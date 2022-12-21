@@ -2,93 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464B8653385
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86363653387
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234729AbiLUPiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 10:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S234719AbiLUPi1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Dec 2022 10:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbiLUPhs (ORCPT
+        with ESMTP id S234633AbiLUPh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 10:37:48 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C7C24F1C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:36:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1671636937; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=OPfqfnyCBHt7EDRFmJCarYGJ48QZcNoJ+pE8zoyraIrFq4o9c6aO7L57HHb2eDqPd4n3cvPGKIvFo2tNWkVq3aH5sQSgWqN7/bVz98zijG/wOIU583WpdxquDRoUraY4NKm/HsEP4dz99ZZ6EkRmmxUC0w/V7+G45H+8wO0rxEc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1671636937; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=3Hz2uwW3hnNguqOhLl5TLTK8gM+WmAZ6vNtAY7+qxZE=; 
-        b=eB/GaDcxK7eXkrrZ9xVBA0aZJS2VUZr3lVjCFsUjdi++rBb1LD2p98YNoJntF8WBN8MT86Yrm+XQ3AZEfLZvhnrXieXwgxeif6PwhWMv0YbIEmf/MFu0fpPjI/qyDBNm5035ySSJd8v+dgp5w/J2c5Eb53X7E53hKGPJ1wRI9CI=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671636937;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:Message-ID:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=3Hz2uwW3hnNguqOhLl5TLTK8gM+WmAZ6vNtAY7+qxZE=;
-        b=fcWAWA6GKtmxvdk3GEUIJKNatO79SqPhDIKRCZ2adST6WVSbo/45/ITKJTXBVd/o
-        ZUHMzHeJnqQgQJSY1V4eMaOZ95srCh+sjKg3hs9iI/AImYstC6LEnYd7H4T1TfYKKOX
-        hNvyvE41NHwu9uJ6uo2nRx2OW6h40q9BCeGnka60=
-Received: from [192.168.1.9] (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1671636936209255.79334159169218; Wed, 21 Dec 2022 21:05:36 +0530 (IST)
-Date:   Wed, 21 Dec 2022 21:05:34 +0530
+        Wed, 21 Dec 2022 10:37:56 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7EF2528D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:36:16 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1p818b-0007if-9S; Wed, 21 Dec 2022 16:36:09 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1p818Z-000p2n-GJ; Wed, 21 Dec 2022 16:36:07 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1p818X-000AdV-5z; Wed, 21 Dec 2022 16:36:05 +0100
+Message-ID: <432ed015f4ba99d6bddd0a10af72324fea1388da.camel@pengutronix.de>
+Subject: Re: [PATCH 1/2] dt-bindings: net: Add rfkill-gpio binding
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Johannes Berg <johannes@sipsolutions.net>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, kernel@pengutronix.de
+Date:   Wed, 21 Dec 2022 16:36:05 +0100
+In-Reply-To: <20221221144505.GA2848091-robh@kernel.org>
+References: <20221221104803.1693874-1-p.zabel@pengutronix.de>
+         <20221221144505.GA2848091-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1+deb11u1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 04/10] drm/print: Fix support for NULL as first argument
- of drm_dbg_*
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-References: <cover.1671566741.git.code@siddh.me>
- <3ebf0d61ad5e82875a4493108602e62429306b14.1671566741.git.code@siddh.me>
- <87edst2ix8.fsf@intel.com>
-Content-Language: en-US, en-GB, hi-IN
-From:   Siddh Raman Pant <code@siddh.me>
-Message-ID: <21113999-99c2-0273-a6fe-8374ee910297@siddh.me>
-In-Reply-To: <87edst2ix8.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21 2022 at 15:11:07 +0530, Jani Nikula wrote:
-> On Wed, 21 Dec 2022, Siddh Raman Pant <code@siddh.me> wrote:
->> Comments say macros DRM_DEBUG_* are deprecated in favor of
->> drm_dbg_*(NULL, ...), but they have broken support for it,
->> as the macro will result in `(NULL) ? (NULL)->dev : NULL`.
->=20
-> What's wrong with that?
+On Mi, 2022-12-21 at 08:45 -0600, Rob Herring wrote:
+> On Wed, Dec 21, 2022 at 11:48:02AM +0100, Philipp Zabel wrote:
+> > Add a device tree binding document for GPIO controlled rfkill switches.
+> > The name, type, shutdown-gpios and reset-gpios properties are the same
+> > as defined for ACPI.
+> > 
+> > Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+> > ---
+> >  .../devicetree/bindings/net/rfkill-gpio.yaml  | 60 +++++++++++++++++++
+> >  1 file changed, 60 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/rfkill-gpio.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/rfkill-gpio.yaml b/Documentation/devicetree/bindings/net/rfkill-gpio.yaml
+> > new file mode 100644
+> > index 000000000000..6e62e6c96456
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/rfkill-gpio.yaml
+> > @@ -0,0 +1,60 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: "http://devicetree.org/schemas/net/rfkill-gpio.yaml#"
+> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > +
+> > +title: GPIO controlled rfkill switch
+> > +
+> > +maintainers:
+> > +  - Johannes Berg <johannes@sipsolutions.net>
+> > +  - Philipp Zabel <p.zabel@pengutronix.de>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: rfkill-gpio
+> > +
+> > +  name:
+> 
+> Did you test this? Something should complain, but maybe not. The problem 
+> is 'name' is already a property in the unflattened DT (and old FDT 
+> formats).
 
-NULL is not a struct, so the syntax is incorrect.
+Thank you. Maybe this was hidden by the fact that I set the name
+property to the same string as the node's name.
 
-Note that this isn't about a dev pointer whose value is
-NULL, the first argument is NULL directly. So "NULL" is
-directly substituted as is. If it was a dev pointer, then
-the definition of struct allowed for no error, but here
-gcc will generate the following error:
+> 'label' would be appropriate perhaps, but why do we care what the name 
+> is?
 
-error: request for member =E2=80=98dev=E2=80=99 in something not a structur=
-e or union=20
+This is meant to be the identifier of the rfkill API object. It is the
+content of /sys/class/rfkill/rfkill0/name, and the 'ID' in the rfkill
+command line tool, that can be used to select a switch, in case a
+device has multiple radios of the same type.
 
-Hence, there is a need to fix them.
+> > +    $ref: /schemas/types.yaml#/definitions/string
+> > +    description: rfkill switch name, defaults to node name
+> > +
+> > +  type:
+> 
+> Too generic. Property names should ideally have 1 type globally. I think 
+> 'type' is already in use. 'radio-type' instead?
 
-Thanks,
-Siddh
+These values correspond to the 'enum rfkill_type' in Linux UAPI, but I
+think in this context 'radio-type' would be better than 'rfkill-type'.
 
+> > +    description: rfkill radio type
+> > +    enum:
+> > +      - wlan
+> > +      - bluetooth
+> > +      - ultrawideband
+> > +      - wimax
+> > +      - wwan
+> > +      - gps
+> > +      - fm
+> > +      - nfc
+> > +
+> > +  shutdown-gpios:
+> > +    maxItems: 1
+> > +
+> > +  reset-gpios:
+> > +    maxItems: 1
+> 
+> I'm lost as to why there are 2 GPIOs.
+
+I don't know either.  My assumption is that this is for devices that
+are radio silenced by just asserting their reset pin (for example GPS
+chips). The driver handles them the same.
+
+I could remove reset-gpios and make shutdown-gpios required.
+
+> > +
+> > +required:
+> > +  - compatible
+> > +  - type
+> > +
+> > +oneOf:
+> > +  - required:
+> > +      - shutdown-gpios
+> > +  - required:
+> > +      - reset-gpios
+> 
+> But only 1 can be present? So just define 1 GPIO name.
+
+The intent was that only one of them would be required.
+
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +
+> > +    rfkill-pcie-wlan {
+> 
+> Node names should be generic.
+
+What could be a generic name for this - is "rfkill" acceptable even
+though it is a Linux subsystem name? Or would "rf-kill-switch" be
+better?
+
+How should they be called if there are multiple of them?
+
+> > +        compatible = "rfkill-gpio";
+> > +        name = "rfkill-pcie-wlan";
+> > +        type = "wlan";
+> > +        shutdown-gpios = <&gpio2 25 GPIO_ACTIVE_HIGH>;
+> > +    };
+> > -- 
+> > 2.30.2
+
+regards
+Philipp
