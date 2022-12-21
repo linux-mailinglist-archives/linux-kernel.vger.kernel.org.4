@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E611D6539A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394C86539AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbiLUXUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 18:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S234910AbiLUXUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 18:20:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbiLUXT6 (ORCPT
+        with ESMTP id S234853AbiLUXUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 18:19:58 -0500
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2B61A06D;
-        Wed, 21 Dec 2022 15:19:57 -0800 (PST)
+        Wed, 21 Dec 2022 18:20:00 -0500
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DF124BE3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:19:59 -0800 (PST)
 Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0A86B20385;
-        Thu, 22 Dec 2022 00:19:55 +0100 (CET)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 2E9CD203C3;
+        Thu, 22 Dec 2022 00:19:57 +0100 (CET)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
 To:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
@@ -51,10 +51,11 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Douglas Anderson <dianders@chromium.org>,
         Vladimir Lypak <vladimir.lypak@gmail.com>,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/8] drm/msm/dpu: Wire up DSC mask for active CTL configuration
-Date:   Thu, 22 Dec 2022 00:19:36 +0100
-Message-Id: <20221221231943.1961117-2-marijn.suijten@somainline.org>
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Marek Vasut <marex@denx.de>
+Subject: [PATCH v2 2/8] drm/msm/dsi: Use DSC slice(s) packet size to compute word count
+Date:   Thu, 22 Dec 2022 00:19:37 +0100
+Message-Id: <20221221231943.1961117-3-marijn.suijten@somainline.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221221231943.1961117-1-marijn.suijten@somainline.org>
 References: <20221221231943.1961117-1-marijn.suijten@somainline.org>
@@ -68,43 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Active CTLs have to configure what DSC block(s) have to be enabled, and
-what DSC block(s) have to be flushed; this value was initialized to zero
-resulting in the necessary register writes to never happen (or would
-write zero otherwise).  This seems to have gotten lost in the DSC v4->v5
-series while refactoring how the combination with merge_3d was handled.
+According to downstream the value to use for WORD_COUNT is
+bytes_per_pkt, which denotes the number of bytes in a packet based on
+how many slices have been configured by the panel driver times the
+width of a slice times the number of bytes per pixel.
 
-Fixes: 58dca9810749 ("drm/msm/disp/dpu1: Add support for DSC in encoder")
+The DSC panels seen thus far use one byte per pixel, only one slice
+per packet, and a slice width of half the panel width leading to the
+desired bytes_per_pkt+1 value to be equal to hdisplay/2+1.  This however
+isn't the case anymore for panels that configure two slices per packet,
+where the value should now be hdisplay+1.
+
+Note that the aforementioned panel (on a Sony Xperia XZ3, sdm845) with
+slice_count=1 has also been tested to successfully accept slice_count=2,
+which would have shown corrupted output previously.
+
+Fixes: 08802f515c3c ("drm/msm/dsi: Add support for DSC configuration")
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c | 1 +
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/gpu/drm/msm/dsi/dsi_host.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-index ae28b2b93e69..35791f93c33d 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-@@ -61,6 +61,7 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
- 	intf_cfg.intf_mode_sel = DPU_CTL_MODE_SEL_CMD;
- 	intf_cfg.stream_sel = cmd_enc->stream_sel;
- 	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
-+	intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
- 	ctl->ops.setup_intf_cfg(ctl, &intf_cfg);
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+index b83cf70b1adb..0686c35a6fd4 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_host.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+@@ -989,7 +989,7 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+ 		if (!msm_host->dsc)
+ 			wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
+ 		else
+-			wc = mode->hdisplay / 2 + 1;
++			wc = msm_host->dsc->slice_chunk_size * msm_host->dsc->slice_count + 1;
  
- 	/* setup which pp blk will connect to this intf */
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-index 0f71e8fe7be7..9ee3a7306a5f 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
-@@ -274,6 +274,7 @@ static void dpu_encoder_phys_vid_setup_timing_engine(
- 	intf_cfg.intf_mode_sel = DPU_CTL_MODE_SEL_VID;
- 	intf_cfg.stream_sel = 0; /* Don't care value for video mode */
- 	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
-+	intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
- 	if (phys_enc->hw_pp->merge_3d)
- 		intf_cfg.merge_3d = phys_enc->hw_pp->merge_3d->idx;
- 
+ 		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
+ 			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
 -- 
 2.39.0
 
