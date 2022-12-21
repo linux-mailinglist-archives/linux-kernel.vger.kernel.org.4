@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2636537FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 22:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C9F6537FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 22:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234829AbiLUVHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 16:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S234975AbiLUVHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 16:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbiLUVHU (ORCPT
+        with ESMTP id S234761AbiLUVHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 16:07:20 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75FE2657F;
-        Wed, 21 Dec 2022 13:07:10 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so1380279wms.4;
-        Wed, 21 Dec 2022 13:07:10 -0800 (PST)
+        Wed, 21 Dec 2022 16:07:22 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9101D2654D;
+        Wed, 21 Dec 2022 13:07:14 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id o5-20020a05600c510500b003d21f02fbaaso2480446wms.4;
+        Wed, 21 Dec 2022 13:07:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5nrHW2nZPS02ZWv3aQJK/QCBWF5IiEBszwRBGZwror8=;
-        b=gnICfvvqTzoxFV9J6OhD0dfy1GMLDNmK/+HGPTgNy7dKVlH4BJtcjnaMWCj0kUHjSb
-         PuUR6Pw/5E0+NzyemYIlh07NYT/DIYBozIoFTNM05Nh5VemjtWNf5stVx/bLlH5yNyQB
-         IjFEW8elV7s6xC9lVWDg8fdLI7MrHrzvdqhxpdjlA7hpSrcn+Q+4JWL35hroS0mR3ZfB
-         b7i4ashBFei/Wf4nHej2MssKZof6oEi/VbgD0AUQUDigRaq5AJoisgNqzDYp3OzbiPuc
-         48v2tGY8toKeT68Cbg2DGBjecM50txuHjcj3/tkcLvYZTeN73lHQVV4uBAZRK48LKiCr
-         ADXQ==
+        bh=lVXE/tLR92m2sGWA4Ap2iyUSciCN0CAi8jf/sNy+hqY=;
+        b=J45PmuQV/HLwZbSRa1zjfv/tsrzWpuonlqZd6yTp1A6jaZbjVPWCZaZyTqYveMq9q6
+         264D8JUg9gWkj+4GOjbq1x1wf5vhTjg3Bda9/RFAqyqh6YuA5hVG0vQv5Qdcf+Z/CA/b
+         Qrq+qb2hYkgBCKmGnrWWK2wBqCOzkJAZ3M53R0I4abbQXs3CxH9o+PdQXpuS/5rYyGeH
+         moF9ehwTKu/HeN84sg+yA4VEy8SyhYJEp5909w3wSb/3ZI7p6RnK+Y2ZDbLHq8Ojlwzm
+         WCBTheS1nGU9FTTxS1uMeP42pkjFNxvK2lkUJjInGvxJuOL0+K7V5HZYAzlUGEnf4iPT
+         BMSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5nrHW2nZPS02ZWv3aQJK/QCBWF5IiEBszwRBGZwror8=;
-        b=ZX2mJLLHJ/ZqPaNJqJ1qT9aq1PqwI0MhdV14qGTN84CCfF+ybyXSoa42c3DW2ifmZ3
-         kRXKMx71gav1iMHg3HI7oh4l0PaA3rb2CX0FqnYDXtZKLB46wlG1kPQdgIhHOA6mz3pB
-         kO/fYXazE4WuefdVLr+g4C/72sVxPHCox24w6ApskWwhkdm9sRvQRfkT+xdbQkKalE51
-         p4wRH9mwfey9+QLPYVTZn5Rqpmu9XOsTeNa8vw8JM647lJ6KSKg5eKjUAE8FbYPXoPzH
-         k+LAtHDxBqq6E2zCTD2NJm9mHDhtIf31vk6cyi1eYkyEKc9ahN+PfIBoKE2BvLzENhxs
-         TgDg==
-X-Gm-Message-State: AFqh2ko/htOadaYjO47q3GEXKrPetFDW1XGROr1zpdqy3dwRp2u0mY3Y
-        A3ZknuH7z3FJbjAU/mW8NNg=
-X-Google-Smtp-Source: AMrXdXsWqORR30ZKUUcvgUiVkQFjXes2NPsOYf28UCYRbqgLunfHxhURs5+D2N0hCE/rzH4p3p7CTA==
-X-Received: by 2002:a05:600c:3b9d:b0:3d2:3e75:7bb9 with SMTP id n29-20020a05600c3b9d00b003d23e757bb9mr2358068wms.34.1671656829455;
-        Wed, 21 Dec 2022 13:07:09 -0800 (PST)
+        bh=lVXE/tLR92m2sGWA4Ap2iyUSciCN0CAi8jf/sNy+hqY=;
+        b=arQ8k18JMCWNIEL1yBdR6rg5VJnEM6RfvDhsWcdtM/ixqaYJXWhjlx1NqW9ycAllFp
+         ieTnUazFdgS8k7K7fQpiwdpBLMwN1QkdwCcivfcY+ptPc38tZ+NDL1yJDfH+bfhr4JKt
+         KVD1lnkhlZbpKCXKvf18KCa+PD8n7iDDyQnOYicUjUNrmAyuJIRMle42dq6LvYm7rMI5
+         5Hnz6m5pibvOFSLpE8VOjQsOvjghy+hcSehvEJcE0KcMd4u09eKl2yK/l7Dm5lcrN7j/
+         WDQTPs3vcm6cqeXozMsn2+n5D33J+9V+ktxnoQ3uZBhlSCgIYqXm/+4jEXXAP328Jsjx
+         pOzg==
+X-Gm-Message-State: AFqh2krNhzgVlC8r1XkLKE0s0uKtjVphahX+CaAXa0ZhYh2pgJeOQqmF
+        xKvlVZs/P1txRn63fJUAGPUxC9ADnNXrhA==
+X-Google-Smtp-Source: AMrXdXvfbPVNSKTMpgu1wbKyL0z1Y/4/DV/Eb7PMOIvGuhk7PEFn9XlRuloouZwAEemucsMt6AaFMw==
+X-Received: by 2002:a7b:c3c6:0:b0:3d2:3376:6f37 with SMTP id t6-20020a7bc3c6000000b003d233766f37mr2633965wmj.10.1671656833130;
+        Wed, 21 Dec 2022 13:07:13 -0800 (PST)
 Received: from localhost ([176.234.10.188])
-        by smtp.gmail.com with UTF8SMTPSA id a1-20020a05600c348100b003b47b80cec3sm3412423wmq.42.2022.12.21.13.07.08
+        by smtp.gmail.com with UTF8SMTPSA id r9-20020a05600c35c900b003d6b71c0c92sm4911025wmq.45.2022.12.21.13.07.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 13:07:09 -0800 (PST)
+        Wed, 21 Dec 2022 13:07:12 -0800 (PST)
 From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
 To:     u.kleine-koenig@pengutronix.de, thierry.reding@gmail.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
@@ -58,9 +58,9 @@ Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
         linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Sasha Finkelstein <fnkl.kernel@gmail.com>
-Subject: [PATCH v5 3/4] arm64: dts: apple: t8103: Add PWM controller
-Date:   Thu, 22 Dec 2022 00:06:47 +0300
-Message-Id: <20221221210648.2735-4-fnkl.kernel@gmail.com>
+Subject: [PATCH v5 4/4] MAINTAINERS: Add entries for Apple PWM driver
+Date:   Thu, 22 Dec 2022 00:06:48 +0300
+Message-Id: <20221221210648.2735-5-fnkl.kernel@gmail.com>
 X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 In-Reply-To: <20221221210648.2735-1-fnkl.kernel@gmail.com>
 References: <20221221210648.2735-1-fnkl.kernel@gmail.com>
@@ -76,104 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds PWM controller and keyboard backlight bindings for M1 MacBooks
+Add the MAINTAINERS entries for the driver
 
 Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
 Acked-by: Sven Peter <sven@svenpeter.dev>
 ---
- arch/arm64/boot/dts/apple/t8103-j293.dts | 19 +++++++++++++++++++
- arch/arm64/boot/dts/apple/t8103-j313.dts | 19 +++++++++++++++++++
- arch/arm64/boot/dts/apple/t8103.dtsi     |  9 +++++++++
- 3 files changed, 47 insertions(+)
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/apple/t8103-j293.dts b/arch/arm64/boot/dts/apple/t8103-j293.dts
-index ecb10d237a05..43f79570b458 100644
---- a/arch/arm64/boot/dts/apple/t8103-j293.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j293.dts
-@@ -11,6 +11,7 @@
- 
- #include "t8103.dtsi"
- #include "t8103-jxxx.dtsi"
-+#include <dt-bindings/leds/common.h>
- 
- / {
- 	compatible = "apple,j293", "apple,t8103", "apple,arm-platform";
-@@ -43,3 +44,21 @@ &i2c2 {
- &i2c4 {
- 	status = "okay";
- };
-+
-+/ {
-+	led-controller {
-+		compatible = "pwm-leds";
-+		led-0 {
-+			pwms = <&fpwm1 0 40000>;
-+			label = "kbd_backlight";
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
-+			color = <LED_COLOR_ID_WHITE>;
-+			max-brightness = <255>;
-+			default-state = "keep";
-+		};
-+	};
-+};
-+
-+&fpwm1 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/apple/t8103-j313.dts b/arch/arm64/boot/dts/apple/t8103-j313.dts
-index df741737b8e6..57e75e6ddf63 100644
---- a/arch/arm64/boot/dts/apple/t8103-j313.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j313.dts
-@@ -11,6 +11,7 @@
- 
- #include "t8103.dtsi"
- #include "t8103-jxxx.dtsi"
-+#include <dt-bindings/leds/common.h>
- 
- / {
- 	compatible = "apple,j313", "apple,t8103", "apple,arm-platform";
-@@ -35,3 +36,21 @@ &pcie0_dart_2 {
- 
- /delete-node/ &port01;
- /delete-node/ &port02;
-+
-+/ {
-+	led-controller {
-+		compatible = "pwm-leds";
-+		led-0 {
-+			pwms = <&fpwm1 0 40000>;
-+			label = "kbd_backlight";
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
-+			color = <LED_COLOR_ID_WHITE>;
-+			max-brightness = <255>;
-+			default-state = "keep";
-+		};
-+	};
-+};
-+
-+&fpwm1 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index 51a63b29d404..ccdb26ef6b22 100644
---- a/arch/arm64/boot/dts/apple/t8103.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -191,6 +191,15 @@ i2c4: i2c@235020000 {
- 			status = "disabled"; /* only used in J293 */
- 		};
- 
-+		fpwm1: pwm@235044000 {
-+			compatible = "apple,t8103-fpwm", "apple,s5l-fpwm";
-+			reg = <0x2 0x35044000 0x0 0x4000>;
-+			power-domains = <&ps_fpwm1>;
-+			clocks = <&clkref>;
-+			#pwm-cells = <2>;
-+			status = "disabled";
-+		};
-+
- 		serial0: serial@235200000 {
- 			compatible = "apple,s5l-uart";
- 			reg = <0x2 0x35200000 0x0 0x1000>;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 886d3f69ee64..cf773aa53210 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1908,6 +1908,7 @@ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+ F:	Documentation/devicetree/bindings/power/apple*
++F:	Documentation/devicetree/bindings/pwm/pwm-apple.yaml
+ F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+ F:	arch/arm64/boot/dts/apple/
+ F:	drivers/clk/clk-apple-nco.c
+@@ -1921,6 +1922,7 @@ F:	drivers/mailbox/apple-mailbox.c
+ F:	drivers/nvme/host/apple.c
+ F:	drivers/nvmem/apple-efuses.c
+ F:	drivers/pinctrl/pinctrl-apple-gpio.c
++F:	drivers/pwm/pwm-apple.c
+ F:	drivers/soc/apple/*
+ F:	drivers/watchdog/apple_wdt.c
+ F:	include/dt-bindings/interrupt-controller/apple-aic.h
 -- 
 2.37.1 (Apple Git-137.1)
 
