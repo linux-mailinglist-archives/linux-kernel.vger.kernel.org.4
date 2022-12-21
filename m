@@ -2,81 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6056531D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575A96531DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiLUNei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S232455AbiLUNew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:34:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiLUNed (ORCPT
+        with ESMTP id S232209AbiLUNeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:34:33 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E593261C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:34:32 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id y25so23489822lfa.9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:34:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+0FXHdAxlQCKNpVHPu4ljr9mTHK7rsIQ0NRxjjSRv34=;
-        b=W8nt8VldUhaBpwI/xNMJ3Bxbtj6Nosqr6KDgWsdch+8IZSqSqqMTaIHnWaFZ6Ik3lG
-         jUspcRWQ/FbdttBiDW3CmDqHVPALZnU6spBvYOAsRCoYd204nS41d+2aI1Z7G8OyTyeN
-         1yhjSUiiWjVr2GvNfofsZtFpisNWasWGrkXUp5EJGq8IzdNNvJY3u0jv3NmJeyTZQcXU
-         CADPUL/7zTS0CnXrwJ4wVOjh7VCJzfQGoQ2d9AWYconnan31xUt4JbGw6troC/1P3i4g
-         OSz3JvS0WDWiKN3itScFH2OkQu6g8ywuS9aaKTHHIANJCWKwePlJxsqjLlN2uMPJ15rE
-         5AdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+0FXHdAxlQCKNpVHPu4ljr9mTHK7rsIQ0NRxjjSRv34=;
-        b=sjWPxqtauqVD7qkgwZeliVllmJ2PnWOHp9RMcZGRVbzUQcb9zNdjNknvus7f87xqaW
-         +CI0kQdo7Wl+4DaxNJRuQ5iTBHOUZ3OQLADtAgSm8HuOXfIOCULD3SQZWIar0NTvfsx2
-         O9cvDy0aPhz2fCu2wpK8Lmnw8ZxAWiqzLAXBflS8ZIICeYnAerjMZVUUld1YIaQ3EoKS
-         8FM51pisQDcMDxY5RMoKTbqiP9ZB4qko7o8T/tPaYbO3yqbcXfh7v5ddrm/CMYAslLF9
-         3rw67whnhTVQ2E6IpEN/WIxt0Z6CvERMNJvOPxIlqel3rQhh84rTUCRzQroOuyuGubeh
-         2cRg==
-X-Gm-Message-State: AFqh2kqTn7gIhzbnI53bSbpp+1vc3odJjzzW0APrIR1ezBtf5BEoVuIp
-        25qTcWZbk+fpW0MG7nUGcjmFUA==
-X-Google-Smtp-Source: AMrXdXviJW015I7NYa4eijEHW4N5KVbIX+8IA0aNfy7QoBevqLdLiSjSiO9lAKC34bmkVJvY/Lbmtg==
-X-Received: by 2002:a19:f705:0:b0:4be:a4cb:be37 with SMTP id z5-20020a19f705000000b004bea4cbbe37mr569117lfe.15.1671629670779;
-        Wed, 21 Dec 2022 05:34:30 -0800 (PST)
-Received: from mutt (c-e429e555.07-21-73746f28.bbcust.telenor.se. [85.229.41.228])
-        by smtp.gmail.com with ESMTPSA id w23-20020a19c517000000b004b5701b5337sm1843649lfe.104.2022.12.21.05.34.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 05:34:30 -0800 (PST)
-Date:   Wed, 21 Dec 2022 14:34:28 +0100
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Ian Kent <raven@themaw.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Eric Sandeen <sandeen@sandeen.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Rick Lindsley <ricklind@linux.vnet.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Carlos Maiolino <cmaiolino@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        elver@google.com, arnd@arndb.de
-Subject: Re: [PATCH 1/2] kernfs: dont take i_lock on inode attr read
-Message-ID: <20221221133428.GE69385@mutt>
-References: <166606025456.13363.3829702374064563472.stgit@donald.themaw.net>
- <166606036215.13363.1288735296954908554.stgit@donald.themaw.net>
- <Y2BMonmS0SdOn5yh@slm.duckdns.org>
+        Wed, 21 Dec 2022 08:34:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248FA19035
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:34:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD2B6617CB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 13:34:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF18C433F0;
+        Wed, 21 Dec 2022 13:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671629685;
+        bh=WqWR0d44+oC0M51OxsJIk5oYzW5Ewe38o6BJGMCz944=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QSN6k2D3YaVWrsm0u1NnBATOWav1SPvpxVC5Qc3+KeNG4kFYC5BhBlpRUkUuffEHo
+         V7tOKTKpWTi8p82CMsN7tiDvBA34Uc1gR7mMrdwD315dPO5RUP3u85SpQ0++9C9XaO
+         2jBoCAhOVg/6bnz+J+IrkfN6pKwcqMCBkxJnLjIa+S//8J7fIjJSNTFLO9YbpkprCy
+         hSHebH+WnK21ogAZxqRvkBPiFJRQGgodD3QxNpdDb7As0CjBWyOB/YTyDeIjg7Ahq6
+         Xv60z9ryBv4gfT4g7hDGD/dYkBebh4LupvK57Dh5AYlcZNaLCVPy71ZI8vvhrX82oa
+         KcjdrPs5K23xg==
+Date:   Wed, 21 Dec 2022 13:34:38 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Dong Bo <dongbo4@huawei.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu,
+        Nianyao Tang <tangnianyao@huawei.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] KVM: arm64: Synchronize SMEN on vcpu schedule out
+Message-ID: <Y6MLbsTpNI4E+5qe@sirena.org.uk>
+References: <20221220105024.13484-1-dongbo4@huawei.com>
+ <86v8m6bcuh.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="X1wLM/v5tW57IqQt"
 Content-Disposition: inline
-In-Reply-To: <Y2BMonmS0SdOn5yh@slm.duckdns.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <86v8m6bcuh.wl-maz@kernel.org>
+X-Cookie: Programming is an unnatural act.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,88 +64,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-31 12:30, Tejun Heo wrote:
-> On Tue, Oct 18, 2022 at 10:32:42AM +0800, Ian Kent wrote:
-> > The kernfs write lock is held when the kernfs node inode attributes
-> > are updated. Therefore, when either kernfs_iop_getattr() or
-> > kernfs_iop_permission() are called the kernfs node inode attributes
-> > won't change.
-> > 
-> > Consequently concurrent kernfs_refresh_inode() calls always copy the
-> > same values from the kernfs node.
-> > 
-> > So there's no need to take the inode i_lock to get consistent values
-> > for generic_fillattr() and generic_permission(), the kernfs read lock
-> > is sufficient.
-> > 
-> > Signed-off-by: Ian Kent <raven@themaw.net>
-> 
-> Acked-by: Tejun Heo <tj@kernel.org>
 
-Hi,
+--X1wLM/v5tW57IqQt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Building an allmodconfig arm64 kernel on yesterdays next-20221220 and
-booting that in qemu I see the following "BUG: KCSAN: data-race in
-set_nlink / set_nlink".
+On Tue, Dec 20, 2022 at 10:15:18AM +0000, Marc Zyngier wrote:
+> Dong Bo <dongbo4@huawei.com> wrote:
 
+> > If we have VHE and need to reenable SME for host in
+> > kvm_arch_vcpu_put_fp, CPACR.SMEN is modified from 0 to 1. Trap
+> > control for reading SVCR is modified from enable to disable.
+> > Synchronization is needed before reading SVCR later in
+> > fpsimd_save, or it may cause sync exception which can not be
+> > handled by host.
 
-==================================================================
-[ 1540.388669][  T123] BUG: KCSAN: data-race in set_nlink / set_nlink
-[ 1540.392779][  T123] 
-[ 1540.394302][  T123] write to 0xffff00000adcc3e4 of 4 bytes by task 126 on cpu 0:
-[ 1540.398828][ T123] set_nlink (/home/anders/src/kernel/next/fs/inode.c:371) 
-[ 1540.401609][ T123] kernfs_refresh_inode (/home/anders/src/kernel/next/fs/kernfs/inode.c:181) 
-[ 1540.404925][ T123] kernfs_iop_getattr (/home/anders/src/kernel/next/fs/kernfs/inode.c:194) 
-[ 1540.408088][ T123] vfs_getattr_nosec (/home/anders/src/kernel/next/fs/stat.c:133) 
-[ 1540.411334][ T123] vfs_statx (/home/anders/src/kernel/next/fs/stat.c:170) 
-[ 1540.414224][ T123] vfs_fstatat (/home/anders/src/kernel/next/fs/stat.c:276) 
-[ 1540.417166][ T123] __do_sys_newfstatat (/home/anders/src/kernel/next/fs/stat.c:446) 
-[ 1540.420539][ T123] __arm64_sys_newfstatat (/home/anders/src/kernel/next/fs/stat.c:440 /home/anders/src/kernel/next/fs/stat.c:440) 
-[ 1540.424003][ T123] el0_svc_common.constprop.0 (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:38 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:52 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:142) 
-[ 1540.427648][ T123] do_el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:197) 
-[ 1540.430378][ T123] el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:133 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:142 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:638) 
-[ 1540.433053][ T123] el0t_64_sync_handler (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:656) 
-[ 1540.436421][ T123] el0t_64_sync (/home/anders/src/kernel/next/arch/arm64/kernel/entry.S:584) 
-[ 1540.439303][  T123] 
-[ 1540.440828][  T123] 1 lock held by systemd-udevd/126:
-[ 1540.444055][ T123] #0: ffff00000609b960 (&root->kernfs_rwsem){++++}-{3:3}, at: kernfs_iop_getattr (/home/anders/src/kernel/next/fs/kernfs/inode.c:193) 
-[ 1540.450699][  T123] irq event stamp: 185034
-[ 1540.453373][ T123] hardirqs last enabled at (185034): seqcount_lockdep_reader_access (/home/anders/src/kernel/next/mm/page_alloc.c:5302) 
-[ 1540.460087][ T123] hardirqs last disabled at (185033): seqcount_lockdep_reader_access (/home/anders/src/kernel/next/include/linux/seqlock.h:103 (discriminator 4)) 
-[ 1540.466686][ T123] softirqs last enabled at (185001): fpsimd_restore_current_state (/home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:264 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1780) 
-[ 1540.473310][ T123] softirqs last disabled at (184999): fpsimd_restore_current_state (/home/anders/src/kernel/next/include/linux/bottom_half.h:20 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:242 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1773) 
-[ 1540.479872][  T123] 
-[ 1540.481406][  T123] read to 0xffff00000adcc3e4 of 4 bytes by task 123 on cpu 0:
-[ 1540.485893][ T123] set_nlink (/home/anders/src/kernel/next/fs/inode.c:368) 
-[ 1540.488663][ T123] kernfs_refresh_inode (/home/anders/src/kernel/next/fs/kernfs/inode.c:181) 
-[ 1540.491961][ T123] kernfs_iop_permission (/home/anders/src/kernel/next/fs/kernfs/inode.c:290) 
-[ 1540.495260][ T123] inode_permission (/home/anders/src/kernel/next/fs/namei.c:458 /home/anders/src/kernel/next/fs/namei.c:525) 
-[ 1540.498450][ T123] link_path_walk (/home/anders/src/kernel/next/fs/namei.c:1715 /home/anders/src/kernel/next/fs/namei.c:2262) 
-[ 1540.501552][ T123] path_lookupat (/home/anders/src/kernel/next/fs/namei.c:2473 (discriminator 2)) 
-[ 1540.504592][ T123] filename_lookup (/home/anders/src/kernel/next/fs/namei.c:2503) 
-[ 1540.507740][ T123] user_path_at_empty (/home/anders/src/kernel/next/fs/namei.c:2876) 
-[ 1540.511010][ T123] do_readlinkat (/home/anders/src/kernel/next/fs/stat.c:477) 
-[ 1540.514097][ T123] __arm64_sys_readlinkat (/home/anders/src/kernel/next/fs/stat.c:504 /home/anders/src/kernel/next/fs/stat.c:501 /home/anders/src/kernel/next/fs/stat.c:501) 
-[ 1540.517598][ T123] el0_svc_common.constprop.0 (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:38 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:52 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:142) 
-[ 1540.521319][ T123] do_el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:197) 
-[ 1540.524125][ T123] el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:133 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:142 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:638) 
-[ 1540.526795][ T123] el0t_64_sync_handler (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:656) 
-[ 1540.530224][ T123] el0t_64_sync (/home/anders/src/kernel/next/arch/arm64/kernel/entry.S:584) 
-[ 1540.533176][  T123] 
-[ 1540.534710][  T123] 1 lock held by systemd-udevd/123:
-[ 1540.537977][ T123] #0: ffff00000609b960 (&root->kernfs_rwsem){++++}-{3:3}, at: kernfs_iop_permission (/home/anders/src/kernel/next/fs/kernfs/inode.c:289) 
-[ 1540.544892][  T123] irq event stamp: 216564
-[ 1540.547603][ T123] hardirqs last enabled at (216564): seqcount_lockdep_reader_access (/home/anders/src/kernel/next/mm/page_alloc.c:5302) 
-[ 1540.554368][ T123] hardirqs last disabled at (216563): seqcount_lockdep_reader_access (/home/anders/src/kernel/next/include/linux/seqlock.h:103 (discriminator 4)) 
-[ 1540.561107][ T123] softirqs last enabled at (216533): fpsimd_restore_current_state (/home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:264 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1780) 
-[ 1540.567833][ T123] softirqs last disabled at (216531): fpsimd_restore_current_state (/home/anders/src/kernel/next/include/linux/bottom_half.h:20 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:242 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1773) 
-[ 1540.574496][  T123] 
-[ 1540.576050][  T123] Reported by Kernel Concurrency Sanitizer on:
-[ 1540.587925][  T123] Hardware name: linux,dummy-virt (DT)
-[ 1540.591282][  T123] ==================================================================
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
+--X1wLM/v5tW57IqQt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Reverting this patch I don't see the data race anymore.
+-----BEGIN PGP SIGNATURE-----
 
-Cheers,
-Anders
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOjC24ACgkQJNaLcl1U
+h9BfMgf/Q43z96bvYnITDmaGHJxEC1F3oW2EdvKLoge3nzDZJTbsZX1jqW5k6Hes
+vfx8GK+A0zVG6XqyT6MpRm6WIldfEpQwTtvdTDFs1DiY2GEpfQozQKllrquASy9W
+W3B1UCB90Dv4c519bT3WRCInlUpHRJijyj/m4cijPK4bhLWqVlJXEPJCZ9kZtd3+
+zaoOdLKZliZ4qYYe1KydiQO+tBNtSwflYRRfD0taUdpYPjDURuIcGubtuwdOkAqa
+4enKZHb2JCUxTuBqOw9ocMglWfRjG+RtRmTdqHap1s0dmP0ywB7v79TBty2HYd7A
+JcOErjeidYrL4XN6aYR91H1EtqhvKg==
+=+pAK
+-----END PGP SIGNATURE-----
+
+--X1wLM/v5tW57IqQt--
