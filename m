@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4295B6530B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C4B6530BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiLUMWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 07:22:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
+        id S229885AbiLUMYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 07:24:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiLUMWr (ORCPT
+        with ESMTP id S229476AbiLUMYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 07:22:47 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DEDDEE1;
-        Wed, 21 Dec 2022 04:22:47 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLBmB8n006709;
-        Wed, 21 Dec 2022 12:22:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=exdPc7+EYm5onuEC/9l+0gNy4dxDHqN5jphkGSUZw7Q=;
- b=EaN6gMmW8fl+1VsmBU9GqgqulRs+IF8+7+BaFXEjJRRnkyU/0mfsmA+omp9pzSQNQK3U
- ObXBknrDJ/zg5GWH5cZdMP1oRbv/yILaydTs5MycHuALuqasbgoozVQNMyprIVm+PrQ/
- tTBQKOln7xi9jwhtyZY+QMvUoFCLEMm3t3qwt7LQYoo7vh27kR6bRkEmG44RWPDh0GKB
- vryIeTTcZ84qEtPT4ZiDl2uX1ZIGf84ck4+AzGS7Ob71zDqwPZiJ8nryJci9w/inlI/+
- TZ90pqxxi1Eaah01cNgvoebjj0Ps4vs1qj5gnrFv9k18aG0ELNvyhkPnu8X7iCKSauuP Jg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mjyk549e8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 12:22:39 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLCMcQb017797
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 12:22:38 GMT
-Received: from [10.216.2.240] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 21 Dec
- 2022 04:22:33 -0800
-Message-ID: <b6172e20-114a-b7e2-2200-0932f803cb20@quicinc.com>
-Date:   Wed, 21 Dec 2022 17:52:30 +0530
+        Wed, 21 Dec 2022 07:24:45 -0500
+Received: from out203-205-251-36.mail.qq.com (out203-205-251-36.mail.qq.com [203.205.251.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF162314F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 04:24:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1671625478;
+        bh=wFNhnD3NzmTBl/E3WRuZI7LywtLlUP3cETCmajXFZTU=;
+        h=From:To:Cc:Subject:Date;
+        b=yLYgsTRVkKzSGX3+P8b4Mxe4LcPSiHIp3Cpcz/tM+dRuH1CNcx6ufk2thKhP7LWDm
+         jvFiLShAjL/cHUeseNIZ/+SvqtuYc3E9eg67h8C/aTb57g0mExV960u7oMnA4dkkRU
+         RfSZqXrg8zGEhFLQCJlS163F0TJE/xpjwNdN5SuA=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id 6229AC9C; Wed, 21 Dec 2022 20:24:34 +0800
+X-QQ-mid: xmsmtpt1671625474tv1woa6v3
+Message-ID: <tencent_31E6ACADCB6915E157CF5113C41803212107@qq.com>
+X-QQ-XMAILINFO: M/NR0wiIuy70qs0pG1YAOxMsMstPYRYt/MG1TX1OpkGzw8hC1ywrfOfgUCyQyX
+         qdfy1hPFOA6646ti+jbPj30FbaQYPii5k7ExSm3ZNJb9yZH3J53N9Za8u5F0gvf0TtaWruGcR95O
+         AcFLcFkPtVMEPBmtnBY+HBMl3kX92xM4AXM3TBjGdzPzAiD7Io8jUXM2eCrXoPVQuIF3XrP+cYv9
+         lYS7yLmjGhTfW3wMo6nYgzsbOjZ9adOK0TrpdwIer/5wabf33x2RIKWZYzdc32o7HQrXam1uC2pG
+         kapORg7XUCulQ+c4uZh1vfHNc81hkJyDjYJfVK5mL9XiXqGUDh9B1Nl28mZ2goMYRt+SvABi0haM
+         iuVT8HMrZ2dvoPJYWmg9bGncL81UNQhiKJcALW5MIZpfWHXaZrOxt07dx9mV/l8BQOsajZFb8HSJ
+         SnYI0MsMF1kjDiY4eRqF8FNnJVljCCVfUk4xvwEY6OT5eeOcm/mnQdib9aYWjKfZA9RozhT1jOPZ
+         PeWAvys/TLdafyvS2nrWL8oRqYP5O7ovJFm2DWR8ihHJazp1OS6yzXrkAO+fUm3mB41x8e50NVaY
+         SSKOC1llUu6M+wYbHOITAVMW/PB5GgHJ8UhFLzqMaBd4PEjlxu2s9VHlkRlbRFECzoJOCxo4ojKK
+         6GpOS+T3HRSwcLftRfEa/74oh8BmWE+zVZK6XIqRW++keN6UWHRXzxBpMlfOaVWIRIlvifxojN5R
+         dRiTmkGhBZAL3Bp7xHrz8TCkvCWBtVU2osGb9XJBfyHRQm9hMHHQrgY2oG8x6MhUTTbJML+XzDKp
+         56YrxY28cQKfQFz3+oQhJ6e2Xid3TBBFNiNQTo4HWbwvnU6comaqTq5AayAIebsajHWaI4W6RPE0
+         BEz4iVa+ST9d0RvAf5a2qcOCR2d8Brw0hYfgFRSs+plAlDLMqe3nK3aLBNW+15Lokv42MzhzVIu7
+         0mnsFZkNQeSnMXFlEtslzp6eBtfJ9RlqVFTuqC6vg01EtcDv/KoT+MXEDColcq
+From:   Rong Tao <rtoax@foxmail.com>
+To:     seanjc@google.com
+Cc:     bp@alien8.de, dave.hansen@linux.intel.com, gg@google.com,
+        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, rongtao@cestc.cn,
+        rtoax@foxmail.com, tglx@linutronix.de, x86@kernel.org
+Subject: [PATCH v2] KVM: VMX: Fix indentation coding style issue
+Date:   Wed, 21 Dec 2022 20:24:32 +0800
+X-OQ-MSGID: <20221221122432.80129-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: clock: SC7280: Add resets for LPASS
- audio clock controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <broonie@kernel.org>,
-        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>
-References: <1671618061-6329-1-git-send-email-quic_srivasam@quicinc.com>
- <1671618061-6329-2-git-send-email-quic_srivasam@quicinc.com>
- <f138f9de-4ecf-3126-97bd-668c96612913@linaro.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <f138f9de-4ecf-3126-97bd-668c96612913@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: wLpZsJjOdbxbXJcTNpRZAG6SrvFJqEJM
-X-Proofpoint-ORIG-GUID: wLpZsJjOdbxbXJcTNpRZAG6SrvFJqEJM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-21_05,2022-12-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- clxscore=1015 suspectscore=0 impostorscore=0 bulkscore=0
- priorityscore=1501 spamscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212210101
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rong Tao <rongtao@cestc.cn>
 
-On 12/21/2022 4:12 PM, Krzysztof Kozlowski wrote:
-Thanks for your time Krzyszto!!!
-> On 21/12/2022 11:21, Srinivasa Rao Mandadapu wrote:
->> Add support for LPASS audio clock gating for RX/TX/SWA core bus clocks
->> for audioreach based SC7280 platforms.
-> Use subject prefixes matching the subsystem (git log --oneline -- ...).
-> The final prefix should be "qcom,sc7280-lpasscc" and then the actual
-> subject should drop redundant pieces.
+Code indentation should use tabs where possible.
 
-Sorry. I didn't understand much from your statement.
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+v2: KVM: VMX: for case-insensitive searches
+v1: https://lore.kernel.org/lkml/tencent_4D21B619F00AE966BD5DD2ABA4BC7A8F060A@qq.com/
+---
+ arch/x86/kvm/vmx/vmx.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Do you mean subject should something like below?
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index fe5615fd8295..29f0a639e1e7 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -806,7 +806,7 @@ void vmx_update_exception_bitmap(struct kvm_vcpu *vcpu)
+ 	 */
+ 	if (is_guest_mode(vcpu))
+ 		eb |= get_vmcs12(vcpu)->exception_bitmap;
+-        else {
++	else {
+ 		int mask = 0, match = 0;
+ 
+ 		if (enable_ept && (eb & (1u << PF_VECTOR))) {
+@@ -1214,7 +1214,7 @@ void vmx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+ 		}
+ 	}
+ 
+-    	if (vmx->nested.need_vmcs12_to_shadow_sync)
++	if (vmx->nested.need_vmcs12_to_shadow_sync)
+ 		nested_sync_vmcs12_to_shadow(vcpu);
+ 
+ 	if (vmx->guest_state_loaded)
+@@ -4966,10 +4966,10 @@ static int vmx_interrupt_allowed(struct kvm_vcpu *vcpu, bool for_injection)
+ 	if (to_vmx(vcpu)->nested.nested_run_pending)
+ 		return -EBUSY;
+ 
+-       /*
+-        * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
+-        * e.g. if the IRQ arrived asynchronously after checking nested events.
+-        */
++	/*
++	 * An IRQ must not be injected into L2 if it's supposed to VM-Exit,
++	 * e.g. if the IRQ arrived asynchronously after checking nested events.
++	 */
+ 	if (for_injection && is_guest_mode(vcpu) && nested_exit_on_intr(vcpu))
+ 		return -EBUSY;
+ 
+-- 
+2.39.0
 
-  dt-bindings: clock: qcom: sc7280-lpasscc: Add resets for audio clock 
-controller
-
->
->>   ...
-> Best regards,
-> Krzysztof
->
