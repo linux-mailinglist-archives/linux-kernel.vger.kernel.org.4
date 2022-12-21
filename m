@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CFB652A58
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 01:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB98652A50
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 01:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234406AbiLUANg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 19:13:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S230048AbiLUAMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 19:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbiLUAMu (ORCPT
+        with ESMTP id S229451AbiLUAM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 19:12:50 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2B8201AC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 16:12:47 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3b102317668so160931177b3.23
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 16:12:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XaREnfCRyQU3ad5Wd1iK/L1d7XHMzN1hNI71g9W9Aqc=;
-        b=K59wK9Xmrz3Bi5vvMVhN1G0pDO7CebJ60f+DjHwvBqntIUvRaRf11KCBF3IsW1uuCm
-         LmdCEuyR6sl4QvqXqpqJlFmXBaasCbZ9nmXW6MTluImHgbKMWTiBxrs1SJxF+2QwuG8Y
-         n3lT/WRDW8kZrenttBA6PiXNPTJQt4eM3DyDoOliigATORAsfTFpRCXSul0pGuAI9MlF
-         xvpQD3dmjMzt8YndE3tmefxjvQ2G/DucE0e/w5OXs/Vyk/ThipPMV2jWTndUm75lJJeN
-         Y5SOmz71wirINtVmmU6GITMwX4RwAhx/qeWMh267Z+OXa2GTQYBVO7aJK80W77QZ+2mh
-         Zn+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XaREnfCRyQU3ad5Wd1iK/L1d7XHMzN1hNI71g9W9Aqc=;
-        b=Nnz/KOgZ+1tJNMTPj2GK25bCczu3tpBcIXUl7ft4Wxh0LUqv1GJVexrHDzFS9teHXV
-         2TS4XxJS1uA6t+hk357b1ozkwNeTsKZImBEUeJ94c5K7wcIe8rysDT4W5hK/doZF1Wud
-         5jLqW5BgEDzcqiIsu/YnojNow3ucyjIlwyqm8tKiE3FEhrlSy8s734YZFSrm/7wX9r4b
-         1VDUGLcsdO9C3D+hKNogwFGYW0fRSkdz1LTNs0u3t9lIWf2qNf5wD9SZ9mASfS8vKplc
-         KrTvJeOWivoCJSn6RzFEoOjebsl5peoD7EhmInc4iYqFgFPY4k1H/dgb4IdlyxWvbREU
-         QJIw==
-X-Gm-Message-State: AFqh2kp6VpLQ6jIvZxtW2OPocxZwheeFAJGSaPW5sPTs20cU/QT3E/Yb
-        CQQWlQPL+t/wkuCZArkduzOyOYDxkbQ=
-X-Google-Smtp-Source: AMrXdXur6oRo558EHTCVqmu2nmkUYNqNZaoP17m0xPtqeSBL8ltbKO3K5SoD9CmsnhBaHILyzV33vTOZCRs=
-X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:a589:30f2:2daa:4ab7])
- (user=yuzhao job=sendgmr) by 2002:a0d:cbd7:0:b0:388:7d2:575d with SMTP id
- n206-20020a0dcbd7000000b0038807d2575dmr768501ywd.21.1671581566428; Tue, 20
- Dec 2022 16:12:46 -0800 (PST)
-Date:   Tue, 20 Dec 2022 17:12:08 -0700
-In-Reply-To: <20221221001207.1376119-1-yuzhao@google.com>
-Message-Id: <20221221001207.1376119-9-yuzhao@google.com>
-Mime-Version: 1.0
-References: <20221221001207.1376119-1-yuzhao@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH mm-unstable v2 8/8] mm: multi-gen LRU: simplify
- arch_has_hw_pte_young() check
-From:   Yu Zhao <yuzhao@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-mm@google.com,
-        Yu Zhao <yuzhao@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 20 Dec 2022 19:12:29 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E031EAFB;
+        Tue, 20 Dec 2022 16:12:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=GH9M5bV1VooJkjUWIga/hv2jQxEHFDZMjQbWm1O6tc8=; b=YulGIBLlt+uAz1B3XpSn3PEV2l
+        JlPFmq6JYNmPnNsrPUTUWCQv1rTeNKwyMxxG8RqU1knVI4VYHeVZ0IboHTv33PVi7B2CsmxPiyH00
+        t5APlVAPVzm1NTlEkuCzGpEYQKYCtPDAOUKwwtDLsojqRWFXbCL3dSTlJHcPhzRisrzI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p7miW-0008LK-86; Wed, 21 Dec 2022 01:12:16 +0100
+Date:   Wed, 21 Dec 2022 01:12:16 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Subject: Re: [PATCH v7 09/11] leds: trigger: netdev: add additional hardware
+ only triggers
+Message-ID: <Y6JPYBQhtpZLadry@lunn.ch>
+References: <20221214235438.30271-1-ansuelsmth@gmail.com>
+ <20221214235438.30271-10-ansuelsmth@gmail.com>
+ <Y5ta87eCAQ8XsY8L@shell.armlinux.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5ta87eCAQ8XsY8L@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Scanning page tables when hardware does not set the accessed bit has
-no real use cases.
+On Thu, Dec 15, 2022 at 05:35:47PM +0000, Russell King (Oracle) wrote:
+> On Thu, Dec 15, 2022 at 12:54:36AM +0100, Christian Marangi wrote:
+> > Add additional hardware only triggers commonly supported by switch LEDs.
+> > 
+> > Additional modes:
+> > link_10: LED on with link up AND speed 10mbps
+> > link_100: LED on with link up AND speed 100mbps
+> > link_1000: LED on with link up AND speed 1000mbps
+> > half_duplex: LED on with link up AND half_duplex mode
+> > full_duplex: LED on with link up AND full duplex mode
+> 
+> Looking at Marvell 88e151x, I don't think this is usable there.
+> We have the option of supporting link_1000 on one of the LEDs,
+> link_100 on another, and link_10 on the other. It's rather rare
+> for all three leds to be wired though.
 
-Signed-off-by: Yu Zhao <yuzhao@google.com>
-Change-Id: I414310f1cf642d305a16045518517f09ce0eda23
----
- mm/vmscan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The 88e151x will need to enumerate what it actually supports from the
+above list, per LED. I also think we can carefully expand the list
+above, adding a few more modes. We just need to ensure what is added
+is reasonably generic, modes we expect multiple PHY to support. What
+we need to avoid is adding every single mode a PHY supports, but no
+other PHY has.
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 308c3c16d81d..88948f4c8d18 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4430,7 +4430,7 @@ static bool try_to_inc_max_seq(struct lruvec *lruvec, unsigned long max_seq,
- 	 * handful of PTEs. Spreading the work out over a period of time usually
- 	 * is less efficient, but it avoids bursty page faults.
- 	 */
--	if (!force_scan && !(arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK))) {
-+	if (!arch_has_hw_pte_young() || !get_cap(LRU_GEN_MM_WALK)) {
- 		success = iterate_mm_list_nowalk(lruvec, max_seq);
- 		goto done;
- 	}
--- 
-2.39.0.314.g84b9a713c41-goog
+> This is also a PHY where "activity" mode is supported (illuminated
+> or blinking if any traffic is transmitted or received) but may not
+> support individual directional traffic in hardware. However, it
+> does support forcing the LED on or off, so software mode can handle
+> those until the user selects a combination of modes that are
+> supported in the hardware.
+> 
+> > Additional blink interval modes:
+> > blink_2hz: LED blink on any even at 2Hz (250ms)
+> > blink_4hz: LED blink on any even at 4Hz (125ms)
+> > blink_8hz: LED blink on any even at 8Hz (62ms)
+> 
+> This seems too restrictive. For example, Marvell 88e151x supports
+> none of these, but does support 42, 84, 170, 340, 670ms.
 
+I would actually drop this whole idea of being able to configure the
+blink period. It seems like it is going to cause problems. I expect
+most PHYs actual share the period across multiple LEDs, which you
+cannot easily model here.
+
+So i would have the driver hard coded to pick a frequency at thats' it.
+
+   Andrew
