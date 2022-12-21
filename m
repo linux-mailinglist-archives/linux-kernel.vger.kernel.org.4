@@ -2,88 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846DC6539EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249DA6539F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234634AbiLUXv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 18:51:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
+        id S231834AbiLUXzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 18:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbiLUXvz (ORCPT
+        with ESMTP id S229789AbiLUXzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 18:51:55 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F184B1B1FD
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:51:51 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id d15so431056pls.6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:51:51 -0800 (PST)
+        Wed, 21 Dec 2022 18:55:42 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7123BE5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:55:40 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id m18so1237364eji.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:55:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aRolca1xLJYStXB4O+QjEQI7hBejIakh3i9Q1ikiuAU=;
-        b=OwGD5+m2wcB5oZr3QQy4jQh4vye04wDMOltND8p76SrMT+vKiFD6FYB6L03PDrcIWk
-         wJ/QQShugUcQKxUrdAB6BoRTqMWW5TZ/RiQM4DHgAN0p/uBL9bJSbY9a/TivzJ2DLJIr
-         7KxPEPusddga+MyaPsRjLxb3qzj/El+ZGQ8QqrxAhk9WWtQchNYOzaOer7JRKMlOlWYf
-         bY4OZabUVBlIF7KYhvxhRhJSlqIsobu9eXFKDaR/yqHIiKTTOffW2puHpx/yWO237nfw
-         6/2LGqYQ56ON3yJufIpCvnKrE15uq5FdlkLgviTDPZn23sSuoJ/oLIAGUmvs/83qqbNm
-         dtbQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=993ucqPWtjUwCkCIDfk3/12NHjl1sqhSbH4u2sWdFYY=;
+        b=QnveVF4WoNa5vx3O5a33f6B2AIDUrJSb5+Z3TCXrZD/4NUl2RUjjth1YpADg6paYJI
+         ng2vBHV9BaZkr/5yrCli0VXXRfTTOJyYJSWlf3D7VV1FCcTy86VA80o50J7RMTGMcIRj
+         UvUu5m511CXvABW4HSkWOHiwtyLJUHNgmyPaHToQzAb9cMBVJz6+E8MjWhAslTEe4sA0
+         xPpXdaQ/ye60EG4PvVS2gVrl7H7dFcgS3fa8Xk3Cl01hRwcvGgJNJubsbfqwTrqVlKjB
+         41yDyxvI2dK2UeNF7cHZv+WpHiV+79nkbyj6PUJ7yV5/zvtP3q5pgGHXBrnLY20Pu6Qa
+         zvfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aRolca1xLJYStXB4O+QjEQI7hBejIakh3i9Q1ikiuAU=;
-        b=8JRVnqz3RiYavqfXV7k5kLz8/NhiFoejzoJHd2tsGLgBULCQBHF3t3N9gdCGK1rLmj
-         mcj9jw2N7aJ/r+nze20cYBNgtHCGn4MAw1kb6h22LffKdWCv80eYzD/Sl/K9P4ZSIV2j
-         LqlQys4wmGd1kgjRFJtkycYXF1P9d5YE0+IPsyv7WpUqRLt4GQPhLtU16qnGd42JKiKx
-         TeNRRrE9rJOryjV8Jfa5jhna9hDcW59ujBAAc/sjJgcKF2T3bYjFkaSZX1YySRaIxkGU
-         8QowvBb8VhU01EtuRVoZ3Crw1x1cnnwYuJryxsTUe4NQtuO61vCUlZdw5sXw4GvbaJQH
-         dSNA==
-X-Gm-Message-State: AFqh2koFHgYrSsR7gdhRxr+U8r+G207QdkfpdB9/HwGtEb8O2hW0LJTp
-        6rMlEeEP0ZsFecPr/rcmu21I/Ukv/YmZnwBU
-X-Google-Smtp-Source: AMrXdXtYlPG/xjTcFb+fb2sHAhxGlovOZc1Z+Aw4PiNu9XnLCiZLq6rvraXNAyFjtQZMpDZerR+EPw==
-X-Received: by 2002:a17:902:d4d1:b0:189:3a04:4466 with SMTP id o17-20020a170902d4d100b001893a044466mr928493plg.2.1671666711203;
-        Wed, 21 Dec 2022 15:51:51 -0800 (PST)
-Received: from google.com (25.11.145.34.bc.googleusercontent.com. [34.145.11.25])
-        by smtp.gmail.com with ESMTPSA id n9-20020a170902d2c900b00176b84eb29asm11994070plc.301.2022.12.21.15.51.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 15:51:50 -0800 (PST)
-Date:   Wed, 21 Dec 2022 23:51:47 +0000
-From:   Fangrui Song <maskray@google.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2] vdso: Improve cmd_vdso_check to check all dynamic
- relocations
-Message-ID: <20221221235147.45lkqmosndritfpe@google.com>
-References: <20220830193701.1702962-1-maskray@google.com>
- <20220910075316.no72fdyqjvunomwm@google.com>
- <CAFP8O3+OwanSJdzd5V3oGJ_MOJOSVdbn+4iBJJKm2LCR8mCA0Q@mail.gmail.com>
- <9ce45cd2-dcd8-11f8-e496-7efe3649e241@csgroup.eu>
- <20221115004625.x4wl6zbg4iiuxl5t@google.com>
- <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com>
- <3ec9737e-3d1a-c014-b91a-0e2d406a3b3d@csgroup.eu>
- <CAFP8O3KZTkSbxXJ2yWt4w-F3xWHY_owCs03wN3Bhss57O-E_JQ@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=993ucqPWtjUwCkCIDfk3/12NHjl1sqhSbH4u2sWdFYY=;
+        b=BP02cUNsxB6Fs2NcgMOPK6iRBybIRVDMwpsp7vwFd4mPd7vLFs5XdAcIeAOybY+QoP
+         etqgBvCQ0riPx2Y7r2RxBMF7/O5SwXL1BMjRu5zNclO1KsYKsHJaNCjlFepKNUOdrT9x
+         xIldikYJaZ1L3wrQoIbV1T1+pJ2H68Vdcxi4EoUQyPE+X38JG7zFbnS/0PQoOOPs+Wgz
+         iFuk56UW92IpxGGx76mCYNmzQiASnq+oX7pve4gUuj52zevZYNxgjSSMf/QCqtbMHtyW
+         lD9oeWtbqzOvkyjGKbQ9iF3KajKOihxHMU0oTV3c0rvtsQgYGjK0nv5s0JNhplxXhub1
+         q4Ow==
+X-Gm-Message-State: AFqh2kobD0UgkBdsPLVArWUUHcwTOog3skX8u6KIu2eJdrB1EMbRU3HP
+        JAIjYj+yUDmzpatS/5d2/bTiBkkuKbKTF5uTDNcvoQ==
+X-Google-Smtp-Source: AMrXdXsfUejqbZ8g4fEk9FVBUfVnB3x9hPo9I82WY7+QDksIgXzhwgs2isjnuWAbYz/l/9sOVJp265tvmZjccBftuBo=
+X-Received: by 2002:a17:906:3506:b0:7e6:42aa:2b16 with SMTP id
+ r6-20020a170906350600b007e642aa2b16mr460451eja.420.1671666939014; Wed, 21 Dec
+ 2022 15:55:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAFP8O3KZTkSbxXJ2yWt4w-F3xWHY_owCs03wN3Bhss57O-E_JQ@mail.gmail.com>
+References: <20221221185540.2265771-1-robbarnes@google.com> <CACeCKafZu=46NE--r9W-wtJWAhj8=s46yCBO4N4u5nt4COqYAQ@mail.gmail.com>
+In-Reply-To: <CACeCKafZu=46NE--r9W-wtJWAhj8=s46yCBO4N4u5nt4COqYAQ@mail.gmail.com>
+From:   Rob Barnes <robbarnes@google.com>
+Date:   Wed, 21 Dec 2022 16:55:02 -0700
+Message-ID: <CA+Dqm30XF=wDVcdUabbHySp-fwf+zFNqXpdYDW3bDTOwRbkiZw@mail.gmail.com>
+Subject: Re: [PATCH] drivers/cros_ec: Handle CrOS EC panics
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dtor@chromium.org, Benson Leung <bleung@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,215 +69,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The actual intention is that no dynamic relocation exists. However, some
-GNU ld ports produce unneeded R_*_NONE. (If a port fails to determine
-the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
-relocations. E.g. ld's powerpc port recently fixed
-https://sourceware.org/bugzilla/show_bug.cgi?id=29540) R_*_NONE are
-generally no-op in the dynamic loaders. So just ignore them.
+On Wed, Dec 21, 2022 at 12:23 PM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> Hi Rob,
+>
+> I'd suggest using the commit title tag "platform/chrome: cros_ec: ..."
+> for commits which are "ChromeOS EC" wide. That's in line with
+> other recent commits in this directory.
 
-With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
-bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
-not called "absolute relocations". (The patch is motivated by the arm64
-port missing R_AARCH64_RELATIVE.)
+Ack. Will do.
 
-Signed-off-by: Fangrui Song <maskray@google.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-Change from v1:
-* rebase after 8ac3b5cd3e0521d92f9755e90d140382fc292510 (lib/vdso: use "grep -E" instead of "egrep")
-* change the commit message to mention an example GNU ld bug; no longer say the patch fixes a deprecated egrep use
----
-  arch/arm/vdso/Makefile            |  3 ---
-  arch/arm64/kernel/vdso/Makefile   |  3 ---
-  arch/arm64/kernel/vdso32/Makefile |  3 ---
-  arch/csky/kernel/vdso/Makefile    |  3 ---
-  arch/loongarch/vdso/Makefile      |  3 ---
-  arch/mips/vdso/Makefile           |  3 ---
-  arch/powerpc/kernel/vdso/Makefile |  1 -
-  arch/riscv/kernel/vdso/Makefile   |  3 ---
-  arch/s390/kernel/vdso32/Makefile  |  2 --
-  arch/s390/kernel/vdso64/Makefile  |  2 --
-  arch/x86/entry/vdso/Makefile      |  4 ----
-  lib/vdso/Makefile                 | 13 ++++---------
-  12 files changed, 4 insertions(+), 39 deletions(-)
+>
+> On Wed, Dec 21, 2022 at 10:56 AM Rob Barnes <robbarnes@google.com> wrote:
+> >
+> > Add handler for CrOS EC panic events. When a panic is reported,
+> > poll EC log then force an orderly shutdown.
+> >
+> > This will preserve the EC log leading up to the crash.
+> >
+> > Signed-off-by: Rob Barnes <robbarnes@google.com>
+> > ---
+> >  drivers/platform/chrome/cros_ec_debugfs.c   | 24 +++++++++++++++++++++
+> >  drivers/platform/chrome/cros_ec_lpc.c       | 10 +++++++++
+> >  include/linux/platform_data/cros_ec_proto.h |  9 ++++++++
+> >  3 files changed, 43 insertions(+)
+> >
+> > diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
+> > index 21d973fc6be2..31637a4e4cf9 100644
+> > --- a/drivers/platform/chrome/cros_ec_debugfs.c
+> > +++ b/drivers/platform/chrome/cros_ec_debugfs.c
+> > @@ -49,6 +49,7 @@ struct cros_ec_debugfs {
+> >         struct delayed_work log_poll_work;
+> >         /* EC panicinfo */
+> >         struct debugfs_blob_wrapper panicinfo_blob;
+> > +       struct notifier_block notifier_panic;
+> >  };
+> >
+> >  /*
+> > @@ -437,6 +438,23 @@ static int cros_ec_create_panicinfo(struct cros_ec_debugfs *debug_info)
+> >         return ret;
+> >  }
+> >
+> > +static int cros_ec_debugfs_panic_event(struct notifier_block *nb,
+> > +                                      unsigned long queued_during_suspend,
+> > +                                      void *_notify)
+> > +{
+> > +       struct cros_ec_debugfs *debug_info =
+> > +               container_of(nb, struct cros_ec_debugfs, notifier_panic);
+> > +
+> > +       if (debug_info->log_buffer.buf) {
+> > +               /* Force log poll work to run immediately */
+> > +               mod_delayed_work(debug_info->log_poll_work.wq, &debug_info->log_poll_work, 0);
+> > +               /* Block until log poll work finishes */
+> > +               flush_delayed_work(&debug_info->log_poll_work);
+> > +       }
+> > +
+> > +       return NOTIFY_DONE;
+> > +}
+> > +
+> >  static int cros_ec_debugfs_probe(struct platform_device *pd)
+> >  {
+> >         struct cros_ec_dev *ec = dev_get_drvdata(pd->dev.parent);
+> > @@ -473,6 +491,12 @@ static int cros_ec_debugfs_probe(struct platform_device *pd)
+> >         debugfs_create_u16("suspend_timeout_ms", 0664, debug_info->dir,
+> >                            &ec->ec_dev->suspend_timeout_ms);
+> >
+> > +       debug_info->notifier_panic.notifier_call = cros_ec_debugfs_panic_event;
+> > +       ret = blocking_notifier_chain_register(&ec->ec_dev->panic_notifier,
+> > +                                              &debug_info->notifier_panic);
+> > +       if (ret)
+> > +               goto remove_debugfs;
+> > +
+> >         ec->debug_info = debug_info;
+> >
+> >         dev_set_drvdata(&pd->dev, ec);
+> > diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
+> > index 7fc8f82280ac..21958c3b0c28 100644
+> > --- a/drivers/platform/chrome/cros_ec_lpc.c
+> > +++ b/drivers/platform/chrome/cros_ec_lpc.c
+> > @@ -21,6 +21,7 @@
+> >  #include <linux/platform_data/cros_ec_proto.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/printk.h>
+> > +#include <linux/reboot.h>
+> >  #include <linux/suspend.h>
+> >
+> >  #include "cros_ec.h"
+> > @@ -332,6 +333,15 @@ static void cros_ec_lpc_acpi_notify(acpi_handle device, u32 value, void *data)
+> >
+> >         if (value == ACPI_NOTIFY_DEVICE_WAKE)
+> >                 pm_system_wakeup();
+> > +
+> > +       if (value == ACPI_NOTIFY_CROS_EC_PANIC) {
+> > +               dev_err(ec_dev->dev,
+> > +                       "CrOS EC Panic Reported. Shutdown is imminent!");
+> > +               blocking_notifier_call_chain(&ec_dev->panic_notifier, 0,
+> > +                                            ec_dev);
+> > +               /* Begin orderly shutdown. Force shutdown after 1 second. */
+> > +               hw_protection_shutdown("CrOS EC Panic", 1000);
+>
+> I feel like this patch is doing 2 things: pulling the logs, and then
+> starting a shutdown.
+> This should be split into 2 patches.
 
-diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
-index a7ec06ce3785..e58197bba776 100644
---- a/arch/arm/vdso/Makefile
-+++ b/arch/arm/vdso/Makefile
-@@ -1,8 +1,5 @@
-  # SPDX-License-Identifier: GPL-2.0
-  
--# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
--# the inclusion of generic Makefile.
--ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
-  include $(srctree)/lib/vdso/Makefile
-  
-  hostprogs := vdsomunge
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index beaf9586338f..1f2427b13410 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -6,9 +6,6 @@
-  # Heavily based on the vDSO Makefiles for other archs.
-  #
-  
--# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
--# the inclusion of generic Makefile.
--ARCH_REL_TYPE_ABS := R_AARCH64_JUMP_SLOT|R_AARCH64_GLOB_DAT|R_AARCH64_ABS64
-  include $(srctree)/lib/vdso/Makefile
-  
-  obj-vdso := vgettimeofday.o note.o sigreturn.o
-diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-index f59bd1a4ead6..d014162c5c71 100644
---- a/arch/arm64/kernel/vdso32/Makefile
-+++ b/arch/arm64/kernel/vdso32/Makefile
-@@ -3,9 +3,6 @@
-  # Makefile for vdso32
-  #
-  
--# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
--# the inclusion of generic Makefile.
--ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
-  include $(srctree)/lib/vdso/Makefile
-  
-  # Same as cc-*option, but using CC_COMPAT instead of CC
-diff --git a/arch/csky/kernel/vdso/Makefile b/arch/csky/kernel/vdso/Makefile
-index 0b6909f10667..86c8c4de1b0f 100644
---- a/arch/csky/kernel/vdso/Makefile
-+++ b/arch/csky/kernel/vdso/Makefile
-@@ -1,8 +1,5 @@
-  # SPDX-License-Identifier: GPL-2.0-only
-  
--# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
--# the inclusion of generic Makefile.
--ARCH_REL_TYPE_ABS := R_CKCORE_ADDR32|R_CKCORE_JUMP_SLOT
-  include $(srctree)/lib/vdso/Makefile
-  
-  # Symbols present in the vdso
-diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
-index d89e2ac75f7b..1b2e0f149f55 100644
---- a/arch/loongarch/vdso/Makefile
-+++ b/arch/loongarch/vdso/Makefile
-@@ -1,9 +1,6 @@
-  # SPDX-License-Identifier: GPL-2.0
-  # Objects to go into the VDSO.
-  
--# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
--# the inclusion of generic Makefile.
--ARCH_REL_TYPE_ABS := R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SLOT
-  include $(srctree)/lib/vdso/Makefile
-  
-  obj-vdso-y := elf.o vgetcpu.o vgettimeofday.o sigreturn.o
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 1f7d5c6c10b0..c060f3596304 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -4,9 +4,6 @@
-  # Sanitizer runtimes are unavailable and cannot be linked here.
-   KCSAN_SANITIZE			:= n
-  
--# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
--# the inclusion of generic Makefile.
--ARCH_REL_TYPE_ABS := R_MIPS_JUMP_SLOT|R_MIPS_GLOB_DAT
-  include $(srctree)/lib/vdso/Makefile
-  
-  obj-vdso-y := elf.o vgettimeofday.o sigreturn.o
-diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-index 6a977b0d8ffc..83c347e9136f 100644
---- a/arch/powerpc/kernel/vdso/Makefile
-+++ b/arch/powerpc/kernel/vdso/Makefile
-@@ -2,7 +2,6 @@
-  
-  # List of files in the vdso, has to be asm only for now
-  
--ARCH_REL_TYPE_ABS := R_PPC_JUMP_SLOT|R_PPC_GLOB_DAT|R_PPC_ADDR32|R_PPC_ADDR24|R_PPC_ADDR16|R_PPC_ADDR16_LO|R_PPC_ADDR16_HI|R_PPC_ADDR16_HA|R_PPC_ADDR14|R_PPC_ADDR14_BRTAKEN|R_PPC_ADDR14_BRNTAKEN|R_PPC_REL24
-  include $(srctree)/lib/vdso/Makefile
-  
-  obj-vdso32 = sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32.o note-32.o getcpu-32.o
-diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-index 06e6b27f3bcc..d85c37e11b21 100644
---- a/arch/riscv/kernel/vdso/Makefile
-+++ b/arch/riscv/kernel/vdso/Makefile
-@@ -1,9 +1,6 @@
-  # SPDX-License-Identifier: GPL-2.0-only
-  # Copied from arch/tile/kernel/vdso/Makefile
-  
--# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
--# the inclusion of generic Makefile.
--ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
-  include $(srctree)/lib/vdso/Makefile
-  # Symbols present in the vdso
-  vdso-syms  = rt_sigreturn
-diff --git a/arch/s390/kernel/vdso32/Makefile b/arch/s390/kernel/vdso32/Makefile
-index 245bddfe9bc0..e795fdbbf484 100644
---- a/arch/s390/kernel/vdso32/Makefile
-+++ b/arch/s390/kernel/vdso32/Makefile
-@@ -2,8 +2,6 @@
-  # List of files in the vdso
-  
-  KCOV_INSTRUMENT := n
--ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
--ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
-  
-  include $(srctree)/lib/vdso/Makefile
-  obj-vdso32 = vdso_user_wrapper-32.o note-32.o
-diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
-index 9e2b95a222a9..47dbbfdfad68 100644
---- a/arch/s390/kernel/vdso64/Makefile
-+++ b/arch/s390/kernel/vdso64/Makefile
-@@ -2,8 +2,6 @@
-  # List of files in the vdso
-  
-  KCOV_INSTRUMENT := n
--ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
--ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
-  
-  include $(srctree)/lib/vdso/Makefile
-  obj-vdso64 = vdso_user_wrapper.o note.o
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 838613ac15b8..b292c24acb8e 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -3,10 +3,6 @@
-  # Building vDSO images for x86.
-  #
-  
--# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
--# the inclusion of generic Makefile.
--ARCH_REL_TYPE_ABS := R_X86_64_JUMP_SLOT|R_X86_64_GLOB_DAT|R_X86_64_RELATIVE|
--ARCH_REL_TYPE_ABS += R_386_GLOB_DAT|R_386_JMP_SLOT|R_386_RELATIVE
-  include $(srctree)/lib/vdso/Makefile
-  
-  # Sanitizer runtimes are unavailable and cannot be linked here.
-diff --git a/lib/vdso/Makefile b/lib/vdso/Makefile
-index e814061d6aa0..9f031eafc465 100644
---- a/lib/vdso/Makefile
-+++ b/lib/vdso/Makefile
-@@ -5,18 +5,13 @@ GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
-  
-  c-gettimeofday-$(CONFIG_GENERIC_GETTIMEOFDAY) := $(addprefix $(GENERIC_VDSO_DIR), gettimeofday.c)
-  
--# This cmd checks that the vdso library does not contain absolute relocation
-+# This cmd checks that the vdso library does not contain dynamic relocations.
-  # It has to be called after the linking of the vdso library and requires it
-  # as a parameter.
-  #
--# $(ARCH_REL_TYPE_ABS) is defined in the arch specific makefile and corresponds
--# to the absolute relocation types printed by "objdump -R" and accepted by the
--# dynamic linker.
--ifndef ARCH_REL_TYPE_ABS
--$(error ARCH_REL_TYPE_ABS is not set)
--endif
--
-+# As a workaround for some GNU ld ports which produce unneeded R_*_NONE
-+# dynamic relocations, ignore R_*_NONE.
-  quiet_cmd_vdso_check = VDSOCHK $@
--      cmd_vdso_check = if $(OBJDUMP) -R $@ | grep -E -h "$(ARCH_REL_TYPE_ABS)"; \
-+      cmd_vdso_check = if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_\w*_"; \
-  		       then (echo >&2 "$@: dynamic relocations are not supported"; \
-  			     rm -f $@; /bin/false); fi
--- 
-2.39.0.314.g84b9a713c41-goog
+Ack. Will do.
 
+>
+> > +       }
+> >  }
+>
+> Line limits are now 100 chars[1], so most of these lines can fit on 1 line.
+>
+> >
+> >  static int cros_ec_lpc_probe(struct platform_device *pdev)
+> > diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+> > index e43107e0bee1..1c4487271836 100644
+> > --- a/include/linux/platform_data/cros_ec_proto.h
+> > +++ b/include/linux/platform_data/cros_ec_proto.h
+> > @@ -41,6 +41,13 @@
+> >  #define EC_MAX_REQUEST_OVERHEAD                1
+> >  #define EC_MAX_RESPONSE_OVERHEAD       32
+> >
+> > +/*
+> > + * EC panic is not covered by the standard (0-F) ACPI notify values.
+> > + * Arbitrarily choosing B0 to notify ec panic, which is in the 84-BF
+> > + * device specific ACPI notify range.
+> > + */
+> > +#define ACPI_NOTIFY_CROS_EC_PANIC      0xB0
+>
+> Can you provide a link (either in the commit, or here in the comment)
+> to the coreboot/BIOS code which uses this value? I feel this should
+> be documented in some form that correlates the caller and the callee.
+
+Link: https://chromium-review.googlesource.com/c/chromiumos/third_party/coreboot/+/4023535
+
+>
+> > +
+> >  /*
+> >   * Command interface between EC and AP, for LPC, I2C and SPI interfaces.
+> >   */
+> > @@ -176,6 +183,8 @@ struct cros_ec_device {
+> >         /* The platform devices used by the mfd driver */
+> >         struct platform_device *ec;
+> >         struct platform_device *pd;
+> > +
+> > +       struct blocking_notifier_head panic_notifier;
+>
+> Any reason we cannot use the existing event_notifier (with value argument)?
+> It's a system panic, so I doubt that computational overhead for other
+> notifier block
+> listeners is a concern.
+
+The value field is already being used for "queued_during_suspend" in
+event_notifier.
+>
+> BR,
+>
+> -Prashant
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f867ea4d75fa59ee87a7f48be144
