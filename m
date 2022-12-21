@@ -2,118 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1290D652B87
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B48D652B8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234214AbiLUCle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 21:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
+        id S234273AbiLUCn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 21:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLUClb (ORCPT
+        with ESMTP id S234260AbiLUCnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 21:41:31 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5FD1D0EC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:41:30 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id c7so12727188qtw.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:41:30 -0800 (PST)
+        Tue, 20 Dec 2022 21:43:19 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1BC1D300
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:42:52 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so757491pjp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:42:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fMhzqhqWq7UkrwtJ6ZqboyA3KFySyX0rXKAhLHPSdxI=;
-        b=l3utyhobS6jS5RhkL2EKink3aSp7+2VybDeEXko1NcMcqStPk1+tFzxDNvKrGu8ffd
-         LL8fxBQRBnsoL7MQz7KzDa+HJRuURIRzpjwN1XC9uFMIVcDg1emThrU2NYPk70waUUnH
-         +QGtxyvyvOex0N1E7n/948MavKr8bQU3HUc60=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OStSd32YplqutNgXvFahsrXJGNlcVFLY4LscMZH0nv0=;
+        b=sN1cz4J6eT7EFe157PmafvjLNvNPsz4rEiWWNtSqYpqGQvtGm8KN5CnOv7jf6YKehs
+         p6OmOUv53NIQgxFBpS0urwKIseyuGyzk/SW1jONEO7T/y+p1gM04ntOt1iRhemzw6gWU
+         8iFxe74N3zHDbbhULKnsXdBY7WGHFAjTmEWqabZwbBmoC6V3XZXhE18Oop3JWJaGiuKh
+         +4zfj5TZ88e2lQToLPpZ8Dd1L8DhIcj7xZ0/R+te0D1MzFhRyvYeGzHwstPKJWJDGTbH
+         ilE46U3zMaBACcbFGDzGiQbjxBnYclFHhvF4g+Dp37AKjcyhrIyXi9dZtDAL2ScsyZoK
+         PTMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fMhzqhqWq7UkrwtJ6ZqboyA3KFySyX0rXKAhLHPSdxI=;
-        b=sPJCoSvVAeB74YdPDppbiUo+iHQ4uGPd19WSYbVN7Ve/+aWyduLwhAwmm+miYnBVI3
-         EhMCMNb3KZ9Nu3FlWZccFk1CezqzK1cwdnTUD4hF//hrJ8D1J/SNE7277u8js1mo3O9k
-         Fxyn2tQ3dK6LYe78VHsuvh9mq/dHHOJz2qmFy+ekiTw4M53eVqKdSMmfGRGp/r+ftnC/
-         9YJKltXz8FoLASPk2Ykc0aL6mw0SQL97PJVLzMUTSn8ToccbNyXTTmXAdz1tC6nEfSl6
-         I+ZJzyfNL7YK4uYLJ00ZPFVMW8CYs0wHf2LmyuXjHVXnNX8MJ6UP583zYjngkvinyA1j
-         d6MQ==
-X-Gm-Message-State: AFqh2krvWfiSywu/KnsZA507BJyLPKZobvTQ4jpvBbD9lEFC2gmNbfi2
-        hKPDzmNvir3yWbsmc074jN6Bhw==
-X-Google-Smtp-Source: AMrXdXsXSk03wijWPMH7tmFpozZvDgbIcfRVQH3NWQ0YJTsvJWJT3pFsqo0N2zFyB6t4H9DjiagPYg==
-X-Received: by 2002:ac8:735a:0:b0:3a6:2170:b089 with SMTP id q26-20020ac8735a000000b003a62170b089mr6859611qtp.12.1671590489812;
-        Tue, 20 Dec 2022 18:41:29 -0800 (PST)
-Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id i17-20020a05620a405100b006fcb77f3bd6sm10471535qko.98.2022.12.20.18.41.28
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OStSd32YplqutNgXvFahsrXJGNlcVFLY4LscMZH0nv0=;
+        b=k1Nk3uQBR++EXPingyVVKd0IFl820RmbGJl0Nl4ylClQ6Regp52R/G0bVSd7XDUmE1
+         8lyfIjJvbXYFzGjqNMEht6aXzUM9yUd6dLrSq+BWQNcOrZmxdOk7H5r6VyOfj+VLM4Ek
+         Gq3N1p5OCONMMKZJ/zdcYzHGGuzKHvO1phMYBSxIVXgYtd9EWKe5WIpejhmEHxgs6kpE
+         iGgHS2PLJecOv5SVoJUkgBnDDgrYSK0WiU0Wqz6C87hZqSS5dzRGL1EbPGJMi5gMEzwn
+         UxIzMK6yrEf/n7SSHPAY+K+PXRuC+NEftUesAinSKcfUIsGHrLUuwZPDdGNKeUpEiHxu
+         0AGQ==
+X-Gm-Message-State: AFqh2kpS+/mcO7v0iuMsP/Fj1TK01UgGg5+POQEv8aIenjzxeevIMnda
+        4Rv6R6Uzq+WCxDWsNL+aRoJj5Q==
+X-Google-Smtp-Source: AMrXdXv1vJnW/Jn0Li+PENUoxvt8jTtf8bCjDmR5JOo5WmyOvS1uIP4t83g1WW9EekMeo72A8LQSWw==
+X-Received: by 2002:a05:6a20:d39a:b0:9d:efbf:6618 with SMTP id iq26-20020a056a20d39a00b0009defbf6618mr605811pzb.38.1671590572269;
+        Tue, 20 Dec 2022 18:42:52 -0800 (PST)
+Received: from ?IPV6:2409:8a28:e63:2da0:b0e9:bb47:3cf6:6095? ([2409:8a28:e63:2da0:b0e9:bb47:3cf6:6095])
+        by smtp.gmail.com with ESMTPSA id h10-20020a62830a000000b00574ffc5976fsm9354886pfe.159.2022.12.20.18.42.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 18:41:28 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Date:   Tue, 20 Dec 2022 21:41:17 -0500
-Message-Id: <0B1950D8-9319-4F25-B14B-4ED949A57BE0@joelfernandes.org>
-References: <20221221004957.GA29021@lothringen>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-In-Reply-To: <20221221004957.GA29021@lothringen>
-To:     Frederic Weisbecker <frederic@kernel.org>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Dec 2022 18:42:51 -0800 (PST)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+X-Google-Original-From: Chengming Zhou <chengming.zhou@linux.dev>
+Message-ID: <3a5a4738-2868-8f2f-f8b2-a28c10fbe25b@linux.dev>
+Date:   Wed, 21 Dec 2022 10:42:39 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [syzbot] KASAN: use-after-free Read in put_pmu_ctx
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        syzbot <syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        bpf@vger.kernel.org, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000a20a2e05f029c577@google.com>
+ <Y6B3xEgkbmFUCeni@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y6B3xEgkbmFUCeni@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/12/19 22:40, Peter Zijlstra wrote:
+> On Mon, Dec 19, 2022 at 12:04:43AM -0800, syzbot wrote:
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    13e3c7793e2f Merge tag 'for-netdev' of https://git.kernel...
+>> git tree:       bpf
+>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=177df7e0480000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=b0e91ad4b5f69c47
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=b8e8c01c8ade4fe6e48f
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e87100480000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ceeb13880000
+>>
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/373a99daa295/disk-13e3c779.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/7fa71ed0fe17/vmlinux-13e3c779.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/2842ad5c698b/bzImage-13e3c779.xz
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com
+>>
+>> ==================================================================
+>> BUG: KASAN: use-after-free in __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4925
+>> Read of size 8 at addr ffff8880237d6018 by task syz-executor287/8300
+>>
+>> CPU: 0 PID: 8300 Comm: syz-executor287 Not tainted 6.1.0-syzkaller-09661-g13e3c7793e2f #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+>> Call Trace:
+>>  <TASK>
+>>  __dump_stack lib/dump_stack.c:88 [inline]
+>>  dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+>>  print_address_description mm/kasan/report.c:284 [inline]
+>>  print_report+0x15e/0x45d mm/kasan/report.c:395
+>>  kasan_report+0xbf/0x1f0 mm/kasan/report.c:495
+>>  __lock_acquire+0x3ee7/0x56d0 kernel/locking/lockdep.c:4925
+>>  lock_acquire kernel/locking/lockdep.c:5668 [inline]
+>>  lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+>>  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+>>  _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
+>>  put_pmu_ctx kernel/events/core.c:4913 [inline]
+>>  put_pmu_ctx+0xad/0x390 kernel/events/core.c:4893
+>>  _free_event+0x3c5/0x13d0 kernel/events/core.c:5196
+>>  free_event+0x58/0xc0 kernel/events/core.c:5224
+>>  __do_sys_perf_event_open+0x66d/0x2980 kernel/events/core.c:12701
+>>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> Does this help?
+> 
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index e47914ac8732..bbff551783e1 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -12689,7 +12689,8 @@ SYSCALL_DEFINE5(perf_event_open,
+>  	return event_fd;
+>  
+>  err_context:
+> -	/* event->pmu_ctx freed by free_event() */
+> +	put_pmu_ctx(event->pmu_ctx);
+> +	event->pmu_ctx = NULL; /* _free_event() */
+>  err_locked:
+>  	mutex_unlock(&ctx->mutex);
+>  	perf_unpin_context(ctx);
 
+Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
 
-> On Dec 20, 2022, at 7:50 PM, Frederic Weisbecker <frederic@kernel.org> wro=
-te:
->=20
-> =EF=BB=BFOn Tue, Dec 20, 2022 at 07:15:00PM -0500, Joel Fernandes wrote:
->> On Tue, Dec 20, 2022 at 5:45 PM Frederic Weisbecker <frederic@kernel.org>=
- wrote:
->> Agreed about (1).
->>=20
->>> _ In (2), E pairs with the address-dependency between idx and lock_count=
-.
->>=20
->> But that is not the only reason. If that was the only reason for (2),
->> then there is an smp_mb() just before the next-scan post-flip before
->> the lock counts are read.
->=20
-> The post-flip barrier makes sure the new idx is visible on the next READER=
-'s
-> turn, but it doesn't protect against the fact that "READ idx then WRITE lo=
-ck[idx]"
-> may appear unordered from the update side POV if there is no barrier betwe=
-en the
-> scan and the flip.
->=20
-> If you remove the smp_mb() from the litmus test I sent, things explode.
+While reviewing the code, I found perf_event_create_kernel_counter()
+has the similar problem in the "err_pmu_ctx" error handling path:
 
-Sure I see what you are saying and it=E2=80=99s a valid point as well. Howev=
-er why do you need memory barrier D (labeled such in the kernel code) for th=
-at? You already have a memory barrier A before the lock count is read. That w=
-ill suffice for the ordering pairing with the addr dependency.
-In other words, if updater sees readers lock counts, then reader would be ma=
-king those lock count updates on post-flip inactive index, not the one being=
- scanned as you wanted, and you will accomplish that just with the mem barri=
-er A.
+CPU0					CPU1
+perf_event_create_kernel_counter()
+  // inc ctx refcnt
+  find_get_context(task, event) (1)
 
-So D fixes the above issue you are talking about (lock count update), howeve=
-r that is already fixed by the memory barrier A. But you still need D for th=
-e issue I mentioned (unlock counts vs flip).
+  // inc pmu_ctx refcnt
+  pmu_ctx = find_get_pmu_context()
 
-That=E2=80=99s just my opinion and let=E2=80=99s discuss more because I cann=
-ot rule out that I am missing something with this complicated topic ;-)
+  event->pmu_ctx = pmu_ctx
+  ...
+  goto err_pmu_ctx:
+    // dec pmu_ctx refcnt
+    put_pmu_ctx(pmu_ctx) (2)
 
-Thanks.=
+    mutex_unlock(&ctx->mutex)
+    // dec ctx refcnt
+    put_ctx(ctx)
+					perf_event_exit_task_context()
+					  mutex_lock()
+					  mutex_unlock()
+					  // last refcnt put
+					  put_ctx()
+    free_event(event)
+      if (event->pmu_ctx) // True
+        put_pmu_ctx() (3)
+          // will access freed pmu_ctx or ctx
+
+      if (event->ctx) // False
+        put_ctx()
+
+(3) has UAF problem since the pmu_ctx maybe freed in (2), so also
+should have "event->pmu_ctx = NULL;" in (2).
+
