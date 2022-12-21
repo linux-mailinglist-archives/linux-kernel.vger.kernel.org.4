@@ -2,116 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E507652C7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14F4652C82
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234324AbiLUFpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 00:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S234345AbiLUFrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 00:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiLUFpR (ORCPT
+        with ESMTP id S229436AbiLUFrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 00:45:17 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D860D1D32B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:45:16 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BL5ia291992328
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Tue, 20 Dec 2022 21:44:37 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BL5ia291992328
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022120601; t=1671601477;
-        bh=g06yUmf4XATZkyNVgR70pXJdHh3OyYrnD4+iUtekOP0=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=AfI10PAjpzs+n5LqVD+Qa05VvlDwgACeb46Vt17Ao+doIuHBRWyNqkFvGJEBqmlN8
-         5mIS91MSiHP/qhd9ll7DsigxcFKtDdEcqjzURjcJk+P6lWVW5fuVyft+wz93J8VYkz
-         CmwJrZskvMG5CdzmO+vlYDnoaHJLGJmn0LT42OMe0+qhH2NLV77fah03noQ5l3t211
-         Xj19RzruWD/fFavgQdDDUZAOCWmJOwWLGrXB/3KpyZ65QkZUzaG7UW/RtUOI39Lam+
-         iJvIoPqy7f1nVrF/akj1UK3uWR1X/xa/X2iBztRW8z9iVSJaIlaMUst+MH/Ak222At
-         qA8hL5CSwKbGA==
-Date:   Tue, 20 Dec 2022 21:44:33 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     "Li, Xin3" <xin3.li@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: RE: [RFC PATCH 22/32] x86/fred: FRED initialization code
-User-Agent: K-9 Mail for Android
-In-Reply-To: <BN6PR1101MB2161C51C6068026D9C442460A8EB9@BN6PR1101MB2161.namprd11.prod.outlook.com>
-References: <20221220063658.19271-1-xin3.li@intel.com> <20221220063658.19271-23-xin3.li@intel.com> <Y6GELyEJeKY3dEqJ@hirez.programming.kicks-ass.net> <16972e64-7d7b-ad8c-f8dc-6dcab69e629e@citrix.com> <Y6GIN5Uf7Qd43A9U@hirez.programming.kicks-ass.net> <BN6PR1101MB2161C51C6068026D9C442460A8EB9@BN6PR1101MB2161.namprd11.prod.outlook.com>
-Message-ID: <0D72CCA1-A0B6-487B-A6B9-7341020D28A2@zytor.com>
+        Wed, 21 Dec 2022 00:47:04 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6D85F87;
+        Tue, 20 Dec 2022 21:47:00 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BL1bOZR014040;
+        Wed, 21 Dec 2022 05:46:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RA7Hd+cZC/9X/zleey9EVeBsRmig/cD6MmzKzXQ4/t4=;
+ b=Nm92RqXRBm4EL3IOXCLuDzXzW1O9mfOi/xdrq3zV8cMQkyg/6qMA/Jzw16HBSXizuPbk
+ 8jOUXLyCTYM2oFQgRENNWic1Zg5s0yAFb40tqSxQRaBxA66XsdMkZNczNhesFdtk+0dK
+ VuxiiaP2qr9JMRQ+glowsALgJhR7kZxwI3pTMjMXZtgc9gWBjO3U+em4kPqIKgD3lEka
+ UBKkot+OA0oXbzLn90hq0qi4RzcWantlD2rPQVdPEgp8j5qW5vOiv8tPxNs8zKsUZcdW
+ qxATCr0rt8YGdokLcXpP6gwLkn98T/Se1USFQdYFljI6m0vSHZPvu3lgD/wGBIh0JzDt bQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mkcxv9w37-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 05:46:15 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BL5kEdJ006256
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 05:46:14 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
+ 2022 21:46:08 -0800
+Message-ID: <e54d0094-5cbd-8710-4fce-5f2d8414bbb7@quicinc.com>
+Date:   Wed, 21 Dec 2022 11:16:06 +0530
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3 1/2] remoteproc: elf_loader: Update resource table name
+ check
+Content-Language: en-US
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
+        <krzysztof.kozlowski@linaro.org>, <mathieu.poirier@linaro.org>,
+        <corbet@lwn.net>
+References: <1671523269-21154-1-git-send-email-quic_srivasam@quicinc.com>
+ <1671523269-21154-2-git-send-email-quic_srivasam@quicinc.com>
+ <0d683526-5707-d5b4-e96d-b2d982d4b5da@quicinc.com>
+In-Reply-To: <0d683526-5707-d5b4-e96d-b2d982d4b5da@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9OlD3RSog9t6gYd-90mAm-eBPN7ewSbF
+X-Proofpoint-ORIG-GUID: 9OlD3RSog9t6gYd-90mAm-eBPN7ewSbF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-21_01,2022-12-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 impostorscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212210040
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On December 20, 2022 9:28:52 PM PST, "Li, Xin3" <xin3=2Eli@intel=2Ecom> wro=
-te:
->> > >> +	wrmsrl(MSR_IA32_FRED_STKLVLS,
->> > >> +	       FRED_STKLVL(X86_TRAP_DB,  1) |
->> > >> +	       FRED_STKLVL(X86_TRAP_NMI, 2) |
->> > >> +	       FRED_STKLVL(X86_TRAP_MC,  2) |
->> > >> +	       FRED_STKLVL(X86_TRAP_DF,  3));
->> > >> +
->> > >> +	/* The FRED equivalents to IST stacks=2E=2E=2E */
->> > >> +	wrmsrl(MSR_IA32_FRED_RSP1, __this_cpu_ist_top_va(DB));
->> > >> +	wrmsrl(MSR_IA32_FRED_RSP2, __this_cpu_ist_top_va(NMI));
->> > >> +	wrmsrl(MSR_IA32_FRED_RSP3, __this_cpu_ist_top_va(DF));
->> > > Not quite=2E=2E IIRC fred only switches to another stack when the l=
-evel
->> > > of the exception is higher=2E Specifically, if we trigger #DB while
->> > > inside #NMI we will not switch to the #DB stack (since 1 < 2)=2E
->
->Yes, current stack level can only grow higher=2E
->
->> >
->> > There needs to be a new stack for #DF, and just possibly one for #MC=
-=2E
->> > NMI and #DB do not need separate stacks under FRED=2E
->>=20
->> True, there is very little need to use additional stacks with FRED=2E
->
->Pretty much=2E
->
->#DB/NMI from a ring 3 context uses CSL 0, and their CSLs increase only
->when happening from a ring 0 context=2E
->
->>=20
->> > > Now, as mentioned elsewhere, it all nests a lot saner, but stack
->> > > exhaustion is still a thing, given the above, what happens when a
->> > > #DB hits an #NMI which tickles a #VE or something?
->> > >
->> > > I don't think we've increased the exception stack size, but perhaps
->> > > we should for FRED?
->> >
->> > Not sure if it matters too much - it doesn't seem usefully different
->> > to IDT delivery=2E=C2=A0 #DB shouldn't get too deep, and NMI gets pro=
-perly
->> > inhibited now=2E
->>=20
->> Both #DB and #NMI can end up in perf, and all that goes quite deep :/
->
->Can you please elaborate it a bit?
->
+Hi,
 
-Right, this is one major reason for putting #DB/NMI in a separate stack le=
-vel=2E
+On 12/20/2022 6:20 PM, Mukesh Ojha wrote:
+> Hi,
+> 
+> On 12/20/2022 1:31 PM, Srinivasa Rao Mandadapu wrote:
+>> Update the way of checking resource table name with prefix
+>> substring search instead of complete string search.
+>> In general Qualcomm DSP binary is prepared by combining different ELFs',
+>> hence section header name (e.g. .resource_table), appended with ELF name
+>> to differentiate with same section(e.g. resource_table.ac_bin_process) of
+>> different ELFs'.
+>> Example readelf output of DSP binary:
+>>      [60] .start.ac_bin_process PROGBITS
+>>      [61] .resource_table.ac_bin_process PROGBITS
+>>      [62] .comment.ac_bin_process PROGBITS
+>>
+> 
+> Could we rephrase above like below ? It could be also taken why applying 
+> the patch.
+> 
+> Update the way of checking resource table name with prefix substring 
+> search instead of complete string search.
+> 
+> In general, Qualcomm DSP binary is prepared by combining different 
+> ELF's. Hence, section header name (e.g. .resource_table), appended
+> with ELF name to differentiate with same section(e.g. 
+> resource_table.ac_bin_process) of different ELFs'.
+> 
+> Example readelf output of DSP binary:
+>        [60] .start.ac_bin_process PROGBITS
+>        [61] .resource_table.ac_bin_process PROGBITS
+>        [62] .comment.ac_bin_process PROGBITS
+> 
+> 
+
+Looks like my email client did not honour new line
+put by me in rephrased text. Sorry for that.
+
+Please run checkpatch.pl before sending the patch.
+
+-Mukesh
+
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> 
+> Otherwise, LGTM.
+> Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> 
+> -Mukesh
+>> ---
+>>   drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c 
+>> b/drivers/remoteproc/remoteproc_elf_loader.c
+>> index 5a412d7..77330d6 100644
+>> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+>> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+>> @@ -272,7 +272,7 @@ find_table(struct device *dev, const struct 
+>> firmware *fw)
+>>           u64 offset = elf_shdr_get_sh_offset(class, shdr);
+>>           u32 name = elf_shdr_get_sh_name(class, shdr);
+>> -        if (strcmp(name_table + name, ".resource_table"))
+>> +        if (!strstarts(name_table + name, ".resource_table"))
+>>               continue;
+>>           table = (struct resource_table *)(elf_data + offset);
