@@ -2,137 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016D96538C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 23:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A44156538D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 23:40:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235189AbiLUWhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 17:37:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S235044AbiLUWkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 17:40:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235100AbiLUWgj (ORCPT
+        with ESMTP id S234967AbiLUWkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 17:36:39 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8C0E36;
-        Wed, 21 Dec 2022 14:36:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671662198; x=1703198198;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=CSuTSRNf7BVJ26/vVNpg852swFu8pb0DaMkyR4IOx0Y=;
-  b=bd7CwxMNEUCU38Bf0Ez+ThbRhw/sW+Nuy4hpsVvdmdw039NEE/fLrXYh
-   LrMjBDkAh/YHPytNFnK3rgwU0quePCa0qZZOfXRy69aqDHYgGPmBw2qib
-   vfuw/zun33jio6aFMEEqAYQI7oX1zf0McZRDO8F2mCSOHEXh8osuYGdRA
-   0CiP1eHzeFN4pbFvazF0TgwHWXkl1P1rHCNch1u6jeRXjRb/kwkuWnriA
-   4/sow9Du8xUFgDk9bGPdse6Hjfwb9ba6vRn/55VsEWZLCgUjXNIenGjPv
-   7RU4Q2bBQvV1dX8xDpR6D5btvnfI9MRN7T0SYv34k7/PlV4gY3ufU6D2C
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="303419288"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="303419288"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 14:36:38 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="758693326"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="758693326"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 14:36:37 -0800
-Date:   Wed, 21 Dec 2022 14:37:02 -0800 (PST)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Marco Pagani <marpagan@redhat.com>
-cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        bagasdotme@gmail.com
-Subject: Re: [PATCH v7 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <70c7daf8-379e-1479-aba5-4476c4a93b9f@redhat.com>
-Message-ID: <alpine.DEB.2.22.394.2212211434520.570436@rhweight-WRK1>
-References: <20221220163652.499831-1-matthew.gerlach@linux.intel.com> <20221220163652.499831-5-matthew.gerlach@linux.intel.com> <Y6HsQJQMDnHgTesF@smile.fi.intel.com> <d34b021c-eec4-905e-f352-734db2d8338a@redhat.com>
- <70c7daf8-379e-1479-aba5-4476c4a93b9f@redhat.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 21 Dec 2022 17:40:39 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B684E17
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 14:40:38 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id f28so62137qkh.10
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 14:40:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=G3OCVo6XS4rgsws68hkJPdhb81JtRDiKMnu7YKNLQzk=;
+        b=odoDsIvPGhL96Eox+D5J0o7CS/3CRll/jZTp2F3vnHSPlAa59jsnzplJny3BSRtLNy
+         4/jrtkG18GyEVmDAxNywuKIibsLDR9O2Mp80KC6eaTMxYMhn5V5ngy1GbKCyz1DVM3jJ
+         /f8+VyQzMVhGbqp1jXgHCCMrL8DY3RKxWwdqhyXeXXmTXiaT7ZsJ+ehlYsktpKPN5iEn
+         5bARy0nTYFwQwNvQ0aFY3JOIdUs3qSJafT6LoOuS//VRfB9ziYYPWSXxrY2waAW7MqJ8
+         gH9OiQGmmDG1uI1+yEskGGfUjpiWltjd4UhVIK4bNcFWMpUOO0qHEg5H77C25K1tY63R
+         gj7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G3OCVo6XS4rgsws68hkJPdhb81JtRDiKMnu7YKNLQzk=;
+        b=NR+uAnB/xbRPHrHODwagURvkAHwk66Nh5TmWkicLAEQJIsIhAdk69B8g4Zbz4zbUQ4
+         N0Pk6oTYV2GCofCgU1W1gIOjOU+Pu51bdzqZkXguMBLrUy1mQkBdH8Ylxp7Pvs0UC/l9
+         c0XBbyQvVduXzEz3XGAIdbrYS8heYBPCB86ZXX5Pw54NOJZkqbC0fURrYZSJnaezpajw
+         yQUMPkQTny6etg02H8LWK98EVAflacGQCMNkLSatyXdGMrz136eqNyiTmhSKmSKc4sTG
+         C498G1YtuTau1CzgZdrl5x/5g3BmnR5ctOjgoUzR3FhXEDapPxClYjBSa5HPGtWqNOI9
+         ADvw==
+X-Gm-Message-State: AFqh2kq3WhSSQsINP2p+ymz3IQg0aD1yMqfDQhdH3xatdXrVK3lRHmUJ
+        t60lXUPij4/oTwu9rW4R2QBD1itnns+c894G+z+Waf/eyLaSCg==
+X-Google-Smtp-Source: AMrXdXsab27EY166Z/yRqBcLT+6ht48O0XgjuA38LmGtQ69fPcRRwlbLxz+Yi6rBlBc3V8tYF0n0DnasvySES3CLSig=
+X-Received: by 2002:a37:ad13:0:b0:6f1:187c:8f79 with SMTP id
+ f19-20020a37ad13000000b006f1187c8f79mr103583qkm.593.1671662437443; Wed, 21
+ Dec 2022 14:40:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221221222418.3307832-1-bgardon@google.com> <20221221222418.3307832-4-bgardon@google.com>
+In-Reply-To: <20221221222418.3307832-4-bgardon@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Wed, 21 Dec 2022 14:40:26 -0800
+Message-ID: <CANgfPd9d=rDxS2BeMRfXt1co1hPFJbDtF7vMe1r-XpTpOsYhNA@mail.gmail.com>
+Subject: Re: [RFC 03/14] KVM: x86/MMU: Move the Shadow MMU implementation to shadow_mmu.c
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Nagareddy Reddy <nspreddy@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Wed, 21 Dec 2022, Marco Pagani wrote:
-
+On Wed, Dec 21, 2022 at 2:24 PM Ben Gardon <bgardon@google.com> wrote:
 >
-> On 2022-12-21 18:26, Marco Pagani wrote:
->>
->>
->> On 2022-12-20 18:09, Andy Shevchenko wrote:
->>> On Tue, Dec 20, 2022 at 08:36:52AM -0800, matthew.gerlach@linux.intel.com wrote:
->>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>
->>>> Add a Device Feature List (DFL) bus driver for the Altera
->>>> 16550 implementation of UART.
->>>
->>> In general the code here looks good to me, but one thing to discuss due to
->>> comment to the previous patch(es).
->>>
->>> ...
->>>
->>>> +	u64 *p;
->>>> +
->>>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
->>>> +	if (!p)
->>>> +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
->>>> +
->>>> +	p++;
->>>> +	uart->port.uartclk = *p;
->>>
->>> So, here and the below is using always the second u64 from the returned data.
->>> Does it mean:
->>> - we always skip the first u64 from the returned buffer and hence... (see below)
->>> - we may actually return the second u64 as a plain number (not a pointer) from
->>>   (an additional?) API? In such case we would not need to take care about this
->>>   p++; lines here and there.
->>> - we have fixed length of the data, returned by find_param(), i.e. 2 u64 words?
->>>
->>
->> I also had the impression that this method of getting and incrementing a pointer
->> to the beginning of the parameter block is a bit more error-prone than necessary.
->> Since parameter blocks are now standardized, wouldn't be easier and safer to wrap
->> the access logic into a helper function like:
->>
->> u16 dfh_get_param_data(struct dfl_device *dfl_dev, u16 param_id, u64 *data)
->>
->> that directly provides a copy of the parameter's data into a pointer provided by
->> the caller and returns the parameter version or an error if not found?
+> Cut and paste the implementation of the Shadow MMU to shadow_mmu.(c|h).
+> This is a monsterously large commit, moving ~3500 lines. With such a
+> large move, there's no way to make it easy. Do the move in one massive
+> step to simplify dealing with merge conflicts and to make the git
+> history a little easier to dig through. Several cleanup commits follow
+> this one rather than preceed it so that their git history will remain
+> easy to see.
 >
-> Please ignore the last part of my reply. The diagram in the documentation made
-> me think that parameter data are always 64-bit wide. Since the parameter data
-> "payload" size depends on the version and ID, an eventual helper function could
-> then return a pointer to the data payload and the version number to the caller.
+> No functional change intended.
+>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
 
-Certainly helper functions should be created to make accessing the actual 
-parameter easier and safer.
+Woops, I guess this message bounced because the patch was just too long.
+I can try to split it in two if folks would prefer, or just send a
+list of the functions / definitions moved.
 
-Thanks for the feedback,
-Matthew Gerlach
+> ---
+>  arch/x86/kvm/debugfs.c          |    1 +
+>  arch/x86/kvm/mmu/mmu.c          | 4526 ++++---------------------------
+>  arch/x86/kvm/mmu/mmu_internal.h |    4 +-
+>  arch/x86/kvm/mmu/shadow_mmu.c   | 3408 +++++++++++++++++++++++
+>  arch/x86/kvm/mmu/shadow_mmu.h   |  145 +
+>  5 files changed, 4086 insertions(+), 3998 deletions(-)
+>
 
->
-> Thanks,
-> Marco
->
->
+...
+
+> --
+> 2.39.0.314.g84b9a713c41-goog
 >
