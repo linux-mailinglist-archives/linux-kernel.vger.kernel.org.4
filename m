@@ -2,96 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D886534EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C046534F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbiLURST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
+        id S234894AbiLURSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234800AbiLURRs (ORCPT
+        with ESMTP id S234831AbiLURRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:17:48 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8BC1573F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:16:54 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id i20so14141784qtw.9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:16:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kB6hFtCRIfVThHjkWb+E2PQntic6R9fKZViI8BQpJ9Y=;
-        b=Myc8ct4l9mrmgL8s4mKOi8PHj3FPFp4bmh5udjz/p40a5SnqSGiuluLOsVJnMth318
-         cuTvtq4VKpNYGjRKVj++VXwKigBw12y8RDQl2ufFxjDDeT7rLFrbTeGRVzpwSPes2UBz
-         KcRFG8NPmM+XShEskb5Qa8XCC72wt5dpJXORM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kB6hFtCRIfVThHjkWb+E2PQntic6R9fKZViI8BQpJ9Y=;
-        b=QvMcJcDPoZnzRhJ8mM9+w+Itr2l8Bws6or8qiSDOHf2SikqSps8Wa1sWEcm6kJ7efB
-         jmHE6JEMeR8x2vyJinV6bHwK1g+GLhmyRim8KXiJJ64MWiKo1+jBydKRRN67+uhf+Hl8
-         h9WvCzdx3r00jp9F5wK5BZ0+yuDU3eEjAOwHmKbLwIecsIAbMw17C5D4Cfmjd2kAGGtw
-         c/Fj1EdlbJjD0qISUrbArE0VCNrc0QXo71eHkUcXmDKBf9CXqq6zTi2SA+Tg29veyrjo
-         63jQ71hfSUy8jvN2pUwqpYEors4YkqjwziDYXPaNrvl0Qdwpfm7KMkQrK5Fcu7qVLFef
-         iVaQ==
-X-Gm-Message-State: AFqh2kraPt1phpRxSX3lVF2y5iS4HL2bLOeZGkuDtJKSP+nnrBIldZ5A
-        YQIhgwo7XmP/CBdZK9sbmN0xmIE6Gif0PDjT
-X-Google-Smtp-Source: AMrXdXuTGt9rztlxL6+RfZYtNUN1/P/jAtcqxBZXEcr2md1hcz5XpHwxIvKvAfJr7JEitQAJ0ZNcbg==
-X-Received: by 2002:a05:622a:1927:b0:3a7:ec54:cfa2 with SMTP id w39-20020a05622a192700b003a7ec54cfa2mr2771720qtc.56.1671643013297;
-        Wed, 21 Dec 2022 09:16:53 -0800 (PST)
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com. [209.85.222.178])
-        by smtp.gmail.com with ESMTPSA id fb24-20020a05622a481800b003a6a4744432sm9477923qtb.87.2022.12.21.09.16.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 09:16:52 -0800 (PST)
-Received: by mail-qk1-f178.google.com with SMTP id k2so7083831qkk.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:16:51 -0800 (PST)
-X-Received: by 2002:a37:a93:0:b0:6ff:812e:a82f with SMTP id
- 141-20020a370a93000000b006ff812ea82fmr83224qkk.336.1671643011317; Wed, 21 Dec
- 2022 09:16:51 -0800 (PST)
+        Wed, 21 Dec 2022 12:17:54 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D6F64CC;
+        Wed, 21 Dec 2022 09:17:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=5NQmoVw/q+8tvK2V4iRPmDMASULYZoPw14pX4rYwT4A=; b=E4Y1LY7caA9JODGRL9bGLDuFlX
+        ViUy7CY6OeLy2kulFlgUTl10dcq9zU5QzOLVVP3z3yOI5IkKdvPfksiET7T3rTJTioWn87fdKm3mt
+        +rpgLeWHCYHP99FJtDfIqdrCcotbjX/LeTXqR2p1naZOs7ywIHuQqXvg0wRE1m6r8U7o=;
+Received: from p200300daa720fc02a80cecba4b8062d5.dip0.t-ipconnect.de ([2003:da:a720:fc02:a80c:ecba:4b80:62d5] helo=nf.local)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1p82iD-00AdKg-7f; Wed, 21 Dec 2022 18:17:01 +0100
+Message-ID: <3cb53fbd-0bee-22f9-bba2-6ac4a87db521@nbd.name>
+Date:   Wed, 21 Dec 2022 18:17:00 +0100
 MIME-Version: 1.0
-References: <20221220203022.1084532-1-kuba@kernel.org>
-In-Reply-To: <20221220203022.1084532-1-kuba@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 21 Dec 2022 09:16:35 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg-W+0gh-XeUrN409RvdOO=VpcWiiPUNm2=Jru5bKWRDQ@mail.gmail.com>
-Message-ID: <CAHk-=wg-W+0gh-XeUrN409RvdOO=VpcWiiPUNm2=Jru5bKWRDQ@mail.gmail.com>
-Subject: Re: [PULL] Networking for v6.2-rc1
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [6.2][regression] after commit
+ cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae stopping working wifi mt7921e
+Content-Language: en-US
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     lorenzo@kernel.org, sujuan.chen@mediatek.com,
+        Linux List Kernel Mailing <linux-wireless@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+References: <CABXGCsMEnQd=gYKTd1knRsWuxCb=Etv5nAre+XJS_s5FgVteYA@mail.gmail.com>
+ <678adc67-9e46-3eef-f274-c951b121570f@nbd.name>
+ <CABXGCsMUbs+bf=tWnx98r4v_JzVmYdVyOos9EhcGJ6jnEwathA@mail.gmail.com>
+ <a30d8580-936a-79e4-c1c7-70f3d3b8da35@nbd.name>
+ <CABXGCsNJKy2SQffeU+uaua5SM_77YiGKdPLRdzSF3F+ShpF+5w@mail.gmail.com>
+From:   Felix Fietkau <nbd@nbd.name>
+In-Reply-To: <CABXGCsNJKy2SQffeU+uaua5SM_77YiGKdPLRdzSF3F+ShpF+5w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 12:30 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> Traffic is winding down significantly so let us pass our fixes to you
-> earlier than the usual Thu schedule.
->
-> We have a fix for the BPF issue we were looking at before 6.1 final,
-> no surprises there. RxRPC fixes were merged relatively late so there's
-> an outpour of follow ups. Last one worth mentioning is the tree-wide
-> fix for network file systems / in-tree socket users, to prevent nested
-> networking calls from corrupting socket memory allocator.
+On 21.12.22 17:46, Mikhail Gavrilov wrote:
+> On Wed, Dec 21, 2022 at 7:12 PM Felix Fietkau <nbd@nbd.name> wrote:
+>>
+>> Thanks! I guess I focused on the wrong part of your kernel log
+>> initially. After more code review, I found that there is in fact a DMA
+>> related bug in the commit that your bisection pointed to, which happened
+>> to uncover and trigger the deadlock fixed by my other patch.
+>>
+>> So here's my fix for the DMA issue:
+>> ---
+> [cutted]
+>>                 qbuf.skip_unmap = false;
+>> -               if (mt76_dma_add_buf(dev, q, &qbuf, 1, 0, buf, t) < 0) {
+>> +               if (mt76_dma_add_rx_buf(dev, q, &qbuf, buf) < 0) {
+>>                         dma_unmap_single(dev->dma_dev, addr, len,
+>>                                          DMA_FROM_DEVICE);
+>>                         skb_free_frag(buf);
+>>
+> 
+> Sorry for stupid question.
+> 
+> Do you have a separate branch?
+> I see that the code is differ between master branch and the patch.
+> 
+> For example in patch the line:
+> - if (mt76_dma_add_buf(dev, q, &qbuf, 1, 0, buf, t) < 0) {
+> replaced by the line:
+> + if (mt76_dma_add_rx_buf(dev, q, &qbuf, buf) < 0) {
+> 
+> But in master branch
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/wireless/mediatek/mt76/dma.c?id=b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf#n604
+> after line:
+> qbuf.skip_unmap = false;
+> followed the line:
+> mt76_dma_add_buf(dev, q, &qbuf, 1, 0, buf, t);
+> without if condition.
+> 
+> So I'm stuck applying the patch :(
+Sorry, I worked on a tree that had other pending fixes applied.
+Please try this:
 
-The  biggest changes seem to be to the intel 2.5Gb driver ("igc"), but
-they weren't mentioned...
 
-Also, maybe more people should look at this one:
+--- a/drivers/net/wireless/mediatek/mt76/dma.c
++++ b/drivers/net/wireless/mediatek/mt76/dma.c
+@@ -205,6 +205,52 @@ mt76_dma_queue_reset(struct mt76_dev *dev, struct mt76_queue *q)
+  	mt76_dma_sync_idx(dev, q);
+  }
+  
++static int
++mt76_dma_add_rx_buf(struct mt76_dev *dev, struct mt76_queue *q,
++		    struct mt76_queue_buf *buf, void *data)
++{
++	struct mt76_desc *desc = &q->desc[q->head];
++	struct mt76_queue_entry *entry = &q->entry[q->head];
++	struct mt76_txwi_cache *txwi = NULL;
++	u32 buf1 = 0, ctrl;
++	int idx = q->head;
++	int rx_token;
++
++	ctrl = FIELD_PREP(MT_DMA_CTL_SD_LEN0, buf[0].len);
++
++	if ((q->flags & MT_QFLAG_WED) &&
++	    FIELD_GET(MT_QFLAG_WED_TYPE, q->flags) == MT76_WED_Q_RX) {
++		txwi = mt76_get_rxwi(dev);
++		if (!txwi)
++			return -ENOMEM;
++
++		rx_token = mt76_rx_token_consume(dev, data, txwi, buf->addr);
++		if (rx_token < 0) {
++			mt76_put_rxwi(dev, txwi);
++			return -ENOMEM;
++		}
++
++		buf1 |= FIELD_PREP(MT_DMA_CTL_TOKEN, rx_token);
++		ctrl |= MT_DMA_CTL_TO_HOST;
++	}
++
++	WRITE_ONCE(desc->buf0, cpu_to_le32(buf->addr));
++	WRITE_ONCE(desc->buf1, cpu_to_le32(buf1));
++	WRITE_ONCE(desc->ctrl, cpu_to_le32(ctrl));
++	WRITE_ONCE(desc->info, 0);
++
++	entry->dma_addr[0] = buf->addr;
++	entry->dma_len[0] = buf->len;
++	entry->txwi = txwi;
++	entry->buf = data;
++	entry->wcid = 0xffff;
++	entry->skip_buf1 = true;
++	q->head = (q->head + 1) % q->ndesc;
++	q->queued++;
++
++	return idx;
++}
++
+  static int
+  mt76_dma_add_buf(struct mt76_dev *dev, struct mt76_queue *q,
+  		 struct mt76_queue_buf *buf, int nbufs, u32 info,
+@@ -212,65 +258,51 @@ mt76_dma_add_buf(struct mt76_dev *dev, struct mt76_queue *q,
+  {
+  	struct mt76_queue_entry *entry;
+  	struct mt76_desc *desc;
+-	u32 ctrl;
+  	int i, idx = -1;
++	u32 ctrl, next;
++
++	if (txwi) {
++		q->entry[q->head].txwi = DMA_DUMMY_DATA;
++		q->entry[q->head].skip_buf0 = true;
++	}
+  
+  	for (i = 0; i < nbufs; i += 2, buf += 2) {
+  		u32 buf0 = buf[0].addr, buf1 = 0;
+  
+  		idx = q->head;
+-		q->head = (q->head + 1) % q->ndesc;
++		next = (q->head + 1) % q->ndesc;
+  
+  		desc = &q->desc[idx];
+  		entry = &q->entry[idx];
+  
+-		if ((q->flags & MT_QFLAG_WED) &&
+-		    FIELD_GET(MT_QFLAG_WED_TYPE, q->flags) == MT76_WED_Q_RX) {
+-			struct mt76_txwi_cache *t = txwi;
+-			int rx_token;
+-
+-			if (!t)
+-				return -ENOMEM;
+-
+-			rx_token = mt76_rx_token_consume(dev, (void *)skb, t,
+-							 buf[0].addr);
+-			buf1 |= FIELD_PREP(MT_DMA_CTL_TOKEN, rx_token);
+-			ctrl = FIELD_PREP(MT_DMA_CTL_SD_LEN0, buf[0].len) |
+-			       MT_DMA_CTL_TO_HOST;
+-		} else {
+-			if (txwi) {
+-				q->entry[q->head].txwi = DMA_DUMMY_DATA;
+-				q->entry[q->head].skip_buf0 = true;
+-			}
+-
+-			if (buf[0].skip_unmap)
+-				entry->skip_buf0 = true;
+-			entry->skip_buf1 = i == nbufs - 1;
+-
+-			entry->dma_addr[0] = buf[0].addr;
+-			entry->dma_len[0] = buf[0].len;
+-
+-			ctrl = FIELD_PREP(MT_DMA_CTL_SD_LEN0, buf[0].len);
+-			if (i < nbufs - 1) {
+-				entry->dma_addr[1] = buf[1].addr;
+-				entry->dma_len[1] = buf[1].len;
+-				buf1 = buf[1].addr;
+-				ctrl |= FIELD_PREP(MT_DMA_CTL_SD_LEN1, buf[1].len);
+-				if (buf[1].skip_unmap)
+-					entry->skip_buf1 = true;
+-			}
+-
+-			if (i == nbufs - 1)
+-				ctrl |= MT_DMA_CTL_LAST_SEC0;
+-			else if (i == nbufs - 2)
+-				ctrl |= MT_DMA_CTL_LAST_SEC1;
++		if (buf[0].skip_unmap)
++			entry->skip_buf0 = true;
++		entry->skip_buf1 = i == nbufs - 1;
++
++		entry->dma_addr[0] = buf[0].addr;
++		entry->dma_len[0] = buf[0].len;
++
++		ctrl = FIELD_PREP(MT_DMA_CTL_SD_LEN0, buf[0].len);
++		if (i < nbufs - 1) {
++			entry->dma_addr[1] = buf[1].addr;
++			entry->dma_len[1] = buf[1].len;
++			buf1 = buf[1].addr;
++			ctrl |= FIELD_PREP(MT_DMA_CTL_SD_LEN1, buf[1].len);
++			if (buf[1].skip_unmap)
++				entry->skip_buf1 = true;
+  		}
+  
++		if (i == nbufs - 1)
++			ctrl |= MT_DMA_CTL_LAST_SEC0;
++		else if (i == nbufs - 2)
++			ctrl |= MT_DMA_CTL_LAST_SEC1;
++
+  		WRITE_ONCE(desc->buf0, cpu_to_le32(buf0));
+  		WRITE_ONCE(desc->buf1, cpu_to_le32(buf1));
+  		WRITE_ONCE(desc->info, cpu_to_le32(info));
+  		WRITE_ONCE(desc->ctrl, cpu_to_le32(ctrl));
+  
++		q->head = next;
+  		q->queued++;
+  	}
+  
+@@ -577,17 +609,9 @@ mt76_dma_rx_fill(struct mt76_dev *dev, struct mt76_queue *q)
+  	spin_lock_bh(&q->lock);
+  
+  	while (q->queued < q->ndesc - 1) {
+-		struct mt76_txwi_cache *t = NULL;
+  		struct mt76_queue_buf qbuf;
+  		void *buf = NULL;
+  
+-		if ((q->flags & MT_QFLAG_WED) &&
+-		    FIELD_GET(MT_QFLAG_WED_TYPE, q->flags) == MT76_WED_Q_RX) {
+-			t = mt76_get_rxwi(dev);
+-			if (!t)
+-				break;
+-		}
+-
+  		buf = page_frag_alloc(rx_page, q->buf_size, GFP_ATOMIC);
+  		if (!buf)
+  			break;
+@@ -601,7 +625,12 @@ mt76_dma_rx_fill(struct mt76_dev *dev, struct mt76_queue *q)
+  		qbuf.addr = addr + offset;
+  		qbuf.len = len - offset;
+  		qbuf.skip_unmap = false;
+-		mt76_dma_add_buf(dev, q, &qbuf, 1, 0, buf, t);
++		if (mt76_dma_add_rx_buf(dev, q, &qbuf, buf) < 0) {
++			dma_unmap_single(dev->dma_dev, addr, len,
++					 DMA_FROM_DEVICE);
++			skb_free_frag(buf);
++			break;
++		}
+  		frames++;
+  	}
+  
 
-   https://lore.kernel.org/all/6b971a4e-c7d8-411e-1f92-fda29b5b2fb9@kernel.org/
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mmio.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mmio.c
+@@ -653,6 +653,13 @@ static u32 mt7915_mmio_wed_init_rx_buf(struct mtk_wed_device *wed, int size)
+  
+  		desc->buf0 = cpu_to_le32(phy_addr);
+  		token = mt76_rx_token_consume(&dev->mt76, ptr, t, phy_addr);
++		if (token < 0) {
++			dma_unmap_single(dev->mt76.dma_dev, phy_addr,
++					 wed->wlan.rx_size, DMA_TO_DEVICE);
++			skb_free_frag(ptr);
++			goto unmap;
++		}
++
+  		desc->token |= cpu_to_le32(FIELD_PREP(MT_DMA_CTL_TOKEN,
+  						      token));
+  		desc++;
 
-which seems to be a regression in 6.1 (and still present, afaik).
+--- a/drivers/net/wireless/mediatek/mt76/tx.c
++++ b/drivers/net/wireless/mediatek/mt76/tx.c
+@@ -764,11 +764,12 @@ int mt76_rx_token_consume(struct mt76_dev *dev, void *ptr,
+  	spin_lock_bh(&dev->rx_token_lock);
+  	token = idr_alloc(&dev->rx_token, t, 0, dev->rx_token_size,
+  			  GFP_ATOMIC);
++	if (token >= 0) {
++		t->ptr = ptr;
++		t->dma_addr = phys;
++	}
+  	spin_unlock_bh(&dev->rx_token_lock);
+  
+-	t->ptr = ptr;
+-	t->dma_addr = phys;
+-
+  	return token;
+  }
+  EXPORT_SYMBOL_GPL(mt76_rx_token_consume);
 
-                Linus
