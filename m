@@ -2,70 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823EE653828
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 22:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCB965382A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 22:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234780AbiLUVVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 16:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S234893AbiLUVVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 16:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbiLUVVJ (ORCPT
+        with ESMTP id S230395AbiLUVVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 16:21:09 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F82A2034A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 13:21:04 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id u10so14444qvp.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 13:21:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wLTluME75UDM26wMyJB90Fb819f9R2iPWOK1x6G1kUs=;
-        b=lJ6UwyXL8Oxx6TgbRkaYmZdqK+Rbz5pxztm7EHy+8H1U3DuwA0QcxlA/daqD0nqLmo
-         7KvuRyN84EhHEZ9D4pZvKvXHncSVuEW6G7LLXmoi5usUp+Xz7FLPdGsP562erjN5z3BN
-         ih1tB7WVVkYYRhd25X2MOkZS8NUclvPJqrwcoptxkxhZkKz635opnxuI6YUap6artoa+
-         EjzqgV8Z6Vnc0zuQoChOhhKJjrJIcvpEo3SmuEtVHM9JK/YQb2J2k1LEkD55vvbwVhBU
-         3qXYSKDsIbfZnPNdi/lMpZ/FZZ2Ik9czPAT1TuQ67BzP1vRuB5mnR8uSc4yddsCI0H8V
-         sDng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wLTluME75UDM26wMyJB90Fb819f9R2iPWOK1x6G1kUs=;
-        b=fK4SzLPKEkYLfOjYBFcH5SJ4RgW60HcnOyYbMhh/A3ZKHWr08c8rdPQ7nYBPmBte5l
-         nrbkCMpFy7HcFFanPA+Jfz9Tp4SWJRitm2YyQ8XwR3K6UEXrJUgD8fFwrDQXuTiF4NFX
-         nAjXCcKyzTxI6NF3oJM4VRofFWiYhMpQGkf1d0LgJviZgaAvtYvhyk4NYmJ1B3fF1hws
-         3so7bpTAYpB6QOizMkXWLTlh3PTrBssZpDwR36EGYIcPVv65H0ll9+W4alrfKoftL74E
-         F6vPEgcEw9L1PTGxzwBuMftVlrWLrBKlAxF2J096LIhVjNam67fejBx4lNFDzi5ZBxHV
-         dK6g==
-X-Gm-Message-State: AFqh2kphj3ivmeMj37k3pIDoHw0Z65O/nv2b6rFYQ5c+AuxCoCoLrXRg
-        6WiMulVYfYe2v4aNcgGaiW6ynAnS2edLd2wOfSo=
-X-Google-Smtp-Source: AMrXdXuvcH/ZKCvNaCKpkMTSNLc7d92H7Ek1++T/aLPAC5hf4awK4yPxIcfrqvuhinJj0lYRDebMlykBBonqyGQIdSA=
-X-Received: by 2002:ad4:5986:0:b0:4c7:79c4:91c8 with SMTP id
- ek6-20020ad45986000000b004c779c491c8mr141117qvb.92.1671657663600; Wed, 21 Dec
- 2022 13:21:03 -0800 (PST)
+        Wed, 21 Dec 2022 16:21:32 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5168322B35;
+        Wed, 21 Dec 2022 13:21:31 -0800 (PST)
+Message-ID: <18e1219a-d2b2-0373-1f30-fcf83acd328f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1671657689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0ZUs0Oi+KQ6ND7Xr4JK7sAaYTromssvZdryVCNE4E8E=;
+        b=kUsg/pqNcucRnMDDXoSqn/4qnyug7Z9+bB4VEfwvYpk5pgRkOQyOFhaikO0PD5jeCaTf89
+        YRVKicwgMLH+BdcT4eoKA7c8RiVyockir7mDP3EIHJckUUJ8UnjlWbejxyw/OkPxIbCY0e
+        uPfaQlLu7qOWPbeVPlCb3Ab1OlwSY0E=
+Date:   Wed, 21 Dec 2022 13:21:25 -0800
 MIME-Version: 1.0
-Received: by 2002:a0c:8dcb:0:b0:52a:be48:9f47 with HTTP; Wed, 21 Dec 2022
- 13:21:03 -0800 (PST)
-Reply-To: Cliffwebster92@zohomail.com
-From:   Cliff Webster <hafsatmane@gmail.com>
-Date:   Wed, 21 Dec 2022 22:21:03 +0100
-Message-ID: <CAJDGAm1KWYq7WANy8jbiG4g836hcPCOAvanv5sf9J+WF7D9gGA@mail.gmail.com>
-Subject: Payment Invoice
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: check null propagation
+ only neither reg is PTR_TO_BTF_ID
+Content-Language: en-US
+To:     Hao Sun <sunhao.th@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+References: <20221213030436.17907-1-sunhao.th@gmail.com>
+ <20221213030436.17907-2-sunhao.th@gmail.com>
+ <7cfaaafa-0eda-a314-5b22-7e22c029f4ad@linux.dev>
+ <7EAED688-C971-410E-BA56-9629CF9B3C91@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <7EAED688-C971-410E-BA56-9629CF9B3C91@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
+On 12/21/22 5:46 AM, Hao Sun wrote:
+> Hi,
+> 
+> I’ve tried something like the bellow, but soon realized that this
+> won’t work because once compiler figures out `inner_map` equals
+> to `val`, it can choose either reg to write into in the following
+> path, meaning that this program can be rejected due to writing
+> into read-only PTR_TO_BTF_ID reg, and this makes the test useless.
 
-Kindly inform us if you have received payment!
+hmm... I read the above a few times but I still don't quite get it.  In 
+particular, '...can be rejected due to writing into read-only PTR_TO_BTF_ID 
+reg...'.  Where is it writing into a read-only PTR_TO_BTF_ID reg in the 
+following bpf prog?  Did I overlook something?
+
+> 
+> Essentially, we want two regs, one points to PTR_TO_BTD_ID, one
+> points to MAP_VALUR_OR_NULL, then compare them and deref map val.
+
+If I read this request correctly, I guess the compiler has changed 'ret = *val' 
+to 'ret = *inner_map'?  Thus, the verifier did not reject because it deref a 
+PTR_TO_BTF_ID?
+
+> It’s hard to implement this in C level because compilers decide
+> which reg to use but not us, maybe we can just drop this test.
+
+Have you tried inline assembly.  Something like this (untested):
+
+         asm volatile (
+                 "r8 = %[val];\n"
+                 "r9 = %[inner_map];\n"
+		"if r8 != r9 goto +1;\n"
+                 "%[ret] = *(u64 *)(r8 +0);\n"
+                 :[ret] "+r"(ret)
+                 : [inner_map] "r"(inner_map), [val] "r"(val)
+                 :"r8", "r9");
+
+Please attach the verifier output in the future.  It will be easier to understand.
+
+> 
+> thoughts?
+>    
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_HASH);
+> +	__uint(max_entries, 1);
+> +	__type(key, u64);
+> +	__type(value, u64);
+> +} m_hash SEC(".maps");
+> +
+> +SEC("?raw_tp")
+> +__failure __msg("invalid mem access 'map_value_or_null")
+> +int jeq_infer_not_null_ptr_to_btfid(void *ctx)
+> +{
+> +	struct bpf_map *map = (struct bpf_map *)&m_hash;
+> +	struct bpf_map *inner_map = map->inner_map_meta;
+> +	u64 key = 0, ret = 0, *val;
+> +
+> +	val = bpf_map_lookup_elem(map, &key);
+> +	/* Do not mark ptr as non-null if one of them is
+> +	 * PTR_TO_BTF_ID, reject because of invalid access
+> +	 * to map value.
+> +	 */
+> +	if (val == inner_map)
+> +		ret = *val;
+> +
+> +	return ret;
+> +}
+
