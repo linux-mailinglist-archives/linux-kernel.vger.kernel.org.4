@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028176533DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC816533DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbiLUQSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 11:18:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55694 "EHLO
+        id S234357AbiLUQSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 11:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiLUQSD (ORCPT
+        with ESMTP id S229578AbiLUQSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 11:18:03 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7E1220EB;
-        Wed, 21 Dec 2022 08:18:02 -0800 (PST)
-From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1671639480;
-        bh=5Kuf8mtaECc9i8ymD5ug9Qtqh/WLjoDjMBBE59Rmcpw=;
-        h=From:Date:Subject:To:Cc:From;
-        b=AifvGmYkaWzleaaxUikPI2TSj/gYzlkmx3hdToqFvQqnW1I04q1d1tkMHPMse+N3p
-         HVVS34JHIPAf7K8tL929JiePLRtbVvIzOi3MsV3mffQxodNHCAnl6m09hT+IvHee6U
-         5v63enPS8AyTyGOrIF4W6YDVq5tHICmdP+x8kjHg=
-Date:   Wed, 21 Dec 2022 16:17:52 +0000
-Subject: [PATCH] kernels/ksysfs.c: export kernel address bits
+        Wed, 21 Dec 2022 11:18:47 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C323E2250C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:18:45 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id v82so13748665oib.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M+bNXioDxNImLTRjcMNz5wv3wPkQ00PwGxcuhrFvOFA=;
+        b=ShqBpPcKfU39heppFQgA+EfPn0ynOOQyj+YmUmCRkX3CdHJjmyJ2JK1jkHdpAHr+LL
+         F9B+EYn8Yz35ZsMqBsJ2/jDVd/9Qsacr+f/rOu785CEBZe65aEkjvpO4vws43SnUodHY
+         LzvHj7lZskMbNHooN12F1rGCGf55BfggbTl5A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M+bNXioDxNImLTRjcMNz5wv3wPkQ00PwGxcuhrFvOFA=;
+        b=kfyWFmKYOuXiOKrgRdkK7sGFONtQkyqX8lVhfr4+No6OJqTGTQcvQjUedzSSKHKfmF
+         J3qDKJRbvuBcEfWAQa5Sruc6D1WK6Puyp+xU9qUw5rwEgt8B0idibpo/eQtipsD6CaTC
+         aw1mHGaQQRQpK9h1zN1lMhQyzbu5yzwUyBDZw+ClneKZg4GLQaT8wZ/CsdVeuQCWqVke
+         b1H8c0hfapv5psbALImNK7CmWQXlPala+/zX2PHQfMOcxEwYZZ3eTkV6II/CnHo57L9z
+         +dKbtcdOKTiI44ouVqX9SnH/pImumzVAeTvSmgLaR8X/F3sXdYfJQkYsDJ7VuN5Y9OeN
+         +zJg==
+X-Gm-Message-State: AFqh2kqE+NC3VUn2b/KYZlltsbad4IKJ8IPm+3Xz1IyN1rg/4RKoNPk3
+        GGAGkHb6gMTavaEzHujVrnTM0Q==
+X-Google-Smtp-Source: AMrXdXtcRbZ41cs7IPkAwPfKR/1iE5afGVWCLVd3aADKKt5k7zhXfOz0qVd3i2fxizOY6AHvkI9m7Q==
+X-Received: by 2002:aca:1008:0:b0:35e:bfd2:4b9b with SMTP id 8-20020aca1008000000b0035ebfd24b9bmr1022506oiq.55.1671639525042;
+        Wed, 21 Dec 2022 08:18:45 -0800 (PST)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id es10-20020a056808278a00b00359ad661d3csm6891742oib.30.2022.12.21.08.18.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 08:18:44 -0800 (PST)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Wed, 21 Dec 2022 10:18:43 -0600
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
+Message-ID: <Y6Mx43EwwV1akWCV@fedora64.linuxtx.org>
+References: <20221219182943.395169070@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221221-address-bits-v1-1-8446b13244ac@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIALAxo2MC/x2NQQqDQAxFryJZG6gpqPQq0kXGiTUgU0mqFMS7G
- 4S/eR8e7wAXU3F4VQeY7Or6LQFNXcE4c/kIag4GehA1MeScTdwx6c+xJeK+60m6Z4ZQErtgMi7j
- HFLZliXO1WTS/90Y3ud5Ad40RvZzAAAA
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-kernel@vger.kernel.org, Karel Zak <kzak@redhat.com>,
-        linux-api@vger.kernel.org
-X-Mailer: b4 0.11.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1671639477; l=2240;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=5Kuf8mtaECc9i8ymD5ug9Qtqh/WLjoDjMBBE59Rmcpw=;
- b=CbJ7PXGbE8At50zccR/KhIolZERvRK+sBE2voTyCEXgFgvKGp0Iz66Uitr0NhE5l4EFZxXfypASI
- 7w1XZWQHA8sgg0TRx6YQEdqtg+LNHI5uXVgAlbhu7d5mChicbR1f
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219182943.395169070@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This can be used by userspace to determine the address size of the
-running kernel.
-It frees userspace from having to interpret this information from the
-UTS machine field.
+On Mon, Dec 19, 2022 at 08:22:39PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.1 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Userspace implementation:
-https://github.com/util-linux/util-linux/pull/1966
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Cc: linux-kernel@vger.kernel.org
-To: Greg KH <gregkh@linuxfoundation.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Karel Zak" <kzak@redhat.com>
-Cc: linux-api@vger.kernel.org
----
- Documentation/ABI/testing/sysfs-kernel-address_bits | 10 ++++++++++
- kernel/ksysfs.c                                     |  9 +++++++++
- 2 files changed, 19 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-kernel-address_bits b/Documentation/ABI/testing/sysfs-kernel-address_bits
-new file mode 100644
-index 000000000000..5d09ff84d4d6
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-kernel-address_bits
-@@ -0,0 +1,10 @@
-+What:		/sys/kernel/address_bit
-+Date:		May 2023
-+KernelVersion:	6.3
-+Contact:	Thomas Weißschuh <linux@weissschuh.net>
-+Description:
-+		The address size of the running kernel in bits.
-+
-+		Access: Read
-+
-+Users:		util-linux
-diff --git a/kernel/ksysfs.c b/kernel/ksysfs.c
-index 2df00b789b90..0408aab80941 100644
---- a/kernel/ksysfs.c
-+++ b/kernel/ksysfs.c
-@@ -51,6 +51,14 @@ static ssize_t cpu_byteorder_show(struct kobject *kobj,
- }
- KERNEL_ATTR_RO(cpu_byteorder);
- 
-+/* address bits */
-+static ssize_t address_bits_show(struct kobject *kobj,
-+				 struct kobj_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%zu\n", sizeof(void *) * 8 /* CHAR_BIT */);
-+}
-+KERNEL_ATTR_RO(address_bits);
-+
- #ifdef CONFIG_UEVENT_HELPER
- /* uevent helper program, used during early boot */
- static ssize_t uevent_helper_show(struct kobject *kobj,
-@@ -233,6 +241,7 @@ static struct attribute * kernel_attrs[] = {
- 	&fscaps_attr.attr,
- 	&uevent_seqnum_attr.attr,
- 	&cpu_byteorder_attr.attr,
-+	&address_bits_attr.attr,
- #ifdef CONFIG_UEVENT_HELPER
- 	&uevent_helper_attr.attr,
- #endif
-
----
-base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
-change-id: 20221221-address-bits-622a8782e73d
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
