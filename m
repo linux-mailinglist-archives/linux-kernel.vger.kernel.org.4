@@ -2,168 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA30965329B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 15:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527EA65329E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 15:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiLUOpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 09:45:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
+        id S231531AbiLUOpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 09:45:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbiLUOpM (ORCPT
+        with ESMTP id S230342AbiLUOpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 09:45:12 -0500
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B102228E;
-        Wed, 21 Dec 2022 06:45:07 -0800 (PST)
-Received: by mail-oo1-f46.google.com with SMTP id e22-20020a4a5516000000b004a3d3028bafso2432841oob.3;
-        Wed, 21 Dec 2022 06:45:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kxc7zdbLSHaxRWR2+Co/0ckNGsOv6s+kVwv5ktMzKsw=;
-        b=odPLsXgV1RlcH9fsRKs6BqjlOGDMi1GEa6E1+e4b1gkOb9vPDeMXQiXOb7c5/icn5M
-         heGk6KNH81umQxTOdO0xLhtYY1SasfZKGY5a05bkNJ1x3vWhywKhDgeaUUjA112eNYG8
-         N/AxK1putmxtTiMNexI8MkE4eZzGa/qpA36NNopgTAb3pvyqmKTsNHUiIYNM1GkLgoIH
-         AAlxUTvwnEFeN+XySY+o22tSGyTRq8furIQPInJEATsAGcbmhEWEI1zH5T6zUFsRL+6R
-         ch+rpPOCvK3k9y4l73k3yTO1IEiAqWxHrwPtMuUYZ43WgRqyYbAX234oi+2reA4z2//t
-         wm7g==
-X-Gm-Message-State: AFqh2kpuEDqxVnS8uYBlS9YgtaSb0udgKHz5bhedu19YqTiJQMKaJfSE
-        1kdiiLpv9rga/jntcEF+cgSOh7a1IQ==
-X-Google-Smtp-Source: AMrXdXsv5ASbBtCMfNaRyWcXcFKU3H1LGLtchFwCMyAF6nfQgyphoBTb7BGZ7LP6yVCkTPqSWsZHjw==
-X-Received: by 2002:a4a:ca8e:0:b0:4a3:6c91:98ab with SMTP id x14-20020a4aca8e000000b004a36c9198abmr948274ooq.2.1671633906971;
-        Wed, 21 Dec 2022 06:45:06 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s26-20020a4aeada000000b0049be9c3c15dsm6168518ooh.33.2022.12.21.06.45.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 06:45:06 -0800 (PST)
-Received: (nullmailer pid 2875796 invoked by uid 1000);
-        Wed, 21 Dec 2022 14:45:05 -0000
-Date:   Wed, 21 Dec 2022 08:45:05 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Johannes Berg <johannes@sipsolutions.net>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/2] dt-bindings: net: Add rfkill-gpio binding
-Message-ID: <20221221144505.GA2848091-robh@kernel.org>
-References: <20221221104803.1693874-1-p.zabel@pengutronix.de>
+        Wed, 21 Dec 2022 09:45:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4972B1103
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 06:45:44 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1p80Le-0000R1-QQ; Wed, 21 Dec 2022 15:45:34 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1p80Le-00017C-6X; Wed, 21 Dec 2022 15:45:34 +0100
+Date:   Wed, 21 Dec 2022 15:45:34 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, marex@denx.de,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        aford@beaconembedded.com, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH] arm64: dts: imx8mp: Enable spba-bus on AIPS3
+Message-ID: <20221221144534.dnkcvgpypml5u3y7@pengutronix.de>
+References: <20221218170545.1472746-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221221104803.1693874-1-p.zabel@pengutronix.de>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221218170545.1472746-1-aford173@gmail.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 11:48:02AM +0100, Philipp Zabel wrote:
-> Add a device tree binding document for GPIO controlled rfkill switches.
-> The name, type, shutdown-gpios and reset-gpios properties are the same
-> as defined for ACPI.
+Hi Adam,
+
+On 22-12-18, Adam Ford wrote:
+> There is an SPBA bus on AIPS3 which includes ecspi1-3,
+> UART1-3, and Flexcan1-2 according to the TRM.
+
+LGTM
+
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+
+Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+
 > 
-> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-> ---
->  .../devicetree/bindings/net/rfkill-gpio.yaml  | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/rfkill-gpio.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/rfkill-gpio.yaml b/Documentation/devicetree/bindings/net/rfkill-gpio.yaml
-> new file mode 100644
-> index 000000000000..6e62e6c96456
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/rfkill-gpio.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/net/rfkill-gpio.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> index 2ce45e7cbbdf..9b0a47e7b8fd 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> @@ -719,121 +719,129 @@ aips3: bus@30800000 {
+>  			#size-cells = <1>;
+>  			ranges;
+>  
+> -			ecspi1: spi@30820000 {
+> +			spba-bus@30800000 {
+> +				compatible = "fsl,spba-bus", "simple-bus";
+> +				reg = <0x30800000 0x100000>;
+>  				#address-cells = <1>;
+> -				#size-cells = <0>;
+> -				compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
+> -				reg = <0x30820000 0x10000>;
+> -				interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk IMX8MP_CLK_ECSPI1_ROOT>,
+> -					 <&clk IMX8MP_CLK_ECSPI1_ROOT>;
+> -				clock-names = "ipg", "per";
+> -				assigned-clock-rates = <80000000>;
+> -				assigned-clocks = <&clk IMX8MP_CLK_ECSPI1>;
+> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
+> -				dmas = <&sdma1 0 7 1>, <&sdma1 1 7 2>;
+> -				dma-names = "rx", "tx";
+> -				status = "disabled";
+> -			};
+> +				#size-cells = <1>;
+> +				ranges;
+>  
+> -			ecspi2: spi@30830000 {
+> -				#address-cells = <1>;
+> -				#size-cells = <0>;
+> -				compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
+> -				reg = <0x30830000 0x10000>;
+> -				interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk IMX8MP_CLK_ECSPI2_ROOT>,
+> -					 <&clk IMX8MP_CLK_ECSPI2_ROOT>;
+> -				clock-names = "ipg", "per";
+> -				assigned-clock-rates = <80000000>;
+> -				assigned-clocks = <&clk IMX8MP_CLK_ECSPI2>;
+> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
+> -				dmas = <&sdma1 2 7 1>, <&sdma1 3 7 2>;
+> -				dma-names = "rx", "tx";
+> -				status = "disabled";
+> -			};
+> +				ecspi1: spi@30820000 {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
+> +					reg = <0x30820000 0x10000>;
+> +					interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+> +					clocks = <&clk IMX8MP_CLK_ECSPI1_ROOT>,
+> +						 <&clk IMX8MP_CLK_ECSPI1_ROOT>;
+> +					clock-names = "ipg", "per";
+> +					assigned-clock-rates = <80000000>;
+> +					assigned-clocks = <&clk IMX8MP_CLK_ECSPI1>;
+> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
+> +					dmas = <&sdma1 0 7 1>, <&sdma1 1 7 2>;
+> +					dma-names = "rx", "tx";
+> +					status = "disabled";
+> +				};
+>  
+> -			ecspi3: spi@30840000 {
+> -				#address-cells = <1>;
+> -				#size-cells = <0>;
+> -				compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
+> -				reg = <0x30840000 0x10000>;
+> -				interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk IMX8MP_CLK_ECSPI3_ROOT>,
+> -					 <&clk IMX8MP_CLK_ECSPI3_ROOT>;
+> -				clock-names = "ipg", "per";
+> -				assigned-clock-rates = <80000000>;
+> -				assigned-clocks = <&clk IMX8MP_CLK_ECSPI3>;
+> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
+> -				dmas = <&sdma1 4 7 1>, <&sdma1 5 7 2>;
+> -				dma-names = "rx", "tx";
+> -				status = "disabled";
+> -			};
+> +				ecspi2: spi@30830000 {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
+> +					reg = <0x30830000 0x10000>;
+> +					interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+> +					clocks = <&clk IMX8MP_CLK_ECSPI2_ROOT>,
+> +						 <&clk IMX8MP_CLK_ECSPI2_ROOT>;
+> +					clock-names = "ipg", "per";
+> +					assigned-clock-rates = <80000000>;
+> +					assigned-clocks = <&clk IMX8MP_CLK_ECSPI2>;
+> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
+> +					dmas = <&sdma1 2 7 1>, <&sdma1 3 7 2>;
+> +					dma-names = "rx", "tx";
+> +					status = "disabled";
+> +				};
+>  
+> -			uart1: serial@30860000 {
+> -				compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
+> -				reg = <0x30860000 0x10000>;
+> -				interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk IMX8MP_CLK_UART1_ROOT>,
+> -					 <&clk IMX8MP_CLK_UART1_ROOT>;
+> -				clock-names = "ipg", "per";
+> -				dmas = <&sdma1 22 4 0>, <&sdma1 23 4 0>;
+> -				dma-names = "rx", "tx";
+> -				status = "disabled";
+> -			};
+> +				ecspi3: spi@30840000 {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
+> +					reg = <0x30840000 0x10000>;
+> +					interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+> +					clocks = <&clk IMX8MP_CLK_ECSPI3_ROOT>,
+> +						 <&clk IMX8MP_CLK_ECSPI3_ROOT>;
+> +					clock-names = "ipg", "per";
+> +					assigned-clock-rates = <80000000>;
+> +					assigned-clocks = <&clk IMX8MP_CLK_ECSPI3>;
+> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
+> +					dmas = <&sdma1 4 7 1>, <&sdma1 5 7 2>;
+> +					dma-names = "rx", "tx";
+> +					status = "disabled";
+> +				};
+>  
+> -			uart3: serial@30880000 {
+> -				compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
+> -				reg = <0x30880000 0x10000>;
+> -				interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk IMX8MP_CLK_UART3_ROOT>,
+> -					 <&clk IMX8MP_CLK_UART3_ROOT>;
+> -				clock-names = "ipg", "per";
+> -				dmas = <&sdma1 26 4 0>, <&sdma1 27 4 0>;
+> -				dma-names = "rx", "tx";
+> -				status = "disabled";
+> -			};
+> +				uart1: serial@30860000 {
+> +					compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
+> +					reg = <0x30860000 0x10000>;
+> +					interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
+> +					clocks = <&clk IMX8MP_CLK_UART1_ROOT>,
+> +						 <&clk IMX8MP_CLK_UART1_ROOT>;
+> +					clock-names = "ipg", "per";
+> +					dmas = <&sdma1 22 4 0>, <&sdma1 23 4 0>;
+> +					dma-names = "rx", "tx";
+> +					status = "disabled";
+> +				};
+>  
+> -			uart2: serial@30890000 {
+> -				compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
+> -				reg = <0x30890000 0x10000>;
+> -				interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk IMX8MP_CLK_UART2_ROOT>,
+> -					 <&clk IMX8MP_CLK_UART2_ROOT>;
+> -				clock-names = "ipg", "per";
+> -				dmas = <&sdma1 24 4 0>, <&sdma1 25 4 0>;
+> -				dma-names = "rx", "tx";
+> -				status = "disabled";
+> -			};
+> +				uart3: serial@30880000 {
+> +					compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
+> +					reg = <0x30880000 0x10000>;
+> +					interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
+> +					clocks = <&clk IMX8MP_CLK_UART3_ROOT>,
+> +						 <&clk IMX8MP_CLK_UART3_ROOT>;
+> +					clock-names = "ipg", "per";
+> +					dmas = <&sdma1 26 4 0>, <&sdma1 27 4 0>;
+> +					dma-names = "rx", "tx";
+> +					status = "disabled";
+> +				};
+>  
+> -			flexcan1: can@308c0000 {
+> -				compatible = "fsl,imx8mp-flexcan";
+> -				reg = <0x308c0000 0x10000>;
+> -				interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
+> -					 <&clk IMX8MP_CLK_CAN1_ROOT>;
+> -				clock-names = "ipg", "per";
+> -				assigned-clocks = <&clk IMX8MP_CLK_CAN1>;
+> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
+> -				assigned-clock-rates = <40000000>;
+> -				fsl,clk-source = /bits/ 8 <0>;
+> -				fsl,stop-mode = <&gpr 0x10 4>;
+> -				status = "disabled";
+> -			};
+> +				uart2: serial@30890000 {
+> +					compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
+> +					reg = <0x30890000 0x10000>;
+> +					interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
+> +					clocks = <&clk IMX8MP_CLK_UART2_ROOT>,
+> +						 <&clk IMX8MP_CLK_UART2_ROOT>;
+> +					clock-names = "ipg", "per";
+> +					dmas = <&sdma1 24 4 0>, <&sdma1 25 4 0>;
+> +					dma-names = "rx", "tx";
+> +					status = "disabled";
+> +				};
+>  
+> -			flexcan2: can@308d0000 {
+> -				compatible = "fsl,imx8mp-flexcan";
+> -				reg = <0x308d0000 0x10000>;
+> -				interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
+> -				clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
+> -					 <&clk IMX8MP_CLK_CAN2_ROOT>;
+> -				clock-names = "ipg", "per";
+> -				assigned-clocks = <&clk IMX8MP_CLK_CAN2>;
+> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
+> -				assigned-clock-rates = <40000000>;
+> -				fsl,clk-source = /bits/ 8 <0>;
+> -				fsl,stop-mode = <&gpr 0x10 5>;
+> -				status = "disabled";
+> +				flexcan1: can@308c0000 {
+> +					compatible = "fsl,imx8mp-flexcan";
+> +					reg = <0x308c0000 0x10000>;
+> +					interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
+> +					clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
+> +						 <&clk IMX8MP_CLK_CAN1_ROOT>;
+> +					clock-names = "ipg", "per";
+> +					assigned-clocks = <&clk IMX8MP_CLK_CAN1>;
+> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
+> +					assigned-clock-rates = <40000000>;
+> +					fsl,clk-source = /bits/ 8 <0>;
+> +					fsl,stop-mode = <&gpr 0x10 4>;
+> +					status = "disabled";
+> +				};
 > +
-> +title: GPIO controlled rfkill switch
-> +
-> +maintainers:
-> +  - Johannes Berg <johannes@sipsolutions.net>
-> +  - Philipp Zabel <p.zabel@pengutronix.de>
-> +
-> +properties:
-> +  compatible:
-> +    const: rfkill-gpio
-> +
-> +  name:
-
-Did you test this? Something should complain, but maybe not. The problem 
-is 'name' is already a property in the unflattened DT (and old FDT 
-formats).
-
-'label' would be appropriate perhaps, but why do we care what the name 
-is? 
-
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: rfkill switch name, defaults to node name
-> +
-> +  type:
-
-Too generic. Property names should ideally have 1 type globally. I think 
-'type' is already in use. 'radio-type' instead?
-
-
-> +    description: rfkill radio type
-> +    enum:
-> +      - wlan
-> +      - bluetooth
-> +      - ultrawideband
-> +      - wimax
-> +      - wwan
-> +      - gps
-> +      - fm
-> +      - nfc
-> +
-> +  shutdown-gpios:
-> +    maxItems: 1
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-
-I'm lost as to why there are 2 GPIOs.
-
-> +
-> +required:
-> +  - compatible
-> +  - type
-> +
-> +oneOf:
-> +  - required:
-> +      - shutdown-gpios
-> +  - required:
-> +      - reset-gpios
-
-But only 1 can be present? So just define 1 GPIO name.
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    rfkill-pcie-wlan {
-
-Node names should be generic.
-
-> +        compatible = "rfkill-gpio";
-> +        name = "rfkill-pcie-wlan";
-> +        type = "wlan";
-> +        shutdown-gpios = <&gpio2 25 GPIO_ACTIVE_HIGH>;
-> +    };
+> +				flexcan2: can@308d0000 {
+> +					compatible = "fsl,imx8mp-flexcan";
+> +					reg = <0x308d0000 0x10000>;
+> +					interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
+> +					clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
+> +						 <&clk IMX8MP_CLK_CAN2_ROOT>;
+> +					clock-names = "ipg", "per";
+> +					assigned-clocks = <&clk IMX8MP_CLK_CAN2>;
+> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
+> +					assigned-clock-rates = <40000000>;
+> +					fsl,clk-source = /bits/ 8 <0>;
+> +					fsl,stop-mode = <&gpr 0x10 5>;
+> +					status = "disabled";
+> +				};
+>  			};
+>  
+>  			crypto: crypto@30900000 {
 > -- 
-> 2.30.2
+> 2.34.1
+> 
 > 
 > 
