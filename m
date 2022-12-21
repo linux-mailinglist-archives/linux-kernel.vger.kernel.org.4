@@ -2,105 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D436D652BDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A47652BE9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbiLUDnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 22:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
+        id S234444AbiLUDof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 22:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLUDnI (ORCPT
+        with ESMTP id S233411AbiLUDoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 22:43:08 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5A21EAD6;
-        Tue, 20 Dec 2022 19:43:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1671594180;
-        bh=AwTHZsJE1OHmZw07jiGlqjcJAYhW0GUTvOa719wrfcw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=g5Egj5vaNGMMyKDGyVK12hdPytUVLvpAYJlg5fhmDr2lN1H0B2+29ItSjzJA5gQL/
-         3zF6gYuGrb6EJrrcOwre55oGT4vYz0Nwp2P3nzh49RLBim0oOTnWJl2CxwovVpu246
-         SzK9ScSOWWln1fhaZulfuvND4o4PIEWv61jZRAgouqK0YOYwurQ3dvXLUuKx5TWk8q
-         MQhX4hxvIp5kL0WQw702zFsQoL2f+067xBRGvt6xhctB+hRRHOCbgLuq9rFd2L5Dmu
-         nk7beGL+LYfF7uy65mU2ZbmQm7QUfbIRpp8GZ3c5TiDIr/N52N7c+qiiovTivU20KM
-         w64WGCwJw99zw==
-Received: from [10.1.0.30] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NcK5w5GFlzbvj;
-        Tue, 20 Dec 2022 22:43:00 -0500 (EST)
-Message-ID: <f4199d1f-306c-681f-8bb9-26d66ecf5121@efficios.com>
-Date:   Tue, 20 Dec 2022 22:43:25 -0500
+        Tue, 20 Dec 2022 22:44:25 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA461EAE1;
+        Tue, 20 Dec 2022 19:44:18 -0800 (PST)
+X-UUID: 8cfb122b2b4a457bbde9c29fb8a0996c-20221221
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=UZa93UET80bJSwOG9nn9/Z7Z/jlBWTvj0iQxh9MxR+w=;
+        b=tzAVQlVn0Aam263ZlhvRJdZLuyGYeBtVPBiws7HaP4sCT1Xl3xKz3Tkuu6+AdF9auwptLQgZTZI70/5VQzLiMOgUtqwOoRvg2PE95lur6OUTVqBz+jpC6a9rjDn5ZJrTGdNHlPJDGAn3Q7focVXoX0U/Rd+3KOKnCn5niQaOs2A=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:39f7488b-92e4-44f9-9191-c878f9a3082c,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.14,REQID:39f7488b-92e4-44f9-9191-c878f9a3082c,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:dcaaed0,CLOUDID:1e3283f3-ff42-4fb0-b929-626456a83c14,B
+        ulkID:2212211144139IVENG50,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 8cfb122b2b4a457bbde9c29fb8a0996c-20221221
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1577682678; Wed, 21 Dec 2022 11:44:10 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 21 Dec 2022 11:44:09 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 21 Dec 2022 11:44:09 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ikjoon Jang <ikjn@chromium.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v2 0/6] Add ADSP power domains controller support for MT8192
+Date:   Wed, 21 Dec 2022 11:44:01 +0800
+Message-ID: <20221221034407.19605-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <20221220140714.GB22763@lothringen>
- <CA83E649-8C79-4D39-9BFE-BBEF95968B98@joelfernandes.org>
- <20221220224459.GA25175@lothringen>
- <CAEXW_YSAv+MzZoW9RK9H3E6DAyZH+wB=4bMy5nXTOExSwgSwAg@mail.gmail.com>
- <20221221004957.GA29021@lothringen> <20221221005858.GA29316@lothringen>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20221221005858.GA29316@lothringen>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-20 19:58, Frederic Weisbecker wrote:
-> On Wed, Dec 21, 2022 at 01:49:57AM +0100, Frederic Weisbecker wrote:
->> On Tue, Dec 20, 2022 at 07:15:00PM -0500, Joel Fernandes wrote:
->>> On Tue, Dec 20, 2022 at 5:45 PM Frederic Weisbecker <frederic@kernel.org> wrote:
->>> Agreed about (1).
->>>
->>>> _ In (2), E pairs with the address-dependency between idx and lock_count.
->>>
->>> But that is not the only reason. If that was the only reason for (2),
->>> then there is an smp_mb() just before the next-scan post-flip before
->>> the lock counts are read.
->>
->> The post-flip barrier makes sure the new idx is visible on the next READER's
->> turn, but it doesn't protect against the fact that "READ idx then WRITE lock[idx]"
->> may appear unordered from the update side POV if there is no barrier between the
->> scan and the flip.
->>
->> If you remove the smp_mb() from the litmus test I sent, things explode.
-> 
-> Or rather, look at it the other way, if there is no barrier between the lock
-> scan and the index flip (E), then the index flip can appear to be written before the
-> lock is read. Which means you may start activating the index before you finish
-> reading it (at least it appears that way from the readers pont of view).
+This series is based on matthias github, v6.1-next.
+The previous discussion: 
+https://patchwork.kernel.org/project/linux-mediatek/patch/20221201073328.1559-1-allen-kh.cheng@mediatek.com/
 
-Considering that you can have pre-existing readers from arbitrary index 
-appearing anywhere in the grace period (because a reader can fetch the
-index and be preempted for an arbitrary amount of time before 
-incrementing the lock count), the grace period algorithm needs to deal 
-with the fact that a newcoming reader can appear in a given index either 
-before or after the flip.
+Change from v1:
+ - move allOf before additionalProperties
+ - add buck isolation setting patches into series
 
-I don't see how flipping the index before or after loading the 
-unlock/lock values would break anything (except for unlikely counter 
-overflow situations as previously discussed).
+Allen-KH Cheng (6):
+  soc: mediatek: pm-domains: Add buck isolation offset and mask to power
+    domain data
+  soc: mediatek: pm-domains: Add buck isolation setting in power domain
+  dt-bindings: power: Add MT8192 ADSP power domain
+  soc: mediatek: pm-domains: Add ADSP power domain data for MT8192
+  dt-bindings: arm: mediatek: Add missing power-domains property
+  arm64: dts: mediatek: Add the missing ADSP power domains controller
+    for MT8192
 
-Thanks,
-
-Mathieu
+ .../arm/mediatek/mediatek,mt8192-clock.yaml     | 17 +++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi        |  9 +++++++++
+ drivers/soc/mediatek/mt8192-pm-domains.h        | 16 ++++++++++++++++
+ drivers/soc/mediatek/mtk-pm-domains.c           |  8 ++++++++
+ drivers/soc/mediatek/mtk-pm-domains.h           |  5 +++++
+ include/dt-bindings/power/mt8192-power.h        |  1 +
+ 6 files changed, 56 insertions(+)
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+2.18.0
 
