@@ -2,178 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7584E6530BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7759C6530C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbiLUMY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 07:24:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S230375AbiLUMZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 07:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiLUMYs (ORCPT
+        with ESMTP id S230465AbiLUMY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 07:24:48 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9BA2315A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 04:24:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1671625487; x=1703161487;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JP6kXKReLiKe0iNUrQQ7tFMFRaAdUy2nqah2AVaSLfc=;
-  b=prygk/mw+QXJ1MZGsEmYlFptmNwH4Ksx5s7qjGf16GkcJdEWFQav+0CA
-   Lk0n5o8AFmvjhnsjYySYkHz5EzJXcfpVtbyNOGXU/0WbKwQ2jYXOTNpad
-   SI2lgxLE2WCrpJbhk27/ijadsbeSzF6tOVKhG0f7TECcBxA6ajCXQNoBC
-   9IB8GQhvSwAmnxwIxgTAPLYpnGLNOmJNv0vs82s5eljUsKb7F1RJw2O25
-   KmGUTPxGJhfI9EP/YRephA/77pHmBLC7Cu8XuKxzqVjTy7R7XW7K6+Rt+
-   IJ7+EfvYD3eYR3Yi+Hod4yUR3umNOtgT1QwaGzdoY4mi6P+NPdlyu4qsf
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,262,1665417600"; 
-   d="scan'208";a="219142419"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Dec 2022 20:24:46 +0800
-IronPort-SDR: q+sOH5KiAo18Ulfn4D6N2Tggw5RhYkRMWLnpKVPczzmLnMN0lnl0Fz7osAa5DvRG0eFqZLMayv
- RWqcYxpA/eYOBKDGrROdmuQR8sH3k+MbMo5gdqbDXiPyMPGgq8pwpmvzl21dIis5G5esMGZpRy
- eVM7pJOdf0Dek+khlmQ+98hdgAB5ikoZH17IGaO1vBiN2cMjrih2xLiIAgV6/+vX1dobEMa875
- UP3H2SHHEQdggRx0a/6Tb2VaaL1VQ9lIC05Dry8Ln9Wr8/lyXk4YEj8SnuTTJbjalMh/MJj4mj
- WeY=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Dec 2022 03:37:16 -0800
-IronPort-SDR: iHJKe74ATLcHBTMg6ixk1PZDrP+iK7UeXk52eKHGvVCtoJubd8A/vy50m0A1rFtzJq/VMFG6Uq
- cWPdaFxpeotA68ozvY5U7KFXWXKfvNFoZGrhdjlnmxPW85KxTzMp5seg3+N0BSpj2eeROSK/dk
- VdOj18qjF0QKPG+wYHrnFpIQrsVUCJaVB7N22enWTUdcpjbu/CGtnrlB4Wv/ch6bo50IIE3iuI
- 4Wq6Kehxqt0sRl+TNReRaUe2hxUCKhpDMxYfWRKF2DCy/sgtkW5DEzRWjYBTg3LlVTgXXzjs9P
- P9M=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Dec 2022 04:24:46 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NcXgy3zP5z1RwqL
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 04:24:46 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1671625485; x=1674217486; bh=JP6kXKReLiKe0iNUrQQ7tFMFRaAdUy2nqah
-        2AVaSLfc=; b=r8o88TIM+zit033pTSLCPBHS94VlTTniEXMuq7UJ2qaMaau9Az/
-        NMdAcHYPo9Ap14bDSKslBZ2yu8o9IFqx0c3lk1cxduytSxNzVAkT2iOEMCMppoCG
-        Oi1s7hk98JyhvSlkAgLEF0NadBfPwA5g2jpn7fBoilWssi77xThrfOvDL+aFLjD8
-        vTkX34Y9737qhAVeUwppbVEsQ26NhfuwTTaZ0AVdcNPGezNhLORueEfhUWBIDs3Q
-        LK/3VVwWQXsV/crun8iRls5edJF7B1h1d6f8BLiqbApPNjVhbjCCET+NFUeFO8zZ
-        C9Y3TbxHHgQcKINLSAOiitw3exR0RWlICHw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id cYkTryMQ1cbY for <linux-kernel@vger.kernel.org>;
-        Wed, 21 Dec 2022 04:24:45 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NcXgv6Twbz1RvLy;
-        Wed, 21 Dec 2022 04:24:43 -0800 (PST)
-Message-ID: <54be50a6-88d2-82d8-b549-a5e49225c6c4@opensource.wdc.com>
-Date:   Wed, 21 Dec 2022 21:24:42 +0900
+        Wed, 21 Dec 2022 07:24:57 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEBF23301
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 04:24:54 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id v11so15415317ljk.12
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 04:24:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7e57CVStI07OWBg/LHZpcyGd4gQwHot2GvYOQMHNZvs=;
+        b=t5k3PBtNvxj5VZWpsUzBPvbnTQobaNdQkW6t3KqGCvX8KIX1e+nM7dF9Qklgd5ihO8
+         xNxINYwrAxLUk+gnhZ6SWrCxQ87rcuWevR7AbMWMvzrNmSUFm6ZX3saqmfsPN/CFa9wc
+         pFIUqx0M78X+Y+OXKEuCWu/cKCII2NfnvzVXqVigWkdT+BUAyzhY+J07wmtwCiw1r/a0
+         oIW+7rYdKxGrOYejr2tapwscmZxaOc8JnXd2AOphoXPYh7Pew5MbaIc9aE0HRsm4BrTo
+         /CVSNS1HXRUTLBvGNN7jOLYT4+TSa/vW60aEANq4o/peH6/Hj+OCdZCX/HNavIzSIks9
+         gXHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7e57CVStI07OWBg/LHZpcyGd4gQwHot2GvYOQMHNZvs=;
+        b=qJCtDGjEcsTEGXSxPVik4Ci1e5yhJX2H4R5dLzDzulmikLeYRJNxj7Cq3i0aB9eiyO
+         hVNU81yeswLiL5MRYH1yZkZ/D/rhXKLjnw+2A5OEdcS2/TR3GFMREIj7o+1ItrOpCF2l
+         KgxkJCZiptcfAHR1QBtq3LfWFZHTmhzqKAbN3hwad4lEGaxHPrQOcLDEPCWSvBNS/aQx
+         nONP8ayLDFH5zCwERW/950fspcQk4+ppcI+iQ7SiQ3Nb8If+2hoZVKS4B6P0gmAlBwNj
+         aQV/AssFloigelG0/iE/CYU8svZ9Ni6SwjfCog5vXyg1Jz6KmZZjvPbXRQaLtfzBtlKA
+         CD2Q==
+X-Gm-Message-State: AFqh2kpI3EtF+EtjK4awVqdulmMClcrkNoodSSKfOJTWMl8KNJj50GD1
+        Jrmf0uZTl6QLu1S4LiIPjlPvPw==
+X-Google-Smtp-Source: AMrXdXt3lqXaZuqf0Hd+ULV+pfNBUMGFEuaf2x4rRw9R9xPvFYQqPwp5tmkGATgLbfnS8bLjxfOmnQ==
+X-Received: by 2002:a2e:8802:0:b0:26f:db35:7e40 with SMTP id x2-20020a2e8802000000b0026fdb357e40mr509832ljh.15.1671625493110;
+        Wed, 21 Dec 2022 04:24:53 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05651c118c00b00279e41de7e6sm1302652ljo.3.2022.12.21.04.24.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 04:24:52 -0800 (PST)
+Message-ID: <5ff6e569-ad9f-f884-ea0e-41114afcaf7d@linaro.org>
+Date:   Wed, 21 Dec 2022 13:24:51 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] scsi: libsas: Grab the host lock in
- sas_ata_device_link_abort()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/2] dt-bindings: clock: SC7280: Add resets for LPASS
+ audio clock controller
 Content-Language: en-US
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc:     Jason Yan <yanaijie@huawei.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Xingui Yang <yangxingui@huawei.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxarm@huawei.com" <linuxarm@huawei.com>,
-        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
-        "kangfenglong@huawei.com" <kangfenglong@huawei.com>
-References: <20221220125349.45091-1-yangxingui@huawei.com>
- <4ec9dbed-1758-d6b4-dc1d-ac42e8c22731@oracle.com>
- <c8387766-2ca0-51f3-e332-71492b13e5c1@opensource.wdc.com>
- <7347d117-6e0b-dd18-90a8-25685f757689@huawei.com>
- <4ff0ca00-31f5-2867-ff59-cecb5d6d1048@opensource.wdc.com>
- <755d7a9c-427e-024a-8509-449ebc5a00e6@huawei.com>
- <f77c7872-3711-2216-c17c-e23591f745c7@opensource.wdc.com>
- <Y6LVaE5e9iZNAYrF@x1-carbon>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <Y6LVaE5e9iZNAYrF@x1-carbon>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        swboyd@chromium.org, agross@kernel.org, andersson@kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org, quic_plai@quicinc.com,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com
+References: <1671618061-6329-1-git-send-email-quic_srivasam@quicinc.com>
+ <1671618061-6329-2-git-send-email-quic_srivasam@quicinc.com>
+ <f138f9de-4ecf-3126-97bd-668c96612913@linaro.org>
+ <b6172e20-114a-b7e2-2200-0932f803cb20@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b6172e20-114a-b7e2-2200-0932f803cb20@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/21 18:44, Niklas Cassel wrote:
-> On Wed, Dec 21, 2022 at 05:31:59PM +0900, Damien Le Moal wrote:
->>>
->>> What about the interrupt handler such as ahci_error_intr()? I didn't see
->>> the callers hold the port lock too. Do they need the port lock?
+On 21/12/2022 13:22, Srinivasa Rao Mandadapu wrote:
+> 
+> On 12/21/2022 4:12 PM, Krzysztof Kozlowski wrote:
+> Thanks for your time Krzyszto!!!
+>> On 21/12/2022 11:21, Srinivasa Rao Mandadapu wrote:
+>>> Add support for LPASS audio clock gating for RX/TX/SWA core bus clocks
+>>> for audioreach based SC7280 platforms.
+>> Use subject prefixes matching the subsystem (git log --oneline -- ...).
+>> The final prefix should be "qcom,sc7280-lpasscc" and then the actual
+
+                                ^^^^^^^ it's written here
+
+>> subject should drop redundant pieces.
+> 
+> Sorry. I didn't understand much from your statement.
+> 
+> Do you mean subject should something like below?
+> 
+>   dt-bindings: clock: qcom: sc7280-lpasscc: Add resets for audio clock 
+> controller
+
+1. The last prefix should be "qcom,sc7280-lpasscc:".
+2. And then drop "audio clock controller" because it is obvious, isn't it?
+
+> 
 >>
->> It looks like it is missing for ahci_thunderx_irq_handler() but that one
->> takes the host lock. Same for xgene_ahci_irq_intr(), again no port lock
->> but host lock taken. And again for ahci_single_level_irq_intr() for the
->> non MSI case. For modern MSI adapters, the port lock is taken in
+>>>   ...
+>> Best regards,
+>> Krzysztof
 >>
->> For other cases, ahci_multi_irqs_intr_hard) takes the port lock.
->>
->> So it looks like ahci_port_intr() needs to take the lock and some
->> cleanups overall (the host lock should not be necessary in the command
->> path. But nobody seems to have issues with the "bad" cases... Probably
->> because they are not mainstream adapters.
->>
->> Definitely some work needed here.
-> 
-> ahci_multi_irqs_intr_hard() takes the ap->lock before calling
-> ahci_handle_port_interrupt(), which calls ahci_port_intr(),
-> so I don't think there is any work needed for multi IRQ AHCI.
 
-Yes. I tried to say that above.
-
-> 
-> For ahci_single_level_irq_intr() the host lock is taken before
-> calling ahci_handle_port_intr(), so I don't see why we need any
-> extra work for single IRQ AHCI.
-> 
-> 
-> Remember, while the default is that:
-> 	ap->lock = &host->lock;
-
-Ah ! Yes ! good point ! So there are no issues anywhere. This is only confusing
-because of the comments I think.
-
-> see:
-> https://github.com/torvalds/linux/blob/v6.1/drivers/ata/libata-core.c#L5305
-> 
-> In case of MULTI MSI, the ap->lock is using its own lock:
-> https://github.com/torvalds/linux/blob/v6.1/drivers/ata/libahci.c#L2460
-> 
-> 
-> So what is it that needs to be fixed for AHCI?
-> 
-> I haven't looked at ahci_thunderx_irq_handler() and xgene_ahci_irq_intr()
-> so I can't speak for these.
-
-These are not multi-irq and use the &host->lock directly, which is the same as
-taking the ap->lock. We could clean that up for consistency and always use
-ap->lock. But not a big deal. No bugs, just a little confusing with a simple
-reading of the code.
-
-> 
-> 
-> Kind regards,
-> Niklas
-
--- 
-Damien Le Moal
-Western Digital Research
+Best regards,
+Krzysztof
 
