@@ -2,153 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373CF652DBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E157652DC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiLUIPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 03:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
+        id S229472AbiLUIQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 03:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234565AbiLUIOp (ORCPT
+        with ESMTP id S234516AbiLUIPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 03:14:45 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47966218AB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:14:42 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so9700318ilt.9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:14:42 -0800 (PST)
+        Wed, 21 Dec 2022 03:15:44 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AB3F7D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:43 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id b3so22401127lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tKVTpYZFPEDtKyLcWavwNidP1gFKsOiP+G6edw3PI9g=;
+        b=vahFHpUDyrqgLEJM7LTlfQSXUee1o2TfjthdfLdgytrvn/mWRZMStW/eUl9K3VhG/2
+         rW3a3BSINNKDlG/kDJ8ERk/Wwdz9KyGmrY9X6HSmHYegm248/3wlGApZXmAvfc8YIZG9
+         UfqpRQNEJQfmABHy1YGf03fdsExb1o6N9UkKHLEsaEiZekXs28Pp500Rg94id2g/3Eed
+         sbWPy7FZRXBMEaVGXZm9n48vANpoT0GV+Gz24KYiw/igkpF3IyVK4SlSzZy07NKKVDWG
+         6pGB3/BFGoBm4h80lujRgi8J3yVVmqVojDmQwW68IKfqhbF3o8fpM12d1bdNyqO9c6pT
+         zRAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tgg/Ot3Hv4241+BBELpgcMRtBbmB5MmgGdiwIdzA4mo=;
-        b=vQ0O+c1mTI5pv/jtDa0BgKVU6doOywAAsdguU9UNIB1brp02DSpBSQiqHgSu8QZsrh
-         4eUX4SCZuy+6KwuDUZLIyFauYnY4iLdbBrO7IYMg3rxtmtOu2a6mh4jRsxxw9FFupKL8
-         E/DaCFD5EpYLDzRIj6J6LX3QupUqmAFVycry+3UEDtIJl6PP9VM3LOOIRnKFUxyaoQZB
-         0V34AlHRGPv8FktM1GFC2sdegZmmB00JL9WqQ90rH84OIGa43q0/YCr7MGmCdkIex0Z6
-         ErCOtLjq6/x7WBGpSGD8uIAESfwYCllNk7fq7orSTuash2/PztjwY3X/8q+R/EquHmol
-         Mewg==
-X-Gm-Message-State: AFqh2kpSDJiN++fiiXYokmYN7TPc1FA9KYwJatRdTsap+/0IANmGTZlo
-        QyabqyzIgQ0wpBch0aTKw3BE7mkU2AQaUe01O+N/0gm4DXN5
-X-Google-Smtp-Source: AMrXdXtfaEJX9GUKY3cc3lEmOhh6LJ/8tyrlHh3bvqe1VCrYfOK9+gUr9yrhnJW2fVhB4Zz6kua6Aa357E22gbzpvuHoW2DuuK95
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tKVTpYZFPEDtKyLcWavwNidP1gFKsOiP+G6edw3PI9g=;
+        b=FBHispVVEX86cNPXnUop1NVB/dDmfRUv1wYD3cMm6A2wWDdvJGgl9gVjHD5SWpP/uI
+         cOeAx1TIG3S8GM2RUq/1Tzol7Vlj/zA1od+La1CRA1L8rmDUJdoGKXh/1/vg48pLHEA8
+         wUKpi5rjkrYGthitawVhrR9JvjyLttGWDkFn2rgbIkfN36Lx6YiFaDF3sa2Q4TeG6/YF
+         DdKpEOUwb+Mm925tW5RwuAh2lNLJQEtGJpXEwv5nbrWsIjhwE0aD8efgD7hkt3zBfvKj
+         y4FThWj9rB0WF6gL+urLRTN/zSpn2/TC6g69oOBFu+toIGCxUBo6CsGbejwcgAJ6UInu
+         mqZg==
+X-Gm-Message-State: AFqh2kq0Sae9XLM+kXC58BZYBd8I2ttanQMS2e3aKHJyXR4XHecygq80
+        Qk6aGh7pnoy94QvQcgDybjMoAQ==
+X-Google-Smtp-Source: AMrXdXtXrEk0IuAOycHdERvZxfkVj6P/rVqGYvaomI4T69wVYQdjoSNcMjMry1fmRVNsDStpQx2K9g==
+X-Received: by 2002:a19:c20d:0:b0:4b5:b18b:8966 with SMTP id l13-20020a19c20d000000b004b5b18b8966mr185160lfc.49.1671610541679;
+        Wed, 21 Dec 2022 00:15:41 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05651205c900b00497aa190523sm1767100lfo.248.2022.12.21.00.15.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 00:15:41 -0800 (PST)
+Message-ID: <88357291-3cdd-8d5a-fdec-38bd081a4235@linaro.org>
+Date:   Wed, 21 Dec 2022 09:15:40 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:191d:b0:38a:741a:501b with SMTP id
- p29-20020a056638191d00b0038a741a501bmr54268jal.114.1671610481618; Wed, 21 Dec
- 2022 00:14:41 -0800 (PST)
-Date:   Wed, 21 Dec 2022 00:14:41 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f5b4ab05f0522438@google.com>
-Subject: [syzbot] BUG: corrupted list in nfc_llcp_register_device
-From:   syzbot <syzbot+c1d0a03d305972dbbe14@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dvyukov@google.com, edumazet@google.com,
-        krzysztof.kozlowski@linaro.org, kuba@kernel.org, linma@zju.edu.cn,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 1/2] arm64: dts: rockchip: Add EmbedFire LubanCat 1
+Content-Language: en-US
+To:     Yuteng Zhong <zonyitoo@gmail.com>, Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, DHDAXCW <lasstp5011@gmail.com>
+References: <Y6KdvAlWLMG4whJh@VM-66-53-centos>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y6KdvAlWLMG4whJh@VM-66-53-centos>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 21/12/2022 06:46, Yuteng Zhong wrote:
+> from: DHDAXCW <lasstp5011@gmail.com>
+> 
+> LubanCat 1 is a Rockchip RK3566 SBC based
+> is developed by EmbedFire Electronics Co., Ltd.
+> Mini Linux Card Type Cheap Computer Development Board
+> 
+> It has the following characteristics:
+> - MicroSD card slot, onboard eMMC flash memory
+> - 1GbE Realtek RTL8211F Ethernet Transceiver
+> - 1 USB Type-C port (power and USB2.0 OTG)
+> - 1 USB 3.0 Host port
+> - 3 USB 2.0 Host ports
+> - 1 HDMI
+> - 1 infrared receiver
+> - 1 MIPI DSI
+> - 1 MIPI CSI
+> - 1 x 4-section headphone jack
+> - Mini PCIe socket (USB or PCIe)
+> - 1 SIM Card slot
+> - 1 SYS LED and 1 PWR LED
+> - 40-pin GPIO expansion header
+> 
+> Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
+> Signed-off-by: DHDAXCW <lasstp5011@gmail.com>
+> ---
+> 
+> Changed in V2:
+>   - Remove RNG node
+> Changed in V3:
+>   - Sent E-mail with a wrong attachment
+> Changed in V4:
+>   - Modify all node names
+> 
+> ---
+>  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+>  .../boot/dts/rockchip/rk3566-lubancat-1.dts   | 598 ++++++++++++++++++
+>  2 files changed, 599 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> index 0a76a2ebb5f6..e52bda04d45a 100644
+> --- a/arch/arm64/boot/dts/rockchip/Makefile
+> +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> @@ -78,6 +78,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-blade.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-model-a.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-box-demo.dtb
+> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-lubancat-1.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-odroid-m1.dtb
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts b/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
+> new file mode 100644
+> index 000000000000..443fcfabbd16
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
+> @@ -0,0 +1,598 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> +* Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+> +*/
+> +
+> +/dts-v1/;
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/leds/common.h>
+> +#include <dt-bindings/pinctrl/rockchip.h>
+> +#include <dt-bindings/soc/rockchip,vop2.h>
+> +#include "rk3566.dtsi"
+> +
+> +/ {
+> +	model = "EmbedFire LubanCat 1";
+> +	compatible = "embedfire,lubancat-1", "rockchip,rk3566";
+> +
+> +	aliases {
+> +		ethernet0 = &gmac1;
+> +		mmc0 = &sdmmc0;
+> +		mmc1 = &sdhci;
+> +	};
+> +
+> +	chosen: chosen {
+> +		stdout-path = "serial2:1500000n8";
+> +	};
+> +
+> +	gmac1_clkin: external-gmac1-clock {
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <125000000>;
+> +		clock-output-names = "gmac1_clkin";
+> +		#clock-cells = <0>;
+> +	};
+> +	
+> +	hdmi-con {
+> +		compatible = "hdmi-connector";
+> +		type = "a";
+> +
+> +		port {
+> +			hdmi_con_in: endpoint {
+> +				remote-endpoint = <&hdmi_out_con>;
+> +			};
+> +		};
+> +	};
+> +
+> +	gpio-leds {
+> +		compatible = "gpio-leds";
+> +
+> +		sys_led: sys-led {
+> +			label = "sys_led";
+> +			linux,default-trigger = "heartbeat";
+> +			default-state = "on";
+> +			gpios = <&gpio0 RK_PC5 GPIO_ACTIVE_LOW>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&sys_led_pin>;
+> +		};
+> +	};
+> +
+> +	usb_5v: usb-5v-regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "usb_5v";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +	};
+> +
+> +	vcc5v0_sys: vcc5v0-sys-regulator {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc5v0_sys";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&usb_5v>;
+> +	};
+> +
+> +	vcc3v3_sys: vcc3v3-sys {
 
-syzbot found the following issue on:
+This is a friendly reminder during the review process.
 
-HEAD commit:    6feb57c2fd7c Merge tag 'kbuild-v6.2' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14dd1bbf880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d3fb546de56fbf8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=c1d0a03d305972dbbe14
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15fbcbd0480000
+It seems my previous comments were not fully addressed. Maybe my
+feedback got lost between the quotes, maybe you just forgot to apply it.
+Please go back to the previous discussion and either implement all
+requested changes or keep discussing them.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/81556e491789/disk-6feb57c2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/065c943ec9de/vmlinux-6feb57c2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/66e98c522c1f/bzImage-6feb57c2.xz
+Thank you.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c1d0a03d305972dbbe14@syzkaller.appspotmail.com
-
-list_add corruption. next->prev should be prev (ffffffff8e7c1b40), but was 054e024500005c15. (next=ffff8880286ef000).
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:29!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 23580 Comm: syz-executor.3 Not tainted 6.1.0-syzkaller-13822-g6feb57c2fd7c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__list_add_valid+0xdd/0x100 lib/list_debug.c:27
-Code: b9 45 6b 06 0f 0b 48 c7 c7 20 c2 4b 8b 31 c0 e8 a9 45 6b 06 0f 0b 48 c7 c7 80 c2 4b 8b 4c 89 e6 4c 89 f1 31 c0 e8 93 45 6b 06 <0f> 0b 48 c7 c7 00 c3 4b 8b 4c 89 f6 4c 89 e1 31 c0 e8 7d 45 6b 06
-RSP: 0018:ffffc9000bb8f560 EFLAGS: 00010246
-RAX: 0000000000000075 RBX: ffff8880286ef008 RCX: 7255f226623a9300
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: 1ffff110056b8600 R08: ffffffff816f2c9d R09: fffff52001771e65
-R10: fffff52001771e65 R11: 1ffff92001771e64 R12: ffffffff8e7c1b40
-R13: dffffc0000000000 R14: ffff8880286ef000 R15: ffff88802b5c3000
-FS:  00007fa56cb80700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f9560bfe718 CR3: 0000000078b31000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __list_add include/linux/list.h:69 [inline]
- list_add include/linux/list.h:88 [inline]
- nfc_llcp_register_device+0x6c4/0x800 net/nfc/llcp_core.c:1603
- nfc_register_device+0x68/0x320 net/nfc/core.c:1124
- nci_register_device+0x7b5/0x8f0 net/nfc/nci/core.c:1257
- virtual_ncidev_open+0x138/0x1b0 drivers/nfc/virtual_ncidev.c:148
- misc_open+0x346/0x3c0 drivers/char/misc.c:165
- chrdev_open+0x53b/0x5f0 fs/char_dev.c:414
- do_dentry_open+0x85f/0x11b0 fs/open.c:882
- do_open fs/namei.c:3557 [inline]
- path_openat+0x25ba/0x2dd0 fs/namei.c:3714
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa56be8c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fa56cb80168 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 00007fa56bfabf80 RCX: 00007fa56be8c0d9
-RDX: 0000000000000002 RSI: 0000000020000080 RDI: ffffffffffffff9c
-RBP: 00007fa56bee7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd25093fef R14: 00007fa56cb80300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__list_add_valid+0xdd/0x100 lib/list_debug.c:27
-Code: b9 45 6b 06 0f 0b 48 c7 c7 20 c2 4b 8b 31 c0 e8 a9 45 6b 06 0f 0b 48 c7 c7 80 c2 4b 8b 4c 89 e6 4c 89 f1 31 c0 e8 93 45 6b 06 <0f> 0b 48 c7 c7 00 c3 4b 8b 4c 89 f6 4c 89 e1 31 c0 e8 7d 45 6b 06
-RSP: 0018:ffffc9000bb8f560 EFLAGS: 00010246
-RAX: 0000000000000075 RBX: ffff8880286ef008 RCX: 7255f226623a9300
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: 1ffff110056b8600 R08: ffffffff816f2c9d R09: fffff52001771e65
-R10: fffff52001771e65 R11: 1ffff92001771e64 R12: ffffffff8e7c1b40
-R13: dffffc0000000000 R14: ffff8880286ef000 R15: ffff88802b5c3000
-FS:  00007fa56cb80700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f9560bfe718 CR3: 0000000078b31000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc3v3_sys";
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vcc5v0_sys>;
+> +	};
+> +
+> +	vcc3v3_pcie: vcc3v3-pcie-regulator {
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Best regards,
+Krzysztof
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
