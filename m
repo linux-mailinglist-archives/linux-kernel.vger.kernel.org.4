@@ -2,124 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FFF6537DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7716537E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbiLUUxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 15:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S234636AbiLUUyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 15:54:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLUUxe (ORCPT
+        with ESMTP id S234611AbiLUUyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 15:53:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2839421E11;
-        Wed, 21 Dec 2022 12:53:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B683D60FB5;
-        Wed, 21 Dec 2022 20:53:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A486BC433F0;
-        Wed, 21 Dec 2022 20:53:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671656012;
-        bh=Ei1yd0A82cwikByLCenh3iB6L944+LMrF6j1GxO8bf8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G5jGAqypOPugBDeBfljlBfqGpIg1CtpmK5YPSiF3ulCeyCVKT1o8fHPY0+KDTUTrd
-         0QpiL09R+a8OR24QIM+xsNYE1vgL0WE7xahHbhzi6/zZ0UwFGrDJwBH/ZPhsAl/DK9
-         alY1H80WlcMsYrYAtKd/xvKFJbzX0PLJxuhEn0WOqSr1QLiEAEz27gG3VVNsFckcbf
-         3m8DDNmvZN1rnsXfTvWmRRG9P3MT4Ac/TTasR6IdGk7A0MgKpDXit2P+LGLbaQ0zXz
-         xvIOraqshLgWFRbBtE0R/ZpfG31ag6KxxAHln38RnLxQyUP6LmQhPjPp21H/i8APsX
-         ycpfem4iJSDug==
-Date:   Wed, 21 Dec 2022 12:53:29 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, dhowells@redhat.com,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>
-Subject: Re: [v2 PATCH] lib/mpi: Fix buffer overrun when SG is too long
-Message-ID: <Y6NySck5p/DXhSUJ@sol.localdomain>
-References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
- <Y5OGr59A9wo86rYY@sol.localdomain>
- <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
- <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
- <0f80852578436dbba7a0fce03d86c3fa2d38c571.camel@huaweicloud.com>
- <Y6FjQPZiJYTEG1zI@gondor.apana.org.au>
- <a04e6458-6814-97fc-f03a-617809e2e6ce@huaweicloud.com>
- <Y6IbWA5aZeBnn4n2@gmail.com>
- <Y6Kthn+rIUnCEJWz@gondor.apana.org.au>
+        Wed, 21 Dec 2022 15:54:47 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01601218AF
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:54:46 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id h9-20020a92c269000000b00303494c4f3eso1167ild.15
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:54:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KSld9w5b0c5431C0gCV8qTOX+c8jsvfzKbAp62hQ8Fg=;
+        b=Jbev21cf5hPlgeHv9nIsXrRKjB/UU0kpZKypkDyHvvTFEkPBRxinA33hurCQM19PXj
+         DNgMdCDVwqBCp32ZPEEyZKPGmGUIMz2KzJV1TXL8PXKMTDGZQpvChlq09N2qUX6RuUtI
+         zcoOTpo7uPSlVgPrElIya+w1+zBnA2qTWDuVPWJmRq6e902v6ATip+KKgGVWYcmJq9NH
+         YuN1zN0zo/nuHhgR6Kyz9pqOale17ZLd3x3uKJV9sFcz7URD8ZoN/JJcFj4tiKxhoLC9
+         75HmaJFWmzSk7grJ2YkJvu+eKx0q03xWUQFQcXxRak+KWWzIo24Olq6JrBJoiU0FqeKm
+         8ERQ==
+X-Gm-Message-State: AFqh2kq5JkcHF4nt0PYxThpaIMEm+Qjmx4PocLsCLTUULhb8AAPaoWSA
+        v1HT+uEzwIavMHgRVapemXn5RqspVOcMWrSl+qEvDU6UnPKi
+X-Google-Smtp-Source: AMrXdXuL+24luRUyHNexCg4o+QwHOBlu6ukTdpFscESJScttijITt95GXMl+4BD/sska23LG+fo/yuJO9BggiQAHirIFJYJP4F+G
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6Kthn+rIUnCEJWz@gondor.apana.org.au>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:cc65:0:b0:398:d917:5c51 with SMTP id
+ j5-20020a02cc65000000b00398d9175c51mr200801jaq.42.1671656085361; Wed, 21 Dec
+ 2022 12:54:45 -0800 (PST)
+Date:   Wed, 21 Dec 2022 12:54:45 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000279ebd05f05cc339@google.com>
+Subject: [syzbot] INFO: trying to register non-static key in __timer_delete_sync
+From:   syzbot <syzbot+1e164be619b690a43d79@syzkaller.appspotmail.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 02:53:58PM +0800, Herbert Xu wrote:
-> On Tue, Dec 20, 2022 at 08:30:16PM +0000, Eric Biggers wrote:
-> >
-> > > Tried, could not boot the UML kernel.
-> > > 
-> > > After looking, it seems we have to call sg_miter_stop(). Or alternatively,
-> > > we could let sg_miter_next() be called but not writing anything inside the
-> > > loop.
-> > > 
-> > > With either of those fixes, the tests pass (using one scatterlist).
-> 
-> Thanks for the quick feedback Roberto!
-> 
-> > I think it should look like:
-> > 
-> > 	while (nbytes) {
-> > 		sg_miter_next(&miter);
-> > 		...
-> > 	}
-> > 	sg_miter_stop(&miter);
-> 
-> You're right Eric.  However, we could also do it by simply not
-> checking nbytes since we already set nents according to nbytes
-> at the top of the function.
-> 
-> ---8<---
-> The helper mpi_read_raw_from_sgl sets the number of entries in
-> the SG list according to nbytes.  However, if the last entry
-> in the SG list contains more data than nbytes, then it may overrun
-> the buffer because it only allocates enough memory for nbytes.
-> 
-> Fixes: 2d4d1eea540b ("lib/mpi: Add mpi sgl helpers")
-> Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-> 
-> diff --git a/lib/mpi/mpicoder.c b/lib/mpi/mpicoder.c
-> index 39c4c6731094..157ef532a6a2 100644
-> --- a/lib/mpi/mpicoder.c
-> +++ b/lib/mpi/mpicoder.c
-> @@ -504,7 +501,8 @@ MPI mpi_read_raw_from_sgl(struct scatterlist *sgl, unsigned int nbytes)
->  
->  	while (sg_miter_next(&miter)) {
->  		buff = miter.addr;
-> -		len = miter.length;
-> +		len = min_t(unsigned, miter.length, nbytes);
-> +		nbytes -= len;
->  
->  		for (x = 0; x < len; x++) {
->  			a <<= 8;
+Hello,
 
-That's fine, I guess.  One quirk of the above approach is that if the last
-needed element of the scatterlist has a lot of extra pages, this will iterate
-through all those extra pages, processing 0 bytes from each.  It could just stop
-when done.  I suppose it's not worth worrying about that case, though.
+syzbot found the following issue on:
 
-- Eric
+HEAD commit:    ca39c4daa6f7 Add linux-next specific files for 20221216
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1182429d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9f0bce83c86de334
+dashboard link: https://syzkaller.appspot.com/bug?extid=1e164be619b690a43d79
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3cbf8a8f223d/disk-ca39c4da.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f104cf6ddf80/vmlinux-ca39c4da.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6ba8b49536b5/bzImage-ca39c4da.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1e164be619b690a43d79@syzkaller.appspotmail.com
+
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 0 PID: 20857 Comm: syz-executor.5 Not tainted 6.1.0-next-20221216-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ assign_lock_key kernel/locking/lockdep.c:981 [inline]
+ register_lock_class+0xf1b/0x1120 kernel/locking/lockdep.c:1294
+ __lock_acquire+0x109/0x56d0 kernel/locking/lockdep.c:4934
+ lock_acquire.part.0+0x11a/0x350 kernel/locking/lockdep.c:5668
+ __timer_delete_sync+0x5d/0x1c0 kernel/time/timer.c:1555
+ del_timer_sync include/linux/timer.h:200 [inline]
+ cleanup_srcu_struct kernel/rcu/srcutree.c:611 [inline]
+ cleanup_srcu_struct+0x112/0x3e0 kernel/rcu/srcutree.c:599
+ kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1325 [inline]
+ kvm_put_kvm+0x884/0xb80 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1352
+ kvm_vm_release+0x43/0x50 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1375
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1a7ae3df8b
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007fff9d5d14e0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f1a7ae3df8b
+RDX: 0000000000000000 RSI: 0000001b32320ef8 RDI: 0000000000000004
+RBP: 00007f1a7afad980 R08: 0000000000000000 R09: 000000008acd30fc
+R10: 0000000000000000 R11: 0000000000000293 R12: 000000000011376f
+R13: 00007fff9d5d15e0 R14: 00007f1a7afac050 R15: 0000000000000032
+ </TASK>
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 20857 at kernel/workqueue.c:3066 __flush_work+0x90a/0xaf0 kernel/workqueue.c:3066
+Modules linked in:
+CPU: 1 PID: 20857 Comm: syz-executor.5 Not tainted 6.1.0-next-20221216-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:__flush_work+0x90a/0xaf0 kernel/workqueue.c:3066
+Code: 00 48 c7 c6 2f 7b 52 81 48 c7 c7 c0 28 79 8c e8 1c 7c 11 00 e9 ab fc ff ff e8 12 d7 2e 00 0f 0b e9 9f fc ff ff e8 06 d7 2e 00 <0f> 0b 45 31 ed e9 90 fc ff ff e8 77 e6 7c 00 e9 7a fb ff ff e8 ed
+RSP: 0018:ffffc900038afb60 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffffe8ffffcd0620 RCX: 0000000000000000
+RDX: ffff888020d38000 RSI: ffffffff81527b6a RDI: 0000000000000001
+RBP: ffffc900038afcf8 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 3e4b5341542f3c20 R12: ffffc9000393b478
+R13: 0000000000000001 R14: fffffbfff1ce6138 R15: ffffe8ffffcd0638
+FS:  0000555555edb400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000200e9000 CR3: 00000000297ac000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ cleanup_srcu_struct kernel/rcu/srcutree.c:612 [inline]
+ cleanup_srcu_struct+0x11e/0x3e0 kernel/rcu/srcutree.c:599
+ kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1325 [inline]
+ kvm_put_kvm+0x884/0xb80 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1352
+ kvm_vm_release+0x43/0x50 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1375
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1a7ae3df8b
+Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
+RSP: 002b:00007fff9d5d14e0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f1a7ae3df8b
+RDX: 0000000000000000 RSI: 0000001b32320ef8 RDI: 0000000000000004
+RBP: 00007f1a7afad980 R08: 0000000000000000 R09: 000000008acd30fc
+R10: 0000000000000000 R11: 0000000000000293 R12: 000000000011376f
+R13: 00007fff9d5d15e0 R14: 00007f1a7afac050 R15: 0000000000000032
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
