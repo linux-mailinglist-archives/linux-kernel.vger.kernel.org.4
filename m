@@ -2,129 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9385653208
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2DB6531F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbiLUNrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
+        id S234296AbiLUNn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiLUNrP (ORCPT
+        with ESMTP id S229838AbiLUNnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:47:15 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BE36475;
-        Wed, 21 Dec 2022 05:47:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671630434; x=1703166434;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=Ey/uI44qPCpd4ueyxtxDLkQhSghq6Fbj8dB2OhBP0No=;
-  b=Hta25vIZugyt08XE12XPlw8wi4ujV3wir82IZS9dfVva9Cgnwz9KC31f
-   ei5ocTRN2lF9EQU/d8dqZW4jc7lrGKFNdwTw3RUQh+zuWkI/m63+AFwRW
-   4I+TY2JNyVNzQB67IxQBnS8Kgl3CosleTrM4pUovIMXLKNxSCoP+3xrCA
-   ERQBCx8OG6yd8z+WCpRRmVQJUi+hDzEzKQJqYUQsgvpWL8he8TtaAVtdj
-   dfBM3PWzqKV6YbegjQ+TAdtKUZh3x4aO2yR0AQ9E6Qs9WGUh1PPnzdn1u
-   fn9up1uI31MzP3z7GTFB/13ku2WvXwL/4NptD6RS4YYVXbkur1vUb7L4J
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="318568460"
-X-IronPort-AV: E=Sophos;i="5.96,262,1665471600"; 
-   d="scan'208";a="318568460"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 05:47:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="651402272"
-X-IronPort-AV: E=Sophos;i="5.96,262,1665471600"; 
-   d="scan'208";a="651402272"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga002.jf.intel.com with ESMTP; 21 Dec 2022 05:47:03 -0800
-Date:   Wed, 21 Dec 2022 21:42:46 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <20221221134246.GB1766136@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
- <Y6B27MpZO8o1Asfe@zn.tnic>
- <20221220074318.GC1724933@chaop.bj.intel.com>
- <Y6GGoAVQGPyCaDnS@zn.tnic>
+        Wed, 21 Dec 2022 08:43:52 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0B6205C5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:43:44 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id ja17so11183994wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:43:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2PpNtCpDSzPsflwXjljiwDro3Ig3Yd6W5cEBWGQHsHU=;
+        b=MUPGmOoWU5FKo3PIgscvq/wlBf9WsS+MzmH1bFytWwftO3cs1RCgYaJF+e8jP15Ub+
+         pHneK+AatBhypXqVXohsw9jnnLKjoB378iojd2+Y8XXYS2/L4flDfR9+5Ly6wmpbSjJq
+         OgYguaGxnb6Icgw5GEsVNTZFFx2b6vWKS92m+iBuV7B4xZkKFE/aD8zO31PRrGoL19Pd
+         7S+BXdpWX9nnzJqzl6MLkeENZ158iJBVRluV4Mo/QIkJkBZW6SGYBJjnhxQn6/aK3PWu
+         jb5D3iwoxi5K1ov/PgyiHPALheOjtAueOPox1F8f5NeMDf4+MjUxwnLotQqtB/ryStQ4
+         2Wqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2PpNtCpDSzPsflwXjljiwDro3Ig3Yd6W5cEBWGQHsHU=;
+        b=G/Tu7ZQOdBi9mn2/B30N/bWwdxpaWbpAv+ki7OmJTFKcg8KGdbE5sftCMNdnKadJVu
+         WutAVK/+Z6N+JnaGpAMm1ovxu8M+/2WTDZFCL+Dyi8bVXpT8zenkdzHLwrtzRpGOByYM
+         9OkKGNELPEahxAD6OjUAiQ0sp1SXjKk4MpNCfcyJjYVX1qOobA4a6uF/TQTGpkAP8KBc
+         l+Qxbw1KuEU2mFlLfMHX5glOcFgMd6yQlLMuefbeAfg0wmVkZ+aGPXGDlmGpoBGG9qYL
+         3Iyo10A0JB6RIDytshHMKMCkxER/p1qWACTEEYZdJq4qG28DtAIFIDkvnQTeVKJIpOfc
+         9kOQ==
+X-Gm-Message-State: AFqh2koUAjpF+ug3WLpZJwHbgvdW0uWv9fimmLxzryVv7K7Fa0Rcz/M4
+        FjAnpYgyAdePfcD0N2k3vs8G2XV8nHoopUnW
+X-Google-Smtp-Source: AMrXdXtfM8xXfEIX4F72BRhv9jv0H3v+5tDr4GJoGD2yHYECtBSa2XlImRu6/9aMGAcIhgbgRXqh9w==
+X-Received: by 2002:a7b:ce89:0:b0:3d2:3239:2fd7 with SMTP id q9-20020a7bce89000000b003d232392fd7mr1655018wmj.41.1671630222970;
+        Wed, 21 Dec 2022 05:43:42 -0800 (PST)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id z13-20020a5d640d000000b002365730eae8sm15558523wru.55.2022.12.21.05.43.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 05:43:42 -0800 (PST)
+Message-ID: <5276e5b8-8596-2811-e03f-c4f3f0d3ab5b@linaro.org>
+Date:   Wed, 21 Dec 2022 14:43:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6GGoAVQGPyCaDnS@zn.tnic>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC][PATCH] thermal/idle_inject: Support 100% idle injection
+Content-Language: en-US
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221209013640.943210-1-srinivas.pandruvada@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221209013640.943210-1-srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 10:55:44AM +0100, Borislav Petkov wrote:
-> On Tue, Dec 20, 2022 at 03:43:18PM +0800, Chao Peng wrote:
-> > RESTRICTEDMEM is needed by TDX_HOST, not TDX_GUEST.
-> 
-> Which basically means that RESTRICTEDMEM should simply depend on KVM.
-> Because you can't know upfront whether KVM will run a TDX guest or a SNP
-> guest and so on.
-> 
-> Which then means that RESTRICTEDMEM will practically end up always
-> enabled in KVM HV configs.
 
-That's right, CONFIG_RESTRICTEDMEM is always selected for supported KVM
-architectures (currently x86_64).
+Hi Srinivas,
 
-> 
-> > The only reason to add another HAVE_KVM_RESTRICTED_MEM is some code only
-> > works for 64bit[*] and CONFIG_RESTRICTEDMEM is not sufficient to enforce
-> > that.
-> 
-> This is what I mean with "we have too many Kconfig items". :-\
 
-Yes I agree. One way to remove this is probably additionally checking
-CONFIG_64BIT instead.
+On 09/12/2022 02:36, Srinivas Pandruvada wrote:
+> The users of idle injection framework allow 100% idle injection. For
+> example: thermal/cpuidle_cooling.c driver. When the ratio set to 100%,
+> the runtime_duration becomes zero.
+> 
+> In the function idle_inject_set_duration() in idle injection framework
+> run_duration_us == 0 is silently ignored, without any error (it is a
+> void function). So, the caller will assume that everything is fine and
+> 100% idle is effective. But in reality the idle inject will be whatever
+> set before.
 
-Thanks,
-Chao
+Good catch
+
+> There are two options:
+> - The caller change their max state to 99% instead of 100% and
+> document that 100% is not supported by idle inject framework
+> - Support 100% idle support in idle inject framework
+
+Yes, from my POV a CPU being impossible to cool down for any reason 
+should end up by staying off.
+
+> Since there are other protections via RT throttling, this framework can
+> allow 100% idle. The RT throttling will be activated at 95% idle by
+> default. The caller disabling RT throttling and injecting 100% idle,
+> should be aware that CPU can't be used at all.
+
+Would it make sense to write a trace in this case ?
+
+> The idle inject timer is started for (run_duration_us + idle_duration_us)
+> duration. Hence replace (run_duration_us && idle_duration_us) with
+> (run_duration_us + idle_duration_us) in the function
+> idle_inject_set_duration().
+
+Sounds good to me
+
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>   drivers/powercap/idle_inject.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+> index f48e71501429..4a4fe60d2563 100644
+> --- a/drivers/powercap/idle_inject.c
+> +++ b/drivers/powercap/idle_inject.c
+> @@ -184,7 +184,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
+>   			      unsigned int run_duration_us,
+>   			      unsigned int idle_duration_us)
+>   {
+> -	if (run_duration_us && idle_duration_us) {
+> +	if (run_duration_us + idle_duration_us) {
+>   		WRITE_ONCE(ii_dev->run_duration_us, run_duration_us);
+>   		WRITE_ONCE(ii_dev->idle_duration_us, idle_duration_us);
+>   	}
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
