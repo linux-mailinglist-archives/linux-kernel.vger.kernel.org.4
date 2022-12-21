@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1119B652DDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60DC652DE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbiLUI3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 03:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
+        id S234390AbiLUI3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 03:29:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiLUI3H (ORCPT
+        with ESMTP id S229634AbiLUI3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Dec 2022 03:29:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E631DF37
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:28:57 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CB91DF10
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:28:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EAEDB811F6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:28:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B3EC433D2;
-        Wed, 21 Dec 2022 08:28:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5CC861722
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:28:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBC9C433F0;
+        Wed, 21 Dec 2022 08:28:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671611333;
-        bh=Rn7MkbT6UsUL4kZ1Ldi0pJvoV9nUIf59eDilGtdiyGw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NA4C4PGkWi8RDz0b2dTZ8emvF8Zrm4PoWOmwuHVjcC2ZIBB4/6ZuQZQXU/zMr+cTs
-         LWX6ISoV264Bmh5eg43Q6lgpH20p1q5Eplyos2KuItFq4f+zD8RPf7jEap8D5h2PaQ
-         +Vt0g5OGRanIugpUcGyRvfLW1pnULfoLIuH+rx+pXTCMPVB+Dxz2AhtxUiF+yTc7W+
-         CDXea5QpGP9H64BtmYXt1YgQxr3Vcz1B6TsTHS7RaTZ++rOuZRU5lu2C8tM6excYjc
-         RTxPUCgxLwyx2dkxNRa0KziUTjDCxcxFz6N2reX0kuwbCUGAZbXjwmoJxmgHA/FN38
-         b2+a0pSSUEw+Q==
+        s=k20201202; t=1671611335;
+        bh=N698njmM2B2uPN33946WgNLAAoM5jgi1Y50DyPJmOtQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bzxSycqgyvMUEP5DwEr0WxevPI+tvkDqgLzXJ5B9RrYEa5bu1+vqaV4QvyUSscIOJ
+         aof4qdO4w5Sv6m1Do61NUf8biPWe/HAvfzELCIPGFXC9qLjCxgRuGWzPT8/h2jK2jm
+         flYBzKMbgeq91Iz1DEJ9+HLL5MkFNqdVuMfchC6mbHxUtFLmR9w6b4HtmJmduP8tvx
+         Uur3pd3plrFjx1LJ/xoY9TDPZZGmf20d3RoCAzRtiafAKvDO2xawb7PNw6oIyrpM1W
+         rhjv+HHazGYIhY5PhEarLnv7AqpyfbTayLAXrwfQX/YSOgDNJdTKU28d1pRT/2jHg6
+         MzHSCn7QyTOuQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 1/2] habanalabs/gaudi2: dump event description even if no cause
-Date:   Wed, 21 Dec 2022 10:28:45 +0200
-Message-Id: <20221221082846.3164-1-ogabbay@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 2/2] habanalabs: fix dma-buf release handling if dma_buf_fd() fails
+Date:   Wed, 21 Dec 2022 10:28:46 +0200
+Message-Id: <20221221082846.3164-2-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221221082846.3164-1-ogabbay@kernel.org>
+References: <20221221082846.3164-1-ogabbay@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -50,33 +52,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+From: Tomer Tayar <ttayar@habana.ai>
 
-In order to have the no-cause error print be more informative,
-we add the event description in addition to the event id.
+The dma-buf private object is freed if a call to dma_buf_fd() fails,
+and because a file was already associated with the dma-buf in
+dma_buf_export(), the release op will be called and will use this
+object.
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Mark the 'priv' field as NULL in this case, and avoid accessing it from
+the release op.
+
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi2/gaudi2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/misc/habanalabs/common/memory.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index 987ec44fa378..7df1a68dd403 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -9271,8 +9271,8 @@ static void gaudi2_handle_eqe(struct hl_device *hdev, struct hl_eq_entry *eq_ent
- 	if (error_count == GAUDI2_NA_EVENT_CAUSE && !is_info_event(event_type))
- 		gaudi2_print_event(hdev, event_type, true, "%d", event_type);
- 	else if (error_count == 0)
--		dev_err_ratelimited(hdev->dev,
--			"No Error cause for H/W event %d\n", event_type);
-+		gaudi2_print_event(hdev, event_type, true,
-+				"No error cause for H/W event %u\n", event_type);
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index 693456366753..a2d24c9a3d1e 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -1782,7 +1782,12 @@ static void hl_unmap_dmabuf(struct dma_buf_attachment *attachment,
+ static void hl_release_dmabuf(struct dma_buf *dmabuf)
+ {
+ 	struct hl_dmabuf_priv *hl_dmabuf = dmabuf->priv;
+-	struct hl_ctx *ctx = hl_dmabuf->ctx;
++	struct hl_ctx *ctx;
++
++	if (!hl_dmabuf)
++		return;
++
++	ctx = hl_dmabuf->ctx;
  
- 	if ((gaudi2_irq_map_table[event_type].reset || reset_required) &&
- 				(hdev->hard_reset_on_fw_events ||
+ 	if (hl_dmabuf->memhash_hnode) {
+ 		mutex_lock(&ctx->mem_hash_lock);
+@@ -1822,7 +1827,7 @@ static int export_dmabuf(struct hl_ctx *ctx,
+ 
+ 	fd = dma_buf_fd(hl_dmabuf->dmabuf, flags);
+ 	if (fd < 0) {
+-		dev_err(hdev->dev, "failed to get a file descriptor for a dma-buf\n");
++		dev_err(hdev->dev, "failed to get a file descriptor for a dma-buf, %d\n", fd);
+ 		rc = fd;
+ 		goto err_dma_buf_put;
+ 	}
+@@ -1835,6 +1840,7 @@ static int export_dmabuf(struct hl_ctx *ctx,
+ 	return 0;
+ 
+ err_dma_buf_put:
++	hl_dmabuf->dmabuf->priv = NULL;
+ 	dma_buf_put(hl_dmabuf->dmabuf);
+ 	return rc;
+ }
 -- 
 2.34.1
 
