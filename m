@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9E26536E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A376536E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiLUTQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 14:16:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S234713AbiLUTRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 14:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232786AbiLUTQw (ORCPT
+        with ESMTP id S232786AbiLUTRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:16:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7959424F39
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671650166;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oziG1chFC2ZM07+R9uNqeu7rPi/qIDF9DD7uMEf+XEc=;
-        b=F3t3XisD9VLixBDA7+YX3wVGcDOXODqrbepMRKb9yXQD4G8xZICOywV5AR8mSAwJj4UT9d
-        Y6kzrCxCond5g0SD4wS2N0t23Vfit/HwDxf875l6QkufIVFjz6p/3VHAt4ZTGApOyh6wYS
-        Dc7+Hm4PDp9dl+jkalxDtPcayKXGz3g=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-573-gwddKEBOPRifL_nGIWB5ZA-1; Wed, 21 Dec 2022 14:16:04 -0500
-X-MC-Unique: gwddKEBOPRifL_nGIWB5ZA-1
-Received: by mail-ej1-f71.google.com with SMTP id nc4-20020a1709071c0400b0078a5ceb571bso11114575ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:16:04 -0800 (PST)
+        Wed, 21 Dec 2022 14:17:20 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBF32611E;
+        Wed, 21 Dec 2022 11:17:19 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id z26so24926103lfu.8;
+        Wed, 21 Dec 2022 11:17:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+uxVp29zK1U9xqn1zesUpsJ7wtKfj/klzX/8Mo0DipY=;
+        b=k9n/vLc1Ln9JuOJ9y6I7pgOBKKJBGQu4c1HrIUkkH8HWULQuVFdqoLCXX+VXaLlv2s
+         o2y5QNtz4jDOzOatLmoleU5m2pb/pbATmCTX7iZKvF+DiUWlLhYOepu5YqNSEcrc81v0
+         dnczF5Lqg1XrqFZKxgU9vaS+194bsFvM3sXdeqrZsuVGyzv4cmB9LHWFsDf/SfaR0BL+
+         2arV2TKoXqtA/kaWSbF3d7kU4QsxXt8G7rb4qEVV7fc1mpkfl5eeF9phFvJ/BvIXwGY/
+         OKz1F1RDDxuogy5D3eBW7HgTSPAtKLzu6JjYJ+jBOtOjYWFLlko1L0AG5PXzqO5PUIZo
+         2GYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oziG1chFC2ZM07+R9uNqeu7rPi/qIDF9DD7uMEf+XEc=;
-        b=OVSZJUzqe7bbqDZHFpcB34Y3kbUSdxwoa3cvZLXNXYLszz4rfBurEKaxy7mVbv5c7a
-         HgPn8KsC8KX9959QB3tsS8hg4rqdPR3n6ALr9xINQannGucaXsatVTJkfZWdwL5RckBW
-         TaPvkUq3dXM9YB0TPyZAEs1ovGGpjBvrLWljB2HuYKMqErcnC1jjPmchQuKsL61AAW3i
-         w5Aq/H1MXZOZxvEbWOyVfDD4FuA+HoO2I93DDsj8U4fcn4BEmNwrsZbkdOS/AIAvH6/+
-         gnabvpUA9CNzt/tPKKsA/ZmBJivbAx8B37xxlOqfN1Yyy9sW3GZnRjoYPDIGFLto2l/b
-         U3bw==
-X-Gm-Message-State: AFqh2krJwLOtbegfnE0Le2I6OG4D3IjShjtMKdjOD79IvqxN8GbkXOKI
-        bw2x7UfskmQ2vkQ2yD/g3CDjpuZAztSyMYpMiZiIeIzMBMKWmmHIqppZ2U0cS8rNjeeOH7xNUzg
-        f16SmnvVgmHUSNNmnDUAcIdqE
-X-Received: by 2002:a17:906:2b16:b0:81b:f931:cb08 with SMTP id a22-20020a1709062b1600b0081bf931cb08mr6654971ejg.47.1671650162802;
-        Wed, 21 Dec 2022 11:16:02 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtYgpQRoajpgpg88+32ygzHFWgzyaQ5djHehL3dJahxgz4ZK1NR86JbdFjj+nGQkHTx6xrXhg==
-X-Received: by 2002:a17:906:2b16:b0:81b:f931:cb08 with SMTP id a22-20020a1709062b1600b0081bf931cb08mr6654959ejg.47.1671650162588;
-        Wed, 21 Dec 2022 11:16:02 -0800 (PST)
-Received: from redhat.com ([2.55.175.215])
-        by smtp.gmail.com with ESMTPSA id mh11-20020a170906eb8b00b007ad69e9d34dsm7460122ejb.54.2022.12.21.11.16.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 11:16:01 -0800 (PST)
-Date:   Wed, 21 Dec 2022 14:15:58 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-block@vger.kernel.org,
-        Dmitry Fomichev <dmitry.fomichev@wdc.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        virtualization@lists.linux-foundation.org,
-        virtio-dev@lists.oasis-open.org, linux-kernel@vger.kernel.org,
-        Hannes Reinecke <hare@suse.de>,
-        Sam Li <faithilikerun@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v2] virtio-blk: avoid kernel panic on VIRTIO_BLK_F_ZONED
- check
-Message-ID: <20221221141451-mutt-send-email-mst@kernel.org>
-References: <20221221145433.254805-1-lstoakes@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+uxVp29zK1U9xqn1zesUpsJ7wtKfj/klzX/8Mo0DipY=;
+        b=MvzmzcPuSAeUfH9Ve2+UHQJQqVNMDTH8pjazyFGV77l08irpkjUGnWtZy9SqA7qBo0
+         ixXtDryCPTSKBgz4Tvh8nm+pF8saMPZMgt0CwozABaefNJg8frySyK/P9+gUVPLAc3ez
+         h7OZDMfkWy3Yf9Q47kM7MNlF0CZ+otfbzuRMjKGUGG7FTRlpSESmm+dLlSiNETV6k1re
+         dAxbbg0m6N6GWqZ7spjtoAQP3Pj69nkqaxoHBnXX18fRYP5OfExnfariwR2hI4mABbd4
+         lYqDUj3R8tD85YeUbo4tIKXPxO6uwhiy0wKvNeguZIWHzkGMAaAdnzKWgi1GEDacszUY
+         mztg==
+X-Gm-Message-State: AFqh2kpJ4USMyZo/hOjUgaIJ6A0kakDn18yrUmkuRmQ32RxRrtGwmfJC
+        6STczZ107yctc9Xs7KLhJZ1xlCdDWFM=
+X-Google-Smtp-Source: AMrXdXthbVDOO69Gmd6f89kU7JTCY7m46ohAqAUosDAVrcLMSE6ki2WmoGXSrSGZAR4wooeOElE2ow==
+X-Received: by 2002:a05:6512:25ac:b0:4b5:8053:5bcc with SMTP id bf44-20020a05651225ac00b004b580535bccmr858751lfb.47.1671650237875;
+        Wed, 21 Dec 2022 11:17:17 -0800 (PST)
+Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
+        by smtp.googlemail.com with ESMTPSA id o3-20020ac24e83000000b004c7d0ed9619sm1155581lfr.123.2022.12.21.11.17.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 11:17:17 -0800 (PST)
+Message-ID: <ccebb92b-01ce-31cf-14b1-dee09d064c6c@gmail.com>
+Date:   Wed, 21 Dec 2022 22:17:09 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221145433.254805-1-lstoakes@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
+ scaling in Tegra234
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
+        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
+        bbasu@nvidia.com
+References: <20221220160240.27494-1-sumitg@nvidia.com>
+ <20221220160240.27494-2-sumitg@nvidia.com>
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20221220160240.27494-2-sumitg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,46 +82,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 02:54:33PM +0000, Lorenzo Stoakes wrote:
-> virtio zoned block device support is added by commit 0562d7bf1604
-> ("virtio-blk: add support for zoned block devices") which adds
-> VIRTIO_BLK_F_ZONED to the features array in virtio_blk.c but makes it
-> conditional on CONFIG_BLK_DEV_ZONED.
-> 
-> In it virtblk_probe() calls virtio_has_feature(vdev, VIRTIO_BLK_F_ZONED)
-> unconditionally, which invokes virtio_check_driver_offered_feature().
-> This function checks whether virtio_blk.feature_table (assigned to
-> the static features array) contains the specified feature enum, and if not
-> _causes a kernel panic_ via BUG().
-> 
-> This therefore means that failing to enable CONFIG_BLK_DEV_ZONED while
-> using virtio is a guaranteed kernel panic. Fix the issue by making the
-> feature test also conditional on CONFIG_BLK_DEV_ZONED.
-> 
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+20.12.2022 19:02, Sumit Gupta пишет:
+> +static int tegra_emc_icc_set_bw(struct icc_node *src, struct icc_node *dst)
+> +{
+> +	struct tegra186_emc *emc = to_tegra186_emc(dst->provider);
+> +	struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
+> +	struct mrq_bwmgr_int_request bwmgr_req = { 0 };
+> +	struct mrq_bwmgr_int_response bwmgr_resp = { 0 };
+> +	struct tegra_icc_node *tnode = mc->curr_tnode;
+> +	struct tegra_bpmp_message msg;
+> +	int ret = 0;
 
-I think this was fixed by
-Message-ID: <20221220112340.518841-1-mst@redhat.com>
-
-
-> ---
->  drivers/block/virtio_blk.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
-> index ff49052e26f7..94d210b10ebb 100644
-> --- a/drivers/block/virtio_blk.c
-> +++ b/drivers/block/virtio_blk.c
-> @@ -1580,7 +1580,8 @@ static int virtblk_probe(struct virtio_device *vdev)
->  	virtblk_update_capacity(vblk, false);
->  	virtio_device_ready(vdev);
->  
-> -	if (virtio_has_feature(vdev, VIRTIO_BLK_F_ZONED)) {
-> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) &&
-> +	    virtio_has_feature(vdev, VIRTIO_BLK_F_ZONED)) {
->  		err = virtblk_probe_zoned_device(vdev, vblk, q);
->  		if (err)
->  			goto out_cleanup_disk;
-> -- 
-> 2.39.0
+Nit: unnecessarily initialized var, the same for the rest of the code
 
