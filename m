@@ -2,151 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0726D652EF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E296652EED
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234645AbiLUJwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 04:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S234699AbiLUJup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 04:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234729AbiLUJuc (ORCPT
+        with ESMTP id S234646AbiLUJtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 04:50:32 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87643220CF;
-        Wed, 21 Dec 2022 01:48:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1671616100; x=1703152100;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TCwGgCICWetfsT4KKQbLKFj7+d66r7dgd5HuulzEnw4=;
-  b=iYDERXwVIcqJHOJ9DBEFF3/UPNo/hj6nSCx97FoOIRNi7gGTqnXCA488
-   lffvC2TiVKyAuIpKsRoDfPE2bL21MNrnKFGlbTbP6JOWOzQerh4c7Huju
-   +JsXosmEQ+3ehykCvgbuvhu7245kcRWlJ3vFk9UOMD7T3KuyKwM6qiLSI
-   AZKDTmz6CEEMh0gUfMrRbHp8WyvVDmIDXBSRf0npAE60joyw8/hT0bObB
-   k3gkXAoH2kKIdYgu+UMDYAmauzaXMBmqr5TekjXmSrwCOF3bnzdV5pvdb
-   93BWodjs7SElN958z4DNjTaxAhGQU8a9JrZOAH7smT0Y5e2oKjkmP0Dia
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,262,1665471600"; 
-   d="scan'208";a="193937817"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Dec 2022 02:48:19 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 21 Dec 2022 02:48:18 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Wed, 21 Dec 2022 02:48:12 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <richardcochran@gmail.com>, <ceggers@arri.de>,
-        <jacob.e.keller@intel.com>
-Subject: [RFC Patch net-next v5 13/13] net: dsa: microchip: ptp: lan937x: Enable periodic output in LED pins
-Date:   Wed, 21 Dec 2022 15:16:12 +0530
-Message-ID: <20221221094612.22372-14-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221221094612.22372-1-arun.ramadoss@microchip.com>
-References: <20221221094612.22372-1-arun.ramadoss@microchip.com>
+        Wed, 21 Dec 2022 04:49:09 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CA922518
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:47:56 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b3so22723264lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:47:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FLEBEWFKmVUzABbgomhdjBEc/qQs01rZclQnVraRaAk=;
+        b=ixtgqs69him+R8vofbTGe5rZr6qzBwPsdEWRPLaodvy478LfY48Gn8IZjpy6W/9uno
+         6z86B+MqaGd8IfCzQVzr2Kfu8W8jc8sz0yQiik0Uku40BEZiCWdNe9uapZR99jtiIDtX
+         nRtSS6dVNX2GPaMNdy2ov4TvFcvOjrIoUy0JfLK8p3gCwznQQcu+kp1m6UfwHdMx7D/Y
+         Qp4/W7NQ2pmuuA4Pb/yxuKggZcWCeZ4K20uOHKRQl4ijjX0cU1HVWJ8GiAj5w9LagUYQ
+         PNlfGiMYmATCyRs93yiG9fV6EAHa0VtHKPwHs5jFrp+AiTw/cKb40UooFGTtcNaL27/q
+         dN9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FLEBEWFKmVUzABbgomhdjBEc/qQs01rZclQnVraRaAk=;
+        b=0sFfC5T+Q8QUTlaplKO4R80gPvykADnGx5qQO7Pp1M8sCzmODuUILR/UG51xf/trV1
+         kaHscFafesWHjg4cVlOeP+admybRK89ShQwarVh0VU0gUZwSZ7OI5Jp1l0Kq/zQEYkzf
+         l6/OATRHyCkxjPPYdtTHI98TmQingahaRUtygJCX6PCgx61rUhfeHYy1OTpH8Fod9Rrd
+         gt8nm9mcYp//x5XOlIWm6kMOeaZPmi+bc+YHlAUYau13i4SpdoLoMwx6ZPChXaRVboqJ
+         qYNeC1IsRqH+sSDdJ/fRWnrguGgJGUGUBWsFAyrK83amfpuS5WGOnEFYG4IZG4yLIwIm
+         cGQA==
+X-Gm-Message-State: AFqh2kqiH8chzjpWNUOIW9i3k4/vdX0kFN1y8vGy0tpDWScqIF/UGqUo
+        7q6jTpRMkcs1Km7tuGA1kQYxug==
+X-Google-Smtp-Source: AMrXdXvSUsFWN8Ug4VQ+xJHQ8UMNbhnFMQgxkmiWJZt3pCBQprIlPuJ4OCiySDp51aDBu3BSEWWswQ==
+X-Received: by 2002:a05:6512:31c5:b0:4b0:25f9:14ea with SMTP id j5-20020a05651231c500b004b025f914eamr552097lfe.21.1671616074385;
+        Wed, 21 Dec 2022 01:47:54 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u24-20020a2e9b18000000b00279ff5d5e10sm1266626lji.38.2022.12.21.01.47.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 01:47:54 -0800 (PST)
+Message-ID: <3a26c733-6573-5954-f4e5-8a1f8abba140@linaro.org>
+Date:   Wed, 21 Dec 2022 10:47:52 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/3] dt-bindings: rng: Add StarFive TRNG module
+Content-Language: en-US
+To:     Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20221221090819.1259443-1-jiajie.ho@starfivetech.com>
+ <20221221090819.1259443-2-jiajie.ho@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221221090819.1259443-2-jiajie.ho@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is difference in implementation of per_out pins between KSZ9563
-and LAN937x. In KSZ9563, Timestamping control register (0x052C) bit 6,
-if 1 - timestamp input and 0 - trigger output. But it is opposite for
-LAN937x 1 - trigger output and 0 - timestamp input.
-As per per_out gpio pins, KSZ9563 has four Led pins and two dedicated
-gpio pins. But in LAN937x dedicated gpio pins are removed instead there
-are up to 10 LED pins out of which LED_0 and LED_1 can be mapped to PTP
-tou 0, 1 or 2. This patch sets the bit 6 in 0x052C register and
-configure the LED override and source register for LAN937x series of
-switches alone.
+On 21/12/2022 10:08, Jia Jie Ho wrote:
+> Add documentation to describe Starfive true random number generator
+> module.
+> 
+> Co-developed-by: Jenny Zhang <jenny.zhang@starfivetech.com>
+> Signed-off-by: Jenny Zhang <jenny.zhang@starfivetech.com>
+> Signed-off-by: Jia Jie Ho <jiajie.ho@starfivetech.com>
+> ---
+>  .../bindings/rng/starfive,jh7110-trng.yaml    | 55 +++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rng/starfive,jh7110-trng.yaml
+> 
 
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
- drivers/net/dsa/microchip/ksz_ptp.c     | 26 +++++++++++++++++++++++++
- drivers/net/dsa/microchip/ksz_ptp_reg.h |  8 ++++++++
- 2 files changed, 34 insertions(+)
 
-diff --git a/drivers/net/dsa/microchip/ksz_ptp.c b/drivers/net/dsa/microchip/ksz_ptp.c
-index c2d156002ee5..1fa63d590ef4 100644
---- a/drivers/net/dsa/microchip/ksz_ptp.c
-+++ b/drivers/net/dsa/microchip/ksz_ptp.c
-@@ -32,6 +32,28 @@
- 
- #define KSZ_PTP_INT_START 13
- 
-+static int ksz_ptp_tou_gpio(struct ksz_device *dev)
-+{
-+	int ret;
-+
-+	if (!is_lan937x(dev))
-+		return 0;
-+
-+	ret = ksz_rmw32(dev, REG_PTP_CTRL_STAT__4, GPIO_OUT,
-+			GPIO_OUT);
-+	if (ret)
-+		return ret;
-+
-+	ret = ksz_rmw32(dev, REG_SW_GLOBAL_LED_OVR__4, LED_OVR_1 | LED_OVR_2,
-+			LED_OVR_1 | LED_OVR_2);
-+	if (ret)
-+		return ret;
-+
-+	return ksz_rmw32(dev, REG_SW_GLOBAL_LED_SRC__4,
-+			 LED_SRC_PTP_GPIO_1 | LED_SRC_PTP_GPIO_2,
-+			 LED_SRC_PTP_GPIO_1 | LED_SRC_PTP_GPIO_2);
-+}
-+
- static int ksz_ptp_tou_reset(struct ksz_device *dev, u8 unit)
- {
- 	u32 data;
-@@ -224,6 +246,10 @@ static int ksz_ptp_enable_perout(struct ksz_device *dev,
- 	if (ret)
- 		return ret;
- 
-+	ret = ksz_ptp_tou_gpio(dev);
-+	if (ret)
-+		return ret;
-+
- 	ret = ksz_ptp_tou_start(dev, request->index);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/net/dsa/microchip/ksz_ptp_reg.h b/drivers/net/dsa/microchip/ksz_ptp_reg.h
-index c5c76b9a4329..d71e85510cda 100644
---- a/drivers/net/dsa/microchip/ksz_ptp_reg.h
-+++ b/drivers/net/dsa/microchip/ksz_ptp_reg.h
-@@ -6,6 +6,14 @@
- #ifndef __KSZ_PTP_REGS_H
- #define __KSZ_PTP_REGS_H
- 
-+#define REG_SW_GLOBAL_LED_OVR__4	0x0120
-+#define LED_OVR_2			BIT(1)
-+#define LED_OVR_1			BIT(0)
-+
-+#define REG_SW_GLOBAL_LED_SRC__4	0x0128
-+#define LED_SRC_PTP_GPIO_1		BIT(3)
-+#define LED_SRC_PTP_GPIO_2		BIT(2)
-+
- /* 5 - PTP Clock */
- #define REG_PTP_CLK_CTRL		0x0500
- 
--- 
-2.36.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
