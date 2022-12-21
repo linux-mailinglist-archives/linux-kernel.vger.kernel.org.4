@@ -2,419 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B29F652CCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E638652CC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbiLUGSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 01:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
+        id S229679AbiLUGRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 01:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbiLUGR6 (ORCPT
+        with ESMTP id S229556AbiLUGRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 01:17:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03F71EC74
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:17:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671603436;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qpSCk6/IKUVw3CgEVGoaTdSKSFUxagfxIV790+FKSD4=;
-        b=BQ8EqVFZIskzbgrQ81dy8CAwM/tL48+WdIERxTTsgDBx0Yiatw1fqu1vOTx8Q0cnwvROsX
-        R7wuJACm+VjbnJBY8sacjEVaqGkXzuDsiTuuaxVJmVaz3bEAHwulp8+tUr4Ce0wKe/lapH
-        63HYoOSGlvmKjZwtRFdvLS03Ea4gUzM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-303-AVJEbaEhNBm8hlaX78LLig-1; Wed, 21 Dec 2022 01:17:12 -0500
-X-MC-Unique: AVJEbaEhNBm8hlaX78LLig-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7A351886461;
-        Wed, 21 Dec 2022 06:17:12 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-13-236.pek2.redhat.com [10.72.13.236])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D4F222166B26;
-        Wed, 21 Dec 2022 06:17:09 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     sgarzare@redhat.com, eperezma@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] vdpa_sim_net: vendor satistics
-Date:   Wed, 21 Dec 2022 14:16:52 +0800
-Message-Id: <20221221061652.15202-5-jasowang@redhat.com>
-In-Reply-To: <20221221061652.15202-1-jasowang@redhat.com>
-References: <20221221061652.15202-1-jasowang@redhat.com>
+        Wed, 21 Dec 2022 01:17:40 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4EF1EED1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:17:38 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id u24-20020a6be918000000b006ed1e9ad302so1328475iof.22
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:17:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c5Z6uDln6PJoe7rNTnxmI3R8lSkwe0kCcWiLF8U3Gss=;
+        b=03JNyne14rZTnnGTBt12SpQbFNZJO20a30UeIywBWw2F+N36aZpPUuNVc3njNNDuBT
+         D7fmRUl94JLGiBfG3+MOR4W9qfjSGP5UTdo+Gjh+YKwAxJg49hgTZEQysaHcsABZa1hP
+         luvucZmR+WYqV0bx3PqaMq+ivgtXp1qRiCV4MxCLWqrJcpMmAg43yOaCoOClXyn8Hzom
+         Fi4dk+CVR68zyU94D14DNA7X6L/vyUlqKzspOluRWC2njVAXRIdrmREc5OW0xnhMSfmm
+         tvYevgESUrvJwYR8qACy3dBveIw3KiNbThnKpiK15AfSIgOxRDFgScLUE+03UyAV7W0L
+         DV1A==
+X-Gm-Message-State: AFqh2koBNb/YsCIK5eOAIW6y8Zk3gbH/FSG097wTU3H3g0vvsHGBa21i
+        frmoBY5w2opwqOJ8kVYNQqsSQQIMiXlmIeFTB8ilJsb36x0J
+X-Google-Smtp-Source: AMrXdXsNFsrBcb7bWBINU6gjh2wdPG1+BM///6FtQulv5NhUR7OzRJiQQTm0GvSzkrqcC6EslDQD6atqE1Sr86d19cjhCL6qXdHA
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cb07:0:b0:30b:bba2:e59d with SMTP id
+ s7-20020a92cb07000000b0030bbba2e59dmr85792ilo.259.1671603457892; Tue, 20 Dec
+ 2022 22:17:37 -0800 (PST)
+Date:   Tue, 20 Dec 2022 22:17:37 -0800
+In-Reply-To: <00000000000033295305ea370bb5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005028ac05f05082d4@google.com>
+Subject: Re: [syzbot] [exfat?] possible deadlock in exfat_iterate
+From:   syzbot <syzbot+38655f1298fefc58a904@syzkaller.appspotmail.com>
+To:     linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for basic vendor stats that include counters
-for tx, rx and cvq.
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Jason Wang <jasowang@redhat.com>
----
- drivers/vdpa/vdpa_sim/vdpa_sim.c     |   2 +
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 215 ++++++++++++++++++++++++++-
- 2 files changed, 211 insertions(+), 6 deletions(-)
+HEAD commit:    6feb57c2fd7c Merge tag 'kbuild-v6.2' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=135ef9f0480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d3fb546de56fbf8d
+dashboard link: https://syzkaller.appspot.com/bug?extid=38655f1298fefc58a904
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1295765f880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1309bb20480000
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 02e892f819e7..595d9d5a372f 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -755,8 +755,10 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.set_vq_cb              = vdpasim_set_vq_cb,
- 	.set_vq_ready           = vdpasim_set_vq_ready,
- 	.get_vq_ready           = vdpasim_get_vq_ready,
-+	.get_vendor_vq_stats    = vdpasim_get_vq_stats,
- 	.set_vq_state           = vdpasim_set_vq_state,
- 	.get_vq_state           = vdpasim_get_vq_state,
-+	.get_vendor_vq_stats    = vdpasim_get_vq_stats,
- 	.get_vq_align           = vdpasim_get_vq_align,
- 	.get_vq_group           = vdpasim_get_vq_group,
- 	.get_device_features    = vdpasim_get_device_features,
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index 20cd5cdff919..3c05e932d90d 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -15,6 +15,7 @@
- #include <linux/etherdevice.h>
- #include <linux/vringh.h>
- #include <linux/vdpa.h>
-+#include <net/netlink.h>
- #include <uapi/linux/virtio_net.h>
- #include <uapi/linux/vdpa.h>
- 
-@@ -36,6 +37,34 @@
- #define VDPASIM_NET_AS_NUM	2
- #define VDPASIM_NET_GROUP_NUM	2
- 
-+struct vdpasim_dataq_stats {
-+	struct u64_stats_sync syncp;
-+	u64 pkts;
-+	u64 bytes;
-+	u64 drops;
-+	u64 errors;
-+	u64 overruns;
-+};
-+
-+struct vdpasim_cq_stats {
-+	struct u64_stats_sync syncp;
-+	u64 requests;
-+	u64 successes;
-+	u64 errors;
-+};
-+
-+struct vdpasim_net{
-+	struct vdpasim vdpasim;
-+	struct vdpasim_dataq_stats tx_stats;
-+	struct vdpasim_dataq_stats rx_stats;
-+	struct vdpasim_cq_stats cq_stats;
-+};
-+
-+static struct vdpasim_net *sim_to_net(struct vdpasim *vdpasim)
-+{
-+	return container_of(vdpasim, struct vdpasim_net, vdpasim);
-+}
-+
- static void vdpasim_net_complete(struct vdpasim_virtqueue *vq, size_t len)
- {
- 	/* Make sure data is wrote before advancing index */
-@@ -93,9 +122,11 @@ static virtio_net_ctrl_ack vdpasim_handle_ctrl_mac(struct vdpasim *vdpasim,
- static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
- {
- 	struct vdpasim_virtqueue *cvq = &vdpasim->vqs[2];
-+	struct vdpasim_net *net = sim_to_net(vdpasim);
- 	virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
- 	struct virtio_net_ctrl_hdr ctrl;
- 	size_t read, write;
-+	u64 requests = 0, errors = 0;
- 	int err;
- 
- 	if (!(vdpasim->features & (1ULL << VIRTIO_NET_F_CTRL_VQ)))
-@@ -113,8 +144,12 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
- 
- 		read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->in_iov, &ctrl,
- 					     sizeof(ctrl));
--		if (read != sizeof(ctrl))
-+		if (read != sizeof(ctrl)) {
-+			++errors;
- 			break;
-+		}
-+
-+		++requests;
- 
- 		switch (ctrl.class) {
- 		case VIRTIO_NET_CTRL_MAC:
-@@ -141,6 +176,12 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
- 			cvq->cb(cvq->private);
- 		local_bh_enable();
- 	}
-+
-+	u64_stats_update_begin(&net->cq_stats.syncp);
-+	net->cq_stats.requests += requests;
-+	net->cq_stats.errors += errors;
-+	net->cq_stats.successes += requests;
-+	u64_stats_update_end(&net->cq_stats.syncp);
- }
- 
- static void vdpasim_net_work(struct work_struct *work)
-@@ -148,8 +189,10 @@ static void vdpasim_net_work(struct work_struct *work)
- 	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
- 	struct vdpasim_virtqueue *txq = &vdpasim->vqs[1];
- 	struct vdpasim_virtqueue *rxq = &vdpasim->vqs[0];
-+	struct vdpasim_net *net = sim_to_net(vdpasim);
- 	ssize_t read, write;
--	int pkts = 0;
-+	u64 tx_pkts = 0, rx_pkts = 0, tx_bytes = 0, rx_bytes = 0;
-+	u64 rx_drops = 0, rx_overruns = 0, rx_errors = 0, tx_errors = 0;
- 	int err;
- 
- 	spin_lock(&vdpasim->lock);
-@@ -168,14 +211,21 @@ static void vdpasim_net_work(struct work_struct *work)
- 	while (true) {
- 		err = vringh_getdesc_iotlb(&txq->vring, &txq->out_iov, NULL,
- 					   &txq->head, GFP_ATOMIC);
--		if (err <= 0)
-+		if (err <= 0) {
-+			if (err)
-+				++tx_errors;
- 			break;
-+		}
- 
-+		++tx_pkts;
- 		read = vringh_iov_pull_iotlb(&txq->vring, &txq->out_iov,
- 					     vdpasim->buffer,
- 					     PAGE_SIZE);
- 
-+		tx_bytes += read;
-+
- 		if (!receive_filter(vdpasim, read)) {
-+			++rx_drops;
- 			vdpasim_net_complete(txq, 0);
- 			continue;
- 		}
-@@ -183,19 +233,25 @@ static void vdpasim_net_work(struct work_struct *work)
- 		err = vringh_getdesc_iotlb(&rxq->vring, NULL, &rxq->in_iov,
- 					   &rxq->head, GFP_ATOMIC);
- 		if (err <= 0) {
-+			++rx_overruns;
- 			vdpasim_net_complete(txq, 0);
- 			break;
- 		}
- 
- 		write = vringh_iov_push_iotlb(&rxq->vring, &rxq->in_iov,
- 					      vdpasim->buffer, read);
--		if (write <= 0)
-+		if (write <= 0) {
-+			++rx_errors;
- 			break;
-+		}
-+
-+		++rx_pkts;
-+		rx_bytes += write;
- 
- 		vdpasim_net_complete(txq, 0);
- 		vdpasim_net_complete(rxq, write);
- 
--		if (++pkts > 4) {
-+		if (tx_pkts > 4) {
- 			schedule_work(&vdpasim->work);
- 			goto out;
- 		}
-@@ -203,6 +259,145 @@ static void vdpasim_net_work(struct work_struct *work)
- 
- out:
- 	spin_unlock(&vdpasim->lock);
-+
-+	u64_stats_update_begin(&net->tx_stats.syncp);
-+	net->tx_stats.pkts += tx_pkts;
-+	net->tx_stats.bytes += tx_bytes;
-+	net->tx_stats.errors += tx_errors;
-+	u64_stats_update_end(&net->tx_stats.syncp);
-+
-+	u64_stats_update_begin(&net->rx_stats.syncp);
-+	net->rx_stats.pkts += rx_pkts;
-+	net->rx_stats.bytes += rx_bytes;
-+	net->rx_stats.drops += rx_drops;
-+	net->rx_stats.errors += rx_errors;
-+	net->rx_stats.overruns += rx_overruns;
-+	u64_stats_update_end(&net->rx_stats.syncp);
-+}
-+
-+static int vdpasim_net_get_stats(struct vdpasim *vdpasim, u16 idx,
-+				 struct sk_buff *msg,
-+				 struct netlink_ext_ack *extack)
-+{
-+	struct vdpasim_net *net = sim_to_net(vdpasim);
-+	u64 rx_pkts, rx_bytes, rx_errors, rx_overruns, rx_drops;
-+	u64 tx_pkts, tx_bytes, tx_errors, tx_drops;
-+	u64 cq_requests, cq_successes, cq_errors;
-+	unsigned int start;
-+	int err = -EMSGSIZE;
-+
-+	switch(idx) {
-+	case 0:
-+		do {
-+			start = u64_stats_fetch_begin(&net->rx_stats.syncp);
-+			rx_pkts = net->rx_stats.pkts;
-+			rx_bytes = net->rx_stats.bytes;
-+			rx_errors = net->rx_stats.errors;
-+			rx_overruns = net->rx_stats.overruns;
-+			rx_drops = net->rx_stats.drops;
-+		} while (u64_stats_fetch_retry(&net->rx_stats.syncp, start));
-+
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+					"rx packets"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      rx_pkts, VDPA_ATTR_PAD))
-+			break;
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "rx bytes"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      rx_bytes, VDPA_ATTR_PAD))
-+			break;
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "rx errors"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      rx_errors, VDPA_ATTR_PAD))
-+			break;
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "rx overrunss"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      rx_overruns, VDPA_ATTR_PAD))
-+			break;
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "rx drops"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      rx_drops, VDPA_ATTR_PAD))
-+			break;
-+		err = 0;
-+		break;
-+	case 1:
-+		do {
-+			start = u64_stats_fetch_begin(&net->tx_stats.syncp);
-+			tx_pkts = net->tx_stats.pkts;
-+			tx_bytes = net->tx_stats.bytes;
-+			tx_errors = net->tx_stats.errors;
-+			tx_drops = net->tx_stats.drops;
-+		} while (u64_stats_fetch_retry(&net->tx_stats.syncp, start));
-+
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "tx packets"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      tx_pkts, VDPA_ATTR_PAD))
-+			break;
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "tx bytes"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      tx_bytes, VDPA_ATTR_PAD))
-+			break;
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "tx errors"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      tx_errors, VDPA_ATTR_PAD))
-+			break;
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "tx drops"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      tx_drops, VDPA_ATTR_PAD))
-+			break;
-+		err = 0;
-+		break;
-+	case 2:
-+		do {
-+			start = u64_stats_fetch_begin(&net->cq_stats.syncp);
-+			cq_requests = net->cq_stats.requests;
-+			cq_successes = net->cq_stats.successes;
-+			cq_errors = net->cq_stats.errors;
-+		} while (u64_stats_fetch_retry(&net->cq_stats.syncp, start));
-+
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "cvq requests"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      cq_requests, VDPA_ATTR_PAD))
-+			break;
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "cvq successes"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      cq_successes, VDPA_ATTR_PAD))
-+			break;
-+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-+				  "cvq errors"))
-+			break;
-+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-+				      cq_errors, VDPA_ATTR_PAD))
-+			break;
-+		err = 0;
-+		break;
-+	default:
-+		err = -EINVAL;
-+		break;
-+	}
-+
-+	return err;
- }
- 
- static void vdpasim_net_get_config(struct vdpasim *vdpasim, void *config)
-@@ -239,6 +434,7 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
- 			       const struct vdpa_dev_set_config *config)
- {
- 	struct vdpasim_dev_attr dev_attr = {};
-+	struct vdpasim_net *net;
- 	struct vdpasim *simdev;
- 	int ret;
- 
-@@ -249,10 +445,11 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
- 	dev_attr.nvqs = VDPASIM_NET_VQ_NUM;
- 	dev_attr.ngroups = VDPASIM_NET_GROUP_NUM;
- 	dev_attr.nas = VDPASIM_NET_AS_NUM;
--	dev_attr.alloc_size = sizeof(struct vdpasim);
-+	dev_attr.alloc_size = sizeof(struct vdpasim_net);
- 	dev_attr.config_size = sizeof(struct virtio_net_config);
- 	dev_attr.get_config = vdpasim_net_get_config;
- 	dev_attr.work_fn = vdpasim_net_work;
-+	dev_attr.get_stats = vdpasim_net_get_stats;
- 	dev_attr.buffer_size = PAGE_SIZE;
- 
- 	simdev = vdpasim_create(&dev_attr, config);
-@@ -265,6 +462,12 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
- 	if (ret)
- 		goto reg_err;
- 
-+	net = sim_to_net(simdev);
-+
-+	u64_stats_init(&net->tx_stats.syncp);
-+	u64_stats_init(&net->rx_stats.syncp);
-+	u64_stats_init(&net->cq_stats.syncp);
-+
- 	return 0;
- 
- reg_err:
--- 
-2.25.1
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/81556e491789/disk-6feb57c2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/065c943ec9de/vmlinux-6feb57c2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/66e98c522c1f/bzImage-6feb57c2.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/e130cbdf95f5/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/33763b071115/mount_6.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+38655f1298fefc58a904@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-syzkaller-13822-g6feb57c2fd7c #0 Not tainted
+------------------------------------------------------
+syz-executor102/5793 is trying to acquire lock:
+ffff88802bd68158 (&mm->mmap_lock){++++}-{3:3}, at: mmap_read_lock+0x17/0x50 include/linux/mmap_lock.h:117
+
+but task is already holding lock:
+ffff8880291240e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_iterate+0x1cc/0x34c0 fs/exfat/dir.c:226
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&sbi->s_lock){+.+.}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       exfat_get_block+0x191/0x1e20 fs/exfat/inode.c:281
+       do_mpage_readpage+0x970/0x1c50 fs/mpage.c:208
+       mpage_readahead+0x210/0x380 fs/mpage.c:361
+       read_pages+0x169/0x9c0 mm/readahead.c:161
+       page_cache_ra_unbounded+0x703/0x820 mm/readahead.c:270
+       page_cache_sync_readahead include/linux/pagemap.h:1210 [inline]
+       filemap_get_pages+0x465/0x10d0 mm/filemap.c:2600
+       filemap_read+0x3cf/0xea0 mm/filemap.c:2694
+       __kernel_read+0x3fc/0x830 fs/read_write.c:428
+       integrity_kernel_read+0xac/0xf0 security/integrity/iint.c:199
+       ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:485 [inline]
+       ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+       ima_calc_file_hash+0x178f/0x1ca0 security/integrity/ima/ima_crypto.c:573
+       ima_collect_measurement+0x444/0x8c0 security/integrity/ima/ima_api.c:292
+       process_measurement+0xf41/0x1bc0 security/integrity/ima/ima_main.c:339
+       ima_file_check+0xd8/0x130 security/integrity/ima/ima_main.c:519
+       do_open fs/namei.c:3559 [inline]
+       path_openat+0x2600/0x2dd0 fs/namei.c:3714
+       do_filp_open+0x264/0x4f0 fs/namei.c:3741
+       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_open fs/open.c:1334 [inline]
+       __se_sys_open fs/open.c:1330 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1330
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (mapping.invalidate_lock#3){.+.+}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       down_read+0x39/0x50 kernel/locking/rwsem.c:1509
+       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+       filemap_fault+0x2fb/0x1060 mm/filemap.c:3146
+       __do_fault+0x136/0x4f0 mm/memory.c:4163
+       do_read_fault mm/memory.c:4514 [inline]
+       do_fault mm/memory.c:4643 [inline]
+       handle_pte_fault mm/memory.c:4931 [inline]
+       __handle_mm_fault mm/memory.c:5073 [inline]
+       handle_mm_fault+0x2066/0x26b0 mm/memory.c:5219
+       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
+       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+       strncpy_from_user+0x150/0x330 lib/strncpy_from_user.c:139
+       getname_flags+0xf5/0x4e0 fs/namei.c:150
+       do_sys_openat2+0xba/0x4e0 fs/open.c:1304
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_open fs/open.c:1334 [inline]
+       __se_sys_open fs/open.c:1330 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1330
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&mm->mmap_lock){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       down_read+0x39/0x50 kernel/locking/rwsem.c:1509
+       mmap_read_lock+0x17/0x50 include/linux/mmap_lock.h:117
+       do_user_addr_fault+0x4b7/0xcb0 arch/x86/mm/fault.c:1379
+       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+       filldir64+0x2df/0x660 fs/readdir.c:331
+       dir_emit_dot include/linux/fs.h:3568 [inline]
+       dir_emit_dots include/linux/fs.h:3579 [inline]
+       exfat_iterate+0x2e4/0x34c0 fs/exfat/dir.c:229
+       iterate_dir+0x257/0x5f0
+       __do_sys_getdents64 fs/readdir.c:369 [inline]
+       __se_sys_getdents64+0x1db/0x4c0 fs/readdir.c:354
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &mm->mmap_lock --> mapping.invalidate_lock#3 --> &sbi->s_lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&sbi->s_lock);
+                               lock(mapping.invalidate_lock#3);
+                               lock(&sbi->s_lock);
+  lock(&mm->mmap_lock);
+
+ *** DEADLOCK ***
+
+3 locks held by syz-executor102/5793:
+ #0: ffff888012b5e0e8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x242/0x2e0 fs/file.c:1046
+ #1: ffff8880731d5730 (&sb->s_type->i_mutex_key#20){++++}-{3:3}, at: iterate_dir+0x147/0x5f0 fs/readdir.c:57
+ #2: ffff8880291240e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_iterate+0x1cc/0x34c0 fs/exfat/dir.c:226
+
+stack backtrace:
+CPU: 0 PID: 5793 Comm: syz-executor102 Not tainted 6.1.0-syzkaller-13822-g6feb57c2fd7c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ down_read+0x39/0x50 kernel/locking/rwsem.c:1509
+ mmap_read_lock+0x17/0x50 include/linux/mmap_lock.h:117
+ do_user_addr_fault+0x4b7/0xcb0 arch/x86/mm/fault.c:1379
+ handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+ exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+ asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0010:filldir64+0x2df/0x660 fs/readdir.c:335
+Code: 5c 24 20 48 89 de e8 10 79 95 ff 83 7c 24 18 00 0f 88 4b 02 00 00 48 39 dd 0f 82 42 02 00 00 0f 01 cb 0f ae e8 48 8b 44 24 60 <48> 89 43 08 e8 a8 76 95 ff 48 8b 04 24 48 8b 4c 24 68 48 89 08 e8
+RSP: 0018:ffffc90005aff6f8 EFLAGS: 00050206
+RAX: 0000000000000000 RBX: 00000000200022c0 RCX: 0000000000000000
+RDX: ffff88801f510000 RSI: 00000000200022c0 RDI: 00007fffffffefe8
+RBP: 00007fffffffefe8 R08: ffffffff81f66420 R09: 0000000000000004
+R10: 0000000000000003 R11: ffff88801f510000 R12: ffffffff8b076a40
+R13: dffffc0000000000 R14: 0000000000000001 R15: ffffc90005affe70
+ dir_emit_dot include/linux/fs.h:3568 [inline]
+ dir_emit_dots include/linux/fs.h:3579 [inline]
+ exfat_iterate+0x2e4/0x34c0 fs/exfat/dir.c:229
+ iterate_dir+0x257/0x5f0
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64+0x1db/0x4c0 fs/readdir.c:354
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fb9bfdcf5f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fb9b716e208 EFLAGS: 00000246 ORIG_RAX: 00000000000000d9
+RAX: ffffffffffffffda RBX: 00007fb9bfe54558 RCX: 00007fb9bfdcf5f9
+RDX: 0000000000000018 RSI: 00000000200022c0 RDI: 0000000000000004
+RBP: 00007fb9bfe54550 R08: 00007fb9b716e700 R09: 0000000000000000
+R10: 00007fb9b716e700 R11: 0000000000000246 R12: 00007fb9bfe5455c
+R13: 00007ffd016b68ff R14: 00007fb9b716e300 R15: 0000000000022000
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	5c                   	pop    %rsp
+   1:	24 20                	and    $0x20,%al
+   3:	48 89 de             	mov    %rbx,%rsi
+   6:	e8 10 79 95 ff       	callq  0xff95791b
+   b:	83 7c 24 18 00       	cmpl   $0x0,0x18(%rsp)
+  10:	0f 88 4b 02 00 00    	js     0x261
+  16:	48 39 dd             	cmp    %rbx,%rbp
+  19:	0f 82 42 02 00 00    	jb     0x261
+  1f:	0f 01 cb             	stac
+  22:	0f ae e8             	lfence
+  25:	48 8b 44 24 60       	mov    0x60(%rsp),%rax
+* 2a:	48 89 43 08          	mov    %rax,0x8(%rbx) <-- trapping instruction
+  2e:	e8 a8 76 95 ff       	callq  0xff9576db
+  33:	48 8b 04 24          	mov    (%rsp),%rax
+  37:	48 8b 4c 24 68       	mov    0x68(%rsp),%rcx
+  3c:	48 89 08             	mov    %rcx,(%rax)
+  3f:	e8                   	.byte 0xe8
 
