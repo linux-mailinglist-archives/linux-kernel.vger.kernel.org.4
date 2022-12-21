@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54502653573
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DFE65357A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiLURmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
+        id S234920AbiLURon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbiLURmi (ORCPT
+        with ESMTP id S234772AbiLURok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:42:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B3823141;
-        Wed, 21 Dec 2022 09:42:37 -0800 (PST)
+        Wed, 21 Dec 2022 12:44:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC5C2333A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:44:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA218618A0;
-        Wed, 21 Dec 2022 17:42:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C1ECC433D2;
-        Wed, 21 Dec 2022 17:42:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671644556;
-        bh=OmqaTEeh+/ZOqMuJ9Z6m3oZQpDCaCjoHmQbvnj5OEYo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HObPDAmKlOF6qqsdZFHgiGA2INgr/+4eWPZLhRul1r203jOAT0SiTUeGPj2nqZZWV
-         zgd8IO6gTn3ZlDBRaIy0l5DkQSDk+zBpqshXiRZArqbVm4F8wvyH218gdhLqWLjG7N
-         ZhnW3Gg3LP2K01LoIgNWmBrDAwC0g2c2WOxpsc2Y=
-Date:   Wed, 21 Dec 2022 18:42:33 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Zijun Hu <zijuhu@codeaurora.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Sai Teja Aluvala <quic_saluvala@quicinc.com>,
-        Panicker Harish <quic_pharish@quicinc.com>,
-        Johan Hovold <johan@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] serdev: ttyport: fix use-after-free on closed TTY
-Message-ID: <Y6NFiXEG+sodmC5S@kroah.com>
-References: <20221221163249.1058459-1-krzysztof.kozlowski@linaro.org>
- <Y6M2vLV9PM3HfXZY@kroah.com>
- <e2925111-abcf-26fb-59e0-9bd4fb3f7b8e@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e2925111-abcf-26fb-59e0-9bd4fb3f7b8e@linaro.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74BE6B81B58
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 17:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 42E5FC433D2;
+        Wed, 21 Dec 2022 17:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671644677;
+        bh=CUr8QtXanjZdKUiabj2eNEnsie/cnsurcrH62Y/c/TI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=kYBv6amM4BrmFCJk/zmKdpgxErzBTTe0LZDCaDuuTU6RezpMuzywDGZDt2VxU8gbQ
+         I0KbihAJBoBRJxbnHq+qs39ywRSySYuWT3vtolVsr7RQ/nwx+WxGgqr3E+cj+fljxR
+         uq4W3rzzv2msPLorfgtfnHRDerST/vSogkj/GgbGAhJbah1XFr47Ud914IVwzg38sa
+         bPhwWf3dyVqt2LFmzrHdER+1fzaKSMJG8TOguF4Psb9Lhlm1S8pnQM2COvF2bfjyE2
+         AVgQdi9coYr0tKpjrvTYegOguqP7PNeYIuyXrqrygJ1Izjv1gnYFDq5n94EZwUErcS
+         ie1nKiWo3BL9Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3302DC43141;
+        Wed, 21 Dec 2022 17:44:37 +0000 (UTC)
+Subject: Re: [GIT PULL] Mailbox changes for v6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CABb+yY1_UYa9T7pNc0yPhmx4hy3W=O5xL4mhfSjZx3s-jnRV7A@mail.gmail.com>
+References: <CABb+yY1_UYa9T7pNc0yPhmx4hy3W=O5xL4mhfSjZx3s-jnRV7A@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-arm-kernel.lists.infradead.org>
+X-PR-Tracked-Message-Id: <CABb+yY1_UYa9T7pNc0yPhmx4hy3W=O5xL4mhfSjZx3s-jnRV7A@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.linaro.org/landing-teams/working/fujitsu/integration.git tags/mailbox-v6.2
+X-PR-Tracked-Commit-Id: 53c60d1004270045d63cdee91aa77c145282d7e4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f2855eec19cadddad2900da3a009ee39df6116a7
+Message-Id: <167164467719.23021.16985766117521718562.pr-tracker-bot@kernel.org>
+Date:   Wed, 21 Dec 2022 17:44:37 +0000
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,89 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 06:37:59PM +0100, Krzysztof Kozlowski wrote:
-> On 21/12/2022 17:39, Greg Kroah-Hartman wrote:
-> > On Wed, Dec 21, 2022 at 05:32:48PM +0100, Krzysztof Kozlowski wrote:
-> >> use-after-free is visible in serdev-ttyport, e.g. during system reboot
-> >> with Qualcomm Atheros Bluetooth.  The TTY is closed, thus "struct
-> >> tty_struct" is being released, but the hci_uart_qca driver performs
-> >> writes and flushes during system shutdown in qca_serdev_shutdown().
-> >>
-> >>   Unable to handle kernel paging request at virtual address 0072662f67726fd7
-> >>   ...
-> >>   CPU: 6 PID: 1 Comm: systemd-shutdow Tainted: G        W          6.1.0-rt5-00325-g8a5f56bcfcca #8
-> >>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
-> >>   Call trace:
-> >>    tty_driver_flush_buffer+0x4/0x30
-> >>    serdev_device_write_flush+0x24/0x34
-> >>    qca_serdev_shutdown+0x80/0x130 [hci_uart]
-> >>    device_shutdown+0x15c/0x260
-> >>    kernel_restart+0x48/0xac
-> >>
-> >> KASAN report:
-> >>
-> >>   BUG: KASAN: use-after-free in tty_driver_flush_buffer+0x1c/0x50
-> >>   Read of size 8 at addr ffff16270c2e0018 by task systemd-shutdow/1
-> >>
-> >>   CPU: 7 PID: 1 Comm: systemd-shutdow Not tainted 6.1.0-next-20221220-00014-gb85aaf97fb01-dirty #28
-> >>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
-> >>   Call trace:
-> >>    dump_backtrace.part.0+0xdc/0xf0
-> >>    show_stack+0x18/0x30
-> >>    dump_stack_lvl+0x68/0x84
-> >>    print_report+0x188/0x488
-> >>    kasan_report+0xa4/0xf0
-> >>    __asan_load8+0x80/0xac
-> >>    tty_driver_flush_buffer+0x1c/0x50
-> >>    ttyport_write_flush+0x34/0x44
-> >>    serdev_device_write_flush+0x48/0x60
-> >>    qca_serdev_shutdown+0x124/0x274
-> >>    device_shutdown+0x1e8/0x350
-> >>    kernel_restart+0x48/0xb0
-> >>    __do_sys_reboot+0x244/0x2d0
-> >>    __arm64_sys_reboot+0x54/0x70
-> >>    invoke_syscall+0x60/0x190
-> >>    el0_svc_common.constprop.0+0x7c/0x160
-> >>    do_el0_svc+0x44/0xf0
-> >>    el0_svc+0x2c/0x6c
-> >>    el0t_64_sync_handler+0xbc/0x140
-> >>    el0t_64_sync+0x190/0x194
-> >>
-> >> Fixes: bed35c6dfa6a ("serdev: add a tty port controller driver")
-> >> Cc: <stable@vger.kernel.org>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---
-> >>  drivers/tty/serdev/serdev-ttyport.c | 24 ++++++++++++++++++++++++
-> >>  1 file changed, 24 insertions(+)
-> >>
-> >> diff --git a/drivers/tty/serdev/serdev-ttyport.c b/drivers/tty/serdev/serdev-ttyport.c
-> >> index d367803e2044..3d2bab91a988 100644
-> >> --- a/drivers/tty/serdev/serdev-ttyport.c
-> >> +++ b/drivers/tty/serdev/serdev-ttyport.c
-> >> @@ -91,6 +91,9 @@ static void ttyport_write_flush(struct serdev_controller *ctrl)
-> >>  	struct serport *serport = serdev_controller_get_drvdata(ctrl);
-> >>  	struct tty_struct *tty = serport->tty;
-> >>  
-> >> +	if (!test_bit(SERPORT_ACTIVE, &serport->flags))
-> >> +		return;
-> > 
-> > Shouldn't that be a more useful macro/function instead?
-> > 	serport_is_active(serport)
-> 
-> Sure, makes sense.
-> 
-> > 
-> > Anyway, what prevents this from changing _right_ after you test it and
-> > before you call the next line in this function (same for all invocations
-> > here.)
-> 
-> Eh, you're right. I got suggested by such solution in
-> ttyport_write_buf() assuming it was correct in the first place. Is
-> holding tty_lock for entire function here reasonable?
+The pull request you sent on Tue, 20 Dec 2022 10:23:30 -0600:
 
-For every function you added this check to?  I don't know, would need to
-audit them all before being able to answer that :(
+> git://git.linaro.org/landing-teams/working/fujitsu/integration.git tags/mailbox-v6.2
 
-thanks,
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f2855eec19cadddad2900da3a009ee39df6116a7
 
-greg k-h
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
