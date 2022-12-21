@@ -2,172 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A806653983
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F37F6539A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234784AbiLUXAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 18:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S230088AbiLUXT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 18:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiLUXAW (ORCPT
+        with ESMTP id S229561AbiLUXTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 18:00:22 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B985BCA8;
-        Wed, 21 Dec 2022 15:00:21 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9916D13FA;
-        Thu, 22 Dec 2022 00:00:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671663619;
-        bh=d8r+TGwKz45eLMUClR+IITxE3oPFLBRWIRAlr2ioc3c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EVwvT8OB/J666L5i1lwNLzJHfly/yun9wpMDqdyWrdECiWhvsPdoz3Clp5Rm2Fie1
-         Uf4Dl/Z9/4Fumj6fCFl2HkCUYY9MoE8f2n2zcoTq/ehRj9bHY4L6xw/IEEAhGVLmvB
-         mq347/ZCv0mZZADXyX5PcsRpWynVWDs7CIJORwKc=
-Date:   Thu, 22 Dec 2022 01:00:14 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Yunke Cao <yunkec@chromium.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] media: uvcvideo: Add a unique suffix to camera
- names
-Message-ID: <Y6OP/qz9R4BgXi4o@pendragon.ideasonboard.com>
-References: <20220920-resend-meta-v4-0-3ac355b66723@chromium.org>
- <20220920-resend-meta-v4-3-3ac355b66723@chromium.org>
- <Y45tnp0naosOrYCY@pendragon.ideasonboard.com>
- <CANiDSCtRoVQ2+asPmOacarvC2VrJYTbU67+wKJq1ciuMrwguPg@mail.gmail.com>
- <20221221220248.12395efb@sal.lan>
- <Y6OHrDw8p4qPWBqz@pendragon.ideasonboard.com>
- <20221221225450.448c58ea@sal.lan>
+        Wed, 21 Dec 2022 18:19:55 -0500
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDF21A06D;
+        Wed, 21 Dec 2022 15:19:54 -0800 (PST)
+Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 161BF203BA;
+        Thu, 22 Dec 2022 00:19:52 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        sunliming <sunliming@kylinos.cn>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/8] drm/msm: DSC Electric Boogaloo for sm8[12]50
+Date:   Thu, 22 Dec 2022 00:19:35 +0100
+Message-Id: <20221221231943.1961117-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221221225450.448c58ea@sal.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 10:54:50PM +0000, Mauro Carvalho Chehab wrote:
-> Em Thu, 22 Dec 2022 00:24:44 +0200
-> Laurent Pinchart <laurent.pinchart@ideasonboard.com> escreveu:
-> 
-> > Hi Mauro,
-> > 
-> > On Wed, Dec 21, 2022 at 10:02:48PM +0000, Mauro Carvalho Chehab wrote:
-> > > Em Tue, 6 Dec 2022 00:02:22 +0100 Ricardo Ribalda escreveu:  
-> > > > On Mon, 5 Dec 2022 at 23:16, Laurent Pinchart wrote:  
-> > > > > On Fri, Dec 02, 2022 at 06:08:19PM +0100, Ricardo Ribalda wrote:    
-> > > > > > Some cameras have multiple data inputs (i.e. IR sensor and RGB sensor),
-> > > > > > append a unique number to the device name.
-> > > > > >
-> > > > > > Fixes v4l2-compliance:
-> > > > > >     Media Controller ioctls:
-> > > > > >          fail: v4l2-test-media.cpp(205): v2_entity_names_set.find(key) != v2_entity_names_set.end()
-> > > > > >        test MEDIA_IOC_G_TOPOLOGY: FAIL
-> > > > > >          fail: v4l2-test-media.cpp(394): num_data_links != num_links
-> > > > > >        test MEDIA_IOC_ENUM_ENTITIES/LINKS: FAIL
-> > > > > >
-> > > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > > > ---
-> > > > > >  drivers/media/usb/uvc/uvc_driver.c | 3 ++-
-> > > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > > > > > index 215fb483efb0..f4032ebb3689 100644
-> > > > > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > > > > @@ -1963,7 +1963,8 @@ int uvc_register_video_device(struct uvc_device *dev,
-> > > > > >               break;
-> > > > > >       }
-> > > > > >
-> > > > > > -     strscpy(vdev->name, dev->name, sizeof(vdev->name));
-> > > > > > +     snprintf(vdev->name, sizeof(vdev->name), "%s %u", dev->name,
-> > > > > > +              stream->header.bTerminalLink);    
-> > > > >
-> > > > > This won't be perfect as the string is not guaranteed to fit in
-> > > > > vdev->name, but I suppose it will help as a quick fix for some devices.
-> > > > > How about the other devices ? Won't they still exhibit the above
-> > > > > v4l2-compliance failure ? Isn't that something that will still affect
-> > > > > Chrome OS devices ?    
-> > > > 
-> > > > We could place the id first... but that will look bad: Eg:
-> > > > 
-> > > > 1- My favorite camera
-> > > > 
-> > > > Another option is to remove the last chars to fit the id. Eg:
-> > > > 
-> > > > My favorite came-1
-> > > > 
-> > > > If you prefer any of those options or have a better idea I can implement that.
-> > > >   
-> > > > > The change should not cause any regression as big as in patch 1/3.
-> > > > > However, unless I'm mistaken users will notice a device name change,
-> > > > > especially when selecting a device in their web browser. Could that be a
-> > > > > problem ?    
-> > > > 
-> > > > I think the only side effect is that the first time that the kernel
-> > > > changes the naming convention, if there are more than one camera on
-> > > > the system, the video conference might pick a different camera.
-> > > > The good news is that the user will be presented with cameras with
-> > > > different names. Now some cameras show very confusing names:
-> > > > 
-> > > > ribalda@alco:~/work/linux$ for a in /dev/video* ; do yavta -l $a| grep
-> > > > "Dell Webcam"; done
-> > > > Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> > > > 'uvcvideo') supports video, capture, without mplanes.
-> > > > Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> > > > 'uvcvideo') supports meta-data, capture, without mplanes.
-> > > > Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> > > > 'uvcvideo') supports video, capture, without mplanes.
-> > > > Device `Dell Webcam WB7022' on `usb-0000:2d:00.0-1.2.3.1' (driver
-> > > > 'uvcvideo') supports meta-data, capture, without mplanes.  
-> > > 
-> > > That is bad, as some apps like camorama actually store the user
-> > > preferences (last used resolution and fps), preserving them the next
-> > > time the camera with the same name is used.
-> > > 
-> > > In the specific case of camorama, it uses the by-id filename, which is
-> > > derived from the name, as stored at:
-> > > 
-> > > 	$ ls -la /dev/v4l/by-id/usb-Quanta_HD_Camera_0001-video-index*
-> > > 	lrwxrwxrwx 1 root root 12 dez 21 09:59 /dev/v4l/by-id/usb-Quanta_HD_Camera_0001-video-index0 -> ../../video0
-> > > 	lrwxrwxrwx 1 root root 12 dez 21 09:59 /dev/v4l/by-id/usb-Quanta_HD_Camera_0001-video-index1 -> ../../video1
-> > > 
-> > > With this change, not only the camera name will become bigger (and may
-> > > end losing the index0/index1 data), but it will also lost the stored 
-> > > preferences on apps like camorama, causing regressions.
-> > > 
-> > > It sounds a lot easier to teach udev to change the name on an unique
-> > > way, on machines where you need it.  
-> > 
-> > It's not a udev issue, it's an API compliance problem, entity names in a
-> > media controller graph must be unique, and they are not.
-> 
-> Then the right fix would be inside the media controller naming
-> logic, in a way that it will ensure unique names. It sounds to me
-> that mc core should then check, at device's register time, if the
-> name was already used. If so, change it to be unique.
+This preliminary Display Stream Compression support package for
+(initially tested on) sm8[12]50 is based on comparing DSC behaviour
+between downstream and mainline.  Some new callbacks are added (for
+binding blocks on active CTLs), logic bugs are corrected, zeroed struct
+members are now assigned proper values, and RM allocation and hw block
+retrieval now hand out (or not) DSC blocks without causing null-pointer
+dereferences.
 
-The entity name and video device name are one and the same.
+Unfortunately it is not yet enough to get rid of completely corrupted
+display output on the boards I tested here:
+- Sony Xperia 1 (sm8150), 1644x3840 or 1096x2560 pixels;
+- Sony Xperia 5II (sm8250), 1080x2520, at 60 or 120Hz;
+- (can include more Xperia boards if desired)
 
-> > Losing the stored preference is possibly inconvenient in some cases, but
-> > I don't think it's a real blocker.
-> 
-> If it causes userspace regressions, then it is a blocker.
+Both devices use the DUALPIPE_DSCMERGE topology downstream: dual LM, PP
+and DSC, but only a single INTF/encoder/DSI-link.
 
-I wouldn't necessarily call this a regression.
+Hopefully this spawns some community/upstream interest to help rootcause
+our corruption issues (after we open a drm/msm report on GitLab for more
+appropriate tracking).
 
--- 
-Regards,
+The Sony Xperia XZ3 (sdm845) was fully tested and validated with this
+series to not cause any regressions (and one of the math fixes now
+allows us to change slice_count in the panel driver, which would corrupt
+previously).
 
-Laurent Pinchart
+Changes since v1:
+
+- Split patch 6 into two separately backportable Fixes: patches;
+- Additionally remove num_enc from msm_display_topology in favour of
+  num_dsc;
+- Reorder patches to have all Fixes: at the beginning for easier
+  picking;
+- Fix existing multiline comment while editing it anyway;
+- Add missing Signed-off-by to patch 5.
+
+v1: https://lore.kernel.org/linux-arm-msm/20221213232207.113607-1-marijn.suijten@somainline.org/T/#u
+
+Marijn Suijten (8):
+  drm/msm/dpu: Wire up DSC mask for active CTL configuration
+  drm/msm/dsi: Use DSC slice(s) packet size to compute word count
+  drm/msm/dsi: Flip greater-than check for slice_count and
+    slice_per_intf
+  drm/msm/dpu: Disallow unallocated resources to be returned
+  drm/msm/dpu: Reject topologies for which no DSC blocks are available
+  drm/msm/dpu: Remove num_enc from topology struct in favour of num_dsc
+  drm/msm/dpu: Implement DSC binding to PP block for CTL V1
+  drm/msm/dpu: Add DSC configuration for SM8150 and SM8250
+
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c   | 12 +++++----
+ .../drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c  |  1 +
+ .../drm/msm/disp/dpu1/dpu_encoder_phys_vid.c  |  1 +
+ .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 23 +++++++++++-----
+ .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |  9 +++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c    | 27 +++++++++++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h    |  4 +++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c        | 14 ++++++++--
+ drivers/gpu/drm/msm/dsi/dsi_host.c            |  7 ++---
+ drivers/gpu/drm/msm/msm_drv.h                 |  2 --
+ 10 files changed, 82 insertions(+), 18 deletions(-)
+
+--
+2.39.0
+
