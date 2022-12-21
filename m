@@ -2,179 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF8D652D88
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5FA652D8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbiLUHze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 02:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S234426AbiLUH7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 02:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbiLUHzV (ORCPT
+        with ESMTP id S234274AbiLUH66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 02:55:21 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E9C21805
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:55:12 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id d15so14767499pls.6
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:55:12 -0800 (PST)
+        Wed, 21 Dec 2022 02:58:58 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D44B0A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:58:57 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id p36so22244692lfa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:58:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p56YFYadKwiAgc0MnsqbNwUdZHZ1PCgYXvpEaau8qXI=;
-        b=smEr4XpRA9enckwDuKr/UQkAYxUCFQt7+Rn6jW3q7sqnpU9OZGETueVipO8M9Jnuyl
-         4CjOpen7LdavGhYBUgH6MzvV2BM9duC9oC49RWeYeOL0IBUKFzzGefRtNTcdxFSJkdxa
-         wIaTILxbOLa4sqcMpJR6wq1A2gZve8FNp6lwRJPFlCKUhmVrpvT4GBljDpG26TGAqfzU
-         MdQe71g/NSUo80iEiQ996CPCw4Av3nLYhDi3+0JQHjbZBt9/CoJ6ntoxPbz59wnYCXKX
-         jFs7UOeLerDI1aWlMQBcdgD2dq2RqIp+sdowTjxp186GZdCe0qxQGKPbXcE9kGJAWq+T
-         lTxA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e8GCz1b2VF0mWtOR9yf+Rv0xFFyTsr8iL68eBnffHjs=;
+        b=apfpV+nJVVyEcEi53k7XYGHX6obMy/OGRT/sqx9uDTR8RjttQLEYj2EWlyGwjiiQPr
+         TvjT0T8ilKqeJHJ6NZdMa9c6feO6j+yj6X5b+iDMN/okmU+RTsu+iI7hRPcqkJoC537D
+         aQhCkqWNyUuhzNTZJ9SlwBKlqTf26FxfuCgThbKJm66orwKWVgkpHoHKtteJoAAJsvxU
+         HrJ2IDOq2C1G3FsNOqt/SUyZxYJUaZJFuu7G54XWpfbwbVdcEwFUQfxskbrfAUp/D8oN
+         lkzMzy2WJnTEN17WsbItT02ABlv6jo1shl274PHCYADQivqTUUnM5nI+SWYqC20+pC4l
+         +MsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p56YFYadKwiAgc0MnsqbNwUdZHZ1PCgYXvpEaau8qXI=;
-        b=wf4oa9miKGpleQURsweprpWtVntg6Cl68+PQlqNzd1WL4i8WE5k/b9Ki/WQGFNADy+
-         sr0nrY6lJ0pXY5i5qRilnkRdPR17uAfIxF4iB/jcRJ/jf10yTGdCzoZavZoLfKL55ghu
-         LUR+5XOwEZWoivhGqw1Vh7R44gE5Qpzb2Mgi3FUXBusuqVKWZLvBoGbwGVatbggGvK4g
-         uAMwfX5dTfk4D0EayPabrxKz7b0BLuCww1JMTEKLcMLv4okZSLU0U6Np8uIRZKAsK+pZ
-         LUxg/3cG23q3wchqp7Tyrie2jy2C+e6yF+nCTjzE/HheyVE8kOeLmF7LS4YAWJlJAfRn
-         hrEg==
-X-Gm-Message-State: AFqh2kqwMGvSiLQaVPA8OzkTHDrkvv0WX96mrAI+ValZz4rT/yuaupyc
-        zsiC0+Lr51/BwNwJYlBDdxB/7O0bbvozYJnHh6w=
-X-Google-Smtp-Source: AMrXdXvt0k1foCfjfBOsRej5TqBsl7rwOVEWd88cgD8kMbNG6mdUJI/iQC+GGHNdWiSjJejRYcCxCg==
-X-Received: by 2002:a17:90a:7d0f:b0:219:7f29:3152 with SMTP id g15-20020a17090a7d0f00b002197f293152mr1098129pjl.39.1671609311796;
-        Tue, 20 Dec 2022 23:55:11 -0800 (PST)
-Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id ne1-20020a17090b374100b0020c899b11f1sm771779pjb.23.2022.12.20.23.55.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 23:55:11 -0800 (PST)
-From:   Shunsuke Mie <mie@igel.co.jp>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, Shunsuke Mie <mie@igel.co.jp>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH] tools/virtio: fix the vringh test for virtio ring changes
-Date:   Wed, 21 Dec 2022 16:55:06 +0900
-Message-Id: <20221221075506.3291148-1-mie@igel.co.jp>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e8GCz1b2VF0mWtOR9yf+Rv0xFFyTsr8iL68eBnffHjs=;
+        b=E28tQwOnNoeqcxQPTvuk8g6sS+viUfqk3hq++BQ/1tLtC93szHoKVD+v4uLxkxfYLx
+         HjwgIs96v3eoYMNxBoKfQuuIl+UzNMZ+z1dClsepkx2F2dIE8xjUKqjMymQDE4BEdRUF
+         edWf5O9OC3ypzz0moqoe+mZextwCd+OWaHyYvKWIewSQCywovfYhfOK4IB3Ez06Ggtmo
+         2Z+M4KophaIUVPcoLvBPukv1R1A8DlqJ68XRizgpHX6R7jEwstXURpF+3PcZZKwtfnKg
+         lDQ35xPxWd+QxBDhybz1wySusymbJWl3ob5oMG+nghe/xl9E7J0Ey2+EkOlKx346ZYpb
+         Jd5A==
+X-Gm-Message-State: AFqh2koVizfUnGXBmC23NF5GTtUAwDBjauOQnoqBm0WbRr7xZNRhPuj1
+        5M9FQTQIVTFL3mJesa7VCaTbLA==
+X-Google-Smtp-Source: AMrXdXurygVZlWFJZ4zMTAx9l7uSZkERAfz5c7Tp/Hu16TGbWU2otQiv8T2qGY77GmvohtJgNW+aPQ==
+X-Received: by 2002:a05:6512:2508:b0:4b5:9b8f:cc82 with SMTP id be8-20020a056512250800b004b59b8fcc82mr391385lfb.0.1671609535445;
+        Tue, 20 Dec 2022 23:58:55 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f9-20020ac251a9000000b004b587e37265sm1767256lfk.58.2022.12.20.23.58.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 23:58:54 -0800 (PST)
+Message-ID: <86592f50-b1d9-b633-4ec8-904a7fd97806@linaro.org>
+Date:   Wed, 21 Dec 2022 08:58:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 1/2] dt-bindings: interconnect: Add QDU1000/QRU1000
+ devices
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221216230914.21771-1-quic_molvera@quicinc.com>
+ <20221216230914.21771-2-quic_molvera@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221216230914.21771-2-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the build caused by missing kmsan_handle_dma() and is_power_of_2() that
-are used in drivers/virtio/virtio_ring.c.
+On 17/12/2022 00:09, Melody Olvera wrote:
+> Add separate schema for QDU1000 and QRU1000 interconnect devices
+> to document the different NoCs on these platforms.
+> 
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>  .../interconnect/qcom,qdu1000-rpmh.yaml       | 70 +++++++++++++
+>  .../interconnect/qcom,qdu1000-rpmh.h          | 98 +++++++++++++++++++
+>  2 files changed, 168 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qdu1000-rpmh.yaml
+>  create mode 100644 include/dt-bindings/interconnect/qcom,qdu1000-rpmh.h
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qdu1000-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,qdu1000-rpmh.yaml
+> new file mode 100644
+> index 000000000000..dad93b8e4895
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,qdu1000-rpmh.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,qdu1000-rpmh.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm RPMh Network-On-Chip Interconnect on QDU1000
+> +
+> +maintainers:
+> +  - Georgi Djakov <djakov@kernel.org>
+> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
+> +
+> +description: |
+> +   RPMh interconnect providers support system bandwidth requirements through
+> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
+> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
+> +   associated with each execution environment. Provider nodes must point to at
+> +   least one RPMh device child node pertaining to their RSC and each provider
+> +   can map to multiple RPMh resources.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,qdu1000-clk-virt
+> +      - qcom,qdu1000-gem-noc
+> +      - qcom,qdu1000-mc-virt
+> +      - qcom,qdu1000-system-noc
+> +
+> +  '#interconnect-cells': true
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +allOf:
+> +  - $ref: qcom,rpmh-common.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,qdu1000-clk-virt
+> +              - qcom,qdu1000-mc-virt
+> +    then:
+> +      properties:
+> +        reg: false
+> +    else:
+> +      required:
+> +        - reg
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +      #include <dt-bindings/interconnect/qcom,qdu1000-rpmh.h>
+> +
+> +      system_noc: interconnect@1640000 {
+> +             compatible = "qcom,qdu1000-system-noc";
 
-Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
----
- tools/virtio/linux/cpumask.h  |  7 +++++++
- tools/virtio/linux/gfp.h      |  7 +++++++
- tools/virtio/linux/kernel.h   |  1 +
- tools/virtio/linux/kmsan.h    | 12 ++++++++++++
- tools/virtio/linux/log2.h     | 11 +++++++++++
- tools/virtio/linux/topology.h |  7 +++++++
- 6 files changed, 45 insertions(+)
- create mode 100644 tools/virtio/linux/cpumask.h
- create mode 100644 tools/virtio/linux/gfp.h
- create mode 100644 tools/virtio/linux/kmsan.h
- create mode 100644 tools/virtio/linux/log2.h
- create mode 100644 tools/virtio/linux/topology.h
+Messed indentation.
 
-diff --git a/tools/virtio/linux/cpumask.h b/tools/virtio/linux/cpumask.h
-new file mode 100644
-index 000000000000..307da69d6b26
---- /dev/null
-+++ b/tools/virtio/linux/cpumask.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_CPUMASK_H
-+#define _LINUX_CPUMASK_H
-+
-+#include <linux/kernel.h>
-+
-+#endif /* _LINUX_CPUMASK_H */
-diff --git a/tools/virtio/linux/gfp.h b/tools/virtio/linux/gfp.h
-new file mode 100644
-index 000000000000..43d146f236f1
---- /dev/null
-+++ b/tools/virtio/linux/gfp.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __LINUX_GFP_H
-+#define __LINUX_GFP_H
-+
-+#include <linux/topology.h>
-+
-+#endif
-diff --git a/tools/virtio/linux/kernel.h b/tools/virtio/linux/kernel.h
-index 21593bf97755..8b877167933d 100644
---- a/tools/virtio/linux/kernel.h
-+++ b/tools/virtio/linux/kernel.h
-@@ -10,6 +10,7 @@
- #include <stdarg.h>
- 
- #include <linux/compiler.h>
-+#include <linux/log2.h>
- #include <linux/types.h>
- #include <linux/overflow.h>
- #include <linux/list.h>
-diff --git a/tools/virtio/linux/kmsan.h b/tools/virtio/linux/kmsan.h
-new file mode 100644
-index 000000000000..272b5aa285d5
---- /dev/null
-+++ b/tools/virtio/linux/kmsan.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_KMSAN_H
-+#define _LINUX_KMSAN_H
-+
-+#include <linux/gfp.h>
-+
-+inline void kmsan_handle_dma(struct page *page, size_t offset, size_t size,
-+			     enum dma_data_direction dir)
-+{
-+}
-+
-+#endif /* _LINUX_KMSAN_H */
-diff --git a/tools/virtio/linux/log2.h b/tools/virtio/linux/log2.h
-new file mode 100644
-index 000000000000..aa67bb21d8e2
---- /dev/null
-+++ b/tools/virtio/linux/log2.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _LINUX_LOG2_H
-+#define _LINUX_LOG2_H
-+
-+inline bool is_power_of_2(unsigned long n)
-+{
-+	return true;
-+}
-+
-+#endif /* _LINUX_LOG2_H */
-diff --git a/tools/virtio/linux/topology.h b/tools/virtio/linux/topology.h
-new file mode 100644
-index 000000000000..910794afb993
---- /dev/null
-+++ b/tools/virtio/linux/topology.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_TOPOLOGY_H
-+#define _LINUX_TOPOLOGY_H
-+
-+#include <linux/cpumask.h>
-+
-+#endif /* _LINUX_TOPOLOGY_H */
--- 
-2.25.1
+Best regards,
+Krzysztof
 
