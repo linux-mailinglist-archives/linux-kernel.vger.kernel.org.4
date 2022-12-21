@@ -2,180 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3D0652F3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BFC652F44
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234548AbiLUKTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 05:19:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S234608AbiLUKVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 05:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiLUKTd (ORCPT
+        with ESMTP id S229472AbiLUKU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 05:19:33 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7455BFF0;
-        Wed, 21 Dec 2022 02:19:32 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7BD9BFB;
-        Wed, 21 Dec 2022 11:19:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671617970;
-        bh=4tVRLsFsteeUnfyjwQCv+uDaxwbCBf1JSypzdiC6Kno=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oS4pimTQRQ2Ifs+muPC7s4eP0zqks1fjoa5KFiN5jWAYE2xvrLMWCK4LCnzbX0QrX
-         7oWQnhU8k148KYMJzfPAuRAXqbsLF0Y2Q+rWbvZWvHKH+/XGoCXxyB3ycgg8FhwhkS
-         QET0xRHCM2pE6a29q8LFDGojTtzuhUH9cTCIgZMA=
-Date:   Wed, 21 Dec 2022 12:19:25 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] USB: Improve usb_fill_* documentation
-Message-ID: <Y6LdrdQ0CDRqkTfh@pendragon.ideasonboard.com>
-References: <20221220-usb-dmadoc-v3-0-6009f4d27631@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221220-usb-dmadoc-v3-0-6009f4d27631@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Dec 2022 05:20:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9644D9FE9;
+        Wed, 21 Dec 2022 02:20:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AA066174D;
+        Wed, 21 Dec 2022 10:20:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C76C433D2;
+        Wed, 21 Dec 2022 10:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671618055;
+        bh=DvJnhNV9WpC0ryEBXj5Ow4+4ZKHs28oUPewt6p/MjKI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pkJGbZ5HH5ds2tTvxlmd8Lh5dMVoo9oOVtaJK+9Z7QnKJZRo0Z897P5v+FcOjyyMb
+         6uMkSGPNYwKfo3eBz0wxtSh8Pj9yFJZnv/5LMsDNi/Os2iM6XQkNhZp7lsAQH9xnkT
+         Jewhzzt/wAoHCgSNxsDAHNf2XXYuZnSV7f1dcu/s/oEbgZ16uIuWzFMRvexu9HwXN0
+         Zasa1NOKKmUEpFbVFPk+3VcIHKtKNNqHEe8F7PRbZDbmopIEPhvqbvqT/wDUA0eSxx
+         3LeGczYrVFB2yngu52Ux8Mp2RTOyd3+F5b292KODFYxPwidOJb85mocmjIpIbtmboB
+         D9dkq8HpvCVCQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p7wDV-00E7hv-58;
+        Wed, 21 Dec 2022 10:20:53 +0000
+Date:   Wed, 21 Dec 2022 10:20:52 +0000
+Message-ID: <86o7rxawhn.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 4/9] irqchip: irq-renesas-rzg2l: Add support for RZ/G2UL SoC
+In-Reply-To: <20221221000242.340202-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221221000242.340202-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20221221000242.340202-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, geert+renesas@glider.be, magnus.damm@gmail.com, linus.walleij@linaro.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org, biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
-
-Thank you for the patch.
-
-On Wed, Dec 21, 2022 at 11:15:14AM +0100, Ricardo Ribalda wrote:
-> Document the transfer buffer requirement. That is, the buffer must be
-> DMAble - otherwise data corruption might occur.
+On Wed, 21 Dec 2022 00:02:37 +0000,
+Prabhakar <prabhakar.csengg@gmail.com> wrote:
 > 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> The IRQC block on RZ/G2UL SoC is almost identical to one found on the
+> RZ/G2L SoC the only difference being it can support BUS_ERR_INT for
+> which it has additional registers.
+> 
+> This patch adds a new entry for "renesas,rzg2ul-irqc" compatible string
+> and now that we have interrupt-names property the driver code parses the
+> interrupts based on names and for backward compatibility we fallback to
+> parse interrupts based on index.
+> 
+> For now we will be using rzg2l_irqc_init() as a callback for RZ/G2UL SoC
+> too and in future when the interrupt handler will be registered for
+> BUS_ERR_INT we will have to implement a new callback.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+
+Since you're posting from a different address, please add a second SoB
+with your gmail address.
+
 > ---
-> USB: Improve usb_fill_* documentation
-> 
-> After trying to "cleanup" the uvc code, I was patiently explained about
-> the requirements of the urb transfer buffers.
-> 
-> Lets make this explicit, so other developers do not make the same mistake.
-> 
-> To: Bagas Sanjaya <bagasdotme@gmail.com>
-> To: Randy Dunlap <rdunlap@infradead.org>
-> To: Alan Stern <stern@rowland.harvard.edu>
-> To: Christoph Hellwig <hch@lst.de>
-> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+> v1 -> v2
+> * New patch
 > ---
-> Changes in v3:
-> - Improve commit message. Thanks Bagas!
-> - Improve field description. Thanks Alan!
-> - Link to v2: https://lore.kernel.org/r/20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org
+>  drivers/irqchip/irq-renesas-rzg2l.c | 80 ++++++++++++++++++++++++++---
+>  1 file changed, 74 insertions(+), 6 deletions(-)
 > 
-> Changes in v2:
-> - s/allocatiing/allocating/ Thanks Randy
-> - Link to v1: https://lore.kernel.org/r/20221220-usb-dmadoc-v1-0-28386d2eb6cd@chromium.org
-> ---
->  include/linux/usb.h | 27 +++++++++++++++++++++++----
->  1 file changed, 23 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 7d5325d47c45..06cde9ddca97 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -1626,14 +1626,25 @@ struct urb {
->   * @urb: pointer to the urb to initialize.
->   * @dev: pointer to the struct usb_device for this urb.
->   * @pipe: the endpoint pipe
-> - * @setup_packet: pointer to the setup_packet buffer
-> - * @transfer_buffer: pointer to the transfer buffer
-> + * @setup_packet: pointer to the setup_packet buffer. The buffer must be
-> + *	suitable for DMA.
-> + * @transfer_buffer: pointer to the transfer buffer. The buffer must be
-> + *	suitable for DMA.
->   * @buffer_length: length of the transfer buffer
->   * @complete_fn: pointer to the usb_complete_t function
->   * @context: what to set the urb context to.
->   *
->   * Initializes a control urb with the proper information needed to submit
->   * it to a device.
-> + *
-> + * The transfer buffer and the setup_packet buffer will most likely be filled
-> + * via DMA. The simplest way to get a buffer that can be DMAed to is
-> + * allocating it via kmalloc() or equivalent, even for very small buffers.
-> + * If the buffers are embedded in a bigger structure, there is a risk that
-> + * the buffer itself, the previous field and/or the next field are corrupted
+> diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
+> index 7918fe201218..5bdf0106ef51 100644
+> --- a/drivers/irqchip/irq-renesas-rzg2l.c
+> +++ b/drivers/irqchip/irq-renesas-rzg2l.c
+> @@ -299,19 +299,86 @@ static const struct irq_domain_ops rzg2l_irqc_domain_ops = {
+>  	.translate = irq_domain_translate_twocell,
+>  };
+>  
+> -static int rzg2l_irqc_parse_interrupts(struct rzg2l_irqc_priv *priv,
+> -				       struct device_node *np)
+> +static int rzg2l_irqc_parse_interrupt_to_fwspec(struct rzg2l_irqc_priv *priv,
+> +						struct device_node *np,
+> +						unsigned int index,
+> +						unsigned int fwspec_index)
+>  {
+>  	struct of_phandle_args map;
+> +	int ret;
+> +
+> +	ret = of_irq_parse_one(np, index, &map);
+> +	if (ret)
+> +		return ret;
+> +
+> +	of_phandle_args_to_fwspec(np, map.args, map.args_count,
+> +				  &priv->fwspec[fwspec_index]);
+> +
+> +	return 0;
+> +}
+> +
+> +static int rzg2l_irqc_parse_interrupt_by_name_to_fwspec(struct rzg2l_irqc_priv *priv,
+> +							struct device_node *np,
+> +							char *irq_name,
+> +							unsigned int fwspec_index)
+> +{
+> +	int index;
+> +
+> +	index = of_property_match_string(np, "interrupt-names", irq_name);
+> +	if (index < 0)
+> +		return index;
+> +
+> +	return rzg2l_irqc_parse_interrupt_to_fwspec(priv, np, index, fwspec_index);
+> +}
+> +
+> +/* Parse hierarchy domain interrupts ie only IRQ0-7 and TINT0-31 */
+> +static int rzg2l_irqc_parse_hierarchy_interrupts(struct rzg2l_irqc_priv *priv,
+> +						 struct device_node *np)
+> +{
+> +	struct property *pp;
+>  	unsigned int i;
+>  	int ret;
+>  
+> +	/*
+> +	 * first check if interrupt-names property exists if so parse them by name
+> +	 * or else parse them by index for backward compatibility.
+> +	 */
+> +	pp = of_find_property(np, "interrupt-names", NULL);
+> +	if (pp) {
+> +		char *irq_name;
+> +
+> +		/* parse IRQ0-7 */
+> +		for (i = 0; i < IRQC_IRQ_COUNT; i++) {
+> +			irq_name = kasprintf(GFP_KERNEL, "irq%d", i);
+> +			if (!irq_name)
+> +				return -ENOMEM;
+> +
+> +			ret = rzg2l_irqc_parse_interrupt_by_name_to_fwspec(priv, np, irq_name, i);
 
-s/field/fields/g
+Am I the only one that find it rather odd to construct a name from an
+index, only to get another index back?
 
-> + * due to cache incoherencies; or slowed down if they are evicted from the
-> + * cache.
-> + *
->   */
->  static inline void usb_fill_control_urb(struct urb *urb,
->  					struct usb_device *dev,
-> @@ -1658,13 +1669,17 @@ static inline void usb_fill_control_urb(struct urb *urb,
->   * @urb: pointer to the urb to initialize.
->   * @dev: pointer to the struct usb_device for this urb.
->   * @pipe: the endpoint pipe
-> - * @transfer_buffer: pointer to the transfer buffer
-> + * @transfer_buffer: pointer to the transfer buffer. The buffer must be
-> + *	suitable for DMA.
->   * @buffer_length: length of the transfer buffer
->   * @complete_fn: pointer to the usb_complete_t function
->   * @context: what to set the urb context to.
->   *
->   * Initializes a bulk urb with the proper information needed to submit it
->   * to a device.
-> + *
-> + * Please refer to usb_fill_control_urb() for a description of the
+In any case, the string stuff could be moved into
+rzg2l_irqc_parse_interrupt_by_name_to_fwspec(). Which could really do
+with a name shortening)... rzg2l_irqc_name_to_fwspec? Same thing for
+the other function (rzg2l_irqc_index_to_fwspec).
 
-I would drop "please". Same below.
-
-With or without those changes,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> + * requirements for transfer_buffer.
->   */
->  static inline void usb_fill_bulk_urb(struct urb *urb,
->  				     struct usb_device *dev,
-> @@ -1687,7 +1702,8 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
->   * @urb: pointer to the urb to initialize.
->   * @dev: pointer to the struct usb_device for this urb.
->   * @pipe: the endpoint pipe
-> - * @transfer_buffer: pointer to the transfer buffer
-> + * @transfer_buffer: pointer to the transfer buffer. The buffer must be
-> + *	suitable for DMA.
->   * @buffer_length: length of the transfer buffer
->   * @complete_fn: pointer to the usb_complete_t function
->   * @context: what to set the urb context to.
-> @@ -1697,6 +1713,9 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
->   * Initializes a interrupt urb with the proper information needed to submit
->   * it to a device.
->   *
-> + * Please refer to usb_fill_control_urb() for a description of the
-> + * requirements for transfer_buffer.
-> + *
->   * Note that High Speed and SuperSpeed(+) interrupt endpoints use a logarithmic
->   * encoding of the endpoint interval, and express polling intervals in
->   * microframes (eight per millisecond) rather than in frames (one per
-> 
-> ---
-> base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
-> change-id: 20221220-usb-dmadoc-29384acebd48
+	M.
 
 -- 
-Regards,
-
-Laurent Pinchart
+Without deviation from the norm, progress is not possible.
