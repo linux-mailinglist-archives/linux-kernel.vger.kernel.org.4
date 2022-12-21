@@ -2,92 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01266653740
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B48A653743
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiLUTyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 14:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S234606AbiLUTzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 14:55:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiLUTyQ (ORCPT
+        with ESMTP id S229968AbiLUTzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:54:16 -0500
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A2E2253C;
-        Wed, 21 Dec 2022 11:54:15 -0800 (PST)
+        Wed, 21 Dec 2022 14:55:39 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E28226AC0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:55:37 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id a1so39044edf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:55:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1671652455; x=1703188455;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=/qDSESjpblGyoZn/+vR6fT722Et90zd4A/yLUMcVyZQ=;
-  b=isZAWBBT8KYTLs96ehhLvnWSg/WolLybe1n7s6A/2lASrGyMsD4s20VF
-   LMZuvEyKg7CYT+RyNI6TnSVn+V9h4jK/GC6L+DSNb3BPfIhyS/tqv8aZU
-   RIv1Zz/bOc0k6CD9Buf+oJSy9VmkjubrVjuJNavWaSOg4x623A7ZCmAoA
-   A=;
-X-IronPort-AV: E=Sophos;i="5.96,263,1665446400"; 
-   d="scan'208";a="275994613"
-Subject: Re: [PATCH v4 1/1] i2c: designware: use casting of u64 in clock
- multiplication to avoid overflow
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-a65ebc6e.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 19:54:11 +0000
-Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-m6i4x-a65ebc6e.us-east-1.amazon.com (Postfix) with ESMTPS id 9DB8B63093;
-        Wed, 21 Dec 2022 19:54:09 +0000 (UTC)
-Received: from EX19D013UWB003.ant.amazon.com (10.13.138.111) by
- EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Wed, 21 Dec 2022 19:54:09 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D013UWB003.ant.amazon.com (10.13.138.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
- Wed, 21 Dec 2022 19:54:08 +0000
-Received: from [192.168.2.120] (10.1.212.33) by mail-relay.amazon.com
- (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Wed, 21 Dec 2022 19:54:04 +0000
-Message-ID: <4f4f7bc4-c433-61b6-3fd8-6159f89e52ab@amazon.com>
-Date:   Wed, 21 Dec 2022 21:54:03 +0200
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EDpY8eXQnR31vDv/hAEogmXTX86hvb4cFMl7BLiqYmU=;
+        b=CdojP4kOwKnkm/3tJ0fwwgiSGm2ckaeouWf4meonSAZrsGDHoQIDukZhPd4hibbAeo
+         DX8YE2PInUDbz8/HiRNou464YkTmN/upcjWmK0cwnnxP983cv4wBxY8LfEHOM7j91rC6
+         in8oT77Q8VmARZ5yd+wCCP9ZQvJhlyqr0Msdw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EDpY8eXQnR31vDv/hAEogmXTX86hvb4cFMl7BLiqYmU=;
+        b=b/yzzt1IGtnnIcZOtEz1zgZltWS5hdbtbmWj61rWjojN9EEhZi6CzahcxY+ld2i0Ww
+         brWHKHX0wS7ZYFpW2OtfsTcTl9CseBp5mHT9EV9CycrFzo+ehebVeb4rDwvNHpLDG+aK
+         PP0m017x3u3bzUT56Pc5z51Ow+M2jpWELwaYfK7rcVaEKb9l7V4s8b6E4w+AfkQa45NT
+         WypGQFmEn3GL8/2iTTBXYdXrvHk3WDCpBH3hRrKeUneLAjG4bUP2lUYzsaktpDDJPD2v
+         Yaz444HCD3PUxyNrO7HLdTTyZUZi8TkYLwIVyCvwr+QTGVuG4OPD8nYbjx9y/JkJdA+8
+         U0zQ==
+X-Gm-Message-State: AFqh2kr7GL8C+rzikkWaiwxWzlhcXz1zlNZrqrXxYcIbEsSesN6OfFig
+        zMq2oMYYm/R+HndTSTZmc48APQ==
+X-Google-Smtp-Source: AMrXdXtbeSysvrQnX4J/n0BRL+ui9qtOJwAQQ8vqXyIVf/1zOytK3Pvkff/VAPOVp20LJDth2bpnZA==
+X-Received: by 2002:a05:6402:558:b0:47e:5b70:de7b with SMTP id i24-20020a056402055800b0047e5b70de7bmr1961383edx.19.1671652535931;
+        Wed, 21 Dec 2022 11:55:35 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id q22-20020a17090676d600b0080c433a9eeesm5586005ejn.182.2022.12.21.11.55.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 11:55:35 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 21 Dec 2022 20:55:29 +0100
+Subject: [PATCH] bpf: Remove unused field initialization
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <wsa@kernel.org>, <jarkko.nikula@linux.intel.com>,
-        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
-        <linus.walleij@linaro.org>, <ben-linux@fluff.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <farbere@amazon.com>, <itamark@amazon.com>,
-        Lareine Khawaly <lareine@amazon.com>
-References: <20221220164806.77576-1-hhhawa@amazon.com>
- <Y6Hs1xwB45K3Ufb8@smile.fi.intel.com>
- <cc16a489-f711-0c54-8576-ef7974b3cb79@amazon.com>
- <Y6ILydYEWzJdzwBJ@smile.fi.intel.com> <Y6IMhZsbOk/J9xZB@smile.fi.intel.com>
- <42585223-2d92-5a9e-3707-d5e70fe6937b@amazon.com>
- <Y6M7hHVcEEyqg/b2@smile.fi.intel.com>
-From:   "Hawa, Hanna" <hhhawa@amazon.com>
-In-Reply-To: <Y6M7hHVcEEyqg/b2@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-13.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-Id: <20221221-bpf-syscall-v1-0-9550f5f2c3fc@chromium.org>
+To:     John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@google.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1511; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=oJ2oob+OSIF7kWeCn8kKWNN2TjOq3zxbD7ZuB1oIGg8=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjo2Sz0BzcDBqxuAFxDAOjbqq++6jm3aPwxe7NWrxe
+ 4+2PVLiJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY6NkswAKCRDRN9E+zzrEiOI2D/
+ 9AzaS8R53TwYp+QQybEExGc3dyoRGwGB4fBDXlti82+f7dTgL4K8OKqpu27Hmp6YEamzToSvtLUKt+
+ Xf5DGm0ejHzPRyee3gq7KX4ZSKSZUacHBuBidhpuxYBwA/k1/SSYt0AVIzyKBD3l7eHN6rR1561yMr
+ 6Jfbo+WuFww2tksLHN6CnI1thn2xGGUYdo6XzdjTuG7F1BDP9sGDdsVdZQwTGZZpYWgoO9lOpwgq3d
+ FWFYmZf9hNMuuTLk9CbpUUsf+1zaS4qzaCUwL9/0ak5YhZPyquE2xIqLUIWk99vzCcDmLyed5BKSd2
+ xFMXjsjPyk1SDZgYIvkeznWa1SKGkAPPy9i8IyFSKVj4A2tO2wKLPdqfEHg5yhf8xuuTcSh3VIknnV
+ PLGCB1oCQMPUJH8SzxRxhJ8OS+F+ZXc2zEmdRj+BIofYQs0kk/WccH59zj3JA2wmlaFPg+H8a+tImX
+ 1tvBc4I+WPb74PAbUJj/5CQjltv+iJk9GzHXIE7UH/vzoj7loGEHIdsY2cmuoPaAh9fBHyN24fCo+a
+ LnjWut+09mykw2hRk02dDj/hXChQImXxZbTVhtoprhdNOy4DpgREOJDGvlVfWfo8kmf54qSe4e3uON
+ lwQouHwYJjhYuCeycqW11pXWW9gleXMNUNVTiFmtoO/EtU00Nvb8tpyZHzTA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Maxlen is used by standard proc_handlers such as proc_dointvec(), but in this
+case we have our own proc_handler. Remove the initialization.
 
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+bpf: Trivial remove of unitialised field.
 
-On 12/21/2022 6:59 PM, Andy Shevchenko wrote:
->> Do you want this change in the same patch? i don't think it's related here..
->> I can push separated change
-> Up to you. If you think it's not suitable, then don't change.
+I have inspired myself in your code and heritaded this bug :). Fixing this
+here so none else makes the same mistake.
 
-Will push as separated patch.
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yhs@fb.com>
+To: KP Singh <kpsingh@kernel.org>
+To: Stanislav Fomichev <sdf@google.com>
+To: Hao Luo <haoluo@google.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ kernel/bpf/syscall.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks,
-Hanna
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 35972afb6850..8e55456bd648 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5319,7 +5319,6 @@ static struct ctl_table bpf_syscall_table[] = {
+ 	{
+ 		.procname	= "bpf_stats_enabled",
+ 		.data		= &bpf_stats_enabled_key.key,
+-		.maxlen		= sizeof(bpf_stats_enabled_key),
+ 		.mode		= 0644,
+ 		.proc_handler	= bpf_stats_handler,
+ 	},
+
+---
+base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+change-id: 20221221-bpf-syscall-58d1ac3f817a
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
