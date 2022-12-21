@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E498652BDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D436D652BDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbiLUDiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 22:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S234396AbiLUDnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 22:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiLUDiF (ORCPT
+        with ESMTP id S229448AbiLUDnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 22:38:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF7A1B1D2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 19:38:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 200A0616C7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 03:38:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB225C433EF;
-        Wed, 21 Dec 2022 03:38:01 +0000 (UTC)
-Date:   Tue, 20 Dec 2022 22:37:59 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alessandro Carminati <acarmina@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [GIT PULL] tracing/rv: Move monitor structure in rodata
-Message-ID: <20221220223759.7ed245ca@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 20 Dec 2022 22:43:08 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5A21EAD6;
+        Tue, 20 Dec 2022 19:43:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1671594180;
+        bh=AwTHZsJE1OHmZw07jiGlqjcJAYhW0GUTvOa719wrfcw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=g5Egj5vaNGMMyKDGyVK12hdPytUVLvpAYJlg5fhmDr2lN1H0B2+29ItSjzJA5gQL/
+         3zF6gYuGrb6EJrrcOwre55oGT4vYz0Nwp2P3nzh49RLBim0oOTnWJl2CxwovVpu246
+         SzK9ScSOWWln1fhaZulfuvND4o4PIEWv61jZRAgouqK0YOYwurQ3dvXLUuKx5TWk8q
+         MQhX4hxvIp5kL0WQw702zFsQoL2f+067xBRGvt6xhctB+hRRHOCbgLuq9rFd2L5Dmu
+         nk7beGL+LYfF7uy65mU2ZbmQm7QUfbIRpp8GZ3c5TiDIr/N52N7c+qiiovTivU20KM
+         w64WGCwJw99zw==
+Received: from [10.1.0.30] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NcK5w5GFlzbvj;
+        Tue, 20 Dec 2022 22:43:00 -0500 (EST)
+Message-ID: <f4199d1f-306c-681f-8bb9-26d66ecf5121@efficios.com>
+Date:   Tue, 20 Dec 2022 22:43:25 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Content-Language: en-US
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <20221220140714.GB22763@lothringen>
+ <CA83E649-8C79-4D39-9BFE-BBEF95968B98@joelfernandes.org>
+ <20221220224459.GA25175@lothringen>
+ <CAEXW_YSAv+MzZoW9RK9H3E6DAyZH+wB=4bMy5nXTOExSwgSwAg@mail.gmail.com>
+ <20221221004957.GA29021@lothringen> <20221221005858.GA29316@lothringen>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221221005858.GA29316@lothringen>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-12-20 19:58, Frederic Weisbecker wrote:
+> On Wed, Dec 21, 2022 at 01:49:57AM +0100, Frederic Weisbecker wrote:
+>> On Tue, Dec 20, 2022 at 07:15:00PM -0500, Joel Fernandes wrote:
+>>> On Tue, Dec 20, 2022 at 5:45 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+>>> Agreed about (1).
+>>>
+>>>> _ In (2), E pairs with the address-dependency between idx and lock_count.
+>>>
+>>> But that is not the only reason. If that was the only reason for (2),
+>>> then there is an smp_mb() just before the next-scan post-flip before
+>>> the lock counts are read.
+>>
+>> The post-flip barrier makes sure the new idx is visible on the next READER's
+>> turn, but it doesn't protect against the fact that "READ idx then WRITE lock[idx]"
+>> may appear unordered from the update side POV if there is no barrier between the
+>> scan and the flip.
+>>
+>> If you remove the smp_mb() from the litmus test I sent, things explode.
+> 
+> Or rather, look at it the other way, if there is no barrier between the lock
+> scan and the index flip (E), then the index flip can appear to be written before the
+> lock is read. Which means you may start activating the index before you finish
+> reading it (at least it appears that way from the readers pont of view).
 
-Linus,
+Considering that you can have pre-existing readers from arbitrary index 
+appearing anywhere in the grace period (because a reader can fetch the
+index and be preempted for an arbitrary amount of time before 
+incrementing the lock count), the grace period algorithm needs to deal 
+with the fact that a newcoming reader can appear in a given index either 
+before or after the flip.
 
-I missed this minor hardening of the kernel in the first pull.
+I don't see how flipping the index before or after loading the 
+unlock/lock values would break anything (except for unlikely counter 
+overflow situations as previously discussed).
 
-Tracing fix for 6.2:
+Thanks,
 
-- Make monitor structures read only
+Mathieu
 
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
-Please pull the latest trace-v6.2-1 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-trace-v6.2-1
-
-Tag SHA1: cf64258c2d5be026d8f6ec5b16d32e90ef3e2990
-Head SHA1: bfa87ac86ce9ff879c5ac49bf09c3999859a8968
-
-
-Alessandro Carminati (1):
-      rv/monitors: Move monitor structure in rodata
-
-----
- kernel/trace/rv/monitors/wip/wip.h   | 2 +-
- kernel/trace/rv/monitors/wwnr/wwnr.h | 2 +-
- tools/verification/dot2/dot2c.py     | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
----------------------------
-commit bfa87ac86ce9ff879c5ac49bf09c3999859a8968
-Author: Alessandro Carminati <acarmina@redhat.com>
-Date:   Tue Nov 22 18:36:48 2022 +0100
-
-    rv/monitors: Move monitor structure in rodata
-    
-    It makes sense to move the important monitor structure into rodata to
-    prevent accidental structure modification.
-    
-    Link: https://lkml.kernel.org/r/20221122173648.4732-1-acarmina@redhat.com
-    
-    Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
-    Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-    Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-diff --git a/kernel/trace/rv/monitors/wip/wip.h b/kernel/trace/rv/monitors/wip/wip.h
-index dacc37b62a2c..2e373f2c65ed 100644
---- a/kernel/trace/rv/monitors/wip/wip.h
-+++ b/kernel/trace/rv/monitors/wip/wip.h
-@@ -27,7 +27,7 @@ struct automaton_wip {
- 	bool final_states[state_max_wip];
- };
- 
--static struct automaton_wip automaton_wip = {
-+static const struct automaton_wip automaton_wip = {
- 	.state_names = {
- 		"preemptive",
- 		"non_preemptive"
-diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.h b/kernel/trace/rv/monitors/wwnr/wwnr.h
-index 118e576b91b4..d0d9c4b8121b 100644
---- a/kernel/trace/rv/monitors/wwnr/wwnr.h
-+++ b/kernel/trace/rv/monitors/wwnr/wwnr.h
-@@ -27,7 +27,7 @@ struct automaton_wwnr {
- 	bool final_states[state_max_wwnr];
- };
- 
--static struct automaton_wwnr automaton_wwnr = {
-+static const struct automaton_wwnr automaton_wwnr = {
- 	.state_names = {
- 		"not_running",
- 		"running"
-diff --git a/tools/verification/dot2/dot2c.py b/tools/verification/dot2/dot2c.py
-index be8a364a469b..87d8a1e1470c 100644
---- a/tools/verification/dot2/dot2c.py
-+++ b/tools/verification/dot2/dot2c.py
-@@ -111,7 +111,7 @@ class Dot2c(Automata):
- 
-     def format_aut_init_header(self):
-         buff = []
--        buff.append("static struct %s %s = {" % (self.struct_automaton_def, self.var_automaton_def))
-+        buff.append("static const struct %s %s = {" % (self.struct_automaton_def, self.var_automaton_def))
-         return buff
- 
-     def __get_string_vector_per_line_content(self, buff):
