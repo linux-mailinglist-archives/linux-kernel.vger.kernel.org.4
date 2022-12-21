@@ -2,272 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD7C65335F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C13653376
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbiLUP2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 10:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S234806AbiLUPfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 10:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbiLUP0Z (ORCPT
+        with ESMTP id S234739AbiLUPes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 10:26:25 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA3A24F1E
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:25:58 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id d20so22557274edn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:25:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xnuTWgs891MmWmFfR4Qv/YHEM/0HR/0MI73lfSbcCY4=;
-        b=aDBvkMWROJJ1SF+9K9XlqbliT77HqNm+Vg5LPrt86sC4Ox5IwW9S7z2MqBRFrwymjk
-         x7HxUiz5K3uaKEspxe6fxE7SNlrdB/bWXv09FrzCMWHgpVAYsOeKjOEVeqtMjSWF3Yg8
-         WX2sngaQTsSIA7AJSuQu38M1rxX8VC6NEPdDFqV3PBRoEvM/4MCvqu7tBTjx93bUpU91
-         rBt88EiXsD8zuGQ1GhkgCceg4wn015vd7Qw/8VgCB2nLuZxCurot8eNjf4nQErgTCcOP
-         UgvKDKyLu4ksD/vcMo6gQ8mqmaGNQHys7TstbQ9HsR44nEQdz+njgtBBNZ6oQGh2zCUY
-         avoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xnuTWgs891MmWmFfR4Qv/YHEM/0HR/0MI73lfSbcCY4=;
-        b=O+bZi0GFH+srfKDZjM/52s9FGKrTj3MwbyV11WNb6omex5iQugR1yc7VDrneX8GCUM
-         nTvUzf9watKrfnJYFQ0Pszpsy5g8VmmzZk/X1BrgX9pnlNV5AgLyme4HXBMd+ePIAvm+
-         HU9gcyyT3WyCGHHtVzarcHLipRQrOyI4GSal+y9aHbY6DHXOgFQ2GUyeFA1xLzGyvxSY
-         0wzzGDzK8SU8czUS4/q1I+c2xOcbnQtu2j80DShuI48pFDTLwU7DEmvMvXyWKOJnYfd8
-         XF5mLQkMPndb/r3rGBUfCj6YW2VOKW/KLQM2sW/eG0IV/zxdxeHZT/XSVd6yzuz2YWt0
-         xVQg==
-X-Gm-Message-State: AFqh2kqwK04EAIGOa/Cr3yx+rsb15eRpp6EJg16cXjoyIZQr5qbv0RPn
-        JWn/9P9tqwYB3MrPU0hSlvn1eA==
-X-Google-Smtp-Source: AMrXdXvXBnVEANUHuH8J6f3JaGNS3lJlvVbNU9b6rlvuhc1hs1KbMNUqeWvEeHdBjrov1egw19JJfA==
-X-Received: by 2002:a05:6402:14d8:b0:45c:835b:944f with SMTP id f24-20020a05640214d800b0045c835b944fmr1651513edx.11.1671636358062;
-        Wed, 21 Dec 2022 07:25:58 -0800 (PST)
-Received: from blmsp.fritz.box ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
-        by smtp.gmail.com with ESMTPSA id n19-20020aa7c793000000b0045cf4f72b04sm7105428eds.94.2022.12.21.07.25.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 07:25:57 -0800 (PST)
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 18/18] can: m_can: Implement transmit submission coalescing
-Date:   Wed, 21 Dec 2022 16:25:37 +0100
-Message-Id: <20221221152537.751564-19-msp@baylibre.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221221152537.751564-1-msp@baylibre.com>
-References: <20221221152537.751564-1-msp@baylibre.com>
+        Wed, 21 Dec 2022 10:34:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21A428746
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:29:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671636582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RL570OHmPW201fZSHberCpl3hdNr7vUODND47Csuw3k=;
+        b=FqvUAbWswhK1a2zG4D7fWmmBjxaXW3/GRm/t680eoV6xs3nPLLT7i60fQwj2u2N2oIl/M+
+        6/5S3unbnT9dhphzPjw2307bsKTEj6EqA+B8sghZr9kbg15KqE4+CYURXh6GEcirGKfk+a
+        XIg9qD9OD+qSkDlfsqObW208RKoA198=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-674-kk_9dkzeN8exWPYguzi-Cg-1; Wed, 21 Dec 2022 10:26:28 -0500
+X-MC-Unique: kk_9dkzeN8exWPYguzi-Cg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F47D18A64E0;
+        Wed, 21 Dec 2022 15:26:28 +0000 (UTC)
+Received: from rules.brq.redhat.com (ovpn-208-25.brq.redhat.com [10.40.208.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3E12340C2064;
+        Wed, 21 Dec 2022 15:26:26 +0000 (UTC)
+From:   Vladis Dronov <vdronov@redhat.com>
+To:     nstange@suse.de
+Cc:     davem@davemloft.net, herbert@gondor.apana.org.au,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        smueller@chronox.de, vdronov@redhat.com
+Subject: [PATCH 6/6] crypto: xts - drop redundant xts key check
+Date:   Wed, 21 Dec 2022 16:26:13 +0100
+Message-Id: <20221221152613.8655-1-vdronov@redhat.com>
+In-Reply-To: <20221108142025.13461-1-nstange@suse.de>
+References: <20221108142025.13461-1-nstange@suse.de>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-m_can supports submitting mulitple transmits with one register write.
-This is an interesting option to reduce the number of SPI transfers for
-peripheral chips.
+xts_fallback_setkey() in xts_aes_set_key() will now enforce key size
+rule in FIPS mode when setting up the fallback algorithm keys, which
+makes the check in xts_aes_set_key() redundant or unreachable. So just
+drop this check.
 
-The m_can_tx_op is extended with a bool that signals if it is the last
-transmission and the submit should be executed immediately.
+xts_fallback_setkey() now makes a key size check in xts_verify_key():
 
-The worker then writes the skb to the FIFO and submits it only if the
-submit bool is set. If it isn't set, the worker will write the next skb
-which is waiting in the workqueue to the FIFO, etc.
+xts_fallback_setkey()
+  crypto_skcipher_setkey() [ skcipher_setkey_unaligned() ]
+    cipher->setkey() { .setkey = xts_setkey }
+      xts_setkey()
+        xts_verify_key()
 
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Signed-off-by: Vladis Dronov <vdronov@redhat.com>
 ---
+ arch/s390/crypto/aes_s390.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Notes:
-    Notes:
-    - I ran into lost messages in the receive FIFO when using this
-      implementation. I guess this only shows up with my test setup in
-      loopback mode and maybe not enough CPU power.
-    - I put this behind the tx-frames ethtool coalescing option as we do
-      wait before submitting packages but it is something different than the
-      tx-frames-irq option. I am not sure if this is the correct option,
-      please let me know.
-
- drivers/net/can/m_can/m_can.c | 56 ++++++++++++++++++++++++++++++++---
- drivers/net/can/m_can/m_can.h |  6 ++++
- 2 files changed, 58 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 719a7dfe154a..9431735fb887 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1457,6 +1457,9 @@ static void m_can_start(struct net_device *dev)
- 	/* basic m_can configuration */
- 	m_can_chip_config(dev);
+diff --git a/arch/s390/crypto/aes_s390.c b/arch/s390/crypto/aes_s390.c
+index 526c3f40f6a2..c773820e4af9 100644
+--- a/arch/s390/crypto/aes_s390.c
++++ b/arch/s390/crypto/aes_s390.c
+@@ -398,10 +398,6 @@ static int xts_aes_set_key(struct crypto_skcipher *tfm, const u8 *in_key,
+ 	if (err)
+ 		return err;
  
-+	netdev_queue_set_dql_min_limit(netdev_get_tx_queue(cdev->net, 0),
-+				       cdev->tx_max_coalesced_frames);
-+
- 	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
- 
- 	m_can_enable_all_interrupts(cdev);
-@@ -1764,8 +1767,13 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
- 		 */
- 		can_put_echo_skb(skb, dev, putidx, frame_len);
- 
--		/* Enable TX FIFO element to start transfer  */
--		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
-+		if (cdev->is_peripheral) {
-+			/* Delay enabling TX FIFO element */
-+			cdev->tx_peripheral_submit |= BIT(putidx);
-+		} else {
-+			/* Enable TX FIFO element to start transfer  */
-+			m_can_write(cdev, M_CAN_TXBAR, BIT(putidx));
-+		}
- 		cdev->tx_fifo_putidx = (++cdev->tx_fifo_putidx >= cdev->can.echo_skb_max ?
- 					0 : cdev->tx_fifo_putidx);
- 	}
-@@ -1778,6 +1786,17 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev,
- 	return NETDEV_TX_BUSY;
- }
- 
-+static void m_can_tx_submit(struct m_can_classdev *cdev)
-+{
-+	if (cdev->version == 30)
-+		return;
-+	if (!cdev->is_peripheral)
-+		return;
-+
-+	m_can_write(cdev, M_CAN_TXBAR, cdev->tx_peripheral_submit);
-+	cdev->tx_peripheral_submit = 0;
-+}
-+
- static void m_can_tx_work_queue(struct work_struct *ws)
- {
- 	struct m_can_tx_op *op = container_of(ws, struct m_can_tx_op, work);
-@@ -1786,11 +1805,15 @@ static void m_can_tx_work_queue(struct work_struct *ws)
- 
- 	op->skb = NULL;
- 	m_can_tx_handler(cdev, skb);
-+	if (op->submit)
-+		m_can_tx_submit(cdev);
- }
- 
--static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb)
-+static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb,
-+			       bool submit)
- {
- 	cdev->tx_ops[cdev->next_tx_op].skb = skb;
-+	cdev->tx_ops[cdev->next_tx_op].submit = submit;
- 	queue_work(cdev->tx_wq, &cdev->tx_ops[cdev->next_tx_op].work);
- 
- 	++cdev->next_tx_op;
-@@ -1801,6 +1824,8 @@ static void m_can_tx_queue_skb(struct m_can_classdev *cdev, struct sk_buff *skb)
- static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
- 					       struct sk_buff *skb)
- {
-+	bool submit;
-+
- 	if (cdev->can.state == CAN_STATE_BUS_OFF) {
- 		m_can_clean(cdev->net);
- 		return NETDEV_TX_OK;
-@@ -1818,7 +1843,15 @@ static netdev_tx_t m_can_start_peripheral_xmit(struct m_can_classdev *cdev,
- 	}
- 	spin_unlock(&cdev->tx_handling_spinlock);
- 
--	m_can_tx_queue_skb(cdev, skb);
-+	++cdev->nr_txs_without_submit;
-+	if (cdev->nr_txs_without_submit >= cdev->tx_max_coalesced_frames ||
-+	    !netdev_xmit_more()) {
-+		cdev->nr_txs_without_submit = 0;
-+		submit = true;
-+	} else {
-+		submit = false;
-+	}
-+	m_can_tx_queue_skb(cdev, skb, submit);
- 
- 	return NETDEV_TX_OK;
- }
-@@ -1954,6 +1987,7 @@ static int m_can_get_coalesce(struct net_device *dev,
- 
- 	ec->rx_max_coalesced_frames_irq = cdev->rx_max_coalesced_frames_irq;
- 	ec->rx_coalesce_usecs_irq = cdev->rx_coalesce_usecs_irq;
-+	ec->tx_max_coalesced_frames = cdev->tx_max_coalesced_frames;
- 	ec->tx_max_coalesced_frames_irq = cdev->tx_max_coalesced_frames_irq;
- 	ec->tx_coalesce_usecs_irq = cdev->tx_coalesce_usecs_irq;
- 
-@@ -1998,6 +2032,18 @@ static int m_can_set_coalesce(struct net_device *dev,
- 		netdev_err(dev, "tx-frames-irq and tx-usecs-irq can only be set together\n");
- 		return -EINVAL;
- 	}
-+	if (ec->tx_max_coalesced_frames > cdev->mcfg[MRAM_TXE].num) {
-+		netdev_err(dev, "tx-frames (%u) greater than the TX event FIFO (%u)\n",
-+			   ec->tx_max_coalesced_frames,
-+			   cdev->mcfg[MRAM_TXE].num);
-+		return -EINVAL;
-+	}
-+	if (ec->tx_max_coalesced_frames > cdev->mcfg[MRAM_TXB].num) {
-+		netdev_err(dev, "tx-frames (%u) greater than the TX FIFO (%u)\n",
-+			   ec->tx_max_coalesced_frames,
-+			   cdev->mcfg[MRAM_TXB].num);
-+		return -EINVAL;
-+	}
- 	if (ec->rx_coalesce_usecs_irq != 0 && ec->tx_coalesce_usecs_irq != 0 &&
- 	    ec->rx_coalesce_usecs_irq != ec->tx_coalesce_usecs_irq) {
- 		netdev_err(dev, "rx-usecs-irq (%u) needs to be equal to tx-usecs-irq (%u) if both are enabled\n",
-@@ -2008,6 +2054,7 @@ static int m_can_set_coalesce(struct net_device *dev,
- 
- 	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
- 	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
-+	cdev->tx_max_coalesced_frames = ec->tx_max_coalesced_frames;
- 	cdev->tx_max_coalesced_frames_irq = ec->tx_max_coalesced_frames_irq;
- 	cdev->tx_coalesce_usecs_irq = ec->tx_coalesce_usecs_irq;
- 
-@@ -2025,6 +2072,7 @@ static const struct ethtool_ops m_can_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS_IRQ |
- 		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ |
- 		ETHTOOL_COALESCE_TX_USECS_IRQ |
-+		ETHTOOL_COALESCE_TX_MAX_FRAMES |
- 		ETHTOOL_COALESCE_TX_MAX_FRAMES_IRQ,
- 	.get_ts_info = ethtool_op_get_ts_info,
- 	.get_coalesce = m_can_get_coalesce,
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index adbd4765accc..40d90016285b 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -74,6 +74,7 @@ struct m_can_tx_op {
- 	struct m_can_classdev *cdev;
- 	struct work_struct work;
- 	struct sk_buff *skb;
-+	bool submit;
- };
- 
- struct m_can_classdev {
-@@ -103,6 +104,7 @@ struct m_can_classdev {
- 	u32 active_interrupts;
- 	u32 rx_max_coalesced_frames_irq;
- 	u32 rx_coalesce_usecs_irq;
-+	u32 tx_max_coalesced_frames;
- 	u32 tx_max_coalesced_frames_irq;
- 	u32 tx_coalesce_usecs_irq;
- 
-@@ -117,6 +119,10 @@ struct m_can_classdev {
- 	int nr_tx_ops;
- 	int next_tx_op;
- 
-+	int nr_txs_without_submit;
-+	/* bitfield of fifo elements that will be submitted together */
-+	u32 tx_peripheral_submit;
-+
- 	struct mram_cfg mcfg[MRAM_CFG_NUM];
- };
- 
+-	/* In fips mode only 128 bit or 256 bit keys are valid */
+-	if (fips_enabled && key_len != 32 && key_len != 64)
+-		return -EINVAL;
+-
+ 	/* Pick the correct function code based on the key length */
+ 	fc = (key_len == 32) ? CPACF_KM_XTS_128 :
+ 	     (key_len == 64) ? CPACF_KM_XTS_256 : 0;
 -- 
-2.38.1
+2.37.2
 
