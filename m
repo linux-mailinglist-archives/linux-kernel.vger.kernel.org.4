@@ -2,205 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8AE6534E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D886534EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234505AbiLURQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S234812AbiLURST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234842AbiLURQD (ORCPT
+        with ESMTP id S234800AbiLURRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:16:03 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D02213F5E;
-        Wed, 21 Dec 2022 09:15:53 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLFsCh4010831;
-        Wed, 21 Dec 2022 17:15:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=1oxQmQwiIenoFfxBXVP/PxDgwVG72FR62Q+9mRgzxps=;
- b=Z8ObkR+wJaOsGV3+N4M4pUt3zlAz45cFfkX0nlySOZ4nuYIMYbfW4duGCgUHF/S8aRzZ
- uO+MGXDBwxDxGsn6PrwogMsXSr9KAYDzfnk/xms/MRUmx2qD9Uxx+qqUBH4kTvdGoq1j
- SKe18fgfFhPaOETT9RiR4CfyffVD3QhUjZj+KQVPZPqUVzuPmCODr5CQoQvDyPQOsOOy
- +ELK1dowxJurCFuVI8/YxZEplRNwR/CE8WSk6A+EhCd98u9vjsnSLQtRd7sNEIAKHAkw
- L9+nB/zJ6AVrcTbK5alBMXtb6Me1sCEMGkOoMXzeX43h9/lLd5q3REOjGn514ljZD7rr uQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm3cjrdwm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 17:15:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLHFcnw003686
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 17:15:38 GMT
-Received: from [10.216.38.32] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 21 Dec
- 2022 09:15:33 -0800
-Message-ID: <84ab14d8-8177-a921-7ae2-7d05248a190b@quicinc.com>
-Date:   Wed, 21 Dec 2022 22:45:29 +0530
+        Wed, 21 Dec 2022 12:17:48 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8BC1573F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:16:54 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id i20so14141784qtw.9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:16:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kB6hFtCRIfVThHjkWb+E2PQntic6R9fKZViI8BQpJ9Y=;
+        b=Myc8ct4l9mrmgL8s4mKOi8PHj3FPFp4bmh5udjz/p40a5SnqSGiuluLOsVJnMth318
+         cuTvtq4VKpNYGjRKVj++VXwKigBw12y8RDQl2ufFxjDDeT7rLFrbTeGRVzpwSPes2UBz
+         KcRFG8NPmM+XShEskb5Qa8XCC72wt5dpJXORM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kB6hFtCRIfVThHjkWb+E2PQntic6R9fKZViI8BQpJ9Y=;
+        b=QvMcJcDPoZnzRhJ8mM9+w+Itr2l8Bws6or8qiSDOHf2SikqSps8Wa1sWEcm6kJ7efB
+         jmHE6JEMeR8x2vyJinV6bHwK1g+GLhmyRim8KXiJJ64MWiKo1+jBydKRRN67+uhf+Hl8
+         h9WvCzdx3r00jp9F5wK5BZ0+yuDU3eEjAOwHmKbLwIecsIAbMw17C5D4Cfmjd2kAGGtw
+         c/Fj1EdlbJjD0qISUrbArE0VCNrc0QXo71eHkUcXmDKBf9CXqq6zTi2SA+Tg29veyrjo
+         63jQ71hfSUy8jvN2pUwqpYEors4YkqjwziDYXPaNrvl0Qdwpfm7KMkQrK5Fcu7qVLFef
+         iVaQ==
+X-Gm-Message-State: AFqh2kraPt1phpRxSX3lVF2y5iS4HL2bLOeZGkuDtJKSP+nnrBIldZ5A
+        YQIhgwo7XmP/CBdZK9sbmN0xmIE6Gif0PDjT
+X-Google-Smtp-Source: AMrXdXuTGt9rztlxL6+RfZYtNUN1/P/jAtcqxBZXEcr2md1hcz5XpHwxIvKvAfJr7JEitQAJ0ZNcbg==
+X-Received: by 2002:a05:622a:1927:b0:3a7:ec54:cfa2 with SMTP id w39-20020a05622a192700b003a7ec54cfa2mr2771720qtc.56.1671643013297;
+        Wed, 21 Dec 2022 09:16:53 -0800 (PST)
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com. [209.85.222.178])
+        by smtp.gmail.com with ESMTPSA id fb24-20020a05622a481800b003a6a4744432sm9477923qtb.87.2022.12.21.09.16.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 09:16:52 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id k2so7083831qkk.7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:16:51 -0800 (PST)
+X-Received: by 2002:a37:a93:0:b0:6ff:812e:a82f with SMTP id
+ 141-20020a370a93000000b006ff812ea82fmr83224qkk.336.1671643011317; Wed, 21 Dec
+ 2022 09:16:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3 1/5] PM: domains: Allow a genpd consumer to require a
- synced power off
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-References: <1671522257-38778-1-git-send-email-quic_akhilpo@quicinc.com>
- <20221220131255.v3.1.I3e6b1f078ad0f1ca9358c573daa7b70ec132cdbe@changeid>
- <CAPDyKFr6Hf5gbJ9T9scYqDrg9tmKmVAm=h1J7r3GZzcogk5HpQ@mail.gmail.com>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <CAPDyKFr6Hf5gbJ9T9scYqDrg9tmKmVAm=h1J7r3GZzcogk5HpQ@mail.gmail.com>
+References: <20221220203022.1084532-1-kuba@kernel.org>
+In-Reply-To: <20221220203022.1084532-1-kuba@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 21 Dec 2022 09:16:35 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wg-W+0gh-XeUrN409RvdOO=VpcWiiPUNm2=Jru5bKWRDQ@mail.gmail.com>
+Message-ID: <CAHk-=wg-W+0gh-XeUrN409RvdOO=VpcWiiPUNm2=Jru5bKWRDQ@mail.gmail.com>
+Subject: Re: [PULL] Networking for v6.2-rc1
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: okB0CZmVtG-v0eCEsgLc9zJvsRiBbtBG
-X-Proofpoint-ORIG-GUID: okB0CZmVtG-v0eCEsgLc9zJvsRiBbtBG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-21_10,2022-12-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- impostorscore=0 spamscore=0 phishscore=0 clxscore=1015 priorityscore=1501
- suspectscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212210144
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/2022 8:13 PM, Ulf Hansson wrote:
-> On Tue, 20 Dec 2022 at 08:44, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->> From: Ulf Hansson <ulf.hansson@linaro.org>
->>
->> Some genpd providers doesn't ensure that it has turned off at hardware.
->> This is fine until the consumer really requires during some special
->> scenarios that the power domain collapse at hardware before it is
->> turned ON again.
->>
->> An example is the reset sequence of Adreno GPU which requires that the
->> 'gpucc cx gdsc' power domain should move to OFF state in hardware at
->> least once before turning in ON again to clear the internal state.
->>
->> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->> ---
->>
->> (no changes since v2)
->>
->> Changes in v2:
->> - Minor formatting fix
->>
->>  drivers/base/power/domain.c | 23 +++++++++++++++++++++++
->>  include/linux/pm_domain.h   |  5 +++++
->>  2 files changed, 28 insertions(+)
->>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index 967bcf9d415e..53524a102321 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -519,6 +519,28 @@ ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
->>  }
->>  EXPORT_SYMBOL_GPL(dev_pm_genpd_get_next_hrtimer);
->>
->> +/*
->> + * dev_pm_genpd_synced_poweroff - Next power off should be synchronous
->> + *
->> + * @dev: A device that is attached to the genpd.
->> + *
->> + * Allows a consumer of the genpd to notify the provider that the next power off
->> + * should be synchronous.
-> Nitpick; similar to other dev_pm_genpd_* function-descriptions, I
-> think it's important to add the below information.
+On Tue, Dec 20, 2022 at 12:30 PM Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> "It is assumed that the users guarantee that the genpd wouldn't be
-> detached while this routine is getting called."
+> Traffic is winding down significantly so let us pass our fixes to you
+> earlier than the usual Thu schedule.
 >
-> Can you please add that?
-Thanks. Fixed in revision 4.
+> We have a fix for the BPF issue we were looking at before 6.1 final,
+> no surprises there. RxRPC fixes were merged relatively late so there's
+> an outpour of follow ups. Last one worth mentioning is the tree-wide
+> fix for network file systems / in-tree socket users, to prevent nested
+> networking calls from corrupting socket memory allocator.
 
--Akhil.
->
->> + */
->> +void dev_pm_genpd_synced_poweroff(struct device *dev)
->> +{
->> +       struct generic_pm_domain *genpd;
->> +
->> +       genpd = dev_to_genpd_safe(dev);
->> +       if (!genpd)
->> +               return;
->> +
->> +       genpd_lock(genpd);
->> +       genpd->synced_poweroff = true;
->> +       genpd_unlock(genpd);
->> +}
->> +EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
->> +
->>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->>  {
->>         unsigned int state_idx = genpd->state_idx;
->> @@ -562,6 +584,7 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->>
->>  out:
->>         raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_ON, NULL);
->> +       genpd->synced_poweroff = false;
->>         return 0;
->>  err:
->>         raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_OFF,
->> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
->> index 1cd41bdf73cf..f776fb93eaa0 100644
->> --- a/include/linux/pm_domain.h
->> +++ b/include/linux/pm_domain.h
->> @@ -136,6 +136,7 @@ struct generic_pm_domain {
->>         unsigned int prepared_count;    /* Suspend counter of prepared devices */
->>         unsigned int performance_state; /* Aggregated max performance state */
->>         cpumask_var_t cpus;             /* A cpumask of the attached CPUs */
->> +       bool synced_poweroff;           /* A consumer needs a synced poweroff */
->>         int (*power_off)(struct generic_pm_domain *domain);
->>         int (*power_on)(struct generic_pm_domain *domain);
->>         struct raw_notifier_head power_notifiers; /* Power on/off notifiers */
->> @@ -235,6 +236,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
->>  int dev_pm_genpd_remove_notifier(struct device *dev);
->>  void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
->>  ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev);
->> +void dev_pm_genpd_synced_poweroff(struct device *dev);
->>
->>  extern struct dev_power_governor simple_qos_governor;
->>  extern struct dev_power_governor pm_domain_always_on_gov;
->> @@ -300,6 +302,9 @@ static inline ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
->>  {
->>         return KTIME_MAX;
->>  }
->> +static inline void dev_pm_genpd_synced_poweroff(struct device *dev)
->> +{ }
->> +
->>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
->>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
->>  #endif
->> --
->> 2.7.4
->>
-> Kind regards
-> Uffe
+The  biggest changes seem to be to the intel 2.5Gb driver ("igc"), but
+they weren't mentioned...
 
+Also, maybe more people should look at this one:
+
+   https://lore.kernel.org/all/6b971a4e-c7d8-411e-1f92-fda29b5b2fb9@kernel.org/
+
+which seems to be a regression in 6.1 (and still present, afaik).
+
+                Linus
