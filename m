@@ -2,316 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527EA65329E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 15:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2442C6532A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 15:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiLUOpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 09:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S231703AbiLUOq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 09:46:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiLUOpp (ORCPT
+        with ESMTP id S229491AbiLUOq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 09:45:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4972B1103
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 06:45:44 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p80Le-0000R1-QQ; Wed, 21 Dec 2022 15:45:34 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1p80Le-00017C-6X; Wed, 21 Dec 2022 15:45:34 +0100
-Date:   Wed, 21 Dec 2022 15:45:34 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, marex@denx.de,
-        devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        aford@beaconembedded.com, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH] arm64: dts: imx8mp: Enable spba-bus on AIPS3
-Message-ID: <20221221144534.dnkcvgpypml5u3y7@pengutronix.de>
-References: <20221218170545.1472746-1-aford173@gmail.com>
+        Wed, 21 Dec 2022 09:46:26 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3E9BC90
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 06:46:22 -0800 (PST)
+Received: from [192.168.1.103] (178.176.72.202) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 21 Dec
+ 2022 17:46:11 +0300
+Subject: Re: [PATCH REPOST] f2fs: file: drop useless initializer in
+ expand_inode_data()
+To:     Yangtao Li <frank.li@vivo.com>, <jaegeuk@kernel.org>,
+        <chao@kernel.org>
+CC:     <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>
+References: <20221221033021.36615-1-frank.li@vivo.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <07bca981-edb0-aa85-28e2-ceaf58b6a519@omp.ru>
+Date:   Wed, 21 Dec 2022 17:46:10 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221218170545.1472746-1-aford173@gmail.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221221033021.36615-1-frank.li@vivo.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.72.202]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 12/21/2022 14:32:04
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 174331 [Dec 21 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_arrow_text}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.202 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.72.202 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;178.176.72.202:7.1.2,7.4.1,7.7.3
+X-KSE-AntiSpam-Info: {iprep_blacklist}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.72.202
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 12/21/2022 14:35:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 12/21/2022 10:52:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
+Hello!
 
-On 22-12-18, Adam Ford wrote:
-> There is an SPBA bus on AIPS3 which includes ecspi1-3,
-> UART1-3, and Flexcan1-2 according to the TRM.
+On 12/21/22 6:30 AM, Yangtao Li wrote:
 
-LGTM
-
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-
-Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
-
+>> In expand_inode_data(), the 'new_size' local variable is initialized to
+>> the result of i_size_read(), however this value isn't ever used,  so we
+>> can drop this initializer...
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+>> analysis tool.
+>>
+>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>
+>> ---
+>> This patch is against the 'dev' branch of Jaegeuk Kim's F2FS repo...
+>> Reposting with ISP RAS mailing lists CC'ed now...
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> index 2ce45e7cbbdf..9b0a47e7b8fd 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> @@ -719,121 +719,129 @@ aips3: bus@30800000 {
->  			#size-cells = <1>;
->  			ranges;
->  
-> -			ecspi1: spi@30820000 {
-> +			spba-bus@30800000 {
-> +				compatible = "fsl,spba-bus", "simple-bus";
-> +				reg = <0x30800000 0x100000>;
->  				#address-cells = <1>;
-> -				#size-cells = <0>;
-> -				compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
-> -				reg = <0x30820000 0x10000>;
-> -				interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
-> -				clocks = <&clk IMX8MP_CLK_ECSPI1_ROOT>,
-> -					 <&clk IMX8MP_CLK_ECSPI1_ROOT>;
-> -				clock-names = "ipg", "per";
-> -				assigned-clock-rates = <80000000>;
-> -				assigned-clocks = <&clk IMX8MP_CLK_ECSPI1>;
-> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
-> -				dmas = <&sdma1 0 7 1>, <&sdma1 1 7 2>;
-> -				dma-names = "rx", "tx";
-> -				status = "disabled";
-> -			};
-> +				#size-cells = <1>;
-> +				ranges;
->  
-> -			ecspi2: spi@30830000 {
-> -				#address-cells = <1>;
-> -				#size-cells = <0>;
-> -				compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
-> -				reg = <0x30830000 0x10000>;
-> -				interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-> -				clocks = <&clk IMX8MP_CLK_ECSPI2_ROOT>,
-> -					 <&clk IMX8MP_CLK_ECSPI2_ROOT>;
-> -				clock-names = "ipg", "per";
-> -				assigned-clock-rates = <80000000>;
-> -				assigned-clocks = <&clk IMX8MP_CLK_ECSPI2>;
-> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
-> -				dmas = <&sdma1 2 7 1>, <&sdma1 3 7 2>;
-> -				dma-names = "rx", "tx";
-> -				status = "disabled";
-> -			};
-> +				ecspi1: spi@30820000 {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
-> +					reg = <0x30820000 0x10000>;
-> +					interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
-> +					clocks = <&clk IMX8MP_CLK_ECSPI1_ROOT>,
-> +						 <&clk IMX8MP_CLK_ECSPI1_ROOT>;
-> +					clock-names = "ipg", "per";
-> +					assigned-clock-rates = <80000000>;
-> +					assigned-clocks = <&clk IMX8MP_CLK_ECSPI1>;
-> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
-> +					dmas = <&sdma1 0 7 1>, <&sdma1 1 7 2>;
-> +					dma-names = "rx", "tx";
-> +					status = "disabled";
-> +				};
->  
-> -			ecspi3: spi@30840000 {
-> -				#address-cells = <1>;
-> -				#size-cells = <0>;
-> -				compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
-> -				reg = <0x30840000 0x10000>;
-> -				interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-> -				clocks = <&clk IMX8MP_CLK_ECSPI3_ROOT>,
-> -					 <&clk IMX8MP_CLK_ECSPI3_ROOT>;
-> -				clock-names = "ipg", "per";
-> -				assigned-clock-rates = <80000000>;
-> -				assigned-clocks = <&clk IMX8MP_CLK_ECSPI3>;
-> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
-> -				dmas = <&sdma1 4 7 1>, <&sdma1 5 7 2>;
-> -				dma-names = "rx", "tx";
-> -				status = "disabled";
-> -			};
-> +				ecspi2: spi@30830000 {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
-> +					reg = <0x30830000 0x10000>;
-> +					interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-> +					clocks = <&clk IMX8MP_CLK_ECSPI2_ROOT>,
-> +						 <&clk IMX8MP_CLK_ECSPI2_ROOT>;
-> +					clock-names = "ipg", "per";
-> +					assigned-clock-rates = <80000000>;
-> +					assigned-clocks = <&clk IMX8MP_CLK_ECSPI2>;
-> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
-> +					dmas = <&sdma1 2 7 1>, <&sdma1 3 7 2>;
-> +					dma-names = "rx", "tx";
-> +					status = "disabled";
-> +				};
->  
-> -			uart1: serial@30860000 {
-> -				compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
-> -				reg = <0x30860000 0x10000>;
-> -				interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-> -				clocks = <&clk IMX8MP_CLK_UART1_ROOT>,
-> -					 <&clk IMX8MP_CLK_UART1_ROOT>;
-> -				clock-names = "ipg", "per";
-> -				dmas = <&sdma1 22 4 0>, <&sdma1 23 4 0>;
-> -				dma-names = "rx", "tx";
-> -				status = "disabled";
-> -			};
-> +				ecspi3: spi@30840000 {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					compatible = "fsl,imx8mp-ecspi", "fsl,imx6ul-ecspi";
-> +					reg = <0x30840000 0x10000>;
-> +					interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-> +					clocks = <&clk IMX8MP_CLK_ECSPI3_ROOT>,
-> +						 <&clk IMX8MP_CLK_ECSPI3_ROOT>;
-> +					clock-names = "ipg", "per";
-> +					assigned-clock-rates = <80000000>;
-> +					assigned-clocks = <&clk IMX8MP_CLK_ECSPI3>;
-> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
-> +					dmas = <&sdma1 4 7 1>, <&sdma1 5 7 2>;
-> +					dma-names = "rx", "tx";
-> +					status = "disabled";
-> +				};
->  
-> -			uart3: serial@30880000 {
-> -				compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
-> -				reg = <0x30880000 0x10000>;
-> -				interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
-> -				clocks = <&clk IMX8MP_CLK_UART3_ROOT>,
-> -					 <&clk IMX8MP_CLK_UART3_ROOT>;
-> -				clock-names = "ipg", "per";
-> -				dmas = <&sdma1 26 4 0>, <&sdma1 27 4 0>;
-> -				dma-names = "rx", "tx";
-> -				status = "disabled";
-> -			};
-> +				uart1: serial@30860000 {
-> +					compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
-> +					reg = <0x30860000 0x10000>;
-> +					interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-> +					clocks = <&clk IMX8MP_CLK_UART1_ROOT>,
-> +						 <&clk IMX8MP_CLK_UART1_ROOT>;
-> +					clock-names = "ipg", "per";
-> +					dmas = <&sdma1 22 4 0>, <&sdma1 23 4 0>;
-> +					dma-names = "rx", "tx";
-> +					status = "disabled";
-> +				};
->  
-> -			uart2: serial@30890000 {
-> -				compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
-> -				reg = <0x30890000 0x10000>;
-> -				interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
-> -				clocks = <&clk IMX8MP_CLK_UART2_ROOT>,
-> -					 <&clk IMX8MP_CLK_UART2_ROOT>;
-> -				clock-names = "ipg", "per";
-> -				dmas = <&sdma1 24 4 0>, <&sdma1 25 4 0>;
-> -				dma-names = "rx", "tx";
-> -				status = "disabled";
-> -			};
-> +				uart3: serial@30880000 {
-> +					compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
-> +					reg = <0x30880000 0x10000>;
-> +					interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
-> +					clocks = <&clk IMX8MP_CLK_UART3_ROOT>,
-> +						 <&clk IMX8MP_CLK_UART3_ROOT>;
-> +					clock-names = "ipg", "per";
-> +					dmas = <&sdma1 26 4 0>, <&sdma1 27 4 0>;
-> +					dma-names = "rx", "tx";
-> +					status = "disabled";
-> +				};
->  
-> -			flexcan1: can@308c0000 {
-> -				compatible = "fsl,imx8mp-flexcan";
-> -				reg = <0x308c0000 0x10000>;
-> -				interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
-> -				clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
-> -					 <&clk IMX8MP_CLK_CAN1_ROOT>;
-> -				clock-names = "ipg", "per";
-> -				assigned-clocks = <&clk IMX8MP_CLK_CAN1>;
-> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
-> -				assigned-clock-rates = <40000000>;
-> -				fsl,clk-source = /bits/ 8 <0>;
-> -				fsl,stop-mode = <&gpr 0x10 4>;
-> -				status = "disabled";
-> -			};
-> +				uart2: serial@30890000 {
-> +					compatible = "fsl,imx8mp-uart", "fsl,imx6q-uart";
-> +					reg = <0x30890000 0x10000>;
-> +					interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
-> +					clocks = <&clk IMX8MP_CLK_UART2_ROOT>,
-> +						 <&clk IMX8MP_CLK_UART2_ROOT>;
-> +					clock-names = "ipg", "per";
-> +					dmas = <&sdma1 24 4 0>, <&sdma1 25 4 0>;
-> +					dma-names = "rx", "tx";
-> +					status = "disabled";
-> +				};
->  
-> -			flexcan2: can@308d0000 {
-> -				compatible = "fsl,imx8mp-flexcan";
-> -				reg = <0x308d0000 0x10000>;
-> -				interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
-> -				clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
-> -					 <&clk IMX8MP_CLK_CAN2_ROOT>;
-> -				clock-names = "ipg", "per";
-> -				assigned-clocks = <&clk IMX8MP_CLK_CAN2>;
-> -				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
-> -				assigned-clock-rates = <40000000>;
-> -				fsl,clk-source = /bits/ 8 <0>;
-> -				fsl,stop-mode = <&gpr 0x10 5>;
-> -				status = "disabled";
-> +				flexcan1: can@308c0000 {
-> +					compatible = "fsl,imx8mp-flexcan";
-> +					reg = <0x308c0000 0x10000>;
-> +					interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
-> +					clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
-> +						 <&clk IMX8MP_CLK_CAN1_ROOT>;
-> +					clock-names = "ipg", "per";
-> +					assigned-clocks = <&clk IMX8MP_CLK_CAN1>;
-> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
-> +					assigned-clock-rates = <40000000>;
-> +					fsl,clk-source = /bits/ 8 <0>;
-> +					fsl,stop-mode = <&gpr 0x10 4>;
-> +					status = "disabled";
-> +				};
-> +
-> +				flexcan2: can@308d0000 {
-> +					compatible = "fsl,imx8mp-flexcan";
-> +					reg = <0x308d0000 0x10000>;
-> +					interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
-> +					clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
-> +						 <&clk IMX8MP_CLK_CAN2_ROOT>;
-> +					clock-names = "ipg", "per";
-> +					assigned-clocks = <&clk IMX8MP_CLK_CAN2>;
-> +					assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_40M>;
-> +					assigned-clock-rates = <40000000>;
-> +					fsl,clk-source = /bits/ 8 <0>;
-> +					fsl,stop-mode = <&gpr 0x10 5>;
-> +					status = "disabled";
-> +				};
->  			};
->  
->  			crypto: crypto@30900000 {
-> -- 
-> 2.34.1
-> 
-> 
-> 
+> Why do you repeatedly send a patch that cannot be applied,
+
+   Why (it does apply to your 'dev' branch)? Because of the merge window?
+
+> and this does not have a CC on linux-kernel.vger.kernel.org.
+
+   I normnally avoid CCing LKML as my patches are not generally interesting
+to the wide public (I think)...
+
+> Otherwise, code modification looks good to me.
+
+   Thanx!
+
+> Thx,
+> Yangtao
+
+MBR, Sergey
