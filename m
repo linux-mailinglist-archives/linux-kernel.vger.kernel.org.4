@@ -2,88 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AB66537E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 22:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F586537F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 22:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234634AbiLUVBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 16:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
+        id S231770AbiLUVGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 16:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLUVB1 (ORCPT
+        with ESMTP id S229620AbiLUVGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 16:01:27 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B07C559A;
-        Wed, 21 Dec 2022 13:01:26 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id x25-20020a056830115900b00670932eff32so9805565otq.3;
-        Wed, 21 Dec 2022 13:01:26 -0800 (PST)
+        Wed, 21 Dec 2022 16:06:52 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005251DF3D;
+        Wed, 21 Dec 2022 13:06:50 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id kw15so423940ejc.10;
+        Wed, 21 Dec 2022 13:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6QEevAywUdrUeO4DWab5onKZKSHXptskyHvOtVcPoLM=;
-        b=aujnWgEizYKCjbfJS0vkqFfjSW1AomSGTvnT0QfxNA3xAl1/UE0c6EioKatVhjL6J3
-         42OzhiUi6zyvBL7wY3XTyuEq8alVjy5Lntt1sxA64oKRg+psSJwJxWURMsR2zFRMehnS
-         p5bSzhLrtQ6JG43iBzwS98Mn7NFVW9/G7uJyU4sWEPCF1v/u9+iojd9sB3rKRquZu9dd
-         Ddb2Xpo7Z6m/b/wYn6AHug4zbPUBx6OwV6BX8I2OVPFnWmoUnCmCHY1K4ttgP9wan1nS
-         hv5WuDgd04N+rrWjHbEcxpLVcM+VhGI+H9nxfeprB2iBUujj2Qm5KR9lju9SISF0W0DU
-         +bNg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8KKbAaGdCU2qz8tzZ8Eajc31tmbLI+yoxmAyVIDyiEo=;
+        b=iEeW+jFlWQHNAOcpKOv++bgVCIpOYDCgaQtQvCOgtQrueHtHQlgYTMP9SQ35W4ncHu
+         Vd5cSfuNee2U7EpalJeQxIK8ZzZz6s/ptl2RJSfrsqayYMfdai7cAWJj+23E+v+yJXlZ
+         qcHAnhy4G3QKSQ7Sj+R6rIA66qjvJLm6S/NxhT8J3dOe6tVJhqdjrPcyskkCpEWMzI+8
+         bM3pXZAtVi9XHCF+NkKW5FPDlYqYjYHweBXS9U8BXZYNBXa6TSlLiSnzx88OoQ20WnVI
+         CcIChN/xYLF0Xv2k3xdsMYgeUrlqLY8Jpx/ge5vOAZNnUpLq/poU/dyT8AyjfAu6oH0E
+         A3IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6QEevAywUdrUeO4DWab5onKZKSHXptskyHvOtVcPoLM=;
-        b=I8tPCmspeAzDZR/DXUcQbU7vykoAo1Pqitjbp/esAhm0AcGG3Qe7BEZbv2U5NnTdvO
-         lxkxgrLDTlC7lYiW+BbredvWTsNfSB1eForf5ZL66NcgoeUAf2Cp1Isr3gvIBmCjTjh2
-         wSSPIGbmXQPIaeZclzCMtsKVC4aiJCldz/ALFG8nKVjMB7aHCgu/r729k44sKJHlPAnv
-         pan+A8lfJ2wVP6VCAenS/ayHDaQiEGEGmWa9yrsX+g7LGuOIWqPpHBWWfGiKkxaufnVP
-         ZyoRuCw+5sPFa8m7CuizFEM406fAiNHGkR1FDSgJTaMLYYZcHljdrE6k74iTSRxsXZsQ
-         O5hg==
-X-Gm-Message-State: AFqh2koRVmeUMXZkvBWjl4Qr8XqujVQ2F2BEfjgf++/IJxreKpeWFIId
-        xJmbyx3j1vyyNbNkRD3eUxw=
-X-Google-Smtp-Source: AMrXdXt2CGoZmAJkjBkN7Wfr4zFgq9qbfTqFafWIOysIuYF2lmo5XwNR3nI5m/jLSsV4WocFLzdtOA==
-X-Received: by 2002:a9d:198a:0:b0:67e:f252:fc9d with SMTP id k10-20020a9d198a000000b0067ef252fc9dmr485763otk.26.1671656485619;
-        Wed, 21 Dec 2022 13:01:25 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r44-20020a05683044ac00b0066e7e4b2f76sm7344017otv.17.2022.12.21.13.01.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 13:01:24 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 21 Dec 2022 13:01:23 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-Message-ID: <20221221210123.GA2717809@roeck-us.net>
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
- <20221019203034.3795710-1-Jason@zx2c4.com>
- <20221221145332.GA2399037@roeck-us.net>
- <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
- <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
- <20221221155641.GB2468105@roeck-us.net>
- <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
- <20221221171922.GA2470607@roeck-us.net>
- <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8KKbAaGdCU2qz8tzZ8Eajc31tmbLI+yoxmAyVIDyiEo=;
+        b=1WAUgoCE4Bu4xo19yYmtbFh4XhG+lv3OVuoDc80OYpZFRfhLN/I/pIXViBOguMcwe7
+         k6fXfQ1jLiXRa3ikPxbcSiC6/WlFRXe8xg5pVwwDnEpHVj99qhLUiJ20l20cgjc8RsPL
+         J0kxicMrUbchfoykl9glv0+G0drMX16u0KZqfBxBrirKldtyJpuRLeKHBPb/S6BGtrMV
+         T1x02u2kiL/8xvW2GRwKmb6Jxh/EDGlYQNHaADhXE08CP0xFrhKzlf7Mc0ECV1s8jJ81
+         z86Nto6d4we4ntqXCXg9GFARCk0PNVke9SKu5+p5oGpq1eUNDGlPgl9AdQX8rmkU8u8W
+         w4cQ==
+X-Gm-Message-State: AFqh2kqXFH3aJjv/SbZesWfMfL3DlVJFCpcraB2PSwnW1MkEnjjPGYS3
+        +3cmFUIJaan+HI6N9DGhCzRuQ0AfUT0xHeY9sw1QRI2zqqiOLg==
+X-Google-Smtp-Source: AMrXdXt3LFry2Pk44xOSwKCaBzl8/kUOHa7kVd6BTzeZ86BdZIVFyr3z2ToxY+RCjIfE7f9tLrzWliU8SEHHrmX8QZM=
+X-Received: by 2002:a17:906:3398:b0:7c0:efb6:8744 with SMTP id
+ v24-20020a170906339800b007c0efb68744mr329585eja.267.1671656809542; Wed, 21
+ Dec 2022 13:06:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221221000242.340202-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221221000242.340202-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdXmKYV7CwuD=ZNgaOTc+LxP9OvEJ8gcW_iS5NamTxEE+w@mail.gmail.com>
+In-Reply-To: <CAMuHMdXmKYV7CwuD=ZNgaOTc+LxP9OvEJ8gcW_iS5NamTxEE+w@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 21 Dec 2022 21:06:22 +0000
+Message-ID: <CA+V-a8tqvY+Nj391j+zJO21Q=47pyFR1SkDLH-hmJephcorY3g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: interrupt-controller:
+ renesas,rzg2l-irqc: Document RZ/G2UL SoC
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,29 +78,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 10:46:08AM -0800, Linus Torvalds wrote:
-> On Wed, Dec 21, 2022 at 9:19 AM Guenter Roeck <linux@roeck-us.net> wrote:
+Hi Geert,
+
+Thank you for the review.
+
+On Wed, Dec 21, 2022 at 12:37 PM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Wed, Dec 21, 2022 at 1:03 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > >
-> > On Wed, Dec 21, 2022 at 09:06:41AM -0800, Linus Torvalds wrote:
-> > >
-> > > I think the real fix is to just remove that broken implementation
-> > > entirely, and rely on the generic one.
+> > Document RZ/G2UL (R9A07G043U) IRQC bindings. The IRQC block on RZ/G2UL SoC
+> > is almost identical to one found on the RZ/G2L SoC the only difference
+> > being it can support BUS_ERR_INT for which it has additional registers.
+> > Hence new generic compatible string "renesas,rzg2ul-irqc" is added for
+> > RZ/G2UL SoC.
 > >
-> > Perfectly fine with me.
-> 
-> That got pushed out as commit 7c0846125358 ("m68k: remove broken
-> strcmp implementation") but it's obviously entirely untested. I don't
-> do m68k cross-compiles, much less boot tests.
-> 
-> Just FYI for everybody - I may have screwed something up for some very
-> non-obvious reason.
-> 
-No worries:
+> > Now that we have additional interrupt for RZ/G2UL and RZ/Five SoC
+> > interrupt-names property is added so that we can parse them based on
+> > names.
+> >
+> > While at it updated the example node to four spaces and added
+> > interrupt-names property.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > v1- > v2
+> > * Dropped RB tags
+> > * Added generic compatible string for rzg2ul
+> > * Added interrupt-names
+> > * Added checks for RZ/G2UL to make sure interrupts are 42 and interrupt-names
+> > * Updated example node with interrupt-names
+> > * Used 4 spaces for example node
+>
+> Thanks for the update!
+>
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> > @@ -19,16 +19,19 @@ description: |
+> >      - NMI edge select (NMI is not treated as NMI exception and supports fall edge and
+> >        stand-up edge detection interrupts)
+> >
+> > -allOf:
+> > -  - $ref: /schemas/interrupt-controller.yaml#
+> > -
+> >  properties:
+> >    compatible:
+> > -    items:
+> > -      - enum:
+> > -          - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
+> > -          - renesas,r9a07g054-irqc    # RZ/V2L
+> > -      - const: renesas,rzg2l-irqc
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
+> > +              - renesas,r9a07g054-irqc    # RZ/V2L
+> > +          - const: renesas,rzg2l-irqc
+> > +
+> > +      - items:
+> > +          - enum:
+> > +              - renesas,r9a07g043u-irqc   # RZ/G2UL
+> > +          - const: renesas,rzg2ul-irqc
+>
+> I'm not sure it's worth splitting into RZ/G2L and RZ/G2UL alike
+> variants, and adding the "renesas,rzg2ul-irqc" family-specific
+> compatible value.  You can easily handle the difference by the presence
+> (or absence) of the "bus-err" interrupt source.
+>
+Yes, the only reason to add "renesas,rzg2ul-irqc" is to differentiate
+RZ/Five later. I have not worked out on how this driver will work in
+case of RZ/Five yet with PLIC (as we sifive plic driver as a chained
+handler and then we have the RISC-V intc driver). If you insist I can
+drop it for now and then later when we add RZ/FIve we could add a
+check for compat string maybe?
 
-Build reference: msi-fixes-6.2-1-2644-g0a924817d2ed
+> I understand there "renesas,r9a07g043f-irqc" will be added later to
+> support RZ/Five?
+>
+Yes.
 
-Building mcf5208evb:m5208:m5208evb_defconfig:initrd ... running ..... passed
-Building q800:m68040:mac_defconfig:initrd ... running ..... passed
-Building q800:m68040:mac_defconfig:rootfs ... running ..... passed
-
-Guenter
+Cheers,
+Prabhakar
