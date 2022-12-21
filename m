@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8908A6537A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7E96537A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234611AbiLUUki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 15:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S234888AbiLUUkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 15:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234606AbiLUUke (ORCPT
+        with ESMTP id S234807AbiLUUki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 15:40:34 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6ED6580
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:40:33 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 7so12440pga.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:40:33 -0800 (PST)
+        Wed, 21 Dec 2022 15:40:38 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2248825E92
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:40:38 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id 21so11518671pfw.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:40:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=daynix-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cbFQ+J5fs5BdCa+m7U3HiXNal18DTSvVi/iSf3zznx4=;
-        b=18h10GUg0vVIZjuVhPGsjv6haTyX1xXm0fs1oK6cXpMzO9Q+tV38Yokj9e74NrYojp
-         FeNHxIzWBf2ySgHYIzgLjcGesUuvFH6a+Srq4hqQsWy/p97WPv3c0gdTH2FOIwmniMkW
-         zv6O5Skz7TQf3tDU07Vh8+ZcGaFBCwx7+ORX3ryJurzUZALXh29abwAuL/ZuNcxeD+U/
-         HVOlKOv3qgi2G+b14vQqmHWCfjxGnohvzeC4FJ2DiYjDFjMv3NLr1MYlyP6M/s1/MD7C
-         hOwrViSfyFkVVjfiCbn4+COqzMKTLuMnlpTg4C6KlTqKKSKr8v/hd1Z+0ijSgB39FxNe
-         JI3A==
+        bh=Pmk4xq5A3rzrlj2+ophiAaZi/UXmP/mo3GRVdbl+68c=;
+        b=rBZZZQ+6jmJ0L8kt2AAAyWKDYURGWgg2jYIvzhfsZvZvEtJZOEgaefc6924ldak9C4
+         bGIi/87uhR4CkdUNv1Y9HrDcs8qRvip5lwN+kTe6HxiJSTKRPaovQ74xU513HQJ7wu7o
+         DlowDD5mS9cCTp4yxhmu5/vCAZTJNw43eJjxbHD4DLmXp9oZYLJNY0QVLUcO2DHQ6uWv
+         wHqRsl/XD2RLPWzKnNegucX6kUSMsfIQ67qE4GDKweu2IX1UQY2CSR53j7q6XnjAloNt
+         3exq48ddIwSK7doMeHFKrwOlWhTnOgAD5nuGqynto1ETtEPVFhDmV/oIeKa3IBb91CIG
+         eyMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cbFQ+J5fs5BdCa+m7U3HiXNal18DTSvVi/iSf3zznx4=;
-        b=PhjHqYEtxPt6tPfhBh7zm4BGaIwqYtey22XQRZSSgg2iovqqL5karyGh6DDDxG4okj
-         ZopbkzfCk5r8JYiUevv/sFKXAAQWlTlnv5WwfMjG3XzorNKdzHeNyLutoC75hJMfMjBA
-         R7/efNnXju3nFZ2N9xk3smk8psz5erPFDRnZtXnT4c4JmvJp1wxRUYcfd04gSRTj/HB0
-         6S877VK3hxm1H1VviZ7txOvemq/D60gmKCexL9RYHqaBX0evKrbQXytXrUsTuHrNdpuu
-         bVVslj192UC98cLOeCCo98XGgNCNyydgKDnmuywAk+6191j+1LSgZRvua7eeHCPN3KT2
-         vM0g==
-X-Gm-Message-State: AFqh2kp31CW12+NT4bcSaIU6DlC5jTmJM2+a5DhFO24osP/iJDaNzX9i
-        qEB7gMNlbay7mUhNEDlcOy9IRA==
-X-Google-Smtp-Source: AMrXdXvlAmSAHNGVh71PvP1fhyI+g3oX+xufwQp6Y95KtVUC/TBW27Yvk+rzxZQ57dE++5uVHJO1jA==
-X-Received: by 2002:a05:6a00:26ee:b0:578:777e:7f18 with SMTP id p46-20020a056a0026ee00b00578777e7f18mr3088234pfw.3.1671655233393;
-        Wed, 21 Dec 2022 12:40:33 -0800 (PST)
+        bh=Pmk4xq5A3rzrlj2+ophiAaZi/UXmP/mo3GRVdbl+68c=;
+        b=pDIcsP4V/CDIA/UGh/8e80fndLZ+3oXRsCvlzlVDvQdwVuVg0Bimd+zF4gZ41+zFIA
+         acOsNvY7NLO9D9sO8giLyZ9ZZphzOAJ4R4tjdUPlrR1xm2gGGrzBJZ/N60DMOzB0AxcP
+         NNMXJbTGEPnMSlUZOI1yyCv/b5lo4YhFPtUrQVYunGnlTuTMuRqE7pbqx/hTqs4YmQdL
+         2CoKqdN6UDV2w/3kbmYvbbSCoWH9QdO7qCvhxhtmo1uA63eSe8reNgjXAJ+byw4l/toR
+         Q6s85ZpkS9bLWG8eQdtGMTn2EI7t8aqdnWCCFu47V+QodOb29YqjoEL9PEkToIqu5Lcl
+         h3Iw==
+X-Gm-Message-State: AFqh2kqrA08ASRkhxV2Zk+q2Z7h+vel7li87u4RriuoXnPHy8wJ3/0r1
+        10ky1YN4HZ2t1ZLaNWIQ86IZ7g==
+X-Google-Smtp-Source: AMrXdXsax/iqZklqdXP5/90X5ExMF635ed0bL4vX13zR5gG19L2ERgmig6NZK0frHLvyHdzzrJLAXA==
+X-Received: by 2002:aa7:9514:0:b0:57f:1da7:a781 with SMTP id b20-20020aa79514000000b0057f1da7a781mr3809463pfp.25.1671655237614;
+        Wed, 21 Dec 2022 12:40:37 -0800 (PST)
 Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id r4-20020aa79884000000b005763c22ea07sm11017784pfl.74.2022.12.21.12.40.29
+        by smtp.gmail.com with ESMTPSA id r4-20020aa79884000000b005763c22ea07sm11017784pfl.74.2022.12.21.12.40.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 12:40:33 -0800 (PST)
+        Wed, 21 Dec 2022 12:40:37 -0800 (PST)
 From:   Akihiko Odaki <akihiko.odaki@daynix.com>
 Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
         linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
@@ -65,9 +65,9 @@ Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Sven Peter <sven@svenpeter.dev>,
         Hector Martin <marcan@marcan.st>,
         Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH v4 2/7] arm64/sysreg: Convert CCSIDR_EL1 to automatic generation
-Date:   Thu, 22 Dec 2022 05:40:11 +0900
-Message-Id: <20221221204016.658874-3-akihiko.odaki@daynix.com>
+Subject: [PATCH v4 3/7] arm64/sysreg: Add CCSIDR2_EL1
+Date:   Thu, 22 Dec 2022 05:40:12 +0900
+Message-Id: <20221221204016.658874-4-akihiko.odaki@daynix.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221221204016.658874-1-akihiko.odaki@daynix.com>
 References: <20221221204016.658874-1-akihiko.odaki@daynix.com>
@@ -83,47 +83,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert CCSIDR_EL1 to automatic generation as per DDI0487I.a.
+CCSIDR2_EL1 is available if FEAT_CCIDX is implemented as per
+DDI0487I.a.
 
 Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+Reviewed-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/sysreg.h |  1 -
- arch/arm64/tools/sysreg         | 10 ++++++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ arch/arm64/tools/sysreg | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 7d301700d1a9..910e960661d3 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -425,7 +425,6 @@
- 
- #define SYS_CNTKCTL_EL1			sys_reg(3, 0, 14, 1, 0)
- 
--#define SYS_CCSIDR_EL1			sys_reg(3, 1, 0, 0, 0)
- #define SYS_AIDR_EL1			sys_reg(3, 1, 0, 0, 7)
- 
- #define SYS_RNDR_EL0			sys_reg(3, 3, 2, 4, 0)
 diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-index 8f26fe1bedc6..097d6faafc87 100644
+index 097d6faafc87..01d592cbc0ba 100644
 --- a/arch/arm64/tools/sysreg
 +++ b/arch/arm64/tools/sysreg
-@@ -873,6 +873,16 @@ Sysreg	SCXTNUM_EL1	3	0	13	0	7
- Field	63:0	SoftwareContextNumber
+@@ -899,6 +899,11 @@ Field	5:3	Ctype2
+ Field	2:0	Ctype1
  EndSysreg
  
-+# The bit layout for CCSIDR_EL1 depends on whether FEAT_CCIDX is implemented.
-+# The following is for case when FEAT_CCIDX is not implemented.
-+Sysreg	CCSIDR_EL1	3	1	0	0	0
-+Res0	63:32
-+Unkn	31:28
-+Field	27:13	NumSets
-+Field	12:3	Associativity
-+Field	2:0	LineSize
++Sysreg	CCSIDR2_EL1	3	1	0	0	2
++Res0	63:24
++Field	23:0	NumSets
 +EndSysreg
 +
- Sysreg	CLIDR_EL1	3	1	0	0	1
- Res0	63:47
- Field	46:33	Ttypen
+ Sysreg	GMID_EL1	3	1	0	0	4
+ Res0	63:4
+ Field	3:0	BS
 -- 
 2.38.1
 
