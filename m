@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA06D652B8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4116652B8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234250AbiLUCnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 21:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S234276AbiLUCoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 21:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiLUCm5 (ORCPT
+        with ESMTP id S234265AbiLUCoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 21:42:57 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97111D0EE;
-        Tue, 20 Dec 2022 18:42:55 -0800 (PST)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NcHlP64hHzJqV3;
-        Wed, 21 Dec 2022 10:41:53 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 21 Dec 2022 10:42:53 +0800
-Subject: Re: [PATCH] scsi: libsas: Grab the host lock in
- sas_ata_device_link_abort()
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Xingui Yang <yangxingui@huawei.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <niklas.cassel@wdc.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
-        <kangfenglong@huawei.com>
-References: <20221220125349.45091-1-yangxingui@huawei.com>
- <4ec9dbed-1758-d6b4-dc1d-ac42e8c22731@oracle.com>
- <c8387766-2ca0-51f3-e332-71492b13e5c1@opensource.wdc.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <7347d117-6e0b-dd18-90a8-25685f757689@huawei.com>
-Date:   Wed, 21 Dec 2022 10:42:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Tue, 20 Dec 2022 21:44:14 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D30A1D0EE;
+        Tue, 20 Dec 2022 18:44:13 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id l4so2893422pld.13;
+        Tue, 20 Dec 2022 18:44:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J/RXyzLEOjOd19EjSvWsrGGKWPgbNTJbgOMFPprH9ag=;
+        b=HXveTWymAztH91B55Q7BBiyOM/Au4FIKsUxCSj7BLah1DbQqaY+zVDl3D548Qg9sDM
+         HGc2Y0k1NTT08755C/3N6JRYZ34gtpAA09c6atZLpU/w6xioXg3WUBM4MlAU3vVhipaM
+         /SQe1e7KcSI7xa6lM3F1QRVDB+8Vpg58pfUZbfYergofs0B8yLFDGFRqEtXl4F79Qhxg
+         eGcbch8KKQn/rlidmhJJVJmHNLIbI5sa0SnRBHQlQapHmU9zwdQWeUuHwspUlC8+P55Z
+         BtNzG5fZCFSjGOByViqPOt+ZFy+LZVJMafF4kSBugFQCji28qzuBDAnzmjZ9rrl1rlP8
+         SsUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J/RXyzLEOjOd19EjSvWsrGGKWPgbNTJbgOMFPprH9ag=;
+        b=GWjqtKan8iOMw1w2Iidv4DIU1VLskKCO21MX+7zUQ3SDa3vyC1a242cJfB6g9XKQBS
+         SMISDQgg1+wFIyY6wQ/UZAKmNOz5nc4fu9UcLXzC+/hrR5kbIeZVyAAbyvZ12Z4Xoh8n
+         R7nRvgKYpQHk39YtLn9iNCByq1NkWaoq+i2GsyHmUCbXONOfmZnqFkMVNpSmzccEEfU0
+         /Y6CxPNZTwYMiHfcTOrDuNLFT54WW1Lhz5FK2bmS9SxWyIfAVW7u0VsMrH9qoz6HEy4G
+         YeTyIUqnW1b1vTmCDlT1l5mF+slOLhkIaLN9i/G/4ClcVafaTbOxaL6oBJsRP+7NfzPZ
+         QpfA==
+X-Gm-Message-State: AFqh2kr7zFi7UAL3QjGRRAGTKxIbmpG2FBvE079EwH0hwqlSnNp+Bo/M
+        ypGo2ULbxfdS+Icdv6PsDwDC5ld4qAs=
+X-Google-Smtp-Source: AMrXdXuhVNnNrM0S9tDiL4YW351ngONGWMku/LFmjAT+yDN1mxln0zia6ID/jhIXxJo9ApRjNSwqIw==
+X-Received: by 2002:a17:902:b109:b0:190:bf01:3a45 with SMTP id q9-20020a170902b10900b00190bf013a45mr18618572plr.25.1671590653005;
+        Tue, 20 Dec 2022 18:44:13 -0800 (PST)
+Received: from debian.me (subs28-116-206-12-57.three.co.id. [116.206.12.57])
+        by smtp.gmail.com with ESMTPSA id l18-20020a170903245200b00177e5d83d3esm10115137pls.88.2022.12.20.18.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 18:44:12 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id EEBF7104964; Wed, 21 Dec 2022 09:44:07 +0700 (WIB)
+Date:   Wed, 21 Dec 2022 09:44:07 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: Improve usb_fill_* documentation
+Message-ID: <Y6Jy90O38E25QgN6@debian.me>
+References: <20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <c8387766-2ca0-51f3-e332-71492b13e5c1@opensource.wdc.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hNraL9BI9bJyuoZF"
+Content-Disposition: inline
+In-Reply-To: <20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,54 +78,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/21 8:36, Damien Le Moal wrote:
-> On 2022/12/20 23:59, John Garry wrote:
->> On 20/12/2022 12:53, Xingui Yang wrote:
->>> Grab the host lock in sas_ata_device_link_abort() before calling
->>
->> This is should be the ata port lock, right? I know that the ata comments
->> say differently.
->>
->>> ata_link_abort(), as the comment in ata_link_abort() mentions.
->>>
->>
->> Can you please add a fixes tag?
->>
->>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
->>
->> Reviewed-by: John Garry <john.g.garry@oracle.com>
->>
->>> ---
->>>    drivers/scsi/libsas/sas_ata.c | 3 +++
->>>    1 file changed, 3 insertions(+)
->>>
->>> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
->>> index f7439bf9cdc6..4f2017b21e6d 100644
->>> --- a/drivers/scsi/libsas/sas_ata.c
->>> +++ b/drivers/scsi/libsas/sas_ata.c
->>> @@ -889,7 +889,9 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
->>>    {
->>>    	struct ata_port *ap = device->sata_dev.ap;
->>>    	struct ata_link *link = &ap->link;
->>> +	unsigned long flags;
->>>    
->>> +	spin_lock_irqsave(ap->lock, flags);
->>>    	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY; /* tf status */
->>>    	device->sata_dev.fis[3] = ATA_ABORTED; /* tf error */
->>>    
->>> @@ -897,6 +899,7 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
->>>    	if (force_reset)
->>>    		link->eh_info.action |= ATA_EH_RESET;
->>>    	ata_link_abort(link);
-> 
-> Really need to add lockdep annotations in libata to avoid/catch such bugs...
-> Will work on that.
 
-Actually in libata there are many places calling ata_link_abort() not 
-holding port lock. And some places are holding the real host 
-lock(ata_host->lock) while calling ata_link_abort(). So if you add the 
-lockdep annotations, there may be too many warnings. If these are real 
-issues, we should fix them first.
+--hNraL9BI9bJyuoZF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Jason
+On Wed, Dec 21, 2022 at 12:13:08AM +0100, Ricardo Ribalda wrote:
+> Make the developer aware of the requirements of transfer buffer.
+>=20
+> The buffer must be DMAble, if the developer uses an invalid buffer, data
+> corruption might happen.
+
+Better say:
+
+```
+Document the transfer buffer requirement. That is, the buffer must be
+DMAble - otherwise data corruption might occur.
+```
+
+> - * @transfer_buffer: pointer to the transfer buffer
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable fo=
+r DMA.
+
+"... The buffer must be ..."
+
+> - * @transfer_buffer: pointer to the transfer buffer
+> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable fo=
+r DMA.
+
+Same here.
+
+The rest is LGTM, thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--hNraL9BI9bJyuoZF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY6Jy8AAKCRD2uYlJVVFO
+oyu4AP9RGvSyV5sX7yoqWF3dHrsRR+M4rQJ2i3D6CPVgp3/t9AD+Pmacn28PzDkQ
+GL575b2RdKJ8bAecfEy3HFHXqCnW7QE=
+=bOKJ
+-----END PGP SIGNATURE-----
+
+--hNraL9BI9bJyuoZF--
