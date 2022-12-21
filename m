@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B08652C6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FE1652C70
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234299AbiLUFiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 00:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S229591AbiLUFiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 00:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiLUFh6 (ORCPT
+        with ESMTP id S234324AbiLUFiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 00:37:58 -0500
+        Wed, 21 Dec 2022 00:38:05 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506151D33A;
-        Tue, 20 Dec 2022 21:37:56 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BL59XOf015301;
-        Wed, 21 Dec 2022 05:37:52 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CE31D65A;
+        Tue, 20 Dec 2022 21:38:05 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BL4mCup012618;
+        Wed, 21 Dec 2022 05:38:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=iuuCsVMes5uuYN5lfuNxmp9Zc6Nb3HtNYUdhownHy0U=;
- b=Kn4gEh4QtNZ9WeWNKAkW74Q1RKUniNUdgDFn9L+1XGhXr7a9S82STXa/V6zKJrjhcGpg
- 37jj7uJPwHsvhUD9sZfoKM3c4rI6WLaEmr20n+C0KFPYIcr/CI6+rXCt5bjPYTAL5g6e
- ao4k3fubo9IXraL3IKnnpQ1S8aGvgGnX8a6zSAHPYWRUgQ04JeP2zs/wQsqvJJYAI5r0
- dLzn3zsS43xz5d631Wtrq1iHUOKTj/ym+wDkaHEPidAucNxhv/nCUidGQ4YUjNndjkWK
- w+kuM6D1lY0TQ3ZBdQSB0zTR/MIAgAp1t90Oc0XP7Fj7QMWOAfTo+913NqqUGFDGtkhx bg== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=/LhkojW8t1G5vUSyhOyg0ZsF21eTZExaLiYk2EUrfDc=;
+ b=DIxRTQzQPJX0cUBZvw3hoY8MbZnrIvKbl22yVDAAajR/lRDWvlNLKSxV9rtbhqVkzAPf
+ JV0tN7sYUL/9+nauz7RnJ+TTWhLiTRQBGKwFcyU8LYNPRp3lJ6UHtJXs1vLf8wxBrBQa
+ FSWj391pwDf4uK3Mv+VCfqK0zquzMnMDCG27FrbAb53myCizFApkpgiRxYBQLsPIWhyW
+ Oc+k2yG41lFSk8RIE0Bpn8HaOF4QypeZZTeb0eDHTO/D9wu7mVDCshMbRcknr/EiTwJK
+ 4ZnPolkTsISZN8aSuOaLkNheIf4TodTEwR10d01Sh+GoYO8N+y9a4/4hCHzr+UYxZquN Bg== 
 Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk195k81n-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mkmvt8qmf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 05:37:52 +0000
+        Wed, 21 Dec 2022 05:38:00 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BL5bp9H004136
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BL5bxLA004178
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 05:37:51 GMT
+        Wed, 21 Dec 2022 05:38:00 GMT
 Received: from jprakash-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 20 Dec 2022 21:37:47 -0800
+ 15.2.986.36; Tue, 20 Dec 2022 21:37:55 -0800
 From:   Jishnu Prakash <quic_jprakash@quicinc.com>
 To:     <gregkh@linuxfoundation.org>, <sboyd@kernel.org>,
         <agross@kernel.org>, <devicetree@vger.kernel.org>,
         <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
         <quic_kamalw@quicinc.com>, <quic_subbaram@quicinc.com>,
-        <quic_collinsd@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_collinsd@quicinc.com>, <linux-kernel@vger.kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
         <linux-arm-msm-owner@vger.kernel.org>,
         Jishnu Prakash <quic_jprakash@quicinc.com>
-Subject: [PATCH] Add a check for remove callback in spmi driver removal API
-Date:   Wed, 21 Dec 2022 11:07:11 +0530
-Message-ID: <1671601032-18397-1-git-send-email-quic_jprakash@quicinc.com>
+Subject: [PATCH] spmi: Add a check for remove callback when removing a SPMI driver
+Date:   Wed, 21 Dec 2022 11:07:12 +0530
+Message-ID: <1671601032-18397-2-git-send-email-quic_jprakash@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1671601032-18397-1-git-send-email-quic_jprakash@quicinc.com>
+References: <1671601032-18397-1-git-send-email-quic_jprakash@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -58,15 +61,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: H2MqB-7DbaoUmH9KXmg_xrHfvRJjD1I8
-X-Proofpoint-ORIG-GUID: H2MqB-7DbaoUmH9KXmg_xrHfvRJjD1I8
+X-Proofpoint-ORIG-GUID: WbEwyLVQ6xJKuxjIf_kv1RA-4agEr9n8
+X-Proofpoint-GUID: WbEwyLVQ6xJKuxjIf_kv1RA-4agEr9n8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-21_01,2022-12-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- priorityscore=1501 mlxlogscore=244 mlxscore=0 impostorscore=0
- lowpriorityscore=0 adultscore=0 bulkscore=0 malwarescore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 mlxlogscore=649
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2212210038
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -78,9 +81,8 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 When removing a SPMI driver, there can be a crash due to NULL pointer
-dereference if it does not have a remove callback defined, as the remove
-callback gets called directly in spmi_drv_remove(). This is one such call
-trace observed when removing the QCOM SPMI PMIC driver:
+dereference if it does not have a remove callback defined. This is
+one such call trace observed when removing the QCOM SPMI PMIC driver:
 
  dump_backtrace.cfi_jt+0x0/0x8
  dump_stack_lvl+0xd8/0x16c
@@ -102,17 +104,28 @@ trace observed when removing the QCOM SPMI PMIC driver:
 
 If a driver has all its resources allocated through devm_() APIs and
 does not need any other explicit cleanup, it would not require a
-remove callback to be defined. The SPMI framework also does not enforce
-the presence of a remove callback when a client driver registers with it.
-Hence, add a check for remove callback presence before calling it
-when removing a SPMI driver.
+remove callback to be defined. Hence, add a check for remove callback
+presence before calling it when removing a SPMI driver.
 
-Jishnu Prakash (1):
-  spmi: Add a check for remove callback when removing a SPMI driver
-
+Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
+---
  drivers/spmi/spmi.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/spmi/spmi.c b/drivers/spmi/spmi.c
+index a456ce5..6b34356 100644
+--- a/drivers/spmi/spmi.c
++++ b/drivers/spmi/spmi.c
+@@ -350,7 +350,8 @@ static void spmi_drv_remove(struct device *dev)
+ 	const struct spmi_driver *sdrv = to_spmi_driver(dev->driver);
+ 
+ 	pm_runtime_get_sync(dev);
+-	sdrv->remove(to_spmi_device(dev));
++	if (sdrv->remove)
++		sdrv->remove(to_spmi_device(dev));
+ 	pm_runtime_put_noidle(dev);
+ 
+ 	pm_runtime_disable(dev);
 -- 
 2.7.4
 
