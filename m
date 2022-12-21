@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035C26534C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 074A36534C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbiLUROX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:14:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
+        id S234804AbiLUROQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:14:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234765AbiLURNl (ORCPT
+        with ESMTP id S234797AbiLURNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:13:41 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCA924F3B;
-        Wed, 21 Dec 2022 09:13:08 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLFaIWx020535;
-        Wed, 21 Dec 2022 17:12:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=TaN/2/hOe7knjlG+3Mf6CFZjVzMOiYNhITeGTjKnf1Y=;
- b=CDJkB+Nj5KM2v0NX5PiHS55KMSvMCTEWsOcSjy8Ewbgc4E9ZpwIl/03f0wvNsjjHwbcg
- R7EQAqosjJUk/+FlU2ob7vupM9vLjEspKpGfMb1+9AY8y4fbkWU7Nm3aLVBb0afWzPH2
- RnyEknxBcj01o3+0JO2DdANS55ucsjkmqz4CZVG7bgShPYoShe8mOGLDmRHpAxvXunH8
- afkPJFm2JwbeujSzpyCZUcxO4EEAOTWht8UT/PqxDU+Wu1C4FqsGi9khev3drUWzRk8I
- +e7+2ywsBy9RMJwUVelouTW1kAqJMjfqR3WZFQ19iL04Y8aH1bbn1se3y31Z1xFTbqzP 5A== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mkcxvbbka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 17:12:58 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLHCwt3019004
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 17:12:58 GMT
-Received: from hu-ahari-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 21 Dec 2022 09:12:53 -0800
-From:   Anjana Hari <quic_ahari@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
-        <bvanassche@acm.org>, <konrad.dybcio@linaro.org>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_narepall@quicinc.com>, <quic_nitirawa@quicinc.com>,
-        <quic_rampraka@quicinc.com>, Anjana Hari <quic_ahari@quicinc.com>
-Subject: [PATCH 2/2] scsi: ufs: ufs-qcom: Add hibernation callbacks
-Date:   Wed, 21 Dec 2022 22:42:22 +0530
-Message-ID: <20221221171222.19699-3-quic_ahari@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221221171222.19699-1-quic_ahari@quicinc.com>
-References: <20221221171222.19699-1-quic_ahari@quicinc.com>
+        Wed, 21 Dec 2022 12:13:36 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96EDB2528C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:13:05 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 918922F4;
+        Wed, 21 Dec 2022 09:13:45 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF1053F703;
+        Wed, 21 Dec 2022 09:13:01 -0800 (PST)
+Message-ID: <72ed59b5-c7e1-c425-d1b6-e8d703d11d7a@arm.com>
+Date:   Wed, 21 Dec 2022 18:12:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: bVDn856PkRQa6O9tR-6v-knJw5aFTNLr
-X-Proofpoint-ORIG-GUID: bVDn856PkRQa6O9tR-6v-knJw5aFTNLr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-21_09,2022-12-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 impostorscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0
- suspectscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212210143
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/7] sched: Teach arch_asym_cpu_priority() the idle
+ state of SMT siblings
+Content-Language: en-US
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
+ <20221122203532.15013-4-ricardo.neri-calderon@linux.intel.com>
+ <e7d6c19b-593d-acfd-35af-73b1840be276@arm.com>
+ <20221212175433.GB27353@ranerica-svr.sc.intel.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20221212175433.GB27353@ranerica-svr.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds freeze-thaw-restore callbacks for Qualcomm UFS platform.
+On 12/12/2022 18:54, Ricardo Neri wrote:
+> On Tue, Dec 06, 2022 at 06:54:39PM +0100, Dietmar Eggemann wrote:
+>> On 22/11/2022 21:35, Ricardo Neri wrote:
 
-Signed-off-by: Anjana Hari <quic_ahari@quicinc.com>
----
- drivers/ufs/host/ufs-qcom.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+[...]
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 8ad1415e10b6..ac5685b0e891 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1498,10 +1498,14 @@ MODULE_DEVICE_TABLE(acpi, ufs_qcom_acpi_match);
- #endif
- 
- static const struct dev_pm_ops ufs_qcom_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(ufshcd_system_suspend, ufshcd_system_resume)
- 	SET_RUNTIME_PM_OPS(ufshcd_runtime_suspend, ufshcd_runtime_resume, NULL)
- 	.prepare	 = ufshcd_suspend_prepare,
- 	.complete	 = ufshcd_resume_complete,
-+	.suspend         = ufshcd_system_suspend,
-+	.resume          = ufshcd_system_resume,
-+	.freeze          = ufshcd_system_freeze,
-+	.restore         = ufshcd_system_restore,
-+	.thaw            = ufshcd_system_thaw,
- };
- 
- static struct platform_driver ufs_qcom_pltform = {
--- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc., is a member of Code Aurora Forum, a Linux Foundation Collaborative Project
+>>> + * want to check the idle state of the SMT siblngs of @cpu.
+>>
+>> s/siblngs/siblings
+>>
+>> The scheduler calls sched_asym_prefer(..., true) from
+>> find_busiest_queue(), asym_active_balance() and nohz_balancer_kick()
+> 
+> In these places we are comparing two specific CPUs, of which the idle
+> state of its siblings impact their throughput and, in consequence, the
+> decision of attempt to balance load.  
+> 
+> In the places were sched_asym_prefer(...., false) is called we compare the
+> destination CPU with a CPU that bears the priority of a sched group,
+> regardless of the idle state of its siblings.
 
+OK.
+
+>> even from SMT layer on !x86.
+> 
+> This is true, but the default arch_asym_cpu_priority ignores check_smt.
+
+True.
+
+>>  So I guess a `bool check_smt` wouldn't be
+>> sufficient to distinguish whether sched_smt_siblings_idle() should be
+>> called or not.
+> 
+> But it is the caller who determines whether the idle state of the SMT
+> siblings of @cpu may be relevant.
+
+I assume caller being the task scheduler here. Callers with
+`check_smt=true` can be called from any SD level with SD_ASYM_PACKING.
+
+Imagine an arch w/ SD_ASYM_PACKING on SMT & MC overwriting
+arch_asym_cpu_priority(). `bool check_smt` wouldn't be sufficient to
+know whether a call to something like sched_smt_siblings_idle()
+(is_core_idle()) which iterates over cpu_smt_mask(cpu) would make sense.
+
+>> To me this comment is a little bit misleading. Not an
+>> issue currently since there is only the x86 overwrite right now.
+> 
+> If my justification make sense to you, I can expand the comment to state
+> that the caller decides whether check_smt is needed but arch-specific
+> implementations are free to ignore it.
+
+Not a big issue but to me if the task scheduler asks for `bool
+check_smt` then archs would have to check to guarantee common behaviour.
+And the meaning of `bool check_smt` on SMT is unclear to me.
+Since only x86 would use this so far it can be adapted later for others
+if needed.
+
+[...]
