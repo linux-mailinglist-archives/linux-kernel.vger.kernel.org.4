@@ -2,460 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A20652D0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D01652D14
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234368AbiLUGvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 01:51:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
+        id S234385AbiLUGyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 01:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLUGvt (ORCPT
+        with ESMTP id S234371AbiLUGy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 01:51:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FEA10DC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671605471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dhva5GfPmicyt0coL+30z4n0lBDOuehb8IuDSk00klA=;
-        b=aXzFOGY6P9tzIcHN9qMlwpnTmdvok2hUgVPkzfDpvqGsXMz8bkL4/tWhWUSJfkXIeGFSV2
-        DQ66RonVg1we1dawC8SfeTS3DSXBChForWKWF+hhlxgkyavMCEWb/r7KUdpxCT07Cz1tc+
-        7L4dkOS1QjREXZ0mxhkmX4CStAgmWzE=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-146-burRYXuJONeDKr4S4gR3SQ-1; Wed, 21 Dec 2022 01:51:09 -0500
-X-MC-Unique: burRYXuJONeDKr4S4gR3SQ-1
-Received: by mail-ed1-f71.google.com with SMTP id v4-20020a056402348400b0046cbbc786bdso10481309edc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:51:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dhva5GfPmicyt0coL+30z4n0lBDOuehb8IuDSk00klA=;
-        b=Zm4E6EIYuYAH0STzZDrgTgJD/UYLibWFLzWWQ11u5DuuDoSyk/XojPjUmauMGmb3dP
-         zCIq8A55yJgaFiHF14PZxq9k2/Db3QrW0gQm+kvgpz6lyfRm9m1t3GJnn56Ksl8qgwTZ
-         lIERiOR/ynMmaEAY/Pw2vtgYFu1q728E6teeMpAtyuZiV3aIzEs7wnws4fMWEWGNiPHc
-         30s8uH6j0Tc+uD8jvm1O9TDiTs4cvhQrWp73Ay7W+NL3mhP8NFSmE+PIUsEEUJ/BmMwK
-         J5pk8ci6ryg1bpvq13iXsElRD6+Ms2EnaL1FcADnguxOw4o3Um/hSxqptW+JfUFgOM6t
-         1TLQ==
-X-Gm-Message-State: AFqh2komhtrW351C9mg6YMMxaJT47KcIertyiufLVLXekV1euFUPj1LZ
-        sjHy4TgxoPRduIjDyY7g/dR18CNHVeScr51dURzPMLo+o35Tmevjnld+xsq6PACBR8WXz3F2Pp6
-        3ndWXbpoW6wD0AJa3CDGAen3nKfmflTJJ14ugWGg8
-X-Received: by 2002:a50:d68f:0:b0:46f:a73d:6bd7 with SMTP id r15-20020a50d68f000000b0046fa73d6bd7mr75371edi.93.1671605468682;
-        Tue, 20 Dec 2022 22:51:08 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtqwmp8ESwM5Bd007mJmlKi9MmXd7uNGAzzH7IMjf+5J7zcVx522GTzaSzVLqSpAtKt8SIgDaKvnXxGOZHSHuw=
-X-Received: by 2002:a50:d68f:0:b0:46f:a73d:6bd7 with SMTP id
- r15-20020a50d68f000000b0046fa73d6bd7mr75365edi.93.1671605468442; Tue, 20 Dec
- 2022 22:51:08 -0800 (PST)
+        Wed, 21 Dec 2022 01:54:29 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2C51F2F4;
+        Tue, 20 Dec 2022 22:54:27 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1p7szG-00989G-S1; Wed, 21 Dec 2022 14:53:59 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 21 Dec 2022 14:53:58 +0800
+Date:   Wed, 21 Dec 2022 14:53:58 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, dhowells@redhat.com,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Tadeusz Struk <tadeusz.struk@intel.com>
+Subject: [v2 PATCH] lib/mpi: Fix buffer overrun when SG is too long
+Message-ID: <Y6Kthn+rIUnCEJWz@gondor.apana.org.au>
+References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
+ <Y5OGr59A9wo86rYY@sol.localdomain>
+ <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
+ <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
+ <0f80852578436dbba7a0fce03d86c3fa2d38c571.camel@huaweicloud.com>
+ <Y6FjQPZiJYTEG1zI@gondor.apana.org.au>
+ <a04e6458-6814-97fc-f03a-617809e2e6ce@huaweicloud.com>
+ <Y6IbWA5aZeBnn4n2@gmail.com>
 MIME-Version: 1.0
-References: <20221221061652.15202-1-jasowang@redhat.com> <20221221061652.15202-5-jasowang@redhat.com>
- <CAJaqyWc=R5xrEhYJCh=BjovjPN2Ckexaci5kaXdmcV6bww4h8A@mail.gmail.com>
-In-Reply-To: <CAJaqyWc=R5xrEhYJCh=BjovjPN2Ckexaci5kaXdmcV6bww4h8A@mail.gmail.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Wed, 21 Dec 2022 07:50:31 +0100
-Message-ID: <CAJaqyWdodVd+YbNC33Xw1fjpDVLokwN8jSc-dV1CaJFgbaf5Bw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] vdpa_sim_net: vendor satistics
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6IbWA5aZeBnn4n2@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 7:33 AM Eugenio Perez Martin
-<eperezma@redhat.com> wrote:
+On Tue, Dec 20, 2022 at 08:30:16PM +0000, Eric Biggers wrote:
 >
-> On Wed, Dec 21, 2022 at 7:17 AM Jason Wang <jasowang@redhat.com> wrote:
-> >
-> > This patch adds support for basic vendor stats that include counters
-> > for tx, rx and cvq.
-> >
-> > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > ---
-> >  drivers/vdpa/vdpa_sim/vdpa_sim.c     |   2 +
-> >  drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 215 ++++++++++++++++++++++++++-
-> >  2 files changed, 211 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> > index 02e892f819e7..595d9d5a372f 100644
-> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> > @@ -755,8 +755,10 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
-> >         .set_vq_cb              = vdpasim_set_vq_cb,
-> >         .set_vq_ready           = vdpasim_set_vq_ready,
-> >         .get_vq_ready           = vdpasim_get_vq_ready,
-> > +       .get_vendor_vq_stats    = vdpasim_get_vq_stats,
-> >         .set_vq_state           = vdpasim_set_vq_state,
-> >         .get_vq_state           = vdpasim_get_vq_state,
-> > +       .get_vendor_vq_stats    = vdpasim_get_vq_stats,
->
-> The patch adds .get_vendor_vq_stats twice to vdpasim_batch_config_ops
-> assignment.
->
+> > Tried, could not boot the UML kernel.
+> > 
+> > After looking, it seems we have to call sg_miter_stop(). Or alternatively,
+> > we could let sg_miter_next() be called but not writing anything inside the
+> > loop.
+> > 
+> > With either of those fixes, the tests pass (using one scatterlist).
 
-Also, I think it should go in the previous patch, with the update to
-vdpasim_config_ops.
+Thanks for the quick feedback Roberto!
 
-Thanks!
+> I think it should look like:
+> 
+> 	while (nbytes) {
+> 		sg_miter_next(&miter);
+> 		...
+> 	}
+> 	sg_miter_stop(&miter);
 
-> >         .get_vq_align           = vdpasim_get_vq_align,
-> >         .get_vq_group           = vdpasim_get_vq_group,
-> >         .get_device_features    = vdpasim_get_device_features,
-> > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> > index 20cd5cdff919..3c05e932d90d 100644
-> > --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> > @@ -15,6 +15,7 @@
-> >  #include <linux/etherdevice.h>
-> >  #include <linux/vringh.h>
-> >  #include <linux/vdpa.h>
-> > +#include <net/netlink.h>
-> >  #include <uapi/linux/virtio_net.h>
-> >  #include <uapi/linux/vdpa.h>
-> >
-> > @@ -36,6 +37,34 @@
-> >  #define VDPASIM_NET_AS_NUM     2
-> >  #define VDPASIM_NET_GROUP_NUM  2
-> >
-> > +struct vdpasim_dataq_stats {
-> > +       struct u64_stats_sync syncp;
-> > +       u64 pkts;
-> > +       u64 bytes;
-> > +       u64 drops;
-> > +       u64 errors;
-> > +       u64 overruns;
-> > +};
-> > +
-> > +struct vdpasim_cq_stats {
-> > +       struct u64_stats_sync syncp;
-> > +       u64 requests;
-> > +       u64 successes;
-> > +       u64 errors;
-> > +};
-> > +
-> > +struct vdpasim_net{
-> > +       struct vdpasim vdpasim;
-> > +       struct vdpasim_dataq_stats tx_stats;
-> > +       struct vdpasim_dataq_stats rx_stats;
-> > +       struct vdpasim_cq_stats cq_stats;
-> > +};
-> > +
-> > +static struct vdpasim_net *sim_to_net(struct vdpasim *vdpasim)
-> > +{
-> > +       return container_of(vdpasim, struct vdpasim_net, vdpasim);
-> > +}
-> > +
-> >  static void vdpasim_net_complete(struct vdpasim_virtqueue *vq, size_t len)
-> >  {
-> >         /* Make sure data is wrote before advancing index */
-> > @@ -93,9 +122,11 @@ static virtio_net_ctrl_ack vdpasim_handle_ctrl_mac(struct vdpasim *vdpasim,
-> >  static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
-> >  {
-> >         struct vdpasim_virtqueue *cvq = &vdpasim->vqs[2];
-> > +       struct vdpasim_net *net = sim_to_net(vdpasim);
-> >         virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
-> >         struct virtio_net_ctrl_hdr ctrl;
-> >         size_t read, write;
-> > +       u64 requests = 0, errors = 0;
-> >         int err;
-> >
-> >         if (!(vdpasim->features & (1ULL << VIRTIO_NET_F_CTRL_VQ)))
-> > @@ -113,8 +144,12 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
-> >
-> >                 read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->in_iov, &ctrl,
-> >                                              sizeof(ctrl));
-> > -               if (read != sizeof(ctrl))
-> > +               if (read != sizeof(ctrl)) {
-> > +                       ++errors;
-> >                         break;
-> > +               }
-> > +
-> > +               ++requests;
-> >
-> >                 switch (ctrl.class) {
-> >                 case VIRTIO_NET_CTRL_MAC:
-> > @@ -141,6 +176,12 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
-> >                         cvq->cb(cvq->private);
-> >                 local_bh_enable();
-> >         }
-> > +
-> > +       u64_stats_update_begin(&net->cq_stats.syncp);
-> > +       net->cq_stats.requests += requests;
-> > +       net->cq_stats.errors += errors;
-> > +       net->cq_stats.successes += requests;
->
-> I'd say we should maintain here requests == errors + requests.
->
-> Intuitively, I'd rename local variable requests to successes, and I'd apply:
-> net->cq_stats.requests += successes + errors;
-> net->cq_stats.errors += errors;
-> net->cq_stats.successes += successes;
->
-> Or am I missing something?
->
-> Thanks!
->
-> > +       u64_stats_update_end(&net->cq_stats.syncp);
-> >  }
-> >
-> >  static void vdpasim_net_work(struct work_struct *work)
-> > @@ -148,8 +189,10 @@ static void vdpasim_net_work(struct work_struct *work)
-> >         struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
-> >         struct vdpasim_virtqueue *txq = &vdpasim->vqs[1];
-> >         struct vdpasim_virtqueue *rxq = &vdpasim->vqs[0];
-> > +       struct vdpasim_net *net = sim_to_net(vdpasim);
-> >         ssize_t read, write;
-> > -       int pkts = 0;
-> > +       u64 tx_pkts = 0, rx_pkts = 0, tx_bytes = 0, rx_bytes = 0;
-> > +       u64 rx_drops = 0, rx_overruns = 0, rx_errors = 0, tx_errors = 0;
-> >         int err;
-> >
-> >         spin_lock(&vdpasim->lock);
-> > @@ -168,14 +211,21 @@ static void vdpasim_net_work(struct work_struct *work)
-> >         while (true) {
-> >                 err = vringh_getdesc_iotlb(&txq->vring, &txq->out_iov, NULL,
-> >                                            &txq->head, GFP_ATOMIC);
-> > -               if (err <= 0)
-> > +               if (err <= 0) {
-> > +                       if (err)
-> > +                               ++tx_errors;
-> >                         break;
-> > +               }
-> >
-> > +               ++tx_pkts;
-> >                 read = vringh_iov_pull_iotlb(&txq->vring, &txq->out_iov,
-> >                                              vdpasim->buffer,
-> >                                              PAGE_SIZE);
-> >
-> > +               tx_bytes += read;
-> > +
-> >                 if (!receive_filter(vdpasim, read)) {
-> > +                       ++rx_drops;
-> >                         vdpasim_net_complete(txq, 0);
-> >                         continue;
-> >                 }
-> > @@ -183,19 +233,25 @@ static void vdpasim_net_work(struct work_struct *work)
-> >                 err = vringh_getdesc_iotlb(&rxq->vring, NULL, &rxq->in_iov,
-> >                                            &rxq->head, GFP_ATOMIC);
-> >                 if (err <= 0) {
-> > +                       ++rx_overruns;
-> >                         vdpasim_net_complete(txq, 0);
-> >                         break;
-> >                 }
-> >
-> >                 write = vringh_iov_push_iotlb(&rxq->vring, &rxq->in_iov,
-> >                                               vdpasim->buffer, read);
-> > -               if (write <= 0)
-> > +               if (write <= 0) {
-> > +                       ++rx_errors;
-> >                         break;
-> > +               }
-> > +
-> > +               ++rx_pkts;
-> > +               rx_bytes += write;
-> >
-> >                 vdpasim_net_complete(txq, 0);
-> >                 vdpasim_net_complete(rxq, write);
-> >
-> > -               if (++pkts > 4) {
-> > +               if (tx_pkts > 4) {
-> >                         schedule_work(&vdpasim->work);
-> >                         goto out;
-> >                 }
-> > @@ -203,6 +259,145 @@ static void vdpasim_net_work(struct work_struct *work)
-> >
-> >  out:
-> >         spin_unlock(&vdpasim->lock);
-> > +
-> > +       u64_stats_update_begin(&net->tx_stats.syncp);
-> > +       net->tx_stats.pkts += tx_pkts;
-> > +       net->tx_stats.bytes += tx_bytes;
-> > +       net->tx_stats.errors += tx_errors;
-> > +       u64_stats_update_end(&net->tx_stats.syncp);
-> > +
-> > +       u64_stats_update_begin(&net->rx_stats.syncp);
-> > +       net->rx_stats.pkts += rx_pkts;
-> > +       net->rx_stats.bytes += rx_bytes;
-> > +       net->rx_stats.drops += rx_drops;
-> > +       net->rx_stats.errors += rx_errors;
-> > +       net->rx_stats.overruns += rx_overruns;
-> > +       u64_stats_update_end(&net->rx_stats.syncp);
-> > +}
-> > +
-> > +static int vdpasim_net_get_stats(struct vdpasim *vdpasim, u16 idx,
-> > +                                struct sk_buff *msg,
-> > +                                struct netlink_ext_ack *extack)
-> > +{
-> > +       struct vdpasim_net *net = sim_to_net(vdpasim);
-> > +       u64 rx_pkts, rx_bytes, rx_errors, rx_overruns, rx_drops;
-> > +       u64 tx_pkts, tx_bytes, tx_errors, tx_drops;
-> > +       u64 cq_requests, cq_successes, cq_errors;
-> > +       unsigned int start;
-> > +       int err = -EMSGSIZE;
-> > +
-> > +       switch(idx) {
-> > +       case 0:
-> > +               do {
-> > +                       start = u64_stats_fetch_begin(&net->rx_stats.syncp);
-> > +                       rx_pkts = net->rx_stats.pkts;
-> > +                       rx_bytes = net->rx_stats.bytes;
-> > +                       rx_errors = net->rx_stats.errors;
-> > +                       rx_overruns = net->rx_stats.overruns;
-> > +                       rx_drops = net->rx_stats.drops;
-> > +               } while (u64_stats_fetch_retry(&net->rx_stats.syncp, start));
-> > +
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                       "rx packets"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     rx_pkts, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "rx bytes"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     rx_bytes, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "rx errors"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     rx_errors, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "rx overrunss"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     rx_overruns, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "rx drops"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     rx_drops, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               err = 0;
-> > +               break;
-> > +       case 1:
-> > +               do {
-> > +                       start = u64_stats_fetch_begin(&net->tx_stats.syncp);
-> > +                       tx_pkts = net->tx_stats.pkts;
-> > +                       tx_bytes = net->tx_stats.bytes;
-> > +                       tx_errors = net->tx_stats.errors;
-> > +                       tx_drops = net->tx_stats.drops;
-> > +               } while (u64_stats_fetch_retry(&net->tx_stats.syncp, start));
-> > +
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "tx packets"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     tx_pkts, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "tx bytes"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     tx_bytes, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "tx errors"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     tx_errors, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "tx drops"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     tx_drops, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               err = 0;
-> > +               break;
-> > +       case 2:
-> > +               do {
-> > +                       start = u64_stats_fetch_begin(&net->cq_stats.syncp);
-> > +                       cq_requests = net->cq_stats.requests;
-> > +                       cq_successes = net->cq_stats.successes;
-> > +                       cq_errors = net->cq_stats.errors;
-> > +               } while (u64_stats_fetch_retry(&net->cq_stats.syncp, start));
-> > +
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "cvq requests"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     cq_requests, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "cvq successes"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     cq_successes, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
-> > +                                 "cvq errors"))
-> > +                       break;
-> > +               if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
-> > +                                     cq_errors, VDPA_ATTR_PAD))
-> > +                       break;
-> > +               err = 0;
-> > +               break;
-> > +       default:
-> > +               err = -EINVAL;
-> > +               break;
-> > +       }
-> > +
-> > +       return err;
-> >  }
-> >
-> >  static void vdpasim_net_get_config(struct vdpasim *vdpasim, void *config)
-> > @@ -239,6 +434,7 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
-> >                                const struct vdpa_dev_set_config *config)
-> >  {
-> >         struct vdpasim_dev_attr dev_attr = {};
-> > +       struct vdpasim_net *net;
-> >         struct vdpasim *simdev;
-> >         int ret;
-> >
-> > @@ -249,10 +445,11 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
-> >         dev_attr.nvqs = VDPASIM_NET_VQ_NUM;
-> >         dev_attr.ngroups = VDPASIM_NET_GROUP_NUM;
-> >         dev_attr.nas = VDPASIM_NET_AS_NUM;
-> > -       dev_attr.alloc_size = sizeof(struct vdpasim);
-> > +       dev_attr.alloc_size = sizeof(struct vdpasim_net);
-> >         dev_attr.config_size = sizeof(struct virtio_net_config);
-> >         dev_attr.get_config = vdpasim_net_get_config;
-> >         dev_attr.work_fn = vdpasim_net_work;
-> > +       dev_attr.get_stats = vdpasim_net_get_stats;
-> >         dev_attr.buffer_size = PAGE_SIZE;
-> >
-> >         simdev = vdpasim_create(&dev_attr, config);
-> > @@ -265,6 +462,12 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
-> >         if (ret)
-> >                 goto reg_err;
-> >
-> > +       net = sim_to_net(simdev);
-> > +
-> > +       u64_stats_init(&net->tx_stats.syncp);
-> > +       u64_stats_init(&net->rx_stats.syncp);
-> > +       u64_stats_init(&net->cq_stats.syncp);
-> > +
-> >         return 0;
-> >
-> >  reg_err:
-> > --
-> > 2.25.1
-> >
+You're right Eric.  However, we could also do it by simply not
+checking nbytes since we already set nents according to nbytes
+at the top of the function.
 
+---8<---
+The helper mpi_read_raw_from_sgl sets the number of entries in
+the SG list according to nbytes.  However, if the last entry
+in the SG list contains more data than nbytes, then it may overrun
+the buffer because it only allocates enough memory for nbytes.
+
+Fixes: 2d4d1eea540b ("lib/mpi: Add mpi sgl helpers")
+Reported-by: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/lib/mpi/mpicoder.c b/lib/mpi/mpicoder.c
+index 39c4c6731094..157ef532a6a2 100644
+--- a/lib/mpi/mpicoder.c
++++ b/lib/mpi/mpicoder.c
+@@ -504,7 +501,8 @@ MPI mpi_read_raw_from_sgl(struct scatterlist *sgl, unsigned int nbytes)
+ 
+ 	while (sg_miter_next(&miter)) {
+ 		buff = miter.addr;
+-		len = miter.length;
++		len = min_t(unsigned, miter.length, nbytes);
++		nbytes -= len;
+ 
+ 		for (x = 0; x < len; x++) {
+ 			a <<= 8;
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
