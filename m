@@ -2,74 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496F66535A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8C46535A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234671AbiLURx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S231384AbiLURzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbiLURxW (ORCPT
+        with ESMTP id S229777AbiLURzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:53:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD82522BDA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:53:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1C3A0CE1876
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 17:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2969BC433F0;
-        Wed, 21 Dec 2022 17:53:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671645198;
-        bh=mwfOVeuQ2/KZmWwHmpVbZjfCeiGA0qA8rK6v/w1N7c0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=GHWweNrt4P2xEHfF0CGgB6iXEphNfB4opIlQO27Xfl3jO/0zAu1KNBnx0RYEg2Y0I
-         GMlufRn2MYXneP+UDbcz1uZvGXl3vjeRPHrPzfe2x5vLiSMT9oZGU5x174ZsKpOVT8
-         t4clHdBRpNaYyUy62nJkkYH+ApJWfNba1t7BNxhzAy7IQ9qYTN8rvJ7DU34Q5S1EqO
-         lKA8WUsoXyoQCA1Jzx/1Xsi3VtqGZqmvu1TGPmtCk5dixL1uK2qQtEacF1VeiwRTsf
-         FHiWz+cKzopKWC189R3E4qgY6LhlxQEfAnujlNcBQI2ckQT2aR6GCVdCvz1c7YcafP
-         s6AunCq69yFsg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0DA3DC43141;
-        Wed, 21 Dec 2022 17:53:18 +0000 (UTC)
-Subject: Re: [GIT PULL] HID fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <c80b4fac-a515-b15e-7233-92145bb2a39c@redhat.com>
-References: <c80b4fac-a515-b15e-7233-92145bb2a39c@redhat.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <c80b4fac-a515-b15e-7233-92145bb2a39c@redhat.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2022122101
-X-PR-Tracked-Commit-Id: 54f27dc53f1764986d417cfafe1013806deba668
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d264dd3bbbd16b56239e889023fbe49413a58eaf
-Message-Id: <167164519805.28688.5004655309179403860.pr-tracker-bot@kernel.org>
-Date:   Wed, 21 Dec 2022 17:53:18 +0000
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Dec 2022 12:55:05 -0500
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B7422BDA;
+        Wed, 21 Dec 2022 09:55:04 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id m2so15446474vsv.9;
+        Wed, 21 Dec 2022 09:55:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1+EHTg950OODgm5W0yafui8aHdMJusC0dH+4uJ44Jio=;
+        b=PiHbb0brrZGhKpSMiZU9LB9N5Y1sDCugXgD8KA5r+NYclSeowpfCcwHOymIUuB3AkA
+         srjF9oWxk0Jh6tmo0FIwqNTRX46h+KWPXs9Dt0GqEbF1BsI+IJ8I26VMHQ3Sz8ReoMrd
+         VgGpmlxJjVRwQgc8pQpdCG8OJotMhEOQY4tJjNUIt+HQAWPJ/5AGy2CFuaSVjoP0/LG/
+         W7L+Al+ofKYUkf1lajwqCBARCIIm9FJt7cyHPuuvTkPyMq0dygCo7QqlD//n7NKNBQzR
+         Vna4dnYx7grnk7UuR5ZYn5H+zK0KTzVCSXq2RpsG573pbcJiq6YFfIl3D3blNQxCz9zH
+         wH0w==
+X-Gm-Message-State: AFqh2kp+rWm7G2ASsA9z+IMBzEFDM3wmnJ2jAopiN5c9fFZGtce9+Q/x
+        Hg8VD2Rdln5vBo0d4GLX9tyquog9idfkenI/2YM=
+X-Google-Smtp-Source: AMrXdXvcjo0kdtXNWnF54g6kqUsDb5GUgL1NC6uyXp7BWEmYvCktUq9ySLvg1y8r5oY9vEpuDaN2+x++rcuIPJnq7jw=
+X-Received: by 2002:a05:6102:126c:b0:3b3:4691:f37e with SMTP id
+ q12-20020a056102126c00b003b34691f37emr312369vsg.70.1671645303271; Wed, 21 Dec
+ 2022 09:55:03 -0800 (PST)
+MIME-Version: 1.0
+References: <20221219201732.460111-1-namhyung@kernel.org> <20221219201732.460111-3-namhyung@kernel.org>
+ <Y6NHf1h2BKOw9J3Q@kernel.org>
+In-Reply-To: <Y6NHf1h2BKOw9J3Q@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 21 Dec 2022 09:54:51 -0800
+Message-ID: <CAM9d7chFP6LAJS0_PkThRBNk9KN6HRCyWJK=PoXMTyY92Di7YA@mail.gmail.com>
+Subject: Re: [PATCH 2/6] perf lock contention: Add -Y/--type-filter option
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+        Blake Jones <blakejones@google.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 21 Dec 2022 16:18:17 +0100:
+Hi Arnaldo,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2022122101
+On Wed, Dec 21, 2022 at 9:50 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Mon, Dec 19, 2022 at 12:17:28PM -0800, Namhyung Kim escreveu:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d264dd3bbbd16b56239e889023fbe49413a58eaf
+[SNIP]
+> > @@ -1465,6 +1483,21 @@ static const char *get_type_str(unsigned int flags)
+> >       return "unknown";
+> >  }
+> >
+> > +static unsigned int get_type_flag(const char *str)
+> > +{
+> > +     for (unsigned int i = 0; i < ARRAY_SIZE(lock_type_table); i++) {
+> > +             if (!strcmp(lock_type_table[i].name, str))
+> > +                     return lock_type_table[i].flags;
+> > +     }
+> > +     return -1U;
+> > +}
+> > +
+> > +static void lock_filter_finish(void)
+> > +{
+> > +     zfree(&filters.types);
+> > +     filters.nr_types = 0;
+> > +}
+> > +
+> >  static void sort_contention_result(void)
+> >  {
+> >       sort_result();
+> > @@ -1507,6 +1540,9 @@ static void print_contention_result(struct lock_contention *con)
+> >               if (st->broken)
+> >                       bad++;
+> >
+> > +             if (!st->wait_time_total)
+> > +                     continue;
+> > +
+> >               list_for_each_entry(key, &lock_keys, list) {
+> >                       key->print(key, st);
+> >                       pr_info(" ");
+> > @@ -1753,6 +1789,7 @@ static int __cmd_contention(int argc, const char **argv)
+> >       print_contention_result(&con);
+> >
+> >  out_delete:
+> > +     lock_filter_finish();
+> >       evlist__delete(con.evlist);
+> >       lock_contention_finish();
+> >       perf_session__delete(session);
+> > @@ -1884,6 +1921,79 @@ static int parse_max_stack(const struct option *opt, const char *str,
+> >       return 0;
+> >  }
+> >
+> > +static bool add_lock_type(unsigned int flags)
+> > +{
+> > +     unsigned int *tmp;
+> > +
+> > +     tmp = realloc(filters.types, (filters.nr_types + 1) * sizeof(*filters.types));
+> > +     if (tmp == NULL)
+> > +             return false;
+> > +
+> > +     tmp[filters.nr_types++] = flags;
+> > +     filters.types = tmp;
+> > +     return true;
+> > +}
+> > +
+> > +static int parse_lock_type(const struct option *opt __maybe_unused, const char *str,
+> > +                        int unset __maybe_unused)
+> > +{
+> > +     char *s, *tmp, *tok;
+> > +     int ret = 0;
+> > +
+> > +     s = strdup(str);
+> > +     if (s == NULL)
+> > +             return -1;
+> > +
+> > +     for (tok = strtok_r(s, ", ", &tmp); tok; tok = strtok_r(NULL, ", ", &tmp)) {
+> > +             unsigned int flags = get_type_flag(tok);
+> > +
+> > +             if (flags == -1U) {
+> > +                     char buf[32];
+> > +
+> > +                     if (strchr(tok, ':'))
+> > +                         continue;
+> > +
+> > +                     /* try :R and :W suffixes for rwlock, rwsem, ... */
+> > +                     scnprintf(buf, sizeof(buf), "%s:R", tok);
+> > +                     flags = get_type_flag(buf);
+> > +                     if (flags != -1UL) {
+> > +                             if (!add_lock_type(flags)) {
+> > +                                     ret = -1;
+> > +                                     break;
+> > +                             }
+> > +                     }
+>
+>
+> clang doesn't like this:
+>
+>   34    97.97 fedora:36                     : FAIL clang version 14.0.5 (Fedora 14.0.5-2.fc36)
+>     builtin-lock.c:2012:14: error: result of comparison of constant 18446744073709551615 with expression of type 'unsigned int' is always true [-Werror,-Wtautological-constant-out-of-range-compare]
+>                             if (flags != -1UL) {
+>                                 ~~~~~ ^  ~~~~
+>     builtin-lock.c:2021:14: error: result of comparison of constant 18446744073709551615 with expression of type 'unsigned int' is always true [-Werror,-Wtautological-constant-out-of-range-compare]
+>                             if (flags != -1UL) {
+>                                 ~~~~~ ^  ~~~~
+>     builtin-lock.c:2037:14: error: result of comparison of constant 18446744073709551615 with expression of type 'unsigned int' is always true [-Werror,-Wtautological-constant-out-of-range-compare]
+>                             if (flags != -1UL) {
+>                                 ~~~~~ ^  ~~~~
+>     3 errors generated.
+>
+> I applied this on top, Ack?
 
-Thank you!
+Oh.. sorry for that.  It could be just -1U.  But I'm ok with UINT_MAX too.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
