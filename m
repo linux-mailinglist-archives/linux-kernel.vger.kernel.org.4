@@ -2,238 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E157652DC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87CA652DC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbiLUIQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 03:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S234548AbiLUIQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 03:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234516AbiLUIPo (ORCPT
+        with ESMTP id S234538AbiLUIPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 03:15:44 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AB3F7D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:43 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id b3so22401127lfv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tKVTpYZFPEDtKyLcWavwNidP1gFKsOiP+G6edw3PI9g=;
-        b=vahFHpUDyrqgLEJM7LTlfQSXUee1o2TfjthdfLdgytrvn/mWRZMStW/eUl9K3VhG/2
-         rW3a3BSINNKDlG/kDJ8ERk/Wwdz9KyGmrY9X6HSmHYegm248/3wlGApZXmAvfc8YIZG9
-         UfqpRQNEJQfmABHy1YGf03fdsExb1o6N9UkKHLEsaEiZekXs28Pp500Rg94id2g/3Eed
-         sbWPy7FZRXBMEaVGXZm9n48vANpoT0GV+Gz24KYiw/igkpF3IyVK4SlSzZy07NKKVDWG
-         6pGB3/BFGoBm4h80lujRgi8J3yVVmqVojDmQwW68IKfqhbF3o8fpM12d1bdNyqO9c6pT
-         zRAA==
+        Wed, 21 Dec 2022 03:15:49 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76CC262F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:46 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id z9-20020a6be009000000b006e0577c3686so6533046iog.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tKVTpYZFPEDtKyLcWavwNidP1gFKsOiP+G6edw3PI9g=;
-        b=FBHispVVEX86cNPXnUop1NVB/dDmfRUv1wYD3cMm6A2wWDdvJGgl9gVjHD5SWpP/uI
-         cOeAx1TIG3S8GM2RUq/1Tzol7Vlj/zA1od+La1CRA1L8rmDUJdoGKXh/1/vg48pLHEA8
-         wUKpi5rjkrYGthitawVhrR9JvjyLttGWDkFn2rgbIkfN36Lx6YiFaDF3sa2Q4TeG6/YF
-         DdKpEOUwb+Mm925tW5RwuAh2lNLJQEtGJpXEwv5nbrWsIjhwE0aD8efgD7hkt3zBfvKj
-         y4FThWj9rB0WF6gL+urLRTN/zSpn2/TC6g69oOBFu+toIGCxUBo6CsGbejwcgAJ6UInu
-         mqZg==
-X-Gm-Message-State: AFqh2kq0Sae9XLM+kXC58BZYBd8I2ttanQMS2e3aKHJyXR4XHecygq80
-        Qk6aGh7pnoy94QvQcgDybjMoAQ==
-X-Google-Smtp-Source: AMrXdXtXrEk0IuAOycHdERvZxfkVj6P/rVqGYvaomI4T69wVYQdjoSNcMjMry1fmRVNsDStpQx2K9g==
-X-Received: by 2002:a19:c20d:0:b0:4b5:b18b:8966 with SMTP id l13-20020a19c20d000000b004b5b18b8966mr185160lfc.49.1671610541679;
-        Wed, 21 Dec 2022 00:15:41 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o9-20020a05651205c900b00497aa190523sm1767100lfo.248.2022.12.21.00.15.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 00:15:41 -0800 (PST)
-Message-ID: <88357291-3cdd-8d5a-fdec-38bd081a4235@linaro.org>
-Date:   Wed, 21 Dec 2022 09:15:40 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PBa479myLuUkjat4HKXd5OZuqhcEUZx+Vab6rwmEGzw=;
+        b=vF/8O4Cbhn4RkUMonYRoNwHxRDVCpEvB4987dMuATx5hNrINinHxRN0H28VeAo+KWs
+         J5AUOlrm4jwAn+ud8fgjnrYTAQ24i2VYDlv0QxgqDWULxcxc8TYZ3eXY11yruIOXyGtH
+         tE99aYYIl79/UywscOPKsGTBAMf4TgtQZBPckaIeZ5t+OP5RSITCH+vtkF8klLBYCwN9
+         HGcbu6VWthT8UEItfAcSaZn1oE3WSYY+FWA+tQyjGEZ9UFpBvwIRL3fBQ5OH2svWRTYI
+         E0c2cAX3PwW8sjBGVdF7DRnwd2Aw3MkGvOzG0fiDqir6vXMQNfDt9ZFiJ0ag3Izza9/p
+         Rotg==
+X-Gm-Message-State: AFqh2kqkeY+RqgJWNTZKIb8fljsUzSoNcTG8XY9fgw4QiWO9H19Ebuhb
+        JLS65fRfh/ooHspa4VcKH4eDIvneAd8t6hWM/YKljiHG1xI9
+X-Google-Smtp-Source: AMrXdXuhsVn7kQmJEIwx9pbMLJ4mKB7ghJUYh3VfjsVxQhGdOtxJ9BoMZxJcWCEgHzJYkPYzjR6MqbaIUOdQHylmpcQ6iu7iaV/f
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 1/2] arm64: dts: rockchip: Add EmbedFire LubanCat 1
-Content-Language: en-US
-To:     Yuteng Zhong <zonyitoo@gmail.com>, Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, DHDAXCW <lasstp5011@gmail.com>
-References: <Y6KdvAlWLMG4whJh@VM-66-53-centos>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y6KdvAlWLMG4whJh@VM-66-53-centos>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:6f08:0:b0:6e4:8c1:d2d7 with SMTP id
+ k8-20020a6b6f08000000b006e408c1d2d7mr93816ioc.27.1671610545932; Wed, 21 Dec
+ 2022 00:15:45 -0800 (PST)
+Date:   Wed, 21 Dec 2022 00:15:45 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cb11c705f052285f@google.com>
+Subject: [syzbot] [ext4?] inconsistent lock state in ext4_xattr_set_handle
+From:   syzbot <syzbot+9fd463c3e6d18ab8a362@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/12/2022 06:46, Yuteng Zhong wrote:
-> from: DHDAXCW <lasstp5011@gmail.com>
-> 
-> LubanCat 1 is a Rockchip RK3566 SBC based
-> is developed by EmbedFire Electronics Co., Ltd.
-> Mini Linux Card Type Cheap Computer Development Board
-> 
-> It has the following characteristics:
-> - MicroSD card slot, onboard eMMC flash memory
-> - 1GbE Realtek RTL8211F Ethernet Transceiver
-> - 1 USB Type-C port (power and USB2.0 OTG)
-> - 1 USB 3.0 Host port
-> - 3 USB 2.0 Host ports
-> - 1 HDMI
-> - 1 infrared receiver
-> - 1 MIPI DSI
-> - 1 MIPI CSI
-> - 1 x 4-section headphone jack
-> - Mini PCIe socket (USB or PCIe)
-> - 1 SIM Card slot
-> - 1 SYS LED and 1 PWR LED
-> - 40-pin GPIO expansion header
-> 
-> Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
-> Signed-off-by: DHDAXCW <lasstp5011@gmail.com>
-> ---
-> 
-> Changed in V2:
->   - Remove RNG node
-> Changed in V3:
->   - Sent E-mail with a wrong attachment
-> Changed in V4:
->   - Modify all node names
-> 
-> ---
->  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
->  .../boot/dts/rockchip/rk3566-lubancat-1.dts   | 598 ++++++++++++++++++
->  2 files changed, 599 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-> index 0a76a2ebb5f6..e52bda04d45a 100644
-> --- a/arch/arm64/boot/dts/rockchip/Makefile
-> +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> @@ -78,6 +78,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-blade.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-cm4.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-soquartz-model-a.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-box-demo.dtb
-> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-lubancat-1.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
->  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-odroid-m1.dtb
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts b/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
-> new file mode 100644
-> index 000000000000..443fcfabbd16
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
-> @@ -0,0 +1,598 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> +* Copyright (c) 2021 Rockchip Electronics Co., Ltd.
-> +*/
-> +
-> +/dts-v1/;
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/pinctrl/rockchip.h>
-> +#include <dt-bindings/soc/rockchip,vop2.h>
-> +#include "rk3566.dtsi"
-> +
-> +/ {
-> +	model = "EmbedFire LubanCat 1";
-> +	compatible = "embedfire,lubancat-1", "rockchip,rk3566";
-> +
-> +	aliases {
-> +		ethernet0 = &gmac1;
-> +		mmc0 = &sdmmc0;
-> +		mmc1 = &sdhci;
-> +	};
-> +
-> +	chosen: chosen {
-> +		stdout-path = "serial2:1500000n8";
-> +	};
-> +
-> +	gmac1_clkin: external-gmac1-clock {
-> +		compatible = "fixed-clock";
-> +		clock-frequency = <125000000>;
-> +		clock-output-names = "gmac1_clkin";
-> +		#clock-cells = <0>;
-> +	};
-> +	
-> +	hdmi-con {
-> +		compatible = "hdmi-connector";
-> +		type = "a";
-> +
-> +		port {
-> +			hdmi_con_in: endpoint {
-> +				remote-endpoint = <&hdmi_out_con>;
-> +			};
-> +		};
-> +	};
-> +
-> +	gpio-leds {
-> +		compatible = "gpio-leds";
-> +
-> +		sys_led: sys-led {
-> +			label = "sys_led";
-> +			linux,default-trigger = "heartbeat";
-> +			default-state = "on";
-> +			gpios = <&gpio0 RK_PC5 GPIO_ACTIVE_LOW>;
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&sys_led_pin>;
-> +		};
-> +	};
-> +
-> +	usb_5v: usb-5v-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "usb_5v";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +	};
-> +
-> +	vcc5v0_sys: vcc5v0-sys-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc5v0_sys";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&usb_5v>;
-> +	};
-> +
-> +	vcc3v3_sys: vcc3v3-sys {
+Hello,
 
-This is a friendly reminder during the review process.
+syzbot found the following issue on:
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1723a120480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=9fd463c3e6d18ab8a362
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-Thank you.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc3v3_sys";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&vcc5v0_sys>;
-> +	};
-> +
-> +	vcc3v3_pcie: vcc3v3-pcie-regulator {
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9fd463c3e6d18ab8a362@syzkaller.appspotmail.com
+
+================================
+WARNING: inconsistent lock state
+6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0 Not tainted
+--------------------------------
+inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
+syz-executor.5/6055 [HC0[0]:SC0[0]:HE1:SE1] takes:
+ffff0000c717ffa8 (&irq_desc_lock_class){?.-.}-{2:2}, at: ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
+ffff0000c717ffa8 (&irq_desc_lock_class){?.-.}-{2:2}, at: ext4_xattr_set_handle+0xd0/0x9a0 fs/ext4/xattr.c:2309
+{IN-HARDIRQ-W} state was registered at:
+  lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+  _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
+  handle_fasteoi_irq+0x38/0x324 kernel/irq/chip.c:693
+  generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
+  handle_irq_desc kernel/irq/irqdesc.c:648 [inline]
+  generic_handle_domain_irq+0x4c/0x6c kernel/irq/irqdesc.c:704
+  __gic_handle_irq drivers/irqchip/irq-gic-v3.c:695 [inline]
+  __gic_handle_irq_from_irqson drivers/irqchip/irq-gic-v3.c:746 [inline]
+  gic_handle_irq+0x78/0x1b4 drivers/irqchip/irq-gic-v3.c:790
+  call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:892
+  do_interrupt_handler+0x7c/0xc0 arch/arm64/kernel/entry-common.c:274
+  __el1_irq arch/arm64/kernel/entry-common.c:471 [inline]
+  el1_interrupt+0x34/0x68 arch/arm64/kernel/entry-common.c:486
+  el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:491
+  el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:580
+  arch_local_irq_restore arch/arm64/include/asm/irqflags.h:122 [inline]
+  __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+  _raw_spin_unlock_irqrestore+0x58/0x8c kernel/locking/spinlock.c:194
+  try_to_wake_up+0x2c4/0x410 kernel/sched/core.c:4194
+  wake_up_process+0x18/0x24 kernel/sched/core.c:4326
+  set_current_rng+0xa4/0xe4 drivers/char/hw_random/core.c:101
+  hwrng_register+0x190/0x47c drivers/char/hw_random/core.c:567
+  virtrng_scan+0x24/0x5c drivers/char/hw_random/virtio-rng.c:207
+  virtio_dev_probe+0x4f8/0x590 drivers/virtio/virtio.c:314
+  call_driver_probe+0x48/0x170
+  really_probe+0x13c/0x4c0 drivers/base/dd.c:639
+  __driver_probe_device+0x124/0x214 drivers/base/dd.c:778
+  driver_probe_device+0x54/0x2f0 drivers/base/dd.c:808
+  __driver_attach+0x250/0x374 drivers/base/dd.c:1190
+  bus_for_each_dev+0xa8/0x110 drivers/base/bus.c:301
+  driver_attach+0x30/0x40 drivers/base/dd.c:1207
+  bus_add_driver+0x14c/0x2e4 drivers/base/bus.c:618
+  driver_register+0x108/0x19c drivers/base/driver.c:246
+  register_virtio_driver+0x54/0x6c drivers/virtio/virtio.c:357
+  virtio_rng_driver_init+0x1c/0x28 drivers/char/hw_random/virtio-rng.c:262
+  do_one_initcall+0x118/0x22c init/main.c:1303
+  do_initcall_level+0xac/0xe4 init/main.c:1376
+  do_initcalls+0x58/0xa8 init/main.c:1392
+  do_basic_setup+0x20/0x2c init/main.c:1411
+  kernel_init_freeable+0xb8/0x148 init/main.c:1631
+  kernel_init+0x24/0x290 init/main.c:1519
+  ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+irq event stamp: 2647
+hardirqs last  enabled at (2647): [<ffff80000c096f4c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (2647): [<ffff80000c096f4c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
+hardirqs last disabled at (2646): [<ffff80000c096d88>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
+hardirqs last disabled at (2646): [<ffff80000c096d88>] _raw_spin_lock_irqsave+0xa4/0xb4 kernel/locking/spinlock.c:162
+softirqs last  enabled at (2636): [<ffff80000801c82c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (2634): [<ffff80000801c7f8>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&irq_desc_lock_class);
+  <Interrupt>
+    lock(&irq_desc_lock_class);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.5/6055:
+ #0: ffff000114834460 (sb_writers#3){.+.+}-{0:0}, at: mnt_want_write+0x20/0x64 fs/namespace.c:393
+ #1: ffff0000c71802e0 (&type->i_mutex_dir_key#10){++++}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff0000c71802e0 (&type->i_mutex_dir_key#10){++++}-{3:3}, at: vfs_setxattr+0xd4/0x1f4 fs/xattr.c:308
+
+stack backtrace:
+CPU: 1 PID: 6055 Comm: syz-executor.5 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ print_usage_bug+0x39c/0x3cc kernel/locking/lockdep.c:3963
+ mark_lock_irq+0x4a8/0x4b4
+ mark_lock+0x154/0x1b4 kernel/locking/lockdep.c:4634
+ mark_usage kernel/locking/lockdep.c:4543 [inline]
+ __lock_acquire+0x5f8/0x3084 kernel/locking/lockdep.c:5009
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ down_write+0x5c/0x88 kernel/locking/rwsem.c:1562
+ ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
+ ext4_xattr_set_handle+0xd0/0x9a0 fs/ext4/xattr.c:2309
+ ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2496
+ ext4_xattr_user_set+0x78/0x90 fs/ext4/xattr_user.c:41
+ __vfs_setxattr+0x250/0x260 fs/xattr.c:182
+ __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
+ __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
+ vfs_setxattr+0xf4/0x1f4 fs/xattr.c:309
+ do_setxattr fs/xattr.c:594 [inline]
+ setxattr fs/xattr.c:617 [inline]
+ path_setxattr+0x354/0x414 fs/xattr.c:636
+ __do_sys_setxattr fs/xattr.c:652 [inline]
+ __se_sys_setxattr fs/xattr.c:648 [inline]
+ __arm64_sys_setxattr+0x2c/0x40 fs/xattr.c:648
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+list_add corruption. prev->next should be next (ffff0000c717ff90), but was 0000000000000000. (prev=ffff80000ef2a260).
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:32!
 
 
-Best regards,
-Krzysztof
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
