@@ -2,124 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C6365320D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A170653210
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiLUNwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        id S229956AbiLUNxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiLUNwo (ORCPT
+        with ESMTP id S229472AbiLUNxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:52:44 -0500
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2040.outbound.protection.outlook.com [40.107.104.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87B42098D;
-        Wed, 21 Dec 2022 05:52:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gha2nlP/U6w/YWr4ITW+PSU0phObrto371f3LSjKXRn+yeVLS06xuqjCSuKfk4HOKNU7hVnv4V+f9PtCLiVlWuUzTe/grlYMQ/tRfmJEj/dUZuvW6ium/BGlARh8ITldTNM1sSEmPfozl4608GQ0PPQcZogtJLPoY0IkVODPYj56qN7hBjODHMGjoa5+7TWD7IcXuIP98yq229i75WZvEnB4a9SqisppaBFd4mBB2StVoKdZThK/PfJmQaXWLIOqoxwbrsE3PYKCqPIrVcNxZ2uUr4+Pdl96FqFfrnpzp90frVLri/gDdoh4KYzQ0ktfCGI87bZTTp1f433S0tWMZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pvy3JSaaRgDLwJxVoYMmsmT7sIo43tf71LK+9gqv70s=;
- b=KwYjO5UJrtf1RZvMGuQ+Kp3Ap+CzY5x+bMQyeizGIbCIjEBcnmXU84vO1r/1ufZcuAtkXuesJTtXlHHAvV0dlasJbU+nR7e6RS+W2EMMQGTwfSeU1nZiH3D+t9MODEjxHpS2d/BK9c1ms5KWCHNq/A+KVj41W+boeJ0U/DSyCrVhGIT4Zpzy5FpRCR9VXXNQOXaAXnb8DXUsERTdxqESdlEc2oz2HQsu2CNWKZ9C7M2IJNoT4PRVtVt6Llq7ib7+fKvRfz1quxDgSUi7pHAW0yOu2TzPjG3VPvvzkjRIIi5A8GYjv6893rKy5DpknPZELN5xI7AMHw6bFg/uNZdvaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pvy3JSaaRgDLwJxVoYMmsmT7sIo43tf71LK+9gqv70s=;
- b=EZFwx/ec7pBzEUcYumHZnkkPyClhqcUTUhqgnJY2uicIb9E1nDFXYy45xWHaihT862KDQARgAK7cahJAkS4pyKMw7M6fc5xzPfwMU5nG+kNa9S2di6WA/OttlLQI96OuxsJ1zNTZhlBNBy8MgFLqFq9CBhCN4LWEMhxo43c3ai5fN2LH+f1YKYTZ2OeL65j44leNPt2Y0fOADp8zBo/xlDHKJrxP4kC286gIxLddCtkhKRlUrFD1/X1X+KY0EsxbkAiyiYc/Nm1dtAng5c2dzw2MjJY9P022UJ0ilZMCUJavN33muSPQO1tOtT/ZiySnLObYny0ac/2urztFtH45YQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
- by AS8PR04MB7542.eurprd04.prod.outlook.com (2603:10a6:20b:299::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.11; Wed, 21 Dec
- 2022 13:52:39 +0000
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::9028:2d9e:dbd:b5c]) by VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::9028:2d9e:dbd:b5c%7]) with mapi id 15.20.5924.016; Wed, 21 Dec 2022
- 13:52:39 +0000
-Date:   Wed, 21 Dec 2022 21:52:28 +0800
-From:   Chester Lin <clin@suse.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        dl-S32 <S32@nxp.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Larisa Ileana Grigore <larisa.grigore@nxp.com>,
-        "Ghennadi Procopciuc (OSS)" <ghennadi.procopciuc@oss.nxp.com>,
-        Matthias Brugger <mbrugger@suse.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: pinctrl: add schema for NXP S32 SoCs
-Message-ID: <Y6MPnJ27IKFiNltl@linux-8mug>
-References: <20221221073232.21888-1-clin@suse.com>
- <20221221073232.21888-2-clin@suse.com>
- <AM9PR04MB8487286EC9EE4AE3F2FD382CE3EB9@AM9PR04MB8487.eurprd04.prod.outlook.com>
- <5c0e7f2f-94e1-c6d4-d848-f90e29eead10@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c0e7f2f-94e1-c6d4-d848-f90e29eead10@linaro.org>
-X-ClientProxiedBy: FR3P281CA0132.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:94::12) To VI1PR0402MB3439.eurprd04.prod.outlook.com
- (2603:10a6:803:4::13)
+        Wed, 21 Dec 2022 08:53:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A102098D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:52:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671630764;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wt5OG1oS1//YGbbxrEqhOQxA7L05Wy2twnDVQJInyqA=;
+        b=Gnc/eRImhNxjT8OSp50F3q9mrbODL1e6+rM5oh+fPLW35wuh1S/diWKykqlR/DnKUKpj0q
+        4948E+6E+GRznzbDU5bHmeFx86pkqDGHbW5GQLje+4SXMKG0W0jYv3v0cDjis7BCnQ4hcH
+        ndlmgdPDg47uzCk4okLjHOc2/mCenjE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-153-is_ROfEoPYmifd7TDbt-nw-1; Wed, 21 Dec 2022 08:52:43 -0500
+X-MC-Unique: is_ROfEoPYmifd7TDbt-nw-1
+Received: by mail-wm1-f69.google.com with SMTP id a6-20020a05600c224600b003d1f3ed49adso703685wmm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:52:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wt5OG1oS1//YGbbxrEqhOQxA7L05Wy2twnDVQJInyqA=;
+        b=FHHC7tc2S6ak2cazdEPmneGxZW9caynrq9/CyNXK19hrNaUqY3+CG6VXz6grUQk+Qo
+         x64kFV6DUrkV7Lvok5p2gniCrO85tshvhKGYQgrk7G4cmusCa0/wphbwgL2TmN0hjOAp
+         iWwuS+xKhGcETExORfYauCaOJmmzz5AMiWNTFGkCANLEuOy/Z0UA4MmqcYA8VO3iQnMn
+         ZFOjLYGlPZnOzPTDwgFgP/kjHhI7kqNKt23eM9QdZBzYuoDL1uaBrknwmIuwKx0jtIje
+         JqWwmm3MCVxb0VEl/Oc0LXNUB2rpkYEr+cQCQfNJHkBAmUbMibpFE+J6xes5MXHWBWfA
+         YObQ==
+X-Gm-Message-State: AFqh2kqjIWjF0HnD3KoXk4wuNv8C/mxaIHzI5rg/FukQij//i7VmjAIj
+        yF7zNsy5MG2/SiSVSUm/HrghCyRI7jfbCp9zCiOSYs/VChcPSmOXJjMYZL0TFo33AWMRfU+DgWB
+        MPy62CoM3yp+OdOUgrkK7ba+U
+X-Received: by 2002:a05:600c:3ac3:b0:3d1:cfcb:7d19 with SMTP id d3-20020a05600c3ac300b003d1cfcb7d19mr1964079wms.32.1671630761957;
+        Wed, 21 Dec 2022 05:52:41 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsnMyZ2+iLdKe/kjn/WoI9JqorUc1P9pOr+w4qirQC2dEa9FsMaKbW23XSD9tNckmsFlYbiQQ==
+X-Received: by 2002:a05:600c:3ac3:b0:3d1:cfcb:7d19 with SMTP id d3-20020a05600c3ac300b003d1cfcb7d19mr1964070wms.32.1671630761710;
+        Wed, 21 Dec 2022 05:52:41 -0800 (PST)
+Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
+        by smtp.gmail.com with ESMTPSA id n38-20020a05600c502600b003d070e45574sm2491521wmr.11.2022.12.21.05.52.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 05:52:41 -0800 (PST)
+Date:   Wed, 21 Dec 2022 14:52:37 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, eperezma@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] vdpa_sim_net: vendor satistics
+Message-ID: <20221221135237.jdysnjip2qmgqehi@sgarzare-redhat>
+References: <20221221061652.15202-1-jasowang@redhat.com>
+ <20221221061652.15202-5-jasowang@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3439:EE_|AS8PR04MB7542:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a13cb59-2fe9-4676-b03c-08dae35a9fae
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8NfxUDjJQrPrRrYxxgyNwae3rQt+Nhdj/u7Vv8a4zUrgtzFfP4gpCMQf599kuSKzMDV3pi+RGtI/iRi5a6iFb8y+Fp9hZSOpj9+X6A2sxHDMY28D+HF73ficAnRV8XKfZUL5Ew9VejbeYxpTE1vUcqc6M7kJbFtjEs4ntSewhOACOrqA/8OItTTh3NkXK5jv+nUlSQQXLf9YkAPrNh2Mgou+RBnkP471kMqku0ClpJ/KZqNeMsKXAJ3LfEJxwDQoVJJu3TFk8nNgx8KCwF1y8eFxxppPA9VPrZhQ+yJgrHVeyj7SEjgUQeP1dVZrPQo12qF/1QP/OKvaQni44K7qGmvY3Hhp3sZSL6gCkg5wvRz/wxlmjN47L8B/YbEgduTjTGKhxIC4OlMaDHMmzcU1+pebfw9OGr1uJmgFHermyr9PF8oTwHZs4ecL3csUUa2Ps0qIidgKQls+Y3lOVQhjYkXm4Yfh9L2JpK/ik9cgiXLyhogbleEl9rRqVjw89ohjWrhD7LdsKYFZJ0sdcIreTlouRxZdaTw4IB9Qne68EARWPECjjNZp8Kgr129Q+p8wX+WL5+GIvnGNu7vwg2u/J7X0CQgtENA3Zkc1aNoB1z92tvlbCRBxypTfqL9cJ6boPd7+ncNCSUtocpPr+raKxbVuextYVVjFfFKO7tlEOzg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(6029001)(7916004)(396003)(39860400002)(346002)(136003)(376002)(366004)(451199015)(38100700002)(2906002)(33716001)(6506007)(4744005)(7416002)(8936002)(5660300002)(41300700001)(66476007)(66946007)(66556008)(4326008)(8676002)(316002)(54906003)(6512007)(26005)(186003)(53546011)(9686003)(107886003)(6666004)(6916009)(6486002)(966005)(478600001)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SCaXkKQahmWfhMI+92R4QKWFRZWZZSBn56dXmAw8e3FwFjAjkD/aiSOfteK7?=
- =?us-ascii?Q?BBkFp1KL/g8HzDip59wqwACi3+3Klkocaq8ddX7GEjYbq5RYUQEpZdfiSGke?=
- =?us-ascii?Q?Wbv42u+i4awirSKdz3pdZ+R0uWdcxCnT2TdZoaMgaOa6ln1/grPyfz2iFTij?=
- =?us-ascii?Q?Mm41eaNOFx+INQqPCQZ/RszgCruT9mh6DY2PsVmL1I6XAybH84P6lv9Dcg0d?=
- =?us-ascii?Q?6lPP9Ytyf787uOrZhkNqGDPJyGdkwMGBiI8GV27t+7gQsxWw9Knf+TcS2FbY?=
- =?us-ascii?Q?ocMQ5ser5rY/oIFL5e+c+y+1Jw10Bhw5PvK6mRKLXSF5fnF9jBiuksT8BO4r?=
- =?us-ascii?Q?4qYiaFVV9Fv51UNFdCNgloJiebrXYeCYcPTKqLNglOb7W/4UU3B1alZUTKEk?=
- =?us-ascii?Q?/QdxljRxk4a6BNopCs0KYxMXNbzEm8JqXcqOHawe6d+UgJn37Zw4oPzqaJA9?=
- =?us-ascii?Q?URGFULWXuWsiZMk+gxQt6zKBFr+rU3NgaO0ibN1PUfPcI8OIrWvpUoGjOqw2?=
- =?us-ascii?Q?EE5J8W6vIyhkNr4vJJ/H0ZadpikBESWHOqDJrAOdzPI0u7f3+FpFAPFYRPhy?=
- =?us-ascii?Q?FrAf/LvZxRkmCUfNzBRNranLl4wSbhe2x0QDAkQKaBkWqexLaWbISsAKIpiB?=
- =?us-ascii?Q?eHL6WLG6r1+ik5uOzdJ4E7FJMcTbC4su1hgx1vYj8PdkXogVqgbZqYGD/r6L?=
- =?us-ascii?Q?z/465Xs5dVYTSBvUCsWnHSIwpXDb/jg8o8cvVZ6hEgbQgAonJgRrsq3VNndT?=
- =?us-ascii?Q?AJ62cGf6gaaHGXTdtEbXGajdSX8RLxYCVa1Nkx+f6Sgcj6EsYWR/HohlqQED?=
- =?us-ascii?Q?kcfstO+8YXg1nLGXsrnuXDJWtIUgwUZONBjDjGAH7QhQTXMt5+rKarnBfzd4?=
- =?us-ascii?Q?Mxcqr7MHVgcJQDcXVcVKZoNL1jtLfIBzePPjGAWHWHZCq5fUERJx9B1ha2gK?=
- =?us-ascii?Q?znJzC5MUcXG4DmEKvcVYq4QqpwrwJb0TeAPLxzyhbhNunHXHAihueiwFTib+?=
- =?us-ascii?Q?VFRr1w7m64KykqiCh8C/DoTyqbH67eClqUtzBfEz4Y+w7imFJQ7c4SrlVw6J?=
- =?us-ascii?Q?ajhgvKynUFCrBJrEET2WYofUSN8cSN3awta+3R8tilk19Rg5q+jb+cBnETOs?=
- =?us-ascii?Q?gkj0DIN9Z/twkY6eB7HwC4kDsi7X48S25o3ik53jtTbhvOBK3YdZJvACs3c/?=
- =?us-ascii?Q?h59qTNQBSHmCoWMno/bvtDinEgSiY1oAFzNFZZtVAfnukctPdF4wC5GclZma?=
- =?us-ascii?Q?lZQObmGIe23mLFTHpMCc8nyJmTmEsrZ3n1bgGr3pHU99bwrzbFtYFMAg2tg4?=
- =?us-ascii?Q?P61HCSfnL4+vPn0Ur0ftqK1YDBnHtvm2LLtGlmVFpczF6yTES/xMt9OghIbl?=
- =?us-ascii?Q?GAqzZNGzVCYbxnMJoDr6CYIiKWfrRcVqCgfGAYpvOzJl4/bSokT9M8Jyw2HV?=
- =?us-ascii?Q?GT7+9wEZ38d0dyYsmgNUjiI/aba9T1gWwx/gJx/qgLQGR6iToPP7xwZIUtEx?=
- =?us-ascii?Q?rF6uAOKC0XkDpMuNoab5fcdug7MlrwWzVuJGEc8k5k/jaR2PYqIXWn1m7Lc4?=
- =?us-ascii?Q?chyBPh9rxv7hDT0NEKQ=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a13cb59-2fe9-4676-b03c-08dae35a9fae
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3439.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 13:52:39.4121
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /eeP3HInNqrBKiCGy36GMZ+WLujcpkEs+l44GoK/DNBVelAZKN4i9StCOdgquj05
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7542
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221221061652.15202-5-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,30 +79,383 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof and Andrei,
+On Wed, Dec 21, 2022 at 02:16:52PM +0800, Jason Wang wrote:
+>This patch adds support for basic vendor stats that include counters
+>for tx, rx and cvq.
+>
+>Signed-off-by: Jason Wang <jasowang@redhat.com>
+>---
+> drivers/vdpa/vdpa_sim/vdpa_sim.c     |   2 +
+> drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 215 ++++++++++++++++++++++++++-
+> 2 files changed, 211 insertions(+), 6 deletions(-)
+>
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>index 02e892f819e7..595d9d5a372f 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>@@ -755,8 +755,10 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+> 	.set_vq_cb              = vdpasim_set_vq_cb,
+> 	.set_vq_ready           = vdpasim_set_vq_ready,
+> 	.get_vq_ready           = vdpasim_get_vq_ready,
+>+	.get_vendor_vq_stats    = vdpasim_get_vq_stats,
+> 	.set_vq_state           = vdpasim_set_vq_state,
+> 	.get_vq_state           = vdpasim_get_vq_state,
+>+	.get_vendor_vq_stats    = vdpasim_get_vq_stats,
+> 	.get_vq_align           = vdpasim_get_vq_align,
+> 	.get_vq_group           = vdpasim_get_vq_group,
+> 	.get_device_features    = vdpasim_get_device_features,
 
-Thanks for reviewing this patch!
+This should go with the previous commit and defining it once.
 
-On Wed, Dec 21, 2022 at 01:30:12PM +0100, Krzysztof Kozlowski wrote:
-> On 21/12/2022 13:28, Andrei Stefanescu wrote:
-> > Hi Chester,
-> > 
-> >> +patternProperties:
-> >> +  '-pins$':
-> > 
-> > Sorry, I missed this in the previous versions. Could you change it to '_pins' (underscore)? In our .dts files we use underscore in the names for pinctrl configuration nodes e.g. i2c4_pins, usbotg_pins.
-> 
-> You cannot have underscores as node names, so what do you mean here? You
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>index 20cd5cdff919..3c05e932d90d 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+>@@ -15,6 +15,7 @@
+> #include <linux/etherdevice.h>
+> #include <linux/vringh.h>
+> #include <linux/vdpa.h>
+>+#include <net/netlink.h>
+> #include <uapi/linux/virtio_net.h>
+> #include <uapi/linux/vdpa.h>
+>
+>@@ -36,6 +37,34 @@
+> #define VDPASIM_NET_AS_NUM	2
+> #define VDPASIM_NET_GROUP_NUM	2
+>
+>+struct vdpasim_dataq_stats {
+>+	struct u64_stats_sync syncp;
+>+	u64 pkts;
+>+	u64 bytes;
+>+	u64 drops;
+>+	u64 errors;
+>+	u64 overruns;
+>+};
+>+
+>+struct vdpasim_cq_stats {
+>+	struct u64_stats_sync syncp;
+>+	u64 requests;
+>+	u64 successes;
+>+	u64 errors;
+>+};
+>+
+>+struct vdpasim_net{
+>+	struct vdpasim vdpasim;
+>+	struct vdpasim_dataq_stats tx_stats;
+>+	struct vdpasim_dataq_stats rx_stats;
+>+	struct vdpasim_cq_stats cq_stats;
+>+};
+>+
+>+static struct vdpasim_net *sim_to_net(struct vdpasim *vdpasim)
+>+{
+>+	return container_of(vdpasim, struct vdpasim_net, vdpasim);
+>+}
+>+
+> static void vdpasim_net_complete(struct vdpasim_virtqueue *vq, size_t len)
+> {
+> 	/* Make sure data is wrote before advancing index */
+>@@ -93,9 +122,11 @@ static virtio_net_ctrl_ack vdpasim_handle_ctrl_mac(struct vdpasim *vdpasim,
+> static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
+> {
+> 	struct vdpasim_virtqueue *cvq = &vdpasim->vqs[2];
+>+	struct vdpasim_net *net = sim_to_net(vdpasim);
+> 	virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
+> 	struct virtio_net_ctrl_hdr ctrl;
+> 	size_t read, write;
+>+	u64 requests = 0, errors = 0;
+> 	int err;
+>
+> 	if (!(vdpasim->features & (1ULL << VIRTIO_NET_F_CTRL_VQ)))
+>@@ -113,8 +144,12 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
+>
+> 		read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->in_iov, &ctrl,
+> 					     sizeof(ctrl));
+>-		if (read != sizeof(ctrl))
+>+		if (read != sizeof(ctrl)) {
+>+			++errors;
+> 			break;
+>+		}
+>+
+>+		++requests;
+>
+> 		switch (ctrl.class) {
+> 		case VIRTIO_NET_CTRL_MAC:
+>@@ -141,6 +176,12 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
+> 			cvq->cb(cvq->private);
+> 		local_bh_enable();
+> 	}
+>+
+>+	u64_stats_update_begin(&net->cq_stats.syncp);
+>+	net->cq_stats.requests += requests;
 
-Krzysztof is right, and Rob also reminded me in his comments in v1:
+I don't know if I understand the meaning of the fields correctly, but 
+should cq_stats.requests count both requests completed successfully and 
+with error?
 
-https://lore.kernel.org/linux-arm-kernel/20221102154903.GA3726664-robh@kernel.org/
+I mean:
+         net->cq_stats.requests += requests + errors;
 
-Regards,
-Chester
+If it is the case I would rename the local "requests" variable in 
+"successes".
 
-> need to fix your DTS not introduce bad practices to mainline kernel.
-> 
-> Best regards,
-> Krzysztof
-> 
+>+	net->cq_stats.errors += errors;
+>+	net->cq_stats.successes += requests;
+>+	u64_stats_update_end(&net->cq_stats.syncp);
+> }
+>
+> static void vdpasim_net_work(struct work_struct *work)
+>@@ -148,8 +189,10 @@ static void vdpasim_net_work(struct work_struct *work)
+> 	struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
+> 	struct vdpasim_virtqueue *txq = &vdpasim->vqs[1];
+> 	struct vdpasim_virtqueue *rxq = &vdpasim->vqs[0];
+>+	struct vdpasim_net *net = sim_to_net(vdpasim);
+> 	ssize_t read, write;
+>-	int pkts = 0;
+>+	u64 tx_pkts = 0, rx_pkts = 0, tx_bytes = 0, rx_bytes = 0;
+>+	u64 rx_drops = 0, rx_overruns = 0, rx_errors = 0, tx_errors = 0;
+> 	int err;
+>
+> 	spin_lock(&vdpasim->lock);
+>@@ -168,14 +211,21 @@ static void vdpasim_net_work(struct work_struct *work)
+> 	while (true) {
+> 		err = vringh_getdesc_iotlb(&txq->vring, &txq->out_iov, NULL,
+> 					   &txq->head, GFP_ATOMIC);
+>-		if (err <= 0)
+>+		if (err <= 0) {
+>+			if (err)
+>+				++tx_errors;
+> 			break;
+>+		}
+>
+>+		++tx_pkts;
+> 		read = vringh_iov_pull_iotlb(&txq->vring, &txq->out_iov,
+> 					     vdpasim->buffer,
+> 					     PAGE_SIZE);
+>
+>+		tx_bytes += read;
+>+
+> 		if (!receive_filter(vdpasim, read)) {
+>+			++rx_drops;
+> 			vdpasim_net_complete(txq, 0);
+> 			continue;
+> 		}
+>@@ -183,19 +233,25 @@ static void vdpasim_net_work(struct work_struct *work)
+> 		err = vringh_getdesc_iotlb(&rxq->vring, NULL, &rxq->in_iov,
+> 					   &rxq->head, GFP_ATOMIC);
+> 		if (err <= 0) {
+>+			++rx_overruns;
+> 			vdpasim_net_complete(txq, 0);
+> 			break;
+> 		}
+>
+> 		write = vringh_iov_push_iotlb(&rxq->vring, &rxq->in_iov,
+> 					      vdpasim->buffer, read);
+>-		if (write <= 0)
+>+		if (write <= 0) {
+>+			++rx_errors;
+> 			break;
+>+		}
+>+
+>+		++rx_pkts;
+>+		rx_bytes += write;
+>
+> 		vdpasim_net_complete(txq, 0);
+> 		vdpasim_net_complete(rxq, write);
+>
+>-		if (++pkts > 4) {
+>+		if (tx_pkts > 4) {
+> 			schedule_work(&vdpasim->work);
+> 			goto out;
+> 		}
+>@@ -203,6 +259,145 @@ static void vdpasim_net_work(struct work_struct *work)
+>
+> out:
+> 	spin_unlock(&vdpasim->lock);
+>+
+>+	u64_stats_update_begin(&net->tx_stats.syncp);
+>+	net->tx_stats.pkts += tx_pkts;
+>+	net->tx_stats.bytes += tx_bytes;
+>+	net->tx_stats.errors += tx_errors;
+>+	u64_stats_update_end(&net->tx_stats.syncp);
+>+
+>+	u64_stats_update_begin(&net->rx_stats.syncp);
+>+	net->rx_stats.pkts += rx_pkts;
+>+	net->rx_stats.bytes += rx_bytes;
+>+	net->rx_stats.drops += rx_drops;
+>+	net->rx_stats.errors += rx_errors;
+>+	net->rx_stats.overruns += rx_overruns;
+>+	u64_stats_update_end(&net->rx_stats.syncp);
+>+}
+>+
+>+static int vdpasim_net_get_stats(struct vdpasim *vdpasim, u16 idx,
+>+				 struct sk_buff *msg,
+>+				 struct netlink_ext_ack *extack)
+>+{
+>+	struct vdpasim_net *net = sim_to_net(vdpasim);
+>+	u64 rx_pkts, rx_bytes, rx_errors, rx_overruns, rx_drops;
+>+	u64 tx_pkts, tx_bytes, tx_errors, tx_drops;
+>+	u64 cq_requests, cq_successes, cq_errors;
+>+	unsigned int start;
+>+	int err = -EMSGSIZE;
+>+
+>+	switch(idx) {
+>+	case 0:
+>+		do {
+>+			start = u64_stats_fetch_begin(&net->rx_stats.syncp);
+>+			rx_pkts = net->rx_stats.pkts;
+>+			rx_bytes = net->rx_stats.bytes;
+>+			rx_errors = net->rx_stats.errors;
+>+			rx_overruns = net->rx_stats.overruns;
+>+			rx_drops = net->rx_stats.drops;
+>+		} while (u64_stats_fetch_retry(&net->rx_stats.syncp, start));
+>+
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+					"rx packets"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      rx_pkts, VDPA_ATTR_PAD))
+>+			break;
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "rx bytes"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      rx_bytes, VDPA_ATTR_PAD))
+>+			break;
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "rx errors"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      rx_errors, VDPA_ATTR_PAD))
+>+			break;
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "rx overrunss"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      rx_overruns, VDPA_ATTR_PAD))
+>+			break;
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "rx drops"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      rx_drops, VDPA_ATTR_PAD))
+>+			break;
+>+		err = 0;
+>+		break;
+>+	case 1:
+>+		do {
+>+			start = u64_stats_fetch_begin(&net->tx_stats.syncp);
+>+			tx_pkts = net->tx_stats.pkts;
+>+			tx_bytes = net->tx_stats.bytes;
+>+			tx_errors = net->tx_stats.errors;
+>+			tx_drops = net->tx_stats.drops;
+>+		} while (u64_stats_fetch_retry(&net->tx_stats.syncp, start));
+>+
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "tx packets"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      tx_pkts, VDPA_ATTR_PAD))
+>+			break;
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "tx bytes"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      tx_bytes, VDPA_ATTR_PAD))
+>+			break;
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "tx errors"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      tx_errors, VDPA_ATTR_PAD))
+>+			break;
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "tx drops"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      tx_drops, VDPA_ATTR_PAD))
+>+			break;
+>+		err = 0;
+>+		break;
+>+	case 2:
+>+		do {
+>+			start = u64_stats_fetch_begin(&net->cq_stats.syncp);
+>+			cq_requests = net->cq_stats.requests;
+>+			cq_successes = net->cq_stats.successes;
+>+			cq_errors = net->cq_stats.errors;
+>+		} while (u64_stats_fetch_retry(&net->cq_stats.syncp, start));
+>+
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "cvq requests"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      cq_requests, VDPA_ATTR_PAD))
+>+			break;
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "cvq successes"))
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      cq_successes, VDPA_ATTR_PAD))
+>+			break;
+>+		if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME,
+>+				  "cvq errors"))
+
+Would it be better to define macros for all these fields (e.g. "tx 
+packets", etc.) so we can avoid typos for the various drivers that will 
+support them?
+
+Thanks,
+Stefano
+
+>+			break;
+>+		if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE,
+>+				      cq_errors, VDPA_ATTR_PAD))
+>+			break;
+>+		err = 0;
+>+		break;
+>+	default:
+>+		err = -EINVAL;
+>+		break;
+>+	}
+>+
+>+	return err;
+> }
+>
+> static void vdpasim_net_get_config(struct vdpasim *vdpasim, void *config)
+>@@ -239,6 +434,7 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+> 			       const struct vdpa_dev_set_config *config)
+> {
+> 	struct vdpasim_dev_attr dev_attr = {};
+>+	struct vdpasim_net *net;
+> 	struct vdpasim *simdev;
+> 	int ret;
+>
+>@@ -249,10 +445,11 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+> 	dev_attr.nvqs = VDPASIM_NET_VQ_NUM;
+> 	dev_attr.ngroups = VDPASIM_NET_GROUP_NUM;
+> 	dev_attr.nas = VDPASIM_NET_AS_NUM;
+>-	dev_attr.alloc_size = sizeof(struct vdpasim);
+>+	dev_attr.alloc_size = sizeof(struct vdpasim_net);
+> 	dev_attr.config_size = sizeof(struct virtio_net_config);
+> 	dev_attr.get_config = vdpasim_net_get_config;
+> 	dev_attr.work_fn = vdpasim_net_work;
+>+	dev_attr.get_stats = vdpasim_net_get_stats;
+> 	dev_attr.buffer_size = PAGE_SIZE;
+>
+> 	simdev = vdpasim_create(&dev_attr, config);
+>@@ -265,6 +462,12 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
+> 	if (ret)
+> 		goto reg_err;
+>
+>+	net = sim_to_net(simdev);
+>+
+>+	u64_stats_init(&net->tx_stats.syncp);
+>+	u64_stats_init(&net->rx_stats.syncp);
+>+	u64_stats_init(&net->cq_stats.syncp);
+>+
+> 	return 0;
+>
+> reg_err:
+>-- 
+>2.25.1
+>
+
