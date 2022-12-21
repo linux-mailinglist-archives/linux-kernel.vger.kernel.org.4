@@ -2,137 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9139652BF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6F8652BF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234227AbiLUDzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 22:55:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
+        id S234161AbiLUD7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 22:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234161AbiLUDzd (ORCPT
+        with ESMTP id S229727AbiLUD7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 22:55:33 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865241EEEF
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 19:55:32 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id s7so14318357plk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 19:55:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LG53lA26L/ncngjFCHRhyvrs5xf1POMXaF/i7pP2T2w=;
-        b=jE8ug6sV2Ksmc1BjKlm2igxId/ENjDWpxJUXauuLCDWxTXh5ogm7qEZcDK557UrubC
-         CrP+Ib8pkTZdIZEdo3nkWvf5LrUWmr4jzVAoTsF/GdW73ifIopte2waaoubyn/9pOerY
-         WAfRkiwcznSlocee7G/hOSFzDtFRdLMj3soEhqVIsFxGlXL84laUyc3rDUUFohWw9FGU
-         5ITGwmYLdSoJpaDqay0DHYJdne1DhHXdxu/ZhO87WLlQPJXGXJ9pxE54c3n2Yam5WAMJ
-         Z4jmRQbXMkrl9CI0akL6yhV89RmgjdmqRaldmqh7AzpJGJFOPNEePFm2YBQD/wudUzJD
-         Jzxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LG53lA26L/ncngjFCHRhyvrs5xf1POMXaF/i7pP2T2w=;
-        b=bBEBWPIeQjGmlS1/IYpcG7gFekLEXskfnPw7EgIhvDjTiIJkCqtS39/5v3eJjqk+8s
-         WcIdFzLFQJRK5XKG2uyWdCpN4pcd3x0yqwjL1cIXCcWdtRKJzq/ymxuWnr1tqAc0qKpL
-         +EF9piE9oiIAF0MIK5m1o5vtLCVliZQTJ0UEUqAln9ccAtrAEqq9/L/AZZ89UHBo5Ywl
-         rQ4a/iN3P91129SjFTV5Wp0sAETeormKu1bncopVjsth2EUASJY1ML83nTvi52b1KJT+
-         L+E/kGUIyz7oP2DOxMpBvO0PrOzuwsbwfWpe1eiVT4jCUI5uKTOb96y5PnOn6L9IRxT3
-         31rg==
-X-Gm-Message-State: AFqh2krGlQdR3PxpOOHq7pZ3DWrblnJ5bappkz6QQ9JeJZATu0YjV3GT
-        hBajDmWW9buF02BNXrQAn4vlAQ==
-X-Google-Smtp-Source: AMrXdXucR+r5a6DTmL41q4+SegBpEAwe4Wonw64R9urkdQSpXNK8K3BOVXCMoHZst4hjRq8i7ONt9w==
-X-Received: by 2002:a17:902:7405:b0:18f:a4e1:9908 with SMTP id g5-20020a170902740500b0018fa4e19908mr661321pll.15.1671594931937;
-        Tue, 20 Dec 2022 19:55:31 -0800 (PST)
-Received: from leoy-yangtze.lan (n058152048225.netvigator.com. [58.152.48.225])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902654500b00188fcc4fc00sm10165715pln.79.2022.12.20.19.55.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 19:55:31 -0800 (PST)
-Date:   Wed, 21 Dec 2022 11:55:24 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Quentin Monnet <quentin@isovalent.com>,
-        Changbin Du <changbin.du@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF"
- section
-Message-ID: <Y6KDrELoIfPbh3VN@leoy-yangtze.lan>
-References: <20221217223509.88254-1-changbin.du@gmail.com>
- <20221217223509.88254-2-changbin.du@gmail.com>
- <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan>
- <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
- <Y6GdofET0gHQzRX6@leoy-yangtze.lan>
- <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
+        Tue, 20 Dec 2022 22:59:43 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2121.outbound.protection.outlook.com [40.107.117.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EB5BEE
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 19:59:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S0cWNTSKxruhTSzpY9eaXyTZwuItYg2O4c9RfNA/+fftVFNnsD0toyCG4zTF11RcfB5uiTX2dpIOfJjlB+zape6HLYitKQBkGZ792UNuB1CgtGyMaM3fGZ1xG/S1bBX5FkY2Oi2MD+AevEr2NNUpNBQ51W62h6IqYAMdfnaQggSwBGdpDGd4EX2T9qQ7PXtPn/5/YRj0acLZgO0l831wxa+9nL/JPWnFsK7bZ6hVuiqd/7p8ThOSd5ujlJUKZxT38cEByu1v8T0Aw5MwbW17kuoxBhDpu9eGG0vfIIrVmCyC+EKMfwPUnsADSiZn7bHDWNfmDx/3YwZPzUnwm58snA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Tk2s5Ce69kwncWgydqDmcqdx+TvyplnR1ES2G5zEGTI=;
+ b=hklmXryNoefxOljPlnqXX2gMCfxDhpOONSi8jSbge8v71Wjh1QJ6oKMCVng9FMStdWwDVLNzdAvwCWSN0RsZ4UlcnTir/gKRiqWENzpxpbobBwFMkKjV3VyfV5WGzm5H0GqyrQS649ANFzeyzsaGOrRQFoGCgA8RKEJxwgsqX1XkZgGXvIYgd6W+MhSqhxUYpcpUKNxnufan7AGNc7d9cvjkCfHDjYDM1kyeNyZsn0oe9iqse2E75NBrAT8r2ys4QB7T/z+12ISzGKguj5E3nl8hGsYukUYY6PGdTL2tnECECsFb3VIBFPz2BGfYl9+Qg3ODWLQfgq/nrfjGB+L6YQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tk2s5Ce69kwncWgydqDmcqdx+TvyplnR1ES2G5zEGTI=;
+ b=HTX1XKs/Tz3FTA1YeWen1Nh1MWPnC8DO8OnNw9o8iWRoE2ok7RcKASaSOwgtWcSYn5EXOav8X5nY6xpkQhXpf6UfgvvBgm11YQBZWqiYbeKQbVST/YEjQj5ndnv3rRoRJcV6ksLvGM4bW7Y6V8lso+O0PGJ3Ho+hyXmWBUgLbLbLXUN92YpV/H9/7tMCkOji+HAvAr8eewQxj2ch2oaq+5FWy48nhOBCJBZ/f938YQNkZmd72hzKIRBKa8YMeCeT2ptILxrBjXb8jtB+S/bvSBra4SxjgbHRvUNqX7juNXjpDhlEuwdvvJNA1TomIcV1NzNPOuIFuPoHUaOTSIDoIw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TY0PR06MB5379.apcprd06.prod.outlook.com (2603:1096:400:216::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Wed, 21 Dec
+ 2022 03:59:40 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::ef03:cbfb:f8ef:d88b]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::ef03:cbfb:f8ef:d88b%9]) with mapi id 15.20.5924.016; Wed, 21 Dec 2022
+ 03:59:40 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] f2fs: remove unused PAGE_PRIVATE_ATOMIC_WRITE
+Date:   Wed, 21 Dec 2022 11:59:31 +0800
+Message-Id: <20221221035931.41027-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221220115602.6715-1-chao@kernel.org>
+References: <20221220115602.6715-1-chao@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0029.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TY0PR06MB5379:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec92d730-d407-4e82-0562-08dae307c8c7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Tlh1TTbGHPLNYE0vf8B782Kzfw39EkmBYwwjEueYRYC+kxKMizM0yb8XK4p7hoL7gKz+0R/HXOM3f0Ez0gM8AD6aJ8pXiIttV5g8kbEUzFEhF3VaUrgldjScjKougHMLtal2NE/0P9oJjS/nFirD8+O46XIIXJdOxl/qIAl/UVsOxwVvwaCSYN5aA8kh+Ags2Cio44bjoOb9nZfLwpjbBvHZuO7JpTJ7rMSIvmJOqYyx63h65rht5WGJhMIGzmXMkvjycBXXyckCwsxknQZgTNTAJuzL97lH2+y8pLNVUFLeySHcG/Xc7RbxpXWSUozpomCdlUXzPmPW+if4XlHjKvmGR8R5j08ecotlYHTMuXuqMsPYAYCLxdxijFt2ffOqefSscrrx+7JaJAhm25BCs958JgU0A5Syw54xIJzz9GQwk3GvIiQ8ojOrtr9xude7s68fVLfczVJe7Kg7VGoE5fieaWLXPGLWEOhBTtMd8sRYZjCzCnfhWR2KrWpkZZzG1+UK5Z5cVAYCOizaeKJLCjreDpDIEqRz60+vrFxXOgd+sR8Niamp1zfsN64ovE+mkt9oL6Nyuao4BuLVijnLZH+4IVxiuHrnbNMuf+kAHabckJrnBtA2Ascp965wPXFaI6jY3+H11Rb+rbvWJop21Ks2nDUHl0eaJ0QnoD43SrQZvm69KopfAWGLA1WpfLrzafBc9WwGlSj+I+JPeoXxzg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(396003)(366004)(39860400002)(451199015)(86362001)(36756003)(558084003)(38350700002)(83380400001)(6506007)(1076003)(2616005)(38100700002)(6512007)(26005)(186003)(4326008)(478600001)(6486002)(66476007)(6666004)(66556008)(8676002)(66946007)(316002)(52116002)(41300700001)(5660300002)(2906002)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cMghAT0dMk9JhIqbyS21eudGHTYjtlYfNFsBEyx5b4GQEyKsZx6ewDIUMSf6?=
+ =?us-ascii?Q?sqGT4PUrVJSEiobVwg8JPD4sNVfw8L/ZOkY+4nMkzkTuLkYz1qMnP0oh79P/?=
+ =?us-ascii?Q?yUpKhzUSlzPNH3TmlH6FCmdezMwgb2BY/Xco9P3qQQdEqs2jAgCMqa3qQrjc?=
+ =?us-ascii?Q?kBhuVKPWxA/9BP4jT8t7Jig454Dcc4KYXdJ29+0lpb4CckgOS9izBN40GdQS?=
+ =?us-ascii?Q?32dLlqNfhcB5/6qz6zsjkm+w02q9DwcsznGdJVmuCfN9Y2eHzQ0+jlkz3AGG?=
+ =?us-ascii?Q?/FhtajSS5dKYRWN00VDaA/GCpbfcfnrpdnXPeAVM+rf1QWJ2ru5h3Ifn8Fzt?=
+ =?us-ascii?Q?Uy2rEieOq+akaP1ApI5Zp8WxG8Isuz/2tW2klofXx2phcMjYxGDY/2P1TWGF?=
+ =?us-ascii?Q?5ZDoT8jADLwKdwTtDWm+woNY1crUbXP84Kn9MapN+DIVkNp3Urfp1tcBem2F?=
+ =?us-ascii?Q?g68cys/QQSmhv2d9Bx2Vv8dHzDkJYTuSuJxUSM6899XIGeLxhWI3ieOeZZEp?=
+ =?us-ascii?Q?waOrf7wQhDaB2QjiOLJg/eFnG0/yBNUWOq1uKL8GE56zZoP3gkTQAWo1qQaX?=
+ =?us-ascii?Q?Ro4pR8AVhTdvdNkDBqPnyeokfa+CjSGsUzAXhA/E+DKPARaClIIOA55+bkjy?=
+ =?us-ascii?Q?EXLIXlhwqfIOl8yuIHUz2Np093QMVTaBbq7oPqr8Cv2UXsU8pbgOSW1siZld?=
+ =?us-ascii?Q?BV5k2nZGYO4SSJzFajp4SfYN+bCRXJI6K7CLxKX/nyoVSHf9j8Bqo93ENssD?=
+ =?us-ascii?Q?AMYoDM36X0O0UXBNfn/e/F6Euv2FEQWFiad3B3sAY9wAoWzOlT8jS1WiylaY?=
+ =?us-ascii?Q?SP5JUBXpMwwahmxLlNA9MTyyy44kRPzbdRZdRs6svH/xkMG6D2Y2wiD8K68A?=
+ =?us-ascii?Q?ga1LO9Tc9KG5DC/6er+2OoMblmpXkHI/ilU7uRXtjzeNbigXMoRKslOwqqid?=
+ =?us-ascii?Q?hE0/Q2DCvODtzNSYvBiA1a1qhuMAQS66wqpJF3B3SC9JqAZGU7n8/I162anL?=
+ =?us-ascii?Q?Raay8ZeV1QNg6V9cuLD6KM50OoobQJueNEYzb6N0wIEZkh6/PTuR7onJkMls?=
+ =?us-ascii?Q?zP1nUQmRUygOqAiUcL2+FpMWE3ZeDvYH5HsZQaiZjIU8XSnzGUW2DcaXXAqB?=
+ =?us-ascii?Q?kPGf2t+P0Z3bxbvWcBDd1UL22bPe8RAtC9arvUtxNBdsJIUehny6E+ZgP2wG?=
+ =?us-ascii?Q?o13V+WpCQetQSTUNzzIm/uas90TiBSSUTkxuaeNAwurdOTcHP2nsTeZREFie?=
+ =?us-ascii?Q?Rs8ZHRf71el0MXiPFF1EmeXOdu4ftFJR4Siik330iQMJZ40R+Cum95VYItC0?=
+ =?us-ascii?Q?ClsjzwGyB4YYzRpN/d60k8i1zhTIp45w4lwlr4xhkUcwXQ+WaHh7dWiO5Xyh?=
+ =?us-ascii?Q?fCdOE7RRAh9UKFUJCuwYc4QQEgpGDP9JAGiui7gbyoLNssK6u5d8VK3lNliq?=
+ =?us-ascii?Q?u6pkUznWKpBV8LDWHaR0ueqdGGV0DqbY70mAvgfW+tGr5H56e0QqJssK7d/V?=
+ =?us-ascii?Q?Wyqo7WqJrTHEc7dPFtjTl+62lrhnJGO2zuVBUpyTMyCLmKDMcXx06FDiwzQr?=
+ =?us-ascii?Q?Pmnn9YtQchISNcyryidZShUTRi5hR8FsimF7u5vl?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec92d730-d407-4e82-0562-08dae307c8c7
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 03:59:40.2233
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bbbmiyt1O/XpRestYNIfX8J1l7j8s27g05o8IwQsbstS464W/Wy+X0ui2pOrM22kHjwjnRRmmumBtXb7SmMnhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5379
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UPPERCASE_50_75 autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 04:13:13PM -0800, Andrii Nakryiko wrote:
+>  PAGE_PRIVATE_GET_FUNC(reference, REF_RESOURCE);
+ 
+>  PAGE_PRIVATE_CLEAR_FUNC(reference, REF_RESOURCE);
 
-[...]
+Delete those two too?
 
-> > > > > @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
-> > > > >   err = 0;
-> > > > >
-> > > > >   if (!btf_data) {
-> > > > > +         pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
-> > > > >           err = -ENOENT;
-> >
-> > btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
-> > section, therefore, bpftool dumps error string "No such file or
-> > directory".  It's confused that actually vmlinux is existed.
-> >
-> > I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
-> > better choice?) to replace -ENOENT at here, this can avoid bpftool to
-> > outputs "No such file or directory" in this case.
-> 
-> The only really meaningful error code would be -ESRCH, which
-> strerror() will translate to "No such process", which is also
-> completely confusing.
+Otherwise, looks good to me.
 
-Or maybe -ENODATA (No data available) is a better choice?
-
-Thanks,
-Leo
-
-> In general, I always found these strerror() messages extremely
-> unhelpful and confusing. I wonder if we should make an effort to
-> actually emit symbolic names of errors instead (literally, "-ENOENT"
-> in this case). This is all tooling for engineers, I find -ENOENT or
-> -ESRCH much more meaningful as an error message, compared to "No such
-> file" seemingly human-readable interpretation.
-> 
-> Quenting, what do you think about the above proposal for bpftool? We
-> can have some libbpf helper internally and do it in libbpf error
-> messages as well and just reuse the logic in bpftool, perhaps?
-> 
-> Anyways, I've applied this patch set to bpf-next. Thanks.
+Thx,
+Yangtao
