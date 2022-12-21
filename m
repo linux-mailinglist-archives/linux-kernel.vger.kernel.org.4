@@ -2,93 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB6A6530DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C306530E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiLUMe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 07:34:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
+        id S231818AbiLUMgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 07:36:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbiLUMeZ (ORCPT
+        with ESMTP id S229774AbiLUMgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 07:34:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC312744
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 04:34:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BF63B81B67
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:34:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B0A2C433D2;
-        Wed, 21 Dec 2022 12:34:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671626058;
-        bh=S/O6ux2v6aPfNcNVslK998HVTz/7pVCS2/8Ewlu4WHM=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=VMuwgOYr4JUNQEiz784JqTKrMgf9DQlsvwACaQi4uMCVO9t8lZFQYSCcxDiUu7YkI
-         lWNfB+2J/FydC9dPf+X2wMNcMgfdaTmeoUEnsqkzDlTFjqkxIlEAmsREXuHT9aL83K
-         YcatceSjgBBmaN7ibI0DnrAN9eXS8miXOos+JxBnQ6LWCNFyfCG3I/kl34cj1Uvfl3
-         sc8cP2FyyPbnQAoenb/B9HK/nIl5ijTlrFwnBqUd3YEUXa6zv2YcN7IaASBfiEiUnx
-         vwD7EURTyPbKmsxWZZ5CQLKwnKFvtcBmCcy8RnythY1FoUtKkvw0q4cL6v6wD+/Bcm
-         0E9eXivW0h3DA==
-Message-ID: <c532ee2b-66bb-9227-ebd7-a070599fe3ae@kernel.org>
-Date:   Wed, 21 Dec 2022 20:34:13 +0800
+        Wed, 21 Dec 2022 07:36:36 -0500
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643F71A3A6;
+        Wed, 21 Dec 2022 04:36:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1671626191;
+        bh=PHssQIIcG/OnBIFPY5sJXgvOu5LyKV2Mnt7w1hnvoCI=;
+        h=From:To:Cc:Subject:Date;
+        b=x8n4JebP+71sEC4bXG/vG9hukn+cawsYg7Rhx2O257iSrhrikB8n7ns0qi/l+Eo9w
+         c2R/2VnFoZqVBqWCWzbFn2BvLJHquDZaM6psq1ElF/2dM0gYDi2+hxUDv6FhNVs5SP
+         XpTENkEbwdOu9j1aFtz0E2lzD2bCwLWtn2DnxpAo=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
+        id 91D036C0; Wed, 21 Dec 2022 20:36:29 +0800
+X-QQ-mid: xmsmtpt1671626189tbjc771wu
+Message-ID: <tencent_F1354BEC925C65EA357E741E91DF2044E805@qq.com>
+X-QQ-XMAILINFO: NMGzQWUSIfvT47z0yqmb0dSmYife1iARkf2zJMgpZ92GOKz7EDdfQ54KVYWztz
+         9sE+iUREtzczPfMx+TkaaJVTc8Y4epsu2vQGFbPFlPo7N9q/K32+RtxBq5B91h53sxXf3GNhceEE
+         gVP8xis9VPZ4gLOJ77TMqEeOKTbqisNFrR8hY72mb/Oho1rFY049klmWX2QBz6XP7ZGzQJXf1QQp
+         FSXpQRD0Z4IfNGYgfVx3x34s+P0arpW3PSIHROXzfGiNbLSbdMGi01dqcsdEu3bY/qSRApS6Z3Dx
+         fq3XFgHipShh9kt4RUrEf84DjuTm1cF88ghf4HVYwSDoZFeB8KQrTN2DjsIhNCpPP8339t0SM3AV
+         n3xPUNEp6LdD/V9PqHTS6sFzupah4tRprped/7EeppL2xp/Rv7y0C1I6ErRRn7hUyjqSxwUA0Caj
+         k7BVlLIF2OzwoZhOQPDfhDipRDkOPfrmLScwV8rmVQWL+StxHNo0irhsKiqhjHbTJH6HwefbkLsC
+         JzPDqgpbVziW0Ji03k9x37sfqqsPWMAh2X7T2JQZSQGXkvHGWRKpB9O0f34SgZ4Rj3wtSVEgYRBL
+         MMLiLIKDS2bgK4DdRwqsYTJZlKELJq3JE9/5ADYkbOlIvNh2Qrc7U1QI9y2bwP9KtGwWd2q3fM7O
+         MvdgqBg2VoCw+BAAJsZUYXhuU/3iq1ziwDZQOo696AEpUfaptQDUxpDo7Pap79zSSUonPo7qGIGj
+         uW56GIdXxhL2zIpCQ2wGBbhxx9mJutANCbqicgill10XU098W2Hi9ULjEP0yE5Io/h96NOo8+9ap
+         L5BeNH6kxLP8TiCpyE3mnO+HyzTBVJoxeSVS3KG7qenF84IgXLrhZ3fVF1JlI/W16eFaQLTFQTYu
+         P5y3VKolVjZhApmLk03uHm1mRaef1iGkT72/GCmqFDDeLVMm4LgO/DarXOZFOAQTZ2EU2zs5BCCm
+         niyGqIvhYUwRyGk56zu6IhoBzAfaQfb5raJ8PmurwerqQC5O4tiQ==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     3chas3@gmail.com
+Cc:     Rong Tao <rongtao@cestc.cn>,
+        linux-atm-general@lists.sourceforge.net (moderated list:ATM),
+        netdev@vger.kernel.org (open list:ATM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] UAPI: fix spelling typos in comments
+Date:   Wed, 21 Dec 2022 20:36:27 +0800
+X-OQ-MSGID: <20221221123627.82584-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, s.shtylyov@omp.ru
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, jaegeuk@kernel.org
-References: <20221221033021.36615-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-Subject: Re: [PATCH REPOST] f2fs: file: drop useless initializer in
- expand_inode_data()
-In-Reply-To: <20221221033021.36615-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+From: Rong Tao <rongtao@cestc.cn>
 
-On 2022/12/21 11:30, Yangtao Li wrote:
-> Hi Sergey,
-> 
->> In expand_inode_data(), the 'new_size' local variable is initialized to
->> the result of i_size_read(), however this value isn't ever used,  so we
->> can drop this initializer...
->>
->> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
->> analysis tool.
->>
->> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->>
->> ---
->> This patch is against the 'dev' branch of Jaegeuk Kim's F2FS repo...
->> Reposting with ISP RAS mailing lists CC'ed now...
-> 
-> Why do you repeatedly send a patch that cannot be applied, and this does not have
+Fix the typo of 'Unsuported' in atmbr2684.h
 
-The format is weired, but still I can apply this into my git repo...
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ include/uapi/linux/atmbr2684.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> a CC on linux-kernel.vger.kernel.org.
+diff --git a/include/uapi/linux/atmbr2684.h b/include/uapi/linux/atmbr2684.h
+index a9e2250cd720..d47c47d06f11 100644
+--- a/include/uapi/linux/atmbr2684.h
++++ b/include/uapi/linux/atmbr2684.h
+@@ -38,7 +38,7 @@
+  */
+ #define BR2684_ENCAPS_VC	(0)	/* VC-mux */
+ #define BR2684_ENCAPS_LLC	(1)
+-#define BR2684_ENCAPS_AUTODETECT (2)	/* Unsuported */
++#define BR2684_ENCAPS_AUTODETECT (2)	/* Unsupported */
+ 
+ /*
+  * Is this VC bridged or routed?
+-- 
+2.39.0
 
-I guess linux-kernel.vger.kernel.org is not mandatory, feel free
-to Cc this mailing list.
-
-Thanks,
-
-> 
-> Otherwise, code modification looks good to me.
-> 
-> Thx,
-> Yangtao
