@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2594652D86
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC40E652D87
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbiLUHyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 02:54:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
+        id S234419AbiLUHy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 02:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiLUHyw (ORCPT
+        with ESMTP id S234412AbiLUHyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 02:54:52 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2075.outbound.protection.outlook.com [40.107.223.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2931DA50;
+        Wed, 21 Dec 2022 02:54:54 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8B620F48
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:54:52 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id j4so22355602lfk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:54:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Cd4NlwVfDDcizKG3XwDkBaypBKyNBzdCvZsOkaiYGc0=;
+        b=dbx0OXlU/beOCbWbFfaOtnDaeEFGca8kNTAdOPFMJUPcctJnA7qwGsGBaZsmBmgR7P
+         rkpnPJOvi0/FwW4DvcmmMrB3TkcnnAyP2YudANOsXMMsJ9miumjyz48uJVMDMMfV+FcF
+         cCdbNv+qQTaIQvkh+y9IWrmWFgKFVqFNeUfa+rqXZoEFl4nUOiTXBSCZwaaXvM0DVWYd
+         7YPVEWTDnUiNP/3pOgMW109zmtEtDu0wYbzcKtT8yDX9mpS/NNJ5fr5lp6H+sb4x5ob5
+         LJDF9V4PYX2veRhf+0s21M2UoO9wt5D1/Ka2p4bWeHPDl444zOQMs7Y5h8RBifJwGqZS
+         uNLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cd4NlwVfDDcizKG3XwDkBaypBKyNBzdCvZsOkaiYGc0=;
+        b=NWWTGoKzQEV1d7nprW51mBysKqqVP+fxZS8T9YIDLfAuKYpAQcquwgpABTKbtBU3XV
+         /INgIwWHmUTe7Xr0ZjywbdHunndTktrsM8f64LJ5UYiickSjL0jBPKOCbqih2O85yFGj
+         z83jx+TKjsqc/9pUfl7C5VaptT5p35/JNnJj4WZlgvl8swoipdNZXZ+kuX9rAK/MomH0
+         3iWbDDKYwo1LMNHaIVAgSRsXaUAumvKQVq3vzXIfWk0km6tZOk5Bo7IN/5cMHPDDPgj4
+         Vd4QuaqUuZMe68ESTNYsGsI8i/Fgj9r3puLisY9rPc0aVaQQGaCThLQhoMjiGdVxmzOS
+         vi8g==
+X-Gm-Message-State: AFqh2kp/GtnP/4B67otTfT+fOKOdEzDKqVKD5mPeR1fzyL+8GpQE8Jfu
+        lQqIDYOGW0/iRslB1/Jx1g89kg==
+X-Google-Smtp-Source: AMrXdXtBM1Gf9AUc4Z7pCqi61fr4zmdhQ+Weqf5tlehKIBjc/4e7HB24prxfvyQPfYRgcN0Q/Ju5IA==
+X-Received: by 2002:ac2:4435:0:b0:4b5:90bb:e565 with SMTP id w21-20020ac24435000000b004b590bbe565mr333068lfl.36.1671609291070;
         Tue, 20 Dec 2022 23:54:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tf9oufEiPiNt4UaySpm3RIUF8UCu0X/KvY7byh+YOPaohzH3Jer1dHSD/748xFRoi7mapzJcLrroYZw4Za/xPIsSYEgt9jcycKPPJAp0vvLo+ij7hRC9vX7MC8KLuPaXyIQxijnx/4GtKjXgsDZ8GpdyA0GrCbti0cEPE6A7JTM6N+qAKOhgGAJ8gb/UiXqVjor6zU0e9xWFJpCsu5oJa2x8PsJ0EY4KuS/YWDOp6h60rP5bTMd5cUEh59iGKXvtljUAZNP3Zq/KZnpJOd0ov0LOM0Il20+x4KpSiUTQN3hDmf2Gn6Qm63pITJptLFsv1D95XSqKEeM3O+qdtLN5vQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HanrB0D3W0UTRUSO9+rCQjbLYtLbXJheXlrxme8HGYg=;
- b=NjbsXn23oqwny1v4IGyCKnn1wVGGonqmkG+mstZ6r8j5Fdu/emvF0FHHWnoHqZ9+ulKvHxFKsU3Rprbvazm9AhVJ4NUfa4cNYzLHF0+2Ab8LgNeuuNv1aunf0Biuj7kLoscZ1gpDs6ZwCg247qQSIh6wjKq5IsJfKitSBU+IxcOu/cKUOyx0R9Vz08xw5Ltu5l4HhHs4f8RTv3B/7LoQvheTCQ1x1awyrHiTpp+SMetaqBFyXbcm04MXRhfDhnexKz71+5lSxNRCfe57jx48BM0OfqAtwxi3kWgp4s6FvlMQTWgvhA5bOf4oo2H6FgUumF22k4YAT+qAKkItlvQrVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HanrB0D3W0UTRUSO9+rCQjbLYtLbXJheXlrxme8HGYg=;
- b=oIHYNxXId5jveuUA4UQWb5Anc/du/HWIesCCHdHRBYFhQMQJJLBJzbkZT0VkQ1gNazQWLt+0QbPBBdmnFjE6KPaPad/axOeG8mwa4jabDFT0fLCNV68jf0o75D28vfq+PUAjCXgZWpyqMGfxhk7nV44fEYNgAzw2g1zLMPFDMFlG0PfS8dkE4ZuoBHP/oqzt/C/dUPFvdNu2BGbNkJkF13jtBqZB7I5kXeOuFtaNtkSssPqJigdHwXVNqaMJ4mNKzNI6xKCPIzu5V+YU3uZCL0SdKT3txtV8YRiN92OlmX3mbulUXd5gQsTAzwqqyo+TeJ3hHlj+9LgxNG04jLwtxw==
-Received: from BN9PR03CA0493.namprd03.prod.outlook.com (2603:10b6:408:130::18)
- by DS7PR12MB5839.namprd12.prod.outlook.com (2603:10b6:8:7a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Wed, 21 Dec
- 2022 07:54:50 +0000
-Received: from BN8NAM11FT110.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:130:cafe::7f) by BN9PR03CA0493.outlook.office365.com
- (2603:10b6:408:130::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.21 via Frontend
- Transport; Wed, 21 Dec 2022 07:54:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT110.mail.protection.outlook.com (10.13.176.156) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.10 via Frontend Transport; Wed, 21 Dec 2022 07:54:49 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
- 2022 23:54:38 -0800
-Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
- 2022 23:54:34 -0800
-Message-ID: <a2b0ebd0-f9cd-5bd2-4d45-57b91e280f34@nvidia.com>
-Date:   Wed, 21 Dec 2022 13:24:31 +0530
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 9-20020ac25f09000000b004a6f66eed7fsm1754646lfq.165.2022.12.20.23.54.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 23:54:50 -0800 (PST)
+Message-ID: <79ffe459-3827-ea67-e854-8eef3d9b630b@linaro.org>
+Date:   Wed, 21 Dec 2022 08:54:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
+ Thunderbird/102.6.0
+Subject: Re: [EXTERNAL] Re: [PATCH] arm64: dts: ti: k3-j721s2: Add support for
+ ADC nodes
 Content-Language: en-US
-To:     Dmitry Osipenko <digetx@gmail.com>, <treding@nvidia.com>,
-        <krzysztof.kozlowski@linaro.org>, <dmitry.osipenko@collabora.com>,
-        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Sumit Gupta <sumitg@nvidia.com>
-CC:     <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
-        <bbasu@nvidia.com>
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
- <23afd0ac-dc3e-3a62-915f-d1af1218e5a1@gmail.com>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <23afd0ac-dc3e-3a62-915f-d1af1218e5a1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT110:EE_|DS7PR12MB5839:EE_
-X-MS-Office365-Filtering-Correlation-Id: 804c658d-b6fc-484e-2b86-08dae328a30f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n/Y5iQKy3cpf4/7mpT6MeYNkN6HY2f+R6n+wD9+xbuMQTjchKdUzOqtHhwPDs2O+kDbKe7i9cL4x9VhY+ICHI8T0QzO9T9/0vv+9agM7To4IGlbMjZka/lxkezCJ+8mzOspMAib3DwnnyG6//hmIIovJtXTkknpGVc12pkq9TSmRaDJJyVY2oqs79/laoaGeymLzGsAO/qa8KJcS2ti0Wj6G9L/oVYI+lJJJxQlWIcxRrjHkKDNGJ0RSSWcBo+sDGiiX58kZtUrT+X5zmb9PGizbAi2ySel39VDXBfV8SqMHel8nzCI/su7f4xLA3aljzXtiGfUjCb+H8a4muN+RNraIRIv5nIyeeuFc7QuJ5agoCM8DCmjCPxHVKv5tGAMz1JOPfIlRwNK1xseq1s48SWn3uwcMmj0d6erAyKg9Qdj3vo8HvnFUIiRQEaEwM0F6YiocH5ONYQofgYQSa1xKYE0qAw8XxE4Ww6xICCgdfxAS22RX87DDvBglC7BQZFd7JhWrq2P5rZkEXXAzPoV3fTtcI/c/6eUXGlafdbbG6dM+uXzWPKRSKBaYYwVDh0klxO02Bbp1Sn4Jlp1KpaIFfd0zmmdFxYYZMk1CT9jfUIAykfWCfJY176E40GLo1qC+MKbeq9k2khUwNzJe2S6asF97CTNi6Nct/ud4KCAoB0+VqNnvnwkWmZaq8bcwD4pMQcXdSddxwSm++4rkmGzMZvlTfuFyMuojtu0mfsBSztrg+CfFvZkjYgPoENbWSjRt
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(346002)(136003)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(31686004)(5660300002)(7416002)(2616005)(107886003)(6666004)(110136005)(478600001)(16526019)(83380400001)(316002)(336012)(426003)(54906003)(4326008)(70206006)(186003)(8676002)(8936002)(47076005)(41300700001)(53546011)(70586007)(16576012)(26005)(4744005)(82740400003)(31696002)(2906002)(36860700001)(921005)(86362001)(40480700001)(36756003)(40460700003)(356005)(7636003)(82310400005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 07:54:49.8192
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 804c658d-b6fc-484e-2b86-08dae328a30f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT110.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5839
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Bhavya Kapoor <b-kapoor@ti.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        kristo@kernel.org, nm@ti.com
+References: <20221220101249.46450-1-b-kapoor@ti.com>
+ <ff5b09db-4900-0b5b-e821-fa05b8d907a4@linaro.org>
+ <a4d11974-eb97-bfa2-790f-3016950ea961@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a4d11974-eb97-bfa2-790f-3016950ea961@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/12/2022 06:42, Bhavya Kapoor wrote:
+> 
+> On 20/12/22 16:20, Krzysztof Kozlowski wrote:
+>> On 20/12/2022 11:12, Bhavya Kapoor wrote:
+>>> J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
+>>> for 8 channel ADCs for J721s2 SoC.
+>>>
+>>> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+>>> ---
+>>>   .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
+>>>   .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 42 ++++++++++++++++++-
+>>>   2 files changed, 55 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+>>> index a7aa6cf08acd..67593aa69327 100644
+>>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+>>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+>>> @@ -309,3 +309,17 @@ &mcu_mcan1 {
+>>>   	pinctrl-0 = <&mcu_mcan1_pins_default>;
+>>>   	phys = <&transceiver2>;
+>>>   };
+>>> +
+>>> +&tscadc0 {
+>>> +	status = "okay";
+>>> +	adc {
+>>> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
+>>> +	};
+>>> +};
+>>> +
+>>> +&tscadc1 {
+>>> +	status = "okay";
+>>> +	adc {
+>>> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
+>>> +	};
+>>> +};
+>>> \ No newline at end of file
+>> This is a friendly reminder during the review process.
+>>
+>> It seems my previous comments were not fully addressed. Maybe my
+>> feedback got lost between the quotes, maybe you just forgot to apply it.
+>> Please go back to the previous discussion and either implement all
+>> requested changes or keep discussing them.
+>>
+>> Thank you.
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Hi , I thought i did addressed the feedback since tscadc is just a 
+> wrapper node.
+> 
+> The actual adc node is inside of tscadc node.
 
+Read the feedback, from all emails.
+Best regards,
+Krzysztof
 
-On 20/12/22 23:36, Dmitry Osipenko wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> 20.12.2022 19:02, Sumit Gupta пишет:
->> +             if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
->> +                     err = tegra_emc_interconnect_init(emc);
->> +                     if (!err)
->> +                             return err;
-> 
-> "return err" doesn't sound good
-> 
->> +                     dev_err(&pdev->dev, "tegra_emc_interconnect_init failed:%d\n", err);
->> +                     goto put_bpmp;
-> 
-> Move error message to tegra_emc_interconnect_init()
-Ok, will change.
