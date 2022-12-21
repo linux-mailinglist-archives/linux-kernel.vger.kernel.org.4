@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7FF65332A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E11A65333A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234627AbiLUPZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 10:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S234697AbiLUP0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 10:26:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234535AbiLUPZr (ORCPT
+        with ESMTP id S234614AbiLUPZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 10:25:47 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A34610BB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:25:44 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id a1so7451607edf.5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:25:44 -0800 (PST)
+        Wed, 21 Dec 2022 10:25:48 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4729A1120
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:25:45 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id s5so22402022edc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:25:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mDXoKkBf3QKLFoNBUr2onp8tCGWeovhpj/ofZ+JjjAU=;
-        b=TMhjNigS1DyIwH8CyjsHocZyaHTt7KyK/ZCjumwTN9EBxfeVWy11UJZ/hucZ2QgmKL
-         i9+S6Mr5k3JlxoN74cBxQBq5gFNneK9tZoVKVuhnXkRB+1GzIbXAOID2fxatGI5h++TP
-         Zg9ZUwqOFDAJMcdoLKzmPTzBXPps2BJltJYupb2iQNZHydtKxPrU6WqFRuRBLXcQKyyd
-         RSGOLfNeeYDV6fqcRTz8VyNhfGn9nhcgt20R8gwBN4q/t2Qht1mRCwJLS7+fMZZ79ntP
-         IbRv940LZ2xjde+/NVeGOgUh4xPCi4R9M9R3FJQF2QijNknp5xw1uMDXBgb9s5+22ovo
-         TWNg==
+        bh=o+yme8fXO1k6A7s/D5dm0smB9lGyLseYaKaraSpk4eI=;
+        b=y3tpr8tNDFKTiSH+l3HSSVqSypavIYRgUCdD5vQ90b36Z2HjfdRi6sguvae0ccMetm
+         D2yr7MTF/FIPYmUNC1j2X4CZ3l8m5GovPkDvxcAQGoodopd9dzFpQ02ICNMxftef394x
+         ceX50juaGs3TyrlQpoXFEuT5ddcpTtiLeCqJ//5mi7r9Zz0fy3LIOVYhC6Q+7Sy6ZLjo
+         hDtWmHOoHxNlomdNzYOUByJAzuL3m+Plas1pxeoENGJ6vYkG2lKIGXoY72lvzf0SUTID
+         FQ4A1ZKDYRcmTtPAj3d54ytgqrhR3zHdGbjFyVBspU4e00j/AUMUyZdIsDH0v2sQJgW8
+         Eynw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mDXoKkBf3QKLFoNBUr2onp8tCGWeovhpj/ofZ+JjjAU=;
-        b=Wta7mCLfXbZUJ5cVlE04zzv1AQ2zMSUJnA4xY1dPX7NvwqVQPSEPuWmdR/ns0Hs3RZ
-         8Qv1WpC/jXQhhxrkk+qb2xnG1jKbpERDuky+/P+VcasAYprGW7Q7A/C9/gXLDBmNkhB3
-         WAVTjjjU0d853xRGmYoz2NQzLjSwBNTCGEKcwLOMQz04LgCMpyvNuLKRAq04pQF2vuDO
-         JbA0jcU8fs2qkYRpkXOHft0sQcqAB4Qy9qSHeQL0+2UCJDJQ0q2GJA/aQb9fNA4GIQlQ
-         R9Jdy35E+Nt5MBwOf2TqkkhhDL0f7SxaKRTCLOnDJtKsDjteKU7bq/5Gij/yeGMqkvMi
-         6Qzg==
-X-Gm-Message-State: AFqh2krKUKZDgaEYH8E01PPY2OEov4mLwdFsUFmB5YmAetE0OG7p9wbI
-        HOYlsl9/ORKFGWxQuHdUlyGnCg==
-X-Google-Smtp-Source: AMrXdXvDT6t1W5s5aKGrm+2dh3ZxOOswfb0M9pNKaUvRbk1dyeabzSVb+FxlWX7PhrvG+s4dg43FWA==
-X-Received: by 2002:a50:fd10:0:b0:46c:97c2:8d75 with SMTP id i16-20020a50fd10000000b0046c97c28d75mr1720946eds.21.1671636342810;
-        Wed, 21 Dec 2022 07:25:42 -0800 (PST)
+        bh=o+yme8fXO1k6A7s/D5dm0smB9lGyLseYaKaraSpk4eI=;
+        b=wl6A18Oo/VddefFwBxgNJFbYJVT/DRL6FCubv9li0M/jkkQhUQbSS1m7eELl18MSPC
+         b83mXByEFMgTZ9HUIGN6enWujJY7FyDS3mUwmS1BO5Jna0cn1UmGn2K4c2SgA+IFfpWM
+         7KGU3nJ6DZ2W4/GhZbUUy93Vkzt+BW3GVII59aVhdZk+OUz+DfHDmmBZHdhSw1hNVQgf
+         WXPXlzGImI7rft0Ywh6uzdSvk/hBmYdhVdi2DIvW++rmFeJMXWRFK6n4+Kapcwi7rW+Q
+         ZgLd0z53RKBmNeT1F/O/3vJ6JNf/p5Ms6ZR+wboZ7rWaKvXUKE5z6Rkp2X6AF4miMDGA
+         EQ+A==
+X-Gm-Message-State: AFqh2kpJF81/OvUuNGG6yu6faBohUCegreZgTjfeOE33FELIQetBEAFw
+        pRazQ5Uz876dEPueyTiVEnNgow==
+X-Google-Smtp-Source: AMrXdXsd8O5QTgH3RQbR4hfIkXviaUW64/PHpxvP7vKAL9gwSWAAh2wMODnt5wvoGJnzKZcAFx6iUw==
+X-Received: by 2002:a50:e60b:0:b0:468:3252:370f with SMTP id y11-20020a50e60b000000b004683252370fmr1862773edm.34.1671636343675;
+        Wed, 21 Dec 2022 07:25:43 -0800 (PST)
 Received: from blmsp.fritz.box ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
-        by smtp.gmail.com with ESMTPSA id n19-20020aa7c793000000b0045cf4f72b04sm7105428eds.94.2022.12.21.07.25.41
+        by smtp.gmail.com with ESMTPSA id n19-20020aa7c793000000b0045cf4f72b04sm7105428eds.94.2022.12.21.07.25.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 07:25:42 -0800 (PST)
+        Wed, 21 Dec 2022 07:25:43 -0800 (PST)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
@@ -58,9 +58,9 @@ Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH 02/18] can: tcan4x5x: Check size of mram configuration
-Date:   Wed, 21 Dec 2022 16:25:21 +0100
-Message-Id: <20221221152537.751564-3-msp@baylibre.com>
+Subject: [PATCH 03/18] can: m_can: Remove repeated check for is_peripheral
+Date:   Wed, 21 Dec 2022 16:25:22 +0100
+Message-Id: <20221221152537.751564-4-msp@baylibre.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221221152537.751564-1-msp@baylibre.com>
 References: <20221221152537.751564-1-msp@baylibre.com>
@@ -75,80 +75,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To reduce debugging effort in case the mram is misconfigured, add this
-size check of the DT configuration. Currently if the mram configuration
-doesn't fit into the available MRAM it just overwrites other areas of
-the MRAM.
+Merge both if-blocks to fix this.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 ---
- drivers/net/can/m_can/m_can.c         | 16 ++++++++++++++++
- drivers/net/can/m_can/m_can.h         |  1 +
- drivers/net/can/m_can/tcan4x5x-core.c |  5 +++++
- 3 files changed, 22 insertions(+)
+ drivers/net/can/m_can/m_can.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 56f07f2023dd..f3ee21ce6109 100644
+index f3ee21ce6109..a43abc667757 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -1860,6 +1860,22 @@ static int register_m_can_dev(struct net_device *dev)
- 	return register_candev(dev);
- }
- 
-+int m_can_check_mram_cfg(struct m_can_classdev *cdev, u32 mram_max_size)
-+{
-+	u32 total_size;
-+
-+	total_size = cdev->mcfg[MRAM_TXB].off - cdev->mcfg[MRAM_SIDF].off +
-+			cdev->mcfg[MRAM_TXB].num * TXB_ELEMENT_SIZE;
-+	if (total_size > mram_max_size) {
-+		dev_err(cdev->dev, "Total size of mram config(%u) exceeds mram(%u)\n",
-+			total_size, mram_max_size);
-+		return -EINVAL;
+@@ -1568,10 +1568,8 @@ static int m_can_close(struct net_device *dev)
+ 		cdev->tx_skb = NULL;
+ 		destroy_workqueue(cdev->tx_wq);
+ 		cdev->tx_wq = NULL;
+-	}
+-
+-	if (cdev->is_peripheral)
+ 		can_rx_offload_disable(&cdev->offload);
 +	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(m_can_check_mram_cfg);
-+
- static void m_can_of_parse_mram(struct m_can_classdev *cdev,
- 				const u32 *mram_config_vals)
- {
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index 4c0267f9f297..d2c584232c1a 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -101,6 +101,7 @@ int m_can_class_register(struct m_can_classdev *cdev);
- void m_can_class_unregister(struct m_can_classdev *cdev);
- int m_can_class_get_clocks(struct m_can_classdev *cdev);
- int m_can_init_ram(struct m_can_classdev *priv);
-+int m_can_check_mram_cfg(struct m_can_classdev *cdev, u32 mram_max_size);
  
- int m_can_class_suspend(struct device *dev);
- int m_can_class_resume(struct device *dev);
-diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-index efa2381bf85b..4f5a3ade6de2 100644
---- a/drivers/net/can/m_can/tcan4x5x-core.c
-+++ b/drivers/net/can/m_can/tcan4x5x-core.c
-@@ -80,6 +80,7 @@
- 	 TCAN4X5X_MCAN_IR_RF1F)
+ 	close_candev(dev);
  
- #define TCAN4X5X_MRAM_START 0x8000
-+#define TCAN4X5X_MRAM_SIZE 0x800
- #define TCAN4X5X_MCAN_OFFSET 0x1000
- 
- #define TCAN4X5X_CLEAR_ALL_INT 0xffffffff
-@@ -312,6 +313,10 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 	if (!mcan_class)
- 		return -ENOMEM;
- 
-+	ret = m_can_check_mram_cfg(mcan_class, TCAN4X5X_MRAM_SIZE);
-+	if (ret)
-+		goto out_m_can_class_free_dev;
-+
- 	priv = cdev_to_priv(mcan_class);
- 
- 	priv->power = devm_regulator_get_optional(&spi->dev, "vsup");
 -- 
 2.38.1
 
