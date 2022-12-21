@@ -2,173 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B970652B96
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE0A652B99
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 03:48:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiLUCrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 21:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
+        id S234292AbiLUCsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 21:48:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234186AbiLUCra (ORCPT
+        with ESMTP id S229893AbiLUCs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 21:47:30 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D9DD11D0EC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 18:47:28 -0800 (PST)
-Received: (qmail 75129 invoked by uid 1000); 20 Dec 2022 21:47:28 -0500
-Date:   Tue, 20 Dec 2022 21:47:28 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] USB: Improve usb_fill_* documentation
-Message-ID: <Y6JzwChVdOIx1vPD@rowland.harvard.edu>
-References: <20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org>
+        Tue, 20 Dec 2022 21:48:28 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6475FF8;
+        Tue, 20 Dec 2022 18:48:24 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NcHtq18mDz4f3k6H;
+        Wed, 21 Dec 2022 10:48:19 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP1 (Coremail) with SMTP id cCh0CgDX9zHzc6JjgyDjAA--.18550S3;
+        Wed, 21 Dec 2022 10:48:21 +0800 (CST)
+Subject: Re: [PATCH -next 0/4] blk-cgroup: synchronize del_gendisk() with
+ configuring cgroup policy
+To:     Yu Kuai <yukuai1@huaweicloud.com>, Tejun Heo <tj@kernel.org>
+Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221217030908.1261787-1-yukuai1@huaweicloud.com>
+ <Y6DP3aOSad8+D1yY@slm.duckdns.org>
+ <e01daffe-a3e3-8bf2-40ee-192a9e70d911@huaweicloud.com>
+ <Y6HcWiJbaWjN3jlt@slm.duckdns.org>
+ <c2fecf04-6e9e-25a1-f14c-47862837cc54@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <ebfd3d01-9fd1-3453-6cf5-05e8540359c7@huaweicloud.com>
+Date:   Wed, 21 Dec 2022 10:48:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c2fecf04-6e9e-25a1-f14c-47862837cc54@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgDX9zHzc6JjgyDjAA--.18550S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF43tw4DWr1kXF4fJrW3trb_yoW8ArW7pF
+        9IgF93A3yqvw1v939Fkr1xZFWFgw4DW3y5Jr43W3s3Z3yqv3sYgr47ArZ5uF1fZF4kGF4Y
+        va15t398Jr48Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 12:13:08AM +0100, Ricardo Ribalda wrote:
-> Make the developer aware of the requirements of transfer buffer.
+Hi,
+
+在 2022/12/21 9:10, Yu Kuai 写道:
+> Hi,
 > 
-> The buffer must be DMAble, if the developer uses an invalid buffer, data
-> corruption might happen.
+> 在 2022/12/21 0:01, Tejun Heo 写道:
+>> Hello,
+>>
+>> On Tue, Dec 20, 2022 at 05:19:12PM +0800, Yu Kuai wrote:
+>>> Yes, that sounds good. BTW, queue_lock is also used to protect
+>>> pd_alloc_fn/pd_init_fn，and we found that blkcg_activate_policy() is
+>>> problematic:
+>>>
+>>> blkcg_activate_policy
+>>>   spin_lock_irq(&q->queue_lock);
+>>>   list_for_each_entry_reverse(blkg, &q->blkg_list
+>>>    pd_alloc_fn(GFP_NOWAIT | __GFP_NOWARN,...) -> failed
+>>>
+>>>    spin_unlock_irq(&q->queue_lock);
+>>>    // release queue_lock here is problematic, this will cause
+>>> pd_offline_fn called without pd_init_fn.
+>>>    pd_alloc_fn(__GFP_NOWARN,...)
+>>
+>> So, if a blkg is destroyed while a policy is being activated, right?
+> Yes, remove cgroup can race with this, for bfq null pointer deference
+> will be triggered in bfq_pd_offline().
+
+BTW, We just found that pd_online_fn() is missed in
+blkcg_activate_policy()... Currently this is not a problem because only
+bl-throttle implement it, and blk-throttle is activated while creating
+blkg.
+
+Thanks,
+Kuai
 > 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> USB: Improve usb_fill_* documentation
+>>
+>>> If we are using a mutex to protect rq_qos ops, it seems the right thing
+>>> to do do also using the mutex to protect blkcg_policy ops, and this
+>>> problem can be fixed because mutex can be held to alloc memroy with
+>>> GFP_KERNEL. What do you think?
+>>
+>> One worry is that switching to mutex can be more headache due to destroy
+>> path synchronization. Another approach would be using a per-blkg flag to
+>> track whether a blkg has been initialized.
+> I think perhaps you mean per blkg_policy_data flag? per blkg flag should
+> not work in this case.
 > 
-> After trying to "cleanup" the uvc code, I was patiently explained about
-> the requirements of the urb transfer buffers.
+> Thanks,
+> Kuai
+>>
+>> Thanks.
+>>
 > 
-> Lets make this explicit, so other developers do not make the same mistake.
+> .
 > 
-> To: Randy Dunlap <rdunlap@infradead.org>
-> To: Alan Stern <stern@rowland.harvard.edu>
-> To: Christoph Hellwig <hch@lst.de>
-> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
-> Changes in v2:
-> - s/allocatiing/allocating/ Thanks Randy
-> - Link to v1: https://lore.kernel.org/r/20221220-usb-dmadoc-v1-0-28386d2eb6cd@chromium.org
-> ---
->  include/linux/usb.h | 27 ++++++++++++++++++++++++---
->  1 file changed, 24 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index 7d5325d47c45..1144ef6e4151 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -1627,13 +1627,20 @@ struct urb {
->   * @dev: pointer to the struct usb_device for this urb.
->   * @pipe: the endpoint pipe
->   * @setup_packet: pointer to the setup_packet buffer
-> - * @transfer_buffer: pointer to the transfer buffer
-> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
 
-For control URBs, the setup_packet must also be suitable for DMA.  It's 
-a little less critical, though, because the setup_packet is only used 
-for DMA out, never DMA in.
-
->   * @buffer_length: length of the transfer buffer
->   * @complete_fn: pointer to the usb_complete_t function
->   * @context: what to set the urb context to.
->   *
->   * Initializes a control urb with the proper information needed to submit
->   * it to a device.
-> + *
-> + * The transfer buffer might be filled via DMA.
-
-"might" is too weak.  For nonzero-length IN transfers, the transfer 
-buffer is certain to be filled via DMA (except for the very few cases of 
-USB controller hardware using PIO instead of DMA).
-
-> The simplest way to get
-> + * a buffer that can be DMAed to, is allocating it via kmalloc() or
-> + * equivalent, even for very small buffers. If transfer_buffer is embedded
-> + * in a bigger structure, there is a risk that the previous and following
-> + * fields are left in a corrupted state by the DMA engine, if the platform
-> + * is not cache coherent.
-
-There is also a risk that data read from the device is corrupted.  And 
-accesses of the surrounding fields may well be slowed down because the 
-DMA mapping evicts them from the cache.
-
->   */
->  static inline void usb_fill_control_urb(struct urb *urb,
->  					struct usb_device *dev,
-> @@ -1658,13 +1665,20 @@ static inline void usb_fill_control_urb(struct urb *urb,
->   * @urb: pointer to the urb to initialize.
->   * @dev: pointer to the struct usb_device for this urb.
->   * @pipe: the endpoint pipe
-> - * @transfer_buffer: pointer to the transfer buffer
-> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
->   * @buffer_length: length of the transfer buffer
->   * @complete_fn: pointer to the usb_complete_t function
->   * @context: what to set the urb context to.
->   *
->   * Initializes a bulk urb with the proper information needed to submit it
->   * to a device.
-> + *
-> + * The transfer buffer might be filled via DMA. The simplest way to get
-> + * a buffer that can be DMAed to, is allocating it via kmalloc() or
-> + * equivalent, even for very small buffers. If transfer_buffer is embedded
-> + * in a bigger structure, there is a risk that the previous and following
-> + * fields are left in a corrupted state by the DMA engine, if the platform
-> + * is not cache coherent.
-
-I see no point in repeating exactly the same text multiple times.  
-Instead, just put a reference to the original occurrence of this 
-warning.
-
-Alan Stern
-
->   */
->  static inline void usb_fill_bulk_urb(struct urb *urb,
->  				     struct usb_device *dev,
-> @@ -1687,7 +1701,7 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
->   * @urb: pointer to the urb to initialize.
->   * @dev: pointer to the struct usb_device for this urb.
->   * @pipe: the endpoint pipe
-> - * @transfer_buffer: pointer to the transfer buffer
-> + * @transfer_buffer: pointer to the transfer buffer. Must be suitable for DMA.
->   * @buffer_length: length of the transfer buffer
->   * @complete_fn: pointer to the usb_complete_t function
->   * @context: what to set the urb context to.
-> @@ -1697,6 +1711,13 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
->   * Initializes a interrupt urb with the proper information needed to submit
->   * it to a device.
->   *
-> + * The transfer buffer might be filled via DMA. The simplest way to get
-> + * a buffer that can be DMAed to, is allocating it via kmalloc() or
-> + * equivalent, even for very small buffers. If transfer_buffer is embedded
-> + * in a bigger structure, there is a risk that the previous and following
-> + * fields are left in a corrupted state by the DMA engine, if the platform
-> + * is not cache coherent.
-> + *
->   * Note that High Speed and SuperSpeed(+) interrupt endpoints use a logarithmic
->   * encoding of the endpoint interval, and express polling intervals in
->   * microframes (eight per millisecond) rather than in frames (one per
-> 
-> ---
-> base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
-> change-id: 20221220-usb-dmadoc-29384acebd48
-> 
-> Best regards,
-> -- 
-> Ricardo Ribalda <ribalda@chromium.org>
