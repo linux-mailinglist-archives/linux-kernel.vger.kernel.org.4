@@ -2,109 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49D36532E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644826532EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234099AbiLUPHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 10:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
+        id S234127AbiLUPKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 10:10:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiLUPHD (ORCPT
+        with ESMTP id S229596AbiLUPKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 10:07:03 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AEF22B00
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:07:02 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id f34so8702376lfv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nXHfNUaNPuVa1Udkb7Ct+xGCUATGWGV9FO609P79yWk=;
-        b=Ee0H9qiZHOqKL3li1jBzUyaziFcgOvcRiEbMtC47CW5az4T11Si7rtZg666S5Fw6U/
-         VDZlNkEvITErFgzfPrgDkoAYnZFcAt37qFAHZrNyenSkz77OGMEzEXWQfcVG3PP3AZB8
-         13eHcid8PwHa3TqdveJdRAzIiHkJq9KWV8PxAS+Yd36I9X+gwY+qAXuIBZOa54RboVwY
-         LSmIDK/6N9QREJIxoLvxa4GlDYrkDjwpveL6fgpEq8BlNvt1SoPIeqiN+mUFn6Lc9NL9
-         nmMI6QN6cbMPCZUjV4pzE8lVC7pm+mtibsxWu3JPaGkJrCv8UZWXZcmYAC7aMGXVdNpt
-         x53Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nXHfNUaNPuVa1Udkb7Ct+xGCUATGWGV9FO609P79yWk=;
-        b=Y5y4FA48PuMiy4N9tivrK6H2Q5YIB+xLeGsW+9n7Ves+Oe3VZm1nEkla9ATNYeppa6
-         Hgc3GwbQqMZQD08IOW/nUjMw0QJEebNO06Dtp3PNtB9Pv9PQh5TxMGqijxRHaZaFVFul
-         iZggVS2luznQj0N9u29u9lZ6B17dx7VMSDNY4/FRk5T8QUvRKsLr+ZwcMS3oljiYSNid
-         sZyG+IXpqQH/On53SsbGfGu88XOByZmGxLMRJNMLZVXXirMfkfJ1sCKyU1WzR5wuA/J2
-         tl+zd+gGiPxzkbqIE28Iuu/RhKyTxwovOQdknhdvH5OaDVOx23PYYbz99/EkFsZtDwxk
-         RRMA==
-X-Gm-Message-State: AFqh2kqPSFtMh6HVEgeOB/1qlA8A7K/EiG70lqEixJw1zQTlH56ta5+Q
-        c0GGbGFwv3tHrTdg5N1xdkdZ0A==
-X-Google-Smtp-Source: AMrXdXscXH6TKv4+JWL+cSlNXlcAiowOZWm12TFZDG5PTlGD3gdIlidFAA3zEusvmWeqvU1rTrh65g==
-X-Received: by 2002:ac2:4bd4:0:b0:4a4:68b9:66b7 with SMTP id o20-20020ac24bd4000000b004a468b966b7mr709486lfq.2.1671635220653;
-        Wed, 21 Dec 2022 07:07:00 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id d4-20020a056512368400b004a47e7b91c4sm1845446lfs.195.2022.12.21.07.06.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 07:07:00 -0800 (PST)
-Message-ID: <0ea140a8-b872-7341-a15a-4feecc69e480@linaro.org>
-Date:   Wed, 21 Dec 2022 16:06:58 +0100
+        Wed, 21 Dec 2022 10:10:21 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F5222B00;
+        Wed, 21 Dec 2022 07:10:21 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLDonRx012598;
+        Wed, 21 Dec 2022 15:10:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=s/n7LfhKNXMJO7cKF05rI7a8p2Cj1T1UqOe64kYAbq4=;
+ b=d2jnJcU6KjXbGyOLhl1xxvIWSrOapQzvy4aVfZ3UL+MzubDAuiVJwKoN1PvADJRs4n9d
+ 2vd6KDxcdeWXf/4ipeA/IylslYA4uPOq2Ec6/OrQ65JuKH4af0qdBK6/oQArUdlFxz9P
+ DTD665E+uYBkSxd5gffEhP3AvDLm8AqCVeeR6WoleGRVeoFZ7ou4vJ9doXIOQVaagx96
+ e/fvKRTwYVqjpwBKczYfNVFGDNmC72k6t1WoOwmvAVBFyt1oP9WWeWHsmcKakXwOYr+R
+ P37ilpp/wWSEd446K+MMLEdi8CyFmrhNof5bXgMNbi+zH70UUfniFON745BM4b/OTCPF rw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mkcxvb3sn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 15:10:15 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLFAEq9001881
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 15:10:14 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 21 Dec 2022 07:10:09 -0800
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>
+CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Emma Anholt <emma@anholt.net>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/4] drm/msm/adreno: Fix null ptr access in adreno_gpu_cleanup()
+Date:   Wed, 21 Dec 2022 20:39:56 +0530
+Message-ID: <20221221203925.v2.1.Ib978de92c4bd000b515486aad72e96c2481f84d0@changeid>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 1/2] arm64: dts: rockchip: Add EmbedFire LubanCat 1
-Content-Language: en-US
-To:     Yuteng Zhong <zonyitoo@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, DHDAXCW <lasstp5011@gmail.com>
-References: <Y6MP74TUp50yt6wZ@VM-66-53-centos>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y6MP74TUp50yt6wZ@VM-66-53-centos>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lCwHDYWW87FrXWVrycegm73ushsI0UHO
+X-Proofpoint-ORIG-GUID: lCwHDYWW87FrXWVrycegm73ushsI0UHO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-21_08,2022-12-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 impostorscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212210126
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/12/2022 14:53, Yuteng Zhong wrote:
-> From: DHDAXCW <lasstp5011@gmail.com>
-> 
-> The LubanCat 1 is a RK3566 based SBC, developed by EmbedFire Electronics
-> Co., Ltd.
-> 
-> It has the following characteristics:
-> - MicroSD card slot, onboard eMMC flash memory
-> - 1GbE Realtek RTL8211F Ethernet Transceiver
-> - 1 USB Type-C port (power and USB2.0 OTG)
-> - 1 USB 3.0 Host port
-> - 3 USB 2.0 Host ports
-> - 1 HDMI
-> - 1 infrared receiver
-> - 1 MIPI DSI
-> - 1 MIPI CSI
-> - 1 x 4-section headphone jack
-> - Mini PCIe socket (USB or PCIe)
-> - 1 SIM Card slot
-> - 1 SYS LED and 1 PWR LED
-> - 40-pin GPIO expansion header
-> 
-> Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
-> Signed-off-by: DHDAXCW <lasstp5011@gmail.com>
+Fix the below kernel panic due to null pointer access:
+[   18.504431] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000048
+[   18.513464] Mem abort info:
+[   18.516346]   ESR = 0x0000000096000005
+[   18.520204]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   18.525706]   SET = 0, FnV = 0
+[   18.528878]   EA = 0, S1PTW = 0
+[   18.532117]   FSC = 0x05: level 1 translation fault
+[   18.537138] Data abort info:
+[   18.540110]   ISV = 0, ISS = 0x00000005
+[   18.544060]   CM = 0, WnR = 0
+[   18.547109] user pgtable: 4k pages, 39-bit VAs, pgdp=0000000112826000
+[   18.553738] [0000000000000048] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000
+[   18.562690] Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+**Snip**
+[   18.696758] Call trace:
+[   18.699278]  adreno_gpu_cleanup+0x30/0x88
+[   18.703396]  a6xx_destroy+0xc0/0x130
+[   18.707066]  a6xx_gpu_init+0x308/0x424
+[   18.710921]  adreno_bind+0x178/0x288
+[   18.714590]  component_bind_all+0xe0/0x214
+[   18.718797]  msm_drm_bind+0x1d4/0x614
+[   18.722566]  try_to_bring_up_aggregate_device+0x16c/0x1b8
+[   18.728105]  __component_add+0xa0/0x158
+[   18.732048]  component_add+0x20/0x2c
+[   18.735719]  adreno_probe+0x40/0xc0
+[   18.739300]  platform_probe+0xb4/0xd4
+[   18.743068]  really_probe+0xfc/0x284
+[   18.746738]  __driver_probe_device+0xc0/0xec
+[   18.751129]  driver_probe_device+0x48/0x110
+[   18.755421]  __device_attach_driver+0xa8/0xd0
+[   18.759900]  bus_for_each_drv+0x90/0xdc
+[   18.763843]  __device_attach+0xfc/0x174
+[   18.767786]  device_initial_probe+0x20/0x2c
+[   18.772090]  bus_probe_device+0x40/0xa0
+[   18.776032]  deferred_probe_work_func+0x94/0xd0
+[   18.780686]  process_one_work+0x190/0x3d0
+[   18.784805]  worker_thread+0x280/0x3d4
+[   18.788659]  kthread+0x104/0x1c0
+[   18.791981]  ret_from_fork+0x10/0x20
+[   18.795654] Code: f9400408 aa0003f3 aa1f03f4 91142015 (f9402516)
+[   18.801913] ---[ end trace 0000000000000000 ]---
+[   18.809039] Kernel panic - not syncing: Oops: Fatal exception
 
-This also needs fixes (SoB order, full name)
+Fixes: 17e822f7591f ("drm/msm: fix unbalanced pm_runtime_enable in adreno_gpu_{init, cleanup}")
+Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+---
 
-Best regards,
-Krzysztof
+Changes in v2:
+- Added 'Fixes' tag (Dan Carpenter)
+
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+index 382fb7f9e497..118d07e5c66c 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+@@ -1073,13 +1073,13 @@ int adreno_gpu_init(struct drm_device *drm, struct platform_device *pdev,
+ void adreno_gpu_cleanup(struct adreno_gpu *adreno_gpu)
+ {
+ 	struct msm_gpu *gpu = &adreno_gpu->base;
+-	struct msm_drm_private *priv = gpu->dev->dev_private;
++	struct msm_drm_private *priv = gpu->dev ? gpu->dev->dev_private : NULL;
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(adreno_gpu->info->fw); i++)
+ 		release_firmware(adreno_gpu->fw[i]);
+ 
+-	if (pm_runtime_enabled(&priv->gpu_pdev->dev))
++	if (priv && pm_runtime_enabled(&priv->gpu_pdev->dev))
+ 		pm_runtime_disable(&priv->gpu_pdev->dev);
+ 
+ 	msm_gpu_cleanup(&adreno_gpu->base);
+-- 
+2.7.4
 
