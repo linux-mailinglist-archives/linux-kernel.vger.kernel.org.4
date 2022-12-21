@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA27652A52
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 01:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80791652A53
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 01:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiLUAM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 19:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S234331AbiLUANE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 19:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234214AbiLUAMn (ORCPT
+        with ESMTP id S234252AbiLUAMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 19:12:43 -0500
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F30F201BC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 16:12:37 -0800 (PST)
-Received: by mail-il1-x14a.google.com with SMTP id x10-20020a056e021bca00b00302b6c0a683so9332672ilv.23
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 16:12:37 -0800 (PST)
+        Tue, 20 Dec 2022 19:12:46 -0500
+Received: from mail-oo1-xc49.google.com (mail-oo1-xc49.google.com [IPv6:2607:f8b0:4864:20::c49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52B820357
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 16:12:38 -0800 (PST)
+Received: by mail-oo1-xc49.google.com with SMTP id w18-20020a4a6d52000000b0049f209d84bbso6158169oof.7
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 16:12:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x7hqwzZvz2lgYCROSGHPyAOjnAXLbIm00pvWJTo+FHY=;
-        b=Y99krAxU+g6T25oGmPipeCWre53NFTuJA+DF0scSa6pVzx7mXz7QcRs4zj3Vl9HPUP
-         tRBIUnIfjLKRhffplM9obWzr4hel+aA8KfE7YGeKIyJFgO8ieeYe689GCoDHNY2gpMbi
-         zM4b5sdTiFZxfWyeTTDtHmyZ3KxDS29e9pBwXEAyARnePnRmobGsBdEh1yOqIqhgKc1a
-         A6uogABkcc5cE5LeJndJvYQP3gvIMBmlhEP3b2yEq96hHoG+8AgIbcjB5BTclwI/Qy2B
-         Dq4+gEK53lcx/Q8/KoZGnlUM5QopFlIwhp4GhqYF6UK/aB/azCbUMD3B1AEeV7oLuxja
-         Qnrw==
+        bh=gUYK6iVE8NyMy+ADEXjGNSzP24X8eYlgIjWsftpIbpg=;
+        b=COBa/Wmi0UcxSY0BUzCvzZSg4FdxLNKz22ZgMbaxMfNqGEwpnSzK+Ad+FmIUryr6eD
+         hrvb+id173KoljBaCO6ipPfL22rnaj9lF2DyB8tH/BSRRrNnR2DEJAUpA4gNsiZ6FlUc
+         9HZPbwK4HzsTPIPRO9gNO96gKLjojmVvKA7YaNzfORXUGx/AUbGwKTYiOdvcUazPysOC
+         RVTg6rZoSWlPvMoi58ZR0BbdLKUE04gIzuDoW6fpxTCkbueXJZsu7T+TVfsMZwmTtFgV
+         N+JSbUk0w5cKXD/XclOTxPcIVANu4eZylI/VRfKjcol9oGuLvaY+QWoSz4BSy92hlMpb
+         IPuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x7hqwzZvz2lgYCROSGHPyAOjnAXLbIm00pvWJTo+FHY=;
-        b=jdRFiu1H9qtX1wvK/jMFlNzumtum9oaDJrCHFldmiIz6eAWdGC2E62NR/8Jj/1rIWy
-         cAzNK/mALBwruMpcU4D05tECYeXkVqzfY6pgmnY69GdH6G0H4uvadZWYTs6IyWLYzkAj
-         pcsIyLsQSISv+m+aWdT+oS3ztGCa5PMKe/UwraXqHR5kAQIchKaWE4cTuo0voVKdbcCB
-         43laTr7OMnLepggE0sOxZjIQ+tbUr3OAhTBCOYdHC8Xs+GW/uoKQ21JB7denOgUmYBxB
-         UMvXEBJ2FuA2uo+gTH/WZEZiEP0yf5wQ/ZTgiDcA4mSrqOuhGxMUMAxO0AHz9T3xrEke
-         V+JQ==
-X-Gm-Message-State: ANoB5pkyGLzyRU4MCxXdMyWsC+m2qUybfLGDq4EV+lHAG6E2mKQq854J
-        rmz/pAEByaeGXGGIEyfGWtzT8VM57EQ=
-X-Google-Smtp-Source: AA0mqf6uw7KuVqvxq95bcw+r3WruBA/v608j3gUgEyvlJRm3jjlnvNsHzE5a8wwOhKy0j7TuaZOuPLg+a5E=
+        bh=gUYK6iVE8NyMy+ADEXjGNSzP24X8eYlgIjWsftpIbpg=;
+        b=3i8RrR6Vx+FkxTlZK6Y10kfxFBRZ3ZBxwgF7Qkb9jV0hOQxF7EMmNPF7N+ldWXbMsX
+         BjvwYI9dec1j+z3TJBltyI44RmgE34Pw3S6ig/9XdYmlLKkXYCOif3MmCnOnyiN5crkB
+         VPksZuPC0/7x6f+Fcl4/qBklNHM9TzR8f1c95n42aAjeiUwJQY8erti3kvmQ2Dk3ZVEe
+         W5ksv93wt4jWgB1C6RQrj0Y1Lb8coV1UvR+rBW59bpYj1phb2Rhnh3pg9gLxETyTBtzB
+         pV60l5itDdHpOF0ET6hRircjL92nFmaBHp5VpfdaQ9iKaCG2ZEtg9mUnRdLsZQk49BzD
+         sD5Q==
+X-Gm-Message-State: AFqh2kqaFbMfj2cLQLmdPgqOSrbZB67NHYJa0N9fJKnTb0JDRXO+ovXR
+        6PlkqXTzM0uKfaTOIJYflppyITmjxrc=
+X-Google-Smtp-Source: AA0mqf4/rwvL7nj+AYw5nim+vzF9pRGefJw2rUsq83pO0l/l8ORY4gc6wDzcNVgSfgwxkSSHUd1IdMkHbhA=
 X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:a589:30f2:2daa:4ab7])
- (user=yuzhao job=sendgmr) by 2002:a02:b01d:0:b0:38a:3421:be23 with SMTP id
- p29-20020a02b01d000000b0038a3421be23mr14395612jah.288.1671581556605; Tue, 20
- Dec 2022 16:12:36 -0800 (PST)
-Date:   Tue, 20 Dec 2022 17:12:01 -0700
+ (user=yuzhao job=sendgmr) by 2002:a05:6870:30e:b0:144:74f1:173d with SMTP id
+ m14-20020a056870030e00b0014474f1173dmr2117657oaf.241.1671581558131; Tue, 20
+ Dec 2022 16:12:38 -0800 (PST)
+Date:   Tue, 20 Dec 2022 17:12:02 -0700
 In-Reply-To: <20221221001207.1376119-1-yuzhao@google.com>
-Message-Id: <20221221001207.1376119-2-yuzhao@google.com>
+Message-Id: <20221221001207.1376119-3-yuzhao@google.com>
 Mime-Version: 1.0
 References: <20221221001207.1376119-1-yuzhao@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH mm-unstable v2 1/8] mm: multi-gen LRU: rename lru_gen_struct
- to lru_gen_folio
+Subject: [PATCH mm-unstable v2 2/8] mm: multi-gen LRU: rename lrugen->lists[]
+ to lrugen->folios[]
 From:   Yu Zhao <yuzhao@google.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Johannes Weiner <hannes@cmpxchg.org>,
@@ -76,250 +76,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new name lru_gen_folio will be more distinct from the coming
-lru_gen_memcg.
+lru_gen_folio will be chained into per-node lists by the coming
+lrugen->list.
 
 Signed-off-by: Yu Zhao <yuzhao@google.com>
-Change-Id: Ic714d328df239f569fe37c3f1fac44a01549883c
+Change-Id: Ib1bee101fd6b73da5409d32e67409fa6475d8cc6
 ---
- include/linux/mm_inline.h |  4 ++--
- include/linux/mmzone.h    |  6 +++---
- mm/vmscan.c               | 34 +++++++++++++++++-----------------
- mm/workingset.c           |  4 ++--
- 4 files changed, 24 insertions(+), 24 deletions(-)
+ Documentation/mm/multigen_lru.rst |  8 ++++----
+ include/linux/mm_inline.h         |  4 ++--
+ include/linux/mmzone.h            |  8 ++++----
+ mm/vmscan.c                       | 20 ++++++++++----------
+ 4 files changed, 20 insertions(+), 20 deletions(-)
 
+diff --git a/Documentation/mm/multigen_lru.rst b/Documentation/mm/multigen_lru.rst
+index d7062c6a8946..d8f721f98868 100644
+--- a/Documentation/mm/multigen_lru.rst
++++ b/Documentation/mm/multigen_lru.rst
+@@ -89,15 +89,15 @@ variables are monotonically increasing.
+ 
+ Generation numbers are truncated into ``order_base_2(MAX_NR_GENS+1)``
+ bits in order to fit into the gen counter in ``folio->flags``. Each
+-truncated generation number is an index to ``lrugen->lists[]``. The
++truncated generation number is an index to ``lrugen->folios[]``. The
+ sliding window technique is used to track at least ``MIN_NR_GENS`` and
+ at most ``MAX_NR_GENS`` generations. The gen counter stores a value
+ within ``[1, MAX_NR_GENS]`` while a page is on one of
+-``lrugen->lists[]``; otherwise it stores zero.
++``lrugen->folios[]``; otherwise it stores zero.
+ 
+ Each generation is divided into multiple tiers. A page accessed ``N``
+ times through file descriptors is in tier ``order_base_2(N)``. Unlike
+-generations, tiers do not have dedicated ``lrugen->lists[]``. In
++generations, tiers do not have dedicated ``lrugen->folios[]``. In
+ contrast to moving across generations, which requires the LRU lock,
+ moving across tiers only involves atomic operations on
+ ``folio->flags`` and therefore has a negligible cost. A feedback loop
+@@ -127,7 +127,7 @@ page mapped by this PTE to ``(max_seq%MAX_NR_GENS)+1``.
+ Eviction
+ --------
+ The eviction consumes old generations. Given an ``lruvec``, it
+-increments ``min_seq`` when ``lrugen->lists[]`` indexed by
++increments ``min_seq`` when ``lrugen->folios[]`` indexed by
+ ``min_seq%MAX_NR_GENS`` becomes empty. To select a type and a tier to
+ evict from, it first compares ``min_seq[]`` to select the older type.
+ If both types are equally old, it selects the one whose first tier has
 diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-index e8ed225d8f7c..f63968bd7de5 100644
+index f63968bd7de5..da38e3d962e2 100644
 --- a/include/linux/mm_inline.h
 +++ b/include/linux/mm_inline.h
-@@ -178,7 +178,7 @@ static inline void lru_gen_update_size(struct lruvec *lruvec, struct folio *foli
- 	int zone = folio_zonenum(folio);
- 	int delta = folio_nr_pages(folio);
- 	enum lru_list lru = type * LRU_INACTIVE_FILE;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
+@@ -256,9 +256,9 @@ static inline bool lru_gen_add_folio(struct lruvec *lruvec, struct folio *folio,
+ 	lru_gen_update_size(lruvec, folio, -1, gen);
+ 	/* for folio_rotate_reclaimable() */
+ 	if (reclaiming)
+-		list_add_tail(&folio->lru, &lrugen->lists[gen][type][zone]);
++		list_add_tail(&folio->lru, &lrugen->folios[gen][type][zone]);
+ 	else
+-		list_add(&folio->lru, &lrugen->lists[gen][type][zone]);
++		list_add(&folio->lru, &lrugen->folios[gen][type][zone]);
  
- 	VM_WARN_ON_ONCE(old_gen != -1 && old_gen >= MAX_NR_GENS);
- 	VM_WARN_ON_ONCE(new_gen != -1 && new_gen >= MAX_NR_GENS);
-@@ -224,7 +224,7 @@ static inline bool lru_gen_add_folio(struct lruvec *lruvec, struct folio *folio,
- 	int gen = folio_lru_gen(folio);
- 	int type = folio_is_file_lru(folio);
- 	int zone = folio_zonenum(folio);
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 
- 	VM_WARN_ON_ONCE_FOLIO(gen != -1, folio);
- 
+ 	return true;
+ }
 diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index cd28a100d9e4..1686fcc4ed01 100644
+index 1686fcc4ed01..6c96ee823dbd 100644
 --- a/include/linux/mmzone.h
 +++ b/include/linux/mmzone.h
-@@ -404,7 +404,7 @@ enum {
-  * The number of pages in each generation is eventually consistent and therefore
-  * can be transiently negative when reset_batch_size() is pending.
-  */
--struct lru_gen_struct {
-+struct lru_gen_folio {
- 	/* the aging increments the youngest generation number */
- 	unsigned long max_seq;
- 	/* the eviction increments the oldest generation numbers */
-@@ -461,7 +461,7 @@ struct lru_gen_mm_state {
- struct lru_gen_mm_walk {
- 	/* the lruvec under reclaim */
- 	struct lruvec *lruvec;
--	/* unstable max_seq from lru_gen_struct */
-+	/* unstable max_seq from lru_gen_folio */
- 	unsigned long max_seq;
- 	/* the next address within an mm to scan */
- 	unsigned long next_addr;
-@@ -524,7 +524,7 @@ struct lruvec {
- 	unsigned long			flags;
- #ifdef CONFIG_LRU_GEN
- 	/* evictable pages divided into generations */
--	struct lru_gen_struct		lrugen;
-+	struct lru_gen_folio		lrugen;
- 	/* to concurrently iterate lru_gen_mm_list */
- 	struct lru_gen_mm_state		mm_state;
- #endif
+@@ -312,7 +312,7 @@ enum lruvec_flags {
+  * They form a sliding window of a variable size [MIN_NR_GENS, MAX_NR_GENS]. An
+  * offset within MAX_NR_GENS, i.e., gen, indexes the LRU list of the
+  * corresponding generation. The gen counter in folio->flags stores gen+1 while
+- * a page is on one of lrugen->lists[]. Otherwise it stores 0.
++ * a page is on one of lrugen->folios[]. Otherwise it stores 0.
+  *
+  * A page is added to the youngest generation on faulting. The aging needs to
+  * check the accessed bit at least twice before handing this page over to the
+@@ -324,8 +324,8 @@ enum lruvec_flags {
+  * rest of generations, if they exist, are considered inactive. See
+  * lru_gen_is_active().
+  *
+- * PG_active is always cleared while a page is on one of lrugen->lists[] so that
+- * the aging needs not to worry about it. And it's set again when a page
++ * PG_active is always cleared while a page is on one of lrugen->folios[] so
++ * that the aging needs not to worry about it. And it's set again when a page
+  * considered active is isolated for non-reclaiming purposes, e.g., migration.
+  * See lru_gen_add_folio() and lru_gen_del_folio().
+  *
+@@ -412,7 +412,7 @@ struct lru_gen_folio {
+ 	/* the birth time of each generation in jiffies */
+ 	unsigned long timestamps[MAX_NR_GENS];
+ 	/* the multi-gen LRU lists, lazily sorted on eviction */
+-	struct list_head lists[MAX_NR_GENS][ANON_AND_FILE][MAX_NR_ZONES];
++	struct list_head folios[MAX_NR_GENS][ANON_AND_FILE][MAX_NR_ZONES];
+ 	/* the multi-gen LRU sizes, eventually consistent */
+ 	long nr_pages[MAX_NR_GENS][ANON_AND_FILE][MAX_NR_ZONES];
+ 	/* the exponential moving average of refaulted */
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 546540bc770a..c0c4b0cd2fe2 100644
+index c0c4b0cd2fe2..94477894b226 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -3215,7 +3215,7 @@ static int get_nr_gens(struct lruvec *lruvec, int type)
+@@ -4274,7 +4274,7 @@ static bool inc_min_seq(struct lruvec *lruvec, int type, bool can_swap)
  
- static bool __maybe_unused seq_is_valid(struct lruvec *lruvec)
- {
--	/* see the comment on lru_gen_struct */
-+	/* see the comment on lru_gen_folio */
- 	return get_nr_gens(lruvec, LRU_GEN_FILE) >= MIN_NR_GENS &&
- 	       get_nr_gens(lruvec, LRU_GEN_FILE) <= get_nr_gens(lruvec, LRU_GEN_ANON) &&
- 	       get_nr_gens(lruvec, LRU_GEN_ANON) <= MAX_NR_GENS;
-@@ -3612,7 +3612,7 @@ struct ctrl_pos {
- static void read_ctrl_pos(struct lruvec *lruvec, int type, int tier, int gain,
- 			  struct ctrl_pos *pos)
- {
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 	int hist = lru_hist_from_seq(lrugen->min_seq[type]);
+ 	/* prevent cold/hot inversion if force_scan is true */
+ 	for (zone = 0; zone < MAX_NR_ZONES; zone++) {
+-		struct list_head *head = &lrugen->lists[old_gen][type][zone];
++		struct list_head *head = &lrugen->folios[old_gen][type][zone];
  
- 	pos->refaulted = lrugen->avg_refaulted[type][tier] +
-@@ -3627,7 +3627,7 @@ static void read_ctrl_pos(struct lruvec *lruvec, int type, int tier, int gain,
- static void reset_ctrl_pos(struct lruvec *lruvec, int type, bool carryover)
- {
- 	int hist, tier;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 	bool clear = carryover ? NR_HIST_GENS == 1 : NR_HIST_GENS > 1;
- 	unsigned long seq = carryover ? lrugen->min_seq[type] : lrugen->max_seq + 1;
+ 		while (!list_empty(head)) {
+ 			struct folio *folio = lru_to_folio(head);
+@@ -4285,7 +4285,7 @@ static bool inc_min_seq(struct lruvec *lruvec, int type, bool can_swap)
+ 			VM_WARN_ON_ONCE_FOLIO(folio_zonenum(folio) != zone, folio);
  
-@@ -3704,7 +3704,7 @@ static int folio_update_gen(struct folio *folio, int gen)
- static int folio_inc_gen(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
- {
- 	int type = folio_is_file_lru(folio);
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 	int new_gen, old_gen = lru_gen_from_seq(lrugen->min_seq[type]);
- 	unsigned long new_flags, old_flags = READ_ONCE(folio->flags);
+ 			new_gen = folio_inc_gen(lruvec, folio, false);
+-			list_move_tail(&folio->lru, &lrugen->lists[new_gen][type][zone]);
++			list_move_tail(&folio->lru, &lrugen->folios[new_gen][type][zone]);
  
-@@ -3749,7 +3749,7 @@ static void update_batch_size(struct lru_gen_mm_walk *walk, struct folio *folio,
- static void reset_batch_size(struct lruvec *lruvec, struct lru_gen_mm_walk *walk)
- {
- 	int gen, type, zone;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
+ 			if (!--remaining)
+ 				return false;
+@@ -4313,7 +4313,7 @@ static bool try_to_inc_min_seq(struct lruvec *lruvec, bool can_swap)
+ 			gen = lru_gen_from_seq(min_seq[type]);
  
- 	walk->batched = 0;
+ 			for (zone = 0; zone < MAX_NR_ZONES; zone++) {
+-				if (!list_empty(&lrugen->lists[gen][type][zone]))
++				if (!list_empty(&lrugen->folios[gen][type][zone]))
+ 					goto next;
+ 			}
  
-@@ -4266,7 +4266,7 @@ static bool inc_min_seq(struct lruvec *lruvec, int type, bool can_swap)
- {
- 	int zone;
- 	int remaining = MAX_LRU_BATCH;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 	int new_gen, old_gen = lru_gen_from_seq(lrugen->min_seq[type]);
+@@ -4778,7 +4778,7 @@ static bool sort_folio(struct lruvec *lruvec, struct folio *folio, int tier_idx)
  
- 	if (type == LRU_GEN_ANON && !can_swap)
-@@ -4302,7 +4302,7 @@ static bool try_to_inc_min_seq(struct lruvec *lruvec, bool can_swap)
- {
- 	int gen, type, zone;
- 	bool success = false;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 	DEFINE_MIN_SEQ(lruvec);
- 
- 	VM_WARN_ON_ONCE(!seq_is_valid(lruvec));
-@@ -4323,7 +4323,7 @@ static bool try_to_inc_min_seq(struct lruvec *lruvec, bool can_swap)
- 		;
+ 	/* promoted */
+ 	if (gen != lru_gen_from_seq(lrugen->min_seq[type])) {
+-		list_move(&folio->lru, &lrugen->lists[gen][type][zone]);
++		list_move(&folio->lru, &lrugen->folios[gen][type][zone]);
+ 		return true;
  	}
  
--	/* see the comment on lru_gen_struct */
-+	/* see the comment on lru_gen_folio */
- 	if (can_swap) {
- 		min_seq[LRU_GEN_ANON] = min(min_seq[LRU_GEN_ANON], min_seq[LRU_GEN_FILE]);
- 		min_seq[LRU_GEN_FILE] = max(min_seq[LRU_GEN_ANON], lrugen->min_seq[LRU_GEN_FILE]);
-@@ -4345,7 +4345,7 @@ static void inc_max_seq(struct lruvec *lruvec, bool can_swap, bool force_scan)
- {
- 	int prev, next;
- 	int type, zone;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
+@@ -4787,7 +4787,7 @@ static bool sort_folio(struct lruvec *lruvec, struct folio *folio, int tier_idx)
+ 		int hist = lru_hist_from_seq(lrugen->min_seq[type]);
  
- 	spin_lock_irq(&lruvec->lru_lock);
+ 		gen = folio_inc_gen(lruvec, folio, false);
+-		list_move_tail(&folio->lru, &lrugen->lists[gen][type][zone]);
++		list_move_tail(&folio->lru, &lrugen->folios[gen][type][zone]);
  
-@@ -4403,7 +4403,7 @@ static bool try_to_inc_max_seq(struct lruvec *lruvec, unsigned long max_seq,
- 	bool success;
- 	struct lru_gen_mm_walk *walk;
- 	struct mm_struct *mm = NULL;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
+ 		WRITE_ONCE(lrugen->protected[hist][type][tier - 1],
+ 			   lrugen->protected[hist][type][tier - 1] + delta);
+@@ -4799,7 +4799,7 @@ static bool sort_folio(struct lruvec *lruvec, struct folio *folio, int tier_idx)
+ 	if (folio_test_locked(folio) || folio_test_writeback(folio) ||
+ 	    (type == LRU_GEN_FILE && folio_test_dirty(folio))) {
+ 		gen = folio_inc_gen(lruvec, folio, true);
+-		list_move(&folio->lru, &lrugen->lists[gen][type][zone]);
++		list_move(&folio->lru, &lrugen->folios[gen][type][zone]);
+ 		return true;
+ 	}
  
- 	VM_WARN_ON_ONCE(max_seq > READ_ONCE(lrugen->max_seq));
+@@ -4866,7 +4866,7 @@ static int scan_folios(struct lruvec *lruvec, struct scan_control *sc,
+ 	for (zone = sc->reclaim_idx; zone >= 0; zone--) {
+ 		LIST_HEAD(moved);
+ 		int skipped = 0;
+-		struct list_head *head = &lrugen->lists[gen][type][zone];
++		struct list_head *head = &lrugen->folios[gen][type][zone];
  
-@@ -4468,7 +4468,7 @@ static bool should_run_aging(struct lruvec *lruvec, unsigned long max_seq, unsig
- 	unsigned long old = 0;
- 	unsigned long young = 0;
- 	unsigned long total = 0;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
+ 		while (!list_empty(head)) {
+ 			struct folio *folio = lru_to_folio(head);
+@@ -5267,7 +5267,7 @@ static bool __maybe_unused state_is_valid(struct lruvec *lruvec)
+ 		int gen, type, zone;
  
- 	for (type = !can_swap; type < ANON_AND_FILE; type++) {
-@@ -4753,7 +4753,7 @@ static bool sort_folio(struct lruvec *lruvec, struct folio *folio, int tier_idx)
- 	int delta = folio_nr_pages(folio);
- 	int refs = folio_lru_refs(folio);
- 	int tier = lru_tier_from_refs(refs);
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 
- 	VM_WARN_ON_ONCE_FOLIO(gen >= MAX_NR_GENS, folio);
- 
-@@ -4853,7 +4853,7 @@ static int scan_folios(struct lruvec *lruvec, struct scan_control *sc,
- 	int scanned = 0;
- 	int isolated = 0;
+ 		for_each_gen_type_zone(gen, type, zone) {
+-			if (!list_empty(&lrugen->lists[gen][type][zone]))
++			if (!list_empty(&lrugen->folios[gen][type][zone]))
+ 				return false;
+ 		}
+ 	}
+@@ -5312,7 +5312,7 @@ static bool drain_evictable(struct lruvec *lruvec)
  	int remaining = MAX_LRU_BATCH;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
  
- 	VM_WARN_ON_ONCE(!list_empty(list));
-@@ -5254,7 +5254,7 @@ static void lru_gen_shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc
+ 	for_each_gen_type_zone(gen, type, zone) {
+-		struct list_head *head = &lruvec->lrugen.lists[gen][type][zone];
++		struct list_head *head = &lruvec->lrugen.folios[gen][type][zone];
  
- static bool __maybe_unused state_is_valid(struct lruvec *lruvec)
- {
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
+ 		while (!list_empty(head)) {
+ 			bool success;
+@@ -5846,7 +5846,7 @@ void lru_gen_init_lruvec(struct lruvec *lruvec)
+ 		lrugen->timestamps[i] = jiffies;
  
- 	if (lrugen->enabled) {
- 		enum lru_list lru;
-@@ -5533,7 +5533,7 @@ static void lru_gen_seq_show_full(struct seq_file *m, struct lruvec *lruvec,
- 	int i;
- 	int type, tier;
- 	int hist = lru_hist_from_seq(seq);
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
+ 	for_each_gen_type_zone(gen, type, zone)
+-		INIT_LIST_HEAD(&lrugen->lists[gen][type][zone]);
++		INIT_LIST_HEAD(&lrugen->folios[gen][type][zone]);
  
- 	for (tier = 0; tier < MAX_NR_TIERS; tier++) {
- 		seq_printf(m, "            %10d", tier);
-@@ -5583,7 +5583,7 @@ static int lru_gen_seq_show(struct seq_file *m, void *v)
- 	unsigned long seq;
- 	bool full = !debugfs_real_fops(m->file)->write;
- 	struct lruvec *lruvec = v;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 	int nid = lruvec_pgdat(lruvec)->node_id;
- 	struct mem_cgroup *memcg = lruvec_memcg(lruvec);
- 	DEFINE_MAX_SEQ(lruvec);
-@@ -5837,7 +5837,7 @@ void lru_gen_init_lruvec(struct lruvec *lruvec)
- {
- 	int i;
- 	int gen, type, zone;
--	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-+	struct lru_gen_folio *lrugen = &lruvec->lrugen;
- 
- 	lrugen->max_seq = MIN_NR_GENS + 1;
- 	lrugen->enabled = lru_gen_enabled();
-diff --git a/mm/workingset.c b/mm/workingset.c
-index 1a86645b7b3c..fd666584515c 100644
---- a/mm/workingset.c
-+++ b/mm/workingset.c
-@@ -223,7 +223,7 @@ static void *lru_gen_eviction(struct folio *folio)
- 	unsigned long token;
- 	unsigned long min_seq;
- 	struct lruvec *lruvec;
--	struct lru_gen_struct *lrugen;
-+	struct lru_gen_folio *lrugen;
- 	int type = folio_is_file_lru(folio);
- 	int delta = folio_nr_pages(folio);
- 	int refs = folio_lru_refs(folio);
-@@ -252,7 +252,7 @@ static void lru_gen_refault(struct folio *folio, void *shadow)
- 	unsigned long token;
- 	unsigned long min_seq;
- 	struct lruvec *lruvec;
--	struct lru_gen_struct *lrugen;
-+	struct lru_gen_folio *lrugen;
- 	struct mem_cgroup *memcg;
- 	struct pglist_data *pgdat;
- 	int type = folio_is_file_lru(folio);
+ 	lruvec->mm_state.seq = MIN_NR_GENS;
+ 	init_waitqueue_head(&lruvec->mm_state.wait);
 -- 
 2.39.0.314.g84b9a713c41-goog
 
