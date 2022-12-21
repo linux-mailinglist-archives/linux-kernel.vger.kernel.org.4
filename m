@@ -2,187 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E5B6536B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 19:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E7C6536B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 19:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234412AbiLUS4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 13:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
+        id S231897AbiLUS4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 13:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbiLUS4j (ORCPT
+        with ESMTP id S229728AbiLUS4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 13:56:39 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCF623BC6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 10:56:37 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id i10-20020a25f20a000000b006ea4f43c0ddso18751384ybe.21
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 10:56:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vkeDQJpVTf6s1YGBospF5WMHq6hnMmsSN6KbLFXrO2Q=;
-        b=aYmNc+Ea/2opXxqCb5rJOnnDocH6oxCiON3IEwUeuCW1rqB1BmsUQoqZWgsU0l8pi0
-         zm7l8qX6kbqV3Ha8FqkQlOp3myaK0F4dl3TIqQWkoJtxck05mbD20v5ZHFZd3mqJme3k
-         OGqPObnxXcb5O1NAMlTsS8lFUPVewLU6PW0s7MHZGM/kmCV0M6xOCjMI3JrYcRUF+sk5
-         htT5mJbvfKM9Mkyjl12XJSJG9d/eIbW8IYVFfqQ87s3Cj7H9hERgyirhmXDJBPkT387e
-         uQW8KQDgnQSNWoG7phE/pAdUg1BatnPFwWDbtMPkvHs2wJ1G2lWIZBTVHFQzC99LbM9p
-         xJyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vkeDQJpVTf6s1YGBospF5WMHq6hnMmsSN6KbLFXrO2Q=;
-        b=GQFndvG888koXKObVX6sErAcQ8onIu3C03xbn+D3ueRh8h+Caq3FX4PPiTogu7MULy
-         WV06g3YkycLlubE5NCOKH2LSJ72SfdV/lzBzll3AdA00L26ZyA62zjNJEHxCIuQs09Zx
-         oxZmBzdiHD4yeLWMEJwXzoWOQoFjUFHPrucJGqxMn+yczRlACCqnrlqFY0zFNsV65/BJ
-         a6FWp7Hjm/wtWKUC8DPjQQyWaYNnQgJukeJY0ELB9R2wlEQKKzZ/ty2xnShX2THNw1dI
-         xjNXhPmQS1IfTTcusULXNh1Nb2a+y0WcjjlLEyJ9lVFkQ8iG6LjcFxlsQjAzOuwoIADy
-         rUlQ==
-X-Gm-Message-State: AFqh2kpOtisrOlgbY99zMrSwEZFnK+coPr3IVIWCb4PzWa91xXq7z8WZ
-        mYO4cjkuBygnhVtoNyVRhDrFqvDyCn1/Keo=
-X-Google-Smtp-Source: AMrXdXuDeIb+sACFxzk6jxFrUXna+B8ejbo67esa7ZWyt/BR8swb1R5A2sciDL3RWE1EW+2TDOqo2QdA3Qg4DN4=
-X-Received: from robbarnes3.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6451])
- (user=robbarnes job=sendgmr) by 2002:a25:aae1:0:b0:6fc:1c96:c9fe with SMTP id
- t88-20020a25aae1000000b006fc1c96c9femr378468ybi.36.1671648996893; Wed, 21 Dec
- 2022 10:56:36 -0800 (PST)
-Date:   Wed, 21 Dec 2022 18:55:41 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221221185540.2265771-1-robbarnes@google.com>
-Subject: [PATCH] drivers/cros_ec: Handle CrOS EC panics
-From:   Rob Barnes <robbarnes@google.com>
-To:     Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     dtor@chromium.org, Benson Leung <bleung@chromium.org>,
-        Rob Barnes <robbarnes@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 21 Dec 2022 13:56:19 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED8B647C;
+        Wed, 21 Dec 2022 10:56:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9B687CE186C;
+        Wed, 21 Dec 2022 18:56:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8206C433D2;
+        Wed, 21 Dec 2022 18:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671648973;
+        bh=I1Wb/JVkjLx/D5Iu41GpT9ftH9FUtw4RpMRFSFdWNlw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fIb6DQ6RJ1UC2WtFiKNrTv9lAD0Rcc9MVYxpARnYwPdZgkqp4Jo5UQGQvg+AflMhq
+         2E7xushjeWlgp95ABFMa9NcijYUi0MA0rGUHcFEAJQF4LNfHEZKKgFm4S0APVM67c+
+         nmzgFENQuVEYLjpziZ5elMLRNEEgJ0eWwBpIVh5ZjN2YdZzJoQ+Mo7CiM/JVFN5IAX
+         bUIiLBt1qb+PMbQip0YBLH0Fdyh9y5z81aSYWtqn8D8fP459cxS6lXIXQnWldCsLb0
+         C5guTRv8LwAK59TTD5RYCNTj7ID7cKP4SkahD/KhFIiFIGbrZoE0V2E+T0d6cE8fHM
+         Er4vY9I2UI6NA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 56D7D5C0989; Wed, 21 Dec 2022 10:56:13 -0800 (PST)
+Date:   Wed, 21 Dec 2022 10:56:13 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Robert Elliott <elliott@hpe.com>
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, linux-crypto@vger.kernel.org,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] rcu: genericize RCU stall suppression functions
+Message-ID: <20221221185613.GB4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221219202910.3063036-1-elliott@hpe.com>
+ <20221219202910.3063036-2-elliott@hpe.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219202910.3063036-2-elliott@hpe.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add handler for CrOS EC panic events. When a panic is reported,
-poll EC log then force an orderly shutdown.
+On Mon, Dec 19, 2022 at 02:29:08PM -0600, Robert Elliott wrote:
+> Convert the functions that temporarily suppress RCU CPU
+> stall reporting:
+> 	rcu_sysrq_start()
+> 	rcu_sysrq_end()
+> 
+> to more generic functions that may be called by functions
+> other than the SysRq handler:
+> 	rcu_suppress_start()
+> 	rcu_suppress_end()
+> 
+> Covert the underlying variable:
+> 	rcu_cpu_stall_suppress
+> 
+> to an atomic variable so multiple threads can manipulate it at the
+> same time, incrementing it in start() and decrementing in end().
+> 
+> Expose that in sysfs in a read-only
+> 	/sys/module/rcupdate/parameters/rcu_cpu_stall_suppress_dyn
+> 
+> Keep
+> 	/sys/module/rcupdate/parameters/rcu_cpu_stall_suppress
+> as writeable by userspace, but OR that into the equations rather than
+> directly manipulate the atomic value.
+> 
+> Signed-off-by: Robert Elliott <elliott@hpe.com>
 
-This will preserve the EC log leading up to the crash.
+I really like the idea of making the suppressing and unsuppressing of
+RCU CPU stall warnings SMP-safe, thank you!  Yes, as far as I know,
+there have been no problems due to this, but accidents waiting to happen
+and all that.
 
-Signed-off-by: Rob Barnes <robbarnes@google.com>
----
- drivers/platform/chrome/cros_ec_debugfs.c   | 24 +++++++++++++++++++++
- drivers/platform/chrome/cros_ec_lpc.c       | 10 +++++++++
- include/linux/platform_data/cros_ec_proto.h |  9 ++++++++
- 3 files changed, 43 insertions(+)
+Some comments and questions below.
 
-diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
-index 21d973fc6be2..31637a4e4cf9 100644
---- a/drivers/platform/chrome/cros_ec_debugfs.c
-+++ b/drivers/platform/chrome/cros_ec_debugfs.c
-@@ -49,6 +49,7 @@ struct cros_ec_debugfs {
- 	struct delayed_work log_poll_work;
- 	/* EC panicinfo */
- 	struct debugfs_blob_wrapper panicinfo_blob;
-+	struct notifier_block notifier_panic;
- };
- 
- /*
-@@ -437,6 +438,23 @@ static int cros_ec_create_panicinfo(struct cros_ec_debugfs *debug_info)
- 	return ret;
- }
- 
-+static int cros_ec_debugfs_panic_event(struct notifier_block *nb,
-+				       unsigned long queued_during_suspend,
-+				       void *_notify)
-+{
-+	struct cros_ec_debugfs *debug_info =
-+		container_of(nb, struct cros_ec_debugfs, notifier_panic);
-+
-+	if (debug_info->log_buffer.buf) {
-+		/* Force log poll work to run immediately */
-+		mod_delayed_work(debug_info->log_poll_work.wq, &debug_info->log_poll_work, 0);
-+		/* Block until log poll work finishes */
-+		flush_delayed_work(&debug_info->log_poll_work);
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
- static int cros_ec_debugfs_probe(struct platform_device *pd)
- {
- 	struct cros_ec_dev *ec = dev_get_drvdata(pd->dev.parent);
-@@ -473,6 +491,12 @@ static int cros_ec_debugfs_probe(struct platform_device *pd)
- 	debugfs_create_u16("suspend_timeout_ms", 0664, debug_info->dir,
- 			   &ec->ec_dev->suspend_timeout_ms);
- 
-+	debug_info->notifier_panic.notifier_call = cros_ec_debugfs_panic_event;
-+	ret = blocking_notifier_chain_register(&ec->ec_dev->panic_notifier,
-+					       &debug_info->notifier_panic);
-+	if (ret)
-+		goto remove_debugfs;
-+
- 	ec->debug_info = debug_info;
- 
- 	dev_set_drvdata(&pd->dev, ec);
-diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-index 7fc8f82280ac..21958c3b0c28 100644
---- a/drivers/platform/chrome/cros_ec_lpc.c
-+++ b/drivers/platform/chrome/cros_ec_lpc.c
-@@ -21,6 +21,7 @@
- #include <linux/platform_data/cros_ec_proto.h>
- #include <linux/platform_device.h>
- #include <linux/printk.h>
-+#include <linux/reboot.h>
- #include <linux/suspend.h>
- 
- #include "cros_ec.h"
-@@ -332,6 +333,15 @@ static void cros_ec_lpc_acpi_notify(acpi_handle device, u32 value, void *data)
- 
- 	if (value == ACPI_NOTIFY_DEVICE_WAKE)
- 		pm_system_wakeup();
-+
-+	if (value == ACPI_NOTIFY_CROS_EC_PANIC) {
-+		dev_err(ec_dev->dev,
-+			"CrOS EC Panic Reported. Shutdown is imminent!");
-+		blocking_notifier_call_chain(&ec_dev->panic_notifier, 0,
-+					     ec_dev);
-+		/* Begin orderly shutdown. Force shutdown after 1 second. */
-+		hw_protection_shutdown("CrOS EC Panic", 1000);
-+	}
- }
- 
- static int cros_ec_lpc_probe(struct platform_device *pdev)
-diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-index e43107e0bee1..1c4487271836 100644
---- a/include/linux/platform_data/cros_ec_proto.h
-+++ b/include/linux/platform_data/cros_ec_proto.h
-@@ -41,6 +41,13 @@
- #define EC_MAX_REQUEST_OVERHEAD		1
- #define EC_MAX_RESPONSE_OVERHEAD	32
- 
-+/*
-+ * EC panic is not covered by the standard (0-F) ACPI notify values.
-+ * Arbitrarily choosing B0 to notify ec panic, which is in the 84-BF
-+ * device specific ACPI notify range.
-+ */
-+#define ACPI_NOTIFY_CROS_EC_PANIC	0xB0
-+
- /*
-  * Command interface between EC and AP, for LPC, I2C and SPI interfaces.
-  */
-@@ -176,6 +183,8 @@ struct cros_ec_device {
- 	/* The platform devices used by the mfd driver */
- 	struct platform_device *ec;
- 	struct platform_device *pd;
-+
-+	struct blocking_notifier_head panic_notifier;
- };
- 
- /**
--- 
-2.39.0.314.g84b9a713c41-goog
+> ---
+>  .../RCU/Design/Requirements/Requirements.rst  |  6 +++---
+>  Documentation/RCU/stallwarn.rst               | 19 +++++++++++++++----
+>  arch/parisc/kernel/process.c                  |  2 +-
+>  drivers/tty/sysrq.c                           |  4 ++--
+>  include/linux/rcupdate.h                      |  8 ++++----
+>  kernel/rcu/rcu.h                              | 11 ++++++-----
+>  kernel/rcu/tree_stall.h                       | 18 ++++++++++--------
+>  kernel/rcu/update.c                           | 11 ++++++++++-
+>  8 files changed, 51 insertions(+), 28 deletions(-)
+> 
+> diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
+> index 49387d823619..5083490bb6fc 100644
+> --- a/Documentation/RCU/Design/Requirements/Requirements.rst
+> +++ b/Documentation/RCU/Design/Requirements/Requirements.rst
+> @@ -1639,9 +1639,9 @@ against mishaps and misuse:
+>     ``rcupdate.rcu_cpu_stall_suppress`` to suppress the splats. This
+>     kernel parameter may also be set via ``sysfs``. Furthermore, RCU CPU
+>     stall warnings are counter-productive during sysrq dumps and during
+> -   panics. RCU therefore supplies the rcu_sysrq_start() and
+> -   rcu_sysrq_end() API members to be called before and after long
+> -   sysrq dumps. RCU also supplies the rcu_panic() notifier that is
+> +   panics. RCU therefore supplies the rcu_suppress_start() and
+> +   rcu_suppress_end() API members to be called before and after long
+> +   CPU usage. RCU also supplies the rcu_panic() notifier that is
+>     automatically invoked at the beginning of a panic to suppress further
+>     RCU CPU stall warnings.
+>  
+> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+> index e38c587067fc..9e6fba72f56d 100644
+> --- a/Documentation/RCU/stallwarn.rst
+> +++ b/Documentation/RCU/stallwarn.rst
+> @@ -135,13 +135,24 @@ see include/trace/events/rcu.h.
+>  Fine-Tuning the RCU CPU Stall Detector
+>  ======================================
+>  
+> -The rcuupdate.rcu_cpu_stall_suppress module parameter disables RCU's
+> -CPU stall detector, which detects conditions that unduly delay RCU grace
+> -periods.  This module parameter enables CPU stall detection by default,
+> -but may be overridden via boot-time parameter or at runtime via sysfs.
+> +RCU's CPU stall detector detects conditions that unduly delay RCU grace
+> +periods.  CPU stall detection is enabled by default, but may be overridden
+> +via boot-time parameter or at runtime via sysfs (accessible via
+> +/sys/module/rcupdate/parameters).
+> +
+> +The rcupdate.rcu_cpu_stall_suppress module parameter disables RCU's
+> +CPU stall detector.
+> +
+> +/sys/module/rcu_cpu_stall_suppress_dyn reports an internal semaphore
 
+Actually an atomically updated variable as opposed to a semaphore,
+correct?  Replacing "an internal semaphore" with something like "a
+variable" would be fine from my viewpoint.
+
+> +used by the RCU's CPU stall detector. Functions holding a CPU for a
+> +long time (e.g., sysrq printouts) increment this value before use
+> +and decrement it when done, so the value reports the number of
+> +functions currently disabling stalls.
+> +
+>  The stall detector's idea of what constitutes "unduly delayed" is
+>  controlled by a set of kernel configuration variables and cpp macros:
+>  
+> +
+>  CONFIG_RCU_CPU_STALL_TIMEOUT
+>  ----------------------------
+
+And thank you for updating the documentation!
+
+> diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
+> index c4f8374c7018..038378fe7bfa 100644
+> --- a/arch/parisc/kernel/process.c
+> +++ b/arch/parisc/kernel/process.c
+> @@ -126,7 +126,7 @@ void machine_power_off(void)
+>  	       "Please power this system off now.");
+>  
+>  	/* prevent soft lockup/stalled CPU messages for endless loop. */
+> -	rcu_sysrq_start();
+> +	rcu_suppress_start();
+>  	lockup_detector_soft_poweroff();
+>  	for (;;);
+>  }
+> diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
+> index d2b2720db6ca..81ab63a473a7 100644
+> --- a/drivers/tty/sysrq.c
+> +++ b/drivers/tty/sysrq.c
+> @@ -579,7 +579,7 @@ void __handle_sysrq(int key, bool check_mask)
+>  	orig_suppress_printk = suppress_printk;
+>  	suppress_printk = 0;
+>  
+> -	rcu_sysrq_start();
+> +	rcu_suppress_start();
+>  	rcu_read_lock();
+>  	/*
+>  	 * Raise the apparent loglevel to maximum so that the sysrq header
+> @@ -623,7 +623,7 @@ void __handle_sysrq(int key, bool check_mask)
+>  		console_loglevel = orig_log_level;
+>  	}
+>  	rcu_read_unlock();
+> -	rcu_sysrq_end();
+> +	rcu_suppress_end();
+>  
+>  	suppress_printk = orig_suppress_printk;
+>  }
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index 03abf883a281..c0d8a4aae7ff 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -131,11 +131,11 @@ static inline void rcu_init_tasks_generic(void) { }
+>  #endif
+>  
+>  #ifdef CONFIG_RCU_STALL_COMMON
+> -void rcu_sysrq_start(void);
+> -void rcu_sysrq_end(void);
+> +void rcu_suppress_start(void);
+> +void rcu_suppress_end(void);
+>  #else /* #ifdef CONFIG_RCU_STALL_COMMON */
+> -static inline void rcu_sysrq_start(void) { }
+> -static inline void rcu_sysrq_end(void) { }
+> +static inline void rcu_suppress_start(void) { }
+> +static inline void rcu_suppress_end(void) { }
+>  #endif /* #else #ifdef CONFIG_RCU_STALL_COMMON */
+>  
+>  #if defined(CONFIG_NO_HZ_FULL) && (!defined(CONFIG_GENERIC_ENTRY) || !defined(CONFIG_KVM_XFER_TO_GUEST_WORK))
+> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> index c5aa934de59b..a658955a1174 100644
+> --- a/kernel/rcu/rcu.h
+> +++ b/kernel/rcu/rcu.h
+> @@ -224,24 +224,25 @@ extern int rcu_cpu_stall_ftrace_dump;
+>  extern int rcu_cpu_stall_suppress;
+>  extern int rcu_cpu_stall_timeout;
+>  extern int rcu_exp_cpu_stall_timeout;
+> +extern atomic_t rcu_cpu_stall_suppress_dyn;
+>  int rcu_jiffies_till_stall_check(void);
+>  int rcu_exp_jiffies_till_stall_check(void);
+>  
+>  static inline bool rcu_stall_is_suppressed(void)
+>  {
+> -	return rcu_stall_is_suppressed_at_boot() || rcu_cpu_stall_suppress;
+> +	return rcu_stall_is_suppressed_at_boot() ||
+> +	       rcu_cpu_stall_suppress ||
+> +	       atomic_read(&rcu_cpu_stall_suppress_dyn);
+>  }
+>  
+>  #define rcu_ftrace_dump_stall_suppress() \
+>  do { \
+> -	if (!rcu_cpu_stall_suppress) \
+> -		rcu_cpu_stall_suppress = 3; \
+
+One thing we are losing here is the ability to see what is suppressing
+the current stall, for example, from a crash dump.  Maybe that is OK,
+as I haven't needed to debug that sort of thing.
+
+Thoughts from those who have had this debugging experience?
+
+> +	atomic_inc(&rcu_cpu_stall_suppress_dyn); \
+>  } while (0)
+>  
+>  #define rcu_ftrace_dump_stall_unsuppress() \
+>  do { \
+> -	if (rcu_cpu_stall_suppress == 3) \
+> -		rcu_cpu_stall_suppress = 0; \
+> +	atomic_dec(&rcu_cpu_stall_suppress_dyn); \
+>  } while (0)
+>  
+>  #else /* #endif #ifdef CONFIG_RCU_STALL_COMMON */
+> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> index 5653560573e2..260748bc5bc8 100644
+> --- a/kernel/rcu/tree_stall.h
+> +++ b/kernel/rcu/tree_stall.h
+> @@ -103,23 +103,25 @@ bool rcu_gp_might_be_stalled(void)
+>  	return !time_before(j, READ_ONCE(rcu_state.gp_start) + d);
+>  }
+>  
+> -/* Don't do RCU CPU stall warnings during long sysrq printouts. */
+> -void rcu_sysrq_start(void)
+> +/* Don't do RCU CPU stall warnings during functions holding the CPU
+> + * for a long period of time such as long sysrq printouts.
+> + */
+> +void rcu_suppress_start(void)
+>  {
+> -	if (!rcu_cpu_stall_suppress)
+> -		rcu_cpu_stall_suppress = 2;
+
+And the same point here.
+
+> +	atomic_inc(&rcu_cpu_stall_suppress_dyn);
+>  }
+> +EXPORT_SYMBOL_GPL(rcu_suppress_start);
+
+If this is being exported to modules, the question of who suppressed
+the CPU stalls might at some point become more urgent.
+
+If the problem was reproducible, I would simply attach a BPF program to
+rcu_suppress_start() and rcu_suppress_end() counting the stack traces of
+all callers to these functions.  This might or might not make everyone
+happy, though.
+
+> -void rcu_sysrq_end(void)
+> +void rcu_suppress_end(void)
+>  {
+> -	if (rcu_cpu_stall_suppress == 2)
+> -		rcu_cpu_stall_suppress = 0;
+> +	atomic_dec(&rcu_cpu_stall_suppress_dyn);
+>  }
+> +EXPORT_SYMBOL_GPL(rcu_suppress_end);
+>  
+>  /* Don't print RCU CPU stall warnings during a kernel panic. */
+>  static int rcu_panic(struct notifier_block *this, unsigned long ev, void *ptr)
+>  {
+> -	rcu_cpu_stall_suppress = 1;
+> +	atomic_inc(&rcu_cpu_stall_suppress_dyn);
+>  	return NOTIFY_DONE;
+>  }
+>  
+> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+> index f5e6a2f95a2a..ceee9d777384 100644
+> --- a/kernel/rcu/update.c
+> +++ b/kernel/rcu/update.c
+> @@ -501,11 +501,18 @@ EXPORT_SYMBOL_GPL(rcutorture_sched_setaffinity);
+>  #ifdef CONFIG_RCU_STALL_COMMON
+>  int rcu_cpu_stall_ftrace_dump __read_mostly;
+>  module_param(rcu_cpu_stall_ftrace_dump, int, 0644);
+> -int rcu_cpu_stall_suppress __read_mostly; // !0 = suppress stall warnings.
+> +
+> +int rcu_cpu_stall_suppress __read_mostly; // !0 = suppress stall warnings from sysfs
+>  EXPORT_SYMBOL_GPL(rcu_cpu_stall_suppress);
+>  module_param(rcu_cpu_stall_suppress, int, 0644);
+> +
+> +atomic_t rcu_cpu_stall_suppress_dyn __read_mostly; // !0 = suppress stall warnings from functions
+> +EXPORT_SYMBOL_GPL(rcu_cpu_stall_suppress_dyn);
+> +module_param_named(rcu_cpu_stall_suppress_dyn, rcu_cpu_stall_suppress_dyn.counter, int, 0444);
+
+I am not seeing a valid use case for specifying an initial
+value on the kernel command line.  Or does this somehow prevent
+rcupdate.rcu_cpu_stall_suppress_dyn from being specified on the kernel
+command line?
+
+If something like rcupdate.rcu_cpu_stall_suppress_dyn=3 can be specified
+(incorrectly, in my current view) on the kernel command line, maybe
+something as shown below would help?
+
+> +
+>  int rcu_cpu_stall_timeout __read_mostly = CONFIG_RCU_CPU_STALL_TIMEOUT;
+>  module_param(rcu_cpu_stall_timeout, int, 0644);
+> +
+>  int rcu_exp_cpu_stall_timeout __read_mostly = CONFIG_RCU_EXP_CPU_STALL_TIMEOUT;
+>  module_param(rcu_exp_cpu_stall_timeout, int, 0644);
+>  #endif /* #ifdef CONFIG_RCU_STALL_COMMON */
+> @@ -616,6 +623,8 @@ void __init rcupdate_announce_bootup_oddness(void)
+>  		pr_info("\tAll grace periods are expedited (rcu_expedited).\n");
+>  	if (rcu_cpu_stall_suppress)
+>  		pr_info("\tRCU CPU stall warnings suppressed (rcu_cpu_stall_suppress).\n");
+> +	if (atomic_read(&rcu_cpu_stall_suppress_dyn))
+> +		pr_info("\tDynamic RCU CPU stall warnings suppressed (rcu_cpu_stall_suppress_dyn).\n");
+
+Should this instead be a WARN_ON() placed somewhere so that it won't
+mess up the printing of the other parameters?
+
+Or maybe have this code set it to back to zero, with the message
+indicating that this is being done?
+
+>  	if (rcu_cpu_stall_timeout != CONFIG_RCU_CPU_STALL_TIMEOUT)
+>  		pr_info("\tRCU CPU stall warnings timeout set to %d (rcu_cpu_stall_timeout).\n", rcu_cpu_stall_timeout);
+>  	rcu_tasks_bootup_oddness();
+> -- 
+> 2.38.1
+> 
