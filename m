@@ -2,177 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C365A653474
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFB26534B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbiLUQ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 11:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S231422AbiLURMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiLUQ51 (ORCPT
+        with ESMTP id S234755AbiLURLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 11:57:27 -0500
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEF5108;
-        Wed, 21 Dec 2022 08:57:25 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id u10so10711449qvp.4;
-        Wed, 21 Dec 2022 08:57:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JoTtGMDsWdhoDasCfRf0mfD1bZkJ5FH2D/JtOhme8+M=;
-        b=IZFbaP0Yp+O1xom7BinCoKENWhFqesOCL5efyxG+mQDoFVPLpver6wgzXxur0ouCsI
-         JxLMSXkzKr0MOWmFErixcWqNTbv31AzcR7BtHMSw69ind4kmb+TfPwwWdc2V/4Z11xun
-         5huGtcLXsUAbIBNebX/CYSnq4tLo2r4v40VA6YEfX/xF+i2OBmWOv+OdTKWyJhbg1dV8
-         VXBEkWvvzWeT3GdxA09ishcrj9y+G0Ee90Fvy31guQi12bF2NYIHEQqDursbby15KkVz
-         fFEdUC7MRvcYbq/049KcZJ48KmLjY79CuTK1OnAYUTBqcgO65ocJkgNgmZJ3grWQMkHw
-         9frg==
-X-Gm-Message-State: AFqh2kpsvq6l7igLDIp2tWeIBJOFoD7ivWXDiZV39KSkdDqpi/j82daa
-        cgc2XCs1BOaHXYzIhzDewBb8tzDs+iexHw==
-X-Google-Smtp-Source: AMrXdXtbNBnIQwYhqMihVNE0MbHGsR8L1Cbu7ZRipnl+ds0XQrWsLjeD5Ld4pSCEkQKzGlLvmWTa2A==
-X-Received: by 2002:a0c:f941:0:b0:4c7:7878:e54a with SMTP id i1-20020a0cf941000000b004c77878e54amr3355130qvo.24.1671641843990;
-        Wed, 21 Dec 2022 08:57:23 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05620a430500b006ff8ac9acfdsm11262138qko.49.2022.12.21.08.57.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 08:57:23 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3b48b139b46so218897917b3.12;
-        Wed, 21 Dec 2022 08:57:23 -0800 (PST)
-X-Received: by 2002:a81:a101:0:b0:3e5:f2ca:7be8 with SMTP id
- y1-20020a81a101000000b003e5f2ca7be8mr295673ywg.358.1671641843155; Wed, 21 Dec
- 2022 08:57:23 -0800 (PST)
-MIME-Version: 1.0
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com> <20221019203034.3795710-1-Jason@zx2c4.com>
- <20221221145332.GA2399037@roeck-us.net> <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
- <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
-In-Reply-To: <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 21 Dec 2022 17:57:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU7-01YhJ2H=7rmWvUjcnW_piy1p0ciYeaKTX8wDCW5Lg@mail.gmail.com>
-Message-ID: <CAMuHMdU7-01YhJ2H=7rmWvUjcnW_piy1p0ciYeaKTX8wDCW5Lg@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-m68k@lists.linux-m68k.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 21 Dec 2022 12:11:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE14F60F8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671642651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=F9veh96YrFLmQjRdbtFw9Zk5FVWnXm2nRWU87plkeGM=;
+        b=JuN1SRNXarY0wKtKJnYzxZy7tz1q32fDPKbz6Sn5nO/n6FR1k8kKgykcTxN8vr5TBfId2l
+        RFYj0dGsOPkwyzlKzGseuf+plzmlHDRV9ebihasRWiFb1HNMOA7iWlB0sRIohpyf5ImeXD
+        JB5FeaAB8veEKAkf41FMFOlQWeZN6/M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-82-NoVb0-zuO1eRi5fiit04aQ-1; Wed, 21 Dec 2022 12:10:47 -0500
+X-MC-Unique: NoVb0-zuO1eRi5fiit04aQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 37A7980D181;
+        Wed, 21 Dec 2022 17:10:47 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-4.gru2.redhat.com [10.97.112.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C0D00492C14;
+        Wed, 21 Dec 2022 17:10:46 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 9CB0240408D40; Wed, 21 Dec 2022 14:09:34 -0300 (-03)
+Message-ID: <20221221165801.362118576@redhat.com>
+User-Agent: quilt/0.66
+Date:   Wed, 21 Dec 2022 13:58:01 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     atomlin@atomlin.com, frederic@kernel.org
+Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
+        peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
+        oleksandr@natalenko.name, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v11 0/6] Ensure quiet_vmstat() is called when returning to userpace and when idle tick is stopped
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rasmus,
+This patch series addresses the following two problems:
 
-On Wed, Dec 21, 2022 at 4:29 PM Rasmus Villemoes
-<rasmus.villemoes@prevas.dk> wrote:
-> On 21/12/2022 16.05, Geert Uytterhoeven wrote:
-> > On Wed, Dec 21, 2022 at 3:54 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >> On Wed, Oct 19, 2022 at 02:30:34PM -0600, Jason A. Donenfeld wrote:
-> >>> Recently, some compile-time checking I added to the clamp_t family of
-> >>> functions triggered a build error when a poorly written driver was
-> >>> compiled on ARM, because the driver assumed that the naked `char` type
-> >>> is signed, but ARM treats it as unsigned, and the C standard says it's
-> >>> architecture-dependent.
-> >>>
-> >>> I doubt this particular driver is the only instance in which
-> >>> unsuspecting authors make assumptions about `char` with no `signed` or
-> >>> `unsigned` specifier. We were lucky enough this time that that driver
-> >>> used `clamp_t(char, negative_value, positive_value)`, so the new
-> >>> checking code found it, and I've sent a patch to fix it, but there are
-> >>> likely other places lurking that won't be so easily unearthed.
-> >>>
-> >>> So let's just eliminate this particular variety of heisensign bugs
-> >>> entirely. Set `-funsigned-char` globally, so that gcc makes the type
-> >>> unsigned on all architectures.
-> >>>
-> >>> This will break things in some places and fix things in others, so this
-> >>> will likely cause a bit of churn while reconciling the type misuse.
-> >>>
-> >>
-> >> There is an interesting fallout: When running the m68k:q800 qemu emulation,
-> >> there are lots of warning backtraces.
-> >>
-> >> WARNING: CPU: 0 PID: 23 at crypto/testmgr.c:5724 alg_test.part.0+0x7c/0x326
-> >> testmgr: alg_test_descs entries in wrong order: 'adiantum(xchacha12,aes)' before 'adiantum(xchacha20,aes)'
-> >> ------------[ cut here ]------------
-> >> WARNING: CPU: 0 PID: 23 at crypto/testmgr.c:5724 alg_test.part.0+0x7c/0x326
-> >> testmgr: alg_test_descs entries in wrong order: 'adiantum(xchacha20,aes)' before 'aegis128'
-> >>
-> >> and so on for pretty much every entry in the alg_test_descs[] array.
-> >>
-> >> Bisect points to this patch, and reverting it fixes the problem.
-> >>
-> >> It looks like the problem is that arch/m68k/include/asm/string.h
-> >> uses "char res" to store the result of strcmp(), and char is now
-> >> unsigned - meaning strcmp() will now never return a value < 0.
-> >> Effectively that means that strcmp() is broken on m68k if
-> >> CONFIG_COLDFIRE=n.
-> >>
-> >> The fix is probably quite simple.
-> >>
-> >> diff --git a/arch/m68k/include/asm/string.h b/arch/m68k/include/asm/string.h
-> >> index f759d944c449..b8f4ae19e8f6 100644
-> >> --- a/arch/m68k/include/asm/string.h
-> >> +++ b/arch/m68k/include/asm/string.h
-> >> @@ -42,7 +42,7 @@ static inline char *strncpy(char *dest, const char *src, size_t n)
-> >>  #define __HAVE_ARCH_STRCMP
-> >>  static inline int strcmp(const char *cs, const char *ct)
-> >>  {
-> >> -       char res;
-> >> +       signed char res;
-> >>
-> >>         asm ("\n"
-> >>                 "1:     move.b  (%0)+,%2\n"     /* get *cs */
-> >>
-> >> Does that make sense ? If so I can send a patch.
-> >
-> > Thanks, been there, done that
-> > https://lore.kernel.org/all/bce014e60d7b1a3d1c60009fc3572e2f72591f21.1671110959.git.geert@linux-m68k.org
->
-> Well, looks like that would still leave strcmp() buggy, you can't
-> represent all possible differences between two char values (signed or
-> not) in an 8-bit quantity. So any implementation based on returning the
-> first non-zero value of *a - *b must store that intermediate value in
-> something wider. Otherwise you'll get -128 from strcmp("\x40", "\xc0"),
-> but _also_ -128 when you do strcmp("\xc0", "\x40"), which is obviously
-> bogus.
+    1. A customer provided some evidence which indicates that
+       the idle tick was stopped; albeit, CPU-specific vmstat
+       counters still remained populated.
 
-So we have https://lore.kernel.org/all/87bko3ia88.fsf@igel.home ;-)
+       Thus one can only assume quiet_vmstat() was not
+       invoked on return to the idle loop. If I understand
+       correctly, I suspect this divergence might erroneously
+       prevent a reclaim attempt by kswapd. If the number of
+       zone specific free pages are below their per-cpu drift
+       value then zone_page_state_snapshot() is used to
+       compute a more accurate view of the aforementioned
+       statistic.  Thus any task blocked on the NUMA node
+       specific pfmemalloc_wait queue will be unable to make
+       significant progress via direct reclaim unless it is
+       killed after being woken up by kswapd
+       (see throttle_direct_reclaim())
 
-And the other issue is m68k strcmp() calls being dropped by the
-optimizer, cfr. the discussion in
-https://lore.kernel.org/all/b673f98db7d14d53a6e1a1957ef81741@AcuMS.aculab.com
+    2. With a SCHED_FIFO task that busy loops on a given CPU,
+       and kworker for that CPU at SCHED_OTHER priority,
+       queuing work to sync per-vmstats will either cause that
+       work to never execute, or stalld (i.e. stall daemon)
+       boosts kworker priority which causes a latency
+       violation
 
-> I recently fixed that long-standing bug in U-Boot's strcmp() and a
-> similar one in nolibc in the linux tree. I wonder how many more
-> instances exist.
 
-Thanks, commit fb63362c63c7aeac ("lib: fix buggy strcmp and strncmp") in
-v2023.01-rc1, which is not yet in a released version.
-(and in plain C, not in asm ;-)
+As seen previously, the trivial test program (i.e. attached at the end of
+this cover letter) executed inside a KVM VM, was used to determine the
+somewhat impact under vanilla and with the proposed changes. Firstly, the
+mlock(2) and munlock(2) system calls was used solely to modify vmstat item
+'NR_MLOCK'. In another scenario, the nanosleep(2) system call was used
+several times to suspend execution for a period of time to approximately
+compute the number of CPU-cycles in the idle code path. The following is an
+average count of CPU-cycles across the aforementioned system calls and the
+idle loop, respectively. I believe these results are negligible:
 
-Gr{oetje,eeting}s,
+				  Vanilla                 Modified
 
-                        Geert
+  Cycles per idle loop            151858                  153258  (+1.0%)
+  Cycles per syscall              8461                    8690    (+2.6%)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Any feedback would be appreciated. Thanks.
+
+Changes since v10 [1]:
+- Close cpu hotplug race with nohz_full CPUs
+   (Frederic Weisbecker)
+
+Changes since v9 [2]:
+- Add config to enable/disable syncing when returning to userspace
+   (Frederic Weisbecker)
+- Add missing signed-off-by
+   (Frederic Weisbecker)
+- Use proper CPU value when skipping nohz_full CPUs
+   (Frederic Weisbecker)
+- Use this_cpu_ptr when appropriate
+   (Frederic Weisbecker)
+- Improve changelogs
+   (Frederic Weisbecker)
+- For stat_refresh sysfs file: avoid queueing work on CPU if stats are clean
+
+Changes since v8 [3]:
+- For nohz_full CPUs, manage per-CPU vmstat flushing from CPU context
+   (Frederic Weisbecker)
+ 
+Changes since v7 [4]:
+ - Added trivial helpers for modification and testing
+   (Andrew Morton)
+ - Modified comment since we do now cancel any delayed
+   work if the tick is stopped in quiet_vmstat()
+ - Moved check to ensure vmstat differentials do not
+   remain if the tick is stopped on exiting to user-mode
+   into a separate patch
+   (Frederic Weisbecker)
+
+Changes since v6 [5]:
+ - Clean vmstat_dirty before differential sync loop
+ - Cancel pending work if tick stopped
+ - Do not queue work to remote CPU if tick stopped
+
+Changes since v5 [6]:
+
+ - Introduced __tick_nohz_user_enter_prepare()
+ - Switched to EXPORT_SYMBOL_GPL()
+
+Changes since v4 [7]:
+
+ - Moved vmstat_dirty specific changes into a separate patch
+   (Marcelo Tosatti)
+
+Changes since v3 [8]:
+
+ - Used EXPORT_SYMBOL() on tick_nohz_user_enter_prepare()
+ - Replaced need_update()
+ - Introduced CPU-specific variable namely vmstat_dirty
+   and mark_vmstat_dirty()
+
+[1]: https://lore.kernel.org/linux-mm/20221216194904.075275493@redhat.com/T/
+[2]: https://lore.kernel.org/lkml/20221214131839.GE1930067@lothringen/t/
+[3]: https://lore.kernel.org/linux-mm/20220924152227.819815-1-atomlin@redhat.com/
+[4]: https://lore.kernel.org/lkml/20220817191346.287594886@redhat.com/
+[5]: https://lore.kernel.org/linux-mm/20220808194820.676246-1-atomlin@redhat.com/
+[6]: https://lore.kernel.org/lkml/20220801234258.134609-1-atomlin@redhat.com/
+[7]: https://lore.kernel.org/lkml/20220621172207.1501641-1-atomlin@redhat.com/
+[8]: https://lore.kernel.org/lkml/20220422193647.3808657-1-atomlin@redhat.com/
+
+
+Aaron Tomlin (4):
+  mm/vmstat: Add CPU-specific variable to track a vmstat discrepancy
+  mm/vmstat: Use vmstat_dirty to track CPU-specific vmstat discrepancies
+  tick/nohz_full: Ensure quiet_vmstat() is called on exit to user-mode
+    when the idle tick is stopped
+  tick/sched: Ensure quiet_vmstat() is called when the idle tick was
+    stopped too
+
+Marcelo Tosatti (2):
+  mm/vmstat: Do not queue vmstat_update if tick is stopped
+  mm/vmstat: avoid queueing work item if cpu stats are clean
+
+ include/linux/tick.h     |    5 +-
+ include/linux/vmstat.h   |    4 +-
+ kernel/time/tick-sched.c |   20 ++++++++++-
+ mm/Kconfig               |   13 +++++++
+ mm/vmstat.c              |  196 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------
+ 5 files changed, 186 insertions(+), 52 deletions(-)
+
+
