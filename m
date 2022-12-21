@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C446539D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CAF6539D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbiLUXao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 18:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S234636AbiLUXdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 18:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLUXal (ORCPT
+        with ESMTP id S229561AbiLUXdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 18:30:41 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39C21BE85
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:30:35 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-45c11d1bfc8so6248717b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:30:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hbc04cspKKUlq2xtt1rWNQAlNz5kGk6IPOX/yNft/AQ=;
-        b=V4dAPKt/20f1/6R3bTH5oYl+4FuzQgvbjYDe0cXrjWnsYdsEPJyXJa6W1YM0OMXDA4
-         NrAGlCgqPwDN9qVSDM4vphAcpbnVOdY8ipYvuPTRuwGzYuHgzzYBX8675DMYRapmwxqr
-         f43LLTzoibaRKtUVkXCnvblD3j+IO0Km4GfBgtxHqQyYLIB5zPgHi+9B7nd/95doL3bJ
-         CcrOr7sJkrrjSKD/uGJ0KOwhmq1tyGFvnxLxbd0t0xDg2BoQHOL+jXZkOd3SopUANXqF
-         vJI7HbLQUhrrlh8XAAaR7hKes8ueemmMmzzsqslTQ0YdTU6o+ZwK/0Zaeo8iGpl7QYDI
-         j/VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hbc04cspKKUlq2xtt1rWNQAlNz5kGk6IPOX/yNft/AQ=;
-        b=nQCND5ywj/dZoXJMdihAdl00bHHR2PZZMxUKcvlbny+H1I69EtTWh7MSm40y0WfNzs
-         Z4HUboCNBNjWEJBnDplKFuYLPFiz+c1qupJAHbbEwqvY+OCKfm4eWJsoXFu4F2aVMjWE
-         iXOWXv/D4aYgVLqmvnyNaC8HvjzUDPbA/lsWJs5ZPSoz+noNp53DNBw8DjFvJSyyNLYQ
-         A7/26c4xkZYY+cUsMe5nlPmZS58ejqG5HpHXXWvCDOgJf4Nu+GssdtFyuMRQmDf9fvcV
-         OhuPyscvOITOBxnORXhYPUuptkfFZd4VqsIDaeHrQvNA+ga7m7DK1+XOvLdXr2YQmjgD
-         AY6Q==
-X-Gm-Message-State: AFqh2kpprkdPp5k4n7nBLHaSVsAPB/aXBeI0x2IP780Vmn9E6vkl8MB2
-        g9+/JYc0aSNVgZvhhdZy1/NGoCTAjHpCaik2sd5X/A==
-X-Google-Smtp-Source: AMrXdXuvXVL02e5WE/59sAq11eayzxXSCUHaxb3H5iKshi4jzDDAn67x0CYU+QFbx7el2rNRbxssKT3vKa5SWTlcLqg=
-X-Received: by 2002:a81:1149:0:b0:433:f1c0:3f1c with SMTP id
- 70-20020a811149000000b00433f1c03f1cmr385286ywr.438.1671665434961; Wed, 21 Dec
- 2022 15:30:34 -0800 (PST)
+        Wed, 21 Dec 2022 18:33:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6B924BE9;
+        Wed, 21 Dec 2022 15:33:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76CD0B81C57;
+        Wed, 21 Dec 2022 23:33:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E971BC433EF;
+        Wed, 21 Dec 2022 23:33:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671665595;
+        bh=hW75uHYjkBGcArJykLAMMvyqPnKjnbwTvRuVZaZ3I0U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oES6z3NNR1B9i6Gjr3jFxQ4kj1uEHYqNeoyESPTRPm9ePZccspuyxf56cifNCjUz3
+         y9xY+i0QFbxTFxobYfpC/sy9w4EtCsQA39A39aTk7USe8sR5Ir21KMwebWwEbgGv2r
+         58Djqj4LmmWq4TceUr96P7je5yL0PfBYIrxBaOZ/5YVuhUXG+hT082kkBUjsfUI6eU
+         yfEAo8aqtKsvjg/kiVo5zKiQhA0IGNRMnXW+QsWWSV34tRVbgfmktq5GNQFIE4DAYO
+         7r4MwA/axqYvyTTZCQfR2oLmEQf31r+PX81o3zNz6aaBfgEfAR6ZgoR+ito8WFzPpv
+         C8ZGm362Gi7VA==
+Date:   Wed, 21 Dec 2022 15:33:13 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Vladis Dronov <vdronov@redhat.com>
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net, nstange@suse.de,
+        elliott@hpe.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, smueller@chronox.de
+Subject: Re: [PATCH 2/6] crypto: xts - drop xts_check_key()
+Message-ID: <Y6OXuT95MlkNanSR@sol.localdomain>
+References: <20221221224111.19254-1-vdronov@redhat.com>
+ <20221221224111.19254-3-vdronov@redhat.com>
 MIME-Version: 1.0
-References: <20221216154938.9426-1-ajye_huang@compal.corp-partner.google.com>
- <b0612bbd-2eba-36cf-9c29-7542cf32adfd@linux.intel.com> <CALprXBYy9_ax8-xfh0paB59Pn=TB7yVLwtY8vnT_-y5vWd867w@mail.gmail.com>
- <9aa4bffd-bc7e-0e40-3063-5ce80b5fbe9a@linux.intel.com>
-In-Reply-To: <9aa4bffd-bc7e-0e40-3063-5ce80b5fbe9a@linux.intel.com>
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Date:   Thu, 22 Dec 2022 07:30:23 +0800
-Message-ID: <CALprXBZkhWitJBeenKHxzyQvkf=Q2FDAHKD511oCWC8-SJBK+A@mail.gmail.com>
-Subject: Re: [PATCH v2] ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Libin Yang <libin.yang@intel.com>,
-        "balamurugan . c" <balamurugan.c@intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        David Lin <CTLIN0@nuvoton.com>, alsa-devel@alsa-project.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Brent Lu <brent.lu@intel.com>, Yong Zhi <yong.zhi@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221221224111.19254-3-vdronov@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pierre
+On Wed, Dec 21, 2022 at 11:41:07PM +0100, Vladis Dronov wrote:
+> xts_check_key() is obsoleted by xts_verify_key(). Over time XTS crypto
+> drivers adopted the newer xts_verify_key() variant, but xts_check_key()
+> is still used by a number of drivers. Switch drivers to use the newer
+> xts_verify_key() and make a couple of cleanups. This allows us to drop
+> xts_check_key() completely and avoid redundancy.
+> 
+> Signed-off-by: Vladis Dronov <vdronov@redhat.com>
+> ---
+>  arch/s390/crypto/paes_s390.c                  |  2 +-
+>  drivers/crypto/atmel-aes.c                    |  2 +-
+>  drivers/crypto/axis/artpec6_crypto.c          |  2 +-
+>  drivers/crypto/cavium/cpt/cptvf_algs.c        |  8 +++----
+>  .../crypto/cavium/nitrox/nitrox_skcipher.c    |  8 +++----
+>  drivers/crypto/ccree/cc_cipher.c              |  2 +-
+>  .../crypto/marvell/octeontx/otx_cptvf_algs.c  |  2 +-
+>  .../marvell/octeontx2/otx2_cptvf_algs.c       |  2 +-
+>  include/crypto/xts.h                          | 21 +++----------------
+>  9 files changed, 15 insertions(+), 34 deletions(-)
 
-On Sat, Dec 17, 2022 at 1:37 AM Pierre-Louis Bossart
-<pierre-louis.bossart@linux.intel.com> wrote:
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 
->
-> Ok, thanks for the explanations.
->
-> Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+but one comment below:
 
-Yesterday, I saw Arnd Bergmann sent this patch "ASoC: Intel:
-sof-nau8825: fix module alias overflow " for reducing the string to
-prevent over length,https://patchwork.kernel.org/project/alsa-devel/patch/20221221132515.2363276-1-arnd@kernel.org/.
+>  static inline int xts_verify_key(struct crypto_skcipher *tfm,
+>  				 const u8 *key, unsigned int keylen)
+>  {
+> @@ -42,7 +25,9 @@ static inline int xts_verify_key(struct crypto_skcipher *tfm,
+>  	if (fips_enabled && keylen != 32 && keylen != 64)
+>  		return -EINVAL;
+>  
+> -	/* ensure that the AES and tweak key are not identical */
+> +	/* ensure that the AES and tweak key are not identical
+> +	 * when in FIPS mode or the FORBID_WEAK_KEYS flag is set.
+> +	 */
+>  	if ((fips_enabled || (crypto_skcipher_get_flags(tfm) &
+>  			      CRYPTO_TFM_REQ_FORBID_WEAK_KEYS)) &&
+>  	    !crypto_memneq(key, key + (keylen / 2), keylen / 2))
 
-so, I need to check with you, should my string need to change the
-format style with his, even the my string does not over length , from
-.drv_name = "adl_nau8318_nau8825" to .drv_name = "adl_nau8318_8825",
-align with his format style?
+Please use the kernel style for block comments:
 
-thanks
+	/*
+	 * Ensure that the AES and tweak key are not identical when in FIPS mode
+	 * or the FORBID_WEAK_KEYS flag is set.
+	 */
+
+- Eric
