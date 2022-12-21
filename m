@@ -2,149 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16F565379C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AB56537A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbiLUUgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 15:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S232067AbiLUUk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 15:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiLUUgR (ORCPT
+        with ESMTP id S229491AbiLUUk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 15:36:17 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E546580;
-        Wed, 21 Dec 2022 12:36:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671654975; x=1703190975;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Pm+AJyr6vEiR2uv5BRun3YZb1cegwZ2UTBD3o38XlSE=;
-  b=nw2kkJTBNL6A18AtWlG1kl7T9yojbp7MuXcAk0SbPAeaj5W1zFCn89qG
-   nVa79gAlvmNzbr67OxLAquUElqL0+f5r+xPqt/v6id+jFmudE+gakcyu9
-   M5MIO8lOe2nCL7Cdvfz6qlMmPF6svaHFsNhWIfiJWvWIqGMME/d1zFK9P
-   a/L76nvxNZVQWariGw7F2KnI+EQoJ2BKoPPf5/s9myffGOOJIExGbHikd
-   Xcag1FqpVHW3funrU64kZSnFYxebU+D0afuDuX6VUdmoAzEJWWW2x46l5
-   4XrlZ9/5av9O3iTFg1FwKkTpRlXV7DeGCkKKqkG47up3Vt49QZwj7+VJz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="347103677"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="347103677"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 12:36:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="682158034"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="682158034"
-Received: from lijieqi-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.64.202])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 12:36:14 -0800
-Message-ID: <838cf73badd8e0c1126dbc64db3aed2f20cbfe9c.camel@linux.intel.com>
-Subject: Re: [RFC][PATCH] thermal/idle_inject: Support 100% idle injection
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 21 Dec 2022 12:36:14 -0800
-In-Reply-To: <5276e5b8-8596-2811-e03f-c4f3f0d3ab5b@linaro.org>
-References: <20221209013640.943210-1-srinivas.pandruvada@linux.intel.com>
-         <5276e5b8-8596-2811-e03f-c4f3f0d3ab5b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Wed, 21 Dec 2022 15:40:26 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8E76580
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:40:25 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id d82so11487583pfd.11
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:40:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=46KJ5714UULj+WdfQJdjJQGrRLK9Woox/C1y7Qhoy2g=;
+        b=b7pzq/wrJe+N+sYe0BI4+oHft0dyRVTtGA/7MXQ9g7N85VS0xZRYMon3Sb3oXzkJm9
+         7dMZnXr5DNUuug64ZrjUUWKQwsrX9ErROhWl/859Rw2hS5lCOrid3gjRl+tIHv70KOk7
+         qMijkbXr9o2A4KspnQapBxQCJvcXHDil02e0tZjkHILGyQaG5IhLCMXq8d9/k7gNlbWO
+         sDXeBldQxtbCbhspG3r9DnJvC4hEULpPr8QBJT2tSX/xdN6wGGewBE0V9eBG4faitRhk
+         r/ivw40L42LGGY8d8Dw0z8eX+uVhBG5K+SsbxCt4tyO6kv0AL0xYCH5zWQmnXCaYLv7m
+         mUGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=46KJ5714UULj+WdfQJdjJQGrRLK9Woox/C1y7Qhoy2g=;
+        b=JjV7nzSKA0rWSjMAqfe3EEtc1vsu1rqOP83702br7qhVOOG1NxRLC/Ppm3fDQc+3j+
+         1/gl3huyEQFgb0hgiYKuAWeqkQh2nUOBt7lcjsCVgMtDfa3d1SxwJehdaTnnglbUDZEG
+         rpQMUH4c/MJxD6UaaXPahP8ljwwLeB0BdBYM2XCigE/qOwRJq/kTM/AwjxR0iJjs4jeM
+         p5UMA16yadpKzLGPZsgaGWV5AdFaUq5ljG4/3UvFowCrpsBJVUrY4E7sE4wWgmnCCN9P
+         /GkeB6QJF4mgIBORKBFeAEmqAsCNb8dt5frGtC4lyyncRZpJUpsoldEPW3EOuPTSqcpw
+         ZHQA==
+X-Gm-Message-State: AFqh2kooGj3EGPcGCNSEiM7iP73V196hZlynGJtuHUhgniPRGJsCmI53
+        eLwgJX3a0B4rQAGgyMj9Ud7ZPw==
+X-Google-Smtp-Source: AMrXdXs2wb7SfTWVOx0D5KHi10IfGT9eumUAALKjwFYtEgDmphXRkUTVayIt5zwFZw6zsdsFbsyt9g==
+X-Received: by 2002:a05:6a00:1d9d:b0:566:900d:5af2 with SMTP id z29-20020a056a001d9d00b00566900d5af2mr3772325pfw.34.1671655224959;
+        Wed, 21 Dec 2022 12:40:24 -0800 (PST)
+Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id r4-20020aa79884000000b005763c22ea07sm11017784pfl.74.2022.12.21.12.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 12:40:24 -0800 (PST)
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH v4 0/7] KVM: arm64: Normalize cache configuration
+Date:   Thu, 22 Dec 2022 05:40:09 +0900
+Message-Id: <20221221204016.658874-1-akihiko.odaki@daynix.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-21 at 14:43 +0100, Daniel Lezcano wrote:
-> 
-> Hi Srinivas,
-> 
-> 
-> On 09/12/2022 02:36, Srinivas Pandruvada wrote:
-> > The users of idle injection framework allow 100% idle injection.
-> > For
-> > example: thermal/cpuidle_cooling.c driver. When the ratio set to
-> > 100%,
-> > the runtime_duration becomes zero.
-> > 
-> > In the function idle_inject_set_duration() in idle injection
-> > framework
-> > run_duration_us == 0 is silently ignored, without any error (it is
-> > a
-> > void function). So, the caller will assume that everything is fine
-> > and
-> > 100% idle is effective. But in reality the idle inject will be
-> > whatever
-> > set before.
-> 
-> Good catch
-> 
-> > There are two options:
-> > - The caller change their max state to 99% instead of 100% and
-> > document that 100% is not supported by idle inject framework
-> > - Support 100% idle support in idle inject framework
-> 
-> Yes, from my POV a CPU being impossible to cool down for any reason 
-> should end up by staying off.
-> 
-> > Since there are other protections via RT throttling, this framework
-> > can
-> > allow 100% idle. The RT throttling will be activated at 95% idle by
-> > default. The caller disabling RT throttling and injecting 100%
-> > idle,
-> > should be aware that CPU can't be used at all.
-> 
-> Would it make sense to write a trace in this case ?
+Before this change, the cache configuration of the physical CPU was
+exposed to vcpus. This is problematic because the cache configuration a
+vcpu sees varies when it migrates between vcpus with different cache
+configurations.
 
-There is one printk already:
-printk_deferred_once("sched: RT throttling activated\n")
+Fabricate cache configuration from the sanitized value, which holds the
+CTR_EL0 value the userspace sees regardless of which physical CPU it
+resides on.
 
-You mean we should add
+V3 -> V4:
+- Implemented UNKNOWN system register definition for CCSIDR_EL1
+- Added a comment about the relation between CCSIDR_EL1 and FEAT_CCIDX
+- Squashed "Normalize cache configuration" and "Allow user to set
+  CCSIDR_EL1"
+  The intermediate state between them did not make much sense.
+- Introduced FIELD_GET to extract CCSIDR_EL1_LineSize.
 
-trace_sched_* for this?
+V2 -> V3:
+- Corrected message for patch "Normalize cache configuration"
+- Split patch "Normalize cache configuration"
+- Added handling for CSSELR_EL1.TnD
+- Added code to ignore RES0 in CSSELR_EL1
+- Replaced arm64_ftr_reg_ctrel0.sys_val with
+  read_sanitised_ftr_reg(SYS_CTR_EL0)
+- Fixed vcpu->arch.ccsidr initialziation
+- Added CCSIDR_EL1 sanitization
+- Added FWB check
+- Added a comment for CACHE_TYPE_SEPARATE
+- Added MTE tag cache creation code for CLIDR_EL1 fabrication
+- Removed CLIDR_EL1 reset code for reset caused by guest
+- Added a comment for CCSIDR2
 
-> 
-> > The idle inject timer is started for (run_duration_us +
-> > idle_duration_us)
-> > duration. Hence replace (run_duration_us && idle_duration_us) with
-> > (run_duration_us + idle_duration_us) in the function
-> > idle_inject_set_duration().
-> 
-> Sounds good to me
-> 
-I will submit a patch for this.
+V2: https://lore.kernel.org/lkml/20221211051700.275761-2-akihiko.odaki@daynix.com/
+V1: https://lore.kernel.org/lkml/525ff263-90b3-5b12-da31-171b09f9ad1b@daynix.com/
 
-Thanks,
-Srinivas
+Akihiko Odaki (6):
+  arm64/sysreg: Convert CCSIDR_EL1 to automatic generation
+  arm64/sysreg: Add CCSIDR2_EL1
+  arm64/cache: Move CLIDR macro definitions
+  KVM: arm64: Always set HCR_TID2
+  KVM: arm64: Mask FEAT_CCIDX
+  KVM: arm64: Normalize cache configuration
 
-> > Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>
-> > ---
-> >   drivers/powercap/idle_inject.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/powercap/idle_inject.c
-> > b/drivers/powercap/idle_inject.c
-> > index f48e71501429..4a4fe60d2563 100644
-> > --- a/drivers/powercap/idle_inject.c
-> > +++ b/drivers/powercap/idle_inject.c
-> > @@ -184,7 +184,7 @@ void idle_inject_set_duration(struct
-> > idle_inject_device *ii_dev,
-> >                               unsigned int run_duration_us,
-> >                               unsigned int idle_duration_us)
-> >   {
-> > -       if (run_duration_us && idle_duration_us) {
-> > +       if (run_duration_us + idle_duration_us) {
-> >                 WRITE_ONCE(ii_dev->run_duration_us,
-> > run_duration_us);
-> >                 WRITE_ONCE(ii_dev->idle_duration_us,
-> > idle_duration_us);
-> >         }
-> 
+Marc Zyngier (1):
+  arm64: Allow the definition of UNKNOWN system register fields
+
+ arch/arm64/include/asm/cache.h             |   9 +
+ arch/arm64/include/asm/kvm_arm.h           |   3 +-
+ arch/arm64/include/asm/kvm_emulate.h       |   4 -
+ arch/arm64/include/asm/kvm_host.h          |   6 +-
+ arch/arm64/include/asm/sysreg.h            |   1 -
+ arch/arm64/kernel/cacheinfo.c              |   5 -
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h |   2 -
+ arch/arm64/kvm/reset.c                     |   1 +
+ arch/arm64/kvm/sys_regs.c                  | 240 ++++++++++++---------
+ arch/arm64/tools/gen-sysreg.awk            |  20 +-
+ arch/arm64/tools/sysreg                    |  17 ++
+ 11 files changed, 196 insertions(+), 112 deletions(-)
+
+-- 
+2.38.1
 
