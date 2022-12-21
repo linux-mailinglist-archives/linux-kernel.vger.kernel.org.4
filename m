@@ -2,139 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8A765351D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B03653527
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbiLUR1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S234875AbiLUR2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiLUR1j (ORCPT
+        with ESMTP id S234890AbiLUR2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:27:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBA96414
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:26:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671643612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NuanpIiit3pxf0DfbjP3/X8tU6mOQsYwFdbXpF1jEBw=;
-        b=UEyL5cmLiTs6BVItbEfqAYnMfOl4X0sDbNVxqAQK8GFWgkVvbcsQF/eI9mA8usrwJUO3UE
-        qAjq4BiICdwDTBfmnpMAkTATH64UaIiH+k0KrccrerpRNjLLy3JQgf0qJgAk3+oc0Qw2gf
-        hmHLcAzDwVUCMwJiZBsI/ijlskyRBes=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-263-iKbVSEwaNMq-GXxh9iUVYw-1; Wed, 21 Dec 2022 12:26:50 -0500
-X-MC-Unique: iKbVSEwaNMq-GXxh9iUVYw-1
-Received: by mail-wr1-f71.google.com with SMTP id r21-20020adfb1d5000000b0026e4c198a43so283396wra.20
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:26:50 -0800 (PST)
+        Wed, 21 Dec 2022 12:28:13 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9729B21E1D;
+        Wed, 21 Dec 2022 09:28:09 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id bi26-20020a05600c3d9a00b003d3404a89faso2771068wmb.1;
+        Wed, 21 Dec 2022 09:28:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pv+f7Qaep3g1XcMnashW4dr0+STOgPcgnTmOuhDg7/E=;
+        b=dx0flUNhrBgzVh2VnHyf7+ho7NV23dHAxQ9JeCm7Wk5bwY6vWZQO/jrt/BItgPQ7CA
+         ulMNEQxUWhVyaoFaw2BaAqKIljM4Wyxv7c1HKTTSwqvzLgD6LXA21UTG9ytFNtX7czjC
+         pignEoYpBvdsxurgG1jCJrY7Y5k6r2P7X+WCtyYuvlNJyAwIYiQFSF73HEqV7tGhsIFg
+         SvMpotb+QLZ4GXbz426B7XcwmWM5Lr5pZOghGP3tc83QnT1fFGayUnRqEhkjPBoltooA
+         FtAD4xfjCuxP4UP4sE4iAkgZTqkn8R97Jkifb6v3Y2J2tIIszAFDpqMqthYy6plJ/NLG
+         1JjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NuanpIiit3pxf0DfbjP3/X8tU6mOQsYwFdbXpF1jEBw=;
-        b=Qz4mCk7RzsnxmWa8IpGZvnkjppccu0xLfOl/dmC+fkxzvUezCvAeQGyQFYL0JXvtyM
-         /CITZ0LfJhqT8dJ9U1+x2425C+f3/2B+6l+YuQcf8ILjrwuwr0dA49pdONRwWVUTLuz7
-         TzRsUAwlc7PP9VZPV3PEfq6B5sijt7VeLKpbgki873vkdw7ItFZkZifqpnbysSXOXevn
-         sQAa3foHt1agi0PziT4tBWhdbCSLQ9tyIF1oNPNHopZ3uLt5Q5fya3cNW15ONAJKCIcq
-         MdemYhGUGj45OQQCDWm48OXM6l3rXy9nwH1nuVvjypXvQ11I5CZN4+MAxpY+W9yTzKFT
-         CeyQ==
-X-Gm-Message-State: AFqh2kpSGygMG3laFkCVlFIcADapcs/4n5klm2crME1m5Pft09YnyEDw
-        RUfQN8Zt0zkgLYWzR6rwWomIhLyb5ejWHNL+0EJZzBnJIcW4wz1MZF3mGKEY4ekdEGeIrLebqZ/
-        Gew80npYCerUY4Y2gRxIFp7U=
-X-Received: by 2002:a05:600c:1f12:b0:3cf:8155:2adc with SMTP id bd18-20020a05600c1f1200b003cf81552adcmr2334952wmb.33.1671643609336;
-        Wed, 21 Dec 2022 09:26:49 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtmCCrwZo4nu1X4aGkuZsQZJ+WKxm5A/pgzSMDNUisKMUrHcMJkTIyFUzoV5mJaknfoOilw9A==
-X-Received: by 2002:a05:600c:1f12:b0:3cf:8155:2adc with SMTP id bd18-20020a05600c1f1200b003cf81552adcmr2334924wmb.33.1671643609137;
-        Wed, 21 Dec 2022 09:26:49 -0800 (PST)
-Received: from [192.168.9.16] (net-2-34-28-158.cust.vodafonedsl.it. [2.34.28.158])
-        by smtp.gmail.com with ESMTPSA id g15-20020a05600c310f00b003b47e75b401sm3174983wmo.37.2022.12.21.09.26.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 09:26:48 -0800 (PST)
-Message-ID: <d34b021c-eec4-905e-f352-734db2d8338a@redhat.com>
-Date:   Wed, 21 Dec 2022 18:26:47 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pv+f7Qaep3g1XcMnashW4dr0+STOgPcgnTmOuhDg7/E=;
+        b=PglZNZfH4Ne5zYNgthmrrOtrGRpESwCIMfWVsqvo4hwwQg8tCM65DM6rVXFg/dsIXd
+         hQt6eeEseA4h9nPtYZR6119T+Z+7IBMtJ6B9UfgNyvoN5mFUfsB/IeAuaCflr524nUNQ
+         IsEzYEoi3XTQqg1acmuXeNLWpJ6gWfg14ET6R4gvnyCaZjn7kiWYxMCtPpaYnJq7kGgx
+         CEfbY0v7c867gR9vJpvQtBt2Wu8mPhPLEyP6DD7L23hdyxkD0aeR4FdEJ/NWapzDOLuK
+         nb/9HARhDolgzsh+riVvbXslY+T8GXkctHCmctXOam6WwifCQ2gT22qhg0Y2yMP56fpi
+         VBjw==
+X-Gm-Message-State: AFqh2kppc/jZf5zkv0rfE798wV18/VLx5z5vDzYslcMHF/CAOC8gDf46
+        zo7/YX3hnWcQ9OhpdB0bGjE=
+X-Google-Smtp-Source: AMrXdXtFNIAw+skNPswTN0DXJvjAscuZylzUT3+8MdknsJzHZ94M5fRHNnyA713k0l3ohsN2xTLX8g==
+X-Received: by 2002:a05:600c:4e46:b0:3d2:3761:b717 with SMTP id e6-20020a05600c4e4600b003d23761b717mr2263461wmq.37.1671643687983;
+        Wed, 21 Dec 2022 09:28:07 -0800 (PST)
+Received: from localhost.localdomain (host-95-251-45-63.retail.telecomitalia.it. [95.251.45.63])
+        by smtp.gmail.com with ESMTPSA id n15-20020a05600c500f00b003cffd3c3d6csm3003260wmr.12.2022.12.21.09.28.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 09:28:07 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Evgeniy Dushistov <dushistov@mail.ru>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH v4 0/3] fs/ufs: Replace kmap() with kmap_local_page 
+Date:   Wed, 21 Dec 2022 18:27:59 +0100
+Message-Id: <20221221172802.18743-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v7 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        matthew.gerlach@linux.intel.com
-Cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        bagasdotme@gmail.com
-References: <20221220163652.499831-1-matthew.gerlach@linux.intel.com>
- <20221220163652.499831-5-matthew.gerlach@linux.intel.com>
- <Y6HsQJQMDnHgTesF@smile.fi.intel.com>
-Content-Language: en-US
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <Y6HsQJQMDnHgTesF@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+kmap() is being deprecated in favor of kmap_local_page().
 
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
-On 2022-12-20 18:09, Andy Shevchenko wrote:
-> On Tue, Dec 20, 2022 at 08:36:52AM -0800, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add a Device Feature List (DFL) bus driver for the Altera
->> 16550 implementation of UART.
-> 
-> In general the code here looks good to me, but one thing to discuss due to
-> comment to the previous patch(es).
-> 
-> ...
-> 
->> +	u64 *p;
->> +
->> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
->> +	if (!p)
->> +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
->> +
->> +	p++;
->> +	uart->port.uartclk = *p;
-> 
-> So, here and the below is using always the second u64 from the returned data.
-> Does it mean:
-> - we always skip the first u64 from the returned buffer and hence... (see below)
-> - we may actually return the second u64 as a plain number (not a pointer) from
->   (an additional?) API? In such case we would not need to take care about this
->   p++; lines here and there.
-> - we have fixed length of the data, returned by find_param(), i.e. 2 u64 words?
-> 
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
 
-I also had the impression that this method of getting and incrementing a pointer
-to the beginning of the parameter block is a bit more error-prone than necessary.
-Since parameter blocks are now standardized, wouldn't be easier and safer to wrap
-the access logic into a helper function like:
+Since its use in fs/ufs is safe everywhere, it should be preferred.
 
-u16 dfh_get_param_data(struct dfl_device *dfl_dev, u16 param_id, u64 *data)
+Therefore, replace kmap() with kmap_local_page() in fs/ufs. kunmap_local()
+requires the mapping address, so return that address from ufs_get_page()
+to be used in ufs_put_page().
 
-that directly provides a copy of the parameter's data into a pointer provided by
-the caller and returns the parameter version or an error if not found?
+This series could have not been ever made because nothing prevented the
+previous patch from working properly but Al Viro made a long series of
+very appreciated comments about how many unnecessary and redundant lines
+of code I could have removed. He could see things I was entirely unable
+to notice. Furthermore, he also provided solutions and details about how
+I could decompose a single patch into a small series of three
+independent units.[1][2][3]
 
-Thanks,
-Marco
+I want to thank him so much for the patience, kindness and the time he
+decided to spend to provide those analysis and write three messages full
+of interesting insights.[1][2][3]
 
+Changes from v1:
+	1/3: No changes.
+	2/3: Restore the return of "err" that was mistakenly deleted
+	     together with the removal of the "out" label in
+	     ufs_add_link(). Thanks to Al Viro.[4]
+	     Return the address of the kmap()'ed page instead of a
+	     pointer to a pointer to the mapped page; a page_address()
+	     had been overlooked in ufs_get_page(). Thanks to Al
+	     Viro.[5]
+	3/3: Return the kernel virtual address got from the call to
+	     kmap_local_page() after conversion from kmap(). Again
+	     thanks to Al Viro.[6]
+
+Changes from v2:
+	1/3: No changes.
+	2/3: Rework ufs_get_page() because the previous version had two
+	     errors: (1) It could return an invalid pages with the out
+	     argument "page" and (2) it could return "page_address(page)"
+	     also in cases where read_mapping_page() returned an error
+	     and the page is never kmap()'ed. Thanks to Al Viro.[7]
+	3/3: Rework ufs_get_page() after conversion to
+	     kmap_local_page(), in accordance to the last changes in 2/3.
+
+Changes from v3:
+	1/3: No changes.
+	2/3: No changes.
+	3/3: Replace kunmap() with kunmap_local().
+
+[1] https://lore.kernel.org/lkml/Y4E++JERgUMoqfjG@ZenIV/
+[2] https://lore.kernel.org/lkml/Y4FG0O7VWTTng5yh@ZenIV/
+[3] https://lore.kernel.org/lkml/Y4ONIFJatIGsVNpf@ZenIV/
+[4] https://lore.kernel.org/lkml/Y5Zc0qZ3+zsI74OZ@ZenIV/
+[5] https://lore.kernel.org/lkml/Y5ZZy23FFAnQDR3C@ZenIV/
+[6] https://lore.kernel.org/lkml/Y5ZcMPzPG9h6C9eh@ZenIV/
+[7] https://lore.kernel.org/lkml/Y5glgpD7fFifC4Fi@ZenIV/#t
+
+The cover letter of the v1 series is at
+https://lore.kernel.org/lkml/20221211213111.30085-1-fmdefrancesco@gmail.com/
+The cover letter of the v2 series is at
+https://lore.kernel.org/lkml/20221212231906.19424-1-fmdefrancesco@gmail.com/
+The cover letter of the v3 series is at
+https://lore.kernel.org/lkml/20221217184749.968-1-fmdefrancesco@gmail.com/
+
+Fabio M. De Francesco (3):
+  fs/ufs: Use the offset_in_page() helper
+  fs/ufs: Change the signature of ufs_get_page()
+  fs/ufs: Replace kmap() with kmap_local_page()
+
+ fs/ufs/dir.c | 134 +++++++++++++++++++++++++++------------------------
+ 1 file changed, 71 insertions(+), 63 deletions(-)
+
+-- 
+2.39.0
