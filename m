@@ -2,81 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83056532CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 15:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B786532CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbiLUO7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 09:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
+        id S232603AbiLUPAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 10:00:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiLUO7p (ORCPT
+        with ESMTP id S232524AbiLUPAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 09:59:45 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4B225CE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 06:59:44 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id v2so8121559ioe.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 06:59:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VSTSYuF2IGWHhVL1H4R/UBsYbY3GgJPyleeG4rMWVfE=;
-        b=EbRH3h1/sjS6Kos+PZMzeKjbriG50DkBaoLywTVgC7IYaW0bF8rQjVcYd5sHTC2IRF
-         istKKDdWOplUTKrD73Z7umq9PSxGHv7WVLy/jkyJgrXxEoL4WsUofTL964FUD6dRzvc2
-         OEBFSWplL5+ztuzB7aIMv643KEt3ZtY2tStkc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VSTSYuF2IGWHhVL1H4R/UBsYbY3GgJPyleeG4rMWVfE=;
-        b=UYwzmoTcnRPdSOHcue2UeebAWypmME7/qYzQWXUaOS/QPzMH27tN+I1nh21hsoo8Sd
-         QrO4EKwNbmAKKcSrGhtiYuWk43pz5UJIgHw8612sIR8/2oQCU8XQ1useURVs8fN+ERD0
-         wYPgH+LnG/kCO36xcK/uK088/EJMAUzoTNG93LaN3hEEhybD8zDWDxhMPyVimdvoqXjQ
-         IZMTLFW2fqUre4JRDI+y1c2gXBnt3YfeVJcpq5zLKm4mgoQplzewyzhtelrI9Jx6ndgB
-         ZaJtJ5BxEUsQ6uaR45ZPIAafmrKdICZK0OYuiow1E9nRTcM1G/+QRNsozzcWtqMT0aDS
-         tJjg==
-X-Gm-Message-State: AFqh2kpc8KidthQUBg+0vZo9tmeBVhnhfoL2X1sgvHSOtcLEzjBCJSyn
-        nd2Ce+S4Q4OK3E6WXdLtgqCfkQLD8lnUewnm
-X-Google-Smtp-Source: AMrXdXs6kcBBuwh3xgUFBvquqCWpgvIdrC1wD2pI6lE+JKWx5qb+rt5psMSJfoUy1s/8t4OUaAZqvg==
-X-Received: by 2002:a6b:c747:0:b0:6e0:380b:b900 with SMTP id x68-20020a6bc747000000b006e0380bb900mr1397553iof.12.1671634783929;
-        Wed, 21 Dec 2022 06:59:43 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id c59-20020a029641000000b0039c8a9d4a82sm2768283jai.108.2022.12.21.06.59.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 06:59:43 -0800 (PST)
-Date:   Wed, 21 Dec 2022 14:59:42 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, swboyd@chromium.org,
-        dmitry.baryshkov@linaro.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported
- max latencies
-Message-ID: <Y6MfXltck34gSwU9@google.com>
-References: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
- <20221205112500.GB4514@thinkpad>
- <Y441/Icd2wSgVnNU@google.com>
- <20221221054953.GA2922@thinkpad>
+        Wed, 21 Dec 2022 10:00:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ECB6334;
+        Wed, 21 Dec 2022 07:00:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBC12617F5;
+        Wed, 21 Dec 2022 15:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 638E9C433D2;
+        Wed, 21 Dec 2022 15:00:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671634811;
+        bh=YUEtdkBBPAUWmuq6fIL/UyKq54OeFkglF7xic8M8yqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=igRLuaTwOufsczIztnoTZkdWW+ncUgjnZqT8iSzR1TyxsCD1eOh/FCpw42Bg+Bnmn
+         vH7CGRXY+Mo7YcOd4XDBw+n0NnyNV4kig1DocR0/ZvFQviMzoh+vG2IUCgt+F53EF7
+         t8zFoqbNx34nXSbs57ytUvlt7GO3xrpMtOg7X7RbynupJR3dwt5QkWrriCIalMVdvW
+         Ae1habiMbrcy7qnSPyfh2shxD4+nhKUgM+JQFPnLuceG+PiCMpvZ2O/ciCc28PAVCK
+         IdEtH58QdiEy85GpCUMZaU18iovT97XZpVjnSciRiu+TvHGDcMNTX4Skdz0ChLsKbR
+         4GRokJwDTBrzA==
+Date:   Wed, 21 Dec 2022 15:00:05 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org
+Subject: Re: [PATCH 4/6] riscv: Fix EFI stub usage of KASAN instrumented
+ string functions
+Message-ID: <Y6MfdfRhlWYBL2KH@spud>
+References: <20221216162141.1701255-1-alexghiti@rivosinc.com>
+ <20221216162141.1701255-5-alexghiti@rivosinc.com>
+ <Y6MSxBaJU7JqfkJO@spud>
+ <CAHVXubgzac0gXNF2FVeUrCAnOe7U9QhAfj3nWd_jc0maaepN2g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="YCPDz/kjihqgJ7An"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221221054953.GA2922@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <CAHVXubgzac0gXNF2FVeUrCAnOe7U9QhAfj3nWd_jc0maaepN2g@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,145 +67,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 11:19:53AM +0530, Manivannan Sadhasivam wrote:
-> On Mon, Dec 05, 2022 at 06:18:36PM +0000, Matthias Kaehlcke wrote:
-> > On Mon, Dec 05, 2022 at 04:55:00PM +0530, Manivannan Sadhasivam wrote:
-> > > On Fri, Sep 16, 2022 at 01:38:37PM +0530, Krishna chaitanya chundru wrote:
-> > > > In ASPM driver, LTR threshold scale and value are updated based on
-> > > > tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
-> > > > LTR threshold scale and value are greater values than max snoop/non-snoop
-> > > > value.
-> > > > 
-> > > > Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> > > > reported snoop/no-snoop values is greater than or equal to
-> > > > LTR_L1.2_THRESHOLD value.
-> > > > 
-> > > > Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> > > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > > > Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > 
-> > > I take my Ack back... Sorry that I did not look into this patch closer.
-> > > 
-> > > > ---
-> > > > 
-> > > > I am taking this patch forward as prasad is no more working with our org.
-> > > > changes since v6:
-> > > > 	- Rebasing with pci/next.
-> > > > changes since v5:
-> > > > 	- no changes, just reposting as standalone patch instead of reply to
-> > > > 	  previous patch.
-> > > > Changes since v4:
-> > > > 	- Replaced conditional statements with min and max.
-> > > > changes since v3:
-> > > > 	- Changed the logic to include this condition "snoop/nosnoop
-> > > > 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> > > > Changes since v2:
-> > > > 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-> > > > Changes since v1:
-> > > > 	- Added missing variable declaration in v1 patch
-> > > > ---
-> > > >  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
-> > > >  1 file changed, 30 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > > > index 928bf64..2bb8470 100644
-> > > > --- a/drivers/pci/pcie/aspm.c
-> > > > +++ b/drivers/pci/pcie/aspm.c
-> > > > @@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> > > >  {
-> > > >  	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> > > >  	u32 val1, val2, scale1, scale2;
-> > > > +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
-> > > >  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
-> > > >  	u32 ctl1 = 0, ctl2 = 0;
-> > > >  	u32 pctl1, pctl2, cctl1, cctl2;
-> > > > +	u16 ltr;
-> > > > +	u16 max_snoop_lat, max_nosnoop_lat;
-> > > >  
-> > > >  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
-> > > >  		return;
-> > > >  
-> > > > +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> > > > +	if (!ltr)
-> > > > +		return;
-> > > > +
-> > > > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> > > > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-> > > > +
-> > > > +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > > > +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
-> > > > +
-> > > > +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > > > +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
-> > > > +
-> > > > +	/* choose the greater max scale value between snoop and no snoop value*/
-> > > > +	max_scale = max(max_snp_scale, max_nsnp_scale);
-> > > > +
-> > > > +	/* choose the greater max value between snoop and no snoop scales */
-> > > > +	max_val = max(max_snp_val, max_nsnp_val);
-> > > > +
-> > > >  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
-> > > >  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> > > >  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> > > > @@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> > > >  	 */
-> > > >  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
-> > > >  	encode_l12_threshold(l1_2_threshold, &scale, &value);
-> > > > +
-> > > > +	/*
-> > > > +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> > > > +	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
-> > > 
-> > > Apart from the bug in calculating the LTR_Threshold as reported by Matthias
-> > > and Bjorn, I'm wondering if we are covering up for the device firmware issue.
-> > 
-> > Yes, I think the patch is doing exactly that.
-> > 
-> > > As per section 6.18, if the device reports snoop/no-snoop scale/value as 0, then
-> > > it implies that the device won't tolerate any additional delays from the host.
+
+--YCPDz/kjihqgJ7An
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Dec 21, 2022 at 03:23:36PM +0100, Alexandre Ghiti wrote:
+> Hi Conor,
+>=20
+> On Wed, Dec 21, 2022 at 3:06 PM Conor Dooley <conor@kernel.org> wrote:
+> >
+> > Hey Alex!
+> >
+> > On Fri, Dec 16, 2022 at 05:21:39PM +0100, Alexandre Ghiti wrote:
+> > > The EFI stub must not use any KASAN instrumented code as the kernel
+> > > proper did not initialize the thread pointer and the mapping for the
+> > > KASAN shadow region.
 > > >
-> > > In that case, how can we allow the link to go into L1.2 since that would incur
-> > > high delay compared to L1.1?
-> > 
-> > I had the same doubt, a value of 0 doesn't make sense, if it literally means
-> > 'max delay of 0ns'. I did some debugging around this issue. One thing I found
-> > is that there are NVMe models that don't have issues with entering L1.2 with
-> > max (no-)snoop latencies of 0. From that I infer that a value of 0 does not
-> > literally mean a max delay of 0ns.
-> > 
-> 
-> This is interesting.
-> 
-> > The PCIe spec doesn't say specifically what a value of 0 in those registers
-> > means, but chapter "6.18 Latency Tolerance Reporting (LTR) Mechanism" of the
-> > PCIe 4.0 base spec says something about the latency requirements in LTR
-> > messages:
-> > 
-> >   Setting the value and scale fields to all 0’s indicates that the device will
-> >   be impacted by any delay and that the best possible service is requested.
-> > 
-> > With that and the fact that several NVMe's don't have issues with all 0 values
-> > I deduce that all 0's means 'best possible service' and not 'max latency of
-> > 0ns'. It seems the Kioxia firmware has a bug which interprets all 0 values as
-> > a max latency of 0ns.
-> > 
-> > Another finding is that the Kioxia NVMe can enter L1.2 if the max latencies
-> > are set to values >= the LTR threshold. Unfortunately that isn't a viable
-> > fix for existing devices in the field, devices under development could possibly
-> > adjust the latencies in the BIOS (coreboot code [1] suggests that this is done
-> > at least in some cases).
-> > 
-> 
-> I fully agree that it is a firmware issue. And yes, we should refrain to fixes
-> in the bootloader if possible.
-> 
-> Another option would be to add a quirk for specific devices in the ASPM code.
-> But in that case, I'm not sure what would be the optimal snoop/no-snoop value
-> that could be used.
+> > > Avoid using generic string functions by copying stub dependencies from
+> > > lib/string.c to drivers/firmware/efi/libstub/string.c as RISC-V does
+> > > not implement architecture-specific versions of those functions.
+> >
+> > To the unaware among us, how does this interact with Heiko's custom
+> > functions for bitmanip extensions? Is this diametrically opposed to
+> > that, or does it actually help avoid having to have special handling
+> > for the efi stub?
+>=20
+> I'm not sure which patchset you are referring to, but I guess you are
+> talking about arch-specific string functions:
 
-I had/have the same doubt.
+Oh sorry, I thought I had linked it..
+https://lore.kernel.org/linux-riscv/20221130225614.1594256-1-heiko@sntech.d=
+e/
 
-> There is another issue where if we have some other device on the same bus
-> that explicitly requires 0ns latency.
+> - If they are written in assembly and are then not kasan-instrumented,
+> we'll be able to use them and then revert part of this patch.
 
-Would that be reasonable requirement, i.e. can 0ns latency ever be achieved?
+They are indeed written in assembly. Ard had left some comments there.
+Heiko's intention was to keep them out of the efistub, so perhaps your
+patchset helps him out.
+
+> - If they are written in C and are then kasan-instrumented (because
+> we'll want to instrument them), we'll keep using the implementation
+> added here.
+>=20
+> Hope that answers your question!
+>=20
+> Alex
+>=20
+> >
+> > Also, checkpatch seems to be rather unhappy with you here:
+> > https://gist.github.com/conor-pwbot/e5b4c8f2c3b88b4a8fcab4df437613e2
+>=20
+> Yes, those new functions are exact copies from lib/string.c, I did not
+> want to fix those checkpatch errors in this patchset.
+
+I figured from the description that that was likely, just mentioned it
+as I was already replying! Apologies for not looking at the source of
+the copy.
+
+Thanks!
+
+> > >
+> > > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > ---
+> > >  arch/riscv/kernel/image-vars.h        |   8 --
+> > >  drivers/firmware/efi/libstub/Makefile |   7 +-
+> > >  drivers/firmware/efi/libstub/string.c | 133 ++++++++++++++++++++++++=
+++
+> > >  3 files changed, 137 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/kernel/image-vars.h b/arch/riscv/kernel/image=
+-vars.h
+> > > index d6e5f739905e..15616155008c 100644
+> > > --- a/arch/riscv/kernel/image-vars.h
+> > > +++ b/arch/riscv/kernel/image-vars.h
+> > > @@ -23,14 +23,6 @@
+> > >   * linked at. The routines below are all implemented in assembler in=
+ a
+> > >   * position independent manner
+> > >   */
+> > > -__efistub_memcmp             =3D memcmp;
+> > > -__efistub_memchr             =3D memchr;
+> > > -__efistub_strlen             =3D strlen;
+> > > -__efistub_strnlen            =3D strnlen;
+> > > -__efistub_strcmp             =3D strcmp;
+> > > -__efistub_strncmp            =3D strncmp;
+> > > -__efistub_strrchr            =3D strrchr;
+> > > -
+> > >  __efistub__start             =3D _start;
+> > >  __efistub__start_kernel              =3D _start_kernel;
+> > >  __efistub__end                       =3D _end;
+> > > diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware=
+/efi/libstub/Makefile
+> > > index b1601aad7e1a..031d2268bab5 100644
+> > > --- a/drivers/firmware/efi/libstub/Makefile
+> > > +++ b/drivers/firmware/efi/libstub/Makefile
+> > > @@ -130,9 +130,10 @@ STUBCOPY_RELOC-$(CONFIG_ARM)     :=3D R_ARM_ABS
+> > >  # also means that we need to be extra careful to make sure that the =
+stub does
+> > >  # not rely on any absolute symbol references, considering that the v=
+irtual
+> > >  # kernel mapping that the linker uses is not active yet when the stu=
+b is
+> > > -# executing. So build all C dependencies of the EFI stub into libstu=
+b, and do
+> > > -# a verification pass to see if any absolute relocations exist in an=
+y of the
+> > > -# object files.
+> > > +# executing. In addition, we need to make sure that the stub does no=
+t use KASAN
+> > > +# instrumented code like the generic string functions. So build all C
+> > > +# dependencies of the EFI stub into libstub, and do a verification p=
+ass to see
+> > > +# if any absolute relocations exist in any of the object files.
+> > >  #
+> > >  STUBCOPY_FLAGS-$(CONFIG_ARM64)       +=3D --prefix-alloc-sections=3D=
+=2Einit \
+> > >                                  --prefix-symbols=3D__efistub_
+> > > diff --git a/drivers/firmware/efi/libstub/string.c b/drivers/firmware=
+/efi/libstub/string.c
+> > > index 5d13e43869ee..5154ae6e7f10 100644
+> > > --- a/drivers/firmware/efi/libstub/string.c
+> > > +++ b/drivers/firmware/efi/libstub/string.c
+> > > @@ -113,3 +113,136 @@ long simple_strtol(const char *cp, char **endp,=
+ unsigned int base)
+> > >
+> > >       return simple_strtoull(cp, endp, base);
+> > >  }
+> > > +
+> > > +#ifndef __HAVE_ARCH_STRLEN
+> > > +/**
+> > > + * strlen - Find the length of a string
+> > > + * @s: The string to be sized
+> > > + */
+> > > +size_t strlen(const char *s)
+> > > +{
+> > > +     const char *sc;
+> > > +
+> > > +     for (sc =3D s; *sc !=3D '\0'; ++sc)
+> > > +             /* nothing */;
+> > > +     return sc - s;
+> > > +}
+> > > +EXPORT_SYMBOL(strlen);
+> > > +#endif
+> > > +
+> > > +#ifndef __HAVE_ARCH_STRNLEN
+> > > +/**
+> > > + * strnlen - Find the length of a length-limited string
+> > > + * @s: The string to be sized
+> > > + * @count: The maximum number of bytes to search
+> > > + */
+> > > +size_t strnlen(const char *s, size_t count)
+> > > +{
+> > > +     const char *sc;
+> > > +
+> > > +     for (sc =3D s; count-- && *sc !=3D '\0'; ++sc)
+> > > +             /* nothing */;
+> > > +     return sc - s;
+> > > +}
+> > > +EXPORT_SYMBOL(strnlen);
+> > > +#endif
+> > > +
+> > > +#ifndef __HAVE_ARCH_STRCMP
+> > > +/**
+> > > + * strcmp - Compare two strings
+> > > + * @cs: One string
+> > > + * @ct: Another string
+> > > + */
+> > > +int strcmp(const char *cs, const char *ct)
+> > > +{
+> > > +     unsigned char c1, c2;
+> > > +
+> > > +     while (1) {
+> > > +             c1 =3D *cs++;
+> > > +             c2 =3D *ct++;
+> > > +             if (c1 !=3D c2)
+> > > +                     return c1 < c2 ? -1 : 1;
+> > > +             if (!c1)
+> > > +                     break;
+> > > +     }
+> > > +     return 0;
+> > > +}
+> > > +EXPORT_SYMBOL(strcmp);
+> > > +#endif
+> > > +
+> > > +#ifndef __HAVE_ARCH_STRRCHR
+> > > +/**
+> > > + * strrchr - Find the last occurrence of a character in a string
+> > > + * @s: The string to be searched
+> > > + * @c: The character to search for
+> > > + */
+> > > +char *strrchr(const char *s, int c)
+> > > +{
+> > > +     const char *last =3D NULL;
+> > > +     do {
+> > > +             if (*s =3D=3D (char)c)
+> > > +                     last =3D s;
+> > > +     } while (*s++);
+> > > +     return (char *)last;
+> > > +}
+> > > +EXPORT_SYMBOL(strrchr);
+> > > +#endif
+> > > +
+> > > +#ifndef __HAVE_ARCH_MEMCMP
+> > > +/**
+> > > + * memcmp - Compare two areas of memory
+> > > + * @cs: One area of memory
+> > > + * @ct: Another area of memory
+> > > + * @count: The size of the area.
+> > > + */
+> > > +#undef memcmp
+> > > +__visible int memcmp(const void *cs, const void *ct, size_t count)
+> > > +{
+> > > +     const unsigned char *su1, *su2;
+> > > +     int res =3D 0;
+> > > +
+> > > +#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+> > > +     if (count >=3D sizeof(unsigned long)) {
+> > > +             const unsigned long *u1 =3D cs;
+> > > +             const unsigned long *u2 =3D ct;
+> > > +             do {
+> > > +                     if (get_unaligned(u1) !=3D get_unaligned(u2))
+> > > +                             break;
+> > > +                     u1++;
+> > > +                     u2++;
+> > > +                     count -=3D sizeof(unsigned long);
+> > > +             } while (count >=3D sizeof(unsigned long));
+> > > +             cs =3D u1;
+> > > +             ct =3D u2;
+> > > +     }
+> > > +#endif
+> > > +     for (su1 =3D cs, su2 =3D ct; 0 < count; ++su1, ++su2, count--)
+> > > +             if ((res =3D *su1 - *su2) !=3D 0)
+> > > +                     break;
+> > > +     return res;
+> > > +}
+> > > +EXPORT_SYMBOL(memcmp);
+> > > +#endif
+> > > +
+> > > +#ifndef __HAVE_ARCH_MEMCHR
+> > > +/**
+> > > + * memchr - Find a character in an area of memory.
+> > > + * @s: The memory area
+> > > + * @c: The byte to search for
+> > > + * @n: The size of the area.
+> > > + *
+> > > + * returns the address of the first occurrence of @c, or %NULL
+> > > + * if @c is not found
+> > > + */
+> > > +void *memchr(const void *s, int c, size_t n)
+> > > +{
+> > > +     const unsigned char *p =3D s;
+> > > +     while (n-- !=3D 0) {
+> > > +             if ((unsigned char)c =3D=3D *p++) {
+> > > +                     return (void *)(p - 1);
+> > > +             }
+> > > +     }
+> > > +     return NULL;
+> > > +}
+> > > +EXPORT_SYMBOL(memchr);
+> > > +#endif
+> > > --
+> > > 2.37.2
+> > >
+> > >
+
+--YCPDz/kjihqgJ7An
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6MfdQAKCRB4tDGHoIJi
+0rD1AQCqrDhav6hfY0d+Zxo7d411z36snzEbHw/G2g8zY1b+aQEA5L8T8mE5iRl3
+Ov5E1pIIrfvvmg4vRhlfFTAQXS7AkQs=
+=gSFB
+-----END PGP SIGNATURE-----
+
+--YCPDz/kjihqgJ7An--
