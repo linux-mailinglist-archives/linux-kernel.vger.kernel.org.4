@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED050652C26
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 05:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CEED652C28
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 05:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234426AbiLUEqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 23:46:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
+        id S234430AbiLUEsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 23:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiLUEqn (ORCPT
+        with ESMTP id S229679AbiLUEsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 23:46:43 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0466175
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 20:46:42 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id x10-20020a056e021bca00b00302b6c0a683so9617417ilv.23
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 20:46:42 -0800 (PST)
+        Tue, 20 Dec 2022 23:48:50 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCF4617E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 20:48:49 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so997945pjp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 20:48:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hNVq9wYnva/HPW3ThTI1Fu0L0uIDsvRYyulYsvw3yMw=;
+        b=N46ClaEkZ5LdphwXlH2yEBShRVSJpXNciwMMS6UVV2V+NVN6hIY+SufeELGHmaDGyN
+         C20fTIWM+vH6ZiG0kBqaqj93CmgognrVh3s0J4NdVoHHAx6kfH0XjugTgzoPwcwfuOru
+         rviZoIIDtRlKxXfALdi7m/bAH8wDP+8txlEST8mXx7YRsDjBArmlzczB4oh1HwQOQRwb
+         nfOT5fVrj/Jzl+5xumQjfv1+gLm561elFy7YDwFozQoLiIlUSayMkekUsbEd6nfIjk1p
+         pQ7nW7Zktmy6rQH11WnZdpTSXuWWm+t3IRAdcP6VdnZagHNmXlMzgRnArKUorxw7d4MN
+         i+wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QioZXgsgOHKc6H8mnlnH5lizZt9Vqo4TbSBYHXXyix4=;
-        b=kkw8qxHsEFWCm+9aUFYW9fD+FVcUjfK8HKs/Z8NxdF2Fr97xYP0CjtFF+dLJW6dA9c
-         kcxVkKZs0PGjxiS7PcdZOvqfTn4zRqlzC+mmBYxPJeHmz3FS6YOVuZ+I9hfvAev5xYCo
-         y/O6ziyb3UzXdBXQQPK1BPSJPyZqhMpFrNlTMYccZL4NGRQurB3aeyl9vCWRqCcBFyZc
-         eaIhOspdg9OL/HxP4+CxLq2gTH0IMXmKMf8y0CoCJJ2CmGXExPtLnbcla9GLBk2iglys
-         /ZQRqz/XnyG88dnzzIaY29M3Xu4sSz1rNWHUPRWvH79+dD09RvBIdomaIxIFMs0o8dBa
-         HCwQ==
-X-Gm-Message-State: AFqh2kproWHfkY34P1jgY/Yrh5ElN/YU46/7TOpiwhIhEslbBwYrJeC6
-        XHe694PlqvQarfO5HGzEYACI95MvRCqxmpn1eWYzrqmWkCU8
-X-Google-Smtp-Source: AMrXdXsY2Bo3B6QIHJigeUIYqHiuZ+rSKfAQCMpP4UVtdKJzuzus+NY4p++NnLXYNq7pFRz9GwZfV6j/EcGKAdxTNzE5zlEpEMU/
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hNVq9wYnva/HPW3ThTI1Fu0L0uIDsvRYyulYsvw3yMw=;
+        b=unPQhvrRzKZiSFiisKHDhXsLg/UpsWevwdAyke350Z7Vhc6rGVqj+N0y9K3xk/+vwT
+         hn8hpXF5z7TOYNh7/AjsDOeBh1gXeFxhyW0c8tnhCH1kUCF7Oi7MegO4a5a7/1UNsSpk
+         wjiU7211lEA43hSOBubECC0ii00PpBeUy6HgbHD6vw6B0USzOeRcUXhkaBP41XYFi98D
+         0bXUFZ7oYf2fFqtVTKf4f5QjCiV/i9Q+8LjA8d4MgHdGWf8lzu0sjLM5pckLqrAEepOV
+         pfgS8lADbP+k2+aFlI6hpIJEUXFaNyvQYOJPeU2gbZDBk+E0yM5zGlTHlhr5KMzhOkXz
+         mVZQ==
+X-Gm-Message-State: AFqh2kqHFvpkYUuws90VrgOP8AaDYdgPvpT5fcTdrcxsmIiUWUZklJ4N
+        QmD95NBq9dbg93m+PaLxvRj4oA==
+X-Google-Smtp-Source: AMrXdXupM0KGFiZrNN7WUHbgR7SQIZup0DNgaE244EV3PgALNtrv+r8+DYIoQZi948KC4j2rzYH3fw==
+X-Received: by 2002:a17:902:ee13:b0:187:c49:5a1a with SMTP id z19-20020a170902ee1300b001870c495a1amr697497plb.17.1671598129213;
+        Tue, 20 Dec 2022 20:48:49 -0800 (PST)
+Received: from localhost ([122.172.82.107])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b00189348ab156sm10215121plg.283.2022.12.20.20.48.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 20:48:48 -0800 (PST)
+Date:   Wed, 21 Dec 2022 10:18:33 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, james.clark@arm.com,
+        Ionela.Voinescu@arm.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: CPPC: Add u64 casts to avoid overflowing
+Message-ID: <20221221044833.ebh2timtn7uluqpm@vireshk-i7>
+References: <20221220101225.3190672-1-pierre.gondois@arm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3465:b0:38a:66d5:f599 with SMTP id
- q37-20020a056638346500b0038a66d5f599mr13915jav.274.1671598001823; Tue, 20 Dec
- 2022 20:46:41 -0800 (PST)
-Date:   Tue, 20 Dec 2022 20:46:41 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001b2b2e05f04f3ddb@google.com>
-Subject: [syzbot] memory leak in prctl
-From:   syzbot <syzbot+91edf9178386a07d06a7@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, brauner@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220101225.3190672-1-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 20-12-22, 11:12, Pierre Gondois wrote:
+> The fields of the _CPC object are unsigned 32-bits values.
+> To avoid overflows while using _CPC's values, add 'u64' casts.
+> 
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 
-syzbot found the following issue on:
+Applied. Thanks.
 
-HEAD commit:    77856d911a8c Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f28cbb880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6b1ea4fdbd78230a
-dashboard link: https://syzkaller.appspot.com/bug?extid=91edf9178386a07d06a7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=153ff26f880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1073a993880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/93698bc86a1d/disk-77856d91.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6190640893ad/vmlinux-77856d91.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ddf790b00ced/bzImage-77856d91.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+91edf9178386a07d06a7@syzkaller.appspotmail.com
-
-Warning: Permanently added '10.128.0.165' (ECDSA) to the list of known hosts.
-executing program
-BUG: memory leak
-unreferenced object 0xffff88810c4c57a0 (size 32):
-  comm "syz-executor948", pid 5064, jiffies 4294946184 (age 7.250s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff814f8d16>] __do_kmalloc_node mm/slab_common.c:967 [inline]
-    [<ffffffff814f8d16>] __kmalloc+0x46/0x120 mm/slab_common.c:981
-    [<ffffffff81564fb7>] kmalloc include/linux/slab.h:584 [inline]
-    [<ffffffff81564fb7>] anon_vma_name_alloc+0x27/0x60 mm/madvise.c:78
-    [<ffffffff8128d4df>] prctl_set_vma kernel/sys.c:2324 [inline]
-    [<ffffffff8128d4df>] __do_sys_prctl+0xaff/0xba0 kernel/sys.c:2627
-    [<ffffffff848a05d5>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff848a05d5>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84a00087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+viresh
