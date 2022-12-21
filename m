@@ -2,120 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074A36534C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBC16534DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234804AbiLUROQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
+        id S234886AbiLURQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbiLURNg (ORCPT
+        with ESMTP id S234799AbiLURP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:13:36 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96EDB2528C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:13:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 918922F4;
-        Wed, 21 Dec 2022 09:13:45 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF1053F703;
-        Wed, 21 Dec 2022 09:13:01 -0800 (PST)
-Message-ID: <72ed59b5-c7e1-c425-d1b6-e8d703d11d7a@arm.com>
-Date:   Wed, 21 Dec 2022 18:12:52 +0100
+        Wed, 21 Dec 2022 12:15:27 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D87DAE;
+        Wed, 21 Dec 2022 09:14:56 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLDqBvK018901;
+        Wed, 21 Dec 2022 17:14:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=gBhHKx02h6Axdy+iRKzp80j+cKaack/GA8r6SHvEQjg=;
+ b=Hcq/uMmEZDfqTcvh88boF5kjeDCqSG+DcwHnt/fnoOnlJG3QDe4SgGBF2t/67L3e2FPU
+ ZNrRm6kYOVdHoHfHgDhYRoNYnZ81ttlsTjafzlTkB+w0+l8uTTd1DbfhjkMy5UN2WmPq
+ UGJjSMekoOuPsQLpVl/iBIZumje8tw6gkmTKB+1M9hGojm9CB49dcag7M/qmX3QzUzeP
+ g7LCK8T5jpf2ODJ0qUqInUiDyNgQUZ+zMooGK8NEnq6yul0+qGGUqPd5ta1jJz+/u8Tt
+ F30lPx84kDXdpbxRZfcAXNYWLMkgenaqLqny1tsSi3Sza5/uWFWOI1SigfFXoxL7AySC AA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm2brrjcb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 17:14:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLHEOd0024082
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 17:14:24 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 21 Dec 2022 09:14:16 -0800
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>, Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Len Brown" <len.brown@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Sean Paul" <sean@poorly.run>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v4 0/5] Improve GPU reset sequence for Adreno GPU
+Date:   Wed, 21 Dec 2022 22:43:58 +0530
+Message-ID: <1671642843-5244-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 3/7] sched: Teach arch_asym_cpu_priority() the idle
- state of SMT siblings
-Content-Language: en-US
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-4-ricardo.neri-calderon@linux.intel.com>
- <e7d6c19b-593d-acfd-35af-73b1840be276@arm.com>
- <20221212175433.GB27353@ranerica-svr.sc.intel.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20221212175433.GB27353@ranerica-svr.sc.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: A7scqoT25a38Jvcnb90YnPX4YI2t75XX
+X-Proofpoint-GUID: A7scqoT25a38Jvcnb90YnPX4YI2t75XX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-21_09,2022-12-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 spamscore=0 suspectscore=0 phishscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212210143
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/12/2022 18:54, Ricardo Neri wrote:
-> On Tue, Dec 06, 2022 at 06:54:39PM +0100, Dietmar Eggemann wrote:
->> On 22/11/2022 21:35, Ricardo Neri wrote:
 
-[...]
+This is a rework of [1] using genpd instead of 'reset' framework.
 
->>> + * want to check the idle state of the SMT siblngs of @cpu.
->>
->> s/siblngs/siblings
->>
->> The scheduler calls sched_asym_prefer(..., true) from
->> find_busiest_queue(), asym_active_balance() and nohz_balancer_kick()
-> 
-> In these places we are comparing two specific CPUs, of which the idle
-> state of its siblings impact their throughput and, in consequence, the
-> decision of attempt to balance load.  
-> 
-> In the places were sched_asym_prefer(...., false) is called we compare the
-> destination CPU with a CPU that bears the priority of a sched group,
-> regardless of the idle state of its siblings.
+As per the recommended reset sequence of Adreno gpu, we should ensure that
+gpucc-cx-gdsc has collapsed at hardware to reset gpu's internal hardware states.
+Because this gdsc is implemented as 'votable', gdsc driver doesn't poll and
+wait until its hw status says OFF.
 
-OK.
+So use the newly introduced genpd api (dev_pm_genpd_synced_poweroff()) to
+provide a hint to the gdsc driver to poll for the hw status and use genpd
+notifier to wait from adreno gpu driver until gdsc is turned OFF.
 
->> even from SMT layer on !x86.
-> 
-> This is true, but the default arch_asym_cpu_priority ignores check_smt.
+This series is rebased on top of linux-next (20221215) since the changes span
+multiple drivers.
 
-True.
+[1] https://patchwork.freedesktop.org/series/107507/
 
->>  So I guess a `bool check_smt` wouldn't be
->> sufficient to distinguish whether sched_smt_siblings_idle() should be
->> called or not.
-> 
-> But it is the caller who determines whether the idle state of the SMT
-> siblings of @cpu may be relevant.
+Changes in v4:
+- Update genpd function documentation (Ulf)
 
-I assume caller being the task scheduler here. Callers with
-`check_smt=true` can be called from any SD level with SD_ASYM_PACKING.
+Changes in v3:
+- Rename the var 'force_sync' to 'wait (Stephen)
 
-Imagine an arch w/ SD_ASYM_PACKING on SMT & MC overwriting
-arch_asym_cpu_priority(). `bool check_smt` wouldn't be sufficient to
-know whether a call to something like sched_smt_siblings_idle()
-(is_core_idle()) which iterates over cpu_smt_mask(cpu) would make sense.
+Changes in v2:
+- Minor formatting fix
+- Select PM_GENERIC_DOMAINS from Kconfig
 
->> To me this comment is a little bit misleading. Not an
->> issue currently since there is only the x86 overwrite right now.
-> 
-> If my justification make sense to you, I can expand the comment to state
-> that the caller decides whether check_smt is needed but arch-specific
-> implementations are free to ignore it.
+Akhil P Oommen (4):
+  clk: qcom: gdsc: Support 'synced_poweroff' genpd flag
+  drm/msm/a6xx: Vote for cx gdsc from gpu driver
+  drm/msm/a6xx: Remove cx gdsc polling using 'reset'
+  drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse
 
-Not a big issue but to me if the task scheduler asks for `bool
-check_smt` then archs would have to check to guarantee common behaviour.
-And the meaning of `bool check_smt` on SMT is unclear to me.
-Since only x86 would use this so far it can be adapted later for others
-if needed.
+Ulf Hansson (1):
+  PM: domains: Allow a genpd consumer to require a synced power off
 
-[...]
+ drivers/base/power/domain.c           | 26 ++++++++++++++++++++
+ drivers/clk/qcom/gdsc.c               | 11 +++++----
+ drivers/gpu/drm/msm/Kconfig           |  1 +
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 46 ++++++++++++++++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  7 ++++++
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 13 +++++++---
+ drivers/gpu/drm/msm/msm_gpu.c         |  4 ---
+ drivers/gpu/drm/msm/msm_gpu.h         |  4 ---
+ include/linux/pm_domain.h             |  5 ++++
+ 9 files changed, 97 insertions(+), 20 deletions(-)
+
+-- 
+2.7.4
+
