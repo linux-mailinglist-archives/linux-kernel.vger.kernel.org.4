@@ -2,174 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4166A65327B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 15:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2466565327E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 15:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiLUO25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 09:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S231641AbiLUO3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 09:29:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiLUO2x (ORCPT
+        with ESMTP id S229789AbiLUO3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 09:28:53 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2097.outbound.protection.outlook.com [40.107.223.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F9C1F5;
-        Wed, 21 Dec 2022 06:28:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=edSTFyknVQS7cjsxXJh7YZYtsWLGm1BhMGwGSRKm+mmK+ljz4a/psva4EOz0iALOd/8+Cu1lH8Hqq8KWNy7+FVd+6kGoryC6QaGn703JzRsMW+J+PerOVoIaW8zGSV/j/PGSXUVdwxGLlcQYbALjeOQXXbJXNxUGRJaEHMEHsG2C/ZvOqajclI4b83D3TV4QCh1G2qy/Lodc+HAEYHLflXkXYHKm0d8+VIhlRUbR9kLY3g3P6ZLrTAn+Ew0RYIC+L65NusvPolN3oU841OGHPDBlqGWcTbpGORYqHUbJ0/hwoE2rLbrgCmzwsOnvLcM6Tx6M4/fwIcp7c1giFkX4qQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1smaSuN20mf22ESDFqt5t1J97rx9xqmvMKdYyl774/g=;
- b=bFVTTM0a9sEozhDPdOzhSOCSeExO2OKaUmap6KiUFBYIaDIijCRsqaD/icaDCbcHvJ6EsmNbbTr+cLGxRRmT0iWaMBsOuj9V930AwT8yS9NLnCWCC1fM0zreFQ9aN1kxLT2odNXe/EpngbL6MXb4WbE/xLLe2sbyRF77dPR1haF9iwNXA68KEpAJZ+muXm20MJVjy3uSrSXJlya9Bl85r3Adxl8F2AWNVC9sl25ia1gQDWDhLQ9nOjifCmg+o069qj7EYd1qvGk3r+mKCeeHrSa2PGo/9A/rRGcJCIopStIYiRyhHBmyGU67aeZZ4n4Z3R5AUJAB+MaBMI/E38SxMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1smaSuN20mf22ESDFqt5t1J97rx9xqmvMKdYyl774/g=;
- b=j8g6blRVemLbYWX99dleDrLtk+Kv8sp1Jvk0R9wZeTAolNVu/qFbEtU/Apvvwlx5VhjmiwHrAyEZT2LrWq0jFnD7CGgVBc+JybW6mFgqdBgnreDKAK8ShKhk2i5rxA3yGGqu/Tw9p84V1ujL4pFJqVafC3THd2cG7SjkKAL9t04=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MN2PR13MB3886.namprd13.prod.outlook.com (2603:10b6:208:1e5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Wed, 21 Dec
- 2022 14:28:46 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::483b:9e84:fadc:da30]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::483b:9e84:fadc:da30%9]) with mapi id 15.20.5924.016; Wed, 21 Dec 2022
- 14:28:46 +0000
-Date:   Wed, 21 Dec 2022 15:28:39 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Aldas =?utf-8?B?VGFyYcWha2V2acSNaXVz?= <aldas60@gmail.com>
-Cc:     manishc@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        gregkh@linuxfoundation.org, netdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: qlge: remove unnecessary spaces before function
- pointer args
-Message-ID: <Y6MYF02RgdtA3SJK@corigine.com>
-References: <20221214205147.2172-1-aldas60@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221214205147.2172-1-aldas60@gmail.com>
-X-ClientProxiedBy: AM0PR06CA0075.eurprd06.prod.outlook.com
- (2603:10a6:208:fa::16) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 21 Dec 2022 09:29:16 -0500
+Received: from radex-web.radex.nl (smtp.radex.nl [178.250.146.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3967313D;
+        Wed, 21 Dec 2022 06:29:10 -0800 (PST)
+Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
+        by radex-web.radex.nl (Postfix) with ESMTPS id 03E77240A8;
+        Wed, 21 Dec 2022 15:29:10 +0100 (CET)
+Message-ID: <b6692501-5c6e-945a-9a54-986ae8dd1687@gmail.com>
+Date:   Wed, 21 Dec 2022 15:29:09 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MN2PR13MB3886:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0ffe2513-f0b1-4723-d900-08dae35fab6a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: prrNvkY8sYtfRoWCSv6O4vP11D/nBqDimVvhDht8Mm7sBfz2loGqzIJBTfPRNx+6+pYcd7idZiADUUqO/bPx3oSolpq99mleBEasKX9k5CtIBf0CGKNusW7hDARIbQHWGykRdKPnxJF5o+G6227Lbz3ckayNPB8CHpae2Ug3pveZ5N0195znfno9XJP7P6QoCd0eS20yoewb7xywiUWWdeqKbYzL8QyoJw3JwyXmgHw9kgoYdRX86WyvWigcp5bCEDD2guNvenBmzxAqzvMO6/SezpgmdGBu1MDh02phozU1KF81ICGl3HLjuDrIlmHEjO6EBoJUXGzPKoGXAYRTRKqBkSmajptgZKD3pE2plIXZfGB1T55LNPJl/3Lkp8m6sTD3i/aPDBRSajoCHKib8mbODQq2oZCbKmu9R2qUMZY4VK0mgaoQPFzGm6K22+42YJlFTkv1OjbWpQ5DTYAOZ6J0YYNPsH9QmvmkgvbP6kPVw26RyUJhwz57cqVF76yYRqtnhfSStEJlFEY9QAS4+rSdbXfnsQMhALg7Ig2/MPd4xMc9+p3hbrmLNx1xp5FwBPY1Bca8BP/Y9dokYl59axv8LQhwPU1UfOnNYl9tOSiVuIuzgiJjzAF3ch5JtAP9SCO6gX60cZapghfnsnga8Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(396003)(39830400003)(366004)(451199015)(478600001)(6486002)(6512007)(6506007)(186003)(36756003)(41300700001)(66476007)(44832011)(4326008)(66946007)(66556008)(8676002)(5660300002)(66574015)(83380400001)(6916009)(8936002)(316002)(2906002)(38100700002)(2616005)(86362001)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RmREdUFKME41SDg1aXJCOFBZdkJNUTNTMHliSTQrVGt1cDMyQTExOGVvNWZp?=
- =?utf-8?B?MzdibFNvRmlTdStxRzR2ZE9JTEV1bHJiNXVLa0RveGo5WkdFOXVibERuSXhk?=
- =?utf-8?B?YXd5d1hzanAxZ1p6YkJsTE95cWdQWU9lNzgzVmNiQUh1bkJQWUxYV0I3V0Na?=
- =?utf-8?B?Q2dlZXVzN3NrZXhEYzR0SG5rVm9DUkk2ZS9SU1hKVzhPSHhJZDRncXY4UUpt?=
- =?utf-8?B?ekFNYXE4ajZ5dEdsdVVwelV3YWoxUUp4djRtVFRON2tWVGZzOXZlcXVwUTdH?=
- =?utf-8?B?UCtrTlF6eXVYbjVYN2hwTVlDRDRTSHY3MzVWWS9JWlpZamh2TDVxWTN0RjJn?=
- =?utf-8?B?dWZWSzFGUHQ2WWdKNlB3eUFjRVJtWHVNaW4yQkNaNjByTnlVWkRTa3BPS0tj?=
- =?utf-8?B?WVJINFh0b1hBZGE4NFhXMHladzRadkQwNzkyMm94UUNaRHFqa0ttNkdLOEpu?=
- =?utf-8?B?UzgxeE1JYWNlcEczTDNPMWwwNXk1Q1YzSURGeEYycXRhTkMxakdqSHlPWi9s?=
- =?utf-8?B?VFV5U0xOVW1tWWNoYUI1cTdRbnpOaTI4UlZXMjVtL3p3ZFJIb0lRY1FjbXdD?=
- =?utf-8?B?L0d5bm1QL2NQQUNHRFhndWhXWkNTdmJJZ3h4RmRUdVBuemZWN2wzQzkxRkVq?=
- =?utf-8?B?Y3E0N0RWVE4yZm5oZ2s5YlhBek45MHZkTldrT0FMMjV4cHltcndSS0d4VkVK?=
- =?utf-8?B?NTZTODNlNnBENDlTN1Z1MEJaWkh5MmRVcDA2a2o2aUtSTVd5dGtNRXdod2Qw?=
- =?utf-8?B?RU15eGZTU1Y5WkdZYlk5RHBVc1FVUDFuSjRLbVNSNk5LVEFHZEVoN1hXcVAz?=
- =?utf-8?B?TnBUd1YzaUxhaWJaNTF4QnBBb0tZV2NlN0FjOUkrT1orK3RVc0cvNDVFTlkx?=
- =?utf-8?B?WFd0WDE0S21uN0dISmF3Z3haL2ZwZ21vamJPK1I4QllqeHV6d2dkWkVpdFBR?=
- =?utf-8?B?ZzVWNmF3Z3ZIdHIyWm8wNkIyU3ZWQnl0YkVnN3lFQkVvS1U1cS9Ob0JFa2pm?=
- =?utf-8?B?SUFBbVhIWnNTWE95SkhvQkdlVTRnWjdSaDhhVG0zUHgxZkd0ZmRhbFVSbktC?=
- =?utf-8?B?cXEyd1JVRFpWZlFnNTF1M0tGaXBXVDd0b3JvcTJiY3R3VkJMdnFLdy9lUHFG?=
- =?utf-8?B?NWlMMUlqWHkvVGtSamJKaW1aUUw3TlMvL0Q4bTVyMzkyRXNjUUltSDM5bVMw?=
- =?utf-8?B?VDhqdjlzM3B5U3NlU01iZW9NaFVtWXhxRDhqQyt4V0VCVThyd2cwT3Z1TUZZ?=
- =?utf-8?B?Z05kank5UjNZNlJmNTM0TGhlaTcrSnd1UWsyMVoxTE1zLzZydTZ3M0JMOUhG?=
- =?utf-8?B?ZTlTTWR0THl2K3BabVMwOFFtOFd3Yy94YllpclBEYklwNkdMYUErTnV1cFRw?=
- =?utf-8?B?cTNBWVJFVWNON3JZVU4yYXN2Vzg5Q1dhR011d3NaS2tjeHB0R0RuU3lkd1ly?=
- =?utf-8?B?aExtRnhwMGphQWMzMjNzSG1TKzdqdGRpdy9XWmdmS25SSm9kUmVmdGxOU3Nw?=
- =?utf-8?B?eTdpbXhqUzc4akFkZFBrRlBCT094cjNTR0ZhZEdEd1JqVForR004NUtYNk5C?=
- =?utf-8?B?WENjYzUxcVpJV01MejQwYUtsczBjc1Y3SjdVZVhBWTBncmF0YWtRbjBoc3ZT?=
- =?utf-8?B?aHh3a1k5ZDFORVNQSFlFVDdsMThoNXJMMTBwQUZ2a3k5bHRJeHF5U2ZDY2Rq?=
- =?utf-8?B?ejJpM3VtSHpLRWVQT2dlN1ozcDl5eGFWWGFnekRMT3c1S0FPeXR5VFNiV0c2?=
- =?utf-8?B?S0RSSXlDbnNjNmY0ZXIwT2JKY0NidTRNeXBZWE5Nb3orZnVnSVhrOGxhb092?=
- =?utf-8?B?TVpYV2RMeEdmemxrVlgyRmZ3blNDV3hDekhxMUk1SUdxV1VUTDdXZERFSmgz?=
- =?utf-8?B?Tmx0Rm1aeWJHTDVxMVI1NFhlRTV1YmlkczZUTFduYUZWZ2tBanBRcVY2SjZY?=
- =?utf-8?B?ZXBxL2FELzk1UlliYXQvNEd5L0RVUkNtcDByeWE2cWdxNWNDN2gvZnoxNmxl?=
- =?utf-8?B?Y3pTKytFZXM5Zm40UXVqZisxQ2o2a3VmeW9Cc0svOXplQTNEOW4wVmQ1NG1o?=
- =?utf-8?B?U0JaUGFHMVVGT2dXd3kvQ3RWczVEU2RnR1ROcGhOckNST0MzTVdvWHAwN1ZL?=
- =?utf-8?B?SUNQTWtIdDJxcGxuKzM2RS9uZjFYWUlQUGwvbW9DUElRTXF1Szh0TnRCMjVR?=
- =?utf-8?B?TFAxR1NJWXExZjQxUEFSS1M5UU0yUCtFVVJFTHZScldjaVpKeEtRNVJma2J4?=
- =?utf-8?B?VTFUak5UUzgycGFDbWJFRU5VZ1ZBPT0=?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ffe2513-f0b1-4723-d900-08dae35fab6a
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 14:28:46.5838
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C6B612CgCUGfVq0YKniZsKYISnDZWQUtOa5AOSyxgiK7FVGOwCs8GxxqN36+DwJUTX8s7By0L2Iya1D90DxsJRisNTJeiY1ZwU+XBnNKHss=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR13MB3886
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id
+ timeout
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, Ferry Toth <fntoth@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org
+References: <20221205201527.13525-1-ftoth@exalondelft.nl>
+ <20221205201527.13525-2-ftoth@exalondelft.nl>
+ <20221220194334.GA942039@roeck-us.net>
+ <4d6f0bdb-500b-7ae5-ef10-a844a7abbf23@gmail.com>
+ <20221221124104.GB1353152@roeck-us.net>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <20221221124104.GB1353152@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 10:51:47PM +0200, Aldas Taraškevičius wrote:
-> Remove unnecessary spaces before the function pointer arguments as
-> warned by checkpatch.
-> 
-> Signed-off-by: Aldas Taraškevičius <aldas60@gmail.com>
-> ---
->  drivers/staging/qlge/qlge.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/qlge/qlge.h b/drivers/staging/qlge/qlge.h
-> index fc8c5ca89..05e4f4744 100644
-> --- a/drivers/staging/qlge/qlge.h
-> +++ b/drivers/staging/qlge/qlge.h
-> @@ -2057,8 +2057,8 @@ enum {
->  };
->  
->  struct nic_operations {
-> -	int (*get_flash) (struct ql_adapter *);
-> -	int (*port_initialize) (struct ql_adapter *);
-> +	int (*get_flash)(struct ql_adapter *);
-> +	int (*port_initialize)(struct ql_adapter *);
->  };
+Hi
 
-I'm not clear if there is consensus on the style issue at play here.
-And so I am neutral on this patch.
+On 21-12-2022 13:41, Guenter Roeck wrote:
+> On Wed, Dec 21, 2022 at 11:07:50AM +0100, Ferry Toth wrote:
+>> Hi,
+>>
+>> On 20-12-2022 20:43, Guenter Roeck wrote:
+>>> On Mon, Dec 05, 2022 at 09:15:26PM +0100, Ferry Toth wrote:
+>>>> Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral
+>>>> if extcon is present") Dual Role support on Intel Merrifield platform
+>>>> broke due to rearranging the call to dwc3_get_extcon().
+>>>>
+>>>> It appears to be caused by ulpi_read_id() on the first test write failing
+>>>> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+>>>> DT when the test write fails and returns 0 in that case, even if DT does not
+>>>> provide the phy. As a result usb probe completes without phy.
+>>>>
+>>>> Make ulpi_read_id() return -ETIMEDOUT to its user if the first test write
+>>>> fails. The user should then handle it appropriately. A follow up patch
+>>>> will make dwc3_core_init() set -EPROBE_DEFER in this case and bail out.
+>>>>
+>>>> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+>>>> Cc: stable@vger.kernel.org
+>>>> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+>>> Hi,
+>>>
+>>> this patch results in some qemu test failures, specifically xilinx-zynq-a9
+>>> machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
+>>> to boot from USB drive. The log shows
+>> I'm not familiar with that platform. Does it use dt to discover the ulpi
+>> device?
+>>
+> The dt usb description includes
+>
+> 	usb_phy0: phy0 {
+>                  compatible = "usb-nop-xceiv";
+>                  #phy-cells = <0>;
+>          };
+>
+> ...
+>
+> &usb0 {
+>          status = "okay";
+>          dr_mode = "host";
+>          usb-phy = <&usb_phy0>;
+> };
+>
+> ...
+>
+>                  usb0: usb@e0002000 {
+>                          compatible = "xlnx,zynq-usb-2.20a", "chipidea,usb2";
+>                          status = "disabled";
+>                          clocks = <&clkc 28>;
+>                          interrupt-parent = <&intc>;
+>                          interrupts = <0 21 4>;
+>                          reg = <0xe0002000 0x1000>;
+>                          phy_type = "ulpi";
+>                  };
+>
+> The chipidea core initialization code includes
+>
+>          if (!platdata->phy_mode)
+>                  platdata->phy_mode = of_usb_get_phy_mode(dev->of_node);
+>
+> Does that mean that every chipidea based usb implementation specifying
+> 	phy_type = "ulpi";
+> in their devicetree description will now fail, plus maybe others
+> who determine the phy mode from devicetree ?
+I don't think so.
+>> I'm guessing that the problem is actually caused by "usb: ulpi: defer
+>> ulpi_register on ulpi_read_id timeout".
+>>
+> Confused. Isn't that this patch ?
+Ehem. Yes.
+>> ulpi_read_id() now returns ETIMEDOUT due to the test write ulpi_write(ulpi,
+>> ULPI_SCRATCH, 0xaa) failing.
+>>
+>> Maybe  we can create a fix by skipping the test write in case dt discovery
+>> is available and calling of_device_request_module() directly, instead of
+>> masking the timed out test write as it was before?
+>>
+> I have no idea. All I can see is that it appears that there was a reason
+> for not returning an error if that test write failed.
 
-But perhaps if these lines are being updated then the following check patch
-warnings could be addressed.
+It seems to have been a quick patch to solve a power sequencing issue:
 
-$ scripts/checkpatch.pl --strict this.patch
-WARNING: function definition argument 'struct ql_adapter *' should also have an identifier name
-#122: FILE: drivers/staging/qlge/qlge.h:2060:
-+	int (*get_flash)(struct ql_adapter *);
+"The ULPI bus code supports native enumeration by reading the
+vendor ID and product ID registers at device creation time, but
+we can't be certain that those register reads will succeed if the
+phy is not powered up. To avoid any problems with reading the ID
+registers before the phy is powered we fallback to DT matching
+when the ID reads fail.
 
-WARNING: function definition argument 'struct ql_adapter *' should also have an identifier name
-#123: FILE: drivers/staging/qlge/qlge.h:2061:
-+	int (*port_initialize)(struct ql_adapter *);
+If the ULPI spec had some generic power sequencing for these
+registers we could put that into the ULPI bus layer and power up
+the device before reading the ID registers. Unfortunately this
+doesn't exist and the power sequence is usually device specific.
+By having the device matched up with DT we can avoid this
+problem."
 
-total: 0 errors, 2 warnings, 0 checks, 10 lines checked
+But as is, the code now requires a DT when there is a power
+sequencing issue, which is wrong for Merrifield. It seems my patch
+breaks the OF path, by replacing that by a deferred probe.
 
-NOTE: For some of the reported defects, checkpatch may be able to
-      mechanically convert to the typical style using --fix or --fix-inplace.
+I'm thinking the correct way would be:
+- if present use DT
+- else if test write fails, defer probe
+- else enumeration by reading the vendor ID and product ID registers
 
-"[PATCH] staging: qlge: remove unnecessary spaces before function pointer args" has style problems, please review.
-
-NOTE: If any of the errors are false positives, please report
-      them to the maintainer, see CHECKPATCH in MAINTAINERS.
+>
+> Thanks,
+> Guenter
+>
+>>> ci_hdrc ci_hdrc.0: failed to register ULPI interface
+>>> ci_hdrc: probe of ci_hdrc.0 failed with error -110
+>>>
+>>> and the USB interface does not instantiate. Reverting this patch fixes
+>>> the problem. Bisect log is attached.
+>>>
+>>> A detailed log is available at
+>>> https://kerneltests.org/builders/qemu-arm-v7-master/builds/484/steps/qemubuildcommand/logs/stdio
+>>>
+>>> Guenter
+>>>
+>>> ---
+>>> # bad: [35f79d0e2c98ff6ecb9b5fc33113158dc7f7353c] Merge tag 'parisc-for-6.2-1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux
+>>> # good: [830b3c68c1fb1e9176028d02ef86f3cf76aa2476] Linux 6.1
+>>> git bisect start 'HEAD' 'v6.1'
+>>> # good: [90b12f423d3c8a89424c7bdde18e1923dfd0941e] Merge tag 'for-linus-6.2-1' of https://github.com/cminyard/linux-ipmi
+>>> git bisect good 90b12f423d3c8a89424c7bdde18e1923dfd0941e
+>>> # good: [c7020e1b346d5840e93b58cc4f2c67fc645d8df9] Merge tag 'pci-v6.2-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci
+>>> git bisect good c7020e1b346d5840e93b58cc4f2c67fc645d8df9
+>>> # bad: [b83a7080d30032cf70832bc2bb04cc342e203b88] Merge tag 'staging-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+>>> git bisect bad b83a7080d30032cf70832bc2bb04cc342e203b88
+>>> # good: [057b40f43ce429a02e793adf3cfbf2446a19a38e] Merge tag 'acpi-6.2-rc1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+>>> git bisect good 057b40f43ce429a02e793adf3cfbf2446a19a38e
+>>> # good: [851f657a86421dded42b6175c6ea0f4f5e86af97] Merge tag '6.2-rc-smb3-client-fixes-part1' of git://git.samba.org/sfrench/cifs-2.6
+>>> git bisect good 851f657a86421dded42b6175c6ea0f4f5e86af97
+>>> # good: [fa205589d5e9fc2d1b2f8d31f665152da04160bc] staging: r8188eu: stop beacon processing if kmalloc fails
+>>> git bisect good fa205589d5e9fc2d1b2f8d31f665152da04160bc
+>>> # good: [4051a1c96e4883f3445cc8f239c214be622f4c6c] Merge tag 'thunderbolt-for-v6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
+>>> git bisect good 4051a1c96e4883f3445cc8f239c214be622f4c6c
+>>> # good: [84e57d292203a45c96dbcb2e6be9dd80961d981a] Merge tag 'exfat-for-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat
+>>> git bisect good 84e57d292203a45c96dbcb2e6be9dd80961d981a
+>>> # good: [6f1f0ad910f73f5533b65e1748448d334e0ec697] usb: gadget: udc: drop obsolete dependencies on COMPILE_TEST
+>>> git bisect good 6f1f0ad910f73f5533b65e1748448d334e0ec697
+>>> # good: [c7912f27dedd874d49eadf78b5b6fbfdec52c7c3] staging: rtl8192e: Fix spelling mistake "ContryIE" -> "CountryIE"
+>>> git bisect good c7912f27dedd874d49eadf78b5b6fbfdec52c7c3
+>>> # bad: [63130462c919ece0ad0d9bb5a1f795ef8d79687e] usb: dwc3: core: defer probe on ulpi_read_id timeout
+>>> git bisect bad 63130462c919ece0ad0d9bb5a1f795ef8d79687e
+>>> # good: [38cea8e31e9ef143187135d714aed4d7bd18463c] dt-bindings: vendor-prefixes: add Genesys Logic
+>>> git bisect good 38cea8e31e9ef143187135d714aed4d7bd18463c
+>>> # good: [9bae996ffa28ac03b6d95382a2a082eb219e745a] usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
+>>> git bisect good 9bae996ffa28ac03b6d95382a2a082eb219e745a
+>>> # bad: [8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
+>>> git bisect bad 8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac
+>>> # first bad commit: [8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
