@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EEA652F4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC31652F59
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbiLUKWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 05:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S234691AbiLUKXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 05:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234668AbiLUKVm (ORCPT
+        with ESMTP id S234657AbiLUKWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 05:21:42 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E20205F4;
-        Wed, 21 Dec 2022 02:21:18 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E93D16602CBF;
-        Wed, 21 Dec 2022 10:21:16 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671618077;
-        bh=9XetkCTtF6ckMwoVbeLdJ6HVv33hp/u5TeeEORSL7cQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cpDtg4obq/fxFMnsFDSGSkpTsT9nXQa740njL6vVX4JoXbYkCpj2XgtRe5FIBpcH0
-         UDhlMcoZoeU3UnDVEIHh4ZB8GNcI1wTorVi+zzvD9ipoe/aonF39Dl6nD5f2LkVJEJ
-         JphQ6d3Tw9GVvaDnabpmMpP13vnz8VMzG4LW0wwWmBjeyI+7BReSfYS4hc6sA9HtNZ
-         KOXeRODHLudlRBeCLbG56yRSl0LuSus76H57xABUDa+nS6lgsrAZo6gQLgX1yYanXP
-         yzEsoYCovGOe30aI1HmhLQT+xcXizj1S1+kHqdvWWxolEgi9q8BZydTZ4i4npec6AN
-         AXUZ5VmKb78tQ==
-Message-ID: <8dc6fd60-4f45-c191-70ba-41e7cbf81090@collabora.com>
-Date:   Wed, 21 Dec 2022 11:21:14 +0100
+        Wed, 21 Dec 2022 05:22:25 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96B4F10B73;
+        Wed, 21 Dec 2022 02:21:37 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 264F42F4;
+        Wed, 21 Dec 2022 02:22:18 -0800 (PST)
+Received: from [10.57.44.124] (unknown [10.57.44.124])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B4F5A3F71E;
+        Wed, 21 Dec 2022 02:21:34 -0800 (PST)
+Message-ID: <a44a57c7-0ac9-bd5d-4c92-225ff9a6c361@arm.com>
+Date:   Wed, 21 Dec 2022 10:21:30 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 3/6] dt-bindings: power: Add MT8192 ADSP power domain
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ikjoon Jang <ikjn@chromium.org>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20221221034407.19605-1-allen-kh.cheng@mediatek.com>
- <20221221034407.19605-4-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221221034407.19605-4-allen-kh.cheng@mediatek.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [PATCH v15 2/2] Documentation: Add document for UltraSoc SMB
+ driver
+To:     Junhao He <hejunhao3@huawei.com>, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, leo.yan@linaro.org,
+        jonathan.cameron@huawei.com
+Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        lpieralisi@kernel.org, linuxarm@huawei.com, yangyicong@huawei.com,
+        liuqi6124@gmail.com, f.fangjian@huawei.com, shenyang39@huawei.com,
+        prime.zeng@hisilicon.com
+References: <20221220092945.30722-1-hejunhao3@huawei.com>
+ <20221220092945.30722-3-hejunhao3@huawei.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20221220092945.30722-3-hejunhao3@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/12/22 04:44, Allen-KH Cheng ha scritto:
-> Add power domain ID for the ADSP power partition found on MT8192 SoC.
+On 20/12/2022 09:29, Junhao He wrote:
+> From: Qi Liu <liuqi115@huawei.com>
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Bring in documentation for UltraSoc SMB driver.
+> It simply describes the device, sysfs interface and the
+> firmware bindings.
+> 
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>   .../sysfs-bus-coresight-devices-ultra_smb     | 31 +++++++
+>   .../trace/coresight/ultrasoc-smb.rst          | 83 +++++++++++++++++++
+>   2 files changed, 114 insertions(+)
+>   create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+>   create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+> new file mode 100644
+> index 000000000000..f6526882c627
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+> @@ -0,0 +1,31 @@
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/enable_sink
+> +Date:		December 2022
+> +KernelVersion:	6.2
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+This is not going in for 6.2. This must be 6.3 now and everywhere
+below.
+
+Thanks
+Suzuki
 
 
