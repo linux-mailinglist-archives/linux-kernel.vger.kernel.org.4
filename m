@@ -2,147 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2F6652D44
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EADC5652D47
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbiLUH2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 02:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        id S234005AbiLUH26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 02:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiLUH2V (ORCPT
+        with ESMTP id S229696AbiLUH2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 02:28:21 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743861DA75
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:28:20 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id qk9so34758285ejc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:28:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z+bHBCE2MXh1kW8rjyOWsgxy9qRS48It+Vaz6G2WMT0=;
-        b=mVk9vm+URVhq0VX3W1uhjC3bUeF40EvBRVpiT7krAj5yU98pHMAAuUjziAgNLDgc+u
-         xydWRwGzfau2Z/BgVTnMh9MuqRAvHs404eoDgnZn6TGBPZQuVZZsrvBzRLhYMz4hC1/k
-         fzWZ56PpFRduSYipPgvsRlEDB8Xmu03BD0bA4MSDJ8jrYhRfLQKE5FyTRXjm8RBsdTX2
-         FrGDZSRnI0G7oGMmloPhJDH7IZM3acXAZ50KGUj1QVLe/G56WVaJgDe2d5b/HvOnpYDU
-         GsfNCrjhKZGXiYsXZ5D1B+c6fzXSOF1XpQy9flziTwyM5kpuz3eyr8HF2yd6o37ZHOR2
-         R4eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z+bHBCE2MXh1kW8rjyOWsgxy9qRS48It+Vaz6G2WMT0=;
-        b=W61MLgsuK8g53F+rsS47DKDmX3kd8SFpCsJBJrG2iC8G7/m/nRkDZhAucjvKCBd96Q
-         zstqqJpZ6yJxPvQqMPY3XTKen2nZqwD24e/1bh4GdwBLSdroGsxXz/ZFTJLalqKoM42d
-         Mka2gYzg79MplZDFykUlyNjGX11zCQkFUZgUOI2+5xseWMs629Lg+dTkKcjPqsoCd8R5
-         90AfKVEVzG6AIaSqLvb1NJsF5mRfk413YKSduTJMAU3DiTzXXYAZnU0N3bWMsI5scNe6
-         xWZ2B8xM0XplpIYX+lXDHcVkEh5l4uS2OStAz9tM/aI8KzJ5M+pn8kGeC7R7zSnCHOTW
-         sIZA==
-X-Gm-Message-State: AFqh2kqqh0tvPKNa6EBP0HtkBiuHaI1ENm3yAupntE3UA0BztN/fdp/D
-        reFg7ORtBQsFb/tqCSh7Q5fp7/+UR5bGpxR+
-X-Google-Smtp-Source: AMrXdXuhVtTnfPDeHgZiNlrbPEC2BXwNQzHIcORFZqmaNw19rlO0CrgJckUQCjTzesYSbrtCVgx5+Q==
-X-Received: by 2002:a17:907:c717:b0:7c1:ad6:638a with SMTP id ty23-20020a170907c71700b007c10ad6638amr575163ejc.17.1671607699037;
-        Tue, 20 Dec 2022 23:28:19 -0800 (PST)
-Received: from [192.168.0.173] ([82.77.81.131])
-        by smtp.gmail.com with ESMTPSA id a14-20020a170906670e00b007c0f45ad6bcsm6666612ejp.109.2022.12.20.23.28.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 23:28:18 -0800 (PST)
-Message-ID: <a13f83f3-737d-1bfe-c9ef-031a6cd4d131@linaro.org>
-Date:   Wed, 21 Dec 2022 09:28:16 +0200
+        Wed, 21 Dec 2022 02:28:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995331EAF7;
+        Tue, 20 Dec 2022 23:28:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DA98616FD;
+        Wed, 21 Dec 2022 07:28:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC7A9C433D2;
+        Wed, 21 Dec 2022 07:28:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671607733;
+        bh=cRF0ar5xp1O4E9/pzfz6d06fa4kFJnLgBYrOdMd0uiQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=he4Iyu4JlNtCB7ZxQFKuVG4TQzlGi6l4zzRS4oor133YItAYFQmxHJDM8FR95eJFa
+         USBviq1kCtMdCWQb+Sd3GDLr+aY2c6uDd6MEKiDXLgitcg7R0Q0Qb1P+zte1jGrQ2N
+         CtgIHAUCaaAQ2zfyfBfCs+moCI+7lIMh8R5FLl38=
+Date:   Wed, 21 Dec 2022 08:28:50 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Joe Wu <joewu@msi.corp-partner.google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        "Dustin L . Howett" <dustin@howett.net>,
+        Benson Leung <bleung@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Xiang wangx <wangxiang@cdjrlc.com>,
+        linux-input@vger.kernel.org,
+        Prashant Malani <pmalani@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Furquan Shaikh <furquan@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Derek Huang <derekhuang@google.com>,
+        chrome-platform@lists.linux.dev,
+        Guenter Roeck <groeck@chromium.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: Re: [PATCH] cros_ec_keyb: Add 3 buttons for monitor function
+Message-ID: <Y6K1sjCTM2Z6d4iU@kroah.com>
+References: <20221220080226.17904-1-joewu@msi.corp-partner.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: kernel BUG in __skb_gso_segment
-Content-Language: en-US
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     mst@redhat.com, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org, edumazet@google.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, willemb@google.com,
-        syzkaller@googlegroups.com, liuhangbin@gmail.com,
-        linux-kernel@vger.kernel.org, joneslee@google.com
-References: <82b18028-7246-9af9-c992-528a0e77f6ba@linaro.org>
- <CAF=yD-KEwVnH6PRyxbJZt4iGfKasadYwU_6_V+hHW2s+ZqFNcw@mail.gmail.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <CAF=yD-KEwVnH6PRyxbJZt4iGfKasadYwU_6_V+hHW2s+ZqFNcw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220080226.17904-1-joewu@msi.corp-partner.google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-I added Greg KH to the thread, maybe he can shed some light on whether
-new support can be marked as fixes and backported to stable. The rules
-on what kind of patches are accepted into the -stable tree don't mention
-new support:
-https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-
-On 20.12.2022 20:27, Willem de Bruijn wrote:
-> On Tue, Dec 20, 2022 at 8:21 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
->>
->> Hi,
->>
->> There's a bug [1] reported by syzkaller in linux-5.15.y that I'd like
->> to squash. The commit in stable that introduces the bug is:
->> b99c71f90978 net: skip virtio_net_hdr_set_proto if protocol already set
->> The upstream commit for this is:
->> 1ed1d592113959f00cc552c3b9f47ca2d157768f
->>
->> I discovered that in mainline this bug was squashed by the following
->> commits:
->> e9d3f80935b6 ("net/af_packet: make sure to pull mac header")
->> dfed913e8b55 ("net/af_packet: add VLAN support for AF_PACKET SOCK_RAW GSO")
->>
->> I'm seeking for some guidance on how to fix linux-5.15.y. From what I
->> understand, the bug in stable is triggered because we end up with a
->> header offset of 18, that eventually triggers the GSO crash in
->> __skb_pull. If I revert the commit in culprit from linux-5.15.y, we'll
->> end up with a header offset of 14, the bug is not hit and the packet is
->> dropped at validate_xmit_skb() time. I'm wondering if reverting it is
->> the right thing to do, as the commit is marked as a fix. Backporting the
->> 2 commits from mainline is not an option as they introduce new support.
->> Would such a patch be better than reverting the offending commit?
+On Tue, Dec 20, 2022 at 04:02:26PM +0800, Joe Wu wrote:
+> Add 3 extra buttons: 'brightness up', 'brightness down'
+> and 'screen lock' to support monitor manipulating function.
 > 
-> If both patches can be backported without conflicts, in this case I
-> think that is the preferred solution.
+> Signed-off-by: Joe Wu <joewu@msi.corp-partner.google.com>
 
-I confirm both patches can be backported without conflicts.
+Note, this is a "fake" email address, please always use your real one
+and not a google-gerrit-assigned address.
 
-> 
-> If the fix were obvious that would be an option. But the history for
-> this code indicates that it isn't. It has a history of fixes for edge
-> cases.
-> 
-> Backporting the two avoids a fork that would make backporting
-> additional fixes harder. The first of the two is technically not a
+thanks,
 
-I agree that a fork would make backporting additional fixes harder.
-I'm no networking guy, but I can debug further to understand whether the
-patch that I proposed or other would make sense for both mainline and
-stable kernels. We'll avoid the fork this way.
-
-> fix, but evidently together they are for this case. And the additional
-> logic and risk backported seems manageable.
-
-It is, indeed.
-
-> 
-> Admittedly that is subjective. I can help take a closer look at a
-> custom fix if consensus is that is preferable.
-
-Thanks. Let's wait for others to comment so that we have an agreement.
-
-Cheers,
-ta
+greg k-h
