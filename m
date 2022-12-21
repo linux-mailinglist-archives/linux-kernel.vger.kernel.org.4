@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779D6652C93
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D8D652C99
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbiLUFzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 00:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
+        id S234409AbiLUF7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 00:59:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234409AbiLUFzm (ORCPT
+        with ESMTP id S234430AbiLUF7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 00:55:42 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3421DDD4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:55:38 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 130so9966085pfu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:55:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TaGVUxRUg0LoszCXjRP27hhaB8J+I3ZvWI15G+yWA+I=;
-        b=Q4X+/Nj5MG5IJNmLNnYZO/3PjdSmzZnvtqzOIF7vVgzizc31le+nFsOp0ozBrnntm0
-         dlQd+fC4HdT0xQyQB3PUk5lUIIjuLwXRpVfYP5GsDg2NqXyQexDmnGV/BbatjAW+e3yI
-         S7Pg//+r1sNLRKqJJiohIA1CFqjf6q2eFZ501XnRW/m0TrBmd3T6t7pULd+pOOoBrPab
-         3CrD/pYazWJZ3m4lOMZg8iS1AD2xGqB487XWqu2C4g42Yy9MNDEwIT0XcfdYL0zbl86W
-         jGmW8Qf9f5o8SjSXRRLtphSYh6rfcU07tG6DAfh4xwQh2uZLUJDYGfCJ23rMUSU9W5rW
-         w2Hw==
+        Wed, 21 Dec 2022 00:59:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23B9D96
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:58:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671602329;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YqEHm3UzxG6ffY8Bp/o4RuRuWIrmYvg6Ffwy9vsFjIs=;
+        b=E3/zItJeJlcXFHx/EdhEM7KW2y0DC86XLbb/1walBUGnTXQllMmMY37QF1+7xZWF2u7sCS
+        qooK8sDc8jO9ntlX3ai2m7zlqhF4w6KY0OjYCVjd91w7MIBoCApg4PLq4ZJ0KsekvIp0+Y
+        kn404lB6STxXyrxO2IbDEGBpOx9pqtg=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-592-m92HwsDeNLeFk5yZALaiRQ-1; Wed, 21 Dec 2022 00:58:48 -0500
+X-MC-Unique: m92HwsDeNLeFk5yZALaiRQ-1
+Received: by mail-ot1-f71.google.com with SMTP id m12-20020a9d6acc000000b006707706d25dso8317545otq.22
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:58:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TaGVUxRUg0LoszCXjRP27hhaB8J+I3ZvWI15G+yWA+I=;
-        b=BZ8aCpUau5pKnJsKRVpL8c9+GgDVSMc4ZV2+pvfNh+AYU1bnleC5WHmqYSB+1a/keX
-         7n4Lk04KI+csqKpLgmob2qnGQJaOGKYpDIM5s11VwT8ybrSIoAYoDyOXy9q5LEkWgxme
-         L1lCv8BiuApKGmbhznWTaGc62h/xl4/cAudBW7R2/ySWhLJAhj349RjFeklbOrgnaCER
-         sdhyhiqFQyXiuvuOe3V9/XArSamqyl50MogOy67u72GKovwqSBXM2vImptT1JQczsyCe
-         qy9cqwnjtk1QwCe4csE9sbgegH8N0x19dI1uPTEJkNNaYJ1y4FwtdmEDb6DqnpClFKwg
-         6itQ==
-X-Gm-Message-State: AFqh2krExno0+Kb/S2vLALCG7egk1iZMnOWegunny6f4cDD0+Lynu3KQ
-        IWXK8RHazy5f6LXVaIo/41PU
-X-Google-Smtp-Source: AMrXdXtp5/WrpKvsBrj1r58d1R59LMAQOzJMUCEth4YEP8J7CqflCHtNTidWpMyzqLMFNwkCbCZ0kQ==
-X-Received: by 2002:a62:644b:0:b0:577:51b1:375e with SMTP id y72-20020a62644b000000b0057751b1375emr1211143pfb.26.1671602137937;
-        Tue, 20 Dec 2022 21:55:37 -0800 (PST)
-Received: from thinkpad ([117.217.177.7])
-        by smtp.gmail.com with ESMTPSA id o198-20020a62cdcf000000b00575d90636dcsm9616173pfg.6.2022.12.20.21.55.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 21:55:36 -0800 (PST)
-Date:   Wed, 21 Dec 2022 11:25:26 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Steev Klimaszewski <steev@kali.org>, andersson@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v3 06/15] arm64: dts: qcom: sc8280xp: Fix the base
- addresses of LLCC banks
-Message-ID: <20221221055526.GB2922@thinkpad>
-References: <20221219182958.476231-1-manivannan.sadhasivam@linaro.org>
- <20221219182958.476231-7-manivannan.sadhasivam@linaro.org>
- <CAKXuJqgL5GsyjaNpkeMf4=72sjw+6ytFUm+yt1WjLyoFLrgm3g@mail.gmail.com>
- <20221220095207.GA38609@thinkpad>
- <Y6JLV4XG/6xDFrN/@zn.tnic>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YqEHm3UzxG6ffY8Bp/o4RuRuWIrmYvg6Ffwy9vsFjIs=;
+        b=ykpQyWLv/sHqTHSXVMtkQ+GbkVTIRYfF+42sW0UUX2lNc+KdytOBgH2RM5QnshOlVE
+         atmyV6IUmzgDcOkTao0lPX9XvcIasnsBr3f+hHU4gFYMI0Kg6cN6ZCDdQuQXfttXy8R0
+         LLiIsU1gB+N7e1evDlmdhSUbO6euIBUv4MXG4Hyt+Az65aWBxKNNDyMvNcomlmw9xUZI
+         NRIayqAwGwHTt5kE9KEZ1p1ocJMz85xHChrAqeMQ9Nh0/GGgN6suOqrgT0Z0VfG0U23H
+         vNV6HPgpGTJg655Jnu7jsBN5CQJAm+4T6BpWahSM8EQ4IluXgA7wO3lOHVrDonDby/wH
+         vFAA==
+X-Gm-Message-State: AFqh2krWuCI2LjL52vesEfL1sHOcnfZQ5k6JxPtWhnkIp/q67THXdR07
+        EURlvO3hEY6MkAZKVZwYb2LRs4r86yeHST2PUxVC+TKjTchyMBqOxP+2E+2Ez7EOaYZdkGc1CgY
+        EIUr32KJlaBZPVjyzs16nM86zu9ASDtHYZ6GYgjdc
+X-Received: by 2002:a05:6870:ac21:b0:144:910f:43ea with SMTP id kw33-20020a056870ac2100b00144910f43eamr23559oab.140.1671602328022;
+        Tue, 20 Dec 2022 21:58:48 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsDR9nnF7mnDlflQ/HQ+MgFqmKyqDpmpzDNyhXa+P22bXXqLYMkGFpt1uwqUiJhWJY6UGD9PZR/L2LPB+ouxTY=
+X-Received: by 2002:a05:6870:ac21:b0:144:910f:43ea with SMTP id
+ kw33-20020a056870ac2100b00144910f43eamr23554oab.140.1671602327855; Tue, 20
+ Dec 2022 21:58:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y6JLV4XG/6xDFrN/@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221220140205.795115-1-lulu@redhat.com> <CACGkMEuJuUrA220XgHDOruK-aHWSfJ6mTaqNVQCAcOsPEwV91A@mail.gmail.com>
+In-Reply-To: <CACGkMEuJuUrA220XgHDOruK-aHWSfJ6mTaqNVQCAcOsPEwV91A@mail.gmail.com>
+From:   Cindy Lu <lulu@redhat.com>
+Date:   Wed, 21 Dec 2022 13:58:11 +0800
+Message-ID: <CACLfguUgsWrE+ZFxJYd-h81AvMQFio0-VU9oE0kpj7t5D2pJvg@mail.gmail.com>
+Subject: Re: [PATCH] vhost_vdpa: fix the compile issue in commit 881ac7d2314f
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 12:55:03AM +0100, Borislav Petkov wrote:
-> On Tue, Dec 20, 2022 at 03:22:07PM +0530, Manivannan Sadhasivam wrote:
-> > This is a genuine use-after-free bug that happens because the edac core frees
-> > the memory assigned to "llcc_driv_data" pointer that gets passed as "pvt_info".
-> > 
-> > Here, the LLCC driver is one creating the "qcom_llcc_edac" platform device and
-> > also allocating memory for "llcc_driv_data". But since during qcom_edac driver
-> > removal, we are just unregistering the driver and the platform device still
-> > stays around, the edac driver is not supposed to free any memory associated
-> > with the platform device.
-> 
-> If you mean
-> 
-> __edac_device_free_ctl_info()
-> 
-> it is very well supposed to free it as it allocates it in
-> edac_device_alloc_ctl_info().
-> 
-> If qcom_llcc_edac_probe() simply goes and assigns something of its own
-> to edev_ctl->pvt_info, then that driver gets to keep the pieces ofc.
-> 
+On Wed, 21 Dec 2022 at 11:23, Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Tue, Dec 20, 2022 at 10:02 PM Cindy Lu <lulu@redhat.com> wrote:
+> >
+> > The input of  vhost_vdpa_iotlb_unmap() was changed in 881ac7d2314f,
+> > But some function was not changed while calling this function.
+> > Add this change
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 881ac7d2314f ("vhost_vdpa: fix the crash in unmap a large memory")
+>
+> Is this commit merged into Linus tree?
+>
+> Btw, Michael, I'd expect there's a respin of the patch so maybe Cindy
+> can squash the fix into the new version?
+>
+> Thanks
+>
+This is not merged in linus tree, and this compile issue was hit in mst's tree
+should I send a new version squash the patch and the fix?
 
-Right. It is the issue of the qcom driver from the start.
+Thanks
+Cindy
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Cindy Lu <lulu@redhat.com>
+> > ---
+> >  drivers/vhost/vdpa.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> > index 46ce35bea705..ec32f785dfde 100644
+> > --- a/drivers/vhost/vdpa.c
+> > +++ b/drivers/vhost/vdpa.c
+> > @@ -66,8 +66,8 @@ static DEFINE_IDA(vhost_vdpa_ida);
+> >  static dev_t vhost_vdpa_major;
+> >
+> >  static void vhost_vdpa_iotlb_unmap(struct vhost_vdpa *v,
+> > -                                  struct vhost_iotlb *iotlb,
+> > -                                  u64 start, u64 last);
+> > +                                  struct vhost_iotlb *iotlb, u64 start,
+> > +                                  u64 last, u32 asid);
+> >
+> >  static inline u32 iotlb_to_asid(struct vhost_iotlb *iotlb)
+> >  {
+> > @@ -139,7 +139,7 @@ static int vhost_vdpa_remove_as(struct vhost_vdpa *v, u32 asid)
+> >                 return -EINVAL;
+> >
+> >         hlist_del(&as->hash_link);
+> > -       vhost_vdpa_iotlb_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
+> > +       vhost_vdpa_iotlb_unmap(v, &as->iotlb, 0ULL, 0ULL - 1, asid);
+> >         kfree(as);
+> >
+> >         return 0;
+> > --
+> > 2.34.3
+> >
+>
 
-Thanks,
-Mani
-
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
-
--- 
-மணிவண்ணன் சதாசிவம்
