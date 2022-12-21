@@ -2,152 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8A66531DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6056531D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbiLUNfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
+        id S230088AbiLUNei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiLUNfG (ORCPT
+        with ESMTP id S229476AbiLUNed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:35:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA66CE9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:34:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671629659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HWvv0yVxWiEaUy/PxGdRu5ElcF4XOZHCSmq8VghIbjU=;
-        b=MxuPqooZrJ+X+ulXXQPwktNKyqMK8NOjvBt18RiWnwazPjWTJZN+M1l9o7hmoX/4KfBo9w
-        0wF+OSwpJT2rJzYx2moD5axlGVfIk8KCHnisdaXc2QkBSHdKVSrKthpYcv/FcUOpNAC4e+
-        g1LblDJnRQnSqG14XAUFMLGvoqMiKbI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-186-ofb_y5lsNWK1E4oPCu4jSQ-1; Wed, 21 Dec 2022 08:34:18 -0500
-X-MC-Unique: ofb_y5lsNWK1E4oPCu4jSQ-1
-Received: by mail-wm1-f72.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso682478wml.9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:34:18 -0800 (PST)
+        Wed, 21 Dec 2022 08:34:33 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E593261C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:34:32 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id y25so23489822lfa.9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:34:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+0FXHdAxlQCKNpVHPu4ljr9mTHK7rsIQ0NRxjjSRv34=;
+        b=W8nt8VldUhaBpwI/xNMJ3Bxbtj6Nosqr6KDgWsdch+8IZSqSqqMTaIHnWaFZ6Ik3lG
+         jUspcRWQ/FbdttBiDW3CmDqHVPALZnU6spBvYOAsRCoYd204nS41d+2aI1Z7G8OyTyeN
+         1yhjSUiiWjVr2GvNfofsZtFpisNWasWGrkXUp5EJGq8IzdNNvJY3u0jv3NmJeyTZQcXU
+         CADPUL/7zTS0CnXrwJ4wVOjh7VCJzfQGoQ2d9AWYconnan31xUt4JbGw6troC/1P3i4g
+         OSz3JvS0WDWiKN3itScFH2OkQu6g8ywuS9aaKTHHIANJCWKwePlJxsqjLlN2uMPJ15rE
+         5AdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HWvv0yVxWiEaUy/PxGdRu5ElcF4XOZHCSmq8VghIbjU=;
-        b=jh/FrCIWDexzm0JMLQ4YsmhBXLUWmGuCZ1hO1dIelOnenPQxgFclHgCuZrzSK6tiFy
-         Ys5+3w6HRkeiW6I4BmEPDXo3OEo4fv+K+ZMh2l9JqmpqfRKDdjGPhQo3XXkd23sOFdBf
-         uLjobDqumPG7f6nRKyPrK5KCcir/RlYMYdgcFxQb6vxD2SNZrx9QwPEYhGJEwLL71bDT
-         jnNRBXHkhBI0b047tje+2x33SLnTMqF8NPQrHuTEzn/BKiayklM6DyWTjjKe3enRxVfj
-         4G2OEyYtDlVMm3vIZ3QwwHOLhzIcmhshbph6TC6zQsrI3p9DCLHJusF4FqOKDDCbaBmT
-         axZg==
-X-Gm-Message-State: AFqh2kqQT7H8fH433/qnr5ftXcgpWJqEajh8bVOl3aRrd6D+Zyzu9P7j
-        lbBTEQX9UN5yFV161ieAL5rRX3Ta28lzYi2mV0R/ivhKFmi1KSpAE1SzRPfIfmyCKM4ep90lhN3
-        4P3zsICh7HYwvNEZzm8QccrsF
-X-Received: by 2002:adf:d4ca:0:b0:242:1dd6:faa3 with SMTP id w10-20020adfd4ca000000b002421dd6faa3mr3206801wrk.23.1671629657455;
-        Wed, 21 Dec 2022 05:34:17 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXt32Wy1vsAsafJ8i+LX0v6mcat5HXfjOVBXGktQWG4rLGZHf1HuDcVnsImxNdMtavFxHzzoxQ==
-X-Received: by 2002:adf:d4ca:0:b0:242:1dd6:faa3 with SMTP id w10-20020adfd4ca000000b002421dd6faa3mr3206794wrk.23.1671629657255;
-        Wed, 21 Dec 2022 05:34:17 -0800 (PST)
-Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600016c900b002425dc49024sm15366015wrf.43.2022.12.21.05.34.16
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+0FXHdAxlQCKNpVHPu4ljr9mTHK7rsIQ0NRxjjSRv34=;
+        b=sjWPxqtauqVD7qkgwZeliVllmJ2PnWOHp9RMcZGRVbzUQcb9zNdjNknvus7f87xqaW
+         +CI0kQdo7Wl+4DaxNJRuQ5iTBHOUZ3OQLADtAgSm8HuOXfIOCULD3SQZWIar0NTvfsx2
+         O9cvDy0aPhz2fCu2wpK8Lmnw8ZxAWiqzLAXBflS8ZIICeYnAerjMZVUUld1YIaQ3EoKS
+         8FM51pisQDcMDxY5RMoKTbqiP9ZB4qko7o8T/tPaYbO3yqbcXfh7v5ddrm/CMYAslLF9
+         3rw67whnhTVQ2E6IpEN/WIxt0Z6CvERMNJvOPxIlqel3rQhh84rTUCRzQroOuyuGubeh
+         2cRg==
+X-Gm-Message-State: AFqh2kqTn7gIhzbnI53bSbpp+1vc3odJjzzW0APrIR1ezBtf5BEoVuIp
+        25qTcWZbk+fpW0MG7nUGcjmFUA==
+X-Google-Smtp-Source: AMrXdXviJW015I7NYa4eijEHW4N5KVbIX+8IA0aNfy7QoBevqLdLiSjSiO9lAKC34bmkVJvY/Lbmtg==
+X-Received: by 2002:a19:f705:0:b0:4be:a4cb:be37 with SMTP id z5-20020a19f705000000b004bea4cbbe37mr569117lfe.15.1671629670779;
+        Wed, 21 Dec 2022 05:34:30 -0800 (PST)
+Received: from mutt (c-e429e555.07-21-73746f28.bbcust.telenor.se. [85.229.41.228])
+        by smtp.gmail.com with ESMTPSA id w23-20020a19c517000000b004b5701b5337sm1843649lfe.104.2022.12.21.05.34.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 05:34:16 -0800 (PST)
-Date:   Wed, 21 Dec 2022 14:34:14 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, eperezma@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] vdpa_sim: support vendor satistics
-Message-ID: <20221221133414.teizf56exrf5tqvj@sgarzare-redhat>
-References: <20221221061652.15202-1-jasowang@redhat.com>
- <20221221061652.15202-4-jasowang@redhat.com>
+        Wed, 21 Dec 2022 05:34:30 -0800 (PST)
+Date:   Wed, 21 Dec 2022 14:34:28 +0100
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Ian Kent <raven@themaw.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Eric Sandeen <sandeen@sandeen.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Rick Lindsley <ricklind@linux.vnet.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        elver@google.com, arnd@arndb.de
+Subject: Re: [PATCH 1/2] kernfs: dont take i_lock on inode attr read
+Message-ID: <20221221133428.GE69385@mutt>
+References: <166606025456.13363.3829702374064563472.stgit@donald.themaw.net>
+ <166606036215.13363.1288735296954908554.stgit@donald.themaw.net>
+ <Y2BMonmS0SdOn5yh@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221221061652.15202-4-jasowang@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y2BMonmS0SdOn5yh@slm.duckdns.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 02:16:51PM +0800, Jason Wang wrote:
+On 2022-10-31 12:30, Tejun Heo wrote:
+> On Tue, Oct 18, 2022 at 10:32:42AM +0800, Ian Kent wrote:
+> > The kernfs write lock is held when the kernfs node inode attributes
+> > are updated. Therefore, when either kernfs_iop_getattr() or
+> > kernfs_iop_permission() are called the kernfs node inode attributes
+> > won't change.
+> > 
+> > Consequently concurrent kernfs_refresh_inode() calls always copy the
+> > same values from the kernfs node.
+> > 
+> > So there's no need to take the inode i_lock to get consistent values
+> > for generic_fillattr() and generic_permission(), the kernfs read lock
+> > is sufficient.
+> > 
+> > Signed-off-by: Ian Kent <raven@themaw.net>
+> 
+> Acked-by: Tejun Heo <tj@kernel.org>
 
-Little typo in the title s/satistics/statistics
+Hi,
 
->This patch adds a new config ops callback to allow individual
->simulator to implement the vendor stats callback.
->
->Signed-off-by: Jason Wang <jasowang@redhat.com>
->---
-> drivers/vdpa/vdpa_sim/vdpa_sim.c | 13 +++++++++++++
-> drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 +++
-> 2 files changed, 16 insertions(+)
->
->diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->index 55aaa023a6e2..02e892f819e7 100644
->--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
->+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->@@ -426,6 +426,18 @@ static int vdpasim_get_vq_state(struct vdpa_device *vdpa, u16 idx,
-> 	return 0;
-> }
->
->+static int vdpasim_get_vq_stats(struct vdpa_device *vdpa, u16 idx,
->+				struct sk_buff *msg,
->+				struct netlink_ext_ack *extack)
->+{
->+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
->+
->+	if (vdpasim->dev_attr.get_stats)
->+		return vdpasim->dev_attr.get_stats(vdpasim, idx,
->+						   msg, extack);
->+	return -EINVAL;
+Building an allmodconfig arm64 kernel on yesterdays next-20221220 and
+booting that in qemu I see the following "BUG: KCSAN: data-race in
+set_nlink / set_nlink".
 
-Maybe -EOPNOTSUPP is better when the device doesn't support it.
-Like we do in vendor_stats_fill() in drivers/vdpa/vdpa.c
 
->+}
->+
-> static u32 vdpasim_get_vq_align(struct vdpa_device *vdpa)
-> {
-> 	return VDPASIM_QUEUE_ALIGN;
->@@ -710,6 +722,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
-> 	.set_vq_ready           = vdpasim_set_vq_ready,
-> 	.get_vq_ready           = vdpasim_get_vq_ready,
-> 	.set_vq_state           = vdpasim_set_vq_state,
->+	.get_vendor_vq_stats    = vdpasim_get_vq_stats,
+==================================================================
+[ 1540.388669][  T123] BUG: KCSAN: data-race in set_nlink / set_nlink
+[ 1540.392779][  T123] 
+[ 1540.394302][  T123] write to 0xffff00000adcc3e4 of 4 bytes by task 126 on cpu 0:
+[ 1540.398828][ T123] set_nlink (/home/anders/src/kernel/next/fs/inode.c:371) 
+[ 1540.401609][ T123] kernfs_refresh_inode (/home/anders/src/kernel/next/fs/kernfs/inode.c:181) 
+[ 1540.404925][ T123] kernfs_iop_getattr (/home/anders/src/kernel/next/fs/kernfs/inode.c:194) 
+[ 1540.408088][ T123] vfs_getattr_nosec (/home/anders/src/kernel/next/fs/stat.c:133) 
+[ 1540.411334][ T123] vfs_statx (/home/anders/src/kernel/next/fs/stat.c:170) 
+[ 1540.414224][ T123] vfs_fstatat (/home/anders/src/kernel/next/fs/stat.c:276) 
+[ 1540.417166][ T123] __do_sys_newfstatat (/home/anders/src/kernel/next/fs/stat.c:446) 
+[ 1540.420539][ T123] __arm64_sys_newfstatat (/home/anders/src/kernel/next/fs/stat.c:440 /home/anders/src/kernel/next/fs/stat.c:440) 
+[ 1540.424003][ T123] el0_svc_common.constprop.0 (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:38 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:52 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:142) 
+[ 1540.427648][ T123] do_el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:197) 
+[ 1540.430378][ T123] el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:133 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:142 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:638) 
+[ 1540.433053][ T123] el0t_64_sync_handler (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:656) 
+[ 1540.436421][ T123] el0t_64_sync (/home/anders/src/kernel/next/arch/arm64/kernel/entry.S:584) 
+[ 1540.439303][  T123] 
+[ 1540.440828][  T123] 1 lock held by systemd-udevd/126:
+[ 1540.444055][ T123] #0: ffff00000609b960 (&root->kernfs_rwsem){++++}-{3:3}, at: kernfs_iop_getattr (/home/anders/src/kernel/next/fs/kernfs/inode.c:193) 
+[ 1540.450699][  T123] irq event stamp: 185034
+[ 1540.453373][ T123] hardirqs last enabled at (185034): seqcount_lockdep_reader_access (/home/anders/src/kernel/next/mm/page_alloc.c:5302) 
+[ 1540.460087][ T123] hardirqs last disabled at (185033): seqcount_lockdep_reader_access (/home/anders/src/kernel/next/include/linux/seqlock.h:103 (discriminator 4)) 
+[ 1540.466686][ T123] softirqs last enabled at (185001): fpsimd_restore_current_state (/home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:264 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1780) 
+[ 1540.473310][ T123] softirqs last disabled at (184999): fpsimd_restore_current_state (/home/anders/src/kernel/next/include/linux/bottom_half.h:20 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:242 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1773) 
+[ 1540.479872][  T123] 
+[ 1540.481406][  T123] read to 0xffff00000adcc3e4 of 4 bytes by task 123 on cpu 0:
+[ 1540.485893][ T123] set_nlink (/home/anders/src/kernel/next/fs/inode.c:368) 
+[ 1540.488663][ T123] kernfs_refresh_inode (/home/anders/src/kernel/next/fs/kernfs/inode.c:181) 
+[ 1540.491961][ T123] kernfs_iop_permission (/home/anders/src/kernel/next/fs/kernfs/inode.c:290) 
+[ 1540.495260][ T123] inode_permission (/home/anders/src/kernel/next/fs/namei.c:458 /home/anders/src/kernel/next/fs/namei.c:525) 
+[ 1540.498450][ T123] link_path_walk (/home/anders/src/kernel/next/fs/namei.c:1715 /home/anders/src/kernel/next/fs/namei.c:2262) 
+[ 1540.501552][ T123] path_lookupat (/home/anders/src/kernel/next/fs/namei.c:2473 (discriminator 2)) 
+[ 1540.504592][ T123] filename_lookup (/home/anders/src/kernel/next/fs/namei.c:2503) 
+[ 1540.507740][ T123] user_path_at_empty (/home/anders/src/kernel/next/fs/namei.c:2876) 
+[ 1540.511010][ T123] do_readlinkat (/home/anders/src/kernel/next/fs/stat.c:477) 
+[ 1540.514097][ T123] __arm64_sys_readlinkat (/home/anders/src/kernel/next/fs/stat.c:504 /home/anders/src/kernel/next/fs/stat.c:501 /home/anders/src/kernel/next/fs/stat.c:501) 
+[ 1540.517598][ T123] el0_svc_common.constprop.0 (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:38 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:52 /home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:142) 
+[ 1540.521319][ T123] do_el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/syscall.c:197) 
+[ 1540.524125][ T123] el0_svc (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:133 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:142 /home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:638) 
+[ 1540.526795][ T123] el0t_64_sync_handler (/home/anders/src/kernel/next/arch/arm64/kernel/entry-common.c:656) 
+[ 1540.530224][ T123] el0t_64_sync (/home/anders/src/kernel/next/arch/arm64/kernel/entry.S:584) 
+[ 1540.533176][  T123] 
+[ 1540.534710][  T123] 1 lock held by systemd-udevd/123:
+[ 1540.537977][ T123] #0: ffff00000609b960 (&root->kernfs_rwsem){++++}-{3:3}, at: kernfs_iop_permission (/home/anders/src/kernel/next/fs/kernfs/inode.c:289) 
+[ 1540.544892][  T123] irq event stamp: 216564
+[ 1540.547603][ T123] hardirqs last enabled at (216564): seqcount_lockdep_reader_access (/home/anders/src/kernel/next/mm/page_alloc.c:5302) 
+[ 1540.554368][ T123] hardirqs last disabled at (216563): seqcount_lockdep_reader_access (/home/anders/src/kernel/next/include/linux/seqlock.h:103 (discriminator 4)) 
+[ 1540.561107][ T123] softirqs last enabled at (216533): fpsimd_restore_current_state (/home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:264 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1780) 
+[ 1540.567833][ T123] softirqs last disabled at (216531): fpsimd_restore_current_state (/home/anders/src/kernel/next/include/linux/bottom_half.h:20 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:242 /home/anders/src/kernel/next/arch/arm64/kernel/fpsimd.c:1773) 
+[ 1540.574496][  T123] 
+[ 1540.576050][  T123] Reported by Kernel Concurrency Sanitizer on:
+[ 1540.587925][  T123] Hardware name: linux,dummy-virt (DT)
+[ 1540.591282][  T123] ==================================================================
 
-Should we add this callback also in vdpasim_batch_config_ops?
 
-Thanks,
-Stefano
+Reverting this patch I don't see the data race anymore.
 
-> 	.get_vq_state           = vdpasim_get_vq_state,
-> 	.get_vq_align           = vdpasim_get_vq_align,
-> 	.get_vq_group           = vdpasim_get_vq_group,
->diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->index 51c070a543f1..d2a08c0abad7 100644
->--- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
->+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->@@ -48,6 +48,9 @@ struct vdpasim_dev_attr {
-> 	work_func_t work_fn;
-> 	void (*get_config)(struct vdpasim *vdpasim, void *config);
-> 	void (*set_config)(struct vdpasim *vdpasim, const void *config);
->+	int (*get_stats)(struct vdpasim *vdpasim, u16 idx,
->+			 struct sk_buff *msg,
->+			 struct netlink_ext_ack *extack);
-> };
->
-> /* State of each vdpasim device */
->-- 
->2.25.1
->
-
+Cheers,
+Anders
