@@ -2,76 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FD0652F34
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D401652F38
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbiLUKPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 05:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S234471AbiLUKQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 05:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234699AbiLUKOO (ORCPT
+        with ESMTP id S234562AbiLUKQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 05:14:14 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951A8192A0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 02:13:48 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BFA506B60E;
-        Wed, 21 Dec 2022 10:13:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1671617626; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xRK2WpHlDuntqBexClMCaSFr+ln4QeiMCHpmknDYBVg=;
-        b=JGh5PXoBKrDpalAOzMiFyiX++lOLkr/pOyJSalZN7gi5sTSszEp7HPqx91LR1GqbDm89JX
-        qr3BbACT+QNHMiCnBzFLOb+wZAcC/yHyPxpk70xjaEvrh1LmTAwQvcLYJR2tjMZJUIa3Iz
-        vnSRoGPM83qvN2SBpR0LZ8GWue9ftRU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1671617626;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xRK2WpHlDuntqBexClMCaSFr+ln4QeiMCHpmknDYBVg=;
-        b=smHsCkbzZGfCQGZgHFE9Wr8mgjys3lGM+QBpPciU6ebp+SWpdcoWH/CGb/RBU4LSNzyshJ
-        OT5KR8tJpGluhGAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 973C113913;
-        Wed, 21 Dec 2022 10:13:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tfbyI1rcomPZHwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 21 Dec 2022 10:13:46 +0000
-Message-ID: <ee59de2d-6649-ad89-bf2f-c1c287221452@suse.de>
-Date:   Wed, 21 Dec 2022 11:13:46 +0100
+        Wed, 21 Dec 2022 05:16:03 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E312BFC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 02:15:45 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id c17so21259732edj.13
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 02:15:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s8TQ65XghkOPiAq/wiBW7MGAtx2Yz5vWTOYzTpQiFwY=;
+        b=VgWqM7n/+2TECRS+UTktIX1FMswAitsWrjyjPRSkEMnUUqIGIPghBosp75x9v8x7OG
+         MeR+gRg/9fWOhzwRKNBW3/n0EH8yiFVuqB8JH5/jj0U1PFl0hecohvgitD8RbHyusIG7
+         i2brmILMQgvdZYi+hiWWF1137V78NczGOEqQA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s8TQ65XghkOPiAq/wiBW7MGAtx2Yz5vWTOYzTpQiFwY=;
+        b=DqMQoXatGbQh/2CP2fwypxI4gE+DvQ7kAh7taU/8Etd8eUYTT3jd1d4RlFgc+k58P2
+         g34S4cfzgoiwLNP0a8bYmznFHw7mNCbXIrC027WlzMAScA+JBr9K5C+2I7uw/IoynCRm
+         6gAq469MU/leoNCU63VjyEsN2QEPpaTUD+2qPPSJAQGijrqzY4wRWgzE9GDQBuMedv+x
+         564fi83XA2YQWBD56d8PqpFKjAPNsp2VxSu5gvQ0iI4XKngTeVAnOJuAdFG8VdmsDDl6
+         0V4opmngSiKEqCW3ZTPpsBftJk29BLt3qgywDdrCHsLtDeFrKMO0CYlmatoE+m5UplVJ
+         7dkg==
+X-Gm-Message-State: AFqh2krOUGy7FLi0D0D0NyRfUOH+WxUvHPGHHgpLn7N0vEW1i19DDQQo
+        AxIBPsmMjGSMpcTGjADWtzlVMcxZ1Q6RAAwuts8=
+X-Google-Smtp-Source: AMrXdXtX8WKMYQWAG6na2BVhiJzYxEfsqA2gp4cThpQXe9mYmybIpM3Wr3K0cRBMA96HWT3TwfQncQ==
+X-Received: by 2002:a05:6402:40c5:b0:473:ae62:40d0 with SMTP id z5-20020a05640240c500b00473ae6240d0mr6025354edb.7.1671617744514;
+        Wed, 21 Dec 2022 02:15:44 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:39e5:d0e8:4943:9f63])
+        by smtp.gmail.com with ESMTPSA id o15-20020aa7c7cf000000b0046f77031d40sm6680086eds.10.2022.12.21.02.15.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 02:15:43 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 21 Dec 2022 11:15:14 +0100
+Subject: [PATCH v3] USB: Improve usb_fill_* documentation
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 06/10] drm: Remove usage of deprecated DRM_DEBUG_DRIVER
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Siddh Raman Pant <code@siddh.me>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <cover.1671566741.git.code@siddh.me>
- <4d1acd84e914bafe491cfb42e7adab32d41ca0ab.1671566741.git.code@siddh.me>
- <877cyl2i0f.fsf@intel.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <877cyl2i0f.fsf@intel.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------Zigq97ZM8q6o60XdUzdO1wYX"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221220-usb-dmadoc-v3-0-6009f4d27631@chromium.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4774; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=0PXjFPGPwH2AHv79/k4M21SMY9pAk4iVw/gw7Yt85yU=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjoty2Nfhz5hV1squR5H/i2T+GfYp2ZQ7DUFsziPez
+ ExeaB6uJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY6LctgAKCRDRN9E+zzrEiAoYD/
+ 4gt7LATKt7Ac0fAFxGLSQ97lUhoz6fjFk7pf8W3JLm3+6T6v309U7ppiUe8iS2RVpjKMQu+jkIe9VB
+ WnQBXuFIqr/gNjNznMgFaCF+J/gmT2EEaCAK2w0Tgf/Vx+1TV2LsnrN/08yUzLLHzhyA9Td8Hlbm6w
+ TOSa50No/yR1RxahaNsDkbaYjspJHFtlyktb1sPA7xFxTvtQ/QW2Iouk0eRM7LYoqtz8LsM5crftO3
+ sP7TihCemyoodP8c73fGNXHIC6no/YSqqTwfoUTiRsuLj4rjquaHr93PbWT8o2Slr0O9GWscNsAHDk
+ xRZ8C+wNKSi+2KXFpMbmQZmR+YDrMrKZc5snwrcTOlbHvYYytGqfd/z4uqHhFqw7gdjaJl7bhMmgfk
+ ln4ma0C+qUwn3D4ZC2qK+D+7zK7PHtwXnPDRzpCzuhyCLUWy3Ih95dWKeIr+d4cnfz3+8HdzcoY7Li
+ 9z2RY5CCCP7J8ps2NELSdcgTTfKd/S/DrUL469D+fEvRyrN7DzqouPjL7VFEStXbCOTGlF+QWAzRBr
+ cmqlvIaImxhgm+6+i3E6nEfa9NbUJgKDozDlEHjJZU8o7r1fCwSC9MpQi3pAN+tXn+Q2sQ4GkLKZF5
+ Hg8IJP40VRCFqTE+6QlGBBjUCFXN62Jd6dEy33DCVZLJ6Cmy83pkYNmXKSRg==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,116 +86,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Zigq97ZM8q6o60XdUzdO1wYX
-Content-Type: multipart/mixed; boundary="------------48zOyBssQtBr0tbS9sWZwF04";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Jani Nikula <jani.nikula@linux.intel.com>,
- Siddh Raman Pant <code@siddh.me>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>
-Cc: linux-kernel <linux-kernel@vger.kernel.org>,
- dri-devel <dri-devel@lists.freedesktop.org>
-Message-ID: <ee59de2d-6649-ad89-bf2f-c1c287221452@suse.de>
-Subject: Re: [PATCH 06/10] drm: Remove usage of deprecated DRM_DEBUG_DRIVER
-References: <cover.1671566741.git.code@siddh.me>
- <4d1acd84e914bafe491cfb42e7adab32d41ca0ab.1671566741.git.code@siddh.me>
- <877cyl2i0f.fsf@intel.com>
-In-Reply-To: <877cyl2i0f.fsf@intel.com>
+Document the transfer buffer requirement. That is, the buffer must be
+DMAble - otherwise data corruption might occur.
 
---------------48zOyBssQtBr0tbS9sWZwF04
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+USB: Improve usb_fill_* documentation
 
-SGkNCg0KQW0gMjEuMTIuMjIgdW0gMTE6MDAgc2NocmllYiBKYW5pIE5pa3VsYToNCj4gT24g
-V2VkLCAyMSBEZWMgMjAyMiwgU2lkZGggUmFtYW4gUGFudCA8Y29kZUBzaWRkaC5tZT4gd3Jv
-dGU6DQo+PiBkcm1fcHJpbnQuaCBzYXlzIERSTV9ERUJVR19EUklWRVIgaXMgZGVwcmVjYXRl
-ZC4NCj4+IFRodXMsIHVzZSBuZXdlciBkcm1fZGJnX2RyaXZlcigpLg0KPj4NCj4+IEFsc28g
-Zml4IHRoZSBkZXByZWNhdGlvbiBjb21tZW50IGluIGRybV9wcmludC5oIHdoaWNoDQo+PiBt
-ZW50aW9ucyBkcm1fZGJnKCkgaW5zdGVhZCBvZiBkcm1fZGJnX2RyaXZlcigpLg0KPj4NCj4+
-IFNpZ25lZC1vZmYtYnk6IFNpZGRoIFJhbWFuIFBhbnQgPGNvZGVAc2lkZGgubWU+DQo+PiAt
-LS0NCj4+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9taXBpX2RiaS5jIHwgMTAgKysrKystLS0t
-LQ0KPj4gICBpbmNsdWRlL2RybS9kcm1fcHJpbnQuaCAgICAgICAgfCAgMiArLQ0KPj4gICAy
-IGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkNCj4+DQo+
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9taXBpX2RiaS5jIGIvZHJpdmVy
-cy9ncHUvZHJtL2RybV9taXBpX2RiaS5jDQo+PiBpbmRleCAyNGFmNTA3YmI2ODcuLjZhZDM5
-OWY2YWIwMyAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fbWlwaV9kYmku
-Yw0KPj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2RybV9taXBpX2RiaS5jDQo+PiBAQCAtNjks
-MTEgKzY5LDExIEBADQo+PiAgICNkZWZpbmUgTUlQSV9EQklfREVCVUdfQ09NTUFORChjbWQs
-IGRhdGEsIGxlbikgXA0KPj4gICAoeyBcDQo+PiAgIAlpZiAoIWxlbikgXA0KPj4gLQkJRFJN
-X0RFQlVHX0RSSVZFUigiY21kPSUwMnhcbiIsIGNtZCk7IFwNCj4+ICsJCWRybV9kYmdfZHJp
-dmVyKE5VTEwsICJjbWQ9JTAyeFxuIiwgY21kKTsgXA0KPj4gICAJZWxzZSBpZiAobGVuIDw9
-IDMyKSBcDQo+PiAtCQlEUk1fREVCVUdfRFJJVkVSKCJjbWQ9JTAyeCwgcGFyPSUqcGhcbiIs
-IGNtZCwgKGludClsZW4sIGRhdGEpO1wNCj4+ICsJCWRybV9kYmdfZHJpdmVyKE5VTEwsICJj
-bWQ9JTAyeCwgcGFyPSUqcGhcbiIsIGNtZCwgKGludClsZW4sIGRhdGEpO1wNCj4+ICAgCWVs
-c2UgXA0KPj4gLQkJRFJNX0RFQlVHX0RSSVZFUigiY21kPSUwMngsIGxlbj0lenVcbiIsIGNt
-ZCwgbGVuKTsgXA0KPj4gKwkJZHJtX2RiZ19kcml2ZXIoTlVMTCwgImNtZD0lMDJ4LCBsZW49
-JXp1XG4iLCBjbWQsIGxlbik7IFwNCj4+ICAgfSkNCj4+ICAgDQo+PiAgIHN0YXRpYyBjb25z
-dCB1OCBtaXBpX2RiaV9kY3NfcmVhZF9jb21tYW5kc1tdID0gew0KPj4gQEAgLTYzMiw3ICs2
-MzIsNyBAQCBib29sIG1pcGlfZGJpX2Rpc3BsYXlfaXNfb24oc3RydWN0IG1pcGlfZGJpICpk
-YmkpDQo+PiAgIAkgICAgRENTX1BPV0VSX01PREVfRElTUExBWV9OT1JNQUxfTU9ERSB8IERD
-U19QT1dFUl9NT0RFX1NMRUVQX01PREUpKQ0KPj4gICAJCXJldHVybiBmYWxzZTsNCj4+ICAg
-DQo+PiAtCURSTV9ERUJVR19EUklWRVIoIkRpc3BsYXkgaXMgT05cbiIpOw0KPj4gKwlkcm1f
-ZGJnX2RyaXZlcihOVUxMLCAiRGlzcGxheSBpcyBPTlxuIik7DQo+PiAgIA0KPj4gICAJcmV0
-dXJuIHRydWU7DQo+PiAgIH0NCj4+IEBAIC0xMTY4LDcgKzExNjgsNyBAQCBpbnQgbWlwaV9k
-Ymlfc3BpX2luaXQoc3RydWN0IHNwaV9kZXZpY2UgKnNwaSwgc3RydWN0IG1pcGlfZGJpICpk
-YmksDQo+PiAgIA0KPj4gICAJbXV0ZXhfaW5pdCgmZGJpLT5jbWRsb2NrKTsNCj4+ICAgDQo+
-PiAtCURSTV9ERUJVR19EUklWRVIoIlNQSSBzcGVlZDogJXVNSHpcbiIsIHNwaS0+bWF4X3Nw
-ZWVkX2h6IC8gMTAwMDAwMCk7DQo+PiArCWRybV9kYmdfZHJpdmVyKE5VTEwsICJTUEkgc3Bl
-ZWQ6ICV1TUh6XG4iLCBzcGktPm1heF9zcGVlZF9oeiAvIDEwMDAwMDApOw0KPj4gICANCj4+
-ICAgCXJldHVybiAwOw0KPj4gICB9DQo+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kcm0vZHJt
-X3ByaW50LmggYi9pbmNsdWRlL2RybS9kcm1fcHJpbnQuaA0KPj4gaW5kZXggNTM3MDJkODMw
-MjkxLi4xMDI2MWZhZWM4YjYgMTAwNjQ0DQo+PiAtLS0gYS9pbmNsdWRlL2RybS9kcm1fcHJp
-bnQuaA0KPj4gKysrIGIvaW5jbHVkZS9kcm0vZHJtX3ByaW50LmgNCj4+IEBAIC02MTQsNyAr
-NjE0LDcgQEAgdm9pZCBfX2RybV9lcnIoY29uc3QgY2hhciAqZm9ybWF0LCAuLi4pOw0KPj4g
-ICAjZGVmaW5lIERSTV9ERUJVRyhmbXQsIC4uLikJCQkJCQlcDQo+PiAgIAlfX2RybV9kYmco
-RFJNX1VUX0NPUkUsIGZtdCwgIyNfX1ZBX0FSR1NfXykNCj4+ICAgDQo+PiAtLyogTk9URTog
-dGhpcyBpcyBkZXByZWNhdGVkIGluIGZhdm9yIG9mIGRybV9kYmcoTlVMTCwgLi4uKS4gKi8N
-Cj4+ICsvKiBOT1RFOiB0aGlzIGlzIGRlcHJlY2F0ZWQgaW4gZmF2b3Igb2YgZHJtX2RiZ19k
-cml2ZXIoTlVMTCwgLi4uKS4gKi8NCj4gDQo+IFdheSBiYWNrIHRoZSBpZGVhIHdhcyB0byBt
-YWtlIHRoZSBzaG9ydGVyIGRybV9kYmcoKSB0aGUgZHJpdmVyIGRlYnVnLA0KPiBhbmQgZHJt
-X2RiZ19jb3JlKCkgdGhlIGRybSBjb3JlIGRlYnVnLCBiZWNhdXNlIHRoZSBmb3JtZXIgdmFz
-dGx5DQo+IG91dG51bWJlcnMgdGhlIHRoZSBsYXR0ZXIuDQo+IA0KPiBJIGRvbid0IGtub3cg
-aWYgdGhhdCBjaGFuZ2VkIHdpdGggdGhlIGR5bmRiZyBzdHVmZi4NCg0KSSd2ZSByZWNlbnRs
-eSBncmVwcGVkIGZvciB0aGVzZSBtYWNyb3MgYW5kIG5vdGhpbmcgdXNlcyBkcm1fZGJnX2Ry
-aXZlcigpIA0KZGlyZWN0bHkuDQoNCkkgYWxzbyB3b25kZXJlZCB3aGV0aGVyIHRoZSBkcml2
-ZXIgZGVidWcgbWFjcm8gbWFrZXMgbXVjaCBzZW5zZS4gRm9yIA0KZXhhbXBsZSwgaWYgYSBk
-cml2ZXIgaW1wbGVtZW50cyBpdHMgb3duIGF0b21pYyBoZWxwZXJzLCBpdCdzIG11Y2ggbW9y
-ZSANCnVzZWZ1bCB0byB1c2UgZHJtX2RiZ19rbXMoKSB3aXRoaW4gdGhvc2UgZnVuY3Rpb25z
-LiBJZiBlbmFibGVkLCB0aGVpciANCm91dHB1dCB3b3VsZCB0aGVuIGJsZW5kIGludG8gdGhl
-IG92ZXJhbGwgS01TLXJlbGF0ZWQgZGVidWdnaW5nLiANCmRybV9kYmcvZHJtX2RiZ19kcml2
-ZXIoKSBhcHBlYXJzIHRvIGJlIG1vc3RseSB1c2VmdWwgZm9yIGluaXQgYW5kIHN0YXR1cyAN
-CnJlcG9ydGluZy4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gDQo+IEJSLA0K
-PiBKYW5pLg0KPiANCj4gDQo+PiAgICNkZWZpbmUgRFJNX0RFQlVHX0RSSVZFUihmbXQsIC4u
-LikJCQkJCVwNCj4+ICAgCV9fZHJtX2RiZyhEUk1fVVRfRFJJVkVSLCBmbXQsICMjX19WQV9B
-UkdTX18pDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIg
-RGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZl
-bGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8
-cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+After trying to "cleanup" the uvc code, I was patiently explained about
+the requirements of the urb transfer buffers.
 
---------------48zOyBssQtBr0tbS9sWZwF04--
+Lets make this explicit, so other developers do not make the same mistake.
 
---------------Zigq97ZM8q6o60XdUzdO1wYX
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Randy Dunlap <rdunlap@infradead.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+To: Christoph Hellwig <hch@lst.de>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v3:
+- Improve commit message. Thanks Bagas!
+- Improve field description. Thanks Alan!
+- Link to v2: https://lore.kernel.org/r/20221220-usb-dmadoc-v2-0-4dd4f198113e@chromium.org
 
------BEGIN PGP SIGNATURE-----
+Changes in v2:
+- s/allocatiing/allocating/ Thanks Randy
+- Link to v1: https://lore.kernel.org/r/20221220-usb-dmadoc-v1-0-28386d2eb6cd@chromium.org
+---
+ include/linux/usb.h | 27 +++++++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmOi3FoFAwAAAAAACgkQlh/E3EQov+A5
-OQ/9EFVK4a9yDrMcMhW5MeTfBVlRaz2c+MIzTbbUwBtVhmmAzlbaBaobEGAOSD5V043gfo0ALuUo
-Z+GT5bUdRip5ipbuqebZmusS6YRFzq/d75Bu8VWdUWfqajYJ+FjQdMo1YufS2Yqb+VcST9RF6zqw
-WUjBYJJQVKJPnXnkuUHt/I/7DyefMLpr9T4mOl2jbFTEyRCFi2/ecNUQCd99wRGZH7IVNaxDjOpR
-h1QgVw7jVc8iBZ0MxzvOwBtTj+9dkV0BEN/k5tnTEjKKEQ5Dt0PdJKEeoAOiQ0oK8xyfexcKbbFs
-7FbvVmQl0rbVk7ghTrX8AzsGT+ddXb5nicsUvkSowus4j1mfWnFSxe7797RYgUB5pz+zBInTp1x6
-Kkrvs2/z8gls6GjC57h9WumHtAu6Mi3ieef4zelmbDJYtHmnfjhiqAJ5c2Dvy+x0RLc0Q3lHa8BS
-QkNHMvl3mh4CCI++JRxsarCgGWKtTIp6BVPawvi7ex9uwd9h25S0yULE75RICVkvlzuYelcXhFNo
-dKMHK5JOOjMDCW2P/pnVctNVvjghZA8TE57wUJlJJL4DYjMsvao+M05hWTYBU86MdfGRDs7saa8R
-kVdLClfX1vwO6u1I/0OytW1IEZsllGYhmkKIih/v+cJW47UMfvLvIRasmwE6Yx2rPxKnUIQ/cN+v
-BBo=
-=+P/i
------END PGP SIGNATURE-----
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 7d5325d47c45..06cde9ddca97 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1626,14 +1626,25 @@ struct urb {
+  * @urb: pointer to the urb to initialize.
+  * @dev: pointer to the struct usb_device for this urb.
+  * @pipe: the endpoint pipe
+- * @setup_packet: pointer to the setup_packet buffer
+- * @transfer_buffer: pointer to the transfer buffer
++ * @setup_packet: pointer to the setup_packet buffer. The buffer must be
++ *	suitable for DMA.
++ * @transfer_buffer: pointer to the transfer buffer. The buffer must be
++ *	suitable for DMA.
+  * @buffer_length: length of the transfer buffer
+  * @complete_fn: pointer to the usb_complete_t function
+  * @context: what to set the urb context to.
+  *
+  * Initializes a control urb with the proper information needed to submit
+  * it to a device.
++ *
++ * The transfer buffer and the setup_packet buffer will most likely be filled
++ * via DMA. The simplest way to get a buffer that can be DMAed to is
++ * allocating it via kmalloc() or equivalent, even for very small buffers.
++ * If the buffers are embedded in a bigger structure, there is a risk that
++ * the buffer itself, the previous field and/or the next field are corrupted
++ * due to cache incoherencies; or slowed down if they are evicted from the
++ * cache.
++ *
+  */
+ static inline void usb_fill_control_urb(struct urb *urb,
+ 					struct usb_device *dev,
+@@ -1658,13 +1669,17 @@ static inline void usb_fill_control_urb(struct urb *urb,
+  * @urb: pointer to the urb to initialize.
+  * @dev: pointer to the struct usb_device for this urb.
+  * @pipe: the endpoint pipe
+- * @transfer_buffer: pointer to the transfer buffer
++ * @transfer_buffer: pointer to the transfer buffer. The buffer must be
++ *	suitable for DMA.
+  * @buffer_length: length of the transfer buffer
+  * @complete_fn: pointer to the usb_complete_t function
+  * @context: what to set the urb context to.
+  *
+  * Initializes a bulk urb with the proper information needed to submit it
+  * to a device.
++ *
++ * Please refer to usb_fill_control_urb() for a description of the
++ * requirements for transfer_buffer.
+  */
+ static inline void usb_fill_bulk_urb(struct urb *urb,
+ 				     struct usb_device *dev,
+@@ -1687,7 +1702,8 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+  * @urb: pointer to the urb to initialize.
+  * @dev: pointer to the struct usb_device for this urb.
+  * @pipe: the endpoint pipe
+- * @transfer_buffer: pointer to the transfer buffer
++ * @transfer_buffer: pointer to the transfer buffer. The buffer must be
++ *	suitable for DMA.
+  * @buffer_length: length of the transfer buffer
+  * @complete_fn: pointer to the usb_complete_t function
+  * @context: what to set the urb context to.
+@@ -1697,6 +1713,9 @@ static inline void usb_fill_bulk_urb(struct urb *urb,
+  * Initializes a interrupt urb with the proper information needed to submit
+  * it to a device.
+  *
++ * Please refer to usb_fill_control_urb() for a description of the
++ * requirements for transfer_buffer.
++ *
+  * Note that High Speed and SuperSpeed(+) interrupt endpoints use a logarithmic
+  * encoding of the endpoint interval, and express polling intervals in
+  * microframes (eight per millisecond) rather than in frames (one per
 
---------------Zigq97ZM8q6o60XdUzdO1wYX--
+---
+base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+change-id: 20221220-usb-dmadoc-29384acebd48
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
