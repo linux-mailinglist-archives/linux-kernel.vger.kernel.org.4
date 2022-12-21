@@ -2,206 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61B0653039
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 12:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BEE65303E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 12:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234500AbiLUL1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 06:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
+        id S232059AbiLUL2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 06:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiLUL1D (ORCPT
+        with ESMTP id S229491AbiLUL2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 06:27:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB9610AF;
-        Wed, 21 Dec 2022 03:27:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 21 Dec 2022 06:28:31 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04CD10AF;
+        Wed, 21 Dec 2022 03:28:29 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61B8B61780;
-        Wed, 21 Dec 2022 11:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73DF7C433EF;
-        Wed, 21 Dec 2022 11:27:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671622021;
-        bh=HjepBz/ZEos8NkTBb7ACzSazfzqLFQPZOb05O/86Zrs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=scyy5swg3nESqilvvNzTnP6mtzjucrmyOP7nocPJdLz5SxMWNXxPzEJ1Z9RvzmMjM
-         A94VhQOUiNK0mxhxxMpC52VFc6mdezCBLS8/yiEoTRfcPOz5QpYFLQqzg7et1t9TpR
-         ePMt2q+1reRNYB+bqb6kjTOIP5LoO4XcUIlx2LVGrar8XUsbnllqlLDxMIc9xTGNMQ
-         nUYC2o6WAS6u3zlyE7i7rUj8aQ4GxUzAOhwvd+jiLHaKNY6lTJDBt4LnKpGsigByid
-         RLt0RwbntRH/IEUIKbwGp6iEggtG5N9C8n99gDYMuXju5zVPWS493XLBDDH94gE/Qh
-         THj4oclsUzdHw==
-Date:   Wed, 21 Dec 2022 12:26:58 +0100
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        sujuan.chen@mediatek.com,
-        Linux List Kernel Mailing <linux-wireless@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [6.2][regression] after commit
- cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae stopping working wifi mt7921e
-Message-ID: <Y6LtgojZfDqNKoE3@lore-desk>
-References: <CABXGCsMEnQd=gYKTd1knRsWuxCb=Etv5nAre+XJS_s5FgVteYA@mail.gmail.com>
- <678adc67-9e46-3eef-f274-c951b121570f@nbd.name>
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 02E2A6602CBE;
+        Wed, 21 Dec 2022 11:28:27 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671622108;
+        bh=RDFxhPbvrsk3uyaySPHdc/0f7M6d/invdCZipXNTsuw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=l/6ZtYbn/OxZgLfVzpO3vAOo6l1vxv+yilHYwRvnRse5q10KKmngyPLbzOpDrhX3J
+         H6HOFVyGymnmombtntevPFy/4b325ABrwoThFGLQfbmG/ik56M8iJF4DtExD908lfX
+         13QfUflje44YjsuCcq3mhzjjY/d5ZazxADbZGtqTX/7j0QufBZASN/p+bfSFo7a66l
+         Ofo6CCFJgq6MrPA3Pmbyw5TXeECfuFc3KL614oH4ujCwESosyOiHHKq+Xw9nQkv+wE
+         EnKqbH0nmlD4GTrmqfWfcYYk/h9ZX/IWwjytWVltSilEyRf8IA9whdcO8tONsN9cjs
+         UWamAeTXUDxCw==
+Message-ID: <82a86d76-ec53-7815-1977-544e4516165f@collabora.com>
+Date:   Wed, 21 Dec 2022 12:28:25 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2s7EVZ7K4gA7xtJY"
-Content-Disposition: inline
-In-Reply-To: <678adc67-9e46-3eef-f274-c951b121570f@nbd.name>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4] media: uvcvideo: Remove void casting for the status
+ endpoint
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Yunke Cao <yunkec@chromium.org>,
+        Max Staudt <mstaudt@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org
+References: <20221214-uvc-status-alloc-v4-0-f8e3e2994ebd@chromium.org>
+Content-Language: en-US
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20221214-uvc-status-alloc-v4-0-f8e3e2994ebd@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+W dniu 20.12.2022 o 23:56, Ricardo Ribalda pisze:
+> Make the code more resiliant, by replacing the castings with proper
 
---2s7EVZ7K4gA7xtJY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+s/resiliant/resilient/
 
-> On 21.12.22 02:10, Mikhail Gavrilov wrote:
-> > Hi,
-> > The kernel 6.2 preparation cycle has begun.
-> > And after the kernel was updated on my laptop, the wifi stopped working.
-> >=20
-> > Bisecting blames this commit:
-> > cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae is the first bad commit
-> > commit cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae
-> > Author: Lorenzo Bianconi <lorenzo@kernel.org>
-> > Date:   Sat Nov 12 16:40:35 2022 +0100
-> >=20
-> >      wifi: mt76: add WED RX support to mt76_dma_{add,get}_buf
-> >=20
-> >      Introduce the capability to configure RX WED in mt76_dma_{add,get}=
-_buf
-> >      utility routines.
-> >=20
-> >      Tested-by: Daniel Golle <daniel@makrotopia.org>
-> >      Co-developed-by: Sujuan Chen <sujuan.chen@mediatek.com>
-> >      Signed-off-by: Sujuan Chen <sujuan.chen@mediatek.com>
-> >      Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> >      Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> >=20
-> >   drivers/net/wireless/mediatek/mt76/dma.c  | 125 ++++++++++++++++++++-=
----------
-> >   drivers/net/wireless/mediatek/mt76/mt76.h |   2 +
-> >   2 files changed, 88 insertions(+), 39 deletions(-)
-> >=20
-> > Unfortunately, I can't be sure that revert this commit will fix the
-> > problem. Because after the revert, compile of kernel failing with
-> > follow error:
-> > drivers/net/wireless/mediatek/mt76/mt7915/dma.c: In function =E2=80=98m=
-t7915_dma_init=E2=80=99:
-> > drivers/net/wireless/mediatek/mt76/mt7915/dma.c:489:33: error:
-> > implicit declaration of function =E2=80=98MT_WED_Q_RX=E2=80=99; did you=
- mean
-> > =E2=80=98MT_WED_Q_TX=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-> >    489 |                                 MT_WED_Q_RX(MT7915_RXQ_BAND0);
-> >        |                                 ^~~~~~~~~~~
-> >        |                                 MT_WED_Q_TX
-> > cc1: some warnings being treated as errors
-> >    CC [M]  drivers/net/ethernet/intel/igb/e1000_phy.o
-> > make[7]: *** [scripts/Makefile.build:252:
-> > drivers/net/wireless/mediatek/mt76/mt7915/dma.o] Error 1
-> > make[7]: *** Waiting for unfinished jobs....
-> I'm pretty sure that commit is unrelated to this issue. However, while
-> looking at the code I found a bug that would explain your issue.
->=20
-> Please try this patch:
+> structure definitions and using offsetof() instead of open coding the
+> location of the data.
+> 
+> Suggested-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+
 > ---
-> --- a/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-> +++ b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-> @@ -422,15 +422,15 @@ void mt7921_roc_timer(struct timer_list *timer)
->  static int mt7921_abort_roc(struct mt7921_phy *phy, struct mt7921_vif *v=
-if)
->  {
-> -	int err;
+> media: uvcvideo: Code cleanup for dev->status
+> 
+> Lets remove all the castings and open coding of offsets for it.
+> 
+> To: Yunke Cao <yunkec@chromium.org>
+> To: Sergey Senozhatsky <senozhatsky@chromium.org>
+> To: Max Staudt <mstaudt@chromium.org>
+> To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> To: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+> Changes in v4:
+> - Fix sizeof() error.
+> - Keep kzalloc(). Thanks Alan, Christoph and Jonathan
+> - Reducing the cc: to:
+> - Link to v3: https://lore.kernel.org/r/20221214-uvc-status-alloc-v3-0-9a67616cc549@chromium.org
+> 
+> Changes in v3:
+> - Split the patch in two
+> - Add linux-usb, Alan and Christoph for the allocation change.
+> - Link to v2: https://lore.kernel.org/r/20221214-uvc-status-alloc-v2-0-3f1cba6fc734@chromium.org
+> 
+> Changes in v2:
+> - using __aligned(), to keep the old alignment
+> - Adding Johnathan Cameron to:, as he has some similar experience with iio
+> - Adding Ming Lei, as this patch kind of revert his patch.
+> - Link to v1: https://lore.kernel.org/r/20221214-uvc-status-alloc-v1-0-a0098ddc7c93@chromium.org
+> ---
+>   drivers/media/usb/uvc/uvc_status.c | 66 +++++++++++++-------------------------
+>   drivers/media/usb/uvc/uvcvideo.h   | 25 +++++++++++++--
+>   2 files changed, 45 insertions(+), 46 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+> index 7518ffce22ed..00f4036d0683 100644
+> --- a/drivers/media/usb/uvc/uvc_status.c
+> +++ b/drivers/media/usb/uvc/uvc_status.c
+> @@ -73,38 +73,24 @@ static void uvc_input_report_key(struct uvc_device *dev, unsigned int code,
+>   /* --------------------------------------------------------------------------
+>    * Status interrupt endpoint
+>    */
+> -struct uvc_streaming_status {
+> -	u8	bStatusType;
+> -	u8	bOriginator;
+> -	u8	bEvent;
+> -	u8	bValue[];
+> -} __packed;
 > -
-> -	if (!test_and_clear_bit(MT76_STATE_ROC, &phy->mt76->state))
-> -		return 0;
-> +	int err =3D 0;
->  	del_timer_sync(&phy->roc_timer);
->  	cancel_work_sync(&phy->roc_work);
-> -	err =3D mt7921_mcu_abort_roc(phy, vif, phy->roc_token_id);
-> -	clear_bit(MT76_STATE_ROC, &phy->mt76->state);
+> -struct uvc_control_status {
+> -	u8	bStatusType;
+> -	u8	bOriginator;
+> -	u8	bEvent;
+> -	u8	bSelector;
+> -	u8	bAttribute;
+> -	u8	bValue[];
+> -} __packed;
+> -
+>   static void uvc_event_streaming(struct uvc_device *dev,
+> -				struct uvc_streaming_status *status, int len)
+> +				struct uvc_status *status, int len)
+>   {
+> -	if (len < 3) {
+> +	if (len <= offsetof(struct uvc_status, bEvent)) {
+>   		uvc_dbg(dev, STATUS,
+>   			"Invalid streaming status event received\n");
+>   		return;
+>   	}
+>   
+>   	if (status->bEvent == 0) {
+> -		if (len < 4)
+> +		if (len <= offsetof(struct uvc_status, streaming))
+>   			return;
 > +
-> +	mt7921_mutex_acquire(phy->dev);
-> +	if (test_and_clear_bit(MT76_STATE_ROC, &phy->mt76->state))
-> +		err =3D mt7921_mcu_abort_roc(phy, vif, phy->roc_token_id);
-> +	mt7921_mutex_release(phy->dev);
->  	return err;
->  }
-> @@ -487,13 +487,8 @@ static int mt7921_cancel_remain_on_channel(struct ie=
-ee80211_hw *hw,
->  {
->  	struct mt7921_vif *mvif =3D (struct mt7921_vif *)vif->drv_priv;
->  	struct mt7921_phy *phy =3D mt7921_hw_phy(hw);
-> -	int err;
-> -	mt7921_mutex_acquire(phy->dev);
-> -	err =3D mt7921_abort_roc(phy, mvif);
-> -	mt7921_mutex_release(phy->dev);
+>   		uvc_dbg(dev, STATUS, "Button (intf %u) %s len %d\n",
+>   			status->bOriginator,
+> -			status->bValue[0] ? "pressed" : "released", len);
+> -		uvc_input_report_key(dev, KEY_CAMERA, status->bValue[0]);
+> +			status->streaming.button ? "pressed" : "released", len);
+> +		uvc_input_report_key(dev, KEY_CAMERA,
+> +				     status->streaming.button);
+>   	} else {
+>   		uvc_dbg(dev, STATUS, "Stream %u error event %02x len %d\n",
+>   			status->bOriginator, status->bEvent, len);
+> @@ -131,7 +117,7 @@ static struct uvc_control *uvc_event_entity_find_ctrl(struct uvc_entity *entity,
+>   }
+>   
+>   static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+> -					const struct uvc_control_status *status,
+> +					const struct uvc_status *status,
+>   					struct uvc_video_chain **chain)
+>   {
+>   	list_for_each_entry((*chain), &dev->chains, list) {
+> @@ -143,7 +129,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+>   				continue;
+>   
+>   			ctrl = uvc_event_entity_find_ctrl(entity,
+> -							  status->bSelector);
+> +						     status->control.bSelector);
+>   			if (ctrl)
+>   				return ctrl;
+>   		}
+> @@ -153,7 +139,7 @@ static struct uvc_control *uvc_event_find_ctrl(struct uvc_device *dev,
+>   }
+>   
+>   static bool uvc_event_control(struct urb *urb,
+> -			      const struct uvc_control_status *status, int len)
+> +			      const struct uvc_status *status, int len)
+>   {
+>   	static const char *attrs[] = { "value", "info", "failure", "min", "max" };
+>   	struct uvc_device *dev = urb->context;
+> @@ -161,24 +147,24 @@ static bool uvc_event_control(struct urb *urb,
+>   	struct uvc_control *ctrl;
+>   
+>   	if (len < 6 || status->bEvent != 0 ||
+> -	    status->bAttribute >= ARRAY_SIZE(attrs)) {
+> +	    status->control.bAttribute >= ARRAY_SIZE(attrs)) {
+>   		uvc_dbg(dev, STATUS, "Invalid control status event received\n");
+>   		return false;
+>   	}
+>   
+>   	uvc_dbg(dev, STATUS, "Control %u/%u %s change len %d\n",
+> -		status->bOriginator, status->bSelector,
+> -		attrs[status->bAttribute], len);
+> +		status->bOriginator, status->control.bSelector,
+> +		attrs[status->control.bAttribute], len);
+>   
+>   	/* Find the control. */
+>   	ctrl = uvc_event_find_ctrl(dev, status, &chain);
+>   	if (!ctrl)
+>   		return false;
+>   
+> -	switch (status->bAttribute) {
+> +	switch (status->control.bAttribute) {
+>   	case UVC_CTRL_VALUE_CHANGE:
+>   		return uvc_ctrl_status_event_async(urb, chain, ctrl,
+> -						   status->bValue);
+> +						   status->control.bValue);
+>   
+>   	case UVC_CTRL_INFO_CHANGE:
+>   	case UVC_CTRL_FAILURE_CHANGE:
+> @@ -214,28 +200,22 @@ static void uvc_status_complete(struct urb *urb)
+>   
+>   	len = urb->actual_length;
+>   	if (len > 0) {
+> -		switch (dev->status[0] & 0x0f) {
+> +		switch (dev->status->bStatusType & 0x0f) {
+>   		case UVC_STATUS_TYPE_CONTROL: {
+> -			struct uvc_control_status *status =
+> -				(struct uvc_control_status *)dev->status;
 > -
-> -	return err;
-> +	return mt7921_abort_roc(phy, mvif);
->  }
->  static int mt7921_set_channel(struct mt7921_phy *phy)
-> @@ -1778,11 +1773,8 @@ static void mt7921_mgd_complete_tx(struct ieee8021=
-1_hw *hw,
->  				   struct ieee80211_prep_tx_info *info)
->  {
->  	struct mt7921_vif *mvif =3D (struct mt7921_vif *)vif->drv_priv;
-> -	struct mt7921_dev *dev =3D mt7921_hw_dev(hw);
-> -	mt7921_mutex_acquire(dev);
->  	mt7921_abort_roc(mvif->phy, mvif);
-> -	mt7921_mutex_release(dev);
->  }
->  const struct ieee80211_ops mt7921_ops =3D {
->=20
+> -			if (uvc_event_control(urb, status, len))
+> +			if (uvc_event_control(urb, dev->status, len))
+>   				/* The URB will be resubmitted in work context. */
+>   				return;
+>   			break;
+>   		}
+>   
+>   		case UVC_STATUS_TYPE_STREAMING: {
+> -			struct uvc_streaming_status *status =
+> -				(struct uvc_streaming_status *)dev->status;
+> -
+> -			uvc_event_streaming(dev, status, len);
+> +			uvc_event_streaming(dev, dev->status, len);
+>   			break;
+>   		}
+>   
+>   		default:
+>   			uvc_dbg(dev, STATUS, "Unknown status event type %u\n",
+> -				dev->status[0]);
+> +				dev->status->bStatusType);
+>   			break;
+>   		}
+>   	}
+> @@ -259,12 +239,12 @@ int uvc_status_init(struct uvc_device *dev)
+>   
+>   	uvc_input_init(dev);
+>   
+> -	dev->status = kzalloc(UVC_MAX_STATUS_SIZE, GFP_KERNEL);
+> -	if (dev->status == NULL)
+> +	dev->status = kzalloc(sizeof(*dev->status), GFP_KERNEL);
+> +	if (!dev->status)
+>   		return -ENOMEM;
+>   
+>   	dev->int_urb = usb_alloc_urb(0, GFP_KERNEL);
+> -	if (dev->int_urb == NULL) {
+> +	if (!dev->int_urb) {
+>   		kfree(dev->status);
+>   		return -ENOMEM;
+>   	}
+> @@ -281,7 +261,7 @@ int uvc_status_init(struct uvc_device *dev)
+>   		interval = fls(interval) - 1;
+>   
+>   	usb_fill_int_urb(dev->int_urb, dev->udev, pipe,
+> -		dev->status, UVC_MAX_STATUS_SIZE, uvc_status_complete,
+> +		dev->status, sizeof(*dev->status), uvc_status_complete,
+>   		dev, interval);
+>   
+>   	return 0;
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> index df93db259312..84326991ec36 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -51,8 +51,6 @@
+>   #define UVC_URBS		5
+>   /* Maximum number of packets per URB. */
+>   #define UVC_MAX_PACKETS		32
+> -/* Maximum status buffer size in bytes of interrupt URB. */
+> -#define UVC_MAX_STATUS_SIZE	16
+>   
+>   #define UVC_CTRL_CONTROL_TIMEOUT	5000
+>   #define UVC_CTRL_STREAMING_TIMEOUT	5000
+> @@ -527,6 +525,26 @@ struct uvc_device_info {
+>   	const struct uvc_control_mapping **mappings;
+>   };
+>   
+> +struct uvc_status_streaming {
+> +	u8	button;
+> +} __packed;
+> +
+> +struct uvc_status_control {
+> +	u8	bSelector;
+> +	u8	bAttribute;
+> +	u8	bValue[11];
+> +} __packed;
+> +
+> +struct uvc_status {
+> +	u8	bStatusType;
+> +	u8	bOriginator;
+> +	u8	bEvent;
+> +	union {
+> +		struct uvc_status_control control;
+> +		struct uvc_status_streaming streaming;
+> +	};
+> +} __packed;
+> +
+>   struct uvc_device {
+>   	struct usb_device *udev;
+>   	struct usb_interface *intf;
+> @@ -559,7 +577,8 @@ struct uvc_device {
+>   	/* Status Interrupt Endpoint */
+>   	struct usb_host_endpoint *int_ep;
+>   	struct urb *int_urb;
+> -	u8 *status;
+> +	struct uvc_status *status;
+> +
+>   	struct input_dev *input;
+>   	char input_phys[64];
+>   
+> 
+> ---
+> base-commit: 0ec5a38bf8499f403f81cb81a0e3a60887d1993c
+> change-id: 20221214-uvc-status-alloc-93becb783898
+> 
+> Best regards,
 
-I guess we have a similar issue for 7663 too:
-
-
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/main.c b/drivers/net=
-/wireless/mediatek/mt76/mt7615/main.c
-index ab4c1b4478aa..0405a31fcfd1 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-@@ -1175,16 +1175,14 @@ static int mt7615_cancel_remain_on_channel(struct i=
-eee80211_hw *hw,
- 					   struct ieee80211_vif *vif)
- {
- 	struct mt7615_phy *phy =3D mt7615_hw_phy(hw);
--	int err;
--
--	if (!test_and_clear_bit(MT76_STATE_ROC, &phy->mt76->state))
--		return 0;
-+	int err =3D 0;
-=20
- 	del_timer_sync(&phy->roc_timer);
- 	cancel_work_sync(&phy->roc_work);
-=20
- 	mt7615_mutex_acquire(phy->dev);
--	err =3D mt7615_mcu_set_roc(phy, vif, NULL, 0);
-+	if (test_and_clear_bit(MT76_STATE_ROC, &phy->mt76->state))
-+		err =3D mt7615_mcu_set_roc(phy, vif, NULL, 0);
- 	mt7615_mutex_release(phy->dev);
-=20
- 	return err;
-
---2s7EVZ7K4gA7xtJY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCY6LtgQAKCRA6cBh0uS2t
-rDjhAP0YBC01r+T8HOIfmVYfb9LbKF3odR1hy6xL2+CPIQXUbgD/W4TBBswa0Vi6
-WxFH3z8MOr+lOev59YNkKE7L/yRo5gg=
-=p1NZ
------END PGP SIGNATURE-----
-
---2s7EVZ7K4gA7xtJY--
