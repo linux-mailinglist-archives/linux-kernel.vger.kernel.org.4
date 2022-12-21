@@ -2,166 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7716537E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592F26537E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234636AbiLUUyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 15:54:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
+        id S234412AbiLUU6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 15:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234611AbiLUUyr (ORCPT
+        with ESMTP id S229620AbiLUU6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 15:54:47 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01601218AF
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:54:46 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id h9-20020a92c269000000b00303494c4f3eso1167ild.15
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:54:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KSld9w5b0c5431C0gCV8qTOX+c8jsvfzKbAp62hQ8Fg=;
-        b=Jbev21cf5hPlgeHv9nIsXrRKjB/UU0kpZKypkDyHvvTFEkPBRxinA33hurCQM19PXj
-         DNgMdCDVwqBCp32ZPEEyZKPGmGUIMz2KzJV1TXL8PXKMTDGZQpvChlq09N2qUX6RuUtI
-         zcoOTpo7uPSlVgPrElIya+w1+zBnA2qTWDuVPWJmRq6e902v6ATip+KKgGVWYcmJq9NH
-         YuN1zN0zo/nuHhgR6Kyz9pqOale17ZLd3x3uKJV9sFcz7URD8ZoN/JJcFj4tiKxhoLC9
-         75HmaJFWmzSk7grJ2YkJvu+eKx0q03xWUQFQcXxRak+KWWzIo24Olq6JrBJoiU0FqeKm
-         8ERQ==
-X-Gm-Message-State: AFqh2kq5JkcHF4nt0PYxThpaIMEm+Qjmx4PocLsCLTUULhb8AAPaoWSA
-        v1HT+uEzwIavMHgRVapemXn5RqspVOcMWrSl+qEvDU6UnPKi
-X-Google-Smtp-Source: AMrXdXuL+24luRUyHNexCg4o+QwHOBlu6ukTdpFscESJScttijITt95GXMl+4BD/sska23LG+fo/yuJO9BggiQAHirIFJYJP4F+G
-MIME-Version: 1.0
-X-Received: by 2002:a02:cc65:0:b0:398:d917:5c51 with SMTP id
- j5-20020a02cc65000000b00398d9175c51mr200801jaq.42.1671656085361; Wed, 21 Dec
- 2022 12:54:45 -0800 (PST)
-Date:   Wed, 21 Dec 2022 12:54:45 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000279ebd05f05cc339@google.com>
-Subject: [syzbot] INFO: trying to register non-static key in __timer_delete_sync
-From:   syzbot <syzbot+1e164be619b690a43d79@syzkaller.appspotmail.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com
+        Wed, 21 Dec 2022 15:58:10 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDF66561;
+        Wed, 21 Dec 2022 12:58:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671656289; x=1703192289;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jC4yCS27B22MgIBp66C0aP/YE780Xq2kMCQfMMWlUzU=;
+  b=hYIqsUQcfr9p6zw5gE6u4+kCnRVwOV6fpTpZPCXAmVB0/5NfTSTd1H91
+   MpqkuzqPe1eEbvQ6GVGVrzY5VtvGdthy0weF9f58Eu1bg5HFAvBtFmA2m
+   8IMBmu+rkUtzA/RutEZTGgIcZpPntK/ue1ZZGYXVFVCek/T3YDHad2ZN0
+   h+h/bZ40u1yom9l3uPz3zpdVsinT3AbEBhbMfaCnlITIYig4JUn2X24VC
+   CawZf4FWV86sGdrG32G3887JjaSMD7zOlD/O2MBhaOtKBNdsWjDvQut6O
+   TVd/uRt+DvAtiPnZ9mcjVFILiqr7ODH8xbnlaYSystKlYTrJENojBuPj3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="320025091"
+X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
+   d="scan'208";a="320025091"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 12:58:08 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="825745425"
+X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
+   d="scan'208";a="825745425"
+Received: from lijieqi-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.64.202])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 12:58:07 -0800
+Message-ID: <3e59c5216fad003f079224cd08a7da9b30f6365d.camel@linux.intel.com>
+Subject: Re: [PATCH v2 2/4] powercap: idle_inject: Add prepare/complete
+ callbacks
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Date:   Wed, 21 Dec 2022 12:58:07 -0800
+In-Reply-To: <e2af7a4b-99f4-f88e-fbe7-5d3595d6211b@linaro.org>
+References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
+         <20221129233419.4022830-3-srinivas.pandruvada@linux.intel.com>
+         <e2af7a4b-99f4-f88e-fbe7-5d3595d6211b@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Daniel,
 
-syzbot found the following issue on:
+On Wed, 2022-12-21 at 15:52 +0100, Daniel Lezcano wrote:
+> 
+> Hi Srinivas,
+> 
+> On 30/11/2022 00:34, Srinivas Pandruvada wrote:
+> > The actual idle percentage can be less than the desired because of
+> > interrupts. Since the objective for CPU Idle injection is for
+> > thermal
+> > control, there should be some way to compensate for lost idle
+> > percentage.
+> > Some architectures provide interface to get actual idle percent
+> > observed
+> > by the hardware. So, the idle percent can be adjusted using the
+> > hardware
+> > feedback. For example, Intel CPUs provides package idle counters,
+> > which
+> > is currently used by intel powerclamp driver to adjust idle time.
+> Can you provide an example in terms of timings?
+> 
+> I'm not getting how 'prepare' would do by returning a positive value
+> to 
+> skip the play_idle_precise() and what will do 'complete' ?
+> 
+intel_powerclamp has a logic where if the current idle percentage
+observed from hardware is more than the desired target inject percent,
+it skips calling play_idle().
 
-HEAD commit:    ca39c4daa6f7 Add linux-next specific files for 20221216
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1182429d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9f0bce83c86de334
-dashboard link: https://syzkaller.appspot.com/bug?extid=1e164be619b690a43d79
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+For example if you want to inject 50% idle and system is naturally idle
+for 60%, there is no use of calling play_idle in the idle injection
+framework to induce more idle. In this way a workload can run
+immediately.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+So trying to emulate the same logic by using powercap/idle_inject
+framework. So prepare() callback in the intel_powerclamp driver calls
+the existing function to check if idle-inject should skip for this time
+or not.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3cbf8a8f223d/disk-ca39c4da.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f104cf6ddf80/vmlinux-ca39c4da.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6ba8b49536b5/bzImage-ca39c4da.xz
+The complete() callback is to do just to adjust run duration. I don't
+have a use case, but to add complementary callback to prepare() if
+required.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1e164be619b690a43d79@syzkaller.appspotmail.com
+Thanks,
+Srinivas
 
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 0 PID: 20857 Comm: syz-executor.5 Not tainted 6.1.0-next-20221216-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- assign_lock_key kernel/locking/lockdep.c:981 [inline]
- register_lock_class+0xf1b/0x1120 kernel/locking/lockdep.c:1294
- __lock_acquire+0x109/0x56d0 kernel/locking/lockdep.c:4934
- lock_acquire.part.0+0x11a/0x350 kernel/locking/lockdep.c:5668
- __timer_delete_sync+0x5d/0x1c0 kernel/time/timer.c:1555
- del_timer_sync include/linux/timer.h:200 [inline]
- cleanup_srcu_struct kernel/rcu/srcutree.c:611 [inline]
- cleanup_srcu_struct+0x112/0x3e0 kernel/rcu/srcutree.c:599
- kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1325 [inline]
- kvm_put_kvm+0x884/0xb80 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1352
- kvm_vm_release+0x43/0x50 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1375
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1a7ae3df8b
-Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-RSP: 002b:00007fff9d5d14e0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f1a7ae3df8b
-RDX: 0000000000000000 RSI: 0000001b32320ef8 RDI: 0000000000000004
-RBP: 00007f1a7afad980 R08: 0000000000000000 R09: 000000008acd30fc
-R10: 0000000000000000 R11: 0000000000000293 R12: 000000000011376f
-R13: 00007fff9d5d15e0 R14: 00007f1a7afac050 R15: 0000000000000032
- </TASK>
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 20857 at kernel/workqueue.c:3066 __flush_work+0x90a/0xaf0 kernel/workqueue.c:3066
-Modules linked in:
-CPU: 1 PID: 20857 Comm: syz-executor.5 Not tainted 6.1.0-next-20221216-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__flush_work+0x90a/0xaf0 kernel/workqueue.c:3066
-Code: 00 48 c7 c6 2f 7b 52 81 48 c7 c7 c0 28 79 8c e8 1c 7c 11 00 e9 ab fc ff ff e8 12 d7 2e 00 0f 0b e9 9f fc ff ff e8 06 d7 2e 00 <0f> 0b 45 31 ed e9 90 fc ff ff e8 77 e6 7c 00 e9 7a fb ff ff e8 ed
-RSP: 0018:ffffc900038afb60 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffffe8ffffcd0620 RCX: 0000000000000000
-RDX: ffff888020d38000 RSI: ffffffff81527b6a RDI: 0000000000000001
-RBP: ffffc900038afcf8 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 3e4b5341542f3c20 R12: ffffc9000393b478
-R13: 0000000000000001 R14: fffffbfff1ce6138 R15: ffffe8ffffcd0638
-FS:  0000555555edb400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000200e9000 CR3: 00000000297ac000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- cleanup_srcu_struct kernel/rcu/srcutree.c:612 [inline]
- cleanup_srcu_struct+0x11e/0x3e0 kernel/rcu/srcutree.c:599
- kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1325 [inline]
- kvm_put_kvm+0x884/0xb80 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1352
- kvm_vm_release+0x43/0x50 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1375
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1a7ae3df8b
-Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-RSP: 002b:00007fff9d5d14e0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000005 RCX: 00007f1a7ae3df8b
-RDX: 0000000000000000 RSI: 0000001b32320ef8 RDI: 0000000000000004
-RBP: 00007f1a7afad980 R08: 0000000000000000 R09: 000000008acd30fc
-R10: 0000000000000000 R11: 0000000000000293 R12: 000000000011376f
-R13: 00007fff9d5d15e0 R14: 00007f1a7afac050 R15: 0000000000000032
- </TASK>
+> 
+> > The only way this can be done currently is by monitoring hardware
+> > idle
+> > percent from a different software thread. This can be avoided by
+> > adding
+> > callbacks.
+> > 
+> > Add a capability to register a prepare and complete callback during
+> > idle
+> > inject registry. Add a new register function
+> > idle_inject_register_full()
+> > which also allows to register callbacks.
+> > 
+> > If they are not NULL, then prepare callback is called before
+> > calling
+> > play_idle_precise() and complete callback is called after calling
+> > play_idle_precise().
+> > 
+> > If prepare callback is present and returns non 0 value then
+> > play_idle_precise() is not called to avoid over compensation.
+> > 
+> > Signed-off-by: Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com>
+> > ---
+> > v2
+> > - Replace begin/end with prepare/complete
+> > - Add new interface idle_inject_register_full with callbacks
+> > - Update kernel doc
+> > - Update commit description
+> > 
+> >   drivers/powercap/idle_inject.c | 62
+> > +++++++++++++++++++++++++++++++---
+> >   include/linux/idle_inject.h    |  4 +++
+> >   2 files changed, 62 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/powercap/idle_inject.c
+> > b/drivers/powercap/idle_inject.c
+> > index dfa989182e71..f48e71501429 100644
+> > --- a/drivers/powercap/idle_inject.c
+> > +++ b/drivers/powercap/idle_inject.c
+> > @@ -63,13 +63,31 @@ struct idle_inject_thread {
+> >    * @idle_duration_us: duration of CPU idle time to inject
+> >    * @run_duration_us: duration of CPU run time to allow
+> >    * @latency_us: max allowed latency
+> > + * @prepare: Callback function which is called before calling
+> > + *             play_idle_precise()
+> > + * @complete: Callback function which is called after calling
+> > + *             play_idle_precise()
+> >    * @cpumask: mask of CPUs affected by idle injection
+> > + *
+> > + * This structure is used to define per instance idle inject
+> > device data. Each
+> > + * instance has an idle duration, a run duration and mask of CPUs
+> > to inject
+> > + * idle.
+> > + * Actual idle is injected by calling kernel scheduler interface
+> > + * play_idle_precise(). There are two optional callbacks which the
+> > caller can
+> > + * register by calling idle_inject_register_full():
+> > + * prepare() - This callback is called just before calling
+> > play_idle_precise()
+> > + *             If this callback returns non zero value then
+> > + *             play_idle_precise() is not called. This means skip
+> > injecting
+> > + *             idle during this period.
+> > + * complete() - This callback is called after calling
+> > play_idle_precise().
+> >    */
+> >   struct idle_inject_device {
+> >         struct hrtimer timer;
+> >         unsigned int idle_duration_us;
+> >         unsigned int run_duration_us;
+> >         unsigned int latency_us;
+> > +       int (*prepare)(unsigned int cpu);
+> > +       void (*complete)(unsigned int cpu);
+> >         unsigned long cpumask[];
+> >   };
+> >   
+> > @@ -132,6 +150,7 @@ static void idle_inject_fn(unsigned int cpu)
+> >   {
+> >         struct idle_inject_device *ii_dev;
+> >         struct idle_inject_thread *iit;
+> > +       int ret;
+> >   
+> >         ii_dev = per_cpu(idle_inject_device, cpu);
+> >         iit = per_cpu_ptr(&idle_inject_thread, cpu);
+> > @@ -141,8 +160,18 @@ static void idle_inject_fn(unsigned int cpu)
+> >          */
+> >         iit->should_run = 0;
+> >   
+> > +       if (ii_dev->prepare) {
+> > +               ret = ii_dev->prepare(cpu);
+> > +               if (ret)
+> > +                       goto skip;
+> > +       }
+> > +
+> >         play_idle_precise(READ_ONCE(ii_dev->idle_duration_us) *
+> > NSEC_PER_USEC,
+> >                           READ_ONCE(ii_dev->latency_us) *
+> > NSEC_PER_USEC);
+> > +
+> > +skip:
+> > +       if (ii_dev->complete)
+> > +               ii_dev->complete(cpu);
+> >   }
+> >   
+> >   /**
+> > @@ -295,17 +324,23 @@ static int idle_inject_should_run(unsigned
+> > int cpu)
+> >   }
+> >   
+> >   /**
+> > - * idle_inject_register - initialize idle injection on a set of
+> > CPUs
+> > + * idle_inject_register_full - initialize idle injection on a set
+> > of CPUs
+> >    * @cpumask: CPUs to be affected by idle injection
+> > + * @prepare: callback called before calling play_idle_precise()
+> > + * @complete: callback called after calling play_idle_precise()
+> >    *
+> >    * This function creates an idle injection control device
+> > structure for the
+> > - * given set of CPUs and initializes the timer associated with
+> > it.  It does not
+> > - * start any injection cycles.
+> > + * given set of CPUs and initializes the timer associated with it.
+> > This
+> > + * function also allows to register prepare() and complete()
+> > callbacks.
+> > + * It does not start any injection cycles.
+> >    *
+> >    * Return: NULL if memory allocation fails, idle injection
+> > control device
+> >    * pointer on success.
+> >    */
+> > -struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask)
+> > +
+> > +struct idle_inject_device *idle_inject_register_full(struct
+> > cpumask *cpumask,
+> > +                                                    int
+> > (*prepare)(unsigned int cpu),
+> > +                                                    void
+> > (*complete)(unsigned int cpu))
+> >   {
+> >         struct idle_inject_device *ii_dev;
+> >         int cpu, cpu_rb;
+> > @@ -318,6 +353,8 @@ struct idle_inject_device
+> > *idle_inject_register(struct cpumask *cpumask)
+> >         hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC,
+> > HRTIMER_MODE_REL);
+> >         ii_dev->timer.function = idle_inject_timer_fn;
+> >         ii_dev->latency_us = UINT_MAX;
+> > +       ii_dev->prepare = prepare;
+> > +       ii_dev->complete = complete;
+> >   
+> >         for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
+> >   
+> > @@ -342,6 +379,23 @@ struct idle_inject_device
+> > *idle_inject_register(struct cpumask *cpumask)
+> >   
+> >         return NULL;
+> >   }
+> > +EXPORT_SYMBOL_NS_GPL(idle_inject_register_full, IDLE_INJECT);
+> > +
+> > +/**
+> > + * idle_inject_register - initialize idle injection on a set of
+> > CPUs
+> > + * @cpumask: CPUs to be affected by idle injection
+> > + *
+> > + * This function creates an idle injection control device
+> > structure for the
+> > + * given set of CPUs and initializes the timer associated with
+> > it.  It does not
+> > + * start any injection cycles.
+> > + *
+> > + * Return: NULL if memory allocation fails, idle injection control
+> > device
+> > + * pointer on success.
+> > + */
+> > +struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask)
+> > +{
+> > +       return idle_inject_register_full(cpumask, NULL, NULL);
+> > +}
+> >   EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
+> >   
+> >   /**
+> > diff --git a/include/linux/idle_inject.h
+> > b/include/linux/idle_inject.h
+> > index fb88e23a99d3..e18d89793490 100644
+> > --- a/include/linux/idle_inject.h
+> > +++ b/include/linux/idle_inject.h
+> > @@ -13,6 +13,10 @@ struct idle_inject_device;
+> >   
+> >   struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask);
+> >   
+> > +struct idle_inject_device *idle_inject_register_full(struct
+> > cpumask *cpumask,
+> > +                                                    int
+> > (*prepare)(unsigned int cpu),
+> > +                                                    void
+> > (*complete)(unsigned int cpu));
+> > +
+> >   void idle_inject_unregister(struct idle_inject_device *ii_dev);
+> >   
+> >   int idle_inject_start(struct idle_inject_device *ii_dev);
+> 
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
