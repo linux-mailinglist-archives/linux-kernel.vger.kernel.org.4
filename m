@@ -2,206 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36377652F20
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965C5652F26
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234797AbiLUKEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 05:04:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S234319AbiLUKIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 05:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234598AbiLUKDd (ORCPT
+        with ESMTP id S233234AbiLUKIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 05:03:33 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91ED02D0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 02:02:28 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B4B24556C;
-        Wed, 21 Dec 2022 10:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1671616946; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IImuWzHDGhEKRR3vXdL9Zxzsbk5euS7gCJV1+J/GTLY=;
-        b=dHEaALmiCMqiziPngQat0Il4MfKl/vzYeV01plW+2mWRzPJAx7aB2nqiT461GBVpaLHmZ7
-        lHF7ggdw2Gqg8uTJla97lRxa1iqKKqNop/pRydf+qthWVLsoTH6kzWjC6fKSEgVYsid8Pc
-        PUUEIvYjtYlDb0GZR3HF9WfzNFgeHck=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1671616946;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IImuWzHDGhEKRR3vXdL9Zxzsbk5euS7gCJV1+J/GTLY=;
-        b=o/f+6TtqEwfq7dbngj+UOlrnhaWs1JeRUeCdbolOKlXN9/buFyBxQQCPNDgUPcV7MmxvhG
-        0P19mfZCEZVMkMDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8440213913;
-        Wed, 21 Dec 2022 10:02:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fwT2HrLZomO7GgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 21 Dec 2022 10:02:26 +0000
-Message-ID: <a776c8d8-388a-dc32-9e4f-25507cecff78@suse.de>
-Date:   Wed, 21 Dec 2022 11:02:25 +0100
+        Wed, 21 Dec 2022 05:08:01 -0500
+Received: from radex-web.radex.nl (smtp.radex.nl [178.250.146.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51D57B03;
+        Wed, 21 Dec 2022 02:07:55 -0800 (PST)
+Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
+        by radex-web.radex.nl (Postfix) with ESMTPS id 6B56E24065;
+        Wed, 21 Dec 2022 11:07:53 +0100 (CET)
+Message-ID: <4d6f0bdb-500b-7ae5-ef10-a844a7abbf23@gmail.com>
+Date:   Wed, 21 Dec 2022 11:07:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 01/10] drm: Remove usage of deprecated DRM_INFO
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Siddh Raman Pant <code@siddh.me>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <cover.1671566741.git.code@siddh.me>
- <da27fd5d4725a8becd426c01ba5652a44cf62ce5.1671566741.git.code@siddh.me>
- <87a63h2iii.fsf@intel.com>
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id
+ timeout
 Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <87a63h2iii.fsf@intel.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------BQEuTsYP8QPEwNVL4H3K1fCR"
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Ferry Toth <ftoth@exalondelft.nl>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org
+References: <20221205201527.13525-1-ftoth@exalondelft.nl>
+ <20221205201527.13525-2-ftoth@exalondelft.nl>
+ <20221220194334.GA942039@roeck-us.net>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <20221220194334.GA942039@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NICE_REPLY_A,NML_ADSP_CUSTOM_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------BQEuTsYP8QPEwNVL4H3K1fCR
-Content-Type: multipart/mixed; boundary="------------wEnaFVlev0KKwZ8EED5sFrUQ";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Jani Nikula <jani.nikula@linux.intel.com>,
- Siddh Raman Pant <code@siddh.me>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>
-Cc: linux-kernel <linux-kernel@vger.kernel.org>,
- dri-devel <dri-devel@lists.freedesktop.org>
-Message-ID: <a776c8d8-388a-dc32-9e4f-25507cecff78@suse.de>
-Subject: Re: [PATCH 01/10] drm: Remove usage of deprecated DRM_INFO
-References: <cover.1671566741.git.code@siddh.me>
- <da27fd5d4725a8becd426c01ba5652a44cf62ce5.1671566741.git.code@siddh.me>
- <87a63h2iii.fsf@intel.com>
-In-Reply-To: <87a63h2iii.fsf@intel.com>
+Hi,
 
---------------wEnaFVlev0KKwZ8EED5sFrUQ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 20-12-2022 20:43, Guenter Roeck wrote:
+> On Mon, Dec 05, 2022 at 09:15:26PM +0100, Ferry Toth wrote:
+>> Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral
+>> if extcon is present") Dual Role support on Intel Merrifield platform
+>> broke due to rearranging the call to dwc3_get_extcon().
+>>
+>> It appears to be caused by ulpi_read_id() on the first test write failing
+>> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+>> DT when the test write fails and returns 0 in that case, even if DT does not
+>> provide the phy. As a result usb probe completes without phy.
+>>
+>> Make ulpi_read_id() return -ETIMEDOUT to its user if the first test write
+>> fails. The user should then handle it appropriately. A follow up patch
+>> will make dwc3_core_init() set -EPROBE_DEFER in this case and bail out.
+>>
+>> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+> Hi,
+>
+> this patch results in some qemu test failures, specifically xilinx-zynq-a9
+> machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
+> to boot from USB drive. The log shows
 
-SGkNCg0KQW0gMjEuMTIuMjIgdW0gMTA6NDkgc2NocmllYiBKYW5pIE5pa3VsYToNCj4gT24g
-V2VkLCAyMSBEZWMgMjAyMiwgU2lkZGggUmFtYW4gUGFudCA8Y29kZUBzaWRkaC5tZT4gd3Jv
-dGU6DQo+PiBkcm1fcHJpbnQuaCBzYXlzIERSTV9JTkZPIGlzIGRlcHJlY2F0ZWQuDQo+PiBU
-aHVzLCB1c2UgbmV3ZXIgcHJpbnRpbmcgbWFjcm9zIGRybV9pbmZvKCkgYW5kIHByX2luZm8o
-KS4NCj4gDQo+IEkgdGhpbmsgaXQncyBhIGJpdCBvZGQgc29tZSBvZiB0aGUgY29udmVyc2lv
-biBpcyB0byBwcl8qKCkgYW5kIHNvbWUgdG8NCj4gZHJtXyooTlVMTCwgLi4uKSBkZXBlbmRp
-bmcgb24gdGhlIGxvZ2dpbmcgbGV2ZWwgZXRjLg0KPiANCj4gTm90YWJseSB0aGUgcHJfKigp
-IGRlYnVncyB3aWxsIGxhY2sgdGhlIFtkcm1dIHBhcnQgYXMgd2VsbCBhcyB0aGUNCj4gZnVu
-Y3Rpb24gbmFtZSwgd2hpY2ggbWFrZXMgc29tZSBvZiB0aGUgbG9nZ2luZyBoYXJkZXIgdG8g
-bWFwIHRvIHdoYXQncw0KPiBnb2luZyBvbi4NCj4gDQo+IE1heWJlIGFsbCBvZiB0aGVtIHNo
-b3VsZCB1c2UgdGhlIGRybV8qKCkgY2FsbHMsIHdpdGggYmV0dGVyIGhhbmRsaW5nIG9mDQo+
-IE5VTEwgZHJtIGRldmljZS4NCg0KVGhhdCdzIGFsc28gd2hhdCBJIHRoaW5rLiBTb21ldGhp
-bmcgbGlrZSBkcm1faW5mbyhOVUxMLCApIHNob3VsZCBqdXN0IA0Kd29yayBhbmQgZ2l2ZSB0
-aGUgc2FtZSByZXN1bHRzIGFzIGJlZm9yZS4gIFRoZSBvbGRlciBjb2RlIHRoYXQgdXNlcyAN
-CmRybV9kZXZfcHJpbnRrKCkgc2VlbXMgdG8gZ2V0IGl0IHJpZ2h0Lg0KDQpCZXN0IHJlZ2Fy
-ZHMNClRob21hcw0KDQo+IA0KPiBCUiwNCj4gSmFuaS4NCj4gDQo+IA0KPiANCj4gDQo+IA0K
-PiANCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBTaWRkaCBSYW1hbiBQYW50IDxjb2RlQHNpZGRo
-Lm1lPg0KPj4gLS0tDQo+PiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fY2xpZW50X21vZGVzZXQu
-YyB8IDIgKy0NCj4+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9jb25uZWN0b3IuYyAgICAgIHwg
-NyArKysrLS0tDQo+PiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZHJ2LmMgICAgICAgICAgICB8
-IDIgKy0NCj4+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9wY2kuYyAgICAgICAgICAgIHwgMiAr
-LQ0KPj4gICA0IGZpbGVzIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMo
-LSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9jbGllbnRfbW9k
-ZXNldC5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9jbGllbnRfbW9kZXNldC5jDQo+PiBpbmRl
-eCBkNTUzZTc5M2U2NzMuLjJiNzZkNDgyOGM1ZiAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMv
-Z3B1L2RybS9kcm1fY2xpZW50X21vZGVzZXQuYw0KPj4gKysrIGIvZHJpdmVycy9ncHUvZHJt
-L2RybV9jbGllbnRfbW9kZXNldC5jDQo+PiBAQCAtMzM1LDcgKzMzNSw3IEBAIHN0YXRpYyBi
-b29sIGRybV9jbGllbnRfdGFyZ2V0X2Nsb25lZChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LA0K
-Pj4gICAJCURSTV9ERUJVR19LTVMoImNhbiBjbG9uZSB1c2luZyAxMDI0eDc2OFxuIik7DQo+
-PiAgIAkJcmV0dXJuIHRydWU7DQo+PiAgIAl9DQo+PiAtCURSTV9JTkZPKCJrbXM6IGNhbid0
-IGVuYWJsZSBjbG9uaW5nIHdoZW4gd2UgcHJvYmFibHkgd2FudGVkIHRvLlxuIik7DQo+PiAr
-CWRybV9pbmZvKGRldiwgImttczogY2FuJ3QgZW5hYmxlIGNsb25pbmcgd2hlbiB3ZSBwcm9i
-YWJseSB3YW50ZWQgdG8uXG4iKTsNCj4+ICAgCXJldHVybiBmYWxzZTsNCj4+ICAgfQ0KPj4g
-ICANCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2Nvbm5lY3Rvci5jIGIv
-ZHJpdmVycy9ncHUvZHJtL2RybV9jb25uZWN0b3IuYw0KPj4gaW5kZXggNTQ3MzU2ZTAwMzQx
-Li4zNGMyNmIyYTk3NGUgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2Nv
-bm5lY3Rvci5jDQo+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2Nvbm5lY3Rvci5jDQo+
-PiBAQCAtMTY1LDEzICsxNjUsMTQgQEAgc3RhdGljIHZvaWQgZHJtX2Nvbm5lY3Rvcl9nZXRf
-Y21kbGluZV9tb2RlKHN0cnVjdCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IpDQo+PiAgIAkJ
-cmV0dXJuOw0KPj4gICANCj4+ICAgCWlmIChtb2RlLT5mb3JjZSkgew0KPj4gLQkJRFJNX0lO
-Rk8oImZvcmNpbmcgJXMgY29ubmVjdG9yICVzXG4iLCBjb25uZWN0b3ItPm5hbWUsDQo+PiAt
-CQkJIGRybV9nZXRfY29ubmVjdG9yX2ZvcmNlX25hbWUobW9kZS0+Zm9yY2UpKTsNCj4+ICsJ
-CWRybV9pbmZvKGNvbm5lY3Rvci0+ZGV2LCAiZm9yY2luZyAlcyBjb25uZWN0b3IgJXNcbiIs
-DQo+PiArCQkJIGNvbm5lY3Rvci0+bmFtZSwgZHJtX2dldF9jb25uZWN0b3JfZm9yY2VfbmFt
-ZShtb2RlLT5mb3JjZSkpOw0KPj4gICAJCWNvbm5lY3Rvci0+Zm9yY2UgPSBtb2RlLT5mb3Jj
-ZTsNCj4+ICAgCX0NCj4+ICAgDQo+PiAgIAlpZiAobW9kZS0+cGFuZWxfb3JpZW50YXRpb24g
-IT0gRFJNX01PREVfUEFORUxfT1JJRU5UQVRJT05fVU5LTk9XTikgew0KPj4gLQkJRFJNX0lO
-Rk8oImNtZGxpbmUgZm9yY2VzIGNvbm5lY3RvciAlcyBwYW5lbF9vcmllbnRhdGlvbiB0byAl
-ZFxuIiwNCj4+ICsJCWRybV9pbmZvKGNvbm5lY3Rvci0+ZGV2LA0KPj4gKwkJCSAiY21kbGlu
-ZSBmb3JjZXMgY29ubmVjdG9yICVzIHBhbmVsX29yaWVudGF0aW9uIHRvICVkXG4iLA0KPj4g
-ICAJCQkgY29ubmVjdG9yLT5uYW1lLCBtb2RlLT5wYW5lbF9vcmllbnRhdGlvbik7DQo+PiAg
-IAkJZHJtX2Nvbm5lY3Rvcl9zZXRfcGFuZWxfb3JpZW50YXRpb24oY29ubmVjdG9yLA0KPj4g
-ICAJCQkJCQkgICAgbW9kZS0+cGFuZWxfb3JpZW50YXRpb24pOw0KPj4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvZ3B1L2RybS9kcm1fZHJ2LmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2Rydi5j
-DQo+PiBpbmRleCA3M2I4NDVhNzVkNTIuLmJjOThlNGJjZjJjMSAxMDA2NDQNCj4+IC0tLSBh
-L2RyaXZlcnMvZ3B1L2RybS9kcm1fZHJ2LmMNCj4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9k
-cm1fZHJ2LmMNCj4+IEBAIC05MzgsNyArOTM4LDcgQEAgaW50IGRybV9kZXZfcmVnaXN0ZXIo
-c3RydWN0IGRybV9kZXZpY2UgKmRldiwgdW5zaWduZWQgbG9uZyBmbGFncykNCj4+ICAgCWlm
-IChkcm1fY29yZV9jaGVja19mZWF0dXJlKGRldiwgRFJJVkVSX01PREVTRVQpKQ0KPj4gICAJ
-CWRybV9tb2Rlc2V0X3JlZ2lzdGVyX2FsbChkZXYpOw0KPj4gICANCj4+IC0JRFJNX0lORk8o
-IkluaXRpYWxpemVkICVzICVkLiVkLiVkICVzIGZvciAlcyBvbiBtaW5vciAlZFxuIiwNCj4+
-ICsJZHJtX2luZm8oZGV2LCAiSW5pdGlhbGl6ZWQgJXMgJWQuJWQuJWQgJXMgZm9yICVzIG9u
-IG1pbm9yICVkXG4iLA0KPj4gICAJCSBkcml2ZXItPm5hbWUsIGRyaXZlci0+bWFqb3IsIGRy
-aXZlci0+bWlub3IsDQo+PiAgIAkJIGRyaXZlci0+cGF0Y2hsZXZlbCwgZHJpdmVyLT5kYXRl
-LA0KPj4gICAJCSBkZXYtPmRldiA/IGRldl9uYW1lKGRldi0+ZGV2KSA6ICJ2aXJ0dWFsIGRl
-dmljZSIsDQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9wY2kuYyBiL2Ry
-aXZlcnMvZ3B1L2RybS9kcm1fcGNpLmMNCj4+IGluZGV4IDM5ZDM1ZmMzYTQzYi4uMThjZjdm
-YTIzNjk4IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2RybV9wY2kuYw0KPj4g
-KysrIGIvZHJpdmVycy9ncHUvZHJtL2RybV9wY2kuYw0KPj4gQEAgLTI2Miw3ICsyNjIsNyBA
-QCB2b2lkIGRybV9sZWdhY3lfcGNpX2V4aXQoY29uc3Qgc3RydWN0IGRybV9kcml2ZXIgKmRy
-aXZlciwNCj4+ICAgCQl9DQo+PiAgIAkJbXV0ZXhfdW5sb2NrKCZsZWdhY3lfZGV2X2xpc3Rf
-bG9jayk7DQo+PiAgIAl9DQo+PiAtCURSTV9JTkZPKCJNb2R1bGUgdW5sb2FkZWRcbiIpOw0K
-Pj4gKwlwcl9pbmZvKCJNb2R1bGUgdW5sb2FkZWRcbiIpOw0KPj4gICB9DQo+PiAgIEVYUE9S
-VF9TWU1CT0woZHJtX2xlZ2FjeV9wY2lfZXhpdCk7DQo+IA0KDQotLSANClRob21hcyBaaW1t
-ZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0
-aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2Vy
-bWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2
-byBUb3Rldg0K
+I'm not familiar with that platform. Does it use dt to discover the ulpi 
+device?
 
---------------wEnaFVlev0KKwZ8EED5sFrUQ--
+I'm guessing that the problem is actually caused by "usb: ulpi: defer 
+ulpi_register on ulpi_read_id timeout".
 
---------------BQEuTsYP8QPEwNVL4H3K1fCR
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+ulpi_read_id() now returns ETIMEDOUT due to the test write 
+ulpi_write(ulpi, ULPI_SCRATCH, 0xaa) failing.
 
------BEGIN PGP SIGNATURE-----
+Maybe  we can create a fix by skipping the test write in case dt 
+discovery is available and calling of_device_request_module() directly, 
+instead of masking the timed out test write as it was before?
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmOi2bEFAwAAAAAACgkQlh/E3EQov+Aq
-pQ//eV6FpL4sJQ33CCFH0b2ZpHiMSTeOuA3JXX1omWME38JckOmsQkPd9nDJ8l0Rg9sOhETJG5BY
-rCL3ok9TtT4ix+zJCNObzNi2jgtQ6iTII3DfVmOZMYUoSJNSZXLWPhyhUxSDnbLZ/XcHEicTS4tr
-qaOaHHwSHsyLOqWr4vuURRCzKYVQfgzp5OOU5ZuVcsR0fS7+nSV2PLBMu//4SVLvAJ5dmFf06H/v
-9JxudGm4nb6ARML6PcWqtBFmUSmp7Bm0B3eP1keQZfAlCOGxmxpBifVZZz7NcyRON5oZ8n/Km4Ui
-FMOdw5uIeMkRfFIGp8xiS+O2ff5JP776vZcrxrtbS5Vk4j/qO9pEUvIM4H9UNL9IoptPGXwDkHNn
-2fFI8xAFBLZuZg7e28y+JnC0NKR7L5P7cn5BL5A5tCf+2GHGww+LneHw0eZ57xIjGWLzB+sY9kXq
-BRByXd41PwxZnW0TnR9PYD4kc+f/ReJ57tC8Etywc9wQ8sKXIQ0AkMweZQuQbcxPF/7wgURutOQQ
-c0sVdZtCOWt86PRsYvDfCgzHZ83TTHAqCC2JTMpXyCF5MU2gJt9jBTVZsUBNkYkX7Hb9erAeojq6
-MxUK1rBzm2v5A7M9U2y6RtweMj047X4lb317Vypzt/Wtvoqlyh37e9gL6RDYNtY/+63EnkAr8gz4
-CfI=
-=i02y
------END PGP SIGNATURE-----
-
---------------BQEuTsYP8QPEwNVL4H3K1fCR--
+> ci_hdrc ci_hdrc.0: failed to register ULPI interface
+> ci_hdrc: probe of ci_hdrc.0 failed with error -110
+>
+> and the USB interface does not instantiate. Reverting this patch fixes
+> the problem. Bisect log is attached.
+>
+> A detailed log is available at
+> https://kerneltests.org/builders/qemu-arm-v7-master/builds/484/steps/qemubuildcommand/logs/stdio
+>
+> Guenter
+>
+> ---
+> # bad: [35f79d0e2c98ff6ecb9b5fc33113158dc7f7353c] Merge tag 'parisc-for-6.2-1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux
+> # good: [830b3c68c1fb1e9176028d02ef86f3cf76aa2476] Linux 6.1
+> git bisect start 'HEAD' 'v6.1'
+> # good: [90b12f423d3c8a89424c7bdde18e1923dfd0941e] Merge tag 'for-linus-6.2-1' of https://github.com/cminyard/linux-ipmi
+> git bisect good 90b12f423d3c8a89424c7bdde18e1923dfd0941e
+> # good: [c7020e1b346d5840e93b58cc4f2c67fc645d8df9] Merge tag 'pci-v6.2-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci
+> git bisect good c7020e1b346d5840e93b58cc4f2c67fc645d8df9
+> # bad: [b83a7080d30032cf70832bc2bb04cc342e203b88] Merge tag 'staging-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+> git bisect bad b83a7080d30032cf70832bc2bb04cc342e203b88
+> # good: [057b40f43ce429a02e793adf3cfbf2446a19a38e] Merge tag 'acpi-6.2-rc1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+> git bisect good 057b40f43ce429a02e793adf3cfbf2446a19a38e
+> # good: [851f657a86421dded42b6175c6ea0f4f5e86af97] Merge tag '6.2-rc-smb3-client-fixes-part1' of git://git.samba.org/sfrench/cifs-2.6
+> git bisect good 851f657a86421dded42b6175c6ea0f4f5e86af97
+> # good: [fa205589d5e9fc2d1b2f8d31f665152da04160bc] staging: r8188eu: stop beacon processing if kmalloc fails
+> git bisect good fa205589d5e9fc2d1b2f8d31f665152da04160bc
+> # good: [4051a1c96e4883f3445cc8f239c214be622f4c6c] Merge tag 'thunderbolt-for-v6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
+> git bisect good 4051a1c96e4883f3445cc8f239c214be622f4c6c
+> # good: [84e57d292203a45c96dbcb2e6be9dd80961d981a] Merge tag 'exfat-for-6.2-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat
+> git bisect good 84e57d292203a45c96dbcb2e6be9dd80961d981a
+> # good: [6f1f0ad910f73f5533b65e1748448d334e0ec697] usb: gadget: udc: drop obsolete dependencies on COMPILE_TEST
+> git bisect good 6f1f0ad910f73f5533b65e1748448d334e0ec697
+> # good: [c7912f27dedd874d49eadf78b5b6fbfdec52c7c3] staging: rtl8192e: Fix spelling mistake "ContryIE" -> "CountryIE"
+> git bisect good c7912f27dedd874d49eadf78b5b6fbfdec52c7c3
+> # bad: [63130462c919ece0ad0d9bb5a1f795ef8d79687e] usb: dwc3: core: defer probe on ulpi_read_id timeout
+> git bisect bad 63130462c919ece0ad0d9bb5a1f795ef8d79687e
+> # good: [38cea8e31e9ef143187135d714aed4d7bd18463c] dt-bindings: vendor-prefixes: add Genesys Logic
+> git bisect good 38cea8e31e9ef143187135d714aed4d7bd18463c
+> # good: [9bae996ffa28ac03b6d95382a2a082eb219e745a] usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
+> git bisect good 9bae996ffa28ac03b6d95382a2a082eb219e745a
+> # bad: [8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
+> git bisect bad 8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac
+> # first bad commit: [8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac] usb: ulpi: defer ulpi_register on ulpi_read_id timeout
