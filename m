@@ -2,78 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B65B6536D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A4C6536D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234489AbiLUTHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 14:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
+        id S234691AbiLUTIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 14:08:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiLUTHl (ORCPT
+        with ESMTP id S234653AbiLUTI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:07:41 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59805205D3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:07:39 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id s2-20020a170902ea0200b0019247629ee5so1394050plg.17
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:07:39 -0800 (PST)
+        Wed, 21 Dec 2022 14:08:27 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD6B205D3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:08:25 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id b189so15616687vsc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:08:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FuHaksFWfmzvX/0UcFQCgtayWDVlA975ayg4IySh6xU=;
-        b=BkDw4UUzBfCiXj8kHMlNPB7j8MqI8B8JKZhzddUdlC9YhXFpxhXgIOHWgwN79k8qoP
-         NXJ55BhukivabsqHxkEz3n4AGQ1/QLSIQzsLnnNoKXPRT/KjwkpxoqJ8xRGUdJmspZX7
-         RyHqPDo7GJzthBPB05auY+JiRJzJRtvZtTTxwbpvGw5ahokR03xAj6teBIrUZBZnVmSM
-         3XAKXZBU0f8kLtMIWY15oKGeoKY7kyWJcKQhaJSpPfwokABNqYL+qSfHkt+AF4qpevQk
-         02hOXbQatSoRrYlu6+fVui5CzAPSsAEP4lSPyG9v/RF3ANO/HtAscNmF6BCz5R2U1W68
-         nRLg==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qn+t8qDtNQ9Zc5y1ZpPtqZOcEJkis56LzveCTgnEvi8=;
+        b=VG2RhAC4GerNWJVwD5eJK2dJtjzxa5jl2ZE1QCuq5JVGE55Nw9FULecqOtzxRwYK6X
+         6x1WsybFrqNdJhT41JDls6OTcVcDuZilELmRIQWqu4uWpTYScMFpjXEAVirA2mY2wWZC
+         BFqQ0e6nDcmL/pH5o0U4mrpND+AVZUnqI15hA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FuHaksFWfmzvX/0UcFQCgtayWDVlA975ayg4IySh6xU=;
-        b=wRLxs2AON9I97Xo10QQtE4K01VJlUz18ObrfvR8Ptfs2N6mwXMR/smd1nQEUFJs3FT
-         nIA/Nm3UmIgGgogqQ2Gkt0yhgpPY9kabwYc2W7mdKZI+QGsVosvA+XeNH4JmSNGArwHW
-         vQXWy4jNOXuHtEq3j5W0W4e2qd60NoRtUy/tk+Z+iiUGuZsICtv4UOH4PntCjDzk0FTg
-         LtADGprs2vaJKBVnUUHeCemecnfzvrlVlAmD45L9+6CXTLdRp0eC2RC6Y02kqDmPzbXV
-         07oUPefzMtwFmAZnd+nk0g5pe1ydB6oTG0siNnKlHqsvsniR9ZNe30HzVorc20cDB8En
-         FUeQ==
-X-Gm-Message-State: AFqh2kqTVgrWVIGfZNKGM5yxmX6AJvRbYxsE4uONpDpsgrXQN8qomp5t
-        nq80HZNfDzYZC+wosA+FRIUZ5yI=
-X-Google-Smtp-Source: AMrXdXt+ySJHbpwBcBFTpnKo3KORcNuqsBqsVtsZm5wl+3GzpFxTxgKl8VYETHw9dOg5iKk2exNzbNQ=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90b:4fc3:b0:218:9893:9aa7 with SMTP id
- qa3-20020a17090b4fc300b0021898939aa7mr216143pjb.223.1671649658846; Wed, 21
- Dec 2022 11:07:38 -0800 (PST)
-Date:   Wed, 21 Dec 2022 11:07:37 -0800
-In-Reply-To: <20221221055856.2786043-1-james.hilliard1@gmail.com>
-Mime-Version: 1.0
-References: <20221221055856.2786043-1-james.hilliard1@gmail.com>
-Message-ID: <Y6NZeY/YpbR3pdFM@google.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: move struct definitions out of
- function params
-From:   sdf@google.com
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qn+t8qDtNQ9Zc5y1ZpPtqZOcEJkis56LzveCTgnEvi8=;
+        b=cNBF7ErS/Na12mYRWPIbJPFItO4kX8eJxm3EgIAvohhGXg+GKz+kvoyXNYB+4V+TpS
+         2o95mbpzwnZ8kGT1yqIKL31U8rq+cDE/C38U7GccduO9gA8GjR4eV/Hplg4TPatKQT6A
+         jtDutPUBS5DDMpdZRwNdohhuzuUfPr3b/NibUWHWnKKzVIb2kJuxeZ7wHmscLzmn8zW1
+         B1V1jUek3bPO1r1AkhVFQDhTtF8iTvHnwP43twBqU0DwmvffWa6YOiMmiJyzg2CUh/SD
+         +sLe9eQ+alPyXzy6O9Ej84lQloJ2MAn9Y5nv78NoGm4UeJrRCkCavdarKN2sQIJBFx50
+         xDeg==
+X-Gm-Message-State: AFqh2krPHMNKqpu9xSHHe7/n34ugDRZKx5bKADyNSCwmUJ9sv1GOIcAn
+        KWt7RoX/131uTLkxUqnPIWM6I1hNlPN5wH3E
+X-Google-Smtp-Source: AMrXdXsUHCR0+EQm5z8jyxFxLM7XJ5rP1C6aDwwB6PI5uAUuCaJ/LuJeU9hBAcoLSj+2vbHrREBfbg==
+X-Received: by 2002:a67:8cc4:0:b0:3b2:a92b:3b52 with SMTP id o187-20020a678cc4000000b003b2a92b3b52mr1301185vsd.8.1671649704706;
+        Wed, 21 Dec 2022 11:08:24 -0800 (PST)
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com. [209.85.219.49])
+        by smtp.gmail.com with ESMTPSA id bp43-20020a05620a45ab00b006fb7c42e73asm11475809qkb.21.2022.12.21.11.08.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 11:08:22 -0800 (PST)
+Received: by mail-qv1-f49.google.com with SMTP id pp21so10946445qvb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:08:21 -0800 (PST)
+X-Received: by 2002:a05:6214:1185:b0:4c6:608c:6b2c with SMTP id
+ t5-20020a056214118500b004c6608c6b2cmr133347qvv.130.1671649701297; Wed, 21 Dec
+ 2022 11:08:21 -0800 (PST)
+MIME-Version: 1.0
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com> <20221019203034.3795710-1-Jason@zx2c4.com>
+ <20221221145332.GA2399037@roeck-us.net> <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
+ <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk> <20221221155641.GB2468105@roeck-us.net>
+ <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
+ <20221221171922.GA2470607@roeck-us.net> <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 21 Dec 2022 11:08:05 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiL2njz3b-_jY7iSJ15eu-9Drb4TOyPdd0cJ=kk_RQEvg@mail.gmail.com>
+Message-ID: <CAHk-=wiL2njz3b-_jY7iSJ15eu-9Drb4TOyPdd0cJ=kk_RQEvg@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-m68k@lists.linux-m68k.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,210 +87,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20, James Hilliard wrote:
-> Anonymous structs can't be declared inside function parameter
-> definitions in current c standards, however clang doesn't detect this
-> condition currently while GCC does.
+On Wed, Dec 21, 2022 at 10:46 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> But it looked very obvious indeed, and I hate having buggy code that
+> is architecture-specific when we have generic code that isn't buggy.
 
-> Details: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108189
+Side note: we have an x86-64 implementation that looks fine (but not
+really noticeably better than the generic one) that is based on the
+'return subtraction' model. But it seems to get it right.
 
-> Fixes errors like:
-> progs/btf_dump_test_case_bitfields.c:85:7: error: anonymous struct  
-> declared inside parameter list will not be visible outside of this  
-> definition or declaration [-Werror]
->     85 | int f(struct {
->        |       ^~~~~~
+And we have a 32-bit x86 assembly thing that is based on 'rep scasb',
+that then uses the carry bit to also get things right.
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+That 32-bit asm goes back to Linux 0.01 (with some changes since to
+use "sbbl+or" instead of a conditional neg). I was playing around a
+lot with the 'rep' instructions back when, since it was all part of
+"learn the instruction set" for me.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+Both of them should probably be removed as pointless too, but they
+don't seem actively buggy.
 
-Looking at the referenced thread, seems like it requires at lest C23
-and I doubt default clang is using that; so seems fine to be pedantic
-here and move the definitions out.
-
-> ---
->   .../bpf/progs/btf_dump_test_case_bitfields.c  |  9 ++++--
->   .../progs/btf_dump_test_case_namespacing.c    | 10 ++++---
->   .../bpf/progs/btf_dump_test_case_packing.c    | 10 ++++---
->   .../bpf/progs/btf_dump_test_case_padding.c    | 10 ++++---
->   .../bpf/progs/btf_dump_test_case_syntax.c     | 30 +++++++++++++------
->   5 files changed, 46 insertions(+), 23 deletions(-)
-
-> diff --git  
-> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c  
-> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
-> index e01690618e1e..c75f6bd06a49 100644
-> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
-> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
-> @@ -82,11 +82,16 @@ struct bitfield_flushed {
->   	long b: 16;
->   };
-
-> -int f(struct {
-> +/* ----- START-EXPECTED-OUTPUT ----- */
-> +struct root_struct {
->   	struct bitfields_only_mixed_types _1;
->   	struct bitfield_mixed_with_others _2;
->   	struct bitfield_flushed _3;
-> -} *_)
-> +};
-> +
-> +/* ------ END-EXPECTED-OUTPUT ------ */
-> +
-> +int f(struct root_struct *_)
->   {
->   	return 0;
->   }
-> diff --git  
-> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c  
-> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
-> index 92a4ad428710..d7cf2a8487c9 100644
-> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
-> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
-> @@ -49,9 +49,7 @@ typedef int Y;
-
->   typedef int Z;
-
-> -/*------ END-EXPECTED-OUTPUT ------ */
-> -
-> -int f(struct {
-> +struct root_struct {
->   	struct S _1;
->   	S _2;
->   	union U _3;
-> @@ -67,7 +65,11 @@ int f(struct {
->   	X xx;
->   	Y yy;
->   	Z zz;
-> -} *_)
-> +};
-> +
-> +/*------ END-EXPECTED-OUTPUT ------ */
-> +
-> +int f(struct root_struct *_)
->   {
->   	return 0;
->   }
-> diff --git  
-> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c  
-> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
-> index 7998f27df7dd..e039ceb50c43 100644
-> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
-> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
-> @@ -132,9 +132,7 @@ struct outer_packed_struct {
->   	struct nested_packed_struct b;
->   } __attribute__((packed));
-
-> -/* ------ END-EXPECTED-OUTPUT ------ */
-> -
-> -int f(struct {
-> +struct root_struct {
->   	struct packed_trailing_space _1;
->   	struct non_packed_trailing_space _2;
->   	struct packed_fields _3;
-> @@ -147,7 +145,11 @@ int f(struct {
->   	struct usb_host_endpoint _10;
->   	struct outer_nonpacked_struct _11;
->   	struct outer_packed_struct _12;
-> -} *_)
-> +};
-> +
-> +/* ------ END-EXPECTED-OUTPUT ------ */
-> +
-> +int f(struct root_struct *_)
->   {
->   	return 0;
->   }
-> diff --git  
-> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c  
-> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
-> index 79276fbe454a..2ca46ad8d66a 100644
-> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
-> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
-> @@ -220,9 +220,7 @@ struct outer_mixed_but_unpacked {
->   	struct nested_packed b2;
->   };
-
-> -/* ------ END-EXPECTED-OUTPUT ------ */
-> -
-> -int f(struct {
-> +struct root_struct {
->   	struct padded_implicitly _1;
->   	struct padded_explicitly _2;
->   	struct padded_a_lot _3;
-> @@ -243,7 +241,11 @@ int f(struct {
->   	struct ib_wc _201;
->   	struct acpi_object_method _202;
->   	struct outer_mixed_but_unpacked _203;
-> -} *_)
-> +} __attribute__((packed));
-> +
-> +/* ------ END-EXPECTED-OUTPUT ------ */
-> +
-> +int f(struct root_struct *_)
->   {
->   	return 0;
->   }
-> diff --git  
-> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c  
-> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-> index 26fffb02ed10..3e31df7cecc6 100644
-> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-> @@ -104,24 +104,24 @@ typedef void (*printf_fn_t)(const char *, ...);
->    *   typedef const fn_output_inner_t fn_ptr_arr2_t[5];
->    */
->   /* ----- START-EXPECTED-OUTPUT ----- */
-> -typedef char * const * (*fn_ptr2_t)(struct {
-> -	int a;
-> -}, int (*)(int));
-> +struct struct_a;
-> +
-> +typedef char * const * (*fn_ptr2_t)(struct struct_a, int (*)(int));
-> +
-> +struct struct_c;
-> +
-> +struct struct_h;
-
->   typedef struct {
->   	int a;
-> -	void (*b)(int, struct {
-> -		int c;
-> -	}, union {
-> +	void (*b)(int, struct struct_c, union {
->   		char d;
->   		int e[5];
->   	});
->   } (*fn_complex_t)(union {
->   	void *f;
->   	char g[16];
-> -}, struct {
-> -	int h;
-> -});
-> +}, struct struct_h);
-
->   typedef void (* (*signal_t)(int, void (*)(int)))(int);
-
-> @@ -272,6 +272,18 @@ struct root_struct {
->   	struct float_struct _15;
->   };
-
-> +struct struct_a {
-> +	int a;
-> +};
-> +
-> +struct struct_h {
-> +	int h;
-> +};
-> +
-> +struct struct_c {
-> +	int c;
-> +};
-> +
->   /* ------ END-EXPECTED-OUTPUT ------ */
-
->   int f(struct root_struct *s)
-> --
-> 2.34.1
-
+               Linus
