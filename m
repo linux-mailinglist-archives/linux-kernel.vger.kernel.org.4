@@ -2,238 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BBF65374B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C258365374A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbiLUT6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 14:58:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
+        id S234562AbiLUT6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 14:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiLUT6K (ORCPT
+        with ESMTP id S229791AbiLUT6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:58:10 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1832DBE26
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:58:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671652671; bh=nWkOMj2N6LbgMIWdXK2PUNqVACe/YQOGQRAijbpfG8U=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=QBBgTrMGUYzx8uaXK8tFNt6L5lDBJm2U1zfKs4oxvTop2Hn5fovA+qFDXHrg/lNRa
-         2AkmhKJzgrHV9p/bWJG7UVEZSmlG6QclvXY/eAR09SegukunBHQW4nLYbCA+X7OJTX
-         bjPrVVZfhl/gIuUoPK4+K32TxC7bpaT1mpZQscwQ=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Wed, 21 Dec 2022 20:57:51 +0100 (CET)
-X-EA-Auth: mNmn2jbSxUm86SXJ/w4EMIdyTLjohVzgPtkuIMBB19SVH0DA7nC/5Kz50Q3wR8loEedLMRaz60iyZoiefapIVjMUBPLfeEHr
-Date:   Thu, 22 Dec 2022 01:27:40 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
-Subject: [PATCH] tty: serial: convert atomic_* to refcount_* APIs
-Message-ID: <Y6NlNB9c22XiYHdD@qemulion>
+        Wed, 21 Dec 2022 14:58:05 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6465610B5D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:58:04 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id m29so24873184lfo.11
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:58:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XgZH7C3EFab6QPuF4xdSFFnQg7k8Lmf8P5JMzy2Da58=;
+        b=GFx1gLnyRPHbQBstsEDO1/fKXIF7FOL+kOKrUraYK+FIwpHEfO7/TGz2OnFhTK++NL
+         s8Pu52L9DkHVRHGRZz3N3E50jXA7bqQtzx5N8PMh2r7+uQJNuIEn1XfkqF5FCFUj6nyF
+         8UqZNvCr4zNvVbEJH7+2nK3yhqLjv8aXi1RDM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XgZH7C3EFab6QPuF4xdSFFnQg7k8Lmf8P5JMzy2Da58=;
+        b=Ja9MxFFRZtngirpx7q7/NEQlYjXMDyw5LnseOfgl0cNsuWn1NTAFUkcwYGEDk3Z7zb
+         6sVtfd8CwtJgK0Xsjefx0vSKUzjQk6H9XDSdiBeMZLhId1BPMKRizAXbWcAuKJY1WR/y
+         zuN3x8a005c4NJEFV6kJyxqF1OVL9WSv/+MLWmyDa/MZE/w9OLeicdBo4CIYzqgO5cA7
+         oIq7sZjk8IjMaR4bN18gYHPSzXyO1j7d/YvHXimpthzVuhsoumHiKAyJ4iVqOmyimqJr
+         8y0pXcR27kO6JcrplzTtwKLPXDN9fACjvOBjSW0a9rLJ4ULey73fOhPphXxFsK47eXK6
+         ZXgw==
+X-Gm-Message-State: AFqh2koF3jTTJw4HORpVbKoXyW5JyY+hqTP9Qft/cYmsxoINPqwR1+B3
+        zMjauZWGrfzNaCM8/XH3wUGk5UoOWkbBDyDPzT6clA==
+X-Google-Smtp-Source: AMrXdXvYxZWKDva6YXYWhomjEbA7yIe/H87WoxNx4RfEl4AevsaFSB7B77wR9lz6f0ciup+5xqwHlz7SgL2TTpazITA=
+X-Received: by 2002:ac2:5205:0:b0:4a4:782a:42ac with SMTP id
+ a5-20020ac25205000000b004a4782a42acmr144698lfl.468.1671652682712; Wed, 21 Dec
+ 2022 11:58:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20221221004957.GA29021@lothringen> <0B1950D8-9319-4F25-B14B-4ED949A57BE0@joelfernandes.org>
+ <20221221112629.GA29427@lothringen> <Y6MuFH2ZMY7mV06q@Boquns-Mac-mini.local>
+ <20221221173005.GB37362@lothringen> <CAEXW_YRe=h0tuRyp=2N1mB9ytsiFLL6U4UX=Od5PN-=7FwuDsg@mail.gmail.com>
+In-Reply-To: <CAEXW_YRe=h0tuRyp=2N1mB9ytsiFLL6U4UX=Od5PN-=7FwuDsg@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 21 Dec 2022 19:57:50 +0000
+Message-ID: <CAEXW_YRkh69OBmFk8UoL=EALseJZy2rwbfgNwrPrv1cK0BvnOg@mail.gmail.com>
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The refcount_* APIs are designed to address known issues with the
-atomic_t APIs for reference counting. They protect the reference
-counters from overflow/underflow, use-after-free errors, provide
-improved memory ordering guarantee schemes, are neater and safer.
-Hence, replace the atomic_* APIs by their equivalent refcount_t
-API functions.
+Mathieu pointed out to me on IRC that adding the control dep on the
+update side removes even that need for E. And I see that is what Boqun
+was suggesting above and that Frederic modified.
 
-This patch proposal address the following warnings generated by
-the atomic_as_refcounter.cocci coccinelle script
-	atomic_add_return(-1, ...)
+See updated litmus here: https://www.irccloud.com/pastebin/TrXacogO/
 
+With this, I am not seeing the "bad condition" happen.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Note: The patch is compile tested using dec_station.defconfig for
-      MIPS architecture.
-
-
- drivers/tty/serial/dz.c | 34 +++++++++++++---------------------
- drivers/tty/serial/zs.c | 11 ++++-------
- drivers/tty/serial/zs.h |  2 +-
- 3 files changed, 18 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
-index 6b7ed7f2f3ca..c248201f9499 100644
---- a/drivers/tty/serial/dz.c
-+++ b/drivers/tty/serial/dz.c
-@@ -46,7 +46,7 @@
- #include <linux/tty.h>
- #include <linux/tty_flip.h>
-
--#include <linux/atomic.h>
-+#include <linux/refcount.h>
- #include <linux/io.h>
- #include <asm/bootinfo.h>
-
-@@ -75,8 +75,8 @@ struct dz_port {
-
- struct dz_mux {
- 	struct dz_port		dport[DZ_NB_PORT];
--	atomic_t		map_guard;
--	atomic_t		irq_guard;
-+	refcount_t		map_guard;
-+	refcount_t		irq_guard;
- 	int			initialised;
- };
-
-@@ -399,18 +399,17 @@ static int dz_startup(struct uart_port *uport)
- 	struct dz_port *dport = to_dport(uport);
- 	struct dz_mux *mux = dport->mux;
- 	unsigned long flags;
--	int irq_guard;
- 	int ret;
- 	u16 tmp;
-
--	irq_guard = atomic_add_return(1, &mux->irq_guard);
--	if (irq_guard != 1)
-+	refcount_inc(&mux->irq_guard);
-+	if (refcount_read(&mux->irq_guard) != 1)
- 		return 0;
-
- 	ret = request_irq(dport->port.irq, dz_interrupt,
- 			  IRQF_SHARED, "dz", mux);
- 	if (ret) {
--		atomic_add(-1, &mux->irq_guard);
-+		refcount_dec(&mux->irq_guard);
- 		printk(KERN_ERR "dz: Cannot get IRQ %d!\n", dport->port.irq);
- 		return ret;
- 	}
-@@ -440,15 +439,13 @@ static void dz_shutdown(struct uart_port *uport)
- 	struct dz_port *dport = to_dport(uport);
- 	struct dz_mux *mux = dport->mux;
- 	unsigned long flags;
--	int irq_guard;
- 	u16 tmp;
-
- 	spin_lock_irqsave(&dport->port.lock, flags);
- 	dz_stop_tx(&dport->port);
- 	spin_unlock_irqrestore(&dport->port.lock, flags);
-
--	irq_guard = atomic_add_return(-1, &mux->irq_guard);
--	if (!irq_guard) {
-+	if (refcount_dec_and_test(&mux->irq_guard)) {
- 		/* Disable interrupts.  */
- 		tmp = dz_in(dport, DZ_CSR);
- 		tmp &= ~(DZ_RIE | DZ_TIE);
-@@ -662,13 +659,11 @@ static const char *dz_type(struct uart_port *uport)
- static void dz_release_port(struct uart_port *uport)
- {
- 	struct dz_mux *mux = to_dport(uport)->mux;
--	int map_guard;
-
- 	iounmap(uport->membase);
- 	uport->membase = NULL;
-
--	map_guard = atomic_add_return(-1, &mux->map_guard);
--	if (!map_guard)
-+	if (refcount_dec_and_test(&mux->map_guard))
- 		release_mem_region(uport->mapbase, dec_kn_slot_size);
- }
-
-@@ -687,14 +682,12 @@ static int dz_map_port(struct uart_port *uport)
- static int dz_request_port(struct uart_port *uport)
- {
- 	struct dz_mux *mux = to_dport(uport)->mux;
--	int map_guard;
- 	int ret;
-
--	map_guard = atomic_add_return(1, &mux->map_guard);
--	if (map_guard == 1) {
--		if (!request_mem_region(uport->mapbase, dec_kn_slot_size,
--					"dz")) {
--			atomic_add(-1, &mux->map_guard);
-+	refcount_inc(&mux->map_guard);
-+	if (refcount_read(&mux->map_guard) == 1) {
-+		if (!request_mem_region(uport->mapbase, dec_kn_slot_size, "dz")) {
-+			refcount_dec(&mux->map_guard);
- 			printk(KERN_ERR
- 			       "dz: Unable to reserve MMIO resource\n");
- 			return -EBUSY;
-@@ -702,8 +695,7 @@ static int dz_request_port(struct uart_port *uport)
- 	}
- 	ret = dz_map_port(uport);
- 	if (ret) {
--		map_guard = atomic_add_return(-1, &mux->map_guard);
--		if (!map_guard)
-+		if (refcount_dec_and_test(&mux->map_guard))
- 			release_mem_region(uport->mapbase, dec_kn_slot_size);
- 		return ret;
- 	}
-diff --git a/drivers/tty/serial/zs.c b/drivers/tty/serial/zs.c
-index 730c648e32ff..6fa79705a0c9 100644
---- a/drivers/tty/serial/zs.c
-+++ b/drivers/tty/serial/zs.c
-@@ -753,15 +753,14 @@ static int zs_startup(struct uart_port *uport)
- 	struct zs_port *zport = to_zport(uport);
- 	struct zs_scc *scc = zport->scc;
- 	unsigned long flags;
--	int irq_guard;
- 	int ret;
-
--	irq_guard = atomic_add_return(1, &scc->irq_guard);
--	if (irq_guard == 1) {
-+	refcount_inc(&scc->irq_guard);
-+	if (refcount_read(&scc->irq_guard) == 1) {
- 		ret = request_irq(zport->port.irq, zs_interrupt,
- 				  IRQF_SHARED, "scc", scc);
- 		if (ret) {
--			atomic_add(-1, &scc->irq_guard);
-+			refcount_dec(&scc->irq_guard);
- 			printk(KERN_ERR "zs: can't get irq %d\n",
- 			       zport->port.irq);
- 			return ret;
-@@ -806,7 +805,6 @@ static void zs_shutdown(struct uart_port *uport)
- 	struct zs_port *zport = to_zport(uport);
- 	struct zs_scc *scc = zport->scc;
- 	unsigned long flags;
--	int irq_guard;
-
- 	spin_lock_irqsave(&scc->zlock, flags);
-
-@@ -816,8 +814,7 @@ static void zs_shutdown(struct uart_port *uport)
-
- 	spin_unlock_irqrestore(&scc->zlock, flags);
-
--	irq_guard = atomic_add_return(-1, &scc->irq_guard);
--	if (!irq_guard)
-+	if (refcount_dec_and_test(&scc->irq_guard))
- 		free_irq(zport->port.irq, scc);
- }
-
-diff --git a/drivers/tty/serial/zs.h b/drivers/tty/serial/zs.h
-index 26ef8eafa1c1..bd97b73d7e16 100644
---- a/drivers/tty/serial/zs.h
-+++ b/drivers/tty/serial/zs.h
-@@ -40,7 +40,7 @@ struct zs_port {
- struct zs_scc {
- 	struct zs_port	zport[2];
- 	spinlock_t	zlock;
--	atomic_t	irq_guard;
-+	refcount_t	irq_guard;
- 	int		initialised;
- };
-
---
-2.34.1
-
-
-
+On Wed, Dec 21, 2022 at 7:33 PM Joel Fernandes <joel@joelfernandes.org> wro=
+te:
+>
+> Ah Frederic, I think you nailed it. E is required to order the flip
+> write with the control-dependency on the READ side. I can confirm the
+> below test with bad condition shows the previous reader sees the
+> post-flip index when it shouldn't have. Please see below modifications
+> to your Litmus test.
+>
+> I think we should document it in the code that E pairs with the
+> control-dependency between idx read and lock count write.
+>
+> C srcu
+> {}
+> // updater
+> P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+> {
+>         int lock1;
+>         int unlock1;
+>         int lock0;
+>         int unlock0;
+>
+>         // SCAN1
+>         unlock1 =3D READ_ONCE(*UNLOCK1);
+>         smp_mb(); // A
+>         lock1 =3D READ_ONCE(*LOCK1);
+>
+>         // FLIP
+>         smp_mb(); // E -------------------- required to make the bad
+> condition not happen.
+>         WRITE_ONCE(*IDX, 1);
+>         smp_mb(); // D
+>
+>         // SCAN2
+>         unlock0 =3D READ_ONCE(*UNLOCK0);
+>         smp_mb(); // A
+>         lock0 =3D READ_ONCE(*LOCK0);
+> }
+>
+> // reader
+> P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+> {
+>         int tmp;
+>         int idx1;
+>         int idx2;
+>
+>         // 1st reader
+>         idx1 =3D READ_ONCE(*IDX);
+>         if (idx1 =3D=3D 0) {
+>                 tmp =3D READ_ONCE(*LOCK0);
+>                 WRITE_ONCE(*LOCK0, tmp + 1);
+>                 smp_mb(); /* B and C */
+>                 tmp =3D READ_ONCE(*UNLOCK0);
+>                 WRITE_ONCE(*UNLOCK0, tmp + 1);
+>         } else {
+>                 tmp =3D READ_ONCE(*LOCK1);
+>                 WRITE_ONCE(*LOCK1, tmp + 1);
+>                 smp_mb(); /* B and C */
+>                 tmp =3D READ_ONCE(*UNLOCK1);
+>                 WRITE_ONCE(*UNLOCK1, tmp + 1);
+>         }
+>
+>         // second reader
+>         idx2 =3D READ_ONCE(*IDX);
+>         if (idx2 =3D=3D 0) {
+>                 tmp =3D READ_ONCE(*LOCK0);
+>                 WRITE_ONCE(*LOCK0, tmp + 1);
+>                 smp_mb(); /* B and C */
+>                 tmp =3D READ_ONCE(*UNLOCK0);
+>                 WRITE_ONCE(*UNLOCK0, tmp + 1);
+>         } else {
+>                 tmp =3D READ_ONCE(*LOCK1);
+>                 WRITE_ONCE(*LOCK1, tmp + 1);
+>                 smp_mb(); /* B and C */
+>                 tmp =3D READ_ONCE(*UNLOCK1);
+>                 WRITE_ONCE(*UNLOCK1, tmp + 1);
+>         }
+> }
+>
+> exists (0:lock1=3D1 /\ 1:idx1=3D1 /\ 1:idx2=3D1 )  (* bad condition: 1st
+> reader saw flip *)
+>
+>
+>
+>
+>
+> On Wed, Dec 21, 2022 at 5:30 PM Frederic Weisbecker <frederic@kernel.org>=
+ wrote:
+> >
+> > On Wed, Dec 21, 2022 at 08:02:28AM -0800, Boqun Feng wrote:
+> > > On Wed, Dec 21, 2022 at 12:26:29PM +0100, Frederic Weisbecker wrote:
+> > > > On Tue, Dec 20, 2022 at 09:41:17PM -0500, Joel Fernandes wrote:
+> > > > >
+> > > > >
+> > > > > > On Dec 20, 2022, at 7:50 PM, Frederic Weisbecker <frederic@kern=
+el.org> wrote:
+> > > > > >
+> > > > > > =EF=BB=BFOn Tue, Dec 20, 2022 at 07:15:00PM -0500, Joel Fernand=
+es wrote:
+> > > > > >> On Tue, Dec 20, 2022 at 5:45 PM Frederic Weisbecker <frederic@=
+kernel.org> wrote:
+> > > > > >> Agreed about (1).
+> > > > > >>
+> > > > > >>> _ In (2), E pairs with the address-dependency between idx and=
+ lock_count.
+> > > > > >>
+> > > > > >> But that is not the only reason. If that was the only reason f=
+or (2),
+> > > > > >> then there is an smp_mb() just before the next-scan post-flip =
+before
+> > > > > >> the lock counts are read.
+> > > > > >
+> > > > > > The post-flip barrier makes sure the new idx is visible on the =
+next READER's
+> > > > > > turn, but it doesn't protect against the fact that "READ idx th=
+en WRITE lock[idx]"
+> > > > > > may appear unordered from the update side POV if there is no ba=
+rrier between the
+> > > > > > scan and the flip.
+> > > > > >
+> > > > > > If you remove the smp_mb() from the litmus test I sent, things =
+explode.
+> > > > >
+> > > > > Sure I see what you are saying and it=E2=80=99s a valid point as =
+well. However why do you need memory barrier D (labeled such in the kernel =
+code) for that? You already have a memory barrier A before the lock count i=
+s read. That will suffice for the ordering pairing with the addr dependency=
+.
+> > > > > In other words, if updater sees readers lock counts, then reader =
+would be making those lock count updates on post-flip inactive index, not t=
+he one being scanned as you wanted, and you will accomplish that just with =
+the mem barrier A.
+> > > > >
+> > > > > So D fixes the above issue you are talking about (lock count upda=
+te), however that is already fixed by the memory barrier A. But you still n=
+eed D for the issue I mentioned (unlock counts vs flip).
+> > > > >
+> > > > > That=E2=80=99s just my opinion and let=E2=80=99s discuss more bec=
+ause I cannot rule out that I
+> > > > > am missing something with this complicated topic ;-)
+> > > >
+> > > > I must be missing something. I often do.
+> > > >
+> > > > Ok let's put that on litmus:
+> > > >
+> > > > ----
+> > > > C srcu
+> > > >
+> > > > {}
+> > > >
+> > > > // updater
+> > > > P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+> > > > {
+> > > >     int lock1;
+> > > >     int unlock1;
+> > > >     int lock0;
+> > > >     int unlock0;
+> > > >
+> > > >     // SCAN1
+> > > >     unlock1 =3D READ_ONCE(*UNLOCK1);
+> > > >     smp_mb(); // A
+> > > >     lock1 =3D READ_ONCE(*LOCK1);
+> > > >
+> > > >     // FLIP
+> > > >     smp_mb(); // E
+> > >
+> > > In real code there is a control dependency between the READ_ONCE() ab=
+ove
+> > > and the WRITE_ONCE() before, i.e. only flip the idx when lock1 =3D=3D
+> > > unlock1, maybe try with the P0 below? Untested due to not having herd=
+ on
+> > > this computer ;-)
+> > >
+> > > >     WRITE_ONCE(*IDX, 1);
+> > > >     smp_mb(); // D
+> > > >
+> > > >     // SCAN2
+> > > >     unlock0 =3D READ_ONCE(*UNLOCK0);
+> > > >     smp_mb(); // A
+> > > >     lock0 =3D READ_ONCE(*LOCK0);
+> > > > }
+> > > >
+> > >       P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1=
+)
+> > >       {
+> > >               int lock1;
+> > >               int unlock1;
+> > >               int lock0;
+> > >               int unlock0;
+> > >
+> > >               // SCAN1
+> > >               unlock1 =3D READ_ONCE(*UNLOCK1);
+> > >               smp_mb(); // A
+> > >               lock1 =3D READ_ONCE(*LOCK1);
+> > >
+> > >               // FLIP
+> > >               if (unlock1 =3D=3D lock1) {
+> > >                       smp_mb(); // E
+> > >                       WRITE_ONCE(*IDX, 1);
+> > >                       smp_mb(); // D
+> > >
+> > >                       // SCAN2
+> > >                       unlock0 =3D READ_ONCE(*UNLOCK0);
+> > >                       smp_mb(); // A
+> > >                       lock0 =3D READ_ONCE(*LOCK0);
+> > >               }
+> > >       }
+> >
+> > That becomes the below (same effect).
+> >
+> > C D
+> >
+> > {}
+> >
+> > // updater
+> > P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+> > {
+> >         int lock1;
+> >         int unlock1;
+> >         int lock0;
+> >         int unlock0;
+> >
+> >         // SCAN1
+> >         unlock1 =3D READ_ONCE(*UNLOCK1);
+> >         smp_mb(); // A
+> >         lock1 =3D READ_ONCE(*LOCK1);
+> >
+> >         if (unlock1 =3D=3D lock1) {
+> >                 // FLIP
+> >                 smp_mb(); // E
+> >                 WRITE_ONCE(*IDX, 1);
+> >                 smp_mb(); // D
+> >
+> >                 // SCAN 2
+> >                 unlock0 =3D READ_ONCE(*UNLOCK0);
+> >                 smp_mb(); // A
+> >                 lock0 =3D READ_ONCE(*LOCK0);
+> >         }
+> > }
+> >
+> > // reader
+> > P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+> > {
+> >         int tmp;
+> >         int idx;
+> >
+> >         // 1st reader
+> >         idx =3D READ_ONCE(*IDX);
+> >         if (idx =3D=3D 0) {
+> >                 tmp =3D READ_ONCE(*LOCK0);
+> >                 WRITE_ONCE(*LOCK0, tmp + 1);
+> >                 smp_mb(); /* B and C */
+> >                 tmp =3D READ_ONCE(*UNLOCK0);
+> >                 WRITE_ONCE(*UNLOCK0, tmp + 1);
+> >         } else {
+> >                 tmp =3D READ_ONCE(*LOCK1);
+> >                 WRITE_ONCE(*LOCK1, tmp + 1);
+> >                 smp_mb(); /* B and C */
+> >                 tmp =3D READ_ONCE(*UNLOCK1);
+> >                 WRITE_ONCE(*UNLOCK1, tmp + 1);
+> >         }
+> >
+> >         // second reader
+> >         idx =3D READ_ONCE(*IDX);
+> >         if (idx =3D=3D 0) {
+> >                 tmp =3D READ_ONCE(*LOCK0);
+> >                 WRITE_ONCE(*LOCK0, tmp + 1);
+> >                 smp_mb(); /* B and C */
+> >                 tmp =3D READ_ONCE(*UNLOCK0);
+> >                 WRITE_ONCE(*UNLOCK0, tmp + 1);
+> >         } else {
+> >                 tmp =3D READ_ONCE(*LOCK1);
+> >                 WRITE_ONCE(*LOCK1, tmp + 1);
+> >                 smp_mb(); /* B and C */
+> >                 tmp =3D READ_ONCE(*UNLOCK1);
+> >                 WRITE_ONCE(*UNLOCK1, tmp + 1);
+> >         }
+> >
+> >         // third reader
+> >         idx =3D READ_ONCE(*IDX);
+> >         if (idx =3D=3D 0) {
+> >                 tmp =3D READ_ONCE(*LOCK0);
+> >                 WRITE_ONCE(*LOCK0, tmp + 1);
+> >                 smp_mb(); /* B and C */
+> >                 tmp =3D READ_ONCE(*UNLOCK0);
+> >                 WRITE_ONCE(*UNLOCK0, tmp + 1);
+> >         } else {
+> >                 tmp =3D READ_ONCE(*LOCK1);
+> >                 WRITE_ONCE(*LOCK1, tmp + 1);
+> >                 smp_mb(); /* B and C */
+> >                 tmp =3D READ_ONCE(*UNLOCK1);
+> >                 WRITE_ONCE(*UNLOCK1, tmp + 1);
+> >         }
+> > }
+> >
+> > exists (0:unlock0=3D0 /\ 1:idx=3D0)
+> >
