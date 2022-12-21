@@ -2,92 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D63653609
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 19:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E82653611
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 19:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbiLUSU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 13:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S231834AbiLUSV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 13:21:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiLUSUZ (ORCPT
+        with ESMTP id S234653AbiLUSVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 13:20:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE87BC4;
-        Wed, 21 Dec 2022 10:20:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B959618A8;
-        Wed, 21 Dec 2022 18:20:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E517EC433D2;
-        Wed, 21 Dec 2022 18:20:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671646823;
-        bh=EaL1FZjLFJ4p/Kw6JDysbkFcTcClZFXC8wsmE4QUj1I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y0b/+0V0GXcWQHdrRu33PGYH0DmXMpXG6qg84EZ0JRauzqdfTqRtTNTcxbXu84JfZ
-         C5fmHMEPmZPZiTiBZyBEZW+ExFvfc2vGtyswlbyFyoZvrg9FMDMhwI35hpRKOtTxM4
-         HRMl1vc+5C6gujCacBy5T+06vipBA3t7u+wUTRjk=
-Date:   Wed, 21 Dec 2022 19:20:20 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
-Message-ID: <Y6NOZEaDpod+9r/0@kroah.com>
-References: <20221219182943.395169070@linuxfoundation.org>
- <20221220150049.GE3748047@roeck-us.net>
- <Y6HQfwEnw75iajYr@kroah.com>
- <20221220161135.GA1983195@roeck-us.net>
- <e3b06c93-1985-a958-871a-bfd73646c38a@kernel.org>
+        Wed, 21 Dec 2022 13:21:50 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFCFE0E0;
+        Wed, 21 Dec 2022 10:21:49 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id vv4so38854325ejc.2;
+        Wed, 21 Dec 2022 10:21:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LnWhFDszNMI8+kb0kwDjwW0IO0VieHrS+DBjt8KEoSM=;
+        b=e4QXwP2bOGr70buxskh5jSIRLAz2fiCw6a7TkqnVMqf6kQc8erSqQoBaELH2aH2bGX
+         +OhWrtWxvzzLnS4EB1Z/WItKht8rqJDCaWex1meDWrYXa+Rf8K27ungyyTEdfZdQGr0/
+         TZ+GcobpkVXE+RRBF5vSnCiQM2VR3LlrIu8ezR3P99wcT79A6f6OxtpIiQecSh66Em5m
+         /y+c7mQFXe4qETizgKgslXpVumXoWgFysiRxzVdA+7G5bKOyDfpvFFhsRI26ZfqeBWeK
+         2NeZhumocnv5e9v9/P1kVF9Bw3OmtPJflSyrRz+e7GHe7amNV/B8NYXMQSZTkY2RPuyi
+         0l2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LnWhFDszNMI8+kb0kwDjwW0IO0VieHrS+DBjt8KEoSM=;
+        b=gtQk+qrTusm57gFE2gID832SGVFCeTOfp1ner15e90aVFU34HJAJ24zMibjcPNl8qf
+         2YjCFRsQvtv3an21ycpgfSIwsWEtJw/zIb7yGoc1fAhTVvv4km1CdW35BvfvzvsbXGg8
+         BsQWoFrH+orz9tT7dnhwnV4+j8Mh+0zGxTtv/mUjbJGQeFwDo2w+49SRW3fZAfqCyCRc
+         DSlZR9imgpYwyn0OkpQQExcUUgdqASERhCggDLWy37h3QnI38Y5GzikuFnCm2V9Rcyif
+         o3TcnEtTaXPjAUFlH/xVoFdIXYA4E6a2Zx4XDv1JWAR/jYxtfHIbDTKckG4jgoAQJmB/
+         AS0A==
+X-Gm-Message-State: AFqh2kqEq0rWb8flRJ/0OdpzccqJPTz7cktwBiX2arTx9wskhrlB3mTj
+        VzHY2eI+x7SS61Z0IEwbFIA=
+X-Google-Smtp-Source: AMrXdXvErNmURo35q8fo78e8suJHy6UEA0KsAxDbpARLlpS4MeoU//sFxO9B6BpmqIFm1jNcxrASHg==
+X-Received: by 2002:a17:907:a0d0:b0:7c1:55aa:2e84 with SMTP id hw16-20020a170907a0d000b007c155aa2e84mr2166799ejc.1.1671646908172;
+        Wed, 21 Dec 2022 10:21:48 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id e22-20020a17090681d600b007c0d0dad9c6sm7424130ejx.108.2022.12.21.10.21.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 10:21:47 -0800 (PST)
+Message-ID: <e5e782d0-5255-518a-af4b-f103eeac2014@gmail.com>
+Date:   Wed, 21 Dec 2022 19:21:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3b06c93-1985-a958-871a-bfd73646c38a@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v5 02/12] dt-bindings: soc: rockchip: grf: add
+ rockchip,lvds.yaml
+To:     heiko@sntech.de
+Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org
+References: <7f883643-c796-029f-ba38-73532325632d@gmail.com>
+Content-Language: en-US
+In-Reply-To: <7f883643-c796-029f-ba38-73532325632d@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 07:34:04AM +0100, Jiri Slaby wrote:
-> On 20. 12. 22, 17:11, Guenter Roeck wrote:
-> > You probably didn't see any reports on mainline because I didn't report
-> > the issue there yet. There are so many failures in mainline that it is
-> > a bit difficult to keep up.
-> 
-> Just heads up, these are breakages in 6.1 known to me:
-> 
-> an io_uring 32bit test crashes the kernel:
-> https://lore.kernel.org/all/c80c1e3f-800b-dc49-f2f5-acc8ceb34d51@gmail.com/
-> 
-> Fixed in io_uring tree.
-> 
-> 
-> bind() of previously bound port no longer fails:
-> https://lore.kernel.org/all/6b971a4e-c7d8-411e-1f92-fda29b5b2fb9@kernel.org/
-> 
-> No fix available and revert close to impossible.
-> 
-> 
-> 
-> And most important, mremap() is broken in 6.1, so mostly everything fails in
-> some random way:
-> https://lore.kernel.org/all/20221216163227.24648-1-vbabka@suse.cz/T/#u
-> 
-> Fixed in -mm.
-> 
-> maybe it can help...
+Add new converted rockchip,lvds.yaml to grf.yaml file.
+Prepare for more SoCs with lvds output.
 
-Thanks for the list, I'll keep an eye out for these...
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
 
-greg k-h
+Changed V5:
+  Drop the quotes
+---
+ .../devicetree/bindings/soc/rockchip/grf.yaml | 24 +++++++++++--------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+index 2ed8cca79..7ac9aa5fa 100644
+--- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
++++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
+@@ -75,13 +75,17 @@ allOf:
+       properties:
+         compatible:
+           contains:
+-            const: rockchip,px30-grf
++            enum:
++              - rockchip,px30-grf
+
+     then:
+       properties:
+         lvds:
+-          description:
+-            Documentation/devicetree/bindings/display/rockchip/rockchip-lvds.txt
++          type: object
++
++          $ref: /schemas/display/rockchip/rockchip,lvds.yaml#
++
++          unevaluatedProperties: false
+
+   - if:
+       properties:
+@@ -109,7 +113,7 @@ allOf:
+         usbphy:
+           type: object
+
+-          $ref: "/schemas/phy/rockchip-usb-phy.yaml#"
++          $ref: /schemas/phy/rockchip-usb-phy.yaml#
+
+           unevaluatedProperties: false
+
+@@ -124,14 +128,14 @@ allOf:
+         gpio:
+           type: object
+
+-          $ref: "/schemas/gpio/rockchip,rk3328-grf-gpio.yaml#"
++          $ref: /schemas/gpio/rockchip,rk3328-grf-gpio.yaml#
+
+           unevaluatedProperties: false
+
+         power-controller:
+           type: object
+
+-          $ref: "/schemas/power/rockchip,power-controller.yaml#"
++          $ref: /schemas/power/rockchip,power-controller.yaml#
+
+           unevaluatedProperties: false
+
+@@ -146,7 +150,7 @@ allOf:
+         mipi-dphy-rx0:
+           type: object
+
+-          $ref: "/schemas/phy/rockchip-mipi-dphy-rx0.yaml#"
++          $ref: /schemas/phy/rockchip-mipi-dphy-rx0.yaml#
+
+           unevaluatedProperties: false
+
+@@ -174,7 +178,7 @@ allOf:
+         reboot-mode:
+           type: object
+
+-          $ref: "/schemas/power/reset/syscon-reboot-mode.yaml#"
++          $ref: /schemas/power/reset/syscon-reboot-mode.yaml#
+
+           unevaluatedProperties: false
+
+@@ -200,7 +204,7 @@ allOf:
+         "usb2phy@[0-9a-f]+$":
+           type: object
+
+-          $ref: "/schemas/phy/phy-rockchip-inno-usb2.yaml#"
++          $ref: /schemas/phy/phy-rockchip-inno-usb2.yaml#
+
+           unevaluatedProperties: false
+
+@@ -228,7 +232,7 @@ allOf:
+         io-domains:
+           type: object
+
+-          $ref: "/schemas/power/rockchip-io-domain.yaml#"
++          $ref: /schemas/power/rockchip-io-domain.yaml#
+
+           unevaluatedProperties: false
+
+--
+2.20.1
+
