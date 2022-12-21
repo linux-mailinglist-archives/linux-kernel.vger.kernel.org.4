@@ -2,109 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D225D6534A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD3C65339B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiLURKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:10:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
+        id S230399AbiLUPor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 10:44:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiLURKj (ORCPT
+        with ESMTP id S229591AbiLUPon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:10:39 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F55C1B79B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:10:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671642638; x=1703178638;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Wka9nixoQhSQpZMewUy1mTEp3oCjGne3Bir7NjGErYw=;
-  b=JpQPnGs0Sr6sz57M9OkugNtHaJWy6aD/RQ2ROZ42AHLfcEiX+qIStraC
-   PoR+Vir8AAjWH9/clTpzp4MzU1XOhUv6ie6hAEnEsRaZrt1bsQOsyGoJc
-   OxC0VA3Rw4z1di0HKVxuthVMtCR8OabU02Li+q4GA3eV1BSQAxaDjOLVz
-   xgJytBCQNvQekKtgriQPTs5a67Sj6jAI/mLpQsM92atT2lbEMiKOxINli
-   n2BAzjU7Pu2tkyUs+R4LwTPm5R+/fEij0ZH+dkAwc2JQrAopdJv20lru1
-   i+DPxJQMC1rkSfdeNlu7AjOg/YxTYWT58mX7GhDuvqZMBJ7Tiv9R2TFXR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="317562111"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="317562111"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 09:08:41 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="720009149"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="720009149"
-Received: from sgeiser-mobl.amr.corp.intel.com (HELO [10.212.42.29]) ([10.212.42.29])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 09:08:39 -0800
-Message-ID: <3917a0cf-20bb-2e7f-60a8-d7ec0069d8fa@linux.intel.com>
-Date:   Wed, 21 Dec 2022 09:42:43 -0600
+        Wed, 21 Dec 2022 10:44:43 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F782E08
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:44:42 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id l10so15886946plb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:44:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UZBFIqT10H+4UsayRiUEr9+GQIHOydECslxG/sJlSmw=;
+        b=3HNbaurNAkTYR1KCD2VvPneuM3GJ2mdEHl1Bw3SqP94M6L8NabiSawtp1B+yTb6PpV
+         7E7Xwd2FMVuxNS1mjjdh+7UzxKEe5v9sjYJnf1cxBnV4vgzH5ddkVMt+ZdYEEgTLRfko
+         plz8mOP/nI1tdzk+xITX72tQOsg0sGx8We5s7QQoGXRj4CTMP50NphCcyk1s9hnJA7tH
+         YiGuo/P7i4YEo3RUbhFbziayeuR5xH+ouM6irRl3JV35hJzeVTKumtAQaldO/KiPOrop
+         nFxfidcBz/HVgOuO+t4DjNHnfNeg7RdkCDYfZZrrdy+O+jenHohgYAJnA9jYfIivG9A9
+         ThtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UZBFIqT10H+4UsayRiUEr9+GQIHOydECslxG/sJlSmw=;
+        b=6jDspitEHQmDiqcedTGQsHHZT8EY2mr1qcdfUIFrKtzncL/dzT+h1r7Me8w75absEH
+         Fs5nuWafXg3kY0bhR0JSWDzE3U3dUGRsrr43YB8ktg537w4hArnoA0QxbM/OBpatamaZ
+         VPzVkNozsaP8BUdnTOJeulSusQ5jXJHKtNnNPdn9YvjbktFpwKr7l8jqhTFV5g8HBi1O
+         4Xu9RNmnYTgxrQ7Wi56B55illngZF3lm5qAJV4vxf491HYdv76a6rtxie8Lc9iZsx9YQ
+         OLeHPiMNfsijW9NogrBBULkXSVzkzJz9TZwGf13eHXBN2r3qENjASQk1W6aq8xudRu9/
+         g2bw==
+X-Gm-Message-State: AFqh2kqXtUmPiN3Jvjo5RhD+KFYEus9UkyIjVNVF3OrkkG7IHj9BGqZo
+        sX3K9np+et5o4V45MPS7stFgAs9UzgN9lmBT
+X-Google-Smtp-Source: AMrXdXtDYhES3XntKcIT5CzNq2CaOgU5xgI4oqyb0N1mgaTOjEWbRaxIHgW4R0BikSsie2GP6NYamQ==
+X-Received: by 2002:a17:902:8644:b0:189:b74f:46ad with SMTP id y4-20020a170902864400b00189b74f46admr575210plt.3.1671637481784;
+        Wed, 21 Dec 2022 07:44:41 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id k15-20020a170902c40f00b001869b988d93sm11649622plk.187.2022.12.21.07.44.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 07:44:41 -0800 (PST)
+Message-ID: <7c89b1c8-f012-3965-ab77-3bc19b3cedaa@kernel.dk>
+Date:   Wed, 21 Dec 2022 08:44:40 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH] ASoC: Intel: fix sof-nau8825 link failure
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [syzbot] WARNING in io_sync_cancel
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
-        "balamurugan.c" <balamurugan.c@intel.com>,
-        Gongjun Song <gongjun.song@intel.com>,
-        Mac Chiang <mac.chiang@intel.com>,
-        David Lin <CTLIN0@nuvoton.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20221221132559.2402341-1-arnd@kernel.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20221221132559.2402341-1-arnd@kernel.org>
+To:     syzbot <syzbot+7df055631cd1be4586fd@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000069608005f0580c52@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <00000000000069608005f0580c52@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/21/22 07:25, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 12/21/22 8:17 AM, syzbot wrote:
+> Hello,
 > 
-> The snd-soc-sof_nau8825.ko module fails to link unless the
-> sof_realtek_common support is also enabled:
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> INFO: rcu detected stall in corrupted
 > 
-> ERROR: modpost: "sof_rt1015p_codec_conf" [sound/soc/intel/boards/snd-soc-sof_nau8825.ko] undefined!
-> ERROR: modpost: "sof_rt1015p_dai_link" [sound/soc/intel/boards/snd-soc-sof_nau8825.ko] undefined!
-> 
-> Fixes: 8d0872f6239f ("ASoC: Intel: add sof-nau8825 machine driver")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5788 } 2646 jiffies s: 2841 root: 0x0/T
+> rcu: blocking rcu_node structures (internal RCU debug):
 
-Thanks!
+#syz test: git://git.kernel.dk/linux.git io_uring-6.2
 
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+-- 
+Jens Axboe
 
-> ---
->  sound/soc/intel/boards/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/sound/soc/intel/boards/Kconfig b/sound/soc/intel/boards/Kconfig
-> index a472de1909f4..9aee729c2406 100644
-> --- a/sound/soc/intel/boards/Kconfig
-> +++ b/sound/soc/intel/boards/Kconfig
-> @@ -558,6 +558,7 @@ config SND_SOC_INTEL_SOF_NAU8825_MACH
->  	select SND_SOC_HDAC_HDMI
->  	select SND_SOC_INTEL_HDA_DSP_COMMON
->  	select SND_SOC_INTEL_SOF_MAXIM_COMMON
-> +	select SND_SOC_INTEL_SOF_REALTEK_COMMON
->  	help
->  	   This adds support for ASoC machine driver for SOF platforms
->  	   with nau8825 codec.
+
