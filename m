@@ -2,378 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C258365374A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5E465374F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234562AbiLUT6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 14:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S234733AbiLUT7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 14:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiLUT6F (ORCPT
+        with ESMTP id S230451AbiLUT7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:58:05 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6465610B5D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:58:04 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id m29so24873184lfo.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:58:04 -0800 (PST)
+        Wed, 21 Dec 2022 14:59:19 -0500
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758E5BE26;
+        Wed, 21 Dec 2022 11:59:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XgZH7C3EFab6QPuF4xdSFFnQg7k8Lmf8P5JMzy2Da58=;
-        b=GFx1gLnyRPHbQBstsEDO1/fKXIF7FOL+kOKrUraYK+FIwpHEfO7/TGz2OnFhTK++NL
-         s8Pu52L9DkHVRHGRZz3N3E50jXA7bqQtzx5N8PMh2r7+uQJNuIEn1XfkqF5FCFUj6nyF
-         8UqZNvCr4zNvVbEJH7+2nK3yhqLjv8aXi1RDM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XgZH7C3EFab6QPuF4xdSFFnQg7k8Lmf8P5JMzy2Da58=;
-        b=Ja9MxFFRZtngirpx7q7/NEQlYjXMDyw5LnseOfgl0cNsuWn1NTAFUkcwYGEDk3Z7zb
-         6sVtfd8CwtJgK0Xsjefx0vSKUzjQk6H9XDSdiBeMZLhId1BPMKRizAXbWcAuKJY1WR/y
-         zuN3x8a005c4NJEFV6kJyxqF1OVL9WSv/+MLWmyDa/MZE/w9OLeicdBo4CIYzqgO5cA7
-         oIq7sZjk8IjMaR4bN18gYHPSzXyO1j7d/YvHXimpthzVuhsoumHiKAyJ4iVqOmyimqJr
-         8y0pXcR27kO6JcrplzTtwKLPXDN9fACjvOBjSW0a9rLJ4ULey73fOhPphXxFsK47eXK6
-         ZXgw==
-X-Gm-Message-State: AFqh2koF3jTTJw4HORpVbKoXyW5JyY+hqTP9Qft/cYmsxoINPqwR1+B3
-        zMjauZWGrfzNaCM8/XH3wUGk5UoOWkbBDyDPzT6clA==
-X-Google-Smtp-Source: AMrXdXvYxZWKDva6YXYWhomjEbA7yIe/H87WoxNx4RfEl4AevsaFSB7B77wR9lz6f0ciup+5xqwHlz7SgL2TTpazITA=
-X-Received: by 2002:ac2:5205:0:b0:4a4:782a:42ac with SMTP id
- a5-20020ac25205000000b004a4782a42acmr144698lfl.468.1671652682712; Wed, 21 Dec
- 2022 11:58:02 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1671652759; x=1703188759;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zQXqnAGgpQQ8/kgGIKKQgdQDWXW93J/yk8fxK9q7Ehs=;
+  b=HFFocTGikglWAv8e3EQye19vgq0r0//1FDMQWLdZXnJ5B7iwfQKMluMj
+   aJaf9y3WGa59xAOMjqCPNZfRC4qHQ9PuyiyV7uDX6UJ8jFV3WnxEnSIAD
+   8TZIqtqW1whSHzVXPDb4CIcIJDWH/rjAwzvIZVh1GmxpRx5tvWNDG+Baq
+   c=;
+X-IronPort-AV: E=Sophos;i="5.96,263,1665446400"; 
+   d="scan'208";a="281532751"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-edda28d4.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 19:59:16 +0000
+Received: from EX13D49EUA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-m6i4x-edda28d4.us-east-1.amazon.com (Postfix) with ESMTPS id 6962E81C33;
+        Wed, 21 Dec 2022 19:59:12 +0000 (UTC)
+Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
+ EX13D49EUA002.ant.amazon.com (10.43.165.30) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Wed, 21 Dec 2022 19:59:11 +0000
+Received: from dev-dsk-hhhawa-1b-84e0d7ff.eu-west-1.amazon.com (10.43.162.134)
+ by EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.20; Wed, 21 Dec 2022 19:59:06 +0000
+From:   Hanna Hawa <hhhawa@amazon.com>
+To:     <wsa@kernel.org>, <jarkko.nikula@linux.intel.com>,
+        <andriy.shevchenko@linux.intel.com>,
+        <mika.westerberg@linux.intel.com>, <jsd@semihalf.com>,
+        <linus.walleij@linaro.org>, <ben-linux@fluff.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <farbere@amazon.com>, <itamark@amazon.com>, <lareine@amazon.com>,
+        <hhhawa@amazon.com>
+Subject: [PATCH v5 1/1] i2c: designware: use casting of u64 in clock multiplication to avoid overflow
+Date:   Wed, 21 Dec 2022 19:59:00 +0000
+Message-ID: <20221221195900.23276-1-hhhawa@amazon.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221221004957.GA29021@lothringen> <0B1950D8-9319-4F25-B14B-4ED949A57BE0@joelfernandes.org>
- <20221221112629.GA29427@lothringen> <Y6MuFH2ZMY7mV06q@Boquns-Mac-mini.local>
- <20221221173005.GB37362@lothringen> <CAEXW_YRe=h0tuRyp=2N1mB9ytsiFLL6U4UX=Od5PN-=7FwuDsg@mail.gmail.com>
-In-Reply-To: <CAEXW_YRe=h0tuRyp=2N1mB9ytsiFLL6U4UX=Od5PN-=7FwuDsg@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 21 Dec 2022 19:57:50 +0000
-Message-ID: <CAEXW_YRkh69OBmFk8UoL=EALseJZy2rwbfgNwrPrv1cK0BvnOg@mail.gmail.com>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.134]
+X-ClientProxiedBy: EX13D28UWC002.ant.amazon.com (10.43.162.145) To
+ EX19D019EUA002.ant.amazon.com (10.252.50.84)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mathieu pointed out to me on IRC that adding the control dep on the
-update side removes even that need for E. And I see that is what Boqun
-was suggesting above and that Frederic modified.
+From: Lareine Khawaly <lareine@amazon.com>
 
-See updated litmus here: https://www.irccloud.com/pastebin/TrXacogO/
+In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
+by depending on the values of the given parameters including the ic_clk.
+For example in our use case where ic_clk is larger than one million,
+multiplication of ic_clk * 4700 will result in 32 bit overflow.
 
-With this, I am not seeing the "bad condition" happen.
+Add cast of u64 to the calculation to avoid multiplication overflow, and
+use the corresponding define for divide.
 
-On Wed, Dec 21, 2022 at 7:33 PM Joel Fernandes <joel@joelfernandes.org> wro=
-te:
->
-> Ah Frederic, I think you nailed it. E is required to order the flip
-> write with the control-dependency on the READ side. I can confirm the
-> below test with bad condition shows the previous reader sees the
-> post-flip index when it shouldn't have. Please see below modifications
-> to your Litmus test.
->
-> I think we should document it in the code that E pairs with the
-> control-dependency between idx read and lock count write.
->
-> C srcu
-> {}
-> // updater
-> P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-> {
->         int lock1;
->         int unlock1;
->         int lock0;
->         int unlock0;
->
->         // SCAN1
->         unlock1 =3D READ_ONCE(*UNLOCK1);
->         smp_mb(); // A
->         lock1 =3D READ_ONCE(*LOCK1);
->
->         // FLIP
->         smp_mb(); // E -------------------- required to make the bad
-> condition not happen.
->         WRITE_ONCE(*IDX, 1);
->         smp_mb(); // D
->
->         // SCAN2
->         unlock0 =3D READ_ONCE(*UNLOCK0);
->         smp_mb(); // A
->         lock0 =3D READ_ONCE(*LOCK0);
-> }
->
-> // reader
-> P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-> {
->         int tmp;
->         int idx1;
->         int idx2;
->
->         // 1st reader
->         idx1 =3D READ_ONCE(*IDX);
->         if (idx1 =3D=3D 0) {
->                 tmp =3D READ_ONCE(*LOCK0);
->                 WRITE_ONCE(*LOCK0, tmp + 1);
->                 smp_mb(); /* B and C */
->                 tmp =3D READ_ONCE(*UNLOCK0);
->                 WRITE_ONCE(*UNLOCK0, tmp + 1);
->         } else {
->                 tmp =3D READ_ONCE(*LOCK1);
->                 WRITE_ONCE(*LOCK1, tmp + 1);
->                 smp_mb(); /* B and C */
->                 tmp =3D READ_ONCE(*UNLOCK1);
->                 WRITE_ONCE(*UNLOCK1, tmp + 1);
->         }
->
->         // second reader
->         idx2 =3D READ_ONCE(*IDX);
->         if (idx2 =3D=3D 0) {
->                 tmp =3D READ_ONCE(*LOCK0);
->                 WRITE_ONCE(*LOCK0, tmp + 1);
->                 smp_mb(); /* B and C */
->                 tmp =3D READ_ONCE(*UNLOCK0);
->                 WRITE_ONCE(*UNLOCK0, tmp + 1);
->         } else {
->                 tmp =3D READ_ONCE(*LOCK1);
->                 WRITE_ONCE(*LOCK1, tmp + 1);
->                 smp_mb(); /* B and C */
->                 tmp =3D READ_ONCE(*UNLOCK1);
->                 WRITE_ONCE(*UNLOCK1, tmp + 1);
->         }
-> }
->
-> exists (0:lock1=3D1 /\ 1:idx1=3D1 /\ 1:idx2=3D1 )  (* bad condition: 1st
-> reader saw flip *)
->
->
->
->
->
-> On Wed, Dec 21, 2022 at 5:30 PM Frederic Weisbecker <frederic@kernel.org>=
- wrote:
-> >
-> > On Wed, Dec 21, 2022 at 08:02:28AM -0800, Boqun Feng wrote:
-> > > On Wed, Dec 21, 2022 at 12:26:29PM +0100, Frederic Weisbecker wrote:
-> > > > On Tue, Dec 20, 2022 at 09:41:17PM -0500, Joel Fernandes wrote:
-> > > > >
-> > > > >
-> > > > > > On Dec 20, 2022, at 7:50 PM, Frederic Weisbecker <frederic@kern=
-el.org> wrote:
-> > > > > >
-> > > > > > =EF=BB=BFOn Tue, Dec 20, 2022 at 07:15:00PM -0500, Joel Fernand=
-es wrote:
-> > > > > >> On Tue, Dec 20, 2022 at 5:45 PM Frederic Weisbecker <frederic@=
-kernel.org> wrote:
-> > > > > >> Agreed about (1).
-> > > > > >>
-> > > > > >>> _ In (2), E pairs with the address-dependency between idx and=
- lock_count.
-> > > > > >>
-> > > > > >> But that is not the only reason. If that was the only reason f=
-or (2),
-> > > > > >> then there is an smp_mb() just before the next-scan post-flip =
-before
-> > > > > >> the lock counts are read.
-> > > > > >
-> > > > > > The post-flip barrier makes sure the new idx is visible on the =
-next READER's
-> > > > > > turn, but it doesn't protect against the fact that "READ idx th=
-en WRITE lock[idx]"
-> > > > > > may appear unordered from the update side POV if there is no ba=
-rrier between the
-> > > > > > scan and the flip.
-> > > > > >
-> > > > > > If you remove the smp_mb() from the litmus test I sent, things =
-explode.
-> > > > >
-> > > > > Sure I see what you are saying and it=E2=80=99s a valid point as =
-well. However why do you need memory barrier D (labeled such in the kernel =
-code) for that? You already have a memory barrier A before the lock count i=
-s read. That will suffice for the ordering pairing with the addr dependency=
-.
-> > > > > In other words, if updater sees readers lock counts, then reader =
-would be making those lock count updates on post-flip inactive index, not t=
-he one being scanned as you wanted, and you will accomplish that just with =
-the mem barrier A.
-> > > > >
-> > > > > So D fixes the above issue you are talking about (lock count upda=
-te), however that is already fixed by the memory barrier A. But you still n=
-eed D for the issue I mentioned (unlock counts vs flip).
-> > > > >
-> > > > > That=E2=80=99s just my opinion and let=E2=80=99s discuss more bec=
-ause I cannot rule out that I
-> > > > > am missing something with this complicated topic ;-)
-> > > >
-> > > > I must be missing something. I often do.
-> > > >
-> > > > Ok let's put that on litmus:
-> > > >
-> > > > ----
-> > > > C srcu
-> > > >
-> > > > {}
-> > > >
-> > > > // updater
-> > > > P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-> > > > {
-> > > >     int lock1;
-> > > >     int unlock1;
-> > > >     int lock0;
-> > > >     int unlock0;
-> > > >
-> > > >     // SCAN1
-> > > >     unlock1 =3D READ_ONCE(*UNLOCK1);
-> > > >     smp_mb(); // A
-> > > >     lock1 =3D READ_ONCE(*LOCK1);
-> > > >
-> > > >     // FLIP
-> > > >     smp_mb(); // E
-> > >
-> > > In real code there is a control dependency between the READ_ONCE() ab=
-ove
-> > > and the WRITE_ONCE() before, i.e. only flip the idx when lock1 =3D=3D
-> > > unlock1, maybe try with the P0 below? Untested due to not having herd=
- on
-> > > this computer ;-)
-> > >
-> > > >     WRITE_ONCE(*IDX, 1);
-> > > >     smp_mb(); // D
-> > > >
-> > > >     // SCAN2
-> > > >     unlock0 =3D READ_ONCE(*UNLOCK0);
-> > > >     smp_mb(); // A
-> > > >     lock0 =3D READ_ONCE(*LOCK0);
-> > > > }
-> > > >
-> > >       P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1=
-)
-> > >       {
-> > >               int lock1;
-> > >               int unlock1;
-> > >               int lock0;
-> > >               int unlock0;
-> > >
-> > >               // SCAN1
-> > >               unlock1 =3D READ_ONCE(*UNLOCK1);
-> > >               smp_mb(); // A
-> > >               lock1 =3D READ_ONCE(*LOCK1);
-> > >
-> > >               // FLIP
-> > >               if (unlock1 =3D=3D lock1) {
-> > >                       smp_mb(); // E
-> > >                       WRITE_ONCE(*IDX, 1);
-> > >                       smp_mb(); // D
-> > >
-> > >                       // SCAN2
-> > >                       unlock0 =3D READ_ONCE(*UNLOCK0);
-> > >                       smp_mb(); // A
-> > >                       lock0 =3D READ_ONCE(*LOCK0);
-> > >               }
-> > >       }
-> >
-> > That becomes the below (same effect).
-> >
-> > C D
-> >
-> > {}
-> >
-> > // updater
-> > P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-> > {
-> >         int lock1;
-> >         int unlock1;
-> >         int lock0;
-> >         int unlock0;
-> >
-> >         // SCAN1
-> >         unlock1 =3D READ_ONCE(*UNLOCK1);
-> >         smp_mb(); // A
-> >         lock1 =3D READ_ONCE(*LOCK1);
-> >
-> >         if (unlock1 =3D=3D lock1) {
-> >                 // FLIP
-> >                 smp_mb(); // E
-> >                 WRITE_ONCE(*IDX, 1);
-> >                 smp_mb(); // D
-> >
-> >                 // SCAN 2
-> >                 unlock0 =3D READ_ONCE(*UNLOCK0);
-> >                 smp_mb(); // A
-> >                 lock0 =3D READ_ONCE(*LOCK0);
-> >         }
-> > }
-> >
-> > // reader
-> > P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
-> > {
-> >         int tmp;
-> >         int idx;
-> >
-> >         // 1st reader
-> >         idx =3D READ_ONCE(*IDX);
-> >         if (idx =3D=3D 0) {
-> >                 tmp =3D READ_ONCE(*LOCK0);
-> >                 WRITE_ONCE(*LOCK0, tmp + 1);
-> >                 smp_mb(); /* B and C */
-> >                 tmp =3D READ_ONCE(*UNLOCK0);
-> >                 WRITE_ONCE(*UNLOCK0, tmp + 1);
-> >         } else {
-> >                 tmp =3D READ_ONCE(*LOCK1);
-> >                 WRITE_ONCE(*LOCK1, tmp + 1);
-> >                 smp_mb(); /* B and C */
-> >                 tmp =3D READ_ONCE(*UNLOCK1);
-> >                 WRITE_ONCE(*UNLOCK1, tmp + 1);
-> >         }
-> >
-> >         // second reader
-> >         idx =3D READ_ONCE(*IDX);
-> >         if (idx =3D=3D 0) {
-> >                 tmp =3D READ_ONCE(*LOCK0);
-> >                 WRITE_ONCE(*LOCK0, tmp + 1);
-> >                 smp_mb(); /* B and C */
-> >                 tmp =3D READ_ONCE(*UNLOCK0);
-> >                 WRITE_ONCE(*UNLOCK0, tmp + 1);
-> >         } else {
-> >                 tmp =3D READ_ONCE(*LOCK1);
-> >                 WRITE_ONCE(*LOCK1, tmp + 1);
-> >                 smp_mb(); /* B and C */
-> >                 tmp =3D READ_ONCE(*UNLOCK1);
-> >                 WRITE_ONCE(*UNLOCK1, tmp + 1);
-> >         }
-> >
-> >         // third reader
-> >         idx =3D READ_ONCE(*IDX);
-> >         if (idx =3D=3D 0) {
-> >                 tmp =3D READ_ONCE(*LOCK0);
-> >                 WRITE_ONCE(*LOCK0, tmp + 1);
-> >                 smp_mb(); /* B and C */
-> >                 tmp =3D READ_ONCE(*UNLOCK0);
-> >                 WRITE_ONCE(*UNLOCK0, tmp + 1);
-> >         } else {
-> >                 tmp =3D READ_ONCE(*LOCK1);
-> >                 WRITE_ONCE(*LOCK1, tmp + 1);
-> >                 smp_mb(); /* B and C */
-> >                 tmp =3D READ_ONCE(*UNLOCK1);
-> >                 WRITE_ONCE(*UNLOCK1, tmp + 1);
-> >         }
-> > }
-> >
-> > exists (0:unlock0=3D0 /\ 1:idx=3D0)
-> >
+Fixes: 2373f6b9744d ("i2c-designware: split of i2c-designware.c into core and bus specific parts")
+Signed-off-by: Lareine Khawaly <lareine@amazon.com>
+Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+---
+Change log v4->v5:
+- Fix indentation
+
+Change Log v3->v4:
+- update line length when possible
+- fix change log location in the patch
+
+Change Log v2->v3:
+- Avoid changing the ic_clk parameter to u64, and do casting in the
+  calculation itself instead.
+- i2c_dw_clk_rate() returns unsigned long which is confusing because the
+  function return the value of get_clk_rate_khz() which returns u32.
+  This is not effect the overflow issue, pushed change in separated
+  patch.
+- use DIV_ROUND_CLOSEST_ULL instead of DIV_ROUND_CLOSEST
+
+Change Log v1->v2:
+- Update commit message and add fix tag.
+
+ drivers/i2c/busses/i2c-designware-common.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-designware-common.c b/drivers/i2c/busses/i2c-designware-common.c
+index e0a46dfd1c15..6fdb25a5f801 100644
+--- a/drivers/i2c/busses/i2c-designware-common.c
++++ b/drivers/i2c/busses/i2c-designware-common.c
+@@ -351,7 +351,8 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
+ 		 *
+ 		 * If your hardware is free from tHD;STA issue, try this one.
+ 		 */
+-		return DIV_ROUND_CLOSEST(ic_clk * tSYMBOL, MICRO) - 8 + offset;
++		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * tSYMBOL, MICRO) -
++		       8 + offset;
+ 	else
+ 		/*
+ 		 * Conditional expression:
+@@ -367,7 +368,8 @@ u32 i2c_dw_scl_hcnt(u32 ic_clk, u32 tSYMBOL, u32 tf, int cond, int offset)
+ 		 * The reason why we need to take into account "tf" here,
+ 		 * is the same as described in i2c_dw_scl_lcnt().
+ 		 */
+-		return DIV_ROUND_CLOSEST(ic_clk * (tSYMBOL + tf), MICRO) - 3 + offset;
++		return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tSYMBOL + tf), MICRO) -
++		       3 + offset;
+ }
+ 
+ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
+@@ -383,7 +385,8 @@ u32 i2c_dw_scl_lcnt(u32 ic_clk, u32 tLOW, u32 tf, int offset)
+ 	 * account the fall time of SCL signal (tf).  Default tf value
+ 	 * should be 0.3 us, for safety.
+ 	 */
+-	return DIV_ROUND_CLOSEST(ic_clk * (tLOW + tf), MICRO) - 1 + offset;
++	return DIV_ROUND_CLOSEST_ULL((u64)ic_clk * (tLOW + tf), MICRO) -
++	       1 + offset;
+ }
+ 
+ int i2c_dw_set_sda_hold(struct dw_i2c_dev *dev)
+-- 
+2.38.1
+
