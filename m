@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F09652C57
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0299652C5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbiLUFTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 00:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
+        id S234299AbiLUFXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 00:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234286AbiLUFTF (ORCPT
+        with ESMTP id S229482AbiLUFW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 00:19:05 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B8F201A1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:19:04 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id a72-20020a63904b000000b00489753edf13so5443072pge.21
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:19:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=py+R3oSyjPwz5eQilf1rTiN3HR85HLknTooDMiJeYUo=;
-        b=IrYUl6bDDomJGNiKTFCeXlabzxYoOo/81h0RLSm5yHtGWxbT3nVREIEJWaaBtfS2aZ
-         pfSuv8XnGzNutDsqoMZsGkXGSg8c+O3cNs0D2GozQUueznDf/meh3ysOkk4SjxZEUdU6
-         9SWb5FrI0dMtSBPox9xM8Zz933uEm9aDHzlWt/X6b92Q4c9wBQAZy4v2TAi7uWSFtbLp
-         ux7Tl69sSgzoyWlv+LQWZLjaEr7es5gH3IwfjswYStg3eP07L7jD6991snc/RUCfm1Nz
-         YtrVPmoh+Gbhs++LAl71qkHd0y5X2ZcJbmQMXWkquzDTp0MCsC9fBQzEE5o7KTp7MP81
-         jMtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=py+R3oSyjPwz5eQilf1rTiN3HR85HLknTooDMiJeYUo=;
-        b=vc3fqxRBxp8thcYYulkmEMujmTS2X7Ch63MT4ZzyyHVPF4KHbe73TH38wiAiAeZT+W
-         FZ1R1wxJ08G5wzG/y7jmgfcr2IFizMcjXrGGV42+szdJAuXOiyn53NPALpirk+9GRal5
-         WRqmNY3GBd5lksNvwhdJKFIrD28SyKZfZkJGrcZVIvQrUXiRO096OvB7+V8U9gT+nlwR
-         gdwqSHvfm87ezE1uAZA2cEXazEcWrcXgW4GW1nXgUZXNEk84RkzPDbpi8v9t1mYA3Ky+
-         0tXFVSvT5NvMyJpRozLsgJdJRpsPec1YE++gZQhl5MDoMwAGik/Y0OAz09tQ1yTDTAeA
-         3s2w==
-X-Gm-Message-State: AFqh2krbIGIg+RhjqAuOFSzW6MASyvdVkyBLRgTyHaDquFYeVZT3F+KL
-        94gx917gqa12zjzKF0+gvDhGDWC9mGbs8YMJ93M8/GusVWgiMpmYIa7ExpxqnzdT6pW4fS1wd1L
-        XNG29/9OrNP8kQopsdPsj2/e4QmPggO/B3IQ8KkM+z2JONynCaEMhAJu3Ay2JzjiDc3sNnrs=
-X-Google-Smtp-Source: AMrXdXv+hnNUWsEz7b/4dhs+ha2LInDp5mmR1pwI+t63dcwKAUw0Rp0nUSTdYwxb3hJhCK5XNRvktv4pbLEC
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a05:6a00:3404:b0:577:4103:8da with SMTP id
- cn4-20020a056a00340400b00577410308damr55063pfb.1.1671599943904; Tue, 20 Dec
- 2022 21:19:03 -0800 (PST)
-Date:   Wed, 21 Dec 2022 05:18:55 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221221051855.15761-1-jstultz@google.com>
-Subject: [PATCH] pstore: Make sure CONFIG_PSTORE_PMSG selects CONFIG_RT_MUTEXES
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <jstultz@google.com>, Wei Wang <wvw@google.com>,
-        Midas Chien <midaschieh@google.com>,
-        "Connor O'Brien" <connoro@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        kernel test robot <lkp@intel.com>, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 21 Dec 2022 00:22:56 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17F0205C6;
+        Tue, 20 Dec 2022 21:22:53 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id BF9BF32007BE;
+        Wed, 21 Dec 2022 00:22:48 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 21 Dec 2022 00:22:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pjd.dev; h=cc:cc
+        :content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1671600168; x=1671686568; bh=7tbpemXh0VafIGgg/pzTEoZlW
+        +RVtkobri/l8+5Gu7I=; b=YnTTqjS5HoTiDhx/yp/G8mDIJofpYPYjBb0xL+PfA
+        O1PrnLAhZMvZIzffITSrjYuoPO93Z7DILFNVnyYNt8J2Qfi0YD6hx0t7d0+aJSr1
+        pobp7gfYFY3jkAo945gvRL+4SZoluBBmB2qBDuQZY/UM2ocJnWXCvLCftUWZ8krk
+        cTyB5kH3tcVb7adA2FG6kxKz07AcZP1DqzD9/M5X0/to3qtpFAoDRvsBSSw1HNxd
+        yxe7gRaCDfQ4+TeV37crF5xo01By2Q0DK9t+2cWzRvQSIw8kIomIn0oxDLootDaG
+        9JlVF0V+lYoZdDBpD53zR38yCLnpWE/TgHKO9UE3sV0vQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1671600168; x=1671686568; bh=7tbpemXh0VafIGgg/pzTEoZlW+RVtkobri/
+        l8+5Gu7I=; b=PCwmBqFnz70uVZKU1H6/I/PEP+tV3sW0jT9C5I3XoihpW7WrA1T
+        cos7Av8AttGma56EtnFuwDxmXvRkmedgiDMUEpdW8u8MreGvT9LS7p3OkGSHCb5x
+        dJZUnNvfTanI55rFIpy84KhC0On+mN7XVrxgrw5gZ8jx/HIJdNPKlQ2L6qjbLFtk
+        rdfajM+EJoYf4Q72bNrbbg8dQv6OYlYbRatYFz4hC07D2SaylAWPdkW5g25l9QfZ
+        Nag9fBfmiu722FiVTQT2vTphALMFtPwS5zVe/6Tizgd2aHhG915ldtupJc6deG5l
+        7utV83YNM+ICbDJG2HkAKkhFpEcJe1iHRkA==
+X-ME-Sender: <xms:KJiiY09_uApeNt2-XPFQAeECu5ZZcX09LLuStPfBmdYboNDutb5ESw>
+    <xme:KJiiY8tKuXnSJq9EB38Ji_-oo4eeN_6n42LONamtHhDtYE81Nhy5ooX9up2ihuYVR
+    GP-Y6p5YrsYjc3dybI>
+X-ME-Received: <xmr:KJiiY6CSm0HM-AMJ1L-DnHK8qinslcmkH88t1QGUQaaR39ZVtRMFbR05wd8V5oQD3woxYrOCw9djPT0_rLSO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeejgdekfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecumhhishhsihhnghcuvffquchfihgvlhguucdlfedtmd
+    enogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffoggfgsedtkeertder
+    tddtnecuhfhrohhmpefrvghtvghrucffvghlvghvohhrhigrshcuoehpvghtvghrsehpjh
+    gurdguvghvqeenucggtffrrghtthgvrhhnpeetgefggfeihedvgfefveekjedvjeejgfdv
+    uefgleevudfhvedtudfhueegleefteenucffohhmrghinhepughmthhfrdhorhhgpdhfrh
+    gvvgguvghskhhtohhprdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehpvghtvghrsehpjhgurdguvghv
+X-ME-Proxy: <xmx:KJiiY0eaXOUIA15X6j7kFiQBB60ConEUM6D-iL0sz0-Z6t6Lc0jLOQ>
+    <xmx:KJiiY5M-weKscmoNhBVn-QcIh78grGdJpN1ZqTMglWq5NSQdF8vaRA>
+    <xmx:KJiiY-lS6tTGOWZaz06lvzk-UKJG3xoGjz6t-jDpXJMSxQuSL77sWw>
+    <xmx:KJiiYyhj1IeY8Tc5bVBTfAWHLA0cJQNb2zYdjj3H9rrT1YKY8S-2mQ>
+Feedback-ID: i9e814621:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 21 Dec 2022 00:22:47 -0500 (EST)
+From:   Peter Delevoryas <peter@pjd.dev>
+Cc:     peter@pjd.dev, sam@mendozajonas.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        joel@jms.id.au, gwshan@linux.vnet.ibm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] net/ncsi: Add NC-SI 1.2 Get MC MAC Address command
+Date:   Tue, 20 Dec 2022 21:22:43 -0800
+Message-Id: <20221221052246.519674-1-peter@pjd.dev>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 76d62f24db07 ("pstore: Switch pmsg_lock to an rt_mutex
-to avoid priority inversion") I changed a lock to an rt_mutex.
+NC-SI 1.2 isn't officially released yet, but the DMTF takes way too long
+to finalize stuff, and there's hardware out there that actually supports
+this command (Just the Broadcom 200G NIC afaik).
 
-However, its possible that CONFIG_RT_MUTEXES is not enabled,
-which then results in a build failure, as the 0day bot detected:
-  https://lore.kernel.org/linux-mm/202212211244.TwzWZD3H-lkp@intel.com/
+The work in progress spec document is here:
 
-Thus this patch changes CONFIG_PSTORE_PMSG to select
-CONFIG_RT_MUTEXES, which ensures the build will not fail.
+https://www.dmtf.org/sites/default/files/standards/documents/DSP0222_1.2WIP90_0.pdf
 
-Cc: Wei Wang <wvw@google.com>
-Cc: Midas Chien<midaschieh@google.com>
-Cc: Connor O'Brien <connoro@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Anton Vorontsov <anton@enomsg.org>
-Cc: Colin Cross <ccross@android.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: kernel test robot <lkp@intel.com>
-Cc: kernel-team@android.com
-Fixes: 76d62f24db07 ("pstore: Switch pmsg_lock to an rt_mutex to avoid priority inversion")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: John Stultz <jstultz@google.com>
----
- fs/pstore/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+The command code is 0x58, the command has no data, and the response
+returns a variable-length array of MAC addresses for the BMC.
 
-diff --git a/fs/pstore/Kconfig b/fs/pstore/Kconfig
-index 8adabde685f1..c49d554cc9ae 100644
---- a/fs/pstore/Kconfig
-+++ b/fs/pstore/Kconfig
-@@ -126,6 +126,7 @@ config PSTORE_CONSOLE
- config PSTORE_PMSG
- 	bool "Log user space messages"
- 	depends on PSTORE
-+	select RT_MUTEXES
- 	help
- 	  When the option is enabled, pstore will export a character
- 	  interface /dev/pmsg0 to log user space messages. On reboot
+I've tested this out using QEMU emulation (I added the Mellanox OEM Get
+MAC Address command to libslirp a while ago [1], although the QEMU code
+to use it is still not in upstream QEMU [2] [3]. I worked on some more
+emulation code for this as well), and on the new Broadcom 200G NIC.
+
+The Nvidia ConnectX-7 NIC doesn't support NC-SI 1.2 yet afaik. Neither
+do older versions in newer firmware, they all just report NC-SI 1.1.
+
+Let me know what I can do to change this patch to be more suitable for
+upstreaming, I'm happy to work on it more!
+
+Thanks,
+Peter
+
+[1] https://gitlab.freedesktop.org/slirp/libslirp/-/blob/0dd7f05095c0a77d9d2ec4764e8617192b4fa6ec/src/ncsi.c#L59
+[2] https://github.com/facebook/openbmc/blob/a33dbcc25759f00baf113fd497c8d9db60eeed9e/common/recipes-devtools/qemu/qemu/0003-slirp-Add-mfr-id-to-netdev-options.patch
+[3] https://github.com/facebook/openbmc/blob/a33dbcc25759f00baf113fd497c8d9db60eeed9e/common/recipes-devtools/qemu/qemu/0004-slirp-Add-oob-eth-addr-to-netdev-options.patch
+
+Peter Delevoryas (3):
+  net/ncsi: Simplify Kconfig/dts control flow
+  net/ncsi: Fix netlink major/minor verison numbers
+  net/ncsi: Add NC-SI 1.2 Get MC MAC Address command
+
+ net/ncsi/internal.h     |  7 ++--
+ net/ncsi/ncsi-cmd.c     |  3 +-
+ net/ncsi/ncsi-manage.c  | 29 ++++++-----------
+ net/ncsi/ncsi-netlink.c |  4 +--
+ net/ncsi/ncsi-pkt.h     | 17 ++++++++--
+ net/ncsi/ncsi-rsp.c     | 71 +++++++++++++++++++++++++++++++++++++++--
+ 6 files changed, 102 insertions(+), 29 deletions(-)
+
 -- 
-2.39.0.314.g84b9a713c41-goog
+2.30.2
 
