@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E18653319
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4895B65331D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234535AbiLUPWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 10:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
+        id S234567AbiLUPXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 10:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiLUPW3 (ORCPT
+        with ESMTP id S229676AbiLUPXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 10:22:29 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A83C1DA46;
-        Wed, 21 Dec 2022 07:22:29 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so2608614pjr.3;
-        Wed, 21 Dec 2022 07:22:29 -0800 (PST)
+        Wed, 21 Dec 2022 10:23:05 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8018022299;
+        Wed, 21 Dec 2022 07:23:04 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so19526063fac.2;
+        Wed, 21 Dec 2022 07:23:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rwvyNFcm0dI6zV7MUfVY3A713zgzqWHPPc2e25ZpgGw=;
-        b=E0MbKWldQ0EFSy7QTA1GSAtiN4RAYci/lnJt/H3APj6U54J0wxzc69vApKxvS8jZRl
-         BbsIjLuItGm9wMgQ2OGfg6lldXUInL85G12fXFHb11M+XR/fIDHOO/P9nMBqXSmywnQB
-         DhwGXY1EKXEbHTnIKB+DDOGtaFReDefM4PQGHbsJf0zC8PsI2z1hec1kLUFutGc3vAA8
-         NbnbnvypJUHiGXhrSHPJlo0J5O09NvzQRcUtznKSO8xX2jz4znAHe3igfBhNwq8JJvzJ
-         ItKr5QdgxJ7sEgFnIUoe1sLFDXZinCxkhebtl8tIb94X/+Ds6PrKKiqYIYF7FjnwIxNJ
-         5tDg==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vAbeixt0uJZ/ZtL8e7tbr2BILgwudnmu8+lBsU8ZDYM=;
+        b=Ws4TLLPl33Vj1O35MNzOh4l13iO+hsE9JYHKBYbr211PI1V6Uaa6//ZYGV4pl+KgcG
+         MbaTROiSvSHcf/+ourGFKwJ1F/1PzSI6yD8TFMj9+cQiwzdqYDfIFm2Mgdq6TAHzWgmO
+         2GGOP+NRUtX7OpoYsCKU6tRJoOjYDeCppvj2QGpIZKdDal11EJRJRO0mMGCosG+BL/re
+         eTY5xJNhhA21szPCW7/AHSKTpcZ2cnV+b0RbWKUn6NLajMepf0PiXH+bbCzD4SecF9VS
+         6ESg5yZ4GM/q3tccWS8ZygdyWi9cRBoDS4JhgQdn+iyX0Q6y/oAWvDoXT6QzlEmu/3+W
+         I/9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rwvyNFcm0dI6zV7MUfVY3A713zgzqWHPPc2e25ZpgGw=;
-        b=7frtkMixz9DO2z1Gcr/J+pK1t4PY5ENEzdO4ZOJh4YCfHzIjzgfzAUpITKQuW5pOXI
-         +Q7yTt/+Iubkj8VUyaKT/83Fb93G2TKgFYRtTSl05yLW6lTbCdma9bLEWpWqRzyr6SrW
-         Yyle6ON/4T7bLeS4lQIclmGNn3dPWQ/m1VXS+G7HKoZPOcA/+7etsEVBdJPN6EMe3r3Q
-         1cF6JWzn77ohRrPT37W1qxKOnAaX/ZV72WCipn2Q44TtkOpXguKvLGQ/BrKkQpG0yGwv
-         UWaMpb1s7anqxu8/I9C5LsrFyT6mDYN4BbSqfyRs9pi21MvUoQWI1y/PjsUBSNG9Vcjh
-         6K6w==
-X-Gm-Message-State: AFqh2krC7WsEikYHXT8bTjzh83PzrtwfApItu4Mxj+Hf7mPQ8SAf94zT
-        fuX0M4u964eponIZrCkZRtI=
-X-Google-Smtp-Source: AMrXdXsCxgI7fsXuBw0msYMSYi44KDcI9/3VNVjscO4DO5/EWZrIajQwA+Xhhmbr2zkWy+t41He6Kw==
-X-Received: by 2002:a17:903:130d:b0:192:490b:a207 with SMTP id iy13-20020a170903130d00b00192490ba207mr1621232plb.33.1671636148615;
-        Wed, 21 Dec 2022 07:22:28 -0800 (PST)
-Received: from VM-66-53-centos ([43.132.141.4])
-        by smtp.gmail.com with ESMTPSA id h13-20020a170902680d00b00186b6a04636sm11586833plk.255.2022.12.21.07.22.26
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vAbeixt0uJZ/ZtL8e7tbr2BILgwudnmu8+lBsU8ZDYM=;
+        b=Idw8gi7LI50Rskrk67QDLNF1AYlfEJhCrN6IK4YpxQ/Tk1QMlhsEU2RpHO5Ea98gtu
+         t7MMLec3pola0b1BPTqjIzJ/LWG2eMnrCthImax25UsPVY1/wsjyOm1M5sLDu1uXNS+Q
+         R+iwB2yghtYLShpSzUzmuiH9jctDqhM+UUpO+3Y9expPE9gb5azb0vJ+YgHWGNczbL6/
+         RUT8u/013Vp9yiACJxSoz2YJm+j6AT8erodHyiN89MqkU3NlOhg7FNJbGSOzKWogDivt
+         gpQ3IUMd4OrqRf+NZqLRyJI1t51eToGeyu+yGasxxwwxnLY39r4tgyBgVLjSXEaRpQT6
+         lgLw==
+X-Gm-Message-State: AFqh2kpWyrhU+hXJlOCMCgSjgkUwVIVyAjMyUk2xMkmAAM4n51sn6XXP
+        Br+KPt0mz1Lm4LLDCFaDvE8=
+X-Google-Smtp-Source: AMrXdXuTsEv4ix+ZalG/Z+Z5KogVxyFAECJzI4TEWTexW9Ik7j44XI6yHc6KfaohVsLi7zMLgRyx0A==
+X-Received: by 2002:a05:6870:f699:b0:148:41a7:eb35 with SMTP id el25-20020a056870f69900b0014841a7eb35mr7708587oab.12.1671636182930;
+        Wed, 21 Dec 2022 07:23:02 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h21-20020a4abb95000000b0049f8b4b2095sm6195278oop.44.2022.12.21.07.23.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 07:22:28 -0800 (PST)
-Date:   Wed, 21 Dec 2022 23:22:24 +0800
-From:   Yuteng Zhong <zonyitoo@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Yuteng Zhong <zonyitoo@gmail.com>,
-        DHDAXCW <lasstp5011@gmail.com>
-Subject: [PATCH v6 2/2] dt-bindings: arm: rockchip: Add EmbedFire LubanCat 1
-Message-ID: <Y6MksLH9POLt6UTI@VM-66-53-centos>
+        Wed, 21 Dec 2022 07:23:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 21 Dec 2022 07:23:00 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-m68k@lists.linux-m68k.org
+Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
+Message-ID: <20221221152300.GA2468105@roeck-us.net>
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
+ <20221019203034.3795710-1-Jason@zx2c4.com>
+ <20221221145332.GA2399037@roeck-us.net>
+ <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y6MkcVIpEaWrTrsS@VM-66-53-centos>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,32 +86,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: DHDAXCW <lasstp5011@gmail.com>
+On Wed, Dec 21, 2022 at 04:05:45PM +0100, Geert Uytterhoeven wrote:
+> Hi Günter,
+> 
+> On Wed, Dec 21, 2022 at 3:54 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On Wed, Oct 19, 2022 at 02:30:34PM -0600, Jason A. Donenfeld wrote:
+> > > Recently, some compile-time checking I added to the clamp_t family of
+> > > functions triggered a build error when a poorly written driver was
+> > > compiled on ARM, because the driver assumed that the naked `char` type
+> > > is signed, but ARM treats it as unsigned, and the C standard says it's
+> > > architecture-dependent.
+> > >
+> > > I doubt this particular driver is the only instance in which
+> > > unsuspecting authors make assumptions about `char` with no `signed` or
+> > > `unsigned` specifier. We were lucky enough this time that that driver
+> > > used `clamp_t(char, negative_value, positive_value)`, so the new
+> > > checking code found it, and I've sent a patch to fix it, but there are
+> > > likely other places lurking that won't be so easily unearthed.
+> > >
+> > > So let's just eliminate this particular variety of heisensign bugs
+> > > entirely. Set `-funsigned-char` globally, so that gcc makes the type
+> > > unsigned on all architectures.
+> > >
+> > > This will break things in some places and fix things in others, so this
+> > > will likely cause a bit of churn while reconciling the type misuse.
+> > >
+> >
+> > There is an interesting fallout: When running the m68k:q800 qemu emulation,
+> > there are lots of warning backtraces.
+> >
+> > WARNING: CPU: 0 PID: 23 at crypto/testmgr.c:5724 alg_test.part.0+0x7c/0x326
+> > testmgr: alg_test_descs entries in wrong order: 'adiantum(xchacha12,aes)' before 'adiantum(xchacha20,aes)'
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 0 PID: 23 at crypto/testmgr.c:5724 alg_test.part.0+0x7c/0x326
+> > testmgr: alg_test_descs entries in wrong order: 'adiantum(xchacha20,aes)' before 'aegis128'
+> >
+> > and so on for pretty much every entry in the alg_test_descs[] array.
+> >
+> > Bisect points to this patch, and reverting it fixes the problem.
+> >
+> > It looks like the problem is that arch/m68k/include/asm/string.h
+> > uses "char res" to store the result of strcmp(), and char is now
+> > unsigned - meaning strcmp() will now never return a value < 0.
+> > Effectively that means that strcmp() is broken on m68k if
+> > CONFIG_COLDFIRE=n.
+> >
+> > The fix is probably quite simple.
+> >
+> > diff --git a/arch/m68k/include/asm/string.h b/arch/m68k/include/asm/string.h
+> > index f759d944c449..b8f4ae19e8f6 100644
+> > --- a/arch/m68k/include/asm/string.h
+> > +++ b/arch/m68k/include/asm/string.h
+> > @@ -42,7 +42,7 @@ static inline char *strncpy(char *dest, const char *src, size_t n)
+> >  #define __HAVE_ARCH_STRCMP
+> >  static inline int strcmp(const char *cs, const char *ct)
+> >  {
+> > -       char res;
+> > +       signed char res;
+> >
+> >         asm ("\n"
+> >                 "1:     move.b  (%0)+,%2\n"     /* get *cs */
+> >
+> > Does that make sense ? If so I can send a patch.
+> 
+> Thanks, been there, done that
+> https://lore.kernel.org/all/bce014e60d7b1a3d1c60009fc3572e2f72591f21.1671110959.git.geert@linux-m68k.org
+> 
+> Note that we detected other issues with the m68k strcmp(), so
+> probably that patch wouldn't go in as-is.
+> 
 
-Add devicetree binding documentation for the EmbedFire LubanCat 1.
+So anything non-Coldfire is and will remain broken on m68k for the time
+being ? Wouldn't it be better to fix the acute problem now and address
+the long-standing problem(s) separately ? 
 
-Signed-off-by: Wenhao Cui <lasstp5011@gmail.com>
-Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
----
- Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 88ff4422a8c1..058ed707f3cd 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -95,6 +95,11 @@ properties:
-           - const: elgin,rv1108-r1
-           - const: rockchip,rv1108
- 
-+      - description: EmbedFire LubanCat 1
-+        items:
-+          - const: embedfire,lubancat-1
-+          - const: rockchip,rk3566
-+
-       - description: Engicam PX30.Core C.TOUCH 2.0
-         items:
-           - const: engicam,px30-core-ctouch2
--- 
-2.27.0
-
+Thanks,
+Guenter
