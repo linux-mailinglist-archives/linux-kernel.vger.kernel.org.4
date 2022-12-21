@@ -2,112 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3BF652BED
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E25652BEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiLUDqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 22:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
+        id S234005AbiLUDuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 22:50:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiLUDql (ORCPT
+        with ESMTP id S229482AbiLUDuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 22:46:41 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554B1BE6;
-        Tue, 20 Dec 2022 19:46:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1671594399;
-        bh=2ppGBTNEKO9ZGf5Jmr6Z5lBYQ/V8tObp7/FB4z0ImVk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JumEZRgUYwBTvJFjedBpRAwFKMWPt91RPx8l1x8EB8Nuk+HafrrTJ1d7ZHKNw9IwU
-         Z6v/YgAOZO9AD2TFEE2afW24EJxUTEtFhiW4FxO/Q/gLPEfo7JeK7nfPlhnscq/OhI
-         3pjGPY4q9zlh+lsV0L7T5fGW5dSQyQNmzHc6qbjo2o39lMGeOgW+T18iBsxix/0XWa
-         pYkIixIXtekn0NK9W5jPW8ThcmaBJ9xtOyGcviYa/qE1u/DTrxb2Y4iolbvevf2el9
-         GZk9b3+nfgMl9VKEyUtTRkETe8+hpe0Rxnf55Tziu1VGM9ygRYN0KlTN2BRbSFpKt8
-         BvROH7PFufK8A==
-Received: from [10.1.0.30] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NcKB73dhWzbTD;
-        Tue, 20 Dec 2022 22:46:39 -0500 (EST)
-Message-ID: <bcb9eb90-9261-ce96-859d-af4cc1d03baa@efficios.com>
-Date:   Tue, 20 Dec 2022 22:47:04 -0500
+        Tue, 20 Dec 2022 22:50:08 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DA1BE6;
+        Tue, 20 Dec 2022 19:50:07 -0800 (PST)
+From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1671594605;
+        bh=vm8LMVsbwRZQxgihhWF8na4eZeHZD1RVft5RuFXZE+c=;
+        h=From:Date:Subject:To:Cc:From;
+        b=PYir1pHBLyivz5JXOkNmuNwSywDHvABj4NSGsP+boTCMvDWEJ92L4Tj/1Zl+W9317
+         nm6C0b6z+93LS8zAz4v/rSxCfa5S9VzHulxMTgSQ4rL2HknI15EC90f8iJK4vi5VuI
+         ry9X9pu0ehjaeMByRUUma1uM6z8RxBZP6wEjK7Es=
+Date:   Wed, 21 Dec 2022 03:49:59 +0000
+Subject: [PATCH] platform/x86: asus-nb-wmi: Add alternate mapping for KEY_CAMERA
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <20221218191310.130904-1-joel@joelfernandes.org>
- <589da7c9-5fb7-5f6f-db88-ca464987997e@efficios.com>
- <CAEXW_YQHpz3dNqW1ocqjr-e9qn09Rkg4kQ19byZORGbO18Xckg@mail.gmail.com>
- <2da94283-4fce-9aff-ac5d-ba181fa0f008@efficios.com>
- <CAEXW_YQBmwynuBOWbV6_L2itRr_i3BZUxQ91PDC2We2vXhpztQ@mail.gmail.com>
- <CAEXW_YTyZaE4ULvm-HygFN2BGm-jayHTbpnYbrJFoo_GOsYKQg@mail.gmail.com>
- <659763b0-eee4-10dd-5f4a-37241173809c@efficios.com>
- <CAEXW_YQ+NTaM43Va5FG8kYSxr2gsbjar4_f3xnpSAHzgUVZ-+g@mail.gmail.com>
- <CAEXW_YRqscm++0TP9bEnM0PQNLMe4cXFWAdRvHh2M5chERm+UA@mail.gmail.com>
- <35293ec4-40a1-cf6b-3bdd-0e3e30819c06@efficios.com>
- <20221221000715.GA27352@lothringen>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20221221000715.GA27352@lothringen>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Message-Id: <20221216-asus-key-v1-1-45da124119a3@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAGeComMC/w2LQQqAIBAAvyJ7biE3SOg3altKYuBiENLf28McB
+ mYGCLfMApsZ0PjJku+qYicDMfl6MuZdHWgmsmRX9NIFL34xLOFQIrFzoHnwwhiarzHpUHsp3/cD
+ l+zOXV8AAAA=
+To:     Corentin Chary <corentin.chary@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.11.0-dev-e429b
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1671594602; l=1123;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=vm8LMVsbwRZQxgihhWF8na4eZeHZD1RVft5RuFXZE+c=;
+ b=09P9ObfPmPrh6SciSdjxoGA+sQ4g3LcPnn8Q2oW1VdDbgqHqnOqjFjbiei8ugHVInOCyi//h/voI
+ EWUFoJQLAEsXBzzKAIuAsGOveNezNS3N4wc9VhFHeYYOvYomuWuR
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-20 19:07, Frederic Weisbecker wrote:
-> On Tue, Dec 20, 2022 at 12:00:58PM -0500, Mathieu Desnoyers wrote:
->> On 2022-12-19 20:04, Joel Fernandes wrote:
->> The main benefit I expect is improved performance of the grace period
->> implementation in common cases where there are few or no readers present,
->> especially on machines with many cpus.
->>
->> It allows scanning both periods (0/1) for each cpu within the same pass,
->> therefore loading both period's unlock counters sitting in the same cache
->> line at once (improved locality), and then loading both period's lock
->> counters, also sitting in the same cache line.
->>
->> It also allows skipping the period flip entirely if there are no readers
->> present, which is an -arguably- tiny performance improvement as well.
-> 
-> I would indeed expect performance improvement if there are no readers in the
-> active period/idx but if there are, it's a performance penalty due to the extra
-> scans.
-> 
-> So my mean questions are:
-> 
-> * Is the no-present-readers the most likely case? I guess it depends on the ssp.
-> 
-> * Does the SRCU update side deserve to be optimized with added code (because
->    we are not debating about removing the flip, rather about adding a fast-path
->    and keep the flip as a slow-path)
->    
-> * The SRCU machinery is already quite complicated. Look how we little things lock
->    ourselves in for days doing our exegesis of SRCU state machine. And halfway
->    through it we are still debating some ordering. Is it worth adding a new path there?
+This keycode is emitted on a Asus VivoBook E410MAB with firmware
+E410MAB.304.
 
-I'm not arguing for making things more complex unless there are good 
-reasons to do so. However I think we badly need to improve the 
-documentation of the memory barriers in SRCU, because the claimed 
-barrier pairing is odd.
+The physical key has a strikken-through camera printed on it.
 
-Thanks,
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ drivers/platform/x86/asus-nb-wmi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Mathieu
+diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
+index c685a705b73d..8ee5d108e9e0 100644
+--- a/drivers/platform/x86/asus-nb-wmi.c
++++ b/drivers/platform/x86/asus-nb-wmi.c
+@@ -544,6 +544,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
+ 	{ KE_KEY, 0x7D, { KEY_BLUETOOTH } }, /* Bluetooth Enable */
+ 	{ KE_KEY, 0x7E, { KEY_BLUETOOTH } }, /* Bluetooth Disable */
+ 	{ KE_KEY, 0x82, { KEY_CAMERA } },
++	{ KE_KEY, 0x85, { KEY_CAMERA } },
+ 	{ KE_KEY, 0x86, { KEY_PROG1 } }, /* MyASUS Key */
+ 	{ KE_KEY, 0x88, { KEY_RFKILL  } }, /* Radio Toggle Key */
+ 	{ KE_KEY, 0x8A, { KEY_PROG1 } }, /* Color enhancement mode */
 
+---
+base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+change-id: 20221216-asus-key-b3bfb3bc2e77
+
+Best regards,
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Thomas Weißschuh <linux@weissschuh.net>
