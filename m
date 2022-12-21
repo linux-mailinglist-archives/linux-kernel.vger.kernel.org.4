@@ -2,65 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E656531FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4C6653202
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiLUNqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:46:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S231124AbiLUNqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:46:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233281AbiLUNqG (ORCPT
+        with ESMTP id S232603AbiLUNqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:46:06 -0500
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C22D5F7F;
-        Wed, 21 Dec 2022 05:46:01 -0800 (PST)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1322d768ba7so19213146fac.5;
-        Wed, 21 Dec 2022 05:46:01 -0800 (PST)
+        Wed, 21 Dec 2022 08:46:39 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AC56442;
+        Wed, 21 Dec 2022 05:46:38 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id f9so10423182pgf.7;
+        Wed, 21 Dec 2022 05:46:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sBaHVyrV7POujfixNjWaFgLMTj+0e1DKLqJO9AQRCRg=;
+        b=U4VPw73nDm+8U6AAipX8JQioyKF6hTYoCj0gMRyNG3znjjPdjriI2Pp2M0ja9Qjglg
+         m/JoRZimd3uh2wzdU6/GvrxWZU+S2awIuTYIgMlWXJs1g1A0gKXWS6l48nOFJ9izNRv3
+         +rx1JQP8lD6EDo/Rfv6vBGTMCreJxcZ1JH080qaLFZcc0nfNhKe6UwZazbCv8DBSt1su
+         hQdw++o0WBhBB+pk2JmmGqxJnrI+9AykWLt6x9yAjfLGRxFNfClPvMVNp5M+zbQbtByK
+         wxWrna8Evv3lvKeRduX7ub8oId+Y0NvPJahZuYOOHh1bC8D8CgRE18OihrZgo0cju/c4
+         VQXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TEqm+cWQNHqjxZ1dYY94SUrdlxLeTyeNr9UU8bL+CN4=;
-        b=E9gWWjQGRzO8V4qPawoiNX8mT5dNUkzoqaoYhN0csyn03M9XnZ8xfrfPeies+f+bvl
-         MpJnuAAU1woRL0OG4mPmdRTyXezxhTisqOf2fg+Nh1bBXpZ01NrOwLO6RE2Czu5j3s0c
-         ddynztykadIzKx3BBc76jW5Doy9xCZwKSER5vlHyqFu5XifcYV1qD7qmU1PaH9yA/gXX
-         5QzYW8E+Qh1c30ueW9oeOqW18O2V/+B+0seChGAka3Or+xvic+9r6md/HNQT0rsUgY0n
-         QJk2KZMh+qRYdYKHAEqr+YJoBs6RUgqfPuJ9X87tnaUiQA6Z+lqcqW9WC+SjAFgML82w
-         h+yQ==
-X-Gm-Message-State: AFqh2kq/cgNB69097FPxQionfXTiDTEJiM9BJE/y2tNvVQYKHsKx2Nar
-        4wuiu4euO2JsxijSSVWgrTKNgWmm9Q==
-X-Google-Smtp-Source: AMrXdXshd+N5tqnvx4BjYWqMK259JeDpgS2H3sA2FNIH3uuAerbwEWb38/uWerAxzHpfXw2bAA+a7A==
-X-Received: by 2002:a05:6870:40c8:b0:148:15ba:8869 with SMTP id l8-20020a05687040c800b0014815ba8869mr996840oal.8.1671630360299;
-        Wed, 21 Dec 2022 05:46:00 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n22-20020a056870559600b0014435b51ef7sm7304861oao.30.2022.12.21.05.45.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 05:45:59 -0800 (PST)
-Received: (nullmailer pid 2733906 invoked by uid 1000);
-        Wed, 21 Dec 2022 13:45:59 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20221221070216.17850-1-lujianhua000@gmail.com>
-References: <20221221070216.17850-1-lujianhua000@gmail.com>
-Message-Id: <167162961165.2717636.4535164259604449279.robh@kernel.org>
-Subject: Re: [PATCH 2/2] dt-bindings: leds: backlight: add binding for Kinetic
- KTZ8866 backlight
-Date:   Wed, 21 Dec 2022 07:45:59 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sBaHVyrV7POujfixNjWaFgLMTj+0e1DKLqJO9AQRCRg=;
+        b=JTdkcvJJYBUFLyIuLdEInWtBKLdrav4dP8h3njbHpvfAQfe0lGlW0Uc8yKo0xKYaj4
+         XX6eDML/X02tswSDqMgqgjTcTmysy/+a5Xb67lPE6coHmHZViz0wfTKKKdr2lkWn2517
+         h0WjpUMznLY9U98NKRZ2E6DxWEhXRA/1h3fMd2tAez11WwD/OIEeQYvgTt2fl0oS6mQU
+         q0r6xcmG2l8X+i9Kwfl99iUs/8pSbRQYJSGIr2pjWoMviALVyP/wSkcKryFYi199/av6
+         ZAZGkeRGkK8t3PBx2oHXEuftKAQqUy3T2EgGV17b8Vl8k1L6UTUNFvb+tlqYhytDMnDS
+         VbpQ==
+X-Gm-Message-State: AFqh2kqMS93/1itDqZNU2XnFwx5pMHiVY3gJOQ6tl1QPfdbPwJMrzS8E
+        jJeLgOPXSN9+LT8Lc9yCXA==
+X-Google-Smtp-Source: AMrXdXtXOGY9IxoHXLDlNGv8XvQrcIqM65VPTe4A/3xBuYUmUYhKdCzylXxrZ/e1PxDg2nnIGcZETA==
+X-Received: by 2002:aa7:93da:0:b0:57a:8f1e:fd35 with SMTP id y26-20020aa793da000000b0057a8f1efd35mr2512650pff.16.1671630397642;
+        Wed, 21 Dec 2022 05:46:37 -0800 (PST)
+Received: from smtpclient.apple (n119236129232.netvigator.com. [119.236.129.232])
+        by smtp.gmail.com with ESMTPSA id v10-20020a62c30a000000b0057ef1262347sm10874010pfg.19.2022.12.21.05.46.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 21 Dec 2022 05:46:37 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: check null propagation
+ only neither reg is PTR_TO_BTF_ID
+From:   Hao Sun <sunhao.th@gmail.com>
+In-Reply-To: <7cfaaafa-0eda-a314-5b22-7e22c029f4ad@linux.dev>
+Date:   Wed, 21 Dec 2022 21:46:23 +0800
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <7EAED688-C971-410E-BA56-9629CF9B3C91@gmail.com>
+References: <20221213030436.17907-1-sunhao.th@gmail.com>
+ <20221213030436.17907-2-sunhao.th@gmail.com>
+ <7cfaaafa-0eda-a314-5b22-7e22c029f4ad@linux.dev>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,39 +87,98 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 21 Dec 2022 15:02:16 +0800, Jianhua Lu wrote:
-> Add device tree bindings for the Kinetic KTZ8866 backlight driver.
-> 
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
->  .../leds/backlight/kinetic,ktz8866.yaml       | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> On 20 Dec 2022, at 6:01 AM, Martin KaFai Lau <martin.lau@linux.dev> =
+wrote:
+>=20
+> On 12/12/22 7:04 PM, Hao Sun wrote:
+>> Verify that nullness information is not porpagated in the branches
+>> of register to register JEQ and JNE operations if one of them is
+>> PTR_TO_BTF_ID.
+>=20
+> Thanks for the fix and test.
+>=20
+>> Signed-off-by: Hao Sun <sunhao.th@gmail.com>
+>> Acked-by: Yonghong Song <yhs@fb.com>
+>> ---
+>>  .../bpf/verifier/jeq_infer_not_null.c         | 22 =
++++++++++++++++++++
+>>  1 file changed, 22 insertions(+)
+>> diff --git =
+a/tools/testing/selftests/bpf/verifier/jeq_infer_not_null.c =
+b/tools/testing/selftests/bpf/verifier/jeq_infer_not_null.c
+>> index 67a1c07ead34..b2b215227d97 100644
+>> --- a/tools/testing/selftests/bpf/verifier/jeq_infer_not_null.c
+>> +++ b/tools/testing/selftests/bpf/verifier/jeq_infer_not_null.c
+>> @@ -172,3 +172,25 @@
+>>   .prog_type =3D BPF_PROG_TYPE_XDP,
+>>   .result =3D ACCEPT,
+>>  },
+>> +{
+>> + "jne/jeq infer not null, PTR_TO_MAP_OR_NULL unchanged with =
+PTR_TO_BTF_ID reg",
+>> + .insns =3D {
+>> + BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+>> + BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+>> + BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
+>> + BPF_LD_MAP_FD(BPF_REG_1, 0),
+>> + /* r6 =3D bpf_map->inner_map_meta; */
+>> + BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 8),
+>=20
+> This bpf_map->inner_map_meta requires CO-RE. It works now but could be =
+fragile in different platform and in the future bpf_map changes. Take a =
+look at the map_ptr_kern.c which uses =
+"__attribute__((preserve_access_index))" at the "struct bpf_map".
+>=20
+> Please translate this verifer test into a proper bpf prog in C code =
+such that it can use the CO-RE in libbpf.  It should run under =
+test_progs instead of test_verifier. The bpf prog can include the =
+"vmlinux.h" to get the "__attribute__((preserve_access_index))" for =
+free.  Take a look at =
+https://lore.kernel.org/all/20221207201648.2990661-2-andrii@kernel.org/ =
+which has example on how to check verifier message in test_progs.
+>=20
 
-yamllint warnings/errors:
+Hi,
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml: properties:compatible:items: {'const': 'kinetic,ktz8866'} is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
+I=E2=80=99ve tried something like the bellow, but soon realized that =
+this
+won=E2=80=99t work because once compiler figures out `inner_map` equals
+to `val`, it can choose either reg to write into in the following
+path, meaning that this program can be rejected due to writing
+into read-only PTR_TO_BTF_ID reg, and this makes the test useless.
 
-doc reference errors (make refcheckdocs):
+Essentially, we want two regs, one points to PTR_TO_BTD_ID, one
+points to MAP_VALUR_OR_NULL, then compare them and deref map val.
+It=E2=80=99s hard to implement this in C level because compilers decide
+which reg to use but not us, maybe we can just drop this test.=20
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221221070216.17850-1-lujianhua000@gmail.com
+thoughts?=20
+ =20
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, u64);
++	__type(value, u64);
++} m_hash SEC(".maps");
++
++SEC("?raw_tp")
++__failure __msg("invalid mem access 'map_value_or_null")
++int jeq_infer_not_null_ptr_to_btfid(void *ctx)
++{
++	struct bpf_map *map =3D (struct bpf_map *)&m_hash;
++	struct bpf_map *inner_map =3D map->inner_map_meta;
++	u64 key =3D 0, ret =3D 0, *val;
++
++	val =3D bpf_map_lookup_elem(map, &key);
++	/* Do not mark ptr as non-null if one of them is
++	 * PTR_TO_BTF_ID, reject because of invalid access
++	 * to map value.
++	 */
++	if (val =3D=3D inner_map)
++		ret =3D *val;
++
++	return ret;
++}
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
