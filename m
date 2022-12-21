@@ -2,139 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BB16536C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B65B6536D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:07:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbiLUTCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 14:02:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S234489AbiLUTHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 14:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiLUTCM (ORCPT
+        with ESMTP id S229814AbiLUTHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:02:12 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41FC23BD0;
-        Wed, 21 Dec 2022 11:02:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0AFE1CE18A8;
-        Wed, 21 Dec 2022 19:02:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9F6C433F2;
-        Wed, 21 Dec 2022 19:02:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671649328;
-        bh=cu25G7BTb31BQwZzaIVB62X6PGA5eYeXzZytkXRQLyY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=awmydDB8vDyt/uonFAbFahvuaSpCwUro6U0LLi9S2zJNlmFPgIoslWg6monMvIaFb
-         b2s3WMr6xNGoqXi0YbReGvjr39vLcMGsu2zoJWQ3s2S2mm65EgS3ORuqTbiMDQpt85
-         O6BgVRcjgB/kYWqW97ye6aMgIm6Wiz8r4m53Zmgt/t+zWVV3bA3aOqExtI54uvU2WU
-         MOZIvv8cvsX/05v4Cq0w2YXfbWdmV47hBfE1dTEDvtwt3SwzyH3txy4BYvYezkwvUs
-         A1v2/fMaAFHK7pin16ikxO+5mW74kLY2ISe7BWEP96UvGR6YjuuGRxscajSPi7asn5
-         zGBIIXQ2+atGA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C48995C0989; Wed, 21 Dec 2022 11:02:07 -0800 (PST)
-Date:   Wed, 21 Dec 2022 11:02:07 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Robert Elliott <elliott@hpe.com>
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, linux-crypto@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] rcu: print first CPU on expedited stall line
-Message-ID: <20221221190207.GC4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221219202910.3063036-1-elliott@hpe.com>
- <20221219202910.3063036-3-elliott@hpe.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219202910.3063036-3-elliott@hpe.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Dec 2022 14:07:41 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59805205D3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:07:39 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id s2-20020a170902ea0200b0019247629ee5so1394050plg.17
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:07:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FuHaksFWfmzvX/0UcFQCgtayWDVlA975ayg4IySh6xU=;
+        b=BkDw4UUzBfCiXj8kHMlNPB7j8MqI8B8JKZhzddUdlC9YhXFpxhXgIOHWgwN79k8qoP
+         NXJ55BhukivabsqHxkEz3n4AGQ1/QLSIQzsLnnNoKXPRT/KjwkpxoqJ8xRGUdJmspZX7
+         RyHqPDo7GJzthBPB05auY+JiRJzJRtvZtTTxwbpvGw5ahokR03xAj6teBIrUZBZnVmSM
+         3XAKXZBU0f8kLtMIWY15oKGeoKY7kyWJcKQhaJSpPfwokABNqYL+qSfHkt+AF4qpevQk
+         02hOXbQatSoRrYlu6+fVui5CzAPSsAEP4lSPyG9v/RF3ANO/HtAscNmF6BCz5R2U1W68
+         nRLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FuHaksFWfmzvX/0UcFQCgtayWDVlA975ayg4IySh6xU=;
+        b=wRLxs2AON9I97Xo10QQtE4K01VJlUz18ObrfvR8Ptfs2N6mwXMR/smd1nQEUFJs3FT
+         nIA/Nm3UmIgGgogqQ2Gkt0yhgpPY9kabwYc2W7mdKZI+QGsVosvA+XeNH4JmSNGArwHW
+         vQXWy4jNOXuHtEq3j5W0W4e2qd60NoRtUy/tk+Z+iiUGuZsICtv4UOH4PntCjDzk0FTg
+         LtADGprs2vaJKBVnUUHeCemecnfzvrlVlAmD45L9+6CXTLdRp0eC2RC6Y02kqDmPzbXV
+         07oUPefzMtwFmAZnd+nk0g5pe1ydB6oTG0siNnKlHqsvsniR9ZNe30HzVorc20cDB8En
+         FUeQ==
+X-Gm-Message-State: AFqh2kqTVgrWVIGfZNKGM5yxmX6AJvRbYxsE4uONpDpsgrXQN8qomp5t
+        nq80HZNfDzYZC+wosA+FRIUZ5yI=
+X-Google-Smtp-Source: AMrXdXt+ySJHbpwBcBFTpnKo3KORcNuqsBqsVtsZm5wl+3GzpFxTxgKl8VYETHw9dOg5iKk2exNzbNQ=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:90b:4fc3:b0:218:9893:9aa7 with SMTP id
+ qa3-20020a17090b4fc300b0021898939aa7mr216143pjb.223.1671649658846; Wed, 21
+ Dec 2022 11:07:38 -0800 (PST)
+Date:   Wed, 21 Dec 2022 11:07:37 -0800
+In-Reply-To: <20221221055856.2786043-1-james.hilliard1@gmail.com>
+Mime-Version: 1.0
+References: <20221221055856.2786043-1-james.hilliard1@gmail.com>
+Message-ID: <Y6NZeY/YpbR3pdFM@google.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: move struct definitions out of
+ function params
+From:   sdf@google.com
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 02:29:09PM -0600, Robert Elliott wrote:
-> Include the first CPU number in the first pr_err() call reporting
-> an expedited stall warning.
-> 
-> Printing the CPU numbers with subsequent pr_cont() calls can
-> result in the prints being many lines away or being dropped entirely
-> in a busy system. This change ensures there is indication of at
-> least one of the CPUs with the problem with the original message.
-> 
-> Before (if prints are interspersed with other prints):
->   rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: {
->   13-....
->   } 32 jiffies s: 6685 root: 0x1/.
-> 
-> After:
->   rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: {13-....
->   } 32 jiffies s: 6685 root: 0x1/.
-> 
-> Signed-off-by: Robert Elliott <elliott@hpe.com>
+On 12/20, James Hilliard wrote:
+> Anonymous structs can't be declared inside function parameter
+> definitions in current c standards, however clang doesn't detect this
+> condition currently while GCC does.
 
-A couple of questions below.
+> Details: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108189
+
+> Fixes errors like:
+> progs/btf_dump_test_case_bitfields.c:85:7: error: anonymous struct  
+> declared inside parameter list will not be visible outside of this  
+> definition or declaration [-Werror]
+>     85 | int f(struct {
+>        |       ^~~~~~
+
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+Acked-by: Stanislav Fomichev <sdf@google.com>
+
+Looking at the referenced thread, seems like it requires at lest C23
+and I doubt default clang is using that; so seems fine to be pedantic
+here and move the definitions out.
 
 > ---
->  kernel/rcu/tree_exp.h | 22 +++++++++++++++-------
->  1 file changed, 15 insertions(+), 7 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-> index ed6c3cce28f2..ade6a18e6c07 100644
-> --- a/kernel/rcu/tree_exp.h
-> +++ b/kernel/rcu/tree_exp.h
-> @@ -624,8 +624,6 @@ static void synchronize_rcu_expedited_wait(void)
->  		if (rcu_stall_is_suppressed())
->  			continue;
->  		trace_rcu_stall_warning(rcu_state.name, TPS("ExpeditedStall"));
-> -		pr_err("INFO: %s detected expedited stalls on CPUs/tasks: {",
-> -		       rcu_state.name);
->  		ndetected = 0;
->  		rcu_for_each_leaf_node(rnp) {
->  			ndetected += rcu_print_task_exp_stall(rnp);
-> @@ -637,11 +635,21 @@ static void synchronize_rcu_expedited_wait(void)
->  					continue;
->  				ndetected++;
->  				rdp = per_cpu_ptr(&rcu_data, cpu);
-> -				pr_cont(" %d-%c%c%c%c", cpu,
-> -					"O."[!!cpu_online(cpu)],
-> -					"o."[!!(rdp->grpmask & rnp->expmaskinit)],
-> -					"N."[!!(rdp->grpmask & rnp->expmaskinitnext)],
-> -					"D."[!!(rdp->cpu_no_qs.b.exp)]);
-> +				// print the prefix and the first CPU number together
-> +				// under heavy load, the pr_cont prints can be far away or dropped
-> +				if (ndetected == 1)
+>   .../bpf/progs/btf_dump_test_case_bitfields.c  |  9 ++++--
+>   .../progs/btf_dump_test_case_namespacing.c    | 10 ++++---
+>   .../bpf/progs/btf_dump_test_case_packing.c    | 10 ++++---
+>   .../bpf/progs/btf_dump_test_case_padding.c    | 10 ++++---
+>   .../bpf/progs/btf_dump_test_case_syntax.c     | 30 +++++++++++++------
+>   5 files changed, 46 insertions(+), 23 deletions(-)
 
-Is the purpose here to print the header only on the first detected task?
-If so, what if there is more than one task blocking the first rcu_node
-structure?  Wouldn't that omit the header entirely?
+> diff --git  
+> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c  
+> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
+> index e01690618e1e..c75f6bd06a49 100644
+> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
+> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_bitfields.c
+> @@ -82,11 +82,16 @@ struct bitfield_flushed {
+>   	long b: 16;
+>   };
 
-> +					pr_err("INFO: %s detected expedited stalls on CPUs/tasks: {%d-%c%c%c%c",
+> -int f(struct {
+> +/* ----- START-EXPECTED-OUTPUT ----- */
+> +struct root_struct {
+>   	struct bitfields_only_mixed_types _1;
+>   	struct bitfield_mixed_with_others _2;
+>   	struct bitfield_flushed _3;
+> -} *_)
+> +};
+> +
+> +/* ------ END-EXPECTED-OUTPUT ------ */
+> +
+> +int f(struct root_struct *_)
+>   {
+>   	return 0;
+>   }
+> diff --git  
+> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c  
+> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
+> index 92a4ad428710..d7cf2a8487c9 100644
+> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
+> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_namespacing.c
+> @@ -49,9 +49,7 @@ typedef int Y;
 
-We can of course get other console output interspersed at this point.
-This might be OK in practice, but the commit log should clearly spell
-out the reasons.
+>   typedef int Z;
 
-> +					       rcu_state.name, cpu,
-> +					       "O."[!!cpu_online(cpu)],
-> +					       "o."[!!(rdp->grpmask & rnp->expmaskinit)],
-> +					       "N."[!!(rdp->grpmask & rnp->expmaskinitnext)],
-> +					       "D."[!!(rdp->cpu_no_qs.b.exp)]);
-> +				else
-> +					pr_cont(" %d-%c%c%c%c", cpu,
-> +						"O."[!!cpu_online(cpu)],
-> +						"o."[!!(rdp->grpmask & rnp->expmaskinit)],
-> +						"N."[!!(rdp->grpmask & rnp->expmaskinitnext)],
-> +						"D."[!!(rdp->cpu_no_qs.b.exp)]);
->  			}
->  		}
->  		pr_cont(" } %lu jiffies s: %lu root: %#lx/%c\n",
-> -- 
-> 2.38.1
-> 
+> -/*------ END-EXPECTED-OUTPUT ------ */
+> -
+> -int f(struct {
+> +struct root_struct {
+>   	struct S _1;
+>   	S _2;
+>   	union U _3;
+> @@ -67,7 +65,11 @@ int f(struct {
+>   	X xx;
+>   	Y yy;
+>   	Z zz;
+> -} *_)
+> +};
+> +
+> +/*------ END-EXPECTED-OUTPUT ------ */
+> +
+> +int f(struct root_struct *_)
+>   {
+>   	return 0;
+>   }
+> diff --git  
+> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c  
+> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+> index 7998f27df7dd..e039ceb50c43 100644
+> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_packing.c
+> @@ -132,9 +132,7 @@ struct outer_packed_struct {
+>   	struct nested_packed_struct b;
+>   } __attribute__((packed));
+
+> -/* ------ END-EXPECTED-OUTPUT ------ */
+> -
+> -int f(struct {
+> +struct root_struct {
+>   	struct packed_trailing_space _1;
+>   	struct non_packed_trailing_space _2;
+>   	struct packed_fields _3;
+> @@ -147,7 +145,11 @@ int f(struct {
+>   	struct usb_host_endpoint _10;
+>   	struct outer_nonpacked_struct _11;
+>   	struct outer_packed_struct _12;
+> -} *_)
+> +};
+> +
+> +/* ------ END-EXPECTED-OUTPUT ------ */
+> +
+> +int f(struct root_struct *_)
+>   {
+>   	return 0;
+>   }
+> diff --git  
+> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c  
+> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+> index 79276fbe454a..2ca46ad8d66a 100644
+> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
+> @@ -220,9 +220,7 @@ struct outer_mixed_but_unpacked {
+>   	struct nested_packed b2;
+>   };
+
+> -/* ------ END-EXPECTED-OUTPUT ------ */
+> -
+> -int f(struct {
+> +struct root_struct {
+>   	struct padded_implicitly _1;
+>   	struct padded_explicitly _2;
+>   	struct padded_a_lot _3;
+> @@ -243,7 +241,11 @@ int f(struct {
+>   	struct ib_wc _201;
+>   	struct acpi_object_method _202;
+>   	struct outer_mixed_but_unpacked _203;
+> -} *_)
+> +} __attribute__((packed));
+> +
+> +/* ------ END-EXPECTED-OUTPUT ------ */
+> +
+> +int f(struct root_struct *_)
+>   {
+>   	return 0;
+>   }
+> diff --git  
+> a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c  
+> b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+> index 26fffb02ed10..3e31df7cecc6 100644
+> --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+> +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+> @@ -104,24 +104,24 @@ typedef void (*printf_fn_t)(const char *, ...);
+>    *   typedef const fn_output_inner_t fn_ptr_arr2_t[5];
+>    */
+>   /* ----- START-EXPECTED-OUTPUT ----- */
+> -typedef char * const * (*fn_ptr2_t)(struct {
+> -	int a;
+> -}, int (*)(int));
+> +struct struct_a;
+> +
+> +typedef char * const * (*fn_ptr2_t)(struct struct_a, int (*)(int));
+> +
+> +struct struct_c;
+> +
+> +struct struct_h;
+
+>   typedef struct {
+>   	int a;
+> -	void (*b)(int, struct {
+> -		int c;
+> -	}, union {
+> +	void (*b)(int, struct struct_c, union {
+>   		char d;
+>   		int e[5];
+>   	});
+>   } (*fn_complex_t)(union {
+>   	void *f;
+>   	char g[16];
+> -}, struct {
+> -	int h;
+> -});
+> +}, struct struct_h);
+
+>   typedef void (* (*signal_t)(int, void (*)(int)))(int);
+
+> @@ -272,6 +272,18 @@ struct root_struct {
+>   	struct float_struct _15;
+>   };
+
+> +struct struct_a {
+> +	int a;
+> +};
+> +
+> +struct struct_h {
+> +	int h;
+> +};
+> +
+> +struct struct_c {
+> +	int c;
+> +};
+> +
+>   /* ------ END-EXPECTED-OUTPUT ------ */
+
+>   int f(struct root_struct *s)
+> --
+> 2.34.1
+
