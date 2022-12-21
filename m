@@ -2,140 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9118653135
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A10DC653137
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbiLUNBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:01:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
+        id S232415AbiLUNBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:01:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiLUNBD (ORCPT
+        with ESMTP id S233664AbiLUNBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:01:03 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AA0E86;
-        Wed, 21 Dec 2022 05:01:01 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so409715wms.4;
-        Wed, 21 Dec 2022 05:01:01 -0800 (PST)
+        Wed, 21 Dec 2022 08:01:36 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264A0E86
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:01:35 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id i188so8667580vsi.8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:01:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=AdWnQ27kmD5VfUep6TMl51Z7Mmf8V787tpSu6AJKxEg=;
-        b=oyt/8pGg1HMGojQDGzHmX1gBi3DLmAoeXQRc50l2jVvtEt6ZUyvgBemjlgZWoLJsuT
-         GOGNdrKiCXl8WF1xSR18lM5B4hZhpDb5oK1r8wFqNXYE1wcn5AY2xf8s80pnEEVQMgl9
-         /KU4+l09Zj/e3sGYiIN8fm0y7//8OWmzVSJ0tyS1Md16UtA57RCifis2Ho3SPJfj7S9p
-         jS++UST56AC+kpLbchtuYsTovkvz3OK6cit9gDtpXgZy9ZSd/NbrOj3ahbje6OcVEYJE
-         P2hZUIMC+4SxXDuEc4P5QCc95AgkXXzkmYAeu7/X6z9fJfzrSojuu4OSrh5WajJyqAGu
-         k71Q==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GDzcNnABsBO1VV0+lqWHXjD9U+uD6P4e2XrXM+GgZjY=;
+        b=OTVCHIxPc8hNDzfRmK7t4nuGHJtQn+GYzCbae4exnTy2K1oWgfe5Bvq5GQh6GyddW7
+         2e7T9YQ4Q9hhUpYtuS7MCCRyX6ZCuQPnYeOF6aryYzZUSHERWk+cHc026N4/8T8Tl6cC
+         +tEqQoAgfKUVPofMAl/+te5vsJxXyo2VMx3lYeKL0YsKh3xyhUI9ZRmQIUxtXh8dYSfU
+         GiyYmwW4lfnkZ1QZuUMdaoUknz/e369FeEvsqlnoRpLp+fCnprpwMy9aF9QgXqi/xK/M
+         nUz4q51UXhg0Ros9EideGqpoxRMwpeydmqnwRbFlFqPoxl8eKRdi/nC47qaxSx1jr4ms
+         3fMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AdWnQ27kmD5VfUep6TMl51Z7Mmf8V787tpSu6AJKxEg=;
-        b=AaykZJ6s0eyzzpboq+zFuO6TcWfa+LjCIk29oDbHrJSnOHoNR9HQ9eTD0AuSRrcmY3
-         BcwsQnF7ts38SnOsMpysm/w7wSW1etyFT/lcy53EQSTPq6IpLQkufFX2jh/lyvxZlQKm
-         OB6y53yCbQHEouQAuptJ+pVNnS2aaW4Ia/CrgLiJVC5UJwmD6KhcD1KPhQ+RacYwIIe6
-         eIvf1IPf5lGbepCnuFsthXguSRy14XdlMB5OJJ4PaBqUAEc/yGioUbfBLvQCit2Ahslp
-         QRm7F4VAQeMnE23XoF/KbpF6xcbbOrezkYy0mVqGsH8b7hbrQ/otQTU+hAMuFQ+iUjkP
-         d1ZA==
-X-Gm-Message-State: AFqh2kokdzB5WZY716dRYiDZzy5kUnt1HmD2pBakc0Rk/xKYbh76aaWk
-        zMZHW2s7px11mjS9nu080RI=
-X-Google-Smtp-Source: AMrXdXusTys0JXtfMzelMdlOYTwD5NxEVLnl3ZVjpk1SyvqgRkDQPrajXdSjXMWVddhhIdX2zVCXDQ==
-X-Received: by 2002:a05:600c:510e:b0:3d3:5885:4d21 with SMTP id o14-20020a05600c510e00b003d358854d21mr1527171wms.17.1671627660155;
-        Wed, 21 Dec 2022 05:01:00 -0800 (PST)
-Received: from Ansuel-xps. (host-82-55-238-56.retail.telecomitalia.it. [82.55.238.56])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05600c415400b003d1e34bcbb2sm2263193wmm.13.2022.12.21.05.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 05:00:59 -0800 (PST)
-Message-ID: <63a3038b.050a0220.d41c3.6f48@mx.google.com>
-X-Google-Original-Message-ID: <Y6MDiW7SlyPxDU4g@Ansuel-xps.>
-Date:   Wed, 21 Dec 2022 14:00:57 +0100
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: Re: [PATCH v7 06/11] leds: trigger: netdev: add hardware control
- support
-References: <20221214235438.30271-1-ansuelsmth@gmail.com>
- <20221214235438.30271-7-ansuelsmth@gmail.com>
- <Y5tUU5zA/lkYJza+@shell.armlinux.org.uk>
- <639ca665.1c0a0220.ae24f.9d06@mx.google.com>
- <Y6JMe9oJDCyLkq7P@lunn.ch>
- <Y6LX43poXJ4k/7mv@shell.armlinux.org.uk>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GDzcNnABsBO1VV0+lqWHXjD9U+uD6P4e2XrXM+GgZjY=;
+        b=IVnIEXxASuL3L6FltZAZnKRs1RfTAVg0QCMrRTF+tMVFt4WBQMDaSOSKCe6ft1UPYS
+         N/vLALYTGWokt1BVMMjzcXryws5OHzolr7ZjouZKwnBXtgWl4iij7MaQ/dJvrjeZqvrN
+         sHVX5HZtGsB4cdfi8ytW50GpKphM2QI2yctDwsefF9mFUNR8RHVqkgccSKI14QX9h/oa
+         YDC9qVVlluVEP00b/PYTrYyJEd1OBExzXsW+wI30Ujag3HUe68KR+77gYS+zxJ+oRpzV
+         6bbTGCJNpxD3g627Ya/WOA1inLjZpIAioYhSm/F7VenU++QO/rEJVoFj201pl4wtBSuq
+         5ENw==
+X-Gm-Message-State: AFqh2krp2CBb5TQ4unr+4Fb1F62WnNz5FHuRyRHKxg/rGqd/ZpYuzgHk
+        GGi0NgSJLrP3sNs5JIqZNvimlmkfMp02pBWHTEYvx1paZ3lyO67y
+X-Google-Smtp-Source: AMrXdXuNB/sDzfpmzwX8uMWvtWlaf+Aec5yUocSOxzO/t/5RUMp33JfueRvXOl2phY2Pl+iiXeKBYtt36VGElgx7ejo=
+X-Received: by 2002:a67:ee5a:0:b0:3b5:21d5:5a0b with SMTP id
+ g26-20020a67ee5a000000b003b521d55a0bmr196624vsp.34.1671627693304; Wed, 21 Dec
+ 2022 05:01:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6LX43poXJ4k/7mv@shell.armlinux.org.uk>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 21 Dec 2022 18:31:22 +0530
+Message-ID: <CA+G9fYukf1K+t3LApra9fUtAybtqz15uzdbfpMcRCiWX7+UNHQ@mail.gmail.com>
+Subject: sh: compiler_types.h:358:45: error: call to '__compiletime_assert_263'
+ declared with attribute error: Unsupported access size for {READ,WRITE}_ONCE().
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Cc:     Rich Felker <dalias@libc.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 09:54:43AM +0000, Russell King (Oracle) wrote:
-> On Wed, Dec 21, 2022 at 12:59:55AM +0100, Andrew Lunn wrote:
-> > > > One thought on this approach though - if one has a PHY that supports
-> > > > "activity" but not independent "rx" and "tx" activity indications
-> > > > and it doesn't support software control, how would one enable activity
-> > > > mode? There isn't a way to simultaneously enable both at the same
-> > > > time... However, I need to check whether there are any PHYs that fall
-> > > > into this category.
-> > > >
-> > > 
-> > > Problem is that for such feature and to have at least something working
-> > > we need to face compromise. We really can't support each switch feature
-> > > and have a generic API for everything.
-> > 
-> > I agree we need to make compromises. We cannot support every LED
-> > feature of every PHY, they are simply too diverse. Hopefully we can
-> > support some features of every PHY. In the worst case, a PHY simply
-> > cannot be controlled via this method, which is the current state
-> > today. So it is not worse off.
-> 
-> ... and that compromise is that it's not going to be possible to enable
-> activity mode on 88e151x with how the code stands and with the
-> independent nature of "rx" and "tx" activity control currently in the
-> netdev trigger... making this whole approach somewhat useless for
-> Marvell PHYs.
+Linux mainline master branch have reported the following regressions.
 
-Again we can consider adding an activity mode. It seems logical that
-some switch may only support global traffic instead of independend tx or
-rx... The feature are not mutually exclusive. One include the other 2.
+Regressions found on sh build failures,
+  - build/gcc-11-defconfig
+  - build/gcc-8-defconfig
+  - build/gcc-11-shx3_defconfig
+  - build/gcc-8-shx3_defconfig
 
-We already a simple workaround for the link mode where on the current
-driver, if the link mode is enabled just all rule for 10 100 and 1000
-mbps are enabled simulating a global link event.
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=sh
+CROSS_COMPILE=sh4-linux-gnu- 'CC=sccache sh4-linux-gnu-gcc'
+'HOSTCC=sccache gcc' shx3_defconfig
 
-> 
-> We really need to see a working implementation for this code for more
-> than just one PHY to prove that it is actually possible for it to
-> support other PHYs. If not, it isn't actually solving the problem,
-> and we're going to continue getting custom implementations to configure
-> the LED settings.
-> 
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=sh
+CROSS_COMPILE=sh4-linux-gnu- 'CC=sccache sh4-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
 
-Agree that we need other user for this to catch some problem in the
-implementation of this generic API.
+  Generating include/generated/machtypes.h
+<stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+In file included from /builds/linux/arch/sh/include/asm/hw_irq.h:6,
+                 from /builds/linux/include/linux/irq.h:596,
+                 from /builds/linux/include/asm-generic/hardirq.h:17,
+                 from /builds/linux/arch/sh/include/asm/hardirq.h:9,
+                 from /builds/linux/include/linux/hardirq.h:11,
+                 from /builds/linux/include/linux/interrupt.h:11,
+                 from /builds/linux/include/linux/serial_core.h:13,
+                 from /builds/linux/include/linux/serial_sci.h:6,
+                 from /builds/linux/arch/sh/kernel/cpu/sh4a/setup-shx3.c:10:
+/builds/linux/include/linux/sh_intc.h:100:63: warning: division
+'sizeof (void *) / sizeof (void)' does not compute the number of array
+elements [-Wsizeof-pointer-div]
+  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
+sizeof(a)/sizeof(*a)
+      |                                                               ^
+/builds/linux/include/linux/sh_intc.h:107:9: note: in expansion of
+macro '_INTC_ARRAY'
+  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
+      |         ^~~~~~~~~~~
+/builds/linux/include/linux/sh_intc.h:124:15: note: in expansion of
+macro 'INTC_HW_DESC'
+  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
+         \
+      |               ^~~~~~~~~~~~
+/builds/linux/arch/sh/kernel/cpu/sh4a/setup-shx3.c:309:8: note: in
+expansion of macro 'DECLARE_INTC_DESC'
+  309 | static DECLARE_INTC_DESC(intc_desc, "shx3", vectors, groups,
+      |        ^~~~~~~~~~~~~~~~~
+/builds/linux/include/linux/sh_intc.h:100:63: warning: division
+'sizeof (void *) / sizeof (void)' does not compute the number of array
+elements [-Wsizeof-pointer-div]
+  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
+sizeof(a)/sizeof(*a)
+      |                                                               ^
+/builds/linux/include/linux/sh_intc.h:107:34: note: in expansion of
+macro '_INTC_ARRAY'
+  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
+      |                                  ^~~~~~~~~~~
+/builds/linux/include/linux/sh_intc.h:124:15: note: in expansion of
+macro 'INTC_HW_DESC'
+  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
+         \
+      |               ^~~~~~~~~~~~
+/builds/linux/arch/sh/kernel/cpu/sh4a/setup-shx3.c:309:8: note: in
+expansion of macro 'DECLARE_INTC_DESC'
+  309 | static DECLARE_INTC_DESC(intc_desc, "shx3", vectors, groups,
+      |        ^~~~~~~~~~~~~~~~~
+/builds/linux/include/linux/sh_intc.h:100:63: warning: division
+'sizeof (void *) / sizeof (void)' does not compute the number of array
+elements [-Wsizeof-pointer-div]
+  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
+sizeof(a)/sizeof(*a)
+      |                                                               ^
+/builds/linux/include/linux/sh_intc.h:107:34: note: in expansion of
+macro '_INTC_ARRAY'
+  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
+      |                                  ^~~~~~~~~~~
+/builds/linux/include/linux/sh_intc.h:124:15: note: in expansion of
+macro 'INTC_HW_DESC'
+  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
+         \
+      |               ^~~~~~~~~~~~
+/builds/linux/arch/sh/kernel/cpu/sh4a/setup-shx3.c:322:8: note: in
+expansion of macro 'DECLARE_INTC_DESC'
+  322 | static DECLARE_INTC_DESC(intc_desc_irq, "shx3-irq", vectors_irq, groups,
+      |        ^~~~~~~~~~~~~~~~~
+/builds/linux/include/linux/sh_intc.h:100:63: warning: division
+'sizeof (void *) / sizeof (void)' does not compute the number of array
+elements [-Wsizeof-pointer-div]
+  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
+sizeof(a)/sizeof(*a)
+      |                                                               ^
+/builds/linux/include/linux/sh_intc.h:107:9: note: in expansion of
+macro '_INTC_ARRAY'
+  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
+      |         ^~~~~~~~~~~
+/builds/linux/include/linux/sh_intc.h:124:15: note: in expansion of
+macro 'INTC_HW_DESC'
+  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
+         \
+      |               ^~~~~~~~~~~~
+/builds/linux/arch/sh/kernel/cpu/sh4a/setup-shx3.c:337:8: note: in
+expansion of macro 'DECLARE_INTC_DESC'
+  337 | static DECLARE_INTC_DESC(intc_desc_irl, "shx3-irl", vectors_irl, groups,
+      |        ^~~~~~~~~~~~~~~~~
+/builds/linux/include/linux/sh_intc.h:100:63: warning: division
+'sizeof (void *) / sizeof (void)' does not compute the number of array
+elements [-Wsizeof-pointer-div]
+  100 | #define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 :
+sizeof(a)/sizeof(*a)
+      |                                                               ^
+/builds/linux/include/linux/sh_intc.h:107:34: note: in expansion of
+macro '_INTC_ARRAY'
+  107 |         _INTC_ARRAY(sense_regs), _INTC_ARRAY(ack_regs), \
+      |                                  ^~~~~~~~~~~
+/builds/linux/include/linux/sh_intc.h:124:15: note: in expansion of
+macro 'INTC_HW_DESC'
+  124 |         .hw = INTC_HW_DESC(vectors, groups, mask_regs,
+         \
+      |               ^~~~~~~~~~~~
+/builds/linux/arch/sh/kernel/cpu/sh4a/setup-shx3.c:337:8: note: in
+expansion of macro 'DECLARE_INTC_DESC'
+  337 | static DECLARE_INTC_DESC(intc_desc_irl, "shx3-irl", vectors_irl, groups,
+      |        ^~~~~~~~~~~~~~~~~
+In file included from <command-line>:
+In function 'follow_pmd_mask',
+    inlined from 'follow_pud_mask' at /builds/linux/mm/gup.c:735:9,
+    inlined from 'follow_p4d_mask' at /builds/linux/mm/gup.c:752:9,
+    inlined from 'follow_page_mask' at /builds/linux/mm/gup.c:809:9:
+/builds/linux/include/linux/compiler_types.h:358:45: error: call to
+'__compiletime_assert_263' declared with attribute error: Unsupported
+access size for {READ,WRITE}_ONCE().
+  358 |         _compiletime_assert(condition, msg,
+__compiletime_assert_, __COUNTER__)
+      |                                             ^
+/builds/linux/include/linux/compiler_types.h:339:25: note: in
+definition of macro '__compiletime_assert'
+  339 |                         prefix ## suffix();
+         \
+      |                         ^~~~~~
+/builds/linux/include/linux/compiler_types.h:358:9: note: in expansion
+of macro '_compiletime_assert'
+  358 |         _compiletime_assert(condition, msg,
+__compiletime_assert_, __COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+/builds/linux/include/asm-generic/rwonce.h:36:9: note: in expansion of
+macro 'compiletime_assert'
+   36 |         compiletime_assert(__native_word(t) || sizeof(t) ==
+sizeof(long long),  \
+      |         ^~~~~~~~~~~~~~~~~~
+/builds/linux/include/asm-generic/rwonce.h:49:9: note: in expansion of
+macro 'compiletime_assert_rwonce_type'
+   49 |         compiletime_assert_rwonce_type(x);
+         \
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/builds/linux/mm/gup.c:661:18: note: in expansion of macro 'READ_ONCE'
+  661 |         pmdval = READ_ONCE(*pmd);
+      |                  ^~~~~~~~~
+make[3]: *** [/builds/linux/scripts/Makefile.build:252: mm/gup.o] Error 1
+In file included from <command-line>:
+/builds/linux/mm/page_vma_mapped.c: In function 'page_vma_mapped_walk':
+/builds/linux/include/linux/compiler_types.h:358:45: error: call to
+'__compiletime_assert_262' declared with attribute error: Unsupported
+access size for {READ,WRITE}_ONCE().
+  358 |         _compiletime_assert(condition, msg,
+__compiletime_assert_, __COUNTER__)
+      |                                             ^
+/builds/linux/include/linux/compiler_types.h:339:25: note: in
+definition of macro '__compiletime_assert'
+  339 |                         prefix ## suffix();
+         \
+      |                         ^~~~~~
+/builds/linux/include/linux/compiler_types.h:358:9: note: in expansion
+of macro '_compiletime_assert'
+  358 |         _compiletime_assert(condition, msg,
+__compiletime_assert_, __COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+/builds/linux/include/asm-generic/rwonce.h:36:9: note: in expansion of
+macro 'compiletime_assert'
+   36 |         compiletime_assert(__native_word(t) || sizeof(t) ==
+sizeof(long long),  \
+      |         ^~~~~~~~~~~~~~~~~~
+/builds/linux/include/asm-generic/rwonce.h:49:9: note: in expansion of
+macro 'compiletime_assert_rwonce_type'
+   49 |         compiletime_assert_rwonce_type(x);
+         \
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/builds/linux/mm/page_vma_mapped.c:210:24: note: in expansion of macro
+'READ_ONCE'
+  210 |                 pmde = READ_ONCE(*pvmw->pmd);
+      |                        ^~~~~~~~~
+make[3]: *** [/builds/linux/scripts/Makefile.build:252:
+mm/page_vma_mapped.o] Error 1
+make[3]: Target 'mm/' not remade because of errors.
+make[2]: *** [/builds/linux/scripts/Makefile.build:504: mm] Error 2
+/builds/linux/fs/ext4/readpage.c: In function 'ext4_mpage_readpages':
+/builds/linux/fs/ext4/readpage.c:405:1: warning: the frame size of
+1132 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+  405 | }
+      | ^
+/builds/linux/fs/mpage.c: In function '__mpage_writepage':
+/builds/linux/fs/mpage.c:634:1: warning: the frame size of 1144 bytes
+is larger than 1024 bytes [-Wframe-larger-than=]
+  634 | }
+      | ^
+/builds/linux/fs/mpage.c: In function 'do_mpage_readpage':
+/builds/linux/fs/mpage.c:308:1: warning: the frame size of 1092 bytes
+is larger than 1024 bytes [-Wframe-larger-than=]
+  308 | }
+      | ^
+make[2]: Target './' not remade because of errors.
+make[1]: *** [/builds/linux/Makefile:2008: .] Error 2
 
--- 
-	Ansuel
+Build:
+https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.1-13872-gb6bb9676f216/testrun/13772324/suite/build/test/gcc-11-shx3_defconfig/details/
+
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
