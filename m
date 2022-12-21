@@ -2,77 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F3C652D05
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E1D652D0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbiLUGrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 01:47:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S234105AbiLUGtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 01:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233321AbiLUGq5 (ORCPT
+        with ESMTP id S229482AbiLUGtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 01:46:57 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A081D336
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:46:56 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id jo4so25640360ejb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:46:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iAVMql90nO7ZkFcVgMNu6fVpAbtsWgSiB+5IHPtWWmc=;
-        b=LAn8A6q3x/FxImTU7EI//vFipPthxtzU9CCh1UlabVwIoxxqd3FVtp9nlPG3NakRLN
-         SYvnKRpPj9rPDJmzRpl2ABWyyAaD8IfdvokDJ9iRekjZOeaVZXE4998zBRpntD0xTo0t
-         zWLJ+Yz02YTk8MXQhIRPIuphm3zS3fu2TuR/GnM4DQHuxBe6iUVQWNe6FuFiwyoYqyA3
-         5iwNSTJxIaWxf1STTVWEShE9l4tdC+y+yWEOZlJnc2vg8AikhmA3K/6jdaJmkn4OZ6Si
-         Tcu3ccyDyds681GzjwZUE4PXEs52QbeiKfsux2FN/Lsy2UN1gVARItqg+CM37mxV/3Cq
-         Rd2g==
+        Wed, 21 Dec 2022 01:49:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CB61F2C4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:49:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671605341;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+/4TAy3lxZDNq7ujOJb9FKrW+iCRhzmTxD7N7cv0eCg=;
+        b=M0Gx+SvVFpoLKQ8Odmy7Q5rAifxcqFJ0UeQOoJk1fXnQz3bHryG2OlrnpaokTj01rYhf4v
+        Oj7NVg0BdHTuUOn23MfWPfNK15nnmO3Hy9TkuStP/uu8PvD2Fdt3W+b/WIGNe4WQMLV8/I
+        KnKg3r5OE0G63ge/dw+KyB3UAYGoLn4=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-441-kjiDS59sMcqND9-MV6_UWA-1; Wed, 21 Dec 2022 01:48:52 -0500
+X-MC-Unique: kjiDS59sMcqND9-MV6_UWA-1
+Received: by mail-oo1-f71.google.com with SMTP id u22-20020a4a6c56000000b004a38aa46a1fso6663287oof.22
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:48:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iAVMql90nO7ZkFcVgMNu6fVpAbtsWgSiB+5IHPtWWmc=;
-        b=Tejm+EmRE1q0HGOeODmyCNomBhf3qlXG8bfKFL9oE7ecGwev+mJfig5e5hlBnWkGAx
-         ngCwhzKJnS7LJ7GRns9Jenr6AUFm9yWGJ4JkdW3G/5dfVUVNn2SXw30lHo9EBN6ANxlV
-         rmsoz93wsBx6P/puILkZnM3e4Z/Hhg3TGAMGY+re9T8xmuA92bQbft4xaRLSdKItBwz/
-         rvaVvT4MlEfVfYZ4dHkCJwoHB5jUy9BinI8T4L8+b0/vDyyqLTyBOH4Z3uKSgr23Rwat
-         TOYZrApbnapyJ8DuYQB/XOvdI+CnjyyIqtRwPQqrBh64pQUuSoox+S+Dsua1uBWIADJL
-         jTFg==
-X-Gm-Message-State: AFqh2krZBMxtwekJ36OHQm839ukQehkpBZGnLAr8tf4GccGm7lCsOger
-        CgpVa9wYwVeggfviM7skhgZjP2qWVu2uyPWFFsw=
-X-Google-Smtp-Source: AMrXdXsy6U3KyN+8+jn5v2xOSWzTtJPiz6KIbtFyXTms7FfdcTs+5eU99zz8pSApZy3b2GiXX5eKzmcSV01kukO30eA=
-X-Received: by 2002:a17:906:4f12:b0:77f:9082:73c7 with SMTP id
- t18-20020a1709064f1200b0077f908273c7mr23621eju.517.1671605215225; Tue, 20 Dec
- 2022 22:46:55 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+/4TAy3lxZDNq7ujOJb9FKrW+iCRhzmTxD7N7cv0eCg=;
+        b=jLRoLzARokAFvR+kYWelLpXzRQX88X/t9V57Ox9N1MdEMCoBjmUQuu73WWnGr3fdr4
+         b6lfmmbQA1Xh2QOocUKgD1GHTuheOyz4OUo5jfKiFkFYI97Yrd6RfTH0ANLjt6qDcqLD
+         IssedVNBAEMw3zUqAUj49usNRxMyy9WThYqny5EAfYcR6nIKSXtnWSTgqtlZv+PCC8jo
+         3MC/iqL1lCqa73zz3dMDj04QzZmq+e+b9OfJwc4h/wPgNtmfcSF301CmvB138y4EJQUf
+         D3bnLtM84MXAGbydyAQsfzUk6D+8WWgV4bTyW2qyQDgey6+zrQx38egHh+KJZrKOm22o
+         3r/g==
+X-Gm-Message-State: AFqh2kr3buMXpkvUgrXJVNiuJ4QrZ1cfCdFildHRx7QlrdHXzyhMnCwc
+        iZ3qPheaoZ1LCsl1UpGeCIrgX8IGHKBiZUowFudULvrWrufdOUq/xhLKjP1GclJqCtP8dZdtYRy
+        RVWIum4s4U3ECgwnTUjt5HOy5msBsvNPGoh0gg/Fi
+X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id u19-20020a056870441300b00144a97b1ae2mr29059oah.35.1671605331286;
+        Tue, 20 Dec 2022 22:48:51 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu80udxD6YrnxsV720q5HV+2HR8kMLdfBS0FZI0RkgPvpsYJe396SNLloD8Y2DlUjugZ1aCdXjvrEHubwRFXk0=
+X-Received: by 2002:a05:6870:4413:b0:144:a97b:1ae2 with SMTP id
+ u19-20020a056870441300b00144a97b1ae2mr29055oah.35.1671605331053; Tue, 20 Dec
+ 2022 22:48:51 -0800 (PST)
 MIME-Version: 1.0
-Sender: goodw771@gmail.com
-Received: by 2002:a05:640c:1a0c:b0:189:ab5b:3d94 with HTTP; Tue, 20 Dec 2022
- 22:46:54 -0800 (PST)
-From:   H mimi m <mimih6474@gmail.com>
-Date:   Wed, 21 Dec 2022 06:46:54 +0000
-X-Google-Sender-Auth: dp3PlfOk9U9aB-AeJyV_-nRkJqE
-Message-ID: <CAM0SVCachfT5FX0dTme0mFfAEGeXC1yPbUMeHuzq7sj2VTQ-dw@mail.gmail.com>
-Subject: REPLY ME
-To:     undisclosed-recipients:;
+References: <20221220140205.795115-1-lulu@redhat.com> <CACGkMEuJuUrA220XgHDOruK-aHWSfJ6mTaqNVQCAcOsPEwV91A@mail.gmail.com>
+ <20221221013359-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20221221013359-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 21 Dec 2022 14:48:40 +0800
+Message-ID: <CACGkMEuXPoR_yp3ZC7XH4TZ8NdL21kWtJaxq22+VU7RQG13f8Q@mail.gmail.com>
+Subject: Re: [PATCH] vhost_vdpa: fix the compile issue in commit 881ac7d2314f
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Cindy Lu <lulu@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-i am Mrs Mimi Hassan Abdul Mohammad and i was diagnosed with cancer
-about 2 years
-ago,before i go for a surgery  i  have to do this,so  If you are
-interested to use the sum of US17.3Million)to help Poor,
-Less-privileged and  ORPHANAGES and invest  in your country, get back
-to me for more information on how you can  contact the COMPANY in
-Ouagadougou Burkina Faso). for where the fund is
-Warm Regards,
-Mrs Mimi Hassan Abdul Mohammad
+On Wed, Dec 21, 2022 at 2:35 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Wed, Dec 21, 2022 at 11:23:09AM +0800, Jason Wang wrote:
+> > On Tue, Dec 20, 2022 at 10:02 PM Cindy Lu <lulu@redhat.com> wrote:
+> > >
+> > > The input of  vhost_vdpa_iotlb_unmap() was changed in 881ac7d2314f,
+> > > But some function was not changed while calling this function.
+> > > Add this change
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: 881ac7d2314f ("vhost_vdpa: fix the crash in unmap a large memory")
+> >
+> > Is this commit merged into Linus tree?
+> >
+> > Btw, Michael, I'd expect there's a respin of the patch so maybe Cindy
+> > can squash the fix into the new version?
+> >
+> > Thanks
+>
+> Thanks, I fixed it myself already. Why do you want a respin?
+
+For some reason I miss v4, so it should be fine.
+
+Thanks
+
+> That will mean trouble as the fixed patch is now being tested.
+>
+>
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Signed-off-by: Cindy Lu <lulu@redhat.com>
+> > > ---
+> > >  drivers/vhost/vdpa.c | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> > > index 46ce35bea705..ec32f785dfde 100644
+> > > --- a/drivers/vhost/vdpa.c
+> > > +++ b/drivers/vhost/vdpa.c
+> > > @@ -66,8 +66,8 @@ static DEFINE_IDA(vhost_vdpa_ida);
+> > >  static dev_t vhost_vdpa_major;
+> > >
+> > >  static void vhost_vdpa_iotlb_unmap(struct vhost_vdpa *v,
+> > > -                                  struct vhost_iotlb *iotlb,
+> > > -                                  u64 start, u64 last);
+> > > +                                  struct vhost_iotlb *iotlb, u64 start,
+> > > +                                  u64 last, u32 asid);
+> > >
+> > >  static inline u32 iotlb_to_asid(struct vhost_iotlb *iotlb)
+> > >  {
+> > > @@ -139,7 +139,7 @@ static int vhost_vdpa_remove_as(struct vhost_vdpa *v, u32 asid)
+> > >                 return -EINVAL;
+> > >
+> > >         hlist_del(&as->hash_link);
+> > > -       vhost_vdpa_iotlb_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
+> > > +       vhost_vdpa_iotlb_unmap(v, &as->iotlb, 0ULL, 0ULL - 1, asid);
+> > >         kfree(as);
+> > >
+> > >         return 0;
+> > > --
+> > > 2.34.3
+> > >
+>
+
