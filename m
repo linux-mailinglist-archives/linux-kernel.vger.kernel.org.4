@@ -2,111 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCE6652F2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB41652F32
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234590AbiLUKNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 05:13:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
+        id S234608AbiLUKPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 05:15:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbiLUKNN (ORCPT
+        with ESMTP id S234697AbiLUKOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 05:13:13 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F9015A21;
-        Wed, 21 Dec 2022 02:13:12 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 21 Dec 2022 05:14:12 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314AE222BC;
+        Wed, 21 Dec 2022 02:13:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B1D1C6602CBE;
-        Wed, 21 Dec 2022 10:13:10 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671617591;
-        bh=n9OD75LWbhmmE+p5PTtkkUSFONy/coTD+gGYR7GYpbk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=X8Mx8SIZzCnbeE3LdffT171/+o2OjubaXA2Kz0R4rzt2ROYvvHQHK23QwaOOMrxG9
-         RgXxrksd3kUKYNGamMDpIkTSWpo+nloYUaaksHGqT455U8rYXXEigxWXo+6n9ZFIBo
-         VfGJd/2m/7nKps9oxigztO2m1xn6lRd92mvvDX1KP721TPDyUrqnJekwD8+WWLiNKt
-         cyabcbyXsTOmRicICbyjxOCp9SYE3G9/A9pR+Kygn26Kdi5UR4MzVIjeoATQnBTGQj
-         vYq3/RnlJJJqvptlZxMU5ZC6q7A+n2yKAfnI1hF0mC99Dpo7SduiqUjkiybKUojvxL
-         Subs/MjIoR0tw==
-Message-ID: <f591f169-acd8-d408-970b-8afc66eda8cf@collabora.com>
-Date:   Wed, 21 Dec 2022 11:13:07 +0100
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9E4A821BB1;
+        Wed, 21 Dec 2022 10:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1671617624; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2TvwPzi6wiLtMmmPj4i4B3RDTNRfbARTRFeV+JMX0Js=;
+        b=zG5A5IIjP4mGDMFds4+99IZGxAVw8smJzZITFQh3e05y+KDNILgN++q7cuwS4z1/tRTV7r
+        zVdmya3DcO8ork6Lg9/je8pgsFWUkBTFb6Uzz8a3cLEbQdFJrVFLhvZgXQcLRbLhTmz70Q
+        i/WOOXamOpYmsZLbHamqnvpDqVGXFpU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1671617624;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2TvwPzi6wiLtMmmPj4i4B3RDTNRfbARTRFeV+JMX0Js=;
+        b=aTfckfLmnAhj/yqAof5u03rFVy5r5S2jurQGunR49hIyz2SE5meeFq06u/pYKT9lvMoJRO
+        Orx6jmW/6KK4mHAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9105013913;
+        Wed, 21 Dec 2022 10:13:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0mxdI1jcomPQHwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 21 Dec 2022 10:13:44 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 21FD4A0732; Wed, 21 Dec 2022 11:13:44 +0100 (CET)
+Date:   Wed, 21 Dec 2022 11:13:44 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     tytso@mit.edu, jack@suse.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        libaokun1@huawei.com, zhanchengbin1@huawei.com,
+        yangerkun@huawei.com
+Subject: Re: [PATCH] [RFC] Fix data missing when reusing bh which is ready to
+ be checkpointed
+Message-ID: <20221221101344.mup3mmrlt5c7yjfv@quack3>
+References: <20221220150551.653925-1-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RESEND PATCH v4] arm64: dts: mt8195: Add Ethernet controller
-Content-Language: en-US
-To:     Biao Huang <biao.huang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        macpaul.lin@mediatek.com
-References: <20221221022523.8458-1-biao.huang@mediatek.com>
- <20221221022523.8458-2-biao.huang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221221022523.8458-2-biao.huang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220150551.653925-1-chengzhihao1@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/12/22 03:25, Biao Huang ha scritto:
-> Add Ethernet controller node for mt8195.
+On Tue 20-12-22 23:05:51, Zhihao Cheng wrote:
+> From: zhanchengbin <zhanchengbin1@huawei.com>
 > 
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> Following process will make data lost and could lead to a filesystem
+> corrupted problem:
+> 
+> 1. jh(bh) is inserted into T1->t_checkpoint_list, bh is dirty, and
+>    jh->b_transaction = NULL
+> 2. T1 is added into journal->j_checkpoint_transactions.
+> 3. Get bh prepare to write while doing checkpoing:
+>            PA				    PB
+>    do_get_write_access             jbd2_log_do_checkpoint
+>     spin_lock(&jh->b_state_lock)
+>      if (buffer_dirty(bh))
+>       clear_buffer_dirty(bh)   // clear buffer dirty
+>        set_buffer_jbddirty(bh)
+> 				    transaction =
+> 				    journal->j_checkpoint_transactions
+> 				    jh = transaction->t_checkpoint_list
+> 				    if (!buffer_dirty(bh))
+> 		                      __jbd2_journal_remove_checkpoint(jh)
+> 				      // bh won't be flushed
+> 		                    jbd2_cleanup_journal_tail
+>     __jbd2_journal_file_buffer(jh, transaction, BJ_Reserved)
+> 4. Aborting journal/Power-cut before writing latest bh on journal area.
+> 
+> In this way we get a corrupted filesystem with bh'data lost.
+> 
+> Fix it by wrapping clear_buffer_dirty(bh) and jh->b_transaction setting
+> into journal->j_list_lock, so that jbd2_log_do_checkpoint() will wait
+> until jh's new transaction fininshed even bh is currently not dirty.
+> 
+> Cc: <stable@kernel.org>
+> Signed-off-by: zhanchengbin <zhanchengbin1@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 > ---
->   arch/arm64/boot/dts/mediatek/mt8195-demo.dts | 88 ++++++++++++++++++++
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi     | 86 +++++++++++++++++++
->   2 files changed, 174 insertions(+)
+>  This is a quick fix, I need some suggestions about this patch, whether
+>  it will import new problems if this patch is applied.
+>  Yi suggests that the formal solution could be splitting
+>  journal->j_list_lock into two locks: one protects checkpoint list and
+>  the other one for other lists. Besides, jh->b_state_lock should be
+>  held while traversing transaction->t_checkpoint_list in
+>  jbd2_log_do_checkpoint()/journal_shrink_one_cp_list().
 > 
+>  fs/jbd2/transaction.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 
-..snip..
+Good catch! Did you find it by code inspection or were you able to actually
+trigger this problem?
 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 5d31536f4c48..02112bbf2bdf 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -1046,6 +1046,92 @@ spis1: spi@1101e000 {
->   			status = "disabled";
->   		};
->   
-> +		eth: ethernet@11021000 {
-> +			compatible = "mediatek,mt8195-gmac", "snps,dwmac-5.10a";
-> +			reg = <0 0x11021000 0 0x4000>;
-> +			interrupts = <GIC_SPI 716 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			interrupt-names = "macirq";
-> +			clock-names = "axi",
-> +				      "apb",
-> +				      "mac_cg",
+I think there might be a simpler fix of the problem. Move the clearing
+of buffer_dirty bit just before the call to __jbd2_journal_file_buffer().
+We'll need to keep the buffer locked somewhat longer but that should not be
+a huge deal.
 
-mac_cg goes as last clock, as specified in the binding.
+								Honza
 
-Order: axi, apb, mac_main, ptp_ref, rmii_internal, mac_cg.
 
-Please fix.
-
-Regards,
-Angelo
-
-> +				      "mac_main",
-> +				      "ptp_ref",
-> +				      "rmii_internal";
-> +			clocks = <&pericfg_ao CLK_PERI_AO_ETHERNET>,
-> +				 <&pericfg_ao CLK_PERI_AO_ETHERNET_BUS>,
-> +				 <&pericfg_ao CLK_PERI_AO_ETHERNET_MAC>,
-> +				 <&topckgen CLK_TOP_SNPS_ETH_250M>,
-> +				 <&topckgen CLK_TOP_SNPS_ETH_62P4M_PTP>,
-> +				 <&topckgen CLK_TOP_SNPS_ETH_50M_RMII>;
-
+> diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
+> index 6a404ac1c178..d22460001d6b 100644
+> --- a/fs/jbd2/transaction.c
+> +++ b/fs/jbd2/transaction.c
+> @@ -990,6 +990,7 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
+>   	start_lock = jiffies;
+>  	lock_buffer(bh);
+>  	spin_lock(&jh->b_state_lock);
+> +	spin_lock(&journal->j_list_lock);
+>  
+>  	/* If it takes too long to lock the buffer, trace it */
+>  	time_lock = jbd2_time_diff(start_lock, jiffies);
+> @@ -1039,6 +1040,7 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
+>  
+>  	error = -EROFS;
+>  	if (is_handle_aborted(handle)) {
+> +		spin_unlock(&journal->j_list_lock);
+>  		spin_unlock(&jh->b_state_lock);
+>  		goto out;
+>  	}
+> @@ -1049,8 +1051,10 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
+>  	 * b_next_transaction points to it
+>  	 */
+>  	if (jh->b_transaction == transaction ||
+> -	    jh->b_next_transaction == transaction)
+> +	    jh->b_next_transaction == transaction) {
+> +		spin_unlock(&journal->j_list_lock);
+>  		goto done;
+> +	}
+>  
+>  	/*
+>  	 * this is the first time this transaction is touching this buffer,
+> @@ -1073,11 +1077,11 @@ do_get_write_access(handle_t *handle, struct journal_head *jh,
+>  		 * Paired with barrier in jbd2_write_access_granted()
+>  		 */
+>  		smp_wmb();
+> -		spin_lock(&journal->j_list_lock);
+>  		__jbd2_journal_file_buffer(jh, transaction, BJ_Reserved);
+>  		spin_unlock(&journal->j_list_lock);
+>  		goto done;
+>  	}
+> +	spin_unlock(&journal->j_list_lock);
+>  	/*
+>  	 * If there is already a copy-out version of this buffer, then we don't
+>  	 * need to make another one
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
