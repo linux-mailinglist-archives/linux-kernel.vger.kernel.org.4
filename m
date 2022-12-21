@@ -2,223 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64713653176
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1861165317C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbiLUNNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        id S233757AbiLUNOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbiLUNNw (ORCPT
+        with ESMTP id S229880AbiLUNOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:13:52 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736798FD1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:13:47 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1443a16b71cso19052433fac.13
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:13:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qtO9wDg8hJUBUQLaiwbIVAo5mfbNL2fVZzLLZezJ9QQ=;
-        b=tdnjA/5PXpLbV2h4/LVz0eHHrk3fPY2VmbkazutmwZogNrS41rkgbySWaKIFWmZCLJ
-         i9SdHw9xyb/HsyIZIBwypHdzlYWDcxg5yBKLjJ4Qyw8iUyQpy2l7GOK92iArImyL1Hay
-         w8GQbEBIm1YU0BlcxRI0fv/Mu3+0kGoTUHNCnWoYhQkmLDoDECDNln3BcMz2JumGgKRG
-         tbhhS/lvRkBS5q7mslBMMW0rzXKq9Wccn+YWaMNV4uyXEyjrEdvv8LaddoRILTF9K6Qa
-         msweVuTk4ZNIBpUEhmrnt7cvkjIDtjPjyxXzbGM7zPppb8NeH7ykwrt1/3LaGlu783sx
-         tS8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qtO9wDg8hJUBUQLaiwbIVAo5mfbNL2fVZzLLZezJ9QQ=;
-        b=oZGcoC4d7Y2h+CsVCxX5OZ/5NTb0VxRw1Zmq4F+iS7yNeNTk3TjswdEh5I4ffIavPX
-         6l9ovad3kzlFolfqlXg4H4h888rVKOFShtI+cA4VfLfyJigefUoVi5w4S3vUkwKwDs0+
-         W3Kx6EBuTWN+4qwwrhj1ZZo6D/6R1vb1ct1o7tCk9CoRHEPPEI2XHWULcmTeAl49Mcyr
-         gimRHQp27KLM7EVBkzvc19pKbkWhWHu34r795Dqr19jec3vxF1U5DeZvk8LksEArG1a6
-         4OuUJvPpnXbwyggoFtdrWG0AN713DnDkpQbAnXbR7BjSsymKC9tHfiMHUP8yKjUjAASA
-         8YdQ==
-X-Gm-Message-State: AFqh2kpr0dqETsiP4fnb05nPqzG4RNQsS+CynfP+w6vkNlilMfZotOkk
-        lBSWKGOLOH3PvKCLr/Nmrnj1J9Z4LNTuN14397CYVg==
-X-Google-Smtp-Source: AMrXdXsyxYuopd3Pilvwcm9RqZRo8uJMyPihyDIVvk58KoFpPnsoD5+9K1a55cKZ9tJrnhz35XcMw96wlhr9vbI+Xjk=
-X-Received: by 2002:a05:6870:bb0c:b0:144:8c6d:33b9 with SMTP id
- nw12-20020a056870bb0c00b001448c6d33b9mr78974oab.190.1671628425203; Wed, 21
- Dec 2022 05:13:45 -0800 (PST)
+        Wed, 21 Dec 2022 08:14:44 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD1FF7D;
+        Wed, 21 Dec 2022 05:14:41 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VXpWPTh_1671628478;
+Received: from 30.120.179.217(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VXpWPTh_1671628478)
+          by smtp.aliyun-inc.com;
+          Wed, 21 Dec 2022 21:14:39 +0800
+Message-ID: <4a9b0ff0-8f03-1bfd-d09c-6deb3a9bb39e@linux.alibaba.com>
+Date:   Wed, 21 Dec 2022 21:14:35 +0800
 MIME-Version: 1.0
-References: <000000000000ea7a5c05f051fd00@google.com> <07f9fa58-097f-f14e-b07a-c94deed898eb@ghiti.fr>
-In-Reply-To: <07f9fa58-097f-f14e-b07a-c94deed898eb@ghiti.fr>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 21 Dec 2022 14:13:33 +0100
-Message-ID: <CACT4Y+YcJqcEFSq-AJQpmps7po7qyBA4Vyts3ku9b=d18O65YA@mail.gmail.com>
-Subject: Re: [syzbot] riscv/fixes boot error: WARNING in __apply_to_page_range (2)
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     syzbot <syzbot+5702f46b5b22bdb38b7e@syzkaller.appspotmail.com>,
-        andrii@kernel.org, aou@eecs.berkeley.edu, ast@kernel.org,
-        bjorn@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, luke.r.nels@gmail.com,
-        martin.lau@linux.dev, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com,
-        xi.wang@gmail.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.1
+Subject: Re: [RFC PATCH net-next v2 0/5] net/smc:Introduce SMC-D based
+ loopback acceleration
+To:     Niklas Schnelle <schnelle@linux.ibm.com>, kgraul@linux.ibm.com,
+        wenjia@linux.ibm.com, jaka@linux.ibm.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1671506505-104676-1-git-send-email-guwen@linux.alibaba.com>
+ <42f2972f1dfe45a2741482f36fbbda5b5a56d8f1.camel@linux.ibm.com>
+From:   Wen Gu <guwen@linux.alibaba.com>
+In-Reply-To: <42f2972f1dfe45a2741482f36fbbda5b5a56d8f1.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,NUMERIC_HTTP_ADDR,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Dec 2022 at 13:45, Alexandre Ghiti <alex@ghiti.fr> wrote:
->
-> Hi,
->
-> On 12/21/22 09:03, syzbot wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    eb67d239f3aa Merge tag 'riscv-for-linus-6.2-mw1' of git:/=
-/..
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux=
-.git fixes
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1667268048000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dbe108b5bcf4ef=
-832
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D5702f46b5b22bdb=
-38b7e
-> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, =
-GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: riscv64
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+5702f46b5b22bdb38b7e@syzkaller.appspotmail.com
->
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 2760 at mm/memory.c:2637 apply_to_pmd_range mm/memor=
-y.c:2637 [inline]
->
->
-> This leads to the following:
->
-> if (WARN_ON_ONCE(pmd_leaf(*pmd)))
->     return -EINVAL;
->
->
-> WARNING: CPU: 0 PID: 2760 at mm/memory.c:2637 apply_to_pud_range mm/memor=
-y.c:2680 [inline]
-> WARNING: CPU: 0 PID: 2760 at mm/memory.c:2637 apply_to_p4d_range mm/memor=
-y.c:2716 [inline]
-> WARNING: CPU: 0 PID: 2760 at mm/memory.c:2637 __apply_to_page_range+0x988=
-/0x1212 mm/memory.c:2750
-> Modules linked in:
-> CPU: 0 PID: 2760 Comm: dhcpcd Not tainted 6.1.0-syzkaller-13662-geb67d239=
-f3aa #0
-> Hardware name: riscv-virtio,qemu (DT)
-> epc : apply_to_pmd_range mm/memory.c:2637 [inline]
-> epc : apply_to_pud_range mm/memory.c:2680 [inline]
-> epc : apply_to_p4d_range mm/memory.c:2716 [inline]
-> epc : __apply_to_page_range+0x988/0x1212 mm/memory.c:2750
->  ra : apply_to_pmd_range mm/memory.c:2637 [inline]
->  ra : apply_to_pud_range mm/memory.c:2680 [inline]
->  ra : apply_to_p4d_range mm/memory.c:2716 [inline]
->  ra : __apply_to_page_range+0x988/0x1212 mm/memory.c:2750
-> epc : ffffffff8042aac8 ra : ffffffff8042aac8 sp : ff20000004d57290
->  gp : ffffffff85cdd280 tp : ff6000000e206200 t0 : ff60000010988a00
->  t1 : 00000000000f0000 t2 : ffffffff804616b4 s0 : ff20000004d57380
->  s1 : 0000000000000006 a0 : 0000000000000007 a1 : 00000000000f0000
->  a2 : ffffffff8042aac8 a3 : 0000000000000002 a4 : ff6000000e207200
->  a5 : 0000000000000000 a6 : 0000000000000003 a7 : 0000000000000000
->  s2 : fffffffeef001000 s3 : 00000000371000e7 s4 : ff6000007a660bc0
->  s5 : 0000000000001000 s6 : fffffffeef001000 s7 : 0000000000000001
->  s8 : ffffffff804d8484 s9 : 0000000000000000 s10: fffffffeef000000
->  s11: 0000000000000000 t3 : fffffffff3f3f300 t4 : fffffffef0a07c70
->  t5 : fffffffef0a07c71 t6 : ff6000000ebcccb8
-> status: 0000000000000120 badaddr: 0000000000000000 cause: 000000000000000=
-3
-> [<ffffffff8042b386>] apply_to_page_range+0x34/0x46 mm/memory.c:2769
-> [<ffffffff804d872a>] kasan_populate_vmalloc+0x52/0x5e mm/kasan/shadow.c:3=
-15
-> [<ffffffff804619e0>] alloc_vmap_area+0x4a6/0x1636 mm/vmalloc.c:1647
-> [<ffffffff80462de2>] __get_vm_area_node+0x272/0x3b0 mm/vmalloc.c:2515
-> [<ffffffff8046917c>] __vmalloc_node_range+0x280/0xdb8 mm/vmalloc.c:3187
-> [<ffffffff800192c0>] bpf_jit_alloc_exec+0x46/0x52 arch/riscv/net/bpf_jit_=
-core.c:190
->
->
-> Here we can see that we are allocating the shadow memory for a BPF region=
- which is *vmalloc-backed*: but the current upstream implementation does po=
-pulate the BPF region at initialization, it does not shallow populate it. A=
-nd we try to use huge pages when possible so that can trigger this warning =
-here.
->
-> This is something that I fixed in the following series: https://patchwork=
-.kernel.org/project/linux-riscv/list/?series=3D705150 :)
-
-Good!
-Let's tell syzbot so that it reports similar bugs in future:
-
-#syz fix: riscv: Rework kasan population functions
 
 
-> Glad to see syzbot running again, thanks
->
-> Alex
->
->
-> [<ffffffff80282f10>] bpf_jit_binary_alloc+0x96/0x13c kernel/bpf/core.c:10=
-27
-> [<ffffffff8001904c>] bpf_int_jit_compile+0x87a/0xa8c arch/riscv/net/bpf_j=
-it_core.c:112
-> [<ffffffff80284d76>] bpf_prog_select_runtime+0x1a2/0x22e kernel/bpf/core.=
-c:2191
-> [<ffffffff828a6840>] bpf_migrate_filter+0x258/0x2be net/core/filter.c:129=
-8
-> [<ffffffff828acbec>] bpf_prepare_filter+0x10e/0x1b4 net/core/filter.c:134=
-6
-> [<ffffffff828acfbc>] __get_filter+0x148/0x1a0 net/core/filter.c:1515
-> [<ffffffff828b3e7c>] sk_attach_filter+0x22/0x11a net/core/filter.c:1530
-> [<ffffffff827f1af4>] sk_setsockopt+0x144e/0x270c net/core/sock.c:1297
-> [<ffffffff827f2dfa>] sock_setsockopt+0x48/0x58 net/core/sock.c:1549
-> [<ffffffff827dfcc8>] __sys_setsockopt+0x3f0/0x418 net/socket.c:2242
-> [<ffffffff827dfd2a>] __do_sys_setsockopt net/socket.c:2257 [inline]
-> [<ffffffff827dfd2a>] sys_setsockopt+0x3a/0x4c net/socket.c:2254
-> [<ffffffff80005ff6>] ret_from_syscall+0x0/0x2
-> irq event stamp: 940
-> hardirqs last  enabled at (939): [<ffffffff833903b0>] __raw_spin_unlock_i=
-rqrestore include/linux/spinlock_api_smp.h:151 [inline]
-> hardirqs last  enabled at (939): [<ffffffff833903b0>] _raw_spin_unlock_ir=
-qrestore+0x68/0x98 kernel/locking/spinlock.c:194
-> hardirqs last disabled at (940): [<ffffffff800105e0>] __trace_hardirqs_of=
-f+0x18/0x20 arch/riscv/kernel/trace_irq.c:25
-> softirqs last  enabled at (888): [<ffffffff8339107a>] softirq_handle_end =
-kernel/softirq.c:414 [inline]
-> softirqs last  enabled at (888): [<ffffffff8339107a>] __do_softirq+0x640/=
-0x930 kernel/softirq.c:600
-> softirqs last disabled at (883): [<ffffffff80069192>] do_softirq_own_stac=
-k include/asm-generic/softirq_stack.h:10 [inline]
-> softirqs last disabled at (883): [<ffffffff80069192>] invoke_softirq kern=
-el/softirq.c:452 [inline]
-> softirqs last disabled at (883): [<ffffffff80069192>] __irq_exit_rcu+0x15=
-4/0x1ea kernel/softirq.c:650
-> ---[ end trace 0000000000000000 ]---
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+On 2022/12/20 22:02, Niklas Schnelle wrote:
+
+> On Tue, 2022-12-20 at 11:21 +0800, Wen Gu wrote:
+>> Hi, all
+>>
+>> # Background
+>>
+>> As previously mentioned in [1], we (Alibaba Cloud) are trying to use SMC
+>> to accelerate TCP applications in cloud environment, improving inter-host
+>> or inter-VM communication.
+>>
+>> In addition of these, we also found the value of SMC-D in scenario of local
+>> inter-process communication, such as accelerate communication between containers
+>> within the same host. So this RFC tries to provide a SMC-D loopback solution
+>> in such scenario, to bring a significant improvement in latency and throughput
+>> compared to TCP loopback.
+>>
+>> # Design
+>>
+>> This patch set provides a kind of SMC-D loopback solution.
+>>
+>> Patch #1/5 and #2/5 provide an SMC-D based dummy device, preparing for the
+>> inter-process communication acceleration. Except for loopback acceleration,
+>> the dummy device can also meet the requirements mentioned in [2], which is
+>> providing a way to test SMC-D logic for broad community without ISM device.
+>>
+>>   +------------------------------------------+
+>>   |  +-----------+           +-----------+   |
+>>   |  | process A |           | process B |   |
+>>   |  +-----------+           +-----------+   |
+>>   |       ^                        ^         |
+>>   |       |    +---------------+   |         |
+>>   |       |    |   SMC stack   |   |         |
+>>   |       +--->| +-----------+ |<--|         |
+>>   |            | |   dummy   | |             |
+>>   |            | |   device  | |             |
+>>   |            +-+-----------+-+             |
+>>   |                   VM                     |
+>>   +------------------------------------------+
+>>
+>> Patch #3/5, #4/5, #5/5 provides a way to avoid data copy from sndbuf to RMB
+>> and improve SMC-D loopback performance. Through extending smcd_ops with two
+>> new semantic: attach_dmb and detach_dmb, sender's sndbuf shares the same
+>> physical memory region with receiver's RMB. The data copied from userspace
+>> to sender's sndbuf directly reaches the receiver's RMB without unnecessary
+>> memory copy in the same kernel.
+>>
+>>   +----------+                     +----------+
+>>   | socket A |                     | socket B |
+>>   +----------+                     +----------+
+>>         |                               ^
+>>         |         +---------+           |
+>>    regard as      |         | ----------|
+>>    local sndbuf   |  B's    |     regard as
+>>         |         |  RMB    |     local RMB
+>>         |-------> |         |
+>>                   +---------+
+> 
+> Hi Wen Gu,
+> 
+> I maintain the s390 specific PCI support in Linux and would like to
+> provide a bit of background on this. You're surely wondering why we
+> even have a copy in there for our ISM virtual PCI device. To understand
+> why this copy operation exists and why we need to keep it working, one
+> needs a bit of s390 aka mainframe background.
+> 
+> On s390 all (currently supported) native machines have a mandatory
+> machine level hypervisor. All OSs whether z/OS or Linux run either on
+> this machine level hypervisor as so called Logical Partitions (LPARs)
+> or as second/third/… level guests on e.g. a KVM or z/VM hypervisor that
+> in turn runs in an LPAR. Now, in terms of memory this machine level
+> hypervisor sometimes called PR/SM unlike KVM, z/VM, or VMWare is a
+> partitioning hypervisor without paging. This is one of the main reasons
+> for the very-near-native performance of the machine hypervisor as the
+> memory of its guests acts just like native RAM on other systems. It is
+> never paged out and always accessible to IOMMU translated DMA from
+> devices without the need for pinning pages and besides a trivial
+> offset/limit adjustment an LPAR's MMU does the same amount of work as
+> an MMU on a bare metal x86_64/ARM64 box.
+> 
+> It also means however that when SMC-D is used to communicate between
+> LPARs via an ISM device there is  no way of mapping the DMBs to the
+> same physical memory as there exists no MMU-like layer spanning
+> partitions that could do such a mapping. Meanwhile for machine level
+> firmware including the ISM virtual PCI device it is still possible to
+> _copy_ memory between different memory partitions. So yeah while I do
+> see the appeal of skipping the memcpy() for loopback or even between
+> guests of a paging hypervisor such as KVM, which can map the DMBs on
+> the same physical memory, we must keep in mind this original use case
+> requiring a copy operation.
+> 
+> Thanks,
+> Niklas
+> 
+
+Hi Niklas,
+
+Thank you so much for the complete and detailed explanation! This provides
+me a brand new perspective of s390 device that we hadn't dabbled in before.
+Now I understand why shared memory is unavailable between different LPARs.
+
+Our original intention of proposing loopback device and the incoming device
+(virtio-ism) for inter-VM is to use SMC-D to accelerate communication in the
+case with no existing s390 ISM devices. In our conception, s390 ISM device,
+loopback device and virtio-ism device are parallel and are abstracted by smcd_ops.
+
+  +------------------------+
+  |          SMC-D         |
+  +------------------------+
+  -------- smcd_ops ---------
+  +------+ +------+ +------+
+  | s390 | | loop | |virtio|
+  | ISM  | | back | | -ism |
+  | dev  | | dev  | | dev  |
+  +------+ +------+ +------+
+
+We also believe that keeping the existing design and behavior of s390 ISM
+device is unshaken. What we want to get support for is some smcd_ops extension
+for devices with optional beneficial capability, such as nocopy here (Let's call
+it this for now), which is really helpful for us in inter-process and inter-VM
+scenario.
+
+And coincided with IBM's intention to add APIs between SMC-D and devices to
+support various devices for SMC-D, as mentioned in [2], we send out this RFC and
+the incoming virio-ism RFC, to provide some examples.
+
+>>
+>> # Benchmark Test
+>>
+>>   * Test environments:
+>>        - VM with Intel Xeon Platinum 8 core 2.50GHz, 16 GiB mem.
+>>        - SMC sndbuf/RMB size 1MB.
+>>
+>>   * Test object:
+>>        - TCP: run on TCP loopback.
+>>        - domain: run on UNIX domain.
+>>        - SMC lo: run on SMC loopback device with patch #1/5 ~ #2/5.
+>>        - SMC lo-nocpy: run on SMC loopback device with patch #1/5 ~ #5/5.
+>>
+>> 1. ipc-benchmark (see [3])
+>>
+>>   - ./<foo> -c 1000000 -s 100
+>>
+>>                         TCP              domain              SMC-lo             SMC-lo-nocpy
+>> Message
+>> rate (msg/s)         75140      129548(+72.41)    152266(+102.64%)         151914(+102.17%)
+> 
+> Interesting that it does beat UNIX domain sockets. Also, see my below
+> comment for nginx/wrk as this seems very similar.
+> 
+>>
+>> 2. sockperf
+>>
+>>   - serv: <smc_run> taskset -c <cpu> sockperf sr --tcp
+>>   - clnt: <smc_run> taskset -c <cpu> sockperf { tp | pp } --tcp --msg-size={ 64000 for tp | 14 for pp } -i 127.0.0.1 -t 30
+>>
+>>                         TCP                  SMC-lo             SMC-lo-nocpy
+>> Bandwidth(MBps)   4943.359        4936.096(-0.15%)        8239.624(+66.68%)
+>> Latency(us)          6.372          3.359(-47.28%)            3.25(-49.00%)
+>>
+>> 3. iperf3
+>>
+>>   - serv: <smc_run> taskset -c <cpu> iperf3 -s
+>>   - clnt: <smc_run> taskset -c <cpu> iperf3 -c 127.0.0.1 -t 15
+>>
+>>                         TCP                  SMC-lo             SMC-lo-nocpy
+>> Bitrate(Gb/s)         40.5            41.4(+2.22%)            76.4(+88.64%)
+>>
+>> 4. nginx/wrk
+>>
+>>   - serv: <smc_run> nginx
+>>   - clnt: <smc_run> wrk -t 8 -c 500 -d 30 http://127.0.0.1:80
+>>
+>>                         TCP                  SMC-lo             SMC-lo-nocpy
+>> Requests/s       154643.22      220894.03(+42.84%)        226754.3(+46.63%)
+> 
+> 
+> This result is very interesting indeed. So with the much more realistic
+> nginx/wrk workload it seems to copy hurts much less than the
+> iperf3/sockperf would suggest while SMC-D itself seems to help more.
+> I'd hope that this translates to actual applications as well. Maybe
+> this makes SMC-D based loopback interesting even while keeping the
+> copy, at least until we can come up with a sane way to work a no-copy
+> variant into SMC-D?
+> 
+
+I agree, nginx/wrk workload is much more realistic for many applications.
+
+But we also encounter many other cases similar to sockperf on the cloud, which
+requires high throughput, such as AI training and big data.
+
+So avoidance of copying between DMBs can help these cases a lot :)
+
+>>
+>>
+>> # Discussion
+>>
+>> 1. API between SMC-D and ISM device
+>>
+>> As Jan mentioned in [2], IBM are working on placing an API between SMC-D
+>> and the ISM device for easier use of different "devices" for SMC-D.
+>>
+>> So, considering that the introduction of attach_dmb or detach_dmb can
+>> effectively avoid data copying from sndbuf to RMB and brings obvious
+>> throughput advantages in inter-VM or inter-process scenarios, can the
+>> attach/detach semantics be taken into consideration when designing the
+>> API to make it a standard ISM device behavior?
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
+> Due to the reasons explained above this behavior can't be emulated by
+> ISM devices at least not when crossing partitions. Not sure if we can
+> still incorporate it in the API and allow for both copying and
+> remapping SMC-D like devices, it definitely needs careful consideration
+> and I think also a better understanding of the benefit for real world
+> workloads.
+> 
+
+Here I am not rigorous.
+
+Nocopy shouldn't be a standard ISM device behavior indeed. Actually we hope it be a
+standard optional _SMC-D_ device behavior and defined by smcd_ops.
+
+For devices don't support these options, like ISM device on s390 architecture,
+.attach_dmb/.detach_dmb and other reasonable extensions (which will be proposed to
+discuss in incoming virtio-ism RFC) can be set to NULL or return invalid. And for
+devices do support, they may be used for improving performance in some cases.
+
+In addition, can I know more latest news about the API design? :) , like its scale, will
+it be a almost refactor of existing interface or incremental patching? and its object,
+will it be tailored for exact ISM behavior or to reserve some options for other devices,
+like nocopy here? From my understanding of [2], it might be the latter?
+
+>>
+>> Maybe our RFC of SMC-D based inter-process acceleration (this one) and
+>> inter-VM acceleration (will coming soon, which is the update of [1])
+>> can provide some examples for new API design. And we are very glad to
+>> discuss this on the mail list.
+>>
+>> 2. Way to select different ISM-like devices
+>>
+>> With the proposal of SMC-D loopback 'device' (this RFC) and incoming
+>> device used for inter-VM acceleration as update of [1], SMC-D has more
+>> options to choose from. So we need to consider that how to indicate
+>> supported devices, how to determine which one to use, and their priority...
+> 
+> Agree on this part, though it is for the SMC maintainers to decide, I
+> think we would definitely want to be able to use any upcoming inter-VM
+> devices on s390 possibly also in conjunction with ISM devices for
+> communication across partitions.
+> 
+
+Yes, this part needs to be discussed with SMC maintainers. And thank you, we are very glad
+if our devices can be applied on s390 through the efforts.
+
+
+Best Regards,
+Wen Gu
+
+>>
+>> IMHO, this may require an update of CLC message and negotiation mechanism.
+>> Again, we are very glad to discuss this with you on the mailing list.
+>>
+>> [1] https://lore.kernel.org/netdev/20220720170048.20806-1-tonylu@linux.alibaba.com/
+>> [2] https://lore.kernel.org/netdev/35d14144-28f7-6129-d6d3-ba16dae7a646@linux.ibm.com/
+>> [3] https://github.com/goldsborough/ipc-bench
+>>
+>> v1->v2
+>>   1. Fix some build WARNINGs complained by kernel test rebot
+>>      Reported-by: kernel test robot <lkp@intel.com>
+>>   2. Add iperf3 test data.
+>>
+>> Wen Gu (5):
+>>    net/smc: introduce SMC-D loopback device
+>>    net/smc: choose loopback device in SMC-D communication
+>>    net/smc: add dmb attach and detach interface
+>>    net/smc: avoid data copy from sndbuf to peer RMB in SMC-D loopback
+>>    net/smc: logic of cursors update in SMC-D loopback connections
+>>
+>>   include/net/smc.h      |   3 +
+>>   net/smc/Makefile       |   2 +-
+>>   net/smc/af_smc.c       |  88 +++++++++++-
+>>   net/smc/smc_cdc.c      |  59 ++++++--
+>>   net/smc/smc_cdc.h      |   1 +
+>>   net/smc/smc_clc.c      |   4 +-
+>>   net/smc/smc_core.c     |  62 +++++++++
+>>   net/smc/smc_core.h     |   2 +
+>>   net/smc/smc_ism.c      |  39 +++++-
+>>   net/smc/smc_ism.h      |   2 +
+>>   net/smc/smc_loopback.c | 358 +++++++++++++++++++++++++++++++++++++++++++++++++
+>>   net/smc/smc_loopback.h |  63 +++++++++
+>>   12 files changed, 662 insertions(+), 21 deletions(-)
+>>   create mode 100644 net/smc/smc_loopback.c
+>>   create mode 100644 net/smc/smc_loopback.h
+>>
