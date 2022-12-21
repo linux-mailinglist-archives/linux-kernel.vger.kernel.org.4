@@ -2,123 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A31A6538F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 23:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743CC6538C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 23:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiLUWoY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Dec 2022 17:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S235041AbiLUWhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 17:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiLUWoW (ORCPT
+        with ESMTP id S234964AbiLUWgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 17:44:22 -0500
-X-Greylist: delayed 521 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Dec 2022 14:44:19 PST
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3048B1DA42
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 14:44:19 -0800 (PST)
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-        id EDFBF140119; Wed, 21 Dec 2022 23:35:36 +0100 (CET)
-Date:   Wed, 21 Dec 2022 23:35:36 +0100
-From:   "Christian A. Ehrhardt" <lk@c--e.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rishabh Agrawal <rishabhagr@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, len.brown@intel.com,
-        drake@endlessm.com, rafael.j.wysocki@intel.com, mingo@redhat.com,
-        vaibhav.shankar@intel.com, biernacki@google.com,
-        zwisler@google.com, mattedavis@google.com,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Subject: Re: [PATCH v2] Add hardcoded crystal clock for KabyLake
-Message-ID: <Y6OKOI5QhPws0wgY@cae.in-ulm.de>
-References: <20221018190124.v2.1.I918ccc908c5c836c1e21e01d2cf6f59b0157bcc3@changeid>
- <Y1GBtjcetPpTq0V3@hirez.programming.kicks-ass.net>
- <3d65c4cc-c002-9e6a-c6ea-fd776968a178@intel.com>
- <87y1sdqh1t.ffs@tglx>
+        Wed, 21 Dec 2022 17:36:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA4920379;
+        Wed, 21 Dec 2022 14:36:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A12261985;
+        Wed, 21 Dec 2022 22:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB1EC433D2;
+        Wed, 21 Dec 2022 22:36:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671662171;
+        bh=M/tRY0dtlLHanEM4j2N/f3MgAV3UJcjYrwR7A8LA+gs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mVUrEkg8zRQ7TSOkQUBdp7TE8RNclfXYOvxwJiCqdcEnXqCcogUVKz4dJyuKzdbdm
+         fYgrFNzIXPUSFq1dJKKsa8EnqAkOyF+WLEhFp07WZOG7+crDHchayR9j2X4FSBPrtO
+         ujaxValndvnwlMPyb6FJgfxbOOrQOQcj0rqQo7FoC7ICwM0uBuXemzqx+qTqbeEVTa
+         yazso3peS/sYGtlt0qxwSfakN1zXY6TkTT+w1KYI2MNqymgCeN6+taqP8hdbg5pPr/
+         Bu4G/3STagQV9C/a5DeT69RLHGxVJa+L3QSwwecy7tepR949nm+iiwLVkeq3nMnVC9
+         GCtNdBlRwljRw==
+Received: by mail-vs1-f53.google.com with SMTP id a66so142574vsa.6;
+        Wed, 21 Dec 2022 14:36:11 -0800 (PST)
+X-Gm-Message-State: AFqh2kqFPX4phZDSyDq3skAQT9ndSvQeHt4Wxn7gFAFWHBPZbw3xRINw
+        5szHWAB7uuFPFqLP7WafM7J1lCfdWY+XBjZLag==
+X-Google-Smtp-Source: AMrXdXuD7TYLmW0mSW/mYJAckH7H6ZU+Lruhm+3KZIf50DE0jUjltL5AsbTqRq+isZxtINz6jEQbpY5Y06hr4ebaBW0=
+X-Received: by 2002:a67:6185:0:b0:3bf:3dbe:50aa with SMTP id
+ v127-20020a676185000000b003bf3dbe50aamr478388vsb.26.1671662170541; Wed, 21
+ Dec 2022 14:36:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <87y1sdqh1t.ffs@tglx>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <7f883643-c796-029f-ba38-73532325632d@gmail.com> <fc68bedc-ff93-13bc-aa06-7920f5e53de6@gmail.com>
+In-Reply-To: <fc68bedc-ff93-13bc-aa06-7920f5e53de6@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 21 Dec 2022 16:35:59 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLzrMtVBY3vSsykakKp8b_AzhQehOGj3T+RH_NqaTitXg@mail.gmail.com>
+Message-ID: <CAL_JsqLzrMtVBY3vSsykakKp8b_AzhQehOGj3T+RH_NqaTitXg@mail.gmail.com>
+Subject: Re: [PATCH v5 05/12] dt-bindings: usb: convert fcs,fusb302.txt to yaml
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     heiko@sntech.de, hjc@rock-chips.com,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 21, 2022 at 12:23 PM Johan Jonker <jbx6244@gmail.com> wrote:
+>
+> Convert fcs,fusb302.txt to yaml.
+>
+> Changed:
+>   Add vbus-supply property
+>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  .../devicetree/bindings/usb/fcs,fusb302.txt   | 34 ----------
+>  .../devicetree/bindings/usb/fcs,fusb302.yaml  | 66 +++++++++++++++++++
+>  2 files changed, 66 insertions(+), 34 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/fcs,fusb302.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/fcs,fusb302.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/usb/fcs,fusb302.txt b/Documentation/devicetree/bindings/usb/fcs,fusb302.txt
+> deleted file mode 100644
+> index 60e465429..000000000
+> --- a/Documentation/devicetree/bindings/usb/fcs,fusb302.txt
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -Fairchild FUSB302 Type-C Port controllers
+> -
+> -Required properties :
+> -- compatible             : "fcs,fusb302"
+> -- reg                    : I2C slave address
+> -- interrupts             : Interrupt specifier
+> -
+> -Required sub-node:
+> -- connector : The "usb-c-connector" attached to the FUSB302 IC. The bindings
+> -  of the connector node are specified in:
+> -
+> -       Documentation/devicetree/bindings/connector/usb-connector.yaml
+> -
+> -
+> -Example:
+> -
+> -fusb302: typec-portc@54 {
+> -       compatible = "fcs,fusb302";
+> -       reg = <0x54>;
+> -       interrupt-parent = <&nmi_intc>;
+> -       interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+> -
+> -       usb_con: connector {
+> -               compatible = "usb-c-connector";
+> -               label = "USB-C";
+> -               power-role = "dual";
+> -               try-power-role = "sink";
+> -               source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> -               sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+> -                            PDO_VAR(3000, 12000, 3000)
+> -                            PDO_PPS_APDO(3000, 11000, 3000)>;
+> -               op-sink-microwatt = <10000000>;
+> -       };
+> -};
+> diff --git a/Documentation/devicetree/bindings/usb/fcs,fusb302.yaml b/Documentation/devicetree/bindings/usb/fcs,fusb302.yaml
+> new file mode 100644
+> index 000000000..9b172fda9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/fcs,fusb302.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/fcs,fusb302.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Fairchild FUSB302 Type-C Port controller
+> +
+> +maintainers:
+> +  - Rob Herring <robh@kernel.org>
 
-Hi,
+Why me? I don't care, but that's kind of the default.
 
-On Mon, Nov 14, 2022 at 11:58:54PM +0100, Thomas Gleixner wrote:
-> On Thu, Oct 20 2022 at 10:18, Dave Hansen wrote:
-> > On 10/20/22 10:13, Peter Zijlstra wrote:
-> >> And why, pray *WHY* can't Intel simply write the correct information in
-> >> CPUID leaf 15h. I mean, they defined the leaf, might as well use it, no?
-> >
-> > Is the data that's in the leaf just wrong?  Doesn't that mean that the
-> > CPUID leaf on these models is violating the architecture contract?  That
-> > sounds like something that deserves an erratum.
-> >
-> > Is there a documented erratum?
-> 
-> I don't know. The code has this comment:
-> 
-> 	/*
-> 	 * Some Intel SoCs like Skylake and Kabylake don't report the crystal
-> 	 * clock, but we can easily calculate it to a high degree of accuracy
-> 	 * by considering the crystal ratio and the CPU speed.
-> 	 */
+> +
+> +properties:
+> +  compatible:
+> +    const: fcs,fusb302
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  vbus-supply:
+> +    description: VBUS power supply
+> +
+> +  connector:
+> +    type: object
+> +    $ref: /schemas/connector/usb-connector.yaml#
 
-Latest (April 2022) version of the SDM clearly states that the
-above comment is wrong. CPUID.16h has the following note:
-| Data is returned from this interface in accordance with the processor's
-| specification and does not reflect actual values. Suitable use of this
-| data includes the display of processor information in like manner to the
-| processor brand string and for determining the appropriate range to use
-| when displaying processor information e.g. frequency history graphs. The
-| returned information should not be used for any other purpose as the
-| returned information does not accurately correlate to information /
-| counters returned by other processor interfaces.
+       unevaluatedProperties: false
 
-Thus using CPUID.16h to determine the crystal clock frequency is wrong.
-This difference is significant. I have one Kaby Lake latop where
-the CPUID.16h reported frequency is 1900MHz but the real frequency is
-only 1896MHz. This amounts to a time drift of about 8s/hour if the
-wrong TSC frequency is used for time keeping.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - vbus-supply
+> +  - connector
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/usb/pd.h>
+> +
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      fusb302: typec-portc@54 {
 
-Basically, I think this commit:
-    604dc9170 (x86/tsc: Use CPUID.0x16 to calculate ...)
-needs to be reverted.
+Drop unused labels.
 
-> so those SoCs fail to expose clock in leaf 15h and then the information
-> in leaf 16h is so inaccurate that the calculation is off.
-> 
-> Sigh. It's 2022 and we are still relying on crystalball mechanisms to
-> figure out the damned crystal frequency.
-> 
-> The specification of leaf 15h is:
-> 
->  15H Time Stamp Counter and Nominal Core Crystal Clock Information Leaf
->     NOTES:
->         If EBX[31:0] is 0, the TSC/”core crystal clock” ratio is not enumerated.
->         If ECX is 0, the nominal core crystal clock frequency is not enumerated.
-> 
-> IOW, this CPUID leaf is defined to be useless and leaves it up to the
-> SoC integration to provide this information or not. It needs even two
-> fields to chose from to make it useless...
-
-The SDM (now?) has some hints on how to do this. This is hidden here:
-
-    Vol.3 Chapter 19.7.3: Determining the Processor Base Frequency
-
-This chapter contains a table that lists the correct crystal clock
-frequencies for CPU models that do not enumerate it via CPUID.15h.
-
-       regards   Christian
-
+> +        compatible = "fcs,fusb302";
+> +        reg = <0x54>;
+> +        interrupt-parent = <&nmi_intc>;
+> +        interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+> +        vbus-supply = <&vbus_typec>;
+> +
+> +        usb_con: connector {
+> +          compatible = "usb-c-connector";
+> +          label = "USB-C";
+> +          power-role = "dual";
+> +          try-power-role = "sink";
+> +          source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> +          sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+> +                       PDO_VAR(3000, 12000, 3000)
+> +                       PDO_PPS_APDO(3000, 11000, 3000)>;
+> +          op-sink-microwatt = <10000000>;
+> +        };
+> +      };
+> +    };
+> --
+> 2.20.1
+>
