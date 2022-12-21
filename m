@@ -2,68 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44156538D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 23:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5766538D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 23:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbiLUWkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 17:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
+        id S235092AbiLUWmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 17:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234967AbiLUWkj (ORCPT
+        with ESMTP id S234967AbiLUWmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 17:40:39 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B684E17
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 14:40:38 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id f28so62137qkh.10
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 14:40:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G3OCVo6XS4rgsws68hkJPdhb81JtRDiKMnu7YKNLQzk=;
-        b=odoDsIvPGhL96Eox+D5J0o7CS/3CRll/jZTp2F3vnHSPlAa59jsnzplJny3BSRtLNy
-         4/jrtkG18GyEVmDAxNywuKIibsLDR9O2Mp80KC6eaTMxYMhn5V5ngy1GbKCyz1DVM3jJ
-         /f8+VyQzMVhGbqp1jXgHCCMrL8DY3RKxWwdqhyXeXXmTXiaT7ZsJ+ehlYsktpKPN5iEn
-         5bARy0nTYFwQwNvQ0aFY3JOIdUs3qSJafT6LoOuS//VRfB9ziYYPWSXxrY2waAW7MqJ8
-         gH9OiQGmmDG1uI1+yEskGGfUjpiWltjd4UhVIK4bNcFWMpUOO0qHEg5H77C25K1tY63R
-         gj7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G3OCVo6XS4rgsws68hkJPdhb81JtRDiKMnu7YKNLQzk=;
-        b=NR+uAnB/xbRPHrHODwagURvkAHwk66Nh5TmWkicLAEQJIsIhAdk69B8g4Zbz4zbUQ4
-         N0Pk6oTYV2GCofCgU1W1gIOjOU+Pu51bdzqZkXguMBLrUy1mQkBdH8Ylxp7Pvs0UC/l9
-         c0XBbyQvVduXzEz3XGAIdbrYS8heYBPCB86ZXX5Pw54NOJZkqbC0fURrYZSJnaezpajw
-         yQUMPkQTny6etg02H8LWK98EVAflacGQCMNkLSatyXdGMrz136eqNyiTmhSKmSKc4sTG
-         C498G1YtuTau1CzgZdrl5x/5g3BmnR5ctOjgoUzR3FhXEDapPxClYjBSa5HPGtWqNOI9
-         ADvw==
-X-Gm-Message-State: AFqh2kq3WhSSQsINP2p+ymz3IQg0aD1yMqfDQhdH3xatdXrVK3lRHmUJ
-        t60lXUPij4/oTwu9rW4R2QBD1itnns+c894G+z+Waf/eyLaSCg==
-X-Google-Smtp-Source: AMrXdXsab27EY166Z/yRqBcLT+6ht48O0XgjuA38LmGtQ69fPcRRwlbLxz+Yi6rBlBc3V8tYF0n0DnasvySES3CLSig=
-X-Received: by 2002:a37:ad13:0:b0:6f1:187c:8f79 with SMTP id
- f19-20020a37ad13000000b006f1187c8f79mr103583qkm.593.1671662437443; Wed, 21
- Dec 2022 14:40:37 -0800 (PST)
+        Wed, 21 Dec 2022 17:42:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873CBCD0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 14:41:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671662487;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bLYZMh2LR87CuiMLuCzUcuWCtKa8d3kE51+MQe3QUCA=;
+        b=Pvhg6h8RrVk2I/cHnbdCBQQqwPrlQH/wFAwKHc6iCt1gy34k+Q/ykaT6WSARbJkKUIEVON
+        gmzdEukZKp2YAX+tVaFIbET0bzWGlPAsewtjKOtO9SGbkgjEguViP9QGNBviBgXj5yRY99
+        Jvs9Q6TRhS/eagW0lZ/BrxWM3RUefLg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-ETNqCoCEOIag41ARSFnPAA-1; Wed, 21 Dec 2022 17:41:24 -0500
+X-MC-Unique: ETNqCoCEOIag41ARSFnPAA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 20F638F6E81;
+        Wed, 21 Dec 2022 22:41:24 +0000 (UTC)
+Received: from rules.brq.redhat.com (ovpn-208-11.brq.redhat.com [10.40.208.11])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 04A1240C2004;
+        Wed, 21 Dec 2022 22:41:21 +0000 (UTC)
+From:   Vladis Dronov <vdronov@redhat.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net
+Cc:     nstange@suse.de, elliott@hpe.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, smueller@chronox.de,
+        vdronov@redhat.com
+Subject: [PATCH 0/6] Trivial set of FIPS 140-3 related changes
+Date:   Wed, 21 Dec 2022 23:41:05 +0100
+Message-Id: <20221221224111.19254-1-vdronov@redhat.com>
 MIME-Version: 1.0
-References: <20221221222418.3307832-1-bgardon@google.com> <20221221222418.3307832-4-bgardon@google.com>
-In-Reply-To: <20221221222418.3307832-4-bgardon@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Wed, 21 Dec 2022 14:40:26 -0800
-Message-ID: <CANgfPd9d=rDxS2BeMRfXt1co1hPFJbDtF7vMe1r-XpTpOsYhNA@mail.gmail.com>
-Subject: Re: [RFC 03/14] KVM: x86/MMU: Move the Shadow MMU implementation to shadow_mmu.c
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Nagareddy Reddy <nspreddy@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,35 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 2:24 PM Ben Gardon <bgardon@google.com> wrote:
->
-> Cut and paste the implementation of the Shadow MMU to shadow_mmu.(c|h).
-> This is a monsterously large commit, moving ~3500 lines. With such a
-> large move, there's no way to make it easy. Do the move in one massive
-> step to simplify dealing with merge conflicts and to make the git
-> history a little easier to dig through. Several cleanup commits follow
-> this one rather than preceed it so that their git history will remain
-> easy to see.
->
-> No functional change intended.
->
-> Signed-off-by: Ben Gardon <bgardon@google.com>
+Hi,
 
-Woops, I guess this message bounced because the patch was just too long.
-I can try to split it in two if folks would prefer, or just send a
-list of the functions / definitions moved.
+This patchset and cover letter was initially composed by Nicolai Stange
+and sent earlier as:
 
-> ---
->  arch/x86/kvm/debugfs.c          |    1 +
->  arch/x86/kvm/mmu/mmu.c          | 4526 ++++---------------------------
->  arch/x86/kvm/mmu/mmu_internal.h |    4 +-
->  arch/x86/kvm/mmu/shadow_mmu.c   | 3408 +++++++++++++++++++++++
->  arch/x86/kvm/mmu/shadow_mmu.h   |  145 +
->  5 files changed, 4086 insertions(+), 3998 deletions(-)
->
+https://lore.kernel.org/all/20221108142025.13461-1-nstange@suse.de/
+with a subject: [PATCH 0/4] Trivial set of FIPS 140-3 related changes
 
-...
+I'm adding patches 2 and 3 which (I hope) resolve issues spotted by
+reviewers of previous version of the patchset. This new patchset should
+ease our future kernel work on the FIPS mode.
 
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+I'm quoting Nicolai's cover letter here:
+
+> Hi all,
+> 
+> these four rather unrelated patches are basically a dump of some of the
+> more trivial changes required for working towards FIPS 140-3 conformance.
+> 
+> Please pick as you deem appropriate.
+> 
+> Thanks!
+> 
+> Nicolai
+
+Nicolai Stange (4):
+  crypto: xts - restrict key lengths to approved values in FIPS mode
+  crypto: testmgr - disallow plain cbcmac(aes) in FIPS mode
+  crypto: testmgr - disallow plain ghash in FIPS mode
+  crypto: testmgr - allow ecdsa-nist-p256 and -p384 in FIPS mode
+
+Vladis Dronov (2):
+  crypto: xts - drop xts_check_key()
+  crypto: xts - drop redundant xts key check
+
+ arch/s390/crypto/aes_s390.c                        |  4 ----
+ arch/s390/crypto/paes_s390.c                       |  2 +-
+ crypto/testmgr.c                                   |  4 ++--
+ drivers/crypto/atmel-aes.c                         |  2 +-
+ drivers/crypto/axis/artpec6_crypto.c               |  2 +-
+ drivers/crypto/cavium/cpt/cptvf_algs.c             |  8 +++-----
+ drivers/crypto/cavium/nitrox/nitrox_skcipher.c     |  8 +++-----
+ drivers/crypto/ccree/cc_cipher.c                   |  2 +-
+ drivers/crypto/marvell/octeontx/otx_cptvf_algs.c   |  2 +-
+ drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c |  2 +-
+ include/crypto/xts.h                               | 24 ++++++++----------------
+ 11 files changed, 22 insertions(+), 38 deletions(-)
+
+
