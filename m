@@ -2,154 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67338652FC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E73A652FC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234471AbiLUKpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 05:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S234512AbiLUKrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 05:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiLUKpt (ORCPT
+        with ESMTP id S229612AbiLUKqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 05:45:49 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16B02736;
-        Wed, 21 Dec 2022 02:45:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xsapQokhKn3g01DS/Y1LIgKzuSsQ+5ZMsJck6mWKddQ=; b=h87ETB5hlJd0/1Riw1TT6BCxuE
-        XkzUMOEu+8h+bFtm0a24kV7+MWp0RdHvE0vV+WrbbIUDr0ncdKNRUJPPwLH815XCivhmWrNHTPPyw
-        zLtq32W51tYVA2nTL4UTR+Fbw7MRGO046pKaHmCFx3TZd+IRztU7NonQOVSJ+OnFrrgs=;
-Received: from p200300daa720fc02bd853fbc229daa4a.dip0.t-ipconnect.de ([2003:da:a720:fc02:bd85:3fbc:229d:aa4a] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1p7wbT-00AZ5f-4S; Wed, 21 Dec 2022 11:45:39 +0100
-Message-ID: <678adc67-9e46-3eef-f274-c951b121570f@nbd.name>
-Date:   Wed, 21 Dec 2022 11:45:38 +0100
+        Wed, 21 Dec 2022 05:46:50 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465D31A23B;
+        Wed, 21 Dec 2022 02:46:49 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id a25so6569141qkl.12;
+        Wed, 21 Dec 2022 02:46:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DNRS4XaCIr+pNxI0B6D9MO5nBjIMTxhyLlBWRC8jTtg=;
+        b=S8Os2Joe8RDvk2V6E2MGGLoqLntI2mMHmuEybFVJNoVHzWZbW9dC7vqg6sI9Y5btYf
+         px59axccSQV2bZa0K2uz/mh6Xwjq63L9deCfZW0f+8zWkuMHzjKGwN+wqw5jU6QzMfRQ
+         g6vCwZaqaiRvgzMRHikIhZ9xLVlrZXw/8QWjVcCnPiygimu8OWBRk0+bCjCR38g8gZoI
+         i4kxMAO7Qs+z4chydFCmXZnxqkpfyebP/MZTAMJbuGfH3b17OY09C/Z4quubPJQ2vMnw
+         IsNMdJCeS50+5JTmb+tIpAVREUshqaSRMFhJ4xJtYfoWnsZkUPKraR4kjzMoxm4eBqVM
+         pBaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DNRS4XaCIr+pNxI0B6D9MO5nBjIMTxhyLlBWRC8jTtg=;
+        b=tI2C9HgYUZ6hd5MwCbSDT82mU3Wql5IBy3CHlweAzCrwf6eA8SZNwKm65kOEfGJdfu
+         oVYynt+Xnc6yE0V/f238Bdvi47erxsEw8jvDnRCUiG9LJV70mHwI3UAtNnDPfrp+n8T9
+         JU0oNdf/7FfeLSk47H4XojGEMRai2iMBEp7ePS7AR/jpfg5+ZnDx3e6JzjSYf1SsCb/5
+         fx7LexG+lEkawTq8lgm3KK/8QqaEZ4UpY1EQU/KEqQL/BO8VzITGhW57v+byD9rZsRAe
+         d9EA6LbefEVe6j/yirddLv8uqDJ6TEaXB5h0axItO0hn7m21YzTov/G24cK0AhS0fBsO
+         cInQ==
+X-Gm-Message-State: AFqh2koRdRlIk4knqZPxujUpsuK6nWsJsHhYbHe9bdo6YSNWyVfbXVci
+        /VJPQzT+S/V363HNy5MN0yAf8WwpcTICXLOe/q0=
+X-Google-Smtp-Source: AMrXdXtD5yxdeFw1QyHVaqgmf2rjXRA/KYamX6ZaftevXCzSpQC1KNQ0AGWes4jvtuAaq355TtF0VtN70rqTJVRaUDE=
+X-Received: by 2002:a05:620a:13e9:b0:6ff:b886:54d3 with SMTP id
+ h9-20020a05620a13e900b006ffb88654d3mr33992qkl.383.1671619608339; Wed, 21 Dec
+ 2022 02:46:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [6.2][regression] after commit
- cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae stopping working wifi mt7921e
-Content-Language: en-US
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        lorenzo@kernel.org, sujuan.chen@mediatek.com,
-        Linux List Kernel Mailing <linux-wireless@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-References: <CABXGCsMEnQd=gYKTd1knRsWuxCb=Etv5nAre+XJS_s5FgVteYA@mail.gmail.com>
-From:   Felix Fietkau <nbd@nbd.name>
-In-Reply-To: <CABXGCsMEnQd=gYKTd1knRsWuxCb=Etv5nAre+XJS_s5FgVteYA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Y6KfFEChA67E7oX/@VM-66-53-centos> <5a7907e3-f79e-5de9-ed1b-ec24ea52c437@linaro.org>
+In-Reply-To: <5a7907e3-f79e-5de9-ed1b-ec24ea52c437@linaro.org>
+From:   ty <zonyitoo@gmail.com>
+Date:   Wed, 21 Dec 2022 18:46:36 +0800
+Message-ID: <CAMmci2UgwqDyPPJXwGRsMW1Y1Cy2c6LMybk+7v7pGz-LtYzGTw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] dt-bindings: arm: rockchip: Add EmbedFire LubanCat 1
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, DHDAXCW <lasstp5011@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.12.22 02:10, Mikhail Gavrilov wrote:
-> Hi,
-> The kernel 6.2 preparation cycle has begun.
-> And after the kernel was updated on my laptop, the wifi stopped working.
-> 
-> Bisecting blames this commit:
-> cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae is the first bad commit
-> commit cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae
-> Author: Lorenzo Bianconi <lorenzo@kernel.org>
-> Date:   Sat Nov 12 16:40:35 2022 +0100
-> 
->      wifi: mt76: add WED RX support to mt76_dma_{add,get}_buf
-> 
->      Introduce the capability to configure RX WED in mt76_dma_{add,get}_buf
->      utility routines.
-> 
->      Tested-by: Daniel Golle <daniel@makrotopia.org>
->      Co-developed-by: Sujuan Chen <sujuan.chen@mediatek.com>
->      Signed-off-by: Sujuan Chen <sujuan.chen@mediatek.com>
->      Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->      Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> 
->   drivers/net/wireless/mediatek/mt76/dma.c  | 125 ++++++++++++++++++++----------
->   drivers/net/wireless/mediatek/mt76/mt76.h |   2 +
->   2 files changed, 88 insertions(+), 39 deletions(-)
-> 
-> Unfortunately, I can't be sure that revert this commit will fix the
-> problem. Because after the revert, compile of kernel failing with
-> follow error:
-> drivers/net/wireless/mediatek/mt76/mt7915/dma.c: In function ‘mt7915_dma_init’:
-> drivers/net/wireless/mediatek/mt76/mt7915/dma.c:489:33: error:
-> implicit declaration of function ‘MT_WED_Q_RX’; did you mean
-> ‘MT_WED_Q_TX’? [-Werror=implicit-function-declaration]
->    489 |                                 MT_WED_Q_RX(MT7915_RXQ_BAND0);
->        |                                 ^~~~~~~~~~~
->        |                                 MT_WED_Q_TX
-> cc1: some warnings being treated as errors
->    CC [M]  drivers/net/ethernet/intel/igb/e1000_phy.o
-> make[7]: *** [scripts/Makefile.build:252:
-> drivers/net/wireless/mediatek/mt76/mt7915/dma.o] Error 1
-> make[7]: *** Waiting for unfinished jobs....
-I'm pretty sure that commit is unrelated to this issue. However, while
-looking at the code I found a bug that would explain your issue.
+Dear Kozlowski,
 
-Please try this patch:
----
---- a/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/main.c
-@@ -422,15 +422,15 @@ void mt7921_roc_timer(struct timer_list *timer)
-  
-  static int mt7921_abort_roc(struct mt7921_phy *phy, struct mt7921_vif *vif)
-  {
--	int err;
--
--	if (!test_and_clear_bit(MT76_STATE_ROC, &phy->mt76->state))
--		return 0;
-+	int err = 0;
-  
-  	del_timer_sync(&phy->roc_timer);
-  	cancel_work_sync(&phy->roc_work);
--	err = mt7921_mcu_abort_roc(phy, vif, phy->roc_token_id);
--	clear_bit(MT76_STATE_ROC, &phy->mt76->state);
-+
-+	mt7921_mutex_acquire(phy->dev);
-+	if (test_and_clear_bit(MT76_STATE_ROC, &phy->mt76->state))
-+		err = mt7921_mcu_abort_roc(phy, vif, phy->roc_token_id);
-+	mt7921_mutex_release(phy->dev);
-  
-  	return err;
-  }
-@@ -487,13 +487,8 @@ static int mt7921_cancel_remain_on_channel(struct ieee80211_hw *hw,
-  {
-  	struct mt7921_vif *mvif = (struct mt7921_vif *)vif->drv_priv;
-  	struct mt7921_phy *phy = mt7921_hw_phy(hw);
--	int err;
-  
--	mt7921_mutex_acquire(phy->dev);
--	err = mt7921_abort_roc(phy, mvif);
--	mt7921_mutex_release(phy->dev);
--
--	return err;
-+	return mt7921_abort_roc(phy, mvif);
-  }
-  
-  static int mt7921_set_channel(struct mt7921_phy *phy)
-@@ -1778,11 +1773,8 @@ static void mt7921_mgd_complete_tx(struct ieee80211_hw *hw,
-  				   struct ieee80211_prep_tx_info *info)
-  {
-  	struct mt7921_vif *mvif = (struct mt7921_vif *)vif->drv_priv;
--	struct mt7921_dev *dev = mt7921_hw_dev(hw);
-  
--	mt7921_mutex_acquire(dev);
-  	mt7921_abort_roc(mvif->phy, mvif);
--	mt7921_mutex_release(dev);
-  }
-  
-  const struct ieee80211_ops mt7921_ops = {
+Sorry that we didn't fully get the idea in your previous comments.
 
+>
+> On 21/12/2022 06:52, Yuteng Zhong wrote:
+> > from: DHDAXCW <lasstp5011@gmail.com>
+> >
+> > LubanCat 1 is a Rockchip RK3566 SBC based
+> > is developed by EmbedFire Electronics Co., Ltd.
+> > Mini Linux Card Type Cheap Computer Development Board
+>
+> This is a friendly reminder during the review process.
+>
+> It seems my previous comments were not fully addressed. Maybe my
+> feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all
+> requested changes or keep discussing them.
+>
+> Thank you.
+
+Your pervious comment were:
+
+> Please wrap commit message according to Linux coding style / submission
+> process:
+> https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+
+So I think there must be something wrong in the message but I didn't
+notice. This message has a `from` line, and the body was wrapped at 75
+columns. Please help me make it better.
+
+
+
+> >
+> > Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
+> > Signed-off-by: DHDAXCW <lasstp5011@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> > index 88ff4422a8c1..84d39a3a8843 100644
+> > --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> > @@ -781,6 +781,11 @@ properties:
+> >            - const: rockchip,rk3568-bpi-r2pro
+> >            - const: rockchip,rk3568
+> >
+> > +      - description: EmbedFire LubanCat 1
+> > +        items:
+> > +          - const: embedfire,lubancat-1
+> > +          - const: rockchip,rk3566
+>
+> Here as well.
+
+This change was addressing the previous comment in V2:
+
+> This is separate patch. Does not look like properly ordered. Don't add
+> stuff at the end of files/lists.
+
+The previous PATCH v2 merged changes in 3 diffent files:
+
+1. arch/arm64/boot/dts/rockchip/Makefile
+2. arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
+3. Documentation/devicetree/bindings/arm/rockchip.yaml
+
+What we do in this PATCH v4 was separated the 3 into a separated patch.
