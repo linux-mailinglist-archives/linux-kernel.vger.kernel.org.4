@@ -2,199 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBCF652EC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACEC652EC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234599AbiLUJoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 04:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
+        id S234603AbiLUJpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 04:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234598AbiLUJoP (ORCPT
+        with ESMTP id S234612AbiLUJpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 04:44:15 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE9821E02;
-        Wed, 21 Dec 2022 01:44:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1671615853; x=1703151853;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=3jl2km6uswmPMXCJ+iIbkqKYQCjHCKbxqOhwnPkmvDU=;
-  b=o6wOr64zh/QX11tbIA5Z3g0u4T0TT0rygBBQKoYlBuNi8DjO4T42/73E
-   wULiRsvgLr/kvJa7IkklmvO9w0EdVu62ZTHO0/MvP8cfrMqn17+yCjLaf
-   XT0RuOrhLSMiq7jhAOXHDY1HrGm7fcRobZxFqTW1Qapsqov4YMA1GB7gB
-   QeNHUJ2m2tdQOsPM2MQnAn+B6h/OXzNsxVaCiouIBwbSdAaxbgDhpu2pX
-   IRD9wf+VUjeQJ0PYgbNqT5LDnxTYjXcVLAILmjUIL2rjKlOt7wGX9L4P0
-   HaDqSL5cGaAadbreL8SEe+JP0nj0Dztb9OEfvGcBjoyHhfqtSdAUJEGSs
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,262,1665417600"; 
-   d="scan'208";a="217386030"
-Received: from mail-dm3nam02lp2043.outbound.protection.outlook.com (HELO NAM02-DM3-obe.outbound.protection.outlook.com) ([104.47.56.43])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Dec 2022 17:44:11 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ECQ2JbvjOBUMjzHtJSAjl/I76CwbMgkpww7jkaVX7n6gXzWXbMdarWhMOb9rU8IdYBCbPdWaI2ell/aP9uvakhYNFuJcfoo2dqHZYYO8+cg8Xu//3oXoTdnGySEOwNynhfZFZoMngPtAVIEAzYhbPi7KIsMKuypTqTU/hnRkS206IKegVym5lo3yXCPHywGMkAAtEUXc68T7pS2QAfQtLunDV7ZCZCLb4Hc2v8vSl6TDlqIzT4UCascFCadrL/76w30rGWasANwEZ9/Ngey8fqRd0vkXNzONe4flWWm/piYJ6QZ0gH/AzbgNy5BzYHRbu4SuR/3CrvEPw+a9Wc569Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HJLWF5WhaqwFd1YSNs0kyZ3F2kKqvrg95F0KUI2WQLo=;
- b=aUkxbU3pIktmY4AYD1Q+NjmWwry7MWuOyTdxe/1/ikSaL4cGQ0ZNg8s3foYWpRi7xgLsixRMJD/+176A87GvGWvS7KVCYMxPGGDufc/W+LiNvIfNkzipJOmwsMTpW+gzfQ94CglPGIqO3ON8zAgmo+R95ZyJHMK6f1sfV0wJqKg9FHqOuC24RQSmFYXkjce/sEFN/6IlO+1S8ffNhU/ZrtbVMD/4ne7CYYwNkL9cRG1o7vBIMp9yUXILMs/9oGmhB6J7Bjek2wXAPzgbmgCbqYedMy/KtWTWKiNhEGJsXuFSW19BFpvnn9sx0yGrRSr9V7hlC+Gq5Q8xHGOnssOVFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Wed, 21 Dec 2022 04:45:00 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF391CB11;
+        Wed, 21 Dec 2022 01:44:52 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id d2so9973084qvp.12;
+        Wed, 21 Dec 2022 01:44:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HJLWF5WhaqwFd1YSNs0kyZ3F2kKqvrg95F0KUI2WQLo=;
- b=e2KWsQT3tmFD1e3aFueNzRfX4/zst2RyppMxLCX+zSgq8idvK8UJbOgX43emX5/mh1StYaAnN///3m3BtcHxZ1iL89jdRimEMP/eWg4PXvSjykHDZ44gm86sqjj1ar3aeQcWqivFKaLPrHz27U7DE0gI2CI7VpxOGL0ZQkQFjGM=
-Received: from MN2PR04MB6272.namprd04.prod.outlook.com (2603:10b6:208:e0::27)
- by DM6PR04MB5787.namprd04.prod.outlook.com (2603:10b6:5:164::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Wed, 21 Dec
- 2022 09:44:10 +0000
-Received: from MN2PR04MB6272.namprd04.prod.outlook.com
- ([fe80::a65a:f2ad:4c7b:3164]) by MN2PR04MB6272.namprd04.prod.outlook.com
- ([fe80::a65a:f2ad:4c7b:3164%4]) with mapi id 15.20.5924.016; Wed, 21 Dec 2022
- 09:44:09 +0000
-From:   Niklas Cassel <Niklas.Cassel@wdc.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-CC:     Jason Yan <yanaijie@huawei.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Xingui Yang <yangxingui@huawei.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxarm@huawei.com" <linuxarm@huawei.com>,
-        "prime.zeng@hisilicon.com" <prime.zeng@hisilicon.com>,
-        "kangfenglong@huawei.com" <kangfenglong@huawei.com>
-Subject: Re: [PATCH] scsi: libsas: Grab the host lock in
- sas_ata_device_link_abort()
-Thread-Topic: [PATCH] scsi: libsas: Grab the host lock in
- sas_ata_device_link_abort()
-Thread-Index: AQHZFIO30NsjJ+GmMUOn/YRyM/YoSq53f2GAgAAjbwCAABWFAIAAK2AAgAAgpYCAABQpAA==
-Date:   Wed, 21 Dec 2022 09:44:09 +0000
-Message-ID: <Y6LVaE5e9iZNAYrF@x1-carbon>
-References: <20221220125349.45091-1-yangxingui@huawei.com>
- <4ec9dbed-1758-d6b4-dc1d-ac42e8c22731@oracle.com>
- <c8387766-2ca0-51f3-e332-71492b13e5c1@opensource.wdc.com>
- <7347d117-6e0b-dd18-90a8-25685f757689@huawei.com>
- <4ff0ca00-31f5-2867-ff59-cecb5d6d1048@opensource.wdc.com>
- <755d7a9c-427e-024a-8509-449ebc5a00e6@huawei.com>
- <f77c7872-3711-2216-c17c-e23591f745c7@opensource.wdc.com>
-In-Reply-To: <f77c7872-3711-2216-c17c-e23591f745c7@opensource.wdc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR04MB6272:EE_|DM6PR04MB5787:EE_
-x-ms-office365-filtering-correlation-id: e19b6e84-08b7-4779-5c70-08dae337e8df
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +hsP7dPen0pZV1EuMGBzOctaoXBXmxQ/c5HoYPcPEMVFq9oKZABD6AhdNagltPZ+imrjrQAQs8hTWkby1P6UXc4ZaCD2s9Ctq1fjMdjQJa48kPIu/AIE6Dgs8/XG2idyeJzdFsY+BTPLGnOfwdVPLhsjufP4z4c/KMCnqezOmORnF1eblmrdEFvWANQ4B7TcYrcGWSItwNH7rZwcy/4b2y8Om7ymPUYSlDIwpoVPajsXkJ9Oow403y+Li3a57nDF5dEOmWG2a/HmjBuW4oOMynn5ocXIlOvaWDY3Aleum6X/ylvJw8nDK8rIpArS+zuspZokAb34hClbAx3rj+jBQy7x0iUHlVcEOJ2ngZDGQ9QRhq7GS1x2GAoUtEmS0ELtmYzdr/WOX8fDCq4/zpKatLTgd+DYklTFzKvlKcaWzxs0p+xCVDg+Rm+Od+YDqn9BhihKk0B0t2JpfvcBqAU5hd7xuW1Hty8ANMkvJFaDBe1cfFxOJHWBUukUdWmdXNtXpl6UgCXkQ0oZNlqU2r2bPofU/dvBfDBN6mBtDq+BLihozUk6LRUqtbWF0D6ro+BS5fOrNT/FBrpm6nyNZZRnfXSksiJ/Fv66g5TKFSdNLneNG4qRujzt2Gb8Bx9frw1TbDfofubkdSun/IHEr6MLSRfh9hMnJ3DscEBf6KxaGEVY4OscA2NsqoHFVkH1zdvo9o0HlnwMwdsWL9AvZ9ZhM8SXZLG4NwDgCEOhgl6FU/F4FV/AOa5WNu/6hbPELIMIVdTIeSBKN1AePvX0Az6zAw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR04MB6272.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(136003)(39860400002)(366004)(396003)(346002)(376002)(451199015)(54906003)(6506007)(316002)(38070700005)(82960400001)(33716001)(966005)(66556008)(478600001)(6486002)(38100700002)(4326008)(8676002)(64756008)(91956017)(66946007)(86362001)(122000001)(76116006)(71200400001)(66446008)(7416002)(5660300002)(66476007)(83380400001)(8936002)(6862004)(2906002)(9686003)(41300700001)(186003)(26005)(6512007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5Lull3Lz5U48/xYqQvHAxttXgNQvFjx4JCzEf0sd1T8GTS1lR8N7PxVYmt2e?=
- =?us-ascii?Q?LEQPSu+L031N5RttkgNovSiCUryzYXQK8XslxMfQGUAa9VWcQtS6Q9grZznz?=
- =?us-ascii?Q?nlfKQPoKA2H9+8HsYW3sqy/ic6iez7/gwFjOfbcy3HgN4onLBomfvJsx4Gh0?=
- =?us-ascii?Q?NSQsSfVRI/5VBmhYgqydK1YqD6rYbon/hGG92zaJh6W9KxuxMeeWsibVxiKi?=
- =?us-ascii?Q?HMP3RGyTSsykrzFzev1VzdgEm1zeM3N5Wlsa1Me61XCRC4ZYeS/nR54o+rKd?=
- =?us-ascii?Q?fWgpJH4lfLRkHcJyH+K9RM9OIukNi/mJowJXHETC59XqONE04QMXJ8G2UWI0?=
- =?us-ascii?Q?2cBqU6RZ99C+ItyKAhuoLcFh5AW2R7dzqJFQa8wEJ7fIBcWjXIwkm4xk86UE?=
- =?us-ascii?Q?XvaPf8LcgBVCBgae6DQnMWu7vzCD7FvBliufNXMnU6FfzIjED64WfEDUC+Ii?=
- =?us-ascii?Q?vTaH1DRilSX2afBz28RYMhedKleYL5sAgEhPMY1n0l2RAdn6JUD5ovYwgmiP?=
- =?us-ascii?Q?qSg0GXOfQ2RPqGX8evdHufg3wlOegBbOH32lELrkbf0ZzyaNcnIS/+qNduYJ?=
- =?us-ascii?Q?L1epgY3fh8uvyB005C29Je+KpMjSrysIfX/PhQbN1daljVswhUy4ju8tNjs7?=
- =?us-ascii?Q?CdI5Az3dsZnrVjkJ22OH/c8xhpQop/3Ie+UWZJoJhZJpnIOxiwjsSQDdvuZc?=
- =?us-ascii?Q?wmFtd1WkOjdXjQ6qnJuMmcQKp5f1PEAOCySqsHJ70s79TV8QRtBUPlrdIQDI?=
- =?us-ascii?Q?7f7AbBnWxF02C0SMi36XX9qEoCHZ0NTjiuVFYIORZ49B7JTadtQPQYyDjtnm?=
- =?us-ascii?Q?YPpmZyzkBM3NwgnRuoRJe69RcF9DRrbJe7k4mCbKMzW80Rzuj076tFyu9T2B?=
- =?us-ascii?Q?1EUY/hsbNIyM+LZ67KkY2v7/il8+2QZNBYPB6Km3TSQUE96D0AhaR06na6Zz?=
- =?us-ascii?Q?kv49G/0W6OtvNuHvWxK0Mh2G7nl8B1IGywVDNVQHaL4eonMb+KqWaF9SY50A?=
- =?us-ascii?Q?TFqk6bPEesXKLvhBUsFBqPRNSLYMdj/1lmXeJdqW/R+zMf+BVZYBuHtfHTbc?=
- =?us-ascii?Q?TAtQqy11vD3FaAOeQUV+Vo/ovixuVeZDa1+PpoCMAUyRQIXvdNOxM1r4ai8D?=
- =?us-ascii?Q?o7hayWgGGCy+0fPBHIGK//TkK3CDCUmEDlBPzXm5WBf9mUGapO+YUQ+qg7zx?=
- =?us-ascii?Q?aWNsfPxANBNM8pIinX2m+m7d8avNwaQ6p7pWp8UlAxfBaixLG9xTDFQwR1gG?=
- =?us-ascii?Q?CDJUqeL54uPfwa69RlzsjyZF0buBieyWRtrMr5bYmVYeq0aYm/IEaTD/qXZQ?=
- =?us-ascii?Q?a/ettR/EhkdabGuFNkp8LmP6oMFclVqlgxKWzSNPOkKhoPvwfJFItBCASz80?=
- =?us-ascii?Q?kIGW1XZZDrbULp5EuksNWs9kjRTOrjMux9TbUUK9XJJUDc67+lqoILLq4XiH?=
- =?us-ascii?Q?YOqdpaMGvHW5zGKoRqbjIDA7EWZleqp0r5g6Md78En0iWlTeFJ075Cv+NJ+l?=
- =?us-ascii?Q?itlFkD3gZn9X/mtCe5iG2/Udfb96JjO20CqqgzEBnmODLGc5Y7kCr8EDEs88?=
- =?us-ascii?Q?h+URVEKYUEUlPH9jWQp51C74OrIkJpM7ZH0GHERAT7AckrnikXNEgVKVA4u5?=
- =?us-ascii?Q?JA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <F3868AF68ABB744E9D3684C2BFAD596C@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aTRZjVs+ZC10gzSWts1gaTVyTRmh0bhpzUVwXGomS1w=;
+        b=eY2hF663BlPaZN1wWAX6Io9R1Scmlmn8/jVlfaBdk84Y0+DgZC/um30n67ZqkhPOZT
+         H+p15ZbvBnwgtRQA7PSmS13BywkeRFvZIgawiqq45gbwziFeC/56QnxciRsn/791U4Li
+         4aVrQ8NcQdXDOFz7RiXcP5wBz9ktQDiZxwpLE7a1e0OlAzSc/9+xBJ6o6A7ixW9MH2k6
+         ja5+m0D4D96rWsgoQH3M5rJ2Y83NDJhadME23X8VQT3zmmrbz2dE5mu549JP2WoFh+LT
+         yhBGXjnXEodpkq2APeDcmByTd0fuCkdDFtJJnO0+rR2B4vU5xMOhLAyo4pyCzDTjnxab
+         k/zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aTRZjVs+ZC10gzSWts1gaTVyTRmh0bhpzUVwXGomS1w=;
+        b=d2ayTbORw4AHCuB3bsw9xkZWHvY/rShMXyWBH+dECGvsslE5a/pm9fNL7svW/vOV3o
+         G/iHgdAD8KszHJH5tgPxM1iBeKFOBsLObe53avMWtl+1vKnK8zd0wLrQ9F7a/enPzb4u
+         fzSL3iqbfzWE8VY2cfj9R3/y09j7GQaRkoGwqsGKGkc7mjG4BYV3mXJqPXyjdhha/GGW
+         ZLyqj4PYmZueRxItua/14DMw1C38tx+SIi1zg1DM94+XJ7+Q8oAfwGGIkXcUFnFfoHR7
+         yLRl/Vrg+sVllmjFG4QZb5x1au0iEtfFOfB7v3XYytDPFbg9dlutYIPqFBtgyOC2/ICq
+         1qmg==
+X-Gm-Message-State: AFqh2krMgv037WjDF+NXNDsZ9/zynVY/FsXMPaHNRg9+cwvyAZcfRG3E
+        DNCMab3yIlCU7KSFe51NDOWvfr4RQCwBBvqt30o=
+X-Google-Smtp-Source: AMrXdXu704n6GIrHINsRbdHORuCEAF2r0AGnKH97K2Ba4BQmlgR92ssx33aWwW4mekPiUne5Nyzc85mc9Djn2Jo5z3M=
+X-Received: by 2002:a05:6214:a91:b0:4bb:7998:fed6 with SMTP id
+ ev17-20020a0562140a9100b004bb7998fed6mr52641qvb.86.1671615891052; Wed, 21 Dec
+ 2022 01:44:51 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6272.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e19b6e84-08b7-4779-5c70-08dae337e8df
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2022 09:44:09.5536
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gPKUrOdV3oIHOcH6Sq7Uq15lT3z+gPtjvhymP1WguqHHsqiZah5PCrK2Ke+jK/+bpdEX+2gnqUDrXJVGZ8ynbQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5787
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Y6KdvAlWLMG4whJh@VM-66-53-centos> <88357291-3cdd-8d5a-fdec-38bd081a4235@linaro.org>
+In-Reply-To: <88357291-3cdd-8d5a-fdec-38bd081a4235@linaro.org>
+From:   ty <zonyitoo@gmail.com>
+Date:   Wed, 21 Dec 2022 17:44:40 +0800
+Message-ID: <CAMmci2XmJ2kN=SBR=GHqDs+ZKhBO0dnjEsPCR_w7sjxNgi=_NQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] arm64: dts: rockchip: Add EmbedFire LubanCat 1
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, DHDAXCW <lasstp5011@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 05:31:59PM +0900, Damien Le Moal wrote:
-> >=20
-> > What about the interrupt handler such as ahci_error_intr()? I didn't se=
-e
-> > the callers hold the port lock too. Do they need the port lock?
->=20
-> It looks like it is missing for ahci_thunderx_irq_handler() but that one
-> takes the host lock. Same for xgene_ahci_irq_intr(), again no port lock
-> but host lock taken. And again for ahci_single_level_irq_intr() for the
-> non MSI case. For modern MSI adapters, the port lock is taken in
->=20
-> For other cases, ahci_multi_irqs_intr_hard) takes the port lock.
->=20
-> So it looks like ahci_port_intr() needs to take the lock and some
-> cleanups overall (the host lock should not be necessary in the command
-> path. But nobody seems to have issues with the "bad" cases... Probably
-> because they are not mainstream adapters.
->=20
-> Definitely some work needed here.
+Dear Kozlowski,
 
-ahci_multi_irqs_intr_hard() takes the ap->lock before calling
-ahci_handle_port_interrupt(), which calls ahci_port_intr(),
-so I don't think there is any work needed for multi IRQ AHCI.
+Before making a new PATCH v5 with the whole .dts file, here is a small
+patch base on the current v4.
 
-For ahci_single_level_irq_intr() the host lock is taken before
-calling ahci_handle_port_intr(), so I don't see why we need any
-extra work for single IRQ AHCI.
+This node name was missed in this PATCH.
+
+---
+
+@@ -74,7 +74,7 @@
+
+     vin-supply =3D <&usb_5v>;
+
+   };
 
 
-Remember, while the default is that:
-	ap->lock =3D &host->lock;
-see:
-https://github.com/torvalds/linux/blob/v6.1/drivers/ata/libata-core.c#L5305
 
-In case of MULTI MSI, the ap->lock is using its own lock:
-https://github.com/torvalds/linux/blob/v6.1/drivers/ata/libahci.c#L2460
+-  vcc3v3_sys: vcc3v3-sys {
 
++  vcc3v3_sys: vcc3v3-sys-regulator {
 
-So what is it that needs to be fixed for AHCI?
+     compatible =3D "regulator-fixed";
 
-I haven't looked at ahci_thunderx_irq_handler() and xgene_ahci_irq_intr()
-so I can't speak for these.
+     regulator-name =3D "vcc3v3_sys";
+
+     regulator-always-on;
 
 
-Kind regards,
-Niklas=
+
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E4=BA=8E2022=E5=B9=B4=
+12=E6=9C=8821=E6=97=A5=E5=91=A8=E4=B8=89 16:15=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 21/12/2022 06:46, Yuteng Zhong wrote:
+> > from: DHDAXCW <lasstp5011@gmail.com>
+> >
+> > LubanCat 1 is a Rockchip RK3566 SBC based
+> > is developed by EmbedFire Electronics Co., Ltd.
+> > Mini Linux Card Type Cheap Computer Development Board
+> >
+> > It has the following characteristics:
+> > - MicroSD card slot, onboard eMMC flash memory
+> > - 1GbE Realtek RTL8211F Ethernet Transceiver
+> > - 1 USB Type-C port (power and USB2.0 OTG)
+> > - 1 USB 3.0 Host port
+> > - 3 USB 2.0 Host ports
+> > - 1 HDMI
+> > - 1 infrared receiver
+> > - 1 MIPI DSI
+> > - 1 MIPI CSI
+> > - 1 x 4-section headphone jack
+> > - Mini PCIe socket (USB or PCIe)
+> > - 1 SIM Card slot
+> > - 1 SYS LED and 1 PWR LED
+> > - 40-pin GPIO expansion header
+> >
+> > Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
+> > Signed-off-by: DHDAXCW <lasstp5011@gmail.com>
+> > ---
+> >
+> > Changed in V2:
+> >   - Remove RNG node
+> > Changed in V3:
+> >   - Sent E-mail with a wrong attachment
+> > Changed in V4:
+> >   - Modify all node names
+> >
+> > ---
+> >  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+> >  .../boot/dts/rockchip/rk3566-lubancat-1.dts   | 598 ++++++++++++++++++
+> >  2 files changed, 599 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dt=
+s/rockchip/Makefile
+> > index 0a76a2ebb5f6..e52bda04d45a 100644
+> > --- a/arch/arm64/boot/dts/rockchip/Makefile
+> > +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> > @@ -78,6 +78,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3566-soquartz-blad=
+e.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3566-soquartz-cm4.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3566-soquartz-model-a.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3566-box-demo.dtb
+> > +dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3566-lubancat-1.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-bpi-r2-pro.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-evb1-v10.dtb
+> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-odroid-m1.dtb
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts b/arch/=
+arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
+> > new file mode 100644
+> > index 000000000000..443fcfabbd16
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3566-lubancat-1.dts
+> > @@ -0,0 +1,598 @@
+> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> > +/*
+> > +* Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+> > +*/
+> > +
+> > +/dts-v1/;
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/leds/common.h>
+> > +#include <dt-bindings/pinctrl/rockchip.h>
+> > +#include <dt-bindings/soc/rockchip,vop2.h>
+> > +#include "rk3566.dtsi"
+> > +
+> > +/ {
+> > +     model =3D "EmbedFire LubanCat 1";
+> > +     compatible =3D "embedfire,lubancat-1", "rockchip,rk3566";
+> > +
+> > +     aliases {
+> > +             ethernet0 =3D &gmac1;
+> > +             mmc0 =3D &sdmmc0;
+> > +             mmc1 =3D &sdhci;
+> > +     };
+> > +
+> > +     chosen: chosen {
+> > +             stdout-path =3D "serial2:1500000n8";
+> > +     };
+> > +
+> > +     gmac1_clkin: external-gmac1-clock {
+> > +             compatible =3D "fixed-clock";
+> > +             clock-frequency =3D <125000000>;
+> > +             clock-output-names =3D "gmac1_clkin";
+> > +             #clock-cells =3D <0>;
+> > +     };
+> > +
+> > +     hdmi-con {
+> > +             compatible =3D "hdmi-connector";
+> > +             type =3D "a";
+> > +
+> > +             port {
+> > +                     hdmi_con_in: endpoint {
+> > +                             remote-endpoint =3D <&hdmi_out_con>;
+> > +                     };
+> > +             };
+> > +     };
+> > +
+> > +     gpio-leds {
+> > +             compatible =3D "gpio-leds";
+> > +
+> > +             sys_led: sys-led {
+> > +                     label =3D "sys_led";
+> > +                     linux,default-trigger =3D "heartbeat";
+> > +                     default-state =3D "on";
+> > +                     gpios =3D <&gpio0 RK_PC5 GPIO_ACTIVE_LOW>;
+> > +                     pinctrl-names =3D "default";
+> > +                     pinctrl-0 =3D <&sys_led_pin>;
+> > +             };
+> > +     };
+> > +
+> > +     usb_5v: usb-5v-regulator {
+> > +             compatible =3D "regulator-fixed";
+> > +             regulator-name =3D "usb_5v";
+> > +             regulator-always-on;
+> > +             regulator-boot-on;
+> > +             regulator-min-microvolt =3D <5000000>;
+> > +             regulator-max-microvolt =3D <5000000>;
+> > +     };
+> > +
+> > +     vcc5v0_sys: vcc5v0-sys-regulator {
+> > +             compatible =3D "regulator-fixed";
+> > +             regulator-name =3D "vcc5v0_sys";
+> > +             regulator-always-on;
+> > +             regulator-boot-on;
+> > +             regulator-min-microvolt =3D <5000000>;
+> > +             regulator-max-microvolt =3D <5000000>;
+> > +             vin-supply =3D <&usb_5v>;
+> > +     };
+> > +
+> > +     vcc3v3_sys: vcc3v3-sys {
+>
+> This is a friendly reminder during the review process.
+>
+> It seems my previous comments were not fully addressed. Maybe my
+> feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all
+> requested changes or keep discussing them.
+>
+> Thank you.
+>
+> > +             compatible =3D "regulator-fixed";
+> > +             regulator-name =3D "vcc3v3_sys";
+> > +             regulator-always-on;
+> > +             regulator-boot-on;
+> > +             regulator-min-microvolt =3D <3300000>;
+> > +             regulator-max-microvolt =3D <3300000>;
+> > +             vin-supply =3D <&vcc5v0_sys>;
+> > +     };
+> > +
+> > +     vcc3v3_pcie: vcc3v3-pcie-regulator {
+>
+>
+> Best regards,
+> Krzysztof
+>
+
+
+--=20
+Y. T. Zhong
+Student of The University of Hong Kong, major in Computer Science.
+E-mail: zonyitoo@gmail.com
