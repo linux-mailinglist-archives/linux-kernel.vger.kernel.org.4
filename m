@@ -2,151 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60856536F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FD26536F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234210AbiLUTX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 14:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
+        id S230361AbiLUTX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 14:23:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiLUTX4 (ORCPT
+        with ESMTP id S229777AbiLUTX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:23:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F637252B7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:23:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671650588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g0DCyUyGJiNNDAi1EtXEtA/eLbPEE2zu+zRGexCyTPU=;
-        b=HOxFfQkotrNjVADX+nHK8du8LwFMcVtFRAWRqZdq7ytylxD8KTtj9xS7s/anFb6+kQOOKO
-        1Sl27HdN5+gZHw9E0ias5XsRtJ8/hdjLmWBGrlByEuXhnrnBsnAGNM9UCr8aIRaFE/I0Q1
-        3bwqFSMEb15H0oVxLNj7yv/PD91hIak=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-orX2Ra2pMDG_QBOez2Stwg-1; Wed, 21 Dec 2022 14:22:57 -0500
-X-MC-Unique: orX2Ra2pMDG_QBOez2Stwg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0CEE9100F907;
-        Wed, 21 Dec 2022 19:22:57 +0000 (UTC)
-Received: from [10.22.33.5] (unknown [10.22.33.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 749B9C16027;
-        Wed, 21 Dec 2022 19:22:56 +0000 (UTC)
-Message-ID: <4d9559ca-9884-1942-907e-7edfff9be81a@redhat.com>
-Date:   Wed, 21 Dec 2022 14:22:56 -0500
+        Wed, 21 Dec 2022 14:23:27 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CE1B8C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:23:26 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id j206so17657671ybj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:23:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K/sXvFrmbYs7P7b0KiJPCWXouTslsk2Z93msc3M9Inc=;
+        b=U0iRcNnOyVoyaix10c4Z9dXZ6zTE/yxFFRgQDw/I5CHvFZq8ZvjPbRznPLM+KTWoOQ
+         rBsTvGszZA6257XmcY9ZiVocUVlc36TBRMNxrwWCu4fr2oH3GCVEETQWVVmVwD7ZiPhZ
+         0LcdZ7xVV/7p3Twg2Ju0zrY+erD+tyF1NzPx0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K/sXvFrmbYs7P7b0KiJPCWXouTslsk2Z93msc3M9Inc=;
+        b=hAci2kHOE2o7rTdtMzz2SjZvHNclNJGNZ/FT4yNxxrP9F04/yEuq1hKBUm8LFCdYvc
+         KnNeTsSy0ziJesi6jWJQF3JEUtieGYIfiqeumiW9wWudi9hYXhoyDrZPdSZU/OqNQeqd
+         v99KJ2rTuNkFcdgXL0ZPRfbypW/9HJB33O164F2GVmPZ2YcsOllOZEI0f45M/Ayqb1Fb
+         egcRjb3bDZBR6SkJn0FMPLyuoz9P8ErW42FI7f8eNeEEcuWUZjoXiF2NGuvaKEj3VwfZ
+         /xSsMhJZycfyr+SDxMsN26rXFUHea+VP+c+ATysqoVfgrb788p9tZ2mgVcYPNZg2MscT
+         5hmA==
+X-Gm-Message-State: AFqh2kpMnmYzG+NzCnM7Cwwn6P5d02PD4U9dUbRWOOz6j4CuWn7dvuam
+        mQ5nV2e6SC3aFmJEQyGMIilfo1x3v7kPwvhsNGrrzw==
+X-Google-Smtp-Source: AMrXdXuZORu9jTsPNLG+uGDrELKBm2RqdfngkRIY9XF0dFWhg3mxyRIAJwMaCdMkNmwhphndMXLlejioJgUHvu3ee1c=
+X-Received: by 2002:a25:9a08:0:b0:740:b601:45e6 with SMTP id
+ x8-20020a259a08000000b00740b60145e6mr261435ybn.121.1671650605658; Wed, 21 Dec
+ 2022 11:23:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH-tip v3] sched: Use kfree_rcu() in do_set_cpus_allowed()
-Content-Language: en-US
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
-References: <20221205163936.2149640-1-longman@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221205163936.2149640-1-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221221185540.2265771-1-robbarnes@google.com>
+In-Reply-To: <20221221185540.2265771-1-robbarnes@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Wed, 21 Dec 2022 11:23:14 -0800
+Message-ID: <CACeCKafZu=46NE--r9W-wtJWAhj8=s46yCBO4N4u5nt4COqYAQ@mail.gmail.com>
+Subject: Re: [PATCH] drivers/cros_ec: Handle CrOS EC panics
+To:     Rob Barnes <robbarnes@google.com>
+Cc:     Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dtor@chromium.org, Benson Leung <bleung@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/5/22 11:39, Waiman Long wrote:
-> Commit 851a723e45d1 ("sched: Always clear user_cpus_ptr in
-> do_set_cpus_allowed()") may call kfree() if user_cpus_ptr was previously
-> set. Unfortunately, some of the callers of do_set_cpus_allowed()
-> may have pi_lock held when calling it. So the following splats may be
-> printed especially when running with a PREEMPT_RT kernel:
+Hi Rob,
+
+I'd suggest using the commit title tag "platform/chrome: cros_ec: ..."
+for commits which are "ChromeOS EC" wide. That's in line with
+other recent commits in this directory.
+
+On Wed, Dec 21, 2022 at 10:56 AM Rob Barnes <robbarnes@google.com> wrote:
 >
->     WARNING: possible circular locking dependency detected
->     BUG: sleeping function called from invalid context
+> Add handler for CrOS EC panic events. When a panic is reported,
+> poll EC log then force an orderly shutdown.
 >
-> To avoid these problems, kfree_rcu() is used instead. An internal
-> cpumask_rcuhead union is created for the sole purpose of facilitating
-> the use of kfree_rcu() to free the cpumask.
+> This will preserve the EC log leading up to the crash.
 >
-> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> Signed-off-by: Rob Barnes <robbarnes@google.com>
 > ---
->   kernel/sched/core.c | 20 +++++++++++++++++---
->   1 file changed, 17 insertions(+), 3 deletions(-)
+>  drivers/platform/chrome/cros_ec_debugfs.c   | 24 +++++++++++++++++++++
+>  drivers/platform/chrome/cros_ec_lpc.c       | 10 +++++++++
+>  include/linux/platform_data/cros_ec_proto.h |  9 ++++++++
+>  3 files changed, 43 insertions(+)
 >
->   [v3: Fix build problem reported by kernel test robot]
+> diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
+> index 21d973fc6be2..31637a4e4cf9 100644
+> --- a/drivers/platform/chrome/cros_ec_debugfs.c
+> +++ b/drivers/platform/chrome/cros_ec_debugfs.c
+> @@ -49,6 +49,7 @@ struct cros_ec_debugfs {
+>         struct delayed_work log_poll_work;
+>         /* EC panicinfo */
+>         struct debugfs_blob_wrapper panicinfo_blob;
+> +       struct notifier_block notifier_panic;
+>  };
 >
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 57e5932f81a9..155b6cfe119a 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2604,9 +2604,19 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
->   		.user_mask = NULL,
->   		.flags     = SCA_USER,	/* clear the user requested mask */
->   	};
-> +	union cpumask_rcuhead {
-> +		cpumask_t cpumask;
-> +		struct rcu_head rcu;
-> +	};
->   
->   	__do_set_cpus_allowed(p, &ac);
-> -	kfree(ac.user_mask);
+>  /*
+> @@ -437,6 +438,23 @@ static int cros_ec_create_panicinfo(struct cros_ec_debugfs *debug_info)
+>         return ret;
+>  }
+>
+> +static int cros_ec_debugfs_panic_event(struct notifier_block *nb,
+> +                                      unsigned long queued_during_suspend,
+> +                                      void *_notify)
+> +{
+> +       struct cros_ec_debugfs *debug_info =
+> +               container_of(nb, struct cros_ec_debugfs, notifier_panic);
 > +
-> +	/*
-> +	 * Because this is called with p->pi_lock held, it is not possible
-> +	 * to use kfree() here (when PREEMPT_RT=y), therefore punt to using
-> +	 * kfree_rcu().
-> +	 */
-> +	kfree_rcu((union cpumask_rcuhead *)ac.user_mask, rcu);
->   }
->   
->   int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
-> @@ -8220,7 +8230,7 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
->   	struct affinity_context ac;
->   	struct cpumask *user_mask;
->   	struct task_struct *p;
-> -	int retval;
-> +	int retval, size;
->   
->   	rcu_read_lock();
->   
-> @@ -8253,7 +8263,11 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
->   	if (retval)
->   		goto out_put_task;
->   
-> -	user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
-> +	/*
-> +	 * See do_set_cpus_allowed() for the rcu_head usage.
-> +	 */
-> +	size = max_t(int, cpumask_size(), sizeof(struct rcu_head));
-> +	user_mask = kmalloc(size, GFP_KERNEL);
->   	if (!user_mask) {
->   		retval = -ENOMEM;
->   		goto out_put_task;
+> +       if (debug_info->log_buffer.buf) {
+> +               /* Force log poll work to run immediately */
+> +               mod_delayed_work(debug_info->log_poll_work.wq, &debug_info->log_poll_work, 0);
+> +               /* Block until log poll work finishes */
+> +               flush_delayed_work(&debug_info->log_poll_work);
+> +       }
+> +
+> +       return NOTIFY_DONE;
+> +}
+> +
+>  static int cros_ec_debugfs_probe(struct platform_device *pd)
+>  {
+>         struct cros_ec_dev *ec = dev_get_drvdata(pd->dev.parent);
+> @@ -473,6 +491,12 @@ static int cros_ec_debugfs_probe(struct platform_device *pd)
+>         debugfs_create_u16("suspend_timeout_ms", 0664, debug_info->dir,
+>                            &ec->ec_dev->suspend_timeout_ms);
+>
+> +       debug_info->notifier_panic.notifier_call = cros_ec_debugfs_panic_event;
+> +       ret = blocking_notifier_chain_register(&ec->ec_dev->panic_notifier,
+> +                                              &debug_info->notifier_panic);
+> +       if (ret)
+> +               goto remove_debugfs;
+> +
+>         ec->debug_info = debug_info;
+>
+>         dev_set_drvdata(&pd->dev, ec);
+> diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
+> index 7fc8f82280ac..21958c3b0c28 100644
+> --- a/drivers/platform/chrome/cros_ec_lpc.c
+> +++ b/drivers/platform/chrome/cros_ec_lpc.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/platform_data/cros_ec_proto.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/printk.h>
+> +#include <linux/reboot.h>
+>  #include <linux/suspend.h>
+>
+>  #include "cros_ec.h"
+> @@ -332,6 +333,15 @@ static void cros_ec_lpc_acpi_notify(acpi_handle device, u32 value, void *data)
+>
+>         if (value == ACPI_NOTIFY_DEVICE_WAKE)
+>                 pm_system_wakeup();
+> +
+> +       if (value == ACPI_NOTIFY_CROS_EC_PANIC) {
+> +               dev_err(ec_dev->dev,
+> +                       "CrOS EC Panic Reported. Shutdown is imminent!");
+> +               blocking_notifier_call_chain(&ec_dev->panic_notifier, 0,
+> +                                            ec_dev);
+> +               /* Begin orderly shutdown. Force shutdown after 1 second. */
+> +               hw_protection_shutdown("CrOS EC Panic", 1000);
 
-Hi Peter,
+I feel like this patch is doing 2 things: pulling the logs, and then
+starting a shutdown.
+This should be split into 2 patches.
 
-Is this patch good enough to be merged as commit 851a723e45d1 ("sched: 
-Always clear user_cpus_ptr in do_set_cpus_allowed()") is now in the 
-Linus' tree?
+> +       }
+>  }
 
-Thanks,
-Longman
+Line limits are now 100 chars[1], so most of these lines can fit on 1 line.
 
+>
+>  static int cros_ec_lpc_probe(struct platform_device *pdev)
+> diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+> index e43107e0bee1..1c4487271836 100644
+> --- a/include/linux/platform_data/cros_ec_proto.h
+> +++ b/include/linux/platform_data/cros_ec_proto.h
+> @@ -41,6 +41,13 @@
+>  #define EC_MAX_REQUEST_OVERHEAD                1
+>  #define EC_MAX_RESPONSE_OVERHEAD       32
+>
+> +/*
+> + * EC panic is not covered by the standard (0-F) ACPI notify values.
+> + * Arbitrarily choosing B0 to notify ec panic, which is in the 84-BF
+> + * device specific ACPI notify range.
+> + */
+> +#define ACPI_NOTIFY_CROS_EC_PANIC      0xB0
+
+Can you provide a link (either in the commit, or here in the comment)
+to the coreboot/BIOS code which uses this value? I feel this should
+be documented in some form that correlates the caller and the callee.
+
+> +
+>  /*
+>   * Command interface between EC and AP, for LPC, I2C and SPI interfaces.
+>   */
+> @@ -176,6 +183,8 @@ struct cros_ec_device {
+>         /* The platform devices used by the mfd driver */
+>         struct platform_device *ec;
+>         struct platform_device *pd;
+> +
+> +       struct blocking_notifier_head panic_notifier;
+
+Any reason we cannot use the existing event_notifier (with value argument)?
+It's a system panic, so I doubt that computational overhead for other
+notifier block
+listeners is a concern.
+
+BR,
+
+-Prashant
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f867ea4d75fa59ee87a7f48be144
