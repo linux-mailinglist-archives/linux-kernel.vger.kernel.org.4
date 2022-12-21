@@ -2,378 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D7A652C83
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9927C652C84
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234410AbiLUFrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 00:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
+        id S233491AbiLUFuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 00:50:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbiLUFrP (ORCPT
+        with ESMTP id S229448AbiLUFuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 00:47:15 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79F620BCA
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:47:14 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id h21so298535qta.12
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:47:14 -0800 (PST)
+        Wed, 21 Dec 2022 00:50:06 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D376720998
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:50:04 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id n4so14550218plp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 21:50:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PBXlnDNPYoJxXW36EjJsXOvqqBc0hM9iN5kX6PcJwfc=;
-        b=E/LVSH/iH6kDTvWLh2CLqML0S5mxE5i5ne0TiARC4o5qUUcf+GYwGjoy5VBzr6GlU+
-         v7uCZTU3ZsttHQvzL06RtQkn64KQ9Ge6fxOxnWtPehEIUA/VRA0g5ULReKhzUpUCl4G3
-         1qP1G/245kDkJdJ13V/3SsPeGNzPwxh4yBYHQ=
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Oi6MKv+8Yh0su2x+3wnzQEef+BMWodNZ1GKcRIWPe/g=;
+        b=ywYPMZzOYVTkkuj8UqS4nrfDsNVVRom/2Rs4csKQ63J9SLUSm15X5OOj3wB9Pe0yQW
+         1+TV6ZFG/WbBCfQwhb2nULWcCS52t8GUUTIkmZt0POTrKFGTdzDNOniPf+H83Pw+bWTv
+         Jomr6rgBzNk26uAcm580W/wBJkQHtPDJeIvdb5WSOCgA/5C1rqIH10gSf7/3bEvIoZeP
+         +jXPpigMMLmWdV7F1a34LckDpo8XFeQCcmJwNFOiRHJjkSkAuykH87eMIm9raqp9ApHq
+         5AMZ//JB43ZL2EkFah5AvizsT3Q06iA+4oBwJg/sYGSXFExwVkF8G8XOcTWe17T7C5QW
+         SJWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PBXlnDNPYoJxXW36EjJsXOvqqBc0hM9iN5kX6PcJwfc=;
-        b=yntoLXkXwbxQslsaDZ4WJ49ZAtTsErCwnNS8YI3zQ5e71BCsCB2hsLCchfkeLLRqd7
-         Bi3RZ75kZdlTglKyHUPv0WMTevuLCEOYlAv9N5lh/mv+rN6qHlui0R3ELgq9SuHBit5F
-         3EjMCm3DMfLv0Mlag1CiLpaUwyaduENn/5MBJbB03XE2TJFL/zs9k6VKfexNFkbTLBNO
-         FlFMwiWmNblO5Gnjj+thfnMGIMESawr4baIkIBGMIXuhrdPySwRwAa6ZCr4WmDPysSs4
-         r8gr26WrhVQ8JRD2VieDi/k2cJCPmzEKOBUYYyW7S/2shyNFWA+MSvi8QIqveZynlTUT
-         mXLA==
-X-Gm-Message-State: AFqh2koKocS6B6WNGQrnGrsRdPEKkrMvBbTkREJVLHoaVRObiPk+t9JT
-        Vtz9b80v/rrdf1IUVUPrrrwwp8YQ87vN0YAoxnkk98zNR8noxweHgoO1pJYCKQ8hTZBblIZgCxV
-        LLnhNASkGuUiHEAGfZbydsMkz1hHvZiuitN8igmfMWEG+VZ5drTjEtkahn/CmGE/6XP6IRm8Jbb
-        gus3x/vYLQacaQ4zRP7Q==
-X-Google-Smtp-Source: AMrXdXuN8y+7QB3cUts3yRRuHbaDcxTuRA0Ginf1DQMXlwKY/psVDhrm/3BXHYKGLA96fmOY+zmGIw==
-X-Received: by 2002:a05:622a:1e06:b0:3a8:28a4:c4bc with SMTP id br6-20020a05622a1e0600b003a828a4c4bcmr604933qtb.11.1671601633172;
-        Tue, 20 Dec 2022 21:47:13 -0800 (PST)
-Received: from ldt-sj3-komrakov.dhcp.broadcom.net ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id bw20-20020a05622a099400b003a7f1e16649sm8790142qtb.42.2022.12.20.21.47.10
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oi6MKv+8Yh0su2x+3wnzQEef+BMWodNZ1GKcRIWPe/g=;
+        b=Q89vBUs5dBxog8m1VLk3GXCXz/4Ax1uFYJDca/DrYGBZMUh+7Ry0lvjNkJz8lAO+pT
+         HUDAjzV3usojbo/BYsuJTvrWtwzYnnK3ope41bbEQr4Ufhog9jPaNWpRv4BPHbGf6Q/W
+         FbV6+DwFS35hUO/DbXA1WvznIWkYQ5YKdBPKaIuDwfIwfKgqg8RHn6er5DJHrU/xLOo2
+         ZIGhjn0p8JJG6o9RhRtWnCd1aU4gLm4C8MSag+CJIpxike2YfZY1gO9lmkcIo4J2+7Sh
+         ZQ0QWTDtibeLf449OsARpopxCtQUlEXjYfwCPuVn8vV0j/39i2PtoBwuEtm9mr5diBCS
+         T26Q==
+X-Gm-Message-State: AFqh2kpmW0hr+hzFzvnWnKBxeSuysKF4D0dXqRuSiNY09TRpX9tphB96
+        KyXLEAUR8auWhzD2370thJCr
+X-Google-Smtp-Source: AMrXdXswAWzhwsfC0ABbkBo6/mdDNCCDtY0/kM+SdcIo0JoA6d6eLhqGPB5H96r6UW+07m1nLDcrcw==
+X-Received: by 2002:a17:902:ea91:b0:191:327d:c18b with SMTP id x17-20020a170902ea9100b00191327dc18bmr716744plb.67.1671601804212;
+        Tue, 20 Dec 2022 21:50:04 -0800 (PST)
+Received: from thinkpad ([117.217.177.7])
+        by smtp.gmail.com with ESMTPSA id j4-20020a170902c3c400b00172cb8b97a8sm10382094plj.5.2022.12.20.21.49.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 21:47:12 -0800 (PST)
-From:   alexander komrakov <alexander.komrakov@broadcom.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     giometti@enneenne.com, gregkh@linuxfoundation.org,
-        alexander komrakov <alexander.komrakov@broadcom.com>
-Subject: [PATCH v2] pps: Add elapsed realtime timestamping
-Date:   Tue, 20 Dec 2022 21:47:07 -0800
-Message-Id: <20221221054707.234998-1-alexander.komrakov@broadcom.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 20 Dec 2022 21:50:02 -0800 (PST)
+Date:   Wed, 21 Dec 2022 11:19:53 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, swboyd@chromium.org,
+        dmitry.baryshkov@linaro.org,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported
+ max latencies
+Message-ID: <20221221054953.GA2922@thinkpad>
+References: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
+ <20221205112500.GB4514@thinkpad>
+ <Y441/Icd2wSgVnNU@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000095be1205f05015a2"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y441/Icd2wSgVnNU@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000095be1205f05015a2
-Content-Transfer-Encoding: 8bit
+On Mon, Dec 05, 2022 at 06:18:36PM +0000, Matthias Kaehlcke wrote:
+> On Mon, Dec 05, 2022 at 04:55:00PM +0530, Manivannan Sadhasivam wrote:
+> > On Fri, Sep 16, 2022 at 01:38:37PM +0530, Krishna chaitanya chundru wrote:
+> > > In ASPM driver, LTR threshold scale and value are updated based on
+> > > tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
+> > > LTR threshold scale and value are greater values than max snoop/non-snoop
+> > > value.
+> > > 
+> > > Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
+> > > reported snoop/no-snoop values is greater than or equal to
+> > > LTR_L1.2_THRESHOLD value.
+> > > 
+> > > Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
+> > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> > > Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > 
+> > I take my Ack back... Sorry that I did not look into this patch closer.
+> > 
+> > > ---
+> > > 
+> > > I am taking this patch forward as prasad is no more working with our org.
+> > > changes since v6:
+> > > 	- Rebasing with pci/next.
+> > > changes since v5:
+> > > 	- no changes, just reposting as standalone patch instead of reply to
+> > > 	  previous patch.
+> > > Changes since v4:
+> > > 	- Replaced conditional statements with min and max.
+> > > changes since v3:
+> > > 	- Changed the logic to include this condition "snoop/nosnoop
+> > > 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
+> > > Changes since v2:
+> > > 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
+> > > Changes since v1:
+> > > 	- Added missing variable declaration in v1 patch
+> > > ---
+> > >  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
+> > >  1 file changed, 30 insertions(+)
+> > > 
+> > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > > index 928bf64..2bb8470 100644
+> > > --- a/drivers/pci/pcie/aspm.c
+> > > +++ b/drivers/pci/pcie/aspm.c
+> > > @@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+> > >  {
+> > >  	struct pci_dev *child = link->downstream, *parent = link->pdev;
+> > >  	u32 val1, val2, scale1, scale2;
+> > > +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
+> > >  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
+> > >  	u32 ctl1 = 0, ctl2 = 0;
+> > >  	u32 pctl1, pctl2, cctl1, cctl2;
+> > > +	u16 ltr;
+> > > +	u16 max_snoop_lat, max_nosnoop_lat;
+> > >  
+> > >  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
+> > >  		return;
+> > >  
+> > > +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
+> > > +	if (!ltr)
+> > > +		return;
+> > > +
+> > > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
+> > > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
+> > > +
+> > > +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> > > +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
+> > > +
+> > > +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> > > +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
+> > > +
+> > > +	/* choose the greater max scale value between snoop and no snoop value*/
+> > > +	max_scale = max(max_snp_scale, max_nsnp_scale);
+> > > +
+> > > +	/* choose the greater max value between snoop and no snoop scales */
+> > > +	max_val = max(max_snp_val, max_nsnp_val);
+> > > +
+> > >  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
+> > >  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+> > >  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+> > > @@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+> > >  	 */
+> > >  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
+> > >  	encode_l12_threshold(l1_2_threshold, &scale, &value);
+> > > +
+> > > +	/*
+> > > +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
+> > > +	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
+> > 
+> > Apart from the bug in calculating the LTR_Threshold as reported by Matthias
+> > and Bjorn, I'm wondering if we are covering up for the device firmware issue.
+> 
+> Yes, I think the patch is doing exactly that.
+> 
+> > As per section 6.18, if the device reports snoop/no-snoop scale/value as 0, then
+> > it implies that the device won't tolerate any additional delays from the host.
+> >
+> > In that case, how can we allow the link to go into L1.2 since that would incur
+> > high delay compared to L1.1?
+> 
+> I had the same doubt, a value of 0 doesn't make sense, if it literally means
+> 'max delay of 0ns'. I did some debugging around this issue. One thing I found
+> is that there are NVMe models that don't have issues with entering L1.2 with
+> max (no-)snoop latencies of 0. From that I infer that a value of 0 does not
+> literally mean a max delay of 0ns.
+> 
 
-Some applications like Android needs elapsed realtime timestamping
-to PPS pulse for its clock management. Add sysfs node for this.
+This is interesting.
 
-Signed-off-by: alexander komrakov <alexander.komrakov@broadcom.com>
----
-Changes in v2:
-  - Remove "staging",wrap changelog text at 72 columns and use sysfs_emit().
+> The PCIe spec doesn't say specifically what a value of 0 in those registers
+> means, but chapter "6.18 Latency Tolerance Reporting (LTR) Mechanism" of the
+> PCIe 4.0 base spec says something about the latency requirements in LTR
+> messages:
+> 
+>   Setting the value and scale fields to all 0’s indicates that the device will
+>   be impacted by any delay and that the best possible service is requested.
+> 
+> With that and the fact that several NVMe's don't have issues with all 0 values
+> I deduce that all 0's means 'best possible service' and not 'max latency of
+> 0ns'. It seems the Kioxia firmware has a bug which interprets all 0 values as
+> a max latency of 0ns.
+> 
+> Another finding is that the Kioxia NVMe can enter L1.2 if the max latencies
+> are set to values >= the LTR threshold. Unfortunately that isn't a viable
+> fix for existing devices in the field, devices under development could possibly
+> adjust the latencies in the BIOS (coreboot code [1] suggests that this is done
+> at least in some cases).
+> 
 
- Documentation/ABI/testing/sysfs-pps | 27 +++++++++++++++++++
- drivers/pps/kapi.c                  | 38 ++++++++++++++++++++++++---
- drivers/pps/sysfs.c                 | 40 ++++++++++++++++++++++++++---
- include/linux/pps_kernel.h          |  2 ++
- 4 files changed, 101 insertions(+), 6 deletions(-)
+I fully agree that it is a firmware issue. And yes, we should refrain to fixes
+in the bootloader if possible. 
 
-diff --git a/Documentation/ABI/testing/sysfs-pps b/Documentation/ABI/testing/sysfs-pps
-index 25028c7bc37d..e5fd7bc89ea9 100644
---- a/Documentation/ABI/testing/sysfs-pps
-+++ b/Documentation/ABI/testing/sysfs-pps
-@@ -1,3 +1,30 @@
-+What:		/sys/class/pps/pps0/assert_elapsed
-+Date:		October 2021
-+Contact:	Alexander Komrakov <alexander.komrakov@broadcom.com>
-+Description:
-+		The /sys/class/pps/ppsX/assert_elapsed file reports the 
-+		elapsed real-time assert events and the elapsed 
-+		real-time assert sequence number of the X-th source 
-+		in the form:
-+
-+			<secs>.<nsec>#<sequence>
-+
-+		If the source has no elapsed real-time assert events 
-+		the content of this file is empty.
-+
-+What:		/sys/class/pps/ppsX/clear_elapsed
-+Date:		October 2021
-+Contact:	Alexander Komrakov <alexander.komrakov@broadcom.com>
-+Description:
-+		The /sys/class/pps/ppsX/clear_elapsed file reports the elapsed
-+		real-time clear events and the elapsed real-time clear 
-+		sequence number of the X-th source in the form:
-+
-+			<secs>.<nsec>#<sequence>
-+
-+		If the source has no elapsed real-time clear events the 
-+		content of this file is empty.
-+
- What:		/sys/class/pps/
- Date:		February 2008
- Contact:	Rodolfo Giometti <giometti@linux.it>
-diff --git a/drivers/pps/kapi.c b/drivers/pps/kapi.c
-index d9d566f70ed1..c4c6e885b768 100644
---- a/drivers/pps/kapi.c
-+++ b/drivers/pps/kapi.c
-@@ -23,6 +23,26 @@
- /*
-  * Local functions
-  */
-+ #define NANOSEC_PER_SEC 1000000000 /* 10^9 */
-+
-+/**
-+ * clock_gettime - get the monotonic clock in pps_ktime format
-+ * @kt:		pointer to the pps_ktime to be set to raw monotonic time
-+ *
-+ * The function calculates the monotonic clock from the timespec clock and
-+ * stores the result in pps_ktime format in the variable pointed to by @kt.
-+ *
-+ * The function returns the monotonic clock normalized format in nanosec.
-+ */
-+static __u64 clock_gettime(struct pps_ktime *kt)
-+{
-+	struct timespec64 ts = { .tv_sec = 0, .tv_nsec = 0 };
-+
-+	ktime_get_boottime_ts64(&ts);
-+	kt->sec = ts.tv_sec;
-+	kt->nsec = ts.tv_nsec;
-+	return (__u64) ts.tv_sec * NANOSEC_PER_SEC + ts.tv_nsec;
-+}
- 
- static void pps_add_offset(struct pps_ktime *ts, struct pps_ktime *offset)
- {
-@@ -162,11 +182,15 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
- 	unsigned long flags;
- 	int captured = 0;
- 	struct pps_ktime ts_real = { .sec = 0, .nsec = 0, .flags = 0 };
-+	struct pps_ktime ts_real_elapsed = { .sec = 0, .nsec = 0, .flags = 0 };
- 
- 	/* check event type */
- 	BUG_ON((event & (PPS_CAPTUREASSERT | PPS_CAPTURECLEAR)) == 0);
-+	clock_gettime(&ts_real_elapsed);
-+	dev_dbg(pps->dev, "PPS event (monotonic) at %lld.%09d\n",
-+			(s64)ts_real_elapsed.sec, ts_real_elapsed.nsec);
- 
--	dev_dbg(pps->dev, "PPS event at %lld.%09ld\n",
-+	dev_dbg(pps->dev, "PPS event (timestamp) at %lld.%09ld\n",
- 			(s64)ts->ts_real.tv_sec, ts->ts_real.tv_nsec);
- 
- 	timespec_to_pps_ktime(&ts_real, ts->ts_real);
-@@ -181,11 +205,15 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
- 	pps->current_mode = pps->params.mode;
- 	if (event & pps->params.mode & PPS_CAPTUREASSERT) {
- 		/* We have to add an offset? */
--		if (pps->params.mode & PPS_OFFSETASSERT)
-+		if (pps->params.mode & PPS_OFFSETASSERT) {
-+			pps_add_offset(&ts_real_elapsed,
-+					&pps->params.assert_off_tu);
- 			pps_add_offset(&ts_real,
- 					&pps->params.assert_off_tu);
-+		}
- 
- 		/* Save the time stamp */
-+		pps->assert_elapsed_tu = ts_real_elapsed;
- 		pps->assert_tu = ts_real;
- 		pps->assert_sequence++;
- 		dev_dbg(pps->dev, "capture assert seq #%u\n",
-@@ -195,11 +223,15 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
- 	}
- 	if (event & pps->params.mode & PPS_CAPTURECLEAR) {
- 		/* We have to add an offset? */
--		if (pps->params.mode & PPS_OFFSETCLEAR)
-+		if (pps->params.mode & PPS_OFFSETCLEAR)	{
-+			pps_add_offset(&ts_real_elapsed,
-+					&pps->params.clear_off_tu);
- 			pps_add_offset(&ts_real,
- 					&pps->params.clear_off_tu);
-+		}
- 
- 		/* Save the time stamp */
-+		pps->clear_elapsed_tu = ts_real_elapsed;
- 		pps->clear_tu = ts_real;
- 		pps->clear_sequence++;
- 		dev_dbg(pps->dev, "capture clear seq #%u\n",
-diff --git a/drivers/pps/sysfs.c b/drivers/pps/sysfs.c
-index 134bc33f6ad0..d905ac78da7e 100644
---- a/drivers/pps/sysfs.c
-+++ b/drivers/pps/sysfs.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/string.h>
- #include <linux/pps_kernel.h>
-+#include <linux/sysfs.h> 
- 
- /*
-  * Attribute functions
-@@ -23,12 +24,27 @@ static ssize_t assert_show(struct device *dev, struct device_attribute *attr,
- 	if (!(pps->info.mode & PPS_CAPTUREASSERT))
- 		return 0;
- 
--	return sprintf(buf, "%lld.%09d#%d\n",
--			(long long) pps->assert_tu.sec, pps->assert_tu.nsec,
--			pps->assert_sequence);
-+	return sysfs_emit(buf, "%lld.%09d#%d\n",
-+			   (long long) pps->assert_tu.sec, pps->assert_tu.nsec,
-+			   pps->assert_sequence);
- }
- static DEVICE_ATTR_RO(assert);
- 
-+static ssize_t assert_elapsed_show(struct device *dev,
-+			   struct device_attribute *attr, char *buf)
-+{
-+	struct pps_device *pps = dev_get_drvdata(dev);
-+
-+	if (!(pps->info.mode & PPS_CAPTUREASSERT))
-+		return 0;
-+
-+	return sysfs_emit(buf, "%lld.%09d#%d\n",
-+			    (long long) pps->assert_elapsed_tu.sec,
-+			    pps->assert_elapsed_tu.nsec,
-+			    pps->assert_sequence);
-+}
-+static DEVICE_ATTR_RO(assert_elapsed);
-+
- static ssize_t clear_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
-@@ -43,6 +59,22 @@ static ssize_t clear_show(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(clear);
- 
-+static ssize_t clear_elapsed_show(struct device *dev,
-+			  struct device_attribute *attr,
-+			  char *buf)
-+{
-+	struct pps_device *pps = dev_get_drvdata(dev);
-+
-+	if (!(pps->info.mode & PPS_CAPTURECLEAR))
-+		return 0;
-+
-+	return sprintf(buf, "%lld.%09d#%d\n",
-+			(long long) pps->clear_elapsed_tu.sec,
-+			pps->clear_elapsed_tu.nsec,
-+			pps->clear_sequence);
-+}
-+static DEVICE_ATTR_RO(clear_elapsed);
-+
- static ssize_t mode_show(struct device *dev, struct device_attribute *attr,
- 			 char *buf)
- {
-@@ -81,7 +113,9 @@ static DEVICE_ATTR_RO(path);
- 
- static struct attribute *pps_attrs[] = {
- 	&dev_attr_assert.attr,
-+	&dev_attr_assert_elapsed.attr,
- 	&dev_attr_clear.attr,
-+	&dev_attr_clear_elapsed.attr,
- 	&dev_attr_mode.attr,
- 	&dev_attr_echo.attr,
- 	&dev_attr_name.attr,
-diff --git a/include/linux/pps_kernel.h b/include/linux/pps_kernel.h
-index 78c8ac4951b5..1fecaaf4c8b9 100644
---- a/include/linux/pps_kernel.h
-+++ b/include/linux/pps_kernel.h
-@@ -47,6 +47,8 @@ struct pps_device {
- 
- 	__u32 assert_sequence;			/* PPS assert event seq # */
- 	__u32 clear_sequence;			/* PPS clear event seq # */
-+	struct pps_ktime assert_elapsed_tu; /* PPS elapsed rt assert seq # */
-+	struct pps_ktime clear_elapsed_tu;  /* PPS elapsed rt clear event seq */
- 	struct pps_ktime assert_tu;
- 	struct pps_ktime clear_tu;
- 	int current_mode;			/* PPS mode at event time */
+Another option would be to add a quirk for specific devices in the ASPM code.
+But in that case, I'm not sure what would be the optimal snoop/no-snoop value
+that could be used. There is another issue where if we have some other device
+on the same bus that explicitly requires 0ns latency.
+
+Thanks,
+Mani
+
+> m.
+> 
+> [1] https://github.com/coreboot/coreboot/blob/master/src/device/pciexp_device.c#L313
+> 
+> 
+> 
+> 
+> > > +	 */
+> > > +	scale = min(scale, max_scale);
+> > > +	value = min(value, max_val);
+> > > +
+> > >  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
+> > >  
+> > >  	/* Some broken devices only support dword access to L1 SS */
+> > > -- 
+> > > 2.7.4
+> > > 
+> > 
+> > -- 
+> > மணிவண்ணன் சதாசிவம்
+
 -- 
-2.25.1
-
-
---00000000000095be1205f05015a2
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-dlCTVYtojuUaRbmzA19y0yWkhdD+tvBz6ZhiadUNgctJrRB/eM/Haly51x78TAN/7VMnEWcMJOAI
-VqjxmYlUuUSDPxgXnmYPrOW6BoN2Gdu8XPtl7PMaDi5hpmKwmXBjAgMBAAGjggHgMIIB3DAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCoGA1UdEQQjMCGBH2FsZXhhbmRlci5rb21yYWtvdkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYI
-KwYBBQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFPkwjpj+
-FmVF/4S+Xdk0AEyqpwxWMA0GCSqGSIb3DQEBCwUAA4IBAQCb5JMXul2vbdO/cV9H0z8JwNx+fZND
-3wpL+BeVFFv2+CqHQUsGXEE2RfswQsmqO2oiD5oDDaxmQf7L4Oriw+KftdjmrJdJNCcMaJmhLNVw
-YQeqEpOVnI5QlzKjUEwRqBpmbP01qvCoywUk+rP3NyesFiVLnFUTeclNnsdbwsbq7E9sAaDOmqaB
-RHynszy96G2ivLxlhO8mmtesGggPPO1ZtDNoRtqLhCQ3w3dJwV11auZCqJEoMHzGxc7ZWKveQZnW
-VfoQxBddLcnLJHjOvhYNiZrbpyPq0sCDoJpOlFH1MaXTVRYhUOIZ/brFvlUB3I/AC9nxzt6W37L1
-7ma2ySaiMYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBu
-di1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIM
-BJ2duBPw/VvvslqDMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA6ELbq1KoI+GQT
-jNFf2AAkUmjQoIlhCmhDyq7zwewFPDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3
-DQEJBTEPFw0yMjEyMjEwNTQ3MTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCG
-SAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEB
-BzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZY928qVbkkCzd62rZw2otinEeXTAkZGV
-6EYCtic2jwM9CuewjpgG1YPRo+5ArWglg7WZxhukthCCDJGiO+3ZCE3YEwFlkw5SaewIG49WFvG+
-L/PKaGaSe2FAU+eQMhgV6bF3xizqb3QvuS92maDgI9r8XlT2CjbQjGwnFeeFhdckS6VkPD17EXXy
-GZGM42pB4+WaIhfmPORLBTht2eLwm0p9EBZuBe7AVaENQPswt8DvBgH5co+c8VtvrWWtc3T0L/ID
-geupkFgpkPnQh+HnDlxeViwEZIO3Fj3tu0JCB1487q8DLwMgrLCkvMXJwpa7jb8TvChuTdCTRQTG
-/nP6EQ==
---00000000000095be1205f05015a2--
+மணிவண்ணன் சதாசிவம்
