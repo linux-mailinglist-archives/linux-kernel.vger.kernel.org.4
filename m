@@ -2,149 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA754653189
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C99265318F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiLUNS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:18:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S232153AbiLUNTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiLUNSY (ORCPT
+        with ESMTP id S229676AbiLUNTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:18:24 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB3D1EEFC;
-        Wed, 21 Dec 2022 05:18:23 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLCQhMa011655;
-        Wed, 21 Dec 2022 13:18:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wjsYk5Xn3nuoj50vklfGDoOMhx7eOhLfE4x/GbRnJ5M=;
- b=FfuZWRpweFHcRHIiOYn7WqABNgBuqyAuvkgEHWDeK3yVWyKlG/wPGFl/iBIXSfZTl9LQ
- XpFay6K4ORVdNVpTfO/kJ4DPl8Z1hm8LdLc/6TBN+qCs7lTxa2FzjsIjgR160pMlzurR
- 00ynZCXp5DLEGle7ZmroicUzsl9FhVN/A7XGasINxPTWXDHfmL6inQJFapftDm7H9Pqm
- 1oKI95zzTYwK91DfqEdCRBtfKBWhptic0eN0xFzosi7rnMAZCWd1GKRvgKYCDNzCteC6
- qCdw70iJwIOpMnz2ZemqYFizCbSclTH1J3Ut6t3LLPbkIwlCI1W3LLdwMVAOr+yoDwMN Aw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk39tbyfg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 13:18:15 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLDIFlW027031
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 13:18:15 GMT
-Received: from [10.216.2.240] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 21 Dec
- 2022 05:18:10 -0800
-Message-ID: <e7edd629-986f-3e64-f9db-5ee68cf4e6f3@quicinc.com>
-Date:   Wed, 21 Dec 2022 18:48:07 +0530
+        Wed, 21 Dec 2022 08:19:00 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB19205C7;
+        Wed, 21 Dec 2022 05:18:58 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id x66so10673432pfx.3;
+        Wed, 21 Dec 2022 05:18:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DriSRwCP3ggEVceguuPjWSqJlvi6Le2y23PSrVSIc6A=;
+        b=i8CdrHruEyO26MA6OZEAlAqYhbmSI7rh9RDteCSKwED17marKImYToVCCQcIN0V1zx
+         PVY/jRmQp3YKUuhApRTRNCe58NPXbtV3UVHFZzBPGrM+7zqI9PheBY8gpjQh/vwVsf7+
+         anuIbJvJ2k9NqtA4UC7/k166XJzqfC04baiH9XOJyKQGBU6I1hEofLmyrQ/GFleWAXpk
+         b5nRbpJCtG0gnBcO5OD+D2GN3TwRwAdNxlWJQz6olxvVa07K61agNn16QhsHQ9KH1+jX
+         pCRVaVpP6PygR9FHGHVQUbAnLiDdjwb3UsIzgQB6lU4dccyFPcTHAHbvuvDtxeuwhgPn
+         Jkrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DriSRwCP3ggEVceguuPjWSqJlvi6Le2y23PSrVSIc6A=;
+        b=bSAAE471BQTycgxlv9+kA8cTkZ4wClO9Yqo1jyvr2djN11T4OSJp3DQEfm4T1mpJtH
+         DslcFi86U+75VjCFy+uUtCfjFs4rSW5qB/gmOz6jSFWP5mvTHowfON/XtjuKTl0Z4DTp
+         1df12oWgvNg0/IrDhMYglfPbRLhAUmov7pROJyrlXHmpQVZD2sEqUBma2keJviHzGkj3
+         dp9DBMJLycs6b8f0/j78rUbTcthFKUQBfZ0YrG5JeulKNqmSZXnasC/9VYeZwxJvwrj7
+         iMjgkmnCKGiALcA2n116s/P5JCdWELkCpVWUz7lXe+XYxCgofdI2pXQ0w4wUZ7NBZSLE
+         u2/Q==
+X-Gm-Message-State: AFqh2krWSwWrpZWhYQiv6lbcLGhhaXq7Tkn//gretLlsin3whM+BtXa+
+        ehT77fnNXP4se/ZkQKVMZRcBR3otXkhrExvr
+X-Google-Smtp-Source: AMrXdXvUgucW2eElR7v3axe6MpjhP3/iuhGotxAcsEeVGK/R/v84SC4AtdYswO4K6Ko+RW2qp47vDg==
+X-Received: by 2002:a62:1bc6:0:b0:56d:74bf:3256 with SMTP id b189-20020a621bc6000000b0056d74bf3256mr1903915pfb.22.1671628738303;
+        Wed, 21 Dec 2022 05:18:58 -0800 (PST)
+Received: from localhost.localdomain ([117.189.239.185])
+        by smtp.gmail.com with ESMTPSA id w7-20020aa79a07000000b0056c2e497b02sm10866772pfj.173.2022.12.21.05.18.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 05:18:57 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, Jianhua Lu <lujianhua000@gmail.com>
+Subject: [RESEND] backlight: ktz8866: Add support for Kinetic KTZ8866 backlight
+Date:   Wed, 21 Dec 2022 21:18:43 +0800
+Message-Id: <20221221131843.30438-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.38.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] clk: qcom: lpasscc: Add resets for SC7280 audioreach
- clock controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <broonie@kernel.org>,
-        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>
-References: <1671618061-6329-1-git-send-email-quic_srivasam@quicinc.com>
- <1671618061-6329-3-git-send-email-quic_srivasam@quicinc.com>
- <efde6373-f788-5c0c-4712-7b9caf7ad3d4@linaro.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <efde6373-f788-5c0c-4712-7b9caf7ad3d4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qpNI6SHiaKOg6hbEzPiaOCumjl8VvSC9
-X-Proofpoint-GUID: qpNI6SHiaKOg6hbEzPiaOCumjl8VvSC9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-21_07,2022-12-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 adultscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212210109
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for Kinetic KTZ8866 backlight, which is used in
+Xiaomi tablet, Mi Pad 5 series. This driver lightly based on
+downstream implementation [1].
+[1] https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/elish-r-oss/drivers/video/backlight/ktz8866.c
 
-On 12/21/2022 4:09 PM, Krzysztof Kozlowski wrote:
-Thanks for your time Krzysztof!!!
-> On 21/12/2022 11:21, Srinivasa Rao Mandadapu wrote:
->> The clock gating control for TX/RX/WSA core bus clocks would be required
->> to be reset(moved from hardware control) from audio core driver. Thus
->> add the support for the reset clocks in audioreach based clock driver.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> ---
->>   drivers/clk/qcom/lpasscc-sc7280.c | 18 ++++++++++++++++++
->>   1 file changed, 18 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
->> index 5c1e17b..d81d81b 100644
->> --- a/drivers/clk/qcom/lpasscc-sc7280.c
->> +++ b/drivers/clk/qcom/lpasscc-sc7280.c
->> @@ -12,10 +12,12 @@
->>   #include <linux/regmap.h>
->>   
->>   #include <dt-bindings/clock/qcom,lpass-sc7280.h>
->> +#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
-> These are bindings for different device.
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+---
+ drivers/video/backlight/Kconfig   |   8 ++
+ drivers/video/backlight/Makefile  |   1 +
+ drivers/video/backlight/ktz8866.c | 174 ++++++++++++++++++++++++++++++
+ drivers/video/backlight/ktz8866.h |  31 ++++++
+ 4 files changed, 214 insertions(+)
+ create mode 100644 drivers/video/backlight/ktz8866.c
+ create mode 100644 drivers/video/backlight/ktz8866.h
 
-They are not exactly for different device. It's for same device with 
-ADSP enabled platforms.
+diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
+index 936ba1e4d35e..2845fd7e33ad 100644
+--- a/drivers/video/backlight/Kconfig
++++ b/drivers/video/backlight/Kconfig
+@@ -190,6 +190,14 @@ config BACKLIGHT_KTD253
+ 	  which is a 1-wire GPIO-controlled backlight found in some mobile
+ 	  phones.
+ 
++config BACKLIGHT_KTZ8866
++	tristate "Backlight Driver for Kinetic KTZ8866"
++	depends on I2C
++	select REGMAP_I2C
++	help
++		Say Y to enabled the backlight driver for the Kinetic KTZ8866
++		found in Xiaomi Mi Pad 5 series.
++
+ config BACKLIGHT_LM3533
+ 	tristate "Backlight Driver for LM3533"
+ 	depends on MFD_LM3533
+diff --git a/drivers/video/backlight/Makefile b/drivers/video/backlight/Makefile
+index e815f3f1deff..f70a819c304c 100644
+--- a/drivers/video/backlight/Makefile
++++ b/drivers/video/backlight/Makefile
+@@ -36,6 +36,7 @@ obj-$(CONFIG_BACKLIGHT_HP680)		+= hp680_bl.o
+ obj-$(CONFIG_BACKLIGHT_HP700)		+= jornada720_bl.o
+ obj-$(CONFIG_BACKLIGHT_IPAQ_MICRO)	+= ipaq_micro_bl.o
+ obj-$(CONFIG_BACKLIGHT_KTD253)		+= ktd253-backlight.o
++obj-$(CONFIG_BACKLIGHT_KTZ8866)		+= ktz8866.o
+ obj-$(CONFIG_BACKLIGHT_LM3533)		+= lm3533_bl.o
+ obj-$(CONFIG_BACKLIGHT_LM3630A)		+= lm3630a_bl.o
+ obj-$(CONFIG_BACKLIGHT_LM3639)		+= lm3639_bl.o
+diff --git a/drivers/video/backlight/ktz8866.c b/drivers/video/backlight/ktz8866.c
+new file mode 100644
+index 000000000000..a0ea6ebbda60
+--- /dev/null
++++ b/drivers/video/backlight/ktz8866.c
+@@ -0,0 +1,174 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Backlight driver for the Kinetic KTZ8866
++ *
++ * Copyright (C) Jianhua Lu <lujianhua000@gmail.com>
++ */
++
++#include <linux/backlight.h>
++#include <linux/delay.h>
++#include <linux/err.h>
++#include <linux/of.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/regmap.h>
++#include "ktz8866.h"
++
++#define DEF_BRIGHTNESS 1500
++#define MAX_BRIGHTNESS 2047
++#define REG_MAX 0x15
++
++/* Helper */
++#define low_3_bit(x) ((x)&0x7)
++#define high_8_bit(x) ((x >> 3) & 0xFF)
++
++struct ktz8866 {
++	struct i2c_client *client;
++	struct regmap *regmap;
++	bool state;
++};
++
++enum {
++	LED_OFF,
++	LED_ON,
++};
++
++static const struct regmap_config ktz8866_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.max_register = REG_MAX,
++};
++
++static int ktz8866_write(struct ktz8866 *ktz, unsigned int reg,
++			 unsigned int val)
++{
++	return regmap_write(ktz->regmap, reg, val);
++}
++
++static int ktz8866_update_bits(struct ktz8866 *ktz, unsigned int reg,
++			       unsigned int mask, unsigned int val)
++{
++	return regmap_update_bits(ktz->regmap, reg, mask, val);
++}
++
++static int
++ktz8866_backlight_update_status(struct backlight_device *backlight_dev)
++{
++	struct ktz8866 *ktz = bl_get_data(backlight_dev);
++	unsigned int brightness = backlight_get_brightness(backlight_dev);
++
++	if (!ktz->state && brightness > 0) {
++		ktz8866_update_bits(ktz, BL_EN, BIT(6), BIT(6));
++		ktz->state = LED_ON;
++	} else if (brightness == 0) {
++		ktz8866_update_bits(ktz, BL_EN, BIT(6), 0);
++		ktz->state = LED_OFF;
++		msleep(10);
++	}
++
++	/* Set brightness */
++	ktz8866_write(ktz, BL_BRT_LSB, low_3_bit(brightness));
++	ktz8866_write(ktz, BL_BRT_MSB, high_8_bit(brightness));
++
++	return 0;
++}
++
++static const struct backlight_ops ktz8866_backlight_ops = {
++	.options = BL_CORE_SUSPENDRESUME,
++	.update_status = ktz8866_backlight_update_status,
++};
++
++static void ktz8866_init(struct ktz8866 *ktz)
++{
++	/* Enable 1~5 current sinks */
++	ktz8866_write(ktz, BL_EN, 0x1F);
++	/* Backlight OVP 26.4V */
++	ktz8866_write(ktz, BL_CFG1, 0x33);
++	/* LED ramping time 128ms */
++	ktz8866_write(ktz, BL_CFG2, 0xBD);
++	/* LED on/off ramping time 1ms */
++	ktz8866_write(ktz, BL_DIMMING, 0x11);
++	/* Enable OUTP and OUTN via pin ENP and ENN */
++	ktz8866_write(ktz, LCD_BIAS_CFG1, 0x9F);
++	/* Backlight Full-scale LED Current 30.0mA */
++	ktz8866_write(ktz, FULL_SCALE_CURRENT, 0xF9);
++}
++
++static int ktz8866_probe(struct i2c_client *client,
++			 const struct i2c_device_id *id)
++{
++	struct backlight_device *backlight_dev;
++	struct backlight_properties props;
++	struct ktz8866 *ktz;
++
++	ktz = devm_kzalloc(&client->dev, sizeof(*ktz), GFP_KERNEL);
++	if (!ktz)
++		return -ENOMEM;
++
++	ktz->client = client;
++	ktz->regmap = devm_regmap_init_i2c(client, &ktz8866_regmap_config);
++
++	if (IS_ERR(ktz->regmap)) {
++		dev_err(&client->dev, "failed to init regmap\n");
++		return PTR_ERR(ktz->regmap);
++	}
++
++	memset(&props, 0, sizeof(props));
++	props.type = BACKLIGHT_RAW;
++	props.max_brightness = MAX_BRIGHTNESS;
++	props.brightness =
++		clamp_t(unsigned int, DEF_BRIGHTNESS, 0, props.max_brightness);
++
++	backlight_dev = devm_backlight_device_register(
++		&client->dev, "ktz8866-backlight", &client->dev, ktz,
++		&ktz8866_backlight_ops, &props);
++
++	if (IS_ERR(backlight_dev)) {
++		dev_err(&client->dev, "failed to register backlight device\n");
++		return PTR_ERR(backlight_dev);
++	}
++
++	ktz8866_init(ktz);
++
++	i2c_set_clientdata(client, backlight_dev);
++	backlight_update_status(backlight_dev);
++
++	return 0;
++}
++
++static void ktz8866_remove(struct i2c_client *client)
++{
++	struct backlight_device *backlight_dev = i2c_get_clientdata(client);
++
++	backlight_dev->props.brightness = 0;
++	backlight_update_status(backlight_dev);
++}
++
++static const struct i2c_device_id ktz8866_ids[] = {
++	{ "ktz8866", 0 },
++	{},
++};
++MODULE_DEVICE_TABLE(i2c, ktz8866_ids);
++
++static const struct of_device_id ktz8866_match_table[] = {
++	{
++		.compatible = "kinetic,ktz8866",
++	},
++	{},
++};
++
++static struct i2c_driver ktz8866_driver = {
++	.driver = {
++		.name = "ktz8866",
++		.of_match_table = ktz8866_match_table,
++	},
++	.probe = ktz8866_probe,
++	.remove = ktz8866_remove,
++	.id_table = ktz8866_ids,
++};
++
++module_i2c_driver(ktz8866_driver);
++
++MODULE_DESCRIPTION("Kinetic KTZ8866 Backlight Driver");
++MODULE_AUTHOR("Jianhua Lu <lujianhua000@gmail.com>");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/video/backlight/ktz8866.h b/drivers/video/backlight/ktz8866.h
+new file mode 100644
+index 000000000000..b2a606288a7e
+--- /dev/null
++++ b/drivers/video/backlight/ktz8866.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Register definitions for Kinetic KTZ8866 backlight
++ *
++ * Copyright (C) Jianhua Lu <lujianhua000@gmail.com>
++ */
++
++#ifndef KTZ8866_H
++#define KTZ8866_H
++
++#define DEVICE_ID 0x01
++#define BL_CFG1 0x02
++#define BL_CFG2 0x03
++#define BL_BRT_LSB 0x04
++#define BL_BRT_MSB 0x05
++#define BL_EN 0x08
++#define LCD_BIAS_CFG1 0x09
++#define LCD_BIAS_CFG2 0x0A
++#define LCD_BIAS_CFG3 0x0B
++#define LCD_BOOST_CFG 0x0C
++#define OUTP_CFG 0x0D
++#define OUTN_CFG 0x0E
++#define FLAG 0x0F
++#define BL_OPTION1 0x10
++#define BL_OPTION2 0x11
++#define PWM2DIG_LSBs 0x12
++#define PWM2DIG_MSBs 0x13
++#define BL_DIMMING 0x14
++#define FULL_SCALE_CURRENT 0x15
++
++#endif /* KTZ8866_H */
+-- 
+2.38.2
 
-Basically lpassaudiocc-sc7280.c and lpasscorecc-sc7280.c are for legacy 
-path.
-
-lpasscc-sc7280.c is for ADSP based AudioReach Solution.
-
->
->>   
->>   #include "clk-regmap.h"
->>   #include "clk-branch.h"
->>   #include "common.h"
->> +#include "reset.h"
->>   
->>   static struct clk_branch lpass_top_cc_lpi_q6_axim_hs_clk = {
->>   	.halt_reg = 0x0,
->> @@ -102,6 +104,18 @@ static const struct qcom_cc_desc lpass_qdsp6ss_sc7280_desc = {
->>   	.num_clks = ARRAY_SIZE(lpass_qdsp6ss_sc7280_clocks),
->>   };
->>   
->> +static const struct qcom_reset_map lpass_cc_sc7280_resets[] = {
->> +	[LPASS_AUDIO_SWR_RX_CGCR] =  { 0xa0, 1 },
->> +	[LPASS_AUDIO_SWR_TX_CGCR] =  { 0xa8, 1 },
->> +	[LPASS_AUDIO_SWR_WSA_CGCR] = { 0xb0, 1 },
-> These are example the same - IDs and values - as
-> qcom,sc7280-lpassaudiocc. Aren't you duplicating same control?
-
-As explained above legacy path drivers and ADSP path drivers are 
-enabled/used exclusively,
-
-adding reset controls here.
-
->
-> Best regards,
-> Krzysztof
->
