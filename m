@@ -2,267 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4666533D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 340996533D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbiLUQMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 11:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S229591AbiLUQQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 11:16:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiLUQMt (ORCPT
+        with ESMTP id S229558AbiLUQQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 11:12:49 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0C7220CE;
-        Wed, 21 Dec 2022 08:12:47 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLDfa2x026028;
-        Wed, 21 Dec 2022 17:12:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=2A2tAKvy9GQzqXbZsSHur6UK/zxVtWe4DXFResJLMYk=;
- b=GRQS9PaT3+2E9Wb8iorc8gCzaElYyJ2JBOk2ChRo7hNfR73pIlNZMQaVuaJrPuatPdcC
- eDFky9ABYCCLuZTiy96V55sWnp9ZEv2fJPEc7nqJCZXU7daLJy+ucgBqF+PYSylx7KO4
- RnwZPFo6dcLvljDc7XhfnuQC9VOMAmpMsEnkf/gIt+B/SCdeNSWhHwhue84SyqBS1HT0
- icdRbKUuIhNv50L3Dg4vnHJkEoNBQNzOZbxDHTwdyPP+45Sr2IqZxE8IZ8RnttaHXyyB
- HG+UeLxr/cDO06sC8JcO+t+V4xuD0+XZU+WGyXLZvoblyzET08NbBJpmdmmvigfw7LCh eg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mh605qrnb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 17:12:30 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 045AA10002A;
-        Wed, 21 Dec 2022 17:12:25 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F1EE32291B5;
-        Wed, 21 Dec 2022 17:12:24 +0100 (CET)
-Received: from [10.201.20.73] (10.201.20.73) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 21 Dec
- 2022 17:12:23 +0100
-Message-ID: <6ba10328-bc48-c953-49e7-29e079fb6406@foss.st.com>
-Date:   Wed, 21 Dec 2022 17:12:22 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH V4 1/3] rpmsg: core: Add signal API support
-Content-Language: en-US
-To:     Sarannya S <quic_sarannya@quicinc.com>,
-        <quic_bjorande@quicinc.com>, <swboyd@chromium.org>,
-        <quic_clew@quicinc.com>, <mathieu.poirier@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1670418258-11502-1-git-send-email-quic_sarannya@quicinc.com>
- <1670418258-11502-2-git-send-email-quic_sarannya@quicinc.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <1670418258-11502-2-git-send-email-quic_sarannya@quicinc.com>
+        Wed, 21 Dec 2022 11:16:20 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6620220DD
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:16:18 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id i188so9214113vsi.8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:16:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=V0Jr0ncaFatQ1llU1BzfDYX0DgcfVDK5RFBuq4i0i/I=;
+        b=cIEeX/c30k4UKyOj4eR0nz6PRiwIs1u/WY+Y/KZnMgS1n898SM4jfwvbYDeHBD6CP+
+         1yh7dxh7J44S9bInD6Wc7znYCP8AFqjsuXW6wbpBgPoBcCDCP+D5aPDlchtW1tskqth0
+         JDrPXLgkL3+R8WYxhpjRlwLNeCbjex7oY7GkjIXJY7ss6zRbrgM150WYsaIGhIfM/fZM
+         d3K7kg+xL4COP5+w3lgfACkztRVqpnbGcP1373A/lt5EIkP6g95+l/KvupNu/ParlyLD
+         d2alslZ88NZsl9wMWzzdqMG0pOFIyz6iLPU5nBOCkS5GxORX8oFmIeCr4CMEAMT84oSA
+         8CVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V0Jr0ncaFatQ1llU1BzfDYX0DgcfVDK5RFBuq4i0i/I=;
+        b=Kv+dbPOoqOQyuR7pfmjRqeizkMdrQoqd5Tnj1MuytrxsUxt4+ZfPSxcTB4fu8aCkG3
+         oakzE8pm4RwQ6tN37zURPLgpUPsf8M0YJr/ZRmUUlNihhjLuQI7SX7aMmrGC6WkwcRpP
+         6WAe95ijvSR4qK/Hk8vIrg6IezsTgNlD/VbncwW5Ju4qweBIOkTYtRdqrEVh879QnvbO
+         mArATJgXpEXT19E5BTycnji1xNUgWo9nBNY2KHOZJ9YVLx9GRmDJuQ/wAax3qJDhNqmp
+         jub6FwHL10rpAegOzWjQLfn9JgonZe9AvSqY68TX1wWrjjhUU+1tR8Vey5fnA5G3c6bl
+         WW9g==
+X-Gm-Message-State: AFqh2kqzSzrYnhUZ23eaOYcY09AJrg4gmndx0GVqZzjOzvYUEdSfbGlx
+        3vgydRaNys3Kf0Iv3nz6nQp/9Q==
+X-Google-Smtp-Source: AMrXdXus2f0EloCt7a3u9bTW2ujIpOXjtqLhrlnsSr1Wm1BTZtnm2QKIoG59T4IHC7fJp76J6j25yA==
+X-Received: by 2002:a05:6102:356c:b0:3b1:3719:f2cf with SMTP id bh12-20020a056102356c00b003b13719f2cfmr972540vsb.24.1671639376650;
+        Wed, 21 Dec 2022 08:16:16 -0800 (PST)
+Received: from nicolas-tpx395.localdomain ([192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id dt20-20020a05620a479400b006fbf88667bcsm10926041qkb.77.2022.12.21.08.16.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 08:16:15 -0800 (PST)
+Message-ID: <0417e11649150202f717646809e7db5c55f7ac83.camel@ndufresne.ca>
+Subject: Re: [PATCH v1 4/9] media: verisilicon: Check AV1 bitstreams bit
+ depth
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Date:   Wed, 21 Dec 2022 11:16:12 -0500
+In-Reply-To: <4aae8684-5ab4-c5a6-cc73-5dc61309b745@collabora.com>
+References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
+         <20221219155616.848690-5-benjamin.gaignard@collabora.com>
+         <e3663c85c75d09259a3135cb6ccfe7d6231bd752.camel@ndufresne.ca>
+         <4aae8684-5ab4-c5a6-cc73-5dc61309b745@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.73]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-21_08,2022-12-21_01,2022-06-22_01
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Le mardi 20 d=C3=A9cembre 2022 =C3=A0 14:02 +0100, Benjamin Gaignard a =C3=
+=A9crit=C2=A0:
+> Le 19/12/2022 =C3=A0 21:38, Nicolas Dufresne a =C3=A9crit=C2=A0:
+> > Le lundi 19 d=C3=A9cembre 2022 =C3=A0 16:56 +0100, Benjamin Gaignard a =
+=C3=A9crit=C2=A0:
+> > > The driver supports 8 and 10 bits bitstreams, make sure to discard
+> > > other cases.
+> > >=20
+> > > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> > > ---
+> > >   drivers/media/platform/verisilicon/hantro_drv.c | 6 ++++++
+> > >   1 file changed, 6 insertions(+)
+> > >=20
+> > > diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/driver=
+s/media/platform/verisilicon/hantro_drv.c
+> > > index 8e93710dcfed..e10fc59634dd 100644
+> > > --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> > > +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> > > @@ -282,7 +282,13 @@ static int hantro_try_ctrl(struct v4l2_ctrl *ctr=
+l)
+> > >   		/* We only support profile 0 */
+> > >   		if (dec_params->profile !=3D 0)
+> > >   			return -EINVAL;
+> > > +	} else if (ctrl->id =3D=3D V4L2_CID_STATELESS_AV1_SEQUENCE) {
+> > > +		const struct v4l2_ctrl_av1_sequence *sequence =3D ctrl->p_new.p_av=
+1_sequence;
+> > > +
+> > > +		if (sequence->bit_depth !=3D 8 && sequence->bit_depth !=3D 10)
+> > > +			return -EINVAL;
+> > As you state in the cover letter, should this just be this for now ?
+>=20
+> The driver can decode 8 or 10 bits bitstreams but will on produce 8bits (=
+NV12_4L4 or NV12)
+> frames. The hardware is able to truncate 10bits bitstreams to 8 bits outp=
+ut.
 
-On 12/7/22 14:04, Sarannya S wrote:
-> Some transports like Glink support the state notifications between
-> clients using flow control signals similar to serial protocol signals.
-> Local glink client drivers can send and receive flow control status
-> to glink clients running on remote processors.
-> 
-> Add APIs to support sending and receiving of flow control status by
-> rpmsg clients.
-> 
-> Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
-> Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
-> ---
->  drivers/rpmsg/rpmsg_core.c     | 21 +++++++++++++++++++++
->  drivers/rpmsg/rpmsg_internal.h |  2 ++
->  include/linux/rpmsg.h          | 15 +++++++++++++++
->  3 files changed, 38 insertions(+)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index d6dde00e..77aeba0 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -331,6 +331,25 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
->  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
->  
->  /**
-> + * rpmsg_set_flow_control() - sets/clears serial flow control signals
-> + * @ept:	the rpmsg endpoint
-> + * @enable:	enable or disable serial flow control
+I tested that, and NV12 works, picking NV12_4L4 though leads to corrupted
+buffers. I think the PP is not being activated. G2/VC8000 and likely VC9000=
+ can
+only produce tile reference in the original depth chosen (hence why it goes=
+ not
+have a format register like G1 does).
 
-What does it mean "enable and disable serial flow control"?
-Do you speak about the flow control feature or the data flow itself?
+As you are aware, the driver didn't pick NV12_10LE40_4L4 automatically, and
+that's what broke fluster 10bit test in tiled mode for 10bit. I suspect in =
+v2,
+we'll have all this fixed and 10bit will be activated, so this comment will=
+ be
+ignored.
 
-I guess it is the activation/deactivation of the data stream
-regarding Bjorn's comment in V1:
+>=20
+> >=20
+> >=20
+> > > +		if (sequence->bit_depth !=3D 8)
+> > > +			return -EINVAL;
+> >=20
+> > >   	}
+> > > +
+> > >   	return 0;
+> > >   }
+> > >  =20
 
-"I therefore asked Deepak to change it so the rpmsg api would contain a
-single "pause incoming data"/"resume incoming data" - given that this is
-a wish that we've seen in a number of discussions."
-
-For me this is the software flow control:
-https://en.wikipedia.org/wiki/Software_flow_control
-
-I would suggest not limiting the control only to activation/deactivation but to
-offer more flexibility in terms of services. replace the boolean by a bitmap
-would allow to extend it later.
-
-For instance by introducing 2 definitions:
-
-/* RPMSG pause transmission request:
- * sent to the remote endpoint to request to suspend its transmission */
- */
-#define RPMSG_FC_PT_REQ  (1 << 0)
-
-/* RPMSG resume transmission request
- * sent to the remote endpoint to allow to resume its transmission
- */
-#define RPMSG_FC_RT_REQ  (1 << 1)
-
-Then we could add (in a next step) some other flow controls such as
-/* RPMSG pause transmission information
- * Sent to the remote endpoint to inform that no more data will be sent
- * until the reception of RPMSG_FC_RT_INFO
- */
-#define RPMSG_FC_PT_INFO  (1 << 16)
-#define RPMSG_FC_RT_INFO  (1 << 16)
-
-> + * @dst:	destination address of the endpoint
-
-Thanks to have integrated this in your patch!
-
-Regards,
-Arnaud
-
-> + *
-> + * Return: 0 on success and an appropriate error value on failure.
-> + */
-> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
-> +{
-> +	if (WARN_ON(!ept))
-> +		return -EINVAL;
-> +	if (!ept->ops->set_flow_control)
-> +		return -ENXIO;
-> +
-> +	return ept->ops->set_flow_control(ept, enable, dst);
-> +}
-> +EXPORT_SYMBOL(rpmsg_set_flow_control);
-> +
-> +/**
->   * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
->   * @ept: the rpmsg endpoint
->   *
-> @@ -539,6 +558,8 @@ static int rpmsg_dev_probe(struct device *dev)
->  
->  		rpdev->ept = ept;
->  		rpdev->src = ept->addr;
-> +
-> +		ept->flow_cb = rpdrv->flowcontrol;
->  	}
->  
->  	err = rpdrv->probe(rpdev);
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index 39b646d..b6efd3e 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -55,6 +55,7 @@ struct rpmsg_device_ops {
->   * @trysendto:		see @rpmsg_trysendto(), optional
->   * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
->   * @poll:		see @rpmsg_poll(), optional
-> + * @set_flow_control:	see @rpmsg_set_flow_control(), optional
->   * @get_mtu:		see @rpmsg_get_mtu(), optional
->   *
->   * Indirection table for the operations that a rpmsg backend should implement.
-> @@ -75,6 +76,7 @@ struct rpmsg_endpoint_ops {
->  			     void *data, int len);
->  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
->  			     poll_table *wait);
-> +	int (*set_flow_control)(struct rpmsg_endpoint *ept, bool enable, u32 dst);
->  	ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
->  };
->  
-> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-> index 523c98b..a0e9d38 100644
-> --- a/include/linux/rpmsg.h
-> +++ b/include/linux/rpmsg.h
-> @@ -64,12 +64,14 @@ struct rpmsg_device {
->  };
->  
->  typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
-> +typedef int (*rpmsg_flowcontrol_cb_t)(struct rpmsg_device *, void *, bool);
->  
->  /**
->   * struct rpmsg_endpoint - binds a local rpmsg address to its user
->   * @rpdev: rpmsg channel device
->   * @refcount: when this drops to zero, the ept is deallocated
->   * @cb: rx callback handler
-> + * @flow_cb: remote flow control callback handler
->   * @cb_lock: must be taken before accessing/changing @cb
->   * @addr: local rpmsg address
->   * @priv: private data for the driver's use
-> @@ -92,6 +94,7 @@ struct rpmsg_endpoint {
->  	struct rpmsg_device *rpdev;
->  	struct kref refcount;
->  	rpmsg_rx_cb_t cb;
-> +	rpmsg_flowcontrol_cb_t flow_cb;
->  	struct mutex cb_lock;
->  	u32 addr;
->  	void *priv;
-> @@ -106,6 +109,7 @@ struct rpmsg_endpoint {
->   * @probe: invoked when a matching rpmsg channel (i.e. device) is found
->   * @remove: invoked when the rpmsg channel is removed
->   * @callback: invoked when an inbound message is received on the channel
-> + * @flowcontrol: invoked when remote side flow control status is received
->   */
->  struct rpmsg_driver {
->  	struct device_driver drv;
-> @@ -113,6 +117,7 @@ struct rpmsg_driver {
->  	int (*probe)(struct rpmsg_device *dev);
->  	void (*remove)(struct rpmsg_device *dev);
->  	int (*callback)(struct rpmsg_device *, void *, int, void *, u32);
-> +	int (*flowcontrol)(struct rpmsg_device *, void *, bool);
->  };
->  
->  static inline u16 rpmsg16_to_cpu(struct rpmsg_device *rpdev, __rpmsg16 val)
-> @@ -192,6 +197,8 @@ __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
->  
->  ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
->  
-> +int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst);
-> +
->  #else
->  
->  static inline int rpmsg_register_device_override(struct rpmsg_device *rpdev,
-> @@ -316,6 +323,14 @@ static inline ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
->  	return -ENXIO;
->  }
->  
-> +static inline int rpmsg_set_flow_control(struct rpmsg_endpoint *ept, bool enable, u32 dst)
-> +{
-> +	/* This shouldn't be possible */
-> +	WARN_ON(1);
-> +
-> +	return -ENXIO;
-> +}
-> +
->  #endif /* IS_ENABLED(CONFIG_RPMSG) */
->  
->  /* use a macro to avoid include chaining to get THIS_MODULE */
