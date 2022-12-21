@@ -2,129 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090FA652D20
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3C2652D21
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234395AbiLUHCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 02:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S234357AbiLUHDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 02:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLUHCm (ORCPT
+        with ESMTP id S229696AbiLUHDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 02:02:42 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CE81F60D;
-        Tue, 20 Dec 2022 23:02:41 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so1281853pjj.2;
-        Tue, 20 Dec 2022 23:02:41 -0800 (PST)
+        Wed, 21 Dec 2022 02:03:12 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB2718B1F
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:03:10 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id h16so13940983wrz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:03:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iLhpvJLe8wUwjMWhjGdcbiLSvV4O6C2uFJ++EfmUmG8=;
-        b=ZWhyIykfGczTmN7iY79uBrF+cj5WfVjL/MKp0+3TaG2jXVOlJvJ9e92gGZ4MWjw6of
-         l9dpblwzn3TABsiiuhvmhoU3UlbaT9+l6LkP7UdpMxtWPzbr8QOMYjDbrD+U943p3lHi
-         VqF/NCLdFt0peRCyMJSqQKFotKsMQxwTUHFndN4f3Y7RojjP9Z8mKTVXec/K995fzOzR
-         CqgzaaN5qxydD+A/doTMb+RyoxvQhVpfYbb74Y+xBZSN34kzZDc0QmhKXaPlvI98Izax
-         yYu1kI4AS5AX+AlPteOCp2AAZDyDO1Vo1QHkONUOSINTR2ndBL+rokF+KMg1N9tky34C
-         8MaQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eg0WhSchjTvqXeKP426L54VYEv3WuT9Mujc7Ng9EqQk=;
+        b=B6/+mfC87WaDmrKji/kmap+UCJ13c7ySQtXVy061Q8CaXeYfrtmsV12CRBzMes/Xoj
+         8jXqhRpeOSuNvQkSawR9K+F7E6Xl6YHuHXqFc+YaBaSVJJFJYL2h4SuSaxdVOfm7IRmb
+         Ws644Udaa1jAlQBbJrVSqOfeBgBk4kItqV8rHKsOD8OSo/Ew/4b2hJgMftYjEAEaVrVV
+         wJdNa8BBlGxLxvd/t4M9hZ5ZnqyztTY/6MqPqQMQIZDX6ebaI8dzpXbDujV+5gxOn3oQ
+         K3MG2XmHV1Dv7NhQ2HsZ2FWxdc+KYPAftr4D6T0n3cxlmJkw8fRr/OJmErpOl/90UMa0
+         qo8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iLhpvJLe8wUwjMWhjGdcbiLSvV4O6C2uFJ++EfmUmG8=;
-        b=UYU3i9n8uTlrYHBMjps4ApTYN/9l/11hyIRf8rtpjwXzzu79GL3Uds2DNVHwOAhdFA
-         H6RjHiqoo7WIeDC9X+LyyJVvjZsuHRXJP4vFZn8/yBopztIRtQcPu6T75VIWOcxSB8Mb
-         JJ2ARUwzI4MV96+7YdppX0EztKPo09zdAHeHKnfjTDfm/XDe3QEfO7RAnUAg7rxiYlc0
-         tPJIZmJN4IFHOkWWc0sMycHrbE1e0Rpju6NuUk48mD85nAaw7P2WUAKUrOGaKf1BLDYI
-         DGwJtkHRNdqboqiVf6f0NW5g3+QI/1YYufcXxvCTGe3Vq/rKOKrOJBtXnw+aFm5g6oDW
-         zv1g==
-X-Gm-Message-State: AFqh2krSucJ/9GureOOjkf/bgduUhPn5KI4L9fXHoufIYTCYfcCLsQq2
-        3ib5UfzbNnZrBmto5txABwbbLqzBN4Iz0zkt
-X-Google-Smtp-Source: AMrXdXtuhzounO8Sea7pU0k8a4F9jEl+j9/DmNWNDZTp4WEhskn10OkAmn5yVWLpiVhqsY8RSI3iww==
-X-Received: by 2002:a05:6a20:12ca:b0:ab:e8a7:6137 with SMTP id v10-20020a056a2012ca00b000abe8a76137mr1634889pzg.3.1671606161142;
-        Tue, 20 Dec 2022 23:02:41 -0800 (PST)
-Received: from localhost.localdomain ([117.189.239.185])
-        by smtp.gmail.com with ESMTPSA id q20-20020a631f54000000b00476c2180dbcsm9134146pgm.29.2022.12.20.23.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 23:02:40 -0800 (PST)
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        Jianhua Lu <lujianhua000@gmail.com>
-Subject: [PATCH 2/2] dt-bindings: leds: backlight: add binding for Kinetic KTZ8866 backlight
-Date:   Wed, 21 Dec 2022 15:02:16 +0800
-Message-Id: <20221221070216.17850-1-lujianhua000@gmail.com>
-X-Mailer: git-send-email 2.38.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eg0WhSchjTvqXeKP426L54VYEv3WuT9Mujc7Ng9EqQk=;
+        b=hC0+m2KN3dIgvgoasUzzeSfCUN4WgLLZjEQCZX0kAjvlWanRMQ5tIQBMx3VXEPmKq0
+         k9DdxTb4/VUw+gT3o8gIU57mFcN33vJrxRffdAcuXqHnwwuhv9KIkDessMXp6UZd+EGU
+         a7waoN6nbJqAATPv7c5rNmZdE9mYXlkMW0VKXJebI2nzPUOPQH/EUhLduBASbpUchC04
+         xhxlS5BFClKtx8YlZsHo+og7wLXpjHAqGbfr4bG22VydiJeqrlhzxVaueE4TjEkl+NKF
+         DV7uX2sth9lDUD1R5lEAlwEoO374w8Qzns9FFMascKn9KDUVyhL1GrlIpRNSBdRFJ411
+         aBkg==
+X-Gm-Message-State: AFqh2kodKwlgQ5FWutt9a6VWnkvLcY9n7acFO9Q4uUk8z2Tv6YJXuDlu
+        QY764D+SRdJIvH4phpZbkQ4ssg==
+X-Google-Smtp-Source: AMrXdXseUP2FWdrUvMZQlBwGZpeRZYjgxls4v7sX9+wuHvypLn0jbH1WS3VJaOvEpeMDbg4HMV3eRw==
+X-Received: by 2002:adf:e103:0:b0:26a:6e7d:5782 with SMTP id t3-20020adfe103000000b0026a6e7d5782mr312026wrz.35.1671606188859;
+        Tue, 20 Dec 2022 23:03:08 -0800 (PST)
+Received: from [192.168.0.173] ([82.77.81.131])
+        by smtp.gmail.com with ESMTPSA id q9-20020a05600000c900b0024228b0b932sm17074639wrx.27.2022.12.20.23.03.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 23:03:08 -0800 (PST)
+Message-ID: <96b4574d-8fe1-7662-5029-fc375f7b9ac9@linaro.org>
+Date:   Wed, 21 Dec 2022 09:03:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 1/2] mtd: spi-nor: issi: is25wp256: Init flash based on
+ SFDP
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>, greentime.hu@sifive.com,
+        jude.onyenegecha@sifive.com, william.salmon@sifive.com,
+        adnan.chowdhury@sifive.com, ben.dooks@sifive.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220920184808.44876-1-sudip.mukherjee@sifive.com>
+ <20221221003009.GA280250@roeck-us.net>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20221221003009.GA280250@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree bindings for the Kinetic KTZ8866 backlight driver.
 
-Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+
+On 21.12.2022 02:30, Guenter Roeck wrote:
+> Hi,
+
+Hi, Guenter,
+
+Thanks for the report.
+
+> 
+> On Tue, Sep 20, 2022 at 07:48:07PM +0100, Sudip Mukherjee wrote:
+>> The datasheet of is25wp256 says it supports SFDP. Get rid of the static
+>> initialization of the flash parameters and init them when parsing SFDP.
+>>
+>> Testing showed the flash using SPINOR_OP_READ_1_1_4_4B 0x6c,
+>> SPINOR_OP_PP_4B 0x12 and SPINOR_OP_BE_4K_4B 0x21 before enabling SFDP.
+>> After this patch, it parses the SFDP information and still uses the
+>> same opcodes.
+>>
+>> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
+> 
+> With this patch in place, qemu emulations with is25wp256 fail to
+> instantiate the flash. Specifically, this affects the qemu sifive_u
+> emulation. The resulting error message is:
+> 
+> spi-nor spi0.0: BFPT parsing failed. Please consider using SPI_NOR_SKIP_SFDP when declaring the flash
+> spi-nor: probe of spi0.0 failed with error -22
+> 
+> qemu command line:
+> 
+> qemu-system-riscv64 -M sifive_u -m 512M \
+>       -no-reboot -kernel arch/riscv/boot/Image -snapshot \
+>       -drive file=flash.8Vtb7,format=raw,if=mtd -bios default \
+>       -append "root=/dev/mtdblock0 mtdparts=spi0.0:- console=ttySIF0,115200 earlycon" \
+>       -nographic -monitor none
+> 
+> Reverting this patch fixes the problem.
+
+I need some more debug info in order to have both flavors of the flash
+work correctly. Would you please revert the patch locally and do the
+tests from below? Thanks!
+
+ta
+
 ---
- .../leds/backlight/kinetic,ktz8866.yaml       | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+# dd if=/dev/urandom of=./qspi_test bs=1M count=6
+6+0 records in
+6+0 records out
 
-diff --git a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-new file mode 100644
-index 000000000000..7286c3fc7f5d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
-@@ -0,0 +1,37 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/backlight/kinetic,ktz8866.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Kinetic Technologies KTZ8866 backlight
-+
-+maintainers:
-+  - Jianhua Lu <lujianhua000@gmail.com>
-+
-+description: |
-+  The Kinetic Technologies KTZ8866 is a high efficiency 6-sinks led backlight
-+  with dual lcd bias power.
-+  https://www.kinet-ic.com/ktz8866/
-+
-+allOf:
-+  - $ref: common.yaml#
-+
-+properties:
-+  compatible:
-+    items:
-+      const: kinetic,ktz8866
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    backlight {
-+        compatible = "kinetic,ktz8866";
-+
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&bl_en_default>;
-+    };
--- 
-2.38.2
+# mtd_debug write /dev/mtd4 0 6291456 qspi_test
+Copied 6291456 bytes from qspi_test to address 0x00000000 in flash
 
+# mtd_debug erase /dev/mtd4 0 6291456
+Erased 6291456 bytes from address 0x00000000 in flash
+
+# mtd_debug read /dev/mtd4 0 6291456 qspi_read
+Copied 6291456 bytes from address 0x00000000 in flash to qspi_read
+
+# hexdump qspi_read
+0000000 ffff ffff ffff ffff ffff ffff ffff ffff
+*
+
+0600000
+
+# mtd_debug write /dev/mtd4 0 6291456 qspi_test
+Copied 6291456 bytes from qspi_test to address 0x00000000 in flash
+
+# mtd_debug read /dev/mtd4 0 6291456 qspi_read
+Copied 6291456 bytes from address 0x00000000 in flash to qspi_read
+
+# sha1sum qspi_test qspi_read
+57f8d4fee65622104e24276e865f662844f12242  qspi_test
+57f8d4fee65622104e24276e865f662844f12242  qspi_read
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/partname
+is25wp256
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/jedec_id
+9d7019
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/manufacturer
+issi
+
+# xxd -p /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+53464450060101ff00060110300000ff9d05010380000002ffffffffffff
+ffffffffffffffffffffffffffffffffffffe520f9ffffffff0f44eb086b
+083b80bbfeffffffffff00ffffff44eb0c200f5210d800ff234ac90082d8
+11cecccd68467a757a75f7aed55c4a422cfff030faa9ffffffffffffffff
+ffffffffffffffff501950169ff9c0648fefffff
+
+# md5sum /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+ba14818b9ec42713f24d94d66bb90ba0  /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
