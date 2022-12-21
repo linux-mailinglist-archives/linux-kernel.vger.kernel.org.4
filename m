@@ -2,137 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7277F652C73
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D20652C76
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 06:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbiLUFj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 00:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S231623AbiLUFmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 00:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiLUFjW (ORCPT
+        with ESMTP id S229436AbiLUFmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 00:39:22 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2461D33A;
-        Tue, 20 Dec 2022 21:39:21 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BL5Hrgs026599;
-        Wed, 21 Dec 2022 05:39:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=D8KWVeGSbq9zikjeHsg8jvAfVBHKlzhqOjkQpLjMGzo=;
- b=PF+Q7kWhWQ6iPB8PI4ZD1fJ11cxHNIhos/JIU0a7ZnJfxH2/SOW28L+3fvIQuPqnr0Lf
- NRvUTR27sSffTZPcwA90P/8ts2N5H9ZwDcpTAtOGb0F3YiCPplMVkWHKTUynqEdZSy1g
- BUXoWvyguC4xmMNwjie9cft6rVlHBo/fP4t7jVijPlfv36pxownxN6v1GVS8AY4V9M3a
- 8Qqwu67VwPjnoA9K9ssEw15jP2hBmWxOCWbhRzIY5RGjR0+sSjHc+wH0DCB4kSYz6yYW
- oveT5XGLoIkw7evc0Jo65CpqmO26J+/vekqfb8QTztqIk3yEBDIK1nE+XqnYElLQv/Zb qw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk85xth3b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 05:39:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BL5dBTo005644
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 05:39:11 GMT
-Received: from [10.206.24.249] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
- 2022 21:39:06 -0800
-Message-ID: <e63e27df-7e46-337c-f22a-ccd1bbcd0c28@quicinc.com>
-Date:   Wed, 21 Dec 2022 11:09:03 +0530
+        Wed, 21 Dec 2022 00:42:35 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDB51AF2E;
+        Tue, 20 Dec 2022 21:42:34 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BL5gQQN087003;
+        Tue, 20 Dec 2022 23:42:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1671601346;
+        bh=St/d0ulWbFggoydGDrSQv9HID53vETKPZujxz9/cCa0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=xQF9r2LGSFvLQwq/dWLIrR3FznjcuWowJPdzWJUs1ZKWoqH66CWUXU8Ft91yer+R4
+         mQ3/cCRV1MK5S8PsBkCfP93NUe8Syv/W/VFwGbgTNmfLHKtyZPGP3AkVIwj6JH02XG
+         ptfysA232Lq5UMrwXGZS9/XciuxwOZUHMr7xgGhA=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BL5gQLS022740
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 20 Dec 2022 23:42:26 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 20
+ Dec 2022 23:42:26 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 20 Dec 2022 23:42:26 -0600
+Received: from [10.250.234.60] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BL5gGTa012775;
+        Tue, 20 Dec 2022 23:42:19 -0600
+Message-ID: <a4d11974-eb97-bfa2-790f-3016950ea961@ti.com>
+Date:   Wed, 21 Dec 2022 11:12:15 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] spmi: Add check for remove callback in spmi_drv_remove
- API
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [EXTERNAL] Re: [PATCH] arm64: dts: ti: k3-j721s2: Add support for
+ ADC nodes
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <agross@kernel.org>, <devicetree@vger.kernel.org>,
-        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
-        <quic_kamalw@quicinc.com>, <sboyd@kernel.org>,
-        <quic_subbaram@quicinc.com>, <quic_collinsd@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-arm-msm-owner@vger.kernel.org>
-References: <1670145780-13111-1-git-send-email-quic_jprakash@quicinc.com>
- <1670145780-13111-2-git-send-email-quic_jprakash@quicinc.com>
- <Y5hqMFw0xl6lmJYL@kroah.com>
- <367fdcef-7360-055a-897b-71a66063b4ba@quicinc.com>
- <Y5iVqrnlX8NoiOkl@kroah.com>
-From:   Jishnu Prakash <quic_jprakash@quicinc.com>
-In-Reply-To: <Y5iVqrnlX8NoiOkl@kroah.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <nm@ti.com>
+References: <20221220101249.46450-1-b-kapoor@ti.com>
+ <ff5b09db-4900-0b5b-e821-fa05b8d907a4@linaro.org>
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+In-Reply-To: <ff5b09db-4900-0b5b-e821-fa05b8d907a4@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ypJ1RWrLRe0TrPWhuJnOXCDa-FmzMhK7
-X-Proofpoint-GUID: ypJ1RWrLRe0TrPWhuJnOXCDa-FmzMhK7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-21_01,2022-12-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=522 bulkscore=0 adultscore=0
- spamscore=0 suspectscore=0 malwarescore=0 impostorscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212210038
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
 
-On 12/13/2022 8:39 PM, Greg KH wrote:
-> On Tue, Dec 13, 2022 at 07:12:10PM +0530, Jishnu Prakash wrote:
->> Hi Greg
-> 
-> Hi, please do not top-post :(
-> 
->> These are two SPMI drivers without remove callbacks defined:
+On 20/12/22 16:20, Krzysztof Kozlowski wrote:
+> On 20/12/2022 11:12, Bhavya Kapoor wrote:
+>> J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
+>> for 8 channel ADCs for J721s2 SoC.
 >>
->> drivers/mfd/qcom-spmi-pmic.c
->> drivers/mfd/hi6421-spmi-pmic.c
-> 
-> Great, they should be fixed up now, right?
-> 
+>> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+>> ---
+>>   .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
+>>   .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 42 ++++++++++++++++++-
+>>   2 files changed, 55 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+>> index a7aa6cf08acd..67593aa69327 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+>> @@ -309,3 +309,17 @@ &mcu_mcan1 {
+>>   	pinctrl-0 = <&mcu_mcan1_pins_default>;
+>>   	phys = <&transceiver2>;
+>>   };
+>> +
+>> +&tscadc0 {
+>> +	status = "okay";
+>> +	adc {
+>> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
+>> +	};
+>> +};
+>> +
+>> +&tscadc1 {
+>> +	status = "okay";
+>> +	adc {
+>> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
+>> +	};
+>> +};
+>> \ No newline at end of file
+> This is a friendly reminder during the review process.
+>
+> It seems my previous comments were not fully addressed. Maybe my
+> feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all
+> requested changes or keep discussing them.
+>
+> Thank you.
+>
+> Best regards,
+> Krzysztof
 
-Our QCOM SPMI PMIC driver allocates resources in its probe using only 
-devm_() APIs and does not require any other cleanup. It doesn't seem 
-right to add an empty remove callback to it just to avoid this crash, it
-seems the better solution architecturally is to call the remove function 
-only if it's defined.
+Hi , I thought i did addressed the feedback since tscadc is just a 
+wrapper node.
 
-In addition, I could see that other buses like PCI and AMBA do check for 
-the remove API being defined for their drivers before calling it:
-
-AMBA example: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/amba/bus.c#n328
-
-PCI example: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/pci-driver.c#n474
-
-
->> We made this change after noticing an issue internally with the first one
->> above, there was a crash when trying to remove it with rmmod, which is fixed
->> by this change.
-> 
-> Then please say that in the changelog text, otherwise we have no idea
-> _why_ this is needed.  All you said was "add this new check _IF_" and we
-> have no idea what the answer to "if" is :(
-> 
-
-I have uploaded the change with an updated title and commit text, can 
-you please have a look?
-
-> thanks,
-> 
-> greg k-h
-Thanks,
-Jishnu
+The actual adc node is inside of tscadc node.
