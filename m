@@ -2,66 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1EB653448
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4572653446
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234010AbiLUQpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 11:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
+        id S234677AbiLUQoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 11:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbiLUQpD (ORCPT
+        with ESMTP id S234674AbiLUQoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 11:45:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00181248C9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:44:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671641056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mQSSP2hgK7QhzoTBEOr4tLIKUv+ZUyOrvkmMLjF5JNQ=;
-        b=eVopJpVqTWkhOW51ew/Zd2zqX71hJiti/1zr9RJliSKneifZViXSIWjFDNhXSpy5VcWQKk
-        OPH4kWU/06wQBVbZrwiEFVs74Rn0tzH3ML2GZFjAj6IZRzPJAlXe4PBpDiOOFQdx/8ZCIj
-        Id+cT0JKma55jC8B369EOTNtRM3czj4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-261-aF8S0HHYNqGhf_-bXwlfng-1; Wed, 21 Dec 2022 11:44:10 -0500
-X-MC-Unique: aF8S0HHYNqGhf_-bXwlfng-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D6601818E46;
-        Wed, 21 Dec 2022 16:44:01 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 11900112132D;
-        Wed, 21 Dec 2022 16:43:59 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <0000000000002b4a9f05ef2b616f@google.com>
-References: <0000000000002b4a9f05ef2b616f@google.com>
-To:     syzbot <syzbot+c22650d2844392afdcfd@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] kernel BUG in rxrpc_put_peer
+        Wed, 21 Dec 2022 11:44:15 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA8C248CB;
+        Wed, 21 Dec 2022 08:44:11 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id x11so513240lfn.0;
+        Wed, 21 Dec 2022 08:44:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V1GxVlFtu0zCkDwe7OA4gE30k4+6vDGKypeT2LbMmpY=;
+        b=ohLeKa4fWkqEflcAjGdhW0fc9PIllRxRoAK6t2D8h9ZtsESxHGlRCTGEwQfA4URDZi
+         GW5vtWM3dCIdYbM8QfULNCWgJmcA8lIByKbsJDsv/p2BU7qkI/mzS/kgQ/ZqzdNW5edm
+         jSSh02un1IgbrC/LHsbMKVR/Ab43Z5qSd2FpEGsZJ3iG8g0s70lTmhgADPGUzprPHtfa
+         CMt2hoLWRYaSYyCREVyQmUlqmUH9o4k+fboqNEvMintawy+IY166zU3Bk7XEVi9tiI36
+         b0DmlCmxY2MozgfFUfvJmwbA4QSA9k9whl8enTpnzwKWxBtXxTg6wS/l5+CmxMIHSuXw
+         6xrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V1GxVlFtu0zCkDwe7OA4gE30k4+6vDGKypeT2LbMmpY=;
+        b=U+dvNHDFdkMpVvzg5feaNb7AMTAFbIVzN9wgCemanmL+rWP1b/FMb5T84fkiXUvaLu
+         Ikj/Ucye4CzSkZ7clmawaua2qJ+Iw17yJOgVFx3qRE+8mwPHPVGnmr06b2BLiEhUlgjX
+         fwHYdiEIrvagmQ8Ms6/Aa1DUg8Tj4+SOHT7wPCt4GKBucwhtLPmsuaHnnFiEb/PtR4Lx
+         isWfmc8TMkcXmQYQw9YOrrj6VC6pwzn9R8XXPZeAkhYGF7n90kO5DO/Z1BclDTA0q5rF
+         aBUaiOFEPLnJDjrYnNBdiZHwe+AB8SBCSd1s3r8kzAuqwD/Va38XnkZl6f6350y0o2BD
+         R02Q==
+X-Gm-Message-State: AFqh2kpU+sqgE86cZmUVXfwT05pKHSHELzsHrIRVM8gikWhTGrI+scMh
+        aPPi3fVGOWykHMViDFQAh5Q=
+X-Google-Smtp-Source: AMrXdXuhxpnbu3WNSK/2fBzR2ROsxfxciQceZtoHHQ/NorD7dRS7cd1FyIECjUesI2KCr2l9BxDb5A==
+X-Received: by 2002:a19:6508:0:b0:4bc:8c94:82f7 with SMTP id z8-20020a196508000000b004bc8c9482f7mr706475lfb.13.1671641049928;
+        Wed, 21 Dec 2022 08:44:09 -0800 (PST)
+Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
+        by smtp.googlemail.com with ESMTPSA id s21-20020a195e15000000b004b575d239besm1893177lfb.237.2022.12.21.08.44.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 08:44:09 -0800 (PST)
+Message-ID: <98b5a73d-be59-457f-e7ce-71cfbbdd025f@gmail.com>
+Date:   Wed, 21 Dec 2022 19:44:02 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2062618.1671641039.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 21 Dec 2022 16:43:59 +0000
-Message-ID: <2062619.1671641039@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
+ scaling in Tegra234
+Content-Language: en-US
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
+        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
+        bbasu@nvidia.com
+References: <20221220160240.27494-1-sumitg@nvidia.com>
+ <20221220160240.27494-2-sumitg@nvidia.com>
+ <f4e05666-d094-18cf-2641-ebf92da85dc8@gmail.com>
+ <221c1bab-8f4d-9dbb-bb12-4f7ab5dc5d90@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <221c1bab-8f4d-9dbb-bb12-4f7ab5dc5d90@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,6 +84,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-=
-fs.git/ 97f46a2a6f87e97634b3179190dbb5d947f03bd6
+21.12.2022 11:05, Sumit Gupta пишет:
+> On 20/12/22 23:37, Dmitry Osipenko wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> 20.12.2022 19:02, Sumit Gupta пишет:
+>>> +#ifndef MEMORY_TEGRA_ICC_H
+>>> +#define MEMORY_TEGRA_ICC_H
+>>> +
+>>> +enum tegra_icc_client_type {
+>>> +     TEGRA_ICC_NONE,
+>>> +     TEGRA_ICC_NISO,
+>>> +     TEGRA_ICC_ISO_DISPLAY,
+>>> +     TEGRA_ICC_ISO_VI,
+>>> +     TEGRA_ICC_ISO_AUDIO,
+>>> +     TEGRA_ICC_ISO_VIFAL,
+>>> +};
+>>
+>> You using only TEGRA_ICC_NISO and !TEGRA_ICC_NISO in the code.
+>>
+>> include/soc/tegra/mc.h defines TAG_DEFAULT/ISO, please drop all these
+>> duplicated and unused "types" unless there is a good reason to keep them
+>>
+> 
+> These type are used while defining clients in "tegra234_mc_clients[]"
+> and its passed to BPMP-FW which has handling for each client type.
+
+The type should be based on the ICC tag, IMO. AFAICS, type isn't fixed
+in FW and you can set both ISO and NISO BW, hence it's up to a device
+driver to select the appropriate tag.
 
