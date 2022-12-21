@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BA1652B1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 02:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 609D3652B20
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 02:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbiLUBsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 20:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
+        id S234091AbiLUB6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 20:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiLUBsx (ORCPT
+        with ESMTP id S229899AbiLUB6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 20:48:53 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5FD1A38B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 17:48:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671587332; x=1703123332;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=saA6yNu5Ageeoss/mZtX0ds4Mj5RDpNf2Va/EUNjVGU=;
-  b=cw/09BjDCDtJKkQ15ewGX2dtlut28rHoiNZYimZSGJrgbTAzA73jpm4I
-   rLT5Har3rN+4SpKHFdhXLypl9CwG59xV51K/Uxrw98z93BoA1iSPiq7xC
-   KxOwflSbtjJQhLyOKtDSD+mFAlDhlIUcA20/S4iRqnmHqF7uasX/dtRgM
-   PEG7edMYsr9MpZED/iFR+dc1tup8JTZk1FFRAK6D1v9RWiBHGOtXwL91N
-   TmSvGKAosRCfpU4bf2xpcKU4+RlQKa8hjBS8tinFxuxkkegwpVVSDfhxi
-   mzg1MnSDu2vLLSBpK5WE6RN3SWyYJACgDKMKyrdiNoYNVZigi08Nr1A4n
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="318462858"
-X-IronPort-AV: E=Sophos;i="5.96,261,1665471600"; 
-   d="scan'208";a="318462858"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 17:48:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="739984976"
-X-IronPort-AV: E=Sophos;i="5.96,261,1665471600"; 
-   d="scan'208";a="739984976"
-Received: from xpf.sh.intel.com ([10.239.182.130])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Dec 2022 17:48:50 -0800
-From:   Pengfei Xu <pengfei.xu@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Pengfei Xu <pengfei.xu@intel.com>,
-        Mehta Sohil <sohil.mehta@intel.com>, kevin.tian@intel.com,
-        seanjc@google.com
-Subject: [PATCH v2 1/1] x86/fpu: Fix the "Block comments should align the * on each line" WARNING from checkpatch
-Date:   Wed, 21 Dec 2022 09:49:41 +0800
-Message-Id: <57144fd558233e24729420f5c34c78d039108bf0.1671587242.git.pengfei.xu@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1671587242.git.pengfei.xu@intel.com>
-References: <cover.1671587242.git.pengfei.xu@intel.com>
+        Tue, 20 Dec 2022 20:58:40 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB257DFE;
+        Tue, 20 Dec 2022 17:58:37 -0800 (PST)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NcGj70KtgzHqYZ;
+        Wed, 21 Dec 2022 09:54:51 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.24) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 21 Dec 2022 09:58:36 +0800
+From:   Xingui Yang <yangxingui@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <john.g.garry@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
+        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>
+Subject: [PATCH v2] scsi: libsas: Fix did not grab the ata port lock in sas_ata_device_link_abort()
+Date:   Wed, 21 Dec 2022 01:52:03 +0000
+Message-ID: <20221221015203.46367-1-yangxingui@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit fixes the following WARNING from checkpatch:
-"
-WARNING: Block comments should align the * on each line
-Line 273: FILE: /home/code/lkml/arch/x86/kernel/fpu/core.c:273:
-+/*
-+  * fpu_enable_guest_xfd_features - Check xfeatures against guest perm and enable
-"
+Grab the ata port lock in sas_ata_device_link_abort() before calling
+ata_link_abort(), as the comment in ata_link_abort() mentions.
 
-Fixes: 0781d60f658e2 ("x86/fpu: Provide fpu_enable_guest_xfd_features() for KVM")
-Signed-off-by: Pengfei Xu <pengfei.xu@intel.com>
+Fixes: 44112922674b ("scsi: libsas: Add sas_ata_device_link_abort()")
+Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+Reviewed-by: John Garry <john.g.garry@oracle.com>
 ---
- arch/x86/kernel/fpu/core.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Changes to v1:
+- Add a fixes tag
+- Update commit message
+---
+ drivers/scsi/libsas/sas_ata.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index d00db56a8868..cc7bab92c4c1 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -270,14 +270,14 @@ void fpu_free_guest_fpstate(struct fpu_guest *gfpu)
- EXPORT_SYMBOL_GPL(fpu_free_guest_fpstate);
- 
- /*
--  * fpu_enable_guest_xfd_features - Check xfeatures against guest perm and enable
--  * @guest_fpu:         Pointer to the guest FPU container
--  * @xfeatures:         Features requested by guest CPUID
--  *
--  * Enable all dynamic xfeatures according to guest perm and requested CPUID.
--  *
--  * Return: 0 on success, error code otherwise
--  */
-+ * fpu_enable_guest_xfd_features - Check xfeatures against guest perm and enable
-+ * @guest_fpu:         Pointer to the guest FPU container
-+ * @xfeatures:         Features requested by guest CPUID
-+ *
-+ * Enable all dynamic xfeatures according to guest perm and requested CPUID.
-+ *
-+ * Return: 0 on success, error code otherwise
-+ */
- int fpu_enable_guest_xfd_features(struct fpu_guest *guest_fpu, u64 xfeatures)
+diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+index f7439bf9cdc6..4f2017b21e6d 100644
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -889,7 +889,9 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
  {
- 	lockdep_assert_preemption_enabled();
+ 	struct ata_port *ap = device->sata_dev.ap;
+ 	struct ata_link *link = &ap->link;
++	unsigned long flags;
+ 
++	spin_lock_irqsave(ap->lock, flags);
+ 	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY; /* tf status */
+ 	device->sata_dev.fis[3] = ATA_ABORTED; /* tf error */
+ 
+@@ -897,6 +899,7 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
+ 	if (force_reset)
+ 		link->eh_info.action |= ATA_EH_RESET;
+ 	ata_link_abort(link);
++	spin_unlock_irqrestore(ap->lock, flags);
+ }
+ EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
+ 
 -- 
-2.31.1
+2.17.1
 
