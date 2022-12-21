@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCC36537C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D5A6537CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbiLUUsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 15:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
+        id S230514AbiLUUvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 15:51:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiLUUss (ORCPT
+        with ESMTP id S229601AbiLUUvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 15:48:48 -0500
+        Wed, 21 Dec 2022 15:51:04 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8138B1A822;
-        Wed, 21 Dec 2022 12:48:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587F81A805;
+        Wed, 21 Dec 2022 12:51:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DCA460CBB;
-        Wed, 21 Dec 2022 20:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB2A8C433D2;
-        Wed, 21 Dec 2022 20:48:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5CB360C98;
+        Wed, 21 Dec 2022 20:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0257C433F0;
+        Wed, 21 Dec 2022 20:51:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671655726;
-        bh=V20cak5a7oCUhu/ElPJQDWDEPcrzF+kUY7ml3BOPRAA=;
+        s=k20201202; t=1671655862;
+        bh=XwvgmsAZzTsYMdW54Yg4aAguQi6qndDU8Dy5H3GxjRA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ugzfuQ/F8El0jwSlwYMle/yRAjDhWVugkamPioI3pUY+8UDkXBGc1PHBwn8DGQkiv
-         IGRQdriSNr3uGD9Ra03+7w75b6rRHNUSxRCD1N3Womaolj2G7ePA+z2/+YI6XaA038
-         dsaLm+ie15QOiyOS3pJe8Jg3FR4zF+ya0zTgHOiD7MuP0XLvhw89RIC75wVV9pWdbf
-         jRRXfZYGifZfd+IMnojvmz5kzGVG4J9guOfY4ep/o/vKfNfIRKcUFpeIobehqrSXp1
-         svckhF3Mu4pRx6vuFsEYboC9GspJv7a9W5o3/1sVPpOlDoGHkl8XOjHvwTBloaMKtP
-         ijFjIzlG7t9wg==
-Date:   Wed, 21 Dec 2022 12:48:44 -0800
+        b=WlmhjcwDXxX3t7g5+nQi2Re9d4MqXg90gl/Bz3AZbe5aOmc4FmnZsc5KOqMYbtkqr
+         sqLHcl1cFNk/+wRTiHG2OVoRjvGiZm56bthn/H7jSahErdR8ICOWuOlBlQjBpDlshq
+         +fgnF+QUEge5MGUY+iosM00NP+FOhV2RTWYirmi8fIUf80qUS9wCFrVy/C69eMlwYg
+         R/qiH44YKoXRlOHMnN1t6fwgi/GRWpePY9aTmuZgXoZzfKp0acoQCjT8isvKCHecNT
+         C4sQ3BAg1keAUWjEBv45oJ/eppkpfgO972gyN/vZdOpiKg70GEU3l1EJETj9IQQ5ld
+         g1+99RJ6CMoQw==
+Date:   Wed, 21 Dec 2022 12:51:00 -0800
 From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v12 0/6] implement getrandom() in vDSO
-Message-ID: <Y6NxLCyk6XVJu2iM@sol.localdomain>
-References: <20221212185347.1286824-1-Jason@zx2c4.com>
- <86cfa465-2485-ff24-16f5-9014e25a0e98@csgroup.eu>
- <Y6IXWltScF2CI1v3@gmail.com>
- <Y6MXbTAHBSR5WBrU@zx2c4.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] KEYS: asymmetric: Copy sig and digest in
+ public_key_verify_signature()
+Message-ID: <Y6NxtH41JNMy3NOl@sol.localdomain>
+References: <20221221103710.2540276-1-roberto.sassu@huaweicloud.com>
+ <20221221103710.2540276-2-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y6MXbTAHBSR5WBrU@zx2c4.com>
+In-Reply-To: <20221221103710.2540276-2-roberto.sassu@huaweicloud.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,42 +61,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 03:25:49PM +0100, Jason A. Donenfeld wrote:
-> On Tue, Dec 20, 2022 at 08:13:14PM +0000, Eric Biggers wrote:
-> > On Tue, Dec 20, 2022 at 05:17:52PM +0000, Christophe Leroy wrote:
-> > > Hi Jason,
-> > > 
-> > > Le 12/12/2022 à 19:53, Jason A. Donenfeld a écrit :
-> > > > Changes v11->v12:
-> > > > ----------------
-> > > > - In order to avoid mlock()ing pages, and the related rlimit and fork
-> > > >    inheritance issues there, Introduce VM_DROPPABLE to prevent swapping
-> > > >    while meeting the cache-like requirements of vDSO getrandom().
-> > > > 
-> > > >    This has some tenticles in mm/ and arch/x86/ code, so I've marked the
-> > > >    two patches for that as still RFC, while the rest of the series is not
-> > > >    RFC.
-> > > > 
-> > > > - Mandate that opaque state blobs don't straddle page boundaries, so
-> > > >    that VM_DROPPABLE can work on page-level granularity rather than
-> > > >    allocation-level granularity.
-> > > > 
-> > > > - Add compiler barriers to vDSO getrandom() to prevent theoretical
-> > > >    reordering potential.
-> > > > 
-> > > > - Initialize the trials loop counter in the chacha test.
-> > > 
-> > > I would have liked to give it a try on powerpc, but the series 
-> > > conflicts. I tried both on v6.1 and on linus/master from now:
-> > > 
-> > 
-> > Same here, I can't figure out how to apply this series.
-> 
-> Rebased v13 posted: https://lore.kernel.org/all/20221221142327.126451-1-Jason@zx2c4.com/
-> 
+On Wed, Dec 21, 2022 at 11:37:10AM +0100, Roberto Sassu wrote:
+> +	sg_init_table(&src_sg, 1);
+> +	sg_set_buf(&src_sg, buf, sig->s_size + sig->digest_size);
 
-Thanks, it is always good to give the *actual* base commit though, preferably
-with the --base option to git format-patch.  "Latest random.git master branch"
-changes over time.
+The above two function calls should be replaced with sg_init_one().
 
 - Eric
