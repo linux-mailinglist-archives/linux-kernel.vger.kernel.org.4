@@ -2,131 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909A2652CFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F3C652D05
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiLUGnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 01:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
+        id S232813AbiLUGrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 01:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLUGnD (ORCPT
+        with ESMTP id S233321AbiLUGq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 01:43:03 -0500
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2521EC71;
-        Tue, 20 Dec 2022 22:43:03 -0800 (PST)
-Received: by mail-ej1-f47.google.com with SMTP id t17so34601198eju.1;
-        Tue, 20 Dec 2022 22:43:03 -0800 (PST)
+        Wed, 21 Dec 2022 01:46:57 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A081D336
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:46:56 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id jo4so25640360ejb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:46:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iAVMql90nO7ZkFcVgMNu6fVpAbtsWgSiB+5IHPtWWmc=;
+        b=LAn8A6q3x/FxImTU7EI//vFipPthxtzU9CCh1UlabVwIoxxqd3FVtp9nlPG3NakRLN
+         SYvnKRpPj9rPDJmzRpl2ABWyyAaD8IfdvokDJ9iRekjZOeaVZXE4998zBRpntD0xTo0t
+         zWLJ+Yz02YTk8MXQhIRPIuphm3zS3fu2TuR/GnM4DQHuxBe6iUVQWNe6FuFiwyoYqyA3
+         5iwNSTJxIaWxf1STTVWEShE9l4tdC+y+yWEOZlJnc2vg8AikhmA3K/6jdaJmkn4OZ6Si
+         Tcu3ccyDyds681GzjwZUE4PXEs52QbeiKfsux2FN/Lsy2UN1gVARItqg+CM37mxV/3Cq
+         Rd2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:sender:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yjzr2jj1F2kUgdqS5ZAf0La7bwTeae6U6bnTXat2Gng=;
-        b=NrXVXGDNE3SrlrP5cbAS+yTpW0xynF5pw6/Ye1r2o0McIxx0/iuwN0yxKZ+EwPQuug
-         FgxpXM4QnpwMyem1qL7tvfKCBrf54X6GvOj330uO7zouhKHqobhKhOT/PPVnV4Dnhyb9
-         KQs1PsxWIuNlCSBDDbWDFtNUcYTzpH//9wST1hXD61thL09xFftBJdTUZ4MH+XVzgbzl
-         RzQDuNJ0/hPaUQJjaVHgKcKrC6sv8vwEnavQDmRj7aaN0ywpnXimD+P76C4CgF6k3rRv
-         pjHIAYsjaZaNTXYgE+2FZDj/eeYMFF4TSRb1lZZhnAB9NW0708KEdRUUsoN5x9c6mfCe
-         Bwqg==
-X-Gm-Message-State: AFqh2krj27jttpRJ/En2kdVNAIdjlIZFhYNKPA/5zpa7cbNay8R8dtNb
-        cBXAphchFloDxuLiCRp0rCc=
-X-Google-Smtp-Source: AMrXdXsKosegsCsvCaudEEkSExyo6mbVSIR4td0ECmmc5bBEC8JdVNAhi4M4j17w0VEGOomIjpwoBA==
-X-Received: by 2002:a17:907:d302:b0:7c1:3472:5e75 with SMTP id vg2-20020a170907d30200b007c134725e75mr483043ejc.29.1671604981642;
-        Tue, 20 Dec 2022 22:43:01 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id e27-20020a170906315b00b007c10d47e748sm6591266eje.36.2022.12.20.22.43.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 22:43:01 -0800 (PST)
-Message-ID: <b21a17c7-df9c-ce20-f986-8f093a33278c@kernel.org>
-Date:   Wed, 21 Dec 2022 07:43:00 +0100
+        bh=iAVMql90nO7ZkFcVgMNu6fVpAbtsWgSiB+5IHPtWWmc=;
+        b=Tejm+EmRE1q0HGOeODmyCNomBhf3qlXG8bfKFL9oE7ecGwev+mJfig5e5hlBnWkGAx
+         ngCwhzKJnS7LJ7GRns9Jenr6AUFm9yWGJ4JkdW3G/5dfVUVNn2SXw30lHo9EBN6ANxlV
+         rmsoz93wsBx6P/puILkZnM3e4Z/Hhg3TGAMGY+re9T8xmuA92bQbft4xaRLSdKItBwz/
+         rvaVvT4MlEfVfYZ4dHkCJwoHB5jUy9BinI8T4L8+b0/vDyyqLTyBOH4Z3uKSgr23Rwat
+         TOYZrApbnapyJ8DuYQB/XOvdI+CnjyyIqtRwPQqrBh64pQUuSoox+S+Dsua1uBWIADJL
+         jTFg==
+X-Gm-Message-State: AFqh2krZBMxtwekJ36OHQm839ukQehkpBZGnLAr8tf4GccGm7lCsOger
+        CgpVa9wYwVeggfviM7skhgZjP2qWVu2uyPWFFsw=
+X-Google-Smtp-Source: AMrXdXsy6U3KyN+8+jn5v2xOSWzTtJPiz6KIbtFyXTms7FfdcTs+5eU99zz8pSApZy3b2GiXX5eKzmcSV01kukO30eA=
+X-Received: by 2002:a17:906:4f12:b0:77f:9082:73c7 with SMTP id
+ t18-20020a1709064f1200b0077f908273c7mr23621eju.517.1671605215225; Tue, 20 Dec
+ 2022 22:46:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-References: <20221220161530.2098299-1-krzysztof.kozlowski@linaro.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH] tty: serial: qcom-geni-serial: fix slab-out-of-bounds on
- RX FIFO buffer
-In-Reply-To: <20221220161530.2098299-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: goodw771@gmail.com
+Received: by 2002:a05:640c:1a0c:b0:189:ab5b:3d94 with HTTP; Tue, 20 Dec 2022
+ 22:46:54 -0800 (PST)
+From:   H mimi m <mimih6474@gmail.com>
+Date:   Wed, 21 Dec 2022 06:46:54 +0000
+X-Google-Sender-Auth: dp3PlfOk9U9aB-AeJyV_-nRkJqE
+Message-ID: <CAM0SVCachfT5FX0dTme0mFfAEGeXC1yPbUMeHuzq7sj2VTQ-dw@mail.gmail.com>
+Subject: REPLY ME
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20. 12. 22, 17:15, Krzysztof Kozlowski wrote:
-> Driver's probe allocates memory for RX FIFO (port->rx_fifo) based on
-> default RX FIFO depth, e.g. 16.  Later during serial startup the
-> qcom_geni_serial_port_setup() updates the RX FIFO depth
-> (port->rx_fifo_depth) to match real device capabilities, e.g. to 32.
-...
-> If the RX FIFO depth changes after probe, be sure to resize the buffer.
-> 
-> Fixes: f9d690b6ece7 ("tty: serial: qcom_geni_serial: Allocate port->rx_fifo buffer in probe")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-
-This patch LGTM, I only wonder:
-
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -864,9 +864,10 @@ static irqreturn_t qcom_geni_serial_isr(int isr, void *dev)
->   	return IRQ_HANDLED;
->   }
->   
-> -static void get_tx_fifo_size(struct qcom_geni_serial_port *port)
-> +static int get_tx_fifo_size(struct qcom_geni_serial_port *port)
-
-... why is this function dubbed get_tx_fifo_size(), provided it handles 
-rx fifo too? And it does not "get" the tx fifo size. In fact, the 
-function sets that :).
-
->   {
->   	struct uart_port *uport;
-> +	u32 old_rx_fifo_depth = port->rx_fifo_depth;
->   
->   	uport = &port->uport;
->   	port->tx_fifo_depth = geni_se_get_tx_fifo_depth(&port->se);
-> @@ -874,6 +875,16 @@ static void get_tx_fifo_size(struct qcom_geni_serial_port *port)
->   	port->rx_fifo_depth = geni_se_get_rx_fifo_depth(&port->se);
->   	uport->fifosize =
->   		(port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
-> +
-> +	if (port->rx_fifo && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
-> +		port->rx_fifo = devm_krealloc(uport->dev, port->rx_fifo,
-> +					      port->rx_fifo_depth * sizeof(u32),
-> +					      GFP_KERNEL);
-
-And now it even allocates memory.
-
-So more appropriate name should be setup_fifos() or similar.
-
-> +		if (!port->rx_fifo)
-> +			return -ENOMEM;
-> +	}
-> +
-> +	return 0;
-
-
--- 
-js
-suse labs
-
+i am Mrs Mimi Hassan Abdul Mohammad and i was diagnosed with cancer
+about 2 years
+ago,before i go for a surgery  i  have to do this,so  If you are
+interested to use the sum of US17.3Million)to help Poor,
+Less-privileged and  ORPHANAGES and invest  in your country, get back
+to me for more information on how you can  contact the COMPANY in
+Ouagadougou Burkina Faso). for where the fund is
+Warm Regards,
+Mrs Mimi Hassan Abdul Mohammad
