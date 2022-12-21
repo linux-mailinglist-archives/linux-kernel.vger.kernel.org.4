@@ -2,204 +2,401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962B5652BF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B2C652BF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 04:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbiLUDvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 22:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S234143AbiLUDza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 22:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiLUDvv (ORCPT
+        with ESMTP id S229652AbiLUDz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 22:51:51 -0500
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409FF1CFDE;
-        Tue, 20 Dec 2022 19:51:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1671594709;
-        bh=AJdVhqN3gg7ANzTOKJ6n8INFL0UmXnPWOux3e6+8cwQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hzKv3bgTs3+oE+9YYqC3poj9l6mcQ0vMmcY7AmglRGR48ztgtRWIApMV2se3pJd+7
-         cg7VrWSs0OA+wm760g5oWERjRJ0HohBpTb2VL8Z1DsU6U0QozAqSEK/jQaOn3mz85i
-         3HbRPB4Ns2J9LHv7Qqqu3vz8CxePOjI40AQj/DBB5Bs3QNL5QLOVo8khNjGQIOL4/Z
-         f6Ii2Lpus53UVffEWqLfqFPGWt9/N4pXc8turspKCiR/ftKp5A0W+t0Y9+jLWVh1QN
-         ZTnVKioyEg3hrie9EpNAolJsks3iyuV8HwM+gcZ+C0WTaokrn1O4gnoFerpV4r3u4u
-         99cpEsWcj8LNw==
-Received: from [10.1.0.30] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NcKJ52zp1zc07;
-        Tue, 20 Dec 2022 22:51:49 -0500 (EST)
-Message-ID: <d010a8ca-79a4-bd25-dff1-cb7dee627365@efficios.com>
-Date:   Tue, 20 Dec 2022 22:52:14 -0500
+        Tue, 20 Dec 2022 22:55:27 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B521CFDE;
+        Tue, 20 Dec 2022 19:55:25 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id u7so6125490plq.11;
+        Tue, 20 Dec 2022 19:55:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LFqFGsRyelRV58UNu8fUWuvZM10Zq7Vola1fXyGhQeA=;
+        b=ng9yWkuwPkAWeYcD7l17MrG6JNu9W5xx/JGKHtPkAJyzqq1co30tVJKZkT8lAH45tY
+         m01UEwA5lqWiInZXhdLPLvtTgoLQbWl52XaBfAowc+hA5ayYhSK3/xYU0mAb+MfImjvH
+         bo2o45D0KG4I9HGzXWGBySJRgcyKZQeZ5ac8GHiu0bzN+Y8gmfWciM7TPv7EYrKiPpih
+         ibVex1jyCcFTUGUYlmlqJYoxA3mwyPXtsQy5Jk7eeE5aCawPY/oU3f07tpRQDu8nRYga
+         hLdqwXyH7elNntjIZXaYo1Pethgg2R0AFI1wpsFPzf2A5Utv2ZZABqUfGVnOXkdmB8h+
+         UM5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LFqFGsRyelRV58UNu8fUWuvZM10Zq7Vola1fXyGhQeA=;
+        b=EV2WneSnW1WghkuD4WOWgPcWbYCUF3+zQAQN9/qbKOlcT686HJR7RVnmqlwFjK0Pl0
+         aARjzYQdSpHTYTaka/PXpawqfCf26mi4GO/PQGY9GGo2fIpZwodPzcEh/faYbyFBjkzV
+         fDliAnuwQViLkF802EyGLcdqNBOAukb2DzSZb1uLu4kIkgDxzFbF7NsgSJkjuBaAfO33
+         DuXq1Lyq7lxmKel6JE1elL7q2dKMKZf4y+X0f+UYJoVsQv276fXzQquNvUv/4VGAGF4d
+         n+wgOMEzu6lD5unzzEJQp5UFogGwCugT6yMWX6cYYkeT3D0iLifMLIIfUv2TMSG1HobD
+         9jWQ==
+X-Gm-Message-State: AFqh2koi8ugy+0Y3E26+UicBwmsYF2374sQoZVpy6N/VuvuamjQZ0Qc2
+        XRxGZO8vVhZTJ+0ezgaepOc=
+X-Google-Smtp-Source: AMrXdXsckNMQT46A9gL453O+zngVYfXJ8GE6Bd1rKGuXjY4mvzMGDVaBvkEY70f8eu0vM9V4teYhsA==
+X-Received: by 2002:a17:902:f14b:b0:189:b203:9e2f with SMTP id d11-20020a170902f14b00b00189b2039e2fmr359148plb.56.1671594925268;
+        Tue, 20 Dec 2022 19:55:25 -0800 (PST)
+Received: from debian.me (subs28-116-206-12-57.three.co.id. [116.206.12.57])
+        by smtp.gmail.com with ESMTPSA id u18-20020a170903125200b00189651e5c26sm4383363plh.236.2022.12.20.19.55.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 19:55:24 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 8EC76100183; Wed, 21 Dec 2022 10:55:21 +0700 (WIB)
+Date:   Wed, 21 Dec 2022 10:55:21 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Mike Leach <mike.leach@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        acme@kernel.org, james.clark@arm.com,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 6/6] Documentation: coresight: docs for config load
+ via configfs
+Message-ID: <Y6KDqe26J8RyoJIV@debian.me>
+References: <20221219234638.3661-1-mike.leach@linaro.org>
+ <20221219234638.3661-7-mike.leach@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Content-Language: en-US
-To:     Joel Fernandes <joel@joelfernandes.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <7A9876BA-C375-42A7-A5C9-FD940D2898D7@joelfernandes.org>
- <B9B73CDE-4C2C-4BC6-A23C-A59C22AD2EB1@joelfernandes.org>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <B9B73CDE-4C2C-4BC6-A23C-A59C22AD2EB1@joelfernandes.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FyZ000GxMOwUmINe"
+Content-Disposition: inline
+In-Reply-To: <20221219234638.3661-7-mike.leach@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-20 15:55, Joel Fernandes wrote:
-> 
-> 
->> On Dec 20, 2022, at 1:29 PM, Joel Fernandes <joel@joelfernandes.org> wrote:
->>
->> ﻿
->>
->>>> On Dec 20, 2022, at 1:13 PM, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
->>>>
->>>> ﻿On 2022-12-20 13:05, Joel Fernandes wrote:
->>>> Hi Mathieu,
->>>>> On Tue, Dec 20, 2022 at 5:00 PM Mathieu Desnoyers
->>>>> <mathieu.desnoyers@efficios.com> wrote:
->>>>>
->>>>> On 2022-12-19 20:04, Joel Fernandes wrote:
->>>>>>> On Mon, Dec 19, 2022 at 7:55 PM Joel Fernandes <joel@joelfernandes.org> wrote:
->>>> [...]
->>>>>>>> On a 64-bit system, where 64-bit counters are used, AFAIU this need to
->>>>>>>> be exactly 2^64 read-side critical sections.
->>>>>>>
->>>>>>> Yes, but what about 32-bit systems?
->>>>>
->>>>> The overflow indeed happens after 2^32 increments, just like seqlock.
->>>>> The question we need to ask is therefore: if 2^32 is good enough for
->>>>> seqlock, why isn't it good enough for SRCU ?
->>>> I think Paul said wrap around does happen with SRCU on 32-bit but I'll
->>>> let him talk more about it. If 32-bit is good enough, let us also drop
->>>> the size of the counters for 64-bit then?
->>>>>>>> There are other synchronization algorithms such as seqlocks which are
->>>>>>>> quite happy with much less protection against overflow (using a 32-bit
->>>>>>>> counter even on 64-bit architectures).
->>>>>>>
->>>>>>> The seqlock is an interesting point.
->>>>>>>
->>>>>>>> For practical purposes, I suspect this issue is really just theoretical.
->>>>>>>
->>>>>>> I have to ask, what is the benefit of avoiding a flip and scanning
->>>>>>> active readers? Is the issue about grace period delay or performance?
->>>>>>> If so, it might be worth prototyping that approach and measuring using
->>>>>>> rcutorture/rcuscale. If there is significant benefit to current
->>>>>>> approach, then IMO it is worth exploring.
->>>>>
->>>>> The main benefit I expect is improved performance of the grace period
->>>>> implementation in common cases where there are few or no readers
->>>>> present, especially on machines with many cpus.
->>>>>
->>>>> It allows scanning both periods (0/1) for each cpu within the same pass,
->>>>> therefore loading both period's unlock counters sitting in the same
->>>>> cache line at once (improved locality), and then loading both period's
->>>>> lock counters, also sitting in the same cache line.
->>>>>
->>>>> It also allows skipping the period flip entirely if there are no readers
->>>>> present, which is an -arguably- tiny performance improvement as well.
->>>> The issue of counter wrap aside, what if a new reader always shows up
->>>> in the active index being scanned, then can you not delay the GP
->>>> indefinitely? It seems like writer-starvation is possible then (sure
->>>> it is possible also with preemption after reader-index-sampling, but
->>>> scanning active index deliberately will make that worse). Seqlock does
->>>> not have such writer starvation just because the writer does not care
->>>> about what the readers are doing.
->>>
->>> No, it's not possible for "current index" readers to starve the g.p. with the side-rcu scheme, because the initial pass (sampling both periods) only opportunistically skips flipping the period if there happens to be no readers in both periods.
->>>
->>> If there are readers in the "non-current" period, the grace period waits for them.
->>>
->>> If there are readers in the "current" period, it flips the period and then waits for them.
->>
->> Ok glad you already do that, this is what I was sort of leaning at in my previous email as well, that is doing a hybrid approach. Sorry I did not know the details of your side-RCU to know you were already doing something like that.
->>
->>>
->>>> That said, the approach of scanning both counters does seem attractive
->>>> for when there are no readers, for the reasons you mentioned. Maybe a
->>>> heuristic to count the number of readers might help? If we are not
->>>> reader-heavy, then scan both. Otherwise, just scan the inactive ones,
->>>> and also couple that heuristic with the number of CPUs. I am
->>>> interested in working on such a design with you! Let us do it and
->>>> prototype/measure. ;-)
->>>
->>> Considering that it would add extra complexity, I'm unsure what that extra heuristic would improve over just scanning both periods in the first pass.
->>
->> Makes sense, I think you indirectly implement a form of heuristic already by flipping in case scanning both was not fruitful.
->>
->>> I'll be happy to work with you on such a design :) I think we can borrow quite a few concepts from side-rcu for this. Please be aware that my time is limited though, as I'm currently supposed to be on vacation. :)
->>
->> Oh, I was more referring to after the holidays. I am also starting vacation soon and limited In cycles ;-). It is probably better to enjoy the holidays and come back to this after.
->>
->> I do want to finish my memory barrier studies of SRCU over the holidays since I have been deep in the hole with that already. Back to the post flip memory barrier here since I think now even that might not be needed…
-> 
-> In my view,  the mb between the totaling of unlocks and totaling of locks serves as the mb that is required to enforce the GP guarantee, which I think is what Mathieu is referring to.
-> 
 
-No, AFAIU you also need barriers at the beginning and end of synchronize_srcu to provide those guarantees:
+--FyZ000GxMOwUmINe
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  * There are memory-ordering constraints implied by synchronize_srcu().
+On Mon, Dec 19, 2022 at 11:46:38PM +0000, Mike Leach wrote:
+> diff --git a/Documentation/trace/coresight/coresight-config.rst b/Documen=
+tation/trace/coresight/coresight-config.rst
+> index 6d5ffa6f7347..109053eb1b93 100644
+> --- a/Documentation/trace/coresight/coresight-config.rst
+> +++ b/Documentation/trace/coresight/coresight-config.rst
+> @@ -141,11 +141,11 @@ Mount configfs as normal and the 'cs-syscfg' subsys=
+tem will appear::
+>      $ ls /config
+>      cs-syscfg  stp-policy
+> =20
+> -This has two sub-directories::
+> +This has two sub-directories, with the load and unload attribute files::
+> =20
+>      $ cd cs-syscfg/
+>      $ ls
+> -    configurations  features
+> +    configurations features load  unload
+> =20
+>  The system has the configuration 'autofdo' built in. It may be examined =
+as
+>  follows::
+> @@ -278,9 +278,16 @@ Creating and Loading Custom Configurations
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+>  Custom configurations and / or features can be dynamically loaded into t=
+he
+> -system by using a loadable module.
+> +system by using a loadable module, or by loading a binary configuration
+> +file in configfs.
+> =20
+> -An example of a custom configuration is found in ./samples/coresight.
+> +Loaded configurations can use previously loaded features. The system will
+> +ensure that it is not possible to unload a feature that is currently in
+> +use, by enforcing the unload order as the strict reverse of the load ord=
+er.
+> +
+> +
+> +Using a Loadable Module
+> +-----------------------
+> =20
+>  This creates a new configuration that uses the existing built in
+>  strobing feature, but provides a different set of presets.
+> @@ -289,6 +296,187 @@ When the module is loaded, then the configuration a=
+ppears in the configfs
+>  file system and is selectable in the same way as the built in configurat=
+ion
+>  described above.
+> =20
+> -Configurations can use previously loaded features. The system will ensure
+> -that it is not possible to unload a feature that is currently in use, by
+> -enforcing the unload order as the strict reverse of the load order.
+> +The file 'coresight-cfg-sample.c' contains the configuration and module
+> +initialisation code needed to create the loadable module.
+> +
+> +This will be built alongside the kernel modules if select in KConfig.
 
-Need for a barrier at the end of synchronize_srcu():
+What config options (CONFIG_) are required for above to work?
 
-  * On systems with more than one CPU, when synchronize_srcu() returns,
-  * each CPU is guaranteed to have executed a full memory barrier since
-  * the end of its last corresponding SRCU read-side critical section
-  * whose beginning preceded the call to synchronize_srcu().
+> +
+> +An example of a custom configuration module is found in './samples/cores=
+ight'.
+> +
+> +Using a Binary Configuration File
+> +---------------------------------
+> +
+> +The './tools/coresight' directory contains example programs to generate =
+and
+> +read and print binary configuration files.
+> +
+> +Building the tools creates the 'coresight-cfg-file-gen' program that will
+> +generate a configuration binary 'example1.cscfg' that can be loaded into=
+ the
+> +system using configfs. The configuration declared in the source file
+> +'coresight-cfg-example1.c' is named 'autofdo3' - the name that will be u=
+sed
+> +once loaded.
+> +
+> +The source files 'coresight-cfg-bufw.h' and 'coresight-cfg-bufw.c' provi=
+de a
+> +standard function to convert a configuration declared in 'C' into the co=
+rrect
+> +binary buffer format. These files can be re-used to create new custom
+> +configurations. Alternatively, addition examples can be added to the
 
-Need for a barrier at the beginning of synchronize_srcu():
+s/addition/additional/
 
-  * In addition,
-  * each CPU having an SRCU read-side critical section that extends beyond
-  * the return from synchronize_srcu() is guaranteed to have executed a
-  * full memory barrier after the beginning of synchronize_srcu() and before
-  * the beginning of that SRCU read-side critical section.  Note that these
-  * guarantees include CPUs that are offline, idle, or executing in user mode,
-  * as well as CPUs that are executing in the kernel.
+> +'coresight-cfg-file-gen' program::
+> +
+> +    $ ./coresight-cfg-file-gen
+> +    Coresight Configuration file Generator
+> +
+> +    Generating example1 example
+> +    Generating example2 example
+> +
+> +The program 'coresight-cfg-file-read' can read back and print a configur=
+ation
+> +binary. This is built using the file reader from the driver code
+> +(coresight-config-file.c), which is copied over into './tools/coresight'=
+ at
+> +build time.::
+> +
+> +    ./coresight-cfg-file-read example1.cscfg
+> +    CoreSight Configuration file reader
+> +    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +    Configuration 1
+> +    Name:- autofdo3
+> +    Description:-
+> +    Setup ETMs with strobing for autofdo
+> +    Supplied presets allow experimentation with mark-space ratio for var=
+ious loads
+> +
+> +    Uses 1 features:-
+> +    Feature-1: strobing
+> +
+> +    Provides 4 sets of preset values, 2 presets per set
+> +    set[0]: 0x7d0, 0x64,
+> +    set[1]: 0x7d0, 0x3e8,
+> +    set[2]: 0x7d0, 0x1388,
+> +    set[3]: 0x7d0, 0x2710,
+> +
+> +    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +    File contains no features
+> +
+> +There are additional attributes in the cs-syscfg directory - load and
+> +unload that can be used to load and unload configuration binary files. To
+> +load, 'cat' the binary config into the load attribute::
+> +
+> +    $ ls /config/cs-syscfg
+> +    configurations features  load  unload
+> +    $ cat example1.cscfg > /config/cs-syscfg/load
+> +    $ ls /config/cs-syscfg/configurations/
+> +    autofdo  autofdo3
+> +
+> +To unload, use the same file in the unload attribute::
+> +
+> +    $ cat example1.cscfg > /config/cs-syscfg/unload
+> +    ls /config/cs-syscfg/configurations/
+> +    autofdo
+> +
+> +
+> +
+> +Binary Configuration File Format
+> +--------------------------------
+> +
+> +The file format is defined in the source file **coresight-config-file.h**
 
-Thanks,
+Use single-quote for identifier names for consistency here.
 
-Mathieu
+> +
+> +The source reader and generator examples produce a binary of this format.
+> +
+> +This arrangement is reproduced below:-
+> +
+> +Overall File structure
+> +~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +::
+> +
+> +   [cscfg_file_header]   // Mandatory
+> +   [CONFIG_ELEM]*        // Optional - multiple, defined by cscfg_file_h=
+eader.nr_configs
+> +   [FEATURE_ELEM]*       // Optional - multiple, defined by cscfg_file_h=
+eader.nr_features
+> +
+> +File is invalid if both [CONFIG_ELEM] and [FEATURE_ELEM] are omitted.
+> +
+> +A file that contains only [FEATURE_ELEM] may be loaded, and the features=
+ used
+> +by subsequently loaded files with [CONFIG_ELEM] elements.
+> +
+> +Element Name Strings
+> +~~~~~~~~~~~~~~~~~~~~
+> +
+> +Configuration name strings are required to consist of alphanumeric chara=
+cters and '_' only. Other special characters are not permitted.
+> +
+> +::
+> +   my_config_2          // is a valid name.
+> +   this-bad-config#5    // this will not work
 
-> Neeraj, do you agree?
-> 
-> Thanks.
-> 
-> 
-> 
-> 
-> 
->>
->> Cheers,
->>
->> - Joel
->>
->>
->>>
->>> Thanks,
->>>
->>> Mathieu
->>>
->>> -- 
->>> Mathieu Desnoyers
->>> EfficiOS Inc.
->>> https://www.efficios.com
->>>
+Instead of using code-block for name examples, what about "... For
+example, foo_bar is a valid name where as foo-bar# is not."?
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+> +
+> +This is in order to comply with the requirements of the perf command lin=
+e.
+> +
+> +It is recommended that Feature and Parameter names use the same conventi=
+on to allow for future enhancements to the command line syntax.
+> +
+> +CONFIG_ELEM element
+> +~~~~~~~~~~~~~~~~~~~
+> +
+> +::
+> +
+> +   [cscfg_file_elem_header]                // header length value to end=
+ of feature strings.
+> +   [cscfg_file_elem_str]                   // name of the configuration.
+> +                                           // (see element string name r=
+equirements)
+> +   [cscfg_file_elem_str]                   // description of configurati=
+on.
+> +   [u16 value](nr_presets)                 // number of defined sets pre=
+sets values.
+> +   [u32 value](nr_total_params)            // total parameters defined b=
+y all used features.
+> +   [u16 value](nr_feat_refs)               // number of features referen=
+ced by the configuration
+> +   [u64 values] * (nr_presets * nr_total_params)     // the preset value=
+s.
+> +   [cscfg_file_elem_str] * (nr_feat_refs)  // names of features used in =
+the configurations.
+> +
+> +FEATURE_ELEM element
+> +~~~~~~~~~~~~~~~~~~~~
+> +
+> +::
+> +
+> +   [cscfg_file_elem_header]                // header length is total byt=
+es to end of param structures.
+> +   [cscfg_file_elem_str]                   // feature name.
+> +   [cscfg_file_elem_str]                   // feature description.
+> +   [u32 value](match_flags)                // flags to associate the fea=
+ture with a device.
+> +   [u16 value](nr_regs)                    // number of registers.
+> +   [u16 value](nr_params)                  // number of parameters.
+> +   [cscfg_regval_desc struct] * (nr_regs)  // register definitions
+> +   [PARAM_ELEM] * (nr_params)              // parameters definitions
+> +
+> +PARAM_ELEM element
+> +~~~~~~~~~~~~~~~~~~
+> +
+> +::
+> +
+> +   [cscfg_file_elem_str]         // parameter name.
+> +   [u64 value](param_value)      // initial value.
+> +
+> +Additional definitions.
+> +~~~~~~~~~~~~~~~~~~~~~~~
 
+Trim trailing period for section names
+
+> +
+> +The following structures are defined in **coresight-config-file.h**
+> +
+> + * **struct cscfg_file_header** : This structure contains an initial mag=
+ic number, the total
+> +   length of the file, and the number of configurations and features in =
+the file.
+> + * **struct cscfg_file_elem_header**: This defines the total length and =
+type of a CONFIG_ELEM
+> +   or a FEATURE_ELEM.
+> + * **struct cscfg_file_elem_str**: This defines a string and its length.
+
+Again, for consistency, wrap identifier names in single-quotes.
+
+> +
+> +The magic number in cscfg_file_header is defined as two bitfields::
+> +
+> +   [31:8] Fixed magic number to identify file type.
+> +   [7:0]  Current file format version.
+> +
+> +The following defines determine the maximum overall file size and maximu=
+m individual
+> +string size::
+> +
+> +   CSCFG_FILE_MAXSIZE       // maximum overall file size.
+> +   CSCFG_FILE_STR_MAXSIZE   // maximum individual string size.
+
+For parameter lists in elements, use bullet lists instead.
+
+> +
+> +Load Dependencies.
+> +~~~~~~~~~~~~~~~~~~
+
+Trim trailing period for section names.
+> +
+> +Files may be unloaded only in the strict reverse order of loading. This =
+is enforced by the
+> +configuration system.
+> +
+> +This is to ensure that any load dependencies are maintained.
+> +
+> +A configuration file that contains a CONFIG_ELEM that references named f=
+eatures "feat_A" and "feat_B" will load only if either:-
+> +a) "feat_A" and/or "feat_B" has been loaded previously, or are present a=
+s built-in / module loaded features.
+> +b) "feat_A" and/or "feat_B" are declared as FEAT_ELEM in the same file a=
+s the CONFIG_ELEM.
+
+Separate the preceding paragraph and the list with a blank line in order
+for the list to be rendered as list.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--FyZ000GxMOwUmINe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY6KDowAKCRD2uYlJVVFO
+o9PrAQCKIWF+ulp0vCakhJ7l3aHILy4sSDT4w5GSUA89FFmwfwD+Kwj4HqGhZJ1j
+gB1KE9nt45jeT6c85kqXXyjifLzfMww=
+=8h8k
+-----END PGP SIGNATURE-----
+
+--FyZ000GxMOwUmINe--
