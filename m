@@ -2,122 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745D36534FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:21:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF366534FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiLURVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:21:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S234948AbiLURVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234958AbiLURUb (ORCPT
+        with ESMTP id S234953AbiLURU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:20:31 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7732B4B;
-        Wed, 21 Dec 2022 09:19:25 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id k7-20020a056830168700b0067832816190so4575513otr.1;
-        Wed, 21 Dec 2022 09:19:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I3f0UiW+/YoUBXR0TYEPPrtQ962Pvq8PyjcKApLuolY=;
-        b=S4JDz4fwJKnV0j2t+m3muAgfmV/i9v941+5H/WJccBUYbdnIgsgPX1hsplf1lkWywn
-         LPmwsR7CREX8GM2K+FgIWNqn2RPJeUWoRfvoUZA9KgsCHYUb2OHx47O/Yr/+zO3V8fvW
-         e9+is3kGg7xnW5j56R/KzPqFMy7sqXpaAgbT+KFGkNVA9xzWWZUWE5nnXvl2vrZ0OcuE
-         qhfq5HGatwlHJs/MMATO0vpWXoHI0A7mmg0mB+DcJ1I87EbHZu3srhnDjNFExkEYVzGJ
-         BxxYjI5nbfyBLmrnJo204A7t446z1aPtQd2Bt5gQakxLLM0B2bcpMZkFe6OUwvvP4uqI
-         vi2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I3f0UiW+/YoUBXR0TYEPPrtQ962Pvq8PyjcKApLuolY=;
-        b=LRJ38qPI4peWMAKanj8fLowA/Csbmk7wAQSw+STV0XckZim0TAV3OJWqy9ocKfDIfh
-         AZ0VhHAyIuuoHiJbkbi7Z5jkeESubp8paxCipiopl2xy2Xhr1rX0BnWFvsbFSLHMd4HR
-         8PsoEmm5a4GvOJedV21ubJ2ojaHSiKcdU0AByU/L1xPteSWdB24LAdm/1G/zQk7I5iJj
-         93vnFMuDzL8W3hGp6W0JLvHf1o88zDrYA7PygaG2LGRqmvWEa/ejtBsdm7U4HBax2vbF
-         G7NzFrOPOzvHsHZB9WAKmsukEWGvd/jnbjLEF4BLdMeX6t63uqzofkjjPr2eoQmMv6G8
-         EhsA==
-X-Gm-Message-State: AFqh2koE00JRPy/cD55nXLMrd1OsXYhWztot6Uhs82TpC1N8C+/BjUKP
-        /ph0Us/jzJxehoeQD4tXGic=
-X-Google-Smtp-Source: AMrXdXv3pz+hJczk8WjDAV1ETvQ0uIZOdEC7sf8fk6L8WyKCM6qdlf4HmLrabf51xN28VtW9sKIJww==
-X-Received: by 2002:a9d:6a11:0:b0:670:8270:1290 with SMTP id g17-20020a9d6a11000000b0067082701290mr1201996otn.38.1671643165022;
-        Wed, 21 Dec 2022 09:19:25 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v17-20020a0568301bd100b0067c87f23476sm1074448ota.57.2022.12.21.09.19.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 09:19:24 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 21 Dec 2022 09:19:22 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-Message-ID: <20221221171922.GA2470607@roeck-us.net>
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
- <20221019203034.3795710-1-Jason@zx2c4.com>
- <20221221145332.GA2399037@roeck-us.net>
- <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
- <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
- <20221221155641.GB2468105@roeck-us.net>
- <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
+        Wed, 21 Dec 2022 12:20:57 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C5A26481;
+        Wed, 21 Dec 2022 09:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1671643209;
+        bh=n/YGAUOunLlUSiLTzekbIHtWmgD98wLpsvCgDOv+sUA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=m7UkjoEn+NoL7YN3Px0a2JFzA75foGkf4ODQZ68ThavqzywQ01kWUs16juIR1JM+R
+         17etM2pfHgilo6f4V+zTSVI0fRSPBSdSITfatkkrxEG8uPFVh3wFJMItqbZHesvZYC
+         ubXuIroWh6VHAdnO6+4ILa+YgNmYLmvs4GSXney+/BgoGoNGhmBwF/yS83VbApTcVt
+         cg6152LRMQnAhFmIRKfVGynsFnzdBQnkRuOYjWmttIZ9o9zaBSpP0/Je+UmEQzy1MX
+         aFl4wLTEpTyY/btGjPv4c+ofgttKC5Z0Fuk57vAjolKQ79CDMSHBFQCoqeZxJYidY1
+         SV1d4D8XPu31g==
+Received: from [10.1.0.30] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NcgDn12cLzbg1;
+        Wed, 21 Dec 2022 12:20:09 -0500 (EST)
+Message-ID: <edd76fa9-c7aa-9433-9ef2-42daec0ab268@efficios.com>
+Date:   Wed, 21 Dec 2022 12:20:34 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Content-Language: en-US
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <20221220140714.GB22763@lothringen>
+ <CA83E649-8C79-4D39-9BFE-BBEF95968B98@joelfernandes.org>
+ <20221220224459.GA25175@lothringen>
+ <CAEXW_YSAv+MzZoW9RK9H3E6DAyZH+wB=4bMy5nXTOExSwgSwAg@mail.gmail.com>
+ <20221221004957.GA29021@lothringen> <20221221005858.GA29316@lothringen>
+ <f4199d1f-306c-681f-8bb9-26d66ecf5121@efficios.com>
+ <20221221121118.GA35081@lothringen>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221221121118.GA35081@lothringen>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 09:06:41AM -0800, Linus Torvalds wrote:
-> On Wed, Dec 21, 2022 at 7:56 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > The above assumes an unsigned char as input to strcmp(). I consider that
-> > a hypothetical problem because "comparing" strings with upper bits
-> > set doesn't really make sense in practice (How does one compare Günter
-> > against Gunter ? And how about Gǖnter ?). On the other side, the problem
-> > observed here is real and immediate.
+On 2022-12-21 07:11, Frederic Weisbecker wrote:
+> On Tue, Dec 20, 2022 at 10:43:25PM -0500, Mathieu Desnoyers wrote:
+>> On 2022-12-20 19:58, Frederic Weisbecker wrote:
+>>> On Wed, Dec 21, 2022 at 01:49:57AM +0100, Frederic Weisbecker wrote:
+>>>> On Tue, Dec 20, 2022 at 07:15:00PM -0500, Joel Fernandes wrote:
+>>>>> On Tue, Dec 20, 2022 at 5:45 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+>>>>> Agreed about (1).
+>>>>>
+>>>>>> _ In (2), E pairs with the address-dependency between idx and lock_count.
+>>>>>
+>>>>> But that is not the only reason. If that was the only reason for (2),
+>>>>> then there is an smp_mb() just before the next-scan post-flip before
+>>>>> the lock counts are read.
+>>>>
+>>>> The post-flip barrier makes sure the new idx is visible on the next READER's
+>>>> turn, but it doesn't protect against the fact that "READ idx then WRITE lock[idx]"
+>>>> may appear unordered from the update side POV if there is no barrier between the
+>>>> scan and the flip.
+>>>>
+>>>> If you remove the smp_mb() from the litmus test I sent, things explode.
+>>>
+>>> Or rather, look at it the other way, if there is no barrier between the lock
+>>> scan and the index flip (E), then the index flip can appear to be written before the
+>>> lock is read. Which means you may start activating the index before you finish
+>>> reading it (at least it appears that way from the readers pont of view).
+>>
+>> Considering that you can have pre-existing readers from arbitrary index
+>> appearing anywhere in the grace period (because a reader can fetch the
+>> index and be preempted for an arbitrary amount of time before incrementing
+>> the lock count), the grace period algorithm needs to deal with the fact that
+>> a newcoming reader can appear in a given index either before or after the
+>> flip.
 > 
-> POSIX does actually specify "Günter" vs "Gunter".
+> True but the number of preempted tasks is bound and there is a forward progress guarantee.
 > 
-> The way strcmp is supposed to work is to return the sign of the
-> difference between the byte values ("unsigned char").
+>> I don't see how flipping the index before or after loading the unlock/lock
+>> values would break anything (except for unlikely counter overflow situations
+>> as previously discussed).
 > 
-> But that sign has to be computed in 'int', not in 'signed char'.
-> 
-> So yes, the m68k implementation is broken regardless, but with a
-> signed char it just happened to work for the US-ASCII case that the
-> crypto case tested.
-> 
+> Forward progress guarantee.
 
-I understand. I just prefer a known limited breakage to completely
-broken code.
+Considering a coherent cache, the store-buffer will ensure that the 
+index flip eventually reaches all readers. This bounds the time during 
+which readers can flood the current index, and therefore guarantees 
+forward progress. AFAIK the Linux kernel does not support architectures 
+with incoherent caches.
 
-> I think the real fix is to just remove that broken implementation
-> entirely, and rely on the generic one.
-
-Perfectly fine with me.
+So I still don't see how having the barrier before or after the index 
+flip is useful for forward progress.
 
 Thanks,
-Guenter
+
+Mathieu
+
+> 
+> Thanks.
+> 
+>>
+>> Thanks,
+>>
+>> Mathieu
+>>
+>> -- 
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> https://www.efficios.com
+>>
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
