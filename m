@@ -2,308 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12998652A73
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 01:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FE2652A76
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 01:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbiLUAWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 19:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S234241AbiLUA1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 19:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbiLUAWO (ORCPT
+        with ESMTP id S229727AbiLUA1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 19:22:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10677F583;
-        Tue, 20 Dec 2022 16:22:12 -0800 (PST)
+        Tue, 20 Dec 2022 19:27:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995C819282;
+        Tue, 20 Dec 2022 16:27:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 972AF61629;
-        Wed, 21 Dec 2022 00:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA947C433EF;
-        Wed, 21 Dec 2022 00:22:09 +0000 (UTC)
-Date:   Tue, 20 Dec 2022 19:22:08 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Philipp Rudo <prudo@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        linux-doc@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 305746162C;
+        Wed, 21 Dec 2022 00:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 077B7C433F1;
+        Wed, 21 Dec 2022 00:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671582453;
+        bh=QZMiVBXSoqyLx9N5rvN6rX9ub6C1WA1HR+6Nwve0IgU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XhQPzt5ZLWLgRAoiTtDiQTndEfBXw2Y+uJLrmGyktVaJSIgnc8u5hCwxgQGPeivGG
+         cEthzGEOMxgXeOpXd7xuwRyfvx+JiS6xwh/WWL0+jAxElKHGcAQGLVVG7E+DhjU/xr
+         hghHasgmD4sFPa1B92G7Meee/MsSt/iPle+Za45gDgx78j+n9EZHaIvO+Luq9odISE
+         dqjxNXdJ1T/9U5NUn3LyfRTC6YP4NHe2i3WVqrPAutUuVKIVVK0ufNWkr1BF/5hnd3
+         zYBwBfDMpiGdWKuDWaovPsx1KwQnFwaSrX9NIN3v25ZHFsjxZSoYPMp7fFBMISOpag
+         R+ODbPF2MW4mA==
+Date:   Wed, 21 Dec 2022 01:27:30 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         linux-kernel@vger.kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Ross Zwisler <zwisler@kernel.org>, kexec@lists.infradead.org
-Subject: Re: [PATCH v3 3/3] kexec: Introduce parameters load_limit_reboot
- and load_limit_panic
-Message-ID: <20221220192208.4d0c934f@gandalf.local.home>
-In-Reply-To: <20221114-disable-kexec-reset-v3-3-4ef4e929adf6@chromium.org>
-References: <20221114-disable-kexec-reset-v3-0-4ef4e929adf6@chromium.org>
-        <20221114-disable-kexec-reset-v3-3-4ef4e929adf6@chromium.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Message-ID: <20221221002730.GA28629@lothringen>
+References: <6438d903-ab97-48c7-c338-9f0bc2686f94@efficios.com>
+ <7A9876BA-C375-42A7-A5C9-FD940D2898D7@joelfernandes.org>
+ <5bd5ee4a-710a-96bc-abe8-772b2e60f478@efficios.com>
+ <CAEXW_YRFbsCzT9iPdVfmeZ5qK+2fnVAwSzxbj1EXmU+vepOKdg@mail.gmail.com>
+ <20221220230521.GC26563@lothringen>
+ <CAEXW_YRw76oCBevJwFvwRRTyNGJZW2H0Zbg1WNX7D4R3bTvsHw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YRw76oCBevJwFvwRRTyNGJZW2H0Zbg1WNX7D4R3bTvsHw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Dec 2022 23:05:45 +0100
-Ricardo Ribalda <ribalda@chromium.org> wrote:
+On Tue, Dec 20, 2022 at 06:46:10PM -0500, Joel Fernandes wrote:
+> On Tue, Dec 20, 2022 at 6:05 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+> >
+> > On Tue, Dec 20, 2022 at 07:06:57PM +0000, Joel Fernandes wrote:
+> > > On Tue, Dec 20, 2022 at 7:01 PM Mathieu Desnoyers
+> > > <mathieu.desnoyers@efficios.com> wrote:
+> > > >
+> > > > On 2022-12-20 13:29, Joel Fernandes wrote:
+> > > > >
+> > > >
+> > > > > I do want to finish my memory barrier studies of SRCU over the holidays since I have been deep in the hole with that already. Back to the post flip memory barrier here since I think now even that might not be needed…
+> > > >
+> > > > I strongly suspect the memory barrier after flip is useless for the same
+> > > > reasons I mentioned explaining why the barrier before the flip is useless.
+> > > >
+> > > > However, we need to double-check that we have memory barriers at the
+> > > > beginning and end of synchronize_srcu, and between load of "unlock"
+> > > > counters and load of "lock" counters.
+> > > >
+> > > > Where is the barrier at the beginning of synchronize_srcu ?
+> > >
+> > > I believe we don't need another memory barrier at the beginning of
+> > > synchronize_srcu() (but this part of my SRCU study is still pending
+> > > ;)) . The grace period guarantee (read-side critical sections don't
+> > > span the GP) is already enforced by the memory barrier between
+> > > scanning for all unlocks, and scanning for all locks (Paired with
+> > > corresponding memory barriers on the read-side).
+> > >
+> > > Accordingly, before we scan all locks and match lock == unlock, there
+> > > is an smp_mb(). Why is that not sufficient?
+> >
+> > That's not enough, you still need a barrier between the updater's pre-GP
+> > accesses and the scans, so that post-GP read side sees the updater's pre-GP
+> > accesses:
+> >
+> >
+> >             UPDATER                        READER
+> >             -------                        ------
+> >             WRITE A                        WRITE srcu_read_lock
+> >             smp_mb() //rcu_seq_snap()      smp_mb()
+> >             READ srcu_read_lock //scans    READ A
+> 
+> But see the comments also in srcu_readers_active_idx_check()
+> 
+> * Needs to be a smp_mb() as the read side may
+> * contain a read from a variable that is written to before the
+> * synchronize_srcu() in the write side
+> 
+> So that appears to be already covered. Or is your point that the scans
+> are not happening on the same CPU as the pre-GP writer, as scans are
+> happening from workqueue ?
 
-I hate to be the grammar police, but..
+Nah I think you're right. Although I guess we still need the barrier between
+updater's pre-gp accesses and srcu_unlock scans...
 
-> Add two parameter to specify how many times a kexec kernel can be loaded.
-
-   "parameters"
 
 > 
-> The sysadmin can set different limits for kexec panic and kexec reboot
-> kernels.
+> Perhaps that comment misled me.
 > 
-> The value can be modified at runtime via sysfs, but only with a value
-> smaller than the current one (except -1).
+> Confused,
 > 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 14 ++++
->  include/linux/kexec.h                           |  2 +-
->  kernel/kexec.c                                  |  2 +-
->  kernel/kexec_core.c                             | 91 ++++++++++++++++++++++++-
->  kernel/kexec_file.c                             |  2 +-
->  5 files changed, 106 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 42af9ca0127e..2b37d6a20747 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -2374,6 +2374,20 @@
->  			for Movable pages.  "nn[KMGTPE]", "nn%", and "mirror"
->  			are exclusive, so you cannot specify multiple forms.
->  
-> +	kexec_core.load_limit_reboot=
-> +	kexec_core.load_limit_panic=
-> +			[KNL]
-> +			This parameter specifies a limit to the number of times
-> +			a kexec kernel can be loaded.
-> +			Format: <int>
-> +			-1  = Unlimited.
-> +			int = Number of times kexec can be called.
-> +
-> +			During runtime, this parameter can be modified with a
-
-> +			value smaller than the current one (but not -1).
-
-Perhaps state:
-			smaller positive value than the current one or if
-			current is currently -1.
-
-> +
-> +			Default: -1
-> +
->  	kgdbdbgp=	[KGDB,HW] kgdb over EHCI usb debug port.
->  			Format: <Controller#>[,poll interval]
->  			The controller # is the number of the ehci usb debug
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index 182e0c11b87b..5daf9990d5b8 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -407,7 +407,7 @@ extern int kimage_crash_copy_vmcoreinfo(struct kimage *image);
->  extern struct kimage *kexec_image;
->  extern struct kimage *kexec_crash_image;
->  
-> -bool kexec_load_permitted(void);
-> +bool kexec_load_permitted(bool crash_image);
->  
->  #ifndef kexec_flush_icache_page
->  #define kexec_flush_icache_page(page)
-> diff --git a/kernel/kexec.c b/kernel/kexec.c
-> index ce1bca874a8d..7aefd134e319 100644
-> --- a/kernel/kexec.c
-> +++ b/kernel/kexec.c
-> @@ -193,7 +193,7 @@ static inline int kexec_load_check(unsigned long nr_segments,
->  	int result;
->  
->  	/* We only trust the superuser with rebooting the system. */
-> -	if (!kexec_load_permitted())
-> +	if (!kexec_load_permitted(flags & KEXEC_ON_CRASH))
-
-Note, here we have KEXEC_ON_CRASH (see bottom).
-
->  		return -EPERM;
->  
->  	/* Permit LSMs and IMA to fail the kexec */
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index a1efc70f4158..adf71f2be3ff 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -952,13 +952,100 @@ static int __init kexec_core_sysctl_init(void)
->  late_initcall(kexec_core_sysctl_init);
->  #endif
->  
-> -bool kexec_load_permitted(void)
-> +struct kexec_load_limit {
-> +	/* Mutex protects the limit count. */
-> +	struct mutex mutex;
-> +	int limit;
-> +};
-> +
-> +struct kexec_load_limit load_limit_reboot = {
-
-Perhaps make the above static?
-
-> +	.mutex = __MUTEX_INITIALIZER(load_limit_reboot.mutex),
-> +	.limit = -1,
-> +};
-> +
-> +struct kexec_load_limit load_limit_panic = {
-
-static?
-
-> +	.mutex = __MUTEX_INITIALIZER(load_limit_panic.mutex),
-> +	.limit = -1,
-> +};
-> +
-> +static int param_get_limit(char *buffer, const struct kernel_param *kp)
->  {
-> +	int ret;
-> +	struct kexec_load_limit *limit = kp->arg;
-
-Looks better if "int ret;" is after the "limit".
-
-> +
-> +	mutex_lock(&limit->mutex);
-> +	ret = scnprintf(buffer, PAGE_SIZE, "%i\n", limit->limit);
-
-The above string can be at most "-2147483648\n\0"
-
-Which is 13 characters. Why use PAGE_SIZE. Or scnprintf(), and not just
-state:
-
-	/* buffer is PAGE_SIZE, much larger than what %i can be */
-	ret = sprintf(buffer, "%i\n", limit->limit);
-
-> +	mutex_unlock(&limit->mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static int param_set_limit(const char *buffer, const struct kernel_param *kp)
-> +{
-> +	int ret;
-> +	struct kexec_load_limit *limit = kp->arg;
-> +	int new_val;
-> +
-> +	ret = kstrtoint(buffer, 0, &new_val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	new_val = max(-1, new_val);
-
-I wonder if anything less than -1 should be invalid.
-
-> +
-> +	mutex_lock(&limit->mutex);
-> +
-> +	if (new_val == -1 && limit->limit != -1) {
-
-If -1 can't change the value, why allow it to be passed in to begin with.
-
-Perhaps we should only allow sysctl to set positive values? Would make the
-code simpler.
-
-> +		ret = -EINVAL;
-> +		goto done;
-> +	}
-> +
-> +	if (limit->limit != -1 && new_val > limit->limit) {
-
-Since the above documentation said "small than" perhaps ">="?
-
-> +		ret = -EINVAL;
-> +		goto done;
-> +	}
-> +
-> +	limit->limit = new_val;
-> +
-> +done:
-> +	mutex_unlock(&limit->mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct kernel_param_ops load_limit_ops = {
-> +	.get = param_get_limit,
-> +	.set = param_set_limit,
-> +};
-> +
-> +module_param_cb(load_limit_reboot, &load_limit_ops, &load_limit_reboot, 0644);
-> +MODULE_PARM_DESC(load_limit_reboot, "Maximum attempts to load a kexec reboot kernel");
-> +
-> +module_param_cb(load_limit_panic, &load_limit_ops, &load_limit_panic, 0644);
-> +MODULE_PARM_DESC(load_limit_reboot, "Maximum attempts to load a kexec panic kernel");
-
-Wait, why the module params if this can not be a module?
-
-The kernel/kexec.c is decided via CONFIG_KEXEC_CORE which is bool. Either
-builtin or not at all. No module selection possible.
-
-For kernel parameters, we should just use __setup(), right?
-
-> +
-> +bool kexec_load_permitted(bool crash_image)
-> +{
-> +	struct kexec_load_limit *limit;
-> +
->  	/*
->  	 * Only the superuser can use the kexec syscall and if it has not
->  	 * been disabled.
->  	 */
-> -	return capable(CAP_SYS_BOOT) && !kexec_load_disabled;
-> +	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
-> +		return false;
-> +
-> +	/* Check limit counter and decrease it.*/
-> +	limit = crash_image ? &load_limit_panic : &load_limit_reboot;
-> +	mutex_lock(&limit->mutex);
-> +	if (!limit->limit) {
-> +		mutex_unlock(&limit->mutex);
-> +		return false;
-> +	}
-> +	if (limit->limit != -1)
-> +		limit->limit--;
-> +	mutex_unlock(&limit->mutex);
-> +
-> +	return true;
->  }
->  
->  /*
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 29efa43ea951..6a1d4b07635e 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -330,7 +330,7 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
->  	struct kimage **dest_image, *image;
->  
->  	/* We only trust the superuser with rebooting the system. */
-> -	if (!kexec_load_permitted())
-> +	if (!kexec_load_permitted(flags & KEXEC_FILE_FLAGS))
-
-Here we have KEXEC_FILE_FLAGS, where above it was KEXCE_FILE_CRASH.
-
-This is confusing to what denotes the "crash_image" boolean. Can we just
-pass in flags and figure it out in the kexec_load_permitted() function?
-
--- Steve
-
-
->  		return -EPERM;
->  
->  	/* Make sure we have a legal set of flags */
-> 
-
+>  - Joel
