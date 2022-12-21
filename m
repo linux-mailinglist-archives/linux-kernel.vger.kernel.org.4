@@ -2,113 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAC4652ABE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 02:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5D3652AC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 02:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234268AbiLUBIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 20:08:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S234255AbiLUBKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 20:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLUBIl (ORCPT
+        with ESMTP id S229448AbiLUBKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 20:08:41 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5C7165AB;
-        Tue, 20 Dec 2022 17:08:40 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1447c7aa004so17516171fac.11;
-        Tue, 20 Dec 2022 17:08:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iK4iz97VIr1jVXuQzZLBdQNi9qt+PjrObZGgfMDl/Js=;
-        b=cTnzhn2Thhc8aTUwGh512oQ5NCw0sMMB8exZiXzZySYK3WQSo5FqUJAP3JmkugQ2yB
-         bHz7OxURxfTqvzDVfQcxs5Y0U4ckeaFr0AS7xyhGBfhA7uS5MnZIjm4+9nwRjYrIzSRu
-         9GvUv0RPMfkAl39ERbewSY45Xyt+WqP2EbZK05EGH4wqGdHSl6d/+mdcWKZ8L7Ew+0Ug
-         tf72oK/EnzCgTWkwSPMZ2v+zi8FZZTYcsYHrmYBCOYy3qOVwpUeLJEdYTYXhv4HfWi9l
-         W08ijnwnUDezzBVSmvNTJ9h9CGFDH3MHG5+c7ooGrDu54Om18DN+eTO3XX+twfH+2p63
-         4Teg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iK4iz97VIr1jVXuQzZLBdQNi9qt+PjrObZGgfMDl/Js=;
-        b=G1gqsmnT6bu7hw3rIA6qJrSvGh0uUvjzNGGREqyiQzG5PtE4oN5u9zA5AZx73K5k0z
-         a5D9QJ732v4InbQCk94zD/czjIHXxRLMyA3Cydeo8+trpeO6AQmUaehbLJSxZPgCsvQW
-         fCfdosLcybsa2c4QdcR4ujQNZP8Qe+4HvsgHhIdRnI/Y5frWmQmw+QXj+wWvx6GzgYBn
-         u2PF1hVygnCW9pSjebuA9aZf3Zpa6hY6loTiCYXwMgFlvtK72KiVSzzOLnGdn3XF9ANw
-         4gjxmzODcxo1KDsaq/fkksOdnCBj3L/ezZOIteLsbwQUQ1MFvMDR+iy2EHCss9Kzi3Y9
-         dipw==
-X-Gm-Message-State: ANoB5pnT6cL8Pb4RQ+AHnlyroC1lJyX/ty88NVn63oYlf4+oPpM9VQ6L
-        e0I5HLt82mWn+Upme/a2MLc=
-X-Google-Smtp-Source: AA0mqf6CTOyTXWJ4MN4lwh5oUlQkXY1H8ltwuapni1WU2l8SjdbXyl9UGeYoza47S+UBXPOIdDN1lg==
-X-Received: by 2002:a05:6870:a117:b0:144:3ed1:1ec2 with SMTP id m23-20020a056870a11700b001443ed11ec2mr25304464oae.43.1671584919870;
-        Tue, 20 Dec 2022 17:08:39 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i3-20020a056870890300b001446d5702b5sm6640256oao.56.2022.12.20.17.08.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 17:08:39 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 20 Dec 2022 17:08:38 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/17] 5.15.85-rc1 review
-Message-ID: <20221221010838.GB1319848@roeck-us.net>
-References: <20221219182940.739981110@linuxfoundation.org>
- <20221220144835.GC3748047@roeck-us.net>
- <20221220153328.GB907923@roeck-us.net>
+        Tue, 20 Dec 2022 20:10:43 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF78165AB;
+        Tue, 20 Dec 2022 17:10:38 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NcFk02y1Gz4f3nqb;
+        Wed, 21 Dec 2022 09:10:32 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7MJXaJjZLLuAA--.30516S3;
+        Wed, 21 Dec 2022 09:10:35 +0800 (CST)
+Subject: Re: [PATCH -next 0/4] blk-cgroup: synchronize del_gendisk() with
+ configuring cgroup policy
+To:     Tejun Heo <tj@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@infradead.org, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221217030908.1261787-1-yukuai1@huaweicloud.com>
+ <Y6DP3aOSad8+D1yY@slm.duckdns.org>
+ <e01daffe-a3e3-8bf2-40ee-192a9e70d911@huaweicloud.com>
+ <Y6HcWiJbaWjN3jlt@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <c2fecf04-6e9e-25a1-f14c-47862837cc54@huaweicloud.com>
+Date:   Wed, 21 Dec 2022 09:10:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220153328.GB907923@roeck-us.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y6HcWiJbaWjN3jlt@slm.duckdns.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3X7MJXaJjZLLuAA--.30516S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFW3uFykCry3JrW5Kw4rXwb_yoW8GF48pF
+        ySqa4fA3yvqw40v39Fkw1xWayvgw4qgw45tr43Wwn5Zw4UX34Fqr47A3yruF1fZFs7Gr4Y
+        vFWYq398Jw48A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 07:33:29AM -0800, Guenter Roeck wrote:
-> On Tue, Dec 20, 2022 at 06:48:37AM -0800, Guenter Roeck wrote:
-> > On Mon, Dec 19, 2022 at 08:24:46PM +0100, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 5.15.85 release.
-> > > There are 17 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > > Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > 
-> > Build results:
-> > 	total: 155 pass: 155 fail: 0
-> > Qemu test results:
-> > 	total: 489 pass: 489 fail: 0
-> > 
+Hi,
+
+在 2022/12/21 0:01, Tejun Heo 写道:
+> Hello,
 > 
-> Wrong results, sorry. I'll resend once I have the real ones.
+> On Tue, Dec 20, 2022 at 05:19:12PM +0800, Yu Kuai wrote:
+>> Yes, that sounds good. BTW, queue_lock is also used to protect
+>> pd_alloc_fn/pd_init_fn，and we found that blkcg_activate_policy() is
+>> problematic:
+>>
+>> blkcg_activate_policy
+>>   spin_lock_irq(&q->queue_lock);
+>>   list_for_each_entry_reverse(blkg, &q->blkg_list
+>>    pd_alloc_fn(GFP_NOWAIT | __GFP_NOWARN,...) -> failed
+>>
+>>    spin_unlock_irq(&q->queue_lock);
+>>    // release queue_lock here is problematic, this will cause
+>> pd_offline_fn called without pd_init_fn.
+>>    pd_alloc_fn(__GFP_NOWARN,...)
+> 
+> So, if a blkg is destroyed while a policy is being activated, right?
+Yes, remove cgroup can race with this, for bfq null pointer deference
+will be triggered in bfq_pd_offline().
+
+> 
+>> If we are using a mutex to protect rq_qos ops, it seems the right thing
+>> to do do also using the mutex to protect blkcg_policy ops, and this
+>> problem can be fixed because mutex can be held to alloc memroy with
+>> GFP_KERNEL. What do you think?
+> 
+> One worry is that switching to mutex can be more headache due to destroy
+> path synchronization. Another approach would be using a per-blkg flag to
+> track whether a blkg has been initialized.
+I think perhaps you mean per blkg_policy_data flag? per blkg flag should
+not work in this case.
+
+Thanks,
+Kuai
+> 
+> Thanks.
 > 
 
-Real test results:
-
-Build results:
-	total: 160 pass: 160 fail: 0
-Qemu test results:
-	total: 489 pass: 487 fail: 2
-Failed tests:
-	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:net,default:zynq-zc702:rootfs
-	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:zynq-zed:rootfs
-
-Guenter
