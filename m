@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC826539B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453CB6539B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235155AbiLUXUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 18:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
+        id S235200AbiLUXUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 18:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234997AbiLUXUL (ORCPT
+        with ESMTP id S235044AbiLUXUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 18:20:11 -0500
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F287024BE3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:20:05 -0800 (PST)
+        Wed, 21 Dec 2022 18:20:17 -0500
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B7424F10;
+        Wed, 21 Dec 2022 15:20:09 -0800 (PST)
 Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 8ACD82038C;
-        Thu, 22 Dec 2022 00:20:03 +0100 (CET)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id A87B3203D9;
+        Thu, 22 Dec 2022 00:20:06 +0100 (CET)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
 To:     phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
@@ -52,59 +52,96 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Vladimir Lypak <vladimir.lypak@gmail.com>,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/8] drm/msm/dpu: Reject topologies for which no DSC blocks are available
-Date:   Thu, 22 Dec 2022 00:19:40 +0100
-Message-Id: <20221221231943.1961117-6-marijn.suijten@somainline.org>
+Subject: [PATCH v2 6/8] drm/msm/dpu: Remove num_enc from topology struct in favour of num_dsc
+Date:   Thu, 22 Dec 2022 00:19:41 +0100
+Message-Id: <20221221231943.1961117-7-marijn.suijten@somainline.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221221231943.1961117-1-marijn.suijten@somainline.org>
 References: <20221221231943.1961117-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resource allocation of DSC blocks should behave more like LMs and CTLs
-where NULL resources (based on initial hw_blk creation via definitions
-in the catalog) are skipped ^1.  The current hardcoded mapping of DSC
-blocks however means that resource allocation shouldn't succeed at all
-when the DSC block on the corresponding index doesn't exist, rather than
-searching for the next free block.
+Downstream calls this num_enc yet the DSC patches introduced a new
+num_dsc struct member, leaving num_enc effectively unused.
 
-This hardcoded mapping should be loosened separately as DPU 5.0.0
-introduced a crossbar where DSC blocks can be "somewhat" freely bound to
-any PP and CTL (in proper pairs).
-
-^1: which, on hardware that supports DSC, can happen after a git rebase
-ended up moving additions to _dpu_cfg to a different struct which has
-the same patch context.
-
-Fixes: f2803ee91a41 ("drm/msm/disp/dpu1: Add DSC support in RM")
+Fixes: 7e9cc175b159 ("drm/msm/disp/dpu1: Add support for DSC in topology")
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 9 ++++-----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c      | 4 ++--
+ drivers/gpu/drm/msm/msm_drv.h               | 2 --
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index 9c6817b5a194..a158cd502d38 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -579,19 +579,18 @@ static struct msm_display_topology dpu_encoder_get_topology(
+ 			topology.num_dspp = topology.num_lm;
+ 	}
+ 
+-	topology.num_enc = 0;
+ 	topology.num_intf = intf_count;
+ 
+ 	if (dpu_enc->dsc) {
+-		/* In case of Display Stream Compression (DSC), we would use
+-		 * 2 encoders, 2 layer mixers and 1 interface
++		/*
++		 * In case of Display Stream Compression (DSC), we would use
++		 * 2 DSC encoders, 2 layer mixers and 1 interface
+ 		 * this is power optimal and can drive up to (including) 4k
+ 		 * screens
+ 		 */
+-		topology.num_enc = 2;
+ 		topology.num_dsc = 2;
+-		topology.num_intf = 1;
+ 		topology.num_lm = 2;
++		topology.num_intf = 1;
+ 	}
+ 
+ 	return topology;
 diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-index 8471d04bff50..dcbf03d2940a 100644
+index dcbf03d2940a..5e7aa0f3a31c 100644
 --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
 +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-@@ -496,6 +496,11 @@ static int _dpu_rm_reserve_dsc(struct dpu_rm *rm,
+@@ -548,8 +548,8 @@ static int _dpu_rm_populate_requirements(
+ {
+ 	reqs->topology = req_topology;
  
- 	/* check if DSC required are allocated or not */
- 	for (i = 0; i < num_dsc; i++) {
-+		if (!rm->dsc_blks[i]) {
-+			DPU_ERROR("DSC %d does not exist\n", i);
-+			return -EIO;
-+		}
-+
- 		if (global_state->dsc_to_enc_id[i]) {
- 			DPU_ERROR("DSC %d is already allocated\n", i);
- 			return -EIO;
+-	DRM_DEBUG_KMS("num_lm: %d num_enc: %d num_intf: %d\n",
+-		      reqs->topology.num_lm, reqs->topology.num_enc,
++	DRM_DEBUG_KMS("num_lm: %d num_dsc: %d num_intf: %d\n",
++		      reqs->topology.num_lm, reqs->topology.num_dsc,
+ 		      reqs->topology.num_intf);
+ 
+ 	return 0;
+diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+index d4e0ef608950..74626a271f46 100644
+--- a/drivers/gpu/drm/msm/msm_drv.h
++++ b/drivers/gpu/drm/msm/msm_drv.h
+@@ -82,14 +82,12 @@ enum msm_event_wait {
+ /**
+  * struct msm_display_topology - defines a display topology pipeline
+  * @num_lm:       number of layer mixers used
+- * @num_enc:      number of compression encoder blocks used
+  * @num_intf:     number of interfaces the panel is mounted on
+  * @num_dspp:     number of dspp blocks used
+  * @num_dsc:      number of Display Stream Compression (DSC) blocks used
+  */
+ struct msm_display_topology {
+ 	u32 num_lm;
+-	u32 num_enc;
+ 	u32 num_intf;
+ 	u32 num_dspp;
+ 	u32 num_dsc;
 -- 
 2.39.0
 
