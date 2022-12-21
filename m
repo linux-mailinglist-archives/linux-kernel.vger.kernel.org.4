@@ -2,122 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F5465341B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCE865341E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234442AbiLUQdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 11:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S234622AbiLUQeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 11:34:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232786AbiLUQd3 (ORCPT
+        with ESMTP id S234581AbiLUQeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 11:33:29 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6C422BD2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:33:24 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id s10so16218241ljg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:33:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yYKTBXQj692clZmnUBZb/0OhG5GDW1ZOmKCzRmlI5HU=;
-        b=rcrlx8QU636cRDmAc1IWueD8zv/ImH3X9JV8jxzf26/ASpQdSBc68iqk7T7elbPK+C
-         UDmyjbl+/I/LkQOL4/XeUrLMAuWXRizkZbGOA4BiqpIhYNSoZNC+fNwoYl/Xmn4bVR/H
-         cKElIwKgGDqPEZ8f9fQaNlrUrW5LeVRogsCskfiVrWnbc7PZ4Lg6NVpkIgvKMLzV/wi2
-         3RI7mYQfQqX2ufRcNG1JWkmJ/jYW8WD66oKaykFwlX2h4NnAwaO1NVIsWqvAppDr3EBa
-         2xX6AA3JNhWYSZmM9Dn2h9DP9puCn++3EHyGYFiGKi8HSiuyNcfhfPadwB7zyVWcOPv+
-         iITA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yYKTBXQj692clZmnUBZb/0OhG5GDW1ZOmKCzRmlI5HU=;
-        b=5Vrkai8MmoSkbO1fVa9KV1ksTF+XKNlj3JcVL/7iIfRyJKE2sGZhJRbS0nfKpO6M/x
-         1LRW42doF4G4OdXtKm9leglbdC8+gRyMREwIDhl63tV+dRrIDt0qjTo1ehejAxvIgr+M
-         NDJFvKzbis4L0UCHn1PdYAHyrjzvBGbptZsO/ZHaUf7lko6sIJG34uq1r5WMBAacej/Y
-         sbL8uQtWQKTEvvA4cPRVewHKjwsp56ViG6zq1icseDHb5enlD95+X0gaD08OnOf3n9oT
-         QBjsxQrKqbKs7iQJ9JV2ekJqzN7oYDRQpFfL9Yj1Iji03PtElM51BQQw/7Eo9GTmUA4J
-         Y/zw==
-X-Gm-Message-State: AFqh2koPE4FSN93306dBU2jHWEkt9kNFl8D8SZjcBeiPtGFdVrwcuAt5
-        YdnAkqQLwxhoY3OseC4zc2GNSA==
-X-Google-Smtp-Source: AMrXdXs3QapjE8xmgWp0PDtBo95Hc2g1XqLaSMhwKgSzMSPHwQ2TtdVfVaZjOv3AhSIzo37T+IbgLw==
-X-Received: by 2002:a05:651c:154e:b0:27a:874:cd2d with SMTP id y14-20020a05651c154e00b0027a0874cd2dmr2300650ljp.9.1671640402963;
-        Wed, 21 Dec 2022 08:33:22 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a7-20020a2eb547000000b0026daf4fc0f7sm1380147ljn.92.2022.12.21.08.33.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 08:33:22 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Zijun Hu <zijuhu@codeaurora.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Cc:     Sai Teja Aluvala <quic_saluvala@quicinc.com>,
-        Panicker Harish <quic_pharish@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH 2/2] Bluetooth: hci_qca: Fix driver shutdown on closed serdev
-Date:   Wed, 21 Dec 2022 17:32:49 +0100
-Message-Id: <20221221163249.1058459-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221221163249.1058459-1-krzysztof.kozlowski@linaro.org>
-References: <20221221163249.1058459-1-krzysztof.kozlowski@linaro.org>
+        Wed, 21 Dec 2022 11:34:07 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89ED29A;
+        Wed, 21 Dec 2022 08:34:06 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BE2DB6602CC7;
+        Wed, 21 Dec 2022 16:34:02 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671640444;
+        bh=de++j1P3f4DdBz0e3wcQHHBTm9Sh0a81SDLOULf9eDA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=lDY7glmSygZPvPoifdftqUhARFQu3TJNdaGP8AentuXTYxeM12jpfLEnDIuga2BIb
+         P6PYeqoWw8fMJVqG9WbHOwuztg/ExxGH1et4OMHjCIT8TTk5M5EaovArgTu86L8Ynq
+         tbup4nDaRIVtWD1nLp88vzQInSoXFJx4hfSiQjiZ96o9Orpwb8vEq2WIuPNNm3sz8g
+         AVELc2x/qEjpn9SskC3BqLixfA/bmIlJjEqe6BbxUQLoResV1naERPF06/s6MnpxiX
+         LNkF8bfO7HODwaZ1k6qYM3j4qtoJ6MBY1AucYVZBlPPZbgtPlsWzH2dJVvmIobTH3K
+         UvWQdEvFIQXFw==
+Message-ID: <06799f6b9f1c9422b8f2c7a5eb484f06fbd41fb6.camel@collabora.com>
+Subject: Re: [PATCH v1 0/9] AV1 stateless decoder for RK3588
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        daniel.almeida@collabora.com, nicolas.dufresne@collabora.co.uk,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Date:   Wed, 21 Dec 2022 11:33:53 -0500
+In-Reply-To: <CAAEAJfBP_D65kjHbwYP+LWfWKfzFtHtWo+3bDcbdO8tPtBurUA@mail.gmail.com>
+References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
+         <CAAEAJfBP_D65kjHbwYP+LWfWKfzFtHtWo+3bDcbdO8tPtBurUA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver shutdown callback (which sends EDL_SOC_RESET to the device
-over serdev) should not be invoked when HCI device is not open (e.g. if
-hci_dev_open_sync() failed), because the serdev and its TTY are not open
-either.  Also skip this step if device is powered off
-(qca_power_shutdown()).
+Le lundi 19 d=C3=A9cembre 2022 =C3=A0 18:07 -0300, Ezequiel Garcia a =C3=A9=
+crit=C2=A0:
+> Hi Benjamin,
+>=20
+> On Mon, Dec 19, 2022 at 12:56 PM Benjamin Gaignard
+> <benjamin.gaignard@collabora.com> wrote:
+> >=20
+> > This series implement AV1 stateless decoder for RK3588 SoC.
+> > The harware support 8 and 10 bits bitstreams up to 7680x4320.
+> > AV1 feature like film grain or scaling are done by the postprocessor.
+> > The driver can produce NV12_4L4 and NV12 pixel formats.
+> > A native 10bits NV12_4L4 format is possible but need more investigation
+> > to be completly documented and enabled.
+> >=20
+> > It is based on Daniel's "[RFC,v3] media: Add AV1 uAPI" [1] patches and
+> > Sebastian's device-tree patches for RK3588.
+> >=20
+>=20
+> I thought the AV1 decoder in RK3588 was really a separate hardware
+> from the Hantro G1/G2.
+>=20
+> Shouldn't this need a new driver for this new hardware?
 
-Fixes: 7e7bbddd029b ("Bluetooth: hci_qca: Fix qca6390 enable failure after warm reboot")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/bluetooth/hci_qca.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+As discussed on IRC, whenever we enable H.264 and HEVC on VC9000 cores, we =
+will
+benefit from sharing some very specific code with the G1 and G2 (respective=
+ly).
+Though for now, there is no overlap as the single core on RK3588 have all o=
+ther
+codecs disabled by fuse.
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 6eddc23e49d9..3325c8be66f8 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -2164,10 +2164,17 @@ static void qca_serdev_shutdown(struct device *dev)
- 	int timeout = msecs_to_jiffies(CMD_TRANS_TIMEOUT_MS);
- 	struct serdev_device *serdev = to_serdev_device(dev);
- 	struct qca_serdev *qcadev = serdev_device_get_drvdata(serdev);
-+	struct hci_uart *hu = &qcadev->serdev_hu;
-+	struct hci_dev *hdev = hu->hdev;
-+	struct qca_data *qca = hu->priv;
- 	const u8 ibs_wake_cmd[] = { 0xFD };
- 	const u8 edl_reset_soc_cmd[] = { 0x01, 0x00, 0xFC, 0x01, 0x05 };
- 
- 	if (qcadev->btsoc_type == QCA_QCA6390) {
-+		if (test_bit(QCA_BT_OFF, &qca->flags) || \
-+		    !test_bit(HCI_RUNNING, &hdev->flags))
-+			return;
-+
- 		serdev_device_write_flush(serdev);
- 		ret = serdev_device_write_buf(serdev, ibs_wake_cmd,
- 					      sizeof(ibs_wake_cmd));
--- 
-2.34.1
+>=20
+> Thanks!
+> Ezequiel
+>=20
+> > The full branch can be found here:
+> > https://gitlab.collabora.com/linux/for-upstream/-/commits/rk3588_av1_de=
+coder_v1
+> >=20
+> > Fluster score is: 151/239 while testing AV1-TEST-VECTORS with GStreamer=
+-AV1-V4L2SL-Gst1.0.
+> > The failing tests are:
+> > - 10bits bitstream because 10bits output formats aren't yet implemented=
+.
+> > - the 2 tests with 2 spatial layers: few errors in luma/chroma values
+> > - tests with resolution < hardware limit (64x64)
+> >=20
+> > Benjamin
+> >=20
+> > Benjamin Gaignard (9):
+> >   dt-bindings: media: rockchip-vpu: Add rk3588 vpu compatible
+> >   media: verisilicon: Add AV1 decoder mode and controls
+> >   media: verisilicon: Save bit depth for AV1 decoder
+> >   media: verisilicon: Check AV1 bitstreams bit depth
+> >   media: verisilicon: Compute motion vectors size for AV1 frames
+> >   media: verisilicon: Add AV1 entropy helpers
+> >   media: verisilicon: Add Rockchip AV1 decoder
+> >   media: verisilicon: Add film grain feature to AV1 driver
+> >   media: verisilicon: Enable AV1 decoder on rk3588
+> >=20
+> >  .../bindings/media/rockchip-vpu.yaml          |    1 +
+> >  drivers/media/platform/verisilicon/Makefile   |    3 +
+> >  drivers/media/platform/verisilicon/hantro.h   |    5 +
+> >  .../media/platform/verisilicon/hantro_drv.c   |   54 +
+> >  .../media/platform/verisilicon/hantro_hw.h    |  102 +
+> >  .../platform/verisilicon/hantro_postproc.c    |    3 +
+> >  .../media/platform/verisilicon/hantro_v4l2.c  |    5 +
+> >  .../verisilicon/rockchip_av1_entropymode.c    | 4536 +++++++++++++++++
+> >  .../verisilicon/rockchip_av1_entropymode.h    |  272 +
+> >  .../verisilicon/rockchip_av1_filmgrain.c      |  401 ++
+> >  .../verisilicon/rockchip_av1_filmgrain.h      |   36 +
+> >  .../verisilicon/rockchip_vpu981_hw_av1_dec.c  | 2280 +++++++++
+> >  .../verisilicon/rockchip_vpu981_regs.h        |  477 ++
+> >  .../platform/verisilicon/rockchip_vpu_hw.c    |  116 +
+> >  14 files changed, 8291 insertions(+)
+> >  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_ent=
+ropymode.c
+> >  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_ent=
+ropymode.h
+> >  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_fil=
+mgrain.c
+> >  create mode 100644 drivers/media/platform/verisilicon/rockchip_av1_fil=
+mgrain.h
+> >  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_=
+hw_av1_dec.c
+> >  create mode 100644 drivers/media/platform/verisilicon/rockchip_vpu981_=
+regs.h
+> >=20
+> > --
+> > 2.34.1
+> >=20
 
