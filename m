@@ -2,163 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BCD652EF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE9E652EFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234739AbiLUJwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 04:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        id S234768AbiLUJx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 04:53:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234760AbiLUJwB (ORCPT
+        with ESMTP id S234729AbiLUJwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 04:52:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3A52315D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:48:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671616121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0DqqQu4/p5Bu6Q7O7nz3+VdKcBNnQK+05f7RglHv4Ow=;
-        b=M7kxC1+CrO5KHOlI+en7V2Ny17G+i4uYKcyyVtrdhG1dl8XxcTbhlifOcZflMjUT+UCM7v
-        ERK9oaRTD32CoVfp+pTXA6kEiP7FoGP4x1RL8oJNdapPHvx8VXpsgCz9+yrE84qU84TC4G
-        zWj98I5HihrRAtJ0FZSaOSh1DHhOWik=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-247-kjfbH-8KNd6mFHMZsLusZA-1; Wed, 21 Dec 2022 04:48:39 -0500
-X-MC-Unique: kjfbH-8KNd6mFHMZsLusZA-1
-Received: by mail-ej1-f70.google.com with SMTP id hq42-20020a1709073f2a00b007c100387d64so10092714ejc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:48:39 -0800 (PST)
+        Wed, 21 Dec 2022 04:52:42 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38B12338B
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:49:25 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id s10so15098167ljg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j4pOTa7XD14Zbi1zXxlhwo2uq1WAQLtH0H1dvVBr/wM=;
+        b=TatoTF6KDCty9jYvwLHt8LUJBG4EfDHIWY7OIX8gecMCtklkbUY83XvdqNexPWzVHh
+         7aHcj6cell6x9syMMMUvBbd8IhMjN1Ix2O2vsj7WocOoSuFZ648iIhqPZhcTYevUeYdq
+         6oxyrVV/PxZazRP/iKy3JHVjRKyCE5XANvaaI2OcyddGsO58OUrq7Z5T494E2mOB2uqA
+         F1ga1FNHs+RVzr2KiNpV9JxdgiuANgeWGzt978v2rBbuOVX9+jVyPWqwofW5nJEl0mFc
+         2/TqloOr9Aav3Y6Y0mHnlbIVWq9I0gPrYXhF+V/yZ9FLrz0NcxH3wTQIHdsKqLB1okOk
+         uYDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0DqqQu4/p5Bu6Q7O7nz3+VdKcBNnQK+05f7RglHv4Ow=;
-        b=KSurU+FCHJpVrZFfuqq+4wVgxSy/mIFOott6uNvJvL0GxpMhwVvYLuBCAHTf+Enl8w
-         wumvFY9QwJSIPzu6gKh5MK2cdi3nnJwiIT14nk4LMzGEIiam3tLRxkhfBd0GqL5Q4KF2
-         urGzhHpa7FcD3U0qHJp1BrDYUehsLFOSnXvgSRMOTclP4h4mzGk2Rwm26qXmvMcXrpXG
-         TC8J1NuMojMD1ZCIzZNYwBXBggNhO+nxOKSy3ZV7qiFEJ0hGxwNfsBniS7Pnfz1kBh+P
-         uavST4WLL7JrUci64yxHLSnOOr1VtFhcrdC2mJ9wfUqRV6PFHbQcJu3NYbYxXVDRQdo6
-         C6mw==
-X-Gm-Message-State: AFqh2kq/xekrSSotymD1ZTbbeB8S3jP9Mz73Y94xlRMMtHVweke49xM6
-        T8BI65Y4TrDqQCNwcR3JkixhC3kEJSABkfhyTFXV7bUbE6Tn+P64XSugrOjXyLNyI9TM4b8D4MZ
-        uhzLPRukFT7bf96YqNI4Mg/DQ
-X-Received: by 2002:a17:907:c315:b0:7c1:b65:11d with SMTP id tl21-20020a170907c31500b007c10b65011dmr753066ejc.12.1671616118848;
-        Wed, 21 Dec 2022 01:48:38 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtXq/DqLZypRBgXlsoku35xMEoLRmpUgHrTrjHXWDRpvqe0wCawvopmqvcqI9F8PnUQjh6dsQ==
-X-Received: by 2002:a17:907:c315:b0:7c1:b65:11d with SMTP id tl21-20020a170907c31500b007c10b65011dmr753056ejc.12.1671616118637;
-        Wed, 21 Dec 2022 01:48:38 -0800 (PST)
-Received: from [10.39.192.150] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id z1-20020a1709063a0100b00780982d77d1sm6815795eje.154.2022.12.21.01.48.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 21 Dec 2022 01:48:38 -0800 (PST)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     Aaron Conole <aconole@redhat.com>
-Cc:     netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Graf <tgraf@suug.ch>, dev@openvswitch.org,
-        Ilya Maximets <i.maximets@ovn.org>,
-        wangchuanlei <wangchuanlei@inspur.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: openvswitch: release vport resources on failure
-Date:   Wed, 21 Dec 2022 10:48:37 +0100
-X-Mailer: MailMate (1.14r5933)
-Message-ID: <DDDE110D-D874-4DB0-9A8B-D796897976F7@redhat.com>
-In-Reply-To: <20221220212717.526780-1-aconole@redhat.com>
-References: <20221220212717.526780-1-aconole@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j4pOTa7XD14Zbi1zXxlhwo2uq1WAQLtH0H1dvVBr/wM=;
+        b=zYR7+ha4DMJCFgkRk6JRIjsjqBThaZjEBnFCEb+UAY64PI8qHOAwrTIV/lMnDQaU3f
+         YEiX2IMoolx/UJoJGdlRy2Ly4KVOqX5w8tVDki2HgGofxyL/pvxLnKangRaHvUe6QFjk
+         1G9Sgqv9FxnB/0auB3OQ6ZPp37pfCcZyxkluu0YnL1GF3n1+I/0UvKzgXJkumyUg/5M0
+         hK9ERmW1ljM8c+yVPJYJV3/w9fSZyP99cTcH1RZ8Tr0f5qLdHH3f5nu0t2xXramynI9t
+         4eBXRT+TcG4AUIIf3guMvdhbFtZ8mxCeZbOOVH+voeiUWHY/4NKDlpyq1VDCoFaK0Z5e
+         53bA==
+X-Gm-Message-State: AFqh2krVpGbw1OZHzzFDtcSJcbaQ4Me7GTHzAX7mvD32U8ioI5Jn6qhM
+        Yu0FtguqUqph6eMsoUMs8WBCzA==
+X-Google-Smtp-Source: AMrXdXssO9jKbgSHpDGsWvD2A8uvCkDgxTfqEYUdI6PAsmQUFbP3WJ19muNo/XTSwSkvzcwBi9mWuw==
+X-Received: by 2002:a2e:bc87:0:b0:27f:6978:583f with SMTP id h7-20020a2ebc87000000b0027f6978583fmr419058ljf.44.1671616164053;
+        Wed, 21 Dec 2022 01:49:24 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g5-20020a2eb5c5000000b00279a7266874sm1273754ljn.98.2022.12.21.01.49.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 01:49:23 -0800 (PST)
+Message-ID: <05aaa9f8-7a97-51c9-e18a-1c3753f2006b@linaro.org>
+Date:   Wed, 21 Dec 2022 10:49:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/3] hwrng: starfive - Add TRNG driver for StarFive SoC
+Content-Language: en-US
+To:     Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20221221090819.1259443-1-jiajie.ho@starfivetech.com>
+ <20221221090819.1259443-3-jiajie.ho@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221221090819.1259443-3-jiajie.ho@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 20 Dec 2022, at 22:27, Aaron Conole wrote:
-
-> A recent commit introducing upcall packet accounting failed to properly=
-
-> release the vport object when the per-cpu stats struct couldn't be
-> allocated.  This can cause dangling pointers to dp objects long after
-> they've been released.
->
-> Cc: Eelco Chaudron <echaudro@redhat.com>
-> Cc: wangchuanlei <wangchuanlei@inspur.com>
-> Fixes: 1933ea365aa7 ("net: openvswitch: Add support to count upcall pac=
-kets")
-> Reported-by: syzbot+8f4e2dcfcb3209ac35f9@syzkaller.appspotmail.com
-> Signed-off-by: Aaron Conole <aconole@redhat.com>
+On 21/12/2022 10:08, Jia Jie Ho wrote:
+> This adds driver support for the hardware random number generator in
+> Starfive SoCs and adds StarFive TRNG entry to MAINTAINERS.
+> 
+> Co-developed-by: Jenny Zhang <jenny.zhang@starfivetech.com>
+> Signed-off-by: Jenny Zhang <jenny.zhang@starfivetech.com>
+> Signed-off-by: Jia Jie Ho <jiajie.ho@starfivetech.com>
 > ---
+>  MAINTAINERS                            |   6 +
+>  drivers/char/hw_random/Kconfig         |  11 +
+>  drivers/char/hw_random/Makefile        |   1 +
+>  drivers/char/hw_random/starfive-trng.c | 403 +++++++++++++++++++++++++
+>  4 files changed, 421 insertions(+)
+>  create mode 100644 drivers/char/hw_random/starfive-trng.c
+> 
 
-Thanks for finding and fixing this! The changes look good to me.
+(...)
 
-Acked-by: Eelco Chaudron <echaudro@redhat.com>
+> +static const struct of_device_id trng_dt_ids[] = {
+> +	{ .compatible = "starfive,jh7110-trng" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, trng_dt_ids);
+> +
+> +static struct platform_driver starfive_trng_driver = {
+> +	.probe	= starfive_trng_probe,
+> +	.driver	= {
+> +		.name		= "starfive-trng",
+> +		.pm		= &starfive_trng_pm_ops,
+> +		.of_match_table	= of_match_ptr(trng_dt_ids),
 
+of_match_ptr goes with __maybe_unused. You will have now warnings, so
+please test more your patches (W=1, sparse, smatch).
 
->  net/openvswitch/datapath.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-> index 932bcf766d63..6774baf9e212 100644
-> --- a/net/openvswitch/datapath.c
-> +++ b/net/openvswitch/datapath.c
-> @@ -1854,7 +1854,7 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, st=
-ruct genl_info *info)
->  	vport->upcall_stats =3D netdev_alloc_pcpu_stats(struct vport_upcall_s=
-tats_percpu);
->  	if (!vport->upcall_stats) {
->  		err =3D -ENOMEM;
-> -		goto err_destroy_portids;
-> +		goto err_destroy_vport;
->  	}
->
->  	err =3D ovs_dp_cmd_fill_info(dp, reply, info->snd_portid,
-> @@ -1869,6 +1869,8 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, st=
-ruct genl_info *info)
->  	ovs_notify(&dp_datapath_genl_family, reply, info);
->  	return 0;
->
-> +err_destroy_vport:
-> +	ovs_dp_detach_port(vport);
->  err_destroy_portids:
->  	kfree(rcu_dereference_raw(dp->upcall_portids));
->  err_unlock_and_destroy_meters:
-> @@ -2316,7 +2318,7 @@ static int ovs_vport_cmd_new(struct sk_buff *skb,=
- struct genl_info *info)
->  	vport->upcall_stats =3D netdev_alloc_pcpu_stats(struct vport_upcall_s=
-tats_percpu);
->  	if (!vport->upcall_stats) {
->  		err =3D -ENOMEM;
-> -		goto exit_unlock_free;
-> +		goto exit_unlock_free_vport;
->  	}
->
->  	err =3D ovs_vport_cmd_fill_info(vport, reply, genl_info_net(info),
-> @@ -2336,6 +2338,8 @@ static int ovs_vport_cmd_new(struct sk_buff *skb,=
- struct genl_info *info)
->  	ovs_notify(&dp_vport_genl_family, reply, info);
->  	return 0;
->
-> +exit_unlock_free_vport:
-> +	ovs_dp_detach_port(vport);
->  exit_unlock_free:
->  	ovs_unlock();
->  	kfree_skb(reply);
-> -- =
-
-> 2.31.1
+Best regards,
+Krzysztof
 
