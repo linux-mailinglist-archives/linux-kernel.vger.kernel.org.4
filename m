@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249DA6539F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC746539F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiLUXzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 18:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
+        id S234606AbiLUX4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 18:56:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiLUXzm (ORCPT
+        with ESMTP id S234562AbiLUX4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 18:55:42 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7123BE5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:55:40 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id m18so1237364eji.5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:55:40 -0800 (PST)
+        Wed, 21 Dec 2022 18:56:17 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA0911C34
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:56:16 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id ud5so1247016ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:56:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=993ucqPWtjUwCkCIDfk3/12NHjl1sqhSbH4u2sWdFYY=;
-        b=QnveVF4WoNa5vx3O5a33f6B2AIDUrJSb5+Z3TCXrZD/4NUl2RUjjth1YpADg6paYJI
-         ng2vBHV9BaZkr/5yrCli0VXXRfTTOJyYJSWlf3D7VV1FCcTy86VA80o50J7RMTGMcIRj
-         UvUu5m511CXvABW4HSkWOHiwtyLJUHNgmyPaHToQzAb9cMBVJz6+E8MjWhAslTEe4sA0
-         xPpXdaQ/ye60EG4PvVS2gVrl7H7dFcgS3fa8Xk3Cl01hRwcvGgJNJubsbfqwTrqVlKjB
-         41yDyxvI2dK2UeNF7cHZv+WpHiV+79nkbyj6PUJ7yV5/zvtP3q5pgGHXBrnLY20Pu6Qa
-         zvfg==
+        bh=kzKr4ZLPbbYDXIuOCpfx81LlSsrLGEdfMdRYLeFSw+k=;
+        b=Nt/Ah4wHxyrJT+bJCzTkJrb+Kpqlj5ulu0x0LYjAlCbM2dpMHvo8tHN/PG2qY2xoVQ
+         It4j0qOIlqzR4oPj8AaYG+VPNCxvWR24V0VNDPae/+kRxUsN+0jrY02wnCkmBvJJr+OV
+         /nz2jAMOTT7vmMNlFvRo/wElJsBMbuPg9jvBBVu/E9m5I0Oo2vS/BQT04SOxssy4jdD5
+         Ml8XpGqKSsBdFPmpx/MchOL2ZrjM5nD03tS7V2Yn7JJqrrz+hgxsA2RZp9IwC4Cagt1l
+         oCQdfvJnx4C732/WUQWPiBF4gmIuEMWDtSz5uztga2PYJgxzELjWlNlzMNxJytB57ChO
+         pYRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=993ucqPWtjUwCkCIDfk3/12NHjl1sqhSbH4u2sWdFYY=;
-        b=BP02cUNsxB6Fs2NcgMOPK6iRBybIRVDMwpsp7vwFd4mPd7vLFs5XdAcIeAOybY+QoP
-         etqgBvCQ0riPx2Y7r2RxBMF7/O5SwXL1BMjRu5zNclO1KsYKsHJaNCjlFepKNUOdrT9x
-         xIldikYJaZ1L3wrQoIbV1T1+pJ2H68Vdcxi4EoUQyPE+X38JG7zFbnS/0PQoOOPs+Wgz
-         iFuk56UW92IpxGGx76mCYNmzQiASnq+oX7pve4gUuj52zevZYNxgjSSMf/QCqtbMHtyW
-         lD9oeWtbqzOvkyjGKbQ9iF3KajKOihxHMU0oTV3c0rvtsQgYGjK0nv5s0JNhplxXhub1
-         q4Ow==
-X-Gm-Message-State: AFqh2kobD0UgkBdsPLVArWUUHcwTOog3skX8u6KIu2eJdrB1EMbRU3HP
-        JAIjYj+yUDmzpatS/5d2/bTiBkkuKbKTF5uTDNcvoQ==
-X-Google-Smtp-Source: AMrXdXsfUejqbZ8g4fEk9FVBUfVnB3x9hPo9I82WY7+QDksIgXzhwgs2isjnuWAbYz/l/9sOVJp265tvmZjccBftuBo=
-X-Received: by 2002:a17:906:3506:b0:7e6:42aa:2b16 with SMTP id
- r6-20020a170906350600b007e642aa2b16mr460451eja.420.1671666939014; Wed, 21 Dec
- 2022 15:55:39 -0800 (PST)
+        bh=kzKr4ZLPbbYDXIuOCpfx81LlSsrLGEdfMdRYLeFSw+k=;
+        b=7/RK3vrT8IHQTfFgYZvc2kGQZ0VxyhARRLNZaZagOJ7Vki1kP5FrlE8UwvRsfpk03x
+         fzXKUD16bvFlCossOX+FJGjEJZT4N8FSIUIZ4wVPjC3LCEEcrM+FDDi2EggoSBO0KafR
+         Yhtd1tL9re83dMqsyXYSUd9dHJBNgsBbg/noPnlSlm9uhB9eX7m3aW9nl1n+zHljjzLN
+         eeH+ph2Clmq2YdG0aHQr8foNIgJRHQeTHkGImX6L0vCjUYf1Spc2Fh/xoFOjm2dKj3PM
+         QKdQW/FaP0LG/lL3J8uBeyu23z2VStLlG0+Nox75lzf2m+IsoyxlSAKJyKQM/H0cCVAV
+         N2BQ==
+X-Gm-Message-State: AFqh2kr0WjBezIYwYcC7AzaJNs4edHq4A4IZM2qGj9lda9oBi5TS2wjm
+        Lqj+g0tfJLO9rRktMguIfQpDHbkxSu/ViQDK6z+fKw==
+X-Google-Smtp-Source: AMrXdXtT4lAsSB+aVj4AyapyqkogksssT3KwyhSb9hwHva23TcfPgfqZrL9LlD/vnN96q8yi7ui9QbNfXm0qmOS6k6A=
+X-Received: by 2002:a17:906:8242:b0:7c1:9b74:d24d with SMTP id
+ f2-20020a170906824200b007c19b74d24dmr276683ejx.561.1671666974521; Wed, 21 Dec
+ 2022 15:56:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20221221185540.2265771-1-robbarnes@google.com> <CACeCKafZu=46NE--r9W-wtJWAhj8=s46yCBO4N4u5nt4COqYAQ@mail.gmail.com>
-In-Reply-To: <CACeCKafZu=46NE--r9W-wtJWAhj8=s46yCBO4N4u5nt4COqYAQ@mail.gmail.com>
+References: <20221221185540.2265771-1-robbarnes@google.com> <CABXOdTcHppsLTDTXBd9ikL+Hk8W4oW_NkWMhOJgmf9aDSW+FKA@mail.gmail.com>
+In-Reply-To: <CABXOdTcHppsLTDTXBd9ikL+Hk8W4oW_NkWMhOJgmf9aDSW+FKA@mail.gmail.com>
 From:   Rob Barnes <robbarnes@google.com>
-Date:   Wed, 21 Dec 2022 16:55:02 -0700
-Message-ID: <CA+Dqm30XF=wDVcdUabbHySp-fwf+zFNqXpdYDW3bDTOwRbkiZw@mail.gmail.com>
+Date:   Wed, 21 Dec 2022 16:55:38 -0700
+Message-ID: <CA+Dqm32+G+PGYDw+KbYLN5unK3Q6Oc6cC6EJDhsQ2ZipKT+9Gw@mail.gmail.com>
 Subject: Re: [PATCH] drivers/cros_ec: Handle CrOS EC panics
-To:     Prashant Malani <pmalani@chromium.org>
+To:     Guenter Roeck <groeck@google.com>
 Cc:     Guenter Roeck <groeck@chromium.org>,
         chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
         dtor@chromium.org, Benson Leung <bleung@chromium.org>
@@ -69,16 +69,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 12:23 PM Prashant Malani <pmalani@chromium.org> wrote:
->
-> Hi Rob,
->
-> I'd suggest using the commit title tag "platform/chrome: cros_ec: ..."
-> for commits which are "ChromeOS EC" wide. That's in line with
-> other recent commits in this directory.
-
-Ack. Will do.
-
+On Wed, Dec 21, 2022 at 1:07 PM Guenter Roeck <groeck@google.com> wrote:
 >
 > On Wed, Dec 21, 2022 at 10:56 AM Rob Barnes <robbarnes@google.com> wrote:
 > >
@@ -163,23 +154,68 @@ Ack. Will do.
 > > +       if (value == ACPI_NOTIFY_CROS_EC_PANIC) {
 > > +               dev_err(ec_dev->dev,
 > > +                       "CrOS EC Panic Reported. Shutdown is imminent!");
+>
+> dev_emerg() would seem to be more appropriate, given that we'll be
+> crashing a second later.
+
+Makes sense. Will do.
+
+>
 > > +               blocking_notifier_call_chain(&ec_dev->panic_notifier, 0,
 > > +                                            ec_dev);
 > > +               /* Begin orderly shutdown. Force shutdown after 1 second. */
 > > +               hw_protection_shutdown("CrOS EC Panic", 1000);
 >
-> I feel like this patch is doing 2 things: pulling the logs, and then
-> starting a shutdown.
-> This should be split into 2 patches.
+> That seems to be the wrong API. From its description:
+>
+>  * Initiate an emergency system shutdown in order to protect hardware from
+>  * further damage. Usage examples include a thermal protection or a voltage or
+>  * current regulator failures.
+>
+> This is an EC crash that apparently can not be handled gracefully.
+> That has nothing to do with hardware protection. Why not just call
+> panic() ?
 
-Ack. Will do.
+I'm adding the ability for the EC to somewhat gracefully handle a
+class of panics. The EC will enter "system safe mode" aka limp mode.
+All tasks are disabled except for a few critical ones. The purpose of
+this mode is to give the OS a couple of seconds to extract info about
+the EC panic and shutdown as gracefully as possible. EC will still
+force a reset after 2 seconds.
+
+Since the EC is in a precarious, non deterministic state and the EC is
+at least partially responsible for thermal and power regulation, it is
+arguably a hardware protection event.
+
+The primary motivation for allowing the OS to attempt an orderly
+shutdown is to sync user data and EC panic data to storage. Will panic
+sync storage? Or will that need to be a seperate call?
 
 >
 > > +       }
+>
+> It troubles me that this comes last. That means the entire
+> mkbp_event_supported handling executes first. What troubles me even
+> more is that 'value' is, with the exception of
+> ACPI_NOTIFY_DEVICE_WAKE, not checked at all. Presumably the EC sends
+> some well defined value if it has an event to report. I don't think it
+> is a good idea to depend on cros_ec_get_next_event() returning
+> something useful after the EC crashed.
+
+Could certainly move the ACPI_NOTIFY_CROS_EC_PANIC to the top. I think
+'value' will be 0x80 when there's MKBP events. I will validate this
+assumption.
+
+> How is this handled today ? Does the EC just reset the AP ?
+
+EC just immediately resets the AP and itself. System safe mode (see
+go/ec-system-safe-mode) will allow the EC to run a few seconds after
+some types of crashes.
+
+
+
+>
 > >  }
->
-> Line limits are now 100 chars[1], so most of these lines can fit on 1 line.
->
 > >
 > >  static int cros_ec_lpc_probe(struct platform_device *pdev)
 > > diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
@@ -196,14 +232,6 @@ Ack. Will do.
 > > + * device specific ACPI notify range.
 > > + */
 > > +#define ACPI_NOTIFY_CROS_EC_PANIC      0xB0
->
-> Can you provide a link (either in the commit, or here in the comment)
-> to the coreboot/BIOS code which uses this value? I feel this should
-> be documented in some form that correlates the caller and the callee.
-
-Link: https://chromium-review.googlesource.com/c/chromiumos/third_party/coreboot/+/4023535
-
->
 > > +
 > >  /*
 > >   * Command interface between EC and AP, for LPC, I2C and SPI interfaces.
@@ -214,17 +242,9 @@ Link: https://chromium-review.googlesource.com/c/chromiumos/third_party/coreboot
 > >         struct platform_device *pd;
 > > +
 > > +       struct blocking_notifier_head panic_notifier;
->
-> Any reason we cannot use the existing event_notifier (with value argument)?
-> It's a system panic, so I doubt that computational overhead for other
-> notifier block
-> listeners is a concern.
-
-The value field is already being used for "queued_during_suspend" in
-event_notifier.
->
-> BR,
->
-> -Prashant
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f867ea4d75fa59ee87a7f48be144
+> >  };
+> >
+> >  /**
+> > --
+> > 2.39.0.314.g84b9a713c41-goog
+> >
