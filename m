@@ -2,170 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B7B6531CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8A66531DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 14:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbiLUNbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 08:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
+        id S232153AbiLUNfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 08:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbiLUNa6 (ORCPT
+        with ESMTP id S229496AbiLUNfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 08:30:58 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316221BEB2;
-        Wed, 21 Dec 2022 05:30:57 -0800 (PST)
-Received: from beast.luon.net (unknown [IPv6:2a10:3781:2531::8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sjoerd)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AB1366602CC7;
-        Wed, 21 Dec 2022 13:30:55 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671629455;
-        bh=2k9liHIna4KFWxtP8eE1o52G4O3DbqUbH/l1lszJKUM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LzPsFYvJAVcpWIHbii8uCyIgFc2seyp8lU4/SxWyrACxeZh5zqtbAwCVPbrowdm/9
-         K54WFXsTCQZY+XhK+deBTgDy/ylnXDNMxxmtR6m7N9K/ZKX1QLnWqS2Dm8oTtzpSLn
-         yOWTQsgwj6JuW2Cn43GoxoqTR1eTL4dp8KO9PRvC6FVLC06TW3nqswceRKdMHV5VP+
-         IG3lEAhW0YfB5OGJa0YrjVBdUHqhyJcemLkTIgHbD9U2NS17ZhSAl3s2ZSyC8ilsCY
-         UcCIRhf4e3I7a4Obc4GYXlPtJs+yIpo59bvOdpmEu9HuAfjp+3H7SNv4gxjboOrGUr
-         mjcI4o7nhfRMw==
-Received: by beast.luon.net (Postfix, from userid 1000)
-        id 64A865EC4843; Wed, 21 Dec 2022 14:30:53 +0100 (CET)
-From:   Sjoerd Simons <sjoerd@collabora.com>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     martyn.welch@collabora.com, Nitin Yadav <n-yadav@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] arm64: dts: ti: k3-am625-sk: Add support for USB
-Date:   Wed, 21 Dec 2022 14:30:50 +0100
-Message-Id: <20221221133051.1069480-4-sjoerd@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221221133051.1069480-1-sjoerd@collabora.com>
-References: <20221221133051.1069480-1-sjoerd@collabora.com>
+        Wed, 21 Dec 2022 08:35:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA66CE9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:34:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671629659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HWvv0yVxWiEaUy/PxGdRu5ElcF4XOZHCSmq8VghIbjU=;
+        b=MxuPqooZrJ+X+ulXXQPwktNKyqMK8NOjvBt18RiWnwazPjWTJZN+M1l9o7hmoX/4KfBo9w
+        0wF+OSwpJT2rJzYx2moD5axlGVfIk8KCHnisdaXc2QkBSHdKVSrKthpYcv/FcUOpNAC4e+
+        g1LblDJnRQnSqG14XAUFMLGvoqMiKbI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-186-ofb_y5lsNWK1E4oPCu4jSQ-1; Wed, 21 Dec 2022 08:34:18 -0500
+X-MC-Unique: ofb_y5lsNWK1E4oPCu4jSQ-1
+Received: by mail-wm1-f72.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso682478wml.9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 05:34:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HWvv0yVxWiEaUy/PxGdRu5ElcF4XOZHCSmq8VghIbjU=;
+        b=jh/FrCIWDexzm0JMLQ4YsmhBXLUWmGuCZ1hO1dIelOnenPQxgFclHgCuZrzSK6tiFy
+         Ys5+3w6HRkeiW6I4BmEPDXo3OEo4fv+K+ZMh2l9JqmpqfRKDdjGPhQo3XXkd23sOFdBf
+         uLjobDqumPG7f6nRKyPrK5KCcir/RlYMYdgcFxQb6vxD2SNZrx9QwPEYhGJEwLL71bDT
+         jnNRBXHkhBI0b047tje+2x33SLnTMqF8NPQrHuTEzn/BKiayklM6DyWTjjKe3enRxVfj
+         4G2OEyYtDlVMm3vIZ3QwwHOLhzIcmhshbph6TC6zQsrI3p9DCLHJusF4FqOKDDCbaBmT
+         axZg==
+X-Gm-Message-State: AFqh2kqQT7H8fH433/qnr5ftXcgpWJqEajh8bVOl3aRrd6D+Zyzu9P7j
+        lbBTEQX9UN5yFV161ieAL5rRX3Ta28lzYi2mV0R/ivhKFmi1KSpAE1SzRPfIfmyCKM4ep90lhN3
+        4P3zsICh7HYwvNEZzm8QccrsF
+X-Received: by 2002:adf:d4ca:0:b0:242:1dd6:faa3 with SMTP id w10-20020adfd4ca000000b002421dd6faa3mr3206801wrk.23.1671629657455;
+        Wed, 21 Dec 2022 05:34:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXt32Wy1vsAsafJ8i+LX0v6mcat5HXfjOVBXGktQWG4rLGZHf1HuDcVnsImxNdMtavFxHzzoxQ==
+X-Received: by 2002:adf:d4ca:0:b0:242:1dd6:faa3 with SMTP id w10-20020adfd4ca000000b002421dd6faa3mr3206794wrk.23.1671629657255;
+        Wed, 21 Dec 2022 05:34:17 -0800 (PST)
+Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600016c900b002425dc49024sm15366015wrf.43.2022.12.21.05.34.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 05:34:16 -0800 (PST)
+Date:   Wed, 21 Dec 2022 14:34:14 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, eperezma@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] vdpa_sim: support vendor satistics
+Message-ID: <20221221133414.teizf56exrf5tqvj@sgarzare-redhat>
+References: <20221221061652.15202-1-jasowang@redhat.com>
+ <20221221061652.15202-4-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221221061652.15202-4-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+On Wed, Dec 21, 2022 at 02:16:51PM +0800, Jason Wang wrote:
 
-AM62 SoC has two instances of USB and they are brought on to the board
-in the following way,
+Little typo in the title s/satistics/statistics
 
--> USB0 instance
- - This is brought out to a USB TypeC connector on board through TPS6598 PD
-   controller. The PD controller should decide the role based on CC pin in
-   the connector. Unfortunately the irq line for the TPS isn't hooked up
-   which is a mode not yet support by the driver (some patches were
-   submitted earlier this year[0]). So for now the PD controller is left
-   out and periphal mode chosen.
+>This patch adds a new config ops callback to allow individual
+>simulator to implement the vendor stats callback.
+>
+>Signed-off-by: Jason Wang <jasowang@redhat.com>
+>---
+> drivers/vdpa/vdpa_sim/vdpa_sim.c | 13 +++++++++++++
+> drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 +++
+> 2 files changed, 16 insertions(+)
+>
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>index 55aaa023a6e2..02e892f819e7 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>@@ -426,6 +426,18 @@ static int vdpasim_get_vq_state(struct vdpa_device *vdpa, u16 idx,
+> 	return 0;
+> }
+>
+>+static int vdpasim_get_vq_stats(struct vdpa_device *vdpa, u16 idx,
+>+				struct sk_buff *msg,
+>+				struct netlink_ext_ack *extack)
+>+{
+>+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>+
+>+	if (vdpasim->dev_attr.get_stats)
+>+		return vdpasim->dev_attr.get_stats(vdpasim, idx,
+>+						   msg, extack);
+>+	return -EINVAL;
 
--> USB1 instance
- - This is brought out to a USB TypeA connector on board.
+Maybe -EOPNOTSUPP is better when the device doesn't support it.
+Like we do in vendor_stats_fill() in drivers/vdpa/vdpa.c
 
-Therefore, add the required device tree support for the above in the board
-dts file.
+>+}
+>+
+> static u32 vdpasim_get_vq_align(struct vdpa_device *vdpa)
+> {
+> 	return VDPASIM_QUEUE_ALIGN;
+>@@ -710,6 +722,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+> 	.set_vq_ready           = vdpasim_set_vq_ready,
+> 	.get_vq_ready           = vdpasim_get_vq_ready,
+> 	.set_vq_state           = vdpasim_set_vq_state,
+>+	.get_vendor_vq_stats    = vdpasim_get_vq_stats,
 
-0: https://lore.kernel.org/lkml/f714ee55-ef47-317d-81b9-57020dda064b@ti.com/T/
+Should we add this callback also in vdpasim_batch_config_ops?
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-[merge from vendor bsp, drop TPS6598 support, reword commit message]
-Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
+Thanks,
+Stefano
 
----
-
-Changes in v2:
-  - Rebase against linux-next 20221220
-
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 50 ++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 4f179b146cab..c82a0ebf6772 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -24,6 +24,8 @@ aliases {
- 		spi0 = &ospi0;
- 		ethernet0 = &cpsw_port1;
- 		ethernet1 = &cpsw_port2;
-+		usb0 = &usb0;
-+		usb1 = &usb1;
- 	};
- 
- 	chosen {
-@@ -284,6 +286,12 @@ main_gpio1_ioexp_intr_pins_default: main-gpio1-ioexp-intr-pins-default {
- 			AM62X_IOPAD(0x01d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
- 		>;
- 	};
-+
-+	main_usb1_pins_default: main-usb1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x0258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
-+		>;
-+	};
- };
- 
- &wkup_uart0 {
-@@ -464,3 +472,45 @@ partition@3fc0000 {
- 		};
- 	};
- };
-+
-+&ecap0 {
-+	status = "disabled";
-+};
-+
-+&ecap1 {
-+	status = "disabled";
-+};
-+
-+&ecap2 {
-+	status = "disabled";
-+};
-+
-+&main_mcan0 {
-+	status = "disabled";
-+};
-+
-+&epwm0 {
-+	status = "disabled";
-+};
-+
-+&epwm1 {
-+	status = "disabled";
-+};
-+
-+&epwm2 {
-+	status = "disabled";
-+};
-+
-+&usbss0 {
-+	ti,vbus-divider;
-+};
-+
-+&usb0 {
-+	dr_mode = "peripheral";
-+};
-+
-+&usb1 {
-+	dr_mode = "host";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_usb1_pins_default>;
-+};
--- 
-2.39.0
+> 	.get_vq_state           = vdpasim_get_vq_state,
+> 	.get_vq_align           = vdpasim_get_vq_align,
+> 	.get_vq_group           = vdpasim_get_vq_group,
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>index 51c070a543f1..d2a08c0abad7 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>@@ -48,6 +48,9 @@ struct vdpasim_dev_attr {
+> 	work_func_t work_fn;
+> 	void (*get_config)(struct vdpasim *vdpasim, void *config);
+> 	void (*set_config)(struct vdpasim *vdpasim, const void *config);
+>+	int (*get_stats)(struct vdpasim *vdpasim, u16 idx,
+>+			 struct sk_buff *msg,
+>+			 struct netlink_ext_ack *extack);
+> };
+>
+> /* State of each vdpasim device */
+>-- 
+>2.25.1
+>
 
