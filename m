@@ -2,131 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DBE653675
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 19:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9676265367A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 19:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbiLUSkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 13:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S234426AbiLUSom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 13:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234889AbiLUSkh (ORCPT
+        with ESMTP id S234296AbiLUSoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 13:40:37 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF47326ACE;
-        Wed, 21 Dec 2022 10:40:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671648032; x=1703184032;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a867+PQTcf3q7dV+YtX1oSNkLuA7GD548wpUTuf/lCw=;
-  b=aSDSwlxQyAU1eG6SE+5phvzneNEhaeZnoyD5NX7BC/ipAVXbT7iKiPJO
-   QnSBsMOYMPTvRp34bHyr1s5F1fL73Tcz8T3XMqzV9ZCEz8bVMHJkpOX57
-   hlASCCblk5koF3THJ3B9tcS7vwt+gTDDgNARi4HCeMK+jWFc1/xXztpxL
-   BvfSmq91BGhGTHC//LATHLXHmqE0K6C3XbBhG3zZCROuf1/tYdgh26FCH
-   78z8QlFcF5i4gVxzhxQzpvRHIje6lTKpiTSayToz5h5bpuws8JQWc7n+q
-   vLREkSr5+FMnsk+7Wvs50R+XGlFHfVJ/ir5tpk0ZdgQbhGotKQH7lqwxp
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="307628301"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="307628301"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 10:40:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="896936893"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="896936893"
-Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 10:40:29 -0800
-Date:   Wed, 21 Dec 2022 19:40:26 +0100
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
-Cc:     Shahed Shaikh <shshaikh@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        GR-Linux-NIC-Dev@marvell.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] qlcnic: prevent ->dcb use-after-free on
- qlcnic_dcb_enable() failure
-Message-ID: <Y6NTGjcM8aUE0M5w@localhost.localdomain>
-References: <20221220125649.1637829-1-d-tatianin@yandex-team.ru>
- <Y6G5eWWucdaJXmQu@localhost.localdomain>
- <8c49acd6-7195-caaf-425c-b9ed9290423d@yandex-team.ru>
+        Wed, 21 Dec 2022 13:44:39 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F71920F45
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 10:44:38 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id n4so16417998plp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 10:44:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IqMLve4a+7yaawxIrTIZNKm2QG2HHAaYLBOV4f2gVjs=;
+        b=lP5/16iiEYGHg9x3sdKqI41DZkM7CC4/jVRfG1JUluigHimrXgJ1BwwVBqPAJw6SLF
+         FIgymM96JKS8LdWm8L4kciMCnvqhtX/lW6UloIH8bFCIsH6QflcXBvIa+fQBYFo3U86/
+         QroUendE8aUHa7TufrfR00JWJ0NbIJTwKDSAMR5RHnIOiaX6xl0pDzo3e6duurK0kza9
+         NfewXU0wGGhp9rU++dvhKVqIpHCfBNygPi5Qv60T3j3RYPH5aH8dB5POTXUrpWSbbW8F
+         D670zUy5bQ8CwJqRo8x955cwaETg9qzeRHzzQfS8zR/qtvVN6M/26rabgDuM6mptso56
+         ezXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IqMLve4a+7yaawxIrTIZNKm2QG2HHAaYLBOV4f2gVjs=;
+        b=c42MJOe4G2vOEXoGzxMy41rC4Lhv/NQnOih0KaBDXP72CbRj/LQK08lyLHJ8OC613W
+         XxHztXV981nhf+d1VYVnX4fcoOqRg7OrRBXx3QidR5lEf/FWua5sJv4dNsAbWuogQnbW
+         4I+dK3ze8NlUh2arF+NAvlwOpqESkrIU4QEGwOiKK3ve1lo05qyrKjPTJbFNcE65bf+G
+         kzMwmSOT4Za7f8xNxCvtrGMgagddB2sr6oAh7XCCrx3hwByzevtrpfxqgBcsMxXm0U7K
+         JK+lZKuEXi2BmY3iltUhLlcNcAS/FtUCYTNi/NCAETzK/AzT4cQ0vROmA8ubZ78yVj9m
+         AmsQ==
+X-Gm-Message-State: AFqh2kqHE2Ph7TD97VhHm7hIOUjYizMk/t4E9ophhSHsIiHePPySF49G
+        g7wZuVKvpkmUT1Vx+RXVH4Yc5A==
+X-Google-Smtp-Source: AMrXdXvNy7clAG/b1GRRifsfntw7rfmh3YaG2BEb1whiRVyvQQr2/FQky5QwMXMFn7Qq1kUV2xB3IQ==
+X-Received: by 2002:a17:90b:35d0:b0:218:7bf2:4ff2 with SMTP id nb16-20020a17090b35d000b002187bf24ff2mr700519pjb.0.1671648277545;
+        Wed, 21 Dec 2022 10:44:37 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id gm16-20020a17090b101000b00219752c8ea5sm1731495pjb.37.2022.12.21.10.44.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 10:44:36 -0800 (PST)
+Date:   Wed, 21 Dec 2022 18:44:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Santosh Shukla <santosh.shukla@amd.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 00/11] SVM: vNMI (with my fixes)
+Message-ID: <Y6NUEV3FTq29R64F@google.com>
+References: <20221129193717.513824-1-mlevitsk@redhat.com>
+ <7af086556ff794bbe78e48c882b6e91aa5ad4022.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8c49acd6-7195-caaf-425c-b9ed9290423d@yandex-team.ru>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7af086556ff794bbe78e48c882b6e91aa5ad4022.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 10:47:29AM +0300, Daniil Tatianin wrote:
-> On 12/20/22 4:32 PM, Michal Swiatkowski wrote:
-> > On Tue, Dec 20, 2022 at 03:56:49PM +0300, Daniil Tatianin wrote:
-> > > adapter->dcb would get silently freed inside qlcnic_dcb_enable() in
-> > > case qlcnic_dcb_attach() would return an error, which always happens
-> > > under OOM conditions. This would lead to use-after-free because both
-> > > of the existing callers invoke qlcnic_dcb_get_info() on the obtained
-> > > pointer, which is potentially freed at that point.
-> > > 
-> > > Propagate errors from qlcnic_dcb_enable(), and instead free the dcb
-> > > pointer at callsite.
-> > > 
-> > > Found by Linux Verification Center (linuxtesting.org) with the SVACE
-> > > static analysis tool.
-> > > 
-> > > Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+On Tue, Dec 20, 2022, Maxim Levitsky wrote:
+> On Tue, 2022-11-29 at 21:37 +0200, Maxim Levitsky wrote:
+> > Hi!
 > > 
-> > Please add Fix tag and net as target (net-next is close till the end of
-> > this year)
+> > This is the vNMI patch series based on Santosh Shukla's vNMI patch series.
 > > 
-> Sorry, I'll include a fixes tag.
-> Could you please explain what I would have to do to add net as target?
-
-Sorry, maybe it was bad wording. I meant to have PATCH net v2 in title.
-For example by adding to git format-patch:
---subject-prefix="PATCH net v2"
-
-> > > ---
-> > >   drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c | 9 ++++++++-
-> > >   drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h       | 5 ++---
-> > >   drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c      | 9 ++++++++-
-> > >   3 files changed, 18 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
-> > > index dbb800769cb6..465f149d94d4 100644
-> > > --- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
-> > > +++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
-> > > @@ -2505,7 +2505,14 @@ int qlcnic_83xx_init(struct qlcnic_adapter *adapter)
-> > >   		goto disable_mbx_intr;
-> > >   	qlcnic_83xx_clear_function_resources(adapter);
-> > > -	qlcnic_dcb_enable(adapter->dcb);
-> > > +
-> > > +	err = qlcnic_dcb_enable(adapter->dcb);
-> > > +	if (err) {
-> > > +		qlcnic_clear_dcb_ops(adapter->dcb);
-> > > +		adapter->dcb = NULL;
-> > > +		goto disable_mbx_intr;
-> > > +	}
+> > In this version of this patch series I addressed most of the review feedback
+> > added some more refactoring and also I think fixed the issue with migration.
 > > 
-> > Maybe I miss sth but it looks like there can be memory leak.
-> > For example if error in attach happen after allocating of dcb->cfg.
-> > Isn't it better to call qlcnic_dcb_free instead of qlcnic_clear_dcb_ops?
-> I think you're right, if attach fails midway then we might leak cfg or
-> something else.
-> I'll use qlcnic_dcb_free() instead and completely remove
-> qlcnic_clear_dcb_ops() as it
-> seems to be unused and relies on dcb being in a very specific state.
+> > I only tested this on a machine which doesn't have vNMI, so this does need
+> > some testing to ensure that nothing is broken.
+> > 
+> > Best regards,
+> >        Maxim Levitsky
+> > 
+> > Maxim Levitsky (9):
+> >   KVM: nSVM: don't sync back tlb_ctl on nested VM exit
+> >   KVM: nSVM: clean up the copying of V_INTR bits from vmcb02 to vmcb12
+> >   KVM: nSVM: explicitly raise KVM_REQ_EVENT on nested VM exit if L1
+> >     doesn't intercept interrupts
+> >   KVM: SVM: drop the SVM specific H_FLAGS
+> >   KVM: x86: emulator: stop using raw host flags
+> >   KVM: SVM: add wrappers to enable/disable IRET interception
+> >   KVM: x86: add a delayed hardware NMI injection interface
+> >   KVM: SVM: implement support for vNMI
+> >   KVM: nSVM: implement support for nested VNMI
+> > 
+> > Santosh Shukla (2):
+> >   x86/cpu: Add CPUID feature bit for VNMI
+> >   KVM: SVM: Add VNMI bit definition
+> > 
+> >  arch/x86/include/asm/cpufeatures.h |   1 +
+> >  arch/x86/include/asm/kvm-x86-ops.h |   2 +
+> >  arch/x86/include/asm/kvm_host.h    |  24 +++--
+> >  arch/x86/include/asm/svm.h         |   7 ++
+> >  arch/x86/kvm/emulate.c             |  11 +--
+> >  arch/x86/kvm/kvm_emulate.h         |   7 +-
+> >  arch/x86/kvm/smm.c                 |   2 -
+> >  arch/x86/kvm/svm/nested.c          | 102 ++++++++++++++++---
+> >  arch/x86/kvm/svm/svm.c             | 154 ++++++++++++++++++++++-------
+> >  arch/x86/kvm/svm/svm.h             |  41 +++++++-
+> >  arch/x86/kvm/x86.c                 |  50 ++++++++--
+> >  11 files changed, 318 insertions(+), 83 deletions(-)
+> > 
+> > -- 
+> > 2.26.3
+> > 
+> > 
+> A very kind ping on these patches.
 
-Great, thanks
-
-[...]
+Sorry, I won't get to this (or anything else) until the new year.
