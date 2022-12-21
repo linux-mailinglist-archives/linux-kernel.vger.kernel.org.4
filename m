@@ -2,110 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F85652C0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 05:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CB9652C13
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 05:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbiLUEIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 23:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
+        id S234385AbiLUEL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 23:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234245AbiLUEH6 (ORCPT
+        with ESMTP id S234367AbiLUELB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 23:07:58 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2139.outbound.protection.outlook.com [40.107.117.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF58DFB
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 20:07:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SB/+urhxYpOxulvN+R4zs7LDvVqWAKt5s+zHT5kq/QxmS3DX5BPe+SQi/ylmsGytvB1wGs5Mt659vvqMCgao7B8Fpy+UhcfCNxS4KNBktYw639NlbRmZsua+3/Dnlzim5Ep1MmHIXF5kt1e7O4/adHIPTE38wt0IyoeZQ6ozgGTlYZiNWPM60BAXkmEzAePQ5qNLpHSVina0Aq8vONeeHdHTGHo0nneNvTJExkCq7WLkVS9GzfHA3K0rK0eqbVkluxRwKY3EqdIX3ebeZETzDxDC8Nd75As9NVqbnhtifwGCm71YFKZ/06tMm1oVJi5939eZnRbC/9O+e1Ywx2j/Ig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g5ma7J2UCGjG1EgskVNyzwgYf6tkwzMVjg3WtfklXhw=;
- b=Rsc2Jjm7sIsWwiBHGxYeFaHOAFS1y91psWhvrLw71VQVvgtjXmfm8v5fjPLHgmiNox/LeF/gHt5vqKHFEzrQGXbDm+amFHOfG4NNerSisqDcmazH5JpiYOC0zsZ69PzbSmTprdQu2oBOZlbCWWVk7zpmU7egCRxy2m0nnXSrhpNq1qFDAaITudspitELU/Rwh8TNzrBthUEAs+nvIIKixlRj1XzsH+isFgtbgo9NnDhSXCJg7Hw8iuUREDzTmJ4ooPJAcghkto4LKgw7X3kbY2Q1yokHObJTY1xc/s6oY2RTkSiq9F2dYJWbgq9v7VyR9rquNvhWtFwIdXd4wFTkNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g5ma7J2UCGjG1EgskVNyzwgYf6tkwzMVjg3WtfklXhw=;
- b=dCldAjJKuC4LP15NXxTIamP0CSE8pjTGr/ijcnZ+C4pEVGVQ/U5laH7z/WQWeOewk64mPqTXjrf9Oh0frIDLeCZ0KUCF6prA9Kq/XATyVu0fsqLuDTj4qgJcZz+szKJaIHpG6mOqh/+JiwpY/v+xhYW0u3nNLdELh4MHun02bM2ghDUkhFku0SjBeY7SNeg7KQiZFEzwHjyxjRcimlaEyx5GMCr0KZKkckCkhz7PD3k4VocLPQdF3oEGnIvhbq1+lZ+y/iROu0JEj06KkU5vv+Sp6vpdXmXIOn9MiYpV1S2CD7AesTjUCIU9FzBazdCRes8HpZbKo1bDGtU1PedfUg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PUZPR06MB6101.apcprd06.prod.outlook.com (2603:1096:301:115::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Wed, 21 Dec
- 2022 04:07:55 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::ef03:cbfb:f8ef:d88b]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::ef03:cbfb:f8ef:d88b%9]) with mapi id 15.20.5924.016; Wed, 21 Dec 2022
- 04:07:55 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] f2fs: maintain discard in separated file
-Date:   Wed, 21 Dec 2022 12:07:47 +0800
-Message-Id: <20221221040747.42162-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <7cd515b7-cc24-bc66-416d-c9d27fade0ec@kernel.org>
-References: <7cd515b7-cc24-bc66-416d-c9d27fade0ec@kernel.org>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0008.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::10) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 20 Dec 2022 23:11:01 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C5EC75C
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 20:10:55 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id qk9so33972040ejc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 20:10:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mzx67yLOttbqOH0rGRIjrW4YxbQAYmEJCNbwtahfAIs=;
+        b=Zi4+Y3LFrUE/QpUhGprR6trG1kxgqYCD+C+8VW5lmE6NfhhTaCrKaYE2DRkxvXHHYq
+         Z3EnLxCis6VJ/TiXlflnT/8W5J64Z2PrhgVusB3wgQE/ML5H9ywJSvAqLSTj0CiUmMg5
+         YRa/TV1UOVkRcLnv/2nfM1SaNTBBj5CnI8C7PFZKdjqzdTm+OwGr39H2Xwsmjy8esYL4
+         mtbEK30/4ES1p49aYxOr4pBLp1qIcht6/RnoE49cXJRfXR9EgKV4bsNG6SBHHk9yacku
+         X1vaZt8kIxeNAPmmXbuRfz+qzXl8jTkFVNpGdR+Drf/JGlT5kIZdCm8NvpVVom/92PeI
+         dhIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mzx67yLOttbqOH0rGRIjrW4YxbQAYmEJCNbwtahfAIs=;
+        b=4bs5uXnS0CLiIKCtD753ZjjBPWh8Taz+NHg/EqR4yZ+AkfXwrKQ9Ptu5mwBVUXUtnd
+         DogTXFCKLPp2Tm/vjCG2ytquMXLjVxdl0j1eCRU9Lc8wc+k2QMw72bPV29y+edQNtKCN
+         IfzOX8RgmWRso2U8xrraP0qLWU6mq/lsmlx13V+UA59LOdYKLw9YxOmMJ3mOFjznhK19
+         CZEvEVK8UaXcTS6drqiZ1tjWrk2vxASjZ/4bzYq+8TOfQ1nE7tkq7JAcbnRnBu3RLc/u
+         I5eqBfRwTCoijz0EY82ftfitWtP2m2xAt3isrdogduvlSD+OBS5CkNhazV/C66mz2QNt
+         qhMA==
+X-Gm-Message-State: AFqh2kqx/4pKB+HGWLdP+wkGxVVBT++WACT7+Y6CpWhrupReBeuhAeG2
+        hKpQ68ohlO8aJXCBnR9bhQcxJoLgzP52SrtExonVbw==
+X-Google-Smtp-Source: AMrXdXt8SiUKTuYGaxNbOD3qA4B0tGD387SNw63q2+UTIi6JGiZULdL7LxyLVSHx9bk/S3K5GpAhTHh7/TLz23dPC+k=
+X-Received: by 2002:a17:906:4bcb:b0:82d:1d5f:2618 with SMTP id
+ x11-20020a1709064bcb00b0082d1d5f2618mr8070ejv.107.1671595853542; Tue, 20 Dec
+ 2022 20:10:53 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PUZPR06MB6101:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c7eb992-5c27-4027-37c2-08dae308efb6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1uPS39rMVA1MiGua6/KdFyw1r+09QXBHjenBERWSCm9QcEARaBERkhtXc9lSJ50ECwpzDfbSdDRMV9uOMECTtNIy55BcqcKwj/OberxcSQlXv4LRNWhXTsdwfkbSnLZk+OpV+Gk4I0B+Q6i0jzU+IAaEms0Gi+RUjtqHp1ezwxDSGBIJwXscjeUS+/TWVN4m0uKR/VAcfWFDWOwyDlkGQG73u7XbOsQ9k64rye7aqoxaPri0WdaXFfHz/7VOpJ7qQjpWFX2Tjl2LDy70al+XgpqndnfqEIeE7kZgHCNaXy5izinYzhfNAXSo/bmuxlLMFyuOta6dbhz8f86VbSlNQG8gOl8pnfQItCMojfTvrbkSE/78101SqGPZVARCD6LdTjHuCsYt/5jPFTRdae2aqvOonEUzUIT2Nr0Px0z3mzfqteSJFTIDnEqLk/g1uVMfsIdb+KbPLCoAmorLnFMbLZZE6qumlGdpevdnGgVPwl/3GDxcOHMO2/PO6kXQVTsqRgL7Zn37MsluEzXuChYM9wfzvikbz33MbMYhY1V2Ox5ONP/uM5ZIDZMPJOhoREyXlE4gPanC2ncKYFlAtcrCtBIyHvXX2mqun+ZiYuH8Xw+KSyfsDYWWzMfpgx5ydksZGDNr51C1gAOg8JCwjb1Srw0Hwr6/rhgOlyxElv/0erwK1r7ObF5hmQH0omhwUy+PfU84SSqMdBWn67p8FUrjz5BlZyDQEVeWhvhXSyHeIQQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(366004)(376002)(136003)(451199015)(1076003)(186003)(6512007)(26005)(478600001)(966005)(52116002)(6506007)(8936002)(38350700002)(6666004)(38100700002)(6486002)(2906002)(5660300002)(36756003)(4744005)(83380400001)(316002)(2616005)(66946007)(41300700001)(66556008)(4326008)(86362001)(66476007)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9T4jzhq3n3rpZEnFK037b1fyA2furSSiyeRhNnIRjuFsSRHKz1TEABj0uOP3?=
- =?us-ascii?Q?SnrrLpqAWmH8HcS5BQwjsBJQSMnTMWmHB7LhQkrm1fcyKlFvHqx9csR8Qz/c?=
- =?us-ascii?Q?UB6G2OzrVPKCzuwDyWm43kJf2GgNzB52/m0VUwVzMhC4n3hC1zRE1ssC8sVA?=
- =?us-ascii?Q?BKKnaaAGuwqNtetLFpVAamZApvUmAorDDqKHdvNxQUVD1O3qffnapEQOwgGH?=
- =?us-ascii?Q?VuLhIznecG3ETUBAAFCFjJePj/zdCJ4kUW1vUdXNRDXdtBCKZWFZP1280b6L?=
- =?us-ascii?Q?9NdB60/b9zvaH0Ph9RYQduinHbHPccsy57lrVBjGNSJxKoAVdnnxQMb86J8j?=
- =?us-ascii?Q?utKuLmXF4+7LjUUbc1xB5kkBaSIRoF3Lt1FZZzXVMtywMVFT8LkN6Jl23uWv?=
- =?us-ascii?Q?zjZrntE8VE9LdHDQ4e3NRkj09+u7F1P2F3LhZykx7d2NtW4CWRhuka7mZM+U?=
- =?us-ascii?Q?hphVQy3eenzzru9Pgfz4O3HUZ6FAxbfQCTOuZOI33FEy0ZaBBuogLoDTyt/Q?=
- =?us-ascii?Q?TmjhD7IkzmYzQB5YY2VRw/+159SdwgqEjhfSt0cq3F1qh+7W9k8zY0TCAGXB?=
- =?us-ascii?Q?DNCb5ODu/19V/0sv3Pw8/KxwE1oxtBhJz7Ftm+0lytxA/hz/lwKskNzFf0AJ?=
- =?us-ascii?Q?zkj056RyHPow9mYzWkzabijiw3YZnmV66MwaOP+JZNV9HtZnuacn90szhrot?=
- =?us-ascii?Q?FLLjOfgpFSmuRjPFbStHWu9k8zVpeIweQIS3XDhvdvHJF36W8Ze9a5eY/xS7?=
- =?us-ascii?Q?h6WOWCUccTREa32VRyTkKDAkU26/JKOJTRB37qwzETTwIL7VZo2VEqc1yej7?=
- =?us-ascii?Q?ZgI+cbssuNKTCN54vNam55WMs8AQ+HGqGUn+Sgbx8S5NG5kLDFbmUKHCfykx?=
- =?us-ascii?Q?+i6bOL1+5huxov3t2bt+2KvUU2eWchGQp088pWqrgzi7kacW0OZU4/mqyPmr?=
- =?us-ascii?Q?UpONwborLtgpJaRUhqmw4UyhIBH56WPXPThRehgXy9c0dERnWSygjnZag+mP?=
- =?us-ascii?Q?vUksCvD8B9JrnEVzjW3aBxJrjLzKsluaO2X/TumlBlwp0wYsdtv3gFncEh6N?=
- =?us-ascii?Q?rouF5tngN+2kYW++LlE7UVkaequq0KIEFNvYE+3+64wEHGq83PpEGNxdpc0l?=
- =?us-ascii?Q?dOSl8VrgL1nchDzhe3Tnz1wpsYGeE7+dHaDv0IpnSluZkzmVJvjmBVKCapP8?=
- =?us-ascii?Q?Tr1jI6yZr3iTfKOZpjQ8K/q9wBlp+VtNUWX8kOK92sETF4dlNk+PPRh9fnQH?=
- =?us-ascii?Q?wO/McgJHv6dHQIk9fuDoencnyhupc1lqznT66KABv36VTEDVN2joQojYbvct?=
- =?us-ascii?Q?Ttm8U5Tes+rOOro3lBWC/0Gx+0e48ZxULvfV2BrAsWQ9k4RhZWtx9Z4bHjCB?=
- =?us-ascii?Q?Lr2/c1bTq/K3wHKmqjK9s9hJVM0zQqs8w+NWeLpFNKQPDALcrOJ79eaf5711?=
- =?us-ascii?Q?tuZTOz04sUwX4jeldtGrSKdGaX8jsO4ZtQa85tlMkR0PayJeRfr03oADud1u?=
- =?us-ascii?Q?i9VCUoOwU3ufXuKeAHGlrYhn+H5o8RSNnbkJpQWP5Vyt1BcTuzszouThlgTE?=
- =?us-ascii?Q?LA8CvNmRLZaWublygpvK1d2TdHahDlkGiZMjgMUp?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c7eb992-5c27-4027-37c2-08dae308efb6
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 04:07:55.0254
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LD8X7zUwfhL7shyFFvov6NJqc/oc/bNI33Ol5W7U+l0gDv0VKxJ5/WjNHs8ev2mx7QCvbnYqivJvQOjrOGqZpA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB6101
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221220055954.11197-1-zhouruihai@huaqin.corp-partner.google.com>
+ <CABXOdTeJuFn-23OiTshJTQWMBvkiqOXUh6S8z354eEPzj+q4Ew@mail.gmail.com> <CAFUSabk3Lut1sHXOQi=ArtS9BvyqZQcTawKBVHupRJt+zOVaMg@mail.gmail.com>
+In-Reply-To: <CAFUSabk3Lut1sHXOQi=ArtS9BvyqZQcTawKBVHupRJt+zOVaMg@mail.gmail.com>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Tue, 20 Dec 2022 20:10:42 -0800
+Message-ID: <CABXOdTdt+iW5e6X1ZAKfqWdkdZOrQ0-5bLoJA8s8vBmSi7f9zg@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: deferred probe when typec
+ count mismatch
+To:     Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>
+Cc:     pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org,
+        knoxchiou@chromium.org, weishunc@chromium.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,22 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Jaegeuk,
+On Tue, Dec 20, 2022 at 6:10 PM Ruihai Zhou
+<zhouruihai@huaqin.corp-partner.google.com> wrote:
+>>
+>> I think that is problematic. It might as well be that nports >
+>> EC_USB_PD_MAX_PORTS.
+>>
+>  Yes, you're right. so we should consider it's a invalid argument and return -EINVAL if nports > EC_USB_PD_MAX_PORTS. right?
 
->> This patch moves discard related code from segment.c into discard.c 
->> since discard is independent feature, and it's better to maintain them 
->> in separated place.
->> 
->> There is no functionality change.
-> 
-> Please check Jaegeuk's comments on similar patch:
+Why ? While this would be a bug, it should hopefully be found early in
+development and never hit the field. I don't see a reason for changing
+the code.
 
-> https://lore.kernel.org/linux-f2fs-devel/20180426160819.GI68594@jaegeuk-macbookpro.roam.corp.google.com/
+>>
+>> Is this really seen in the field ? The EC should never report a wrong
+>> (random) number of ports. If it is not ready, there should be _some_
+>> indication that it isn't ready. Does it really report a more or less
+>> random number in this case ?
+>
+>  Yes, I saw this on corsola board. The EC report a wrong number(not random), because corsola emulates HDMI MUX over the current
+>  type-c mux stack. The ec has to fake a type-c port to pass the MUX info. But the task are not initiated on starting up, and increase the
+>  type-c port counts after the tasks finished. In this case, I saw the typec->num_ports = 1, but the nports = 2, which will be probe failed and
+>  block the HDMI mux function.
+>
+>  I will send v2 patch, if nports > EC_USB_PD_MAX_PORTS, then return -EINVAL, but if nports > typec->num_ports, we consider wait a second
+>  to ec task increase the type-c port counts if there're a HDMI DB attach, then return -EPROBE_DEFER
 
-How about to pick Chao' patch?
+The current code just reduces nports if it is larger than
+EC_USB_PD_MAX_PORTS. Again, I don't see a reason to change that.
 
-Discard is a relatively independent feature, maybe we can move it to an independent position.
-And for systems that do not support discard, use CONFIG_F2FS_DISACRD=n to cut this part of the code?
+Anyway, I am not sure if the above will work reliably. I am not sure
+what "HDMI DB" refers to, but if it is an external connector its
+status could change anytime. In that situation, no amount of waiting
+would help. Either case, the EC on corsola should really not change
+the number of ports it supports. Either it is a constant that should
+not change, or it is dynamic and the EC would need to tell the host if
+the number of ports changes (up or down). Trying to fix this in
+cros_ec_typec without well defined protocol exchange with the EC is at
+best a kludge, but not a real solution.
 
-Thx,
-Yangtao
+Thanks,
+Guenter
