@@ -2,116 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92846653096
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1F8653099
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiLUML3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 07:11:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
+        id S229881AbiLUMMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 07:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiLUML0 (ORCPT
+        with ESMTP id S229472AbiLUMMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 07:11:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146332628;
-        Wed, 21 Dec 2022 04:11:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA1DCB81B80;
-        Wed, 21 Dec 2022 12:11:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C44B4C433D2;
-        Wed, 21 Dec 2022 12:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671624681;
-        bh=Yi1sF85S9MiMleKMdbGeKCC7UjazMd8nprfYlJnsE3w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S4coD86hzo9BMcqjlDxy02GuxStiRxBs7xL/tkcssh1jWhItk0rGK2OU6Y+XqdM+m
-         5bCE/Dvs25Y8XxNOf/CZBK5cTmRJcCeRcqKyiDe4Bnu4OCTQ7MEIaSzAHGC0QFVSba
-         8LasEW8ba5HXLLdduosoIp5JXLoVPLvCt6pULlbHDcqp1mP/qTaarv3nm3vuNQXrkW
-         Oiv/KPZDSZixi0sPUpL/Bv4jaknANlXpZb67jJCbfdqA8Y+HkEJ++L8zaa8UKLefwN
-         dpIVZr/qXVfJ/NCEpKj+cVjmA3rtzmHnLTNuhUFDBPBdgDeHOE89mBRejlQlaQqeN4
-         miJmNHppBoxmg==
-Date:   Wed, 21 Dec 2022 13:11:18 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Message-ID: <20221221121118.GA35081@lothringen>
-References: <20221220140714.GB22763@lothringen>
- <CA83E649-8C79-4D39-9BFE-BBEF95968B98@joelfernandes.org>
- <20221220224459.GA25175@lothringen>
- <CAEXW_YSAv+MzZoW9RK9H3E6DAyZH+wB=4bMy5nXTOExSwgSwAg@mail.gmail.com>
- <20221221004957.GA29021@lothringen>
- <20221221005858.GA29316@lothringen>
- <f4199d1f-306c-681f-8bb9-26d66ecf5121@efficios.com>
+        Wed, 21 Dec 2022 07:12:30 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE672AE2;
+        Wed, 21 Dec 2022 04:12:29 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id d2so10183638qvp.12;
+        Wed, 21 Dec 2022 04:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oQf5YLAPimW4Vw+lXekg7aGz4djtucNpOLvkhBsL8fY=;
+        b=MyQgM3oNihULVPGYU+e06vCoKN5a/flzi84nvSKLIPFKcbzcABA4S8BwGSUlcCFOqV
+         lN6w6ZsEZXlcfEW7+9JzAj9olv9B+iRhJqSS6o4J98blKQEAONcNLrPZgv0EjvdexRUe
+         VI71fSP+yaZulhoFSxLRfWc2fYAtpwW9ih9lIQ5twYPhaHOVyvFFZcSKDnf+GAFEom0F
+         HUr0r2oKpdHe/gGWq15oVcgfOKwTIdNIMrtQsFMNzRhh5+xVrifksmFa3DhPOlqRug1H
+         ZfYrVkbSjtgcCalWzdy2xgW1pk+1mVtWsxmPGAd92n3Cec8qi7Zu/bRWP2fwDAA+zu4Z
+         MMRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oQf5YLAPimW4Vw+lXekg7aGz4djtucNpOLvkhBsL8fY=;
+        b=LKWGXWxHHLpKf4mLgzS8nGcZy93O2++NyNJlnc41UOTQDOa2Ug6M3iDRmrtUVXH9FS
+         cMEMjM5RrdlY11tF0OIE6lqSJ2rd1uluL7Bb5L6X+wXsCHkG3dCxOraG5DuFUc4UcqmC
+         +/jCQuzZurRcEYIkk//2RkME7QpIt+2273XMw6XkqDuHoi9DNXSFi0dL+XTPIUoT0pbu
+         JJZzABMuSiZpFSEd1HVx6dwTcfi3zdIqpdaamz1diPizNCvniSSJOosEtNuCLc4RcTom
+         GS5Xf4CsdqRfqqav1LRObngPIq4hkWAH/sRIHuVrZ8RuM5bqg7XP017MpkYx9CVAy+xf
+         ohew==
+X-Gm-Message-State: AFqh2komHGmre9ZCfcrPOf7AR0ZIq+Yify9fMTufAQMHkdz8RtAhT7GS
+        Ahw8YxUO7qBnG1WSkTBQ1VDJlplEksBES6BNrbUdBhOKDj1sd7W+Jtxbgg==
+X-Google-Smtp-Source: AMrXdXs3I6lQEOnWGKd4HpQBGugdIGOO6wFs7aYgVIashBCALecxPLc7OZbV9+5OFuIdu/AX2jtgr+AY080gTizJnOY=
+X-Received: by 2002:a05:6214:a91:b0:4bb:7998:fed6 with SMTP id
+ ev17-20020a0562140a9100b004bb7998fed6mr69417qvb.86.1671624748724; Wed, 21 Dec
+ 2022 04:12:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4199d1f-306c-681f-8bb9-26d66ecf5121@efficios.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y6KfFEChA67E7oX/@VM-66-53-centos> <5a7907e3-f79e-5de9-ed1b-ec24ea52c437@linaro.org>
+ <CAMmci2UgwqDyPPJXwGRsMW1Y1Cy2c6LMybk+7v7pGz-LtYzGTw@mail.gmail.com> <2673859.iZASKD2KPV@diego>
+In-Reply-To: <2673859.iZASKD2KPV@diego>
+From:   ty <zonyitoo@gmail.com>
+Date:   Wed, 21 Dec 2022 20:12:17 +0800
+Message-ID: <CAMmci2XoF0M81mVt8zko3D3G2oTHq0ia_nZ9CPX9Xz20j92c9Q@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] dt-bindings: arm: rockchip: Add EmbedFire LubanCat 1
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, DHDAXCW <lasstp5011@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 10:43:25PM -0500, Mathieu Desnoyers wrote:
-> On 2022-12-20 19:58, Frederic Weisbecker wrote:
-> > On Wed, Dec 21, 2022 at 01:49:57AM +0100, Frederic Weisbecker wrote:
-> > > On Tue, Dec 20, 2022 at 07:15:00PM -0500, Joel Fernandes wrote:
-> > > > On Tue, Dec 20, 2022 at 5:45 PM Frederic Weisbecker <frederic@kernel.org> wrote:
-> > > > Agreed about (1).
-> > > > 
-> > > > > _ In (2), E pairs with the address-dependency between idx and lock_count.
-> > > > 
-> > > > But that is not the only reason. If that was the only reason for (2),
-> > > > then there is an smp_mb() just before the next-scan post-flip before
-> > > > the lock counts are read.
-> > > 
-> > > The post-flip barrier makes sure the new idx is visible on the next READER's
-> > > turn, but it doesn't protect against the fact that "READ idx then WRITE lock[idx]"
-> > > may appear unordered from the update side POV if there is no barrier between the
-> > > scan and the flip.
-> > > 
-> > > If you remove the smp_mb() from the litmus test I sent, things explode.
-> > 
-> > Or rather, look at it the other way, if there is no barrier between the lock
-> > scan and the index flip (E), then the index flip can appear to be written before the
-> > lock is read. Which means you may start activating the index before you finish
-> > reading it (at least it appears that way from the readers pont of view).
-> 
-> Considering that you can have pre-existing readers from arbitrary index
-> appearing anywhere in the grace period (because a reader can fetch the
-> index and be preempted for an arbitrary amount of time before incrementing
-> the lock count), the grace period algorithm needs to deal with the fact that
-> a newcoming reader can appear in a given index either before or after the
-> flip.
+Hi, Kozlowski and St=C3=BCbner,
 
-True but the number of preempted tasks is bound and there is a forward progress guarantee.
+Thank you very much for pointing me in the right direction.
 
-> I don't see how flipping the index before or after loading the unlock/lock
-> values would break anything (except for unlikely counter overflow situations
-> as previously discussed).
+> So how did you solve the comment "Does not look like properly ordered.
+> Don't add stuff at the end of files/lists."? What did you change to
+> solve it?
 
-Forward progress guarantee.
+> for context sorting order in that file is alphabetical by description
 
-Thanks.
+I finally got it. It should be put right after the "Elgin RV1108 R1".
 
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> https://www.efficios.com
-> 
+> You do not wrap at 75, but at some other place. Just put it to editor
+> and check where is wrapping (count characters).
+
+The original message was:
+
+>  from: DHDAXCW <lasstp5011@gmail.com>
+>
+> LubanCat 1 is a Rockchip RK3566 SBC based
+> is developed by EmbedFire Electronics Co., Ltd.
+> Mini Linux Card Type Cheap Computer Development Board
+>
+> Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
+> Signed-off-by: DHDAXCW <lasstp5011@gmail.com>
+
+The longest line is "Mini Linux Card Type Cheap Computer Development
+Board", which has 53 characters. Or ... I should use the whole line as
+much as possible? Then I see why I was doing wrong. It will be fixed
+in the PATCH v5.
