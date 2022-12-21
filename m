@@ -2,524 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534D865346A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE43265345E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbiLUQzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 11:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S233234AbiLUQw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 11:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234493AbiLUQz0 (ORCPT
+        with ESMTP id S229728AbiLUQwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 11:55:26 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEE024F31;
-        Wed, 21 Dec 2022 08:55:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3E947CE184D;
-        Wed, 21 Dec 2022 16:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB96C433D2;
-        Wed, 21 Dec 2022 16:55:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671641720;
-        bh=kQ5TM6o2+LDElE0lUxB2V7bOS6UURSuGPno2UEuB5h4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pft5AQfhG/sHe7eeMbIbFK+SGbmH5rOcQ9L3Bg3BzbZxOpuPZPh7/6XEv0uZJY4f6
-         snwcym33KBcJYWoV/dd4G/8BVu5GkvEIN5PH2o/r7xrrk0gIwJiieQzaZ9M6gek23d
-         HO8YhaWkKsa1k0NstcG5giVixsAoQRVryFaD2ixU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 5.15.85
-Date:   Wed, 21 Dec 2022 17:55:08 +0100
-Message-Id: <1671641708252232@kroah.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <167164170822885@kroah.com>
-References: <167164170822885@kroah.com>
+        Wed, 21 Dec 2022 11:52:55 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2088.outbound.protection.outlook.com [40.107.212.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922F77679
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:52:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hq+YOATGJ2JsJUX3BE1PTxPgRxgmaVTtpoKgNRAKpxGzn52Tb25HqE6jcUByUvaay0kwfq9pjjXGk3s6DjXofTq05YrM2LbUv63GtEpmvECvlTZNyqIfdcKMSRKas5ab2sfQNPbtS7Cc7srQxApXU0lu7QbJVsJ1qi7vwGkQAZcU7vWRCvL7xGHYtQI5ZWuLylEY3wLFDpF2hlokwRqoLHWs46ylZUbOR1CAPnNRRUKR0oRwCWH7QAJQY1ykY304Mbz6RUQeOmvpFk6HPo+gYp2BCC9l2G0xz+8DZpoJ/ehk2YJ4qH1eEKt4gWbSfUH4rbK2k8JjHg5qbDEvIjlRQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RnviDfjDncYP7duZytT8HerOvdsH8tW2tTgyISbEXrA=;
+ b=Llu4hRo+15KMW4HhVOzRLdOCyxI3jPsc6hW+SwBhrrqn+0gscVJVBYyFBU+puz6q/IKk/n/zpvVoqRSXratj7lpqX4sgVYrgvRtFgCLOjptsBxxtkGFtKG8MP8C7Q+xxeq9QQSuz1nMyhOnxoRZtfVnhKUE7zvkSolgwFRWts842P+jC5eSgsyEDpKZAQK8FQ1M7TZKJRCVCOs3KPaCxkx75M7Q2qzENq0+T26HqySUJ94aUP28SQkf81Fwd+7LVCy4w9cfE4wbgvN6LLKmfA3z5Lpok4tDAlNnE2Ckgru5gDAvcbjPiNIQ8IjXmH9vaj85rJqbnQ1a1XQQFxPeGLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RnviDfjDncYP7duZytT8HerOvdsH8tW2tTgyISbEXrA=;
+ b=rWPcBf+7pUO/C1cIjabC8IhPym8IILxWm8qKAZXWlag396MdkKunzNdjJGhNl6Pn5ZCF5Kb7GElo3UZc3DI/r5SWMEvJ0S/BV93lDxR5NMr1P1tWs37webk/5tFtLeT3gfHuUIG984X8JCIRzCIcxCG2k4mY1rQjvKQmRYEOY38=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
+ by PH0PR12MB5436.namprd12.prod.outlook.com (2603:10b6:510:eb::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Wed, 21 Dec
+ 2022 16:52:51 +0000
+Received: from DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::7d2d:dc01:79cf:df79]) by DM6PR12MB4123.namprd12.prod.outlook.com
+ ([fe80::7d2d:dc01:79cf:df79%3]) with mapi id 15.20.5924.016; Wed, 21 Dec 2022
+ 16:52:50 +0000
+Message-ID: <7fe4d8aa-ea13-bb78-655e-b6122e0b35a4@amd.com>
+Date:   Wed, 21 Dec 2022 22:25:23 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V2 1/4] ASoC: amd: ps: implement api to retrieve acp
+ device config
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, broonie@kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Mario.Limonciello@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221221112611.1373278-1-Vijendar.Mukunda@amd.com>
+ <202212220044.5C92oI7z-lkp@intel.com>
+From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
+In-Reply-To: <202212220044.5C92oI7z-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0189.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e8::10) To DM6PR12MB4123.namprd12.prod.outlook.com
+ (2603:10b6:5:21f::23)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|PH0PR12MB5436:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ebb5fb6-89e1-4252-f0c8-08dae373cb88
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Kxz/xM5yapbbHzfSLvygwbd9xrBlieBNuCeBGKtSRNmo2NAjFeeAlEVYFqaCsf0PKd5FKbv+5EbcRGICg3KGiBW09eKpbRGcQorROgHA8uRK652FQgJA/2EJnHEgR8SpJkvfFAl8dRCN/4iVuzPbcs0VXrCTWG9FRioCurwBnEeqT4EuRvCCalYTI4KVkeR31RV6nhuyNrE5UxzP4LEb/X3+KhfMo2FV3vyoNc0Qghu7QBE7bPJKkX5PALokiQP1Ndftj4nSBNcBc/a4rZ5caULp0WTBcvI4jCn1tc40Ry8HKNk+uLv8fqiGs0xx3iM28as+hQsTaWoHmdUbQ3PZk0hHix665RSqYAW5HyljCvO+DONeVbtlHxZylE7iugg56iwA6CaYzBUdk5rLyesL5amWipJpR6lBNrUKMw3ilgqP1CNw6uNUr6f2or3dl3JoQkdlIoOOYVKP/z0jDq5mCFolTNedWF0wzVruLMHg2UCl+rMbQWLnamiHATuomhTRpkgsW86t2tqu/FnSCiO1jeiAjD0rydJcv2mJjgzgbckpHuOL6RQzWmR0VoWQbPye7iRGXMe2QoXyqkwQUrNRVUyQUavZKHkFzXxqMrWbjnV4wkArgUu0IHSkMm/niIb0zkGJlWMlCE3ZYnZISj8G20DwXJr7iT7HaSpiPUcjTz9thU1s5vmiDb76GcKehBH9xP3KBwtKPTNQPXuNmT7q2D7n4dhm72l1BqJ3O1yIMeQ5UUuEl40OZgmlRV/onTouzHpJZpzf8hNFGkSVIGmLjypTmEmBc/z9LekAIIFYIp4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(39860400002)(136003)(366004)(451199015)(31686004)(45080400002)(2616005)(186003)(6506007)(6512007)(66556008)(478600001)(26005)(6486002)(8676002)(66476007)(66946007)(41300700001)(8936002)(5660300002)(83380400001)(2906002)(6666004)(966005)(4326008)(36756003)(54906003)(38100700002)(86362001)(316002)(53546011)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L0w1S3huWUVGVmFHK1QwSGE5YlkwZmhxaUpnNU8xQTRKSXN4SkI2MmhzSWVo?=
+ =?utf-8?B?S2FJOXo4cTVNQU1xekU4R1N4eG8yZlFSNGovb3hmN0VMNUtmdkRvNG5INlYr?=
+ =?utf-8?B?b2lxTUcxeFNLQzRFSExGbVhvMW5ZdWdiZVZuL2NwWmV3bTZLUXN0SnYrVzhZ?=
+ =?utf-8?B?Y043QTJQWmh0a3IyazJuc09vZnBpQXZ0RWZINTNJNFE5RVVZWUZTeXBPR0RY?=
+ =?utf-8?B?SmRQd05hRStNa0pES1RtcHFxNm5HbnlSM2xSbWNmVVlZQ2xDb09KV1FyMEhG?=
+ =?utf-8?B?MnNJQzVWMFdiQk13TEkzM2dsYjlhcFdMcGN5UlNncy8yeEhRRitucEVib3Vx?=
+ =?utf-8?B?UHpUOG5zTGtWZkhRNjU0VlpicjlDYXJlZmVhZ2hpU2VrOVBSZkZwbUdBTUdN?=
+ =?utf-8?B?NmJJbmNzdTloZHBBSmpkSzhJR1JlU1poTk16K3cyNGlLZUNld3g3eGw1eXRo?=
+ =?utf-8?B?YkdlVUlaVGdkZWhJblNtVjJEdkoyazBBYnlXTjdKcVMvUDh4cGFhUmJkOEQy?=
+ =?utf-8?B?cW1zemZOSnEva1ptc2J4SGNWTUVWbkpBVnpab0hqVXZHZzNrQ0h5TEJDUUQv?=
+ =?utf-8?B?MTA4TU11eENHclZCcThiR1YyM2RNRmxCOStSVXpROTFsQ1FpdlFXVXI0ekI4?=
+ =?utf-8?B?Q1hGQ2xWTDU2MW1OeWNJR3dqd1dtWWEyTUJuZWkzR1JseVg5MHErN0JYUGg2?=
+ =?utf-8?B?MVZzVElMdlRSYjRsVXM3dFAxdngwN2VZRU9aYkhIS2hVc0VDTXc3S05QeEEy?=
+ =?utf-8?B?TG4rcG9FQUE2Yk5Td2M3anhPMEZEZXZhUVl0Q0JnZVA3Q3NOTmhSd3ZNOGFy?=
+ =?utf-8?B?UUtjM2tUT2NWeEprQWIrWWp5TnR2YVU3b0pQMWhidDNaZ0xSSVJNcWtLSzk0?=
+ =?utf-8?B?RVhnaDNKdE14N3ArQ3gxdm9WcXBvS29WbTBrMU80bnlIZG8raGNYUFRCeXRi?=
+ =?utf-8?B?ejZwL3I5ZHorbWo5UXd0dk85T3YvQktLQlR3ZHNzcVZLU0k4ME8wOFR2NWtU?=
+ =?utf-8?B?eTBoWGxpVVprLzlFaFlrMnpTdWc0WmdHYkNBMG01bVhQODQwS1Nidi82OGRm?=
+ =?utf-8?B?R2FXTWMvZkY0TExla0JJZTFzbVJnUHdVUXUzdHNJZ3ZDZlZNaFdSdWllVFlj?=
+ =?utf-8?B?TW00MVBNKzFGWHQ5dll4QkRMSmdWSEdQZUdhWENxcklkR0pWYXVOVkR2RDhi?=
+ =?utf-8?B?VUxNMTFHRkdSejA1V1JRZEdRSndTVkV0eHZjK2dzSG5Bb3dVSVNMdUtNY3Zi?=
+ =?utf-8?B?U1BzV2FqRDRjNmJyY2ZvL0I0eHBBKytWb0pQNkZOeS80VFgxZkFqbVg0RjBl?=
+ =?utf-8?B?aXZncGwzWTlOZk5mYUNFS3h6MFhSYld0ZitYdGZLQk1HK1U1SXRxRi9hUzJV?=
+ =?utf-8?B?RDEvY05NbzR3T0pCSzY0WTJLazZxNWczazFlK0c4K0YwWDBCNGF2K2cxQTMy?=
+ =?utf-8?B?KzllWEFqQ3cxUE1OMndDazFQTmY5K3I4cW5LYUJiTGliNmdiUHdXODkrTnc1?=
+ =?utf-8?B?aFg2NVYrZm5xUmV5bVpxZW1vZHJXUzlCZzNxUDhENmw1QnMzSVhlN21tMm82?=
+ =?utf-8?B?MXIyenJkamxWMndZMnpzZzA2VHdvVlJGVVlvMXN3R1lwWEJvUkZPYmFxZW11?=
+ =?utf-8?B?OG51anlucThQa0FzNlNYS0JLRU4raitVL2QrM254b1ZqL0s2UHFDWTREeGxq?=
+ =?utf-8?B?eDhVQUFLa0J0N1pwYVdNVFkyb3VNc0RBM2NsYW16cGV2OUJodEJ0RGlqODF6?=
+ =?utf-8?B?MFEybDdRVFlTeWljVDllOWI2ZjBHMjc1K2VYZk9mejB5Ykx4NmVNdVZjTGpw?=
+ =?utf-8?B?eDc0VW9BbTBBUmxhVmFCSzNVSlRSdFZ4TU5HdWl4Z2NTNWdKMCtIM1Q3K1FV?=
+ =?utf-8?B?cUxjb2xGeEN6OUJ1U0FpbDBDQjdVVmVEeU5GM2szNUtsNU1GQk1hazRPNi9H?=
+ =?utf-8?B?dHZYZytwbVM2M2dCbitLU1dQcXFxWjRZRGxlcmlVeXNJaklUWTJSV09rQTRR?=
+ =?utf-8?B?a2Q5SFZyK0lDQ1FkaEI4MEtPVkRzTTk3MFhNc05zMEdSZjZEM2VnUUQySU9q?=
+ =?utf-8?B?TFNwTFNLQktFa0ZjSytnQmQ4QUdCQTRJcU9ZWDdVOC9Zell5ME4za1NwMStk?=
+ =?utf-8?Q?WLYeaoCYU6pvCdiO8ciEa1xY7?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ebb5fb6-89e1-4252-f0c8-08dae373cb88
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 16:52:50.5749
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: b9JEL6e4+xRp4D1btiYaDfnuuwJA1L95zYGPws2QNoq6kGUc2SuHA9e04dkINpYyqG/mKyuJrEA0dxYfUmueZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5436
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Makefile b/Makefile
-index 66cd053b3e7a..314864891d49 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- VERSION = 5
- PATCHLEVEL = 15
--SUBLEVEL = 84
-+SUBLEVEL = 85
- EXTRAVERSION =
- NAME = Trick or Treat
- 
-diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
-index d8ab0139e5cd..785d81d61ba4 100644
---- a/drivers/hid/hid-uclogic-core.c
-+++ b/drivers/hid/hid-uclogic-core.c
-@@ -172,6 +172,7 @@ static int uclogic_probe(struct hid_device *hdev,
- 	 * than the pen, so use QUIRK_MULTI_INPUT for all tablets.
- 	 */
- 	hdev->quirks |= HID_QUIRK_MULTI_INPUT;
-+	hdev->quirks |= HID_QUIRK_HIDINPUT_FORCE;
- 
- 	/* Allocate and assign driver data */
- 	drvdata = devm_kzalloc(&hdev->dev, sizeof(*drvdata), GFP_KERNEL);
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index f19e64830739..70667b46858a 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -7410,7 +7410,7 @@ static void igb_vf_reset_msg(struct igb_adapter *adapter, u32 vf)
- {
- 	struct e1000_hw *hw = &adapter->hw;
- 	unsigned char *vf_mac = adapter->vf_data[vf].vf_mac_addresses;
--	u32 reg, msgbuf[3];
-+	u32 reg, msgbuf[3] = {};
- 	u8 *addr = (u8 *)(&msgbuf[1]);
- 
- 	/* process all the same items cleared in a function level reset */
-diff --git a/drivers/net/loopback.c b/drivers/net/loopback.c
-index a1c77cc00416..498e5c8013ef 100644
---- a/drivers/net/loopback.c
-+++ b/drivers/net/loopback.c
-@@ -208,7 +208,7 @@ static __net_init int loopback_net_init(struct net *net)
- 	int err;
- 
- 	err = -ENOMEM;
--	dev = alloc_netdev(0, "lo", NET_NAME_UNKNOWN, loopback_setup);
-+	dev = alloc_netdev(0, "lo", NET_NAME_PREDICTABLE, loopback_setup);
- 	if (!dev)
- 		goto out;
- 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index c52f7b5b5ec0..e55d0c7db6b5 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -43,7 +43,7 @@
- #define PCI_DEVICE_ID_INTEL_ADLP		0x51ee
- #define PCI_DEVICE_ID_INTEL_ADLM		0x54ee
- #define PCI_DEVICE_ID_INTEL_ADLS		0x7ae1
--#define PCI_DEVICE_ID_INTEL_RPL			0x460e
-+#define PCI_DEVICE_ID_INTEL_RPL			0xa70e
- #define PCI_DEVICE_ID_INTEL_RPLS		0x7a61
- #define PCI_DEVICE_ID_INTEL_MTLP		0x7ec1
- #define PCI_DEVICE_ID_INTEL_MTL			0x7e7e
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index bf0a3fc2d776..5df1b68e5eac 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -213,8 +213,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
- 
- 		memset(&v4l2_event, 0, sizeof(v4l2_event));
- 		v4l2_event.type = UVC_EVENT_DATA;
--		uvc_event->data.length = req->actual;
--		memcpy(&uvc_event->data.data, req->buf, req->actual);
-+		uvc_event->data.length = min_t(unsigned int, req->actual,
-+			sizeof(uvc_event->data.data));
-+		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
- 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
- 	}
- }
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index fdf083196528..105f2b8dc1ba 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -59,6 +59,7 @@
- #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
- #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI		0x51ed
-+#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI	0x54ed
- 
- #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
-@@ -247,7 +248,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		xhci->quirks |= XHCI_MISSING_CAS;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
--	    pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI)
-+	    (pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_PCH_XHCI))
- 		xhci->quirks |= XHCI_RESET_TO_DEFAULT;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index a2126b07e854..9bb20779f156 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -195,6 +195,8 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(0x16DC, 0x0015) }, /* W-IE-NE-R Plein & Baus GmbH CML Control, Monitoring and Data Logger */
- 	{ USB_DEVICE(0x17A8, 0x0001) }, /* Kamstrup Optical Eye/3-wire */
- 	{ USB_DEVICE(0x17A8, 0x0005) }, /* Kamstrup M-Bus Master MultiPort 250D */
-+	{ USB_DEVICE(0x17A8, 0x0011) }, /* Kamstrup 444 MHz RF sniffer */
-+	{ USB_DEVICE(0x17A8, 0x0013) }, /* Kamstrup 870 MHz RF sniffer */
- 	{ USB_DEVICE(0x17A8, 0x0101) }, /* Kamstrup 868 MHz wM-Bus C-Mode Meter Reader (Int Ant) */
- 	{ USB_DEVICE(0x17A8, 0x0102) }, /* Kamstrup 868 MHz wM-Bus C-Mode Meter Reader (Ext Ant) */
- 	{ USB_DEVICE(0x17F4, 0xAAAA) }, /* Wavesense Jazz blood glucose meter */
-diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
-index a7a7af8d05bf..e04bdb308265 100644
---- a/drivers/usb/serial/f81232.c
-+++ b/drivers/usb/serial/f81232.c
-@@ -130,9 +130,6 @@ static u8 const clock_table[] = { F81232_CLK_1_846_MHZ, F81232_CLK_14_77_MHZ,
- 
- static int calc_baud_divisor(speed_t baudrate, speed_t clockrate)
- {
--	if (!baudrate)
--		return 0;
--
- 	return DIV_ROUND_CLOSEST(clockrate, baudrate);
- }
- 
-@@ -519,9 +516,14 @@ static void f81232_set_baudrate(struct tty_struct *tty,
- 	speed_t baud_list[] = { baudrate, old_baudrate, F81232_DEF_BAUDRATE };
- 
- 	for (i = 0; i < ARRAY_SIZE(baud_list); ++i) {
--		idx = f81232_find_clk(baud_list[i]);
-+		baudrate = baud_list[i];
-+		if (baudrate == 0) {
-+			tty_encode_baud_rate(tty, 0, 0);
-+			return;
-+		}
-+
-+		idx = f81232_find_clk(baudrate);
- 		if (idx >= 0) {
--			baudrate = baud_list[i];
- 			tty_encode_baud_rate(tty, baudrate, baudrate);
- 			break;
- 		}
-diff --git a/drivers/usb/serial/f81534.c b/drivers/usb/serial/f81534.c
-index c0bca52ef92a..556d4e0dda87 100644
---- a/drivers/usb/serial/f81534.c
-+++ b/drivers/usb/serial/f81534.c
-@@ -536,9 +536,6 @@ static int f81534_submit_writer(struct usb_serial_port *port, gfp_t mem_flags)
- 
- static u32 f81534_calc_baud_divisor(u32 baudrate, u32 clockrate)
- {
--	if (!baudrate)
--		return 0;
--
- 	/* Round to nearest divisor */
- 	return DIV_ROUND_CLOSEST(clockrate, baudrate);
- }
-@@ -568,9 +565,14 @@ static int f81534_set_port_config(struct usb_serial_port *port,
- 	u32 baud_list[] = {baudrate, old_baudrate, F81534_DEFAULT_BAUD_RATE};
- 
- 	for (i = 0; i < ARRAY_SIZE(baud_list); ++i) {
--		idx = f81534_find_clk(baud_list[i]);
-+		baudrate = baud_list[i];
-+		if (baudrate == 0) {
-+			tty_encode_baud_rate(tty, 0, 0);
-+			return 0;
-+		}
-+
-+		idx = f81534_find_clk(baudrate);
- 		if (idx >= 0) {
--			baudrate = baud_list[i];
- 			tty_encode_baud_rate(tty, baudrate, baudrate);
- 			break;
- 		}
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index c3b7f1d98e78..dee79c7d82d5 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -255,6 +255,7 @@ static void option_instat_callback(struct urb *urb);
- #define QUECTEL_PRODUCT_EP06			0x0306
- #define QUECTEL_PRODUCT_EM05G			0x030a
- #define QUECTEL_PRODUCT_EM060K			0x030b
-+#define QUECTEL_PRODUCT_EM05G_SG		0x0311
- #define QUECTEL_PRODUCT_EM12			0x0512
- #define QUECTEL_PRODUCT_RM500Q			0x0800
- #define QUECTEL_PRODUCT_RM520N			0x0801
-@@ -1160,6 +1161,8 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0, 0) },
- 	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G, 0xff),
- 	  .driver_info = RSVD(6) | ZLP },
-+	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_SG, 0xff),
-+	  .driver_info = RSVD(6) | ZLP },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0x00, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
-diff --git a/fs/udf/inode.c b/fs/udf/inode.c
-index ea8f6cd01f50..6a0e8ef664c1 100644
---- a/fs/udf/inode.c
-+++ b/fs/udf/inode.c
-@@ -438,6 +438,12 @@ static int udf_get_block(struct inode *inode, sector_t block,
- 		iinfo->i_next_alloc_goal++;
- 	}
- 
-+	/*
-+	 * Block beyond EOF and prealloc extents? Just discard preallocation
-+	 * as it is not useful and complicates things.
-+	 */
-+	if (((loff_t)block) << inode->i_blkbits > iinfo->i_lenExtents)
-+		udf_discard_prealloc(inode);
- 	udf_clear_extent_cache(inode);
- 	phys = inode_getblk(inode, block, &err, &new);
- 	if (!phys)
-@@ -487,8 +493,6 @@ static int udf_do_extend_file(struct inode *inode,
- 	uint32_t add;
- 	int count = 0, fake = !(last_ext->extLength & UDF_EXTENT_LENGTH_MASK);
- 	struct super_block *sb = inode->i_sb;
--	struct kernel_lb_addr prealloc_loc = {};
--	uint32_t prealloc_len = 0;
- 	struct udf_inode_info *iinfo;
- 	int err;
- 
-@@ -509,19 +513,6 @@ static int udf_do_extend_file(struct inode *inode,
- 			~(sb->s_blocksize - 1);
- 	}
- 
--	/* Last extent are just preallocated blocks? */
--	if ((last_ext->extLength & UDF_EXTENT_FLAG_MASK) ==
--						EXT_NOT_RECORDED_ALLOCATED) {
--		/* Save the extent so that we can reattach it to the end */
--		prealloc_loc = last_ext->extLocation;
--		prealloc_len = last_ext->extLength;
--		/* Mark the extent as a hole */
--		last_ext->extLength = EXT_NOT_RECORDED_NOT_ALLOCATED |
--			(last_ext->extLength & UDF_EXTENT_LENGTH_MASK);
--		last_ext->extLocation.logicalBlockNum = 0;
--		last_ext->extLocation.partitionReferenceNum = 0;
--	}
--
- 	/* Can we merge with the previous extent? */
- 	if ((last_ext->extLength & UDF_EXTENT_FLAG_MASK) ==
- 					EXT_NOT_RECORDED_NOT_ALLOCATED) {
-@@ -549,7 +540,7 @@ static int udf_do_extend_file(struct inode *inode,
- 		 * more extents, we may need to enter possible following
- 		 * empty indirect extent.
- 		 */
--		if (new_block_bytes || prealloc_len)
-+		if (new_block_bytes)
- 			udf_next_aext(inode, last_pos, &tmploc, &tmplen, 0);
- 	}
- 
-@@ -583,17 +574,6 @@ static int udf_do_extend_file(struct inode *inode,
- 	}
- 
- out:
--	/* Do we have some preallocated blocks saved? */
--	if (prealloc_len) {
--		err = udf_add_aext(inode, last_pos, &prealloc_loc,
--				   prealloc_len, 1);
--		if (err)
--			return err;
--		last_ext->extLocation = prealloc_loc;
--		last_ext->extLength = prealloc_len;
--		count++;
--	}
--
- 	/* last_pos should point to the last written extent... */
- 	if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_SHORT)
- 		last_pos->offset -= sizeof(struct short_ad);
-@@ -609,13 +589,17 @@ static int udf_do_extend_file(struct inode *inode,
- static void udf_do_extend_final_block(struct inode *inode,
- 				      struct extent_position *last_pos,
- 				      struct kernel_long_ad *last_ext,
--				      uint32_t final_block_len)
-+				      uint32_t new_elen)
- {
--	struct super_block *sb = inode->i_sb;
- 	uint32_t added_bytes;
- 
--	added_bytes = final_block_len -
--		      (last_ext->extLength & (sb->s_blocksize - 1));
-+	/*
-+	 * Extent already large enough? It may be already rounded up to block
-+	 * size...
-+	 */
-+	if (new_elen <= (last_ext->extLength & UDF_EXTENT_LENGTH_MASK))
-+		return;
-+	added_bytes = (last_ext->extLength & UDF_EXTENT_LENGTH_MASK) - new_elen;
- 	last_ext->extLength += added_bytes;
- 	UDF_I(inode)->i_lenExtents += added_bytes;
- 
-@@ -632,12 +616,12 @@ static int udf_extend_file(struct inode *inode, loff_t newsize)
- 	int8_t etype;
- 	struct super_block *sb = inode->i_sb;
- 	sector_t first_block = newsize >> sb->s_blocksize_bits, offset;
--	unsigned long partial_final_block;
-+	loff_t new_elen;
- 	int adsize;
- 	struct udf_inode_info *iinfo = UDF_I(inode);
- 	struct kernel_long_ad extent;
- 	int err = 0;
--	int within_final_block;
-+	bool within_last_ext;
- 
- 	if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_SHORT)
- 		adsize = sizeof(struct short_ad);
-@@ -646,8 +630,17 @@ static int udf_extend_file(struct inode *inode, loff_t newsize)
- 	else
- 		BUG();
- 
-+	/*
-+	 * When creating hole in file, just don't bother with preserving
-+	 * preallocation. It likely won't be very useful anyway.
-+	 */
-+	udf_discard_prealloc(inode);
-+
- 	etype = inode_bmap(inode, first_block, &epos, &eloc, &elen, &offset);
--	within_final_block = (etype != -1);
-+	within_last_ext = (etype != -1);
-+	/* We don't expect extents past EOF... */
-+	WARN_ON_ONCE(within_last_ext &&
-+		     elen > ((loff_t)offset + 1) << inode->i_blkbits);
- 
- 	if ((!epos.bh && epos.offset == udf_file_entry_alloc_offset(inode)) ||
- 	    (epos.bh && epos.offset == sizeof(struct allocExtDesc))) {
-@@ -663,19 +656,17 @@ static int udf_extend_file(struct inode *inode, loff_t newsize)
- 		extent.extLength |= etype << 30;
- 	}
- 
--	partial_final_block = newsize & (sb->s_blocksize - 1);
-+	new_elen = ((loff_t)offset << inode->i_blkbits) |
-+					(newsize & (sb->s_blocksize - 1));
- 
- 	/* File has extent covering the new size (could happen when extending
- 	 * inside a block)?
- 	 */
--	if (within_final_block) {
-+	if (within_last_ext) {
- 		/* Extending file within the last file block */
--		udf_do_extend_final_block(inode, &epos, &extent,
--					  partial_final_block);
-+		udf_do_extend_final_block(inode, &epos, &extent, new_elen);
- 	} else {
--		loff_t add = ((loff_t)offset << sb->s_blocksize_bits) |
--			     partial_final_block;
--		err = udf_do_extend_file(inode, &epos, &extent, add);
-+		err = udf_do_extend_file(inode, &epos, &extent, new_elen);
- 	}
- 
- 	if (err < 0)
-@@ -776,10 +767,11 @@ static sector_t inode_getblk(struct inode *inode, sector_t block,
- 		goto out_free;
- 	}
- 
--	/* Are we beyond EOF? */
-+	/* Are we beyond EOF and preallocated extent? */
- 	if (etype == -1) {
- 		int ret;
- 		loff_t hole_len;
-+
- 		isBeyondEOF = true;
- 		if (count) {
- 			if (c)
-diff --git a/fs/udf/truncate.c b/fs/udf/truncate.c
-index 532cda99644e..036ebd892b85 100644
---- a/fs/udf/truncate.c
-+++ b/fs/udf/truncate.c
-@@ -120,60 +120,42 @@ void udf_truncate_tail_extent(struct inode *inode)
- 
- void udf_discard_prealloc(struct inode *inode)
- {
--	struct extent_position epos = { NULL, 0, {0, 0} };
-+	struct extent_position epos = {};
-+	struct extent_position prev_epos = {};
- 	struct kernel_lb_addr eloc;
- 	uint32_t elen;
- 	uint64_t lbcount = 0;
- 	int8_t etype = -1, netype;
--	int adsize;
- 	struct udf_inode_info *iinfo = UDF_I(inode);
-+	int bsize = 1 << inode->i_blkbits;
- 
- 	if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_IN_ICB ||
--	    inode->i_size == iinfo->i_lenExtents)
-+	    ALIGN(inode->i_size, bsize) == ALIGN(iinfo->i_lenExtents, bsize))
- 		return;
- 
--	if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_SHORT)
--		adsize = sizeof(struct short_ad);
--	else if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_LONG)
--		adsize = sizeof(struct long_ad);
--	else
--		adsize = 0;
--
- 	epos.block = iinfo->i_location;
- 
- 	/* Find the last extent in the file */
--	while ((netype = udf_next_aext(inode, &epos, &eloc, &elen, 1)) != -1) {
--		etype = netype;
-+	while ((netype = udf_next_aext(inode, &epos, &eloc, &elen, 0)) != -1) {
-+		brelse(prev_epos.bh);
-+		prev_epos = epos;
-+		if (prev_epos.bh)
-+			get_bh(prev_epos.bh);
-+
-+		etype = udf_next_aext(inode, &epos, &eloc, &elen, 1);
- 		lbcount += elen;
- 	}
- 	if (etype == (EXT_NOT_RECORDED_ALLOCATED >> 30)) {
--		epos.offset -= adsize;
- 		lbcount -= elen;
--		extent_trunc(inode, &epos, &eloc, etype, elen, 0);
--		if (!epos.bh) {
--			iinfo->i_lenAlloc =
--				epos.offset -
--				udf_file_entry_alloc_offset(inode);
--			mark_inode_dirty(inode);
--		} else {
--			struct allocExtDesc *aed =
--				(struct allocExtDesc *)(epos.bh->b_data);
--			aed->lengthAllocDescs =
--				cpu_to_le32(epos.offset -
--					    sizeof(struct allocExtDesc));
--			if (!UDF_QUERY_FLAG(inode->i_sb, UDF_FLAG_STRICT) ||
--			    UDF_SB(inode->i_sb)->s_udfrev >= 0x0201)
--				udf_update_tag(epos.bh->b_data, epos.offset);
--			else
--				udf_update_tag(epos.bh->b_data,
--					       sizeof(struct allocExtDesc));
--			mark_buffer_dirty_inode(epos.bh, inode);
--		}
-+		udf_delete_aext(inode, prev_epos);
-+		udf_free_blocks(inode->i_sb, inode, &eloc, 0,
-+				DIV_ROUND_UP(elen, 1 << inode->i_blkbits));
- 	}
- 	/* This inode entry is in-memory only and thus we don't have to mark
- 	 * the inode dirty */
- 	iinfo->i_lenExtents = lbcount;
- 	brelse(epos.bh);
-+	brelse(prev_epos.bh);
- }
- 
- static void udf_update_alloc_ext_desc(struct inode *inode,
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 761efd7da514..e15fcf72a342 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -4453,7 +4453,8 @@ static inline int l2cap_config_req(struct l2cap_conn *conn,
- 
- 	chan->ident = cmd->ident;
- 	l2cap_send_cmd(conn, cmd->ident, L2CAP_CONF_RSP, len, rsp);
--	chan->num_conf_rsp++;
-+	if (chan->num_conf_rsp < L2CAP_CONF_MAX_CONF_RSP)
-+		chan->num_conf_rsp++;
- 
- 	/* Reset config buffer. */
- 	chan->conf_len = 0;
-diff --git a/tools/testing/selftests/net/toeplitz.sh b/tools/testing/selftests/net/toeplitz.sh
-index 0a49907cd4fe..da5bfd834eff 100755
---- a/tools/testing/selftests/net/toeplitz.sh
-+++ b/tools/testing/selftests/net/toeplitz.sh
-@@ -32,7 +32,7 @@ DEV="eth0"
- # This is determined by reading the RSS indirection table using ethtool.
- get_rss_cfg_num_rxqs() {
- 	echo $(ethtool -x "${DEV}" |
--		egrep [[:space:]]+[0-9]+:[[:space:]]+ |
-+		grep -E [[:space:]]+[0-9]+:[[:space:]]+ |
- 		cut -d: -f2- |
- 		awk '{$1=$1};1' |
- 		tr ' ' '\n' |
+On 21/12/22 22:10, kernel test robot wrote:
+> Hi Vijendar,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on broonie-sound/for-next]
+> [also build test WARNING on linus/master next-20221220]
+> [cannot apply to v6.1]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit-scm.com%2Fdocs%2Fgit-format-patch%23_base_tree_information&data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cf724439b0cd34a8d51da08dae3722149%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638072376572895135%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=SgBlnpPN56oK62ky0JU8azh3nuEXn6tMz3xZbOejY5Q%3D&reserved=0]
+>
+> url:    https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux%2Fcommits%2FVijendar-Mukunda%2FASoC-amd-ps-implement-api-to-retrieve-acp-device-config%2F20221221-192703&data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cf724439b0cd34a8d51da08dae3722149%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638072376572895135%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=UGJ84JSzprAvXAfmo2OXhrWT3CBFgJ12CzIArUgBEfM%3D&reserved=0
+> base:   https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fbroonie%2Fsound.git&data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cf724439b0cd34a8d51da08dae3722149%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638072376573051377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=4LZbNCMAz%2BCGrAgM%2FsBDxgRx7ose4EyopgsQkM4W8NU%3D&reserved=0 for-next
+> patch link:    https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20221221112611.1373278-1-Vijendar.Mukunda%2540amd.com&data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cf724439b0cd34a8d51da08dae3722149%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638072376573051377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=o%2B9ZhXvww%2FKDjm2sfVskOK0pNibVP%2BMO4sJnv6%2FAwRI%3D&reserved=0
+> patch subject: [PATCH V2 1/4] ASoC: amd: ps: implement api to retrieve acp device config
+> config: x86_64-randconfig-a015-20221219
+> compiler: clang version 14.0.6 (https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project&data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cf724439b0cd34a8d51da08dae3722149%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638072376573051377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=4xoUOqgeepbVj6xehXIOmWaRcR6FhKKmlHnxO0l1HBU%3D&reserved=0 f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fraw.githubusercontent.com%2Fintel%2Flkp-tests%2Fmaster%2Fsbin%2Fmake.cross&data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cf724439b0cd34a8d51da08dae3722149%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638072376573051377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=65DwVdNjRWKIxNSxqtpFyF0%2FFldAeix1%2FTnZGYSj6L4%3D&reserved=0 -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux%2Fcommit%2Fa47d6a455ff7716688a8c7efaae89f07cebf118d&data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cf724439b0cd34a8d51da08dae3722149%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638072376573051377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=U9Ko4HNfl%2FfQTaPrCPVH7R%2FG5MIXydh5xtoNbyDNX8Q%3D&reserved=0
+>         git remote add linux-review https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fintel-lab-lkp%2Flinux&data=05%7C01%7CVijendar.Mukunda%40amd.com%7Cf724439b0cd34a8d51da08dae3722149%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638072376573051377%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=pEWhdrTN6tbqt22WvlgMAlVJKo43ont0s9fIuFaav0M%3D&reserved=0
+>         git fetch --no-tags linux-review Vijendar-Mukunda/ASoC-amd-ps-implement-api-to-retrieve-acp-device-config/20221221-192703
+>         git checkout a47d6a455ff7716688a8c7efaae89f07cebf118d
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/amd/ps/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> sound/soc/amd/ps/pci-ps.c:135:6: warning: no previous prototype for function 'get_acp63_device_config' [-Wmissing-prototypes]
+>    void get_acp63_device_config(u32 config, struct pci_dev *pci, struct acp63_dev_data *acp_data)
+>         ^
+>    sound/soc/amd/ps/pci-ps.c:135:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void get_acp63_device_config(u32 config, struct pci_dev *pci, struct acp63_dev_data *acp_data)
+>    ^
+>    static 
+>    sound/soc/amd/ps/pci-ps.c:231:60: error: use of undeclared identifier 'ACP_DMIC_ADDR'
+>                    adev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP_DMIC_ADDR, 0);
+>                                                                             ^
+>    1 warning and 1 error generated.
+>
+> will fix it and respin the patch series.
+
+> vim +/get_acp63_device_config +135 sound/soc/amd/ps/pci-ps.c
+>
+>    134	
+>  > 135	void get_acp63_device_config(u32 config, struct pci_dev *pci, struct acp63_dev_data *acp_data)
+>    136	{
+>    137		struct acpi_device *dmic_dev;
+>    138		const union acpi_object *obj;
+>    139		bool is_dmic_dev = false;
+>    140	
+>    141		dmic_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_DMIC_ADDR, 0);
+>    142		if (dmic_dev) {
+>    143			if (!acpi_dev_get_property(dmic_dev, "acp-audio-device-type",
+>    144						   ACPI_TYPE_INTEGER, &obj) &&
+>    145						   obj->integer.value == ACP_DMIC_DEV)
+>    146				is_dmic_dev = true;
+>    147		}
+>    148	
+>    149		switch (config) {
+>    150		case ACP_CONFIG_0:
+>    151		case ACP_CONFIG_1:
+>    152		case ACP_CONFIG_2:
+>    153		case ACP_CONFIG_3:
+>    154		case ACP_CONFIG_9:
+>    155		case ACP_CONFIG_15:
+>    156			dev_dbg(&pci->dev, "Audio Mode %d\n", config);
+>    157			break;
+>    158		default:
+>    159			if (is_dmic_dev) {
+>    160				acp_data->pdev_mask = ACP63_PDM_DEV_MASK;
+>    161				acp_data->pdev_count = ACP63_PDM_MODE_DEVS;
+>    162			}
+>    163			break;
+>    164		}
+>    165	}
+>    166	
+>
+
