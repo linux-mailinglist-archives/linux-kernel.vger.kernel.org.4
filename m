@@ -2,445 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD3E65366D
+	by mail.lfdr.de (Postfix) with ESMTP id EC5C965366F
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 19:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234884AbiLUSjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 13:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S234861AbiLUSjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 13:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234869AbiLUSjG (ORCPT
+        with ESMTP id S229491AbiLUSjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 13:39:06 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0C126A92
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 10:39:03 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id ay40so11804267wmb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 10:39:03 -0800 (PST)
+        Wed, 21 Dec 2022 13:39:00 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA3426553;
+        Wed, 21 Dec 2022 10:38:55 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id fc4so38800548ejc.12;
+        Wed, 21 Dec 2022 10:38:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Tdfq1utjuYGywu1rGDiKFUqkvIDtVkRzBeIHYHR/to=;
-        b=sxJncKU9fpwrCVcLW+BmIgDu4EOidsj3Uri3LlvygYszdp8sCT07h8r1NoJtUiQWj4
-         oSh3lRrCtWpRqlwfNMI1qGWaw6m6YN9xwD0+uIUwBkDsk2rlEb3umIMEOiz7KgL1nEp9
-         21+PzACBSCsG35NG4YD5zqMhxWOuh3dey5xjZptrhmvRzeBvlWliUzsfC716hgLeuvbM
-         yVQo7o4lAVsgAEYY+1Dy8rHbOjitPaclxAblgbgIkNL6IcYNj6Z5miT9rixpgNwbzYyi
-         YkQipHyWDqYcHIB8xd3kXIbH6A5NPAgJtkHwVNIY/2IzWiJQr8ft64maQ3jsCcxYFSf5
-         wECw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jc2yYG+gQ1ySOw0R7wQZqhRCBKNq4tM0cYlBd4X3CZg=;
+        b=ceBvzlNhxKJTHoEzhKZM14WTSmEyFMxr9YJr8ssQz70KoRSw+G4oq4Gc12ff3u44FR
+         25DNya0iLA6+CUo064bvcr0kQHvTZeCicH887BvcDHJDhpVUNTseGM6hVgc6pqDE+4qj
+         nBFzkFkoSQgvZ23u0rBdcQWoMoKkbfD4DbbFNxLSEEmrUwVSRvMeKBHlhBziruk/WVj4
+         lrePgVGHiJX9+qEIErySWT54wMGhhgxejxpu791XE5wp3zSSKcugfAVTn3fkKQaYb32S
+         XV9vasnhgtfsW6KDh8DI9A9orovaU/sc9rZSZ5FRNXYtNv2fEW0sLF6eunHed8F0d62Q
+         fiQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Tdfq1utjuYGywu1rGDiKFUqkvIDtVkRzBeIHYHR/to=;
-        b=wX9DrBRZqaLPOmI8t0BkqG3Zs7fcPVeFIn+2oQ++zsfU4xqwhvo7/EcdPbm6eelF6P
-         PR+2H8HiIasmpcNE2MSn4mDqJOAR2nkjrwbu52gyxH7KJDRdXBQi9iyYOi1C5ZlcVH+b
-         0coR4Jn/0NB2N5NEJwlhq7EFb9BDUs6QiAEUIUhgetWpBiWHMrT23a8/kDNhK4xkhG6r
-         qBv0GmEqfXeNLz48TjJf/srA4gutqENfhagLDUNfbtVdH06UcWSMyftPjlcByNZJPY0a
-         zBMlsE1bXulcGi+KAMU7G19Yc9HINgH2LVL6H/relxaAq9VkB2k0YKio2dUde1OoN7xL
-         nEAA==
-X-Gm-Message-State: AFqh2kosMgel4cprdPmxCI4Y3J9sfOd6+pxW4OQXUks6Be9kd2Ne9j5I
-        uSGMUzxUMr8qE/DZzazv32EO0w==
-X-Google-Smtp-Source: AMrXdXvUqmEeFyA/hCVl+BYEbvYTn3El9tNVBANMSabgaOVSgNIczt43vkKhbtp7qHvEjv3LgX1g3w==
-X-Received: by 2002:a05:600c:1e8c:b0:3d6:2952:679b with SMTP id be12-20020a05600c1e8c00b003d62952679bmr2409002wmb.34.1671647942061;
-        Wed, 21 Dec 2022 10:39:02 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id o12-20020adfe80c000000b00236883f2f5csm16055360wrm.94.2022.12.21.10.39.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 10:39:01 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-X-Google-Original-From: Daniel Lezcano <daniel.lezcano@kernel.org>
-To:     rafael@kernel.org
-Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [RFC PATCH] thermal/acpi: Add ACPI trip point routines
-Date:   Wed, 21 Dec 2022 19:38:39 +0100
-Message-Id: <20221221183840.2352014-1-daniel.lezcano@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jc2yYG+gQ1ySOw0R7wQZqhRCBKNq4tM0cYlBd4X3CZg=;
+        b=mezB+TLEF/DtPN1smfmI/1/jGsZm7548/oyoZYGh9hZI8gf/03SayVHSBjdpYuA1MO
+         vScleQqaFFEuNiDA1hvfTigoVycX8EtaqJPWXcD5h8ZnRy0UP7ED3XzD20csXw5ZPkHH
+         as8aE9ySgpUsgpnSL/7pLpezZcFV6Y6/K/F+y1y8xiRIVzsKyrH+RGHvd5JqG0GavRb3
+         GT95+gLh4tPOWwXZzFhnBDGs2nC/5curD9021rY5bScDU545BAwySXjBOaAOSiOKBg0N
+         oMO0hortZCAer0CvOc4S/kS0uTUbFouEhMhnFLEZ4h6xQ0pwKlDiw1sFGO6r1pzHAqE6
+         LQ3Q==
+X-Gm-Message-State: AFqh2kpuzuiqUI4RSDEMMu2G6uVraQSvl8edsHTLLgSqgvRen4zASsLL
+        a5IioZixgIqEPYhtXQKe8+k=
+X-Google-Smtp-Source: AMrXdXt6IbrtIM1adFUIFm0vx5+vypCXEYGE+Z9T2m6KdCzpHUQsEMqIvyOTi4rIzvs4t+lS9va6qA==
+X-Received: by 2002:a17:906:99d1:b0:7ad:cf9c:b210 with SMTP id s17-20020a17090699d100b007adcf9cb210mr2034587ejn.18.1671647933846;
+        Wed, 21 Dec 2022 10:38:53 -0800 (PST)
+Received: from ?IPV6:2a02:a466:68ed:1:ab0c:1fa8:a7fa:2000? (2a02-a466-68ed-1-ab0c-1fa8-a7fa-2000.fixed6.kpn.net. [2a02:a466:68ed:1:ab0c:1fa8:a7fa:2000])
+        by smtp.gmail.com with ESMTPSA id f1-20020a17090631c100b007c07b23a79bsm7449957ejf.213.2022.12.21.10.38.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 10:38:53 -0800 (PST)
+Message-ID: <e7b8eea1-a5bb-5d3d-0b61-d8e476613c81@gmail.com>
+Date:   Wed, 21 Dec 2022 19:38:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id
+ timeout
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org
+References: <20221205201527.13525-1-ftoth@exalondelft.nl>
+ <20221205201527.13525-2-ftoth@exalondelft.nl>
+ <20221220194334.GA942039@roeck-us.net>
+ <4d6f0bdb-500b-7ae5-ef10-a844a7abbf23@gmail.com>
+ <20221221124104.GB1353152@roeck-us.net>
+ <b6692501-5c6e-945a-9a54-986ae8dd1687@gmail.com>
+ <20221221173035.GB2470607@roeck-us.net>
+Content-Language: en-US
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <20221221173035.GB2470607@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
+Op 21-12-2022 om 18:30 schreef Guenter Roeck:
+> On Wed, Dec 21, 2022 at 03:29:09PM +0100, Ferry Toth wrote:
+>> Hi
+>>
+>> On 21-12-2022 13:41, Guenter Roeck wrote:
+>>> On Wed, Dec 21, 2022 at 11:07:50AM +0100, Ferry Toth wrote:
+>>>> Hi,
+>>>>
+>>>> On 20-12-2022 20:43, Guenter Roeck wrote:
+>>>>> On Mon, Dec 05, 2022 at 09:15:26PM +0100, Ferry Toth wrote:
+>>>>>> Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral
+>>>>>> if extcon is present") Dual Role support on Intel Merrifield platform
+>>>>>> broke due to rearranging the call to dwc3_get_extcon().
+>>>>>>
+>>>>>> It appears to be caused by ulpi_read_id() on the first test write failing
+>>>>>> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+>>>>>> DT when the test write fails and returns 0 in that case, even if DT does not
+>>>>>> provide the phy. As a result usb probe completes without phy.
+>>>>>>
+>>>>>> Make ulpi_read_id() return -ETIMEDOUT to its user if the first test write
+>>>>>> fails. The user should then handle it appropriately. A follow up patch
+>>>>>> will make dwc3_core_init() set -EPROBE_DEFER in this case and bail out.
+>>>>>>
+>>>>>> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+>>>>>> Cc: stable@vger.kernel.org
+>>>>>> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+>>>>> Hi,
+>>>>>
+>>>>> this patch results in some qemu test failures, specifically xilinx-zynq-a9
+>>>>> machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
+>>>>> to boot from USB drive. The log shows
+>>>> I'm not familiar with that platform. Does it use dt to discover the ulpi
+>>>> device?
+>>>>
+>>> The dt usb description includes
+>>>
+>>> 	usb_phy0: phy0 {
+>>>                   compatible = "usb-nop-xceiv";
+>>>                   #phy-cells = <0>;
+>>>           };
+>>>
+>>> ...
+>>>
+>>> &usb0 {
+>>>           status = "okay";
+>>>           dr_mode = "host";
+>>>           usb-phy = <&usb_phy0>;
+>>> };
+>>>
+>>> ...
+>>>
+>>>                   usb0: usb@e0002000 {
+>>>                           compatible = "xlnx,zynq-usb-2.20a", "chipidea,usb2";
+>>>                           status = "disabled";
+>>>                           clocks = <&clkc 28>;
+>>>                           interrupt-parent = <&intc>;
+>>>                           interrupts = <0 21 4>;
+>>>                           reg = <0xe0002000 0x1000>;
+>>>                           phy_type = "ulpi";
+>>>                   };
+>>>
+>>> The chipidea core initialization code includes
+>>>
+>>>           if (!platdata->phy_mode)
+>>>                   platdata->phy_mode = of_usb_get_phy_mode(dev->of_node);
+>>>
+>>> Does that mean that every chipidea based usb implementation specifying
+>>> 	phy_type = "ulpi";
+>>> in their devicetree description will now fail, plus maybe others
+>>> who determine the phy mode from devicetree ?
+>> I don't think so.
+>>>> I'm guessing that the problem is actually caused by "usb: ulpi: defer
+>>>> ulpi_register on ulpi_read_id timeout".
+>>>>
+>>> Confused. Isn't that this patch ?
+>> Ehem. Yes.
+>>>> ulpi_read_id() now returns ETIMEDOUT due to the test write ulpi_write(ulpi,
+>>>> ULPI_SCRATCH, 0xaa) failing.
+>>>>
+>>>> Maybe  we can create a fix by skipping the test write in case dt discovery
+>>>> is available and calling of_device_request_module() directly, instead of
+>>>> masking the timed out test write as it was before?
+>>>>
+>>> I have no idea. All I can see is that it appears that there was a reason
+>>> for not returning an error if that test write failed.
+>>
+>> It seems to have been a quick patch to solve a power sequencing issue:
+>>
+>> "The ULPI bus code supports native enumeration by reading the
+>> vendor ID and product ID registers at device creation time, but
+>> we can't be certain that those register reads will succeed if the
+>> phy is not powered up. To avoid any problems with reading the ID
+>> registers before the phy is powered we fallback to DT matching
+>> when the ID reads fail.
+>>
+>> If the ULPI spec had some generic power sequencing for these
+>> registers we could put that into the ULPI bus layer and power up
+>> the device before reading the ID registers. Unfortunately this
+>> doesn't exist and the power sequence is usually device specific.
+>> By having the device matched up with DT we can avoid this
+>> problem."
+>>
+>> But as is, the code now requires a DT when there is a power
+>> sequencing issue, which is wrong for Merrifield. It seems my patch
+>> breaks the OF path, by replacing that by a deferred probe.
+>>
+>> I'm thinking the correct way would be:
+>> - if present use DT
+>> - else if test write fails, defer probe
+>> - else enumeration by reading the vendor ID and product ID registers
+>>
+> 
+> I think this patch should be reverted until a better solution is found.
+> After all, at this point it is effectively unknown if there are other
+> users (besides devicetree) depending on ulpi_read_id() returning 0 if
+> the communication with the device fails.
 
-The ACPI specification describes the trip points, the device tree
-bindings as well.
+I don't see how any code could rely on not having DT and a timeout while 
+attempting to enumerate and still expecting success (0). dwc3 in that 
+case just assumes ulpi found and continues probe leading to 
+non-functional dwc3 host.
+I think a fix should be relatively simple to find and resolve 2 bads.
 
-The OF code uses the generic trip point structures.
-
-The ACPI has their own trip points structure and uses the get_trip_*
-ops to retrieve them.
-
-We can do the same as the OF code and create a set of ACPI functions
-to retrieve a trip point description. Having a common code for ACPI
-will help to cleanup the remaining Intel drivers and get rid of the
-get_trip_* functions.
-
-These changes add the ACPI thermal calls to retrieve the basic
-information we need to be reused in the thermal ACPI and Intel
-drivers.
-
-It does not depend on any material.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
----
- drivers/thermal/Kconfig        |  13 ++
- drivers/thermal/Makefile       |   1 +
- drivers/thermal/thermal_acpi.c | 267 +++++++++++++++++++++++++++++++++
- include/linux/thermal.h        |  16 ++
- 4 files changed, 297 insertions(+)
- create mode 100644 drivers/thermal/thermal_acpi.c
-
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index e052dae614eb..e57011be7009 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -76,6 +76,19 @@ config THERMAL_OF
- 	  Say 'Y' here if you need to build thermal infrastructure
- 	  based on device tree.
- 
-+config THERMAL_ACPI
-+	bool
-+	prompt "APIs to parse thermal data out of the ACPI tables"
-+	depends on ACPI
-+	default y
-+	help
-+	  This options provides helpers to add the support to
-+	  read and parse thermal data definitions out of the
-+	  ACPI tables blob.
-+
-+	  Say 'Y' here if you need to build thermal infrastructure
-+	  based on ACPI.
-+
- config THERMAL_WRITABLE_TRIPS
- 	bool "Enable writable trip points"
- 	help
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 2506c6c8ca83..60f0dfa9aae2 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -13,6 +13,7 @@ thermal_sys-$(CONFIG_THERMAL_NETLINK)		+= thermal_netlink.o
- # interface to/from other layers providing sensors
- thermal_sys-$(CONFIG_THERMAL_HWMON)		+= thermal_hwmon.o
- thermal_sys-$(CONFIG_THERMAL_OF)		+= thermal_of.o
-+thermal_sys-$(CONFIG_THERMAL_ACPI)		+= thermal_acpi.o
- 
- # governors
- thermal_sys-$(CONFIG_THERMAL_GOV_FAIR_SHARE)	+= gov_fair_share.o
-diff --git a/drivers/thermal/thermal_acpi.c b/drivers/thermal/thermal_acpi.c
-new file mode 100644
-index 000000000000..4e18073f8817
---- /dev/null
-+++ b/drivers/thermal/thermal_acpi.c
-@@ -0,0 +1,267 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2022 Linaro Limited
-+ *
-+ * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-+ * 
-+ * ACPI thermal configuration
-+ */
-+#include <linux/acpi.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/units.h>
-+#include <uapi/linux/thermal.h>
-+
-+#include "thermal_core.h"
-+
-+int thermal_acpi_trip_gtsh(struct acpi_device *adev)
-+{
-+	unsigned long long hyst;
-+	acpi_status status;
-+
-+	status = acpi_evaluate_integer(adev->handle, "GTSH", NULL, &hyst);
-+	if (ACPI_FAILURE(status))
-+		return 0;
-+
-+	return (int)(hyst * 100);
-+}
-+
-+int thermal_acpi_get_tzd(struct acpi_device *adev, struct acpi_handle_list *devices)
-+{
-+	acpi_status status;
-+
-+	/*
-+	 * _TZD (Thermal zone device): This optional object evaluates
-+	 * to a package of device names. Each name corresponds to a
-+	 * device in the ACPI namespace that is associated with the
-+	 * thermal zone. The temperature reported by the thermal zone
-+	 * is roughly correspondent to that of each of the devices.
-+	 */
-+	status = acpi_evaluate_reference(adev->handle, "_TZD", NULL, devices);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+int thermal_acpi_get_temp(struct acpi_device *adev, int *temperature)
-+{
-+	unsigned long long temp;
-+	acpi_status status;
-+
-+	/*
-+	 * _TMP (Temperature): This control method returns the thermal zone’s
-+	 * current operating temperature. The return value is the current
-+	 * temperature of the thermal zone in tenths of degrees Kelvin
-+	 */
-+	status = acpi_evaluate_integer(adev->handle, "_TMP", NULL, &temp);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	*temperature = deci_kelvin_to_millicelsius(temp);
-+	
-+	return 0;
-+}
-+
-+int thermal_acpi_trip_crit(struct acpi_device *adev, struct thermal_trip *trip)
-+{
-+	unsigned long long temp;
-+	acpi_status status;
-+
-+	/*
-+	 * _CRT (Critical temperature): This object, when defined under a thermal
-+	 * zone, returns the critical temperature at which OSPM must shutdown
-+	 * the system. If this object it present under a device, the device’s
-+	 * driver evaluates this object to determine the device’s critical cooling
-+	 * temperature trip point. This value may then be used by the device’s
-+	 * driver to program an internal device temperature sensor trip point
-+         */
-+	status = acpi_evaluate_integer(adev->handle, "_CRT", NULL, &temp);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	trip->hysteresis = thermal_acpi_trip_gtsh(adev);
-+	trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	trip->type = THERMAL_TRIP_CRITICAL;
-+
-+	return 0;
-+}
-+
-+int thermal_acpi_trip_hot(struct acpi_device *adev, struct thermal_trip *trip)
-+{
-+	unsigned long long temp;
-+	acpi_status status;
-+
-+	/*
-+	 * _HOT (Hot Temperature): This optional object, when defined under a
-+	 * thermal zone, returns the critical temperature at which OSPM may
-+	 * choose to transition the system into the S4 sleeping state. The
-+	 * platform vendor should define _HOT to be far enough below _CRT so as
-+	 * to allow OSPM enough time to transition the system into the S4
-+	 * sleeping state. While dependent on the amount of installed memory,
-+	 * on typical platforms OSPM implementations can transition the system
-+	 * into the S4 sleeping state in tens of seconds. If this object it 
-+	 * present under a device, the device’s driver evaluates this object to
-+	 * determine the device’s hot cooling temperature trip point. This value
-+	 * may then be used by the device’s driver to program an internal device
-+	 * temperature sensor trip point.
-+	 */
-+	status = acpi_evaluate_integer(adev->handle, "_HOT", NULL, &temp);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	trip->hysteresis = thermal_acpi_trip_gtsh(adev);
-+	trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	trip->type = THERMAL_TRIP_HOT;
-+
-+	return 0;
-+}
-+
-+int thermal_acpi_trip_psv_psl(struct acpi_device *adev, struct acpi_handle_list *devices)
-+{
-+	acpi_status status;
-+
-+	/*
-+	 * _PSL (Passive List): This object is defined under a thermal zone and
-+	 *  evaluates to a list of processor objects to be used for passive cooling
-+	 */
-+	status = acpi_evaluate_reference(adev->handle, "_PSL", NULL, devices);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+int thermal_acpi_trip_psv_tsp(struct acpi_device *adev)
-+{
-+	acpi_status status;
-+	unsigned long long tsp;
-+	
-+	/*
-+	 * _TSP (Thermal Sampling Period): This object evaluates to a thermal
-+	 * sampling period (in tenths of seconds) used by OSPM to implement the
-+	 * Passive cooling equation. This value, along with _TC1 and _TC2, will
-+	 * enable OSPM to provide the proper hysteresis required by the system
-+	 * to accomplish an effective passive cooling policy.
-+	 */
-+	status = acpi_evaluate_integer(adev->handle, "_TSP", NULL, &tsp);
-+	if (ACPI_FAILURE(status))
-+		return -EIO;
-+
-+	return (int)tsp;
-+}
-+
-+int thermal_acpi_trip_psv_tc1(struct acpi_device *adev)
-+{
-+	acpi_status status;
-+	unsigned long long tc1;
-+
-+	/*
-+	 * _TC1 (Thermal Constant 1): This object evaluates to the constant _TC1
-+	 * for use in the Passive cooling formula
-+	 */
-+	status = acpi_evaluate_integer(adev->handle, "_TC1", NULL, &tc1);
-+	if (ACPI_FAILURE(status))
-+		return -EINVAL;
-+
-+	return (int)tc1;
-+}
-+
-+int thermal_acpi_trip_psv_tc2(struct acpi_device *adev)
-+{
-+	acpi_status status;
-+	unsigned long long tc2;
-+	
-+	/*
-+	 * _TC2 (Thermal Constant 1): This object evaluates to the constant _TC2
-+	 * for use in the Passive cooling formula
-+	 */
-+	status = acpi_evaluate_integer(adev->handle, "_TC2", NULL, &tc2);
-+	if (ACPI_FAILURE(status))
-+		return -EINVAL;
-+
-+	return (int)tc2;
-+}
-+
-+int thermal_acpi_trip_psv(struct acpi_device *adev, struct thermal_trip *trip)
-+{
-+	unsigned long long temp;
-+	acpi_status status;
-+
-+	/*
-+	 * _PSV (Passive): This optional object, if present under a thermal zone,
-+	 * evaluates to the temperature at which OSPM must activate passive
-+	 * cooling policy
-+	 */
-+	status = acpi_evaluate_integer(adev->handle, "_PSV", NULL, &temp);
-+	if (ACPI_FAILURE(status))
-+		return -EINVAL;
-+
-+	/*
-+	 * The _PSL, _TSP, _TC1 and _TC2 are required if the _PSV object exists.
-+	 * We assume the caller will raise an error if it was able to get the _PSV
-+	 * but then fail to get the other objects.
-+	 */
-+	trip->hysteresis = thermal_acpi_trip_gtsh(adev);
-+	trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	trip->type = THERMAL_TRIP_PASSIVE;
-+
-+	return 0;
-+}
-+
-+int thermal_acpi_trip_acl(struct acpi_device *adev,
-+			  struct acpi_handle_list *devices, int id)
-+{
-+	acpi_status status;
-+	char name[5];	
-+
-+	/*
-+	 * _ALx: This object is defined under a thermal zone and evaluates to a
-+	 * list of Active cooling devices to be turned on when the corresponding
-+	 * _ACx temperature threshold is exceeded. For example, these devices
-+	 * could be fans.
-+	 */
-+	sprintf(name, "_AL%d", id);
-+
-+	status = acpi_evaluate_reference(adev->handle, name, NULL, devices);
-+	if (ACPI_FAILURE(status))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+int thermal_acpi_trip_act(struct acpi_device *adev,
-+			  struct thermal_trip *trip, int id)
-+{
-+	acpi_status status;
-+	unsigned long long temp;
-+	char name[5];	
-+
-+	/*
-+	 * _ACx: This optional object, if present under a thermal zone, returns
-+	 * the temperature trip point at which OSPM must start or stop active
-+	 * cooling, where x is a value between 0 and 9 that designates multiple
-+	 * active cooling levels of the thermal zone. If the Active cooling
-+	 * device has one cooling level (that is, “on”) then that cooling level
-+	 * must be defined as _AC0. If the cooling device has two levels of
-+	 * capability, such as a high fan speed and a low fan speed, then they
-+	 * must be defined as _AC0 and _AC1 respectively. The smaller the value
-+	 * of x, the greater the cooling strength _ACx represents. In the above
-+	 * example, _AC0 represents the greater level of cooling (the faster fan
-+	 * speed) and _AC1 represents the lesser level of cooling (the slower
-+	 * fan speed). For every _ACx method, there must be a matching _ALx
-+	 * object or a corresponding entry in an _ART object’s active cooling
-+	 * relationship list.
-+	 */
-+	sprintf(name, "_AC%d", id);
-+
-+	status = acpi_evaluate_integer(adev->handle, name, NULL, &temp);
-+	if (ACPI_FAILURE(status))
-+		return -EINVAL;
-+
-+	trip->hysteresis = thermal_acpi_trip_gtsh(adev);
-+	trip->temperature = deci_kelvin_to_millicelsius(temp);
-+	trip->type = THERMAL_TRIP_ACTIVE;
-+
-+	return 0;
-+}
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index e2797f314d99..67608a3a62d3 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -334,6 +334,22 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
- }
- #endif
- 
-+#ifdef CONFIG_ACPI
-+struct acpi_handle_list;
-+int thermal_acpi_get_temp(struct acpi_device *adev, int *temperature);
-+int thermal_acpi_trip_crit(struct acpi_device *adev, struct thermal_trip *trip);
-+int thermal_acpi_trip_hot(struct acpi_device *adev, struct thermal_trip *trip);
-+int thermal_acpi_trip_psv(struct acpi_device *adev, struct thermal_trip *trip);
-+int thermal_acpi_trip_act(struct acpi_device *adev, struct thermal_trip *trip, int id);
-+int thermal_acpi_trip_acl(struct acpi_device *adev, struct acpi_handle_list *devices, int id);
-+int thermal_acpi_trip_psv_psl(struct acpi_device *adev, struct acpi_handle_list *devices);
-+int thermal_acpi_trip_psv_tsp(struct acpi_device *adev);
-+int thermal_acpi_trip_psv_tc1(struct acpi_device *adev);
-+int thermal_acpi_trip_psv_tc2(struct acpi_device *adev);
-+int thermal_acpi_trip_gtsh(struct acpi_device *adev);
-+int thermal_acpi_get_tzd(struct acpi_device *adev, struct acpi_handle_list *devices);
-+#endif
-+
- int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
- 			  struct thermal_trip *trip);
- 
--- 
-2.34.1
+> Guenter
 
