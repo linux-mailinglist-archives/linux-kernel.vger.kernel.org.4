@@ -2,227 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF19652D60
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCD4652D62
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234017AbiLUHms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 02:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
+        id S234097AbiLUHnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 02:43:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiLUHmp (ORCPT
+        with ESMTP id S234210AbiLUHnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 02:42:45 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C86B6555;
-        Tue, 20 Dec 2022 23:42:43 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BL7gYlk113506;
-        Wed, 21 Dec 2022 01:42:34 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1671608554;
-        bh=Ez96FijQFklJTz8IMFPnWCRlr1eR4+kdyeMz2055puc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=lKl5Rz3dGRDIv9eNmOQzwZ70i4kCtD4rcddfn3n5Y3Ub/1/1M+L+wH9IDjXoiykb7
-         nAXfnQHGqJZJV1mOgGqEtZOGx8A2p8FNwd5LMh6eoijxiL1sG7yD4ymbTCshJzBt6P
-         DqtsLC9fy75iLCfL2JD6LrBSf9o7Ey6e5lAj1slQ=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BL7gYAo003429
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 21 Dec 2022 01:42:34 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 21
- Dec 2022 01:42:33 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 21 Dec 2022 01:42:33 -0600
-Received: from [10.0.2.15] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BL7gS8P100590;
-        Wed, 21 Dec 2022 01:42:28 -0600
-Message-ID: <645aca4d-b19c-390d-b899-fd40a924a096@ti.com>
-Date:   Wed, 21 Dec 2022 13:12:14 +0530
+        Wed, 21 Dec 2022 02:43:01 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6772120F40
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:43:00 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8Bx2+oDuaJjn4gHAA--.17081S3;
+        Wed, 21 Dec 2022 15:42:59 +0800 (CST)
+Received: from localhost.localdomain (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxPuQCuaJj+00GAA--.25824S2;
+        Wed, 21 Dec 2022 15:42:58 +0800 (CST)
+From:   Jinyang He <hejinyang@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] LoongArch: Fix irq enable in exception handlers
+Date:   Wed, 21 Dec 2022 15:42:38 +0800
+Message-Id: <20221221074238.6699-1-hejinyang@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] Documentation: dt-bindings: k3-r5f-rproc: Add new
- compatible for AM62 SoC family
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <andersson@kernel.org>, <mathieu.poirier@linaro.org>,
-        <p.zabel@pengutronix.de>, <linux-remoteproc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <s-anna@ti.com>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
-        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>
-References: <20221130134052.7513-1-devarsht@ti.com>
- <20221130134052.7513-2-devarsht@ti.com>
- <b4b608bf-e347-5500-eb94-bec3611f6a56@linaro.org>
-From:   Devarsh Thakkar <devarsht@ti.com>
-In-Reply-To: <b4b608bf-e347-5500-eb94-bec3611f6a56@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxPuQCuaJj+00GAA--.25824S2
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxGFy8CF48WrW7tr1xWr18uFg_yoWrWrWrpF
+        W7CFs7GrW8C3Z7Wa9rJ34Ivr13X392qay7C3ykC3yfua1ayrykWr1vqFW7XF1jv34Dury0
+        vryYy3WIq3WUAFUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
+        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU82g43UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+The interrupt state can be got by regs->csr_prmd. Once previous
+interrupt state is disable, we shouldn't enable interrupt if we
+triggered exception which can be triggered in kernel mode. So
+conditionally enable interrupt. For those do_\exception which
+can not triggered in kernel mode but need enable interrupt, call
+die_if_kernel() firstly. And for do_lsx, do_lasx and do_lbt cannot
+triggered in kernel mode, too.
 
-Thanks for the review. Please find my response inline.
+Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+---
+ arch/loongarch/kernel/traps.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-On 30/11/22 20:33, Krzysztof Kozlowski wrote:
-> On 30/11/2022 14:40, Devarsh Thakkar wrote:
->> AM62 family of devices don't have a R5F cluster, instead
->> they have single core DM R5F.
->> Add new compatible string ti,am62-r5fss to support this scenario.
->>
->> When this new compatible is used don't allow cluster-mode
->> property usage in device-tree as this implies that there
->> is no R5F cluster available and only single R5F core
->> is present.
->>
->> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
->> ---
->> V2: Avoid acronyms, use "Device Manager" instead of "DM"
-> 
-> Use subject prefixes matching the subsystem (git log --oneline -- ...).
-Agreed, I will update the prefix as dt-bindings: remoteproc: k3-r5f: in V3.
-> 
->> ---
->>  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml  | 48 +++++++++++++------
->>  1 file changed, 34 insertions(+), 14 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
->> index fb9605f0655b..91357635025a 100644
->> --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
->> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
->> @@ -21,6 +21,9 @@ description: |
->>    called "Single-CPU" mode, where only Core0 is used, but with ability to use
->>    Core1's TCMs as well.
->>  
->> +  AM62 SoC family support a single R5F core only which runs Device Manager
->> +  firmware and can also be used as a remote processor with IPC communication.
->> +
->>    Each Dual-Core R5F sub-system is represented as a single DTS node
->>    representing the cluster, with a pair of child DT nodes representing
->>    the individual R5F cores. Each node has a number of required or optional
->> @@ -28,6 +31,9 @@ description: |
->>    the device management of the remote processor and to communicate with the
->>    remote processor.
->>  
->> +  Since AM62 SoC family only support a single core, there is no cluster-mode
->> +  property setting required for it.
->> +
->>  properties:
->>    $nodename:
->>      pattern: "^r5fss(@.*)?"
->> @@ -38,6 +44,7 @@ properties:
->>        - ti,j721e-r5fss
->>        - ti,j7200-r5fss
->>        - ti,am64-r5fss
->> +      - ti,am62-r5fss
-> 
-> Some order? Alphabetical, so before am64? Same in other places.
-Agreed, I will update in V3 accordingly.
-> 
-> 
->>        - ti,j721s2-r5fss
->>  
->>    power-domains:
->> @@ -80,7 +87,8 @@ patternProperties:
->>        node representing a TI instantiation of the Arm Cortex R5F core. There
->>        are some specific integration differences for the IP like the usage of
->>        a Region Address Translator (RAT) for translating the larger SoC bus
->> -      addresses into a 32-bit address space for the processor.
->> +      addresses into a 32-bit address space for the processor. For AM62x,
->> +      should only define one R5F child node as it has only one core available.
->>  
->>        Each R5F core has an associated 64 KB of Tightly-Coupled Memory (TCM)
->>        internal memories split between two banks - TCMA and TCMB (further
->> @@ -104,6 +112,7 @@ patternProperties:
->>            - ti,j721e-r5f
->>            - ti,j7200-r5f
->>            - ti,am64-r5f
->> +          - ti,am62-r5f
->>            - ti,j721s2-r5f
->>  
->>        reg:
->> @@ -207,20 +216,31 @@ patternProperties:
->>        - firmware-name
->>  
->>      unevaluatedProperties: false
-> 
-> Blank line.
-Agreed, I will remove it in V3.
-> 
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - ti,am64-r5fss
->> +    then:
->> +      properties:
->> +        ti,cluster-mode:
->> +          enum: [0, 2]
->> +
->> +    else:
->> +      properties:
->> +        ti,cluster-mode:
-> 
-> It's not really valid anymore for ti,am62-r5fss, so this cannot be
-> simple "else".  Instead you need to list all compatibles.
-I agree that the else block is not valid for am62x, but my understanding is that since all the blocks under allOf are checked for validity,
-I thought to add a separate if block only for am62x to set cluster-mode to false [1], which I believe would negate the effect of above else condition for am62x,
-so that we don't have to list all compatibles under separate if blocks.
+diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+index 1ea14f6c18d3..3ac7b32d1e15 100644
+--- a/arch/loongarch/kernel/traps.c
++++ b/arch/loongarch/kernel/traps.c
+@@ -340,9 +340,9 @@ asmlinkage void noinstr do_fpe(struct pt_regs *regs, unsigned long fcsr)
+ 
+ 	/* Clear FCSR.Cause before enabling interrupts */
+ 	write_fcsr(LOONGARCH_FCSR0, fcsr & ~mask_fcsr_x(fcsr));
+-	local_irq_enable();
+ 
+ 	die_if_kernel("FP exception in kernel code", regs);
++	local_irq_enable();
+ 
+ 	sig = SIGFPE;
+ 	fault_addr = (void __user *) regs->csr_era;
+@@ -432,7 +432,8 @@ asmlinkage void noinstr do_bp(struct pt_regs *regs)
+ 	unsigned long era = exception_era(regs);
+ 	irqentry_state_t state = irqentry_enter(regs);
+ 
+-	local_irq_enable();
++	if (regs->csr_prmd & CSR_PRMD_PIE)
++		local_irq_enable();
+ 	current->thread.trap_nr = read_csr_excode();
+ 	if (__get_inst(&opcode, (u32 *)era, user))
+ 		goto out_sigsegv;
+@@ -514,7 +515,8 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
+ 	unsigned int __user *era = (unsigned int __user *)exception_era(regs);
+ 	irqentry_state_t state = irqentry_enter(regs);
+ 
+-	local_irq_enable();
++	if (regs->csr_prmd & CSR_PRMD_PIE)
++		local_irq_enable();
+ 	current->thread.trap_nr = read_csr_excode();
+ 
+ 	if (notify_die(DIE_RI, "RI Fault", regs, 0, current->thread.trap_nr,
+@@ -606,8 +608,8 @@ asmlinkage void noinstr do_fpu(struct pt_regs *regs)
+ {
+ 	irqentry_state_t state = irqentry_enter(regs);
+ 
+-	local_irq_enable();
+ 	die_if_kernel("do_fpu invoked from kernel context!", regs);
++	local_irq_enable();
+ 	BUG_ON(is_lsx_enabled());
+ 	BUG_ON(is_lasx_enabled());
+ 
+@@ -623,13 +625,13 @@ asmlinkage void noinstr do_lsx(struct pt_regs *regs)
+ {
+ 	irqentry_state_t state = irqentry_enter(regs);
+ 
++	die_if_kernel("do_lsx invoked from kernel context!", regs);
+ 	local_irq_enable();
+ 	if (!cpu_has_lsx) {
+ 		force_sig(SIGILL);
+ 		goto out;
+ 	}
+ 
+-	die_if_kernel("do_lsx invoked from kernel context!", regs);
+ 	BUG_ON(is_lasx_enabled());
+ 
+ 	preempt_disable();
+@@ -645,14 +647,13 @@ asmlinkage void noinstr do_lasx(struct pt_regs *regs)
+ {
+ 	irqentry_state_t state = irqentry_enter(regs);
+ 
++	die_if_kernel("do_lasx invoked from kernel context!", regs);
+ 	local_irq_enable();
+ 	if (!cpu_has_lasx) {
+ 		force_sig(SIGILL);
+ 		goto out;
+ 	}
+ 
+-	die_if_kernel("do_lasx invoked from kernel context!", regs);
+-
+ 	preempt_disable();
+ 	init_restore_lasx();
+ 	preempt_enable();
+@@ -666,6 +667,7 @@ asmlinkage void noinstr do_lbt(struct pt_regs *regs)
+ {
+ 	irqentry_state_t state = irqentry_enter(regs);
+ 
++	die_if_kernel("do_lbt invoked from kernel context!", regs);
+ 	local_irq_enable();
+ 	force_sig(SIGILL);
+ 	local_irq_disable();
+@@ -677,7 +679,6 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
+ {
+ 	irqentry_state_t state = irqentry_enter(regs);
+ 
+-	local_irq_enable();
+ 	/*
+ 	 * Game over - no way to handle this if it ever occurs.	Most probably
+ 	 * caused by a fatal error after another hardware/software error.
+@@ -685,8 +686,8 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
+ 	pr_err("Caught reserved exception %u on pid:%d [%s] - should not happen\n",
+ 		read_csr_excode(), current->pid, current->comm);
+ 	die_if_kernel("do_reserved exception", regs);
++	local_irq_enable();
+ 	force_sig(SIGUNUSED);
+-
+ 	local_irq_disable();
+ 
+ 	irqentry_exit(regs, state);
+-- 
+2.34.3
 
-Just to verify this, I deliberately set cluster-mode=1 in am62x devicetree and then ran a dtbs-check and got below log : 
-"linux-next/arch/arm64/boot/dts/ti/k3-am625-sk.dtb: r5fss@78000000: ti,cluster-mode: False schema does not allow [[1]]"
-
-and above warning log goes away when i remove the cluster-mode node in am62x devicetree.
-But please do let me know if I am missing something here or there is a better/more proper way to do this.
-
-Best Regards,
-Devarsh
-
-> 
->> +          enum: [0, 1]
->> +
-[1]
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - ti,am62-r5fss
->> +    then:
->> +      properties:
->> +        ti,cluster-mode: false
->>  
->> -if:
->> -  properties:
->> -    compatible:
->> -      enum:
->> -        - ti,am64-r5fss
->> -then:
->> -  properties:
->> -    ti,cluster-mode:
->> -      enum: [0, 2]
->> -else:
->> -  properties:
->> -    ti,cluster-mode:
->> -      enum: [0, 1]
->>  
->>  required:
->>    - compatible
-> 
-> Best regards,
-> Krzysztof
-> 
