@@ -2,177 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCD4652D62
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAA2652D63
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 08:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234097AbiLUHnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 02:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S234180AbiLUHnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 02:43:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbiLUHnB (ORCPT
+        with ESMTP id S234063AbiLUHnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 02:43:01 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6772120F40
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:43:00 -0800 (PST)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8Bx2+oDuaJjn4gHAA--.17081S3;
-        Wed, 21 Dec 2022 15:42:59 +0800 (CST)
-Received: from localhost.localdomain (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxPuQCuaJj+00GAA--.25824S2;
-        Wed, 21 Dec 2022 15:42:58 +0800 (CST)
-From:   Jinyang He <hejinyang@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] LoongArch: Fix irq enable in exception handlers
-Date:   Wed, 21 Dec 2022 15:42:38 +0800
-Message-Id: <20221221074238.6699-1-hejinyang@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Wed, 21 Dec 2022 02:43:04 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470D920BDF
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:43:03 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id y16so14079940wrm.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 23:43:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gtEeCyZo+BoK/gQWnIMAa0rL2S7n7yu+aVkFuuU4nIA=;
+        b=ts3U2g9DAdjZwMBXYPV6zCdRGXuJJ8ilhPuD1/k/EqxC76ujHmNY8V2SNeuYubCOE2
+         /p6f7XlOWcFi7MY04O0T0TLDRBCI0W3pXws+fo3w8aSnw1oVRXh/gvn+7p7/Sug2Vs0V
+         gXdK9KU8AHN7FY+KV7vD3oIajRCvP+vnIO3aOPCamTNgosNkFwW7q8nhB85FJa4OKmVd
+         ldbu1oskwqEbazIHH+WDEfwxcMacIVstFiYYByladoAgRpvSWbl7wnIL1Tm0wH9ZGCJH
+         17VekoSk0gT+22cG73DH4fpue1rpWo3nVEH8z81vpOM5dyNHvknn7C1RijusSnYAV4kg
+         94Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gtEeCyZo+BoK/gQWnIMAa0rL2S7n7yu+aVkFuuU4nIA=;
+        b=r28YXfd9tiqFO+J+GpsICXer3ghj81isgcT2WwQdsFBRhCBg+QKV2jKiTkn70UraYH
+         P7pH9s2/XlY2I2NwKjN37R5omCvxoNi9tQW+i9K1WcY5FyzewkRinwhnZ7aIuAq//I95
+         Lwl7OsMKitm2w10FTezuuDkbRBvatDnb4nip42P40RI6Xcen/sLOe85E6Tyhoh4KyuJz
+         PobFaQh3A6oJJS34acSNecERQITvfqq5ekJ5ktEvqjPgGlWzEOXTUEQOdvsgOK5Yb2kB
+         9ihKAqDmK4pRWsuT+TKoput485s8y8NA1SiqLGSYfO77CVNUe9FQq2Ei1F2X+FRVPVia
+         rKZQ==
+X-Gm-Message-State: AFqh2kr5vHVjT7dOQybsMcHwuCmYWCDV5e0ytc5aRfU3HWG953Onahpg
+        js/qnQvdUT2TSloSrzN+FCcgsQ==
+X-Google-Smtp-Source: AMrXdXv21kIbZbZLvmA9ia6JHuOYyE+pfn930c/N7aqu/GugI0f9rh6mUvA63yF75WtQg4YoH/Tr4A==
+X-Received: by 2002:a05:6000:1372:b0:242:4d28:6a55 with SMTP id q18-20020a056000137200b002424d286a55mr2871319wrz.51.1671608581915;
+        Tue, 20 Dec 2022 23:43:01 -0800 (PST)
+Received: from [192.168.0.173] ([82.77.81.131])
+        by smtp.gmail.com with ESMTPSA id u1-20020a5d6ac1000000b00241cfe6e286sm14490746wrw.98.2022.12.20.23.43.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 23:43:01 -0800 (PST)
+Message-ID: <fc60e8da-1187-ca2b-1aa8-28e01ea2769a@linaro.org>
+Date:   Wed, 21 Dec 2022 09:42:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxPuQCuaJj+00GAA--.25824S2
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGFy8CF48WrW7tr1xWr18uFg_yoWrWrWrpF
-        W7CFs7GrW8C3Z7Wa9rJ34Ivr13X392qay7C3ykC3yfua1ayrykWr1vqFW7XF1jv34Dury0
-        vryYy3WIq3WUAFUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
-        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU82g43UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: kernel BUG in __skb_gso_segment
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>, mst@redhat.com,
+        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, willemb@google.com,
+        syzkaller@googlegroups.com, liuhangbin@gmail.com,
+        linux-kernel@vger.kernel.org, joneslee@google.com
+References: <82b18028-7246-9af9-c992-528a0e77f6ba@linaro.org>
+ <CAF=yD-KEwVnH6PRyxbJZt4iGfKasadYwU_6_V+hHW2s+ZqFNcw@mail.gmail.com>
+ <a13f83f3-737d-1bfe-c9ef-031a6cd4d131@linaro.org>
+ <Y6K3q6Bo3wwC57bK@kroah.com>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <Y6K3q6Bo3wwC57bK@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interrupt state can be got by regs->csr_prmd. Once previous
-interrupt state is disable, we shouldn't enable interrupt if we
-triggered exception which can be triggered in kernel mode. So
-conditionally enable interrupt. For those do_\exception which
-can not triggered in kernel mode but need enable interrupt, call
-die_if_kernel() firstly. And for do_lsx, do_lasx and do_lbt cannot
-triggered in kernel mode, too.
 
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
----
- arch/loongarch/kernel/traps.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index 1ea14f6c18d3..3ac7b32d1e15 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -340,9 +340,9 @@ asmlinkage void noinstr do_fpe(struct pt_regs *regs, unsigned long fcsr)
- 
- 	/* Clear FCSR.Cause before enabling interrupts */
- 	write_fcsr(LOONGARCH_FCSR0, fcsr & ~mask_fcsr_x(fcsr));
--	local_irq_enable();
- 
- 	die_if_kernel("FP exception in kernel code", regs);
-+	local_irq_enable();
- 
- 	sig = SIGFPE;
- 	fault_addr = (void __user *) regs->csr_era;
-@@ -432,7 +432,8 @@ asmlinkage void noinstr do_bp(struct pt_regs *regs)
- 	unsigned long era = exception_era(regs);
- 	irqentry_state_t state = irqentry_enter(regs);
- 
--	local_irq_enable();
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_enable();
- 	current->thread.trap_nr = read_csr_excode();
- 	if (__get_inst(&opcode, (u32 *)era, user))
- 		goto out_sigsegv;
-@@ -514,7 +515,8 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
- 	unsigned int __user *era = (unsigned int __user *)exception_era(regs);
- 	irqentry_state_t state = irqentry_enter(regs);
- 
--	local_irq_enable();
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_enable();
- 	current->thread.trap_nr = read_csr_excode();
- 
- 	if (notify_die(DIE_RI, "RI Fault", regs, 0, current->thread.trap_nr,
-@@ -606,8 +608,8 @@ asmlinkage void noinstr do_fpu(struct pt_regs *regs)
- {
- 	irqentry_state_t state = irqentry_enter(regs);
- 
--	local_irq_enable();
- 	die_if_kernel("do_fpu invoked from kernel context!", regs);
-+	local_irq_enable();
- 	BUG_ON(is_lsx_enabled());
- 	BUG_ON(is_lasx_enabled());
- 
-@@ -623,13 +625,13 @@ asmlinkage void noinstr do_lsx(struct pt_regs *regs)
- {
- 	irqentry_state_t state = irqentry_enter(regs);
- 
-+	die_if_kernel("do_lsx invoked from kernel context!", regs);
- 	local_irq_enable();
- 	if (!cpu_has_lsx) {
- 		force_sig(SIGILL);
- 		goto out;
- 	}
- 
--	die_if_kernel("do_lsx invoked from kernel context!", regs);
- 	BUG_ON(is_lasx_enabled());
- 
- 	preempt_disable();
-@@ -645,14 +647,13 @@ asmlinkage void noinstr do_lasx(struct pt_regs *regs)
- {
- 	irqentry_state_t state = irqentry_enter(regs);
- 
-+	die_if_kernel("do_lasx invoked from kernel context!", regs);
- 	local_irq_enable();
- 	if (!cpu_has_lasx) {
- 		force_sig(SIGILL);
- 		goto out;
- 	}
- 
--	die_if_kernel("do_lasx invoked from kernel context!", regs);
--
- 	preempt_disable();
- 	init_restore_lasx();
- 	preempt_enable();
-@@ -666,6 +667,7 @@ asmlinkage void noinstr do_lbt(struct pt_regs *regs)
- {
- 	irqentry_state_t state = irqentry_enter(regs);
- 
-+	die_if_kernel("do_lbt invoked from kernel context!", regs);
- 	local_irq_enable();
- 	force_sig(SIGILL);
- 	local_irq_disable();
-@@ -677,7 +679,6 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
- {
- 	irqentry_state_t state = irqentry_enter(regs);
- 
--	local_irq_enable();
- 	/*
- 	 * Game over - no way to handle this if it ever occurs.	Most probably
- 	 * caused by a fatal error after another hardware/software error.
-@@ -685,8 +686,8 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
- 	pr_err("Caught reserved exception %u on pid:%d [%s] - should not happen\n",
- 		read_csr_excode(), current->pid, current->comm);
- 	die_if_kernel("do_reserved exception", regs);
-+	local_irq_enable();
- 	force_sig(SIGUNUSED);
--
- 	local_irq_disable();
- 
- 	irqentry_exit(regs, state);
--- 
-2.34.3
+On 21.12.2022 09:37, Greg KH wrote:
+> On Wed, Dec 21, 2022 at 09:28:16AM +0200, Tudor Ambarus wrote:
+>> Hi,
+>>
+>> I added Greg KH to the thread, maybe he can shed some light on whether
+>> new support can be marked as fixes and backported to stable. The rules
+>> on what kind of patches are accepted into the -stable tree don't mention
+>> new support:
+>> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> 
+> As you say, we don't take new features into older kernels.  Unless they
+> fix a reported problem, if so, submit the git ids to us and we will be
+> glad to review them.
+> 
 
+They do fix a bug. I'm taking care of it. Shall I update
+Documentation/process/stable-kernel-rules.rst to mention this rule as
+well?
+
+
+Thanks,
+ta
