@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AC4652F45
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E44652F53
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 11:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234678AbiLUKVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 05:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
+        id S234816AbiLUKXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 05:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbiLUKVB (ORCPT
+        with ESMTP id S234633AbiLUKWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 05:21:01 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA399B7D9;
-        Wed, 21 Dec 2022 02:20:58 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9EB446602CBE;
-        Wed, 21 Dec 2022 10:20:56 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671618057;
-        bh=4XAFAvREPt9mELPunubuWmSA1SRawFig707S7i4tp50=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=L824nQQwaWZop8xOF/IUB0BVf5zE6Osn1O5fsLXd+eOrIxOAZBMuv/jfXG0fPJQQ0
-         4uXxLaodRCsn/RQWdbdI97iIHvIC+ndpro0wiEe56Tea7uTQuR2qwpqsWH0z1GbcZR
-         5QDxV0H1+rUA1D7LLlW55spD9A9EbCqbvycdJ1hHfdU3xqq3sHzVohhwHCuX9J7UF5
-         Zea1OkPR/j6GuwFIXggmWKMrL0zASp7BAqsGfylBIy62LQiyUBUttD8iSRp5+n9boV
-         6/P7NFLmB3pEIc+4WL00G8FNI/+y8E4PtfkSo6I16eGJvmzGCliE8PAcvHeD48auzm
-         imZqL9D8bu7Sw==
-Message-ID: <7cba92b5-b0fe-cb26-cdec-463a00657d29@collabora.com>
-Date:   Wed, 21 Dec 2022 11:20:53 +0100
+        Wed, 21 Dec 2022 05:22:12 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F8213F87;
+        Wed, 21 Dec 2022 02:21:30 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BL8iXI5001160;
+        Wed, 21 Dec 2022 10:21:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=MCWvNDHZ4u8ehQkpYRwQotBi9IyItvZvp/bt9JT5p8s=;
+ b=pgfkrXEB/Xhn+SUDwnkRwktIcrKoBPhXZ+TNSWWh7m6uheuNpPF75OIj3owjbW4jKReD
+ sILelvhgsDsAf1Xf7jv9lfVd8NbjRQ1tCjdX7kJSHTwqxgtm9xyOl0ztFerIO1/bAXqZ
+ v2SqzceVQUW/O4tJt9L9AiEiNLRsq6RcyUP74gH0+xs+XgjLyNxRyA75kHL6PbLQP2eW
+ 2vk3ETtqeXkRkjBvETYfpw9rXtb9/fFW7vl8U4YrOVQQ5qot5JJnkfJk9hB8Xlu45u9e
+ 1vI2fDwwFxLUkqB9tL0aFqVcKkgFmiG021BtubbR9Dvcpl4xwURCDSO4/mv/0c+WKF11 hQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk39tbntr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 10:21:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLALLKs008565
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 10:21:21 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 21 Dec 2022 02:21:17 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH 0/2] Add resets for ADSP based audio clock controller driver.
+Date:   Wed, 21 Dec 2022 15:50:59 +0530
+Message-ID: <1671618061-6329-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 2/6] soc: mediatek: pm-domains: Add buck isolation
- setting in power domain
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ikjoon Jang <ikjn@chromium.org>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20221221034407.19605-1-allen-kh.cheng@mediatek.com>
- <20221221034407.19605-3-allen-kh.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221221034407.19605-3-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 15gR521WN9KUW8SFa4F8OCF_xISm7gbS
+X-Proofpoint-GUID: 15gR521WN9KUW8SFa4F8OCF_xISm7gbS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-21_04,2022-12-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=879 spamscore=0 clxscore=1011 adultscore=0 priorityscore=1501
+ impostorscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212210083
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,35 +77,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/12/22 04:44, Allen-KH Cheng ha scritto:
-> In MT8192, we need to disable EXT_BUCK_ISO before turning on the ADSP
-> power pm-domains (mtcmos).
-> 
-> Add the MTK_SCPD_EXT_BUCK_ISO flag to control the buck isolation
-> setting in the mediatek power domain driver.
-> 
-> Fixes: 59b644b01cf4 ("soc: mediatek: Add MediaTek SCPSYS power domains")
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->   drivers/soc/mediatek/mtk-pm-domains.c | 8 ++++++++
->   drivers/soc/mediatek/mtk-pm-domains.h | 1 +
->   2 files changed, 9 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
-> index 09e3c38b8466..63f1e183f645 100644
-> --- a/drivers/soc/mediatek/mtk-pm-domains.c
-> +++ b/drivers/soc/mediatek/mtk-pm-domains.c
-> @@ -218,6 +218,10 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
->   	if (ret)
->   		goto err_reg;
->   
-> +	if (MTK_SCPD_CAPS(pd, MTK_SCPD_EXT_BUCK_ISO))
+Add resets for audio clock controller on audioreach based platforms. 
 
-if (pd->data->ext_buck_iso_offs && MTK_SCPD_CAPS(pd, MTK_SCPD_EXT_BUCK_ISO))
-	regmap_[...etc]
+Srinivasa Rao Mandadapu (2):
+  dt-bindings: clock: SC7280:  Add resets for LPASS audio clock
+    controller
+  clk: qcom: lpasscc: Add resets for SC7280 audioreach clock controller
 
-...so that we validate that ext_buck_iso_offs is actually present (as I
-suppose that this is supposed to *never* be 0x0).
+ .../devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml |  4 ++++
+ drivers/clk/qcom/lpasscc-sc7280.c                      | 18 ++++++++++++++++++
+ 2 files changed, 22 insertions(+)
 
-Regards,
-Angelo
+-- 
+2.7.4
+
