@@ -2,123 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAFE653467
+	by mail.lfdr.de (Postfix) with ESMTP id 437F3653466
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiLUQzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 11:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S234567AbiLUQzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 11:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234296AbiLUQzJ (ORCPT
+        with ESMTP id S234352AbiLUQzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Dec 2022 11:55:09 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD542240B8;
-        Wed, 21 Dec 2022 08:55:07 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id 1so24385890lfz.4;
-        Wed, 21 Dec 2022 08:55:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pKpFopFM+2p/s1rCGdP6Z1nsO+BxLqf3LvQx/9wlFY0=;
-        b=ChA+yVv3lB6Fzz5kJ1UE+vuKF2qz6h08hFftpVh0TotNethlWSKylrQR5xIP+QxAk6
-         sSzxD+z9NTp84P+QTcNTScu5QrEzHEDr9pcDPoxlVTX9bm0guls39R0GyjTkcK/ymMFs
-         aL1oFCKZymTRxAjCchuiA9b5LvonHJDYrjfYaTjZD0gqs6cEmyC2Erna5KxDaKkEB1Ek
-         RLJ8QXCE7ovCElVoHQcBtcSCxeiY70Z3RUxDa/uA8BLvsyQ2BlcFthcUsEF0eDpqrXeF
-         58zYI9hq2x7FvMhGJ0ojI89z7iu/ysDBQZOjKuobznqo36Wo6QGSdkA5SAn0HYjAGwjI
-         ecpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKpFopFM+2p/s1rCGdP6Z1nsO+BxLqf3LvQx/9wlFY0=;
-        b=S1aYCp5x6ejABxDsnGGvswv78vbV+7sK/snLO7UPmqWgGOI/Wwv+pqd8VrzLT51oxC
-         681NJI+cdYbmeF6EBrucfwFThsv916tgFx0Ee09CnQ2fstgJoHQX9VyjjBiyipdRRffp
-         M/htQvw11F0ZV7bx2TINuE08FON5CyTOET189glVauLApN5uCW1DEbG61M39jt8CGfHJ
-         10tt36QeHAfLJ6aWdheNaVM85L5y4Fw3ne765AJA8gQ5Wqajkw9y6jHm0wDgmtPNRQvR
-         rcnIH1hHBcrG/4r+hqWfGBr9wAImnYOEescizvnB0DBtF4BAKhreFBoPZuKdTCvT7/C+
-         Dd7w==
-X-Gm-Message-State: AFqh2kptMjmtjaOn8bgDAThsoJytyoWHCZ+nCwJcidVlsPjUGYadnIE1
-        Z1HkW4nVBqGOnCIhZ7nP7dE=
-X-Google-Smtp-Source: AMrXdXsE0hc14q00/Ji4tJF2zXxYjgrpZbqAN7yU8tEF5zJcQPgy7AKxaPcyNetQ1YqvfdfczeZc2Q==
-X-Received: by 2002:ac2:5b12:0:b0:4b5:6fa3:5d63 with SMTP id v18-20020ac25b12000000b004b56fa35d63mr2192589lfn.13.1671641706009;
-        Wed, 21 Dec 2022 08:55:06 -0800 (PST)
-Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id bi26-20020a05651c231a00b0027a2a26a655sm1395056ljb.8.2022.12.21.08.55.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 08:55:05 -0800 (PST)
-Message-ID: <8641fad2-7170-4c0c-fbd6-6e2e784b3106@gmail.com>
-Date:   Wed, 21 Dec 2022 19:54:58 +0300
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B605A24970;
+        Wed, 21 Dec 2022 08:55:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F0D8B81BD8;
+        Wed, 21 Dec 2022 16:55:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7072FC433EF;
+        Wed, 21 Dec 2022 16:55:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671641706;
+        bh=zMIpGrndxPG0VEHLYWt8z7uKeKf9TUU5w/6EAiB+aZw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Eianol1tYawt1zTiKlhnsq5SMhytQ6uJ1aq2nBVfBBe81rYx7be3Q5utJKdlve0Ue
+         sF6HqQrjAxbxsiOJ6+zGl64kSGsM6p/8LE9iVwsbu5oMeliEr+DyCdBYW3hbhsgfp2
+         E7kT+p8G2c9QJ3DwzKVuyOzIv8XVV7W+mF5hoBY8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.10.161
+Date:   Wed, 21 Dec 2022 17:55:01 +0100
+Message-Id: <167164170215084@kroah.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
-Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
-        bbasu@nvidia.com
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20221220160240.27494-2-sumitg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-20.12.2022 19:02, Sumit Gupta пишет:
->  static int tegra186_emc_probe(struct platform_device *pdev)
->  {
->  	struct mrq_emc_dvfs_latency_response response;
->  	struct tegra_bpmp_message msg;
->  	struct tegra186_emc *emc;
-> +	struct tegra_mc *mc;
->  	unsigned int i;
->  	int err;
->  
-> @@ -158,6 +307,9 @@ static int tegra186_emc_probe(struct platform_device *pdev)
->  	if (!emc)
->  		return -ENOMEM;
->  
-> +	platform_set_drvdata(pdev, emc);
-> +	emc->dev = &pdev->dev;
-> +
->  	emc->bpmp = tegra_bpmp_get(&pdev->dev);
->  	if (IS_ERR(emc->bpmp))
->  		return dev_err_probe(&pdev->dev, PTR_ERR(emc->bpmp), "failed to get BPMP\n");
-> @@ -236,6 +388,19 @@ static int tegra186_emc_probe(struct platform_device *pdev)
->  	debugfs_create_file("max_rate", S_IRUGO | S_IWUSR, emc->debugfs.root,
->  			    emc, &tegra186_emc_debug_max_rate_fops);
->  
-> +	mc = dev_get_drvdata(emc->dev->parent);
-> +	if (mc && mc->soc->icc_ops) {
-> +		if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
-> +			err = tegra_emc_interconnect_init(emc);
-> +			if (!err)
-> +				return err;
-> +			dev_err(&pdev->dev, "tegra_emc_interconnect_init failed:%d\n", err);
-> +			goto put_bpmp;
-> +		} else {
-> +			dev_info(&pdev->dev, "MRQ_BWMGR_INT not present\n");
-> +		}
+I'm announcing the release of the 5.10.161 kernel.
 
-If there is no MRQ_BWMGR_INT, then device drivers using ICC won't probe.
-This is either a error condition, or ICC should inited and then ICC
-changes should be skipped.
+All users of the 5.10 kernel series must upgrade.
+
+The updated 5.10.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                  |    2 
+ drivers/hid/hid-ids.h                     |    2 
+ drivers/hid/hid-ite.c                     |   26 +++++++++-
+ drivers/hid/hid-uclogic-core.c            |    1 
+ drivers/net/ethernet/intel/igb/igb_main.c |    2 
+ drivers/net/loopback.c                    |    2 
+ drivers/usb/gadget/function/f_uvc.c       |    5 +
+ drivers/usb/host/xhci-pci.c               |    4 +
+ drivers/usb/serial/cp210x.c               |    2 
+ drivers/usb/serial/f81232.c               |   12 ++--
+ drivers/usb/serial/f81534.c               |   12 ++--
+ drivers/usb/serial/option.c               |    3 +
+ fs/udf/inode.c                            |   76 +++++++++++++-----------------
+ fs/udf/truncate.c                         |   48 +++++-------------
+ net/bluetooth/l2cap_core.c                |    3 -
+ 15 files changed, 106 insertions(+), 94 deletions(-)
+
+Bruno Thomsen (1):
+      USB: serial: cp210x: add Kamstrup RF sniffer PIDs
+
+Duke Xin (1):
+      USB: serial: option: add Quectel EM05-G modem
+
+Greg Kroah-Hartman (1):
+      Linux 5.10.161
+
+Hans de Goede (3):
+      HID: ite: Add support for Acer S1002 keyboard-dock
+      HID: ite: Enable QUIRK_TOUCHPAD_ON_OFF_REPORT on Acer Aspire Switch 10E
+      HID: ite: Enable QUIRK_TOUCHPAD_ON_OFF_REPORT on Acer Aspire Switch V 10
+
+Jan Kara (4):
+      udf: Discard preallocation before extending file with a hole
+      udf: Fix preallocation discarding at indirect extent boundary
+      udf: Do not bother looking for prealloc extents if i_lenExtents matches i_size
+      udf: Fix extending file within last block
+
+Johan Hovold (2):
+      USB: serial: f81232: fix division by zero on line-speed change
+      USB: serial: f81534: fix division by zero on line-speed change
+
+José Expósito (1):
+      HID: uclogic: Add HID_QUIRK_HIDINPUT_FORCE quirk
+
+Rasmus Villemoes (1):
+      net: loopback: use NET_NAME_PREDICTABLE for name_assign_type
+
+Reka Norman (1):
+      xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
+
+Sungwoo Kim (1):
+      Bluetooth: L2CAP: Fix u8 overflow
+
+Szymon Heidrich (1):
+      usb: gadget: uvc: Prevent buffer overflow in setup handler
+
+Tony Nguyen (1):
+      igb: Initialize mailbox message for VF reset
 
