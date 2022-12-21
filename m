@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87CA652DC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC6E652DC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 09:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234548AbiLUIQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 03:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
+        id S230238AbiLUIQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 03:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234538AbiLUIPt (ORCPT
+        with ESMTP id S234547AbiLUIPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Dec 2022 03:15:49 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76CC262F
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C0D636D
         for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:46 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id z9-20020a6be009000000b006e0577c3686so6533046iog.0
+Received: by mail-il1-f197.google.com with SMTP id s2-20020a056e02216200b0030bc3be69e5so2797737ilv.20
         for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 00:15:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PBa479myLuUkjat4HKXd5OZuqhcEUZx+Vab6rwmEGzw=;
-        b=vF/8O4Cbhn4RkUMonYRoNwHxRDVCpEvB4987dMuATx5hNrINinHxRN0H28VeAo+KWs
-         J5AUOlrm4jwAn+ud8fgjnrYTAQ24i2VYDlv0QxgqDWULxcxc8TYZ3eXY11yruIOXyGtH
-         tE99aYYIl79/UywscOPKsGTBAMf4TgtQZBPckaIeZ5t+OP5RSITCH+vtkF8klLBYCwN9
-         HGcbu6VWthT8UEItfAcSaZn1oE3WSYY+FWA+tQyjGEZ9UFpBvwIRL3fBQ5OH2svWRTYI
-         E0c2cAX3PwW8sjBGVdF7DRnwd2Aw3MkGvOzG0fiDqir6vXMQNfDt9ZFiJ0ag3Izza9/p
-         Rotg==
-X-Gm-Message-State: AFqh2kqkeY+RqgJWNTZKIb8fljsUzSoNcTG8XY9fgw4QiWO9H19Ebuhb
-        JLS65fRfh/ooHspa4VcKH4eDIvneAd8t6hWM/YKljiHG1xI9
-X-Google-Smtp-Source: AMrXdXuhsVn7kQmJEIwx9pbMLJ4mKB7ghJUYh3VfjsVxQhGdOtxJ9BoMZxJcWCEgHzJYkPYzjR6MqbaIUOdQHylmpcQ6iu7iaV/f
+        bh=mMzPRxOPZqhngdN1cZmIq8P1MO04u/BexRoyy50ugc0=;
+        b=1poYQbD/mLWrFy7LyX1GCsOXzf6Rg6vl9+8hZkrVkEInC4g0NthnurEfei3xmtx+oP
+         7GAgaKIchwNBRZuAYPj4r7w+x8PJFWddpFhgkJDYaQX68Z00X8llu8UuNT/xJVfiwOXq
+         ninr43pmf4NXYh/rM/BP6+4XnwPFzAMm2tqLQidxdTh6PjLgavix4HPSnJew4sR1kWWL
+         U3sRCktmuQq3Y9o9E8156l5MIsI8Nk3tffsHtXSc7l/aeEMbJz/4Chr2MmBHS+q0JEUE
+         KLhf/+arKKQ1RvUebgo7/eY9U3W/V50ik9aA1dDw/VrRRhOOIvY27blsDKkMlDEuivz2
+         bJMQ==
+X-Gm-Message-State: AFqh2kpOOptuUtnAJrhO5LpeKJqkz9TpgZ2G3q0RQ4ULs2C2CS1eQA5D
+        XLmWxE8hKpdRo6Zu5I7mU8U+KwRu6YqeyDSAVOuhCo8PoO7Y
+X-Google-Smtp-Source: AMrXdXuqAeEJW/YmlRJHpE1A0vEZhXOkM30EfuEpFQqt88nO7mdzMlR2OfZ8SLhYv/H26aIcJgjOSF74UuK6wHvrfhsaHlfag93E
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6f08:0:b0:6e4:8c1:d2d7 with SMTP id
- k8-20020a6b6f08000000b006e408c1d2d7mr93816ioc.27.1671610545932; Wed, 21 Dec
- 2022 00:15:45 -0800 (PST)
-Date:   Wed, 21 Dec 2022 00:15:45 -0800
+X-Received: by 2002:a05:6e02:c61:b0:302:a229:3090 with SMTP id
+ f1-20020a056e020c6100b00302a2293090mr117861ilj.90.1671610546257; Wed, 21 Dec
+ 2022 00:15:46 -0800 (PST)
+Date:   Wed, 21 Dec 2022 00:15:46 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cb11c705f052285f@google.com>
-Subject: [syzbot] [ext4?] inconsistent lock state in ext4_xattr_set_handle
-From:   syzbot <syzbot+9fd463c3e6d18ab8a362@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+Message-ID: <000000000000d0021505f0522813@google.com>
+Subject: [syzbot] possible deadlock in page_cache_ra_unbounded
+From:   syzbot <syzbot+47c7e14e1bd09234d0ad@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -58,140 +58,191 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1723a120480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=9fd463c3e6d18ab8a362
+HEAD commit:    6feb57c2fd7c Merge tag 'kbuild-v6.2' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13abf993880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d3fb546de56fbf8d
+dashboard link: https://syzkaller.appspot.com/bug?extid=47c7e14e1bd09234d0ad
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+disk image: https://storage.googleapis.com/syzbot-assets/81556e491789/disk-6feb57c2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/065c943ec9de/vmlinux-6feb57c2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/66e98c522c1f/bzImage-6feb57c2.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9fd463c3e6d18ab8a362@syzkaller.appspotmail.com
+Reported-by: syzbot+47c7e14e1bd09234d0ad@syzkaller.appspotmail.com
 
-================================
-WARNING: inconsistent lock state
-6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0 Not tainted
---------------------------------
-inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
-syz-executor.5/6055 [HC0[0]:SC0[0]:HE1:SE1] takes:
-ffff0000c717ffa8 (&irq_desc_lock_class){?.-.}-{2:2}, at: ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
-ffff0000c717ffa8 (&irq_desc_lock_class){?.-.}-{2:2}, at: ext4_xattr_set_handle+0xd0/0x9a0 fs/ext4/xattr.c:2309
-{IN-HARDIRQ-W} state was registered at:
-  lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
-  __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
-  _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
-  handle_fasteoi_irq+0x38/0x324 kernel/irq/chip.c:693
-  generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
-  handle_irq_desc kernel/irq/irqdesc.c:648 [inline]
-  generic_handle_domain_irq+0x4c/0x6c kernel/irq/irqdesc.c:704
-  __gic_handle_irq drivers/irqchip/irq-gic-v3.c:695 [inline]
-  __gic_handle_irq_from_irqson drivers/irqchip/irq-gic-v3.c:746 [inline]
-  gic_handle_irq+0x78/0x1b4 drivers/irqchip/irq-gic-v3.c:790
-  call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:892
-  do_interrupt_handler+0x7c/0xc0 arch/arm64/kernel/entry-common.c:274
-  __el1_irq arch/arm64/kernel/entry-common.c:471 [inline]
-  el1_interrupt+0x34/0x68 arch/arm64/kernel/entry-common.c:486
-  el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:491
-  el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:580
-  arch_local_irq_restore arch/arm64/include/asm/irqflags.h:122 [inline]
-  __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-  _raw_spin_unlock_irqrestore+0x58/0x8c kernel/locking/spinlock.c:194
-  try_to_wake_up+0x2c4/0x410 kernel/sched/core.c:4194
-  wake_up_process+0x18/0x24 kernel/sched/core.c:4326
-  set_current_rng+0xa4/0xe4 drivers/char/hw_random/core.c:101
-  hwrng_register+0x190/0x47c drivers/char/hw_random/core.c:567
-  virtrng_scan+0x24/0x5c drivers/char/hw_random/virtio-rng.c:207
-  virtio_dev_probe+0x4f8/0x590 drivers/virtio/virtio.c:314
-  call_driver_probe+0x48/0x170
-  really_probe+0x13c/0x4c0 drivers/base/dd.c:639
-  __driver_probe_device+0x124/0x214 drivers/base/dd.c:778
-  driver_probe_device+0x54/0x2f0 drivers/base/dd.c:808
-  __driver_attach+0x250/0x374 drivers/base/dd.c:1190
-  bus_for_each_dev+0xa8/0x110 drivers/base/bus.c:301
-  driver_attach+0x30/0x40 drivers/base/dd.c:1207
-  bus_add_driver+0x14c/0x2e4 drivers/base/bus.c:618
-  driver_register+0x108/0x19c drivers/base/driver.c:246
-  register_virtio_driver+0x54/0x6c drivers/virtio/virtio.c:357
-  virtio_rng_driver_init+0x1c/0x28 drivers/char/hw_random/virtio-rng.c:262
-  do_one_initcall+0x118/0x22c init/main.c:1303
-  do_initcall_level+0xac/0xe4 init/main.c:1376
-  do_initcalls+0x58/0xa8 init/main.c:1392
-  do_basic_setup+0x20/0x2c init/main.c:1411
-  kernel_init_freeable+0xb8/0x148 init/main.c:1631
-  kernel_init+0x24/0x290 init/main.c:1519
-  ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 2647
-hardirqs last  enabled at (2647): [<ffff80000c096f4c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
-hardirqs last  enabled at (2647): [<ffff80000c096f4c>] _raw_spin_unlock_irqrestore+0x48/0x8c kernel/locking/spinlock.c:194
-hardirqs last disabled at (2646): [<ffff80000c096d88>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (2646): [<ffff80000c096d88>] _raw_spin_lock_irqsave+0xa4/0xb4 kernel/locking/spinlock.c:162
-softirqs last  enabled at (2636): [<ffff80000801c82c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (2634): [<ffff80000801c7f8>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+REISERFS (device loop4): Created .reiserfs_priv - reserved for xattr storage.
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-syzkaller-13822-g6feb57c2fd7c #0 Not tainted
+------------------------------------------------------
+syz-executor.4/3542 is trying to acquire lock:
+ffff88803bf4f520 (mapping.invalidate_lock#11){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ffff88803bf4f520 (mapping.invalidate_lock#11){.+.+}-{3:3}, at: page_cache_ra_unbounded+0xe9/0x820 mm/readahead.c:226
+
+but task is already holding lock:
+ffff88802540e090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&sbi->lock){+.+.}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
+       reiserfs_get_block+0x24e/0x5180 fs/reiserfs/inode.c:680
+       do_mpage_readpage+0x970/0x1c50 fs/mpage.c:208
+       mpage_readahead+0x210/0x380 fs/mpage.c:361
+       read_pages+0x169/0x9c0 mm/readahead.c:161
+       page_cache_ra_unbounded+0x703/0x820 mm/readahead.c:270
+       page_cache_sync_readahead include/linux/pagemap.h:1210 [inline]
+       filemap_get_pages+0x465/0x10d0 mm/filemap.c:2600
+       filemap_read+0x3cf/0xea0 mm/filemap.c:2694
+       call_read_iter include/linux/fs.h:2180 [inline]
+       generic_file_splice_read+0x1ff/0x5d0 fs/splice.c:309
+       do_splice_to fs/splice.c:793 [inline]
+       splice_direct_to_actor+0x41b/0xc00 fs/splice.c:865
+       do_splice_direct+0x279/0x3d0 fs/splice.c:974
+       do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
+       __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+       __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (mapping.invalidate_lock#11){.+.+}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       down_read+0x39/0x50 kernel/locking/rwsem.c:1509
+       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+       page_cache_ra_unbounded+0xe9/0x820 mm/readahead.c:226
+       do_sync_mmap_readahead+0x4b2/0x9a0
+       filemap_fault+0x38d/0x1060 mm/filemap.c:3154
+       __do_fault+0x136/0x4f0 mm/memory.c:4163
+       do_shared_fault mm/memory.c:4569 [inline]
+       do_fault mm/memory.c:4647 [inline]
+       handle_pte_fault mm/memory.c:4931 [inline]
+       __handle_mm_fault mm/memory.c:5073 [inline]
+       handle_mm_fault+0x18bc/0x26b0 mm/memory.c:5219
+       do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
+       handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+       exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+       asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+       __put_user_4+0x12/0x20 arch/x86/lib/putuser.S:93
+       reiserfs_ioctl+0x14b/0x340 fs/reiserfs/ioctl.c:96
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
 other info that might help us debug this:
+
  Possible unsafe locking scenario:
 
-       CPU0
-       ----
-  lock(&irq_desc_lock_class);
-  <Interrupt>
-    lock(&irq_desc_lock_class);
+       CPU0                    CPU1
+       ----                    ----
+  lock(&sbi->lock);
+                               lock(mapping.invalidate_lock#11);
+                               lock(&sbi->lock);
+  lock(mapping.invalidate_lock#11);
 
  *** DEADLOCK ***
 
-2 locks held by syz-executor.5/6055:
- #0: ffff000114834460 (sb_writers#3){.+.+}-{0:0}, at: mnt_want_write+0x20/0x64 fs/namespace.c:393
- #1: ffff0000c71802e0 (&type->i_mutex_dir_key#10){++++}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #1: ffff0000c71802e0 (&type->i_mutex_dir_key#10){++++}-{3:3}, at: vfs_setxattr+0xd4/0x1f4 fs/xattr.c:308
+1 lock held by syz-executor.4/3542:
+ #0: ffff88802540e090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x77/0xd0 fs/reiserfs/lock.c:27
 
 stack backtrace:
-CPU: 1 PID: 6055 Comm: syz-executor.5 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+CPU: 1 PID: 3542 Comm: syz-executor.4 Not tainted 6.1.0-syzkaller-13822-g6feb57c2fd7c #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
+Call Trace:
+ <TASK>
  __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_usage_bug+0x39c/0x3cc kernel/locking/lockdep.c:3963
- mark_lock_irq+0x4a8/0x4b4
- mark_lock+0x154/0x1b4 kernel/locking/lockdep.c:4634
- mark_usage kernel/locking/lockdep.c:4543 [inline]
- __lock_acquire+0x5f8/0x3084 kernel/locking/lockdep.c:5009
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- down_write+0x5c/0x88 kernel/locking/rwsem.c:1562
- ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
- ext4_xattr_set_handle+0xd0/0x9a0 fs/ext4/xattr.c:2309
- ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2496
- ext4_xattr_user_set+0x78/0x90 fs/ext4/xattr_user.c:41
- __vfs_setxattr+0x250/0x260 fs/xattr.c:182
- __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
- __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
- vfs_setxattr+0xf4/0x1f4 fs/xattr.c:309
- do_setxattr fs/xattr.c:594 [inline]
- setxattr fs/xattr.c:617 [inline]
- path_setxattr+0x354/0x414 fs/xattr.c:636
- __do_sys_setxattr fs/xattr.c:652 [inline]
- __se_sys_setxattr fs/xattr.c:648 [inline]
- __arm64_sys_setxattr+0x2c/0x40 fs/xattr.c:648
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-list_add corruption. prev->next should be next (ffff0000c717ff90), but was 0000000000000000. (prev=ffff80000ef2a260).
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:32!
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ down_read+0x39/0x50 kernel/locking/rwsem.c:1509
+ filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ page_cache_ra_unbounded+0xe9/0x820 mm/readahead.c:226
+ do_sync_mmap_readahead+0x4b2/0x9a0
+ filemap_fault+0x38d/0x1060 mm/filemap.c:3154
+ __do_fault+0x136/0x4f0 mm/memory.c:4163
+ do_shared_fault mm/memory.c:4569 [inline]
+ do_fault mm/memory.c:4647 [inline]
+ handle_pte_fault mm/memory.c:4931 [inline]
+ __handle_mm_fault mm/memory.c:5073 [inline]
+ handle_mm_fault+0x18bc/0x26b0 mm/memory.c:5219
+ do_user_addr_fault+0x69b/0xcb0 arch/x86/mm/fault.c:1428
+ handle_page_fault arch/x86/mm/fault.c:1519 [inline]
+ exc_page_fault+0x7a/0x110 arch/x86/mm/fault.c:1575
+ asm_exc_page_fault+0x22/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0010:__put_user_4+0x12/0x20 arch/x86/lib/putuser.S:95
+Code: 01 31 c9 0f 01 ca c3 90 0f 01 cb 66 89 01 31 c9 0f 01 ca c3 0f 1f 40 00 48 bb fd ef ff ff ff 7f 00 00 48 39 d9 73 54 0f 01 cb <89> 01 31 c9 0f 01 ca c3 66 0f 1f 44 00 00 0f 01 cb 89 01 31 c9 0f
+RSP: 0018:ffffc90014c97eb0 EFLAGS: 00050297
+RAX: 0000000000000000 RBX: 00007fffffffeffd RCX: 0000000020000000
+RDX: 0000000000000001 RSI: ffffffff8aedcc60 RDI: ffffffff8b4bc060
+RBP: 1ffff110077e9e4b R08: dffffc0000000000 R09: fffffbfff1d2ccfe
+R10: fffffbfff1d2ccfe R11: 1ffffffff1d2ccfd R12: 0000000020000000
+R13: ffff88803bf4f698 R14: ffff88803bf4f258 R15: ffff8880205c9400
+ reiserfs_ioctl+0x14b/0x340 fs/reiserfs/ioctl.c:96
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0a0548c0d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0a061d5168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f0a055abf80 RCX: 00007f0a0548c0d9
+RDX: 0000000020000000 RSI: 0000000080087601 RDI: 0000000000000004
+RBP: 00007f0a054e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc8aa2e79f R14: 00007f0a061d5300 R15: 0000000000022000
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	01 31                	add    %esi,(%rcx)
+   2:	c9                   	leaveq
+   3:	0f 01 ca             	clac
+   6:	c3                   	retq
+   7:	90                   	nop
+   8:	0f 01 cb             	stac
+   b:	66 89 01             	mov    %ax,(%rcx)
+   e:	31 c9                	xor    %ecx,%ecx
+  10:	0f 01 ca             	clac
+  13:	c3                   	retq
+  14:	0f 1f 40 00          	nopl   0x0(%rax)
+  18:	48 bb fd ef ff ff ff 	movabs $0x7fffffffeffd,%rbx
+  1f:	7f 00 00
+  22:	48 39 d9             	cmp    %rbx,%rcx
+  25:	73 54                	jae    0x7b
+  27:	0f 01 cb             	stac
+* 2a:	89 01                	mov    %eax,(%rcx) <-- trapping instruction
+  2c:	31 c9                	xor    %ecx,%ecx
+  2e:	0f 01 ca             	clac
+  31:	c3                   	retq
+  32:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+  38:	0f 01 cb             	stac
+  3b:	89 01                	mov    %eax,(%rcx)
+  3d:	31 c9                	xor    %ecx,%ecx
+  3f:	0f                   	.byte 0xf
 
 
 ---
