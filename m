@@ -2,160 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8A4652F09
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2421D652F10
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiLUJ7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 04:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
+        id S234684AbiLUJ7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 04:59:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234680AbiLUJ61 (ORCPT
+        with ESMTP id S234676AbiLUJ64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 04:58:27 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B61D2339B;
-        Wed, 21 Dec 2022 01:53:38 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E543A2F4;
-        Wed, 21 Dec 2022 01:54:18 -0800 (PST)
-Received: from [10.57.44.6] (unknown [10.57.44.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C57AE3F71E;
-        Wed, 21 Dec 2022 01:53:33 -0800 (PST)
-Message-ID: <43780b8b-d358-ba8f-a4af-06165dbbf18a@arm.com>
-Date:   Wed, 21 Dec 2022 10:53:24 +0100
+        Wed, 21 Dec 2022 04:58:56 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE82F233B3;
+        Wed, 21 Dec 2022 01:55:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LXTjxNIwyTamcsYiCUb1qbSp8dawRiYmOqWzEm2gekI=; b=ln8ec5+mDsvVeVkYSdnkkKkSyL
+        SZXC7xhjFUriKXcoax4iKbHOBqvEK+SXuneJWVll3OY6YVNzsnKSg5y20qCmb3nFPkAw8h4vwDTB8
+        2R6mvqzk1nJ19+pSPicHHwCsf1FO5eJnSYbRIHXmbbW7NKzouJgccP7nbXs1YmEbOX8LWq/rSo/IS
+        KlFf+S5I3eD2a2BzZqskDzKriDhfusCBD1wPwCzF3MVFTDUj3G8ZU1gSouJlNMuHvWa4lcwCLTlhX
+        ntwkPH3nPstYgrYkSNEt8zrxOuldgsLxd7U6u/cONukLoCzBlFq2BhJpHgEkQ3oIcEUXiQMtXdDKV
+        +16P8nww==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35800)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p7voG-0000TN-KP; Wed, 21 Dec 2022 09:54:48 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p7voB-0006Rt-Mc; Wed, 21 Dec 2022 09:54:43 +0000
+Date:   Wed, 21 Dec 2022 09:54:43 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Subject: Re: [PATCH v7 06/11] leds: trigger: netdev: add hardware control
+ support
+Message-ID: <Y6LX43poXJ4k/7mv@shell.armlinux.org.uk>
+References: <20221214235438.30271-1-ansuelsmth@gmail.com>
+ <20221214235438.30271-7-ansuelsmth@gmail.com>
+ <Y5tUU5zA/lkYJza+@shell.armlinux.org.uk>
+ <639ca665.1c0a0220.ae24f.9d06@mx.google.com>
+ <Y6JMe9oJDCyLkq7P@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/5] cacheinfo: Use RISC-V's init_cache_level() as
- generic OF implementation
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, palmer@rivosinc.com,
-        Ionela.Voinescu@arm.com, Conor Dooley <conor.dooley@microchip.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Gavin Shan <gshan@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org
-References: <20221209103130.572196-1-pierre.gondois@arm.com>
- <20221209103130.572196-2-pierre.gondois@arm.com>
- <20221220233912.GA1193943-robh@kernel.org>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20221220233912.GA1193943-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6JMe9oJDCyLkq7P@lunn.ch>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Rob,
-
-On 12/21/22 00:39, Rob Herring wrote:
-> On Fri, Dec 09, 2022 at 11:31:23AM +0100, Pierre Gondois wrote:
->> RISC-V's implementation of init_of_cache_level() is following
->> the Devicetree Specification v0.3 regarding caches, cf.:
->> - s3.7.3 'Internal (L1) Cache Properties'
->> - s3.8 'Multi-level and Shared Cache Nodes'
->>
->> Allow reusing the implementation by moving it.
->>
->> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
->> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
->> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->> ---
->>   arch/riscv/kernel/cacheinfo.c | 39 +------------------------------
->>   drivers/base/cacheinfo.c      | 44 +++++++++++++++++++++++++++++++++++
->>   include/linux/cacheinfo.h     |  1 +
->>   3 files changed, 46 insertions(+), 38 deletions(-)
->>
->> diff --git a/arch/riscv/kernel/cacheinfo.c b/arch/riscv/kernel/cacheinfo.c
->> index 90deabfe63ea..440a3df5944c 100644
->> --- a/arch/riscv/kernel/cacheinfo.c
->> +++ b/arch/riscv/kernel/cacheinfo.c
->> @@ -115,44 +115,7 @@ static void fill_cacheinfo(struct cacheinfo **this_leaf,
->>   
->>   int init_cache_level(unsigned int cpu)
->>   {
->> -	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
->> -	struct device_node *np = of_cpu_device_node_get(cpu);
->> -	struct device_node *prev = NULL;
->> -	int levels = 0, leaves = 0, level;
->> -
->> -	if (of_property_read_bool(np, "cache-size"))
->> -		++leaves;
->> -	if (of_property_read_bool(np, "i-cache-size"))
->> -		++leaves;
->> -	if (of_property_read_bool(np, "d-cache-size"))
->> -		++leaves;
->> -	if (leaves > 0)
->> -		levels = 1;
->> -
->> -	prev = np;
->> -	while ((np = of_find_next_cache_node(np))) {
->> -		of_node_put(prev);
->> -		prev = np;
->> -		if (!of_device_is_compatible(np, "cache"))
->> -			break;
->> -		if (of_property_read_u32(np, "cache-level", &level))
->> -			break;
->> -		if (level <= levels)
->> -			break;
->> -		if (of_property_read_bool(np, "cache-size"))
->> -			++leaves;
->> -		if (of_property_read_bool(np, "i-cache-size"))
->> -			++leaves;
->> -		if (of_property_read_bool(np, "d-cache-size"))
->> -			++leaves;
->> -		levels = level;
->> -	}
->> -
->> -	of_node_put(np);
->> -	this_cpu_ci->num_levels = levels;
->> -	this_cpu_ci->num_leaves = leaves;
->> -
->> -	return 0;
->> +	return init_of_cache_level(cpu);
+On Wed, Dec 21, 2022 at 12:59:55AM +0100, Andrew Lunn wrote:
+> > > One thought on this approach though - if one has a PHY that supports
+> > > "activity" but not independent "rx" and "tx" activity indications
+> > > and it doesn't support software control, how would one enable activity
+> > > mode? There isn't a way to simultaneously enable both at the same
+> > > time... However, I need to check whether there are any PHYs that fall
+> > > into this category.
+> > >
+> > 
+> > Problem is that for such feature and to have at least something working
+> > we need to face compromise. We really can't support each switch feature
+> > and have a generic API for everything.
 > 
-> Not in this patch, but in patch 5, shouldn't riscv init_cache_level() be
-> removed? The topology code already called init_of_cache_level() and
-> RiscV has nothing architectural to add/change. IOW, init_cache_level()
-> should only do architecture defined init, and not anything DT or ACPI
-> related (unless those are non-standard).
-> 
-> Rob
+> I agree we need to make compromises. We cannot support every LED
+> feature of every PHY, they are simply too diverse. Hopefully we can
+> support some features of every PHY. In the worst case, a PHY simply
+> cannot be controlled via this method, which is the current state
+> today. So it is not worse off.
 
-I think you are right. Just to re-phrase your point:
-init_of_cache_level() is called through this path:
-init_cpu_topology()
-\-fetch_cache_info()
-   \-init_of_cache_level()
+... and that compromise is that it's not going to be possible to enable
+activity mode on 88e151x with how the code stands and with the
+independent nature of "rx" and "tx" activity control currently in the
+netdev trigger... making this whole approach somewhat useless for
+Marvell PHYs.
 
-If there is missing information in the DT and it's not possible to create the
-cacheinfo, then the arch specific implementation i.e. init_cache_level() is
-called through:
-update_siblings_masks() | cacheinfo_cpu_online()
-\-detect_cache_attributes()
-   \-init_cache_level()
+We really need to see a working implementation for this code for more
+than just one PHY to prove that it is actually possible for it to
+support other PHYs. If not, it isn't actually solving the problem,
+and we're going to continue getting custom implementations to configure
+the LED settings.
 
-This is useful for arm to call init_cache_level() since it is possible
-to extract some information from some registers. For RISC-V, if
-init_of_cache_level() fails, then init_cache_level() will fail again.
-So removing RISC-V's init_cache_level() makes sense.
-
-Regards,
-Pierre
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
