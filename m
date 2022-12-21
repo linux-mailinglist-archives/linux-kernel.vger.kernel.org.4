@@ -2,133 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC6C652B18
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 02:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322E0652B1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 02:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234339AbiLUBm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 20:42:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S233331AbiLUBr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 20:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiLUBmz (ORCPT
+        with ESMTP id S229451AbiLUBr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 20:42:55 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 638B71928E;
-        Tue, 20 Dec 2022 17:42:54 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BL1fcrJ7003645, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BL1fcrJ7003645
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Wed, 21 Dec 2022 09:41:38 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+        Tue, 20 Dec 2022 20:47:26 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F101A38B;
+        Tue, 20 Dec 2022 17:47:25 -0800 (PST)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NcGWM3ZFhzJqbJ;
+        Wed, 21 Dec 2022 09:46:23 +0800 (CST)
+Received: from [10.67.101.126] (10.67.101.126) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 21 Dec 2022 09:42:29 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 21 Dec 2022 09:42:29 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Wed, 21 Dec 2022 09:42:29 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>,
-        "rtl8821cerfe2@gmail.com" <rtl8821cerfe2@gmail.com>,
-        "JunASAKA@zzy040330.moe" <JunASAKA@zzy040330.moe>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>
-Subject: Re: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for rtl8192eu
-Thread-Topic: [PATCH] wifi: rtl8xxxu: fixing transmisison failure for
- rtl8192eu
-Thread-Index: AQHZEcSxpWNKKfbUGEumZ8h5P7r+XK52Rmng///23oCAANQEgA==
-Date:   Wed, 21 Dec 2022 01:42:29 +0000
-Message-ID: <fb0a7d6c0897464550ed7ee75c6318c525a0f001.camel@realtek.com>
-References: <20221217030659.12577-1-JunASAKA@zzy040330.moe>
-         <3b4124ebabcb4ceaae89cd9ccf84c7de@realtek.com>
-         <33b2b585-c5b1-5888-bcee-ca74ce809a44@gmail.com>
-In-Reply-To: <33b2b585-c5b1-5888-bcee-ca74ce809a44@gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [125.224.71.208]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEyLzIwIOS4i+WNiCAxMDowMDowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5E08DD7BCA56F7478F2C5D3AA4F61ED8@realtek.com>
-Content-Transfer-Encoding: base64
+ 15.1.2375.34; Wed, 21 Dec 2022 09:47:23 +0800
+Message-ID: <6e2f1142-c14b-0277-0c5e-fda26235794c@huawei.com>
+Date:   Wed, 21 Dec 2022 09:47:23 +0800
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH] scsi: libsas: Grab the host lock in
+ sas_ata_device_link_abort()
+Content-Language: en-CA
+To:     John Garry <john.g.garry@oracle.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <niklas.cassel@wdc.com>,
+        <damien.lemoal@opensource.wdc.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>
+References: <20221220125349.45091-1-yangxingui@huawei.com>
+ <4ec9dbed-1758-d6b4-dc1d-ac42e8c22731@oracle.com>
+From:   yangxingui <yangxingui@huawei.com>
+In-Reply-To: <4ec9dbed-1758-d6b4-dc1d-ac42e8c22731@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.101.126]
+X-ClientProxiedBy: dggpemm500011.china.huawei.com (7.185.36.110) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTEyLTIwIGF0IDE1OjAzICswMjAwLCBCaXR0ZXJibHVlIFNtaXRoIHdyb3Rl
-Og0KPiBPbiAyMC8xMi8yMDIyIDA3OjQ0LCBQaW5nLUtlIFNoaWggd3JvdGU6DQo+ID4gDQo+ID4g
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4gRnJvbTogSnVuIEFTQUtBIDxKdW5B
-U0FLQUB6enkwNDAzMzAubW9lPg0KPiA+ID4gU2VudDogU2F0dXJkYXksIERlY2VtYmVyIDE3LCAy
-MDIyIDExOjA3IEFNDQo+ID4gPiBUbzogSmVzLlNvcmVuc2VuQGdtYWlsLmNvbQ0KPiA+ID4gQ2M6
-IGt2YWxvQGtlcm5lbC5vcmc7IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGVkdW1hemV0QGdvb2dsZS5j
-b207IGt1YmFAa2VybmVsLm9yZzsgDQo+ID4gPiBwYWJlbmlAcmVkaGF0LmNvbTsNCj4gPiA+IGxp
-bnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgbGlu
-dXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgSnVuDQo+ID4gPiBBU0FLQQ0KPiA+ID4gPEp1bkFT
-QUtBQHp6eTA0MDMzMC5tb2U+DQo+ID4gPiBTdWJqZWN0OiBbUEFUQ0hdIHdpZmk6IHJ0bDh4eHh1
-OiBmaXhpbmcgdHJhbnNtaXNpc29uIGZhaWx1cmUgZm9yIHJ0bDgxOTJldQ0KPiA+ID4gDQo+ID4g
-PiBGaXhpbmcgdHJhbnNtaXNzaW9uIGZhaWx1cmUgd2hpY2ggcmVzdWx0cyBpbg0KPiA+ID4gImF1
-dGhlbnRpY2F0aW9uIHdpdGggLi4uIHRpbWVkIG91dCIuIFRoaXMgY2FuIGJlDQo+ID4gPiBmaXhl
-ZCBieSBkaXNhYmxlIHRoZSBSRUdfVFhQQVVTRS4NCj4gPiA+IA0KPiA+ID4gU2lnbmVkLW9mZi1i
-eTogSnVuIEFTQUtBIDxKdW5BU0FLQUB6enkwNDAzMzAubW9lPg0KPiA+ID4gLS0tDQo+ID4gPiAg
-ZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGw4eHh4dS9ydGw4eHh4dV84MTkyZS5jIHwg
-NSArKysrKw0KPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykNCj4gPiA+IA0K
-PiA+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsOHh4eHUv
-cnRsOHh4eHVfODE5MmUuYw0KPiA+ID4gYi9kcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0
-bDh4eHh1L3J0bDh4eHh1XzgxOTJlLmMNCj4gPiA+IGluZGV4IGE3ZDc2NjkzYzAyZC4uOWQwZWQ2
-NzYwY2I2IDEwMDY0NA0KPiA+ID4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9y
-dGw4eHh4dS9ydGw4eHh4dV84MTkyZS5jDQo+ID4gPiArKysgYi9kcml2ZXJzL25ldC93aXJlbGVz
-cy9yZWFsdGVrL3J0bDh4eHh1L3J0bDh4eHh1XzgxOTJlLmMNCj4gPiA+IEBAIC0xNzQ0LDYgKzE3
-NDQsMTEgQEAgc3RhdGljIHZvaWQgcnRsODE5MmVfZW5hYmxlX3JmKHN0cnVjdCBydGw4eHh4dV9w
-cml2ICpwcml2KQ0KPiA+ID4gIAl2YWw4ID0gcnRsOHh4eHVfcmVhZDgocHJpdiwgUkVHX1BBRF9D
-VFJMMSk7DQo+ID4gPiAgCXZhbDggJj0gfkJJVCgwKTsNCj4gPiA+ICAJcnRsOHh4eHVfd3JpdGU4
-KHByaXYsIFJFR19QQURfQ1RSTDEsIHZhbDgpOw0KPiA+ID4gKw0KPiA+ID4gKwkvKg0KPiA+ID4g
-KwkgKiBGaXggdHJhbnNtaXNzaW9uIGZhaWx1cmUgb2YgcnRsODE5MmUuDQo+ID4gPiArCSAqLw0K
-PiA+ID4gKwlydGw4eHh4dV93cml0ZTgocHJpdiwgUkVHX1RYUEFVU0UsIDB4MDApOw0KPiA+IA0K
-PiA+IEkgdHJhY2Ugd2hlbiBydGw4eHh4dSBzZXQgUkVHX1RYUEFVU0U9MHhmZiB0aGF0IHdpbGwg
-c3RvcCBUWC4NCj4gPiBUaGUgb2NjYXNpb25zIGluY2x1ZGUgUkYgY2FsaWJyYXRpb24sIExQUyBt
-b2RlIChjYWxsZWQgYnkgcG93ZXIgb2ZmKSwgYW5kDQo+ID4gZ29pbmcgdG8gc3RvcC4gU28sIEkg
-dGhpbmsgUkYgY2FsaWJyYXRpb24gZG9lcyBUWCBwYXVzZSBidXQgbm90IHJlc3RvcmUNCj4gPiBz
-ZXR0aW5ncyBhZnRlciBjYWxpYnJhdGlvbiwgYW5kIGNhdXNlcyBUWCBzdHVjay4gQXMgdGhlIGZs
-b3cgSSB0cmFjZWQsDQo+ID4gdGhpcyBwYXRjaCBsb29rcyByZWFzb25hYmxlLiBCdXQsIEkgd29u
-ZGVyIHdoeSBvdGhlciBwZW9wbGUgZG9uJ3QgbWVldA0KPiA+IHRoaXMgcHJvYmxlbS4NCj4gPiAN
-Cj4gT3RoZXIgcGVvcGxlIGhhdmUgdGhpcyBwcm9ibGVtIHRvbzoNCj4gaHR0cHM6Ly9idWd6aWxs
-YS5rZXJuZWwub3JnL3Nob3dfYnVnLmNnaT9pZD0xOTY3NjkNCj4gaHR0cHM6Ly9idWd6aWxsYS5r
-ZXJuZWwub3JnL3Nob3dfYnVnLmNnaT9pZD0yMTY3NDYNCg0KSW4gdGhlIHRocmVhZHMsIHlvdSBo
-YXZlIGFuc3dlcmVkIG15IHF1ZXN0aW9uIHdpdGgNCiJrZXJuZWwgNC44LjAgd29ya3MsIGJ1dCA0
-LjkuPyBkb2VzIG5vdCB3b3JrLiINCg0KPiANCj4gVGhlIFJGIGNhbGlicmF0aW9uIGRvZXMgcmVz
-dG9yZSBSRUdfVFhQQVVTRSBhdCB0aGUgZW5kLiBXaGF0IGhhcHBlbnMgaXMNCj4gd2hlbiB5b3Ug
-cGx1ZyBpbiB0aGUgZGV2aWNlLCBzb21ldGhpbmcgKG1hYzgwMjExPyB3cGFfc3VwcGxpY2FudD8p
-IGNhbGxzDQo+IHJ0bDh4eHh1X3N0YXJ0KCksIHRoZW4gcnRsOHh4eHVfc3RvcCgpLCB0aGVuIHJ0
-bDh4eHh1X3N0YXJ0KCkgYWdhaW4uDQo+IHJ0bDh4eHh1X3N0b3AoKSBzZXRzIFJFR19UWFBBVVNF
-IHRvIDB4ZmYgYW5kIG5vdGhpbmcgc2V0cyBpdCBiYWNrIHRvIDAuDQo+IA0KDQpZb3UgYXJlIGNv
-cnJlY3QuIFRoYXQgaXMgY2xlYXIgdG8gbWUuIEkgbWlzcyB0aGUgcG9pbnQgdGhhdCBSRiBjYWxp
-YnJhdGlvbg0KZG9lcyBiYWNrdXAvcmVzdG9yZSByZWdpc3RlcnMgY29udGFpbmluZyBSRUdfVFhQ
-QVVTRS4NCg0KVGhlbiwgSSB0aGluayBteSByZXZpZXdlZC1ieSBjYW4gYmUgc3RpbGwgYXBwbGll
-ZCwgcmlnaHQ/DQoNClBpbmctS2UNCg0K
+
+
+On 2022/12/20 22:59, John Garry wrote:
+> On 20/12/2022 12:53, Xingui Yang wrote:
+>> Grab the host lock in sas_ata_device_link_abort() before calling
+> 
+> This is should be the ata port lock, right? I know that the ata comments 
+> say differently.
+ok, I will update the commit message and use ata port lock instead.
+> 
+>> ata_link_abort(), as the comment in ata_link_abort() mentions.
+>>
+> 
+> Can you please add a fixes tag?
+ok, I will update and add a fix tag.
+
+Thanks,
+Xingui
+> 
+>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+> 
+> Reviewed-by: John Garry <john.g.garry@oracle.com>
+> 
+>> ---
+>>   drivers/scsi/libsas/sas_ata.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/scsi/libsas/sas_ata.c 
+>> b/drivers/scsi/libsas/sas_ata.c
+>> index f7439bf9cdc6..4f2017b21e6d 100644
+>> --- a/drivers/scsi/libsas/sas_ata.c
+>> +++ b/drivers/scsi/libsas/sas_ata.c
+>> @@ -889,7 +889,9 @@ void sas_ata_device_link_abort(struct 
+>> domain_device *device, bool force_reset)
+>>   {
+>>       struct ata_port *ap = device->sata_dev.ap;
+>>       struct ata_link *link = &ap->link;
+>> +    unsigned long flags;
+>> +    spin_lock_irqsave(ap->lock, flags);
+>>       device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY; /* tf status */
+>>       device->sata_dev.fis[3] = ATA_ABORTED; /* tf error */
+>> @@ -897,6 +899,7 @@ void sas_ata_device_link_abort(struct 
+>> domain_device *device, bool force_reset)
+>>       if (force_reset)
+>>           link->eh_info.action |= ATA_EH_RESET;
+>>       ata_link_abort(link);
+>> +    spin_unlock_irqrestore(ap->lock, flags);
+>>   }
+>>   EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
+> 
+> .
