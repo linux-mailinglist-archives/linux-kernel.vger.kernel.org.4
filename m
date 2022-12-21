@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E999B653270
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 15:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A0C653273
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 15:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiLUOZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 09:25:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S229934AbiLUOZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 09:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbiLUOYL (ORCPT
+        with ESMTP id S230361AbiLUOYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 09:24:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB71223BD6;
-        Wed, 21 Dec 2022 06:23:57 -0800 (PST)
+        Wed, 21 Dec 2022 09:24:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3BF22B17;
+        Wed, 21 Dec 2022 06:24:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C5F1617E4;
-        Wed, 21 Dec 2022 14:23:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23225C433F0;
-        Wed, 21 Dec 2022 14:23:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C93B5617BF;
+        Wed, 21 Dec 2022 14:24:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C04C7C433F1;
+        Wed, 21 Dec 2022 14:23:58 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="H2Bn34hJ"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="HT3w7twd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1671632634;
+        t=1671632637;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9+eBAmbpbdea8DaiBsQ0U/ZmfhFOLmnWTai6jkJI6wk=;
-        b=H2Bn34hJ8YPNy/uqrSdCtLCNqFAFhlK0ZhjXjDgqda8Vv+CYfoU2SDFlnaRgzeBTV9lcBh
-        /q7PEDaITuqEdy5W2CAtOLsv5AntMge6lO7g0WnTtXsp7eacXyy7JUOgQj3yqePTJ6OSb8
-        fXe1biRzlCOgeQ/nIepmP8RKrA2Ll48=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0962b29f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 21 Dec 2022 14:23:54 +0000 (UTC)
+        bh=wX9nNFDHSrGbegaJ46QS9p6J0Mtbhj1QR3dJxiigHiI=;
+        b=HT3w7twdtjOM8Lj+OxxP7pRr/JiUXu7p07nj7r6Gujv0+CqDJyzx7OgFCE8G2mEcEbvfWB
+        ZtZYpOyJyIss2kWIhtW8W216Cei1+0QTlUQ5XalSx3oefvJUM00EtVrx68cllkYcoFDGIc
+        tKKF6soqfi4a8EDwUxpk50jFqOIgwRk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 89b2f60d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 21 Dec 2022 14:23:57 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         tglx@linutronix.de
@@ -46,846 +46,519 @@ Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Carlos O'Donell <carlos@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>, Jann Horn <jannh@google.com>,
-        Christian Brauner <brauner@kernel.org>
-Subject: [PATCH v13 6/7] random: introduce generic vDSO getrandom() implementation
-Date:   Wed, 21 Dec 2022 15:23:26 +0100
-Message-Id: <20221221142327.126451-7-Jason@zx2c4.com>
+        Christian Brauner <brauner@kernel.org>,
+        Samuel Neves <sneves@dei.uc.pt>
+Subject: [PATCH v13 7/7] x86: vdso: Wire up getrandom() vDSO implementation
+Date:   Wed, 21 Dec 2022 15:23:27 +0100
+Message-Id: <20221221142327.126451-8-Jason@zx2c4.com>
 In-Reply-To: <20221221142327.126451-1-Jason@zx2c4.com>
 References: <20221221142327.126451-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a generic C vDSO getrandom() implementation, which operates on
-an opaque state returned by vgetrandom_alloc() and produces random bytes
-the same way as getrandom(). This has a the API signature:
+Hook up the generic vDSO implementation to the x86 vDSO data page. Since
+the existing vDSO infrastructure is heavily based on the timekeeping
+functionality, which works over arrays of bases, a new macro is
+introduced for vvars that are not arrays.
 
-  ssize_t vgetrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state);
+The vDSO function requires a ChaCha20 implementation that does not write
+to the stack, yet can still do an entire ChaCha20 permutation, so
+provide this using SSE2, since this is userland code that must work on
+all x86-64 processors. There's a simple test for this code as well.
 
-The return value and the first 3 arguments are the same as ordinary
-getrandom(), while the last argument is a pointer to the opaque
-allocated state. Were all four arguments passed to the getrandom()
-syscall, nothing different would happen, and the functions would have
-the exact same behavior.
-
-The actual vDSO RNG algorithm implemented is the same one implemented by
-drivers/char/random.c, using the same fast-erasure techniques as that.
-Should the in-kernel implementation change, so too will the vDSO one.
-
-It requires an implementation of ChaCha20 that does not use any stack,
-in order to maintain forward secrecy if a multi-threaded program forks
-(though this does not account for a similar issue with SA_SIGINFO
-copying registers to the stack), so this is left as an
-architecture-specific fill-in. Stack-less ChaCha20 is an easy algorithm
-to implement on a variety of architectures, so this shouldn't be too
-onerous.
-
-Initially, the state is keyless, and so the first call makes a
-getrandom() syscall to generate that key, and then uses it for
-subsequent calls. By keeping track of a generation counter, it knows
-when its key is invalidated and it should fetch a new one using the
-syscall. Later, more than just a generation counter might be used.
-
-Since MADV_WIPEONFORK is set on the opaque state, the key and related
-state is wiped during a fork(), so secrets don't roll over into new
-processes, and the same state doesn't accidentally generate the same
-random stream. The generation counter, as well, is always >0, so that
-the 0 counter is a useful indication of a fork() or otherwise
-uninitialized state.
-
-If the kernel RNG is not yet initialized, then the vDSO always calls the
-syscall, because that behavior cannot be emulated in userspace, but
-fortunately that state is short lived and only during early boot. If it
-has been initialized, then there is no need to inspect the `flags`
-argument, because the behavior does not change post-initialization
-regardless of the `flags` value.
-
-Since the opaque state passed to it is mutated, vDSO getrandom() is not
-reentrant, when used with the same opaque state, which libc should be
-mindful of.
-
-vgetrandom_alloc() and vDSO getrandom() provide the ability for
-userspace to generate random bytes quickly and safely, and are intended
-to be integrated into libc's thread management. As an illustrative
-example, together with the example code from "random: add
-vgetrandom_alloc() syscall", the following code might be used to do the
-same outside of libc. In a libc, only the non-static vgetrandom()
-function at the end would be exported as part of a getrandom()
-implementations, and the various pthread-isms are expected to be elided
-into libc internals.
-
-  static struct {
-    ssize_t(*fn)(void *buf, size_t len, unsigned long flags, void *state);
-    pthread_key_t key;
-    pthread_once_t initialized;
-  } grnd_ctx = {
-    .initialized = PTHREAD_ONCE_INIT
-  };
-
-  static void vgetrandom_init(void)
-  {
-    if (pthread_key_create(&grnd_ctx.key, vgetrandom_put_state) != 0)
-      return;
-    grnd_ctx.fn = vdso_sym("LINUX_2.6", "__vdso_getrandom");
-  }
-
-  ssize_t vgetrandom(void *buf, size_t len, unsigned long flags)
-  {
-    void *state;
-
-    pthread_once(&grnd_ctx.initialized, vgetrandom_init);
-    if (!grnd_ctx.fn)
-      return getrandom(buf, len, flags);
-    state = pthread_getspecific(grnd_ctx.key);
-    if (!state) {
-      state = vgetrandom_get_state();
-      if (pthread_setspecific(grnd_ctx.key, state) != 0) {
-        vgetrandom_put_state(state);
-        state = NULL;
-      }
-      if (!state)
-        return getrandom(buf, len, flags);
-    }
-    return grnd_ctx.fn(buf, len, flags, state);
-  }
-
+Reviewed-by: Samuel Neves <sneves@dei.uc.pt> # for vgetrandom-chacha.S
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- MAINTAINERS                                   |   1 +
- drivers/char/random.c                         |   7 +
- include/vdso/datapage.h                       |  12 +
- include/vdso/getrandom.h                      |  32 +-
- include/vdso/types.h                          |  35 +++
- lib/vdso/getrandom.c                          | 224 ++++++++++++++
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/entry/vdso/Makefile                  |   3 +-
+ arch/x86/entry/vdso/vdso.lds.S                |   2 +
+ arch/x86/entry/vdso/vgetrandom-chacha.S       | 177 ++++++++++++++++++
+ arch/x86/entry/vdso/vgetrandom.c              |  17 ++
+ arch/x86/include/asm/vdso/getrandom.h         |  55 ++++++
+ arch/x86/include/asm/vdso/vsyscall.h          |   2 +
+ arch/x86/include/asm/vvar.h                   |  16 ++
  tools/testing/selftests/vDSO/.gitignore       |   1 +
- tools/testing/selftests/vDSO/Makefile         |   2 +
- .../selftests/vDSO/vdso_test_getrandom.c      | 283 ++++++++++++++++++
- 9 files changed, 595 insertions(+), 2 deletions(-)
- create mode 100644 include/vdso/types.h
- create mode 100644 lib/vdso/getrandom.c
- create mode 100644 tools/testing/selftests/vDSO/vdso_test_getrandom.c
+ tools/testing/selftests/vDSO/Makefile         |   9 +
+ .../testing/selftests/vDSO/vdso_test_chacha.c |  43 +++++
+ 11 files changed, 325 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/entry/vdso/vgetrandom-chacha.S
+ create mode 100644 arch/x86/entry/vdso/vgetrandom.c
+ create mode 100644 arch/x86/include/asm/vdso/getrandom.h
+ create mode 100644 tools/testing/selftests/vDSO/vdso_test_chacha.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1984d383aebf..6dfb8ebee747 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17518,6 +17518,7 @@ S:	Maintained
- F:	drivers/char/random.c
- F:	drivers/virt/vmgenid.c
- F:	include/vdso/getrandom.h
-+F:	lib/vdso/getrandom.c
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 3604074a878b..ed689d831362 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -272,6 +272,7 @@ config X86
+ 	select HAVE_UNSTABLE_SCHED_CLOCK
+ 	select HAVE_USER_RETURN_NOTIFIER
+ 	select HAVE_GENERIC_VDSO
++	select VDSO_GETRANDOM			if X86_64
+ 	select HOTPLUG_SMT			if SMP
+ 	select IRQ_FORCED_THREADING
+ 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 838613ac15b8..3979bb4a61ae 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -27,7 +27,7 @@ VDSO32-$(CONFIG_X86_32)		:= y
+ VDSO32-$(CONFIG_IA32_EMULATION)	:= y
  
- RAPIDIO SUBSYSTEM
- M:	Matt Porter <mporter@kernel.crashing.org>
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 6425f5f838e0..660cd15b6228 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -60,6 +60,7 @@
- #include <crypto/blake2s.h>
- #ifdef CONFIG_VDSO_GETRANDOM
- #include <vdso/getrandom.h>
-+#include <vdso/datapage.h>
+ # files to link into the vdso
+-vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o
++vobjs-y := vdso-note.o vclock_gettime.o vgetcpu.o vgetrandom.o vgetrandom-chacha.o
+ vobjs32-y := vdso32/note.o vdso32/system_call.o vdso32/sigreturn.o
+ vobjs32-y += vdso32/vclock_gettime.o
+ vobjs-$(CONFIG_X86_SGX)	+= vsgx.o
+@@ -105,6 +105,7 @@ CFLAGS_REMOVE_vclock_gettime.o = -pg
+ CFLAGS_REMOVE_vdso32/vclock_gettime.o = -pg
+ CFLAGS_REMOVE_vgetcpu.o = -pg
+ CFLAGS_REMOVE_vsgx.o = -pg
++CFLAGS_REMOVE_vgetrandom.o = -pg
+ 
+ #
+ # X32 processes use x32 vDSO to access 64bit kernel data.
+diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
+index e8c60ae7a7c8..0bab5f4af6d1 100644
+--- a/arch/x86/entry/vdso/vdso.lds.S
++++ b/arch/x86/entry/vdso/vdso.lds.S
+@@ -30,6 +30,8 @@ VERSION {
+ #ifdef CONFIG_X86_SGX
+ 		__vdso_sgx_enter_enclave;
  #endif
- #include <asm/archrandom.h>
- #include <asm/processor.h>
-@@ -407,6 +408,9 @@ static void crng_reseed(struct work_struct *work)
- 	if (next_gen == ULONG_MAX)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
-+#ifdef CONFIG_VDSO_GETRANDOM
-+	smp_store_release(&_vdso_rng_data.generation, next_gen + 1);
-+#endif
- 	if (!static_branch_likely(&crng_is_ready))
- 		crng_init = CRNG_READY;
- 	spin_unlock_irqrestore(&base_crng.lock, flags);
-@@ -857,6 +861,9 @@ static void __cold _credit_init_bits(size_t bits)
- 		if (static_key_initialized)
- 			execute_in_process_context(crng_set_ready, &set_ready);
- 		atomic_notifier_call_chain(&random_ready_notifier, 0, NULL);
-+#ifdef CONFIG_VDSO_GETRANDOM
-+		smp_store_release(&_vdso_rng_data.is_ready, true);
-+#endif
- 		wake_up_interruptible(&crng_init_wait);
- 		kill_fasync(&fasync, SIGIO, POLL_IN);
- 		pr_notice("crng init done\n");
-diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
-index 73eb622e7663..d1f800c1c718 100644
---- a/include/vdso/datapage.h
-+++ b/include/vdso/datapage.h
-@@ -18,6 +18,7 @@
- #include <vdso/time.h>
- #include <vdso/time32.h>
- #include <vdso/time64.h>
-+#include <vdso/types.h>
- 
- #ifdef CONFIG_ARCH_HAS_VDSO_DATA
- #include <asm/vdso/data.h>
-@@ -109,6 +110,16 @@ struct vdso_data {
- 	struct arch_vdso_data	arch_data;
- };
- 
-+/**
-+ * struct vdso_rng_data - vdso RNG state information
-+ * @generation:	counter representing the number of RNG reseeds
-+ * @is_ready:	boolean signaling whether the RNG is initialized
-+ */
-+struct vdso_rng_data {
-+	vdso_kernel_ulong	generation;
-+	u8			is_ready;
-+};
-+
- /*
-  * We use the hidden visibility to prevent the compiler from generating a GOT
-  * relocation. Not only is going through a GOT useless (the entry couldn't and
-@@ -120,6 +131,7 @@ struct vdso_data {
-  */
- extern struct vdso_data _vdso_data[CS_BASES] __attribute__((visibility("hidden")));
- extern struct vdso_data _timens_data[CS_BASES] __attribute__((visibility("hidden")));
-+extern struct vdso_rng_data _vdso_rng_data __attribute__((visibility("hidden")));
- 
- /*
-  * The generic vDSO implementation requires that gettimeofday.h
-diff --git a/include/vdso/getrandom.h b/include/vdso/getrandom.h
-index e3ceb1976386..7dc93d5f72dc 100644
---- a/include/vdso/getrandom.h
-+++ b/include/vdso/getrandom.h
-@@ -6,11 +6,39 @@
- #ifndef _VDSO_GETRANDOM_H
- #define _VDSO_GETRANDOM_H
- 
-+#include <crypto/chacha.h>
-+#include <vdso/types.h>
-+
- /**
-  * struct vgetrandom_state - State used by vDSO getrandom() and allocated by vgetrandom_alloc().
-  *
-- * Currently empty, as the vDSO getrandom() function has not yet been implemented.
-+ * @batch:	One and a half ChaCha20 blocks of buffered RNG output.
-+ *
-+ * @key:	Key to be used for generating next batch.
-+ *
-+ * @batch_key:	Union of the prior two members, which is exactly two full
-+ * 		ChaCha20 blocks in size, so that @batch and @key can be filled
-+ * 		together.
-+ *
-+ * @generation:	Snapshot of @rng_info->generation in the vDSO data page at
-+ *		the time @key was generated.
-+ *
-+ * @pos:	Offset into @batch of the next available random byte.
-+ *
-+ * @in_use:	Reentrancy guard for reusing a state within the same thread
-+ *		due to signal handlers.
-  */
--struct vgetrandom_state { int placeholder; };
-+struct vgetrandom_state {
-+	union {
-+		struct {
-+			u8	batch[CHACHA_BLOCK_SIZE * 3 / 2];
-+			u32	key[CHACHA_KEY_SIZE / sizeof(u32)];
-+		};
-+		u8		batch_key[CHACHA_BLOCK_SIZE * 2];
-+	};
-+	vdso_kernel_ulong	generation;
-+	u8			pos;
-+	bool 			in_use;
-+};
- 
- #endif /* _VDSO_GETRANDOM_H */
-diff --git a/include/vdso/types.h b/include/vdso/types.h
++		getrandom;
++		__vdso_getrandom;
+ 	local: *;
+ 	};
+ }
+diff --git a/arch/x86/entry/vdso/vgetrandom-chacha.S b/arch/x86/entry/vdso/vgetrandom-chacha.S
 new file mode 100644
-index 000000000000..ce131463aeff
+index 000000000000..91fbb7ac7af4
 --- /dev/null
-+++ b/include/vdso/types.h
-@@ -0,0 +1,35 @@
++++ b/arch/x86/entry/vdso/vgetrandom-chacha.S
+@@ -0,0 +1,177 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
++ */
++
++#include <linux/linkage.h>
++#include <asm/frame.h>
++
++.section	.rodata.cst16.CONSTANTS, "aM", @progbits, 16
++.align 16
++CONSTANTS:	.octa 0x6b20657479622d323320646e61707865
++.text
++
++/*
++ * Very basic SSE2 implementation of ChaCha20. Produces a given positive number
++ * of blocks of output with a nonce of 0, taking an input key and 8-byte
++ * counter. Importantly does not spill to the stack. Its arguments are:
++ *
++ *	rdi: output bytes
++ *	rsi: 32-byte key input
++ *	rdx: 8-byte counter input/output
++ *	rcx: number of 64-byte blocks to write to output
++ */
++SYM_FUNC_START(__arch_chacha20_blocks_nostack)
++
++#define output  %rdi
++#define key     %rsi
++#define counter %rdx
++#define nblocks %rcx
++#define i       %al
++#define state0  %xmm0
++#define state1  %xmm1
++#define state2  %xmm2
++#define state3  %xmm3
++#define copy0   %xmm4
++#define copy1   %xmm5
++#define copy2   %xmm6
++#define copy3   %xmm7
++#define temp    %xmm8
++#define one     %xmm9
++
++	/* copy0 = "expand 32-byte k" */
++	movaps		CONSTANTS(%rip),copy0
++	/* copy1,copy2 = key */
++	movups		0x00(key),copy1
++	movups		0x10(key),copy2
++	/* copy3 = counter || zero nonce */
++	movq		0x00(counter),copy3
++	/* one = 1 || 0 */
++	movq		$1,%rax
++	movq		%rax,one
++
++.Lblock:
++	/* state0,state1,state2,state3 = copy0,copy1,copy2,copy3 */
++	movdqa		copy0,state0
++	movdqa		copy1,state1
++	movdqa		copy2,state2
++	movdqa		copy3,state3
++
++	movb		$10,i
++.Lpermute:
++	/* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
++	paddd		state1,state0
++	pxor		state0,state3
++	movdqa		state3,temp
++	pslld		$16,temp
++	psrld		$16,state3
++	por		temp,state3
++
++	/* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
++	paddd		state3,state2
++	pxor		state2,state1
++	movdqa		state1,temp
++	pslld		$12,temp
++	psrld		$20,state1
++	por		temp,state1
++
++	/* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
++	paddd		state1,state0
++	pxor		state0,state3
++	movdqa		state3,temp
++	pslld		$8,temp
++	psrld		$24,state3
++	por		temp,state3
++
++	/* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
++	paddd		state3,state2
++	pxor		state2,state1
++	movdqa		state1,temp
++	pslld		$7,temp
++	psrld		$25,state1
++	por		temp,state1
++
++	/* state1[0,1,2,3] = state1[0,3,2,1] */
++	pshufd		$0x39,state1,state1
++	/* state2[0,1,2,3] = state2[1,0,3,2] */
++	pshufd		$0x4e,state2,state2
++	/* state3[0,1,2,3] = state3[2,1,0,3] */
++	pshufd		$0x93,state3,state3
++
++	/* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
++	paddd		state1,state0
++	pxor		state0,state3
++	movdqa		state3,temp
++	pslld		$16,temp
++	psrld		$16,state3
++	por		temp,state3
++
++	/* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
++	paddd		state3,state2
++	pxor		state2,state1
++	movdqa		state1,temp
++	pslld		$12,temp
++	psrld		$20,state1
++	por		temp,state1
++
++	/* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
++	paddd		state1,state0
++	pxor		state0,state3
++	movdqa		state3,temp
++	pslld		$8,temp
++	psrld		$24,state3
++	por		temp,state3
++
++	/* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
++	paddd		state3,state2
++	pxor		state2,state1
++	movdqa		state1,temp
++	pslld		$7,temp
++	psrld		$25,state1
++	por		temp,state1
++
++	/* state1[0,1,2,3] = state1[2,1,0,3] */
++	pshufd		$0x93,state1,state1
++	/* state2[0,1,2,3] = state2[1,0,3,2] */
++	pshufd		$0x4e,state2,state2
++	/* state3[0,1,2,3] = state3[0,3,2,1] */
++	pshufd		$0x39,state3,state3
++
++	decb		i
++	jnz		.Lpermute
++
++	/* output0 = state0 + copy0 */
++	paddd		copy0,state0
++	movups		state0,0x00(output)
++	/* output1 = state1 + copy1 */
++	paddd		copy1,state1
++	movups		state1,0x10(output)
++	/* output2 = state2 + copy2 */
++	paddd		copy2,state2
++	movups		state2,0x20(output)
++	/* output3 = state3 + copy3 */
++	paddd		copy3,state3
++	movups		state3,0x30(output)
++
++	/* ++copy3.counter */
++	paddq		one,copy3
++
++	/* output += 64, --nblocks */
++	addq		$64,output
++	decq		nblocks
++	jnz		.Lblock
++
++	/* counter = copy3.counter */
++	movq		copy3,0x00(counter)
++
++	/* Zero out the potentially sensitive regs, in case nothing uses these again. */
++	pxor		state0,state0
++	pxor		state1,state1
++	pxor		state2,state2
++	pxor		state3,state3
++	pxor		copy1,copy1
++	pxor		copy2,copy2
++	pxor		temp,temp
++
++	ret
++SYM_FUNC_END(__arch_chacha20_blocks_nostack)
+diff --git a/arch/x86/entry/vdso/vgetrandom.c b/arch/x86/entry/vdso/vgetrandom.c
+new file mode 100644
+index 000000000000..6045ded5da90
+--- /dev/null
++++ b/arch/x86/entry/vdso/vgetrandom.c
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
++ */
++#include <linux/types.h>
++
++#include "../../../../lib/vdso/getrandom.c"
++
++ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags, void *state);
++
++ssize_t __vdso_getrandom(void *buffer, size_t len, unsigned int flags, void *state)
++{
++	return __cvdso_getrandom(buffer, len, flags, state);
++}
++
++ssize_t getrandom(void *, size_t, unsigned int, void *)
++	__attribute__((weak, alias("__vdso_getrandom")));
+diff --git a/arch/x86/include/asm/vdso/getrandom.h b/arch/x86/include/asm/vdso/getrandom.h
+new file mode 100644
+index 000000000000..46f99d735ae6
+--- /dev/null
++++ b/arch/x86/include/asm/vdso/getrandom.h
+@@ -0,0 +1,55 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
 + */
-+#ifndef __VDSO_TYPES_H
-+#define __VDSO_TYPES_H
++#ifndef __ASM_VDSO_GETRANDOM_H
++#define __ASM_VDSO_GETRANDOM_H
 +
-+#include <linux/types.h>
++#ifndef __ASSEMBLY__
 +
-+/**
-+ * type vdso_kernel_ulong - unsigned long type that matches kernel's unsigned long
-+ *
-+ * Data shared between userspace and the kernel must operate the same way in both 64-bit code and in
-+ * 32-bit compat code, over the same potentially 64-bit kernel. This type represents the size of an
-+ * unsigned long as used by kernel code. This isn't necessarily the same as an unsigned long as used
-+ * by userspace, however.
-+ *
-+ *                 +-------------------+-------------------+------------------+-------------------+
-+ *                 | 32-bit userspace  | 32-bit userspace  | 64-bit userspace | 64-bit userspace  |
-+ *                 | unsigned long     | vdso_kernel_ulong | unsigned long    | vdso_kernel_ulong |
-+ * +---------------+-------------------+-------------------+------------------+-------------------+
-+ * | 32-bit kernel | ✓ same size       | ✓ same size       |
-+ * | unsigned long |                   |                   |
-+ * +---------------+-------------------+-------------------+------------------+-------------------+
-+ * | 64-bit kernel | ✘ different size! | ✓ same size       | ✓ same size      | ✓ same size       |
-+ * | unsigned long |                   |                   |                  |                   |
-+ * +---------------+-------------------+-------------------+------------------+-------------------+
-+ */
-+#ifdef CONFIG_64BIT
-+typedef u64 vdso_kernel_ulong;
-+#else
-+typedef u32 vdso_kernel_ulong;
-+#endif
-+
-+#endif /* __VDSO_TYPES_H */
-diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
-new file mode 100644
-index 000000000000..64ab28913a23
---- /dev/null
-+++ b/lib/vdso/getrandom.c
-@@ -0,0 +1,224 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-+ */
-+
-+#include <linux/cache.h>
-+#include <linux/kernel.h>
-+#include <linux/time64.h>
-+#include <vdso/datapage.h>
-+#include <vdso/getrandom.h>
-+#include <asm/vdso/getrandom.h>
-+#include <asm/vdso/vsyscall.h>
-+
-+#define MEMCPY_AND_ZERO_SRC(type, dst, src, len) do {				\
-+	while (len >= sizeof(type)) {						\
-+		__put_unaligned_t(type, __get_unaligned_t(type, src), dst);	\
-+		__put_unaligned_t(type, 0, src);				\
-+		dst += sizeof(type);						\
-+		src += sizeof(type);						\
-+		len -= sizeof(type);						\
-+	}									\
-+} while (0)
-+
-+static void memcpy_and_zero_src(void *dst, void *src, size_t len)
-+{
-+	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
-+		if (IS_ENABLED(CONFIG_64BIT))
-+			MEMCPY_AND_ZERO_SRC(u64, dst, src, len);
-+		MEMCPY_AND_ZERO_SRC(u32, dst, src, len);
-+		MEMCPY_AND_ZERO_SRC(u16, dst, src, len);
-+	}
-+	MEMCPY_AND_ZERO_SRC(u8, dst, src, len);
-+}
++#include <asm/unistd.h>
++#include <asm/vvar.h>
 +
 +/**
-+ * __cvdso_getrandom_data - Generic vDSO implementation of getrandom() syscall.
-+ * @rng_info:		Describes state of kernel RNG, memory shared with kernel.
-+ * @buffer:		Destination buffer to fill with random bytes.
-+ * @len:		Size of @buffer in bytes.
-+ * @flags:		Zero or more GRND_* flags.
-+ * @opaque_state:	Pointer to an opaque state area.
-+ *
-+ * This implements a "fast key erasure" RNG using ChaCha20, in the same way that the kernel's
-+ * getrandom() syscall does. It periodically reseeds its key from the kernel's RNG, at the same
-+ * schedule that the kernel's RNG is reseeded. If the kernel's RNG is not ready, then this always
-+ * calls into the syscall.
-+ *
-+ * @opaque_state *must* be allocated using the vgetrandom_alloc() syscall.  Unless external locking
-+ * is used, one state must be allocated per thread, as it is not safe to call this function
-+ * concurrently with the same @opaque_state. However, it is safe to call this using the same
-+ * @opaque_state that is shared between main code and signal handling code, within the same thread.
-+ *
++ * getrandom_syscall - Invoke the getrandom() syscall.
++ * @buffer:	Destination buffer to fill with random bytes.
++ * @len:	Size of @buffer in bytes.
++ * @flags:	Zero or more GRND_* flags.
 + * Returns the number of random bytes written to @buffer, or a negative value indicating an error.
 + */
-+static __always_inline ssize_t
-+__cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_t len,
-+		       unsigned int flags, void *opaque_state)
++static __always_inline ssize_t getrandom_syscall(void *buffer, size_t len, unsigned int flags)
 +{
-+	ssize_t ret = min_t(size_t, INT_MAX & PAGE_MASK /* = MAX_RW_COUNT */, len);
-+	struct vgetrandom_state *state = opaque_state;
-+	size_t batch_len, nblocks, orig_len = len;
-+	unsigned long current_generation;
-+	void *orig_buffer = buffer;
-+	u32 counter[2] = { 0 };
-+	bool in_use, have_retried = false;
++	long ret;
 +
-+	/* The state must not straddle a page, since pages can be zeroed at any time. */
-+	if (unlikely(((unsigned long)opaque_state & ~PAGE_MASK) + sizeof(*state) > PAGE_SIZE))
-+		goto fallback_syscall;
++	asm ("syscall" : "=a" (ret) :
++	     "0" (__NR_getrandom), "D" (buffer), "S" (len), "d" (flags) :
++	     "rcx", "r11", "memory");
 +
-+	/*
-+	 * If the kernel's RNG is not yet ready, then it's not possible to provide random bytes from
-+	 * userspace, because A) the various @flags require this to block, or not, depending on
-+	 * various factors unavailable to userspace, and B) the kernel's behavior before the RNG is
-+	 * ready is to reseed from the entropy pool at every invocation.
-+	 */
-+	if (unlikely(!READ_ONCE(rng_info->is_ready)))
-+		goto fallback_syscall;
-+
-+	/*
-+	 * This condition is checked after @rng_info->is_ready, because before the kernel's RNG is
-+	 * initialized, the @flags parameter may require this to block or return an error, even when
-+	 * len is zero.
-+	 */
-+	if (unlikely(!len))
-+		return 0;
-+
-+	/*
-+	 * @state->in_use is basic reentrancy protection against this running in a signal handler
-+	 * with the same @opaque_state, but obviously not atomic wrt multiple CPUs or more than one
-+	 * level of reentrancy. If a signal interrupts this after reading @state->in_use, but before
-+	 * writing @state->in_use, there is still no race, because the signal handler will run to
-+	 * its completion before returning execution.
-+	 */
-+	in_use = READ_ONCE(state->in_use);
-+	if (unlikely(in_use))
-+		goto fallback_syscall;
-+	WRITE_ONCE(state->in_use, true);
-+
-+retry_generation:
-+	/*
-+	 * @rng_info->generation must always be read here, as it serializes @state->key with the
-+	 * kernel's RNG reseeding schedule.
-+	 */
-+	current_generation = READ_ONCE(rng_info->generation);
-+
-+	/*
-+	 * If @state->generation doesn't match the kernel RNG's generation, then it means the
-+	 * kernel's RNG has reseeded, and so @state->key is reseeded as well.
-+	 */
-+	if (unlikely(state->generation != current_generation)) {
-+		/*
-+		 * Write the generation before filling the key, in case of fork. If there is a fork
-+		 * just after this line, the two forks will get different random bytes from the
-+		 * syscall, which is good. However, were this line to occur after the getrandom
-+		 * syscall, then both child and parent could have the same bytes and the same
-+		 * generation counter, so the fork would not be detected. Therefore, write
-+		 * @state->generation before the call to the getrandom syscall.
-+		 */
-+		WRITE_ONCE(state->generation, current_generation);
-+
-+		/* Prevent the syscall from being reordered wrt current_generation. */
-+		barrier();
-+
-+		/* Reseed @state->key using fresh bytes from the kernel. */
-+		if (getrandom_syscall(state->key, sizeof(state->key), 0) != sizeof(state->key)) {
-+			/*
-+			 * If the syscall failed to refresh the key, then @state->key is now
-+			 * invalid, so invalidate the generation so that it is not used again, and
-+			 * fallback to using the syscall entirely.
-+			 */
-+			WRITE_ONCE(state->generation, 0);
-+
-+			/*
-+			 * Set @state->in_use to false only after the last write to @state in the
-+			 * line above.
-+			 */
-+			WRITE_ONCE(state->in_use, false);
-+
-+			goto fallback_syscall;
-+		}
-+
-+		/*
-+		 * Set @state->pos to beyond the end of the batch, so that the batch is refilled
-+		 * using the new key.
-+		 */
-+		state->pos = sizeof(state->batch);
-+	}
-+
-+	/* Set len to the total amount of bytes that this function is allowed to read, ret. */
-+	len = ret;
-+more_batch:
-+	/*
-+	 * First use bytes out of @state->batch, which may have been filled by the last call to this
-+	 * function.
-+	 */
-+	batch_len = min_t(size_t, sizeof(state->batch) - state->pos, len);
-+	if (batch_len) {
-+		/* Zeroing at the same time as memcpying helps preserve forward secrecy. */
-+		memcpy_and_zero_src(buffer, state->batch + state->pos, batch_len);
-+		state->pos += batch_len;
-+		buffer += batch_len;
-+		len -= batch_len;
-+	}
-+
-+	if (!len) {
-+		/* Prevent the loop from being reordered wrt ->generation. */
-+		barrier();
-+
-+		/*
-+		 * Since @rng_info->generation will never be 0, re-read @state->generation, rather
-+		 * than using the local current_generation variable, to learn whether a fork
-+		 * occurred or if @state was zeroed due to memory pressure. Primarily, though, this
-+		 * indicates whether the kernel's RNG has reseeded, in which case generate a new key
-+		 * and start over.
-+		 */
-+		if (unlikely(READ_ONCE(state->generation) != READ_ONCE(rng_info->generation))) {
-+			/*
-+			 * Prevent this from looping forever in case of low memory or racing with a
-+			 * user force-reseeding the kernel's RNG using the ioctl.
-+			 */
-+			if (have_retried)
-+				goto fallback_syscall;
-+
-+			have_retried = true;
-+			buffer = orig_buffer;
-+			goto retry_generation;
-+		}
-+
-+		/*
-+		 * Set @state->in_use to false only when there will be no more reads or writes of
-+		 * @state.
-+		 */
-+		WRITE_ONCE(state->in_use, false);
-+		return ret;
-+	}
-+
-+	/* Generate blocks of RNG output directly into @buffer while there's enough room left. */
-+	nblocks = len / CHACHA_BLOCK_SIZE;
-+	if (nblocks) {
-+		__arch_chacha20_blocks_nostack(buffer, state->key, counter, nblocks);
-+		buffer += nblocks * CHACHA_BLOCK_SIZE;
-+		len -= nblocks * CHACHA_BLOCK_SIZE;
-+	}
-+
-+	BUILD_BUG_ON(sizeof(state->batch_key) % CHACHA_BLOCK_SIZE != 0);
-+
-+	/* Refill the batch and then overwrite the key, in order to preserve forward secrecy. */
-+	__arch_chacha20_blocks_nostack(state->batch_key, state->key, counter,
-+				       sizeof(state->batch_key) / CHACHA_BLOCK_SIZE);
-+
-+	/* Since the batch was just refilled, set the position back to 0 to indicate a full batch. */
-+	state->pos = 0;
-+	goto more_batch;
-+
-+fallback_syscall:
-+	return getrandom_syscall(orig_buffer, orig_len, flags);
++	return ret;
 +}
 +
-+static __always_inline ssize_t
-+__cvdso_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state)
++#define __vdso_rng_data (VVAR(_vdso_rng_data))
++
++static __always_inline const struct vdso_rng_data *__arch_get_vdso_rng_data(void)
 +{
-+	return __cvdso_getrandom_data(__arch_get_vdso_rng_data(), buffer, len, flags, opaque_state);
++	if (__vdso_data->clock_mode == VDSO_CLOCKMODE_TIMENS)
++		return (void *)&__vdso_rng_data + ((void *)&__timens_vdso_data - (void *)&__vdso_data);
++	return &__vdso_rng_data;
 +}
++
++/**
++ * __arch_chacha20_blocks_nostack - Generate ChaCha20 stream without using the stack.
++ * @dst_bytes:	Destination buffer to hold @nblocks * 64 bytes of output.
++ * @key:	32-byte input key.
++ * @counter:	8-byte counter, read on input and updated on return.
++ * @nblocks:	Number of blocks to generate.
++ *
++ * Generates a given positive number of blocks of ChaCha20 output with nonce=0, and does not write
++ * to any stack or memory outside of the parameters passed to it, in order to mitigate stack data
++ * leaking into forked child processes.
++ */
++extern void __arch_chacha20_blocks_nostack(u8 *dst_bytes, const u32 *key, u32 *counter, size_t nblocks);
++
++#endif /* !__ASSEMBLY__ */
++
++#endif /* __ASM_VDSO_GETRANDOM_H */
+diff --git a/arch/x86/include/asm/vdso/vsyscall.h b/arch/x86/include/asm/vdso/vsyscall.h
+index be199a9b2676..71c56586a22f 100644
+--- a/arch/x86/include/asm/vdso/vsyscall.h
++++ b/arch/x86/include/asm/vdso/vsyscall.h
+@@ -11,6 +11,8 @@
+ #include <asm/vvar.h>
+ 
+ DEFINE_VVAR(struct vdso_data, _vdso_data);
++DEFINE_VVAR_SINGLE(struct vdso_rng_data, _vdso_rng_data);
++
+ /*
+  * Update the vDSO data page to keep in sync with kernel timekeeping.
+  */
+diff --git a/arch/x86/include/asm/vvar.h b/arch/x86/include/asm/vvar.h
+index 183e98e49ab9..9d9af37f7cab 100644
+--- a/arch/x86/include/asm/vvar.h
++++ b/arch/x86/include/asm/vvar.h
+@@ -26,6 +26,8 @@
+  */
+ #define DECLARE_VVAR(offset, type, name) \
+ 	EMIT_VVAR(name, offset)
++#define DECLARE_VVAR_SINGLE(offset, type, name) \
++	EMIT_VVAR(name, offset)
+ 
+ #else
+ 
+@@ -37,6 +39,10 @@ extern char __vvar_page;
+ 	extern type timens_ ## name[CS_BASES]				\
+ 	__attribute__((visibility("hidden")));				\
+ 
++#define DECLARE_VVAR_SINGLE(offset, type, name)				\
++	extern type vvar_ ## name					\
++	__attribute__((visibility("hidden")));				\
++
+ #define VVAR(name) (vvar_ ## name)
+ #define TIMENS(name) (timens_ ## name)
+ 
+@@ -44,12 +50,22 @@ extern char __vvar_page;
+ 	type name[CS_BASES]						\
+ 	__attribute__((section(".vvar_" #name), aligned(16))) __visible
+ 
++#define DEFINE_VVAR_SINGLE(type, name)					\
++	type name							\
++	__attribute__((section(".vvar_" #name), aligned(16))) __visible
++
+ #endif
+ 
+ /* DECLARE_VVAR(offset, type, name) */
+ 
+ DECLARE_VVAR(128, struct vdso_data, _vdso_data)
+ 
++#if !defined(_SINGLE_DATA)
++#define _SINGLE_DATA
++DECLARE_VVAR_SINGLE(640, struct vdso_rng_data, _vdso_rng_data)
++#endif
++
+ #undef DECLARE_VVAR
++#undef DECLARE_VVAR_SINGLE
+ 
+ #endif
 diff --git a/tools/testing/selftests/vDSO/.gitignore b/tools/testing/selftests/vDSO/.gitignore
-index a8dc51af5a9c..7dbfdec53f3d 100644
+index 7dbfdec53f3d..30d5c8f0e5c7 100644
 --- a/tools/testing/selftests/vDSO/.gitignore
 +++ b/tools/testing/selftests/vDSO/.gitignore
-@@ -6,3 +6,4 @@ vdso_test_correctness
- vdso_test_gettimeofday
+@@ -7,3 +7,4 @@ vdso_test_gettimeofday
  vdso_test_getcpu
  vdso_standalone_test_x86
-+vdso_test_getrandom
+ vdso_test_getrandom
++vdso_test_chacha
 diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index d53a4d8008f9..a33b4d200a32 100644
+index a33b4d200a32..1b9057974693 100644
 --- a/tools/testing/selftests/vDSO/Makefile
 +++ b/tools/testing/selftests/vDSO/Makefile
-@@ -11,6 +11,7 @@ ifeq ($(ARCH),$(filter $(ARCH),x86 x86_64))
- TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
+@@ -3,6 +3,7 @@ include ../lib.mk
+ 
+ uname_M := $(shell uname -m 2>/dev/null || echo not)
+ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
++SODIUM := $(shell pkg-config --libs libsodium 2>/dev/null)
+ 
+ TEST_GEN_PROGS := $(OUTPUT)/vdso_test_gettimeofday $(OUTPUT)/vdso_test_getcpu
+ TEST_GEN_PROGS += $(OUTPUT)/vdso_test_abi
+@@ -12,9 +13,15 @@ TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
  endif
  TEST_GEN_PROGS += $(OUTPUT)/vdso_test_correctness
-+TEST_GEN_PROGS += $(OUTPUT)/vdso_test_getrandom
+ TEST_GEN_PROGS += $(OUTPUT)/vdso_test_getrandom
++ifeq ($(uname_M),x86_64)
++ifneq ($(SODIUM),)
++TEST_GEN_PROGS += $(OUTPUT)/vdso_test_chacha
++endif
++endif
  
  CFLAGS := -std=gnu99
  CFLAGS_vdso_standalone_test_x86 := -nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
-@@ -33,3 +34,4 @@ $(OUTPUT)/vdso_test_correctness: vdso_test_correctness.c
- 		vdso_test_correctness.c \
++CFLAGS_vdso_test_chacha := $(SODIUM) -idirafter $(top_srcdir)/include -idirafter $(top_srcdir)/arch/$(ARCH)/include -D__ASSEMBLY__ -Wa,--noexecstack
+ LDFLAGS_vdso_test_correctness := -ldl
+ ifeq ($(CONFIG_X86_32),y)
+ LDLIBS += -lgcc_s
+@@ -35,3 +42,5 @@ $(OUTPUT)/vdso_test_correctness: vdso_test_correctness.c
  		-o $@ \
  		$(LDFLAGS_vdso_test_correctness)
-+$(OUTPUT)/vdso_test_getrandom: parse_vdso.c
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
+ $(OUTPUT)/vdso_test_getrandom: parse_vdso.c
++$(OUTPUT)/vdso_test_chacha: CFLAGS += $(CFLAGS_vdso_test_chacha)
++$(OUTPUT)/vdso_test_chacha: $(top_srcdir)/arch/$(ARCH)/entry/vdso/vgetrandom-chacha.S
+diff --git a/tools/testing/selftests/vDSO/vdso_test_chacha.c b/tools/testing/selftests/vDSO/vdso_test_chacha.c
 new file mode 100644
-index 000000000000..7184e633cec7
+index 000000000000..bce7a7752b11
 --- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -0,0 +1,283 @@
++++ b/tools/testing/selftests/vDSO/vdso_test_chacha.c
+@@ -0,0 +1,43 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
 + */
 +
-+#include <assert.h>
-+#include <pthread.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <time.h>
-+#include <unistd.h>
-+#include <sys/auxv.h>
-+#include <sys/mman.h>
++#include <sodium/crypto_stream_chacha20.h>
 +#include <sys/random.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+
++#include <string.h>
++#include <stdint.h>
 +#include "../kselftest.h"
-+#include "parse_vdso.h"
 +
-+#ifndef timespecsub
-+#define	timespecsub(tsp, usp, vsp)					\
-+	do {								\
-+		(vsp)->tv_sec = (tsp)->tv_sec - (usp)->tv_sec;		\
-+		(vsp)->tv_nsec = (tsp)->tv_nsec - (usp)->tv_nsec;	\
-+		if ((vsp)->tv_nsec < 0) {				\
-+			(vsp)->tv_sec--;				\
-+			(vsp)->tv_nsec += 1000000000L;			\
-+		}							\
-+	} while (0)
-+#endif
++extern void __arch_chacha20_blocks_nostack(uint8_t *dst_bytes, const uint8_t *key, uint32_t *counter, size_t nblocks);
 +
-+static void *vgetrandom_alloc(unsigned int *num, unsigned int *size_per_each)
++int main(int argc, char *argv[])
 +{
-+	enum { __NR_vgetrandom_alloc = 451 };
-+	*size_per_each = 0;
-+	return (void *)syscall(__NR_vgetrandom_alloc, num, size_per_each, 0, 0);
-+}
-+
-+static struct {
-+	pthread_mutex_t lock;
-+	void **states;
-+	size_t len, cap;
-+} grnd_allocator = {
-+	.lock = PTHREAD_MUTEX_INITIALIZER
-+};
-+
-+static void *vgetrandom_get_state(void)
-+{
-+	void *state = NULL;
-+
-+	pthread_mutex_lock(&grnd_allocator.lock);
-+	if (!grnd_allocator.len) {
-+		size_t new_cap;
-+		size_t page_size = getpagesize();
-+		unsigned int num = sysconf(_SC_NPROCESSORS_ONLN); /* Could be arbitrary, just a hint. */
-+		unsigned int size_per_each;
-+		void *new_block = vgetrandom_alloc(&num, &size_per_each);
-+		void *new_states;
-+
-+		if (new_block == MAP_FAILED)
-+			goto out;
-+		new_cap = grnd_allocator.cap + num;
-+		new_states = reallocarray(grnd_allocator.states, new_cap, sizeof(*grnd_allocator.states));
-+		if (!new_states) {
-+			munmap(new_block, num * size_per_each);
-+			goto out;
-+		}
-+		grnd_allocator.cap = new_cap;
-+		grnd_allocator.states = new_states;
-+
-+		for (size_t i = 0; i < num; ++i) {
-+			grnd_allocator.states[i] = new_block;
-+			if (((uintptr_t)new_block & (page_size - 1)) + size_per_each > page_size)
-+				new_block = (void *)(((uintptr_t)new_block + page_size) & (page_size - 1));
-+			else
-+				new_block += size_per_each;
-+		}
-+		grnd_allocator.len = num;
-+	}
-+	state = grnd_allocator.states[--grnd_allocator.len];
-+
-+out:
-+	pthread_mutex_unlock(&grnd_allocator.lock);
-+	return state;
-+}
-+
-+static void vgetrandom_put_state(void *state)
-+{
-+	if (!state)
-+		return;
-+	pthread_mutex_lock(&grnd_allocator.lock);
-+	grnd_allocator.states[grnd_allocator.len++] = state;
-+	pthread_mutex_unlock(&grnd_allocator.lock);
-+}
-+
-+static struct {
-+	ssize_t(*fn)(void *buf, size_t len, unsigned long flags, void *state);
-+	pthread_key_t key;
-+	pthread_once_t initialized;
-+} grnd_ctx = {
-+	.initialized = PTHREAD_ONCE_INIT
-+};
-+
-+static void vgetrandom_init(void)
-+{
-+	if (pthread_key_create(&grnd_ctx.key, vgetrandom_put_state) != 0)
-+		return;
-+	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
-+	if (!sysinfo_ehdr) {
-+		printf("AT_SYSINFO_EHDR is not present!\n");
-+		exit(KSFT_SKIP);
-+	}
-+	vdso_init_from_sysinfo_ehdr(sysinfo_ehdr);
-+	grnd_ctx.fn = (__typeof__(grnd_ctx.fn))vdso_sym("LINUX_2.6", "__vdso_getrandom");
-+	if (!grnd_ctx.fn) {
-+		printf("__vdso_getrandom is missing!\n");
-+		exit(KSFT_FAIL);
-+	}
-+}
-+
-+static ssize_t vgetrandom(void *buf, size_t len, unsigned long flags)
-+{
-+	void *state;
-+
-+	pthread_once(&grnd_ctx.initialized, vgetrandom_init);
-+	state = pthread_getspecific(grnd_ctx.key);
-+	if (!state) {
-+		state = vgetrandom_get_state();
-+		if (pthread_setspecific(grnd_ctx.key, state) != 0) {
-+			vgetrandom_put_state(state);
-+			state = NULL;
-+		}
-+		if (!state) {
-+			printf("vgetrandom_get_state failed!\n");
-+			exit(KSFT_FAIL);
-+		}
-+	}
-+	return grnd_ctx.fn(buf, len, flags, state);
-+}
-+
-+enum { TRIALS = 25000000, THREADS = 256 };
-+
-+static void *test_vdso_getrandom(void *)
-+{
-+	for (size_t i = 0; i < TRIALS; ++i) {
-+		unsigned int val;
-+		ssize_t ret = vgetrandom(&val, sizeof(val), 0);
-+		assert(ret == sizeof(val));
-+	}
-+	return NULL;
-+}
-+
-+static void *test_libc_getrandom(void *)
-+{
-+	for (size_t i = 0; i < TRIALS; ++i) {
-+		unsigned int val;
-+		ssize_t ret = getrandom(&val, sizeof(val), 0);
-+		assert(ret == sizeof(val));
-+	}
-+	return NULL;
-+}
-+
-+static void *test_syscall_getrandom(void *)
-+{
-+	for (size_t i = 0; i < TRIALS; ++i) {
-+		unsigned int val;
-+		ssize_t ret = syscall(SYS_getrandom, &val, sizeof(val), 0);
-+		assert(ret == sizeof(val));
-+	}
-+	return NULL;
-+}
-+
-+static void bench_single(void)
-+{
-+	struct timespec start, end, diff;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+	test_vdso_getrandom(NULL);
-+	clock_gettime(CLOCK_MONOTONIC, &end);
-+	timespecsub(&end, &start, &diff);
-+	printf("   vdso: %u times in %lu.%09lu seconds\n", TRIALS, diff.tv_sec, diff.tv_nsec);
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+	test_libc_getrandom(NULL);
-+	clock_gettime(CLOCK_MONOTONIC, &end);
-+	timespecsub(&end, &start, &diff);
-+	printf("   libc: %u times in %lu.%09lu seconds\n", TRIALS, diff.tv_sec, diff.tv_nsec);
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+	test_syscall_getrandom(NULL);
-+	clock_gettime(CLOCK_MONOTONIC, &end);
-+	timespecsub(&end, &start, &diff);
-+	printf("syscall: %u times in %lu.%09lu seconds\n", TRIALS, diff.tv_sec, diff.tv_nsec);
-+}
-+
-+static void bench_multi(void)
-+{
-+	struct timespec start, end, diff;
-+	pthread_t threads[THREADS];
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+	for (size_t i = 0; i < THREADS; ++i)
-+		assert(pthread_create(&threads[i], NULL, test_vdso_getrandom, NULL) == 0);
-+	for (size_t i = 0; i < THREADS; ++i)
-+		pthread_join(threads[i], NULL);
-+	clock_gettime(CLOCK_MONOTONIC, &end);
-+	timespecsub(&end, &start, &diff);
-+	printf("   vdso: %u x %u times in %lu.%09lu seconds\n", TRIALS, THREADS, diff.tv_sec, diff.tv_nsec);
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+	for (size_t i = 0; i < THREADS; ++i)
-+		assert(pthread_create(&threads[i], NULL, test_libc_getrandom, NULL) == 0);
-+	for (size_t i = 0; i < THREADS; ++i)
-+		pthread_join(threads[i], NULL);
-+	clock_gettime(CLOCK_MONOTONIC, &end);
-+	timespecsub(&end, &start, &diff);
-+	printf("   libc: %u x %u times in %lu.%09lu seconds\n", TRIALS, THREADS, diff.tv_sec, diff.tv_nsec);
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+	for (size_t i = 0; i < THREADS; ++i)
-+		assert(pthread_create(&threads[i], NULL, test_syscall_getrandom, NULL) == 0);
-+	for (size_t i = 0; i < THREADS; ++i)
-+		pthread_join(threads[i], NULL);
-+	clock_gettime(CLOCK_MONOTONIC, &end);
-+	timespecsub(&end, &start, &diff);
-+	printf("   syscall: %u x %u times in %lu.%09lu seconds\n", TRIALS, THREADS, diff.tv_sec, diff.tv_nsec);
-+}
-+
-+static void fill(void)
-+{
-+	uint8_t weird_size[323929];
-+	for (;;)
-+		vgetrandom(weird_size, sizeof(weird_size), 0);
-+}
-+
-+static void kselftest(void)
-+{
-+	uint8_t weird_size[1263];
++	enum { TRIALS = 1000, BLOCKS = 128, BLOCK_SIZE = 64 };
++	static const uint8_t nonce[8] = { 0 };
++	uint32_t counter[2];
++	uint8_t key[32];
++	uint8_t output1[BLOCK_SIZE * BLOCKS], output2[BLOCK_SIZE * BLOCKS];
 +
 +	ksft_print_header();
 +	ksft_set_plan(1);
 +
-+	for (size_t i = 0; i < 1000; ++i) {
-+		ssize_t ret = vgetrandom(weird_size, sizeof(weird_size), 0);
-+		if (ret != sizeof(weird_size))
-+			exit(KSFT_FAIL);
++	for (unsigned int trial = 0; trial < TRIALS; ++trial) {
++		if (getrandom(key, sizeof(key), 0) != sizeof(key)) {
++			printf("getrandom() failed!\n");
++			return KSFT_SKIP;
++		}
++		crypto_stream_chacha20(output1, sizeof(output1), nonce, key);
++		for (unsigned int split = 0; split < BLOCKS; ++split) {
++			memset(output2, 'X', sizeof(output2));
++			memset(counter, 0, sizeof(counter));
++			if (split)
++				__arch_chacha20_blocks_nostack(output2, key, counter, split);
++			__arch_chacha20_blocks_nostack(output2 + split * BLOCK_SIZE, key, counter, BLOCKS - split);
++			if (memcmp(output1, output2, sizeof(output1)))
++				return KSFT_FAIL;
++		}
 +	}
-+
-+	ksft_test_result_pass("getrandom: PASS\n");
-+	exit(KSFT_PASS);
-+}
-+
-+static void usage(const char *argv0)
-+{
-+	fprintf(stderr, "Usage: %s [bench-single|bench-multi|fill]\n", argv0);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	if (argc == 1) {
-+		kselftest();
-+		return 0;
-+	}
-+
-+	if (argc != 2) {
-+		usage(argv[0]);
-+		return 1;
-+	}
-+	if (!strcmp(argv[1], "bench-single"))
-+		bench_single();
-+	else if (!strcmp(argv[1], "bench-multi"))
-+		bench_multi();
-+	else if (!strcmp(argv[1], "fill"))
-+		fill();
-+	else {
-+		usage(argv[0]);
-+		return 1;
-+	}
-+	return 0;
++	ksft_test_result_pass("chacha: PASS\n");
++	return KSFT_PASS;
 +}
 -- 
 2.39.0
