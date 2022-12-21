@@ -2,61 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94316653499
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8559565349E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiLURJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:09:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S231422AbiLURJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 12:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLURJJ (ORCPT
+        with ESMTP id S234589AbiLURJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:09:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29AB1903D;
-        Wed, 21 Dec 2022 09:09:07 -0800 (PST)
+        Wed, 21 Dec 2022 12:09:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45721AA39;
+        Wed, 21 Dec 2022 09:09:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAD79B81BDA;
-        Wed, 21 Dec 2022 17:09:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27BB4C433EF;
-        Wed, 21 Dec 2022 17:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671642545;
-        bh=HexWrl21jQsZiZHSJmWAZU7Ngb+sLT1anzFCUeX4EtU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eb1rcmPIHP+2ixTURffKrMR/B0JPZHtcCp3fI8SsDi38mfPsBeBn0wkQMfGl+WqEc
-         EReXnaFgZ6dxXAFvqCA5sYZNrexaFNulst4/5VC+IhK9+dfLk0UscsoR2tDUYSthbK
-         M4awtawpM9cIjyVwb0fPcZxSuIVWiCKFWpscUxYYw2MSmsOB4vNbHTgLNgsVg+ooik
-         IcZ0YCbfl7H/IYiAM1B0U1uRfO4Z6VB3TpHQliDUvIPcxYjy+60I9d91p27S1yfLIO
-         tRRPvOOuFj9CY1ZxFso107+OjTh+UkYETvwPmtbFTmvdvXK3YHpMmeqkNjJnsQImXu
-         4WTH7RLaXi4MA==
-Date:   Wed, 21 Dec 2022 10:09:00 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Gulam Mohamed <gulam.mohamed@oracle.com>
-Cc:     linux-block@vger.kernel.org, axboe@kernel.dk,
-        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
-        christoph.boehmwalder@linbit.com, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, colyli@suse.de,
-        kent.overstreet@gmail.com, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, dave.jiang@intel.com,
-        ira.weiny@intel.com, junxiao.bi@oracle.com,
-        martin.petersen@oracle.com, kch@nvidia.com,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        linux-bcache@vger.kernel.org, linux-raid@vger.kernel.org,
-        nvdimm@lists.linux.dev, konrad.wilk@oracle.com, joe.jin@oracle.com,
-        rajesh.sivaramasubramaniom@oracle.com, shminderjit.singh@oracle.com
-Subject: Re: [PATCH for-6.2/block V3 2/2] block: Change the granularity of io
- ticks from ms to ns
-Message-ID: <Y6M9rJbw3ZMvOeDr@kbusch-mbp.dhcp.thefacebook.com>
-References: <20221221040506.1174644-1-gulam.mohamed@oracle.com>
- <20221221040506.1174644-2-gulam.mohamed@oracle.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4133161874;
+        Wed, 21 Dec 2022 17:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C55C433EF;
+        Wed, 21 Dec 2022 17:09:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671642555;
+        bh=wSTYubRBxF2E/svtoZSQEY8V3Xpq7fKv9QSV/aPUK9E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GTB3cCN8oyMVlhx3Zp1vQborXQ9Rh6s+kbOpBshicpAtRZGJQX9lUQzWmL8qZcmWi
+         +avt2mXfK9XtchraCcf/4Xbu/nUmsWOiuv1VEsyj8Ze6Sb4NL8gqokaXzSsTZf9SYP
+         rYuNZyLJfWES36q16fjWV0nviRnmP5mlg8GbDrXg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 6.0.15
+Date:   Wed, 21 Dec 2022 18:09:11 +0100
+Message-Id: <1671642552184152@kroah.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221040506.1174644-2-gulam.mohamed@oracle.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,67 +49,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 04:05:06AM +0000, Gulam Mohamed wrote:
-> +u64  blk_get_iostat_ticks(struct request_queue *q)
-> +{
-> +       return (blk_queue_precise_io_stat(q) ? ktime_get_ns() : jiffies);
-> +}
-> +EXPORT_SYMBOL_GPL(blk_get_iostat_ticks);
-> +
->  void update_io_ticks(struct block_device *part, u64 now, bool end)
->  {
->  	u64 stamp;
-> @@ -968,20 +980,26 @@ EXPORT_SYMBOL(bdev_start_io_acct);
->  u64 bio_start_io_acct(struct bio *bio)
->  {
->  	return bdev_start_io_acct(bio->bi_bdev, bio_sectors(bio),
-> -				  bio_op(bio), jiffies);
-> +				  bio_op(bio),
-> +				  blk_get_iostat_ticks(bio->bi_bdev->bd_queue));
->  }
->  EXPORT_SYMBOL_GPL(bio_start_io_acct);
->  
->  void bdev_end_io_acct(struct block_device *bdev, enum req_op op,
->  		      u64 start_time)
->  {
-> +	u64 now;
-> +	u64 duration;
-> +	struct request_queue *q = bdev_get_queue(bdev);
->  	const int sgrp = op_stat_group(op);
-> -	u64 now = READ_ONCE(jiffies);
-> -	u64 duration = (unsigned long)now -(unsigned long) start_time;
-> +	now = blk_get_iostat_ticks(q);;
+I'm announcing the release of the 6.0.15 kernel.
 
-I don't think you can rely on the blk_queue_precise_io_stat() flag in
-the completion side. The user can toggle this with data in flight, which
-means the completion may use different tick units than the start. I
-think you'll need to add a flag to the request in the start accounting
-side to know which method to use for the completion.
+All users of the 6.0 kernel series must upgrade.
 
-> @@ -951,6 +951,7 @@ ssize_t part_stat_show(struct device *dev,
->  	struct request_queue *q = bdev_get_queue(bdev);
->  	struct disk_stats stat;
->  	unsigned int inflight;
-> +	u64 stat_ioticks;
->  
->  	if (queue_is_mq(q))
->  		inflight = blk_mq_in_flight(q, bdev);
-> @@ -959,10 +960,13 @@ ssize_t part_stat_show(struct device *dev,
->  
->  	if (inflight) {
->  		part_stat_lock();
-> -		update_io_ticks(bdev, jiffies, true);
-> +		update_io_ticks(bdev, blk_get_iostat_ticks(q), true);
->  		part_stat_unlock();
->  	}
->  	part_stat_read_all(bdev, &stat);
-> +	stat_ioticks = (blk_queue_precise_io_stat(q) ?
-> +				div_u64(stat.io_ticks, NSEC_PER_MSEC) :
-> +				jiffies_to_msecs(stat.io_ticks));
+The updated 6.0.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.0.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
+thanks,
 
-With the user able to change the precision at will, I think these
-io_ticks need to have a consistent unit size. Mixing jiffies and nsecs
-is going to create garbage stats output. Could existing io_ticks using
-jiffies be converted to jiffies_to_nsecs() so that you only have one
-unit to consider?
+greg k-h
+
+------------
+
+ Documentation/security/keys/trusted-encrypted.rst                  |    3 
+ Makefile                                                           |    2 
+ drivers/net/ethernet/intel/igb/igb_main.c                          |    2 
+ drivers/net/loopback.c                                             |    2 
+ drivers/pci/controller/pcie-mt7621.c                               |    3 
+ drivers/usb/dwc3/dwc3-pci.c                                        |    2 
+ drivers/usb/gadget/function/f_uvc.c                                |    5 
+ drivers/usb/host/xhci-pci.c                                        |    4 
+ drivers/usb/serial/cp210x.c                                        |    2 
+ drivers/usb/serial/f81232.c                                        |   12 -
+ drivers/usb/serial/f81534.c                                        |   12 -
+ drivers/usb/serial/option.c                                        |    3 
+ drivers/usb/typec/ucsi/ucsi.c                                      |   17 +
+ drivers/usb/typec/ucsi/ucsi.h                                      |    1 
+ fs/udf/inode.c                                                     |   76 +++----
+ fs/udf/truncate.c                                                  |   48 +---
+ include/linux/module.h                                             |    9 
+ kernel/module/kallsyms.c                                           |    2 
+ kernel/trace/bpf_trace.c                                           |   98 +++++++++-
+ kernel/trace/ftrace.c                                              |   16 +
+ net/bluetooth/l2cap_core.c                                         |    3 
+ security/keys/encrypted-keys/encrypted.c                           |    6 
+ sound/pci/hda/patch_realtek.c                                      |    2 
+ tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c              |   24 ++
+ tools/testing/selftests/bpf/prog_tests/kprobe_multi_testmod_test.c |   89 +++++++++
+ tools/testing/selftests/bpf/prog_tests/module_attach.c             |    7 
+ tools/testing/selftests/bpf/progs/kprobe_multi.c                   |   50 +++++
+ tools/testing/selftests/bpf/progs/test_module_attach.c             |    6 
+ tools/testing/selftests/bpf/trace_helpers.c                        |   20 +-
+ tools/testing/selftests/bpf/trace_helpers.h                        |    2 
+ tools/testing/selftests/net/toeplitz.sh                            |    2 
+ 31 files changed, 410 insertions(+), 120 deletions(-)
+
+Andy Chi (1):
+      ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
+
+Bruno Thomsen (1):
+      USB: serial: cp210x: add Kamstrup RF sniffer PIDs
+
+Duke Xin (1):
+      USB: serial: option: add Quectel EM05-G modem
+
+Greg Kroah-Hartman (1):
+      Linux 6.0.15
+
+Heikki Krogerus (1):
+      usb: typec: ucsi: Resume in separate work
+
+Jan Kara (4):
+      udf: Discard preallocation before extending file with a hole
+      udf: Fix preallocation discarding at indirect extent boundary
+      udf: Do not bother looking for prealloc extents if i_lenExtents matches i_size
+      udf: Fix extending file within last block
+
+Jiri Olsa (8):
+      kallsyms: Make module_kallsyms_on_each_symbol generally available
+      ftrace: Add support to resolve module symbols in ftrace_lookup_symbols
+      bpf: Rename __bpf_kprobe_multi_cookie_cmp to bpf_kprobe_multi_addrs_cmp
+      bpf: Take module reference on kprobe_multi link
+      selftests/bpf: Add load_kallsyms_refresh function
+      selftests/bpf: Add bpf_testmod_fentry_* functions
+      selftests/bpf: Add kprobe_multi check to module attach test
+      selftests/bpf: Add kprobe_multi kmod attach api tests
+
+Johan Hovold (2):
+      USB: serial: f81232: fix division by zero on line-speed change
+      USB: serial: f81534: fix division by zero on line-speed change
+
+John Thomson (1):
+      PCI: mt7621: Add sentinel to quirks table
+
+Nikolaus Voss (1):
+      KEYS: encrypted: fix key instantiation with user-provided data
+
+Rasmus Villemoes (1):
+      net: loopback: use NET_NAME_PREDICTABLE for name_assign_type
+
+Reka Norman (1):
+      xhci: Apply XHCI_RESET_TO_DEFAULT quirk to ADL-N
+
+Shruthi Sanil (1):
+      usb: dwc3: pci: Update PCIe device ID for USB3 controller on CPU sub-system for Raptor Lake
+
+Sungwoo Kim (1):
+      Bluetooth: L2CAP: Fix u8 overflow
+
+Szymon Heidrich (1):
+      usb: gadget: uvc: Prevent buffer overflow in setup handler
+
+Tiezhu Yang (1):
+      selftests: net: Use "grep -E" instead of "egrep"
+
+Tony Nguyen (1):
+      igb: Initialize mailbox message for VF reset
+
