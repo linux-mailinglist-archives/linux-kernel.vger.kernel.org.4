@@ -2,169 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D05652C00
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 05:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB216652C05
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 05:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiLUEEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 23:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S234299AbiLUEFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 23:05:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiLUEEh (ORCPT
+        with ESMTP id S234331AbiLUEFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 23:04:37 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A4B15FEB;
-        Tue, 20 Dec 2022 20:04:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671595476; x=1703131476;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=4qP4H0hsiLpkO+5AKT1x06DsKup5Ebhiib4B7n4kAsg=;
-  b=kSMeXIkN8QkFvsxQnY7kvADiDD4fZEQdgB7Oc1cgBjPWokgibpHISIFx
-   7gbnqtllKSyF2Cc0/kDsMAlJk8nZu7cdGpn3xbXaKSxl5E7y8KN8fn2no
-   UVvwdQIEt9yuUc0YtrpdNYeKut7lOLVVR2CMqrUGR+Tsy0f1Ydgk8mkWL
-   2TgMFwvRhgj1xkyn2JwaeKigZT3SuSmIvnrTQ0cWH/9TOSqyy1If1+kiM
-   Z6uEoSxrjtZ9lnNKqTPX7tIiddu/Q4HI/Dk4kbQOFkRyNt6hzZhHQoRLT
-   J6R+MU5Hu3Rp/Mo6RyEjzhVWEbNq0CFtQTYSrAvJJGYMBoMTyv4itQxGP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="300125418"
-X-IronPort-AV: E=Sophos;i="5.96,261,1665471600"; 
-   d="scan'208";a="300125418"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2022 20:04:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10567"; a="653356540"
-X-IronPort-AV: E=Sophos;i="5.96,261,1665471600"; 
-   d="scan'208";a="653356540"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Dec 2022 20:04:17 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 20 Dec 2022 20:04:16 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 20 Dec 2022 20:04:16 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 20 Dec 2022 20:04:16 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 20 Dec 2022 20:04:15 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HKahIvxP5u084UnI1dYJetnD8hwl4ph+yAwX4EqInvjy3Fg3Vu4CVTBNQTQ9MVOctPSdaacxZl1zSIRCemeQejKbfxIfbrjuoFCI4m/g6MHNM3SsGGU+gGtuaGuSlRqWzeG6bBPeNUUCMZ1inGqWit0sKtIG4//3emXSE9rmNjV0azb+9B3zjwXpEDOeTzu+uvJRr2lvxLCSN+xweNSwqNlu50r4dRBDBX8ypOmlE+dzNBpZuDBy40ZRxBa4EaSzEY9AoLHsE2kAjDmuZF6/DuNfvYkEEeh7xihaY1a1zDbe0l0mJWe8+IXJDcvtl9BmA9y4Oyh35/+8DwkhMeBEnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UY7KT1U/Hd76usMwZKCUNd37Dar0DdW6xQTWLKZxvmU=;
- b=c3e6SIl/gyD0+CEUesylCVTwBXWD2eWPTrNXpkqoU4dpCVfb+JXpvj4m2sx0qEkgB+SWxBmYukd+NqsdC2Yn7DZnJHG0+hc6cVG441IqIK18OkIQlz5+KD+TUZjDMQRuPAmXoxye+nVGWfNsm0vHqEztm2sLiPfKrqybnHFrxhzU3tUlYoBvJh63cORvyEqNHzxiVPlOO7gMMnyQYRQ5I7ipBWuHOluczsTvRl/fVPm/Nsf35IRpD/RAfS2qnybksrU/YCd1jYvojN//RDUiqJ9xzpFnK3146c+NFHVKMtm7mQKLqM7TLqGgc6eaq1msbH/MshiTazSxwj5QdTz6SQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
- by BY1PR11MB8006.namprd11.prod.outlook.com (2603:10b6:a03:52d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Wed, 21 Dec
- 2022 04:04:11 +0000
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::ae1a:fa3e:e36e:c2fe]) by PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::ae1a:fa3e:e36e:c2fe%3]) with mapi id 15.20.5924.016; Wed, 21 Dec 2022
- 04:04:11 +0000
-Message-ID: <d4dec151-553f-e762-7fcc-81ae82b5c211@intel.com>
-Date:   Wed, 21 Dec 2022 12:03:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 6/9] kvm/x86: Add ARCH_CAP_VIRTUAL_ENUM for guest
- MSR_IA32_ARCH_CAPABILITIES
-To:     Zhang Chen <chen.zhang@intel.com>
-CC:     "Gao, Chao" <chao.gao@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-References: <20221210160046.2608762-1-chen.zhang@intel.com>
- <20221210160046.2608762-7-chen.zhang@intel.com>
-Content-Language: en-US
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <20221210160046.2608762-7-chen.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SGXP274CA0014.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::26)
- To PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
+        Tue, 20 Dec 2022 23:05:39 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C5615FEB;
+        Tue, 20 Dec 2022 20:05:30 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BL0ic2a026008;
+        Wed, 21 Dec 2022 04:05:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=qCow3b3gBADi4XqwH0quFWwnLvaIoVCqn4xVVehDvWU=;
+ b=1AizXW7rOjlHvTJa6C+WATR+YF6tw+ISvZJMWa4JWXCHohUTDDrHCnK6lv2MODXz7p07
+ IgjCTyHjZE9BRHiJ+q2c6msV3tnOXdboi86jpQvXIkSKWPTedKt4Urf8hYIAvW7glRbS
+ JiwdMt0XDabUHVQTHqWP/3hcN2erqokh0F4eeYu8KbG5pnPdYAyuzDIt10EAWjmNhLGF
+ 1sUKh+yOaQcm36pIjRbq/hE2DcCe8lRxYBbkSzdWGZGBjlAxLAP6fs4vCZO6MeL7frW1
+ ww/HsxLt7JsCL9d0f2Qoh+QlZ10AFAnAqywdQ3WZcLExSWvLBEUSngsO0j2LzSV8QYUi OQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mh6tp7tr6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Dec 2022 04:05:11 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2BL1BDLx003525;
+        Wed, 21 Dec 2022 04:05:10 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3mh476294c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Dec 2022 04:05:10 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BL459MA023735;
+        Wed, 21 Dec 2022 04:05:09 GMT
+Received: from bm-iostat-test-2.osdevelopmeniad.oraclevcn.com (bm-iostat-test-2.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.255.177])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3mh4762924-1;
+        Wed, 21 Dec 2022 04:05:09 +0000
+From:   Gulam Mohamed <gulam.mohamed@oracle.com>
+To:     linux-block@vger.kernel.org
+Cc:     axboe@kernel.dk, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, christoph.boehmwalder@linbit.com,
+        minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
+        colyli@suse.de, kent.overstreet@gmail.com, agk@redhat.com,
+        snitzer@kernel.org, dm-devel@redhat.com, song@kernel.org,
+        dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, ira.weiny@intel.com, junxiao.bi@oracle.com,
+        gulam.mohamed@oracle.com, martin.petersen@oracle.com,
+        kch@nvidia.com, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
+        linux-raid@vger.kernel.org, nvdimm@lists.linux.dev,
+        konrad.wilk@oracle.com, joe.jin@oracle.com,
+        rajesh.sivaramasubramaniom@oracle.com, shminderjit.singh@oracle.com
+Subject: [PATCH for-6.2/block V3 1/2] block: Data type conversion for IO accounting
+Date:   Wed, 21 Dec 2022 04:05:05 +0000
+Message-Id: <20221221040506.1174644-1-gulam.mohamed@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4965:EE_|BY1PR11MB8006:EE_
-X-MS-Office365-Filtering-Correlation-Id: 340890ba-9339-4324-0f5b-08dae3086a6b
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mFJimagLGfRhA9P15VCDbfJj58VwW/A/DoMieQ4zfIjk/jGuwp3kDQ7Ypv0fn9tlVcihdlZy4CRqUPkH2yo1F9cUEnuuo+sw91OQpIetQph48EVtEaUcblaJX2bFWTfvB/e8ECrveVNmyZ49LMurdx9Ps+kfsi4E+B1OV2QGdRxNCuyF6UbV6e1KI8B+r60ecB0GrRZ51XiPIlCA5C0QvrXrQoIKDn9hXSCC1PMK/Gn9AEeDsi4QqgubZAp6tH9cp+bZJl9+zh2TLLRuJQiKyR/GEW5bNwqeYu/nc03GO2Q03Qoc7hN66VPyAHotqZNRjDR8BrX3Xyvi4f43nDhvm7CrIVHkZGUsgctA0C1qkcWng3bCJ/IjwGnkSbZGSKy/aLAdYTKDw9bhn+imGd7JkA0iZs4BF+KA7L6xaDjmamI/YAfJiDGyJ26kY1BZitNIQayhXv9eIj8UVhlrL3+L9N1tcvUtc5Sjz5wG6BiRGpojcc7yrOQhh1S52GC2b6ZZXqH0S7zRvhs/ZAriSGVqrtmd7091DgvZsmYmwEAM4Kb7ndNRWaZO4b1Fdei2WGLV1BDfUZ3jF1vWRhTGU/2vv+Mo/Vs0LJIm46E4gT9dgVUypmTimUQeC91pufyLcX7yW1DhDwmHKY9nnSvCr5wQyiyXbKS667uzCwQa5nYJFMtETgbaRM+ohNSy/u4ihMBUb0+oY5pi+SpLZ4vMCSsiz5Onj50oSjJvgNLC0MQnX38=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(396003)(366004)(39860400002)(346002)(451199015)(36756003)(6486002)(37006003)(6506007)(53546011)(8676002)(2616005)(66946007)(31696002)(4326008)(86362001)(66556008)(66476007)(38100700002)(6636002)(54906003)(7416002)(478600001)(316002)(82960400001)(31686004)(6666004)(83380400001)(6862004)(5660300002)(8936002)(2906002)(41300700001)(186003)(26005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UmVudER5VWViZjBZNzNwSFhsblA0a2FURGo1R0doZnlSRGh5dG95d0lDak9i?=
- =?utf-8?B?VnZnZkhVeFd3K1ZmWkYyWVBiTVNIbFlKWC84MlpBWEdHeEVtdnNmcUhnUEZs?=
- =?utf-8?B?aXdnWlAybG1JbnFKK1dSalJHYUJXQWw3aHRjRVpFWGFSeGM4SW8xUkRqaVNR?=
- =?utf-8?B?MkU4SU5JYXpVV0drUFc0Q3JBUUsxRFUxTW9jUWh6d2VqbVdTYkRkZGJlMXF1?=
- =?utf-8?B?aEU0M2JBdGFlakJPVEtOV1lyRkdva2w5Z1RrU1huMk1hSFFCVjdwU2xQYjho?=
- =?utf-8?B?Z3RPR0wzSjF4SHVwRUJWQkJ0Wm1zVHJCbDQ4UWlKenVOZWMwTjY5di9YZFZn?=
- =?utf-8?B?eUdiUEg3YUhqQ0JPRDhzYVdZRmZFaTFGWW13SmsvKzhvU1lOc1BwaXcyN3pm?=
- =?utf-8?B?eTQ4ZzVUQmtPV01EZlVSTER4YzZseHBEaitnYUx2NEVHMUtvY2FNTHVxSFkr?=
- =?utf-8?B?bFFlVjk3RnllOW96cmtlenRybGxkekpCUG56N01UU1czV29NRGhBNHd6T0dT?=
- =?utf-8?B?RERaeEtEdTRsdWM3alpkR1pFRnNuL1dJeXp5T2tDNlp5Z2xwbzIxRzA3STZZ?=
- =?utf-8?B?aTRLdmZVUFFoNDJqMi9oS1pVOEc4aDM2RC9MNFZaU2pLUUh4UnM0NDlRN3lC?=
- =?utf-8?B?NUtLbCt6bjdicGJaZlk1WUdwQU8vZ1JrUS9YYklDb0UrMUxKWXF6R3JhbnhH?=
- =?utf-8?B?cVFGdjEyRDBTZzFXUmg4d25Ld0pzTXRZVXZqZkJjMHpVMjF4S21Hejg2UUNB?=
- =?utf-8?B?Rnl6NWY0ZVBycmwrSGU3MVozQUMvYkdwazNaa2Qxc0ViUlZCb2tDTVNORWp4?=
- =?utf-8?B?QVZRYVZ4dG5FS0JDLzRlQk9KeFY4czgrOG54dTU3dGhjVFVtRDJleEFGU2RK?=
- =?utf-8?B?Si95dGhBMEF0YVk4RS9pRmxvNGw1U2pMZXZKS0dLdlY5VFZHYTB3STFiTE1B?=
- =?utf-8?B?YmpJc3ZzVUhXbHRqd1JIMkpzMnA2QmhwUEFkZDhFLzd4UVBKaVZPZ3MzMVd2?=
- =?utf-8?B?R1U3RUtjNDBlL1NCUSthUEJKcTM0eUJISDI1dTVQQUwxUlRxRGp2dWNhbFJt?=
- =?utf-8?B?MUlLMllZckpOTkFDbnFwUkpGNFVoSDdCVEFUazBCU3lIUTJBeG4vbnlTOGQ5?=
- =?utf-8?B?NjR4VlJ2cjJjcDhLdmxMYi9Kck93RHJOMUpYaVUrc2lMa2FWaGt3dVdYY3ZQ?=
- =?utf-8?B?bGhmb2prd2N6QURUeGw2RlBuZll4eFNpNUxWR1RrcEFDaTlRQTJkNEFQdG9k?=
- =?utf-8?B?ejg3UjNQYTQ1aldEc2VxejZPTTNibnpmNzF2TTdqRGtHYlpXdE5HdGZQSSt5?=
- =?utf-8?B?QjNaK2tleDFLcjFoZm9VRHVSbitwdHJFSkl3ZktVQzdGZ04vK09GcEdxNEFs?=
- =?utf-8?B?Ky8vZFVGeVpPeE5ZbTFKQ29GV0hOcERqUXZNRk1kcUYxQ0M0SVlabTlCQVNB?=
- =?utf-8?B?cjdnd1ltZUFXWi8wdERyd2ZJUS9UVTdrMmNUeWR6UTBpZ2hxWmgvVllSRnhh?=
- =?utf-8?B?U3lRNDVyajZRK0VZbzVTUUJkTVR5MTBYcFFIZndBZDFYaGQvWWFxYWl6bElZ?=
- =?utf-8?B?bGExUlh5enBiMVZaRm5lSjVnbkhZc3JGdHhHdXU0ZURtcUhyVmlZek5ja05M?=
- =?utf-8?B?VmNlODk2SWxueStRNlBneDV0Q3U3dklQQ0NBUHFhNlFueUkvYXplUExVQmNM?=
- =?utf-8?B?cjQzdjBzcUgybnByL2RNcXkrV2FoeEdSTU5UZ0NQZ3EvNHUxaWVHZ2JiazJF?=
- =?utf-8?B?T3BaWHNyTzJoVjV2aFk1MlVuK1ZVRWFGTG5iYlYwVGtuaXNPbzgzeWVveElz?=
- =?utf-8?B?RGRndmc1Z1J3dkF4L0xIcUtWNy84Ym12Vy8wY2QrSklSb0MrQXN2MEhPM2dZ?=
- =?utf-8?B?ZlVRT0hkMSttZzQ1SlRzNHRxRURYSjhUQWsydlhKSjFSc1Q2K1M5SERXMkpx?=
- =?utf-8?B?eXZYM1RWNUgxNmI0aS9ON1ZTS3RlcUFRY1NvMVUzNy9uL0wwU0pyYU1Yclc5?=
- =?utf-8?B?R0J5SUpJQUtZN20wSUpaSExrZlJGVXNRY3dZU0I2eCtpb3RYeXZPUERDcnBZ?=
- =?utf-8?B?TklNM0htZDhaWUtDZG8vbVBOVWJMcllzMkJUOWNaUmFySWdudlRWT2tKYzQv?=
- =?utf-8?B?MXJxTUpSR3hOWnVRN3BxRUgrcEl5clNIZnA3Ymxxa2s3cTVBa2JGdmloRUQw?=
- =?utf-8?B?M2c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 340890ba-9339-4324-0f5b-08dae3086a6b
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4965.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 04:04:11.3660
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i2PmSV7wV91p6LOGUiIw8HRmhEnJ+GB9/0aAf9j59MhcADR+fT5boSeus+DDkh+PNyO5VqBM5TinqaGZo1qbFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR11MB8006
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-21_01,2022-12-20_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 suspectscore=0
+ adultscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212210027
+X-Proofpoint-GUID: wDgeMj7pcM-YvdFbu7xUMiWUgEUFWRds
+X-Proofpoint-ORIG-GUID: wDgeMj7pcM-YvdFbu7xUMiWUgEUFWRds
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,131 +83,366 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Change the data type of start and end time IO accounting variables in,
+block layer, from "unsigned long" to "u64". This is to enable nano-seconds
+granularity, in next commit, for the devices whose latency is less than
+milliseconds.
 
-On 12/11/2022 12:00 AM, Zhang Chen wrote:
-> Add the 63 bit in MSR_IA32_ARCH_CAPABILITIES for enable the virtual MSRs.
-> Virtual MSRs can allow guests to notify VMM whether or not
-> they are using specific software mitigation, allowing a VMM
-> to enable there hardware control only where necessary.
-> As Intel spec defination, expose virtual MSR for guest.
-> Make guest have ability to check virtual MSR 0x50000000.
->
-> Signed-off-by: Zhang Chen <chen.zhang@intel.com>
-> ---
->   arch/x86/kvm/vmx/vmx.c | 15 +++++++++++++++
->   arch/x86/kvm/vmx/vmx.h |  1 +
->   arch/x86/kvm/x86.c     | 16 +++++++++++++++-
->   3 files changed, 31 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 407061b369b4..6ed6b743be0e 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2001,6 +2001,12 @@ static int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   	case MSR_IA32_DEBUGCTLMSR:
->   		msr_info->data = vmcs_read64(GUEST_IA32_DEBUGCTL);
->   		break;
-> +	case MSR_VIRTUAL_ENUMERATION:
-> +		if (!msr_info->host_initiated &&
-> +		    !(vcpu->arch.arch_capabilities & ARCH_CAP_VIRTUAL_ENUM))
-> +			return 1;
-> +		msr_info->data = vmx->msr_virtual_enumeration;
-> +		break;
->   	default:
->   	find_uret_msr:
->   		msr = vmx_find_uret_msr(vmx, msr_info->index);
-> @@ -2375,6 +2381,15 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   		}
->   		ret = kvm_set_msr_common(vcpu, msr_info);
->   		break;
-> +	case MSR_VIRTUAL_ENUMERATION:
-> +		if (msr_info->host_initiated &&
-> +		    !(vcpu->arch.arch_capabilities & ARCH_CAP_VIRTUAL_ENUM))
-> +			return 1;
-> +		if (data & ~VIRT_ENUM_MITIGATION_CTRL_SUPPORT)
-> +			return 1;
-> +		vmx->msr_virtual_enumeration = data &
-> +						VIRT_ENUM_MITIGATION_CTRL_SUPPORT;
-> +		break;
->   
->   	default:
->   	find_uret_msr:
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index c5a41ae14237..fc873cf45f70 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -298,6 +298,7 @@ struct vcpu_vmx {
->   	 * IA32_SPEC_CTRL_MSR.
->   	 */
->   	u64		      spec_ctrl_mask;
-> +	u64		      msr_virtual_enumeration;
->   	u32		      msr_ia32_umwait_control;
->   
->   	/*
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 2835bd796639..6be0a3f1281f 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -1532,6 +1532,8 @@ static const u32 emulated_msrs_all[] = {
->   	MSR_IA32_VMX_EPT_VPID_CAP,
->   	MSR_IA32_VMX_VMFUNC,
->   
-> +	MSR_VIRTUAL_ENUMERATION,
-> +
->   	MSR_K7_HWCR,
->   	MSR_KVM_POLL_CONTROL,
->   };
-> @@ -1567,6 +1569,7 @@ static const u32 msr_based_features_all[] = {
->   	MSR_IA32_UCODE_REV,
->   	MSR_IA32_ARCH_CAPABILITIES,
->   	MSR_IA32_PERF_CAPABILITIES,
-> +	MSR_VIRTUAL_ENUMERATION,
->   };
->   
->   static u32 msr_based_features[ARRAY_SIZE(msr_based_features_all)];
-> @@ -1588,7 +1591,8 @@ static unsigned int num_msr_based_features;
->   	 ARCH_CAP_SKIP_VMENTRY_L1DFLUSH | ARCH_CAP_SSB_NO | ARCH_CAP_MDS_NO | \
->   	 ARCH_CAP_PSCHANGE_MC_NO | ARCH_CAP_TSX_CTRL_MSR | ARCH_CAP_TAA_NO | \
->   	 ARCH_CAP_SBDR_SSDP_NO | ARCH_CAP_FBSDP_NO | ARCH_CAP_PSDP_NO | \
-> -	 ARCH_CAP_FB_CLEAR | ARCH_CAP_RRSBA | ARCH_CAP_PBRSB_NO)
-> +	 ARCH_CAP_FB_CLEAR | ARCH_CAP_RRSBA | ARCH_CAP_PBRSB_NO | \
-> +	 ARCH_CAP_VIRTUAL_ENUM)
->   
->   static u64 kvm_get_arch_capabilities(void)
->   {
-> @@ -1607,6 +1611,13 @@ static u64 kvm_get_arch_capabilities(void)
->   	 */
->   	data |= ARCH_CAP_PSCHANGE_MC_NO;
->   
-> +	/*
-> +	 * Virtual MSRs can allow guests to notify VMM whether or not
-> +	 * they are using specific software mitigation, allowing a VMM
-> +	 * to enable there hardware control only where necessary.
-> +	 */
-> +	data |= ARCH_CAP_VIRTUAL_ENUM;
+Changes from V2 to V3
+=====================
+1. Changed all the required variables data-type to u64 as part of this
+   first patch
+2. Create a new setting '2' for iostats in sysfs in next patch
+3. Change the code to get the ktime values when iostat=2 in next patch
 
+Signed-off-by: Gulam Mohamed <gulam.mohamed@oracle.com>
+---
+ block/blk-core.c              | 24 ++++++++++++------------
+ block/blk.h                   |  2 +-
+ drivers/block/drbd/drbd_int.h |  2 +-
+ drivers/block/zram/zram_drv.c |  4 ++--
+ drivers/md/bcache/request.c   | 10 +++++-----
+ drivers/md/dm-core.h          |  2 +-
+ drivers/md/dm.c               |  2 +-
+ drivers/md/md.h               |  2 +-
+ drivers/md/raid1.h            |  2 +-
+ drivers/md/raid10.h           |  2 +-
+ drivers/md/raid5.c            |  2 +-
+ drivers/nvdimm/btt.c          |  2 +-
+ drivers/nvdimm/pmem.c         |  2 +-
+ include/linux/blk_types.h     |  2 +-
+ include/linux/blkdev.h        | 12 ++++++------
+ include/linux/part_stat.h     |  2 +-
+ 16 files changed, 37 insertions(+), 37 deletions(-)
 
-IMO, this is:  data &= ARCH_CAP_VIRTUAL_ENUM; because it requires 
-platform support.
+diff --git a/block/blk-core.c b/block/blk-core.c
+index 8ab21dd01cd1..5670032fe932 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -927,13 +927,13 @@ int iocb_bio_iopoll(struct kiocb *kiocb, struct io_comp_batch *iob,
+ }
+ EXPORT_SYMBOL_GPL(iocb_bio_iopoll);
+ 
+-void update_io_ticks(struct block_device *part, unsigned long now, bool end)
++void update_io_ticks(struct block_device *part, u64 now, bool end)
+ {
+-	unsigned long stamp;
++	u64 stamp;
+ again:
+ 	stamp = READ_ONCE(part->bd_stamp);
+-	if (unlikely(time_after(now, stamp))) {
+-		if (likely(try_cmpxchg(&part->bd_stamp, &stamp, now)))
++	if (unlikely(time_after64(now, stamp))) {
++		if (likely(try_cmpxchg64(&part->bd_stamp, &stamp, now)))
+ 			__part_stat_add(part, io_ticks, end ? now - stamp : 1);
+ 	}
+ 	if (part->bd_partno) {
+@@ -942,9 +942,9 @@ void update_io_ticks(struct block_device *part, unsigned long now, bool end)
+ 	}
+ }
+ 
+-unsigned long bdev_start_io_acct(struct block_device *bdev,
+-				 unsigned int sectors, enum req_op op,
+-				 unsigned long start_time)
++u64 bdev_start_io_acct(struct block_device *bdev,
++			unsigned int sectors, enum req_op op,
++			u64 start_time)
+ {
+ 	const int sgrp = op_stat_group(op);
+ 
+@@ -965,7 +965,7 @@ EXPORT_SYMBOL(bdev_start_io_acct);
+  *
+  * Returns the start time that should be passed back to bio_end_io_acct().
+  */
+-unsigned long bio_start_io_acct(struct bio *bio)
++u64 bio_start_io_acct(struct bio *bio)
+ {
+ 	return bdev_start_io_acct(bio->bi_bdev, bio_sectors(bio),
+ 				  bio_op(bio), jiffies);
+@@ -973,11 +973,11 @@ unsigned long bio_start_io_acct(struct bio *bio)
+ EXPORT_SYMBOL_GPL(bio_start_io_acct);
+ 
+ void bdev_end_io_acct(struct block_device *bdev, enum req_op op,
+-		      unsigned long start_time)
++		      u64 start_time)
+ {
+ 	const int sgrp = op_stat_group(op);
+-	unsigned long now = READ_ONCE(jiffies);
+-	unsigned long duration = now - start_time;
++	u64 now = READ_ONCE(jiffies);
++	u64 duration = (unsigned long)now -(unsigned long) start_time;
+ 
+ 	part_stat_lock();
+ 	update_io_ticks(bdev, now, true);
+@@ -987,7 +987,7 @@ void bdev_end_io_acct(struct block_device *bdev, enum req_op op,
+ }
+ EXPORT_SYMBOL(bdev_end_io_acct);
+ 
+-void bio_end_io_acct_remapped(struct bio *bio, unsigned long start_time,
++void bio_end_io_acct_remapped(struct bio *bio, u64 start_time,
+ 			      struct block_device *orig_bdev)
+ {
+ 	bdev_end_io_acct(orig_bdev, bio_op(bio), start_time);
+diff --git a/block/blk.h b/block/blk.h
+index 8900001946c7..8997435ad4a0 100644
+--- a/block/blk.h
++++ b/block/blk.h
+@@ -341,7 +341,7 @@ static inline bool blk_do_io_stat(struct request *rq)
+ 	return (rq->rq_flags & RQF_IO_STAT) && !blk_rq_is_passthrough(rq);
+ }
+ 
+-void update_io_ticks(struct block_device *part, unsigned long now, bool end);
++void update_io_ticks(struct block_device *part, u64 now, bool end);
+ 
+ static inline void req_set_nomerge(struct request_queue *q, struct request *req)
+ {
+diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
+index ae713338aa46..8e4d3b2eb99d 100644
+--- a/drivers/block/drbd/drbd_int.h
++++ b/drivers/block/drbd/drbd_int.h
+@@ -236,7 +236,7 @@ struct drbd_request {
+ 	struct list_head req_pending_local;
+ 
+ 	/* for generic IO accounting */
+-	unsigned long start_jif;
++	u64 start_jif;
+ 
+ 	/* for DRBD internal statistics */
+ 
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index 966aab902d19..da28eb83e6ed 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1581,7 +1581,7 @@ static void __zram_make_request(struct zram *zram, struct bio *bio)
+ 	u32 index;
+ 	struct bio_vec bvec;
+ 	struct bvec_iter iter;
+-	unsigned long start_time;
++	u64 start_time;
+ 
+ 	index = bio->bi_iter.bi_sector >> SECTORS_PER_PAGE_SHIFT;
+ 	offset = (bio->bi_iter.bi_sector &
+@@ -1662,7 +1662,7 @@ static int zram_rw_page(struct block_device *bdev, sector_t sector,
+ 	u32 index;
+ 	struct zram *zram;
+ 	struct bio_vec bv;
+-	unsigned long start_time;
++	u64 start_time;
+ 
+ 	if (PageTransHuge(page))
+ 		return -ENOTSUPP;
+diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
+index 39c7b607f8aa..1f9bd20dcdcf 100644
+--- a/drivers/md/bcache/request.c
++++ b/drivers/md/bcache/request.c
+@@ -476,7 +476,7 @@ struct search {
+ 	unsigned int		cache_missed:1;
+ 
+ 	struct block_device	*orig_bdev;
+-	unsigned long		start_time;
++	u64			start_time;
+ 
+ 	struct btree_op		op;
+ 	struct data_insert_op	iop;
+@@ -714,7 +714,7 @@ static void search_free(struct closure *cl)
+ 
+ static inline struct search *search_alloc(struct bio *bio,
+ 		struct bcache_device *d, struct block_device *orig_bdev,
+-		unsigned long start_time)
++		u64 start_time)
+ {
+ 	struct search *s;
+ 
+@@ -1065,7 +1065,7 @@ static void cached_dev_nodata(struct closure *cl)
+ 
+ struct detached_dev_io_private {
+ 	struct bcache_device	*d;
+-	unsigned long		start_time;
++	u64			start_time;
+ 	bio_end_io_t		*bi_end_io;
+ 	void			*bi_private;
+ 	struct block_device	*orig_bdev;
+@@ -1094,7 +1094,7 @@ static void detached_dev_end_io(struct bio *bio)
+ }
+ 
+ static void detached_dev_do_request(struct bcache_device *d, struct bio *bio,
+-		struct block_device *orig_bdev, unsigned long start_time)
++		struct block_device *orig_bdev, u64 start_time)
+ {
+ 	struct detached_dev_io_private *ddip;
+ 	struct cached_dev *dc = container_of(d, struct cached_dev, disk);
+@@ -1173,7 +1173,7 @@ void cached_dev_submit_bio(struct bio *bio)
+ 	struct block_device *orig_bdev = bio->bi_bdev;
+ 	struct bcache_device *d = orig_bdev->bd_disk->private_data;
+ 	struct cached_dev *dc = container_of(d, struct cached_dev, disk);
+-	unsigned long start_time;
++	u64    start_time;
+ 	int rw = bio_data_dir(bio);
+ 
+ 	if (unlikely((d->c && test_bit(CACHE_SET_IO_DISABLE, &d->c->flags)) ||
+diff --git a/drivers/md/dm-core.h b/drivers/md/dm-core.h
+index 6c6bd24774f2..e620fd878b08 100644
+--- a/drivers/md/dm-core.h
++++ b/drivers/md/dm-core.h
+@@ -284,7 +284,7 @@ struct dm_io {
+ 	unsigned short magic;
+ 	blk_short_t flags;
+ 	spinlock_t lock;
+-	unsigned long start_time;
++	u64 start_time;
+ 	void *data;
+ 	struct dm_io *next;
+ 	struct dm_stats_aux stats_aux;
+diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+index e1ea3a7bd9d9..011a85ea40da 100644
+--- a/drivers/md/dm.c
++++ b/drivers/md/dm.c
+@@ -494,7 +494,7 @@ static bool bio_is_flush_with_data(struct bio *bio)
+ static void dm_io_acct(struct dm_io *io, bool end)
+ {
+ 	struct dm_stats_aux *stats_aux = &io->stats_aux;
+-	unsigned long start_time = io->start_time;
++	u64 start_time = io->start_time;
+ 	struct mapped_device *md = io->md;
+ 	struct bio *bio = io->orig_bio;
+ 	unsigned int sectors;
+diff --git a/drivers/md/md.h b/drivers/md/md.h
+index 554a9026669a..df73c1d1d960 100644
+--- a/drivers/md/md.h
++++ b/drivers/md/md.h
+@@ -711,7 +711,7 @@ struct md_thread {
+ 
+ struct md_io_acct {
+ 	struct bio *orig_bio;
+-	unsigned long start_time;
++	u64 start_time;
+ 	struct bio bio_clone;
+ };
+ 
+diff --git a/drivers/md/raid1.h b/drivers/md/raid1.h
+index ebb6788820e7..0fb5a1148745 100644
+--- a/drivers/md/raid1.h
++++ b/drivers/md/raid1.h
+@@ -157,7 +157,7 @@ struct r1bio {
+ 	sector_t		sector;
+ 	int			sectors;
+ 	unsigned long		state;
+-	unsigned long		start_time;
++	u64			start_time;
+ 	struct mddev		*mddev;
+ 	/*
+ 	 * original bio going to /dev/mdx
+diff --git a/drivers/md/raid10.h b/drivers/md/raid10.h
+index 8c072ce0bc54..4cf3eec89bf3 100644
+--- a/drivers/md/raid10.h
++++ b/drivers/md/raid10.h
+@@ -123,7 +123,7 @@ struct r10bio {
+ 	sector_t		sector;	/* virtual sector number */
+ 	int			sectors;
+ 	unsigned long		state;
+-	unsigned long		start_time;
++	u64			start_time;
+ 	struct mddev		*mddev;
+ 	/*
+ 	 * original bio going to /dev/mdx
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index 7b820b81d8c2..8f4364f4bda0 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -5474,7 +5474,7 @@ static void raid5_align_endio(struct bio *bi)
+ 	struct r5conf *conf;
+ 	struct md_rdev *rdev;
+ 	blk_status_t error = bi->bi_status;
+-	unsigned long start_time = md_io_acct->start_time;
++	u64 start_time = md_io_acct->start_time;
+ 
+ 	bio_put(bi);
+ 
+diff --git a/drivers/nvdimm/btt.c b/drivers/nvdimm/btt.c
+index 0297b7882e33..8fc1d5da747c 100644
+--- a/drivers/nvdimm/btt.c
++++ b/drivers/nvdimm/btt.c
+@@ -1442,7 +1442,7 @@ static void btt_submit_bio(struct bio *bio)
+ 	struct bio_integrity_payload *bip = bio_integrity(bio);
+ 	struct btt *btt = bio->bi_bdev->bd_disk->private_data;
+ 	struct bvec_iter iter;
+-	unsigned long start;
++	u64 start;
+ 	struct bio_vec bvec;
+ 	int err = 0;
+ 	bool do_acct;
+diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+index 96e6e9a5f235..b5b7a709e1ab 100644
+--- a/drivers/nvdimm/pmem.c
++++ b/drivers/nvdimm/pmem.c
+@@ -202,7 +202,7 @@ static void pmem_submit_bio(struct bio *bio)
+ 	int ret = 0;
+ 	blk_status_t rc = 0;
+ 	bool do_acct;
+-	unsigned long start;
++	u64 start;
+ 	struct bio_vec bvec;
+ 	struct bvec_iter iter;
+ 	struct pmem_device *pmem = bio->bi_bdev->bd_disk->private_data;
+diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+index 99be590f952f..d3386ac3b470 100644
+--- a/include/linux/blk_types.h
++++ b/include/linux/blk_types.h
+@@ -41,7 +41,7 @@ struct block_device {
+ 	sector_t		bd_start_sect;
+ 	sector_t		bd_nr_sectors;
+ 	struct disk_stats __percpu *bd_stats;
+-	unsigned long		bd_stamp;
++	u64			bd_stamp;
+ 	bool			bd_read_only;	/* read-only policy */
+ 	dev_t			bd_dev;
+ 	atomic_t		bd_openers;
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 2db2ad72af0f..ca94d690d292 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -1433,14 +1433,14 @@ static inline void blk_wake_io_task(struct task_struct *waiter)
+ 		wake_up_process(waiter);
+ }
+ 
+-unsigned long bdev_start_io_acct(struct block_device *bdev,
++u64 bdev_start_io_acct(struct block_device *bdev,
+ 				 unsigned int sectors, enum req_op op,
+-				 unsigned long start_time);
++				 u64 start_time);
+ void bdev_end_io_acct(struct block_device *bdev, enum req_op op,
+-		unsigned long start_time);
++		u64 start_time);
+ 
+-unsigned long bio_start_io_acct(struct bio *bio);
+-void bio_end_io_acct_remapped(struct bio *bio, unsigned long start_time,
++u64 bio_start_io_acct(struct bio *bio);
++void bio_end_io_acct_remapped(struct bio *bio, u64 start_time,
+ 		struct block_device *orig_bdev);
+ 
+ /**
+@@ -1448,7 +1448,7 @@ void bio_end_io_acct_remapped(struct bio *bio, unsigned long start_time,
+  * @bio:	bio to end account for
+  * @start_time:	start time returned by bio_start_io_acct()
+  */
+-static inline void bio_end_io_acct(struct bio *bio, unsigned long start_time)
++static inline void bio_end_io_acct(struct bio *bio, u64 start_time)
+ {
+ 	return bio_end_io_acct_remapped(bio, start_time, bio->bi_bdev);
+ }
+diff --git a/include/linux/part_stat.h b/include/linux/part_stat.h
+index abeba356bc3f..85c50235693c 100644
+--- a/include/linux/part_stat.h
++++ b/include/linux/part_stat.h
+@@ -10,7 +10,7 @@ struct disk_stats {
+ 	unsigned long sectors[NR_STAT_GROUPS];
+ 	unsigned long ios[NR_STAT_GROUPS];
+ 	unsigned long merges[NR_STAT_GROUPS];
+-	unsigned long io_ticks;
++	u64 io_ticks;
+ 	local_t in_flight[2];
+ };
+ 
+-- 
+2.31.1
 
-
-> +
->   	/*
->   	 * If we're doing cache flushes (either "always" or "cond")
->   	 * we will do one whenever the guest does a vmlaunch/vmresume.
-> @@ -1657,6 +1668,9 @@ static int kvm_get_msr_feature(struct kvm_msr_entry *msr)
->   	case MSR_IA32_UCODE_REV:
->   		rdmsrl_safe(msr->index, &msr->data);
->   		break;
-> +	case MSR_VIRTUAL_ENUMERATION:
-> +		msr->data = VIRT_ENUM_MITIGATION_CTRL_SUPPORT;
-
-
-Need to check bit 63 of host MSR_ARCH_CAPABILITIES before expose the 
-feature.
-
-
-> +		break;
->   	default:
->   		return static_call(kvm_x86_get_msr_feature)(msr);
->   	}
