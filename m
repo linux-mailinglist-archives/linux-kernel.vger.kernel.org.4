@@ -2,140 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD536653441
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B0F653442
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 17:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbiLUQn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 11:43:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S234650AbiLUQoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 11:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLUQnz (ORCPT
+        with ESMTP id S234634AbiLUQn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 11:43:55 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225E41B1C3;
-        Wed, 21 Dec 2022 08:43:54 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id a19so16271035ljk.0;
-        Wed, 21 Dec 2022 08:43:54 -0800 (PST)
+        Wed, 21 Dec 2022 11:43:57 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E6C24091
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:43:56 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id t17so38225254eju.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 08:43:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oULZCgNbfWj4m4caq/a2lcpegq9TrbPJmjWNoed3b4c=;
-        b=ckXHwxcWGvFJKFJLqgwogTI0tRtuokJ4jc0TkxVUcwbJdle/YLQSB+m6Nx7uKmF55t
-         OX4N4uD7MSidYOHOFbOj/u7RCpyUJplJcignTSq590QrxQsDQoW+gQigUTm0efCidrol
-         ZJmgznmK3zsH5HEjm1aNOYEECaxRAitOT+g3qob14vx8f6BdelScV6dRRPoD4vrLrbyr
-         DXTVYHyH/4EhVnmEHY57vxTwLaKmwOM7XlswzKsGP2TmMTyVS6L/4J83GmN0PT0TciO+
-         Nd3L4TIVpFq7ix4SyY7RU82XQ+NtzIlgLn3CrFg4Ousfmrg5dSbb1B8mvgwtlPmRjS2W
-         n7EQ==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b6ICykQPN4FWYe26rm3myJiY8Og6Xjh6UqIQ4+3pT6M=;
+        b=fvqr+Tt94mw0fBiJlvT0zP62QSQdIApdpuPom/2zpbT5xnaDczTj0eM6dkmChablWs
+         pG58Sq/Hbdq5LPgWoepJaeyOgySi+Ah7Tf6R547FWMrvA5CUOdCX07YyX6opyZPll0z+
+         YmIaZpKWs1u1fhOkfzQwAhrdfRzL5rlVsVrMOa6ngc9J2RtEhsWS89LkMkhE75JmBPDF
+         W62n7owzHummK20AwwsSH0clysC0rUOz89nxX4qOCVfS+scGYxaDz3EmGTSuet2Y9Ehg
+         zBWfyGFJBqhODk82rM/y3UWamtq3ZtB4iG8cs1omqSuKr5RZeccZocS7GiqClIPIbj9I
+         4nog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oULZCgNbfWj4m4caq/a2lcpegq9TrbPJmjWNoed3b4c=;
-        b=b8GHjwtwveeodTL/BTNLWJJ8Eq4HFBLwdzYfKGZrdl7lO0xaC7y0ttjQosKVWFuYg7
-         5AsOUWq/+Y5EQ7P6XOu/GTSYNG8JQuyBRkDs10+FgSHv5Y6Uiyou05H+quDhakmU5v9+
-         rj9wwn2mGnbnigwvEYs3MVcsSrJty6EsuQ/iLgmIIqoYQmagOwvBlBdoA/x9ZqjCd8OF
-         dcOs63QJlwhBnrC9XDypLDQjMjl3NaE7q7+ox5vl30lZLnCdVq11Sp0yrEOcyZ/tdQ7m
-         btvUBjTNuASjNDZfouR2SM4Vh4Vgki3ub2DUceL41OHroNcZcfYvzo14LaW5HpnhguN+
-         PBew==
-X-Gm-Message-State: AFqh2kpmDf/DIRl2/8uHf+/AC2GPQJhHu6YFi8My7SC/7+0b4jnHNGh8
-        NESZXTlBsP4QQPea3COBUsc=
-X-Google-Smtp-Source: AMrXdXueErfqKFW+4DkNSwLM3/joF4A+AhmFUIqWH4pitUGqS/JT46+9Aan6tuSebT77hEiNlFD75Q==
-X-Received: by 2002:a05:651c:19a8:b0:277:edc:d288 with SMTP id bx40-20020a05651c19a800b002770edcd288mr2713181ljb.1.1671641032414;
-        Wed, 21 Dec 2022 08:43:52 -0800 (PST)
-Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id h3-20020a05651c124300b00279cf45a02asm1382048ljh.132.2022.12.21.08.43.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 08:43:51 -0800 (PST)
-Message-ID: <d2c4c6fc-c432-d122-1e90-3e3ef96eed72@gmail.com>
-Date:   Wed, 21 Dec 2022 19:43:44 +0300
+        bh=b6ICykQPN4FWYe26rm3myJiY8Og6Xjh6UqIQ4+3pT6M=;
+        b=RBJXswF2JHVdgN6WP/ffO3BC0gzCV2+BXcw9eE6iOl9IF2gnLBttU8+/eLsCL3YMPL
+         5lLR/5s7YvayplVkfnsRxIMvz6JxZfEQcZ3Lesw0sUZ24DYgo6n31f01kOKEIPy5fDWT
+         dhNgupW7fk+0g3ec9ny15siIYCkAiTEr8seuVxCiYEMWwyPqjVQIE2UcMfedWitRFo6X
+         d+vEUSRQ6poVLQgrFQp0XGFv7Fi4ph3LGW3FA1Dw0upKGAB+MHtx0Vo2lpWx4Js0hKWK
+         /Jh57sI5QbT+GaF0IIr9aryKHSBs4YfDhkTby8mu9qs+DLoXWuNjRjsqsUOtGMIs4sbN
+         Uk2A==
+X-Gm-Message-State: AFqh2kof82RbwbXl4rubypmyq1hPH3NlOHKLWHMrPkxNK5dNH8G8AMpP
+        Od0Cl83xxFsnW2BNF5UPkKImlPuU3vYDCm4H8AU=
+X-Google-Smtp-Source: AMrXdXs1Oh0Oq8ZfZ9IOqRvATBJe3v/KKqNbCcYWUOmKdQaiScpLbBttmaRM/rGEVCvTiUMS2PrijtiRuofHLS/Ma+U=
+X-Received: by 2002:a17:906:3ec6:b0:7c1:2c5c:c3ca with SMTP id
+ d6-20020a1709063ec600b007c12c5cc3camr240074ejj.366.1671641035351; Wed, 21 Dec
+ 2022 08:43:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
- <4d562b75-854d-1997-8969-e7ef222e4e37@gmail.com>
- <298fcaca-c708-5d68-95d6-51673f7a2174@nvidia.com>
-Content-Language: en-US
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <298fcaca-c708-5d68-95d6-51673f7a2174@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a05:7208:341:b0:5e:e736:966f with HTTP; Wed, 21 Dec 2022
+ 08:43:54 -0800 (PST)
+Reply-To: canyeu298@gmail.com
+From:   Can yeu <rm9831982@gmail.com>
+Date:   Wed, 21 Dec 2022 17:43:54 +0100
+Message-ID: <CACF1i3jkC6Zso8QFooR1e=bVhX14Cpg9PsrCXrv8i7SkpuzKgQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-21.12.2022 12:35, Sumit Gupta пишет:
-> 
-> 
-> On 20/12/22 23:40, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> 20.12.2022 19:02, Sumit Gupta пишет:
->>> +static int tegra_emc_icc_get_init_bw(struct icc_node *node, u32
->>> *avg, u32 *peak)
->>> +{
->>> +     *avg = 0;
->>> +     *peak = 0;
->>> +
->>> +     return 0;
->>> +}
->>
->> Looks wrong, you should add ICC support to all the drivers first and
->> only then enable ICC. I think you added this init_bw() to work around
->> the fact that ICC isn't supported by T234 drivers.
-> 
-> If get_bw hook is not added then max freq is set due to 'INT_MAX' below.
-> 
->  void icc_node_add(struct icc_node *node, struct icc_provider *provider)
->  {
->    ....
->    /* get the initial bandwidth values and sync them with hardware */
->    if (provider->get_bw) {
->          provider->get_bw(node, &node->init_avg, &node->init_peak);
->    } else {
->          node->init_avg = INT_MAX;
->          node->init_peak = INT_MAX;
->  }
-> 
-> So, will have to add the empty functions at least.
-> 
->  static int tegra_emc_icc_get_init_bw(struct icc_node *node, u32 *avg,
-> u32 *peak)
->  {
-> -       *avg = 0;
-> -       *peak = 0;
-> -
->         return 0;
->  }
-> 
-> Support to all the client drivers can't be added at once as there are
-> many drivers all with different requirements and handling. This patch
-> series is the beginning to add the basic interconnect support in new
-> Tegra SoC's. Support for more clients will be added later one by one or
-> in batch.
+-- 
+Dear friend,
 
-This means that bandwidth management isn't working properly. You should
-leave the freq to INT_MAX and fix the missing integer overflows in the
-code if any, or read out the BW from FW.
+I have an important message that I want to discuss with you.
 
-Once you'll enable ICC for all drivers, it will start working.
+Please accept my sincere greetings
 
+Mrs Can Yeu
