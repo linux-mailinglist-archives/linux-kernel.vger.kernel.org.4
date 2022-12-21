@@ -2,74 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24ECC6536A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 19:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5100D653697
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 19:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234949AbiLUSuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 13:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
+        id S234960AbiLUSvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 13:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234920AbiLUSuT (ORCPT
+        with ESMTP id S235008AbiLUSuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 13:50:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BCF26AB6;
-        Wed, 21 Dec 2022 10:50:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1030B81BFC;
-        Wed, 21 Dec 2022 18:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7ECA8C433F0;
-        Wed, 21 Dec 2022 18:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671648615;
-        bh=HJAZdblItd5twkTV+6z8m0BTBiFhMx2rWYzmImr2nYw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=eMvznkWUCvfISPcLR6PVFQp/lxffSNqcU7MN9CeD8AC5rIdBoGSYE9G8hYJMeByDG
-         0lSoD0y5DWRIVBRPU11oNN3Iy5TC/kW7dp7Nn957TqmDxJPUzGqxOf/K8XsAuIxZzb
-         wQPeeqLwpUtAn/tf0lJCqas8zQnl3WxKysF0h6/0lsqOYvSAg/q7UsEZwoWUJ6l2AN
-         nUEKkprrBdf6pJv+u0tKxOcvAAJu+NuWZzHxZzx1n6Xr7d2038TmojfpQ7O/RMnmJS
-         cbAIhAbJl5B8lD5/GMYcYUzK2/DQcvVTOCBRVAjNwi0qN7H2gpu8Xj7NYLELv0jm+Z
-         5kN+3QKheTSug==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6A128C43141;
-        Wed, 21 Dec 2022 18:50:15 +0000 (UTC)
-Subject: Re: [GIT PULL] smb3 client fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mupDphsriFvcC_Hh0dWaDWdyAKNk1xKwEts7mfm3K5ESw@mail.gmail.com>
-References: <CAH2r5mupDphsriFvcC_Hh0dWaDWdyAKNk1xKwEts7mfm3K5ESw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mupDphsriFvcC_Hh0dWaDWdyAKNk1xKwEts7mfm3K5ESw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/6.2-rc-smb3-client-fixes-part2
-X-PR-Tracked-Commit-Id: aacfc939cc42293fbcfe113040b4e8abaef68429
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0a924817d2ed9396401e0557c6134276d2e26382
-Message-Id: <167164861543.27828.16700385442452255152.pr-tracker-bot@kernel.org>
-Date:   Wed, 21 Dec 2022 18:50:15 +0000
-To:     Steve French <smfrench@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Paulo Alcantara <pc@cjr.nz>, CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Dec 2022 13:50:44 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B4226549;
+        Wed, 21 Dec 2022 10:50:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671648634; x=1703184634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z01BVsejbngTM6ruRmidtKJYXyXGIth2OroyVk1DGBk=;
+  b=hrvHIUU3/2K7c3DF4f1EFgOsTUesWCoGp14cWmIiGP0plC/2cc2t6Xnb
+   j7DWxg3Vsl2JPQETTSvhj953mhDw+SIS8cpzCtIB5+fM+cFBJzb8us9Hq
+   gNY/Cif9BupG3lXbz1rPIpu1w9DtTUVskTrg/qMaUsCh8EqlCFu8McmyM
+   KBAl8EzvbR6KetrLv/wKvcvb9yaIhCrsqMzMsMHrj1wJbXkRm4n4PxS5Q
+   cf4vuy1CtldZsBl3s1d6bqwye4VfmTFo92IPeqNNxPNfhVq5iTv6Qi8cO
+   +HZq0J1ZF4oPim9I7Q/AAiCfmcJngPdGlXzWh8jDptaONKvOzTX/jYCKH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="319999393"
+X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
+   d="scan'208";a="319999393"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 10:50:34 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="653595156"
+X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
+   d="scan'208";a="653595156"
+Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 10:50:31 -0800
+Date:   Wed, 21 Dec 2022 19:50:23 +0100
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Krzysztof Halasa <khalasa@piap.pl>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khc@pm.waw.pl>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] ixp4xx_eth: Fix an error handling path in
+ ixp4xx_eth_probe()
+Message-ID: <Y6NVb8igxFCwwdw5@localhost.localdomain>
+References: <3ab37c3934c99066a124f99e73c0fc077fcb69b4.1671607040.git.christophe.jaillet@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ab37c3934c99066a124f99e73c0fc077fcb69b4.1671607040.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 20 Dec 2022 15:49:40 -0600:
+On Wed, Dec 21, 2022 at 08:17:52AM +0100, Christophe JAILLET wrote:
+> If an error occurs after a successful ixp4xx_mdio_register() call, it
+> should be undone by a corresponding ixp4xx_mdio_remove().
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/6.2-rc-smb3-client-fixes-part2
+What about error when mdio_bus is 0? It means that mdio_register can
+return no error, but sth happen and there is no need to call mdio_remove
+in this case?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0a924817d2ed9396401e0557c6134276d2e26382
+I mean:
+ /* If the instance with the MDIO bus has not yet appeared,
+  * defer probing until it gets probed.
+  */
+  if (!mdio_bus)
+	return -EPROBE_DEFER;
+> 
+> Add the missing call in the error handling path, as already done in the
+> remove function.
+> 
+> Fixes: 2098c18d6cf6 ("IXP4xx: Add PHYLIB support to Ethernet driver.")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/net/ethernet/xscale/ixp4xx_eth.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/xscale/ixp4xx_eth.c b/drivers/net/ethernet/xscale/ixp4xx_eth.c
+> index 3b0c5f177447..007d68b385a5 100644
+> --- a/drivers/net/ethernet/xscale/ixp4xx_eth.c
+> +++ b/drivers/net/ethernet/xscale/ixp4xx_eth.c
+> @@ -1490,8 +1490,10 @@ static int ixp4xx_eth_probe(struct platform_device *pdev)
+>  
+>  	netif_napi_add_weight(ndev, &port->napi, eth_poll, NAPI_WEIGHT);
+netif_napi_add_weight() doesn't need to be unrolled in case of error
+(call netif_napi_del() or something)?
 
-Thank you!
+Thanks
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+>  
+> -	if (!(port->npe = npe_request(NPE_ID(port->id))))
+> -		return -EIO;
+> +	if (!(port->npe = npe_request(NPE_ID(port->id)))) {
+> +		err = -EIO;
+> +		goto err_remove_mdio;
+> +	}
+>  
+>  	port->plat = plat;
+>  	npe_port_tab[NPE_ID(port->id)] = port;
+> @@ -1530,6 +1532,8 @@ static int ixp4xx_eth_probe(struct platform_device *pdev)
+>  err_free_mem:
+>  	npe_port_tab[NPE_ID(port->id)] = NULL;
+>  	npe_release(port->npe);
+> +err_remove_mdio:
+> +	ixp4xx_mdio_remove();
+>  	return err;
+>  }
+>  
+> -- 
+> 2.34.1
+> 
