@@ -2,72 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E75652E2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE70652E4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 10:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbiLUJEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 04:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S234474AbiLUJPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 04:15:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLUJER (ORCPT
+        with ESMTP id S234411AbiLUJPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 04:04:17 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB21B9FF6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:04:16 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id r6-20020a92cd86000000b00304b2d1c2d7so9736169ilb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:04:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ia4dJITgQv0bYAFEjbhJvQ4iASXrHbDprdY2PuEPXho=;
-        b=xNHT/uMm33D3qvB4uxOrQ6OgV4JuroGIub18x2e2hpIXfQxWgQTv3/LZXSCdeO5mgB
-         S/NbiffEte0qKy41SVWwAxwJteAOukOeKhQ9dhkQMWy993D7/gsOLVzqXEchSSEtADm0
-         GhDPR5GQTVHQIW//wf1oKErmmEZHYwyI9LqfEbyb82rnNW2BwQSD9vtq9MWVZ3NHHvfM
-         nUHaOgGpA8hccTj/2sprzOyPWM5/rMytTzzfnmLjOuHCbOGJGFTk2ZwsJu/BadcrFodM
-         sCGXsKEBEAVjfQhDHw7qab2R04zLZwzUNja5gdL9LVCGUwR96Y8xc7buH+1oAe3H+JH5
-         M/Sg==
-X-Gm-Message-State: AFqh2kojpnyj+vU1Thm4kZLFlhFjw9znHDpSSQe+guqMX9iJoWN0lfn+
-        VIPNlWfzeXk74iucgqmkOt1GaMAkP4X78xYkNqCyTOGdiVf4
-X-Google-Smtp-Source: AMrXdXtMpTcOIxU50ZfMZW6MV95T7PVHS6tNn/AnpqOhH6B0O2gJj3giuH3QVrwkD8QOaLdzrJfZOldbg/Mz/O/jDq53ZWc3alZ8
+        Wed, 21 Dec 2022 04:15:34 -0500
+X-Greylist: delayed 579 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Dec 2022 01:15:32 PST
+Received: from mail.svorkabrattegg.com (mail.svorkabrattegg.com [51.38.115.213])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344831DB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 01:15:32 -0800 (PST)
+Received: by mail.svorkabrattegg.com (Postfix, from userid 1002)
+        id AAC4CA29F8; Wed, 21 Dec 2022 09:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=svorkabrattegg.com;
+        s=mail; t=1671613551;
+        bh=Y+XRYQY8ltLtFzls3R7OdDHLHuCDiF1fyvM1egRuKlc=;
+        h=Date:From:To:Subject:From;
+        b=TRemosxjK7GqtpiB8i/3xbQqOyuFdCNXUkhdtzdG7dg8ivwMm00Bb5ERVP1AKHQLp
+         u9nC6wyozYkDh3byPBa0GXqv/rlHI5yxP+vRIJ3EePH0lEQTJ2Jcpd0boh/Z7OwFEG
+         7vFv9LA8lF4TFlGykxlrIouxdV8zC0MfVJeqzjvjQD2vnkFHJH6DYptajS9rvtfsXT
+         GLKLJM8EKzVhnwlJakiuQZ9rQZjdijIOLdiaKccL97+9ZmCoSO5+NWHEvH6HDogZ7S
+         3fC/l9MgpoDMZytsto9roJB6FxvgubQBbcp3ivqvl5i8JXs/9j6puFl12wH5wqc+bV
+         LnFzf5CxQBmZg==
+Received: by mail.svorkabrattegg.com for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 09:05:49 GMT
+Message-ID: <20221221074500-0.1.7y.heuq.0.sbdvoejbuk@svorkabrattegg.com>
+Date:   Wed, 21 Dec 2022 09:05:49 GMT
+From:   "Timeo Moreau" <timeo.moreau@svorkabrattegg.com>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Livraison d'emballage
+X-Mailer: mail.svorkabrattegg.com
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3465:b0:38a:66d5:f599 with SMTP id
- q37-20020a056638346500b0038a66d5f599mr62164jav.274.1671613456040; Wed, 21 Dec
- 2022 01:04:16 -0800 (PST)
-Date:   Wed, 21 Dec 2022 01:04:16 -0800
-In-Reply-To: <20221221072129.1698-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003fcf9105f052d60d@google.com>
-Subject: Re: [syzbot] WARNING in io_sync_cancel
-From:   syzbot <syzbot+7df055631cd1be4586fd@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: svorkabrattegg.com]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [51.38.115.213 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: svorkabrattegg.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.8 FROM_FMBLA_NEWDOM28 From domain was registered in last 14-28
+        *      days
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Bonjour,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Je vous contacte au nom d'une entreprise qui a de nombreuses ann=C3=A9es =
+d'exp=C3=A9rience dans l'industrie de l'emballage.
 
-Reported-and-tested-by: syzbot+7df055631cd1be4586fd@syzkaller.appspotmail.com
+Nous produisons des mat=C3=A9riaux d'emballage en feuille modernes, impri=
+m=C3=A9s en technologie flexographique.
 
-Tested on:
+Nous ex=C3=A9cutons les commandes en coop=C3=A9ration avec les fournisseu=
+rs de mati=C3=A8res premi=C3=A8res les plus importants et r=C3=A9put=C3=A9=
+s, garantissant une qualit=C3=A9 stable et reproductible des produits pro=
+pos=C3=A9s.
 
-commit:         b6bb9676 Merge tag 'm68knommu-for-v6.2' of git://git.k..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=12e09a08480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8ca07260bb631fb4
-dashboard link: https://syzkaller.appspot.com/bug?extid=7df055631cd1be4586fd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=17a06d8b880000
+Les produits dans nos emballages sont disponibles dans les plus grandes c=
+ha=C3=AEnes de magasins, ce qui est la meilleure preuve de la haute quali=
+t=C3=A9 de nos emballages.
 
-Note: testing is done by a robot and is best-effort only.
+Souhaitez-vous parler d'opportunit=C3=A9s de coop=C3=A9ration?
+
+
+Timeo Moreau
