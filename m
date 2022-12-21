@@ -2,251 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32894653849
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 22:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7CA653852
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 22:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiLUVnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 16:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S234710AbiLUV5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 16:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiLUVm7 (ORCPT
+        with ESMTP id S229968AbiLUV5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 16:42:59 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAAF9FF7;
-        Wed, 21 Dec 2022 13:42:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671658976; x=1703194976;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=TvlUnu3C6op7wG4ST++somBZ6d6xEHGhdoKUuYrzNgA=;
-  b=lZd1+61z+PF6mSjWb/VsbvqMLuqVte+QcyXE45kcff0kSo+V9qx+MIFL
-   TnLQlTSr9i29ey28P9R/2Jxss6uWazCHtvx2RdSkPCIHZj7fU5mbGzBnb
-   UlUtvcQndnQF6moukC0T4zKiDO7F/CjkxyZp5aqY9YCxm2hskB5sv016d
-   4tAY89A123/znADYZJObYWdUw2mq4YQKACnu60e8weDETs6+X1XdD/KtC
-   hfcpW0sC5akvH238spn4raCX2jtP00w0G54YBqIcP8Bg4v/L31pzRzl58
-   L2INLCvCSSe6gshKsrYd0PX4ukMaQuq4OS15oPby87E2mLs6kUQFQl/ld
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="317617063"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="317617063"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 13:42:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="714942331"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="714942331"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Dec 2022 13:42:54 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 21 Dec 2022 13:42:54 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 21 Dec 2022 13:42:54 -0800
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.42) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 21 Dec 2022 13:42:52 -0800
+        Wed, 21 Dec 2022 16:57:41 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2043.outbound.protection.outlook.com [40.107.220.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5741A38F;
+        Wed, 21 Dec 2022 13:57:38 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hOahL5+WYVgR4fa0ucreSSk6+ExrLZMzPPTLPfzZcv07nmoteb2GWssplDRPAy3WRABa0+A+tlKUwI4D7/APK4Qbe9l4LOR7BdIe7zug2qoHuC0fPbPcwCU5b6iyOSvC/oqmYKfVL8mBKi5hGoPCsbHcidHJPNY5JYdPQvS6/xMEoRM5CgHTT3hPm3HdsR++tOATLPfSjzAIP1hJ3V+wErfQP8JMt1FtNyToUh2z7Yp2Xs8zYrUmHLC+HWj8zMFdGSmFu0CdP6zwiUbsVBgmldNidxqrc2VJlGpMIKRRUnL1Gx3mUIrzCUVZ3kSbQbcrxgz+DtmzdBpkARzfB75Nkg==
+ b=cOi/nABSQCLReHqylRiBd249T1UG9CfW7uVZdR46HLoZVFePeizKx9XJuTmwmL4OTUF2uyqlSZJtKpZTMT+tQmk7Il7beYAKTrNYh22nyiIxg2iLWDC1Z1hkkO8cVRkHkjEtU+EOus38HdiGH6Nu2RUFSjBWCCfKOY041ZRwa020ieL6is0dewC/nBx5DK6wPEKftBBtWyaZDewMbZ4sl76kehgic74uK+pHDXUfQW3mfbZE6mc6XF8ApMrZ7QzcG0sr8hgj+vTJSuEiVGgtxUoyHXr5letIXRZtgfDj9HHiXMSi5YJEgqGh4S6YXfRwN3fM1tDqV5mlsw2a20JgkA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TvlUnu3C6op7wG4ST++somBZ6d6xEHGhdoKUuYrzNgA=;
- b=dGSC2/7Epk4TWj8o7JAqVixuAvRsdp0MwiUG2Lvh1L50CLScyx80Ba7VYjfmUKxCJgYVEQ/xUqbhmgq0JRiQLllXktEFRKYOwmvwT3PtIWM3zFTXona0iGSwiOY0SPUGl8+929POK8Az8KCjh0sMyQLyRCDTjkxlwWFqShodWZS7kmH2tKMdqyG6pZJpVfECtyEDBaOT8nQSgSDutVR0KfLiwqT9X74tFtC90I8etCImd2DMUunVZGT2RytvDPflc/So3O6/5Cl73wl/81KEDJcXEGdxf8uuQ7770b3euoOW7hkm1yOc1f+GzCOjx5h4H8v3T8wQjTgujjBSHkbn6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by MW4PR11MB7102.namprd11.prod.outlook.com (2603:10b6:303:22b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Wed, 21 Dec
- 2022 21:42:50 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::7ed5:a749:7b4f:ceff]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::7ed5:a749:7b4f:ceff%5]) with mapi id 15.20.5924.016; Wed, 21 Dec 2022
- 21:42:50 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "bp@alien8.de" <bp@alien8.de>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v4 07/39] x86: Add user control-protection fault handler
-Thread-Topic: [PATCH v4 07/39] x86: Add user control-protection fault handler
-Thread-Index: AQHZBq9UGJ4pSWbilUqMOVDoCgC2J653EFAAgACLOQCAAKjLAIAAuKSA
-Date:   Wed, 21 Dec 2022 21:42:50 +0000
-Message-ID: <0e529db5f814ef7af7b197962c752a1454510a49.camel@intel.com>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
-         <20221203003606.6838-8-rick.p.edgecombe@intel.com>
-         <Y6HglBhrccduDTQA@zn.tnic>
-         <3aaf1b0d67492415acb9b3d06bb97e916cb7b77a.camel@intel.com>
-         <Y6Li9oIl/tK96KUf@zn.tnic>
-In-Reply-To: <Y6Li9oIl/tK96KUf@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.38.4 (3.38.4-1.fc33) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|MW4PR11MB7102:EE_
-x-ms-office365-filtering-correlation-id: a9f12bed-1c68-443e-dd0c-08dae39c4ecf
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2D9lnY+zboBODME/SkjiEvRx8i1LP/7oOcLSMz9d9RFYB4Akb8fav2u2qcRy+lMfTRO5G7jt5ezB68hSie8GlGnfvZ0UV2XchXbP6diGFI1Azb6JvJp1iedH+tBzk3mV+X1P77kZ9zX3mfnfC4JZyAUGCNOLhfvfwa+SzZEaNRjWQ/DX1vQ/BelIx4VRy3a0D/GMd1I0074PvnkpBrYXSXfLzQwq1S/1bqgIuOfrI8We/Xe46PCZHBlFtwpe9P+/fGO4k2xICdA/mXQ+FOjRLxdjNyR0wZY4zDHu3Wo/vYFyw9P2sjIkJXtFChExvGpdLbBCLD6fkZJHkLJNXuYpmb3kgmvlfmVRTEwf6PNpnd4UIDWoH2EWsVaeAeMKB01wS57dVlGjX+/odwB5BPjM5xltOk13fLjRh5rukFCbs6rNQCEuMEgbsOKbe+8ypsn0A47oC6GHZ2k6bMKq0nBJRGIUzflFzqDxr8Zbf2qA2wwumSIzeXTCNG9WegGMhYuBOB0eTBAKO4IT4fRdGCRYs9O2IiWqK4JgswjpXa1mlYYbddnuPb3fz9zCk/n28uiWTmceM/CMMHhMavGZbkgwqJVaw8uqb/zHSZyb5iZDFZnk2YojXH87YI3Be+nJolAe4APkUc43SUqD0Z/5MCnLPCCkSOqyC3sn18SHiFoU00dZPE9CBO1svweHi/jYlJHz1IPkSKtOoWIO4MoymIzsAQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(136003)(39860400002)(376002)(366004)(451199015)(64756008)(2616005)(66946007)(66446008)(4326008)(91956017)(76116006)(66476007)(8676002)(38070700005)(7416002)(2906002)(4001150100001)(316002)(5660300002)(7406005)(86362001)(54906003)(41300700001)(82960400001)(38100700002)(122000001)(6916009)(8936002)(36756003)(6512007)(83380400001)(478600001)(71200400001)(186003)(6486002)(66899015)(26005)(66556008)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?enBncXZ0Rk54L0RqWHdyT1UvY29YV2VKV1JleWNkUVhKUlNZd01aWkJ0NXRL?=
- =?utf-8?B?YWVDUVphWS9uRXVSclVVWEJoUUJtaE5TWWhKNnMwMTFWSHJqdDlJcW92MUE3?=
- =?utf-8?B?ZzJDWUlIRW4yb1EreXppZnBPR0RTVUUzT1NidDFzeGt6VHg5KzdVbkNRV0I4?=
- =?utf-8?B?YUhhMHNCT1NTdHI5TktqV2krV3NSbEFmN1h4WUMyRXBzU2U4SGdNbnc1cU8v?=
- =?utf-8?B?M1g3WnhsMUlmWDFSR25jNDhoeGE1NFpzUUJXRklISXJTSUVSSDlkK3hLOHkr?=
- =?utf-8?B?NUVQU254TFo4QVpBL3FFWVBFVkt6aGdiWFI1Z21Lakdka3V6WWxmckZOSHZ5?=
- =?utf-8?B?UHNNdlIrZjFENUdrV2cyT2pjSlpidlZJTk42aHY0UGQ5ZlVKT3laaDlsVkR3?=
- =?utf-8?B?a3pISVp0czdWbDRoSVJOYVlDTXkrWnRYKys1dE5tQlEva01vc1pVSWJ3VjdB?=
- =?utf-8?B?MGh0aG5lcmUyM2g0UkVCSU5BamFlcU5LOS9OSkJCUlNReDY2MTBYMEdMM1h3?=
- =?utf-8?B?NWM3QVRHZ1llUXVYWHNucnpGKzd4QXZsdkJNT0crd05pREdwNWRXalRZUUpk?=
- =?utf-8?B?WUM5RE11cE5qa2h2MUU4eU4zWlRrb1JvMWVrRUUyV1V1aS9qRDk3VVA0MDR0?=
- =?utf-8?B?NEJiSmYxcmphdGhIWkpISG4veWgwd2ZlMVNGWmh3R1hKdE1aUGUrcjRVbjE1?=
- =?utf-8?B?dkJkNzA2VmJuSC95TDNsejd6eUxFVVFpS1c0aTJEQ3YyQVpXb3diWStmMHdk?=
- =?utf-8?B?VnRZeitYdmkzU0hEOU1wYVc0Mld2Y0JBZkZhb1dTUzNtUFlvbXF4eDBac1Rx?=
- =?utf-8?B?Ny9SNzlsZ3JzQU0yYjVEOEdJU0YvVklCR1RkNjN6Z0RRTTBPZFFHZWVDL2hD?=
- =?utf-8?B?N3paZTREdVVrQ0w0TEg1Qm5EaXVmdjNPRXp4Tm5oOWRVZDdJZlVGUnE0azRR?=
- =?utf-8?B?MWwxeFhzWjlhaVVKWWM4TFBnd1Eva0JtNmh3T1RMUVBxQnN0OXVxY1F5VjBw?=
- =?utf-8?B?R1c5V0RHcHVqREJkcjgwNmQxc242QUc2OGVuTlBlVWRGLy9sMnEwcmtHa2xi?=
- =?utf-8?B?MElIa2NhWlNnMnJRaGxqU1duZFhaQ3NiYU5KeTQ1ZzNnOWJHREljajU0K25w?=
- =?utf-8?B?aFppNEV4YzE2LytBT3hWcXg5Z0tVd1JnSUV2VFdqemNVaHVDT0toWG5DcUQr?=
- =?utf-8?B?TzhCbGRTeXlFS0tKL3kzSmI0U0E3RUloV3pFZ24xcHBaQWZwbjJXaWtieE1U?=
- =?utf-8?B?Um82em5tdmxnaERQYU5xN2JMMG9qRzNmcFJmQmRraFdUQ2RvZlBjNWZnb21l?=
- =?utf-8?B?SGZOZ095LzZPalBPRmZraWJmNnlUVnlnRHR0TnVGNnVoSGgvS2FRT0k5UWVG?=
- =?utf-8?B?R2xxSDJ1aWcyUGhWRWtTL2haeFBBM0I0dnZ2cTZQT2EyRWVMWGhoTDZJemNu?=
- =?utf-8?B?TlBrRDk1S04zbk9KOU1aQ3d2blJEcldkMHNlcWJWZjFLeTVtYnJrclRpZ3hV?=
- =?utf-8?B?MWlDVEhYaHdtMXIwMHhCdG8xRmZsRmVWVzYrUE9BVHZpdE1QYzlnVmZJZGlo?=
- =?utf-8?B?NGV3bWxuc3I5WlRwTE5NUUNSWGE5di9sYTdsVHc4V2paemo3N1prbjNlN0pB?=
- =?utf-8?B?aHE3ekNOcHFvS0FrV0xFcGUyRnJ2L09lamIyd2lTckdSdU5Qd3djdWhaMW85?=
- =?utf-8?B?NnZncDVzTE8rRERXTkUwb3J3TVBnYmhxemtaelhqTmhzUE1xOXQ5L1FUSFZp?=
- =?utf-8?B?NkN4Y2x2RGpjQ0VoemFic0RWMDlYVmhnSURuTm1Sc1pGRTUzSWcwbkljQS9Z?=
- =?utf-8?B?L3RWdHd6WHl1TEFYcjVwaFl3OTFDNXFrVHRSUjQrQzdaalB6cklNM2lPSmNh?=
- =?utf-8?B?QThjU3FzRTBWUFhlZWl0YW9ReHRNR3JGMjJwaGlwSlFNVjR5MGJSWkJoU2xU?=
- =?utf-8?B?a3Fob1FyRXYxTVJjTU1aaXB4Qnl0ZXo2SGlSQTkvbEJ6QW5CWXBnUDVQWHA1?=
- =?utf-8?B?Yk5nTnpMei8raFhNY1crL3dOK1kzSDdiVHJWTGlFbTQxdlRQRXJOUUtRbjBE?=
- =?utf-8?B?K2hld1hvOG1pSWlLY2Zaa09MK3BVK0FNbUdOVEZVNmM4N0VwbHp6RmVCTHlS?=
- =?utf-8?B?OXliNTJpcUcxZmpUUUZsMmt0MjhKOTBPQlZHcWFQRTZzYlVLanM3REJaUFdK?=
- =?utf-8?Q?/s69lqEnrR0Gm6YXcKgexzA=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B6A6C1475B33EA49BC9CAA3F8DA3C5D2@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ bh=Wd4e9kSqTBmqN8/Eo18606I52UhAtJd73VDZvzthFHM=;
+ b=XxywtdE4k8lMOB1pqynQHzuaoH/DIiWtAdTXVWSzmbqhmU+jRfEBWXPlwRbWt0T3StSNrlxfdWR4ptDU2wfRPMmkw6jY5ErZ/2aXWSmfsuo5BuWTd0H5+6Vzj7FsehHJUxFUidyc6e0bYrhj54s4jNiMdKK1a7OCSxrwZo1w8F4MOH460ivohxp5neGVYghmMe5XPmesgSf3wWclfzkKGruAdALuM4+vdt+gDcBtiPRpn8+vVUHiX6Ij60u7gfo+yg1JtsuwLZcDZc8pBHDCy5x7I7Mf3Mc5dW54s6XEJpYW47d4HvK+Rt/nFfgT+oGtQwkNJrFcyFtXNZw/wTDYBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Wd4e9kSqTBmqN8/Eo18606I52UhAtJd73VDZvzthFHM=;
+ b=Z5O+VVERiZJqO7MyOGKVD/wcYU4x8BPOcE20dBp0LaYg8Hv9Fjb+klJy9ag59VBl6nijuscWZCex/LFeLsjF5lulBxsIjgpIfKiORbsXiSKmrxyfQ6FPbHP6xJC12a9SOhLU4aTlxXFtmIPFgdEDwu7vddDj02e9zMJR29PR04Wc1H6lYbZikXcUdm2EGhIQXKfzOLnNnF6ZYD+w4pWjbSMrjOlK+H5g2bNysL+WUG87V3Rd23qP7vVBcNAHSv1/6tRTFXFQYCj02Hbf0nvEqQtzpa7hBz1Izd9u6I1zXv6PU0MhnSemrMQbpd8ZCen81UqkLJM7xE0LNRBIjXDnJA==
+Received: from DM5PR07CA0099.namprd07.prod.outlook.com (2603:10b6:4:ae::28) by
+ CY5PR12MB6369.namprd12.prod.outlook.com (2603:10b6:930:21::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5924.16; Wed, 21 Dec 2022 21:57:36 +0000
+Received: from DS1PEPF0000E65D.namprd02.prod.outlook.com
+ (2603:10b6:4:ae:cafe::29) by DM5PR07CA0099.outlook.office365.com
+ (2603:10b6:4:ae::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.22 via Frontend
+ Transport; Wed, 21 Dec 2022 21:57:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF0000E65D.mail.protection.outlook.com (10.167.18.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.8 via Frontend Transport; Wed, 21 Dec 2022 21:57:35 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 21 Dec
+ 2022 13:57:20 -0800
+Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 21 Dec
+ 2022 13:57:19 -0800
+Message-ID: <4a7c67d5-3711-40d6-f9ac-e2f5e7099d03@nvidia.com>
+Date:   Wed, 21 Dec 2022 13:57:19 -0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9f12bed-1c68-443e-dd0c-08dae39c4ecf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Dec 2022 21:42:50.2526
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] mm: Move FOLL_* defs to mm_types.h
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "Jeff Layton" <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <2161258.1671657894@warthog.procyon.org.uk>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <2161258.1671657894@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E65D:EE_|CY5PR12MB6369:EE_
+X-MS-Office365-Filtering-Correlation-Id: 97e38452-469a-4029-668d-08dae39e5ecf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NnKQBibmvws2sHUudauC4rG9aWtekfC6mM+xywa3VAl803lSEVnwW7E5ngnRmtV8m9y8azO7TDLwBnK6KpK5wITaw9wOQs0XwtCLbomvDEIlR022evVnxwODTDC613uAKxMKFfcr6goal8U6q+2mLoh87dtKa4AYwS0ssVCCfWktoYFG6NGUDpCKh1CgSiyRvdAVUuy/75vj//PLCmfQWDt2dSPl6mxpc3qfEEA2iI41ebxzmm27yrhcxk5c7v+hoe3pi7HhA78+qEhERcP3fNOKvdKljiGZ1flo9dsFA23UqMdiWcSlqubpjaD/zfqd7s4rXgrUM5zAcG4wUrsT/JzZR9AVIMeb1V4K+zFLZozbLKCk+TpmWSXBx+PiwVvA89wqT/GqO97f2yirCsfddTwQ7gfpYybmP+0v+FTKTWZOytsA+AnWSTqgZ2EkrqxsoL92H4dG2OwJn4HlEAq1+46JeDSFieFZJHXx6iLFh02jlkX91YBxxvEyLqhMVnueMBlzPkidALBdtrzIw8cHvwIbyXqSjive06yS9vqoY+H8DQ31a2gI1Gh35rE/R7mgXjRtjPxr8MtrFHZmMdgxSJZmEHMWPE4/J6Bc6P9pozTMisutIwxvSw/5lkAp6Zr+noA9hbGOjnGXwxXLvRZETajtmCaUOVyOAfXE6jzCybLBcx8Rp/PUaimAjZ1vMJEXoxZcuISFdKxmRWFQq/HAm52ZdTUxZCvEawgTZ1ZWFveo1kPlNxH33sF9soOk5mniNZEsB0NVEnrP+ja4/zFPRIiUH0fg7N1df/JPzpMg9WPQYrT8R249lubRc58w/NcvqeutI/4Mmyhkpt3IF0A5J+x6QhQQfzZdPyZMx0hKYng=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199015)(40470700004)(36840700001)(46966006)(31686004)(36756003)(4326008)(356005)(2906002)(82740400003)(70206006)(86362001)(30864003)(70586007)(31696002)(8676002)(966005)(5660300002)(36860700001)(7636003)(83380400001)(478600001)(40460700003)(336012)(316002)(16526019)(2616005)(110136005)(16576012)(41300700001)(40480700001)(26005)(8936002)(54906003)(426003)(47076005)(82310400005)(186003)(53546011)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2022 21:57:35.9928
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oIxEhjaWS+3un1gPttK7PMrrc5j24oHM+ZrZMnqR+fgs4tzQ5zJRzWIULEWFv1LLVmjKNK20EzjAj5wICTE/5U5AF3FCEP8RifqtojMaweM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7102
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97e38452-469a-4029-668d-08dae39e5ecf
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E65D.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6369
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTEyLTIxIGF0IDExOjQxICswMTAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6
-DQo+IE9uIFdlZCwgRGVjIDIxLCAyMDIyIGF0IDEyOjM3OjUxQU0gKzAwMDAsIEVkZ2Vjb21iZSwg
-UmljayBQIHdyb3RlOg0KPiA+IFlvdSBtZWFuIGhhdmluZyBzZXBhcmF0ZSBwYXRocyBmb3Iga2Vy
-bmVsIElCVCBhbmQgdXNlciBzaGFkb3cgc3RhY2sNCj4gPiB0aGF0IGNvbXBpbGUgb3V0PyBJIGd1
-ZXNzIGl0IGNvdWxkIGp1c3QgYWxsIGJlIGluIHBsYWNlIGlmDQo+ID4gQ09ORklHX1g4Nl9DRVQg
-aXMgaW4gcGxhY2UuDQo+ID4gDQo+ID4gSSBkb24ndCBrbm93LCBJIHRob3VnaHQgaXQgd2FzIHJl
-bGF0aXZlbHkgY2xlYW4sIGJ1dCBJIGNhbiByZW1vdmUNCj4gPiBpdC4NCj4gDQo+IFllYWgsIEkn
-bSB3b25kZXJpbmcgaWYgd2UgcmVhbGx5IG5lZWQgdGhlIGlmZGVmZmVyeS4gSSBhbHdheXMNCj4g
-cXVlc3Rpb24NCj4gaWZkZWZmZXJ5IGJlY2F1c2UgaXQgaXMgYSkgdWdseSwgYikgYSBtZXNzIHRv
-IGRlYWwgd2l0aCBhbmQgaGF2aW5nIGl0DQo+IGlzDQo+IG5vdCByZWFsbHkgd29ydGggaXQuIFll
-YWgsIHdlIHNhdmUgYSBjb3VwbGUgb2YgS0JzLCBiaWcgZGVhbC4NCj4gDQo+IFdoYXQgd291bGQg
-cHJhY3RpY2FsbHkgaGFwcGVuIGlzLCBzaGFkb3cgc3RhY2sgd2lsbCBiZSBkZWZhdWx0LQ0KPiBl
-bmFibGVkDQo+IG9uIHRoZSBtYWpvcml0eSBvZiBrZXJuZWxzIG91dCB0aGVyZSAtIGRpc3RybyBv
-bmVzIC0gc28gaXQgd2lsbCBiZQ0KPiBlbmFibGVkIHByYWN0aWNhbGx5IGV2ZXJ5d2hlcmUuDQo+
-IA0KPiBBbmQgaXQnbGwgYmUgb2ZmIG9ubHkgaW4gc29tZSBzZWxmLWJ1aWx0IGtlcm5lbHMgd2hp
-Y2ggYXJlIHRoZSB2ZXJ5DQo+IHNtYWxsIG1pbm9yaXR5Lg0KPiANCj4gQW5kIGhvdyBtdWNoIGFy
-ZSB0aGUgc3BhY2Ugc2F2aW5ncyB3aXRoIHRoZSB3aG9sZSBzZXQgYXBwbGllZCwgd2l0aA0KPiBh
-bmQNCj4gd2l0aG91dCB0aGUgS2NvbmZpZyBpdGVtIGVuYWJsZWQ/IFByb2JhYmx5IG9ubHkgYSBj
-b3VwbGUgb2YgS0JzLg0KDQpPaCwgeW91IG1lYW4gdGhlIHdob2xlIEtjb25maWcgdGhpbmcuIFll
-YSwgSSBtZWFuIEkgc2VlIHRoZSBwb2ludCBhYm91dA0KdHlwaWNhbCBjb25maWdzLiBCdXQgYXQg
-bGVhc3QgQ09ORklHX1g4Nl9DRVQgc2VlbXMgY29uc2lzdGVudCB3aXRoDQpDT05GSUdfSU5URUxf
-VERYX0dVRVNULCBDT05GSUdfSU9NTVVfU1ZBLCBldGMuDQoNCldoYXQgYWJvdXQgbW92aW5nIGl0
-IG91dCBvZiB0cmFwcy5jIHRvIGEgY2V0LmMsIGxpa2UNCmV4Y192bW1fY29tbXVuaWNhdGlvbiBm
-b3IgQ09ORklHX0FNRF9NRU1fRU5DUlQ/IFRoZW4gdGhlIGluY2x1c2lvbg0KbG9naWMgbGl2ZXMg
-aW4gdGhlIGJ1aWxkIGZpbGVzLCBpbnN0ZWFkIG9mIGFuIGlmZGVmLg0KDQo+IA0KPiBBbmQgaWYg
-c28sIEknbSB0aGlua2luZyB3ZSBjb3VsZCBhdCBsZWFzdCBtYWtlIHRoZSB0cmFwcy5jIHN0dWZm
-DQo+IHVuY29uZGl0aW9uYWwgLSBpdCdsbCBiZSB0aGVyZSBidXQgd29uJ3QgcnVuLiBVbmxlc3Mg
-d2UgZ2V0IHNvbWUNCj4gd2VpcmQNCj4gI0NQIGJ1dCBpdCdsbCBiZSBjYXVnaHQgYnkgZG9fdW5l
-eHBlY3RlZF9jcCgpLg0KPiANCj4gQW5kIHlvdSBoYXZlIGZlYXR1cmUgdGVzdHMgZXZlcnl3aGVy
-ZSBzbyBpdCdzIG5vdCBsaWtlIGl0J2xsIGdldA0KPiAibWlzdXNlZCIuDQo+IA0KPiBBbmQgd2hl
-biB5b3UgZG8gdGhhdCwgeW91J2xsIGhhdmUgZXZlcnl0aGluZyBhIGxvdCBzaW1wbGVyLCBhIGxv
-dA0KPiBsZXNzDQo+IEtjb25maWcgaXRlbXMgdG8gYnVpbGQtdGVzdCBhbmQgYWxsIGdvb2QuDQo+
-IA0KPiBSaWdodD8NCj4gDQo+IE9yIGFtIEkgY29tcGxldGVseSB3YXkgb2ZmIGludG8gdGhlIHdl
-ZWRzIGhlcmUgYW5kIGFtIG1pc3NpbmcgYW4NCj4gaW1wb3J0YW50IGFzcGVjdC4uLj8NCj4gDQoN
-Ck9uZSBhc3BlY3QgdGhhdCBoYXMgY29tZSB1cCBhIGNvdXBsZSBvZiB0aW1lcywgaXMgaG93IGNs
-b3NlbHkgcmVsYXRlZA0KYWxsIHRoZXNlIENFVCBmZWF0dXJlcyBhcmUgKG9yIGFyZW4ndCkuIFNo
-YWRvdyBzdGFjayBhbmQgSUJUIGFyZSBtb3N0bHkNCnNlcGFyYXRlLCBidXQgZG8gc2hhcmUgYW4g
-eGZlYXR1cmUgYW5kIGFuIGV4Y2VwdGlvbiB0eXBlLiBTaW1pbGFybHkgZm9yDQpzdXBlcnZpc29y
-IGFuZCB1c2VyIG1vZGUgc3VwcG9ydCBmb3IgZWl0aGVyIG9mIHRoZSBDRVQgZmVhdHVyZXMuIFNv
-DQptYXliZSB0aGF0IGlzIHdoYXQgaXMgdW51c3VhbCBoZXJlLiBUaGVyZSBhcmUgc29tZSBhc3Bl
-Y3RzIHRoYXQgbWFrZQ0KdGhlbSBsb29rIGxpa2Ugc2VwYXJhdGUgZmVhdHVyZXMsIHdoaWNoIGxl
-YWRzIHBlb3BsZSB0byB0aGluayB0aGV5DQpzaG91bGQgYmUgc2VwYXJhdGUgaW4gdGhlIGNvZGUu
-IEJ1dCBhY3R1YWxseSBzZXBhcmF0aW5nIHRoZW0gbGVhZHMgdG8NCmV4Y2VzcyBpZmRlZmVyeS4N
-Cg0KVG8gbWUsIHB1dHRpbmcgdGhlIHdob2xlIGhhbmRsZXIgaW4gZXZlbiBpZiB0aGVyZSBhcmUg
-bm8gQ0VUIGZlYXR1cmVzDQpzZWVtcyBsaWtlIHRvbyBtdWNoLiBMZWF2aW5nIGl0IGluIHVuY29u
-ZGl0aW9uYWxseSBpcyBhcHBhcmVudGx5IGFsc28NCmluY29uc2lzdGVudCB3aXRoIHNvbWUgb2Yg
-dGhlIHByZXZpb3VzIHRyYXBzLmMgZGVjaXNpb25zLiBTbyBJJ2QgbGVhdmUNCkNPTkZJR19YODZf
-Q0VUIGF0IGxlYXN0IGFuZCBpdCBjYW4gaGVscCBhbnlvbmUgYnVpbGRpbmcgc3VwZXIgc3RyaXBw
-ZWQNCmRvd24ga2VybmVscy4gQnV0IEknbSBvayB3aXRoIHdoYXRldmVyIHBlb3BsZSB0aGluay4N
-Cg0K
+On 12/21/22 13:24, David Howells wrote:
+> Hi Andrew,
+> 
+> Is it too late to ask you to add this to the current merge window?  It just
+> moves the FOLL_* flags between headers, flipping the order of the banner
+> comment and the defs.
+> 
+> It did have the following attributions:
+> 
+> 	Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+> 	Reviewed-by: Christoph Hellwig <hch@lst.de>
+> 
+> but the FOLL_* flagset got altered during the merge window, so I redid the
+> patch.
+> 
+> Thanks,
+> David
+> ---
+> mm: Move FOLL_* defs to mm_types.h
+>      
+> Move FOLL_* definitions to linux/mm_types.h to make them more accessible
+> without having to drag in all of linux/mm.h and everything that drags in
+> too[1].
+
+I re-checked that everything got accurately moved. Looks good.
+
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
+> 
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: John Hubbard <jhubbard@nvidia.com>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: linux-mm@kvack.org
+> cc: linux-fsdevel@vger.kernel.org
+> Link: https://lore.kernel.org/linux-fsdevel/Y1%2FhSO+7kAJhGShG@casper.infradead.org/ [1]
+> Link: https://lore.kernel.org/r/166732025009.3186319.3402781784409891214.stgit@warthog.procyon.org.uk/ # rfc
+> Link: https://lore.kernel.org/r/166869688542.3723671.10243929000823258622.stgit@warthog.procyon.org.uk/ # rfc
+> Link: https://lore.kernel.org/r/166920902968.1461876.15991975556984309489.stgit@warthog.procyon.org.uk/ # v2
+> Link: https://lore.kernel.org/r/166997420723.9475.3907844523056304049.stgit@warthog.procyon.org.uk/ # v3
+> ---
+>   include/linux/mm.h       |   75 -----------------------------------------------
+>   include/linux/mm_types.h |   75 +++++++++++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 75 insertions(+), 75 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index f3f196e4d66d..be5edc0770ea 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3071,81 +3071,6 @@ static inline vm_fault_t vmf_error(int err)
+>   struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
+>   			 unsigned int foll_flags);
+>   
+> -#define FOLL_WRITE	0x01	/* check pte is writable */
+> -#define FOLL_TOUCH	0x02	/* mark page accessed */
+> -#define FOLL_GET	0x04	/* do get_page on page */
+> -#define FOLL_DUMP	0x08	/* give error on hole if it would be zero */
+> -#define FOLL_FORCE	0x10	/* get_user_pages read/write w/o permission */
+> -#define FOLL_NOWAIT	0x20	/* if a disk transfer is needed, start the IO
+> -				 * and return without waiting upon it */
+> -#define FOLL_NOFAULT	0x80	/* do not fault in pages */
+> -#define FOLL_HWPOISON	0x100	/* check page is hwpoisoned */
+> -#define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
+> -#define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
+> -#define FOLL_ANON	0x8000	/* don't do file mappings */
+> -#define FOLL_LONGTERM	0x10000	/* mapping lifetime is indefinite: see below */
+> -#define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
+> -#define FOLL_PIN	0x40000	/* pages must be released via unpin_user_page */
+> -#define FOLL_FAST_ONLY	0x80000	/* gup_fast: prevent fall-back to slow gup */
+> -#define FOLL_PCI_P2PDMA	0x100000 /* allow returning PCI P2PDMA pages */
+> -#define FOLL_INTERRUPTIBLE  0x200000 /* allow interrupts from generic signals */
+> -
+> -/*
+> - * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
+> - * other. Here is what they mean, and how to use them:
+> - *
+> - * FOLL_LONGTERM indicates that the page will be held for an indefinite time
+> - * period _often_ under userspace control.  This is in contrast to
+> - * iov_iter_get_pages(), whose usages are transient.
+> - *
+> - * FIXME: For pages which are part of a filesystem, mappings are subject to the
+> - * lifetime enforced by the filesystem and we need guarantees that longterm
+> - * users like RDMA and V4L2 only establish mappings which coordinate usage with
+> - * the filesystem.  Ideas for this coordination include revoking the longterm
+> - * pin, delaying writeback, bounce buffer page writeback, etc.  As FS DAX was
+> - * added after the problem with filesystems was found FS DAX VMAs are
+> - * specifically failed.  Filesystem pages are still subject to bugs and use of
+> - * FOLL_LONGTERM should be avoided on those pages.
+> - *
+> - * FIXME: Also NOTE that FOLL_LONGTERM is not supported in every GUP call.
+> - * Currently only get_user_pages() and get_user_pages_fast() support this flag
+> - * and calls to get_user_pages_[un]locked are specifically not allowed.  This
+> - * is due to an incompatibility with the FS DAX check and
+> - * FAULT_FLAG_ALLOW_RETRY.
+> - *
+> - * In the CMA case: long term pins in a CMA region would unnecessarily fragment
+> - * that region.  And so, CMA attempts to migrate the page before pinning, when
+> - * FOLL_LONGTERM is specified.
+> - *
+> - * FOLL_PIN indicates that a special kind of tracking (not just page->_refcount,
+> - * but an additional pin counting system) will be invoked. This is intended for
+> - * anything that gets a page reference and then touches page data (for example,
+> - * Direct IO). This lets the filesystem know that some non-file-system entity is
+> - * potentially changing the pages' data. In contrast to FOLL_GET (whose pages
+> - * are released via put_page()), FOLL_PIN pages must be released, ultimately, by
+> - * a call to unpin_user_page().
+> - *
+> - * FOLL_PIN is similar to FOLL_GET: both of these pin pages. They use different
+> - * and separate refcounting mechanisms, however, and that means that each has
+> - * its own acquire and release mechanisms:
+> - *
+> - *     FOLL_GET: get_user_pages*() to acquire, and put_page() to release.
+> - *
+> - *     FOLL_PIN: pin_user_pages*() to acquire, and unpin_user_pages to release.
+> - *
+> - * FOLL_PIN and FOLL_GET are mutually exclusive for a given function call.
+> - * (The underlying pages may experience both FOLL_GET-based and FOLL_PIN-based
+> - * calls applied to them, and that's perfectly OK. This is a constraint on the
+> - * callers, not on the pages.)
+> - *
+> - * FOLL_PIN should be set internally by the pin_user_pages*() APIs, never
+> - * directly by the caller. That's in order to help avoid mismatches when
+> - * releasing pages: get_user_pages*() pages must be released via put_page(),
+> - * while pin_user_pages*() pages must be released via unpin_user_page().
+> - *
+> - * Please see Documentation/core-api/pin_user_pages.rst for more information.
+> - */
+> -
+>   static inline int vm_fault_to_errno(vm_fault_t vm_fault, int foll_flags)
+>   {
+>   	if (vm_fault & VM_FAULT_OOM)
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 3b8475007734..4e1031626403 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -1085,4 +1085,79 @@ enum fault_flag {
+>   
+>   typedef unsigned int __bitwise zap_flags_t;
+>   
+> +/*
+> + * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
+> + * other. Here is what they mean, and how to use them:
+> + *
+> + * FOLL_LONGTERM indicates that the page will be held for an indefinite time
+> + * period _often_ under userspace control.  This is in contrast to
+> + * iov_iter_get_pages(), whose usages are transient.
+> + *
+> + * FIXME: For pages which are part of a filesystem, mappings are subject to the
+> + * lifetime enforced by the filesystem and we need guarantees that longterm
+> + * users like RDMA and V4L2 only establish mappings which coordinate usage with
+> + * the filesystem.  Ideas for this coordination include revoking the longterm
+> + * pin, delaying writeback, bounce buffer page writeback, etc.  As FS DAX was
+> + * added after the problem with filesystems was found FS DAX VMAs are
+> + * specifically failed.  Filesystem pages are still subject to bugs and use of
+> + * FOLL_LONGTERM should be avoided on those pages.
+> + *
+> + * FIXME: Also NOTE that FOLL_LONGTERM is not supported in every GUP call.
+> + * Currently only get_user_pages() and get_user_pages_fast() support this flag
+> + * and calls to get_user_pages_[un]locked are specifically not allowed.  This
+> + * is due to an incompatibility with the FS DAX check and
+> + * FAULT_FLAG_ALLOW_RETRY.
+> + *
+> + * In the CMA case: long term pins in a CMA region would unnecessarily fragment
+> + * that region.  And so, CMA attempts to migrate the page before pinning, when
+> + * FOLL_LONGTERM is specified.
+> + *
+> + * FOLL_PIN indicates that a special kind of tracking (not just page->_refcount,
+> + * but an additional pin counting system) will be invoked. This is intended for
+> + * anything that gets a page reference and then touches page data (for example,
+> + * Direct IO). This lets the filesystem know that some non-file-system entity is
+> + * potentially changing the pages' data. In contrast to FOLL_GET (whose pages
+> + * are released via put_page()), FOLL_PIN pages must be released, ultimately, by
+> + * a call to unpin_user_page().
+> + *
+> + * FOLL_PIN is similar to FOLL_GET: both of these pin pages. They use different
+> + * and separate refcounting mechanisms, however, and that means that each has
+> + * its own acquire and release mechanisms:
+> + *
+> + *     FOLL_GET: get_user_pages*() to acquire, and put_page() to release.
+> + *
+> + *     FOLL_PIN: pin_user_pages*() to acquire, and unpin_user_pages to release.
+> + *
+> + * FOLL_PIN and FOLL_GET are mutually exclusive for a given function call.
+> + * (The underlying pages may experience both FOLL_GET-based and FOLL_PIN-based
+> + * calls applied to them, and that's perfectly OK. This is a constraint on the
+> + * callers, not on the pages.)
+> + *
+> + * FOLL_PIN should be set internally by the pin_user_pages*() APIs, never
+> + * directly by the caller. That's in order to help avoid mismatches when
+> + * releasing pages: get_user_pages*() pages must be released via put_page(),
+> + * while pin_user_pages*() pages must be released via unpin_user_page().
+> + *
+> + * Please see Documentation/core-api/pin_user_pages.rst for more information.
+> + */
+> +
+> +#define FOLL_WRITE	0x01	/* check pte is writable */
+> +#define FOLL_TOUCH	0x02	/* mark page accessed */
+> +#define FOLL_GET	0x04	/* do get_page on page */
+> +#define FOLL_DUMP	0x08	/* give error on hole if it would be zero */
+> +#define FOLL_FORCE	0x10	/* get_user_pages read/write w/o permission */
+> +#define FOLL_NOWAIT	0x20	/* if a disk transfer is needed, start the IO
+> +				 * and return without waiting upon it */
+> +#define FOLL_NOFAULT	0x80	/* do not fault in pages */
+> +#define FOLL_HWPOISON	0x100	/* check page is hwpoisoned */
+> +#define FOLL_TRIED	0x800	/* a retry, previous pass started an IO */
+> +#define FOLL_REMOTE	0x2000	/* we are working on non-current tsk/mm */
+> +#define FOLL_ANON	0x8000	/* don't do file mappings */
+> +#define FOLL_LONGTERM	0x10000	/* mapping lifetime is indefinite: see below */
+> +#define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
+> +#define FOLL_PIN	0x40000	/* pages must be released via unpin_user_page */
+> +#define FOLL_FAST_ONLY	0x80000	/* gup_fast: prevent fall-back to slow gup */
+> +#define FOLL_PCI_P2PDMA	0x100000 /* allow returning PCI P2PDMA pages */
+> +#define FOLL_INTERRUPTIBLE  0x200000 /* allow interrupts from generic signals */
+> +
+>   #endif /* _LINUX_MM_TYPES_H */
+> 
+
