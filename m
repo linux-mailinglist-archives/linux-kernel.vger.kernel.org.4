@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C947A652CA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C54A652CA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 07:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234513AbiLUGCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 01:02:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        id S234556AbiLUGC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 01:02:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbiLUGBz (ORCPT
+        with ESMTP id S234478AbiLUGCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 01:01:55 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE821EC78
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:01:40 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id v3so9759175pgh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:01:40 -0800 (PST)
+        Wed, 21 Dec 2022 01:02:02 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3741A20F7D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:01:44 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id 21so9994759pfw.4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 22:01:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pxb84ytAPFYreSOdPkhL3PM7KemIvxiY/1J13wK332c=;
-        b=UjDk03Xng4Fdh5jRhus2wH9UUuHAQyoFWmA2K42x+nWA7pqpImyeM0Kt2r5uZQ0hXF
-         vw9C9qsE1YdAAUSnNHaCc8Btp8sLRss51PLxbbpIe2YiycY8rITES89MtLAHVNd5vzum
-         zGGUeuc8OrQQuOqapwjOl9rPfBtU6BXem5qzstlBpIJRxC5vKgsT8Aa2Tbc/O4Yq1HpW
-         fQrUq/T9UadAmhL9DW39kwVKpbD21TMHt+o17qb5vLqtU5IWH1CCmhnY3HPHlm59W9pz
-         VaxdRz/9zO3jznGR0DfTxjUts8mfxb+KUgaHEh0h5ET7bku0Tn1IK4kfxOUW4IgjFYM4
-         cjvw==
+        bh=ytBbvPTXR4FdqciS4jsfQvnjl2UrmH262qeoBNVrzHw=;
+        b=jw0wbWgKyc3Q6Zq1TuhcRXITmEOfWs7TN0eWvllMPmMcHMAdVZWUm80Eh2mWdWnt7k
+         hXWD+JrNkOB7hvw4ppRyxg2PVr0MhhrPZqgApkq2npstymirN6PCv2462HJ6G9D1STUX
+         IqRMa/uqSTUy55DX8LFZnwAEvexbPqVRLeIjWBaJx1R3LS3f1IzRqCi019epBfNGsGBL
+         8TO6gv50pUT2bNAWYVMUDKBS3gslh86ihDiAylvYMCQcGV5SPvp9kupz0rQyLZ9vyjgs
+         s5zMrlgBEyQHpeM/ggwOmZEed8IRBpvkydAMrfPH3Gs4smtBcmEx/TchhlNSmgITQid/
+         4hyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pxb84ytAPFYreSOdPkhL3PM7KemIvxiY/1J13wK332c=;
-        b=038AtODNL8FnJErGhObYRAQKsc5dY6vbOlcCC8PmpuZN5+wYpL7O+mTsytaDcN+aSu
-         ZrRYABIM7DqTQzZNSUsOJWqwWvOAkJEeOBje5MjPHjxRLHyoujrlgUJlBR/W8IijI+vD
-         x2GeIEoktAe3+WQceA73XkULe771n2fX+LwPKJbuHBedLaoc+q54V63zr4hRijXEovmM
-         vszTGrKpL0tp8Y0RxmatSvZETfifV+Sqya9II6gOCpG7NRlInoWqCNMpn9z6JcP7fBFz
-         f/iU++gWa/l4irL61Lqa1+k3AJK5sYCYBjQ+Ygs15nYY8wcxESqehufF8B5pgwgaql5g
-         E0LA==
-X-Gm-Message-State: AFqh2kqPgMNKWBK8nowjLbwrkUwi5PWaa0YFE9KG7uHrqufRbPIi1gTw
-        E+NCsPQDyRnAU4AD9bfrVns=
-X-Google-Smtp-Source: AMrXdXtMQNG4MLPAQuAxM6F8pv2SymackH14UvCmmp2Lj0VLowO3NVPJe1mW7SvC4gzZLgCzhayhhQ==
-X-Received: by 2002:aa7:81d4:0:b0:56e:a7a7:35a0 with SMTP id c20-20020aa781d4000000b0056ea7a735a0mr1036849pfn.25.1671602500364;
-        Tue, 20 Dec 2022 22:01:40 -0800 (PST)
+        bh=ytBbvPTXR4FdqciS4jsfQvnjl2UrmH262qeoBNVrzHw=;
+        b=S/hyo0zJ8f3U4mQQrLpEULz6ObbJQOf4p70OwOrBu80mRhUSwrKHaOb7GebONPCgyR
+         w53nnrECe/fxBO/vjOe83dySYTXG6l3s/HVqMraX1RCx24a/uBikrTv4WMYCO8mg8qDF
+         a0dQkBmifeoraPyW1LHvenR5Bp6YVc88vFOfcZZhorz88lKCwM5VB+b6nuy8kwi2KKLk
+         ddvosBxAYMJZgU8l0/wngMv8gg7rtfKQBA4fQt/uJn8xfYk1NvjYXkP9ybUX49R617TH
+         b0a9fkg6vbBJY4DyTzZVL9Ix2wPuDfpQWX2ifOJvCTd4YBQuG5JWNqC2vVTVlIe32ByM
+         cqdw==
+X-Gm-Message-State: AFqh2koqOCZaGidzQQ1qxyTv2Qfl7QliwCof2Yk3CzCPp8Fz8HX5e/gS
+        i/axwx8YAu3DrnWuisF1skA=
+X-Google-Smtp-Source: AMrXdXsxGwqIM5xvXEW99PyYos0qHzvLtaE2c5N1DiiTeZRQgwkFsv40m2wKs3WF1Y5ZUax9VoVMjg==
+X-Received: by 2002:a62:6143:0:b0:577:3546:d7be with SMTP id v64-20020a626143000000b005773546d7bemr1140045pfb.30.1671602503240;
+        Tue, 20 Dec 2022 22:01:43 -0800 (PST)
 Received: from vernon-pc.. ([114.231.52.81])
-        by smtp.gmail.com with ESMTPSA id w7-20020a626207000000b00562677968aesm9598886pfb.72.2022.12.20.22.01.37
+        by smtp.gmail.com with ESMTPSA id w7-20020a626207000000b00562677968aesm9598886pfb.72.2022.12.20.22.01.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 22:01:39 -0800 (PST)
+        Tue, 20 Dec 2022 22:01:42 -0800 (PST)
 From:   Vernon Yang <vernon2gm@gmail.com>
 To:     Liam.Howlett@oracle.com, akpm@linux-foundation.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         maple-tree@lists.infradead.org, Vernon Yang <vernon2gm@gmail.com>
-Subject: [PATCH v2 6/7] maple_tree: refine ma_state init from mas_start()
-Date:   Wed, 21 Dec 2022 14:00:57 +0800
-Message-Id: <20221221060058.609003-7-vernon2gm@gmail.com>
+Subject: [PATCH v2 7/7] maple_tree: refine mab_calc_split function
+Date:   Wed, 21 Dec 2022 14:00:58 +0800
+Message-Id: <20221221060058.609003-8-vernon2gm@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221221060058.609003-1-vernon2gm@gmail.com>
 References: <20221221060058.609003-1-vernon2gm@gmail.com>
@@ -72,57 +72,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If mas->node is an MAS_START, there are three cases, and they
-all assign different values to mas->node and mas->offset. So
-there is no need to set them to a default value before updating.
+Invert the conditional judgment of the mid_split, to focus
+the return statement in the last statement, which is easier
+to understand and for better readability.
 
-Update them directly to make them easier to understand and for
-better readability.
-
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
 ---
- lib/maple_tree.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ lib/maple_tree.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index b3a215dd961e..5911211c8557 100644
+index 5911211c8557..5e1a9d39b330 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -1329,7 +1329,7 @@ static void mas_node_count(struct ma_state *mas, int count)
-  * mas_start() - Sets up maple state for operations.
-  * @mas: The maple state.
-  *
-- * If mas->node == MAS_START, then set the min, max, depth, and offset to
-+ * If mas->node == MAS_START, then set the min, max and depth to
-  * defaults.
-  *
-  * Return:
-@@ -1343,22 +1343,22 @@ static inline struct maple_enode *mas_start(struct ma_state *mas)
- 	if (likely(mas_is_start(mas))) {
- 		struct maple_enode *root;
+@@ -1882,10 +1882,9 @@ static inline int mab_calc_split(struct ma_state *mas,
  
--		mas->node = MAS_NONE;
- 		mas->min = 0;
- 		mas->max = ULONG_MAX;
- 		mas->depth = 0;
--		mas->offset = 0;
+ 	/* Avoid ending a node on a NULL entry */
+ 	split = mab_no_null_split(bn, split, slot_count);
+-	if (!(*mid_split))
+-		return split;
  
- 		root = mas_root(mas);
- 		/* Tree with nodes */
- 		if (likely(xa_is_node(root))) {
- 			mas->depth = 1;
- 			mas->node = mte_safe_root(root);
-+			mas->offset = 0;
- 			return NULL;
- 		}
+-	*mid_split = mab_no_null_split(bn, *mid_split, slot_count);
++	if (unlikely(*mid_split))
++		*mid_split = mab_no_null_split(bn, *mid_split, slot_count);
  
- 		/* empty tree */
- 		if (unlikely(!root)) {
-+			mas->node = MAS_NONE;
- 			mas->offset = MAPLE_NODE_SLOTS;
- 			return NULL;
- 		}
+ 	return split;
+ }
 -- 
 2.34.1
 
