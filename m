@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EC6653775
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCA0653778
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 21:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234807AbiLUUSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 15:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S234817AbiLUUSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 15:18:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLUUSP (ORCPT
+        with ESMTP id S229844AbiLUUSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 15:18:15 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247771EAE0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:18:15 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id 17so16706554pll.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:18:15 -0800 (PST)
+        Wed, 21 Dec 2022 15:18:47 -0500
+Received: from mailfilter05-out40.webhostingserver.nl (mailfilter05-out40.webhostingserver.nl [195.211.74.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B4823EA0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 12:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cYnyNgioHqW+YyalrsuLbViTa7ofHL8P3cbVInZ4vMw=;
-        b=H4AtwDoHmrDbQI3uVNotQSSH3qGcsSLKdHm3f4MxYefK8SWgbFz13cnTykEabP79dj
-         52I+/gyeqDHx6UHqrMH9NgncBDx55Q1/+WdLnFaV7zwznuLdUlhIMam/8pBjx4L1vP4/
-         B1QFl7yXCJwGGMisgkLN9hGNUSLIkXxoX+f2vF0xXbSgpj6XHvnYKjoT2slOTE+Bhwje
-         GzM9UXcT85VTGUrUG1nK+hyenOKKINb6sQ/giYix7g7nR3yPsCJRm/jwcQqIGA2RvKHB
-         I/PyjqNCHzADjo+TpEjzFarZLPz804w4gFRDWhScH+/xrKwHOm8JH6ggBt8KtWw9CJ7+
-         CeGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cYnyNgioHqW+YyalrsuLbViTa7ofHL8P3cbVInZ4vMw=;
-        b=HKX12+hnIFD18aJob/s5nrLji59/7hBkoFnJnLYmWDgjGA1uoTzWaTEHWb8Kdl0ag6
-         JDCTrySeL9BP9w2q9cyU55h3Xi2/7oZddNrlbEFw2yL6abwnSGCLX7ToVNPJux8SybMU
-         dA/26uNEizFb+qIcyGusBq8YkfpscXRk+aAdPRakdNxskKLxbdk87mN8w3vf5rEONYGw
-         sFjMGq5MN3JB89HDwv7sTIBix3hj4r1+RreYm9l0g4rValpAYvjY/jYLWl7Kc+BON4vy
-         8p6usKOX7cLy6AOk4fFGFLDAbDgwts55gwto3q9Teaz5ejwR67E06DBx1z5NQ5MYqy8y
-         27zA==
-X-Gm-Message-State: AFqh2krF9efPlgXB6+eycvDFcwow7PHT/V6rfWf8fp/hdi5vqNlbEuTz
-        qfJMfAS3mYh3CxkP/H2s9UWg8rSHqn31/5kXgbCUrA==
-X-Google-Smtp-Source: AMrXdXv718hVhESIvi0jTJ7/DSgHb5rhUOx/aVT4c5nLV5EqfUjMQ+GHFrKhJQZ60vAuH0Z0kK1oR1aozeM3JzV6fEQ=
-X-Received: by 2002:a17:902:b20d:b0:191:283d:612e with SMTP id
- t13-20020a170902b20d00b00191283d612emr152231plr.88.1671653894254; Wed, 21 Dec
- 2022 12:18:14 -0800 (PST)
+        d=exalondelft.nl; s=whs1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=pWO3hqi+QAixwpdeI1+jy7duJrkYMUdLerm7qfnV53A=;
+        b=bt4Sry3aTw0lf00bXdiWU63WNWX2xULSlnLeoMlYGJgIUrA0UaELJreJBK7qG0rqme9vHQccu0DoQ
+         8d3jK+pqdJdDihGPzjRg4FlbGmDFRo7y3oT5vU/K7Dkd5ui7thxDwpTQOSR2xRnPpbzp8I8FQNCspe
+         hj0dFvmoyiD65Vr2SZ3fTiI1QsZTL/sYxq5Xh8YQr/iK9AMKfK/gXygUtgotOmBL+zuuI6gf9DU7ET
+         SfZZLnuV3uYR/e5rT+4J2382bjF+8WdY28g1ypON7S585DxzeBsvzts5se2S7rpdADrzVsXtn7p/6N
+         61PBJ40+gS6dIWvhLrArPQBZxs30OFw==
+X-Halon-ID: e54b552b-816b-11ed-936b-001a4a4cb933
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter05.webhostingserver.nl (Halon) with ESMTPSA
+        id e54b552b-816b-11ed-936b-001a4a4cb933;
+        Wed, 21 Dec 2022 21:13:12 +0100 (CET)
+Received: from 2a02-a466-68ed-1-b319-6467-c1bf-a947.fixed6.kpn.net ([2a02:a466:68ed:1:b319:6467:c1bf:a947] helo=delfion.fritz.box)
+        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
+        (envelope-from <ftoth@exalondelft.nl>)
+        id 1p85Y1-00ELTs-1X;
+        Wed, 21 Dec 2022 21:18:41 +0100
+From:   Ferry Toth <ftoth@exalondelft.nl>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ferry Toth <ftoth@exalondelft.nl>,
+        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org
+Subject: [PATCH v1 1/1] Revert "usb: ulpi: defer ulpi_register on ulpi_read_id timeout"
+Date:   Wed, 21 Dec 2022 21:18:05 +0100
+Message-Id: <20221221201805.19436-1-ftoth@exalondelft.nl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20221221-bpf-syscall-v1-0-9550f5f2c3fc@chromium.org>
- <CAKH8qBuLhZ+T9fvP=DXeYevdrNofTPpEiQqq2RenBUKVghPmtA@mail.gmail.com> <CANiDSCv0EObZHCL1D1CHBRaNf68Df4Ur9kFgaoGSGH=KYwgOPw@mail.gmail.com>
-In-Reply-To: <CANiDSCv0EObZHCL1D1CHBRaNf68Df4Ur9kFgaoGSGH=KYwgOPw@mail.gmail.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 21 Dec 2022 12:18:02 -0800
-Message-ID: <CAKH8qBu6B9VHGiqg152dGhybryKVv8OTavTy3PUpHXvM1_i1mQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Remove unused field initialization
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <song@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,88 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 12:13 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> Hi Stanislav
->
-> On Wed, 21 Dec 2022 at 21:10, Stanislav Fomichev <sdf@google.com> wrote:
-> >
-> > On Wed, Dec 21, 2022 at 11:55 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
-> > >
-> > > Maxlen is used by standard proc_handlers such as proc_dointvec(), but in this
-> > > case we have our own proc_handler. Remove the initialization.
-> >
-> > Are you sure?
-> >
-> > bpf_stats_handler
-> >   proc_dointvec_minmax
-> >     do_proc_dointvec
-> >       __do_proc_dointvec
-> >         vleft = table->maxlen / sizeof(*i);
->
-> I believe do_proc_dointvec is using the value from:
->
-> struct ctl_table tmp = {
->   .maxlen=sixeof(val);
-> }
+This reverts commit 8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac.
 
-Oh, you're right, I've missed that!
+This patch results in some qemu test failures, specifically xilinx-zynq-a9
+machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
+to boot from USB drive.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+Fixes: 8a7b31d545d3 ("usb: ulpi: defer ulpi_register on ulpi_read_id timeout")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Cc: stable@vger.kernel.org
+Link: https://lkml.org/lkml/2022/12/20/803
+Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+---
+ drivers/usb/common/ulpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> >
-> > Maybe we should really do the following instead?
-> >
-> > .maxlen: sizeof(int)
-> >
-> > ?
-> >
-> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > ---
-> > > bpf: Trivial remove of unitialised field.
-> > >
-> > > I have inspired myself in your code and heritaded this bug :). Fixing this
-> > > here so none else makes the same mistake.
-> > >
-> > > To: Alexei Starovoitov <ast@kernel.org>
-> > > To: Daniel Borkmann <daniel@iogearbox.net>
-> > > To: John Fastabend <john.fastabend@gmail.com>
-> > > To: Andrii Nakryiko <andrii@kernel.org>
-> > > To: Martin KaFai Lau <martin.lau@linux.dev>
-> > > To: Song Liu <song@kernel.org>
-> > > To: Yonghong Song <yhs@fb.com>
-> > > To: KP Singh <kpsingh@kernel.org>
-> > > To: Stanislav Fomichev <sdf@google.com>
-> > > To: Hao Luo <haoluo@google.com>
-> > > To: Jiri Olsa <jolsa@kernel.org>
-> > > Cc: bpf@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > ---
-> > >  kernel/bpf/syscall.c | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > >
-> > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > > index 35972afb6850..8e55456bd648 100644
-> > > --- a/kernel/bpf/syscall.c
-> > > +++ b/kernel/bpf/syscall.c
-> > > @@ -5319,7 +5319,6 @@ static struct ctl_table bpf_syscall_table[] = {
-> > >         {
-> > >                 .procname       = "bpf_stats_enabled",
-> > >                 .data           = &bpf_stats_enabled_key.key,
-> > > -               .maxlen         = sizeof(bpf_stats_enabled_key),
-> > >                 .mode           = 0644,
-> > >                 .proc_handler   = bpf_stats_handler,
-> > >         },
-> > >
-> > > ---
-> > > base-commit: b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
-> > > change-id: 20221221-bpf-syscall-58d1ac3f817a
-> > >
-> > > Best regards,
-> > > --
-> > > Ricardo Ribalda <ribalda@chromium.org>
->
->
->
-> --
-> Ricardo Ribalda
+diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+index 60e8174686a1..d7c8461976ce 100644
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -207,7 +207,7 @@ static int ulpi_read_id(struct ulpi *ulpi)
+ 	/* Test the interface */
+ 	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
+ 	if (ret < 0)
+-		return ret;
++		goto err;
+ 
+ 	ret = ulpi_read(ulpi, ULPI_SCRATCH);
+ 	if (ret < 0)
+-- 
+2.37.2
+
