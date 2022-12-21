@@ -2,156 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDA5652A7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 01:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 289C8652A84
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 01:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234342AbiLUAbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 19:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S234360AbiLUAgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 19:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiLUAbp (ORCPT
+        with ESMTP id S234342AbiLUAgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 19:31:45 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168A9201AC;
-        Tue, 20 Dec 2022 16:31:44 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id i15so19949546edf.2;
-        Tue, 20 Dec 2022 16:31:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VCqofWIdcRE0wcGcSYV7leS63wz3iWTm3oh5pG3tFkc=;
-        b=ErTUjWAMWzlIL8k4rTRrQFek0BdgPOCmhnjqDcWpWtonCq6c1XTEGzH6sp4pn0lUxz
-         x3z+eUpewj90wgHmbPH3/EgJiZXLKuT8fltUObTY4ZeGXrqq/kCdICQ3ta3JYJ5w9lZv
-         LbmSdH44cxFZgLnTjl96cxPJ2vsx1QSRRkayQwawxQXDXEI+Bk7ncl5SlvTv1ZzF7MkD
-         hvQd2e+Lj3d/lA47bPPz0K0gUAmL5G6iHf5Qq/+uLYvDEb6vo03SWYNjyFgDVcwduge0
-         8B6c3GDvoK23djOrnLLEw9yfz0K/4tqWn/jPN+MkpoN8+Z+X8eMPEn8KSYBwXhg2klHU
-         K5/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VCqofWIdcRE0wcGcSYV7leS63wz3iWTm3oh5pG3tFkc=;
-        b=QnCEhhkubMGcj3ZbPVfJXXQI5BOhh50Eoxw3b95QFG7llJWaarEzlpTYC9cT/XnWbQ
-         pED5kPgIqEIBIc0gYCFg/wezTiwLLKOQhKCDF/SgBxNEDA319pMfhUU/DYbMj8mci1KQ
-         k+9y7/bikUekY6AzS+sG9JOs8whfNFj3SvfWX/vk264IJewkqQlEGhnbs6cCuVSbYHcv
-         /BvAGN7dJNpwpXFnymD0CT5ikSNR+GLakIgoQjOsVrVTKWdcjVbOlp4ZzdhqilQXe9jV
-         pKpm2GHHtWhOQbJWIfOEVcVhVBHyom68Megv/mA9wDqNrZ1jNlq9CJqkS17e3cFhXi/w
-         60Aw==
-X-Gm-Message-State: ANoB5plEWbqYnMh7UXpSd0vAYA0OEnx/oq4+RpesKCAp6gApW7//UMDj
-        +nk3GaFoK1QxA+OLhCsHO9GLAouo69upTDDogL4=
-X-Google-Smtp-Source: AA0mqf7Vj4LDQTGT2qms5U1xLKxeAG3aN068iuTz4pDqzDHwntSg3DsFDaeiJD2ru6wqI5VUjpTXdMYzkArTY5MWRxQ=
-X-Received: by 2002:aa7:cc08:0:b0:461:8a43:e93 with SMTP id
- q8-20020aa7cc08000000b004618a430e93mr10657639edt.275.1671582702709; Tue, 20
- Dec 2022 16:31:42 -0800 (PST)
+        Tue, 20 Dec 2022 19:36:12 -0500
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45638E32
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 16:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1671582971; x=1703118971;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=q0ahnBYAstKhjnn4LtyS1XS23LTr37IS9ECQYCkoAP0=;
+  b=g22DUOFi8s3ITvwcFbGn8VLHVzi24OB07AHp+TOdl1eQzOsRtswh41EM
+   rNCZ1Iiyi6psN1bJDdNKHOikBLaZhyM4HcQbQsFf7zQDqCtuQ1FTyVcEC
+   PIKFGdvpaswUG2JY4Iy6Wjwtr1dhCMc5N5fW67PPxNe8TFS4GfQvVBdiY
+   gaD/zzGFXwF7bjJt8qxDcu9Ol9Ddl+3P7ctjD/vVgll7yREy6c/wBR7GL
+   a4tq7/a2SSo1eOXAhhwoAvauilm53LxWPsQjUVMfF7hLrJvDg8tQy7djH
+   obPOLhZpNpUXOCZrbqLYZEPxYUKth7g+fjIoM+pHM1y+hUvMQUGf8jpW6
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,261,1665417600"; 
+   d="scan'208";a="219335683"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Dec 2022 08:36:07 +0800
+IronPort-SDR: xqTFZ48FgyhJT52pDsRjs/vRTPn2znilihPmtRknrIQfrBMckqh4t9EvzJf+pcJP2RZ2HCMawX
+ wAuyvKKym5RJhhajMlG+K3CmnvRf8qYqn03yBUr/L02VHE8COhgzBs74u5WK1NBq2fOP+Kjspo
+ NbHjrViRbaZMCHlh8MTaWVedTlhHHKEU90ng6CbiZlMmiMdq3LRpLKRgzBuPCIa/QQpCNpxh5Z
+ HijCnetOLc7eMRGG8WZUS5wkSxnffDKyEzJgRKMtJ/ufOqMtnRD7ExzwDXqb9gukS35gGcE62C
+ /W4=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2022 15:54:21 -0800
+IronPort-SDR: h4Iw0CETRfvVkS2A+Vscw79S0xGHDyVTUaSVn8jd+PHM1nrrSrrN4Tfyt514Ru6TUy5gMwbhgP
+ yvpQf2+XBjY9Zg19HgjeNHf3sFC9oqXS7K6ZPOQXTJ2eLnNeOu+OoWjvCdNnyMHA3pOswWr9SG
+ ySLEtn1JK4F/xqymHENS4RXx8g3/FVRdtFkbAybYgbSR9ij8voNBUiY6XgaEyjofp8qpmIRXZG
+ zG81LoV0Xg5azjWsg3dwY1icQaJXIKMoAquLOgtFNUyGrS2OPOe7V5CfCut0VdQF5UGWn8LrO8
+ K2A=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2022 16:36:07 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NcDyG5r5xz1Rwt8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 16:36:06 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1671582965; x=1674174966; bh=q0ahnBYAstKhjnn4LtyS1XS23LTr37IS9EC
+        QYCkoAP0=; b=p5JXa5ZCV39ji/p6irfYD/CiXosNIkEy7Rqvp7ioj9Vlxq3/Fv7
+        R4Cg7w2cyk2tgcpGr85BceHqzsD2fGJvbxtmISAkPz5JDHUrp0mPh5BxlqITA/Zm
+        WYymkldx2vuwSz6GVo5oWTjeDmEJ2aaY9er6juUWBhFrbQyn+GrteUVvinUkq9CX
+        GlH/v90hTRDVVQPERp8coUQ3/6AS9VJXf/xDJUW/MoQYssFHDFqrlDpNgr6ZIBUW
+        tc9V4votkFVr3LFufHF99a6vCaXT9a1Yde319LFYeccDg0B0UaP1O1j98733wv27
+        Twh268yNB1qZa+rygIRCEGQ9XP+hk7I9ySA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id D6PE-xX7_DvJ for <linux-kernel@vger.kernel.org>;
+        Tue, 20 Dec 2022 16:36:05 -0800 (PST)
+Received: from [10.89.80.120] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.80.120])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NcDyD3LqNz1RvLy;
+        Tue, 20 Dec 2022 16:36:04 -0800 (PST)
+Message-ID: <c8387766-2ca0-51f3-e332-71492b13e5c1@opensource.wdc.com>
+Date:   Wed, 21 Dec 2022 09:36:03 +0900
 MIME-Version: 1.0
-References: <20221212115505.36770-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221212115505.36770-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y54ycZdMLjU5QVn5@spud> <CA+V-a8sa1H=Hh2SzbKDWhiAO=C+Y2YN7sk9APBeqktBeHf49jA@mail.gmail.com>
- <Y6CPQWHrPLk1O6jB@spud>
-In-Reply-To: <Y6CPQWHrPLk1O6jB@spud>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 21 Dec 2022 00:31:16 +0000
-Message-ID: <CA+V-a8sZeFgbUuuxHmXGEMKoayB02K22dZuw0TZHHv36UcdcVw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/6] riscv: errata: Add Andes alternative ports
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Guo Ren <guoren@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [PATCH] scsi: libsas: Grab the host lock in
+ sas_ata_device_link_abort()
+Content-Language: en-US
+To:     John Garry <john.g.garry@oracle.com>,
+        Xingui Yang <yangxingui@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, niklas.cassel@wdc.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, prime.zeng@hisilicon.com,
+        kangfenglong@huawei.com
+References: <20221220125349.45091-1-yangxingui@huawei.com>
+ <4ec9dbed-1758-d6b4-dc1d-ac42e8c22731@oracle.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <4ec9dbed-1758-d6b4-dc1d-ac42e8c22731@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+On 2022/12/20 23:59, John Garry wrote:
+> On 20/12/2022 12:53, Xingui Yang wrote:
+>> Grab the host lock in sas_ata_device_link_abort() before calling
+> 
+> This is should be the ata port lock, right? I know that the ata comments 
+> say differently.
+> 
+>> ata_link_abort(), as the comment in ata_link_abort() mentions.
+>>
+> 
+> Can you please add a fixes tag?
+> 
+>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+> 
+> Reviewed-by: John Garry <john.g.garry@oracle.com>
+> 
+>> ---
+>>   drivers/scsi/libsas/sas_ata.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+>> index f7439bf9cdc6..4f2017b21e6d 100644
+>> --- a/drivers/scsi/libsas/sas_ata.c
+>> +++ b/drivers/scsi/libsas/sas_ata.c
+>> @@ -889,7 +889,9 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
+>>   {
+>>   	struct ata_port *ap = device->sata_dev.ap;
+>>   	struct ata_link *link = &ap->link;
+>> +	unsigned long flags;
+>>   
+>> +	spin_lock_irqsave(ap->lock, flags);
+>>   	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY; /* tf status */
+>>   	device->sata_dev.fis[3] = ATA_ABORTED; /* tf error */
+>>   
+>> @@ -897,6 +899,7 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
+>>   	if (force_reset)
+>>   		link->eh_info.action |= ATA_EH_RESET;
+>>   	ata_link_abort(link);
 
-On Mon, Dec 19, 2022 at 4:20 PM Conor Dooley <conor@kernel.org> wrote:
->
-> On Mon, Dec 19, 2022 at 11:19:13AM +0000, Lad, Prabhakar wrote:
-> > Hi Conor,
-> >
-> > Thank you for the review.
-> >
-> > On Sat, Dec 17, 2022 at 9:19 PM Conor Dooley <conor@kernel.org> wrote:
-> > >
-> > > On Mon, Dec 12, 2022 at 11:55:02AM +0000, Prabhakar wrote:
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > Add required ports of the Alternative scheme for Andes CPU cores.
-> > > >
-> > > > I/O Coherence Port (IOCP) provides an AXI interface for connecting external
-> > > > non-caching masters, such as DMA controllers. IOCP is a specification
-> > > > option and is disabled on the Renesas RZ/Five SoC due to this reason cache
-> > > > management needs a software workaround.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > ---
-> > > > v4 -> v5
-> > > > * Sorted the Kconfig/Makefile/Switch based on Core name
-> > > > * Added a comments
-> > > > * Introduced RZFIVE_SBI_EXT_IOCP_SW_WORKAROUND SBI EXT ID to check if
-> > > >   CMO needs to be applied. Is there a way we can access the DTB while patching
-> > > >   as we can drop this SBI EXT ID and add a DT property instead for cmo?
-> > > >
-<snip>
-> > > Seeing as you need a new version for some of the other bits, I think it
-> > > would be good to add a minor comment here somewhere (be it here or the
-> > > commit message) that links to the SBI specs for this.
-> > > I think this looks pretty good though.
-> > Sure I'll add a comment here.
-> >
-> > I was wondering if we can get rid of this vendor specific extension
-> > here if we get access to the DT here (for example having a DT property
-> > which would indicate if IOCP CMO should be applied or not). Do you
-> > think that would be good approach?  ATM we dont have a pointer here
-> > for FDT whie early patching.
->
-> I dunno. I think it is fine to use the ECALL to be honest - I'd rather
-> that than a property that someone may omit.
->
-Ok, I was so I will stick with the current implementation.
+Really need to add lockdep annotations in libata to avoid/catch such bugs...
+Will work on that.
 
-> That said, for the cache management stuff we are gonna need for
-> PolarFire SoC, we will need to have info from the DT AFAICT - marchid
-> etc are all set to zero on our platform so cannot be used.
->
-Aha so while patching you will need a pointer to FDT node.
+>> +	spin_unlock_irqrestore(ap->lock, flags);
+>>   }
+>>   EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
+>>   
+> 
 
-> I was thinking about using the compatible instead, but...
-> we've not tried to "forward"-port our stuff from 5.15 yet as we have
-> not yet completed testing testing on our vendor tree (and need some PCI
-> changes accepted upstream first anyway), as a result I have not looked
-> into what's needed there for use with alternatives. We've been using a
-> pre-alternatives version of that patchset from around the 5.15
-> development point in time instead.
->
-Good to know. Let me know if you plan to implement the patching
-mechanism based on FDT soon. I can give it a test.
+-- 
+Damien Le Moal
+Western Digital Research
 
-Cheers,
-Prabhakar
