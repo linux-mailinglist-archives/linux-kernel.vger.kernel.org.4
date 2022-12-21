@@ -2,171 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32477652BFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 05:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CA8652BFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 05:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbiLUEAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Dec 2022 23:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        id S229696AbiLUECQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Dec 2022 23:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiLUEAB (ORCPT
+        with ESMTP id S229727AbiLUECN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Dec 2022 23:00:01 -0500
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E93F1022
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 20:00:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1671595201; x=1703131201;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=x75bHZHEUWl0iFLgcRBohFMshs2LLAhyBh4URz+y8R4=;
-  b=PfbAekJYQLUNTAJphL4H41bcT4sd+YfJf3gNK3Ax0z2wwrYnPdIR8Z5K
-   zmcgykr1fORPenJicw4STSHvZOPNFfRonb4n4G6LMH7avnUy2sSw+VySl
-   PIawxoDlzDUSDU+IqOZanth0NFDCLzbclbYx1MRNmTPyE/2vw0wRMG3h7
-   TuaOjfW92SGCkVwUdzDFIgrGPVf1gYIY0G/cb6ExlYN5DHgYfBU20dHZi
-   JanUa5SMES1lNCSzCE5TMPkM4rusKqTrsK9HIK1qy5PZTxQP9S67TxFDw
-   UEz4Q1mbJzYW4glBD4onpDUHahPsEvQY3dj7NF9ibiSQ0sxTJ5AHIAFP0
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,261,1665417600"; 
-   d="scan'208";a="323485731"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Dec 2022 11:59:59 +0800
-IronPort-SDR: nd4YVgZoFTdhUHMqpYZYWMmYZbv8TngCTTCd82N/krPNOw7LyG8062fsjfApNsg1FCf5/LOYJ1
- Pj5S0N2HKSBSKIHEd7ru6zCp7kcz8w1/ggiOAbveYpmyv1xijY/WBEGeSib7HhYn/jtYpipkvt
- jOGhTQeGxVFKiutcwRcrO+4nP9+RgYPfi2oml6XHxvemvE894Lg36SpSGNqE0C8xUrtjH4UUov
- Kae1U2j8Y9Ky0Bw8tUsq67sdEs4gP4teEfIY3bUzSOGtoE6w48YAloPkK2GQGch6TcMMfkZTAS
- DP4=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2022 19:12:29 -0800
-IronPort-SDR: DpAxVR7YgOd0a+g4nskdLq6HhySRFrt956Uwr67Oy0bzbsJSyeNeOK/WMht2tiD+MZXUbj7c52
- 9M5vV1GzRq68r+Q8axCEhYel170thatCkGpEgjBLMKeSX9weV+5aN9o4azUWgIGNl3TT/yrBuJ
- JaTFxpDMVFwUyc9gZ1PayLrPivWWNNvVXqSiVr5gfStCWrs3s6QBpUf7UsYrfYeAWUU0NUL9Yo
- TJ9qhocNeKD7vxoUhZMv9I804qdCSJM0E9CFT7ebULdbDZiMuz2usBvciU/TlBj4U6/hT/eaUS
- 9mY=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2022 20:00:00 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NcKTV6j4pz1RvTr
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Dec 2022 19:59:58 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1671595198; x=1674187199; bh=x75bHZHEUWl0iFLgcRBohFMshs2LLAhyBh4
-        URz+y8R4=; b=YqEG4pXF67jFgCcjnnQY+ofO2YuodPsFRbU/FHv2JKCYYo7hFJ3
-        6VizM97Uo/0VyfsQC/LNlQ81TY4tz4cC+LEYEqMUVszTFDIT9fhdaNDVLvUo6fxm
-        LQqe00Zt4vbepzD1OLuzA0s7s3UZ7NWWPgKfrpwDmYTXuDwCmRoMRgyaxEPv0P1w
-        /f4HzLTXkjT3lPvzQDhbdwZ4Wu5I39foxN2TqBb18gvgUcmsH1y1Lmkmo6AoPevI
-        6W2aINeq9AVlIffZwbwOAa1BBA4WLOxRbueGJeDX5xJU6Uw+jjnmKKSd05iSUHh6
-        lSGXatI0FVULa7b/ITQsmg3Nc86Li2PCZog==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 61mVd8B_tZUO for <linux-kernel@vger.kernel.org>;
-        Tue, 20 Dec 2022 19:59:58 -0800 (PST)
-Received: from [10.89.80.120] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.80.120])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NcKTS3G3Lz1RvLy;
-        Tue, 20 Dec 2022 19:59:56 -0800 (PST)
-Message-ID: <4ff0ca00-31f5-2867-ff59-cecb5d6d1048@opensource.wdc.com>
-Date:   Wed, 21 Dec 2022 12:59:54 +0900
+        Tue, 20 Dec 2022 23:02:13 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B30B13DD4;
+        Tue, 20 Dec 2022 20:02:12 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso879103pjp.4;
+        Tue, 20 Dec 2022 20:02:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9skzcMqbtck7zeDrhArO3NT59qMeIn4qeXyo+A2838=;
+        b=GoNWVSAhRUDsH6UFui56Vg0q0rYDE4FSKMAT0U5dPjQrIQzNdTwwvGj4yg9hwTO0CT
+         5rE7dZ/SBgAmATDfmvaxU9Zt9exkpK3fcCA2YcrIlvkwd7mYbEToZP4z8iZuzA7iRHDS
+         NgNe5cMcKYJIu3oEvV1WhYbFg/b6wMGJnN9NnS2xDRBGDA24LQzLO1QFMQj7R2vonKEg
+         ciyMgA4Z8VUGRIYj1Z5sU2OOpK3jFOKCM6YRrZkt+jno6WuMTbdDCd0JZJEv/lJP2Rel
+         NMCdqmYeoS/4CPtnMp1aIwnfJ4ZtGku/JKBs/o/IdxWpwdPYZGLetI+csXq0uTEIPmEy
+         4sUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d9skzcMqbtck7zeDrhArO3NT59qMeIn4qeXyo+A2838=;
+        b=HLIPdOgoblwTkXylz5ME45bnpW0gRKthGejJYfWGCs+Qou9fTx4uYplg4HtcU878JG
+         s8ea3VVZEney/VZRKKAU6xVP+FbiSV3GxuJsIHq/zLM62WZPb8XOr22mshBjnfdYVbQD
+         xgZxF6TBzU0Dybi1AnYaycmXE+NbtV1JAT4hTMU4iOAAjc5oHRhYjo5cVlw+E4YeZsom
+         iSideR8CcfQTroUcStPvlLLLSQXJZT8sGj9bU8TsPKaItSj3zQo0cZ1h5GvrS2lP/Jfx
+         sGi5Iu1FyXgFrEUocZz8UYTrWthrAVzfSNN1V5ealXJ6iYMcpCEkJj0rY09UlI/ZDke3
+         FLyQ==
+X-Gm-Message-State: AFqh2kr8/hXs8u+d9O5y9q7VdlIV6w0o9wC5r0GJYBfXZ8nVtYpXmiCp
+        p5u6ohCcG7omKYRpuu7OuBY=
+X-Google-Smtp-Source: AMrXdXvveVZhAyS8I/wF4nTGzldy02cLhtXAryRTJ56zc5etopPXtDjxy+8P/cQcIF+g+X4VUYGc6A==
+X-Received: by 2002:a05:6a20:6699:b0:af:b771:1d01 with SMTP id o25-20020a056a20669900b000afb7711d01mr761379pzh.49.1671595331815;
+        Tue, 20 Dec 2022 20:02:11 -0800 (PST)
+Received: from debian.me (subs28-116-206-12-57.three.co.id. [116.206.12.57])
+        by smtp.gmail.com with ESMTPSA id a5-20020a170902710500b0017f7628cbddsm2123862pll.30.2022.12.20.20.02.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 20:02:11 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 97DCA100064; Wed, 21 Dec 2022 11:02:08 +0700 (WIB)
+Date:   Wed, 21 Dec 2022 11:02:08 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Junhao He <hejunhao3@huawei.com>
+Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        mike.leach@linaro.org, leo.yan@linaro.org,
+        jonathan.cameron@huawei.com, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, lpieralisi@kernel.org,
+        linuxarm@huawei.com, yangyicong@huawei.com, liuqi6124@gmail.com,
+        f.fangjian@huawei.com, shenyang39@huawei.com,
+        prime.zeng@hisilicon.com
+Subject: Re: [PATCH v15 2/2] Documentation: Add document for UltraSoc SMB
+ driver
+Message-ID: <Y6KFQIk8rbMIglBO@debian.me>
+References: <20221220092945.30722-1-hejunhao3@huawei.com>
+ <20221220092945.30722-3-hejunhao3@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [PATCH] scsi: libsas: Grab the host lock in
- sas_ata_device_link_abort()
-Content-Language: en-US
-To:     Jason Yan <yanaijie@huawei.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Xingui Yang <yangxingui@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, niklas.cassel@wdc.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, prime.zeng@hisilicon.com,
-        kangfenglong@huawei.com
-References: <20221220125349.45091-1-yangxingui@huawei.com>
- <4ec9dbed-1758-d6b4-dc1d-ac42e8c22731@oracle.com>
- <c8387766-2ca0-51f3-e332-71492b13e5c1@opensource.wdc.com>
- <7347d117-6e0b-dd18-90a8-25685f757689@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <7347d117-6e0b-dd18-90a8-25685f757689@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gWpaJsbJoxLyMRhG"
+Content-Disposition: inline
+In-Reply-To: <20221220092945.30722-3-hejunhao3@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/21 11:42, Jason Yan wrote:
-> On 2022/12/21 8:36, Damien Le Moal wrote:
->> On 2022/12/20 23:59, John Garry wrote:
->>> On 20/12/2022 12:53, Xingui Yang wrote:
->>>> Grab the host lock in sas_ata_device_link_abort() before calling
->>>
->>> This is should be the ata port lock, right? I know that the ata comments
->>> say differently.
->>>
->>>> ata_link_abort(), as the comment in ata_link_abort() mentions.
->>>>
->>>
->>> Can you please add a fixes tag?
->>>
->>>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
->>>
->>> Reviewed-by: John Garry <john.g.garry@oracle.com>
->>>
->>>> ---
->>>>    drivers/scsi/libsas/sas_ata.c | 3 +++
->>>>    1 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
->>>> index f7439bf9cdc6..4f2017b21e6d 100644
->>>> --- a/drivers/scsi/libsas/sas_ata.c
->>>> +++ b/drivers/scsi/libsas/sas_ata.c
->>>> @@ -889,7 +889,9 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
->>>>    {
->>>>    	struct ata_port *ap = device->sata_dev.ap;
->>>>    	struct ata_link *link = &ap->link;
->>>> +	unsigned long flags;
->>>>    
->>>> +	spin_lock_irqsave(ap->lock, flags);
->>>>    	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY; /* tf status */
->>>>    	device->sata_dev.fis[3] = ATA_ABORTED; /* tf error */
->>>>    
->>>> @@ -897,6 +899,7 @@ void sas_ata_device_link_abort(struct domain_device *device, bool force_reset)
->>>>    	if (force_reset)
->>>>    		link->eh_info.action |= ATA_EH_RESET;
->>>>    	ata_link_abort(link);
->>
->> Really need to add lockdep annotations in libata to avoid/catch such bugs...
->> Will work on that.
-> 
-> Actually in libata there are many places calling ata_link_abort() not 
-> holding port lock. And some places are holding the real host 
-> lock(ata_host->lock) while calling ata_link_abort(). So if you add the 
-> lockdep annotations, there may be too many warnings. If these are real 
-> issues, we should fix them first.
 
-libata-EH does most of its work without the port lock held because by the time
-we get EH started, we are guaranteed to be idle with no commands in flight. That
-is why the calls you mention look like "bugs" but are not.
+--gWpaJsbJoxLyMRhG
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-lockdep annotation will be a little tricky, but not too hard to do either.
+On Tue, Dec 20, 2022 at 05:29:45PM +0800, Junhao He wrote:
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_=
+smb b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+> new file mode 100644
+> index 000000000000..f6526882c627
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+> @@ -0,0 +1,31 @@
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/enable_sink
+> +Date:		December 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(RW) Add/remove a SMB device from a trace path. There can be
+> +		multiple sources for a single SMB device.
+> +
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_size
+> +Date:		December 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(Read) Shows the buffer size of each UltraSoc SMB device.
+> +
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_status
+> +Date:		December 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(Read) Shows the value held by UltraSoc SMB status register.
+> +		BIT(0) is zero means buffer is empty.
+> +
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/read_pos
+> +Date:		December 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(Read) Shows the value held by UltraSoc SMB Read Pointer re=
+gister.
+> +
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/write_pos
+> +Date:		December 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(Read) Shows the value held by UltraSoc SMB Write Pointer r=
+egister.
 
-> 
-> Thanks,
-> Jason
+s/Read/RO/ and s/value held by/value of/
 
--- 
-Damien Le Moal
-Western Digital Research
+> diff --git a/Documentation/trace/coresight/ultrasoc-smb.rst b/Documentati=
+on/trace/coresight/ultrasoc-smb.rst
+> new file mode 100644
+> index 000000000000..056dd120e14c
+> --- /dev/null
+> +++ b/Documentation/trace/coresight/ultrasoc-smb.rst
+> @@ -0,0 +1,83 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +UltraSoc - HW Assisted Tracing on SoC
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +   :Author:   Qi Liu <liuqi115@huawei.com>
+> +   :Date:     December 2022
+> +
+> +Introduction
+> +------------
+> +
+> +UltraSoc SMB is a per SCCL (Super CPU Cluster) hardware. It provides a
+> +way to buffer and store CPU trace messages in a region of shared system
+> +memory. The device acts as a coresight sink device and the
+> +corresponding trace generators (ETM) are attached as source devices.
+> +
+> +Sysfs files and directories
+> +---------------------------
+> +
+> +The SMB devices appear on the existing coresight bus alongside other
+> +devices::
+> +
+> +	$# ls /sys/bus/coresight/devices/
+> +	ultra_smb0   ultra_smb1   ultra_smb2   ultra_smb3
+> +
+> +The ``ultra_smb<N>`` names SMB device associated with SCCL.::
+> +
+> +	$# ls /sys/bus/coresight/devices/ultra_smb0
+> +	enable_sink   mgmt
+> +	$# ls /sys/bus/coresight/devices/ultra_smb0/mgmt
+> +	buf_size  buf_status  read_pos  write_pos
+> +
+> +Key file items are:
+> +
+> +   * ``read_pos``: Shows the value on the read pointer register.
+> +   * ``write_pos``: Shows the value on the write pointer register.
+> +   * ``buf_status``: Shows the value on the status register.
+> +     BIT(0) is zero value which means the buffer is empty.
+> +   * ``buf_size``: Shows the buffer size of each device.
+> +
+> +Firmware Bindings
+> +-----------------
+> +
+> +The device is only supported with ACPI. Its binding describes device
+> +identifier, resource information and graph structure.
+> +
+> +The device is identified as ACPI HID "HISI03A1". Device resources are al=
+located
+> +using the _CRS method. Each device must present two base address; the fi=
+rst one
+> +is the configuration base address of the device, the second one is the 3=
+2-bit
+> +base address of shared system memory.
+> +
+> +Example::
+> +
+> +    Device(USMB) {                                               \
+> +      Name(_HID, "HISI03A1")                                     \
+> +      Name(_CRS, ResourceTemplate() {                            \
+> +          QWordMemory (ResourceConsumer, , MinFixed, MaxFixed, NonCachea=
+ble, \
+> +		       ReadWrite, 0x0, 0x95100000, 0x951FFFFF, 0x0, 0x100000) \
+> +          QWordMemory (ResourceConsumer, , MinFixed, MaxFixed, Cacheable=
+, \
+> +		       ReadWrite, 0x0, 0x50000000, 0x53FFFFFF, 0x0, 0x4000000) \
+> +      })                                                         \
+> +      Name(_DSD, Package() {                                     \
+> +        ToUUID("ab02a46b-74c7-45a2-bd68-f7d344ef2153"),          \
+> +	/* Use CoreSight Graph ACPI bindings to describe connections topology */
+> +        Package() {                                              \
+> +          0,                                                     \
+> +          1,                                                     \
+> +          Package() {                                            \
+> +            1,                                                   \
+> +            ToUUID("3ecbc8b6-1d0e-4fb3-8107-e627f805c6cd"),      \
+> +            8,                                                   \
+> +            Package() {0x8, 0, \_SB.S00.SL11.CL28.F008, 0},       \
+> +            Package() {0x9, 0, \_SB.S00.SL11.CL29.F009, 0},       \
+> +            Package() {0xa, 0, \_SB.S00.SL11.CL2A.F010, 0},       \
+> +            Package() {0xb, 0, \_SB.S00.SL11.CL2B.F011, 0},       \
+> +            Package() {0xc, 0, \_SB.S00.SL11.CL2C.F012, 0},       \
+> +            Package() {0xd, 0, \_SB.S00.SL11.CL2D.F013, 0},       \
+> +            Package() {0xe, 0, \_SB.S00.SL11.CL2E.F014, 0},       \
+> +            Package() {0xf, 0, \_SB.S00.SL11.CL2F.F015, 0},       \
+> +          }                                                      \
+> +        }                                                        \
+> +      })                                                         \
+> +    }
 
+This doc LGTM, thanks.
+
+For this doc,
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--gWpaJsbJoxLyMRhG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY6KFQAAKCRD2uYlJVVFO
+ow1wAQDFWt3fu2nr0v0ewY7DfkD7+xZqVxk2CBKg2MiWMDayZQEArvFvJIzaSQ2v
+fO5NYQKcDOA6BN5dF0qXxSLoEUDzaQ8=
+=azdo
+-----END PGP SIGNATURE-----
+
+--gWpaJsbJoxLyMRhG--
