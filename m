@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF636530C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 983456530CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 13:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbiLUM2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 07:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S231569AbiLUM3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 07:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiLUM2K (ORCPT
+        with ESMTP id S230264AbiLUM27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 07:28:10 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCBD23150;
-        Wed, 21 Dec 2022 04:28:08 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLBtJ9U014578;
-        Wed, 21 Dec 2022 12:28:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=MzegHwyungJP8at2Tw5NExRsmohwgdnjXBTsPH0lPJ8=;
- b=Rrn7MJqk99AYVmVtXHUdL1/3NBbdYht1SPEu61HlpqOHfRCqf68wupHkzr3O5nAVDPRE
- /XThY789TqcYF93WEmFpuyXgfGpNnNLdyiuETAkSVoOBbGRtjBsP2lbQtBt2da5yC5TB
- hF/7EhzQIyM0CF4DknGFsHDGcDmswJHHOaDlhoBtO42AM0IrGM6rcDjrfb0IditRLnWP
- Dg/r0s1ZSDhW75WRVL3Zt1Aaz12fcai2gXvImZKFHqQSIqNs86UBLL99SLTsy+Rybvgp
- ATigkt22K1pBJ7Ad3HtNVGMcZGeTJpwSj/8qMWr0WOeIYHXe8oBrn8HfTdDxdu8E32vP jA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm0wfg4qb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 12:28:01 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLCS09v001063
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 12:28:00 GMT
-Received: from [10.216.2.240] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 21 Dec
- 2022 04:27:55 -0800
-Message-ID: <ce8c2208-b4a2-70ea-bf87-a2baba292a28@quicinc.com>
-Date:   Wed, 21 Dec 2022 17:57:52 +0530
+        Wed, 21 Dec 2022 07:28:59 -0500
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB42823150;
+        Wed, 21 Dec 2022 04:28:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1671625734;
+        bh=AFdOwjgElA0eVy7l9HQ7225RQz+4S6ABdjqCdlZNIhE=;
+        h=From:To:Cc:Subject:Date;
+        b=tw6kYs0OmI6AhCcSoNrD/2NXnGjZQjDSbfpwnZAmeTJT68jobrgORpjxl3srBUIsh
+         /lGoGBRK3w5gv0e/bivplkjTuH+enPc52kxqJ6VgUzeC8OHRYzQ8phi6sHs5Sxp3aB
+         4rToUFc0IlgJsvsjqCMATq6FQGuggI9GIHG9EUcs=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
+        id 732BAE55; Wed, 21 Dec 2022 20:28:50 +0800
+X-QQ-mid: xmsmtpt1671625730t6gewc676
+Message-ID: <tencent_A492CB3F9592578451154442830EA1B02C07@qq.com>
+X-QQ-XMAILINFO: MyHh0PQai9Fp55N85Mprq5cqwqbSGPRN4ij7NV1aatKhjs13keIoWdefELgoRH
+         Of1pucblIq9+mT+7KZJBZZBwDtWAVtmikJL8r5LNVS+HnwVHwg961R8yLc6py/mEJmaHgKRwbbkt
+         NzCzwaZT/qJuF6OhAr200ctxmy967DAySPFqrvwJ2hn+/JXPOntaQL9So89Isy0HJmoJ4dns6q9u
+         L88U8wDuS98WimEutfC9OY51vVNjLwihLCp4blnTYueL+5SoYzhdqWkA7RMZI8i6YuGn+TZ15dfw
+         SZURqnGhxvmJsLe3R4efPL5+Wa8I2OSNLhtdZsyGVRKoo+kEZlPpgMShiOY64mnNq8gZkqXDP95Z
+         8FdJNQ1RW5pnohOpxyCt3LQYmKSHORprzISYywVcQSd8YoEViJyZi5AvpUl6zNzWXsgppqH+z/Ty
+         jpx/eCup6XeN5rXnKBB7mnWdsaJNZxWgXEltm0FVYrFOJXd2ULLbZHgeU1a9v2Q2MsVkT3sRqali
+         uVjmOv/nNh545FqE+nc8vl1OTLXVSFoDwyXVZ9NBJVal0oMCXtmG9/6p+U/7HSgpI01Wb54P/iem
+         SeECaQM80kOPZmyEmnKvzGwJtKzuJD2vAtV13LpFADV6HffNlStEZq0SAap+VpqT4Jy2AzlX/iM8
+         May22tpbAtVRZ1F6Y4nlS86zteyXeDSyq19/ZSoPyPbED7+/v8SEtiouoPHwXa6OWYP4UGUFUnEo
+         u6S2QtNuY2kA91N7AsPOcAwT9LssYqElGXL3zZT5guOWY/PwgoO69IsRh4CSMiCa72ZghDqbJ1JN
+         pqCU+quqCNKCorzbqbAXkDbpQzk7qRlojOL6259oiTetOnFVAEF1jAWziCUI/B8jWmosQM+lgYgE
+         IcVTZJVWfMOslxBoYU1I26/nXUTobxrq103qZNDTMRS5ud/hYKa1SWUoD5zE56KYtcTGMOPoRTWu
+         1KSC9FBC5ooZPlFX3P19eWmHXT0uc9KW9EEtg9xhXIFtZh3Q06UQrw2Negkhi9J/MVXA3bwr7N6W
+         aIwJEeGg==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     seanjc@google.com
+Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, rongtao@cestc.cn,
+        rtoax@foxmail.com, tglx@linutronix.de, x86@kernel.org
+Subject: [PATCH v2] KVM: VMX: Use tabs instead of spaces for indentation
+Date:   Wed, 21 Dec 2022 20:28:49 +0800
+X-OQ-MSGID: <20221221122849.80994-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: clock: SC7280: Add resets for LPASS
- audio clock controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <broonie@kernel.org>,
-        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>
-References: <1671618061-6329-1-git-send-email-quic_srivasam@quicinc.com>
- <1671618061-6329-2-git-send-email-quic_srivasam@quicinc.com>
- <f138f9de-4ecf-3126-97bd-668c96612913@linaro.org>
- <b6172e20-114a-b7e2-2200-0932f803cb20@quicinc.com>
- <5ff6e569-ad9f-f884-ea0e-41114afcaf7d@linaro.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <5ff6e569-ad9f-f884-ea0e-41114afcaf7d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _348LdYM0GSeg0L3Pt4OozUmDzVlGM2b
-X-Proofpoint-GUID: _348LdYM0GSeg0L3Pt4OozUmDzVlGM2b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-21_05,2022-12-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
- spamscore=0 suspectscore=0 phishscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212210101
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rong Tao <rongtao@cestc.cn>
 
-On 12/21/2022 5:54 PM, Krzysztof Kozlowski wrote:
-> On 21/12/2022 13:22, Srinivasa Rao Mandadapu wrote:
->> On 12/21/2022 4:12 PM, Krzysztof Kozlowski wrote:
->> Thanks for your time Krzyszto!!!
->>> On 21/12/2022 11:21, Srinivasa Rao Mandadapu wrote:
->>>> Add support for LPASS audio clock gating for RX/TX/SWA core bus clocks
->>>> for audioreach based SC7280 platforms.
->>> Use subject prefixes matching the subsystem (git log --oneline -- ...).
->>> The final prefix should be "qcom,sc7280-lpasscc" and then the actual
->                                  ^^^^^^^ it's written here
->
->>> subject should drop redundant pieces.
->> Sorry. I didn't understand much from your statement.
->>
->> Do you mean subject should something like below?
->>
->>    dt-bindings: clock: qcom: sc7280-lpasscc: Add resets for audio clock
->> controller
-> 1. The last prefix should be "qcom,sc7280-lpasscc:".
-> 2. And then drop "audio clock controller" because it is obvious, isn't it?
-Okay!. Thanks for clarifying. I will change accordingly. Actually I 
-followed previous similar commits.
->
->>>>    ...
->>> Best regards,
->>> Krzysztof
->>>
-> Best regards,
-> Krzysztof
->
+Code indentation should use tabs where possible and miss a '*'.
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+v2: KVM: VMX: for case-insensitive searches
+v1: https://lore.kernel.org/lkml/tencent_768ACEEBE1E803E29F4191906956D065B806@qq.com/
+---
+ arch/x86/kvm/vmx/vmenter.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
+index 8477d8bdd69c..f09e3aaab102 100644
+--- a/arch/x86/kvm/vmx/vmenter.S
++++ b/arch/x86/kvm/vmx/vmenter.S
+@@ -229,7 +229,7 @@ SYM_INNER_LABEL(vmx_vmexit, SYM_L_GLOBAL)
+ 	 * eIBRS has its own protection against poisoned RSB, so it doesn't
+ 	 * need the RSB filling sequence.  But it does need to be enabled, and a
+ 	 * single call to retire, before the first unbalanced RET.
+-         */
++	 */
+ 
+ 	FILL_RETURN_BUFFER %_ASM_CX, RSB_CLEAR_LOOPS, X86_FEATURE_RSB_VMEXIT,\
+ 			   X86_FEATURE_RSB_VMEXIT_LITE
+@@ -273,7 +273,7 @@ SYM_FUNC_END(__vmx_vcpu_run)
+  * vmread_error_trampoline - Trampoline from inline asm to vmread_error()
+  * @field:	VMCS field encoding that failed
+  * @fault:	%true if the VMREAD faulted, %false if it failed
+-
++ *
+  * Save and restore volatile registers across a call to vmread_error().  Note,
+  * all parameters are passed on the stack.
+  */
+-- 
+2.39.0
+
