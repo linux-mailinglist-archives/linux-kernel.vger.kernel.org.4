@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE2D65371A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C28F1653727
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234688AbiLUTmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 14:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
+        id S234749AbiLUTn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 14:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiLUTl5 (ORCPT
+        with ESMTP id S229789AbiLUTnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:41:57 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD65F26102
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:41:55 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so9648815otp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:41:55 -0800 (PST)
+        Wed, 21 Dec 2022 14:43:51 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F56C26137
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:43:50 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id f20so16695911lja.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:43:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=M77+zkSrNLPknPTLa1QipDCIHqQpe+PgczwgzLamsAQ=;
-        b=V3ap7UEAvze92oEmjHSpPU+W/Mq3T/ZoTGcN1x4Imhxw+3JdxoAUq42/164zPEQKnR
-         wK+Xi7s8lio6LtL38ODgbknXRgpVh1cDvkllAK46rfCgsbIMQzm5xHoiq5oFs2u0dT1X
-         RmaAnRCooC5KgOTvn9n208tf9mtk0HpdJ5REtp4gatMRGPFAtaQrlUMCPn6+Fch/FuCd
-         2VFHo85jJyAGzOEIOzSopVkVYql+PW7UNAMJijxIP36Q79hZD+eCWFX75OJste7IYkfE
-         ZQFzRHArJC3CsX4eCFswOQCm0RNYhJwGXxHyPnZ1mz2jJHkcclb/989bHw2B7YiBwrFO
-         eeTw==
+        bh=kYmaas5EgsqwB1HZHnQkYwwmJtIimjHn5rSwR1jMRh0=;
+        b=v6SpFvK9pqLxtQJZSExisnllyUO5wL73hlJENBwKhFmAVeWsDZmMrAOssuVNLLXZPP
+         a/EoWYwqC8hZyl6twcKu42TJH/hdDVeruuwKIk2mAcoVrBArxzardjkjf9uk2G/Xf+VV
+         HcvU11Pou5FtThGqIXJ7vRAM1JAJNABhC8J5+4cRss1hPzukvKw0ZN4hJBRF9xRzLKiu
+         Gtf/zc3tKlKVdGq8bd3IVtedrHdpr+fwNk8Wjc93zAnyTL1J2hYYKLs2qHx6SL7PGVjo
+         2Wh5E1UfbKuzDZ+l6ybAaLBio+P65xEfZBPz0agfYoOYz/Uh+Tq+p/1IsBklWSwJl63Q
+         wh6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M77+zkSrNLPknPTLa1QipDCIHqQpe+PgczwgzLamsAQ=;
-        b=azvC7duxnyC9ZH2lt+9IPB2TvxA6Q7YXKkNmzlVHh6d5Q2faV7UDR0b81wiI4IDVOk
-         XosGXqUc5vpal+XCyJid01gvTMcXfmnul9tOtbusQpQIpcou2C635BJ8xuE9ZQy0GFEf
-         oWZbNyE1B429MOEsNg1tNn+fDrNeNEb8A2Tq7NasXL04rQDe4RtdOu1vJFwYwIL+qIPd
-         19RDovWiiUCxDPJuSNJusvFP9RgZ8n6Ld657WZ4l8/gg5oRGI0TlbA9k+DD2vhMxw0hl
-         nd2swxiTXg/23qfwSa1oV66VrCI4pEWZCtnvuaqddiM9t5oGV//u9onKF5/JeU+ZJold
-         8k8Q==
-X-Gm-Message-State: AFqh2koyvHIHBlBMQVmXOWZNqt85lRl2tFJW/ePfRx6REiRsy9GMCGKg
-        Hb2de5LFiRpzFOEvS46qZf2aQg==
-X-Google-Smtp-Source: AMrXdXsNphmP7S1148UfbgYRWOShpLe/8D/x7R63IpeDLafvHZ6lrfJ8iA8shAxwkx95cBEJXRvZkQ==
-X-Received: by 2002:a05:6830:26e5:b0:670:8d2e:649e with SMTP id m37-20020a05683026e500b006708d2e649emr1150551otu.17.1671651713994;
-        Wed, 21 Dec 2022 11:41:53 -0800 (PST)
-Received: from [192.168.11.20] (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
-        by smtp.gmail.com with ESMTPSA id g17-20020a9d6b11000000b00660e833baddsm7325994otp.29.2022.12.21.11.41.52
+        bh=kYmaas5EgsqwB1HZHnQkYwwmJtIimjHn5rSwR1jMRh0=;
+        b=od6DvqxgDxzWwRCDQGW+DG5QwXQ+gwjRHG/5zN69oxEzdH12j1Fl1N0acT7UuEPhji
+         owSfah0rcMdtLqaTTKRLjI7iwzuwec6KPbm0Lyx1YZo+4/L7YNBoODiI3JdPfln38Abd
+         y7L0Iv1MSr/tHe1z8NnHUdfbGyu1jGndeFhdTqh0nV0gfBqkjv4djVrePCOJlOBsIwoe
+         Dw/2w6cTY41rpfNl8kez688/kDyfFPEluJyh8pI4DOcq99ulMl+DscOyud0WsbkVE2xF
+         cEKNE8+aTaXP67xCOkF3ahcoxQt2Szo3ZdBndkKbzAt3DcL1scPjVebVx92SH6GQxkwM
+         PAZw==
+X-Gm-Message-State: AFqh2kpH2IZ8HYulgLBt9pCGQ8pTR/s7kBL5gBqE0d+fLoiMjYHnangA
+        go9WcV+62te+zGV6R5uQ/xut1w==
+X-Google-Smtp-Source: AMrXdXvHM+AHzDjoRaw3LDYEcNpdxHutKCs+iwgoETz5JMAamSxV72aBEHSOtLDaXf47nSnSHLlFnw==
+X-Received: by 2002:a2e:3303:0:b0:27b:5a9b:a3c7 with SMTP id d3-20020a2e3303000000b0027b5a9ba3c7mr866009ljc.50.1671651828562;
+        Wed, 21 Dec 2022 11:43:48 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id i26-20020a2ea23a000000b0027f94a09cb4sm501415ljm.135.2022.12.21.11.43.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 11:41:53 -0800 (PST)
-Message-ID: <4d434dd7-cd3c-ed53-c337-4cf1ba018aef@kali.org>
-Date:   Wed, 21 Dec 2022 13:41:52 -0600
+        Wed, 21 Dec 2022 11:43:47 -0800 (PST)
+Message-ID: <87837483-93eb-823a-508a-4e163f969de0@linaro.org>
+Date:   Wed, 21 Dec 2022 21:43:47 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [PATCH v3 0/7] dts: qcom: sc8280xp: add i2c, spi, and rng nodes
-To:     Brian Masney <bmasney@redhat.com>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     quic_shazhuss@quicinc.com, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, johan+linaro@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
-        echanude@redhat.com
-References: <20221220192854.521647-1-bmasney@redhat.com>
-Content-Language: en-US
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <20221220192854.521647-1-bmasney@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v9 01/15] drm/msm/disp/dpu: clear dpu_assign_crtc and get
+ crtc from connector state instead of dpu_enc
+Content-Language: en-GB
+To:     Vinod Polimera <vpolimer@qti.qualcomm.com>,
+        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        "Vishnuvardhan Prodduturi (QUIC)" <quic_vproddut@quicinc.com>,
+        "Bjorn Andersson (QUIC)" <quic_bjorande@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
+References: <1671012352-1825-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1671012352-1825-2-git-send-email-quic_vpolimer@quicinc.com>
+ <7ad7654a-b0a0-c08a-d111-cd34d38c36e0@linaro.org>
+ <BN0PR02MB8173B06FA578D6BC22AC6424E4EB9@BN0PR02MB8173.namprd02.prod.outlook.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <BN0PR02MB8173B06FA578D6BC22AC6424E4EB9@BN0PR02MB8173.namprd02.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,49 +92,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/12/2022 16:10, Vinod Polimera wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> Sent: Wednesday, December 14, 2022 9:05 PM
+>> To: Vinod Polimera (QUIC) <quic_vpolimer@quicinc.com>; dri-
+>> devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
+>> freedreno@lists.freedesktop.org; devicetree@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org; robdclark@gmail.com;
+>> dianders@chromium.org; swboyd@chromium.org; Kalyan Thota (QUIC)
+>> <quic_kalyant@quicinc.com>; Kuogee Hsieh (QUIC)
+>> <quic_khsieh@quicinc.com>; Vishnuvardhan Prodduturi (QUIC)
+>> <quic_vproddut@quicinc.com>; Bjorn Andersson (QUIC)
+>> <quic_bjorande@quicinc.com>; Aravind Venkateswaran (QUIC)
+>> <quic_aravindh@quicinc.com>; Abhinav Kumar (QUIC)
+>> <quic_abhinavk@quicinc.com>; Sankeerth Billakanti (QUIC)
+>> <quic_sbillaka@quicinc.com>
+>> Subject: Re: [PATCH v9 01/15] drm/msm/disp/dpu: clear dpu_assign_crtc and
+>> get crtc from connector state instead of dpu_enc
+>>
+>> WARNING: This email originated from outside of Qualcomm. Please be wary
+>> of any links or attachments, and do not enable macros.
+>>
+>> On 14/12/2022 12:05, Vinod Polimera wrote:
+>>> Update crtc retrieval from dpu_enc to dpu_enc connector state,
+>>> since new links get set as part of the dpu enc virt mode set.
+>>> The dpu_enc->crtc cache is no more needed, hence cleaning it as
+>>> part of this change.
+>>>
+>>> This patch is dependent on the series:
+>>> https://patchwork.freedesktop.org/series/110969/
+>>>
+>>> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+>>> ---
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  4 ---
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 42 +++++++++---------
+>> -----------
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  8 ------
+>>>    3 files changed, 13 insertions(+), 41 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>>> index 3f72d38..289d51e 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>>> @@ -1029,7 +1029,6 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
+>>>                 */
+>>>                if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
+>>>                        release_bandwidth = true;
+>>> -             dpu_encoder_assign_crtc(encoder, NULL);
+>>>        }
+>>>
+>>>        /* wait for frame_event_done completion */
+>>> @@ -1099,9 +1098,6 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
+>>>        trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
+>>>        dpu_crtc->enabled = true;
+>>>
+>>> -     drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state-
+>>> encoder_mask)
+>>> -             dpu_encoder_assign_crtc(encoder, crtc);
+>>> -
+>>>        /* Enable/restore vblank irq handling */
+>>>        drm_crtc_vblank_on(crtc);
+>>>    }
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>> index a585036..b9b254d 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>> @@ -132,11 +132,6 @@ enum dpu_enc_rc_states {
+>>>     * @intfs_swapped:  Whether or not the phys_enc interfaces have been
+>> swapped
+>>>     *                  for partial update right-only cases, such as pingpong
+>>>     *                  split where virtual pingpong does not generate IRQs
+>>> - * @crtc:            Pointer to the currently assigned crtc. Normally you
+>>> - *                   would use crtc->state->encoder_mask to determine the
+>>> - *                   link between encoder/crtc. However in this case we need
+>>> - *                   to track crtc in the disable() hook which is called
+>>> - *                   _after_ encoder_mask is cleared.
+>>>     * @connector:              If a mode is set, cached pointer to the active
+>> connector
+>>>     * @crtc_kickoff_cb:                Callback into CRTC that will flush & start
+>>>     *                          all CTL paths
+>>> @@ -181,7 +176,6 @@ struct dpu_encoder_virt {
+>>>
+>>>        bool intfs_swapped;
+>>>
+>>> -     struct drm_crtc *crtc;
+>>>        struct drm_connector *connector;
+>>>
+>>>        struct dentry *debugfs_root;
+>>> @@ -1317,7 +1311,7 @@ static void dpu_encoder_vblank_callback(struct
+>> drm_encoder *drm_enc,
+>>>                struct dpu_encoder_phys *phy_enc)
+>>>    {
+>>>        struct dpu_encoder_virt *dpu_enc = NULL;
+>>> -     unsigned long lock_flags;
+>>> +     struct drm_crtc *crtc;
+>>>
+>>>        if (!drm_enc || !phy_enc)
+>>>                return;
+>>> @@ -1325,12 +1319,13 @@ static void dpu_encoder_vblank_callback(struct
+>> drm_encoder *drm_enc,
+>>>        DPU_ATRACE_BEGIN("encoder_vblank_callback");
+>>>        dpu_enc = to_dpu_encoder_virt(drm_enc);
+>>>
+>>> -     atomic_inc(&phy_enc->vsync_cnt);
+>>> +     if (!dpu_enc->connector || !dpu_enc->connector->state ||
+>>> +         !dpu_enc->connector->state->crtc)
+>>> +             return;
+>>>
+>>> -     spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+>>> -     if (dpu_enc->crtc)
+>>> -             dpu_crtc_vblank_callback(dpu_enc->crtc);
+>>> -     spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+>>> +     atomic_inc(&phy_enc->vsync_cnt);
+>>> +     crtc = dpu_enc->connector->state->crtc;
+>>> +     dpu_crtc_vblank_callback(crtc);
+>>>
+>>>        DPU_ATRACE_END("encoder_vblank_callback");
+>>>    }
+>>> @@ -1353,33 +1348,22 @@ static void
+>> dpu_encoder_underrun_callback(struct drm_encoder *drm_enc,
+>>>        DPU_ATRACE_END("encoder_underrun_callback");
+>>>    }
+>>>
+>>> -void dpu_encoder_assign_crtc(struct drm_encoder *drm_enc, struct
+>> drm_crtc *crtc)
+>>> -{
+>>> -     struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+>>> -     unsigned long lock_flags;
+>>> -
+>>> -     spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+>>> -     /* crtc should always be cleared before re-assigning */
+>>> -     WARN_ON(crtc && dpu_enc->crtc);
+>>> -     dpu_enc->crtc = crtc;
+>>> -     spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+>>> -}
+>>> -
+>>>    void dpu_encoder_toggle_vblank_for_crtc(struct drm_encoder
+>> *drm_enc,
+>>>                                        struct drm_crtc *crtc, bool enable)
+>>>    {
+>>>        struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+>>> -     unsigned long lock_flags;
+>>> +     struct drm_crtc *new_crtc;
+>>>        int i;
+>>>
+>>>        trace_dpu_enc_vblank_cb(DRMID(drm_enc), enable);
+>>>
+>>> -     spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+>>> -     if (dpu_enc->crtc != crtc) {
+>>> -             spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+>>> +     if (!dpu_enc->connector || !dpu_enc->connector->state)
+>>> +             return;
+>>> +
+>>> +     new_crtc = dpu_enc->connector->state->crtc;
+>>> +     if (!new_crtc || new_crtc != crtc) {
+>>
+>> I don't like going through all the pointers and states without locks.
+>> The connector->state can potentially check. So, I'd propose even simpler
+>> solution: just store the crtc in the dpu_enc at the creation time. Then
+>> you can use the rest of the current dpu_enc->crtc as expected.
+> 
+> Can i do as below.
+> After encoder to crtc is pinned, i can update dpu_encoder structure that is attached with drm_enc with the crtc created during drm_obj_init
+> 
+> @@ -816,6 +816,7 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
+>                  }
+>                  priv->crtcs[priv->num_crtcs++] = crtc;
+>                  encoder->possible_crtcs = 1 << drm_crtc_index(crtc);
+>                + dpu_encoder_assign_crtc(encoder, crtc);
+>                  i++;
+>          }
 
-On 12/20/22 1:28 PM, Brian Masney wrote:
-> This patch series adds the i2c and spi nodes that are missing on the
-> sc8280xp platform. Since I am already making changes to sc8280xp.dtsi
-> in this series, I also included a change to enable the rng node for this
-> platform as well.
->
-> The first three patches in this series are new in v2 and rename one node
-> at a time to try to make the review easier. Each patch has a changelog.
->
-> Note that this series needs to be applied on top of:
-> [PATCH v5] arm64: dts: qcom: sa8540p-ride: enable pcie2a node
-> https://lore.kernel.org/lkml/20221213095922.11649-1-quic_shazhuss@quicinc.com/
->
-> Changes from v2 to v3:
-> - Reordered rng node in patch 7 so that it's sorted correctly by address
-> - Since I respun the series, I made Konrad's sort order suggestion to
->    the state nodes since I'm making changes here.
-> - Collected R-b and T-b tags.
->
-> Brian Masney (7):
->    arm64: dts: qcom: sc8280xp: rename qup2_uart17 to uart17
->    arm64: dts: qcom: sc8280xp: rename qup2_i2c5 to i2c21
->    arm64: dts: qcom: sc8280xp: rename qup0_i2c4 to i2c4
->    arm64: dts: qcom: sc8280xp: add missing i2c nodes
->    arm64: dts: qcom: sc8280xp: add missing spi nodes
->    arm64: dts: qcom: sa8540p-ride: add i2c nodes
->    arm64: dts: qcom: sc8280xp: add rng device tree node
->
->   arch/arm64/boot/dts/qcom/sa8295p-adp.dts      |  12 +-
->   arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  91 ++-
->   arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     | 160 ++--
->   .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 178 ++---
->   arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 725 +++++++++++++++++-
->   5 files changed, 983 insertions(+), 183 deletions(-)
+Yes.
 
+>>
+>>>                return;
+>>>        }
+>>> -     spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+>>>
+>>>        for (i = 0; i < dpu_enc->num_phys_encs; i++) {
+>>>                struct dpu_encoder_phys *phys = dpu_enc->phys_encs[i];
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>>> index 7f3d823..eb9fc7c 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+>>> @@ -40,14 +40,6 @@ struct msm_display_info {
+>>>    };
+>>>
+>>>    /**
+>>> - * dpu_encoder_assign_crtc - Link the encoder to the crtc it's assigned to
+>>> - * @encoder: encoder pointer
+>>> - * @crtc:    crtc pointer
+>>> - */
+>>> -void dpu_encoder_assign_crtc(struct drm_encoder *encoder,
+>>> -                          struct drm_crtc *crtc);
+>>> -
+>>> -/**
+>>>     * dpu_encoder_toggle_vblank_for_crtc - Toggles vblank interrupts on or
+>> off if
+>>>     *  the encoder is assigned to the given crtc
+>>>     * @encoder:        encoder pointer
+>>
+>> --
+>> With best wishes
+>> Dmitry
+> 
 
-One note, and this isn't due to your patches at all, but the touchscreen 
-on the Thinkpad X13s needs to be manually bound in order to work via 
-echo 1-0010 | sudo tee /sys/bus/i2c/drivers/i2c_hid_of/bind - this patch 
-does not affect that, though I had hoped maybe it would.
-
-Tested on the Lenovo Thinkpad X13s
-
-Tested-by: Steev Klimaszewski <steev@kali.org>
+-- 
+With best wishes
+Dmitry
 
