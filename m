@@ -2,138 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDE265338E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF1D653390
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 16:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234442AbiLUPjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 10:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
+        id S229652AbiLUPkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 10:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233766AbiLUPip (ORCPT
+        with ESMTP id S229591AbiLUPj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 10:38:45 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9817222BC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 07:38:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1671637083; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=YtcM+Iz3r8jkjev8FMSfjCgSrEZFmHFI2VlA30lBcgv9YBhuaGuY4zHvuswJA072Iyd+U2B5f28favQuPwsLMZEzHv5IQ0rNwpmhE7WjfrE4neTBOKO941ABOCq4hM106KlrhFJoR3AmHEqyn1/VgaDFp0PAB88s2wxlinqduaw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1671637083; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=NSC4qFEML6JXScA68OwOMvTL2VeNJw9INIEB/X5j5DE=; 
-        b=Rr0YzyGueqTu31cRn0TdhGj6+wrgC/YJ06BE2HFYvhwy+wRWhX8ZEI80Je75e06ncW4OPjuREpuPjCiterht6LHx9SIjAdyFl92ZRVilIoRQknPMzAcRDU6nw9XnPWIiIUvCP3MJO0gl2ZdFiKrTdoEPzPha0H1kISVM+ZkB+ZU=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671637083;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:Message-ID:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=NSC4qFEML6JXScA68OwOMvTL2VeNJw9INIEB/X5j5DE=;
-        b=lLYfPW003I/0101fGgO0uqwxVrjtA6k8WT/5ycLvSBx8ecVFBlVmyJ75qo+DRSk+
-        /ySfzYBNG0gW30Fr+inPccfcrnB5JoHVa3LR/ZsjYaRfmTiwx6bEJ+PFRpwymmRhw++
-        0SDWoXVbdqt8nGRcxU23V0MX0sNRYTmoXccCGtck=
-Received: from [192.168.1.9] (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1671637082214850.5013694823708; Wed, 21 Dec 2022 21:08:02 +0530 (IST)
-Date:   Wed, 21 Dec 2022 21:08:01 +0530
+        Wed, 21 Dec 2022 10:39:58 -0500
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D57B9;
+        Wed, 21 Dec 2022 07:39:57 -0800 (PST)
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 2BLFdavX012529;
+        Thu, 22 Dec 2022 00:39:37 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2BLFdavX012529
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1671637177;
+        bh=e5zLKGROubDNVvYxZKupYtEZfQJgPSYQABMW+J+3mDs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=xNtSKmCWEoxmpMGBvN9ieu4widdAifgZmD1YWGYQ8KRJs/UXoP2AYWa+854iilMPn
+         QYu/Px2/7KUS9YVG+3xRwH+D4vmYgnJjkj97LDPn2YF3K6OIMFjvPveM4SLnsnGayy
+         R44AClZ653RPjMLj7tfa7zHNgM2vOcZyoiOq9+uIwo2/cpkNr+sK1YvzgoifdsUFVO
+         vxG47DR6bDvj4ijZUuySzjmkash/lfjZc7US6fYP6tRakh3+IZ7uCk7ToIg+e7PEPZ
+         IkEOo/slEWPDzUeDIHpufADvgnjOitJY4xwgU2fdVi36/alpA+kveK54t0AXWb7+NZ
+         IHEij96gekoQA==
+X-Nifty-SrcIP: [209.85.160.54]
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-144bd860fdbso19641297fac.0;
+        Wed, 21 Dec 2022 07:39:37 -0800 (PST)
+X-Gm-Message-State: AFqh2kpzyqoiEeemT07PFtTB6W0XhfFdq+HlUUtgTJSFH5MohRzcWn8r
+        3V4THN6jqRUuXbXv/79kTI0NAo2gjotyRysY8Ho=
+X-Google-Smtp-Source: AMrXdXu5wBUNkd6f+ZHBJHJAfJjzw4vVTST+099spBVLipN+anBHxC5siTmFSLQ2Jxj/8kubYP90fcs7i0BaTV1TKzk=
+X-Received: by 2002:a05:6870:4c0e:b0:144:a2de:1075 with SMTP id
+ pk14-20020a0568704c0e00b00144a2de1075mr113181oab.194.1671637176438; Wed, 21
+ Dec 2022 07:39:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 04/10] drm/print: Fix support for NULL as first argument
- of drm_dbg_*
-Content-Language: en-US, en-GB, hi-IN
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-References: <cover.1671566741.git.code@siddh.me>
- <3ebf0d61ad5e82875a4493108602e62429306b14.1671566741.git.code@siddh.me>
- <e10cf9f1-af23-4355-7768-7d5010a28be0@suse.de>
-From:   Siddh Raman Pant <code@siddh.me>
-Message-ID: <16b08ba3-0d38-eb0f-8d4d-1da55ef38852@siddh.me>
-In-Reply-To: <e10cf9f1-af23-4355-7768-7d5010a28be0@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com>
+ <26bd2928-9d62-32b3-4f9f-9dd9293cefeb@leemhuis.info>
+In-Reply-To: <26bd2928-9d62-32b3-4f9f-9dd9293cefeb@leemhuis.info>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 22 Dec 2022 00:39:00 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ5VVRdrewtxrBdw561LL=yY8fdr=i1e7pp4DRht=r_Ww@mail.gmail.com>
+Message-ID: <CAK7LNAQ5VVRdrewtxrBdw561LL=yY8fdr=i1e7pp4DRht=r_Ww@mail.gmail.com>
+Subject: Re: BUG: arm64: missing build-id from vmlinux
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, Dennis Gilmore <dennis@ausil.us>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21 2022 at 14:38:08 +0530, Thomas Zimmermann wrote:
-> Hi
->=20
-> Am 20.12.22 um 21:16 schrieb Siddh Raman Pant:
->> Comments say macros DRM_DEBUG_* are deprecated in favor of
->> drm_dbg_*(NULL, ...), but they have broken support for it,
->> as the macro will result in `(NULL) ? (NULL)->dev : NULL`.
->>
->> Thus, fix them by casting input drm to a temporary struct ptr,
->> with the same convention as in __DRM_DEFINE_DBG_RATELIMITED.
->>
->> Signed-off-by: Siddh Raman Pant <code@siddh.me>
->> ---
->> =C2=A0 include/drm/drm_print.h | 89 ++++++++++++++++++++++++++++++++----=
------
->> =C2=A0 1 file changed, 69 insertions(+), 20 deletions(-)
->>
->> diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
->> index a44fb7ef257f..53702d830291 100644
->> --- a/include/drm/drm_print.h
->> +++ b/include/drm/drm_print.h
->> @@ -486,26 +486,75 @@ void __drm_dev_dbg(struct _ddebug *desc, const str=
-uct device *dev,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __drm_printk((drm), err, _ratelimited, "*=
-ERROR* " fmt, ##__VA_ARGS__)
->> =C2=A0 =C2=A0 -#define drm_dbg_core(drm, fmt, ...)=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 \
->> -=C2=A0=C2=A0=C2=A0 drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_CORE, =
-fmt, ##__VA_ARGS__)
-> ...
->> +#define drm_dbg_core(drm, fmt, ...)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
->> +({=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
->> +=C2=A0=C2=A0=C2=A0 const struct drm_device *drm_ =3D (drm);=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
->> +=C2=A0=C2=A0=C2=A0 drm_dev_dbg(drm_ ? drm_->dev : NULL, DRM_UT_CORE,=C2=
-=A0=C2=A0=C2=A0 \
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fmt,=
- ##__VA_ARGS__);=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 \
->> +})
->=20
-> Instead of doing this for each drm_dbg_ macro, rather add an internal hel=
-per that returns the device or NULL like this:
->=20
-> static inline struct device *__drm_print_dev(struct drm_device *drm)
-> {
-> =C2=A0=C2=A0=C2=A0=C2=A0if (drm)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return drm->dev;
-> =C2=A0=C2=A0=C2=A0=C2=A0return NULL;
-> }
->=20
-> and change the macros to
->=20
-> drm_dbg_core(drm, fmt, ...)
-> =C2=A0=C2=A0=C2=A0=C2=A0drm_dev_dbg(__drm_print_dev(drm), DRM_UT_CORE, )
->=20
-> and so on.
->=20
-> Best regards
-> Thomas
+On Wed, Dec 21, 2022 at 5:23 PM Thorsten Leemhuis
+<regressions@leemhuis.info> wrote:
+>
+> Hi, this is your Linux kernel regression tracker. CCing the regression
+> mailing list, as it should be in the loop for all regressions:
+> https://docs.kernel.org/admin-guide/reporting-regressions.html
+>
+> On 18.12.22 21:51, Dennis Gilmore wrote:
+> > The changes in https://lore.kernel.org/linux-arm-kernel/166783716442.32724.935158280857906499.b4-ty@kernel.org/T/
+> > result in vmlinux no longer having a build-id.
+>
+> FWIW, that's 994b7ac1697b ("arm64: remove special treatment for the link
+> order of head.o") from Masahiro merged through Will this cycle.
+>
+> > At the least, this
+> > causes rpm builds to fail. Reverting the patch does bring back a
+> > build-id, but there may be a different way to fix the regression
+>
+> Makes me wonder if other distros or CIs relying on the build-id are
+> broken, too.
+>
+> Anyway, the holiday season is upon us, hence I also wonder if it would
+> be best to revert above change quickly and leave further debugging for 2023.
+>
+> Masahiro, Will, what's your option on this?
 
-Sure, I'll send a v2.
 
-Thanks,
-Siddh
+I do not understand why you rush into the revert so quickly.
+We are before -rc1.
+We have 7 weeks before the 6.2 release
+(assuming we will have up to -rc7).
 
+If we get -rc6 or -rc7 and we still do not
+solve the issue, we should consider reverting it.
+
+
+
+The problem is that the .notes section was
+turned into PROGBITS.
+
+
+
+$ aarch64-linux-gnu-readelf -S  vmlinux.good
+
+   [ snip ]
+
+  [ 7] .notes            NOTE             ffffffc0082c53a0  002d53a0
+       0000000000000054  0000000000000000   A       0     0     4
+
+
+
+$ aarch64-linux-gnu-readelf -S  vmlinux.bad
+
+  [ snip ]
+
+  [ 7] .notes            PROGBITS         ffffffc0082c5380  002d5380
+       0000000000000054  0000000000000000   A       0     0     4
+
+
+
+
+I just want to figure out why the linker transforms it this way.
+
+
+
+
+
+
+
+>
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>
+> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> reports and sometimes miss something important when writing mails like
+> this. If that's the case here, don't hesitate to tell me in a public
+> reply, it's in everyone's interest to set the public record straight.
+>
+> #regzbot ^introduced 994b7ac1697b
+> #regzbot title arm64: missing build-id in vmlinux breaks at leas
+> Fedora's kernel packaging
+> #regzbot ignore-activity
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
