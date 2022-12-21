@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AD7653731
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171E7653734
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 20:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiLUTqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 14:46:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
+        id S230014AbiLUTqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 14:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiLUTqO (ORCPT
+        with ESMTP id S233283AbiLUTqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 14:46:14 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1690920BEC
+        Wed, 21 Dec 2022 14:46:15 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12B325E8E
         for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:46:12 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id qk9so39249ejc.3
+Received: by mail-ed1-x536.google.com with SMTP id m19so23454657edj.8
         for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 11:46:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=h5QqjbWC4xPqNCugqJ9inOxUkbx/4jCQyhj7e6d+JX0=;
-        b=gy8HEbmVaGXlWVpYtQSfYtXKoJlAwrX2PiZnxXo9HoTMGvawfZ+wlH6pOBMI2rJ95R
-         /oMpWzeHuxdhZYx7w9UuejGKiMy7C9Y7/uVbbkZWbiC5EySjHA14dJohFrdn7hjbfX9W
-         worysGPSqMzZPNCuYeUhwE2dBuffLaUUIFjxY=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xv7lgqcsWR7csyQW/ua9GbEMjmdKQM2eL6DIBrKZNHc=;
+        b=RQbFTmSpCufgNXH4cjE/NEaU/tEsNuzVOXIbI8CwMamw5qAWhVCN2G0OePZAGiA7kj
+         1F+gYgX+YqQxgMX8QnWDLWOUT9frqU8rVVDlo2XOFQL2RcFmTwvlLp/ylO6/Ec1sZ1je
+         yQOoeN3E69nDmdnkj/Bn6C32nSB4lRotDVDZs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h5QqjbWC4xPqNCugqJ9inOxUkbx/4jCQyhj7e6d+JX0=;
-        b=KtpV37NaBMdGA3xKjvtgh+o0HXO8TnTyJOHQt1HIb3PN7X1lmFTw46oZH/Pq7+hVgH
-         QLYNxjzoKV3S8QWJO2O2b+A5YTJZzBJBUzTP7Cw9Uxlrar8AO+wH5zPTkaSFGymKr1EI
-         0XfhDokYEEAYZuBzjF4vpQ8KFlism7KqZX7K6AcIUPPyvYv6FAx/yXWXl2E8GvImpfHW
-         0L1dtzeBm33BGbso2w7tGGPBGhfPh/VhDXLxOAkaStyqgRUVIggB2UBnRHrdsfXT7LT5
-         yfaTtF0x5td9cuARMVD2lX+bka7IhcWmvvLZiJ9ybww7W4if4Io1DfIJFK8wWRxD1rtH
-         8JJw==
-X-Gm-Message-State: AFqh2kqPnE54012Cjflv+WakhxWwui8KUTX2iptOneEhVa775Utb3dGC
-        1VptLLnnjYG/JiyMCRFuZvHFag==
-X-Google-Smtp-Source: AMrXdXtRt6qphcfjVI4QjTn7e3c297nIpVXd5Stx/oZg+CVvsEnswh01KNoB+LTkOeEQPOYsYa3+Wg==
-X-Received: by 2002:a17:907:d50e:b0:81f:fc05:2ba0 with SMTP id wb14-20020a170907d50e00b0081ffc052ba0mr2675538ejc.2.1671651970624;
-        Wed, 21 Dec 2022 11:46:10 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xv7lgqcsWR7csyQW/ua9GbEMjmdKQM2eL6DIBrKZNHc=;
+        b=et5m9Oq6XR0dcMIM/vp0xVkGka2AaZAFrepxi/rfHGbeJT5DF5UQmOnTs9hEVCQzOh
+         XPwmZqZRErzDnB1iWU4FpzGIBgXjdh34ZWLoNX6Kfxi+32t2phozgIt6S4toFw7LUArQ
+         J7xAAH+Liq+/RiRtG4cmRWSVeLrz0wupKeqa4upcWV6uUDac/Rg6wRTxoZAxnHDDOv48
+         VAwcDfo2E7xVBDaAuPwEVYCKGGtYkdE6YzY79k6v/pywtsx1QGVOsljPxTV2E6p/UZqA
+         VQdacHnl2Al1ivBpzn1g3lK8Rg+AxpBkYctCkYeuxS0fjBnBRtYV7g//wxKDfPIKjsXB
+         177Q==
+X-Gm-Message-State: AFqh2kppPImjEDD3AfFqyQnycH+KkbxpJMzyCR7RtAgKVfW3d8IRXM8D
+        /a+JbuD5bw8Oj7diGGXglt/9ag==
+X-Google-Smtp-Source: AMrXdXsRzDD7P90Vqn5PD1Ce6iPmD51XQ9bLvdWSr569JN4lv564Sm7Wg5IUnhiukQhDGHLKUieQhg==
+X-Received: by 2002:a50:fd10:0:b0:46d:aef2:3350 with SMTP id i16-20020a50fd10000000b0046daef23350mr3127946eds.26.1671651971256;
+        Wed, 21 Dec 2022 11:46:11 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id f24-20020a056402005800b0046cbcc86bdesm7382008edu.7.2022.12.21.11.46.09
+        by smtp.gmail.com with ESMTPSA id f24-20020a056402005800b0046cbcc86bdesm7382008edu.7.2022.12.21.11.46.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 11:46:10 -0800 (PST)
-Subject: [PATCH v5 0/3] kexec: Add new parameter to limit the access to kexec
+        Wed, 21 Dec 2022 11:46:11 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 21 Dec 2022 20:45:57 +0100
+Subject: [PATCH v5 1/3] Documentation: sysctl: Correct kexec_load_disabled
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHRio2MC/43NwarCMBAF0F+RrI10ktQmb/X+Q1wkk4kN1hYSLY
- r03x1cikhXw71wzzxFpZKpir/NUxSac83TyKHdbgT2fjyRzJGzUI1SAGBkzNWHgeSZ7oSyUKWrBB
- c6Aui0tknwMvhKMhQ/Ys/b8TYMXPa5XqfyeH+agc/hNzqDbGQKLUTVYLId/GNfpku+XXZTOYkjk7
- NawShm0DirQSOE0H5h9ApGM2MoGXLK+Zj2XxizgjHM+GAbhzY6a/GDWZblBd8zzw2TAQAA
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 21 Dec 2022 20:45:56 +0100
-Message-Id: <20221114-disable-kexec-reset-v5-0-1bd37caf3c75@chromium.org>
+Message-Id: <20221114-disable-kexec-reset-v5-1-1bd37caf3c75@chromium.org>
+References: <20221114-disable-kexec-reset-v5-0-1bd37caf3c75@chromium.org>
+In-Reply-To: <20221114-disable-kexec-reset-v5-0-1bd37caf3c75@chromium.org>
 To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Eric Biederman <ebiederm@xmission.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -68,86 +67,57 @@ Cc:     Ross Zwisler <zwisler@kernel.org>,
         "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2328; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=pHYAwK2HBx9n8zpILJY4+z4Vwehv4LFp5obwLjvJPUI=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjo2J2bQVimyy1/Vsjq4S0a4azyR8AdmG30PBxAZnh
- G4wJW8GJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY6NidgAKCRDRN9E+zzrEiI/FEA
- CG6+MF4+l8zL5dE4Gt3+i0jiytzzPAhfXFs4fHRSCsUD2O2MNBscf1A4mFZLPnTaW7vBMNVrfFEufO
- 7gIESmiyNGt6ayHX1VooSQ1ShQsdAWtyVGe1W6o4w6yeO83drpRi+sU/5OpDYnpEASg0y+NSwRqzAZ
- Z+nysGMjXUNaB+2sTaWHHEFHRM7ALV7br6WhBL2WCHQTTSVE6XpRl7twTUn3Yhcef9ec0pX+jduF4g
- ScjmpYOqWv5hXqMymVLqbg/BjCGdVWVuWcfFdp7JIEmC73e15DUmlJRpZ9cyUk20l61NuMK2R4vRqx
- B6LzBRyuBMFF0SupmUNcjJRZsniObm/UscQJdm/zeX5TLZ9jo5iPjHGLwAsTEzb/hr8uaymqCyka2Z
- 0MST/nj60mrMDj5cTcvVfdglJxBr/RgDggDuGPbLNYUMacpuQWqR/IarPTHekEP3MJRWLll+Gse4i5
- i0I0ECLpz6rDav25LJLgdE/4Nk+5fqUI5glc5OmDmkhlD95fzmg5DSpFUCf70EMQb0w57j9SFbWwcX
- tStaxYotNcUOSxPw+TUcc3RL504iw0GF8kKxKmBAiFHVEB/K1CHUXy4D8oo3q7GVk1IAnGAwDsMzWf
- bP2mw6WT2gEgAAPMNLnnG9094iJ41CQS6r/kA3eIYyo1cPjcJHKui7ZnTSQw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1258; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=U6cVA0f3MVv7jTHbprLKEENRfx9C5MeH7N8/eIFjhzo=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjo2J7s4JnwPmuL15uZ+xM4QsaksUW5vucOTw7PXPE
+ fZ88t7CJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY6NiewAKCRDRN9E+zzrEiDaJD/
+ 0bTQsbJRZ8Zw4ky/CUdrnkq+0uRbLoHVXu1ml36UHUihbFPSWbVefZ5p1bYmwIZmSzSEOemUBtbWdT
+ eCmm343+ZRdig25r3HYVQIPjfZmV3J4KTW1CW2kJ/RYT7TV+eqt/2WIoUfoJ+caPbmQMSk2sX9JKNe
+ iijWrC7+ouZanLCd/BxoBeKuuYxs23zGypKigm9U8VNs+DkSs81Bzs3scnfDafdqogSPF8hXbIbarZ
+ oYujynTcfBNl3PXB6y3B6cJqOY/XAekyQrlGk2qzoIdtLj1ehxmNAcSQb9+iFt5B1oCkklY6C/E2XX
+ Nasw1eCd8feM4nAnrK7M5JGDx676PMd/68QY1M1yPkv4/4eQei8ivJydAsQTcda25vtz6qRzt3oziG
+ 5aPY9IuCSwEUB/A49HgpyPNeO3QQyjM/JRlwFsngYGpwhUoLjMHpkW2ic3AlmQyZz3dxm92CG0nH80
+ 9HJmFnuxPGB1Zps0f8nXKPz8DHobHLJPNu8nwBs6F2O2o5m6u0I3dlHrcwLEQS1eG7KZWLLfA93nPc
+ BGj1rKeM5vda3r4fqTGmqxUFj5yoH5KqsYwSG8iPQfUQMSVO07eiyfXsDi2RZdrO8JPAG/120gdoY1
+ Tqqx7ihn4UKRARwU+N4J0xr0tgvT6t1e8J1doKvNiEfsUHBHmrvedZ9miHuw==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add two parameter to specify how many times a kexec kernel can be loaded.
+kexec_load_disabled affects both ``kexec_load`` and ``kexec_file_load``
+syscalls. Make it explicit.
 
-These parameter allow hardening the system.
-
-While we are at it, fix a documentation issue and refactor some code.
-
-To: Jonathan Corbet <corbet@lwn.net>
-To: Eric Biederman <ebiederm@xmission.com>
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: kexec@lists.infradead.org
-Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ross Zwisler <zwisler@kernel.org>
-To: Philipp Rudo <prudo@redhat.com>
-To: Guilherme G. Piccoli <gpiccoli@igalia.com>
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
 ---
-Changes in v5:
-- Remove maxlen from ctl_table. Thanks Steven!
-- Link to v4: https://lore.kernel.org/r/20221114-disable-kexec-reset-v4-0-ab809c8d988c@chromium.org
+ Documentation/admin-guide/sysctl/kernel.rst | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Changes in v4 (Thanks Steven!):
-- Uses sysctl instead or module_parameters
-- Pass image type instead of boolean to permitted
-- Fix typo on flag handling
-- Return -EINVAL for values that does not change the current value.
-- Link to v3: https://lore.kernel.org/r/20221114-disable-kexec-reset-v3-0-4ef4e929adf6@chromium.org
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index 98d1b198b2b4..97394bd9d065 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -450,9 +450,10 @@ this allows system administrators to override the
+ kexec_load_disabled
+ ===================
+ 
+-A toggle indicating if the ``kexec_load`` syscall has been disabled.
+-This value defaults to 0 (false: ``kexec_load`` enabled), but can be
+-set to 1 (true: ``kexec_load`` disabled).
++A toggle indicating if the syscalls ``kexec_load`` and
++``kexec_file_load`` have been disabled.
++This value defaults to 0 (false: ``kexec_*load`` enabled), but can be
++set to 1 (true: ``kexec_*load`` disabled).
+ Once true, kexec can no longer be used, and the toggle cannot be set
+ back to false.
+ This allows a kexec image to be loaded before disabling the syscall,
 
-Changes in v3:
-- s/paramter/parameter/ Thanks Ghilherme!
-- s/permited/permitted/ Thanks Joel!
-- Link to v2: https://lore.kernel.org/r/20221114-disable-kexec-reset-v2-0-c498313c1bb5@chromium.org
-
-Changes in v2:
-- Instead of kexec_reboot_disabled, add two new counters (Thanks Philipp!)
-- Link to v1: https://lore.kernel.org/r/20221114-disable-kexec-reset-v1-0-fb51d20cf871@chromium.org
-
----
-Ricardo Ribalda (3):
-      Documentation: sysctl: Correct kexec_load_disabled
-      kexec: Factor out kexec_load_permitted
-      kexec: Introduce sysctl parameters kexec_load_limit_*
-
- Documentation/admin-guide/sysctl/kernel.rst | 25 +++++++-
- include/linux/kexec.h                       |  3 +-
- kernel/kexec.c                              |  4 +-
- kernel/kexec_core.c                         | 94 ++++++++++++++++++++++++++++-
- kernel/kexec_file.c                         | 11 ++--
- 5 files changed, 127 insertions(+), 10 deletions(-)
----
-base-commit: 479174d402bcf60789106eedc4def3957c060bad
-change-id: 20221114-disable-kexec-reset-19b7e117338f
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+2.39.0.314.g84b9a713c41-goog-b4-0.11.0-dev-696ae
