@@ -2,101 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17926653B37
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 05:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA73653B38
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 05:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235122AbiLVEUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 23:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
+        id S235129AbiLVEVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 23:21:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234968AbiLVETy (ORCPT
+        with ESMTP id S235017AbiLVEUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 23:19:54 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E2C22BDD
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:19:53 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4528903f275so9657567b3.8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:19:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wqbMgd0zowymzGskr7701SDcBxSEYhpmKyp2L4CmwQc=;
-        b=FaAk0+IovKrA30gqzGnUXCgvxnAEqM9RNUrx6/qbk2dXbMev+aX6+TBCBI++qJqoJh
-         DHNBFkCo27K0mtm3kCypi0Ii7FLQEyOoUcXG+t83h3xzdMvkNUCkZTP8OrqRsYYWm0el
-         eWwdtsGBlfK8BfaDX27IjQxVLcqXb9rSOW0ntCxNjAM2Cim1CHaEVKSL6BfOAxE/zGHv
-         zshIYCJIZ+wR/JAB7hswAHRV8jE3CLxEuhhNl1iaGkZYIJeIjSv9yuHWpAemQnptTj9G
-         AsAn5TBRtcqHkkCAS4JOx0xwOehAeuT/Kj0REFHOiEd6bNs1NdquJnCAzj9joH3GCGp1
-         aNTQ==
+        Wed, 21 Dec 2022 23:20:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FDC248C6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:19:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671682765;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0mH3oOfXNbjXLHYuolZ32GbumyIJzP4ESKq36TBA8l8=;
+        b=WFTLh5u25Av31+XIc0OXl2SpphmVLkWbuOlTEk+WNbOU9vJFub3tsJFRPc96Kdlbxp6PwA
+        l0q9sDe0JXflqM2hKSANWC7Sg4aCDMgchlJODz0G8f9jMrM47stq0pPJurqppPaDBe1agP
+        JA27nBFjoDpXFlHQkrgbpR9n0vMwKC4=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-22-bUgKwSqoPe2dG9Y_US_Fxw-1; Wed, 21 Dec 2022 23:19:23 -0500
+X-MC-Unique: bUgKwSqoPe2dG9Y_US_Fxw-1
+Received: by mail-pl1-f199.google.com with SMTP id i4-20020a17090332c400b0018f82951826so637436plr.20
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:19:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wqbMgd0zowymzGskr7701SDcBxSEYhpmKyp2L4CmwQc=;
-        b=DJmZpvGwa47fRGOzxcJH+2hrKMiv0YdQEb71x6ZA7TSFsF+0xjuzQBUvnooT5f2glg
-         HM2yB4RxSZlqNmpHr5i96rt6Qf0Yb7CUqjIm3rMXPoPKR5i+PqAQNvl5aP0u0thHwnYv
-         5Gx3DevBaLYOsBv2Qo4GbmKl4zsakG2ZNZzyBiKu/vsMZ0YHFOdteIC6nqrW5qpIy6Qg
-         JogTScz5mwFddghFY61R8nS8/ddEqmqi5446jsKcuMi112p+zP3bgMRop6XLuRfJHl5n
-         leBT0yvrOmOjdez7ANHw1jLBpTKWJNuehOCNTjo8IwCO2/lnft4q4fwapWy8GLeDdvlA
-         iZtg==
-X-Gm-Message-State: AFqh2kpA3abPB+h8sl0o3cc3KOKrzSF32JkUOPpVvu/pSYLvJ5t6LZIn
-        EIsLKJqpWEWs2LgAfqo7ciU/4Ahoc9Y=
-X-Google-Smtp-Source: AMrXdXtoQV2nYQsCRHGYe9z8m7Uo+pjFU+YdC4C/Y+Mib9s2WlE6ZwrTFMZkcNSCiAcHyEFs+f2bQg5UyD0=
-X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:a463:5f7b:440e:5c77])
- (user=yuzhao job=sendgmr) by 2002:a25:3c85:0:b0:6dc:b9ec:7c87 with SMTP id
- j127-20020a253c85000000b006dcb9ec7c87mr460947yba.322.1671682792499; Wed, 21
- Dec 2022 20:19:52 -0800 (PST)
-Date:   Wed, 21 Dec 2022 21:19:06 -0700
-In-Reply-To: <20221222041905.2431096-1-yuzhao@google.com>
-Message-Id: <20221222041905.2431096-9-yuzhao@google.com>
-Mime-Version: 1.0
-References: <20221222041905.2431096-1-yuzhao@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH mm-unstable v3 8/8] mm: multi-gen LRU: simplify
- arch_has_hw_pte_young() check
-From:   Yu Zhao <yuzhao@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-mm@google.com,
-        Yu Zhao <yuzhao@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mH3oOfXNbjXLHYuolZ32GbumyIJzP4ESKq36TBA8l8=;
+        b=Nl4FHFUcea1mTFzbt5Nr4EHMATfxsxjwygnacejtOr+xZyWxpVd/bfAQac/5tjisTd
+         6IhR9yqqeShvmtIcEtKcTVjSJBr87xCp9NvWLBnfZk0Bo2fCo/BZBQ35ThGCjlBHAA3V
+         /fb25bq1Sd7sZTn6cOQM0xbKzo+hbahZkKT4XTqN55auIj5DNQ1RJ7fAhj+3qyPXnUBg
+         qawlLPVYd2lca7tEy6SxMMehymzizm1qV23UarHR4EVwfVG3pPotCHDYrGSR8dzqzxSv
+         p69puVyN+JzVcYeExYIraz7FQNy65OrpD4Ch+wUi0tmRL2lsxLK55tVUcRIi7xSEohFN
+         AbuQ==
+X-Gm-Message-State: AFqh2ko/jQYqDbkow91kgPJwAPnPbIRs1YgQEi61AcED/LbfseJSJvL9
+        wUH3I00LMR9V0lNiH/dusLMPiZ2fOAYydIPxCo6HryfJnxDx7O+DrsfkxHe/yeG1NdA58sZVhcq
+        ItHpDxS6bnQktLqtSLrzRFfZ3
+X-Received: by 2002:aa7:96ec:0:b0:574:3b4e:1cbf with SMTP id i12-20020aa796ec000000b005743b4e1cbfmr4892995pfq.6.1671682762518;
+        Wed, 21 Dec 2022 20:19:22 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuKWT574oUOFYNCMz80T1Z1j80xvWLo+SP9Aqhw3A+inWm0X9J2tfCjbK+qrt2KsSY5h33Dpw==
+X-Received: by 2002:aa7:96ec:0:b0:574:3b4e:1cbf with SMTP id i12-20020aa796ec000000b005743b4e1cbfmr4892982pfq.6.1671682762208;
+        Wed, 21 Dec 2022 20:19:22 -0800 (PST)
+Received: from [10.72.13.15] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id i22-20020aa796f6000000b0057630286100sm11183084pfq.164.2022.12.21.20.19.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 20:19:21 -0800 (PST)
+Message-ID: <11aa3331-a262-bc97-193c-d1c9a9214541@redhat.com>
+Date:   Thu, 22 Dec 2022 12:19:17 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [PATCH 3/4] vdpa_sim: support vendor satistics
+Content-Language: en-US
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     mst@redhat.com, eperezma@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20221221061652.15202-1-jasowang@redhat.com>
+ <20221221061652.15202-4-jasowang@redhat.com>
+ <20221221133414.teizf56exrf5tqvj@sgarzare-redhat>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20221221133414.teizf56exrf5tqvj@sgarzare-redhat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Scanning page tables when hardware does not set the accessed bit has
-no real use cases.
 
-Signed-off-by: Yu Zhao <yuzhao@google.com>
----
- mm/vmscan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+在 2022/12/21 21:34, Stefano Garzarella 写道:
+> On Wed, Dec 21, 2022 at 02:16:51PM +0800, Jason Wang wrote:
+>
+> Little typo in the title s/satistics/statistics
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index a9b318e1bdc2..71d13c969b52 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4428,7 +4428,7 @@ static bool try_to_inc_max_seq(struct lruvec *lruvec, unsigned long max_seq,
- 	 * handful of PTEs. Spreading the work out over a period of time usually
- 	 * is less efficient, but it avoids bursty page faults.
- 	 */
--	if (!force_scan && !(arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK))) {
-+	if (!arch_has_hw_pte_young() || !get_cap(LRU_GEN_MM_WALK)) {
- 		success = iterate_mm_list_nowalk(lruvec, max_seq);
- 		goto done;
- 	}
--- 
-2.39.0.314.g84b9a713c41-goog
+
+Fixed.
+
+
+>
+>> This patch adds a new config ops callback to allow individual
+>> simulator to implement the vendor stats callback.
+>>
+>> Signed-off-by: Jason Wang <jasowang@redhat.com>
+>> ---
+>> drivers/vdpa/vdpa_sim/vdpa_sim.c | 13 +++++++++++++
+>> drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 +++
+>> 2 files changed, 16 insertions(+)
+>>
+>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c 
+>> b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>> index 55aaa023a6e2..02e892f819e7 100644
+>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>> @@ -426,6 +426,18 @@ static int vdpasim_get_vq_state(struct 
+>> vdpa_device *vdpa, u16 idx,
+>>     return 0;
+>> }
+>>
+>> +static int vdpasim_get_vq_stats(struct vdpa_device *vdpa, u16 idx,
+>> +                struct sk_buff *msg,
+>> +                struct netlink_ext_ack *extack)
+>> +{
+>> +    struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>> +
+>> +    if (vdpasim->dev_attr.get_stats)
+>> +        return vdpasim->dev_attr.get_stats(vdpasim, idx,
+>> +                           msg, extack);
+>> +    return -EINVAL;
+>
+> Maybe -EOPNOTSUPP is better when the device doesn't support it.
+> Like we do in vendor_stats_fill() in drivers/vdpa/vdpa.c
+>
+
+That's right.
+
+
+>> +}
+>> +
+>> static u32 vdpasim_get_vq_align(struct vdpa_device *vdpa)
+>> {
+>>     return VDPASIM_QUEUE_ALIGN;
+>> @@ -710,6 +722,7 @@ static const struct vdpa_config_ops 
+>> vdpasim_config_ops = {
+>>     .set_vq_ready           = vdpasim_set_vq_ready,
+>>     .get_vq_ready           = vdpasim_get_vq_ready,
+>>     .set_vq_state           = vdpasim_set_vq_state,
+>> +    .get_vendor_vq_stats    = vdpasim_get_vq_stats,
+>
+> Should we add this callback also in vdpasim_batch_config_ops?
+
+
+Yes.
+
+Thanks
+
+
+>
+> Thanks,
+> Stefano
+>
+>>     .get_vq_state           = vdpasim_get_vq_state,
+>>     .get_vq_align           = vdpasim_get_vq_align,
+>>     .get_vq_group           = vdpasim_get_vq_group,
+>> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h 
+>> b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>> index 51c070a543f1..d2a08c0abad7 100644
+>> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+>> @@ -48,6 +48,9 @@ struct vdpasim_dev_attr {
+>>     work_func_t work_fn;
+>>     void (*get_config)(struct vdpasim *vdpasim, void *config);
+>>     void (*set_config)(struct vdpasim *vdpasim, const void *config);
+>> +    int (*get_stats)(struct vdpasim *vdpasim, u16 idx,
+>> +             struct sk_buff *msg,
+>> +             struct netlink_ext_ack *extack);
+>> };
+>>
+>> /* State of each vdpasim device */
+>> -- 
+>> 2.25.1
+>>
+>
 
