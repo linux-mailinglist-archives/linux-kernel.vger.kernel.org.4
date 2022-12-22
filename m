@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9DC653C87
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DCB653C8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234882AbiLVHbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 02:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S235039AbiLVHc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 02:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiLVHbm (ORCPT
+        with ESMTP id S234949AbiLVHc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 02:31:42 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34564248E9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:31:40 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id n10-20020a6b590a000000b006e03471b3eeso423927iob.11
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:31:40 -0800 (PST)
+        Thu, 22 Dec 2022 02:32:56 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D6923EA6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:32:55 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id l3-20020a056e021aa300b00304be32e9e5so707566ilv.12
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:32:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oPmhdJO1dscVyydjxIqVGVM6EeEaaoZup7WwmkNURI8=;
-        b=amh3FTktZrZocA+/nYq3u4Dh3xL4LXpNX03YVFcDHuV9t9pLzryRILVVYMA1GicQ9b
-         HgMt5aIj+Qb55lhu2+ZLc0K6j1srUWW14WfLeTtPJgIn657/52RdiOaEHWJv78yPUsAd
-         3XA2BkdEhmRNuA6K/kr0MsrU+VYdiqfbogxPsHIzlaQA7LwbW6ViyMF2VipPBGtdypY2
-         EOoAh2/KcLxRQX4kCUpuz4uePIDqoeVzrosGRT+qjl4LGLzeydWfJUfuZWywQHn0jE/A
-         GM61Ixx0/SjN1YocmNFuKBolesHAuQFJgWT2UPIDe22eZuzZTxO2jUfeOGItrXewNGRD
-         gghA==
-X-Gm-Message-State: AFqh2kpaJFWuwwowvzjj6XOPS1JvgyWse5aK+WBLLiYnEXead/iWoAVz
-        vnM21wprA/O05NtsmOEghfNyy3nEERxOs2wo+dn6WmzuyR38
-X-Google-Smtp-Source: AMrXdXsc+y/qIxNXvGfVdCDzWhayA4p6N+Wf0NxgQOlbpD/XmHbrO1mPuRYfBzFSYz/QHGAffGGRcXsoFlXJDeSMaoATDB1yUV0t
+        bh=BIkHxDubkjuQslZrjT1X+xdpYct/nDKr2hboTqeeD0A=;
+        b=tsF1sm3HzlENdEQlJQ8xh5mwzdTuvEu29gqMy/n/5MmK4upd76g717mPpVzqZw3Qls
+         +RYwtzEzzat9kZDjDVt69duOFBPiDubg0/IMFaMML8SkOlB9blz8bKWyJfg5Ifo2lD9o
+         VhI7WsuKkh9LjSsthMKqk0eD2SlnIhfgNH84Ykob6ZT3+ujSmekIQ7LcCkvkfsZJbD3D
+         rFjhLSBg+8g020ON4iZLP7DCZH2kWJIxMZ4E50yV1HtudC9Twnk26lyGJ+oX1NLp6XHz
+         dlrIu5Vi9SU7S/KoMxMIQzeEtCycUkRI+8wZ5zCg3eX2LUzsDdpfzflfxbJakrpDUg4/
+         I9Hg==
+X-Gm-Message-State: AFqh2kqQEtsYRyFZNOIy+azjrIYasXWf/Z3ClyRtcHGYMLPXrfhkAJYo
+        GZXCWLE198htczXFODz/pJa67O86NOv12iwIxk9/dtFI5DuZ
+X-Google-Smtp-Source: AMrXdXsKrYCCsV5zrx5z/esYEJVAmIAHQ2g2HwX6axV9m2MqlDyhHAjTIz5biSlETwyJgmcv0oR7TjJa4UTY0sczipilRiLQrEv9
 MIME-Version: 1.0
-X-Received: by 2002:a92:d248:0:b0:30b:bc94:e9d0 with SMTP id
- v8-20020a92d248000000b0030bbc94e9d0mr474220ilg.50.1671694299511; Wed, 21 Dec
- 2022 23:31:39 -0800 (PST)
-Date:   Wed, 21 Dec 2022 23:31:39 -0800
+X-Received: by 2002:a05:6e02:48a:b0:30b:b9a9:ca8 with SMTP id
+ b10-20020a056e02048a00b0030bb9a90ca8mr452268ils.216.1671694374940; Wed, 21
+ Dec 2022 23:32:54 -0800 (PST)
+Date:   Wed, 21 Dec 2022 23:32:54 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e5454b05f065a803@google.com>
-Subject: [syzbot] [btrfs?] general protection fault in start_transaction
-From:   syzbot <syzbot+96977faa68092ad382c4@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000006436bb05f065adbc@google.com>
+Subject: [syzbot] [hfs?] possible deadlock in hfs_extend_file
+From:   syzbot <syzbot+a4919d77e3a0272910bb@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -60,80 +59,161 @@ syzbot found the following issue on:
 
 HEAD commit:    b6bb9676f216 Merge tag 'm68knommu-for-v6.2' of git://git.k..
 git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13431bbf880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17bd42cf880000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=d3fb546de56fbf8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=96977faa68092ad382c4
+dashboard link: https://syzkaller.appspot.com/bug?extid=a4919d77e3a0272910bb
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11040abf880000
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/2f703f794500/disk-b6bb9676.raw.xz
 vmlinux: https://storage.googleapis.com/syzbot-assets/0cca7cdd545b/vmlinux-b6bb9676.xz
 kernel image: https://storage.googleapis.com/syzbot-assets/0ce2560b7652/bzImage-b6bb9676.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/a6a120f35475/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+96977faa68092ad382c4@syzkaller.appspotmail.com
+Reported-by: syzbot+a4919d77e3a0272910bb@syzkaller.appspotmail.com
 
-general protection fault, probably for non-canonical address 0xdffffc0000000041: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000208-0x000000000000020f]
-CPU: 1 PID: 34 Comm: kworker/u4:2 Not tainted 6.1.0-syzkaller-13872-gb6bb9676f216 #0
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-syzkaller-13872-gb6bb9676f216 #0 Not tainted
+------------------------------------------------------
+syz-executor.5/10745 is trying to acquire lock:
+ffff88802b21e8f8 (&HFS_I(tree->inode)->extents_lock){+.+.}-{3:3}, at: hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
+
+but task is already holding lock:
+ffff88806083e0b0 (&tree->tree_lock#2/1){+.+.}-{3:3}, at: hfs_find_init+0x167/0x1e0
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&tree->tree_lock#2/1){+.+.}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       hfs_find_init+0x167/0x1e0
+       hfs_ext_read_extent fs/hfs/extent.c:200 [inline]
+       hfs_extend_file+0x2f8/0x1420 fs/hfs/extent.c:401
+       hfs_bmap_reserve+0xfa/0x410 fs/hfs/btree.c:234
+       hfs_cat_create+0x1b5/0x8a0 fs/hfs/catalog.c:104
+       hfs_create+0x62/0xd0 fs/hfs/dir.c:202
+       lookup_open fs/namei.c:3413 [inline]
+       open_last_lookups fs/namei.c:3481 [inline]
+       path_openat+0x12ac/0x2dd0 fs/namei.c:3711
+       do_filp_open+0x264/0x4f0 fs/namei.c:3741
+       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_open fs/open.c:1334 [inline]
+       __se_sys_open fs/open.c:1330 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1330
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&HFS_I(tree->inode)->extents_lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
+       hfs_bmap_reserve+0xfa/0x410 fs/hfs/btree.c:234
+       __hfs_ext_write_extent+0x1ea/0x460 fs/hfs/extent.c:121
+       __hfs_ext_cache_extent+0x67/0x980 fs/hfs/extent.c:174
+       hfs_ext_read_extent fs/hfs/extent.c:202 [inline]
+       hfs_extend_file+0x323/0x1420 fs/hfs/extent.c:401
+       hfs_get_block+0x3fc/0xbb0 fs/hfs/extent.c:353
+       __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
+       __block_write_begin fs/buffer.c:2041 [inline]
+       block_write_begin+0x93/0x1e0 fs/buffer.c:2102
+       cont_write_begin+0x606/0x860 fs/buffer.c:2456
+       hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
+       cont_expand_zero fs/buffer.c:2383 [inline]
+       cont_write_begin+0x2cf/0x860 fs/buffer.c:2446
+       hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
+       hfs_file_truncate+0x159/0xa10 fs/hfs/extent.c:494
+       hfs_inode_setattr+0x45d/0x690 fs/hfs/inode.c:651
+       notify_change+0xe50/0x1100 fs/attr.c:482
+       do_truncate+0x200/0x2f0 fs/open.c:65
+       do_sys_ftruncate+0x2b0/0x350 fs/open.c:193
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&tree->tree_lock#2/1);
+                               lock(&HFS_I(tree->inode)->extents_lock);
+                               lock(&tree->tree_lock#2/1);
+  lock(&HFS_I(tree->inode)->extents_lock);
+
+ *** DEADLOCK ***
+
+4 locks held by syz-executor.5/10745:
+ #0: ffff8880231a8460 (sb_writers#22){.+.+}-{0:0}, at: do_sys_ftruncate+0x243/0x350 fs/open.c:190
+ #1: ffff88802b21a328 (&sb->s_type->i_mutex_key#28){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff88802b21a328 (&sb->s_type->i_mutex_key#28){+.+.}-{3:3}, at: do_truncate+0x1ec/0x2f0 fs/open.c:63
+ #2: ffff88802b21a178 (&HFS_I(inode)->extents_lock#2){+.+.}-{3:3}, at: hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
+ #3: ffff88806083e0b0 (&tree->tree_lock#2/1){+.+.}-{3:3}, at: hfs_find_init+0x167/0x1e0
+
+stack backtrace:
+CPU: 0 PID: 10745 Comm: syz-executor.5 Not tainted 6.1.0-syzkaller-13872-gb6bb9676f216 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: btrfs-qgroup-rescan btrfs_work_helper
-RIP: 0010:start_transaction+0x48/0x10f0 fs/btrfs/transaction.c:564
-Code: 48 89 fb 48 bd 00 00 00 00 00 fc ff df e8 00 90 00 fe 48 89 5c 24 38 48 81 c3 08 02 00 00 48 89 d8 48 c1 e8 03 48 89 44 24 70 <80> 3c 28 00 74 08 48 89 df e8 da 33 56 fe 48 89 5c 24 60 48 8b 03
-RSP: 0018:ffffc90000ab7ab0 EFLAGS: 00010206
-RAX: 0000000000000041 RBX: 0000000000000208 RCX: ffff88801779ba80
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: 0000000000000001 R09: fffff52000156f5d
-R10: fffff52000156f5d R11: 1ffff92000156f5c R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000001 R15: 0000000000000003
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2bea75b718 CR3: 000000001d0cc000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- btrfs_qgroup_rescan_worker+0x3bb/0x6a0 fs/btrfs/qgroup.c:3402
- btrfs_work_helper+0x312/0x850 fs/btrfs/async-thread.c:280
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
+ hfs_bmap_reserve+0xfa/0x410 fs/hfs/btree.c:234
+ __hfs_ext_write_extent+0x1ea/0x460 fs/hfs/extent.c:121
+ __hfs_ext_cache_extent+0x67/0x980 fs/hfs/extent.c:174
+ hfs_ext_read_extent fs/hfs/extent.c:202 [inline]
+ hfs_extend_file+0x323/0x1420 fs/hfs/extent.c:401
+ hfs_get_block+0x3fc/0xbb0 fs/hfs/extent.c:353
+ __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
+ __block_write_begin fs/buffer.c:2041 [inline]
+ block_write_begin+0x93/0x1e0 fs/buffer.c:2102
+ cont_write_begin+0x606/0x860 fs/buffer.c:2456
+ hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
+ cont_expand_zero fs/buffer.c:2383 [inline]
+ cont_write_begin+0x2cf/0x860 fs/buffer.c:2446
+ hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
+ hfs_file_truncate+0x159/0xa10 fs/hfs/extent.c:494
+ hfs_inode_setattr+0x45d/0x690 fs/hfs/inode.c:651
+ notify_change+0xe50/0x1100 fs/attr.c:482
+ do_truncate+0x200/0x2f0 fs/open.c:65
+ do_sys_ftruncate+0x2b0/0x350 fs/open.c:193
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4373c8c0d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f43749db168 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
+RAX: ffffffffffffffda RBX: 00007f4373dabf80 RCX: 00007f4373c8c0d9
+RDX: 0000000000000000 RSI: 0000000002007fff RDI: 0000000000000005
+RBP: 00007f4373ce7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffda414b44f R14: 00007f43749db300 R15: 0000000000022000
  </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:start_transaction+0x48/0x10f0 fs/btrfs/transaction.c:564
-Code: 48 89 fb 48 bd 00 00 00 00 00 fc ff df e8 00 90 00 fe 48 89 5c 24 38 48 81 c3 08 02 00 00 48 89 d8 48 c1 e8 03 48 89 44 24 70 <80> 3c 28 00 74 08 48 89 df e8 da 33 56 fe 48 89 5c 24 60 48 8b 03
-RSP: 0018:ffffc90000ab7ab0 EFLAGS: 00010206
-RAX: 0000000000000041 RBX: 0000000000000208 RCX: ffff88801779ba80
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: 0000000000000001 R09: fffff52000156f5d
-R10: fffff52000156f5d R11: 1ffff92000156f5c R12: 0000000000000000
-R13: 0000000000000001 R14: 0000000000000001 R15: 0000000000000003
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffeba9a96cc CR3: 000000000d08e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	48 89 fb             	mov    %rdi,%rbx
-   3:	48 bd 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbp
-   a:	fc ff df
-   d:	e8 00 90 00 fe       	callq  0xfe009012
-  12:	48 89 5c 24 38       	mov    %rbx,0x38(%rsp)
-  17:	48 81 c3 08 02 00 00 	add    $0x208,%rbx
-  1e:	48 89 d8             	mov    %rbx,%rax
-  21:	48 c1 e8 03          	shr    $0x3,%rax
-  25:	48 89 44 24 70       	mov    %rax,0x70(%rsp)
-* 2a:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1) <-- trapping instruction
-  2e:	74 08                	je     0x38
-  30:	48 89 df             	mov    %rbx,%rdi
-  33:	e8 da 33 56 fe       	callq  0xfe563412
-  38:	48 89 5c 24 60       	mov    %rbx,0x60(%rsp)
-  3d:	48 8b 03             	mov    (%rbx),%rax
 
 
 ---
@@ -143,5 +223,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
