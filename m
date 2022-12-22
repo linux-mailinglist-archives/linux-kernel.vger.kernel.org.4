@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B03654835
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05135654849
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235679AbiLVWNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 17:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S235604AbiLVWRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 17:17:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiLVWMu (ORCPT
+        with ESMTP id S230116AbiLVWR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 17:12:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B86A10FDB;
-        Thu, 22 Dec 2022 14:12:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2377C61DB4;
-        Thu, 22 Dec 2022 22:12:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 518A6C433F2;
-        Thu, 22 Dec 2022 22:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671747168;
-        bh=mQD2ZYw4YRduH/pzuxEiNaEpTsT1YNKaQ62QM19DZGQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XQqMj6Z4it5dSFIYft/H2Xzfs/wXS3w0orSN/1N6zaT/JSyNX+MYxUMbSYWJb9qYs
-         MSKBbg7QoMfXqkYroZVfTbb7AAbk30WPU5M1BbT3jayFvOocStnYrnMcrVyj0QPZB0
-         9wn1QMIuHbt1FRas8Tec/sEx7+abSc2//V5Qaep3OMpz2jNJt4jWu4RjRr1z3kzjcm
-         K6l5kMN0ViZaNaWxzH8bc65XUL49e+TYdhLQnVgqmjx6Op02k6yrBr5FfRDBqPzDBl
-         BopxF+W1aJmuDKVqwz7T09xdXnCm+8FgHIjxNkfLtL8byI++EUno7vjf2agYZZ66yP
-         Z35qEt0tuQneg==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     peterz@infradead.org, tglx@linutronix.de
-Cc:     jstultz@google.com, edumazet@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 3/3] softirq: don't yield if only expedited handlers are pending
-Date:   Thu, 22 Dec 2022 14:12:44 -0800
-Message-Id: <20221222221244.1290833-4-kuba@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221222221244.1290833-1-kuba@kernel.org>
-References: <20221222221244.1290833-1-kuba@kernel.org>
+        Thu, 22 Dec 2022 17:17:28 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A8726AD7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 14:17:26 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id b13so4712795lfo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 14:17:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S54q1Ly25fucvW8wy0dU1/tQS+0Zh9k/n0J/KMOoAU0=;
+        b=UW/yqmwPTVLenNcJd2Qd9e0NTgzQmDmaeg/bt/1PlCivJ63Y0t909OjvU07U0fiXq5
+         F+fAfdqnxDQCZ3CD1hBEotehTTTx9o02Jrp9q4h5qnUGBTYTyZuyM/4nsDCaMpRFE6bn
+         yxw1PjO7chlYHaKDLmRK/jM3xriUiZsxpwOJQmd4PMJpNJ5ftd11U64ACeCg8Yo6a02d
+         ziaB+GPZOefHkuvljAfNwQo7C5F0DVM2QOHfxosbMflSALoeveHH9J85byzk0nDEFU0y
+         rMrqkMl04eBixz/FrvumqndbNMhC/JV4CE0W4pXBfE2zdOsiCkiYVWb1D6f04Jj0wmJT
+         DQtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S54q1Ly25fucvW8wy0dU1/tQS+0Zh9k/n0J/KMOoAU0=;
+        b=TQdnkn1/O6iKPWlpZ+/I8Rb1se5dqx1ibESert1WJqi/AqWsonRY8530kz3aJ2+E+n
+         KgJuKrMNP1WzyNhyUvEnq50PXrSK8YzdnJOKFQFJC07VXDT2CK81Hlr3x0YlLENufhJU
+         FBWX1w3k2Lx6zK9D2wrMtPBIaLH+K0xj9MP9a367RJowkD+ckHQZtMfUeuiR1yUHzsq4
+         8ZGh6Chl4n+ao5Y4XBEXNgKc6O7TIg3DvF4ABBgzcO6cVvDMtoOTueBNCn/bNaELAa/a
+         hmS34A8XQmY9B0375SYPhe5xLXf1AVn+6vaYhvqIoOQCQM61IBixGge9EcOakAUuFeCY
+         kxjA==
+X-Gm-Message-State: AFqh2ko+d1wBrOU2UUEhis7Mmlr2dNKDK82RiJ+B3/h03OiSk3jIPoho
+        qKwLOzrNyQHHB9hPN/r9n2VVlA==
+X-Google-Smtp-Source: AMrXdXtWAyVvjnaVxKo6msD2MtpwrZhPvPMCjOS4jjqOp4cyiwI3D+yRNc34Pp4Vgq6Bd/bxog2D0g==
+X-Received: by 2002:a05:6512:3e0d:b0:4a9:a1f1:3f57 with SMTP id i13-20020a0565123e0d00b004a9a1f13f57mr2962950lfv.50.1671747445066;
+        Thu, 22 Dec 2022 14:17:25 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id x11-20020a0565123f8b00b004b5adb59ed5sm222468lfa.297.2022.12.22.14.17.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 14:17:23 -0800 (PST)
+Message-ID: <71bf6521-71d7-ec45-912f-e3dc6038d3a4@linaro.org>
+Date:   Fri, 23 Dec 2022 00:17:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 1/2] scsi: ufs: ufs-qcom: add basic interconnect support
+Content-Language: en-GB
+To:     Brian Masney <bmasney@redhat.com>, andersson@kernel.org
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20221117104957.254648-1-bmasney@redhat.com>
+ <20221117104957.254648-2-bmasney@redhat.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221117104957.254648-2-bmasney@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,46 +78,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In networking we try to keep Tx packet queues small, so we limit
-how many bytes a socket may packetize and queue up. Tx completions
-(from NAPI) notify the sockets when packets have left the system
-(NIC Tx completion) and the socket schedules a tasklet to queue
-the next batch of frames.
+On 17/11/2022 12:49, Brian Masney wrote:
+> The firmware on the Qualcomm platforms expects the interconnect votes to
+> be present. Let's add very basic support where the maximum throughput is
+> requested to match what's done in a few other drivers.
+> 
+> This will not break boot on systems where the interconnects and
+> interconnect-names properties are not specified in device tree for UFS
+> since the interconnect framework will silently return.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> ---
+>   drivers/ufs/host/ufs-qcom.c | 25 +++++++++++++++++++++++++
+>   1 file changed, 25 insertions(+)
+> 
+> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> index 8ad1415e10b6..55bf8dd88985 100644
+> --- a/drivers/ufs/host/ufs-qcom.c
+> +++ b/drivers/ufs/host/ufs-qcom.c
+> @@ -7,6 +7,7 @@
+>   #include <linux/time.h>
+>   #include <linux/clk.h>
+>   #include <linux/delay.h>
+> +#include <linux/interconnect.h>
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+>   #include <linux/platform_device.h>
+> @@ -936,6 +937,22 @@ static const struct reset_control_ops ufs_qcom_reset_ops = {
+>   	.deassert = ufs_qcom_reset_deassert,
+>   };
+>   
+> +static int ufs_qcom_icc_init(struct device *dev, char *pathname)
+> +{
+> +	struct icc_path *path;
+> +	int ret;
+> +
+> +	path = devm_of_icc_get(dev, pathname);
+> +	if (IS_ERR(path))
+> +		return dev_err_probe(dev, PTR_ERR(path), "failed to acquire interconnect path\n");
+> +
+> +	ret = icc_set_bw(path, 0, UINT_MAX);
 
-This leads to a situation where we go thru the softirq loop twice.
-First round we have pending = NET (from the NIC IRQ/NAPI), and
-the second iteration has pending = TASKLET (the socket tasklet).
+I noticed that this patch bumps peak_bw (and leaves average_bw as 0), 
+while vendor kernels bump average_bw, but ib (peak_bw) is set to 0.
 
-On two web workloads I looked at this condition accounts for 10%
-and 23% of all ksoftirqd wake ups respectively. We run NAPI
-which wakes some process up, we hit need_resched() and wake up
-ksoftirqd just to run the TSQ (TCP small queues) tasklet.
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "failed to set bandwidth request\n");
+> +
+> +	return 0;
+> +}
+> +
+>   /**
+>    * ufs_qcom_init - bind phy with controller
+>    * @hba: host controller instance
+> @@ -991,6 +1008,14 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+>   			err = dev_err_probe(dev, PTR_ERR(host->generic_phy), "Failed to get PHY\n");
+>   			goto out_variant_clear;
+>   		}
+> +
+> +		err = ufs_qcom_icc_init(dev, "ufs-ddr");
+> +		if (err)
+> +			goto out_variant_clear;
+> +
+> +		err = ufs_qcom_icc_init(dev, "cpu-ufs");
+> +		if (err)
+> +			goto out_variant_clear;
+>   	}
+>   
+>   	host->device_reset = devm_gpiod_get_optional(dev, "reset",
 
-Tweak the need_resched() condition to be ignored if all pending
-softIRQs are "non-deferred". The tasklet would run relatively
-soon, anyway, but once ksoftirqd is woken we're risking stalls.
-
-I did not see any negative impact on the latency in an RR test
-on a loaded machine with this change applied.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- kernel/softirq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index ad200d386ec1..4ac59ffb0d55 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -601,7 +601,7 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
- 
- 		if (time_is_before_eq_jiffies(end) || !--max_restart)
- 			limit = SOFTIRQ_OVERLOAD_TIME;
--		else if (need_resched())
-+		else if (need_resched() && pending & ~SOFTIRQ_NOW_MASK)
- 			limit = SOFTIRQ_DEFER_TIME;
- 		else
- 			goto restart;
 -- 
-2.38.1
+With best wishes
+Dmitry
 
