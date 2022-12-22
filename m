@@ -2,78 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE792653A17
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 01:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7A3653A19
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 01:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiLVA1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 19:27:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S232013AbiLVAaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 19:30:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiLVA1R (ORCPT
+        with ESMTP id S229742AbiLVAaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 19:27:17 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E332034C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 16:27:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671668837; x=1703204837;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=jHQcEHSK0InmHnPsXM0Gx80tyPuqDCQXyyxjt9KKKBE=;
-  b=eFxG1caUXXOZ19rXqHGaJGkZFG5HOHTZ/avXSdQ4gAcGk7rXU6gzEbqJ
-   FgfyeoLJjqKoyX3D6foDLkJlxaojndLjeK4l6mYsvYUEyvaJMLlI6AffN
-   P6Au238XqMaQ8eYpc7wdxIreM1Zma6kD5llmJmhNBTKLqlBs73BYDPy25
-   4Q3Yn9pSeY+kmR2DNSKsEMODgrPNEL8oMX98C/AOAAJrVYPwnld7wrkjQ
-   2F3Z6U3nVctM5GcIcUl/dIJjTwOSYFEOvwDOyVM/S3g3viCcghhEk4cts
-   ux+ivd93flQ2Agl14xj8clo3Y30BxYld4tana2KiV45Uh2cgPTGm0xsRT
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="299679563"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="299679563"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 16:27:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="740360369"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="740360369"
-Received: from gaoyuanf-mobl.amr.corp.intel.com (HELO [10.212.85.133]) ([10.212.85.133])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 16:27:15 -0800
-Message-ID: <07538266-ea40-389e-9e68-054822121e0b@linux.intel.com>
-Date:   Wed, 21 Dec 2022 18:27:14 -0600
+        Wed, 21 Dec 2022 19:30:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262F6218AE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 16:30:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B002BB81BE6
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 00:30:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D6BC433EF;
+        Thu, 22 Dec 2022 00:30:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671669003;
+        bh=W3ieMBH1py2ivn2gYCl7Hf6einZeemiSyRBDMxO+2co=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=LC7pVYH9rem06N0nQg5JO40wJEmhJz4oDd7vtKrq6OgFKM0epZ8YtmjEJoiOtm00R
+         YI1BMuCHJ/YYMVe9ztbCxACHk9Tub7A4kCcDGA4omlJfJBjKWiGz/0HpiHLmq9OswB
+         VH2zaMQYMrH/EvRz6oQbC1O+JbEt0Z2q3zgF9lcxtTC0elauT8WniN5GpSRP9M8lgl
+         X9jPcOFpGOJ3VPxjJgOngXteJW/ohsPAlP5bMaSYSnVR4XeMiEQC0KT0XYxCRok03s
+         W/0PapvkB62OTr1yp5fL+2ry77CC9MDW4vAk6z/6D/ZWagSbNi6nWjxMbRg2eynPXa
+         TCzIAed7Z3DhQ==
+Date:   Thu, 22 Dec 2022 00:29:56 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Changbin Du <changbin.du@gmail.com>, Guo Ren <guoren@kernel.org>
+CC:     Conor Dooley <conor.dooley@microchip.com>, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        mhiramat@kernel.org, changbin.du@intel.com, zong.li@sifive.com,
+        rostedt@goodmis.org, boqun.feng@gmail.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] riscv: patch: Fixup lockdep warning in stop_machine
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221222001902.zcbwlvqaitvsfb33@mail.google.com>
+References: <20221120101049.2078117-1-guoren@kernel.org> <Y3tPEDvM3aVJmVxF@wendy> <CAJF2gTS0FDgV3toa9wZxPhK2G+f4vCtrru7q3R4FXnMkxYmu-w@mail.gmail.com> <20221222001902.zcbwlvqaitvsfb33@mail.google.com>
+Message-ID: <5CA9DB64-CE90-490A-835B-0FC4550E5D9A@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v2] ASoC: Intel: sof_nau8825: add variant with nau8318
- amplifier.
-Content-Language: en-US
-To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Cc:     Libin Yang <libin.yang@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        "balamurugan . c" <balamurugan.c@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Muralidhar Reddy <muralidhar.reddy@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        David Lin <CTLIN0@nuvoton.com>, alsa-devel@alsa-project.org,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Brent Lu <brent.lu@intel.com>, Yong Zhi <yong.zhi@intel.com>
-References: <20221216154938.9426-1-ajye_huang@compal.corp-partner.google.com>
- <b0612bbd-2eba-36cf-9c29-7542cf32adfd@linux.intel.com>
- <CALprXBYy9_ax8-xfh0paB59Pn=TB7yVLwtY8vnT_-y5vWd867w@mail.gmail.com>
- <9aa4bffd-bc7e-0e40-3063-5ce80b5fbe9a@linux.intel.com>
- <CALprXBZkhWitJBeenKHxzyQvkf=Q2FDAHKD511oCWC8-SJBK+A@mail.gmail.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <CALprXBZkhWitJBeenKHxzyQvkf=Q2FDAHKD511oCWC8-SJBK+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,24 +60,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 12/21/22 17:30, Ajye Huang wrote:
-> Hi Pierre
-> 
-> On Sat, Dec 17, 2022 at 1:37 AM Pierre-Louis Bossart
-> <pierre-louis.bossart@linux.intel.com> wrote:
-> 
->>
->> Ok, thanks for the explanations.
->>
->> Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> 
-> Yesterday, I saw Arnd Bergmann sent this patch "ASoC: Intel:
-> sof-nau8825: fix module alias overflow " for reducing the string to
-> prevent over length,https://patchwork.kernel.org/project/alsa-devel/patch/20221221132515.2363276-1-arnd@kernel.org/.
-> 
-> so, I need to check with you, should my string need to change the
-> format style with his, even the my string does not over length , from
-> .drv_name = "adl_nau8318_nau8825" to .drv_name = "adl_nau8318_8825",
-> align with his format style?
+On 22 December 2022 00:19:02 GMT, Changbin Du <changbin=2Edu@gmail=2Ecom> =
+wrote:
+>Hello,
+>Does this patch get merged into riscv tree now? This problem has been the=
+re for a long
+>time=2E (I suppose you have received my previous reponse=2E)
 
-That would be more consistent indeed, no objections from me.
+As far as I can tell, this patch is still missing a sign-off from you=2E
+There's nothing in response to this thread that I can see which provides o=
+ne=2E
+
+>
+>On Mon, Nov 21, 2022 at 07:09:45PM +0800, Guo Ren wrote:
+>> On Mon, Nov 21, 2022 at 6:13 PM Conor Dooley <conor=2Edooley@microchip=
+=2Ecom> wrote:
+>> >
+>> > On Sun, Nov 20, 2022 at 05:10:49AM -0500, guoren@kernel=2Eorg wrote:
+>> > > From: Changbin Du <changbin=2Edu@gmail=2Ecom>
+>> >
+>> > > Fixes: 0ff7c3b33127 ("riscv: Use text_mutex instead of patch_lock")
+>> > > Cc: Changbin Du <changbin=2Edu@gmail=2Ecom>
+>> > > Co-developed-by: Guo Ren <guoren@kernel=2Eorg>
+>> > > Signed-off-by: Guo Ren <guoren@kernel=2Eorg>
+>> > > Cc: Zong Li <zong=2Eli@sifive=2Ecom>
+>> > > Cc: Palmer Dabbelt <palmer@dabbelt=2Ecom>
+>> > > ---
+>> >
+>> > Hey Guo Ren,
+>> >
+>> > FYI you're missing a SoB from Chanbin on this patch=2E They gave one =
+in
+>> > their v1 though so you should be able to re-use that?
+>> I'm waiting for his SoB=2E I don't think I could directly use his SoB i=
+n
+>> v1=2E I need him to confirm my rewritten commit log for lockdep
+>> analysis=2E
+>>=20
+>> >
+>> > Thanks,
+>> > Conor=2E
+>> >
+>> > > Changes in v2:
+>> > >  - Rewrite commit log with lockdep explanation [Guo Ren]
+>> > >  - Rebase on v6=2E1 [Guo Ren]
+>> > >
+>> > > v1:
+>> > > https://lore=2Ekernel=2Eorg/linux-riscv/20210417023532=2E354714-1-c=
+hangbin=2Edu@gmail=2Ecom/
+>> >
+>>=20
+>>=20
+>> --=20
+>> Best Regards
+>>  Guo Ren
+>
