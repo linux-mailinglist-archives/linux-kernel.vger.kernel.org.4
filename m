@@ -2,103 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01369654451
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A33A654445
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235510AbiLVP1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S235822AbiLVP0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235423AbiLVP11 (ORCPT
+        with ESMTP id S235759AbiLVPZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:27:27 -0500
-X-Greylist: delayed 174 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Dec 2022 07:27:26 PST
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D05065E8;
-        Thu, 22 Dec 2022 07:27:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1671722665;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=SxW45KTnLVIUUtB58HOiMPr3gJUSP+a3USQoYmqm660=;
-    b=ZdynYWx1d5lNzCF7wuaAEBEZhKVYdg/qTLCLWyN4nWAKVT8+A3bmtLvUZGpDBZ7SE7
-    VS8BSTnGM24tKW/GFRvToNePN26aR8b2500LyR+v8D8hO186FmjwjVWiJNeS+I5bOYmN
-    SMFNFqiGT+Xtnystihs4R7C151S8efhYS8YH1jJO9LX1sESDgMPFHzu8UdPdhHDFI2D3
-    dlH2ROaZjI4fEfDFrPQx2Jep9Y9RrSfxCP3GDKFQigiSHOKYKRbyp/JRCnjnxorvhstg
-    lL26aunMiQNOTi0Kmfq6GGkMtJp8fIRFJECMLURHRIe7LneY/xKWkSlsoOxNDAVuoK+p
-    5Mpg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWyvDI"
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
-    with ESMTPSA id Yce349yBMFONKEU
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 22 Dec 2022 16:24:23 +0100 (CET)
-Date:   Thu, 22 Dec 2022 16:24:15 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     wangweidong.a@awinic.com
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, perex@perex.cz, tiwai@suse.com,
-        ckeepax@opensource.cirrus.com, rf@opensource.cirrus.com,
-        peter.ujfalusi@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, james.schulman@cirrus.com,
-        flatmax@flatmax.com, ryan.lee.analog@gmail.com,
-        jonathan.albrieux@gmail.com, tanureal@opensource.cirrus.com,
-        povik+lin@cutebit.org, 13691752556@139.com,
-        cezary.rojewski@intel.com, alsa-devel@alsa-project.org,
+        Thu, 22 Dec 2022 10:25:57 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003E52B268;
+        Thu, 22 Dec 2022 07:24:42 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A6BD140002;
+        Thu, 22 Dec 2022 15:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1671722681;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=paTDVkvAnOW0G/nrH5hLopHfXkzR9wnPXZ3DRptHKzE=;
+        b=An1s8lISNjsPvQ1ituTK/aN3u0eD6UmoFmKwIL0GQfGp0XvXqvtsK7VWOQKsisikEGAN7q
+        muHMLfnUj9yHCYDEFEMNgMuF7RfsFT/acVCNbJH7UNgauLLskDpn43sPiZ/dBSMYF7lrzA
+        zP4cUUaSokxDZ4VxRXLq01Zun+/zSNg4/3lrpVCYkyojIls7kUtcdLgMNik5FrwTPJsBxp
+        c4pm2wnqiWjeg+ZliKFWAAp/2G1W+ZeGAyrooqc7g9jfxp5qHhp8AGzu5JDv61DkzHMALr
+        MDCoPNRIpRzb53IT9AqPTu59V4MlDFJOc2aZ9wTUQnOYjjAI8RhTisk42WDATg==
+Date:   Thu, 22 Dec 2022 16:24:38 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liweilei@awinic.com, zhaolei@awinic.com, yijiangtao@awinic.com,
-        zhangjianming@awinic.com, duanyibo@awinic.com
-Subject: Re: [PATCH V7 5/5] ASoC: dt-bindings: Add schema for "awinic,aw883xx"
-Message-ID: <Y6R2nziLaN3OyEo6@gerhold.net>
-References: <20221222123431.106425-1-wangweidong.a@awinic.com>
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v4 3/5] usb: gadget: udc: add Renesas RZ/N1 USBF
+ controller support
+Message-ID: <20221222162438.4d06bd77@bootlin.com>
+In-Reply-To: <Y6MFKdOU4IUQo70L@kroah.com>
+References: <20221213133302.218955-1-herve.codina@bootlin.com>
+ <20221213133302.218955-4-herve.codina@bootlin.com>
+ <CAMuHMdV7QNZ8Rv6iFLhj_MmBHL-vGWuWZdKB=REWba1UAWgkHw@mail.gmail.com>
+ <Y6MFKdOU4IUQo70L@kroah.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222123431.106425-1-wangweidong.a@awinic.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 08:34:31PM +0800, wangweidong.a@awinic.com wrote:
-> From: Weidong Wang <wangweidong.a@awinic.com>
-> 
-> Add a DT schema for describing Awinic AW883xx audio amplifiers. They are
-> controlled using I2C.
-> 
-> Signed-off-by: Weidong Wang <wangweidong.a@awinic.com>
-> ---
->  .../bindings/sound/awinic,aw883xx.yaml        | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/awinic,aw883xx.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/awinic,aw883xx.yaml b/Documentation/devicetree/bindings/sound/awinic,aw883xx.yaml
-> new file mode 100644
-> index 000000000000..af4e0e27f8f7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/awinic,aw883xx.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/awinic,aw883xx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Awinic AW883xx Smart Audio Amplifier
-> +
-> +maintainers:
-> +  - Stephan Gerhold <stephan@gerhold.net>
+Hi Geert, Greg,
 
-Please add yourself as maintainer, not other people you found in similar
-DT schema files. I have no idea how this hardware works. :)
+On Wed, 21 Dec 2022 14:07:53 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-Thanks,
-Stephan
+> On Wed, Dec 21, 2022 at 02:03:43PM +0100, Geert Uytterhoeven wrote:
+> > Hi Herv=C3=A9,
+> >=20
+> > On Tue, Dec 13, 2022 at 2:33 PM Herve Codina <herve.codina@bootlin.com>=
+ wrote: =20
+> > > Add support for the Renesas USBF controller.
+> > > This controller is an USB2.0 UDC controller available in the
+> > > Renesas r9a06g032 SoC (RZ/N1 family).
+> > >
+> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
+> >=20
+> > Thanks for your patch!
+> >  =20
+> > > --- /dev/null
+> > > +++ b/drivers/usb/gadget/udc/renesas_usbf.c =20
+> >  =20
+> > > +#ifdef DEBUG
+> > > +#define TRACE(_fmt, ...) trace_printk("%s: " _fmt, __func__, ##__VA_=
+ARGS__)
+> > > +#define USBF_TRACE_EP_MASK 0x0ffff /* All the 16 endpoints */
+> > > +#define TRACEEP(_ep, _fmt, ...)                                     =
+        \
+> > > +       do {                                                         =
+       \
+> > > +               if ((1 << (_ep)->id) & USBF_TRACE_EP_MASK)           =
+       \
+> > > +                       trace_printk("%s: " _fmt, __func__, ##__VA_AR=
+GS__); \
+> > > +       } while (0)
+> > > +#else
+> > > +#define TRACE(_fmt, ...) do { } while (0)
+> > > +#define TRACEEP(_ep, _fmt, ...) do { } while (0) =20
+> >=20
+> > Please use "no_printk(fmt, ##__VA_ARGS__)" instead of dummy loops,
+> > to avoid bad callers going unnoticed if DEBUG is not defined. =20
+>=20
+> Even better, do NOT define custom debug/trace macros for a single
+> driver, just use the ones that the rest of the kernel uses instead
+> please.
+>=20
+> thanks,
+>=20
+> greg k-h
+
+I would like to keep some granularity in debug messages and
+also keep the function name automatically added.
+I propose 3 kinds of messages:
+- general ones,
+- specific Endpoint0 ones,
+- other Endpoints ones.
+
+So before doing any modification in the source code, what do you
+think about:
+    /*
+     * Suggested tracers:
+     * - no_printk:    Disable tracing
+     * - trace_printk: Print to trace buffer
+     */
+    #define usbf_dbg(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA_ARG=
+S__)
+    #define usbf_dbg_ep0(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA=
+_ARGS__)
+    #define usbf_dbg_epn(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA=
+_ARGS__)
+
+The code will use only these macros instead of the previously
+defined TRACE and TRACEEP as follow:
+- usbf_dbg() will be called instead of TRACE()
+- usbf_dbg_ep0() will be called instead of TRACEEP() for Endpoint0
+- usbf_dbg_epn() will be called instead of TRACEEP() for other Endpoints
+
+Is that ok for you ?
+
+Best regards,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
