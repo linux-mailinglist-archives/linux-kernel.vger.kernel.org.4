@@ -2,218 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE216546F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCC36546F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235502AbiLVUEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S235543AbiLVUGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiLVUEm (ORCPT
+        with ESMTP id S229504AbiLVUGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 15:04:42 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9B218E09;
-        Thu, 22 Dec 2022 12:04:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671739478; x=1703275478;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=2q6FBTjWkLO39oTeagsXJdhWGEtB4Lz7zPluFifDe+M=;
-  b=X89KOA19QMloxn2PM4oxZ5vnSeW/XJ0StlowVEnQyf2vhf/v8vHN77+E
-   9U8E/sO0pLdIV0Mx5ESxZ7kfdjQcBPcrtHRyW8VO1oMpjcgFBO9LpB3e5
-   e1mJyTV+ABXBm8MH1TPfsNLwA1cNhnD4MTHB8iz+YOhRqe1/0hDCb+1P5
-   Tu7VtTeebfdtMzMf0JX+nQRQQ4JiGPMh8+4JlT5fxEFKHI3qOChdYkLV3
-   FVsEJck/i5AAD7vHcwiunVSz7C1uVY8LhAFat8DNN7iY0ngjv5baoswYv
-   cMMoJWDh2HoVSOMzTBtOJ3uxApKKzTuNsQ0/TNKn5hVEB7gnLfGOXVOLE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="303674254"
-X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
-   d="scan'208";a="303674254"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 12:04:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="720432649"
-X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
-   d="scan'208";a="720432649"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2022 12:04:13 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 22 Dec 2022 12:04:12 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 22 Dec 2022 12:04:12 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 22 Dec 2022 12:04:12 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.177)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 22 Dec 2022 12:04:12 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T3WSxswFDNz4unPwJSyC14oNisKtEOkmEvTrmEmgBbNUrR4d0kHJx7L+QzQ4fOyxjyrhiRos1+t9T7mrAHy5yaxxfUX/BLy0gRZneYKT+/87XEU5yUNPb2CaafJKhuxKPEIfrX/1cYzjYNMGSHhOr9nzKfAdSp6I+KDJkPXhdMTMOgVPrF7F+U1FMkOTgoZmGUWSnklTm70B8LWAH2w1c86fFE6OWXwRILqz8zmzD2te8V/PenhrAgRWjR1rQftz9g8pR0zSDvztxQcKRpr0BIBTzpQAECbuJHeVl5rJ3M2UPGz/GDKaAS82sj2nohwyuFCT6xyXQO5d2wKjgEHNag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xSAXeNJR/kQ1nq6WhLOqvBSythGpoIlpQubitdJFuaM=;
- b=imoe4Yw0JLC2bQ/tg/FEaAY3zeHFdqOHqsxKOaHhisRnCIDp8j4c2cLdsnhePVsZKqPVJIddkvVREmMxSawmCs5c01kIvfALDIDLeMvdBPsP3XhBnxpc5a2CYmdxNgcRI40FcS5EEH969UjY9DIEummxdMwR4sbVjesF1Vb1WHKaIw/dJoS781R0ddoQK6qFfN7fpbKkulqrurcyjqeB95iNW3QpFJ045DlW3PWGdVvAXfMlFoFICMp/922cfHA+M9i/3F7zr6mHHcFoVDKm/568WOSSw7MsjFpAVGyOZDYPw4UPn1bto1el6ac4ziIXdEqaUmHOVyQMqojrdkaMmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN6PR1101MB2227.namprd11.prod.outlook.com
- (2603:10b6:405:51::14) by CH0PR11MB5218.namprd11.prod.outlook.com
- (2603:10b6:610:e1::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.6; Thu, 22 Dec
- 2022 20:04:10 +0000
-Received: from BN6PR1101MB2227.namprd11.prod.outlook.com
- ([fe80::5d3a:5bc9:4e57:622e]) by BN6PR1101MB2227.namprd11.prod.outlook.com
- ([fe80::5d3a:5bc9:4e57:622e%7]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
- 20:04:10 +0000
-Date:   Thu, 22 Dec 2022 21:04:11 +0100
-From:   Piotr Raczynski <piotr.raczynski@intel.com>
-To:     Clark Wang <xiaoning.wang@nxp.com>
-CC:     <linux@armlinux.org.uk>, <peppe.cavallaro@st.com>,
-        <alexandre.torgue@foss.st.com>, <joabreu@synopsys.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <mcoquelin.stm32@gmail.com>, <andrew@lunn.ch>,
-        <hkallweit1@gmail.com>, <netdev@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] net: stmmac: resume phy separately before calling
- stmmac_hw_setup()
-Message-ID: <Y6S4O2tgf6ntc/vG@nimitz>
-References: <20221221080144.2549125-1-xiaoning.wang@nxp.com>
- <20221221080144.2549125-3-xiaoning.wang@nxp.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221221080144.2549125-3-xiaoning.wang@nxp.com>
-X-ClientProxiedBy: CH2PR11CA0023.namprd11.prod.outlook.com
- (2603:10b6:610:54::33) To BN6PR1101MB2227.namprd11.prod.outlook.com
- (2603:10b6:405:51::14)
+        Thu, 22 Dec 2022 15:06:15 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B381A816
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 12:06:14 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id i7so2719658wrv.8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 12:06:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZJWly5kBebpQU0okqF7TXgSEM1mQ0IrTkUDNeGNEww=;
+        b=M7mgkYdGCUsFmj3AdjvMMkSpff/r8gGvOLnk6G6r28Hmm6hkUoVbsIj5aUScUp32OQ
+         Fs4mGUJMO+kVN3fyvnCDNVb3LxeaapmQp1bfm2vq+6LAHIqDSZ0SGE9URDE5tkenwTjK
+         UlkK6pMuQZ7yVKf34aqBuNzne12EUN8pryeYtD50paVRIBI8wL2lxAWtkKAIOYtaXczF
+         IwpsmCWY0SyErNUpIL8MWCwAdKwfc3ghCMeV4P9jfwNmkn9nqH94p/yTwu2zpQ5XOWN8
+         HjlDNt5K1nov6SHUI425oTpjFNhwcum/630m8uZ6BvpJadRAAqbv7Pa2erDJe5UhEEg4
+         MuGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RZJWly5kBebpQU0okqF7TXgSEM1mQ0IrTkUDNeGNEww=;
+        b=1l4s0zakW1Z38lKAzWmwQwYGEHln5Nm0M2CYBsho8PRganpvCkIeWCLakwfroZVV1i
+         6s6hSEw98N1N5EWqlzV4IlVLE+CK1/cFH2+Lss60ixAPPsr52ZhAc53+e5oAPg8gXtzI
+         rOcosAZ4ILjL2dVIXG8f3n8MLjXvnh9eRNqEKG4J/ycl5FCPyNerwf4GsaJy58w2CW++
+         of8JDLgDP7Fl8i/3ojH7yraccQyxy1zfeQP0WZ2qGDCPmEK4oGi48eusWimrDbvK3zwl
+         TKQPXXRuBnaZiHdokqxauYJHiB7Vh8LMCVQf/k8E9JwM88HkiYuowd3S51HO8H1rEXMW
+         pvOQ==
+X-Gm-Message-State: AFqh2kqAEykvrqFrQAUnCitfDJr6aK7mmoDszhBwVCaj+X77yOQl7lNc
+        hoGlicsvdDDVT4+EGZQiho0=
+X-Google-Smtp-Source: AMrXdXve9X9xpjXpQvMkY7Gu8MBnYGGuP6vof+BTZ571QEMPAzD+ZO5QPAtN3FbO8KvlM4Sa/WF3Zg==
+X-Received: by 2002:a05:6000:49:b0:242:6777:c7e2 with SMTP id k9-20020a056000004900b002426777c7e2mr3736136wrx.31.1671739572912;
+        Thu, 22 Dec 2022 12:06:12 -0800 (PST)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id o2-20020a5d58c2000000b0026a4bb75477sm1348793wrf.28.2022.12.22.12.06.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 12:06:12 -0800 (PST)
+Date:   Thu, 22 Dec 2022 20:06:11 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Subject: Re: [PATCH v3 1/3] mm: vmalloc: Avoid calling __find_vmap_area()
+ twice in __vunmap()
+Message-ID: <Y6S4s2PAg6AjYKbP@lucifer>
+References: <20221222190022.134380-1-urezki@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN6PR1101MB2227:EE_|CH0PR11MB5218:EE_
-X-MS-Office365-Filtering-Correlation-Id: 93780171-d9e7-4d3b-8907-08dae457b0bc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4gmxC5Mb+rY0/Rulq2HF3E5TdAtORxFcvw2uRV6JP9J+RZbCyvkNzuU2HydS8fA+DXsPQAkgLTeiRKlNYVWTch0BBzDbTl7jROFEVUJxg61Zs+jU1byxaj1VJ5SX3Rh4TxjKxCTjXlHK0YvGdIVSksoTmIcMkmnYE/Hj5CfDiQ/r73ILNr374o67cdT0/q4n1muijOz5vnEq82cuCUNW8tlMUkxqh86MZeeioztafxrVmsm0oA0KLKNoTKNxT7Lmxfyn5REGSV8hT8dX67zQ+AxD01XwAlMzfxIPwf6s/KcXwtM8YpibG04E8X7JyLxbXVXSECvFdbCnr6L5DOb4xjfsZ7dzVl5xHrPmJd2j4Ysm62EwHw+ZS0B02P4U3or7dan+HsrWiLqOE7V8roEzQRFZMxGdWyqE/ypAzhiEG2oWD5h0sVbMXsx49sFytkCzMnG/VfESYgSG8IcwwNwzKYqHMIq5Dtbu2t/yTZL+YND+NTsjsjiilsDujlHFhn3Wrkpobf1aMavHDhruC2Fvn6QyPvFtEPVTF0eAyOVbYVIgqHeMK/hCSBiBfVQCs8ged0o3EZgFDPeKHyUQF1EsR4Rq8FYKy88II3qU0qxKUQML68Da6ZzYppMZKv2e4Ya8o6Gj51eQt9TBYCEsZov3iQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1101MB2227.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(346002)(39860400002)(376002)(396003)(136003)(451199015)(2906002)(44832011)(5660300002)(7416002)(6916009)(316002)(8936002)(8676002)(4326008)(41300700001)(66946007)(66556008)(66476007)(6506007)(33716001)(478600001)(6486002)(86362001)(9686003)(6512007)(186003)(26005)(82960400001)(83380400001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NKv0a07p5uuZz6cFpUaSGcpu6u17m5Sve7XEM5ybVHXsgU4BQ2O4AnM4Y9qH?=
- =?us-ascii?Q?UMKu23eR4W/abjtv7urSQeViLdQHT8+txDSwdD1dGS0LAjVBchT0qJK//h01?=
- =?us-ascii?Q?37KHLIqYimhLRQ+xH1puxP1hbhsJLRftQyc0rgZ5zJfDMiSm/PbB7FpPHFn6?=
- =?us-ascii?Q?PyRP34PczLfK0aWtOCCbY9pWsu/0wKkxDnvPym9VT2p2sBWq2RzrkB0/t5Ou?=
- =?us-ascii?Q?ijOTTQp1lUBVmwmDk2W9Fj1yPxi6u2JeSpJJL/zTb5Ii3VoJzzzCvJyRK2+4?=
- =?us-ascii?Q?BclO2/iqvEW7LmzPE/F8AiCoNjozhmB/6/u2AiEhJyO5DHAJMa/1Gi8JR3FV?=
- =?us-ascii?Q?8mYDLLJzVsJ7X87NpZ8dDrxravAUkD8os93r3urSoS9oWhqSl68p9ak0bcvi?=
- =?us-ascii?Q?gBdFX4aaACPBzWhg4i5WQxqC+oi20i1xxoZgaSX+zLP91Ruvt0isAslSG8r0?=
- =?us-ascii?Q?KZZZS+SWzPOoyZ6l7hk64i0mE5D0VGnugmC38Bhjltl2Yj0W4zNOMu0F5b0L?=
- =?us-ascii?Q?FL0ZsujBff0Vr2nVod5GKag1i/KTKfuj0H81vvihIb/2c6oHtyLrXuEtCWbs?=
- =?us-ascii?Q?1IaGU427iITDHrX2Bgjd7qQN0EmUw5PQGupHa0SUYytq7SjMJIsIZE+Iw7N0?=
- =?us-ascii?Q?DeV9ySZ8nZjRQkZNOLz/z/AsdVfn8C383OiLXNDyocDgW/1YLv/XsRcffUUS?=
- =?us-ascii?Q?/+ZJOlQDCE4pwFL7zU10umQLvl7+tOJK3AvsobMnOfmvDHdTzObdSe2f0rQi?=
- =?us-ascii?Q?RqxHErBtILXJhASb/0EsGtG5DzF9LFiTc9GL5GN/WrdXCAFsBZ8oMd1pytxg?=
- =?us-ascii?Q?1ZFazQchLr63GLaPoSae7zpSWAyVSjKBtI2p/JhEyQXkW0sGXoQKCmfhF6uX?=
- =?us-ascii?Q?g2I3CVSGi6/7itakFGe6iSUdo2X8yOyB1czx+ie81+q2a4UzbzsqT1bWJCXa?=
- =?us-ascii?Q?0I6nTN0a5NhDEV//35n9xMp9RMRIP/NCv3fEkjr/nT/hYkHu6Wy743SXoPle?=
- =?us-ascii?Q?PlN+GpUeJufi+YdpEU9BC2dwldiUjrp0L7jhueMXIjUqjCAm41bTxq+ZZR1i?=
- =?us-ascii?Q?WkGg/7Ph9PZvhTIBdRf6JQE1BoUnNAu+GQT83L2v2E/0fdL4hU+wZZMzzsMn?=
- =?us-ascii?Q?JRbSxp5NBidEhd6VZd4+Jz4jiZODPjPV0LjzwJSkORewcZ/oFSK5QdekHI0m?=
- =?us-ascii?Q?mQ+MCP2zvcPKDh/pRhuq82njC0ChDUTNPlgUdJSXv4banoJqyCF82UenQldS?=
- =?us-ascii?Q?5VktoSLcR3n7YXbcQqkPkS/A9heYbYePvrnLooyYay04fAVUMxOg0uNFuJLt?=
- =?us-ascii?Q?YorT6x30tBs0hyN6eXw2K1jFgv8+uh6EdJctU4O4Odr7n+cvCGP755SH2X3q?=
- =?us-ascii?Q?eAcgyrXRWZeuowemdIHEDVqbooVIndvA8QnoOpi3Qe0WaSLOSOUfXFSb8aUa?=
- =?us-ascii?Q?OfEBni+gkPEblHyDZQxsrE8auss70EJuDyQOiUNv5XMOJp067AoEYrJDlXBm?=
- =?us-ascii?Q?woDnbh9etzlgZVR5Lqz2vYbZLLkURdZTnbmxLLKe51j0hF5vWKZR+RO+Kqcn?=
- =?us-ascii?Q?U+jVHB+QEgkPCgzejoATccQl+51PSoOsFkZYSp4jXGMsPdnREyvPjbutazZz?=
- =?us-ascii?Q?cQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93780171-d9e7-4d3b-8907-08dae457b0bc
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR1101MB2227.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 20:04:10.6811
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CXXi3vWlHUteII2Ua11y1EYv8djVqVQHgwT3dc56p/tHG0NF9a0vuXZH5i07V7au9hGEpOFUAQert7UIUpBj3IC98oUbFphESnAQlE8qAwE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5218
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221222190022.134380-1-urezki@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 04:01:44PM +0800, Clark Wang wrote:
-> On some platforms, mac cannot work after resumed from the suspend with WoL
-> enabled.
-> 
-> We found the stmmac_hw_setup() when system resumes will called after the
-> stmmac_mac_link_up(). So the correct values set in stmmac_mac_link_up()
-> are overwritten by stmmac_core_init() in phylink_resume().
-> 
-> So call the new added function in phylink to resume phy fristly.
-							  first.
-> Then can call the stmmac_hw_setup() before calling phy_resume().
-
-It'd be nice to add Fixes tag with appropriate commit id.
-Other than that looks fine.
-
-Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
-
-> 
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+n Thu, Dec 22, 2022 at 08:00:20PM +0100, Uladzislau Rezki (Sony) wrote:
+> Currently the __vunmap() path calls __find_vmap_area() twice. Once on
+> entry to check that the area exists, then inside the remove_vm_area()
+> function which also performs a new search for the VA.
+>
+> In order to improvie it from a performance point of view we split
+> remove_vm_area() into two new parts:
+>   - find_unlink_vmap_area() that does a search and unlink from tree;
+>   - __remove_vm_area() that removes without searching.
+>
+> In this case there is no any functional change for remove_vm_area()
+> whereas vm_remove_mappings(), where a second search happens, switches
+> to the __remove_vm_area() variant where the already detached VA is
+> passed as a parameter, so there is no need to find it again.
+>
+> Performance wise, i use test_vmalloc.sh with 32 threads doing alloc
+> free on a 64-CPUs-x86_64-box:
+>
+> perf without this patch:
+> -   31.41%     0.50%  vmalloc_test/10  [kernel.vmlinux]    [k] __vunmap
+>    - 30.92% __vunmap
+>       - 17.67% _raw_spin_lock
+>            native_queued_spin_lock_slowpath
+>       - 12.33% remove_vm_area
+>          - 11.79% free_vmap_area_noflush
+>             - 11.18% _raw_spin_lock
+>                  native_queued_spin_lock_slowpath
+>         0.76% free_unref_page
+>
+> perf with this patch:
+> -   11.35%     0.13%  vmalloc_test/14  [kernel.vmlinux]    [k] __vunmap
+>    - 11.23% __vunmap
+>       - 8.28% find_unlink_vmap_area
+>          - 7.95% _raw_spin_lock
+>               7.44% native_queued_spin_lock_slowpath
+>       - 1.93% free_vmap_area_noflush
+>          - 0.56% _raw_spin_lock
+>               0.53% native_queued_spin_lock_slowpath
+>         0.60% __vunmap_range_noflush
+>
+> __vunmap() consumes around ~20% less CPU cycles on this test.
+>
+> v2 -> v3:
+> - update commit message;
+> - rename the vm_remove_mappings() to the va_remove_mappings();
+> - move va-unlinking to the callers so the free_vmap_area_noflush()
+>   now expects a VA that has been disconnected;
+> - eliminate a local variable in the remove_vm_area().
+>
+> Reported-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 > ---
->  .../net/ethernet/stmicro/stmmac/stmmac_main.c    | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index c6951c976f5d..d0bdc9b6dbe8 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -7532,16 +7532,9 @@ int stmmac_resume(struct device *dev)
->  	}
->  
->  	rtnl_lock();
-> -	if (device_may_wakeup(priv->device) && priv->plat->pmt) {
-> -		phylink_resume(priv->phylink);
-> -	} else {
-> -		phylink_resume(priv->phylink);
-> -		if (device_may_wakeup(priv->device))
-> -			phylink_speed_up(priv->phylink);
+>  mm/vmalloc.c | 77 ++++++++++++++++++++++++++++++++--------------------
+>  1 file changed, 47 insertions(+), 30 deletions(-)
+>
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 9e30f0b39203..eb91ecaa7277 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -1815,9 +1815,9 @@ static void drain_vmap_area_work(struct work_struct *work)
+>  }
+>
+>  /*
+> - * Free a vmap area, caller ensuring that the area has been unmapped
+> - * and flush_cache_vunmap had been called for the correct range
+> - * previously.
+> + * Free a vmap area, caller ensuring that the area has been unmapped,
+> + * unlinked and flush_cache_vunmap had been called for the correct
+> + * range previously.
+>   */
+>  static void free_vmap_area_noflush(struct vmap_area *va)
+>  {
+> @@ -1825,9 +1825,8 @@ static void free_vmap_area_noflush(struct vmap_area *va)
+>  	unsigned long va_start = va->va_start;
+>  	unsigned long nr_lazy;
+>
+> -	spin_lock(&vmap_area_lock);
+> -	unlink_va(va, &vmap_area_root);
+> -	spin_unlock(&vmap_area_lock);
+> +	if (WARN_ON_ONCE(!list_empty(&va->list)))
+> +		return;
+>
+>  	nr_lazy = atomic_long_add_return((va->va_end - va->va_start) >>
+>  				PAGE_SHIFT, &vmap_lazy_nr);
+> @@ -1871,6 +1870,19 @@ struct vmap_area *find_vmap_area(unsigned long addr)
+>  	return va;
+>  }
+>
+> +static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
+> +{
+> +	struct vmap_area *va;
+> +
+> +	spin_lock(&vmap_area_lock);
+> +	va = __find_vmap_area(addr, &vmap_area_root);
+> +	if (va)
+> +		unlink_va(va, &vmap_area_root);
+> +	spin_unlock(&vmap_area_lock);
+> +
+> +	return va;
+> +}
+> +
+>  /*** Per cpu kva allocator ***/
+>
+>  /*
+> @@ -2015,6 +2027,10 @@ static void free_vmap_block(struct vmap_block *vb)
+>  	tmp = xa_erase(&vmap_blocks, addr_to_vb_idx(vb->va->va_start));
+>  	BUG_ON(tmp != vb);
+>
+> +	spin_lock(&vmap_area_lock);
+> +	unlink_va(vb->va, &vmap_area_root);
+> +	spin_unlock(&vmap_area_lock);
+> +
+>  	free_vmap_area_noflush(vb->va);
+>  	kfree_rcu(vb, rcu_head);
+>  }
+> @@ -2591,6 +2607,20 @@ struct vm_struct *find_vm_area(const void *addr)
+>  	return va->vm;
+>  }
+>
+> +static struct vm_struct *__remove_vm_area(struct vmap_area *va)
+> +{
+> +	struct vm_struct *vm;
+> +
+> +	if (!va || !va->vm)
+> +		return NULL;
+> +
+> +	vm = va->vm;
+> +	kasan_free_module_shadow(vm);
+> +	free_unmap_vmap_area(va);
+> +
+> +	return vm;
+> +}
+> +
+>  /**
+>   * remove_vm_area - find and remove a continuous kernel virtual area
+>   * @addr:	    base address
+> @@ -2603,26 +2633,10 @@ struct vm_struct *find_vm_area(const void *addr)
+>   */
+>  struct vm_struct *remove_vm_area(const void *addr)
+>  {
+> -	struct vmap_area *va;
+> -
+>  	might_sleep();
+>
+> -	spin_lock(&vmap_area_lock);
+> -	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
+> -	if (va && va->vm) {
+> -		struct vm_struct *vm = va->vm;
+> -
+> -		va->vm = NULL;
+> -		spin_unlock(&vmap_area_lock);
+> -
+> -		kasan_free_module_shadow(vm);
+> -		free_unmap_vmap_area(va);
+> -
+> -		return vm;
 > -	}
-> -	rtnl_unlock();
->  
-> -	rtnl_lock();
-> +	phylink_phy_resume(priv->phylink);
-> +
->  	mutex_lock(&priv->lock);
->  
->  	stmmac_reset_queues_param(priv);
-> @@ -7559,6 +7552,11 @@ int stmmac_resume(struct device *dev)
->  	stmmac_enable_all_dma_irq(priv);
->  
->  	mutex_unlock(&priv->lock);
-> +
-> +	phylink_resume(priv->phylink);
-> +	if (device_may_wakeup(priv->device) && !priv->plat->pmt)
-> +		phylink_speed_up(priv->phylink);
-> +
->  	rtnl_unlock();
->  
->  	netif_device_attach(ndev);
-> -- 
-> 2.34.1
-> 
+> -
+> -	spin_unlock(&vmap_area_lock);
+> -	return NULL;
+> +	return __remove_vm_area(
+> +		find_unlink_vmap_area((unsigned long) addr));
+>  }
+>
+>  static inline void set_area_direct_map(const struct vm_struct *area,
+> @@ -2636,16 +2650,17 @@ static inline void set_area_direct_map(const struct vm_struct *area,
+>  			set_direct_map(area->pages[i]);
+>  }
+>
+> -/* Handle removing and resetting vm mappings related to the vm_struct. */
+> -static void vm_remove_mappings(struct vm_struct *area, int deallocate_pages)
+> +/* Handle removing and resetting vm mappings related to the VA's vm_struct. */
+> +static void va_remove_mappings(struct vmap_area *va, int deallocate_pages)
+>  {
+> +	struct vm_struct *area = va->vm;
+>  	unsigned long start = ULONG_MAX, end = 0;
+>  	unsigned int page_order = vm_area_page_order(area);
+>  	int flush_reset = area->flags & VM_FLUSH_RESET_PERMS;
+>  	int flush_dmap = 0;
+>  	int i;
+>
+> -	remove_vm_area(area->addr);
+> +	__remove_vm_area(va);
+>
+>  	/* If this is not VM_FLUSH_RESET_PERMS memory, no need for the below. */
+>  	if (!flush_reset)
+> @@ -2690,6 +2705,7 @@ static void vm_remove_mappings(struct vm_struct *area, int deallocate_pages)
+>  static void __vunmap(const void *addr, int deallocate_pages)
+>  {
+>  	struct vm_struct *area;
+> +	struct vmap_area *va;
+>
+>  	if (!addr)
+>  		return;
+> @@ -2698,19 +2714,20 @@ static void __vunmap(const void *addr, int deallocate_pages)
+>  			addr))
+>  		return;
+>
+> -	area = find_vm_area(addr);
+> -	if (unlikely(!area)) {
+> +	va = find_unlink_vmap_area((unsigned long)addr);
+> +	if (unlikely(!va)) {
+>  		WARN(1, KERN_ERR "Trying to vfree() nonexistent vm area (%p)\n",
+>  				addr);
+>  		return;
+>  	}
+>
+> +	area = va->vm;
+>  	debug_check_no_locks_freed(area->addr, get_vm_area_size(area));
+>  	debug_check_no_obj_freed(area->addr, get_vm_area_size(area));
+>
+>  	kasan_poison_vmalloc(area->addr, get_vm_area_size(area));
+>
+> -	vm_remove_mappings(area, deallocate_pages);
+> +	va_remove_mappings(va, deallocate_pages);
+>
+>  	if (deallocate_pages) {
+>  		int i;
+> --
+> 2.30.2
+>
+
+All looks good to me! Great work! Feel free to add the below to all patches in series:-
+
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
