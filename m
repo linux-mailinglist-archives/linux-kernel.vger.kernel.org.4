@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D96B6547BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 22:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A54B16547C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 22:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiLVVRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 16:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S235659AbiLVVSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 16:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiLVVRL (ORCPT
+        with ESMTP id S230347AbiLVVSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 16:17:11 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826E010FEC
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 13:17:10 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id n3so2049962pfq.10
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 13:17:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DKGYCzvkrRQsG26exGSDsGM12AW8tkADFj8h5RB+A30=;
-        b=xA2sAcbvHRLRPTNUcWhOU2eTVgIGKrEnm3k5rs25we3/mQswqEnKJE0BAFGpg2kPLM
-         Dn+EN3WwOtSdz1LqYVQHtlzMiwaek22Q1ndUd9meDVwMakC3sKgEbMO0Rc8qgFYrbgtk
-         4w2iEeXUEjqhaSrsFJcAuejShPMBEUqXlFZ9Kfn/61Me0fPEwNYwlDC6fmLNoUU1VAgz
-         aNA638ly+YP1vGWFb1l37EDPbImpC/e4Vi1aHts4gCQHLljJG37sLlLDYxqYZCqJq/w6
-         EBu1T8DMU/uOOsK8JeW7wGifHMMCwARYXQq6U9qR4aEosFifxbJqR7YbwEd7Ib/oBOds
-         A1Eg==
+        Thu, 22 Dec 2022 16:18:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BD81E73C
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 13:17:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671743848;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JvoMNsJvzMmJ+w485oCvbJgOGlOvC+kCcpkVN/ffzRU=;
+        b=ZlhZvkt1ZHFOHoejwRn74jaguvWENAxne55JpkLWtaGEatWQdOssWVxRAFdUqrFfvJxAKP
+        r6jh++bLpyHDQFAdnii73cHZaF7sW9tj8uCW4ZlwMsJjId5sYWOEU625rEOiDwCYKF42gd
+        zM67RI2VPaAXlH9GXeIeD99HYN0zz/Q=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-360-VS9mfCa-NwCmbM8h7-6ixQ-1; Thu, 22 Dec 2022 16:17:25 -0500
+X-MC-Unique: VS9mfCa-NwCmbM8h7-6ixQ-1
+Received: by mail-qt1-f200.google.com with SMTP id e18-20020ac845d2000000b003a6a5cbbebcso1223593qto.20
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 13:17:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DKGYCzvkrRQsG26exGSDsGM12AW8tkADFj8h5RB+A30=;
-        b=0YjejKohptA1EFW6U5biXWrZNBLFS2dPl9NgVNiPBYOXll6yHEYCBTtZ9CmcfVMvnj
-         H4IOyMpRZyUNOt7Liof3+P/LhqDly/2oH0JzKYRiCOPDAxEepDKaxuXhQtX4CfTcbG4G
-         dr62H6hD87Og2vMPhCqNz0LWdHlhlHt+ry//FiWtnfjwocmspc8mrjpkEsYH8tmSTSRF
-         ehLJOhA6XZRUh16QwWpZG4lt+lWYLRm+2krxB6aRc6N/GEmq58ZLzvzXzAYDr1tzBYAX
-         GsrOOkTDAxxPbMxGwM78lStTkdN82mVssoNo4clH76XJgWiGpIMqNYwRzDNCQC2IpZmI
-         iEhQ==
-X-Gm-Message-State: AFqh2kryn3QYn+RyD2LC5KctXHHrEsDt3UOKO8D1bfZe7mJzf5rXEhv5
-        73jvMfZclWUBdnAl00lft/9znXP8T0+NIL/pGuKM
-X-Google-Smtp-Source: AMrXdXutQGBOBCQtEo6BWJnU2LinVPQY1YK1lmJoTJgmHaEQzUCCjkTLfrnDcRjCZNzga7g8tnUcuDgqK3DL5+HgtFo=
-X-Received: by 2002:aa7:924d:0:b0:577:62a8:f7a1 with SMTP id
- 13-20020aa7924d000000b0057762a8f7a1mr454916pfp.2.1671743829956; Thu, 22 Dec
- 2022 13:17:09 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JvoMNsJvzMmJ+w485oCvbJgOGlOvC+kCcpkVN/ffzRU=;
+        b=huxXNPIzKO5qSlt2ldnbR0T7qj91S2D30VI17QzQonHwe8aS7h+bIQiXgVNLaRfgKO
+         NoSbfc5NwZtSZ2+RtVlY7mt5lWAYu14MehDDls8RPgQz9US2n1j4U7D76acjvwZ5m52z
+         L80l+fmb03UMcHLPUfAeh0cdtiVACH8/ocIwsIeej/UbbFsmYUTrCgvvCYdNoQIAosTf
+         wdb1/TAqAwkc1Clux5NRqON+4d/J6Uo4gP4WbFNh7YHEzLm42foZSQX7fbij6yCw+H0B
+         YuqK3IXINffeis6Hmfx6xFEbKSyEmv3UxiN6b/qeRLlpnZoyEhYIt3HiRn5+jULCqUmT
+         JA/A==
+X-Gm-Message-State: AFqh2krjfKi/wgDWqw0gAQfXhuFcv+rBPBln1zyuG6jL6P5Rh29v3pdb
+        aC2AbIV5Xek7hUz6ZcuyhchdI55BRfTcUPclGNpOOqCO+AQxBTyzMFg2wmLUUl3JQw64GrADH2Z
+        SVQdmhuQUx7TPOqUfXrOIZiBN
+X-Received: by 2002:ac8:7616:0:b0:3ab:5f5f:a0d7 with SMTP id t22-20020ac87616000000b003ab5f5fa0d7mr10184620qtq.2.1671743845525;
+        Thu, 22 Dec 2022 13:17:25 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvhBkL/MXLQzmxAc9KAb3d66sq1547AHHocyIzrLd9tSP4EgY9PF1B4tejCIsLJ9b9dDcuEcA==
+X-Received: by 2002:ac8:7616:0:b0:3ab:5f5f:a0d7 with SMTP id t22-20020ac87616000000b003ab5f5fa0d7mr10184601qtq.2.1671743845312;
+        Thu, 22 Dec 2022 13:17:25 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
+        by smtp.gmail.com with ESMTPSA id fy15-20020a05622a5a0f00b003999d25e772sm898838qtb.71.2022.12.22.13.17.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 13:17:24 -0800 (PST)
+Date:   Thu, 22 Dec 2022 16:17:22 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Miaohe Lin <linmiaohe@huawei.com>
+Subject: Re: [PATCH v1 0/2] mm/hugetlb: uffd-wp fixes for
+ hugetlb_change_protection()
+Message-ID: <Y6TJYl78od9XQuvj@x1n>
+References: <20221222205511.675832-1-david@redhat.com>
 MIME-Version: 1.0
-References: <cover.1670606054.git.rgb@redhat.com> <79fcf72ea442eeede53ed5e6de567f8df8ef7d83.1670606054.git.rgb@redhat.com>
- <CAHC9VhQont7=S9pvTpLUmxVSj-g-j2ZhVCLiUki69vtp8rf-9A@mail.gmail.com> <Y6TBL7+W7Q1lYc9Q@madcap2.tricolour.ca>
-In-Reply-To: <Y6TBL7+W7Q1lYc9Q@madcap2.tricolour.ca>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 22 Dec 2022 16:16:58 -0500
-Message-ID: <CAHC9VhQ6Nn2DuO-w3OtMj3rrtPp+X5ULYpZW8wLTakK9sMrs0g@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] fanotify,audit: Allow audit to use the full
- permission event response
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-api@vger.kernel.org,
-        Amir Goldstein <amir73il@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221222205511.675832-1-david@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,74 +81,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 3:42 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> On 2022-12-20 18:31, Paul Moore wrote:
-> > On Mon, Dec 12, 2022 at 9:06 AM Richard Guy Briggs <rgb@redhat.com> wrote:
-> > >
-> > > This patch passes the full response so that the audit function can use all
-> > > of it. The audit function was updated to log the additional information in
-> > > the AUDIT_FANOTIFY record.
-> > >
-> > > Currently the only type of fanotify info that is defined is an audit
-> > > rule number, but convert it to hex encoding to future-proof the field.
-> > > Hex encoding suggested by Paul Moore <paul@paul-moore.com>.
-> > >
-> > > Sample records:
-> > >   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_info=3137 subj_trust=3 obj_trust=5
-> > >   type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F subj_trust=2 obj_trust=2
-> > >
-> > > Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> > > Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
-> > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > > ---
-> > >  fs/notify/fanotify/fanotify.c |  3 ++-
-> > >  include/linux/audit.h         |  9 +++++----
-> > >  kernel/auditsc.c              | 25 ++++++++++++++++++++++---
-> > >  3 files changed, 29 insertions(+), 8 deletions(-)
-> >
-> > ...
-> >
-> > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > index d1fb821de104..8d523066d81f 100644
-> > > --- a/kernel/auditsc.c
-> > > +++ b/kernel/auditsc.c
-> > > @@ -64,6 +64,7 @@
-> > >  #include <uapi/linux/limits.h>
-> > >  #include <uapi/linux/netfilter/nf_tables.h>
-> > >  #include <uapi/linux/openat2.h> // struct open_how
-> > > +#include <uapi/linux/fanotify.h>
-> > >
-> > >  #include "audit.h"
-> > >
-> > > @@ -2877,10 +2878,28 @@ void __audit_log_kern_module(char *name)
-> > >         context->type = AUDIT_KERN_MODULE;
-> > >  }
-> > >
-> > > -void __audit_fanotify(u32 response)
-> > > +void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
-> > >  {
-> > > -       audit_log(audit_context(), GFP_KERNEL,
-> > > -               AUDIT_FANOTIFY, "resp=%u", response);
-> > > +       struct audit_context *ctx = audit_context();
-> > > +       struct audit_buffer *ab;
-> > > +       char numbuf[12];
-> > > +
-> > > +       if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
-> > > +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > > +                         "resp=%u fan_type=%u fan_info=3F subj_trust=2 obj_trust=2",
-> > > +                         response, FAN_RESPONSE_INFO_NONE);
-> >
-> > The fan_info, subj_trust, and obj_trust constant values used here are
-> > awfully magic-numbery and not the usual sentinel values one might
-> > expect for a "none" operation, e.g. zeros/INT_MAX/etc. I believe a
-> > comment here explaining the values would be a good idea.
->
-> Ack.  I'll add a comment.  I would have preferred zero for default of
-> unset, but Steve requested 0/1/2 no/yes/unknown.
+On Thu, Dec 22, 2022 at 09:55:09PM +0100, David Hildenbrand wrote:
+> Playing with virtio-mem and background snapshots (using uffd-wp) on
+> hugetlb in QEMU, I managed to trigger a VM_BUG_ON(). Looking into the
+> details, hugetlb_change_protection() seems to not handle uffd-wp correctly
+> in all cases.
+> 
+> Patch #1 fixes my test case. I don't have reproducers for patch #2, as
+> it requires running into migration entries.
+> 
+> I did not yet check in detail yet if !hugetlb code requires similar care.
+> 
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Muchun Song <muchun.song@linux.dev>
+> Cc: Miaohe Lin <linmiaohe@huawei.com>
+> 
+> David Hildenbrand (2):
+>   mm/hugetlb: fix PTE marker handling in hugetlb_change_protection()
+>   mm/hugetlb: fix uffd-wp handling for migration entries in
+>     hugetlb_change_protection()
 
-Yeah, if they were zeros I don't think we would need to comment on
-them as zeros for unset/unknown/invalid is rather common, 2 ... not so
-much.
+Reviewed-by: Peter Xu <peterx@redhat.com>
+
+Thanks, David.
 
 -- 
-paul-moore.com
+Peter Xu
+
