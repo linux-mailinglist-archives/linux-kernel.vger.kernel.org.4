@@ -2,81 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1656540ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173A36540F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235163AbiLVMUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
+        id S235205AbiLVMVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiLVMUC (ORCPT
+        with ESMTP id S229817AbiLVMVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:20:02 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0766D1B3;
-        Thu, 22 Dec 2022 04:20:01 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p8KYK-00087V-Ce; Thu, 22 Dec 2022 13:20:00 +0100
-Message-ID: <64800063-4728-6984-f1ee-f6e8c9978cb7@leemhuis.info>
-Date:   Thu, 22 Dec 2022 13:20:00 +0100
+        Thu, 22 Dec 2022 07:21:21 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94D0F019;
+        Thu, 22 Dec 2022 04:21:19 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.22]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1M3DBd-1p9hTs0g1d-003fA7; Thu, 22 Dec 2022 13:21:17 +0100
+Message-ID: <97138f56-3915-b7d6-73f6-e8eceaa0ca63@i2se.com>
+Date:   Thu, 22 Dec 2022 13:21:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PULL] Networking for next-6.1 #forregzbot
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221004052000.2645894-1-kuba@kernel.org>
- <6b971a4e-c7d8-411e-1f92-fda29b5b2fb9@kernel.org>
- <d6c68083-25e3-3ff5-9b0d-8928d1e077f1@leemhuis.info>
-In-Reply-To: <d6c68083-25e3-3ff5-9b0d-8928d1e077f1@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671711602;d5608299;
-X-HE-SMSGID: 1p8KYK-00087V-Ce
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 2/2] usb: misc: onboard_hub: Fail silently when there
+ is no platform device
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>
+References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+ <20221222022605.v2.2.I0c5ce35d591fa1f405f213c444522585be5601f0@changeid>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20221222022605.v2.2.I0c5ce35d591fa1f405f213c444522585be5601f0@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:HlE8p13iAhP0Vhk6L3o0fro9+sYEBtmoiRX5ecuA4PT0NVCHQbu
+ u8Q2ovmUZpKklSNwiWfE8JN4VKGzTgbQ0VkO/4gbRDIpqIoJDZRCckeBI8Y78Aaj9k+Ef/y
+ XUuexUmInUaj+YTthaiM3Xd4kJuDxIg2rrcbfYq2zVDUiftGJ57+zSxVnIx4qny6h0XphfI
+ oWJW2FxLUgbAcQuJLWDYg==
+UI-OutboundReport: notjunk:1;M01:P0:dETeS9UmyNs=;dBNkXmBiuAy1A8vVOBu8CuESKcm
+ iF5wqqkRAHKvS78FdbNx497SiQefjCqKLa5q30L3mHCYBL6WOwpcZfqN+lwF/6IG+BnBfL0Td
+ RuJDRTgxhuVshxe7RM6kDJapGjHaEtPoBD2rQ3yQpzML+sVxqmH9TfJTYbr4Jt2lBPDnAN9xJ
+ 2GRsn6ZshlQTLlLRmj00DV5OIp6GqydQcW2ldp+HRpcroZRIoJrPq1MqFSjoic6GXQQsaZEDM
+ l/jY4gMkzvKqyEgKt7C995AclUMMyvfjXcTqhF87t3FcKWKWVfYMsGCn1sPL1rDFrHKEz4vjB
+ m9YwEal/soWMiaaWJY21a9Knmn3V8yBUA3gLEp0bBEb9gD0jhCjFsG8yGpjzhik1LmGeZksBR
+ hTEH6DPc5nbxzUPFjsOM8pHDJ2Fzwvu8E1vhwmP9Sg84606xkzJNofo5F3DLxque/KEKJuzro
+ sOAl0e6u59rY2S/UxKYUnZ8KNUICHJ+miDOjcbssyACYOxjwYq03nzuuJFYUWorccJezln6sO
+ kXylwqxTomNPxXDCwUHMYdWrit4mSsnc9HdNciHCFwvq+tA88poV8Pra2vpJLkErKujnn9dkt
+ 0de7qAiSErL+41dt4h1RQq69nW9L/ZT9qAXjADXGGIO+sOrL+xAW6MPtHexvvVR7UD8NZPV0i
+ 1z470JyV5+FglKbZHPBtwyuZDQkpiSdSpOBV6fEhvA==
 X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 22.12.22 um 03:26 schrieb Matthias Kaehlcke:
+> Some boards with an onboard USB hub supported by the onboard_hub
+> driver have a device tree node for the hub, but the node doesn't
+> specify all properties needed by the driver (which is not a DT
+> error per se). For such a hub no onboard_hub platform device is
+> created. However the USB portion of the onboard hub driver still
+> probes and uses _find_onboard_hub() to find the platform device
+> that corresponds to the hub. If the DT node of the hub doesn't
+> have an associated platform device the function looks for a
+> "peer-hub" node (to get the platform device from there), if
+> that doesn't exist either it logs an error and returns -EINVAL.
+>
+> The absence of a platform device is expected in some
+> configurations, so drop the error log and fail silently with
+> -ENODEV.
+>
+> Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+>
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-
-On 21.12.22 12:30, Thorsten Leemhuis wrote:
-> [Note: this mail contains only information for Linux kernel regression
-> tracking. Mails like these contain '#forregzbot' in the subject to make
-> then easy to spot and filter out. The author also tried to remove most
-> or all individuals from the list of recipients to spare them the hassle.]
-> 
-> On 16.12.22 11:49, Jiri Slaby wrote:
->>
->> On 04. 10. 22, 7:20, Jakub Kicinski wrote:
->>> Joanne Koong (7):
->>
->>>        net: Add a bhash2 table hashed by port and address
->>
->> This makes regression tests of python-ephemeral-port-reserve to fail.
-> 
-> Thanks for the report. To be sure below issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-> tracking bot:
-> 
-> #regzbot ^introduced 28044fc1d495
-> #regzbot title new: regression tests of python-ephemeral-port-reserve fail
-> #regzbot ignore-activity
-
-#regzbot monitor:
-https://lore.kernel.org/all/20221221151258.25748-1-kuniyu@amazon.com/
-#regzbot fix: tcp: Add TIME_WAIT sockets in bhash2
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
