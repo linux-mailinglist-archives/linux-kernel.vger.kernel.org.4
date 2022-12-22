@@ -2,170 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3826545EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5366545F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiLVSYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:24:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S229863AbiLVSas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiLVSYt (ORCPT
+        with ESMTP id S229524AbiLVSao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:24:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52045193C7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:24:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D665D61D12
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 18:24:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41776C433D2;
-        Thu, 22 Dec 2022 18:24:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671733487;
-        bh=tl1gg3Ak90AOq3HELmaMHrMBcMcRxM9Rb8qbrkkLXoE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=LoWoQEEVk6LcZJRKXLNT+tcJBv+Bk4+JqxYiflUSScXRrRYFRSWpJJNBkSjEyU+3X
-         H0Pc1YgG08PMt1Ek1kgjrNLvonXvi9oXV4d1/nXt7Ox1KVb7QgZ4J46cvtZFMJaDEK
-         PzcPhCOwB/GJZlhyS49EEYKWipnT8TA9JriqLAwRAHaV2yveXSVdWW4AwRMrp2qrmZ
-         XwWDP8YkSppOXk+Zb0KMUqsVJWWExP20pSK9hJABwMGDMS3tn2Wd43/sk3jdyMUkxJ
-         dNWse0c1Q5lMJQDUwZ08GVYDnqE8BMMkEqeftOJ6H/LhjY8kRH5Fs+I4fhfTNS8mQC
-         +iwJGPI+dJv8A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DB5865C146C; Thu, 22 Dec 2022 10:24:46 -0800 (PST)
-Date:   Thu, 22 Dec 2022 10:24:46 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Waiman Long <longman@redhat.com>, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Tim Chen <tim.c.chen@intel.com>
-Subject: Re: [RFC PATCH] clocksource: Suspend the watchdog temporarily when
- high read lantency detected
-Message-ID: <20221222182446.GQ4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <6fb04ee9-ce77-4835-2ad1-b7f8419cfb77@redhat.com>
- <20221220183400.GY4001@paulmck-ThinkPad-P17-Gen-1>
- <Y6Ja+kYQAi4pppV6@feng-clx>
- <8a9bed0d-c166-37e9-24c3-8cea7a336c76@redhat.com>
- <20221222004032.GI4001@paulmck-ThinkPad-P17-Gen-1>
- <a82092f5-abc8-584f-b2ba-f06c82ffbe7d@redhat.com>
- <20221222055515.GJ4001@paulmck-ThinkPad-P17-Gen-1>
- <Y6PyisHYYtde/6Xk@feng-clx>
- <20221222061429.GL4001@paulmck-ThinkPad-P17-Gen-1>
- <Y6P7JPHf9wDse0XK@feng-clx>
+        Thu, 22 Dec 2022 13:30:44 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABC112AF2;
+        Thu, 22 Dec 2022 10:30:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CYBC/8xjN5yFLuDRDQziYv7W6KDRZWn+mtIXtPlLNzBj9Ty1ibGadR17vYKCqDoio4drzoqHsjKeK7JBZnry/qG7YbDEw+JExveP4f/2WoH8Zpmhmxabn5H0NSae0XWlMFbx4pvaCE6vLBD/7rihbJIImF7md4J6P0dzGMeDB4ObombjAvJVlrmn1oMht/Y+50Nmjo0Z2ELGc6bQBZ+3hcpAxAzCZe5CWaFnCId+LXEZfuvz/09tAInmWaYWCT0nY7buECdNOE4ULhKVQPwae+bLtvftHZXiNJH+y9fsfDOkoTswJKPGnFiyJRMWYhi7PcHjzcaVTDZpFRIMzBxUqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=baZISl2xHD5RFTWWB3obPEV/QIGPuK7ekfeJv5IvwYs=;
+ b=DIWh53xRFt/KffxIdxzyEC+/GDlHxK0E+FB0FZPPI9LWTqS0uV2uVnbsUbcctvt94/4fdHvD8vKRh9aWkd4votLMoKU1b0RNOyMnyAJ+mGcLQUmU8aDGYomrqoec7j4sbWzH09kMzm8Y+ob1nx2lmFJOIT3FhtEPoryzinxHLwhZ8BpOo/3exIkZoFA/SQgdAkq9hn/POwgyMPxopdLoERfGOEwZ7B+gbvwzyyTSbe+dyclZdNn6PHlEyIpcq2QQazjWY1AE1wivOTuxen+4p2obhIKLwdNGCOa7yf34A2+ivoV/DO5Q+1+eTmV3/KL01O36b5DDb/OYAdi3DBEudg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=baZISl2xHD5RFTWWB3obPEV/QIGPuK7ekfeJv5IvwYs=;
+ b=hRmgXD3dP5vJWLQqECm7Kei9aSDQx7NsW0f/WwNOjJ8QApkuRbVSaXtWmN4YUyer50VW0tX8RbGuoW1RFw7VYNvJ9Loo5P7dn6Wb+KLcbKLpT+9buspQahsLGwVy86DqxazCr1vcUB+GMNnQ8DTZuslUwP7Z7FFgAnrmXdAQW5g=
+Received: from MW4PR03CA0127.namprd03.prod.outlook.com (2603:10b6:303:8c::12)
+ by CH2PR12MB4056.namprd12.prod.outlook.com (2603:10b6:610:a5::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
+ 2022 18:30:36 +0000
+Received: from CO1NAM11FT048.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8c:cafe::3f) by MW4PR03CA0127.outlook.office365.com
+ (2603:10b6:303:8c::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.12 via Frontend
+ Transport; Thu, 22 Dec 2022 18:30:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT048.mail.protection.outlook.com (10.13.175.148) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5944.6 via Frontend Transport; Thu, 22 Dec 2022 18:30:36 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 22 Dec
+ 2022 12:30:34 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        <linux-efi@vger.kernel.org>
+CC:     Carlos Soriano Sanchez <csoriano@redhat.com>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        "David Airlie" <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, <christian.koenig@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] Recover from failure to probe GPU
+Date:   Thu, 22 Dec 2022 12:30:09 -0600
+Message-ID: <20221222183012.1046-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6P7JPHf9wDse0XK@feng-clx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT048:EE_|CH2PR12MB4056:EE_
+X-MS-Office365-Filtering-Correlation-Id: be75b191-527e-4fa5-7334-08dae44a9ea7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: g8UKc94ut6N8m1OA6FmQxFpBTmX0GIU/eEMNyWhuUYth+aWN/u5cxRarz6Ktt7Bcb98O5RfjrOmowVoe5SBhHD2b00f+lnFcCHPoipYrKn9IzAGW0DMg2Fd6lUjs3FJBCDIh2Tsm5RyIj8lQxAWXe25MLEjPygtOPbIxmblLXWKm0uAHQ3Z/FFjyaYzaDQr0OQRhIsTF1QA6i04Hg1n05UuuaGXO6bZ4xYCctrUpZrchSFOYbPV7Plpj6BIy8uuy5fPZmebkGxRzmSUHYxq1nB9Gz2hyODxSH57LPTKgH2hU8CMVUFiJJVKgN26qAu643lWfg5FYQOfuTpaVgD7K7iXrAPHfNNsre7BHc3Fk18b8DJJFxAlsstc0A/U9zJWprlZMiOMejYoriliOy/5bjJZstgoDX+7wM51nwQf2LBq52RAeWshljiHY06hE4xoWu2yW69HVcygTuxGuJ5OO09fCKDgYSVAWYgMQXsOvyfuqaXesrbTreQngUFqw/p2LI9jJfKdF/NW/THyfckVN2PRQPzEfOPi5YjGa2Zlz7SdguiC1Xd3FBcozbfUR8aqn7ntygWabjj7+n1T2+NVqm8/4V8KAkOXVQ/OUwFQ9vNHoG90DmR/67BfHFQHheXsvhk2ox802ejSg75mZ8sKXDGKBk3rdR6XZZK79kczopP21tL5wUfVL5kjq5sxw/MLuAo6UOoTqF9jpCQFdMehvk6RN44k0hbu7ITsphMAwjVk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(136003)(346002)(451199015)(46966006)(40470700004)(36840700001)(44832011)(54906003)(2906002)(8936002)(36756003)(426003)(110136005)(47076005)(316002)(83380400001)(478600001)(40460700003)(336012)(16526019)(40480700001)(6666004)(1076003)(2616005)(86362001)(26005)(186003)(7696005)(36860700001)(82310400005)(41300700001)(82740400003)(5660300002)(70586007)(81166007)(70206006)(4326008)(356005)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 18:30:36.5427
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: be75b191-527e-4fa5-7334-08dae44a9ea7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT048.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4056
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 02:37:24PM +0800, Feng Tang wrote:
-> On Wed, Dec 21, 2022 at 10:14:29PM -0800, Paul E. McKenney wrote:
-> > On Thu, Dec 22, 2022 at 02:00:42PM +0800, Feng Tang wrote:
-> > > On Wed, Dec 21, 2022 at 09:55:15PM -0800, Paul E. McKenney wrote:
-> > > > On Wed, Dec 21, 2022 at 10:39:53PM -0500, Waiman Long wrote:
-> > > > > On 12/21/22 19:40, Paul E. McKenney wrote:
-> > > > > > commit 199dfa2ba23dd0d650b1482a091e2e15457698b7
-> > > > > > Author: Paul E. McKenney<paulmck@kernel.org>
-> > > > > > Date:   Wed Dec 21 16:20:25 2022 -0800
-> > > > > > 
-> > > > > >      clocksource: Verify HPET and PMTMR when TSC unverified
-> > > > > >      On systems with two or fewer sockets, when the boot CPU has CONSTANT_TSC,
-> > > > > >      NONSTOP_TSC, and TSC_ADJUST, clocksource watchdog verification of the
-> > > > > >      TSC is disabled.  This works well much of the time, but there is the
-> > > > > >      occasional system that meets all of these criteria, but which still
-> > > > > >      has a TSC that skews significantly from atomic-clock time.  This is
-> > > > > >      usually attributed to a firmware or hardware fault.  Yes, the various
-> > > > > >      NTP daemons do express their opinions of userspace-to-atomic-clock time
-> > > > > >      skew, but they put them in various places, depending on the daemon and
-> > > > > >      distro in question.  It would therefore be good for the kernel to have
-> > > > > >      some clue that there is a problem.
-> > > > > >      The old behavior of marking the TSC unstable is a non-starter because a
-> > > > > >      great many workloads simply cannot tolerate the overheads and latencies
-> > > > > >      of the various non-TSC clocksources.  In addition, NTP-corrected systems
-> > > > > >      often seem to be able to tolerate significant kernel-space time skew as
-> > > > > >      long as the userspace time sources are within epsilon of atomic-clock
-> > > > > >      time.
-> > > > > >      Therefore, when watchdog verification of TSC is disabled, enable it for
-> > > > > >      HPET and PMTMR (AKA ACPI PM timer).  This provides the needed in-kernel
-> > > > > >      time-skew diagnostic without degrading the system's performance.
-> > > > > >      Signed-off-by: Paul E. McKenney<paulmck@kernel.org>
-> > > > > >      Cc: Thomas Gleixner<tglx@linutronix.de>
-> > > > > >      Cc: Ingo Molnar<mingo@redhat.com>
-> > > > > >      Cc: Borislav Petkov<bp@alien8.de>
-> > > > > >      Cc: Dave Hansen<dave.hansen@linux.intel.com>
-> > > > > >      Cc: "H. Peter Anvin"<hpa@zytor.com>
-> > > > > >      Cc: Daniel Lezcano<daniel.lezcano@linaro.org>
-> > > > > >      Cc: Feng Tang<feng.tang@intel.com>
-> > > > > >      Cc: Waiman Long <longman@redhat.com
-> > > > > >      Cc:<x86@kernel.org>
-> > > > > 
-> > > > > As I currently understand, you are trying to use TSC as a watchdog to check
-> > > > > against HPET and PMTMR. I do have 2 questions about this patch.
-> > > > > 
-> > > > > First of all, why you need to use both HPET and PMTMR? Can you just use one
-> > > > > of those that are available. Secondly, is it possible to enable this
-> > > > > time-skew diagnostic for a limit amount of time instead running
-> > > > > indefinitely? The running of the clocksource watchdog itself will still
-> > > > > consume a tiny amount of CPU cycles.
-> > > > 
-> > > > I could certainly do something so that only the first of HPET and PMTMR
-> > > > is checked.  Could you give me a quick run-through of the advantages of
-> > > > using only one?  I would need to explain that in the commit log.
-> > > > 
-> > > > Would it make sense to have a kernel boot variable giving the number of
-> > > > minutes for which the watchdog was to run, with a default of zero
-> > > > meaning "indefinitely"?
-> > > 
-> > > We've discussed about the "os noise", which customer may really care.
-> > > IIUC, this patch intends to test if HPET/PMTIMER HW is broken, so how
-> > > about making it run for a number of minutes the default behavior.   
-> > 
-> > It is also intended to determine if TSC is broken, with NTP drift rates
-> > used to determine which timer is at fault.
-> > 
-> > OK, how about a Kconfig option for the number of minutes, set to whatever
-> > you guys tell me?  (Three minutes?  Five minutes?  Something else?)
-> > People wanting to run it continuously could then build their kernels
-> > with that Kconfig option set to zero.
->  
-> I don't have specific preference for 5 or 10 minutes, as long as it
-> is a one time deal :) 
-> 
-> > > Also I've run the patch on a Alderlake system, with a fine acpi pm_timer
-> > > and a fake broken pm_timer, and they both works without errors.
-> > 
-> > Thank you!  Did it correctly identify the fake broken pm_timer as being
-> > broken?  If so, may I have your Tested-by?
-> 
-> On that Alderlake system, HPET will be disabled by kernel, and I
-> manually increased the tsc frequency about 1/256 to make pm_timer
-> look to have 1/256 deviation. And got dmesg like:
-> 
-> [    2.738554] clocksource: timekeeping watchdog on CPU3: Marking clocksource 'acpi_pm' as unstable because the skew is too large:
-> [    2.738558] clocksource:                       'tsc' wd_nsec: 275956624 wd_now: 13aab38d0d wd_last: 1382c1144d mask: ffffffffffffffff
-> [    2.738564] clocksource:                       'acpi_pm' cs_nsec: 277034651 cs_now: 731575 cs_last: 63f3cb mask: ffffff
-> [    2.738568] clocksource:                       'tsc' (not 'acpi_pm') is current clocksource.
-> 
-> The deviation is indeed about 1/256. And pm_timer won't be shown in /sys/:
-> 
-> /sys/devices/system/clocksource/clocksource0/available_clocksource:tsc 
-> /sys/devices/system/clocksource/clocksource0/current_clocksource:tsc
-> 
-> So feel free to add:
-> 
-> 	Tested-by: Feng Tang <feng.tang@intel.com>
+One of the first thing that KMS drivers do during initialization is
+destroy the system firmware framebuffer by means of
+`drm_aperture_remove_conflicting_pci_framebuffers`
 
-Thank you very much!  I will apply this on my next rebase.
+This means that if for any reason the GPU failed to probe the user
+will be stuck with at best a screen frozen at the last thing that
+was shown before the KMS driver continued it's probe.
 
-							Thanx, Paul
+The problem is most pronounced when new GPU support is introduced
+because users will need to have a recent linux-firmware snapshot
+on their system when they boot a kernel with matching support.
+
+However the problem is further exaggerated in the case of amdgpu because
+it has migrated to "IP discovery" where amdgpu will attempt to load
+on "ALL" AMD GPUs even if the driver is missing support for IP blocks
+contained in that GPU.
+
+IP discovery requires some probing and isn't run until after the
+framebuffer has been destroyed.
+
+This means a situation can occur where a user purchases a new GPU not
+yet supported by a distribution and when booting the installer it will
+"freeze" even if the distribution doesn't have the matching kernel support
+for those IP blocks.
+
+The perfect example of this is Ubuntu 21.10 and the new dGPUs just
+launched by AMD.  The installation media ships with kernel 5.19 (which
+has IP discovery) but the amdgpu support for those IP blocks landed in
+kernel 6.0. The matching linux-firmware was released after 21.10's launch.
+The screen will freeze without nomodeset. Even if a user manages to install
+and then upgrades to kernel 6.0 after install they'll still have the
+problem of missing firmware, and the same experience.
+
+This is quite jarring for users, particularly if they don't know
+that they have to use "nomodeset" to install.
+
+To help the situation, allow drivers to re-run the init process for the
+firmware framebuffer during a failed probe. As this problem is most
+pronounced with amdgpu, this is the only driver changed.
+
+But if this makes sense more generally for other KMS drivers, the call
+can be added to the cleanup routine for those too.
+
+Here is a sample of what happens with missing GPU firmware and this
+series:
+
+[    5.950056] amdgpu 0000:63:00.0: vgaarb: deactivate vga console
+[    5.950114] amdgpu 0000:63:00.0: enabling device (0006 -> 0007)
+[    5.950883] [drm] initializing kernel modesetting (YELLOW_CARP 0x1002:0x1681 0x17AA:0x22F1 0xD2).
+[    5.952954] [drm] register mmio base: 0xB0A00000
+[    5.952958] [drm] register mmio size: 524288
+[    5.954633] [drm] add ip block number 0 <nv_common>
+[    5.954636] [drm] add ip block number 1 <gmc_v10_0>
+[    5.954637] [drm] add ip block number 2 <navi10_ih>
+[    5.954638] [drm] add ip block number 3 <psp>
+[    5.954639] [drm] add ip block number 4 <smu>
+[    5.954641] [drm] add ip block number 5 <dm>
+[    5.954642] [drm] add ip block number 6 <gfx_v10_0>
+[    5.954643] [drm] add ip block number 7 <sdma_v5_2>
+[    5.954644] [drm] add ip block number 8 <vcn_v3_0>
+[    5.954645] [drm] add ip block number 9 <jpeg_v3_0>
+[    5.954663] amdgpu 0000:63:00.0: amdgpu: Fetched VBIOS from VFCT
+[    5.954666] amdgpu: ATOM BIOS: 113-REMBRANDT-X37
+[    5.954677] [drm] VCN(0) decode is enabled in VM mode
+[    5.954678] [drm] VCN(0) encode is enabled in VM mode
+[    5.954680] [drm] JPEG decode is enabled in VM mode
+[    5.954681] amdgpu 0000:63:00.0: amdgpu: Trusted Memory Zone (TMZ) feature disabled as experimental (default)
+[    5.954683] amdgpu 0000:63:00.0: amdgpu: PCIE atomic ops is not supported
+[    5.954724] [drm] vm size is 262144 GB, 4 levels, block size is 9-bit, fragment size is 9-bit
+[    5.954732] amdgpu 0000:63:00.0: amdgpu: VRAM: 512M 0x000000F400000000 - 0x000000F41FFFFFFF (512M used)
+[    5.954735] amdgpu 0000:63:00.0: amdgpu: GART: 1024M 0x0000000000000000 - 0x000000003FFFFFFF
+[    5.954738] amdgpu 0000:63:00.0: amdgpu: AGP: 267419648M 0x000000F800000000 - 0x0000FFFFFFFFFFFF
+[    5.954747] [drm] Detected VRAM RAM=512M, BAR=512M
+[    5.954750] [drm] RAM width 256bits LPDDR5
+[    5.954834] [drm] amdgpu: 512M of VRAM memory ready
+[    5.954838] [drm] amdgpu: 15680M of GTT memory ready.
+[    5.954873] [drm] GART: num cpu pages 262144, num gpu pages 262144
+[    5.955333] [drm] PCIE GART of 1024M enabled (table at 0x000000F41FC00000).
+[    5.955502] amdgpu 0000:63:00.0: Direct firmware load for amdgpu/yellow_carp_toc.bin failed with error -2
+[    5.955505] amdgpu 0000:63:00.0: amdgpu: fail to request/validate toc microcode
+[    5.955510] [drm:psp_sw_init [amdgpu]] *ERROR* Failed to load psp firmware!
+[    5.955725] [drm:amdgpu_device_init.cold [amdgpu]] *ERROR* sw_init of IP block <psp> failed -2
+[    5.955952] amdgpu 0000:63:00.0: amdgpu: amdgpu_device_ip_init failed
+[    5.955954] amdgpu 0000:63:00.0: amdgpu: Fatal error during GPU init
+[    5.955957] amdgpu 0000:63:00.0: amdgpu: amdgpu: finishing device.
+[    5.971162] efifb: probing for efifb
+[    5.971281] efifb: showing boot graphics
+[    5.974803] efifb: framebuffer at 0x910000000, using 20252k, total 20250k
+[    5.974805] efifb: mode is 2880x1800x32, linelength=11520, pages=1
+[    5.974807] efifb: scrolling: redraw
+[    5.974807] efifb: Truecolor: size=8:8:8:8, shift=24:16:8:0
+[    5.974974] Console: switching to colour frame buffer device 180x56
+[    5.978181] fb0: EFI VGA frame buffer device
+[    5.978199] amdgpu: probe of 0000:63:00.0 failed with error -2
+[    5.978285] [drm] amdgpu: ttm finalized
+
+Now if the user loads the firmware into the system they can re-load the
+driver or re-attach using sysfs and it gracefully recovers.
+
+[  665.080480] [drm] Initialized amdgpu 3.49.0 20150101 for 0000:63:00.0 on minor 0
+[  665.090075] fbcon: amdgpudrmfb (fb0) is primary device
+[  665.090248] [drm] DSC precompute is not needed.
+
+Mario Limonciello (2):
+  firmware: sysfb: Allow re-creating system framebuffer after init
+  drm/amd: Re-create firmware framebuffer on failure to probe
+
+ drivers/firmware/efi/sysfb_efi.c        |  6 +++---
+ drivers/firmware/sysfb.c                | 15 ++++++++++++++-
+ drivers/firmware/sysfb_simplefb.c       |  4 ++--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  2 ++
+ include/linux/sysfb.h                   |  5 +++++
+ 5 files changed, 26 insertions(+), 6 deletions(-)
+
+
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+-- 
+2.34.1
+
