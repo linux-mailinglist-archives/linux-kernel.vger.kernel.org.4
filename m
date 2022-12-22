@@ -2,91 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652B16541F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E23156541F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235065AbiLVNdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 08:33:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S235202AbiLVNd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235428AbiLVNdD (ORCPT
+        with ESMTP id S230326AbiLVNdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 08:33:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690642B275;
-        Thu, 22 Dec 2022 05:32:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 22 Dec 2022 08:33:11 -0500
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEAD15706
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 05:33:09 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32E2FB81D30;
-        Thu, 22 Dec 2022 13:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63507C433D2;
-        Thu, 22 Dec 2022 13:32:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671715975;
-        bh=7LR0l7yAD1N13182E2DUGhjtgRZlgRJBPWSovE/SLwE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lP5lxrht9dKWOqHtaThhNrUxW2Wq+HHrwS/rpu5v/NRZlrrk+HUmdaygzS8+uOR6H
-         Ly30cnInhJiXqtwYXZq9rVF6t8XrMTQX7/rT9xYkdPDFAPo10/mG9Jf833luXAVkl7
-         j6c8ArydGuSUKr+NrATEvYMh5CX08ORQm+NJ+yYM=
-Date:   Thu, 22 Dec 2022 14:32:52 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     sashal@kernel.org, corbet@lwn.net, stable@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joneslee@google.com
-Subject: Re: [PATCH] Documentation: stable: Add rule on what kind of patches
- are accepted
-Message-ID: <Y6RchEaXUvg+9nKv@kroah.com>
-References: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 2A27F1F8F4;
+        Thu, 22 Dec 2022 14:33:07 +0100 (CET)
+Date:   Thu, 22 Dec 2022 14:33:05 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH] dt-bindings: arm-smmu: disallow clocks when not used
+Message-ID: <20221222133305.txcla3kk6lrqk7sc@SoMainline.org>
+References: <20221222092355.74586-1-krzysztof.kozlowski@linaro.org>
+ <20221222101611.nwt5arux2hcvvtvf@SoMainline.org>
+ <bff48e91-3cdc-a052-9573-3c4271f88e5a@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bff48e91-3cdc-a052-9573-3c4271f88e5a@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 11:16:58AM +0200, Tudor Ambarus wrote:
-> The list of rules on what kind of patches are accepted, and which ones
-> are not into the “-stable” tree, did not mention anything about new
-> features and let the reader use its own judgement. One may be under the
-> impression that new features are not accepted at all, but that's not true:
-> new features are not accepted unless they fix a reported problem.
-> Update documentation with missing rule.
+On 2022-12-22 11:36:16, Krzysztof Kozlowski wrote:
+> On 22/12/2022 11:16, Marijn Suijten wrote:
+> > Is this missing a cc to linux-arm-msm?
 > 
-> Link: https://lore.kernel.org/lkml/fc60e8da-1187-ca2b-1aa8-28e01ea2769a@linaro.org/T/#mff820d23793baf637a1b39f5dfbcd9d4d0f0c3a6
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
->  Documentation/process/stable-kernel-rules.rst | 1 +
->  1 file changed, 1 insertion(+)
+> No, it is not (or maybe but then fix MAINTAINERS). The policy is to use
+> get_maintainers.pl to CC people.
+
+Yes, that is the question: is it in MANTAINERS and if not, why not?
+
+> > On 2022-12-22 10:23:55, Krzysztof Kozlowski wrote:
+> >> Disallow clocks for variants other than:
+> >> 1. SMMUs with platform-specific compatibles which list explicit clocks
+> >>    and clock-names,
+> >> 2. SMMUs using only generic compatibles, e.g. arm,mmu-500, which have a
+> >>    variable clocks on different implementations.
+> >>
+> >> This requires such variants with platform-specific compatible, to
+> >> explicitly list the clocks or omit them, making the binding more
+> >> constraint.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > 
+> > But...
+> > 
+> >> ---
+> >>
+> >> Cc: Marijn Suijten <marijn.suijten@somainline.org>
+> >> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >> ---
+> >>  .../devicetree/bindings/iommu/arm,smmu.yaml   | 28 +++++++++++++++++++
+> >>  1 file changed, 28 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+> >> index 895ec8418465..0d88395e43ad 100644
+> >> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+> >> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+> >> @@ -367,6 +367,34 @@ allOf:
+> >>              - description: interface clock required to access smmu's registers
+> >>                  through the TCU's programming interface.
+> >>  
+> >> +  # Disallow clocks for all other platforms with specific compatibles
+> >> +  - if:
+> >> +      properties:
+> >> +        compatible:
+> >> +          contains:
+> >> +            enum:
+> >> +              - cavium,smmu-v2
+> >> +              - marvell,ap806-smmu-500
+> >> +              - nvidia,smmu-500
+> >> +              - qcom,qcm2290-smmu-500
+> >> +              - qcom,qdu1000-smmu-500
+> >> +              - qcom,sc7180-smmu-500
+> > 
+> > Hmm, sc7280 has two SMMUs.  The one for Adreno has clocks and a PD, the
 > 
-> diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
-> index 2fd8aa593a28..266290fab1d9 100644
-> --- a/Documentation/process/stable-kernel-rules.rst
-> +++ b/Documentation/process/stable-kernel-rules.rst
-> @@ -22,6 +22,7 @@ Rules on what kind of patches are accepted, and which ones are not, into the
->     maintainer and include an addendum linking to a bugzilla entry if it
->     exists and additional information on the user-visible impact.
->   - New device IDs and quirks are also accepted.
-> + - New features are not accepted unless they fix a reported problem.
+> sc7280 is not here, so what is the mistake you see?
 
-No need to call this out, it falls under the "fixes a problem" option,
-right?
+sc7280 has two IOMMU nodes.  One with clocks (should not be in this
+list), the other doesn't have clocks (should be in this list).
 
-The goal is not to iterate every single option here, that would be
-crazy.  Let's keep it short and simple, our biggest problem is that
-people do NOT read this document, not that it does not list these types
-of corner cases.
+How do you want to address that?
 
-So thanks for the patch, but I will not accept it.
+> > one for APPS has neither.  Same story on sm8[12]50.  Aren't those going
+> > to trip up the other `if` that requires clocks in both scenarios?
+> 
+> They are not here either, so what is the error?
 
-thanks,
+Ditto.
 
-greg k-h
+> > Note that the Adreno SMMUs have (or will get when we/Konrad submit
+> > support for it) the "qcom,adreno-smmu" compatible to distinguish them.
+
+- Marijn
