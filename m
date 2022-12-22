@@ -2,156 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311C0654468
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C4C65447F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiLVPjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
+        id S235407AbiLVPni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiLVPjC (ORCPT
+        with ESMTP id S230329AbiLVPnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:39:02 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D082936D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:38:40 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id u7so2325557plq.11
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:38:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+pOD6qK21JMmHtZu4DKvodAq25Aw2OJGG1BCa4STcTM=;
-        b=S8hUijCrZmz9w4BtoqIFcausqra1NaLhcNe6XM0w/SlphSKuE4EJO5T/eUeE49HZv1
-         SeEj0wpgcKkvbM0XZrs348Utuun9If7AP0hrXdRM2HoyUoz+Htu5KoNvHGDbBbGqIq6G
-         98dlnuF+RVoRzmx7lY70fKWKyZMKcpxQvw1N68m+H0ipwVJS3G9brjZroZqpck0oCT5P
-         EnDIIs+rEBFZ/P15LXtHOzB9scSEXEnvBwIhhAnaqlwGR9oBAXKOY0qTBtYuGSXL0Xlz
-         5+4+6hIIF1v4EnFCeJxSnT9USAbP0KEDC5TyTqmy+8NqQdTUPhE84lgGv+oCaSugCQxo
-         12Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+pOD6qK21JMmHtZu4DKvodAq25Aw2OJGG1BCa4STcTM=;
-        b=1ZEaN75pmBLzWPtnNG1KFzOhC5MGGNXb/I00slB94QZCHnF1PQltnLV0QW88OJ9RKs
-         XiiHVlHZO3/En2GZv36ziZj7r5KUv8rDlqunacc0Rj9k/z7z/14odoauXGjD6L3rqdc3
-         X7bokmCpp+w7ASIzyAT4L2oa6I+OE8KP5cOui8oN/rErMX5NaS2/y3cJwOiX7vDWEhfc
-         7h1/8ExQqOiDm/vKHH4poR/CA86SHN98HdxMe8Or6xTfFV2xL7AP5FTvx++ZmDIKSYZ5
-         TW1EgDiVogyVYVLESo3WQs02Fu+PH5Yzu4PUiEgqSoRuzmDJ+Cq9WvIxqoj3GorNt/aG
-         rTaw==
-X-Gm-Message-State: AFqh2koy5V4xWUrag/ltDrYKg8TH6IydadFXEfctci+EPZwCVkkzHgyJ
-        UDeBm+NWh0KDlu4O5a113eTdZQ==
-X-Google-Smtp-Source: AMrXdXsY3aG2CDjoYFn0g5dZ8Cckt4U22dyIJHZQwhtekv0YmqxlayHLsCIlOjp87IVfr5LoDARskg==
-X-Received: by 2002:a17:902:b402:b0:188:d434:9c67 with SMTP id x2-20020a170902b40200b00188d4349c67mr6046512plr.32.1671723520207;
-        Thu, 22 Dec 2022 07:38:40 -0800 (PST)
-Received: from [10.254.61.32] ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id u6-20020a170902e5c600b00172fad607b3sm669185plf.207.2022.12.22.07.38.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 07:38:39 -0800 (PST)
-Message-ID: <8c25e591-34d6-7c42-b3a8-dcde86643fe7@bytedance.com>
-Date:   Thu, 22 Dec 2022 23:38:35 +0800
+        Thu, 22 Dec 2022 10:43:25 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20952B255
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:43:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1671723649; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=Fub5C9NlCORIkvWi/8Kjs74RJ7k4MImwXBpFtATEPZ17BAp6w/OQ9XJAMlop3Vuhkf+7E3pcsOhg6Uu2vdLythqXTq2zgKY+0sETuCkj2s8SZ7gMsk/qojBay5J88bxhLtD6hadC/hLiLf1oy1XwSXlTu5gRv+4dAOsipK3YCOA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1671723649; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=tL/P1i4iMJc5VhZfCY58mDeHvqscFRuLwd2Nnlm0Pt0=; 
+        b=BNui7a9D+tqlhEr9x66zchMzyVXyYrem6RsQIQOZ6xHSUE4t9aqNEcacfIOH0HrggNV+f3lMeFUxifyj6nnQrRcQzCHdLdTqHEYfiT51JpCWZYGGAIi4UrkdnvXyjdz3UP+OIaJ8bcVl6calaJGWeGO5FYuBJcann0YuXOe4ikQ=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671723649;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=tL/P1i4iMJc5VhZfCY58mDeHvqscFRuLwd2Nnlm0Pt0=;
+        b=UwTWkCPBeIlYvW49Jhhu0cAfLelbO9sblGD81ETJMes3VzCXKHm4Ik+67HRJIAAx
+        0NdJm+3GBFHN9ZTL4GqU/BytK2/xTo/rxXiw6ycp+roAtdfBrQ7a/0sp3RpKU/fmpYD
+        Ahx1NtQSZI467YWR7EyAr93JhJmwKS+EIVqphwqc=
+Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
+        with SMTPS id 167172364697892.94726004909683; Thu, 22 Dec 2022 21:10:46 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Simon Ser <contact@emersion.fr>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <cover.1671723195.git.code@siddh.me>
+Subject: [PATCH v2 0/9] drm: Remove usage of deprecated DRM_* macros
+Date:   Thu, 22 Dec 2022 21:10:34 +0530
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [External] Re: [PATCH v2] blk-throtl: Introduce sync and async
- queues for blk-throtl
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yinxin.x@bytedance.com
-References: <20221218111314.55525-1-hanjinke.666@bytedance.com>
- <20221221104246.37714-1-hanjinke.666@bytedance.com>
- <20221222133912.GA20830@blackbody.suse.cz>
-From:   hanjinke <hanjinke.666@bytedance.com>
-In-Reply-To: <20221222133912.GA20830@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset aims to remove usages of deprecated DRM_* macros from the
+files residing in drivers/gpu/drm root.
+
+In process, I found out that NULL as first argument of drm_dbg_* wasn't
+working, but it was listed as the alternative in deprecation comment,
+so I fixed that before removing usages of DRM_DEBUG_* macros.
+
+This patchset should be applied in order as changes might be dependent.
+
+Please review and let me know if any errors are there, and hopefully
+this gets accepted.
+
+----
+Changes in v2:
+- Removed conversions to pr_*() in DRM_INFO, DRM_NOTE, and DRM_ERROR change=
+s.
+- Due to above, DRM_NOTE usage cannot be removed and the patch is dropped.
+- DRY: NULL support is now achieved by way of a separate function.
+
+Siddh Raman Pant (9):
+  drm: Remove usage of deprecated DRM_INFO
+  drm: Remove usage of deprecated DRM_ERROR
+  drm/print: Fix support for NULL as first argument of drm_dbg_*
+  drm: Remove usage of deprecated DRM_DEBUG
+  drm: Remove usage of deprecated DRM_DEBUG_DRIVER
+  drm: Remove usage of deprecated DRM_DEBUG_KMS
+  drm: Remove usage of deprecated DRM_DEBUG_PRIME
+  drm/drm_blend: Remove usage of deprecated DRM_DEBUG_ATOMIC
+  drm/drm_lease: Remove usage of deprecated DRM_DEBUG_LEASE
+
+ drivers/gpu/drm/drm_agpsupport.c       |   4 +-
+ drivers/gpu/drm/drm_blend.c            |  13 ++-
+ drivers/gpu/drm/drm_bridge.c           |   8 +-
+ drivers/gpu/drm/drm_bufs.c             | 122 +++++++++++++------------
+ drivers/gpu/drm/drm_client_modeset.c   | 118 +++++++++++++-----------
+ drivers/gpu/drm/drm_color_mgmt.c       |   4 +-
+ drivers/gpu/drm/drm_connector.c        |  28 +++---
+ drivers/gpu/drm/drm_context.c          |  18 ++--
+ drivers/gpu/drm/drm_crtc.c             |  36 ++++----
+ drivers/gpu/drm/drm_crtc_helper.c      |  60 ++++++------
+ drivers/gpu/drm/drm_debugfs_crc.c      |   8 +-
+ drivers/gpu/drm/drm_displayid.c        |   4 +-
+ drivers/gpu/drm/drm_dma.c              |  10 +-
+ drivers/gpu/drm/drm_drv.c              |  20 ++--
+ drivers/gpu/drm/drm_edid.c             |  17 ++--
+ drivers/gpu/drm/drm_file.c             |  18 ++--
+ drivers/gpu/drm/drm_framebuffer.c      |   3 +-
+ drivers/gpu/drm/drm_gem.c              |   7 +-
+ drivers/gpu/drm/drm_gem_dma_helper.c   |   6 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c |   6 +-
+ drivers/gpu/drm/drm_hashtab.c          |   6 +-
+ drivers/gpu/drm/drm_ioc32.c            |  13 +--
+ drivers/gpu/drm/drm_ioctl.c            |  24 ++---
+ drivers/gpu/drm/drm_irq.c              |   4 +-
+ drivers/gpu/drm/drm_lease.c            |  68 +++++++-------
+ drivers/gpu/drm/drm_legacy_misc.c      |   4 +-
+ drivers/gpu/drm/drm_lock.c             |  20 ++--
+ drivers/gpu/drm/drm_mipi_dbi.c         |  19 ++--
+ drivers/gpu/drm/drm_mode_config.c      |   2 +-
+ drivers/gpu/drm/drm_mode_object.c      |   6 +-
+ drivers/gpu/drm/drm_modes.c            |  10 +-
+ drivers/gpu/drm/drm_modeset_helper.c   |   2 +-
+ drivers/gpu/drm/drm_pci.c              |  12 +--
+ drivers/gpu/drm/drm_plane.c            |  46 +++++-----
+ drivers/gpu/drm/drm_probe_helper.c     |  39 ++++----
+ drivers/gpu/drm/drm_rect.c             |   4 +-
+ drivers/gpu/drm/drm_scatter.c          |  19 ++--
+ drivers/gpu/drm/drm_syncobj.c          |   2 +-
+ drivers/gpu/drm/drm_sysfs.c            |  22 ++---
+ drivers/gpu/drm/drm_vm.c               |  45 +++++----
+ include/drm/drm_print.h                |  44 ++++++---
+ 41 files changed, 486 insertions(+), 435 deletions(-)
+
+--=20
+2.35.1
 
 
-在 2022/12/22 下午9:39, Michal Koutný 写道:
-> Hello Jinke.
-> 
-> On Wed, Dec 21, 2022 at 06:42:46PM +0800, Jinke Han <hanjinke.666@bytedance.com> wrote:
->> In our test, fio writes a 100g file in sequential 4k blocksize in
->> a container with low bps limit configured (wbps=10M). More than 1200
->> ios were throttled in blk-throtl queue and the avarage throtle time
->> of each io is 140s. At the same time, the operation of saving a small
->> file by vim will be blocked amolst 140s. As a fsync will be send by vim,
->> the sync ios of fsync will be blocked by a huge amount of buffer write
->> ios ahead. This is also a priority inversion problem within one cgroup.
->> In the database scene, things got really bad with blk-throtle enabled
->> as fsync is called very often.
-> 
-> I'm trying to make sense of the numbers:
-> - at 10 MB/s, it's 0.4 ms per 4k block
-> - there are 1.2k throttled bios that gives waiting time of roughly 0.5s
->    ~ 0.4ms * 1200
-> - you say that you observe 280 times longer throttling time,
-> - that'd mean there should be 340k queued bios
->    - or cummulative dispatch of ~1400 MB of data
-> 
-Hi
-Device            r/s     w/s     rMB/s     wMB/s   rrqm/s   wrqm/s 
-%rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-sdb              0.00   11.00      0.00      8.01     0.00     0.00 
-0.00   0.00    0.00    7.18   0.08     0.00   745.45   3.27   3.60
-
-Device            r/s     w/s     rMB/s     wMB/s   rrqm/s   wrqm/s 
-%rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-sdb              0.00    8.00      0.00      9.14     0.00     0.00 
-0.00   0.00    0.00    7.38   0.06     0.00  1170.00   2.62   2.10
-
-Device            r/s     w/s     rMB/s     wMB/s   rrqm/s   wrqm/s 
-%rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-sdb              0.00   16.00      0.00     12.02     0.00    12.00 
-0.00  42.86    0.00    7.25   0.12     0.00   769.25   2.06   3.30
-
-Device            r/s     w/s     rMB/s     wMB/s   rrqm/s   wrqm/s 
-%rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-sdb              0.00   11.00      0.00     10.91     0.00     1.00 
-0.00   8.33    0.00    6.82   0.07     0.00  1015.64   2.36   2.60
-
-Device            r/s     w/s     rMB/s     wMB/s   rrqm/s   wrqm/s 
-%rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-sdb              0.00   11.00      0.00      9.14     0.00     1.00 
-0.00   8.33    0.00    6.27   0.07     0.00   850.91   2.55   2.80
-
-I used bcc to trace the time of bio form submit_bio to blk_mq_submit_bio
-and found the avarage time was nearly 140s(use bcc trace fsync duration 
-also get the same result).
-The iostat above seem the avaerage of each io nearly 1M, so I have rough 
-estimate the num of the bio queued is 140s * 10 m / 1m.
-
-
-> So what are the queued quantities? Are there more than 1200 bios or are
-> they bigger than the 4k you mention?
-> 
-"fio writes a 100g file in sequential 4k blocksize"
-Bios may be more than 1M as ext4 will merged continuously logic blocks 
-when physical block also continuously.
-> Thanks for clarification.
-> 
-> (I acknowledge the possible problem with a large population of async
-> writes delaying scarce sync writes.)
-> 
-> Michal
-
-If the 0.4ms oberved by iostat, the way to estimate the throtle time of 
-the bio by 0.4ms * 1200 may not work as the 0.4 is duration of the 
-request from alloc to done.
-
-If the average size of bio is 1m, dispatch one bio should cost 1m/ 10M = 
-100ms. The queue is fifo, so the average throtle time 100ms * 1400.
-
-Thanks.
