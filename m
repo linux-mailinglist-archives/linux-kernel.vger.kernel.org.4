@@ -2,242 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849656545A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 18:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 718326545A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 18:36:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiLVRgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 12:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
+        id S230071AbiLVRgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 12:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiLVRgG (ORCPT
+        with ESMTP id S229952AbiLVRgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 12:36:06 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C1E1A227;
-        Thu, 22 Dec 2022 09:36:02 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 84DCC471;
-        Thu, 22 Dec 2022 18:35:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671730559;
-        bh=hijU5pTXB9YZuj+LHk38stTpLiPyJVSZ9fnlhqOpl6U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZfjxJDyvMexcyKmDO90zNzxc5PBx4obzRRTCt0NCsODTJtAA4ePHWp1NSQLNf8qS0
-         8HKCuBYz31mwT0gpEzW+q/n2izA0iLxyad05Vc2aUyqd/EWNz9Ks/5Yn3G9/j4cueX
-         JEc6+v3RGhX+ImnYDq9VHb8xqWMJNWe+KSpwTdUg=
-Date:   Thu, 22 Dec 2022 19:35:54 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Umang Jain <umang.jain@ideasonboard.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: Re: [PATCH] staging: vc04_services: vchiq_arm: Create
- platform_device per device
-Message-ID: <Y6SVegtHvwQ3p+3K@pendragon.ideasonboard.com>
-References: <20221220084404.19280-1-umang.jain@ideasonboard.com>
- <Y6Lqs8RUiyi452gM@pendragon.ideasonboard.com>
- <Y6MF3l40WM3onmyO@kroah.com>
- <d48462f6-de4c-2816-0a7a-b3b13993604c@ideasonboard.com>
+        Thu, 22 Dec 2022 12:36:47 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6EE13D71;
+        Thu, 22 Dec 2022 09:36:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671730606; x=1703266606;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=g8zlTHwNhpDMhAUchHtjK5Guuw+jimmxGdCWGt48Uf0=;
+  b=k3NEFvsuivtnSfldNSDIW3Jk1EwLnwAaIa8CNaUEL6tJpkvd67lDZns+
+   ZCghkeo6RXWhOH9S+x5zR3CSRFrdwUHMhsCzcePxhvLKZxixaPxYhGute
+   /zUQ1iOe+lgKvpM83/ZmRRd7oHcb0Jk6BSdTvjPUH3XgPRlz0Ef7+qQID
+   2Rh0YuK7qSrLGEn9pf2RBfKpv7Nd92xwe5f7rrLozzkyKqKwfHcr80Udk
+   O04G+Tse9GLsphvEcx/XY7bR++6coDI4zoMYT4ZALQO1UgCEoSYkO846Y
+   ZWfl0Lg9ygjPSfsnTe1BxM3zQe3NUThalyxF0DFFsFSUPVE+VQNzNaZIg
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="317822534"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="317822534"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 09:36:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="653956069"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="653956069"
+Received: from dkrumwie-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.24.53])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 09:36:45 -0800
+Message-ID: <8d3a9644657c8f0b54dd272fe0a4d640a8a6dfb9.camel@linux.intel.com>
+Subject: Re: [PATCH v2 2/4] powercap: idle_inject: Add prepare/complete
+ callbacks
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Date:   Thu, 22 Dec 2022 09:36:45 -0800
+In-Reply-To: <de6a5000-260e-bb4a-31c4-a0cfe533fad4@linaro.org>
+References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
+         <20221129233419.4022830-3-srinivas.pandruvada@linux.intel.com>
+         <e2af7a4b-99f4-f88e-fbe7-5d3595d6211b@linaro.org>
+         <3e59c5216fad003f079224cd08a7da9b30f6365d.camel@linux.intel.com>
+         <de6a5000-260e-bb4a-31c4-a0cfe533fad4@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d48462f6-de4c-2816-0a7a-b3b13993604c@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang,
+Hi Daniel,
 
-On Thu, Dec 22, 2022 at 01:59:28PM +0530, Umang Jain wrote:
-> On 12/21/22 6:40 PM, Greg Kroah-Hartman wrote:
-> > On Wed, Dec 21, 2022 at 01:14:59PM +0200, Laurent Pinchart wrote:
-> >> On Tue, Dec 20, 2022 at 02:14:04PM +0530, Umang Jain wrote:
-> >>> Create a proper per device platorm_device structure for all the child
-> >>> devices that needs to be registered by vchiq platform driver. Replace
-> >>> the vchiq_register_child() with platform_add_devices() to register the
-> >>> child devices.
-> >>
-> >> This explains what the patch does, but not why.
-> >>
-> >>> This is part of an effort to address TODO item "Get rid of all non
-> >>> essential global structures and create a proper per device structure"
-> >>
-> >> And this explains part of the reason only. Could you please expand the
-> >> commit message with the reasoning behind this change ? It's not clear
-> >> from the change below why this is needed and good.
+On Thu, 2022-12-22 at 10:50 +0100, Daniel Lezcano wrote:
 > 
-> Ok, I thought the TODO reference was sufficient but I'll expand on it.
->
-> >>> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> >>> ---
-> >>>   .../interface/vchiq_arm/vchiq_arm.c           | 59 ++++++++++---------
-> >>>   1 file changed, 31 insertions(+), 28 deletions(-)
-> >>>
-> >>> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> >>> index 22de23f3af02..fa42ea3791a7 100644
-> >>> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> >>> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> >>> @@ -65,8 +65,29 @@ int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
-> >>>   DEFINE_SPINLOCK(msg_queue_spinlock);
-> >>>   struct vchiq_state g_state;
-> >>>   
-> >>> -static struct platform_device *bcm2835_camera;
-> >>> -static struct platform_device *bcm2835_audio;
-> >>> +static u64 vchiq_device_dmamask = DMA_BIT_MASK(32);
-> >>
-> >> The fact that this isn't const and is used by two different
-> >> platform_device instances is worrying. Either it can be made const, or
-> >> it's wrong.
+> Hi Srinivas,
 > 
-> ack.
->
-> >>> +
-> >>> +static struct platform_device bcm2835_camera = {
-> >>> +	.name		= "bcm2835-camera",
-> >>> +	.id		= PLATFORM_DEVID_NONE,
-> >>> +	.dev		= {
-> >>> +		.dma_mask	= &vchiq_device_dmamask,
-> >>> +	}
-> >>> +};
-> >>> +
-> >>> +static struct platform_device bcm2835_audio = {
-> >>> +	.name		= "bcm2835_audio",
-> >>> +	.id		= PLATFORM_DEVID_NONE,
-> >>> +	.dev		= {
-> >>> +		.dma_mask	= &vchiq_device_dmamask,
-> >>> +	}
-> >>> +
-> >>
-> >> Extra blank line.
 > 
-> oops, checkpatch.pl didn't catch this :-/
->
-> >>> +};
-> >>> +
-> >>> +static struct platform_device *vchiq_devices[] __initdata = {
-> >> Make it const.
-> >>
-> >>> +	&bcm2835_camera,
-> >>> +	&bcm2835_audio,
-> >>> +};
-> >>>   
-> >>>   struct vchiq_drvdata {
-> >>>   	const unsigned int cache_line_size;
-> >>> @@ -1763,28 +1784,6 @@ static const struct of_device_id vchiq_of_match[] = {
-> >>>   };
-> >>>   MODULE_DEVICE_TABLE(of, vchiq_of_match);
-> >>>   
-> >>> -static struct platform_device *
-> >>> -vchiq_register_child(struct platform_device *pdev, const char *name)
-> >>> -{
-> >>> -	struct platform_device_info pdevinfo;
-> >>> -	struct platform_device *child;
-> >>> -
-> >>> -	memset(&pdevinfo, 0, sizeof(pdevinfo));
-> >>> -
-> >>> -	pdevinfo.parent = &pdev->dev;
-> >>> -	pdevinfo.name = name;
-> >>> -	pdevinfo.id = PLATFORM_DEVID_NONE;
-> >>> -	pdevinfo.dma_mask = DMA_BIT_MASK(32);
-> >>> -
-> >>> -	child = platform_device_register_full(&pdevinfo);
-> >>> -	if (IS_ERR(child)) {
-> >>> -		dev_warn(&pdev->dev, "%s not registered\n", name);
-> >>> -		child = NULL;
-> >>> -	}
-> >>> -
-> >>> -	return child;
-> >>> -}
-> >>> -
-> >>>   static int vchiq_probe(struct platform_device *pdev)
-> >>>   {
-> >>>   	struct device_node *fw_node;
-> >>> @@ -1832,8 +1831,11 @@ static int vchiq_probe(struct platform_device *pdev)
-> >>>   		goto error_exit;
-> >>>   	}
-> >>>   
-> >>> -	bcm2835_camera = vchiq_register_child(pdev, "bcm2835-camera");
-> >>> -	bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
-> >>> +	err = platform_add_devices(vchiq_devices, ARRAY_SIZE(vchiq_devices));
-> >>> +	if (err) {
-> >>> +		dev_warn(&pdev->dev, "Failed to add vchiq child devices");
-> >>> +		goto error_exit;
-> >>> +	}
-> >>
-> >> If you unbind and rebind this driver, the platform_device instances
-> >> defined as global variables will be reused, and I'm pretty sure that
-> >> will cause issues, for instance with the kobj->state_initialized check
-> >> in kobject_init() (called from device_initialize(), itself called from
-> >> platform_device_register(), from platform_add_devices()). I'm not sure
-> >> static instances of platform_device are a very good idea in general.
-> >
-> > static instances of any device are a horrible idea, but it seems that
-> > many drivers do this and abuse platform devices this way :(
+> On 21/12/2022 21:58, srinivas pandruvada wrote:
+> > Hi Daniel,
+> > 
+> > On Wed, 2022-12-21 at 15:52 +0100, Daniel Lezcano wrote:
+> > > 
+> > > Hi Srinivas,
+> > > 
+> > > On 30/11/2022 00:34, Srinivas Pandruvada wrote:
+> > > > The actual idle percentage can be less than the desired because
+> > > > of
+> > > > interrupts. Since the objective for CPU Idle injection is for
+> > > > thermal
+> > > > control, there should be some way to compensate for lost idle
+> > > > percentage.
+> > > > Some architectures provide interface to get actual idle percent
+> > > > observed
+> > > > by the hardware. So, the idle percent can be adjusted using the
+> > > > hardware
+> > > > feedback. For example, Intel CPUs provides package idle
+> > > > counters,
+> > > > which
+> > > > is currently used by intel powerclamp driver to adjust idle
+> > > > time.
+> > > Can you provide an example in terms of timings?
+> > > 
+> > > I'm not getting how 'prepare' would do by returning a positive
+> > > value
+> > > to
+> > > skip the play_idle_precise() and what will do 'complete' ?
+> > > 
+> > intel_powerclamp has a logic where if the current idle percentage
+> > observed from hardware is more than the desired target inject
+> > percent,
+> > it skips calling play_idle().
+> > 
+> > For example if you want to inject 50% idle and system is naturally
+> > idle
+> > for 60%, there is no use of calling play_idle in the idle injection
+> > framework to induce more idle. In this way a workload can run
+> > immediately.
+> > 
+> > So trying to emulate the same logic by using powercap/idle_inject
+> > framework. So prepare() callback in the intel_powerclamp driver
+> > calls
+> > the existing function to check if idle-inject should skip for this
+> > time
+> > or not.
 > 
-> It seems  I have been a victim of the abuse usage while looking for 
-> platform_device references in the codebase. I'm working on a new 
-> approach for this.
-> 
-> Currently (as per the linux-next branch), the vchiq driver will happily 
-> carry on if any of the child  platform device registration fails. That 
-> means if bcm2835-audio fails to register, bcm2835-camera will  still 
-> kept registered I suppose.
-> 
-> However with usage of platform_add_devices() in this patch, I introduced 
-> a functionality change (I'm realizing this now) - any failure of child 
-> platform device registeration will -unregister- all the other platform 
-> devices i.e. if bcm2835-audio fails, bcm2835-camera will also get 
-> unregistered.
-> 
-> Should I be working towards the status-quo behavior ? Or it's sane to 
-> unregistered other platform devices if one of the fails like 
-> platform_add_devices() does ? (This affects my new approach as well, 
-> hence the question)
+> The function 'prepare' has the 'cpu' parameter. How can it compare
+> with 
+> the desired idle duration as this information is not passed to the 
+> callback ?
+Good question.
 
-If it doesn't cause too much extra complexity, it would be nice to skip
-devices that can't be registered successfully, and still support the
-other ones. I don't expect registration failures to be a occuring
-normally, so if this causes too much completely, I think it would still
-be fine to fail more harshly.
+Calling driver knows what idle_duration he set.
+In my first version, I passed *idle_duration (with current
+idle_duration set), so the caller can change this for the current
+play_idle call if required for one time.
 
-> > Ideally this should be done properly, with the correct devices created
-> > automatically based on the device tree structure, NOT hard-coded into a
-> > .c file like this.
-> >
-> > So I too really do not like this change, why are these not being created
-> > by the firware layer automatically?
+But in powerclamp case we either skip the whole play_idle or not. It
+doesn't change idle duration. So didn't add.
+
+But we can add this back.
+
+Thanks,
+Srinivas
+
+
+
 > 
-> Not sure if this is a helpful comment, but as far I know, there can be 
-> vchiq child platform devices which probably don't have a Device tree 
-> entry. like the bcm2835-isp [1] I posted earlier.
 > 
-> [1] https://lore.kernel.org/lkml/20221121214722.22563-1-umang.jain@ideasonboard.com/
 
-Those devices are implemented and exposed by the firmware running on the
-VC4. The device tree describes the VC4 itself with the resources
-required to communicate with it through a mailbox interface. I was going
-to say that the platform devices are then created based on what the
-firmware exposes, but that's not right, they're indeed hardcoded in the
-vchiq driver. Adding corresponding DT nodes (as children of the vchiq DT
-node) could make sense. Dave, do you have any opinion on this ?
-
--- 
-Regards,
-
-Laurent Pinchart
