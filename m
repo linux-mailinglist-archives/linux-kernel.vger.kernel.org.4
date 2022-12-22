@@ -2,114 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EAC653D6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 10:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F164653D5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 10:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235007AbiLVJVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 04:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S235003AbiLVJRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 04:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiLVJVU (ORCPT
+        with ESMTP id S234894AbiLVJRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 04:21:20 -0500
-X-Greylist: delayed 350 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Dec 2022 01:21:18 PST
-Received: from out-142.mta0.migadu.com (out-142.mta0.migadu.com [91.218.175.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C754D2723
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 01:21:18 -0800 (PST)
-Message-ID: <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1671700522;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NvqkcEhrk+31x6ylR2f9V4qr4sT6WSxNh1dY0eCIAOs=;
-        b=XTVAAwsSdY6nHEMOBrzOgvN4x8AqzHZeORy/uoDdixW280qUcHCF+W3bpJavdLjOKCK89U
-        Cm3nLGJvY6HLZV3fCpnfWRboZMTcoxdfO9S6rOlzBBLE1caL1tnTCFiTzuY6ILn7CZxwvi
-        aJ9VjA37iMNgELJEqErmdnmXnu144tE=
-Date:   Thu, 22 Dec 2022 02:15:20 -0700
+        Thu, 22 Dec 2022 04:17:06 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F2420F77
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 01:17:05 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id x22so3408402ejs.11
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 01:17:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PWgdTaVoa5qu+SyKBPOqpyG8l+WOI84pd0n3Dy38GcU=;
+        b=U0oIHqjyc/QAR8FDSw9DidXPhhKEKPzFBYt9+d2EmqwGfptBLDtVhcIOndYbHCbvJ8
+         2t5WJcvI4GzXA0qeCRSAj7FGJM7+iLIQ6YsL1Xmbw2tnWTd9xRenq33ync9u+OWSGLum
+         /nHT+Dwx4i3YIz3FRW87xA79vqXhvpxGeDklfoFhbMnbkmZ8XwpKTZcMhPbNNC4a0hnq
+         QPOucczRbQSBKzg2Znj/63d2CKwaFjI7d9hw31bTonYWWV6VDHVU/X8lhgD+aJAjHkFe
+         1WMYQd08j3QEkVta80CONk+JpqomQ5pLfqytUlQzrNtZDgG5xJjp1+cRFVXlUkolBkPC
+         VktQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PWgdTaVoa5qu+SyKBPOqpyG8l+WOI84pd0n3Dy38GcU=;
+        b=FSsDby3LHg0F2yUjsCj4uye21w4t7ReXKszWBj/+DQ0shZkeXi+w8j/E2RY/L5zY8p
+         epKv4yPaYob2VAYSkGDzehzNT8Smi8/9sbDqu7T7v/VUll4ZrgpMlwr/LtF5g2zJe2Kh
+         JW6aRz9jv7J3nAKYYBJDXu8iuq7Hgg0kpfZPjqxBsU4pomrELH6dsB7/RApQbr0CNOPt
+         faHoFE1X7ycHfZe6/cHn3ECUzq8bNdRnvfE2w0/uHwhXWLocsslcX0lhynYduXuR3Ppf
+         SYwwVh0Fd+yhwxl/dqlLDi5a6F+HkNx7AdNBUNIgzLy4mCAmiZOuSg3YQKS3jmWEmmRn
+         M82w==
+X-Gm-Message-State: AFqh2kodICedGQ3djt9k+w4foGeBYxI5tqfSjsl34Iq8uIQelmz3kRDL
+        f/HGAf248mCQi41xYlC5N2cYR6mvASHZV8zI
+X-Google-Smtp-Source: AMrXdXuAhZXJjeqFNgfF9FOIJBrdld+yAZuaSog/qvpLdb2c0jE829UuVB5H8G9GoA2gjp4kzvfJhQ==
+X-Received: by 2002:a17:907:6e16:b0:7c0:9f6f:6d8 with SMTP id sd22-20020a1709076e1600b007c09f6f06d8mr5040158ejc.2.1671700623648;
+        Thu, 22 Dec 2022 01:17:03 -0800 (PST)
+Received: from alba.. ([82.77.81.131])
+        by smtp.gmail.com with ESMTPSA id a12-20020a17090682cc00b007c6be268252sm29072ejy.77.2022.12.22.01.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 01:17:03 -0800 (PST)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     gregkh@linuxfoundation.org, sashal@kernel.org, corbet@lwn.net
+Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joneslee@google.com,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH] Documentation: stable: Add rule on what kind of patches are accepted
+Date:   Thu, 22 Dec 2022 11:16:58 +0200
+Message-Id: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0
- controller
-To:     korantwork@gmail.com, nirmal.patel@linux.intel.com,
-        lpieralisi@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-References: <20221222072603.1175248-1-korantwork@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Jonathan Derrick <jonathan.derrick@linux.dev>
-In-Reply-To: <20221222072603.1175248-1-korantwork@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The list of rules on what kind of patches are accepted, and which ones
+are not into the “-stable” tree, did not mention anything about new
+features and let the reader use its own judgement. One may be under the
+impression that new features are not accepted at all, but that's not true:
+new features are not accepted unless they fix a reported problem.
+Update documentation with missing rule.
 
+Link: https://lore.kernel.org/lkml/fc60e8da-1187-ca2b-1aa8-28e01ea2769a@linaro.org/T/#mff820d23793baf637a1b39f5dfbcd9d4d0f0c3a6
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
+ Documentation/process/stable-kernel-rules.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 12/22/22 12:26 AM, korantwork@gmail.com wrote:
-> From: Xinghui Li <korantli@tencent.com>
-> 
-> Commit ee81ee84f873("PCI: vmd: Disable MSI-X remapping when possible")
-> disable the vmd MSI-X remapping for optimizing pci performance.However,
-> this feature severely negatively optimized performance in multi-disk
-> situations.
-> 
-> In FIO 4K random test, we test 1 disk in the 1 CPU
-> 
-> when disable MSI-X remapping:
-> read: IOPS=1183k, BW=4622MiB/s (4847MB/s)(1354GiB/300001msec)
-> READ: bw=4622MiB/s (4847MB/s), 4622MiB/s-4622MiB/s (4847MB/s-4847MB/s),
-> io=1354GiB (1454GB), run=300001-300001msec
-> 
-> When not disable MSI-X remapping:
-> read: IOPS=1171k, BW=4572MiB/s (4795MB/s)(1340GiB/300001msec)
-> READ: bw=4572MiB/s (4795MB/s), 4572MiB/s-4572MiB/s (4795MB/s-4795MB/s),
-> io=1340GiB (1438GB), run=300001-300001msec
-> 
-> However, the bypass mode could increase the interrupts costs in CPU.
-> We test 12 disks in the 6 CPU,
-Well the bypass mode was made to improve performance where you have >4 
-drives so this is pretty surprising. With bypass mode disabled, VMD will 
-intercept and forward interrupts, increasing costs.
+diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
+index 2fd8aa593a28..266290fab1d9 100644
+--- a/Documentation/process/stable-kernel-rules.rst
++++ b/Documentation/process/stable-kernel-rules.rst
+@@ -22,6 +22,7 @@ Rules on what kind of patches are accepted, and which ones are not, into the
+    maintainer and include an addendum linking to a bugzilla entry if it
+    exists and additional information on the user-visible impact.
+  - New device IDs and quirks are also accepted.
++ - New features are not accepted unless they fix a reported problem.
+  - No "theoretical race condition" issues, unless an explanation of how the
+    race can be exploited is also provided.
+  - It cannot contain any "trivial" fixes in it (spelling changes,
+-- 
+2.34.1
 
-I think Nirmal would want to to understand if there's some other factor 
-going on here.
-
-> 
-> When disable MSI-X remapping:
-> read: IOPS=562k, BW=2197MiB/s (2304MB/s)(644GiB/300001msec)
-> READ: bw=2197MiB/s (2304MB/s), 2197MiB/s-2197MiB/s (2304MB/s-2304MB/s),
-> io=644GiB (691GB), run=300001-300001msec
-> 
-> When not disable MSI-X remapping:
-> read: IOPS=1144k, BW=4470MiB/s (4687MB/s)(1310GiB/300005msec)
-> READ: bw=4470MiB/s (4687MB/s), 4470MiB/s-4470MiB/s (4687MB/s-4687MB/s),
-> io=1310GiB (1406GB), run=300005-300005msec
-> 
-> Signed-off-by: Xinghui Li <korantli@tencent.com>
-> ---
->   drivers/pci/controller/vmd.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index e06e9f4fc50f..9f6e9324d67d 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -998,8 +998,7 @@ static const struct pci_device_id vmd_ids[] = {
->   		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP,},
->   	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_28C0),
->   		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW |
-> -				VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> -				VMD_FEAT_CAN_BYPASS_MSI_REMAP,},
-> +				VMD_FEAT_HAS_BUS_RESTRICTIONS,},
->   	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x467f),
->   		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
->   				VMD_FEAT_HAS_BUS_RESTRICTIONS |
