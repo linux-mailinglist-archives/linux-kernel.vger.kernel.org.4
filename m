@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A978165478D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B14465478F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiLVUxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
+        id S230206AbiLVUyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLVUxO (ORCPT
+        with ESMTP id S229603AbiLVUyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 15:53:14 -0500
-Received: from mailfilter02-out40.webhostingserver.nl (mailfilter02-out40.webhostingserver.nl [195.211.72.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48861C916
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 12:53:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=exalondelft.nl; s=whs1;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=5qhayPKhfBfDxM0F+uRbZ4HQENiaq8XOO7xJH6gBv6g=;
-        b=QSDzSMyXiXkIT2XfNUMGCDngq1KffMLlXc/Vp5DTxhMGzp0uElrvLombgdcXDnmtic8SteS08kZP9
-         KShbF2USqJxxLOTuhx/DdwrqCGEQ+7mdHjJpn/n7UsDDCOLsZY5w40bFP1JuNzgrudZTRYey7vVTuf
-         dpRtP7Kq+/SU7GdiUxJLlwUl13e0MozJF5Qw1Ygy/qe0ZFx8zXgrdaRvnYUyg84X/hm97fAeNDNplu
-         DcBaM5LCQhbV8ZR1SULHNcsLzTH8BvKIR/i72+w5iYBR4bbHsvT3H7J79BPGAqF9+MsjBahgolP9f9
-         3002f32NF29DFRCwshAqU1mHtlTxwHQ==
-X-Halon-ID: a4057b1d-823a-11ed-ac07-001a4a4cb922
-Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-        by mailfilter02.webhostingserver.nl (Halon) with ESMTPSA
-        id a4057b1d-823a-11ed-ac07-001a4a4cb922;
-        Thu, 22 Dec 2022 21:53:09 +0100 (CET)
-Received: from 2a02-a466-68ed-1-86df-abe6-f3ae-663d.fixed6.kpn.net ([2a02:a466:68ed:1:86df:abe6:f3ae:663d] helo=delfion.fritz.box)
-        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
-        (envelope-from <ftoth@exalondelft.nl>)
-        id 1p8SYu-00Gils-2c;
-        Thu, 22 Dec 2022 21:53:08 +0100
-From:   Ferry Toth <ftoth@exalondelft.nl>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ferry Toth <ftoth@exalondelft.nl>,
-        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org
-Subject: [PATCH v2 1/1] Revert "usb: ulpi: defer ulpi_register on ulpi_read_id timeout"
-Date:   Thu, 22 Dec 2022 21:53:02 +0100
-Message-Id: <20221222205302.45761-1-ftoth@exalondelft.nl>
-X-Mailer: git-send-email 2.37.2
+        Thu, 22 Dec 2022 15:54:38 -0500
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780B81C916;
+        Thu, 22 Dec 2022 12:54:37 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id A1715774;
+        Thu, 22 Dec 2022 20:54:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A1715774
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1671742476; bh=BOl6ICJ8RqdJV/GOC1RaekskBBpoDf7iE7ORiDpKG5M=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=opBNAa42RBXIgcq6/Wg3Wpkatc+UgO6KGWwH/W1NGxg8UlxYjdfHc3b/ECEkJOA96
+         oKIbeDIfKwNEYyBR4dF88k9GtXuVx2OKnWARuS478xNZn9ArfsmOCZm6I7OErHrmLX
+         vh00GCngBsJY+etnO0p3KN7UaujLje7WhZbxWrcG9BUSm7eWRaNo8oC6FXGAwTNnLY
+         uJlU22BEshbtF0J/R4NhDLGq7msohT105z0dniqiB/u9vEbnpyohLtiLNhoTJUv/4B
+         8gAcsLIdpoI7MJDqdjomF1XRHl3AV0VWnqN8mXAh+ZedKourXzUgsqWR8nqx9b9MBG
+         cdi3W/pIl9Kpw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Christoph Hellwig <hch@lst.de>, axboe@meta.com, sagi@grimberg.me,
+        kbusch@kernel.org, linux-nvme@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH] docs, nvme: add a feature and quirk policy document
+In-Reply-To: <20221222160920.GA10193@lst.de>
+References: <20221215125130.261098-1-hch@lst.de>
+ <87zgboddb7.fsf@meer.lwn.net> <20221215132622.GA21083@lst.de>
+ <20221221083450.GA23903@lst.de> <87mt7g27lv.fsf@meer.lwn.net>
+ <20221222160920.GA10193@lst.de>
+Date:   Thu, 22 Dec 2022 13:54:35 -0700
+Message-ID: <87zgbfma5w.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac.
+Christoph Hellwig <hch@lst.de> writes:
 
-This patch results in some qemu test failures, specifically xilinx-zynq-a9
-machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
-to boot from USB drive.
+> On Wed, Dec 21, 2022 at 06:45:32AM -0700, Jonathan Corbet wrote:
+>> Sorry, the argument is that the subsystem profiles there were created
+>> for the very purpose of documenting subsystem-specific patch policies
+>> like those found in your document.  The hope is that, someday, people
+>> will be able to go to one place to learn what special hoops any given
+>> subsystem will make them jump through.
+>> 
+>> This isn't something I'm going to dig in my heels on, though.  But at a
+>> minimum, could you add an entry to
+>> Documentation/maintainer/maintainer-entry-profile.rst ?
+>
+> What about the following?  This moves the file to a new
+> Documentation/nvme/ directory and then links it form
+> Documentation/maintainer/maintainer-entry-profile.rst:
 
-Fixes: 8a7b31d545d3 ("usb: ulpi: defer ulpi_register on ulpi_read_id timeout")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/lkml/20221220194334.GA942039@roeck-us.net/
-Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
----
- drivers/usb/common/ulpi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm not really a fan of adding more top-level directories; one of these
+years I'd like to try to move things in the opposite direction.  That is
+a battle for another day, though; for now let's just go with this and
+get the document merged.
 
-diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-index 60e8174686a1..d7c8461976ce 100644
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -207,7 +207,7 @@ static int ulpi_read_id(struct ulpi *ulpi)
- 	/* Test the interface */
- 	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
- 	if (ret < 0)
--		return ret;
-+		goto err;
- 
- 	ret = ulpi_read(ulpi, ULPI_SCRATCH);
- 	if (ret < 0)
--- 
-2.37.2
+That said, I suspect you'll add a build warning about the new document
+not being included in any toctree.  Fixing that would involve adding a
+basic index.rst to the new directory and adding that to a file like
+Documentation/subsystem-apis.rst.
 
+Thanks,
+
+jon
