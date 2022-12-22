@@ -2,128 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A705653ACD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 03:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B09653ACE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 03:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbiLVCqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 21:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
+        id S235025AbiLVCsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 21:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234995AbiLVCqp (ORCPT
+        with ESMTP id S234980AbiLVCsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 21:46:45 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1CBE0E1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:46:44 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id l13-20020a056e0212ed00b00304c6338d79so360913iln.21
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:46:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eDDI/oL2Ke17uihTmFfkBMeQOhWJlHrip9oEuESCg5w=;
-        b=PYLDB9k83Dd/nHxPO3CPfg6oALUmrzMweDSNzHBZsnqe59AbQVrTMh9FQz1RwEUi4z
-         KBZDi/68YHh7uDO7gfcpIrCniaGud3jCB+h0Fb6YEX+B9x099nGfjM4lgixHv0/kJ6QB
-         uiLiOq0MzjeZrjEfOanJT98ZiC9xRmGtpcwiH7zZ2Lq1tfQFjo07r+FVUQq3IzTyfqWX
-         XSmUNguQvy9lTz2zFM3kjrwTdm59BJykrBJdU7W/Xg/nDD2fNEOgbZONnsJptgGrMCjc
-         UrhizYR2Ts/QPHBEMpsdX2AZ9D9/vw2nuIz8WULU13dJF/J1enuS/9wQ+FU01yyPbyp1
-         8Fbw==
-X-Gm-Message-State: AFqh2krfYz60/cDpEMazTBybP5CIO/IxuO7lh5N5dLVW47dkd9Q8Cs3k
-        slG6BZ43TjRawxxIT34/M2oxjFxsnpxidHwySlplj+p3t33x
-X-Google-Smtp-Source: AMrXdXub4G4vWjai0NqHLLfmuFyUTLtFVBrj5YtPa02LsRS2KJP52iuoPbUYfCoJm2N3ghjoAn5C0T+w93GzTbQQW192huo7zfhS
+        Wed, 21 Dec 2022 21:48:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC98F1AA14
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:48:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44A4D619A2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 02:48:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45BDCC433EF;
+        Thu, 22 Dec 2022 02:48:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671677314;
+        bh=ioQP7BdKoCQzYScolgYNHmzEqHjWvZA+Dx6rHvT72+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CNcz2Z2p5ejNlCmn4IHzA/qP4Bf/7asJUxOYY4W21+MC6W+RuJQ1MowAsx4R6c0yg
+         2g2V4Sq30uRvxwm0BFfZgXgwKafzM3YsCcuQ4bkvt5Fr2lwisKj5Eb+rklEgV0X6sz
+         h+FnelKcC+3OHll4oi0OjpWOgPTh9FnU1BAdJ2FOWVcmF/MfM04+sVwQ94J2OqyYEt
+         0PJtKwpmFKf3QFpm2x7qXDAoYPjyIN/PQOnfF6bmYP5j9MYLhwkaz5iIfypCywaxd2
+         ybvKCgUj4eoz5kNtATUHF7VgZ77ma2FroTv7qVxwWnKeaokzU3vVNwceX81viA//v+
+         qdlDnF629jRXA==
+Date:   Thu, 22 Dec 2022 10:48:28 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Sandeep Dhavale <dhavale@google.com>
+Cc:     Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        kernel-team@android.com, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EROFS: Replace erofs_unzipd workqueue with per-cpu
+ threads
+Message-ID: <Y6PFfEnJE3g98X/e@debian>
+Mail-Followup-To: Sandeep Dhavale <dhavale@google.com>,
+        Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>, Jeffle Xu <jefflexu@linux.alibaba.com>,
+        kernel-team@android.com, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <20221222011529.3471280-1-dhavale@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:501:b0:38a:cb79:54f9 with SMTP id
- i1-20020a056638050100b0038acb7954f9mr333604jar.99.1671677203922; Wed, 21 Dec
- 2022 18:46:43 -0800 (PST)
-Date:   Wed, 21 Dec 2022 18:46:43 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000eb49a905f061ada5@google.com>
-Subject: [syzbot] [vfs?] [ntfs3?] WARNING in do_symlinkat
-From:   syzbot <syzbot+e78eab0c1cf4649256ed@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221222011529.3471280-1-dhavale@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Sandeen,
 
-syzbot found the following issue on:
+On Thu, Dec 22, 2022 at 01:15:29AM +0000, Sandeep Dhavale wrote:
+> Using per-cpu thread pool we can reduce the scheduling latency compared
+> to workqueue implementation. With this patch scheduling latency and
+> variation is reduced as per-cpu threads are SCHED_FIFO kthread_workers.
+> 
+> The results were evaluated on arm64 Android devices running 5.10 kernel.
+> 
+> The table below shows resulting improvements of total scheduling latency
+> for the same app launch benchmark runs with 50 iterations. Scheduling
+> latency is the latency between when the task (workqueue kworker vs
+> kthread_worker) became eligible to run to when it actually started
+> running.
+> +-------------------------+-----------+----------------+---------+
+> |                         | workqueue | kthread_worker |  diff   |
+> +-------------------------+-----------+----------------+---------+
+> | Average (us)            |     15253 |           2914 | -80.89% |
+> | Median (us)             |     14001 |           2912 | -79.20% |
+> | Minimum (us)            |      3117 |           1027 | -67.05% |
+> | Maximum (us)            |     30170 |           3805 | -87.39% |
+> | Standard deviation (us) |      7166 |            359 |         |
+> +-------------------------+-----------+----------------+---------+
+> 
+> Signed-off-by: Sandeep Dhavale <dhavale@google.com>
 
-HEAD commit:    77856d911a8c Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10600abf880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f967143badd2fa39
-dashboard link: https://syzkaller.appspot.com/bug?extid=e78eab0c1cf4649256ed
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16bddf1f880000
+Thanks for the patch.  Generally, This path looks good to me (compared
+with softirq context.)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b424d9203f5/disk-77856d91.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/47fd68051834/vmlinux-77856d91.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d3091f087a86/bzImage-77856d91.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/93766764f567/mount_0.gz
+With the background at LPC 22, I can see how important such low latency
+requirement is needed for Android upstream and AOSP.  However, could you
+add some link or some brief background to other folks without such
+impression?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e78eab0c1cf4649256ed@syzkaller.appspotmail.com
+> ---
+>  fs/erofs/zdata.c | 84 +++++++++++++++++++++++++++++++++++-------------
+>  fs/erofs/zdata.h |  4 ++-
+>  2 files changed, 64 insertions(+), 24 deletions(-)
+> 
+> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> index ccf7c55d477f..646667dbe615 100644
+> --- a/fs/erofs/zdata.c
+> +++ b/fs/erofs/zdata.c
+> @@ -8,6 +8,7 @@
+>  #include "compress.h"
+>  #include <linux/prefetch.h>
+>  #include <linux/psi.h>
+> +#include <linux/slab.h>
+>  
+>  #include <trace/events/erofs.h>
+>  
+> @@ -184,26 +185,56 @@ typedef tagptr1_t compressed_page_t;
+>  #define tag_compressed_page_justfound(page) \
+>  	tagptr_fold(compressed_page_t, page, 1)
+>  
+> -static struct workqueue_struct *z_erofs_workqueue __read_mostly;
+> +static struct kthread_worker **z_erofs_kthread_pool;
+>  
+> -void z_erofs_exit_zip_subsystem(void)
+> +static void z_erofs_destroy_kthread_pool(void)
+>  {
+> -	destroy_workqueue(z_erofs_workqueue);
+> -	z_erofs_destroy_pcluster_pool();
+> +	unsigned long cpu;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		if (z_erofs_kthread_pool[cpu]) {
+> +			kthread_destroy_worker(z_erofs_kthread_pool[cpu]);
+> +			z_erofs_kthread_pool[cpu] = NULL;
+> +		}
+> +	}
+> +	kfree(z_erofs_kthread_pool);
+>  }
+>  
+> -static inline int z_erofs_init_workqueue(void)
+> +static int z_erofs_create_kthread_workers(void)
+>  {
+> -	const unsigned int onlinecpus = num_possible_cpus();
+> +	unsigned long cpu;
+> +	struct kthread_worker *worker;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		worker = kthread_create_worker_on_cpu(cpu, 0, "z_erofs/%ld", cpu);
 
-DEBUG_RWSEMS_WARN_ON((rwsem_owner(sem) != current) && !rwsem_test_oflags(sem, RWSEM_NONSPINNABLE)): count = 0x0, magic = 0xffff88806d8a8a90, owner = 0x0, curr 0xffff888075533a80, list empty
-WARNING: CPU: 1 PID: 5295 at kernel/locking/rwsem.c:1361 __up_write kernel/locking/rwsem.c:1360 [inline]
-WARNING: CPU: 1 PID: 5295 at kernel/locking/rwsem.c:1361 up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
-Modules linked in:
-CPU: 1 PID: 5295 Comm: syz-executor.1 Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__up_write kernel/locking/rwsem.c:1360 [inline]
-RIP: 0010:up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
-Code: c7 00 ac ed 8a 48 c7 c6 a0 ae ed 8a 48 8b 54 24 28 48 8b 4c 24 18 4d 89 e0 4c 8b 4c 24 30 31 c0 53 e8 9b 59 e8 ff 48 83 c4 08 <0f> 0b e9 6b fd ff ff 48 c7 c1 d8 83 96 8e 80 e1 07 80 c1 03 38 c1
-RSP: 0018:ffffc9000496fd40 EFLAGS: 00010292
-RAX: 161bb8d4b7118f00 RBX: ffffffff8aedace0 RCX: ffff888075533a80
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc9000496fe10 R08: ffffffff816f29ad R09: fffff5200092df61
-R10: fffff5200092df61 R11: 1ffff9200092df60 R12: 0000000000000000
-R13: ffff88806d8a8a90 R14: 1ffff9200092dfb0 R15: dffffc0000000000
-FS:  00007ff7ee349700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020023000 CR3: 000000007cc18000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- inode_unlock include/linux/fs.h:761 [inline]
- done_path_create fs/namei.c:3857 [inline]
- do_symlinkat+0x242/0x5f0 fs/namei.c:4433
- __do_sys_symlinkat fs/namei.c:4447 [inline]
- __se_sys_symlinkat fs/namei.c:4444 [inline]
- __x64_sys_symlinkat+0x95/0xa0 fs/namei.c:4444
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff7ed68c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff7ee349168 EFLAGS: 00000246 ORIG_RAX: 000000000000010a
-RAX: ffffffffffffffda RBX: 00007ff7ed7ac050 RCX: 00007ff7ed68c0d9
-RDX: 0000000020000280 RSI: ffffffffffffff9c RDI: 00000000200004c0
-RBP: 00007ff7ed6e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe963e7f2f R14: 00007ff7ee349300 R15: 0000000000022000
- </TASK>
+how about calling them as erofs_worker/%ld, since in the future they
+can also be used for other uses (like verification or decryption).
 
+> +		if (IS_ERR(worker)) {
+> +			z_erofs_destroy_kthread_pool();
+> +			return -ENOMEM;
+> +		}
+> +		sched_set_fifo(worker->task);
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Could we add some kernel configuration option to enable/disable this,
+since I'm not sure if all users need RT threads.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> +		z_erofs_kthread_pool[cpu] = worker;
+> +	}
+> +	return 0;
+> +}
+>  
+> -	/*
+> -	 * no need to spawn too many threads, limiting threads could minimum
+> -	 * scheduling overhead, perhaps per-CPU threads should be better?
+> -	 */
+> -	z_erofs_workqueue = alloc_workqueue("erofs_unzipd",
+> -					    WQ_UNBOUND | WQ_HIGHPRI,
+> -					    onlinecpus + onlinecpus / 4);
+> -	return z_erofs_workqueue ? 0 : -ENOMEM;
+> +static int z_erofs_init_kthread_pool(void)
+> +{
+> +	int err;
+> +
+> +	z_erofs_kthread_pool = kcalloc(num_possible_cpus(),
+> +			sizeof(struct kthread_worker *), GFP_ATOMIC);
+> +	if (!z_erofs_kthread_pool)
+> +		return -ENOMEM;
+> +	err = z_erofs_create_kthread_workers();
+> +
+> +	return err;
+> +}
+> +
+> +
+> +void z_erofs_exit_zip_subsystem(void)
+> +{
+> +	z_erofs_destroy_kthread_pool();
+> +	z_erofs_destroy_pcluster_pool();
+>  }
+>  
+>  int __init z_erofs_init_zip_subsystem(void)
+> @@ -211,10 +242,16 @@ int __init z_erofs_init_zip_subsystem(void)
+>  	int err = z_erofs_create_pcluster_pool();
+>  
+>  	if (err)
+> -		return err;
+> -	err = z_erofs_init_workqueue();
+> +		goto out_error_pcluster_pool;
+> +
+> +	err = z_erofs_init_kthread_pool();
+>  	if (err)
+> -		z_erofs_destroy_pcluster_pool();
+> +		goto out_error_kthread_pool;
+> +
+> +	return err;
+> +out_error_kthread_pool:
+> +	z_erofs_destroy_pcluster_pool();
+> +out_error_pcluster_pool:
+>  	return err;
+>  }
+>  
+> @@ -1143,7 +1180,7 @@ static void z_erofs_decompress_queue(const struct z_erofs_decompressqueue *io,
+>  	}
+>  }
+>  
+> -static void z_erofs_decompressqueue_work(struct work_struct *work)
+> +static void z_erofs_decompressqueue_kthread_work(struct kthread_work *work)
+>  {
+>  	struct z_erofs_decompressqueue *bgq =
+>  		container_of(work, struct z_erofs_decompressqueue, u.work);
+> @@ -1170,15 +1207,16 @@ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+>  
+>  	if (atomic_add_return(bios, &io->pending_bios))
+>  		return;
+> -	/* Use workqueue and sync decompression for atomic contexts only */
+> +	/* Use kthread_workers and sync decompression for atomic contexts only */
+>  	if (in_atomic() || irqs_disabled()) {
+> -		queue_work(z_erofs_workqueue, &io->u.work);
+> +		kthread_queue_work(z_erofs_kthread_pool[raw_smp_processor_id()],
+> +			       &io->u.work);
+
+Should we need to handle cpu online/offline as well?
+
+Thanks,
+Gao Xiang
