@@ -2,114 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8AB6544A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299536544A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiLVPym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S230070AbiLVPzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiLVPyk (ORCPT
+        with ESMTP id S229807AbiLVPzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:54:40 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7148C286F4;
-        Thu, 22 Dec 2022 07:54:39 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5E98D6602CD4;
-        Thu, 22 Dec 2022 15:54:37 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671724478;
-        bh=qAhG/99ma0oz2fsDZKxatykFyuHEp485BVRnZklODwo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WBvNMLrJs1Tepv7wPgNfxOpPQHWNuLF5o77g3MDtDLkmjglKgBrnf+zXwUxaGUyls
-         6zWLBUY0IK0CHLi8muG6wytWp+gy1QtiR3WZgWCfsIenc2GG44a7yVoNH5EPsFxp9O
-         jmQAXq9FVX4/t/Wd9mRIB3LG8A7FIeTE4nu6lNXZJXzz83KKohxJpLzPw+FsI4OoMi
-         dhr+z6qlnjInxUUzIzPj8pXSuXo6Qr+tbwWdwulbaTJZIJrN+fuVSFTj78Dr5wDhvv
-         l/GUuSyDJdHzKUquLXP8W5ne2w51qobXAOpdq5aiflgMpC1F2qZXgb2ipEZy/o58x+
-         m5zAtEwM7s4gw==
-Message-ID: <372e5ab4-bc2c-1ccd-1f22-7bab635c36d1@collabora.com>
-Date:   Thu, 22 Dec 2022 16:54:34 +0100
+        Thu, 22 Dec 2022 10:55:43 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608151A807
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:55:38 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id g1so1512422pfk.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:55:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RVaV7gXLAFZP6vBGDynJRLj4x0H9TKcM19ib2OhgZ/w=;
+        b=EAlNqUp4R98KPIi17pVdCnGeg5YLtNQ9E22YaC1IFqgL+oNc1/lrrzl9VI+JoE13lK
+         VjR+L7aPwZEWakcgUqLmXMSQGZRe1ByvOVnPjx0FkqCB0YAvQ7g/QYD/oKpltY7og9uh
+         fj46XAgcvN9T82QeRZ5TYiGWzLt1NDC0/jcMQbA9nah/zSLLM65bkL3BEYwGTTT7JE+E
+         fRlmfJcYb3OfKXRLNLFyF4BtRo8cQ20YymZrzvB0pjm3rlMM1g90MHpr4pb/vujzl5KI
+         RnxT1tJKm6B06dpjlVt6MNAwhdgkmhFEuC/piaLlUHv3zKIhCnj8rgzUXt+u0NHtQ6be
+         E5Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RVaV7gXLAFZP6vBGDynJRLj4x0H9TKcM19ib2OhgZ/w=;
+        b=WzsldvjP+YdSO3G8I7MgQyXqM+7nFOwVVY3oVI84TIKrtf16PuLVL7XLOR3wDxixOt
+         XXT7Ewp8YkNyGCPzJpgvIOnmbn2pM9lL5darA7L3V4LTI+lI6pODnqiKWIHXWb6fGL7p
+         JFQlPOU7PlO0p31br9stRx1rIUyE5r/We+h/F0lHVtCXwO4vGEjtSr0cdOb5CfbqqIU5
+         8w/tpy4mZtnihmKCq9RP3SK3h8rLgFCHltZNYyghBt+IyBNwJBl7nyP3MpBx3ubRUm0C
+         +LFI5qeLwHgWOF+uWv5MDmLrqbIoDVNTKcci1wJ7gP5eZ2JPg4pLsEqiD2lALsVcv359
+         iyfA==
+X-Gm-Message-State: AFqh2koxD020zzIReO5UxqQl7zD3szMRCE55Fwijh+s3tMWH5qcR04rY
+        XaJgy17rN+nZo4wzDUDCoDWmKAf5vB49oiLFAT0FIg==
+X-Google-Smtp-Source: AMrXdXvFRr7/qzMUTbWIbPlyXiSK1LlPeSwNSmbVaA49P8mvF4F6AzosMjY/nVV12nHcybLxRklk9IDiMv161RPdSo4=
+X-Received: by 2002:a63:40c5:0:b0:489:17a2:a53d with SMTP id
+ n188-20020a6340c5000000b0048917a2a53dmr317357pga.255.1671724537702; Thu, 22
+ Dec 2022 07:55:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 0/6] MediaTek Frequency Hopping: MT6795/8173/92/95
-Content-Language: en-US
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
-        wenst@chromium.org, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, rex-bc.chen@mediatek.com,
-        jose.exposito89@gmail.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20221222155147.158837-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221222155147.158837-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221222060427.21626-1-jasowang@redhat.com> <20221222060427.21626-5-jasowang@redhat.com>
+ <CAJs=3_D6sug80Bb9tnAw5T0_NaL_b=u8ZMcwZtd-dy+AH_yqzQ@mail.gmail.com> <CACGkMEv4YxuqrSx_HW2uWgXXSMOFCzTJCCD_EVhMwegsL8SoCg@mail.gmail.com>
+In-Reply-To: <CACGkMEv4YxuqrSx_HW2uWgXXSMOFCzTJCCD_EVhMwegsL8SoCg@mail.gmail.com>
+From:   Alvaro Karsz <alvaro.karsz@solid-run.com>
+Date:   Thu, 22 Dec 2022 17:54:59 +0200
+Message-ID: <CAJs=3_Akv1zoKy_HARjnqMdNsy_n34TzzGA6a25xrkF2rCnqwg@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq command
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
+        eperezma@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/12/22 16:51, AngeloGioacchino Del Regno ha scritto:
-> This series adds support for Frequency Hopping (FHCTL) on more MediaTek
-> SoCs, specifically, MT6795, MT8173, MT8192 and MT8195.
-> 
-> In order to support older platforms like MT6795 and MT8173 it was
-> necessary to add a new register layout that is ever-so-slightly
-> different from the one that was previously introduced for MT8186.
-> 
-> Since the new layout refers to older SoCs, the one valid for MT8186
-> and newer SoCs was renamed to be a "v2" layout, while the new one
-> for older chips gets the "v1" name.
-> 
-> Note: These commits won't change any behavior unless FHCTL gets
->        explicitly enabled and configured in devicetrees.
-> 
-
-Forgot to write in the cover letter that this series can be applied on top
-of [1], but that's a dependency only because that big cleanup moves things
-around (hence these commits won't apply if not on top of [1]).
-
-
-[1]: 
-https://lore.kernel.org/lkml/20221222114857.120060-1-angelogioacchino.delregno@collabora.com
-
-Cheers,
-Angelo
-
-> AngeloGioacchino Del Regno (6):
->    clk: mediatek: fhctl: Add support for older fhctl register layout
->    dt-bindings: clock: mediatek,mt8186-fhctl: Support MT6795,
->      MT8173/92/95
->    clk: mediatek: mt6795: Add support for frequency hopping through FHCTL
->    clk: mediatek: mt8173: Add support for frequency hopping through FHCTL
->    clk: mediatek: mt8192: Add support for frequency hopping through FHCTL
->    clk: mediatek: mt8195: Add support for frequency hopping through FHCTL
-> 
->   .../bindings/clock/mediatek,mt8186-fhctl.yaml |  7 +-
->   drivers/clk/mediatek/clk-fhctl.c              | 26 ++++++-
->   drivers/clk/mediatek/clk-fhctl.h              |  9 ++-
->   drivers/clk/mediatek/clk-mt6795-apmixedsys.c  | 63 ++++++++++++++++-
->   drivers/clk/mediatek/clk-mt8173-apmixedsys.c  | 65 ++++++++++++++++-
->   drivers/clk/mediatek/clk-mt8186-apmixedsys.c  |  2 +
->   drivers/clk/mediatek/clk-mt8192.c             | 67 +++++++++++++++++-
->   drivers/clk/mediatek/clk-mt8195-apmixedsys.c  | 69 ++++++++++++++++++-
->   drivers/clk/mediatek/clk-pllfh.c              | 23 +++++--
->   drivers/clk/mediatek/clk-pllfh.h              |  1 +
->   10 files changed, 311 insertions(+), 21 deletions(-)
-> 
-
+My point is that the device may complete the control command after the timeout,
+so, if I'm not mistaken, next time we send a control command and call
+virtqueue_wait_for_used we'll get the previous response.
