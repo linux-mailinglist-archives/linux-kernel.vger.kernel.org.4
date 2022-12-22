@@ -2,163 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301B8654360
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E33265436B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235468AbiLVOuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S235227AbiLVO4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLVOuw (ORCPT
+        with ESMTP id S229811AbiLVO4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:50:52 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63744140BE
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:50:51 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id w18-20020a5d9cd2000000b006e32359d7fcso782400iow.15
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:50:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CvCDHTZz8XZgDHWgSHzRw1HHbu1w6RGcC+QRODVz9tU=;
-        b=q8VRkvSsUd4yoz0RJI61pGIqyJKH3kkIzd8unIdQDxV0A8qe3eeC3DJCq0dsd6YvWx
-         8OMoT75lrav5WypQe75njOGgTjyT15b6/CCs8bBDLfuS9pvp5XP2orTck3agciUDbU51
-         l2D8kTU4UGm/uPm86mFhtFiC4On51RxnF2pyAh78gnx5f9BLOMIJpYTh8WsNEhniLdkw
-         lvZSTAUyoXQb1186s9LF2GjoJE0OfvXj6vCPjtTGYtjGesw6sDG3IzQ4aoScUS5OhMjr
-         KZWPHj9AbSCl34oJHOCE2wQxb40LA92JN55lA+5np/w9RBtRUNjFzBQas4vt4KSdTDnn
-         N00Q==
-X-Gm-Message-State: AFqh2krsTiQTcuxMmfcai6Lvmoz/8Fj1kvqGvcoNps5ps95BfKdg9hL+
-        4gzvg5CdUNyhGAe/FDAxTppF43UpQSx2Pnbj2B0lxvWZ1to9
-X-Google-Smtp-Source: AMrXdXul9Lw78c52HR0EIK9tYsTDqGbi0N8fx6kCpC0JHI1kBmPLBK8Y6HoOQCGI/rIUgUkX1uBBk0VV90BrBxydGPjYbsBntK3f
+        Thu, 22 Dec 2022 09:56:08 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E901E735;
+        Thu, 22 Dec 2022 06:56:04 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 63DF41C09F5; Thu, 22 Dec 2022 15:56:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1671720962;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iGsweO4fT04ZOHHSUyF4a2DG33BMKp9jkHL7IT3pXvE=;
+        b=PjNJgMNphpe/LhbeSipabN44uYFvuXO22OvJn5f5F740gmdEe4ecvaMbHD6plx17LU3iCb
+        bGZCQi24MAnW2V5BaOlXCpN7x0cNs15cz16UFcDGqa9dCMWbzxLweRu12uxUSvQyO74+ha
+        sRSm9D6Zf4sbcWYwSrIcY4Im70mDvaw=
+Date:   Thu, 22 Dec 2022 15:56:01 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Marek Vasut <marex@denx.de>
+Cc:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel <kernel@dh-electronics.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: leds: Mark label property as deprecated
+Message-ID: <Y6RwAcXnfY/zjk/b@duo.ucw.cz>
+References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
+ <Y3y/S5COG7VPbsqL@duo.ucw.cz>
+ <3f4c89a3-8955-ce41-ac2a-cee9b0ed5210@denx.de>
+ <20221130191905.GA2631320-robh@kernel.org>
+ <4043d693-7739-4709-8551-9f476031db70@denx.de>
+ <38c9aae4-0cae-a5a6-7c76-f23edf259dab@gmail.com>
+ <e6b166b399314a91bc97db591c8ec5a7@dh-electronics.com>
+ <Y6RgjV4FT57SaTQw@duo.ucw.cz>
+ <3c555cae-999f-ccd2-d114-00b92abd19ba@denx.de>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:491:b0:30a:b1d7:7b19 with SMTP id
- b17-20020a056e02049100b0030ab1d77b19mr637852ils.290.1671720650733; Thu, 22
- Dec 2022 06:50:50 -0800 (PST)
-Date:   Thu, 22 Dec 2022 06:50:50 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008d00ec05f06bcb35@google.com>
-Subject: [syzbot] [gfs2?] BUG: unable to handle kernel NULL pointer
- dereference in gfs2_rindex_update
-From:   syzbot <syzbot+2b32df23ff6b5b307565@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="g1aUR9kw9ctIZUgk"
+Content-Disposition: inline
+In-Reply-To: <3c555cae-999f-ccd2-d114-00b92abd19ba@denx.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--g1aUR9kw9ctIZUgk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1130468c480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=2b32df23ff6b5b307565
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=141a9390480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166a0317880000
+On Thu 2022-12-22 15:01:44, Marek Vasut wrote:
+> On 12/22/22 14:50, Pavel Machek wrote:
+> > Hi!
+> >=20
+> > > > > This part I understand. What is not clear to me is, why is 'label=
+' being
+> > > > > un-deprecated.
+> > > >=20
+> > > > It shouldn't be. It seems to be Pavel's ad-hoc decision.
+> > >=20
+> > > Is there a majority agreement that the "label" property remains
+> > > deprecated?
+> >=20
+> >=20
+> > > If so, I would say we can mark the label as deprecated.
+> > >=20
+> > > On the other hand, the new generated standardized sysfs name does not=
+ seem
+> > > to provide a full replacement for the "label" property.
+> > > What is still missing?
+> >=20
+> > Having reasonable naming of the LEDs is pre-requisite for deprecating
+> > label property.
+>=20
+> As far as I can tell, function and function-enumerator is the reasonable
+> naming. Jacek seem to confirm that. I would say, label can be deprecated .
+> What is the counter-argument for why it should NOT be deprecated ?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/9bf67d96dec4/mount_0.gz
+When the label is no longer neccessary for naming leds, it can be
+deprecated. AFAICT, that is currently not the case.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2b32df23ff6b5b307565@syzkaller.appspotmail.com
+Best regards,
+									Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
-loop0: detected capacity change from 0 to 32768
-gfs2: fsid=syz:syz: Trying to join cluster "lock_nolock", "syz:syz"
-gfs2: fsid=syz:syz: Now mounting FS (format 1801)...
-gfs2: fsid=syz:syz.0: journal 0 mapped with 3 extents in 0ms
-Unable to handle kernel NULL pointer dereference at virtual address 00000000000004b8
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010d0e4000
-[00000000000004b8] pgd=080000010d0ef003, p4d=080000010d0ef003, pud=080000010c843003, pmd=0000000000000000
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3073 Comm: syz-executor647 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : gfs2_rindex_update+0x4c/0x21c fs/gfs2/rgrp.c:1037
-lr : gfs2_rindex_update+0x3c/0x21c fs/gfs2/rgrp.c:1035
-sp : ffff800012f13610
-x29: ffff800012f13650 x28: 0000000000000000 x27: 0000000000000000
-x26: ffff0000ca97a580 x25: ffff0000cb5ee000 x24: ffff0000cb5ee174
-x23: 0000000000000000 x22: ffff80000925c6b0 x21: ffff800012f13850
-x20: ffff0000cb5ee000 x19: 0000000000000000 x18: ffff800012f132d0
-x17: ffff80000dda8198 x16: ffff80000dbe6158 x15: ffff0000c99bcec0
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c99bcec0
-x11: ff808000092a1b7c x10: 0000000000000000 x9 : ffff8000092a1b7c
-x8 : ffff0000c99bcec0 x7 : ffff80000846001c x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000002
-x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- gfs2_rindex_update+0x4c/0x21c fs/gfs2/rgrp.c:1038
- punch_hole+0x578/0x18b8 fs/gfs2/bmap.c:1796
- gfs2_truncatei_resume+0x28/0x68 fs/gfs2/bmap.c:2154
- inode_go_held+0xb8/0xe0 fs/gfs2/glops.c:513
- gfs2_instantiate+0xf0/0x208 fs/gfs2/glock.c:529
- gfs2_glock_holder_ready fs/gfs2/glock.c:1326 [inline]
- gfs2_glock_wait+0x10c/0x164 fs/gfs2/glock.c:1346
- gfs2_glock_nq+0x104/0x220 fs/gfs2/glock.c:1596
- gfs2_glock_nq_init fs/gfs2/glock.h:264 [inline]
- init_statfs fs/gfs2/ops_fstype.c:696 [inline]
- init_journal+0x7a8/0xcbc fs/gfs2/ops_fstype.c:820
- init_inodes+0x74/0x184 fs/gfs2/ops_fstype.c:889
- gfs2_fill_super+0x630/0x874 fs/gfs2/ops_fstype.c:1247
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1324
- gfs2_get_tree+0x30/0xc0 fs/gfs2/ops_fstype.c:1330
- vfs_get_tree+0x40/0x140 fs/super.c:1531
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x890 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: f943a293 b947c697 2a1f03e0 a902ffff (f9425e75) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	f943a293 	ldr	x19, [x20, #1856]
-   4:	b947c697 	ldr	w23, [x20, #1988]
-   8:	2a1f03e0 	mov	w0, wzr
-   c:	a902ffff 	stp	xzr, xzr, [sp, #40]
-* 10:	f9425e75 	ldr	x21, [x19, #1208] <-- trapping instruction
+--g1aUR9kw9ctIZUgk
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY6RwAQAKCRAw5/Bqldv6
+8ipDAJ9UQeaV8wbRmUaK78L8ef8b20shsgCfVQip2dhkf7hu87g/yP0SouLr5yU=
+=Vv5l
+-----END PGP SIGNATURE-----
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--g1aUR9kw9ctIZUgk--
