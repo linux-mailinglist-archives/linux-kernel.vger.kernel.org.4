@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F5B65412F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F17654138
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235399AbiLVMmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
+        id S235503AbiLVMoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiLVMmb (ORCPT
+        with ESMTP id S235261AbiLVMoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:42:31 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACA5FCC;
-        Thu, 22 Dec 2022 04:42:30 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DA3DA17BDE;
-        Thu, 22 Dec 2022 12:42:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1671712948; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XmkqMDqoOV2vZvcbKcSsCfN2Q0eQg7RCp79KQBrfRkU=;
-        b=dSEDo37e26q8wi6ingQFJVEw8ZwHEMXjmoJnlKx5yU0EpR8/7YJpcefHYY7HrMFSWB6lDt
-        ycqha5Hk438wJBN8l31iaa6ZjoXMTfcfMzt8d4xt1jJqjk4w7T9mGQDqrByjlXPqi9U0Km
-        o9hwyEGzg18Ii5EMC0HnilSgQgQFD14=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1671712948;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XmkqMDqoOV2vZvcbKcSsCfN2Q0eQg7RCp79KQBrfRkU=;
-        b=mSsqGeCLP8TAnnwN4OgzqnF0AAYUERoi+NMcROyY2OO72miZv8uYpXvAr4Kv8QeeyabLxI
-        LvOBfeTtXTWOKNBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC4B413918;
-        Thu, 22 Dec 2022 12:42:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mBLbMbRQpGOCHQAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 22 Dec 2022 12:42:28 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 478E4A0732; Thu, 22 Dec 2022 13:42:28 +0100 (CET)
-Date:   Thu, 22 Dec 2022 13:42:28 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jack@suse.cz, kbusch@kernel.org
-Subject: Re: [PATCH RESEND v2 4/5] sbitmap: add sbitmap_find_bit to remove
- repeat code in __sbitmap_get/__sbitmap_get_shallow
-Message-ID: <20221222124228.pt3x3yenrqi44dhr@quack3>
-References: <20221222143353.598042-1-shikemeng@huaweicloud.com>
- <20221222143353.598042-5-shikemeng@huaweicloud.com>
+        Thu, 22 Dec 2022 07:44:18 -0500
+Received: from outbound-smtp15.blacknight.com (outbound-smtp15.blacknight.com [46.22.139.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E77423E9F
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 04:44:16 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
+        by outbound-smtp15.blacknight.com (Postfix) with ESMTPS id BD89C1C36CD
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 12:44:14 +0000 (GMT)
+Received: (qmail 19094 invoked from network); 22 Dec 2022 12:44:14 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 22 Dec 2022 12:44:14 -0000
+Date:   Thu, 22 Dec 2022 12:44:12 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>, Marco Elver <elver@google.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH] mm: remove unused alloc_pages_bulk_list()
+Message-ID: <20221222124412.rpnl2vojnx7izoow@techsingularity.net>
+References: <20221217001554.554913-1-lstoakes@gmail.com>
+ <Y51L496TjNuiSxsG@casper.infradead.org>
+ <Y51/Mt70d++6Zzzq@lucifer>
+ <20221219100734.jag6zejp4tug77yq@techsingularity.net>
+ <CAHbLzkp58y=d70j7eE9KkhK0HOorjD4=vxpuTk-9jLwGH5yarw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20221222143353.598042-5-shikemeng@huaweicloud.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHbLzkp58y=d70j7eE9KkhK0HOorjD4=vxpuTk-9jLwGH5yarw@mail.gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 22-12-22 22:33:52, Kemeng Shi wrote:
-> There are three differences between __sbitmap_get and
-> __sbitmap_get_shallow when searching free bit:
-> 1. __sbitmap_get_shallow limit number of bit to search per word.
-> __sbitmap_get has no such limit.
-> 2. __sbitmap_get_shallow always searches with wrap set. __sbitmap_get set
-> wrap according to round_robin.
-> 3. __sbitmap_get_shallow always searches from first bit in first word.
-> __sbitmap_get searches from first bit when round_robin is not set
-> otherwise searches from SB_NR_TO_BIT(sb, alloc_hint).
+On Tue, Dec 20, 2022 at 09:56:19AM -0800, Yang Shi wrote:
+> On Mon, Dec 19, 2022 at 2:07 AM Mel Gorman <mgorman@techsingularity.net> wrote:
+> >
+> > On Sat, Dec 17, 2022 at 08:34:58AM +0000, Lorenzo Stoakes wrote:
+> > > + Mel
+> > >
+> > > On Sat, Dec 17, 2022 at 04:56:03AM +0000, Matthew Wilcox wrote:
+> > > > I think we're waiting to see if any users show up.  It's only been 18
+> > > > months or so, so perhaps wait a little longer?
+> > >
+> > > Apologies, I should have researched the background of this further. I see it was
+> > > added speculatively in 0f87d9d30f.
+> > >
+> > > > Also, if we do get rid of this, then __alloc_pages_bulk() can lose
+> > > > the "list" argument.
+> > >
+> > > Ack. Will do a v2 if Mel feels it's appropriate to remove at this stage,
+> > > otherwise we can drop the idea and wait for users to emerge.
+> >
+> > I reckon we should give it another few months until May. There has been
+> > one user recently that tried to use list but it turned out arrays were
+> > more appropriate.
 > 
-> Add helper function sbitmap_find_bit function to do common search while
-> accept "limit depth per word", "wrap flag" and "first bit to
-> search" from caller to support the need of both __sbitmap_get and
-> __sbitmap_get_shallow.
+> Another recent try was the patches for dm-crypt. However Mel suggested
+> adding a callback interface instead of using list since list is not
+> necessary for that usecase. Or are we talking about the same one?
 > 
-> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 
-One style nit below, otherwise feel free to add:
+That was the one I was thinking of but forgot the specifics so the array
+comment was wrong. I only remembered that there was an attempted list user
+but it wasn't the best solution.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+> I didn't get time to implement Mel's suggestion yet due to my
+> employment change. Hopefully I can find some time after the new year.
+> 
 
+No rush.
 
-> @@ -215,11 +211,32 @@ static int __sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint)
->  		alloc_hint = 0;
->  		if (++index >= sb->map_nr)
->  			index = 0;
-> +
->  	}
-
-Pointless empty line here...
-
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Mel Gorman
+SUSE Labs
