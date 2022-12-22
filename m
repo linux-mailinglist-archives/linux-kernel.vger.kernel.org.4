@@ -2,209 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 734A8654433
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3306B65442F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235672AbiLVPWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:22:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        id S235438AbiLVPWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:22:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235525AbiLVPWN (ORCPT
+        with ESMTP id S235395AbiLVPWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:22:13 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C680C2B255
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:22:10 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id m18so5668304eji.5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:22:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bhr5qDaT2JKIRy4QvSZClVOncStleytag0NJgoail6A=;
-        b=ePqAcSTv4XFlYItKTMjsdafeWPV1Hl+RIsok1DKy20O+kji7kTZb1NLBcjy8LSb5GO
-         DKVimmhqpbvQvpGX3lkLIcV5qEzhTN+gHlzlVBYTRtwcP4XiiWXeG6OxUO8L6GC5CRjI
-         KXSUPKuyEeqtb7mtcqdXGyalgJiLm3TULo5K6Eu/CX+Jb65fdcRb6YalpGGvyCOX+3km
-         osFRw39wFQnsEu6dv4CBaXwNeRRTtG3Zdy3azOPmX8GjJtg3kdPGAaDByIvcuBetEfzE
-         X/osZqdwjxHbrFjOv4285WvB4hSevd8RHOcvEKmBHli9hHeY3CS26iqJKjryyjcYY1X3
-         DNxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bhr5qDaT2JKIRy4QvSZClVOncStleytag0NJgoail6A=;
-        b=78dD290lGwrkucI98RS+kS78dJ6+zlSt1xYmZUInMgTl9vAXjGapXCNJBnTi+lPBGD
-         nJvM8cK/awgJaqNeWH65oUGrPlnRYeP8V5wCEkZOoH8+sHmWx6LuhrSGduDFjgYzAi8j
-         pQxO0nLSxXHFjnITIlFKkTvoOGeEvK6b90HGcHNawWMSmBVG16EqjSIR/dzHj1taWdLk
-         +cSwN7YN9FCeMo0wgd0akbd+Az6yj1Ug3OHa3QFBZxlAYHEs1rOBIlrShT+pSSbh7xCz
-         HQjqKBZiJ1r98bAqJIBsFBUDjCASz2TPpvBuI5/L1ebuJytd2a54Bwox53Uv4NwxjOG6
-         FFGQ==
-X-Gm-Message-State: AFqh2kqDtdPhzfhy3gUdbWP0z5/k5+UO4/2tjbokqwDTpPjj/LLjeze2
-        E920ok3c0GBvOlIHqAjf5yZfPg==
-X-Google-Smtp-Source: AMrXdXtbgI4HP9ON1BOA05QZAkYnwABg7Urk8RYFc/CPmTwTPH+kKnb/ofkilCaMyH68fi7bo6a7Xw==
-X-Received: by 2002:a17:906:700f:b0:7c1:6bd9:571e with SMTP id n15-20020a170906700f00b007c16bd9571emr4149992ejj.13.1671722530401;
-        Thu, 22 Dec 2022 07:22:10 -0800 (PST)
-Received: from MBP-di-Paolo.station (net-93-70-85-0.cust.vodafonedsl.it. [93.70.85.0])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906201100b007c08439161dsm355670ejo.50.2022.12.22.07.22.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 22 Dec 2022 07:22:10 -0800 (PST)
-From:   Paolo Valente <paolo.valente@linaro.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
-        glen.valante@linaro.org, damien.lemoal@opensource.wdc.com,
-        Federico Gavioli <f.gavioli97@gmail.com>,
-        Paolo Valente <paolo.valente@linaro.org>
-Subject: [PATCH V12 6/8] block, bfq: retrieve independent access ranges from request queue
-Date:   Thu, 22 Dec 2022 16:21:55 +0100
-Message-Id: <20221222152157.61789-7-paolo.valente@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221222152157.61789-1-paolo.valente@linaro.org>
-References: <20221222152157.61789-1-paolo.valente@linaro.org>
+        Thu, 22 Dec 2022 10:22:08 -0500
+Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0767DCC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:22:06 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id CC2A5604F1;
+        Thu, 22 Dec 2022 16:22:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1671722524; bh=vNDIYTwEss2KZvwae1b8e3lfz3SV2TKIW9N1SEMH9n4=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=ZlBJ2hzltLu41o8Yjexvn42Ix3eFfdoKw/ece7ISvy8oJDp4K+X0cOmfz3V5PNJ2P
+         twGfDM+4ZQuf6NbIWbh02WU+IomQimj7GqXMUE3P5junXYq6lMORRrcNhj7nlx2r8z
+         0J3qeGGuTglrWii/EB3mXgq5Fno25r0PKvXtvUsdlLSY6issH+JEvR1clpXdEdo0Pn
+         43saIu9zuDjM9Y+Wp7FrWlf1qRfOCilKpJLGRduzC+ROttFW3k98BToEZYx2t/RY+u
+         1g7KKx8hQXUd1KKB4njNfWf8C9RHJ7514YrjEQ3k6UkxbQA1IkAlgXM667BCK7Gah4
+         dFq54i6ME4cMw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zE2Ll1VIcGzM; Thu, 22 Dec 2022 16:22:02 +0100 (CET)
+Received: from [193.198.186.200] (PC-MTODOROV.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 3763A604F5;
+        Thu, 22 Dec 2022 16:22:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1671722522; bh=vNDIYTwEss2KZvwae1b8e3lfz3SV2TKIW9N1SEMH9n4=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=Kv7FFRhruDr2IkZL7MoVf343AkSP3/kAWB6dznjs+KAVV0LhHNa5hj7aQrqdTLGe/
+         5XflJFsRgP/xHEX3XRKij1vb3pwSa8BLLOzBKCAaWM+w/piSRa1vBQc2bE/K6jaqG3
+         e1z9dw6yT55Nr4IoIyZuHjm5FjpoTLfJVk2o01t0ryKQRglaV9yppagevkgz6oqVx1
+         UY9MWLCmSJ+y2bL8QBe3qzMuHzWmWNyn4iczj1myEyDSy4ZCTNuZDZ0HlL61X25RrE
+         zzxPNWfXurrj8ZYAbpCo/oVn/VMbTRB/VtRTV0BIEohiYdVt7rjJHvkRSS/cXmXPA2
+         S8h0q7CrmNw6g==
+Message-ID: <d8d62c8a-32e0-9975-5ed5-b832bb8df549@alu.unizg.hr>
+Date:   Thu, 22 Dec 2022 16:21:56 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: Re: LOOKS GOOD: Possible regression in drm/i915 driver: memleak
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        intel-gfx@lists.freedesktop.org
+References: <f849cc70-b21f-6476-ba26-08989d1243c2@alu.unizg.hr>
+ <05424a5351a847786377a548dba0759917d8046c.camel@linux.intel.com>
+ <15ef1bb9-7312-5d98-8bf0-0af1a37cfd2a@linux.intel.com>
+ <619bdecc-cf87-60a4-f50d-836f4c073ea7@alu.unizg.hr>
+ <8e080674-36ab-9260-046e-f4e3c931a3b9@alu.unizg.hr>
+ <96661293-32d7-0bb4-fb0e-28086eaaecc3@linux.intel.com>
+Content-Language: en-US, hr, en-GB, de-DE
+In-Reply-To: <96661293-32d7-0bb4-fb0e-28086eaaecc3@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Federico Gavioli <f.gavioli97@gmail.com>
+On 12/22/2022 09:04, Tvrtko Ursulin wrote:
 
-This patch implements the code to gather the content of the
-independent_access_ranges structure from the request_queue and copy
-it into the queue's bfq_data. This copy is done at queue initialization.
+>
+> On 22/12/2022 00:12, Mirsad Goran Todorovac wrote:
+>> On 20. 12. 2022. 20:34, Mirsad Todorovac wrote:
+>>
+>> As I hear no reply from Tvrtko, and there is already 1d5h uptime with 
+>> no leaks (but
+>> the kworker with memstick_check nag I couldn't bisect on the only box 
+>> that reproduced it,
+>> because something in hw was not supported in pre 4.16 kernels on the 
+>> Lenovo V530S-07ICB.
+>> Or I am doing something wrong.)
+>>
+>> However, now I can find the memstick maintainers thanks to Tvrtko's 
+>> hint.
+>>
+>> If you no longer require my service, I would close this on my behalf.
+>>
+>> I hope I did not cause too much trouble. The knowledgeable knew that 
+>> this was not a security
+>> risk, but only a bug. (30 leaks of 64 bytes each were hardly to 
+>> exhaust memory in any realistic
+>> time.)
+>>
+>> However, having some experience with software development, I always 
+>> preferred bugs reported
+>> and fixed rather than concealed and lying in wait (or worse, found 
+>> first by a motivated
+>> adversary.) Forgive me this rant, I do not live from writing kernel 
+>> drivers, this is just a
+>> pet project as of time being ...
+Hi,
+> It is not forgotten - I was trying to reach out to the original author 
+> of the fixlet which worked for you. If that fails I will take it up on 
+> myself, but need to set aside some time to get into the exact problem 
+> space before I can vouch for the fix and send it on my own.
+That's good news. Possibly with some assistance I could bisect on pre 
+4.16 kernels with the additional drivers.
+> In the meantime definitely thanks a lot for testing this quickly and 
+> reporting back!
+Not at all, I considered it a privilege to assist your team.
+> What will happen next is, that when either the original author or 
+> myself are ready to send out the fix as a proper patch, you will be 
+> copied on it via the "Reported-by" and possibly "Tested-by" tags. 
+> Latter is if the patch remains identical. If it changes we might 
+> kindly ask you to re-test if possible.
 
-We copy the access ranges into the bfq_data to avoid taking the queue
-lock each time we access the ranges.
+I've seen the published patch and it seems like the same two lines 
+change (-1/+1).
+In case of a change, I will attempt to test with the same config, setup 
+and running programs.
 
-This implementation, however, puts a limit to the maximum independent
-ranges supported by the scheduler. Such a limit is equal to the constant
-BFQ_MAX_ACTUATORS. This limit was placed to avoid the allocation of
-dynamic memory.
+I may need to correct myself in regard as to security aspect of this 
+patch as addressed in 786555987207.
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Co-developed-by: Rory Chen <rory.c.chen@seagate.com>
-Signed-off-by: Rory Chen <rory.c.chen@seagate.com>
-Signed-off-by: Federico Gavioli <f.gavioli97@gmail.com>
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
----
- block/bfq-iosched.c | 59 +++++++++++++++++++++++++++++++++++++++------
- block/bfq-iosched.h |  8 +++++-
- 2 files changed, 58 insertions(+), 9 deletions(-)
+QUOTE:
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index f29444d53e6a..1db7fb18f99e 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -1797,10 +1797,25 @@ static bool bfq_bfqq_higher_class_or_weight(struct bfq_queue *bfqq,
-  */
- static unsigned int bfq_actuator_index(struct bfq_data *bfqd, struct bio *bio)
- {
--	/*
--	 * Multi-actuator support not complete yet, so always return 0
--	 * for the moment (to keep incomplete mechanisms off).
--	 */
-+	unsigned int i;
-+	sector_t end;
-+
-+	/* no search needed if one or zero ranges present */
-+	if (bfqd->num_actuators == 1)
-+		return 0;
-+
-+	/* bio_end_sector(bio) gives the sector after the last one */
-+	end = bio_end_sector(bio) - 1;
-+
-+	for (i = 0; i < bfqd->num_actuators; i++) {
-+		if (end >= bfqd->sector[i] &&
-+		    end < bfqd->sector[i] + bfqd->nr_sectors[i])
-+			return i;
-+	}
-+
-+	WARN_ONCE(true,
-+		  "bfq_actuator_index: bio sector out of ranges: end=%llu\n",
-+		  end);
- 	return 0;
- }
- 
-@@ -7109,6 +7124,8 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
- {
- 	struct bfq_data *bfqd;
- 	struct elevator_queue *eq;
-+	unsigned int i;
-+	struct blk_independent_access_ranges *ia_ranges = q->disk->ia_ranges;
- 
- 	eq = elevator_alloc(q, e);
- 	if (!eq)
-@@ -7151,12 +7168,38 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
- 
- 	bfqd->queue = q;
- 
-+	bfqd->num_actuators = 1;
- 	/*
--	 * Multi-actuator support not complete yet, unconditionally
--	 * set to only one actuator for the moment (to keep incomplete
--	 * mechanisms off).
-+	 * If the disk supports multiple actuators, copy independent
-+	 * access ranges from the request queue structure.
- 	 */
--	bfqd->num_actuators = 1;
-+	spin_lock_irq(&q->queue_lock);
-+	if (ia_ranges) {
-+		/*
-+		 * Check if the disk ia_ranges size exceeds the current bfq
-+		 * actuator limit.
-+		 */
-+		if (ia_ranges->nr_ia_ranges > BFQ_MAX_ACTUATORS) {
-+			pr_crit("nr_ia_ranges higher than act limit: iars=%d, max=%d.\n",
-+				ia_ranges->nr_ia_ranges, BFQ_MAX_ACTUATORS);
-+			pr_crit("Falling back to single actuator mode.\n");
-+		} else {
-+			bfqd->num_actuators = ia_ranges->nr_ia_ranges;
-+
-+			for (i = 0; i < bfqd->num_actuators; i++) {
-+				bfqd->sector[i] = ia_ranges->ia_range[i].sector;
-+				bfqd->nr_sectors[i] =
-+					ia_ranges->ia_range[i].nr_sectors;
-+			}
-+		}
-+	}
-+
-+	/* Otherwise use single-actuator dev info */
-+	if (bfqd->num_actuators == 1) {
-+		bfqd->sector[0] = 0;
-+		bfqd->nr_sectors[0] = get_capacity(q->disk);
-+	}
-+	spin_unlock_irq(&q->queue_lock);
- 
- 	INIT_LIST_HEAD(&bfqd->dispatch);
- 
-diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-index de2b2af643e5..830dda1f9322 100644
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -814,7 +814,13 @@ struct bfq_data {
- 	 * case of single-actuator drives.
- 	 */
- 	unsigned int num_actuators;
--
-+	/*
-+	 * Disk independent access ranges for each actuator
-+	 * in this device.
-+	 */
-+	sector_t sector[BFQ_MAX_ACTUATORS];
-+	sector_t nr_sectors[BFQ_MAX_ACTUATORS];
-+	struct blk_independent_access_range ia_ranges[BFQ_MAX_ACTUATORS];
- };
- 
- enum bfqq_state_flags {
+     Currently we create a new mmap_offset for every call to
+     mmap_offset_ioctl. This exposes ourselves to an abusive client that may
+     simply create new mmap_offsets ad infinitum, which will exhaust 
+physical
+     memory and the virtual address space. In addition to the exhaustion, a
+     very long linear list of mmap_offsets causes other clients using the
+     object to incur long list walks -- these long lists can also be
+     generated by simply having many clients generate their own mmap_offset.
+
+It is unobvious whether the bug that caused chrome to trigger 30 
+memleaks could be exploited by an
+abusive script to exhaust larger parts of kernel memory and possibly 
+crash the kernel?
+
+Thanks,
+Mirsad
+
 -- 
-2.20.1
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+--
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+tel. +385 (0)1 3711 451
+mob. +385 91 57 88 355
 
