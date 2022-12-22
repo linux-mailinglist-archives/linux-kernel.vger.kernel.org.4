@@ -2,206 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD81654788
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A978165478D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbiLVUsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S229927AbiLVUxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiLVUsS (ORCPT
+        with ESMTP id S229603AbiLVUxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 15:48:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730171CB33
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 12:47:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671742051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MBkwW1AcUtBRbFAy7tADg9c0t3Qyu1AJkfHSKMyEdjg=;
-        b=SWVhtOM9Ijoqd8M05r1BX9Xp2zDPHdIDYrBYWXGApIxr3WIJfP3UBxfXZthxkSBRwGfAuz
-        7yHBC5Y5T+RUrMtI/S+7pAjBGzS3++7UL9bCFztMrhJ0VX9Gks3e9dzu0qKr+cms0eedkz
-        oStP61fiQfKqhaJaApjvwEmt37Vcx/M=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-13-W0ApSfykO0OlxaKD-rvsxQ-1; Thu, 22 Dec 2022 15:47:25 -0500
-X-MC-Unique: W0ApSfykO0OlxaKD-rvsxQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 260B53C01E0A;
-        Thu, 22 Dec 2022 20:47:25 +0000 (UTC)
-Received: from madcap2.tricolour.ca (ovpn-0-3.rdu2.redhat.com [10.22.0.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A3ABE14152F4;
-        Thu, 22 Dec 2022 20:47:23 +0000 (UTC)
-Date:   Thu, 22 Dec 2022 15:47:21 -0500
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v5 2/3] fanotify: define struct members to hold response
- decision context
-Message-ID: <Y6TCWe4/nR957pFh@madcap2.tricolour.ca>
-References: <cover.1670606054.git.rgb@redhat.com>
- <45da8423b9b1e8fc7abd68cd2269acff8cf9022a.1670606054.git.rgb@redhat.com>
- <20221216164342.ojcbdifdmafq5njw@quack3>
+        Thu, 22 Dec 2022 15:53:14 -0500
+Received: from mailfilter02-out40.webhostingserver.nl (mailfilter02-out40.webhostingserver.nl [195.211.72.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48861C916
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 12:53:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=exalondelft.nl; s=whs1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=5qhayPKhfBfDxM0F+uRbZ4HQENiaq8XOO7xJH6gBv6g=;
+        b=QSDzSMyXiXkIT2XfNUMGCDngq1KffMLlXc/Vp5DTxhMGzp0uElrvLombgdcXDnmtic8SteS08kZP9
+         KShbF2USqJxxLOTuhx/DdwrqCGEQ+7mdHjJpn/n7UsDDCOLsZY5w40bFP1JuNzgrudZTRYey7vVTuf
+         dpRtP7Kq+/SU7GdiUxJLlwUl13e0MozJF5Qw1Ygy/qe0ZFx8zXgrdaRvnYUyg84X/hm97fAeNDNplu
+         DcBaM5LCQhbV8ZR1SULHNcsLzTH8BvKIR/i72+w5iYBR4bbHsvT3H7J79BPGAqF9+MsjBahgolP9f9
+         3002f32NF29DFRCwshAqU1mHtlTxwHQ==
+X-Halon-ID: a4057b1d-823a-11ed-ac07-001a4a4cb922
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter02.webhostingserver.nl (Halon) with ESMTPSA
+        id a4057b1d-823a-11ed-ac07-001a4a4cb922;
+        Thu, 22 Dec 2022 21:53:09 +0100 (CET)
+Received: from 2a02-a466-68ed-1-86df-abe6-f3ae-663d.fixed6.kpn.net ([2a02:a466:68ed:1:86df:abe6:f3ae:663d] helo=delfion.fritz.box)
+        by s198.webhostingserver.nl with esmtpa (Exim 4.96)
+        (envelope-from <ftoth@exalondelft.nl>)
+        id 1p8SYu-00Gils-2c;
+        Thu, 22 Dec 2022 21:53:08 +0100
+From:   Ferry Toth <ftoth@exalondelft.nl>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ferry Toth <ftoth@exalondelft.nl>,
+        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org
+Subject: [PATCH v2 1/1] Revert "usb: ulpi: defer ulpi_register on ulpi_read_id timeout"
+Date:   Thu, 22 Dec 2022 21:53:02 +0100
+Message-Id: <20221222205302.45761-1-ftoth@exalondelft.nl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221216164342.ojcbdifdmafq5njw@quack3>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-16 17:43, Jan Kara wrote:
-> On Mon 12-12-22 09:06:10, Richard Guy Briggs wrote:
-> > This patch adds a flag, FAN_INFO and an extensible buffer to provide
-> > additional information about response decisions.  The buffer contains
-> > one or more headers defining the information type and the length of the
-> > following information.  The patch defines one additional information
-> > type, FAN_RESPONSE_INFO_AUDIT_RULE, to audit a rule number.  This will
-> > allow for the creation of other information types in the future if other
-> > users of the API identify different needs.
-> > 
-> > Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> > Link: https://lore.kernel.org/r/2745105.e9J7NaK4W3@x2
-> > Suggested-by: Jan Kara <jack@suse.cz>
-> > Link: https://lore.kernel.org/r/20201001101219.GE17860@quack2.suse.cz
-> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> 
-> Thanks for the patches. They look very good to me. Just two nits below. I
-> can do the small updates on commit if there would be no other changes. But
-> I'd like to get some review from audit guys for patch 3/3 before I commit
-> this.
+This reverts commit 8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac.
 
-I'd prefer to send a followup patch based on your recommendations rather
-than have you modify it.  It does save some back and forth though...
+This patch results in some qemu test failures, specifically xilinx-zynq-a9
+machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
+to boot from USB drive.
 
-> > diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
-> > index caa1211bac8c..cf3584351e00 100644
-> > --- a/fs/notify/fanotify/fanotify_user.c
-> > +++ b/fs/notify/fanotify/fanotify_user.c
-> > @@ -283,19 +283,44 @@ static int create_fd(struct fsnotify_group *group, const struct path *path,
-> >  	return client_fd;
-> >  }
-> >  
-> > +static int process_access_response_info(int fd, const char __user *info, size_t info_len,
-> > +					struct fanotify_response_info_audit_rule *friar)
-> 
-> I prefer to keep lines within 80 columns, unless there is really good
-> reason (like with strings) to have them longer.
+Fixes: 8a7b31d545d3 ("usb: ulpi: defer ulpi_register on ulpi_read_id timeout")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/lkml/20221220194334.GA942039@roeck-us.net/
+Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+---
+ drivers/usb/common/ulpi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sure.  In this case, it buys us little since the last line is lined up
-with the arguments openning bracket and it one long struct name unless I
-unalign that argument and back up the indent by one.
-
-> BTW, why do you call the info structure 'friar'? I feel some language twist
-> escapes me ;)
-
-Fanotify_Response_Info_Audit_Rule, it is a pronounceable word, and
-besides they have a long reputation for making good beer.  :-D
-
-> > +{
-> > +	if (fd == FAN_NOFD)
-> > +		return -ENOENT;
-> 
-> I would not test 'fd' in this function at all. After all it is not part of
-> the response info structure and you do check it in
-> process_access_response() anyway.
-
-I wrestled with that.  I was even tempted to swallow the following fd
-check too, but the flow would not have made as much sense for the
-non-INFO case.
-
-My understanding from Amir was that FAN_NOFD was only to be sent in in
-conjuction with FAN_INFO to test if a newer kernel was present.
-
-I presumed that if FAN_NOFD was present without FAN_INFO that was an
-invalid input to an old kernel.
-
-> > +
-> > +	if (info_len != sizeof(*friar))
-> > +		return -EINVAL;
-> > +
-> > +	if (copy_from_user(friar, info, sizeof(*friar)))
-> > +		return -EFAULT;
-> > +
-> > +	if (friar->hdr.type != FAN_RESPONSE_INFO_AUDIT_RULE)
-> > +		return -EINVAL;
-> > +	if (friar->hdr.pad != 0)
-> > +		return -EINVAL;
-> > +	if (friar->hdr.len != sizeof(*friar))
-> > +		return -EINVAL;
-> > +
-> > +	return info_len;
-> > +}
-> > +
-> 
-> ...
-> 
-> > @@ -327,10 +359,18 @@ static int process_access_response(struct fsnotify_group *group,
-> >  		return -EINVAL;
-> >  	}
-> >  
-> > -	if (fd < 0)
-> > +	if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
-> >  		return -EINVAL;
-> >  
-> > -	if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
-> > +	if (response & FAN_INFO) {
-> > +		ret = process_access_response_info(fd, info, info_len, &friar);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +	} else {
-> > +		ret = 0;
-> > +	}
-> > +
-> > +	if (fd < 0)
-> >  		return -EINVAL;
-> 
-> And here I'd do:
-> 
-> 	if (fd == FAN_NOFD)
-> 		return 0;
-> 	if (fd < 0)
-> 		return -EINVAL;
-> 
-> As we talked in previous revisions we'd specialcase FAN_NOFD to just verify
-> extra info is understood by the kernel so that application writing fanotify
-> responses has a way to check which information it can provide to the
-> kernel.
-
-The reason for including it in process_access_response_info() is to make
-sure that it is included in the FAN_INFO case to detect this extension.
-If it were included here
-
-> 								Honza
-> 
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
-
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
+diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+index 60e8174686a1..d7c8461976ce 100644
+--- a/drivers/usb/common/ulpi.c
++++ b/drivers/usb/common/ulpi.c
+@@ -207,7 +207,7 @@ static int ulpi_read_id(struct ulpi *ulpi)
+ 	/* Test the interface */
+ 	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
+ 	if (ret < 0)
+-		return ret;
++		goto err;
+ 
+ 	ret = ulpi_read(ulpi, ULPI_SCRATCH);
+ 	if (ret < 0)
+-- 
+2.37.2
 
