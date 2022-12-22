@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBD2654424
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8352654431
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235230AbiLVPVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S235380AbiLVPWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:22:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiLVPVq (ORCPT
+        with ESMTP id S235486AbiLVPVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:21:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4672662DE;
-        Thu, 22 Dec 2022 07:21:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 22 Dec 2022 10:21:54 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AA827DE1;
+        Thu, 22 Dec 2022 07:21:52 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9DEDCB81E12;
-        Thu, 22 Dec 2022 15:21:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8F7C433D2;
-        Thu, 22 Dec 2022 15:21:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671722502;
-        bh=7/Y2uZ8A9lceps36kzxsVQStq3KTyvTY+WEoC5HeMOk=;
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id EBE438535C;
+        Thu, 22 Dec 2022 16:21:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1671722510;
+        bh=PN/hmxooUMT8XNFph9UDv6cR7gQs64H/ILYeISDd/40=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oog2bss5LB4qzM4eYx1PNIIP8v0QIoRTekYHSaGz54yrd5OFLqf+83ujZqurOshZj
-         1AWVSBpqMlWOlB08VIBE/JisLYBdK/aBBd1TJNQyh0ZQ/rQGhdUxUU705WDJlmwFu/
-         nlKvHve0vmoGatJ6jRne4OXHJOLqdgvsf/rx0hByUhQo6Q8vWQVUQTy0cyift9V0TF
-         tlIj0DUpdPgNG0sa/BytuhU8vzkSSmElHSa9mHzXrK2cZoM327+/Rl+dsrMz6JXaef
-         tx/7F0xRS5E5Gimw4ulTiBfPy74iCjvB20j8+yUssNwg2hV3X4HVObKePAzYKuh+3H
-         crTk8GEfREWMw==
-Message-ID: <041b77e0-40c5-e724-e5d9-f1da64d5e684@kernel.org>
-Date:   Thu, 22 Dec 2022 16:21:35 +0100
+        b=kCRBSw1XtVvx/yWUqBuqNJ1e/hVIMwGa74y4SEHfVhSJYUunzkPSVX65ULcYPfjKZ
+         xVu8pWLNhq1eo/1c0HIMf/B8+SSdr8t+py2gz3QqYh1SrlHi/45iBaEHrXwLr+Obns
+         DHX3XFSt2xXZ/0OTQnH+ehCwSmK7BsOJc/vF9mK7om9Z794W2RJNsFRTiysBiOKj57
+         gxjo1FQwKAjKAco1jcMD56nnHd4+zKEYuFA+vV5XNNW1XBv2Q9ZS1RvZtD1fqzmPwi
+         jxdRmszHr0J33rJUU4/5VJbY0hzyAoF22k2mNBBzohjdgz7r+Y32OPNl3cuESrpfDj
+         a7g233pJmMsMA==
+Message-ID: <cb3c3a1e-ec10-1e7b-1b21-3cb250f92ecf@denx.de>
+Date:   Thu, 22 Dec 2022 16:21:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 6/7] ARM: dts: stm32: add ETZPC as a system bus for
- STM32MP15x boards
+Subject: Re: [PATCH] dt-bindings: leds: Mark label property as deprecated
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel <kernel@dh-electronics.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
+ <Y3y/S5COG7VPbsqL@duo.ucw.cz> <3f4c89a3-8955-ce41-ac2a-cee9b0ed5210@denx.de>
+ <20221130191905.GA2631320-robh@kernel.org>
+ <4043d693-7739-4709-8551-9f476031db70@denx.de>
+ <38c9aae4-0cae-a5a6-7c76-f23edf259dab@gmail.com>
+ <e6b166b399314a91bc97db591c8ec5a7@dh-electronics.com>
+ <Y6RgjV4FT57SaTQw@duo.ucw.cz> <3c555cae-999f-ccd2-d114-00b92abd19ba@denx.de>
+ <Y6RwAcXnfY/zjk/b@duo.ucw.cz>
 Content-Language: en-US
-To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>,
-        alexandre.torgue@foss.st.com, robh+dt@kernel.org,
-        Oleksii_Moisieiev@epam.com, linus.walleij@linaro.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        loic.pallardy@st.com, devicetree@vger.kernel.org,
-        mark.rutland@arm.com, arnd@arndb.de
-References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
- <20221221173055.11719-7-gatien.chevallier@foss.st.com>
- <2e7c901c-e322-ded6-b170-6d2436d74c0f@kernel.org>
- <0bff5b2d-2837-57cb-5434-58158acc1483@foss.st.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <0bff5b2d-2837-57cb-5434-58158acc1483@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <Y6RwAcXnfY/zjk/b@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/12/2022 15:42, Gatien CHEVALLIER wrote:
-> Hello,
-> 
-> 
-> On 12/22/22 11:30, Krzysztof Kozlowski wrote:
->> On 21/12/2022 18:30, Gatien Chevallier wrote:
->>> The STM32 System Bus is an internal bus on which devices are connected.
->>> ETZPC is a peripheral overseeing the firewall bus that configures
->>> and control access to the peripherals connected on it.
+On 12/22/22 15:56, Pavel Machek wrote:
+> On Thu 2022-12-22 15:01:44, Marek Vasut wrote:
+>> On 12/22/22 14:50, Pavel Machek wrote:
+>>> Hi!
 >>>
->>> For more information on which peripheral is securable, please read
->>> the STM32MP15 reference manual.
+>>>>>> This part I understand. What is not clear to me is, why is 'label' being
+>>>>>> un-deprecated.
+>>>>>
+>>>>> It shouldn't be. It seems to be Pavel's ad-hoc decision.
+>>>>
+>>>> Is there a majority agreement that the "label" property remains
+>>>> deprecated?
 >>>
->>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->>> ---
->>>   arch/arm/boot/dts/stm32mp151.dtsi | 2737 +++++++++++++++--------------
->>>   1 file changed, 1406 insertions(+), 1331 deletions(-)
->>>   
->>> -		lptimer1: timer@40009000 {
->>> +		etzpc: etzpc@5c007000 {
+>>>
+>>>> If so, I would say we can mark the label as deprecated.
+>>>>
+>>>> On the other hand, the new generated standardized sysfs name does not seem
+>>>> to provide a full replacement for the "label" property.
+>>>> What is still missing?
+>>>
+>>> Having reasonable naming of the LEDs is pre-requisite for deprecating
+>>> label property.
 >>
->> Node names should be generic.
->> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>> As far as I can tell, function and function-enumerator is the reasonable
+>> naming. Jacek seem to confirm that. I would say, label can be deprecated .
+>> What is the counter-argument for why it should NOT be deprecated ?
 > 
-> Will change to etzpc: bus@5c007000 in V3
-> 
->>
->>> +			compatible = "st,stm32mp15-sys-bus";
->>> +			reg = <0x5c007000 0x400>;
->>>   			#address-cells = <1>;
->>> -			#size-cells = <0>;
->>> -			compatible = "st,stm32-lptimer";
->>> -			reg = <0x40009000 0x400>;
->>> -			interrupts-extended = <&exti 47 IRQ_TYPE_LEVEL_HIGH>;
->>> -			clocks = <&rcc LPTIM1_K>;
->>> -			clock-names = "mux";
->>> -			wakeup-source;
->>> -			status = "disabled";
->>
->> Why entire bus is disabled? What resources do you miss?
-> 
-> Here, I did not want to modify the status of the nodes in the device 
+> When the label is no longer neccessary for naming leds, it can be
+> deprecated. AFAICT, that is currently not the case.
 
-By making it disabled you actually modify the status of any enabled
-node. By making it enabled you do not cause any change.
+I'm sorry, this is not a counter-argument, this is hand-waving .
 
-> tree. Nodes that are default enabled in the SoC device tree stay enabled 
-> and vice-versa.
+Do you have anything to back your claim that the label is currently 
+still needed, contrary to what the DT bindings document claims for 
+years? "This property is deprecated - use 'function' and 'color' 
+properties instead. function-enumerator has no effect when this property 
+is present."
 
-No, because parent is disabled.
+"
+commit c5d18dd6b64e09dd6984bda9bdd55160af537a8c
+Date:   Sun Jun 9 20:19:04 2019 +0200
 
-> IMO think this patch should not include these kind of 
-> changes in its scope. I describe the bus and the peripherals connected 
-> to it, nothing more :)
+     dt-bindings: leds: Add properties for LED name construction
 
-I am not proposing to change existing nodes. I am asking why new node is
-being disabled (because it is a new node, isn't it?).
+     Introduce dedicated properties for conveying information about
+     LED function and color. Mark old "label" property as deprecated.
 
-Best regards,
-Krzysztof
+     Additionally function-enumerator property is being provided
+     for the cases when neither function nor color can be used
+     for LED differentiation.
+"
 
+It seems the function and function-enumerator is very much the 
+replacement for label, except standardized. If that's not the case, do 
+elaborate. If there is a special case that is not covered by it, do 
+point it out.
