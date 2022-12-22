@@ -2,50 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0001D653CC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D664A653CC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbiLVIH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 03:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
+        id S234764AbiLVIIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 03:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiLVIHZ (ORCPT
+        with ESMTP id S229567AbiLVIId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 03:07:25 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B1D18B2E;
-        Thu, 22 Dec 2022 00:07:24 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p8Gbq-0005kI-JY; Thu, 22 Dec 2022 09:07:22 +0100
-Message-ID: <918e41dd-e5ea-9dc5-e6d4-5d524f317d18@leemhuis.info>
-Date:   Thu, 22 Dec 2022 09:07:21 +0100
+        Thu, 22 Dec 2022 03:08:33 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160B118B2E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 00:08:33 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id s5so1830599edc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 00:08:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aWl2qoDVkyJv80Dcc1T5jz7QH+u5H5UltZOFP/s+yNc=;
+        b=pxjve+q03lKhs9SeI/Plbwt+Lh8uP7gi1x/bjlCAL591ccNGllzK8muEElztCm5iUh
+         mS0twT3wf+xxGqzYK3BsDx/gvFSz4ISBvX8iqJZGXbnGRdQpcLsbopmYDk1Vd2Smv/7I
+         F/trMddiOnaywB0ILgvT4aIHLcoAQ8zQYrsfQyPSGX8i72oCryK8lMyRuFDIwtd9C339
+         vbdtqh5IlwEVvxKj1QceSj+xghj6cH02HJywNPUGBmJ93ZVRpLR3iP9AO2kJILUYvUH4
+         0/xhFPV8hDQsQGUBbMjr0JqnUHrI+JcGPKQO/woydj2xCzN03+akoAHUEidDm2IgbrMI
+         U+QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aWl2qoDVkyJv80Dcc1T5jz7QH+u5H5UltZOFP/s+yNc=;
+        b=22iYvOT/JeGfBORDMqT3Q9BlO1Ohm0nNdPkObpHDNfMF+BglPBmzeMUkOrMbsKyvzZ
+         hDt5rcPgolGdst9XXZ1YxxUxuuCY+kZLmADWERtJKQmDMdrZYl/gvDxue1lf+9N3BZwp
+         ZmUWPg/Tci7UOtR6EldIK5Wvp546ya7D3N2nHuy/TK1hs2j/FYj7JAXkXd6mGqPksEvT
+         JEmv2y08Rwz5tCD28NJ6DJjQWfSaO5KFOdvCuoqq4hJezr/Kuz45fKNDs6Qz1KIvCLrn
+         MQKXLS18Ev2/g1qWc4heQC5bKJhxgYlbjk9DOwllMvvtX8t6wETKvzQrJkjx+yrqO+CN
+         grQw==
+X-Gm-Message-State: AFqh2koJhGqywqUB+3Jh8dOsDGWemTFJlFcjIAyHdms6NSDUiSyPIc7D
+        Sa2WGQUlk/7/iCBaGUu5Q6niNZvSUrPFKaKJTyw=
+X-Google-Smtp-Source: AMrXdXusTK9Hhv8wh8JqFhdYHmGuw61kpiPUKpJ/RHarx/sqLCZ/vGyocTEVJbmzH+H6TkwPBJNf4iI2gDX4yf+P1K4=
+X-Received: by 2002:aa7:c986:0:b0:46c:5a22:b00c with SMTP id
+ c6-20020aa7c986000000b0046c5a22b00cmr512937edt.46.1671696511568; Thu, 22 Dec
+ 2022 00:08:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
-Content-Language: en-US, de-DE
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        akpm@linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20221219182943.395169070@linuxfoundation.org>
- <20221220150049.GE3748047@roeck-us.net> <Y6HQfwEnw75iajYr@kroah.com>
- <20221220161135.GA1983195@roeck-us.net>
- <e3b06c93-1985-a958-871a-bfd73646c38a@kernel.org>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <e3b06c93-1985-a958-871a-bfd73646c38a@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671696445;fb6d1a39;
-X-HE-SMSGID: 1p8Gbq-0005kI-JY
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <Y5XhPJ39ipMCcctq@qemulion>
+In-Reply-To: <Y5XhPJ39ipMCcctq@qemulion>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Thu, 22 Dec 2022 16:07:54 +0800
+Message-ID: <CAAfSe-sa2Vw7bUxuRne-fw7GZrHW+7OMj6gCS9jPTamsGF5MBQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/sprd: remove redundant error logging
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,49 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21.12.22 07:34, Jiri Slaby wrote:
-> On 20. 12. 22, 17:11, Guenter Roeck wrote:
->> You probably didn't see any reports on mainline because I didn't report
->> the issue there yet. There are so many failures in mainline that it is
->> a bit difficult to keep up.
-> 
-> Just heads up, these are breakages in 6.1 known to me:
-> 
-> an io_uring 32bit test crashes the kernel:
-> https://lore.kernel.org/all/c80c1e3f-800b-dc49-f2f5-acc8ceb34d51@gmail.com/
-> 
-> Fixed in io_uring tree.
+On Sun, 11 Dec 2022 at 21:55, Deepak R Varma <drv@mailo.com> wrote:
+>
+> A call to platform_get_irq() already prints an error on failure within
+> its own implementation. So printing another error based on its return
+> value in the caller is redundant and should be removed. The clean up
+> also makes if condition block braces unnecessary. Remove that as well.
+>
+> Issue identified using platform_get_irq.cocci coccicheck script.
+>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+>  drivers/gpu/drm/sprd/sprd_dpu.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/sprd/sprd_dpu.c b/drivers/gpu/drm/sprd/sprd_dpu.c
+> index 88f4259680f1..db0bcea1d9f4 100644
+> --- a/drivers/gpu/drm/sprd/sprd_dpu.c
+> +++ b/drivers/gpu/drm/sprd/sprd_dpu.c
+> @@ -803,10 +803,8 @@ static int sprd_dpu_context_init(struct sprd_dpu *dpu,
+>         }
+>
+>         ctx->irq = platform_get_irq(pdev, 0);
+> -       if (ctx->irq < 0) {
+> -               dev_err(dev, "failed to get dpu irq\n");
+> +       if (ctx->irq < 0)
 
-Just BTW: afaics the fix is now in mainline as 990a4de57e44
+Thanks for the patch, it makes sense to me, so
+Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
 
-> bind() of previously bound port no longer fails:
-> https://lore.kernel.org/all/6b971a4e-c7d8-411e-1f92-fda29b5b2fb9@kernel.org/
-> 
-> No fix available and revert close to impossible.
-
-Also just BTW: fix posted yesterday.
-
-> And most important, mremap() is broken in 6.1, so mostly everything
-> fails in some random way:
-> https://lore.kernel.org/all/20221216163227.24648-1-vbabka@suse.cz/T/#u
-> 
-> Fixed in -mm.
-
-That one seems to fix an annoying issue many people might run into (at
-least it looks like it to my untrained eyes), which is the reason why I
-write this mail.
-
-Andrew moved that fix from mm-hotfixes-unstable to mm-hotfixes-stable
-yesterday and I assume he'll send it to Linus pretty soon now to ensure
-it makes it into -rc1, so that the stable team can pick it up. It might
-be a bad season to ask this, but that made me wonder:
-
-Should that patch have progressed quicker? And if so: how to make that
-happen when a similar situation arises in the future? Should somebody
-(the developer of the patch? me?) kindly ask the maintainer in question
-to sent the fix straight to Linus once it spend 1 or 2 days in next?
-
-It's not the first time that I see something like this, that's why I'm
-wondering if I should do something in such situations.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>                 return ctx->irq;
+> -       }
+>
+>         /* disable and clear interrupts before register dpu IRQ. */
+>         writel(0x00, ctx->base + REG_DPU_INT_EN);
+> --
+> 2.34.1
+>
+>
+>
