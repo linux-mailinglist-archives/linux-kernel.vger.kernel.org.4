@@ -2,41 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A24865493F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 00:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB116654940
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 00:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiLVX2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 18:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
+        id S231278AbiLVX2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 18:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiLVX2P (ORCPT
+        with ESMTP id S229666AbiLVX2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 18:28:15 -0500
-X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Dec 2022 15:28:13 PST
-Received: from second.openwall.net (second.openwall.net [193.110.157.125])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6847C1AA0B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 15:28:13 -0800 (PST)
-Received: (qmail 10063 invoked from network); 22 Dec 2022 23:21:31 -0000
-Received: from localhost (HELO pvt.openwall.com) (127.0.0.1)
-  by localhost with SMTP; 22 Dec 2022 23:21:31 -0000
-Received: by pvt.openwall.com (Postfix, from userid 503)
-        id 59670AB3A4; Fri, 23 Dec 2022 00:21:12 +0100 (CET)
-Date:   Fri, 23 Dec 2022 00:21:12 +0100
-From:   Solar Designer <solar@openwall.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     oss-security@lists.openwall.com,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
-Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat correctly
-Message-ID: <20221222232112.GA29438@openwall.com>
-References: <Y6SJDbKBk471KE4k@p183> <Y6TUJcr/IHrsTE0W@codewreck.org>
-Mime-Version: 1.0
+        Thu, 22 Dec 2022 18:28:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156A61C126
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 15:28:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8520861D9F
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 23:28:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB3AC433D2;
+        Thu, 22 Dec 2022 23:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671751726;
+        bh=n75CE56JG+8uNg3L6CecbO0S3UDi3slN/OLYYemTW0M=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=NgmwYDXsEdrhoqIY/+0PXoI9gulDLy9fI2WFvJHmWJtNNc24aKqbJKjTYkzeZjtED
+         9Eerw28Avwchz1hhSph8zEwSj6Dt5TdnBA75/tZfJojegbb6tt7VbwxK4Ln4vAPih6
+         6v2tliTaWM2fQbe4aAGed/Nt6RuWVk38M9P9ei+r6/syNL7liGxwLVOqC8KBmvTt+9
+         Uol0UOSri4kOxdI1ZUK+VK7tsSeCGtQZdZp4BYl92VeWMWo2JXstsOQ4YisrGlMvUY
+         cDkhuS7JSZQOTbjBpYu4qqIy5/ZyCP5YUzc0p091w3fRxktLk3Mme/8qq016BUn9wv
+         YnGvgdX2cZ0fA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 774405C167A; Thu, 22 Dec 2022 15:28:46 -0800 (PST)
+Date:   Thu, 22 Dec 2022 15:28:46 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Waiman Long <longman@redhat.com>, John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Tim Chen <tim.c.chen@intel.com>
+Subject: Re: [RFC PATCH] clocksource: Suspend the watchdog temporarily when
+ high read lantency detected
+Message-ID: <20221222232846.GA2171581@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Y6Ja+kYQAi4pppV6@feng-clx>
+ <8a9bed0d-c166-37e9-24c3-8cea7a336c76@redhat.com>
+ <20221222004032.GI4001@paulmck-ThinkPad-P17-Gen-1>
+ <a82092f5-abc8-584f-b2ba-f06c82ffbe7d@redhat.com>
+ <20221222055515.GJ4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y6PyisHYYtde/6Xk@feng-clx>
+ <20221222061429.GL4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y6P7JPHf9wDse0XK@feng-clx>
+ <20221222182446.GQ4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221222214219.GA1875767@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6TUJcr/IHrsTE0W@codewreck.org>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+In-Reply-To: <20221222214219.GA1875767@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,73 +69,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 07:03:17AM +0900, Dominique Martinet wrote:
-> Alexey Dobriyan wrote on Thu, Dec 22, 2022 at 07:42:53PM +0300:
-> > --- a/man5/proc.5
-> > +++ b/man5/proc.5
-> > @@ -2092,6 +2092,11 @@ Strings longer than
-> >  .B TASK_COMM_LEN
-> >  (16) characters (including the terminating null byte) are silently truncated.
-> >  This is visible whether or not the executable is swapped out.
-> > +
-> > +Note that \fIcomm\fP can contain space and closing parenthesis characters. 
-> > +Parsing /proc/${pid}/stat with split() or equivalent, or scanf(3) isn't
-> > +reliable. The correct way is to locate closing parenthesis with strrchr(')')
-> > +from the end of the buffer and parse integers from there.
+On Thu, Dec 22, 2022 at 01:42:19PM -0800, Paul E. McKenney wrote:
+> On Thu, Dec 22, 2022 at 10:24:46AM -0800, Paul E. McKenney wrote:
+> > On Thu, Dec 22, 2022 at 02:37:24PM +0800, Feng Tang wrote:
+> > > On Wed, Dec 21, 2022 at 10:14:29PM -0800, Paul E. McKenney wrote:
+> > > > On Thu, Dec 22, 2022 at 02:00:42PM +0800, Feng Tang wrote:
+> > > > > On Wed, Dec 21, 2022 at 09:55:15PM -0800, Paul E. McKenney wrote:
+> > > > > > On Wed, Dec 21, 2022 at 10:39:53PM -0500, Waiman Long wrote:
 > 
-> That's still not enough unless new lines are escaped, which they aren't:
+> [ . . . ]
 > 
-> $ echo -n 'test) 0 0 0
-> ' > /proc/$$/comm
-> $ cat /proc/$$/stat
-> 71076 (test) 0 0 0
-> ) S 71075 71076 71076 34840 71192 4194304 6623 6824 0 0 10 3 2 7 20 0 1 0 36396573 15208448 2888 18446744073709551615 94173281726464 94173282650929 140734972513568 0 0 0 65536 3686404 1266761467 1 0 0 17 1 0 0 0 0 0 94173282892592 94173282940880 94173287231488 140734972522071 140734972522076 140734972522076 140734972526574 0
+> > > > > > > As I currently understand, you are trying to use TSC as a watchdog to check
+> > > > > > > against HPET and PMTMR. I do have 2 questions about this patch.
+> > > > > > > 
+> > > > > > > First of all, why you need to use both HPET and PMTMR? Can you just use one
+> > > > > > > of those that are available. Secondly, is it possible to enable this
+> > > > > > > time-skew diagnostic for a limit amount of time instead running
+> > > > > > > indefinitely? The running of the clocksource watchdog itself will still
+> > > > > > > consume a tiny amount of CPU cycles.
+> > > > > > 
+> > > > > > I could certainly do something so that only the first of HPET and PMTMR
+> > > > > > is checked.  Could you give me a quick run-through of the advantages of
+> > > > > > using only one?  I would need to explain that in the commit log.
+> > > > > > 
+> > > > > > Would it make sense to have a kernel boot variable giving the number of
+> > > > > > minutes for which the watchdog was to run, with a default of zero
+> > > > > > meaning "indefinitely"?
+> > > > > 
+> > > > > We've discussed about the "os noise", which customer may really care.
+> > > > > IIUC, this patch intends to test if HPET/PMTIMER HW is broken, so how
+> > > > > about making it run for a number of minutes the default behavior.   
+> > > > 
+> > > > It is also intended to determine if TSC is broken, with NTP drift rates
+> > > > used to determine which timer is at fault.
+> > > > 
+> > > > OK, how about a Kconfig option for the number of minutes, set to whatever
+> > > > you guys tell me?  (Three minutes?  Five minutes?  Something else?)
+> > > > People wanting to run it continuously could then build their kernels
+> > > > with that Kconfig option set to zero.
+> > >  
+> > > I don't have specific preference for 5 or 10 minutes, as long as it
+> > > is a one time deal :) 
+> > > 
+> > > > > Also I've run the patch on a Alderlake system, with a fine acpi pm_timer
+> > > > > and a fake broken pm_timer, and they both works without errors.
+> > > > 
+> > > > Thank you!  Did it correctly identify the fake broken pm_timer as being
+> > > > broken?  If so, may I have your Tested-by?
+> > > 
+> > > On that Alderlake system, HPET will be disabled by kernel, and I
+> > > manually increased the tsc frequency about 1/256 to make pm_timer
+> > > look to have 1/256 deviation. And got dmesg like:
+> > > 
+> > > [    2.738554] clocksource: timekeeping watchdog on CPU3: Marking clocksource 'acpi_pm' as unstable because the skew is too large:
+> > > [    2.738558] clocksource:                       'tsc' wd_nsec: 275956624 wd_now: 13aab38d0d wd_last: 1382c1144d mask: ffffffffffffffff
+> > > [    2.738564] clocksource:                       'acpi_pm' cs_nsec: 277034651 cs_now: 731575 cs_last: 63f3cb mask: ffffff
+> > > [    2.738568] clocksource:                       'tsc' (not 'acpi_pm') is current clocksource.
+> > > 
+> > > The deviation is indeed about 1/256. And pm_timer won't be shown in /sys/:
+> > > 
+> > > /sys/devices/system/clocksource/clocksource0/available_clocksource:tsc 
+> > > /sys/devices/system/clocksource/clocksource0/current_clocksource:tsc
+> > > 
+> > > So feel free to add:
+> > > 
+> > > 	Tested-by: Feng Tang <feng.tang@intel.com>
+> > 
+> > Thank you very much!  I will apply this on my next rebase.
 > 
-> The silver lining here is that comm length is rather small (16) so we
-> cannot emulate full lines and a very careful process could notice that
-> there are not enough fields after the last parenthesis... So just look
-> for the last closing parenthesis in the next line and try again?
+> But first, here is a prototype of the limited-time clocksource watchdog.
 
-No, just don't treat this file's content as a line (nor as several
-lines) - treat it as a string that might contain new line characters.
+And here is the limited-watchdogging patch.
 
-The ps command from procps-ng seems to manage, e.g. for your test "ps c"
-prints:
+Thoughts?
 
-29394 pts/3    S      0:00 test) 0 0 0?
+						Thanx, Paul
 
-where the question mark is what it substitutes for the non-printable
-character (the new line character).  I didn't check whether the process
-name it prints comes from /proc/$$/stat or /proc/$$/status, though (per
-strace, it reads both).
+------------------------------------------------------------------------
 
-> But, really, I just don't see how this can practically be said to be parsable...
+commit 375e65d3055f9b379e5fbd449e69752cb69b4e19
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Thu Dec 22 15:20:37 2022 -0800
 
-This format certainly makes it easier to get a parser wrong than to get
-it right.
+    clocksource: Limit the number of watchdogged clocksources
+    
+    When TSC is deemed trustworthy, the clocksource watchdog will verify
+    other clocksources against it.  @@@ Why limit it?  Needed from Waiman.
+    Maybe overhead and disturbance of additional checks? @@@
+    
+    Therefore, supply a new tsc_watchdogged kernel boot parameter that
+    limits the number of clocksources that will be verified against TSC.
+    This parameter defaults to INT_MAX.  A value of zero prevents any
+    verification.
+    
+    Link: https://lore.kernel.org/all/a82092f5-abc8-584f-b2ba-f06c82ffbe7d@redhat.com/
+    Reported-by: Waiman Long <longman@redhat.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Cc: Thomas Gleixner <tglx@linutronix.de>
+    Cc: Ingo Molnar <mingo@redhat.com>
+    Cc: Borislav Petkov <bp@alien8.de>
+    Cc: Dave Hansen <dave.hansen@linux.intel.com>
+    Cc: "H. Peter Anvin" <hpa@zytor.com>
+    Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+    Cc: Feng Tang <feng.tang@intel.com>
+    Cc: Waiman Long <longman@redhat.com
+    Cc: <x86@kernel.org>
 
-I agree the above man page edit is not enough, and should also mention
-the caveat that this shouldn't be read in nor parsed as a line.
-
-Also, the Linux kernel does have problems with new lines in the comm
-field elsewhere, at least in the log messages it produces:
-
-https://github.com/lkrg-org/lkrg/issues/165
-
-Here I looked into this in context of LKRG development, but with the
-kernel itself also producing messages with comm in them the point of
-only fixing LKRG's messages is moot.
-
-Alexander
-
-P.S. While this thread goes well so far, please note that in general
-CC'ing other lists on postings to oss-security (or vice versa) is
-discouraged.  With such CC's, possible follow-ups from members of those
-other lists can be off-topic for oss-security - e.g., they might focus
-on non-security technicalities.  Probably not this time when only a man
-page is to be patched, but proposed patches to the Linux kernel often
-result in lengthy discussions and multiple versions of the patch.  In
-those cases, I think it's better to have separate threads and only post
-summary follow-up(s) to oss-security (e.g., one message stating that a
-patch was proposed and linking to the thread, and another after the
-final version is merged).
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 68c597e5909a4..0e304e40c21fa 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6345,6 +6345,12 @@
+ 			with CPUID.16h support and partial CPUID.15h support.
+ 			Format: <unsigned int>
+ 
++	tsc_watchdogged=  [X86]
++			Specify the limit on the number of clocksources
++			that will be verified against TSC in cases where
++			the TSC is deemed trustworthy.	Defaults to
++			INT_MAX.  Specify zero to avoid verification.
++
+ 	tsx=		[X86] Control Transactional Synchronization
+ 			Extensions (TSX) feature in Intel processors that
+ 			support TSX control.
+diff --git a/arch/x86/include/asm/time.h b/arch/x86/include/asm/time.h
+index a53961c64a567..0fa15c4819082 100644
+--- a/arch/x86/include/asm/time.h
++++ b/arch/x86/include/asm/time.h
+@@ -8,7 +8,7 @@
+ extern void hpet_time_init(void);
+ extern void time_init(void);
+ extern bool pit_timer_init(void);
+-extern bool tsc_clocksource_watchdog_disabled(void);
++extern void tsc_clocksource_watchdog_disabled(struct clocksource *csp);
+ 
+ extern struct clock_event_device *global_clock_event;
+ 
+diff --git a/arch/x86/kernel/hpet.c b/arch/x86/kernel/hpet.c
+index c8eb1ac5125ab..cf28b0abc06bd 100644
+--- a/arch/x86/kernel/hpet.c
++++ b/arch/x86/kernel/hpet.c
+@@ -1091,8 +1091,7 @@ int __init hpet_enable(void)
+ 	if (!hpet_counting())
+ 		goto out_nohpet;
+ 
+-	if (tsc_clocksource_watchdog_disabled())
+-		clocksource_hpet.flags |= CLOCK_SOURCE_MUST_VERIFY;
++	tsc_clocksource_watchdog_disabled(&clocksource_hpet);
+ 	clocksource_register_hz(&clocksource_hpet, (u32)hpet_freq);
+ 
+ 	if (id & HPET_ID_LEGSUP) {
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index 924e877b95f31..6a1def7c02a6e 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -53,6 +53,9 @@ static u32 art_to_tsc_denominator;
+ static u64 art_to_tsc_offset;
+ struct clocksource *art_related_clocksource;
+ 
++static int max_tsc_watchdogged = INT_MAX;
++static atomic_t cur_tsc_watchdogged;
++
+ struct cyc2ns {
+ 	struct cyc2ns_data data[2];	/*  0 + 2*16 = 32 */
+ 	seqcount_latch_t   seq;		/* 32 + 4    = 36 */
+@@ -308,6 +311,14 @@ static int __init tsc_setup(char *str)
+ 
+ __setup("tsc=", tsc_setup);
+ 
++static int __init tsc_watchdogged_setup(char *str)
++{
++	max_tsc_watchdogged = simple_strtol(str, NULL, 0);
++	return 1;
++}
++
++__setup("tsc_watchdogged=", tsc_watchdogged_setup);
++
+ #define MAX_RETRIES		5
+ #define TSC_DEFAULT_THRESHOLD	0x20000
+ 
+@@ -1186,9 +1197,18 @@ static void __init tsc_disable_clocksource_watchdog(void)
+ 	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+ }
+ 
+-bool tsc_clocksource_watchdog_disabled(void)
++/*
++ * If the TSC is judged trustworthy and the limit on the number of
++ * to-be-watchdogged clocksources has not been exceeded, place the specified
++ * clocksource into must-verify state.
++ */
++void tsc_clocksource_watchdog_disabled(struct clocksource *csp)
+ {
+-	return !(clocksource_tsc.flags & CLOCK_SOURCE_MUST_VERIFY);
++	if (clocksource_tsc.flags & CLOCK_SOURCE_MUST_VERIFY ||
++	    atomic_inc_return(&cur_tsc_watchdogged) > max_tsc_watchdogged)
++		return;
++	pr_info("clocksource: '%s' will be checked by clocksource watchdog.\n", csp->name);
++	csp->flags |= CLOCK_SOURCE_MUST_VERIFY;
+ }
+ 
+ static void __init check_system_tsc_reliable(void)
+diff --git a/drivers/clocksource/acpi_pm.c b/drivers/clocksource/acpi_pm.c
+index 82338773602ca..8562f59ac27e9 100644
+--- a/drivers/clocksource/acpi_pm.c
++++ b/drivers/clocksource/acpi_pm.c
+@@ -211,8 +211,7 @@ static int __init init_acpi_pm_clocksource(void)
+ 		return -ENODEV;
+ 	}
+ 
+-	if (tsc_clocksource_watchdog_disabled())
+-		clocksource_acpi_pm.flags |= CLOCK_SOURCE_MUST_VERIFY;
++	tsc_clocksource_watchdog_disabled(&clocksource_acpi_pm);
+ 	return clocksource_register_hz(&clocksource_acpi_pm, PMTMR_TICKS_PER_SEC);
+ }
+ 
