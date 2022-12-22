@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA240653FE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A89D653FEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235682AbiLVLvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:51:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S235531AbiLVLv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235197AbiLVLtt (ORCPT
+        with ESMTP id S235327AbiLVLuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:49:49 -0500
+        Thu, 22 Dec 2022 06:50:04 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E95D29369;
-        Thu, 22 Dec 2022 03:48:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED0B29377;
+        Thu, 22 Dec 2022 03:48:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671709717; x=1703245717;
+  t=1671709723; x=1703245723;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=XiqeX8OeZdoKUwrXM421vQgERq+9V4kGiGuMnC/Jf7o=;
-  b=nqWG5QnFL5OQGFYBvWW0sTdS2KeWDm9be9l3a9unZXEVrGGSM7TV5vLA
-   bRhKqXUWaib63O2/ly8KB+rQy608WYLfA8y4JOSlXuVUyWJ+BNt2CoBOB
-   k9WJGhto4OVbBLIqS4Vm8OGW1kXbSN9xTQVZszuvdNww5wNJBbhCrnEeM
-   WHGs2SuZ0obRcoPuhB/sxCbtYhH3i5qVeWC2cugdG+b7tD8q8rNxf29Qa
-   ZVBw48F+NyZISNeaEOm3v/Cv+k32akMxSwihEjMmmGaLNWIUfGSY/8KGR
-   lzJ06GmM9iXdo9J5VD/EdRF8cSSdf957ID60ghlgF8ZdS/+hnNS5Jk8nd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="318804788"
+  bh=F9SleecBAnyNkNrMFTTvSCZSu7ImUGAg65gwiv6wE30=;
+  b=CzYKR3D+9/RLl79ipyyrMi5/N4RTi5YKQhyXHLMs5NMgiHq4TgWc1I+R
+   MT4CnPSkiDw4ku4qf5EhCFlZjxHZk5hUtbWbu3cckHAxtDITjP+w3YGtB
+   Nl5FzQP5Rh6663yEHqjj1W4U9p1cu2EiJTdDsz8NnwHgFSEwX5z7r/M9l
+   Gh8K1HYwmjQ8BnJQhCZraJ9MZYqW9slveaFhOL2E8Oa/+s9cYGfU7XkBC
+   sajSpRNnX/C4X+rcg7zgILoQ9CKh1Rmld3sR4axpN2u8qVokY9P/77/J6
+   VGB6nEOI1kly+grzwNJr+c1ViIY3OsiwYeaYeT8BCwIS/01G32EHaGd7z
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="318804801"
 X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="318804788"
+   d="scan'208";a="318804801"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 03:48:36 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="629504799"
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 03:48:42 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="629504822"
 X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="629504799"
+   d="scan'208";a="629504822"
 Received: from lab-ah.igk.intel.com ([10.91.215.196])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 03:48:30 -0800
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 03:48:36 -0800
 From:   Andrzej Hajda <andrzej.hajda@intel.com>
 To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
@@ -58,9 +58,9 @@ Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH 12/19] arch/powerpc: correct logged function names in xchg helpers
-Date:   Thu, 22 Dec 2022 12:46:28 +0100
-Message-Id: <20221222114635.1251934-13-andrzej.hajda@intel.com>
+Subject: [PATCH 13/19] arch/riscv: rename internal name __xchg to __arch_xchg
+Date:   Thu, 22 Dec 2022 12:46:29 +0100
+Message-Id: <20221222114635.1251934-14-andrzej.hajda@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221222114635.1251934-1-andrzej.hajda@intel.com>
 References: <20221222114635.1251934-1-andrzej.hajda@intel.com>
@@ -81,31 +81,45 @@ __xchg will be used for non-atomic xchg macro.
 
 Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
 ---
- arch/powerpc/include/asm/cmpxchg.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/riscv/include/asm/atomic.h  | 2 +-
+ arch/riscv/include/asm/cmpxchg.h | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/cmpxchg.h b/arch/powerpc/include/asm/cmpxchg.h
-index 05f246c0e36eb3..b5624c9fe09bf7 100644
---- a/arch/powerpc/include/asm/cmpxchg.h
-+++ b/arch/powerpc/include/asm/cmpxchg.h
-@@ -163,7 +163,7 @@ __xchg_local(void *ptr, unsigned long x, unsigned int size)
- 		return __xchg_u64_local(ptr, x);
- #endif
- 	}
--	BUILD_BUG_ON_MSG(1, "Unsupported size for __xchg");
-+	BUILD_BUG_ON_MSG(1, "Unsupported size for __xchg_local");
- 	return x;
- }
+diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+index 0dfe9d857a762b..bba472928b5393 100644
+--- a/arch/riscv/include/asm/atomic.h
++++ b/arch/riscv/include/asm/atomic.h
+@@ -261,7 +261,7 @@ c_t arch_atomic##prefix##_xchg_release(atomic##prefix##_t *v, c_t n)	\
+ static __always_inline							\
+ c_t arch_atomic##prefix##_xchg(atomic##prefix##_t *v, c_t n)		\
+ {									\
+-	return __xchg(&(v->counter), n, size);				\
++	return __arch_xchg(&(v->counter), n, size);			\
+ }									\
+ static __always_inline							\
+ c_t arch_atomic##prefix##_cmpxchg_relaxed(atomic##prefix##_t *v,	\
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index 12debce235e52d..2f4726d3cfcc25 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -114,7 +114,7 @@
+ 					    _x_, sizeof(*(ptr)));	\
+ })
  
-@@ -182,7 +182,7 @@ __xchg_relaxed(void *ptr, unsigned long x, unsigned int size)
- 		return __xchg_u64_relaxed(ptr, x);
- #endif
- 	}
--	BUILD_BUG_ON_MSG(1, "Unsupported size for __xchg_local");
-+	BUILD_BUG_ON_MSG(1, "Unsupported size for __xchg_relaxed");
- 	return x;
- }
- #define arch_xchg_local(ptr,x)						     \
+-#define __xchg(ptr, new, size)						\
++#define __arch_xchg(ptr, new, size)					\
+ ({									\
+ 	__typeof__(ptr) __ptr = (ptr);					\
+ 	__typeof__(new) __new = (new);					\
+@@ -143,7 +143,7 @@
+ #define arch_xchg(ptr, x)						\
+ ({									\
+ 	__typeof__(*(ptr)) _x_ = (x);					\
+-	(__typeof__(*(ptr))) __xchg((ptr), _x_, sizeof(*(ptr)));	\
++	(__typeof__(*(ptr))) __arch_xchg((ptr), _x_, sizeof(*(ptr)));	\
+ })
+ 
+ #define xchg32(ptr, x)							\
 -- 
 2.34.1
 
