@@ -2,95 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D666545DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8AC6545DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiLVSMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:12:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
+        id S230183AbiLVSOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiLVSMS (ORCPT
+        with ESMTP id S229745AbiLVSOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:12:18 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCE7764F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:12:17 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id e141so2900239ybh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:12:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vUBAS00PRdtRG1FOxjmExMw30CS0Cv+1NUdfDxRvZlA=;
-        b=rZOh1SxfDlyTmG+rxpZqcn/nWmMNEovD2C2hKgwzsUlmtHIeKPacRoEH7djiDvoTL1
-         VXEw2Nla+Tb+GB+mx8G/WYvGTCHIY8wFnDBikCCrMdqzUGWZXVMDypMtNFUywEkP7pVQ
-         +qy4bILGfzgcT+LFEUJBqOypGtJbJ5zNE4m3fezc6E6TmdeO4yN5DOJJW1A+7X4eyVWK
-         OGb07TJTAwx58p4S+9VJZBz8mg54ttn+gI81Rn+DhH5TbUXn0C/v6XxCkU1SPpPI6Les
-         ew1Huwi+8H8NacS0/pN69/a6b6ODT9XXLbpsUOw9nHEDcTwVZ06Nkbb6CB4AYgfA5hfW
-         VvXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vUBAS00PRdtRG1FOxjmExMw30CS0Cv+1NUdfDxRvZlA=;
-        b=AFOFqscHYkGDq9QCVVjLEV3d1mXodnowi1yGDSmmCWzVFC0wmwqxrUiymlkFlG6VSV
-         ZH/cj+hVFdpAYvi0HSFvTpdLP28w9jk/xe6EXdW8DsqKzChh/KgcDxslyTTI5HK0iThI
-         Vk0UYPGHzaiY/e0IKJkg/RL5a3Xm76HeBqPHHwv5fJ4vAhdnrCcQVCmJTGH8VnSKsRii
-         EcpiQSeDoifI3wAKpvFfvQNzUCa9PW/dyA4UTgGO78oduDhpjSWcve0Y+P4ktNP1aPlj
-         gRNzKK807XFxyZNzVgavY2bU1tbwZA6thTYF0CAuffdvkCE4FPg4WYtR+zcfSmBwBdaI
-         6cmg==
-X-Gm-Message-State: AFqh2konw5QmwqlceEBqHnKwdBb1eEevA4dYpsKwSIz0x6OSMhoFd9KF
-        ZSt3hMB1p1T7s2TrxhYAXZrFtzEZm6ge5Q9Bi28RRw==
-X-Google-Smtp-Source: AMrXdXvLrW2srrW3QadKtrQqseeGGov3b/HuSypqszvimruSvg23ZHlKFAjQsr6vISn3P/kFUgTgWDTEyzsR9s6ybtE=
-X-Received: by 2002:a5b:b47:0:b0:6fe:1625:f1f5 with SMTP id
- b7-20020a5b0b47000000b006fe1625f1f5mr667202ybr.549.1671732736796; Thu, 22 Dec
- 2022 10:12:16 -0800 (PST)
+        Thu, 22 Dec 2022 13:14:43 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2082B13D4E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:14:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671732882; x=1703268882;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MLsZoG3w/wofZAj98krLPXC/JPTNK5PARxNbIkVb9u0=;
+  b=az9uAuHUz5MTWTsRgog01e2pLsZKtGATyM1T9+/gsqECWb0fB1Xa2HMI
+   CyG+ktnvh7oxftQMWvonw15b8wQIr04wmqcOysCenq5KsYuPLwb7ZH1nQ
+   gJUWitz1Eqg2Wrf4Py5sYptmIyV5Fk5Jqz7dDpOJR40zHyYL8cCC/LZ6s
+   EjifODgMNRhE0Hmnl2lJGqpR899F+FbKiOCjL6AyDgG5i4AdBJzzlcKTB
+   nTyJlczBl3YFgTcRZtw9YKVHFDRtzGyxJdDZFZK4FNyib9J1aYfztN3Xi
+   xp9GNxWx3bBf2limANUkeBCgdfv2aXGih5YK+Og9bU0rse9EOlM14F+2S
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="406428319"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="406428319"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 10:14:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="682479432"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="682479432"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 Dec 2022 10:14:39 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p8Q5X-000C0Y-0g;
+        Thu, 22 Dec 2022 18:14:39 +0000
+Date:   Fri, 23 Dec 2022 02:13:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:haltnmi3slow.2022.12.21a] BUILD SUCCESS
+ 86bee2e421da7c7aed829206357a82cdfb46b3b4
+Message-ID: <63a49e61.bVPOVTuj7Ggymwwx%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <BN6PR07MB3185E78473482885FE72BCF3ABE89@BN6PR07MB3185.namprd07.prod.outlook.com>
-In-Reply-To: <BN6PR07MB3185E78473482885FE72BCF3ABE89@BN6PR07MB3185.namprd07.prod.outlook.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 22 Dec 2022 19:11:38 +0100
-Message-ID: <CAG_fn=UZcDSqnD6+CezbdaekXqejRKm-W8V6ZHxQ+GGUwb3YdA@mail.gmail.com>
-Subject: Re: Syzkaller found a bug: KASAN: use-after-free Write in put_pmu_ctx
-To:     Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
-Cc:     "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "longman@redhat.com" <longman@redhat.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "contact@pgazz.com" <contact@pgazz.com>,
-        Paul Gazzillo <Paul.Gazzillo@ucf.edu>,
-        "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 6:40 PM Sanan Hasanov
-<sanan.hasanov@knights.ucf.edu> wrote:
->
-> Good day, dear maintainers,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git haltnmi3slow.2022.12.21a
+branch HEAD: 86bee2e421da7c7aed829206357a82cdfb46b3b4  Merge branch 'slownmi.2022.12.19a' into HEAD
 
-Hi Sanan,
+elapsed time: 722m
 
-> Config file: https://drive.google.com/file/d/1JutR21cgcf28flJVyLqDniNyrExMsSn_/view?usp=sharing
->
-> Reproducer file: https://drive.google.com/file/d/1X31x8w4ULrtP_YnkD7_RCyW7FlwGewMR/view?usp=sharing
+configs tested: 108
+configs skipped: 2
 
-Any chance you can build with debug info enabled (CONFIG_DEBUG_INFO=y)?
-Then you'll be able to generate file:line information for the report
-(probably your syzkaller instance will do that for you, otherwise you
-can always use scripts/decode_stacktrace.sh)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->
-> Thank you!
->
+gcc tested configs:
+um                           x86_64_defconfig
+um                             i386_defconfig
+i386                                defconfig
+x86_64                              defconfig
+arc                                 defconfig
+x86_64                               rhel-8.3
+i386                 randconfig-a001-20221219
+s390                             allmodconfig
+x86_64                          rhel-8.3-func
+alpha                               defconfig
+x86_64                    rhel-8.3-kselftests
+i386                 randconfig-a003-20221219
+arm                                 defconfig
+s390                                defconfig
+x86_64               randconfig-a002-20221219
+x86_64                           allyesconfig
+x86_64               randconfig-a003-20221219
+s390                             allyesconfig
+i386                 randconfig-a002-20221219
+powerpc                           allnoconfig
+x86_64               randconfig-a001-20221219
+i386                 randconfig-a006-20221219
+i386                 randconfig-a005-20221219
+x86_64               randconfig-a004-20221219
+x86_64               randconfig-a006-20221219
+i386                 randconfig-a004-20221219
+x86_64               randconfig-a005-20221219
+mips                             allyesconfig
+i386                             allyesconfig
+ia64                             allmodconfig
+x86_64                           rhel-8.3-bpf
+arm                              allyesconfig
+m68k                             allyesconfig
+x86_64                           rhel-8.3-syz
+m68k                             allmodconfig
+arc                              allyesconfig
+arm64                            allyesconfig
+powerpc                          allmodconfig
+x86_64                         rhel-8.3-kunit
+alpha                            allyesconfig
+sh                               allmodconfig
+x86_64                           rhel-8.3-kvm
+riscv                randconfig-r042-20221218
+arc                  randconfig-r043-20221219
+arm                  randconfig-r046-20221219
+arc                  randconfig-r043-20221218
+s390                 randconfig-r044-20221218
+m68k                         apollo_defconfig
+arm                           viper_defconfig
+x86_64                            allnoconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+sparc                               defconfig
+sh                          sdk7786_defconfig
+nios2                         3c120_defconfig
+m68k                          atari_defconfig
+arm                          iop32x_defconfig
+arm                        oxnas_v6_defconfig
+arm                         nhk8815_defconfig
+powerpc                       eiger_defconfig
+xtensa                              defconfig
+m68k                                defconfig
+m68k                            mac_defconfig
+powerpc                      ep88xc_defconfig
+sh                               j2_defconfig
+i386                          randconfig-c001
+s390                 randconfig-r044-20221222
+arc                  randconfig-r043-20221222
+riscv                randconfig-r042-20221222
+arm                            lart_defconfig
+powerpc                 mpc837x_rdb_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+
+clang tested configs:
+x86_64                          rhel-8.3-rust
+i386                 randconfig-a014-20221219
+i386                 randconfig-a012-20221219
+i386                 randconfig-a013-20221219
+i386                 randconfig-a015-20221219
+x86_64               randconfig-a011-20221219
+i386                 randconfig-a016-20221219
+i386                 randconfig-a011-20221219
+x86_64               randconfig-a012-20221219
+x86_64               randconfig-a014-20221219
+x86_64               randconfig-a015-20221219
+x86_64               randconfig-a013-20221219
+arm                  randconfig-r046-20221218
+x86_64               randconfig-a016-20221219
+hexagon              randconfig-r041-20221218
+hexagon              randconfig-r045-20221219
+s390                 randconfig-r044-20221219
+hexagon              randconfig-r041-20221219
+hexagon              randconfig-r045-20221218
+riscv                randconfig-r042-20221219
+x86_64               randconfig-k001-20221219
+x86_64                        randconfig-k001
+s390                 randconfig-r044-20221221
+riscv                randconfig-r042-20221221
+hexagon              randconfig-r045-20221221
+hexagon              randconfig-r041-20221221
+i386                             allyesconfig
+arm                         s3c2410_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
