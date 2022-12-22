@@ -2,257 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683D06539FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 01:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94572653A02
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 01:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234634AbiLVAI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 19:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S234730AbiLVAMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 19:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLVAIx (ORCPT
+        with ESMTP id S229561AbiLVAMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 19:08:53 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143CF1403B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 16:08:52 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-45c11d1bfc8so7127827b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 16:08:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gRJiaMBN5q0w63AV8y2lpXPrHKb44IbAvEnQCP+/w78=;
-        b=ltr0IRNdED3tcQyKKmA6vC2ztlwcFPDYcV2FrMx+nNuKthK6Rlp9ZA0DtcD98U++tc
-         Y2WcM6v48jVYEJ4dEmomek8JUu/2Nx7uujy0Ws4yFsJHwbl2DUuNJGQvlh52putC3AAP
-         lmLn6g0XVrzrlqmAf8BS81xWCY0Vb3tb9+Bk0jh5rmL3CpVtYZwDdxwX6aiyeHYfoQy0
-         oSQXKvGUTgCuZrYJd+cNP1SoR0YQ8L9FHoaGnvG5+rWep6AlYUBzbIgCaHG6ybTZRhHM
-         rRb0sXiubW3z7Rt829kfJjvEm5hGlXe1oaqo0tgXFbZNAyjGZxcfLYdS3oPQRMirmFIJ
-         fqPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gRJiaMBN5q0w63AV8y2lpXPrHKb44IbAvEnQCP+/w78=;
-        b=PTA8tV4G1V5si7mgqswHFy7dvf5EmpCewLb7ud1OKSe2LYvFiRkseZCcm14OgZNAED
-         mXwpFl4hR83yWw1Rbn/FjtAj/92/9UpQFHmDrDxw+zOub+2er8v8yXn1b5DqYxjRCaUz
-         xvqi2WFq8Rluyl6ljLZ8mh7sT/0TiJCKJmwoXJyk8vDv9M/oTCxTmhpsUKnwz7bkkJnB
-         9T7N/2h6arSnau2yfYM8ELGCgvOkPJWxbcD0rwUGY/tmLMZHVl+wllWriXqo8fRYjJd7
-         gfJ5YMuAF45pF2QGO/RjMCXsrpfgTJ8Ul0FtFmSgwnzaCW5iOom/PfO6P8YcHBtvRq9+
-         5Lfw==
-X-Gm-Message-State: AFqh2koZ/AGAc3cMnBibl7YXYnjvjS2E7ecEC4k2Ntlwy+wTYY3Caw15
-        5vVJzEBLYttNjdBFNGjlpvW/xvqG9fpAtCwpXWYZaA==
-X-Google-Smtp-Source: AMrXdXtxti6TUYNedXjSlbb50sB2ItknfQ43lWElm2HOSR6vNaJnf6iD0ID5rz0S83rNBjt7UWVubWmkfJNjSuo6bIo=
-X-Received: by 2002:a81:f111:0:b0:3df:6a50:40ec with SMTP id
- h17-20020a81f111000000b003df6a5040ecmr373835ywm.340.1671667731127; Wed, 21
- Dec 2022 16:08:51 -0800 (PST)
+        Wed, 21 Dec 2022 19:12:34 -0500
+Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EA2E01F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 16:12:31 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id D3ECE604F0;
+        Thu, 22 Dec 2022 01:12:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1671667948; bh=DhTKIzs3fcKoZJwXnt3sUyxHmyFNNTV1yFYSML1ykgc=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=CGkbxcBWisRX8MQLP3+Ws1E18751ctQ2ZTaagDNqqUuTbIrESqJqvTC5QROm63qRH
+         kdTKnifGQdaJYCssZz28MtaYuryfAeuGXLuoL3V9sdC9/NYwvUyzCtkWaCt20gyUHM
+         T1CNIzg7QXEREtapESjyWIRNzN3TXvm01/Cg5wFPXS9/Gs+B/gJSXW7/Sinh2QPCoP
+         XHXI3yd41wtFwb3KLjq2ZUfnOKRa6nntBoNWLcr1/OWYeZBdMgfsLIyzhL+oxuJhIq
+         evtr/xmLHeiErvdpo/HhfpUowIZfYEhVBTtys+VxqkBavhXnwisY4599l+8skPA+gj
+         Wc9XxHjEMNfrA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2X7pmtL7sIZE; Thu, 22 Dec 2022 01:12:26 +0100 (CET)
+Received: from [192.168.0.12] (unknown [188.252.197.66])
+        by domac.alu.hr (Postfix) with ESMTPSA id 92213604EE;
+        Thu, 22 Dec 2022 01:12:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1671667946; bh=DhTKIzs3fcKoZJwXnt3sUyxHmyFNNTV1yFYSML1ykgc=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=arfR6j72j2JN+4GMnRfVD6a1d7HiLEN1BPbCv4PH0O89Iqs5/z07yfrebdK7e0/Ma
+         Mzgc6RHHLJaybPdrLWlZ8057IUNLY5Rnwyw+VlJ9+p7VmgQviGRIM9UqIug7BksjV2
+         cQQCnPlof+ovPbqb+p+jW6omZFM6MsPnQaLMbVwP9McyJ+F119cKpwa1aw0/Up/Gd6
+         7pat8r/q3kKsC17L3kqMG99Z/pqgL4lZ2j2i9sspvG/yDasSK7d46bPJPuC/lWQSJv
+         5oXybYLxu5rTwEES/DNxeT0t5N482VsGENdKL9wrRdPUZvKTARmkD/F1xi6iIsbJq0
+         pJAsMEyNZIKdQ==
+Message-ID: <8e080674-36ab-9260-046e-f4e3c931a3b9@alu.unizg.hr>
+Date:   Thu, 22 Dec 2022 01:12:24 +0100
 MIME-Version: 1.0
-References: <20221221185540.2265771-1-robbarnes@google.com>
- <CABXOdTcHppsLTDTXBd9ikL+Hk8W4oW_NkWMhOJgmf9aDSW+FKA@mail.gmail.com> <CA+Dqm32+G+PGYDw+KbYLN5unK3Q6Oc6cC6EJDhsQ2ZipKT+9Gw@mail.gmail.com>
-In-Reply-To: <CA+Dqm32+G+PGYDw+KbYLN5unK3Q6Oc6cC6EJDhsQ2ZipKT+9Gw@mail.gmail.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 21 Dec 2022 16:08:40 -0800
-Message-ID: <CABXOdTdKNSfEbRAjrPTrCghb05xMNLrqhTz1C+G_UCnpMBJL+A@mail.gmail.com>
-Subject: Re: [PATCH] drivers/cros_ec: Handle CrOS EC panics
-To:     Rob Barnes <robbarnes@google.com>
-Cc:     Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dtor@chromium.org, Benson Leung <bleung@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: LOOKS GOOD: Possible regression in drm/i915 driver: memleak
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        intel-gfx@lists.freedesktop.org
+References: <f849cc70-b21f-6476-ba26-08989d1243c2@alu.unizg.hr>
+ <05424a5351a847786377a548dba0759917d8046c.camel@linux.intel.com>
+ <15ef1bb9-7312-5d98-8bf0-0af1a37cfd2a@linux.intel.com>
+ <619bdecc-cf87-60a4-f50d-836f4c073ea7@alu.unizg.hr>
+In-Reply-To: <619bdecc-cf87-60a4-f50d-836f4c073ea7@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 3:56 PM Rob Barnes <robbarnes@google.com> wrote:
->
-> On Wed, Dec 21, 2022 at 1:07 PM Guenter Roeck <groeck@google.com> wrote:
-> >
-> > On Wed, Dec 21, 2022 at 10:56 AM Rob Barnes <robbarnes@google.com> wrote:
-> > >
-> > > Add handler for CrOS EC panic events. When a panic is reported,
-> > > poll EC log then force an orderly shutdown.
-> > >
-> > > This will preserve the EC log leading up to the crash.
-> > >
-> > > Signed-off-by: Rob Barnes <robbarnes@google.com>
-> > > ---
-> > >  drivers/platform/chrome/cros_ec_debugfs.c   | 24 +++++++++++++++++++++
-> > >  drivers/platform/chrome/cros_ec_lpc.c       | 10 +++++++++
-> > >  include/linux/platform_data/cros_ec_proto.h |  9 ++++++++
-> > >  3 files changed, 43 insertions(+)
-> > >
-> > > diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
-> > > index 21d973fc6be2..31637a4e4cf9 100644
-> > > --- a/drivers/platform/chrome/cros_ec_debugfs.c
-> > > +++ b/drivers/platform/chrome/cros_ec_debugfs.c
-> > > @@ -49,6 +49,7 @@ struct cros_ec_debugfs {
-> > >         struct delayed_work log_poll_work;
-> > >         /* EC panicinfo */
-> > >         struct debugfs_blob_wrapper panicinfo_blob;
-> > > +       struct notifier_block notifier_panic;
-> > >  };
-> > >
-> > >  /*
-> > > @@ -437,6 +438,23 @@ static int cros_ec_create_panicinfo(struct cros_ec_debugfs *debug_info)
-> > >         return ret;
-> > >  }
-> > >
-> > > +static int cros_ec_debugfs_panic_event(struct notifier_block *nb,
-> > > +                                      unsigned long queued_during_suspend,
-> > > +                                      void *_notify)
-> > > +{
-> > > +       struct cros_ec_debugfs *debug_info =
-> > > +               container_of(nb, struct cros_ec_debugfs, notifier_panic);
-> > > +
-> > > +       if (debug_info->log_buffer.buf) {
-> > > +               /* Force log poll work to run immediately */
-> > > +               mod_delayed_work(debug_info->log_poll_work.wq, &debug_info->log_poll_work, 0);
-> > > +               /* Block until log poll work finishes */
-> > > +               flush_delayed_work(&debug_info->log_poll_work);
-> > > +       }
-> > > +
-> > > +       return NOTIFY_DONE;
-> > > +}
-> > > +
-> > >  static int cros_ec_debugfs_probe(struct platform_device *pd)
-> > >  {
-> > >         struct cros_ec_dev *ec = dev_get_drvdata(pd->dev.parent);
-> > > @@ -473,6 +491,12 @@ static int cros_ec_debugfs_probe(struct platform_device *pd)
-> > >         debugfs_create_u16("suspend_timeout_ms", 0664, debug_info->dir,
-> > >                            &ec->ec_dev->suspend_timeout_ms);
-> > >
-> > > +       debug_info->notifier_panic.notifier_call = cros_ec_debugfs_panic_event;
-> > > +       ret = blocking_notifier_chain_register(&ec->ec_dev->panic_notifier,
-> > > +                                              &debug_info->notifier_panic);
-> > > +       if (ret)
-> > > +               goto remove_debugfs;
-> > > +
-> > >         ec->debug_info = debug_info;
-> > >
-> > >         dev_set_drvdata(&pd->dev, ec);
-> > > diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-> > > index 7fc8f82280ac..21958c3b0c28 100644
-> > > --- a/drivers/platform/chrome/cros_ec_lpc.c
-> > > +++ b/drivers/platform/chrome/cros_ec_lpc.c
-> > > @@ -21,6 +21,7 @@
-> > >  #include <linux/platform_data/cros_ec_proto.h>
-> > >  #include <linux/platform_device.h>
-> > >  #include <linux/printk.h>
-> > > +#include <linux/reboot.h>
-> > >  #include <linux/suspend.h>
-> > >
-> > >  #include "cros_ec.h"
-> > > @@ -332,6 +333,15 @@ static void cros_ec_lpc_acpi_notify(acpi_handle device, u32 value, void *data)
-> > >
-> > >         if (value == ACPI_NOTIFY_DEVICE_WAKE)
-> > >                 pm_system_wakeup();
-> > > +
-> > > +       if (value == ACPI_NOTIFY_CROS_EC_PANIC) {
-> > > +               dev_err(ec_dev->dev,
-> > > +                       "CrOS EC Panic Reported. Shutdown is imminent!");
-> >
-> > dev_emerg() would seem to be more appropriate, given that we'll be
-> > crashing a second later.
->
-> Makes sense. Will do.
->
-> >
-> > > +               blocking_notifier_call_chain(&ec_dev->panic_notifier, 0,
-> > > +                                            ec_dev);
-> > > +               /* Begin orderly shutdown. Force shutdown after 1 second. */
-> > > +               hw_protection_shutdown("CrOS EC Panic", 1000);
-> >
-> > That seems to be the wrong API. From its description:
-> >
-> >  * Initiate an emergency system shutdown in order to protect hardware from
-> >  * further damage. Usage examples include a thermal protection or a voltage or
-> >  * current regulator failures.
-> >
-> > This is an EC crash that apparently can not be handled gracefully.
-> > That has nothing to do with hardware protection. Why not just call
-> > panic() ?
->
-> I'm adding the ability for the EC to somewhat gracefully handle a
-> class of panics. The EC will enter "system safe mode" aka limp mode.
-> All tasks are disabled except for a few critical ones. The purpose of
-> this mode is to give the OS a couple of seconds to extract info about
-> the EC panic and shutdown as gracefully as possible. EC will still
-> force a reset after 2 seconds.
->
-> Since the EC is in a precarious, non deterministic state and the EC is
-> at least partially responsible for thermal and power regulation, it is
-> arguably a hardware protection event.
->
+On 20. 12. 2022. 20:34, Mirsad Todorovac wrote:
+> On 12/20/22 16:52, Tvrtko Ursulin wrote:
+> 
+>> On 20/12/2022 15:22, srinivas pandruvada wrote:
+>>> +Added DRM mailing list and maintainers
+>>>
+>>> On Tue, 2022-12-20 at 15:33 +0100, Mirsad Todorovac wrote:
+>>>> Hi all,
+>>>>
+>>>> I have been unsuccessful to find any particular Intel i915 maintainer
+>>>> emails, so my best bet is to post here, as you will must assuredly
+>>>> already know them.
+>>
+>> For future reference you can use ${kernel_dir}/scripts/get_maintainer.pl -f ...
+>>
+>>>> The problem is a kernel memory leak that is repeatedly occurring
+>>>> triggered during the execution of Chrome browser under the latest
+>>>> 6.1.0+
+>>>> kernel of this morning and Almalinux 8.6 on a Lenovo desktop box
+>>>> with Intel(R) Core(TM) i5-8400 CPU @ 2.80GHz CPU.
+>>>>
+>>>> The build is with KMEMLEAK, KASAN and MGLRU turned on during the
+>>>> build,
+>>>> on a vanilla mainline kernel from Mr. Torvalds' tree.
+>>>>
+>>>> The leaks look like this one:
+>>>>
+>>>> unreferenced object 0xffff888131754880 (size 64):
+>>>>     comm "chrome", pid 13058, jiffies 4298568878 (age 3708.084s)
+>>>>     hex dump (first 32 bytes):
+>>>>       01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>>>> ................
+>>>>       00 00 00 00 00 00 00 00 00 80 1e 3e 83 88 ff ff
+>>>> ...........>....
+>>>>     backtrace:
+>>>>       [<ffffffff9e9b5542>] slab_post_alloc_hook+0xb2/0x340
+>>>>       [<ffffffff9e9bbf5f>] __kmem_cache_alloc_node+0x1bf/0x2c0
+>>>>       [<ffffffff9e8f767a>] kmalloc_trace+0x2a/0xb0
+>>>>       [<ffffffffc08dfde5>] drm_vma_node_allow+0x45/0x150 [drm]
+>>>>       [<ffffffffc0b33315>] __assign_mmap_offset_handle+0x615/0x820
+>>>> [i915]
+>>>>       [<ffffffffc0b34057>] i915_gem_mmap_offset_ioctl+0x77/0x110
+>>>> [i915]
+>>>>       [<ffffffffc08bc5e1>] drm_ioctl_kernel+0x181/0x280 [drm]
+>>>>       [<ffffffffc08bc9cd>] drm_ioctl+0x2dd/0x6a0 [drm]
+>>>>       [<ffffffff9ea54744>] __x64_sys_ioctl+0xc4/0x100
+>>>>       [<ffffffff9fbc0178>] do_syscall_64+0x58/0x80
+>>>>       [<ffffffff9fc000aa>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>>>>
+>>>> The complete list of leaks in attachment, but they seem similar or
+>>>> the same.
+>>>>
+>>>> Please find attached lshw and kernel build config file.
+>>>>
+>>>> I will probably check the same parms on my laptop at home, which is
+>>>> also
+>>>> Lenovo, but a different hw config and Ubuntu 22.10.
+>>
+>> Could you try the below patch?
+>>
+>> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
+>> index c3ea243d414d..0b07534c203a 100644
+>> --- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
+>> +++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
+>> @@ -679,9 +679,10 @@ mmap_offset_attach(struct drm_i915_gem_object *obj,
+>>   insert:
+>>          mmo = insert_mmo(obj, mmo);
+>>          GEM_BUG_ON(lookup_mmo(obj, mmap_type) != mmo);
+>> -out:
+>> +
+>>          if (file)
+>>                  drm_vma_node_allow(&mmo->vma_node, file);
+>> +out:
+>>          return mmo;
+>>
+>>   err:
+>>
+>> Maybe it is not the best fix but curious to know if it will make the leak go away.
+> 
+> Hi,
+> 
+> After 27 minutes uptime with the patched kernel it looks promising.
+> It is much longer than it took for the buggy kernel to leak slabs.
+> 
+> Here is the output:
+> 
+> [root@pc-mtodorov marvin]# echo scan > /sys/kernel/debug/kmemleak
+> [root@pc-mtodorov marvin]# cat !$
+> cat /sys/kernel/debug/kmemleak
+> unreferenced object 0xffff888105028d80 (size 16):
+>    comm "kworker/u12:5", pid 359, jiffies 4294902898 (age 1620.144s)
+>    hex dump (first 16 bytes):
+>      6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00  memstick0.......
+>    backtrace:
+>      [<ffffffffb6bb5542>] slab_post_alloc_hook+0xb2/0x340
+>      [<ffffffffb6bbbf5f>] __kmem_cache_alloc_node+0x1bf/0x2c0
+>      [<ffffffffb6af8175>] __kmalloc_node_track_caller+0x55/0x160
+>      [<ffffffffb6ae34a6>] kstrdup+0x36/0x60
+>      [<ffffffffb6ae3508>] kstrdup_const+0x28/0x30
+>      [<ffffffffb70d0757>] kvasprintf_const+0x97/0xd0
+>      [<ffffffffb7c9cdf4>] kobject_set_name_vargs+0x34/0xc0
+>      [<ffffffffb750289b>] dev_set_name+0x9b/0xd0
+>      [<ffffffffc12d9201>] memstick_check+0x181/0x639 [memstick]
+>      [<ffffffffb676e1d6>] process_one_work+0x4e6/0x7e0
+>      [<ffffffffb676e556>] worker_thread+0x76/0x770
+>      [<ffffffffb677b468>] kthread+0x168/0x1a0
+>      [<ffffffffb6604c99>] ret_from_fork+0x29/0x50
+> [root@pc-mtodorov marvin]# w
+>   20:27:35 up 27 min,  2 users,  load average: 0.83, 1.15, 1.19
+> USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+> marvin   tty2     tty2             20:01   27:10  10:12   2.09s /opt/google/chrome/chrome --type=utility --utility-sub-type=audio.m
+> marvin   pts/1    -                20:01    0.00s  2:00   0.38s sudo bash
+> [root@pc-mtodorov marvin]# uname -rms
+> Linux 6.1.0-b6bb9676f216-mglru-kmemlk-kasan+ x86_64
+> [root@pc-mtodorov marvin]#
 
-In my opinion it is an abuse of the API. I guess we have to agree to disagree.
+As I hear no reply from Tvrtko, and there is already 1d5h uptime with no leaks (but
+the kworker with memstick_check nag I couldn't bisect on the only box that reproduced it,
+because something in hw was not supported in pre 4.16 kernels on the Lenovo V530S-07ICB.
+Or I am doing something wrong.)
 
-Guenter
+However, now I can find the memstick maintainers thanks to Tvrtko's hint.
 
-> The primary motivation for allowing the OS to attempt an orderly
-> shutdown is to sync user data and EC panic data to storage. Will panic
-> sync storage? Or will that need to be a seperate call?
->
-> >
-> > > +       }
-> >
-> > It troubles me that this comes last. That means the entire
-> > mkbp_event_supported handling executes first. What troubles me even
-> > more is that 'value' is, with the exception of
-> > ACPI_NOTIFY_DEVICE_WAKE, not checked at all. Presumably the EC sends
-> > some well defined value if it has an event to report. I don't think it
-> > is a good idea to depend on cros_ec_get_next_event() returning
-> > something useful after the EC crashed.
->
-> Could certainly move the ACPI_NOTIFY_CROS_EC_PANIC to the top. I think
-> 'value' will be 0x80 when there's MKBP events. I will validate this
-> assumption.
->
-> > How is this handled today ? Does the EC just reset the AP ?
->
-> EC just immediately resets the AP and itself. System safe mode (see
-> go/ec-system-safe-mode) will allow the EC to run a few seconds after
-> some types of crashes.
->
->
->
-> >
-> > >  }
-> > >
-> > >  static int cros_ec_lpc_probe(struct platform_device *pdev)
-> > > diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-> > > index e43107e0bee1..1c4487271836 100644
-> > > --- a/include/linux/platform_data/cros_ec_proto.h
-> > > +++ b/include/linux/platform_data/cros_ec_proto.h
-> > > @@ -41,6 +41,13 @@
-> > >  #define EC_MAX_REQUEST_OVERHEAD                1
-> > >  #define EC_MAX_RESPONSE_OVERHEAD       32
-> > >
-> > > +/*
-> > > + * EC panic is not covered by the standard (0-F) ACPI notify values.
-> > > + * Arbitrarily choosing B0 to notify ec panic, which is in the 84-BF
-> > > + * device specific ACPI notify range.
-> > > + */
-> > > +#define ACPI_NOTIFY_CROS_EC_PANIC      0xB0
-> > > +
-> > >  /*
-> > >   * Command interface between EC and AP, for LPC, I2C and SPI interfaces.
-> > >   */
-> > > @@ -176,6 +183,8 @@ struct cros_ec_device {
-> > >         /* The platform devices used by the mfd driver */
-> > >         struct platform_device *ec;
-> > >         struct platform_device *pd;
-> > > +
-> > > +       struct blocking_notifier_head panic_notifier;
-> > >  };
-> > >
-> > >  /**
-> > > --
-> > > 2.39.0.314.g84b9a713c41-goog
-> > >
+If you no longer require my service, I would close this on my behalf.
+
+I hope I did not cause too much trouble. The knowledgeable knew that this was not a security
+risk, but only a bug. (30 leaks of 64 bytes each were hardly to exhaust memory in any realistic
+time.)
+
+However, having some experience with software development, I always preferred bugs reported
+and fixed rather than concealed and lying in wait (or worse, found first by a motivated
+adversary.) Forgive me this rant, I do not live from writing kernel drivers, this is just a
+pet project as of time being ...
+
+Thanks,
+Mirsad
+
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
