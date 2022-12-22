@@ -2,76 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1559D653BF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 07:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EA2653C00
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 07:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235011AbiLVGCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 01:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S230014AbiLVGFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 01:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiLVGCv (ORCPT
+        with ESMTP id S231892AbiLVGF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 01:02:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D90A11A1F;
-        Wed, 21 Dec 2022 22:02:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 22 Dec 2022 01:05:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4119612D36
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 22:04:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671689080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xrsqGz7chPZ2KmKpMG8QR1W3lTlHGgi0D+G+V4JZPLQ=;
+        b=iImIyes7xYAVCGxbwG5lv3vho/bTH2+VkThpxSV6CQQjwInQ4NM+DVttPfb1ooajaUGepS
+        Rchkt1AEphWmp+GHiy7xigoxD2FpKbThgVQcn4GMJLCckC42QjkiZOWaA5EPQc7tZYTmvf
+        FauQtTVWsJtAfYB8Q8daPZK4vplrcP0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-WY9h8Mx9PDWA6rvdtnC63g-1; Thu, 22 Dec 2022 01:04:37 -0500
+X-MC-Unique: WY9h8Mx9PDWA6rvdtnC63g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA279B81BE5;
-        Thu, 22 Dec 2022 06:02:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BECA3C433EF;
-        Thu, 22 Dec 2022 06:02:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671688967;
-        bh=QCHeWI4MnQJP8gQWw8/q2WL8k04wCBoAA/xJCgvSvjA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d+DKXZCveXnS9PbpxHTdgO12VikhRSUaT7Zl7CSGPNuKSBT0Zd1lztUG80mX2U9Ad
-         yZaY0r5hswR2zXSLrRWmvPFFILubOnMHH+ie/c+uR1Unrg/zX1EqLTSnCJ9z+nk5Ul
-         hjiglV2Eb77h3IPD2MvoOdKz6e5ZmkT4SlyRlhIA=
-Date:   Thu, 22 Dec 2022 07:02:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ferry Toth <ftoth@exalondelft.nl>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] Revert "usb: ulpi: defer ulpi_register on
- ulpi_read_id timeout"
-Message-ID: <Y6PzBAcx921ogdO/@kroah.com>
-References: <20221221201805.19436-1-ftoth@exalondelft.nl>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5F8C91C0514F;
+        Thu, 22 Dec 2022 06:04:36 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-13-179.pek2.redhat.com [10.72.13.179])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 89948112132C;
+        Thu, 22 Dec 2022 06:04:29 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
+        eperezma@redhat.com
+Subject: [RFC PATCH 0/4] virtio-net: don't busy poll for cvq command
+Date:   Thu, 22 Dec 2022 14:04:23 +0800
+Message-Id: <20221222060427.21626-1-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221201805.19436-1-ftoth@exalondelft.nl>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 09:18:05PM +0100, Ferry Toth wrote:
-> This reverts commit 8a7b31d545d3a15f0e6f5984ae16f0ca4fd76aac.
-> 
-> This patch results in some qemu test failures, specifically xilinx-zynq-a9
-> machine and zynq-zc702 as well as zynq-zed devicetree files, when trying
-> to boot from USB drive.
-> 
-> Fixes: 8a7b31d545d3 ("usb: ulpi: defer ulpi_register on ulpi_read_id timeout")
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Cc: stable@vger.kernel.org
-> Link: https://lkml.org/lkml/2022/12/20/803
+Hi all:
 
-We have no control over lkml.org at all, please always use
-lore.kernel.org instead.  Can you fix this up to use that?
+The code used to busy poll for cvq command which turns out to have
+several side effects:
 
-thanks,
+1) infinite poll for buggy devices
+2) bad interaction with scheduler
 
-greg k-h
+So this series tries to use sleep + timeout instead of busy polling.
+
+Please review.
+
+Thanks
+
+Jason Wang (4):
+  virtio-net: convert rx mode setting to use workqueue
+  virtio_ring: switch to use BAD_RING()
+  virtio_ring: introduce a per virtqueue waitqueue
+  virtio-net: sleep instead of busy waiting for cvq command
+
+ drivers/net/virtio_net.c     | 79 +++++++++++++++++++++++++++++++-----
+ drivers/virtio/virtio_ring.c | 33 ++++++++++++++-
+ include/linux/virtio.h       |  4 ++
+ 3 files changed, 105 insertions(+), 11 deletions(-)
+
+-- 
+2.25.1
+
