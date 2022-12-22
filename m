@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32786654972
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 00:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110B4654971
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 00:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235443AbiLVXib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 18:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
+        id S235639AbiLVXis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 18:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiLVXiV (ORCPT
+        with ESMTP id S235701AbiLVXih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 18:38:21 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2068.outbound.protection.outlook.com [40.107.6.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0718DDF1B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 15:38:21 -0800 (PST)
+        Thu, 22 Dec 2022 18:38:37 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2069.outbound.protection.outlook.com [40.107.6.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631B513F08;
+        Thu, 22 Dec 2022 15:38:31 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VcjN6cPJHJTHlVR3riOmYa0AuJpKtTolXt8EjYOLgumXVjzoQEZNXRCoyHy6i5wgz8Y55P85ejdRw2dYrM3exLPuJOCT4hNu1GzMW9bpJoadNM3gHGtOF8lba8MBIDKVgeIW2POMYCpyBYq/SlSRVTZXPaG17Zf2lAwd+QB3Bt3GdwV/rQkUavTT2jLOGCZLsoR0J5tbb62V4VNnm4iYVLv1umvWyf3IxXjHWGkPZPj5TEwH4OLK1BmgPlIZ92j7PTX50EK1QethImpR985ThsXYo7uoqauv9BEloZWO5/yEa5fPSQmnRJEdvw7AwAL71BRJtS/Rqw9728RrqGEtEQ==
+ b=iOB+cp/2ZenWVC56AXYvi0QMqLdjEQZZBxI/yX4ymCSj0bZwUAYrI9TmW/sylFQ++fBBgu9DDupqlTpeBX8rtK6RfVczLDn3rstdWudO4xBsPKc5Ccvzvqt1mWzxTb1HGftWgc/clG2T2XitntV3Ba8YOaV7eCBps4ZNbGPwFjI5cx5b7DiN4nMDmWudptRWXYIjpDRBZ520WDyKbpvXxCpx4c66xaVN9+Jo7C3TwcNjcKQdgyyBWodhzIPgM9wgWFyc+ZewahzNeCU0YXFDObDg1SWgUzeOoaC925nM2hyLZnr3sqmIWpBfAF32O4LZP8Osrrfdp9UECksKGLwj0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kEBfPTZlgkreP+XuG4W5PTE+mzXKo0XwInNaxx9l5Ug=;
- b=ONOBXbnCTlhWpxClg+2/bJOnbKXAl6Xul99Iicb4E6gweKdaTejgL/rbhQxlONvqxBwW0rjpiUtOU0aBjHkIkUj+PJv88aY4LfoVb2Y2saTYtYE9n7hK+yQAsJAJdR9wcCfP5K/19hvVJzWvyF/3V1Bajbo4m1baMECPFgH+nyMUR2p5qhmPkkyePuEMyQrhq21OVY5UXyS7Rs7ppEO4hxj/i/Cujb5l6BoFYnJNq51zCywg+V32LzJMbZrICJ7ji6diVNjk9oiJ1+aAmYR1OcKieoZf2Imo++ftafEYT6cJlfQgErtFh3KdAdMmr/hGFKwRg5cbi0XtJOaIRmWrYA==
+ bh=BJBQsgZqHySR5ZJFvpzCoSAiWyJRIXKFYrS/yNJi4yQ=;
+ b=ApyPzopBuElCPf0QfJjnVclcgzjB2uF0LMQsxisQJlcqxUmJQEGB+z3+W8jxc+jSKbRYV6GsgFv7mg3ETzkvFE8c1o3U7gEouq/dJRi9/Zs9zworvZ+5uJWqFb+K/wBvZr7NLqcxNcGxYIsgG8cwt1i5basU7x0OlN/QBOZArT8AXiU/X4ANjAbUCOmdKvAvNw6jVAFj12ugPV7hhUTTgz891KwsK2VCA65GjCSnSrwcLzOoLXhGve1hXFfCRoijx2R2W6jctmLOqgPhDExS7x/1ofAIcqoDCDUx8xtyjmIsnMC6fy+rU62bfodVKxB9PtFuBnbJzp+W9HHUHjU5RA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
  dkim=pass header.d=seco.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kEBfPTZlgkreP+XuG4W5PTE+mzXKo0XwInNaxx9l5Ug=;
- b=ZxYIWT8tdIe786tRfASDvM9R1Q3xQE8YVbETgwMcl/Vc7xXDgtb5SNXLBLyOWXxa/0Qy/rKFCdOdMvPb+whCL2WXZwtpxD4lLRRG/MOzxuR+txM49pJt94FH3lO7mtb8g3IdJKswxcIwdPES24yQhMbEZ5Ym2ovjsoAdyNI3x7wx85SpuB8XtUE6bbDJGRK7WOx2FcfLZeJXPh/n3JXmmcPEgFbS0GnorZMrhEFflhKMnRD8drc0y+NHvONqfyEZcmRGMeH4Wrqgvg+CZv8h0GagHupYR8iP4DxLUxWClja5SreVOzRMl33w1BA5h2wFdMfMrWsQABvNn63CXCYPtw==
+ bh=BJBQsgZqHySR5ZJFvpzCoSAiWyJRIXKFYrS/yNJi4yQ=;
+ b=Kxx5V0tmSntBCR5hSadufXiJxVSI14CMpcTNTBsut77IFRn6JW35ARk4uwSINfjoAnDZ/iC2MIZ2x7W3brA6W+zIqg+5bucsCkArQnh2rVwrAhPqnW/mseH2lstFFQZVbTRvLL9r6byBMuBuVTCDNWV1ba440xGnlVrs6CWTQmjs2UghhluVykWEzIw1hYP0MISQAksrd5iiF8pod7M7zBSMr15370avBpk619nzmWJNz+r//lzLf9moexF+YnpjdhvrHQfUK23qB4hi+gBEKzxc5sxUc8oFoQcnKIwbfcC42OgQUEbZhUrQqRe5PfY9CPi3LkOZW6+JvHXhzRByDg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=seco.com;
 Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
  by AS2PR03MB9100.eurprd03.prod.outlook.com (2603:10a6:20b:5fb::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
- 2022 23:38:19 +0000
+ 2022 23:38:27 +0000
 Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
  ([fe80::2b95:1fe4:5d8f:22fb]) by DB9PR03MB8847.eurprd03.prod.outlook.com
  ([fe80::2b95:1fe4:5d8f:22fb%7]) with mapi id 15.20.5944.013; Thu, 22 Dec 2022
- 23:38:19 +0000
+ 23:38:27 +0000
 From:   Sean Anderson <sean.anderson@seco.com>
 To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -48,75 +48,103 @@ To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         dri-devel@lists.freedesktop.org
 Cc:     linux-kernel@vger.kernel.org,
         Sean Anderson <sean.anderson@seco.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joerg Roedel <joro@8bytes.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        John Stultz <jstultz@google.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Takashi Iwai <tiwai@suse.com>, Will Deacon <will@kernel.org>,
-        Yong Wu <yong.wu@mediatek.com>, alsa-devel@alsa-project.org,
-        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v2 2/3] iommu/sound: Use component_match_add_of helper
-Date:   Thu, 22 Dec 2022 18:37:58 -0500
-Message-Id: <20221222233759.1934852-3-sean.anderson@seco.com>
+        Mihail Atanassov <mihail.atanassov@arm.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Samuel Holland <samuel@sholland.org>,
+        Sean Paul <sean@poorly.run>, Tian Tao <tiantao6@hisilicon.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        etnaviv@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH v2 3/3] drm: Convert users of drm_of_component_match_add to component_match_add_of
+Date:   Thu, 22 Dec 2022 18:37:59 -0500
+Message-Id: <20221222233759.1934852-4-sean.anderson@seco.com>
 X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
 In-Reply-To: <20221222233759.1934852-1-sean.anderson@seco.com>
 References: <20221222233759.1934852-1-sean.anderson@seco.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: BL1PR13CA0205.namprd13.prod.outlook.com
  (2603:10b6:208:2be::30) To DB9PR03MB8847.eurprd03.prod.outlook.com
  (2603:10a6:10:3dd::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|AS2PR03MB9100:EE_
-X-MS-Office365-Filtering-Correlation-Id: 018f03e4-a305-4ac9-25d9-08dae4759b07
+X-MS-Office365-Filtering-Correlation-Id: d0773e21-0506-45e2-4bab-08dae4759fd8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EF/GvGH/+mpcc1bpvYt1wkDNG/hy+mNOxiTWq33s3ALuXesewmsFr2yrdP/jD4vwQj70LvpL/Z0t9tHpQXNmR3LfB6zW3GJA7n89kW2mi5Om/myPJxrpQfj54xZVTAaBAgcllC+1t1KqBqvTojw+hxfBJIcCif3pAYJZEQL+YlSEfWTHqzVPxEu2tCvdn8yasLemLeUogW/x5KYZQq1grRrs4a53OgBHpzymffbEc2bpsRQeYzFQIlXE9PyoXs1FPjDrXugB+CdPNnmDsgbKovMolfxieTZlGFQXX7FTetNmacZbkTNcsI7imPyH9pXK78yjnCQ+FG9TCBFIWiBfq0Xi12jTQa1VQPrwiJqYfdq4xjcKOcPPGZM8taiM/2ZoVvLPrRBFsIMcOxOCZ9dBLiqrZshzDMnyPCuaAxG9lR26ZBHKejw5a4GwYERfZTAJ3oTLkc6DYBgXnrexWLPfvrGErADDcSLHcMP2yZKTD+J0MfCieQuayquCEfB54zWuOZwUvh/Csla1RJD6KvSgVR743RmTNRoeqmgZh/Y1EEXrqViBmkEC4lzLSvOb6gidm7IWD7C3na47z8tWX+wUv83VHtLeizJJSoZ67eEspAuhXK/liHWlqB9maDxVj6h8PbelJIWQjVbhoPQWgFIHJ0WTf4Ng6uxdtvOT3fn+gBn9KcZEKcKxSpLqH1uBrvq7EnYkPhmhXJKJLqtSaPMRiQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(366004)(376002)(136003)(39850400004)(451199015)(86362001)(36756003)(110136005)(316002)(54906003)(478600001)(38350700002)(52116002)(8936002)(44832011)(41300700001)(2906002)(4326008)(6486002)(66946007)(66556008)(7416002)(6666004)(5660300002)(66476007)(38100700002)(26005)(8676002)(6512007)(83380400001)(6506007)(186003)(1076003)(2616005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: OrRzdtGzlbVhGjlo5VQbmcOe9GYWaj6poLsMUMKqln6CpLCtfojVnZEzlt0EYmhFJE/4bgQSL4Yb3LzedtCSpkEfD8E8yJgYsfW/dkkAoipxnSUUYJS42swEBpOYnZobMbg3Kw5m9ibz/WRuGH5zXbE+8An+gWn5W4n+d+tgcr6yX4ehIB10q/IxtR9fHIGGqYtIr+sH3MUPkcxC/B8X26BcrD0olI5fGTfLv8FFSDRKHpPaPZjOg2AVvsIDi5tBpgi2WnJRgvBLHYiOZB1iqginMqRE8O2xrpR5RRQMt7BMH5YX4CHateWIBGnR8KEec6NVEjH28a9g4uiEidK9XdthCKfhBFSXMkrmQPfLlxXVW9e6TmyDGGb7j2/G4fd8Z7CFoqCfWWZBn0ShHJSnaAwKKZffWivEyBJZqjIOqTy8w9VQJMDdnuS5ESA3QRCMvguNfH8g7aDV2W2IjxBd8KoZ7SfQ9M0aVIE0kbBngEfslCXHNfnIVTypjgtBTdLIzV53EmanjnCphaW57huFo57HCZIRsaisq/Y0xUNYN5SeumHKss/zw0URrz55KH6gcV5gt4eoukOORHjP3mzseOJVTWLXkCx+UaeAHq3PrSWNaOuOuI5ZFmFyF05nSyEeCT91wDN+Z761YRViHPvD2rWBAFcuApnt/5674UylUNUXOB2eZOj29WcUSZGl17OUqErlB22qHUt3i6lOimYufw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(366004)(376002)(136003)(39850400004)(451199015)(86362001)(36756003)(110136005)(316002)(7406005)(54906003)(478600001)(38350700002)(52116002)(8936002)(44832011)(41300700001)(30864003)(2906002)(4326008)(6486002)(66946007)(66556008)(7416002)(6666004)(5660300002)(66476007)(38100700002)(26005)(8676002)(6512007)(83380400001)(6506007)(186003)(1076003)(2616005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C+48QwAXZC5yEi/kr6vKW5Hd3jP2SDHfjOAYX2ARqLwijYLQ/c+jvATQvATV?=
- =?us-ascii?Q?UgJDlPOwJTwUaG5/tWyHr0iGVh2w0ICX9ybdzwmLHVy7SKHOGfvfdNzkCep+?=
- =?us-ascii?Q?vPgnM9Ci+fU2fVaTpx+hXgpyJ2Ik1BMu84sfzWCUtigMhZ3+dY4y5RipbccA?=
- =?us-ascii?Q?QsxK9V838yXtK5nS/xQKznhIXmCgCNkmc/FEK16Bwd/zvjvHyFieYzXjuq/R?=
- =?us-ascii?Q?+f3JmyCAL8sKk/cr1eR+tcce8BxkIt85Qg6l3s85get8b2xtMyh8rI3eaXi9?=
- =?us-ascii?Q?3u8DPbIlXgBUdRBlmjE0lYGmdO7Wp7y0DsoFjp10biIrFMTJbINnuwS4O02S?=
- =?us-ascii?Q?qpzqm3bYsA/X438a0HBj2oZgjIDTQ113vYLfhPnbRs/rPjxW1lwbOi4eVvWd?=
- =?us-ascii?Q?VmcWHoAdmAN1LCC5k62XhSB6mF74gSFy8QNu0iG4RPQKQnFnX9JICLL7KQ8f?=
- =?us-ascii?Q?MQGRQJ7E7l71kw5iaNdaGt0jFBUthp327EO8PHP53IBriXe+3YnKfmveZLK0?=
- =?us-ascii?Q?vCSjB42u4sVuI2VeCEPlnYgtkb/bUABpR4udldVJ94lmOzvyg6NdzqSw02IB?=
- =?us-ascii?Q?h/ZzeMMGBBzM+YwlgaViyDiUKdzrkRrsqiSnOuB4HL9YAoK7SjKgzBQaL9Wl?=
- =?us-ascii?Q?CW07zcMDucOOs6crzbMXT/xmg8KfUUQMk76v2T8y8OYkCCmWdzuFcvdyfS2y?=
- =?us-ascii?Q?Q37IdMn1aW0W4ILpskPFyoKa4VBH660uaEY0DV/V53xBwsVKPRVIlI3Qc+D3?=
- =?us-ascii?Q?3nOHOSmEgOdt5JWwmTC8BHLHD5ZSG4esya1Vj8WVOFIYklQdN10puutnrHP5?=
- =?us-ascii?Q?oR96LRTORskYcUm91055mf1qkRv5AaFeW0Zhrke8YF7g8jUxW4DimN/rITzs?=
- =?us-ascii?Q?yR3CVYUgyAMQc8yzCs+fejJlGA5evXo3xRVdDSNhxRI4PD3Xvzm8jCR0bWxx?=
- =?us-ascii?Q?JJi2GOE7JWyKzWFbJ4DB27iLMnJ8CB/xePa8bUg85wbRhiksPK5YVZ9ocPpb?=
- =?us-ascii?Q?TcX1A03chZK4WQ0sIIEiK4bn1Tq3yTkwH2cvx0HK7KBT0O9lDz9ur7a6pQvt?=
- =?us-ascii?Q?Jzf5TNCcXiYc4JjIs1N573lSpyWqrF75dwlliRgcMzhzGYGbRuBpr9Men2AZ?=
- =?us-ascii?Q?7ywxc4m6CupMvMp7lR4Fn9C5JADslG5+lhx1BmkCTT2dPT4e0+6DG1w8uLLd?=
- =?us-ascii?Q?iapz7rMXysfrqCdVWP9G4K8GncO4HIRGO23PI/BQE/g92NQlFkc073gJbJey?=
- =?us-ascii?Q?D/EPl1DzsyjVbqbr1/ttRPXy+CBpFzue5Q2i0UbOSNbV+1+4vohB0IlKqq0e?=
- =?us-ascii?Q?FLKLUW4jWdZNFMs4/yS4EtWDISy5ahWNETNOh8qtRTzMaucZhs7lMP63L9RH?=
- =?us-ascii?Q?toi/UPT4+qnBWbMyD1rZIggjy6F6Si1qSicBnyHOLRbCk5kRR0Segv+cv7yZ?=
- =?us-ascii?Q?M47/aXUWlD4n6o+FwFIvuFzO5x6rEDDvKfFOye4OJoy4pEejWr4C8pGA7iNf?=
- =?us-ascii?Q?oB3Itdv/j/WXabrvJjoUVtF8Z6R6BusZ/il/yxm02fqJ7bJFFE83xfQFOYN0?=
- =?us-ascii?Q?Z+ryacsvnX0QfUOMW3z4FztNEfeNoXViJWFcauJRQHgnyzNnOZK51NPqiiIg?=
- =?us-ascii?Q?TQ=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UjNLUGZVdW1NWmh3dEpyaDNSSDFyWW1oUGhmUUZIL1EwUDg0d2IvZjhOK2g3?=
+ =?utf-8?B?djQyTGM2OVVBTWNRNFA2eXpKUTRQNng0QnRHY2h1cE5NK09FbnFwcGJMY2s5?=
+ =?utf-8?B?cko4R1lEYkQwMGVZNCtIbGlWU3BWZ3hyOGU5N2JqNjgzdlVGb0V4TVp4WEZY?=
+ =?utf-8?B?a0pjMFlQejNtOHNRdXRmQmdZd050NFcxdWg3emhHMFZDWnNFY05OWEwvRXM3?=
+ =?utf-8?B?WnVHRjlrMldWYUxFWWlhSk9SNFhwZUdibmZwUFBPaElmSEkraWRYQkVkVEJO?=
+ =?utf-8?B?SXJlY3ZxNG12ODV3SFpMV3oySDFHWWN0Qzh3NEs0ak9BZkNzZUZVL1ovQ3NN?=
+ =?utf-8?B?K1FrNkkyWjR5QXBTUnN3b1FLN0hHMnRSZ3FOSks5aHU3V2FLOCtadlZsOTRz?=
+ =?utf-8?B?WUUvYzYrSmd4NEROWlVjcFJ0dVorUjB6TTdTODEvTk13Y1FzTjBUMS9nRmE0?=
+ =?utf-8?B?WDUrdEZLYTNzQmFWVU9XRGQ2M3lVZ0xZS1lndnFlZ0FiZU5zckNsM0tSR25W?=
+ =?utf-8?B?M3QzNmRxcDFGZDlEK2U4VG1HRXo3dDFVblNRYVU3cHY0UUE2OHpUbURKUVE1?=
+ =?utf-8?B?NER1dmpRMTZ0MXc2TDN5cVBxWS9yeEM4RURwRkdZUGpxUGtEdGp5ZFBJdW9F?=
+ =?utf-8?B?WDVlektqeWdvRW1wdUh1TXV2SnMxa0xFNEQvSjZIMHRSZS82OWphcnlodGN5?=
+ =?utf-8?B?TGpBeHp6RWRxUmM3d0YzRjRzK1pPeUJLZVRvYnpnSjVtTjFIMGl3Wm5OZmth?=
+ =?utf-8?B?cW1rTEYyZEhHdnhIV2tsMWZJcE42Um5wMnpVYU1wc2lMV21VRDFZSFJ2RGR3?=
+ =?utf-8?B?UGFzd2hCWStWZTBDVldjZVd3eGMvUTdic3VFQUk1Q2tFV3NLbnowMkVOLzlR?=
+ =?utf-8?B?MEZLTHc5eGhiNnIzTEFBUitORmROQ3dGb0RXbnhSOSs0ZUxEb3BTS2l4ZFBq?=
+ =?utf-8?B?OEpIeDVxd3l3TU5FSTltWVVMNW9heWVYWEtkWEsvblloZDhSMHhHcU02ZHAv?=
+ =?utf-8?B?R1oyYnNFSko2aXpUaXNVcVFCVFNKRjhsaW55UUdYd2RpWFBsbjZqUlFidndH?=
+ =?utf-8?B?Sk5kVUNtZXdUZkI4TDQrZjc2bkFsK2V1ZHcwQkJaZ0RVTjUxbnJheUY4bVBi?=
+ =?utf-8?B?TCtjbHdQQm5ubHcvNkdmMGN0djlCWlBWNUhJSFdsN1pQS1VwdXpMdEVPUWdi?=
+ =?utf-8?B?dUo1VHNoNmN3RkQvVmpaTU1scytoUnR1bVZGZW0vaWxnYWNPWHpOSnB4Misr?=
+ =?utf-8?B?MmdSOWJOQS9LV3B5bnNRSFBla3N2SVdzdzNJTkdZajNyanhPNUtDVnVkTmpH?=
+ =?utf-8?B?VStoeVRLZmtXUHp6UVN2QTU2dE8wVmZPSkJremlOc2VlUVhnYm95Ni9zdnVl?=
+ =?utf-8?B?SkZ4WHVscWJmdDkweW94SWE1QlAvZVVKbFF1TVJrYVhQd251cTBIaUI3aDhY?=
+ =?utf-8?B?UTVaYllBTENJYnFOY3JlM1FlR0ZqN0pzZWk0ODBNcEN0MjNoUFVITXZYS2tY?=
+ =?utf-8?B?TndoekJQUGVCd0hBY1RmOHZaYlJzVFJZT0pxN2dqbVRZMkxLdFpkU2g3a1NG?=
+ =?utf-8?B?akdmenhJRkpsbjFGWjdHdkpoYTNZczFHTG1XQjl6K093ZnlscHNSbXR5MmZz?=
+ =?utf-8?B?RjM0cHB3ZFljdFlGNkJjSTZnc0tPeTRVSjdSbVpVekJFMEFBajU2bk10Y2VQ?=
+ =?utf-8?B?am5leGI4ZWUrWGxoRTM5WExzeWVNYisxWFBjcCtDNDhnU3pzNk5IVWxpMkV6?=
+ =?utf-8?B?dENRWVdvZDVaeXFVOVJYUDR4M21FVFJoWklUMldwWXlQRmhQNGcvZmRaYUlm?=
+ =?utf-8?B?MjNBS212MGxibVJic2RrZ1czb1kvam4vcTJFZExxS1Y3ZjBrRmpvd3RnTmNj?=
+ =?utf-8?B?QU51RysxWXNMMDBYR3ZDbDgzMmFMNFBZVnVkeU5kVXlRNjNjdEcvZnB3MS83?=
+ =?utf-8?B?L0xSR21WWngydzJFVEQ3WXJYRi9xUjd5UWlEQXhXL0VTRDJZNTJ6cnhwLzF4?=
+ =?utf-8?B?QXFvaUdoUDVuWCt3OGJQMExYVEFLWFNkaHdWbW53TDlsbzdvMmdqUHdXK0ZO?=
+ =?utf-8?B?ci9TOUgvS3Y4Nk9JSmxEQ2xSeUZvRXNMVnlOeUt3bFNGTlRwWjd0eFRkS1Nu?=
+ =?utf-8?B?M0gxa0dvdEhKZTh3RVZremYrdDFXM2tNb3lMRWQ1NmcwUXBiVGc1Ly9JdS9Q?=
+ =?utf-8?B?MlE9PQ==?=
 X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 018f03e4-a305-4ac9-25d9-08dae4759b07
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0773e21-0506-45e2-4bab-08dae4759fd8
 X-MS-Exchange-CrossTenant-AuthSource: DB9PR03MB8847.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 23:38:19.0662
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 23:38:27.2123
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6KSwa0DgHjRRJSl/fupxp2pWp/sBt+YZVyTw68BWlejvQiIUOr0MuPL3zt9Y6kiU6EIEh/Jy9IvQ7+wsLqxE7A==
+X-MS-Exchange-CrossTenant-UserPrincipalName: OoB/31SbI/ndNhK5KWP5CvXNmRWBgy3BSwSe+BIP+B121xOTVy1mGVC7xOz5CUd5661o8h8BpAZpH2o846h00A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR03MB9100
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -128,73 +156,364 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert users of component_match_add_release with component_release_of
-and component_compare_of to component_match_add_of.
+Every user of this function either uses component_compare_of or
+something equivalent. Most of them immediately put the device node as
+well. Convert these users to component_match_add_of and remove
+drm_of_component_match_add.
 
 Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-Acked-by: Mark Brown <broonie@kernel.org>
+Acked-by: Jyri Sarha <jyri.sarhaı@iki.fi>
+Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
 ---
 
-Changes in v2:
-- Split off from helper addition
+(no changes since v1)
 
- drivers/iommu/mtk_iommu.c    | 3 +--
- drivers/iommu/mtk_iommu_v1.c | 3 +--
- sound/soc/codecs/wcd938x.c   | 6 ++----
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ .../gpu/drm/arm/display/komeda/komeda_drv.c   |  6 ++--
+ drivers/gpu/drm/arm/hdlcd_drv.c               |  9 +-----
+ drivers/gpu/drm/arm/malidp_drv.c              | 11 +------
+ drivers/gpu/drm/armada/armada_drv.c           | 10 ++++---
+ drivers/gpu/drm/drm_of.c                      | 29 +++----------------
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c         |  4 +--
+ .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |  3 +-
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  3 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  4 +--
+ drivers/gpu/drm/msm/msm_drv.c                 | 14 ++++-----
+ drivers/gpu/drm/sti/sti_drv.c                 |  3 +-
+ drivers/gpu/drm/sun4i/sun4i_drv.c             |  3 +-
+ drivers/gpu/drm/tilcdc/tilcdc_external.c      | 10 ++-----
+ include/drm/drm_of.h                          | 12 --------
+ 14 files changed, 33 insertions(+), 88 deletions(-)
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 2ab2ecfe01f8..483b7a9e4410 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -1079,8 +1079,7 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
- 		}
- 		data->larb_imu[id].dev = &plarbdev->dev;
+diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+index 3f4e719eebd8..e3bfc72c378f 100644
+--- a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
++++ b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+@@ -103,10 +103,8 @@ static void komeda_add_slave(struct device *master,
+ 	struct device_node *remote;
  
--		component_match_add_release(dev, match, component_release_of,
--					    component_compare_of, larbnode);
-+		component_match_add_of(dev, match, larbnode);
- 	}
+ 	remote = of_graph_get_remote_node(np, port, endpoint);
+-	if (remote) {
+-		drm_of_component_match_add(master, match, component_compare_of, remote);
+-		of_node_put(remote);
+-	}
++	if (remote)
++		component_match_add_of(master, match, remote);
+ }
  
- 	/* Get smi-(sub)-common dev from the last larb. */
-diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-index 6e0e65831eb7..fb09ed6bf550 100644
---- a/drivers/iommu/mtk_iommu_v1.c
-+++ b/drivers/iommu/mtk_iommu_v1.c
-@@ -672,8 +672,7 @@ static int mtk_iommu_v1_probe(struct platform_device *pdev)
- 		}
- 		data->larb_imu[i].dev = &plarbdev->dev;
+ static int komeda_platform_probe(struct platform_device *pdev)
+diff --git a/drivers/gpu/drm/arm/hdlcd_drv.c b/drivers/gpu/drm/arm/hdlcd_drv.c
+index 7043d1c9ed8f..fa37ca10c80b 100644
+--- a/drivers/gpu/drm/arm/hdlcd_drv.c
++++ b/drivers/gpu/drm/arm/hdlcd_drv.c
+@@ -353,11 +353,6 @@ static const struct component_master_ops hdlcd_master_ops = {
+ 	.unbind		= hdlcd_drm_unbind,
+ };
  
--		component_match_add_release(dev, &match, component_release_of,
--					    component_compare_of, larbnode);
-+		component_match_add_of(dev, &match, larbnode);
- 	}
- 
- 	platform_set_drvdata(pdev, data);
-diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index aca06a4026f3..2f8444e54083 100644
---- a/sound/soc/codecs/wcd938x.c
-+++ b/sound/soc/codecs/wcd938x.c
-@@ -4474,8 +4474,7 @@ static int wcd938x_add_slave_components(struct wcd938x_priv *wcd938x,
- 	}
- 
- 	of_node_get(wcd938x->rxnode);
--	component_match_add_release(dev, matchptr, component_release_of,
--				    component_compare_of, wcd938x->rxnode);
-+	component_match_add_of(dev, matchptr, wcd938x->rxnode);
- 
- 	wcd938x->txnode = of_parse_phandle(np, "qcom,tx-device", 0);
- 	if (!wcd938x->txnode) {
-@@ -4483,8 +4482,7 @@ static int wcd938x_add_slave_components(struct wcd938x_priv *wcd938x,
+-static int compare_dev(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ static int hdlcd_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *port;
+@@ -368,9 +363,7 @@ static int hdlcd_probe(struct platform_device *pdev)
+ 	if (!port)
  		return -ENODEV;
+ 
+-	drm_of_component_match_add(&pdev->dev, &match, compare_dev, port);
+-	of_node_put(port);
+-
++	component_match_add_of(&pdev->dev, &match, port);
+ 	return component_master_add_with_match(&pdev->dev, &hdlcd_master_ops,
+ 					       match);
+ }
+diff --git a/drivers/gpu/drm/arm/malidp_drv.c b/drivers/gpu/drm/arm/malidp_drv.c
+index 589c1c66a6dc..3a49c29ba5b8 100644
+--- a/drivers/gpu/drm/arm/malidp_drv.c
++++ b/drivers/gpu/drm/arm/malidp_drv.c
+@@ -909,13 +909,6 @@ static const struct component_master_ops malidp_master_ops = {
+ 	.unbind = malidp_unbind,
+ };
+ 
+-static int malidp_compare_dev(struct device *dev, void *data)
+-{
+-	struct device_node *np = data;
+-
+-	return dev->of_node == np;
+-}
+-
+ static int malidp_platform_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *port;
+@@ -929,9 +922,7 @@ static int malidp_platform_probe(struct platform_device *pdev)
+ 	if (!port)
+ 		return -ENODEV;
+ 
+-	drm_of_component_match_add(&pdev->dev, &match, malidp_compare_dev,
+-				   port);
+-	of_node_put(port);
++	component_match_add_of(&pdev->dev, &match, port);
+ 	return component_master_add_with_match(&pdev->dev, &malidp_master_ops,
+ 					       match);
+ }
+diff --git a/drivers/gpu/drm/armada/armada_drv.c b/drivers/gpu/drm/armada/armada_drv.c
+index 0643887800b4..c0211ad7a45d 100644
+--- a/drivers/gpu/drm/armada/armada_drv.c
++++ b/drivers/gpu/drm/armada/armada_drv.c
+@@ -184,10 +184,12 @@ static void armada_add_endpoints(struct device *dev,
+ 
+ 	for_each_endpoint_of_node(dev_node, ep) {
+ 		remote = of_graph_get_remote_port_parent(ep);
+-		if (remote && of_device_is_available(remote))
+-			drm_of_component_match_add(dev, match, component_compare_of,
+-						   remote);
+-		of_node_put(remote);
++		if (remote) {
++			if (of_device_is_available(remote))
++				component_match_add_of(dev, match, remote);
++			else
++				of_node_put(remote);
++		}
  	}
- 	of_node_get(wcd938x->txnode);
--	component_match_add_release(dev, matchptr, component_release_of,
--				    component_compare_of, wcd938x->txnode);
-+	component_match_add_of(dev, matchptr, wcd938x->txnode);
+ }
+ 
+diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
+index 7bbcb999bb75..0a474729ddf6 100644
+--- a/drivers/gpu/drm/drm_of.c
++++ b/drivers/gpu/drm/drm_of.c
+@@ -78,24 +78,6 @@ uint32_t drm_of_find_possible_crtcs(struct drm_device *dev,
+ }
+ EXPORT_SYMBOL(drm_of_find_possible_crtcs);
+ 
+-/**
+- * drm_of_component_match_add - Add a component helper OF node match rule
+- * @master: master device
+- * @matchptr: component match pointer
+- * @compare: compare function used for matching component
+- * @node: of_node
+- */
+-void drm_of_component_match_add(struct device *master,
+-				struct component_match **matchptr,
+-				int (*compare)(struct device *, void *),
+-				struct device_node *node)
+-{
+-	of_node_get(node);
+-	component_match_add_release(master, matchptr, component_release_of,
+-				    compare, node);
+-}
+-EXPORT_SYMBOL_GPL(drm_of_component_match_add);
+-
+ /**
+  * drm_of_component_probe - Generic probe function for a component based master
+  * @dev: master device containing the OF node
+@@ -130,10 +112,9 @@ int drm_of_component_probe(struct device *dev,
+ 			break;
+ 
+ 		if (of_device_is_available(port->parent))
+-			drm_of_component_match_add(dev, &match, compare_of,
+-						   port);
+-
+-		of_node_put(port);
++			component_match_add_of(dev, &match, port);
++		else
++			of_node_put(port);
+ 	}
+ 
+ 	if (i == 0) {
+@@ -171,9 +152,7 @@ int drm_of_component_probe(struct device *dev,
+ 				continue;
+ 			}
+ 
+-			drm_of_component_match_add(dev, &match, compare_of,
+-						   remote);
+-			of_node_put(remote);
++			component_match_add_of(dev, &match, remote);
+ 		}
+ 		of_node_put(port);
+ 	}
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+index 1d2b4fb4bcf8..4a0dba34a6e7 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+@@ -590,8 +590,8 @@ static int etnaviv_pdev_probe(struct platform_device *pdev)
+ 			if (!first_node)
+ 				first_node = core_node;
+ 
+-			drm_of_component_match_add(&pdev->dev, &match,
+-						   component_compare_of, core_node);
++			of_node_get(core_node);
++			component_match_add_of(&pdev->dev, &match, core_node);
+ 		}
+ 	} else {
+ 		char **names = dev->platform_data;
+diff --git a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+index 9c5d49bf40c9..3ee277615c39 100644
+--- a/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
++++ b/drivers/gpu/drm/hisilicon/kirin/kirin_drm_drv.c
+@@ -273,8 +273,7 @@ static int kirin_drm_platform_probe(struct platform_device *pdev)
+ 	if (!remote)
+ 		return -ENODEV;
+ 
+-	drm_of_component_match_add(dev, &match, component_compare_of, remote);
+-	of_node_put(remote);
++	component_match_add_of(dev, &match, remote);
+ 
+ 	return component_master_add_with_match(dev, &kirin_drm_ops, match);
+ }
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index 3d5af44bf92d..d0c87175dec4 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -1444,8 +1444,7 @@ static int ingenic_drm_probe(struct platform_device *pdev)
+ 	if (!np)
+ 		return ingenic_drm_bind(dev, false);
+ 
+-	drm_of_component_match_add(dev, &match, component_compare_of, np);
+-	of_node_put(np);
++	component_match_add_of(dev, &match, np);
+ 
+ 	return component_master_add_with_match(dev, &ingenic_master_ops, match);
+ }
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+index cd5b18ef7951..abead814bfdc 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+@@ -787,8 +787,8 @@ static int mtk_drm_probe(struct platform_device *pdev)
+ 		    comp_type == MTK_DSI) {
+ 			dev_info(dev, "Adding component match for %pOF\n",
+ 				 node);
+-			drm_of_component_match_add(dev, &match, component_compare_of,
+-						   node);
++			of_node_get(node);
++			component_match_add_of(dev, &match, node);
+ 		}
+ 
+ 		ret = mtk_ddp_comp_init(node, &private->ddp_comp[comp_id], comp_id);
+diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+index 8b0b0ac74a6f..8ccf57def955 100644
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -5,6 +5,7 @@
+  * Author: Rob Clark <robdclark@gmail.com>
+  */
+ 
++#include <linux/component.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/fault-inject.h>
+ #include <linux/kthread.h>
+@@ -1156,10 +1157,9 @@ static int add_components_mdp(struct device *master_dev,
+ 			continue;
+ 
+ 		if (of_device_is_available(intf))
+-			drm_of_component_match_add(master_dev, matchptr,
+-						   component_compare_of, intf);
+-
+-		of_node_put(intf);
++			component_match_add_of(master_dev, matchptr, intf);
++		else
++			of_node_put(intf);
+ 	}
+ 
+ 	return 0;
+@@ -1188,9 +1188,9 @@ static int add_gpu_components(struct device *dev,
+ 		return 0;
+ 
+ 	if (of_device_is_available(np))
+-		drm_of_component_match_add(dev, matchptr, component_compare_of, np);
+-
+-	of_node_put(np);
++		component_match_add_of(dev, matchptr, np);
++	else
++		of_node_put(np);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/gpu/drm/sti/sti_drv.c b/drivers/gpu/drm/sti/sti_drv.c
+index ef6a4e63198f..e3aae4574c75 100644
+--- a/drivers/gpu/drm/sti/sti_drv.c
++++ b/drivers/gpu/drm/sti/sti_drv.c
+@@ -238,8 +238,7 @@ static int sti_platform_probe(struct platform_device *pdev)
+ 	child_np = of_get_next_available_child(node, NULL);
+ 
+ 	while (child_np) {
+-		drm_of_component_match_add(dev, &match, component_compare_of,
+-					   child_np);
++		component_match_add_of(dev, &match, child_np);
+ 		child_np = of_get_next_available_child(node, child_np);
+ 	}
+ 
+diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
+index cc94efbbf2d4..9b3ddd82f1be 100644
+--- a/drivers/gpu/drm/sun4i/sun4i_drv.c
++++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
+@@ -323,7 +323,8 @@ static int sun4i_drv_add_endpoints(struct device *dev,
+ 	     of_device_is_available(node))) {
+ 		/* Add current component */
+ 		DRM_DEBUG_DRIVER("Adding component %pOF\n", node);
+-		drm_of_component_match_add(dev, match, component_compare_of, node);
++		of_node_get(node);
++		component_match_add_of(dev, match, node);
+ 		count++;
+ 	}
+ 
+diff --git a/drivers/gpu/drm/tilcdc/tilcdc_external.c b/drivers/gpu/drm/tilcdc/tilcdc_external.c
+index 3b86d002ef62..0138ce02a64f 100644
+--- a/drivers/gpu/drm/tilcdc/tilcdc_external.c
++++ b/drivers/gpu/drm/tilcdc/tilcdc_external.c
+@@ -155,11 +155,6 @@ int tilcdc_attach_external_device(struct drm_device *ddev)
+ 	return ret;
+ }
+ 
+-static int dev_match_of(struct device *dev, void *data)
+-{
+-	return dev->of_node == data;
+-}
+-
+ int tilcdc_get_external_components(struct device *dev,
+ 				   struct component_match **match)
+ {
+@@ -173,7 +168,8 @@ int tilcdc_get_external_components(struct device *dev,
+ 	}
+ 
+ 	if (match)
+-		drm_of_component_match_add(dev, match, dev_match_of, node);
+-	of_node_put(node);
++		component_match_add_of(dev, match, node);
++	else
++		of_node_put(node);
+ 	return 1;
+ }
+diff --git a/include/drm/drm_of.h b/include/drm/drm_of.h
+index 10ab58c40746..685c44dc1dae 100644
+--- a/include/drm/drm_of.h
++++ b/include/drm/drm_of.h
+@@ -33,10 +33,6 @@ uint32_t drm_of_crtc_port_mask(struct drm_device *dev,
+ 			    struct device_node *port);
+ uint32_t drm_of_find_possible_crtcs(struct drm_device *dev,
+ 				    struct device_node *port);
+-void drm_of_component_match_add(struct device *master,
+-				struct component_match **matchptr,
+-				int (*compare)(struct device *, void *),
+-				struct device_node *node);
+ int drm_of_component_probe(struct device *dev,
+ 			   int (*compare_of)(struct device *, void *),
+ 			   const struct component_master_ops *m_ops);
+@@ -69,14 +65,6 @@ static inline uint32_t drm_of_find_possible_crtcs(struct drm_device *dev,
  	return 0;
  }
  
+-static inline void
+-drm_of_component_match_add(struct device *master,
+-			   struct component_match **matchptr,
+-			   int (*compare)(struct device *, void *),
+-			   struct device_node *node)
+-{
+-}
+-
+ static inline int
+ drm_of_component_probe(struct device *dev,
+ 		       int (*compare_of)(struct device *, void *),
 -- 
 2.35.1.1320.gc452695387.dirty
 
