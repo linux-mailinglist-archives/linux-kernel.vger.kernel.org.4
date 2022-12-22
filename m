@@ -2,130 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F2F653A2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 01:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A82653A2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 01:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234829AbiLVApz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 19:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
+        id S234872AbiLVArE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 19:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiLVApy (ORCPT
+        with ESMTP id S229601AbiLVArC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 19:45:54 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B883F314
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 16:45:52 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id i21-20020a056e021d1500b003041b04e3ebso260283ila.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 16:45:52 -0800 (PST)
+        Wed, 21 Dec 2022 19:47:02 -0500
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6A2314;
+        Wed, 21 Dec 2022 16:47:00 -0800 (PST)
+Received: by mail-pg1-f180.google.com with SMTP id s196so340969pgs.3;
+        Wed, 21 Dec 2022 16:47:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zYUhkFKvY5IbV4RqNVKD9rJbddGx3SRJptJw8BeSSvY=;
-        b=S9M9SrYVigIVbayAAayr/FdM/Kz/hVCrD0L5/ETe4XKfmzEYMuRiD+9YiHKkw7B32v
-         eI+7Xe9E7mLFBIprabmkstw2mCBT2KJMZ/vc/ZWLeGKwLEo0FjsbOnX6zypbGReVMZ8W
-         jGeqUCU00rSnChpW2lX4d0Z3oMaVmWc1xEYsGgCHGwWE1KP4/Wh53ZmHpHcDsaDIVJNg
-         MVwniA0o7zLbGTE1zySHX0WWTms6Mce/IcO5pJQKMWWzEySlvHS7EfpMeSPgNbCXx3Nx
-         wA5a30KoJGSzBRoJjYJCuBNghqVI5QRZTVDt6GmAW0I0hicSerIjvuQrbt7umzOMNItX
-         x0Vg==
-X-Gm-Message-State: AFqh2kr1TXP2x9N/ObxVjKkQY12EsZu8T++5APG0lTann25KXhG2fGjX
-        S8qSxOfkHAmzgO0Qx3cLXyOk4+OA0M48uXVRUSDshK+7p8/D
-X-Google-Smtp-Source: AMrXdXsxMjUq/nIPr6Kdbmfdbfw8EXz556sp/PvVb3oBo6kHw9mYz8aYi6PUQN3iPIbvpYpSIidIYBKNjK0PiuA/9K1pP2LmxPk+
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D8q+249haixB7NYYpN2RHdBV90bkuxv5Hi/JR+Cotic=;
+        b=nZnvQnYyKBPQ78V++T6KAA8f45BHvb42rwZpNa9fV9dreFM5M7b9Tkp6HqOIIXcXEs
+         xaxBd45I7HNdNoyUUropgssACIvicc5TiufGRlFakCKNljlOHu8NkMA0BHL8sJJyBlzl
+         BMLNksaIqHCd5FDXeQfXr6FU/qMZdhc0mpRRDfu0vEAKPX2u3Nr6A+Kaux5SUeOd0rhZ
+         0ki/PfzWWczSHOUfsWEFMs4LnAM2cyldayTrv54KpfZN3lS2dZ5QHQzM4mjr1b17nbis
+         +OM4sd2t0UHBqMZObKhynInvRA4euk5d2uCeUduaizHA28dGRQ2G6Cg8k5ZF37D+8vIg
+         k8Sg==
+X-Gm-Message-State: AFqh2kosjtHVI60oubhstzz6BE1TCbII9qV5IuT4fEyz49TPb3BWq7fM
+        scmkzKLClDptSTby+YVeUblaUkrXYZORB56dgrEp1q318CI=
+X-Google-Smtp-Source: AMrXdXvRy0gMj7jpUxsIu5yTJZvAgCC1niu1PLKOOTN9T/h4F8EvgV2okW2zQLST6MZvo/mVilmodZPyvtWKFIa0o/g=
+X-Received: by 2002:a05:6a00:3387:b0:572:7c58:540 with SMTP id
+ cm7-20020a056a00338700b005727c580540mr238341pfb.69.1671670019429; Wed, 21 Dec
+ 2022 16:46:59 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d86:b0:304:c71d:8e03 with SMTP id
- h6-20020a056e021d8600b00304c71d8e03mr378450ila.274.1671669952042; Wed, 21 Dec
- 2022 16:45:52 -0800 (PST)
-Date:   Wed, 21 Dec 2022 16:45:52 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ac5f1705f05ffd3b@google.com>
-Subject: [syzbot] [gfs2?] UBSAN: array-index-out-of-bounds in __gfs2_iomap_get
-From:   syzbot <syzbot+45d4691b1ed3c48eba05@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
-        syzkaller-bugs@googlegroups.com
+References: <20221219212013.1294820-1-frank.jungclaus@esd.eu>
+ <20221219212013.1294820-2-frank.jungclaus@esd.eu> <CAMZ6RqKc0mvfQGEGb7gCE69Mskhzq5YKF88Jhe+1VR=43YW3Xg@mail.gmail.com>
+ <f9c68625149673fec635d64a21608f3b53866cd7.camel@esd.eu>
+In-Reply-To: <f9c68625149673fec635d64a21608f3b53866cd7.camel@esd.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 22 Dec 2022 09:46:48 +0900
+Message-ID: <CAMZ6RqL+7zLLkL_bXAR0iwk6XH_7F_-t472vnq_-jMgT4XC6UA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
+ event (1)
+To:     Frank Jungclaus <Frank.Jungclaus@esd.eu>
+Cc:     =?UTF-8?Q?Stefan_M=C3=A4tje?= <Stefan.Maetje@esd.eu>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue. 22 Dec. 2022 at 02:55, Frank Jungclaus <Frank.Jungclaus@esd.eu> wrote:
+> On Tue, 2022-12-20 at 14:16 +0900, Vincent MAILHOL wrote:
+> > On Tue. 20 Dec. 2022 at 06:25, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+> > >
+> > > Moved the supply for cf->data[3] (bit stream position of CAN error)
+> > > outside of the "switch (ecc & SJA1000_ECC_MASK){}"-statement, because
+> > > this position is independent of the error type.
+> > >
+> > > Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
+> > > Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> > > ---
+> > >  drivers/net/can/usb/esd_usb.c | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> > > index 42323f5e6f3a..5e182fadd875 100644
+> > > --- a/drivers/net/can/usb/esd_usb.c
+> > > +++ b/drivers/net/can/usb/esd_usb.c
+> > > @@ -286,7 +286,6 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+> > >                                 cf->data[2] |= CAN_ERR_PROT_STUFF;
+> > >                                 break;
+> > >                         default:
+> > > -                               cf->data[3] = ecc & SJA1000_ECC_SEG;
+> > >                                 break;
+> > >                         }
+> > >
+> > > @@ -294,6 +293,9 @@ static void esd_usb_rx_event(struct esd_usb_net_priv *priv,
+> > >                         if (!(ecc & SJA1000_ECC_DIR))
+> > >                                 cf->data[2] |= CAN_ERR_PROT_TX;
+> > >
+> > > +                       /* Bit stream position in CAN frame as the error was detected */
+> > > +                       cf->data[3] = ecc & SJA1000_ECC_SEG;
+> >
+> > Can you confirm that the value returned by the device matches the
+> > specifications from linux/can/error.h?
+>
+> The value returned is supposed to be compatible to the SJA1000 ECC
+> register.
+>
+> See
+> https://esd.eu/fileadmin/esd/docs/manuals/NTCAN_Part1_Function_API_Manual_en_56.pdf
+>
+> Chapter "6.2.10 EV_CAN_ERROR_EXT" (page 185)
+> and
+> "Annex B: Bus Error Code" table 37 and 38 (page 272 and following).
+>
+> So this should be compliant with the values given in linux/can/error.h.
 
-syzbot found the following issue on:
+Thanks for the link. It is indeed compliant.
 
-HEAD commit:    77856d911a8c Merge tag 'arm64-fixes' of git://git.kernel.o..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=155a6663880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f967143badd2fa39
-dashboard link: https://syzkaller.appspot.com/bug?extid=45d4691b1ed3c48eba05
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160f494f880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=123f9577880000
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b424d9203f5/disk-77856d91.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/47fd68051834/vmlinux-77856d91.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d3091f087a86/bzImage-77856d91.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/67525acd7f1d/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+45d4691b1ed3c48eba05@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 125323
-gfs2: fsid=syz:syz: Trying to join cluster "lock_nolock", "syz:syz"
-gfs2: fsid=syz:syz: Now mounting FS (format 1801)...
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/gfs2/bmap.c:901:46
-index 11 is out of range for type 'u64 [11]'
-CPU: 0 PID: 5067 Comm: syz-executor164 Not tainted 6.1.0-syzkaller-13031-g77856d911a8c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_out_of_bounds+0xe0/0x110 lib/ubsan.c:282
- __gfs2_iomap_get+0x4a4/0x16e0 fs/gfs2/bmap.c:901
- gfs2_iomap_get fs/gfs2/bmap.c:1399 [inline]
- gfs2_block_map+0x28f/0x7f0 fs/gfs2/bmap.c:1214
- gfs2_write_alloc_required+0x441/0x6e0 fs/gfs2/bmap.c:2322
- gfs2_jdesc_check+0x1b9/0x290 fs/gfs2/super.c:114
- init_journal+0x5a4/0x22c0 fs/gfs2/ops_fstype.c:804
- init_inodes+0xdc/0x340 fs/gfs2/ops_fstype.c:889
- gfs2_fill_super+0x1bb2/0x2700 fs/gfs2/ops_fstype.c:1247
- get_tree_bdev+0x400/0x620 fs/super.c:1282
- gfs2_get_tree+0x50/0x210 fs/gfs2/ops_fstype.c:1330
- vfs_get_tree+0x88/0x270 fs/super.c:1489
- do_new_mount+0x289/0xad0 fs/namespace.c:3145
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f2c63567aca
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd0e3a28d8 EFLAGS: 00000282 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f2c63567aca
-RDX: 0000000020037f40 RSI: 0000000020037f80 RDI: 00007ffd0e3a28e0
-RBP: 00007ffd0e3a28e0 R08: 00007ffd0e3a2920 R09: 0000000000043350
-R10: 0000000002000011 R11: 0000000000000282 R12: 0000000000000004
-R13: 00005555567192c0 R14: 00007ffd0e3a2920 R15: 0000000000000000
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> >   https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/error.h#L90
+> >
+> > >                         if (priv->can.state == CAN_STATE_ERROR_WARNING ||
+> > >                             priv->can.state == CAN_STATE_ERROR_PASSIVE) {
+> > >                                 cf->data[1] = (txerr > rxerr) ?
+> > > --
+> > > 2.25.1
+> > >
+>
