@@ -2,56 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51123654937
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 00:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A24865493F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 00:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiLVXVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 18:21:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S229475AbiLVX2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 18:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiLVXVQ (ORCPT
+        with ESMTP id S230012AbiLVX2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 18:21:16 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1D46275;
-        Thu, 22 Dec 2022 15:21:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7070ACE1B8A;
-        Thu, 22 Dec 2022 23:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2F5C433EF;
-        Thu, 22 Dec 2022 23:21:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671751271;
-        bh=l6dL2vDSNcL7oYRW+amc2+4KyYkOXC0ok5zluOYGF/g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Us100g1wlq6MRpiTXSukcbxWLPU4glMHHxSIsSW5tmgjbU5PUCDDOe7gHmx/riPRo
-         11b3JkF/y8fctAVaiDwp48R6YryN86LM3/dakavL6IHhvpaHZQ0b4swv3BOAPr7fvo
-         7F+XEEOQFfqZ2QpYVHMkmqSc1cErCWHyB4UGkE5m/op+cMqNmcVhZYSzv9KlAg0M2O
-         XDLnfVxGNGLh9i5rSzyJ9JBmA00ooCGEmKLQ00O+dQgtPcDuA2W+m6+U1PEex4dmgK
-         G6dpmmNRPupLBgat3Kg2p733GRAlD3B1K0WJrUrAd7FiVb+INZ43xBbz9SbGeAW23k
-         6cl5O38+Fl5dg==
-Date:   Thu, 22 Dec 2022 23:21:06 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Message-ID: <Y6TmYjr07W9WJEPn@spud>
-References: <20221213060204.27286-1-alexghiti@rivosinc.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9ftFqcji9/MYD4OZ"
+        Thu, 22 Dec 2022 18:28:15 -0500
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Dec 2022 15:28:13 PST
+Received: from second.openwall.net (second.openwall.net [193.110.157.125])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6847C1AA0B
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 15:28:13 -0800 (PST)
+Received: (qmail 10063 invoked from network); 22 Dec 2022 23:21:31 -0000
+Received: from localhost (HELO pvt.openwall.com) (127.0.0.1)
+  by localhost with SMTP; 22 Dec 2022 23:21:31 -0000
+Received: by pvt.openwall.com (Postfix, from userid 503)
+        id 59670AB3A4; Fri, 23 Dec 2022 00:21:12 +0100 (CET)
+Date:   Fri, 23 Dec 2022 00:21:12 +0100
+From:   Solar Designer <solar@openwall.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     oss-security@lists.openwall.com,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
+Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat correctly
+Message-ID: <20221222232112.GA29438@openwall.com>
+References: <Y6SJDbKBk471KE4k@p183> <Y6TUJcr/IHrsTE0W@codewreck.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221213060204.27286-1-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Y6TUJcr/IHrsTE0W@codewreck.org>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,86 +44,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 23, 2022 at 07:03:17AM +0900, Dominique Martinet wrote:
+> Alexey Dobriyan wrote on Thu, Dec 22, 2022 at 07:42:53PM +0300:
+> > --- a/man5/proc.5
+> > +++ b/man5/proc.5
+> > @@ -2092,6 +2092,11 @@ Strings longer than
+> >  .B TASK_COMM_LEN
+> >  (16) characters (including the terminating null byte) are silently truncated.
+> >  This is visible whether or not the executable is swapped out.
+> > +
+> > +Note that \fIcomm\fP can contain space and closing parenthesis characters. 
+> > +Parsing /proc/${pid}/stat with split() or equivalent, or scanf(3) isn't
+> > +reliable. The correct way is to locate closing parenthesis with strrchr(')')
+> > +from the end of the buffer and parse integers from there.
+> 
+> That's still not enough unless new lines are escaped, which they aren't:
+> 
+> $ echo -n 'test) 0 0 0
+> ' > /proc/$$/comm
+> $ cat /proc/$$/stat
+> 71076 (test) 0 0 0
+> ) S 71075 71076 71076 34840 71192 4194304 6623 6824 0 0 10 3 2 7 20 0 1 0 36396573 15208448 2888 18446744073709551615 94173281726464 94173282650929 140734972513568 0 0 0 65536 3686404 1266761467 1 0 0 17 1 0 0 0 0 0 94173282892592 94173282940880 94173287231488 140734972522071 140734972522076 140734972522076 140734972526574 0
+> 
+> The silver lining here is that comm length is rather small (16) so we
+> cannot emulate full lines and a very careful process could notice that
+> there are not enough fields after the last parenthesis... So just look
+> for the last closing parenthesis in the next line and try again?
 
---9ftFqcji9/MYD4OZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No, just don't treat this file's content as a line (nor as several
+lines) - treat it as a string that might contain new line characters.
 
-On Tue, Dec 13, 2022 at 07:02:04AM +0100, Alexandre Ghiti wrote:
-> During the early page table creation, we used to set the mapping for
-> PAGE_OFFSET to the kernel load address: but the kernel load address is
-> always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-> pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-> PAGE_OFFSET is).
->=20
-> But actually we don't have to establish this mapping (ie set va_pa_offset)
-> that early in the boot process because:
->=20
-> - first, setup_vm installs a temporary kernel mapping and among other
->   things, discovers the system memory,
-> - then, setup_vm_final creates the final kernel mapping and takes
->   advantage of the discovered system memory to create the linear
->   mapping.
->=20
-> During the first phase, we don't know the start of the system memory and
-> then until the second phase is finished, we can't use the linear mapping =
-at
-> all and phys_to_virt/virt_to_phys translations must not be used because it
-> would result in a different translation from the 'real' one once the final
-> mapping is installed.
->=20
-> So here we simply delay the initialization of va_pa_offset to after the
-> system memory discovery. But to make sure noone uses the linear mapping
-> before, we add some guard in the DEBUG_VIRTUAL config.
->=20
-> Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-> in a better TLB utilization.
->=20
-> Note that we rely on the firmware to protect itself using PMP.
->=20
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
->=20
-> v3:
-> - Change the comment about initrd_start VA conversion so that it fits
->   ARM64 and RISCV64 (and others in the future if needed), as suggested
->   by Rob
->=20
-> v2:
-> - Add a comment on why RISCV64 does not need to set initrd_start/end that
->   early in the boot process, as asked by Rob
->=20
-> Note that this patch is rebased on top of:
-> [PATCH v1 1/1] riscv: mm: call best_map_size many times during linear-map=
-ping
+The ps command from procps-ng seems to manage, e.g. for your test "ps c"
+prints:
 
-Hey Alex, unfortunately I could not get this to apply either (I tried a
-riscv/for-next & Linus' tree).
-The above patch should be in both, so idk:
-git am -3 v3_20221213_alexghiti_riscv_use_pud_p4d_pgd_pages_for_the_linear_=
-mapping.mbx
-Applying: riscv: Use PUD/P4D/PGD pages for the linear mapping
-error: sha1 information is lacking or useless (arch/riscv/mm/init.c).
-error: could not build fake ancestor
-Patch failed at 0001 riscv: Use PUD/P4D/PGD pages for the linear mapping
+29394 pts/3    S      0:00 test) 0 0 0?
 
-I assume it'll need a rebase after -rc1?
+where the question mark is what it substitutes for the non-printable
+character (the new line character).  I didn't check whether the process
+name it prints comes from /proc/$$/stat or /proc/$$/status, though (per
+strace, it reads both).
 
-It's really nice to see someone looking at this early code, from the
-bit of digging around that I've done chasing bugs it feels like it needs
-it- so thanks!
+> But, really, I just don't see how this can practically be said to be parsable...
 
+This format certainly makes it easier to get a parser wrong than to get
+it right.
 
---9ftFqcji9/MYD4OZ
-Content-Type: application/pgp-signature; name="signature.asc"
+I agree the above man page edit is not enough, and should also mention
+the caveat that this shouldn't be read in nor parsed as a line.
 
------BEGIN PGP SIGNATURE-----
+Also, the Linux kernel does have problems with new lines in the comm
+field elsewhere, at least in the log messages it produces:
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6TmYgAKCRB4tDGHoIJi
-0izPAP9karoTeNWFNJMv29u3mPiB5aYGZlbcvx9ezsfRYThJLgEAshJH3WY+pdJL
-JZ083PbuMpcDpANbhziGKxUSbknqmQ8=
-=Khpa
------END PGP SIGNATURE-----
+https://github.com/lkrg-org/lkrg/issues/165
 
---9ftFqcji9/MYD4OZ--
+Here I looked into this in context of LKRG development, but with the
+kernel itself also producing messages with comm in them the point of
+only fixing LKRG's messages is moot.
+
+Alexander
+
+P.S. While this thread goes well so far, please note that in general
+CC'ing other lists on postings to oss-security (or vice versa) is
+discouraged.  With such CC's, possible follow-ups from members of those
+other lists can be off-topic for oss-security - e.g., they might focus
+on non-security technicalities.  Probably not this time when only a man
+page is to be patched, but proposed patches to the Linux kernel often
+result in lengthy discussions and multiple versions of the patch.  In
+those cases, I think it's better to have separate threads and only post
+summary follow-up(s) to oss-security (e.g., one message stating that a
+patch was proposed and linking to the thread, and another after the
+final version is merged).
