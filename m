@@ -2,63 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07E0654378
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F63E654385
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235221AbiLVPBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
+        id S235480AbiLVPCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiLVPBM (ORCPT
+        with ESMTP id S235300AbiLVPCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:01:12 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8627765A6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XTTakKKGONeu99NX+RdV/3iW6zoTQF0qP973mKxDx7o=; b=SHkHag2Mw3rf/y0ZlemtnKyGgN
-        1UQs3KD8hyYZp5PhMXDY9Ya6vcEBAvxtZfxWiv67hDP54ogWqz8vOaXOEQwLh2+GdaKvQY95Z5BS6
-        Sb/3DD00EHnTNhPfulmeCouQ537B/SvzwGMCwSZsRGdKgQ8hxRDS+aH+7UfZhQZIzy9Kixm2FQv1/
-        l3nIddMjv2bXD+Jqz5eMDfKvshGRBGs7ZnJppN4AN2Gb7eTAvYLzejERhxFGesz+ND/fbwp4JyjQn
-        gN4WJNn1pYkeotAibbMbn3dhUXwWRSSm7OvXapvBbZOqM7fAIqtDHFiUCHmuwdTHlvQz+8yhkVLum
-        eB9CP4Hw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p8N4D-00DGeD-Nh; Thu, 22 Dec 2022 15:01:05 +0000
-Date:   Thu, 22 Dec 2022 07:01:05 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: Re: [PATCH v2 1/3] mm: vmalloc: Avoid of calling __find_vmap_area()
- twise in __vunmap()
-Message-ID: <Y6RxMQnevF++FlRG@infradead.org>
-References: <20221221174454.1085130-1-urezki@gmail.com>
- <Y6QbvYfvhUI3J7S+@infradead.org>
- <Y6RsmcvZ8Ru211Jk@pc636>
+        Thu, 22 Dec 2022 10:02:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436BD21812
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:02:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671721322;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LJ9TKjkNcbwIl+mphZW6iF9b6MFhoECdv27WBprwBlw=;
+        b=M3IqyvZS3yKdWhlO6ebxH0gqP68j7MYUxxykryNVppYvhqVR7uy/m2Pw0Gwk5G2k3SUgtq
+        hPpN558NrjHRhcqvMmHuligeXbrZlJLR2YYcz1hChNX5V07J68e5Lbng6DTlMkxdhf09Nc
+        CDujoVszFRsDGbP1PYxtDhL895K2qYY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-546-vEDcC2HANCu8HRye7N1l7Q-1; Thu, 22 Dec 2022 10:01:59 -0500
+X-MC-Unique: vEDcC2HANCu8HRye7N1l7Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C0CF1C06901;
+        Thu, 22 Dec 2022 15:01:57 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 844512166B29;
+        Thu, 22 Dec 2022 15:01:54 +0000 (UTC)
+Subject: [PATCH v5 0/3] mm, netfs,
+ fscache: Stop read optimisation when folio removed from pagecache
+From:   David Howells <dhowells@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Dave Wysochanski <dwysocha@redhat.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        linux-cachefs@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-nfs@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-mm@kvack.org, Theodore Ts'o <tytso@mit.edu>,
+        Ilya Dryomov <idryomov@gmail.com>, linux-cifs@vger.kernel.org,
+        dhowells@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, linux-erofs@lists.ozlabs.org,
+        linux-ext4@lists.ozlabs.org, linux-cachefs@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 22 Dec 2022 15:01:53 +0000
+Message-ID: <167172131368.2334525.8569808925687731937.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6RsmcvZ8Ru211Jk@pc636>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 03:41:29PM +0100, Uladzislau Rezki wrote:
-> Do you mean like:
 
-Yes.
+Hi Linus,
+
+I've split the folio_has_private()/filemap_release_folio() call pair
+merging into its own patch, separate from the actual bugfix and pulled out
+the folio_needs_release() function into mm/internal.h and made
+filemap_release_folio() use it.  I've also got rid of the bit clearances
+from the network filesystem evict_inode functions as they doesn't seem to
+be necessary.
+
+Note that the last vestiges of try_to_release_page() got swept away in the
+current merge window, so I rebased and dealt with that.  One comment
+remained, which is removed by the first patch.
+
+David
+
+Changes:
+========
+ver #5)
+ - Rebased on linus/master.  try_to_release_page() has now been entirely
+   replaced by filemap_release_folio(), barring one comment.
+ - Cleaned up some pairs in ext4.
+
+ver #4)
+ - Split has_private/release call pairs into own patch.
+ - Moved folio_needs_release() to mm/internal.h and removed open-coded
+   version from filemap_release_folio().
+ - Don't need to clear AS_RELEASE_ALWAYS in ->evict_inode().
+ - Added experimental patch to reduce shrink_folio_list().
+
+ver #3)
+ - Fixed mapping_clear_release_always() to use clear_bit() not set_bit().
+ - Moved a '&&' to the correct line.
+
+ver #2)
+ - Rewrote entirely according to Willy's suggestion[1].
+
+Link: https://lore.kernel.org/r/Yk9V/03wgdYi65Lb@casper.infradead.org/ [1]
+Link: https://lore.kernel.org/r/164928630577.457102.8519251179327601178.stgit@warthog.procyon.org.uk/ # v1
+Link: https://lore.kernel.org/r/166844174069.1124521.10890506360974169994.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/166869495238.3720468.4878151409085146764.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/1459152.1669208550@warthog.procyon.org.uk/ # v3 also
+---
+David Howells (3):
+      mm: Merge folio_has_private()/filemap_release_folio() call pairs
+      mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
+      mm: Make filemap_release_folio() better inform shrink_folio_list()
+
+
+ fs/9p/cache.c           |  2 ++
+ fs/afs/internal.h       |  2 ++
+ fs/cachefiles/namei.c   |  2 ++
+ fs/ceph/cache.c         |  2 ++
+ fs/cifs/fscache.c       |  2 ++
+ fs/ext4/move_extent.c   | 12 ++++--------
+ fs/splice.c             |  3 +--
+ include/linux/pagemap.h | 23 ++++++++++++++++++++++-
+ mm/filemap.c            | 20 +++++++++++++++-----
+ mm/huge_memory.c        |  3 +--
+ mm/internal.h           | 11 +++++++++++
+ mm/khugepaged.c         |  3 +--
+ mm/memory-failure.c     |  8 +++-----
+ mm/migrate.c            |  3 +--
+ mm/truncate.c           |  6 ++----
+ mm/vmscan.c             | 35 ++++++++++++++++++-----------------
+ 16 files changed, 89 insertions(+), 48 deletions(-)
+
+
