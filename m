@@ -2,194 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CF4654420
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBD2654424
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235201AbiLVPUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S235230AbiLVPVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235056AbiLVPUS (ORCPT
+        with ESMTP id S229707AbiLVPVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:20:18 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557CF1AD;
-        Thu, 22 Dec 2022 07:20:16 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 22 Dec 2022 10:21:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4672662DE;
+        Thu, 22 Dec 2022 07:21:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E32616602CD4;
-        Thu, 22 Dec 2022 15:20:13 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671722414;
-        bh=0WLku65f/V6ZFbTI8eRaD22um8ER97RajgZyN2ZWo+w=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=bYpPeK+exgNtp/fIMWWDdygR1jbWZ+llFWRNMB19amjByhA3Y8ydSKLTnwVbY+Uxw
-         6xs7cztJbbVOOKen5ui4FK6AIeSR8Uu3M4XxwF4C/7NQeQix16PjOR9oBjg3BqbZw1
-         X8k/wU71V0+IKxaJ/xfuQCC7GUfGIonMEVRQ9U+P+e7txp+x0CXyHevGptTF/OeQmG
-         DbpHYERswk2kdGi38AR4rCczLFa0G+o7al15HOrJdw1QYD583Ey/W0uNv1psVW3gS+
-         +9SsYbCZZH9DJkYTrDGHWa1qHe8ERf7WKdHkh3MshmGJPYsjqWtDq8fd11scLHOIpS
-         17ZwZdeagFy5w==
-Message-ID: <f7067028-9662-7776-80a5-3bbe046c92e0@collabora.com>
-Date:   Thu, 22 Dec 2022 16:20:11 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DEDCB81E12;
+        Thu, 22 Dec 2022 15:21:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8F7C433D2;
+        Thu, 22 Dec 2022 15:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671722502;
+        bh=7/Y2uZ8A9lceps36kzxsVQStq3KTyvTY+WEoC5HeMOk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oog2bss5LB4qzM4eYx1PNIIP8v0QIoRTekYHSaGz54yrd5OFLqf+83ujZqurOshZj
+         1AWVSBpqMlWOlB08VIBE/JisLYBdK/aBBd1TJNQyh0ZQ/rQGhdUxUU705WDJlmwFu/
+         nlKvHve0vmoGatJ6jRne4OXHJOLqdgvsf/rx0hByUhQo6Q8vWQVUQTy0cyift9V0TF
+         tlIj0DUpdPgNG0sa/BytuhU8vzkSSmElHSa9mHzXrK2cZoM327+/Rl+dsrMz6JXaef
+         tx/7F0xRS5E5Gimw4ulTiBfPy74iCjvB20j8+yUssNwg2hV3X4HVObKePAzYKuh+3H
+         crTk8GEfREWMw==
+Message-ID: <041b77e0-40c5-e724-e5d9-f1da64d5e684@kernel.org>
+Date:   Thu, 22 Dec 2022 16:21:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] USB: gadget: Add ID numbers to configfs-gadget driver
- names
-To:     Chanh Nguyen <chanh@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Li <frank.li@nxp.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Vacura <w36195@motorola.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Vijayavardhan Vennapusa <vvreddy@codeaurora.org>,
-        Rondreis <linhaoguo86@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>
-References: <20221221091317.19380-1-chanh@os.amperecomputing.com>
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH 6/7] ARM: dts: stm32: add ETZPC as a system bus for
+ STM32MP15x boards
 Content-Language: en-US
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20221221091317.19380-1-chanh@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>,
+        alexandre.torgue@foss.st.com, robh+dt@kernel.org,
+        Oleksii_Moisieiev@epam.com, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        loic.pallardy@st.com, devicetree@vger.kernel.org,
+        mark.rutland@arm.com, arnd@arndb.de
+References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
+ <20221221173055.11719-7-gatien.chevallier@foss.st.com>
+ <2e7c901c-e322-ded6-b170-6d2436d74c0f@kernel.org>
+ <0bff5b2d-2837-57cb-5434-58158acc1483@foss.st.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <0bff5b2d-2837-57cb-5434-58158acc1483@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-W dniu 21.12.2022 o 10:13, Chanh Nguyen pisze:
-> It is unable to use configfs to attach more than one gadget. When
-> attaching the second gadget, it always fails and the kernel message
-> prints out:
+On 22/12/2022 15:42, Gatien CHEVALLIER wrote:
+> Hello,
 > 
-> Error: Driver 'configfs-gadget' is already registered, aborting...
-> UDC core: g1: driver registration failed: -16
 > 
-
-I assume you are interested in a scenario where there is more than one
-UDC available which means you can have more than one active gadget?
-
-> This commit fixes the problem by a ".N" suffix added to each
-> configfs_gadget's driver name (where N is a unique ID number),
-> thus making the names distinct.
+> On 12/22/22 11:30, Krzysztof Kozlowski wrote:
+>> On 21/12/2022 18:30, Gatien Chevallier wrote:
+>>> The STM32 System Bus is an internal bus on which devices are connected.
+>>> ETZPC is a peripheral overseeing the firewall bus that configures
+>>> and control access to the peripherals connected on it.
+>>>
+>>> For more information on which peripheral is securable, please read
+>>> the STM32MP15 reference manual.
+>>>
+>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>>> ---
+>>>   arch/arm/boot/dts/stm32mp151.dtsi | 2737 +++++++++++++++--------------
+>>>   1 file changed, 1406 insertions(+), 1331 deletions(-)
+>>>   
+>>> -		lptimer1: timer@40009000 {
+>>> +		etzpc: etzpc@5c007000 {
+>>
+>> Node names should be generic.
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 > 
-> Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
+> Will change to etzpc: bus@5c007000 in V3
 > 
-> ---
-> Changes in v2:
->    - Replace scnprintf() by kasprintf() to simplify the code [CJ]
->    - Move the clean up code from gadgets_drop() to
->      gadget_info_attr_release()                        [Frank Li]
->    - Correct the resource free up in gadges_make()   [Alan Stern]
->    - Remove the unnecessary variable in gadgets_make()    [Chanh]
->    - Fixes minor grammar issue in commit message          [Chanh]
-> ---
->   drivers/usb/gadget/configfs.c | 25 ++++++++++++++++++++++++-
->   1 file changed, 24 insertions(+), 1 deletion(-)
+>>
+>>> +			compatible = "st,stm32mp15-sys-bus";
+>>> +			reg = <0x5c007000 0x400>;
+>>>   			#address-cells = <1>;
+>>> -			#size-cells = <0>;
+>>> -			compatible = "st,stm32-lptimer";
+>>> -			reg = <0x40009000 0x400>;
+>>> -			interrupts-extended = <&exti 47 IRQ_TYPE_LEVEL_HIGH>;
+>>> -			clocks = <&rcc LPTIM1_K>;
+>>> -			clock-names = "mux";
+>>> -			wakeup-source;
+>>> -			status = "disabled";
+>>
+>> Why entire bus is disabled? What resources do you miss?
 > 
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 96121d1c8df4..7faf68bfa716 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -3,6 +3,7 @@
->   #include <linux/module.h>
->   #include <linux/slab.h>
->   #include <linux/device.h>
-> +#include <linux/idr.h>
->   #include <linux/kstrtox.h>
->   #include <linux/nls.h>
->   #include <linux/usb/composite.h>
-> @@ -11,6 +12,8 @@
->   #include "u_f.h"
->   #include "u_os_desc.h"
->   
-> +static DEFINE_IDA(driver_id_numbers);
-> +
->   int check_user_usb_string(const char *name,
->   		struct usb_gadget_strings *stringtab_dev)
->   {
-> @@ -52,6 +55,9 @@ struct gadget_info {
->   	char qw_sign[OS_STRING_QW_SIGN_LEN];
->   	spinlock_t spinlock;
->   	bool unbind;
-> +
-> +	/* Make driver names unique */
-> +	int driver_id_number;
->   };
->   
->   static inline struct gadget_info *to_gadget_info(struct config_item *item)
-> @@ -393,6 +399,8 @@ static void gadget_info_attr_release(struct config_item *item)
->   	WARN_ON(!list_empty(&gi->string_list));
->   	WARN_ON(!list_empty(&gi->available_func));
->   	kfree(gi->composite.gadget_driver.function);
-> +	kfree(gi->composite.gadget_driver.driver.name);
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->   	kfree(gi);
->   }
->   
-> @@ -1623,13 +1631,28 @@ static struct config_group *gadgets_make(
->   
->   	gi->composite.gadget_driver = configfs_driver_template;
->   
-> +	gi->driver_id_number = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-> +	if (gi->driver_id_number < 0)
-> +		goto err;
-> +
-> +	gi->composite.gadget_driver.driver.name = kasprintf(GFP_KERNEL,
-> +							    "configfs-gadget.%d",
-> +							    gi->driver_id_number);
+> Here, I did not want to modify the status of the nodes in the device 
 
-I'm wondering if it maybe makes more sense to use the gadget name as a suffix
-instead?
+By making it disabled you actually modify the status of any enabled
+node. By making it enabled you do not cause any change.
 
-	gi->composite.gadget_driver.driver.name =
-		kasprintf(GFP_KERNEL, "configfs-gadget.%s" name);
+> tree. Nodes that are default enabled in the SoC device tree stay enabled 
+> and vice-versa.
 
-So that when you
+No, because parent is disabled.
 
-mkdir g1
+> IMO think this patch should not include these kind of 
+> changes in its scope. I describe the bus and the peripherals connected 
+> to it, nothing more :)
 
-you will ultimately see /sys/bus/gadget/drivers/configfs-gadget.g1
+I am not proposing to change existing nodes. I am asking why new node is
+being disabled (because it is a new node, isn't it?).
 
-instead of /sys/bus/gadget/drivers/configfs-gadget.0
-
-Gadget names are guaranteed to be unique because they are created
-as sibling subdirectories in configfs. Your patch would then be greatly
-simplified (no need for ida).
-
-Regards,
-
-Andrzej
-
-> +	if (!gi->composite.gadget_driver.driver.name)
-> +		goto out_free_driver_id_number;
-> +
->   	gi->composite.gadget_driver.function = kstrdup(name, GFP_KERNEL);
->   	gi->composite.name = gi->composite.gadget_driver.function;
->   
->   	if (!gi->composite.gadget_driver.function)
-> -		goto err;
-> +		goto out_free_driver_name;
->   
->   	return &gi->group;
-> +
-> +out_free_driver_name:
-> +	kfree(gi->composite.gadget_driver.driver.name);
-> +out_free_driver_id_number:
-> +	ida_free(&driver_id_numbers, gi->driver_id_number);
->   err:
->   	kfree(gi);
->   	return ERR_PTR(-ENOMEM);
+Best regards,
+Krzysztof
 
