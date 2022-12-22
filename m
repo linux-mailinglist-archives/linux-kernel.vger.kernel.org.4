@@ -2,53 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEBD653AE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 04:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73820653AF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 04:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbiLVDYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 22:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
+        id S230092AbiLVDkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 22:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiLVDYl (ORCPT
+        with ESMTP id S229601AbiLVDko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 22:24:41 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C75420BDA;
-        Wed, 21 Dec 2022 19:24:39 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R891e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VXrYeJt_1671679475;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VXrYeJt_1671679475)
-          by smtp.aliyun-inc.com;
-          Thu, 22 Dec 2022 11:24:37 +0800
-Date:   Thu, 22 Dec 2022 11:24:34 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-fscrypt@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Liu Jiang <gerry@linux.alibaba.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Xin Yin <yinxin.x@bytedance.com>,
-        Liu Bo <bo.liu@linux.alibaba.com>, Gao Xiang <xiang@kernel.org>
-Subject: Re: [RFC] fs-verity and encryption for EROFS
-Message-ID: <Y6PN8vpE0xbppmpB@B-P7TQMD6M-0146.local>
-Mail-Followup-To: linux-fscrypt@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Liu Jiang <gerry@linux.alibaba.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Xin Yin <yinxin.x@bytedance.com>, Liu Bo <bo.liu@linux.alibaba.com>,
-        Gao Xiang <xiang@kernel.org>
-References: <Y6KqpGscDV6u5AfQ@B-P7TQMD6M-0146.local>
+        Wed, 21 Dec 2022 22:40:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2838417E29
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 19:39:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671680396;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j2K/BkWyYsT/Jk2fklfpa4mrCdOdKG4g2EgGgkbPYAo=;
+        b=UjnZSDcNIEGVRAbEFN0L4pZxKfCSf+TPhTXqLPgcGB/jFfqGiu8uPlvtgJiek6w2TACGBb
+        qfY6zJgxIDGj2L1pROIEaCB5j3U60cgVsUQvkppTlKyWvXHX3rNTbNdN+DtA+22lTWOmkq
+        YU8hjsq5/XOvqEPbVkUphqtcYTRkpIc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-136-2dlkGSn0MWyQ8eLUiSWLog-1; Wed, 21 Dec 2022 22:39:54 -0500
+X-MC-Unique: 2dlkGSn0MWyQ8eLUiSWLog-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 24FBC38173C0;
+        Thu, 22 Dec 2022 03:39:54 +0000 (UTC)
+Received: from [10.22.33.5] (unknown [10.22.33.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7BF902166B26;
+        Thu, 22 Dec 2022 03:39:53 +0000 (UTC)
+Message-ID: <a82092f5-abc8-584f-b2ba-f06c82ffbe7d@redhat.com>
+Date:   Wed, 21 Dec 2022 22:39:53 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y6KqpGscDV6u5AfQ@B-P7TQMD6M-0146.local>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [RFC PATCH] clocksource: Suspend the watchdog temporarily when
+ high read lantency detected
+Content-Language: en-US
+To:     paulmck@kernel.org
+Cc:     Feng Tang <feng.tang@intel.com>, John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Tim Chen <tim.c.chen@intel.com>
+References: <20221220082512.186283-1-feng.tang@intel.com>
+ <6fb04ee9-ce77-4835-2ad1-b7f8419cfb77@redhat.com>
+ <20221220183400.GY4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y6Ja+kYQAi4pppV6@feng-clx> <8a9bed0d-c166-37e9-24c3-8cea7a336c76@redhat.com>
+ <20221222004032.GI4001@paulmck-ThinkPad-P17-Gen-1>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221222004032.GI4001@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,88 +72,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-( + more lists )
+On 12/21/22 19:40, Paul E. McKenney wrote:
+> commit 199dfa2ba23dd0d650b1482a091e2e15457698b7
+> Author: Paul E. McKenney<paulmck@kernel.org>
+> Date:   Wed Dec 21 16:20:25 2022 -0800
+>
+>      clocksource: Verify HPET and PMTMR when TSC unverified
+>      
+>      On systems with two or fewer sockets, when the boot CPU has CONSTANT_TSC,
+>      NONSTOP_TSC, and TSC_ADJUST, clocksource watchdog verification of the
+>      TSC is disabled.  This works well much of the time, but there is the
+>      occasional system that meets all of these criteria, but which still
+>      has a TSC that skews significantly from atomic-clock time.  This is
+>      usually attributed to a firmware or hardware fault.  Yes, the various
+>      NTP daemons do express their opinions of userspace-to-atomic-clock time
+>      skew, but they put them in various places, depending on the daemon and
+>      distro in question.  It would therefore be good for the kernel to have
+>      some clue that there is a problem.
+>      
+>      The old behavior of marking the TSC unstable is a non-starter because a
+>      great many workloads simply cannot tolerate the overheads and latencies
+>      of the various non-TSC clocksources.  In addition, NTP-corrected systems
+>      often seem to be able to tolerate significant kernel-space time skew as
+>      long as the userspace time sources are within epsilon of atomic-clock
+>      time.
+>      
+>      Therefore, when watchdog verification of TSC is disabled, enable it for
+>      HPET and PMTMR (AKA ACPI PM timer).  This provides the needed in-kernel
+>      time-skew diagnostic without degrading the system's performance.
+>      
+>      Signed-off-by: Paul E. McKenney<paulmck@kernel.org>
+>      Cc: Thomas Gleixner<tglx@linutronix.de>
+>      Cc: Ingo Molnar<mingo@redhat.com>
+>      Cc: Borislav Petkov<bp@alien8.de>
+>      Cc: Dave Hansen<dave.hansen@linux.intel.com>
+>      Cc: "H. Peter Anvin"<hpa@zytor.com>
+>      Cc: Daniel Lezcano<daniel.lezcano@linaro.org>
+>      Cc: Feng Tang<feng.tang@intel.com>
+>      Cc: Waiman Long <longman@redhat.com
+>      Cc:<x86@kernel.org>
 
-On Wed, Dec 21, 2022 at 02:41:40PM +0800, Gao Xiang wrote:
-> Hi folks,
-> 
-> (As Eric suggested, I post it on list now..)
-> 
-> In order to outline what we could do next to benefit various image-based
-> distribution use cases (especially for signed+verified images and
-> confidential computing), I'd like to discuss two potential new
-> features for EROFS: verification and encryption.
-> 
-> - Verification
-> 
-> As we're known that currently dm-verity is mainly used for read-only
-> devices to keep the image integrity.  However, if we consider an
-> image-based system with lots of shared blobs (no matter they are
-> device-based or file-based).  IMHO, it'd be better to have an in-band
-> (rather than a device-mapper out-of-band) approach to verify such blobs.
-> 
-> In particular, currently in container image use cases, an EROFS image
-> can consist of
-> 
->   - one meta blob for metadata and filesystem tree;
-> 
->   - several data-shared blobs with chunk-based de-duplicated data (in
->     layers to form the incremental update way; or some other ways like
->     one file-one blob)
-> 
-> Currently data blobs can be varied from (typically) dozen blobs to (in
-> principle) 2^16 - 1 blobs.  dm-verity setup is much hard to cover such
-> usage but that distribution form is more and more common with the
-> revolution of containerization.
-> 
-> Also since we have EROFS over fscache infrastructure, file-based
-> distribution makes dm-verity almost impossible as well. Generally we
-> could enable underlayfs fs-verity I think, but considering on-demand
-> lazy pulling from remote, such data may be incomplete before data is
-> fully downloaded. (I think that is also almost like what Google did
-> fs-verity for incfs.)  In addition, IMO it's not good if we rely on
-> features of a random underlay fs with generated tree from random
-> hashing algorithm and no original signing (by image creator).
+As I currently understand, you are trying to use TSC as a watchdog to 
+check against HPET and PMTMR. I do have 2 questions about this patch.
 
-random hashing algorithm, underlay block sizes, (maybe) new underlay
-layout and no original signing, which impacts reproduction.
+First of all, why you need to use both HPET and PMTMR? Can you just use 
+one of those that are available. Secondly, is it possible to enable this 
+time-skew diagnostic for a limit amount of time instead running 
+indefinitely? The running of the clocksource watchdog itself will still 
+consume a tiny amount of CPU cycles.
 
-> 
-> My preliminary thought for EROFS on verification is to have blob-based
-> (or device-based) merkle trees but makes such image integrity
-> self-contained so that Android, embedded, system rootfs, and container
-> use cases can all benefit from it.. 
-> 
-> Also as a self-containerd verfication approaches as the other Linux
-> filesystems, it makes bootloaders and individual EROFS image unpacker
-> to support/check image integrity and signing easily...
-> 
-> It seems the current fs-verity codebase can almost be well-fitted for
-> this with some minor modification.  If possible, we could go further
-> in this way.
-> 
-> - Encryption
-> 
-> I also have some rough preliminary thought for EROFS encryption.
-> (Although that is not quite in details as verification.)  Currently we
-> have full-disk encryption and file-based encryption, However, in order
-> to do finer data sharing between encrypted data (it seems hard to do
-> finer data de-duplication with file-based encryption), we could also
-> consider modified convergence encryption, especially for image-based
-> offline data.
-> 
-> In order to prevent dictionary attack, the key itself may not directly be
-> derived from its data hashing, but we could assign some random key
-> relating to specific data as an encrypted chunk and find a way to share
-> these keys and data in a trusted domain.
-> 
-> The similar thought was also shown in the presentation of AWS Lambda
-> sparse filesystem, although they don't show much internal details:
-> https://youtu.be/FTwsMYXWGB0
-> 
-> Anyway, for encryption, it's just a preliminary thought but we're happy
-> to have a better encryption solution for data sharing for confidential
-> container images... 
-> 
-> Thanks,
-> Gao Xiang
+Cheers,
+Longman
+
+
