@@ -2,79 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD72B6542C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A1D6542C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiLVOTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
+        id S235003AbiLVOUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235542AbiLVOTX (ORCPT
+        with ESMTP id S229608AbiLVOUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:19:23 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679172AC5;
-        Thu, 22 Dec 2022 06:17:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671718648; x=1703254648;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=meZJDY1PMUtgLkPrUblSxd3HYWLxd7p0iVKy4Ko1qbk=;
-  b=iUm2KU0rDre6tmN6s+s8l2/7ICOnJNxv129qzHEN855OShvjjwysq+7g
-   1C2WXTU/a00d54gKgoTZBdAObGy5BRzQKlmKHOZSde1sVUOce8VzcnzCd
-   7im0oQJCmxVJRxs7/pFd8GzBIL95938hx7diqbd4+pcEUKPykMrXOfCdq
-   8BKA87hKzb5tovTNn/j/ddKK/p0kPD7Uc9hAFSoLApfT7rt3Iq7NNH7Ms
-   4fPs2xcM+Ab+4AGf+q/0vg8I7OlYfzHxQXc5i77152MT9nEmbv4bTKIC9
-   eem4M0oXdKDjZhyyuyKqeQvav1QGS90CiPMmHIVyteqwpns/jdBrDBWDM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="307820223"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="307820223"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 06:17:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="651797661"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="651797661"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.17.92]) ([10.213.17.92])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 06:17:21 -0800
-Message-ID: <286f817c-2e3a-aba9-1083-73f25bafd84c@intel.com>
-Date:   Thu, 22 Dec 2022 15:17:18 +0100
+        Thu, 22 Dec 2022 09:20:47 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AF8FCB
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:20:45 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id bj12so5161766ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:20:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w0VrLN7ReTiwyFyH6raxJVPW+7ZqprbBaTbgFuBLlhM=;
+        b=FNQNThLxl6dYeyRcypE1Wb/0gAAdVIup4nGRAQFlKXw8GsLHJxFTiv3rZh/dSGtNpj
+         UoSBUSvs01CFyVaRG5I3hnbEGjtL5C1MaL9pVYSj6N0TZ2RQTM3X3c4uxyJTYpBM31sW
+         /v1DktRiKjecXCs9U7gbxS6RxnAlabfTbJ7GNkzgSoYlqAtus3pr+ZXj+VwkJmmfYCFJ
+         uXcfdYcLvmRHvTkiz4tyAc9cP4OjsHG8mVAiO3OO7v27YN0p7+mt9WMlPI0kcA7TywCN
+         Ndjg6WaPX8hoSexAXMQUFiWHBjaNSVbRm38REOjDzbfXoXFPSGv5XNuDU8ZVPzVkagkw
+         f4KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w0VrLN7ReTiwyFyH6raxJVPW+7ZqprbBaTbgFuBLlhM=;
+        b=JfcUzFe3TGyi5+xI0zi34qN9kXt8V3fnFUdCZi+3v0X/xm8tM+IDmUcBaW+Cz0JV4/
+         fU9FEcJM9m3RZVZEa11wSvWwOeT1JWcyBT2N14Y+pcBmc6lLtLM+yh8l0/lc9wcYj6/D
+         WOxBqG27fNx2qDCAa1MNcpz/SBbInzCfeEysDfehPaUgyRPsrefLN2wJlyS2aoTytDp7
+         umg3/s3K19fuMM/mOTq1XndwYWqUS8iraWeUEo5rNYBCuqfivsA8AZanugBAeRL0p/h2
+         y/Jyfr0Fxvu9r751+nRgpAJpRXkFuKKiW3ccYHJHEosRFslBtr1P7iRIKttsxqKWWFe+
+         5cbQ==
+X-Gm-Message-State: AFqh2kpHNz5FzQOInNHbtnDIlbYOqi47yd1bEEp4RUzpY4LJ+4+mM66t
+        x2eS3QONgjW0cnZNV0DtNtM3Vw==
+X-Google-Smtp-Source: AMrXdXuCxILt4Fs1n68sHksTQWcVTaD7koX4UFAdmbC4PzMLB6vMG1r8Uldc8TuybgNHW7U4PRDX6Q==
+X-Received: by 2002:a17:907:d681:b0:7c0:eb38:f8af with SMTP id wf1-20020a170907d68100b007c0eb38f8afmr4881131ejc.2.1671718843921;
+        Thu, 22 Dec 2022 06:20:43 -0800 (PST)
+Received: from [192.168.0.104] ([82.77.81.131])
+        by smtp.gmail.com with ESMTPSA id x20-20020aa7d6d4000000b0047b252468a4sm415718edr.78.2022.12.22.06.20.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 06:20:43 -0800 (PST)
+Message-ID: <86b513b7-b65f-4948-7c09-789844f0d90d@linaro.org>
+Date:   Thu, 22 Dec 2022 16:20:42 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH 00/19] Introduce __xchg, non-atomic xchg
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] Documentation: stable: Add rule on what kind of patches
+ are accepted
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>
-References: <20221222114635.1251934-1-andrzej.hajda@intel.com>
- <CAMuHMdUE-a6SffG1PH=WfrMx-CNLB9EfUr4qmL_USBP31YGoNg@mail.gmail.com>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <CAMuHMdUE-a6SffG1PH=WfrMx-CNLB9EfUr4qmL_USBP31YGoNg@mail.gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     sashal@kernel.org, corbet@lwn.net, stable@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joneslee@google.com
+References: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
+ <Y6RchEaXUvg+9nKv@kroah.com>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <Y6RchEaXUvg+9nKv@kroah.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,65 +80,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 22.12.2022 15:12, Geert Uytterhoeven wrote:
-> Hi Andrzej,
->
-> Thanks for your series!
->
-> On Thu, Dec 22, 2022 at 12:49 PM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
->> I hope there will be place for such tiny helper in kernel.
->> Quick cocci analyze shows there is probably few thousands places
->> where it could be useful.
->> I am not sure who is good person to review/ack such patches,
->> so I've used my intuition to construct to/cc lists, sorry for mistakes.
->> This is the 2nd approach of the same idea, with comments addressed[0].
+On 22.12.2022 15:32, Greg KH wrote:
+> On Thu, Dec 22, 2022 at 11:16:58AM +0200, Tudor Ambarus wrote:
+>> The list of rules on what kind of patches are accepted, and which ones
+>> are not into the “-stable” tree, did not mention anything about new
+>> features and let the reader use its own judgement. One may be under the
+>> impression that new features are not accepted at all, but that's not true:
+>> new features are not accepted unless they fix a reported problem.
+>> Update documentation with missing rule.
 >>
->> The helper is tiny and there are advices we can leave without it, so
->> I want to present few arguments why it would be good to have it:
+>> Link: https://lore.kernel.org/lkml/fc60e8da-1187-ca2b-1aa8-28e01ea2769a@linaro.org/T/#mff820d23793baf637a1b39f5dfbcd9d4d0f0c3a6
+>> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+>> ---
+>>   Documentation/process/stable-kernel-rules.rst | 1 +
+>>   1 file changed, 1 insertion(+)
 >>
->> 1. Code readability/simplification/number of lines:
->>
->> Real example from drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c:
->> -       previous_min_rate = evport->qos.min_rate;
->> -       evport->qos.min_rate = min_rate;
->> +       previous_min_rate = __xchg(evport->qos.min_rate, min_rate);
-> Upon closer look, shouldn't that be
->
->      previous_min_rate = __xchg(&evport->qos.min_rate, min_rate);
->
-> ?
+>> diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
+>> index 2fd8aa593a28..266290fab1d9 100644
+>> --- a/Documentation/process/stable-kernel-rules.rst
+>> +++ b/Documentation/process/stable-kernel-rules.rst
+>> @@ -22,6 +22,7 @@ Rules on what kind of patches are accepted, and which ones are not, into the
+>>      maintainer and include an addendum linking to a bugzilla entry if it
+>>      exists and additional information on the user-visible impact.
+>>    - New device IDs and quirks are also accepted.
+>> + - New features are not accepted unless they fix a reported problem.
+> 
+> No need to call this out, it falls under the "fixes a problem" option,
+> right?
+> 
+> The goal is not to iterate every single option here, that would be
+> crazy.  Let's keep it short and simple, our biggest problem is that
+> people do NOT read this document, not that it does not list these types
+> of corner cases.
+> 
 
-Yes, you are right, the first argument is a pointer.
+When I read the document I thought that new features are not accepted
+at all, so I took into consideration making a custom fix for stable.
+But that would have been worse, as it implied forking the stable and
+would have made backporting additional fixes harder. An explicit rule
+like this would have saved me few emails changed and few hours spent on
+looking for an alternative fix. But maybe others find this a
+common sense implied rule and you won't have to be summoned for it
+anymore.
 
-Regards
-Andrzej
+> So thanks for the patch, but I will not accept it.
+> 
 
->
->> For sure the code is more compact, and IMHO more readable.
->>
->> 2. Presence of similar helpers in other somehow related languages/libs:
->>
->> a) Rust[1]: 'replace' from std::mem module, there is also 'take'
->>      helper (__xchg(&x, 0)), which is the same as private helper in
->>      i915 - fetch_and_zero, see latest patch.
->> b) C++ [2]: 'exchange' from utility header.
->>
->> If the idea is OK there are still 2 qestions to answer:
->>
->> 1. Name of the helper, __xchg follows kernel conventions,
->>      but for me Rust names are also OK.
-> Before I realized the missing "&", I wondered how this is different
-> from swap(), so naming is important.
-> https://elixir.bootlin.com/linux/latest/source/include/linux/minmax.h#L139
->
-> Gr{oetje,eeting}s,
->
->                          Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+Okay, as you prefer.
 
+Cheers,
+ta
