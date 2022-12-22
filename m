@@ -2,178 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAADE65410B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E7B654115
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235475AbiLVMdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S235710AbiLVMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235542AbiLVMdA (ORCPT
+        with ESMTP id S235493AbiLVMdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:33:00 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1694F25EB9;
-        Thu, 22 Dec 2022 04:32:50 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMCFHvE025679;
-        Thu, 22 Dec 2022 12:32:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=2Ud7qlUcdnoe8KhA2+Hd9TL+vFSLoW/2hQIjB8zlhco=;
- b=DIxAS70DDeNC2o9rYvyGkVlIbe9AP60vixNvQlykBJsDbbp4X6KBa2w+ABgq/jPWswgL
- dy6N8XGuOufxZQjJPx0eLabyHu9VAN1KkKAoYMjok/EXt+GyQ3eLXISzO2vTgKP5zXVW
- 2HIvnK62RWsKRn9upUSqQc/RAAreCIn3R/kdK1zNM3JCyS6/a26Ray8G5lStu1qa5LlI
- mHyQDtRl5GANY98N7FRTbIQGBeaG1wDV+2fKwXhhdCfSRLcJQFlF81Jy7wj53iZU0IOO
- cLUQPl6tdolOt8rsHQR5TD61Xibn/u0YJsHqHI3QHzgsUYY3z8o8RmufAu2dbG51an1b VA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mmq2t8cs2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:32:49 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BMCLtvB019064;
-        Thu, 22 Dec 2022 12:32:48 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mmq2t8cq7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:32:48 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BM2j3jR027376;
-        Thu, 22 Dec 2022 12:32:46 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3mh6ywq268-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:32:46 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BMCWhKq52429198
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 22 Dec 2022 12:32:43 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB50720040;
-        Thu, 22 Dec 2022 12:32:42 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2E6F20049;
-        Thu, 22 Dec 2022 12:32:42 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 22 Dec 2022 12:32:42 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        =?UTF-8?q?Christian=20Borntr=C3=A4ger?= <borntraeger@linux.ibm.com>,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] vfio/type1: Respect IOMMU reserved regions in vfio_test_domain_fgsp()
-Date:   Thu, 22 Dec 2022 13:32:42 +0100
-Message-Id: <20221222123242.1598848-1-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 22 Dec 2022 07:33:08 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7D4222523;
+        Thu, 22 Dec 2022 04:33:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B07152F4;
+        Thu, 22 Dec 2022 04:33:42 -0800 (PST)
+Received: from e126835.arm.com (unknown [10.57.87.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C08C3FA32;
+        Thu, 22 Dec 2022 04:32:56 -0800 (PST)
+From:   Emekcan Aras <emekcan.aras@arm.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Miguel Silva <rui.silva@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Emekcan Aras <emekcan.aras@arm.com>
+Subject: [PATCH v3 1/2] arm: dts: arm: add arm corstone500 device tree
+Date:   Thu, 22 Dec 2022 12:32:43 +0000
+Message-Id: <20221222123244.147238-2-emekcan.aras@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221222123244.147238-1-emekcan.aras@arm.com>
+References: <20221222123244.147238-1-emekcan.aras@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GxQMyUlwK-kb4nWNrV1hL-BuInFrstTt
-X-Proofpoint-ORIG-GUID: X-Vh0qEZCrKQc7pK-0xInN1iuH8WTD8z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-22_06,2022-12-22_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 priorityscore=1501 phishscore=0 spamscore=0
- mlxscore=0 bulkscore=0 mlxlogscore=961 clxscore=1011 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212220100
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit cbf7827bc5dc ("iommu/s390: Fix potential s390_domain
-aperture shrinking") the s390 IOMMU driver uses a reserved region
-instead of an artificially shrunk aperture to restrict IOMMU use based
-on the system provided DMA ranges of devices. In particular on current
-machines this prevents use of DMA addresses below 2^32 for all devices.
-While usually just IOMMU mapping below these addresses is
-harmless. However our virtual ISM PCI device looks at new mappings on
-IOTLB flush and immediately goes into the error state if such a mapping
-violates its allowed DMA ranges. This then breaks pass-through of the
-ISM device to a KVM guest.
+Corstone500[0] is a platform from arm, which includes Cortex-A cores and
+ideal starting point for feature rich System on Chip (SoC) designs
+based on the Cortex-A5 core.
 
-Analysing this we found that vfio_test_domain_fgsp() maps 2 pages at DMA
-address 0 irrespective of the IOMMUs reserved regions. Even if usually
-harmless this seems wrong in the general case so instead go through the
-freshly updated IOVA list and try to find a range that isn't reserved
-and fits 2 pages and use that for testing for fine grained super pages.
+These device trees contains the necessary bits to support the
+Corstone 500 FVP (Fixed Virtual Platform) and the
+FPGA MPS3 board.
 
-Fixes: 6fe1010d6d9c ("vfio/type1: DMA unmap chunking")
-Reported-by: Matthew Rosato <mjrosato@linux.ibm.com>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+0: https://developer.arm.com/documentation/102262/0000
+
+Signed-off-by: Emekcan Aras <emekcan.aras@arm.com>
 ---
-- Testing: I tested this based on current master on both on s390 where it skips
-  the reserved 0x0-0x100000000 range and on AMD Vi where it continues to do the
-  test on DMA address 0 and sets domain->fgsp to true.
+ arch/arm/boot/dts/Makefile        |   3 +-
+ arch/arm/boot/dts/corstone500.dts | 182 ++++++++++++++++++++++++++++++
+ 2 files changed, 184 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/corstone500.dts
 
- drivers/vfio/vfio_iommu_type1.c | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index 23c24fe98c00..9395097897b8 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -1856,24 +1856,31 @@ static int vfio_iommu_replay(struct vfio_iommu *iommu,
-  * significantly boosts non-hugetlbfs mappings and doesn't seem to hurt when
-  * hugetlbfs is in use.
-  */
--static void vfio_test_domain_fgsp(struct vfio_domain *domain)
-+static void vfio_test_domain_fgsp(struct vfio_domain *domain, struct list_head *regions)
- {
--	struct page *pages;
- 	int ret, order = get_order(PAGE_SIZE * 2);
-+	struct vfio_iova *region;
-+	struct page *pages;
- 
- 	pages = alloc_pages(GFP_KERNEL | __GFP_ZERO, order);
- 	if (!pages)
- 		return;
- 
--	ret = iommu_map(domain->domain, 0, page_to_phys(pages), PAGE_SIZE * 2,
--			IOMMU_READ | IOMMU_WRITE | IOMMU_CACHE);
--	if (!ret) {
--		size_t unmapped = iommu_unmap(domain->domain, 0, PAGE_SIZE);
-+	list_for_each_entry(region, regions, list) {
-+		if (region->end - region->start < PAGE_SIZE * 2)
-+			continue;
- 
--		if (unmapped == PAGE_SIZE)
--			iommu_unmap(domain->domain, PAGE_SIZE, PAGE_SIZE);
--		else
--			domain->fgsp = true;
-+		ret = iommu_map(domain->domain, region->start, page_to_phys(pages), PAGE_SIZE * 2,
-+				IOMMU_READ | IOMMU_WRITE | IOMMU_CACHE);
-+		if (!ret) {
-+			size_t unmapped = iommu_unmap(domain->domain, region->start, PAGE_SIZE);
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 6aa7dc4db2fc..4dc4df0707dc 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1465,7 +1465,8 @@ dtb-$(CONFIG_ARCH_VEXPRESS) += \
+ 	vexpress-v2p-ca5s.dtb \
+ 	vexpress-v2p-ca9.dtb \
+ 	vexpress-v2p-ca15-tc1.dtb \
+-	vexpress-v2p-ca15_a7.dtb
++	vexpress-v2p-ca15_a7.dtb \
++	corstone500.dtb
+ dtb-$(CONFIG_ARCH_VIRT) += \
+ 	xenvm-4.2.dtb
+ dtb-$(CONFIG_ARCH_VT8500) += \
+diff --git a/arch/arm/boot/dts/corstone500.dts b/arch/arm/boot/dts/corstone500.dts
+new file mode 100644
+index 000000000000..bcca7d736c85
+--- /dev/null
++++ b/arch/arm/boot/dts/corstone500.dts
+@@ -0,0 +1,182 @@
++// SPDX-License-Identifier: GPL-2.0 or MIT
++/*
++ * Copyright (c) 2022, Arm Limited. All rights reserved.
++ *
++ */
 +
-+			if (unmapped == PAGE_SIZE)
-+				iommu_unmap(domain->domain, region->start + PAGE_SIZE, PAGE_SIZE);
-+			else
-+				domain->fgsp = true;
-+		}
-+		break;
- 	}
- 
- 	__free_pages(pages, order);
-@@ -2326,7 +2333,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
- 		}
- 	}
- 
--	vfio_test_domain_fgsp(domain);
-+	vfio_test_domain_fgsp(domain, &iova_copy);
- 
- 	/* replay mappings on new domains */
- 	ret = vfio_iommu_replay(iommu, domain);
++
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++
++/ {
++	model = "ARM Corstone500";
++	compatible = "arm,corstone500";
++	interrupt-parent = <&gic>;
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	aliases {
++		serial0 = &uart0;
++		serial1 = &uart1;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	psci {
++		compatible = "arm,psci-1.0";
++		method = "smc";
++		cpu_on = <0x84000003>;
++	};
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		enable-method = "psci";
++
++		cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a5";
++			reg = <0>;
++			next-level-cache = <&L2>;
++		};
++
++		cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a5";
++			reg = <1>;
++			next-level-cache = <&L2>;
++		};
++
++		cpu@2 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a5";
++			reg = <2>;
++			next-level-cache = <&L2>;
++		};
++
++		cpu@3 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a5";
++			reg = <3>;
++			next-level-cache = <&L2>;
++		};
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x7f000000>;
++	};
++
++	L2: cache-controller@1c010000 {
++		compatible = "arm,pl310-cache";
++		reg = <0x1c010000 0x1000>;
++		interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
++		cache-level = <2>;
++		cache-unified;
++		arm,data-latency = <1 1 1>;
++		arm,tag-latency = <1 1 1>;
++	};
++
++	refclk7500khz: clock-refclk7500khz {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <7500000>;
++		clock-output-names = "apb_pclk";
++	};
++
++	refclk24mhz: clock-refclk24mhz {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++		clock-output-names = "apb_pclk";
++	};
++
++	smbclk: clock-refclk24mhzx2 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <48000000>;
++		clock-output-names = "smclk";
++	};
++
++
++	gic: interrupt-controller@1c001000 {
++		compatible = "arm,cortex-a5-gic";
++		#interrupt-cells = <3>;
++		#address-cells = <0>;
++		interrupt-controller;
++		reg =	<0x1c001000 0x1000>,
++			<0x1c000100 0x100>;
++		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) |
++			IRQ_TYPE_LEVEL_HIGH)>;
++	};
++
++	soc{
++		compatible = "simple-bus";
++		#address-cells = <1>;
++		#size-cells = <1>;
++		clock_frequency = <50000000>;
++		interrupt-parent = <&gic>;
++		ranges;
++
++		uart0: serial@1a200000 {
++			compatible = "arm,pl011", "arm,primecell";
++			reg = <0x1a200000 0x1000>;
++			interrupts = <GIC_SPI 8 (GIC_CPU_MASK_SIMPLE(4) |
++				IRQ_TYPE_LEVEL_HIGH)>;
++			clocks = <&refclk7500khz>;
++			clock-names = "apb_pclk";
++		};
++
++		uart1: serial@1a210000 {
++			compatible = "arm,pl011", "arm,primecell";
++			reg = <0x1a210000 0x1000>;
++			interrupts = <GIC_SPI 9 (GIC_CPU_MASK_SIMPLE(4) |
++				IRQ_TYPE_LEVEL_HIGH)>;
++			clocks = <&refclk7500khz>;
++			clock-names = "apb_pclk";
++		};
++
++		timer0: timer@1a040000 {
++			compatible = "arm,armv7-timer-mem";
++			reg = <0x1a040000 0x1000>;
++			clock-frequency = <7500000>;
++
++			frame@1a050000 {
++				frame-number = <0>;
++				interrupts = <GIC_SPI 2 (GIC_CPU_MASK_SIMPLE(4) |
++				IRQ_TYPE_LEVEL_HIGH)>;
++				reg = <0x1a050000 0x1000>;
++			};
++		};
++
++		smsc: ethernet@4020000 {
++			compatible = "smsc,lan9220", "smsc,lan9115";
++			reg = <0x40200000 0x10000>;
++			interrupts = <GIC_SPI 43 (GIC_CPU_MASK_SIMPLE(4) |
++				IRQ_TYPE_LEVEL_HIGH)>;
++			reg-io-width = <4>;
++			phy-mode = "mii";
++			smsc,irq-active-high;
++			vdd33a-supply = <&v2m_fixed_3v3>;
++			vddvario-supply = <&v2m_fixed_3v3>;
++		};
++
++		rtc@1a220000 {
++			compatible = "arm,pl031", "arm,primecell";
++			reg = <0x1a220000 0x1000>;
++			clocks = <&refclk24mhz>;
++			interrupts = <GIC_SPI 6 (GIC_CPU_MASK_SIMPLE(4) |
++				IRQ_TYPE_LEVEL_HIGH)>;
++			clock-names = "apb_pclk";
++		};
++	};
++
++	v2m_fixed_3v3: regulator-0 {
++		compatible = "regulator-fixed";
++		regulator-name = "3V3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++	};
++};
 -- 
-2.34.1
+2.25.1
 
