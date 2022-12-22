@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6485465432B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9460C653C2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 07:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbiLVOda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S235149AbiLVGfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 01:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235762AbiLVOd0 (ORCPT
+        with ESMTP id S235052AbiLVGfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:33:26 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851592B26F;
-        Thu, 22 Dec 2022 06:33:25 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id ud5so5344014ejc.4;
-        Thu, 22 Dec 2022 06:33:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3tzm+8PkCoG+IFqQnJKv6s/WFlDz1S9hgijTugMX/bI=;
-        b=TzOXnr9K4kajX9bIK/WZB3FahhP1w6vqcHzSRLDI1wGi8vPRQotaTMBjFQ5acMX+Kn
-         Wk07AvtQlG6j023kKCKliq4wIY4sbpLmTLDocADmSRQvP9EZqXgOOI8/BwcjFdWB2y7Q
-         sbgCzDz4mJ47mzZq11IsTixO/Sk9UGdkjwz+Dy0EkV6rb+7po2/oOLbsRlk8kzMQ+Bev
-         oDayfXtv7pIKMnlDlaulk/s0on6V7VZqu/EfalrF4copH2a2qXdLo4I0IbWnfne2uTe0
-         Ht9dBlptgRTVZ+XraSWBxFmJrWrLSl0iibQLRyTXOZXxZrR/KarQY+T63ZWwO8BAZT5F
-         qLWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3tzm+8PkCoG+IFqQnJKv6s/WFlDz1S9hgijTugMX/bI=;
-        b=lUbCZKN0e3S7ehTsjaPh5br7QxRXW+Wp5nXlSPsFmPmyjIlNE+DoQviDN7tB3KsLtY
-         rZq8Wz5OTWjBlUAPFAIcrMI1yhD2oEpvObFc4he6ZLVKe2K7c9XTuG5zfxPu9tA+33ZQ
-         4zsR1RZ/XczDfA7yjw7PFHtUAbyUjRZIrLFD8br0hyc0ZUZwZdyV03qpIfCotv9hPboZ
-         NdVz77C8KQYv8/4GyEdWJu56NqRpMrP/hmcRwzmESFmTpPCqYHioE/C68eyppLtd9MTb
-         iMJtyjMBQBtXJdN5xcABiHIfBXJZdJvlr6mzQ3gPy6DJR/tB4OxHUuiBXLm70FAbNrKF
-         wrrw==
-X-Gm-Message-State: AFqh2kpDS3JIVMN/QEZ+48YIGUGzAe0OcCxMU/2w56NIvQ15K7SOhkpf
-        fnHWo4OpmRJ+kD99zB64gBA=
-X-Google-Smtp-Source: AMrXdXvRhRHj2vwrTPeoGMfOkoJbnMKxdSD94gT8jMnTAO4Eim3FH5O3xsHrF4NAry/VlNnLCTxHpg==
-X-Received: by 2002:a17:906:191a:b0:837:c2fc:a97c with SMTP id a26-20020a170906191a00b00837c2fca97cmr4736411eje.64.1671719604154;
-        Thu, 22 Dec 2022 06:33:24 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id b12-20020aa7dc0c000000b0046892e493dcsm429715edu.26.2022.12.22.06.33.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 06:33:23 -0800 (PST)
-Message-ID: <1889d8ee-e119-4a52-33a1-b990a41a137c@gmail.com>
-Date:   Thu, 22 Dec 2022 15:33:22 +0100
+        Thu, 22 Dec 2022 01:35:01 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3FA1E3C7;
+        Wed, 21 Dec 2022 22:34:59 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Nd0sn5d5Hz4f3jJ0;
+        Thu, 22 Dec 2022 14:34:53 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP1 (Coremail) with SMTP id cCh0CgDH5jCP+qNjzwckAQ--.30442S2;
+        Thu, 22 Dec 2022 14:34:56 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     jack@suse.cz, kbusch@kernel.org, shikemeng@huaweicloud.com
+Subject: [PATCH RESEND v2 0/5] A few bugfix and cleanup patches for sbitmap
+Date:   Thu, 22 Dec 2022 22:33:48 +0800
+Message-Id: <20221222143353.598042-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v6 16/17] arm64: dts: rockchip: rename vbus-supply to
- phy-supply in rk3566-box-demo.dts
-To:     heiko@sntech.de
-Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
-        linus.walleij@linaro.org, inki.dae@samsung.com,
-        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
-        alim.akhtar@samsung.com, linux-samsung-soc@vger.kernel.org
-References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
-Content-Language: en-US
-In-Reply-To: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgDH5jCP+qNjzwckAQ--.30442S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFW8JF4DZFy5Jry8uw1xZrb_yoW3Kwb_tF
+        WkAFW8tFykJF15JFy7XFy7AFyDKw4kJa4UtanayrWxJr1xZas7Xw4kuFW2qr15ZFyDuF15
+        Jry5Jrs5AwnI9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M28lY4IEw2IIxx
+        k0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK
+        6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+        x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjTRCA
+        pnUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'vbus-supply' does not match any of the regexes in rk3566-box-demo.dts
-in the usb2phy0_otg node, so rename vbus-supply to phy-supply.
+Hi, this series contain a bugfix patch to correct wake_batch
+recalculation to avoid potential IO hung and a few cleanup patches to
+remove unnecessary check and repeat code in sbitmap. Thanks.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2:
+ -add patch "sbitmap: correct wake_batch recalculation to avoid potential
+IO hung"
+---
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-index 4c7f9abd5..4dc9b7623 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-@@ -464,7 +464,7 @@
- };
+Kemeng Shi (5):
+  sbitmap: remove unnecessary calculation of alloc_hint in
+    __sbitmap_get_shallow
+  sbitmap: remove redundant check in __sbitmap_queue_get_batch
+  sbitmap: rewrite sbitmap_find_bit_in_index to reduce repeat code
+  sbitmap: add sbitmap_find_bit to remove repeat code in
+    __sbitmap_get/__sbitmap_get_shallow
+  sbitmap: correct wake_batch recalculation to avoid potential IO hung
 
- &usb2phy0_otg {
--	vbus-supply = <&vcc5v0_usb2_otg>;
-+	phy-supply = <&vcc5v0_usb2_otg>;
- 	status = "okay";
- };
+ lib/sbitmap.c | 103 ++++++++++++++++++++++----------------------------
+ 1 file changed, 46 insertions(+), 57 deletions(-)
 
---
-2.20.1
+-- 
+2.30.0
 
