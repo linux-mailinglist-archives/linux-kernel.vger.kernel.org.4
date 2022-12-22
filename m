@@ -2,153 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A176B65409B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235F4654099
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbiLVMBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S235824AbiLVMBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235872AbiLVMBS (ORCPT
+        with ESMTP id S235870AbiLVMBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:01:18 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F41733CF2;
-        Thu, 22 Dec 2022 03:53:51 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BMBrPJm034972;
-        Thu, 22 Dec 2022 05:53:25 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1671710005;
-        bh=Pa68b4sXRmlnioUqLVfGjGaP9VNUezQMYQLlr032dqo=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Y04xHemtQJg22QotSih5nUzCXb8V3/JphHTFMrZ5GD+fQ5MBFHrrT3gscCKypA4ox
-         kmNo08vOhQ7FXOf3WXAsbeRXDF/UbLdA/Fzeh/0s8jZkeLZmcjnqgKAcDOeQb8CNZf
-         ZLM5HC18kLVTrX08KdD80kvUPvvfqA5ChXdfgavo=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BMBrPAY109598
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 22 Dec 2022 05:53:25 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 22
- Dec 2022 05:53:25 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 22 Dec 2022 05:53:25 -0600
-Received: from [10.250.234.78] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BMBrFU4092320;
-        Thu, 22 Dec 2022 05:53:18 -0600
-Message-ID: <f89a1758-7cf5-3bb1-e28e-bb01fd6de9d3@ti.com>
-Date:   Thu, 22 Dec 2022 17:23:15 +0530
+        Thu, 22 Dec 2022 07:01:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C6E33CF4;
+        Thu, 22 Dec 2022 03:53:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E18FB81D30;
+        Thu, 22 Dec 2022 11:53:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9314C433F2;
+        Thu, 22 Dec 2022 11:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671710016;
+        bh=dwRgGhvkMsp229h+rO5gqtrhdXxrFhA631KDq6GCycY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WifJDlvxmHu39qI6F+fDSJ5b1cObtwXpINE6FUABMBEy0GM/b8I4BYqJKUOvrl/Ws
+         SpRbSnqddfHC9RohYxVrBf2oZ9WyphQhtOb0T+h3nYNZm4/SNZEYTm31Xkak0N5kIr
+         WTvYcPiVEaufsYUtmZj2LiyCI1Q5setZj6fTkkjBcIxfmkmvEu0qH/mwrx1wR/kg3k
+         v+I7niKR0Iwa1jrd03hAzn6pCnLFZHrk3eELuFxwOam/vXZRhWSY1ckDQWqZdLyaMP
+         XYtZns5zGWWcIkQthsXtJb5UKcGdymf10jv1nxZDn00mvP+wg0v9kPSsFobNVRfaw3
+         xdK/9aOin6M1g==
+Received: by mail-lf1-f46.google.com with SMTP id z26so2366639lfu.8;
+        Thu, 22 Dec 2022 03:53:36 -0800 (PST)
+X-Gm-Message-State: AFqh2kqXAvfO2rQtRdg8RrjNzaPGeu1Xf8khoMGgY0bAZ5mTznuXLjRG
+        pa4v6DbgJfZVhjhkj2UVQJhXDYltSFdZEqE1XeQ=
+X-Google-Smtp-Source: AMrXdXvrt9G9hSeWg+GElY+cYYoH6hbx0Lc+3N6i5piAcI92l/HeoPS1Z81DFG39t0aA0cn/00XO87rpCaoY9xDesuQ=
+X-Received: by 2002:a05:6512:15a3:b0:4bc:bdf5:f163 with SMTP id
+ bp35-20020a05651215a300b004bcbdf5f163mr310195lfb.583.1671710014879; Thu, 22
+ Dec 2022 03:53:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [EXTERNAL] Re: [PATCH] arm64: dts: ti: k3-j721s2: Add support for
- ADC nodes
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <kristo@kernel.org>, <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-References: <20221220101249.46450-1-b-kapoor@ti.com>
- <ff5b09db-4900-0b5b-e821-fa05b8d907a4@linaro.org>
- <a4d11974-eb97-bfa2-790f-3016950ea961@ti.com>
- <79ffe459-3827-ea67-e854-8eef3d9b630b@linaro.org>
- <a22a2c32-3b52-8bdf-f959-c95554125c64@ti.com>
- <5e8d7388-1b2b-cebb-fd09-38b4364c00e1@linaro.org>
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-In-Reply-To: <5e8d7388-1b2b-cebb-fd09-38b4364c00e1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com>
+ <26bd2928-9d62-32b3-4f9f-9dd9293cefeb@leemhuis.info> <CAK7LNAQ5VVRdrewtxrBdw561LL=yY8fdr=i1e7pp4DRht=r_Ww@mail.gmail.com>
+ <0ab93345-18e1-15c9-a4a3-066ea1cd862b@leemhuis.info>
+In-Reply-To: <0ab93345-18e1-15c9-a4a3-066ea1cd862b@leemhuis.info>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 22 Dec 2022 12:53:23 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXE+LBOBavOre1O8LTGPCmB8m58fbfo92Sx4WukyNAur-A@mail.gmail.com>
+Message-ID: <CAMj1kXE+LBOBavOre1O8LTGPCmB8m58fbfo92Sx4WukyNAur-A@mail.gmail.com>
+Subject: Re: BUG: arm64: missing build-id from vmlinux
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, Dennis Gilmore <dennis@ausil.us>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 22/12/22 16:16, Krzysztof Kozlowski wrote:
-> On 22/12/2022 11:39, Bhavya Kapoor wrote:
->> On 21/12/22 13:24, Krzysztof Kozlowski wrote:
->>> On 21/12/2022 06:42, Bhavya Kapoor wrote:
->>>> On 20/12/22 16:20, Krzysztof Kozlowski wrote:
->>>>> On 20/12/2022 11:12, Bhavya Kapoor wrote:
->>>>>> J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
->>>>>> for 8 channel ADCs for J721s2 SoC.
->>>>>>
->>>>>> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
->>>>>> ---
->>>>>>     .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
->>>>>>     .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 42 ++++++++++++++++++-
->>>>>>     2 files changed, 55 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
->>>>>> index a7aa6cf08acd..67593aa69327 100644
->>>>>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
->>>>>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
->>>>>> @@ -309,3 +309,17 @@ &mcu_mcan1 {
->>>>>>     	pinctrl-0 = <&mcu_mcan1_pins_default>;
->>>>>>     	phys = <&transceiver2>;
->>>>>>     };
->>>>>> +
->>>>>> +&tscadc0 {
->>>>>> +	status = "okay";
->>>>>> +	adc {
->>>>>> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
->>>>>> +	};
->>>>>> +};
->>>>>> +
->>>>>> +&tscadc1 {
->>>>>> +	status = "okay";
->>>>>> +	adc {
->>>>>> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
->>>>>> +	};
->>>>>> +};
->>>>>> \ No newline at end of file
->>>>> This is a friendly reminder during the review process.
->>>>>
->>>>> It seems my previous comments were not fully addressed. Maybe my
->>>>> feedback got lost between the quotes, maybe you just forgot to apply it.
->>>>> Please go back to the previous discussion and either implement all
->>>>> requested changes or keep discussing them.
->>>>>
->>>>> Thank you.
->>>>>
->>>>> Best regards,
->>>>> Krzysztof
->>>> Hi , I thought i did addressed the feedback since tscadc is just a
->>>> wrapper node.
->>>>
->>>> The actual adc node is inside of tscadc node.
->>> Read the feedback, from all emails.
->>> Best regards,
->>> Krzysztof
->>
->> Hi , i have gone through all earlier mails but can't find anything else.
->> Can you point out again whats the issue.
-> "And this is a v2? Or resend? Or something else?"
+On Wed, 21 Dec 2022 at 17:29, Thorsten Leemhuis
+<regressions@leemhuis.info> wrote:
 >
-> You miss proper versioning and changelog.
+> On 21.12.22 16:39, Masahiro Yamada wrote:
+> > On Wed, Dec 21, 2022 at 5:23 PM Thorsten Leemhuis
+> > <regressions@leemhuis.info> wrote:
+> >>
+> >> Hi, this is your Linux kernel regression tracker. CCing the regression
+> >> mailing list, as it should be in the loop for all regressions:
+> >> https://docs.kernel.org/admin-guide/reporting-regressions.html
+> >>
+> >> On 18.12.22 21:51, Dennis Gilmore wrote:
+> >>> The changes in https://lore.kernel.org/linux-arm-kernel/166783716442.=
+32724.935158280857906499.b4-ty@kernel.org/T/
+> >>> result in vmlinux no longer having a build-id.
+> >>
+> >> FWIW, that's 994b7ac1697b ("arm64: remove special treatment for the li=
+nk
+> >> order of head.o") from Masahiro merged through Will this cycle.
+> >>
+> >>> At the least, this
+> >>> causes rpm builds to fail. Reverting the patch does bring back a
+> >>> build-id, but there may be a different way to fix the regression
+> >>
+> >> Makes me wonder if other distros or CIs relying on the build-id are
+> >> broken, too.
+> >>
+> >> Anyway, the holiday season is upon us, hence I also wonder if it would
+> >> be best to revert above change quickly and leave further debugging for=
+ 2023.
+> >>
+> >> Masahiro, Will, what's your option on this?
 >
-> Additionally - I commented just before error in your patch. You must fix
-> it, not ignore it, even though I did not point it out before.
+> Masahiro, many thx for looking into this.
 >
-> Best regards,
-> Krzysztof
+> > I do not understand why you rush into the revert so quickly.
+> > We are before -rc1.
+> > We have 7 weeks before the 6.2 release
+> > (assuming we will have up to -rc7).
+> >
+> > If we get -rc6 or -rc7 and we still do not
+> > solve the issue, we should consider reverting it.
+>
+> Because it looked like a regression that makes it harder for people and
+> CI systems to build and test mainline. To quote
+> Documentation/process/handling-regressions.rst (
+> https://docs.kernel.org/process/handling-regressions.html ):
+>
+> """
+>  * Fix regressions within two or three days, if they are critical for
+> some reason =E2=80=93 for example, if the issue is likely to affect many =
+users
+> of the kernel series in question on all or certain architectures. Note,
+> this includes mainline, as issues like compile errors otherwise might
+> prevent many testers or continuous integration systems from testing the
+> series.
+> """
+>
+> I suspect that other distros rely on the build-id as well. Maybe I'm
+> wrong with that, but even if only Fedora and derivatives are effected it
+> will annoy some people. Sure, each can apply the revert, but before that
+> everyone affected will spend time debugging the issue first. A quick
+> revert in mainline (with a reapply later together with a fix) thus IMHO
+> is the most efficient approach afaics.
+>
 
-Hi, i had replied to that as well earlier. You can check that out 
-https://lore.kernel.org/all/89ce3639-e979-e369-657a-20aea4295970@ti.com/ .
+Agree with Masahiro here.
 
-Maybe you missed out on that.
+The issue seems to be caused by the fact that whichever object gets
+linked first gets to decide the type of a section, and so the .notes
+section will be of type NOTE if head.o gets linked first, or PROGBITS
+otherwise. The latter PROGBITS type seems to be the result of the
+compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
 
-Regards
+The hunk below fixes it for me, by avoiding notes emitted as PROGBITS.
+I'll leave it to Masahiro to decide whether this should be fixed for
+arm64 only or for all architectures, but I suspect the latter would be
+most appropriate.
 
+Note that the kernel's rpm-pkg and binrpm-pkg targets seem to be
+unaffected by this.
+
+diff --git a/arch/arm64/include/asm/assembler.h
+b/arch/arm64/include/asm/assembler.h
+index 376a980f2bad08bb..10a172601fe7f53f 100644
+--- a/arch/arm64/include/asm/assembler.h
++++ b/arch/arm64/include/asm/assembler.h
+@@ -818,7 +818,7 @@ alternative_endif
+
+ #ifdef GNU_PROPERTY_AARCH64_FEATURE_1_DEFAULT
+ .macro emit_aarch64_feature_1_and, feat=3DGNU_PROPERTY_AARCH64_FEATURE_1_D=
+EFAULT
+-       .pushsection .note.gnu.property, "a"
++       .pushsection .note.gnu.property, "a", %note
+        .align  3
+        .long   2f - 1f
+        .long   6f - 3f
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.ld=
+s.S
+index 4c13dafc98b8400f..8a8044dea71b0609 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -160,6 +160,7 @@ SECTIONS
+        /DISCARD/ : {
+                *(.interp .dynamic)
+                *(.dynsym .dynstr .hash .gnu.hash)
++               *(.note.GNU-stack) # emitted as PROGBITS
+        }
+
+        . =3D KIMAGE_VADDR;
