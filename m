@@ -2,99 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47145654692
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2289B654695
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiLVT1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 14:27:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S235713AbiLVT3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 14:29:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235460AbiLVT1V (ORCPT
+        with ESMTP id S235539AbiLVT2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 14:27:21 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBC916497;
-        Thu, 22 Dec 2022 11:27:19 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.22]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MWR6x-1pOhbD3gC3-00Xt8l; Thu, 22 Dec 2022 20:27:00 +0100
-Message-ID: <a84537e0-0413-5d46-c37a-504480270548@i2se.com>
-Date:   Thu, 22 Dec 2022 20:26:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 0/4] staging: vchiq: Rework child platform device
- (un)register
-Content-Language: en-US
-To:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adrien Thierry <athierry@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20221222191500.515795-1-umang.jain@ideasonboard.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20221222191500.515795-1-umang.jain@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:Ap+FkWHcNYNWYt1CpGgPE3HsUQXbFmR0jDqZcSozQNGHMZhYxJ+
- NzXHxFQTLt9WxBkZa50yuuYyr20NqiVD4+r5WMppsJxsr9lMg7/JcGYUsOEPLEpbmLB8gtc
- kt3jvTvR9soniLxfyM5RVQ2vQuAuw3i3mKYYJABdz8U+RZNka3ySyKNffEkTX76gspQERBg
- zkWhI6kaTM77fxJXOc59Q==
-UI-OutboundReport: notjunk:1;M01:P0:7KilMkushd8=;wAAjO6Vqda0+dMhep/IXtPIhdjc
- D2RF5bA82mE/Niw1pL/77BGkASFqBMjdXMZDNtzV8+HOrIPYhYmOZwv07Ezw6Wg1FT+9bgv48
- 2U05t5JofDj64ti7PuzZb4MGoAqWaexx7kXg+YxxFJy3YMFCMzSIGhiyu04jgfUtZfHh/j86D
- Q0A6XG1IvrOtPr9G3lswSPUOzUw9lDlNbPHoUtFK2Nsfn5TKtWpN1F7yrFSlSpvyD/XLpCYKj
- HBW2ZpW7Y52r5dGfxGWQHQIPSOkgFv4Vj/cT4qojgn5HPofepDNCI9gkeapq0O5CTVtLoqorq
- O0OJEQt0kIBzjExHAOHCAQnzf/Cs/cbnzkA8kuquO+oW/7gdsccwrT1VX1Z15AlCx7Oo5XkkY
- ZIfGbLLnT2AG8nTCFCB31uCVa/UXdtERWntd03ViRWO3u8PATdxxo02HQ3u/Q4Y7z8Te/XcF0
- q7YDhpY2TU0ry/ESpfOMqkjD+fdtjRy2UDiANJmH4k4PY9TTkszeG99iCj/u9hTF/PXEivsLT
- ppuyKzKH1yf9rbK6I9FPENcG54wSvr+ma5OTZPkcaVM+a7fV36Z5T1/ZsBvOWydORP//64lkY
- mIKfN+63LAPm2vYnZRjUkgPDV8oLGO33Y9Lmo69RiwRpYd668IkiD1YyKVr3dlaWN8QY2TU1y
- ZMe1j6DsjjOnexGkCW0jMrIqBsgH9zJxPJSE36syUw==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 22 Dec 2022 14:28:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1A6248F4;
+        Thu, 22 Dec 2022 11:28:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B94C61D43;
+        Thu, 22 Dec 2022 19:28:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D64E4C433EF;
+        Thu, 22 Dec 2022 19:28:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671737327;
+        bh=MUeB0rYcxx+chXDaIoYXhIqUO/+caG17xssga2eVpD0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=dhQfy/UKl6qrhKXOwV2+vIdXIqBfTCtxmZkrw+UrXPwYWLPbLvGyXMbBjGPU8Sfd1
+         bZhp79JPg5E+U0EOVltrb1NK7fmgegcHWLvFL+cyYFs7enMvznf4PiOi0I8o8OPm3/
+         fBIP7p5Crm5SnZELuYBTHk7S+yYCPLPnhVZ4NnowG25oYK8aEMzP7W3tFkE/19Jco5
+         IcHENmm5b6AI9T9JzUJPVHGGbO73qZfD67r1RjLPP+r9OhLgxrGtAPJMiXahW5CT06
+         fsiaPujLXYJLGsgbxWoyKyu+VKpbtKLFt2rjxEdUTB1i8uF/ICmwElSV5ZRP391LQ0
+         KNdwvg61CODlA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C322CC43141;
+        Thu, 22 Dec 2022 19:28:47 +0000 (UTC)
+Subject: Re: [GIT PULL] perf tools changes for v6.2: 2nd batch
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221222164914.508929-1-acme@kernel.org>
+References: <20221222164914.508929-1-acme@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221222164914.508929-1-acme@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v6.2-2-2022-12-22
+X-PR-Tracked-Commit-Id: 09e6f9f98370be9a9f8978139e0eb1be87d1125f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d1ac1a2b14264e98c24db6f8c2bd452e695c7238
+Message-Id: <167173732779.14570.14395787931706934186.pr-tracker-bot@kernel.org>
+Date:   Thu, 22 Dec 2022 19:28:47 +0000
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@gmail.com>,
+        Hans-Peter Nilsson <hp@axis.com>,
+        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang,
+The pull request you sent on Thu, 22 Dec 2022 13:49:14 -0300:
 
-Am 22.12.22 um 20:14 schrieb Umang Jain:
-> V2 series for addressing the TODO item:
->          "Get rid of all non essential global structures and create a proper
->           per device structure"
-> This series:
-> - Fixes a platform device leak (1/4)
-> - Simplifies vchiq_register_child (2/4 and 3/4)
-> - drops global references for child platform devices and prepares for
->    addition of new child devices in future (4/4)
+> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-for-v6.2-2-2022-12-22
 
-the whole problem i see with this series is that kernel module support 
-is broken. So i'm not able to test everything.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d1ac1a2b14264e98c24db6f8c2bd452e695c7238
 
-Did you did just test driver removable?
+Thank you!
 
->
-> v1: https://lore.kernel.org/all/20221220084404.19280-1-umang.jain@ideasonboard.com/
->
-> Umang Jain (4):
->    staging: vc04_services: Stop leaking platform device on error path
->    staging: vchiq: Do not assign default dma_mask explicitly
->    staging: vchiq: Simplify platform devices registration
->    staging: vchiq: Rework child platform device (un)register
->
->   .../interface/vchiq_arm/vchiq_arm.c           | 40 ++++++++++---------
->   1 file changed, 21 insertions(+), 19 deletions(-)
->
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
