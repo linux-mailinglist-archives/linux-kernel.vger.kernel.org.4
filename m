@@ -2,139 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FABB654348
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB8A65434B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiLVOmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:42:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
+        id S235785AbiLVOnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235652AbiLVOmg (ORCPT
+        with ESMTP id S234727AbiLVOne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:42:36 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAF8DF3F;
-        Thu, 22 Dec 2022 06:42:34 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMBwOVt016862;
-        Thu, 22 Dec 2022 15:42:14 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=fvpymYp2FaznQd80RWNDR540iqdoNsFsg4q4JG4xgdM=;
- b=4EyEl9gJxslTyAXas03y9REGd114PsRPmOT7sEDyBdDWau0nXDoMFF2PEtrUEBz7rkgJ
- s2BnWgge9zOGTqtASq5myo4o+Ckh7iP8HvqglMjKpMYzFNnDGeTvr94W7qSKgCWKZv99
- MnMLdJ2/XkJ2T1HgVOtUI1H72ry5h3Kr3/s/SQxu4ctYvLsOyffxD9nC3u8TmLxNFiIx
- S9LNR4EOzVl2vNViUWeygBy0mMpRLqAQIUIG3ZmM0RRQtXiXayzu/RUP9r3TdAVZF6pr
- QZ6ehYf+MaYqa2Gz0xTZSOwcDv9BT0yyAkU7Sv5nnAeijnYzxOUeQrkvvOYFmrTZvSNc Ug== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mh605wnnw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 15:42:14 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 164F1100059;
-        Thu, 22 Dec 2022 15:42:13 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 37A75231DC2;
-        Thu, 22 Dec 2022 15:42:10 +0100 (CET)
-Received: from [10.201.21.217] (10.201.21.217) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 22 Dec
- 2022 15:42:09 +0100
-Message-ID: <0bff5b2d-2837-57cb-5434-58158acc1483@foss.st.com>
-Date:   Thu, 22 Dec 2022 15:42:09 +0100
+        Thu, 22 Dec 2022 09:43:34 -0500
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C58DF3F;
+        Thu, 22 Dec 2022 06:43:34 -0800 (PST)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1322d768ba7so2713701fac.5;
+        Thu, 22 Dec 2022 06:43:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PFFd7m/bU9463PFLncKR6cUl2BapFHel3PaN5ohq5f0=;
+        b=mZ9TMNuvZ3ro9y76mK98ILg01hMZXH5wllYwixUjGZEiPFVlvXKZ3+xQkbekMXHnml
+         BN9keBU0d7O6m3ZLWT8rnBBcjmYXs4ppL3/M/fdFTQvZPIglwMsQ5GFknHXp44Cx13kj
+         EqLic31iqzMZDUPcAHVvyk8hsnnhUcuQ8rUncbYGsVUa/H6KvB0Hdnj1MVZuYgsU2YOc
+         2KUds6QUt2PKBDXZs4XUUwGB6rv+/kvLoajXD6zrGgJjWEV+KR9A1K5wQfiRbTQNu6na
+         NoXrvFGDJon1xTmTwivD3Wb2ojLydfRgKDFTpV0dxkUUKT9VAcgKYvMVEAewLj/F1pZO
+         ciTA==
+X-Gm-Message-State: AFqh2kq7CAsuvFSFBQUoH6+qebxhlkGULCiN+cxoNBnXZ4ZOI5hdz6aI
+        gkN0h6O489cROWOn6dVyC7z7b6z/xA==
+X-Google-Smtp-Source: AMrXdXtQBOve/jNx+L/Q8K8KWjdlB5ZI36GhyWwtlKDL2DTz835Npj1AXWHHeMYIsiF/DhTdYe3CWQ==
+X-Received: by 2002:a05:6870:814:b0:144:54b3:750 with SMTP id fw20-20020a056870081400b0014454b30750mr2756769oab.12.1671720213458;
+        Thu, 22 Dec 2022 06:43:33 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z44-20020a056870c22c00b001375188dae9sm147865oae.16.2022.12.22.06.43.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 06:43:33 -0800 (PST)
+Received: (nullmailer pid 1211543 invoked by uid 1000);
+        Thu, 22 Dec 2022 14:43:32 -0000
+Date:   Thu, 22 Dec 2022 08:43:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>, kvm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/3] of: overlay: Fix trivial typo
+Message-ID: <167172020686.1211425.17489090373509742153.robh@kernel.org>
+References: <20221220-permited-v1-0-52ea9857fa61@chromium.org>
+ <20221220-permited-v1-3-52ea9857fa61@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 6/7] ARM: dts: stm32: add ETZPC as a system bus for
- STM32MP15x boards
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
-        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
-        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
-        <arnd@arndb.de>
-References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
- <20221221173055.11719-7-gatien.chevallier@foss.st.com>
- <2e7c901c-e322-ded6-b170-6d2436d74c0f@kernel.org>
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <2e7c901c-e322-ded6-b170-6d2436d74c0f@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.217]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-22_08,2022-12-22_03,2022-06-22_01
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220-permited-v1-3-52ea9857fa61@chromium.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-
-On 12/22/22 11:30, Krzysztof Kozlowski wrote:
-> On 21/12/2022 18:30, Gatien Chevallier wrote:
->> The STM32 System Bus is an internal bus on which devices are connected.
->> ETZPC is a peripheral overseeing the firewall bus that configures
->> and control access to the peripherals connected on it.
->>
->> For more information on which peripheral is securable, please read
->> the STM32MP15 reference manual.
->>
->> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->> ---
->>   arch/arm/boot/dts/stm32mp151.dtsi | 2737 +++++++++++++++--------------
->>   1 file changed, 1406 insertions(+), 1331 deletions(-)
->>   
->> -		lptimer1: timer@40009000 {
->> +		etzpc: etzpc@5c007000 {
+On Tue, 20 Dec 2022 23:20:32 +0100, Ricardo Ribalda wrote:
+> Permitted is spelled with two t.
 > 
-> Node names should be generic.
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Will change to etzpc: bus@5c007000 in V3
-
-> 
->> +			compatible = "st,stm32mp15-sys-bus";
->> +			reg = <0x5c007000 0x400>;
->>   			#address-cells = <1>;
->> -			#size-cells = <0>;
->> -			compatible = "st,stm32-lptimer";
->> -			reg = <0x40009000 0x400>;
->> -			interrupts-extended = <&exti 47 IRQ_TYPE_LEVEL_HIGH>;
->> -			clocks = <&rcc LPTIM1_K>;
->> -			clock-names = "mux";
->> -			wakeup-source;
->> -			status = "disabled";
-> 
-> Why entire bus is disabled? What resources do you miss?
-
-Here, I did not want to modify the status of the nodes in the device 
-tree. Nodes that are default enabled in the SoC device tree stay enabled 
-and vice-versa. IMO think this patch should not include these kind of 
-changes in its scope. I describe the bus and the peripherals connected 
-to it, nothing more :)
-
-> 
->> +			#size-cells = <1>;
->> +			feature-domain-controller;
->> +			#feature-domain-cells = <2>;
->> +			ranges;
->>   
-> Best regards,
-> Krzysztof
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/of/overlay.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
-Best regards,
-Gatien
+Applied, thanks!
