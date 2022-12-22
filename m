@@ -2,153 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5E6654396
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DA36543C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235906AbiLVPEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:04:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S235836AbiLVPGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235811AbiLVPDs (ORCPT
+        with ESMTP id S235801AbiLVPGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:03:48 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1E32CC99;
-        Thu, 22 Dec 2022 07:02:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1671721374; x=1703257374;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=BemLfJGRQcaAB/OnhUXouvv/1MERj6C4v/FiqDQcucs=;
-  b=qhA2Xp89w6j4QioYt+0s4p06/6C6NWqMXKCZAWe/nI7FrUWTURLVR4WV
-   UaBwUgkMUQD0xqgzw20y2OQR6+BphUJy8cAS2tMhSO7LBx5VLFxe4OJE7
-   KGGVrDlX8rTjEazsfvWT7j+d9e1j+8G4vUMpnmJb03x4zLYBZtX4dcitw
-   Z8oyERT2Q4KlguYR9fVCEHY/dKFAeZs+5V8q94OnKXhdVuNYAdeqlIg8C
-   8rwHWymiPoOz8RBe0in6XWCZ8Vlew4CB1B1R/rF4k5KnjCmLZxX+j3yoI
-   r22Ghz79g11NX9AETexe9RLpGfNAbSFkNGKK4he/tMVYzgN5xd0nRgKS8
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="189343420"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Dec 2022 08:02:52 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 22 Dec 2022 08:02:51 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 22 Dec 2022 08:02:48 -0700
-Message-ID: <cc41ccf443b1f2c7a4cb5e247dabfa53a6674226.camel@microchip.com>
-Subject: Re: [PATCH net 0/8] Add support for two classes of VCAP rules
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Daniel Machon" <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Dan Carpenter <error27@gmail.com>
-Date:   Thu, 22 Dec 2022 16:02:47 +0100
-In-Reply-To: <0efd4a7072fb90cc9bc9992b00d9ade233a38de1.camel@redhat.com>
-References: <20221221132517.2699698-1-steen.hegelund@microchip.com>
-         <0efd4a7072fb90cc9bc9992b00d9ade233a38de1.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 
+        Thu, 22 Dec 2022 10:06:05 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA22DA0;
+        Thu, 22 Dec 2022 07:06:04 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMCmdsh011885;
+        Thu, 22 Dec 2022 15:05:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Gya7rubpAwJcrKugU9ig5Vdy5rjuPokrmgg+3DKAtFk=;
+ b=Z7FqvxRnqB0BEkLNuLC459CZsf6ixZ9sBoW/lw4yhP3ReE4oj/KA8Y694U1Zji3xFQAl
+ WWzX39hOozbdondCCdhTnIzNDKwmp67YsbLMVHNMnKDMjpHUlTPEwEl1eGGy1N82YPeS
+ PqhQSiNLFQoXZjKcE95wiggl57SgidpKa3ijCyrTCzasYa+FLRvA99r4ZJm33kyHtuOR
+ 3cL2dpFMbdqU98QaBdS1Ee1xfg+zXeaM+EgC4gyLQNM0/L2A9vLwAIGZplAQ5JyoLRrG
+ ngbGAWRzZwjzIhZNrmOW66VGakfmHcv62/yU0eTlz5BQe+pT4PgL7VjiILh06g+rURGn pw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm2brtwau-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 15:05:58 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BMF5TQM005606
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 15:05:29 GMT
+Received: from vpolimer-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 22 Dec 2022 07:05:14 -0800
+From:   Vinod Polimera <quic_vpolimer@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
+CC:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <robdclark@gmail.com>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <quic_kalyant@quicinc.com>, <dmitry.baryshkov@linaro.org>,
+        <quic_khsieh@quicinc.com>, <quic_vproddut@quicinc.com>,
+        <quic_bjorande@quicinc.com>, <quic_abhinavk@quicinc.com>,
+        <quic_sbillaka@quicinc.com>
+Subject: [PATCH v10 00/15] Add PSR support for eDP 
+Date:   Thu, 22 Dec 2022 20:34:47 +0530
+Message-ID: <1671721502-16587-1-git-send-email-quic_vpolimer@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: hay7mu7mfZdhQDyo1WPZ6CW0WNITQ1aS
+X-Proofpoint-GUID: hay7mu7mfZdhQDyo1WPZ6CW0WNITQ1aS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_08,2022-12-22_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 spamscore=0 suspectscore=0 phishscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212220131
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
+Changes in v2:
+  - Use dp bridge to set psr entry/exit instead of dpu_enocder.
+  - Don't modify whitespaces.
+  - Set self refresh aware from atomic_check.
+  - Set self refresh aware only if psr is supported.
+  - Provide a stub for msm_dp_display_set_psr.
+  - Move dp functions to bridge code.
 
-On Thu, 2022-12-22 at 15:22 +0100, Paolo Abeni wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
->=20
-> Hello,
-> On Wed, 2022-12-21 at 14:25 +0100, Steen Hegelund wrote:
-> > This adds support for two classes of VCAP rules:
-> >=20
-> > - Permanent rules (added e.g. for PTP support)
-> > - TC user rules (added by the TC userspace tool)
-> >=20
-> > For this to work the VCAP Loopups must be enabled from boot, so that th=
-e
-> > "internal" clients like PTP can add rules that are always active.
-> >=20
-> > When the TC tool add a flower filter the VCAP rule corresponding to thi=
-s
-> > filter will be disabled (kept in memory) until a TC matchall filter cre=
-ates
-> > a link from chain 0 to the chain (lookup) where the flower filter was
-> > added.
-> >=20
-> > When the flower filter is enabled it will be written to the appropriate
-> > VCAP lookup and become active in HW.
-> >=20
-> > Likewise the flower filter will be disabled if there is no link from ch=
-ain
-> > 0 to the chain of the filter (lookup), and when that happens the
-> > corresponding VCAP rule will be read from the VCAP instance and stored =
-in
-> > memory until it is deleted or enabled again.
->=20
-> Despite the 'net' target, this looks really like net-next material as
-> most patches look like large refactor. I see there are a bunch of fixes
-> in patches 3-8, but quite frankly it's not obvious at all what the
-> refactors/new features described into the commit messages themself
-> really fix.
+Changes in v3:
+  - Change callback names to reflect atomic interfaces.
+  - Move bridge callback change to separate patch as suggested by Dmitry.
+  - Remove psr function declaration from msm_drv.h.
+  - Set self_refresh_aware flag only if psr is supported.
+  - Modify the variable names to simpler form.
+  - Define bit fields for PSR settings.
+  - Add comments explaining the steps to enter/exit psr.
+  - Change DRM_INFO to drm_dbg_db. 
 
-Yes the patches 3-8 is the response to Michael Walles observations on LAN96=
-6x
-and Jakubs Kicinski comment (see link), but the description in the commits =
-may
-not be that clear, in the sense that they do not state one-to-one what the
-mitigation is.
+Changes in v4:
+  - Move the get crtc functions to drm_atomic.
+  - Add atomic functions for DP bridge too.
+  - Add ternary operator to choose eDP or DP ops.
+  - Return true/false instead of 1/0.
+  - mode_valid missing in the eDP bridge ops.
+  - Move the functions to get crtc into drm_atomic.c.
+  - Fix compilation issues.
+  - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
+  - Check for crtc state enable while reserving resources.
 
-See https://lore.kernel.org/netdev/20221209150332.79a921fd@kernel.org/
+Changes in v5:
+  - Move the mode_valid changes into a different patch.
+  - Complete psr_op_comp only when isr is set.
+  - Move the DP atomic callback changes to a different patch.
+  - Get crtc from drm connector state crtc.
+  - Move to separate patch for check for crtc state enable while
+reserving resources.
 
-So essentially this makes it possible to have rules that are always in the =
-VCAP
-HW (to make the PTP feature work), even before the TC chains have been
-established (which was the problem that Michael encountered).
+Changes in v6:
+  - Remove crtc from dpu_encoder_virt struct.
+  - fix crtc check during vblank toggle crtc.
+  - Misc changes. 
 
-I still think this a net submission, since it fixes the problem that was
-observed in the previous netnext window.
+Changes in v7:
+  - Add fix for underrun issue on kasan build.
 
-But I will rephrase the reasoning in a V2 to hopefully make that more
-understandable.
+Changes in v8:
+  - Drop the enc spinlock as it won't serve any purpose in
+protetcing conn state.(Dmitry/Doug)
 
-If you still think it is better to post this in the upcoming net-next windo=
-w, I
-am also OK with that.
+Changes in v9:
+  - Update commit message and fix alignment using spaces.(Marijn)
+  - Misc changes.(Marijn)
 
->=20
-> I suggest to move this series to net-next (and thus repost after Jan
-> 2), unless you come-up with some good reasons to keep it in net.
->=20
-> Thanks,
->=20
-> Paolo
->=20
+Changes in v10:
+  - get crtc cached in dpu_enc during obj init.(Dmitry)
 
-BR
-Steen
+Sankeerth Billakanti (1):
+  drm/msm/dp: disable self_refresh_aware after entering psr
+
+Vinod Polimera (14):
+  drm/msm/disp/dpu: cache crtc obj in the dpu_encoder during
+    initialization
+  drm: add helper functions to retrieve old and new crtc
+  drm/msm/dp: use atomic callbacks for DP bridge ops
+  drm/msm/dp: Add basic PSR support for eDP
+  drm/msm/dp: use the eDP bridge ops to validate eDP modes
+  drm/bridge: use atomic enable/disable callbacks for panel bridge
+  drm/bridge: add psr support for panel bridge callbacks
+  drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
+    functions
+  drm/msm/disp/dpu: check for crtc enable rather than crtc active to
+    release shared resources
+  drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
+  drm/msm/disp/dpu: get timing engine status from intf status register
+  drm/msm/disp/dpu: wait for extra vsync till timing engine status is
+    disabled
+  drm/msm/disp/dpu: reset the datapath after timing engine disable
+  drm/msm/disp/dpu: clear active interface in the datapath cleanup
+
+ drivers/gpu/drm/bridge/panel.c                     |  68 ++++++-
+ drivers/gpu/drm/drm_atomic.c                       |  60 ++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c           |  17 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  45 +++--
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  22 +++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   3 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  12 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        |   8 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   3 +-
+ drivers/gpu/drm/msm/dp/dp_catalog.c                |  80 ++++++++
+ drivers/gpu/drm/msm/dp/dp_catalog.h                |   4 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  80 ++++++++
+ drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   3 +
+ drivers/gpu/drm/msm/dp/dp_display.c                |  36 ++--
+ drivers/gpu/drm/msm/dp/dp_display.h                |   2 +
+ drivers/gpu/drm/msm/dp/dp_drm.c                    | 206 ++++++++++++++++++++-
+ drivers/gpu/drm/msm/dp/dp_drm.h                    |   9 +-
+ drivers/gpu/drm/msm/dp/dp_link.c                   |  36 ++++
+ drivers/gpu/drm/msm/dp/dp_panel.c                  |  22 +++
+ drivers/gpu/drm/msm/dp/dp_panel.h                  |   6 +
+ drivers/gpu/drm/msm/dp/dp_reg.h                    |  27 +++
+ include/drm/drm_atomic.h                           |   7 +
+ 22 files changed, 696 insertions(+), 60 deletions(-)
+
+-- 
+2.7.4
+
