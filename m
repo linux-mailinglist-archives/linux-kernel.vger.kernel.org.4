@@ -2,345 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBBF654472
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9456265446C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235228AbiLVPlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S230071AbiLVPlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:41:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiLVPla (ORCPT
+        with ESMTP id S229525AbiLVPlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:41:30 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E8711453
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:41:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1671723652; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=TFaGR2XcNqR08I95QmCsDEI+2RsYKIgUe8iT6mzW8JNR6+uVtI48g68h4QH95JCPpDOfhrXbUBayvQ2nuOO+HRJ3FsEQdqvfU297dFjf++du/OEJcWHS+UfGHHX9Rs5Cut4d79hCq/QUJKQRt53qzFfgKQ4zF7B1ZiCKRJwyOew=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1671723652; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=iZz7X6e3jG+2rIkRvN509bNCkZ80pmjJN8lTLn7L8aw=; 
-        b=IU64PLwoXT1GLArrrfI0nDsCJJd+fEhM88nAhLdhj83RD/9bCpHh4VvaFeUJZ9LFiIXcd04gIFBUD86x/QIlIqTweknJhwwB07xkr2y6TO+1DXR9zPZgeMUIAwE1Dd//2755bq0kceU+w6LxpsZ1YrtxmyWE8IyGwKiTdTChAxY=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671723652;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=iZz7X6e3jG+2rIkRvN509bNCkZ80pmjJN8lTLn7L8aw=;
-        b=e9kMocEBUsI03h4fI+PbQDjGMe3qoBDMTuaC1CQIOo1hokiTDCaiCEuiC8qjhE5h
-        AT9Kw75SRIODili26mNQa1Dis8fsTQeYaSdxHG+QaB3v0kGqlqheLMyNKx2HYySY8Ic
-        IPFLjRKynn968e/K+7d7BKGLqW97pLBZ/V2fGJaE=
-Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 16717236509871003.0139285664518; Thu, 22 Dec 2022 21:10:50 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Simon Ser <contact@emersion.fr>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <1a9995a54f7309b4d120582b36ebb7950d5ddeba.1671723195.git.code@siddh.me>
-Subject: [PATCH v2 9/9] drm/drm_lease: Remove usage of deprecated DRM_DEBUG_LEASE
-Date:   Thu, 22 Dec 2022 21:10:43 +0530
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1671723195.git.code@siddh.me>
-References: <cover.1671723195.git.code@siddh.me>
-MIME-Version: 1.0
+        Thu, 22 Dec 2022 10:41:05 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2070.outbound.protection.outlook.com [40.107.22.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61863BE23;
+        Thu, 22 Dec 2022 07:41:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hBY7r+7dcnaN8TomWEfkm/d3A1GrDsUOIngZNBBIHjyYq6PFONqCJ4iE89i0FF7Vom85zAGCItmoY1qaj0fo+kSLGVDaWqqKSbI7BB6dP/167u+KDiwjYBZ7/+3NyE/+CEeexJF3+uy5QUxj9ApAo83IwPJhSohFSTm7nnTmCj7wF14JX7ttlWY8kMFlpgVrf2RejN4KM7yCMua6mg49i/bexwBc21CSi/b5QZfhmoeiq9LZBQOS/g6HanycHX74FzSArSeajWaPpobF/GCe3IWXFD+YclmOb5o/ut2T06BZ9O+j9jYm1cjcjStBF65WEO5xmszPz4VivTP9lZFDPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=49H+3yrgq/xF9Q3aB733Xq780HCQBjI+zAEaIn5tUPo=;
+ b=jq0rMdleHnELNZf7sboOsWft+MQ+X9u4iOu7tQxVEFU8Dbo90XftSRPxvLR7Kbzcz4BRr99oih1TGqPY1XEN1XR6DYEbGDTSk86Hs1wGSHBi+baWit7Lmr0NidbfRbe1BIzG00zj8++G+UUbSwY4tm/TbSuPFmllljTl/lctnXL/uIdzZ/j7XC82Hn/YqGWam8Nj4YxeZzkW1jwYpt/Jjw6WHioR/kRpz2J0xB4mktC6cFh8K43VitvC9Eo5QDmoQMmx8bdCQZJrzWpOxAhWWmH44z3Bot8sebEsu2v2+ZUW1pnnBtP+qbRCVvMUXW5CrtCFEPvjVtO0UFESgsWBVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=49H+3yrgq/xF9Q3aB733Xq780HCQBjI+zAEaIn5tUPo=;
+ b=KWjXDPm/WicgEcVFjTF7nldeJ8BNqkbuKiURLTFSgbcD9nO97KOjl62/ECg6aRaesV3VGDFdq5TcskdL8ENlT/WrpE31ikoTyzii5+lfzIJOO4sbImneyYgKpXZNPWSPDF0wnSOXl256ZoKyFNudbNa/7R6/AlOrmZNQ5zJyZ+E=
+Received: from VI1PR04MB5807.eurprd04.prod.outlook.com (2603:10a6:803:ec::21)
+ by DBBPR04MB8043.eurprd04.prod.outlook.com (2603:10a6:10:1e7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
+ 2022 15:41:00 +0000
+Received: from VI1PR04MB5807.eurprd04.prod.outlook.com
+ ([fe80::75ca:4956:79f9:6d69]) by VI1PR04MB5807.eurprd04.prod.outlook.com
+ ([fe80::75ca:4956:79f9:6d69%7]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
+ 15:41:00 +0000
+From:   Camelia Alexandra Groza <camelia.groza@nxp.com>
+To:     Sean Anderson <sean.anderson@seco.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: RE: [PATCH net v2] powerpc: dts: t208x: Disable 10G on MAC1 and MAC2
+Thread-Topic: [PATCH net v2] powerpc: dts: t208x: Disable 10G on MAC1 and MAC2
+Thread-Index: AQHZEXQBPotIqLiZVkqXNZXBHISHtK51Z8xAgASou7A=
+Date:   Thu, 22 Dec 2022 15:41:00 +0000
+Message-ID: <VI1PR04MB5807E65FA99FE10D53804445F2E89@VI1PR04MB5807.eurprd04.prod.outlook.com>
+References: <20221216172937.2960054-1-sean.anderson@seco.com>
+ <VI1PR04MB5807014739D89583FF87D43EF2E59@VI1PR04MB5807.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB5807014739D89583FF87D43EF2E59@VI1PR04MB5807.eurprd04.prod.outlook.com>
+Accept-Language: en-GB, ro-RO, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR04MB5807:EE_|DBBPR04MB8043:EE_
+x-ms-office365-filtering-correlation-id: 02b86093-0771-4158-a66e-08dae432ed50
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: eAbbeH+HqSfeQutj9ya3G/vMtmshA59XvIRQh9jbOc1F27hW9wqylRBcsIXhLh4DQp4h3hRC0XRJOHKh1M0B+CneKxwtu+5/LWJm+IoZu3Nx67z669foGzdJwR5Hz8TmdAVLl9Hwn8YrEg4Ri14A3/u8K2dKj/PCF1xxzQxzHF6dQJTMytOPmWTCtWb0DMhuYZypjyemvghBIWFyl2U+bbHQZAouSMgCgh52yy60YFYOU+cywmt5z1YYObQwyAfLxNi9GqWhg622HyRT+fC3JyC7HI9V7KZ/63EwbobRwNVgrew7zyVGeGZO89QedIr3prfFf1daXMRSbAWYXCSiPrbiFVNE/jf7bcEk+eETFhz3tpZfhhTig0jKXyyh5k3i1iUfJKPCI/C/94XgVKxiXEb/oIeSpFpDJfq281l8BzwbVDhlW48q2MYRHSK3jKILV+cc0Vctoy2YbnS2U1P2LfWgDYebr02lcX+7YdMqp7aInh3qpXzRHreh3pfHjq3SFUIWfwpqji+IZjSLVC+2MryddlUnJriHHi/0g2ntYYR6u9vphJlRyDGW02E4SF/FR6WHKQ7pbcmTIKuDZEHnJTB6MB4dNkZD1nxnACf2ch3NhIL2HEKyT0waicYcWx0RTsxnGfEs6qtujzRcVvKtV6qiQwLbm5/zSlFf1iqf8ztfopJ3wnIbNIyQxirl/s6no63EyNsxYGKBGll0VSHhtg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5807.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(136003)(376002)(396003)(451199015)(8936002)(186003)(8676002)(38070700005)(55016003)(38100700002)(122000001)(5660300002)(7416002)(52536014)(64756008)(66946007)(4326008)(41300700001)(9686003)(26005)(76116006)(83380400001)(66556008)(66476007)(71200400001)(66446008)(86362001)(33656002)(2906002)(53546011)(55236004)(7696005)(478600001)(316002)(6506007)(110136005)(54906003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?oIbFAnND7+ezRzu3DVciswkXA2HjZQ+bNVr4fnE9UClY4PkqwPc5PmmYlBUP?=
+ =?us-ascii?Q?wEw55l9JiPn+fIo48CrjPgqMzgj4sn4odFIDZ92pIMTK2fwSsx81obb4Aw1a?=
+ =?us-ascii?Q?666ptXpPVO+SYn4lUxGOu+ixu5BgKvMgBEjz5sh24kQN2SgQT3TOfY27hj1I?=
+ =?us-ascii?Q?pZDAipEdu3v4c0uVEjKZQagcFJlcssOd6ojVqz7YTmjeDuIpsSN1KVBiA0YK?=
+ =?us-ascii?Q?fip8DU9nqd9YFi+K0LccwYp8wjipAgaX3YsZYlmO2jTVOdlvtiuXZ0wgTqvM?=
+ =?us-ascii?Q?M+/76lnSEwRdl8iVAL9HJmyohLkYKgTu7HxnplcIf7OZEVDfJduG8mLTbA3m?=
+ =?us-ascii?Q?xDPX7/lsVC14CchrHfMGBk69v9X/6LpBSTF+OJWXTE5HIXLoYp6OGeIMT3ev?=
+ =?us-ascii?Q?P8qsmAW9Q7vQZGpQjgqDs9mBSg/UPEHTuQ1yskK6hbgpTAVF1NDqtxdZuDW2?=
+ =?us-ascii?Q?tcsmdRnmf2YTWdHvmzZvZP0P7JYabEhDhzqvtvv8zuCG22Us9X/rNuIndLHD?=
+ =?us-ascii?Q?5ACBAq4sxTW7dmuUEgGnReXHDmiXP1I2QkBU/zzPN1xRPB2mohLD+wWiGm9E?=
+ =?us-ascii?Q?28Au4hpX2DYObCctDYhSG5dGEEXynVu+8W0mZXL0l7MraDtYVGzIuxHO19Nw?=
+ =?us-ascii?Q?YhEpVGO4/YV9Bhf5RMPUqf/QgctViNAGuWFnxN1od6UbaI9C7r7nDA2jeZdI?=
+ =?us-ascii?Q?r40mdWpUJ8oEatpekx8RvQqb39YzB8yfaLuZUMKNMKLIUQkmmasNcPw5B+pK?=
+ =?us-ascii?Q?apblgtQfdvDPnnKZYXGlOJDw6kH3KWiyYJfP65e3XLytDWfwXm1JGhjZnrrd?=
+ =?us-ascii?Q?Lj9i/bj4XIVoXcZoLHoWg3IhLwD2L8gGr0Vagjz52wwRdIK3BhqfsNAxgOmg?=
+ =?us-ascii?Q?E/UnvuPTqUN/Nw93R7W0wNzQu43t+9tvRQJjP4dnvn7sTg6M6CiYVL6ohShG?=
+ =?us-ascii?Q?NLMnH3/Eec/WslYMDHOwC+NTRw8b8qfmBEU2xhzlqE5Kox64DxYV0Tdl3xrJ?=
+ =?us-ascii?Q?ZoDSfaUbDD2jFg5Mkwt2Edgg+gEntLC1Z3qQcXzxjJrzUJ5wjuSsSAqqqoCF?=
+ =?us-ascii?Q?7b1Us6HaxcTVTwkQjVYM7Pnv4WuhnvfSVPqPOyyBZTlGiit9xN+I8NGkjQE8?=
+ =?us-ascii?Q?RQlG9kAJA3gYeSRidlYABHTGmFnaPg9e+DUD7uuKLUusF6+3B+UAhTkhf6VN?=
+ =?us-ascii?Q?W3glG1ONtUhDzzhFbDGng5pXKjS3cuPifNTiParfp5Hb58cOCYmwQQzdcL4q?=
+ =?us-ascii?Q?OO/2+urma0LalOTrJvkdKUiKXdcuT/Yehp3R5qhBeh+5ijZa5XsTs4fPgSD4?=
+ =?us-ascii?Q?ap0wyqcWxA9t5WCWcGnocUerSZGcm5BMNKHmpapdgf9y8pO/uirY6cE6WmPn?=
+ =?us-ascii?Q?lNOM7OIaD1uLP5TU37QSaOxWq6xElsWtfELSJnGqN2pq94s4XQOPOEwLdI4h?=
+ =?us-ascii?Q?sMnkJ3t4i9CEkFrbo5E0A0HlBO7t+BSHBOBomMFYAxnTjCX3JhPLnsVUYlet?=
+ =?us-ascii?Q?ilqDtv2VMwYsZAtaLbhu+ZplMwYwx0IayCbb6p7GQ8TPKHNmhFrviX9S1UnK?=
+ =?us-ascii?Q?4MA+qbG4UAD+WLOFlqXYhQRRdtE1TbeZGL7uGS/v?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5807.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02b86093-0771-4158-a66e-08dae432ed50
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Dec 2022 15:41:00.6861
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l+pCr340ciCMd8setf9fHB8G5TmtLd1b9eUlW9mjtZJ268vL5Lbea2ECQa5UKAK1j1ZXxOxvx+GyQaFXDEUF3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB8043
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm_print.h says DRM_DEBUG_LEASE is deprecated in favor of
-drm_dbg_lease().
+> -----Original Message-----
+> From: Camelia Alexandra Groza <camelia.groza@nxp.com>
+> Sent: Monday, December 19, 2022 18:23
+> To: Sean Anderson <sean.anderson@seco.com>; David S . Miller
+> <davem@davemloft.net>; netdev@vger.kernel.org
+> Cc: devicetree@vger.kernel.org; Rob Herring <robh+dt@kernel.org>;
+> Christophe Leroy <christophe.leroy@csgroup.eu>; Nicholas Piggin
+> <npiggin@gmail.com>; Michael Ellerman <mpe@ellerman.id.au>; linuxppc-
+> dev@lists.ozlabs.org; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt@linaro.org>; linux-kernel@vger.kernel.org; Sean
+> Anderson <sean.anderson@seco.com>
+> Subject: RE: [PATCH net v2] powerpc: dts: t208x: Disable 10G on MAC1 and
+> MAC2
+>=20
+> > -----Original Message-----
+> > From: Sean Anderson <sean.anderson@seco.com>
+> > Sent: Friday, December 16, 2022 19:30
+> > To: David S . Miller <davem@davemloft.net>; netdev@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org; Rob Herring <robh+dt@kernel.org>;
+> > Christophe Leroy <christophe.leroy@csgroup.eu>; Nicholas Piggin
+> > <npiggin@gmail.com>; Michael Ellerman <mpe@ellerman.id.au>; linuxppc-
+> > dev@lists.ozlabs.org; Krzysztof Kozlowski
+> > <krzysztof.kozlowski+dt@linaro.org>; linux-kernel@vger.kernel.org;
+> Camelia
+> > Alexandra Groza <camelia.groza@nxp.com>; Sean Anderson
+> > <sean.anderson@seco.com>
+> > Subject: [PATCH net v2] powerpc: dts: t208x: Disable 10G on MAC1 and
+> > MAC2
+> >
+> > There aren't enough resources to run these ports at 10G speeds. Disable
+> > 10G for these ports, reverting to the previous speed.
+> >
+> > Fixes: 36926a7d70c2 ("powerpc: dts: t208x: Mark MAC1 and MAC2 as 10G")
+> > Reported-by: Camelia Alexandra Groza <camelia.groza@nxp.com>
+> > Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> > ---
+>=20
+> Thank you.
+>=20
+> Reviewed-by: Camelia Groza <camelia.groza@nxp.com>
+> Tested-by: Camelia Groza <camelia.groza@nxp.com>
 
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
-Reviewed-by: Simon Ser <contact@emersion.fr>
----
- drivers/gpu/drm/drm_lease.c | 64 ++++++++++++++++++++-----------------
- 1 file changed, 34 insertions(+), 30 deletions(-)
+I see the patch marked Not Applicable in the netdev patchwork.
+What tree will it go through?
 
-diff --git a/drivers/gpu/drm/drm_lease.c b/drivers/gpu/drm/drm_lease.c
-index c442d5e766d1..08b4f29f8b61 100644
---- a/drivers/gpu/drm/drm_lease.c
-+++ b/drivers/gpu/drm/drm_lease.c
-@@ -213,11 +213,11 @@ static struct drm_master *drm_lease_create(struct drm=
-_master *lessor, struct idr
- =09int id;
- =09void *entry;
-=20
--=09DRM_DEBUG_LEASE("lessor %d\n", lessor->lessee_id);
-+=09drm_dbg_lease(dev, "lessor %d\n", lessor->lessee_id);
-=20
- =09lessee =3D drm_master_create(lessor->dev);
- =09if (!lessee) {
--=09=09DRM_DEBUG_LEASE("drm_master_create failed\n");
-+=09=09drm_dbg_lease(dev, "drm_master_create failed\n");
- =09=09return ERR_PTR(-ENOMEM);
- =09}
-=20
-@@ -231,7 +231,7 @@ static struct drm_master *drm_lease_create(struct drm_m=
-aster *lessor, struct idr
- =09=09=09error =3D -EBUSY;
-=20
- =09=09if (error !=3D 0) {
--=09=09=09DRM_DEBUG_LEASE("object %d failed %d\n", object, error);
-+=09=09=09drm_dbg_lease(dev, "object %d failed %d\n", object, error);
- =09=09=09goto out_lessee;
- =09=09}
- =09}
-@@ -249,7 +249,8 @@ static struct drm_master *drm_lease_create(struct drm_m=
-aster *lessor, struct idr
-=20
- =09/* Move the leases over */
- =09lessee->leases =3D *leases;
--=09DRM_DEBUG_LEASE("new lessee %d %p, lessor %d %p\n", lessee->lessee_id, =
-lessee, lessor->lessee_id, lessor);
-+=09drm_dbg_lease(dev, "new lessee %d %p, lessor %d %p\n",
-+=09=09      lessee->lessee_id, lessee, lessor->lessee_id, lessor);
-=20
- =09mutex_unlock(&dev->mode_config.idr_mutex);
- =09return lessee;
-@@ -268,7 +269,7 @@ void drm_lease_destroy(struct drm_master *master)
-=20
- =09mutex_lock(&dev->mode_config.idr_mutex);
-=20
--=09DRM_DEBUG_LEASE("drm_lease_destroy %d\n", master->lessee_id);
-+=09drm_dbg_lease(dev, "drm_lease_destroy %d\n", master->lessee_id);
-=20
- =09/* This master is referenced by all lessees, hence it cannot be destroy=
-ed
- =09 * until all of them have been
-@@ -277,7 +278,8 @@ void drm_lease_destroy(struct drm_master *master)
-=20
- =09/* Remove this master from the lessee idr in the owner */
- =09if (master->lessee_id !=3D 0) {
--=09=09DRM_DEBUG_LEASE("remove master %d from device list of lessees\n", ma=
-ster->lessee_id);
-+=09=09drm_dbg_lease(dev, "remove master %d from device list of lessees\n",
-+=09=09=09      master->lessee_id);
- =09=09idr_remove(&(drm_lease_owner(master)->lessee_idr), master->lessee_id=
-);
- =09}
-=20
-@@ -292,7 +294,7 @@ void drm_lease_destroy(struct drm_master *master)
- =09=09drm_master_put(&master->lessor);
- =09}
-=20
--=09DRM_DEBUG_LEASE("drm_lease_destroy done %d\n", master->lessee_id);
-+=09drm_dbg_lease(dev, "drm_lease_destroy done %d\n", master->lessee_id);
- }
-=20
- static void _drm_lease_revoke(struct drm_master *top)
-@@ -308,7 +310,8 @@ static void _drm_lease_revoke(struct drm_master *top)
- =09 * the tree is fully connected, we can do this without recursing
- =09 */
- =09for (;;) {
--=09=09DRM_DEBUG_LEASE("revoke leases for %p %d\n", master, master->lessee_=
-id);
-+=09=09drm_dbg_lease(master->dev, "revoke leases for %p %d\n",
-+=09=09=09      master, master->lessee_id);
-=20
- =09=09/* Evacuate the lease */
- =09=09idr_for_each_entry(&master->leases, entry, object)
-@@ -408,7 +411,7 @@ static int fill_object_idr(struct drm_device *dev,
-=20
- =09ret =3D validate_lease(dev, object_count, objects, universal_planes);
- =09if (ret) {
--=09=09DRM_DEBUG_LEASE("lease validation failed\n");
-+=09=09drm_dbg_lease(dev, "lease validation failed\n");
- =09=09goto out_free_objects;
- =09}
-=20
-@@ -418,7 +421,7 @@ static int fill_object_idr(struct drm_device *dev,
- =09=09struct drm_mode_object *obj =3D objects[o];
- =09=09u32 object_id =3D objects[o]->id;
-=20
--=09=09DRM_DEBUG_LEASE("Adding object %d to lease\n", object_id);
-+=09=09drm_dbg_lease(dev, "Adding object %d to lease\n", object_id);
-=20
- =09=09/*
- =09=09 * We're using an IDR to hold the set of leased
-@@ -430,8 +433,8 @@ static int fill_object_idr(struct drm_device *dev,
- =09=09 */
- =09=09ret =3D idr_alloc(leases, &drm_lease_idr_object , object_id, object_=
-id + 1, GFP_KERNEL);
- =09=09if (ret < 0) {
--=09=09=09DRM_DEBUG_LEASE("Object %d cannot be inserted into leases (%d)\n"=
-,
--=09=09=09=09=09object_id, ret);
-+=09=09=09drm_dbg_lease(dev, "Object %d cannot be inserted into leases (%d)=
-\n",
-+=09=09=09=09      object_id, ret);
- =09=09=09goto out_free_objects;
- =09=09}
- =09=09if (obj->type =3D=3D DRM_MODE_OBJECT_CRTC && !universal_planes) {
-@@ -439,15 +442,15 @@ static int fill_object_idr(struct drm_device *dev,
-=20
- =09=09=09ret =3D idr_alloc(leases, &drm_lease_idr_object, crtc->primary->b=
-ase.id, crtc->primary->base.id + 1, GFP_KERNEL);
- =09=09=09if (ret < 0) {
--=09=09=09=09DRM_DEBUG_LEASE("Object primary plane %d cannot be inserted in=
-to leases (%d)\n",
--=09=09=09=09=09=09object_id, ret);
-+=09=09=09=09drm_dbg_lease(dev, "Object primary plane %d cannot be inserted=
- into leases (%d)\n",
-+=09=09=09=09=09      object_id, ret);
- =09=09=09=09goto out_free_objects;
- =09=09=09}
- =09=09=09if (crtc->cursor) {
- =09=09=09=09ret =3D idr_alloc(leases, &drm_lease_idr_object, crtc->cursor-=
->base.id, crtc->cursor->base.id + 1, GFP_KERNEL);
- =09=09=09=09if (ret < 0) {
--=09=09=09=09=09DRM_DEBUG_LEASE("Object cursor plane %d cannot be inserted =
-into leases (%d)\n",
--=09=09=09=09=09=09=09object_id, ret);
-+=09=09=09=09=09drm_dbg_lease(dev, "Object cursor plane %d cannot be insert=
-ed into leases (%d)\n",
-+=09=09=09=09=09=09      object_id, ret);
- =09=09=09=09=09goto out_free_objects;
- =09=09=09=09}
- =09=09=09}
-@@ -490,14 +493,14 @@ int drm_mode_create_lease_ioctl(struct drm_device *de=
-v,
- =09=09return -EOPNOTSUPP;
-=20
- =09if (cl->flags && (cl->flags & ~(O_CLOEXEC | O_NONBLOCK))) {
--=09=09DRM_DEBUG_LEASE("invalid flags\n");
-+=09=09drm_dbg_lease(dev, "invalid flags\n");
- =09=09return -EINVAL;
- =09}
-=20
- =09lessor =3D drm_file_get_master(lessor_priv);
- =09/* Do not allow sub-leases */
- =09if (lessor->lessor) {
--=09=09DRM_DEBUG_LEASE("recursive leasing not allowed\n");
-+=09=09drm_dbg_lease(dev, "recursive leasing not allowed\n");
- =09=09ret =3D -EINVAL;
- =09=09goto out_lessor;
- =09}
-@@ -520,7 +523,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09=09=09=09      object_count, object_ids);
- =09=09kfree(object_ids);
- =09=09if (ret) {
--=09=09=09DRM_DEBUG_LEASE("lease object lookup failed: %i\n", ret);
-+=09=09=09drm_dbg_lease(dev, "lease object lookup failed: %i\n", ret);
- =09=09=09idr_destroy(&leases);
- =09=09=09goto out_lessor;
- =09=09}
-@@ -534,7 +537,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09=09goto out_lessor;
- =09}
-=20
--=09DRM_DEBUG_LEASE("Creating lease\n");
-+=09drm_dbg_lease(dev, "Creating lease\n");
- =09/* lessee will take the ownership of leases */
- =09lessee =3D drm_lease_create(lessor, &leases);
-=20
-@@ -545,7 +548,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09}
-=20
- =09/* Clone the lessor file to create a new file for us */
--=09DRM_DEBUG_LEASE("Allocating lease file\n");
-+=09drm_dbg_lease(dev, "Allocating lease file\n");
- =09lessee_file =3D file_clone_open(lessor_file);
- =09if (IS_ERR(lessee_file)) {
- =09=09ret =3D PTR_ERR(lessee_file);
-@@ -560,7 +563,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09lessee_priv->authenticated =3D 1;
-=20
- =09/* Pass fd back to userspace */
--=09DRM_DEBUG_LEASE("Returning fd %d id %d\n", fd, lessee->lessee_id);
-+=09drm_dbg_lease(dev, "Returning fd %d id %d\n", fd, lessee->lessee_id);
- =09cl->fd =3D fd;
- =09cl->lessee_id =3D lessee->lessee_id;
-=20
-@@ -568,7 +571,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09fd_install(fd, lessee_file);
-=20
- =09drm_master_put(&lessor);
--=09DRM_DEBUG_LEASE("drm_mode_create_lease_ioctl succeeded\n");
-+=09drm_dbg_lease(dev, "drm_mode_create_lease_ioctl succeeded\n");
- =09return 0;
-=20
- out_lessee:
-@@ -579,7 +582,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
-=20
- out_lessor:
- =09drm_master_put(&lessor);
--=09DRM_DEBUG_LEASE("drm_mode_create_lease_ioctl failed: %d\n", ret);
-+=09drm_dbg_lease(dev, "drm_mode_create_lease_ioctl failed: %d\n", ret);
- =09return ret;
- }
-=20
-@@ -601,7 +604,7 @@ int drm_mode_list_lessees_ioctl(struct drm_device *dev,
- =09=09return -EOPNOTSUPP;
-=20
- =09lessor =3D drm_file_get_master(lessor_priv);
--=09DRM_DEBUG_LEASE("List lessees for %d\n", lessor->lessee_id);
-+=09drm_dbg_lease(dev, "List lessees for %d\n", lessor->lessee_id);
-=20
- =09mutex_lock(&dev->mode_config.idr_mutex);
-=20
-@@ -610,7 +613,8 @@ int drm_mode_list_lessees_ioctl(struct drm_device *dev,
- =09=09/* Only list un-revoked leases */
- =09=09if (!idr_is_empty(&lessee->leases)) {
- =09=09=09if (count_lessees > count) {
--=09=09=09=09DRM_DEBUG_LEASE("Add lessee %d\n", lessee->lessee_id);
-+=09=09=09=09drm_dbg_lease(dev, "Add lessee %d\n",
-+=09=09=09=09=09      lessee->lessee_id);
- =09=09=09=09ret =3D put_user(lessee->lessee_id, lessee_ids + count);
- =09=09=09=09if (ret)
- =09=09=09=09=09break;
-@@ -619,7 +623,7 @@ int drm_mode_list_lessees_ioctl(struct drm_device *dev,
- =09=09}
- =09}
-=20
--=09DRM_DEBUG_LEASE("Lessor leases to %d\n", count);
-+=09drm_dbg_lease(dev, "Lessor leases to %d\n", count);
- =09if (ret =3D=3D 0)
- =09=09arg->count_lessees =3D count;
-=20
-@@ -651,7 +655,7 @@ int drm_mode_get_lease_ioctl(struct drm_device *dev,
- =09=09return -EOPNOTSUPP;
-=20
- =09lessee =3D drm_file_get_master(lessee_priv);
--=09DRM_DEBUG_LEASE("get lease for %d\n", lessee->lessee_id);
-+=09drm_dbg_lease(dev, "get lease for %d\n", lessee->lessee_id);
-=20
- =09mutex_lock(&dev->mode_config.idr_mutex);
-=20
-@@ -665,7 +669,7 @@ int drm_mode_get_lease_ioctl(struct drm_device *dev,
- =09count =3D 0;
- =09idr_for_each_entry(object_idr, entry, object) {
- =09=09if (count_objects > count) {
--=09=09=09DRM_DEBUG_LEASE("adding object %d\n", object);
-+=09=09=09drm_dbg_lease(dev, "adding object %d\n", object);
- =09=09=09ret =3D put_user(object, object_ids + count);
- =09=09=09if (ret)
- =09=09=09=09break;
-@@ -696,7 +700,7 @@ int drm_mode_revoke_lease_ioctl(struct drm_device *dev,
- =09struct drm_master *lessee;
- =09int ret =3D 0;
-=20
--=09DRM_DEBUG_LEASE("revoke lease for %d\n", arg->lessee_id);
-+=09drm_dbg_lease(dev, "revoke lease for %d\n", arg->lessee_id);
-=20
- =09/* Can't lease without MODESET */
- =09if (!drm_core_check_feature(dev, DRIVER_MODESET))
---=20
-2.35.1
-
+> > Changes in v2:
+> > - Remove the 10g properties, instead of removing the MAC dtsis.
+> >
+> >  arch/powerpc/boot/dts/fsl/t2081si-post.dtsi | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/arch/powerpc/boot/dts/fsl/t2081si-post.dtsi
+> > b/arch/powerpc/boot/dts/fsl/t2081si-post.dtsi
+> > index 74e17e134387..27714dc2f04a 100644
+> > --- a/arch/powerpc/boot/dts/fsl/t2081si-post.dtsi
+> > +++ b/arch/powerpc/boot/dts/fsl/t2081si-post.dtsi
+> > @@ -659,3 +659,19 @@ L2_1: l2-cache-controller@c20000 {
+> >  		interrupts =3D <16 2 1 9>;
+> >  	};
+> >  };
+> > +
+> > +&fman0_rx_0x08 {
+> > +	/delete-property/ fsl,fman-10g-port;
+> > +};
+> > +
+> > +&fman0_tx_0x28 {
+> > +	/delete-property/ fsl,fman-10g-port;
+> > +};
+> > +
+> > +&fman0_rx_0x09 {
+> > +	/delete-property/ fsl,fman-10g-port;
+> > +};
+> > +
+> > +&fman0_tx_0x29 {
+> > +	/delete-property/ fsl,fman-10g-port;
+> > +};
+> > --
+> > 2.35.1.1320.gc452695387.dirty
 
