@@ -2,122 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB122654344
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FABB654348
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235633AbiLVOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
+        id S229879AbiLVOmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiLVOlf (ORCPT
+        with ESMTP id S235652AbiLVOmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:41:35 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC95A454
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:41:34 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id cf42so3056442lfb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:41:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Y8q7yCOMFgnvKGyTp7h3zj10DGyq90Tq72pzXwBz32s=;
-        b=JKp/m0Cz9g+KRBmrZ/zb9sY+rbC+Z3MKRfAhzZXDV3M0CkvZ0MtVmXHIJVLK6xNIux
-         SiXkQz/4OrIVReFWaudjX+Q/K5ngnuWoqoa3giU7d3QNHzuaVX3ZJmyB5jxHNgHXL518
-         FgRSGoDcZWdL1XJhH0WBXvo2Z0rIDRTEwaWAfoQhpyx/1cUsOjHmqS/5xxE8wX+kAPlQ
-         yytA/9ncZGE49NskaeCGz2uQ+PYzeXnU13mZOdOww/V9xcRntA/UR35Hq59+HvsTRdJs
-         9EYjcKy6/fMsxGcUVXjd3ajvUtpRXkbJpa26mam0cJ920JbNThdqWjgF8CNeNnxk7Alz
-         Q2cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y8q7yCOMFgnvKGyTp7h3zj10DGyq90Tq72pzXwBz32s=;
-        b=eqLhwsGbImmPgB8dmPb6IDs7qtM+ImI5Oh2PJ53m2uwyxcp51l9B+6k8XndooWIUUL
-         SHAtpug9TEPKabjwPvMAnW2W6dS1DsyctwbyFmITWvvd4bhgvAAOgPqSHo3qlJsw4aO6
-         ZBvBghpJvXo11l5fUutVF2ehGJ++sGucRZ1TkL0PCXR0T4R6itl8IwleSZ6zE1FScjxp
-         BheKa4TzSnbrWoM0AeW3ERaiq+2PQzbMVEcCdzytMuNIZFZD+qHao2oXaUM/q0r1W2xe
-         D4Mf8Z7dAU24j9uVeKsXZJMPd/BEmUMo29RUXey2n9PqdC89+ZW4d2U++4DPdjWc8ez/
-         uOsQ==
-X-Gm-Message-State: AFqh2kpMuLFN9fcr5AemrZIEdr7n6DWhpMg64K0ocNdK3s08/2YyvAv5
-        kjMfC60NrznS7VsJ3g3VF18=
-X-Google-Smtp-Source: AMrXdXvinT8dSllKaVAXZCxs9aPvOnFv4m4qU/eR7WOf1jlIEExyVF0VtYqBpvRaGk+5TAkMt4hSSA==
-X-Received: by 2002:a19:5218:0:b0:4bc:4ad0:4148 with SMTP id m24-20020a195218000000b004bc4ad04148mr1482686lfb.8.1671720092395;
-        Thu, 22 Dec 2022 06:41:32 -0800 (PST)
-Received: from pc636 (host-90-233-218-120.mobileonline.telia.com. [90.233.218.120])
-        by smtp.gmail.com with ESMTPSA id q8-20020ac25108000000b004aac23e0dd6sm90078lfb.29.2022.12.22.06.41.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 06:41:31 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 22 Dec 2022 15:41:29 +0100
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: Re: [PATCH v2 1/3] mm: vmalloc: Avoid of calling __find_vmap_area()
- twise in __vunmap()
-Message-ID: <Y6RsmcvZ8Ru211Jk@pc636>
-References: <20221221174454.1085130-1-urezki@gmail.com>
- <Y6QbvYfvhUI3J7S+@infradead.org>
+        Thu, 22 Dec 2022 09:42:36 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAF8DF3F;
+        Thu, 22 Dec 2022 06:42:34 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMBwOVt016862;
+        Thu, 22 Dec 2022 15:42:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=fvpymYp2FaznQd80RWNDR540iqdoNsFsg4q4JG4xgdM=;
+ b=4EyEl9gJxslTyAXas03y9REGd114PsRPmOT7sEDyBdDWau0nXDoMFF2PEtrUEBz7rkgJ
+ s2BnWgge9zOGTqtASq5myo4o+Ckh7iP8HvqglMjKpMYzFNnDGeTvr94W7qSKgCWKZv99
+ MnMLdJ2/XkJ2T1HgVOtUI1H72ry5h3Kr3/s/SQxu4ctYvLsOyffxD9nC3u8TmLxNFiIx
+ S9LNR4EOzVl2vNViUWeygBy0mMpRLqAQIUIG3ZmM0RRQtXiXayzu/RUP9r3TdAVZF6pr
+ QZ6ehYf+MaYqa2Gz0xTZSOwcDv9BT0yyAkU7Sv5nnAeijnYzxOUeQrkvvOYFmrTZvSNc Ug== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mh605wnnw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 15:42:14 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 164F1100059;
+        Thu, 22 Dec 2022 15:42:13 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 37A75231DC2;
+        Thu, 22 Dec 2022 15:42:10 +0100 (CET)
+Received: from [10.201.21.217] (10.201.21.217) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 22 Dec
+ 2022 15:42:09 +0100
+Message-ID: <0bff5b2d-2837-57cb-5434-58158acc1483@foss.st.com>
+Date:   Thu, 22 Dec 2022 15:42:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y6QbvYfvhUI3J7S+@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 6/7] ARM: dts: stm32: add ETZPC as a system bus for
+ STM32MP15x boards
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
+        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>
+References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
+ <20221221173055.11719-7-gatien.chevallier@foss.st.com>
+ <2e7c901c-e322-ded6-b170-6d2436d74c0f@kernel.org>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <2e7c901c-e322-ded6-b170-6d2436d74c0f@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.217]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_08,2022-12-22_03,2022-06-22_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> A sorry.  I need more coffee, this is not the cover letter, but the
-> patch that introduceѕ find_unlink_vmap_area.
+Hello,
+
+
+On 12/22/22 11:30, Krzysztof Kozlowski wrote:
+> On 21/12/2022 18:30, Gatien Chevallier wrote:
+>> The STM32 System Bus is an internal bus on which devices are connected.
+>> ETZPC is a peripheral overseeing the firewall bus that configures
+>> and control access to the peripherals connected on it.
+>>
+>> For more information on which peripheral is securable, please read
+>> the STM32MP15 reference manual.
+>>
+>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>> ---
+>>   arch/arm/boot/dts/stm32mp151.dtsi | 2737 +++++++++++++++--------------
+>>   1 file changed, 1406 insertions(+), 1331 deletions(-)
+>>   
+>> -		lptimer1: timer@40009000 {
+>> +		etzpc: etzpc@5c007000 {
 > 
-Sorry. I should post it with a cover latter to make it less confusing.
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-> > -	spin_lock(&vmap_area_lock);
-> > -	unlink_va(va, &vmap_area_root);
-> > -	spin_unlock(&vmap_area_lock);
-> > +	if (!list_empty(&va->list)) {
-> > +		spin_lock(&vmap_area_lock);
-> > +		unlink_va(va, &vmap_area_root);
-> > +		spin_unlock(&vmap_area_lock);
-> > +	}
+Will change to etzpc: bus@5c007000 in V3
+
 > 
-> As mentioned before, I'd much rather move this into the callers.
+>> +			compatible = "st,stm32mp15-sys-bus";
+>> +			reg = <0x5c007000 0x400>;
+>>   			#address-cells = <1>;
+>> -			#size-cells = <0>;
+>> -			compatible = "st,stm32-lptimer";
+>> -			reg = <0x40009000 0x400>;
+>> -			interrupts-extended = <&exti 47 IRQ_TYPE_LEVEL_HIGH>;
+>> -			clocks = <&rcc LPTIM1_K>;
+>> -			clock-names = "mux";
+>> -			wakeup-source;
+>> -			status = "disabled";
 > 
-Agree. There is only one caller, it is the free_vmap_block().
-Will fix in the v3.
+> Why entire bus is disabled? What resources do you miss?
 
-> > +	va = find_unlink_vmap_area((unsigned long) addr);
-> > +	return __remove_vm_area(va);
+Here, I did not want to modify the status of the nodes in the device 
+tree. Nodes that are default enabled in the SoC device tree stay enabled 
+and vice-versa. IMO think this patch should not include these kind of 
+changes in its scope. I describe the bus and the peripherals connected 
+to it, nothing more :)
+
 > 
-> This can drop the va local variable now.
->
-Do you mean like:
+>> +			#size-cells = <1>;
+>> +			feature-domain-controller;
+>> +			#feature-domain-cells = <2>;
+>> +			ranges;
+>>   
+> Best regards,
+> Krzysztof
+> 
 
-struct vm_struct *remove_vm_area(const void *addr)
-{
-    might_sleep();
-    return __remove_vm_area(
-        find_unlink_vmap_area((unsigned long) addr));
-}
-
-?
-
-Thanks for review!
-
---
-Uladzislau Rezki
+Best regards,
+Gatien
