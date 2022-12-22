@@ -2,135 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0107653E8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFA9653E93
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbiLVKvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 05:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S235327AbiLVKyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 05:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiLVKvP (ORCPT
+        with ESMTP id S229907AbiLVKyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 05:51:15 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8F227932;
-        Thu, 22 Dec 2022 02:51:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671706274; x=1703242274;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=CrZLdDeZWDVo8FK6+1dIOoyIZVEvLuy5zxZWQ9Y3KoI=;
-  b=fVeFRHl1Y40P5RAO+DEp8MfHRa36G1TdpLlFT5Z7gQale/ZQ/FGIbZtj
-   wqGQhGoZS4YVcqEef2VXt6QQHLzhTzsOpwOIpA7cdWJeM+Hvtg9TQu3PY
-   +9cEBYUOoOdALAArn7NVkjuPb4131KORDuY2JxVanYvpYOVlGSVsYhSTo
-   IHrKTJBKTROD3gUAAotoTcwSzmveAbCf0/5pedzKFVKzZbZwZxX5KdWFU
-   tUZwXvObEXsqDUzom+AgNOkJ/IuRWwxeC2e1Uc2kLdp9/6deyQ1Jyiees
-   pJj2Iwyc5Pm36UeSlZRn06ahjy0opNxym3vy85IvlqgfK2tY0IgdoLxob
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="384454541"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="384454541"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 02:51:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="601846989"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="601846989"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga003.jf.intel.com with ESMTP; 22 Dec 2022 02:51:11 -0800
-Message-ID: <379b395f-b65c-96fe-7ecc-f18e3740b990@linux.intel.com>
-Date:   Thu, 22 Dec 2022 12:52:33 +0200
+        Thu, 22 Dec 2022 05:54:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6A127935
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 02:53:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671706398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8G2t4EncMzIPIeZuX+4iivTLgYuFur9QluEHx6LDvQ8=;
+        b=WEY2hsgPJLd1TlsqjaQR6N94/9hVUU45kT04QZfGXdQC+SoM/cIqprNr8QTX17PqmSKFKQ
+        3dUS2XDC29sotvv8BbYDxmnFje/L8Utx2UMcz4vOXjdxlMlAJpO4e+xOSLP2MuOEQWZpIv
+        34Wuwy/oZ2nk5TTncoQt3bu5R2INg7c=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-241-3tW0RXbLPKaWkYMeACOYzQ-1; Thu, 22 Dec 2022 05:53:16 -0500
+X-MC-Unique: 3tW0RXbLPKaWkYMeACOYzQ-1
+Received: by mail-wr1-f71.google.com with SMTP id r21-20020adfb1d5000000b0026e4c198a43so317350wra.20
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 02:53:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8G2t4EncMzIPIeZuX+4iivTLgYuFur9QluEHx6LDvQ8=;
+        b=iWp3wGO0kbZMWAPkqyUDoJ5ZQpzB/QIoGRTnRFfl8ZoIVTKWt90wMdg4RVzZdDcns0
+         n+hqYzsj0WTu/aCHJcdQ9p/vgMdRYUfoa0/YEzYlH4xsj6W9NTzy37L1AuwZ+LL2GHOo
+         7De4iEgGfzbYEZDYh0M1L9GoKvBCD2bjOH0VpbVpsdYNb7nzvt+VDDdo0JIBNIVEEtYO
+         3Y6YErLWDUOiarvdWmpy6aofDNJfNzjEUBOq4URFzP4RW6NLzfwZZVZK+0b8qR1r0OAL
+         lGmu4lryRRt6HHK1hyGD6pEesftuCE5/KpwpAW1pluwP9YIKlDM/RapHbecfNViTGOVP
+         bshA==
+X-Gm-Message-State: AFqh2krhpwL6VA49ugPK5tCKRIyQ26nRpoewET47jec4Bn52f2fv0X1l
+        +CD3gbUGB58MlgtCFDh8XmfBeoUkKukIgoXecD/YjNTAF4BdEf8QVX3vYHoULTnaNBJiGUxRW3+
+        wk4IOk4NmEDyPPEMYL+4fOQiz
+X-Received: by 2002:a7b:cb89:0:b0:3d2:2101:1f54 with SMTP id m9-20020a7bcb89000000b003d221011f54mr4088295wmi.4.1671706395603;
+        Thu, 22 Dec 2022 02:53:15 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuWy0Wp+keurAyyZDEg4bOQUbTq2wJRgZQKCZGHKk9AOq3sK2SNmvUXsdQwg+ta4Y0Xv7buqg==
+X-Received: by 2002:a7b:cb89:0:b0:3d2:2101:1f54 with SMTP id m9-20020a7bcb89000000b003d221011f54mr4088281wmi.4.1671706395348;
+        Thu, 22 Dec 2022 02:53:15 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-101-173.dyn.eolo.it. [146.241.101.173])
+        by smtp.gmail.com with ESMTPSA id ay39-20020a05600c1e2700b003cfa80443a0sm554729wmb.35.2022.12.22.02.53.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 02:53:14 -0800 (PST)
+Message-ID: <a198f9fa6737b22ed2839a5dbfbcfdf6c6d7508d.camel@redhat.com>
+Subject: Re: [PATCH 3/3] net/ncsi: Add NC-SI 1.2 Get MC MAC Address command
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Peter Delevoryas <peter@pjd.dev>
+Cc:     sam@mendozajonas.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, joel@jms.id.au, gwshan@linux.vnet.ibm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 22 Dec 2022 11:53:13 +0100
+In-Reply-To: <20221221052246.519674-4-peter@pjd.dev>
+References: <20221221052246.519674-1-peter@pjd.dev>
+         <20221221052246.519674-4-peter@pjd.dev>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Content-Language: en-US
-To:     Jimmy Hu <hhhuuu@google.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221222072912.1843384-1-hhhuuu@google.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] usb: xhci: Check endpoint is valid before
- dereferencing it
-In-Reply-To: <20221222072912.1843384-1-hhhuuu@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.12.2022 9.29, Jimmy Hu wrote:
-> When the host controller is not responding, all URBs queued to all
-> endpoints need to be killed. This can cause a kernel panic if we
-> dereference an invalid endpoint.
+On Tue, 2022-12-20 at 21:22 -0800, Peter Delevoryas wrote:
+> This change adds support for the NC-SI 1.2 Get MC MAC Address command,
+> specified here:
 > 
-> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
-> checking if the endpoint is valid before dereferencing it.
+> https://www.dmtf.org/sites/default/files/standards/documents/DSP0222_1.2WIP90_0.pdf
 > 
-> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
-> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
+> It serves the exact same function as the existing OEM Get MAC Address
+> commands, so if a channel reports that it supports NC-SI 1.2, we prefer
+> to use the standard command rather than the OEM command.
 > 
-> [233311.853964] pc : xhci_hc_died+0x10c/0x270
-> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
+> Verified with an invalid MAC address and 2 valid ones:
 > 
-> [233311.854077] Call trace:
-> [233311.854085]  xhci_hc_died+0x10c/0x270
-> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
-> [233311.854105]  call_timer_fn+0x50/0x2d4
-> [233311.854112]  expire_timers+0xac/0x2e4
-> [233311.854118]  run_timer_softirq+0x300/0xabc
-> [233311.854127]  __do_softirq+0x148/0x528
-> [233311.854135]  irq_exit+0x194/0x1a8
-> [233311.854143]  __handle_domain_irq+0x164/0x1d0
-> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
-> [233311.854156]  el1_irq+0xfc/0x1a8
-> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
-> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
-> [233311.854194]  do_idle+0x594/0x6ac
-> [233311.854201]  cpu_startup_entry+0x7c/0x80
-> [233311.854209]  secondary_start_kernel+0x170/0x198
+> [   55.137072] ftgmac100 1e690000.ftgmac eth0: NCSI: Received 3 provisioned MAC addresses
+> [   55.137614] ftgmac100 1e690000.ftgmac eth0: NCSI: MAC address 0: 00:00:00:00:00:00
+> [   55.138026] ftgmac100 1e690000.ftgmac eth0: NCSI: MAC address 1: fa:ce:b0:0c:20:22
+> [   55.138528] ftgmac100 1e690000.ftgmac eth0: NCSI: MAC address 2: fa:ce:b0:0c:20:23
+> [   55.139241] ftgmac100 1e690000.ftgmac eth0: NCSI: Unable to assign 00:00:00:00:00:00 to device
+> [   55.140098] ftgmac100 1e690000.ftgmac eth0: NCSI: Set MAC address to fa:ce:b0:0c:20:22
 > 
-> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
-> ---
->   drivers/usb/host/xhci-ring.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
+> IMPORTANT NOTE:
 > 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index ddc30037f9ce..f5b0e1ce22af 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->   	struct xhci_virt_ep *ep;
->   	struct xhci_ring *ring;
->   
-> -	ep = &xhci->devs[slot_id]->eps[ep_index];
-> +	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
-> +	if (!ep)
-> +		return;
+> The code I'm submitting here is parsing the MAC addresses as if they are
+> transmitted in *reverse* order.
+> 
+> This is different from how every other NC-SI command is parsed in the
+> Linux kernel, even though the spec describes the format in the same way
+> for every command.
+> 
+> The *reason* for this is that I was able to test this code against the
+> new 200G Broadcom NIC, which reports that it supports NC-SI 1.2 in Get
+> Version ID and successfully responds to this command. It transmits the
+> MAC addresses in reverse byte order.
+> 
+> Nvidia's new 200G NIC doesn't support NC-SI 1.2 yet. I don't know how
+> they're planning to implement it.
+
+All the above looks like a good reason to wait for at least a
+stable/documented H/W implementation, before pushing code to the
+networking core.
+
+>  net/ncsi/ncsi-cmd.c    |  3 ++-
+>  net/ncsi/ncsi-manage.c |  9 +++++++--
+>  net/ncsi/ncsi-pkt.h    | 10 ++++++++++
+>  net/ncsi/ncsi-rsp.c    | 45 +++++++++++++++++++++++++++++++++++++++++-
+>  4 files changed, 63 insertions(+), 4 deletions(-)
+> 
+> diff --git a/net/ncsi/ncsi-cmd.c b/net/ncsi/ncsi-cmd.c
+> index dda8b76b7798..7be177f55173 100644
+> --- a/net/ncsi/ncsi-cmd.c
+> +++ b/net/ncsi/ncsi-cmd.c
+> @@ -269,7 +269,8 @@ static struct ncsi_cmd_handler {
+>  	{ NCSI_PKT_CMD_GPS,    0, ncsi_cmd_handler_default },
+>  	{ NCSI_PKT_CMD_OEM,   -1, ncsi_cmd_handler_oem     },
+>  	{ NCSI_PKT_CMD_PLDM,   0, NULL                     },
+> -	{ NCSI_PKT_CMD_GPUUID, 0, ncsi_cmd_handler_default }
+> +	{ NCSI_PKT_CMD_GPUUID, 0, ncsi_cmd_handler_default },
+> +	{ NCSI_PKT_CMD_GMCMA,  0, ncsi_cmd_handler_default }
+>  };
+>  
+>  static struct ncsi_request *ncsi_alloc_command(struct ncsi_cmd_arg *nca)
+> diff --git a/net/ncsi/ncsi-manage.c b/net/ncsi/ncsi-manage.c
+> index f56795769893..bc1887a2543d 100644
+> --- a/net/ncsi/ncsi-manage.c
+> +++ b/net/ncsi/ncsi-manage.c
+> @@ -1038,11 +1038,16 @@ static void ncsi_configure_channel(struct ncsi_dev_priv *ndp)
+>  	case ncsi_dev_state_config_oem_gma:
+>  		nd->state = ncsi_dev_state_config_clear_vids;
+>  
+> -		nca.type = NCSI_PKT_CMD_OEM;
+>  		nca.package = np->id;
+>  		nca.channel = nc->id;
+>  		ndp->pending_req_num = 1;
+> -		ret = ncsi_gma_handler(&nca, nc->version.mf_id);
+> +		if (nc->version.major >= 1 && nc->version.minor >= 2) {
+> +			nca.type = NCSI_PKT_CMD_GMCMA;
+> +			ret = ncsi_xmit_cmd(&nca);
+> +		} else {
+> +			nca.type = NCSI_PKT_CMD_OEM;
+> +			ret = ncsi_gma_handler(&nca, nc->version.mf_id);
+> +		}
+>  		if (ret < 0)
+>  			schedule_work(&ndp->work);
+>  
+> diff --git a/net/ncsi/ncsi-pkt.h b/net/ncsi/ncsi-pkt.h
+> index c9d1da34dc4d..f2f3b5c1b941 100644
+> --- a/net/ncsi/ncsi-pkt.h
+> +++ b/net/ncsi/ncsi-pkt.h
+> @@ -338,6 +338,14 @@ struct ncsi_rsp_gpuuid_pkt {
+>  	__be32                  checksum;
+>  };
+>  
+> +/* Get MC MAC Address */
+> +struct ncsi_rsp_gmcma_pkt {
+> +	struct ncsi_rsp_pkt_hdr rsp;
+> +	unsigned char           address_count;
+> +	unsigned char           reserved[3];
+> +	unsigned char           addresses[][ETH_ALEN];
+> +};
 > +
+>  /* AEN: Link State Change */
+>  struct ncsi_aen_lsc_pkt {
+>  	struct ncsi_aen_pkt_hdr aen;        /* AEN header      */
+> @@ -398,6 +406,7 @@ struct ncsi_aen_hncdsc_pkt {
+>  #define NCSI_PKT_CMD_GPUUID	0x52 /* Get package UUID                 */
+>  #define NCSI_PKT_CMD_QPNPR	0x56 /* Query Pending NC PLDM request */
+>  #define NCSI_PKT_CMD_SNPR	0x57 /* Send NC PLDM Reply  */
+> +#define NCSI_PKT_CMD_GMCMA	0x58 /* Get MC MAC Address */
+>  
+>  
+>  /* NCSI packet responses */
+> @@ -433,6 +442,7 @@ struct ncsi_aen_hncdsc_pkt {
+>  #define NCSI_PKT_RSP_GPUUID	(NCSI_PKT_CMD_GPUUID + 0x80)
+>  #define NCSI_PKT_RSP_QPNPR	(NCSI_PKT_CMD_QPNPR   + 0x80)
+>  #define NCSI_PKT_RSP_SNPR	(NCSI_PKT_CMD_SNPR   + 0x80)
+> +#define NCSI_PKT_RSP_GMCMA	(NCSI_PKT_CMD_GMCMA  + 0x80)
+>  
+>  /* NCSI response code/reason */
+>  #define NCSI_PKT_RSP_C_COMPLETED	0x0000 /* Command Completed        */
+> diff --git a/net/ncsi/ncsi-rsp.c b/net/ncsi/ncsi-rsp.c
+> index 7a805b86a12d..28a042688d0b 100644
+> --- a/net/ncsi/ncsi-rsp.c
+> +++ b/net/ncsi/ncsi-rsp.c
+> @@ -1140,6 +1140,48 @@ static int ncsi_rsp_handler_netlink(struct ncsi_request *nr)
+>  	return ret;
+>  }
+>  
+> +static int ncsi_rsp_handler_gmcma(struct ncsi_request *nr)
+> +{
+> +	struct ncsi_dev_priv *ndp = nr->ndp;
+> +	struct net_device *ndev = ndp->ndev.dev;
+> +	struct ncsi_rsp_gmcma_pkt *rsp;
+> +	struct sockaddr saddr;
+> +	int ret = -1;
+> +	int i;
+> +	int j;
+> +
+> +	rsp = (struct ncsi_rsp_gmcma_pkt *)skb_network_header(nr->rsp);
+> +	saddr.sa_family = ndev->type;
+> +	ndev->priv_flags |= IFF_LIVE_ADDR_CHANGE;
+> +
+> +	netdev_warn(ndev, "NCSI: Received %d provisioned MAC addresses\n",
+> +		    rsp->address_count);
+> +	for (i = 0; i < rsp->address_count; i++) {
+> +		netdev_warn(ndev, "NCSI: MAC address %d: "
+> +			    "%02x:%02x:%02x:%02x:%02x:%02x\n", i,
+> +			    rsp->addresses[i][5], rsp->addresses[i][4],
+> +			    rsp->addresses[i][3], rsp->addresses[i][2],
+> +			    rsp->addresses[i][1], rsp->addresses[i][0]);
+> +	}
 
+You must avoid this kind of debug messages on 'warn' level (more
+below). You could consider pr_debug() instead or completely drop the
+message.
 
-This is a good generic change that should be added anyway, but but might not fix
-the rootcause. It will reduce the risk of the race drastically.
+Cheers,
 
-We do check that xhci-devs[slot_id] exists once before calling xhci_kill_endpoint_urbs()
-for the endpoints of that virt_dev in xhci_hc_died().
-And xhci_hc_died() should always be calling with lock held (need to doublecheck this is true).
-
-Older kernels used release and re-aquire the lock while giving back urbs for an endpoint,
-so older kernels really need this change.
-
-But newer kernels don't release the lock anymore when giving back URBs.
-
-Looks like real issue is that we don't take the lock when we free the virt_dev.
-
--Mathias
+Paolo
 
