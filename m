@@ -2,140 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EC76545D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343876545D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiLVSJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
+        id S229731AbiLVSJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiLVSJE (ORCPT
+        with ESMTP id S229793AbiLVSJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:09:04 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6656817E2A;
-        Thu, 22 Dec 2022 10:09:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7DF73CE1BBF;
-        Thu, 22 Dec 2022 18:09:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 888A8C433EF;
-        Thu, 22 Dec 2022 18:08:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671732539;
-        bh=NRWCSSJiKT9ebsO+yFv6XlrvJQ8lw4SJc9ho5RGZ8kQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O+/8KgAVud6rfrWzxP+YdfiPHcK/C2uyvMeKfRTVp5GXnfxlTSw2YhTIZ1suPtB+g
-         qa1Vzj6th9MaT9J68NdAap/uY2YFhNb9CDl8F+pbqazkGKHMAvfEN9QGorEiWYuoYo
-         kZ9KpbK36As7+rEwBKrmzRQCVBbcStXbYsyvXzGD3V6P5Ko5M6V5MMlDH/io2lavKm
-         661bNCMaBttnvQON6e1pMcKeusaf8/flZELGwfrMk/AmoRnUmtRvl7jbqa34tbYgUN
-         ACHf1U0EU019/dPcX+GligpopT/J76AsClKBhd0wc+vLwlyA7Kue72tCQdaVxE+pQ+
-         BJsffRUwMiLGA==
-Date:   Thu, 22 Dec 2022 10:08:59 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Jun Nie <jun.nie@linaro.org>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: fix underflow in group bitmap calculation
-Message-ID: <Y6SdOzSr5CW5nQl/@magnolia>
-References: <20221222020244.1821308-1-jun.nie@linaro.org>
- <Y6SW5s/jFY1oWFe2@mit.edu>
+        Thu, 22 Dec 2022 13:09:47 -0500
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0258E15804;
+        Thu, 22 Dec 2022 10:09:47 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id r205so2573841oib.9;
+        Thu, 22 Dec 2022 10:09:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f80xyDOk9KHf4uJK6arjWJwVRc80XWsAqw622e+2d9I=;
+        b=WjjX6ssCoVnP0c+K+hxsLtrqtF/y05DUpLRooP+0T86UHmIZ/uZuXMbNz7T54ZXWZ9
+         fegWZqKuZFoJNkn8MqAVAriaw0XWGM6YQiaMgk+BKAiXXN71TEthY7e8rMO1lrnwJeuQ
+         BzRNw6Fxnr01r298QCnLF6OcVIDJ6FUyl3+ULWN1xl3t2WTB8okzaV4hzHFgnEzvubRc
+         oETUpu0awoE3eaN8NPaka/+ci/nnguob+Sjcdc8haRJ4IlaCOeLUpzUnlpEDozRZq0hc
+         F2akBF/ES0P8d+yiU4VSxuI5oWU9oUHVrChhoz/c1W+yQqJHfhTbdQguGxY9nvJdEXP8
+         oQTQ==
+X-Gm-Message-State: AFqh2kq5bJyIeIBQ5hHu2I/aestXd5wRXvXSBKZuKDPYgYlqcAAPalw1
+        rLToN9k9hbjn2Yw9ut8MBQ==
+X-Google-Smtp-Source: AMrXdXsf5t0zjQgu0bp4rIu0RQlpGNwMex6n3Tknbcjzee6r9WtvrQsaOzukDzzJMGUlkmjLBBgQfQ==
+X-Received: by 2002:a05:6808:13c1:b0:35e:66a4:1b19 with SMTP id d1-20020a05680813c100b0035e66a41b19mr4305245oiw.8.1671732586235;
+        Thu, 22 Dec 2022 10:09:46 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r70-20020acaa849000000b00354932bae03sm598371oie.10.2022.12.22.10.09.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 10:09:45 -0800 (PST)
+Received: (nullmailer pid 1836501 invoked by uid 1000);
+        Thu, 22 Dec 2022 18:09:45 -0000
+Date:   Thu, 22 Dec 2022 12:09:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-pm@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Biju Das <biju.das@bp.renesas.com>, linux-gpio@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: Add RZ/V2M PWC
+Message-ID: <167173258412.1836090.16333363777384274301.robh@kernel.org>
+References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com>
+ <20221221210917.458537-2-fabrizio.castro.jz@renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6SW5s/jFY1oWFe2@mit.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221221210917.458537-2-fabrizio.castro.jz@renesas.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 12:41:58PM -0500, Theodore Ts'o wrote:
-> On Thu, Dec 22, 2022 at 10:02:44AM +0800, Jun Nie wrote:
-> > There is case that s_first_data_block is not 0 and block nr is smaller than
-> > s_first_data_block when calculating group bitmap during allocation. This
-> > underflow make index exceed es->s_groups_count in ext4_get_group_info()
-> > and trigger the BUG_ON.
-> > 
-> > Fix it with protection of underflow.
+
+On Wed, 21 Dec 2022 21:09:14 +0000, Fabrizio Castro wrote:
+> The Renesas RZ/V2M External Power Sequence Controller (PWC)
+> IP is a multi-function device, and it's capable of:
+> * external power supply on/off sequence generation
+> * on/off signal generation for the LPDDR4 core power supply (LPVDD)
+> * key input signals processing
+> * general-purpose output pins
 > 
-> When was this happening, and why?  If blocknr is less than
-> s_first_data_block, this is either a insufficient input validation,
-> insufficient validation to detection file system corruption. or some
-> other kernel bug.
+> Add the corresponding dt-bindings.
 > 
-> Looking quickly at the code and the repro, it appears that issue is
-> that FS_IOC_GETFSMAP is getting passed a stating physical block of 0
-> in fmh_keys[0] when on a file system with a blocksize of 1k (in which
-> case s_first_data_block is 1).  It's unclear to me what
-
-Question -- on a 1k-block filesystem, are the first 1024 bytes of the
-device *reserved* by ext4 for whatever bootloader crud goes in there?
-Or is that space undefined in the filesystem specification?
-
-I never did figure that out when I was writing the ondisk specification
-that's in the kernel, but maybe you remember?
-
-> FS_IOC_GETFSMAP should *do* when passed a value which requests that it
-> provide a mapping for a block which is out of bounds (either too big,
-> or too small)?.  Should it return an error?  Should it simply not
-> return a mapping?  The map page for ioctl_getfsmap() doesn't shed any
-> light on this question.
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> ---
 > 
-> Darrick, you designed the interface and wrote most of fs/ext4/fsmap.c.
-> Can you let us know what is supposed to happen in this case?  Many
-> thanks!!
-
-If those first 1024 bytes are defined to be reserved in the ondisk
-format, then you could return a mapping for those bytes with the owner
-code set to EXT4_FMR_OWN_UNKNOWN.
-
-If, however, the space is undefined, then going off this statement in
-the manpage:
-
-"For example, if the low key (fsmap_head.fmh_keys[0]) is set to (8:0,
-36864, 0, 0, 0), the filesystem  will  only  return  records for extents
-starting at or above 36 KiB on disk."
-
-I think the 'at or above' clause means that ext4 should not pass back
-any mapping for the byte range 0-1023 on a 1k-block filesystem.
-
-If the low key is set to (8:0, 0, 0, 0, 0) and high key is set to (8:0,
-1023, 0, 0, 0) then ext4 shouldn't return any mapping at all, because
-there's no space usage defined for that region of the disk.
-
-If the low key is set to (8:0, 0, 0, 0, 0) and high key is set to all
-ones, then ext4 can return mappings for the primary superblock at offset
-1024.
-
---D
-
+> v1->v2: I have dropped syscon, simple-mfd, regmap, offset, and the child nodes.
 > 
-> > Fixes: 72b64b594081ef ("ext4 uninline ext4_get_group_no_and_offset()")
+>  .../bindings/mfd/renesas,rzv2m-pwc.yaml       | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/renesas,rzv2m-pwc.yaml
 > 
-> This makes ***no*** sense; the commit in question is from 2006, which
-> means that in some jourisdictions it's old enough to drive a car.  :-)
-> Futhermore, all it does is move the function from an inline function
-> to a C file (in this case, balloc.c).  It also long predates
-> introduction of FS_IOC_GETFSMAP support, which was in 2017.  
-> 
-> I'm guessing you just did a "git blame" and blindly assumed that
-> whatever commit last touched the C code in question was what
-> introduced the problem?
-> 
-> Anyway, please try to understand what is going on instead of doing the
-> moral equivalent of taking a sledgehammer to the code until the
-> reproducer stops triggering a BUG.  It's not enough to shut up the
-> reproducer; you should understand what is happening, and why, and then
-> strive to find the best fix to the problem.  Papering over problems in
-> the end will result in more fragile code, and the goal of syzkaller is
-> to improve kernel quality.  But syzkaller is just a tool and used
-> wrongly, it can have the opposite effect.
-> 
-> Regards,
-> 
-> 					- Ted
+
+Reviewed-by: Rob Herring <robh@kernel.org>
