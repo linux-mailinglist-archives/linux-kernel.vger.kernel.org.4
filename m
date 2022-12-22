@@ -2,110 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DED06542B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26106542A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbiLVOQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
+        id S235530AbiLVOPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiLVOPa (ORCPT
+        with ESMTP id S235497AbiLVOOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:15:30 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66F52EF90
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:13:02 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id n4so2147298plp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:13:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+9vMWr+QReiCFTMChXS+VaiIVai5hcXHpa8PnZ2xGs0=;
-        b=CdISaZLIaDAiejs3ebXWfckHizcdGNVuYMECOILk4yH8xwZVwxG4rqfNknKiQ9bMxv
-         K6t7qbFpxglLraOezwuKyzjqE8CILTiYQ8fqC9spqWBaWJemqGlFl9HcxUr/IKp4GiVs
-         lmvYjvo5Xsua2Dr3Hikt0B9Qgo+BR+9rdhHGiGch3nEldEUjjhkJEPBqpNEJNmNBWlR7
-         afSp0RPecbEl4ZEjX8yxe7ItSy8y0659l6Vht++AZTi1zjiu/7I/OJvwdg/hfknwmO05
-         fKeR62Njz+K0Ku39QJtMu4hAR3KOVexrkaHShOcxUgXcwsBT/pNtnOm1BuGm8aBWvH1H
-         26Vw==
+        Thu, 22 Dec 2022 09:14:20 -0500
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E0530F7E;
+        Thu, 22 Dec 2022 06:12:34 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-417b63464c6so28097417b3.8;
+        Thu, 22 Dec 2022 06:12:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+9vMWr+QReiCFTMChXS+VaiIVai5hcXHpa8PnZ2xGs0=;
-        b=sdllJi0937JMmkmsdJZdTZoy4T40iciyXPicesAPxR7IIKa9KIeRW6KFX0x/uQ/i2p
-         KJZJeUkiCPX740ZnDz8xid8N1HXD2kGu0SCOvSoC51QOovavIcKMMQWQ/0NTgTBY3noQ
-         XX4yZbmbfHoCIjtVVz33UKv8/oVRg6dah77Z27aBbrasfctFdRgTL2IobUK2q302qqm/
-         J2VG3spnlDLe4n82jCia2odsTMwE347+iBy4TWaai4UVBTZfLEH1JSo7YW4Wd2RVo+sS
-         XJ6t3FP0oZbBitIIs7qTk5hOJIUyzN2GBT3rYWgPBCJD3jtVb3HCBCsT+2e6CJM23CqF
-         FlUQ==
-X-Gm-Message-State: AFqh2kp7vfwFr3g+1eLvfR9q8Cfis2cgrLQlF5bpbQuajoP4S0XfXCwe
-        ahE5zDTBIgMols5laveS+C6YyxtXEva77C8=
-X-Google-Smtp-Source: AMrXdXsteySjBHCQNu+U2EA0Z9ki5BDJhCG3tehQDYHTLHrsEX/9rNG3ICW7RmKBQP2Yjf+3ELN7ag==
-X-Received: by 2002:a17:90b:3712:b0:223:ceed:ef6f with SMTP id mg18-20020a17090b371200b00223ceedef6fmr6803083pjb.10.1671718382131;
-        Thu, 22 Dec 2022 06:13:02 -0800 (PST)
-Received: from localhost.localdomain ([117.217.177.177])
-        by smtp.gmail.com with ESMTPSA id f8-20020a655908000000b0047829d1b8eesm832031pgu.31.2022.12.22.06.12.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 06:13:01 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, vkoul@kernel.org
-Cc:     quic_cang@quicinc.com, quic_asutoshd@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, ahalaney@redhat.com,
-        abel.vesa@linaro.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
-        bvanassche@acm.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v5 23/23] MAINTAINERS: Add myself as the maintainer for Qcom UFS drivers
-Date:   Thu, 22 Dec 2022 19:40:01 +0530
-Message-Id: <20221222141001.54849-24-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221222141001.54849-1-manivannan.sadhasivam@linaro.org>
-References: <20221222141001.54849-1-manivannan.sadhasivam@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DaSeJ7b4XoTWS2Tt6rTxmu6n/STTyq8+F8PwIAXlFPg=;
+        b=snwQPrziDRvHxYKwMTri99AuykkorHMSGwRWWjC6+ozExMNLXWJ5Rln9GYRJtpHZsl
+         IcKwp9Kyisk+I3BxcTvZDzmL8WzfNI9fcabWHHA1g0Olsrlm5fc2tVouDvlImCPiN6bS
+         uIIRWe1zIuO5ecJM+KnyDtl4GvH4CJuBBEfY2m/8tclpBIWkA7X710HSx8xtTqn66GfC
+         hNKuCh14czT+PfDFRv1T+LERV+P/M7iM0GEpdyWTwV04MhrkY+WKhAaO9rr0PFLNtX9U
+         itnFt2OEMQngcOVwKZmJTeM1svVNJR4fAag8r4palaN+lhoxeBpZGhiOR3jBKkDQDgRx
+         IUBg==
+X-Gm-Message-State: AFqh2koC4Bippk+Xu08JITVMh+VCf98MNEDFJOreN2kGca2NbzSh5DOX
+        J1Ou1NuO82bBC3BdgpK4W7AgSyZgLNCPkg==
+X-Google-Smtp-Source: AMrXdXt6fHpDrv2KsLe47Nfxc/RUhFejpc4iFMyyhA6hT+y9cNFyLJJP3SQ6K1c4OhoPuQbueDLMkA==
+X-Received: by 2002:a05:7500:3107:b0:ea:b360:b46 with SMTP id bg7-20020a057500310700b000eab3600b46mr383884gab.23.1671718353407;
+        Thu, 22 Dec 2022 06:12:33 -0800 (PST)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id u2-20020a37ab02000000b006fc92cf4703sm316216qke.132.2022.12.22.06.12.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 06:12:31 -0800 (PST)
+Received: by mail-yb1-f180.google.com with SMTP id c124so2042737ybb.13;
+        Thu, 22 Dec 2022 06:12:31 -0800 (PST)
+X-Received: by 2002:a25:d243:0:b0:702:90b4:2e24 with SMTP id
+ j64-20020a25d243000000b0070290b42e24mr417369ybg.365.1671718351056; Thu, 22
+ Dec 2022 06:12:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221222114635.1251934-1-andrzej.hajda@intel.com>
+In-Reply-To: <20221222114635.1251934-1-andrzej.hajda@intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 22 Dec 2022 15:12:19 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUE-a6SffG1PH=WfrMx-CNLB9EfUr4qmL_USBP31YGoNg@mail.gmail.com>
+Message-ID: <CAMuHMdUE-a6SffG1PH=WfrMx-CNLB9EfUr4qmL_USBP31YGoNg@mail.gmail.com>
+Subject: Re: [PATCH 00/19] Introduce __xchg, non-atomic xchg
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qcom UFS drivers are left un-maintained till now. I'd like to step up to
-maintain the drivers and the binding.
+Hi Andrzej,
 
-Acked-by: Bjorn Andersson <andersson@kernel.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Thanks for your series!
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7729a30b9609..7638c749a63f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21411,6 +21411,14 @@ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- F:	drivers/ufs/host/ufs-mediatek*
- 
-+UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER QUALCOMM HOOKS
-+M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-+L:	linux-arm-msm@vger.kernel.org
-+L:	linux-scsi@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-+F:	drivers/ufs/host/ufs-qcom*
-+
- UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER RENESAS HOOKS
- M:	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
- L:	linux-renesas-soc@vger.kernel.org
--- 
-2.25.1
+On Thu, Dec 22, 2022 at 12:49 PM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
+> I hope there will be place for such tiny helper in kernel.
+> Quick cocci analyze shows there is probably few thousands places
+> where it could be useful.
+> I am not sure who is good person to review/ack such patches,
+> so I've used my intuition to construct to/cc lists, sorry for mistakes.
+> This is the 2nd approach of the same idea, with comments addressed[0].
+>
+> The helper is tiny and there are advices we can leave without it, so
+> I want to present few arguments why it would be good to have it:
+>
+> 1. Code readability/simplification/number of lines:
+>
+> Real example from drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c:
+> -       previous_min_rate = evport->qos.min_rate;
+> -       evport->qos.min_rate = min_rate;
+> +       previous_min_rate = __xchg(evport->qos.min_rate, min_rate);
 
+Upon closer look, shouldn't that be
+
+    previous_min_rate = __xchg(&evport->qos.min_rate, min_rate);
+
+?
+
+> For sure the code is more compact, and IMHO more readable.
+>
+> 2. Presence of similar helpers in other somehow related languages/libs:
+>
+> a) Rust[1]: 'replace' from std::mem module, there is also 'take'
+>     helper (__xchg(&x, 0)), which is the same as private helper in
+>     i915 - fetch_and_zero, see latest patch.
+> b) C++ [2]: 'exchange' from utility header.
+>
+> If the idea is OK there are still 2 qestions to answer:
+>
+> 1. Name of the helper, __xchg follows kernel conventions,
+>     but for me Rust names are also OK.
+
+Before I realized the missing "&", I wondered how this is different
+from swap(), so naming is important.
+https://elixir.bootlin.com/linux/latest/source/include/linux/minmax.h#L139
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
