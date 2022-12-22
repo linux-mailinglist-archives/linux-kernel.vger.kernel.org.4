@@ -2,61 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1050E654824
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B7C654825
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235659AbiLVWBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 17:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S235432AbiLVWBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 17:01:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235432AbiLVWBo (ORCPT
+        with ESMTP id S235443AbiLVWBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Dec 2022 17:01:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7FBDEFE;
-        Thu, 22 Dec 2022 14:01:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3EF2B81F68;
-        Thu, 22 Dec 2022 22:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0F5C433EF;
-        Thu, 22 Dec 2022 22:01:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671746499;
-        bh=0AHFrmtAkzUY8TmraN3K72lLEpI4eao1ncPI5QWPLq4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EkelR5Yf6MJK35i2G7HbiRdwiWSrGDls5wzM68w0OZYqUqEzJdcfcVtq3GkYePakY
-         C7a35OYyTNCzLvJb5RwjRW0aFz5jQcalCNY/E8Foz88MNHX/oV9mmNsYrZpBSPM2Vg
-         KaiTe352DbYEpYnoDXedqBS/SBSYWRxioRoUKOjjOMHB4rRLNUkes2H/AKCgfLlw7A
-         rOnsOSqLO9gPuo4xJkCdcESXKiwQuE1PTqRLd2u991OMYnpqZEE/3HwaC3EC400SKu
-         3GbdX3vPiYVM89RulVx6nbBsTPN1BbbEinYYuYUvpjXHbfYR92lbdRR3KDUymRfHUV
-         vL4xjcshiRTiQ==
-Date:   Thu, 22 Dec 2022 22:01:34 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org
-Subject: Re: [PATCH 0/6] RISC-V kasan rework
-Message-ID: <Y6TTvku/yuSjm42j@spud>
-References: <20221216162141.1701255-1-alexghiti@rivosinc.com>
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BBF27CF9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 14:01:43 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id cf42so4674396lfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 14:01:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hwyt8ZdI5ZWUHfUGRX4s0PkLUr1UuuhJWewTj+QujR0=;
+        b=sdyRfPiBd704FQG4bNjO87wMafWV6TlycxRFOCRg6C1jFqskYPrheu40WnKLXd97VD
+         9awr9681ZZ40f3yEZ2IV7TOgT6N9WWG8ibxUc6eDGIm+JUjyZLX3o+sCaKvKuvXbGC/K
+         FhxTq13RxetjjMC19nCQz2Cd1WynTrH/8q7rY/Q0ugj5DGuvoBsDN0X830KHShnuh/FQ
+         SlGLo97+D1lqnHkOgPdteqpHcC/bRwOEBxgtL2oG9pTqonU5RBKciuJ/xsbJgR0BIKsl
+         iWxKGuexHDXtiOQgKoz3mSY1ZLtgf0sbmw+VTgwLb4GN7btlbcv4CDGIcClg7UDOwjgS
+         8Jig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hwyt8ZdI5ZWUHfUGRX4s0PkLUr1UuuhJWewTj+QujR0=;
+        b=MwZzs2vXI7jdfRM7Gn49Z+jc3Qb/w6qcFYaB2g3NxybPnfBXfpkA5T8KF0T35J+I5d
+         KWuNTTNCIHfknWFsAzAhfndTfAyOxbrxDIjo3teS/8zQwsOH+OxymEOkjg2OFzBsjt+s
+         4qyg2woCRZKl/Il8eWi+W6701V7iR7FycxsodzY5Pti3qrqh1kyIy/GVXXogmYsB84ir
+         KdIzHKNqw88BcaFKG3LuauikQiTEiwGhPBhQxbnmKcELkDl7JSnFg1sQMYzB71SbwBbY
+         Dwvp0pOBb8vF9Ywb/7HNhcIjf4A135f+P2FtyMzRzdpQ9fo/Z5PQKN/xS48fi7agRRG9
+         spIw==
+X-Gm-Message-State: AFqh2krs0V74h2AuBTam//DIpmGGX+60kCro2/TTnwbvKFUfbsBGi1bj
+        BnujA3poTqjTrxh6oY+JNLHGiw==
+X-Google-Smtp-Source: AMrXdXtCv726/Ll7RZS1LYdA1OYHa3A5hq1rDXIE2Lyae6+L1yQnAfH8gZRKJugpTYZo5pID48KFog==
+X-Received: by 2002:a05:6512:16a8:b0:4b5:a70f:8efc with SMTP id bu40-20020a05651216a800b004b5a70f8efcmr3436708lfb.64.1671746501410;
+        Thu, 22 Dec 2022 14:01:41 -0800 (PST)
+Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
+        by smtp.gmail.com with ESMTPSA id s20-20020a195e14000000b004b0b2212315sm224362lfb.121.2022.12.22.14.01.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 14:01:40 -0800 (PST)
+Message-ID: <144d7b69-fb67-60dd-2c40-c004fbbba288@linaro.org>
+Date:   Thu, 22 Dec 2022 23:01:38 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="TCn4u6SoH/sj16af"
-Content-Disposition: inline
-In-Reply-To: <20221216162141.1701255-1-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] arm64: dts: qcom: sm6350-lena: Flatten gpio-keys
+ pinctrl state
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221222215906.324092-1-marijn.suijten@somainline.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221222215906.324092-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,90 +87,68 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---TCn4u6SoH/sj16af
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hey Alex!
+On 22.12.2022 22:59, Marijn Suijten wrote:
+> Pinctrl states typically collate multiple related pins.  In the case of
+> gpio-keys there's no hardware-defined relation at all except all pins
+> representing a key; and especially on Sony's lena board there's only one
+> pin regardless. Flatten it similar to other boards [1].
+> 
+> As a drive-by fix, clean up the label string.
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/11174eb6-0a9d-7df1-6f06-da4010f76453@linaro.org/
+> 
+> Fixes: 2b8bbe985659 ("arm64: dts: qcom: sm6350-lena: Include pm6350 and configure buttons")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-On Fri, Dec 16, 2022 at 05:21:35PM +0100, Alexandre Ghiti wrote:
-> As described in patch 2, our current kasan implementation is intricate,
-> so I tried to simplify the implementation and mimic what arm64/x86 are
-> doing.
-
-I'm not sure that I am going to have much to contribute for this series,
-but I did notice some difficulty actually applying it. At whatever point
-you sent it, the pwbot did actually give it a shakedown - but it doesn't
-apply any of the "usual suspects" tree wise.
-It looks like multiple patches interact with commit 9f2ac64d6ca6 ("riscv:
-mm: add missing memcpy in kasan_init"), which caused me some difficulty
-that was not just a trivial resolution.
-A rebase on top of v6.2-rc1 is (I would imagine) a good idea for this
-series?
-
-For the future, perhaps using the base-commit arg would be useful for
-stuff like this :)
-
-> In addition it fixes UEFI bootflow with a kasan kernel and kasan inline
-> instrumentation: all kasan configurations were tested on a large ubuntu
-> kernel with success with KASAN_KUNIT_TEST and KASAN_MODULE_TEST.
->=20
-> inline ubuntu config + uefi:
->  sv39: OK
->  sv48: OK
->  sv57: OK
->=20
-> outline ubuntu config + uefi:
->  sv39: OK
->  sv48: OK
->  sv57: OK
->=20
-> Actually 1 test always fails with KASAN_KUNIT_TEST that I have to check:
-> # kasan_bitops_generic: EXPECTATION FAILED at mm/kasan/kasan__test.c:1020
-> KASAN failure expected in "set_bit(nr, addr)", but none occurrred
->=20
-> Note that Palmer recently proposed to remove COMMAND_LINE_SIZE from the
-> userspace abi
-> https://lore.kernel.org/lkml/20221211061358.28035-1-palmer@rivosinc.com/T/
-> so that we can finally increase the command line to fit all kasan kernel
-> parameters.
->=20
-> All of this should hopefully fix the syzkaller riscv build that has been
-> failing for a few months now, any test is appreciated and if I can help
-> in any way, please ask.
->=20
-> Alexandre Ghiti (6):
->   riscv: Split early and final KASAN population functions
->   riscv: Rework kasan population functions
->   riscv: Move DTB_EARLY_BASE_VA to the kernel address space
->   riscv: Fix EFI stub usage of KASAN instrumented string functions
->   riscv: Fix ptdump when KASAN is enabled
->   riscv: Unconditionnally select KASAN_VMALLOC if KASAN
->=20
->  arch/riscv/Kconfig                    |   1 +
->  arch/riscv/kernel/image-vars.h        |   8 -
->  arch/riscv/mm/init.c                  |   2 +-
->  arch/riscv/mm/kasan_init.c            | 511 ++++++++++++++------------
->  arch/riscv/mm/ptdump.c                |  24 +-
->  drivers/firmware/efi/libstub/Makefile |   7 +-
->  drivers/firmware/efi/libstub/string.c | 133 +++++++
->  7 files changed, 435 insertions(+), 251 deletions(-)
->=20
-> --=20
-> 2.37.2
->=20
->=20
-
---TCn4u6SoH/sj16af
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6TTvgAKCRB4tDGHoIJi
-0orbAP9JIVPQo+hgzKfF1ShcT+6Ln7xErm9HazmhbtqIG0D61gEA5NgEVxpsOv3f
-J9oJpI8UCyLrfCOHSx5LFudR2RhlJgs=
-=WKhG
------END PGP SIGNATURE-----
-
---TCn4u6SoH/sj16af--
+Konrad
+> 
+> Changes since v1:
+> 
+> - Replace accidental semicolon in patch title with colon.
+> 
+> v1: https://lore.kernel.org/linux-arm-msm/20221222212634.298135-1-marijn.suijten@somainline.org/T/#u
+> 
+>  .../qcom/sm6350-sony-xperia-lena-pdx213.dts    | 18 ++++++++----------
+>  1 file changed, 8 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts b/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts
+> index 94f77d376662..4916d0db5b47 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts
+> @@ -35,10 +35,10 @@ framebuffer: framebuffer@a0000000 {
+>  	gpio-keys {
+>  		compatible = "gpio-keys";
+>  		pinctrl-names = "default";
+> -		pinctrl-0 = <&gpio_keys_state>;
+> +		pinctrl-0 = <&vol_down_n>;
+>  
+>  		key-volume-down {
+> -			label = "volume_down";
+> +			label = "Volume Down";
+>  			linux,code = <KEY_VOLUMEDOWN>;
+>  			gpios = <&pm6350_gpios 2 GPIO_ACTIVE_LOW>;
+>  		};
+> @@ -305,14 +305,12 @@ touchscreen@48 {
+>  };
+>  
+>  &pm6350_gpios {
+> -	gpio_keys_state: gpio-keys-state {
+> -		key-volume-down-pins {
+> -			pins = "gpio2";
+> -			function = PMIC_GPIO_FUNC_NORMAL;
+> -			power-source = <0>;
+> -			bias-disable;
+> -			input-enable;
+> -		};
+> +	vol_down_n: vol-down-n-state {
+> +		pins = "gpio2";
+> +		function = PMIC_GPIO_FUNC_NORMAL;
+> +		power-source = <0>;
+> +		bias-disable;
+> +		input-enable;
+>  	};
+>  };
+>  
