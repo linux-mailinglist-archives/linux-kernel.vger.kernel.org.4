@@ -2,127 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907E46544B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FB36544B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiLVP5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S230518AbiLVP5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbiLVP5E (ORCPT
+        with ESMTP id S231337AbiLVP5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:57:04 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2816E083
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:57:01 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id o6so3341205lfi.5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:57:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9IorTpVi1Uzkxm+J45cvzGF9CpTZu4xTCsCDzNG9rvQ=;
-        b=L7AFpvZ8RZJ7Jg9wmkPhQwL2RucNvDcEbTN4UgryvffNtFa3wd1La32Rm9FtI1SVQs
-         mWjf7EbBPwze2XoztU/RnPNt60sYDoOhNJdJXqiL+YBziBjKAXcyIswMovypzWOBU73X
-         9vS7YrtetBZfmSUbqIzjbZ0NUVzhkYKI9KLO/89bItLxA8Ln26wxUqKDU1CfvvU73K4s
-         bga6CO/YImN5pTp5zkF4bn9wmDBG66YvxR0OhApSY0IZXE2ddB0XEm/CHDN7Z/w8NDDg
-         TCj4dvDWv5XWrLVhgcGtrfcTenWnmSStFvAscK/E7cJtsPJ0BJoO+MflAjfBRrifD4Fb
-         pI8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9IorTpVi1Uzkxm+J45cvzGF9CpTZu4xTCsCDzNG9rvQ=;
-        b=vMpemjMPd3IWOTcB8b0RgEVWcR88sEweEoc5A6HLcKYsuN4V8/QacAM5orLw9evczj
-         ytR04EcJtYxS7gMmBkYLfbratLmDjCAOFF+R389ltXUcpXFugufeWn4BE3LV0RDQFiPM
-         D02f08lNlOMRp4coDC2SpNrv9CR1zoh3ZyjQCZ/VUIGuw1Kejg0XaNGJSDYBn1X243ZT
-         lHxIlDph7IIXm5rlxU6dnppUZUsKkRklZMtgSBK2dF4zGZuBiW25C2zuMamLmcFWsZu+
-         vKsbqAaldanferiZ0Oh74d16lqLbcAX93NZazL6tZJSGUF8kpuBEnTE9VuZ9ZyryrL+J
-         qr9Q==
-X-Gm-Message-State: AFqh2kqws4oHPAHoQ3AxjNboMf7WQ0zCrxAaAacYaSwG90uCOvtct9tp
-        rkZQR5NQauc24AOGCRVEW5oYjA==
-X-Google-Smtp-Source: AMrXdXvZ3082LMCenN68mf9vfl1DFIcmDzRUxBQYnHI1JRU+puaHlbNOWHLuLFn505leMQ/10M/kFQ==
-X-Received: by 2002:a05:6512:142:b0:4b5:a207:8d73 with SMTP id m2-20020a056512014200b004b5a2078d73mr1786934lfo.52.1671724620260;
-        Thu, 22 Dec 2022 07:57:00 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f13-20020a19380d000000b004acb2adfa1fsm106882lfa.307.2022.12.22.07.56.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 07:56:59 -0800 (PST)
-Message-ID: <1f40c42c-f979-0b74-fcbc-1df142de7e77@linaro.org>
-Date:   Thu, 22 Dec 2022 16:56:57 +0100
+        Thu, 22 Dec 2022 10:57:40 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486CF6595;
+        Thu, 22 Dec 2022 07:57:38 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMBtNKr000553;
+        Thu, 22 Dec 2022 16:57:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=mLYXc+UkL0/McAv2NjSFthugo2hDHA7ShsQrJDZkdzY=;
+ b=PLCWdqKDQisgqSJ03zlXhazC8iRzwxddQMvUBmI9FXvnNdG1nWVnN7BLtK6EDluZ4Cdb
+ juRG3sKI87ZBnWgh2cj7MlckRA6ti/0eNbvJ8KhgOvlHkeBYGGGeWb63DJXUsIc8tAS+
+ /sKqpwsObDg1J8okoppDHkpknt1j93V7vCnwWdug+kF7zJELbgUhBEClc49KcIrQtG+4
+ dAnEncMu/4+fa8DGql/va3xQ5Ye4xuLz4H4OlvaJajJNymsLXp7YQgAqmceuKQ18pSkB
+ B/t+5aRVcDKouVfsJfCPuvYGB5rHHFeuG4eab6cIJx8slE8/9UmfLf/JHSkeEecF7z36 Zg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mh42pxhse-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 16:57:16 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7A70310004D;
+        Thu, 22 Dec 2022 16:57:11 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 14D67235F39;
+        Thu, 22 Dec 2022 16:57:03 +0100 (CET)
+Received: from [10.201.21.217] (10.201.21.217) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 22 Dec
+ 2022 16:57:02 +0100
+Message-ID: <18d0eca0-838e-92c3-4188-d8dcf480ef6e@foss.st.com>
+Date:   Thu, 22 Dec 2022 16:57:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH V2 4/6] dt-bindings: usb: ci-hdrc-usb2: convert to DT
- schema format
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 6/7] ARM: dts: stm32: add ETZPC as a system bus for
+ STM32MP15x boards
 Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, xu.yang_2@nxp.com
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-References: <20221014095148.2063669-1-peng.fan@oss.nxp.com>
- <20221014095148.2063669-5-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221014095148.2063669-5-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
+        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>
+References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
+ <20221221173055.11719-7-gatien.chevallier@foss.st.com>
+ <2e7c901c-e322-ded6-b170-6d2436d74c0f@kernel.org>
+ <0bff5b2d-2837-57cb-5434-58158acc1483@foss.st.com>
+ <041b77e0-40c5-e724-e5d9-f1da64d5e684@kernel.org>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <041b77e0-40c5-e724-e5d9-f1da64d5e684@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.201.21.217]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_08,2022-12-22_03,2022-06-22_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/10/2022 11:51, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Convert the binding to DT schema format
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
 
+
+On 12/22/22 16:21, Krzysztof Kozlowski wrote:
+> On 22/12/2022 15:42, Gatien CHEVALLIER wrote:
+>> Hello,
+>>
+>>
+>> On 12/22/22 11:30, Krzysztof Kozlowski wrote:
+>>> On 21/12/2022 18:30, Gatien Chevallier wrote:
+>>>> The STM32 System Bus is an internal bus on which devices are connected.
+>>>> ETZPC is a peripheral overseeing the firewall bus that configures
+>>>> and control access to the peripherals connected on it.
+>>>>
+>>>> For more information on which peripheral is securable, please read
+>>>> the STM32MP15 reference manual.
+>>>>
+>>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>>>> ---
+>>>>    arch/arm/boot/dts/stm32mp151.dtsi | 2737 +++++++++++++++--------------
+>>>>    1 file changed, 1406 insertions(+), 1331 deletions(-)
+>>>>    
+>>>> -		lptimer1: timer@40009000 {
+>>>> +		etzpc: etzpc@5c007000 {
+>>>
+>>> Node names should be generic.
+>>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>>
+>> Will change to etzpc: bus@5c007000 in V3
+>>
+>>>
+>>>> +			compatible = "st,stm32mp15-sys-bus";
+>>>> +			reg = <0x5c007000 0x400>;
+>>>>    			#address-cells = <1>;
+>>>> -			#size-cells = <0>;
+>>>> -			compatible = "st,stm32-lptimer";
+>>>> -			reg = <0x40009000 0x400>;
+>>>> -			interrupts-extended = <&exti 47 IRQ_TYPE_LEVEL_HIGH>;
+>>>> -			clocks = <&rcc LPTIM1_K>;
+>>>> -			clock-names = "mux";
+>>>> -			wakeup-source;
+>>>> -			status = "disabled";
+>>>
+>>> Why entire bus is disabled? What resources do you miss?
+>>
+>> Here, I did not want to modify the status of the nodes in the device
+> 
+> By making it disabled you actually modify the status of any enabled
+> node. By making it enabled you do not cause any change.
+> 
+>> tree. Nodes that are default enabled in the SoC device tree stay enabled
+>> and vice-versa.
+> 
+> No, because parent is disabled.
+> 
+>> IMO think this patch should not include these kind of
+>> changes in its scope. I describe the bus and the peripherals connected
+>> to it, nothing more :)
+> 
+> I am not proposing to change existing nodes. I am asking why new node is
+> being disabled (because it is a new node, isn't it?).
+
+I'm sorry but the ETZPC node is not disabled. The patch is quite hard to 
+read as I'm moving all securable/MCU isolation capable peripheral nodes 
+under ETZPC.
+
+ >>>> -			#size-cells = <0>;
+ >>>> -			compatible = "st,stm32-lptimer";
+ >>>> -			reg = <0x40009000 0x400>;
+ >>>> -			interrupts-extended = <&exti 47 IRQ_TYPE_LEVEL_HIGH>;
+ >>>> -			clocks = <&rcc LPTIM1_K>;
+ >>>> -			clock-names = "mux";
+ >>>> -			wakeup-source;
+ >>>> -			status = "disabled";
+
+are part of lptimer1 node, which is moved under ETZPC. ETZPC node is 
+default enabled.
+
+Result after patch is:
+
+etzpc: etzpc@5c007000 {
+	compatible = "st,stm32mp15-sys-bus";
+	reg = <0x5c007000 0x400>;
+	#address-cells = <1>;
+	#size-cells = <1>;
+	feature-domain-controller;
+	#feature-domain-cells = <2>;
+	ranges;
+
+	timers2: timer@40000000 {
 (...)
 
-> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> new file mode 100644
-> index 000000000000..ed03649f17a6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> @@ -0,0 +1,341 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/ci-hdrc-usb2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: USB2 ChipIdea USB controller for ci13xxx Binding
-> +
-> +maintainers:
-> +  - Xu Yang <xu.yang_2@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - chipidea,usb2
-> +          - lsi,zevio-usb
-> +          - nvidia,tegra20-udc
-> +          - nvidia,tegra30-udc
-> +          - nvidia,tegra114-udc
-> +          - nvidia,tegra124-udc
-> +          - qcom,ci-hdrc
+Or do I misunderstand you comment?
 
-Except other comments, this conversion does not match existing Qualcomm
-driver and Qualcomm DTS. You miss the "ulpi" node.
-
-Best regards,
-Krzysztof
-
+> 
+> Best regards,
+> Krzysztof
+> 
