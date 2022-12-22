@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A965F6542DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 891C36542DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbiLVOY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:24:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S235531AbiLVOZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:25:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbiLVOYz (ORCPT
+        with ESMTP id S229674AbiLVOZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:24:55 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57DD286F0;
-        Thu, 22 Dec 2022 06:24:54 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id tz12so5237290ejc.9;
-        Thu, 22 Dec 2022 06:24:54 -0800 (PST)
+        Thu, 22 Dec 2022 09:25:49 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EC625C42;
+        Thu, 22 Dec 2022 06:25:48 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id tz12so5243503ejc.9;
+        Thu, 22 Dec 2022 06:25:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=HdAXRp18Yhl+PSUnXtbvxR+DNOmBhpNB7mLZxnFGxfA=;
-        b=Ak5UOvazOKQI4voJRBbw/aBCbllxV6iZfxLX5kvr7a5k5+402RTMNX9ttsPTN8xVOn
-         jT6T0+rXU62S82MDgMd+aQlPOOz/nfCu0pq1ZLDkC8fIZcYV/qrF/bpFwM8yAWQ0x7EQ
-         q9HcoG9P5F+9jZje1fi5sgQoaWHo7hmbgbgOJE7cM//3AeuvYbrpdL0Sl9FsN+43sM41
-         8MexiDyS2m+RHro68c2blvLTjRBbFlnQ4ynqfyt4QdPsL54m7KwwZe765Cl5pAO+TBLQ
-         kh0a1doC6s6qxvb+rN0CUV2+qE2y3WmNyNet3Vn2IghdsPmFXjRJdFOalNe3uBpXFpbA
-         /VTA==
+        bh=fOsi2OwSq3xHI7aui3O414Oo1XlE4pBwJtqzcodoVCQ=;
+        b=MlKU5KNhffaWl+HI6LQ+w9cQLnvsbNTJVEYK+oItp52FhknzDgvIMJ+/mBcMmMp/nM
+         FBpCzLrvZGFUSW739Xqa/Ck0qPPJgnpjK0rQAn5r8CjtHNetqca/BWq7JNQ+kU+FffjZ
+         PxKNZj2lsEPu6ozrQke8Yrx6nOyxq8DCQO3+CF6oFs1k2/eMoo41sh1pwJ5vaBD+e3Rm
+         QmtU8bNdMMjy7r4ot3LTZwTOv7Y2MR9p6CCO8dRh9pCJX9XeuvS3t3CHNsI6aIZEHN+s
+         pUvz8hEIRjXvtwWLkd+UAXxEgwQIC0kvRIJIJL1TlRSDlX85aGeo05gDzYBkQ/jh/xbf
+         Rn0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HdAXRp18Yhl+PSUnXtbvxR+DNOmBhpNB7mLZxnFGxfA=;
-        b=UJDgSurvDHvuC3vqPLj5mf3XHbKX1zQy87tGMuG0aRrfYYMPVyO63as/RpTHaadKD0
-         Fhyz9YEh6amrT97TtlKUDaUvHFS1g28771sZt9bm9c0dMP/oE7GeyzrdKYfysbR4s1lP
-         h7uMV3cwLUur/teXpSdJhFnIdcHOYD/6fNdERLEfJ223p97jq/e9mY0ajYL7unzL9Mg2
-         s8+6Oc48nB622g3jKC53JBZWnd813Use+V8r1qjueS4liRECiA3zbkfZW/rHbHvW7rHU
-         QbwY7CubnUK4/ye7mJpac4XujJpqBX1mC6t9kXiFCDlUacUGTgFbKFqtu3tMt1JDMFKt
-         HV7g==
-X-Gm-Message-State: AFqh2kpftqdfVistrTIxPKH+rYlLAIn46ABzZ6K3K8VCdTsyxMVWS0Vr
-        2UYWheAhxKRW+FaZrvnLklc=
-X-Google-Smtp-Source: AMrXdXt45+koOLdg7WkWVuXyCH9JMIXYsbmfdjeRv0hUdjOfPc/eqO1XzGfCc9tGBAYRQkxdVQZgQA==
-X-Received: by 2002:a17:907:1b0b:b0:7c1:6344:84a with SMTP id mp11-20020a1709071b0b00b007c16344084amr7096364ejc.5.1671719093335;
-        Thu, 22 Dec 2022 06:24:53 -0800 (PST)
+        bh=fOsi2OwSq3xHI7aui3O414Oo1XlE4pBwJtqzcodoVCQ=;
+        b=RcozcPYsc7GqGd4Xte+1Nnqket5mNOKqHVrNLt6L8VjlDmNAhj6rVSeFpi7EmuRb0g
+         ///lVLjOBCSLjRY2FbvTrJgrkVYrvXJ/woHmKbDiGl4junmmbRoY390EpiaN4efA62AV
+         tP+ujAIR7mFxY7gHZy8HZO4rLwl9rCF8QruqSL8Gbrqj5GRiqRNaHC0oqyTTJHUit1uS
+         ru5t7W8c77iQY4vzKU2yD0j7yfrU5jHfzvItMiTGZnfnZA69sAwPpuw5cVY9AwomsnVU
+         v2vUK4vRF9O3nzIkllvhyGCX00m3JHVc9MG0g5pxIwwbSgRBbGNMYmTwIFaqjh4P98He
+         xeKQ==
+X-Gm-Message-State: AFqh2kodjkxoi8CHjqMu3oLc9xo1oRQ2v8Ar3lXwbSq6zqKJS2zCcU45
+        m6RThXo3dIMay6QAJyZngNk=
+X-Google-Smtp-Source: AMrXdXs2ZIgjx4BwdrZ9OPUxEcwQhQL93aelpNu8ZOBPma6g87PHYtq+N1Mh0lqNtQZcwkk2DClGQQ==
+X-Received: by 2002:a17:906:688f:b0:7ae:31a0:571c with SMTP id n15-20020a170906688f00b007ae31a0571cmr4818918ejr.57.1671719146475;
+        Thu, 22 Dec 2022 06:25:46 -0800 (PST)
 Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id w14-20020a17090649ce00b00835dababb9fsm283580ejv.214.2022.12.22.06.24.52
+        by smtp.gmail.com with ESMTPSA id cq17-20020a056402221100b00477f0d89e8fsm432158edb.6.2022.12.22.06.25.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 06:24:53 -0800 (PST)
-Message-ID: <1c3b18ad-350f-e862-de98-a775e11e132c@gmail.com>
-Date:   Thu, 22 Dec 2022 15:24:51 +0100
+        Thu, 22 Dec 2022 06:25:46 -0800 (PST)
+Message-ID: <78b4548e-dfe1-d0c6-f96c-5d40f28f8b2e@gmail.com>
+Date:   Thu, 22 Dec 2022 15:25:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
 From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v6 03/17] dt-bindings: display: dsi-controller: move
- clock-master property
+Subject: [PATCH v6 04/17] dt-bindings: display: bridge: snps,dw-mipi-dsi: fix
+ clock properties
 To:     heiko@sntech.de
 Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
@@ -86,50 +86,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clock-master property is used for the controller and not in the panel,
-so move it there.
+Fix clock properties from the common snps,dw-mipi-dsi.yaml file,
+as they don't match with what is used on the SoCs.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/display/dsi-controller.yaml       | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ .../display/bridge/snps,dw-mipi-dsi.yaml         | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/dsi-controller.yaml b/Documentation/devicetree/bindings/display/dsi-controller.yaml
-index ca21671f6..67ce10307 100644
---- a/Documentation/devicetree/bindings/display/dsi-controller.yaml
-+++ b/Documentation/devicetree/bindings/display/dsi-controller.yaml
-@@ -30,6 +30,15 @@ properties:
-   $nodename:
-     pattern: "^dsi(@.*)?$"
+diff --git a/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml b/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml
+index 11fd68a70..0b51c64f1 100644
+--- a/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml
+@@ -26,19 +26,9 @@ properties:
+   reg:
+     maxItems: 1
 
-+  clock-master:
-+    type: boolean
-+    description:
-+      Should be enabled if the host is being used in conjunction with
-+      another DSI host to drive the same peripheral. Hardware supporting
-+      such a configuration generally requires the data on both the busses
-+      to be driven by the same clock. Only the DSI host instance
-+      controlling this clock should contain this property.
-+
-   "#address-cells":
-     const: 1
-
-@@ -52,15 +61,6 @@ patternProperties:
-           case the reg property can take multiple entries, one for each virtual
-           channel that the peripheral responds to.
-
--      clock-master:
--        type: boolean
--        description:
--          Should be enabled if the host is being used in conjunction with
--          another DSI host to drive the same peripheral. Hardware supporting
--          such a configuration generally requires the data on both the busses
--          to be driven by the same clock. Only the DSI host instance
--          controlling this clock should contain this property.
+-  clocks:
+-    items:
+-      - description: Module clock
+-      - description: DSI bus clock for either AHB and APB
+-      - description: Pixel clock for the DPI/RGB input
+-    minItems: 2
 -
-       enforce-video-mode:
-         type: boolean
-         description:
+-  clock-names:
+-    items:
+-      - const: ref
+-      - const: pclk
+-      - const: px_clk
+-    minItems: 2
++  clocks: true
++
++  clock-names: true
+
+   resets:
+     maxItems: 1
 --
 2.20.1
 
