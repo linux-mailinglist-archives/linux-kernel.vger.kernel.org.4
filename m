@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA20653E74
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD0B653E7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235003AbiLVKmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 05:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        id S235281AbiLVKpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 05:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235120AbiLVKl7 (ORCPT
+        with ESMTP id S229620AbiLVKpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 05:41:59 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1544D18B23
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 02:41:56 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-172-D_exMaKhNCWc8qzlCOLIiw-1; Thu, 22 Dec 2022 10:41:53 +0000
-X-MC-Unique: D_exMaKhNCWc8qzlCOLIiw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 22 Dec
- 2022 10:41:52 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Thu, 22 Dec 2022 10:41:52 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>
-Subject: RE: [PATCH v2] kbuild: treat char as always unsigned
-Thread-Topic: [PATCH v2] kbuild: treat char as always unsigned
-Thread-Index: AQHZFV6o8tF/XYcvI0qqEtVNYsUlXa55tQ3w
-Date:   Thu, 22 Dec 2022 10:41:52 +0000
-Message-ID: <b2144334261246aa8dc5004c5f1a58c9@AcuMS.aculab.com>
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
- <20221019203034.3795710-1-Jason@zx2c4.com>
- <20221221145332.GA2399037@roeck-us.net>
- <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
- <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
- <20221221155641.GB2468105@roeck-us.net>
- <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
-In-Reply-To: <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 22 Dec 2022 05:45:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B050E13D64
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 02:44:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671705855;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gi5urjN2N7QuS8JEXiq0+o2rzUnJbYSXkxKQ9B/QdeU=;
+        b=SnERvi0TcB6vPW5PuckKX3qsDzGM9AdoH0VlAPTJmcvw54+C7LZ+MnTxeCGUAn1XwEznjO
+        lMw0k14mKpCylj8/w0BEBELxpefVp+GNP3AsAE4ymHpj7eXNl9nzTk5rDuIQFW2cH/WiZc
+        S6OQCB8p8D9M+udCUl8HjjCzVlDnOYA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-338-Nufljwc1OEWuRXMlsHbYPg-1; Thu, 22 Dec 2022 05:44:13 -0500
+X-MC-Unique: Nufljwc1OEWuRXMlsHbYPg-1
+Received: by mail-wm1-f69.google.com with SMTP id v192-20020a1cacc9000000b003d21fa95c38so734220wme.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 02:44:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gi5urjN2N7QuS8JEXiq0+o2rzUnJbYSXkxKQ9B/QdeU=;
+        b=gfJ8vUFXFDwa1j2zWwyQ2gnqNu5h8KHv/nqDBAaA8LkTqjjHzAOEVDRlP9nls9QZPO
+         APw1e9AAa75vUhNEIemxmPgItHOLTsHP47OR24k93g++aoWCBSsCWfxsRHtFLAvORBZs
+         b0thvPjhQXrY3nrAQ+hODx3r9pHdi9CuAEdUB2nCo66a+M/axzvWq7KVHEVVnXEv4J5O
+         h0e2bGSxDDqVGxStzAfZxk7Sm8PWtzd0NREUtvu+t+YdU0b9S2pmtcWMS838oesHwkki
+         n7i49sDU6j8fjVx9L7WLbfYhmgUgTKUEdDUzbt73aNWqKciQfTIS9zklnhpmmSV8dZvp
+         BtDw==
+X-Gm-Message-State: AFqh2kr5g6mMVLg+SvTURYki8NRJWU84Fg6LVJVFzakCdMOC4Lrwi7/J
+        MdCi/DVH0OydnprLac623/JZvoI8GVMDk0kAD11GLLizN/RE15J7GwfH7H1nxqJDL9qgFsYpkHq
+        bxnkfeKbnllhxifrUHTvHCRrc
+X-Received: by 2002:a5d:43c7:0:b0:26b:c52e:f7c7 with SMTP id v7-20020a5d43c7000000b0026bc52ef7c7mr4018750wrr.29.1671705852492;
+        Thu, 22 Dec 2022 02:44:12 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvni/JVJYdZYhjeyU1Sy9xUOEsBi09aiftzU746b9vFIpzA/VFtRgh8+4XjsBHPtjl9arvOPg==
+X-Received: by 2002:a5d:43c7:0:b0:26b:c52e:f7c7 with SMTP id v7-20020a5d43c7000000b0026bc52ef7c7mr4018734wrr.29.1671705852266;
+        Thu, 22 Dec 2022 02:44:12 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-101-173.dyn.eolo.it. [146.241.101.173])
+        by smtp.gmail.com with ESMTPSA id h15-20020adfaa8f000000b002421888a011sm184094wrc.69.2022.12.22.02.44.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 02:44:11 -0800 (PST)
+Message-ID: <8a0a90511222d3161bfe2984f6b14f82206b8930.camel@redhat.com>
+Subject: Re: [PATCH 0/3] net/ncsi: Add NC-SI 1.2 Get MC MAC Address command
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Peter Delevoryas <peter@pjd.dev>
+Cc:     sam@mendozajonas.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, joel@jms.id.au, gwshan@linux.vnet.ibm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 22 Dec 2022 11:44:10 +0100
+In-Reply-To: <20221221052246.519674-1-peter@pjd.dev>
+References: <20221221052246.519674-1-peter@pjd.dev>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjEgRGVjZW1iZXIgMjAyMiAxNzowNw0KPiAN
-Cj4gT24gV2VkLCBEZWMgMjEsIDIwMjIgYXQgNzo1NiBBTSBHdWVudGVyIFJvZWNrIDxsaW51eEBy
-b2Vjay11cy5uZXQ+IHdyb3RlOg0KPiA+DQo+ID4gVGhlIGFib3ZlIGFzc3VtZXMgYW4gdW5zaWdu
-ZWQgY2hhciBhcyBpbnB1dCB0byBzdHJjbXAoKS4gSSBjb25zaWRlciB0aGF0DQo+ID4gYSBoeXBv
-dGhldGljYWwgcHJvYmxlbSBiZWNhdXNlICJjb21wYXJpbmciIHN0cmluZ3Mgd2l0aCB1cHBlciBi
-aXRzDQo+ID4gc2V0IGRvZXNuJ3QgcmVhbGx5IG1ha2Ugc2Vuc2UgaW4gcHJhY3RpY2UgKEhvdyBk
-b2VzIG9uZSBjb21wYXJlIEfDvG50ZXINCj4gPiBhZ2FpbnN0IEd1bnRlciA/IEFuZCBob3cgYWJv
-dXQgR8eWbnRlciA/KS4gT24gdGhlIG90aGVyIHNpZGUsIHRoZSBwcm9ibGVtDQo+ID4gb2JzZXJ2
-ZWQgaGVyZSBpcyByZWFsIGFuZCBpbW1lZGlhdGUuDQo+IA0KPiBQT1NJWCBkb2VzIGFjdHVhbGx5
-IHNwZWNpZnkgIkfDvG50ZXIiIHZzICJHdW50ZXIiLg0KPiANCj4gVGhlIHdheSBzdHJjbXAgaXMg
-c3VwcG9zZWQgdG8gd29yayBpcyB0byByZXR1cm4gdGhlIHNpZ24gb2YgdGhlDQo+IGRpZmZlcmVu
-Y2UgYmV0d2VlbiB0aGUgYnl0ZSB2YWx1ZXMgKCJ1bnNpZ25lZCBjaGFyIikuDQo+IA0KPiBCdXQg
-dGhhdCBzaWduIGhhcyB0byBiZSBjb21wdXRlZCBpbiAnaW50Jywgbm90IGluICdzaWduZWQgY2hh
-cicuDQo+IA0KPiBTbyB5ZXMsIHRoZSBtNjhrIGltcGxlbWVudGF0aW9uIGlzIGJyb2tlbiByZWdh
-cmRsZXNzLCBidXQgd2l0aCBhDQo+IHNpZ25lZCBjaGFyIGl0IGp1c3QgaGFwcGVuZWQgdG8gd29y
-ayBmb3IgdGhlIFVTLUFTQ0lJIGNhc2UgdGhhdCB0aGUNCj4gY3J5cHRvIGNhc2UgdGVzdGVkLg0K
-PiANCj4gSSB0aGluayB0aGUgcmVhbCBmaXggaXMgdG8ganVzdCByZW1vdmUgdGhhdCBicm9rZW4g
-aW1wbGVtZW50YXRpb24NCj4gZW50aXJlbHksIGFuZCByZWx5IG9uIHRoZSBnZW5lcmljIG9uZS4N
-Cg0KSSB3b25kZXIgaG93IG11Y2ggc2xvd2VyIGl0IGlzIC0gbTY4ayBpcyBsaWtlbHkgdG8gYmUg
-bWljcm9jb2RlZA0KYW5kIEkgZG9uJ3QgdGhpbmsgaW5zdHJ1Y3Rpb24gdGltaW5ncyBhcmUgYWN0
-dWFsbHkgYXZhaWxhYmxlLg0KVGhlIGZhc3Rlc3QgdmVyc2lvbiBwcm9iYWJseSB1c2VzIHN1Yngg
-KHdpdGggY2FycnkpIHRvIGdlbmVyYXRlDQowLy0xIGFuZCBsZWF2ZXMgK2RlbHRhIGZvciB0aGUg
-b3RoZXIgcmVzdWx0IC0gYnV0IGdldHRpbmcgdGhlDQpjb21wYXJlcyBhbmQgYnJhbmNoZXMgaW4g
-dGhlIHJpZ2h0IG9yZGVyIGlzIGhhcmQuDQoNCkkgYmVsaWV2ZSBzb21lIG9mIHRoZSBvdGhlciBt
-NjhrIGFzbSBmdW5jdGlvbnMgYXJlIGFsc28gbWlzc2luZw0KdGhlICJtZW1vcnkiICdjbG9iYmVy
-JyBhbmQgc28gY291bGQgZ2V0IG1pcy1vcHRpbWlzZWQuDQpXaGlsZSBJIGNhbiB3cml0ZSAob3Ig
-cmF0aGVyIGhhdmUgd3JpdHRlbikgbTY4ayBhc20gSSBkb24ndCBoYXZlDQphIGNvbXBpbGVyLg0K
-DQpJIGFsc28gc3VzcGVjdCB0aGF0IGFueSB4ODYgY29kZSB0aGF0IHVzZXMgJ3JlcCBzY2FzJyBp
-cyBnb2luZw0KdG8gYmUgc2xvdyBvbiBhbnl0aGluZyBtb2Rlcm4uDQoNCglEYXZpZA0KDQotDQpS
-ZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWls
-dG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMp
-DQo=
+On Tue, 2022-12-20 at 21:22 -0800, Peter Delevoryas wrote:
+> NC-SI 1.2 isn't officially released yet, but the DMTF takes way too long
+> to finalize stuff, and there's hardware out there that actually supports
+> this command (Just the Broadcom 200G NIC afaik).
+> 
+> The work in progress spec document is here:
+> 
+> https://www.dmtf.org/sites/default/files/standards/documents/DSP0222_1.2WIP90_0.pdf
+> 
+> The command code is 0x58, the command has no data, and the response
+> returns a variable-length array of MAC addresses for the BMC.
+> 
+> I've tested this out using QEMU emulation (I added the Mellanox OEM Get
+> MAC Address command to libslirp a while ago [1], although the QEMU code
+> to use it is still not in upstream QEMU [2] [3]. I worked on some more
+> emulation code for this as well), and on the new Broadcom 200G NIC.
+> 
+> The Nvidia ConnectX-7 NIC doesn't support NC-SI 1.2 yet afaik. Neither
+> do older versions in newer firmware, they all just report NC-SI 1.1.
+> 
+> Let me know what I can do to change this patch to be more suitable for
+> upstreaming, I'm happy to work on it more!
+
+This series is targeting the net-next tree, you should include such tag
+into the patch subjected.
+
+We have already submitted the networking pull request to Linus
+for v6.2 and therefore net-next is closed for new drivers, features,
+code refactoring and optimizations. We are currently accepting
+bug fixes only.
+
+Please repost when net-next reopens after Jan 2nd.
+
+RFC patches sent for review only are obviously welcome at any time.
+
+Thanks,
+
+Paolo
 
