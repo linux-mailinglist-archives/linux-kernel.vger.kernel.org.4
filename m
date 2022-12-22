@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4079654137
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F5B65412F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235473AbiLVMno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
+        id S235399AbiLVMmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235650AbiLVMnh (ORCPT
+        with ESMTP id S229620AbiLVMmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:43:37 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604AC22BF8;
-        Thu, 22 Dec 2022 04:43:34 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMAldat005760;
-        Thu, 22 Dec 2022 12:43:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=n4u0QORlDQIiNmr9PqyeFNaeaGjlinS5DG6hnZGlICQ=;
- b=J+QG8jkl5tAkYHMWziuti+rIE9AH2y+T52mw4Y+TSREMvfnAvrP5rGqEPy/ykrBVl5vC
- YCd6m98k0FGh9gLfBw5/L/KWOF42jyCZxJpNLHDqoLMH2Ll6DPUNHwyzLJN1mPhHZJT4
- dwKpasRvXJgiCSpbKBT6JNzt+BTKrBlyuTn/I3TGZEjENQby9B7iWbcJx49DBfFDS5rd
- aSNVg483Ehx518NtLDwBDjiL7CHdUmmEkCQa50gvIcTpTf7daW8kz/d1mFNCyswLB4aJ
- CjICv0hZBW37CbF1OoLCVXunB6hW994k9Q/HlUZa1BSPGL07vpW2a0sBedLV4ehzc/Ju Sw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm0wfjr21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:43:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BMChL4R020922
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:43:21 GMT
-Received: from youghand-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 22 Dec 2022 04:43:19 -0800
-From:   Youghandhar Chintala <quic_youghand@quicinc.com>
-To:     <ath10k@lists.infradead.org>, <johannes@sipsolutions.net>
-CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_mpubbise@quicinc.com>,
-        Youghandhar Chintala <quic_youghand@quicinc.com>
-Subject: [PATCH 2/2] wifi: ath10k: update the channel list if change in channel flags.
-Date:   Thu, 22 Dec 2022 18:12:21 +0530
-Message-ID: <20221222124221.30894-3-quic_youghand@quicinc.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221222124221.30894-1-quic_youghand@quicinc.com>
-References: <20221222124221.30894-1-quic_youghand@quicinc.com>
+        Thu, 22 Dec 2022 07:42:31 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACA5FCC;
+        Thu, 22 Dec 2022 04:42:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DA3DA17BDE;
+        Thu, 22 Dec 2022 12:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1671712948; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XmkqMDqoOV2vZvcbKcSsCfN2Q0eQg7RCp79KQBrfRkU=;
+        b=dSEDo37e26q8wi6ingQFJVEw8ZwHEMXjmoJnlKx5yU0EpR8/7YJpcefHYY7HrMFSWB6lDt
+        ycqha5Hk438wJBN8l31iaa6ZjoXMTfcfMzt8d4xt1jJqjk4w7T9mGQDqrByjlXPqi9U0Km
+        o9hwyEGzg18Ii5EMC0HnilSgQgQFD14=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1671712948;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XmkqMDqoOV2vZvcbKcSsCfN2Q0eQg7RCp79KQBrfRkU=;
+        b=mSsqGeCLP8TAnnwN4OgzqnF0AAYUERoi+NMcROyY2OO72miZv8uYpXvAr4Kv8QeeyabLxI
+        LvOBfeTtXTWOKNBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC4B413918;
+        Thu, 22 Dec 2022 12:42:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mBLbMbRQpGOCHQAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 22 Dec 2022 12:42:28 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 478E4A0732; Thu, 22 Dec 2022 13:42:28 +0100 (CET)
+Date:   Thu, 22 Dec 2022 13:42:28 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jack@suse.cz, kbusch@kernel.org
+Subject: Re: [PATCH RESEND v2 4/5] sbitmap: add sbitmap_find_bit to remove
+ repeat code in __sbitmap_get/__sbitmap_get_shallow
+Message-ID: <20221222124228.pt3x3yenrqi44dhr@quack3>
+References: <20221222143353.598042-1-shikemeng@huaweicloud.com>
+ <20221222143353.598042-5-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: vaiGVMP9aUTPZOxXjkcOTheW1XDqGMo1
-X-Proofpoint-GUID: vaiGVMP9aUTPZOxXjkcOTheW1XDqGMo1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-22_06,2022-12-22_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
- spamscore=0 suspectscore=0 phishscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212220111
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221222143353.598042-5-shikemeng@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are connection failures in hidden SSID case when the device is
-with default reg domain WW.
-For WW reg domain most of the 5 GHz channels are passive. When device
-listens to the beacon on that channel, the driver is updating its
-channel flag but firmware is not aware of it and firmware is not
-sending probes on that channels.
-Due to this, we are seeing connection failures when a device is trying
-to connect with hidden SSID AP.
-Register beacon hint notifier to the regulatory core so that driver get
-notified when there is a change in channel flags. Driver's notifier
-callback will send the updated flags to the firmware.
+On Thu 22-12-22 22:33:52, Kemeng Shi wrote:
+> There are three differences between __sbitmap_get and
+> __sbitmap_get_shallow when searching free bit:
+> 1. __sbitmap_get_shallow limit number of bit to search per word.
+> __sbitmap_get has no such limit.
+> 2. __sbitmap_get_shallow always searches with wrap set. __sbitmap_get set
+> wrap according to round_robin.
+> 3. __sbitmap_get_shallow always searches from first bit in first word.
+> __sbitmap_get searches from first bit when round_robin is not set
+> otherwise searches from SB_NR_TO_BIT(sb, alloc_hint).
+> 
+> Add helper function sbitmap_find_bit function to do common search while
+> accept "limit depth per word", "wrap flag" and "first bit to
+> search" from caller to support the need of both __sbitmap_get and
+> __sbitmap_get_shallow.
+> 
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 
-Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
-Tested-on: QCA6174 hw3.2 SDIO WLAN.RMH.4.4.1-00174
+One style nit below, otherwise feel free to add:
 
-Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
----
- drivers/net/wireless/ath/ath10k/mac.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
-index ec8d5b29bc72..91a957295456 100644
---- a/drivers/net/wireless/ath/ath10k/mac.c
-+++ b/drivers/net/wireless/ath/ath10k/mac.c
-@@ -3534,6 +3534,15 @@ static void ath10k_mac_update_channel_list(struct ath10k *ar,
- 	}
- }
- 
-+static void ath10k_mac_beacon_notifier(struct wiphy *wiphy)
-+{
-+	struct ieee80211_hw *hw = wiphy_to_ieee80211_hw(wiphy);
-+	struct ath10k *ar = hw->priv;
-+
-+	if (ath10k_update_channel_list(ar))
-+		ath10k_warn(ar, "failed to update channel list\n");
-+}
-+
- static void ath10k_reg_notifier(struct wiphy *wiphy,
- 				struct regulatory_request *request)
- {
-@@ -10286,6 +10295,8 @@ int ath10k_mac_register(struct ath10k *ar)
- 			goto err_unregister;
- 	}
- 
-+	ar->hw->wiphy->beacon_hint_notifier = ath10k_mac_beacon_notifier;
-+
- 	return 0;
- 
- err_unregister:
+
+> @@ -215,11 +211,32 @@ static int __sbitmap_get(struct sbitmap *sb, unsigned int alloc_hint)
+>  		alloc_hint = 0;
+>  		if (++index >= sb->map_nr)
+>  			index = 0;
+> +
+>  	}
+
+Pointless empty line here...
+
+								Honza
 -- 
-2.38.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
