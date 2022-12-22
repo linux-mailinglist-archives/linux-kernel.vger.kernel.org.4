@@ -2,161 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF71653EBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA36653EBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235325AbiLVLJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:09:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S235386AbiLVLKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234894AbiLVLJm (ORCPT
+        with ESMTP id S235379AbiLVLJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:09:42 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96062B861;
-        Thu, 22 Dec 2022 03:09:40 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A354F6602C5F;
-        Thu, 22 Dec 2022 11:09:37 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671707378;
-        bh=9AUHReu8S/xX7R3+pH3TTsXI6e8ZAG2uSiP5k+96Fzc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AXeZPwjilwQjk5/eDQ0HLfrUo6f0gL/fVzzlGfEL/oKzAx0m0pg6vXy8Fgi97eEhq
-         0jOmqbpJNk0LF/AJTCoK/IUzlAL48XErbsfd5z5LiFPSsdarfb353dIdJHrUByqzTs
-         Z7kIcsC0yqBmUGWS/W7eTjlNv0B5Arbul58aFatvsOv1PLg1Rmux+gwYPspf7/Jv1j
-         mnAjv3r28UFJs+KMQdmXpairBPWsmtXXjVN5ZiE/hx1pso07w7mItLVIcvwMN36cMb
-         zUNRQXbzi+nFlBf2XgXiCNZ7LxwA4y14OyOaLv8uBYzCMCozTgt8Qn41k1cAD7JKYd
-         +RzRbZdL7PSOg==
-Message-ID: <31b2946b-d4f2-5e5b-a107-45b3454c601b@collabora.com>
-Date:   Thu, 22 Dec 2022 12:09:34 +0100
+        Thu, 22 Dec 2022 06:09:56 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D5A28720;
+        Thu, 22 Dec 2022 03:09:54 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so1559754pjd.0;
+        Thu, 22 Dec 2022 03:09:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PS18Odh7yIwGitQspmqvEHIFeSofJlERTxp58aaKy5s=;
+        b=JNfL6+soyHU08XT3Q00FBuAnFCrt2YhCmg6H0GelUhB2DDwlJk9QiOIm5+CjFxC0JK
+         d3FkKEnHMSGlIvygDeT1iyZAgtk19dX595URUVTChdSuQ/Tt0+I7hmDzP9jO/P3yuiHf
+         cni/Ic2/jc89PZCahqR16mNk56jy7KhIKSgg1/T8T4IwUwQub9yW8nOhyfaKhz/0S71k
+         QoQI3eHSegX/rtTmlFyWI09WDLptLHGibsMhZHME57XMkdzrOvFsntIoVwnC2r9eXMm9
+         Ron9OpCuYSaB2NJrMmb+PNwMJxu20Rmf2vxiRy+EoctCjbSp0/OLfBWUUrO0i5w9znSN
+         UzIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PS18Odh7yIwGitQspmqvEHIFeSofJlERTxp58aaKy5s=;
+        b=GNYO7iUHKkoxkyAKXPDPMJVHjh/PlxFAPYEjGxANSH27erIXkD+1LnL/+iPnzrPUS2
+         Zg6TW/IjhIgbsS8o5rjATfXZ5Hv8v1vJOh0TNAgmXRqwopyiO4QFxj3lr8N5L29XaOyC
+         YRByJDqe4kPmHQUNmjroBdZFc3JpFVQX0pDwQylHD3QH9ucMVrMR6jrLalbsd0BbWbDT
+         9ap0zYUSuxoGUN6jcYve3gkvmZ5qEh7Ju4l48ShlplmENF0dB1Bz+kIdHeHDi70PV4Vm
+         xlM6T9DWSXh3Cm36csyZi5GLQk2cGJzw3uJavj79GpNrCH2c5BU5KvdbDNCa5Gc2dR1K
+         6wLA==
+X-Gm-Message-State: AFqh2kpu394AZ3wYMZqAFQZsYGF6a5BwVsP35i+zUxcBlePr3Bvutq4Q
+        xJCCd8LAz7BABPIRiTFJwnfWTybiKBba7Gka
+X-Google-Smtp-Source: AMrXdXtHjQXwPpxASxolDnhbQYO8T3qdfZRDFMMyilqqoxuvFUBTdi6eaNm5RT2AJtvwleQPpsnr9Q==
+X-Received: by 2002:a05:6a20:8e10:b0:a4:a73e:d1e2 with SMTP id y16-20020a056a208e1000b000a4a73ed1e2mr8261977pzj.57.1671707394004;
+        Thu, 22 Dec 2022 03:09:54 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id w185-20020a6230c2000000b0057621a437d7sm443905pfw.116.2022.12.22.03.09.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 03:09:53 -0800 (PST)
+Message-ID: <8f0fec41-d302-b261-ce5a-83692f1238b6@gmail.com>
+Date:   Thu, 22 Dec 2022 19:09:45 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 2/3] ASoC: SOF: mediatek: Support mt8188 platform
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Chunxu Li <chunxu.li@mediatek.com>,
-        Dan Carpenter <error27@gmail.com>,
-        YC Hung <yc.hung@mediatek.com>,
-        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221222072150.10627-1-tinghan.shen@mediatek.com>
- <20221222072150.10627-3-tinghan.shen@mediatek.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [PATCH v2 06/15] KVM: vmx/pmu: Emulate MSR_ARCH_LBR_CTL for guest
+ Arch LBR
 Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221222072150.10627-3-tinghan.shen@mediatek.com>
+To:     Yang Weijiang <weijiang.yang@intel.com>
+Cc:     kan.liang@linux.intel.com, wei.w.wang@intel.com, seanjc@google.com,
+        pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221125040604.5051-1-weijiang.yang@intel.com>
+ <20221125040604.5051-7-weijiang.yang@intel.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20221125040604.5051-7-weijiang.yang@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/12/22 08:21, Tinghan Shen ha scritto:
-> Add support of SOF on MediaTek MT8188 SoC.
-> MT8188 ADSP integrates with a single core Cadence HiFi-5 DSP.
-> The IPC communication between AP and DSP is based on shared DRAM and
-> mailbox interrupt.
-> 
-> The change in the mt8186.h is compatible on both mt8186 and
-> mt8188. The register controls booting the DSP core with the
-> default address or the user specified address. Both mt8186
-> and mt8188 should boot with the user specified boot in the driver.
-> The usage of the register is the same on both SoC, but the
-> control bit is different on mt8186 and mt8188, which is bit 1 on mt8186
-> and bit 0 on mt8188. Configure the redundant bit has noside effect
-> on both SoCs.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> ---
->   sound/soc/sof/mediatek/mt8186/mt8186.c | 17 +++++++++++++++++
->   sound/soc/sof/mediatek/mt8186/mt8186.h |  3 ++-
->   2 files changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/sof/mediatek/mt8186/mt8186.c b/sound/soc/sof/mediatek/mt8186/mt8186.c
-> index 79da25725987..af0dfc2fc4cc 100644
-> --- a/sound/soc/sof/mediatek/mt8186/mt8186.c
-> +++ b/sound/soc/sof/mediatek/mt8186/mt8186.c
-> @@ -625,8 +625,25 @@ static const struct sof_dev_desc sof_of_mt8186_desc = {
->   	.ops = &sof_mt8186_ops,
->   };
->   
-> +static const struct sof_dev_desc sof_of_mt8188_desc = {
-> +	.ipc_supported_mask	= BIT(SOF_IPC),
-> +	.ipc_default		= SOF_IPC,
-> +	.default_fw_path = {
-> +		[SOF_IPC] = "mediatek/sof",
-> +	},
-> +	.default_tplg_path = {
-> +		[SOF_IPC] = "mediatek/sof-tplg",
-> +	},
-> +	.default_fw_filename = {
-> +		[SOF_IPC] = "sof-mt8188.ri",
-> +	},
-> +	.nocodec_tplg_filename = "sof-mt8188-nocodec.tplg",
-> +	.ops = &sof_mt8186_ops,
-> +};
-> +
->   static const struct of_device_id sof_of_mt8186_ids[] = {
->   	{ .compatible = "mediatek,mt8186-dsp", .data = &sof_of_mt8186_desc},
-> +	{ .compatible = "mediatek,mt8188-dsp", .data = &sof_of_mt8188_desc},
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, sof_of_mt8186_ids);
-> diff --git a/sound/soc/sof/mediatek/mt8186/mt8186.h b/sound/soc/sof/mediatek/mt8186/mt8186.h
-> index 98b2965e5ba6..886d687449e3 100644
-> --- a/sound/soc/sof/mediatek/mt8186/mt8186.h
-> +++ b/sound/soc/sof/mediatek/mt8186/mt8186.h
-> @@ -52,7 +52,8 @@ struct snd_sof_dev;
->   #define ADSP_PRID			0x0
->   #define ADSP_ALTVEC_C0			0x04
->   #define ADSP_ALTVECSEL			0x0C
-> -#define ADSP_ALTVECSEL_C0		BIT(1)
-> +/* BIT(1) for mt8186. BIT(0) for mt8188 */
+On 25/11/2022 12:05 pm, Yang Weijiang wrote:
+>   static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   {
+>   	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> @@ -377,6 +402,14 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   	case MSR_ARCH_LBR_DEPTH:
+>   		msr_info->data = lbr_desc->records.nr;
+>   		return 0;
+> +	case MSR_ARCH_LBR_CTL:
+> +		if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR)) {
+> +			WARN_ON_ONCE(!msr_info->host_initiated);
 
-We can be clearer here:
+Why we need this warning even in the format of WARN_ON_ONCE() ?
+And why not for MSR_ARCH_LBR_DEPTH msr ?
 
-#define MT8188_ADSP_ALTVECSEL_C0	BIT(0)
-#define MT8186_ADSP_ALTVECSEL_C0	BIT(1)
-
-/*
-  * On MT8188, BIT(1) is not evaluated and on MT8186 BIT(0) is not evaluated:
-  * We can simplify the driver by safely setting both bits regardless of the SoC.
-  */
-#define ADSP_ALTVECSEL_C0		(MT8188_ADSP_ALTVECSEL_C0 |
-					 MT8186_ADSP_ALTVECSEL_C0)
-
-...so that we don't have to check the commit history to understand what's going
-on here, and it becomes clear that ALTVECSEL is not both bits, but one of them.
-
-Cheers,
-Angelo
-
+> +			msr_info->data = 0;
+> +		} else {
+> +			msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
+> +		}
+> +		return 0;
