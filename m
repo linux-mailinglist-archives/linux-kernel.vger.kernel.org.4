@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B560653C80
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7C7653C83
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbiLVH0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 02:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
+        id S234636AbiLVH3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 02:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiLVH0I (ORCPT
+        with ESMTP id S229682AbiLVH3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 02:26:08 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A8538B4;
-        Wed, 21 Dec 2022 23:26:07 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id x66so650596pfx.3;
-        Wed, 21 Dec 2022 23:26:07 -0800 (PST)
+        Thu, 22 Dec 2022 02:29:20 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A322BDA
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:29:18 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-43ea89bc5d8so12951507b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:29:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=C1M6sI8nGjn1AQZW7MjYI4O6nfdLnBf5J3+wPQ6ghb0=;
-        b=KZRpJQE2dMcoZOUADI+9CK3UIfA+yeOJRhVV06WaoBzBZFtg5CdZP5hSE68WLOOdXm
-         rG8tFq14LpuMpsAzqBqXWMdbGZYMyGIQka9dtDTu9Z0iNl1g7AiYDphbg44aUydjiiaS
-         TuK6DrJjGI1cOwkQxLoSaKogyEP3yeyP+rasQspiBvXFLV8sNUIRPw7oj6UtTpLhfUV6
-         7xz/qHNDbXb8f2Zqsoz+dIcgYoWolASTcAcCD70/oNGbes+I0+4ZkgcXp+k9QUtqaAUC
-         NyLYQmrC52cU6+XUGtmFw5AxyCxtKkWHiAUMIQXHDjVZZb2Z4YPqvLKlXoylD3mbxDCh
-         OgJg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YDBQOU+0luLi27shrHHDO2SRv4ai6dz5pCa52is39dQ=;
+        b=iyErmQImVKKNNTRt+pdj6Ntw0fQgB9SlSnTHvhEXKX9A1ANKW81xBXTTwAdp7y2JDx
+         u6bWXDVQuSRQjViyREmniY3etXM4sCrTuCKcLWSBbs2hRUH4CNCuWooUyMkW3gVccYEt
+         7K4yX2KFPokD1wGq7s9sSWJNSHYUbdlsiDfEjILmWobBEJnLEE5JkKpwvVAd93q665gT
+         cNuCR8oY7J1lWy4ntIfDwlL/8p6TJ+dQMm7RC/pX4Z5nCOyFeagZE49TF4JrNdLLW0s6
+         rSYu7mEakG3h5ZTcpaFegNCEla3Mku56Zw59AYRALgXhl1zfa9ZmaGU6XRoVh96alT4o
+         llIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C1M6sI8nGjn1AQZW7MjYI4O6nfdLnBf5J3+wPQ6ghb0=;
-        b=13v8N6MhXyuD7XNvmql05xK8xp49um2Fe+wFzsCpFkHwRl2WTl7sbCCeM1IvCZmMBb
-         Ki09o5wldhZi/tmEsg2o17jRNpdQYskdJAcIMaX+KQTOnOi9I83NUKmC02+kcFJbrJRn
-         9rQy1ybCwk/gfGmDfsyeaUd5yqiEehjit0i5AyGVM9EfenmI1rlQLhreYKLMR4rysegU
-         InMw/qls+m1yfO1aKzQ5bNH7MEfKeBUiUVUL9TNnm8PP7OODUe6f1suLYyye8JfGVTzq
-         6KN3LeFtjGhDvArsdigzokOJB/qRlHv6LMYyO4UYWdhKIyWfvoLv90Zm0GgpgFwnW5Kx
-         r4Fw==
-X-Gm-Message-State: AFqh2kq0605eupuvKR9z/keIBpsThISVg/8XBKZ93bvBIMqVAzMtaEHK
-        hD1Ev/k7AaraZoYZjnSq9MI=
-X-Google-Smtp-Source: AMrXdXuMdbHUhQAzE0MiH3d0myApJ7/oKLKYNYQRn7zJ2MLcR9aEZ57SMdbpCEwj2o/zAnLNy4GSwg==
-X-Received: by 2002:a05:6a00:3691:b0:577:6264:9d0f with SMTP id dw17-20020a056a00369100b0057762649d0fmr5425480pfb.6.1671693967081;
-        Wed, 21 Dec 2022 23:26:07 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.4])
-        by smtp.gmail.com with ESMTPSA id j186-20020a62c5c3000000b00573eb4a9a66sm11815117pfg.2.2022.12.21.23.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 23:26:06 -0800 (PST)
-From:   korantwork@gmail.com
-To:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lpieralisi@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-Subject: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
-Date:   Thu, 22 Dec 2022 15:26:03 +0800
-Message-Id: <20221222072603.1175248-1-korantwork@gmail.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YDBQOU+0luLi27shrHHDO2SRv4ai6dz5pCa52is39dQ=;
+        b=44E0/l77U36+AjNxd7Furq3JGCNbbmGLTReNQRQkkl7MZaACx4SUaVMqif2lCQTxOU
+         kR+2EcxJTgAf37vNHC7CxjhI2tcDikx377UcHpjPttomLLKILjZyDg/tWAaiCO4vzerr
+         n8rnFaGN7vi9Bl3BZ24ah9NL/kSX12Hj4EtbkedzDYP0wH3D0AwBsqsCoMSGwqXuuVcU
+         2NmnMQDDO719/99N5iQtuR9E+qnT+7BpADX++xKgjxxdZPoGGkVODENxkQ+7uHHv+EB4
+         lzl11u3kLBK3wsmKlDFHWqrXhkrAnQMvhrElHRKhob1ehxKv59k7Oe6DxtlhqX47hiDv
+         qQuw==
+X-Gm-Message-State: AFqh2koqcQo2zXseUBs8/bhfWpmhHhd2GdaYC6ZCwR139hmu96yrPzUz
+        3/ogQ+ofm3lK7a++wvPOIUwR6BHIZmQ=
+X-Google-Smtp-Source: AMrXdXsw3K5e0ejM3+wRydXNF+NfW/0OfhSvRepRxGDF2lEIac10qPBfPK6x49VmTKZSNK9p4LXq5kKUgok=
+X-Received: from hhhuuu.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:c80])
+ (user=hhhuuu job=sendgmr) by 2002:a0d:ca93:0:b0:44d:26dc:2fc7 with SMTP id
+ m141-20020a0dca93000000b0044d26dc2fc7mr359175ywd.333.1671694158099; Wed, 21
+ Dec 2022 23:29:18 -0800 (PST)
+Date:   Thu, 22 Dec 2022 07:29:12 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221222072912.1843384-1-hhhuuu@google.com>
+Subject: [PATCH v2] usb: xhci: Check endpoint is valid before dereferencing it
+From:   Jimmy Hu <hhhuuu@google.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jimmy Hu <hhhuuu@google.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,57 +67,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinghui Li <korantli@tencent.com>
+When the host controller is not responding, all URBs queued to all
+endpoints need to be killed. This can cause a kernel panic if we
+dereference an invalid endpoint.
 
-Commit ee81ee84f873("PCI: vmd: Disable MSI-X remapping when possible")
-disable the vmd MSI-X remapping for optimizing pci performance.However,
-this feature severely negatively optimized performance in multi-disk
-situations.
+Fix this by using xhci_get_virt_ep() helper to find the endpoint and
+checking if the endpoint is valid before dereferencing it.
 
-In FIO 4K random test, we test 1 disk in the 1 CPU
+[233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
+[233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
 
-when disable MSI-X remapping:
-read: IOPS=1183k, BW=4622MiB/s (4847MB/s)(1354GiB/300001msec)
-READ: bw=4622MiB/s (4847MB/s), 4622MiB/s-4622MiB/s (4847MB/s-4847MB/s),
-io=1354GiB (1454GB), run=300001-300001msec
+[233311.853964] pc : xhci_hc_died+0x10c/0x270
+[233311.853971] lr : xhci_hc_died+0x1ac/0x270
 
-When not disable MSI-X remapping:
-read: IOPS=1171k, BW=4572MiB/s (4795MB/s)(1340GiB/300001msec)
-READ: bw=4572MiB/s (4795MB/s), 4572MiB/s-4572MiB/s (4795MB/s-4795MB/s),
-io=1340GiB (1438GB), run=300001-300001msec
+[233311.854077] Call trace:
+[233311.854085]  xhci_hc_died+0x10c/0x270
+[233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
+[233311.854105]  call_timer_fn+0x50/0x2d4
+[233311.854112]  expire_timers+0xac/0x2e4
+[233311.854118]  run_timer_softirq+0x300/0xabc
+[233311.854127]  __do_softirq+0x148/0x528
+[233311.854135]  irq_exit+0x194/0x1a8
+[233311.854143]  __handle_domain_irq+0x164/0x1d0
+[233311.854149]  gic_handle_irq.22273+0x10c/0x188
+[233311.854156]  el1_irq+0xfc/0x1a8
+[233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
+[233311.854185]  cpuidle_enter_state+0x1f0/0x764
+[233311.854194]  do_idle+0x594/0x6ac
+[233311.854201]  cpu_startup_entry+0x7c/0x80
+[233311.854209]  secondary_start_kernel+0x170/0x198
 
-However, the bypass mode could increase the interrupts costs in CPU.
-We test 12 disks in the 6 CPU,
-
-When disable MSI-X remapping:
-read: IOPS=562k, BW=2197MiB/s (2304MB/s)(644GiB/300001msec)
-READ: bw=2197MiB/s (2304MB/s), 2197MiB/s-2197MiB/s (2304MB/s-2304MB/s),
-io=644GiB (691GB), run=300001-300001msec
-
-When not disable MSI-X remapping:
-read: IOPS=1144k, BW=4470MiB/s (4687MB/s)(1310GiB/300005msec)
-READ: bw=4470MiB/s (4687MB/s), 4470MiB/s-4470MiB/s (4687MB/s-4687MB/s),
-io=1310GiB (1406GB), run=300005-300005msec
-
-Signed-off-by: Xinghui Li <korantli@tencent.com>
+Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jimmy Hu <hhhuuu@google.com>
 ---
- drivers/pci/controller/vmd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/usb/host/xhci-ring.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index e06e9f4fc50f..9f6e9324d67d 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -998,8 +998,7 @@ static const struct pci_device_id vmd_ids[] = {
- 		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP,},
- 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_28C0),
- 		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW |
--				VMD_FEAT_HAS_BUS_RESTRICTIONS |
--				VMD_FEAT_CAN_BYPASS_MSI_REMAP,},
-+				VMD_FEAT_HAS_BUS_RESTRICTIONS,},
- 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x467f),
- 		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
- 				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index ddc30037f9ce..f5b0e1ce22af 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+ 	struct xhci_virt_ep *ep;
+ 	struct xhci_ring *ring;
+ 
+-	ep = &xhci->devs[slot_id]->eps[ep_index];
++	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
++	if (!ep)
++		return;
++
+ 	if ((ep->ep_state & EP_HAS_STREAMS) ||
+ 			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
+ 		int stream_id;
 -- 
-2.39.0
+2.39.0.314.g84b9a713c41-goog
 
