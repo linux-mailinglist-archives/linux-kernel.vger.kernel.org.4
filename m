@@ -2,147 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1017D65407B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8770F654020
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235637AbiLVL5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54820 "EHLO
+        id S235577AbiLVLyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235538AbiLVLzv (ORCPT
+        with ESMTP id S235576AbiLVLwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:55:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3292CCAF;
-        Thu, 22 Dec 2022 03:49:58 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E4D816602D1D;
-        Thu, 22 Dec 2022 11:49:55 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671709797;
-        bh=PXg/FppXIPAwQaA1oQS+Wf5hDsh7ZOHb0BNVjLOTW5Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f9W6n2Y+3XLDFPStXfD7nv1eW8u2Cq6hou75Mr0KBNGbXgRhbFUvBDL0gRaXjmkg7
-         UMOAtHy9RpleUcKMqypwUm+7FAP+7WV94SPPDS+iflSM0R/3B0aYQ+zVzsCrD1kbCN
-         GLQRSRhrcBvuMao4KMZkkxqhvQDXv5uRUpuNxj/JtHPg+K9qzLfeMANU/PKqlwK/IW
-         jWq29M4zs7VdJhfxxuCcltCFciWJYoREentf1WHh1zoMt7+ZBmdnEzDUFeSiN8AEmd
-         crxVtp/VRrYmXTljITVZtiquORGQRHUQmrruNQeeitOGEvtUI2kb2G0cp9sMJ1mkVR
-         u8wQ8i1Fqflcw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v1 25/25] clk: mediatek: clk-mt7986-topckgen: Migrate to mtk_clk_simple_probe()
-Date:   Thu, 22 Dec 2022 12:48:57 +0100
-Message-Id: <20221222114857.120060-26-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221222114857.120060-1-angelogioacchino.delregno@collabora.com>
-References: <20221222114857.120060-1-angelogioacchino.delregno@collabora.com>
+        Thu, 22 Dec 2022 06:52:40 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253682B268;
+        Thu, 22 Dec 2022 03:49:16 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Nd7rQ5mnrz4f3jJ9;
+        Thu, 22 Dec 2022 19:49:10 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP4 (Coremail) with SMTP id gCh0CgBXDbE4RKRjA31EAQ--.22363S2;
+        Thu, 22 Dec 2022 19:49:13 +0800 (CST)
+Subject: Re: [PATCH RESEND v2 2/5] sbitmap: remove redundant check in
+ __sbitmap_queue_get_batch
+To:     Jan Kara <jack@suse.cz>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kbusch@kernel.org
+References: <20221222143353.598042-1-shikemeng@huaweicloud.com>
+ <20221222143353.598042-3-shikemeng@huaweicloud.com>
+ <20221222112319.26wtwxeyry6ybvse@quack3>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <792b0caa-0e99-94b2-60bf-90ad719c63d7@huaweicloud.com>
+Date:   Thu, 22 Dec 2022 19:49:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221222112319.26wtwxeyry6ybvse@quack3>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: gCh0CgBXDbE4RKRjA31EAQ--.22363S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1rJw15Cry8tw1xJrWUArb_yoW8uw1xp3
+        yUJa47Gw4vqFy7Zws7A3yUZF10ya1vkry3Gr4fKrZIkr1YkF1Yqr18Ca1S9F1xuFnYy3W7
+        Z3yrXas7u3y5XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUzsqWUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no more non-common calls in clk_mt7986_topckgen_probe():
-migrate this driver to mtk_clk_simple_probe().
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clk/mediatek/clk-mt7986-topckgen.c | 52 +++++-----------------
- 1 file changed, 12 insertions(+), 40 deletions(-)
+Hi Jan, thanks for review.
+on 12/22/2022 7:23 PM, Jan Kara wrote:
+>> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+>> index cb5e03a2d65b..11e75f4040fb 100644
+>> --- a/lib/sbitmap.c
+>> +++ b/lib/sbitmap.c
+>> @@ -518,11 +518,9 @@ unsigned long __sbitmap_queue_get_batch(struct sbitmap_queue *sbq, int nr_tags,
+>>  
+>>  			get_mask = ((1UL << nr_tags) - 1) << nr;
+>>  			val = READ_ONCE(map->word);
+>> -			do {
+>> -				if ((val & ~get_mask) != val)
+>> -					goto next;
+>> -			} while (!atomic_long_try_cmpxchg(ptr, &val,
+>> -							  get_mask | val));
+>> +			while (!atomic_long_try_cmpxchg(ptr, &val,
+>> +							  get_mask | val))
+>> +				;
+>>  			get_mask = (get_mask & ~val) >> nr;
+>>  			if (get_mask) {
+>>  				*offset = nr + (index << sb->shift);
+> 
+> So I agree this will result in correct behavior but it can change
+> performance. In the original code, we end up doing
+> atomic_long_try_cmpxchg() only for words where we have a chance of getting
+> all tags allocated. Now we just accept any word where we could allocate at
+> least one bit. Frankly the original code looks rather restrictive and also
+> the fact that we look only from the first zero bit in the word looks
+> unnecessarily restrictive so maybe I miss some details about what's
+> expected from __sbitmap_queue_get_batch(). So all in all I wanted to point
+> out this needs more scrutiny from someone understanding better expectations
+> from __sbitmap_queue_get_batch().
+In the very beginning, __sbitmap_queue_get_batch will return if we only
+get partial tags allocated. Recent commit fbb564a557809 ("lib/sbitmap: Fix
+invalid loop in __sbitmap_queue_get_batch()") thought we may reuse busying
+bits in old codes and change behavior of __sbitmap_queue_get_batch() to get
+all tags. However we will not reuse busying bits in old codes actually. So
+I try to revert this wrong fix and keep the behavior of
+__sbitmap_queue_get_batch() as it designed to be at beginning.
 
-diff --git a/drivers/clk/mediatek/clk-mt7986-topckgen.c b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-index bf3088e6d9e3..286418aa00a0 100644
---- a/drivers/clk/mediatek/clk-mt7986-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-@@ -290,52 +290,24 @@ static const struct mtk_mux top_muxes[] = {
- 			     0x1C4, 5),
- };
- 
--static int clk_mt7986_topckgen_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
--	int r;
--	void __iomem *base;
--	int nr = ARRAY_SIZE(top_fixed_clks) + ARRAY_SIZE(top_divs) +
--		 ARRAY_SIZE(top_muxes);
--
--	base = of_iomap(node, 0);
--	if (!base) {
--		pr_err("%s(): ioremap failed\n", __func__);
--		return -ENOMEM;
--	}
--
--	clk_data = mtk_alloc_clk_data(nr);
--	if (!clk_data)
--		return -ENOMEM;
--
--	mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
--				    clk_data);
--	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
--	mtk_clk_register_muxes(top_muxes, ARRAY_SIZE(top_muxes), node,
--			       &mt7986_clk_lock, clk_data, &pdev->dev);
--
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--
--	if (r) {
--		pr_err("%s(): could not register clock provider: %d\n",
--		       __func__, r);
--		goto free_topckgen_data;
--	}
--	return r;
--
--free_topckgen_data:
--	mtk_free_clk_data(clk_data);
--	return r;
--}
-+static const struct mtk_clk_desc topck_desc = {
-+	.fixed_clks = top_fixed_clks,
-+	.num_fixed_clks = ARRAY_SIZE(top_fixed_clks),
-+	.factor_clks = top_divs,
-+	.num_factor_clks = ARRAY_SIZE(top_divs),
-+	.mux_clks = top_muxes,
-+	.num_mux_clks = ARRAY_SIZE(top_muxes),
-+	.clk_lock = &mt7986_clk_lock,
-+};
- 
- static const struct of_device_id of_match_clk_mt7986_topckgen[] = {
--	{ .compatible = "mediatek,mt7986-topckgen", },
-+	{ .compatible = "mediatek,mt7986-topckgen", .data = &topck_desc },
- 	{}
- };
- 
- static struct platform_driver clk_mt7986_topckgen_drv = {
--	.probe = clk_mt7986_topckgen_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt7986-topckgen",
- 		.of_match_table = of_match_clk_mt7986_topckgen,
+Besides, if we keep to get all tags,the check below is redundant.
+	get_mask = (get_mask & ~ret) >> nr;
+	if (get_mask) {
+		...
+	}
+As we only reach here if we get all tags and the check above will always
+pass. So this check in old codes should be removed.
+
 -- 
-2.39.0
+Best wishes
+Kemeng Shi
 
