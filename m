@@ -2,310 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63911653BB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 06:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC502653BCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 06:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbiLVFRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 00:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S231221AbiLVFkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 00:40:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235153AbiLVFRH (ORCPT
+        with ESMTP id S229531AbiLVFkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 00:17:07 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B14186B7;
-        Wed, 21 Dec 2022 21:13:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671686033; x=1703222033;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=gjDOTrejfvU1JS+kyRfSzyrPM6HthrD4LYyGBfTHWgU=;
-  b=VNWMvRqHlqkk+GwV1cM6bSSBJKIFrMlSV8mhiEG+B6kurRtTzUjWXP0W
-   43OaVO9NKI5ntLIxOnXEZxsd8uQxDZTrsmfoKOPcwSxEc3vr9uiNIf5QH
-   iChhlLnCqTf0IM0ylxNIMIGagkljnStXIFniM36V4Ty2xQRs9uDioII1I
-   h5CpCGf77HuV8IftniPu84D7QoyyNbIp5u+xaBp5ywV8K5n3ANLqyG43I
-   wpUksi0vp7QqZjeYlvj/jwNWDyFvABCmIXbY4uT5QdP84JP5/piaRDpM2
-   Tkha3MtLZBb/pxYr0GI8IRUIxjEhEqFMhedmaieUyvzki338sWMvE3MYD
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="321228018"
-X-IronPort-AV: E=Sophos;i="5.96,264,1665471600"; 
-   d="scan'208";a="321228018"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 21:13:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="645080042"
-X-IronPort-AV: E=Sophos;i="5.96,264,1665471600"; 
-   d="scan'208";a="645080042"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga007.jf.intel.com with ESMTP; 21 Dec 2022 21:13:52 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 21 Dec 2022 21:13:52 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 21 Dec 2022 21:13:51 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 21 Dec 2022 21:13:51 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 21 Dec 2022 21:13:49 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZP0njF6WAmqS7cFjy/VdNEIObt1kkKHyMO8yb6DjMPCBGZEDSy8YQ+uP7ZnIAKLShk05aMW6sGNYlciPInooc9An9Rc/1bGta/ZP6Z53XtGuYs3E6w+Gfg2ugRQi1ARwhzPrl66SYcfohqhXg2ceO6qUVjw7k7ZOjsCmcvQK8JZZUksTav/3nUNq0Cgu+0HKDCODo6zDrfDEOW5cS0jv76rjGjLC8dyI4JlwPzc9x8fA3wYil0mNoBLhfPsawS5KHpD+ApnrqsKlXcAGyTHOvczGdas5hSmXYGwCNLNxVsi1Kp0Vnsi2Xa+2Or5cDNSJLWFCG00onPTbl/KONtoiTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s8b608D77EZGKNyl200jVR8vldWynzDDunqC7STo9tQ=;
- b=INBJazG1zn3TBbnKc0mIN0vY+FtL7ylRYTpxour0EH1Chy/cbLvWJvW4Q/2D6shZ0/YcQ+e75Fmrz73unenjJY14agtnwiQwHKbD7CNo0cNVEmXcare0wymuTTwIWh/U+qRwxjwdhqTI1w+RW4xGdWS+qkF7BXEetBqz10NyR7IHSvWAhYBAJgJEvIuTnNbwgOLfVM5hkgWZLj5FnOyJT8x0eFXkiftei9HlgsnSsdHUHyyGOvNHKdDUwWKv1TdG4HbpVsTIcbLosjHMk+sM9Rj70XiDXuBZXWOZgPvoyYEPwVm5YIYyGolvJRpYYVO3YcQ6+7JIiTBP/aM5EHFavA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by CY8PR11MB7265.namprd11.prod.outlook.com (2603:10b6:930:98::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
- 2022 05:13:47 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::288d:5cae:2f30:828b]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::288d:5cae:2f30:828b%6]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
- 05:13:47 +0000
-Date:   Wed, 21 Dec 2022 21:13:43 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-CC:     Evgeniy Dushistov <dushistov@mail.ru>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH v4 2/3] fs/ufs: Change the signature of ufs_get_page()
-Message-ID: <Y6Pnh98KZj0D+FUR@iweiny-desk3>
-References: <20221221172802.18743-1-fmdefrancesco@gmail.com>
- <20221221172802.18743-3-fmdefrancesco@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221221172802.18743-3-fmdefrancesco@gmail.com>
-X-ClientProxiedBy: BY5PR17CA0061.namprd17.prod.outlook.com
- (2603:10b6:a03:167::38) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Thu, 22 Dec 2022 00:40:01 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B88713EBC;
+        Wed, 21 Dec 2022 21:40:00 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id x11so1231061lfn.0;
+        Wed, 21 Dec 2022 21:40:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q2wMW4A7w/lGCoVRU7jKGf5pziTEUEGOvTu5cpMPFGo=;
+        b=XgkriJeRzw3TuTEkJlMTg7lt3CW6sVRjPycUFqcEpyL9FvVk6lsAQHyOkjLZdi3NcL
+         PMS3Nois69/vR34Dw3LTp+uiPy5L3WhXv9Nl5PiLTx9ZxhUQhKV9eiYzGfCSQFMUcPrq
+         /luZFu22J2bkQzC1JWnu8Uih1qP+bznHo/k6aa9epHZhKh3vysuyz+sE4wz/xpej77fS
+         E2Vr2zX8v3t8nlnizJR69Jf6acjEw06Pq/q0aWvuReRV2kGx6mdS97RJg3kKEfpvHac3
+         YglDIippPwBDIZFnzm5TkHUZLyReUdHDUbZb6Pyblo4lvyDK5OYw7Q3Ju8T6krkqOcpN
+         drCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q2wMW4A7w/lGCoVRU7jKGf5pziTEUEGOvTu5cpMPFGo=;
+        b=LQGJXv8k+Sjci7fAnEDkDNXVai4EsQc/QXaierE6J27OhmKPAENvM8JtSOpz6kLqqc
+         ZKoSbTwDip7kNH8wHFsBPAwpfsVZl6Ub/fw8zCbtTllC7fgcp0kq3vSh7YritxXfCnxP
+         CzGygBrxZMjHXIURb/8SLorEoyRNFvI15Rq05TkAgN+LEDVajH+dg6/6QacDfsnbawHZ
+         4w0Yhb20ZmPL5CHplTnHtvZ+2A9O+9tGY8gAqJwKlzJ4Cig7dkIlkscWQwIKYx+Vk0h9
+         BCLxWkGmadtJjX026HpJ/rvJXOslOYFTtPpV1TWkVMnWr5lIgHZR/GKEnvHjtI/25Mc+
+         NERw==
+X-Gm-Message-State: AFqh2kqt1ifv6pKBgZu9lgF5j1VhB0XRixwXjytI+/tp2iRq+/4d1u7O
+        nv5R4ILFbyicUNr99qWP5ocW/bPFQ+Ba4219EVQ=
+X-Google-Smtp-Source: AMrXdXs//td63oy92QcY5/viNOMn0IRgcHT2NuhED1i0wZii8vyvRQUIJzyAt9sgyqpem/sXH+ORnJyeeKxGeQ8WV7I=
+X-Received: by 2002:ac2:41da:0:b0:4b4:af05:4a8d with SMTP id
+ d26-20020ac241da000000b004b4af054a8dmr228392lfi.415.1671687598455; Wed, 21
+ Dec 2022 21:39:58 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|CY8PR11MB7265:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5db47e37-526d-409e-8fa6-08dae3db4e22
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R1SPRMRx3IKBnFW14rymWwIaV9ZjJVTnORiD1rfHfDx4IaPzRfD5aGVthvlg5/PG5KV2wMQejVuevM3jtwjoGimQeWkRQCKbD5YuVgMbXb3WH5Ja9T9iCukKku2SFl1Y0nF11yfB1okgJSqRn8GnL9Kilfsj3YrWDtM0C4KGdbjZ9GViGHhnXNi31WdP7vGtyYYWuVZutbzyVc1DTknHh7vAx9FtXiin4KgweM0C2+8+BLIW8S3nv1d4RzyJiSW1Yv9KVBTGsnAr4OXwxV09XJr05CLUNLZjcf1fRXlH5SXcV9okmOD+HkcYXN5G4nuwTq8PSFA4cues5xMmUpmQJXp6Qah6ugylfz6jaoOcvBa+NGEsigKfPr25RXq8BPMOC+0FsllpSyMXmJFSG7L+xKQgQyBzi9+y6KxeopS63vHld+1pxRbGuy30k67UeTN0A65+/dtBIad36ZfUWn1dom8izFKryX4Zg6t7cG/lczgnFrR+z5N8Sq2FQpXYCmkF9wIB62NhjDrD/Y/yYiRT3nGabBvUL1gia61iEKjb/maK6BvaqeWCXAM/gHaGMc/+qAO2S2ODMKpb4vyZGgFkpE4l2pBWVkL8CARRaUGqGRj+0W3PihNXZLjVK5m6xmTnJtcJiZXM0uTaxnHyFGZwMQ2SmxZpj0/ncKVnXF3ARpG2PJ1AXbrsuT2EIy5r5gru
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(396003)(376002)(136003)(346002)(366004)(451199015)(6486002)(6506007)(478600001)(66476007)(26005)(9686003)(66556008)(186003)(6916009)(86362001)(66946007)(316002)(6512007)(54906003)(6666004)(8676002)(8936002)(4326008)(5660300002)(82960400001)(2906002)(41300700001)(38100700002)(44832011)(33716001)(83380400001)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P+ILRYTz4TqCusH0DmE92DL9AxWS2D61/oRFuK81mIVy8WLqh9yQ4mIjCG+y?=
- =?us-ascii?Q?FPBQ5b4zVT6AFumHxSs2KkZSSSoywQfqYCBnKmaGxfFSVPFtl/dwzt2r7Juz?=
- =?us-ascii?Q?kxPA5ktgYGR/0E9DJ2hTtyJNoqb30XXZkiWTk5roFWKQC8maMRwPVLSxc2R+?=
- =?us-ascii?Q?+oBCxNxhqiEyIomWnYTBGBTCUDkwuc1RbV6azgrDDiZjxnL3n+kK2ZMh4Bbr?=
- =?us-ascii?Q?Esvppcc/T6uEWV5CsSsCsSPQnpHonrEzBlev/PEn2F/beeaDddGmu2vayzRz?=
- =?us-ascii?Q?kgtGqwsggrqX4cCL+ija+CqNf9+Xz5jxnmT+nzCozAs22L5xHKCRi5zeV+E6?=
- =?us-ascii?Q?J9gqAAdYaRz8CChTNFHeMHiN6EngmZFX8ZH15LWink3JnuXwTeEHXyp4kV+t?=
- =?us-ascii?Q?QSbzQ3l4ZMMKaR4rDYbuucEY01bHlpZXi+inNYWk1FLJTYwyJZ5hRg3uKQcR?=
- =?us-ascii?Q?/hxT8TWkzrj5Mewrdh+wxMWc1XJ4/deqDzc51LuLNYUAXHcl8cQKkXtexL/i?=
- =?us-ascii?Q?OXXfHALu3pVDUTrmCu8oie1MUsa53oVzhdYZSfrOeZ4FeeqoQez0i0WU2Wfz?=
- =?us-ascii?Q?3cN8Zw2fkkLrg+LyUJQOiMKtMCFcP+dAbGq+BLGYDxXj3px9I2cyuDjHftzi?=
- =?us-ascii?Q?sR5RAy2MymjNQ/llkuWvJMGWrZY7ziTEiFoC1RXUnzs6Sblq90mZrZHe/DCA?=
- =?us-ascii?Q?Q6FnHn+3wWGc9RLgqjJ/6U1NYmVDivOpP+zHaRp0FoP7mQ0EjQj4lG+Gj6o5?=
- =?us-ascii?Q?yiZqeHvK44qKMfaMX1VwtIjUzbNGJZ2WVgq6oj7TwOuOHIlwH5zNFAgIvkxU?=
- =?us-ascii?Q?UC72+p2CVthfPo1AX9ZO62pIsqwgvfMVe3K4P6IQHLAF7gbRMvXvd2S2szG+?=
- =?us-ascii?Q?3MmUWQGe2l7eFiJSfXJBZ2LzqlV7lJr7j638hmPP6Im1T4b1nXNOCVCaR8U/?=
- =?us-ascii?Q?GBpS7zmRwYwGVAN2iHUEUuqxKUCe1pnkNlRb59pYYRsG37nkpwPF1I5U7XmQ?=
- =?us-ascii?Q?Z7w7fJoxtFwPM46/FH/4mIqQOOSbKKNOhhj+8ijcowMXcil59GBzZMgpdxyo?=
- =?us-ascii?Q?xqIufSS2ZOnUi3/DRz5LH4bj4ndVUMXLD63I9MmKpQ1k1dQWLfRhZAaunPe2?=
- =?us-ascii?Q?B+ucZj9XrCt+ithmiJQ0VpHU89j4FeIQ/wMoy85r9aNcutexOvZuMn0wiXzJ?=
- =?us-ascii?Q?Vsz+BHdBX65JIY2iZiGRxBWKpoI2hpn4EAZbquiBeapUO9buvBBR8/8l/ONT?=
- =?us-ascii?Q?Yg4bBFyod10PJkbAWOxR1WIXJw3jQ95Z9LKHREnOhL0FahjUwrV5PehRSP/s?=
- =?us-ascii?Q?hUw/cdxGlLoJXq1EOyHhi+uRmiUdFvr/BGeaFnoRcZUsqmxdEbeRFMyd3KE1?=
- =?us-ascii?Q?F8bRrMelP6YXVuTusMKjUK7U0jymDg63wNOBDm+mIQ/jISLf4vZLG2SxAILa?=
- =?us-ascii?Q?SewNLOLxF2hf5n0cJx01r57qtcCqAVUNR3vZYb3qBZLNH4JHX+vZfGA3dzRa?=
- =?us-ascii?Q?21FL603PzjgxDEcRo+4KTb1KeCE61mfj9ns07R8cRZR5yuKNRBUaK8srl/xO?=
- =?us-ascii?Q?FFDgzCLO+pz3WrnMnuboG0MfHSmgZKJjzfYiuY2O?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5db47e37-526d-409e-8fa6-08dae3db4e22
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 05:13:47.6451
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LtStDiDZV1ePWqGHeE5WBcuCGNu/ebSwUrVgdfCpCvwbG+xxRLimrJyRuRSOTG9+SR9D51msN/I55Y681Gou0Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7265
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221218234801.579114-1-jmaxwell37@gmail.com> <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
+ <bf56c3aa-85df-734d-f419-835a35e66e03@kernel.org> <CAGHK07BehyHXoS+27=cfZoKz4XNTcJjyB5us33sNS7P+_fudHQ@mail.gmail.com>
+ <CAGHK07D2Dy4zFGHqwdyg+nsRC_iL4ArWTPk7L2ndA2PaLfOMYQ@mail.gmail.com>
+In-Reply-To: <CAGHK07D2Dy4zFGHqwdyg+nsRC_iL4ArWTPk7L2ndA2PaLfOMYQ@mail.gmail.com>
+From:   Jonathan Maxwell <jmaxwell37@gmail.com>
+Date:   Thu, 22 Dec 2022 16:39:21 +1100
+Message-ID: <CAGHK07DU15NhFvGuLB6WHUF0fffT3MefL3E3JWHmtWR6Wzm0bA@mail.gmail.com>
+Subject: Re: [net-next] ipv6: fix routing cache overflow for raw sockets
+To:     David Ahern <dsahern@kernel.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, yoshfuji@linux-ipv6.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 06:28:01PM +0100, Fabio M. De Francesco wrote:
-> Change the signature of ufs_get_page() in order to prepare this function
-> to the conversion to the use of kmap_local_page(). Change also those call
-> sites which are required to conform its invocations to the new
-> signature.
-> 
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  fs/ufs/dir.c | 49 +++++++++++++++++++++----------------------------
->  1 file changed, 21 insertions(+), 28 deletions(-)
-> 
-> diff --git a/fs/ufs/dir.c b/fs/ufs/dir.c
-> index 69f78583c9c1..9fa86614d2d1 100644
-> --- a/fs/ufs/dir.c
-> +++ b/fs/ufs/dir.c
-> @@ -185,7 +185,7 @@ static bool ufs_check_page(struct page *page)
->  	return false;
+On Wed, Dec 21, 2022 at 3:31 PM Jonathan Maxwell <jmaxwell37@gmail.com> wrote:
+>
+> On Wed, Dec 21, 2022 at 8:55 AM Jonathan Maxwell <jmaxwell37@gmail.com> wrote:
+> >
+> > On Wed, Dec 21, 2022 at 2:10 AM David Ahern <dsahern@kernel.org> wrote:
+> > >
+> > > On 12/20/22 5:35 AM, Paolo Abeni wrote:
+> > > > On Mon, 2022-12-19 at 10:48 +1100, Jon Maxwell wrote:
+> > > >> Sending Ipv6 packets in a loop via a raw socket triggers an issue where a
+> > > >> route is cloned by ip6_rt_cache_alloc() for each packet sent. This quickly
+> > > >> consumes the Ipv6 max_size threshold which defaults to 4096 resulting in
+> > > >> these warnings:
+> > > >>
+> > > >> [1]   99.187805] dst_alloc: 7728 callbacks suppressed
+> > > >> [2] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
+> > > >> .
+> > > >> .
+> > > >> [300] Route cache is full: consider increasing sysctl net.ipv6.route.max_size.
+> > > >
+> > > > If I read correctly, the maximum number of dst that the raw socket can
+> > > > use this way is limited by the number of packets it allows via the
+> > > > sndbuf limit, right?
+> > > >
+> > > > Are other FLOWI_FLAG_KNOWN_NH users affected, too? e.g. nf_dup_ipv6,
+> > > > ipvs, seg6?
+> > > >
+> > > > @DavidA: why do we need to create RTF_CACHE clones for KNOWN_NH flows?
+> > > >
+> > > > Thanks,
+> > > >
+> > > > Paolo
+> > > >
+> > >
+> > > If I recall the details correctly: that sysctl limit was added back when
+> > > ipv6 routes were managed as dst_entries and there was a desire to allow
+> > > an admin to limit the memory consumed. At this point in time, IPv6 is
+> > > more inline with IPv4 - a separate struct for fib entries from dst
+> > > entries. That "Route cache is full" message is now out of date since
+> > > this is dst_entries which have a gc mechanism.
+> > >
+> > > IPv4 does not limit the number of dst_entries that can be allocated
+> > > (ip_rt_max_size is the sysctl variable behind the ipv4 version of
+> > > max_size and it is a no-op). IPv6 can probably do the same here?
+> > >
+> >
+> > diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+> > index dbc224023977..701aba7feaf5 100644
+> > --- a/net/ipv6/route.c
+> > +++ b/net/ipv6/route.c
+> > @@ -6470,7 +6470,7 @@ static int __net_init ip6_route_net_init(struct net *net)
+> >  #endif
+> >
+> >         net->ipv6.sysctl.flush_delay = 0;
+> > -       net->ipv6.sysctl.ip6_rt_max_size = 4096;
+> > +       net->ipv6.sysctl.ip6_rt_max_size = INT_MAX;
+> >         net->ipv6.sysctl.ip6_rt_gc_min_interval = HZ / 2;
+> >         net->ipv6.sysctl.ip6_rt_gc_timeout = 60*HZ;
+> >         net->ipv6.sysctl.ip6_rt_gc_interval = 30*HZ;
+> >
+> > The above patch resolved it for the Ipv6 reproducer.
+> >
+> > Would that be sufficient?
+> >
+>
+> Otherwise if you prefer to make Ipv6 behaviour similar to IPv4.
+> Rather than upping max_size.
+>
+> Here is prototype patch that removes the max_size check for Ipv6:
+>
+
+There are some mistakes in this prototype patch. Let me come up with a
+better one. I'll submit a new patch in the new year for review. Thanks for
+the suggestion DavidA.
+
+Regards
+
+Jon
+
+> diff --git a/include/net/dst_ops.h b/include/net/dst_ops.h
+> index 88ff7bb2bb9b..632086b2f644 100644
+> --- a/include/net/dst_ops.h
+> +++ b/include/net/dst_ops.h
+> @@ -16,7 +16,7 @@ struct dst_ops {
+>         unsigned short          family;
+>         unsigned int            gc_thresh;
+>
+> -       int                     (*gc)(struct dst_ops *ops);
+> +       void                    (*gc)(struct dst_ops *ops);
+>         struct dst_entry *      (*check)(struct dst_entry *, __u32 cookie);
+>         unsigned int            (*default_advmss)(const struct dst_entry *);
+>         unsigned int            (*mtu)(const struct dst_entry *);
+> diff --git a/net/core/dst.c b/net/core/dst.c
+> index 497ef9b3fc6a..dcb85267bc4c 100644
+> --- a/net/core/dst.c
+> +++ b/net/core/dst.c
+> @@ -82,12 +82,8 @@ void *dst_alloc(struct dst_ops *ops, struct net_device *dev,
+>
+>         if (ops->gc &&
+>             !(flags & DST_NOCOUNT) &&
+> -           dst_entries_get_fast(ops) > ops->gc_thresh) {
+> -               if (ops->gc(ops)) {
+> -                       pr_notice_ratelimited("Route cache is full:
+> consider increasing sysctl net.ipv6.route.max_size.\n");
+> -                       return NULL;
+> -               }
+> -       }
+> +           dst_entries_get_fast(ops) > ops->gc_thresh)
+> +               ops->gc(ops);
+>
+>         dst = kmem_cache_alloc(ops->kmem_cachep, GFP_ATOMIC);
+>         if (!dst)
+> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+> index dbc224023977..8db7c5436da4 100644
+> --- a/net/ipv6/route.c
+> +++ b/net/ipv6/route.c
+> @@ -91,7 +91,7 @@ static struct dst_entry *ip6_negative_advice(struct
+> dst_entry *);
+>  static void            ip6_dst_destroy(struct dst_entry *);
+>  static void            ip6_dst_ifdown(struct dst_entry *,
+>                                        struct net_device *dev, int how);
+> -static int              ip6_dst_gc(struct dst_ops *ops);
+> +static void             ip6_dst_gc(struct dst_ops *ops);
+>
+>  static int             ip6_pkt_discard(struct sk_buff *skb);
+>  static int             ip6_pkt_discard_out(struct net *net, struct
+> sock *sk, struct sk_buff *skb);
+> @@ -3295,32 +3295,21 @@ struct dst_entry *icmp6_dst_alloc(struct
+> net_device *dev,
+>         return dst;
 >  }
->  
-> -static struct page *ufs_get_page(struct inode *dir, unsigned long n)
-> +static void *ufs_get_page(struct inode *dir, unsigned long n, struct page **p)
+>
+> -static int ip6_dst_gc(struct dst_ops *ops)
+> +static void ip6_dst_gc(struct dst_ops *ops)
 >  {
->  	struct address_space *mapping = dir->i_mapping;
->  	struct page *page = read_mapping_page(mapping, n, NULL);
-> @@ -195,8 +195,10 @@ static struct page *ufs_get_page(struct inode *dir, unsigned long n)
->  			if (!ufs_check_page(page))
->  				goto fail;
->  		}
-> +		*p = page;
-> +		return page_address(page);
->  	}
-> -	return page;
-> +	return ERR_CAST(page);
->  
->  fail:
->  	ufs_put_page(page);
-> @@ -227,15 +229,12 @@ ufs_next_entry(struct super_block *sb, struct ufs_dir_entry *p)
->  
->  struct ufs_dir_entry *ufs_dotdot(struct inode *dir, struct page **p)
->  {
-> -	struct page *page = ufs_get_page(dir, 0);
-> -	struct ufs_dir_entry *de = NULL;
-> +	struct ufs_dir_entry *de = ufs_get_page(dir, 0, p);
-
-I don't know why but ufs_get_page() returning an address read really odd to me.
-But rolling around my head alternative names nothing seems better than this.
-
->  
-> -	if (!IS_ERR(page)) {
-> -		de = ufs_next_entry(dir->i_sb,
-> -				    (struct ufs_dir_entry *)page_address(page));
-> -		*p = page;
-> -	}
-> -	return de;
-> +	if (!IS_ERR(de))
-> +		return ufs_next_entry(dir->i_sb, de);
-> +	else
-> +		return NULL;
->  }
->  
->  /*
-> @@ -273,11 +272,10 @@ struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
->  		start = 0;
->  	n = start;
->  	do {
-> -		char *kaddr;
-> -		page = ufs_get_page(dir, n);
-> -		if (!IS_ERR(page)) {
-> -			kaddr = page_address(page);
-> -			de = (struct ufs_dir_entry *) kaddr;
-> +		char *kaddr = ufs_get_page(dir, n, &page);
-> +
-> +		if (!IS_ERR(kaddr)) {
-> +			de = (struct ufs_dir_entry *)kaddr;
->  			kaddr += ufs_last_byte(dir, n) - reclen;
->  			while ((char *) de <= kaddr) {
->  				if (ufs_match(sb, namelen, name, de))
-> @@ -328,12 +326,10 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
->  	for (n = 0; n <= npages; n++) {
->  		char *dir_end;
->  
-> -		page = ufs_get_page(dir, n);
-> -		err = PTR_ERR(page);
-> -		if (IS_ERR(page))
-> -			goto out;
-> +		kaddr = ufs_get_page(dir, n, &page);
-> +		if (IS_ERR(kaddr))
-> +			return PTR_ERR(kaddr);
->  		lock_page(page);
-> -		kaddr = page_address(page);
->  		dir_end = kaddr + ufs_last_byte(dir, n);
->  		de = (struct ufs_dir_entry *)kaddr;
->  		kaddr += PAGE_SIZE - reclen;
-> @@ -395,7 +391,6 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
->  	/* OFFSET_CACHE */
->  out_put:
->  	ufs_put_page(page);
-> -out:
->  	return err;
->  out_unlock:
->  	unlock_page(page);
-> @@ -429,6 +424,7 @@ ufs_readdir(struct file *file, struct dir_context *ctx)
->  	unsigned chunk_mask = ~(UFS_SB(sb)->s_uspi->s_dirblksize - 1);
->  	bool need_revalidate = !inode_eq_iversion(inode, file->f_version);
->  	unsigned flags = UFS_SB(sb)->s_flags;
-> +	struct page *page;
-
-NIT: Does page now leave the scope of the for loop?
-
->  
->  	UFSD("BEGIN\n");
->  
-> @@ -439,16 +435,14 @@ ufs_readdir(struct file *file, struct dir_context *ctx)
->  		char *kaddr, *limit;
->  		struct ufs_dir_entry *de;
-
-Couldn't that be declared here?
-
-Regardless I don't think this is broken.
-
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-
->  
-> -		struct page *page = ufs_get_page(inode, n);
+>         struct net *net = container_of(ops, struct net, ipv6.ip6_dst_ops);
+> -       int rt_min_interval = net->ipv6.sysctl.ip6_rt_gc_min_interval;
+> -       int rt_max_size = net->ipv6.sysctl.ip6_rt_max_size;
+>         int rt_elasticity = net->ipv6.sysctl.ip6_rt_gc_elasticity;
+>         int rt_gc_timeout = net->ipv6.sysctl.ip6_rt_gc_timeout;
+> -       unsigned long rt_last_gc = net->ipv6.ip6_rt_last_gc;
+>         int entries;
+>
+>         entries = dst_entries_get_fast(ops);
+> -       if (entries > rt_max_size)
+> -               entries = dst_entries_get_slow(ops);
 > -
-> -		if (IS_ERR(page)) {
-> +		kaddr = ufs_get_page(inode, n, &page);
-> +		if (IS_ERR(kaddr)) {
->  			ufs_error(sb, __func__,
->  				  "bad page in #%lu",
->  				  inode->i_ino);
->  			ctx->pos += PAGE_SIZE - offset;
->  			return -EIO;
->  		}
-> -		kaddr = page_address(page);
->  		if (unlikely(need_revalidate)) {
->  			if (offset) {
->  				offset = ufs_validate_entry(sb, kaddr, offset, chunk_mask);
-> @@ -595,12 +589,11 @@ int ufs_empty_dir(struct inode * inode)
->  	for (i = 0; i < npages; i++) {
->  		char *kaddr;
->  		struct ufs_dir_entry *de;
-> -		page = ufs_get_page(inode, i);
->  
-> -		if (IS_ERR(page))
-> +		kaddr = ufs_get_page(inode, i, &page);
-> +		if (IS_ERR(kaddr))
->  			continue;
->  
-> -		kaddr = page_address(page);
->  		de = (struct ufs_dir_entry *)kaddr;
->  		kaddr += ufs_last_byte(inode, i) - UFS_DIR_REC_LEN(1);
->  
-> -- 
-> 2.39.0
-> 
+> -       if (time_after(rt_last_gc + rt_min_interval, jiffies) &&
+> -           entries <= rt_max_size)
+> -               goto out;
+>
+>         net->ipv6.ip6_rt_gc_expire++;
+>         fib6_run_gc(net->ipv6.ip6_rt_gc_expire, net, true);
+>         entries = dst_entries_get_slow(ops);
+>         if (entries < ops->gc_thresh)
+>                 net->ipv6.ip6_rt_gc_expire = rt_gc_timeout>>1;
+> -out:
+>         net->ipv6.ip6_rt_gc_expire -= net->ipv6.ip6_rt_gc_expire>>rt_elasticity;
+> -       return entries > rt_max_size;
+>  }
+>
+>  static int ip6_nh_lookup_table(struct net *net, struct fib6_config *cfg,
+>
+> > > I do not believe the suggested flag is the right change.
+> >
+> > Regards
+> >
+> > Jon
