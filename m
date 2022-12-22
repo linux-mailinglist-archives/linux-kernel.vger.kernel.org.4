@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31446540AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BF46540B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235777AbiLVMFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
+        id S235882AbiLVMIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235576AbiLVME5 (ORCPT
+        with ESMTP id S235394AbiLVMHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:04:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999C0389D3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 03:56:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671710171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mRKidmqSKLNtQGQfAKwhWxh0PYTmuJUINjlyOCWghFA=;
-        b=i3EvwZ6UZOpaI2V5jSQwAeLgWIaIpgBbVe1CM9FUMrb5VmWYREGjbgSpFTtm17XzabOPFq
-        zgwvgSXt595y9rpm5LlZfu2bsOPD1Cx777cPMhQyYOyInD+WLvpcxBk2BlE8X6OI46kwJg
-        SUTREB9jhRoVNJEjEvctowa3TUakqK8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-494-eNQ5OV07MFODFRfd2A4wtw-1; Thu, 22 Dec 2022 06:56:08 -0500
-X-MC-Unique: eNQ5OV07MFODFRfd2A4wtw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 936FA381A733;
-        Thu, 22 Dec 2022 11:56:07 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 472372026D4B;
-        Thu, 22 Dec 2022 11:56:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     torvalds@linux-foundation.org
-cc:     dhowells@redhat.com, Marc Dionne <marc.dionne@auristor.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] afs: A fix, two cleanups and writepage removal
+        Thu, 22 Dec 2022 07:07:54 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CC230576
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 03:58:56 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id n4so1830629plp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 03:58:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=uqAGZ9Jl1ugDkGODMUauM9R6lPCE9WVjpJqEw8MulTg=;
+        b=jNNWhzkoPcDSs01qx7It+I0JOsx5wDPFmcjZBmdo1M0JKCEJeQ6oVhrj0zzrqSyiLS
+         ghWgCqam/fMQGQtJCNvCXVEdNRPPM8OW8Utc/jwJiwRHUqYIc7zLyAoDnUvQGqHnW8vQ
+         dWHAkH/6mu+xVRoiMl+zLmyRqnNTOZ/2+d69BtZSgIZUzLarOP3BjWfbD+C5nuG+fm8r
+         MdWM0tAiDR0kpLG/OcbG7aYlrJB6uDLgX49SCpONKvpLZVrftVTJrfeNhFrYamnM1Xly
+         yK8Hs7pJilLwpbpTU8bIBrUDoJf10qq+twVyXNcTT4iWoeQEx6Vyzw+43mgQCLDGd+Fe
+         vyBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uqAGZ9Jl1ugDkGODMUauM9R6lPCE9WVjpJqEw8MulTg=;
+        b=nYbpXx7YrDgumiUJB5HQQBLGQluqBZ8Eg7K1gg/hbLCYTpr4cqKOHzGnaPSPOfjZNP
+         PGXGXM7kqYRiOWeJ0gEJGp7esF9587dv67ZjvjWCTAaX9AgvbTlg0OLfhhMTI2N6PH0B
+         OcQ2P5Lb/bNdtwdmBCyOCPCoaCwtx1onzfZDIzU0m/ldL6O0wCsxpBNvVbtk394ew/lt
+         0UzWJCLO1tpTxK5Fo781wl0q54FOrTKBEMc9lrHCbx500B5U+0rtnvN+PxuhGffoStwO
+         pmOZn11c9MzGf+MtILTJ5Uxe+mxWxeusqexXZ/2Z9hh1MytSmrL83CyhylXMoNLxjmJf
+         ci2A==
+X-Gm-Message-State: AFqh2kr7bFRQvSkY42s4Go2wtp4+9x0N7hGRKWJWPAM174+a9z93wK4b
+        isWmjda5WlQ0ky4OKCWnN12hvxb5kcg=
+X-Google-Smtp-Source: AMrXdXuIpK52XdG8oAdtePBmQvM/7yRhIW3K9yeWMMu9f7OjFCAZyqKWPZ/RGI+2DX4fiBg+enoitQ==
+X-Received: by 2002:a17:902:f7c3:b0:18f:5bc0:5892 with SMTP id h3-20020a170902f7c300b0018f5bc05892mr5222407plw.0.1671710317543;
+        Thu, 22 Dec 2022 03:58:37 -0800 (PST)
+Received: from MBP ([68.74.118.125])
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902e38200b00186b0ac12c5sm357965ple.172.2022.12.22.03.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 03:58:37 -0800 (PST)
+References: <20221115140233.21981-1-schspa@gmail.com>
+ <m2zgc2vzwx.fsf@gmail.com> <Y5a3rAm21mCf2xrG@bombadil.infradead.org>
+ <m2bko8c0yh.fsf@gmail.com> <m2pmcoag55.fsf@gmail.com>
+ <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
+ <Y5oqxh2jnarlEKNG@bombadil.infradead.org> <m2o7s55gan.fsf@gmail.com>
+ <m2ili43s2v.fsf@gmail.com> <Y6P2MUcTGU9LIrDg@bombadil.infradead.org>
+ <m235983p58.fsf@gmail.com>
+User-agent: mu4e 1.8.10; emacs 29.0.60
+From:   Schspa Shi <schspa@gmail.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org,
+        syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
+        syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
+        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
+Subject: Re: [PATCH] umh: fix UAF when the process is being killed
+Date:   Thu, 22 Dec 2022 19:56:26 +0800
+In-reply-to: <m235983p58.fsf@gmail.com>
+Message-ID: <m2bknv3b1a.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2219504.1671710165.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 22 Dec 2022 11:56:05 +0000
-Message-ID: <2219505.1671710165@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,51 +83,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-Could you pull this please?  There's a fix for a couple of missing resourc=
-e
-counter decrements, two small cleanups of now-unused bits of code and a
-patch to remove writepage support from afs.
+Schspa Shi <schspa@gmail.com> writes:
 
-Thanks,
-David
----
-The following changes since commit b6bb9676f2165d518b35ba3bea5f1fcfc0d969b=
-f:
+> Luis Chamberlain <mcgrof@kernel.org> writes:
+>
+>> On Thu, Dec 22, 2022 at 01:45:46PM +0800, Schspa Shi wrote:
+>>> 
+>>> Schspa Shi <schspa@gmail.com> writes:
+>>> 
+>>> > Luis Chamberlain <mcgrof@kernel.org> writes:
+>>> >
+>>> >> Peter, Ingo, Steven would like you're review.
+>>> >>
+>>> >> On Tue, Dec 13, 2022 at 03:03:53PM -0800, Luis Chamberlain wrote:
+>>> >>> On Mon, Dec 12, 2022 at 09:38:31PM +0800, Schspa Shi wrote:
+>>> >>> > I'd like to upload a V2 patch with the new solution if you prefer the
+>>> >>> > following way.
+>>> >>> > 
+>>> >>> > diff --git a/kernel/umh.c b/kernel/umh.c
+>>> >>> > index 850631518665..8023f11fcfc0 100644
+>>> >>> > --- a/kernel/umh.c
+>>> >>> > +++ b/kernel/umh.c
+>>> >>> > @@ -452,6 +452,11 @@ int call_usermodehelper_exec(struct subprocess_info *sub_info, int wait)
+>>> >>> >                 /* umh_complete() will see NULL and free sub_info */
+>>> >>> >                 if (xchg(&sub_info->complete, NULL))
+>>> >>> >                         goto unlock;
+>>> >>> > +               /*
+>>> >>> > +                * kthreadd (or new kernel thread) will call complete()
+>>> >>> > +                * shortly.
+>>> >>> > +                */
+>>> >>> > +               wait_for_completion(&done);
+>>> >>> >         }
+>>> >>> 
+>>> >>> Yes much better. Did you verify it fixes the splat found by the bots?
+>>> >>
+>>> >> Wait, I'm not sure yet why this would fix it... I first started thinking
+>>> >> that this may be a good example of a Coccinelle SmPL rule, something like:
+>>> >>
+>>> >> 	DECLARE_COMPLETION_ONSTACK(done);
+>>> >> 	foo *foo;
+>>> >> 	...
+>>> >> 	foo->completion = &done;
+>>> >> 	...
+>>> >> 	queue_work(system_unbound_wq, &foo->work);
+>>> >> 	....
+>>> >> 	ret = wait_for_completion_state(&done, state);
+>>> >> 	...
+>>> >> 	if (!ret)
+>>> >> 		S
+>>> >> 	...
+>>> >> 	+wait_for_completion(&done);
+>>> >>
+>>> >> But that is pretty complex, and while it may be useful to know how many
+>>> >> patterns we have like this, it begs the question if generalizing this
+>>> >> inside the callers is best for -ERESTARTSYS condition is best. What
+>>> >> do folks think?
+>>> >>
+>>> >> The rationale here is that if you queue stuff and give access to the
+>>> >> completion variable but its on-stack obviously you can end up with the
+>>> >> queued stuff complete() on a on-stack variable. The issue seems to
+>>> >> be that wait_for_completion_state() for -ERESTARTSYS still means
+>>> >> that the already scheduled queue'd work is *about* to run and
+>>> >> the process with the completion on-stack completed. So we race with
+>>> >> the end of the routine and the completion on-stack.
+>>> >>
+>>> >> It makes me wonder if wait_for_completion() above really is doing
+>>> >> something more, if it is just helping with timing and is still error
+>>> >> prone.
+>>> >>
+>>> >> The queued work will try the the completion as follows:
+>>> >>
+>>> >> static void umh_complete(struct subprocess_info *sub_info)
+>>> >> {
+>>> >> 	struct completion *comp = xchg(&sub_info->complete, NULL);              
+>>> >> 	/*
+>>> >> 	 * See call_usermodehelper_exec(). If xchg() returns NULL
+>>> >> 	 * we own sub_info, the UMH_KILLABLE caller has gone away
+>>> >> 	 * or the caller used UMH_NO_WAIT.
+>>> >> 	 */
+>>> >> 	if (comp)
+>>> >> 		complete(comp);
+>>> >> 	else
+>>> >> 		call_usermodehelper_freeinfo(sub_info);
+>>> >> }
+>>> >>
+>>> >> So the race is getting -ERESTARTSYS on the process with completion
+>>> >> on-stack and the above running complete(comp). Why would sprinkling
+>>> >> wait_for_completion(&done) *after* wait_for_completion_state(&done, state)
+>>> >> fix this UAF?
+>>> >
+>>> > The wait_for_completion(&done) is added when xchg(&sub_info->complete,
+>>> > NULL) return NULL. When it returns NULL, it means the umh_complete was
+>>> > using the completion variable at the same time and will call complete
+>>> > in a very short time.
+>>> >
+>>> Hi Luis:
+>>> 
+>>> Is there any further progress on this problem? Does the above
+>>> explanation answer your doubts?
+>>
+>> I think it would be useful to proove your work for you to either
+>> hunt with SmPL coccinelle a similar flaw / how rampant this issue
+>> is and then also try to create the same UAF there and prove how
+>> your changes fixes it.
+>>
+>
+> OK, but it will take some time.
 
-  Merge tag 'm68knommu-for-v6.2' of git://git.kernel.org/pub/scm/linux/ker=
-nel/git/gerg/m68knommu (2022-12-20 08:56:35 -0600)
+Hi Luis:
 
-are available in the Git repository at:
+I have made a kernel module to prove this fix. Please check this at:
+Link: https://github.com/schspa/code_snippet/tree/master/kernel_module/completion
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags=
-/afs-next-20221222
+There is both bad & ok test case in the README.org.
 
-for you to fetch changes up to a9eb558a5bea66cc43950632f5fffec6b5795233:
+>
+>>   Luis
 
-  afs: Stop implementing ->writepage() (2022-12-22 11:40:35 +0000)
 
-----------------------------------------------------------------
-afs next
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      afs: remove variable nr_servers
-
-David Howells (2):
-      afs: Fix lost servers_outstanding count
-      afs: Stop implementing ->writepage()
-
-Gaosheng Cui (1):
-      afs: remove afs_cache_netfs and afs_zap_permits() declarations
-
- fs/afs/dir.c      |  1 +
- fs/afs/file.c     |  3 +-
- fs/afs/fs_probe.c |  5 +++-
- fs/afs/internal.h |  8 ------
- fs/afs/volume.c   |  6 +---
- fs/afs/write.c    | 83 +++++++++++++++++++++++++++++++-------------------=
------
- 6 files changed, 55 insertions(+), 51 deletions(-)
-
+-- 
+BRs
+Schspa Shi
