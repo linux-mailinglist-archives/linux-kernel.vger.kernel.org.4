@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98243654248
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B4E654249
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbiLVOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S235353AbiLVOBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:01:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbiLVOBO (ORCPT
+        with ESMTP id S235294AbiLVOBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:01:14 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE1610B45
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:01:10 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id c11so1356427qtn.11
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 06:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SBYHoKwjQArM9LB7va7yba+zWUDZ0lSQxJbhHePp+Bk=;
-        b=UuaxYsIaNDRY0Pa19OFmUNoA2PBEv9u9nBdzxSo5R5xPkdSR8UIUb2/1ViFm3Mpgji
-         Cr3Zn3gfpL8ev5HqBZgnWDII+J4UqUCTi4COWQ5UpWeFCuuW9BnTvYeG6NHBucdE24Ej
-         yqWvnrJs5O6FJMv9+EdyPQCXvmEUoEvXZiX/s4458CehUaxufF4iovPeZuWHRwdKmBlX
-         nF8ftQcNitOmpWtrWdEBWrtGwTLOSYcivUzlNOLX/0jGkXnJzzU0CV8u+6T6uvM/eAXk
-         T604KCkOtPndIefDBr7t7Z4GekyjpfgzYfwPpMb0XEptvIEnwy4pTM8Nx7LCoCc/HvxT
-         Lupw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SBYHoKwjQArM9LB7va7yba+zWUDZ0lSQxJbhHePp+Bk=;
-        b=Knq/2buYoWy+9U/prbSCUTrCAOfwZR7he46X3/eHo5yRInSQsullq9MNuz0W5lhDtY
-         VjnuvSwCTWMdDflqWJ0adz3GWONiGpuW97dnLE58dtR3Rs6vUTW/GET1hkXMGYHnkcmt
-         lGCBFDZzqcz5gSWHh/JbNx7uyWhHml6Ry4iW+GXjkXJhhoAS3BqQaM+JX8ajCbQNWAhb
-         nOHOw3dSBeA3BvMTMTH7Ybmv6a671UJh+GHZzsbRyYSsCnH1Ao3dinuVTwddpWYWfkeO
-         /ax9pImtcAJ8gAgzIq2jP/vM91QbnHSf8/dV2LDWdtaKesnel5r7sPJsdjYTRFypXq0W
-         6Bcw==
-X-Gm-Message-State: AFqh2kpOVsZ2stQRRhTnZHwczBpXCYJHHORgjTcVlVwER3JTiXY1ifar
-        eVIi+F7ab5FRQ2nRzBhTfdvvyQ==
-X-Google-Smtp-Source: AMrXdXvRkI2U6gES0TIzmcGbc9xurURxGvcBNfn1RoVNkwjnkstY+t71tFXIkaUF7C6JpXap3icAPA==
-X-Received: by 2002:ac8:4646:0:b0:3a4:3137:79b6 with SMTP id f6-20020ac84646000000b003a4313779b6mr8218504qto.24.1671717669873;
-        Thu, 22 Dec 2022 06:01:09 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id t16-20020a05620a451000b006fa8299b4d5sm316173qkp.100.2022.12.22.06.01.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 06:01:09 -0800 (PST)
-Message-ID: <1110c180e6586e213ea180920cbe6215b68a42be.camel@ndufresne.ca>
-Subject: Re: [PATCH] media: v4l2-ctrls: Fix doc for
- v4l2_ctrl_request_hdl_find
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 22 Dec 2022 09:01:04 -0500
-In-Reply-To: <20221222115638.768143-1-linmq006@gmail.com>
-References: <20221222115638.768143-1-linmq006@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Thu, 22 Dec 2022 09:01:48 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABB226AF2;
+        Thu, 22 Dec 2022 06:01:47 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id C109480654;
+        Thu, 22 Dec 2022 15:01:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1671717705;
+        bh=YqaNO9kDy3nFfNc/a2RaV0OvzPrs8XfvxLhPTZxI0VQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aILuV8G0LVnhl9CsZCqq8FNrYyCr2x7Hs0Vs5ioyLmaR0iEyIBZ1h38scHWidtDDa
+         x21BQnj9MfV0C8q4GCz7y9/rprMLjKtb0q28MJry4Y57y0Xc8yYk636EmayAb3UlV2
+         HDegMUTAFoVpoiPy7/XKYY9etcJH1FvS2EnK2NdMrJUeWoboJBiUxZ1YeszoTrf1y6
+         Ov79iM1dljOWzniDTE+DZHQiSdWVe2RUfI3zUl8vc5q3cVf1C2cXqeuL0oPDR2kYgj
+         GqLhd6Iz/v59Ty777DgVMJJ2+slSkqAAvalF9IJcVBNm4phtpWOtJ+yTr8wh0dio5P
+         f5jbfRB4sOcBg==
+Message-ID: <3c555cae-999f-ccd2-d114-00b92abd19ba@denx.de>
+Date:   Thu, 22 Dec 2022 15:01:44 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] dt-bindings: leds: Mark label property as deprecated
+Content-Language: en-US
+To:     Pavel Machek <pavel@ucw.cz>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel <kernel@dh-electronics.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
+ <Y3y/S5COG7VPbsqL@duo.ucw.cz> <3f4c89a3-8955-ce41-ac2a-cee9b0ed5210@denx.de>
+ <20221130191905.GA2631320-robh@kernel.org>
+ <4043d693-7739-4709-8551-9f476031db70@denx.de>
+ <38c9aae4-0cae-a5a6-7c76-f23edf259dab@gmail.com>
+ <e6b166b399314a91bc97db591c8ec5a7@dh-electronics.com>
+ <Y6RgjV4FT57SaTQw@duo.ucw.cz>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <Y6RgjV4FT57SaTQw@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 22 d=C3=A9cembre 2022 =C3=A0 15:56 +0400, Miaoqian Lin a =C3=A9cri=
-t=C2=A0:
-> We should call v4l2_ctrl_request_hdl_put() instead of
-> v4l2_ctrl_request_put_hdl(). Fix the typo.
->=20
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On 12/22/22 14:50, Pavel Machek wrote:
+> Hi!
+> 
+>>>> This part I understand. What is not clear to me is, why is 'label' being
+>>>> un-deprecated.
+>>>
+>>> It shouldn't be. It seems to be Pavel's ad-hoc decision.
+>>
+>> Is there a majority agreement that the "label" property remains
+>> deprecated?
+> 
+> 
+>> If so, I would say we can mark the label as deprecated.
+>>
+>> On the other hand, the new generated standardized sysfs name does not seem
+>> to provide a full replacement for the "label" property.
+>> What is still missing?
+> 
+> Having reasonable naming of the LEDs is pre-requisite for deprecating
+> label property.
 
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-
-> ---
->  include/media/v4l2-ctrls.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-> index e59d9a234631..7788eeb3e2bb 100644
-> --- a/include/media/v4l2-ctrls.h
-> +++ b/include/media/v4l2-ctrls.h
-> @@ -1343,7 +1343,7 @@ void v4l2_ctrl_request_complete(struct media_reques=
-t *req,
->   * @parent: The parent control handler ('priv' in media_request_object_f=
-ind())
->   *
->   * This function finds the control handler in the request. It may return
-> - * NULL if not found. When done, you must call v4l2_ctrl_request_put_hdl=
-()
-> + * NULL if not found. When done, you must call v4l2_ctrl_request_hdl_put=
-()
->   * with the returned handler pointer.
->   *
->   * If the request is not in state VALIDATING or QUEUED, then this functi=
-on
-
+As far as I can tell, function and function-enumerator is the reasonable 
+naming. Jacek seem to confirm that. I would say, label can be deprecated 
+. What is the counter-argument for why it should NOT be deprecated ?
