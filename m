@@ -2,156 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588A0653AD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 03:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17999653ADB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 04:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234883AbiLVC5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 21:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
+        id S234764AbiLVDCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 22:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiLVC5k (ORCPT
+        with ESMTP id S229742AbiLVDCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 21:57:40 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31AC1A82E
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:57:38 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id i7-20020a056e021b0700b003033a763270so376004ilv.19
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:57:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JkvBE1UbBZoC/yc5i9qfAPMN7tBftxb6qZxmobUW1/k=;
-        b=ouQOGyu5nLld9FbUIk+WtUt7CdSMYeAjJ4y5J9+2h6jZ+ulZJ27OLntgKHJvVl513l
-         DWcnMlqYluO3hNDZu9EtEkO6Mc117a6LzUg75KZqaPIip+LzdAKItF87fwgGvMd9UC1D
-         hZxREQNCjnA9M6Lu8QAQxL8VmZiFUVzqX4xlVwUo0UwiBkVB3OMdVCi9zlLvvel2D2dv
-         wm6qem6yYyvTOMio0MN+KsDR7h0n54XTY92uw4SkDXSNItLdcBIwMAD/LrHuy7pUSOlr
-         /G6Tvm5nJY/gd3PHq61qqxLWKfohgOycGd6d/GEHqhcl4J7KzvEpVgOT9Yg3lstS5kvy
-         jH/Q==
-X-Gm-Message-State: AFqh2kqBpKQKH/g35TeE/PZbHao1uD8yDBQuAiZeFE+QdDx8WCkkgkqk
-        yEZnxrctVmSK+X+Qd+KMGZuSWLMfZqW2nJH2u9kRjg1POhE3
-X-Google-Smtp-Source: AMrXdXtoIpWpXVvycFxtoKV7NJZ47m+rb40rPxKrIlRA0WKuJMQpdx7PBpYVJrptjRcbdfeZnnybBr/5moUnxPeYWeIxllIAej3A
+        Wed, 21 Dec 2022 22:02:06 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F422121266;
+        Wed, 21 Dec 2022 19:02:03 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Ncw851Zcvz4f3k6l;
+        Thu, 22 Dec 2022 11:01:57 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+        by APP1 (Coremail) with SMTP id cCh0CgB35C6kyKNjHbIbAQ--.54629S2;
+        Thu, 22 Dec 2022 11:01:58 +0800 (CST)
+Message-ID: <403085d2-48c9-7691-1bdc-b2307521c0d7@huaweicloud.com>
+Date:   Thu, 22 Dec 2022 11:01:56 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a02:8586:0:b0:38a:979e:f584 with SMTP id
- d6-20020a028586000000b0038a979ef584mr299871jai.261.1671677858334; Wed, 21 Dec
- 2022 18:57:38 -0800 (PST)
-Date:   Wed, 21 Dec 2022 18:57:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000eccdc505f061d47f@google.com>
-Subject: [syzbot] [sysv?] [vfs?] WARNING in invalidate_bh_lru
-From:   syzbot <syzbot+9743a41f74f00e50fc77@syzkaller.appspotmail.com>
-To:     hch@infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Pu Lehui <pulehui@huaweicloud.com>
+Subject: Re: [RFC PATCH RESEND bpf-next 3/4] riscv, bpf: Add
+ bpf_arch_text_poke support for RV64
+To:     Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>
+References: <20221220021319.1655871-1-pulehui@huaweicloud.com>
+ <20221220021319.1655871-4-pulehui@huaweicloud.com>
+ <27a7b2ff-c0db-7fa0-2da0-8d76899f94f8@huawei.com>
+Content-Language: en-US
+In-Reply-To: <27a7b2ff-c0db-7fa0-2da0-8d76899f94f8@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgB35C6kyKNjHbIbAQ--.54629S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WryxurWxAr1rAry7AryfCrg_yoWfJF1UpF
+        1kKrW5GrWUXrn3Jr17tr4UXFyYyr4kX3WDJr18Xa18JFsFvr1vgr1jgrsIgrn8Cr48Gr1j
+        vr1jgrnrurnrJrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1560b830480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=9743a41f74f00e50fc77
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e320b3880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=147c0577880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/93008694e408/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9743a41f74f00e50fc77@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-VFS: brelse: Trying to free free buffer
-WARNING: CPU: 0 PID: 0 at fs/buffer.c:1145 __brelse fs/buffer.c:1145 [inline]
-WARNING: CPU: 0 PID: 0 at fs/buffer.c:1145 brelse include/linux/buffer_head.h:326 [inline]
-WARNING: CPU: 0 PID: 0 at fs/buffer.c:1145 __invalidate_bh_lrus fs/buffer.c:1380 [inline]
-WARNING: CPU: 0 PID: 0 at fs/buffer.c:1145 invalidate_bh_lru+0xa0/0x134 fs/buffer.c:1393
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __brelse fs/buffer.c:1145 [inline]
-pc : brelse include/linux/buffer_head.h:326 [inline]
-pc : __invalidate_bh_lrus fs/buffer.c:1380 [inline]
-pc : invalidate_bh_lru+0xa0/0x134 fs/buffer.c:1393
-lr : __brelse fs/buffer.c:1145 [inline]
-lr : brelse include/linux/buffer_head.h:326 [inline]
-lr : __invalidate_bh_lrus fs/buffer.c:1380 [inline]
-lr : invalidate_bh_lru+0xa0/0x134 fs/buffer.c:1393
-sp : ffff800008003e50
-x29: ffff800008003e50 x28: ffff80000d2d42f0 x27: ffff80000d2d42e8
-x26: ffff800008648d54 x25: ffff0000c054e2a0 x24: 00000000ffffffff
-x23: ffff0001fefcc830 x22: 0000000000000000 x21: 0000000000000001
-x20: 0000000000000000 x19: ffff80000cbe89d6 x18: 000000000000035e
-x17: ffff8001f1cee000 x16: ffff80000dbe6158 x15: ffff80000d39bc80
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff80000d39bc80
-x11: ff808000081c4d64 x10: 0000000000010002 x9 : ad49151c1e37eb00
-x8 : ad49151c1e37eb00 x7 : ffff80000c091ebc x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100010002 x0 : 0000000000000027
-Call trace:
- __brelse fs/buffer.c:1145 [inline]
- brelse include/linux/buffer_head.h:326 [inline]
- __invalidate_bh_lrus fs/buffer.c:1380 [inline]
- invalidate_bh_lru+0xa0/0x134 fs/buffer.c:1393
- __flush_smp_call_function_queue+0x26c/0x8d8 kernel/smp.c:630
- generic_smp_call_function_single_interrupt+0x28/0xfc kernel/smp.c:546
- do_handle_IPI arch/arm64/kernel/smp.c:876 [inline]
- ipi_handler+0x108/0x1a8 arch/arm64/kernel/smp.c:922
- handle_percpu_devid_irq+0xb0/0x1cc kernel/irq/chip.c:930
- generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
- handle_irq_desc kernel/irq/irqdesc.c:648 [inline]
- generic_handle_domain_irq+0x4c/0x6c kernel/irq/irqdesc.c:704
- __gic_handle_irq drivers/irqchip/irq-gic-v3.c:695 [inline]
- __gic_handle_irq_from_irqson drivers/irqchip/irq-gic-v3.c:746 [inline]
- gic_handle_irq+0x78/0x1b4 drivers/irqchip/irq-gic-v3.c:790
- call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:892
- do_interrupt_handler+0x7c/0xc0 arch/arm64/kernel/entry-common.c:274
- __el1_irq arch/arm64/kernel/entry-common.c:471 [inline]
- el1_interrupt+0x34/0x68 arch/arm64/kernel/entry-common.c:486
- el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:491
- el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:580
- arch_local_irq_enable+0xc/0x18 arch/arm64/include/asm/irqflags.h:35
- default_idle_call+0x48/0xb8 kernel/sched/idle.c:109
- cpuidle_idle_call kernel/sched/idle.c:191 [inline]
- do_idle+0x110/0x2d4 kernel/sched/idle.c:303
- cpu_startup_entry+0x24/0x28 kernel/sched/idle.c:400
- kernel_init+0x0/0x290 init/main.c:729
- start_kernel+0x0/0x620 init/main.c:890
- start_kernel+0x450/0x620 init/main.c:1145
- __primary_switched+0xb4/0xbc arch/arm64/kernel/head.S:471
-irq event stamp: 114628
-hardirqs last  enabled at (114627): [<ffff80000c096a3c>] default_idle_call+0x34/0xb8 kernel/sched/idle.c:106
-hardirqs last disabled at (114628): [<ffff80000c084174>] __el1_irq arch/arm64/kernel/entry-common.c:468 [inline]
-hardirqs last disabled at (114628): [<ffff80000c084174>] el1_interrupt+0x24/0x68 arch/arm64/kernel/entry-common.c:486
-softirqs last  enabled at (114616): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (114581): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
----[ end trace 0000000000000000 ]---
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 2022/12/20 11:00, Xu Kuohai wrote:
+> On 12/20/2022 10:13 AM, Pu Lehui wrote:
+>> From: Pu Lehui <pulehui@huawei.com>
+>>
+>> Implement bpf_arch_text_poke for RV64. For call scenario,
+>> ftrace framework reserve 4 nops for RV64 kernel function
+>> as function entry, and use auipc+jalr instructions to call
+>> kernel or module functions. However, since the auipc+jalr
+>> call instructions is non-atomic operation, we need to use
+>> stop-machine to make sure instruction patching in atomic
+>> context. As for jump scenario, since we only jump inside
+>> the trampoline, a jal instruction is sufficient.
+>>
+>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>> ---
+>>   arch/riscv/net/bpf_jit.h        |   5 ++
+>>   arch/riscv/net/bpf_jit_comp64.c | 131 +++++++++++++++++++++++++++++++-
+>>   2 files changed, 134 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+>> index d926e0f7ef57..bf9802a63061 100644
+>> --- a/arch/riscv/net/bpf_jit.h
+>> +++ b/arch/riscv/net/bpf_jit.h
+>> @@ -573,6 +573,11 @@ static inline u32 rv_fence(u8 pred, u8 succ)
+>>       return rv_i_insn(imm11_0, 0, 0, 0, 0xf);
+>>   }
+>> +static inline u32 rv_nop(void)
+>> +{
+>> +    return rv_i_insn(0, 0, 0, 0, 0x13);
+>> +}
+>> +
+>>   /* RVC instrutions. */
+>>   static inline u16 rvc_addi4spn(u8 rd, u32 imm10)
+>> diff --git a/arch/riscv/net/bpf_jit_comp64.c 
+>> b/arch/riscv/net/bpf_jit_comp64.c
+>> index bf4721a99a09..fa8b03c52463 100644
+>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>> @@ -8,6 +8,8 @@
+>>   #include <linux/bitfield.h>
+>>   #include <linux/bpf.h>
+>>   #include <linux/filter.h>
+>> +#include <linux/memory.h>
+>> +#include <linux/stop_machine.h>
+>>   #include "bpf_jit.h"
+>>   #define RV_REG_TCC RV_REG_A6
+>> @@ -238,7 +240,7 @@ static void __build_epilogue(bool is_tail_call, 
+>> struct rv_jit_context *ctx)
+>>       if (!is_tail_call)
+>>           emit_mv(RV_REG_A0, RV_REG_A5, ctx);
+>>       emit_jalr(RV_REG_ZERO, is_tail_call ? RV_REG_T3 : RV_REG_RA,
+>> -          is_tail_call ? 4 : 0, /* skip TCC init */
+>> +          is_tail_call ? 20 : 0, /* skip reserved nops and TCC init */
+>>             ctx);
+>>   }
+>> @@ -615,6 +617,127 @@ static int add_exception_handler(const struct 
+>> bpf_insn *insn,
+>>       return 0;
+>>   }
+>> +struct text_poke_args {
+>> +    void *addr;
+>> +    const void *insns;
+>> +    size_t len;
+>> +    atomic_t cpu_count;
+>> +};
+>> +
+>> +static int do_text_poke(void *data)
+>> +{
+>> +    int ret = 0;
+>> +    struct text_poke_args *patch = data;
+>> +
+>> +    if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
+> 
+> seems this sync is not needed, why not calling stop machine like this:
+> 
+> stop_machine(do_text_poke, &patch, NULL);
+> 
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+I think both version should be ok. While the NULL version uses first cpu 
+as master to patch_text and the others touch nmi watchdog, this version 
+attempts to let other cpus enter cpu_relax to calm down, and let master 
+cpu owns system resources as possible.
+
+>> +        ret = patch_text_nosync(patch->addr, patch->insns, patch->len);
+>> +        atomic_inc(&patch->cpu_count);
+>> +    } else {
+>> +        while (atomic_read(&patch->cpu_count) <= num_online_cpus())
+>> +            cpu_relax();
+>> +        smp_mb();
+>> +    }
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +static int bpf_text_poke_stop_machine(void *addr, const void *insns, 
+>> size_t len)
+>> +{
+>> +    struct text_poke_args patch = {
+>> +        .addr = addr,
+>> +        .insns = insns,
+>> +        .len = len,
+>> +        .cpu_count = ATOMIC_INIT(0),
+>> +    };
+>> +
+>> +    return stop_machine(do_text_poke, &patch, cpu_online_mask);
+>> +}
+>> +
+>> +static int gen_call_or_nops(void *target, void *ip, u32 *insns)
+>> +{
+>> +    int i, ret;
+>> +    s64 rvoff;
+>> +    struct rv_jit_context ctx;
+>> +
+>> +    ctx.ninsns = 0;
+>> +    ctx.insns = (u16 *)insns;
+>> +
+>> +    if (!target) {
+>> +        for (i = 0; i < 4; i++)
+>> +            emit(rv_nop(), &ctx);
+>> +        return 0;
+>> +    }
+>> +
+>> +    rvoff = (s64)(target - ip);
+>> +    emit(rv_sd(RV_REG_SP, -8, RV_REG_RA), &ctx);
+>> +    ret = emit_jump_and_link(RV_REG_RA, rvoff, false, &ctx);
+>> +    if (ret)
+>> +        return ret;
+>> +    emit(rv_ld(RV_REG_RA, -8, RV_REG_SP), &ctx);
+>> +
+>> +    return 0;
+>> +
+>> +}
+>> +
+>> +static int bpf_text_poke_call(void *ip, void *old_addr, void *new_addr)
+>> +{
+>> +    int ret;
+>> +    u32 old_insns[4], new_insns[4];
+>> +
+>> +    ret = gen_call_or_nops(old_addr, ip + 4, old_insns);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    ret = gen_call_or_nops(new_addr, ip + 4, new_insns);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    mutex_lock(&text_mutex);
+>> +    if (memcmp(ip, old_insns, sizeof(old_insns))) {
+>> +        ret = -EFAULT;
+>> +        goto out;
+>> +    }
+>> +
+>> +    if (memcmp(ip, new_insns, sizeof(new_insns)))
+>> +        ret = bpf_text_poke_stop_machine(ip, new_insns, 
+>> sizeof(new_insns));
+> 
+> since there are 4 instructions being replaced, it is possible that
+> serveral old instructions were already executed before stop machine.
+> 
+
+Yes, there are unpredictable problems after stop machine in that 
+situation. In addition, probing stop machine sub-functions may lead to 
+loop nesting problems. And this is the current problem with riscv ftrace.
+
+But the surprise was that Andy's work [1] was about to solve these 
+problems. We can synchronize changes in the future.
+
+[1] 
+https://lore.kernel.org/linux-riscv/20220913094252.3555240-1-andy.chiu@sifive.com
+
+>> +out:
+>> +    mutex_unlock(&text_mutex);
+>> +    return ret;
+>> +}
+>> +
+>> +static int bpf_text_poke_jump(void *ip, void *old_addr, void *new_addr)
+>> +{
+>> +    int ret;
+>> +    u32 old_insn, new_insn;
+>> +
+>> +    old_insn = old_addr ? rv_jal(RV_REG_ZERO, (s64)(old_addr - ip) >> 
+>> 1) : rv_nop();
+>> +    new_insn = new_addr ? rv_jal(RV_REG_ZERO, (s64)(new_addr - ip) >> 
+>> 1) : rv_nop();
+>> +
+>> +    mutex_lock(&text_mutex);
+>> +    if (memcmp(ip, &old_insn, sizeof(old_insn))) {
+>> +        ret = -EFAULT;
+>> +        goto out;
+>> +    }
+>> +
+>> +    if (memcmp(ip, &new_insn, sizeof(new_insn)))
+>> +        ret = patch_text_nosync(ip, &new_insn, sizeof(new_insn));
+>> +out:
+>> +    mutex_unlock(&text_mutex);
+>> +    return ret;
+>> +}
+>> +
+>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>> +               void *old_addr, void *new_addr)
+>> +{
+>> +    if (!is_kernel_text((unsigned long)ip) &&
+>> +        !is_bpf_text_address((unsigned long)ip))
+>> +        return -ENOTSUPP;
+>> +
+>> +    return poke_type == BPF_MOD_CALL ?
+>> +           bpf_text_poke_call(ip, old_addr, new_addr) :
+>> +           bpf_text_poke_jump(ip, old_addr, new_addr);
+>> +}
+>> +
+>>   int bpf_jit_emit_insn(const struct bpf_insn *insn, struct 
+>> rv_jit_context *ctx,
+>>                 bool extra_pass)
+>>   {
+>> @@ -1266,7 +1389,7 @@ int bpf_jit_emit_insn(const struct bpf_insn 
+>> *insn, struct rv_jit_context *ctx,
+>>   void bpf_jit_build_prologue(struct rv_jit_context *ctx)
+>>   {
+>> -    int stack_adjust = 0, store_offset, bpf_stack_adjust;
+>> +    int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
+>>       bool is_main_prog = ctx->prog->aux->func_idx == 0;
+>>       bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, 16);
+>> @@ -1294,6 +1417,10 @@ void bpf_jit_build_prologue(struct 
+>> rv_jit_context *ctx)
+>>       store_offset = stack_adjust - 8;
+>> +    /* reserve 4 nop insns */
+>> +    for (i = 0; i < 4; i++)
+>> +        emit(rv_nop(), ctx);
+>> +
+>>       /* First instruction is always setting the tail-call-counter
+>>        * (TCC) register. This instruction is skipped for tail calls.
+>>        * Force using a 4-byte (non-compressed) instruction.
+
