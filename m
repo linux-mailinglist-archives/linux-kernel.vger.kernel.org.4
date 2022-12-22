@@ -2,107 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C279F654666
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A61654668
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiLVTOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 14:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
+        id S229786AbiLVTPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 14:15:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiLVTOl (ORCPT
+        with ESMTP id S229843AbiLVTPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 14:14:41 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C64D28E24
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:14:41 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id ml19so1823983qvb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:14:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GJNaFLC8BKqHDga1qfAWPtgnMSOxG5YailbfsAfU+ik=;
-        b=b61Hcf9HQ4PdKZUPZZLS3zdovc4g6u1yYBjSZgqYu6QJAjBaXfM3ZQUO9y8930Wl8o
-         5VplkZ9Tddes/053LAXLBP2Yeu/xoJFUXi0nNmXuIWvwOum0uE6dBYUiwQCYUhLt0vi1
-         6nttqcTaSWh1ipcrOsn2D42Af5+OwmrLsWf2Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GJNaFLC8BKqHDga1qfAWPtgnMSOxG5YailbfsAfU+ik=;
-        b=2xaPNoBi7NpAF8g4Faca+q8v4tg9f1eLGtlxcCSvzmaPWxx/89QE/i4z8rJIrHg2GJ
-         p5ylJjxcq74tGAyab+I2j5/Vqgshf9K+Bmi4mo0XnlwN9LvZoeUP9DDCKktuJ5yCRPAG
-         aiN961i1TIlmV02K7XxgRYnIxSG7z0J5Y+eFQxHLydhPBFjVQSMluWYyD91qBez+/5hb
-         NjH4cp8nzNHiu3bj4xDgn/HjO1iF7AUxwh7HcF11v2dkc705eaOyCs6ookLPWW2fZe9y
-         /eg2YtWjhcCVaXQSxV6sQtf1y2pJrnoCynCa6VXe8cb8XpEWW28mjtBMTIqn/5AH15/l
-         NRAg==
-X-Gm-Message-State: AFqh2kr0SyMmCUMEm0ntL19Pa5WC1TgG+tGIkKamDPMxbJ/Xk5eHsXzR
-        qqCo+Ppeiv6B8MED93XPWQJom8FTQioDeQuX
-X-Google-Smtp-Source: AMrXdXsNJnluQyExlIdtp52abknVeQ30AnN3FW9DeVX/GsX+Sx4FGD3xKT+M/ObzVK4JclI0Dd67WA==
-X-Received: by 2002:a05:6214:5b04:b0:516:d25b:a5d5 with SMTP id ma4-20020a0562145b0400b00516d25ba5d5mr9529413qvb.16.1671736480192;
-        Thu, 22 Dec 2022 11:14:40 -0800 (PST)
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com. [209.85.222.181])
-        by smtp.gmail.com with ESMTPSA id x17-20020a05620a449100b006fc2e2198easm806135qkp.95.2022.12.22.11.14.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 11:14:37 -0800 (PST)
-Received: by mail-qk1-f181.google.com with SMTP id a25so1363709qkl.12
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:14:37 -0800 (PST)
-X-Received: by 2002:a05:620a:4720:b0:6ff:cbda:a128 with SMTP id
- bs32-20020a05620a472000b006ffcbdaa128mr277409qkb.697.1671736477239; Thu, 22
- Dec 2022 11:14:37 -0800 (PST)
+        Thu, 22 Dec 2022 14:15:17 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CE327CD8;
+        Thu, 22 Dec 2022 11:15:15 -0800 (PST)
+Received: from umang.jainideasonboard.com (unknown [IPv6:2401:4900:1f3f:d076:4da6:b729:f032:ed0a])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1C1F7471;
+        Thu, 22 Dec 2022 20:15:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671736512;
+        bh=YxPVSern8c6BOEbRmDUoR5qKPKTaeKpaIusaimppST4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WLz96d20tboBXh4/SZ/mHDETiyar8Zei97l2GZiDWT7ud/bfHm0LqXhECgTmRGMUH
+         HITUHkf9W54ihP0lIBKDgsVM9aPgTJVu65qxQqPb9n83lJDgJmQpMSu3KqOttrFl3k
+         VdAQ5qRiJDzYFoCRGzk0E7pIK9OfljNF6YEHWaCA=
+From:   Umang Jain <umang.jain@ideasonboard.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adrien Thierry <athierry@redhat.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Umang Jain <umang.jain@ideasonboard.com>
+Subject: [PATCH v2 0/4] staging: vchiq: Rework child platform device (un)register
+Date:   Fri, 23 Dec 2022 00:44:56 +0530
+Message-Id: <20221222191500.515795-1-umang.jain@ideasonboard.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221222164914.508929-1-acme@kernel.org>
-In-Reply-To: <20221222164914.508929-1-acme@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 22 Dec 2022 11:14:20 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi4u5rpaPrOokekEg_5Sud=8SZhA=KTALXNOC_S89jKBg@mail.gmail.com>
-Message-ID: <CAHk-=wi4u5rpaPrOokekEg_5Sud=8SZhA=KTALXNOC_S89jKBg@mail.gmail.com>
-Subject: Re: [GIT PULL] perf tools changes for v6.2: 2nd batch
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Changbin Du <changbin.du@gmail.com>,
-        Hans-Peter Nilsson <hp@axis.com>,
-        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 8:49 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
->         Please consider pulling,
+V2 series for addressing the TODO item:
+        "Get rid of all non essential global structures and create a proper
+         per device structure"
+This series:
+- Fixes a platform device leak (1/4)
+- Simplifies vchiq_register_child (2/4 and 3/4)
+- drops global references for child platform devices and prepares for
+  addition of new child devices in future (4/4)
 
-I have pulled this, because it's purely tooling.
+v1: https://lore.kernel.org/all/20221220084404.19280-1-umang.jain@ideasonboard.com/
 
-HOWEVER.
+Umang Jain (4):
+  staging: vc04_services: Stop leaking platform device on error path
+  staging: vchiq: Do not assign default dma_mask explicitly
+  staging: vchiq: Simplify platform devices registration
+  staging: vchiq: Rework child platform device (un)register
 
-You are now on my shit-list for violating the Christmas peace with a
-pull request where most of the contents were not in linux-next, and
-weren't fixes.
+ .../interface/vchiq_arm/vchiq_arm.c           | 40 ++++++++++---------
+ 1 file changed, 21 insertions(+), 19 deletions(-)
 
-I'm PISSED.  Right now I am in the mindset of "I pulled this, but I
-never *ever* want to see another pull request from this f*cker".
+-- 
+2.38.1
 
-Get bent.
-
-                    Linus
