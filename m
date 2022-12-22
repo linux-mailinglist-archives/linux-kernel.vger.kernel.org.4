@@ -2,180 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235F4654099
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080206540A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235824AbiLVMBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:01:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S235609AbiLVMCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235870AbiLVMBQ (ORCPT
+        with ESMTP id S235664AbiLVMB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:01:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C6E33CF4;
-        Thu, 22 Dec 2022 03:53:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E18FB81D30;
-        Thu, 22 Dec 2022 11:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9314C433F2;
-        Thu, 22 Dec 2022 11:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671710016;
-        bh=dwRgGhvkMsp229h+rO5gqtrhdXxrFhA631KDq6GCycY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WifJDlvxmHu39qI6F+fDSJ5b1cObtwXpINE6FUABMBEy0GM/b8I4BYqJKUOvrl/Ws
-         SpRbSnqddfHC9RohYxVrBf2oZ9WyphQhtOb0T+h3nYNZm4/SNZEYTm31Xkak0N5kIr
-         WTvYcPiVEaufsYUtmZj2LiyCI1Q5setZj6fTkkjBcIxfmkmvEu0qH/mwrx1wR/kg3k
-         v+I7niKR0Iwa1jrd03hAzn6pCnLFZHrk3eELuFxwOam/vXZRhWSY1ckDQWqZdLyaMP
-         XYtZns5zGWWcIkQthsXtJb5UKcGdymf10jv1nxZDn00mvP+wg0v9kPSsFobNVRfaw3
-         xdK/9aOin6M1g==
-Received: by mail-lf1-f46.google.com with SMTP id z26so2366639lfu.8;
-        Thu, 22 Dec 2022 03:53:36 -0800 (PST)
-X-Gm-Message-State: AFqh2kqXAvfO2rQtRdg8RrjNzaPGeu1Xf8khoMGgY0bAZ5mTznuXLjRG
-        pa4v6DbgJfZVhjhkj2UVQJhXDYltSFdZEqE1XeQ=
-X-Google-Smtp-Source: AMrXdXvrt9G9hSeWg+GElY+cYYoH6hbx0Lc+3N6i5piAcI92l/HeoPS1Z81DFG39t0aA0cn/00XO87rpCaoY9xDesuQ=
-X-Received: by 2002:a05:6512:15a3:b0:4bc:bdf5:f163 with SMTP id
- bp35-20020a05651215a300b004bcbdf5f163mr310195lfb.583.1671710014879; Thu, 22
- Dec 2022 03:53:34 -0800 (PST)
+        Thu, 22 Dec 2022 07:01:27 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BC02B26C;
+        Thu, 22 Dec 2022 03:54:07 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id a1so2585356edf.5;
+        Thu, 22 Dec 2022 03:54:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZUc9ftQEfhd/MV6cYGaYztTCR+BYKCTunlj8uFzmn+4=;
+        b=i93t2b/Htglle9vUzVQKJQ7VAo/2qMpxF89GS76QCzCoUyAUdZMEz1b1Aa+PFTUuop
+         b1saCaoF31Ralebjc1qZPgfTtQi/hFc55f5xDvPlBgDvfTh/gQIWNRySpcUhg+LXmC8I
+         5V+1cBSppUMktXDusJmnQcbEbLoa+TpYIz2vWqI+p8f5CodZr0+6hsha76TA2zeLvm08
+         zMWQAlrQ0E0xMDlXIJsGztoTRPDH+2pWoGdhHCJx50vqao+HcvR3ClJVZ7aSwsWSqK7r
+         RCDyk72raqqWUZidbHuIIFfm4Q5xPNthfq2e3fCzlsgQYXcfHNgk6DlzHhEHhOv/ffMS
+         jvrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZUc9ftQEfhd/MV6cYGaYztTCR+BYKCTunlj8uFzmn+4=;
+        b=ZlmH/6MG57gBV41uCoYFeksMuj7D04VlQ30lbf7jGTxvBmGrkMWo4TWoEjIILgKW0G
+         xYWtOG69WtFdJjupxYetCPHs5seK1HkZqMbaiPB4BAxgwW+x0ZFWZNIRCbZCycEWgCTL
+         UuY3kCcqrvlYsttb0fG1OLXHRXfWcJPhQKqHZDMM6O4luW/bPMAj8kSm9WD3XPaM8gID
+         guBg3X0vtMg7gGw0teOxVqrRNzOVfzXikscF1rYCn42a+WqU4qBzjmXgqxgdWRanKzp3
+         /bcFja9KSoV1CBOKBt1a9iTXFolEwrikb5p7m/Yog6n0HrofALIzIhKnU/Qcy9xnFSqz
+         PtGw==
+X-Gm-Message-State: AFqh2kp6KOO5iLYZbcgAnkUIYh+m8fWYaGFjzupD0CTq0M3hPAuMR5M3
+        Nsdib36vKfGy1vT8XgCI2exTGyo0XsrPo5TpGSk=
+X-Google-Smtp-Source: AMrXdXts0LR79dHOd6WwBj5aSIMsk5SRX5i2AP+zNxuECLbTY24XvwP3oGjtrdUQX9zHVFa8JV2WtWA2w6J+yeSCkXU=
+X-Received: by 2002:a05:6402:22a8:b0:468:cae8:f5a6 with SMTP id
+ cx8-20020a05640222a800b00468cae8f5a6mr645677edb.263.1671710046207; Thu, 22
+ Dec 2022 03:54:06 -0800 (PST)
 MIME-Version: 1.0
-References: <CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com>
- <26bd2928-9d62-32b3-4f9f-9dd9293cefeb@leemhuis.info> <CAK7LNAQ5VVRdrewtxrBdw561LL=yY8fdr=i1e7pp4DRht=r_Ww@mail.gmail.com>
- <0ab93345-18e1-15c9-a4a3-066ea1cd862b@leemhuis.info>
-In-Reply-To: <0ab93345-18e1-15c9-a4a3-066ea1cd862b@leemhuis.info>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 22 Dec 2022 12:53:23 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXE+LBOBavOre1O8LTGPCmB8m58fbfo92Sx4WukyNAur-A@mail.gmail.com>
-Message-ID: <CAMj1kXE+LBOBavOre1O8LTGPCmB8m58fbfo92Sx4WukyNAur-A@mail.gmail.com>
-Subject: Re: BUG: arm64: missing build-id from vmlinux
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, Dennis Gilmore <dennis@ausil.us>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
+References: <20221221000242.340202-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221221000242.340202-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdXmKYV7CwuD=ZNgaOTc+LxP9OvEJ8gcW_iS5NamTxEE+w@mail.gmail.com>
+ <CA+V-a8tqvY+Nj391j+zJO21Q=47pyFR1SkDLH-hmJephcorY3g@mail.gmail.com> <CAMuHMdXDbfadxJsrEvQMwQKvxtBxQRA_Bx4+FY90N9v_XVirOA@mail.gmail.com>
+In-Reply-To: <CAMuHMdXDbfadxJsrEvQMwQKvxtBxQRA_Bx4+FY90N9v_XVirOA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 22 Dec 2022 11:53:40 +0000
+Message-ID: <CA+V-a8vmxDMTVJuxo9=6451_Y3e1+7SUu9R38LBsQyuzXch5_g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: interrupt-controller:
+ renesas,rzg2l-irqc: Document RZ/G2UL SoC
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Dec 2022 at 17:29, Thorsten Leemhuis
-<regressions@leemhuis.info> wrote:
->
-> On 21.12.22 16:39, Masahiro Yamada wrote:
-> > On Wed, Dec 21, 2022 at 5:23 PM Thorsten Leemhuis
-> > <regressions@leemhuis.info> wrote:
-> >>
-> >> Hi, this is your Linux kernel regression tracker. CCing the regression
-> >> mailing list, as it should be in the loop for all regressions:
-> >> https://docs.kernel.org/admin-guide/reporting-regressions.html
-> >>
-> >> On 18.12.22 21:51, Dennis Gilmore wrote:
-> >>> The changes in https://lore.kernel.org/linux-arm-kernel/166783716442.=
-32724.935158280857906499.b4-ty@kernel.org/T/
-> >>> result in vmlinux no longer having a build-id.
-> >>
-> >> FWIW, that's 994b7ac1697b ("arm64: remove special treatment for the li=
-nk
-> >> order of head.o") from Masahiro merged through Will this cycle.
-> >>
-> >>> At the least, this
-> >>> causes rpm builds to fail. Reverting the patch does bring back a
-> >>> build-id, but there may be a different way to fix the regression
-> >>
-> >> Makes me wonder if other distros or CIs relying on the build-id are
-> >> broken, too.
-> >>
-> >> Anyway, the holiday season is upon us, hence I also wonder if it would
-> >> be best to revert above change quickly and leave further debugging for=
- 2023.
-> >>
-> >> Masahiro, Will, what's your option on this?
->
-> Masahiro, many thx for looking into this.
->
-> > I do not understand why you rush into the revert so quickly.
-> > We are before -rc1.
-> > We have 7 weeks before the 6.2 release
-> > (assuming we will have up to -rc7).
-> >
-> > If we get -rc6 or -rc7 and we still do not
-> > solve the issue, we should consider reverting it.
->
-> Because it looked like a regression that makes it harder for people and
-> CI systems to build and test mainline. To quote
-> Documentation/process/handling-regressions.rst (
-> https://docs.kernel.org/process/handling-regressions.html ):
->
-> """
->  * Fix regressions within two or three days, if they are critical for
-> some reason =E2=80=93 for example, if the issue is likely to affect many =
-users
-> of the kernel series in question on all or certain architectures. Note,
-> this includes mainline, as issues like compile errors otherwise might
-> prevent many testers or continuous integration systems from testing the
-> series.
-> """
->
-> I suspect that other distros rely on the build-id as well. Maybe I'm
-> wrong with that, but even if only Fedora and derivatives are effected it
-> will annoy some people. Sure, each can apply the revert, but before that
-> everyone affected will spend time debugging the issue first. A quick
-> revert in mainline (with a reapply later together with a fix) thus IMHO
-> is the most efficient approach afaics.
->
+Hi Geert,
 
-Agree with Masahiro here.
+On Thu, Dec 22, 2022 at 8:19 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Wed, Dec 21, 2022 at 10:06 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> > On Wed, Dec 21, 2022 at 12:37 PM Geert Uytterhoeven
+> > <geert@linux-m68k.org> wrote:
+> > > On Wed, Dec 21, 2022 at 1:03 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > Document RZ/G2UL (R9A07G043U) IRQC bindings. The IRQC block on RZ/G2UL SoC
+> > > > is almost identical to one found on the RZ/G2L SoC the only difference
+> > > > being it can support BUS_ERR_INT for which it has additional registers.
+> > > > Hence new generic compatible string "renesas,rzg2ul-irqc" is added for
+> > > > RZ/G2UL SoC.
+> > > >
+> > > > Now that we have additional interrupt for RZ/G2UL and RZ/Five SoC
+> > > > interrupt-names property is added so that we can parse them based on
+> > > > names.
+> > > >
+> > > > While at it updated the example node to four spaces and added
+> > > > interrupt-names property.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > ---
+> > > > v1- > v2
+> > > > * Dropped RB tags
+> > > > * Added generic compatible string for rzg2ul
+> > > > * Added interrupt-names
+> > > > * Added checks for RZ/G2UL to make sure interrupts are 42 and interrupt-names
+> > > > * Updated example node with interrupt-names
+> > > > * Used 4 spaces for example node
+> > >
+> > > Thanks for the update!
+> > >
+> > > > --- a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> > > > +++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> > > > @@ -19,16 +19,19 @@ description: |
+> > > >      - NMI edge select (NMI is not treated as NMI exception and supports fall edge and
+> > > >        stand-up edge detection interrupts)
+> > > >
+> > > > -allOf:
+> > > > -  - $ref: /schemas/interrupt-controller.yaml#
+> > > > -
+> > > >  properties:
+> > > >    compatible:
+> > > > -    items:
+> > > > -      - enum:
+> > > > -          - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
+> > > > -          - renesas,r9a07g054-irqc    # RZ/V2L
+> > > > -      - const: renesas,rzg2l-irqc
+> > > > +    oneOf:
+> > > > +      - items:
+> > > > +          - enum:
+> > > > +              - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
+> > > > +              - renesas,r9a07g054-irqc    # RZ/V2L
+> > > > +          - const: renesas,rzg2l-irqc
+> > > > +
+> > > > +      - items:
+> > > > +          - enum:
+> > > > +              - renesas,r9a07g043u-irqc   # RZ/G2UL
+> > > > +          - const: renesas,rzg2ul-irqc
+> > >
+> > > I'm not sure it's worth splitting into RZ/G2L and RZ/G2UL alike
+> > > variants, and adding the "renesas,rzg2ul-irqc" family-specific
+> > > compatible value.  You can easily handle the difference by the presence
+> > > (or absence) of the "bus-err" interrupt source.
+> > >
+> > Yes, the only reason to add "renesas,rzg2ul-irqc" is to differentiate
+> > RZ/Five later. I have not worked out on how this driver will work in
+> > case of RZ/Five yet with PLIC (as we sifive plic driver as a chained
+> > handler and then we have the RISC-V intc driver). If you insist I can
+> > drop it for now and then later when we add RZ/FIve we could add a
+> > check for compat string maybe?
+>
+> Given you already use "renesas,r9a07g043u-irqc" (note the "u") here,
+> you will have "renesas,r9a07g043f-irqc" to handle the (minor)
+> differences.
+>
+Ok, so I'll revert back to the previous version of the patch and still
+add the interrupt names.
 
-The issue seems to be caused by the fact that whichever object gets
-linked first gets to decide the type of a section, and so the .notes
-section will be of type NOTE if head.o gets linked first, or PROGBITS
-otherwise. The latter PROGBITS type seems to be the result of the
-compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
-
-The hunk below fixes it for me, by avoiding notes emitted as PROGBITS.
-I'll leave it to Masahiro to decide whether this should be fixed for
-arm64 only or for all architectures, but I suspect the latter would be
-most appropriate.
-
-Note that the kernel's rpm-pkg and binrpm-pkg targets seem to be
-unaffected by this.
-
-diff --git a/arch/arm64/include/asm/assembler.h
-b/arch/arm64/include/asm/assembler.h
-index 376a980f2bad08bb..10a172601fe7f53f 100644
---- a/arch/arm64/include/asm/assembler.h
-+++ b/arch/arm64/include/asm/assembler.h
-@@ -818,7 +818,7 @@ alternative_endif
-
- #ifdef GNU_PROPERTY_AARCH64_FEATURE_1_DEFAULT
- .macro emit_aarch64_feature_1_and, feat=3DGNU_PROPERTY_AARCH64_FEATURE_1_D=
-EFAULT
--       .pushsection .note.gnu.property, "a"
-+       .pushsection .note.gnu.property, "a", %note
-        .align  3
-        .long   2f - 1f
-        .long   6f - 3f
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.ld=
-s.S
-index 4c13dafc98b8400f..8a8044dea71b0609 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -160,6 +160,7 @@ SECTIONS
-        /DISCARD/ : {
-                *(.interp .dynamic)
-                *(.dynsym .dynstr .hash .gnu.hash)
-+               *(.note.GNU-stack) # emitted as PROGBITS
-        }
-
-        . =3D KIMAGE_VADDR;
+Cheers,
+Prabhakar
