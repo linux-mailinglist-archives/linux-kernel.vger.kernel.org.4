@@ -2,124 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7C7653C83
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D142653C89
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234636AbiLVH3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 02:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
+        id S235002AbiLVHb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 02:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiLVH3U (ORCPT
+        with ESMTP id S229987AbiLVHbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 02:29:20 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A322BDA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:29:18 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-43ea89bc5d8so12951507b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:29:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YDBQOU+0luLi27shrHHDO2SRv4ai6dz5pCa52is39dQ=;
-        b=iyErmQImVKKNNTRt+pdj6Ntw0fQgB9SlSnTHvhEXKX9A1ANKW81xBXTTwAdp7y2JDx
-         u6bWXDVQuSRQjViyREmniY3etXM4sCrTuCKcLWSBbs2hRUH4CNCuWooUyMkW3gVccYEt
-         7K4yX2KFPokD1wGq7s9sSWJNSHYUbdlsiDfEjILmWobBEJnLEE5JkKpwvVAd93q665gT
-         cNuCR8oY7J1lWy4ntIfDwlL/8p6TJ+dQMm7RC/pX4Z5nCOyFeagZE49TF4JrNdLLW0s6
-         rSYu7mEakG3h5ZTcpaFegNCEla3Mku56Zw59AYRALgXhl1zfa9ZmaGU6XRoVh96alT4o
-         llIA==
+        Thu, 22 Dec 2022 02:31:42 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E10248C6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:31:40 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id j11-20020a056e02218b00b00304b148969dso707502ila.13
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:31:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YDBQOU+0luLi27shrHHDO2SRv4ai6dz5pCa52is39dQ=;
-        b=44E0/l77U36+AjNxd7Furq3JGCNbbmGLTReNQRQkkl7MZaACx4SUaVMqif2lCQTxOU
-         kR+2EcxJTgAf37vNHC7CxjhI2tcDikx377UcHpjPttomLLKILjZyDg/tWAaiCO4vzerr
-         n8rnFaGN7vi9Bl3BZ24ah9NL/kSX12Hj4EtbkedzDYP0wH3D0AwBsqsCoMSGwqXuuVcU
-         2NmnMQDDO719/99N5iQtuR9E+qnT+7BpADX++xKgjxxdZPoGGkVODENxkQ+7uHHv+EB4
-         lzl11u3kLBK3wsmKlDFHWqrXhkrAnQMvhrElHRKhob1ehxKv59k7Oe6DxtlhqX47hiDv
-         qQuw==
-X-Gm-Message-State: AFqh2koqcQo2zXseUBs8/bhfWpmhHhd2GdaYC6ZCwR139hmu96yrPzUz
-        3/ogQ+ofm3lK7a++wvPOIUwR6BHIZmQ=
-X-Google-Smtp-Source: AMrXdXsw3K5e0ejM3+wRydXNF+NfW/0OfhSvRepRxGDF2lEIac10qPBfPK6x49VmTKZSNK9p4LXq5kKUgok=
-X-Received: from hhhuuu.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:c80])
- (user=hhhuuu job=sendgmr) by 2002:a0d:ca93:0:b0:44d:26dc:2fc7 with SMTP id
- m141-20020a0dca93000000b0044d26dc2fc7mr359175ywd.333.1671694158099; Wed, 21
- Dec 2022 23:29:18 -0800 (PST)
-Date:   Thu, 22 Dec 2022 07:29:12 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221222072912.1843384-1-hhhuuu@google.com>
-Subject: [PATCH v2] usb: xhci: Check endpoint is valid before dereferencing it
-From:   Jimmy Hu <hhhuuu@google.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jimmy Hu <hhhuuu@google.com>,
-        stable@vger.kernel.org
+        bh=2Vj70vXqAi1mevmse7PywnzjwLNIX/DY/2s63bH6r/c=;
+        b=D0jUGi4EuMAcE85308yaGT4DqnZeEX+fM41m2Xd7KlqrfvFJ2ZFoScfTDQ5yaNFrNK
+         2tUIYYA9AaLfZ+5gx8QdkqDITFDxJS6IvEPm3NScM5X467/8MMBEeloCPdDhpqXdRVxZ
+         t0l24c4I7hi56pTp0K7wfZa4/N1zDqJ9mv8kYSQ65bGmF8Ju1QZFCiTNPGejj0/9RqOp
+         E11WqMEoWqYz8fuHZiunRs+EdzIn+jXHzWg7trn7AZko7IymOWmvsO5IV8W75HmiswT8
+         Bs1eeCYDA4U+n3rLWZhG00Hc/egBakiJmKgcxUJcqSUu2VESFS8mmhZQAz3koZpC4c3x
+         w04g==
+X-Gm-Message-State: AFqh2koL07+jexHLPHrdaKC8vQ6XNWT29KfMX5p4I8tAMs1LYbJ9O3NK
+        Vf2b5tvsSZusyRuxpucLu+5f+3Z7KnbsDrJbw8FMBI+1aFou
+X-Google-Smtp-Source: AMrXdXuVevLm+5oTk0G2BTm+4+OJEgoP44HeGXufw7OedfqsYvd9X+5ofk/y3Vufpg7PmgFWHRTYJcr7HyD8I5rln8vH+Hdw2sxA
+MIME-Version: 1.0
+X-Received: by 2002:a05:6602:1790:b0:6df:f58c:6932 with SMTP id
+ y16-20020a056602179000b006dff58c6932mr333894iox.137.1671694299269; Wed, 21
+ Dec 2022 23:31:39 -0800 (PST)
+Date:   Wed, 21 Dec 2022 23:31:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e1923c05f065a8dc@google.com>
+Subject: [syzbot] [udf?] WARNING in udf_rename
+From:   syzbot <syzbot+932c11aa5a73e344a857@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the host controller is not responding, all URBs queued to all
-endpoints need to be killed. This can cause a kernel panic if we
-dereference an invalid endpoint.
+Hello,
 
-Fix this by using xhci_get_virt_ep() helper to find the endpoint and
-checking if the endpoint is valid before dereferencing it.
+syzbot found the following issue on:
 
-[233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
-[233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
+HEAD commit:    e45fb347b630 Add linux-next specific files for 20221220
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=101f5464480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8ae91cba504b4da8
+dashboard link: https://syzkaller.appspot.com/bug?extid=932c11aa5a73e344a857
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116bc780480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12aa9b94480000
 
-[233311.853964] pc : xhci_hc_died+0x10c/0x270
-[233311.853971] lr : xhci_hc_died+0x1ac/0x270
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1ae2b280f860/disk-e45fb347.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/253fc221144a/vmlinux-e45fb347.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e2695a52406f/bzImage-e45fb347.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/0ec2a53bda86/mount_0.gz
 
-[233311.854077] Call trace:
-[233311.854085]  xhci_hc_died+0x10c/0x270
-[233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
-[233311.854105]  call_timer_fn+0x50/0x2d4
-[233311.854112]  expire_timers+0xac/0x2e4
-[233311.854118]  run_timer_softirq+0x300/0xabc
-[233311.854127]  __do_softirq+0x148/0x528
-[233311.854135]  irq_exit+0x194/0x1a8
-[233311.854143]  __handle_domain_irq+0x164/0x1d0
-[233311.854149]  gic_handle_irq.22273+0x10c/0x188
-[233311.854156]  el1_irq+0xfc/0x1a8
-[233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
-[233311.854185]  cpuidle_enter_state+0x1f0/0x764
-[233311.854194]  do_idle+0x594/0x6ac
-[233311.854201]  cpu_startup_entry+0x7c/0x80
-[233311.854209]  secondary_start_kernel+0x170/0x198
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+932c11aa5a73e344a857@syzkaller.appspotmail.com
 
-Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=5073 'syz-executor109'
+loop0: detected capacity change from 0 to 2048
+UDF-fs: INFO Mounting volume 'LinuxUDF', timestamp 2022/11/22 14:59 (1000)
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5073 at fs/udf/namei.c:802 udf_rename+0x914/0xb60 fs/udf/namei.c:802
+Modules linked in:
+CPU: 1 PID: 5073 Comm: syz-executor109 Not tainted 6.1.0-next-20221220-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:udf_rename+0x914/0xb60 fs/udf/namei.c:802
+Code: 48 89 da 48 8b 7c 24 58 e8 89 c5 ff ff 31 ff 89 c3 89 c6 e8 3e 38 a2 fe 85 db 0f 84 5d fa ff ff e9 c9 fd ff ff e8 7c 3b a2 fe <0f> 0b 48 8b 7c 24 30 bb 8b ff ff ff e8 8b 58 01 00 e9 ae fd ff ff
+RSP: 0018:ffffc900039df5d0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888022559d40 RSI: ffffffff82df1964 RDI: 0000000000000005
+RBP: ffffc900039dfbe8 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff888073571490 R14: ffffc900039df660 R15: ffff888073571af8
+FS:  0000555556037300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000005fdeb8 CR3: 000000002a4df000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vfs_rename+0x1162/0x1a90 fs/namei.c:4779
+ do_renameat2+0xb22/0xc30 fs/namei.c:4930
+ __do_sys_rename fs/namei.c:4976 [inline]
+ __se_sys_rename fs/namei.c:4974 [inline]
+ __x64_sys_rename+0x81/0xa0 fs/namei.c:4974
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4a792ed819
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd557425e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
+RAX: ffffffffffffffda RBX: 0031656c69662f2e RCX: 00007f4a792ed819
+RDX: 00007f4a792ed819 RSI: 0000000020000400 RDI: 00000000200003c0
+RBP: 00007f4a792ad0b0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000bea R11: 0000000000000246 R12: 00007f4a792ad140
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
 ---
- drivers/usb/host/xhci-ring.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index ddc30037f9ce..f5b0e1ce22af 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
- 	struct xhci_virt_ep *ep;
- 	struct xhci_ring *ring;
- 
--	ep = &xhci->devs[slot_id]->eps[ep_index];
-+	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
-+	if (!ep)
-+		return;
-+
- 	if ((ep->ep_state & EP_HAS_STREAMS) ||
- 			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
- 		int stream_id;
--- 
-2.39.0.314.g84b9a713c41-goog
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
