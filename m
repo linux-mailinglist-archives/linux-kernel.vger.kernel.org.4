@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC56B65477C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B5765477D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbiLVUqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
+        id S235298AbiLVUqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiLVUqL (ORCPT
+        with ESMTP id S229524AbiLVUqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Dec 2022 15:46:11 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A75164E4;
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6904B1C401;
         Thu, 22 Dec 2022 12:46:10 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BMKjqCK129515;
-        Thu, 22 Dec 2022 14:45:52 -0600
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BMKjuVe024965;
+        Thu, 22 Dec 2022 14:45:56 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1671741952;
-        bh=t0CVlGayMw5HcUXgmGTym4TtlkZXIl8bMzE8UidCg5k=;
-        h=From:To:CC:Subject:Date;
-        b=HWlECEZuZQdcMs1QjhMsKnx5gryDNYkfRok6Z0h2QfGaMVfqFjQ7GYgsNEtkGOrJa
-         Au2fc/lhRX6Ce3o9q0d/0js9WfxDG6S+FioHJBTQSobLkvFrtklQbJ435kORBhVTG5
-         wzLRpuvGTTiaSGt83bFbgqs8YDn2HWvNPurTmD6Y=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BMKjqqM120296
+        s=ti-com-17Q1; t=1671741956;
+        bh=FjD3HhJH9r0H0J7RMDwx9xTIzqCwJ0z09ShPMRFU5ZY=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=NWiLXIdb1wDfwULe2IXdh9KUYnSKoAAQbVoRoCXtV8axNatVnXNwuNA3bAE+Ju+pv
+         wBB8vVIfdbBCYtj+wrM7ZSUCl8deET3tS3Xea+K6PoXeiASnMEadkJSHZx6f9xBAeM
+         x+UZQRF7A0De1Ia9YBKbi+kBOqMf2Lcj3LpMPDv0=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BMKjujt119268
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 22 Dec 2022 14:45:52 -0600
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 22 Dec 2022 14:45:56 -0600
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 22
- Dec 2022 14:45:51 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2022 14:45:56 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 22 Dec 2022 14:45:51 -0600
+ Frontend Transport; Thu, 22 Dec 2022 14:45:56 -0600
 Received: from LT5CD112GSQZ.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BMKjk7M004121;
-        Thu, 22 Dec 2022 14:45:47 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BMKjk7N004121;
+        Thu, 22 Dec 2022 14:45:52 -0600
 From:   Apurva Nandan <a-nandan@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
@@ -50,10 +50,12 @@ To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-gpio@vger.kernel.org>
 CC:     Apurva Nandan <a-nandan@ti.com>, Hari Nagalla <hnagalla@ti.com>
-Subject: [PATCH v4 0/4] Add initial support for J784S4 SoC
-Date:   Fri, 23 Dec 2022 02:15:41 +0530
-Message-ID: <20221222204545.45281-1-a-nandan@ti.com>
+Subject: [PATCH v4 1/4] dt-bindings: arm: ti: Add bindings for J784s4 SoC
+Date:   Fri, 23 Dec 2022 02:15:42 +0530
+Message-ID: <20221222204545.45281-2-a-nandan@ti.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221222204545.45281-1-a-nandan@ti.com>
+References: <20221222204545.45281-1-a-nandan@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -67,76 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The J784S4 SoC belongs to the K3 Multicore SoC architecture
-platform, providing advanced system integration in automotive,
-ADAS and industrial applications requiring AI at the network edge.
-This SoC extends the K3 Jacinto 7 family of SoCs with focus on
-raising performance and integration while providing interfaces,
-memory architecture and compute performance for multi-sensor, high
-concurrency applications.
+Add binding for J784S4 SoC
 
-Some highlights of this SoC are:
-* Up to 8 Cortex-A72s, four clusters of lockstep capable dual Cortex-R5F MCUs,
-  4 C7x floating point vector DSPs with Matrix Multiply Accelerator(MMA) for
-  deep learning and CNN.
-* 3D GPU: Automotive grade IMG BXS-4-64
-* Vision Processing Accelerator (VPAC) with image signal processor and Depth
-  and Motion Processing Accelerator (DMPAC)
-* Three CSI2.0 4L RX plus two CSI2.0 4L TX, two DSI Tx, one eDP/DP and one
-  DPI interface.
-* Integrated gigabit ethernet switch, up to 8 ports (TDA4VH), two ports
-  support 10Gb USXGMII; Two 4 lane PCIe-GEN3 controllers, USB3.0 Dual-role
-  device subsystems, Up to 20 MCANs, among other peripherals.
+Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/arm/ti/k3.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-See J784S4 Technical Reference Manual (SPRUJ52 - JUNE 2022)
-for further details: http://www.ti.com/lit/zip/spruj52
-
-bootlog: https://rentry.co/gbefx/raw
-
-Changes in v4:
-- Removed ti,sci-dev-id from main_navss and mcu_navss, also changed their
-  compatibles to "simple-bus"
-- Removed status = "disabled" from phy_gmii_sel and cpts@3d000
-- Removed empty chosen {} from k3-j784s4.dtsi
-
-Changes in v3:
-- Enabled hwspinlock, main_ringacc, main_udmap, cpts, and mcu_navss in
-  the dtsi
-- Removed alignment in secure_ddr optee
-- Changed the assigned clock parent in main and mcu cpts to main pll0, hsdiv6
-  from pll3, hsdiv1
-- Removed few signed-off by
-- Formatting fixes at some places
-- Corrected link to EVM board schmatics in the commit
-
-Changes in v2:
-- Disabled all the IPs that are not mandatory for booting up the SoC by
-  default in the dtsi, and thus this gives a minimal SoC boot devicetree.
-- Moved no-1-8-v property from the k3-j784s4-evm.dts file to
-  k3-j784s4-main.dtsi file.
-- Naming changes (hwlock, regulator) and commit description changes.
-- Added device specific compatible for j721e system controller.
-- Dropped bootargs completely.
-
-Apurva Nandan (4):
-  dt-bindings: arm: ti: Add bindings for J784s4 SoC
-  dt-bindings: pinctrl: k3: Introduce pinmux definitions for J784s4
-  arm64: dts: ti: Add initial support for J784S4 SoC
-  arm64: dts: ti: Add support for J784S4 EVM board
-
- .../devicetree/bindings/arm/ti/k3.yaml        |    6 +
- arch/arm64/boot/dts/ti/Makefile               |    2 +
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      |  196 ++++
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi    | 1007 +++++++++++++++++
- .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     |  311 +++++
- arch/arm64/boot/dts/ti/k3-j784s4.dtsi         |  284 +++++
- include/dt-bindings/pinctrl/k3.h              |    3 +
- 7 files changed, 1809 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
- create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
- create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4.dtsi
-
+diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+index 203faab80142..98af220df721 100644
+--- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+@@ -72,6 +72,12 @@ properties:
+               - ti,j721s2-evm
+           - const: ti,j721s2
+ 
++      - description: K3 J784s4 SoC
++        items:
++          - enum:
++              - ti,j784s4-evm
++          - const: ti,j784s4
++
+ additionalProperties: true
+ 
+ ...
 -- 
 2.34.1
 
