@@ -2,117 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9725E653E43
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F50D653E46
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235286AbiLVK14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 05:27:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
+        id S235302AbiLVK3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 05:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiLVK1x (ORCPT
+        with ESMTP id S235225AbiLVK3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 05:27:53 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8237510576
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 02:27:51 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id a10-20020a056e02180a00b0030bc09c6b94so890183ilv.6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 02:27:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5HTIk+zLHUJHm6DydAui0axcG/OhmJp0BU+jpk6xqyA=;
-        b=JH2SBGgWpn4UCDLBKcA/KKYyES3Zr93pDVj5JmxXLAP3TPdV5o70xVnlrNUoLNXRJQ
-         qM4dYupDHrv/YYUEENtMTIJUlZdbCE+RRvg9Y97QwsdFD1EAgPyARAbrSFq/njIL7W+g
-         dGCg3vv3a2Zve5Pu5wRqkoqM3dNXwqsarBMaq2CpqvORfHGTNLTmlu4qwDjN7H6xkvfv
-         c6p4RWXEl0XBTo3s7X3UiTUsfRbKJXSKpM5PnHMr+EC0azFu5+2NnaltxOTFIsfxmQ60
-         DTqhWcnWhUfNfExZNG5eN0hkbqe9KibKlvRGhNHuYbiWQiSfJFP/FnerDyG7Vm5Pbkfe
-         uDYg==
-X-Gm-Message-State: AFqh2kqavezcrxZq4/KKNGE4hcDL435bLxu8VTQ1BwFdKFPf5Bs0LpuS
-        KHLDajbhY3PezsRL1PfgN22UDAvzF6+j9hN54yfXwf4zH4Sb
-X-Google-Smtp-Source: AMrXdXs0+ZcI1FZ4fAjD3AHxHK3b14KKfNTVkQbC4YkmhGNSNNfgCkmPH354UiQpL9dWLNj9lXMtYz5to1DNNei4Bx68d2VKecjY
+        Thu, 22 Dec 2022 05:29:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3B01F9E0;
+        Thu, 22 Dec 2022 02:28:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87F56B81CF9;
+        Thu, 22 Dec 2022 10:28:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AFC6C433D2;
+        Thu, 22 Dec 2022 10:28:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671704936;
+        bh=jYTXu0mr+Iq6KsQjoUZEPTS0lZzRoJQ5HbdtWQnEvNg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=uMSR+36hRVEFMyTqZxJsZ/l5MIb9nLJOET4nlj/5d5nB6WKNS2Zrpeqv9PMiIvD04
+         86mk2UNDKtXLANDCgEJ4k329aEkoC0DM6yWIFDOTTgVSeaFY8B+QODruD65AneFLiz
+         Tbbh/muKl2qef7TVbkYIANwjITxBmz/nu+JscetuzodGJOjec5lmO+vWTPNTpvhIX7
+         CK8pUYzURAWR+G28q4CnZY4AcV/7C83IXrktDaBhhbD3F5yinAq4K0+8fP+RpLSEdw
+         sObXujqJv8rZyaPOpWwfhpzlIj8kzK3vW8tPk7x7S6aWXZ0OmgQTcRLJuVhHvOBwxO
+         LcVUpJ9kR4RFg==
+Message-ID: <ed8aa4d3-9570-eb72-a7d4-3b690adc3a6d@kernel.org>
+Date:   Thu, 22 Dec 2022 11:28:51 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a02:c723:0:b0:375:3f45:dc94 with SMTP id
- h3-20020a02c723000000b003753f45dc94mr432432jao.144.1671704870902; Thu, 22 Dec
- 2022 02:27:50 -0800 (PST)
-Date:   Thu, 22 Dec 2022 02:27:50 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ffe48405f0681eea@google.com>
-Subject: [syzbot] [reiserfs?] memory leak in journal_init
-From:   syzbot <syzbot+38daa8d09e2bde63614c@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, axboe@kernel.dk, bvanassche@acm.org,
-        jlayton@kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org, yi.zhang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH 5/7] bus: stm32_sys_bus: add support for STM32MP15 and
+ STM32MP13 system bus
+Content-Language: en-US
+To:     Gatien Chevallier <gatien.chevallier@foss.st.com>,
+        alexandre.torgue@foss.st.com, robh+dt@kernel.org,
+        Oleksii_Moisieiev@epam.com, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        loic.pallardy@st.com, devicetree@vger.kernel.org,
+        mark.rutland@arm.com, arnd@arndb.de
+References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
+ <20221221173055.11719-6-gatien.chevallier@foss.st.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20221221173055.11719-6-gatien.chevallier@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 21/12/2022 18:30, Gatien Chevallier wrote:
+> This driver is checking the access rights of the different
+> peripherals connected to the system bus. If access is denied,
+> the associated device tree node is skipped so the platform bus
+> does not probe it.
+> 
+> Signed-off-by: Loic PALLARDY <loic.pallardy@st.com>
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> ---
+>  MAINTAINERS                 |   6 ++
+>  drivers/bus/Kconfig         |   9 ++
+>  drivers/bus/Makefile        |   1 +
+>  drivers/bus/stm32_sys_bus.c | 180 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 196 insertions(+)
+>  create mode 100644 drivers/bus/stm32_sys_bus.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 886d3f69ee64..768a8272233e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19522,6 +19522,12 @@ L:	linux-spi@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/spi/spi-stm32.c
+>  
+> +ST STM32 SYS BUS DRIVER
+> +M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+> +F:	drivers/bus/stm32_sys_bus.c
+> +
+>  ST STPDDC60 DRIVER
+>  M:	Daniel Nilsson <daniel.nilsson@flex.com>
+>  L:	linux-hwmon@vger.kernel.org
+> diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
+> index 7bfe998f3514..638bf5839cb0 100644
+> --- a/drivers/bus/Kconfig
+> +++ b/drivers/bus/Kconfig
+> @@ -163,6 +163,15 @@ config QCOM_SSC_BLOCK_BUS
+>  	  i2c/spi/uart controllers, a hexagon core, and a clock controller
+>  	  which provides clocks for the above.
+>  
+> +config STM32_SYS_BUS
+> +	bool "STM32 System bus controller"
+> +	depends on ARCH_STM32
 
-syzbot found the following issue on:
+|| COMPILE_TEST
 
-HEAD commit:    f9ff5644bcc0 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=168fd1f0480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ea51bad86b095bab
-dashboard link: https://syzkaller.appspot.com/bug?extid=38daa8d09e2bde63614c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1427ed10480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1340b05f880000
+> +	default MACH_STM32MP157 || MACH_STM32MP13
+> +	help
+> +	  Say y to enable device access right verification before device probing.
+> +	  If access not granted, device won't be probed and an error message will
+> +	  provide the reason.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5afa364baa22/disk-f9ff5644.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/eceb2cb98557/vmlinux-f9ff5644.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/974bb6f9809b/bzImage-f9ff5644.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/395742fd36dd/mount_0.gz
+(...)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+38daa8d09e2bde63614c@syzkaller.appspotmail.com
+> +
+> +static int stm32_sys_bus_probe(struct platform_device *pdev)
+> +{
+> +	struct sys_bus_data *pdata;
+> +	struct resource *res;
+> +	void __iomem *mmio;
+> +	struct stm32_sys_bus_match_data *mdata;
+> +	struct device_node *np = pdev->dev.of_node;
+> +
+> +	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
+> +	if (!pdata)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	mmio = devm_ioremap_resource(&pdev->dev, res);
 
-BUG: memory leak
-unreferenced object 0xffff88810c37aa80 (size 192):
-  comm "syz-executor428", pid 5076, jiffies 4294957825 (age 12.820s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 04 00 00 00 00 00 00 00  ................
-    01 00 00 00 00 00 00 00 01 00 00 00 03 00 00 00  ................
-  backtrace:
-    [<ffffffff814f8270>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1062
-    [<ffffffff8178f011>] kmalloc include/linux/slab.h:580 [inline]
-    [<ffffffff8178f011>] kzalloc include/linux/slab.h:720 [inline]
-    [<ffffffff8178f011>] alloc_journal_list+0x21/0xc0 fs/reiserfs/journal.c:2571
-    [<ffffffff8179311f>] journal_list_init fs/reiserfs/journal.c:2585 [inline]
-    [<ffffffff8179311f>] journal_init+0x7bf/0x1fc0 fs/reiserfs/journal.c:2840
-    [<ffffffff8177e93f>] reiserfs_fill_super+0x61f/0x15d0 fs/reiserfs/super.c:2022
-    [<ffffffff8160e263>] mount_bdev+0x223/0x260 fs/super.c:1359
-    [<ffffffff8167270b>] legacy_get_tree+0x2b/0x90 fs/fs_context.c:610
-    [<ffffffff8160bde8>] vfs_get_tree+0x28/0x100 fs/super.c:1489
-    [<ffffffff8164fc87>] do_new_mount fs/namespace.c:3145 [inline]
-    [<ffffffff8164fc87>] path_mount+0xc37/0x10d0 fs/namespace.c:3475
-    [<ffffffff816508be>] do_mount fs/namespace.c:3488 [inline]
-    [<ffffffff816508be>] __do_sys_mount fs/namespace.c:3697 [inline]
-    [<ffffffff816508be>] __se_sys_mount fs/namespace.c:3674 [inline]
-    [<ffffffff816508be>] __x64_sys_mount+0x18e/0x1d0 fs/namespace.c:3674
-    [<ffffffff8489f645>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8489f645>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84a00087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Use helper for these two.
 
+> +	if (IS_ERR(mmio))
+> +		return PTR_ERR(mmio);
+> +
+> +	pdata->sys_bus_base = mmio;
+> +
+> +	mdata = (struct stm32_sys_bus_match_data *)of_device_get_match_data(&pdev->dev);
 
+Why do you need the cast?
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> +	if (!mdata)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Can you explain the case when this can actually happen? If it can, you
+have bug in ID table.
+
+> +		return -EINVAL;
+> +
+> +	pdata->pconf = mdata;
+> +	pdata->dev = &pdev->dev;
+> +
+> +	platform_set_drvdata(pdev, pdata);
+> +
+> +	stm32_sys_bus_populate(pdata);
+> +
+> +	/* Populate all available nodes */
+> +	return of_platform_populate(np, NULL, NULL, &pdev->dev);
+> +}
+> +
+> +static const struct stm32_sys_bus_match_data stm32mp15_sys_bus_data = {
+> +	.max_entries = STM32MP15_ETZPC_ENTRIES,
+> +	.sys_bus_get_access = stm32_etzpc_get_access,
+> +};
+> +
+> +static const struct stm32_sys_bus_match_data stm32mp13_sys_bus_data = {
+> +	.max_entries = STM32MP13_ETZPC_ENTRIES,
+> +	.sys_bus_get_access = stm32_etzpc_get_access,
+
+It's the same as previous, drop.
+
+> +};
+> +
+> +static const struct of_device_id stm32_sys_bus_of_match[] = {
+> +	{ .compatible = "st,stm32mp15-sys-bus", .data = &stm32mp15_sys_bus_data },
+> +	{ .compatible = "st,stm32mp13-sys-bus", .data = &stm32mp13_sys_bus_data },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, stm32_sys_bus_of_match);
+> +
+> +static struct platform_driver stm32_sys_bus_driver = {
+> +	.probe  = stm32_sys_bus_probe,
+> +	.driver = {
+> +		.name = "stm32-sys-bus",
+> +		.of_match_table = stm32_sys_bus_of_match,
+> +	},
+> +};
+> +
+> +static int __init stm32_sys_bus_init(void)
+> +{
+> +	return platform_driver_register(&stm32_sys_bus_driver);
+> +}
+> +arch_initcall(stm32_sys_bus_init);
+> +
+
+Best regards,
+Krzysztof
+
