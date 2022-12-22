@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A67D654568
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4D1654569
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbiLVQ5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 11:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S235351AbiLVQ5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 11:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiLVQ5N (ORCPT
+        with ESMTP id S229754AbiLVQ5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 11:57:13 -0500
+        Thu, 22 Dec 2022 11:57:33 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86BC18E07
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:56:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6721215F3D
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:56:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671728186;
+        s=mimecast20190719; t=1671728215;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=zlp17/58Tt0fnoE4NSJJ90eJ41XW+fAlC4kIuMp7uqI=;
-        b=StdTWGX7CE/W1uIFRD3QUHoLrEmK49/akKCNSIcDWL/CqCHURk5vye2Yy7/gx0iQG5keYH
-        aYwRahleWzZB/ydVvQOtcaa2KjhA/Cfrkc6r4eHqdwRaz28BE4QXPYja4n8x4vFmAq8+Up
-        ulMYpcdHDowCfU9rXEQ+0e15xctjXas=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=MQbiQgVa8Sd+/Pe5VdbOI63fL3/bgCZNkjMcKwZRP68=;
+        b=FiwpMrA7P1S/stReRsh+BeuQNqEP+3k25ttoGc+2GI3mdwSCQqBnU9t9wsyyTZYjk0eSBF
+        7EVtnGDg1Y3zCtBtjto5Gz90/OdsvFrwY4FmCmbxOGNbiLeN14Moe+PjH9ps3twqT+IZqs
+        1pTw3EbhXaf7e5Hau3lAGnUIR3zlDCY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-567-AgSSBaIlO-mPM10iqZnQXw-1; Thu, 22 Dec 2022 11:56:25 -0500
-X-MC-Unique: AgSSBaIlO-mPM10iqZnQXw-1
-Received: by mail-wr1-f71.google.com with SMTP id q16-20020adfab10000000b00271460582b6so523618wrc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:56:25 -0800 (PST)
+ us-mta-511-1Wc5JLECP1W_W5miONW82g-1; Thu, 22 Dec 2022 11:56:54 -0500
+X-MC-Unique: 1Wc5JLECP1W_W5miONW82g-1
+Received: by mail-wm1-f70.google.com with SMTP id h126-20020a1c2184000000b003d96bdce12fso210830wmh.9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:56:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zlp17/58Tt0fnoE4NSJJ90eJ41XW+fAlC4kIuMp7uqI=;
-        b=e+H5aqZ9/R7j9qiVA2dAC9pOoj998yh/k+5izLMg93GwDXV2mdvPiMB/FHrP7OfWv3
-         halVVcDo4X/hdXxPMa9J6pqA49DA+9kmT0HXOZpQaMH7Zm9IJiUaPSFeNW5SdZGH/9ep
-         K0a1VKvm3iERZxQ5uGm0bjxjZpefqMajnkkMLbwO1tuSHtuyGdbGy8hCkOkCR8dqzEmM
-         Qd2nsAtLDt/ReBNUH0Ye49+NRxgY2wIrHdWwqvfb4vCJSgwo7T0xI4SaxjpyzJAk7R8W
-         uT1+E7Q9olc65ghsrvJP87tHe4KWHHV3WZkmP0IrzLDDUuuzJEnAbcZ1K3P/40x2gGdn
-         xcTQ==
-X-Gm-Message-State: AFqh2kqYBmWy/fQ79nwlIItyBsz0JXKVBL5+hLeVAI4vbdJ/HQIYPGFd
-        3T65oOwdVOfEUhHPL7EfBUHkGMlp1F3kKaH8A4GkIP0/RiMG20WK7bOwM5LMZ/uUay/BfPKUoir
-        D38s5LFcVlZMgSA4QOONGAqAt
-X-Received: by 2002:a1c:3887:0:b0:3d2:26cd:3b1e with SMTP id f129-20020a1c3887000000b003d226cd3b1emr4857119wma.28.1671728184562;
-        Thu, 22 Dec 2022 08:56:24 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsRrPQh7eA2NY2acTEbP3AJ32bo0iEjaZr7kwlePoHW7ktgOSmPd+0CFvutXpFHlHqQDiu1LQ==
-X-Received: by 2002:a1c:3887:0:b0:3d2:26cd:3b1e with SMTP id f129-20020a1c3887000000b003d226cd3b1emr4857106wma.28.1671728184413;
-        Thu, 22 Dec 2022 08:56:24 -0800 (PST)
+        bh=MQbiQgVa8Sd+/Pe5VdbOI63fL3/bgCZNkjMcKwZRP68=;
+        b=Jap4adEykqByOKD85WHs66AS08FGO/o9gIxG7badg/1fSm4y25xFeVeFP2IE6Vu0GU
+         KVpuPeqZ2kn+lRcYyf4Q00c+c3NUQ8nRkRrEwslYtXt9q46mhzgIF436BbLTiPkcCNuV
+         SmFQP3vd51xDBr6k71jrq5FRbEMiCTpfa3F62QWNHU29DPbnMsR2/Y3c2gmpC64MozvP
+         Eq6oSs5/7EwN3FVtsDymUjJBnWmwXk/j5ZkRo+iEDusQuTxQm8OY2eyisdCV/8H0Apkf
+         ClADCTgNDaQzatbIzjG7muLLK6SHOZSm2vTZ2MrOClBcdotkEGliodhvsU6lvcj+g1K5
+         B7YQ==
+X-Gm-Message-State: AFqh2koXh8W+aKlVCE5V98TrylAYw8RJjcS99Ok+kBH7u45oTFBe9Bbu
+        Uc6pNHJlP366xNgiSTxA4cmez52Kjh4SY6tSEaPSGQUe13vjHzitjpFa3IqlUqwoXHj5OzATeph
+        KDx5v+5myMr2FPYU+xWsBMVk5
+X-Received: by 2002:a05:600c:154b:b0:3cf:674a:aefe with SMTP id f11-20020a05600c154b00b003cf674aaefemr4724713wmg.22.1671728213068;
+        Thu, 22 Dec 2022 08:56:53 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuOZOe9BJd7XkAbkJc+rkQYeIs2MCsgTmWjd7D8H2aHQPtv06n5zjhQyRVO8OYHzIpRlu/3LA==
+X-Received: by 2002:a05:600c:154b:b0:3cf:674a:aefe with SMTP id f11-20020a05600c154b00b003cf674aaefemr4724695wmg.22.1671728212900;
+        Thu, 22 Dec 2022 08:56:52 -0800 (PST)
 Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id o27-20020a05600c511b00b003c6f8d30e40sm7098863wms.31.2022.12.22.08.56.23
+        by smtp.gmail.com with ESMTPSA id j30-20020a05600c1c1e00b003c71358a42dsm8768201wms.18.2022.12.22.08.56.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 08:56:23 -0800 (PST)
+        Thu, 22 Dec 2022 08:56:52 -0800 (PST)
 From:   Valentin Schneider <vschneid@redhat.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Ben Segall <bsegall@google.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
@@ -69,15 +70,18 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 4/7] sched/fair: Introduce sched_smt_siblings_idle()
-In-Reply-To: <20221122203532.15013-5-ricardo.neri-calderon@linux.intel.com>
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 5/7] x86/sched: Remove SD_ASYM_PACKING from the "SMT"
+ domain
+In-Reply-To: <20221220004238.GB23844@ranerica-svr.sc.intel.com>
 References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-5-ricardo.neri-calderon@linux.intel.com>
-Date:   Thu, 22 Dec 2022 16:56:22 +0000
-Message-ID: <xhsmhsfh7e5s9.mognet@vschneid.remote.csb>
+ <20221122203532.15013-6-ricardo.neri-calderon@linux.intel.com>
+ <Y5IKuJTjE6Pjrw9I@arm.com>
+ <20221214165900.GA972@ranerica-svr.sc.intel.com>
+ <xhsmhwn6s62b5.mognet@vschneid.remote.csb>
+ <20221220004238.GB23844@ranerica-svr.sc.intel.com>
+Date:   Thu, 22 Dec 2022 16:56:51 +0000
+Message-ID: <xhsmhr0wre5rg.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -90,106 +94,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/22 12:35, Ricardo Neri wrote:
-> Architectures that implement arch_asym_cpu_priority() may need to know the
-> idle state of the SMT siblings of a CPU. The scheduler has this information
-> and functionality. Expose it.
+On 19/12/22 16:42, Ricardo Neri wrote:
+> On Thu, Dec 15, 2022 at 04:48:14PM +0000, Valentin Schneider wrote:
+>> With that said, so far all but one flag (SD_PREFER_SIBLING, and that's
+>> because of big.LITTLE woes) follow the SDF_SHARED_{CHILD, PARENT} pattern,
+>> if SD_ASYM_PACKING no longer does then we need to think whether we're
+>> trying to make it do funky things.
 >
-> Move the existing functionality outside of the NUMA code.
+> My thesis is that x86 does not need the SD_ASYM_PACKING flag at the SMT
+> level because all SMT siblings are identical. There are cores of higher
+> priority at the "MC" level (maybe in the future at the "CLS" level).
+>
+> Power7 is fine because it only uses SD_ASYM_PACKING at the SMT level.
 >
 
-test_idle_cores() does something similar without an iteration, did you
-consider using that instead?
+So with what I groked from your series, I agree with you, x86 shouldn't
+need it at SMT level.
 
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Tim C. Chen <tim.c.chen@intel.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: x86@kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Changes since v1:
->  * Introduced this patch.
-> ---
->  include/linux/sched.h |  2 ++
->  kernel/sched/fair.c   | 39 ++++++++++++++++++++++-----------------
->  2 files changed, 24 insertions(+), 17 deletions(-)
->
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index ffb6eb55cd13..0d01c64ac737 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -2426,4 +2426,6 @@ static inline void sched_core_fork(struct task_struct *p) { }
->  
->  extern void sched_set_stop_task(int cpu, struct task_struct *stop);
->  
-> +extern bool sched_smt_siblings_idle(int cpu);
-> +
->  #endif
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 0e4251f83807..9517c48df50e 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -1052,6 +1052,28 @@ update_stats_curr_start(struct cfs_rq *cfs_rq, struct sched_entity *se)
->   * Scheduling class queueing methods:
->   */
->  
-> +static inline bool is_core_idle(int cpu)
-> +{
-> +#ifdef CONFIG_SCHED_SMT
-> +	int sibling;
-> +
-> +	for_each_cpu(sibling, cpu_smt_mask(cpu)) {
-> +		if (cpu == sibling)
-> +			continue;
-> +
-> +		if (!idle_cpu(sibling))
-> +			return false;
-> +	}
-> +#endif
-> +
-> +	return true;
-> +}
-> +
-> +bool sched_smt_siblings_idle(int cpu)
-> +{
-> +	return is_core_idle(cpu);
-> +}
-> +
->  #ifdef CONFIG_NUMA
->  #define NUMA_IMBALANCE_MIN 2
->  
-> @@ -1691,23 +1713,6 @@ struct numa_stats {
->  	int idle_cpu;
->  };
->  
-> -static inline bool is_core_idle(int cpu)
-> -{
-> -#ifdef CONFIG_SCHED_SMT
-> -	int sibling;
-> -
-> -	for_each_cpu(sibling, cpu_smt_mask(cpu)) {
-> -		if (cpu == sibling)
-> -			continue;
-> -
-> -		if (!idle_cpu(sibling))
-> -			return false;
-> -	}
-> -#endif
-> -
-> -	return true;
-> -}
-> -
->  struct task_numa_env {
->  	struct task_struct *p;
->  
-> -- 
-> 2.25.1
+What about the below?
+
+---
+
+diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
+index 57bde66d95f7a..8dc16942135b4 100644
+--- a/include/linux/sched/sd_flags.h
++++ b/include/linux/sched/sd_flags.h
+@@ -132,12 +132,12 @@ SD_FLAG(SD_SERIALIZE, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
+ /*
+  * Place busy tasks earlier in the domain
+  *
+- * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
+- *               up, but currently assumed to be set from the base domain
+- *               upwards (see update_top_cache_domain()).
++ * SHARED_PARENT: Usually set on the SMT level. Can be set further up if all
++ *                siblings of an SMT core are identical, but SMT cores themselves
++ *                have different priorites.
+  * NEEDS_GROUPS: Load balancing flag.
+  */
+-SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
++SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
+ 
+ /*
+  * Prefer to place tasks in a sibling domain
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index b1d338a740e56..2d532e29373b1 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1772,6 +1772,19 @@ queue_balance_callback(struct rq *rq,
+ 	for (__sd = rcu_dereference_check_sched_domain(cpu_rq(cpu)->sd); \
+ 			__sd; __sd = __sd->parent)
+ 
++static inline struct sched_domain *__highest_flag_domain(struct sched_domain *sd, int flag)
++{
++	struct sched_domain *hsd = NULL;
++
++	for (; sd; sd = sd->parent) {
++		if (!(sd->flags & flag))
++			break;
++		hsd = sd;
++	}
++
++	return hsd;
++}
++
+ /**
+  * highest_flag_domain - Return highest sched_domain containing flag.
+  * @cpu:	The CPU whose highest level of sched domain is to
+@@ -1783,15 +1796,7 @@ queue_balance_callback(struct rq *rq,
+  */
+ static inline struct sched_domain *highest_flag_domain(int cpu, int flag)
+ {
+-	struct sched_domain *sd, *hsd = NULL;
+-
+-	for_each_domain(cpu, sd) {
+-		if (!(sd->flags & flag))
+-			break;
+-		hsd = sd;
+-	}
+-
+-	return hsd;
++	return __highest_flag_domain(rcu_dereference_check_sched_domain(cpu_rq(cpu)->sd), flag);
+ }
+ 
+ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
+@@ -1806,6 +1811,16 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
+ 	return sd;
+ }
+ 
++static inline struct sched_domain *highest_parent_flag_domain(int cpu, int flag)
++{
++	struct sched_domain *sd;
++
++	SCHED_WARN_ON(!(sd_flag_debug[ilog2(flag)].meta_flags & SDF_SHARED_PARENT));
++
++	sd = lowest_flag_domain(cpu, flag);
++	return __highest_flag_domain(sd, flag);
++}
++
+ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
+ DECLARE_PER_CPU(int, sd_llc_size);
+ DECLARE_PER_CPU(int, sd_llc_id);
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 8154ef590b9f8..4e0e5b27c331b 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -692,7 +692,7 @@ static void update_top_cache_domain(int cpu)
+ 	sd = lowest_flag_domain(cpu, SD_NUMA);
+ 	rcu_assign_pointer(per_cpu(sd_numa, cpu), sd);
+ 
+-	sd = highest_flag_domain(cpu, SD_ASYM_PACKING);
++	sd = highest_parent_flag_domain(cpu, SD_ASYM_PACKING);
+ 	rcu_assign_pointer(per_cpu(sd_asym_packing, cpu), sd);
+ 
+ 	sd = lowest_flag_domain(cpu, SD_ASYM_CPUCAPACITY_FULL);
 
