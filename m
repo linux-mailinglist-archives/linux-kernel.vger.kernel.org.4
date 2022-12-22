@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF367653B31
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 05:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B40BA653B32
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 05:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235043AbiLVEUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 23:20:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S235001AbiLVEUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 23:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235015AbiLVETs (ORCPT
+        with ESMTP id S235004AbiLVETt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 23:19:48 -0500
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64D42409A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:19:43 -0800 (PST)
-Received: by mail-il1-x14a.google.com with SMTP id i21-20020a056e021d1500b003041b04e3ebso493357ila.7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:19:43 -0800 (PST)
+        Wed, 21 Dec 2022 23:19:49 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504F7233B0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:19:45 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id z17-20020a25e311000000b00719e04e59e1so689077ybd.10
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:19:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GKQYzYQslmsEvTKoQjl1Dy8mF9dw9swe45tpdyd96Iw=;
-        b=hiWrjVIMR/8TnqO43W7ej+Q9H4D1PFrQLabYHgT2Fiz6OmgEI02DldL0TyORs8wy8n
-         gzQMTWHm8bPRJjvpDLuxOYEX45gDXAal7JLlT/n18L6hVsg3dngAiFDK3Tn+rpAmxV6C
-         +qEslUlp9HbFzqL4mgVM5b5RkhpgXYnyZ+ORq6Ita7eNOYYtIOGIzMuXESbtK6od4r1A
-         jWAL37uhaZUkjPoemHffstsks18inpeSIQG+tf76sgmOk7/nZKU+GpNLKMjITNkpPHgq
-         53hXe1Fl0FagiNNwuieSMmO4uKwVQ6ZUaFgxxLKWXGELNgQBxX2r4plz2LGpanIqTl28
-         9HRA==
+        bh=BDLLEQAWPiuWvu6uAw7SlKRBGnG2Q5GXtGAMB+TrPE8=;
+        b=YYDj3c5fM6hkrbkgsT5AQ5QuP7PmzqKTtUZOCkQp6tMZe2KtlQXDXuSeID5qZPLv5w
+         uekCpC4/7VqRHl3u7ovnnOyeEqj/EsywNvGk0SU8TWCKdL5T+UUJ8v4uRxtZmS6vPnl7
+         Wzj8lALjPQjik55Xsborgrd9EdV5KGHkidFuPRxek7BFO5jMvsBbkzoNYwVZleOoZih8
+         UbO7SNB2W/YpVQufPScszqS4sLh/XpytF5xvF1sxeegGQeYmCWYdyiAVgWPTJHcniUSO
+         tcG3i3xlYkukeP0JsAW7kB7ooTJnC5WmKclKn5JT2ujNOCPHbdsDPc8vVma69pRmczRk
+         1nkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GKQYzYQslmsEvTKoQjl1Dy8mF9dw9swe45tpdyd96Iw=;
-        b=PRlp8cVIIu/KvRYLxUgPtydbE/mrlQcPDwL3236t48AAYx0SSbF3WnozHhBp97D/7U
-         HSYFjtok1CoOaSyrmTcpWMHZCVsPij6WUu3OouLGv2QZZ8UM0rjxa6dZEa5br+mFYo9B
-         QPrn9g5DrlHipqVOw7lJX0gXBRYc19cMJoO2TUgP6WBdTas8xJ846WdKGnEVqk1mgcYx
-         BdO8j399T/ZRIxDktRXXl24fEL7k7EHm3amUZ+KPobv6Cqt5yy9qKGDE6OxSn+DRphJu
-         JViuW+3nQW4RKg78nX2HHrcpGlcMvZcl6Iqc7+2T9AjNOIw5FWe8mtasBKUXXm8RqX4c
-         V8kA==
-X-Gm-Message-State: AFqh2kplAMfinwAPe16zTPgaWHCOBH3xJABqwcCi0jUWlDQYzD9n+6sK
-        HyrWwTAN27iAkMHXO9O02cElIBavfxY=
-X-Google-Smtp-Source: AMrXdXulwki9nSBxGR/8kwCpRV7uTwszRsuNMgerK7fVzStawG8GMbadC6mUNc3+9DnL5KUi28j6NQ4IuKE=
+        bh=BDLLEQAWPiuWvu6uAw7SlKRBGnG2Q5GXtGAMB+TrPE8=;
+        b=Mp4DVX1Cv0o3iPYIMwGf2JeA9ockLqcWiGL0ydhu4B/79UfDO8mkY7vpQn7mDXF8Gx
+         REcylFz8mjhLeMz6cDVGEDKCRGqBUvJsGbO1UNgPOwbw2mcIVHsbm3wBX0HVnn8+/t1s
+         joaAhevtuMtXV2as/Rfh01Z2EWabXUYLt70qpjCVqkZ/EAeWJAwvIC7ISaiZR8xMp2EV
+         SqTUt6onMu8buUxP7e7eeXiETQjV2SxaVHpFJKa3U4PugqAcssD9vph+pgpp3oUb6nK6
+         5s1+x7xQpD+LuRcVpjZyHkBE4RF+tfuHH+YYqkcszsfCun2M7dKWQkh5Vbp4BTlDfpBM
+         MKjA==
+X-Gm-Message-State: AFqh2kqJr//+INtPKcmjq96P9cMm2S3DLHcDBD5+9pcvk7C6Gb3yJ4d9
+        RhJIGcfxio9H+QlwKyEIB+Xpitg3+Lo=
+X-Google-Smtp-Source: AMrXdXs9f5JEJZRSlLA1c9vebSH3Lts9X7RAt6HHv3GXYgSIKO08I/5btJz8yV9BWIG6W3F5rzxEG2SadvM=
 X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:a463:5f7b:440e:5c77])
- (user=yuzhao job=sendgmr) by 2002:a02:881a:0:b0:38a:141d:6564 with SMTP id
- r26-20020a02881a000000b0038a141d6564mr112099jai.140.1671682783226; Wed, 21
- Dec 2022 20:19:43 -0800 (PST)
-Date:   Wed, 21 Dec 2022 21:19:00 -0700
+ (user=yuzhao job=sendgmr) by 2002:a25:dcc7:0:b0:6fa:5ab4:12b5 with SMTP id
+ y190-20020a25dcc7000000b006fa5ab412b5mr381185ybe.620.1671682784642; Wed, 21
+ Dec 2022 20:19:44 -0800 (PST)
+Date:   Wed, 21 Dec 2022 21:19:01 -0700
 In-Reply-To: <20221222041905.2431096-1-yuzhao@google.com>
-Message-Id: <20221222041905.2431096-3-yuzhao@google.com>
+Message-Id: <20221222041905.2431096-4-yuzhao@google.com>
 Mime-Version: 1.0
 References: <20221222041905.2431096-1-yuzhao@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Subject: [PATCH mm-unstable v3 2/8] mm: multi-gen LRU: rename lrugen->lists[]
- to lrugen->folios[]
+Subject: [PATCH mm-unstable v3 3/8] mm: multi-gen LRU: remove eviction
+ fairness safeguard
 From:   Yu Zhao <yuzhao@google.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Johannes Weiner <hannes@cmpxchg.org>,
@@ -76,192 +76,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lru_gen_folio will be chained into per-node lists by the coming
-lrugen->list.
+Recall that the eviction consumes the oldest generation: first it
+bucket-sorts folios whose gen counters were updated by the aging and
+reclaims the rest; then it increments lrugen->min_seq.
+
+The current eviction fairness safeguard for global reclaim has a
+dilemma: when there are multiple eligible memcgs, should it continue
+or stop upon meeting the reclaim goal? If it continues, it overshoots
+and increases direct reclaim latency; if it stops, it loses fairness
+between memcgs it has taken memory away from and those it has yet to.
+
+With memcg LRU, the eviction, while ensuring eventual fairness, will
+stop upon meeting its goal. Therefore the current eviction fairness
+safeguard for global reclaim will not be needed.
+
+Note that memcg LRU only applies to global reclaim. For memcg reclaim,
+the eviction will continue, even if it is overshooting. This becomes
+unconditional due to code simplification.
 
 Signed-off-by: Yu Zhao <yuzhao@google.com>
 ---
- Documentation/mm/multigen_lru.rst |  8 ++++----
- include/linux/mm_inline.h         |  4 ++--
- include/linux/mmzone.h            |  8 ++++----
- mm/vmscan.c                       | 20 ++++++++++----------
- 4 files changed, 20 insertions(+), 20 deletions(-)
+ mm/vmscan.c | 81 +++++++++++++++--------------------------------------
+ 1 file changed, 23 insertions(+), 58 deletions(-)
 
-diff --git a/Documentation/mm/multigen_lru.rst b/Documentation/mm/multigen_lru.rst
-index d7062c6a8946..d8f721f98868 100644
---- a/Documentation/mm/multigen_lru.rst
-+++ b/Documentation/mm/multigen_lru.rst
-@@ -89,15 +89,15 @@ variables are monotonically increasing.
- 
- Generation numbers are truncated into ``order_base_2(MAX_NR_GENS+1)``
- bits in order to fit into the gen counter in ``folio->flags``. Each
--truncated generation number is an index to ``lrugen->lists[]``. The
-+truncated generation number is an index to ``lrugen->folios[]``. The
- sliding window technique is used to track at least ``MIN_NR_GENS`` and
- at most ``MAX_NR_GENS`` generations. The gen counter stores a value
- within ``[1, MAX_NR_GENS]`` while a page is on one of
--``lrugen->lists[]``; otherwise it stores zero.
-+``lrugen->folios[]``; otherwise it stores zero.
- 
- Each generation is divided into multiple tiers. A page accessed ``N``
- times through file descriptors is in tier ``order_base_2(N)``. Unlike
--generations, tiers do not have dedicated ``lrugen->lists[]``. In
-+generations, tiers do not have dedicated ``lrugen->folios[]``. In
- contrast to moving across generations, which requires the LRU lock,
- moving across tiers only involves atomic operations on
- ``folio->flags`` and therefore has a negligible cost. A feedback loop
-@@ -127,7 +127,7 @@ page mapped by this PTE to ``(max_seq%MAX_NR_GENS)+1``.
- Eviction
- --------
- The eviction consumes old generations. Given an ``lruvec``, it
--increments ``min_seq`` when ``lrugen->lists[]`` indexed by
-+increments ``min_seq`` when ``lrugen->folios[]`` indexed by
- ``min_seq%MAX_NR_GENS`` becomes empty. To select a type and a tier to
- evict from, it first compares ``min_seq[]`` to select the older type.
- If both types are equally old, it selects the one whose first tier has
-diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-index f63968bd7de5..da38e3d962e2 100644
---- a/include/linux/mm_inline.h
-+++ b/include/linux/mm_inline.h
-@@ -256,9 +256,9 @@ static inline bool lru_gen_add_folio(struct lruvec *lruvec, struct folio *folio,
- 	lru_gen_update_size(lruvec, folio, -1, gen);
- 	/* for folio_rotate_reclaimable() */
- 	if (reclaiming)
--		list_add_tail(&folio->lru, &lrugen->lists[gen][type][zone]);
-+		list_add_tail(&folio->lru, &lrugen->folios[gen][type][zone]);
- 	else
--		list_add(&folio->lru, &lrugen->lists[gen][type][zone]);
-+		list_add(&folio->lru, &lrugen->folios[gen][type][zone]);
- 
- 	return true;
- }
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 1686fcc4ed01..6c96ee823dbd 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -312,7 +312,7 @@ enum lruvec_flags {
-  * They form a sliding window of a variable size [MIN_NR_GENS, MAX_NR_GENS]. An
-  * offset within MAX_NR_GENS, i.e., gen, indexes the LRU list of the
-  * corresponding generation. The gen counter in folio->flags stores gen+1 while
-- * a page is on one of lrugen->lists[]. Otherwise it stores 0.
-+ * a page is on one of lrugen->folios[]. Otherwise it stores 0.
-  *
-  * A page is added to the youngest generation on faulting. The aging needs to
-  * check the accessed bit at least twice before handing this page over to the
-@@ -324,8 +324,8 @@ enum lruvec_flags {
-  * rest of generations, if they exist, are considered inactive. See
-  * lru_gen_is_active().
-  *
-- * PG_active is always cleared while a page is on one of lrugen->lists[] so that
-- * the aging needs not to worry about it. And it's set again when a page
-+ * PG_active is always cleared while a page is on one of lrugen->folios[] so
-+ * that the aging needs not to worry about it. And it's set again when a page
-  * considered active is isolated for non-reclaiming purposes, e.g., migration.
-  * See lru_gen_add_folio() and lru_gen_del_folio().
-  *
-@@ -412,7 +412,7 @@ struct lru_gen_folio {
- 	/* the birth time of each generation in jiffies */
- 	unsigned long timestamps[MAX_NR_GENS];
- 	/* the multi-gen LRU lists, lazily sorted on eviction */
--	struct list_head lists[MAX_NR_GENS][ANON_AND_FILE][MAX_NR_ZONES];
-+	struct list_head folios[MAX_NR_GENS][ANON_AND_FILE][MAX_NR_ZONES];
- 	/* the multi-gen LRU sizes, eventually consistent */
- 	long nr_pages[MAX_NR_GENS][ANON_AND_FILE][MAX_NR_ZONES];
- 	/* the exponential moving average of refaulted */
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 42507b36698e..d94d9fcabf36 100644
+index d94d9fcabf36..49d7c103906a 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -4271,7 +4271,7 @@ static bool inc_min_seq(struct lruvec *lruvec, int type, bool can_swap)
+@@ -449,6 +449,11 @@ static bool cgroup_reclaim(struct scan_control *sc)
+ 	return sc->target_mem_cgroup;
+ }
  
- 	/* prevent cold/hot inversion if force_scan is true */
- 	for (zone = 0; zone < MAX_NR_ZONES; zone++) {
--		struct list_head *head = &lrugen->lists[old_gen][type][zone];
-+		struct list_head *head = &lrugen->folios[old_gen][type][zone];
++static bool global_reclaim(struct scan_control *sc)
++{
++	return !sc->target_mem_cgroup || mem_cgroup_is_root(sc->target_mem_cgroup);
++}
++
+ /**
+  * writeback_throttling_sane - is the usual dirty throttling mechanism available?
+  * @sc: scan_control in question
+@@ -499,6 +504,11 @@ static bool cgroup_reclaim(struct scan_control *sc)
+ 	return false;
+ }
  
- 		while (!list_empty(head)) {
- 			struct folio *folio = lru_to_folio(head);
-@@ -4282,7 +4282,7 @@ static bool inc_min_seq(struct lruvec *lruvec, int type, bool can_swap)
- 			VM_WARN_ON_ONCE_FOLIO(folio_zonenum(folio) != zone, folio);
++static bool global_reclaim(struct scan_control *sc)
++{
++	return true;
++}
++
+ static bool writeback_throttling_sane(struct scan_control *sc)
+ {
+ 	return true;
+@@ -5006,8 +5016,7 @@ static int isolate_folios(struct lruvec *lruvec, struct scan_control *sc, int sw
+ 	return scanned;
+ }
  
- 			new_gen = folio_inc_gen(lruvec, folio, false);
--			list_move_tail(&folio->lru, &lrugen->lists[new_gen][type][zone]);
-+			list_move_tail(&folio->lru, &lrugen->folios[new_gen][type][zone]);
- 
- 			if (!--remaining)
- 				return false;
-@@ -4310,7 +4310,7 @@ static bool try_to_inc_min_seq(struct lruvec *lruvec, bool can_swap)
- 			gen = lru_gen_from_seq(min_seq[type]);
- 
- 			for (zone = 0; zone < MAX_NR_ZONES; zone++) {
--				if (!list_empty(&lrugen->lists[gen][type][zone]))
-+				if (!list_empty(&lrugen->folios[gen][type][zone]))
- 					goto next;
- 			}
- 
-@@ -4775,7 +4775,7 @@ static bool sort_folio(struct lruvec *lruvec, struct folio *folio, int tier_idx)
- 
- 	/* promoted */
- 	if (gen != lru_gen_from_seq(lrugen->min_seq[type])) {
--		list_move(&folio->lru, &lrugen->lists[gen][type][zone]);
-+		list_move(&folio->lru, &lrugen->folios[gen][type][zone]);
- 		return true;
+-static int evict_folios(struct lruvec *lruvec, struct scan_control *sc, int swappiness,
+-			bool *need_swapping)
++static int evict_folios(struct lruvec *lruvec, struct scan_control *sc, int swappiness)
+ {
+ 	int type;
+ 	int scanned;
+@@ -5096,9 +5105,6 @@ static int evict_folios(struct lruvec *lruvec, struct scan_control *sc, int swap
+ 		goto retry;
  	}
  
-@@ -4784,7 +4784,7 @@ static bool sort_folio(struct lruvec *lruvec, struct folio *folio, int tier_idx)
- 		int hist = lru_hist_from_seq(lrugen->min_seq[type]);
+-	if (need_swapping && type == LRU_GEN_ANON)
+-		*need_swapping = true;
+-
+ 	return scanned;
+ }
  
- 		gen = folio_inc_gen(lruvec, folio, false);
--		list_move_tail(&folio->lru, &lrugen->lists[gen][type][zone]);
-+		list_move_tail(&folio->lru, &lrugen->folios[gen][type][zone]);
+@@ -5138,67 +5144,26 @@ static unsigned long get_nr_to_scan(struct lruvec *lruvec, struct scan_control *
+ 	return min_seq[!can_swap] + MIN_NR_GENS <= max_seq ? nr_to_scan : 0;
+ }
  
- 		WRITE_ONCE(lrugen->protected[hist][type][tier - 1],
- 			   lrugen->protected[hist][type][tier - 1] + delta);
-@@ -4796,7 +4796,7 @@ static bool sort_folio(struct lruvec *lruvec, struct folio *folio, int tier_idx)
- 	if (folio_test_locked(folio) || folio_test_writeback(folio) ||
- 	    (type == LRU_GEN_FILE && folio_test_dirty(folio))) {
- 		gen = folio_inc_gen(lruvec, folio, true);
--		list_move(&folio->lru, &lrugen->lists[gen][type][zone]);
-+		list_move(&folio->lru, &lrugen->folios[gen][type][zone]);
- 		return true;
- 	}
+-static bool should_abort_scan(struct lruvec *lruvec, unsigned long seq,
+-			      struct scan_control *sc, bool need_swapping)
++static unsigned long get_nr_to_reclaim(struct scan_control *sc)
+ {
+-	int i;
+-	DEFINE_MAX_SEQ(lruvec);
++	/* don't abort memcg reclaim to ensure fairness */
++	if (!global_reclaim(sc))
++		return -1;
  
-@@ -4863,7 +4863,7 @@ static int scan_folios(struct lruvec *lruvec, struct scan_control *sc,
- 	for (zone = sc->reclaim_idx; zone >= 0; zone--) {
- 		LIST_HEAD(moved);
- 		int skipped = 0;
--		struct list_head *head = &lrugen->lists[gen][type][zone];
-+		struct list_head *head = &lrugen->folios[gen][type][zone];
+-	if (!current_is_kswapd()) {
+-		/* age each memcg at most once to ensure fairness */
+-		if (max_seq - seq > 1)
+-			return true;
++	/* discount the previous progress for kswapd */
++	if (current_is_kswapd())
++		return sc->nr_to_reclaim + sc->last_reclaimed;
  
- 		while (!list_empty(head)) {
- 			struct folio *folio = lru_to_folio(head);
-@@ -5264,7 +5264,7 @@ static bool __maybe_unused state_is_valid(struct lruvec *lruvec)
- 		int gen, type, zone;
+-		/* over-swapping can increase allocation latency */
+-		if (sc->nr_reclaimed >= sc->nr_to_reclaim && need_swapping)
+-			return true;
+-
+-		/* give this thread a chance to exit and free its memory */
+-		if (fatal_signal_pending(current)) {
+-			sc->nr_reclaimed += MIN_LRU_BATCH;
+-			return true;
+-		}
+-
+-		if (cgroup_reclaim(sc))
+-			return false;
+-	} else if (sc->nr_reclaimed - sc->last_reclaimed < sc->nr_to_reclaim)
+-		return false;
+-
+-	/* keep scanning at low priorities to ensure fairness */
+-	if (sc->priority > DEF_PRIORITY - 2)
+-		return false;
+-
+-	/*
+-	 * A minimum amount of work was done under global memory pressure. For
+-	 * kswapd, it may be overshooting. For direct reclaim, the allocation
+-	 * may succeed if all suitable zones are somewhat safe. In either case,
+-	 * it's better to stop now, and restart later if necessary.
+-	 */
+-	for (i = 0; i <= sc->reclaim_idx; i++) {
+-		unsigned long wmark;
+-		struct zone *zone = lruvec_pgdat(lruvec)->node_zones + i;
+-
+-		if (!managed_zone(zone))
+-			continue;
+-
+-		wmark = current_is_kswapd() ? high_wmark_pages(zone) : low_wmark_pages(zone);
+-		if (wmark > zone_page_state(zone, NR_FREE_PAGES))
+-			return false;
+-	}
+-
+-	sc->nr_reclaimed += MIN_LRU_BATCH;
+-
+-	return true;
++	return max(sc->nr_to_reclaim, compact_gap(sc->order));
+ }
  
- 		for_each_gen_type_zone(gen, type, zone) {
--			if (!list_empty(&lrugen->lists[gen][type][zone]))
-+			if (!list_empty(&lrugen->folios[gen][type][zone]))
- 				return false;
- 		}
- 	}
-@@ -5309,7 +5309,7 @@ static bool drain_evictable(struct lruvec *lruvec)
- 	int remaining = MAX_LRU_BATCH;
+ static void lru_gen_shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
+ {
+ 	struct blk_plug plug;
+ 	bool need_aging = false;
+-	bool need_swapping = false;
+ 	unsigned long scanned = 0;
+ 	unsigned long reclaimed = sc->nr_reclaimed;
+-	DEFINE_MAX_SEQ(lruvec);
++	unsigned long nr_to_reclaim = get_nr_to_reclaim(sc);
  
- 	for_each_gen_type_zone(gen, type, zone) {
--		struct list_head *head = &lruvec->lrugen.lists[gen][type][zone];
-+		struct list_head *head = &lruvec->lrugen.folios[gen][type][zone];
+ 	lru_add_drain();
  
- 		while (!list_empty(head)) {
- 			bool success;
-@@ -5843,7 +5843,7 @@ void lru_gen_init_lruvec(struct lruvec *lruvec)
- 		lrugen->timestamps[i] = jiffies;
+@@ -5222,7 +5187,7 @@ static void lru_gen_shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc
+ 		if (!nr_to_scan)
+ 			goto done;
  
- 	for_each_gen_type_zone(gen, type, zone)
--		INIT_LIST_HEAD(&lrugen->lists[gen][type][zone]);
-+		INIT_LIST_HEAD(&lrugen->folios[gen][type][zone]);
+-		delta = evict_folios(lruvec, sc, swappiness, &need_swapping);
++		delta = evict_folios(lruvec, sc, swappiness);
+ 		if (!delta)
+ 			goto done;
  
- 	lruvec->mm_state.seq = MIN_NR_GENS;
- 	init_waitqueue_head(&lruvec->mm_state.wait);
+@@ -5230,7 +5195,7 @@ static void lru_gen_shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc
+ 		if (scanned >= nr_to_scan)
+ 			break;
+ 
+-		if (should_abort_scan(lruvec, max_seq, sc, need_swapping))
++		if (sc->nr_reclaimed >= nr_to_reclaim)
+ 			break;
+ 
+ 		cond_resched();
+@@ -5677,7 +5642,7 @@ static int run_eviction(struct lruvec *lruvec, unsigned long seq, struct scan_co
+ 		if (sc->nr_reclaimed >= nr_to_reclaim)
+ 			return 0;
+ 
+-		if (!evict_folios(lruvec, sc, swappiness, NULL))
++		if (!evict_folios(lruvec, sc, swappiness))
+ 			return 0;
+ 
+ 		cond_resched();
 -- 
 2.39.0.314.g84b9a713c41-goog
 
