@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB0565484C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D1365484E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbiLVWST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 17:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S230042AbiLVWTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 17:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiLVWSP (ORCPT
+        with ESMTP id S229939AbiLVWTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 17:18:15 -0500
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9862666;
-        Thu, 22 Dec 2022 14:18:14 -0800 (PST)
+        Thu, 22 Dec 2022 17:19:45 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360A528719
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 14:19:44 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id a25so1575820qkl.12
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 14:19:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1671747494; x=1703283494;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=UwKdVjpYLkRqGESN/NcUvn6sDkhajOztv9Cw8D+KxY4=;
-  b=Fv4eeOfs891uuujrf+t+KVo5G8Xs2yDTt/EHFiyEnbjW6JgZ4R2rlCzx
-   n/fzVpmPDI595tFmldDC7gnBGheKY+OKalwZ2AcI2vsFD/zEPe7+60cjw
-   cL9M+ndcitTIAKTaaJI0+O3eqJDUUZR8PH+5A5pIPPtdgBxZXafGAUF53
-   A=;
-X-IronPort-AV: E=Sophos;i="5.96,266,1665446400"; 
-   d="scan'208";a="250387884"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 22:18:07 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com (Postfix) with ESMTPS id 431A482186;
-        Thu, 22 Dec 2022 22:18:06 +0000 (UTC)
-Received: from EX13D34UEA003.ant.amazon.com (10.43.61.16) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Thu, 22 Dec 2022 22:18:06 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D34UEA003.ant.amazon.com (10.43.61.16) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Thu, 22 Dec 2022 22:18:05 +0000
-Received: from dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (10.15.11.255)
- by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP Server id
- 15.0.1497.42 via Frontend Transport; Thu, 22 Dec 2022 22:18:05 +0000
-Received: by dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (Postfix, from userid 23027615)
-        id 5DACF20D15; Thu, 22 Dec 2022 23:18:04 +0100 (CET)
-From:   Pratyush Yadav <ptyadav@amazon.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, Len Brown <lenb@kernel.org>,
-        "Srinivas Pandruvada" <srinivas.pandruvada@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devel@acpica.org>
-Subject: Re: [PATCH 1/2] acpi: processor: allow fixing up the frequency for
- a performance state
-References: <20221221155203.11347-1-ptyadav@amazon.de>
-        <20221221155203.11347-2-ptyadav@amazon.de>
-        <CAJZ5v0i-mrt57=2ROywn4Na_N3YVk+3D869QpHWqp9eo2NtGAw@mail.gmail.com>
-Date:   Thu, 22 Dec 2022 23:18:04 +0100
-In-Reply-To: <CAJZ5v0i-mrt57=2ROywn4Na_N3YVk+3D869QpHWqp9eo2NtGAw@mail.gmail.com>       (Rafael
- J. Wysocki's message of "Thu, 22 Dec 2022 17:23:41 +0100")
-Message-ID: <mafs0edsrdqw3.fsf_-_@amazon.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UfSW37xyH08SHLM9n3NcxeaT1opzh4yR4lRe7mABNso=;
+        b=cUVNX9ZqoXmKkgfp2gBAHZlt09fofwavxmdbZiz0Pyj1vO7lVklOULeg7WyLbz7ylA
+         m8SDJzPw9UJ19VUUDwN+8+EdtmiYFGGYtS945P7D2Jsoa8dpJIZ+ckV+fPnrXt24ZU60
+         3AgF4y0qEy4c3J6OzTJEkDEjoYDNfhE/xGgFj+OVd4kKt7sylvpf+QqgwWEHkPwzS7tR
+         6O80tSUQvv5AP2qy7YjDjne4P4peYPhGoEz1tusxo7vV1HppjQh+stxHSRH4jwJKeobV
+         lqffWea2hel9b2IKmu2ppG9b0doupx9a/YvorJuxgJ+GQnHlBQGlX6XOIaTSnEvGBzxU
+         nI4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UfSW37xyH08SHLM9n3NcxeaT1opzh4yR4lRe7mABNso=;
+        b=BmfZKMfyis4NVPM1vPNXYcKIPS1TpnFsxfh0WXQ++L7Q1/WkgGYxc9eTFqj6r4579h
+         N3a6wo1R0wmZXDy7kxu4ITt0iix73XWNrba620aEZVH7mpNq5TkGfMBFynJjtv+wdgTQ
+         7az+j+yAzV/tCEwJQXyjA+aGi4jDwT05bvhdby6XVZdMBV7ofigBYXbWbzggX6KKAD0y
+         24hTedAK7IDz5iWwpHC+F7PEsDPPrOtmc8FOJlWezsKePcEfGqlh3uA6C+/Xahfyj95w
+         psfhdQtEyzj5XFuVoR0N1OvnNyJTYU/oyhGJ8/tuQcs2VbsfJ6Qvd+bWTQj/5Ra2vPso
+         Y/mw==
+X-Gm-Message-State: AFqh2kptoU135Ob1dbPLp0VeMhszzkfRHJwgVUopZNlEeVLs6sKsVrbn
+        0oaguJoAecTcW5F/q1GA1grKSVmdF1qmbmCXEojFAw==
+X-Google-Smtp-Source: AMrXdXuTZx+MXLMJByTfCJ3fWVZHrHlG32ocHcBiVOA9wx9LeZTLtM6itQXQCtMyT5FFlyorvQqGrQrgCC3366wuIdM=
+X-Received: by 2002:a05:620a:13e9:b0:6ff:b886:54d3 with SMTP id
+ h9-20020a05620a13e900b006ffb88654d3mr315913qkl.383.1671747582993; Thu, 22 Dec
+ 2022 14:19:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221018205845.770121-1-pgonda@google.com> <20221018205845.770121-6-pgonda@google.com>
+In-Reply-To: <20221018205845.770121-6-pgonda@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Thu, 22 Dec 2022 14:19:31 -0800
+Message-ID: <CAGtprH8wfYk05+yfzngHJ99ESwjhDf-sRaLO3AT2x1VyFQ6pvw@mail.gmail.com>
+Subject: Re: [PATCH V5 5/7] KVM: selftests: add library for
+ creating/interacting with SEV guests
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcorr@google.com, seanjc@google.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, joro@8bytes.org, mizhang@google.com,
+        pbonzini@redhat.com, andrew.jones@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,49 +71,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22 2022, Rafael J. Wysocki wrote:
-> On Wed, Dec 21, 2022 at 4:52 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
->>
->> In some cases the ACPI table can have an incorrect frequency populated
->> for a performance state. For example, in Intel platforms, the Turbo
->> frequency is just listed as +1 MHz above the max non-turbo frequency.
+On Tue, Oct 18, 2022 at 1:59 PM Peter Gonda <pgonda@google.com> wrote:
 >
-> Which is a known convention based on compatibility with some older OSes.
+> ...
+> +
+> +static void configure_sev_pte_masks(struct kvm_vm *vm)
+> +{
+> +       uint32_t eax, ebx, ecx, edx, enc_bit;
+> +
+> +       cpuid(CPUID_MEM_ENC_LEAF, &eax, &ebx, &ecx, &edx);
+> +       enc_bit = ebx & CPUID_EBX_CBIT_MASK;
+> +
+> +       vm->arch.c_bit = 1 << enc_bit;
 
-Interesting. I did not know that.
+This should be 1ULL << enc_bit as the overall result overflows 32 bits.
 
+> +       vm->arch.pte_me_mask = vm->arch.c_bit | vm->arch.s_bit;
+
+Maybe the role of pte_me_mask needs to be discussed in more detail. If
+pte_me_mask is to be used only for maintaining/manipulating encryption
+of page table memory then maybe it should be just set as
+vm->arch.c_bit or better yet replaced with vm->arch.c_bit.
+
+gpa_protected_mask also needs to be set here so that vm_untag_gpa
+works as expected.
+
+> +       vm->protected = true;
+> +}
+> +
+> ...
+> +}
+
+> --
+> 2.38.0.413.g74048e4d9e-goog
 >
->> The frequency can actually go much higher based on various factors like
->> temperature, voltage, etc.
->
-> It can.
->
->> Allow drivers like intel_pstate to fix up performance state frequencies
->> with the actual maximum value.
->
-> Why do you want to do that?
-
-To be able to use my processors at the full frequency they are capable
-of. See [0] for more details.
-
-[0] https://lore.kernel.org/linux-pm/mafs0k02jd8oh.fsf_-_@dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com/
-
->
-[...]
-
--- 
-Regards,
-Pratyush Yadav
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
