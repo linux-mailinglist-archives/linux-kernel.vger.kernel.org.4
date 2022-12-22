@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7846B653EE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE93653EEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbiLVLSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        id S235457AbiLVLSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:18:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235387AbiLVLRu (ORCPT
+        with ESMTP id S235389AbiLVLRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:17:50 -0500
+        Thu, 22 Dec 2022 06:17:51 -0500
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473C722BD3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A318022BD8;
         Thu, 22 Dec 2022 03:17:50 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nd7890F9Qz4f3jJB;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nd7892rr7z4f3pFL;
         Thu, 22 Dec 2022 19:17:45 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgB3a+nXPKRjMew+AQ--.3596S9;
-        Thu, 22 Dec 2022 19:17:47 +0800 (CST)
+        by APP2 (Coremail) with SMTP id Syh0CgB3a+nXPKRjMew+AQ--.3596S10;
+        Thu, 22 Dec 2022 19:17:48 +0800 (CST)
 From:   Kemeng Shi <shikemeng@huaweicloud.com>
 To:     paolo.valente@linaro.org, axboe@kernel.dk,
         linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     jack@suse.cz, hch@lst.de, damien.lemoal@wdc.com
-Subject: [PATCH RESEND v2 07/10] block, bfq: remove redundant check in bfq_put_cooperator
-Date:   Fri, 23 Dec 2022 03:16:38 +0800
-Message-Id: <20221222191641.1643117-8-shikemeng@huaweicloud.com>
+Subject: [PATCH RESEND v2 08/10] block, bfq: remove unnecessary goto tag in bfq_dispatch_rq_from_bfqq
+Date:   Fri, 23 Dec 2022 03:16:39 +0800
+Message-Id: <20221222191641.1643117-9-shikemeng@huaweicloud.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20221222191641.1643117-1-shikemeng@huaweicloud.com>
 References: <20221222191641.1643117-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgB3a+nXPKRjMew+AQ--.3596S9
-X-Coremail-Antispam: 1UD129KBjvdXoWrKrWxAFWUXr1xWw48Gw1Utrb_yoWxtrg_t3
-        sYkFWrJrW8Gry5Ar1ftas8Aw1UAayrJF1DJFyFqw4DXF15GF4rCa92gFWayFs8Way7Ga4a
-        yFy0q3WDtr4DKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: Syh0CgB3a+nXPKRjMew+AQ--.3596S10
+X-Coremail-Antispam: 1UD129KBjvdXoWruF4UWF4DWFyxKr47GF15urg_yoWkZFXEyF
+        409r9ayFWkCF98Wr4YkFsrJF1jyFW2qa1DtF1Fg3y2g3W7J3ZYyF9IqrsIka95WrWIkFyY
+        qFs0q343Jr1UXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbSxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
         Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_JFv_Gryl82
         xGYIkIc2x26280x7IE14v26r126s0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC
@@ -60,28 +60,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have already avoided a circular list in bfq_setup_merge (see comments
-in bfq_setup_merge() for details), so bfq_queue will not appear in it's
-new_bfqq list. Just remove this check.
+We jump to tag only for returning current rq. Return directly to
+remove this tag.
 
 Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 ---
- block/bfq-iosched.c | 2 --
- 1 file changed, 2 deletions(-)
+ block/bfq-iosched.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 7c91d16dbf6f..89995815dbae 100644
+index 89995815dbae..195cdc6be087 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -5273,8 +5273,6 @@ void bfq_put_cooperator(struct bfq_queue *bfqq)
+@@ -4965,7 +4965,7 @@ static struct request *bfq_dispatch_rq_from_bfqq(struct bfq_data *bfqd,
+ 	bfq_dispatch_remove(bfqd->queue, rq);
+ 
+ 	if (bfqq != bfqd->in_service_queue)
+-		goto return_rq;
++		return rq;
+ 
+ 	/*
+ 	 * If weight raising has to terminate for bfqq, then next
+@@ -4985,12 +4985,9 @@ static struct request *bfq_dispatch_rq_from_bfqq(struct bfq_data *bfqd,
+ 	 * belongs to CLASS_IDLE and other queues are waiting for
+ 	 * service.
  	 */
- 	__bfqq = bfqq->new_bfqq;
- 	while (__bfqq) {
--		if (__bfqq == bfqq)
--			break;
- 		next = __bfqq->new_bfqq;
- 		bfq_put_queue(__bfqq);
- 		__bfqq = next;
+-	if (!(bfq_tot_busy_queues(bfqd) > 1 && bfq_class_idle(bfqq)))
+-		goto return_rq;
++	if ((bfq_tot_busy_queues(bfqd) > 1 && bfq_class_idle(bfqq)))
++		bfq_bfqq_expire(bfqd, bfqq, false, BFQQE_BUDGET_EXHAUSTED);
+ 
+-	bfq_bfqq_expire(bfqd, bfqq, false, BFQQE_BUDGET_EXHAUSTED);
+-
+-return_rq:
+ 	return rq;
+ }
+ 
 -- 
 2.30.0
 
