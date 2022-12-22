@@ -2,144 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE31265422F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D54B654232
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235230AbiLVNxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 08:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S235221AbiLVN4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiLVNxd (ORCPT
+        with ESMTP id S229658AbiLVNz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 08:53:33 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9721CD9B;
-        Thu, 22 Dec 2022 05:53:32 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMBuOtE006364;
-        Thu, 22 Dec 2022 14:53:14 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=orkOALmHM5dS4VJrmcn/mvwkBSL4faYpF3SmcTP2AWs=;
- b=OXRsbjilMCAPPMLQGC0lLoIEhh0YdsCwDUhNolKhtIdeyQC3OqlWHGx9L2WrWUHvSYif
- aE87bBYqGDLZOw7xtdsCVG/Lod3lN/oS7tDpupUosyf/1yrGTvYKCzhMxLoaUFxQ2BB0
- bkunCrjkQq8ULby8DGDlel3epEpjQ1yl9CE4SRRzAJ2XerW+erWouxP67exgE9MCYkOV
- K0q1CoBAD1Js+s7/livFr5fWJaNDX5CGHs1nwudkoIIWh6HvGEeO4oyNlH3sis5T1fRK
- MwKSsyUMGBRtMZNwT4kK1HQb/KiEc2dOQyy5YC0ZLyeB3jpnqOUZUD7wuStGrbT/C99P Fg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mkc8jf9w2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 14:53:14 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A037010002A;
-        Thu, 22 Dec 2022 14:53:12 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 99F4620E1D1;
-        Thu, 22 Dec 2022 14:53:12 +0100 (CET)
-Received: from [10.201.21.217] (10.201.21.217) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 22 Dec
- 2022 14:53:12 +0100
-Message-ID: <e667c7e0-9c31-a3d1-8599-29a7b81f9b59@foss.st.com>
-Date:   Thu, 22 Dec 2022 14:53:11 +0100
+        Thu, 22 Dec 2022 08:55:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BB212604;
+        Thu, 22 Dec 2022 05:55:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F28DF61B83;
+        Thu, 22 Dec 2022 13:55:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1619C433D2;
+        Thu, 22 Dec 2022 13:55:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671717355;
+        bh=tc1btOSbBaMZEMUX8Y0A0tpBlXbf7iZKeoWMZ5GMRBY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=h/xcKtKwDWcBW1YfeRk2m2xy8oi1Ssc4a9WJ+kG01SsNnJZwCP6fAHEX6VoKdvaCg
+         /y3sfpROcHfrC4Z38FRHBCkKkTxUOfOGOPb03bfR/oQQu/f5kztn6ZZDnGenib5vc7
+         rU9IzQTAC+Em18Dx7RK429CbmeE+SbyRnkeAvPnZNvmJzY8fGsN/KHl09vh4X3EdhD
+         90vv/XEO1v/G4S8GIepOW/fteqE8ksRDDaIosyrEDbFtCd5MZjTj/8uHwHaowSV5Qw
+         PkgCQyfF2BptVktsHGQRlinrz54K/SIrQx+JT1F43sZ9tJJD1m8D2tFBv8sY0QZjhs
+         Mq4g+Whd2wQRA==
+Message-ID: <e2974f65-fe56-2ac2-5b03-bc8ffe14b554@kernel.org>
+Date:   Thu, 22 Dec 2022 14:55:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 4/7] dt-bindings: bus: add STM32MP13 ETZPC firewall
- bus bindings
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH 2/7] dt-bindings: bus: add STM32 System Bus
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
-        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
-        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
-        <arnd@arndb.de>
+To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>,
+        alexandre.torgue@foss.st.com, robh+dt@kernel.org,
+        Oleksii_Moisieiev@epam.com, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        loic.pallardy@st.com, devicetree@vger.kernel.org,
+        mark.rutland@arm.com, arnd@arndb.de
 References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
- <20221221173055.11719-5-gatien.chevallier@foss.st.com>
- <85c3352c-b427-c440-a1bd-57f830c14c50@kernel.org>
-From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <85c3352c-b427-c440-a1bd-57f830c14c50@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ <20221221173055.11719-3-gatien.chevallier@foss.st.com>
+ <d55cae92-0c4f-f957-4c7b-bdf7b9b6006a@kernel.org>
+ <f785a9f9-a931-a4b0-5d97-d9e8ce24065a@foss.st.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <f785a9f9-a931-a4b0-5d97-d9e8ce24065a@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.217]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-22_06,2022-12-22_03,2022-06-22_01
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On 12/22/22 11:26, Krzysztof Kozlowski wrote:
-> On 21/12/2022 18:30, Gatien Chevallier wrote:
->> Adds the list of peripherals IDs under firewall bus on STM32MP13.
+On 22/12/2022 14:39, Gatien CHEVALLIER wrote:
+> Hello,
+> 
+> On 12/22/22 11:24, Krzysztof Kozlowski wrote:
+>> On 21/12/2022 18:30, Gatien Chevallier wrote:
+>>> Document STM32 System Bus. This bus is intended to control firewall
+>>> access for the peripherals connected to it.
+>>>
+>>> Signed-off-by: Loic PALLARDY <loic.pallardy@st.com>
+>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
 >>
->> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->> ---
->>   include/dt-bindings/bus/stm32mp13_sys_bus.h | 60 +++++++++++++++++++++
->>   1 file changed, 60 insertions(+)
->>   create mode 100644 include/dt-bindings/bus/stm32mp13_sys_bus.h
+>> Please use scripts/get_maintainers.pl to get a list of necessary people
+>> and lists to CC.  It might happen, that command when run on an older
+>> kernel, gives you outdated entries.  Therefore please be sure you base
+>> your patches on recent Linux kernel
+> As it is based on Oleksii's patchset and older threads:
+> [1]: 
+> https://lore.kernel.org/all/20190318100605.29120-1-benjamin.gaignard@st.com/
+> [2]: 
+> https://lore.kernel.org/all/20200701132523.32533-1-benjamin.gaignard@st.com/
+> 
+> I wanted to include people that have already been included or 
+> participated in these.
+> 
+> I'm sorry I did miss/added some (extra) people. I will double-check for 
+> next patchset version.
+
+Include people pointed by maintainers, they are not "extra". They are
+basic/required. It's worth to include additionally people from original
+feature-domain work, but as extra, not replacing get_maintainers!
+
+> 
 >>
->> diff --git a/include/dt-bindings/bus/stm32mp13_sys_bus.h b/include/dt-bindings/bus/stm32mp13_sys_bus.h
->> new file mode 100644
->> index 000000000000..1160de87bc4a
->> --- /dev/null
->> +++ b/include/dt-bindings/bus/stm32mp13_sys_bus.h
->> @@ -0,0 +1,60 @@
->> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
->> +/*
->> + * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
->> + */
->> +#ifndef _DT_BINDINGS_BUS_STM32MP13_SYS_BUS_H
->> +#define _DT_BINDINGS_BUS_STM32MP13_SYS_BUS_H
->> +
->> +/* ETZPC IDs */
->> +#define STM32MP1_ETZPC_VREFBUF_ID	0
->> +#define STM32MP1_ETZPC_LPTIM2_ID	1
->> +#define STM32MP1_ETZPC_LPTIM3_ID	2
->> +#define STM32MP1_ETZPC_LTDC_ID		3
->> +#define STM32MP1_ETZPC_DCMIPP_ID	4
->> +#define STM32MP1_ETZPC_USBPHYCTRL_ID	5
->> +#define STM32MP1_ETZPC_DDRCTRLPHY_ID	6
->> +/* IDs 7-11 reserved */
->> +#define STM32MP1_ETZPC_IWDG1_ID		12
->> +#define STM32MP1_ETZPC_STGENC_ID	13
->> +/* IDs 14-15 reserved */
->> +#define STM32MP1_ETZPC_USART1_ID	16
->> +#define STM32MP1_ETZPC_USART2_ID	17
->> +#define STM32MP1_ETZPC_SPI4_ID		18
->> +#define STM32MP1_ETZPC_SPI5_ID		19
->> +#define STM32MP1_ETZPC_I2C3_ID		20
->> +#define STM32MP1_ETZPC_I2C4_ID		21
->> +#define STM32MP1_ETZPC_I2C5_ID		22
->> +#define STM32MP1_ETZPC_TIM12_ID		23
->> +#define STM32MP1_ETZPC_TIM13_ID		24
->> +#define STM32MP1_ETZPC_TIM14_ID		25
->> +#define STM32MP1_ETZPC_TIM15_ID		26
->> +#define STM32MP1_ETZPC_TIM16_ID		27
->> +#define STM32MP1_ETZPC_TIM17_ID		28
->> +/* IDs 29-31 reserved */
+>>> ---
+>>>   .../devicetree/bindings/bus/st,sys-bus.yaml   | 88 +++++++++++++++++++
+>>>   1 file changed, 88 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/bus/st,sys-bus.yaml b/Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+>>> new file mode 100644
+>>> index 000000000000..9c0e86612695
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+>>> @@ -0,0 +1,88 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/bus/stm32,sys-bus.yaml
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title:  STM32 System Bus
+>>
+>> Only one space.
+>>
 > 
-> Same comments (all of them). IDs cannot be reserved.
+> Ack. I already pushed a V2, that is now outdated with your review, where 
+> this error is fixed.
+> 
+>>> +
+>>> +description: |
+>>> +  The STM32 System Bus is an internal bus to which some internal peripherals
+>>> +  are connected. STM32 System Bus integrates a firewall controlling access to each
+>>> +  device. This bus prevents non-accessible devices to be probed.
+>>> +
+>>> +  To see which peripherals are securable, please check the SoC reference manual.
+>>> +
+>>> +maintainers:
+>>> +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
+>>> +
+>>> +allOf:
+>>> +  - $ref: /schemas/feature-controllers/feature-domain-controller.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - st,stm32mp13-sys-bus
+>>> +      - st,stm32mp15-sys-bus
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  "#address-cells":
+>>> +    const: 1
+>>> +
+>>> +  "#size-cells":
+>>> +    const: 1
+>>> +
+>>> +  '#feature-domain-cells':
+>>
+>> Use consistent quotes, either ' or "
+> 
+> Ack, will change in V3.
+> 
+>>
+>>> +    minItems: 1
+>>
+>> No. Cells must be const. This does not match cells at all...
+>>
+> 
+> Ack, will change to const in V3. What do imply by saying it does not 
+> match? 
 
-My response on patch [RFC PATCH 4/7] applies to this as well
+cells do not have items, it's not an array but a number.
+
+> Note that I've changed it to "minimum" in V2.
+
+No, it must be const.
+
+
 
 > 
-> Best regards,
-> Krzysztof
+>>> +
+>>> +  ranges: true
+>>> +
+>>> +  feature-domain-controller: true
+>>> +
+>>> +patternProperties:
+>>> +  "^.*@[0-9a-f]+$":
+>>> +    description: Devices attached to system bus
+>>> +    type: object
+>>> +    properties:
+>>> +      feature-domains:
+>>> +        $ref: /schemas/feature-controllers/feature-domain-controller.yaml#/properties/feature-domains
+>>
+>> maxItems
 > 
+> I don't think setting a max here is relevant as there can be numerous 
+> feature-domains referenced.
 
+Then pick some high, reasonable number with minItems: 1.
+
+> 
+> Maybe a min?
+> 
+>>
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - "#address-cells"
+>>> +  - "#size-cells"
+>>> +  - feature-domain-controller
+>>> +  - '#feature-domain-cells'
+>>> +  - ranges
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    // In this example,
+>>> +    // - the foo1 device refers to etzpc as his domain controller.
+>>> +    // - same goes for foo2.
+>>> +    // Access rights are verified before creating devices.
+>>> +
+>>> +    etzpc: etzpc@5c007000 {
+>>
+>> Node names should be generic.
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>>
+> 
+> Ack, will change to "etzpc: bus@5c007000" in V3
+> 
+>>> +        compatible = "st,stm32mp15-sys-bus";
+>>> +        reg = <0x5c007000 0x400>;
+>>> +        #address-cells = <1>;
+>>> +        #size-cells = <1>;
+>>> +        ranges;
+>>> +        feature-domain-controller;
+>>> +        #feature-domain-cells = <1>;
+>>> +
+>>> +        foo1: foo@1000000 {
+>>
+>> Node names should be generic.
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+> Here, if I use real peripherals, I have an issue with the dependency to 
+> YAML files. The feature-domains property is not defined in their 
+> bindings. Therefore, the dt_binding_check fails on peripherals whose 
+> YAML declare "additionalProperties: false" because the link to the 
+> feature domain controller bindings does not exist.
+
+Then your patchset is not complete and not correct, right? The binding
+for the real example which you have in real world, should also allow it
+in such
 Best regards,
-Gatien
+Krzysztof
+
