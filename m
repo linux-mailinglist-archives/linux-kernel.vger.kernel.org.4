@@ -2,109 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0FD653EF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B78A653EFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235420AbiLVLWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S235453AbiLVLXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235133AbiLVLWv (ORCPT
+        with ESMTP id S235133AbiLVLXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:22:51 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938E612600;
-        Thu, 22 Dec 2022 03:22:49 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so1539634pjh.5;
-        Thu, 22 Dec 2022 03:22:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hLgs1lnetEyknU/J00Q9dg+rep4hDdlUeMLNhubrH7k=;
-        b=jFpjvGje8T+CENNBBCN2AMF/9FIhSTWjz1wfo+HYkF/V9M9n8c1Zep6WmWwXmteyBu
-         WLRLkAczJGuk9jipcgZtyx4DqKOs4Hf0bM2LFGWaZoUPeXxksmXJJDI9DCp6c2Mg3bBr
-         2n8wX1Uv/7RMMNGpgIOGGZUji0uLPCgGQHsfzwDNpgZfTGiH9nUVCodrrC8pvLtbatv9
-         oH76U9GZ/CA6pAdv4at+CgP8blvC5DFxA+leWHvdscSouvJ2+Dz+CwtB47vU9Bi/EH0/
-         RgnzgU4qN2rMlQ7k3BzeBaucrjP/5lDYigb/AsDR5LaAIvaZmlQHcAajwdINCX2vC5hs
-         jMWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hLgs1lnetEyknU/J00Q9dg+rep4hDdlUeMLNhubrH7k=;
-        b=qL1mtRQDYbpoLQei9TXhv+DKc2wSha0mxe5dNkdx2baA6RTkRQuQqCgt/DGd4ddb+R
-         DuVj2Hn2XA9Ubxd/GbjwzB0xsGUQv/l9l+InOcWwNGHK9DjfwVhH+aWSniVrMLeg0xt3
-         9GDi6B0suwDAeBuyZ3fP49dIcLILzsxXlS/JyV6lssOvkdHmlS+OEsSFOnG8ZwTOoQHH
-         LehMhcmV3h/Pxt5wgwP7p39HZK1EnmTi0APGge1uxJvidsf3xqQp+mtCieW3Jxu+9OAn
-         bRrwyMBOV7GgUQvidUgcFczSiIWmRn/tt1CTOKip/I4fFzZNCVL6OAT5mFriMfVi2Vw0
-         kiTg==
-X-Gm-Message-State: AFqh2koDiO78RH3NkMw1pOrUJg9IjgEJlSWHpUd00kCjCTAgBJsp3JWp
-        EGdEjMc5H7atq3nHooSNzIA=
-X-Google-Smtp-Source: AMrXdXtDw4S2svhTHvYarWfBuWqpYWueLLxgbOGNu07nleRYG642JRNpHHVYWYza6grZUflq7Qd+Uw==
-X-Received: by 2002:a17:90b:3711:b0:223:f7a6:1c1e with SMTP id mg17-20020a17090b371100b00223f7a61c1emr5783069pjb.31.1671708169146;
-        Thu, 22 Dec 2022 03:22:49 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id n8-20020a17090a73c800b0021e1c8ef788sm2966940pjk.51.2022.12.22.03.22.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 03:22:48 -0800 (PST)
-Message-ID: <195c26b7-783f-fc27-1a60-b0dcd1de01ac@gmail.com>
-Date:   Thu, 22 Dec 2022 19:22:42 +0800
+        Thu, 22 Dec 2022 06:23:22 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF181EE;
+        Thu, 22 Dec 2022 03:23:21 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 19E9223940;
+        Thu, 22 Dec 2022 11:23:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1671708200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q7//GWIteFgH1E0ImEj9IrbM2aYh4kFVO4zFsnlVSG0=;
+        b=TsbymAibCwFsC0kzQbs0g54rk6xYAfYEj5MIFHZeX5X5+OOYIakazt1cJXV7uEi3qmcHux
+        8IDBoOVHPykhxPuClSrfKWnrAUw8jOY4uYtyp/oB0/RZCLQ1WlDGqXMun5fQCQNfkAs3kM
+        dDqQBB5w+X+MFpasnHVksH6JJrmjD5c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1671708200;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q7//GWIteFgH1E0ImEj9IrbM2aYh4kFVO4zFsnlVSG0=;
+        b=ARBTYnbj+oCFe2R0D9NbmqK4FVwODoDm/qByVjoYBv4ovWcb7TqR3KgBOjBu3xhL4Lqhh2
+        En4zaFhH1uNAulAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0BD01138FD;
+        Thu, 22 Dec 2022 11:23:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id o43WAig+pGOoeAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 22 Dec 2022 11:23:20 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 73E47A0732; Thu, 22 Dec 2022 12:23:19 +0100 (CET)
+Date:   Thu, 22 Dec 2022 12:23:19 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jack@suse.cz, kbusch@kernel.org
+Subject: Re: [PATCH RESEND v2 2/5] sbitmap: remove redundant check in
+ __sbitmap_queue_get_batch
+Message-ID: <20221222112319.26wtwxeyry6ybvse@quack3>
+References: <20221222143353.598042-1-shikemeng@huaweicloud.com>
+ <20221222143353.598042-3-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [PATCH v2 12/15] KVM: x86/vmx: Disable Arch LBREn bit in #DB and
- warm reset
-Content-Language: en-US
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     kan.liang@linux.intel.com, wei.w.wang@intel.com, seanjc@google.com,
-        pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221125040604.5051-1-weijiang.yang@intel.com>
- <20221125040604.5051-13-weijiang.yang@intel.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20221125040604.5051-13-weijiang.yang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221222143353.598042-3-shikemeng@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/11/2022 12:06 pm, Yang Weijiang wrote:
-> +static void disable_arch_lbr_ctl(struct kvm_vcpu *vcpu)
-> +{
-> +	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
-> +	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-> +
-> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
-> +	    test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use) &&
-> +	    lbr_desc->event) {
-> +		u64 ctl = vmcs_read64(GUEST_IA32_LBR_CTL);
-> +
-> +		vmcs_write64(GUEST_IA32_LBR_CTL, ctl & ~ARCH_LBR_CTL_LBREN);
-> +	}
-> +}
-> +
->   static void vmx_inject_exception(struct kvm_vcpu *vcpu)
->   {
->   	struct kvm_queued_exception *ex = &vcpu->arch.exception;
-> @@ -1738,6 +1752,9 @@ static void vmx_inject_exception(struct kvm_vcpu *vcpu)
->   	vmcs_write32(VM_ENTRY_INTR_INFO_FIELD, intr_info);
->   
->   	vmx_clear_hlt(vcpu);
-> +
-> +	if (ex->vector == DB_VECTOR)
-> +		disable_arch_lbr_ctl(vcpu);
+On Thu 22-12-22 22:33:50, Kemeng Shi wrote:
+> Commit fbb564a557809 ("lib/sbitmap: Fix invalid loop in
+> __sbitmap_queue_get_batch()") mentioned that "Checking free bits when
+> setting the target bits. Otherwise, it may reuse the busying bits."
+> This commit add check to make sure all masked bits in word before
+> cmpxchg is zero. Then the existing check after cmpxchg to check any
+> zero bit is existing in masked bits in word is redundant.
+> 
+> Actually, old value of word before cmpxchg is stored in val and we
+> will filter out busy bits in val by "(get_mask & ~val)" after cmpxchg.
+> So we will not reuse busy bits methioned in commit fbb564a557809
+> ("lib/sbitmap: Fix invalid loop in __sbitmap_queue_get_batch()"). Revert
+> new-added check to remove redundant check.
+> 
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 
-Please verify this with KUT testcase, once I failed and did not confirm
-if it is a hardware issue. Good Luck.
+...
 
->   }
+> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> index cb5e03a2d65b..11e75f4040fb 100644
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -518,11 +518,9 @@ unsigned long __sbitmap_queue_get_batch(struct sbitmap_queue *sbq, int nr_tags,
+>  
+>  			get_mask = ((1UL << nr_tags) - 1) << nr;
+>  			val = READ_ONCE(map->word);
+> -			do {
+> -				if ((val & ~get_mask) != val)
+> -					goto next;
+> -			} while (!atomic_long_try_cmpxchg(ptr, &val,
+> -							  get_mask | val));
+> +			while (!atomic_long_try_cmpxchg(ptr, &val,
+> +							  get_mask | val))
+> +				;
+>  			get_mask = (get_mask & ~val) >> nr;
+>  			if (get_mask) {
+>  				*offset = nr + (index << sb->shift);
+
+So I agree this will result in correct behavior but it can change
+performance. In the original code, we end up doing
+atomic_long_try_cmpxchg() only for words where we have a chance of getting
+all tags allocated. Now we just accept any word where we could allocate at
+least one bit. Frankly the original code looks rather restrictive and also
+the fact that we look only from the first zero bit in the word looks
+unnecessarily restrictive so maybe I miss some details about what's
+expected from __sbitmap_queue_get_batch(). So all in all I wanted to point
+out this needs more scrutiny from someone understanding better expectations
+from __sbitmap_queue_get_batch().
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
