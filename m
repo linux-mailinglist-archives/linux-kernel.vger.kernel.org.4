@@ -2,124 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632DD6540C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8EB6540C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235878AbiLVMLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:11:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
+        id S235566AbiLVMML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235670AbiLVMLI (ORCPT
+        with ESMTP id S235777AbiLVMLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:11:08 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749B23579F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 04:02:49 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id bp15so2368943lfb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 04:02:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W0/WYYRiZBUptmaI66MTLgo9LuZpA2AGvxzbCPWDdlk=;
-        b=hr2UUO/mNiySg/OJe785T6rDWQsaL5wuR+cKg25Sfx3KJL7RnyGRxe4vjovpzRI5Vq
-         pXrSDrQsDX2uU6riY9SAob/gXpuIbx+NvDfC1tVmj00LQt05D35HdRs3QQdeeos6Dpzq
-         WCUZ59QJLlzwg4u2RVxEUjw9ZNwZ7R7IQ44bSTCneUnI71TaIJYO4IR0Vc9ZdKtC+Hsg
-         tff3ylJ54TJmNwuYmcwZzkVBc0iDr2f92NBxR/Cc8+Ffc4kmWv2xzrRSvSvfOZdGDp2K
-         h9eVECZtnwGS7svAsm+dDRoHjf2C03mTeERC22jwdMtif0MX9TDdeonYN0k0XwOnvrFx
-         qoUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W0/WYYRiZBUptmaI66MTLgo9LuZpA2AGvxzbCPWDdlk=;
-        b=dt+5h+75x9HdKPriO2ivz3j//EY+85D2F7fSFWxU7IzBuLqAbfmuGmwzbVYf/RKM2Z
-         0ka53xkmsfBFJPNaIdkqtqPt9W12ioyTP8YAUZDwf6lnnRmmQsjRv5gnoghd9Z+ocu4g
-         +wAwdAj3YZ9kB+eoQ1U1WEXdty+3UslG6YpHMQpr76+s5HPJNoTnmvejWIMxuaBjVhSP
-         JP1zBrZDaoO3Ew+qIao3zM0F43YXqxhSWdKmyyifOwntDlJbo52KLar8p5Kal4N9PPfi
-         3CtmTpZHGZ7CDMeB5G28NfEiLpBPEXiPBQpek2EE3lkwkviI97m1DbnU0c94/GSALMl2
-         XL6Q==
-X-Gm-Message-State: AFqh2krEOgE4yr65DJ6YV0QpdLaIvnb9BzJP1RDcavcleT/xvXTYH3Zj
-        1r6OOYTgLJ5acWTIZBy448PExhQudPFw1ddd
-X-Google-Smtp-Source: AMrXdXuJycJoLh9UbvXcMVXUe6Q2RHi1EKx0BHBv+IoJX0TXdcdFnDm5Mz6e2aCQ1xgovOVI4v4dAg==
-X-Received: by 2002:a05:6512:4005:b0:4b5:9183:5ad0 with SMTP id br5-20020a056512400500b004b591835ad0mr3126053lfb.63.1671710567857;
-        Thu, 22 Dec 2022 04:02:47 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id d9-20020a056512368900b004a26ba3458fsm50812lfs.62.2022.12.22.04.02.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 04:02:47 -0800 (PST)
-Message-ID: <e21d15f9-10fa-671b-b49c-a9f748aae75d@linaro.org>
-Date:   Thu, 22 Dec 2022 13:02:46 +0100
+        Thu, 22 Dec 2022 07:11:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5196B36D42;
+        Thu, 22 Dec 2022 04:03:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4F7F3CE19BB;
+        Thu, 22 Dec 2022 12:03:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10E6C433D2;
+        Thu, 22 Dec 2022 12:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671710602;
+        bh=juXlLY89CiB9bJ9o17px1v8bs7xEFLxq9o/YkeYNwvg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BxxeCHxAMVIThDcrxhuGCdBUO2YtMPtf5b0Acf6+0I8BGI7do+Tclh9jQgSSqEgyW
+         dVgpCG6SSH5CzjlfPTZ7kylDtjvA4WMECdQEXSopfTE+O/nu+PatRbvNyGMsUI/3hE
+         0UnYbgAKzG9G8wa9MwxAwyJS2kF9mKd8CXyX+lH4eOkGZ2Vzu6qzVa+RB4YwbUm41g
+         MLK4+xh3SK/W4B67xN/gcHzrmWMvgwnOgbe91MuVcpg4Fr4uhMfiJ42JQw2OUFRL9p
+         MO557ODWyoovr88Y/RnW2NKOd7CcYLkjQ7xb28qpFwsVVA2WiPwtYxB3iYilDcs/YR
+         BX12fqUGDv8dQ==
+Date:   Thu, 22 Dec 2022 13:03:19 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>, neeraj.iitr10@gmail.com
+Subject: Re: [PATCH] srcu: Remove memory barrier "E" as it does not do
+ anything
+Message-ID: <20221222120319.GA44533@lothringen>
+References: <20221222002011.1858494-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
-Content-Language: en-US
-To:     Bhavya Kapoor <b-kapoor@ti.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        kristo@kernel.org, nm@ti.com
-References: <20221221055144.7181-1-b-kapoor@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221221055144.7181-1-b-kapoor@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221222002011.1858494-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/12/2022 06:51, Bhavya Kapoor wrote:
-> J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
-> for 8 channel ADCs for J721s2 SoC.
+On Thu, Dec 22, 2022 at 12:20:11AM +0000, Joel Fernandes (Google) wrote:
+> During a flip, we have a full memory barrier before srcu_idx is incremented.
 > 
-> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
-> ---
+> The idea is we intend to order the first phase scan's read of lock
+> counters with the flipping of the index.
 > 
-> Changelog v1 -> v2:
-> 	- Updated Interrupt Values for tscadc
+> However, such ordering is already enforced because of the
+> control-dependency between the 2 scans. We would be flipping the index
+> only if lock and unlock counts matched.
 > 
->  .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
->  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 42 ++++++++++++++++++-
->  2 files changed, 55 insertions(+), 1 deletion(-)
+> But such match will not happen if there was a pending reader before the flip
+> in the first place (observation courtesy Mathieu Desnoyers).
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-> index a7aa6cf08acd..67593aa69327 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-> @@ -309,3 +309,17 @@ &mcu_mcan1 {
->  	pinctrl-0 = <&mcu_mcan1_pins_default>;
->  	phys = <&transceiver2>;
->  };
-> +
-> +&tscadc0 {
-> +	status = "okay";
-> +	adc {
-> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-> +	};
-> +};
-> +
-> +&tscadc1 {
-> +	status = "okay";
-> +	adc {
-> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-> +	};
-> +};
-> \ No newline at end of file
+> The litmus test below shows this:
+> (test courtesy Frederic Weisbecker, Changes for ctrldep by Boqun/me):
+> 
+> C srcu
+> 
+> {}
+> 
+> // updater
+> P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+> {
+>         int lock1;
+>         int unlock1;
+>         int lock0;
+>         int unlock0;
+> 
+>         // SCAN1
+>         unlock1 = READ_ONCE(*UNLOCK1);
+>         smp_mb(); // A
+>         lock1 = READ_ONCE(*LOCK1);
+> 
+>         // FLIP
+>         if (lock1 == unlock1) {         // Control dep
+>                 smp_mb(); // E
+>                 WRITE_ONCE(*IDX, 1);
+>                 smp_mb(); // D
+> 
+>                 // SCAN2
+>                 unlock0 = READ_ONCE(*UNLOCK0);
+>                 smp_mb(); // A
+>                 lock0 = READ_ONCE(*LOCK0);
+>         }
+> }
+> 
+> // reader
+> P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+> {
+>         int tmp;
+>         int idx1;
+>         int idx2;
+> 
+>         // 1st reader
+>         idx1 = READ_ONCE(*IDX);
+>         if (idx1 == 0) {
+>                 tmp = READ_ONCE(*LOCK0);
+>                 WRITE_ONCE(*LOCK0, tmp + 1);
+>                 smp_mb(); /* B and C */
+>                 tmp = READ_ONCE(*UNLOCK0);
+>                 WRITE_ONCE(*UNLOCK0, tmp + 1);
+>         } else {
+>                 tmp = READ_ONCE(*LOCK1);
+>                 WRITE_ONCE(*LOCK1, tmp + 1);
+>                 smp_mb(); /* B and C */
+>                 tmp = READ_ONCE(*UNLOCK1);
+>                 WRITE_ONCE(*UNLOCK1, tmp + 1);
+>         }
+> 
+>         // second reader
+>         idx2 = READ_ONCE(*IDX);
+>         if (idx2 == 0) {
+>                 tmp = READ_ONCE(*LOCK0);
+>                 WRITE_ONCE(*LOCK0, tmp + 1);
+>                 smp_mb(); /* B and C */
+>                 tmp = READ_ONCE(*UNLOCK0);
+>                 WRITE_ONCE(*UNLOCK0, tmp + 1);
+>         } else {
+>                 tmp = READ_ONCE(*LOCK1);
+>                 WRITE_ONCE(*LOCK1, tmp + 1);
+>                 smp_mb(); /* B and C */
+>                 tmp = READ_ONCE(*UNLOCK1);
+>                 WRITE_ONCE(*UNLOCK1, tmp + 1);
+>         }
+> }
+> 
+> The following bad condition will not occur even if memory barrier E
+> is dropped:
+> 
+> (* bad condition: SCAN1 saw lock count changes though 1st reader saw flip *)
+>  exists (0:lock1=1 /\ 1:idx1=1 /\ 1:idx2=1)
 
-Same errors as before.
+Good catch!
 
-I don't know how many same patches we need to see - this is fourth. None
-of them seems to be correct...
+The litmus test can be shorten with removing the second reader and limit the
+exists clause to 0:lock1=1 :
 
-Best regards,
-Krzysztof
+---
+C srcu-E
 
+{}
+
+// updater
+P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+{
+	int lock1;
+	int unlock1;
+	int lock0;
+	int unlock0;
+
+	// SCAN1
+	unlock1 = READ_ONCE(*UNLOCK1);
+	smp_mb(); // A
+	lock1 = READ_ONCE(*LOCK1);
+
+	// FLIP
+	if (lock1 == unlock1) {         // Control dep
+		WRITE_ONCE(*IDX, 1);
+		smp_mb(); // D
+
+		// SCAN2
+		unlock0 = READ_ONCE(*UNLOCK0);
+		smp_mb(); // A
+		lock0 = READ_ONCE(*LOCK0);
+	}
+}
+
+// reader
+P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+{
+	int tmp;
+	int idx1;
+	int idx2;
+
+	// 1st reader
+	idx1 = READ_ONCE(*IDX);
+	if (idx1 == 0) {
+		tmp = READ_ONCE(*LOCK0);
+		WRITE_ONCE(*LOCK0, tmp + 1);
+		smp_mb(); /* B and C */
+		tmp = READ_ONCE(*UNLOCK0);
+		WRITE_ONCE(*UNLOCK0, tmp + 1);
+	} else {
+		tmp = READ_ONCE(*LOCK1);
+		WRITE_ONCE(*LOCK1, tmp + 1);
+		smp_mb(); /* B and C */
+		tmp = READ_ONCE(*UNLOCK1);
+		WRITE_ONCE(*UNLOCK1, tmp + 1);
+	}
+}
+exists (0:lock1=1) (* only happens if the control dep is removed *)
+--
+
+> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> index 1c304fec89c0..d1368d64fdba 100644
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -983,15 +983,9 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
+>  static void srcu_flip(struct srcu_struct *ssp)
+>  {
+>  	/*
+> -	 * Ensure that if this updater saw a given reader's increment
+> -	 * from __srcu_read_lock(), that reader was using an old value
+> -	 * of ->srcu_idx.  Also ensure that if a given reader sees the
+> -	 * new value of ->srcu_idx, this updater's earlier scans cannot
+> -	 * have seen that reader's increments (which is OK, because this
+> -	 * grace period need not wait on that reader).
+> +	 * Control dependency locks==unlocks ensures that if a reader sees the
+> +	 * flip, previous scan would only see before-flip reader lock counts.
+
+I would personally prefer that we keep the detailed comment explaining the
+ordering requirements here, just mentioning it's performed via control
+dependency now. This way we don't need to debate that again in 10 years.
+
+Thanks.
+
+
+>  	 */
+> -	smp_mb(); /* E */  /* Pairs with B and C. */
+> -
+>  	WRITE_ONCE(ssp->srcu_idx, ssp->srcu_idx + 1);
+>  
+>  	/*
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
+> 
