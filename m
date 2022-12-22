@@ -2,172 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB46E654628
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0163765462B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiLVSvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
+        id S235580AbiLVSwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:52:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbiLVSv0 (ORCPT
+        with ESMTP id S229984AbiLVSv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:51:26 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98F8723EB9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:51:19 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8FBFC1FB;
-        Thu, 22 Dec 2022 10:52:00 -0800 (PST)
-Received: from e120937-lin.. (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3859C3FA32;
-        Thu, 22 Dec 2022 10:51:18 -0800 (PST)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        f.fainelli@gmail.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, Ludvig.Parsson@axis.com,
-        cristian.marussi@arm.com
-Subject: [PATCH 9/9] firmware: arm_scmi: Split bus and driver into distinct modules
-Date:   Thu, 22 Dec 2022 18:50:49 +0000
-Message-Id: <20221222185049.737625-10-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221222185049.737625-1-cristian.marussi@arm.com>
-References: <20221222185049.737625-1-cristian.marussi@arm.com>
+        Thu, 22 Dec 2022 13:51:59 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4A029363;
+        Thu, 22 Dec 2022 10:51:41 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id x22so6955092ejs.11;
+        Thu, 22 Dec 2022 10:51:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+wjlf9HtdBwtd5BfrKK3NoAIyLd+UFeDv/NhLgMN1as=;
+        b=A4i6MI57PBStveX53sUUEvZ+x7r1V47+5xIVi+hPAAfEWErZ06/pJUlK4Hst9pX/b8
+         XlJsuixCjjzgxhcnCMGoxM5AEfOvrtXGsbYxsdOnJg3yL04oHA3B4hzJ63iRKf4XCCcy
+         +4ezcGTXJvXs/CsX9i+BqbEmLHYworqDNE7nCKjxq7RHtsGCXdeSufvd8EQwmkpIZRmc
+         7CMhvEKfe26E8krl41lM7uYmiegPQzavuvjHeheWfjx2y3/74PG8dDEFo/mfClmMm+fM
+         iVkHNcOuHpAWzrA1430NggdBSgVRlkVZw79JIUMGN3drPnGPOodEjpMsNufwvlmYqKY5
+         c3+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+wjlf9HtdBwtd5BfrKK3NoAIyLd+UFeDv/NhLgMN1as=;
+        b=sMVEBBEi07v4TAMXgZRWCpzbOI5iR8X+oUAl+WHypYpUcSFjqDS5A5IqBsdZ9y74Du
+         WKzDTMJzXNPR/O5T68klx8PhXey02s7/8F7MlhU6TmNj3AL/QuDHtzkrYTBpe7Segwb5
+         ugeDvg9j1UFoarbgcNCr/VPnp3F8RblqYu5kmW1EkW+qF3NITFaJOhv0rpyycE+lbeL9
+         HPl3n7FQzChXN+bMrMArhCxbYPsIRHi7Z6swibmE+SbPYWkn4P9bYOQ2n6R0l2sSvcbs
+         9515Nu6InFegoga2k21UuO47WWaU2oglf+a7WyKq4Yp/X6tcmMTy1I9qDig7JQU1akMO
+         ITTA==
+X-Gm-Message-State: AFqh2koWSQNYZmnWX2+fJcnCR3XtcpdUaO9p06RlzoEtP6ItoMUZtbdt
+        3madA/gprR9mbfzXbeImnhDURSPwoakw9PXXE4/hCS2p
+X-Google-Smtp-Source: AMrXdXtN2rRR20R19i6vscCm4IWwKN/GFSFnTNL5An/JnKDjI+AGAskvFSxXaCgJEImPDZBjcbQAJSLtaww1FHflMl0=
+X-Received: by 2002:a17:906:f209:b0:7fd:f0b1:c8ec with SMTP id
+ gt9-20020a170906f20900b007fdf0b1c8ecmr453038ejb.114.1671735100056; Thu, 22
+ Dec 2022 10:51:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221217223509.88254-1-changbin.du@gmail.com> <20221217223509.88254-2-changbin.du@gmail.com>
+ <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan> <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
+ <Y6GdofET0gHQzRX6@leoy-yangtze.lan> <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
+ <Y6KDrELoIfPbh3VN@leoy-yangtze.lan>
+In-Reply-To: <Y6KDrELoIfPbh3VN@leoy-yangtze.lan>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 22 Dec 2022 10:51:28 -0800
+Message-ID: <CAEf4BzaiNOo_qqo16qLACfBe6esg2w+GafqU0TtwZMprpuDBEQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF" section
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Quentin Monnet <quentin@isovalent.com>,
+        Changbin Du <changbin.du@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the SCMI bus on its own as a distinct module initialized at
-subsys_initcall level when builtin.
+On Tue, Dec 20, 2022 at 7:55 PM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> On Tue, Dec 20, 2022 at 04:13:13PM -0800, Andrii Nakryiko wrote:
+>
+> [...]
+>
+> > > > > > @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+> > > > > >   err = 0;
+> > > > > >
+> > > > > >   if (!btf_data) {
+> > > > > > +         pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
+> > > > > >           err = -ENOENT;
+> > >
+> > > btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
+> > > section, therefore, bpftool dumps error string "No such file or
+> > > directory".  It's confused that actually vmlinux is existed.
+> > >
+> > > I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
+> > > better choice?) to replace -ENOENT at here, this can avoid bpftool to
+> > > outputs "No such file or directory" in this case.
+> >
+> > The only really meaningful error code would be -ESRCH, which
+> > strerror() will translate to "No such process", which is also
+> > completely confusing.
+>
+> Or maybe -ENODATA (No data available) is a better choice?
 
-Keep the SCMI driver core stack, together with any configured transport,
-in a different module initialized as module_init level.
+-ENODATA sounds good to me, yep.
 
-SCMI Drivers initialization remain unchanged at module_init level.
-
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
- drivers/firmware/arm_scmi/Makefile |  8 ++++++--
- drivers/firmware/arm_scmi/bus.c    | 15 ++++++++++++---
- drivers/firmware/arm_scmi/common.h |  2 --
- drivers/firmware/arm_scmi/driver.c |  6 +-----
- 4 files changed, 19 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/firmware/arm_scmi/Makefile b/drivers/firmware/arm_scmi/Makefile
-index 9ea86f8cc8f7..f0596c386c62 100644
---- a/drivers/firmware/arm_scmi/Makefile
-+++ b/drivers/firmware/arm_scmi/Makefile
-@@ -1,5 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- scmi-bus-y = bus.o
-+scmi-core-objs := $(scmi-bus-y)
-+
- scmi-driver-y = driver.o notify.o
- scmi-transport-$(CONFIG_ARM_SCMI_HAVE_SHMEM) = shmem.o
- scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_MAILBOX) += mailbox.o
-@@ -8,9 +10,11 @@ scmi-transport-$(CONFIG_ARM_SCMI_HAVE_MSG) += msg.o
- scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_VIRTIO) += virtio.o
- scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_OPTEE) += optee.o
- scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o voltage.o powercap.o
--scmi-module-objs := $(scmi-bus-y) $(scmi-driver-y) $(scmi-protocols-y) \
--		    $(scmi-transport-y)
-+scmi-module-objs := $(scmi-driver-y) $(scmi-protocols-y) $(scmi-transport-y)
-+
-+obj-$(CONFIG_ARM_SCMI_PROTOCOL) += scmi-core.o
- obj-$(CONFIG_ARM_SCMI_PROTOCOL) += scmi-module.o
-+
- obj-$(CONFIG_ARM_SCMI_POWER_DOMAIN) += scmi_pm_domain.o
- obj-$(CONFIG_ARM_SCMI_POWER_CONTROL) += scmi_power_control.o
- 
-diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
-index 190999a658b2..6228f1581fe3 100644
---- a/drivers/firmware/arm_scmi/bus.c
-+++ b/drivers/firmware/arm_scmi/bus.c
-@@ -476,18 +476,21 @@ static void scmi_devices_unregister(void)
- 	bus_for_each_dev(&scmi_bus_type, NULL, NULL, __scmi_devices_unregister);
- }
- 
--int __init scmi_bus_init(void)
-+static int __init scmi_bus_init(void)
- {
- 	int retval;
- 
- 	retval = bus_register(&scmi_bus_type);
- 	if (retval)
--		pr_err("scmi protocol bus register failed (%d)\n", retval);
-+		pr_err("SCMI protocol bus register failed (%d)\n", retval);
-+
-+	pr_info("SCMI protocol bus registered\n");
- 
- 	return retval;
- }
-+subsys_initcall(scmi_bus_init);
- 
--void __exit scmi_bus_exit(void)
-+static void __exit scmi_bus_exit(void)
- {
- 	/*
- 	 * Destroy all remaining devices: just in case the drivers were
-@@ -497,3 +500,9 @@ void __exit scmi_bus_exit(void)
- 	bus_unregister(&scmi_bus_type);
- 	ida_destroy(&scmi_bus_id);
- }
-+module_exit(scmi_bus_exit);
-+
-+MODULE_ALIAS("scmi-core");
-+MODULE_AUTHOR("Sudeep Holla <sudeep.holla@arm.com>");
-+MODULE_DESCRIPTION("ARM SCMI protocol bus");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
-index 19726a037991..80f63fc8ca14 100644
---- a/drivers/firmware/arm_scmi/common.h
-+++ b/drivers/firmware/arm_scmi/common.h
-@@ -99,8 +99,6 @@ scmi_revision_area_get(const struct scmi_protocol_handle *ph);
- void scmi_setup_protocol_implemented(const struct scmi_protocol_handle *ph,
- 				     u8 *prot_imp);
- 
--int __init scmi_bus_init(void);
--void __exit scmi_bus_exit(void);
- extern struct bus_type scmi_bus_type;
- 
- #define SCMI_BUS_NOTIFY_DEVICE_REQUEST		0
-diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index 115baaa4aca9..50267eef10fa 100644
---- a/drivers/firmware/arm_scmi/driver.c
-+++ b/drivers/firmware/arm_scmi/driver.c
-@@ -2638,8 +2638,6 @@ static int __init scmi_driver_init(void)
- 	if (WARN_ON(!IS_ENABLED(CONFIG_ARM_SCMI_HAVE_TRANSPORT)))
- 		return -EINVAL;
- 
--	scmi_bus_init();
--
- 	/* Initialize any compiled-in transport which provided an init/exit */
- 	ret = scmi_transports_init();
- 	if (ret)
-@@ -2658,7 +2656,7 @@ static int __init scmi_driver_init(void)
- 
- 	return platform_driver_register(&scmi_driver);
- }
--subsys_initcall(scmi_driver_init);
-+module_init(scmi_driver_init);
- 
- static void __exit scmi_driver_exit(void)
- {
-@@ -2673,8 +2671,6 @@ static void __exit scmi_driver_exit(void)
- 	scmi_system_unregister();
- 	scmi_powercap_unregister();
- 
--	scmi_bus_exit();
--
- 	scmi_transports_exit();
- 
- 	platform_driver_unregister(&scmi_driver);
--- 
-2.34.1
-
+>
+> Thanks,
+> Leo
+>
+> > In general, I always found these strerror() messages extremely
+> > unhelpful and confusing. I wonder if we should make an effort to
+> > actually emit symbolic names of errors instead (literally, "-ENOENT"
+> > in this case). This is all tooling for engineers, I find -ENOENT or
+> > -ESRCH much more meaningful as an error message, compared to "No such
+> > file" seemingly human-readable interpretation.
+> >
+> > Quenting, what do you think about the above proposal for bpftool? We
+> > can have some libbpf helper internally and do it in libbpf error
+> > messages as well and just reuse the logic in bpftool, perhaps?
+> >
+> > Anyways, I've applied this patch set to bpf-next. Thanks.
