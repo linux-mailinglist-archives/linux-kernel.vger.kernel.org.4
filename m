@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AC3653B65
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 05:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C472653B6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 05:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbiLVEof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 23:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S234894AbiLVEtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 23:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiLVEoc (ORCPT
+        with ESMTP id S234459AbiLVEto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 23:44:32 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAD21A204;
-        Wed, 21 Dec 2022 20:44:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1671684266; bh=mSeQo5HD6mm53XVJ7wzrrTx/ANQPLgJs/zlmqz1os+Y=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=iVh/hulKQDt9Y8D++LiH6897M99Dpxlct7q+sR+mjsJ24076OFXzC5tz8sh18dQrc
-         r7SEHzb9gRskfMMdFVmkEo9lgJUgfUBPI2Vx4LH7qZ1GktT5/PTIPsBCfqAC5zd8xe
-         COLHhiDxC+pqLQ9aISt5UCS0W2OM+4z/KuAL6tkbv8vA0IpqSXEUudeNv7a91Gmq8l
-         wcCWmeiN42A3ZLsyluCEeJJfQblm+ZhO5y/tOTQoeWDGmFsBXFK3vCfD6kmP4Ig+U6
-         ZbRr+MTwbtvjCOxJxeMT89M3KH3fUrDxZtx+TfxAtrVeFENrn06WQ8qpD7R8GaND8l
-         fSTg/uBc7dSsA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from homer.fritz.box ([212.114.172.145]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MDhhX-1ozfFl1Evf-00Ap3t; Thu, 22
- Dec 2022 05:44:26 +0100
-Message-ID: <36902a3dd6ee1a8656548ff5b5eadb88245e2799.camel@gmx.de>
-Subject: Re: regression: nfs mount (even idle) eventually hangs server
-From:   Mike Galbraith <efault@gmx.de>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
-Date:   Thu, 22 Dec 2022 05:44:25 +0100
-In-Reply-To: <1A404CDB-95A8-4D04-B76B-91D4F063B489@oracle.com>
-References: <65ed34338c69cb034295f2c9cbe0af684d65d30f.camel@gmx.de>
-         <360f3dcfb6cfbefdbcc42fc84c660995142a8645.camel@gmx.de>
-         <241c118c2fb60df744bbe351387fc29a34ff6ab9.camel@gmx.de>
-         <f533c2e38c0619ea0c3b4346d1c7c99c5ae2122b.camel@gmx.de>
-         <1A404CDB-95A8-4D04-B76B-91D4F063B489@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:zX4AtPJMSxHapawfaJ5LW8msY0KiDpItEQOIRMXxUMfoXTP0nSK
- XQ5SdLxZoQ0CyVjzsbcw5cAeqb5d7+/e07mqZOoofLMUwxq2WA/LqDPNwCbp06pF8RBMHZ+
- pPVCgUZa0A+1AGiKI79fTgBP5NVBDdGyxAj8VH3jVxCNaqvlx/aBmQcMBFTVcYr2YgoposP
- n4iIji/SxpjEkq/MF+Kag==
-UI-OutboundReport: notjunk:1;M01:P0:DMZZOEW2BCo=;Y+DP8BZtE3rTL3IOMC4eI1f4v3i
- 8fjzzmmSwvkNdHyuTFAGM5bL2D2V3mMB9zVEm/kNqpctkOLcKmHqad65IEU3F3xb59L1laMzB
- 57z4+5ScgGaAoJ/fFi3RpI5uP1Nw1rwsDmDyHWR/Qz6rvFnRXLSOHn/m6eofiSofqWSwQZe0i
- 5sZ2Fgx2Xyx2BcXiejQANzKAcnMUirgMjES3S0tBZTcy7j7BSzWJZqc5PJziwTNbHtKnOcId7
- Vy4wflcJY665cI5SMqmIUiQ6V5igOVFf1XhGLAyhEWARkjBxWccS6GfMKFfG+LV88T7moRQd7
- y23ug80Dd86nvEz4au/QnW83Q9edwn9Mw4PqBOzI1felBBRbpRHEt6dnghensldHhwb0KovsJ
- 03IZ45zY6Tv4WQbGa7/yaxixVXq4bisaUk6fCrnTw5QFGzPuYfUP3n47vhKaOML69NWgCWYzE
- BtlVdJtYd7uRu2rFyibvOux/pu9CKjnZLPyzFkMmd1yWEVZMCtHPgoXd0nhAopJTzTr9c+PAl
- uaDtJj2S/iNEjuF+hRGrw7Sf30mCfpAqEqhAvnn6YHewZ7KYX6O1JYTpUuOnrKLgIBHTodioT
- m/FmtghyAWb4N8vL/F2JafwCmPpwpJEZoqRSAfjISaG/cNrWrBEXQGiT+n5y39jtc6v//BnJZ
- y6j1d2rmr9JTHv9ufYpFUzB2P32MYq4ihHjwtrLDMovCBsGRB7kCuGeSBAtTebvVPLPaxoWiN
- Ukf6dZbJrQww4fO6pqkLnJEmtavNRu6XiaYQ2tWZ1PNHq1MgAw+bzCm+yWhIlzoPsbroU/bDc
- PXBL0smyF2IbKAeGRZ4vjGEoH6kQ+Pouo45fF+BiwtFb0m+WzHn/YmFicJpK75rHmnpu8P/rJ
- 9UaY/5TNe+vpSktrqR3uHoHFe+BsJummRBkQNBuFLjTxHJtUGuHg3aRYxshCb1C/OFkiqUNMZ
- pNgLqkbhuu+eV+qWY8prUNqgWLk=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 21 Dec 2022 23:49:44 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458211A80E;
+        Wed, 21 Dec 2022 20:49:44 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BM4bgBC032093;
+        Thu, 22 Dec 2022 04:49:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=8NKz2ilz1nUXqtBqiyLd1bHJ5FljdNQMK8Gvb39Gb+M=;
+ b=n+Udh3cQtavIsBd7Gvp/Y8/e7hTm+JcmZW9dvs+paUTYlrdHICvLScco69KpADrCZxjT
+ 9YMrKAwIYVadYRAY3zDQZVd6U7FRmxwJX9D056yDlyPBZpvxW+F3UMDqGdV+J57uSj8y
+ VjtYaVqNa8nlvC6HssPwCVZ9MAZv3wR7xZGwaSt8pTZak4XkSz6rJ55W28UA4Z3mZGxd
+ jAIdaZNLgb92z7yvYGOMr7KHQNOC4DESFVukr2f8zvsbbyqgRefifvSw5vQPp2wxh2IX
+ EEvDaWNfKUWtqKLHgyCXDJsSPI/aLSZTGqDaNo3Z1WCWa+JL6xpr36dcCAqEHw2rm23a Rw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm5r2h9x4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 04:49:41 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2BM4na0u017965;
+        Thu, 22 Dec 2022 04:49:36 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3mh6ukhx2p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 22 Dec 2022 04:49:36 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BM4naUo017958;
+        Thu, 22 Dec 2022 04:49:36 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-vdadhani-hyd.qualcomm.com [10.213.106.28])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2BM4nauk017957;
+        Thu, 22 Dec 2022 04:49:36 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 4047106)
+        id 87BE65001C2; Thu, 22 Dec 2022 10:19:35 +0530 (+0530)
+From:   Viken Dadhaniya <quic_vdadhani@quicinc.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, quic_vnivarth@quicinc.com,
+        quic_vtanuku@quicinc.com, quic_arandive@quicinc.com,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Subject: [PATCH V1 1/1] Serial: core: Add compat ioctl support
+Date:   Thu, 22 Dec 2022 10:19:25 +0530
+Message-Id: <20221222044925.27846-1-quic_vdadhani@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ZhoE1F2HzIAuvtmtE_rav98Md3AnjTWj
+X-Proofpoint-ORIG-GUID: ZhoE1F2HzIAuvtmtE_rav98Md3AnjTWj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_01,2022-12-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+ impostorscore=0 spamscore=0 clxscore=1011 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212220042
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,24 +79,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-22 at 04:28 +0000, Chuck Lever III wrote:
->
-> Hi Mike-
+Current serial core driver doesn't support compat_ioctl
+due to which 32-bit application is not able to send
+ioctls to driver on a 64-bit platform.
 
-Greetings,
+Added compat_ioctl support in serial core to handle
+ioctls from 32-bit applications on a 64-bit platform.
 
-> I'm guessing your client mounts with NFSv4.x.
+Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+---
+ drivers/tty/serial/serial_core.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Yes, mount says vers=3D4.2.
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index b9fbbee598b8..5ffa0798db3b 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -1601,6 +1601,22 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
+ 	return ret;
+ }
+ 
++/**
++ * uart_compat_ioctl: uart compat IOCTL function.
++ * @tty: pointer to tty structure.
++ * @cmd: command code passed by user-space.
++ * @arg: argument  passed by user-space.
++ *
++ * This function will call normal uart IOCTL.
++ *
++ * Return: 0 for success, Negative number for error condition.
++ */
++static long
++uart_compat_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
++{
++	return (long)uart_ioctl(tty, cmd, arg);
++};
++
+ static void uart_set_ldisc(struct tty_struct *tty)
+ {
+ 	struct uart_state *state = tty->driver_data;
+@@ -2670,6 +2686,7 @@ static const struct tty_operations uart_ops = {
+ 	.chars_in_buffer= uart_chars_in_buffer,
+ 	.flush_buffer	= uart_flush_buffer,
+ 	.ioctl		= uart_ioctl,
++	.compat_ioctl   = uart_compat_ioctl,
+ 	.throttle	= uart_throttle,
+ 	.unthrottle	= uart_unthrottle,
+ 	.send_xchar	= uart_send_xchar,
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 
-> We've been chasing a similar problem for a few months, but for
-> lack of a solid reproducer, it has remained elusive.
->
-> We believe the problem was introduced between 5.19 and 6.0. If
-> you have a fairly reliable way to trigger the server hang, then
-> maybe a bisect would be possible?
-
-The 'solid' reproducer attribute is a bit of a problem, why I was
-taking potshots at it.  I'll try to sneak up on it.
-
-	-Mike
