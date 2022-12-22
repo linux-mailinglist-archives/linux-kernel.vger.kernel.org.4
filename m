@@ -2,106 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150F6653AF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 04:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB29C653B01
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 04:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiLVDmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 22:42:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
+        id S234634AbiLVDqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 22:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiLVDma (ORCPT
+        with ESMTP id S229601AbiLVDqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 22:42:30 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0886E18E32;
-        Wed, 21 Dec 2022 19:42:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1671680547; bh=r0OzK6/K2zK5Ri/bmQhFWby+lEk9HX7/WMDoa3C7Fkk=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=NnkJ1A1dbqjBE70OU660pCVgKRucoC0VJ8e6wsSie6PM/ciyw2dttit9B3o/Br7hQ
-         Rf1CEoQLBZxCOPzP5r5J2NHxcb4YVzCXfr/toM9GdOrx4PTeyNs8U/aVCZrcLws6fY
-         1ME2915dW1OGHuKcFQupl7ouXjQO8+htsg+VDLPi4y2ocJhP4fX9owJMl4rfbF9Nat
-         ktqJ7oTjyLgKi6dT6riVI/iuWY+9eQLLrWCRU+St/gS+XxDj9/0VtyxLmZUoF0QRqa
-         rdgy0s1xxt3RBBRD0qFY7s90k3+Splfo0AUCbHQTyUxwKJD+aHk7RJf8yyt6tz+DqF
-         xlLb0KMxaDrhQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from homer.fritz.box ([212.114.172.145]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7R1J-1op3IE02Wr-017jnL; Thu, 22
- Dec 2022 04:42:27 +0100
-Message-ID: <241c118c2fb60df744bbe351387fc29a34ff6ab9.camel@gmx.de>
-Subject: Re: regression: nfs mount (even idle) eventually hangs server
-From:   Mike Galbraith <efault@gmx.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     linux-nfs@vger.kernel.org
-Date:   Thu, 22 Dec 2022 04:42:26 +0100
-In-Reply-To: <360f3dcfb6cfbefdbcc42fc84c660995142a8645.camel@gmx.de>
-References: <65ed34338c69cb034295f2c9cbe0af684d65d30f.camel@gmx.de>
-         <360f3dcfb6cfbefdbcc42fc84c660995142a8645.camel@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Wed, 21 Dec 2022 22:46:33 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD0D23329;
+        Wed, 21 Dec 2022 19:46:32 -0800 (PST)
+Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ncx381tGRzJpRt;
+        Thu, 22 Dec 2022 11:42:44 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 22 Dec
+ 2022 11:46:07 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ntb@lists.linux.dev>
+CC:     <jdmason@kudzu.us>, <dave.jiang@intel.com>, <allenbh@gmail.com>,
+        <lpieralisi@kernel.org>, <kw@linux.com>, <mani@kernel.org>,
+        <kishon@kernel.org>, <bhelgaas@google.com>, <helgaas@kernel.org>
+Subject: [PATCH v2] PCI: endpoint: pci-epf-vntb: fix doc warning in pci-epf-vntb.c
+Date:   Thu, 22 Dec 2022 11:43:24 +0800
+Message-ID: <20221222034324.3294639-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+oWVfH7B5raoTurhi7fj8NVL9M1ztZhwxkW89lsElb2Bgpq8rlH
- 0rvvC+CnuhJwJ/Mek69PAe5RoiT7CREfoqm/JnOh8rM55TpAtwKqrIzoQ0vJNn7UA2y3liA
- OCTxpIqCZ6SvIs482abPjBijIggIo/Hf4/EKbjyo1QK+mVtGlKSdDkxPl8+ooEQzjSVC/L0
- RcAZoM9ZjqnRnEXTxMjSQ==
-UI-OutboundReport: notjunk:1;M01:P0:AWjDBLvWvi0=;Lk/fuvj0k2yLROYkIgLSmJod9Vf
- iBO3sHjRlO0ZNzS8xiewX0L7Sj9BmuhpbUgfMnpKhhuwgkbKXFv+LI/Q73vBnXRuWK5bAjxr/
- 7jj9V4aEluoAweSaCgnwiZC3wuE/O7Jbq4cqGC20sKfCBGIjVD9D0HXH9xeqJPT/UiGG2+KmJ
- 3u3IEPmGWuuhpGOZkVMxob+5Bg7paWHGC2JeMaaL8Fdu71AWhzwT5S1/zEPZmGHXrsMA/tuxo
- gnP4idWmhEuWcS9bO3voiPQNJUooSWz2fbHyndZ8iApYDSpsHiF/z3c0V8KZF5bE14ND/iWWi
- Z74IzmhAm/bZX52Z5K6W1qL//9mCjwO1/NxUbf3KrBEunTvBlAPFaJpim+e/fuECSA7A8tNyx
- NTBOIsTIM5V+yqe0LUm9syZAcS5NPlURQQngUevqBfi4AAM0WOZdUMRFoU3FIuwn5XoxtVUUo
- uccr0ZJi2MqzmmEB06plEJ5UD9eLRxr9pkZAE6sC6HOF2nX5NYDbxRpmxXSdBJw/yKNT0SNC3
- Y5f0fzbQ4FpaLOzlwXu3t9gG15yhl3rr6Y4rFcxHYpchF+xAflificNncrV2RUrc/xy33ftbf
- eRPqvB3zXdnbT1GqEm0Y+9rbRDBXScgjj9t6BlxKunu4FuxY/OIWpiJ3AOCwx1Zserfu7yY5u
- HwJU7d0yPaY0gEdV/UJnnI83UIPjWgZNoz+1j0jj6o/da7g4CPvht9mcJ9M9/tFVvxP3Tgkzy
- 1aqajnLOo+pKvnV4a2MZpcCYGhjepdLiQLvAjNje+lkarF+5CNzcmsUbINdGmNMp6ewBiGJt5
- 2kiCL0hdHkNwXIJ7+dcZXUeT+DTMH8yhx5zzDfJz0bohrNx/HLRwzmYp1dNHeQwal8GC3j7dp
- Si+VHJX5xgnFQZevJ/ajtdNtWgyrlCD4qYxxKx5km1pd4+S4kchbaLg2lRae0F5q5rCCZ3xlH
- B42O1jN9ytOwAihdGqrfD4+fgBg=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-21 at 10:56 +0100, Mike Galbraith wrote:
-> > 6.1 didn't reproduce either, so it would appear to be a merge window b=
-ug.
+Fix the following make W=1 warning:
 
-Ah, not true, turning evolution loose in nfs mounted home and letting
-it refresh mailboxes while desktop box was kept busy jammed up 6.1.0 in
-fairly short order. =C2=A0
+  drivers/pci/endpoint/functions/pci-epf-vntb.c:645: warning: Function parameter or member 'num_mws' not described in 'epf_ntb_mw_bar_clear'
 
-homer:..debug/tracing # grep WARNING: /netconsole.log2
-[ 3309.873094] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1655 __queue_=
-delayed_work+0x6a/0x90
-[ 3309.873446] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1657 __queue_=
-delayed_work+0x5a/0x90
-[ 3309.873780] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
-work+0x33b/0x3d0
-[ 3309.874120] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
-work+0x33b/0x3d0
-[ 3309.874452] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
-work+0x33b/0x3d0
-[ 3309.874783] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
-work+0x33b/0x3d0
-[ 3309.875099] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
-work+0x33b/0x3d0
-[ 3309.875426] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
-work+0x33b/0x3d0
-[ 3309.875745] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
-work+0x33b/0x3d0
-[ 3309.876064] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
-work+0x33b/0x3d0
-[ 3309.876383] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
-work+0x33b/0x3d0
+Fixes: 8e4bfbe644a6 ("PCI: endpoint: pci-epf-vntb: fix error handle in epf_ntb_mw_bar_init()")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+v1 -> v2:
+  Based on latest commit.
+---
+ drivers/pci/endpoint/functions/pci-epf-vntb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sigh.  Ok 6.0, batter up...
+diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+index 04698e7995a5..37134aead77c 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
++++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+@@ -594,6 +594,7 @@ static void epf_ntb_db_bar_clear(struct epf_ntb *ntb)
+ /**
+  * epf_ntb_mw_bar_init() - Configure Memory window BARs
+  * @ntb: NTB device that facilitates communication between HOST and VHOST
++ * @num_mws: the number of Memory window BARs that to be cleared
+  *
+  * Returns: Zero for success, or an error code in case of failure
+  */
+-- 
+2.25.1
 
-	-Mike
