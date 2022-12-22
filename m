@@ -2,115 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08868653F36
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5864654011
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235433AbiLVLqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S235327AbiLVLxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLVLqj (ORCPT
+        with ESMTP id S235630AbiLVLvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:46:39 -0500
-Received: from forwardcorp1c.mail.yandex.net (forwardcorp1c.mail.yandex.net [178.154.239.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C32D41;
-        Thu, 22 Dec 2022 03:46:36 -0800 (PST)
-Received: from iva4-f06c35e68a0a.qloud-c.yandex.net (iva4-f06c35e68a0a.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:152e:0:640:f06c:35e6])
-        by forwardcorp1c.mail.yandex.net (Yandex) with ESMTP id 59C8B5E8FA;
-        Thu, 22 Dec 2022 14:46:34 +0300 (MSK)
-Received: from [IPV6:2a02:6b8:b081:b5b0::1:4] (unknown [2a02:6b8:b081:b5b0::1:4])
-        by iva4-f06c35e68a0a.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id WklqJ10RgiE1-4EonBEYl;
-        Thu, 22 Dec 2022 14:46:33 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1671709593; bh=v+YXuoAWt5kCRFjKyaUhO+Sfafoa/+MDXkI+ks4y4KI=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=onuwFFL1BiDfSJd++DXCzKHWi92XRUtCnxuHlrhKU5gXz1GYyOSqrZo41qZA1YOEN
-         qvXj+ouKZ5U2tfczt3RfkdogkUzv9tgWV0A8uzIsTd4WVCLu0h13scl3FUW9ogqk4X
-         uAz//pQGNmOEjX+DmjFwf3tGWyzBPeDFrmmkEENE=
-Authentication-Results: iva4-f06c35e68a0a.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-Message-ID: <89723faa-b0c2-54c9-89bd-f1bf025636ab@yandex-team.ru>
-Date:   Thu, 22 Dec 2022 14:46:32 +0300
+        Thu, 22 Dec 2022 06:51:06 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E72D2A533;
+        Thu, 22 Dec 2022 03:49:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671709747; x=1703245747;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xrva1eFk6Np1Bm1YmRwegqhZeY1WwhPNk9Drl9WzrJI=;
+  b=UE2Sdfb7RyduJZnLoGxcxngQLIBvNWa1aUvZzaNx7oB/iJgazljtCVZC
+   Niwzasj3Xl1B9X3YT0pu9FXODrlzsjTHL5ip52BKO9hB6WH/atFEy3iMg
+   veQmlImqTVCt0a13265jEgTD5hIAhb8XM8d1c60bC2vXnkO7tjeRBk4iW
+   uzC9V4lANf7tSqh6dx1JmSQnbafYs1fRKt87+ylyF+JqLgp+12O9eUDBn
+   rGQSjWN0BwsbgD9REma45qP/XXtQB2l62E6YvbgaNmYyC9Mu5bo2V2YNq
+   voQ3sYTFRrtyGCbCIooinFnE6K5EZGgbYbUfPyn2b/mAONFyHXekFC6dT
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="318804902"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="318804902"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 03:49:06 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="629504931"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="629504931"
+Received: from lab-ah.igk.intel.com ([10.91.215.196])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 03:49:00 -0800
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH 17/19] arch/xtensa: rename internal name __xchg to __arch_xchg
+Date:   Thu, 22 Dec 2022 12:46:33 +0100
+Message-Id: <20221222114635.1251934-18-andrzej.hajda@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221222114635.1251934-1-andrzej.hajda@intel.com>
+References: <20221222114635.1251934-1-andrzej.hajda@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net v2] qlcnic: prevent ->dcb use-after-free on
- qlcnic_dcb_enable() failure
-Content-Language: en-US
-To:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Cc:     Shahed Shaikh <shshaikh@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        GR-Linux-NIC-Dev@marvell.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221222074223.1746072-1-d-tatianin@yandex-team.ru>
- <Y6QqDLoqCXHG8KVl@localhost.localdomain>
-From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
-In-Reply-To: <Y6QqDLoqCXHG8KVl@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/22/22 12:57 PM, Michal Swiatkowski wrote:
-> On Thu, Dec 22, 2022 at 10:42:23AM +0300, Daniil Tatianin wrote:
->> adapter->dcb would get silently freed inside qlcnic_dcb_enable() in
->> case qlcnic_dcb_attach() would return an error, which always happens
->> under OOM conditions. This would lead to use-after-free because both
->> of the existing callers invoke qlcnic_dcb_get_info() on the obtained
->> pointer, which is potentially freed at that point.
->>
->> Propagate errors from qlcnic_dcb_enable(), and instead free the dcb
->> pointer at callsite using qlcnic_dcb_free(). This also removes the now
->> unused qlcnic_clear_dcb_ops() helper, which was a simple wrapper around
->> kfree() also causing memory leaks for partially initialized dcb.
->>
->> Found by Linux Verification Center (linuxtesting.org) with the SVACE
->> static analysis tool.
->>
->> Fixes: 3c44bba1d270 ("qlcnic: Disable DCB operations from SR-IOV VFs")
->> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
->> ---
->> Changes since v1:
->> - Add a fixes tag + net as a target
->> - Remove qlcnic_clear_dcb_ops entirely & use qlcnic_dcb_free instead
->> ---
->>   drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c |  9 ++++++++-
->>   drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h       | 10 ++--------
->>   drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c      |  9 ++++++++-
->>   3 files changed, 18 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
->> index dbb800769cb6..774f2c6875ec 100644
->> --- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
->> +++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_init.c
->> @@ -2505,7 +2505,14 @@ int qlcnic_83xx_init(struct qlcnic_adapter *adapter)
->>   		goto disable_mbx_intr;
->>   
->>   	qlcnic_83xx_clear_function_resources(adapter);
->> -	qlcnic_dcb_enable(adapter->dcb);
->> +
->> +	err = qlcnic_dcb_enable(adapter->dcb);
->> +	if (err) {
->> +		qlcnic_dcb_free(adapter->dcb);
->> +		adapter->dcb = NULL;
-> Small nit, I think qlcnic_dcb_free() already set adapter->dcb to NULL.
-Oops, you're right. Thanks for spotting.
-> Otherwise, thanks for changing:
-> Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-> 
-> Thanks,
-> Michal
-> 
-> [...]
->> -- 
->> 2.25.1
+__xchg will be used for non-atomic xchg macro.
+
+Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+---
+ arch/xtensa/include/asm/cmpxchg.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/xtensa/include/asm/cmpxchg.h b/arch/xtensa/include/asm/cmpxchg.h
+index eb87810357ad88..675a11ea8de76b 100644
+--- a/arch/xtensa/include/asm/cmpxchg.h
++++ b/arch/xtensa/include/asm/cmpxchg.h
+@@ -170,7 +170,7 @@ static inline unsigned long xchg_u32(volatile int * m, unsigned long val)
+ }
+ 
+ #define arch_xchg(ptr,x) \
+-	((__typeof__(*(ptr)))__xchg((unsigned long)(x),(ptr),sizeof(*(ptr))))
++	((__typeof__(*(ptr)))__arch_xchg((unsigned long)(x),(ptr),sizeof(*(ptr))))
+ 
+ static inline u32 xchg_small(volatile void *ptr, u32 x, int size)
+ {
+@@ -203,7 +203,7 @@ static inline u32 xchg_small(volatile void *ptr, u32 x, int size)
+ extern void __xchg_called_with_bad_pointer(void);
+ 
+ static __inline__ unsigned long
+-__xchg(unsigned long x, volatile void * ptr, int size)
++__arch_xchg(unsigned long x, volatile void * ptr, int size)
+ {
+ 	switch (size) {
+ 	case 1:
+-- 
+2.34.1
+
