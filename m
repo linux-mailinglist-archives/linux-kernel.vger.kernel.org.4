@@ -2,210 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0FA653EB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF71653EBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235364AbiLVLID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:08:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
+        id S235325AbiLVLJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235361AbiLVLHt (ORCPT
+        with ESMTP id S234894AbiLVLJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:07:49 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C254BF019;
-        Thu, 22 Dec 2022 03:07:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671707267; x=1703243267;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=PzxNWDti1cf66pFXSYkQzqiTjHe4km403foTbIRPRcE=;
-  b=mCKUYJxRcyIXzIt1sHFstmUcJDhyl04Q/aGwQEFY/CC/LAlcI82M/4OI
-   dzRNh5DyzKLCSs+WPAcjMTD04R8ttiQt72BOKWlt9wTuKwMip3jN73ltt
-   womYfWvneha/UB2gG4f3TPLuYjwRuey2RSIvqt03wu/SxpJChj5e3v4Ij
-   NGCcu0wPzu5KzTEDLAYdGuIai/z2pvv7Iv//QzI7bUhKaXIhM4QKH9W/a
-   chRU6Cln+Wwdgfc+97+0d7ZkqT8yuL2kBB3VohphHppdQf9YTxIKA48Lt
-   a1+spTEi3XWESPzpi1vZz+7H17xoj6LeR2aXMsDnTeIVnGkpAvPf1cNRq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="303535009"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="303535009"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 03:07:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="629491068"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="629491068"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga006.jf.intel.com with ESMTP; 22 Dec 2022 03:07:25 -0800
-Message-ID: <23fe0fe3-f330-b58e-c366-3ac5bd80fe22@linux.intel.com>
-Date:   Thu, 22 Dec 2022 13:08:47 +0200
+        Thu, 22 Dec 2022 06:09:42 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96062B861;
+        Thu, 22 Dec 2022 03:09:40 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A354F6602C5F;
+        Thu, 22 Dec 2022 11:09:37 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671707378;
+        bh=9AUHReu8S/xX7R3+pH3TTsXI6e8ZAG2uSiP5k+96Fzc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AXeZPwjilwQjk5/eDQ0HLfrUo6f0gL/fVzzlGfEL/oKzAx0m0pg6vXy8Fgi97eEhq
+         0jOmqbpJNk0LF/AJTCoK/IUzlAL48XErbsfd5z5LiFPSsdarfb353dIdJHrUByqzTs
+         Z7kIcsC0yqBmUGWS/W7eTjlNv0B5Arbul58aFatvsOv1PLg1Rmux+gwYPspf7/Jv1j
+         mnAjv3r28UFJs+KMQdmXpairBPWsmtXXjVN5ZiE/hx1pso07w7mItLVIcvwMN36cMb
+         zUNRQXbzi+nFlBf2XgXiCNZ7LxwA4y14OyOaLv8uBYzCMCozTgt8Qn41k1cAD7JKYd
+         +RzRbZdL7PSOg==
+Message-ID: <31b2946b-d4f2-5e5b-a107-45b3454c601b@collabora.com>
+Date:   Thu, 22 Dec 2022 12:09:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 2/3] ASoC: SOF: mediatek: Support mt8188 platform
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Chunxu Li <chunxu.li@mediatek.com>,
+        Dan Carpenter <error27@gmail.com>,
+        YC Hung <yc.hung@mediatek.com>,
+        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221222072150.10627-1-tinghan.shen@mediatek.com>
+ <20221222072150.10627-3-tinghan.shen@mediatek.com>
 Content-Language: en-US
-To:     Ladislav Michl <oss-lists@triops.cz>, Jimmy Hu <hhhuuu@google.com>
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221222072912.1843384-1-hhhuuu@google.com>
- <Y6Qc1p4saGFTdh9n@lenoch>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] usb: xhci: Check endpoint is valid before
- dereferencing it
-In-Reply-To: <Y6Qc1p4saGFTdh9n@lenoch>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221222072150.10627-3-tinghan.shen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.12.2022 11.01, Ladislav Michl wrote:
-> On Thu, Dec 22, 2022 at 07:29:12AM +0000, Jimmy Hu wrote:
->> When the host controller is not responding, all URBs queued to all
->> endpoints need to be killed. This can cause a kernel panic if we
->> dereference an invalid endpoint.
->>
->> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
->> checking if the endpoint is valid before dereferencing it.
->>
->> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
->> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
->>
->> [233311.853964] pc : xhci_hc_died+0x10c/0x270
->> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
->>
->> [233311.854077] Call trace:
->> [233311.854085]  xhci_hc_died+0x10c/0x270
->> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
->> [233311.854105]  call_timer_fn+0x50/0x2d4
->> [233311.854112]  expire_timers+0xac/0x2e4
->> [233311.854118]  run_timer_softirq+0x300/0xabc
->> [233311.854127]  __do_softirq+0x148/0x528
->> [233311.854135]  irq_exit+0x194/0x1a8
->> [233311.854143]  __handle_domain_irq+0x164/0x1d0
->> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
->> [233311.854156]  el1_irq+0xfc/0x1a8
->> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
->> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
->> [233311.854194]  do_idle+0x594/0x6ac
->> [233311.854201]  cpu_startup_entry+0x7c/0x80
->> [233311.854209]  secondary_start_kernel+0x170/0x198
->>
->> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
->> ---
->>   drivers/usb/host/xhci-ring.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->> index ddc30037f9ce..f5b0e1ce22af 100644
->> --- a/drivers/usb/host/xhci-ring.c
->> +++ b/drivers/usb/host/xhci-ring.c
->> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>   	struct xhci_virt_ep *ep;
->>   	struct xhci_ring *ring;
->>   
->> -	ep = &xhci->devs[slot_id]->eps[ep_index];
->> +	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
->> +	if (!ep)
->> +		return;
->> +
+Il 22/12/22 08:21, Tinghan Shen ha scritto:
+> Add support of SOF on MediaTek MT8188 SoC.
+> MT8188 ADSP integrates with a single core Cadence HiFi-5 DSP.
+> The IPC communication between AP and DSP is based on shared DRAM and
+> mailbox interrupt.
 > 
-> xhci_get_virt_ep also adds check for slot_id == 0. It changes behaviour,
-> do we really want to skip that slot? Original code went from 0 to
-> MAX_HC_SLOTS-1.
+> The change in the mt8186.h is compatible on both mt8186 and
+> mt8188. The register controls booting the DSP core with the
+> default address or the user specified address. Both mt8186
+> and mt8188 should boot with the user specified boot in the driver.
+> The usage of the register is the same on both SoC, but the
+> control bit is different on mt8186 and mt8188, which is bit 1 on mt8186
+> and bit 0 on mt8188. Configure the redundant bit has noside effect
+> on both SoCs.
 > 
-> It seems to be off by one to me. Am I missing anything?
-
-slot_id 0 is always invalid, so this is a good change.
-
-
-> Also, what about passing ep directly to xhci_kill_endpoint_urbs
-> and do the check in xhci_hc_died? Not even compile tested:
-
-passing ep to a function named kill_endpoint_urbs() sound like the
-right thing to do, but as a generic change.
-
-I think its a good idea to first do a targeted fix for this null pointer
-issue that we can send to stable fist.
-
-
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> ---
+>   sound/soc/sof/mediatek/mt8186/mt8186.c | 17 +++++++++++++++++
+>   sound/soc/sof/mediatek/mt8186/mt8186.h |  3 ++-
+>   2 files changed, 19 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index ddc30037f9ce..5dac483c562a 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1162,14 +1162,12 @@ static void xhci_kill_ring_urbs(struct xhci_hcd *xhci, struct xhci_ring *ring)
->   }
+> diff --git a/sound/soc/sof/mediatek/mt8186/mt8186.c b/sound/soc/sof/mediatek/mt8186/mt8186.c
+> index 79da25725987..af0dfc2fc4cc 100644
+> --- a/sound/soc/sof/mediatek/mt8186/mt8186.c
+> +++ b/sound/soc/sof/mediatek/mt8186/mt8186.c
+> @@ -625,8 +625,25 @@ static const struct sof_dev_desc sof_of_mt8186_desc = {
+>   	.ops = &sof_mt8186_ops,
+>   };
 >   
->   static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
-> -		int slot_id, int ep_index)
-> +		struct xhci_virt_ep *ep)
->   {
->   	struct xhci_td *cur_td;
->   	struct xhci_td *tmp;
-> -	struct xhci_virt_ep *ep;
->   	struct xhci_ring *ring;
->   
-> -	ep = &xhci->devs[slot_id]->eps[ep_index];
->   	if ((ep->ep_state & EP_HAS_STREAMS) ||
->   			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
->   		int stream_id;
-> @@ -1180,18 +1178,12 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->   			if (!ring)
->   				continue;
->   
-> -			xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
-> -					"Killing URBs for slot ID %u, ep index %u, stream %u",
-> -					slot_id, ep_index, stream_id);
->   			xhci_kill_ring_urbs(xhci, ring);
->   		}
->   	} else {
->   		ring = ep->ring;
->   		if (!ring)
->   			return;
-> -		xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
-> -				"Killing URBs for slot ID %u, ep index %u",
-> -				slot_id, ep_index);
->   		xhci_kill_ring_urbs(xhci, ring);
->   	}
->   
-> @@ -1217,6 +1209,7 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->   void xhci_hc_died(struct xhci_hcd *xhci)
->   {
->   	int i, j;
-> +	struct xhci_virt_ep *ep;
->   
->   	if (xhci->xhc_state & XHCI_STATE_DYING)
->   		return;
-> @@ -1227,11 +1220,14 @@ void xhci_hc_died(struct xhci_hcd *xhci)
->   	xhci_cleanup_command_queue(xhci);
->   
->   	/* return any pending urbs, remove may be waiting for them */
-> -	for (i = 0; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
-> +	for (i = 0; i < HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
->   		if (!xhci->devs[i])
->   			continue;
-> -		for (j = 0; j < 31; j++)
-> -			xhci_kill_endpoint_urbs(xhci, i, j);
-> +		for (j = 0; j < EP_CTX_PER_DEV; j++) {
-> +			ep = &xhci->devs[i]->eps[j];
-> +			if (ep)
-> +				xhci_kill_endpoint_urbs(xhci, ep);
-> +		}
+> +static const struct sof_dev_desc sof_of_mt8188_desc = {
+> +	.ipc_supported_mask	= BIT(SOF_IPC),
+> +	.ipc_default		= SOF_IPC,
+> +	.default_fw_path = {
+> +		[SOF_IPC] = "mediatek/sof",
+> +	},
+> +	.default_tplg_path = {
+> +		[SOF_IPC] = "mediatek/sof-tplg",
+> +	},
+> +	.default_fw_filename = {
+> +		[SOF_IPC] = "sof-mt8188.ri",
+> +	},
+> +	.nocodec_tplg_filename = "sof-mt8188-nocodec.tplg",
+> +	.ops = &sof_mt8186_ops,
+> +};
+> +
+>   static const struct of_device_id sof_of_mt8186_ids[] = {
+>   	{ .compatible = "mediatek,mt8186-dsp", .data = &sof_of_mt8186_desc},
+> +	{ .compatible = "mediatek,mt8188-dsp", .data = &sof_of_mt8188_desc},
+>   	{ }
+>   };
+>   MODULE_DEVICE_TABLE(of, sof_of_mt8186_ids);
+> diff --git a/sound/soc/sof/mediatek/mt8186/mt8186.h b/sound/soc/sof/mediatek/mt8186/mt8186.h
+> index 98b2965e5ba6..886d687449e3 100644
+> --- a/sound/soc/sof/mediatek/mt8186/mt8186.h
+> +++ b/sound/soc/sof/mediatek/mt8186/mt8186.h
+> @@ -52,7 +52,8 @@ struct snd_sof_dev;
+>   #define ADSP_PRID			0x0
+>   #define ADSP_ALTVEC_C0			0x04
+>   #define ADSP_ALTVECSEL			0x0C
+> -#define ADSP_ALTVECSEL_C0		BIT(1)
+> +/* BIT(1) for mt8186. BIT(0) for mt8188 */
 
-This does loop a bit more than the existing code.
-With this change its always HCS_MAX_SLOTS * EP_CTX_PER_DEV.
-Previously best case was just HCS_MAX_SLOTS.
+We can be clearer here:
 
--Mathias
+#define MT8188_ADSP_ALTVECSEL_C0	BIT(0)
+#define MT8186_ADSP_ALTVECSEL_C0	BIT(1)
 
+/*
+  * On MT8188, BIT(1) is not evaluated and on MT8186 BIT(0) is not evaluated:
+  * We can simplify the driver by safely setting both bits regardless of the SoC.
+  */
+#define ADSP_ALTVECSEL_C0		(MT8188_ADSP_ALTVECSEL_C0 |
+					 MT8186_ADSP_ALTVECSEL_C0)
+
+...so that we don't have to check the commit history to understand what's going
+on here, and it becomes clear that ALTVECSEL is not both bits, but one of them.
+
+Cheers,
+Angelo
 
