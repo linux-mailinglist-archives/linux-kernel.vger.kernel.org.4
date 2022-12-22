@@ -2,122 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06A065418B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6964265419E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbiLVNRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 08:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S235501AbiLVNSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiLVNRM (ORCPT
+        with ESMTP id S235500AbiLVNRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 08:17:12 -0500
-Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6699C2A53D;
-        Thu, 22 Dec 2022 05:17:11 -0800 (PST)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id A70361F69E;
-        Thu, 22 Dec 2022 14:17:08 +0100 (CET)
-Date:   Thu, 22 Dec 2022 14:17:07 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     phone-devel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lux Aliaga <they@mint.lgbt>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] dt-bindings: arm-smmu: Document smmu-500 binding
- for SM6125
-Message-ID: <20221222131707.avpdf7ioo3x36nix@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        phone-devel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lux Aliaga <they@mint.lgbt>, Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20221216215819.1164973-1-marijn.suijten@somainline.org>
- <20221216215819.1164973-2-marijn.suijten@somainline.org>
- <306709f8-7d45-9b76-f95b-1b3088d37a78@linaro.org>
- <6d263321-782d-9d9c-4fdf-8bcf5b280779@linaro.org>
- <20221219192839.6oqialqqw5xw5fxa@SoMainline.org>
- <b4186ec6-a3f2-4dfb-a83e-25cf6d460a39@linaro.org>
- <20221222082353.lhdw7h3pdqyyvsxy@SoMainline.org>
- <a251f29d-58b7-5ccb-2661-a397e41fba80@linaro.org>
- <20221222101012.ptrrugxj3ksiyitn@SoMainline.org>
- <7d45c125-e4f5-b03f-45d6-3ecf87b2f09d@linaro.org>
+        Thu, 22 Dec 2022 08:17:52 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5263E2B620;
+        Thu, 22 Dec 2022 05:17:45 -0800 (PST)
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1p8LS0-000Jl4-Ab; Thu, 22 Dec 2022 14:17:32 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1p8LRz-000LrB-Kg; Thu, 22 Dec 2022 14:17:31 +0100
+Subject: Re: [PATCH bpf-next 1/2] bpf/perf: Call perf_prepare_sample() before
+ bpf_prog_run()
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+References: <20221220220144.4016213-1-namhyung@kernel.org>
+ <20221220220144.4016213-2-namhyung@kernel.org>
+ <Y6RTy29ULXp8WJ/Q@hirez.programming.kicks-ass.net>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <2d164a5f-2885-2a6e-581a-2673ca0b1b81@iogearbox.net>
+Date:   Thu, 22 Dec 2022 14:17:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7d45c125-e4f5-b03f-45d6-3ecf87b2f09d@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y6RTy29ULXp8WJ/Q@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26758/Thu Dec 22 09:27:27 2022)
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-22 11:36:49, Krzysztof Kozlowski wrote:
-> [..]
-> > There is:
-> > 
-> >   clock-names:
-> >     minItems: 1
-> >     maxItems: 7
-> > 
-> >   clocks:
-> >     minItems: 1
-> >     maxItems: 7
-> > 
-> > But I did not provide _any_ (see patch 2 of this series).  Shouldn't
-> > that trigger a warning?
+On 12/22/22 1:55 PM, Peter Zijlstra wrote:
+> On Tue, Dec 20, 2022 at 02:01:43PM -0800, Namhyung Kim wrote:
+>> When the BPF program calls bpf_cast_to_kern_ctx(), it assumes the program will
+>> access perf sample data directly and call perf_prepare_sample() to make sure
+>> the sample data is populated.
 > 
-> No. Are these required properties?
+> I don't understand a word of this :/ What are you doing and why?
 
-Ah right, this has no effect if the property is not required.  Only if
-the property is set should it adhere to minItems; that is, `clocks;` or
-`clock-names;` as boolean property isn't allowed, it has to have `clocks
-= <between 1 and 7 items>`.
+Yeah, above commit message is too terse and unclear. Also, not following where
+this assumption comes from; bpf_cast_to_kern_ctx() can be used elsewhere, too,
+not just tracing. Recent example from CI side can be found [0].
 
-- Marijn
+Thanks,
+Daniel
+
+   [0] bpf tree, 70a00e2f1dba ("selftests/bpf: Test bpf_skb_adjust_room on CHECKSUM_PARTIAL")
