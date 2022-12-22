@@ -2,110 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9709654711
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4904E654715
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiLVU0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S230028AbiLVU0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiLVU0N (ORCPT
+        with ESMTP id S229867AbiLVU02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 15:26:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60D71129;
-        Thu, 22 Dec 2022 12:26:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E742B81F4E;
-        Thu, 22 Dec 2022 20:26:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 397C9C433D2;
-        Thu, 22 Dec 2022 20:26:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671740770;
-        bh=qHR2zPL/B++9QMiW8PY2adF7drOv1mN1P/N96IPTXvw=;
-        h=From:Date:Subject:To:Cc:Reply-To:From;
-        b=hyZhyXQsk1u33ls5rZOZFptQF3KwtSTwBsjX7lI7M5kgyngieLpzFWPa8mkalPuAW
-         U6wpG3nhxzBjm0a23Lx7CJ9wndohy0q7zg5wq5mSrmQFUXnKoEj3ETkmdxHvm8X8RE
-         qrprP1y7mces2jW4o8XiMpeM89me8xVwyQtsTwSubxET+7x2EJDi0RcDtt+wNNPhx6
-         DxwLZfCrLal69ByvUYaQmA3xlhbQr9Ra6JnXc776Rttty0MCoYzPBhnrchoSRhMlU5
-         wq5npsgO6a5GT78Yn2R0AvW4tniTpC95l7MJTMW+CUvT+OZOSXx3/VzQLdOEtJS2qX
-         j5EVI0hXQAMyA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 20F8FC4332F;
-        Thu, 22 Dec 2022 20:26:10 +0000 (UTC)
-From:   Konstantin Ryabitsev via B4 Submission Endpoint 
-        <devnull+icon.mricon.com@kernel.org>
-Date:   Thu, 22 Dec 2022 15:26:05 -0500
-Subject: [PATCH] rtl8723ae: fix obvious spelling error tyep->type
+        Thu, 22 Dec 2022 15:26:28 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9E664D0;
+        Thu, 22 Dec 2022 12:26:26 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id k7-20020a056830168700b0067832816190so1747780otr.1;
+        Thu, 22 Dec 2022 12:26:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0bNa5Kdmcwa+mXleBewekipXDfwkrNZzap+jetEOYl8=;
+        b=w/hCYbDPqaCKmk7aUtAtMVcDSfW9nmmQV1k6xohtgrkHVkzWb4GoifuxuFfU5gVxlH
+         H8OTizlNhsM/mcXS8g8nkkYHbL+wTUjJ1rCcjcc5kbLH6Rmlh/OL4oi4QLp2G9PIT768
+         PKg0mo/VTqytjQg7mDXUTl91lXCNjJfyEUhjG3W4vCLp7+anPOOAJyKhrxKyU8G6r5FC
+         04iX1kMiD9AHyde2ej+lqepyFoZ5a1p3jFMABbEpu8xj6SGgvVDkVzBUkYM6OwIltr2H
+         5bUjAHWg9DEkHQMxiY3uwKgkpT/BlE6VC2Nur6cyfQ6EWobMATDi+AUhoMOHLwA+2WfP
+         h3BA==
+X-Gm-Message-State: AFqh2kp82GUlNzIM5jGf7G7ePTSq/opsQMj+OTaPIk1/sMkjEw+yOhx1
+        6xapyJkQspT3VV1Q1+AnCw==
+X-Google-Smtp-Source: AMrXdXucxOZJROMeEnqXizAa6bJGOHQA+pgTrIZbg3P5Tml16wuho1SX/QIVObL8GR/stBrcV9KKJw==
+X-Received: by 2002:a9d:6389:0:b0:661:dfeb:a975 with SMTP id w9-20020a9d6389000000b00661dfeba975mr3595710otk.32.1671740785784;
+        Thu, 22 Dec 2022 12:26:25 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e26-20020a9d6e1a000000b0066b9a6bf3bcsm758618otr.12.2022.12.22.12.26.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 12:26:25 -0800 (PST)
+Received: (nullmailer pid 2066452 invoked by uid 1000);
+        Thu, 22 Dec 2022 20:26:24 -0000
+Date:   Thu, 22 Dec 2022 14:26:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     alim.akhtar@samsung.com, heiko@sntech.de,
+        kyungmin.park@samsung.com, linux-arm-kernel@lists.infradead.org,
+        Laurent.pinchart@ideasonboard.com, devicetree@vger.kernel.org,
+        philippe.cornu@foss.st.com, neil.armstrong@linaro.org,
+        linux-usb@vger.kernel.org, jonas@kwiboo.se, daniel@ffwll.ch,
+        robh+dt@kernel.org, airlied@gmail.com, andrzej.hajda@intel.com,
+        hjc@rock-chips.com, jernej.skrabec@gmail.com,
+        dri-devel@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, linux-rockchip@lists.infradead.org,
+        inki.dae@samsung.com, robert.foss@linaro.org,
+        sw0312.kim@samsung.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v6 06/17] dt-bindings: display: bridge: convert
+ analogix_dp.txt to yaml
+Message-ID: <167174078307.2066361.1514368429127273992.robh@kernel.org>
+References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+ <489e7bd3-fa26-885f-4104-8b0b29aa4f2b@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221222-rtl8723ae-typo-fix-v1-1-848434b179c7@mricon.com>
-X-B4-Tracking: v=1; b=H4sIAF29pGMC/x2N0QrCMAxFf2Xk2YCLzIq/Ij6kbeoC2o20DGXs3
- +32eDj3cFcoYioF7t0KJosWnXKD/tRBGDm/BDU2BjoT9USEVt83RxcWrL95wqRfHEJwKXon8Zqg
- hZ6LoDfOYdzTD5cqtovZpO2Pt8dz2/7zn07PfQAAAA==
-To:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jens Schleusener <Jens.Schleusener@fossies.org>,
-        Konstantin Ryabitsev <mricon@kernel.org>,
-        Konstantin Ryabitsev <icon@mricon.com>
-X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1671740769; l=1473;
- i=icon@mricon.com; s=20221221; h=from:subject:message-id;
- bh=oCZJAayGA+HuvI2C2uO/qjBYv80/QKeamQWghltN4rw=; =?utf-8?q?b=3D6IPoQOd0wT7g?=
- =?utf-8?q?y3OrBdrL5Bv9HxpyKZvO/NfKADAOjMBZXh+lJVo5aNThMoRLl4B+2uQLUTyzTW5C?=
- X5Ksp+adDh68B1/RFrRTqDcqM15+L042hqzGhqOM6Gz27ljLQXz/
-X-Developer-Key: i=icon@mricon.com; a=ed25519;
- pk=24L8+ejW6PwbTbrJ/uT8HmSM8XkvGGtjTZ6NftSSI6I=
-X-Endpoint-Received: by B4 Submission Endpoint for icon@mricon.com/20221221 with auth_id=17
-X-Original-From: Konstantin Ryabitsev <icon@mricon.com>
-Reply-To: <icon@mricon.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <489e7bd3-fa26-885f-4104-8b0b29aa4f2b@gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konstantin Ryabitsev <icon@mricon.com>
 
-This appears to be an obvious spelling error, initially identified in a
-codespell report and never addressed.
+On Thu, 22 Dec 2022 15:26:57 +0100, Johan Jonker wrote:
+> Convert analogix_dp.txt to yaml for use as common document.
+> 
+> Changed:
+>   Relexed requirements
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  .../bindings/display/bridge/analogix,dp.yaml  | 63 +++++++++++++++++++
+>  .../bindings/display/bridge/analogix_dp.txt   | 51 ---------------
+>  .../bindings/display/exynos/exynos_dp.txt     |  2 +-
+>  3 files changed, 64 insertions(+), 52 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/analogix,dp.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/display/bridge/analogix_dp.txt
+> 
 
-Reported-by: Jens Schleusener <Jens.Schleusener@fossies.org>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=205891
-Signed-off-by: Konstantin Ryabitsev <icon@mricon.com>
----
- drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hal_bt_coexist.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hal_bt_coexist.h b/drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hal_bt_coexist.h
-index 0455a3712f3e..12cdecdafc32 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hal_bt_coexist.h
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hal_bt_coexist.h
-@@ -116,7 +116,7 @@ void rtl8723e_dm_bt_hw_coex_all_off(struct ieee80211_hw *hw);
- long rtl8723e_dm_bt_get_rx_ss(struct ieee80211_hw *hw);
- void rtl8723e_dm_bt_balance(struct ieee80211_hw *hw,
- 			    bool balance_on, u8 ms0, u8 ms1);
--void rtl8723e_dm_bt_agc_table(struct ieee80211_hw *hw, u8 tyep);
-+void rtl8723e_dm_bt_agc_table(struct ieee80211_hw *hw, u8 type);
- void rtl8723e_dm_bt_bb_back_off_level(struct ieee80211_hw *hw, u8 type);
- u8 rtl8723e_dm_bt_check_coex_rssi_state(struct ieee80211_hw *hw,
- 					u8 level_num, u8 rssi_thresh,
-
----
-base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
-change-id: 20221222-rtl8723ae-typo-fix-5cc7fdb7ed6f
-
-Best regards,
--- 
-Konstantin Ryabitsev <icon@mricon.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
