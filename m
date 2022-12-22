@@ -2,82 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7CD6545C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 18:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517F36545C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 18:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbiLVRzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 12:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
+        id S231345AbiLVR4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 12:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLVRzS (ORCPT
+        with ESMTP id S231259AbiLVR4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 12:55:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996B314D20
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 09:54:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671731672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IRTDKe6s9SNj5DLqMjBZrk0WKDza/XoTLHk/ytD7aNk=;
-        b=RbdnBJQTe7zMsQaPu7nz3A5mSGwiFHN2tJFNPKPD+imFoXlF4x0+uYJtDpBg65LCt2kps3
-        bYXe0tYBM6O9RllMYxdSEvqhf6aBMo6wUAHwoYpDvtvqSnpqK+/+IIZLUvXiaSf/Noy7mu
-        nKZyQNcLenTr+uGb5vPDEeIeMJWt9gs=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-673-MSDcXpMSN9eFXk3qCKwv8w-1; Thu, 22 Dec 2022 12:54:31 -0500
-X-MC-Unique: MSDcXpMSN9eFXk3qCKwv8w-1
-Received: by mail-qt1-f198.google.com with SMTP id h26-20020ac8505a000000b003a7e8e8b03bso982454qtm.18
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 09:54:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IRTDKe6s9SNj5DLqMjBZrk0WKDza/XoTLHk/ytD7aNk=;
-        b=wqJHRQ6trRQ0NhQCab80QOe/mYnotK5EcNIKlT9MQQLpqZBKQgnU2YELHtGNILyUS5
-         JqWTcfB0jT/HzI+utYPJtfkmwFDAMf99KQuK1kPTUYndAkgEn2duR/FVyFQAjSTOCtKm
-         rGqktLQpRaf0oXRpt+9nA91LM5EuO2OYZ8ERlkzBxjMms1HaEGe6cqslFzyzHunRchfQ
-         9aN/WU529eOykuMe5EW+K/ib/HqHkfKKbYilvoapYsCPyP00jB9RDETTnFW/os387ePM
-         FDWFRNaOefud9DLfjOR1gn4mXCuTrbf6VlBh1Bts7OQxOBB/RlYB/zahcUMq6w2Ve4h5
-         mfGw==
-X-Gm-Message-State: AFqh2kokdZaY/VU2j8YI0AL5oGwKFxVIMDUv6pc7rek663s1RQXAuvKM
-        Do98+o2LG5XCNrPCNfkrTDWY4+fi1yJMWEXgqPJOwYaCvqNPXWVVJY6HZ0IqI1j+Oc9LIWzKAFH
-        PcjI4zOxb3sYLz11dIJdx55qm
-X-Received: by 2002:ac8:118b:0:b0:3a5:3819:51da with SMTP id d11-20020ac8118b000000b003a5381951damr7139641qtj.38.1671731669413;
-        Thu, 22 Dec 2022 09:54:29 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvDQLd3OUCvru/dxxH0aQgJi4ZmowpscJKxrqqgWsSqBfQzpHecpmPZ2Yd/yulKjDT6RkYfVQ==
-X-Received: by 2002:ac8:118b:0:b0:3a5:3819:51da with SMTP id d11-20020ac8118b000000b003a5381951damr7139619qtj.38.1671731669110;
-        Thu, 22 Dec 2022 09:54:29 -0800 (PST)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b006f9f714cb6asm695092qkp.50.2022.12.22.09.54.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 09:54:28 -0800 (PST)
-Date:   Thu, 22 Dec 2022 12:54:35 -0500
-From:   Brian Foster <bfoster@redhat.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Waiman Long <longman@redhat.com>,
-        Sven Luther <Sven.Luther@windriver.com>
-Subject: Re: [PATCH RFC] ipc/mqueue: introduce msg cache
-Message-ID: <Y6SZ28uWzWqaSik2@bfoster>
-References: <20221220184813.1908318-1-roman.gushchin@linux.dev>
- <Y6RE5iUHSinUJxDt@bfoster>
- <Y6SHzFPJLEr09JHF@P9FQF9L96D>
+        Thu, 22 Dec 2022 12:56:07 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082162876B;
+        Thu, 22 Dec 2022 09:56:05 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BMHtojr030741;
+        Thu, 22 Dec 2022 11:55:50 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1671731750;
+        bh=HEPNELefQY8vutwbS0sibDLyacHcL0+Y8msG5+P4E+M=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=wTc4sdpHCm+iPiR/Ab41EKgGo47UJhvf5ULbwujKxJqbn7RBH9nZAYnfsR7Fcn7B0
+         f/g6DClbCUeYWgFchIZgUdufRpjXLo8B0RxaT6JHl0VwJmFFjfrM2UrmEYe8ssMx7d
+         fGwJu7ylUWSZ7PQi9+hCUD9FwO82gNHBnc2mT1W4=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BMHtocF017816
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 22 Dec 2022 11:55:50 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 22
+ Dec 2022 11:55:50 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 22 Dec 2022 11:55:50 -0600
+Received: from [10.250.232.188] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BMHtkjH040419;
+        Thu, 22 Dec 2022 11:55:46 -0600
+Message-ID: <d8aaea9b-dc3a-66ba-6bd3-e400be204013@ti.com>
+Date:   Thu, 22 Dec 2022 23:25:45 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6SHzFPJLEr09JHF@P9FQF9L96D>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 4/4] arm64: dts: ti: Add support for J784S4 EVM board
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>, Andrew Davis <afd@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, Hari Nagalla <hnagalla@ti.com>
+References: <20221116130428.161329-1-a-nandan@ti.com>
+ <20221116130428.161329-5-a-nandan@ti.com>
+ <b57433e7-b309-bd1c-f794-3da74021f03c@ti.com>
+ <20221118174754.y37pq77drvla2uxj@tinderbox>
+ <8c123fa2-caab-d2dd-5eb4-688f1c6abb33@ti.com>
+ <20221118180808.wnel7d6gswsnooww@junkman>
+ <93242211-95e7-09a0-fced-5ef2deb9fc08@ti.com>
+ <20221118192744.wish2vrxgy7dg7c2@unnerving>
+ <3d5e41f6-16a8-4298-ccd3-6db60f94eb47@ti.com>
+ <20221118221534.52rfyf5gsck3xrrb@sauciness>
+From:   Apurva Nandan <a-nandan@ti.com>
+In-Reply-To: <20221118221534.52rfyf5gsck3xrrb@sauciness>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,220 +81,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 08:37:32AM -0800, Roman Gushchin wrote:
-> On Thu, Dec 22, 2022 at 06:52:06AM -0500, Brian Foster wrote:
-> > On Tue, Dec 20, 2022 at 10:48:13AM -0800, Roman Gushchin wrote:
-> > > Sven Luther reported a regression in the posix message queues
-> > > performance caused by switching to the per-object tracking of
-> > > slab objects introduced by patch series ending with the
-> > > commit 10befea91b61 ("mm: memcg/slab: use a single set of kmem_caches for all
-> > > allocations").
-> > > 
-> > > To mitigate the regression cache allocated mqueue messages on a small
-> > > percpu cache instead of releasing and re-allocating them every time.
-> > > 
-> > > This change brings the performance measured by a benchmark kindly
-> > > provided by Sven [1] almost back to the original (or even better)
-> > > numbers. Measurements results are also provided by Sven.
-> > > 
-> > > +------------+---------------------------------+--------------------------------+
-> > > | kernel     | mqueue_rcv (ns)     variation   | mqueue_send (ns)   variation   |
-> > > | version    | min avg  max      min      avg  | min avg max       min     avg  |
-> > > +------------+--------------------------+---------------------------------------+
-> > > | 4.18.45    | 351 382 17533    base     base  | 383 410 13178     base    base |
-> > > | 5.8-good   | 380 392  7156   -7,63%  -2,55%  | 376 384  6225    1,86%   6,77% |
-> > > | 5.8-bad    | 524 530  5310  -33,02% -27,92%  | 512 519  8775  -25,20% -21,00% |
-> > > | 5.10       | 520 533  4078  -32,20% -28,33%  | 518 534  8108  -26,06% -23,22% |
-> > > | 5.15       | 431 444  8440  -18,56% -13,96%  | 425 437  6170   -9,88%  -6,18% |
-> > > | 6.0.3      | 474 614  3881  -25,95% -37,79%  | 482 693   931  -20,54% -40,84% |
-> > > | 6.1-rc8    | 496 509  8804  -29,23% -24,95%  | 493 512  5748  -22,31% -19,92% |
-> > > | 6.1-rc8+p  | 392 397  5479  -10,46%  -3,78%  | 364 369 10776    5,22%  11,11% |
-> > > +------------+---------------------------------+--------------------------------+
-> > > 
-> > > The last line reflects the result with this patch ("6.1-rc8+p").
-> > > 
-> > > [1]: https://lore.kernel.org/linux-mm/Y46lqCToUa%2FBgt%2Fc@P9FQF9L96D/T/
-> > > 
-> > > Reported-by: Sven Luther <Sven.Luther@windriver.com>
-> > > Tested-by: Sven Luther <Sven.Luther@windriver.com>
-> > > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> > > ---
-> > >  include/linux/memcontrol.h |  12 +++++
-> > >  ipc/mqueue.c               |  20 ++++++--
-> > >  ipc/msg.c                  |  12 ++---
-> > >  ipc/msgutil.c              | 101 +++++++++++++++++++++++++++++++++----
-> > >  ipc/util.h                 |   8 ++-
-> > >  mm/memcontrol.c            |  62 +++++++++++++++++++++++
-> > >  6 files changed, 194 insertions(+), 21 deletions(-)
-> > > 
-> > ...
-> > > diff --git a/ipc/msgutil.c b/ipc/msgutil.c
-> > > index d0a0e877cadd..8667708fc00a 100644
-> > > --- a/ipc/msgutil.c
-> > > +++ b/ipc/msgutil.c
-> > ...
-> > > @@ -39,16 +40,76 @@ struct msg_msgseg {
-> > ...
-> > > +static struct msg_msg *alloc_msg(size_t len, struct msg_cache *cache)
-> > >  {
-> > >  	struct msg_msg *msg;
-> > >  	struct msg_msgseg **pseg;
-> > >  	size_t alen;
-> > >  
-> > > +	if (cache) {
-> > > +		struct pcpu_msg_cache *pc;
-> > > +
-> > > +		msg = NULL;
-> > > +		pc = get_cpu_ptr(cache->pcpu_cache);
-> > > +		if (pc->msg && pc->len == len) {
-> > > +			struct obj_cgroup *objcg;
-> > > +
-> > > +			rcu_read_lock();
-> > > +			objcg = obj_cgroup_from_current();
-> > > +			if (objcg == pc->objcg) {
-> > > +				msg = pc->msg;
-> > > +				pc->msg = NULL;
-> > > +				obj_cgroup_put(pc->objcg);
-> > > +			}
-> > > +			rcu_read_unlock();
-> > > +		}
-> > > +		put_cpu_ptr(cache->pcpu_cache);
-> > > +		if (msg)
-> > > +			return msg;
-> > > +	}
-> > > +
-> > >  	alen = min(len, DATALEN_MSG);
-> > >  	msg = kmalloc(sizeof(*msg) + alen, GFP_KERNEL_ACCOUNT);
-> > >  	if (msg == NULL)
-> > > @@ -77,18 +138,19 @@ static struct msg_msg *alloc_msg(size_t len)
-> > >  	return msg;
-> > >  
-> > >  out_err:
-> > > -	free_msg(msg);
-> > > +	free_msg(msg, NULL);
-> > >  	return NULL;
-> > >  }
-> > >  
-> > > -struct msg_msg *load_msg(const void __user *src, size_t len)
-> > > +struct msg_msg *load_msg(const void __user *src, size_t len,
-> > > +			 struct msg_cache *cache)
-> > >  {
-> > >  	struct msg_msg *msg;
-> > >  	struct msg_msgseg *seg;
-> > >  	int err = -EFAULT;
-> > >  	size_t alen;
-> > >  
-> > > -	msg = alloc_msg(len);
-> > > +	msg = alloc_msg(len, cache);
-> > >  	if (msg == NULL)
-> > >  		return ERR_PTR(-ENOMEM);
-> > >  
-> > > @@ -104,14 +166,16 @@ struct msg_msg *load_msg(const void __user *src, size_t len)
-> > >  			goto out_err;
-> > >  	}
-> > >  
-> > > -	err = security_msg_msg_alloc(msg);
-> > > -	if (err)
-> > > -		goto out_err;
-> > > +	if (!msg->security) {
-> > > +		err = security_msg_msg_alloc(msg);
-> > > +		if (err)
-> > > +			goto out_err;
-> > > +	}
-> > >  
-> > >  	return msg;
-> > >  
-> > >  out_err:
-> > > -	free_msg(msg);
-> > > +	free_msg(msg, NULL);
-> > >  	return ERR_PTR(err);
-> > >  }
-> > >  #ifdef CONFIG_CHECKPOINT_RESTORE
-> > > @@ -166,10 +230,29 @@ int store_msg(void __user *dest, struct msg_msg *msg, size_t len)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > -void free_msg(struct msg_msg *msg)
-> > > +void free_msg(struct msg_msg *msg, struct msg_cache *cache)
-> > >  {
-> > >  	struct msg_msgseg *seg;
-> > >  
-> > > +	if (cache) {
-> > > +		struct pcpu_msg_cache *pc;
-> > > +		bool cached = false;
-> > > +
-> > > +		pc = get_cpu_ptr(cache->pcpu_cache);
-> > > +		if (!pc->msg) {
-> > > +			pc->objcg = get_obj_cgroup_from_slab_obj(msg);
-> > > +			pc->len = msg->m_ts;
-> > > +			pc->msg = msg;
-> > > +
-> > > +			if (pc->objcg)
-> > > +				cached = true;
-> > > +		}
-> > 
-> > Hi Roman,
-> > 
-> > It seems that this is kind of tailored to the ideal conditions
-> > implemented by the test case: i.e., a single, fixed size message being
-> > passed back and forth on a single cpu. Does that actually represent the
-> > production workload?
-> 
-> Hi Brian!
-> 
-> Not really, it was all based on Sven's report and the benchmark he provided.
-> I assume that the benchmark emulates the production workload he has, but
-> it's up to him to confirm.
-> 
-> Personally I haven't seen a lot of mqueue usage in the production, especially
-> for anything performance-sensitive. Also, Sven reported the regression which
-> was introduced in 5.9, so I take it as an indicator that not so many users
-> depend on the mqueue performance.
-> 
 
-Ok, thanks for the context. I've not either TBH. I guess even though
-it's quite helpful to simplify a bug/regression into a test program, it
-might be useful to confirm whatever improvement translates back to the
-production workload if it happens to be more involved. If it's really as
-simple as the test program, then carry on.. nothing to see here :). But
-I'll defer to Sven..
+On 19/11/22 03:45, Nishanth Menon wrote:
+> On 15:08-20221118, Andrew Davis wrote:
+>> On 11/18/22 1:27 PM, Nishanth Menon wrote:
+>>> On 12:15-20221118, Andrew Davis wrote:
+>>>> I don't see either of those addressed in that thread, only that
+>>>> the aliases should go in the .dts files and be trimmed, nothing
+>>> Key is trimmed to what the system and ecosystem needs.
+>>>
+>>>> stops us from:
+>>>>
+>>>> chosen {
+>>>> 	stdout-path = "serial10:115200n8";
+>>>> };
+>>>>
+>>>> aliases {
+>>>> 	serial10 = &main_uart8;
+>>>> };
+>>> Do we need 10 serial aliases? There are'nt 10 serial ports exposed in
+>>> j782s2. ok - lets say we do this, then: [1] is needed to boot? but why
+>>> do we need to do that for all armv8 platforms when aliases allows us
+>> Why do we need SERIAL_8250_NR_UARTS at all, might be a better question.
+>> These should be dynamically allocated if the number goes over the
+>> default count imposed by the TTY framework. Maybe folks are still a
+>> bit too afraid to touch the TTY subsystem core, I don't blame them..
+>>
+>>> to trim it to just the 3 or 4 serial ports the platform really needs
+>>> That + being able to use the convention that serial2 is always linux
+>>> console, is'nt that a good thing? Hence recommending to just expose the
+>>> serialports as aliases to exactly what we need while keeping serial2 as
+>>> the linux console (which in this case happens to be main_uart8 - example
+>>> as j721s2 does).
+>>>
+>> "serial2 as the linux console" is *not* a convention, we just don't want to
+>> fix up our bootloader/userspace to actually reason about what serial ports to
+>> put logins on. Why not make ttyS10 the default, or ttyS666, it doesn't solve
+>> your multi-distro issue either way since they usually only start a login on
+>> ttyS0, console=, and/or the first virtual tty. Never on ttyS2. So you are
+>> hacking up DT for a solution that doesn't do what you want in the end.
+> ttyS2 is an accidental convention not a "by design" or definition
+> convention. I suspect we ended up here from old OMAP days - all
+> platforms in k3 ended up with ttyS2. In hindsight, if I had to do it
+> by design, I would probably have picked ttyS0, well, we did'nt.
+>
+> $ git grep stdout-path arch/arm/boot/dts|grep serial|cut -d '=' -f 2|cut -d ':' -f1|grep -v '&'|sort|uniq -c
+>      379  "serial0
+>       21  "serial1
+>       33  "serial2
+>       13  "serial3
+>        1  "/slaves@3e000000/serial@0
+>
+> $ git grep stdout-path arch/arm64/boot/dts|grep serial|cut -d '=' -f 2|cut -d ':' -f1|grep -v '&'|sort|uniq -c
+>      245  "serial0
+>       17  "serial0";
+>        7  "serial1
+>       49  "serial2
+>        3  "serial3
+>        2  "serial4
+>        2  "serial5
+>        2  "serial6
+>
+> $ git grep stdout-path arch/arm64/boot/dts/ti|grep serial|cut -d '=' -f 2|cut -d ':' -f1|grep -v '&'|sort|uniq -c
+>        8  "serial2
+>        1  "serial3
+>
+> I don't buy the argument here for 1-1 mapping of aliased serial
+> instances to instances - why should main_uart8 be ttyS10, why not
+> ttyS8 (it is equally valid - why was it called uart8?).. That mapping
+> is just a convention we are choosing to create.
+>
+> The iot2050 ecosystem picked ttyS3 as the linux console for reasons of
+> that ecosystem. K3 so far has selected ttyS2 as the convention for
+> console - no matter where the serial instances have been located.
+>
+> I want to maintain consistency of existing TI platforms here without
+> needing to shove a dozen things on existing users (yes j78-evm is a new
+> board, but it is within the existing k3 s/w ecosystem and yes, getty,
+> systemd etc are smarter today than once upon a time)
+>
+> So, given TI K3 history does'nt follow rest of the non-TI instances
+> unfortunately - and I am going to put my foot down here - serial8 or 10
+> is "fake" anyways - rationalization can be made in different ways. So
+> pushing for one over the other is not something I will entertain.
+>
+>  From usage model point of view - serial0 will be the best candidate as
+> console followed by serial2 (purely statistically speaking). In K3
+> context, it is just serial2 in TI board ecosystem.
+>
+> That is a discussion for pros and cons - Open to hearing opinions.
+> Unless I hear 1000% strong reasons with _backing data_ - not an
+> subjective "it is correct thing to do" - why we'd want to move TI
+> board ecosystem (including all the pains of bootloader combinations
+> etc) switch over to ttyS0[1], having a mix and churn for the s/w
+> ecosystem of having to deal with ttyS0 and ttyS2 nodes in arm64/dts/ti
+> at least for the TI board ecosystem.. I cant see why i want to put the
+> ecosystem through another churn on consoles.. But, fine, i will keep
+> my ears open. If there are no strong arguments with _data_, then we
+> stick with serial2 and y'all can curse me for another decade+ for that
+> call :)
+>
+> [1] I have'nt forgotten ttyO2 to ttyS2 transition of OMAP
+>   https://duckduckgo.com/?q=ttyO2+to+ttyS2+omap
 
-> > 
-> > I'm a little curious if/how this might work for workloads that might
-> > involve more variable sized messages, deeper queue depths (i.e.  sending
-> > more than one message before attempting a recv) and more tasks across
-> > different cpus. For example, it looks like if an "uncommonly" sized
-> > message ended up cached on a cpu, this would always result in subsequent
-> > misses because the alloc side requires an exact size match and the free
-> > side never replaces a cached msg. Hm?
-> 
-> Yes, of course it's very primitive. But I'm not sure we want to implement
-> something complicated here. If there any specific ideas, I'm totally up for
-> them. We can cache 2 sizes or 4 sizes or something else, but Idk how much value
-> it has.
-> 
 
-Agreed on avoiding unnecessary complexity. FWIW, a couple thoughts that
-crossed my mind when skimming this patch were to do something like
-unconditionally replace a cached msg with one being freed (and hope for
-some size repetition?), or perhaps always replace a cached msg with a
-larger one being freed. Also if it is possible to use a larger
-physically allocated msg to send a smaller actual message (?), perhaps
-it might make sense to use the cached msg so long as it is large enough
-for the current request (instead of exactly matching).
+Hi all,
 
-Any of those may or may not be more complex than just caching multiple
-objects (i.e. may require to track physical msg size, or to realloc a
-msg, etc.) or just may not add any measurable value over the current
-approach. Just some random ideas. ;)
+I agree that there could be different standpoints on the aliasing of serial,
+and the current way might not be the right way, but we have been using that
+a quite long without any issues. (All K3 platforms use the same serial2 for
+console).
 
-Brian
+IMO, if needed, the right way to change to other serial would be to:
+1. Change all the serial aliases across K3 platforms, along with other
+serial dependencies in userspace.
+2. And have that as a separate patch series, i.e. a series that changes 
+all the
+incorrect aliases across K3 platforms. And this J784S4 patch series is 
+not that
+one.
 
-> Btw, in parallel I'm working on some generic improvements to the slab
-> allocation path [1], maybe it will be good enough for Sven.
-> 
-> [1]: https://lore.kernel.org/linux-mm/20221220204451.gm5d3pdbfvd5ki6b@google.com/T/
-> 
-> Thanks!
-> 
+Coming to a consensus would take time, lets do that separately and no 
+point blocking
+this series for it. All the previous platforms use the serial2 for 
+console uart
+and I will post my next series with the same. If there is a need to 
+change the serial
+aliasing, change it across all previous platforms in a separate patch 
+series.
+
+-- 
+Thanks and regards,
+Apurva Nandan,
+Texas Instruments India.
 
