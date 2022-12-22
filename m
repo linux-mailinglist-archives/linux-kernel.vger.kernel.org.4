@@ -2,114 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FD2654142
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D72B654140
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbiLVMqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
+        id S235346AbiLVMqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235429AbiLVMqM (ORCPT
+        with ESMTP id S235223AbiLVMqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:46:12 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E01C09
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 04:46:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9KuqnMcJO0dp697So4H0mIqLFmpVOveIphlqnuNm0Dg=; b=pBU1yqQtEZ1yfPtFv9e0Mx4SNa
-        QVoyaWJpS491vWaHZTEONAIr5OEFbOvnCD3AITpQuWCJ7zdignFsJkpLblX5MKrux9zFk+TAg55lo
-        hKmeU2+InYcSiTwFzJTvJD/D+CrBwxG8hwddW/iH24UuVtmTRYeDODDqXUkSrl9EutpAguq/uLHkV
-        lK+Ev7S9hBCeFGmj7ncL13JtcspXcC0VFxf1Wk2ylfaFuNA8ANIOmlIAPztnO+TDy2h0xh7iAWmeF
-        nYawSpAngm4uAKsswq13FxlJVjPK4OJBRsLxybqQiSbcxBdFLjhkWQh2S7I7qhTZLna7Fzakii+pW
-        p7YBVwIQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p8KxU-003f2f-9d; Thu, 22 Dec 2022 12:46:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4FE8A3001E5;
-        Thu, 22 Dec 2022 13:45:48 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 19ED52CEADD46; Thu, 22 Dec 2022 13:45:48 +0100 (CET)
-Date:   Thu, 22 Dec 2022 13:45:48 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zhang Qiao <zhangqiao22@huawei.com>
-Cc:     Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
-Message-ID: <Y6RRfF5yRew7rdCp@hirez.programming.kicks-ass.net>
-References: <73e639d5-702b-0d03-16d9-a965b1963ef6@huawei.com>
+        Thu, 22 Dec 2022 07:46:03 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A52309
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 04:46:02 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id a17so1490627wrt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 04:46:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6n0bW6AEyag4Yz/fTHAES88HSyxxmFvstBuhh9x5saw=;
+        b=KOROV8lX7w89xX5ufKygg/XiKOHbwq+ahSq/EFXdClSz6A6PPIASH93vwSblhvyfvP
+         z065xKqyID4B23C5FKRtCNBRT7EZeHKqBaXWbTm25nv5NSIM4YVpd6sapwFwIVxhDl9W
+         vgS1DDELxOfO9UFeHBkuF3kXiBeX2Z9lJnUFB7VxxeWgDG2J9dKD9d4mhaDEElya+7OC
+         J/Ifu+V/cIVhsVdOkWv9imdoqJp91AmZx3BU1lsgG0BAioTGznMGTy/nSQNLUBVfUTbu
+         59/w/iEnZzmu8sYKq1kwC+RZvZABDeTzNELZU1mol/HdAZezfgpti3m/1ZYHUj2Ma+AJ
+         OpWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6n0bW6AEyag4Yz/fTHAES88HSyxxmFvstBuhh9x5saw=;
+        b=vyQteTcEAEdt9foB3SuLeAXPl3YUIvBjluYgjau5iFaGy08EKQDknpX8P6wZUGbNdr
+         vvBZKGakkCQGbpgI8zugil4DiGABV7OuMdkN6j69+L62IvYvcknIAv+g6BqIwbTpSwQp
+         aUkQY4lttBwfGHQXC9o8zyPEajgxXJFqr4vh7FZIPWk5x44zDCe0iM5OiwlTMpvfFZuh
+         0Hq5Rbxb7wo5Fltyc5iwJZLLu9nHed4VWleeQLQhnrGkWeGDwreN61uNH7jmalxBcrUl
+         ZBkA1bxdURCzHeGlF4XXJRH002GrxhnVf6HKR1YcYkx6RbUNiQLDTPOfWZ3IKoPiUWbD
+         Y79Q==
+X-Gm-Message-State: AFqh2krSJXxzIB3B6Ed9MKiJEs0mByNPTsqQLd+8flzgSJaVJmg7vdFc
+        arZn4LLtHB/6+NwBDtDznCiWAg==
+X-Google-Smtp-Source: AMrXdXv2CMOs1kyvXBletImJqlJC+DtSfV8o0e7xTIWzSkmMqSaL7v/keKysbviY3GcBchUTo4+AIw==
+X-Received: by 2002:adf:fd4a:0:b0:242:593e:ee08 with SMTP id h10-20020adffd4a000000b00242593eee08mr3616514wrs.36.1671713160841;
+        Thu, 22 Dec 2022 04:46:00 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id o2-20020a5d58c2000000b0026a4bb75477sm456705wrf.28.2022.12.22.04.45.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 04:46:00 -0800 (PST)
+Message-ID: <b1f9dd11-b626-26d8-c6bd-7b5af7340dbb@linaro.org>
+Date:   Thu, 22 Dec 2022 12:45:59 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <73e639d5-702b-0d03-16d9-a965b1963ef6@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 05/21] dt-bindings: msm: dsi-controller-main: Deprecate
+ qcom,dsi-ctrl-6g-qcm2290 in favour of qcom,qcm2290-dsi-ctrl
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org, dianders@chromium.org,
+        david@ixit.cz, krzysztof.kozlowski+dt@linaro.org,
+        swboyd@chromium.org, konrad.dybcio@somainline.org,
+        agross@kernel.org, andersson@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221220123634.382970-1-bryan.odonoghue@linaro.org>
+ <20221220123634.382970-6-bryan.odonoghue@linaro.org>
+ <4115ec26-dedf-ca80-b81a-409d9db88f52@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <4115ec26-dedf-ca80-b81a-409d9db88f52@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 11:19:31PM +0800, Zhang Qiao wrote:
-> hi folks,
+On 22/12/2022 11:50, Krzysztof Kozlowski wrote:
+> On 20/12/2022 13:36, Bryan O'Donoghue wrote:
+>> Deprecate qcom,dsi-ctrl-6g-qcm2290 in favour of the desired format
+>> qcom,qcm2290-dsi-ctrl.
+>>
+>> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>> ---
+>>   .../display/msm/dsi-controller-main.yaml      | 36 +++++++++++--------
+>>   1 file changed, 21 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> index 01afa9e9c4b3c..98d54a7ee28d4 100644
+>> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> @@ -14,21 +14,27 @@ allOf:
+>>   
+>>   properties:
+>>     compatible:
+>> -    items:
+>> -      - enum:
+>> -          - qcom,apq8064-dsi-ctrl
+>> -          - qcom,msm8916-dsi-ctrl
+>> -          - qcom,msm8953-dsi-ctrl
+>> -          - qcom,msm8974-dsi-ctrl
+>> -          - qcom,msm8996-dsi-ctrl
+>> -          - qcom,msm8998-dsi-ctrl
+>> -          - qcom,dsi-ctrl-6g-qcm2290
+>> -          - qcom,sc7180-dsi-ctrl
+>> -          - qcom,sc7280-dsi-ctrl
+>> -          - qcom,sdm660-dsi-ctrl
+>> -          - qcom,sdm845-dsi-ctrl
+>> -          - qcom,sm8250-dsi-ctrl
+>> -      - const: qcom,mdss-dsi-ctrl
+>> +    oneOf:
+>> +      - items:
+>> +          - enum:
+>> +              - qcom,apq8064-dsi-ctrl
+>> +              - qcom,msm8916-dsi-ctrl
+>> +              - qcom,msm8953-dsi-ctrl
+>> +              - qcom,msm8974-dsi-ctrl
+>> +              - qcom,msm8996-dsi-ctrl
+>> +              - qcom,msm8998-dsi-ctrl
+>> +              - qcom,qcm2290-dsi-ctrl
+>> +              - qcom,sc7180-dsi-ctrl
+>> +              - qcom,sc7280-dsi-ctrl
+>> +              - qcom,sdm660-dsi-ctrl
+>> +              - qcom,sdm845-dsi-ctrl
+>> +              - qcom,sm8250-dsi-ctrl
+>> +          - const: qcom,mdss-dsi-ctrl
+>> +      - items:
 > 
->     I found problem about s64 overflow in max_vruntime().
+> I would just squash it with previous. You are adding some code and in
+> next patch immediately:
+> 1. re-indent it,
+> 2. remove it (qcom,dsi-ctrl-6g-qcm2290)
 > 
->     I create a task group GROUPA (path: /system.slice/xxx/yyy/CGROUPA) and run a task in this
-> group on each cpu, these tasks is while loop and 100% cpu usage.
 > 
->     When unregister net devices, will queue a kwork on system_highpri_wq at flush_all_backlogs()
-> and wake up a high-priority kworker thread on each cpu. However, the kworker thread has been
-> waiting on the queue and has not been scheduled.
+> Best regards,
+> Krzysztof
 > 
->     After parsing the vmcore, the vruntime of the kworker is 0x918fdb05287da7c3 and the
-> cfs_rq->min_vruntime is 0x124b17fd59db8d02.
-> 
->     why the difference between the cfs_rq->min_vruntime and kworker's vruntime is so large?
->     1) the kworker of the system_highpri_wq sleep for long long time(about 300 days).
->     2) cfs_rq->curr is the ancestor of the GROUPA, cfs->curr->load.weight is 2494, so when
-> the task belonging to the GROUPA run for a long time, its vruntime will increase by 420
-> times, cfs_rq->min_vruntime will also grow rapidly.
->     3) when wakeup kworker thread, kworker will be set the maximum value between kworker's
-> vruntime and cfs_rq->min_vruntime. But at max_vruntime(), there will be a s64 overflow issue,
-> as follow:
-> 
-> ---------
-> 
-> static inline u64 min_vruntime(u64 min_vruntime, u64 vruntime)
-> {
-> 	/*
-> 	 * vruntime=0x124b17fd59db8d02
-> 	 * min_vruntime=0x918fdb05287da7c3
-> 	 * vruntime - min_vruntime = 9276074894177461567 > s64_max, will s64 overflow
-> 	 */
-> 	s64 delta = (s64)(vruntime - min_vruntime);
-> 	if (delta < 0)
-> 		min_vruntime = vruntime;
-> 
-> 	return min_vruntime;
-> }
-> 
-> ----------
-> 
-> max_vruntime() will return the kworker's old vruntime, it is incorrect and the correct result
-> shoud be cfs_rq->minvruntime. This incorrect result is greater than cfs_rq->min_vruntime and
-> will cause kworker thread starved.
-> 
->     Does anyone have a good suggestion for slove this problem? or bugfix patch.
 
-I don't understand what you tihnk the problem is. Signed overflow is
-perfectly fine and works as designed here.
+Just to make sure.
+
+I'll squash this patch down in the previous and include your RB.
