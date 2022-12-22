@@ -2,240 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39EC654208
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2481265420C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiLVNjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 08:39:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S229907AbiLVNj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiLVNjl (ORCPT
+        with ESMTP id S230381AbiLVNjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 08:39:41 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87841262C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 05:39:38 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id n4so2062679plp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 05:39:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XkH6OCe/x7JQpec0bculCGFtQ6ZNz0wh9corwULkI6E=;
-        b=FHVUziAoXjTfQ8658Fz9bwN0Axo0vLmOhfG4Ls9YhXfuE0H267tuhjHuesk9fD2K4W
-         YPQXKDwl5aopv6vRGezEP4B9N9zw4a3u7G6Bz4yO3DD67p7mZTqlSa4PnAR5MEiyW9bJ
-         dsGwTXvS3xKr2R1D9Ycerfrn21+Eul85nUP/XU6zE3v7jtoOAPPeTp8r3gvIqljBqNbY
-         n58FCmLREKEpE5OW6kCAMEiBrj6vzqI71CBF2zAopovLxV9Qqn1C4KpVlGvv7LDupbaO
-         hD5Xc176rzoQVE5I+chEqQDievaykAMcXpuLKEEZ/Ctqq7yXoTO1TgE17UMhm3MANEOP
-         fL7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XkH6OCe/x7JQpec0bculCGFtQ6ZNz0wh9corwULkI6E=;
-        b=T68vtmGxg6XmF0FT8kJerLEmDhprwpA8+YQBlpguzpVKNPE3QPS4jiB/YTLVOA8vbz
-         VvCh3mETi8tg95YUd1kKLOwyhjFvJfoTp96D9F+6aSOjNFZhTbLMA2Eyyf8bkFuSQUdB
-         blOv0HxG2bPkORBCsqrBWFL4duBLtSWcrOhrxwezHXjQFRSB9Q7t5Eei386DnXsJpwvP
-         SEP9nTVSNAeZXIb6BZufJ5REOio83q7bHV4Acf0aVwAETaijx/kJCbD79xXTlqQkMN8F
-         y46omObQ1P1UPPFcOX/lX21vng6sfUKzrETheVgHx5lF+pDpAdLpsdxJJsASAkb6W9c0
-         n/7w==
-X-Gm-Message-State: AFqh2kqKnUkOzouJJCIE8LURMboLsX/1HIp2s0AUCUAgE7XxNWspFpDo
-        fDmgPTi7rZWSlVysOOpbRMbL
-X-Google-Smtp-Source: AMrXdXv2M1IfxFj/4CiOC19ST6aljTgL/aYpmm8XATNS5YYQkHSGGLRZiUWulnL1zLa8NWat1LI+4g==
-X-Received: by 2002:a05:6a21:3393:b0:ab:fb31:be13 with SMTP id yy19-20020a056a21339300b000abfb31be13mr31582570pzb.37.1671716378114;
-        Thu, 22 Dec 2022 05:39:38 -0800 (PST)
-Received: from thinkpad ([117.217.177.99])
-        by smtp.gmail.com with ESMTPSA id 37-20020a631765000000b0046b2ebb0a52sm756040pgx.17.2022.12.22.05.39.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 05:39:36 -0800 (PST)
-Date:   Thu, 22 Dec 2022 19:09:26 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, swboyd@chromium.org,
-        dmitry.baryshkov@linaro.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported
- max latencies
-Message-ID: <20221222133926.GA50976@thinkpad>
-References: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
- <20221205112500.GB4514@thinkpad>
- <Y441/Icd2wSgVnNU@google.com>
- <20221221054953.GA2922@thinkpad>
- <Y6MfXltck34gSwU9@google.com>
+        Thu, 22 Dec 2022 08:39:51 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E711262C;
+        Thu, 22 Dec 2022 05:39:50 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMBh8MW001873;
+        Thu, 22 Dec 2022 14:39:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=JWSFMS/RjJJvWBd45Dlnuo9vEz3wrE67COqhffoMv6I=;
+ b=i6mHZi6kuCrWx7KOhnVivhGqK5Oj+mo3k/JyMBsJYS85mXTQbcNrgMDCydoNG/sljHTc
+ mFNOChS9QjmXAvRNO5u7cjZoHPYk+8n19KqgrmnKYwFSHhICrLiFMhHIVxDsEtPv72wc
+ Fs3OBLwu1Ayyt8jrXX7W5y7d+g9A8i8j6b+/AuOu4EZExzXRAML9yHXmjDRUOb63yxoB
+ v4H4bkmeVwMjZMAHUQ19qYI0+QXEbdYVrsk3IbI4pgRPnSU118swSKhavHm7YKgG7HAu
+ LcJeRMrTecNwnp/g8lckgEGHRZNmt7Y22vEuElJhW5EDEwFQ4/cgzpeD+fZhsOdFElYA QA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mka9xgtvp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 14:39:30 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2FA5410002A;
+        Thu, 22 Dec 2022 14:39:30 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0B48B228A31;
+        Thu, 22 Dec 2022 14:39:30 +0100 (CET)
+Received: from [10.201.21.217] (10.201.21.217) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 22 Dec
+ 2022 14:39:29 +0100
+Message-ID: <f785a9f9-a931-a4b0-5d97-d9e8ce24065a@foss.st.com>
+Date:   Thu, 22 Dec 2022 14:39:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y6MfXltck34gSwU9@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 2/7] dt-bindings: bus: add STM32 System Bus
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
+        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>
+References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
+ <20221221173055.11719-3-gatien.chevallier@foss.st.com>
+ <d55cae92-0c4f-f957-4c7b-bdf7b9b6006a@kernel.org>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <d55cae92-0c4f-f957-4c7b-bdf7b9b6006a@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.217]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_06,2022-12-22_02,2022-06-22_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 02:59:42PM +0000, Matthias Kaehlcke wrote:
-> On Wed, Dec 21, 2022 at 11:19:53AM +0530, Manivannan Sadhasivam wrote:
-> > On Mon, Dec 05, 2022 at 06:18:36PM +0000, Matthias Kaehlcke wrote:
-> > > On Mon, Dec 05, 2022 at 04:55:00PM +0530, Manivannan Sadhasivam wrote:
-> > > > On Fri, Sep 16, 2022 at 01:38:37PM +0530, Krishna chaitanya chundru wrote:
-> > > > > In ASPM driver, LTR threshold scale and value are updated based on
-> > > > > tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
-> > > > > LTR threshold scale and value are greater values than max snoop/non-snoop
-> > > > > value.
-> > > > > 
-> > > > > Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> > > > > reported snoop/no-snoop values is greater than or equal to
-> > > > > LTR_L1.2_THRESHOLD value.
-> > > > > 
-> > > > > Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> > > > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > > > > Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > > 
-> > > > I take my Ack back... Sorry that I did not look into this patch closer.
-> > > > 
-> > > > > ---
-> > > > > 
-> > > > > I am taking this patch forward as prasad is no more working with our org.
-> > > > > changes since v6:
-> > > > > 	- Rebasing with pci/next.
-> > > > > changes since v5:
-> > > > > 	- no changes, just reposting as standalone patch instead of reply to
-> > > > > 	  previous patch.
-> > > > > Changes since v4:
-> > > > > 	- Replaced conditional statements with min and max.
-> > > > > changes since v3:
-> > > > > 	- Changed the logic to include this condition "snoop/nosnoop
-> > > > > 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> > > > > Changes since v2:
-> > > > > 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-> > > > > Changes since v1:
-> > > > > 	- Added missing variable declaration in v1 patch
-> > > > > ---
-> > > > >  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
-> > > > >  1 file changed, 30 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > > > > index 928bf64..2bb8470 100644
-> > > > > --- a/drivers/pci/pcie/aspm.c
-> > > > > +++ b/drivers/pci/pcie/aspm.c
-> > > > > @@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> > > > >  {
-> > > > >  	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> > > > >  	u32 val1, val2, scale1, scale2;
-> > > > > +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
-> > > > >  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
-> > > > >  	u32 ctl1 = 0, ctl2 = 0;
-> > > > >  	u32 pctl1, pctl2, cctl1, cctl2;
-> > > > > +	u16 ltr;
-> > > > > +	u16 max_snoop_lat, max_nosnoop_lat;
-> > > > >  
-> > > > >  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
-> > > > >  		return;
-> > > > >  
-> > > > > +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> > > > > +	if (!ltr)
-> > > > > +		return;
-> > > > > +
-> > > > > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> > > > > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-> > > > > +
-> > > > > +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > > > > +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
-> > > > > +
-> > > > > +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > > > > +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
-> > > > > +
-> > > > > +	/* choose the greater max scale value between snoop and no snoop value*/
-> > > > > +	max_scale = max(max_snp_scale, max_nsnp_scale);
-> > > > > +
-> > > > > +	/* choose the greater max value between snoop and no snoop scales */
-> > > > > +	max_val = max(max_snp_val, max_nsnp_val);
-> > > > > +
-> > > > >  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
-> > > > >  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> > > > >  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> > > > > @@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> > > > >  	 */
-> > > > >  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
-> > > > >  	encode_l12_threshold(l1_2_threshold, &scale, &value);
-> > > > > +
-> > > > > +	/*
-> > > > > +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> > > > > +	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
-> > > > 
-> > > > Apart from the bug in calculating the LTR_Threshold as reported by Matthias
-> > > > and Bjorn, I'm wondering if we are covering up for the device firmware issue.
-> > > 
-> > > Yes, I think the patch is doing exactly that.
-> > > 
-> > > > As per section 6.18, if the device reports snoop/no-snoop scale/value as 0, then
-> > > > it implies that the device won't tolerate any additional delays from the host.
-> > > >
-> > > > In that case, how can we allow the link to go into L1.2 since that would incur
-> > > > high delay compared to L1.1?
-> > > 
-> > > I had the same doubt, a value of 0 doesn't make sense, if it literally means
-> > > 'max delay of 0ns'. I did some debugging around this issue. One thing I found
-> > > is that there are NVMe models that don't have issues with entering L1.2 with
-> > > max (no-)snoop latencies of 0. From that I infer that a value of 0 does not
-> > > literally mean a max delay of 0ns.
-> > > 
-> > 
-> > This is interesting.
-> > 
-> > > The PCIe spec doesn't say specifically what a value of 0 in those registers
-> > > means, but chapter "6.18 Latency Tolerance Reporting (LTR) Mechanism" of the
-> > > PCIe 4.0 base spec says something about the latency requirements in LTR
-> > > messages:
-> > > 
-> > >   Setting the value and scale fields to all 0’s indicates that the device will
-> > >   be impacted by any delay and that the best possible service is requested.
-> > > 
-> > > With that and the fact that several NVMe's don't have issues with all 0 values
-> > > I deduce that all 0's means 'best possible service' and not 'max latency of
-> > > 0ns'. It seems the Kioxia firmware has a bug which interprets all 0 values as
-> > > a max latency of 0ns.
-> > > 
-> > > Another finding is that the Kioxia NVMe can enter L1.2 if the max latencies
-> > > are set to values >= the LTR threshold. Unfortunately that isn't a viable
-> > > fix for existing devices in the field, devices under development could possibly
-> > > adjust the latencies in the BIOS (coreboot code [1] suggests that this is done
-> > > at least in some cases).
-> > > 
-> > 
-> > I fully agree that it is a firmware issue. And yes, we should refrain to fixes
-> > in the bootloader if possible.
-> > 
-> > Another option would be to add a quirk for specific devices in the ASPM code.
-> > But in that case, I'm not sure what would be the optimal snoop/no-snoop value
-> > that could be used.
-> 
-> I had/have the same doubt.
-> 
-> > There is another issue where if we have some other device on the same bus
-> > that explicitly requires 0ns latency.
-> 
-> Would that be reasonable requirement, i.e. can 0ns latency ever be achieved?
+Hello,
 
-Well, not in an ideal world. But the device vendors do not fail to surprise us ;)
+On 12/22/22 11:24, Krzysztof Kozlowski wrote:
+> On 21/12/2022 18:30, Gatien Chevallier wrote:
+>> Document STM32 System Bus. This bus is intended to control firewall
+>> access for the peripherals connected to it.
+>>
+>> Signed-off-by: Loic PALLARDY <loic.pallardy@st.com>
+>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> 
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC.  It might happen, that command when run on an older
+> kernel, gives you outdated entries.  Therefore please be sure you base
+> your patches on recent Linux kernel
+As it is based on Oleksii's patchset and older threads:
+[1]: 
+https://lore.kernel.org/all/20190318100605.29120-1-benjamin.gaignard@st.com/
+[2]: 
+https://lore.kernel.org/all/20200701132523.32533-1-benjamin.gaignard@st.com/
 
-Thanks,
-Mani
+I wanted to include people that have already been included or 
+participated in these.
 
--- 
-மணிவண்ணன் சதாசிவம்
+I'm sorry I did miss/added some (extra) people. I will double-check for 
+next patchset version.
+
+> 
+>> ---
+>>   .../devicetree/bindings/bus/st,sys-bus.yaml   | 88 +++++++++++++++++++
+>>   1 file changed, 88 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/bus/st,sys-bus.yaml b/Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+>> new file mode 100644
+>> index 000000000000..9c0e86612695
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+>> @@ -0,0 +1,88 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/bus/stm32,sys-bus.yaml
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title:  STM32 System Bus
+> 
+> Only one space.
+> 
+
+Ack. I already pushed a V2, that is now outdated with your review, where 
+this error is fixed.
+
+>> +
+>> +description: |
+>> +  The STM32 System Bus is an internal bus to which some internal peripherals
+>> +  are connected. STM32 System Bus integrates a firewall controlling access to each
+>> +  device. This bus prevents non-accessible devices to be probed.
+>> +
+>> +  To see which peripherals are securable, please check the SoC reference manual.
+>> +
+>> +maintainers:
+>> +  - Gatien Chevallier <gatien.chevallier@foss.st.com>
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/feature-controllers/feature-domain-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - st,stm32mp13-sys-bus
+>> +      - st,stm32mp15-sys-bus
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  "#address-cells":
+>> +    const: 1
+>> +
+>> +  "#size-cells":
+>> +    const: 1
+>> +
+>> +  '#feature-domain-cells':
+> 
+> Use consistent quotes, either ' or "
+
+Ack, will change in V3.
+
+> 
+>> +    minItems: 1
+> 
+> No. Cells must be const. This does not match cells at all...
+> 
+
+Ack, will change to const in V3. What do imply by saying it does not 
+match? Note that I've changed it to "minimum" in V2.
+
+>> +
+>> +  ranges: true
+>> +
+>> +  feature-domain-controller: true
+>> +
+>> +patternProperties:
+>> +  "^.*@[0-9a-f]+$":
+>> +    description: Devices attached to system bus
+>> +    type: object
+>> +    properties:
+>> +      feature-domains:
+>> +        $ref: /schemas/feature-controllers/feature-domain-controller.yaml#/properties/feature-domains
+> 
+> maxItems
+
+I don't think setting a max here is relevant as there can be numerous 
+feature-domains referenced.
+
+Maybe a min?
+
+> 
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - "#address-cells"
+>> +  - "#size-cells"
+>> +  - feature-domain-controller
+>> +  - '#feature-domain-cells'
+>> +  - ranges
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    // In this example,
+>> +    // - the foo1 device refers to etzpc as his domain controller.
+>> +    // - same goes for foo2.
+>> +    // Access rights are verified before creating devices.
+>> +
+>> +    etzpc: etzpc@5c007000 {
+> 
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+
+Ack, will change to "etzpc: bus@5c007000" in V3
+
+>> +        compatible = "st,stm32mp15-sys-bus";
+>> +        reg = <0x5c007000 0x400>;
+>> +        #address-cells = <1>;
+>> +        #size-cells = <1>;
+>> +        ranges;
+>> +        feature-domain-controller;
+>> +        #feature-domain-cells = <1>;
+>> +
+>> +        foo1: foo@1000000 {
+> 
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+Here, if I use real peripherals, I have an issue with the dependency to 
+YAML files. The feature-domains property is not defined in their 
+bindings. Therefore, the dt_binding_check fails on peripherals whose 
+YAML declare "additionalProperties: false" because the link to the 
+feature domain controller bindings does not exist.
+
+What would be your recommandation here as declaring:
+
+patternProperties:
+   "^.*@[0-9a-f]+$":
+     description: Devices attached to system bus
+     type: object
+     properties:
+       feature-domains:
+         $ref: 
+/schemas/feature-controllers/feature-domain-controller.yaml#/properties/feature-domains
+
+does not solve the issue?
+
+
+
+> 
+>> +          reg = <0x0 0x1000000>;
+> 
+> Missing compatible, missing proper device name. Don't use fake names,
+> but describe real case.
+
+Linked to above issue.
+
+> 
+>> +          feature-domains = <&etzpc 0>;
+>> +        };
+>> +
+>> +        foo2: foo@2000000 {
+>> +          reg = <0x0 0x2000000>;
+>> +          feature-domains = <&etzpc 0>;
+>> +        };
+>> +    };
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Best regards,
+Gatien
