@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B02A65450E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B86E654512
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiLVQYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 11:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S229752AbiLVQZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 11:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLVQYc (ORCPT
+        with ESMTP id S229770AbiLVQZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 11:24:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346232497F;
-        Thu, 22 Dec 2022 08:24:29 -0800 (PST)
+        Thu, 22 Dec 2022 11:25:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1846AD4F;
+        Thu, 22 Dec 2022 08:25:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9479861C43;
-        Thu, 22 Dec 2022 16:24:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF62C433EF;
-        Thu, 22 Dec 2022 16:24:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671726269;
-        bh=m/JZ2MlUNjzmWc4uVPQGsugJ7FAGwWNl1f1pGALXa0U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mWWTm1aIXB9Cfm+ZRFrZkYsyC0A2TvsTQHAoR5O78dMvRN5yg91mIViPY3MzmNDKM
-         D0HxihuOAnC7sIKtYOnfzthi4dNa/zg8Iql/mT5sRRDP2T42oJddrRGDw5Y2iQxjbC
-         S7dK50jygWA4M6yvbvQflfyhmFE3hlKkI8Jum8Tk=
-Date:   Thu, 22 Dec 2022 17:24:25 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     sashal@kernel.org, corbet@lwn.net, stable@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joneslee@google.com
-Subject: Re: [PATCH] Documentation: stable: Add rule on what kind of patches
- are accepted
-Message-ID: <Y6SEuYEK/90dJjMe@kroah.com>
-References: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
- <Y6RchEaXUvg+9nKv@kroah.com>
- <86b513b7-b65f-4948-7c09-789844f0d90d@linaro.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC91F61C27;
+        Thu, 22 Dec 2022 16:25:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7036C433EF;
+        Thu, 22 Dec 2022 16:25:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671726340;
+        bh=vvag379xei9QKBc4aAnNJasBDyZYO68DL42DBe0lDsc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qu1UtskEppTnHBeXtbhhQ5uhSofJOfc6DUqdGx662zT9xlQ++X0InCVEmaUBAYOSC
+         lApQL5trAFN/5MzFqU59Ax1RJrb/UUhDDUqZHKsCyIj5YE9olIGPEuTv1+lbfyn9os
+         gHpccr7bwXvmNFPjmaJqjsTwiED7CThiqBmsj0sAuvymBFyA5YdOEbDOgV0BypNr0q
+         b7r/BxdyR41Bm4vRN3316IQUQNMpWRUQE9pf6mbp0KQ9cbHGwl/482YYW+WXF7YoWy
+         oYRdKXwz9REOuy+OulhNWMQ/1fKT1Dbgka9XhkYGPFSFXAMOsBs6CU8LYPHisMq38x
+         9WjB0c3Fx+Psw==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: [PATCH 1/5] kbuild: refactor silent mode detection
+Date:   Fri, 23 Dec 2022 01:25:31 +0900
+Message-Id: <20221222162535.1578462-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <86b513b7-b65f-4948-7c09-789844f0d90d@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,55 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 04:20:42PM +0200, Tudor Ambarus wrote:
-> 
-> 
-> On 22.12.2022 15:32, Greg KH wrote:
-> > On Thu, Dec 22, 2022 at 11:16:58AM +0200, Tudor Ambarus wrote:
-> > > The list of rules on what kind of patches are accepted, and which ones
-> > > are not into the “-stable” tree, did not mention anything about new
-> > > features and let the reader use its own judgement. One may be under the
-> > > impression that new features are not accepted at all, but that's not true:
-> > > new features are not accepted unless they fix a reported problem.
-> > > Update documentation with missing rule.
-> > > 
-> > > Link: https://lore.kernel.org/lkml/fc60e8da-1187-ca2b-1aa8-28e01ea2769a@linaro.org/T/#mff820d23793baf637a1b39f5dfbcd9d4d0f0c3a6
-> > > Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> > > ---
-> > >   Documentation/process/stable-kernel-rules.rst | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
-> > > index 2fd8aa593a28..266290fab1d9 100644
-> > > --- a/Documentation/process/stable-kernel-rules.rst
-> > > +++ b/Documentation/process/stable-kernel-rules.rst
-> > > @@ -22,6 +22,7 @@ Rules on what kind of patches are accepted, and which ones are not, into the
-> > >      maintainer and include an addendum linking to a bugzilla entry if it
-> > >      exists and additional information on the user-visible impact.
-> > >    - New device IDs and quirks are also accepted.
-> > > + - New features are not accepted unless they fix a reported problem.
-> > 
-> > No need to call this out, it falls under the "fixes a problem" option,
-> > right?
-> > 
-> > The goal is not to iterate every single option here, that would be
-> > crazy.  Let's keep it short and simple, our biggest problem is that
-> > people do NOT read this document, not that it does not list these types
-> > of corner cases.
-> > 
-> 
-> When I read the document I thought that new features are not accepted
-> at all, so I took into consideration making a custom fix for stable.
-> But that would have been worse, as it implied forking the stable and
-> would have made backporting additional fixes harder. An explicit rule
-> like this would have saved me few emails changed and few hours spent on
-> looking for an alternative fix. But maybe others find this a
-> common sense implied rule and you won't have to be summoned for it
-> anymore.
+Factor out $(findstring s,...).
 
-Let's just say that this is the first time in the 18+ years of stable
-kernel development that it has come up as a question like this :)
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-thanks,
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-greg k-h
+diff --git a/Makefile b/Makefile
+index 25247f931872..e8ce3e2b30d6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -100,12 +100,12 @@ endif
+ # make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
+ 
+ ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+-silence:=$(findstring s,$(firstword -$(MAKEFLAGS)))
++short-opts := $(firstword -$(MAKEFLAGS))
+ else
+-silence:=$(findstring s,$(filter-out --%,$(MAKEFLAGS)))
++short-opts := $(filter-out --%,$(MAKEFLAGS))
+ endif
+ 
+-ifeq ($(silence),s)
++ifneq ($(findstring s,$(short-opts)),)
+ quiet=silent_
+ KBUILD_VERBOSE = 0
+ endif
+-- 
+2.34.1
+
