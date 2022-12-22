@@ -2,77 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B638B653C73
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D34653C79
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbiLVHOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 02:14:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
+        id S231146AbiLVHXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 02:23:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234764AbiLVHOj (ORCPT
+        with ESMTP id S229567AbiLVHXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 02:14:39 -0500
-X-Greylist: delayed 413 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Dec 2022 23:14:36 PST
-Received: from out-61.mta0.migadu.com (out-61.mta0.migadu.com [IPv6:2001:41d0:1004:224b::3d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACF21ADAF
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:14:36 -0800 (PST)
-Date:   Thu, 22 Dec 2022 08:07:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1671692859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GA27Msw6p/zB5NqRtzleiY7vvKaWzvXonvXCWKB28rM=;
-        b=hzihvZGRnTZFLZqzjUQZtDqhdxaKsk8cVLfHnl2DAc6HFg9mjgAXm27nCfxnTMAMdAz8tv
-        AlUmg+XrccFrPItVs1suMKmKZdwKGkk+fFkK5ugHUxZSDCSOewqbPmtpVHIJ3QhrvH/7qV
-        b3xJYDmw45+WjvUPB0PhyhCwAkNC8NY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Richard Leitner <richard.leitner@linux.dev>
-To:     "David R. Piegdon" <david@p23q.org>
-Cc:     Randolph =?utf-8?Q?Maa=C3=9Fen?= <randolph.maassen@indurad.com>,
-        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial8250 on tegra hsuart: recover from spurious
- interrupts due to tegra2 silicon bug
-Message-ID: <Y6QCGuXXavQwnR/7@g0hl1n.net>
-References: <4676ea34-69ce-5422-1ded-94218b89f7d9@p23q.org>
- <Y3tUWPCVnauLeuG2@skidata.com>
- <73C64EC3-3F03-426F-833B-CC9FBA9205D8@p23q.org>
+        Thu, 22 Dec 2022 02:23:18 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2723F222BB;
+        Wed, 21 Dec 2022 23:23:10 -0800 (PST)
+X-UUID: 69020fc14d874acea1d0c8b7b74af407-20221222
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=FJPFukDF7AUerp0CNeHyC/hh1h36pU7tNlEmG6GXReU=;
+        b=AVEou5HEpvGtfEtbCaeIUOzPsqLMj3CSnf9ZBWskMPXXtQx7pHnODckF9o4lzxzzcGR2GraEQUgGtgGXDEPffwpMmjsSObLKpDDu/PBA2AUiIylIgrTjYr5gEssTw7IuJdJC+tQKH8dXPS+4Q0Q+n4CDHZKXBRf/C+aL6+PO2JQ=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:4c42dc1a-8c6f-4fe2-b83c-5515b46868fb,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:c76e7c52-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 69020fc14d874acea1d0c8b7b74af407-20221222
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 755569833; Thu, 22 Dec 2022 15:23:07 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 22 Dec 2022 15:23:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 22 Dec 2022 15:23:05 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Chunxu Li <chunxu.li@mediatek.com>,
+        Dan Carpenter <error27@gmail.com>,
+        YC Hung <yc.hung@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <sound-open-firmware@alsa-project.org>,
+        <alsa-devel@alsa-project.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v1 0/3] Add support of MediaTek mt8188 to SOF
+Date:   Thu, 22 Dec 2022 15:21:47 +0800
+Message-ID: <20221222072150.10627-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <73C64EC3-3F03-426F-833B-CC9FBA9205D8@p23q.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add support of MediaTek mt8188 SoC DSP to SOF.
+The sof driver patches in this series are taken from
+thesofproject/linux/tree/topic/sof-dev-rebase.
 
-On Tue, Nov 22, 2022 at 06:47:39PM +0100, David R. Piegdon wrote:
-> Hallo Richard,
-> it's great to hear that the patch was helpful for someone other than us.
-> However, I no longer work on that project, or that company. I have added my old coworker Randolph to the recipients, who, I think, still maintains that platform (based on colibri t20 from toradex). Maybe he can be of help. If you come up with technical questions, I might still have a memory or two.
+Tinghan Shen (3):
+  dt-bindings: dsp: mediatek: Add mt8188 dsp compatible
+  ASoC: SOF: mediatek: Support mt8188 platform
+  ASoC: SOF: mediatek: Provide debugfs_add_region_item ops for core
 
-Thanks for the feedback.
+ .../bindings/dsp/mediatek,mt8186-dsp.yaml     |  4 +++-
+ sound/soc/sof/mediatek/mt8186/mt8186.c        | 20 +++++++++++++++++++
+ sound/soc/sof/mediatek/mt8186/mt8186.h        |  3 ++-
+ sound/soc/sof/mediatek/mt8195/mt8195.c        |  1 +
+ 4 files changed, 26 insertions(+), 2 deletions(-)
 
-As I'd love to see this mainline: Does one of you (David, Randolph) have
-interest/time to try to bring this mainline? If not I can try, altough
-I'm not into the Tegra UARTs details that deep...
+-- 
+2.18.0
 
-regards;rl
-
-> @Randolph: Cheers & I hope everything is going well!
-> 
-> Yours,
-> David
-> 
