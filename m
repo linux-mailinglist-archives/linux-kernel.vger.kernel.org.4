@@ -2,127 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B0865440C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA8365440B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiLVPOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:14:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S235500AbiLVPOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbiLVPOS (ORCPT
+        with ESMTP id S235335AbiLVPOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:14:18 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA8129376
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:14:17 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id x11so2189540ljh.7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:14:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pe60z7sOPgdNmMoaBm9gqJAGwx8DeOE6G4rpNU/Dxso=;
-        b=RXxD05WFgOXm4VLh4/C1VgYmc17QfRc+SWT877WZ2JXefQHZaUg24iiC2SHpijgCMu
-         uDap1cnRuCP7gguQ0rZ9WL6EyS/VRAem5sQXeumBTKkDIIOn2mBfzWf6xDRgtPnyvmDm
-         Rjst7FOX5u1s+lPXrGMKRphCcwkw6yVB3hEpvyvYFWKzMtLpa+GNYJvh/zWOwG4mdwKf
-         ajO08O9qN1c5odb79KbWEfo+wD7ttuujsdUZmLYTpiNSEpE68qxaoE7fbrXyc39lJU8u
-         SMUVPfez8U7/vZ0LyCPfGXYcxbjnhSsQ+87ODnUbgNORuIYIosdBWQiESPRaL7sk9WDD
-         jgLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pe60z7sOPgdNmMoaBm9gqJAGwx8DeOE6G4rpNU/Dxso=;
-        b=DpnBLAvXIRSqM/LshpifRpLk9zP7XmToWO6Mf77RiYBvpgjOue1wPlRjlBK6n9Yps0
-         o856BkPaj/ZmjjgK56cMmsisLkff3s99MSqpD413KnPb9f13y0lTntJvc1fsseCFxRkI
-         dgYQ/GBS2SjosDnHblVBGW6av6eSAesOXyStSjC/W6N0Q/RSSI247EdTNWtX1OIuhuax
-         U4LU17/ZM2cdiIp95x5Jz1fiRsDBnSN93riREPdVUNWLHB3S3Iw1sH7YuX/WEG9bXJhr
-         pl1af8TJ5m7LK5p0nUWocIW8D1i49OBssi0RGQnPg3gTPuNxKpRy3Li7hxLkO1JA8N/M
-         7Few==
-X-Gm-Message-State: AFqh2kqoNndM3EZtcVwTWRdXTMU0Y/EW6nWSIy2/WF5uODrGf7BXqz/m
-        T0IXIXQoxoUR36DP//TqWNCV7w==
-X-Google-Smtp-Source: AMrXdXvFdNEKOncS2Cehjtfz9and/trFT/D/VuioBxLX6Czy8gPEXL7F9+N40PJvaLe5FuukbY1msQ==
-X-Received: by 2002:a2e:82cd:0:b0:27a:c0f:30be with SMTP id n13-20020a2e82cd000000b0027a0c0f30bemr1778754ljh.35.1671722056313;
-        Thu, 22 Dec 2022 07:14:16 -0800 (PST)
-Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id o10-20020ac24e8a000000b004b4fefacd89sm96363lfr.139.2022.12.22.07.14.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 07:14:15 -0800 (PST)
-Message-ID: <defdfa62-6c89-6921-e789-6e989a84553d@linaro.org>
-Date:   Thu, 22 Dec 2022 16:14:13 +0100
+        Thu, 22 Dec 2022 10:14:21 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A759424F2F;
+        Thu, 22 Dec 2022 07:14:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671722060; x=1703258060;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gyODYh2bF0u1w4lb06K7uWpgiRl7PFX7XVgYO3KlnoI=;
+  b=Ef8pahAoZ6c2PyxVzwX8UzIgpAk1GalnhH08P5zhFRJXVVYw++2e13Lq
+   zn7vOpzjVdRcoeJUHLohXDA1FpJB1XfTzxtDq0m7YKTmniB2hte4zqsC/
+   HooB0rtZbJ9tgTC+CQLkyh4AD8FaQuase9jMJRxEllwdOCoKFZp6aOQox
+   2F3kwutNOechoUzmcnJ5kr6vTIuHkcE+9oSWp4w7Y8VW8mIbjXN+E+Sep
+   ORSwjCIQbq17mf4PhlInXFw0RM4Xt+1gFSgggKUy91k4LaLv/9xPzJtEo
+   bU/KTFzj2/OKqWrfrdkrQuMdKhTxCekneeQQnP+h4ZGHv2f60916GeSvI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="300489202"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="300489202"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 07:14:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="651806882"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="651806882"
+Received: from mylly.fi.intel.com (HELO [10.237.72.179]) ([10.237.72.179])
+  by orsmga002.jf.intel.com with ESMTP; 22 Dec 2022 07:14:15 -0800
+Message-ID: <9c663363-49a0-da2f-508b-dbf3906b4d61@linux.intel.com>
+Date:   Thu, 22 Dec 2022 17:14:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 1/4] arm64: dts: qcom: sdm845-db845c: fix audio codec
- interrupt pin name
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Joel Selvaraj <joelselvaraj.oss@gmail.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Caleb Connolly <caleb@connolly.tech>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Doug Anderson <dianders@chromium.org>
-References: <20221222151319.122398-1-krzysztof.kozlowski@linaro.org>
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [PATCH v5 1/1] i2c: designware: use casting of u64 in clock
+ multiplication to avoid overflow
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221222151319.122398-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hanna Hawa <hhhawa@amazon.com>
+Cc:     wsa@kernel.org, mika.westerberg@linux.intel.com, jsd@semihalf.com,
+        linus.walleij@linaro.org, ben-linux@fluff.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
+        talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
+        farbere@amazon.com, itamark@amazon.com, lareine@amazon.com
+References: <20221221195900.23276-1-hhhawa@amazon.com>
+ <Y6NnkDwD9UUQ8Ro/@smile.fi.intel.com>
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <Y6NnkDwD9UUQ8Ro/@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22.12.2022 16:13, Krzysztof Kozlowski wrote:
-> The pin config entry should have a string, not number, for the GPIO used
-> as WCD9340 audio codec interrupt.
+On 12/21/22 22:07, Andy Shevchenko wrote:
+> On Wed, Dec 21, 2022 at 07:59:00PM +0000, Hanna Hawa wrote:
+>> From: Lareine Khawaly <lareine@amazon.com>
+>>
+>> In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
+>> by depending on the values of the given parameters including the ic_clk.
+>> For example in our use case where ic_clk is larger than one million,
+>> multiplication of ic_clk * 4700 will result in 32 bit overflow.
+>>
+>> Add cast of u64 to the calculation to avoid multiplication overflow, and
+>> use the corresponding define for divide.
 > 
-> Fixes: 89a32a4e769c ("arm64: dts: qcom: db845c: add analog audio support")
-> Reported-by: Doug Anderson <dianders@chromium.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Perfect, thank you!
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> 
-> Cc: Doug Anderson <dianders@chromium.org>
-> 
-> Changes since v3:
-> 1. Add Fixes and Rb tags.
-> 
-> Changes since v2:
-> 1. New patch.
-> ---
->  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> index f41c6d600ea8..774e4352f299 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-> @@ -979,7 +979,7 @@ sdc2_card_det_n: sd-card-det-n {
->  	};
->  
->  	wcd_intr_default: wcd_intr_default {
-> -		pins = <54>;
-> +		pins = "gpio54";
->  		function = "gpio";
->  
->  		input-enable;
+Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
