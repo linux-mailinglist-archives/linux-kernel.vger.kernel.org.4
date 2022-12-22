@@ -2,57 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15590653EED
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C59654675
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235480AbiLVLSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S230022AbiLVTSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 14:18:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbiLVLRv (ORCPT
+        with ESMTP id S229691AbiLVTSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:17:51 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF3D1F611;
-        Thu, 22 Dec 2022 03:17:51 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nd78B0HDyz4f3lWy;
-        Thu, 22 Dec 2022 19:17:46 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP2 (Coremail) with SMTP id Syh0CgB3a+nXPKRjMew+AQ--.3596S12;
-        Thu, 22 Dec 2022 19:17:48 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     paolo.valente@linaro.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     jack@suse.cz, hch@lst.de, damien.lemoal@wdc.com
-Subject: [PATCH RESEND v2 10/10] block, bfq: remove check of bfq_wr_max_softrt_rate which is always greater than 0
-Date:   Fri, 23 Dec 2022 03:16:41 +0800
-Message-Id: <20221222191641.1643117-11-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20221222191641.1643117-1-shikemeng@huaweicloud.com>
-References: <20221222191641.1643117-1-shikemeng@huaweicloud.com>
+        Thu, 22 Dec 2022 14:18:35 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C9DF8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:18:34 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id g13so4128139lfv.7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:18:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+nIjDYFZ/q7w9qAhp90+SKidk8iu8dhx1d9mlC/tW0c=;
+        b=yrRJPcE78fNCnK9sR1nhZnrkvIK0a8Jlo4I9kpkI7hsxVyOT0DRmxB3n4qYH95gbiD
+         Abpr7j/RSJRtamJnLwjBLT4KmXUyp3ogiQ/7R6tXldS3TNrXLYhCwEQFgUJYB7FlaRon
+         CmMIGrLbfcVUMI7ypnCpSpn0n+cBmFbHDNiUZxXfk2eSj2fj4LCYLHwIcAWhG1PxkKXk
+         FZbZkUVGCV8jz7HLm1vmui7AhGLNEkF6GOMjg8pPu3v+chy4roDh/v5fUTL6wKCRUhd8
+         C3s/eqJ8DpA/MT6R512ly5RM0dKxv+Y8mgAXGEpRdfZUE17qWNEAGv1bRVfhV55k5q+F
+         kd0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+nIjDYFZ/q7w9qAhp90+SKidk8iu8dhx1d9mlC/tW0c=;
+        b=MHr5AcI0axil54XyBPZi7WN7bJZTNaYIA2NIP/VdWlqNwIHZbrAvH/vVDGY+Q4yS59
+         vn8TZdO0swE3kqiP3pKW+VHsvJ9iy3Qf83E/xgMpAOL8SiN0VoIkSK1LAuHGFI2QUEbk
+         /zKySHvf0pe8PebiIjhh6qx1qcjBIpfmX/WAQlnn9SjqyL7RESw+tiFEz8jrHe04bcxQ
+         zing1vhqwAerNyDZEw6Gk86YZCUsAhFHGnTDKDbHF2Dhudimv+wSvI4+b3Vy/jJhyf7J
+         r1LphDecq3t/9hXBtnTZ3KsweEcCFHUezmgFP4Waq8xSbQvj6D3dQZ9foDsOXhHBVxXX
+         kFWQ==
+X-Gm-Message-State: AFqh2kqxyJMRDALieWfoicwGdwuU6UApUcdSkVMwCI1VNmXTddLR2+yy
+        ZpMFmdWEI202KDqDOS6qDZCU/w==
+X-Google-Smtp-Source: AMrXdXuRA2TZlXiMk/H+rp6r4ihck4Na/0nUwW3npG2/RhtLvzSRWFzNQwklWFPqZmKwzcBtBhNBmA==
+X-Received: by 2002:ac2:5102:0:b0:4b5:6649:eb6c with SMTP id q2-20020ac25102000000b004b56649eb6cmr2397541lfb.25.1671736712582;
+        Thu, 22 Dec 2022 11:18:32 -0800 (PST)
+Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
+        by smtp.gmail.com with ESMTPSA id c11-20020a056512324b00b004b550c26949sm169532lfr.290.2022.12.22.11.18.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 11:18:32 -0800 (PST)
+Message-ID: <d1e1b18c-0d17-2145-0fc2-3f9be8d68fe9@linaro.org>
+Date:   Thu, 22 Dec 2022 20:18:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgB3a+nXPKRjMew+AQ--.3596S12
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cry7Zr47CFyUZFyfJF13Arb_yoW8Gr1kpa
-        yaqr4UWF45Ka1F9F4UtF18Ww1jyan3W3srKw1DZw1DtrW7ZFn3ua9akwnYva92qFn7Crsx
-        ZF1DKa4kXF1DA37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
-        8IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAv
-        FVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJw
-        A2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE
-        3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr2
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv
-        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY
-        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
-        CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jstxDUUUUU=
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] arm64: dts: qcom: sdm845-tama: Add volume up and camera
+ GPIO keys
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221222190656.31664-1-marijn.suijten@somainline.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221222190656.31664-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,39 +86,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bfqd->bfq_wr_max_softrt_rate is assigned with 7000 in bfq_init_queue and
-never changed. So we can remove bfqd->bfq_wr_max_softrt_rate > 0 check
-which is always true.
 
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
----
- block/bfq-iosched.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 91bc68fba72d..00cdd42ac02a 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -1788,8 +1788,7 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
- 	 *   to control its weight explicitly)
- 	 */
- 	in_burst = bfq_bfqq_in_large_burst(bfqq);
--	soft_rt = bfqd->bfq_wr_max_softrt_rate > 0 &&
--		!BFQQ_TOTALLY_SEEKY(bfqq) &&
-+	soft_rt = !BFQQ_TOTALLY_SEEKY(bfqq) &&
- 		!in_burst &&
- 		time_is_before_jiffies(bfqq->soft_rt_next_start) &&
- 		bfqq->dispatched == 0 &&
-@@ -4284,8 +4283,7 @@ void bfq_bfqq_expire(struct bfq_data *bfqd,
- 	if (bfqd->low_latency && bfqq->wr_coeff == 1)
- 		bfqq->last_wr_start_finish = jiffies;
- 
--	if (bfqd->low_latency && bfqd->bfq_wr_max_softrt_rate > 0 &&
--	    RB_EMPTY_ROOT(&bfqq->sort_list)) {
-+	if (bfqd->low_latency && RB_EMPTY_ROOT(&bfqq->sort_list)) {
- 		/*
- 		 * If we get here, and there are no outstanding
- 		 * requests, then the request pattern is isochronous
--- 
-2.30.0
+On 22.12.2022 20:06, Marijn Suijten wrote:
+> Tama has four GPIO-wired keys: two for camera focus and shutter /
+> snapshot, and two more for volume up and down.  As per the comment these
+> used to not work because the necessary pin bias was missing, which is
+> now set via pinctrl on pm8998_gpio(s).
+> 
+> The missing bias has also been added to the existing volume down button,
+> which receives a node name and label cleanup at the same time to be more
+> consistent with other DTS and the newly added buttons.  Its deprecated
+> gpio-key,wakeup property has also been replaced with wakeup-source.
+> 
+> Note that volume up is also available through the usual PON RESIN node,
+> but unlike other platforms only triggers when the power button is held
+> down at the same time making it unsuitable to serve as KEY_VOLUMEUP.
+Sounds rather intriguing..
 
+> 
+> Fixes: 30a7f99befc6 ("arm64: dts: qcom: Add support for SONY Xperia XZ2 / XZ2C / XZ3 (Tama platform)")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  .../dts/qcom/sdm845-sony-xperia-tama.dtsi     | 72 +++++++++++++++++--
+>  1 file changed, 68 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
+> index 87dd0fc36747..6390dadd5f82 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
+> @@ -4,6 +4,7 @@
+>   */
+>  
+>  #include <dt-bindings/input/input.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+>  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>  #include "sdm845.dtsi"
+>  #include "pm8005.dtsi"
+> @@ -17,14 +18,43 @@ / {
+>  	gpio-keys {
+>  		compatible = "gpio-keys";
+>  
+> -		/* Neither Camera Focus, nor Camera Shutter seem to work... */
+> +		pinctrl-0 = <&focus_n &snapshot_n &vol_down_n &vol_up_n>;
+> +		pinctrl-names = "default";
+>  
+> -		key-vol-down {
+> -			label = "volume_down";
+> +		key-camera-focus {
+> +			label = "Camera Focus";
+> +			gpios = <&pm8998_gpio 2 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_CAMERA_FOCUS>;
+> +			debounce-interval = <15>;
+> +			linux,can-disable;
+> +			wakeup-source;
+> +		};
+> +
+> +		key-camera-snapshot {
+> +			label = "Camera Snapshot";
+> +			gpios = <&pm8998_gpio 7 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_CAMERA>;
+> +			debounce-interval = <15>;
+> +			linux,can-disable;
+> +			wakeup-source;
+> +		};
+> +
+> +		key-volume-down {
+> +			label = "Volume Down";
+>  			gpios = <&pm8998_gpio 5 GPIO_ACTIVE_LOW>;
+>  			linux,code = <KEY_VOLUMEDOWN>;
+>  			debounce-interval = <15>;
+> -			gpio-key,wakeup;
+> +			linux,can-disable;
+> +			wakeup-source;
+> +		};
+> +
+> +		key-volume-up {
+> +			label = "Volume Up";
+> +			gpios = <&pm8998_gpio 6 GPIO_ACTIVE_LOW>;
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			debounce-interval = <15>;
+> +			linux,can-disable;
+> +			wakeup-source;
+>  		};
+>  	};
+>  
+> @@ -358,6 +388,40 @@ &i2c14 {
+>  	/* AMS TCS3490 RGB+IR color sensor @ 72 */
+>  };
+>  
+> +&pm8998_gpio {
+> +	focus_n: focus-n-state {
+> +		pins = "gpio2";
+> +		function = PMIC_GPIO_FUNC_NORMAL;
+> +		power-source = <0>;
+> +		bias-pull-up;
+> +		input-enable;
+> +	};
+> +
+> +	vol_down_n: vol-down-n-state {
+> +		pins = "gpio5";
+> +		function = PMIC_GPIO_FUNC_NORMAL;
+> +		power-source = <0>;
+> +		bias-pull-up;
+> +		input-enable;
+> +	};
+> +
+> +	vol_up_n: vol-up-n-state {
+> +		pins = "gpio6";
+> +		function = PMIC_GPIO_FUNC_NORMAL;
+> +		power-source = <0>;
+> +		bias-pull-up;
+> +		input-enable;
+> +	};
+> +
+> +	snapshot_n: snapshot-n-state {
+> +		pins = "gpio7";
+> +		function = PMIC_GPIO_FUNC_NORMAL;
+> +		power-source = <0>;
+> +		bias-pull-up;
+> +		input-enable;
+> +	};
+> +};
+> +
+>  &qupv3_id_0 {
+>  	status = "okay";
+>  };
