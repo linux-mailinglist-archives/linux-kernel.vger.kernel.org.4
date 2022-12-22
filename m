@@ -2,124 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3823F65432F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D79653C31
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 07:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235736AbiLVOd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S235187AbiLVGfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 01:35:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiLVOdx (ORCPT
+        with ESMTP id S235124AbiLVGfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:33:53 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359F81903D;
-        Thu, 22 Dec 2022 06:33:52 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id jo4so5321705ejb.7;
-        Thu, 22 Dec 2022 06:33:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3spaG/gmW2iurMqKAzeqtwdB73qDEY0NRjhBceQ6XKs=;
-        b=CRqcUNirJ7ntkMUU3JTGsOB20UlhBrxRoqyYx/3ZS4wzpgONJrG2I2eRg06hDXUMcN
-         CGWzv1hqWty3MdmlDNEkmXm5Wvd75JsO30NtYG6rUExTOsSTd2ejWM/Ph0Vvl4znq5cR
-         ASJyzhJg7dtPga9J3IzuVm8cO4HrT5GWRX5Z2wnWWU8R+ioOxrk5PylVbB6v7DZuFC0I
-         LJ6OcTUs0vB5PaNojBTWE7NVnvc8iR57BDNCFcPC5dyI2v2Z41IO48C8khaMVX+F2wOH
-         2itQG6e4aRjBmTmFUmWle4aNRLym2mhAYcibcMvG+bDMR8Ho8oYFuUC6WFf/Q1+viOC9
-         GsfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3spaG/gmW2iurMqKAzeqtwdB73qDEY0NRjhBceQ6XKs=;
-        b=qPB8+OvS5Qf8AbLQtbP5a21xgHSuPpVASEUTaPJZTsY/ZtUvBwweUX60x/DCOGHjAv
-         Mo3Eh2Z4ryzKuf1G0L1AilxbzNwfi1p5G5/NxkXv7ep9LYShpJ9Tt947HGKnvX91O4UR
-         TGaxgM2anEOozpwZM92gGLYIxpapXJspLyHN+/LQas20N6ID7rnmx17XLMyotfAIudpn
-         Rt8o0H3RU+bgto3j1GgVTFfVGOz4C1bXuwLNeQgovD11J7UPipVIdDd2Z1EVxbdzCdq6
-         +o4PaH5RPJadvNX5c2XdDbYBfGxB4eP1gCwA5hAvoK5MR3Em+a0eN2SlpL6xx+rkvwrA
-         8GFg==
-X-Gm-Message-State: AFqh2kosErui76+V+WlLqRonRDt0jojNvhr3PxjTZh21/2qmYWAhUiDG
-        oEcRkFnW1V7M7JxJOx5mwsE=
-X-Google-Smtp-Source: AMrXdXs5nNL5GxAUeP1wdSH8AGyRtbt3ZUxJM9gwb+vJpq0IniGq4U7xZeYGlX3TVYis4RhsdPUVwQ==
-X-Received: by 2002:a17:907:6d95:b0:7c0:aabd:fef0 with SMTP id sb21-20020a1709076d9500b007c0aabdfef0mr5674298ejc.17.1671719630737;
-        Thu, 22 Dec 2022 06:33:50 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id jj20-20020a170907985400b007c0b6e1c7fdsm304754ejc.104.2022.12.22.06.33.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 06:33:50 -0800 (PST)
-Message-ID: <4df211eb-4fcd-ee20-48a1-ce7712de552c@gmail.com>
-Date:   Thu, 22 Dec 2022 15:33:49 +0100
+        Thu, 22 Dec 2022 01:35:02 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474C21EAC1;
+        Wed, 21 Dec 2022 22:35:01 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nd0sp3sKZz4f3jLy;
+        Thu, 22 Dec 2022 14:34:54 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP1 (Coremail) with SMTP id cCh0CgDH5jCP+qNjzwckAQ--.30442S4;
+        Thu, 22 Dec 2022 14:34:57 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     jack@suse.cz, kbusch@kernel.org, shikemeng@huaweicloud.com
+Subject: [PATCH RESEND v2 2/5] sbitmap: remove redundant check in __sbitmap_queue_get_batch
+Date:   Thu, 22 Dec 2022 22:33:50 +0800
+Message-Id: <20221222143353.598042-3-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20221222143353.598042-1-shikemeng@huaweicloud.com>
+References: <20221222143353.598042-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v6 17/17] arm64: dts: rockchip: rk356x: remove hclk from dsi
- node
-To:     heiko@sntech.de
-Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
-        linus.walleij@linaro.org, inki.dae@samsung.com,
-        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
-        alim.akhtar@samsung.com, linux-samsung-soc@vger.kernel.org
-References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
-Content-Language: en-US
-In-Reply-To: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgDH5jCP+qNjzwckAQ--.30442S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF47Aw45urWUAr4fGry3Arb_yoW8Xr1xpF
+        Wjg34rWr4IqFy2v34DA3WUA3W8t398Cryayrs2g34akw1Dtrn3XrWIkFW3u3W3XF95A3W3
+        Za1fZasF9rWUXFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+        8IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK
+        0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4
+        x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l
+        84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I
+        8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
+        xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zV
+        CS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
+        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAV
+        WUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY
+        1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+        0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7s
+        RNVbyUUUUUU==
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hclk is not used in the dw-mipi-dsi-rockchip.c driver,
-so remove hclk from the rk356x.dtsi dsi node.
+Commit fbb564a557809 ("lib/sbitmap: Fix invalid loop in
+__sbitmap_queue_get_batch()") mentioned that "Checking free bits when
+setting the target bits. Otherwise, it may reuse the busying bits."
+This commit add check to make sure all masked bits in word before
+cmpxchg is zero. Then the existing check after cmpxchg to check any
+zero bit is existing in masked bits in word is redundant.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+Actually, old value of word before cmpxchg is stored in val and we
+will filter out busy bits in val by "(get_mask & ~val)" after cmpxchg.
+So we will not reuse busy bits methioned in commit fbb564a557809
+("lib/sbitmap: Fix invalid loop in __sbitmap_queue_get_batch()"). Revert
+new-added check to remove redundant check.
+
+Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 ---
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ lib/sbitmap.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index 5706c3e24..2cb61a783 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -743,8 +743,8 @@
- 		compatible = "rockchip,rk3568-mipi-dsi", "snps,dw-mipi-dsi";
- 		reg = <0x00 0xfe060000 0x00 0x10000>;
- 		interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
--		clock-names = "pclk", "hclk";
--		clocks = <&cru PCLK_DSITX_0>, <&cru HCLK_VO>;
-+		clock-names = "pclk";
-+		clocks = <&cru PCLK_DSITX_0>;
- 		phy-names = "dphy";
- 		phys = <&dsi_dphy0>;
- 		power-domains = <&power RK3568_PD_VO>;
-@@ -771,8 +771,8 @@
- 		compatible = "rockchip,rk3568-mipi-dsi", "snps,dw-mipi-dsi";
- 		reg = <0x0 0xfe070000 0x0 0x10000>;
- 		interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
--		clock-names = "pclk", "hclk";
--		clocks = <&cru PCLK_DSITX_1>, <&cru HCLK_VO>;
-+		clock-names = "pclk";
-+		clocks = <&cru PCLK_DSITX_1>;
- 		phy-names = "dphy";
- 		phys = <&dsi_dphy1>;
- 		power-domains = <&power RK3568_PD_VO>;
---
-2.20.1
+diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+index cb5e03a2d65b..11e75f4040fb 100644
+--- a/lib/sbitmap.c
++++ b/lib/sbitmap.c
+@@ -518,11 +518,9 @@ unsigned long __sbitmap_queue_get_batch(struct sbitmap_queue *sbq, int nr_tags,
+ 
+ 			get_mask = ((1UL << nr_tags) - 1) << nr;
+ 			val = READ_ONCE(map->word);
+-			do {
+-				if ((val & ~get_mask) != val)
+-					goto next;
+-			} while (!atomic_long_try_cmpxchg(ptr, &val,
+-							  get_mask | val));
++			while (!atomic_long_try_cmpxchg(ptr, &val,
++							  get_mask | val))
++				;
+ 			get_mask = (get_mask & ~val) >> nr;
+ 			if (get_mask) {
+ 				*offset = nr + (index << sb->shift);
+-- 
+2.30.0
 
