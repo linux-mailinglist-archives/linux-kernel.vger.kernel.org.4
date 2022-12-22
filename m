@@ -2,99 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA36653EBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E770653EBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235386AbiLVLKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
+        id S235364AbiLVLKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235379AbiLVLJ4 (ORCPT
+        with ESMTP id S235211AbiLVLKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:09:56 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D5A28720;
-        Thu, 22 Dec 2022 03:09:54 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so1559754pjd.0;
-        Thu, 22 Dec 2022 03:09:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PS18Odh7yIwGitQspmqvEHIFeSofJlERTxp58aaKy5s=;
-        b=JNfL6+soyHU08XT3Q00FBuAnFCrt2YhCmg6H0GelUhB2DDwlJk9QiOIm5+CjFxC0JK
-         d3FkKEnHMSGlIvygDeT1iyZAgtk19dX595URUVTChdSuQ/Tt0+I7hmDzP9jO/P3yuiHf
-         cni/Ic2/jc89PZCahqR16mNk56jy7KhIKSgg1/T8T4IwUwQub9yW8nOhyfaKhz/0S71k
-         QoQI3eHSegX/rtTmlFyWI09WDLptLHGibsMhZHME57XMkdzrOvFsntIoVwnC2r9eXMm9
-         Ron9OpCuYSaB2NJrMmb+PNwMJxu20Rmf2vxiRy+EoctCjbSp0/OLfBWUUrO0i5w9znSN
-         UzIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PS18Odh7yIwGitQspmqvEHIFeSofJlERTxp58aaKy5s=;
-        b=GNYO7iUHKkoxkyAKXPDPMJVHjh/PlxFAPYEjGxANSH27erIXkD+1LnL/+iPnzrPUS2
-         Zg6TW/IjhIgbsS8o5rjATfXZ5Hv8v1vJOh0TNAgmXRqwopyiO4QFxj3lr8N5L29XaOyC
-         YRByJDqe4kPmHQUNmjroBdZFc3JpFVQX0pDwQylHD3QH9ucMVrMR6jrLalbsd0BbWbDT
-         9ap0zYUSuxoGUN6jcYve3gkvmZ5qEh7Ju4l48ShlplmENF0dB1Bz+kIdHeHDi70PV4Vm
-         xlM6T9DWSXh3Cm36csyZi5GLQk2cGJzw3uJavj79GpNrCH2c5BU5KvdbDNCa5Gc2dR1K
-         6wLA==
-X-Gm-Message-State: AFqh2kpu394AZ3wYMZqAFQZsYGF6a5BwVsP35i+zUxcBlePr3Bvutq4Q
-        xJCCd8LAz7BABPIRiTFJwnfWTybiKBba7Gka
-X-Google-Smtp-Source: AMrXdXtHjQXwPpxASxolDnhbQYO8T3qdfZRDFMMyilqqoxuvFUBTdi6eaNm5RT2AJtvwleQPpsnr9Q==
-X-Received: by 2002:a05:6a20:8e10:b0:a4:a73e:d1e2 with SMTP id y16-20020a056a208e1000b000a4a73ed1e2mr8261977pzj.57.1671707394004;
-        Thu, 22 Dec 2022 03:09:54 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id w185-20020a6230c2000000b0057621a437d7sm443905pfw.116.2022.12.22.03.09.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 03:09:53 -0800 (PST)
-Message-ID: <8f0fec41-d302-b261-ce5a-83692f1238b6@gmail.com>
-Date:   Thu, 22 Dec 2022 19:09:45 +0800
+        Thu, 22 Dec 2022 06:10:08 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AD428735;
+        Thu, 22 Dec 2022 03:10:07 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8B2276602C5F;
+        Thu, 22 Dec 2022 11:10:05 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671707406;
+        bh=ZxlK9ZTzRuaI+IcB1DKLbYNT0sm+mq5gGTXC+Q0nj3s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WdjzxeLNQEpbE5AIFqpHLH0Vg0UbayJ73KKohKjgSRPhSkJXWcbnICh4MIB+fJArW
+         eSFXzVyr8LfscfwPhdClUSs7WJkDd8rf9lWl7S2cwnYuN+6Y6r/EupXJfI9YvbkaW9
+         e9AkdoAmG4uuo8v2ExKlY8RBAqEZH9QpUqmY+uo552T4DzHTC6IigKNmTyuHRZJnVI
+         oPduyqUjuGvB6eIsj8F0mB6Qx8Ea+T5lKtwNxJHXu8ejKW1GHBW4tGVZawUJkwKXgS
+         hFpky/4CmHSZ4JKDbyyDV5epSljPZqXsZAAMvFA8VghfZoA9k1RQrYleWwMjNlBOZQ
+         VSuYTXe1bRxmA==
+Message-ID: <2dc5b86a-0bc6-db0d-5a1d-1fa7415f8ec7@collabora.com>
+Date:   Thu, 22 Dec 2022 12:10:02 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.0
-Subject: Re: [PATCH v2 06/15] KVM: vmx/pmu: Emulate MSR_ARCH_LBR_CTL for guest
- Arch LBR
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 3/3] ASoC: SOF: mediatek: Provide
+ debugfs_add_region_item ops for core
 Content-Language: en-US
-To:     Yang Weijiang <weijiang.yang@intel.com>
-Cc:     kan.liang@linux.intel.com, wei.w.wang@intel.com, seanjc@google.com,
-        pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221125040604.5051-1-weijiang.yang@intel.com>
- <20221125040604.5051-7-weijiang.yang@intel.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <20221125040604.5051-7-weijiang.yang@intel.com>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Chunxu Li <chunxu.li@mediatek.com>,
+        Dan Carpenter <error27@gmail.com>,
+        YC Hung <yc.hung@mediatek.com>,
+        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221222072150.10627-1-tinghan.shen@mediatek.com>
+ <20221222072150.10627-4-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221222072150.10627-4-tinghan.shen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/11/2022 12:05 pm, Yang Weijiang wrote:
->   static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   {
->   	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-> @@ -377,6 +402,14 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   	case MSR_ARCH_LBR_DEPTH:
->   		msr_info->data = lbr_desc->records.nr;
->   		return 0;
-> +	case MSR_ARCH_LBR_CTL:
-> +		if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR)) {
-> +			WARN_ON_ONCE(!msr_info->host_initiated);
+Il 22/12/22 08:21, Tinghan Shen ha scritto:
+> Set the generic iomem callback for debugfs_add_region_item to support
+> sof-logger.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 
-Why we need this warning even in the format of WARN_ON_ONCE() ?
-And why not for MSR_ARCH_LBR_DEPTH msr ?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> +			msr_info->data = 0;
-> +		} else {
-> +			msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
-> +		}
-> +		return 0;
+
