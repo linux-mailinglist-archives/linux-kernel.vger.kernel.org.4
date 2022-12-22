@@ -2,108 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A676546D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9826E6546D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiLVTpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 14:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
+        id S235507AbiLVTpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 14:45:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235773AbiLVTpO (ORCPT
+        with ESMTP id S235630AbiLVTpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 14:45:14 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1781789B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:45:12 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id f25so624845uaa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:45:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=g2pmAFCGG/GkprLUyNP1SWGbkG4SkcqSGKIUA+ilYYY=;
-        b=lJQbq1cjQrhpT5gOQ48YcaZ99RlKBG8zn4rLrJViTnXXV0/N6DlHZaK/DnfSRGpvY6
-         tbLfdqHJJElRh/9IegWQIZORipwpZYgdw53aYe5UgjrJwj9KBVnpyE1AEPZ2b7MHBhfB
-         y84ZdO5dguqeoWcRy3bX07BSQWgoh36brbeTvDIFLjB3KnSx8LGOQGaaorhoZ75LAvrd
-         dqWnQ4RAr+YV+7bkff2V1Z4zY9pN5gbu0c2O9raCZxubnCMcW2eSMuvXk3qkplHjXPX4
-         jZjlhLjjnMBTWwpgkoTTYTX248jyEJ/+h/5MGi3vwMHZO3uJJVgxC3pGEdTc128vTLQA
-         XxNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g2pmAFCGG/GkprLUyNP1SWGbkG4SkcqSGKIUA+ilYYY=;
-        b=BbPmCgb04tfKPYLEHYfns0sj3HX3UIfSouiKTgBZAgnZzeXhQBQAJy79nVWcn2hUvp
-         6rY7ZaA8q9k3pmMtL5S/ZGVV5b1SnMRRo1CAOwUlwN+dabx2qMNg6Al/vgfOBL0emtRj
-         j+2F3k8v2A24CAMX3k3+f9lpzc7pDtSnPvUtmPxurkBYXav1Tb2zKhA/JxCJZwUPIuRx
-         aoiaDpF6fFrI68Qt7bsLOcEhF6hdp9CP2EkOFIOfUqTmIzUJF+KCVoK2zEK/Z80MyEou
-         ko7SsazkR0sPD4UF5mxQ/9q5K1y2yAdZWE84gFQMGHq/ArjOIYg0FZRJrejzM/0pDfiT
-         USZw==
-X-Gm-Message-State: AFqh2kpE3nREEd7glELvDZtAMRbTwm/6d5Q9gwad/glIeS1M7hrCifCB
-        pmb/rFerfuLM1bejzqC+ZdTyaUWsrXwzAaqNoxOMYA==
-X-Google-Smtp-Source: AMrXdXtY1Ct6Q0uN9UxGKowZcibIYrmSO2B+kzXShATRsXat7vZOWdyPlemKxIFu4aVKAno0xiCo82UWNO4TrTf5duI=
-X-Received: by 2002:ab0:21c1:0:b0:3c7:9fbd:a455 with SMTP id
- u1-20020ab021c1000000b003c79fbda455mr713425uan.113.1671738311648; Thu, 22 Dec
- 2022 11:45:11 -0800 (PST)
+        Thu, 22 Dec 2022 14:45:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2ED218395;
+        Thu, 22 Dec 2022 11:45:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E93761CED;
+        Thu, 22 Dec 2022 19:45:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94132C433D2;
+        Thu, 22 Dec 2022 19:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671738311;
+        bh=xNqblJGSgmlKRE4lOsULWelwnd8P673BVC2C67doqHk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ngXF/sayw7wEEKjwiwcS9ouP6YcEuYi5cT2vCjJZaak4pHwd16ZLD5ZYSq8KGqSTl
+         OdJXB+wBqxetmZeXcOkGqwdw6WNb5wJqiq4dStDtnV59kkv7sN0BxLI+UsiaIhx48q
+         HR/1isARu4h/Einj+ZAVvViJmW9+CCsAdPaKhWyKuQDF3qT4ki4q29alS37yXRtRD2
+         T7d3njqYKgqXg9I08KsCTVP+cP530WO55J7HnDSKamCRPWbM64fjwBp0SNVgz4bueL
+         7Ahfca7M1Fdbr1pfu6AkxnwSeZ9KvHg+cEiR5fwXNKlTUmlVtmJ2ZVMH++YPdYVWb+
+         cJnHgECabpvvQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1F4345C146C; Thu, 22 Dec 2022 11:45:11 -0800 (PST)
+Date:   Thu, 22 Dec 2022 11:45:11 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Message-ID: <20221222194511.GS4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221222185314.GR4001@paulmck-ThinkPad-P17-Gen-1>
+ <F492F726-00AA-4FC8-A5E5-BBF006CE946C@joelfernandes.org>
 MIME-Version: 1.0
-References: <20221222061341.381903-1-yuanchu@google.com> <20221222104937.795d2a134ac59c8244d9912c@linux-foundation.org>
-In-Reply-To: <20221222104937.795d2a134ac59c8244d9912c@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 22 Dec 2022 12:44:35 -0700
-Message-ID: <CAOUHufZpbfTCeqteEZt5k-kFZh3-++Gm0Wnc0-O=RFT-K9kzkw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mm: add vma_has_locality()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Yuanchu Xie <yuanchu@google.com>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Steven Barrett <steven@liquorix.net>,
-        Brian Geffon <bgeffon@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, Peter Xu <peterx@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <F492F726-00AA-4FC8-A5E5-BBF006CE946C@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 11:49 AM Andrew Morton
-<akpm@linux-foundation.org> wrote:
->
-> On Wed, 21 Dec 2022 22:13:40 -0800 Yuanchu Xie <yuanchu@google.com> wrote:
->
-> > From: Yu Zhao <yuzhao@google.com>
+On Thu, Dec 22, 2022 at 01:56:17PM -0500, Joel Fernandes wrote:
+> 
+> 
+> > On Dec 22, 2022, at 1:53 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > 
+> > ﻿On Thu, Dec 22, 2022 at 01:19:06PM -0500, Joel Fernandes wrote:
+> >> 
+> >> 
+> >>>> On Dec 22, 2022, at 11:43 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> >>> 
+> >>> ﻿On Thu, Dec 22, 2022 at 01:40:10PM +0100, Frederic Weisbecker wrote:
+> >>>>> On Wed, Dec 21, 2022 at 12:11:42PM -0500, Mathieu Desnoyers wrote:
+> >>>>> On 2022-12-21 06:59, Frederic Weisbecker wrote:
+> >>>>>>> On Tue, Dec 20, 2022 at 10:34:19PM -0500, Mathieu Desnoyers wrote:
+> >>>>> [...]
+> >>>>>>> 
+> >>>>>>> The memory ordering constraint I am concerned about here is:
+> >>>>>>> 
+> >>>>>>> * [...] In addition,
+> >>>>>>> * each CPU having an SRCU read-side critical section that extends beyond
+> >>>>>>> * the return from synchronize_srcu() is guaranteed to have executed a
+> >>>>>>> * full memory barrier after the beginning of synchronize_srcu() and before
+> >>>>>>> * the beginning of that SRCU read-side critical section. [...]
+> >>>>>>> 
+> >>>>>>> So if we have a SRCU read-side critical section that begins after the beginning
+> >>>>>>> of synchronize_srcu, but before its first memory barrier, it would miss the
+> >>>>>>> guarantee that the full memory barrier is issued before the beginning of that
+> >>>>>>> SRCU read-side critical section. IOW, that memory barrier needs to be at the
+> >>>>>>> very beginning of the grace period.
+> >>>>>> 
+> >>>>>> I'm confused, what's wrong with this ?
+> >>>>>> 
+> >>>>>> UPDATER                  READER
+> >>>>>> -------                  ------
+> >>>>>> STORE X = 1              STORE srcu_read_lock++
+> >>>>>> // rcu_seq_snap()        smp_mb()
+> >>>>>> smp_mb()                 READ X
+> >>>>>> // scans
+> >>>>>> READ srcu_read_lock
+> >>>>> 
+> >>>>> What you refer to here is only memory ordering of the store to X and load
+> >>>>> from X wrt loading/increment of srcu_read_lock, which is internal to the
+> >>>>> srcu implementation. If we really want to model the provided high-level
+> >>>>> memory ordering guarantees, we should consider a scenario where SRCU is used
+> >>>>> for its memory ordering properties to synchronize other variables.
+> >>>>> 
+> >>>>> I'm concerned about the following Dekker scenario, where synchronize_srcu()
+> >>>>> and srcu_read_lock/unlock would be used instead of memory barriers:
+> >>>>> 
+> >>>>> Initial state: X = 0, Y = 0
+> >>>>> 
+> >>>>> Thread A                   Thread B
+> >>>>> ---------------------------------------------
+> >>>>> STORE X = 1                STORE Y = 1
+> >>>>> synchronize_srcu()
+> >>>>>                          srcu_read_lock()
+> >>>>>                          r1 = LOAD X
+> >>>>>                          srcu_read_unlock()
+> >>>>> r0 = LOAD Y
+> >>>>> 
+> >>>>> BUG_ON(!r0 && !r1)
+> >>>>> 
+> >>>>> So in the synchronize_srcu implementation, there appears to be two
+> >>>>> major scenarios: either srcu_gp_start_if_needed starts a gp or expedited gp,
+> >>>>> or it uses an already started gp/expedited gp. When snapshotting with
+> >>>>> rcu_seq_snap, the fact that the memory barrier is after the ssp->srcu_gp_seq
+> >>>>> load means that it does not order prior memory accesses before that load.
+> >>>>> This sequence value is then used to identify which gp_seq to wait for when
+> >>>>> piggy-backing on another already-started gp. I worry about reordering
+> >>>>> between STORE X = 1 and load of ssp->srcu_gp_seq, which is then used to
+> >>>>> piggy-back on an already-started gp.
+> >>>>> 
+> >>>>> I suspect that the implicit barrier in srcu_read_lock() invoked at the
+> >>>>> beginning of srcu_gp_start_if_needed() is really the barrier that makes
+> >>>>> all this behave as expected. But without documentation it's rather hard to
+> >>>>> follow.
+> >>>> 
+> >>>> Oh ok I see now. It might be working that way by accident or on forgotten
+> >>>> purpose. In any case, we really want to add a comment above that
+> >>>> __srcu_read_lock_nmisafe() call.
+> >>> 
+> >>> Another test for the safety (or not) of removing either D or E is
+> >>> to move that WRITE_ONCE() to follow (or, respectively, precede) the
+> >>> adjacent scans.
+> >> 
+> >> Good idea, though I believe the MBs that the above talk about are not the flip ones. They are the ones in synchronize_srcu() beginning and end, that order with respect to grace period start and end.
+> >> 
+> >> So that (flipping MBs) is unrelated, or did I miss something?
+> > 
+> > The thought is to manually similate in the source code the maximum
+> > memory-reference reordering that a maximally hostile compiler and CPU
+> > would be permitted to carry out.  So yes, given that there are other
+> > memory barriers before and after, these other memory barriers limit how
+> > far the flip may be moved in the source code.
+> > 
+> > Here I am talking about the memory barriers associated with the flip,
+> > but the same trick can of course be applied to other memory barriers.
+> > In general, remove a given memory barrier and (in the source code)
+> > maximally rearrange the memory references that were previously ordered
+> > by the memory barrier in question.
+> > 
+> > Again, the presence of other memory barriers will limit the permitted
+> > maximal source-code rearrangement.
+> 
+> 
+> Makes sense if the memory barrier is explicit. In this case, the memory barriers are implicit apparently, with a srcu_read_lock() in the beginning of synchronize_rcu() having the implicit / indirect memory barrier. So I am not sure if that can be implemented without breaking SRCU readers.
 
-This works; suggested-by probably works even better, since I didn't do
-the follow-up work.
+First, are we talking about the same barrier?  I am talking about E.
 
-> > Currently in vm_flags in vm_area_struct, both VM_SEQ_READ and
-> > VM_RAND_READ indicate a lack of locality in accesses to the vma. Some
-> > places that check for locality are missing one of them. We add
-> > vma_has_locality to replace the existing locality checks for clarity.
->
-> I'm all confused.  Surely VM_SEQ_READ implies locality and VM_RAND_READ
-> indicates no-locality?
+Yes, this would require a bit of restructuring.  The overall
+approach would be something like this, in SRCU_STATE_SCAN1:
 
-Spatially, yes. But we focus more on the temporal criteria here, i.e.,
-the reuse of an area within a relatively small duration. Both the
-active/inactive LRU and MGLRU rely on this.
+1.	Scan the unlocks.
 
-VM_SEQ_READ, while being a special case of spatial locality, fails the
-temporal criteria. VM_RAND_READ fails both criterias, obviously.
+2.	smp_mb(); /* A */
 
-Once an area passes the temporal criteria, MGLRU additionally exploits
-spatial locality by lru_gen_look_around(), which is also touched in
-this patch. This part is good to know but not really relevant here.
+3.	Flip the index.
+
+4.	Scan the locks.
+
+5.	If unlocks == locks, advance the state to SRCU_STATE_SCAN2.
+
+6.	Otherwise, execute the current SRCU_STATE_SCAN1 code.
+
+Give or take the usual devils in the details.
+
+Alternatively, remove E and hammer it on a weakly ordered system.
+
+							Thanx, Paul
