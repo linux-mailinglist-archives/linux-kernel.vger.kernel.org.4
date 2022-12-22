@@ -2,153 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B7C654825
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709B3654826
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235432AbiLVWBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 17:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S229666AbiLVWC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 17:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235443AbiLVWBo (ORCPT
+        with ESMTP id S229526AbiLVWCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 17:01:44 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BBF27CF9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 14:01:43 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id cf42so4674396lfb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 14:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hwyt8ZdI5ZWUHfUGRX4s0PkLUr1UuuhJWewTj+QujR0=;
-        b=sdyRfPiBd704FQG4bNjO87wMafWV6TlycxRFOCRg6C1jFqskYPrheu40WnKLXd97VD
-         9awr9681ZZ40f3yEZ2IV7TOgT6N9WWG8ibxUc6eDGIm+JUjyZLX3o+sCaKvKuvXbGC/K
-         FhxTq13RxetjjMC19nCQz2Cd1WynTrH/8q7rY/Q0ugj5DGuvoBsDN0X830KHShnuh/FQ
-         SlGLo97+D1lqnHkOgPdteqpHcC/bRwOEBxgtL2oG9pTqonU5RBKciuJ/xsbJgR0BIKsl
-         iWxKGuexHDXtiOQgKoz3mSY1ZLtgf0sbmw+VTgwLb4GN7btlbcv4CDGIcClg7UDOwjgS
-         8Jig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hwyt8ZdI5ZWUHfUGRX4s0PkLUr1UuuhJWewTj+QujR0=;
-        b=MwZzs2vXI7jdfRM7Gn49Z+jc3Qb/w6qcFYaB2g3NxybPnfBXfpkA5T8KF0T35J+I5d
-         KWuNTTNCIHfknWFsAzAhfndTfAyOxbrxDIjo3teS/8zQwsOH+OxymEOkjg2OFzBsjt+s
-         4qyg2woCRZKl/Il8eWi+W6701V7iR7FycxsodzY5Pti3qrqh1kyIy/GVXXogmYsB84ir
-         KdIzHKNqw88BcaFKG3LuauikQiTEiwGhPBhQxbnmKcELkDl7JSnFg1sQMYzB71SbwBbY
-         Dwvp0pOBb8vF9Ywb/7HNhcIjf4A135f+P2FtyMzRzdpQ9fo/Z5PQKN/xS48fi7agRRG9
-         spIw==
-X-Gm-Message-State: AFqh2krs0V74h2AuBTam//DIpmGGX+60kCro2/TTnwbvKFUfbsBGi1bj
-        BnujA3poTqjTrxh6oY+JNLHGiw==
-X-Google-Smtp-Source: AMrXdXtCv726/Ll7RZS1LYdA1OYHa3A5hq1rDXIE2Lyae6+L1yQnAfH8gZRKJugpTYZo5pID48KFog==
-X-Received: by 2002:a05:6512:16a8:b0:4b5:a70f:8efc with SMTP id bu40-20020a05651216a800b004b5a70f8efcmr3436708lfb.64.1671746501410;
-        Thu, 22 Dec 2022 14:01:41 -0800 (PST)
-Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id s20-20020a195e14000000b004b0b2212315sm224362lfb.121.2022.12.22.14.01.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 14:01:40 -0800 (PST)
-Message-ID: <144d7b69-fb67-60dd-2c40-c004fbbba288@linaro.org>
-Date:   Thu, 22 Dec 2022 23:01:38 +0100
+        Thu, 22 Dec 2022 17:02:52 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982D7DED0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 14:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671746571; x=1703282571;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XzRcH9xIgofCN1Fx2C1/9Imdy13Q/iYG8/kotrsmBok=;
+  b=kAvYFwULYAC9OXS8hhKKvvLgBHpKv0OLWtKzSblIjG0/mn/bLgS7leMI
+   cwDHdFN+BQ1V3I8oqvlboHU7dOqv4gtJbG01v7G4+A4RODBZJkYBXuKdj
+   D2vuxvXAdqbywBV7BJNjf8PIRMt2El2tJrNoVePB/k3SvwQ/nq8LItuKC
+   pziDdOgkHEU37bl+euiVyuXTBdbtanHuMbw1pUJKpuRpgcSGsdX2wN4/p
+   E8oTfk9GRHi3EDYNrm7GLGgwN6FJwU0RpRrupEVvU7P3KCIXQtkDQbGRM
+   eOaCKOJk0ZbnBjZHKezU3h2uv9et+8HhvwI6pjRm4XqCtVcW6ilxeXSJo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="320282402"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="320282402"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 14:02:29 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="602009621"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="602009621"
+Received: from twinkler-lnx.jer.intel.com ([10.12.87.42])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 14:02:26 -0800
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: [char-misc-next] mei: gsc_proxy: add gsc proxy driver
+Date:   Fri, 23 Dec 2022 00:02:14 +0200
+Message-Id: <20221222220214.3688774-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] arm64: dts: qcom: sm6350-lena: Flatten gpio-keys
- pinctrl state
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221222215906.324092-1-marijn.suijten@somainline.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221222215906.324092-1-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Alexander Usyskin <alexander.usyskin@intel.com>
 
+Add GSC proxy driver. It to allows messaging between GSC component
+on Intel on board graphics card and CSME device.
+GSC and MEI
 
-On 22.12.2022 22:59, Marijn Suijten wrote:
-> Pinctrl states typically collate multiple related pins.  In the case of
-> gpio-keys there's no hardware-defined relation at all except all pins
-> representing a key; and especially on Sony's lena board there's only one
-> pin regardless. Flatten it similar to other boards [1].
-> 
-> As a drive-by fix, clean up the label string.
-> 
-> [1]: https://lore.kernel.org/linux-arm-msm/11174eb6-0a9d-7df1-6f06-da4010f76453@linaro.org/
-> 
-> Fixes: 2b8bbe985659 ("arm64: dts: qcom: sm6350-lena: Include pm6350 and configure buttons")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+---
+ MAINTAINERS                                |   2 +-
+ drivers/misc/mei/Kconfig                   |   1 +
+ drivers/misc/mei/Makefile                  |   1 +
+ drivers/misc/mei/gsc_proxy/Kconfig         |  13 ++
+ drivers/misc/mei/gsc_proxy/Makefile        |   7 +
+ drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c | 205 +++++++++++++++++++++
+ 6 files changed, 228 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/misc/mei/gsc_proxy/Kconfig
+ create mode 100644 drivers/misc/mei/gsc_proxy/Makefile
+ create mode 100644 drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
 
-Konrad
-> 
-> Changes since v1:
-> 
-> - Replace accidental semicolon in patch title with colon.
-> 
-> v1: https://lore.kernel.org/linux-arm-msm/20221222212634.298135-1-marijn.suijten@somainline.org/T/#u
-> 
->  .../qcom/sm6350-sony-xperia-lena-pdx213.dts    | 18 ++++++++----------
->  1 file changed, 8 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts b/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts
-> index 94f77d376662..4916d0db5b47 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts
-> @@ -35,10 +35,10 @@ framebuffer: framebuffer@a0000000 {
->  	gpio-keys {
->  		compatible = "gpio-keys";
->  		pinctrl-names = "default";
-> -		pinctrl-0 = <&gpio_keys_state>;
-> +		pinctrl-0 = <&vol_down_n>;
->  
->  		key-volume-down {
-> -			label = "volume_down";
-> +			label = "Volume Down";
->  			linux,code = <KEY_VOLUMEDOWN>;
->  			gpios = <&pm6350_gpios 2 GPIO_ACTIVE_LOW>;
->  		};
-> @@ -305,14 +305,12 @@ touchscreen@48 {
->  };
->  
->  &pm6350_gpios {
-> -	gpio_keys_state: gpio-keys-state {
-> -		key-volume-down-pins {
-> -			pins = "gpio2";
-> -			function = PMIC_GPIO_FUNC_NORMAL;
-> -			power-source = <0>;
-> -			bias-disable;
-> -			input-enable;
-> -		};
-> +	vol_down_n: vol-down-n-state {
-> +		pins = "gpio2";
-> +		function = PMIC_GPIO_FUNC_NORMAL;
-> +		power-source = <0>;
-> +		bias-disable;
-> +		input-enable;
->  	};
->  };
->  
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5490b1f94803..01473c039412 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10561,7 +10561,7 @@ M:	Tomas Winkler <tomas.winkler@intel.com>
+ L:	linux-kernel@vger.kernel.org
+ S:	Supported
+ F:	Documentation/driver-api/mei/*
+-F:	drivers/misc/mei/
++F:	drivers/misc/mei/*
+ F:	drivers/watchdog/mei_wdt.c
+ F:	include/linux/mei_aux.h
+ F:	include/linux/mei_cl_bus.h
+diff --git a/drivers/misc/mei/Kconfig b/drivers/misc/mei/Kconfig
+index d21486d69df2..92baed17a50b 100644
+--- a/drivers/misc/mei/Kconfig
++++ b/drivers/misc/mei/Kconfig
+@@ -62,4 +62,5 @@ config INTEL_MEI_GSC
+ 
+ source "drivers/misc/mei/hdcp/Kconfig"
+ source "drivers/misc/mei/pxp/Kconfig"
++source "drivers/misc/mei/gsc_proxy/Kconfig"
+ 
+diff --git a/drivers/misc/mei/Makefile b/drivers/misc/mei/Makefile
+index fb740d754900..14aee253ae48 100644
+--- a/drivers/misc/mei/Makefile
++++ b/drivers/misc/mei/Makefile
+@@ -30,3 +30,4 @@ CFLAGS_mei-trace.o = -I$(src)
+ 
+ obj-$(CONFIG_INTEL_MEI_HDCP) += hdcp/
+ obj-$(CONFIG_INTEL_MEI_PXP) += pxp/
++obj-$(CONFIG_INTEL_MEI_GSC_PROXY) += gsc_proxy/
+diff --git a/drivers/misc/mei/gsc_proxy/Kconfig b/drivers/misc/mei/gsc_proxy/Kconfig
+new file mode 100644
+index 000000000000..9bc4486a6dad
+--- /dev/null
++++ b/drivers/misc/mei/gsc_proxy/Kconfig
+@@ -0,0 +1,13 @@
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (c) 2022, Intel Corporation. All rights reserved.
++#
++config INTEL_MEI_GSC_PROXY
++	tristate "Intel GSC Proxy services of ME Interface"
++	select INTEL_MEI_ME
++	depends on DRM_I915
++	help
++	  MEI Support for GSC Proxy Services on Intel platforms.
++
++	  MEI GSC proxy enables messaging between GSC service on
++	  Intel graphics on-board card and services on CSE (MEI)
++	  firmware residing SoC or PCH.
+diff --git a/drivers/misc/mei/gsc_proxy/Makefile b/drivers/misc/mei/gsc_proxy/Makefile
+new file mode 100644
+index 000000000000..fd7da77ad90a
+--- /dev/null
++++ b/drivers/misc/mei/gsc_proxy/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2022, Intel Corporation. All rights reserved.
++#
++# Makefile - GSC Proxy client driver for Intel MEI Bus Driver.
++
++obj-$(CONFIG_INTEL_MEI_GSC_PROXY) += mei_gsc_proxy.o
+diff --git a/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c b/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
+new file mode 100644
+index 000000000000..4be6dc3ffdff
+--- /dev/null
++++ b/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
+@@ -0,0 +1,205 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2022 Intel Corporation
++ */
++
++/**
++ * DOC: MEI_GSC_PROXY Client Driver
++ *
++ * The mei_gsc_proxy driver acts as a translation layer between
++ * user (I915) and CSE FW services.
++ */
++
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/uuid.h>
++#include <linux/mei_cl_bus.h>
++#include <linux/component.h>
++#include <drm/drm_connector.h>
++#include <drm/i915_component.h>
++#include <drm/i915_gsc_proxy_mei_interface.h>
++
++/**
++ * mei_gsc_proxy_send - Sends a proxy message to ME FW.
++ * @dev: device corresponding to the mei_cl_device
++ * @buf: a message buffer to send
++ * @size: size of the message
++ * Return: bytes sent on Success, <0 on Failure
++ */
++static int mei_gsc_proxy_send(struct device *dev, const void *buf, size_t size)
++{
++	ssize_t ret;
++
++	if (!dev || !buf)
++		return -EINVAL;
++
++	ret = mei_cldev_send(to_mei_cl_device(dev), buf, size);
++	if (ret < 0)
++		dev_dbg(dev, "mei_cldev_send failed. %zd\n", ret);
++
++	return ret;
++}
++
++/**
++ * mei_gsc_proxy_recv - Receives a proxy message from ME FW.
++ * @dev: device corresponding to the mei_cl_device
++ * @buf: a message buffer to contain the received message
++ * @size: size of the buffer
++ * Return: bytes received on Success, <0 on Failure
++ */
++static int mei_gsc_proxy_recv(struct device *dev, void *buf, size_t size)
++{
++	ssize_t ret;
++
++	if (!dev || !buf)
++		return -EINVAL;
++
++	ret = mei_cldev_recv(to_mei_cl_device(dev), buf, size);
++	if (ret < 0)
++		dev_dbg(dev, "mei_cldev_recv failed. %zd\n", ret);
++
++	return ret;
++}
++
++static const struct i915_gsc_proxy_component_ops mei_gsc_proxy_ops = {
++	.owner = THIS_MODULE,
++	.send = mei_gsc_proxy_send,
++	.recv = mei_gsc_proxy_recv,
++};
++
++static int mei_component_master_bind(struct device *dev)
++{
++	struct mei_cl_device *cldev = to_mei_cl_device(dev);
++	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
++
++	comp_master->ops = &mei_gsc_proxy_ops;
++	comp_master->mei_dev = dev;
++	return component_bind_all(dev, comp_master);
++}
++
++static void mei_component_master_unbind(struct device *dev)
++{
++	struct mei_cl_device *cldev = to_mei_cl_device(dev);
++	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
++
++	component_unbind_all(dev, comp_master);
++}
++
++static const struct component_master_ops mei_component_master_ops = {
++	.bind = mei_component_master_bind,
++	.unbind = mei_component_master_unbind,
++};
++
++/**
++ * mei_gsc_proxy_component_match - compare function for matching mei.
++ *
++ *    The function checks if the driver is i915, the subcomponent is SW Proxy
++ *    and the grand parent of proxy and the parent of i915 are the same
++ *    PCH device.
++ *
++ * @dev: master device
++ * @subcomponent: subcomponent to match (I915_COMPONENT_SWPROXY)
++ * @data: compare data (mei gsc proxy device)
++ *
++ * Return:
++ * * 1 - if components match
++ * * 0 - otherwise
++ */
++static int mei_gsc_proxy_component_match(struct device *dev, int subcomponent, void *data)
++{
++	struct device *base = data;
++
++	if (!dev || !dev->driver ||
++	    strcmp(dev->driver->name, "i915") ||
++	    subcomponent != I915_COMPONENT_GSC_PROXY)
++		return 0;
++
++	base = base->parent;
++	if (!base) /* mei device */
++		return 0;
++
++	base = base->parent; /* pci device */
++
++	dev = dev->parent;
++	return (base && dev && dev == base);
++}
++
++static int mei_gsc_proxy_probe(struct mei_cl_device *cldev, const struct mei_cl_device_id *id)
++{
++	struct i915_gsc_proxy_component *comp_master;
++	struct component_match *master_match = NULL;
++	int ret;
++
++	ret = mei_cldev_enable(cldev);
++	if (ret < 0) {
++		dev_err(&cldev->dev, "mei_cldev_enable Failed. %d\n", ret);
++		goto enable_err_exit;
++	}
++
++	comp_master = kzalloc(sizeof(*comp_master), GFP_KERNEL);
++	if (!comp_master) {
++		ret = -ENOMEM;
++		goto err_exit;
++	}
++
++	component_match_add_typed(&cldev->dev, &master_match,
++				  mei_gsc_proxy_component_match, &cldev->dev);
++	if (IS_ERR_OR_NULL(master_match)) {
++		ret = -ENOMEM;
++		goto err_exit;
++	}
++
++	mei_cldev_set_drvdata(cldev, comp_master);
++	ret = component_master_add_with_match(&cldev->dev,
++					      &mei_component_master_ops,
++					      master_match);
++	if (ret < 0) {
++		dev_err(&cldev->dev, "Master comp add failed %d\n", ret);
++		goto err_exit;
++	}
++
++	return 0;
++
++err_exit:
++	mei_cldev_set_drvdata(cldev, NULL);
++	kfree(comp_master);
++	mei_cldev_disable(cldev);
++enable_err_exit:
++	return ret;
++}
++
++static void mei_gsc_proxy_remove(struct mei_cl_device *cldev)
++{
++	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
++	int ret;
++
++	component_master_del(&cldev->dev, &mei_component_master_ops);
++	kfree(comp_master);
++	mei_cldev_set_drvdata(cldev, NULL);
++
++	ret = mei_cldev_disable(cldev);
++	if (ret)
++		dev_warn(&cldev->dev, "mei_cldev_disable() failed %d\n", ret);
++}
++
++#define MEI_GUID_GSC_PROXY GUID_INIT(0xf73db04, 0x97ab, 0x4125, \
++				     0xb8, 0x93, 0xe9, 0x4, 0xad, 0xd, 0x54, 0x64)
++
++static struct mei_cl_device_id mei_gsc_proxy_tbl[] = {
++	{ .uuid = MEI_GUID_GSC_PROXY, .version = MEI_CL_VERSION_ANY },
++	{ }
++};
++MODULE_DEVICE_TABLE(mei, mei_gsc_proxy_tbl);
++
++static struct mei_cl_driver mei_gsc_proxy_driver = {
++	.id_table = mei_gsc_proxy_tbl,
++	.name = KBUILD_MODNAME,
++	.probe = mei_gsc_proxy_probe,
++	.remove	= mei_gsc_proxy_remove,
++};
++
++module_mei_cl_driver(mei_gsc_proxy_driver);
++
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("MEI GSC PROXY");
+-- 
+2.38.1
+
