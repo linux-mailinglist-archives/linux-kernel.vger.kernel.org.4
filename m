@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C80654475
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED4165446E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiLVPll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S230310AbiLVPlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbiLVPl2 (ORCPT
+        with ESMTP id S229525AbiLVPl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Dec 2022 10:41:28 -0500
 Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802A517414
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E121A82A
         for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:41:25 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; t=1671723651; cv=none; 
         d=zohomail.in; s=zohoarc; 
-        b=afDaLve54pgeuDsZug2F8oCsQta7Wcv/5Y4ujwHaC/v0nQ7WIlQdfijwb02kpBqiqoa+ihvjblsIwNCfnVVPazg5AHw6VNiG37Sv5S5U9nJ+mCRKhxDHREw1SxdMfEyfg+UmvxuBYSkWfbEtiCnfpxIXiIR0KiaRl5Hld1Rsado=
+        b=Jqc0VQquB+j/zoLYAQH9Bx3xekdzsxmrYlcQwoDHDi7zlpxZIHxuIoo61kvRXM+GD8pz9VuANzJ4pO+RH26K0QwFIspawTa2DV9sYfdbG0n7e4OzXkAY7W/+vPp5ECOR8pWfCtIcZRKe8ynQUC6Cw8SfPGnvWMySGrJu3gbSUOY=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
         t=1671723651; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=1MCKPJOG9ImRBJLySDbjsiaY3Ui5PpMZ+NWkNcMBJcc=; 
-        b=ea6szritPlwEEyRxR7EFBEshraVatCEARiM/If5Xdw8nNiZUqHoHUYOSuUoELC748cKiZVrWz8MIv52snHgbjFx265trnAma+xL5zwFoxTb9G+pGeNEbyFNY/xslBJkqMgl4Gz4eSzcGH/2adYG7rCeL9CVQZ8s8TStGxeMApkg=
+        bh=jOS7lFqPyYp4aF6uyo+Mu87tNYK2Fubh9HQ2gBzQ9pY=; 
+        b=dYu0F1rb0hwU/HMv7vvPxKe3VACmJwvUaoRfSBueVni/13B9C3nlb5KuSgK4gGq2IzlAzEj7KKQDejBFEqcvQ9orVkHfwZ40jwc/lUBG6aldblKUKIHY/rRvei+NtifpGNMQTXr7VUvrNPVblViYegcJCrZTxp6aX1gyuGLFlLc=
 ARC-Authentication-Results: i=1; mx.zohomail.in;
         dkim=pass  header.i=siddh.me;
         spf=pass  smtp.mailfrom=code@siddh.me;
@@ -29,12 +29,12 @@ ARC-Authentication-Results: i=1; mx.zohomail.in;
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671723651;
         s=zmail; d=siddh.me; i=code@siddh.me;
         h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=1MCKPJOG9ImRBJLySDbjsiaY3Ui5PpMZ+NWkNcMBJcc=;
-        b=D5M8EEyXnty59BC5u06qtwDD41GRAVI5Gka9YYEHZwyDnBiixX28hBt9EFqwvdfc
-        fsO/J151DpIq96ya2IdSUX7+SHv8WhQnQZR79Ka3tRAIZArgugewGwAjEWgs99oN9KN
-        8Th7ZcE5DW72H4Qx9EhMIQQNIhOM5t266ZqTj45w=
+        bh=jOS7lFqPyYp4aF6uyo+Mu87tNYK2Fubh9HQ2gBzQ9pY=;
+        b=ZwaW4OiBc8H0sdC6pEw/EDve8LxAnsN78Dhmm2TraAW9sb5BnMEVMEBROldnTfDd
+        nf/Gahc3ZqjACQXVgPafDwqoNwUruYKpziEyl26ScP8QCeIVEyM85siXvwPhRMHIEox
+        VLAZJHS04wzyBuCdON7Hq/F4EF+aUaNmI3VvdikY=
 Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1671723650135402.59306702069614; Thu, 22 Dec 2022 21:10:50 +0530 (IST)
+        with SMTPS id 167172365051070.15665484717306; Thu, 22 Dec 2022 21:10:50 +0530 (IST)
 From:   Siddh Raman Pant <code@siddh.me>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -44,9 +44,9 @@ To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Simon Ser <contact@emersion.fr>
 Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <e7b5b54ebfac4ba53cd95174b81d3f3169a4d630.1671723195.git.code@siddh.me>
-Subject: [PATCH v2 7/9] drm: Remove usage of deprecated DRM_DEBUG_PRIME
-Date:   Thu, 22 Dec 2022 21:10:41 +0530
+Message-ID: <58ca4a915c1ff714198316365afbb7fb2da1bf8b.1671723195.git.code@siddh.me>
+Subject: [PATCH v2 8/9] drm/drm_blend: Remove usage of deprecated DRM_DEBUG_ATOMIC
+Date:   Thu, 22 Dec 2022 21:10:42 +0530
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <cover.1671723195.git.code@siddh.me>
 References: <cover.1671723195.git.code@siddh.me>
@@ -63,49 +63,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm_print.h says DRM_DEBUG_PRIME is deprecated in favor of
-drm_dbg_prime().
+drm_print.h says DRM_DEBUG_ATOMIC is deprecated in favor of
+drm_dbg_atomic().
 
 Signed-off-by: Siddh Raman Pant <code@siddh.me>
+Reviewed-by: Simon Ser <contact@emersion.fr>
 ---
- drivers/gpu/drm/drm_gem_dma_helper.c   | 4 ++--
- drivers/gpu/drm/drm_gem_shmem_helper.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/drm_blend.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_gem_dma_helper.c b/drivers/gpu/drm/drm_gem=
-_dma_helper.c
-index 1ba551b0ab97..0f903cc8914a 100644
---- a/drivers/gpu/drm/drm_gem_dma_helper.c
-+++ b/drivers/gpu/drm/drm_gem_dma_helper.c
-@@ -477,8 +477,8 @@ drm_gem_dma_prime_import_sg_table(struct drm_device *de=
-v,
- =09dma_obj->dma_addr =3D sg_dma_address(sgt->sgl);
- =09dma_obj->sgt =3D sgt;
+diff --git a/drivers/gpu/drm/drm_blend.c b/drivers/gpu/drm/drm_blend.c
+index b4c8cab7158c..6e74de833466 100644
+--- a/drivers/gpu/drm/drm_blend.c
++++ b/drivers/gpu/drm/drm_blend.c
+@@ -450,8 +450,8 @@ static int drm_atomic_helper_crtc_normalize_zpos(struct=
+ drm_crtc *crtc,
+ =09int i, n =3D 0;
+ =09int ret =3D 0;
 =20
--=09DRM_DEBUG_PRIME("dma_addr =3D %pad, size =3D %zu\n", &dma_obj->dma_addr=
+-=09DRM_DEBUG_ATOMIC("[CRTC:%d:%s] calculating normalized zpos values\n",
+-=09=09=09 crtc->base.id, crtc->name);
++=09drm_dbg_atomic(dev, "[CRTC:%d:%s] calculating normalized zpos values\n"=
 ,
--=09=09=09attach->dmabuf->size);
-+=09drm_dbg_prime(dev, "dma_addr =3D %pad, size =3D %zu\n", &dma_obj->dma_a=
-ddr,
-+=09=09      attach->dmabuf->size);
++=09=09       crtc->base.id, crtc->name);
 =20
- =09return &dma_obj->base;
- }
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_g=
-em_shmem_helper.c
-index f0b6b69f4baf..1b9a6b357d8a 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -764,7 +764,7 @@ drm_gem_shmem_prime_import_sg_table(struct drm_device *=
-dev,
+ =09states =3D kmalloc_array(total_planes, sizeof(*states), GFP_KERNEL);
+ =09if (!states)
+@@ -469,9 +469,8 @@ static int drm_atomic_helper_crtc_normalize_zpos(struct=
+ drm_crtc *crtc,
+ =09=09=09goto done;
+ =09=09}
+ =09=09states[n++] =3D plane_state;
+-=09=09DRM_DEBUG_ATOMIC("[PLANE:%d:%s] processing zpos value %d\n",
+-=09=09=09=09 plane->base.id, plane->name,
+-=09=09=09=09 plane_state->zpos);
++=09=09drm_dbg_atomic(dev, "[PLANE:%d:%s] processing zpos value %d\n",
++=09=09=09       plane->base.id, plane->name, plane_state->zpos);
+ =09}
 =20
- =09shmem->sgt =3D sgt;
+ =09sort(states, n, sizeof(*states), drm_atomic_state_zpos_cmp, NULL);
+@@ -480,8 +479,8 @@ static int drm_atomic_helper_crtc_normalize_zpos(struct=
+ drm_crtc *crtc,
+ =09=09plane =3D states[i]->plane;
 =20
--=09DRM_DEBUG_PRIME("size =3D %zu\n", size);
-+=09drm_dbg_prime(dev, "size =3D %zu\n", size);
+ =09=09states[i]->normalized_zpos =3D i;
+-=09=09DRM_DEBUG_ATOMIC("[PLANE:%d:%s] normalized zpos value %d\n",
+-=09=09=09=09 plane->base.id, plane->name, i);
++=09=09drm_dbg_atomic(dev, "[PLANE:%d:%s] normalized zpos value %d\n",
++=09=09=09       plane->base.id, plane->name, i);
+ =09}
+ =09crtc_state->zpos_changed =3D true;
 =20
- =09return &shmem->base;
- }
 --=20
 2.35.1
 
