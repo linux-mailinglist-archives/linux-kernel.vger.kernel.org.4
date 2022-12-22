@@ -2,89 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A537F653C3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 07:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A41653C4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 07:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234981AbiLVGoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 01:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S235085AbiLVGqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 01:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiLVGow (ORCPT
+        with ESMTP id S234634AbiLVGqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 01:44:52 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CD52189C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 22:44:51 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 7so745848pga.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 22:44:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=086dsIWiKVuDdE5qHTcupmnKCG4y2yzrnr4Huev2NRw=;
-        b=UtaOxFFLchWt5Jb/3Qqzm81/vYaqvIO89JpWehCUn/CUHFGzoM5mnpGGBFlYqQAoGd
-         HNaC4hz9Wsd4cdrkLx4Nc3B37RZeAXNTTbWL+/LYmA84syobG+0riP0NUwuuMOLk0vM9
-         31gmckA5xEiwm+8UXywQe5qkGm3622bwgeIVe534hNeHlbnrHCysSoCqhjwrJwPlkRNH
-         xmSbqkhkZGSyFCxhD8DJcIVlOqa5aOvOkcRUxPZKzzjMp46TLQ3zogc3AjHVRg2Hd/hE
-         u7zVrjzMsbBqYzgul0riADWu8PTfE+0rGq7xHVnf0NatXFT2v3uTvvZPalPduYNE26Vg
-         GhsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=086dsIWiKVuDdE5qHTcupmnKCG4y2yzrnr4Huev2NRw=;
-        b=c7ptD69GR4XzK1Htj8HngE9WA9JUaAFslTZpOQNC4Sup+chbNJ/th+U5PzKJlzdK/w
-         lm47AlwNJlf9XkPQ9eGI3YU6twYKGNoFFsefDVGSXI9Um4S39exU+j5ovqom5Q6iEwTC
-         gStXm9YA2bls8qKLpUdARZdic22IQTiXUx+DBOrebdE6iSrXY4DK6nY7HKUmH2j/rRtC
-         du/x8JTVGVy0ZPqQAgUkDTbh3dMGhxEuFO0PAemrC4kSEwJQoPRykifmvPqlg5wMzebP
-         MOc3KYqN9AvPmQfpEZ7Fy8x7snUnfPQkKBxuXgpQF/qw2buu4dY++OOMcmsgpIl1Gshp
-         pPcA==
-X-Gm-Message-State: AFqh2kqkurQzAq1qpCP7FIvMqm7jbid7BiN+ZjowLenp9FPTqnuTJYZ0
-        VdW1CecWnonGvPjOPe9W/8nwGQ9QPg5EeUAHqTfBIQ==
-X-Google-Smtp-Source: AMrXdXt0UcjoP66yyusLKIKTSX4FRsTvLnD0LVdmB5/Zjm2T6SMC5OAPDw1o6lqRfglsrE+itHgRlexlQR8eCOjBmiM=
-X-Received: by 2002:a65:45c8:0:b0:48c:5903:2f5b with SMTP id
- m8-20020a6545c8000000b0048c59032f5bmr224962pgr.504.1671691490591; Wed, 21 Dec
- 2022 22:44:50 -0800 (PST)
+        Thu, 22 Dec 2022 01:46:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529BFE9F;
+        Wed, 21 Dec 2022 22:46:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D2E6198C;
+        Thu, 22 Dec 2022 06:46:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE36C433EF;
+        Thu, 22 Dec 2022 06:46:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671691594;
+        bh=r+TpYUu1H/6E+XARhFn5KV+cckPTe7hXDUGCZhWSdRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V10UhZ//K95coireqWbC3aUHFG1mVQ4j0yW4D8fDuXTH689cms1MA3Y3DkDpVQmqf
+         YAFeAyTVVHzZMAxhws0G5bIlGTsFipr6oB1pUojpILcmQxXV7rAEiT9KnermvtAKEb
+         zeJk0M9NnUBlyfmBQXA3Blivreb8eLoc2I1YPwM0=
+Date:   Thu, 22 Dec 2022 07:46:31 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jimmy Hu <hhhuuu@google.com>
+Cc:     mathias.nyman@intel.com, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: xhci: Check endpoint is valid before
+ dereferencing it
+Message-ID: <Y6P9R36yrOnDpyVz@kroah.com>
+References: <20221222024630.1812735-1-hhhuuu@google.com>
+ <Y6PxuFPfKM0sttAr@kroah.com>
+ <CAJh=zjKv-h0LT68rzDTTi=AA-8jBv+ke5DKW9M0v6Y9Qte-rfQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221222060427.21626-1-jasowang@redhat.com> <20221222060427.21626-5-jasowang@redhat.com>
-In-Reply-To: <20221222060427.21626-5-jasowang@redhat.com>
-From:   Alvaro Karsz <alvaro.karsz@solid-run.com>
-Date:   Thu, 22 Dec 2022 08:44:12 +0200
-Message-ID: <CAJs=3_D6sug80Bb9tnAw5T0_NaL_b=u8ZMcwZtd-dy+AH_yqzQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq command
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
-        eperezma@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJh=zjKv-h0LT68rzDTTi=AA-8jBv+ke5DKW9M0v6Y9Qte-rfQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-Adding timeout to the cvq is a great idea IMO.
+A: No.
+Q: Should I include quotations after my reply?
 
-> -       /* Spin for a response, the kick causes an ioport write, trapping
-> -        * into the hypervisor, so the request should be handled immediately.
-> -        */
-> -       while (!virtqueue_get_buf(vi->cvq, &tmp) &&
-> -              !virtqueue_is_broken(vi->cvq))
-> -               cpu_relax();
-> +       virtqueue_wait_for_used(vi->cvq, &tmp);
+http://daringfireball.net/2007/07/on_top
 
-Do you think that we should continue like nothing happened in case of a timeout?
-Shouldn't we reset the device?
-What happens if a device completes the control command after timeout?
+On Thu, Dec 22, 2022 at 02:39:16PM +0800, Jimmy Hu wrote:
+> The xhci_kill_endpoint_urbs() function was added in commit 50e8725e7c42 -
+> 2014-03-04 xhci: Refactor command watchdog and fix split string. [Sarah
+> Sharp <sarah.a.sharp@linux.intel.com>]
+> And then, it is called by xhci_hc_died() function added in d9f11ba9f107 -
+> 2017-04-08 xhci: Rework how we handle unresponsive or hoptlug removed hosts
+> [Mathias Nyman <mathias.nyman@linux.intel.com>]
 
-Thanks
+Ok, so which one do you think should be used?
 
-Alvaro
+> Sorry. I don't know if it should also be cc: stable kernels. I use scripts/
+> get_maintainer.pl to get the list.
+> =========
+> $ scripts/get_maintainer.pl
+> 0001-usb-xhci-Check-endpoint-is-valid-before-dereferencin.patch
+> Mathias Nyman <mathias.nyman@intel.com> (supporter:USB XHCI DRIVER)
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
+> linux-usb@vger.kernel.org (open list:USB XHCI DRIVER)
+> linux-kernel@vger.kernel.org (open list)
+> =========
+
+that tool has nothing to do with copying for stable kernels as the perl
+script does not know if this is a bugfix or not, right?  Please read
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
+
+thanks,
+
+greg k-h
