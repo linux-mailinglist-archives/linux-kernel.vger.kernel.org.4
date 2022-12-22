@@ -2,291 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1313D6546EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794CB6546F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235362AbiLVTzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 14:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S235288AbiLVT4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 14:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiLVTzn (ORCPT
+        with ESMTP id S229754AbiLVT4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 14:55:43 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A0F283
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:55:41 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so2922304pjh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:55:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qENgK5bMvxidfmAY/CbHWGvtCRrxRzra8Ekw+yNOLus=;
-        b=hQ8lX61uJO7AZn8IOJCsnlmGTG9MYx5KJKbShwl4MqZkwr0n017fsTkynykRWRh7xT
-         KwbzEHh0hdoHrJKIjGUK9dyqdn3OGd0x+yjJJdU1nnB/h8zah7RKyfWVQbGVDX8bSTGB
-         rPOhWVuXaIJxc29S7Tjsj48SawemSzhyBfoFeElw0sR7Nt+VEVR7RKr9DX5WRh+NdW66
-         SN/wSiTWdVqfi/XwF1E8UJWhsGYSqrj82Na4yTS8ELa9cJSEB4E9M1uZQgp6dHdENlGu
-         ZsLudF+kmh4bFCL5ZFqzClgHwLW7tZpBDyN43VrI/zcLR0xrQu/Ls7TCicCxzLecPjch
-         jDHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qENgK5bMvxidfmAY/CbHWGvtCRrxRzra8Ekw+yNOLus=;
-        b=XyWDZ8ctJxk6mVjA+bTwgrkGGAsho1U692idIr7BprVNc0wbiRiP/shgpGi9TOkjRL
-         4cYx5wSOFaLX6YL8E/xK+QNjCXG9zqSK5bJKcBhW6PUSnHIolz3HS7mv/hyDZjObYpAj
-         iylaBCeqdAM1u1JwuXYMsUiZD/Bk/sw6VSKrA2orh8jHs+VHGt7dZLcsyrPZIl+Ch8l9
-         gJ3n1iOaqlDOmzfwihkmF3jBsoG4y0PPEkd3ft3vjtkGNxVw/T+6K7lAAqlPbgpx3FAT
-         d2cQGkX2zaRIA0WKjI6neA2B0V2893+7eop0LBF555ej7gQrNze8ARtz31fZFdofkTJ8
-         9BEw==
-X-Gm-Message-State: AFqh2kpMEv+008Vn5K4hlS2UvnzXsDey99ilCAAqCa2KGGMqSEhtnR9P
-        q9dOFNjSVuu2Q0SyzmptBwZS4XzRn5SIVZA9CYTjbg==
-X-Google-Smtp-Source: AMrXdXsVqoeRc7k2ZV58wwtc9SPaZAwyII5hfb2lvf4rXI7Hm3dv6bgqAnfpZcaY+LHOWmPptKYy9yv2LI3GmSY64O8=
-X-Received: by 2002:a17:902:b592:b0:189:e924:e27d with SMTP id
- a18-20020a170902b59200b00189e924e27dmr379022pls.167.1671738940683; Thu, 22
- Dec 2022 11:55:40 -0800 (PST)
+        Thu, 22 Dec 2022 14:56:45 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7D519021;
+        Thu, 22 Dec 2022 11:56:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671739004; x=1703275004;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=MZwVDRGg39JMKDu0r99clAhAaWH4PkVMHpXyXMqbYHI=;
+  b=OgflItj8kHLhfrSGjXcunfC3Ondhibp/C5C0xJJEHnhIOiGOxdYO4HFP
+   9B/iVa1uDvY7Nci5R3jP/xvkqjW1QGosSbLBBjRDHcixGRTJRXTb4JzOl
+   yNekzqKSVGf4DChLZJAV06ztERv7v/NiSqxE0YAtl3lvz37GYkVywvE1M
+   81l63YoZVPAJDqFPhmAlNRUWMStrzbrmp7uV+qw1tdED08O3fo/GZBQ9r
+   u+1cclpKdcpWTX6iljE+Dx+KgQc0uHisMlVnR0tG3VGQypczcsixU1Pi/
+   0VsBOWVCKIvXOezgdILrcZtlSEo7PctfFzUTqqwZV/VwkIsJ4vAiE83yQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="382462916"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="382462916"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 11:56:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="826080789"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="826080789"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 22 Dec 2022 11:56:43 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 22 Dec 2022 11:56:43 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 22 Dec 2022 11:56:43 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 22 Dec 2022 11:56:43 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=La6hv0K1g2CxFg0aJdDKm+0REMWTPlTYaJJKTV9BARNEf0BysfipudIDM+8bfRafjM364F4R/i8SqdhMdYNMHJC1FQ/3+d+ch+skiQ7yPqfM9esGH3lkaM/9fR1gh5LYFwzbRWzWG/R6Kc7j0ZZOAWe/PH/0qchIp3dy4YNhYFxXKWTbrqkGSTpX4AVASRdOTsBmFiaocsLpKOI6G8Oc1YiNTU4trr3NGAkAiD0AouSo/p4xetXCzQNLNacPVymcx3xeuG1ijxJILGF1Y9280jTZkkYPKESe537FDG0rJXhzfjq26f1Ru58uriu70adqMOXj+7dUILBxYAzMqySg+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XzIVY77WnzSGCA+VpIQsrRksRcUfADrXk06yE+39T5M=;
+ b=NederfCD14C1Pz+dFo92fDorDjrB2pmZkLOGPQW4ZiDK9Se3GymqfgHTwxeSG9Xbb3SFlufSEbfcEEztY2oFXj7OOlgoqvVLbbtg3T9U+d7KjrHk+TuZVaMmbfbcT1WU+4p+JqbPOin/kc46tIBSIksmd7PXfIZy94KK9iRnbJNPf0w50uSSCbHWx9Ykjhz43S9VGMfZsi7F+5uBvH+hk23T9/knH2wYDjn7xIFnn2vvcZapezifFmEMUmQIHOPZd9Y76dAFnwLBhH3Re+Ww53UgmDC9EF5nOU9Nb6NgaqGs1p2/FtcttChQIYWacFHC+bmsvp82Az73v6ilIskTtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BN6PR1101MB2227.namprd11.prod.outlook.com
+ (2603:10b6:405:51::14) by DS0PR11MB7507.namprd11.prod.outlook.com
+ (2603:10b6:8:150::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.12; Thu, 22 Dec
+ 2022 19:56:42 +0000
+Received: from BN6PR1101MB2227.namprd11.prod.outlook.com
+ ([fe80::5d3a:5bc9:4e57:622e]) by BN6PR1101MB2227.namprd11.prod.outlook.com
+ ([fe80::5d3a:5bc9:4e57:622e%7]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
+ 19:56:42 +0000
+Date:   Thu, 22 Dec 2022 20:56:39 +0100
+From:   Piotr Raczynski <piotr.raczynski@intel.com>
+To:     Clark Wang <xiaoning.wang@nxp.com>
+CC:     <linux@armlinux.org.uk>, <peppe.cavallaro@st.com>,
+        <alexandre.torgue@foss.st.com>, <joabreu@synopsys.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <mcoquelin.stm32@gmail.com>, <andrew@lunn.ch>,
+        <hkallweit1@gmail.com>, <netdev@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 0/2] fix mac not working after system resumed with WoL
+ enabled
+Message-ID: <Y6S2d6mQ+Vl+wp+D@nimitz>
+References: <20221221080144.2549125-1-xiaoning.wang@nxp.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221221080144.2549125-1-xiaoning.wang@nxp.com>
+X-ClientProxiedBy: FR2P281CA0015.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a::25) To BN6PR1101MB2227.namprd11.prod.outlook.com
+ (2603:10b6:405:51::14)
 MIME-Version: 1.0
-References: <20221221141548.274408-1-conor@kernel.org> <20221222180627.GA1748427-robh@kernel.org>
- <Y6SuyiYC/oLB2VzL@spud>
-In-Reply-To: <Y6SuyiYC/oLB2VzL@spud>
-From:   Atish Kumar Patra <atishp@rivosinc.com>
-Date:   Thu, 22 Dec 2022 11:55:29 -0800
-Message-ID: <CAHBxVyEZJeH6H00Jdcm2_=z-D2kYxVTgagYhmLoyJ2CPqcFbgg@mail.gmail.com>
-Subject: Re: [PATCH v1] dt-bindings: riscv: add SBI PMU event mappings
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
-        palmer@dabbelt.com, Conor Dooley <conor.dooley@microchip.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, apatel@ventanamicro.com,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        opensbi@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN6PR1101MB2227:EE_|DS0PR11MB7507:EE_
+X-MS-Office365-Filtering-Correlation-Id: 57b069de-6557-48f9-8213-08dae456a53e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0SP3fTV7EA1Xw9oLbbPDbGO6XhpWRuK5IqM/bieCGKNiMD0zXuz24qofi+utv8zTOhk9/T6DkoAmrbAIuzcxT7ndB/2oyUUJ2HdO2Nj5Z8HmpSEPvqo0oIBy2tF1cECX825aUQ5HDdlzx3Y9HfeJ3nEOQWmFn5nd0TcRQ4O7cwRa10nAYhVHE/WVmMYuaVrdCcsSeMB44slxT4RuR7tRXEAsCEemkg60RFxszIYYLYKw8b1Fbxd3Cwt7FGTGoNmZsyYTnwdkyUDo1KSJolXso15mvIVQWY1UOSMRvVGgwwShfIdmkrkavNABWDEk6scpDKdRpSQU1JSRqj1swzQM9CbfeuKxf5wOXTyAI40cJ4+Y7Oijc291pbGzbPKvRLKAsb0uKnovzkqWyu1U7abKJ60KfqgK7ANmDHOfGiYMY9MpDOyc2FmADoi8gCsb5gkTwoo0mt7cRkG+k8DDB+lX4nxVxMXHLWtBiOox0V7WTNwmtAfUT4N08iG7zQFPRHCyDP457xV6IZXxbf4veVQVILLnuu2Z7TEQdLhZVbl64JsSMw603N7hDau1tFLXaMgmGwBxfivKxjMeS+2WERKP8wbCIQxqndMPVbXnQquyc0jpt23+26LyKAiNjx21e7Fl
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1101MB2227.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(376002)(136003)(39860400002)(346002)(451199015)(4744005)(44832011)(478600001)(8936002)(8676002)(66946007)(7416002)(2906002)(66476007)(66556008)(4326008)(5660300002)(6916009)(316002)(6486002)(6666004)(6506007)(33716001)(186003)(6512007)(9686003)(83380400001)(26005)(38100700002)(82960400001)(41300700001)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KpWwIvcoCcBDrBmQox5ZgkSvKota3buOcdVTxo+p3rwBNR28HoIHrUlqdsdg?=
+ =?us-ascii?Q?pyetuiM+v6yhQ2kvayaZLN/TAagsYAuAK3Ohm2r9FguXOAXxmLrjnyCFKKMI?=
+ =?us-ascii?Q?VBuXqv2JmheuLN7PIH8iON5WUGptJJGHGaQDQm3l8UsXkZjBb7oLrgcD0Fcw?=
+ =?us-ascii?Q?1f6BqsuzogOgH6bui1H6qDaIuz+Kw75X9dljARG7rvvMjGzG/ornv7GyTIxP?=
+ =?us-ascii?Q?NcTrf8HqDUcf5HHks7UP5Prl1y7Uvw472iiowgmVacEuzN7mwomTB0df365A?=
+ =?us-ascii?Q?EfHhcyPKHb7++VREYtPTP9N0L4/vqaTyc4wKA4BtZo2uyC1f6axNIJR/3caY?=
+ =?us-ascii?Q?3vmd/J+PkBoo+F48LVFBvR1vBxLFL3bI1TiVn1LLk2QX03AC2p0v3Him/man?=
+ =?us-ascii?Q?iNL5uC+QrBPViIMsHRQrbHQpvELM2KrN5mnh4djLmh3TBFKciKQZCTJnGfn9?=
+ =?us-ascii?Q?nUfKZtDDW5iFymbeXRb3SXsZ9XHTnL9WmqvbGCtzo2lSrpu1Bfh1skKy3ati?=
+ =?us-ascii?Q?lHW1eAlzbBZ6Qo8lFW794yct7D8ZUbwaeii5Ks/PyoYanGWBSQmmiGBpBUbc?=
+ =?us-ascii?Q?BPI5lJQJFzY8VwoQrYoXFwOlNdUka+zoq9tXiMLrlv+CHFh+kVXLae8bZ3nM?=
+ =?us-ascii?Q?Y/iUZ7UuqQW7fFEiozqwtfsYWTLWA77Q0AmkOpMb/AgU0R7VH79jyRs+PLYL?=
+ =?us-ascii?Q?YgpdRtQocm9q9HiaIPGSi7x1mUs8Nu+FcbP8tm1wKyk0Oh7zFP3eIkMsFMtS?=
+ =?us-ascii?Q?etFeIWke7DMYRlGfZoOrYSeIrWqykGBq03TpwNmXzblzcGPSA2S5A2SJ8PqD?=
+ =?us-ascii?Q?a33Wx0unnPUdF1TI4OpIIRFmsrT3uNbxd96BbnsMsIiLaNxSbAHgm3R+a5BV?=
+ =?us-ascii?Q?HqdbdDEmk5qCccHsfCV6gX4QoEcaqExbv6QknGAxpUh+3TZkao95SrHSRgAx?=
+ =?us-ascii?Q?T0h2PHJ/LURyloGdXcYEXwpRDhII9HBu8gP5ZE5QPG+4BL4Ud1clQTmiuWsv?=
+ =?us-ascii?Q?mxK5/x2WJVFtop3wW1MCrqVWtAwbZZqP0UTZmOpv2A8lY5/QL/fC2TZz7VyF?=
+ =?us-ascii?Q?KG0B+XRbqHNisAVs780cpK8Mp4hvglOFNIp9d9FYn155BNKfM1sHZe0kW3sy?=
+ =?us-ascii?Q?BZ8+8NflU1j9DYd+NSX8I2TM3HpFEj6OAHPJMYgR76F2ufmM2cN4GZlt/Y8B?=
+ =?us-ascii?Q?LNTFbcOX91wrYp26GvUk6ypHfWzOxbpMc6CMmkcvSIHUpp6HQueoAth8EwDm?=
+ =?us-ascii?Q?YpZagBWkrtTUc8IL/VdPk8gXYtXlxuc7/jrGjSkpoS/XL9NGEpgM6VnUtcXW?=
+ =?us-ascii?Q?K58Juxh6RI7Me0qgARRzJTOKWVg3IcnTs25D4I+nMKTiPj82ZwZLDSsuJHlZ?=
+ =?us-ascii?Q?yUbl7WwgnrfF+i6h8Vp5PqUNKbmXpJkjKX0BmLoFoVF45dBs+swZ5vtLo5aS?=
+ =?us-ascii?Q?+yVuEdo0AByXhgd1liSJ1PTTV7hSA+Aa5Wvo9r2HSj8lBIo612rEtFnm14fi?=
+ =?us-ascii?Q?V4tOob1tJ/EmPZP+/dE2BRC8iwNZNca9YKgSeEbmGmAOZJTSJ9szuWhgYjyG?=
+ =?us-ascii?Q?/54twB2CEvxpoqQto9ihJhA6rnsCovfk+pVCn3z3qPsHH7Qnblu4m/zvYJME?=
+ =?us-ascii?Q?vg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57b069de-6557-48f9-8213-08dae456a53e
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR1101MB2227.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 19:56:41.9503
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 56fXKEpV4EJ1C5mGrtXQFit33IvivoEwS/tK7+RPP+uppWDJ4lINJQ5YGLFQlJu4N+fifqOlYaJimtSKMVi/VbrJsQ/g0cPkCKfGqQZMzo0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7507
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 11:24 AM Conor Dooley <conor@kernel.org> wrote:
->
-> Hey Rob,
->
-> On Thu, Dec 22, 2022 at 12:06:27PM -0600, Rob Herring wrote:
-> > On Wed, Dec 21, 2022 at 02:15:49PM +0000, Conor Dooley wrote:
-> > > From: Conor Dooley <conor.dooley@microchip.com>
-> > >
-> > > The SBI PMU extension requires a firmware to be aware of the event to
-> > > counter/mhpmevent mappings supported by the hardware. OpenSBI may use
-> > > DeviceTree to describe the PMU mappings. This binding is currently
-> > > described in markdown in OpenSBI (since v1.0 in Dec 2021) & used by QEMU
-> > > since v7.2.0.
-> > >
-> > > Import the binding for use while validating dtb dumps from QEMU and
-> > > upcoming hardware (eg JH7110 SoC) that will make use of the event
-> > > mapping.
-> > >
-> > > Link: https://github.com/riscv-software-src/opensbi/blob/master/docs/pmu_support.md
-> > > Co-developed-by: Atish Patra <atishp@rivosinc.com>
-> > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > > ---
-> > > I asked Rob on IRC about these bindings a few weeks ago & he said he
-> > > would be willing to take them. I have modified wording slightly in the
-> > > descriptions, but have mostly left things as close to the OpenSBI
-> > > documentation as possible.
-> >
-> > Please CC the perf maintainers. Might be crickets, but so they at least
-> > have a chance to see it.
->
-> Yah, I was kinda unsure who to CC. It does list them as being
-> specifically ARM so I probably made the wrong choice about inclusion.
-> I've added them now.
->
-> > > I'm not super sure about what I've done with the properties being
-> > > correct type wise, I went digging in bindings and am sorta using the
-> > > first thing that "fit".
-> > >
-> > > Since you wrote the md doc Atish, I put your co-developed-by. OpenSBI
-> > > is BSD-2-Clause licensed so I am also unsure as to what license I can
-> > > use for this binding since that's where I took it from.
-> > > ---
-> > >  .../devicetree/bindings/perf/riscv,pmu.yaml   | 158 ++++++++++++++++++
-> > >  1 file changed, 158 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/perf/riscv,pmu.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/perf/riscv,pmu.yaml b/Documentation/devicetree/bindings/perf/riscv,pmu.yaml
-> > > new file mode 100644
-> > > index 000000000000..d65f937680af
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/perf/riscv,pmu.yaml
-> > > @@ -0,0 +1,158 @@
-> > > +# SPDX-License-Identifier: BSD-2-Clause
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/perf/riscv,pmu.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: RISC-V SBI PMU events
-> > > +
-> > > +maintainers:
-> > > +  - Atish Patra <atishp@rivosinc.com>
-> > > +
-> > > +description: |
-> > > +  SBI PMU extension supports allow supervisor software to configure, start &
-> > > +  stop any performance counter at anytime. Thus, a user can leverage full
-> > > +  capability of performance analysis tools such as perf if the SBI PMU
-> > > +  extension is enabled. The OpenSBI implementation makes the following
-> > > +  assumptions about the hardware platform:
-> > > +    MCOUNTINHIBIT CSR must be implemented in the hardware. Otherwise, the SBI
-> > > +    PMU extension will not be enabled.
-> > > +
+On Wed, Dec 21, 2022 at 04:01:42PM +0800, Clark Wang wrote:
+> Hi,
+> The issue description is in the commit message.
+> 
+> This patchset is the second version following discussions with Russell.
+> But the name of each patch has changed, so V2 is not marked in each patch.
+> 
+> Thanks.
+> 
 
-This is no longer true since OpenSBI commit b28f070. We should remove
-this from OpenSBI docs as well.
+Please include target tree name in the subject eg. [net 1/2]
 
-> > > +    The platform must provide information about PMU event to counter mapping
-> > > +    via device tree or platform specific hooks. Otherwise, the SBI PMU
-> > > +    extension will not be enabled.
-> > > +
-> > > +    The platforms should provide information about the PMU event selector
-> > > +    values that should be encoded in the expected value of MHPMEVENTx while
-> > > +    configuring MHPMCOUNTERx for that specific event. This can be done via a
-> > > +    device tree or platform specific hooks. The exact value to be written to
-> > > +    the MHPMEVENTx is completely dependent on the platform. The generic
-> > > +    platform writes the zero-extended event_idx as the expected value for
-> > > +    hardware cache/generic events as suggested by the SBI specification.
-> > > +
-
-But the larger question is these are OpenSBI implementation specific
-assumptions. Should it be included in
-the DT binding ?
-
-> > > +properties:
-> > > +  compatible:
-> > > +    const: riscv,pmu
-> > > +
-> > > +  riscv,event-to-mhpmevent:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > > +    description:
-> > > +      Represents an ONE-to-ONE mapping between a PMU event and the event
-> > > +      selector value that platform expects to be written to the MHPMEVENTx CSR
-> > > +      for that event.
-> > > +      The mapping is encoded in an array format where each row represents an
-> >
-> > s/array/matrix/
-> >
-> > > +      event. The first element represents the event idx while the second &
-> > > +      third elements represent the event selector value that should be encoded
-> > > +      in the expected value to be written in MHPMEVENTx.
-> > > +      This property shouldn't encode any raw hardware event.
-> > > +    minItems: 1
-> > > +    maxItems: 255
->
-> I copied these 255s from dt-schema somewhere as a sane max.
-> Atish, is there a cap here or should we allow as many as someone likes?
-> The md binding doesn't mention any limits - is it in the SBI spec?
-> The strongest wording I saw there was "limited" & event idx is 20 bits
-> wide as per the spec [0]. Does that make 2^20 the hard limit here?
->
-
-This is for hardware & cache events. The total number of events
-defined there are 52 (10 HW + 42 Cache) events.
-So 255 is a sane max that provides enough room for expansion in future
-if required.
-
-> 0 - https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc#11-performance-monitoring-unit-extension-eid-0x504d55-pmu
->
-> > > +    items:
-> > > +      $ref: /schemas/types.yaml#/definitions/uint32-array
-> >
-> > Huh? A property can only have 1 type. I wonder what the tools do with
-> > this...
->
-> I suppose I left this over (by accident) from when I had it arranged
-> slightly differently. I guess I never actually noticed as the tools
-> don't appear to complain. Now dropped :)
->
-> > > +      maxItems: 3
-> >
-> > Better to do:
-> >
-> >          items:
-> >            - description: what's in the 1st word
-> >            - description: what's in the 2nd word
-> >            - description: what's in the 3rd word
-> >
-> > And rework the overall description to not say the same thing.
->
-> Yah, good idea. I'll do that for the next version.
->
-> > > +  riscv,event-to-mhpmcounters:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > > +    description:
-> > > +      Represents a MANY-to-MANY mapping between a range of events and all the
-> > > +      MHPMCOUNTERx in a bitmap format that can be used to monitor these range
-> > > +      of events. The information is encoded in an array format where each
-> > > +      row represents a certain range of events and corresponding counters.
-> > > +      The first element represents starting of the pmu event id and 2nd column
-> > > +      represents the end of the pmu event id. The third element represent a
-> > > +      bitmap of all the MHPMCOUNTERx.
-> > > +      This property is mandatory if event-to-mhpmevent is present. Otherwise,
-> > > +      it can be omitted.
-> >
-> > No need to state this in freeform text, use 'dependencies'.
->
-> Oh! I didn't know that that existed. I was going to go and do some sort
-> of required properties dance but perhaps that's not needed now (at least
-> to the same extent).
->
-> > > +      This property shouldn't encode any raw event.
-> > > +    minItems: 1
-> > > +    maxItems: 255
-> > > +    items:
-> > > +      $ref: /schemas/types.yaml#/definitions/uint32-array
-> > > +      maxItems: 3
-> > > +
-> > > +  riscv,raw-event-to-mhpmcounters:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > > +    description:
-> > > +      Represents an ONE-to-MANY or MANY-to-MANY mapping between the rawevent(s)
-> > > +      and all the MHPMCOUNTERx in a bitmap format that can be used to monitor
-> > > +      that raw event.
-> > > +      The encoding of the raw events are platform specific. The information is
-> > > +      encoded in an array format where each row represents the specific raw
-> > > +      event(s). The first element is a 64-bit match value where the invariant
-> > > +      bits of range of events are set. The second element is a 64-bit mask that
-> > > +      will have all the variant bits of the range of events cleared. All other
-> > > +      bits should be set in the mask. The third element is a 32-bit value to
-> > > +      represent bitmap of all MHPMCOUNTERx that can monitor these set of
-> > > +      event(s). If a platform directly encodes each raw PMU event as a unique
-> > > +      ID, the value of select_mask must be 0xffffffff_ffffffff.
-> > > +    minItems: 1
-> > > +    maxItems: 255
-> > > +    items:
-> > > +      $ref: /schemas/types.yaml#/definitions/uint32-array
-> > > +      maxItems: 5
-> > > +
-> > > +required:
-> > > +  - compatible
-> >
-> > I assume at least one of the other properties must be present?
->
-> Atish: (and +CC the OpenSBI list)
-> Which properties are actually needed here? Or are any? The md binding
-> in the OpenSBI sources doesn't seem to require anything other than the
-> compatible?
->
-
-That's true. Opensbi allows the platform to define functions
-to provide the mapping. Now that's an OpenSBI implementation thing.
-Other implementations may choose to use it differently.
-
-
-> Thanks Rob,
-> Conor.
->
+> Clark Wang (2):
+>   net: phylink: add a function to resume phy alone to fix resume issue
+>     with WoL enabled
+>   net: stmmac: resume phy separately before calling stmmac_hw_setup()
+> 
+>  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 16 +++++++-------
+>  drivers/net/phy/phylink.c                     | 21 ++++++++++++++++++-
+>  include/linux/phylink.h                       |  1 +
+>  3 files changed, 28 insertions(+), 10 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
