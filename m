@@ -2,798 +2,441 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2276653488
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Dec 2022 18:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86751653BCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 06:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbiLURGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 12:06:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
+        id S234636AbiLVFlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 00:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234636AbiLURF5 (ORCPT
+        with ESMTP id S229531AbiLVFlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:05:57 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6341CE6;
-        Wed, 21 Dec 2022 09:05:55 -0800 (PST)
+        Thu, 22 Dec 2022 00:41:17 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F0A2BC0;
+        Wed, 21 Dec 2022 21:41:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1671642355; x=1703178355;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DGYrM3N4wZb2eAZ7fb5UiyWAukbJreMHapEROGFMvu8=;
-  b=Mvrs9Ji5mUipApD4HmkiM+IcyLxLdI/J2jrh8qSnvD87ExakgEKAScho
-   Xm9t4gRsAqRHxr6EqpBhNVB1VL9Kto0E8NYg8bN22pj3GYMeaw8OdSxVN
-   IoJJi55Hlvkc6zvDsgJShn681115U//ciqy3OjIeCTGTW4tUPx6KrzOId
-   RZ76v1/4e27+MQxZRHjTjeynLS664FR0kqm8cZss+M0m19m2jMx4KvQCI
-   KQWA02dpN88Jy/yiQIcOxOcspplhgn63TmvqryWf5rW5sA250SLjDKAB0
-   abuOJjv0uHBGqec8LKUW7913isvYEunj/tj3Nt+0YCC927VElW+ySSFkd
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="129224605"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Dec 2022 10:05:54 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671687676; x=1703223676;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=Zo/fbzhz2/KeSWjzHSyX/uhSqAWWLw9x+eTLpxwC4cQ=;
+  b=Ewe0pbzo/JlspJ9Voi2O7xjeM3Ix9/Z7XPTupF02GSL22nHn87dElkHd
+   y1u532TT416bEkO4Tov/TRdIJchx3bmseqBPS1rcci51zOrh93m+NLHDW
+   YHHLeAfP3sNs0zqkDpFQuu1cXp2J84zx+vQfNxN6IHFVIqP53eHEjMjwl
+   Z5zSpXcvBdJ8LgiQtetmX5OrCyqf39vvzKprw+2z+ChDZylgbc8iYsSoq
+   5HOt7UnadG/QD44pzHmVuzdWXssXnL2biaomGHV2OQ1emUrXdtxZVEDUS
+   QHBk6p6X6YhruTN2h5hiwC20NArcqNtb98O5K3odo1ivSFBxQccFbKVOf
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="321965933"
+X-IronPort-AV: E=Sophos;i="5.96,264,1665471600"; 
+   d="scan'208";a="321965933"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 21:41:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="980457893"
+X-IronPort-AV: E=Sophos;i="5.96,264,1665471600"; 
+   d="scan'208";a="980457893"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Dec 2022 21:41:15 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 21 Dec 2022 10:05:52 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Wed, 21 Dec 2022 10:05:50 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <arnd@arndb.de>
-CC:     <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <unglinuxdriver@microchip.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH char-misc-next] misc: microchip: pci1xxxx: Add OTP/EEPROM driver for the pci1xxxx switch
-Date:   Thu, 22 Dec 2022 11:10:48 +0530
-Message-ID: <20221222054048.3080265-1-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+ 15.1.2507.16; Wed, 21 Dec 2022 21:41:14 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 21 Dec 2022 21:41:14 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 21 Dec 2022 21:41:14 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iTU8TDA6YDU2wwWT3bOHmrWH2nqIXhaMIVITMvupSjawAUXt9wnmzSnaZd8qzVw6WQpQ+a/NTl0y8JrAGn0bVIeR73JC2ELWg+i7skfZ7MmobQeg1b8GwV3JuTjzgbNj1485ctXCTAECvl2DJqotXavWVmqqAufWBIoFyT9y2uYxFk1PbNARNFHjPFrwdw3rMvIoNV88hDeTy+H+/aHBxI+k2goHHMeEhdd7SM8VngKg5fi3svBlxUV361ny5S5KwxW7QXRK1pzDa1WttbTAxbjb6ZkFIc4KeTzItvgH9w8SUwmEF2obEaQen6PxuafMbHXBsMBxBEm3IqULR7SLHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zXjmNwxDO3Xec2XZAZarYMfYNHW0ySRLe1UZNq3/iwc=;
+ b=BI+Fq0yBc55e0YS9bpry/p/4oyssudd5ddmtDv1a3VszqEqC9f2VeGUxs2Etz+IsMGQ1UxLxuLT/nzAoyJ+MlH3QbvuSrUxulBCHjcG/+Mf94NWFoNJ7Zm+lh1gOJUzHS62MTDENAWxYkp+Pk85lXiYxuwpfwXr/4W0YfAhJktvTrGSXXkXISzzRl9rwZ2EK7UyIoHSzsFZJDQ1sOekmTlrMCwDSdAFy90mim9WXQ5Ma/L2zYRrlzlWZLRDC4cecPekT2blp7I9o8tHNS7CqdXTO2QNHTN+k1/JvEw1D64aOoMEpquMby490pOVePF/yfJ0gcDJDJxDCB5R0GrFVRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by CY5PR11MB6439.namprd11.prod.outlook.com (2603:10b6:930:34::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
+ 2022 05:41:07 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::288d:5cae:2f30:828b]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::288d:5cae:2f30:828b%6]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
+ 05:41:07 +0000
+Date:   Wed, 21 Dec 2022 21:41:01 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+CC:     Evgeniy Dushistov <dushistov@mail.ru>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH v4 3/3] fs/ufs: Replace kmap() with kmap_local_page()
+Message-ID: <Y6Pt7QXbXjaFpNjx@iweiny-desk3>
+References: <20221221172802.18743-1-fmdefrancesco@gmail.com>
+ <20221221172802.18743-4-fmdefrancesco@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221221172802.18743-4-fmdefrancesco@gmail.com>
+X-ClientProxiedBy: SJ0PR03CA0006.namprd03.prod.outlook.com
+ (2603:10b6:a03:33a::11) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|CY5PR11MB6439:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4c426229-0a56-4854-61f8-08dae3df1fc2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hKIAfpXI5UVmqcqMu25e2PA/dTjFdBP0QHDKpLV92vqw96zNDP1IVxcp2zXhvjO0mFu4hXHbfe0AVpQ/S+6z2ur1KrVqMx7qFL7Vi/3KTWHaLkrySMKSgiyarFBDkPicNcoqSGX+w1bACeTUHKhLnNqvEiwZfWAabHaombkxc4/q5cF+5nZ6ysubSeYhsBGkx4B6I7p/bsDShbnbnUKgT23ooQTkQ3DKtGMsMaK0mFZg+p9aJeHZjnDZJhONoLO96x306jgQgO0/90ycC12Q46xml1+Ao/6jFvQq/o6v470niNEnbuIepO+yvrTVSuFDtoC0HvgsSjjK9IQy7t8AQfP75EFUuuEzId46qoRGFc2ToSQFzXtpf0+S6YQJYiys73MkFNaLRTD6AcEHJEIVNwJ2tlI67TNf5shrtuqsYVStj/I1t2ezDXXBQKYt10j7dOTIS4dn5rfpVcfREjRiUPCbqqx29YRi4D6t1bF1ldAQ/bKh6d1EqqAr/sHUDc5Gdi9F+iifpTGUQfyCOAYFX+aiLDIhCDfqgTxWaSecEGylyhhzbBx35RjpFuzrubdmeFV/iKRcdrtQUSveEYlz/oscqgYf2M6JYAT3jzHi46XujgVZiO9a9P4UD7iTHm9jst5mTVwxH/ynNpvivjAe0g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(136003)(39860400002)(376002)(366004)(396003)(451199015)(54906003)(6506007)(6916009)(478600001)(316002)(82960400001)(6486002)(33716001)(38100700002)(8676002)(66476007)(66946007)(86362001)(66556008)(4326008)(83380400001)(5660300002)(8936002)(6666004)(9686003)(2906002)(41300700001)(186003)(6512007)(26005)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2FMcWdwaXRwSC9iem5XRlpobzFhQm1sZU13MFo0alVNTjdEZ2xleGRxQi8w?=
+ =?utf-8?B?Z2VuYmwrZXhKVy9ienhUYnVnNVRjMTJDNk9uRHYxWnpqelBSbGtPTDNnaG1t?=
+ =?utf-8?B?RGtqY2ZCUExGSFVUUW1uWld2bit5YlJvRDFQeWgrVzJxTlVHWCtxYStZQ0Mz?=
+ =?utf-8?B?NkZEcVBETmdsQUtLc2VIWFlGczIxazJ4dUVmV2NOTUFhMTNEY3o4TTF1bWNT?=
+ =?utf-8?B?LzJ3VWRBZTBDK25hRThSa0lZdkN5N0ZmbnFqTStwcUozTlZnSXgzN2ZmakdK?=
+ =?utf-8?B?T3plam1RZU1DbXBpdWh3dkcxTHBrS2Z6T25mRytJZkgrWG1LQkZ2WXhBT3d0?=
+ =?utf-8?B?ckRPMHJFakdvWkt5KzZQZzBIZWhHNmdyWUt6aDY4WjluOEdESjBOc1pMcm11?=
+ =?utf-8?B?K0hFd1NpYWdsUTVqOW1OWWJXczk1VTN6eERhaHA1MXZXejl3bHhoZ2VNVGRl?=
+ =?utf-8?B?Nm9FK050S1VHRnF0OGhBWitDN3VXNmV1ZjVialNqbHgrT0w5S1hsaFhYNTB4?=
+ =?utf-8?B?emY3ZXFmMkQ0RjNlUGMrYmo0TEl0Mi9VT3haVWh6Z25RVW55TmNZeEpSRU9S?=
+ =?utf-8?B?QWg3WlRzdVNUNlMwdks0d3NianFrVmV0KzByREQwcUtvTjJNZWpHZzgzTXNH?=
+ =?utf-8?B?a2N1WHhGc3lRNHBJWGFiN0EweW84V1d3QWpKOVJUZFBDdWl4OEkxa1VEV2kv?=
+ =?utf-8?B?OVpqblp5aTZoNG1UYWpuR3BSSEtVVkRnd20vNUR3MU1DZi9aeDd6L2lGMkty?=
+ =?utf-8?B?VXFCNWR6NEt0U1dDYmptdi8wNHgzdWxaaTNuQTJaSVZpVzVKeWphSDkzYU9x?=
+ =?utf-8?B?bFdNUWhmaHpCQVBscnlSSDYrVDFEa1MvOHRWa2tJQUFMU3VHRlpFYm96QXNX?=
+ =?utf-8?B?N2syUlUxSXdsdXNZempSM1BZRjR0VU5PSS9RWC9sL3RPQ3BPeUlubGU2SXMy?=
+ =?utf-8?B?TnY3bGVPWmFSdlpEdGV4TStFU1NGVStjL3hkd0VtTWo0SEh1UjdzVEhFUzli?=
+ =?utf-8?B?eHpTaWhpaFF0emxrTWVONWtMQ2tscmx3YVVwNkUzZTZUazgzTE9qcjY5cFBo?=
+ =?utf-8?B?ODVtYUZTODVhWWFPaGVDTjJYOE5ZdkE4UUF3cHlKN0tHbEJ5ZTVjZWVtT3Bl?=
+ =?utf-8?B?K2Uramo2Q0RzTTNXTGJhaVJYRXl3SDk0cE1Cb1NpaWRtMS9zQ3p0ZFFyL2Fm?=
+ =?utf-8?B?enM4Q2psQUU4QTU4dlhoQVpjRU5kVWhYbzlEUVU5S2lHNG5Ld0hLT3BtRHcx?=
+ =?utf-8?B?cGR0VnlFMXgzT0NTMnl0WC90N2hjZkE1ZWtFWFB4aHpCUnhrV05jV2RGbExL?=
+ =?utf-8?B?TzhsS3JrTEhVTGhPYmM2UkVmQklzTWQvQkgzV2YydlllalhweDVzdEJJOGJI?=
+ =?utf-8?B?N3JrRmdIWWgxYzVtVU5lUFh2WEpLVHZRMnpMVXVJQURxL1VWaHhFdHJiZWxZ?=
+ =?utf-8?B?bmNpN1dFSis4TDNIQ250OGg4Q3A0eWlIdmordC9KM2xHVFdKcUpWdzZ3d3l6?=
+ =?utf-8?B?bEdZbVd5VnordlFKZW5EeU5tR3Nnb2pKUHI0bW56YXpXOVdZQWFMWTRLNHNL?=
+ =?utf-8?B?VjhBYWtpMW93QXU1aytlR0tTdlRRZ1ppcE1CVy9Cdml1bkVvUWt1ZVIvQm9z?=
+ =?utf-8?B?RWk2eS9rS3hxVU5ZdkJ0V1M2dUxDZ01Ed0x4aWtFVnArdkNEM2ExWEc2SUE1?=
+ =?utf-8?B?MHZBYzAyN3NSSW1mem5IQVJVcjhiZG1BREZ6VU9EdVNMcjBmTGdhbTJ1RGxS?=
+ =?utf-8?B?eWUvWjR2Y2dvWmZremlKaU16VThWcDRPVUE4MTI3OENhV0FBdHJoTFBQY0JW?=
+ =?utf-8?B?SDNpRCtQSDlDTjNmSVF2UnNKUS9oWDE1cDFseXNVRWJRaDRKMEJwMUNHZGRP?=
+ =?utf-8?B?QmZCOHpXdjlxTnkrdDl4a0dVYWdIMjV1bjlONEU2cExiNUJxYUsxamRPUEtk?=
+ =?utf-8?B?WWhmanlwZ2ZiU3lMbmdvVDFjdXF5V1JDTVZvUU5LYThzYllkU29maTVxVjNP?=
+ =?utf-8?B?WVRaTEJpRW04T0lMNis0K1NyWW9XRXZRdE14TS9VYWNWS3VtMGhHd2RaUHkr?=
+ =?utf-8?B?U2xXR2JsOXllNU80Z0xFYnllSXNnR1lRRk1KQUtLOWJsQUhsQmRydWV1UFlN?=
+ =?utf-8?Q?w0gZfnkRrq3w7iNb8Zx/nHFZc?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c426229-0a56-4854-61f8-08dae3df1fc2
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 05:41:07.7641
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IewGuNQzgIeqbfkjzLbmd3lj1BePXDim15soIpmyL6BaOgBilor9U7NYANCB4KMPyeCztrtuikndV+uhZc200Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6439
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microchip's pci1xxxx is an unmanaged PCIe3.1a switch for consumer, industrial,
-and automotive applications. This switch integrates OTP and EEPROM to enable
-customization of the part in the field. This patch provides the OTP/EEPROM
-driver to support the same.
+On Wed, Dec 21, 2022 at 06:28:02PM +0100, Fabio M. De Francesco wrote:
+> kmap() is being deprecated in favor of kmap_local_page().
+> 
+> There are two main problems with kmap(): (1) It comes with an overhead as
+> the mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when the
+> kmap’s pool wraps and it might block when the mapping space is fully
+> utilized until a slot becomes available.
+> 
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, the
+> kernel virtual addresses are restored and still valid.
+> 
+> Since its use in fs/ufs is safe everywhere, it should be preferred.
+> 
+> Therefore, replace kmap() with kmap_local_page() in fs/ufs. kunmap_local()
+> requires the mapping address, so return that address from ufs_get_page()
+> to be used in ufs_put_page().
 
-Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
----
- MAINTAINERS                                   |   1 +
- drivers/misc/mchp_pci1xxxx/Makefile           |   2 +-
- .../misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c | 693 ++++++++++++++++++
- 3 files changed, 695 insertions(+), 1 deletion(-)
- create mode 100644 drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
+I don't see the calls to kunmap() in ufs_rename converted here?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9886aa1a4403..195af3ac451d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13614,6 +13614,7 @@ S:	Supported
- F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.c
- F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gp.h
- F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_gpio.c
-+F:	drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
- 
- MICROCHIP OTPC DRIVER
- M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-diff --git a/drivers/misc/mchp_pci1xxxx/Makefile b/drivers/misc/mchp_pci1xxxx/Makefile
-index fc4615cfe28b..ae31251dab37 100644
---- a/drivers/misc/mchp_pci1xxxx/Makefile
-+++ b/drivers/misc/mchp_pci1xxxx/Makefile
-@@ -1 +1 @@
--obj-$(CONFIG_GP_PCI1XXXX) := mchp_pci1xxxx_gp.o mchp_pci1xxxx_gpio.o
-+obj-$(CONFIG_GP_PCI1XXXX) := mchp_pci1xxxx_gp.o mchp_pci1xxxx_gpio.o mchp_pci1xxxx_otpe2p.o
-diff --git a/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
-new file mode 100644
-index 000000000000..03a537d45873
---- /dev/null
-+++ b/drivers/misc/mchp_pci1xxxx/mchp_pci1xxxx_otpe2p.c
-@@ -0,0 +1,693 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2022 Microchip Technology Inc.
-+// PCI1xxxx OTP/EEPROM driver
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bio.h>
-+#include <linux/blkdev.h>
-+#include <linux/blk-mq.h>
-+#include <linux/delay.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/kthread.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/spinlock.h>
-+
-+#include "mchp_pci1xxxx_gp.h"
-+
-+#define PERI_PF3_SYSTEM_REG_ADDR_BASE	(0x2000)
-+#define PERI_PF3_SYSTEM_REG_LENGTH	(0x4000)
-+
-+#define CONFIG_REG_ADDR_BASE		(0)
-+#define EEPROM_REG_ADDR_BASE		(0x0E00)
-+#define OTP_REG_ADDR_BASE		(0x1000)
-+
-+#define MMAP_CFG_OFFSET(x)		(CONFIG_REG_ADDR_BASE + (x))
-+
-+#define CFG_SYS_LOCK_OFFSET		(0xA0)
-+#define CFG_SYS_LOCK_PF3		BIT(5)
-+
-+#define MMAP_OTP_OFFSET(x)		(OTP_REG_ADDR_BASE + (x))
-+
-+#define OTP_PWR_DN_OFFSET		(0x00)
-+#define OTP_ADDR_HIGH_OFFSET		(0x04)
-+#define OTP_ADDR_LOW_OFFSET		(0x08)
-+#define	OTP_ADDR_BITS_OFFSET		(0x0C)
-+#define OTP_PRGM_DATA_OFFSET		(0x10)
-+#define OTP_PRGM_MODE_OFFSET		(0x14)
-+#define OTP_RD_DATA_OFFSET		(0x18)
-+#define OTP_FUNC_CMD_OFFSET		(0x20)
-+#define OTP_TEST_CMD_OFFSET		(0x24)
-+#define OTP_CMD_GO_OFFSET		(0x28)
-+#define OTP_PASS_FAIL_OFFSET		(0x2C)
-+#define OTP_STATUS_OFFSET		(0x30)
-+#define OTP_MAX_PRG_OFFSET		(0x34)
-+#define OTP_RSTB_PW_OFFSET		(0x50)
-+#define OTP_PGM_PW_OFFSET		(0x60)
-+#define OTP_READ_PW_OFFSET		(0x70)
-+
-+#define OTP_PWR_DN_BIT			BIT(0)
-+#define OTP_CMD_GO_BIT			BIT(0)
-+#define OTP_PGM_MODE_BYTE_BIT		BIT(0)
-+#define OTP_STATUS_BUSY_BIT		BIT(0)
-+#define OTP_FUNC_PGM_BIT		BIT(1)
-+#define OTP_FUNC_RD_BIT			BIT(0)
-+
-+#define OTP_RW_TIMEOUT_MILLISECONDS	(5)
-+
-+#define MMAP_EEPROM_OFFSET(x)		(EEPROM_REG_ADDR_BASE + (x))
-+
-+#define E2P_CMD_REG			(0x00)
-+#define E2P_DATA_REG			(0x04)
-+#define E2P_CFG_REG			(0x08)
-+#define E2P_PAD_CTL_REG			(0x0C)
-+
-+#define E2P_CMD_EPC_BUSY_BIT		BIT(31)
-+#define E2P_CMD_EPC_TIMEOUT_BIT		BIT(17)
-+#define E2P_CMD_EPC_WRITE		(BIT(29) | BIT(28))
-+
-+#define E2P_CFG_BAUD_RATE_100KHZ	BIT(9)
-+#define E2P_CFG_SIZE_SEL		BIT(12)
-+#define E2P_CFG_PULSE_WIDTH_100KHZ	(BIT(17) | BIT(16))
-+#define OTP_E2P_SECTOR_SIZE		(512)
-+#define OTP_SIZE_IN_BYTES		(8 * 1024)
-+#define E2P_SIZE_IN_BYTES		(8 * 1024)
-+
-+struct pci1xxxx_otp_e2p_device {
-+	struct pci1xxxx_otp_e2p_disk *otp_e2p_device;
-+	struct auxiliary_device *pdev;
-+	void __iomem *reg_base;
-+	int block_device_count;
-+};
-+
-+struct pci1xxxx_otp_e2p_disk {
-+	struct blk_mq_tag_set tag_set;
-+	struct auxiliary_device *pdev;
-+	struct request_queue *queue;
-+	struct mutex  lock;
-+	struct gendisk *gd;
-+	bool E2P;
-+	int (*disk_write_byte)(struct pci1xxxx_otp_e2p_device *priv,
-+		unsigned long byte_offset, u8 value);
-+	int (*disk_read_byte)(struct pci1xxxx_otp_e2p_device *priv,
-+		unsigned long byte_offset, u8 *data);
-+};
-+
-+static int OTP_sector_count = OTP_SIZE_IN_BYTES / OTP_E2P_SECTOR_SIZE;
-+static int E2P_sector_count = E2P_SIZE_IN_BYTES / OTP_E2P_SECTOR_SIZE;
-+static int otp_device_count, e2p_device_count;
-+static int block_driver_registered;
-+static int OTP_block_driver_major;
-+
-+static void otp_device_set_address(struct pci1xxxx_otp_e2p_device *priv, u16 address)
-+{
-+	u32 lo, hi;
-+
-+	lo = address & 0xFF;
-+	hi = (address & 0x1f00) >> 8;
-+	writel(lo, priv->reg_base + MMAP_OTP_OFFSET(OTP_ADDR_LOW_OFFSET));
-+	writel(hi, priv->reg_base + MMAP_OTP_OFFSET(OTP_ADDR_HIGH_OFFSET));
-+}
-+
-+static int set_sys_lock(struct pci1xxxx_otp_e2p_device *priv)
-+{
-+	void __iomem *p = priv->reg_base + MMAP_CFG_OFFSET(CFG_SYS_LOCK_OFFSET);
-+	u8 data;
-+
-+	writel(CFG_SYS_LOCK_PF3, p);
-+	data = readl(p);
-+	if (data != CFG_SYS_LOCK_PF3)
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+static int release_sys_lock(struct pci1xxxx_otp_e2p_device *priv)
-+{
-+	void __iomem *p = priv->reg_base + MMAP_CFG_OFFSET(CFG_SYS_LOCK_OFFSET);
-+	u8 data;
-+
-+	data = readl(p);
-+	if (data != CFG_SYS_LOCK_PF3)
-+		return 0;
-+
-+	writel(0, p);
-+
-+	data = readl(p);
-+	if (data & CFG_SYS_LOCK_PF3)
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
-+static int otp_e2p_device_open(struct block_device *bdev, fmode_t mode)
-+{
-+	struct pci1xxxx_otp_e2p_disk *disk_priv;
-+	struct pci1xxxx_otp_e2p_device *priv;
-+	struct auxiliary_device *pdev;
-+	int retval = 0;
-+	u8 data;
-+
-+	disk_priv = (struct pci1xxxx_otp_e2p_disk *)bdev->bd_disk->private_data;
-+	pdev = (struct auxiliary_device *)disk_priv->pdev;
-+	priv = dev_get_drvdata(&pdev->dev);
-+
-+	mutex_lock(&disk_priv->lock);
-+
-+	do {
-+		retval = set_sys_lock(priv);
-+		if (retval)
-+			break;
-+
-+		if (!disk_priv->E2P) {
-+			data = readl(priv->reg_base +
-+				     MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-+			writel((data & ~OTP_PWR_DN_BIT), priv->reg_base +
-+				MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-+		}
-+	} while (false);
-+
-+	mutex_unlock(&disk_priv->lock);
-+
-+	return retval;
-+}
-+
-+static void otp_e2p_device_release(struct gendisk *disk, fmode_t mode)
-+{
-+	struct pci1xxxx_otp_e2p_disk *disk_priv;
-+	struct pci1xxxx_otp_e2p_device *priv;
-+	u8 data;
-+
-+	disk_priv = (struct pci1xxxx_otp_e2p_disk *)disk->private_data;
-+	priv = dev_get_drvdata(&disk_priv->pdev->dev);
-+
-+	mutex_lock(&disk_priv->lock);
-+
-+	if (!disk_priv->E2P) {
-+		data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-+		writel((data | OTP_PWR_DN_BIT), priv->reg_base +
-+			MMAP_OTP_OFFSET(OTP_PWR_DN_OFFSET));
-+	}
-+	release_sys_lock(priv);
-+
-+	mutex_unlock(&disk_priv->lock);
-+}
-+
-+static int e2p_device_write_byte(struct pci1xxxx_otp_e2p_device *priv,
-+				 unsigned long byte_offset, u8 value)
-+{
-+	u32 data;
-+
-+	/* Write the value into E2P_DATA_REG register */
-+	writel(value, priv->reg_base + MMAP_EEPROM_OFFSET(E2P_DATA_REG));
-+	data = E2P_CMD_EPC_TIMEOUT_BIT | E2P_CMD_EPC_WRITE | byte_offset;
-+
-+	/* Write the data into E2P_CMD_REG register */
-+	writel(data, priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Set the EPC_BUSY bit of E2P_CMD_REG register */
-+	writel(E2P_CMD_EPC_BUSY_BIT | data, priv->reg_base +
-+	       MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Wait for the EPC_BUSY bit to get cleared */
-+	do {
-+		data = readl(priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+	} while (data & E2P_CMD_EPC_BUSY_BIT);
-+
-+	if (data & E2P_CMD_EPC_TIMEOUT_BIT) {
-+		dev_err(&priv->pdev->dev, "%s timed out\n", __func__);
-+		return -EFAULT;
-+	}
-+
-+	return 0;
-+}
-+
-+static int e2p_device_read_byte(struct pci1xxxx_otp_e2p_device *priv,
-+				unsigned long byte_offset, u8 *data)
-+{
-+	u32 regval;
-+
-+	/*
-+	 * Write the byte offset into the EPC_ADDRESS field of E2P_CMD_REG
-+	 * register
-+	 */
-+	writel(byte_offset, priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Set the EPC_BUSY bit of E2P_CMD_REG register */
-+	writel(E2P_CMD_EPC_BUSY_BIT | byte_offset, priv->reg_base +
-+	       MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Wait for the EPC_BUSY bit to get cleared */
-+	do {
-+		regval = readl(priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+	} while (regval & E2P_CMD_EPC_BUSY_BIT);
-+
-+	if (regval & E2P_CMD_EPC_TIMEOUT_BIT) {
-+		dev_err(&priv->pdev->dev, "%s timed out\n", __func__);
-+		return -EFAULT;
-+	}
-+
-+	/* Read the contents from the E2P_DATA_REG */
-+	*data = readl(priv->reg_base + MMAP_EEPROM_OFFSET(E2P_DATA_REG));
-+	return 0;
-+}
-+
-+static bool check_e2p_response(struct pci1xxxx_otp_e2p_device *priv)
-+{
-+	u32 data;
-+
-+	if (set_sys_lock(priv))
-+		return false;
-+
-+	writel((E2P_CFG_PULSE_WIDTH_100KHZ | E2P_CFG_SIZE_SEL |
-+		E2P_CFG_BAUD_RATE_100KHZ), priv->reg_base +
-+		MMAP_EEPROM_OFFSET(E2P_CFG_REG));
-+
-+	/*
-+	 * Write the byte offset into the EPC_ADDRESS field of E2P_CMD_REG
-+	 * register
-+	 */
-+	writel(E2P_CMD_EPC_TIMEOUT_BIT, priv->reg_base +
-+	       MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Set the EPC_BUSY bit of E2P_CMD_REG register */
-+	writel(E2P_CMD_EPC_BUSY_BIT, priv->reg_base +
-+	       MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+
-+	/* Wait for the EPC_BUSY bit to get cleared or timeout bit to get set*/
-+	do {
-+		data = readl(priv->reg_base + MMAP_EEPROM_OFFSET(E2P_CMD_REG));
-+	} while (data & E2P_CMD_EPC_BUSY_BIT);
-+
-+	/* If EPC_TIMEOUT is set, then the EEPROM is not responsive */
-+	release_sys_lock(priv);
-+
-+	if (data & E2P_CMD_EPC_TIMEOUT_BIT) {
-+		dev_err(&priv->pdev->dev,
-+			"EPC_Timeout, EEPROM is unresponsive: %x\n", data);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static int otp_device_write_byte(struct pci1xxxx_otp_e2p_device *priv,
-+				 unsigned long byte_offset, u8 value)
-+{
-+	unsigned long j0, j1, delay;
-+	u8 data;
-+
-+	if (!value)
-+		return 0;
-+
-+	otp_device_set_address(priv, (u16)byte_offset);
-+
-+	/* Set OTP_PGM_MODE_BYTE command bit in OTP_PRGM_MODE register */
-+	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PRGM_MODE_OFFSET));
-+	writel((data | OTP_PGM_MODE_BYTE_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_PRGM_MODE_OFFSET));
-+
-+	/* Write the value to program into OTP_PRGM_DATA register */
-+	writel(value, priv->reg_base + MMAP_OTP_OFFSET(OTP_PRGM_DATA_OFFSET));
-+
-+	/* Set OTP_PROGRAM command bit in OTP_FUNC_CMD register */
-+	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-+	writel((data | OTP_FUNC_PGM_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-+
-+	/* Set OTP_GO command bit in OTP_CMD_GO register */
-+	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-+	writel((data | OTP_CMD_GO_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-+	delay = msecs_to_jiffies(OTP_RW_TIMEOUT_MILLISECONDS);
-+	j0 = jiffies;
-+	j1 = j0 + delay;
-+
-+	/* Wait for the OTP_BUSY bit to get cleared in OTP_STATUS register */
-+	do {
-+		data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_STATUS_OFFSET));
-+	} while ((data & OTP_STATUS_BUSY_BIT) && (time_before(jiffies, j1)));
-+
-+	if (data & OTP_STATUS_BUSY_BIT) {
-+		dev_err(&priv->pdev->dev, "%s timed out\n", __func__);
-+		return -EFAULT;
-+	}
-+
-+	/* Read the result from OTP_RD_DATA register */
-+	data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_PASS_FAIL_OFFSET));
-+	if (data & 0x02)
-+		return 0;
-+
-+	dev_err(&priv->pdev->dev, "%s write read mismatch 0x%x\n", __func__, data);
-+	return -EFAULT;
-+}
-+
-+static int otp_device_read_byte(struct pci1xxxx_otp_e2p_device *priv,
-+				unsigned long byte_offset, u8 *data)
-+{
-+	unsigned long j0, j1, delay;
-+
-+	otp_device_set_address(priv, (u16)byte_offset);
-+
-+	/* Set OTP_READ command bit in OTP_FUNC_CMD register */
-+	*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-+	writel((*data | OTP_FUNC_RD_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_FUNC_CMD_OFFSET));
-+
-+	/* Set OTP_GO command bit in OTP_CMD_GO register */
-+	*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-+	writel((*data | OTP_CMD_GO_BIT), priv->reg_base +
-+		MMAP_OTP_OFFSET(OTP_CMD_GO_OFFSET));
-+	delay = msecs_to_jiffies(OTP_RW_TIMEOUT_MILLISECONDS);
-+	j0 = jiffies;
-+	j1 = j0 + delay;
-+
-+	/* Wait for OTP_BUSY bit to get cleared in OTP_STATUS */
-+	do {
-+		*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_STATUS_OFFSET));
-+	} while ((*data & OTP_STATUS_BUSY_BIT) && (time_before(jiffies, j1)));
-+
-+	if (*data & OTP_STATUS_BUSY_BIT) {
-+		dev_err(&priv->pdev->dev, "%s timed out\n", __func__);
-+		return -EFAULT;
-+	}
-+
-+	/* Read the result from OTP_RD_DATA register */
-+	*data = readl(priv->reg_base + MMAP_OTP_OFFSET(OTP_RD_DATA_OFFSET));
-+	return 0;
-+}
-+
-+static int otp_e2P_device_transfer(struct request *req)
-+{
-+	struct pci1xxxx_otp_e2p_disk *disk_priv;
-+	struct pci1xxxx_otp_e2p_device *priv;
-+	unsigned long sector;
-+	unsigned long nsect;
-+	long byte_offset;
-+	int retval;
-+	u8 *buffer;
-+	int write;
-+	int i, j;
-+
-+	sector = blk_rq_pos(req);
-+	nsect = blk_rq_cur_sectors(req);
-+	buffer = bio_data(req->bio);
-+	write = rq_data_dir(req);
-+	disk_priv = (struct pci1xxxx_otp_e2p_disk *)req->q->disk->private_data;
-+	priv = dev_get_drvdata(&disk_priv->pdev->dev);
-+
-+	if (write) {
-+		for (i = 0; i < nsect; i++) {
-+			byte_offset = (sector + i) * OTP_E2P_SECTOR_SIZE;
-+			for (j = 0; j < OTP_E2P_SECTOR_SIZE; j++) {
-+				retval = disk_priv->disk_write_byte(priv,
-+								    byte_offset + j,
-+								    *buffer);
-+				if (retval)
-+					return retval;
-+
-+				buffer++;
-+			}
-+		}
-+	} else {
-+		for (i = 0; i < nsect; i++) {
-+			byte_offset = (sector + i) * OTP_E2P_SECTOR_SIZE;
-+			for (j = 0; j < OTP_E2P_SECTOR_SIZE; j++) {
-+				retval = disk_priv->disk_read_byte(priv,
-+								   byte_offset + j,
-+								   buffer);
-+				if (retval)
-+					return retval;
-+
-+				buffer++;
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static blk_status_t OTPE2P_queue_rq(struct blk_mq_hw_ctx *hctx,
-+				    const struct blk_mq_queue_data *bd)
-+{
-+	struct request *req = bd->rq;
-+
-+	blk_mq_start_request(req);
-+	if (!otp_e2P_device_transfer(req)) {
-+		blk_mq_end_request(req, BLK_STS_OK);
-+		return BLK_STS_OK;
-+	}
-+
-+	return BLK_STS_IOERR;
-+}
-+
-+static const struct blk_mq_ops OTPE2P_mq_ops = {
-+	.queue_rq	= OTPE2P_queue_rq,
-+};
-+
-+static const struct block_device_operations otp_e2p_device_ops = {
-+	.owner = THIS_MODULE,
-+	.open = otp_e2p_device_open,
-+	.release = otp_e2p_device_release,
-+};
-+
-+static int otp_e2p_device_create_block_device(struct auxiliary_device *aux_dev)
-+{
-+	struct auxiliary_device_wrapper *aux_dev_wrapper;
-+	struct pci1xxxx_otp_e2p_device *priv;
-+	struct gp_aux_data_type *pdata;
-+	int retval = 0, i;
-+
-+	aux_dev_wrapper = (struct auxiliary_device_wrapper *) container_of(aux_dev,
-+			  struct auxiliary_device_wrapper, aux_dev);
-+	pdata = &(aux_dev_wrapper->gp_aux_data);
-+	if (!pdata) {
-+		dev_err(&aux_dev->dev, "Invalid data in aux_dev_wrapper->gp_aux_data\n");
-+		return -EINVAL;
-+	}
-+
-+	priv = devm_kzalloc(&aux_dev->dev, sizeof(struct pci1xxxx_otp_e2p_device),
-+			    GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->pdev = aux_dev;
-+
-+	dev_set_drvdata(&aux_dev->dev, priv);
-+
-+	if (!devm_request_mem_region(&aux_dev->dev, pdata->region_start +
-+				     PERI_PF3_SYSTEM_REG_ADDR_BASE,
-+		PERI_PF3_SYSTEM_REG_LENGTH, aux_dev->name)) {
-+		dev_err(&aux_dev->dev, "can't request otpe2p region\n");
-+		return -ENOMEM;
-+	}
-+
-+	priv->reg_base = devm_ioremap(&aux_dev->dev, pdata->region_start +
-+				      PERI_PF3_SYSTEM_REG_ADDR_BASE,
-+				      PERI_PF3_SYSTEM_REG_LENGTH);
-+	if (!priv->reg_base) {
-+		dev_err(&aux_dev->dev, "ioremap failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	priv->block_device_count = 0;
-+	do {
-+		if (check_e2p_response(priv))
-+			priv->block_device_count = 2;
-+		else
-+			priv->block_device_count = 1;
-+
-+		priv->otp_e2p_device = devm_kzalloc(&priv->pdev->dev,
-+						    priv->block_device_count *
-+						    sizeof(struct pci1xxxx_otp_e2p_disk),
-+						    GFP_KERNEL);
-+		if (!priv->otp_e2p_device) {
-+			retval = -ENOMEM;
-+			break;
-+		}
-+
-+		for (i = 0; i < priv->block_device_count; i++) {
-+			mutex_init(&priv->otp_e2p_device[i].lock);
-+			priv->otp_e2p_device[i].tag_set.ops = &OTPE2P_mq_ops;
-+			priv->otp_e2p_device[i].tag_set.nr_hw_queues = 1;
-+			priv->otp_e2p_device[i].tag_set.queue_depth = 16;
-+			priv->otp_e2p_device[i].tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
-+
-+			retval = blk_mq_alloc_tag_set(&priv->otp_e2p_device[i].tag_set);
-+			if (retval) {
-+				dev_err(&aux_dev->dev, "blk_mq_alloc_tag_set failed\n");
-+				break;
-+			}
-+
-+			priv->otp_e2p_device[i].queue =
-+				blk_mq_init_queue(&priv->otp_e2p_device[i].tag_set);
-+			if (IS_ERR(priv->otp_e2p_device[i].queue)) {
-+				retval = PTR_ERR(priv->otp_e2p_device[i].queue);
-+				priv->otp_e2p_device[i].queue = NULL;
-+				if (i)
-+					goto e2p_free_tag_set;
-+				else
-+					goto otp_free_tag_set;
-+			}
-+
-+			blk_queue_logical_block_size(priv->otp_e2p_device[i].queue,
-+						     OTP_E2P_SECTOR_SIZE);
-+			blk_queue_physical_block_size(priv->otp_e2p_device[i].queue,
-+						      OTP_E2P_SECTOR_SIZE);
-+			priv->otp_e2p_device[i].queue->queuedata = priv;
-+			priv->otp_e2p_device[i].gd =
-+				blk_mq_alloc_disk(&priv->otp_e2p_device[i].tag_set,
-+				NULL);
-+			if (IS_ERR(priv->otp_e2p_device[i].gd)) {
-+				retval = PTR_ERR(priv->otp_e2p_device[i].gd);
-+				if (i)
-+					goto e2p_destroy_queue;
-+				else
-+					goto otp_destroy_queue;
-+			}
-+
-+			priv->otp_e2p_device[i].pdev = aux_dev;
-+			priv->otp_e2p_device[i].gd->major = OTP_block_driver_major;
-+			priv->otp_e2p_device[i].gd->minors = 1;
-+			priv->otp_e2p_device[i].gd->first_minor =
-+				otp_device_count + e2p_device_count;
-+			priv->otp_e2p_device[i].gd->fops = &otp_e2p_device_ops;
-+			priv->otp_e2p_device[i].gd->private_data =
-+				&priv->otp_e2p_device[i];
-+
-+			if (i == 0) {
-+				snprintf(priv->otp_e2p_device[i].gd->disk_name,
-+					 32, "PCI1xxxxOTP%x", otp_device_count);
-+				set_capacity(priv->otp_e2p_device[i].gd,
-+					     OTP_sector_count);
-+				priv->otp_e2p_device[i].disk_read_byte = otp_device_read_byte;
-+				priv->otp_e2p_device[i].disk_write_byte = otp_device_write_byte;
-+				otp_device_count++;
-+			} else {
-+				snprintf(priv->otp_e2p_device[i].gd->disk_name,
-+					 32, "PCI1xxxxE2P%x", otp_device_count - 1);
-+				set_capacity(priv->otp_e2p_device[i].gd,
-+					     E2P_sector_count);
-+				priv->otp_e2p_device[i].E2P = true;
-+				priv->otp_e2p_device[i].disk_read_byte = e2p_device_read_byte;
-+				priv->otp_e2p_device[i].disk_write_byte = e2p_device_write_byte;
-+				e2p_device_count++;
-+			}
-+
-+			retval = add_disk(priv->otp_e2p_device[i].gd);
-+			if (retval) {
-+				if (i)
-+					goto e2p_free_disk;
-+				else
-+					goto otp_free_disk;
-+			}
-+		}
-+
-+	} while (false);
-+
-+	return retval;
-+
-+e2p_free_disk:
-+	del_gendisk(priv->otp_e2p_device[1].gd);
-+	put_disk(priv->otp_e2p_device[1].gd);
-+e2p_destroy_queue:
-+	blk_mq_destroy_queue(priv->otp_e2p_device[1].queue);
-+e2p_free_tag_set:
-+	blk_mq_free_tag_set(&priv->otp_e2p_device[1].tag_set);
-+otp_free_disk:
-+	del_gendisk(priv->otp_e2p_device[0].gd);
-+	put_disk(priv->otp_e2p_device[0].gd);
-+otp_destroy_queue:
-+	blk_mq_destroy_queue(priv->otp_e2p_device[0].queue);
-+otp_free_tag_set:
-+	blk_mq_free_tag_set(&priv->otp_e2p_device[0].tag_set);
-+
-+	return retval;
-+}
-+
-+static void pci1xxxx_otp_e2p_remove(struct auxiliary_device *aux_dev)
-+{
-+	struct pci1xxxx_otp_e2p_device *priv = dev_get_drvdata(&aux_dev->dev);
-+	int i;
-+
-+	for (i = 0; i < priv->block_device_count; i++) {
-+
-+		if (priv->otp_e2p_device[i].queue)
-+			blk_mq_destroy_queue(priv->otp_e2p_device[i].queue);
-+
-+		if (priv->otp_e2p_device[i].gd) {
-+			del_gendisk(priv->otp_e2p_device[i].gd);
-+			put_disk(priv->otp_e2p_device[i].gd);
-+			blk_mq_free_tag_set(&priv->otp_e2p_device[i].tag_set);
-+		}
-+	}
-+}
-+
-+static int pci1xxxx_otp_e2p_probe(struct auxiliary_device *aux_dev,
-+				  const struct auxiliary_device_id *id)
-+{
-+	int retval;
-+
-+	retval = otp_e2p_device_create_block_device(aux_dev);
-+	if (retval) {
-+		dev_err(&aux_dev->dev,
-+			"otp/eeprom device enumeration failed with errno = %d\n",
-+			retval);
-+		return retval;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct auxiliary_device_id pci1xxxx_otp_e2p_auxiliary_id_table[] = {
-+	{.name = "mchp_pci1xxxx_gp.gp_otp_e2p"},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(auxiliary, pci1xxxx_otp_e2p_auxiliary_id_table);
-+
-+static struct auxiliary_driver pci1xxxx_otp_e2p_driver = {
-+	.driver = {
-+		.name = "PCI1xxxxOTPE2P",
-+	},
-+	.probe = pci1xxxx_otp_e2p_probe,
-+	.remove = pci1xxxx_otp_e2p_remove,
-+	.id_table = pci1xxxx_otp_e2p_auxiliary_id_table
-+};
-+
-+static int __init pci1xxxx_otp_e2p_driver_init(void)
-+{
-+	int retval;
-+
-+	do {
-+		OTP_block_driver_major = register_blkdev(OTP_block_driver_major,
-+			"OTPBlockDevice");
-+		if (OTP_block_driver_major < 0) {
-+			retval = OTP_block_driver_major;
-+			break;
-+		}
-+
-+		block_driver_registered = 1;
-+
-+		retval = auxiliary_driver_register(&pci1xxxx_otp_e2p_driver);
-+		if (retval)
-+			break;
-+
-+	} while (false);
-+
-+	return retval;
-+}
-+
-+static void __exit pci1xxxx_otp_e2p_driver_exit(void)
-+{
-+	auxiliary_driver_unregister(&pci1xxxx_otp_e2p_driver);
-+	if (block_driver_registered)
-+		unregister_blkdev(OTP_block_driver_major, "OTPBlockDevice");
-+}
-+
-+module_init(pci1xxxx_otp_e2p_driver_init);
-+module_exit(pci1xxxx_otp_e2p_driver_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>");
-+MODULE_AUTHOR("Tharun Kumar P<tharunkumar.pasumarthi@microchip.com>");
-+MODULE_DESCRIPTION("Microchip Technology Inc. PCI1xxxx OTP EEPROM programmer");
--- 
-2.25.1
+Did I miss them?
 
+I think those calls need to be changed to ufs_put_page() calls in a precursor
+patch to this one unless I'm missing something.
+
+> 
+> Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  fs/ufs/dir.c | 75 ++++++++++++++++++++++++++++++++--------------------
+>  1 file changed, 46 insertions(+), 29 deletions(-)
+> 
+> diff --git a/fs/ufs/dir.c b/fs/ufs/dir.c
+> index 9fa86614d2d1..ed3568da29a8 100644
+> --- a/fs/ufs/dir.c
+> +++ b/fs/ufs/dir.c
+> @@ -61,9 +61,9 @@ static int ufs_commit_chunk(struct page *page, loff_t pos, unsigned len)
+>  	return err;
+>  }
+>  
+> -static inline void ufs_put_page(struct page *page)
+> +static inline void ufs_put_page(struct page *page, void *page_addr)
+>  {
+> -	kunmap(page);
+> +	kunmap_local((void *)((unsigned long)page_addr & PAGE_MASK));
+
+Any address in the page can be passed to kunmap_local() as this mask is done
+internally.
+
+>  	put_page(page);
+>  }
+>  
+> @@ -76,7 +76,7 @@ ino_t ufs_inode_by_name(struct inode *dir, const struct qstr *qstr)
+>  	de = ufs_find_entry(dir, qstr, &page);
+>  	if (de) {
+>  		res = fs32_to_cpu(dir->i_sb, de->d_ino);
+> -		ufs_put_page(page);
+> +		ufs_put_page(page, de);
+>  	}
+>  	return res;
+>  }
+> @@ -99,18 +99,17 @@ void ufs_set_link(struct inode *dir, struct ufs_dir_entry *de,
+>  	ufs_set_de_type(dir->i_sb, de, inode->i_mode);
+>  
+>  	err = ufs_commit_chunk(page, pos, len);
+> -	ufs_put_page(page);
+> +	ufs_put_page(page, de);
+>  	if (update_times)
+>  		dir->i_mtime = dir->i_ctime = current_time(dir);
+>  	mark_inode_dirty(dir);
+>  }
+>  
+>  
+> -static bool ufs_check_page(struct page *page)
+> +static bool ufs_check_page(struct page *page, char *kaddr)
+>  {
+>  	struct inode *dir = page->mapping->host;
+>  	struct super_block *sb = dir->i_sb;
+> -	char *kaddr = page_address(page);
+>  	unsigned offs, rec_len;
+>  	unsigned limit = PAGE_SIZE;
+>  	const unsigned chunk_mask = UFS_SB(sb)->s_uspi->s_dirblksize - 1;
+> @@ -185,23 +184,32 @@ static bool ufs_check_page(struct page *page)
+>  	return false;
+>  }
+>  
+> +/*
+> + * Calls to ufs_get_page()/ufs_put_page() must be nested according to the
+> + * rules documented in kmap_local_page()/kunmap_local().
+> + *
+> + * NOTE: ufs_find_entry() and ufs_dotdot() act as calls to ufs_get_page()
+> + * and must be treated accordingly for nesting purposes.
+> + */
+>  static void *ufs_get_page(struct inode *dir, unsigned long n, struct page **p)
+>  {
+> +	char *kaddr;
+> +
+>  	struct address_space *mapping = dir->i_mapping;
+>  	struct page *page = read_mapping_page(mapping, n, NULL);
+>  	if (!IS_ERR(page)) {
+> -		kmap(page);
+> +		kaddr = kmap_local_page(page);
+>  		if (unlikely(!PageChecked(page))) {
+> -			if (!ufs_check_page(page))
+> +			if (!ufs_check_page(page, kaddr))
+>  				goto fail;
+>  		}
+>  		*p = page;
+> -		return page_address(page);
+> +		return kaddr;
+>  	}
+>  	return ERR_CAST(page);
+>  
+>  fail:
+> -	ufs_put_page(page);
+> +	ufs_put_page(page, kaddr);
+>  	return ERR_PTR(-EIO);
+>  }
+>  
+> @@ -227,6 +235,13 @@ ufs_next_entry(struct super_block *sb, struct ufs_dir_entry *p)
+>  					fs16_to_cpu(sb, p->d_reclen));
+>  }
+>  
+> +/*
+> + * Calls to ufs_get_page()/ufs_put_page() must be nested according to the
+> + * rules documented in kmap_local_page()/kunmap_local().
+> + *
+> + * ufs_dotdot() acts as a call to ufs_get_page() and must be treated
+> + * accordingly for nesting purposes.
+> + */
+>  struct ufs_dir_entry *ufs_dotdot(struct inode *dir, struct page **p)
+>  {
+>  	struct ufs_dir_entry *de = ufs_get_page(dir, 0, p);
+> @@ -238,12 +253,15 @@ struct ufs_dir_entry *ufs_dotdot(struct inode *dir, struct page **p)
+>  }
+>  
+>  /*
+> - *	ufs_find_entry()
+> + * Finds an entry in the specified directory with the wanted name. It returns a
+> + * pointer to the directory's entry. The page in which the entry was found is
+> + * in the res_page out parameter. The page is returned mapped and unlocked.
+> + * The entry is guaranteed to be valid.
+>   *
+> - * finds an entry in the specified directory with the wanted name. It
+> - * returns the page in which the entry was found, and the entry itself
+> - * (as a parameter - res_dir). Page is returned mapped and unlocked.
+> - * Entry is guaranteed to be valid.
+
+I don't follow why this comment needed changing for this patch.  It probably
+warrants it's own patch.
+
+> + * On Success ufs_put_page() should be called on *res_page.
+> + *
+> + * ufs_find_entry() acts as a call to ufs_get_page() and must be treated
+> + * accordingly for nesting purposes.
+>   */
+>  struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
+>  				     struct page **res_page)
+> @@ -282,7 +300,7 @@ struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct qstr *qstr,
+>  					goto found;
+>  				de = ufs_next_entry(sb, de);
+>  			}
+> -			ufs_put_page(page);
+> +			ufs_put_page(page, kaddr);
+>  		}
+>  		if (++n >= npages)
+>  			n = 0;
+> @@ -360,7 +378,7 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
+>  			de = (struct ufs_dir_entry *) ((char *) de + rec_len);
+>  		}
+>  		unlock_page(page);
+> -		ufs_put_page(page);
+> +		ufs_put_page(page, kaddr);
+>  	}
+>  	BUG();
+>  	return -EINVAL;
+> @@ -390,7 +408,7 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
+>  	mark_inode_dirty(dir);
+>  	/* OFFSET_CACHE */
+>  out_put:
+> -	ufs_put_page(page);
+> +	ufs_put_page(page, kaddr);
+>  	return err;
+>  out_unlock:
+>  	unlock_page(page);
+> @@ -468,13 +486,13 @@ ufs_readdir(struct file *file, struct dir_context *ctx)
+>  					       ufs_get_de_namlen(sb, de),
+>  					       fs32_to_cpu(sb, de->d_ino),
+>  					       d_type)) {
+> -					ufs_put_page(page);
+> +					ufs_put_page(page, kaddr);
+>  					return 0;
+>  				}
+>  			}
+>  			ctx->pos += fs16_to_cpu(sb, de->d_reclen);
+>  		}
+> -		ufs_put_page(page);
+> +		ufs_put_page(page, kaddr);
+>  	}
+>  	return 0;
+>  }
+> @@ -485,10 +503,10 @@ ufs_readdir(struct file *file, struct dir_context *ctx)
+>   * previous entry.
+>   */
+>  int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
+> -		     struct page * page)
+> +		     struct page *page)
+>  {
+>  	struct super_block *sb = inode->i_sb;
+> -	char *kaddr = page_address(page);
+> +	char *kaddr = (char *)((unsigned long)dir & PAGE_MASK);
+
+I feel like this deserves a comment to clarify that dir points somewhere in the
+page we need the base address of.
+
+>  	unsigned int from = offset_in_page(dir) & ~(UFS_SB(sb)->s_uspi->s_dirblksize - 1);
+>  	unsigned int to = offset_in_page(dir) + fs16_to_cpu(sb, dir->d_reclen);
+>  	loff_t pos;
+> @@ -527,7 +545,7 @@ int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
+>  	inode->i_ctime = inode->i_mtime = current_time(inode);
+>  	mark_inode_dirty(inode);
+>  out:
+> -	ufs_put_page(page);
+> +	ufs_put_page(page, kaddr);
+>  	UFSD("EXIT\n");
+>  	return err;
+>  }
+> @@ -551,8 +569,7 @@ int ufs_make_empty(struct inode * inode, struct inode *dir)
+>  		goto fail;
+>  	}
+>  
+> -	kmap(page);
+> -	base = (char*)page_address(page);
+> +	base = kmap_local_page(page);
+
+NIT: I'd make this conversion a separate patch.
+
+Ira
+
+>  	memset(base, 0, PAGE_SIZE);
+>  
+>  	de = (struct ufs_dir_entry *) base;
+> @@ -569,7 +586,7 @@ int ufs_make_empty(struct inode * inode, struct inode *dir)
+>  	de->d_reclen = cpu_to_fs16(sb, chunk_size - UFS_DIR_REC_LEN(1));
+>  	ufs_set_de_namlen(sb, de, 2);
+>  	strcpy (de->d_name, "..");
+> -	kunmap(page);
+> +	kunmap_local(base);
+>  
+>  	err = ufs_commit_chunk(page, 0, chunk_size);
+>  fail:
+> @@ -585,9 +602,9 @@ int ufs_empty_dir(struct inode * inode)
+>  	struct super_block *sb = inode->i_sb;
+>  	struct page *page = NULL;
+>  	unsigned long i, npages = dir_pages(inode);
+> +	char *kaddr;
+>  
+>  	for (i = 0; i < npages; i++) {
+> -		char *kaddr;
+>  		struct ufs_dir_entry *de;
+>  
+>  		kaddr = ufs_get_page(inode, i, &page);
+> @@ -620,12 +637,12 @@ int ufs_empty_dir(struct inode * inode)
+>  			}
+>  			de = ufs_next_entry(sb, de);
+>  		}
+> -		ufs_put_page(page);
+> +		ufs_put_page(page, kaddr);
+>  	}
+>  	return 1;
+>  
+>  not_empty:
+> -	ufs_put_page(page);
+> +	ufs_put_page(page, kaddr);
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.39.0
+> 
