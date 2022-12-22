@@ -2,224 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DCB653C8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 163E0653C94
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235039AbiLVHc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 02:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S234972AbiLVHiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 02:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234949AbiLVHc4 (ORCPT
+        with ESMTP id S229698AbiLVHh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 02:32:56 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D6923EA6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:32:55 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id l3-20020a056e021aa300b00304be32e9e5so707566ilv.12
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 23:32:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BIkHxDubkjuQslZrjT1X+xdpYct/nDKr2hboTqeeD0A=;
-        b=tsF1sm3HzlENdEQlJQ8xh5mwzdTuvEu29gqMy/n/5MmK4upd76g717mPpVzqZw3Qls
-         +RYwtzEzzat9kZDjDVt69duOFBPiDubg0/IMFaMML8SkOlB9blz8bKWyJfg5Ifo2lD9o
-         VhI7WsuKkh9LjSsthMKqk0eD2SlnIhfgNH84Ykob6ZT3+ujSmekIQ7LcCkvkfsZJbD3D
-         rFjhLSBg+8g020ON4iZLP7DCZH2kWJIxMZ4E50yV1HtudC9Twnk26lyGJ+oX1NLp6XHz
-         dlrIu5Vi9SU7S/KoMxMIQzeEtCycUkRI+8wZ5zCg3eX2LUzsDdpfzflfxbJakrpDUg4/
-         I9Hg==
-X-Gm-Message-State: AFqh2kqQEtsYRyFZNOIy+azjrIYasXWf/Z3ClyRtcHGYMLPXrfhkAJYo
-        GZXCWLE198htczXFODz/pJa67O86NOv12iwIxk9/dtFI5DuZ
-X-Google-Smtp-Source: AMrXdXsKrYCCsV5zrx5z/esYEJVAmIAHQ2g2HwX6axV9m2MqlDyhHAjTIz5biSlETwyJgmcv0oR7TjJa4UTY0sczipilRiLQrEv9
+        Thu, 22 Dec 2022 02:37:56 -0500
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2056.outbound.protection.outlook.com [40.107.249.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FABE1900A;
+        Wed, 21 Dec 2022 23:37:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AiV5zAMFoJ0MiqRbt60M/IF/enKb8vDYWRQ4tP8C0kdv+W3utAzuTlEhAuMqd4mzuChjrc67MQKG1oQg2E0YGI+aYmGQtyssSeuCFCSouTkHfmpqE0khnoROLSEpXpi5pnu3ZbNRBPIvba6zTEql8W3YolI9DW3yqyHC1w/Y15YOuJLkVX0edJLpKULHHFvVIAZgv7psh3ggKPF0aE7cxGXuKO2gMFrPA/RQOSgETRiH1ZIi84tLqUJVAN0gKb6As5pCq+3G8Qx7lnEUbhi+jfXWduhRQzetAWl0hb3Op8U7Ol4GzjdvM5Ll2I+mocsFHdCZetjGz3+OwJifx1FW6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VnclSI31i9Z9Ok/npWLlz8ucL+qRlAkeZAtbRRNmH6o=;
+ b=FsyA4ZdkqPCKQD0hcxYSbAV/LqGdqSdkSAT8dRlrjgIDmRzBz9syt/5sEi8ndzgVCaSXDfKAHPjJXkkafEjSeMFJBnDbb2SPo9wjGUG1jpMssPOViaSRfUNTSO2dOGASj2uH7FPJJRqMBgEPpbd2/u7wqBO1oBAdTpVPwgq7xvErFpUMd93BM/mJnHIw3+8YSH4OxbQ+YlFSkCd1TglN2YI3hKiaYLZPJqo1jza4+G5pwyGwYoq77WBLe+qU4AfoyYna0I9sXOq0iG2SK+zj1zH6RkFvHIzyggGsp71m/P6i6G7JX9shLB9PzqLq625cCxXD0X0fhShSdlm2VC1L7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VnclSI31i9Z9Ok/npWLlz8ucL+qRlAkeZAtbRRNmH6o=;
+ b=XiCkkEhEuY9YuknyVKJKiPx7bopi75S9c5uJJQsJovF3CgR2rCG975Vf2a+HHnY1w0LjKC6OSIj9Tn3x27aAaxiklsh0Ph3eQSD3x1FRdOAtPZ3Lpo9JjnpcE7e6DvjC87Po8CCKJvhD7eWBjDVZS4h1ajO/8ozY4tXFH/a/NoQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com (2603:10a6:208:5b::30)
+ by DBAPR04MB7272.eurprd04.prod.outlook.com (2603:10a6:10:1ad::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
+ 2022 07:37:51 +0000
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::c1e7:eafb:408c:6ae5]) by AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::c1e7:eafb:408c:6ae5%4]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
+ 07:37:51 +0000
+From:   Chancel Liu <chancel.liu@nxp.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shengjiu.wang@gmail.com,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
+        perex@perex.cz, tiwai@suse.com, devicetree@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Cc:     Chancel Liu <chancel.liu@nxp.com>
+Subject: [PATCH 0/3] Add support for XCVR on i.MX93 platform
+Date:   Thu, 22 Dec 2022 15:36:15 +0800
+Message-Id: <20221222073618.1064415-1-chancel.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0035.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::8) To AM0PR04MB4211.eurprd04.prod.outlook.com
+ (2603:10a6:208:5b::30)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:48a:b0:30b:b9a9:ca8 with SMTP id
- b10-20020a056e02048a00b0030bb9a90ca8mr452268ils.216.1671694374940; Wed, 21
- Dec 2022 23:32:54 -0800 (PST)
-Date:   Wed, 21 Dec 2022 23:32:54 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006436bb05f065adbc@google.com>
-Subject: [syzbot] [hfs?] possible deadlock in hfs_extend_file
-From:   syzbot <syzbot+a4919d77e3a0272910bb@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB4211:EE_|DBAPR04MB7272:EE_
+X-MS-Office365-Filtering-Correlation-Id: bcf53cfe-4f93-4e82-65ec-08dae3ef6e14
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TZenyBRGvrpFximAPSNG8t4pmc1dIgTNdKX9HSVULBjuKysMVs+sVJaHAdRLEJGp7FqBRL42aIz2KR6V87C2XCedVPRCHO6T0b4tuZIvjX4qaM6ak9QlsokQiChjXS9YyCgdU84IYw3nEXHMjSm4kzNhKGXkrq1ZM9ORmNbmE5dsu9Iwz1mHVtWCDdb7PcZonuW67qhmV+e5bAqapx8oQmP7bclmA+ZF4BOtGJzK9cg4n0DwILhR3I639CSxRXitFixRHrQGzX59JWvhjGZIttbnN9oxEBd90sUkAmABKDwCqL1Rp6QU+82IVU8ObkIlOFRI+zht+JS4y9T8u1PutB9qOUfHo8IHz+fvPI7fPyxtt45c22bcB8BTd2SpkpwxaxNfJw7wfHjP7BtF9zf4hhkjYBLPiDgtfktcxC9ap2ukN+KO25MOU74DdPBevKLFCnfRrJoj+cqF4ndb4PJBOpAsiBjPy0uYggG6BdVI0hFhjwNl4/JfU6YGiSi7VQNEHtkeZjcZY0oIf2tT7qdIkFKv7vGbgG2KrUfZYbyC0fDUUdb5ZwF6XtqsLpxRDHjd84mfdebWIuR602Fr3nLHOI1DHXXbW+XfrB+ChCptuYyHPa4HVK8XSjCi2CU6MNmZeCj3rdcKLWVcLcIzSsR9s/fqOurWbFMERv8U+9MnArIEs6oDNQU7/OK14tgjXH1NLe3/rVBVoIATtz2np/JqMA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4211.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(366004)(136003)(396003)(451199015)(41300700001)(2906002)(8936002)(4326008)(66476007)(66946007)(66556008)(44832011)(7416002)(86362001)(8676002)(316002)(5660300002)(4744005)(921005)(6506007)(186003)(6512007)(26005)(38100700002)(38350700002)(52116002)(6666004)(36756003)(83380400001)(2616005)(1076003)(6486002)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UGk/c2NC/vE8Fgny6J/6WcnqMFdHXI8iyR+BZ08PgLOgqlSyRsi+LP0A4qf/?=
+ =?us-ascii?Q?aR/DYuDpsOvSOmpKlhxJ49WnHN1Jt1YxCOGZapheH5we7LwqPnbQo90H8Xxa?=
+ =?us-ascii?Q?zVSd2NINKugKWxGr/yH7JGx67xuPinADfe4pU10FwS3y7FpSjXjLgVCUfZ+i?=
+ =?us-ascii?Q?8FoY/iM8Ownc+05GS3muQUs7TDEkfHaZ+QTwoUSiw2dJukJiC/XJNF0G9VQ+?=
+ =?us-ascii?Q?CgnjRl60778l8Sy2ILwmkcDA6O9dqhSsosbz8qc3J59xOi73T2DlqDdbMdrv?=
+ =?us-ascii?Q?BC/2M/zaFL5TYDFBil99/tRP8yxNeEo0LfeIPRsziDNn0zQKs2Ejyn5jKyfK?=
+ =?us-ascii?Q?uQCjc3FtT4suHc/0FT7Rm4LZcytj49C8OaVyqhAW54x55DBCUPYVmMybuPXV?=
+ =?us-ascii?Q?gdrEdIJsbGBLgcGkUfESJQPSLi68VePtzPFJB2RNaDg+wVPz/qUjjoAZ69c9?=
+ =?us-ascii?Q?O5+6Ka69Np45IrnVXP+MfKmcnMTbF3Y5qzZLOLs0lLnxWRezq8/RH0to+4Dq?=
+ =?us-ascii?Q?JZT1Og+6gsPkZs1X6dJbjrgd50a3lPd72LDcbjcE8b7KDLWKfY8lXCt/QG1R?=
+ =?us-ascii?Q?K07IFRG9fWMnChS3Ids40/ehrCQXZzflZocEGz72/BtPCK6YgR8ViVJVBBHH?=
+ =?us-ascii?Q?f4WvtyVzMwy76C5Egh+vL41zT0mBuA88eu4lrGpDMe10zo07qaVXlrbeeZ93?=
+ =?us-ascii?Q?CP1EzmIffL8NwQ0MnGjtpUKrPJHfM/qtdL2MaKnwFLfVB6RdanD1dRQLQAHs?=
+ =?us-ascii?Q?AASajdUOWgWjRBN6d7ccWa9QFBCXO4sYGmMbeLkJeXXSQkru6HW97DgbyngI?=
+ =?us-ascii?Q?1thgTPkoQV1T6adtqB6Ap2YKluE9cxge4vWyEoyebF1Qs04gK72sF0wDV5Ph?=
+ =?us-ascii?Q?Z4XTS+5BO805mWhB7t3Y44yPfQf7ULX7OA9CW9c3Dt/1tTU+WlSD9tKYessO?=
+ =?us-ascii?Q?coG7bsT2arm9WamGHkM1A+AJ013lPLLtJe+4U9dKa+DArZq9BK5JOhSMXEwI?=
+ =?us-ascii?Q?45f66XJWe3YbY/BZgwrPgmHY1VzD5rLOLC53C9R3zkggm+As9haAttKK1YGX?=
+ =?us-ascii?Q?MJNN0LD9dQe2AslPEStPrGYWQHa+ZvOy6OppCEEmogGmVYoqt9eaWGA3obKf?=
+ =?us-ascii?Q?/h7sWVHqnmtjPwFDGCz4GBmkWsybbJJKst+SFCGDVzal45K6xRKg13bc83m2?=
+ =?us-ascii?Q?xLvV9M2kLJ+Un9YD8r0aBzThkKcGS0GmgOdnOKFHzB0wd2BHhTdlq7qj/4gX?=
+ =?us-ascii?Q?t54/3Ik+JqzXsJQxG3jn4NuD/kABqsVoxji49sPC0EK4nRJeqQirwLHpZpgv?=
+ =?us-ascii?Q?cvcCq30HV4mvXyZ0rcCNxbJC7gThtorQX4XlBBEF/MdwVaxa+EToIvvXiyrf?=
+ =?us-ascii?Q?f67oHSm9n7Cf2w2kym6xnQALxVXBnaZj15eAscI6jyPY2/HtnEiyko3jqNMe?=
+ =?us-ascii?Q?creVnwJA7z574JP+tNkpa/+OyuXZc3/QF10FuSyAReemhHwAo5y+dczySk3u?=
+ =?us-ascii?Q?1zLOJZ082roUTOQJ7EW2S1dIn25/KbV4wuOH4/AUh3Zmjr4mHOA1i2Te2HNW?=
+ =?us-ascii?Q?jsJ+XAB9NEVYAbcUXYK091n3pL78eZYzRMgg2+bu?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bcf53cfe-4f93-4e82-65ec-08dae3ef6e14
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB4211.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 07:37:51.3303
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xs67zwOrpB5d33w5ag4XuyhwzsxRgZZmVvM4/p9FxHRVOwM5TnWVr6apBiR7ID+zOCOEFF0pjrAWX/0/bRXmLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7272
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patchset supports XCVR on i.MX93 platform.
 
-syzbot found the following issue on:
+Chancel Liu (3):
+  ASoC: dt-bindings: fsl,xcvr: Add compatible string for i.MX93 platform
+  ASoC: fsl_xcvr: Add support for i.MX93 platform
+  ASoC: fsl_xcvr: Add constraints of period size while using eDMA
 
-HEAD commit:    b6bb9676f216 Merge tag 'm68knommu-for-v6.2' of git://git.k..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17bd42cf880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d3fb546de56fbf8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=a4919d77e3a0272910bb
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+ .../devicetree/bindings/sound/fsl,xcvr.yaml   |   1 +
+ sound/soc/fsl/fsl_xcvr.c                      | 167 +++++++++++++-----
+ sound/soc/fsl/fsl_xcvr.h                      |   7 +
+ 3 files changed, 127 insertions(+), 48 deletions(-)
 
-Unfortunately, I don't have any reproducer for this issue yet.
+--
+2.25.1
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2f703f794500/disk-b6bb9676.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0cca7cdd545b/vmlinux-b6bb9676.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0ce2560b7652/bzImage-b6bb9676.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a4919d77e3a0272910bb@syzkaller.appspotmail.com
-
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-syzkaller-13872-gb6bb9676f216 #0 Not tainted
-------------------------------------------------------
-syz-executor.5/10745 is trying to acquire lock:
-ffff88802b21e8f8 (&HFS_I(tree->inode)->extents_lock){+.+.}-{3:3}, at: hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
-
-but task is already holding lock:
-ffff88806083e0b0 (&tree->tree_lock#2/1){+.+.}-{3:3}, at: hfs_find_init+0x167/0x1e0
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&tree->tree_lock#2/1){+.+.}-{3:3}:
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       hfs_find_init+0x167/0x1e0
-       hfs_ext_read_extent fs/hfs/extent.c:200 [inline]
-       hfs_extend_file+0x2f8/0x1420 fs/hfs/extent.c:401
-       hfs_bmap_reserve+0xfa/0x410 fs/hfs/btree.c:234
-       hfs_cat_create+0x1b5/0x8a0 fs/hfs/catalog.c:104
-       hfs_create+0x62/0xd0 fs/hfs/dir.c:202
-       lookup_open fs/namei.c:3413 [inline]
-       open_last_lookups fs/namei.c:3481 [inline]
-       path_openat+0x12ac/0x2dd0 fs/namei.c:3711
-       do_filp_open+0x264/0x4f0 fs/namei.c:3741
-       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
-       do_sys_open fs/open.c:1326 [inline]
-       __do_sys_open fs/open.c:1334 [inline]
-       __se_sys_open fs/open.c:1330 [inline]
-       __x64_sys_open+0x221/0x270 fs/open.c:1330
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&HFS_I(tree->inode)->extents_lock){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
-       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
-       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
-       hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
-       hfs_bmap_reserve+0xfa/0x410 fs/hfs/btree.c:234
-       __hfs_ext_write_extent+0x1ea/0x460 fs/hfs/extent.c:121
-       __hfs_ext_cache_extent+0x67/0x980 fs/hfs/extent.c:174
-       hfs_ext_read_extent fs/hfs/extent.c:202 [inline]
-       hfs_extend_file+0x323/0x1420 fs/hfs/extent.c:401
-       hfs_get_block+0x3fc/0xbb0 fs/hfs/extent.c:353
-       __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
-       __block_write_begin fs/buffer.c:2041 [inline]
-       block_write_begin+0x93/0x1e0 fs/buffer.c:2102
-       cont_write_begin+0x606/0x860 fs/buffer.c:2456
-       hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
-       cont_expand_zero fs/buffer.c:2383 [inline]
-       cont_write_begin+0x2cf/0x860 fs/buffer.c:2446
-       hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
-       hfs_file_truncate+0x159/0xa10 fs/hfs/extent.c:494
-       hfs_inode_setattr+0x45d/0x690 fs/hfs/inode.c:651
-       notify_change+0xe50/0x1100 fs/attr.c:482
-       do_truncate+0x200/0x2f0 fs/open.c:65
-       do_sys_ftruncate+0x2b0/0x350 fs/open.c:193
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&tree->tree_lock#2/1);
-                               lock(&HFS_I(tree->inode)->extents_lock);
-                               lock(&tree->tree_lock#2/1);
-  lock(&HFS_I(tree->inode)->extents_lock);
-
- *** DEADLOCK ***
-
-4 locks held by syz-executor.5/10745:
- #0: ffff8880231a8460 (sb_writers#22){.+.+}-{0:0}, at: do_sys_ftruncate+0x243/0x350 fs/open.c:190
- #1: ffff88802b21a328 (&sb->s_type->i_mutex_key#28){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #1: ffff88802b21a328 (&sb->s_type->i_mutex_key#28){+.+.}-{3:3}, at: do_truncate+0x1ec/0x2f0 fs/open.c:63
- #2: ffff88802b21a178 (&HFS_I(inode)->extents_lock#2){+.+.}-{3:3}, at: hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
- #3: ffff88806083e0b0 (&tree->tree_lock#2/1){+.+.}-{3:3}, at: hfs_find_init+0x167/0x1e0
-
-stack backtrace:
-CPU: 0 PID: 10745 Comm: syz-executor.5 Not tainted 6.1.0-syzkaller-13872-gb6bb9676f216 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
- __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
- lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
- __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
- hfs_bmap_reserve+0xfa/0x410 fs/hfs/btree.c:234
- __hfs_ext_write_extent+0x1ea/0x460 fs/hfs/extent.c:121
- __hfs_ext_cache_extent+0x67/0x980 fs/hfs/extent.c:174
- hfs_ext_read_extent fs/hfs/extent.c:202 [inline]
- hfs_extend_file+0x323/0x1420 fs/hfs/extent.c:401
- hfs_get_block+0x3fc/0xbb0 fs/hfs/extent.c:353
- __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
- __block_write_begin fs/buffer.c:2041 [inline]
- block_write_begin+0x93/0x1e0 fs/buffer.c:2102
- cont_write_begin+0x606/0x860 fs/buffer.c:2456
- hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
- cont_expand_zero fs/buffer.c:2383 [inline]
- cont_write_begin+0x2cf/0x860 fs/buffer.c:2446
- hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
- hfs_file_truncate+0x159/0xa10 fs/hfs/extent.c:494
- hfs_inode_setattr+0x45d/0x690 fs/hfs/inode.c:651
- notify_change+0xe50/0x1100 fs/attr.c:482
- do_truncate+0x200/0x2f0 fs/open.c:65
- do_sys_ftruncate+0x2b0/0x350 fs/open.c:193
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4373c8c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f43749db168 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
-RAX: ffffffffffffffda RBX: 00007f4373dabf80 RCX: 00007f4373c8c0d9
-RDX: 0000000000000000 RSI: 0000000002007fff RDI: 0000000000000005
-RBP: 00007f4373ce7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffda414b44f R14: 00007f43749db300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
