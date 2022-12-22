@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D3A65463E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F074165463F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235418AbiLVTAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 14:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        id S235465AbiLVTAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 14:00:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLVTAh (ORCPT
+        with ESMTP id S229674AbiLVTAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 14:00:37 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7D4233AB
+        Thu, 22 Dec 2022 14:00:38 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEED4248EE
         for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:00:35 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id f34so4050135lfv.10
+Received: by mail-lf1-x12b.google.com with SMTP id bp15so4028822lfb.13
         for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:00:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xFGD4VIGKFF/VgK3W8l6J2/VT0xeVWmVNx8bDUgm6n8=;
-        b=PjEfHeIvZJi/4S12sn9JGXZNOZM2wzHObFOhOl9XJx0YgNJvbJRTcTu5+qyQ0wKPYU
-         PBhUKu4FcEJyPvnsxq3X5tofzpUREJxpyb0pKYrwk3FLWIWghNUvhAILYvekBCp3o5sc
-         C52ub7lXZ9HtC+lvZqE+wQTUrCCVgFsEtOMEQpgDif60a4yPSjpF1/YlgyPK6RLbPWbs
-         43WCM75n2T4FUVL2H0eXfPFQffnCLflKwiE88owiUiN5Fw1ckhaqjpn2JfHARVjcDozT
-         5082axGIHk5OOLCfkB1lIzKpbmRUgXIGxFjIaKb6HqxFpQRtJozeS9GYTrRx8e1RUP4/
-         JK5w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i+DOrKc/WLcF8tZORAcZxALx+GbVZfz9pT9WtlPUuC4=;
+        b=bcrd/4/xejvVpq2+B3spoa/sbs9+HPre0M1zqgfRI4dfY5E5LLvs2Qh8ug58GxtUlS
+         maVwcN/m+756UH2rwsGldqcaBBY4cgnAT1gpT5r67UCTO8byxZzI1h7F/Z4hd4dD3OMI
+         pwjn8QOFoRBrS4dZPFZk1GAW7LFmW+QMvJqP19G0NtyH5b6iXpL67h0+kV8VaNk2h9DJ
+         cmBkv3h+DmAARSsdpskD45XXO1BfEN/S2Pc4Ypcd8ACZ7ZgK+xOC8vgd2bX7/NUMoEH7
+         eL3xq2h11ZhNpZ2t1u/eQch2Q5E6nCkWHMmqAyYutaSnLMFckQpTER9Z80Z3zQ5VEVF1
+         ky/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xFGD4VIGKFF/VgK3W8l6J2/VT0xeVWmVNx8bDUgm6n8=;
-        b=2Unn0mAlYufwJWRivQQx7DTtK0K2SkrdkWE7xn5mvXWhPTTmhTIT/3ivUn4BPmdpLL
-         Tbo1p/+qNxq/H3UeUSqIcV+oERHjk54AP5pZheVTdW5oiKkrNH0aFWwHyzU1rAFTRTQy
-         xyCS1RWdFXqbOxlhNI0nC+0AkNNeBx0ok3SOlX+U1+oP06kQnUGYYe4L4xsVd6YgpKTR
-         m5QLeci/qC8TD9meTZYWI7h44ybScI0lYGirPr5IEOH5TIXitqyy1bVM9psGgNVJVzIn
-         8Hzx6CiTZK1AxVmH8P1L9TzatpOU/UovRQLpBUll/2q9qzttSyml3eHF85mT7a7mUWNs
-         sV1w==
-X-Gm-Message-State: AFqh2kpxMP2Jib3/yZPtZtzOzMRQ/lp/xrrJCJyt4VTmgebL/zsAiAki
-        0FJ5CXDC5c3BSXuBC2YUqq8=
-X-Google-Smtp-Source: AMrXdXtwRLeGl6roX1wbkOoZ3GXJm4X3LNeUwUJivdXD+/FVCK7yPlPjMZWjL7DFMTWhKsmS7oQpGg==
-X-Received: by 2002:ac2:47f6:0:b0:4af:f5c1:b1c7 with SMTP id b22-20020ac247f6000000b004aff5c1b1c7mr1729091lfp.20.1671735633323;
-        Thu, 22 Dec 2022 11:00:33 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i+DOrKc/WLcF8tZORAcZxALx+GbVZfz9pT9WtlPUuC4=;
+        b=bGvukt+0yfOe1WOfMlMbdR6T3+c8t6GercNHKgz2bcjadgoWgvt12nfp23EzdLahWV
+         RPgp6p7j1U8RQ9Dse+jVv+9aEAVykVUIOkTN1eLRHAnCLOciyYHbyrezFGvkfk2b/Ir0
+         SpiOy+HBnBRUfuxVViS+/9GAhQnwNuVA+e2hqulF8ZyAobzeknrsZlxksccO5zbt4Zei
+         5s2Hd1ZUje2vZ4Exp89c0kInVCcL0p8rsOyo9d3/xrYkdvL+3SRDgxZGilx16oFQd79H
+         +NczrIdljVRCI3GbHa7S+Vbb2mWMVlYyFWpNGfABIL1F/ke4W2ljvsMemHSJ/pmCgodj
+         E2Zg==
+X-Gm-Message-State: AFqh2koP/8kGwbpkZtTVGL0CcNCsZ93het2Ro6ZCqS3YtuamtyaIVNIt
+        jFBmrxgTWGuKJogkp+Zo2tI=
+X-Google-Smtp-Source: AMrXdXul5bZK1z5ZO6+wV5M1B4ckWgEp7djYnY12RmpTYVoVITC2Do/+E8FCHd6bs5YsCMrtD5VgnQ==
+X-Received: by 2002:a05:6512:b9f:b0:4b5:9914:87f6 with SMTP id b31-20020a0565120b9f00b004b5991487f6mr2162013lfv.66.1671735634218;
+        Thu, 22 Dec 2022 11:00:34 -0800 (PST)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id c20-20020ac24154000000b0048a8c907fe9sm164209lfi.167.2022.12.22.11.00.32
+        by smtp.gmail.com with ESMTPSA id c20-20020ac24154000000b0048a8c907fe9sm164209lfi.167.2022.12.22.11.00.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 11:00:32 -0800 (PST)
+        Thu, 22 Dec 2022 11:00:33 -0800 (PST)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
@@ -59,11 +60,13 @@ Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Uladzislau Rezki <urezki@gmail.com>,
         Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH v3 1/3] mm: vmalloc: Avoid calling __find_vmap_area() twice in __vunmap()
-Date:   Thu, 22 Dec 2022 20:00:20 +0100
-Message-Id: <20221222190022.134380-1-urezki@gmail.com>
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v3 2/3] mm: vmalloc: Switch to find_unlink_vmap_area() in vm_unmap_ram()
+Date:   Thu, 22 Dec 2022 20:00:21 +0100
+Message-Id: <20221222190022.134380-2-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221222190022.134380-1-urezki@gmail.com>
+References: <20221222190022.134380-1-urezki@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,223 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the __vunmap() path calls __find_vmap_area() twice. Once on
-entry to check that the area exists, then inside the remove_vm_area()
-function which also performs a new search for the VA.
+Switch from find_vmap_area() to find_unlink_vmap_area() to prevent
+a double access to the vmap_area_lock: one for finding area, second
+time is for unlinking from a tree.
 
-In order to improvie it from a performance point of view we split
-remove_vm_area() into two new parts:
-  - find_unlink_vmap_area() that does a search and unlink from tree;
-  - __remove_vm_area() that removes without searching.
-
-In this case there is no any functional change for remove_vm_area()
-whereas vm_remove_mappings(), where a second search happens, switches
-to the __remove_vm_area() variant where the already detached VA is
-passed as a parameter, so there is no need to find it again.
-
-Performance wise, i use test_vmalloc.sh with 32 threads doing alloc
-free on a 64-CPUs-x86_64-box:
-
-perf without this patch:
--   31.41%     0.50%  vmalloc_test/10  [kernel.vmlinux]    [k] __vunmap
-   - 30.92% __vunmap
-      - 17.67% _raw_spin_lock
-           native_queued_spin_lock_slowpath
-      - 12.33% remove_vm_area
-         - 11.79% free_vmap_area_noflush
-            - 11.18% _raw_spin_lock
-                 native_queued_spin_lock_slowpath
-        0.76% free_unref_page
-
-perf with this patch:
--   11.35%     0.13%  vmalloc_test/14  [kernel.vmlinux]    [k] __vunmap
-   - 11.23% __vunmap
-      - 8.28% find_unlink_vmap_area
-         - 7.95% _raw_spin_lock
-              7.44% native_queued_spin_lock_slowpath
-      - 1.93% free_vmap_area_noflush
-         - 0.56% _raw_spin_lock
-              0.53% native_queued_spin_lock_slowpath
-        0.60% __vunmap_range_noflush
-
-__vunmap() consumes around ~20% less CPU cycles on this test.
-
-v2 -> v3:
-- update commit message;
-- rename the vm_remove_mappings() to the va_remove_mappings();
-- move va-unlinking to the callers so the free_vmap_area_noflush()
-  now expects a VA that has been disconnected;
-- eliminate a local variable in the remove_vm_area().
-
-Reported-by: Roman Gushchin <roman.gushchin@linux.dev>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- mm/vmalloc.c | 77 ++++++++++++++++++++++++++++++++--------------------
- 1 file changed, 47 insertions(+), 30 deletions(-)
+ mm/vmalloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 9e30f0b39203..eb91ecaa7277 100644
+index eb91ecaa7277..70e5000b9d68 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -1815,9 +1815,9 @@ static void drain_vmap_area_work(struct work_struct *work)
- }
- 
- /*
-- * Free a vmap area, caller ensuring that the area has been unmapped
-- * and flush_cache_vunmap had been called for the correct range
-- * previously.
-+ * Free a vmap area, caller ensuring that the area has been unmapped,
-+ * unlinked and flush_cache_vunmap had been called for the correct
-+ * range previously.
-  */
- static void free_vmap_area_noflush(struct vmap_area *va)
- {
-@@ -1825,9 +1825,8 @@ static void free_vmap_area_noflush(struct vmap_area *va)
- 	unsigned long va_start = va->va_start;
- 	unsigned long nr_lazy;
- 
--	spin_lock(&vmap_area_lock);
--	unlink_va(va, &vmap_area_root);
--	spin_unlock(&vmap_area_lock);
-+	if (WARN_ON_ONCE(!list_empty(&va->list)))
-+		return;
- 
- 	nr_lazy = atomic_long_add_return((va->va_end - va->va_start) >>
- 				PAGE_SHIFT, &vmap_lazy_nr);
-@@ -1871,6 +1870,19 @@ struct vmap_area *find_vmap_area(unsigned long addr)
- 	return va;
- }
- 
-+static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
-+{
-+	struct vmap_area *va;
-+
-+	spin_lock(&vmap_area_lock);
-+	va = __find_vmap_area(addr, &vmap_area_root);
-+	if (va)
-+		unlink_va(va, &vmap_area_root);
-+	spin_unlock(&vmap_area_lock);
-+
-+	return va;
-+}
-+
- /*** Per cpu kva allocator ***/
- 
- /*
-@@ -2015,6 +2027,10 @@ static void free_vmap_block(struct vmap_block *vb)
- 	tmp = xa_erase(&vmap_blocks, addr_to_vb_idx(vb->va->va_start));
- 	BUG_ON(tmp != vb);
- 
-+	spin_lock(&vmap_area_lock);
-+	unlink_va(vb->va, &vmap_area_root);
-+	spin_unlock(&vmap_area_lock);
-+
- 	free_vmap_area_noflush(vb->va);
- 	kfree_rcu(vb, rcu_head);
- }
-@@ -2591,6 +2607,20 @@ struct vm_struct *find_vm_area(const void *addr)
- 	return va->vm;
- }
- 
-+static struct vm_struct *__remove_vm_area(struct vmap_area *va)
-+{
-+	struct vm_struct *vm;
-+
-+	if (!va || !va->vm)
-+		return NULL;
-+
-+	vm = va->vm;
-+	kasan_free_module_shadow(vm);
-+	free_unmap_vmap_area(va);
-+
-+	return vm;
-+}
-+
- /**
-  * remove_vm_area - find and remove a continuous kernel virtual area
-  * @addr:	    base address
-@@ -2603,26 +2633,10 @@ struct vm_struct *find_vm_area(const void *addr)
-  */
- struct vm_struct *remove_vm_area(const void *addr)
- {
--	struct vmap_area *va;
--
- 	might_sleep();
- 
--	spin_lock(&vmap_area_lock);
--	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
--	if (va && va->vm) {
--		struct vm_struct *vm = va->vm;
--
--		va->vm = NULL;
--		spin_unlock(&vmap_area_lock);
--
--		kasan_free_module_shadow(vm);
--		free_unmap_vmap_area(va);
--
--		return vm;
--	}
--
--	spin_unlock(&vmap_area_lock);
--	return NULL;
-+	return __remove_vm_area(
-+		find_unlink_vmap_area((unsigned long) addr));
- }
- 
- static inline void set_area_direct_map(const struct vm_struct *area,
-@@ -2636,16 +2650,17 @@ static inline void set_area_direct_map(const struct vm_struct *area,
- 			set_direct_map(area->pages[i]);
- }
- 
--/* Handle removing and resetting vm mappings related to the vm_struct. */
--static void vm_remove_mappings(struct vm_struct *area, int deallocate_pages)
-+/* Handle removing and resetting vm mappings related to the VA's vm_struct. */
-+static void va_remove_mappings(struct vmap_area *va, int deallocate_pages)
- {
-+	struct vm_struct *area = va->vm;
- 	unsigned long start = ULONG_MAX, end = 0;
- 	unsigned int page_order = vm_area_page_order(area);
- 	int flush_reset = area->flags & VM_FLUSH_RESET_PERMS;
- 	int flush_dmap = 0;
- 	int i;
- 
--	remove_vm_area(area->addr);
-+	__remove_vm_area(va);
- 
- 	/* If this is not VM_FLUSH_RESET_PERMS memory, no need for the below. */
- 	if (!flush_reset)
-@@ -2690,6 +2705,7 @@ static void vm_remove_mappings(struct vm_struct *area, int deallocate_pages)
- static void __vunmap(const void *addr, int deallocate_pages)
- {
- 	struct vm_struct *area;
-+	struct vmap_area *va;
- 
- 	if (!addr)
- 		return;
-@@ -2698,19 +2714,20 @@ static void __vunmap(const void *addr, int deallocate_pages)
- 			addr))
- 		return;
- 
--	area = find_vm_area(addr);
--	if (unlikely(!area)) {
-+	va = find_unlink_vmap_area((unsigned long)addr);
-+	if (unlikely(!va)) {
- 		WARN(1, KERN_ERR "Trying to vfree() nonexistent vm area (%p)\n",
- 				addr);
+@@ -2252,7 +2252,7 @@ void vm_unmap_ram(const void *mem, unsigned int count)
  		return;
  	}
  
-+	area = va->vm;
- 	debug_check_no_locks_freed(area->addr, get_vm_area_size(area));
- 	debug_check_no_obj_freed(area->addr, get_vm_area_size(area));
- 
- 	kasan_poison_vmalloc(area->addr, get_vm_area_size(area));
- 
--	vm_remove_mappings(area, deallocate_pages);
-+	va_remove_mappings(va, deallocate_pages);
- 
- 	if (deallocate_pages) {
- 		int i;
+-	va = find_vmap_area(addr);
++	va = find_unlink_vmap_area(addr);
+ 	BUG_ON(!va);
+ 	debug_check_no_locks_freed((void *)va->va_start,
+ 				    (va->va_end - va->va_start));
 -- 
 2.30.2
 
