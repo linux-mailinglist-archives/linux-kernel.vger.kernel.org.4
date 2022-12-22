@@ -2,81 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836FE653B43
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 05:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA2B653B4A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 05:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234939AbiLVE0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 23:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S234763AbiLVE21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 23:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234740AbiLVE0s (ORCPT
+        with ESMTP id S230014AbiLVE2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 23:26:48 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E4F26F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:26:47 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso4796664pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 20:26:47 -0800 (PST)
+        Wed, 21 Dec 2022 23:28:24 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4C42C1;
+        Wed, 21 Dec 2022 20:28:22 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BM0xCj1012924;
+        Thu, 22 Dec 2022 04:28:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=NNQKihCudOUIhYR491gCeNyLrHlBg+oTrUCBKiPeFfw=;
+ b=DCIAjlrfQtuPs9ekeojjchMnRaV7QlSIiNCLmqSz9vBLS+ai8eV4axkRiczqy045v5bu
+ iAZ48FEw2Y3jSwme9H3WKTK1mo84VoEUqm2HCpgy+yDlpo7UQ4D9S15UzVgCjhFRaz/a
+ G6NhYu90IUbr35epRrd7EGZGoPsRfUWzy6BNQS0xRHz0aP7H3cXhqU/9AUevEd2KohkH
+ gLqgEiVubsj8rSX8rw9qz5clEXSg9cFIl6azwp7PO0dLMAAwHAjYQb5I7IKA1U8Z3L/J
+ IDUhLb1i0Nj4iKy+ZhgTDF6dBhiysahqmd0J/GxU1ZtSwb3Ld5MbFs6FRDStxc8SNmt2 9g== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mh6tmaect-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Dec 2022 04:28:20 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2BM2dDIl009720;
+        Thu, 22 Dec 2022 04:28:19 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3mh47du724-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Dec 2022 04:28:19 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kqMU2bY154jiTu32ARU+oY/CZ5EuAgR2ESfEDiTB668LseMhKRECyXCK9JvrgvjI2um1O4TjeQdwosUnBV53wUgqOvnljbXX5BSPCW3YGFwARR/12g/sTU+4TvSHlb5gn6i6G0KMKvb3vX68Cpbg+q5ftIIt1X0pxrwx4aeEfb56Bl7XKAdjxYP59Aj4VTMzg3jD1g1tzWsO0lZMIlkdKeQf6GqaBtUf4pZWxnZlpHahO4HeHyclLshWpo+FX1EzcLRusK/0+VObFgL4evpN1S6OLsSJnvAJL2GRx4EJ0XYhU6+VtA/mbwsVfRMGWIurkwW/Pf77OeDhu3jSfH1N4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NNQKihCudOUIhYR491gCeNyLrHlBg+oTrUCBKiPeFfw=;
+ b=mU3t7ZHJNizR3wVVgydDrkg0BS6nqZXxk+d3ZkrvGMyZjnzIxATi2vWSNXV8NLnntLwjX+S+H5r5g0oI3Cy7AI5thuL6T6yQ093wlJO7GG5SG/bYRcCDzDxqa79Ccg174cQhBUfBmgpeiSoLF/Fcpmz2XN7fPjAFM/RQ6T8z0/Tqik5OwFLo8FicnrdvOgmv1K7/s2p7uYdI07VaXCcz98WW6vXX6IAIKutxbY6SoJp4gyCoNlbd3cBQ1f/fufDyDn9nJoW8y0Mq5f1Q6CBD2rv0cSlktSfxoEOWkReJyRTS9Vjs2GtwWLXd+1tFaex+6LHku8g9VmdXad+QTLN6XQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=83IiZKKqeyFIPbt60kx1s4S33RFQeqF/INn7EFkiJWE=;
-        b=GUVigi1Sp2FNxfUmEOdGyWZf6iA44V655PYUi0Un0GFD69bZQlUYaKNrBrP2bVLzuO
-         7gNkN6AcFluR2IVssNsgJtWwWYdorDOcUj/FYEmaRZc9el/7gqtI7F3CI2dbKuXoicFx
-         Kb8RgfYmy7ri1Qam18pe/J0cVzhR5MxVetJPk63DtFBrs3xF/PCear9Hji1HqfwbqDN1
-         dhqDLr8VSSBZiQz+xsQ1Ai9GEEMI8/oNEFAxsLHXstPAsRTq08iADZKsytScsQtL2DKz
-         jqI7LlUN5+ITkNloFHEukMk4fXHHZE9KOTRCKg+KBdTFef5vAP3rTOEXiKYS/s4eV0WV
-         u2WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=83IiZKKqeyFIPbt60kx1s4S33RFQeqF/INn7EFkiJWE=;
-        b=zU+LZ9XfpAl8IC1HkqxJgJP026t8J0Od6rQW6CnUYzqBeZPAB4Auku8aanpS2GAOaz
-         W739oBc7RJTXidA0q4mjJuxmow5yGkxIYS96qS31bc2yIVVKCAbZj6WuKCRQxoXzoJeB
-         3CKr/yHWilAAs4GMx9UbbzDJEK/Be81P0DJcJJJXIJhFY+XzT0HIr2LHfVRxHk5ywqRi
-         iK39ob/BvqrePYHVmLhmGOOCIWL8ojz5KcQssmZzgCK/idmVWNRodFrPl/3XCGVy+WHa
-         JclbGCT8RZiyHLskE+ETqFZlbOfcHomtJSjFmx6U9vFhlpfZ/WV1Zo7yjfarHK//nr8d
-         GE1w==
-X-Gm-Message-State: AFqh2kpb2PoKoyEaopw3nwamMFJ4AUVTlApqDPHuH/lL1fcV5XDvrwZq
-        0FsH+lCF6+T+Iy23q+Kfv62GfKUvsk3xum2Xy6o=
-X-Google-Smtp-Source: AMrXdXtAcLvhmdXv3zALbUM+xSxaidfY2tI4Q/XslneGGdyo2VnpEEJlFzBBZlm2davf3bX6cTTaNw==
-X-Received: by 2002:a17:902:d34a:b0:188:5256:bf60 with SMTP id l10-20020a170902d34a00b001885256bf60mr4401845plk.25.1671683206613;
-        Wed, 21 Dec 2022 20:26:46 -0800 (PST)
-Received: from localhost.localdomain ([2402:7500:56a:a93e:d2b2:b38a:f4a1:ecec])
-        by smtp.gmail.com with ESMTPSA id t11-20020a170902e84b00b00183e2a96414sm12250691plg.121.2022.12.21.20.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 20:26:46 -0800 (PST)
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        "balamurugan . c" <balamurugan.c@intel.com>,
-        Libin Yang <libin.yang@intel.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        alsa-devel@alsa-project.org
-Subject: [PATCH v3] ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
-Date:   Thu, 22 Dec 2022 12:26:24 +0800
-Message-Id: <20221222042624.557869-1-ajye_huang@compal.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NNQKihCudOUIhYR491gCeNyLrHlBg+oTrUCBKiPeFfw=;
+ b=r8UQ+BLYR59WF9lXTvdCy1U2ZQmSG5vgTzkG1+oR/i7CP5aC5taijPtbrjVFKIyJDAMB5UcOXjOY+DJvfuTL7FlyEe3VqlstzZRwYGNkYKuLarbJwAah+AKDnNil//ACHd+iq0FgBjlWzVRt7nnjgBggRCP2ko4Ut30hQ2pujfw=
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
+ by CY5PR10MB6072.namprd10.prod.outlook.com (2603:10b6:930:38::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
+ 2022 04:28:17 +0000
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::d8a4:336a:21e:40d9]) by BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::d8a4:336a:21e:40d9%4]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
+ 04:28:17 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     Mike Galbraith <efault@gmx.de>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: Re: regression: nfs mount (even idle) eventually hangs server
+Thread-Topic: regression: nfs mount (even idle) eventually hangs server
+Thread-Index: AQHZFSMVb1dlHuUkzEyQB2fRdyO/kK55RIoAgAAJEgCAAAO9AA==
+Date:   Thu, 22 Dec 2022 04:28:17 +0000
+Message-ID: <1A404CDB-95A8-4D04-B76B-91D4F063B489@oracle.com>
+References: <65ed34338c69cb034295f2c9cbe0af684d65d30f.camel@gmx.de>
+ <360f3dcfb6cfbefdbcc42fc84c660995142a8645.camel@gmx.de>
+ <241c118c2fb60df744bbe351387fc29a34ff6ab9.camel@gmx.de>
+ <f533c2e38c0619ea0c3b4346d1c7c99c5ae2122b.camel@gmx.de>
+In-Reply-To: <f533c2e38c0619ea0c3b4346d1c7c99c5ae2122b.camel@gmx.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3654.120.0.1.13)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|CY5PR10MB6072:EE_
+x-ms-office365-filtering-correlation-id: ea12f93d-71db-4d53-25fd-08dae3d4f2d1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /P08B3hvK5+qXbplmQ7vgJDR6j272m1WllidPl9RFStoV7jPEbyx4kKo+oyyO0vK57mhW0MvuIw1194Mkfqon2Y3dyicnJc6i3C5pATBb6xWmDrKuTjxGnkdcAv87IJivQh7iSduBDke1lIn4edLpQlBUeQdrD8ZPnf/bsYnFv6Dj8qQquOFQsuPp1uWtj9m/0N2Z/LitQTcN8kFyu34j5BhjAiNeaUQNV8ukRSUoCUQ6REXD0WWNSUPp4l34opR7LrSoDDM9nAHtTFrzL0pItsxFZXyQrnfeK+UmEa5UcKsbKb134uN5DX3Q336j7xNCq/at1VZR7JC0AqOnvAcmuatKMZzYrlUp+AcXf3KhFqI9cxHu1w/6w2/ZujF7Or4Wv99VdfzTraNmVmASBTTPuCBUGG963XtZnox20ZwPWCPFAX46d/WJMXN7i3TcaWsdkiZozRan3srVNxAMtNq3wqkssQhjXc9kciiku/f5O4/efl6cIpIHVXKGehiicgI859MESxGVqBnWMw2dA3PzMp34O1Q6VTVyLq7eefdhe6Omy7s5WubbaOXcYrzO8ZlqM44SDeVrSYofYNcOShMVP7IKLCpBcZ38AmYC2TVV/jkx+vVZk77Vf0xxJGw+fxrajwhXnVFHEzHyXnquXiyN4QbtQOxiPFBeYTL8+5E3DPe9z0KEIbOj13LrCPGYRCzev/at0Lq9ZLe/1kVatG9qcBBAu42LSudALboJP9JcxE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(39860400002)(136003)(376002)(396003)(451199015)(6486002)(478600001)(6506007)(71200400001)(66446008)(26005)(66556008)(64756008)(66476007)(76116006)(2616005)(6512007)(91956017)(6916009)(186003)(86362001)(54906003)(316002)(66946007)(122000001)(38100700002)(83380400001)(38070700005)(8676002)(41300700001)(4326008)(4001150100001)(33656002)(8936002)(2906002)(53546011)(36756003)(5660300002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ptAlDpD3F6rmw/zyvtpARUnyyFYXk5wsU/yyquA6cHHnhSeFw/u+dXFT1B+T?=
+ =?us-ascii?Q?cI50AjaAZBVzpn0nHBercx4EPdO+q7vp9Ks8Tpf6ICvgTsTKVSTzcYL9jnOU?=
+ =?us-ascii?Q?hn9wOrd3ni29BkZnhfZ59Tjr1XYrR3OcYk6Q+9RdhIUdx1pYjUzXyYBCr7o2?=
+ =?us-ascii?Q?zKaFk62s6PX4L8Vw2aKYksN8becpr+LLV/AVNe0JYo3KgbyGl7rSrEkOMt19?=
+ =?us-ascii?Q?zOnBMMDcxBG0lauUC9PNrmZK51HE0VKPVVOwnq7NWdh+ASElFl2PCvOlJ8o4?=
+ =?us-ascii?Q?cqdtAFHZDjr7gAGSJ0wtgq+YfOgt4Fv2599y+RcwyBGgWGl2OeOYu2xfNQWM?=
+ =?us-ascii?Q?RYA9WKHSbQ+jb8RGdBhr3NC0oAMolgisiAB4HoyYXD4roAIAk/EyhhGxzbt7?=
+ =?us-ascii?Q?X5V3FXx9ACoaRsqvKIBtNBSrztSK7SOFxY2j6MbRzwMqlKyrvMpPPwDXiGhr?=
+ =?us-ascii?Q?QhrpIQL2D3AnmJGOEIIzSMW+8DOSkP01f2Ei+SGiBdk0J+b2p0scV3dTPxvi?=
+ =?us-ascii?Q?4yeNT2c9MJ5HfvHoLvAU94O8lXHlH3AMVRUD0Momc6aeJCXwWofnPoy1JFEy?=
+ =?us-ascii?Q?bYo3iMtkyWbhv1esQgMJcA1LcKmWZg0zKWtLcl/pszU0Gev8v+Mu5bSPf65u?=
+ =?us-ascii?Q?bMM6piRohQOtd20v1BOZ2m7H6yCgIjQRF/Usiu2OEEkjnOcX0tX4BWXF7hfw?=
+ =?us-ascii?Q?wdk6tGnHRylN/ZJwoLjrBOI2ZvSkVrTq4s/I3SoCGsp0IyD+qfMcyd/6mmCU?=
+ =?us-ascii?Q?u8iDQQPpKA/asXp+97gYEA7f2/Yk9MQyShjoalQJ2nru4Jtd+A52oGvGZw2V?=
+ =?us-ascii?Q?o9Fd4toR+URs4qmmgEUaVI8o50pWC05/J3dmYZoE9nDBAuAV2gWck2grbqnN?=
+ =?us-ascii?Q?VmvEf84p7zAiWkJEsqkUQsG8X6eFOijtF1yKx6q2H6/2ilvhN3FWRs/J2aIP?=
+ =?us-ascii?Q?BiprlPaLLiqB2u+QBxYqZwaTefw/cywayBj6Zj6UxwwAnBv5Hlh3+sxnN2Dg?=
+ =?us-ascii?Q?29iWwORpA22u0sNQdapz24HqkqgjxBmO8ZkBrKnchIK1WsNI+LQI8v83mgQU?=
+ =?us-ascii?Q?phD//Ehcahba6YFrdnA64AM1LfaSUupmpGKClLLfBnI/LlKtynAngx5fSjUA?=
+ =?us-ascii?Q?oFDeWdBB2StDmAdFICi/rY81v0mDJzoS5z4HSFMXN6f+sIrIuYJ6a+TI/emY?=
+ =?us-ascii?Q?mbzqzzdWjjAgdHfOsJ0oIGEjbofMZjb0sYz3XhASY1qIEseRbeeb4/JGisLW?=
+ =?us-ascii?Q?Jse/eVH0KON6SDZ6/s1pey9jx4ZpvrqQq/nZVBWZvbUAX50EhG47sQnwaJco?=
+ =?us-ascii?Q?yOnnp7Wj191891HOnMh+ybywibCqm7LgjIck/sRCTjV5xXYa4FyYkpnLODCt?=
+ =?us-ascii?Q?59rHCfDye62OXaV28u2VxF6r+lGYm8ogAUaPJIFnbw6pWkkHAPHvrdhaJrZ9?=
+ =?us-ascii?Q?HmH6IPswqbczMfSD7yOyf5tTh5xzsbRW5dBAf+bPX2xsZv2eS3I0a2itAMGh?=
+ =?us-ascii?Q?ayCRwTuFdSVNr+7unAlNPub5seP5bLpRvMniTCsuiuOJtR7rU1nmkLWi8AXk?=
+ =?us-ascii?Q?l4yTbu9Li4vPOqWCL9MXLvH4CIDiGATIvd7GoW8OND1JUiDZRXRjIQhCqeSs?=
+ =?us-ascii?Q?yw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9802974D1E66B541A6942CB92A30F287@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea12f93d-71db-4d53-25fd-08dae3d4f2d1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Dec 2022 04:28:17.2242
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aKFhFe9wzpWCC6Kc/hnts87RTAmqlY5hTxd9EnFK4OGTrFRGVjhNEURTIn2IE8ORpsyszSBDNm6hyDFKKw8IFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB6072
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_01,2022-12-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
+ mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212220038
+X-Proofpoint-GUID: Xj7_ZmjWzhcKKtRHM3zOCp5nH0TLq_KU
+X-Proofpoint-ORIG-GUID: Xj7_ZmjWzhcKKtRHM3zOCp5nH0TLq_KU
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,126 +152,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the driver data for two nau8318 speaker amplifiers on
-SSP1 and nau8825 on SSP0 for ADL platform.
 
-The nau8315 and nau8318 are both Nuvoton Amp chips. They use the same
-Amp driver nau8315.c. The acpi_device_id for nau8315 is "NVTN2010",
-for nau8318 is "NVTN2012".
-The nau8825 is one of Nuvoton headset codec, and its acpi_device_id is
-"10508825".
 
-Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
----
- changes from v1->v2:
- * Modify title and add explanations in commit messages .
- * Use new topology file "sof-adl-nau8318-nau8825.tplg" instead of sof-adl-max98360a-nau8825.tplg.
- changes from v2-v3:
- * Modify drv_name string from "adl_nau8318_nau8825" to "adl_nau8318_8825".
+> On Dec 21, 2022, at 11:14 PM, Mike Galbraith <efault@gmx.de> wrote:
+>=20
+> On Thu, 2022-12-22 at 04:42 +0100, Mike Galbraith wrote:
+>> On Wed, 2022-12-21 at 10:56 +0100, Mike Galbraith wrote:
+>>>> 6.1 didn't reproduce either, so it would appear to be a merge window b=
+ug.
+>>=20
+>> Ah, not true, turning evolution loose in nfs mounted home and letting
+>> it refresh mailboxes while desktop box was kept busy jammed up 6.1.0 in
+>> fairly short order. =20
+>=20
+> Well crap.  That was _not_ virgin 6.1.0 after all, it was 6.1.0 with...
+>=20
+> 44df6f439a17 NFSD: add delegation reaper to react to low memory condition
+> 3959066b697b NFSD: add support for sending CB_RECALL_ANY
+> a1049eb47f20 NFSD: refactoring courtesy_client_reaper to a generic low me=
+mory shrinker
+>=20
+> ...applied from poking about yesterday.  I had given up on those as
+> culprit, and intended to pop them off and rebuild, but they were in
+> fact in the booted kernel.  Oh well, booboo could have a bright side.
 
- sound/soc/intel/boards/Kconfig                |  1 +
- sound/soc/intel/boards/sof_nau8825.c          | 23 +++++++++++++++++++
- .../intel/common/soc-acpi-intel-adl-match.c   | 12 ++++++++++
- 3 files changed, 36 insertions(+)
+Hi Mike-
 
-diff --git a/sound/soc/intel/boards/Kconfig b/sound/soc/intel/boards/Kconfig
-index a472de1909f4..3f68e9edd853 100644
---- a/sound/soc/intel/boards/Kconfig
-+++ b/sound/soc/intel/boards/Kconfig
-@@ -554,6 +554,7 @@ config SND_SOC_INTEL_SOF_NAU8825_MACH
- 	select SND_SOC_RT1015P
- 	select SND_SOC_MAX98373_I2C
- 	select SND_SOC_MAX98357A
-+	select SND_SOC_NAU8315
- 	select SND_SOC_DMIC
- 	select SND_SOC_HDAC_HDMI
- 	select SND_SOC_INTEL_HDA_DSP_COMMON
-diff --git a/sound/soc/intel/boards/sof_nau8825.c b/sound/soc/intel/boards/sof_nau8825.c
-index 27880224359d..78d84527081a 100644
---- a/sound/soc/intel/boards/sof_nau8825.c
-+++ b/sound/soc/intel/boards/sof_nau8825.c
-@@ -48,6 +48,7 @@
- #define SOF_MAX98373_SPEAKER_AMP_PRESENT	BIT(15)
- #define SOF_MAX98360A_SPEAKER_AMP_PRESENT	BIT(16)
- #define SOF_RT1015P_SPEAKER_AMP_PRESENT	BIT(17)
-+#define SOF_NAU8318_SPEAKER_AMP_PRESENT	BIT(18)
- 
- static unsigned long sof_nau8825_quirk = SOF_NAU8825_SSP_CODEC(0);
- 
-@@ -338,6 +339,13 @@ static struct snd_soc_dai_link_component rt1019p_component[] = {
- 	}
- };
- 
-+static struct snd_soc_dai_link_component nau8318_components[] = {
-+	{
-+		.name = "NVTN2012:00",
-+		.dai_name = "nau8315-hifi",
-+	}
-+};
-+
- static struct snd_soc_dai_link_component dummy_component[] = {
- 	{
- 		.name = "snd-soc-dummy",
-@@ -486,6 +494,11 @@ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
- 			max_98360a_dai_link(&links[id]);
- 		} else if (sof_nau8825_quirk & SOF_RT1015P_SPEAKER_AMP_PRESENT) {
- 			sof_rt1015p_dai_link(&links[id]);
-+		} else if (sof_nau8825_quirk &
-+				SOF_NAU8318_SPEAKER_AMP_PRESENT) {
-+			links[id].codecs = nau8318_components;
-+			links[id].num_codecs = ARRAY_SIZE(nau8318_components);
-+			links[id].init = speaker_codec_init;
- 		} else {
- 			goto devm_err;
- 		}
-@@ -657,6 +670,16 @@ static const struct platform_device_id board_ids[] = {
- 					SOF_BT_OFFLOAD_SSP(2) |
- 					SOF_SSP_BT_OFFLOAD_PRESENT),
- 	},
-+	{
-+		.name = "adl_nau8318_8825",
-+		.driver_data = (kernel_ulong_t)(SOF_NAU8825_SSP_CODEC(0) |
-+					SOF_SPEAKER_AMP_PRESENT |
-+					SOF_NAU8318_SPEAKER_AMP_PRESENT |
-+					SOF_NAU8825_SSP_AMP(1) |
-+					SOF_NAU8825_NUM_HDMIDEV(4) |
-+					SOF_BT_OFFLOAD_SSP(2) |
-+					SOF_SSP_BT_OFFLOAD_PRESENT),
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(platform, board_ids);
-diff --git a/sound/soc/intel/common/soc-acpi-intel-adl-match.c b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-index 60aee56f94bd..b1c0a89a8787 100644
---- a/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-+++ b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
-@@ -450,6 +450,11 @@ static const struct snd_soc_acpi_codecs adl_lt6911_hdmi = {
- 	.codecs = {"INTC10B0"}
- };
- 
-+static const struct snd_soc_acpi_codecs adl_nau8318_amp = {
-+	.num_codecs = 1,
-+	.codecs = {"NVTN2012"}
-+};
-+
- struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
- 	{
- 		.comp_ids = &adl_rt5682_rt5682s_hp,
-@@ -507,6 +512,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
- 		.quirk_data = &adl_rt1015p_amp,
- 		.sof_tplg_filename = "sof-adl-rt1015-nau8825.tplg",
- 	},
-+	{
-+		.id = "10508825",
-+		.drv_name = "adl_nau8318_8825",
-+		.machine_quirk = snd_soc_acpi_codec_list,
-+		.quirk_data = &adl_nau8318_amp,
-+		.sof_tplg_filename = "sof-adl-nau8318-nau8825.tplg",
-+	},
- 	{
- 		.id = "10508825",
- 		.drv_name = "sof_nau8825",
--- 
-2.25.1
+I'm guessing your client mounts with NFSv4.x.
+
+We've been chasing a similar problem for a few months, but for
+lack of a solid reproducer, it has remained elusive.
+
+We believe the problem was introduced between 5.19 and 6.0. If
+you have a fairly reliable way to trigger the server hang, then
+maybe a bisect would be possible?
+
+
+--
+Chuck Lever
+
+
 
