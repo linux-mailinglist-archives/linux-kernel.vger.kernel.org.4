@@ -2,228 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E65653D00
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F027653D0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235100AbiLVI3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 03:29:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S235119AbiLVIgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 03:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiLVI3n (ORCPT
+        with ESMTP id S229630AbiLVIgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 03:29:43 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA2C1E72E;
-        Thu, 22 Dec 2022 00:29:41 -0800 (PST)
-Received: from [IPV6:2401:4900:1f3f:d076:4da6:b729:f032:ed0a] (unknown [IPv6:2401:4900:1f3f:d076:4da6:b729:f032:ed0a])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 6B5D7471;
-        Thu, 22 Dec 2022 09:29:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1671697779;
-        bh=/q53No7ZZ6mK9UhJ4TE5lLfW6oG5AMGtiUmwcXAKce8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=b3efKgZAqHly+/w9zn0++Zk0QgleIhWWSKdph7PKunlevNV5MfjNF3JQt7khoOnzq
-         qBDkhu/Wl+ZEvdMZqUeLCCH7nyPJ3vEjwcI6TgHFvmt/Kw9LAHsbofvZJBoPI/BHTJ
-         YSg0e8s4ZH+J9fSyvkelJ67INEi4v/6T/lbbzu6U=
-Message-ID: <d48462f6-de4c-2816-0a7a-b3b13993604c@ideasonboard.com>
-Date:   Thu, 22 Dec 2022 13:59:28 +0530
+        Thu, 22 Dec 2022 03:36:04 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905BAB1D2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 00:36:02 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id u19so3207442ejm.8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 00:36:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TOfc7EGG83O/xS/Uaar9/uexk/8D+4jXs6c0U4ftxC0=;
+        b=gfHxNAQcIb72vXPpnCGJHdtH5YsR+5yf953FvOjGAhWm3ROz2AVyy9CDJBLeNf0Xsf
+         g9Eh9BgzRGBI33iFH5EZMV1EyIo7qyQnOzqYxqpf0Gjth3XeVsWoNbJNSN2vNy6sOFuW
+         Wsug4Breu+GJr9uWJSgyuWFyAkODYy3I0LhGAhQx8d/XTHDWTyujMAqRk8IKCo3XupVR
+         EtXTA5QFtT71L7oUN1XfeOIi1qNPuI4Ftw7zc5iri5clz6gloEaAgmrsnTwzIJpV7zKC
+         Y4ovHaf0puufxFDIxFt9QIkeiNIL/eHaZGlBfSNoMU4eDIyvuDDHx7q4G0Acjva9LNJa
+         JpOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TOfc7EGG83O/xS/Uaar9/uexk/8D+4jXs6c0U4ftxC0=;
+        b=oi/UK0+wCCRzTUkk3ARIPq6idXR23WM3q1l8hS3feO+e9aB/gH8iLPgWxOWp2VR0vp
+         TjjGO/X9T0Yhjje/u9vgGysqJa7c/t3H+9EkkqUqePsIYwSK9O2qZXs0ea+etMbYfE+p
+         tJ1EPOpJEYdRstIu/COw3sc/gYJVPR93Atbfdb2eiuWBW21A7G1r+lRpFoS+HpuWCeq0
+         YIn2h3aanHZPYqXX0aNydwtwZJa0APXUCqcs7uSN+nLc1WXfORXXg9za/pTRqt3fgZZM
+         qmJ9YuuaSeHznxZ1nVgrC87u7dsQ0Ge+nJeBJdyMQJ1EsABjm4Bk0YKObJSEV8PIXeZt
+         B7bQ==
+X-Gm-Message-State: AFqh2kolTCeXFTxtGYEjHoYVkFhID/y5i9kuh/F5UOVTl2l1Vd9abwkH
+        NQhwRqq1AecgsDpsfatcSszu3g==
+X-Google-Smtp-Source: AMrXdXufKakRH5nGU5aUpV3tx6ejjMjOfwfADHcgGBq0LAtF8x6ieGOMYJpFB7vOGDLs3YVRR2cQ7Q==
+X-Received: by 2002:a17:907:80ce:b0:7c1:26b9:c556 with SMTP id io14-20020a17090780ce00b007c126b9c556mr4429988ejc.15.1671698161125;
+        Thu, 22 Dec 2022 00:36:01 -0800 (PST)
+Received: from alba.. ([82.77.81.131])
+        by smtp.gmail.com with ESMTPSA id t16-20020a1709060c5000b007c14ae38a80sm7987721ejf.122.2022.12.22.00.35.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 00:36:00 -0800 (PST)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     stable@vger.kernel.org
+Cc:     willemdebruijn.kernel@gmail.com, mst@redhat.com,
+        jasowang@redhat.com, edumazet@google.com,
+        virtualization@lists.linux-foundation.org, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        willemb@google.com, syzkaller@googlegroups.com,
+        liuhangbin@gmail.com, linux-kernel@vger.kernel.org,
+        joneslee@google.com, Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH 0/2] net/af_packet: Fix kernel BUG in __skb_gso_segment
+Date:   Thu, 22 Dec 2022 10:35:43 +0200
+Message-Id: <20221222083545.1972489-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] staging: vc04_services: vchiq_arm: Create platform_device
- per device
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-References: <20221220084404.19280-1-umang.jain@ideasonboard.com>
- <Y6Lqs8RUiyi452gM@pendragon.ideasonboard.com> <Y6MF3l40WM3onmyO@kroah.com>
-Content-Language: en-US
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <Y6MF3l40WM3onmyO@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg, Laurent
+The series is intended for stable@vger.kernel.org # 5.4+
 
-thank you for the feedback
+Syzkaller reported the following bug on linux-5.{4, 10, 15}.y:
+https://syzkaller.appspot.com/bug?id=ce5575575f074c33ff80d104f5baee26f22e95f5
 
-On 12/21/22 6:40 PM, Greg Kroah-Hartman wrote:
-> On Wed, Dec 21, 2022 at 01:14:59PM +0200, Laurent Pinchart wrote:
->> Hi Umang,
->>
->> Thank you for the patch.
->>
->> On Tue, Dec 20, 2022 at 02:14:04PM +0530, Umang Jain wrote:
->>> Create a proper per device platorm_device structure for all the child
->>> devices that needs to be registered by vchiq platform driver. Replace
->>> the vchiq_register_child() with platform_add_devices() to register the
->>> child devices.
->> This explains what the patch does, but not why.
->>
->>> This is part of an effort to address TODO item "Get rid of all non
->>> essential global structures and create a proper per device structure"
->> And this explains part of the reason only. Could you please expand the
->> commit message with the reasoning behind this change ? It's not clear
->> from the change below why this is needed and good.
+The upstream commit that introduces this bug is:
+1ed1d5921139 ("net: skip virtio_net_hdr_set_proto if protocol already set")
 
-Ok, I thought the TODO reference was sufficient but I'll expand on it.
->>
->>> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
->>> ---
->>>   .../interface/vchiq_arm/vchiq_arm.c           | 59 ++++++++++---------
->>>   1 file changed, 31 insertions(+), 28 deletions(-)
->>>
->>> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
->>> index 22de23f3af02..fa42ea3791a7 100644
->>> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
->>> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
->>> @@ -65,8 +65,29 @@ int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
->>>   DEFINE_SPINLOCK(msg_queue_spinlock);
->>>   struct vchiq_state g_state;
->>>   
->>> -static struct platform_device *bcm2835_camera;
->>> -static struct platform_device *bcm2835_audio;
->>> +static u64 vchiq_device_dmamask = DMA_BIT_MASK(32);
->> The fact that this isn't const and is used by two different
->> platform_device instances is worrying. Either it can be made const, or
->> it's wrong.
+Upstream fixes the bug with the following commits, one of which introduces
+new support:
+e9d3f80935b6 ("net/af_packet: make sure to pull mac header")
+dfed913e8b55 ("net/af_packet: add VLAN support for AF_PACKET SOCK_RAW GSO") 
 
-ack.
->>
->>> +
->>> +static struct platform_device bcm2835_camera = {
->>> +	.name		= "bcm2835-camera",
->>> +	.id		= PLATFORM_DEVID_NONE,
->>> +	.dev		= {
->>> +		.dma_mask	= &vchiq_device_dmamask,
->>> +	}
->>> +};
->>> +
->>> +static struct platform_device bcm2835_audio = {
->>> +	.name		= "bcm2835_audio",
->>> +	.id		= PLATFORM_DEVID_NONE,
->>> +	.dev		= {
->>> +		.dma_mask	= &vchiq_device_dmamask,
->>> +	}
->>> +
->> Extra blank line.
+The additional logic and risk backported seems manageable.
 
-oops, checkpatch.pl didn't catch this :-/
->>
->>> +};
->>> +
->>> +static struct platform_device *vchiq_devices[] __initdata = {
->> Make it const.
->>
->>> +	&bcm2835_camera,
->>> +	&bcm2835_audio,
->>> +};
->>>   
->>>   struct vchiq_drvdata {
->>>   	const unsigned int cache_line_size;
->>> @@ -1763,28 +1784,6 @@ static const struct of_device_id vchiq_of_match[] = {
->>>   };
->>>   MODULE_DEVICE_TABLE(of, vchiq_of_match);
->>>   
->>> -static struct platform_device *
->>> -vchiq_register_child(struct platform_device *pdev, const char *name)
->>> -{
->>> -	struct platform_device_info pdevinfo;
->>> -	struct platform_device *child;
->>> -
->>> -	memset(&pdevinfo, 0, sizeof(pdevinfo));
->>> -
->>> -	pdevinfo.parent = &pdev->dev;
->>> -	pdevinfo.name = name;
->>> -	pdevinfo.id = PLATFORM_DEVID_NONE;
->>> -	pdevinfo.dma_mask = DMA_BIT_MASK(32);
->>> -
->>> -	child = platform_device_register_full(&pdevinfo);
->>> -	if (IS_ERR(child)) {
->>> -		dev_warn(&pdev->dev, "%s not registered\n", name);
->>> -		child = NULL;
->>> -	}
->>> -
->>> -	return child;
->>> -}
->>> -
->>>   static int vchiq_probe(struct platform_device *pdev)
->>>   {
->>>   	struct device_node *fw_node;
->>> @@ -1832,8 +1831,11 @@ static int vchiq_probe(struct platform_device *pdev)
->>>   		goto error_exit;
->>>   	}
->>>   
->>> -	bcm2835_camera = vchiq_register_child(pdev, "bcm2835-camera");
->>> -	bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
->>> +	err = platform_add_devices(vchiq_devices, ARRAY_SIZE(vchiq_devices));
->>> +	if (err) {
->>> +		dev_warn(&pdev->dev, "Failed to add vchiq child devices");
->>> +		goto error_exit;
->>> +	}
->> If you unbind and rebind this driver, the platform_device instances
->> defined as global variables will be reused, and I'm pretty sure that
->> will cause issues, for instance with the kobj->state_initialized check
->> in kobject_init() (called from device_initialize(), itself called from
->> platform_device_register(), from platform_add_devices()). I'm not sure
->> static instances of platform_device are a very good idea in general.
-> static instances of any device are a horrible idea, but it seems that
-> many drivers do this and abuse platform devices this way :(
+The blammed commit introduces a kernel BUG in __skb_gso_segment for
+AF_PACKET SOCK_RAW GSO VLAN tagged packets. What happens is that
+virtio_net_hdr_set_proto() exists early as skb->protocol is already set to
+ETH_P_ALL. Then in packet_parse_headers() skb->protocol is set to
+ETH_P_8021AD, but neither the network header position is adjusted, nor the
+mac header is pulled. Thus when we get to validate the xmit skb and enter
+skb_mac_gso_segment(), skb->mac_len has value 14, but vlan_depth gets
+updated to 18 after skb_network_protocol() is called. This causes the
+BUG_ON from __skb_pull(skb, vlan_depth) to be hit, as the mac header has
+not been pulled yet.
 
-It seems  I have been a victim of the abuse usage while looking for 
-platform_device references in the codebase. I'm working on a new 
-approach for this.
+The fixes from upstream backported cleanly without conflicts. I updated
+the commit message of the first patch to describe the problem encountered,
+and added Cc, Fixes, Reported-by and Tested-by tags. For the second patch
+I just added Cc to stable indicating the versions to be fixed, and added
+my Tested and Signed-off-by tags.
 
-Currently (as per the linux-next branch), the vchiq driver will happily 
-carry on if any of the child  platform device registration fails. That 
-means if bcm2835-audio fails to register, bcm2835-camera will  still 
-kept registered I suppose.
+I tested the patches on linux-5.{4, 10, 15}.y.
 
-However with usage of platform_add_devices() in this patch, I introduced 
-a functionality change (I'm realizing this now) - any failure of child 
-platform device registeration will -unregister- all the other platform 
-devices i.e. if bcm2835-audio fails, bcm2835-camera will also get 
-unregistered.
+Eric Dumazet (1):
+  net/af_packet: make sure to pull mac header
 
-Should I be working towards the status-quo behavior ? Or it's sane to 
-unregistered other platform devices if one of the fails like 
-platform_add_devices() does ? (This affects my new approach as well, 
-hence the question)
->
-> Ideally this should be done properly, with the correct devices created
-> automatically based on the device tree structure, NOT hard-coded into a
-> .c file like this.
->
-> So I too really do not like this change, why are these not being created
-> by the firware layer automatically?
+Hangbin Liu (1):
+  net/af_packet: add VLAN support for AF_PACKET SOCK_RAW GSO
 
-Not sure if this is a helpful comment, but as far I know, there can be 
-vchiq child platform devices which probably don't have a Device tree 
-entry. like the bcm2835-isp [1] I posted earlier.
+ net/packet/af_packet.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-[1] 
-https://lore.kernel.org/lkml/20221121214722.22563-1-umang.jain@ideasonboard.com/
->
-> thanks,
->
-> greg k-h
+-- 
+2.34.1
 
