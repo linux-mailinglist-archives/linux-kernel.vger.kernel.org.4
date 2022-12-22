@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2294465492E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 00:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5148965492F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 00:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235540AbiLVXNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 18:13:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
+        id S230422AbiLVXPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 18:15:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiLVXNK (ORCPT
+        with ESMTP id S229627AbiLVXO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 18:13:10 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018BC13CF3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 15:13:08 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p8UkE-0008C4-MR; Fri, 23 Dec 2022 00:12:58 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p8UkB-0016KT-6V; Fri, 23 Dec 2022 00:12:55 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p8UkA-007DyK-6J; Fri, 23 Dec 2022 00:12:54 +0100
-Date:   Fri, 23 Dec 2022 00:12:54 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Evgeniy Polyakov <zbr@ioremap.net>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 595/606] w1: ds2482: Convert to i2c's .probe_new()
-Message-ID: <20221222231254.hwexrvmpeu7gg3a7@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-596-uwe@kleine-koenig.org>
+        Thu, 22 Dec 2022 18:14:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020E0FD24
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 15:14:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F9ADB81F6E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 23:14:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E24C433EF;
+        Thu, 22 Dec 2022 23:14:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671750893;
+        bh=JA2bLvlEnV7mEWPSobqdn6WnIG1Hk0vKA9vXUhZr3r0=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=CmZ7q4WO0WV2j2CrZbQTU1MyVtB46zbwFfCmEE0gcJ2FYIX3EE8F8NweOSA5d62I4
+         OWJrQWeRRoK5b8544OUZYaSUkcEwqhd4vouoYgbCoMR4+X4Exi1iV5jGU38QAQKAHt
+         Je5eBnJgvRqnsaL/P7h8sGzeblmhexLBCvbVCIv0+d8/Udw0A40gJE3BXv7zA+lhf1
+         TFdkd773qTpa8Jch8TL355+ESbXVqO6q+Nc1aZsMVCgxlw5eYjUBB5lE2lXVldPy4g
+         Cnx/ev3Ix1Xdd4xdqndxGUVRGl7hHoKzoPxHZwQRlH5/SozEnCQYYe6IAGcDQxiQpq
+         aKV+XNRPjJIRg==
+Date:   Thu, 22 Dec 2022 15:14:50 -0800 (PST)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+cc:     "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] xen/pvcalls: free active map buffer on
+ pvcalls_front_free_map
+In-Reply-To: <6a762ee32dd655cbb09a4aa0e2307e8919761311.1671531297.git.oleksii_moisieiev@epam.com>
+Message-ID: <alpine.DEB.2.22.394.2212221514360.4079@ubuntu-linux-20-04-desktop>
+References: <6a762ee32dd655cbb09a4aa0e2307e8919761311.1671531297.git.oleksii_moisieiev@epam.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5rngkaf32hfaczuf"
-Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-596-uwe@kleine-koenig.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,70 +58,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 20 Dec 2022, Oleksii Moisieiev wrote:
+> Data buffer for active map is allocated in alloc_active_ring and freed
+> in free_active_ring function, which is used only for the error
+> cleanup. pvcalls_front_release is calling pvcalls_front_free_map which
+> ends foreign access for this buffer, but doesn't free allocated pages.
+> Call free_active_ring to clean all allocated resources.
+> 
+> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
 
---5rngkaf32hfaczuf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 
-Hello Evgeniy,
 
-On Fri, Nov 18, 2022 at 11:45:29PM +0100, Uwe Kleine-K=F6nig wrote:
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 > ---
->  drivers/w1/masters/ds2482.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/w1/masters/ds2482.c b/drivers/w1/masters/ds2482.c
-> index 62c44616d8a9..3d8b51316bef 100644
-> --- a/drivers/w1/masters/ds2482.c
-> +++ b/drivers/w1/masters/ds2482.c
-> @@ -442,8 +442,7 @@ static u8 ds2482_w1_set_pullup(void *data, int delay)
+>  drivers/xen/pvcalls-front.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/xen/pvcalls-front.c b/drivers/xen/pvcalls-front.c
+> index 1826e8e67125..9b569278788a 100644
+> --- a/drivers/xen/pvcalls-front.c
+> +++ b/drivers/xen/pvcalls-front.c
+> @@ -225,6 +225,8 @@ static irqreturn_t pvcalls_front_event_handler(int irq, void *dev_id)
+>  	return IRQ_HANDLED;
 >  }
-> =20
-> =20
-> -static int ds2482_probe(struct i2c_client *client,
-> -			const struct i2c_device_id *id)
-> +static int ds2482_probe(struct i2c_client *client)
+>  
+> +static void free_active_ring(struct sock_mapping *map);
+> +
+>  static void pvcalls_front_free_map(struct pvcalls_bedata *bedata,
+>  				   struct sock_mapping *map)
 >  {
->  	struct ds2482_data *data;
->  	int err =3D -ENODEV;
-> @@ -553,7 +552,7 @@ static struct i2c_driver ds2482_driver =3D {
->  	.driver =3D {
->  		.name	=3D "ds2482",
->  	},
-> -	.probe		=3D ds2482_probe,
-> +	.probe_new	=3D ds2482_probe,
->  	.remove		=3D ds2482_remove,
->  	.id_table	=3D ds2482_id,
->  };
-
-Assuming you don't have any concerns, it would be great if you applied
-this patch for the next merge window.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---5rngkaf32hfaczuf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOk5HIACgkQwfwUeK3K
-7An7/gf9F+44jb7JRWixeoFnDEDnNPYJrSkzWuDnT2dGl+Jxt5JrLeH2ZFKPL2Wu
-MZ/BMPVofOab7dka20wYPMxFePx6VrksKT4JanziwisGu9f9CzEmnKADpJy4GtLy
-4YwqpBFXRopKl+M0Bx3b7DeCFN1ddLbt5LQTiWq6OSXTqixgnTRt0ytjxXpSPMSh
-YU6h5V/1b+Y5e8Ijf7IDMC3gMZskc3EkqA/7OK1TDh3PgdqK4hjgcq58Nd1400cN
-7RlyaJziV2kqbeEQuHy+OjmQDATyc1JrG+e4ykPKWR8kaTZsqQkz8dqVbNM2XKt/
-jEKvWFZvaQEhJTYIdhKHQzqEmz6b4Q==
-=8ARK
------END PGP SIGNATURE-----
-
---5rngkaf32hfaczuf--
+> @@ -240,7 +242,7 @@ static void pvcalls_front_free_map(struct pvcalls_bedata *bedata,
+>  	for (i = 0; i < (1 << PVCALLS_RING_ORDER); i++)
+>  		gnttab_end_foreign_access(map->active.ring->ref[i], NULL);
+>  	gnttab_end_foreign_access(map->active.ref, NULL);
+> -	free_page((unsigned long)map->active.ring);
+> +	free_active_ring(map);
+>  
+>  	kfree(map);
+>  }
+> -- 
+> 2.25.1
+> 
