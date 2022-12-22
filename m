@@ -2,104 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C25654374
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD956543A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235533AbiLVO65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S235195AbiLVPFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiLVO6y (ORCPT
+        with ESMTP id S235574AbiLVPF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:58:54 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37E71EC55;
-        Thu, 22 Dec 2022 06:58:53 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMEcgOV037417;
-        Thu, 22 Dec 2022 14:57:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=XL1hZNgrmOg9cH6ry3OwTUd/lTK9egdtoBeKA3RpoBs=;
- b=awHM/ztat81t3bGwLLSRdGBY4j0lBgPoyXma0KO2R9KCMbpRORinlKfw56d/CwzLYCMX
- n7KULpjGKvEAj11fNk8ME34kN0eHq4l8+VGDcCmP/lrGAPm04vEEH6Jj2n0XyWlUNGGz
- o9mh1yIBrozckj10DpUNl8ITblAKKAe8szXdbKNNRICZZ8pS/asM3nqf6sEWgdydaKF3
- 6ElwIIxh0g6Or5JgFZNpj56V8hTfknpI6LH4+u5HL3EbXFvU9h2PFBD67XuT1anLi3PF
- 9Eo2UWMcQzWBhhbrjYOdX6HwPNBj8PhnaUFCmPw5FRTmUMAGXAh6Me0FiqnmenTY8rga Ww== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mmrsnh2fm-1
+        Thu, 22 Dec 2022 10:05:27 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5E82B61C;
+        Thu, 22 Dec 2022 07:05:26 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMBHvfi030992;
+        Thu, 22 Dec 2022 15:05:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Gya7rubpAwJcrKugU9ig5Vdy5rjuPokrmgg+3DKAtFk=;
+ b=W0RqP4Dq2OBOzNLn6gZb6rUfLk8x6Z/rG9hyBW8mNCzROWsEMOhJywywVW+5JoRqvwmY
+ Yie1al1eODBfLtBYWbHQYYu6JIOdV09vpQxhefzUGKIobx9FDPGgOYoezI7xO3dOBpuK
+ E/3vSNmK10OrxfITNQzJubngwMgBe1n30XKPunppmFTvrS5I20v/L/3FLNH5uy1G9dhP
+ PtfunxJm/WZjeW22bXFxImB9ERCfLlJQZQtzX7o5uvqFDAwPrNHFu++rcs+NTPiTdHSP
+ XntvLcLQNA76zLotTswX6HaQAN+3kVDUOZ5PJIRGuj84sK9Vz/LeifrYku3LuuhfJIom 4g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm8x4j1t1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 14:57:43 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BMEv18W002601;
-        Thu, 22 Dec 2022 14:57:42 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mmrsnh2ew-1
+        Thu, 22 Dec 2022 15:05:22 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BMF5LIp005563
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 14:57:42 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMCaeJ6022055;
-        Thu, 22 Dec 2022 14:57:40 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3mh6yy25wg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 14:57:40 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BMEvdvs57278816
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 22 Dec 2022 14:57:39 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB02C58056;
-        Thu, 22 Dec 2022 14:57:39 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A10735803F;
-        Thu, 22 Dec 2022 14:57:31 +0000 (GMT)
-Received: from [9.160.79.63] (unknown [9.160.79.63])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 22 Dec 2022 14:57:31 +0000 (GMT)
-Message-ID: <1c02cc0d-9f0c-cf4a-b012-9932f551dd83@linux.ibm.com>
-Date:   Thu, 22 Dec 2022 16:57:30 +0200
+        Thu, 22 Dec 2022 15:05:21 GMT
+Received: from vpolimer-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 22 Dec 2022 06:59:47 -0800
+From:   Vinod Polimera <quic_vpolimer@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
+CC:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <robdclark@gmail.com>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <quic_kalyant@quicinc.com>, <dmitry.baryshkov@linaro.org>,
+        <quic_khsieh@quicinc.com>, <quic_vproddut@quicinc.com>,
+        <quic_bjorande@quicinc.com>, <quic_abhinavk@quicinc.com>,
+        <quic_sbillaka@quicinc.com>
+Subject: [PATCH v10 00/15] Add PSR support for eDP 
+Date:   Thu, 22 Dec 2022 20:29:17 +0530
+Message-ID: <1671721172-16078-1-git-send-email-quic_vpolimer@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH RFC v7 62/64] x86/sev: Add KVM commands for instance certs
-Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
-Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        tobin@ibm.com, bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com, Dionna Glaze <dionnaglaze@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-63-michael.roth@amd.com>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <20221214194056.161492-63-michael.roth@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Vmc8E9jK40yCYYa9Yu3ItgHPAwELMYH9
-X-Proofpoint-GUID: abweW81WQRFpje3SmNwzKQF3FrWvXWzr
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: yH708T5851oBYUFtCaW4hvIU3w8DFhUO
+X-Proofpoint-ORIG-GUID: yH708T5851oBYUFtCaW4hvIU3w8DFhUO
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-22_08,2022-12-22_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxlogscore=999 clxscore=1011 spamscore=0 lowpriorityscore=0 adultscore=0
- impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212220127
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+ definitions=main-2212220131
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,223 +78,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dionna, Mike,
+Changes in v2:
+  - Use dp bridge to set psr entry/exit instead of dpu_enocder.
+  - Don't modify whitespaces.
+  - Set self refresh aware from atomic_check.
+  - Set self refresh aware only if psr is supported.
+  - Provide a stub for msm_dp_display_set_psr.
+  - Move dp functions to bridge code.
 
-On 14/12/2022 21:40, Michael Roth wrote:
-> From: Dionna Glaze <dionnaglaze@google.com>
-> 
-> The /dev/sev device has the ability to store host-wide certificates for
-> the key used by the AMD-SP for SEV-SNP attestation report signing,
-> but for hosts that want to specify additional certificates that are
-> specific to the image launched in a VM, a different way is needed to
-> communicate those certificates.
-> 
-> This patch adds two new KVM ioctl commands: KVM_SEV_SNP_{GET,SET}_CERTS
-> 
-> The certificates that are set with this command are expected to follow
-> the same format as the host certificates, but that format is opaque
-> to the kernel.
-> 
-> The new behavior for custom certificates is that the extended guest
-> request command will now return the overridden certificates if they
-> were installed for the instance. The error condition for a too small
-> data buffer is changed to return the overridden certificate data size
-> if there is an overridden certificate set installed.
-> 
-> Setting a 0 length certificate returns the system state to only return
-> the host certificates on an extended guest request.
-> 
-> We also increase the SEV_FW_BLOB_MAX_SIZE another 4K page to allow
-> space for an extra certificate.
-> 
-> Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> 
-> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  arch/x86/kvm/svm/sev.c   | 111 ++++++++++++++++++++++++++++++++++++++-
->  arch/x86/kvm/svm/svm.h   |   1 +
->  include/linux/psp-sev.h  |   2 +-
->  include/uapi/linux/kvm.h |  12 +++++
->  4 files changed, 123 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 4de952d1d446..d0e58cffd1ed 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -2081,6 +2081,7 @@ static void *snp_context_create(struct kvm *kvm, struct kvm_sev_cmd *argp)
->  		goto e_free;
->  
->  	sev->snp_certs_data = certs_data;
-> +	sev->snp_certs_len = 0;
->  
->  	return context;
->  
-> @@ -2364,6 +2365,86 @@ static int snp_launch_finish(struct kvm *kvm, struct kvm_sev_cmd *argp)
->  	return ret;
->  }
->  
-> +static int snp_get_instance_certs(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	struct kvm_sev_snp_get_certs params;
-> +
-> +	if (!sev_snp_guest(kvm))
-> +		return -ENOTTY;
-> +
-> +	if (!sev->snp_context)
-> +		return -EINVAL;
-> +
-> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data,
-> +			   sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	/* No instance certs set. */
-> +	if (!sev->snp_certs_len)
-> +		return -ENOENT;
-> +
-> +	if (params.certs_len < sev->snp_certs_len) {
-> +		/* Output buffer too small. Return the required size. */
-> +		params.certs_len = sev->snp_certs_len;
-> +
-> +		if (copy_to_user((void __user *)(uintptr_t)argp->data, &params,
-> +				 sizeof(params)))
-> +			return -EFAULT;
-> +
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (copy_to_user((void __user *)(uintptr_t)params.certs_uaddr,
-> +			 sev->snp_certs_data, sev->snp_certs_len))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int snp_set_instance_certs(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +	unsigned long length = SEV_FW_BLOB_MAX_SIZE;
-> +	void *to_certs = sev->snp_certs_data;
-> +	struct kvm_sev_snp_set_certs params;
-> +
-> +	if (!sev_snp_guest(kvm))
-> +		return -ENOTTY;
-> +
-> +	if (!sev->snp_context)
-> +		return -EINVAL;
-> +
-> +	if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data,
-> +			   sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	if (params.certs_len > SEV_FW_BLOB_MAX_SIZE)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Setting a length of 0 is the same as "uninstalling" instance-
-> +	 * specific certificates.
-> +	 */
-> +	if (params.certs_len == 0) {
-> +		sev->snp_certs_len = 0;
-> +		return 0;
-> +	}
-> +
-> +	/* Page-align the length */
-> +	length = (params.certs_len + PAGE_SIZE - 1) & PAGE_MASK;
-> +
-> +	if (copy_from_user(to_certs,
-> +			   (void __user *)(uintptr_t)params.certs_uaddr,
-> +			   params.certs_len)) {
-> +		return -EFAULT;
-> +	}
-> +
-> +	sev->snp_certs_len = length;
+Changes in v3:
+  - Change callback names to reflect atomic interfaces.
+  - Move bridge callback change to separate patch as suggested by Dmitry.
+  - Remove psr function declaration from msm_drv.h.
+  - Set self_refresh_aware flag only if psr is supported.
+  - Modify the variable names to simpler form.
+  - Define bit fields for PSR settings.
+  - Add comments explaining the steps to enter/exit psr.
+  - Change DRM_INFO to drm_dbg_db. 
 
-Here we set the length to the page-aligned value, but we copy only
-params.cert_len bytes.  If there are two subsequent
-snp_set_instance_certs() calls where the second one has a shorter
-length, we might "keep" some leftover bytes from the first call.
+Changes in v4:
+  - Move the get crtc functions to drm_atomic.
+  - Add atomic functions for DP bridge too.
+  - Add ternary operator to choose eDP or DP ops.
+  - Return true/false instead of 1/0.
+  - mode_valid missing in the eDP bridge ops.
+  - Move the functions to get crtc into drm_atomic.c.
+  - Fix compilation issues.
+  - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
+  - Check for crtc state enable while reserving resources.
 
-Consider:
-1. snp_set_instance_certs(certs_addr point to "AAA...", certs_len=8192)
-2. snp_set_instance_certs(certs_addr point to "BBB...", certs_len=4097)
+Changes in v5:
+  - Move the mode_valid changes into a different patch.
+  - Complete psr_op_comp only when isr is set.
+  - Move the DP atomic callback changes to a different patch.
+  - Get crtc from drm connector state crtc.
+  - Move to separate patch for check for crtc state enable while
+reserving resources.
 
-If I understand correctly, on the second call we'll copy 4097 "BBB..."
-bytes into the to_certs buffer, but length will be (4096 + PAGE_SIZE -
-1) & PAGE_MASK which will be 8192.
+Changes in v6:
+  - Remove crtc from dpu_encoder_virt struct.
+  - fix crtc check during vblank toggle crtc.
+  - Misc changes. 
 
-Later when fetching the certs (for the extended report or in
-snp_get_instance_certs()) the user will get a buffer of 8192 bytes
-filled with 4097 BBBs and 4095 leftover AAAs.
+Changes in v7:
+  - Add fix for underrun issue on kasan build.
 
-Maybe zero sev->snp_certs_data entirely before writing to it?
+Changes in v8:
+  - Drop the enc spinlock as it won't serve any purpose in
+protetcing conn state.(Dmitry/Doug)
 
-Related question (not only for this patch) regarding snp_certs_data
-(host or per-instance): why is its size page-aligned at all? why is it
-limited by 16KB or 20KB? If I understand correctly, for SNP, this buffer
-is never sent to the PSP.
+Changes in v9:
+  - Update commit message and fix alignment using spaces.(Marijn)
+  - Misc changes.(Marijn)
 
-> +
-> +	return 0;
-> +}
-> +
->  int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  {
->  	struct kvm_sev_cmd sev_cmd;
+Changes in v10:
+  - get crtc cached in dpu_enc during obj init.(Dmitry)
 
-[...]
+Sankeerth Billakanti (1):
+  drm/msm/dp: disable self_refresh_aware after entering psr
 
-> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
-> index a1e6624540f3..970a9de0ed20 100644
-> --- a/include/linux/psp-sev.h
-> +++ b/include/linux/psp-sev.h
-> @@ -22,7 +22,7 @@
->  #define __psp_pa(x)	__pa(x)
->  #endif
->  
-> -#define SEV_FW_BLOB_MAX_SIZE	0x4000	/* 16KB */
-> +#define SEV_FW_BLOB_MAX_SIZE	0x5000	/* 20KB */
->  
+Vinod Polimera (14):
+  drm/msm/disp/dpu: cache crtc obj in the dpu_encoder during
+    initialization
+  drm: add helper functions to retrieve old and new crtc
+  drm/msm/dp: use atomic callbacks for DP bridge ops
+  drm/msm/dp: Add basic PSR support for eDP
+  drm/msm/dp: use the eDP bridge ops to validate eDP modes
+  drm/bridge: use atomic enable/disable callbacks for panel bridge
+  drm/bridge: add psr support for panel bridge callbacks
+  drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
+    functions
+  drm/msm/disp/dpu: check for crtc enable rather than crtc active to
+    release shared resources
+  drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
+  drm/msm/disp/dpu: get timing engine status from intf status register
+  drm/msm/disp/dpu: wait for extra vsync till timing engine status is
+    disabled
+  drm/msm/disp/dpu: reset the datapath after timing engine disable
+  drm/msm/disp/dpu: clear active interface in the datapath cleanup
 
-This has effects in drivers/crypto/ccp/sev-dev.c
-                                                               (for
-example in alloc_snp_host_map).  Is that OK?
+ drivers/gpu/drm/bridge/panel.c                     |  68 ++++++-
+ drivers/gpu/drm/drm_atomic.c                       |  60 ++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c           |  17 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  45 +++--
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  22 +++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   3 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  12 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        |   8 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   3 +-
+ drivers/gpu/drm/msm/dp/dp_catalog.c                |  80 ++++++++
+ drivers/gpu/drm/msm/dp/dp_catalog.h                |   4 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  80 ++++++++
+ drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   3 +
+ drivers/gpu/drm/msm/dp/dp_display.c                |  36 ++--
+ drivers/gpu/drm/msm/dp/dp_display.h                |   2 +
+ drivers/gpu/drm/msm/dp/dp_drm.c                    | 206 ++++++++++++++++++++-
+ drivers/gpu/drm/msm/dp/dp_drm.h                    |   9 +-
+ drivers/gpu/drm/msm/dp/dp_link.c                   |  36 ++++
+ drivers/gpu/drm/msm/dp/dp_panel.c                  |  22 +++
+ drivers/gpu/drm/msm/dp/dp_panel.h                  |   6 +
+ drivers/gpu/drm/msm/dp/dp_reg.h                    |  27 +++
+ include/drm/drm_atomic.h                           |   7 +
+ 22 files changed, 696 insertions(+), 60 deletions(-)
 
+-- 
+2.7.4
 
--Dov
-
->  /**
->   * SEV platform state
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 61b1e26ced01..48bcc59cf86b 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1949,6 +1949,8 @@ enum sev_cmd_id {
->  	KVM_SEV_SNP_LAUNCH_START,
->  	KVM_SEV_SNP_LAUNCH_UPDATE,
->  	KVM_SEV_SNP_LAUNCH_FINISH,
-> +	KVM_SEV_SNP_GET_CERTS,
-> +	KVM_SEV_SNP_SET_CERTS,
->  
->  	KVM_SEV_NR_MAX,
->  };
-> @@ -2096,6 +2098,16 @@ struct kvm_sev_snp_launch_finish {
->  	__u8 pad[6];
->  };
->  
-> +struct kvm_sev_snp_get_certs {
-> +	__u64 certs_uaddr;
-> +	__u64 certs_len;
-> +};
-> +
-> +struct kvm_sev_snp_set_certs {
-> +	__u64 certs_uaddr;
-> +	__u64 certs_len;
-> +};
-> +
->  #define KVM_DEV_ASSIGN_ENABLE_IOMMU	(1 << 0)
->  #define KVM_DEV_ASSIGN_PCI_2_3		(1 << 1)
->  #define KVM_DEV_ASSIGN_MASK_INTX	(1 << 2)
