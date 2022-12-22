@@ -2,131 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD62653C7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B560653C80
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 08:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234764AbiLVHXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 02:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
+        id S231146AbiLVH0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 02:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiLVHXS (ORCPT
+        with ESMTP id S229608AbiLVH0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 02:23:18 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275FD22B01;
-        Wed, 21 Dec 2022 23:23:10 -0800 (PST)
-X-UUID: f2bcbfd6031243bbb112612c8ca7fdfa-20221222
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=I5wbPKHKnzWyiSg3WCvRk7OUYhVp4BGRWfdopNLnhGk=;
-        b=d2sTv/8jF5bPfHj7Xv7Z9ehY+L1BdOBXYeZrNeogBsn0jg7gOYjQ7OrhNydv0mh/WxTipxs06JZQe5GQ0ogZ7qkyWDD3VGTL6FpTZG+U7pKZ/3v8wFsOMkv8UOPRv6+rQLxbl7IBo2AVUJ767asB4jpvEyOD2Dxjg9KpIOGjhFg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:dc0f5937-4eae-4fb7-ba80-4ec207178d23,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.14,REQID:dc0f5937-4eae-4fb7-ba80-4ec207178d23,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:dcaaed0,CLOUDID:b976178a-8530-4eff-9f77-222cf6e2895b,B
-        ulkID:221222152307TWEQSHSI,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: f2bcbfd6031243bbb112612c8ca7fdfa-20221222
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 509231344; Thu, 22 Dec 2022 15:23:06 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 22 Dec 2022 15:23:05 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 22 Dec 2022 15:23:05 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Chunxu Li <chunxu.li@mediatek.com>,
-        Dan Carpenter <error27@gmail.com>,
-        YC Hung <yc.hung@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <sound-open-firmware@alsa-project.org>,
-        <alsa-devel@alsa-project.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v1 3/3] ASoC: SOF: mediatek: Provide debugfs_add_region_item ops for core
-Date:   Thu, 22 Dec 2022 15:21:50 +0800
-Message-ID: <20221222072150.10627-4-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221222072150.10627-1-tinghan.shen@mediatek.com>
-References: <20221222072150.10627-1-tinghan.shen@mediatek.com>
+        Thu, 22 Dec 2022 02:26:08 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A8538B4;
+        Wed, 21 Dec 2022 23:26:07 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id x66so650596pfx.3;
+        Wed, 21 Dec 2022 23:26:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C1M6sI8nGjn1AQZW7MjYI4O6nfdLnBf5J3+wPQ6ghb0=;
+        b=KZRpJQE2dMcoZOUADI+9CK3UIfA+yeOJRhVV06WaoBzBZFtg5CdZP5hSE68WLOOdXm
+         rG8tFq14LpuMpsAzqBqXWMdbGZYMyGIQka9dtDTu9Z0iNl1g7AiYDphbg44aUydjiiaS
+         TuK6DrJjGI1cOwkQxLoSaKogyEP3yeyP+rasQspiBvXFLV8sNUIRPw7oj6UtTpLhfUV6
+         7xz/qHNDbXb8f2Zqsoz+dIcgYoWolASTcAcCD70/oNGbes+I0+4ZkgcXp+k9QUtqaAUC
+         NyLYQmrC52cU6+XUGtmFw5AxyCxtKkWHiAUMIQXHDjVZZb2Z4YPqvLKlXoylD3mbxDCh
+         OgJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C1M6sI8nGjn1AQZW7MjYI4O6nfdLnBf5J3+wPQ6ghb0=;
+        b=13v8N6MhXyuD7XNvmql05xK8xp49um2Fe+wFzsCpFkHwRl2WTl7sbCCeM1IvCZmMBb
+         Ki09o5wldhZi/tmEsg2o17jRNpdQYskdJAcIMaX+KQTOnOi9I83NUKmC02+kcFJbrJRn
+         9rQy1ybCwk/gfGmDfsyeaUd5yqiEehjit0i5AyGVM9EfenmI1rlQLhreYKLMR4rysegU
+         InMw/qls+m1yfO1aKzQ5bNH7MEfKeBUiUVUL9TNnm8PP7OODUe6f1suLYyye8JfGVTzq
+         6KN3LeFtjGhDvArsdigzokOJB/qRlHv6LMYyO4UYWdhKIyWfvoLv90Zm0GgpgFwnW5Kx
+         r4Fw==
+X-Gm-Message-State: AFqh2kq0605eupuvKR9z/keIBpsThISVg/8XBKZ93bvBIMqVAzMtaEHK
+        hD1Ev/k7AaraZoYZjnSq9MI=
+X-Google-Smtp-Source: AMrXdXuMdbHUhQAzE0MiH3d0myApJ7/oKLKYNYQRn7zJ2MLcR9aEZ57SMdbpCEwj2o/zAnLNy4GSwg==
+X-Received: by 2002:a05:6a00:3691:b0:577:6264:9d0f with SMTP id dw17-20020a056a00369100b0057762649d0fmr5425480pfb.6.1671693967081;
+        Wed, 21 Dec 2022 23:26:07 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id j186-20020a62c5c3000000b00573eb4a9a66sm11815117pfg.2.2022.12.21.23.26.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 23:26:06 -0800 (PST)
+From:   korantwork@gmail.com
+To:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
+        lpieralisi@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Subject: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
+Date:   Thu, 22 Dec 2022 15:26:03 +0800
+Message-Id: <20221222072603.1175248-1-korantwork@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set the generic iomem callback for debugfs_add_region_item to support
-sof-logger.
+From: Xinghui Li <korantli@tencent.com>
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Commit ee81ee84f873("PCI: vmd: Disable MSI-X remapping when possible")
+disable the vmd MSI-X remapping for optimizing pci performance.However,
+this feature severely negatively optimized performance in multi-disk
+situations.
+
+In FIO 4K random test, we test 1 disk in the 1 CPU
+
+when disable MSI-X remapping:
+read: IOPS=1183k, BW=4622MiB/s (4847MB/s)(1354GiB/300001msec)
+READ: bw=4622MiB/s (4847MB/s), 4622MiB/s-4622MiB/s (4847MB/s-4847MB/s),
+io=1354GiB (1454GB), run=300001-300001msec
+
+When not disable MSI-X remapping:
+read: IOPS=1171k, BW=4572MiB/s (4795MB/s)(1340GiB/300001msec)
+READ: bw=4572MiB/s (4795MB/s), 4572MiB/s-4572MiB/s (4795MB/s-4795MB/s),
+io=1340GiB (1438GB), run=300001-300001msec
+
+However, the bypass mode could increase the interrupts costs in CPU.
+We test 12 disks in the 6 CPU,
+
+When disable MSI-X remapping:
+read: IOPS=562k, BW=2197MiB/s (2304MB/s)(644GiB/300001msec)
+READ: bw=2197MiB/s (2304MB/s), 2197MiB/s-2197MiB/s (2304MB/s-2304MB/s),
+io=644GiB (691GB), run=300001-300001msec
+
+When not disable MSI-X remapping:
+read: IOPS=1144k, BW=4470MiB/s (4687MB/s)(1310GiB/300005msec)
+READ: bw=4470MiB/s (4687MB/s), 4470MiB/s-4470MiB/s (4687MB/s-4687MB/s),
+io=1310GiB (1406GB), run=300005-300005msec
+
+Signed-off-by: Xinghui Li <korantli@tencent.com>
 ---
- sound/soc/sof/mediatek/mt8186/mt8186.c | 3 +++
- sound/soc/sof/mediatek/mt8195/mt8195.c | 1 +
- 2 files changed, 4 insertions(+)
+ drivers/pci/controller/vmd.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/sound/soc/sof/mediatek/mt8186/mt8186.c b/sound/soc/sof/mediatek/mt8186/mt8186.c
-index af0dfc2fc4cc..dbea604ebc04 100644
---- a/sound/soc/sof/mediatek/mt8186/mt8186.c
-+++ b/sound/soc/sof/mediatek/mt8186/mt8186.c
-@@ -588,6 +588,9 @@ static struct snd_sof_dsp_ops sof_mt8186_ops = {
- 	.drv		= mt8186_dai,
- 	.num_drv	= ARRAY_SIZE(mt8186_dai),
- 
-+	/* Debug information */
-+	.debugfs_add_region_item = snd_sof_debugfs_add_region_item_iomem,
-+
- 	/* PM */
- 	.suspend	= mt8186_dsp_suspend,
- 	.resume		= mt8186_dsp_resume,
-diff --git a/sound/soc/sof/mediatek/mt8195/mt8195.c b/sound/soc/sof/mediatek/mt8195/mt8195.c
-index 3c81e84fcecf..11ceff3acc54 100644
---- a/sound/soc/sof/mediatek/mt8195/mt8195.c
-+++ b/sound/soc/sof/mediatek/mt8195/mt8195.c
-@@ -642,6 +642,7 @@ static struct snd_sof_dsp_ops sof_mt8195_ops = {
- 
- 	/* Debug information */
- 	.dbg_dump = mt8195_adsp_dump,
-+	.debugfs_add_region_item = snd_sof_debugfs_add_region_item_iomem,
- 
- 	/* DAI drivers */
- 	.drv = mt8195_dai,
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index e06e9f4fc50f..9f6e9324d67d 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -998,8 +998,7 @@ static const struct pci_device_id vmd_ids[] = {
+ 		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP,},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_VMD_28C0),
+ 		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW |
+-				VMD_FEAT_HAS_BUS_RESTRICTIONS |
+-				VMD_FEAT_CAN_BYPASS_MSI_REMAP,},
++				VMD_FEAT_HAS_BUS_RESTRICTIONS,},
+ 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x467f),
+ 		.driver_data = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
+ 				VMD_FEAT_HAS_BUS_RESTRICTIONS |
 -- 
-2.18.0
+2.39.0
 
