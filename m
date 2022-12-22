@@ -2,121 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF8E6544F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581996544FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234880AbiLVQOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 11:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
+        id S231409AbiLVQRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 11:17:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiLVQO3 (ORCPT
+        with ESMTP id S229764AbiLVQRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 11:14:29 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5B81DA7C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:14:24 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id s22so2379075ljp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:14:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PbPXhuWWUXCRtpfbn6zcTOg0AnuCm5I9vIiDytL2HSE=;
-        b=hoQ5+/ua4l1uCEHcyPzLxFU0z00ihnn+72AS2FvqOzEkhDnNgUbMTMmlZaMshGvN6F
-         H9AiYgIGs+dKk1auU2FZVRzQRtQfh68uYuxPJZFXklP5j3GUux/O8MjV9Eg1GKPVriaT
-         3fUFv1t4Xax1nCv2IxWyNtdkwki2Wwg1e78LtqvecXbS/WboO/S8s/pzvDbzikk8oWXc
-         wrE1g9TDBXd3pxNAcsWHyryFGc0soFPmHfZcJMe7jgPigym1yjUn7rxMEYCOACQPK5zO
-         tDk8GJvC4mQdJbZZPGKOlw5oWbPpXc1Yqy2fMAcn78ZWMRl1B2t9PnJUC/lfEsanEEmL
-         SjYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PbPXhuWWUXCRtpfbn6zcTOg0AnuCm5I9vIiDytL2HSE=;
-        b=t2KISIe9R+G/9EONsvbhgyf0VHxSVib7GNH+5hd55L5ht4OsRKGIEnzHWzG6ybqHdi
-         ArBNDDECQXYiyIzLIHkXwoAMgNd/REfpisQsCS5s+PDSMTvCvMKkbBMByVsiXg9IGcbG
-         6TynIbWChKDzF60M+XH8MbHTJhnzPRBk7x7g4UBkdCRnSaYL+gQrdKwZHeLInJKr7jKV
-         jlBTgQbqIwQjEGNa3QV7awaRyJy+2GZ+tvjqfamkHhT0HVOT8f9hAg+1fH8ObS1Xpoqc
-         gUi7zjTa+4pLR+OlVVOIDJhA96iKufvC+96pufv/ZflnEumVUZBLiZLql1LvaKcTPd6y
-         nwmQ==
-X-Gm-Message-State: AFqh2krwpdUv4lLSPJdwPR6Phgp/S9uS4Hgj4cjdzQ54OrR7hHw0s2y8
-        7ArYYVTpCE4eDoD5zY048RFISA==
-X-Google-Smtp-Source: AMrXdXu8ilr3WfblXfjnYbETxE1Xt6mHIdo6oVC3go86KQrgoWjBgFCDI+5ScStOnnoxmqAARd/q0Q==
-X-Received: by 2002:a2e:b0e1:0:b0:27d:960:ab5e with SMTP id h1-20020a2eb0e1000000b0027d0960ab5emr1772402ljl.50.1671725663097;
-        Thu, 22 Dec 2022 08:14:23 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id x24-20020a05651c105800b002797d6bb516sm89450ljm.20.2022.12.22.08.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 08:14:22 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: add input-enable and bias-bus-hold
-Date:   Thu, 22 Dec 2022 17:14:20 +0100
-Message-Id: <20221222161420.172824-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 22 Dec 2022 11:17:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF10220C6;
+        Thu, 22 Dec 2022 08:17:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C895AB803F2;
+        Thu, 22 Dec 2022 16:17:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B5BC433EF;
+        Thu, 22 Dec 2022 16:17:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671725847;
+        bh=Dg4BfgoD9YyHNiJlbfaKe3wduOjMhakUuIqaDZWVMts=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=r6iKDDAJAHG+tS7DCBhoWziRGZ0VtwQfnefbMTUuPF7/ibqRSOCtx1EF1UK+X+9U/
+         /k+smgNITqozFDcN3VQBWmPmYBbwMyYH2FR7yBWIIfgvsf9WTtMANljAh3mITMtsDM
+         9okAQrVDObXXuv3RnHWjt3W/sYMUVgSjdFaWO0qgLyP1DNDEMoQNA1HGGcNjfsNYjl
+         HQz5bANbmLgCg4xofTFJyPCVh9x8DU0RHm3HV++HGeD99FPZDj9Nfjvg+B+4az3d4Z
+         t12BI4bPjjXIlA3M0fgFWptMgDNXESRPYlizuE5HRA729tAv6TIj1fRfZMqKuKYj4g
+         OLniTpyqA30wQ==
+Message-ID: <4f52f323-c8eb-bab0-ffa8-2c53c20d35ec@kernel.org>
+Date:   Thu, 22 Dec 2022 09:17:26 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [net-next] ipv6: fix routing cache overflow for raw sockets
+To:     Jonathan Maxwell <jmaxwell37@gmail.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, yoshfuji@linux-ipv6.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221218234801.579114-1-jmaxwell37@gmail.com>
+ <9f145202ca6a59b48d4430ed26a7ab0fe4c5dfaf.camel@redhat.com>
+ <bf56c3aa-85df-734d-f419-835a35e66e03@kernel.org>
+ <CAGHK07BehyHXoS+27=cfZoKz4XNTcJjyB5us33sNS7P+_fudHQ@mail.gmail.com>
+ <CAGHK07D2Dy4zFGHqwdyg+nsRC_iL4ArWTPk7L2ndA2PaLfOMYQ@mail.gmail.com>
+ <CAGHK07DU15NhFvGuLB6WHUF0fffT3MefL3E3JWHmtWR6Wzm0bA@mail.gmail.com>
+Content-Language: en-US
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <CAGHK07DU15NhFvGuLB6WHUF0fffT3MefL3E3JWHmtWR6Wzm0bA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow bias-bus-hold and input-enable properties (already used in SM8450):
+On 12/21/22 10:39 PM, Jonathan Maxwell wrote:
+> There are some mistakes in this prototype patch. Let me come up with a
+> better one. I'll submit a new patch in the new year for review. Thanks for
+> the suggestion DavidA.
 
-  sm8450-qrd.dtb: pinctrl@3440000: dmic02-default-state: 'oneOf' conditional failed, one must be fixed:
-    'pins' is a required property
-    'function' is a required property
-    'clk-pins', 'data-pins' do not match any of the regexes: 'pinctrl-[0-9]+'
-    'input-enable' does not match any of the regexes: 'pinctrl-[0-9]+'
-
-Compact the properties which are just set to true for readability.
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
----
-
-Changes since v1:
-1. Add input-enable.
----
- .../bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml     | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml
-index 01a0a4a40ba5..e04d094d1946 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml
-@@ -96,14 +96,12 @@ $defs:
-           2: Lower Slew rate (slower edges)
-           3: Reserved (No adjustments)
- 
-+      bias-bus-hold: true
-       bias-pull-down: true
--
-       bias-pull-up: true
--
-       bias-disable: true
--
-+      input-enable: true
-       output-high: true
--
-       output-low: true
- 
-     required:
--- 
-2.34.1
-
+you are welcome. When you submit the next one, it would be helpful to
+show change in memory consumption and a comparison to IPv4 for a similar
+raw socket program.
