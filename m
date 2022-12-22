@@ -2,164 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BC0654505
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DE865450B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiLVQWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 11:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S230318AbiLVQX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 11:23:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLVQWn (ORCPT
+        with ESMTP id S229545AbiLVQXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 11:22:43 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A8A220C9;
-        Thu, 22 Dec 2022 08:22:42 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMDRVQ5002035;
-        Thu, 22 Dec 2022 16:22:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=85s9GL61Q+5hGLd8vqh8/LD4aIYTGuvpAcdjzwURrfw=;
- b=GNnCaFwT5fCH+LeDz52aKLFdn51FT6vSb9sUXdUGe3UFR8PWmaqWjD4Ge7h8hkVsPIXj
- nIf7vjZpQb8W58eMoX606M+8CwJ59cIqTz5tF9Xbk4Rf/yswFvqxZdPBSkrKyvtNQWuM
- jpYfxA2i/fIuIiFj1hiqPI6bK7TlMxOGcK5G9fTQcce6fEt9bMIcyodd+NN581Rujbx+
- tJKDA3AbswvfEPee/Mjs99OXQAxvV8zub9vJ0u7MCHzK7CRItmvzRFbQ3EzOCFrARONF
- 97QjXViKiWmnSwKm1PRvFTTyHXoqlSMqRn5HyXeZcRmdZ1mwzLgTfMu5en72S7nG3R9K kA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mmn3n8te7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 16:22:30 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BMGMTHY032570
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 16:22:29 GMT
-Received: from [10.110.68.133] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 22 Dec
- 2022 08:22:28 -0800
-Message-ID: <54bd8b85-8b68-4b28-ec68-28edf9a8a097@quicinc.com>
-Date:   Thu, 22 Dec 2022 08:22:16 -0800
+        Thu, 22 Dec 2022 11:23:54 -0500
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B90E23BDF;
+        Thu, 22 Dec 2022 08:23:53 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id d2so1528158qvp.12;
+        Thu, 22 Dec 2022 08:23:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6F4Pdl1w0uJ/Dj5PshnD7dKmjPpVZhf3+ujj3GIsvkc=;
+        b=QrUrlL0glPYAh7QSMkWy9mJk5uKLkgmzrLnpwQjic6ABSc28VRx5h9b+IBj0DBzxPW
+         4KrIdPlrbCLnIXE3m9FnrBmmKCQgPy48gmofYjIZpewevdbsnnGWjj3dMMkUpBqKsW2+
+         f4oz5i0GQ+bBDFR4OKGU1nWZlGeNhSB0ZU4m3tfJ0m+nvxw6XFDGUQ1KhWHTDifFUOCS
+         RhFhjlEs2tdIgd33aH5E52d3fvbii84qY/Uvvh5HFHoKDCiPcNN/GCsvtjcfLY77LRB2
+         2szDTccKM3ocLDli6tVXQx2xF3nr3lE8aqR1JN4O8eHBf4fPVhL6B2/DHbJj/IR3DI7B
+         R6lw==
+X-Gm-Message-State: AFqh2kqj2xnsHKKqiplICiMmiZzHm5kGW3D0sQHQMbx/H45wPqpTuzRs
+        w01eceWEK2b54IcQAWKEDTVdjGxdvIb366qVnKi/HCtL
+X-Google-Smtp-Source: AMrXdXurfuRqQTflDUkqlaJ6hSuTf3f6g7DGp7yvtz9AE6HsJKpctve7bbgi+dRkkUmDQqQUupj2l7oq2Y7cbFDnK2w=
+X-Received: by 2002:a0c:c345:0:b0:4c7:27cf:dfca with SMTP id
+ j5-20020a0cc345000000b004c727cfdfcamr268581qvi.3.1671726232692; Thu, 22 Dec
+ 2022 08:23:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v14 1/5] arm64: dts: qcom: add data-lanes and
- link-freuencies into dp_out endpoint
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
-        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <airlied@gmail.com>
-CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1671217893-17496-1-git-send-email-quic_khsieh@quicinc.com>
- <1671217893-17496-2-git-send-email-quic_khsieh@quicinc.com>
- <1a5cc3d3-ac2d-52c8-79f4-b13252a4bb86@linaro.org>
-Content-Language: en-US
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <1a5cc3d3-ac2d-52c8-79f4-b13252a4bb86@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6vrkoX9hfurY3YRHajdQGM6tw57oWLfA
-X-Proofpoint-ORIG-GUID: 6vrkoX9hfurY3YRHajdQGM6tw57oWLfA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-22_09,2022-12-22_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
- adultscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212220139
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221221155203.11347-1-ptyadav@amazon.de> <20221221155203.11347-2-ptyadav@amazon.de>
+In-Reply-To: <20221221155203.11347-2-ptyadav@amazon.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 22 Dec 2022 17:23:41 +0100
+Message-ID: <CAJZ5v0i-mrt57=2ROywn4Na_N3YVk+3D869QpHWqp9eo2NtGAw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] acpi: processor: allow fixing up the frequency for a
+ performance state
+To:     Pratyush Yadav <ptyadav@amazon.de>
+Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@acpica.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 12/22/2022 2:47 AM, Krzysztof Kozlowski wrote:
-> On 16/12/2022 20:11, Kuogee Hsieh wrote:
->> Move data-lanes property from mdss_dp node to dp_out endpoint. Also
->> add link-frequencies property into dp_out endpoint as well. The last
->> frequency specified at link-frequencies will be the max link rate
->> supported by DP.
->>
->> Changes in v5:
->> -- revert changes at sc7180.dtsi and sc7280.dtsi
->> -- add &dp_out to sc7180-trogdor.dtsi and sc7280-herobrine.dtsi
->>
->> Changes in v6:
->> -- add data-lanes and link-frequencies to yaml
->>
->> Changes in v7:
->> -- change 160000000 to 1620000000
->> -- separate yaml to different patch
->>
->> Changes in v8:
->> -- correct Bjorn mail address to kernel.org
->>
->> Changes in v9:
->> -- use symbol rate (hz) for link-frequencies at dp_out at sc7180_trogdor.dtsi
->>
->> Changes in v13:
->> -- delete an extra space at data-lanes
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi   | 6 +++++-
->>   arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 4 ++++
->>   2 files changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
->> index eae22e6..e2783dd 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
->> @@ -814,7 +814,11 @@ hp_i2c: &i2c9 {
->>   	status = "okay";
->>   	pinctrl-names = "default";
->>   	pinctrl-0 = <&dp_hot_plug_det>;
->> -	data-lanes = <0 1>;
->> +};
->> +
->> +&dp_out {
->> +    data-lanes = <0 1>;
->> +    link-frequencies = /bits/ 64 <1620000000 2700000000 5400000000>;
-> Messed order of nodes.
-
-can you please give me more details and how should i fixed it?
-
-Thanks,
-
->>   };
->>   
->>   &pm6150_adc {
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->> index c11e371..3f363f8 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->> @@ -442,7 +442,11 @@ ap_i2c_tpm: &i2c14 {
->>   	status = "okay";
->>   	pinctrl-names = "default";
->>   	pinctrl-0 = <&dp_hot_plug_det>;
->> +};
->> +
->> +&dp_out {
-> Same problem here.
+On Wed, Dec 21, 2022 at 4:52 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
 >
+> In some cases the ACPI table can have an incorrect frequency populated
+> for a performance state. For example, in Intel platforms, the Turbo
+> frequency is just listed as +1 MHz above the max non-turbo frequency.
+
+Which is a known convention based on compatibility with some older OSes.
+
+> The frequency can actually go much higher based on various factors like
+> temperature, voltage, etc.
+
+It can.
+
+> Allow drivers like intel_pstate to fix up performance state frequencies
+> with the actual maximum value.
+
+Why do you want to do that?
+
+> While at it, also update the QoS
+> constraints if needed to match the new frequency values.
 >
-> Best regards,
-> Krzysztof
+> Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
+> ---
+>  drivers/acpi/processor_perflib.c | 40 ++++++++++++++++++++++++++++++++
+>  include/acpi/processor.h         |  2 ++
+>  2 files changed, 42 insertions(+)
+>
+> diff --git a/drivers/acpi/processor_perflib.c b/drivers/acpi/processor_perflib.c
+> index 970f04a958cd..4958aee4c024 100644
+> --- a/drivers/acpi/processor_perflib.c
+> +++ b/drivers/acpi/processor_perflib.c
+> @@ -766,3 +766,43 @@ void acpi_processor_unregister_performance(unsigned int cpu)
+>         mutex_unlock(&performance_mutex);
+>  }
+>  EXPORT_SYMBOL(acpi_processor_unregister_performance);
+> +
+> +int acpi_processor_fixup_perf_state(unsigned int cpu, unsigned int state,
+> +                                   unsigned int frequency)
+> +{
+> +       struct acpi_processor *pr;
+> +       int ret;
+> +
+> +       mutex_lock(&performance_mutex);
+> +
+> +       pr = per_cpu(processors, cpu);
+> +       if (!pr) {
+> +               mutex_unlock(&performance_mutex);
+> +               return -ENODEV;
+> +       }
+> +
+> +       if (!pr->performance) {
+> +               mutex_unlock(&performance_mutex);
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (state >= pr->performance->state_count) {
+> +               mutex_unlock(&performance_mutex);
+> +               return -EINVAL;
+> +       }
+> +
+> +       pr->performance->states[state].core_frequency = frequency;
+> +
+> +       if (ignore_ppc != 1 && state == pr->performance_platform_limit &&
+> +           freq_qos_request_active(&pr->perflib_req)) {
+> +               ret = freq_qos_update_request(&pr->perflib_req,
+> +                                             frequency * 1000);
+> +               if (ret < 0)
+> +                       pr_warn("Failed to update perflib freq constraint: CPU%d (%d)\n",
+> +                               pr->id, ret);
+> +       }
+> +
+> +       mutex_unlock(&performance_mutex);
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL(acpi_processor_fixup_perf_state);
+> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+> index 94181fe9780a..daff978cfa7d 100644
+> --- a/include/acpi/processor.h
+> +++ b/include/acpi/processor.h
+> @@ -258,6 +258,8 @@ extern int acpi_processor_preregister_performance(struct
+>  extern int acpi_processor_register_performance(struct acpi_processor_performance
+>                                                *performance, unsigned int cpu);
+>  extern void acpi_processor_unregister_performance(unsigned int cpu);
+> +extern int acpi_processor_fixup_perf_state(unsigned int cpu, unsigned int state,
+> +                                          unsigned int frequency);
+>
+>  int acpi_processor_pstate_control(void);
+>  /* note: this locks both the calling module and the processor module
+> --
+> 2.38.1
 >
