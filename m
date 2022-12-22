@@ -2,118 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4F7653A9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 03:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72DCB653AA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 03:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbiLVC04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 21:26:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S234658AbiLVCaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 21:30:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiLVC0u (ORCPT
+        with ESMTP id S229561AbiLVCac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 21:26:50 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E2E10069
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:26:50 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id z144so372617iof.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:26:50 -0800 (PST)
+        Wed, 21 Dec 2022 21:30:32 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B112465FB;
+        Wed, 21 Dec 2022 18:30:31 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id u7so684137plq.11;
+        Wed, 21 Dec 2022 18:30:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fVWA7/D2KvjMyMicmKIzWkp9wEe3Q6Twufyriuc4mnk=;
-        b=F+cvtx7SUTBiDbyXWwC1K3FSy9wvZ3+6N3Ol2twXHs8J8w4KDcC3F1O1+gSzcMeK3X
-         Aj4VfFDE8EzvrmHmiq0I9CxoJZAMmE+mYUaWWJzu6CNM+4jWd/SyDIjcr/BmG40Sdr3s
-         e+ao1Efe1LBSnUNdNyzTedN629/nEG+bd9ZuU=
+        bh=bU8Z99SwhtjnecE1y/hevP0WZYcJF+SzZEK7GtxdCvM=;
+        b=ZytbUugcquyBxXD00pbwWSG0pZY+Bt/ijdMlI86ewRQIjJCwbX/tDGBWZ8fdGf8qfh
+         gieHpsFW83kIzXfg8vGkDP/AMxey+1fqhJ/DjQ5EmY5JfKDW6ut794CSl10k6ui/q+8j
+         aYj03aOqDvEDi7XkSei1QznQytQCGVGH/oMncSLbS3KqBqQhPZj9QvotXQ5QwBXZtJ1i
+         6ACQOGzKfd/+S1LuHjY4aYQmsJ/2dUhStcQ3PtJpjyZ8M2dCqNpv50JYTkKFRug23wyN
+         0mcXXBZwL42U2xc414DMThAe1Ac02XDqIMS7mL4Jyw1NCYxFl+0Ae5mbdcKwIRlCxyEp
+         joMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fVWA7/D2KvjMyMicmKIzWkp9wEe3Q6Twufyriuc4mnk=;
-        b=h8qo7OobuWl/xxKscfXgIbwS6SburtcGO8LcMx0iK1ZgRSCfwE3ZjGPPqYYVHwVguF
-         lLVTE1/5sg7+eJiXWFk5V5YmdJRoDHwa29538czAfr364lXIgtn4hdQFgMi7DW500uuU
-         nshP3s6TUU2kZwCvIGyFa0CHF0IercaylnK2tYSOQicXCxYQdGpXuARy9bWS24KqmsGb
-         gQk/EBqARHUGvNnd2n8AChDQJC7IEQVlDaRarYyCbQEpxDWsQbLvKoTTfygRbsyyhRVE
-         HAkQFEvUjxVpFaesgrBWfQJBYO526+54viVzwOq4wubgDpnCDVzcPNsyDmnGWCYRNPln
-         O1rA==
-X-Gm-Message-State: AFqh2kqpYAfjaZy/2ixF1++fTIQZ4ydv/LKHCm9+cqfM42U5JvPZQ8hS
-        1wXaaPbanbrKZvXp3ABBg0lCZw==
-X-Google-Smtp-Source: AMrXdXta0auQ6KBKrMkNKxV0MubHW/Vl+yjQV7HxmnSm0MYbIwEb5899dmogvKr3NTgh01lj6IJOZw==
-X-Received: by 2002:a6b:dc02:0:b0:6e2:d3fa:76eb with SMTP id s2-20020a6bdc02000000b006e2d3fa76ebmr2618945ioc.20.1671676009612;
-        Wed, 21 Dec 2022 18:26:49 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id x43-20020a0294ae000000b00375783003fcsm5994321jah.136.2022.12.21.18.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 18:26:49 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>, stable@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: [PATCH v2 2/2] usb: misc: onboard_hub: Fail silently when there is no platform device
-Date:   Thu, 22 Dec 2022 02:26:45 +0000
-Message-Id: <20221222022605.v2.2.I0c5ce35d591fa1f405f213c444522585be5601f0@changeid>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
-References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
+        bh=bU8Z99SwhtjnecE1y/hevP0WZYcJF+SzZEK7GtxdCvM=;
+        b=LtESV7Ft52Vh3aQgQfkJEu+CT5/Qwy9/oDxouaR4fekvZIAndrgG/Co5PCWYCVApET
+         Oa0VX3X7N9D8HTkgHWeZSjUosi2fjZO3XqUmyOwW+shmRfHYrvMn5rqr9yahgwje6Lhz
+         vFio6j/gt9+REpvxY5NUx08L33g3zbYBMSYDa4Y4RG0yMhQgClibf2LoDhLS5GeI5heN
+         5j3YTIyNC6fcnLuwqN6zDIuP/h88+53MC7Wa3T/PWB2Pn0L0HelW92hKdtf01dp8mv6p
+         2jsroRpE5kNVG2J0oLVgjXiBzzE3In3Px3M0lvJw8N2Qj/LS6+vMkwgs6dDnthrhDsnL
+         YR/A==
+X-Gm-Message-State: AFqh2kq4+MYS+gtl0F32sONhLGtfp5fIT8mkDKaek/lnI0A6L1LrgPVt
+        RJzbQp9BQk/N3710hcMo6LRgDQMCCtFq/Y65zQ==
+X-Google-Smtp-Source: AMrXdXteatI0E1ZI/1uHRj5RqrEYN3RXlaY/jHnTWyPz7wDf4HyntB+/bxrRbxmQwWnp9Grmoge5VpdNUGUpIARkfTg=
+X-Received: by 2002:a17:90a:8d14:b0:219:dd76:7e87 with SMTP id
+ c20-20020a17090a8d1400b00219dd767e87mr515322pjo.233.1671676231084; Wed, 21
+ Dec 2022 18:30:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221213030436.17907-1-sunhao.th@gmail.com> <20221213030436.17907-2-sunhao.th@gmail.com>
+ <7cfaaafa-0eda-a314-5b22-7e22c029f4ad@linux.dev> <7EAED688-C971-410E-BA56-9629CF9B3C91@gmail.com>
+ <18e1219a-d2b2-0373-1f30-fcf83acd328f@linux.dev>
+In-Reply-To: <18e1219a-d2b2-0373-1f30-fcf83acd328f@linux.dev>
+From:   Hao Sun <sunhao.th@gmail.com>
+Date:   Thu, 22 Dec 2022 10:30:19 +0800
+Message-ID: <CACkBjsa+gOh0pFPctnigXs9ugW06efCqZ+qn+dTcyRJbf6z-MQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: check null propagation
+ only neither reg is PTR_TO_BTF_ID
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some boards with an onboard USB hub supported by the onboard_hub
-driver have a device tree node for the hub, but the node doesn't
-specify all properties needed by the driver (which is not a DT
-error per se). For such a hub no onboard_hub platform device is
-created. However the USB portion of the onboard hub driver still
-probes and uses _find_onboard_hub() to find the platform device
-that corresponds to the hub. If the DT node of the hub doesn't
-have an associated platform device the function looks for a
-"peer-hub" node (to get the platform device from there), if
-that doesn't exist either it logs an error and returns -EINVAL.
+Martin KaFai Lau <martin.lau@linux.dev> =E4=BA=8E2022=E5=B9=B412=E6=9C=8822=
+=E6=97=A5=E5=91=A8=E5=9B=9B 05:21=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 12/21/22 5:46 AM, Hao Sun wrote:
+> > Hi,
+> >
+> > I=E2=80=99ve tried something like the bellow, but soon realized that th=
+is
+> > won=E2=80=99t work because once compiler figures out `inner_map` equals
+> > to `val`, it can choose either reg to write into in the following
+> > path, meaning that this program can be rejected due to writing
+> > into read-only PTR_TO_BTF_ID reg, and this makes the test useless.
+>
+> hmm... I read the above a few times but I still don't quite get it.  In
+> particular, '...can be rejected due to writing into read-only PTR_TO_BTF_=
+ID
+> reg...'.  Where is it writing into a read-only PTR_TO_BTF_ID reg in the
+> following bpf prog?  Did I overlook something?
+>
+> >
+> > Essentially, we want two regs, one points to PTR_TO_BTD_ID, one
+> > points to MAP_VALUR_OR_NULL, then compare them and deref map val.
+>
+> If I read this request correctly, I guess the compiler has changed 'ret =
+=3D *val'
+> to 'ret =3D *inner_map'?  Thus, the verifier did not reject because it de=
+ref a
+> PTR_TO_BTF_ID?
+>
 
-The absence of a platform device is expected in some
-configurations, so drop the error log and fail silently with
--ENODEV.
+Yes, and if we do "*val =3D 0", it's rejected due to writing to read-only
+PTR_TO_BTF_ID reg.
 
-Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+> > It=E2=80=99s hard to implement this in C level because compilers decide
+> > which reg to use but not us, maybe we can just drop this test.
+>
+> Have you tried inline assembly.  Something like this (untested):
+>
+>          asm volatile (
+>                  "r8 =3D %[val];\n"
+>                  "r9 =3D %[inner_map];\n"
+>                 "if r8 !=3D r9 goto +1;\n"
+>                  "%[ret] =3D *(u64 *)(r8 +0);\n"
+>                  :[ret] "+r"(ret)
+>                  : [inner_map] "r"(inner_map), [val] "r"(val)
+>                  :"r8", "r9");
+>
 
-Changes in v2:
-- patch added to the series
+This would work, didn't realize that I can inline BPF insns this way.
+Thanks!
 
- drivers/usb/misc/onboard_usb_hub.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+> Please attach the verifier output in the future.  It will be easier to un=
+derstand.
+>
 
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index d63c63942af1..44a0b0ddee55 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -348,10 +348,8 @@ static struct onboard_hub *_find_onboard_hub(struct device *dev)
- 	pdev = of_find_device_by_node(dev->of_node);
- 	if (!pdev) {
- 		np = of_parse_phandle(dev->of_node, "peer-hub", 0);
--		if (!np) {
--			dev_err(dev, "failed to find device node for peer hub\n");
--			return ERR_PTR(-EINVAL);
--		}
-+		if (!np)
-+			return ERR_PTR(-ENODEV);
- 
- 		pdev = of_find_device_by_node(np);
- 		of_node_put(np);
--- 
-2.39.0.314.g84b9a713c41-goog
-
+Will do the next time.
