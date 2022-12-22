@@ -2,364 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED56E653E09
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB08653E0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235243AbiLVKJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 05:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
+        id S235273AbiLVKKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 05:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235305AbiLVKIx (ORCPT
+        with ESMTP id S235351AbiLVKKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 05:08:53 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172DE27926;
-        Thu, 22 Dec 2022 02:08:32 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BM7i86C006371;
-        Thu, 22 Dec 2022 11:08:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=HvbZMt9uDmeIHEq1F2d8b531XzccYnOXXCh8BRejkHI=;
- b=0aOLiW/5yk94W7IywlL+O7RGxMcFAbR7V/cT2Y2xoSg0b+iei4SGAUY2jrGh/c6HBJq4
- o0GxNw8EGtZW66xSsQX8C+UKamz1YG/N7GJoe6zwJp9+d5DP7TO1JUlv0xlPMflvbi5P
- np9g5vSxiEhPW2S1XdgqjajikA6XLBmHoi9b8NE5n8JnCyzZqHe6O+R/mbdigRV2qp1Y
- ANKwvFMo0ANhB7gK1W46zMuEAGFvVrjHtua4p4unfbpRwCI+dlv3VUwczBKs9EzrCT7O
- oqU1KT5j9nK1j8DtYHeEu+I4zKaYLb+7x9WL4tS6ykBD7umrHGM3k3N3O6djEbUGWU51 nA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mkc8jdu2c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 11:08:16 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 970B810002A;
-        Thu, 22 Dec 2022 11:08:15 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8EE4521D3C8;
-        Thu, 22 Dec 2022 11:08:15 +0100 (CET)
-Received: from localhost (10.201.21.217) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 22 Dec
- 2022 11:08:15 +0100
-From:   Gatien Chevallier <gatien.chevallier@foss.st.com>
-To:     <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
-        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
-        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
-        <arnd@arndb.de>, <gatien.chevallier@foss.st.com>
-Subject: [RFC PATCH v2 7/7] ARM: dts: stm32: add ETZPC as a system bus for STM32MP13x boards
-Date:   Thu, 22 Dec 2022 11:07:15 +0100
-Message-ID: <20221222100715.69233-8-gatien.chevallier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221222100715.69233-6-gatien.chevallier@foss.st.com>
-References: <20221222100715.69233-6-gatien.chevallier@foss.st.com>
+        Thu, 22 Dec 2022 05:10:21 -0500
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2AF1E3C7;
+        Thu, 22 Dec 2022 02:10:15 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 64C5E200F3;
+        Thu, 22 Dec 2022 11:10:13 +0100 (CET)
+Date:   Thu, 22 Dec 2022 11:10:12 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     phone-devel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lux Aliaga <they@mint.lgbt>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] dt-bindings: arm-smmu: Document smmu-500 binding
+ for SM6125
+Message-ID: <20221222101012.ptrrugxj3ksiyitn@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        phone-devel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lux Aliaga <they@mint.lgbt>, Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20221216215819.1164973-1-marijn.suijten@somainline.org>
+ <20221216215819.1164973-2-marijn.suijten@somainline.org>
+ <306709f8-7d45-9b76-f95b-1b3088d37a78@linaro.org>
+ <6d263321-782d-9d9c-4fdf-8bcf5b280779@linaro.org>
+ <20221219192839.6oqialqqw5xw5fxa@SoMainline.org>
+ <b4186ec6-a3f2-4dfb-a83e-25cf6d460a39@linaro.org>
+ <20221222082353.lhdw7h3pdqyyvsxy@SoMainline.org>
+ <a251f29d-58b7-5ccb-2661-a397e41fba80@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.201.21.217]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-22_05,2022-12-21_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a251f29d-58b7-5ccb-2661-a397e41fba80@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The STM32 System Bus is an internal bus on which devices are connected.
-ETZPC is a peripheral overseeing the firewall bus that configures
-and control access to the peripherals connected on it.
+On 2022-12-22 10:29:40, Krzysztof Kozlowski wrote:
+> On 22/12/2022 09:23, Marijn Suijten wrote:
+> > On 2022-12-20 10:52:49, Krzysztof Kozlowski wrote:
+> >> On 19/12/2022 20:28, Marijn Suijten wrote:
+> >>> On 2022-12-19 10:09:03, Krzysztof Kozlowski wrote:
+> >>>> On 19/12/2022 10:07, Krzysztof Kozlowski wrote:
+> >>>>> On 16/12/2022 22:58, Marijn Suijten wrote:
+> >>>>>> From: Martin Botka <martin.botka@somainline.org>
+> >>>>>>
+> >>>>>> Document smmu-500 compatibility with the SM6125 SoC.
+> >>>>>>
+> >>>>>
+> >>>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>>>
+> >>>> Wait, not entirely... no constraints for clocks and regs?
+> >>>
+> >>> Quite odd that there is no warning for my DT patch as it clearly
+> >>> requires at least one clock...
+> > 
+> > Again, any idea why there's no warning for this DT mismatching minItems:
+> > 1 for clocks, clock-names and power-domains?
+> 
+> I don't know what do you have in DT and what is mismatched. Why there
+> should be a warning?
 
-For more information on which peripheral is securable, please read
-the STM32MP13 reference manual.
+There is:
 
-Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
----
- arch/arm/boot/dts/stm32mp131.dtsi | 242 ++++++++++++++++--------------
- 1 file changed, 130 insertions(+), 112 deletions(-)
+  clock-names:
+    minItems: 1
+    maxItems: 7
 
-diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
-index dd35a607073d..0b3934fe6c34 100644
---- a/arch/arm/boot/dts/stm32mp131.dtsi
-+++ b/arch/arm/boot/dts/stm32mp131.dtsi
-@@ -3,6 +3,7 @@
-  * Copyright (C) STMicroelectronics 2021 - All Rights Reserved
-  * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
-  */
-+#include <dt-bindings/bus/stm32mp13_sys_bus.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/stm32mp13-clks.h>
- #include <dt-bindings/reset/stm32mp13-resets.h>
-@@ -231,88 +232,6 @@ dmamux1: dma-router@48002000 {
- 			dma-channels = <16>;
- 		};
- 
--		spi4: spi@4c002000 {
--			compatible = "st,stm32h7-spi";
--			reg = <0x4c002000 0x400>;
--			interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&rcc SPI4_K>;
--			resets = <&rcc SPI4_R>;
--			#address-cells = <1>;
--			#size-cells = <0>;
--			dmas = <&dmamux1 83 0x400 0x01>,
--			       <&dmamux1 84 0x400 0x01>;
--			dma-names = "rx", "tx";
--			status = "disabled";
--		};
--
--		spi5: spi@4c003000 {
--			compatible = "st,stm32h7-spi";
--			reg = <0x4c003000 0x400>;
--			interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&rcc SPI5_K>;
--			resets = <&rcc SPI5_R>;
--			#address-cells = <1>;
--			#size-cells = <0>;
--			dmas = <&dmamux1 85 0x400 0x01>,
--			       <&dmamux1 86 0x400 0x01>;
--			dma-names = "rx", "tx";
--			status = "disabled";
--		};
--
--		i2c3: i2c@4c004000 {
--			compatible = "st,stm32mp13-i2c";
--			reg = <0x4c004000 0x400>;
--			interrupt-names = "event", "error";
--			interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&rcc I2C3_K>;
--			resets = <&rcc I2C3_R>;
--			#address-cells = <1>;
--			#size-cells = <0>;
--			dmas = <&dmamux1 73 0x400 0x1>,
--			       <&dmamux1 74 0x400 0x1>;
--			dma-names = "rx", "tx";
--			st,syscfg-fmp = <&syscfg 0x4 0x4>;
--			i2c-analog-filter;
--			status = "disabled";
--		};
--
--		i2c4: i2c@4c005000 {
--			compatible = "st,stm32mp13-i2c";
--			reg = <0x4c005000 0x400>;
--			interrupt-names = "event", "error";
--			interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&rcc I2C4_K>;
--			resets = <&rcc I2C4_R>;
--			#address-cells = <1>;
--			#size-cells = <0>;
--			dmas = <&dmamux1 75 0x400 0x1>,
--			       <&dmamux1 76 0x400 0x1>;
--			dma-names = "rx", "tx";
--			st,syscfg-fmp = <&syscfg 0x4 0x8>;
--			i2c-analog-filter;
--			status = "disabled";
--		};
--
--		i2c5: i2c@4c006000 {
--			compatible = "st,stm32mp13-i2c";
--			reg = <0x4c006000 0x400>;
--			interrupt-names = "event", "error";
--			interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
--				     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&rcc I2C5_K>;
--			resets = <&rcc I2C5_R>;
--			#address-cells = <1>;
--			#size-cells = <0>;
--			dmas = <&dmamux1 115 0x400 0x1>,
--			       <&dmamux1 116 0x400 0x1>;
--			dma-names = "rx", "tx";
--			st,syscfg-fmp = <&syscfg 0x4 0x10>;
--			i2c-analog-filter;
--			status = "disabled";
--		};
--
- 		rcc: rcc@50000000 {
- 			compatible = "st,stm32mp13-rcc", "syscon";
- 			reg = <0x50000000 0x1000>;
-@@ -349,36 +268,6 @@ mdma: dma-controller@58000000 {
- 			dma-requests = <48>;
- 		};
- 
--		sdmmc1: mmc@58005000 {
--			compatible = "st,stm32-sdmmc2", "arm,pl18x", "arm,primecell";
--			arm,primecell-periphid = <0x20253180>;
--			reg = <0x58005000 0x1000>, <0x58006000 0x1000>;
--			interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "cmd_irq";
--			clocks = <&rcc SDMMC1_K>;
--			clock-names = "apb_pclk";
--			resets = <&rcc SDMMC1_R>;
--			cap-sd-highspeed;
--			cap-mmc-highspeed;
--			max-frequency = <130000000>;
--			status = "disabled";
--		};
--
--		sdmmc2: mmc@58007000 {
--			compatible = "st,stm32-sdmmc2", "arm,pl18x", "arm,primecell";
--			arm,primecell-periphid = <0x20253180>;
--			reg = <0x58007000 0x1000>, <0x58008000 0x1000>;
--			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "cmd_irq";
--			clocks = <&rcc SDMMC2_K>;
--			clock-names = "apb_pclk";
--			resets = <&rcc SDMMC2_R>;
--			cap-sd-highspeed;
--			cap-mmc-highspeed;
--			max-frequency = <130000000>;
--			status = "disabled";
--		};
--
- 		iwdg2: watchdog@5a002000 {
- 			compatible = "st,stm32mp1-iwdg";
- 			reg = <0x5a002000 0x400>;
-@@ -414,6 +303,135 @@ ts_cal2: calib@5e {
- 			};
- 		};
- 
-+		etzpc: etzpc@5c007000 {
-+			compatible = "st,stm32mp13-sys-bus";
-+			reg = <0x5c007000 0x400>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			feature-domain-controller;
-+			#feature-domain-cells = <2>;
-+			ranges;
-+
-+			spi4: spi@4c002000 {
-+				compatible = "st,stm32h7-spi";
-+				reg = <0x4c002000 0x400>;
-+				interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&rcc SPI4_K>;
-+				resets = <&rcc SPI4_R>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				dmas = <&dmamux1 83 0x400 0x01>,
-+				       <&dmamux1 84 0x400 0x01>;
-+				dma-names = "rx", "tx";
-+				feature-domains = <&etzpc STM32MP1_ETZPC_SPI4_ID>;
-+				status = "disabled";
-+			};
-+
-+			spi5: spi@4c003000 {
-+				compatible = "st,stm32h7-spi";
-+				reg = <0x4c003000 0x400>;
-+				interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&rcc SPI5_K>;
-+				resets = <&rcc SPI5_R>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				dmas = <&dmamux1 85 0x400 0x01>,
-+				       <&dmamux1 86 0x400 0x01>;
-+				dma-names = "rx", "tx";
-+				feature-domains = <&etzpc STM32MP1_ETZPC_SPI5_ID>;
-+				status = "disabled";
-+			};
-+
-+			i2c3: i2c@4c004000 {
-+				compatible = "st,stm32mp13-i2c";
-+				reg = <0x4c004000 0x400>;
-+				interrupt-names = "event", "error";
-+				interrupts = <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&rcc I2C3_K>;
-+				resets = <&rcc I2C3_R>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				dmas = <&dmamux1 73 0x400 0x1>,
-+				       <&dmamux1 74 0x400 0x1>;
-+				dma-names = "rx", "tx";
-+				st,syscfg-fmp = <&syscfg 0x4 0x4>;
-+				i2c-analog-filter;
-+				feature-domains = <&etzpc STM32MP1_ETZPC_I2C3_ID>;
-+				status = "disabled";
-+			};
-+
-+			i2c4: i2c@4c005000 {
-+				compatible = "st,stm32mp13-i2c";
-+				reg = <0x4c005000 0x400>;
-+				interrupt-names = "event", "error";
-+				interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&rcc I2C4_K>;
-+				resets = <&rcc I2C4_R>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				dmas = <&dmamux1 75 0x400 0x1>,
-+				       <&dmamux1 76 0x400 0x1>;
-+				dma-names = "rx", "tx";
-+				st,syscfg-fmp = <&syscfg 0x4 0x8>;
-+				i2c-analog-filter;
-+				feature-domains = <&etzpc STM32MP1_ETZPC_I2C4_ID>;
-+				status = "disabled";
-+			};
-+
-+			i2c5: i2c@4c006000 {
-+				compatible = "st,stm32mp13-i2c";
-+				reg = <0x4c006000 0x400>;
-+				interrupt-names = "event", "error";
-+				interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&rcc I2C5_K>;
-+				resets = <&rcc I2C5_R>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				dmas = <&dmamux1 115 0x400 0x1>,
-+				       <&dmamux1 116 0x400 0x1>;
-+				dma-names = "rx", "tx";
-+				st,syscfg-fmp = <&syscfg 0x4 0x10>;
-+				i2c-analog-filter;
-+				feature-domains = <&etzpc STM32MP1_ETZPC_I2C5_ID>;
-+				status = "disabled";
-+			};
-+
-+			sdmmc1: mmc@58005000 {
-+				compatible = "st,stm32-sdmmc2", "arm,pl18x", "arm,primecell";
-+				arm,primecell-periphid = <0x20253180>;
-+				reg = <0x58005000 0x1000>, <0x58006000 0x1000>;
-+				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-names = "cmd_irq";
-+				clocks = <&rcc SDMMC1_K>;
-+				clock-names = "apb_pclk";
-+				resets = <&rcc SDMMC1_R>;
-+				cap-sd-highspeed;
-+				cap-mmc-highspeed;
-+				max-frequency = <130000000>;
-+				feature-domains = <&etzpc STM32MP1_ETZPC_SDMMC1_ID>;
-+				status = "disabled";
-+			};
-+
-+			sdmmc2: mmc@58007000 {
-+				compatible = "st,stm32-sdmmc2", "arm,pl18x", "arm,primecell";
-+				arm,primecell-periphid = <0x20253180>;
-+				reg = <0x58007000 0x1000>, <0x58008000 0x1000>;
-+				interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-names = "cmd_irq";
-+				clocks = <&rcc SDMMC2_K>;
-+				clock-names = "apb_pclk";
-+				resets = <&rcc SDMMC2_R>;
-+				cap-sd-highspeed;
-+				cap-mmc-highspeed;
-+				max-frequency = <130000000>;
-+				feature-domains = <&etzpc STM32MP1_ETZPC_SDMMC2_ID>;
-+				status = "disabled";
-+			};
-+
-+		};
- 		/*
- 		 * Break node order to solve dependency probe issue between
- 		 * pinctrl and exti.
--- 
-2.25.1
+  clocks:
+    minItems: 1
+    maxItems: 7
 
+But I did not provide _any_ (see patch 2 of this series).  Shouldn't
+that trigger a warning?
+
+> >>> Irrespective of that downstream doesn't define any (nor power domains).
+> >>> How should we proceed?
+> >>
+> >> Binding now has constraints for clocks so at least that should be added
+> >> to your variant.
+> > 
+> > And that should be:
+> > 
+> >     clock-names: false
+> >     clocks: false
+> >     power-domains: false
+> > 
+> > Because this board does declare have any, at least not when going off of
+> > downstream DT?
+> 
+> I'll add it for existing platforms, so you can rebase on top.
+
+Thanks, will do!
+
+- Marijn
