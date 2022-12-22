@@ -2,84 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA5965417D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3F0654180
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235460AbiLVNEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 08:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S235477AbiLVNFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235159AbiLVNEc (ORCPT
+        with ESMTP id S235159AbiLVNFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 08:04:32 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3018527CF9;
-        Thu, 22 Dec 2022 05:04:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mvzYaFpmiBrAALCIOGS8LyjgZjYQvTkctg7B9W1gCbA=; b=eHub322LS1fojURr/mFQ8s9YEW
-        pgIvOlB+BReIjBD7xZUrHEExwUWlZVYYvQ+RFWdr1Np8pzM4xPv6OYWQnOLV2/LvC64mc6pKzbbrD
-        GEUnM9q8UGW1wxzlnHB+Er0zXmBzT4dhe16TRpk99QvLdNtf6N3lbFg41lxpXjtZ3D+KT05Xz/5D7
-        CaBd19Q0BTSq95A7ok10jWhCSpDHpXkzhTKjehIqetjTjgHVtZMSn7hgHwSWUyXff0G7voVN8WHxC
-        t6o7XAFGbUvL2i1HEko9l7MctqJDHUL9NlpmyQXnaDKbla2sV/BEE8Xk4ZofN+Hgw8jMcyzSR23H7
-        kwaPGhpQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p8LF3-003fgr-Og; Thu, 22 Dec 2022 13:04:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 283FA3000DD;
-        Thu, 22 Dec 2022 14:03:58 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 040EF20D2DE36; Thu, 22 Dec 2022 14:03:57 +0100 (CET)
-Date:   Thu, 22 Dec 2022 14:03:57 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: Re: [RFC PATCH 14/32] x86/fred: header file with FRED definitions
-Message-ID: <Y6RVvRg20Xc6IR4k@hirez.programming.kicks-ass.net>
-References: <20221220063658.19271-1-xin3.li@intel.com>
- <20221220063658.19271-15-xin3.li@intel.com>
- <Y6F4s0K2b2G8aMve@hirez.programming.kicks-ass.net>
- <BN6PR1101MB21615569318BD964A2855F44A8EB9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+        Thu, 22 Dec 2022 08:05:43 -0500
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479553AA;
+        Thu, 22 Dec 2022 05:05:41 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-45ef306bd74so26219397b3.2;
+        Thu, 22 Dec 2022 05:05:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MLCFjw9XIBAbu93dkTI6RLAmkXvVW4axCY2krlbo1Ww=;
+        b=AkgVq2KBYpb4dUz0BEny9VGKMx98sCEpomruDdErtQTfod0SDz1QtGYEm+OIDWZNIO
+         vlQLLC1fLfHsGwkEMryIAhStNEw19kGCriTIwXdKo95+rHg27uqTDoD6QrDwgrjhAgBv
+         5OeSsvpqWZOhT0hvQccLl9BV1fCCIImERWNC1N9nam8oaJUg1FQIZ6s63aMqMTkhZU9B
+         Nhmoxqt6o1fxNucfYYoBZ3BShgbfc0DN6a0xFeFUrsGyLrsrvRdSYCDDHEsCTSl3p8Ev
+         WPKEvWt8gavBdlzigJ0+ZZnAsFQc7zDLvD122e7t4/offEodIPmuNFBZ0mp9AtbYgERN
+         cO6A==
+X-Gm-Message-State: AFqh2kpLkKL29cnfwWmnCpz/b074K+GOwYpImBNnzYyFXgJZEq8laVWx
+        Md3ffQKeQVsohYzvrIFmq39t0Ljs9iEWBQ==
+X-Google-Smtp-Source: AMrXdXv+fd3oxdp37Kj0lM82VJ47EaSdU2higWi9k+R5qohKiq7HGGEAXGMRjmfGmAOqmoIqZFfDxg==
+X-Received: by 2002:a05:7500:5c05:b0:ea:6682:469c with SMTP id fd5-20020a0575005c0500b000ea6682469cmr392958gab.12.1671714340243;
+        Thu, 22 Dec 2022 05:05:40 -0800 (PST)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id w26-20020a05620a095a00b006fc6529abaesm231627qkw.101.2022.12.22.05.05.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 05:05:39 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-45c11d1bfc8so25845717b3.9;
+        Thu, 22 Dec 2022 05:05:39 -0800 (PST)
+X-Received: by 2002:a05:690c:d84:b0:437:febc:6583 with SMTP id
+ da4-20020a05690c0d8400b00437febc6583mr536308ywb.384.1671714339227; Thu, 22
+ Dec 2022 05:05:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN6PR1101MB21615569318BD964A2855F44A8EB9@BN6PR1101MB2161.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com> <20221019203034.3795710-1-Jason@zx2c4.com>
+ <20221221145332.GA2399037@roeck-us.net> <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
+ <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk> <20221221155641.GB2468105@roeck-us.net>
+ <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
+ <20221221171922.GA2470607@roeck-us.net> <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 22 Dec 2022 14:05:26 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWwNv-xzrsckMab_eAtZZ-ybDFPyxG9f9ndHBgXjLAayQ@mail.gmail.com>
+Message-ID: <CAMuHMdWwNv-xzrsckMab_eAtZZ-ybDFPyxG9f9ndHBgXjLAayQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-m68k@lists.linux-m68k.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 02:58:06AM +0000, Li, Xin3 wrote:
+Hi Linus,
 
-> > > +/* Flags above the CS selector (regs->csl) */
-> > > +#define FRED_CSL_ENABLE_NMI		_BITUL(28)
-> > > +#define FRED_CSL_ALLOW_SINGLE_STEP	_BITUL(25)
-> > > +#define FRED_CSL_INTERRUPT_SHADOW	_BITUL(24)
-> > 
-> > What's the state of IBT WAIT-FOR-ENDBR vs this? That really should also get a
-> > high CS bit.
-> 
-> FRED does provide more possibilities :)
+On Wed, Dec 21, 2022 at 7:46 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> On Wed, Dec 21, 2022 at 9:19 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On Wed, Dec 21, 2022 at 09:06:41AM -0800, Linus Torvalds wrote:
+> > > I think the real fix is to just remove that broken implementation
+> > > entirely, and rely on the generic one.
+> >
+> > Perfectly fine with me.
+>
+> That got pushed out as commit 7c0846125358 ("m68k: remove broken
+> strcmp implementation") but it's obviously entirely untested. I don't
+> do m68k cross-compiles, much less boot tests.
+>
+> Just FYI for everybody - I may have screwed something up for some very
+> non-obvious reason.
+>
+> But it looked very obvious indeed, and I hate having buggy code that
+> is architecture-specific when we have generic code that isn't buggy.
 
-That's not an answer. IBT has a clear defect and FRED *should* fix it.
+Thank you for being proactive!
+It works fine (and slightly reduced kernel size, too ;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
