@@ -2,365 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30759654638
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC8F654639
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235535AbiLVSyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S235379AbiLVS4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235382AbiLVSyQ (ORCPT
+        with ESMTP id S229984AbiLVS4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:54:16 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E584625C50
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:53:55 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id g11-20020a6be60b000000b006e2c707e565so1066130ioh.14
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:53:55 -0800 (PST)
+        Thu, 22 Dec 2022 13:56:31 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288515FD0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:56:30 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id bq12so2074834qtb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:56:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AyzbZhj/sevqH9K1VabpvvJ0X5bM1/62pGgsjeAJLZU=;
+        b=PA1HkvImMApo2F0Vn69Qf84j8Edaj3TyuyoWz/DwzLFjcu0aCNEBG8Y2f4uVE8LGID
+         QKt420WVs5iGg8it8E6eSOnltPg82WYqjMnAkx6dRHmSU8NHSDOBeENCYh1dnKa6kz04
+         rDJGjWQkXQsxjJfpmvLEKGM4en1jDabnPpFAE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Oa7EM5KnTqbETjvoJefmB06QiJeNz3GkW1CQR+Pg8Rg=;
-        b=jbwb0Exgyw0+jlb4ciyt61lfpam6OPtZ3fmV4hUlA+AS+KEwlCSYQz1t+pjKpyKrcB
-         6fM6qABACjC3gceLDt8JsIv7GxSvfMSFkYW8WMHKJ2xSZ6aLESdr8FbFlVYAX491o6Nd
-         MFFDWhGPm4g1+y6mKo9og+B6kkgEFPkH8kax6DIC1zcFqReUjFBGIjXJiO8tacJJw74o
-         z48E3Buh1DGLti6Fdl9X++vp5y98MUexdxJZAtJSEIB2H8vni31eIdO8vVgh+qrwMpqK
-         KIDx9PmHBCw5yeL7uTbFNoKsgTOREJ69m0var0iOWhiNmirlrU+f0ssErWb+Jp6ik6Qo
-         u+Ww==
-X-Gm-Message-State: AFqh2kr6E9RNJ1i/yZe3qqcvjScgNMYe0PbW4eO82RQ+hmK3Yog6PId1
-        dkpPKzIN5yD6A5SyqcAH7zJccXnp85lYUDzPu/R5roGT6UXn
-X-Google-Smtp-Source: AMrXdXuXBCzoK8vNJfj7RbWtgzfqAXK5CQTE7ZPYbZ//TkkkVpOfh9c6NodZZNkMlUXrHy6rsxyvrW3n97YpYCYJ1by9sv+Co2kq
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3894:b0:38a:682a:58fc with SMTP id
- b20-20020a056638389400b0038a682a58fcmr645265jav.250.1671735235280; Thu, 22
- Dec 2022 10:53:55 -0800 (PST)
-Date:   Thu, 22 Dec 2022 10:53:55 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000db858c05f06f30b0@google.com>
-Subject: [syzbot] [exfat?] INFO: task hung in exfat_write_inode
-From:   syzbot <syzbot+2f73ed585f115e98aee8@syzkaller.appspotmail.com>
-To:     linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AyzbZhj/sevqH9K1VabpvvJ0X5bM1/62pGgsjeAJLZU=;
+        b=I6/zXA+PFSMgXescCXlMlgz/Hs6wTrSaEQU1MViQ7EFF9z+Uq+lF17smVRxXLgl91r
+         O+gUk8LxmaQUn1Ki6ENyTt/TN3H7qCrDf0WvuvqElpNdg58ZU+M0AgTxaiQ3BTMuybUl
+         O5WUN8NGlt1/0bFgFvBlnZbTaZ6SQ08aaqCXu4zCZMJjSvHfU/Rl1Eb5kUq6/9KjwlUI
+         KAm8XuNokLN5/M61d8R//ETOnvKNxmakJKNLfN2qTWo6skI0B8wGWh7eEQmjWbEe448V
+         /xPfHACQ+gUN6XVZ0PBZ7omuZw111rqb5KEiUXiWo7s0UWgBjUgAfTGmQBokxmsfXWTT
+         4ONA==
+X-Gm-Message-State: AFqh2kowV5wdG/8jKHheYxsT4B+IfdWobKpuK2omBQFkLsAL07ZpnzvU
+        5EMrefZXgcO5p0gYrqOcYuZmvA==
+X-Google-Smtp-Source: AMrXdXuHzBuiZ7RDHxoenXy5PQuevThXaYcF6dNW8Mqfgcztor0xXbrHKQm/O1LoK4aIYZwl+VUT0g==
+X-Received: by 2002:ac8:524c:0:b0:3a9:7dd5:6a33 with SMTP id y12-20020ac8524c000000b003a97dd56a33mr15681340qtn.64.1671735389189;
+        Thu, 22 Dec 2022 10:56:29 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id z24-20020ac87118000000b0039cc0fbdb61sm743454qto.53.2022.12.22.10.56.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 10:56:28 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Date:   Thu, 22 Dec 2022 13:56:17 -0500
+Message-Id: <F492F726-00AA-4FC8-A5E5-BBF006CE946C@joelfernandes.org>
+References: <20221222185314.GR4001@paulmck-ThinkPad-P17-Gen-1>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+In-Reply-To: <20221222185314.GR4001@paulmck-ThinkPad-P17-Gen-1>
+To:     paulmck@kernel.org
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    f9ff5644bcc0 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15a7ad1b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c163713cf9186fe7
-dashboard link: https://syzkaller.appspot.com/bug?extid=2f73ed585f115e98aee8
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11d6fe00480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d2fc63880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/95eb66f6b569/disk-f9ff5644.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fb05e1a5a9de/vmlinux-f9ff5644.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e2f1f698973a/bzImage-f9ff5644.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/b52ba015912a/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2f73ed585f115e98aee8@syzkaller.appspotmail.com
-
-INFO: task kworker/u4:1:11 blocked for more than 143 seconds.
-      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u4:1    state:D stack:18424 pid:11    ppid:2      flags:0x00004000
-Workqueue: writeback wb_workfn (flush-7:2)
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5244 [inline]
- __schedule+0x995/0xe20 kernel/sched/core.c:6555
- schedule+0xcb/0x190 kernel/sched/core.c:6631
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
- __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
- write_inode fs/fs-writeback.c:1451 [inline]
- __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
- writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
- __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
- wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
- wb_check_background_flush fs/fs-writeback.c:2131 [inline]
- wb_do_writeback fs/fs-writeback.c:2219 [inline]
- wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-INFO: task kworker/u4:2:34 blocked for more than 144 seconds.
-      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u4:2    state:D stack:17088 pid:34    ppid:2      flags:0x00004000
-Workqueue: writeback wb_workfn (flush-7:1)
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5244 [inline]
- __schedule+0x995/0xe20 kernel/sched/core.c:6555
- schedule+0xcb/0x190 kernel/sched/core.c:6631
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
- __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
- write_inode fs/fs-writeback.c:1451 [inline]
- __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
- writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
- __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
- wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
- wb_check_background_flush fs/fs-writeback.c:2131 [inline]
- wb_do_writeback fs/fs-writeback.c:2219 [inline]
- wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-INFO: task kworker/u4:5:1065 blocked for more than 145 seconds.
-      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u4:5    state:D stack:22144 pid:1065  ppid:2      flags:0x00004000
-Workqueue: writeback wb_workfn (flush-7:4)
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5244 [inline]
- __schedule+0x995/0xe20 kernel/sched/core.c:6555
- schedule+0xcb/0x190 kernel/sched/core.c:6631
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
- __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
- write_inode fs/fs-writeback.c:1451 [inline]
- __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
- writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
- __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
- wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
- wb_check_background_flush fs/fs-writeback.c:2131 [inline]
- wb_do_writeback fs/fs-writeback.c:2219 [inline]
- wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-INFO: task kworker/u4:0:5140 blocked for more than 145 seconds.
-      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u4:0    state:D stack:21824 pid:5140  ppid:2      flags:0x00004000
-Workqueue: writeback wb_workfn (flush-7:0)
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5244 [inline]
- __schedule+0x995/0xe20 kernel/sched/core.c:6555
- schedule+0xcb/0x190 kernel/sched/core.c:6631
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
- __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
- write_inode fs/fs-writeback.c:1451 [inline]
- __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
- writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
- __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
- wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
- wb_check_background_flush fs/fs-writeback.c:2131 [inline]
- wb_do_writeback fs/fs-writeback.c:2219 [inline]
- wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-INFO: task kworker/u4:3:5145 blocked for more than 146 seconds.
-      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u4:3    state:D stack:22144 pid:5145  ppid:2      flags:0x00004000
-Workqueue: writeback wb_workfn (flush-7:3)
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5244 [inline]
- __schedule+0x995/0xe20 kernel/sched/core.c:6555
- schedule+0xcb/0x190 kernel/sched/core.c:6631
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
- __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
- write_inode fs/fs-writeback.c:1451 [inline]
- __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
- writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
- __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
- wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
- wb_check_background_flush fs/fs-writeback.c:2131 [inline]
- wb_do_writeback fs/fs-writeback.c:2219 [inline]
- wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-INFO: task kworker/u4:4:5146 blocked for more than 147 seconds.
-      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u4:4    state:D stack:22144 pid:5146  ppid:2      flags:0x00004000
-Workqueue: writeback wb_workfn (flush-7:5)
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5244 [inline]
- __schedule+0x995/0xe20 kernel/sched/core.c:6555
- schedule+0xcb/0x190 kernel/sched/core.c:6631
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
- __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
- write_inode fs/fs-writeback.c:1451 [inline]
- __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
- writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
- __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
- wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
- wb_check_background_flush fs/fs-writeback.c:2131 [inline]
- wb_do_writeback fs/fs-writeback.c:2219 [inline]
- wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Showing all locks held in the system:
-4 locks held by kworker/u4:1/11:
- #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
- #1: ffffc90000107d00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
- #2: ffff88802bc260e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
- #3: ffff888079e060e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
-1 lock held by rcu_tasks_kthre/12:
- #0: ffffffff8d326e50 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
-1 lock held by rcu_tasks_trace/13:
- #0: ffffffff8d327650 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
-1 lock held by khungtaskd/28:
- #0: ffffffff8d326c80 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
-4 locks held by kworker/u4:2/34:
- #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
- #1: ffffc90000ab7d00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
- #2: ffff888022bd40e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
- #3: ffff88807a1c40e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
-4 locks held by kworker/u4:5/1065:
- #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
- #1: ffffc900056dfd00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
- #2: ffff8880756600e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
- #3: ffff88802b40c0e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
-2 locks held by getty/4750:
- #0: ffff888028235098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:244
- #1: ffffc900015902f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x53b/0x1650 drivers/tty/n_tty.c:2177
-6 locks held by syz-executor402/5133:
-6 locks held by syz-executor402/5134:
-6 locks held by syz-executor402/5135:
-6 locks held by syz-executor402/5136:
-6 locks held by syz-executor402/5137:
-6 locks held by syz-executor402/5138:
-4 locks held by kworker/u4:0/5140:
- #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
- #1: ffffc90003effd00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
- #2: ffff8880756620e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
- #3: ffff88807f4ae0e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
-4 locks held by kworker/u4:3/5145:
- #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
- #1: ffffc90003f1fd00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
- #2: ffff8880757220e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
- #3: ffff88802b6100e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
-4 locks held by kworker/u4:4/5146:
- #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
- #1: ffffc90003f3fd00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
- #2: ffff88802bda60e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
- #3: ffff88807bd960e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 PID: 28 Comm: khungtaskd Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- nmi_cpu_backtrace+0x46f/0x4f0 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1ba/0x420 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
- watchdog+0xcd5/0xd20 kernel/hung_task.c:377
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 5133 Comm: syz-executor402 Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:is_valid_cluster fs/exfat/exfat_fs.h:413 [inline]
-RIP: 0010:exfat_clear_bitmap+0x85/0x5b0 fs/exfat/balloc.c:171
-Code: e8 30 e2 84 ff 4c 8b 3b bf 01 00 00 00 44 89 e6 e8 40 4a 2f ff 41 83 fc 01 0f 86 cb 01 00 00 49 8d 5f 08 48 89 d8 48 c1 e8 03 <42> 8a 04 28 84 c0 0f 85 78 03 00 00 8b 1b 89 df 44 89 e6 e8 93 47
-RSP: 0018:ffffc90003b1f838 EFLAGS: 00000a02
-RAX: 1ffff1100fe95c01 RBX: ffff88807f4ae008 RCX: 0000000000000000
-RDX: ffff88801f718000 RSI: 000000003c2e4184 RDI: 0000000000000001
-RBP: ffff888075662000 R08: ffffffff825c8fa0 R09: ffffed100e7265b4
-R10: ffffed100e7265b4 R11: 1ffff1100e7265b3 R12: 000000003c2e4184
-R13: dffffc0000000000 R14: 0000000000000000 R15: ffff88807f4ae000
-FS:  000055555561c300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055d87a197600 CR3: 000000007e2a5000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __exfat_free_cluster+0x470/0x9c0 fs/exfat/fatent.c:192
- exfat_free_cluster+0x73/0xc0 fs/exfat/fatent.c:232
- __exfat_truncate+0x67e/0x980 fs/exfat/file.c:184
- exfat_evict_inode+0xce/0x270 fs/exfat/inode.c:624
- evict+0x2a4/0x620 fs/inode.c:664
- __dentry_kill+0x3b1/0x5b0 fs/dcache.c:607
- dentry_kill+0xbb/0x290
- dput+0x1f3/0x410 fs/dcache.c:913
- do_renameat2+0xabf/0x12d0 fs/namei.c:4932
- __do_sys_rename fs/namei.c:4976 [inline]
- __se_sys_rename fs/namei.c:4974 [inline]
- __x64_sys_rename+0x82/0x90 fs/namei.c:4974
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fe1e540ea79
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff21223158 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe1e540ea79
-RDX: 0000000000000000 RSI: 0000000020000080 RDI: 0000000020000040
-RBP: 0000000000000000 R08: 00007fff21223180 R09: 00007fff21223180
-R10: 00007fff21223030 R11: 0000000000000246 R12: 00007fe1e53cd890
-R13: 00007fff212231b0 R14: 00007fff21223190 R15: 0000000000000000
- </TASK>
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> On Dec 22, 2022, at 1:53 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+>=20
+> =EF=BB=BFOn Thu, Dec 22, 2022 at 01:19:06PM -0500, Joel Fernandes wrote:
+>>=20
+>>=20
+>>>> On Dec 22, 2022, at 11:43 AM, Paul E. McKenney <paulmck@kernel.org> wro=
+te:
+>>>=20
+>>> =EF=BB=BFOn Thu, Dec 22, 2022 at 01:40:10PM +0100, Frederic Weisbecker w=
+rote:
+>>>>> On Wed, Dec 21, 2022 at 12:11:42PM -0500, Mathieu Desnoyers wrote:
+>>>>> On 2022-12-21 06:59, Frederic Weisbecker wrote:
+>>>>>>> On Tue, Dec 20, 2022 at 10:34:19PM -0500, Mathieu Desnoyers wrote:
+>>>>> [...]
+>>>>>>>=20
+>>>>>>> The memory ordering constraint I am concerned about here is:
+>>>>>>>=20
+>>>>>>> * [...] In addition,
+>>>>>>> * each CPU having an SRCU read-side critical section that extends be=
+yond
+>>>>>>> * the return from synchronize_srcu() is guaranteed to have executed a=
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+>>>>>>> * full memory barrier after the beginning of synchronize_srcu() and b=
+efore
+>>>>>>> * the beginning of that SRCU read-side critical section. [...]
+>>>>>>>=20
+>>>>>>> So if we have a SRCU read-side critical section that begins after th=
+e beginning
+>>>>>>> of synchronize_srcu, but before its first memory barrier, it would m=
+iss the
+>>>>>>> guarantee that the full memory barrier is issued before the beginnin=
+g of that
+>>>>>>> SRCU read-side critical section. IOW, that memory barrier needs to b=
+e at the
+>>>>>>> very beginning of the grace period.
+>>>>>>=20
+>>>>>> I'm confused, what's wrong with this ?
+>>>>>>=20
+>>>>>> UPDATER                  READER
+>>>>>> -------                  ------
+>>>>>> STORE X =3D 1              STORE srcu_read_lock++
+>>>>>> // rcu_seq_snap()        smp_mb()
+>>>>>> smp_mb()                 READ X
+>>>>>> // scans
+>>>>>> READ srcu_read_lock
+>>>>>=20
+>>>>> What you refer to here is only memory ordering of the store to X and l=
+oad
+>>>>> from X wrt loading/increment of srcu_read_lock, which is internal to t=
+he
+>>>>> srcu implementation. If we really want to model the provided high-leve=
+l
+>>>>> memory ordering guarantees, we should consider a scenario where SRCU i=
+s used
+>>>>> for its memory ordering properties to synchronize other variables.
+>>>>>=20
+>>>>> I'm concerned about the following Dekker scenario, where synchronize_s=
+rcu()
+>>>>> and srcu_read_lock/unlock would be used instead of memory barriers:
+>>>>>=20
+>>>>> Initial state: X =3D 0, Y =3D 0
+>>>>>=20
+>>>>> Thread A                   Thread B
+>>>>> ---------------------------------------------
+>>>>> STORE X =3D 1                STORE Y =3D 1
+>>>>> synchronize_srcu()
+>>>>>                          srcu_read_lock()
+>>>>>                          r1 =3D LOAD X
+>>>>>                          srcu_read_unlock()
+>>>>> r0 =3D LOAD Y
+>>>>>=20
+>>>>> BUG_ON(!r0 && !r1)
+>>>>>=20
+>>>>> So in the synchronize_srcu implementation, there appears to be two
+>>>>> major scenarios: either srcu_gp_start_if_needed starts a gp or expedit=
+ed gp,
+>>>>> or it uses an already started gp/expedited gp. When snapshotting with
+>>>>> rcu_seq_snap, the fact that the memory barrier is after the ssp->srcu_=
+gp_seq
+>>>>> load means that it does not order prior memory accesses before that lo=
+ad.
+>>>>> This sequence value is then used to identify which gp_seq to wait for w=
+hen
+>>>>> piggy-backing on another already-started gp. I worry about reordering
+>>>>> between STORE X =3D 1 and load of ssp->srcu_gp_seq, which is then used=
+ to
+>>>>> piggy-back on an already-started gp.
+>>>>>=20
+>>>>> I suspect that the implicit barrier in srcu_read_lock() invoked at the=
+
+>>>>> beginning of srcu_gp_start_if_needed() is really the barrier that make=
+s
+>>>>> all this behave as expected. But without documentation it's rather har=
+d to
+>>>>> follow.
+>>>>=20
+>>>> Oh ok I see now. It might be working that way by accident or on forgott=
+en
+>>>> purpose. In any case, we really want to add a comment above that
+>>>> __srcu_read_lock_nmisafe() call.
+>>>=20
+>>> Another test for the safety (or not) of removing either D or E is
+>>> to move that WRITE_ONCE() to follow (or, respectively, precede) the
+>>> adjacent scans.
+>>=20
+>> Good idea, though I believe the MBs that the above talk about are not the=
+ flip ones. They are the ones in synchronize_srcu() beginning and end, that o=
+rder with respect to grace period start and end.
+>>=20
+>> So that (flipping MBs) is unrelated, or did I miss something?
+>=20
+> The thought is to manually similate in the source code the maximum
+> memory-reference reordering that a maximally hostile compiler and CPU
+> would be permitted to carry out.  So yes, given that there are other
+> memory barriers before and after, these other memory barriers limit how
+> far the flip may be moved in the source code.
+>=20
+> Here I am talking about the memory barriers associated with the flip,
+> but the same trick can of course be applied to other memory barriers.
+> In general, remove a given memory barrier and (in the source code)
+> maximally rearrange the memory references that were previously ordered
+> by the memory barrier in question.
+>=20
+> Again, the presence of other memory barriers will limit the permitted
+> maximal source-code rearrangement.
+
+
+Makes sense if the memory barrier is explicit. In this case, the memory barr=
+iers are implicit apparently, with a srcu_read_lock() in the beginning of sy=
+nchronize_rcu() having the implicit / indirect memory barrier. So I am not s=
+ure if that can be implemented without breaking SRCU readers.
+
+Thanks.
+
+
+
+
+>=20
+>                            Thanx, Paul
