@@ -2,112 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0F0653EB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0FA653EB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235372AbiLVLIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
+        id S235364AbiLVLID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:08:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiLVLId (ORCPT
+        with ESMTP id S235361AbiLVLHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:08:33 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB33B861;
-        Thu, 22 Dec 2022 03:08:32 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.22]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MacjC-1obzTr3ClG-00c7RZ; Thu, 22 Dec 2022 12:07:57 +0100
-Message-ID: <8fcbdf54-98ae-6a06-ecaf-591a43b863a1@i2se.com>
-Date:   Thu, 22 Dec 2022 12:07:56 +0100
+        Thu, 22 Dec 2022 06:07:49 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C254BF019;
+        Thu, 22 Dec 2022 03:07:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671707267; x=1703243267;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=PzxNWDti1cf66pFXSYkQzqiTjHe4km403foTbIRPRcE=;
+  b=mCKUYJxRcyIXzIt1sHFstmUcJDhyl04Q/aGwQEFY/CC/LAlcI82M/4OI
+   dzRNh5DyzKLCSs+WPAcjMTD04R8ttiQt72BOKWlt9wTuKwMip3jN73ltt
+   womYfWvneha/UB2gG4f3TPLuYjwRuey2RSIvqt03wu/SxpJChj5e3v4Ij
+   NGCcu0wPzu5KzTEDLAYdGuIai/z2pvv7Iv//QzI7bUhKaXIhM4QKH9W/a
+   chRU6Cln+Wwdgfc+97+0d7ZkqT8yuL2kBB3VohphHppdQf9YTxIKA48Lt
+   a1+spTEi3XWESPzpi1vZz+7H17xoj6LeR2aXMsDnTeIVnGkpAvPf1cNRq
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="303535009"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="303535009"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 03:07:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="629491068"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="629491068"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga006.jf.intel.com with ESMTP; 22 Dec 2022 03:07:25 -0800
+Message-ID: <23fe0fe3-f330-b58e-c366-3ac5bd80fe22@linux.intel.com>
+Date:   Thu, 22 Dec 2022 13:08:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 5/7] vc04_services: vchiq_arm: Drop VCHIQ_RETRY usage
- on disconnect
-To:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20221219115725.11992-1-umang.jain@ideasonboard.com>
- <20221219115725.11992-6-umang.jain@ideasonboard.com>
+ Firefox/102.0 Thunderbird/102.4.2
 Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20221219115725.11992-6-umang.jain@ideasonboard.com>
+To:     Ladislav Michl <oss-lists@triops.cz>, Jimmy Hu <hhhuuu@google.com>
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20221222072912.1843384-1-hhhuuu@google.com>
+ <Y6Qc1p4saGFTdh9n@lenoch>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v2] usb: xhci: Check endpoint is valid before
+ dereferencing it
+In-Reply-To: <Y6Qc1p4saGFTdh9n@lenoch>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:ow/FZUP+RKjclWSiCtRIaLt7Bf7HqGbYjZOp9iWu0B/tP44u6ME
- OX1XZE9IOt7yjDKIPhox6tUfd0mvsbzBdeWXUEW/FbnRnRxlJfokQTdRyRkQzuZ1AD4HeWJ
- K58g7bsv6D8irvrrvSRSKMg3qyUYEfgfm6oNVudouzpxtRouV+smCpSQNQY7H+oYTgUAtiR
- RrZiVOK9YBcABgjeNjUeQ==
-UI-OutboundReport: notjunk:1;M01:P0:NIzVU/U6y2I=;ntISWqAzkY8Sol7nfKIpq0ArtHF
- OEAUdqhoO0+ln1uLQUUV3BATXP8NI6raoZsgxFYp+8KNkADoltuBDozq3eKQeXkUlBW2qC5VU
- uB3oCBgUsGDG2O3HwXYGuGBRmIRnyAkWaJxIZSS/ymtzKC/qCzQ3XXc8TqtIQekj/S64/hQzu
- 54/yrdQaUV6bF8mqgLii3khsYhTNvDwFeb1ByMP1+E9lodGgwGThuSkOFgYQPcS663BranzzU
- Ep1tPlUdS6xSto7F8EIB06WCxFtawf8Nx/r25qHt+UYvPBlnUhpnYOqYlQNeta95tPcHujcSM
- H5VbOCuLb9CypWEwWD+tRTOXjCHmSRb8tvVrw4QIcYabNQl8MjhmH0CCRP6EGc2zKhCZSklQ2
- M0sGAYJrM76ib/yynCXJETnVXdxbsb7ig2fre1JITN1VZ5C4faTIiGIiY+98WU3cjxTKcQ0tE
- YBjrV+UJhFzuIya03PSxLZ7frSZ+M5Xj/mmbVB2xXSRZOUhVbSLWBKiMzkK6e6kG79bDJCZ90
- qG9rS/oIHZ2P0Vlt7QQdLHgnwRY7NCvDS9wH1v3s9o1JVUV/Vwh6MQZMgfKPWaKFNdwQWokCj
- G9Mb3NuCb+FoCBmjqP6kDso00Hjxa+k2buzqwOTCaEeG+3yWfoDKk0zNssHgXWdE9WHhcTYGw
- zg5RMBsY2e4q2EhQXd9BHVpIBxyXASfZurv9QlOwWw==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Umang,
+On 22.12.2022 11.01, Ladislav Michl wrote:
+> On Thu, Dec 22, 2022 at 07:29:12AM +0000, Jimmy Hu wrote:
+>> When the host controller is not responding, all URBs queued to all
+>> endpoints need to be killed. This can cause a kernel panic if we
+>> dereference an invalid endpoint.
+>>
+>> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
+>> checking if the endpoint is valid before dereferencing it.
+>>
+>> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
+>> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
+>>
+>> [233311.853964] pc : xhci_hc_died+0x10c/0x270
+>> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
+>>
+>> [233311.854077] Call trace:
+>> [233311.854085]  xhci_hc_died+0x10c/0x270
+>> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
+>> [233311.854105]  call_timer_fn+0x50/0x2d4
+>> [233311.854112]  expire_timers+0xac/0x2e4
+>> [233311.854118]  run_timer_softirq+0x300/0xabc
+>> [233311.854127]  __do_softirq+0x148/0x528
+>> [233311.854135]  irq_exit+0x194/0x1a8
+>> [233311.854143]  __handle_domain_irq+0x164/0x1d0
+>> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
+>> [233311.854156]  el1_irq+0xfc/0x1a8
+>> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
+>> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
+>> [233311.854194]  do_idle+0x594/0x6ac
+>> [233311.854201]  cpu_startup_entry+0x7c/0x80
+>> [233311.854209]  secondary_start_kernel+0x170/0x198
+>>
+>> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+>> ---
+>>   drivers/usb/host/xhci-ring.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>> index ddc30037f9ce..f5b0e1ce22af 100644
+>> --- a/drivers/usb/host/xhci-ring.c
+>> +++ b/drivers/usb/host/xhci-ring.c
+>> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+>>   	struct xhci_virt_ep *ep;
+>>   	struct xhci_ring *ring;
+>>   
+>> -	ep = &xhci->devs[slot_id]->eps[ep_index];
+>> +	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
+>> +	if (!ep)
+>> +		return;
+>> +
+> 
+> xhci_get_virt_ep also adds check for slot_id == 0. It changes behaviour,
+> do we really want to skip that slot? Original code went from 0 to
+> MAX_HC_SLOTS-1.
+> 
+> It seems to be off by one to me. Am I missing anything?
 
-Am 19.12.22 um 12:57 schrieb Umang Jain:
-> Drop the usage of VCHIQ_RETRY when the vchiq has connection status
-> VCHIQ_CONNSTATE_DISCONNECTED. Disconnected status will not be valid to
-> carry on a retry, replace the VCHIQ_RETRY with -ENOTCONN.
->
-> This patch removes the usage of vCHIQ_RETRY completely and act as
-> intermediatory to address the TODO item:
-> 	* Get rid of custom function return values
-> for vc04_services/interface.
->
-> Fixes: 71bad7f08641 ("staging: add bcm2708 vchiq driver")
-please drop this fixes tag since this commit doesn't fix a real issue 
-and also shouldn't be applied to stable.
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
->   .../staging/vc04_services/interface/vchiq_arm/vchiq_core.c    | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-> index 9c64d5de810e..ddb6d0f4daed 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-> @@ -3641,7 +3641,7 @@ vchiq_loud_error_footer(void)
->   int vchiq_send_remote_use(struct vchiq_state *state)
->   {
->   	if (state->conn_state == VCHIQ_CONNSTATE_DISCONNECTED)
-> -		return VCHIQ_RETRY;
-> +		return -ENOTCONN;
->   
->   	return queue_message(state, NULL, MAKE_REMOTE_USE, NULL, NULL, 0, 0);
+slot_id 0 is always invalid, so this is a good change.
+
+
+> Also, what about passing ep directly to xhci_kill_endpoint_urbs
+> and do the check in xhci_hc_died? Not even compile tested:
+
+passing ep to a function named kill_endpoint_urbs() sound like the
+right thing to do, but as a generic change.
+
+I think its a good idea to first do a targeted fix for this null pointer
+issue that we can send to stable fist.
+
+
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index ddc30037f9ce..5dac483c562a 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -1162,14 +1162,12 @@ static void xhci_kill_ring_urbs(struct xhci_hcd *xhci, struct xhci_ring *ring)
 >   }
-> @@ -3649,7 +3649,7 @@ int vchiq_send_remote_use(struct vchiq_state *state)
->   int vchiq_send_remote_use_active(struct vchiq_state *state)
->   {
->   	if (state->conn_state == VCHIQ_CONNSTATE_DISCONNECTED)
-> -		return VCHIQ_RETRY;
-> +		return -ENOTCONN;
 >   
->   	return queue_message(state, NULL, MAKE_REMOTE_USE_ACTIVE,
->   			     NULL, NULL, 0, 0);
+>   static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+> -		int slot_id, int ep_index)
+> +		struct xhci_virt_ep *ep)
+>   {
+>   	struct xhci_td *cur_td;
+>   	struct xhci_td *tmp;
+> -	struct xhci_virt_ep *ep;
+>   	struct xhci_ring *ring;
+>   
+> -	ep = &xhci->devs[slot_id]->eps[ep_index];
+>   	if ((ep->ep_state & EP_HAS_STREAMS) ||
+>   			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
+>   		int stream_id;
+> @@ -1180,18 +1178,12 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+>   			if (!ring)
+>   				continue;
+>   
+> -			xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
+> -					"Killing URBs for slot ID %u, ep index %u, stream %u",
+> -					slot_id, ep_index, stream_id);
+>   			xhci_kill_ring_urbs(xhci, ring);
+>   		}
+>   	} else {
+>   		ring = ep->ring;
+>   		if (!ring)
+>   			return;
+> -		xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
+> -				"Killing URBs for slot ID %u, ep index %u",
+> -				slot_id, ep_index);
+>   		xhci_kill_ring_urbs(xhci, ring);
+>   	}
+>   
+> @@ -1217,6 +1209,7 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
+>   void xhci_hc_died(struct xhci_hcd *xhci)
+>   {
+>   	int i, j;
+> +	struct xhci_virt_ep *ep;
+>   
+>   	if (xhci->xhc_state & XHCI_STATE_DYING)
+>   		return;
+> @@ -1227,11 +1220,14 @@ void xhci_hc_died(struct xhci_hcd *xhci)
+>   	xhci_cleanup_command_queue(xhci);
+>   
+>   	/* return any pending urbs, remove may be waiting for them */
+> -	for (i = 0; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
+> +	for (i = 0; i < HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
+>   		if (!xhci->devs[i])
+>   			continue;
+> -		for (j = 0; j < 31; j++)
+> -			xhci_kill_endpoint_urbs(xhci, i, j);
+> +		for (j = 0; j < EP_CTX_PER_DEV; j++) {
+> +			ep = &xhci->devs[i]->eps[j];
+> +			if (ep)
+> +				xhci_kill_endpoint_urbs(xhci, ep);
+> +		}
+
+This does loop a bit more than the existing code.
+With this change its always HCS_MAX_SLOTS * EP_CTX_PER_DEV.
+Previously best case was just HCS_MAX_SLOTS.
+
+-Mathias
+
+
