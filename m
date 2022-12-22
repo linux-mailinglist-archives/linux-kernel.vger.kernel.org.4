@@ -2,171 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC25654615
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5F3654617
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235443AbiLVSjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S229630AbiLVSpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235217AbiLVSit (ORCPT
+        with ESMTP id S229524AbiLVSph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:38:49 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFCDE1D320
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:38:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A32AA16F2;
-        Thu, 22 Dec 2022 10:39:28 -0800 (PST)
-Received: from e120937-lin.. (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA57D3FAFB;
-        Thu, 22 Dec 2022 10:38:46 -0800 (PST)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, cristian.marussi@arm.com
-Subject: [PATCH 5/5] firmware: arm_scmi: Fix virtio channels cleanup on shutdown
-Date:   Thu, 22 Dec 2022 18:38:23 +0000
-Message-Id: <20221222183823.518856-6-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221222183823.518856-1-cristian.marussi@arm.com>
-References: <20221222183823.518856-1-cristian.marussi@arm.com>
+        Thu, 22 Dec 2022 13:45:37 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1721DF11
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:45:36 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id 83so2132700yba.11
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:45:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:references:in-reply-to:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cZO0VTSbbcbYZiJPaOMLh4dyINA59L0dviM5rTB/N30=;
+        b=V67A64iJJgBrjZ+aTi5eGT/XHfSFML26yXbyNNSLyh+ceMbDuFmXnYwdVUW9FtnmxF
+         vTtFRSEFwdOnXCyTK3uPVq8e8OkfCGR3Cat0uwEBT3MxekGHPhpMW1nzWrtrgxusZ6dd
+         zdeQqgMh2tNkQrvT6no9zdRtTiGpHLD8vpQVsQE5O90Ek6nfPLFNbngFpYmpSZU1e66e
+         1ja3momlTcJOdbS6nKd9VDEYBjOsdYvOg/gZ4Rp9d7TJblifEoC+BmBpcZf1pkfO281y
+         FRndApx4C9NzocSWmgKbX+TJ+YMZzh3Hy4IjVJWDlZY6PSPv/bcnK+yHENgemf63Dloe
+         sNsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:references:in-reply-to:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cZO0VTSbbcbYZiJPaOMLh4dyINA59L0dviM5rTB/N30=;
+        b=6M2Dz+cg4RlaYhkj42NrTddHrRSihy75I8buqjt75rR5vegcY9FZMsQKPexRnsIqbZ
+         yAkpo6fy+DagF1B9sbgs7t7O4Mmg5AZ2FGY9eUkVI9S64Zwqj3L85JHuTHkX9lKmvQXC
+         gpY6kDceKGzcvdCvlncVy6XmLwiU6/9CfesTIA/cV3CLj/kxxoUl6DWZ0BqeQZ7Ck2TF
+         O+NrkDdGlbRJNcorCMndKBv0AHJq60kKAgfpDQAWb66VHdqB6f8pDeRzFyl2YBfoy+1G
+         MhRsw2cpsLDRIAndXuulrHBvXLoFv+8xEqw1Y6nWTNSNycxe18Tb5cRL0lxcbdcYRuf9
+         S2mA==
+X-Gm-Message-State: AFqh2kpatvGHbe4ab1kGX/fmBlzvm+8X+relxLsFjQC3lcB0amOTaLK+
+        LOVmVcsDV8zDIKTMKjp4Gqolc4HBgWJh5dF8Vuw=
+X-Google-Smtp-Source: AMrXdXsJpSpfSesp8O9SL82szen1btsnsDyArf2ahU4GOxJyR1kdwbLOz8Cmgls44s4e+R7IZUUPxBJ2U4N3K6krrwo=
+X-Received: by 2002:a25:9744:0:b0:71f:d74e:f3f with SMTP id
+ h4-20020a259744000000b0071fd74e0f3fmr801891ybo.75.1671734735664; Thu, 22 Dec
+ 2022 10:45:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:c290:b0:3b5:5241:cf84 with HTTP; Thu, 22 Dec 2022
+ 10:45:32 -0800 (PST)
+Reply-To: rebecca9407128@gmail.com
+In-Reply-To: <CA+FCbF2eOmCu_McyuSF0d-Hk6X4kHzN134d3i9jeqk+Dd8RHOw@mail.gmail.com>
+References: <CA+FCbF18KVRd6jToXuWoQGNBVQPx0fUq+4SbUoL=JWuwdTOPnQ@mail.gmail.com>
+ <CA+FCbF1SVQHhVg0MNrqAMiKe0T2re3uxOfzo6UDF0M_HJF9qHQ@mail.gmail.com>
+ <CA+FCbF36YsDma5V2tYf2p9AjMFNnUNe6TjBukNR=pfp7eSgsMg@mail.gmail.com>
+ <CA+FCbF2adWnLSJYXpx71TicVjHbXxP_kP0znyK4uJ=Kz7_J39A@mail.gmail.com> <CA+FCbF2eOmCu_McyuSF0d-Hk6X4kHzN134d3i9jeqk+Dd8RHOw@mail.gmail.com>
+From:   Rebecca Johnson <sikiralassan1@gmail.com>
+Date:   Thu, 22 Dec 2022 10:45:32 -0800
+Message-ID: <CA+FCbF1OOJ-UZwyd32ciRLmtjwWjjWUAhKXBf2dCmxpq352v+A@mail.gmail.com>
+Subject: Re:
+To:     sikiralassan1@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When unloading the SCMI core stack module, configured to use the virtio
-SCMI transport, LOCKDEP reports the splat down below about unsafe locks
-dependencies.
-
-In order to avoid this possible unsafe locking scenario call upfront
-virtio_break_device() before getting hold of vioch->lock.
-
-=====================================================
- WARNING: HARDIRQ-safe -> HARDIRQ-unsafe lock order detected
- 6.1.0-00067-g6b934395ba07-dirty #4 Not tainted
- -----------------------------------------------------
- rmmod/307 [HC0[0]:SC0[0]:HE0:SE1] is trying to acquire:
- ffff000080c510e0 (&dev->vqs_list_lock){+.+.}-{3:3}, at: virtio_break_device+0x28/0x68
-
- and this task is already holding:
- ffff00008288ada0 (&channels[i].lock){-.-.}-{3:3}, at: virtio_chan_free+0x60/0x168 [scmi_module]
-
- which would create a new lock dependency:
-  (&channels[i].lock){-.-.}-{3:3} -> (&dev->vqs_list_lock){+.+.}-{3:3}
-
- but this new dependency connects a HARDIRQ-irq-safe lock:
-  (&channels[i].lock){-.-.}-{3:3}
-
- ... which became HARDIRQ-irq-safe at:
-   lock_acquire+0x128/0x398
-   _raw_spin_lock_irqsave+0x78/0x140
-   scmi_vio_complete_cb+0xb4/0x3b8 [scmi_module]
-   vring_interrupt+0x84/0x120
-   vm_interrupt+0x94/0xe8
-   __handle_irq_event_percpu+0xb4/0x3d8
-   handle_irq_event_percpu+0x20/0x68
-   handle_irq_event+0x50/0xb0
-   handle_fasteoi_irq+0xac/0x138
-   generic_handle_domain_irq+0x34/0x50
-   gic_handle_irq+0xa0/0xd8
-   call_on_irq_stack+0x2c/0x54
-   do_interrupt_handler+0x8c/0x90
-   el1_interrupt+0x40/0x78
-   el1h_64_irq_handler+0x18/0x28
-   el1h_64_irq+0x64/0x68
-   _raw_write_unlock_irq+0x48/0x80
-   ep_start_scan+0xf0/0x128
-   do_epoll_wait+0x390/0x858
-   do_compat_epoll_pwait.part.34+0x1c/0xb8
-   __arm64_sys_epoll_pwait+0x80/0xd0
-   invoke_syscall+0x4c/0x110
-   el0_svc_common.constprop.3+0x98/0x120
-   do_el0_svc+0x34/0xd0
-   el0_svc+0x40/0x98
-   el0t_64_sync_handler+0x98/0xc0
-   el0t_64_sync+0x170/0x174
-
- to a HARDIRQ-irq-unsafe lock:
-  (&dev->vqs_list_lock){+.+.}-{3:3}
-
- ... which became HARDIRQ-irq-unsafe at:
- ...
-   lock_acquire+0x128/0x398
-   _raw_spin_lock+0x58/0x70
-   __vring_new_virtqueue+0x130/0x1c0
-   vring_create_virtqueue+0xc4/0x2b8
-   vm_find_vqs+0x20c/0x430
-   init_vq+0x308/0x390
-   virtblk_probe+0x114/0x9b0
-   virtio_dev_probe+0x1a4/0x248
-   really_probe+0xc8/0x3a8
-   __driver_probe_device+0x84/0x190
-   driver_probe_device+0x44/0x110
-   __driver_attach+0x104/0x1e8
-   bus_for_each_dev+0x7c/0xd0
-   driver_attach+0x2c/0x38
-   bus_add_driver+0x1e4/0x258
-   driver_register+0x6c/0x128
-   register_virtio_driver+0x2c/0x48
-   virtio_blk_init+0x70/0xac
-   do_one_initcall+0x84/0x420
-   kernel_init_freeable+0x2d0/0x340
-   kernel_init+0x2c/0x138
-   ret_from_fork+0x10/0x20
-
- other info that might help us debug this:
-
-  Possible interrupt unsafe locking scenario:
-
-        CPU0                    CPU1
-        ----                    ----
-   lock(&dev->vqs_list_lock);
-                                local_irq_disable();
-                                lock(&channels[i].lock);
-                                lock(&dev->vqs_list_lock);
-   <Interrupt>
-     lock(&channels[i].lock);
-
-  *** DEADLOCK ***
-================
-
-Fixes: 42e90eb53bf3f ("firmware: arm_scmi: Add a virtio channel refcount")
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
- drivers/firmware/arm_scmi/virtio.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/firmware/arm_scmi/virtio.c b/drivers/firmware/arm_scmi/virtio.c
-index 33c9b81a55cd..1db975c08896 100644
---- a/drivers/firmware/arm_scmi/virtio.c
-+++ b/drivers/firmware/arm_scmi/virtio.c
-@@ -160,7 +160,6 @@ static void scmi_vio_channel_cleanup_sync(struct scmi_vio_channel *vioch)
- 	}
- 
- 	vioch->shutdown_done = &vioch_shutdown_done;
--	virtio_break_device(vioch->vqueue->vdev);
- 	if (!vioch->is_rx && vioch->deferred_tx_wq)
- 		/* Cannot be kicked anymore after this...*/
- 		vioch->deferred_tx_wq = NULL;
-@@ -482,6 +481,12 @@ static int virtio_chan_free(int id, void *p, void *data)
- 	struct scmi_chan_info *cinfo = p;
- 	struct scmi_vio_channel *vioch = cinfo->transport_info;
- 
-+	/*
-+	 * Break device to inhibit further traffic flowing while shutting down
-+	 * the channels: doing it later holding vioch->lock creates unsafe
-+	 * locking dependency chains as reported by LOCKDEP.
-+	 */
-+	virtio_break_device(vioch->vqueue->vdev);
- 	scmi_vio_channel_cleanup_sync(vioch);
- 
- 	scmi_free_channel(cinfo, data, id);
 -- 
-2.34.1
-
+My name is Rebecca Johnson from Canada I want to open Charity
+Foundation and Company in your country on your behalf
+is this okay
