@@ -2,130 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187F165414E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0DE654154
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235343AbiLVMr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S229949AbiLVMv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiLVMrx (ORCPT
+        with ESMTP id S229566AbiLVMvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:47:53 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D9E22B;
-        Thu, 22 Dec 2022 04:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671713272; x=1703249272;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UPM8RDFaM30ZmFrIb8CKMZ1JANhWUp662jbH45qLr6M=;
-  b=U7Ti5gM7uX2hSBxzWafGGZSDBcDqjumI2csrgPUV3Gmaxw1BNaf3z8Ro
-   FF6neieM8V/SA6HrQxhmet6cGsg8V1Pn4Ot+4KX3fglxDxDH1pnW3PVoK
-   9YZRCSIZn28az1kCO6XUr5BdCTW0FvwIqD4SViceQ6X0gdg6zF7f5QLxR
-   /Bo00h41XDF2crkrb9MNAQZgCN8wXjmgNq51blBh7KNfBIdJYH2/+Rvm3
-   /zv4/jpzOePRSdt+y2oFm4ceGTgMmphSDzSce147uOX4vF6brBHpliEaY
-   BbIViYm6PVSbzGpAKVyuCm0/IWoVcd4nQbwgISsWEK4Ox8GcXvIGwMOIB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="322031547"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="322031547"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 04:47:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="897213732"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="897213732"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Dec 2022 04:47:45 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p8Kz8-00Duf4-1e;
-        Thu, 22 Dec 2022 14:47:42 +0200
-Date:   Thu, 22 Dec 2022 14:47:42 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH 18/19] linux/include: add non-atomic version of xchg
-Message-ID: <Y6RR7hPZUN22ytap@smile.fi.intel.com>
-References: <20221222114635.1251934-1-andrzej.hajda@intel.com>
- <20221222114635.1251934-19-andrzej.hajda@intel.com>
+        Thu, 22 Dec 2022 07:51:24 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336171FCD1;
+        Thu, 22 Dec 2022 04:51:23 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMAlwfd010892;
+        Thu, 22 Dec 2022 12:51:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dQWDc633Ytw2GCHBm5Z4OBT+5qdBrfSR64+yxyehY5U=;
+ b=A6I4I3zXD+b6XJ2x5w2tRukd4ZStZVXv18iAI6N6UV6uAU8C7ymhuLXgb3KNO07CKAOR
+ iIUHnY5Cjxfnfx5SDXCUkuNYB+A1o5FNXw7pn1c79NrwUOzPDHgthBurCF8cCLyZ2TR6
+ j4tHPu/7TXL4fy473JjmBjK0YJgaUFaRAJsq+Yhl5ImXeGP1xwX4FOGTE4TMMRAeOCSk
+ y5/s5WdFYEvbsRuD5MK8U//Vf6Y73EWq160A0S32FEsDXd35vWE6eTCnUQjD7rbZxDJ7
+ zR9vRpgmbrXLBJui6GaV/quf9kS7Ps6jCJNsPq1dneLVlAFMui8j8ETra3z7PDB5HgSd Ng== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk90t5rse-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 12:51:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BMCpAaU005294
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 12:51:10 GMT
+Received: from [10.206.25.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 22 Dec
+ 2022 04:51:06 -0800
+Message-ID: <acdda510-945f-ff68-5c8b-a1a0290bed6d@quicinc.com>
+Date:   Thu, 22 Dec 2022 18:21:03 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222114635.1251934-19-andrzej.hajda@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: usb: f_fs: Fix CFI failure in ki_complete
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
+        Dan Carpenter <error27@gmail.com>
+CC:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        John Keeping <john@metanate.com>,
+        Pratham Pratap <quic_ppratap@quicinc.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        "Udipto Goswami" <quic_ugoswami@quicinc.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "# 5 . 15" <stable@vger.kernel.org>
+References: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com>
+ <Y5cuCMhFIaKraUyi@kroah.com>
+ <abe47a47aa5d49878c58fc1199be18ea@AcuMS.aculab.com>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <abe47a47aa5d49878c58fc1199be18ea@AcuMS.aculab.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pFPZgNiXiluh-RTeQnpXqgMOU1DpSMA7
+X-Proofpoint-ORIG-GUID: pFPZgNiXiluh-RTeQnpXqgMOU1DpSMA7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_05,2022-12-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ spamscore=0 impostorscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
+ suspectscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212220112
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 12:46:34PM +0100, Andrzej Hajda wrote:
-> The pattern of setting variable with new value and returning old
-> one is very common in kernel. Usually atomicity of the operation
-> is not required, so xchg seems to be suboptimal and confusing in
-> such cases.
 
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> ---
->  include/linux/non-atomic/xchg.h | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->  create mode 100644 include/linux/non-atomic/xchg.h
+On 14-12-22 11:05 pm, David Laight wrote:
+> From: Greg Kroah-Hartman
+>> Sent: 12 December 2022 13:35
+>>
+>> On Mon, Dec 12, 2022 at 06:54:24PM +0530, Prashanth K wrote:
+>>> Function pointer ki_complete() expects 'long' as its second
+>>> argument, but we pass integer from ffs_user_copy_worker. This
+>>> might cause a CFI failure, as ki_complete is an indirect call
+>>> with mismatched prototype. Fix this by typecasting the second
+>>> argument to long.
+>>
+>> "might"?  Does it or not?  If it does, why hasn't this been reported
+>> before?
 > 
-> diff --git a/include/linux/non-atomic/xchg.h b/include/linux/non-atomic/xchg.h
-> new file mode 100644
-> index 00000000000000..f7fa5dd746f37d
-> --- /dev/null
-> +++ b/include/linux/non-atomic/xchg.h
-> @@ -0,0 +1,19 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_NON_ATOMIC_XCHG_H
-> +#define _LINUX_NON_ATOMIC_XCHG_H
-> +
-> +/**
-> + * __xchg - set variable pointed by @ptr to @val, return old value
-> + * @ptr: pointer to affected variable
-> + * @val: value to be written
-> + *
-> + * This is non-atomic variant of xchg.
-> + */
-> +#define __xchg(ptr, val) ({		\
-> +	__auto_type __ptr = ptr;	\
-> +	__auto_type __t = *__ptr;	\
-> +	*__ptr = (val);			\
-> +	__t;				\
-> +})
-> +
-> +#endif
-> -- 
-> 2.34.1
+> Does the cast even help at all.
+Actually I also have these same questions
+- why we haven't seen any instances other than this one?
+- why its not seen on other indirect function calls?
+
+Here is the the call stack of the failure that we got.
+
+[  323.288681][    T7] Kernel panic - not syncing: CFI failure (target: 
+0xffffffe5fc811f98)
+[  323.288710][    T7] CPU: 6 PID: 7 Comm: kworker/u16:0 Tainted: G S 
+    W  OE     5.15.41-android13-8-g5ffc5644bd20 #1
+[  323.288730][    T7] Workqueue: adb ffs_user_copy_worker.cfi_jt
+[  323.288752][    T7] Call trace:
+[  323.288755][    T7]  dump_backtrace.cfi_jt+0x0/0x8
+[  323.288772][    T7]  dump_stack_lvl+0x80/0xb8
+[  323.288785][    T7]  panic+0x180/0x444
+[  323.288797][    T7]  find_check_fn+0x0/0x218
+[  323.288810][    T7]  ffs_user_copy_worker+0x1dc/0x204
+[  323.288822][    T7]  kretprobe_trampoline.cfi_jt+0x0/0x8
+[  323.288837][    T7]  worker_thread+0x3ec/0x920
+[  323.288850][    T7]  kthread+0x168/0x1dc
+[  323.288859][    T7]  ret_from_fork+0x10/0x20
+[  323.288866][    T7] SMP: stopping secondary CPUs
+
+And from address to line translation, we got know the issue is from
+ffs_user_copy_worker+0x1dc/0x204
+		||
+io_data->kiocb->ki_complete(io_data->kiocb, ret);
+
+And "find_check_fn" was getting invoked from ki_complete. Only thing 
+that I found suspicious about ki_complete() is its argument types. 
+That's why I pushed this patch here, so that we can discuss this out here.
+
+Thanks in advance
+
 > 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> ...
+>>> -	io_data->kiocb->ki_complete(io_data->kiocb, ret);
+>>> +	io_data->kiocb->ki_complete(io_data->kiocb, (long)ret);
+> ...
+> 
+> If definition of the parameter in the structure member ki_complete()
+> definition is 'long' then the compiler has to promote 'ret' to long
+> anyway. CFI has nothing to do with it.
+> 
+> OTOH if you've used a cast to assign a function with a
+> different prototype to ki_complete then 'all bets are off'
+> and you get all the run time errors you deserve.
+> CFI just converts some of them to compile time errors.
+> 
+> For instance if you assign xx_complete(long) to (*ki_complete)(int)
+> then it is very likely that xx_complete() will an argument
+> with some of the high bits set.
+> But adding a cast to the call - ki_complete((long)int_var)
+> will make absolutely no difference.
+> The compiler wont zero/sign extend int_var to 64bits for you,
+> that will just get optimised away and the high bits will
+> be unchanged.
+> 
+> You're description seems to be the other way around (which might
+> be safe, but CFI probably still barfs).
+> But you need to fix the indirect calls so the function types
+> match.
+So does that mean, we need to add casts in al indirect calls to match 
+the function signature?
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
 
