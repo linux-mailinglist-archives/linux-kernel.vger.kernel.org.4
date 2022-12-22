@@ -2,87 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA8365440B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 562A0654411
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235500AbiLVPOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:14:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S235601AbiLVPOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235335AbiLVPOV (ORCPT
+        with ESMTP id S229707AbiLVPO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:14:21 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A759424F2F;
-        Thu, 22 Dec 2022 07:14:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671722060; x=1703258060;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gyODYh2bF0u1w4lb06K7uWpgiRl7PFX7XVgYO3KlnoI=;
-  b=Ef8pahAoZ6c2PyxVzwX8UzIgpAk1GalnhH08P5zhFRJXVVYw++2e13Lq
-   zn7vOpzjVdRcoeJUHLohXDA1FpJB1XfTzxtDq0m7YKTmniB2hte4zqsC/
-   HooB0rtZbJ9tgTC+CQLkyh4AD8FaQuase9jMJRxEllwdOCoKFZp6aOQox
-   2F3kwutNOechoUzmcnJ5kr6vTIuHkcE+9oSWp4w7Y8VW8mIbjXN+E+Sep
-   ORSwjCIQbq17mf4PhlInXFw0RM4Xt+1gFSgggKUy91k4LaLv/9xPzJtEo
-   bU/KTFzj2/OKqWrfrdkrQuMdKhTxCekneeQQnP+h4ZGHv2f60916GeSvI
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="300489202"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="300489202"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 07:14:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="651806882"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="651806882"
-Received: from mylly.fi.intel.com (HELO [10.237.72.179]) ([10.237.72.179])
-  by orsmga002.jf.intel.com with ESMTP; 22 Dec 2022 07:14:15 -0800
-Message-ID: <9c663363-49a0-da2f-508b-dbf3906b4d61@linux.intel.com>
-Date:   Thu, 22 Dec 2022 17:14:14 +0200
+        Thu, 22 Dec 2022 10:14:29 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2342926AA1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:14:28 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id n1so2210154ljg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:14:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/hJcEHNExNxST6Lgk42fV7p9jHJjh3wV2GauSE8OfYI=;
+        b=phZTk5cphy9HXfhb6AWRQT6m8otcwgW4aIoXikuzaO5LwiISVNf2Z80iVrFHy9Iupn
+         hh9vdEO0T3K1G1Kpow+zQwQJRIok7b1s+WjQBW0BNsDC0t+wSoBlwUGJuSYFqCTbxrQN
+         JAOm7TjMF9ItJo9N11tTNIbOsMergZsZEIsD9djoGsdJrPhSe3gR9FHF3exoK77UvYlp
+         n2aV8BjzgLukZKbpid4NRjM/E/CThCz2TgzY9W6Oq/zZiajgRgkNtOaJSI9u7/MsPbVR
+         BIgVErUwRDo+OXDd1Xg/7eigVrxRL9FC2X5IWmq46KvdSaGbXHtXGkm5abGLvuCWJq8M
+         UAEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/hJcEHNExNxST6Lgk42fV7p9jHJjh3wV2GauSE8OfYI=;
+        b=AKlp1kcN/NWS1Q4m13/Xp1JmvRC3SZYz/chU5l0YaX1bh0RgMaoxtwBQaC3gQv8toC
+         VGehpHDXJJhua4scpTlzSKsbe0WsooFPhSydCxSBCUAep/arH8X1XS/5m3XOPyoeLG1L
+         v5kABckSsfrkMT2NYa2ZSBpq+ZYh+s+51EQPPKP6WiMK1BIkf+rzkr2O7eg/Bky2lW2w
+         zDVHbhK+bJcsmsNgqPSgBvwNkfU1yT3ovbSJQLmE0hVNESV/ncwBESjJUJsJ8kmDQOR+
+         rAGEGgFY1NKxi7emxDuKfXiHPCSQtVnPQhqwZ9E3OdyfE98XqJLgO5zslUZodWZXC4BM
+         U53Q==
+X-Gm-Message-State: AFqh2kqWZZ/ginjodCVg52JQGBwMxpbFgg/r+n19yakyTifgKJ2Wty7T
+        qdhsqyakWc/7lIvrqmgOxrrKVg==
+X-Google-Smtp-Source: AMrXdXsPiNouCzJDivhhECwkK+IQXW2byyi+qTZPygB6gdAWsmCNl/TPl2vf1NrVGAhxtYaxKH4B2w==
+X-Received: by 2002:a2e:720a:0:b0:27f:82f8:c7f8 with SMTP id n10-20020a2e720a000000b0027f82f8c7f8mr2130644ljc.42.1671722066554;
+        Thu, 22 Dec 2022 07:14:26 -0800 (PST)
+Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
+        by smtp.gmail.com with ESMTPSA id p23-20020a2ea4d7000000b00277201f6c81sm70294ljm.77.2022.12.22.07.14.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 07:14:26 -0800 (PST)
+Message-ID: <3ff9b6f3-70b7-d6b1-9714-b51e3e867b6b@linaro.org>
+Date:   Thu, 22 Dec 2022 16:14:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH v5 1/1] i2c: designware: use casting of u64 in clock
- multiplication to avoid overflow
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 2/4] arm64: dts: qcom: sdm845-xiaomi-beryllium: fix
+ audio codec interrupt pin name
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hanna Hawa <hhhawa@amazon.com>
-Cc:     wsa@kernel.org, mika.westerberg@linux.intel.com, jsd@semihalf.com,
-        linus.walleij@linaro.org, ben-linux@fluff.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dwmw@amazon.co.uk, benh@amazon.com, ronenk@amazon.com,
-        talel@amazon.com, jonnyc@amazon.com, hanochu@amazon.com,
-        farbere@amazon.com, itamark@amazon.com, lareine@amazon.com
-References: <20221221195900.23276-1-hhhawa@amazon.com>
- <Y6NnkDwD9UUQ8Ro/@smile.fi.intel.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <Y6NnkDwD9UUQ8Ro/@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Joel Selvaraj <joelselvaraj.oss@gmail.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Caleb Connolly <caleb@connolly.tech>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Doug Anderson <dianders@chromium.org>
+References: <20221222151319.122398-1-krzysztof.kozlowski@linaro.org>
+ <20221222151319.122398-2-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221222151319.122398-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/22 22:07, Andy Shevchenko wrote:
-> On Wed, Dec 21, 2022 at 07:59:00PM +0000, Hanna Hawa wrote:
->> From: Lareine Khawaly <lareine@amazon.com>
->>
->> In functions i2c_dw_scl_lcnt() and i2c_dw_scl_hcnt() may have overflow
->> by depending on the values of the given parameters including the ic_clk.
->> For example in our use case where ic_clk is larger than one million,
->> multiplication of ic_clk * 4700 will result in 32 bit overflow.
->>
->> Add cast of u64 to the calculation to avoid multiplication overflow, and
->> use the corresponding define for divide.
+
+
+On 22.12.2022 16:13, Krzysztof Kozlowski wrote:
+> The pin config entry should have a string, not number, for the GPIO used
+> as WCD9340 audio codec interrupt.
 > 
-> Perfect, thank you!
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Fixes: dd6459a0890a ("arm64: dts: qcom: split beryllium dts into common dtsi and tianma dts")
+> Reported-by: Doug Anderson <dianders@chromium.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> 
+> Cc: Doug Anderson <dianders@chromium.org>
+> 
+> Changes since v3:
+> 1. New patch.
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> index eb6b2b676eca..85b8a1b5f0d5 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+> @@ -472,7 +472,7 @@ sdc2_card_det_n: sd-card-det-n {
+>  	};
+>  
+>  	wcd_intr_default: wcd_intr_default {
+> -		pins = <54>;
+> +		pins = "gpio54";
+>  		function = "gpio";
+>  
+>  		input-enable;
