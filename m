@@ -2,194 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FE4653D38
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 10:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CEE653D40
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 10:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235173AbiLVJBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 04:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S235174AbiLVJDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 04:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiLVJBT (ORCPT
+        with ESMTP id S229567AbiLVJDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 04:01:19 -0500
-Received: from h1.cmg1.smtp.forpsi.com (h1.cmg1.smtp.forpsi.com [81.2.195.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1561FCFA
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 01:01:15 -0800 (PST)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id 8HRupBMVhPm6C8HRwps7dc; Thu, 22 Dec 2022 10:01:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671699673; bh=qge3kDbkiWyV4yHzI7E+c0ZfjS1KW8bVG8zEvpOWOd0=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=I8sIdEt4zgseAOWO1uZpTg4s5AR8McQeqDXwwZJS3svKg1Nzt6Dgwkk+AFwy2wZLW
-         B2y9df9/XZI9xNlVACIv7IjvTbWWQ5zg3YJR7DC6pt1GtIW5E4++0tfearsd/cPTIE
-         sSGQLkjcJ3aWhB2JFTGl/UoO1etNrwtlO24g3G1zDRGmmOFGVsBTDsOpITIqV0C4K3
-         AE1SmYgJx5CdynP/o2t9aKPER84egcDTbx9EM6HkxfDG6a7rqFRGYzveu/UfSnws8W
-         wKTtDxSuNV8GRnrbVUeUVDpvs81lrgOzH2Ao9d8rdALNGrPYK9Dlxukx3ku8pe3ufb
-         6fWzO3fsNA41A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1671699673; bh=qge3kDbkiWyV4yHzI7E+c0ZfjS1KW8bVG8zEvpOWOd0=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=I8sIdEt4zgseAOWO1uZpTg4s5AR8McQeqDXwwZJS3svKg1Nzt6Dgwkk+AFwy2wZLW
-         B2y9df9/XZI9xNlVACIv7IjvTbWWQ5zg3YJR7DC6pt1GtIW5E4++0tfearsd/cPTIE
-         sSGQLkjcJ3aWhB2JFTGl/UoO1etNrwtlO24g3G1zDRGmmOFGVsBTDsOpITIqV0C4K3
-         AE1SmYgJx5CdynP/o2t9aKPER84egcDTbx9EM6HkxfDG6a7rqFRGYzveu/UfSnws8W
-         wKTtDxSuNV8GRnrbVUeUVDpvs81lrgOzH2Ao9d8rdALNGrPYK9Dlxukx3ku8pe3ufb
-         6fWzO3fsNA41A==
-Date:   Thu, 22 Dec 2022 10:01:10 +0100
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Jimmy Hu <hhhuuu@google.com>
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: xhci: Check endpoint is valid before
- dereferencing it
-Message-ID: <Y6Qc1p4saGFTdh9n@lenoch>
-References: <20221222072912.1843384-1-hhhuuu@google.com>
+        Thu, 22 Dec 2022 04:03:37 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1531FCF7;
+        Thu, 22 Dec 2022 01:03:34 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7B92DE000A;
+        Thu, 22 Dec 2022 09:03:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1671699813;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T4gOPWGjEg88chOoWuaav23pjpL5Y5e5uaZVe/EqBqE=;
+        b=QeGD5dLYPEuaEGCcki0adCUzRqSKZ/zV31K71rU2ze+Figq+pEPdRZgrSchKyv0X9dVVLd
+        E4Zgew6xIafwewAasolBVx4tkU7epbCps3/37BBPtagS1o2eBEWyQ90dPbzFI7SmayUXpC
+        /4irqMiMWzfHCCQpB45qqr1f03QVKbIlNhe7wzVxa8ZhbEsjSdhDOKmCu7oVyMzSDc/ko7
+        LY/2AlLiBGZPqUD1hUAnJngvTe6kAqNaSI7PQQK/fmEopXzCbseH5gG118ncWstV8uhhyI
+        oRv3L5QCAPiw/qPFMO7puyrSsxEEng2gkOHvWI5S2TDyya9Dy+mYxZI/dgNJ3Q==
+Date:   Thu, 22 Dec 2022 10:03:28 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+Subject: Re: [PATCH v2 00/21] Add Tegra20 parallel video input capture
+Message-ID: <20221222100328.6e341874@booty>
+In-Reply-To: <a99fa7e5-31bc-4286-17e5-6ba6e4932bcf@gmail.com>
+References: <20221128152336.133953-1-luca.ceresoli@bootlin.com>
+ <a99fa7e5-31bc-4286-17e5-6ba6e4932bcf@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222072912.1843384-1-hhhuuu@google.com>
-X-CMAE-Envelope: MS4wfNO5x+DpKZwbW3lurs1sQhgUPIy+dj7ucKhBRqyEPreFzT3p9wNPofvA00eN4H/tcs8ydYqz5iIEZ71vt1eLaXu0WWa/enj7rgwRjpowbQt2RTSa3Ues
- YGtWSsfYnpDSy+qitDo63FZ4CZjII3PYG6Pv4eoe0rtqB5dAFjzyc9tzUV/gv/aLhyKMSHlEI9nu4VvOVSBXUzYfBoZddAHy6tTFgsAVuuMCtOEtugRzHHWb
- QtBPQOwXUE9r0Qk7Wu5eL84fyhZ2yHdCrTWu/hNks9USiAlyByN8mik3s1efnXAfyv5dYr//CPwcdkLbP+Ohjwn3V1paC5gJHPs/AFXwAIwBn/m2x+YaOyhH
- aJ786keQe8H+mjR+sDWirXH+eeTEiQ==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 07:29:12AM +0000, Jimmy Hu wrote:
-> When the host controller is not responding, all URBs queued to all
-> endpoints need to be killed. This can cause a kernel panic if we
-> dereference an invalid endpoint.
-> 
-> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
-> checking if the endpoint is valid before dereferencing it.
-> 
-> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
-> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
-> 
-> [233311.853964] pc : xhci_hc_died+0x10c/0x270
-> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
-> 
-> [233311.854077] Call trace:
-> [233311.854085]  xhci_hc_died+0x10c/0x270
-> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
-> [233311.854105]  call_timer_fn+0x50/0x2d4
-> [233311.854112]  expire_timers+0xac/0x2e4
-> [233311.854118]  run_timer_softirq+0x300/0xabc
-> [233311.854127]  __do_softirq+0x148/0x528
-> [233311.854135]  irq_exit+0x194/0x1a8
-> [233311.854143]  __handle_domain_irq+0x164/0x1d0
-> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
-> [233311.854156]  el1_irq+0xfc/0x1a8
-> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
-> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
-> [233311.854194]  do_idle+0x594/0x6ac
-> [233311.854201]  cpu_startup_entry+0x7c/0x80
-> [233311.854209]  secondary_start_kernel+0x170/0x198
-> 
-> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
-> ---
->  drivers/usb/host/xhci-ring.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index ddc30037f9ce..f5b0e1ce22af 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->  	struct xhci_virt_ep *ep;
->  	struct xhci_ring *ring;
->  
-> -	ep = &xhci->devs[slot_id]->eps[ep_index];
-> +	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
-> +	if (!ep)
-> +		return;
-> +
+Hello Dmitry,
 
-xhci_get_virt_ep also adds check for slot_id == 0. It changes behaviour,
-do we really want to skip that slot? Original code went from 0 to
-MAX_HC_SLOTS-1.
+thanks for your review.
 
-It seems to be off by one to me. Am I missing anything?
-Also, what about passing ep directly to xhci_kill_endpoint_urbs
-and do the check in xhci_hc_died? Not even compile tested:
+On Tue, 20 Dec 2022 23:21:49 +0300
+Dmitry Osipenko <digetx@gmail.com> wrote:
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index ddc30037f9ce..5dac483c562a 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1162,14 +1162,12 @@ static void xhci_kill_ring_urbs(struct xhci_hcd *xhci, struct xhci_ring *ring)
- }
- 
- static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
--		int slot_id, int ep_index)
-+		struct xhci_virt_ep *ep)
- {
- 	struct xhci_td *cur_td;
- 	struct xhci_td *tmp;
--	struct xhci_virt_ep *ep;
- 	struct xhci_ring *ring;
- 
--	ep = &xhci->devs[slot_id]->eps[ep_index];
- 	if ((ep->ep_state & EP_HAS_STREAMS) ||
- 			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
- 		int stream_id;
-@@ -1180,18 +1178,12 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
- 			if (!ring)
- 				continue;
- 
--			xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
--					"Killing URBs for slot ID %u, ep index %u, stream %u",
--					slot_id, ep_index, stream_id);
- 			xhci_kill_ring_urbs(xhci, ring);
- 		}
- 	} else {
- 		ring = ep->ring;
- 		if (!ring)
- 			return;
--		xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
--				"Killing URBs for slot ID %u, ep index %u",
--				slot_id, ep_index);
- 		xhci_kill_ring_urbs(xhci, ring);
- 	}
- 
-@@ -1217,6 +1209,7 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
- void xhci_hc_died(struct xhci_hcd *xhci)
- {
- 	int i, j;
-+	struct xhci_virt_ep *ep;
- 
- 	if (xhci->xhc_state & XHCI_STATE_DYING)
- 		return;
-@@ -1227,11 +1220,14 @@ void xhci_hc_died(struct xhci_hcd *xhci)
- 	xhci_cleanup_command_queue(xhci);
- 
- 	/* return any pending urbs, remove may be waiting for them */
--	for (i = 0; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
-+	for (i = 0; i < HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
- 		if (!xhci->devs[i])
- 			continue;
--		for (j = 0; j < 31; j++)
--			xhci_kill_endpoint_urbs(xhci, i, j);
-+		for (j = 0; j < EP_CTX_PER_DEV; j++) {
-+			ep = &xhci->devs[i]->eps[j];
-+			if (ep)
-+				xhci_kill_endpoint_urbs(xhci, ep);
-+		}
- 	}
- 
- 	/* inform usb core hc died if PCI remove isn't already handling it */
->  	if ((ep->ep_state & EP_HAS_STREAMS) ||
->  			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
->  		int stream_id;
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
+> 28.11.2022 18:23, Luca Ceresoli =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > Tegra20 and other Tegra SoCs have a video input (VI) peripheral that can
+> > receive from either MIPI CSI-2 or parallel video (called respectively "=
+CSI"
+> > and "VIP" in the documentation). The kernel currently has a staging dri=
+ver
+> > for Tegra210 CSI capture. This patch set adds support for Tegra20 VIP
+> > capture.
+> >=20
+> > Unfortunately I had no real documentation available to base this work o=
+n.
+> > I only had a working downstream 3.1 kernel, so I started with the driver
+> > found there and heavily reworked it to fit into the mainline tegra-video
+> > driver structure. The existing code appears written with the intent of
+> > being modular and allow adding new input mechanisms and new SoCs while
+> > keeping a unique VI core module. However its modularity and extensibili=
+ty
+> > was not enough to add Tegra20 VIP support, so I added some hooks to turn
+> > hard-coded behaviour into per-SoC or per-bus customizable code. There a=
+re
+> > also a fix, some generic cleanups and DT bindings.
+> >=20
+> > Quick tour of the patches:
+> >=20
+> >  * Device tree bindings and minor DTS improvements
+> >=20
+> >    01. dt-bindings: display: tegra: add Tegra20 VIP
+> >    02. dt-bindings: display: tegra: vi: add 'vip' property and example =
+=20
+>=20
+> This series adds the new DT node, but there are no board DTs in upstream
+> that will use VIP? Will we see the board patches?
+
+I'm afraid I have no such plan. I don't have any public hardware with
+Tegra20, with or without a parallel sensor. I have a custom board.
+
+> In any case, given that you're likely the only one here who has access
+> to hardware with VIP,=20
+
+Likely indeed.
+
+> you should promote yourself to the tegra-video
+> driver maintainers and confirm that you will be able to maintain and
+> test this code for years to come.
+
+I can definitely add myself as a maintainer of this driver and join the
+maintenance effort, I'm adding that in v3. I also have a board that I
+can permanently use for testing.
+
+--=20
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
