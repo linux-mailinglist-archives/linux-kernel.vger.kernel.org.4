@@ -2,136 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD18D6541F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652B16541F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiLVNcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 08:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
+        id S235065AbiLVNdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234727AbiLVNbw (ORCPT
+        with ESMTP id S235428AbiLVNdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 08:31:52 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E55A13FAB
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 05:31:51 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso5757496pjt.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 05:31:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2xuFcNG+Lmd6sCAcx37A72Ddu+m83mu9NNvxLdsptSw=;
-        b=nA0ejjbc4ytOQVnxKuefw8MAuoRRUqjMaGNYnMY+ffjK/YbyiaNBpzJcU+FMdCNPv9
-         qzJ+NCcvT5bJcFZsC+3gSV9hOTT10rdAe7l12HO/wqnJ3E5e1Iz1Oyo7zDYY6iJfo2Yr
-         abNHgiimpIb4/+OxWWJ83YaQciW8gx1jdh/CiWuA4yoRQ9JXoZU/J6WLVLCG9eWXpYqZ
-         Pzssu2lDki9ge53ut13Cr6nDhJJvEng5+Gt0G0Yd6CJh9ZXuScFZdiV+socMh4eDvQWG
-         qyXqE6bmxNqbqhIaRZK4pZDCEg7UDXXXZzL53S0KezKK9Mr5F6o/kxJiNUQTQKE37WxJ
-         UAAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2xuFcNG+Lmd6sCAcx37A72Ddu+m83mu9NNvxLdsptSw=;
-        b=FITo8zn0/W8urRfx9WpC94B0RhhWRapGqN+WF2zk+3qoRlreEHIPusZHr9cx3pGjec
-         OBek7YgDe0KDr9OvjuJectC4C/BBHmAapRE7VqkRhVJthYjYYgDh/L166xaMKwSEKkm5
-         +fvBipGuDxiXHpHk/x6D8V960tGacyCYdyLTAdkmRQc6Ywj+0WIcPezyFir3V8xCI9WV
-         Q5QQEJOjIHPg+GeG/sG/nvoCML17uXZNChzCeQq6uDEewAKi6mcQav45EiwMB6J+Mrsx
-         kQZKmgDoSwTACmZqjriTGqGFsIcKCJEnbt8y5XtRspx7u8+/fhwW22v3PUWvgrgGUpGv
-         3n7w==
-X-Gm-Message-State: AFqh2kqaPRqT5MHY4ibPWfgLjp+LTZFz0r2p+voX1H/hrQeR+FuD7z/y
-        VSxicHDdbEdgpXIiVMaL5Y0u
-X-Google-Smtp-Source: AMrXdXssTF2j/7G2W7A5SzQqs9JwTq3TPxXMUyLOzEdRGDV92xCWp41iMryIUYKECqxp58XVPBCdlw==
-X-Received: by 2002:a05:6a20:3d14:b0:af:b909:2b3f with SMTP id y20-20020a056a203d1400b000afb9092b3fmr8965864pzi.34.1671715910863;
-        Thu, 22 Dec 2022 05:31:50 -0800 (PST)
-Received: from localhost.localdomain ([117.217.177.99])
-        by smtp.gmail.com with ESMTPSA id f66-20020a623845000000b00573a9d13e9esm737467pfa.36.2022.12.22.05.31.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 05:31:50 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bhelgaas@google.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0 and PCIe1
-Date:   Thu, 22 Dec 2022 19:01:23 +0530
-Message-Id: <20221222133123.50676-4-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221222133123.50676-1-manivannan.sadhasivam@linaro.org>
-References: <20221222133123.50676-1-manivannan.sadhasivam@linaro.org>
+        Thu, 22 Dec 2022 08:33:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690642B275;
+        Thu, 22 Dec 2022 05:32:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32E2FB81D30;
+        Thu, 22 Dec 2022 13:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63507C433D2;
+        Thu, 22 Dec 2022 13:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671715975;
+        bh=7LR0l7yAD1N13182E2DUGhjtgRZlgRJBPWSovE/SLwE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lP5lxrht9dKWOqHtaThhNrUxW2Wq+HHrwS/rpu5v/NRZlrrk+HUmdaygzS8+uOR6H
+         Ly30cnInhJiXqtwYXZq9rVF6t8XrMTQX7/rT9xYkdPDFAPo10/mG9Jf833luXAVkl7
+         j6c8ArydGuSUKr+NrATEvYMh5CX08ORQm+NJ+yYM=
+Date:   Thu, 22 Dec 2022 14:32:52 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     sashal@kernel.org, corbet@lwn.net, stable@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joneslee@google.com
+Subject: Re: [PATCH] Documentation: stable: Add rule on what kind of patches
+ are accepted
+Message-ID: <Y6RchEaXUvg+9nKv@kroah.com>
+References: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
-endpoint devices using GIC-ITS MSI controller. Add support for it.
+On Thu, Dec 22, 2022 at 11:16:58AM +0200, Tudor Ambarus wrote:
+> The list of rules on what kind of patches are accepted, and which ones
+> are not into the “-stable” tree, did not mention anything about new
+> features and let the reader use its own judgement. One may be under the
+> impression that new features are not accepted at all, but that's not true:
+> new features are not accepted unless they fix a reported problem.
+> Update documentation with missing rule.
+> 
+> Link: https://lore.kernel.org/lkml/fc60e8da-1187-ca2b-1aa8-28e01ea2769a@linaro.org/T/#mff820d23793baf637a1b39f5dfbcd9d4d0f0c3a6
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+>  Documentation/process/stable-kernel-rules.rst | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
+> index 2fd8aa593a28..266290fab1d9 100644
+> --- a/Documentation/process/stable-kernel-rules.rst
+> +++ b/Documentation/process/stable-kernel-rules.rst
+> @@ -22,6 +22,7 @@ Rules on what kind of patches are accepted, and which ones are not, into the
+>     maintainer and include an addendum linking to a bugzilla entry if it
+>     exists and additional information on the user-visible impact.
+>   - New device IDs and quirks are also accepted.
+> + - New features are not accepted unless they fix a reported problem.
 
-Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
-msi-map-mask of 0xff00, all the 32 devices under these two busses can
-share the same Device ID.
+No need to call this out, it falls under the "fixes a problem" option,
+right?
 
-The GIC-ITS MSI implementation provides an advantage over internal MSI
-implementation using Locality-specific Peripheral Interrupts (LPI) that
-would allow MSIs to be targeted for each CPU core.
+The goal is not to iterate every single option here, that would be
+crazy.  Let's keep it short and simple, our biggest problem is that
+people do NOT read this document, not that it does not list these types
+of corner cases.
 
-It should be noted that the MSIs for BDF (1:0.0) only works with Device
-ID of 0x5980 and 0x5a00. Hence, the IDs are swapped.
+So thanks for the patch, but I will not accept it.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+thanks,
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 570475040d95..c4dd5838fac6 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -1733,9 +1733,13 @@ pcie0: pci@1c00000 {
- 			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
- 				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
- 
--			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "msi";
--			#interrupt-cells = <1>;
-+			/*
-+			 * MSIs for BDF (1:0.0) only works with Device ID 0x5980.
-+			 * Hence, the IDs are swapped.
-+			 */
-+			msi-map = <0x0 &gic_its 0x5981 0x1>,
-+				  <0x100 &gic_its 0x5980 0x1>;
-+			msi-map-mask = <0xff00>;
- 			interrupt-map-mask = <0 0 0 0x7>;
- 			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
- 					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-@@ -1842,9 +1846,13 @@ pcie1: pci@1c08000 {
- 			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
- 				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
- 
--			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
--			interrupt-names = "msi";
--			#interrupt-cells = <1>;
-+			/*
-+			 * MSIs for BDF (1:0.0) only works with Device ID 0x5a00.
-+			 * Hence, the IDs are swapped.
-+			 */
-+			msi-map = <0x0 &gic_its 0x5a01 0x1>,
-+				  <0x100 &gic_its 0x5a00 0x1>;
-+			msi-map-mask = <0xff00>;
- 			interrupt-map-mask = <0 0 0 0x7>;
- 			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
- 					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
--- 
-2.25.1
-
+greg k-h
