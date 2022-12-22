@@ -2,182 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02D0654771
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC56B65477C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbiLVUnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:43:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
+        id S235061AbiLVUqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:46:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbiLVUnQ (ORCPT
+        with ESMTP id S229743AbiLVUqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 15:43:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFE3B40
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 12:42:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671741751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ltDpmYqCGhbOq/yrPkshjRh5qr1TMsJK7Tg/zkPd44k=;
-        b=Ip7aZHcaK8qJNNwB0EJbJ44YW/LwJxHPMpJWAQkZ1IAhhGE1MDQE3P1Dl4t1ZJCDckEp4K
-        ZyrnswMswhkeG+emV8XPiI5bE/Z3umZG/XkH0WChPZi329TRamT3lDzSwpYIYurd7y17MX
-        0zlPXEIxfxRAwHDOo6SS7Bnk34NLKh4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-18-HPGPMRxlOoWd85n9TnjEdg-1; Thu, 22 Dec 2022 15:42:27 -0500
-X-MC-Unique: HPGPMRxlOoWd85n9TnjEdg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F13AC3815D21;
-        Thu, 22 Dec 2022 20:42:26 +0000 (UTC)
-Received: from madcap2.tricolour.ca (ovpn-0-3.rdu2.redhat.com [10.22.0.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 681EC2166B26;
-        Thu, 22 Dec 2022 20:42:25 +0000 (UTC)
-Date:   Thu, 22 Dec 2022 15:42:23 -0500
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-api@vger.kernel.org,
-        Amir Goldstein <amir73il@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>
-Subject: Re: [PATCH v5 3/3] fanotify,audit: Allow audit to use the full
- permission event response
-Message-ID: <Y6TBL7+W7Q1lYc9Q@madcap2.tricolour.ca>
-References: <cover.1670606054.git.rgb@redhat.com>
- <79fcf72ea442eeede53ed5e6de567f8df8ef7d83.1670606054.git.rgb@redhat.com>
- <CAHC9VhQont7=S9pvTpLUmxVSj-g-j2ZhVCLiUki69vtp8rf-9A@mail.gmail.com>
+        Thu, 22 Dec 2022 15:46:11 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A75164E4;
+        Thu, 22 Dec 2022 12:46:10 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BMKjqCK129515;
+        Thu, 22 Dec 2022 14:45:52 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1671741952;
+        bh=t0CVlGayMw5HcUXgmGTym4TtlkZXIl8bMzE8UidCg5k=;
+        h=From:To:CC:Subject:Date;
+        b=HWlECEZuZQdcMs1QjhMsKnx5gryDNYkfRok6Z0h2QfGaMVfqFjQ7GYgsNEtkGOrJa
+         Au2fc/lhRX6Ce3o9q0d/0js9WfxDG6S+FioHJBTQSobLkvFrtklQbJ435kORBhVTG5
+         wzLRpuvGTTiaSGt83bFbgqs8YDn2HWvNPurTmD6Y=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BMKjqqM120296
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 22 Dec 2022 14:45:52 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 22
+ Dec 2022 14:45:51 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 22 Dec 2022 14:45:51 -0600
+Received: from LT5CD112GSQZ.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BMKjk7M004121;
+        Thu, 22 Dec 2022 14:45:47 -0600
+From:   Apurva Nandan <a-nandan@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>
+CC:     Apurva Nandan <a-nandan@ti.com>, Hari Nagalla <hnagalla@ti.com>
+Subject: [PATCH v4 0/4] Add initial support for J784S4 SoC
+Date:   Fri, 23 Dec 2022 02:15:41 +0530
+Message-ID: <20221222204545.45281-1-a-nandan@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhQont7=S9pvTpLUmxVSj-g-j2ZhVCLiUki69vtp8rf-9A@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-20 18:31, Paul Moore wrote:
-> On Mon, Dec 12, 2022 at 9:06 AM Richard Guy Briggs <rgb@redhat.com> wrote:
-> >
-> > This patch passes the full response so that the audit function can use all
-> > of it. The audit function was updated to log the additional information in
-> > the AUDIT_FANOTIFY record.
-> >
-> > Currently the only type of fanotify info that is defined is an audit
-> > rule number, but convert it to hex encoding to future-proof the field.
-> > Hex encoding suggested by Paul Moore <paul@paul-moore.com>.
-> >
-> > Sample records:
-> >   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_info=3137 subj_trust=3 obj_trust=5
-> >   type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F subj_trust=2 obj_trust=2
-> >
-> > Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> > Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
-> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > ---
-> >  fs/notify/fanotify/fanotify.c |  3 ++-
-> >  include/linux/audit.h         |  9 +++++----
-> >  kernel/auditsc.c              | 25 ++++++++++++++++++++++---
-> >  3 files changed, 29 insertions(+), 8 deletions(-)
-> 
-> ...
-> 
-> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > index d1fb821de104..8d523066d81f 100644
-> > --- a/kernel/auditsc.c
-> > +++ b/kernel/auditsc.c
-> > @@ -64,6 +64,7 @@
-> >  #include <uapi/linux/limits.h>
-> >  #include <uapi/linux/netfilter/nf_tables.h>
-> >  #include <uapi/linux/openat2.h> // struct open_how
-> > +#include <uapi/linux/fanotify.h>
-> >
-> >  #include "audit.h"
-> >
-> > @@ -2877,10 +2878,28 @@ void __audit_log_kern_module(char *name)
-> >         context->type = AUDIT_KERN_MODULE;
-> >  }
-> >
-> > -void __audit_fanotify(u32 response)
-> > +void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
-> >  {
-> > -       audit_log(audit_context(), GFP_KERNEL,
-> > -               AUDIT_FANOTIFY, "resp=%u", response);
-> > +       struct audit_context *ctx = audit_context();
-> > +       struct audit_buffer *ab;
-> > +       char numbuf[12];
-> > +
-> > +       if (friar->hdr.type == FAN_RESPONSE_INFO_NONE) {
-> > +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > +                         "resp=%u fan_type=%u fan_info=3F subj_trust=2 obj_trust=2",
-> > +                         response, FAN_RESPONSE_INFO_NONE);
-> 
-> The fan_info, subj_trust, and obj_trust constant values used here are
-> awfully magic-numbery and not the usual sentinel values one might
-> expect for a "none" operation, e.g. zeros/INT_MAX/etc. I believe a
-> comment here explaining the values would be a good idea.
+The J784S4 SoC belongs to the K3 Multicore SoC architecture
+platform, providing advanced system integration in automotive,
+ADAS and industrial applications requiring AI at the network edge.
+This SoC extends the K3 Jacinto 7 family of SoCs with focus on
+raising performance and integration while providing interfaces,
+memory architecture and compute performance for multi-sensor, high
+concurrency applications.
 
-Ack.  I'll add a comment.  I would have preferred zero for default of
-unset, but Steve requested 0/1/2 no/yes/unknown.
+Some highlights of this SoC are:
+* Up to 8 Cortex-A72s, four clusters of lockstep capable dual Cortex-R5F MCUs,
+  4 C7x floating point vector DSPs with Matrix Multiply Accelerator(MMA) for
+  deep learning and CNN.
+* 3D GPU: Automotive grade IMG BXS-4-64
+* Vision Processing Accelerator (VPAC) with image signal processor and Depth
+  and Motion Processing Accelerator (DMPAC)
+* Three CSI2.0 4L RX plus two CSI2.0 4L TX, two DSI Tx, one eDP/DP and one
+  DPI interface.
+* Integrated gigabit ethernet switch, up to 8 ports (TDA4VH), two ports
+  support 10Gb USXGMII; Two 4 lane PCIe-GEN3 controllers, USB3.0 Dual-role
+  device subsystems, Up to 20 MCANs, among other peripherals.
 
-> > +               return;
-> > +       }
-> > +       ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
-> > +       if (ab) {
-> > +               audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
-> > +                                response, friar->hdr.type);
-> > +               snprintf(numbuf, sizeof(numbuf), "%u", friar->rule_number);
-> > +               audit_log_n_hex(ab, numbuf, sizeof(numbuf));
-> 
-> It looks like the kernel's printf format string parsing supports %X so
-> why not just use that for now, we can always complicate it later if
-> needed.  It would probably also remove the need for the @ab, @numbuf,
-> and @ctx variables.  For example:
-> 
-> audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
->   "resp=%u fan_type=%u fan_info=%X subj_trust=%u obj_trust=%u",
->   response, friar->hdr.type, friar->rule_number,
->   friar->subj_trust, friar->obj_trust);
-> 
-> Am I missing something?
+See J784S4 Technical Reference Manual (SPRUJ52 - JUNE 2022)
+for further details: http://www.ti.com/lit/zip/spruj52
 
-No, I am.  Thank you, that's much cleaner.
+bootlog: https://rentry.co/gbefx/raw
 
-> > +               audit_log_format(ab, " subj_trust=%u obj_trust=%u",
-> > +                                friar->subj_trust, friar->obj_trust);
-> > +               audit_log_end(ab);
-> > +       }
-> >  }
-> >
-> >  void __audit_tk_injoffset(struct timespec64 offset)
-> > --
-> > 2.27.0
-> 
-> -- 
-> paul-moore.com
-> 
-> --
-> Linux-audit mailing list
-> Linux-audit@redhat.com
-> https://listman.redhat.com/mailman/listinfo/linux-audit
-> 
+Changes in v4:
+- Removed ti,sci-dev-id from main_navss and mcu_navss, also changed their
+  compatibles to "simple-bus"
+- Removed status = "disabled" from phy_gmii_sel and cpts@3d000
+- Removed empty chosen {} from k3-j784s4.dtsi
 
-- RGB
+Changes in v3:
+- Enabled hwspinlock, main_ringacc, main_udmap, cpts, and mcu_navss in
+  the dtsi
+- Removed alignment in secure_ddr optee
+- Changed the assigned clock parent in main and mcu cpts to main pll0, hsdiv6
+  from pll3, hsdiv1
+- Removed few signed-off by
+- Formatting fixes at some places
+- Corrected link to EVM board schmatics in the commit
 
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
+Changes in v2:
+- Disabled all the IPs that are not mandatory for booting up the SoC by
+  default in the dtsi, and thus this gives a minimal SoC boot devicetree.
+- Moved no-1-8-v property from the k3-j784s4-evm.dts file to
+  k3-j784s4-main.dtsi file.
+- Naming changes (hwlock, regulator) and commit description changes.
+- Added device specific compatible for j721e system controller.
+- Dropped bootargs completely.
+
+Apurva Nandan (4):
+  dt-bindings: arm: ti: Add bindings for J784s4 SoC
+  dt-bindings: pinctrl: k3: Introduce pinmux definitions for J784s4
+  arm64: dts: ti: Add initial support for J784S4 SoC
+  arm64: dts: ti: Add support for J784S4 EVM board
+
+ .../devicetree/bindings/arm/ti/k3.yaml        |    6 +
+ arch/arm64/boot/dts/ti/Makefile               |    2 +
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      |  196 ++++
+ arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi    | 1007 +++++++++++++++++
+ .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     |  311 +++++
+ arch/arm64/boot/dts/ti/k3-j784s4.dtsi         |  284 +++++
+ include/dt-bindings/pinctrl/k3.h              |    3 +
+ 7 files changed, 1809 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j784s4.dtsi
+
+-- 
+2.34.1
 
