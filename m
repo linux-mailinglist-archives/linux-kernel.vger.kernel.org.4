@@ -2,102 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585D36545FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5A8654603
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbiLVSa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
+        id S229630AbiLVScI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiLVSao (ORCPT
+        with ESMTP id S229704AbiLVScG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:30:44 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2041.outbound.protection.outlook.com [40.107.92.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A9E20D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:30:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C3B+xO7DkzFna+c8+vqRoJ8EnpQIgWUOfHBE2P0EcnZ71L0lCLba+Sez/zU882r4wpDW38BeJ/lkEuWlnvZ/aRCbAL8Al+DTYzPWzr0mGeAsOy5u7BUAnEQsTsfpM/GO/FuvnVNZ2HaBFKNh1RbrauwCBCnNNArg5fi8llako/p3RSEo4bZqRcLVwqz58kjOEM9jwxPGkPL8CWQr5zeQ8slO6K1IKFpd84eBz49ljHkTq/gSVEuEtLkhuZ2FlmDumZ8xcKV7R5b3mmA1izAoh8pZ6gYSwpG91UTfWXpkyLDmkIBQDekAlgXzw7Q7pv3RpprnhId9kq311V0cuw/Lug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cH1qMhRE9Ggw3CGUNYB4BLxIKgkwh2qMbD5kFyCG6YE=;
- b=GyLmvJE0PtJv1WGd08yC3W722JhCYSmMUo8eG1IyNx2w9Fm3FCnc9qrqR0I4RmVboDcchxVXi7jw7BMji7zd4hly3+a3NWEOUEhqX+BhjVlxqp97cVc3HWIuHJhiG/IiZDcBpE049RjIBBDFU7bi7WTmPoDq2W2tUEl32b0tNr6/iFyW+FZ0bLUgR6l4X3yOg7LDqYQNJtyZ8KXNiZcB8DBhR6oM6dO8al39YNX5WgSI1oJvNCjIA8JluXqc6V6l0hyJ6Gj96rsRT812MeWQpO4766HbIme0cD/nEgqlomXyuo4AFnFxbYr/gWHrRwV5pQrODzqb6wbXvDenoI5kuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cH1qMhRE9Ggw3CGUNYB4BLxIKgkwh2qMbD5kFyCG6YE=;
- b=y8uzRtQiCp1m6bMPrEJB+DZKtyNeqzsqDkONp8vKwd+FhV1ru0TotO8ck4Kq44fQ7OEvgfV6DVFmGjMm4HTMD1uK3iPzALV9W1vHKAoSPhSJW1nhEBl8nn0we3CCxuTfGTkW7gUJZjWv68qzISSGBJetAT7BuKzkZ6jKJQ2n5V4=
-Received: from MW4PR03CA0138.namprd03.prod.outlook.com (2603:10b6:303:8c::23)
- by SN7PR12MB7855.namprd12.prod.outlook.com (2603:10b6:806:343::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Thu, 22 Dec
- 2022 18:30:40 +0000
-Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8c:cafe::ff) by MW4PR03CA0138.outlook.office365.com
- (2603:10b6:303:8c::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.21 via Frontend
- Transport; Thu, 22 Dec 2022 18:30:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5944.13 via Frontend Transport; Thu, 22 Dec 2022 18:30:38 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 22 Dec
- 2022 12:30:37 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Carlos Soriano Sanchez <csoriano@redhat.com>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        "David Airlie" <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, <christian.koenig@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Subject: [PATCH 2/2] drm/amd: Re-create firmware framebuffer on failure to probe
-Date:   Thu, 22 Dec 2022 12:30:11 -0600
-Message-ID: <20221222183012.1046-3-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221222183012.1046-1-mario.limonciello@amd.com>
-References: <20221222183012.1046-1-mario.limonciello@amd.com>
+        Thu, 22 Dec 2022 13:32:06 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F221A81F
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:32:04 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id gv5-20020a17090b11c500b00223f01c73c3so5970755pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:32:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=diDXt1oiDTYYx+8T5X5MAg+oSyu87V+IQcU8UuO/bT8=;
+        b=Y1DXhnLRuVIKSL/hOJKfvpsDdGQDbEdO5M18e4MXIZPLXvz9VecS07A8CeqU+QzDV0
+         h98yaU63vhqQ3gkUN6YTnJc5rP5xMXXKl/pMBb30TRo+lWRCUYupW9uKxWaBUFya42rY
+         jwyUiJxU8BAZ0FlPJOHRKyjnHkmNPSS7c7GA6uPuqdU6aSu54Zwp+jVfwPaz93PVrOqx
+         w6gYl64rmL4KwTTqvT6iVSCYZP5Q1xzuIkuICJ+jo5Wc54WqehH8TMIn0HcQ+J7RmFU2
+         qeg2Q2fOQMOklkZCPOjnrt2bIDRvYiqmflDd1Kl8UEkRPEipw4/SbPwuFu0E0L8w15H0
+         lL2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=diDXt1oiDTYYx+8T5X5MAg+oSyu87V+IQcU8UuO/bT8=;
+        b=iZoBWgTLH+zIMfeeEkkh23Tkh7IOI1UdH0jKOY5FaZewou5z/wMa2l+7MY20zfOLEs
+         bcDVf6tkUVAnrjgBmNXAt0n9i90mYCPBZyEjx2twNVVwBXA6gR2xol87J0uCbbAw7Ll0
+         ed33oOdx2fXmL9i6N18jiamsKuJkE38AdzP+ttAT/5mtrkB8EEqAF/NwhEUYG8yCGqh5
+         kAfPIqYgr+rcSZHOtJ9Lwo+e3gWQd+pe3210aZ8EMfiSdSwioeNaTTuq4LsfsgbAvZpy
+         9rGVHSIrAvdhOdc9SySdUbTM9uuxG1mIEAlfA+3ryIQHeq18KxSBa+SiPE7D0FyTrr7I
+         Jrgw==
+X-Gm-Message-State: AFqh2koV7eT2T2yhH483i2mgf2as4VDQ4L+LLVCsOJOF5oAg2GV8GKei
+        KE9zZuWo2//6PqJrjwm2HzF3Zw==
+X-Google-Smtp-Source: AMrXdXuHe5bFWv9dlBVk/46Ykx3FR+o21ilS7idgRhcvRxes2Ivb3UoF23cHSQqTaY0zvEbur9DgIQ==
+X-Received: by 2002:a05:6a21:339a:b0:a7:891b:3601 with SMTP id yy26-20020a056a21339a00b000a7891b3601mr1406077pzb.1.1671733923687;
+        Thu, 22 Dec 2022 10:32:03 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w17-20020a170902e89100b00189ac5a2340sm860204plg.124.2022.12.22.10.32.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 10:32:03 -0800 (PST)
+Date:   Thu, 22 Dec 2022 18:31:59 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Zhang Chen <chen.zhang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH 5/9] x86/bugs: Use Virtual MSRs to request hardware
+ mitigations
+Message-ID: <Y6Sin1bmLN10yvMw@google.com>
+References: <20221210160046.2608762-1-chen.zhang@intel.com>
+ <20221210160046.2608762-6-chen.zhang@intel.com>
+ <Y5oviY0471JytWPo@google.com>
+ <Y6BtcutjgcgE8dsv@gao-cwp>
+ <Y6Cb2OrkQ8X3IvW5@google.com>
+ <Y6G77CTIk8CvtTLn@gao-cwp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT012:EE_|SN7PR12MB7855:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63a68fb0-c963-42f2-4c2d-08dae44aa012
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E59BtYrQGV8TTFTzJlKDAa1WE/fhHNkvclmh+FshUfYsBJKlfVQE7c2MvDZAREf06WRz0mCMqDIv8jfD9DP7qlGewy0zEvdZ/cfY/xD4TMAF7QbV80Fss8VW2Kl9kWfoDs7DC8z9BnMOq986cZUdTPbAnUXy1HfxNSO6UidT7m2n/ySfDgNMmcuMj7e8wTSYmm4SRbN4yaO/7jGneC/CMM+tPMoLmixxF4lYkDORgkb6+iUY6OEpPNvYPeTecGtQLlRtxjHAALaQ7w/ESV15KEjIc0mo+hZdjMzZfojySmOh36Q8Rr8Ao/7IVMif2AkTbwI2U70Lpc5yZMflTHTnIO/sjBYJw5YmnQU2KzXDv/zMo0aK4qhzMrku0fgV/WTs9VNtgxVSzoiasSVDjRBdBGElDv2sQhuvzbE9nv6ayAfp3RKf+fC+Ie9kF6qNux/T+XGqjA6csSxW6vq848BdHvaS3z89JNPQ23VCOTWTctUQk/dQPRB/5CE+la0DBhXNcl4MeLCCkS0lkwvZ4lSonhrKAyHLM1zke8CBAABquE35Q7Nu/4EOvL89ZKjppDzdVrEBXVfFvB4zf7O2n+vDjWRkO09vght62+UdyZPLbNJ4k9koGMGvEhb+sijEu4+iMpYbXBIwmGtnMKOqZBbRaogwd3lA0iPdsY1OB5HY7AFQIMTXfybzJG5mYENFriIn4rdMILu5nYmbRhR1gBzuw2TRNxW1BtIUDwt7D2KOtp4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(39860400002)(346002)(451199015)(36840700001)(40470700004)(46966006)(478600001)(26005)(41300700001)(54906003)(8936002)(36756003)(6666004)(110136005)(7696005)(336012)(70206006)(70586007)(16526019)(186003)(8676002)(82740400003)(5660300002)(4326008)(40460700003)(2906002)(81166007)(36860700001)(1076003)(44832011)(82310400005)(356005)(47076005)(2616005)(426003)(86362001)(40480700001)(316002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 18:30:38.8894
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63a68fb0-c963-42f2-4c2d-08dae44aa012
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7855
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6G77CTIk8CvtTLn@gao-cwp>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,41 +84,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the probe sequence fails then the user is stuck with a frozen
-screen and can only really recover via SSH or by rebooting and
-applying nomodeset to the kernel command line.
+On Tue, Dec 20, 2022, Chao Gao wrote:
+> On Mon, Dec 19, 2022 at 05:14:00PM +0000, Sean Christopherson wrote:
+> >On Mon, Dec 19, 2022, Chao Gao wrote:
+> >> On Wed, Dec 14, 2022 at 08:18:17PM +0000, Sean Christopherson wrote:
+> >> > To me, this looks like Intel is foisting a paravirt interface on KVM and other
+> >> > hypervisors without collaborating with said hypervisors' developers and maintainers.
+> >> >
+> >> >I get that some of the mitigations are vendor specific, but things like RETPOLINE
+> >> >aren't vendor specific.  I haven't followed all of the mitigation stuff very
+> >> >closely, but I wouldn't be surprised if there are mitigations now or in the future
+> >> >that are common across architectures, e.g. arm64 and x86-64.  Intel doing its own
+> >> >thing means AMD and arm64 will likely follow suit, and suddenly KVM is supporting
+> >> >multiple paravirt interfaces for very similar things, without having any control
+> >> >over the APIs.  That's all kinds of backwards.
+> >> 
+> >> But if the interface is defined by KVM rather than Intel, it will likely end up
+> >> with different interfaces for different VMMs, then Linux guest needs to support
+> >> all of them. And KVM needs to implement Hyper-V's and Xen's interface to support
+> >> Hyper-V enlightened and Xen enlightened guest. This is a _real_ problem and
+> >> complicates KVM/Linux in a similar way as multiple paravirt interfaces.
+> >
+> >I never said the PV interfaces should be defined by KVM.  I 100% agree that any
+> >one hypervisor defining its own interface will suffer the same problem.
+> 
+> I am thinking there are only two options:
+> 
+> 1. Intel defines the interface.
+> 2. Every VMM defines its own interface.
+> 
+> Any middle ground between the two options?
 
-This is particularly problematic as newer GPUs are introduced because
-distributions may take some time to land newer GPU firmware.
+Work with other x86 hardware vendors to define a common interface?  Ask hypervisor
+developers to define a common, extensible interface?
 
-So when probe fails, re-create the system framebuffer so that the
-user at least has basic graphics support.
+Maybe it turns out that it's impossible to abstract anything away and everything
+ends up being vendor-specific anyways, but not even trying to provide a common
+interace is extremely frustrating, especially since all this mitigation stuff has
+been going on for ~5 years.  There's been plenty of time to establish relationships
+and points of contact.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+> >I think having a PV interface for coordinating mitigations between host and guest
+> >is a great idea.  What I don't like is tying the interface to "hardware" and defining
+> 
+> Do you think something below is better than the intel-defined interface?
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index bf2d50c8c92a..8961c62ab29b 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -40,6 +40,7 @@
- #include <linux/cc_platform.h>
- #include <linux/fb.h>
- #include <linux/dynamic_debug.h>
-+#include <linux/sysfb.h>
- 
- #include "amdgpu.h"
- #include "amdgpu_irq.h"
-@@ -2187,6 +2188,7 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
- 
- err_pci:
- 	pci_disable_device(pdev);
-+	sysfb_enable();
- 	return ret;
- }
- 
--- 
-2.34.1
+No, KVM doing its own thing would only exacerbate the issue.
 
+> add a new KVM_CAP_* and a KVM_FEATURE_* in hypervisor CPUID leaf to enumerate
+> the interface. And add a new virtual MSR 0x4b564dxx for guest to report in-use
+> software mitigations and assign one bit for each software mitigation. On MSR
+> write emulation, call into vmx code to enable some hardware mitigations if
+> the corresponding software mitigations are not effective on host.
+> 
+> I am afraid it is late to switch to above approach because e.g., if Hyper-V
+> decides to support the intel-defined interface, KVM probably needs to support it
+> for Hyper-V guests.
+
+Hence my frustration.
