@@ -2,86 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE1865416F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBA4654176
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbiLVNAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 08:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S235395AbiLVNCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiLVNAk (ORCPT
+        with ESMTP id S235247AbiLVNCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 08:00:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C1BC09;
-        Thu, 22 Dec 2022 05:00:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7726DB81D2D;
-        Thu, 22 Dec 2022 13:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7D61C433D2;
-        Thu, 22 Dec 2022 13:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671714036;
-        bh=9W5wvIsudxlyGWjHXQF4tUGsiSCy97rCYsCSM77Fg00=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dcnzhC9r1DlFOf5fxMK6qAK/mWD0n9P52cyC6lX/n411r5np52AZp3mrqa6wAnRNR
-         plT+6Mo/k5/VMd7IsD+D0UrZeTmKXhiqypuVaWuj9Uj/EHedpLogBWQ85eUhscJYVb
-         4/6UL3dLJB2O4Y8Jg2/UKJ+2snswaQhAVvVbYJUVsyOLpoA+2cNXsbUAn/3BSg20dP
-         HBiipcUVhQtcXkIyHkwDJiMdG5OoOjsFvKQ43S2L0gctF2n7XUkf5qRlPA+Hwy7Wd7
-         qB31vpwGubOk0lfVBs7e8IJTtxUczi4wA6YvYyuKEsi6xvzS3Caez5j5NShZGQC3Iu
-         +k02QLKYRa/Qg==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: Re: [RFC PATCH RESEND bpf-next 0/4] Support bpf trampoline for RV64
-In-Reply-To: <20221220021319.1655871-1-pulehui@huaweicloud.com>
-References: <20221220021319.1655871-1-pulehui@huaweicloud.com>
-Date:   Thu, 22 Dec 2022 14:00:33 +0100
-Message-ID: <87ili3a8zy.fsf@all.your.base.are.belong.to.us>
+        Thu, 22 Dec 2022 08:02:10 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A755526492;
+        Thu, 22 Dec 2022 05:02:09 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMC3dY8016973;
+        Thu, 22 Dec 2022 14:01:44 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=VfXLK2ENqOHIyN2VaJvWoWk54NjhoqbK7T93glbOHVw=;
+ b=APyrqvCMtyI7tjM0vzRax+L5j54dvsPvQ/4AwhOTP8aCo5BZ34d4wrVM3XifSSw7amT0
+ 0mtIosOHPVOV3VBHvLIh5bRB0qMFoUm2lCR9bB5EgD8aFq6IjP8eezE8WMGkJwuBOMX7
+ gyK53sY5RsyCk45ZI2UaDvENCesFIO3zQBoSsyIs+7HhI9OoDZuFJ/frmBE/BHL+VYoB
+ gtp6e1ovQfzWAfbopsAG26GfNxp/F0gAZfg164gPrjbYzIH1fRKKtckwmSiXnXmIWFd0
+ BOpiG8skjzMxL7OqxbGnpshsRtjoxc5Pby0ZsxOuKJXGiMVWRn/tCkpUm2zQwqvbMbYL Zw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mh605w3as-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 14:01:44 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7D56C10004A;
+        Thu, 22 Dec 2022 14:01:41 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 610A62291C4;
+        Thu, 22 Dec 2022 14:01:06 +0100 (CET)
+Received: from [10.201.21.217] (10.201.21.217) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 22 Dec
+ 2022 14:01:05 +0100
+Message-ID: <6e14aecb-e6f5-ec10-a5c5-af6fd1b54e89@foss.st.com>
+Date:   Thu, 22 Dec 2022 14:01:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 1/7] dt-bindings: Document common device controller
+ bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
+        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>
+References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
+ <20221221173055.11719-2-gatien.chevallier@foss.st.com>
+ <2a4b5094-013f-f873-4c0e-bb48ca6ac19e@kernel.org>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <2a4b5094-013f-f873-4c0e-bb48ca6ac19e@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.217]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_06,2022-12-22_02,2022-06-22_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pu Lehui <pulehui@huaweicloud.com> writes:
 
-> BPF trampoline is the critical infrastructure of the bpf
-> subsystem, acting as a mediator between kernel functions
-> and BPF programs. Numerous important features, such as
-> using ebpf program for zero overhead kernel introspection,
-> rely on this key component. We can't wait to support bpf
-> trampoline on RV64. The implementation of bpf trampoline
-> was closely to x86 and arm64 for future development.
+Hello Krzysztof,
 
-Thank you for working on this! BPF trampoline is the "missing piece"
-from getting proper kfunc support.
+On 12/22/22 11:22, Krzysztof Kozlowski wrote:
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC.  It might happen, that command when run on an older
+> kernel, gives you outdated entries.  Therefore please be sure you base
+> your patches on recent Linux kernel.
+> 
+> 
+> On 21/12/2022 18:30, Gatien Chevallier wrote:
+>> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+> 
+> You same From as SoB.
+> 
+>>
+>> Introducing of the common device controller bindings for the controller
+>> provider and consumer devices. Those bindings are intended to allow
+>> divided system on chip into muliple domains, that can be used to
+>> configure hardware permissions.
+>>
+>> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> 
+> Missing SoB.
+> 
+> Missing changelog. This is not v1 but v7 or something >
+> 
+> 
+>> ---
+>>   .../feature-domain-controller.yaml            | 84 +++++++++++++++++++
+>>   1 file changed, 84 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml b/Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+>> new file mode 100644
+>> index 000000000000..90a7c38c833c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+>> @@ -0,0 +1,84 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/feature-controllers/feature-domain-controller.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Generic Domain Controller bindings
+> 
+> Drop "bindings".
+> 
+> Anyway you duplicate work here:
+> https://lore.kernel.org/all/c869d2751125181a55bc8a88c96e3a892b42f37a.1668070216.git.oleksii_moisieiev@epam.com/
+> and maybe you duplicate comments.
+> 
+> I don't think there is point to review things twice, so NAK.
+This is a result of me not knowing how to handle this particular case. 
+It is a patch that I need to have in my patch set in order to pass Rob's 
+bindings check. Otherwise, feature domains bindings defined here will 
+not be known in the STM32 System Bus binding file, where they are used.
 
-Unfortunately, I wont be able to do a proper review until next week.
+I wanted to illustrate the use of Oleksii's binding with a practical 
+use-case that we want to implement.
 
+What would be the correct way of managing this dependency?
+-Specify something like "On top of ...." in the cover letter/patch and 
+reference the other thread?
+-Use a "Depends-On" tag on the YAML binding commit?
+-Something else?
 
-Happy holidays,
-Bj=C3=B6rn
+Best regards,
+Gatien
+
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
