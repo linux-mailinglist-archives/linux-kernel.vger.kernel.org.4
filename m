@@ -2,116 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219C365485C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A73465488D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 23:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235754AbiLVW0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 17:26:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S235754AbiLVWbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 17:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235746AbiLVW0C (ORCPT
+        with ESMTP id S230022AbiLVWbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 17:26:02 -0500
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316E01AF0F;
-        Thu, 22 Dec 2022 14:26:02 -0800 (PST)
-Received: by mail-vs1-f52.google.com with SMTP id b189so3019455vsc.10;
-        Thu, 22 Dec 2022 14:26:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AkWzqdI4Ao/+eVXLfPWUg98sZ0/cE4H62K67j4Goqj8=;
-        b=iEF2E45WYSiHPz6GVI7qBefO4C0uOy5YXfmuIzCRND8a4TYbPscY0QrjhTXrDQpXdo
-         5NMJRXg1Xhp93ucEtlN9ErDxGPNvisjFXYvR70WCuY+QxjmqqRXssDJquVaGr822iBnB
-         vouQsxC/7JvWnUeSacxZRw68LtNzS07hWK12aXj33pibEb+Fhrso/4glRKnrjDZ4+2j9
-         D3Fn/4Q4wVcvdnBcFF9+FgjUMOhKB7bMOunPd9LTmQPqDZU+WaciZU4fEQH/Th/I7KxT
-         g8RHJYr8nNd9Sp1bR+bLuzNrEdrK5AQn5oBxkTNbAb3yOVPGcVcdM0/VeH9MBlt3xlZZ
-         UMLw==
-X-Gm-Message-State: AFqh2kp+Aw5Glv9oHS1kkYNOmfSuoAA7Wb3HUPEWcDAcrzLlaEpZbMka
-        YJ+8W1ve6wljwSp8EDfraqVoQsb00YgRJGP6ar8=
-X-Google-Smtp-Source: AMrXdXu92x7/g1eEEZfwE8ES3ruQ0C87z/T6TNu8N8wO0AT01JLWu3vII7c0sqg9sj3/3qajTrcmF429sUadsrPfWVc=
-X-Received: by 2002:a67:eace:0:b0:3b1:30fb:e106 with SMTP id
- s14-20020a67eace000000b003b130fbe106mr705520vso.55.1671747961063; Thu, 22 Dec
- 2022 14:26:01 -0800 (PST)
+        Thu, 22 Dec 2022 17:31:14 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17206DF26;
+        Thu, 22 Dec 2022 14:31:13 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 24E18890;
+        Thu, 22 Dec 2022 23:31:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671748270;
+        bh=4/t+YVQ93NeTOT2q8i2JnCNw/16YvgJAmUtLne/NeoU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i+bLXhyf69PykRZ9sVs9HCIaKV1KQ7YcI+ummSNc8c7g1gooBjwAdQF3DAoWfJby+
+         921g6uaYrhQnPhn+xzvCGw5OkLMw1O/sx+syyUcfhoU6LE8OTxlPKjuVLyhsecDpGg
+         6oolZwu59nlKMRakA4vgM+6az4ArBLkAg8cWKmUw=
+Date:   Fri, 23 Dec 2022 00:31:05 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ivan Mironov <mironov.ivan@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: sony: Support for DS4 clones that do not implement
+ feature report 0x81
+Message-ID: <Y6TaqXproHyRSThH@pendragon.ideasonboard.com>
+References: <20210113173402.17030-1-mironov.ivan@gmail.com>
+ <8a2463a97af411e4167f3c4abc2d4be6447e51ac.camel@gmail.com>
 MIME-Version: 1.0
-References: <20221220220144.4016213-1-namhyung@kernel.org> <20221220220144.4016213-2-namhyung@kernel.org>
- <Y6RTy29ULXp8WJ/Q@hirez.programming.kicks-ass.net> <2d164a5f-2885-2a6e-581a-2673ca0b1b81@iogearbox.net>
- <CAM9d7cj=iuxhLndNMBMeff6Ayp2hLfdz+6CHsZL7g213aWbUYQ@mail.gmail.com> <Y6S7BcblAHO4nQTf@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y6S7BcblAHO4nQTf@hirez.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 22 Dec 2022 14:25:49 -0800
-Message-ID: <CAM9d7chi6ijPEwkTbmLJGz+_fQFvnFxwc44M-g93ym2-ZPN9tw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf/perf: Call perf_prepare_sample() before bpf_prog_run()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8a2463a97af411e4167f3c4abc2d4be6447e51ac.camel@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 12:16 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Dec 22, 2022 at 09:34:42AM -0800, Namhyung Kim wrote:
->
-> > Sorry about that.  Let me rephrase it like below:
-> >
-> > With bpf_cast_to_kern_ctx(), BPF programs attached to a perf event
-> > can access perf sample data directly from the ctx.
->
-> This is the bpf_prog_run() in bpf_overflow_handler(), right?
+Hi Ivan,
 
-Yes.
+On Sat, Feb 13, 2021 at 09:02:45AM +0500, Ivan Mironov wrote:
+> Ignore this patch, I am working on a better one.
 
->
-> > But the perf sample
-> > data is not fully prepared at this point, and some fields can have invalid
-> > uninitialized values.  So it needs to call perf_prepare_sample() before
-> > calling the BPF overflow handler.
->
-> It never was, why is it a problem now?
+Have you managed to write a better patch ? I've successfuly tested this
+one with a PS4 controller clone.
 
-BPF used to allow selected fields only like period and addr, and they
-are initialized always by perf_sample_data_init().  This is relaxed
-by the bpf_cast_to_kern_ctx() and it can easily access arbitrary
-fields of perf_sample_data now.
+> On Wed, 2021-01-13 at 22:34 +0500, Ivan Mironov wrote:
+> > There are clones of DualShock 4 that are very similar to the originals,
+> > except of 1) they do not support HID feature report 0x81 and 2) they do
+> > not have any USB Audio interfaces despite they physically have audio
+> > jack.
+> > 
+> > Such controllers are working fine with Linux when connected via
+> > Bluetooth, but not when connected via USB. Here is how failed USB
+> > connection attempt looks in log:
+> > 
+> > 	usb 1-5: New USB device found, idVendor=054c, idProduct=05c4, bcdDevice= 1.00
+> > 	usb 1-5: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> > 	usb 1-5: Product: Wireless Controller
+> > 	usb 1-5: Manufacturer: Sony Computer Entertainment
+> > 	sony 0003:054C:05C4.0007: failed to retrieve feature report 0x81 with the DualShock 4 MAC address
+> > 	sony 0003:054C:05C4.0007: hidraw6: USB HID v81.11 Gamepad [Sony Computer Entertainment Wireless Controller] on usb-0000:00:14.0-5/input0
+> > 	sony 0003:054C:05C4.0007: failed to claim input
+> > 
+> > This patch adds support of using feature report 0x12 as a fallback for
+> > Bluetooth MAC address retrieval. Feature report 0x12 also seems to be
+> > used by DS4Windows[1] for all DS4 controllers.
+> > 
+> > [1] https://github.com/Ryochan7/DS4Windows/blob/1b74a4440089f38a24ee2c2483c1d733a0692b8f/DS4Windows/HidLibrary/HidDevice.cs#L479
+> > 
+> > Signed-off-by: Ivan Mironov <mironov.ivan@gmail.com>
+> > ---
+> >  drivers/hid/hid-sony.c | 72 ++++++++++++++++++++++++++++++------------
+> >  1 file changed, 52 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
+> > index e3a557dc9ffd..97df12180e45 100644
+> > --- a/drivers/hid/hid-sony.c
+> > +++ b/drivers/hid/hid-sony.c
+> > @@ -491,6 +491,7 @@ struct motion_output_report_02 {
+> >  
+> > 
+> >  #define DS4_FEATURE_REPORT_0x02_SIZE 37
+> >  #define DS4_FEATURE_REPORT_0x05_SIZE 41
+> > +#define DS4_FEATURE_REPORT_0x12_SIZE 16
+> >  #define DS4_FEATURE_REPORT_0x81_SIZE 7
+> >  #define DS4_FEATURE_REPORT_0xA3_SIZE 49
+> >  #define DS4_INPUT_REPORT_0x11_SIZE 78
+> > @@ -2593,6 +2594,53 @@ static int sony_get_bt_devaddr(struct sony_sc *sc)
+> >  	return 0;
+> >  }
+> >  
+> > 
+> > +static int sony_get_usb_ds4_devaddr(struct sony_sc *sc)
+> > +{
+> > +	u8 *buf = NULL;
+> > +	int ret;
+> > +
+> > +	buf = kmalloc(max(DS4_FEATURE_REPORT_0x12_SIZE, DS4_FEATURE_REPORT_0x81_SIZE), GFP_KERNEL);
+> > +	if (!buf)
+> > +		return -ENOMEM;
+> > +
+> > +	/*
+> > +	 * The MAC address of a DS4 controller connected via USB can be
+> > +	 * retrieved with feature report 0x81. The address begins at
+> > +	 * offset 1.
+> > +	 */
+> > +	ret = hid_hw_raw_request(sc->hdev, 0x81, buf,
+> > +			DS4_FEATURE_REPORT_0x81_SIZE, HID_FEATURE_REPORT,
+> > +			HID_REQ_GET_REPORT);
+> > +	if (ret == DS4_FEATURE_REPORT_0x81_SIZE) {
+> > +		memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+> > +		goto out_free;
+> > +	}
+> > +	dbg_hid("%s: hid_hw_raw_request(..., 0x81, ...) returned %d\n", __func__, ret);
+> > +
+> > +	/*
+> > +	 * Some variants do not implement feature report 0x81 at all.
+> > +	 * Fortunately, feature report 0x12 also contains the MAC address of
+> > +	 * a controller.
+> > +	 */
+> > +	ret = hid_hw_raw_request(sc->hdev, 0x12, buf,
+> > +			DS4_FEATURE_REPORT_0x12_SIZE, HID_FEATURE_REPORT,
+> > +			HID_REQ_GET_REPORT);
+> > +	if (ret == DS4_FEATURE_REPORT_0x12_SIZE) {
+> > +		memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+> > +		goto out_free;
+> > +	}
+> > +	dbg_hid("%s: hid_hw_raw_request(..., 0x12, ...) returned %d\n", __func__, ret);
+> > +
+> > +	hid_err(sc->hdev, "failed to retrieve feature reports 0x81 and 0x12 with the DualShock 4 MAC address\n");
+> > +	ret = ret < 0 ? ret : -EINVAL;
+> > +
+> > +out_free:
+> > +
+> > +	kfree(buf);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> >  static int sony_check_add(struct sony_sc *sc)
+> >  {
+> >  	u8 *buf = NULL;
+> > @@ -2613,26 +2661,9 @@ static int sony_check_add(struct sony_sc *sc)
+> >  			return 0;
+> >  		}
+> >  	} else if (sc->quirks & (DUALSHOCK4_CONTROLLER_USB | DUALSHOCK4_DONGLE)) {
+> > -		buf = kmalloc(DS4_FEATURE_REPORT_0x81_SIZE, GFP_KERNEL);
+> > -		if (!buf)
+> > -			return -ENOMEM;
+> > -
+> > -		/*
+> > -		 * The MAC address of a DS4 controller connected via USB can be
+> > -		 * retrieved with feature report 0x81. The address begins at
+> > -		 * offset 1.
+> > -		 */
+> > -		ret = hid_hw_raw_request(sc->hdev, 0x81, buf,
+> > -				DS4_FEATURE_REPORT_0x81_SIZE, HID_FEATURE_REPORT,
+> > -				HID_REQ_GET_REPORT);
+> > -
+> > -		if (ret != DS4_FEATURE_REPORT_0x81_SIZE) {
+> > -			hid_err(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
+> > -			ret = ret < 0 ? ret : -EINVAL;
+> > -			goto out_free;
+> > -		}
+> > -
+> > -		memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+> > +		ret = sony_get_usb_ds4_devaddr(sc);
+> > +		if (ret < 0)
+> > +			return ret;
+> >  
+> > 
+> >  		snprintf(sc->hdev->uniq, sizeof(sc->hdev->uniq),
+> >  			 "%pMR", sc->mac_address);
+> > @@ -2670,6 +2701,7 @@ static int sony_check_add(struct sony_sc *sc)
+> >  		return 0;
+> >  	}
+> >  
+> > 
+> > +	dbg_hid("%s: retrieved MAC address: %s\n", __func__, sc->hdev->uniq);
+> >  	ret = sony_check_add_dev_list(sc);
+> >  
+> > 
+> >  out_free:
 
-The background of this change is to use BPF as a filter for perf
-event samples.  The code is there already and returning 0 from
-BPF can drop perf samples.  With access to more sample data,
-it'd make more educated decisions.
+-- 
+Regards,
 
-For example, I got some requests to limit perf samples in a
-selected region of address (code or data).  Or it can collect
-samples only if some hardware specific information is set in
-the raw data like in AMD IBS.  We can easily extend it to other
-sample info based on users' needs.
-
->
-> > But just calling perf_prepare_sample() can be costly when the BPF
->
-> So you potentially call it twice now, how's that useful?
-
-Right.  I think we can check data->sample_flags in
-perf_prepare_sample() to minimize the duplicate work.
-It already does it for some fields, but misses others.
-
-Thanks,
-Namhyung
+Laurent Pinchart
