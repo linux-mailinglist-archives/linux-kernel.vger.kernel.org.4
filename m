@@ -2,132 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACCF654164
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC01654169
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbiLVM4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S235386AbiLVM5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235191AbiLVM4B (ORCPT
+        with ESMTP id S235167AbiLVM5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:56:01 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2717EB5E;
-        Thu, 22 Dec 2022 04:55:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1vFrv+zarbZYHT3+ptNBvFlR54/j8sRf1M3avE9pjzs=; b=QGxfGbHTpUd1Ebcww5ZEEaTE6/
-        ya/BmPob1YD5pkd7HSuEiNal6es+3RMTQR3x/Hpo8wCXJ74DZ+MHSl58jDGdeB2PIzROPkDQF0Zm8
-        4VNF72RFdadMgaSLgmdZFKETvgTKqUuVFyfC+BDOiDWFeMLYBV53PXc+VkMJNQNTko0XlyZA4aeib
-        qJfURT8D2Xfe08DoBDUtdTCPayp0cf2uw0GOT1+NQumczRUE+xGxBfeDMDYTUFpmjvmBbBP1m/GI+
-        0niJhlZbYwjyNUujI3Uk/rjD4JCdO2HnMHBrg71h/Wx5PzryIpqryc92oLdokDA4tFQZVtm0ejHKn
-        MxE8OPLw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1p8L6s-00Dpbg-0L;
-        Thu, 22 Dec 2022 12:55:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0F8D230006D;
-        Thu, 22 Dec 2022 13:55:40 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DE88920C8AA31; Thu, 22 Dec 2022 13:55:39 +0100 (CET)
-Date:   Thu, 22 Dec 2022 13:55:39 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf/perf: Call perf_prepare_sample() before
- bpf_prog_run()
-Message-ID: <Y6RTy29ULXp8WJ/Q@hirez.programming.kicks-ass.net>
-References: <20221220220144.4016213-1-namhyung@kernel.org>
- <20221220220144.4016213-2-namhyung@kernel.org>
+        Thu, 22 Dec 2022 07:57:13 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84A5C09;
+        Thu, 22 Dec 2022 04:57:12 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id t2so1956812ply.2;
+        Thu, 22 Dec 2022 04:57:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=shgak+5Q2UJGQJ85fQXrp0MEzUzzc2nXkSpaCSHFJYQ=;
+        b=FcKTZen7yqObZyLVxp/FvVZ7ea8HzZe2c6uOTBFoi7g3bvvFbNxS69MvDGg046Y6un
+         2LeP2xDKu2GfR1YyG/aBRDuXAF0ecWQ8Csl3hbcVWuWf0bY9B0qsqtf++qNrc4XoWglU
+         7sq1XNpnuhVkAkm6nmtoBQRGunTiEs0fikUVrcAJYPT4W/S+xMeirwizvmIFvNcG0NKj
+         elRI9YWw1QUFmanPdZAO23zBuVVXSkxIZV42evQWC4a0bir2+suL+8q9eHgXsI2kAzHP
+         YUI31GiOOBZw7mFH2MbVypk9uQo+Zlsi6nhfVbkhYS21wyAoIIycudtzOE+Pbj/aUQVy
+         C4QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=shgak+5Q2UJGQJ85fQXrp0MEzUzzc2nXkSpaCSHFJYQ=;
+        b=R1sP2lipLMMXjocjmJnWAD3tKDhaYwrTlRbPCGA1tQXhiaaSAjui2OrN2t9cH3O4eY
+         RNUaAzUvCrIj5ft7adKLv6/8O1PSO7VOH9Q5CPOCy1+A2g6uHTtQDbP72qneM90wFpCU
+         syc/AqkYlmMuXAY1tX1dpzNNQhGBDuozbsxJ7+wFNDbBPYHKPiprw7bn1DofWtt55pr8
+         eWz5ENg11g/GrfO3oo1eJpDc9zUag4N8Y22E28GX3uawgeYqrwVG9LG9DpCeezl8pRL+
+         eMxtQdVyEPUW8BbyjzOLb29AnRdzp3miORnyYAAWnCWkcS+CUgP6W4BBUdQirJ1NO3w8
+         TxQg==
+X-Gm-Message-State: AFqh2krp4jgHWpfVjfHPTDpfWKJbg+W5M5l/sozWCXDqTBpGAlGssKTI
+        KBW18RzNPhraLkBQct+aWurTuIRNEbQ=
+X-Google-Smtp-Source: AMrXdXsd9OGV3/LNWKzCGh0+pYkG2ET1wu9v2lHLd6/kz1GWmcYM10Z3xGox/MgmSzx2r2SjbHrbvg==
+X-Received: by 2002:a17:902:7243:b0:189:30cd:8fa2 with SMTP id c3-20020a170902724300b0018930cd8fa2mr6203652pll.50.1671713832224;
+        Thu, 22 Dec 2022 04:57:12 -0800 (PST)
+Received: from [192.168.43.80] (subs03-180-214-233-71.three.co.id. [180.214.233.71])
+        by smtp.gmail.com with ESMTPSA id s6-20020a170902ea0600b001913c5fc051sm404944plg.274.2022.12.22.04.57.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 04:57:11 -0800 (PST)
+Message-ID: <4fbc9e89-24af-9d59-dab0-73925ac94df1@gmail.com>
+Date:   Thu, 22 Dec 2022 19:56:57 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220220144.4016213-2-namhyung@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] Documentation: stable: Add rule on what kind of patches
+ are accepted
+Content-Language: en-US
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        gregkh@linuxfoundation.org, sashal@kernel.org, corbet@lwn.net
+Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joneslee@google.com
+References: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 02:01:43PM -0800, Namhyung Kim wrote:
-> When the BPF program calls bpf_cast_to_kern_ctx(), it assumes the program will
-> access perf sample data directly and call perf_prepare_sample() to make sure
-> the sample data is populated.
-
-I don't understand a word of this :/ What are you doing and why?
-
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  include/linux/bpf.h   | 1 +
->  kernel/bpf/verifier.c | 1 +
->  kernel/events/core.c  | 3 +++
->  3 files changed, 5 insertions(+)
+On 12/22/22 16:16, Tudor Ambarus wrote:
+> The list of rules on what kind of patches are accepted, and which ones
+> are not into the “-stable” tree, did not mention anything about new
+> features and let the reader use its own judgement. One may be under the
+> impression that new features are not accepted at all, but that's not true:
+> new features are not accepted unless they fix a reported problem.
+> Update documentation with missing rule.
 > 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 5fec2d1be6d7..6bd4c21a6dd4 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1341,6 +1341,7 @@ struct bpf_prog {
->  				enforce_expected_attach_type:1, /* Enforce expected_attach_type checking at attach time */
->  				call_get_stack:1, /* Do we call bpf_get_stack() or bpf_get_stackid() */
->  				call_get_func_ip:1, /* Do we call get_func_ip() */
-> +				call_cast_kctx:1, /* Do we call bpf_cast_to_kern_ctx() */
->  				tstamp_type_access:1; /* Accessed __sk_buff->tstamp_type */
->  	enum bpf_prog_type	type;		/* Type of BPF program */
->  	enum bpf_attach_type	expected_attach_type; /* For some prog types */
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index faa358b3d5d7..23a9dc187292 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9236,6 +9236,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  				regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_TRUSTED;
->  				regs[BPF_REG_0].btf = desc_btf;
->  				regs[BPF_REG_0].btf_id = meta.ret_btf_id;
-> +				env->prog->call_cast_kctx = 1;
->  			} else if (meta.func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
->  				ret_t = btf_type_by_id(desc_btf, meta.arg_constant.value);
->  				if (!ret_t || !btf_type_is_struct(ret_t)) {
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index e47914ac8732..a654a0cb6842 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -10332,6 +10332,7 @@ static void bpf_overflow_handler(struct perf_event *event,
->  		.event = event,
->  	};
->  	struct bpf_prog *prog;
-> +	struct perf_event_header dummy;
->  	int ret = 0;
->  
->  	ctx.regs = perf_arch_bpf_user_pt_regs(regs);
-> @@ -10346,6 +10347,8 @@ static void bpf_overflow_handler(struct perf_event *event,
->  			data->callchain = perf_callchain(event, regs);
->  			data->sample_flags |= PERF_SAMPLE_CALLCHAIN;
->  		}
-> +		if (prog->call_cast_kctx)
-> +			perf_prepare_sample(&dummy, data, event, regs);
->  
->  		ret = bpf_prog_run(prog, &ctx);
->  	}
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
+
+Are there any other examples of problems that can "only" be solved by
+introducing new features? Or new huge features that are virtually
+harder to backport?
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
