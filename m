@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D664A653CC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C636653CCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234764AbiLVIIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 03:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S234914AbiLVILi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 03:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiLVIId (ORCPT
+        with ESMTP id S229567AbiLVILe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 03:08:33 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160B118B2E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 00:08:33 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id s5so1830599edc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 00:08:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aWl2qoDVkyJv80Dcc1T5jz7QH+u5H5UltZOFP/s+yNc=;
-        b=pxjve+q03lKhs9SeI/Plbwt+Lh8uP7gi1x/bjlCAL591ccNGllzK8muEElztCm5iUh
-         mS0twT3wf+xxGqzYK3BsDx/gvFSz4ISBvX8iqJZGXbnGRdQpcLsbopmYDk1Vd2Smv/7I
-         F/trMddiOnaywB0ILgvT4aIHLcoAQ8zQYrsfQyPSGX8i72oCryK8lMyRuFDIwtd9C339
-         vbdtqh5IlwEVvxKj1QceSj+xghj6cH02HJywNPUGBmJ93ZVRpLR3iP9AO2kJILUYvUH4
-         0/xhFPV8hDQsQGUBbMjr0JqnUHrI+JcGPKQO/woydj2xCzN03+akoAHUEidDm2IgbrMI
-         U+QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aWl2qoDVkyJv80Dcc1T5jz7QH+u5H5UltZOFP/s+yNc=;
-        b=22iYvOT/JeGfBORDMqT3Q9BlO1Ohm0nNdPkObpHDNfMF+BglPBmzeMUkOrMbsKyvzZ
-         hDt5rcPgolGdst9XXZ1YxxUxuuCY+kZLmADWERtJKQmDMdrZYl/gvDxue1lf+9N3BZwp
-         ZmUWPg/Tci7UOtR6EldIK5Wvp546ya7D3N2nHuy/TK1hs2j/FYj7JAXkXd6mGqPksEvT
-         JEmv2y08Rwz5tCD28NJ6DJjQWfSaO5KFOdvCuoqq4hJezr/Kuz45fKNDs6Qz1KIvCLrn
-         MQKXLS18Ev2/g1qWc4heQC5bKJhxgYlbjk9DOwllMvvtX8t6wETKvzQrJkjx+yrqO+CN
-         grQw==
-X-Gm-Message-State: AFqh2koJhGqywqUB+3Jh8dOsDGWemTFJlFcjIAyHdms6NSDUiSyPIc7D
-        Sa2WGQUlk/7/iCBaGUu5Q6niNZvSUrPFKaKJTyw=
-X-Google-Smtp-Source: AMrXdXusTK9Hhv8wh8JqFhdYHmGuw61kpiPUKpJ/RHarx/sqLCZ/vGyocTEVJbmzH+H6TkwPBJNf4iI2gDX4yf+P1K4=
-X-Received: by 2002:aa7:c986:0:b0:46c:5a22:b00c with SMTP id
- c6-20020aa7c986000000b0046c5a22b00cmr512937edt.46.1671696511568; Thu, 22 Dec
- 2022 00:08:31 -0800 (PST)
+        Thu, 22 Dec 2022 03:11:34 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E607218B1;
+        Thu, 22 Dec 2022 00:11:30 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DE0D124E36E;
+        Thu, 22 Dec 2022 16:11:16 +0800 (CST)
+Received: from EXMBX063.cuchost.com (172.16.7.63) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 22 Dec
+ 2022 16:11:16 +0800
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX063.cuchost.com
+ (172.16.6.63) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 22 Dec
+ 2022 16:11:16 +0800
+Received: from EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4]) by
+ EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4%16]) with mapi id
+ 15.00.1497.044; Thu, 22 Dec 2022 16:11:16 +0800
+From:   JiaJie Ho <jiajie.ho@starfivetech.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: RE: [PATCH 3/3] riscv: dts: starfive: Add TRNG node for VisionFive 2
+Thread-Topic: [PATCH 3/3] riscv: dts: starfive: Add TRNG node for VisionFive 2
+Thread-Index: AQHZFRwZSE/lt9EBpUOGdiBQvIWXRa53klOAgAH8thA=
+Date:   Thu, 22 Dec 2022 08:11:16 +0000
+Message-ID: <ee96fa9cdf9442169dab277647a3bae3@EXMBX168.cuchost.com>
+References: <20221221090819.1259443-1-jiajie.ho@starfivetech.com>
+ <20221221090819.1259443-4-jiajie.ho@starfivetech.com>
+ <cbbf719b-a027-f91b-bd2c-6e6b43447b97@linaro.org>
+In-Reply-To: <cbbf719b-a027-f91b-bd2c-6e6b43447b97@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [161.142.229.243]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <Y5XhPJ39ipMCcctq@qemulion>
-In-Reply-To: <Y5XhPJ39ipMCcctq@qemulion>
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Thu, 22 Dec 2022 16:07:54 +0800
-Message-ID: <CAAfSe-sa2Vw7bUxuRne-fw7GZrHW+7OMj6gCS9jPTamsGF5MBQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/sprd: remove redundant error logging
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Dec 2022 at 21:55, Deepak R Varma <drv@mailo.com> wrote:
->
-> A call to platform_get_irq() already prints an error on failure within
-> its own implementation. So printing another error based on its return
-> value in the caller is redundant and should be removed. The clean up
-> also makes if condition block braces unnecessary. Remove that as well.
->
-> Issue identified using platform_get_irq.cocci coccicheck script.
->
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
->  drivers/gpu/drm/sprd/sprd_dpu.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/sprd/sprd_dpu.c b/drivers/gpu/drm/sprd/sprd_dpu.c
-> index 88f4259680f1..db0bcea1d9f4 100644
-> --- a/drivers/gpu/drm/sprd/sprd_dpu.c
-> +++ b/drivers/gpu/drm/sprd/sprd_dpu.c
-> @@ -803,10 +803,8 @@ static int sprd_dpu_context_init(struct sprd_dpu *dpu,
->         }
->
->         ctx->irq = platform_get_irq(pdev, 0);
-> -       if (ctx->irq < 0) {
-> -               dev_err(dev, "failed to get dpu irq\n");
-> +       if (ctx->irq < 0)
-
-Thanks for the patch, it makes sense to me, so
-Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
-
->                 return ctx->irq;
-> -       }
->
->         /* disable and clear interrupts before register dpu IRQ. */
->         writel(0x00, ctx->base + REG_DPU_INT_EN);
-> --
-> 2.34.1
->
->
->
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEtvemxv
+d3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiBTZW50OiBXZWRuZXNkYXks
+IERlY2VtYmVyIDIxLCAyMDIyIDU6NDggUE0NCj4gVG86IEppYUppZSBIbyA8amlhamllLmhvQHN0
+YXJmaXZldGVjaC5jb20+OyBPbGl2aWEgTWFja2FsbA0KPiA8b2xpdmlhQHNlbGVuaWMuY29tPjsg
+SGVyYmVydCBYdSA8aGVyYmVydEBnb25kb3IuYXBhbmEub3JnLmF1PjsgUm9iDQo+IEhlcnJpbmcg
+PHJvYmgrZHRAa2VybmVsLm9yZz47IEtyenlzenRvZiBLb3psb3dza2kNCj4gPGtyenlzenRvZi5r
+b3psb3dza2krZHRAbGluYXJvLm9yZz4NCj4gQ2M6IEVtaWwgUmVubmVyIEJlcnRoaW5nIDxrZXJu
+ZWxAZXNtaWwuZGs+OyBDb25vciBEb29sZXkNCj4gPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29t
+PjsgbGludXgtY3J5cHRvQHZnZXIua2VybmVsLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5l
+bC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiByaXNjdkBsaXN0
+cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMy8zXSByaXNjdjogZHRzOiBz
+dGFyZml2ZTogQWRkIFRSTkcgbm9kZSBmb3IgVmlzaW9uRml2ZSAyDQo+IA0KPiA+ICsNCj4gPiAr
+CQlybmc6IHJuZ0AxNjAwYzAwMCB7DQo+ID4gKwkJCWNvbXBhdGlibGUgPSAic3RhcmZpdmUsamg3
+MTEwLXRybmciOw0KPiA+ICsJCQlyZWcgPSA8MHgwIDB4MTYwMEMwMDAgMHgwIDB4NDAwMD47DQo+
+ID4gKwkJCWNsb2NrcyA9IDwmc3RnY3JnIEpINzExMF9TVEdDTEtfU0VDX0hDTEs+LA0KPiA+ICsJ
+CQkJIDwmc3RnY3JnIEpINzExMF9TVEdDTEtfU0VDX01JU0NBSEI+Ow0KPiA+ICsJCQljbG9jay1u
+YW1lcyA9ICJoY2xrIiwgImFoYiI7DQo+ID4gKwkJCXJlc2V0cyA9IDwmc3RnY3JnDQo+IEpINzEx
+MF9TVEdSU1RfU0VDX1RPUF9IUkVTRVROPjsNCj4gPiArCQkJaW50ZXJydXB0cyA9IDwzMD47DQo+
+ID4gKwkJCXN0YXR1cyA9ICJva2F5IjsNCj4gDQo+IERyb3AuIEl0J3MgYnkgZGVmYXVsdC4NCj4g
+DQpJJ2xsIGZpeCB0aGlzIGluIHYyLg0KDQpUaGFua3MsDQpKaWEgSmllDQo=
