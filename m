@@ -2,197 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B3A6547CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 22:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B91056547DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 22:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiLVVYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 16:24:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S230034AbiLVV0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 16:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiLVVYU (ORCPT
+        with ESMTP id S229630AbiLVV0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 16:24:20 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2080.outbound.protection.outlook.com [40.107.8.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C5513F2F;
-        Thu, 22 Dec 2022 13:24:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OtchnrIg4P//0DC70xokpeqppeDkhdtKfwcga55WBTItcH630fbntigQEiIWJLYGl1CFtSYxQAjnp00OX9OHmqscjDGV6xA/FUgA+yeJQ4vjqf7WK4xFe95rzE1EZngIbQMhq0PV+gZ3cMGATtI5+VXknbaBox7jWA/b6ZEkJAUEDdiaUe+4wPVHwdKVJntASh0SyLQjH1YZRy02JEBeVlbuxiyJWovEqIslUTSVtFB1Cjs5jVLsX4ZEq7U98lHWD55CixlYlzCgsNMFV2uIW6EMUtLr2P34IXyLH0zmk/ZnS/LAZ4JWC+6Xi3o95ZNkqxC7MVto+yKNZM1vUcHduA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FRQbPN4cfNIZ4KiGP4aDPTGboAZM3MuIVJ3CN3KcRjs=;
- b=l1sLHQGirLT++4dvpujEV9Qb2CpaP6g+OICWxqzdkp4T42XVYpRB7Dxb1gvw16WyR32mq1iYdePTMnFGgWTTyv4ujlXmfKU8cO9GR6SyKR8RzfaGXMmIqaBS2t9sKZnYrItsK4pvsYwyoKZipVJx/r9VHCc8FaiaD4emwXQWx2uSPV1/3IZudGDP1abstAu6SaoRGucMmKmEjIrlfNXYhQl8/78KtATwkKcNfobWXx7X6p8Acd0Hr2mfT6kc33jstyboEgYdEg3myisJNdr0sL5NXFeWTHtiYvc8ubH+Gd6Rzt5cnjTryvhhXpnKd8wnSlSqqOnbkIODgatDpJWCsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FRQbPN4cfNIZ4KiGP4aDPTGboAZM3MuIVJ3CN3KcRjs=;
- b=AzN0d+9nfBQ03pc9/dNj69TCap31BlbZCRaNaY0KZQhTbFBuNSAMafq33Fxd7G2g1b9eHxK00jBO72fdQeEg2m80kAKtbmDhfqwKBQwJHyXzQ8COUb7Vm0yNCapIiN3OyAQwgP/v2QKeJq4Fh5I/RAKeSqOXXpJqiBdPzuOSEJMJojv1+lNq6ghp4BR1qDaGFlOHJgw0XxDUXiAlQGSy7wAKNpzpM7bd0Bp62o3TnL+GCCONjzDnn/AoeqFuYBTrzretOpucVRxzKaqjTVi/zVT2GVJMYoMcXHVOqbCPe6JLpBbdaThN22fksC4uj0zvUV3+UwqZKcx955m7sxD3pQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from AS8PR03MB8832.eurprd03.prod.outlook.com (2603:10a6:20b:56e::11)
- by DB9PR03MB7307.eurprd03.prod.outlook.com (2603:10a6:10:22b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.6; Thu, 22 Dec
- 2022 21:24:14 +0000
-Received: from AS8PR03MB8832.eurprd03.prod.outlook.com
- ([fe80::264c:4825:bcb5:e4ac]) by AS8PR03MB8832.eurprd03.prod.outlook.com
- ([fe80::264c:4825:bcb5:e4ac%9]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
- 21:24:14 +0000
-Message-ID: <56310773-a062-0e48-28f7-6d2c5d035fee@seco.com>
-Date:   Thu, 22 Dec 2022 16:24:09 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 0/2] drm: Add component_match_add_of and convert users of
- drm_of_component_match_add
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, Yong Wu <yong.wu@mediatek.com>,
-        alsa-devel@alsa-project.org, etnaviv@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, iommu@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-sunxi@lists.linux.dev
-References: <20221103182222.2247724-1-sean.anderson@seco.com>
- <68562aca-5256-9e4b-bcd5-983e43408a7d@seco.com>
- <2db73405-464f-6980-a7c1-7fe232611331@arm.com>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <2db73405-464f-6980-a7c1-7fe232611331@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BLAPR05CA0016.namprd05.prod.outlook.com
- (2603:10b6:208:36e::22) To AS8PR03MB8832.eurprd03.prod.outlook.com
- (2603:10a6:20b:56e::11)
+        Thu, 22 Dec 2022 16:26:46 -0500
+Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E95101D7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 13:26:45 -0800 (PST)
+Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 23A473F635;
+        Thu, 22 Dec 2022 22:26:44 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64; dts: qcom: sm6350-lena: Flatten gpio-keys pinctrl state
+Date:   Thu, 22 Dec 2022 22:26:34 +0100
+Message-Id: <20221222212634.298135-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR03MB8832:EE_|DB9PR03MB7307:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c39ab5a-158f-4fb4-0b2d-08dae462e017
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: e4xsc/YlrsK118S8OJT2dmoz1pm7IvHTy7e2e2fRJsr9mRfHpTCVp/XOjI9mQ9v6fezkXkTxtleVITqLAXR0+aN/oRz/IXpOwWlqOk6KOqVUU8064M1o22jswawgdDOE/EaDnpT8hBgYAzMYIOVpZp6Q/onCuFFYrY2qb8Rw9Fh9h+C2qLewwRqlIW3gLRWa90yAkhn+ovRxMwuFBJbvvXVU7hhFjGFyVzdj5KE8pGDr8+oOJ2J8liTTSBNi2obrBTZCX6Aqp5bb12a5txcMDiotDLATH5S59fPkNUXERj4qzI5z59+/QCZluRGwxAa4Fv8KsDHXOXXpuZ84A7KvLLiuirSU0gUdeV42AGWQ97sFur7rXcDHlqmH3Zp7TtdFmJAjSx1byNLumSTMBsGcHBGBlOzxqCMAdbbditKdgT30u6TCBfnAmMWl6hyPUzJnof/gZDM3KSlSIApA9vl+9nXj/V5tr/TwetXujpNFUTxQreHSwi5OCyYRmDGVqAiJFeoYR3C5BUUJseFntsaL5ZLcCoH3BqraeiXvhQzR2vyo6TEaJS6V/xBy4CKD2mBsv1KOEZrKh3tuSiJAJ1vaZdv7Wpset4uesk+Zm3Olm0QsIYUq7vCgHJ6IJ/3zbFW2GSqmtnKw0CdA+ftkQJO89Rx3dZXpDH7SOVa6sPQRixT0j+3NUz34PpOrrf6aEunY2M6qQ1FbuU5d9OuSxSTdGeP2hvxJfr9M+/OQgGsWzaEbvN4cT1SuNNdnjqEFsnbQLoPBiweAAqZKVSnJrZOUR3nvE2gFAd5sC8Iy6ZAvvK4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR03MB8832.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(39850400004)(346002)(366004)(376002)(451199015)(52116002)(36756003)(2616005)(966005)(6486002)(478600001)(8936002)(44832011)(7416002)(5660300002)(38350700002)(38100700002)(2906002)(4001150100001)(83380400001)(110136005)(316002)(41300700001)(31696002)(86362001)(66476007)(66556008)(8676002)(66946007)(4326008)(6512007)(31686004)(26005)(186003)(6506007)(53546011)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Yk9JS2JVSTEvSXYxbTA1aFVvNXczU3ZlUENSbWRwVDZCeXZXWC82OFg5N2Vn?=
- =?utf-8?B?a3VHejl4VlYxWGEvdnBuTmZCaHJ5Q1I1ZXg4dVM5MzVuczVNUXhCbFlFNnk1?=
- =?utf-8?B?QUt0RWlKMjhLeVNEcW14QzVoOHIrSXF2OUR1UjkvbXh6WmVDaGNuUG85K0RK?=
- =?utf-8?B?cWxnTy8xbVVQaDFveGJaMjNkUUZQVlNmZUtRdVlSL1NOc3Q0eEovaE8yZUN2?=
- =?utf-8?B?ZGUzUmpRMFFYeDZ6U2gvb1o4ZGY2cXRBMjVjck5xdWx2U1RrTXhEOFVsclJF?=
- =?utf-8?B?b2VYQmR2OXFEczR2cnVOcW9KY1VrV1lXZ3NaZ2FTcWRIeGV3ekVTUXlrUXho?=
- =?utf-8?B?NExYY29na0daelE4dnBEUmZwbDZVaVFYc3ZxbUZ4V2JUMWhSWWxpUnlJeEJD?=
- =?utf-8?B?bVdaMGlYNERtbjloZktjczArTlFyMWg4Y1FxZkxGZ0xTZGI4WmdoTDJjNHVH?=
- =?utf-8?B?bXhkZ2JpbFFpdVl5NFdlRS9MWkh2b3p3S1cwV1B3bkVCOFQ4bzR3YkVXKzE4?=
- =?utf-8?B?OUdyK0VXOGEwckZPYXFxVVR1WU01dTl4WHJQaEI3QjR5TFpCN1UxY3pqZ0xt?=
- =?utf-8?B?cW9wZmdrZHEvZlMrczNXeGZqZ0JmZWVSbDVKMGx2S1lxVyszM1Vnd1dMNlhG?=
- =?utf-8?B?YzRLTUdQV1RQYjFTNEpSTEFaQTFOS09YeXFaemlJRmZWK04zdCtZZkRTKzdz?=
- =?utf-8?B?YjNLSHFwMkRnS3krY2RCczBxYzJpT3JnMXpFMmFQQmFuWnhNMHJQZGQyS1JO?=
- =?utf-8?B?RlN2c0Z0OTVjUjJsdm9TLzBOWkJha1o1dUxLSEtmd3Z6eHBOenVpa2FjRmh0?=
- =?utf-8?B?SWZJMFdzVVlIR3g5NnJ5YUE3WXowTGhwbWlOZVpiUC95R1JsQ21tUGRGeGRq?=
- =?utf-8?B?a2ErOVlXZlpsRGJnZVVQRTRRU0I3QldiOW9wYW45cTlXaWlvM3ltNUlIMHI0?=
- =?utf-8?B?Q0dVY2c5QTQ2bzU5NFV4ZjVxWVl1SVRnKy9pUmtDY3NKK0hlSjhCVnlwQ1Vm?=
- =?utf-8?B?Umc0Z0diakg4dDFEcTNETlgzb0RwSW5aZzJYT1pxRE5DTDlDZURXTDFTd3lG?=
- =?utf-8?B?cHBPSU9qRzBGNXFjVFZJelhVbmhXcnVDWEhVMHVlOWM0bEJMQ1VsYTVzY1JQ?=
- =?utf-8?B?QkNSUklxQ0pEZFlLVXQ2TjFHWUdoNHhqd3B0MmQ4L0tVa2pBcU5QUVUwTW9i?=
- =?utf-8?B?S29oMXp0eG5hVTRpUzR2dEUxdWZsSkg2Z3RSb1c0aitrNHMyeDBNcTJSbFJx?=
- =?utf-8?B?ZzRhTTVGUUMyUWxRM0g0Y25TWEdpR1VaMVVzMDFhd0lTelFqUDRncWdjMTdR?=
- =?utf-8?B?UmVWVi81Q2tEOEp6WEdYT21vbVBWRVgxbm9qUFd0TklqZkZQNytBMnVzbzBE?=
- =?utf-8?B?UytlNno4eE5jYlk1T0l5S3FPN0luYjV2bCtJNGpaYUdCYmU5d0xoeHRmV1pr?=
- =?utf-8?B?aWU3ek9yTXdITFJDZHdYZDVvNVphcU5VaXpTcXNxZGJtM2ZmaXBSeVJ2dFdh?=
- =?utf-8?B?M3JDZitSV1dtakZrZlVIYjBoMGc5ZzlJeEU4QjIwdi9pQmJPZ0pBZ1FXMlVy?=
- =?utf-8?B?RmZSZnlqdWpKOWVqazBZNFNEa1JBaDM0blI3Rm02aytGb0d0SmlqUHczSnBB?=
- =?utf-8?B?Z2IvTWdnQ3BXRTQ2N1JKTGprZXFCNTd2UDhTM0FZSE56aG5LNHFicXFZN0No?=
- =?utf-8?B?K284NThXQzU2b1hOUGg1UEZPd0FsYWcwZi9vSm1qRzlZN09ReTIzRklBc2lv?=
- =?utf-8?B?ZGxYNm9paEZGdzVLODR1RERqWWhWWFAwL0RJaUpod200anc1WHF0UWRacThT?=
- =?utf-8?B?b2ZPWU5kZk5tbGxmOGEyTUJtMzZCVGRzcVptUEZ4bHE3djFoTnhmTWZVSUxF?=
- =?utf-8?B?SUQvaWs5MGtMVi8wb2kwdGhMYzlZSFRTVFRuKzZ0MWcybmg2TFQyOVVSLy9C?=
- =?utf-8?B?RTR5V0pBcHJPKy9rR1BpL0ZXY3pZMzRsVTcwYkF0MDVmWDJKL2RhWVE4OHpI?=
- =?utf-8?B?aXdYOHdQOVBMQ2szMmo1M3o5eFNrMjNPcjFXc0ZDSHROTm5MZGlla1NwQXNr?=
- =?utf-8?B?bk12UHpqNFVRTDNCa0RJR0p6d2xsNyszYXc5UGpLU0M2aWo0ZFhqODMxVWlt?=
- =?utf-8?B?TDR4b1BoL01sNmdsbmUrRjlkc21sM3R0ZTlNZGtKU0pMZFdWeHQvaDVEUjRn?=
- =?utf-8?B?SUE9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c39ab5a-158f-4fb4-0b2d-08dae462e017
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR03MB8832.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 21:24:14.6380
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VggdDe1rLJM2xJnF+ZkDBsNDEJx9zVR8raURblc8QgfN40RPTzRksip5cIDgFLdOqAAJmOFJZs6yGNswF9RBwg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB7307
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+Pinctrl states typically collate multiple related pins.  In the case of
+gpio-keys there's no hardware-defined relation at all except all pins
+representing a key; and especially on Sony's lena board there's only one
+pin regardless. Flatten it similar to other boards [1].
 
-On 12/16/22 12:41, Robin Murphy wrote:
-> On 2022-12-16 17:08, Sean Anderson wrote:
->> On 11/3/22 14:22, Sean Anderson wrote:
->>> This series adds a new function component_match_add_of to simplify the
->>> common case of calling component_match_add_release with
->>> component_release_of and component_compare_of. There is already
->>> drm_of_component_match_add, which allows for a custom compare function.
->>> However, all existing users just use component_compare_of (or an
->>> equivalent).
->>>
->>> I can split the second commit up if that is easier to review.
->>>
->>>
->>> Sean Anderson (2):
->>>    component: Add helper for device nodes
->>>    drm: Convert users of drm_of_component_match_add to
->>>      component_match_add_of
->>>
->>>   .../gpu/drm/arm/display/komeda/komeda_drv.c   |  6 ++--
->>>   drivers/gpu/drm/arm/hdlcd_drv.c               |  9 +-----
->>>   drivers/gpu/drm/arm/malidp_drv.c              | 11 +------
->>>   drivers/gpu/drm/armada/armada_drv.c           | 10 ++++---
->>>   drivers/gpu/drm/drm_of.c                      | 29 +++----------------
->>>   drivers/gpu/drm/etnaviv/etnaviv_drv.c         |  4 +--
->>>   .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |  3 +-
->>>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  3 +-
->>>   drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  4 +--
->>>   drivers/gpu/drm/msm/msm_drv.c                 | 14 ++++-----
->>>   drivers/gpu/drm/sti/sti_drv.c                 |  3 +-
->>>   drivers/gpu/drm/sun4i/sun4i_drv.c             |  3 +-
->>>   drivers/gpu/drm/tilcdc/tilcdc_external.c      | 10 ++-----
->>>   drivers/iommu/mtk_iommu.c                     |  3 +-
->>>   drivers/iommu/mtk_iommu_v1.c                  |  3 +-
->>>   include/drm/drm_of.h                          | 12 --------
->>>   include/linux/component.h                     |  9 ++++++
->>>   sound/soc/codecs/wcd938x.c                    |  6 ++--
->>>   18 files changed, 46 insertions(+), 96 deletions(-)
->>>
->>
->> ping?
->>
->> Should I send a v2 broken up like Mark suggested?
-> 
-> FWIW you'll need to rebase the IOMMU changes on 6.2-rc1 anyway - mtk_iommu stops using component_match_add_release() at all.
-> 
-> Thanks,
-> Robin.
+As a drive-by fix, clean up the label string.
 
-I am preparing v2 of this series, but I don't see these changes on
-drm-next, which seems to have been updated to at least 6.2-rc1. I tried
-searching for these changes on lore [1], but I don't see them there
-either. Do you have a commit hash/lore link for these changes?
+[1]: https://lore.kernel.org/linux-arm-msm/11174eb6-0a9d-7df1-6f06-da4010f76453@linaro.org/
 
---Sean
+Fixes: 2b8bbe985659 ("arm64: dts: qcom: sm6350-lena: Include pm6350 and configure buttons")
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+---
+ .../qcom/sm6350-sony-xperia-lena-pdx213.dts    | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-[1] https://lore.kernel.org/all/?q=dfn%3Adrivers%2Fiommu%2Fmtk_iommu.c+b%3Acomponent
+diff --git a/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts b/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts
+index 94f77d376662..4916d0db5b47 100644
+--- a/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts
++++ b/arch/arm64/boot/dts/qcom/sm6350-sony-xperia-lena-pdx213.dts
+@@ -35,10 +35,10 @@ framebuffer: framebuffer@a0000000 {
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&gpio_keys_state>;
++		pinctrl-0 = <&vol_down_n>;
+ 
+ 		key-volume-down {
+-			label = "volume_down";
++			label = "Volume Down";
+ 			linux,code = <KEY_VOLUMEDOWN>;
+ 			gpios = <&pm6350_gpios 2 GPIO_ACTIVE_LOW>;
+ 		};
+@@ -305,14 +305,12 @@ touchscreen@48 {
+ };
+ 
+ &pm6350_gpios {
+-	gpio_keys_state: gpio-keys-state {
+-		key-volume-down-pins {
+-			pins = "gpio2";
+-			function = PMIC_GPIO_FUNC_NORMAL;
+-			power-source = <0>;
+-			bias-disable;
+-			input-enable;
+-		};
++	vol_down_n: vol-down-n-state {
++		pins = "gpio2";
++		function = PMIC_GPIO_FUNC_NORMAL;
++		power-source = <0>;
++		bias-disable;
++		input-enable;
+ 	};
+ };
+ 
+-- 
+2.39.0
+
