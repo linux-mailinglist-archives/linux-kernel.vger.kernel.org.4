@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC0F654765
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A294654769
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiLVUk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S229743AbiLVUlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:41:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiLVUj5 (ORCPT
+        with ESMTP id S230384AbiLVUlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 15:39:57 -0500
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDF024977;
-        Thu, 22 Dec 2022 12:39:34 -0800 (PST)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1322d768ba7so3828031fac.5;
-        Thu, 22 Dec 2022 12:39:34 -0800 (PST)
+        Thu, 22 Dec 2022 15:41:15 -0500
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B84912AB1;
+        Thu, 22 Dec 2022 12:40:55 -0800 (PST)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-14449b7814bso3853874fac.3;
+        Thu, 22 Dec 2022 12:40:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vpT8R1Rv+Nm5XIJthL+2JjEda6upkRaZYMhbehQvjd8=;
-        b=CZ46ljM1ZFaE0Dk6EFsq0LucUk3sYTbkAKu562F+EkqLG6XAqKUeywq2dR2hUH6QCt
-         Gi1V66oNHfhKJJ5qJi8Dcb+GVBB0yWIVu+wKTg1e3Ew0Yo+hr1bfdDVI0/wnIJMidQ3S
-         px40RHlDdgCUyVc9uI/q1ZtoFVTlKMdQ4s1DEgdXerK+eHDhyPNHgT06220/1UOXD/Cz
-         u3JEg3zutRR/qSVc39uHJJD86eb76upEXry//lCbesU5wc/s6nVjgzIFjl6zlCiCNaY2
-         fJ5ams87cSxKkok70WCn4FfCuew4Dgyn/toUrH6dqVf3t1yz4etmFRqZt1J/6AS0REDn
-         6lpg==
-X-Gm-Message-State: AFqh2kqHE7uElL3YMhij393vIrbOHu2v9qd0eQA8SXZ0VxYY1dQo/1X2
-        lI5Gtnzd4PgIS7Ilcq82hw==
-X-Google-Smtp-Source: AMrXdXuxMOhZ9CB4M20W0IRTPaF1HVPtXYoHPVef1+Ha2t5/a0xpc0Vt0pNC5vAIaFdy1xWar3bFNw==
-X-Received: by 2002:a05:6870:815:b0:143:be53:bc15 with SMTP id fw21-20020a056870081500b00143be53bc15mr3452785oab.17.1671741573613;
-        Thu, 22 Dec 2022 12:39:33 -0800 (PST)
+        bh=jnBz8eeKizZYt94fvfql8mf6HshaTd0IO3owHnhYilk=;
+        b=DShRsq0JccjKfNdqJwFjs3ykqLwBiDWV4tlXWrxipV+4wwvIPomJ6r0TYlCXHfKOVr
+         Gxq/D5cwW3hyh28HpFUXHIAAyIsaxDOXPIieHCpHJTHiTNxkIj+pv2WruUZKymyR+lHM
+         e893VJHXOv0EMmZnubOHAdyjZvaOxWv1uIuzZQI8Y3gVNKwEDq7T86MOJie+noQhQSBg
+         yn66WCI3Ki7WUSpzUB+qvdGJI51w8koGErdN2PRJVcFewoIb5K/bj+4EdG20mG5LBc+2
+         F4NnsJ5M4RGUup3szYXIG/G609hNjyOkpWsMvPWs6TeSjYiDBNmxWtUVFXj0E+/5gd7j
+         CMtw==
+X-Gm-Message-State: AFqh2koYC/Xelz8H3WWlyq60eBY3b9VpsUendB91SyuPIvqz/Pk0YCKs
+        jlY2EmhYoC1PX6qr9b8b9A==
+X-Google-Smtp-Source: AMrXdXvnlaOpydtz121X22CM+JoesTbwPRx+uOohxf0uybdbJWFTqySszg7BdCq+tOUcaIGXrrHbNg==
+X-Received: by 2002:a05:6870:b624:b0:144:6d65:fe49 with SMTP id cm36-20020a056870b62400b001446d65fe49mr3954856oab.7.1671741654285;
+        Thu, 22 Dec 2022 12:40:54 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r42-20020a05687108aa00b0013669485016sm708870oaq.37.2022.12.22.12.39.32
+        by smtp.gmail.com with ESMTPSA id u3-20020a056870304300b00136f3e4bc29sm716880oau.9.2022.12.22.12.40.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 12:39:33 -0800 (PST)
-Received: (nullmailer pid 2080731 invoked by uid 1000);
-        Thu, 22 Dec 2022 20:39:32 -0000
-Date:   Thu, 22 Dec 2022 14:39:32 -0600
+        Thu, 22 Dec 2022 12:40:53 -0800 (PST)
+Received: (nullmailer pid 2082309 invoked by uid 1000);
+        Thu, 22 Dec 2022 20:40:53 -0000
+Date:   Thu, 22 Dec 2022 14:40:53 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: pinctrl: qcom,sm8450-lpass-lpi: add
- input-enable and bias-bus-hold
-Message-ID: <167174157218.2080693.3036143873208701568.robh@kernel.org>
-References: <20221222161420.172824-1-krzysztof.kozlowski@linaro.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCH v1] dt-bindings: memory-controllers: ti,gpmc: fix typo in
+ description
+Message-ID: <167174165175.2082238.1901745325507661042.robh@kernel.org>
+References: <20221222182309.575069-1-colin.foster@in-advantage.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221222161420.172824-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221222182309.575069-1-colin.foster@in-advantage.com>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -72,26 +67,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 22 Dec 2022 17:14:20 +0100, Krzysztof Kozlowski wrote:
-> Allow bias-bus-hold and input-enable properties (already used in SM8450):
+On Thu, 22 Dec 2022 10:23:09 -0800, Colin Foster wrote:
+> Fix typo where 'GPMC driver implements an interrupt controller' instead of
+> 'and interrupt controller'
 > 
->   sm8450-qrd.dtb: pinctrl@3440000: dmic02-default-state: 'oneOf' conditional failed, one must be fixed:
->     'pins' is a required property
->     'function' is a required property
->     'clk-pins', 'data-pins' do not match any of the regexes: 'pinctrl-[0-9]+'
->     'input-enable' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 
-> Compact the properties which are just set to true for readability.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
 > ---
-> 
-> Changes since v1:
-> 1. Add input-enable.
-> ---
->  .../bindings/pinctrl/qcom,sm8450-lpass-lpi-pinctrl.yaml     | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  .../devicetree/bindings/memory-controllers/ti,gpmc.yaml         | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
