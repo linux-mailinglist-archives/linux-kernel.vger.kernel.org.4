@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F074165463F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDE165463D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235465AbiLVTAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 14:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
+        id S231233AbiLVTAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 14:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiLVTAi (ORCPT
+        with ESMTP id S229722AbiLVTAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Dec 2022 14:00:38 -0500
 Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEED4248EE
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:00:35 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bp15so4028822lfb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:00:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5A723304
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:00:36 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id o6so4072968lfi.5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:00:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i+DOrKc/WLcF8tZORAcZxALx+GbVZfz9pT9WtlPUuC4=;
-        b=bcrd/4/xejvVpq2+B3spoa/sbs9+HPre0M1zqgfRI4dfY5E5LLvs2Qh8ug58GxtUlS
-         maVwcN/m+756UH2rwsGldqcaBBY4cgnAT1gpT5r67UCTO8byxZzI1h7F/Z4hd4dD3OMI
-         pwjn8QOFoRBrS4dZPFZk1GAW7LFmW+QMvJqP19G0NtyH5b6iXpL67h0+kV8VaNk2h9DJ
-         cmBkv3h+DmAARSsdpskD45XXO1BfEN/S2Pc4Ypcd8ACZ7ZgK+xOC8vgd2bX7/NUMoEH7
-         eL3xq2h11ZhNpZ2t1u/eQch2Q5E6nCkWHMmqAyYutaSnLMFckQpTER9Z80Z3zQ5VEVF1
-         ky/w==
+        bh=At43IBCLPeuA3Qoij5h6NdcJqc+/xwkW1Zl5H96ba4o=;
+        b=Dqr3iTZ0vzi70FOzZCaSh8aJhEc4QWrvczhL1whAhjZsrmsmNR9XDbERrQ+QdsxnCz
+         NXXUnCyPLEKwSNi/nPioasZlPFKne+ljvHsef3XRmYULCgnlhYHXSTzOnqEza/jON6FP
+         7YvavRGlP0sUCaScGkAG+SDHAJl2mS++2Oq/qQ+zgVykelUeL9x0ATuMuSddjx4f8G2/
+         2TSyGTB4r1kPJ8qSevDi1E2qgvQxatN/QWx+q+rgxp/fnX62hrfw1bM7cWq2YWpQ7eOM
+         BkRzAmRfSliOkhUzDNtFK7zemygu+nen07SRpSIEQ7x+T+AcJu3df9Fr/pqwlU4DxnPf
+         zH7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i+DOrKc/WLcF8tZORAcZxALx+GbVZfz9pT9WtlPUuC4=;
-        b=bGvukt+0yfOe1WOfMlMbdR6T3+c8t6GercNHKgz2bcjadgoWgvt12nfp23EzdLahWV
-         RPgp6p7j1U8RQ9Dse+jVv+9aEAVykVUIOkTN1eLRHAnCLOciyYHbyrezFGvkfk2b/Ir0
-         SpiOy+HBnBRUfuxVViS+/9GAhQnwNuVA+e2hqulF8ZyAobzeknrsZlxksccO5zbt4Zei
-         5s2Hd1ZUje2vZ4Exp89c0kInVCcL0p8rsOyo9d3/xrYkdvL+3SRDgxZGilx16oFQd79H
-         +NczrIdljVRCI3GbHa7S+Vbb2mWMVlYyFWpNGfABIL1F/ke4W2ljvsMemHSJ/pmCgodj
-         E2Zg==
-X-Gm-Message-State: AFqh2koP/8kGwbpkZtTVGL0CcNCsZ93het2Ro6ZCqS3YtuamtyaIVNIt
-        jFBmrxgTWGuKJogkp+Zo2tI=
-X-Google-Smtp-Source: AMrXdXul5bZK1z5ZO6+wV5M1B4ckWgEp7djYnY12RmpTYVoVITC2Do/+E8FCHd6bs5YsCMrtD5VgnQ==
-X-Received: by 2002:a05:6512:b9f:b0:4b5:9914:87f6 with SMTP id b31-20020a0565120b9f00b004b5991487f6mr2162013lfv.66.1671735634218;
+        bh=At43IBCLPeuA3Qoij5h6NdcJqc+/xwkW1Zl5H96ba4o=;
+        b=E8uyLYiMY20S7ctSvjWBe4dLt1ZOdu/EnWBrkkI9sBEIJvb+i8O9PJc2xcfAMQTsqz
+         U/CKiVf3Ylf8rv6Za9r9aF9oEwnDxVBNQceqaUqFQxPmdhx7LIYgwBoTXE48Kyjk9RY8
+         FcDiPjxFPqLcieBILNChHvvJdwoOlFnZDImBDetxzBZJVmcFLuxmKl9AibXe7Oz1d/7y
+         aQpHmKyCVQmj63IfZ8zVFKyK+Q0bS99g50PDTUn4hLcSyzSqrNF8LkL8MvkTvx/XP/C0
+         R0+S5KLAroF3afaavjYlDvDe9YCApihANC5FA9uApcF194wiyrRGodZuTtDEJNl7qvQQ
+         Nngw==
+X-Gm-Message-State: AFqh2krgzRWNrY0hlS/IZ3h3Kw4BeHXTIGV8QyvR8fJvWWDK9Lc7fcFX
+        R0zQQqktZv3tLA8eabVWdnY=
+X-Google-Smtp-Source: AMrXdXvv/k1GbWC8VD6nUe01H19g0QQ6rT7WPMAhGe/HhukHF3+U6/vdOWzIkaKy+1YR/bzzerRjTA==
+X-Received: by 2002:a05:6512:3683:b0:4b5:b46d:e52 with SMTP id d3-20020a056512368300b004b5b46d0e52mr1603684lfs.50.1671735634989;
         Thu, 22 Dec 2022 11:00:34 -0800 (PST)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id c20-20020ac24154000000b0048a8c907fe9sm164209lfi.167.2022.12.22.11.00.33
+        by smtp.gmail.com with ESMTPSA id c20-20020ac24154000000b0048a8c907fe9sm164209lfi.167.2022.12.22.11.00.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 11:00:33 -0800 (PST)
+        Thu, 22 Dec 2022 11:00:34 -0800 (PST)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
@@ -59,11 +59,10 @@ Cc:     linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
         Matthew Wilcox <willy@infradead.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Uladzislau Rezki <urezki@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v3 2/3] mm: vmalloc: Switch to find_unlink_vmap_area() in vm_unmap_ram()
-Date:   Thu, 22 Dec 2022 20:00:21 +0100
-Message-Id: <20221222190022.134380-2-urezki@gmail.com>
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: [PATCH v3 3/3] mm: vmalloc: Replace BUG_ON() by WARN_ON_ONCE()
+Date:   Thu, 22 Dec 2022 20:00:22 +0100
+Message-Id: <20221222190022.134380-3-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221222190022.134380-1-urezki@gmail.com>
 References: <20221222190022.134380-1-urezki@gmail.com>
@@ -79,29 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch from find_vmap_area() to find_unlink_vmap_area() to prevent
-a double access to the vmap_area_lock: one for finding area, second
-time is for unlinking from a tree.
+Currently a vm_unmap_ram() functions triggers a BUG() if an area
+is not found. Replace it by the WARN_ON_ONCE() error message and
+keep machine alive instead of stopping it.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+The worst case is a memory leaking.
+
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- mm/vmalloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/vmalloc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index eb91ecaa7277..70e5000b9d68 100644
+index 70e5000b9d68..09a9b93b32ca 100644
 --- a/mm/vmalloc.c
 +++ b/mm/vmalloc.c
-@@ -2252,7 +2252,7 @@ void vm_unmap_ram(const void *mem, unsigned int count)
- 		return;
+@@ -2253,7 +2253,9 @@ void vm_unmap_ram(const void *mem, unsigned int count)
  	}
  
--	va = find_vmap_area(addr);
-+	va = find_unlink_vmap_area(addr);
- 	BUG_ON(!va);
+ 	va = find_unlink_vmap_area(addr);
+-	BUG_ON(!va);
++	if (WARN_ON_ONCE(!va))
++		return;
++
  	debug_check_no_locks_freed((void *)va->va_start,
  				    (va->va_end - va->va_start));
+ 	free_unmap_vmap_area(va);
 -- 
 2.30.2
 
