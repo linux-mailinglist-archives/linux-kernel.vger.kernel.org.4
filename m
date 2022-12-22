@@ -2,237 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F47654199
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 876076541CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235586AbiLVNRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 08:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
+        id S235653AbiLVNVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbiLVNRr (ORCPT
+        with ESMTP id S235438AbiLVNUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 08:17:47 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5D12B269;
-        Thu, 22 Dec 2022 05:17:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671715055; x=1703251055;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=dfHYhHeVc907lIsPPsA55ZfTAeCOXwi9AQBDrXC8Qxg=;
-  b=hO2rZyE6ZxCarcOcN2i5GVuqg0tur3FZhDsRME/bYtE9XZLhMu3R6Cf2
-   fArgNGcGOIqiqZ0/RL/LiKc3CPTY3IyN0fqlvbuk73ikJonpzdY6K69i0
-   tv9VhFPpOErk8AfM7evZn9g885aVI/WZI6pOWBNVDq/mEy+SAHKe8QEU+
-   ptfAQ6H4tQEsYmZDWXhS3PTLiMNYJrAoPP41RqHLDhgYAzhXiqHq/cb6Y
-   V46yI5FyAxmslcR/yv4Ds2oFli/8IKvINMnLvli2MQ9tvmSHjW57F0z7Z
-   UZUGnzZK5e1przyZVZjwl1bylx86w+kLpaS+N2BoKzCkttXXCkqqfpfQi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="320179190"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="320179190"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 05:17:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="684187507"
-X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
-   d="scan'208";a="684187507"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 22 Dec 2022 05:17:31 -0800
-Message-ID: <0fe978ed-8269-9774-1c40-f8a98c17e838@linux.intel.com>
-Date:   Thu, 22 Dec 2022 15:18:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Content-Language: en-US
-To:     Ladislav Michl <oss-lists@triops.cz>
-Cc:     Jimmy Hu <hhhuuu@google.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20221222072912.1843384-1-hhhuuu@google.com>
- <Y6Qc1p4saGFTdh9n@lenoch>
- <23fe0fe3-f330-b58e-c366-3ac5bd80fe22@linux.intel.com>
- <Y6RFCjbMswOBoKdV@lenoch>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] usb: xhci: Check endpoint is valid before
- dereferencing it
-In-Reply-To: <Y6RFCjbMswOBoKdV@lenoch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 22 Dec 2022 08:20:50 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E2B30569
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 05:19:45 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id z12so1285155qtv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 05:19:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wk3pBbo7oihlFPssQ1OxlDxm4sHEv8p5gdZtboMH1O8=;
+        b=CwiqSPCeU2+iq/h+7Wqn9UbqgHDma4zL0XpdC/uAoJscoDx58v4b3nIuiYo1IL3C8m
+         fb/n6QHlP/tK0xWeewSjDkKnXDPO+ZPG3Svru2MpWQt+ndo8e1cLhw0HwfSElewDp1SI
+         deH/2zs4rzUsYGvGVMzDiHCRfXgIFm09wPAKI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wk3pBbo7oihlFPssQ1OxlDxm4sHEv8p5gdZtboMH1O8=;
+        b=eYdbQDXsn0UI5w/RI1y1cs+y8P7kUnHf5+U8EGqy08Xr1x55+6QLYTowVhsD9i6g56
+         K+LCTbkGvyup0Jy3qEcj3rH6UgRlaVWqwU7aY/3qWDVdh3uaWI6azkjYTKUMlpMdv5Jv
+         6x2UbPvH+xPuHFC2gbVqzuzUS8SKShpuAHAMYGGPNoHb7DTTUcBerCY8qZvtC/AV+gqc
+         UqWKlLUFzzG6KMB4eRazaYOrhR2NqD09rq936tulW816R31puxFXihSUjhrjY12M8RWE
+         5dDveA+yPK0Bjd5qguVjociBbVDIIgLZ8gcjOqRTD537W33StgIuJSd1wyYPvHPxP7dc
+         87nw==
+X-Gm-Message-State: AFqh2kq4m7AOuMG/VWQ79MN7f8kRzSOS5cvxk56YiRcwIlHxTHaw1w9n
+        fl06XpDd+o0z3oRt0dGYumIhRA==
+X-Google-Smtp-Source: AMrXdXuLTbH3P0acYDjpZG3Gox2r2i9YrmLKNqeb32hxqsQpiZugkP0ANftLbKKTmkWlST1SXpZung==
+X-Received: by 2002:a05:622a:400c:b0:3a9:80b6:8347 with SMTP id cf12-20020a05622a400c00b003a980b68347mr7037764qtb.1.1671715183976;
+        Thu, 22 Dec 2022 05:19:43 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id r12-20020ac8520c000000b0039a55f78792sm325244qtn.89.2022.12.22.05.19.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 05:19:43 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Date:   Thu, 22 Dec 2022 08:19:32 -0500
+Message-Id: <318A1705-D3B8-42B1-9BB1-AA9027166C96@joelfernandes.org>
+References: <20221222124010.GC44777@lothringen>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+In-Reply-To: <20221222124010.GC44777@lothringen>
+To:     Frederic Weisbecker <frederic@kernel.org>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.12.2022 13.52, Ladislav Michl wrote:
-> On Thu, Dec 22, 2022 at 01:08:47PM +0200, Mathias Nyman wrote:
->> On 22.12.2022 11.01, Ladislav Michl wrote:
->>> On Thu, Dec 22, 2022 at 07:29:12AM +0000, Jimmy Hu wrote:
->>>> When the host controller is not responding, all URBs queued to all
->>>> endpoints need to be killed. This can cause a kernel panic if we
->>>> dereference an invalid endpoint.
->>>>
->>>> Fix this by using xhci_get_virt_ep() helper to find the endpoint and
->>>> checking if the endpoint is valid before dereferencing it.
->>>>
->>>> [233311.853271] xhci-hcd xhci-hcd.1.auto: xHCI host controller not responding, assume dead
->>>> [233311.853393] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000e8
->>>>
->>>> [233311.853964] pc : xhci_hc_died+0x10c/0x270
->>>> [233311.853971] lr : xhci_hc_died+0x1ac/0x270
->>>>
->>>> [233311.854077] Call trace:
->>>> [233311.854085]  xhci_hc_died+0x10c/0x270
->>>> [233311.854093]  xhci_stop_endpoint_command_watchdog+0x100/0x1a4
->>>> [233311.854105]  call_timer_fn+0x50/0x2d4
->>>> [233311.854112]  expire_timers+0xac/0x2e4
->>>> [233311.854118]  run_timer_softirq+0x300/0xabc
->>>> [233311.854127]  __do_softirq+0x148/0x528
->>>> [233311.854135]  irq_exit+0x194/0x1a8
->>>> [233311.854143]  __handle_domain_irq+0x164/0x1d0
->>>> [233311.854149]  gic_handle_irq.22273+0x10c/0x188
->>>> [233311.854156]  el1_irq+0xfc/0x1a8
->>>> [233311.854175]  lpm_cpuidle_enter+0x25c/0x418 [msm_pm]
->>>> [233311.854185]  cpuidle_enter_state+0x1f0/0x764
->>>> [233311.854194]  do_idle+0x594/0x6ac
->>>> [233311.854201]  cpu_startup_entry+0x7c/0x80
->>>> [233311.854209]  secondary_start_kernel+0x170/0x198
->>>>
->>>> Fixes: 50e8725e7c42 ("xhci: Refactor command watchdog and fix split string.")
->>>> Cc: stable@vger.kernel.org
->>>> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
->>>> ---
->>>>    drivers/usb/host/xhci-ring.c | 5 ++++-
->>>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->>>> index ddc30037f9ce..f5b0e1ce22af 100644
->>>> --- a/drivers/usb/host/xhci-ring.c
->>>> +++ b/drivers/usb/host/xhci-ring.c
->>>> @@ -1169,7 +1169,10 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>>>    	struct xhci_virt_ep *ep;
->>>>    	struct xhci_ring *ring;
->>>> -	ep = &xhci->devs[slot_id]->eps[ep_index];
->>>> +	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
->>>> +	if (!ep)
->>>> +		return;
->>>> +
->>>
->>> xhci_get_virt_ep also adds check for slot_id == 0. It changes behaviour,
->>> do we really want to skip that slot? Original code went from 0 to
->>> MAX_HC_SLOTS-1.
->>>
->>> It seems to be off by one to me. Am I missing anything?
->>
->> slot_id 0 is always invalid, so this is a good change.
-> 
-> I see. Now reading more carefully:
-> #define HCS_MAX_SLOTS(p)	(((p) >> 0) & 0xff)
-> #define MAX_HC_SLOTS		256
-> So the loop should go:
-> 	for (i = 1; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++)
-
-yes
-
-> 
->>> Also, what about passing ep directly to xhci_kill_endpoint_urbs
->>> and do the check in xhci_hc_died? Not even compile tested:
->>
->> passing ep to a function named kill_endpoint_urbs() sound like the
->> right thing to do, but as a generic change.
->>
->> I think its a good idea to first do a targeted fix for this null pointer
->> issue that we can send to stable fist.
-> 
-> Agree. But I still do not understand the root cause. There is a check
-> for NULL xhci->devs[i] already, so patch does not add much more, except
-> for test for slot_id == 0. And the eps array is just array of
-> struct xhci_virt_ep, not a pointers to them, so &xhci->devs[i]->eps[j]
-> should be always valid pointer. However struct xhci_ring in each eps
-> is allocated and not protected by any lock here. Is that correct?
-
-I think root cause is that freeing xhci->devs[i] and including rings isn't
-protected by the lock, this happens in xhci_free_virt_device() called by
-xhci_free_dev(), which in turn may be called by usbcore at any time
-
-So xhci->devs[i] might just suddenly disappear
-
-Patch just checks more often if xhci->devs[i] is valid, between every endpoint.
-So the race between xhci_free_virt_device() and xhci_kill_endpoint_urbs()
-doesn't trigger null pointer deref as easily.
 
 
-> 
->>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->>> index ddc30037f9ce..5dac483c562a 100644
->>> --- a/drivers/usb/host/xhci-ring.c
->>> +++ b/drivers/usb/host/xhci-ring.c
->>> @@ -1162,14 +1162,12 @@ static void xhci_kill_ring_urbs(struct xhci_hcd *xhci, struct xhci_ring *ring)
->>>    }
->>>    static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>> -		int slot_id, int ep_index)
->>> +		struct xhci_virt_ep *ep)
->>>    {
->>>    	struct xhci_td *cur_td;
->>>    	struct xhci_td *tmp;
->>> -	struct xhci_virt_ep *ep;
->>>    	struct xhci_ring *ring;
->>> -	ep = &xhci->devs[slot_id]->eps[ep_index];
->>>    	if ((ep->ep_state & EP_HAS_STREAMS) ||
->>>    			(ep->ep_state & EP_GETTING_NO_STREAMS)) {
->>>    		int stream_id;
->>> @@ -1180,18 +1178,12 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>>    			if (!ring)
->>>    				continue;
->>> -			xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
->>> -					"Killing URBs for slot ID %u, ep index %u, stream %u",
->>> -					slot_id, ep_index, stream_id);
->>>    			xhci_kill_ring_urbs(xhci, ring);
->>>    		}
->>>    	} else {
->>>    		ring = ep->ring;
->>>    		if (!ring)
->>>    			return;
->>> -		xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
->>> -				"Killing URBs for slot ID %u, ep index %u",
->>> -				slot_id, ep_index);
->>>    		xhci_kill_ring_urbs(xhci, ring);
->>>    	}
->>> @@ -1217,6 +1209,7 @@ static void xhci_kill_endpoint_urbs(struct xhci_hcd *xhci,
->>>    void xhci_hc_died(struct xhci_hcd *xhci)
->>>    {
->>>    	int i, j;
->>> +	struct xhci_virt_ep *ep;
->>>    	if (xhci->xhc_state & XHCI_STATE_DYING)
->>>    		return;
->>> @@ -1227,11 +1220,14 @@ void xhci_hc_died(struct xhci_hcd *xhci)
->>>    	xhci_cleanup_command_queue(xhci);
->>>    	/* return any pending urbs, remove may be waiting for them */
->>> -	for (i = 0; i <= HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
->>> +	for (i = 0; i < HCS_MAX_SLOTS(xhci->hcs_params1); i++) {
->>>    		if (!xhci->devs[i])
->>>    			continue;
->>> -		for (j = 0; j < 31; j++)
->>> -			xhci_kill_endpoint_urbs(xhci, i, j);
->>> +		for (j = 0; j < EP_CTX_PER_DEV; j++) {
->>> +			ep = &xhci->devs[i]->eps[j];
->>> +			if (ep)
->>> +				xhci_kill_endpoint_urbs(xhci, ep);
->>> +		}
->>
->> This does loop a bit more than the existing code.
->> With this change its always HCS_MAX_SLOTS * EP_CTX_PER_DEV.
->> Previously best case was just HCS_MAX_SLOTS.
-> 
-> No, that's just the same:
+> On Dec 22, 2022, at 7:40 AM, Frederic Weisbecker <frederic@kernel.org> wro=
+te:
+>=20
+> =EF=BB=BFOn Wed, Dec 21, 2022 at 12:11:42PM -0500, Mathieu Desnoyers wrote=
+:
+>>> On 2022-12-21 06:59, Frederic Weisbecker wrote:
+>>> On Tue, Dec 20, 2022 at 10:34:19PM -0500, Mathieu Desnoyers wrote:
+>> [...]
+>>>>=20
+>>>> The memory ordering constraint I am concerned about here is:
+>>>>=20
+>>>>  * [...] In addition,
+>>>>  * each CPU having an SRCU read-side critical section that extends beyo=
+nd
+>>>>  * the return from synchronize_srcu() is guaranteed to have executed a
+>>>>  * full memory barrier after the beginning of synchronize_srcu() and be=
+fore
+>>>>  * the beginning of that SRCU read-side critical section. [...]
+>>>>=20
+>>>> So if we have a SRCU read-side critical section that begins after the b=
+eginning
+>>>> of synchronize_srcu, but before its first memory barrier, it would miss=
+ the
+>>>> guarantee that the full memory barrier is issued before the beginning o=
+f that
+>>>> SRCU read-side critical section. IOW, that memory barrier needs to be a=
+t the
+>>>> very beginning of the grace period.
+>>>=20
+>>> I'm confused, what's wrong with this ?
+>>>=20
+>>> UPDATER                  READER
+>>> -------                  ------
+>>> STORE X =3D 1              STORE srcu_read_lock++
+>>> // rcu_seq_snap()        smp_mb()
+>>> smp_mb()                 READ X
+>>> // scans
+>>> READ srcu_read_lock
+>>=20
+>> What you refer to here is only memory ordering of the store to X and load=
 
-you're right, incorrectly read that your patch deleted the
-"if (!xhci->devs[i]) continue;" lines.
+>> from X wrt loading/increment of srcu_read_lock, which is internal to the
+>> srcu implementation. If we really want to model the provided high-level
+>> memory ordering guarantees, we should consider a scenario where SRCU is u=
+sed
+>> for its memory ordering properties to synchronize other variables.
+>>=20
+>> I'm concerned about the following Dekker scenario, where synchronize_srcu=
+()
+>> and srcu_read_lock/unlock would be used instead of memory barriers:
+>>=20
+>> Initial state: X =3D 0, Y =3D 0
+>>=20
+>> Thread A                   Thread B
+>> ---------------------------------------------
+>> STORE X =3D 1                STORE Y =3D 1
+>> synchronize_srcu()
+>>                           srcu_read_lock()
+>>                           r1 =3D LOAD X
+>>                           srcu_read_unlock()
+>> r0 =3D LOAD Y
+>>=20
+>> BUG_ON(!r0 && !r1)
+>>=20
+>> So in the synchronize_srcu implementation, there appears to be two
+>> major scenarios: either srcu_gp_start_if_needed starts a gp or expedited g=
+p,
+>> or it uses an already started gp/expedited gp. When snapshotting with
+>> rcu_seq_snap, the fact that the memory barrier is after the ssp->srcu_gp_=
+seq
+>> load means that it does not order prior memory accesses before that load.=
 
-Thanks
--Mathias
+>> This sequence value is then used to identify which gp_seq to wait for whe=
+n
+>> piggy-backing on another already-started gp. I worry about reordering
+>> between STORE X =3D 1 and load of ssp->srcu_gp_seq, which is then used to=
+
+>> piggy-back on an already-started gp.
+>>=20
+>> I suspect that the implicit barrier in srcu_read_lock() invoked at the
+>> beginning of srcu_gp_start_if_needed() is really the barrier that makes
+>> all this behave as expected. But without documentation it's rather hard t=
+o
+>> follow.
+>=20
+> Oh ok I see now. It might be working that way by accident or on forgotten
+> purpose. In any case, we really want to add a comment above that
+> __srcu_read_lock_nmisafe() call.
+
+Agreed on the analysis and the need for comments, thanks!
+
+I think we also ought to document some more cases like, how the memory barri=
+ers here relate to the other memory barrier A inside the scan loop. But I gu=
+ess for me I need to understand the GP guarantee ordering first before attem=
+pting documenting that aspect. Oh well, thank God for holidays. ;-)
+
+Thanks,
+
+ - Joel
+
+
+
+>=20
