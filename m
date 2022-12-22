@@ -2,33 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C636653CCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AA9653CD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbiLVILi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 03:11:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S234968AbiLVIMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 03:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiLVILe (ORCPT
+        with ESMTP id S229567AbiLVIMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 03:11:34 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E607218B1;
-        Thu, 22 Dec 2022 00:11:30 -0800 (PST)
+        Thu, 22 Dec 2022 03:12:52 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DD72229F;
+        Thu, 22 Dec 2022 00:12:51 -0800 (PST)
 Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
         (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DE0D124E36E;
-        Thu, 22 Dec 2022 16:11:16 +0800 (CST)
-Received: from EXMBX063.cuchost.com (172.16.7.63) by EXMBX165.cuchost.com
+        by ex01.ufhost.com (Postfix) with ESMTP id 9C3D324E342;
+        Thu, 22 Dec 2022 16:12:44 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
  (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 22 Dec
- 2022 16:11:16 +0800
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX063.cuchost.com
- (172.16.6.63) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 22 Dec
- 2022 16:11:16 +0800
+ 2022 16:12:44 +0800
 Received: from EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4]) by
  EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4%16]) with mapi id
- 15.00.1497.044; Thu, 22 Dec 2022 16:11:16 +0800
+ 15.00.1497.044; Thu, 22 Dec 2022 16:12:44 +0800
 From:   JiaJie Ho <jiajie.ho@starfivetech.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Olivia Mackall <olivia@selenic.com>,
@@ -41,15 +38,15 @@ CC:     Emil Renner Berthing <kernel@esmil.dk>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: RE: [PATCH 3/3] riscv: dts: starfive: Add TRNG node for VisionFive 2
-Thread-Topic: [PATCH 3/3] riscv: dts: starfive: Add TRNG node for VisionFive 2
-Thread-Index: AQHZFRwZSE/lt9EBpUOGdiBQvIWXRa53klOAgAH8thA=
-Date:   Thu, 22 Dec 2022 08:11:16 +0000
-Message-ID: <ee96fa9cdf9442169dab277647a3bae3@EXMBX168.cuchost.com>
+Subject: RE: [PATCH 1/3] dt-bindings: rng: Add StarFive TRNG module
+Thread-Topic: [PATCH 1/3] dt-bindings: rng: Add StarFive TRNG module
+Thread-Index: AQHZFRxUoXQEQibksUW9iWQOWN1q6q53kkEAgAH9dkA=
+Date:   Thu, 22 Dec 2022 08:12:44 +0000
+Message-ID: <3fe5be6168b94f62b2c9ce078e5e954a@EXMBX168.cuchost.com>
 References: <20221221090819.1259443-1-jiajie.ho@starfivetech.com>
- <20221221090819.1259443-4-jiajie.ho@starfivetech.com>
- <cbbf719b-a027-f91b-bd2c-6e6b43447b97@linaro.org>
-In-Reply-To: <cbbf719b-a027-f91b-bd2c-6e6b43447b97@linaro.org>
+ <20221221090819.1259443-2-jiajie.ho@starfivetech.com>
+ <3a26c733-6573-5954-f4e5-8a1f8abba140@linaro.org>
+In-Reply-To: <3a26c733-6573-5954-f4e5-8a1f8abba140@linaro.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -60,8 +57,8 @@ x-yovoleruleagent: yovoleflag
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,13 +75,18 @@ b3psb3dza2krZHRAbGluYXJvLm9yZz4NCj4gQ2M6IEVtaWwgUmVubmVyIEJlcnRoaW5nIDxrZXJu
 ZWxAZXNtaWwuZGs+OyBDb25vciBEb29sZXkNCj4gPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29t
 PjsgbGludXgtY3J5cHRvQHZnZXIua2VybmVsLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5l
 bC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiByaXNjdkBsaXN0
-cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMy8zXSByaXNjdjogZHRzOiBz
-dGFyZml2ZTogQWRkIFRSTkcgbm9kZSBmb3IgVmlzaW9uRml2ZSAyDQo+IA0KPiA+ICsNCj4gPiAr
-CQlybmc6IHJuZ0AxNjAwYzAwMCB7DQo+ID4gKwkJCWNvbXBhdGlibGUgPSAic3RhcmZpdmUsamg3
-MTEwLXRybmciOw0KPiA+ICsJCQlyZWcgPSA8MHgwIDB4MTYwMEMwMDAgMHgwIDB4NDAwMD47DQo+
-ID4gKwkJCWNsb2NrcyA9IDwmc3RnY3JnIEpINzExMF9TVEdDTEtfU0VDX0hDTEs+LA0KPiA+ICsJ
-CQkJIDwmc3RnY3JnIEpINzExMF9TVEdDTEtfU0VDX01JU0NBSEI+Ow0KPiA+ICsJCQljbG9jay1u
-YW1lcyA9ICJoY2xrIiwgImFoYiI7DQo+ID4gKwkJCXJlc2V0cyA9IDwmc3RnY3JnDQo+IEpINzEx
-MF9TVEdSU1RfU0VDX1RPUF9IUkVTRVROPjsNCj4gPiArCQkJaW50ZXJydXB0cyA9IDwzMD47DQo+
-ID4gKwkJCXN0YXR1cyA9ICJva2F5IjsNCj4gDQo+IERyb3AuIEl0J3MgYnkgZGVmYXVsdC4NCj4g
-DQpJJ2xsIGZpeCB0aGlzIGluIHYyLg0KDQpUaGFua3MsDQpKaWEgSmllDQo=
+cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMS8zXSBkdC1iaW5kaW5nczog
+cm5nOiBBZGQgU3RhckZpdmUgVFJORyBtb2R1bGUNCj4gDQo+IE9uIDIxLzEyLzIwMjIgMTA6MDgs
+IEppYSBKaWUgSG8gd3JvdGU6DQo+ID4gQWRkIGRvY3VtZW50YXRpb24gdG8gZGVzY3JpYmUgU3Rh
+cmZpdmUgdHJ1ZSByYW5kb20gbnVtYmVyIGdlbmVyYXRvcg0KPiA+IG1vZHVsZS4NCj4gPg0KPiA+
+IENvLWRldmVsb3BlZC1ieTogSmVubnkgWmhhbmcgPGplbm55LnpoYW5nQHN0YXJmaXZldGVjaC5j
+b20+DQo+ID4gU2lnbmVkLW9mZi1ieTogSmVubnkgWmhhbmcgPGplbm55LnpoYW5nQHN0YXJmaXZl
+dGVjaC5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTogSmlhIEppZSBIbyA8amlhamllLmhvQHN0YXJm
+aXZldGVjaC5jb20+DQo+ID4gLS0tDQo+ID4gIC4uLi9iaW5kaW5ncy9ybmcvc3RhcmZpdmUsamg3
+MTEwLXRybmcueWFtbCAgICB8IDU1ICsrKysrKysrKysrKysrKysrKysNCj4gPiAgMSBmaWxlIGNo
+YW5nZWQsIDU1IGluc2VydGlvbnMoKykNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4gRG9j
+dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3JuZy9zdGFyZml2ZSxqaDcxMTAtdHJuZy55
+YW1sDQo+ID4NCj4gDQo+IA0KPiBSZXZpZXdlZC1ieTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6
+eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiANCkhpIEtyenlzenRvZiwNCg0KVGhhbmsg
+eW91IGZvciBzcGVuZGluZyB0aW1lIHJldmlld2luZyB0aGlzIHBhdGNoLg0KDQpCZXN0IHJlZ2Fy
+ZHMsDQpKaWEgSmllDQoNCg==
