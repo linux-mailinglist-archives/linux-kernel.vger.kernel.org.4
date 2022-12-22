@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6974654623
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5CA0654622
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbiLVSv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:51:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S230422AbiLVSvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:51:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiLVSvM (ORCPT
+        with ESMTP id S230181AbiLVSvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:51:12 -0500
+        Thu, 22 Dec 2022 13:51:13 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44FB022B2A
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:51:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C44A322B0A
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:51:11 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 212FE1FB;
-        Thu, 22 Dec 2022 10:51:51 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0892153B;
+        Thu, 22 Dec 2022 10:51:52 -0800 (PST)
 Received: from e120937-lin.. (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE9633FA32;
-        Thu, 22 Dec 2022 10:51:08 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B5383FA32;
+        Thu, 22 Dec 2022 10:51:10 -0800 (PST)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
         f.fainelli@gmail.com, etienne.carriere@linaro.org,
         vincent.guittot@linaro.org, Ludvig.Parsson@axis.com,
         cristian.marussi@arm.com
-Subject: [PATCH 3/9] firmware: arm_scmi: Move protocol registration helpers
-Date:   Thu, 22 Dec 2022 18:50:43 +0000
-Message-Id: <20221222185049.737625-4-cristian.marussi@arm.com>
+Subject: [PATCH 4/9] firmware: arm_scmi: Add common notifier helpers
+Date:   Thu, 22 Dec 2022 18:50:44 +0000
+Message-Id: <20221222185049.737625-5-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221222185049.737625-1-cristian.marussi@arm.com>
 References: <20221222185049.737625-1-cristian.marussi@arm.com>
@@ -43,210 +43,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move protocol registration helpers and logic out of bus.c compilation
-unit into driver.c.
-
-No functional change.
+Add a pair of notifier chains and generic empty notifier callbacks: still
+currently unused but they will be used to act properly on device request
+and creation events.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- drivers/firmware/arm_scmi/bus.c    | 68 ------------------------------
- drivers/firmware/arm_scmi/common.h |  3 --
- drivers/firmware/arm_scmi/driver.c | 67 +++++++++++++++++++++++++++++
- 3 files changed, 67 insertions(+), 71 deletions(-)
+ drivers/firmware/arm_scmi/bus.c    |  6 ++-
+ drivers/firmware/arm_scmi/common.h |  5 ++
+ drivers/firmware/arm_scmi/driver.c | 83 +++++++++++++++++++++++++++++-
+ 3 files changed, 92 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
-index 35bb70724d44..089957f5fb9b 100644
+index 089957f5fb9b..bed566f58029 100644
 --- a/drivers/firmware/arm_scmi/bus.c
 +++ b/drivers/firmware/arm_scmi/bus.c
-@@ -16,8 +16,6 @@
+@@ -15,6 +15,9 @@
+ 
  #include "common.h"
  
++BLOCKING_NOTIFIER_HEAD(scmi_requested_devices_nh);
++EXPORT_SYMBOL_GPL(scmi_requested_devices_nh);
++
  static DEFINE_IDA(scmi_bus_id);
--static DEFINE_IDR(scmi_protocols);
--static DEFINE_SPINLOCK(protocol_lock);
  
  static const struct scmi_device_id *
- scmi_dev_match_id(struct scmi_device *scmi_dev, struct scmi_driver *scmi_drv)
-@@ -76,30 +74,6 @@ struct scmi_device *scmi_child_dev_find(struct device *parent,
- 	return to_scmi_dev(dev);
+@@ -94,12 +97,13 @@ static void scmi_dev_remove(struct device *dev)
+ 		scmi_drv->remove(scmi_dev);
  }
  
--const struct scmi_protocol *scmi_protocol_get(int protocol_id)
--{
--	const struct scmi_protocol *proto;
--
--	proto = idr_find(&scmi_protocols, protocol_id);
--	if (!proto || !try_module_get(proto->owner)) {
--		pr_warn("SCMI Protocol 0x%x not found!\n", protocol_id);
--		return NULL;
--	}
--
--	pr_debug("Found SCMI Protocol 0x%x\n", protocol_id);
--
--	return proto;
--}
--
--void scmi_protocol_put(int protocol_id)
--{
--	const struct scmi_protocol *proto;
--
--	proto = idr_find(&scmi_protocols, protocol_id);
--	if (proto)
--		module_put(proto->owner);
--}
--
- static int scmi_dev_probe(struct device *dev)
- {
- 	struct scmi_driver *scmi_drv = to_scmi_driver(dev->driver);
-@@ -232,48 +206,6 @@ void scmi_set_handle(struct scmi_device *scmi_dev)
- 		scmi_device_link_add(&scmi_dev->dev, scmi_dev->handle->dev);
- }
+-static struct bus_type scmi_bus_type = {
++struct bus_type scmi_bus_type = {
+ 	.name =	"scmi_protocol",
+ 	.match = scmi_dev_match,
+ 	.probe = scmi_dev_probe,
+ 	.remove = scmi_dev_remove,
+ };
++EXPORT_SYMBOL_GPL(scmi_bus_type);
  
--int scmi_protocol_register(const struct scmi_protocol *proto)
--{
--	int ret;
--
--	if (!proto) {
--		pr_err("invalid protocol\n");
--		return -EINVAL;
--	}
--
--	if (!proto->instance_init) {
--		pr_err("missing init for protocol 0x%x\n", proto->id);
--		return -EINVAL;
--	}
--
--	spin_lock(&protocol_lock);
--	ret = idr_alloc(&scmi_protocols, (void *)proto,
--			proto->id, proto->id + 1, GFP_ATOMIC);
--	spin_unlock(&protocol_lock);
--	if (ret != proto->id) {
--		pr_err("unable to allocate SCMI idr slot for 0x%x - err %d\n",
--		       proto->id, ret);
--		return ret;
--	}
--
--	pr_debug("Registered SCMI Protocol 0x%x\n", proto->id);
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(scmi_protocol_register);
--
--void scmi_protocol_unregister(const struct scmi_protocol *proto)
--{
--	spin_lock(&protocol_lock);
--	idr_remove(&scmi_protocols, proto->id);
--	spin_unlock(&protocol_lock);
--
--	pr_debug("Unregistered SCMI Protocol 0x%x\n", proto->id);
--
--	return;
--}
--EXPORT_SYMBOL_GPL(scmi_protocol_unregister);
--
- static int __scmi_devices_unregister(struct device *dev, void *data)
- {
- 	struct scmi_device *scmi_dev = to_scmi_dev(dev);
+ int scmi_driver_register(struct scmi_driver *driver, struct module *owner,
+ 			 const char *mod_name)
 diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
-index 136bfd30f99c..6a38244494fd 100644
+index 6a38244494fd..7ddae90eb945 100644
 --- a/drivers/firmware/arm_scmi/common.h
 +++ b/drivers/firmware/arm_scmi/common.h
-@@ -106,9 +106,6 @@ void scmi_setup_protocol_implemented(const struct scmi_protocol_handle *ph,
+@@ -105,6 +105,11 @@ void scmi_setup_protocol_implemented(const struct scmi_protocol_handle *ph,
+ 
  int __init scmi_bus_init(void);
  void __exit scmi_bus_exit(void);
++extern struct bus_type scmi_bus_type;
++
++#define SCMI_BUS_NOTIFY_DEVICE_REQUEST		0
++#define SCMI_BUS_NOTIFY_DEVICE_UNREQUEST	1
++extern struct blocking_notifier_head scmi_requested_devices_nh;
  
--const struct scmi_protocol *scmi_protocol_get(int protocol_id);
--void scmi_protocol_put(int protocol_id);
--
  int scmi_protocol_acquire(const struct scmi_handle *handle, u8 protocol_id);
  void scmi_protocol_release(const struct scmi_handle *handle, u8 protocol_id);
- 
 diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index f85b34e69d01..d1e32ea6d90a 100644
+index d1e32ea6d90a..62760bed1645 100644
 --- a/drivers/firmware/arm_scmi/driver.c
 +++ b/drivers/firmware/arm_scmi/driver.c
-@@ -51,6 +51,9 @@ enum scmi_error_codes {
- 	SCMI_ERR_PROTOCOL = -10,/* Protocol Error */
+@@ -150,6 +150,9 @@ struct scmi_protocol_instance {
+  * @notify_priv: Pointer to private data structure specific to notifications.
+  * @node: List head
+  * @users: Number of users of this instance
++ * @bus_nb: A notifier to listen for device bind/unbind on the scmi bus
++ * @dev_req_nb: A notifier to listen for device request/unrequest on the scmi
++ *		bus
+  */
+ struct scmi_info {
+ 	struct device *dev;
+@@ -169,9 +172,13 @@ struct scmi_info {
+ 	void *notify_priv;
+ 	struct list_head node;
+ 	int users;
++	struct notifier_block bus_nb;
++	struct notifier_block dev_req_nb;
  };
  
-+static DEFINE_IDR(scmi_protocols);
-+static DEFINE_SPINLOCK(protocol_lock);
-+
- /* List of all SCMI devices active in system */
- static LIST_HEAD(scmi_list);
- /* Protection for the entire list */
-@@ -194,6 +197,70 @@ static inline int scmi_to_linux_errno(int errno)
- 	return -EIO;
+ #define handle_to_scmi_info(h)	container_of(h, struct scmi_info, handle)
++#define bus_nb_to_scmi_info(nb)	container_of(nb, struct scmi_info, bus_nb)
++#define req_nb_to_scmi_info(nb)	container_of(nb, struct scmi_info, dev_req_nb)
+ 
+ static const int scmi_linux_errmap[] = {
+ 	/* better than switch case as long as return value is continuous */
+@@ -2509,6 +2516,60 @@ static void scmi_cleanup_txrx_channels(struct scmi_info *info)
+ 	scmi_cleanup_channels(info, &info->rx_idr);
  }
  
-+static const struct scmi_protocol *scmi_protocol_get(int protocol_id)
++static int scmi_bus_notifier(struct notifier_block *nb,
++			     unsigned long action, void *data)
 +{
-+	const struct scmi_protocol *proto;
++	struct scmi_info *info = bus_nb_to_scmi_info(nb);
++	struct scmi_device *sdev = to_scmi_dev(data);
 +
-+	proto = idr_find(&scmi_protocols, protocol_id);
-+	if (!proto || !try_module_get(proto->owner)) {
-+		pr_warn("SCMI Protocol 0x%x not found!\n", protocol_id);
-+		return NULL;
++	/* Skip transport devices and devices of different SCMI instances */
++	if (!strncmp(sdev->name, "__scmi_transport_device", 23) ||
++	    sdev->dev.parent != info->dev)
++		return NOTIFY_DONE;
++
++	switch (action) {
++	case BUS_NOTIFY_BIND_DRIVER:
++		break;
++	case BUS_NOTIFY_UNBOUND_DRIVER:
++		break;
++	default:
++		return NOTIFY_DONE;
 +	}
 +
-+	pr_debug("Found SCMI Protocol 0x%x\n", protocol_id);
++	dev_dbg(info->dev, "Device %s (%s) is now %s\n", dev_name(&sdev->dev),
++		sdev->name, action == BUS_NOTIFY_BIND_DRIVER ?
++		"about to be BOUND." : "UNBOUND.");
 +
-+	return proto;
++	return NOTIFY_OK;
 +}
 +
-+static void scmi_protocol_put(int protocol_id)
++static int scmi_device_request_notifier(struct notifier_block *nb,
++					unsigned long action, void *data)
 +{
-+	const struct scmi_protocol *proto;
++	struct device_node *np;
++	struct scmi_device_id *id_table = data;
++	struct scmi_info *info = req_nb_to_scmi_info(nb);
 +
-+	proto = idr_find(&scmi_protocols, protocol_id);
-+	if (proto)
-+		module_put(proto->owner);
-+}
++	np = idr_find(&info->active_protocols, id_table->protocol_id);
++	if (!np)
++		return NOTIFY_DONE;
 +
-+int scmi_protocol_register(const struct scmi_protocol *proto)
-+{
-+	int ret;
++	dev_dbg(info->dev, "%sRequested device (%s) for protocol 0x%x\n",
++		action == SCMI_BUS_NOTIFY_DEVICE_REQUEST ? "" : "UN-",
++		id_table->name, id_table->protocol_id);
 +
-+	if (!proto) {
-+		pr_err("invalid protocol\n");
-+		return -EINVAL;
++	switch (action) {
++	case SCMI_BUS_NOTIFY_DEVICE_REQUEST:
++		break;
++	case SCMI_BUS_NOTIFY_DEVICE_UNREQUEST:
++		break;
++	default:
++		return NOTIFY_DONE;
 +	}
 +
-+	if (!proto->instance_init) {
-+		pr_err("missing init for protocol 0x%x\n", proto->id);
-+		return -EINVAL;
-+	}
-+
-+	spin_lock(&protocol_lock);
-+	ret = idr_alloc(&scmi_protocols, (void *)proto,
-+			proto->id, proto->id + 1, GFP_ATOMIC);
-+	spin_unlock(&protocol_lock);
-+	if (ret != proto->id) {
-+		pr_err("unable to allocate SCMI idr slot for 0x%x - err %d\n",
-+		       proto->id, ret);
-+		return ret;
-+	}
-+
-+	pr_debug("Registered SCMI Protocol 0x%x\n", proto->id);
-+
-+	return 0;
++	return NOTIFY_OK;
 +}
-+EXPORT_SYMBOL_GPL(scmi_protocol_register);
 +
-+void scmi_protocol_unregister(const struct scmi_protocol *proto)
-+{
-+	spin_lock(&protocol_lock);
-+	idr_remove(&scmi_protocols, proto->id);
-+	spin_unlock(&protocol_lock);
-+
-+	pr_debug("Unregistered SCMI Protocol 0x%x\n", proto->id);
-+}
-+EXPORT_SYMBOL_GPL(scmi_protocol_unregister);
-+
- void scmi_notification_instance_data_set(const struct scmi_handle *handle,
- 					 void *priv)
+ static int scmi_probe(struct platform_device *pdev)
  {
+ 	int ret;
+@@ -2528,6 +2589,8 @@ static int scmi_probe(struct platform_device *pdev)
+ 
+ 	info->dev = dev;
+ 	info->desc = desc;
++	info->bus_nb.notifier_call = scmi_bus_notifier;
++	info->dev_req_nb.notifier_call = scmi_device_request_notifier;
+ 	INIT_LIST_HEAD(&info->node);
+ 	idr_init(&info->protocols);
+ 	mutex_init(&info->protocols_mtx);
+@@ -2563,10 +2626,19 @@ static int scmi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = scmi_xfer_info_init(info);
++	ret = bus_register_notifier(&scmi_bus_type, &info->bus_nb);
+ 	if (ret)
+ 		goto clear_txrx_setup;
+ 
++	ret = blocking_notifier_chain_register(&scmi_requested_devices_nh,
++					       &info->dev_req_nb);
++	if (ret)
++		goto clear_bus_notifier;
++
++	ret = scmi_xfer_info_init(info);
++	if (ret)
++		goto clear_dev_req_notifier;
++
+ 	if (scmi_notification_init(handle))
+ 		dev_err(dev, "SCMI Notifications NOT available.\n");
+ 
+@@ -2624,6 +2696,11 @@ static int scmi_probe(struct platform_device *pdev)
+ 
+ notification_exit:
+ 	scmi_notification_exit(&info->handle);
++clear_dev_req_notifier:
++	blocking_notifier_chain_unregister(&scmi_requested_devices_nh,
++					   &info->dev_req_nb);
++clear_bus_notifier:
++	bus_unregister_notifier(&scmi_bus_type, &info->bus_nb);
+ clear_txrx_setup:
+ 	scmi_cleanup_txrx_channels(info);
+ 	return ret;
+@@ -2652,6 +2729,10 @@ static int scmi_remove(struct platform_device *pdev)
+ 		of_node_put(child);
+ 	idr_destroy(&info->active_protocols);
+ 
++	blocking_notifier_chain_unregister(&scmi_requested_devices_nh,
++					   &info->dev_req_nb);
++	bus_unregister_notifier(&scmi_bus_type, &info->bus_nb);
++
+ 	/* Safe to free channels since no more users */
+ 	scmi_cleanup_txrx_channels(info);
+ 
 -- 
 2.34.1
 
