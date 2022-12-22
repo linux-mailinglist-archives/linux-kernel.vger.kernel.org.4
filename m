@@ -2,152 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0B8653CDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 924CB653CE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 09:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235003AbiLVITM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 03:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S235051AbiLVITe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 03:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiLVITK (ORCPT
+        with ESMTP id S235033AbiLVITb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 03:19:10 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2093.outbound.protection.outlook.com [40.107.117.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236F010067
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 00:19:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PrwAjoEghr61A2tDSqwfA7UqbckD0n8Cm6Cjn+UjK2ZA2w0kTuJXZCHtMIgENNfSX1OEHVuHUK4LJnm/GMbt2VXbZC44QVK3VGbuNX07sozt3q5wfWIe89EzW7tbqVtUqbZb3rUtiwMNxG00/4s9ON5bL2TnrSfYWvGfCaPBPrI6frWGiDT0zpseG02h6GXMgA035ZtVrt2Pl+aQfbyo3E/gUyca10Ei1h4wdgq9fJr8GBnzoBbXhwylxvphSRK9UxTjwgZDo7+DwVkhD6xJO9XY/G47pZOAfQREMl38LRFwuhN2DvkRr8AUJdhFDyaX1CjdVCxuIaxTNudUe1wbGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d6rbzt6PNOYtXfIFChp7Ox5pFWGHtIuFwGv0WQS4m+g=;
- b=XDwqNPHzST6/2lhEHM6vH2vxRM4Sf9zSLG6H2KvBpY1hR4EcQuOb82x8PWpx+bEc+8BfblhVHMTc3Pzh20t/wg7xmw7Obz62NMSfc2ts0jwj/YLYg4w1UjpBPSArmwwSzpyhXVWvCDhAHwb8Aj4hHquDTwgDb43KgMw7pRmjT1P9xWpdv2FS1nQwyE3e0b5vy8n4KuzzHemeCO/LAi3RdrbSnuApJKQRhSys/ZHsR8m8xKrVmSRoJ7/dmAuEwFVu2BPcglqBAzgtXcFuz06vihu7qcoE5JScql7PvpuvfIDiwsjfIJ0qg+JOsiqii+YTqO/virItuqR68Lv6huOhQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d6rbzt6PNOYtXfIFChp7Ox5pFWGHtIuFwGv0WQS4m+g=;
- b=BkAfJ5X2jkSaCJOSZzjlRrSOzMFsHi9QddN5ICGFLvTID7A5WY09KIluwqdYkGHDFNnrRireSjT9dAze8LZ3ni0fXOfdMr3jt6UlvAaHpBd7k+z2h/+pulc5W/lqKgKFj/eV1fwK1jcE1TOaZCQ9LIylrWwG9sXbMQl+AFMzkgnBdfyjnW0h7raLT5IG1V5E+qX94IBjz335EZv0GS1/gUvBFWLo7vuyD4MEC6dkq4/pelgGxRa7OGRiQ6cp3kHRxChwPIV2Ns3QtvDKMQocw3kZJsUbdSyHnIcFsM6CXTNd/rzM25CmuoQuecq3xeu34uDd6pUGiHPqT3GVlIiEOw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PSAPR06MB4280.apcprd06.prod.outlook.com (2603:1096:301:85::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.6; Thu, 22 Dec
- 2022 08:19:06 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::ef03:cbfb:f8ef:d88b]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::ef03:cbfb:f8ef:d88b%9]) with mapi id 15.20.5924.016; Thu, 22 Dec 2022
- 08:19:06 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: drop useless initializer and unneeded local variable
-Date:   Thu, 22 Dec 2022 16:18:55 +0800
-Message-Id: <20221222081855.81553-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0003.apcprd02.prod.outlook.com
- (2603:1096:4:194::13) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Thu, 22 Dec 2022 03:19:31 -0500
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511BE101C6;
+        Thu, 22 Dec 2022 00:19:30 -0800 (PST)
+Received: by mail-qv1-f45.google.com with SMTP id h10so818867qvq.7;
+        Thu, 22 Dec 2022 00:19:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RMmfHUYc7ijR6hdADXh8O3NMov5DfuOpW26VTuf213g=;
+        b=G7iufXoW54xSvthzqr+3y3wgxQbr3lDveMvCoduyIVYcn9b4Cg4I+TcNr+PMkWZh/s
+         m/aN098BMsm3UPZa33963FuAn2pztHalco1dWE7HhMCovhWWVOB3C8CHRkBHilWvU1z8
+         1Ni/0sE+CAANhKEeaQ0ibfIu+zSENR1etWSBbZtMy2kUAwM0pvelJ3wfjJOIBPvvxQTt
+         voht23L3YzX8y3R5V9TnoRSVAY/I5YhEoG0n/bAvMnKOleEM78xK22BrxMCD8mAi40vp
+         LRXFaX4f9Ko5JMqBO/p6KlJOTzc4j3ENgU3T/pM3l98rbvS+AavRmRhiby8rZCn5/Yyq
+         hCaQ==
+X-Gm-Message-State: AFqh2koCYHTEV04NyuCd7G5tQI8YZDUWMJ6jeJOycNE5bK1xttg00AB5
+        CC+pYUne3xSl4F3RC4HsEJjMf0o2hGIU0Q==
+X-Google-Smtp-Source: AMrXdXuMuHw41LNCyCvcauLAmzjXyf9yRJ0wH8piUqai+QC5g7ax5FjCLtVhWqCGQWtPwqbEdg8W6g==
+X-Received: by 2002:a0c:fc48:0:b0:4e1:bb55:1d8d with SMTP id w8-20020a0cfc48000000b004e1bb551d8dmr6718811qvp.44.1671697169176;
+        Thu, 22 Dec 2022 00:19:29 -0800 (PST)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id s5-20020a05620a254500b006f9f714cb6asm12296746qko.50.2022.12.22.00.19.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 00:19:28 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-45ef306bd74so18287057b3.2;
+        Thu, 22 Dec 2022 00:19:28 -0800 (PST)
+X-Received: by 2002:a0d:ca4d:0:b0:38e:e541:d8ca with SMTP id
+ m74-20020a0dca4d000000b0038ee541d8camr307319ywd.283.1671697168114; Thu, 22
+ Dec 2022 00:19:28 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PSAPR06MB4280:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1713597b-c6d9-42cc-b0b7-08dae3f5312e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0PoAQwXJjMqxGW1WulXD8DNNegTLcLqWYhA7ZsyZilheEqoCqBXGCkBKYDZOhisx9CutS0qgry/D5d07Bg8wzRwIF/+ro6xbdviaPXIgTFKAJyTvfvq4PCQC4PfF56PvwPMQETvtc7X2wAKiBApFcjHdEycK8YiNNguoZinnqtj6on7qhJdiCph2yDgtZ4GKYftr2YRIzpNFZGCcyfZjHll8lYiphAFTGnGowfwLtZAUnEO7CmQQV6nLf0/svdUHnXPGc6U4dRkIUpdm0IDKdkh0j16E+CvwVTSdXCCUo2lZF8YmZ42WYafmb06RkHjJzdmtj8w2U0f4Dm4Ro9fzgSM4yUsLmkQKo4dJduOfXGTjAt6LQ5bPYhVCZ0j9IEEroI2rtz75kl8uBUxBVJ1PZ26M2cE/ShoQyYKdQdG4s08dWAe5fOEHUBvDvTvRdWLT+j+xcdhEc62y60joH0v1dUTV6q2+bXa+/iTO0gY++cw0ihA2BYvMnYyX6Met50cKtTFiVueQOVnHEilFkvGg86Z8NCgUw6Y/fIfuIwMNakWb5eg64iN9SsI/nPAnzn9Xu28ttyih7W6Ad7JWsMWCdBrbtj6J0JXW7FjFkvxC0d0z5J2DyUxr9NmACoEAjTak3mhVEf+KZ5jEaUIKCfZTQ+zdDQNORqM3Uq2cB4iu5LxieRDgEulEfxurYTLpx0wPZMBtDdqxeZUqmjgpUjJitg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39850400004)(376002)(136003)(346002)(451199015)(36756003)(316002)(8676002)(4326008)(66556008)(41300700001)(66476007)(66946007)(83380400001)(38350700002)(38100700002)(86362001)(107886003)(478600001)(6666004)(8936002)(5660300002)(2906002)(6506007)(2616005)(1076003)(52116002)(6486002)(186003)(26005)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Cq0HoCfrIssMpwj4vOMmvPuRBe2Cs597OJ4ByWid+gDLmO0nmORxMpmfSutZ?=
- =?us-ascii?Q?Dfu0+Bw467T44LBUoPfTk6pmFUzmzwahCvmVRaAnvJc2Pd4K8On0/CYxEKMf?=
- =?us-ascii?Q?QTt8jecJVN5ffO6n5cbwElY0m2k4dL/U4GMXV4/wIqnXCzO2j9Xg9U4m5SXb?=
- =?us-ascii?Q?ifl2W2UUqv2IztCpWWZR21RP4vgEKyqCzlmVLmcphLUG0jjJFrKhXlkBFzBh?=
- =?us-ascii?Q?83cqnTwQwflyHq5qkujqheFLfilVVw+Fa5m8Mx+vsQPUXNHj37pRIRkvbykd?=
- =?us-ascii?Q?S4pQ7jIowZ5AJsLsrdU40greEnMqVFaU7YWl9ZfWG0v8HHkj0wR5sJ/8vgBJ?=
- =?us-ascii?Q?CyBgt7xmHYt0yQyXMzHfkZV9rZ5i+c9sxAfqWSdj6eNac9HukrkTrvOiAAl4?=
- =?us-ascii?Q?UGbL5MaIwxWHgU9+3vTH1gF6DZ8E/gZsYmNZR34oUbSBbGjFWzw2aCOd5B8/?=
- =?us-ascii?Q?aoDuvs3w4yJ+VA/UDQIG7L6Bd+wYqNPvYJ8Dj/mt9gSIq9dEIHkoWi3dAPeW?=
- =?us-ascii?Q?Mpu2UhKGuzMumJOQtSnu8lWV5h4mxGS+d1KjYjBr3fg1p6+PhH/Kmy3CLRJD?=
- =?us-ascii?Q?otFTY8RJrr3G2PtsKosHCuj8NsuPxDrUwx5Dz07NGWKlWGFoOEtVJRn6SoJb?=
- =?us-ascii?Q?VyvSe2izkbQI/5Z2bKb2Gh9cgdLX0eg5PtuiiVeXX8hN6REIQgQqpRGHBoc1?=
- =?us-ascii?Q?0yp+6PNVtsFhhg/5WbwprfRYnZPYiF0+XDoj21ibQtbBTXg/QAFoo/tuUQjF?=
- =?us-ascii?Q?b4BPw9mlb26qzAYtt+NIolIsjL+15n/VA5cR+1cAX2PLbwIOvXWrrIxIDic7?=
- =?us-ascii?Q?Xy5Kz72weZn8nuraARQm9f57T90Jtng5SG3pc2x87LDsIPN4n1wzfB6vCEMI?=
- =?us-ascii?Q?X+Zvy2LL49u9PUsCDDLtYoKrgXvyjY2W59cCBwQJw8Q7xyJ2YAUtU7EaCePX?=
- =?us-ascii?Q?e9oJDmRJ2Mz6x15UVzgzWQg8q4zxTKx/H7cwJwW0WM77XL/OtL5Tpi0g8hqs?=
- =?us-ascii?Q?dEJ9V6NWJi/EAa+so9CVQ+/AS8hGCDKjGIvw171OUDix7lsezwL/u6Ro2YRf?=
- =?us-ascii?Q?M07M3rVhek5QqsrXSB7WoVUHDNeG1nwW491f3VFSchAs8Spj8c26fnmowolA?=
- =?us-ascii?Q?PI3tL+K9EnsiUBLQS/t8nlF//GzLOiD5QtlNuQZRVWWR9UoWDtBFxCg94Xnu?=
- =?us-ascii?Q?Vfq2tjdWtjyGNwaG3c7ROCfnay4eORm8ky4FffR4EWM630trU2U9i7+Kfoee?=
- =?us-ascii?Q?ZBs1akkf3kzjdVNkDe9IuZ5OFaXTi510GlxBlOb1EP2L68PVwOuAXlM2C5gY?=
- =?us-ascii?Q?zD4PXPcPdwqspWwRQR1IYp7XwG5riGzfQC6hSlXDB4jJ3jt3kcpsv2gmauG4?=
- =?us-ascii?Q?IKLmxNrz0JR1mYBt2dB9ThbsgIY2zLGNwnwLI1WavAWhNaaPrX5nmenWjmWY?=
- =?us-ascii?Q?bSbrHh5KoEl1PexShxk7515KYHEu7LGm9ZaU9+2jrvxVbP5DjiQpnWKCxq5Q?=
- =?us-ascii?Q?JaTWGeXl/DTsEjvmTx/NmiLJagX/XT+2gQzP3l31X3Uh8bhmqaJw8W6Da55g?=
- =?us-ascii?Q?XX4toYZYa7BYYWXfVN9co6y14UN86phWQVlT819o?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1713597b-c6d9-42cc-b0b7-08dae3f5312e
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Dec 2022 08:19:06.0182
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WGzqahqgcY7IZZCpvp8O99IRD1AfBPEPqNRzafp2dIz+HP1VZ9Ggmfxfb8HdxJ6E/IUMvVUrf9RYCiSejzF/ow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4280
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221221000242.340202-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221221000242.340202-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdXmKYV7CwuD=ZNgaOTc+LxP9OvEJ8gcW_iS5NamTxEE+w@mail.gmail.com> <CA+V-a8tqvY+Nj391j+zJO21Q=47pyFR1SkDLH-hmJephcorY3g@mail.gmail.com>
+In-Reply-To: <CA+V-a8tqvY+Nj391j+zJO21Q=47pyFR1SkDLH-hmJephcorY3g@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 22 Dec 2022 09:19:14 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXDbfadxJsrEvQMwQKvxtBxQRA_Bx4+FY90N9v_XVirOA@mail.gmail.com>
+Message-ID: <CAMuHMdXDbfadxJsrEvQMwQKvxtBxQRA_Bx4+FY90N9v_XVirOA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: interrupt-controller:
+ renesas,rzg2l-irqc: Document RZ/G2UL SoC
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need to initialize idx twice. BTW, remove the unnecessary cnt variable.
+Hi Prabhakar,
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/iostat.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+On Wed, Dec 21, 2022 at 10:06 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Wed, Dec 21, 2022 at 12:37 PM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Wed, Dec 21, 2022 at 1:03 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Document RZ/G2UL (R9A07G043U) IRQC bindings. The IRQC block on RZ/G2UL SoC
+> > > is almost identical to one found on the RZ/G2L SoC the only difference
+> > > being it can support BUS_ERR_INT for which it has additional registers.
+> > > Hence new generic compatible string "renesas,rzg2ul-irqc" is added for
+> > > RZ/G2UL SoC.
+> > >
+> > > Now that we have additional interrupt for RZ/G2UL and RZ/Five SoC
+> > > interrupt-names property is added so that we can parse them based on
+> > > names.
+> > >
+> > > While at it updated the example node to four spaces and added
+> > > interrupt-names property.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > > v1- > v2
+> > > * Dropped RB tags
+> > > * Added generic compatible string for rzg2ul
+> > > * Added interrupt-names
+> > > * Added checks for RZ/G2UL to make sure interrupts are 42 and interrupt-names
+> > > * Updated example node with interrupt-names
+> > > * Used 4 spaces for example node
+> >
+> > Thanks for the update!
+> >
+> > > --- a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> > > +++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> > > @@ -19,16 +19,19 @@ description: |
+> > >      - NMI edge select (NMI is not treated as NMI exception and supports fall edge and
+> > >        stand-up edge detection interrupts)
+> > >
+> > > -allOf:
+> > > -  - $ref: /schemas/interrupt-controller.yaml#
+> > > -
+> > >  properties:
+> > >    compatible:
+> > > -    items:
+> > > -      - enum:
+> > > -          - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
+> > > -          - renesas,r9a07g054-irqc    # RZ/V2L
+> > > -      - const: renesas,rzg2l-irqc
+> > > +    oneOf:
+> > > +      - items:
+> > > +          - enum:
+> > > +              - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
+> > > +              - renesas,r9a07g054-irqc    # RZ/V2L
+> > > +          - const: renesas,rzg2l-irqc
+> > > +
+> > > +      - items:
+> > > +          - enum:
+> > > +              - renesas,r9a07g043u-irqc   # RZ/G2UL
+> > > +          - const: renesas,rzg2ul-irqc
+> >
+> > I'm not sure it's worth splitting into RZ/G2L and RZ/G2UL alike
+> > variants, and adding the "renesas,rzg2ul-irqc" family-specific
+> > compatible value.  You can easily handle the difference by the presence
+> > (or absence) of the "bus-err" interrupt source.
+> >
+> Yes, the only reason to add "renesas,rzg2ul-irqc" is to differentiate
+> RZ/Five later. I have not worked out on how this driver will work in
+> case of RZ/Five yet with PLIC (as we sifive plic driver as a chained
+> handler and then we have the RISC-V intc driver). If you insist I can
+> drop it for now and then later when we add RZ/FIve we could add a
+> check for compat string maybe?
 
-diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
-index 3166a8939ed4..335b055ffe7d 100644
---- a/fs/f2fs/iostat.c
-+++ b/fs/f2fs/iostat.c
-@@ -97,8 +97,7 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
- 
- static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
- {
--	int io, idx = 0;
--	unsigned int cnt;
-+	int io, idx;
- 	struct f2fs_iostat_latency iostat_lat[MAX_IO_TYPE][NR_PAGE_TYPE];
- 	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
- 	unsigned long flags;
-@@ -106,12 +105,11 @@ static inline void __record_iostat_latency(struct f2fs_sb_info *sbi)
- 	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
- 	for (idx = 0; idx < MAX_IO_TYPE; idx++) {
- 		for (io = 0; io < NR_PAGE_TYPE; io++) {
--			cnt = io_lat->bio_cnt[idx][io];
- 			iostat_lat[idx][io].peak_lat =
- 			   jiffies_to_msecs(io_lat->peak_lat[idx][io]);
--			iostat_lat[idx][io].cnt = cnt;
--			iostat_lat[idx][io].avg_lat = cnt ?
--			   jiffies_to_msecs(io_lat->sum_lat[idx][io]) / cnt : 0;
-+			iostat_lat[idx][io].cnt = io_lat->bio_cnt[idx][io];
-+			iostat_lat[idx][io].avg_lat = iostat_lat[idx][io].cnt ?
-+			   jiffies_to_msecs(io_lat->sum_lat[idx][io]) / iostat_lat[idx][io].cnt : 0;
- 			io_lat->sum_lat[idx][io] = 0;
- 			io_lat->peak_lat[idx][io] = 0;
- 			io_lat->bio_cnt[idx][io] = 0;
--- 
-2.25.1
+Given you already use "renesas,r9a07g043u-irqc" (note the "u") here,
+you will have "renesas,r9a07g043f-irqc" to handle the (minor)
+differences.
 
+> > I understand there "renesas,r9a07g043f-irqc" will be added later to
+> > support RZ/Five?
+> >
+> Yes.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
