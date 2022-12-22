@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299536544A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8C36544AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiLVPzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S230032AbiLVP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiLVPzn (ORCPT
+        with ESMTP id S229904AbiLVP4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:55:43 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608151A807
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:55:38 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id g1so1512422pfk.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:55:38 -0800 (PST)
+        Thu, 22 Dec 2022 10:56:32 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CC56595;
+        Thu, 22 Dec 2022 07:56:31 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id y4so2312054ljc.9;
+        Thu, 22 Dec 2022 07:56:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RVaV7gXLAFZP6vBGDynJRLj4x0H9TKcM19ib2OhgZ/w=;
-        b=EAlNqUp4R98KPIi17pVdCnGeg5YLtNQ9E22YaC1IFqgL+oNc1/lrrzl9VI+JoE13lK
-         VjR+L7aPwZEWakcgUqLmXMSQGZRe1ByvOVnPjx0FkqCB0YAvQ7g/QYD/oKpltY7og9uh
-         fj46XAgcvN9T82QeRZ5TYiGWzLt1NDC0/jcMQbA9nah/zSLLM65bkL3BEYwGTTT7JE+E
-         fRlmfJcYb3OfKXRLNLFyF4BtRo8cQ20YymZrzvB0pjm3rlMM1g90MHpr4pb/vujzl5KI
-         RnxT1tJKm6B06dpjlVt6MNAwhdgkmhFEuC/piaLlUHv3zKIhCnj8rgzUXt+u0NHtQ6be
-         E5Rw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F96RJDidpidVjpAMCz7zq3Z+CFLpO9DsBw3nyLpGt2Q=;
+        b=B3lncGg4Dzq95xAkmu+C1az6ltl+mDL3a+i60Jh2B+NSMLwvb+eRP22S4QGAzjAXuG
+         x+Goml3Jq8yGzrTC9f91NmmeeJwrU/PuCfGOxuAce6GaA9NPhJ/bW0eng0H+zWav4ceC
+         qDuUjdKcG4Y4zS/bieYoh85HQP5W7ihYiCePGrKNjcTjCYAeMMrzD8oQYewhhGgn83Jf
+         pTjtxGXOLt29oHy9VXoM8y7Y8tH9MqZW+iwZeLS3ZoLxsG9MfQLS+HnhiYqqvge+o7wS
+         y90aeqfYXcrK5lvm0jb6p8RGVwalIqpWlDzvykizVNsLhzPQMGeI/QL+Isef9682g2p2
+         Wysw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RVaV7gXLAFZP6vBGDynJRLj4x0H9TKcM19ib2OhgZ/w=;
-        b=WzsldvjP+YdSO3G8I7MgQyXqM+7nFOwVVY3oVI84TIKrtf16PuLVL7XLOR3wDxixOt
-         XXT7Ewp8YkNyGCPzJpgvIOnmbn2pM9lL5darA7L3V4LTI+lI6pODnqiKWIHXWb6fGL7p
-         JFQlPOU7PlO0p31br9stRx1rIUyE5r/We+h/F0lHVtCXwO4vGEjtSr0cdOb5CfbqqIU5
-         8w/tpy4mZtnihmKCq9RP3SK3h8rLgFCHltZNYyghBt+IyBNwJBl7nyP3MpBx3ubRUm0C
-         +LFI5qeLwHgWOF+uWv5MDmLrqbIoDVNTKcci1wJ7gP5eZ2JPg4pLsEqiD2lALsVcv359
-         iyfA==
-X-Gm-Message-State: AFqh2koxD020zzIReO5UxqQl7zD3szMRCE55Fwijh+s3tMWH5qcR04rY
-        XaJgy17rN+nZo4wzDUDCoDWmKAf5vB49oiLFAT0FIg==
-X-Google-Smtp-Source: AMrXdXvFRr7/qzMUTbWIbPlyXiSK1LlPeSwNSmbVaA49P8mvF4F6AzosMjY/nVV12nHcybLxRklk9IDiMv161RPdSo4=
-X-Received: by 2002:a63:40c5:0:b0:489:17a2:a53d with SMTP id
- n188-20020a6340c5000000b0048917a2a53dmr317357pga.255.1671724537702; Thu, 22
- Dec 2022 07:55:37 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F96RJDidpidVjpAMCz7zq3Z+CFLpO9DsBw3nyLpGt2Q=;
+        b=YxF1ySqahyzOHjr5bQVTGId+8hykf+GApkrvQyAANmOiT8FhCzYOvkYDORW/bWRZrW
+         kGgfuZxQq4jeZGw46Wc5oPcfa4bq5qPq8/rk6heG+ec3HPPyA58IaMGS2kVqU10VhY6Q
+         WPrM5RqYqXH71Et92g+NK1fylrIN4WPX0Cn1X/vYimTnWubkwcNb3877icDTo1PakkwF
+         q6RtqiJRDDGHlgu/K8D0ddO8uYsqsFsjshtT72YzRehO2RE9HfDj9/R5Hijc6oZupdp/
+         VWdbv7fAmp9k3Y4Y5HYTVYp0S96rS3lAnsI+9VBvxFqtdXlIVaijV8dBdNiVMyj1Plbi
+         VFaQ==
+X-Gm-Message-State: AFqh2krD2YX4kx38igRBBecFvoio7a9XEzbIxvKSm1QMInXWJZBf5JjA
+        PljjSyYIRwJPb4dHXw7Hzg/HI9yfcXc=
+X-Google-Smtp-Source: AMrXdXvdgoKtg5dMQONAK6q/GptxY+yvMH4riZfYIewdvX0/oOdpo1YTdRkyuS0V/ffonFuPTuBYtw==
+X-Received: by 2002:a2e:9588:0:b0:277:413:7da3 with SMTP id w8-20020a2e9588000000b0027704137da3mr2155659ljh.49.1671724589747;
+        Thu, 22 Dec 2022 07:56:29 -0800 (PST)
+Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
+        by smtp.googlemail.com with ESMTPSA id z13-20020a2e350d000000b0027eb5903568sm83550ljz.72.2022.12.22.07.56.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 07:56:29 -0800 (PST)
+Message-ID: <791f5e52-6035-2501-7bc2-2795e43ae1c1@gmail.com>
+Date:   Thu, 22 Dec 2022 18:56:27 +0300
 MIME-Version: 1.0
-References: <20221222060427.21626-1-jasowang@redhat.com> <20221222060427.21626-5-jasowang@redhat.com>
- <CAJs=3_D6sug80Bb9tnAw5T0_NaL_b=u8ZMcwZtd-dy+AH_yqzQ@mail.gmail.com> <CACGkMEv4YxuqrSx_HW2uWgXXSMOFCzTJCCD_EVhMwegsL8SoCg@mail.gmail.com>
-In-Reply-To: <CACGkMEv4YxuqrSx_HW2uWgXXSMOFCzTJCCD_EVhMwegsL8SoCg@mail.gmail.com>
-From:   Alvaro Karsz <alvaro.karsz@solid-run.com>
-Date:   Thu, 22 Dec 2022 17:54:59 +0200
-Message-ID: <CAJs=3_Akv1zoKy_HARjnqMdNsy_n34TzzGA6a25xrkF2rCnqwg@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq command
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
-        eperezma@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
+ scaling in Tegra234
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
+        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
+        bbasu@nvidia.com
+References: <20221220160240.27494-1-sumitg@nvidia.com>
+ <20221220160240.27494-2-sumitg@nvidia.com>
+ <62fc4a96-bab8-4d43-5278-3375e34431e7@gmail.com>
+In-Reply-To: <62fc4a96-bab8-4d43-5278-3375e34431e7@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,6 +83,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My point is that the device may complete the control command after the timeout,
-so, if I'm not mistaken, next time we send a control command and call
-virtqueue_wait_for_used we'll get the previous response.
+21.12.2022 22:20, Dmitry Osipenko пишет:
+> 20.12.2022 19:02, Sumit Gupta пишет:
+>> +static int tegra_emc_icc_set_bw(struct icc_node *src, struct icc_node *dst)
+>> +{
+>> +	struct tegra186_emc *emc = to_tegra186_emc(dst->provider);
+>> +	struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
+>> +	struct mrq_bwmgr_int_request bwmgr_req = { 0 };
+>> +	struct mrq_bwmgr_int_response bwmgr_resp = { 0 };
+>> +	struct tegra_icc_node *tnode = mc->curr_tnode;
+>> +	struct tegra_bpmp_message msg;
+>> +	int ret = 0;
+>> +
+>> +	/*
+>> +	 * Same Src and Dst node will happen during boot from icc_node_add().
+>> +	 * This can be used to pre-initialize and set bandwidth for all clients
+>> +	 * before their drivers are loaded. We are skipping this case as for us,
+>> +	 * the pre-initialization already happened in Bootloader(MB2) and BPMP-FW.
+>> +	 */
+>> +	if (src->id == dst->id)
+>> +		return 0;
+>> +
+>> +	if (mc->curr_tnode->type == TEGRA_ICC_NISO)
+> 
+> The mc->curr_tnode usage looks suspicious, why you can't use src node?
+> 
+
+This function sets memory BW for a memory client and not for EMC.
+Apparently, you should move the BW setting to tegra234_mc_icc_set() and
+then tegra_emc_icc_set_bw() will be a noop.
+
