@@ -2,166 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45E96546E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E80BF6546E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiLVTrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 14:47:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        id S235374AbiLVTs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 14:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiLVTr2 (ORCPT
+        with ESMTP id S229840AbiLVTss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 14:47:28 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C6718E17
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:47:25 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id p36so4200461lfa.12
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:47:25 -0800 (PST)
+        Thu, 22 Dec 2022 14:48:48 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1347018378
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:48:41 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id co23so2697576wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 11:48:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u8NgwXERUKhNSJZQWMYuge/ry0x9I6WYR0sM01t06s0=;
-        b=bbzH3g1gRAHvzwo8GTQ6XClYMbkx5gU0KV/HaxOXDWk5UjjJkipKsv87WlL4LbKSRj
-         Nd6XJVTBK5LWzGpUV7C4G92pS4ZmNQ15mAHewNdvngveAcbkDC5YfiL84cRlxzjG0Mrz
-         /4h42avJAm+I9FD+bgVCRmO72kpXJ9TMKZIQlQ7xjFo+tN2OmuI2CjGkuh5G9Vay6F5f
-         FAd251i+mwrgwgNrTXXTNxWsRWUJt9JmGnNMJMb5682w8e7umTuzG4qvbV1OFZkshsx4
-         ytREtyEu7bugA+kkgHOVV8Xs4b/in1EFevSwzj1ifSvOlUFmPYHmWf1qpE+MT4e1ke/r
-         rsOQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FtOA/G1DpjjrVMsZI4k2Vt28ANwPj2q63Muqqvyu2zA=;
+        b=jyRHh+0uRVaab71ue7ES0wpumLeHKUwXW4PjtQUWE98J+2/wd09BkW1+41UAv3J91l
+         Cn4ug5ObpzDr9pU+f5HaT2nLf4hHj7tcjo5D25lVixKDgfibIlTMR1VFrPAsIpGuwdNl
+         qb0TGjOqnBtYz0KX3J6tdyidtI8R4Y7/zFuzOQ5XukhAGioiDUQtS0v16h56wDIU540B
+         un2uxpOnmololAGHsH0NvBpmhNGKlQRdULhyLaZ70SvGav10GApOSrlPL39MX28AhOvi
+         DMpTeWE3A/4aJ0N+79GnGw1uadvJFpgnH7trtwI+akOWKJ/B0hDyb5jjQMB25MBOlfjP
+         kOiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u8NgwXERUKhNSJZQWMYuge/ry0x9I6WYR0sM01t06s0=;
-        b=GIABkMMnAITQReYay13Y05EWlV+E6slFio5220gnINp/0y7QwAqMvK7SE2KbGiJkEN
-         nx28qWoTti1FCmvmcLsc1mxzwqnvO+jbYKKD3zYM6+qoQkpV94LMnkiJavv72i+p8Kp0
-         Tz/Jk4Orb0wmwSUaynOOephveMepe8Pkss4rNFo2twvYib9FYTPH2dM9IfUQ3YkxleuT
-         qC1V7pkIUnmaQpetXSWKgYcaomeUGOTAbteZso+9mQbgm1KnG4r+S7k268U+s+95gQje
-         RQWap3uFJK0mpkKBkNkPIdVX+SB1bFcrrHVaegxXj6vk2W/VdDAOD0ZaphM/FyLOHdFj
-         ApYg==
-X-Gm-Message-State: AFqh2kq4ckkD8Z0bFgjTjYFcGdfX6xxASY58sAZIdMOrfjh4Y+CN1VaX
-        +tjVWooX0BZIzUdeWDu1JLeTSA==
-X-Google-Smtp-Source: AMrXdXsX9bjV3cSBoR62uGY4csjneEp5yAry3R9DZBQ7Po6MyaDjh00JD6pgLxDz1/HR/p7299yJjg==
-X-Received: by 2002:a05:6512:691:b0:4b6:fdc3:a668 with SMTP id t17-20020a056512069100b004b6fdc3a668mr2080075lfe.31.1671738444194;
-        Thu, 22 Dec 2022 11:47:24 -0800 (PST)
-Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id r21-20020ac25f95000000b004b5a4cf69dfsm178714lfe.261.2022.12.22.11.47.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 11:47:23 -0800 (PST)
-Message-ID: <979c2896-cab5-1e2d-f587-b9eb3aa70dfb@linaro.org>
-Date:   Thu, 22 Dec 2022 20:47:21 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FtOA/G1DpjjrVMsZI4k2Vt28ANwPj2q63Muqqvyu2zA=;
+        b=pfdzexlokP8EBfywFx+NzN1E3a7gdp56ck2rEw+Jx+0jDGF072pfruQyO8lWAzycnd
+         CDNq1SM8kz0k+ISpm4jpcmpWm1+Cp+3be7bfqP3iO7grjwt8ndqK4nL4KbN+mbplJwHK
+         9p2WMY+UHxwDuazQc3u3e6hJODf7pdwgwW3dqQuqZz1Q9zEv0v/NYyKi5twQVOxgMgHO
+         kwNxDiCYEGRAtQc3CWFH5+PIzWVbIR4vuTyDz5b1JEbZNZSOu2D7zZWpwKIYqBJkEuXc
+         MXUJAxG3wQJDMYAwhF2o3Ty+j0JGcIsAtDOjIP1ClZA3xRLJqHal0EYF8gR4smxBZbp6
+         wkeg==
+X-Gm-Message-State: AFqh2krcTXBWK15I0tTUywnvglA+IpJBsWSzeorfr5qz0/HcqWqyMm2I
+        SM0E67+uJggPJ/oe3pPtgGY=
+X-Google-Smtp-Source: AMrXdXtVDFnuywO3qY8gU1BLBO/McMKtUZpmNx9eFyAO4XUFYBVpOJMgY+iLji/tNZ/pHLnkONFQwQ==
+X-Received: by 2002:adf:f74e:0:b0:22e:6227:34e4 with SMTP id z14-20020adff74e000000b0022e622734e4mr4619931wrp.0.1671738519675;
+        Thu, 22 Dec 2022 11:48:39 -0800 (PST)
+Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.googlemail.com with ESMTPSA id i1-20020adfb641000000b002425787c5easm1349317wre.96.2022.12.22.11.48.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 11:48:38 -0800 (PST)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Rapoport <rppt@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH 0/4] update mlock to use folios
+Date:   Thu, 22 Dec 2022 19:48:29 +0000
+Message-Id: <cover.1671738120.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: sm6125: Add GPI DMA nodes
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lux Aliaga <they@mint.lgbt>,
-        Richard Acayan <mailingradian@gmail.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221222194600.139854-1-marijn.suijten@somainline.org>
- <20221222194600.139854-3-marijn.suijten@somainline.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221222194600.139854-3-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series updates mlock to use folios, converting the internal interface
+to using folios exclusively and exposing the folio interface externally.
 
+As a product of this moves to using a folio batch rather than a pagevec for
+mlock folios, which brings it in line with the core folio batches contained
+in mm/swap.c.
 
-On 22.12.2022 20:46, Marijn Suijten wrote:
-> From: Martin Botka <martin.botka@somainline.org>
-> 
-> Add nodes for GPI DMA hosts on SM6125.
-> 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> [Marijn: reorder properties, use sdm845 fallback compatible, disable by
->  default, use 3 instead of 5 dma cells]
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Lorenzo Stoakes (4):
+  mm: pagevec: add folio_batch_reinit()
+  mm: mlock: use folios and a folio batch internally
+  mm: mlock: update the interface to use folios
+  Documentation/mm: Update references to __m[un]lock_page() to *_folio()
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm6125.dtsi | 37 ++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> index 7c326368e30d..6f9b56a937c6 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> @@ -5,6 +5,7 @@
->  
->  #include <dt-bindings/clock/qcom,gcc-sm6125.h>
->  #include <dt-bindings/clock/qcom,rpmcc.h>
-> +#include <dt-bindings/dma/qcom-gpi.h>
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/power/qcom-rpmpd.h>
-> @@ -510,6 +511,42 @@ sdhc_2: mmc@4784000 {
->  			status = "disabled";
->  		};
->  
-> +		gpi_dma0: dma-controller@4a00000 {
-> +			compatible = "qcom,sm6125-gpi-dma", "qcom,sdm845-gpi-dma";
-> +			reg = <0x04a00000 0x60000>;
-> +			interrupts = <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 336 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 337 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 338 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 339 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 340 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 342 IRQ_TYPE_LEVEL_HIGH>;
-> +			dma-channels = <8>;
-> +			dma-channel-mask = <0x1f>;
-> +			iommus = <&apps_smmu 0x136 0x0>;
-> +			#dma-cells = <3>;
-> +			status = "disabled";
-> +		};
-> +
-> +		gpi_dma1: dma-controller@4c00000 {
-> +			compatible = "qcom,sm6125-gpi-dma", "qcom,sdm845-gpi-dma";
-> +			reg = <0x04c00000 0x60000>;
-> +			interrupts = <GIC_SPI 314 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 315 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 317 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 318 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 319 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 321 IRQ_TYPE_LEVEL_HIGH>;
-> +			dma-channels = <8>;
-> +			dma-channel-mask = <0x0f>;
-> +			iommus = <&apps_smmu 0x156 0x0>;
-> +			#dma-cells = <3>;
-> +			status = "disabled";
-> +		};
-> +
->  		usb3: usb@4ef8800 {
->  			compatible = "qcom,sm6125-dwc3", "qcom,dwc3";
->  			reg = <0x04ef8800 0x400>;
+ Documentation/mm/unevictable-lru.rst |  12 +-
+ include/linux/pagevec.h              |   5 +
+ mm/internal.h                        |  26 ++-
+ mm/mlock.c                           | 266 +++++++++++++--------------
+ mm/swap.c                            |   2 +-
+ 5 files changed, 161 insertions(+), 150 deletions(-)
+
+--
+2.39.0
