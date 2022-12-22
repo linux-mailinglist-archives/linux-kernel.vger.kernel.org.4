@@ -2,114 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8C36544AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907E46544B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiLVP4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S231233AbiLVP5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiLVP4c (ORCPT
+        with ESMTP id S230509AbiLVP5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:56:32 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CC56595;
-        Thu, 22 Dec 2022 07:56:31 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id y4so2312054ljc.9;
-        Thu, 22 Dec 2022 07:56:31 -0800 (PST)
+        Thu, 22 Dec 2022 10:57:04 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2816E083
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:57:01 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id o6so3341205lfi.5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 07:57:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=F96RJDidpidVjpAMCz7zq3Z+CFLpO9DsBw3nyLpGt2Q=;
-        b=B3lncGg4Dzq95xAkmu+C1az6ltl+mDL3a+i60Jh2B+NSMLwvb+eRP22S4QGAzjAXuG
-         x+Goml3Jq8yGzrTC9f91NmmeeJwrU/PuCfGOxuAce6GaA9NPhJ/bW0eng0H+zWav4ceC
-         qDuUjdKcG4Y4zS/bieYoh85HQP5W7ihYiCePGrKNjcTjCYAeMMrzD8oQYewhhGgn83Jf
-         pTjtxGXOLt29oHy9VXoM8y7Y8tH9MqZW+iwZeLS3ZoLxsG9MfQLS+HnhiYqqvge+o7wS
-         y90aeqfYXcrK5lvm0jb6p8RGVwalIqpWlDzvykizVNsLhzPQMGeI/QL+Isef9682g2p2
-         Wysw==
+        bh=9IorTpVi1Uzkxm+J45cvzGF9CpTZu4xTCsCDzNG9rvQ=;
+        b=L7AFpvZ8RZJ7Jg9wmkPhQwL2RucNvDcEbTN4UgryvffNtFa3wd1La32Rm9FtI1SVQs
+         mWjf7EbBPwze2XoztU/RnPNt60sYDoOhNJdJXqiL+YBziBjKAXcyIswMovypzWOBU73X
+         9vS7YrtetBZfmSUbqIzjbZ0NUVzhkYKI9KLO/89bItLxA8Ln26wxUqKDU1CfvvU73K4s
+         bga6CO/YImN5pTp5zkF4bn9wmDBG66YvxR0OhApSY0IZXE2ddB0XEm/CHDN7Z/w8NDDg
+         TCj4dvDWv5XWrLVhgcGtrfcTenWnmSStFvAscK/E7cJtsPJ0BJoO+MflAjfBRrifD4Fb
+         pI8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F96RJDidpidVjpAMCz7zq3Z+CFLpO9DsBw3nyLpGt2Q=;
-        b=YxF1ySqahyzOHjr5bQVTGId+8hykf+GApkrvQyAANmOiT8FhCzYOvkYDORW/bWRZrW
-         kGgfuZxQq4jeZGw46Wc5oPcfa4bq5qPq8/rk6heG+ec3HPPyA58IaMGS2kVqU10VhY6Q
-         WPrM5RqYqXH71Et92g+NK1fylrIN4WPX0Cn1X/vYimTnWubkwcNb3877icDTo1PakkwF
-         q6RtqiJRDDGHlgu/K8D0ddO8uYsqsFsjshtT72YzRehO2RE9HfDj9/R5Hijc6oZupdp/
-         VWdbv7fAmp9k3Y4Y5HYTVYp0S96rS3lAnsI+9VBvxFqtdXlIVaijV8dBdNiVMyj1Plbi
-         VFaQ==
-X-Gm-Message-State: AFqh2krD2YX4kx38igRBBecFvoio7a9XEzbIxvKSm1QMInXWJZBf5JjA
-        PljjSyYIRwJPb4dHXw7Hzg/HI9yfcXc=
-X-Google-Smtp-Source: AMrXdXvdgoKtg5dMQONAK6q/GptxY+yvMH4riZfYIewdvX0/oOdpo1YTdRkyuS0V/ffonFuPTuBYtw==
-X-Received: by 2002:a2e:9588:0:b0:277:413:7da3 with SMTP id w8-20020a2e9588000000b0027704137da3mr2155659ljh.49.1671724589747;
-        Thu, 22 Dec 2022 07:56:29 -0800 (PST)
-Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id z13-20020a2e350d000000b0027eb5903568sm83550ljz.72.2022.12.22.07.56.28
+        bh=9IorTpVi1Uzkxm+J45cvzGF9CpTZu4xTCsCDzNG9rvQ=;
+        b=vMpemjMPd3IWOTcB8b0RgEVWcR88sEweEoc5A6HLcKYsuN4V8/QacAM5orLw9evczj
+         ytR04EcJtYxS7gMmBkYLfbratLmDjCAOFF+R389ltXUcpXFugufeWn4BE3LV0RDQFiPM
+         D02f08lNlOMRp4coDC2SpNrv9CR1zoh3ZyjQCZ/VUIGuw1Kejg0XaNGJSDYBn1X243ZT
+         lHxIlDph7IIXm5rlxU6dnppUZUsKkRklZMtgSBK2dF4zGZuBiW25C2zuMamLmcFWsZu+
+         vKsbqAaldanferiZ0Oh74d16lqLbcAX93NZazL6tZJSGUF8kpuBEnTE9VuZ9ZyryrL+J
+         qr9Q==
+X-Gm-Message-State: AFqh2kqws4oHPAHoQ3AxjNboMf7WQ0zCrxAaAacYaSwG90uCOvtct9tp
+        rkZQR5NQauc24AOGCRVEW5oYjA==
+X-Google-Smtp-Source: AMrXdXvZ3082LMCenN68mf9vfl1DFIcmDzRUxBQYnHI1JRU+puaHlbNOWHLuLFn505leMQ/10M/kFQ==
+X-Received: by 2002:a05:6512:142:b0:4b5:a207:8d73 with SMTP id m2-20020a056512014200b004b5a2078d73mr1786934lfo.52.1671724620260;
+        Thu, 22 Dec 2022 07:57:00 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f13-20020a19380d000000b004acb2adfa1fsm106882lfa.307.2022.12.22.07.56.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 07:56:29 -0800 (PST)
-Message-ID: <791f5e52-6035-2501-7bc2-2795e43ae1c1@gmail.com>
-Date:   Thu, 22 Dec 2022 18:56:27 +0300
+        Thu, 22 Dec 2022 07:56:59 -0800 (PST)
+Message-ID: <1f40c42c-f979-0b74-fcbc-1df142de7e77@linaro.org>
+Date:   Thu, 22 Dec 2022 16:56:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
+Subject: Re: [PATCH V2 4/6] dt-bindings: usb: ci-hdrc-usb2: convert to DT
+ schema format
 Content-Language: en-US
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
-        bbasu@nvidia.com
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
- <62fc4a96-bab8-4d43-5278-3375e34431e7@gmail.com>
-In-Reply-To: <62fc4a96-bab8-4d43-5278-3375e34431e7@gmail.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, xu.yang_2@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
+References: <20221014095148.2063669-1-peng.fan@oss.nxp.com>
+ <20221014095148.2063669-5-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221014095148.2063669-5-peng.fan@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-21.12.2022 22:20, Dmitry Osipenko пишет:
-> 20.12.2022 19:02, Sumit Gupta пишет:
->> +static int tegra_emc_icc_set_bw(struct icc_node *src, struct icc_node *dst)
->> +{
->> +	struct tegra186_emc *emc = to_tegra186_emc(dst->provider);
->> +	struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
->> +	struct mrq_bwmgr_int_request bwmgr_req = { 0 };
->> +	struct mrq_bwmgr_int_response bwmgr_resp = { 0 };
->> +	struct tegra_icc_node *tnode = mc->curr_tnode;
->> +	struct tegra_bpmp_message msg;
->> +	int ret = 0;
->> +
->> +	/*
->> +	 * Same Src and Dst node will happen during boot from icc_node_add().
->> +	 * This can be used to pre-initialize and set bandwidth for all clients
->> +	 * before their drivers are loaded. We are skipping this case as for us,
->> +	 * the pre-initialization already happened in Bootloader(MB2) and BPMP-FW.
->> +	 */
->> +	if (src->id == dst->id)
->> +		return 0;
->> +
->> +	if (mc->curr_tnode->type == TEGRA_ICC_NISO)
+On 14/10/2022 11:51, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> The mc->curr_tnode usage looks suspicious, why you can't use src node?
+> Convert the binding to DT schema format
 > 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
 
-This function sets memory BW for a memory client and not for EMC.
-Apparently, you should move the BW setting to tegra234_mc_icc_set() and
-then tegra_emc_icc_set_bw() will be a noop.
+(...)
+
+> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+> new file mode 100644
+> index 000000000000..ed03649f17a6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+> @@ -0,0 +1,341 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/ci-hdrc-usb2.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: USB2 ChipIdea USB controller for ci13xxx Binding
+> +
+> +maintainers:
+> +  - Xu Yang <xu.yang_2@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - chipidea,usb2
+> +          - lsi,zevio-usb
+> +          - nvidia,tegra20-udc
+> +          - nvidia,tegra30-udc
+> +          - nvidia,tegra114-udc
+> +          - nvidia,tegra124-udc
+> +          - qcom,ci-hdrc
+
+Except other comments, this conversion does not match existing Qualcomm
+driver and Qualcomm DTS. You miss the "ulpi" node.
+
+Best regards,
+Krzysztof
 
