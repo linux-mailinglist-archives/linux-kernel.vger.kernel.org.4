@@ -2,163 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65195654631
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FCD654636
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbiLVSy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
+        id S235476AbiLVSyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235490AbiLVSyL (ORCPT
+        with ESMTP id S235510AbiLVSyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:54:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C2624941;
-        Thu, 22 Dec 2022 10:53:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00E9A61D05;
-        Thu, 22 Dec 2022 18:53:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 531C4C433F0;
-        Thu, 22 Dec 2022 18:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671735195;
-        bh=0lfqHS+pnnKBfEkssmmqwz9g54VECV2eOGJmG2SehW0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=E6TLZ3eIjXmPaq+e4d6nwmW4wL73YxySH48U40GgZ9Iw0FOAN6Fcs+YfrziaY4xg+
-         WK85cOb4PN+L6izp4jAJefrbsaVAYOoErtUGi5M8e5R6/jirmIuJlcQb8HNx5CtoGv
-         DrToqKswi/1BVAu4ecJuV7B6ARiqRZjSymFc0PW08gRHXt5SGexW9vaAkFJGg+CO90
-         T8YbWRWQOSSg/MXeuGZqCsvJX2Hv2SD5djkxVNIDHF9z8JMdPYVeRqFSOnZigOvcdc
-         GMjexz5tQYvUmwJpHlZVciTV9IUhzvAADnjK4nzyEPKIu2yHuSdKgqlq7mIwRorqOb
-         8Gdo6DOKjI4qQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DD5555C146C; Thu, 22 Dec 2022 10:53:14 -0800 (PST)
-Date:   Thu, 22 Dec 2022 10:53:14 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Message-ID: <20221222185314.GR4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221222164302.GP4001@paulmck-ThinkPad-P17-Gen-1>
- <71C23049-158C-4E43-A54F-714640393682@joelfernandes.org>
+        Thu, 22 Dec 2022 13:54:14 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCD9275DD
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:53:30 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id fc4so6935859ejc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZcsqGPg6FZAoLHqSnlhY2ZqAO977IJDvTdbEOzXS1SA=;
+        b=AamEj6mQ2MbxRL2eTQGNKqmtoyHbk3rHDzkRcFN6JuRLM98nQ/XJwAS2oV1KzfiTG3
+         KASKWAosayh8tChJjITyM7qtpCbQmvCZoGsUz6zA82x+iqbXvIjaRSr/hoBQRO7TVY2g
+         ahPYr09u+OlpS6QVItdO9QwhJ3xF09lfs9xGI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZcsqGPg6FZAoLHqSnlhY2ZqAO977IJDvTdbEOzXS1SA=;
+        b=bE3UQB53yaGp2hxXvF9Ee+T4M3sxT3YvAPRrF4/BZxFjQ03uhSxd/g5PaUzzXM/nXy
+         u99jQgs3ArlktcGfS3U34k+HFBVgYd/EezvOpV7ZftyAJ6kwq8a7hxgnoTjM2XLc4Fqy
+         l0SHMdL+20UenvF55I5+2gGXml126M+rOHaohVmzGETEpJ7UlOoKuKDpF1/gJFOQAbZc
+         li5eT8iPERJK2kRezOpSdC2/l5NqQptxwpvsJ+ajCwX2LQJojFdiQ1+UNLaGtZndFC7I
+         V12BU6HIvOLjqpV8hx7ySoOf5Ioww+1mh/m3bxZkZXKyKorAsjOWW6eGFYg0SqqXhDY6
+         eUFQ==
+X-Gm-Message-State: AFqh2kquth1NnXyecyOKx5lUQC7kJ4+ncCqc2YnlvlfYC0DP+dvWXCXB
+        CCj8uqI48ib1DKcmuO11Oy/83l8Ne3JHorG0QaI=
+X-Google-Smtp-Source: AMrXdXt3qASk7D+BiElA55plLkckN4JexTQ7PzPf7I7GKu7MdDy46RF9PgB/ua7eYhH8Y0HksKe8Og==
+X-Received: by 2002:a17:907:6f17:b0:7c1:5019:50c6 with SMTP id sy23-20020a1709076f1700b007c1501950c6mr7293358ejc.72.1671735209450;
+        Thu, 22 Dec 2022 10:53:29 -0800 (PST)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id p10-20020a170906614a00b007812ba2a360sm525608ejl.149.2022.12.22.10.53.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 10:53:28 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id i82-20020a1c3b55000000b003d1e906ca23so1871794wma.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:53:27 -0800 (PST)
+X-Received: by 2002:a05:600c:4aa8:b0:3d0:69f4:d3d0 with SMTP id
+ b40-20020a05600c4aa800b003d069f4d3d0mr298494wmp.93.1671735207659; Thu, 22 Dec
+ 2022 10:53:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <71C23049-158C-4E43-A54F-714640393682@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221222151319.122398-1-krzysztof.kozlowski@linaro.org> <20221222151319.122398-3-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221222151319.122398-3-krzysztof.kozlowski@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 22 Dec 2022 10:53:15 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WWPe9bBP2z6Q3GOaGr-5U9conGq4d8obwVCxQtZ7rAUw@mail.gmail.com>
+Message-ID: <CAD=FV=WWPe9bBP2z6Q3GOaGr-5U9conGq4d8obwVCxQtZ7rAUw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] arm64: dts: qcom: sdm845: align TLMM pin
+ configuration with DT schema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Joel Selvaraj <joelselvaraj.oss@gmail.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Caleb Connolly <caleb@connolly.tech>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 01:19:06PM -0500, Joel Fernandes wrote:
-> 
-> 
-> > On Dec 22, 2022, at 11:43 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > 
-> > ﻿On Thu, Dec 22, 2022 at 01:40:10PM +0100, Frederic Weisbecker wrote:
-> >>> On Wed, Dec 21, 2022 at 12:11:42PM -0500, Mathieu Desnoyers wrote:
-> >>> On 2022-12-21 06:59, Frederic Weisbecker wrote:
-> >>>>> On Tue, Dec 20, 2022 at 10:34:19PM -0500, Mathieu Desnoyers wrote:
-> >>> [...]
-> >>>>> 
-> >>>>> The memory ordering constraint I am concerned about here is:
-> >>>>> 
-> >>>>>  * [...] In addition,
-> >>>>>  * each CPU having an SRCU read-side critical section that extends beyond
-> >>>>>  * the return from synchronize_srcu() is guaranteed to have executed a
-> >>>>>  * full memory barrier after the beginning of synchronize_srcu() and before
-> >>>>>  * the beginning of that SRCU read-side critical section. [...]
-> >>>>> 
-> >>>>> So if we have a SRCU read-side critical section that begins after the beginning
-> >>>>> of synchronize_srcu, but before its first memory barrier, it would miss the
-> >>>>> guarantee that the full memory barrier is issued before the beginning of that
-> >>>>> SRCU read-side critical section. IOW, that memory barrier needs to be at the
-> >>>>> very beginning of the grace period.
-> >>>> 
-> >>>> I'm confused, what's wrong with this ?
-> >>>> 
-> >>>> UPDATER                  READER
-> >>>> -------                  ------
-> >>>> STORE X = 1              STORE srcu_read_lock++
-> >>>> // rcu_seq_snap()        smp_mb()
-> >>>> smp_mb()                 READ X
-> >>>> // scans
-> >>>> READ srcu_read_lock
-> >>> 
-> >>> What you refer to here is only memory ordering of the store to X and load
-> >>> from X wrt loading/increment of srcu_read_lock, which is internal to the
-> >>> srcu implementation. If we really want to model the provided high-level
-> >>> memory ordering guarantees, we should consider a scenario where SRCU is used
-> >>> for its memory ordering properties to synchronize other variables.
-> >>> 
-> >>> I'm concerned about the following Dekker scenario, where synchronize_srcu()
-> >>> and srcu_read_lock/unlock would be used instead of memory barriers:
-> >>> 
-> >>> Initial state: X = 0, Y = 0
-> >>> 
-> >>> Thread A                   Thread B
-> >>> ---------------------------------------------
-> >>> STORE X = 1                STORE Y = 1
-> >>> synchronize_srcu()
-> >>>                           srcu_read_lock()
-> >>>                           r1 = LOAD X
-> >>>                           srcu_read_unlock()
-> >>> r0 = LOAD Y
-> >>> 
-> >>> BUG_ON(!r0 && !r1)
-> >>> 
-> >>> So in the synchronize_srcu implementation, there appears to be two
-> >>> major scenarios: either srcu_gp_start_if_needed starts a gp or expedited gp,
-> >>> or it uses an already started gp/expedited gp. When snapshotting with
-> >>> rcu_seq_snap, the fact that the memory barrier is after the ssp->srcu_gp_seq
-> >>> load means that it does not order prior memory accesses before that load.
-> >>> This sequence value is then used to identify which gp_seq to wait for when
-> >>> piggy-backing on another already-started gp. I worry about reordering
-> >>> between STORE X = 1 and load of ssp->srcu_gp_seq, which is then used to
-> >>> piggy-back on an already-started gp.
-> >>> 
-> >>> I suspect that the implicit barrier in srcu_read_lock() invoked at the
-> >>> beginning of srcu_gp_start_if_needed() is really the barrier that makes
-> >>> all this behave as expected. But without documentation it's rather hard to
-> >>> follow.
-> >> 
-> >> Oh ok I see now. It might be working that way by accident or on forgotten
-> >> purpose. In any case, we really want to add a comment above that
-> >> __srcu_read_lock_nmisafe() call.
-> > 
-> > Another test for the safety (or not) of removing either D or E is
-> > to move that WRITE_ONCE() to follow (or, respectively, precede) the
-> > adjacent scans.
-> 
-> Good idea, though I believe the MBs that the above talk about are not the flip ones. They are the ones in synchronize_srcu() beginning and end, that order with respect to grace period start and end.
-> 
-> So that (flipping MBs) is unrelated, or did I miss something?
+Hi,
 
-The thought is to manually similate in the source code the maximum
-memory-reference reordering that a maximally hostile compiler and CPU
-would be permitted to carry out.  So yes, given that there are other
-memory barriers before and after, these other memory barriers limit how
-far the flip may be moved in the source code.
+On Thu, Dec 22, 2022 at 7:13 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> DT schema expects TLMM pin configuration nodes to be named with
+> '-state' suffix and their optional children with '-pins' suffix.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> Cc: Doug Anderson <dianders@chromium.org>
+>
+> Tested on Qualcomm RB3. Please kndly test a bit more on other devices.
+> This should not have an functional impact.
+>
+> Changes since v3:
+> 1. db845c: drop qup_uart3_default override and use qup_uart3_4pin
+>    (Doug).
+>
+> Changes since v2:
+> 1. Bring back UART6 4-pin bias/drive strength to DTSI.
+>
+> Changes since v1:
+> 1. Address comments and implement conclusion with Doug.  Drop
+>    default-pins/pinmux/mux/config nodes but instead add subnodes for
+>    specific pins for UARTs.  This should match approach used for SC7180.
+>
+> v1: https://lore.kernel.org/linux-kernel/1b9dcca8-1abd-99a3-da12-a8763bf77f12@linaro.org/
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi    | 397 ++++------
+>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts    |  93 +--
+>  .../arm64/boot/dts/qcom/sdm845-lg-common.dtsi |  60 +-
+>  arch/arm64/boot/dts/qcom/sdm845-lg-judyln.dts |   2 +-
+>  arch/arm64/boot/dts/qcom/sdm845-mtp.dts       |  77 +-
+>  .../boot/dts/qcom/sdm845-oneplus-common.dtsi  | 101 +--
+>  .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 150 ++--
+>  .../dts/qcom/sdm845-sony-xperia-tama.dtsi     |   6 +-
+>  .../qcom/sdm845-xiaomi-beryllium-common.dtsi  |  12 +-
+>  .../boot/dts/qcom/sdm845-xiaomi-polaris.dts   |  21 +-
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi          | 689 ++++++++----------
+>  .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts |  53 +-
+>  .../boot/dts/qcom/sdm850-samsung-w737.dts     | 121 +--
+>  13 files changed, 701 insertions(+), 1081 deletions(-)
 
-Here I am talking about the memory barriers associated with the flip,
-but the same trick can of course be applied to other memory barriers.
-In general, remove a given memory barrier and (in the source code)
-maximally rearrange the memory references that were previously ordered
-by the memory barrier in question.
-
-Again, the presence of other memory barriers will limit the permitted
-maximal source-code rearrangement.
-
-							Thanx, Paul
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
