@@ -2,135 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0163765462B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F1465462F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235580AbiLVSwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S235577AbiLVSxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiLVSv7 (ORCPT
+        with ESMTP id S235510AbiLVSx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:51:59 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4A029363;
-        Thu, 22 Dec 2022 10:51:41 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id x22so6955092ejs.11;
-        Thu, 22 Dec 2022 10:51:41 -0800 (PST)
+        Thu, 22 Dec 2022 13:53:28 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BCA2EFBC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:52:33 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id e13so4166315edj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:52:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+wjlf9HtdBwtd5BfrKK3NoAIyLd+UFeDv/NhLgMN1as=;
-        b=A4i6MI57PBStveX53sUUEvZ+x7r1V47+5xIVi+hPAAfEWErZ06/pJUlK4Hst9pX/b8
-         XlJsuixCjjzgxhcnCMGoxM5AEfOvrtXGsbYxsdOnJg3yL04oHA3B4hzJ63iRKf4XCCcy
-         +4ezcGTXJvXs/CsX9i+BqbEmLHYworqDNE7nCKjxq7RHtsGCXdeSufvd8EQwmkpIZRmc
-         7CMhvEKfe26E8krl41lM7uYmiegPQzavuvjHeheWfjx2y3/74PG8dDEFo/mfClmMm+fM
-         iVkHNcOuHpAWzrA1430NggdBSgVRlkVZw79JIUMGN3drPnGPOodEjpMsNufwvlmYqKY5
-         c3+Q==
+        bh=Wv5r7o6DzTqSnIpCAKgG7SesTpoF9G2sHu8yiB5cAqQ=;
+        b=mSfrS/J8VO5tRvI4ypr7qpNfnF83I4UW4EOsuJRte7oJb3nlCbheVYTcvXQaLYQY/D
+         mZ3a1yMbIuPZpRRD+rZIyshMQj/e5SwoAOSeLTBjeW0K/mmPSjCm78S6ZU4DiydPBtUa
+         f5cuFbWVbca71QSlKUVjm57bFQnNbBgicqmHc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+wjlf9HtdBwtd5BfrKK3NoAIyLd+UFeDv/NhLgMN1as=;
-        b=sMVEBBEi07v4TAMXgZRWCpzbOI5iR8X+oUAl+WHypYpUcSFjqDS5A5IqBsdZ9y74Du
-         WKzDTMJzXNPR/O5T68klx8PhXey02s7/8F7MlhU6TmNj3AL/QuDHtzkrYTBpe7Segwb5
-         ugeDvg9j1UFoarbgcNCr/VPnp3F8RblqYu5kmW1EkW+qF3NITFaJOhv0rpyycE+lbeL9
-         HPl3n7FQzChXN+bMrMArhCxbYPsIRHi7Z6swibmE+SbPYWkn4P9bYOQ2n6R0l2sSvcbs
-         9515Nu6InFegoga2k21UuO47WWaU2oglf+a7WyKq4Yp/X6tcmMTy1I9qDig7JQU1akMO
-         ITTA==
-X-Gm-Message-State: AFqh2koWSQNYZmnWX2+fJcnCR3XtcpdUaO9p06RlzoEtP6ItoMUZtbdt
-        3madA/gprR9mbfzXbeImnhDURSPwoakw9PXXE4/hCS2p
-X-Google-Smtp-Source: AMrXdXtN2rRR20R19i6vscCm4IWwKN/GFSFnTNL5An/JnKDjI+AGAskvFSxXaCgJEImPDZBjcbQAJSLtaww1FHflMl0=
-X-Received: by 2002:a17:906:f209:b0:7fd:f0b1:c8ec with SMTP id
- gt9-20020a170906f20900b007fdf0b1c8ecmr453038ejb.114.1671735100056; Thu, 22
- Dec 2022 10:51:40 -0800 (PST)
+        bh=Wv5r7o6DzTqSnIpCAKgG7SesTpoF9G2sHu8yiB5cAqQ=;
+        b=SxBGxa+EhKzY/I4yK9t8PH1E6LTZopcpVKY8YAtPxyyuN9do/451+WdO4woba2V1PU
+         84UnvLMSXGo5937m+B2hEvPn2H/PVHa/2YUywMmjNV9/BvrfiojL6P7Soz5uTkxqB6Ek
+         1ugsb5eeY2iIqf2AvN2VM+K2cFDWwoiUmTDToJL4zrBH646kA/yszU9BDD8H0yNZWKAP
+         BEGBYEkuQqUEclVAaQU93zCmhxWM9ujUVE0wzkSkWTl+Rfa3I499VkVthXFtrI5u4F/U
+         UruDUuXT8xBcWCyxVwTf2C4aprtZPDFC5GwtZPh2Mh9nZEb5xcAbjJbyO3XXv7p0cPDW
+         6JSw==
+X-Gm-Message-State: AFqh2kp8Gx961U7NrqGWGCsN+rSPjN0xdnl8avZRc3Lwdq9iOCJRI2lm
+        anJDuCRspOqy2oJyBZlEvo3rlV8WYPEZzow8RWo=
+X-Google-Smtp-Source: AMrXdXtsZdhdoRdn8MVgIR24LOQexCRZcwfJ3VXoNu5hJGlTk/+GFo4bMqojq9F7PbsmMjQ5ArCTYg==
+X-Received: by 2002:a05:6402:1f09:b0:478:8375:5dd5 with SMTP id b9-20020a0564021f0900b0047883755dd5mr5470202edb.24.1671735151166;
+        Thu, 22 Dec 2022 10:52:31 -0800 (PST)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id j18-20020aa7c412000000b0046bc2f432dasm651158edq.22.2022.12.22.10.52.29
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 10:52:30 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id h16so2528819wrz.12
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:52:29 -0800 (PST)
+X-Received: by 2002:a5d:6449:0:b0:242:1f80:6cd9 with SMTP id
+ d9-20020a5d6449000000b002421f806cd9mr273405wrw.405.1671735148968; Thu, 22 Dec
+ 2022 10:52:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20221217223509.88254-1-changbin.du@gmail.com> <20221217223509.88254-2-changbin.du@gmail.com>
- <Y5/eE+ds+e+k3VJO@leoy-yangtze.lan> <20221220013114.zkkxkqh7orahxbzh@mail.google.com>
- <Y6GdofET0gHQzRX6@leoy-yangtze.lan> <CAEf4Bzb_XOEoG9anNdzQVJRqd3G4yKJTSa9Dgc9xkMXqn-xdFg@mail.gmail.com>
- <Y6KDrELoIfPbh3VN@leoy-yangtze.lan>
-In-Reply-To: <Y6KDrELoIfPbh3VN@leoy-yangtze.lan>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 22 Dec 2022 10:51:28 -0800
-Message-ID: <CAEf4BzaiNOo_qqo16qLACfBe6esg2w+GafqU0TtwZMprpuDBEQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] libbpf: show error info about missing ".BTF" section
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Quentin Monnet <quentin@isovalent.com>,
-        Changbin Du <changbin.du@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20221222151319.122398-1-krzysztof.kozlowski@linaro.org> <20221222151319.122398-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221222151319.122398-2-krzysztof.kozlowski@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 22 Dec 2022 10:52:16 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XsDznyCcrv=DKt6DyPHRg7uJUa6GF-A8h3hRa6cAwa-A@mail.gmail.com>
+Message-ID: <CAD=FV=XsDznyCcrv=DKt6DyPHRg7uJUa6GF-A8h3hRa6cAwa-A@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] arm64: dts: qcom: sdm845-xiaomi-beryllium: fix
+ audio codec interrupt pin name
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Joel Selvaraj <joelselvaraj.oss@gmail.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Caleb Connolly <caleb@connolly.tech>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 7:55 PM Leo Yan <leo.yan@linaro.org> wrote:
->
-> On Tue, Dec 20, 2022 at 04:13:13PM -0800, Andrii Nakryiko wrote:
->
-> [...]
->
-> > > > > > @@ -990,6 +990,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
-> > > > > >   err = 0;
-> > > > > >
-> > > > > >   if (!btf_data) {
-> > > > > > +         pr_warn("failed to find '%s' ELF section in %s\n", BTF_ELF_SEC, path);
-> > > > > >           err = -ENOENT;
-> > >
-> > > btf_parse_elf() returns -ENOENT when ELF file doesn't contain BTF
-> > > section, therefore, bpftool dumps error string "No such file or
-> > > directory".  It's confused that actually vmlinux is existed.
-> > >
-> > > I am wondering if we can use error -LIBBPF_ERRNO__FORMAT (or any
-> > > better choice?) to replace -ENOENT at here, this can avoid bpftool to
-> > > outputs "No such file or directory" in this case.
-> >
-> > The only really meaningful error code would be -ESRCH, which
-> > strerror() will translate to "No such process", which is also
-> > completely confusing.
->
-> Or maybe -ENODATA (No data available) is a better choice?
+Hi,
 
--ENODATA sounds good to me, yep.
+On Thu, Dec 22, 2022 at 7:13 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The pin config entry should have a string, not number, for the GPIO used
+> as WCD9340 audio codec interrupt.
+>
+> Fixes: dd6459a0890a ("arm64: dts: qcom: split beryllium dts into common dtsi and tianma dts")
+> Reported-by: Doug Anderson <dianders@chromium.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> ---
+>
+> Cc: Doug Anderson <dianders@chromium.org>
+>
+> Changes since v3:
+> 1. New patch.
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Thanks,
-> Leo
->
-> > In general, I always found these strerror() messages extremely
-> > unhelpful and confusing. I wonder if we should make an effort to
-> > actually emit symbolic names of errors instead (literally, "-ENOENT"
-> > in this case). This is all tooling for engineers, I find -ENOENT or
-> > -ESRCH much more meaningful as an error message, compared to "No such
-> > file" seemingly human-readable interpretation.
-> >
-> > Quenting, what do you think about the above proposal for bpftool? We
-> > can have some libbpf helper internally and do it in libbpf error
-> > messages as well and just reuse the logic in bpftool, perhaps?
-> >
-> > Anyways, I've applied this patch set to bpf-next. Thanks.
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
