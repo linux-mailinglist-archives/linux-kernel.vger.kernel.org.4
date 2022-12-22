@@ -2,153 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E75D654634
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30759654638
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235370AbiLVSyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S235535AbiLVSyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiLVSyN (ORCPT
+        with ESMTP id S235382AbiLVSyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:54:13 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CB8275C3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:53:26 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id b24-20020a05600c4a9800b003d21efdd61dso1969249wmp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:53:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZRm9urdOthWqTYxAw02fxkoMKYNKeTirXSn3tbLtpc=;
-        b=DqydNKpoK6xZ9NSkK2c/6XM/aLr5fmVcnfv97GPGX4t5d7SoTa1+Vj7MbKtmyUz2kG
-         wEZv9euJIhxdwnS5KDjjxd7WRLWoknTnb7dET+eUcY2RTZ3kIF3m+H4D2G5Ky0PknVfL
-         Pb9zTvvYizHD2gGeZwV1XN15iZSqKwdQAZZQMkQzluqK20AayXQfNV9HR5CljPueba3M
-         c5JXXjGBW71+n2yDA7hqZ74NPrTba2GW9H8fRTM2AVHcN4M9Zcp/XU5uf5DrmEdLdUwc
-         uweuf1M7V6MRMRcExOe2U6+80LMwxr2u7ZMnirQicpzKUo+UtZU0ibU3OTdmV9HcNAjU
-         eKCg==
+        Thu, 22 Dec 2022 13:54:16 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E584625C50
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:53:55 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id g11-20020a6be60b000000b006e2c707e565so1066130ioh.14
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:53:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mZRm9urdOthWqTYxAw02fxkoMKYNKeTirXSn3tbLtpc=;
-        b=iGi0q+l5iIDWy5E76kRe5BxACPGWXzKjQX/wzHM8fCuhImD6atRyDjmZEA48oC354O
-         lhqfKyY9nWpm6zoDfRvK/lt4P8gwm25K0A8mDFs33W66VylUXaI2+8CTYQyRTTCGS4Rl
-         tXLohrJ3Ok1DLCpoQnuIo+DdMArznZ/ONcVjcmWQ9XAnYue1wzqYJiJfZ5Mr/8c0H+Bl
-         u0RXItbCUyjh7fLSaihE9/GqB0d4mbkrsb63fzNo5HUFEeNUZi4J6M8s/ggxSPm4lkP6
-         6a4ZiRwpdTgdpfA8qvTChJKJ2AjPTXHQCsdNFliXINeybPfeImIv8fpEJpfHdt3txf34
-         vbIA==
-X-Gm-Message-State: AFqh2kpdNGg7cll6iDZvDimA3IJbkV1rfJKBGsk6RpYXWJWDmCLrWgKc
-        5mI+UDPS+N4eemHhfzPpgNg=
-X-Google-Smtp-Source: AMrXdXsiZnZT37+W2XIO83aQjb+0JFc6XJ5Ad9sd0DAmV5sXvHfzSlJOJgF0vWfO7rAT6BENa8pdNQ==
-X-Received: by 2002:a05:600c:15d4:b0:3d1:d746:d95b with SMTP id v20-20020a05600c15d400b003d1d746d95bmr7888624wmf.41.1671735205373;
-        Thu, 22 Dec 2022 10:53:25 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id a6-20020adff7c6000000b002421db5f279sm1163666wrq.78.2022.12.22.10.53.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 10:53:24 -0800 (PST)
-Date:   Thu, 22 Dec 2022 21:53:20 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, xinhui pan <xinhui.pan@amd.com>,
-        amd-gfx@lists.freedesktop.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, daniel@ffwll.ch,
-        matthew.auld@intel.com, christian.koenig@amd.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, arunpravin.paneerselvam@amd.com,
-        xinhui pan <xinhui.pan@amd.com>
-Subject: Re: [PATCH v6] drm: Optimise for continuous memory allocation
-Message-ID: <202212222042.6Dhv6XWG-lkp@intel.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Oa7EM5KnTqbETjvoJefmB06QiJeNz3GkW1CQR+Pg8Rg=;
+        b=jbwb0Exgyw0+jlb4ciyt61lfpam6OPtZ3fmV4hUlA+AS+KEwlCSYQz1t+pjKpyKrcB
+         6fM6qABACjC3gceLDt8JsIv7GxSvfMSFkYW8WMHKJ2xSZ6aLESdr8FbFlVYAX491o6Nd
+         MFFDWhGPm4g1+y6mKo9og+B6kkgEFPkH8kax6DIC1zcFqReUjFBGIjXJiO8tacJJw74o
+         z48E3Buh1DGLti6Fdl9X++vp5y98MUexdxJZAtJSEIB2H8vni31eIdO8vVgh+qrwMpqK
+         KIDx9PmHBCw5yeL7uTbFNoKsgTOREJ69m0var0iOWhiNmirlrU+f0ssErWb+Jp6ik6Qo
+         u+Ww==
+X-Gm-Message-State: AFqh2kr6E9RNJ1i/yZe3qqcvjScgNMYe0PbW4eO82RQ+hmK3Yog6PId1
+        dkpPKzIN5yD6A5SyqcAH7zJccXnp85lYUDzPu/R5roGT6UXn
+X-Google-Smtp-Source: AMrXdXuXBCzoK8vNJfj7RbWtgzfqAXK5CQTE7ZPYbZ//TkkkVpOfh9c6NodZZNkMlUXrHy6rsxyvrW3n97YpYCYJ1by9sv+Co2kq
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221218065708.93332-1-xinhui.pan@amd.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:3894:b0:38a:682a:58fc with SMTP id
+ b20-20020a056638389400b0038a682a58fcmr645265jav.250.1671735235280; Thu, 22
+ Dec 2022 10:53:55 -0800 (PST)
+Date:   Thu, 22 Dec 2022 10:53:55 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000db858c05f06f30b0@google.com>
+Subject: [syzbot] [exfat?] INFO: task hung in exfat_write_inode
+From:   syzbot <syzbot+2f73ed585f115e98aee8@syzkaller.appspotmail.com>
+To:     linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi xinhui,
+Hello,
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+syzbot found the following issue on:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/xinhui-pan/drm-Optimise-for-continuous-memory-allocation/20221218-145922
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20221218065708.93332-1-xinhui.pan%40amd.com
-patch subject: [PATCH v6] drm: Optimise for continuous memory allocation
-config: s390-randconfig-m041-20221218
-compiler: s390-linux-gcc (GCC) 12.1.0
+HEAD commit:    f9ff5644bcc0 Merge tag 'hsi-for-6.2' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15a7ad1b880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c163713cf9186fe7
+dashboard link: https://syzkaller.appspot.com/bug?extid=2f73ed585f115e98aee8
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11d6fe00480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d2fc63880000
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/95eb66f6b569/disk-f9ff5644.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fb05e1a5a9de/vmlinux-f9ff5644.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e2f1f698973a/bzImage-f9ff5644.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b52ba015912a/mount_0.gz
 
-smatch warnings:
-drivers/gpu/drm/drm_buddy.c:501 find_continuous_blocks() error: uninitialized symbol 'block'.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2f73ed585f115e98aee8@syzkaller.appspotmail.com
 
-vim +/block +501 drivers/gpu/drm/drm_buddy.c
+INFO: task kworker/u4:1:11 blocked for more than 143 seconds.
+      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:1    state:D stack:18424 pid:11    ppid:2      flags:0x00004000
+Workqueue: writeback wb_workfn (flush-7:2)
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x995/0xe20 kernel/sched/core.c:6555
+ schedule+0xcb/0x190 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+ write_inode fs/fs-writeback.c:1451 [inline]
+ __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
+ writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
+ __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
+ wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
+ wb_check_background_flush fs/fs-writeback.c:2131 [inline]
+ wb_do_writeback fs/fs-writeback.c:2219 [inline]
+ wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task kworker/u4:2:34 blocked for more than 144 seconds.
+      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:2    state:D stack:17088 pid:34    ppid:2      flags:0x00004000
+Workqueue: writeback wb_workfn (flush-7:1)
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x995/0xe20 kernel/sched/core.c:6555
+ schedule+0xcb/0x190 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+ write_inode fs/fs-writeback.c:1451 [inline]
+ __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
+ writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
+ __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
+ wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
+ wb_check_background_flush fs/fs-writeback.c:2131 [inline]
+ wb_do_writeback fs/fs-writeback.c:2219 [inline]
+ wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task kworker/u4:5:1065 blocked for more than 145 seconds.
+      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:5    state:D stack:22144 pid:1065  ppid:2      flags:0x00004000
+Workqueue: writeback wb_workfn (flush-7:4)
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x995/0xe20 kernel/sched/core.c:6555
+ schedule+0xcb/0x190 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+ write_inode fs/fs-writeback.c:1451 [inline]
+ __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
+ writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
+ __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
+ wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
+ wb_check_background_flush fs/fs-writeback.c:2131 [inline]
+ wb_do_writeback fs/fs-writeback.c:2219 [inline]
+ wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task kworker/u4:0:5140 blocked for more than 145 seconds.
+      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:0    state:D stack:21824 pid:5140  ppid:2      flags:0x00004000
+Workqueue: writeback wb_workfn (flush-7:0)
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x995/0xe20 kernel/sched/core.c:6555
+ schedule+0xcb/0x190 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+ write_inode fs/fs-writeback.c:1451 [inline]
+ __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
+ writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
+ __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
+ wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
+ wb_check_background_flush fs/fs-writeback.c:2131 [inline]
+ wb_do_writeback fs/fs-writeback.c:2219 [inline]
+ wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task kworker/u4:3:5145 blocked for more than 146 seconds.
+      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:3    state:D stack:22144 pid:5145  ppid:2      flags:0x00004000
+Workqueue: writeback wb_workfn (flush-7:3)
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x995/0xe20 kernel/sched/core.c:6555
+ schedule+0xcb/0x190 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+ write_inode fs/fs-writeback.c:1451 [inline]
+ __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
+ writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
+ __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
+ wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
+ wb_check_background_flush fs/fs-writeback.c:2131 [inline]
+ wb_do_writeback fs/fs-writeback.c:2219 [inline]
+ wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+INFO: task kworker/u4:4:5146 blocked for more than 147 seconds.
+      Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:4    state:D stack:22144 pid:5146  ppid:2      flags:0x00004000
+Workqueue: writeback wb_workfn (flush-7:5)
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5244 [inline]
+ __schedule+0x995/0xe20 kernel/sched/core.c:6555
+ schedule+0xcb/0x190 kernel/sched/core.c:6631
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6690
+ __mutex_lock_common+0xe4f/0x26e0 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+ write_inode fs/fs-writeback.c:1451 [inline]
+ __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1663
+ writeback_sb_inodes+0x812/0x1050 fs/fs-writeback.c:1889
+ __writeback_inodes_wb+0x11d/0x260 fs/fs-writeback.c:1960
+ wb_writeback+0x440/0x7b0 fs/fs-writeback.c:2065
+ wb_check_background_flush fs/fs-writeback.c:2131 [inline]
+ wb_do_writeback fs/fs-writeback.c:2219 [inline]
+ wb_workfn+0xb3f/0xef0 fs/fs-writeback.c:2246
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-8a257b57bc11a2 xinhui pan 2022-12-18  472  static struct drm_buddy_block *
-8a257b57bc11a2 xinhui pan 2022-12-18  473  find_continuous_blocks(struct drm_buddy *mm,
-8a257b57bc11a2 xinhui pan 2022-12-18  474  		       int order,
-8a257b57bc11a2 xinhui pan 2022-12-18  475  		       unsigned long flags,
-8a257b57bc11a2 xinhui pan 2022-12-18  476  		       struct drm_buddy_block **lb)
-8a257b57bc11a2 xinhui pan 2022-12-18  477  {
-8a257b57bc11a2 xinhui pan 2022-12-18  478  	struct list_head *head = &mm->free_list[order - 1];
-8a257b57bc11a2 xinhui pan 2022-12-18  479  	struct drm_buddy_block *free_block, *first = NULL, *last = NULL;
-8a257b57bc11a2 xinhui pan 2022-12-18  480  
-8a257b57bc11a2 xinhui pan 2022-12-18  481  	/*
-8a257b57bc11a2 xinhui pan 2022-12-18  482  	 * Look for continuous free memory in buddy and buddy-in-law.
-8a257b57bc11a2 xinhui pan 2022-12-18  483  	 * IOW, the most left blocks at right of free block and the most right
-8a257b57bc11a2 xinhui pan 2022-12-18  484  	 * blocks at left of free block.
-8a257b57bc11a2 xinhui pan 2022-12-18  485  	 */
-8a257b57bc11a2 xinhui pan 2022-12-18  486  
-8a257b57bc11a2 xinhui pan 2022-12-18  487  	list_for_each_entry(free_block, head, link) {
-8a257b57bc11a2 xinhui pan 2022-12-18  488  		struct drm_buddy_block *buddy, *parent, *block;
-8a257b57bc11a2 xinhui pan 2022-12-18  489  		int left, min_order = 0;
-8a257b57bc11a2 xinhui pan 2022-12-18  490  		LIST_HEAD(fbl);
-8a257b57bc11a2 xinhui pan 2022-12-18  491  
-8a257b57bc11a2 xinhui pan 2022-12-18  492  		parent = free_block->parent;
-8a257b57bc11a2 xinhui pan 2022-12-18  493  		if (!parent)
-8a257b57bc11a2 xinhui pan 2022-12-18  494  			continue;
-8a257b57bc11a2 xinhui pan 2022-12-18  495  
-8a257b57bc11a2 xinhui pan 2022-12-18  496  		left = parent->left == free_block;
-8a257b57bc11a2 xinhui pan 2022-12-18  497  		list_add(&free_block->tmp_link, &fbl);
-8a257b57bc11a2 xinhui pan 2022-12-18  498  		buddy = __get_buddy(free_block);
-8a257b57bc11a2 xinhui pan 2022-12-18  499  		__continuous_block_in_tree(buddy, &fbl, left, min_order);
-8a257b57bc11a2 xinhui pan 2022-12-18  500  
-8a257b57bc11a2 xinhui pan 2022-12-18 @501  		while (parent && !((parent->left == block) ^ left)) {
-                                                                                            ^^^^^
-Not initialized on first iteration.
+Showing all locks held in the system:
+4 locks held by kworker/u4:1/11:
+ #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc90000107d00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+ #2: ffff88802bc260e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
+ #3: ffff888079e060e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+1 lock held by rcu_tasks_kthre/12:
+ #0: ffffffff8d326e50 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/13:
+ #0: ffffffff8d327650 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x30/0xd00 kernel/rcu/tasks.h:507
+1 lock held by khungtaskd/28:
+ #0: ffffffff8d326c80 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
+4 locks held by kworker/u4:2/34:
+ #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc90000ab7d00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+ #2: ffff888022bd40e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
+ #3: ffff88807a1c40e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+4 locks held by kworker/u4:5/1065:
+ #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc900056dfd00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+ #2: ffff8880756600e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
+ #3: ffff88802b40c0e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+2 locks held by getty/4750:
+ #0: ffff888028235098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x21/0x70 drivers/tty/tty_ldisc.c:244
+ #1: ffffc900015902f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x53b/0x1650 drivers/tty/n_tty.c:2177
+6 locks held by syz-executor402/5133:
+6 locks held by syz-executor402/5134:
+6 locks held by syz-executor402/5135:
+6 locks held by syz-executor402/5136:
+6 locks held by syz-executor402/5137:
+6 locks held by syz-executor402/5138:
+4 locks held by kworker/u4:0/5140:
+ #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc90003effd00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+ #2: ffff8880756620e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
+ #3: ffff88807f4ae0e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+4 locks held by kworker/u4:3/5145:
+ #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc90003f1fd00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+ #2: ffff8880757220e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
+ #3: ffff88802b6100e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
+4 locks held by kworker/u4:4/5146:
+ #0: ffff8881451dc938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x7f2/0xdb0
+ #1: ffffc90003f3fd00 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x831/0xdb0 kernel/workqueue.c:2264
+ #2: ffff88802bda60e0 (&type->s_umount_key#42){.+.+}-{3:3}, at: trylock_super+0x1b/0xf0 fs/super.c:415
+ #3: ffff88807bd960e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_write_inode+0x65/0x110 fs/exfat/inode.c:93
 
-8a257b57bc11a2 xinhui pan 2022-12-18  502  			block = parent;
-8a257b57bc11a2 xinhui pan 2022-12-18  503  			parent = parent->parent;
-8a257b57bc11a2 xinhui pan 2022-12-18  504  		}
-8a257b57bc11a2 xinhui pan 2022-12-18  505  
-8a257b57bc11a2 xinhui pan 2022-12-18  506  		if (!parent)
-8a257b57bc11a2 xinhui pan 2022-12-18  507  			continue;
-8a257b57bc11a2 xinhui pan 2022-12-18  508  
-8a257b57bc11a2 xinhui pan 2022-12-18  509  		buddy = __get_buddy(block);
-8a257b57bc11a2 xinhui pan 2022-12-18  510  		__continuous_block_in_tree(buddy, &fbl, !left, min_order);
-8a257b57bc11a2 xinhui pan 2022-12-18  511  
-8a257b57bc11a2 xinhui pan 2022-12-18  512  		/* list head of fbl is invalid outside.
-8a257b57bc11a2 xinhui pan 2022-12-18  513  		 * Walk through list from first fo last only.
-8a257b57bc11a2 xinhui pan 2022-12-18  514  		 */
-8a257b57bc11a2 xinhui pan 2022-12-18  515  		if (__free_block_in_order(&fbl, free_block, order, &first, &last))
-8a257b57bc11a2 xinhui pan 2022-12-18  516  			break;
-8a257b57bc11a2 xinhui pan 2022-12-18  517  	}
-8a257b57bc11a2 xinhui pan 2022-12-18  518  
-8a257b57bc11a2 xinhui pan 2022-12-18  519  	*lb = last;
-8a257b57bc11a2 xinhui pan 2022-12-18  520  	return first;
-8a257b57bc11a2 xinhui pan 2022-12-18  521  }
+=============================================
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+NMI backtrace for cpu 0
+CPU: 0 PID: 28 Comm: khungtaskd Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x46f/0x4f0 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x1ba/0x420 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
+ watchdog+0xcd5/0xd20 kernel/hung_task.c:377
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 5133 Comm: syz-executor402 Not tainted 6.1.0-syzkaller-13139-gf9ff5644bcc0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:is_valid_cluster fs/exfat/exfat_fs.h:413 [inline]
+RIP: 0010:exfat_clear_bitmap+0x85/0x5b0 fs/exfat/balloc.c:171
+Code: e8 30 e2 84 ff 4c 8b 3b bf 01 00 00 00 44 89 e6 e8 40 4a 2f ff 41 83 fc 01 0f 86 cb 01 00 00 49 8d 5f 08 48 89 d8 48 c1 e8 03 <42> 8a 04 28 84 c0 0f 85 78 03 00 00 8b 1b 89 df 44 89 e6 e8 93 47
+RSP: 0018:ffffc90003b1f838 EFLAGS: 00000a02
+RAX: 1ffff1100fe95c01 RBX: ffff88807f4ae008 RCX: 0000000000000000
+RDX: ffff88801f718000 RSI: 000000003c2e4184 RDI: 0000000000000001
+RBP: ffff888075662000 R08: ffffffff825c8fa0 R09: ffffed100e7265b4
+R10: ffffed100e7265b4 R11: 1ffff1100e7265b3 R12: 000000003c2e4184
+R13: dffffc0000000000 R14: 0000000000000000 R15: ffff88807f4ae000
+FS:  000055555561c300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055d87a197600 CR3: 000000007e2a5000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __exfat_free_cluster+0x470/0x9c0 fs/exfat/fatent.c:192
+ exfat_free_cluster+0x73/0xc0 fs/exfat/fatent.c:232
+ __exfat_truncate+0x67e/0x980 fs/exfat/file.c:184
+ exfat_evict_inode+0xce/0x270 fs/exfat/inode.c:624
+ evict+0x2a4/0x620 fs/inode.c:664
+ __dentry_kill+0x3b1/0x5b0 fs/dcache.c:607
+ dentry_kill+0xbb/0x290
+ dput+0x1f3/0x410 fs/dcache.c:913
+ do_renameat2+0xabf/0x12d0 fs/namei.c:4932
+ __do_sys_rename fs/namei.c:4976 [inline]
+ __se_sys_rename fs/namei.c:4974 [inline]
+ __x64_sys_rename+0x82/0x90 fs/namei.c:4974
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe1e540ea79
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff21223158 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe1e540ea79
+RDX: 0000000000000000 RSI: 0000000020000080 RDI: 0000000020000040
+RBP: 0000000000000000 R08: 00007fff21223180 R09: 00007fff21223180
+R10: 00007fff21223030 R11: 0000000000000246 R12: 00007fe1e53cd890
+R13: 00007fff212231b0 R14: 00007fff21223190 R15: 0000000000000000
+ </TASK>
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
