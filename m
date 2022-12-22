@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B4E654249
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539E765424B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235353AbiLVOBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S235362AbiLVODB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235294AbiLVOBs (ORCPT
+        with ESMTP id S230299AbiLVOC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:01:48 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABB226AF2;
-        Thu, 22 Dec 2022 06:01:47 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id C109480654;
-        Thu, 22 Dec 2022 15:01:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1671717705;
-        bh=YqaNO9kDy3nFfNc/a2RaV0OvzPrs8XfvxLhPTZxI0VQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aILuV8G0LVnhl9CsZCqq8FNrYyCr2x7Hs0Vs5ioyLmaR0iEyIBZ1h38scHWidtDDa
-         x21BQnj9MfV0C8q4GCz7y9/rprMLjKtb0q28MJry4Y57y0Xc8yYk636EmayAb3UlV2
-         HDegMUTAFoVpoiPy7/XKYY9etcJH1FvS2EnK2NdMrJUeWoboJBiUxZ1YeszoTrf1y6
-         Ov79iM1dljOWzniDTE+DZHQiSdWVe2RUfI3zUl8vc5q3cVf1C2cXqeuL0oPDR2kYgj
-         GqLhd6Iz/v59Ty777DgVMJJ2+slSkqAAvalF9IJcVBNm4phtpWOtJ+yTr8wh0dio5P
-         f5jbfRB4sOcBg==
-Message-ID: <3c555cae-999f-ccd2-d114-00b92abd19ba@denx.de>
-Date:   Thu, 22 Dec 2022 15:01:44 +0100
+        Thu, 22 Dec 2022 09:02:58 -0500
+X-Greylist: delayed 65088 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Dec 2022 06:02:56 PST
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5C86466;
+        Thu, 22 Dec 2022 06:02:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671717757; bh=rAiXl+mdpdCyxLsqZQpH6KekvLvHUkV0B51Cjb53HRA=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=i6BFp7rKXpgwTRO40SFxqhfrW02mMUMoJLjZTI+qZzI5AB/lStix1/QLLR5e80x3b
+         rXfO3HCVxI1+sCYIX4j+Avg2DgqyxuBH9tegUoiJTNaEN/5KunUeMb1udV/C/D6wgE
+         YgwnYM90DYx11Oobo7OSH2rmoiGHcjuvvi5F1s2s=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Thu, 22 Dec 2022 15:02:37 +0100 (CET)
+X-EA-Auth: /Rb/X7L8cN/nRl02EkrqvOrn+ZbhNwuoCLwLDamRCNY6fwRTz1VkrjOc32l1B8MUotKGCIay5XAUGENZzl1xxEq2AY99KDTC
+Date:   Thu, 22 Dec 2022 19:32:32 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
+Subject: Re: [PATCH] tty: serial: convert atomic_* to refcount_* APIs
+Message-ID: <Y6RjeCvgReLWQ89A@qemulion>
+References: <Y6NlNB9c22XiYHdD@qemulion>
+ <Y6PxNRgzPAdukDs5@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] dt-bindings: leds: Mark label property as deprecated
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        kernel <kernel@dh-electronics.com>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20221122111124.6828-1-cniedermaier@dh-electronics.com>
- <Y3y/S5COG7VPbsqL@duo.ucw.cz> <3f4c89a3-8955-ce41-ac2a-cee9b0ed5210@denx.de>
- <20221130191905.GA2631320-robh@kernel.org>
- <4043d693-7739-4709-8551-9f476031db70@denx.de>
- <38c9aae4-0cae-a5a6-7c76-f23edf259dab@gmail.com>
- <e6b166b399314a91bc97db591c8ec5a7@dh-electronics.com>
- <Y6RgjV4FT57SaTQw@duo.ucw.cz>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <Y6RgjV4FT57SaTQw@duo.ucw.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6PxNRgzPAdukDs5@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/22/22 14:50, Pavel Machek wrote:
-> Hi!
-> 
->>>> This part I understand. What is not clear to me is, why is 'label' being
->>>> un-deprecated.
->>>
->>> It shouldn't be. It seems to be Pavel's ad-hoc decision.
->>
->> Is there a majority agreement that the "label" property remains
->> deprecated?
-> 
-> 
->> If so, I would say we can mark the label as deprecated.
->>
->> On the other hand, the new generated standardized sysfs name does not seem
->> to provide a full replacement for the "label" property.
->> What is still missing?
-> 
-> Having reasonable naming of the LEDs is pre-requisite for deprecating
-> label property.
+On Thu, Dec 22, 2022 at 06:55:01AM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Dec 22, 2022 at 01:27:40AM +0530, Deepak R Varma wrote:
+> > The refcount_* APIs are designed to address known issues with the
+> > atomic_t APIs for reference counting. They protect the reference
+> > counters from overflow/underflow, use-after-free errors, provide
+> > improved memory ordering guarantee schemes, are neater and safer.
+> > Hence, replace the atomic_* APIs by their equivalent refcount_t
+> > API functions.
+> >
+> > This patch proposal address the following warnings generated by
+> > the atomic_as_refcounter.cocci coccinelle script
+> > 	atomic_add_return(-1, ...)
+> >
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> > Note: The patch is compile tested using dec_station.defconfig for
+> >       MIPS architecture.
+>
+> Do you have this hardware?  If not, please just do
+> one-variable-at-a-time so that if there are real problems, we can revert
+> the offending change easier.  And it makes it simpler to review.
 
-As far as I can tell, function and function-enumerator is the reasonable 
-naming. Jacek seem to confirm that. I would say, label can be deprecated 
-. What is the counter-argument for why it should NOT be deprecated ?
+Hi Greg,
+I do not have the hardware. I will make a one variable per patch change as
+suggest and send in a patch set.
+
+>
+> But, are you sure this is correct:
+>
+> > -	irq_guard = atomic_add_return(1, &mux->irq_guard);
+> > -	if (irq_guard != 1)
+> > +	refcount_inc(&mux->irq_guard);
+> > +	if (refcount_read(&mux->irq_guard) != 1)
+>
+> That is now different logic than before, why?  Are you sure this is ok?
+
+This is not correct. I read it wrong. I will correct this in the patch set.
+
+>
+> I stopped reviewing here...
+Thanks. I will review the rest of the changes per your advise and make the
+corrections.
+
+regards,
+./drv
+
+>
+> thanks,
+>
+> greg k-h
+
+
