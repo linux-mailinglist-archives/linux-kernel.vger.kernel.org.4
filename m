@@ -2,630 +2,504 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6868665448A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E250654578
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 18:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiLVPrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S230438AbiLVRFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 12:05:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiLVPrM (ORCPT
+        with ESMTP id S230032AbiLVRFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:47:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6BB286F4;
-        Thu, 22 Dec 2022 07:47:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47CBA61C36;
-        Thu, 22 Dec 2022 15:47:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 450E1C433EF;
-        Thu, 22 Dec 2022 15:47:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671724025;
-        bh=bTWyutJD/6azJRA4ZClYi+ktMUxXp6kuCPzrUV6U3Cs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QMZNb/etxmZhIa5X910QJJOf3NlkDmBSd+n3m+bLeNoXQ6MROX0CwMM4u1uWj2803
-         wRE1fDDbvHLMsMKaSxaX+swUWrpiMcQz0slXOYITVH29yy1lsRcWG6wddSAL2umAwB
-         Rfi6AU/NZz/aIQJjeeQ9S1V2YLy04nIi6OyTi1EyyYzioP14VyWzdTKJ2g7bnxMtK0
-         xflJLj2iMH+pvC/GwgTU/lvu/26ZsDy0vvpbFZ1xlKX0Rk+jSlZc66omR8WAXSw9cm
-         S651ZSWI2kddAPKmUnJEg92evie1tiok0BVjid22fvsbVrv6m4ianx+IdvCZ6unze7
-         wBF8u74ZdFYow==
-Date:   Fri, 23 Dec 2022 00:47:01 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     wuqiang <wuqiang.matt@bytedance.com>
-Cc:     davem@davemloft.net, anil.s.keshavamurthy@intel.com,
-        naveen.n.rao@linux.ibm.com, rostedt@goodmis.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        sander@svanheule.net, ebiggers@google.com,
-        dan.j.williams@intel.com, jpoimboe@kernel.org,
-        linux-kernel@vger.kernel.org, lkp@intel.com, mattwu@163.com,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 1/5] lib: objpool added: ring-array based lockless
- MPMC queue
-Message-Id: <20221223004701.80fd132089e6a8b14531cf30@kernel.org>
-In-Reply-To: <20221212123153.190888-2-wuqiang.matt@bytedance.com>
-References: <20221212123153.190888-1-wuqiang.matt@bytedance.com>
-        <20221212123153.190888-2-wuqiang.matt@bytedance.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Thu, 22 Dec 2022 12:05:45 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF563C4E;
+        Thu, 22 Dec 2022 09:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671728743; x=1703264743;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xRzPPYpvZCh9imRdT6OgYxnUrsY6lkm1XcM6syklJx4=;
+  b=cIxpDQ9K8fJi7ZAJjsTnodnVXctD1ZzKf+5ljDkgeHgzT5nAI1jTm2tB
+   XvFaB7lqmRJeNfF47PwtNj+zj/Ts/e+BL2sKu9wQZEhUO0f4Sff+Ww1+p
+   qymGVuDxs4d7Zxi8GOEQ/lyegi7TMvebtXsj0BQX5FemBfM6PYGXcdmYU
+   EACASFaNJT2DydO2TrdlCIw02g6zmmd2KUNXQqZZyfvweiPcCxqVARYKB
+   ikf46W6Wu6IAWtpjkfYlobJxRAAyeoGylr2qGaiSvfrYZaW+HIZP9cWGx
+   1AjdRplrVIaBxDFv392tYfLIZYTKhO1+SOZcSdKPHjfH6LqfD/ECiira5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="406410669"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="406410669"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 09:04:02 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="794175713"
+X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
+   d="scan'208";a="794175713"
+Received: from rpurdy-mobl.amr.corp.intel.com (HELO [10.212.42.91]) ([10.212.42.91])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 09:04:00 -0800
+Message-ID: <4a0f5f9f-3d58-1a45-4d8c-f009f2af36e5@linux.intel.com>
+Date:   Thu, 22 Dec 2022 09:50:07 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH V7 3/5] ASoC: codecs: Aw883xx common function for ALSA
+ Audio Driver
+Content-Language: en-US
+To:     wangweidong.a@awinic.com, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        perex@perex.cz, tiwai@suse.com, ckeepax@opensource.cirrus.com,
+        rf@opensource.cirrus.com, peter.ujfalusi@linux.intel.com,
+        james.schulman@cirrus.com, flatmax@flatmax.com,
+        ryan.lee.analog@gmail.com, jonathan.albrieux@gmail.com,
+        tanureal@opensource.cirrus.com, povik+lin@cutebit.org,
+        13691752556@139.com, cezary.rojewski@intel.com,
+        stephan@gerhold.net, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     liweilei@awinic.com, zhaolei@awinic.com, yijiangtao@awinic.com,
+        zhangjianming@awinic.com, duanyibo@awinic.com
+References: <20221222123205.106353-1-wangweidong.a@awinic.com>
+ <20221222123205.106353-4-wangweidong.a@awinic.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20221222123205.106353-4-wangweidong.a@awinic.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matt,
 
-Thanks for your update! I reviewed it and have some comments and questions.
-
-BTW, from the next version, can you Cc the series to linux-trace-kernel@vger
-mailing list too?
-
-http://vger.kernel.org/vger-lists.html#linux-trace-kernel
-
-On Mon, 12 Dec 2022 20:31:49 +0800
-wuqiang <wuqiang.matt@bytedance.com> wrote:
-
-> The object pool is a scalable implementaion of high performance queue
-> for objects allocation and reclamation, such as kretprobe instances.
-> 
-> With leveraging per-cpu ring-array to mitigate the hot spots of memory
-> contention, it could deliver near-linear scalability for high parallel
-> scenarios. The ring-array is compactly managed in a single cache-line
-> to benefit from warmed L1 cache for most cases (<= 4 objects per-core).
-> The body of pre-allocated objects is stored in continuous cache-lines
-> just after the ring-array.
-> 
-> The object pool is interrupt safe. Both allocation and reclamation
-> (object pop and push operations) can be preemptible or interruptable.
-> 
-> It's best suited for following cases:
-> 1) Memory allocation or reclamation are prohibited or too expensive
-> 2) Consumers are of different priorities, such as irqs and threads
-> 
-> Limitations:
-> 1) Maximum objects (capacity) is determined during pool initializing
-> 2) The memory of objects won't be freed until the poll is finalized
-> 3) Object allocation (pop) may fail after trying all cpu slots
-> 4) Object reclamation (push) won't fail but may take long time to
->    finish for imbalanced scenarios. You can try larger max_entries
->    to mitigate, or ( >= CPUS * nr_objs) to avoid
-> 
-> Signed-off-by: wuqiang <wuqiang.matt@bytedance.com>
-> ---
->  include/linux/objpool.h | 109 ++++++++++++++
->  lib/Makefile            |   2 +-
->  lib/objpool.c           | 320 ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 430 insertions(+), 1 deletion(-)
->  create mode 100644 include/linux/objpool.h
->  create mode 100644 lib/objpool.c
-> 
-> diff --git a/include/linux/objpool.h b/include/linux/objpool.h
-> new file mode 100644
-> index 000000000000..922e1bc96f2b
-> --- /dev/null
-> +++ b/include/linux/objpool.h
-> @@ -0,0 +1,109 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _LINUX_OBJPOOL_H
-> +#define _LINUX_OBJPOOL_H
-> +
-> +#include <linux/types.h>
-> +
-> +/*
-> + * objpool: ring-array based lockless MPMC queue
-> + *
-> + * Copyright: wuqiang.matt@bytedance.com
-> + *
-> + * The object pool is a scalable implementaion of high performance queue
-> + * for objects allocation and reclamation, such as kretprobe instances.
-> + *
-> + * With leveraging per-cpu ring-array to mitigate the hot spots of memory
-> + * contention, it could deliver near-linear scalability for high parallel
-> + * scenarios. The ring-array is compactly managed in a single cache-line
-> + * to benefit from warmed L1 cache for most cases (<= 4 objects per-core).
-> + * The body of pre-allocated objects is stored in continuous cache-lines
-> + * just after the ring-array.
-> + *
-> + * The object pool is interrupt safe. Both allocation and reclamation
-> + * (object pop and push operations) can be preemptible or interruptable.
-> + *
-> + * It's best suited for following cases:
-> + * 1) Memory allocation or reclamation are prohibited or too expensive
-> + * 2) Consumers are of different priorities, such as irqs and threads
-> + *
-> + * Limitations:
-> + * 1) Maximum objects (capacity) is determined during pool initializing
-> + * 2) The memory of objects won't be freed until the poll is finalized
-> + * 3) Object allocation (pop) may fail after trying all cpu slots
-> + */
-> +
-> +/*
-> + * objpool_slot: per-cpu ring array
-> + *
-> + * Represents a cpu-local array-based ring buffer, its size is specialized
-> + * during initialization of object pool.
-> + *
-> + * The objpool_slot is allocated from local memory for NUMA system, and to
-> + * be kept compact in a single cacheline. ages[] is stored just after the
-> + * body of objpool_slot, and then entries[]. The Array of ages[] describes
-> + * revision of each item, solely used to avoid ABA. And array of entries[]
-> + * contains the pointers of objects.
-> + *
-> + * The default size of objpool_slot is a single cache-line, aka. 64 bytes.
-> + *
-> + * 64bit:
-> + *        4      8      12     16        32                 64
-> + * | head | tail | size | mask | ages[4] | ents[4]: (8 * 4) | objects
-> + *
-> + * 32bit:
-> + *        4      8      12     16        32        48       64
-> + * | head | tail | size | mask | ages[4] | ents[4] | unused | objects
-> + *
-> + */
-> +
-> +struct objpool_slot {
-> +	uint32_t                head;	/* head of ring array */
-> +	uint32_t                tail;	/* tail of ring array */
-> +	uint32_t                size;	/* array size, pow of 2 */
-> +	uint32_t                mask;	/* size - 1 */
-> +} __packed;
-> +
-> +struct objpool_head;
-> +
-> +/* caller-specified callback for object initial setup, only called once */
-
-This comment is a bit confusing. it is "called once for each object", right?
-
-> +typedef int (*objpool_init_obj_cb)(void *obj, void *context);
-> +
-> +/* caller-specified cleanup callback for objpool destruction */
-> +typedef int (*objpool_fini_cb)(struct objpool_head *head, void *context);
-> +
-> +/*
-> + * objpool_head: object pooling metadata
-> + */
-> +
-> +struct objpool_head {
-> +	int                     obj_size;	/* object & element size */
-> +	int                     nr_objs;	/* total objs (to be pre-allocated) */
-> +	int                     nr_cpus;	/* nr_cpu_ids */
-> +	int                     capacity;	/* max objects per cpuslot */
-> +	gfp_t                   gfp;		/* gfp flags for kmalloc & vmalloc */
-> +	unsigned long           flags;		/* flags for objpool management */
-> +	struct objpool_slot   **cpu_slots;	/* array of percpu slots */
-> +	int                    *slot_sizes;	/* size in bytes of slots */
-> +	objpool_fini_cb         release;	/* resource cleanup callback */
-> +	void                   *context;	/* caller-provided context */
-> +};
-> +
-> +#define OBJPOOL_FROM_VMALLOC	(0x800000000)	/* objpool allocated from vmalloc area */
-> +#define OBJPOOL_HAVE_OBJECTS	(0x400000000)	/* objects allocated along with objpool */
-> +
-> +/* initialize object pool and pre-allocate objects */
-> +int objpool_init(struct objpool_head *head, int nr_objs, int object_size,
-> +		 gfp_t gfp, void *context, objpool_init_obj_cb objinit,
-> +		 objpool_fini_cb release);
-> +
-> +/* allocate an object from objects pool */
-> +void *objpool_pop(struct objpool_head *head);
-> +
-> +/* reclaim an object to objects pool */
-> +int objpool_push(void *node, struct objpool_head *head);
-> +
-> +/* cleanup the whole object pool (objects including) */
-> +void objpool_fini(struct objpool_head *head);
-> +
-> +#endif /* _LINUX_OBJPOOL_H */
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 59bd7c2f793a..f23d9c4fe639 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -34,7 +34,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
->  	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
->  	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
->  	 nmi_backtrace.o win_minmax.o memcat_p.o \
-> -	 buildid.o
-> +	 buildid.o objpool.o
->  
->  lib-$(CONFIG_PRINTK) += dump_stack.o
->  lib-$(CONFIG_SMP) += cpumask.o
-> diff --git a/lib/objpool.c b/lib/objpool.c
-> new file mode 100644
-> index 000000000000..bab8b27e75d7
-> --- /dev/null
-> +++ b/lib/objpool.c
-> @@ -0,0 +1,320 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <linux/objpool.h>
-> +#include <linux/slab.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/atomic.h>
-> +#include <linux/prefetch.h>
-> +#include <linux/cpumask.h>
-> +
-> +/*
-> + * objpool: ring-array based lockless MPMC/FIFO queues
-> + *
-> + * Copyright: wuqiang.matt@bytedance.com
-> + */
-> +
-> +/* compute the suitable num of objects to be managed by slot */
-> +static inline int objpool_nobjs(int size)
+> +static int aw_dev_dsp_write_32bit(struct aw_device *aw_dev,
+> +		unsigned short dsp_addr, unsigned int dsp_data)
 > +{
-> +	return rounddown_pow_of_two((size - sizeof(struct objpool_slot)) /
-> +			(sizeof(uint32_t) + sizeof(void *)));
+> +	int ret;
+> +	u16 temp_data = 0;
+
+useless init
+
+> +
+> +	ret = regmap_write(aw_dev->regmap, AW_PID_2049_DSPMADD_REG, dsp_addr);
+> +	if (ret < 0) {
+> +		dev_err(aw_dev->dev, "%s write addr error, ret=%d", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	temp_data = dsp_data & AW_DSP_16_DATA_MASK;
+> +	ret = regmap_write(aw_dev->regmap, AW_PID_2049_DSPMDAT_REG, (u16)temp_data);
+> +	if (ret < 0) {
+> +		dev_err(aw_dev->dev, "%s write datal error, ret=%d", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	temp_data = dsp_data >> 16;
+> +	ret = regmap_write(aw_dev->regmap, AW_PID_2049_DSPMDAT_REG, (u16)temp_data);
+> +	if (ret < 0) {
+> +		dev_err(aw_dev->dev, "%s write datah error, ret=%d", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
 > +}
 > +
-> +#define SLOT_AGES(s) ((uint32_t *)((char *)(s) + sizeof(struct objpool_slot)))
-> +#define SLOT_ENTS(s) ((void **)((char *)(s) + sizeof(struct objpool_slot) + \
-> +			sizeof(uint32_t) * (s)->size))
-> +#define SLOT_OBJS(s) ((void *)((char *)(s) + sizeof(struct objpool_slot) + \
-> +			(sizeof(uint32_t) + sizeof(void *)) * (s)->size))
-> +#define SLOT_CORE(n) cpumask_nth((n) % num_possible_cpus(), cpu_possible_mask)
-> +
-> +/* allocate and initialize percpu slots */
-> +static inline int
-
-nit: I don't think this needs to be inlined, since it is only
-used once and not on a hot path. I would suggest making it just
-a 'static' function and letting the compiler decide whether
-to inline it or not.
-
-> +objpool_init_percpu_slots(struct objpool_head *head, int nobjs,
-> +			void *context, objpool_init_obj_cb objinit)
+> +static int aw_dev_dsp_write(struct aw_device *aw_dev,
+> +		unsigned short dsp_addr, unsigned int dsp_data, unsigned char data_type)
 > +{
-> +	int i, j, n, size, objsz, cpu = 0, nents = head->capacity;
+> +	int ret = 0;
+> +	u32 reg_value;
+> +
+> +	mutex_lock(&aw_dev->dsp_lock);
+> +	switch (data_type) {
+> +	case AW_DSP_16_DATA:
+> +		ret = aw_dev_dsp_write_16bit(aw_dev, dsp_addr, dsp_data);
+> +		if (ret < 0)
+> +			dev_err(aw_dev->dev, "write dsp_addr[0x%x] 16-bit dsp_data[0x%x] failed",
+> +					(u32)dsp_addr, dsp_data);
+> +		break;
+> +	case AW_DSP_32_DATA:
+> +		ret = aw_dev_dsp_write_32bit(aw_dev, dsp_addr, dsp_data);
+> +		if (ret < 0)
+> +			dev_err(aw_dev->dev, "write dsp_addr[0x%x] 32-bit dsp_data[0x%x] failed",
+> +					(u32)dsp_addr, dsp_data);
+> +		break;
+> +	default:
+> +		dev_err(aw_dev->dev, "data type[%d] unsupported", data_type);
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	/* clear dsp chip select state*/
+> +	regmap_read(aw_dev->regmap, AW_PID_2049_ID_REG, &reg_value);
+> +	mutex_unlock(&aw_dev->dsp_lock);
+> +	return ret;
+> +}
+> +
+> +static int aw_dev_dsp_read_16bit(struct aw_device *aw_dev,
+> +		unsigned short dsp_addr, unsigned int *dsp_data)
+> +{
+> +	int ret;
+> +	unsigned int temp_data = 0;
+> +
+> +	ret = regmap_write(aw_dev->regmap, AW_PID_2049_DSPMADD_REG, dsp_addr);
+> +	if (ret < 0) {
+> +		dev_err(aw_dev->dev, "%s write error, ret=%d", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = regmap_read(aw_dev->regmap, AW_PID_2049_DSPMDAT_REG, &temp_data);
+> +	if (ret < 0) {
+> +		dev_err(aw_dev->dev, "%s read error, ret=%d", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	*dsp_data = temp_data;
+> +
+> +	return 0;
+> +}
+> +
+> +static int aw_dev_dsp_read_32bit(struct aw_device *aw_dev,
+> +		unsigned short dsp_addr, unsigned int *dsp_data)
+> +{
+> +	int ret;
+> +	unsigned int temp_data = 0;
+> +
+> +	ret = regmap_write(aw_dev->regmap, AW_PID_2049_DSPMADD_REG, dsp_addr);
+> +	if (ret < 0) {
+> +		dev_err(aw_dev->dev, "%s write error, ret=%d", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = regmap_read(aw_dev->regmap, AW_PID_2049_DSPMDAT_REG, &temp_data);
+> +	if (ret < 0) {
+> +		dev_err(aw_dev->dev, "%s read error, ret=%d", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	*dsp_data = temp_data;
+> +
+> +	ret = regmap_read(aw_dev->regmap, AW_PID_2049_DSPMDAT_REG, &temp_data);
+> +	if (ret < 0) {
+> +		dev_err(aw_dev->dev, "%s read error, ret=%d", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	*dsp_data |= (temp_data << 16);
+> +
+> +	return 0;
+> +}
+> +
+> +static int aw_dev_dsp_read(struct aw_device *aw_dev,
+> +		unsigned short dsp_addr, unsigned int *dsp_data, unsigned char data_type)
+> +{
+> +	int ret = 0;
+> +	u32 reg_value;
+> +
+> +	mutex_lock(&aw_dev->dsp_lock);
+> +	switch (data_type) {
+> +	case AW_DSP_16_DATA:
+> +		ret = aw_dev_dsp_read_16bit(aw_dev, dsp_addr, dsp_data);
+> +		if (ret < 0)
+> +			dev_err(aw_dev->dev, "read dsp_addr[0x%x] 16-bit dsp_data[0x%x] failed",
+> +					(u32)dsp_addr, *dsp_data);
+> +		break;
+> +	case AW_DSP_32_DATA:
+> +		ret = aw_dev_dsp_read_32bit(aw_dev, dsp_addr, dsp_data);
+> +		if (ret < 0)
+> +			dev_err(aw_dev->dev, "read dsp_addr[0x%x] 32r-bit dsp_data[0x%x] failed",
+> +					(u32)dsp_addr, *dsp_data);
+> +		break;
+> +	default:
+> +		dev_err(aw_dev->dev, "data type[%d] unsupported", data_type);
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	/* clear dsp chip select state*/
+> +	regmap_read(aw_dev->regmap, AW_PID_2049_ID_REG, &reg_value);
+> +	mutex_unlock(&aw_dev->dsp_lock);
+> +	return ret;
+> +}
+> +
+> +
+> +static int aw_dev_read_chipid(struct aw_device *aw_dev, u16 *chip_id)
+> +{
+> +	int ret = 0;
 
-'nents' and 'n' is a bit confusing. please use 'capacity' or always
-use 'head->capacity'.
+useless init
+
+> +	int reg_val = 0;
+> +
+> +	ret = regmap_read(aw_dev->regmap, AW_CHIP_ID_REG, &reg_val);
+> +	if (ret < 0)
+> +		return -EIO;
+> +
+> +	dev_info(aw_dev->dev, "chip id = %x\n", reg_val);
+> +	*chip_id = reg_val;
+> +
+> +	return 0;
+> +}
+> +
+> +static void aw_dev_set_cfg_f0_fs(struct aw_device *aw_dev, unsigned int *f0_fs)
+> +{
+> +	unsigned int rate_data = 0;
+> +	u32 fs = 0;
+> +
+> +	regmap_read(aw_dev->regmap, AW_PID_2049_I2SCTRL_REG, &rate_data);
+
+usually you test the regmap results and here you don't, is it intentional?
 
 > +
-> +	/* aligned object size by sizeof(void *) */
-> +	objsz = ALIGN(head->obj_size, sizeof(void *));
-> +	/* shall we allocate objects along with objpool_slot */
-> +	if (objsz)
-> +		head->flags |= OBJPOOL_HAVE_OBJECTS;
-> +
-> +	for (i = 0; i < head->nr_cpus; i++) {
-> +		struct objpool_slot *os;
-> +
-> +		/* skip the cpus which could never be present */
-> +		if (!cpu_possible(i))
-> +			continue;
+> +	switch (rate_data & (~AW_PID_2049_I2SSR_MASK)) {
+> +	case AW_PID_2049_I2SSR_8_KHZ_VALUE:
+> +		fs = 8000;
+> +		break;
+> +	case AW_PID_2049_I2SSR_16_KHZ_VALUE:
+> +		fs = 16000;
+> +		break;
+> +	case AW_PID_2049_I2SSR_32_KHZ_VALUE:
+> +		fs = 32000;
+> +		break;
+> +	case AW_PID_2049_I2SSR_44_KHZ_VALUE:
+> +		fs = 44000;
 
-You can use ;
+did you mean 44100?
 
-	for_each_possible_cpu(i) {
-
+> +		break;
+> +	case AW_PID_2049_I2SSR_48_KHZ_VALUE:
+> +		fs = 48000;
+> +		break;
+> +	case AW_PID_2049_I2SSR_96_KHZ_VALUE:
+> +		fs = 96000;
+> +		break;
+> +	case AW_PID_2049_I2SSR_192KHZ_VALUE:
+> +		fs = 192000;
+> +		break;
+> +	default:
+> +		fs = 48000;
+> +		dev_err(aw_dev->dev,
+> +			"rate can not support, use default 48kHz");
+> +		break;
+> +	}
 > +
-> +		/* compute how many objects to be managed by this slot */
-> +		n = nobjs / num_possible_cpus();
-> +		if (cpu < (nobjs % num_possible_cpus()))
-> +			n++;
-> +		size = sizeof(struct objpool_slot) + sizeof(void *) * nents +
-> +		       sizeof(uint32_t) * nents + objsz * n;
+> +	dev_dbg(aw_dev->dev, "i2s fs:%d Hz", fs);
+> +	*f0_fs = fs / 8;
 > +
-> +		/* decide memory area for cpu-slot allocation */
-> +		if (!cpu && !(head->gfp & GFP_ATOMIC) && size > PAGE_SIZE / 2)
-> +			head->flags |= OBJPOOL_FROM_VMALLOC;
-
-Why 'PAGE_SIZE / 2' ?
-
+> +	aw_dev_dsp_write(aw_dev, AW_PID_2049_DSP_REG_CFGF0_FS, *f0_fs, AW_DSP_32_DATA);
+> +}
 > +
-> +		/* allocate percpu slot & objects from local memory */
-> +		if (head->flags & OBJPOOL_FROM_VMALLOC)
-> +			os = __vmalloc_node(size, sizeof(void *), head->gfp,
-> +				cpu_to_node(i), __builtin_return_address(0));
-> +		else
-> +			os = kmalloc_node(size, head->gfp, cpu_to_node(i));
-> +		if (!os)
-> +			return -ENOMEM;
+> +/*[9 : 6]: -6DB ; [5 : 0]: -0.125DB  real_value = value * 8 : 0.125db --> 1*/
+> +static unsigned int reg_val_to_db(unsigned int value)
+> +{
+> +	return (((value >> AW_PID_2049_VOL_6DB_START) * AW_PID_2049_VOLUME_STEP_DB) +
+> +			((value & 0x3f) % AW_PID_2049_VOLUME_STEP_DB));
+> +}
 > +
-> +		/* initialize percpu slot for the i-th slot */
-> +		memset(os, 0, size);
-> +		os->size = head->capacity;
-> +		os->mask = os->size - 1;
-> +		head->cpu_slots[i] = os;
-> +		head->slot_sizes[i] = size;
-> +		cpu = cpu + 1;
+> +/*[9 : 6]: -6DB ; [5 : 0]: -0.125DB reg_value = value / step << 6 + value % step ; step = 6 * 8*/
+> +static unsigned short db_to_reg_val(unsigned short value)
+> +{
+> +	return (((value / AW_PID_2049_VOLUME_STEP_DB) << AW_PID_2049_VOL_6DB_START) +
+> +			(value % AW_PID_2049_VOLUME_STEP_DB));
+> +}
 > +
-> +		/*
-> +		 * start from 2nd round to avoid conflict of 1st item.
-> +		 * we assume that the head item is ready for retrieval
-> +		 * iff head is equal to ages[head & mask]. but ages is
-> +		 * initialized as 0, so in view of the caller of pop(),
-> +		 * the 1st item (0th) is always ready, but fact could
-> +		 * be: push() is stalled before the final update, thus
-> +		 * the item being inserted will be lost forever.
-> +		 */
-> +		os->head = os->tail = head->capacity;
+> +static int aw_dev_dsp_fw_check(struct aw_device *aw_dev)
+> +{
+> +	struct aw_prof_desc *set_prof_desc = NULL;
+> +	struct aw_sec_data_desc *dsp_fw_desc = NULL;
+> +	u16 base_addr = AW_PID_2049_DSP_FW_ADDR;
+> +	u16 addr = base_addr;
+> +	int ret, i;
+> +	u32 dsp_val;
+> +	u16 bin_val;
 > +
-> +		if (!objsz)
-> +			continue;
+> +	ret = aw883xx_dev_get_prof_data(aw_dev, aw_dev->prof_cur, &set_prof_desc);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +		for (j = 0; j < n; j++) {
-> +			uint32_t *ages = SLOT_AGES(os);
-> +			void **ents = SLOT_ENTS(os);
-> +			void *obj = SLOT_OBJS(os) + j * objsz;
-> +			uint32_t ie = os->tail & os->mask;
+> +	/*update reg*/
+> +	dsp_fw_desc = &set_prof_desc->sec_desc[AW_DATA_TYPE_DSP_FW];
 > +
-> +			/* perform object initialization */
-> +			if (objinit) {
-> +				int rc = objinit(obj, context);
-> +				if (rc)
-> +					return rc;
-> +			}
+> +	for (i = 0; i < AW_FW_CHECK_PART; i++) {
+> +		ret = aw_dev_dsp_read(aw_dev, addr, &dsp_val, AW_DSP_16_DATA);
+> +		if (ret  < 0) {
+> +			dev_err(aw_dev->dev, "dsp read failed");
+> +			return ret;
+> +		}
 > +
-> +			/* add obj into the ring array */
-> +			ents[ie] = obj;
-> +			ages[ie] = os->tail;
-> +			os->tail++;
-> +			head->nr_objs++;
+> +		bin_val = be16_to_cpup((void *)&dsp_fw_desc->data[2 * (addr - base_addr)]);
+> +
+> +		if (dsp_val != bin_val) {
+> +			dev_err(aw_dev->dev, "fw check failed, addr[0x%x], read[0x%x] != bindata[0x%x]",
+> +					addr, dsp_val, bin_val);
+> +			return -EINVAL;
+> +		}
+> +
+> +		addr += (dsp_fw_desc->len / 2) / AW_FW_CHECK_PART;
+> +		if ((addr - base_addr) > dsp_fw_desc->len) {
+> +			dev_err(aw_dev->dev, "fw check failed, addr[0x%x] too large", addr);
+> +			return -EINVAL;
 > +		}
 > +	}
 > +
 > +	return 0;
 > +}
 > +
-> +/* cleanup all percpu slots of the object pool */
-> +static inline void objpool_fini_percpu_slots(struct objpool_head *head)
-
-This is also no need to be inlined.
-
+> +static int aw_dev_set_volume(struct aw_device *aw_dev, unsigned int value)
 > +{
-> +	int i;
+> +	struct aw_volume_desc *vol_desc = &aw_dev->volume_desc;
+> +	unsigned int reg_value = 0;
+> +	u16 real_value = 0;
+> +	u16 volume = 0;
 > +
-> +	if (!head->cpu_slots)
-> +		return;
+> +	volume = min((value + vol_desc->init_volume), (unsigned int)AW_PID_2049_MUTE_VOL);
+> +	real_value = db_to_reg_val(volume);
 > +
-> +	for (i = 0; i < head->nr_cpus; i++) {
-> +		if (!head->cpu_slots[i])
-> +			continue;
-> +		if (head->flags & OBJPOOL_FROM_VMALLOC)
-> +			vfree(head->cpu_slots[i]);
-> +		else
-> +			kfree(head->cpu_slots[i]);
-> +	}
-> +	kfree(head->cpu_slots);
-> +	head->cpu_slots = NULL;
-> +	head->slot_sizes = NULL;
+> +	/* cal real value */
+> +	regmap_read(aw_dev->regmap, AW_PID_2049_SYSCTRL2_REG, &reg_value);
+> +
+> +	dev_dbg(aw_dev->dev, "value 0x%x , reg:0x%x", value, real_value);
+> +
+> +	/*[15 : 6] volume*/
+> +	real_value = (real_value << AW_PID_2049_VOL_START_BIT) | (reg_value & AW_PID_2049_VOL_MASK);
+> +
+> +	/* write value */
+> +	regmap_write(aw_dev->regmap, AW_PID_2049_SYSCTRL2_REG, real_value);
+> +
+> +	return 0;
 > +}
 > +
-> +/**
-> + * objpool_init: initialize object pool and pre-allocate objects
-> + *
-> + * args:
-
-At first, please write this in kernel-doc style.
-See Documentation/doc-guide/kernel-doc.rst
-
-> + * @head:    the object pool to be initialized, declared by caller
-> + * @nr_objs: total objects to be pre-allocated by this object pool
-> + * @object_size: size of an object, no objects pre-allocated if 0
-
-This is a bit strange. If no objects pre-allocated, @nr_objs should
-be 0 instead of (or both of) @object_size.
-
-And anyway, if there is no actual use-case for non pre-allocated
-feature (except for the test case, of course), I would suggest
-dropping it from this first version.
-
-> + * @gfp:     flags for memory allocation (via kmalloc or vmalloc)
-> + * @context: user context for object initialization callback
-> + * @objinit: object initialization callback for extra setting-up
-> + * @release: cleanup callback for private objects/pool/context
-> + *
-> + * return:
-> + *         0 for success, otherwise error code
-> + *
-> + * All pre-allocated objects are to be zeroed. Caller could do extra
-> + * initialization in objinit callback. The objinit callback will be
-> + * called once and only once after the slot allocation. Then objpool
-> + * won't touch any content of the objects since then. It's caller's
-> + * duty to perform reinitialization after object allocation (pop) or
-> + * clearance before object reclamation (push) if required.
-> + */
-> +int objpool_init(struct objpool_head *head, int nr_objs, int object_size,
-> +		gfp_t gfp, void *context, objpool_init_obj_cb objinit,
-> +		objpool_fini_cb release)
+> +void aw883xx_dev_set_volume(struct aw_device *aw_dev, unsigned short set_vol)
 > +{
-> +	int nents, rc;
+> +	int ret = 0;
 > +
-> +	/* check input parameters */
-> +	if (nr_objs <= 0 || object_size < 0)
+> +	ret = aw_dev_set_volume(aw_dev, set_vol);
+> +	if (ret < 0)
+> +		dev_dbg(aw_dev->dev, "set volume failed");
+> +}
+> +EXPORT_SYMBOL_GPL(aw883xx_dev_set_volume);
+> +
+> +static void aw_dev_fade_in(struct aw_device *aw_dev)
+> +{
+> +	int i = 0;
+
+useless init
+
+> +	struct aw_volume_desc *desc = &aw_dev->volume_desc;
+> +	int fade_step = aw_dev->fade_step;
+> +	u16 fade_in_vol = desc->ctl_volume;
+> +
+> +	if (!aw_dev->fade_en)
+> +		return;
+> +
+> +	if (fade_step == 0 || aw_dev->fade_in_time == 0) {
+> +		aw_dev_set_volume(aw_dev, fade_in_vol);
+> +		return;
+> +	}
+> +	/*volume up*/
+> +	for (i = AW_PID_2049_MUTE_VOL; i >= fade_in_vol; i -= fade_step) {
+> +		aw_dev_set_volume(aw_dev, i);
+> +		usleep_range(aw_dev->fade_in_time, aw_dev->fade_in_time + 10);
+> +	}
+> +	if (i != fade_in_vol)
+> +		aw_dev_set_volume(aw_dev, fade_in_vol);
+> +}
+> +
+> +static void aw_dev_fade_out(struct aw_device *aw_dev)
+> +{
+> +	int i = 0;
+
+useless init
+
+> +	struct aw_volume_desc *desc = &aw_dev->volume_desc;
+> +	int fade_step = aw_dev->fade_step;
+> +
+> +	if (!aw_dev->fade_en)
+> +		return;
+> +
+> +	if (fade_step == 0 || aw_dev->fade_out_time == 0) {
+> +		aw_dev_set_volume(aw_dev, AW_PID_2049_MUTE_VOL);
+> +		return;
+> +	}
+> +
+> +	for (i = desc->ctl_volume; i <= AW_PID_2049_MUTE_VOL; i += fade_step) {
+> +		aw_dev_set_volume(aw_dev, i);
+> +		usleep_range(aw_dev->fade_out_time, aw_dev->fade_out_time + 10);
+> +	}
+> +	if (i != AW_PID_2049_MUTE_VOL) {
+> +		aw_dev_set_volume(aw_dev, AW_PID_2049_MUTE_VOL);
+> +		usleep_range(aw_dev->fade_out_time, aw_dev->fade_out_time + 10);
+> +	}
+> +}
+> +
+> +static int aw_dev_modify_dsp_cfg(struct aw_device *aw_dev,
+> +			unsigned int addr, unsigned int dsp_data, unsigned char data_type)
+> +{
+> +	u32 addr_offset = 0;
+
+useless init
+
+> +	u16 data1 = 0;
+> +	u32 data2 = 0;
+
+useless init and could be moved to lower scopes
+
+> +	struct aw_sec_data_desc *crc_dsp_cfg = &aw_dev->crc_dsp_cfg;
+> +
+> +	dev_dbg(aw_dev->dev, "addr:0x%x, dsp_data:0x%x", addr, dsp_data);
+> +
+> +	addr_offset = (addr - AW_PID_2049_DSP_CFG_ADDR) * 2;
+> +	if (addr_offset > crc_dsp_cfg->len) {
+> +		dev_err(aw_dev->dev, "addr_offset[%d] > crc_dsp_cfg->len[%d]",
+> +				addr_offset, crc_dsp_cfg->len);
 > +		return -EINVAL;
+> +	}
+> +	switch (data_type) {
+> +	case AW_DSP_16_DATA:
+> +		data1 = cpu_to_le16((u16)dsp_data);
+> +		memcpy(crc_dsp_cfg->data + addr_offset, (u8 *)&data1, 2);
+> +		break;
+> +	case AW_DSP_32_DATA:
+> +		data2 = cpu_to_le32(dsp_data);
+> +		memcpy(crc_dsp_cfg->data + addr_offset, (u8 *)&data2, 4);
+> +		break;
+> +	default:
+> +		dev_err(aw_dev->dev, "data type[%d] unsupported", data_type);
+> +		return -EINVAL;
+> +	}
 > +
-> +	/* calculate percpu slot size (rounded to pow of 2) */
-> +	nents = max_t(int, roundup_pow_of_two(nr_objs),
-> +			objpool_nobjs(L1_CACHE_BYTES));
-> +
-> +	/* initialize objpool head */
-> +	memset(head, 0, sizeof(struct objpool_head));
-> +	head->nr_cpus = nr_cpu_ids;
-> +	head->obj_size = object_size;
-> +	head->capacity = nents;
-> +	head->gfp = gfp & ~__GFP_ZERO;
-> +	head->context = context;
-> +	head->release = release;
-> +
-> +	/* allocate array for percpu slots */
-> +	head->cpu_slots = kzalloc(head->nr_cpus * sizeof(void *) +
-> +			       head->nr_cpus * sizeof(uint32_t), head->gfp);
-
-This looks wired. Please allocate the array for cpu_slots and slot_sizes
-separately.
-
-> +	if (!head->cpu_slots)
-> +		return -ENOMEM;
-> +	head->slot_sizes = (uint32_t *)&head->cpu_slots[head->nr_cpus];
-
-And do not do this. If it allocates 2 arrays, we can use many debug
-features to detect overrun, but this wired allocation will prevent it.
-
-> +
-> +	/* initialize per-cpu slots */
-> +	rc = objpool_init_percpu_slots(head, nr_objs, context, objinit);
-> +	if (rc)
-> +		objpool_fini_percpu_slots(head);
-> +
-> +	return rc;
-> +}
-> +EXPORT_SYMBOL_GPL(objpool_init);
-> +
-> +/* adding object to slot tail, the given slot must NOT be full */
-> +static inline int objpool_add_slot(void *obj, struct objpool_slot *os)
-> +{
-> +	uint32_t *ages = SLOT_AGES(os);
-> +	void **ents = SLOT_ENTS(os);
-> +	uint32_t tail = atomic_inc_return((atomic_t *)&os->tail) - 1;
-
-No, don't cast u32 to atomic_t. 
-
-> +
-> +	WRITE_ONCE(ents[tail & os->mask], obj);
-> +
-> +	/* order matters: obj must be updated before tail updating */
-> +	smp_store_release(&ages[tail & os->mask], tail);
 > +	return 0;
 > +}
 > +
-> +/**
-> + * objpool_push: reclaim the object and return back to objects pool
-
-Ditto, please use kernel-doc.
-
-> + *
-> + * args:
-> + * @obj:  object pointer to be pushed to object pool
-> + * @head: object pool
-> + *
-> + * return:
-> + *     0 or error code: it fails only when objects pool are full
-> + *
-> + * objpool_push is non-blockable, and can be nested
-> + */
-> +int objpool_push(void *obj, struct objpool_head *head)
+> +static int aw_dev_dsp_set_cali_re(struct aw_device *aw_dev)
 > +{
-> +	int cpu = raw_smp_processor_id();
-> +
-> +	return objpool_add_slot(obj, head->cpu_slots[cpu]);
-> +}
-> +EXPORT_SYMBOL_GPL(objpool_push);
-> +
-> +/* try to retrieve object from slot */
-> +static inline void *objpool_try_get_slot(struct objpool_slot *os)
-> +{
-> +	uint32_t *ages = SLOT_AGES(os);
-> +	void **ents = SLOT_ENTS(os);
-> +	/* do memory load of head to local head */
-> +	uint32_t head = smp_load_acquire(&os->head);
-> +
-> +	/* loop if slot isn't empty */
-> +	while (head != READ_ONCE(os->tail)) {
-> +		uint32_t id = head & os->mask, prev = head;
-> +
-> +		/* do prefetching of object ents */
-> +		prefetch(&ents[id]);
-> +
-> +		/*
-> +		 * check whether this item was ready for retrieval ? There's
-> +		 * possibility * in theory * we might retrieve wrong object,
-> +		 * in case ages[id] overflows when current task is sleeping,
-> +		 * but it will take very very long to overflow an uint32_t
-> +		 */
+> +	u32 cali_re = 0;
+> +	int ret = 0;
 
-We should make sure it is safe in theory. The hot path can be loose but
-it must be ensured before use. OS can be used very long time in some time
-(e.g. 10 years) and uint32 is too short ... (uint64 is OK)
+useless inits
 
-> +		if (smp_load_acquire(&ages[id]) == head) {
-> +			/* node must have been udpated by push() */
-> +			void *node = READ_ONCE(ents[id]);
-> +			/* commit and move forward head of the slot */
-> +			if (try_cmpxchg_release(&os->head, &head, head + 1))
-> +				return node;
-> +		}
 > +
-> +		/* re-load head from memory and continue trying */
-> +		head = READ_ONCE(os->head);
-> +		/*
-> +		 * head stays unchanged, so it's very likely current pop()
-> +		 * just preempted/interrupted an ongoing push() operation
-> +		 */
-> +		if (head == prev)
-> +			break;
+> +	cali_re = AW_SHOW_RE_TO_DSP_RE((aw_dev->cali_desc.cali_re +
+> +		aw_dev->cali_desc.ra), AW_PID_2049_DSP_RE_SHIFT);
+> +
+> +	/* set cali re to device */
+> +	ret = aw_dev_dsp_write(aw_dev,
+> +			AW_PID_2049_DSP_REG_CFG_ADPZ_RE, cali_re, AW_DSP_32_DATA);
+> +	if (ret < 0) {
+> +		dev_err(aw_dev->dev, "set cali re error");
+> +		return ret;
 > +	}
 > +
-> +	return NULL;
+> +	ret = aw_dev_modify_dsp_cfg(aw_dev, AW_PID_2049_DSP_REG_CFG_ADPZ_RE,
+> +				cali_re, AW_DSP_32_DATA);
+> +	if (ret < 0)
+> +		dev_err(aw_dev->dev, "modify dsp cfg failed");
+> +
+> +	return ret;
+> +
 > +}
-> +
-> +/**
-> + * objpool_pop: allocate an object from objects pool
 
-Ditto.
+this file needs style fixes, stopping the review here.
 
-Thank you,
-
-> + *
-> + * args:
-> + * @head: object pool
-> + *
-> + * return:
-> + *   object: NULL if failed (object pool is empty)
-> + *
-> + * objpool_pop can be nested, so can be used in any context.
-> + */
-> +void *objpool_pop(struct objpool_head *head)
-> +{
-> +	int i, cpu = raw_smp_processor_id();
-> +	void *obj = NULL;
-> +
-> +	for (i = 0; i < num_possible_cpus(); i++) {
-> +		obj = objpool_try_get_slot(head->cpu_slots[cpu]);
-> +		if (obj)
-> +			break;
-> +		cpu = cpumask_next_wrap(cpu, cpu_possible_mask, -1, 1);
-> +	}
-> +
-> +	return obj;
-> +}
-> +EXPORT_SYMBOL_GPL(objpool_pop);
-> +
-> +/**
-> + * objpool_fini: cleanup the whole object pool (releasing all objects)
-> + *
-> + * args:
-> + * @head: object pool to be released
-> + *
-> + */
-> +void objpool_fini(struct objpool_head *head)
-> +{
-> +	if (!head->cpu_slots)
-> +		return;
-> +
-> +	/* release percpu slots */
-> +	objpool_fini_percpu_slots(head);
-> +
-> +	/* call user's cleanup callback if provided */
-> +	if (head->release)
-> +		head->release(head, head->context);
-> +}
-> +EXPORT_SYMBOL_GPL(objpool_fini);
-> -- 
-> 2.34.1
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
