@@ -2,178 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3206545E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 057C96545E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbiLVSPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
+        id S231454AbiLVSTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbiLVSPc (ORCPT
+        with ESMTP id S230357AbiLVSTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:15:32 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AE11CB00
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:15:29 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so2665146pjh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:15:29 -0800 (PST)
+        Thu, 22 Dec 2022 13:19:20 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A74E113B
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:19:19 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id c11so1953200qtn.11
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:19:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=752C77UYWYC/kCXAv9m+o+bKyybany3JU3TCXHGZR0U=;
-        b=mnWHipNRICDDr9o9B9k9tzUHQ5DlJw7QNZU1NFFDGUJ/WFgmaKL6adljuLzxsRCR1T
-         yOt1llvxRLddf3o8tFdD1XSrfvJKY91Y6BA+Ue/bxbYYHAufNWWHf+w2InX7LDglGQta
-         9K3BVA4lZMYr2iIsmJ+f1M3V5mNVtVOBrDe0He7TJ193jL7X5zGQlNAIk8two/do47Qa
-         +IAmme0Ak9mW8lBakzH8LqHkhC04c8aYC5+Yadk9FKgybASwcKtR2kDtwpwTkfLtjN0F
-         Pf78IoRu0kt98rlTKH1ZJdwA91Ht9u39VkBXmY2L8neh0zXKIViW79WjZdA8w13OMOlE
-         OnLQ==
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=izSwWPJ6y3lH+EuzVUHTuzemZUg/0p3iz1ZnqBmNFPM=;
+        b=GpVLjzXsRu45a4gBSDavXvutE25nTliJ4P2mtVxJkep7KehSEiSWGfSjbQmQnw+Yej
+         bnUa+iGpSkotXgVj4fGHQTpK37ZKEW+zuBVepi+0zPwVcvLxtjt0SaUBlk7PRkyfYCuN
+         cMg8BNFNGjB/UrSx4mt1I5m4KtU33+KrkkTvI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=752C77UYWYC/kCXAv9m+o+bKyybany3JU3TCXHGZR0U=;
-        b=wRX2o9DzHc5lg747wVvjKv+nhI5VuhNfxCy1us68cClAAzzqq2lexR7lTsnn67gtj9
-         ZD/z5Ln8/iq5NEijlBwhGgXVq2ldlwNhqKYRrAbU0uypxVHqtJLXZqHjPXYOlnd6+Rp2
-         GgYOrjdN+27dPsfegoxZVER1AMrVohRAr2s1Y7i6wDXFEEYX63NSF5hh8NdjjPx5qQ4U
-         rV1H5XYEPBrIfoxOpqsjn6RF8Twpxq6xpLEEAaLfwE5wcGq0kHWDts7G1pM86tuiye6j
-         /cM6UJDgT/0ts3u9ZnHVNyTNiOagFZ3RUPnKZC/AKG5pnMDDSue00U59bRQ8JGbA7kV8
-         96WQ==
-X-Gm-Message-State: AFqh2krhrlTNvyOqo8SLHT6eYipHsU17ZBm6bhJQBjYN3GC0DvNPfSfO
-        uVAyzmDCD+Eosfe5FgetXrXVNQ==
-X-Google-Smtp-Source: AMrXdXtVsGTXmJ+OudFvpboyWukOEY96QmhFL3/LDUsVn+qtHCwo04yMbEQyfv9hcz3t0HxxdVHCiA==
-X-Received: by 2002:a17:903:41ca:b0:189:6624:58c0 with SMTP id u10-20020a17090341ca00b00189662458c0mr1174380ple.3.1671732928592;
-        Thu, 22 Dec 2022 10:15:28 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a7-20020a17090a70c700b00219feae9486sm3443216pjm.7.2022.12.22.10.15.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 10:15:28 -0800 (PST)
-Date:   Thu, 22 Dec 2022 18:15:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     "Huang, Kai" <kai.huang@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        "tabba@google.com" <tabba@google.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "dhildenb@redhat.com" <dhildenb@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
-        "ddutile@redhat.com" <ddutile@redhat.com>,
-        "qperret@google.com" <qperret@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "vannapurve@google.com" <vannapurve@google.com>,
-        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
-        "hughd@google.com" <hughd@google.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "steven.price@arm.com" <steven.price@arm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
-Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <Y6SevJt6XXOsmIBD@google.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
- <5c6e2e516f19b0a030eae9bf073d555c57ca1f21.camel@intel.com>
- <20221219075313.GB1691829@chaop.bj.intel.com>
- <deba096c85e41c3a15d122f2159986a74b16770f.camel@intel.com>
- <20221220072228.GA1724933@chaop.bj.intel.com>
- <126046ce506df070d57e6fe5ab9c92cdaf4cf9b7.camel@intel.com>
- <20221221133905.GA1766136@chaop.bj.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221133905.GA1766136@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=izSwWPJ6y3lH+EuzVUHTuzemZUg/0p3iz1ZnqBmNFPM=;
+        b=Wte4HSqiMwc28C8kkprX4GW0zcBvnHFcy7Zuhf6V0154gDJ4aCN8xPui+rtEPEbqX1
+         Bn8GIjpCxLtX5T8IE6oNeXqOAItyYVRr1S3Pe/a0dFYegZ8dQBS0GI0u7PQ/i1fkkUnV
+         lt1xF/A+4Qjwfh2aINz8qXzY2UqYlshXwhTbURrc1QZPoc5E21za+alWs9wDBP3lg9ms
+         uW27U4dfbaCIxoWF1264JNIY/fPc6HSykG+8XAqHtObyYKQPhuLUe4/hsLOMT67usxkV
+         fRuEgG4ZJtXtoc1inCKzWOkhIPvG/RpgvH9DbDVHFOXTzU+znazul4ewRhFamUGoRYYO
+         pEEg==
+X-Gm-Message-State: AFqh2krn/yqx+b4b6b2UagagDjIMvm/ikheV7b0LZEe6MMTLx37e3ew+
+        45R/os4tuPN7A0IClV5tHmIu9g==
+X-Google-Smtp-Source: AMrXdXuQQBYYNbPy/pST2ZGImpqOqF2KaAebZWKwXGOXWrjQn2ReNkclQVmbNnJreRG0Cz8FBcfg7A==
+X-Received: by 2002:a05:622a:2516:b0:3a9:70a2:2c59 with SMTP id cm22-20020a05622a251600b003a970a22c59mr9525514qtb.39.1671733158072;
+        Thu, 22 Dec 2022 10:19:18 -0800 (PST)
+Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b006f9f714cb6asm730727qkp.50.2022.12.22.10.19.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 10:19:17 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Date:   Thu, 22 Dec 2022 13:19:06 -0500
+Message-Id: <71C23049-158C-4E43-A54F-714640393682@joelfernandes.org>
+References: <20221222164302.GP4001@paulmck-ThinkPad-P17-Gen-1>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+In-Reply-To: <20221222164302.GP4001@paulmck-ThinkPad-P17-Gen-1>
+To:     paulmck@kernel.org
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022, Chao Peng wrote:
-> On Tue, Dec 20, 2022 at 08:33:05AM +0000, Huang, Kai wrote:
-> > On Tue, 2022-12-20 at 15:22 +0800, Chao Peng wrote:
-> > > On Mon, Dec 19, 2022 at 08:48:10AM +0000, Huang, Kai wrote:
-> > > > On Mon, 2022-12-19 at 15:53 +0800, Chao Peng wrote:
-> > But for non-restricted-mem case, it is correct for KVM to decrease page's
-> > refcount after setting up mapping in the secondary mmu, otherwise the page will
-> > be pinned by KVM for normal VM (since KVM uses GUP to get the page).
-> 
-> That's true. Actually even true for restrictedmem case, most likely we
-> will still need the kvm_release_pfn_clean() for KVM generic code. On one
-> side, other restrictedmem users like pKVM may not require page pinning
-> at all. On the other side, see below.
-> 
-> > 
-> > So what we are expecting is: for KVM if the page comes from restricted mem, then
-> > KVM cannot decrease the refcount, otherwise for normal page via GUP KVM should.
 
-No, requiring the user (KVM) to guard against lack of support for page migration
-in restricted mem is a terrible API.  It's totally fine for restricted mem to not
-support page migration until there's a use case, but punting the problem to KVM
-is not acceptable.  Restricted mem itself doesn't yet support page migration,
-e.g. explosions would occur even if KVM wanted to allow migration since there is
-no notification to invalidate existing mappings.
 
-> I argue that this page pinning (or page migration prevention) is not
-> tied to where the page comes from, instead related to how the page will
-> be used. Whether the page is restrictedmem backed or GUP() backed, once
-> it's used by current version of TDX then the page pinning is needed. So
-> such page migration prevention is really TDX thing, even not KVM generic
-> thing (that's why I think we don't need change the existing logic of
-> kvm_release_pfn_clean()). Wouldn't better to let TDX code (or who
-> requires that) to increase/decrease the refcount when it populates/drops
-> the secure EPT entries? This is exactly what the current TDX code does:
+> On Dec 22, 2022, at 11:43 AM, Paul E. McKenney <paulmck@kernel.org> wrote:=
 
-I agree that whether or not migration is supported should be controllable by the
-user, but I strongly disagree on punting refcount management to KVM (or TDX).
-The whole point of restricted mem is to support technologies like TDX and SNP,
-accomodating their special needs for things like page migration should be part of
-the API, not some footnote in the documenation.
+>=20
+> =EF=BB=BFOn Thu, Dec 22, 2022 at 01:40:10PM +0100, Frederic Weisbecker wro=
+te:
+>>> On Wed, Dec 21, 2022 at 12:11:42PM -0500, Mathieu Desnoyers wrote:
+>>> On 2022-12-21 06:59, Frederic Weisbecker wrote:
+>>>>> On Tue, Dec 20, 2022 at 10:34:19PM -0500, Mathieu Desnoyers wrote:
+>>> [...]
+>>>>>=20
+>>>>> The memory ordering constraint I am concerned about here is:
+>>>>>=20
+>>>>>  * [...] In addition,
+>>>>>  * each CPU having an SRCU read-side critical section that extends bey=
+ond
+>>>>>  * the return from synchronize_srcu() is guaranteed to have executed a=
 
-It's not difficult to let the user communicate support for page migration, e.g.
-if/when restricted mem gains support, add a hook to restrictedmem_notifier_ops
-to signal support (or lack thereof) for page migration.  NULL == no migration,
-non-NULL == migration allowed.
+>>>>>  * full memory barrier after the beginning of synchronize_srcu() and b=
+efore
+>>>>>  * the beginning of that SRCU read-side critical section. [...]
+>>>>>=20
+>>>>> So if we have a SRCU read-side critical section that begins after the b=
+eginning
+>>>>> of synchronize_srcu, but before its first memory barrier, it would mis=
+s the
+>>>>> guarantee that the full memory barrier is issued before the beginning o=
+f that
+>>>>> SRCU read-side critical section. IOW, that memory barrier needs to be a=
+t the
+>>>>> very beginning of the grace period.
+>>>>=20
+>>>> I'm confused, what's wrong with this ?
+>>>>=20
+>>>> UPDATER                  READER
+>>>> -------                  ------
+>>>> STORE X =3D 1              STORE srcu_read_lock++
+>>>> // rcu_seq_snap()        smp_mb()
+>>>> smp_mb()                 READ X
+>>>> // scans
+>>>> READ srcu_read_lock
+>>>=20
+>>> What you refer to here is only memory ordering of the store to X and loa=
+d
+>>> from X wrt loading/increment of srcu_read_lock, which is internal to the=
 
-We know that supporting page migration in TDX and SNP is possible, and we know
-that page migration will require a dedicated API since the backing store can't
-memcpy() the page.  I don't see any reason to ignore that eventuality.
+>>> srcu implementation. If we really want to model the provided high-level
+>>> memory ordering guarantees, we should consider a scenario where SRCU is u=
+sed
+>>> for its memory ordering properties to synchronize other variables.
+>>>=20
+>>> I'm concerned about the following Dekker scenario, where synchronize_src=
+u()
+>>> and srcu_read_lock/unlock would be used instead of memory barriers:
+>>>=20
+>>> Initial state: X =3D 0, Y =3D 0
+>>>=20
+>>> Thread A                   Thread B
+>>> ---------------------------------------------
+>>> STORE X =3D 1                STORE Y =3D 1
+>>> synchronize_srcu()
+>>>                           srcu_read_lock()
+>>>                           r1 =3D LOAD X
+>>>                           srcu_read_unlock()
+>>> r0 =3D LOAD Y
+>>>=20
+>>> BUG_ON(!r0 && !r1)
+>>>=20
+>>> So in the synchronize_srcu implementation, there appears to be two
+>>> major scenarios: either srcu_gp_start_if_needed starts a gp or expedited=
+ gp,
+>>> or it uses an already started gp/expedited gp. When snapshotting with
+>>> rcu_seq_snap, the fact that the memory barrier is after the ssp->srcu_gp=
+_seq
+>>> load means that it does not order prior memory accesses before that load=
+.
+>>> This sequence value is then used to identify which gp_seq to wait for wh=
+en
+>>> piggy-backing on another already-started gp. I worry about reordering
+>>> between STORE X =3D 1 and load of ssp->srcu_gp_seq, which is then used t=
+o
+>>> piggy-back on an already-started gp.
+>>>=20
+>>> I suspect that the implicit barrier in srcu_read_lock() invoked at the
+>>> beginning of srcu_gp_start_if_needed() is really the barrier that makes
+>>> all this behave as expected. But without documentation it's rather hard t=
+o
+>>> follow.
+>>=20
+>> Oh ok I see now. It might be working that way by accident or on forgotten=
 
-But again, unless I'm missing something, that's a future problem because restricted
-mem doesn't yet support page migration regardless of the downstream user.
+>> purpose. In any case, we really want to add a comment above that
+>> __srcu_read_lock_nmisafe() call.
+>=20
+> Another test for the safety (or not) of removing either D or E is
+> to move that WRITE_ONCE() to follow (or, respectively, precede) the
+> adjacent scans.
+
+Good idea, though I believe the MBs that the above talk about are not the fl=
+ip ones. They are the ones in synchronize_srcu() beginning and end, that ord=
+er with respect to grace period start and end.
+
+So that (flipping MBs) is unrelated, or did I miss something?
+
+Thanks.
+
+
+
+>=20
+>                            Thanx, Paul
