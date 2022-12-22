@@ -2,134 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B68654127
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 348FA654129
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235451AbiLVMkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
+        id S235638AbiLVMlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:41:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiLVMkR (ORCPT
+        with ESMTP id S235554AbiLVMky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:40:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EA8E15;
-        Thu, 22 Dec 2022 04:40:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6032BB81D11;
-        Thu, 22 Dec 2022 12:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C135CC433EF;
-        Thu, 22 Dec 2022 12:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671712813;
-        bh=A8z1NSCUeJ0GDD5qSEMg8VBjXL+asOLb0k3hOA+DVns=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j9DdAio452LSzQ2g8EiTrC8AiQD6o74vWIlB1P/cAxLYb9BdPYcMXO31mwYcHIDuE
-         4TVjl8HaK44hgK+ojucmH0VlXkPlWZ5QVRCx5sE6kOVu9eSyCIRDYgnwVL1SRMQXwK
-         vU7AzH5Jlggs5JEIst3Vj0wcBNkTinhPdmeH2STzP7POf3KthXksIZtYsvN4Rv7KJm
-         X/hntErPycQnSvedDI9JjWA7cbQOhbpOLAB3kqnzc825OPEEPm6eHY3ubOGDnLdyVa
-         B9BvjqLObQ2Y9SkO3h10D25hAKnZHNyOSmIv2rH1x1U1ZX/vEtJ7ixR2VNl4MJcgiq
-         7m1VpPi4KrQSg==
-Date:   Thu, 22 Dec 2022 13:40:10 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Message-ID: <20221222124010.GC44777@lothringen>
-References: <6438d903-ab97-48c7-c338-9f0bc2686f94@efficios.com>
- <7A9876BA-C375-42A7-A5C9-FD940D2898D7@joelfernandes.org>
- <5bd5ee4a-710a-96bc-abe8-772b2e60f478@efficios.com>
- <20221220225756.GB26563@lothringen>
- <c085be21-b45f-4186-6f41-5082771c79ca@efficios.com>
- <20221221115924.GA34934@lothringen>
- <bb794e83-992e-8181-d9b9-acc68536ce5a@efficios.com>
+        Thu, 22 Dec 2022 07:40:54 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9130362C7;
+        Thu, 22 Dec 2022 04:40:53 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMBBHOV007356;
+        Thu, 22 Dec 2022 12:40:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=nqjGoOHjHNSgovETUOR5NWPAiQbG8cHIjvCBrOxlN1k=;
+ b=gAqS6hp+uKmgoyl70T+fZtevglk81ed7yWEFtCkDsIPFxHeyseVOC8q7O9ws/3FG5LqC
+ WYuoZvnwRWeH//JOonnEtwmjXEOM+7WpcH5jDXbEqtGeEDsvO0QjpIL/ASNxg07a5y5V
+ j469yezMdLW+uqT4ZJn8gSF48sdKmMOHaWBuiZPIoamSZGpMy+xdDewug6NO18M1y6V1
+ QZKUulORIs+5Rusayv+rerpXJN6GwtU/kwulQ2vTJrfLT5l/9nIUht52ebVY0XEqhn5Z
+ IBg5f+bgLoTB6xBtbMUptvuD+n1gzlr6+QHNL6rcEcmBMLIkL++Kic+U+8eph1a8yyUv tw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm0wfjqxa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 12:40:47 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BMCehED019868
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 12:40:43 GMT
+Received: from [10.216.55.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 22 Dec
+ 2022 04:40:41 -0800
+Message-ID: <1ab41b6b-545a-4a51-97d6-0020381736e3@quicinc.com>
+Date:   Thu, 22 Dec 2022 18:10:37 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bb794e83-992e-8181-d9b9-acc68536ce5a@efficios.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 0/2] Update the channel list if the change in channel
+ flags
+To:     <ath11k@lists.infradead.org>, <johannes@sipsolutions.net>
+CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_mpubbise@quicinc.com>
+References: <20221222120529.31436-1-quic_youghand@quicinc.com>
+Content-Language: en-US
+From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
+In-Reply-To: <20221222120529.31436-1-quic_youghand@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QYy0BnwG_A8vWTgjix_0hpfs1pdPkQdq
+X-Proofpoint-GUID: QYy0BnwG_A8vWTgjix_0hpfs1pdPkQdq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_06,2022-12-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=823 clxscore=1015
+ spamscore=0 suspectscore=0 phishscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212220111
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 12:11:42PM -0500, Mathieu Desnoyers wrote:
-> On 2022-12-21 06:59, Frederic Weisbecker wrote:
-> > On Tue, Dec 20, 2022 at 10:34:19PM -0500, Mathieu Desnoyers wrote:
-> [...]
-> > > 
-> > > The memory ordering constraint I am concerned about here is:
-> > > 
-> > >   * [...] In addition,
-> > >   * each CPU having an SRCU read-side critical section that extends beyond
-> > >   * the return from synchronize_srcu() is guaranteed to have executed a
-> > >   * full memory barrier after the beginning of synchronize_srcu() and before
-> > >   * the beginning of that SRCU read-side critical section. [...]
-> > > 
-> > > So if we have a SRCU read-side critical section that begins after the beginning
-> > > of synchronize_srcu, but before its first memory barrier, it would miss the
-> > > guarantee that the full memory barrier is issued before the beginning of that
-> > > SRCU read-side critical section. IOW, that memory barrier needs to be at the
-> > > very beginning of the grace period.
-> > 
-> > I'm confused, what's wrong with this ?
-> > 
-> > UPDATER                  READER
-> > -------                  ------
-> > STORE X = 1              STORE srcu_read_lock++
-> > // rcu_seq_snap()        smp_mb()
-> > smp_mb()                 READ X
-> > // scans
-> > READ srcu_read_lock
-> 
-> What you refer to here is only memory ordering of the store to X and load
-> from X wrt loading/increment of srcu_read_lock, which is internal to the
-> srcu implementation. If we really want to model the provided high-level
-> memory ordering guarantees, we should consider a scenario where SRCU is used
-> for its memory ordering properties to synchronize other variables.
-> 
-> I'm concerned about the following Dekker scenario, where synchronize_srcu()
-> and srcu_read_lock/unlock would be used instead of memory barriers:
-> 
-> Initial state: X = 0, Y = 0
-> 
-> Thread A                   Thread B
-> ---------------------------------------------
-> STORE X = 1                STORE Y = 1
-> synchronize_srcu()
->                            srcu_read_lock()
->                            r1 = LOAD X
->                            srcu_read_unlock()
-> r0 = LOAD Y
-> 
-> BUG_ON(!r0 && !r1)
-> 
-> So in the synchronize_srcu implementation, there appears to be two
-> major scenarios: either srcu_gp_start_if_needed starts a gp or expedited gp,
-> or it uses an already started gp/expedited gp. When snapshotting with
-> rcu_seq_snap, the fact that the memory barrier is after the ssp->srcu_gp_seq
-> load means that it does not order prior memory accesses before that load.
-> This sequence value is then used to identify which gp_seq to wait for when
-> piggy-backing on another already-started gp. I worry about reordering
-> between STORE X = 1 and load of ssp->srcu_gp_seq, which is then used to
-> piggy-back on an already-started gp.
-> 
-> I suspect that the implicit barrier in srcu_read_lock() invoked at the
-> beginning of srcu_gp_start_if_needed() is really the barrier that makes
-> all this behave as expected. But without documentation it's rather hard to
-> follow.
 
-Oh ok I see now. It might be working that way by accident or on forgotten
-purpose. In any case, we really want to add a comment above that
-__srcu_read_lock_nmisafe() call.
+On 12/22/2022 5:35 PM, Youghandhar Chintala wrote:
+> There are connection failures in hidden SSID case when the device is with
+> default reg domain WW.
+> For WW reg domain most of the 5 GHz channels are passive. When device
+> listens to the beacon on that channel, the driver is updating its channel
+> flag but firmware is not aware of it and firmware is not sending probes
+> on that channels.
+> Due to this, we are seeing connection failures when the device is tries to
+> connect with hidden SSID AP.
+> Whenever the driver detects a channel flag change, send the updated channel
+> list command to the firmware.
+>
+> Youghandhae Chintala (2):
+>    wifi: cfg80211: Add beacon hint notifier support
+>    wifi: ath10k: update the channel list if change in channel flags.
+>
+>   drivers/net/wireless/ath/ath10k/mac.c | 11 +++++++++++
+>   include/net/cfg80211.h                |  2 ++
+>   net/wireless/reg.c                    |  5 ++++-
+>   3 files changed, 17 insertions(+), 1 deletion(-)
+
+Hi All,
+
+My bad. Wrong list added. Please ignore this series. I will resend to 
+right list.
+
+Regards,
+
+Youghandhar
 
