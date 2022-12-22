@@ -2,100 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CC9653E4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC31F653E4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 11:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbiLVK3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 05:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
+        id S235316AbiLVKaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 05:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235225AbiLVK3q (ORCPT
+        with ESMTP id S235225AbiLVKaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 05:29:46 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8577C1A214;
-        Thu, 22 Dec 2022 02:29:43 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 4C1D024E347;
-        Thu, 22 Dec 2022 18:29:42 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 22 Dec
- 2022 18:29:42 +0800
-Received: from EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4]) by
- EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4%16]) with mapi id
- 15.00.1497.044; Thu, 22 Dec 2022 18:29:42 +0800
-From:   JiaJie Ho <jiajie.ho@starfivetech.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Olivia Mackall <olivia@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: RE: [PATCH 2/3] hwrng: starfive - Add TRNG driver for StarFive SoC
-Thread-Topic: [PATCH 2/3] hwrng: starfive - Add TRNG driver for StarFive SoC
-Thread-Index: AQHZFRwx15kE4gLKu0uxN2CW96B+Oa53kqwAgAIT3RD//3zVgIAAklKA
-Date:   Thu, 22 Dec 2022 10:29:41 +0000
-Message-ID: <2684abf708f145f4b49ec1680c1ddb87@EXMBX168.cuchost.com>
-References: <20221221090819.1259443-1-jiajie.ho@starfivetech.com>
- <20221221090819.1259443-3-jiajie.ho@starfivetech.com>
- <05aaa9f8-7a97-51c9-e18a-1c3753f2006b@linaro.org>
- <69dca1be673a40729d750c00d927b437@EXMBX168.cuchost.com>
- <27f1c084-60b4-daeb-0ffe-c0500aecbd49@linaro.org>
-In-Reply-To: <27f1c084-60b4-daeb-0ffe-c0500aecbd49@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [161.142.229.243]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 22 Dec 2022 05:30:20 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A40D1FCF7;
+        Thu, 22 Dec 2022 02:30:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671705019; x=1703241019;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Rbzof44+EtrdYScW9KjRxHkIGR0ZtgJFbtkIuoytGKc=;
+  b=PoCwBwtcO185hqvPbW60HJsWuCiNCRYw6jsg4jgsQwCXwyO4WKkv0yXk
+   nHuKA0137PU0bpOZV0+bFWC9W9kFl3c2oLWgyzcRVUs3mHUQ8WHbGqAv/
+   xuk2Ufxkwi9vgaV7o9SUrI7RVgIFJ4u9IWmnGtxRg6W27JmxXZ+rxPrRb
+   DaLNmarThN4xZoUh2Kw/lZcLJY0SyzZGP+NPyTLZbzAZs5trk7VcntPbd
+   ++ADwBIOZfacrPbRLOISvdPPAMP1yQcRUt2TjVGg2mmA4DhIcBD5Hac4S
+   +vjCOgXFCre89gFvbmmasQPxENs2B98AzdKwhHyI8qZkE9jWcVM9WRWE4
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="347239118"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="347239118"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 02:30:18 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="720268696"
+X-IronPort-AV: E=Sophos;i="5.96,265,1665471600"; 
+   d="scan'208";a="720268696"
+Received: from lardelea-mobl1.ger.corp.intel.com ([10.251.219.104])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 02:30:16 -0800
+Date:   Thu, 22 Dec 2022 12:30:14 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Richard Leitner <richard.leitner@linux.dev>
+cc:     "David R. Piegdon" <lkml@p23q.org>, linux-tegra@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] serial8250 on tegra hsuart: recover from spurious
+ interrupts due to tegra2 silicon bug
+In-Reply-To: <Y3tUWPCVnauLeuG2@skidata.com>
+Message-ID: <e48e8030-f15e-fe5b-84b7-44406937e51@linux.intel.com>
+References: <4676ea34-69ce-5422-1ded-94218b89f7d9@p23q.org> <Y3tUWPCVnauLeuG2@skidata.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEtvemxv
-d3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiBTZW50OiBUaHVyc2RheSwg
-RGVjZW1iZXIgMjIsIDIwMjIgNTo0NCBQTQ0KPiBUbzogSmlhSmllIEhvIDxqaWFqaWUuaG9Ac3Rh
-cmZpdmV0ZWNoLmNvbT47IE9saXZpYSBNYWNrYWxsDQo+IDxvbGl2aWFAc2VsZW5pYy5jb20+OyBI
-ZXJiZXJ0IFh1IDxoZXJiZXJ0QGdvbmRvci5hcGFuYS5vcmcuYXU+OyBSb2INCj4gSGVycmluZyA8
-cm9iaCtkdEBrZXJuZWwub3JnPjsgS3J6eXN6dG9mIEtvemxvd3NraQ0KPiA8a3J6eXN6dG9mLmtv
-emxvd3NraStkdEBsaW5hcm8ub3JnPg0KPiBDYzogRW1pbCBSZW5uZXIgQmVydGhpbmcgPGtlcm5l
-bEBlc21pbC5kaz47IENvbm9yIERvb2xleQ0KPiA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+
-OyBsaW51eC1jcnlwdG9Admdlci5rZXJuZWwub3JnOw0KPiBkZXZpY2V0cmVlQHZnZXIua2VybmVs
-Lm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+IHJpc2N2QGxpc3Rz
-LmluZnJhZGVhZC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCAyLzNdIGh3cm5nOiBzdGFyZml2
-ZSAtIEFkZCBUUk5HIGRyaXZlciBmb3IgU3RhckZpdmUgU29DDQo+IA0KPiA+IEhvdyBkbyBJIHBy
-b3Blcmx5IGhhbmRsZSBfX21heWJlX3VudXNlZCBmdW5jdGlvbnMgaW4gdGhpcyBzY2VuYXJpbz8N
-Cj4gDQo+IFRoZSBzYW1lIGFzIGluIG90aGVyIGZpbGVzLiBVc2UgYGdpdCBncmVwYA0KPiANCj4g
-PiBXaWxsIGl0IGhlbHAgaWYgSSBhZGQgI2RlZmluZSBhcyBmb2xsb3dzOg0KPiA+DQo+ID4gI2lm
-ZGVmIENPTkZJR19QTQ0KPiA+ICNkZWZpbmUgU1RBUkZJVkVfUk5HX1BNX09QUyAoJnN0YXJmaXZl
-X3JuZ19wbV9vcHMpICNlbHNlICNkZWZpbmUNCj4gPiBTVEFSRklWRV9STkdfUE1fT1BTIE5VTEwg
-I2VuZGlmDQo+IA0KPiBJIHRhbGtlZCBvbmx5IGFib3V0IG9mX21hdGNoX3B0cigpLiBUaGlzIGlz
-IG5vdCBvZl9tYXRjaF9wdHIgYW5kIHNob3VsZCBoYXZlDQo+IGl0cyBvd24gc3ludGF4IChwbV9z
-bGVlcF9wdHIgKyBzdGF0aWMgREVGSU5FX1NJTVBMRV9ERVZfUE1fT1BTKQ0KPiANCj4gPg0KPiA+
-IHN0YXRpYyBzdHJ1Y3QgcGxhdGZvcm1fZHJpdmVyIHN0YXJmaXZlX3RybmdfZHJpdmVyID0gew0K
-PiA+ICAgICAgICAgLnByb2JlICA9IHN0YXJmaXZlX3RybmdfcHJvYmUsDQo+ID4gICAgICAgICAu
-ZHJpdmVyID0gew0KPiA+ICAgICAgICAgICAgICAgICAubmFtZSAgICAgICAgICAgPSAic3RhcmZp
-dmUtdHJuZyIsDQo+ID4gICAgICAgICAgICAgICAgIC5wbSAgICAgICAgICAgICA9IFNUQVJGSVZF
-X1JOR19QTV9PUFMsDQo+ID4gICAgICAgICAgICAgICAgIC5vZl9tYXRjaF90YWJsZSA9IG9mX21h
-dGNoX3B0cih0cm5nX2R0X2lkcyksDQo+ID4gICAgICAgICB9LA0KPiA+IH07DQo+ID4NCj4gPiBJ
-IGRpZCBidWlsZCB0aGUgcGF0Y2hlcyB3aXRoIHRoZSB0b29scyBtZW50aW9uZWQgYnV0IGRpZCBu
-b3QgZ2V0IHdhcm5pbmdzLg0KPiA+IERvIEkgbmVlZCBhIHNwZWNpZmljIHZlcnNpb24sIG9yIGhh
-dmUgSSBkb25lIHNvbWV0aGluZyB3cm9uZz8NCj4gDQo+IFlvdSBqdXN0IG5lZWQgcHJvcGVyIENP
-TVBJTEVfVEVTVCBjb25maWcgd2l0aCBPRiBkaXNhYmxlZC4NCj4gDQoNCkknbGwgdXBkYXRlIHRo
-ZSBwYXRjaCBhY2NvcmRpbmdseS4NClRoYW5rcyBhZ2FpbiBmb3IgdGhlIGNvbW1lbnRzIGFuZCBz
-dWdnZXN0aW9ucy4NCg0KUmVnYXJkcywNCkppYSBKaWUNCg==
+On Mon, 21 Nov 2022, Richard Leitner wrote:
+
+> Hi,
+> 
+> On Fri, Jul 13, 2018 at 11:32:42AM +0000, David R. Piegdon wrote:
+> > Hi,
+> > a while back I sent a few mails regarding spurious interrupts in the
+> > UARTA (hsuart) block of the Tegra2 SoC, when using the 8250 driver for
+> > it instead of the hsuart driver. After going down a pretty deep
+> > debugging/testing hole, I think I found a patch that fixes the issue. So
+> > far testing in a reboot-cycle suggests that the error frequency dropped
+> > from >3% of all reboots to at least <0.05% of all reboots. Tests
+> > continue to run over the weekend.
+> > 
+> > The patch below already is a second iteration; the first did not reset
+> > the MCR or contain the lines below '// clear interrupts'. This resulted
+> > in no more spurious interrupts, but in a few % of spurious interrupts
+> > that were recovered the UART block did not receive any characters any
+> > more. So further resetting was required to fully reacquire operational
+> > state of the UART block.
+> > 
+> > I'd love any comments/suggestions on this!
+> 
+> I'd like to follow up on this ancient patch as we are using it
+> successfully for a few years with different kernel versions on a
+> tegra20 SOM (tamonten) now and I'm currently cleaning up our tree.
+> 
+> David, have you done any work in regarding this issue since 2018?
+> 
+> What would be needed to get this solution mainline?
+
+It seems that the code would belong to ->handle_irq() rather than 
+8250_core. Do the affected device belong under 8250_tegra.c? If they do, 
+then just create .handle_irq for it and detect this condition there after 
+call to serial8250_handle_irq().
+
+> The recipient of this mail are from the initial thread [1] and
+> a current get_maintainers.pl run.
+> 
+> regards;rl
+> 
+> [1] https://patchwork.ozlabs.org/project/linux-tegra/patch/4676ea34-69ce-5422-1ded-94218b89f7d9@p23q.org/
+> 
+> > 
+> > Cheers,
+> > 
+> > David
+> > 
+> > diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+> > index e8819aa20415..1d76eebefd4e 100644
+> > --- a/drivers/tty/serial/8250/8250_core.c
+> > +++ b/drivers/tty/serial/8250/8250_core.c
+> > @@ -140,6 +140,38 @@ static irqreturn_t serial8250_interrupt(int irq, void *dev_id)
+> >  				"serial8250: too much work for irq%d\n", irq);
+> >  			break;
+> >  		}
+> > +
+> > +#ifdef CONFIG_ARCH_TEGRA_2x_SOC
+> > +		if (!handled && (port->type == PORT_TEGRA)) {
+> > +			/*
+> > +			 * Fix Tegra 2 CPU silicon bug where sometimes
+> > +			 * "TX holding register empty" interrupts result in a
+> > +			 * bad (metastable?) state in Tegras HSUART IP core.
+> > +			 * Only way to recover seems to be to reset all
+> > +			 * interrupts as well as the TX queue and the MCR.
+> > +			 * But we don't want to loose any outgoing characters,
+> > +			 * so only do it if the RX and TX queues are empty.
+> > +			 */
+> > +			unsigned char lsr = port->serial_in(port, UART_LSR);
+
+serial_lsr_in(), make sure you take the port's lock btw.
+
+> > +			const unsigned char fifo_empty_mask =
+> > +						(UART_LSR_TEMT | UART_LSR_THRE);
+> > +			if (((lsr & (UART_LSR_DR | fifo_empty_mask)) ==
+> > +							fifo_empty_mask)) {
+
+uart_lsr_tx_empty(lsr) && !(lsr & UART_LSR_DR)
+
+fifo_empty_mask can be dropped.
+
+-- 
+ i.
+
+> > +				port->serial_out(port, UART_IER, 0);
+> > +				port->serial_out(port, UART_MCR, 0);
+> > +				serial8250_clear_and_reinit_fifos(up);
+> > +				port->serial_out(port, UART_MCR, up->mcr);
+> > +				port->serial_out(port, UART_IER, up->ier);
+> > +				// clear interrupts
+> > +				serial_port_in(port, UART_LSR);
+> > +				serial_port_in(port, UART_RX);
+> > +				serial_port_in(port, UART_IIR);
+> > +				serial_port_in(port, UART_MSR);
+> > +				up->lsr_saved_flags = 0;
+> > +				up->msr_saved_flags = 0;
+> > +			}
+> > +		}
+> > +#endif
+> >  	} while (l != end);
+> >  
+> >  	spin_unlock(&i->lock);
+> 
+
