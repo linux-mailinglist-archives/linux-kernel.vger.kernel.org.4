@@ -2,86 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B14465478F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37480654792
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiLVUyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        id S235439AbiLVU4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLVUyi (ORCPT
+        with ESMTP id S235061AbiLVU4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 15:54:38 -0500
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780B81C916;
-        Thu, 22 Dec 2022 12:54:37 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 22 Dec 2022 15:56:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDC41C916
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 12:55:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671742518;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qcDRS9Sce9ANj40wLqgQKKpvrIhr1uJpBf+ytEcZupg=;
+        b=IuO8X1SHUxOcs/LckNhMnnTV9RhMYdaHxaxVA3ui2TE4CEPWg22QOexdCaWiaj3EUlC4dc
+        zj7UBNryobFoaxKYCeSU938/ly0TjyyDwqJj11yqip1EpyHsIZKJD1rTG9xEv2ZsX+pfdc
+        VRbFd8kgYN2UVPhDZT2wZES00k/Lir0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-zkxOB09qPE2IQI9M8lcv7Q-1; Thu, 22 Dec 2022 15:55:15 -0500
+X-MC-Unique: zkxOB09qPE2IQI9M8lcv7Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A1715774;
-        Thu, 22 Dec 2022 20:54:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A1715774
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1671742476; bh=BOl6ICJ8RqdJV/GOC1RaekskBBpoDf7iE7ORiDpKG5M=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=opBNAa42RBXIgcq6/Wg3Wpkatc+UgO6KGWwH/W1NGxg8UlxYjdfHc3b/ECEkJOA96
-         oKIbeDIfKwNEYyBR4dF88k9GtXuVx2OKnWARuS478xNZn9ArfsmOCZm6I7OErHrmLX
-         vh00GCngBsJY+etnO0p3KN7UaujLje7WhZbxWrcG9BUSm7eWRaNo8oC6FXGAwTNnLY
-         uJlU22BEshbtF0J/R4NhDLGq7msohT105z0dniqiB/u9vEbnpyohLtiLNhoTJUv/4B
-         8gAcsLIdpoI7MJDqdjomF1XRHl3AV0VWnqN8mXAh+ZedKourXzUgsqWR8nqx9b9MBG
-         cdi3W/pIl9Kpw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Christoph Hellwig <hch@lst.de>, axboe@meta.com, sagi@grimberg.me,
-        kbusch@kernel.org, linux-nvme@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH] docs, nvme: add a feature and quirk policy document
-In-Reply-To: <20221222160920.GA10193@lst.de>
-References: <20221215125130.261098-1-hch@lst.de>
- <87zgboddb7.fsf@meer.lwn.net> <20221215132622.GA21083@lst.de>
- <20221221083450.GA23903@lst.de> <87mt7g27lv.fsf@meer.lwn.net>
- <20221222160920.GA10193@lst.de>
-Date:   Thu, 22 Dec 2022 13:54:35 -0700
-Message-ID: <87zgbfma5w.fsf@meer.lwn.net>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08AAD87A383;
+        Thu, 22 Dec 2022 20:55:15 +0000 (UTC)
+Received: from t480s.fritz.box (unknown [10.39.193.53])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D45D340C2064;
+        Thu, 22 Dec 2022 20:55:12 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Miaohe Lin <linmiaohe@huawei.com>
+Subject: [PATCH v1 0/2] mm/hugetlb: uffd-wp fixes for hugetlb_change_protection()
+Date:   Thu, 22 Dec 2022 21:55:09 +0100
+Message-Id: <20221222205511.675832-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@lst.de> writes:
+Playing with virtio-mem and background snapshots (using uffd-wp) on
+hugetlb in QEMU, I managed to trigger a VM_BUG_ON(). Looking into the
+details, hugetlb_change_protection() seems to not handle uffd-wp correctly
+in all cases.
 
-> On Wed, Dec 21, 2022 at 06:45:32AM -0700, Jonathan Corbet wrote:
->> Sorry, the argument is that the subsystem profiles there were created
->> for the very purpose of documenting subsystem-specific patch policies
->> like those found in your document.  The hope is that, someday, people
->> will be able to go to one place to learn what special hoops any given
->> subsystem will make them jump through.
->> 
->> This isn't something I'm going to dig in my heels on, though.  But at a
->> minimum, could you add an entry to
->> Documentation/maintainer/maintainer-entry-profile.rst ?
->
-> What about the following?  This moves the file to a new
-> Documentation/nvme/ directory and then links it form
-> Documentation/maintainer/maintainer-entry-profile.rst:
+Patch #1 fixes my test case. I don't have reproducers for patch #2, as
+it requires running into migration entries.
 
-I'm not really a fan of adding more top-level directories; one of these
-years I'd like to try to move things in the opposite direction.  That is
-a battle for another day, though; for now let's just go with this and
-get the document merged.
+I did not yet check in detail yet if !hugetlb code requires similar care.
 
-That said, I suspect you'll add a build warning about the new document
-not being included in any toctree.  Fixing that would involve adding a
-basic index.rst to the new directory and adding that to a file like
-Documentation/subsystem-apis.rst.
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
 
-Thanks,
+David Hildenbrand (2):
+  mm/hugetlb: fix PTE marker handling in hugetlb_change_protection()
+  mm/hugetlb: fix uffd-wp handling for migration entries in
+    hugetlb_change_protection()
 
-jon
+ mm/hugetlb.c | 38 ++++++++++++++++----------------------
+ 1 file changed, 16 insertions(+), 22 deletions(-)
+
+-- 
+2.38.1
+
