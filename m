@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A540D653AB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 03:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E118653AAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 03:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235109AbiLVCgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 21:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
+        id S234997AbiLVCgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 21:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234980AbiLVCfh (ORCPT
+        with ESMTP id S235046AbiLVCfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 21:35:37 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1EE264A0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:35:14 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id pi14-20020a17090b1e4e00b0021d20da7a51so2300625pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:35:14 -0800 (PST)
+        Wed, 21 Dec 2022 21:35:39 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B6D26AC6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:35:16 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id pa16-20020a17090b265000b0020a71040b4cso300727pjb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 18:35:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OqpNn9k+U+hG3YogdgDR/fOEr/aI6IdVDrzcvJRoBmQ=;
-        b=LZCil3LEBuiqPglCaABHVnyyRktcG83zDWgYL8mZt4giWucmb8FzbuHkl/qRDPEfTL
-         sho0PmZ83Kz1PVrv7LxQITDU73TzGBV57cqQUyLCGPrx9sfwBeRiioD2DlM4/tip3fqi
-         o4IJFivw5AtKaKsdUfv+TfoKhPRPMShpd4EbkgwFft29q/MNo2D6I6u6PD7ToZ52tz4W
-         VKhny6D60ScNULutdaRX1NMuignZ1Y+Q42SR/GGwjeDOYE8dXqUceH2wQdl+BQh9qtF5
-         92z74m16CNnw3BzXc5KaYuQ6cZkc4YU7xlvloYt7f+L5x8vmyokePQB0TBCZVG3vF0Yg
-         INTQ==
+        bh=b9yKHiaQzq9mZ3IJWGzrPWbD3+83EkY9xWMVBG05dNQ=;
+        b=XlyER0aXwnjO8q6dTDihNfSIfjWn8dSVJ8IiBcSHE7yuANREvStJV3g9XDl8A/5Vwr
+         OaNHoUYM9Z3wM78fZ/XqZqc2ZUebk2Up0L9xXgXL4U3gFGGz6w6NBfJtgfGPwYUC+B8s
+         lG8Y2mimnBPeTLnpwg2Gmem25P6HBJfKl/2T+uaujz8TJVx2GozbpVFZB4OD+HpbyDdX
+         FHdfVOyX6+BPp8Ht/TdNLUscgGNFc8b5S04IVXGZFWLXt3JasjvhdrpNTDIHgFTTxdhl
+         C2eu1PX9i9Z3SW518upry6mS+ShsSl8pxZNEoSPq4X6DQp773Xn1V/u5SNKVXrbP8X0c
+         vtUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OqpNn9k+U+hG3YogdgDR/fOEr/aI6IdVDrzcvJRoBmQ=;
-        b=b8XX7b2uZvcozgBj6OGMmzGTiexqi6XAxEjJK32lZe8NnldgDXdjl4XH5ZOZawHkGd
-         F0J/gTgeTyI1tXKEjf9rHcmwSz64smtDZub1cn7hqo9dO2vk5e1lBeaa7NcFtB5qGDPw
-         6h/0TTlbC8Ijl9Mfz9XT6zlxTWrO1IPWhqzhvbwD9RY7M8W8aqi22eAYEQ29DzYW0QeN
-         UrMbWwTfbS6zrDHnoKSQQnxtU8UyAv3RuwbTUuudxLU8mKDELLj6VhNii5Mr+98BY2hT
-         aSKgxM3XH+dOB8D37oy9vH2lhofPRra+8/dRqvPcWP2ON8q3Y0pvTW1aWLu44qhBGJt3
-         fVgg==
-X-Gm-Message-State: AFqh2krDNTACpeR2KkYpbSGtJ926b9tzIXp89y9NoAO33SMje5ruzHKP
-        0cveuLDYPQsiR4LWM6jjJWCcRTIH+epO
-X-Google-Smtp-Source: AMrXdXsdS1uAeaLst9k9vclVCCOLWIbxK9Lx9IWWeNQ8BLMOiOd/S8VYUSYeV2+muAopSD1+l7BaJNjs32ck
+        bh=b9yKHiaQzq9mZ3IJWGzrPWbD3+83EkY9xWMVBG05dNQ=;
+        b=x9xuSQJNwgHBxcU5HYm2Dy5FNIj96/5HorcahakgG3P9Ku2yRVrqXRMBE5cFuwD7tN
+         vvBnWRbdpWOjoyCXYwl/wWpdAKR3loYWE0L8OydOrCl3gZw7rvdxANftHOU4tm/s3CM/
+         xfWqYJmpBBJ9q2PlABo4NZElzgzYHzOC4sXMVxapHDQSVR1T2Sr2D6sEgR4o/TM6ivtX
+         mxGwfA4Rt3tWhmcFJ7uvNd0Nbg3ZdIu1OOJii0o/H6++Z3B+4Dh5/HUTllFjCa0So4R5
+         2JjHzGjMR0CyT3cApAjCOdPOrBx5jLo6vIN2ItEf8xNAxREP/GzQOD77PrPXSFz7N4Yq
+         xfFQ==
+X-Gm-Message-State: AFqh2kqjAGj+Z8tqtrPg/0TeX8sz8HZxGk4Jl6PmRUF7G/wTr7EePQ95
+        6vQwNnF30BcwPCYhB1cg+WOhxEvCn6XP
+X-Google-Smtp-Source: AMrXdXuzNj9EuXh7z055yKJ7hUYnL0IVln/7MJaAb+bM/jJJ7BibhMJSEr7enuNFlr9FF9cWepYFeciD79VX
 X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a17:902:7d92:b0:18e:bd50:f19a with SMTP id
- a18-20020a1709027d9200b0018ebd50f19amr219700plm.81.1671676513459; Wed, 21 Dec
- 2022 18:35:13 -0800 (PST)
-Date:   Wed, 21 Dec 2022 18:34:56 -0800
+ (user=vipinsh job=sendgmr) by 2002:a17:90b:701:b0:219:1d0a:34a6 with SMTP id
+ s1-20020a17090b070100b002191d0a34a6mr128835pjz.1.1671676515179; Wed, 21 Dec
+ 2022 18:35:15 -0800 (PST)
+Date:   Wed, 21 Dec 2022 18:34:57 -0800
 In-Reply-To: <20221222023457.1764-1-vipinsh@google.com>
 Mime-Version: 1.0
 References: <20221222023457.1764-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221222023457.1764-9-vipinsh@google.com>
-Subject: [Patch v3 8/9] KVM: x86/mmu: Make split_shadow_page_cache NUMA aware
+Message-ID: <20221222023457.1764-10-vipinsh@google.com>
+Subject: [Patch v3 9/9] KVM: x86/mmu: Reduce default cache size in KVM from 40
+ to PT64_ROOT_MAX_LEVEL
 From:   Vipin Sharma <vipinsh@google.com>
 To:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
         dmatlack@google.com
@@ -69,208 +70,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make split_shadow_page_cache NUMA aware and allocate page table's pages
-during the split based on the underlying physical page's NUMA node.
+KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE is set to 40 without any specific
+reason. Reduce default size to PT64_ROOT_MAX_LEVEL, which is currently
+5.
+
+Change mmu_pte_list_desc_cache size to what is needed as it is more than
+5 but way less than 40.
+
+Tested by running dirty_log_perf_test on both tdp and shadow MMU with 48
+vcpu and 2GB/vcpu size on a 2 NUMA node machine. No impact on
+performance noticed.
+
+Ran perf on dirty_log_perf_test and found kvm_mmu_get_free_page() calls
+reduced by ~3300 which is near to 48 (vcpus) * 2 (nodes) * 35 (cache
+size).
 
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- arch/x86/include/asm/kvm_host.h |  2 +-
- arch/x86/kvm/mmu/mmu.c          | 50 ++++++++++++++++++---------------
- 2 files changed, 29 insertions(+), 23 deletions(-)
+ arch/x86/include/asm/kvm_types.h | 2 +-
+ arch/x86/kvm/mmu/mmu.c           | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index b1f319ad6f89..7b3f36ae37a4 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1410,7 +1410,7 @@ struct kvm_arch {
- 	 *
- 	 * Protected by kvm->slots_lock.
- 	 */
--	struct kvm_mmu_memory_cache split_shadow_page_cache;
-+	struct kvm_mmu_memory_cache split_shadow_page_cache[MAX_NUMNODES];
- 	struct kvm_mmu_memory_cache split_page_header_cache;
+diff --git a/arch/x86/include/asm/kvm_types.h b/arch/x86/include/asm/kvm_types.h
+index 08f1b57d3b62..752dab218a62 100644
+--- a/arch/x86/include/asm/kvm_types.h
++++ b/arch/x86/include/asm/kvm_types.h
+@@ -2,6 +2,6 @@
+ #ifndef _ASM_X86_KVM_TYPES_H
+ #define _ASM_X86_KVM_TYPES_H
  
- 	/*
+-#define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE 40
++#define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE PT64_ROOT_MAX_LEVEL
+ 
+ #endif /* _ASM_X86_KVM_TYPES_H */
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 511c6ef265ee..7454bfc49a51 100644
+index 7454bfc49a51..f89d933ff380 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6126,7 +6126,7 @@ static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
- int kvm_mmu_init_vm(struct kvm *kvm)
+@@ -677,11 +677,12 @@ static int mmu_topup_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
+ 
+ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
  {
- 	struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
--	int r;
-+	int r, nid;
+-	int r, nid;
++	int r, nid, desc_capacity;
  
- 	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
- 	INIT_LIST_HEAD(&kvm->arch.possible_nx_huge_pages);
-@@ -6145,8 +6145,9 @@ int kvm_mmu_init_vm(struct kvm *kvm)
- 	INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache,
- 				  mmu_page_header_cache, NUMA_NO_NODE);
- 
--	INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache,
--				  NULL, NUMA_NO_NODE);
-+	for_each_node(nid)
-+		INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache[nid],
-+					  NULL, NUMA_NO_NODE);
- 	spin_lock_init(&kvm->arch.split_shadow_page_cache_lock);
- 
- 	INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_desc_cache,
-@@ -6157,10 +6158,13 @@ int kvm_mmu_init_vm(struct kvm *kvm)
- 
- static void mmu_free_vm_memory_caches(struct kvm *kvm)
- {
-+	int nid;
-+
- 	kvm_mmu_free_memory_cache(&kvm->arch.split_desc_cache);
- 	kvm_mmu_free_memory_cache(&kvm->arch.split_page_header_cache);
--	mmu_free_sp_memory_cache(&kvm->arch.split_shadow_page_cache,
--				 &kvm->arch.split_shadow_page_cache_lock);
-+	for_each_node(nid)
-+		mmu_free_sp_memory_cache(&kvm->arch.split_shadow_page_cache[nid],
-+					 &kvm->arch.split_shadow_page_cache_lock);
- }
- 
- void kvm_mmu_uninit_vm(struct kvm *kvm)
-@@ -6269,7 +6273,7 @@ static inline bool need_topup(struct kvm_mmu_memory_cache *cache, int min)
- 	return kvm_mmu_memory_cache_nr_free_objects(cache) < min;
- }
- 
--static bool need_topup_split_caches_or_resched(struct kvm *kvm)
-+static bool need_topup_split_caches_or_resched(struct kvm *kvm, int nid)
- {
- 	if (need_resched() || rwlock_needbreak(&kvm->mmu_lock))
- 		return true;
-@@ -6281,10 +6285,10 @@ static bool need_topup_split_caches_or_resched(struct kvm *kvm)
- 	 */
- 	return need_topup(&kvm->arch.split_desc_cache, SPLIT_DESC_CACHE_MIN_NR_OBJECTS) ||
- 	       need_topup(&kvm->arch.split_page_header_cache, 1) ||
--	       need_topup(&kvm->arch.split_shadow_page_cache, 1);
-+	       need_topup(&kvm->arch.split_shadow_page_cache[nid], 1);
- }
- 
--static int topup_split_caches(struct kvm *kvm)
-+static int topup_split_caches(struct kvm *kvm, int nid)
- {
- 	/*
- 	 * Allocating rmap list entries when splitting huge pages for nested
-@@ -6314,18 +6318,21 @@ static int topup_split_caches(struct kvm *kvm)
+ 	/* 1 rmap, 1 parent PTE per level, and the prefetched rmaps. */
+-	r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
+-				       1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
++	desc_capacity = 1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM;
++	r = __kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
++					 desc_capacity, desc_capacity);
  	if (r)
  		return r;
- 
--	return mmu_topup_sp_memory_cache(&kvm->arch.split_shadow_page_cache,
-+	return mmu_topup_sp_memory_cache(&kvm->arch.split_shadow_page_cache[nid],
- 					 &kvm->arch.split_shadow_page_cache_lock,
- 					 1);
- }
- 
--static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *huge_sptep)
-+static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm,
-+							u64 *huge_sptep,
-+							u64 huge_spte)
- {
- 	struct kvm_mmu_page *huge_sp = sptep_to_sp(huge_sptep);
- 	struct shadow_page_caches caches = {};
- 	union kvm_mmu_page_role role;
- 	unsigned int access;
- 	gfn_t gfn;
-+	int nid;
- 
- 	gfn = kvm_mmu_page_get_gfn(huge_sp, spte_index(huge_sptep));
- 	access = kvm_mmu_page_get_access(huge_sp, spte_index(huge_sptep));
-@@ -6338,9 +6345,11 @@ static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *hu
- 	 */
- 	role = kvm_mmu_child_role(huge_sptep, /*direct=*/true, access);
- 
-+	nid = kvm_pfn_to_page_table_nid(spte_to_pfn(huge_spte));
-+
- 	/* Direct SPs do not require a shadowed_info_cache. */
- 	caches.page_header_cache = &kvm->arch.split_page_header_cache;
--	caches.shadow_page_cache = &kvm->arch.split_shadow_page_cache;
-+	caches.shadow_page_cache = &kvm->arch.split_shadow_page_cache[nid];
- 	caches.shadow_page_cache_lock = &kvm->arch.split_shadow_page_cache_lock;
- 
- 	/* Safe to pass NULL for vCPU since requesting a direct SP. */
-@@ -6360,7 +6369,7 @@ static void shadow_mmu_split_huge_page(struct kvm *kvm,
- 	gfn_t gfn;
- 	int index;
- 
--	sp = shadow_mmu_get_sp_for_split(kvm, huge_sptep);
-+	sp = shadow_mmu_get_sp_for_split(kvm, huge_sptep, huge_spte);
- 
- 	for (index = 0; index < SPTE_ENT_PER_PAGE; index++) {
- 		sptep = &sp->spt[index];
-@@ -6398,7 +6407,7 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
- 					  u64 *huge_sptep)
- {
- 	struct kvm_mmu_page *huge_sp = sptep_to_sp(huge_sptep);
--	int level, r = 0;
-+	int level, r = 0, nid;
- 	gfn_t gfn;
- 	u64 spte;
- 
-@@ -6406,13 +6415,14 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
- 	gfn = kvm_mmu_page_get_gfn(huge_sp, spte_index(huge_sptep));
- 	level = huge_sp->role.level;
- 	spte = *huge_sptep;
-+	nid = kvm_pfn_to_page_table_nid(spte_to_pfn(spte));
- 
- 	if (kvm_mmu_available_pages(kvm) <= KVM_MIN_FREE_MMU_PAGES) {
- 		r = -ENOSPC;
- 		goto out;
- 	}
- 
--	if (need_topup_split_caches_or_resched(kvm)) {
-+	if (need_topup_split_caches_or_resched(kvm, nid)) {
- 		write_unlock(&kvm->mmu_lock);
- 		cond_resched();
- 		/*
-@@ -6420,7 +6430,7 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
- 		 * rmap iterator should be restarted because the MMU lock was
- 		 * dropped.
- 		 */
--		r = topup_split_caches(kvm) ?: -EAGAIN;
-+		r = topup_split_caches(kvm, nid) ?: -EAGAIN;
- 		write_lock(&kvm->mmu_lock);
- 		goto out;
- 	}
-@@ -6709,17 +6719,15 @@ void kvm_mmu_invalidate_mmio_sptes(struct kvm *kvm, u64 gen)
- }
- 
- static unsigned long mmu_shrink_cache(struct kvm_mmu_memory_cache *cache,
--				      int cache_count,
- 				      spinlock_t *cache_lock)
- {
- 	unsigned long freed = 0;
- 	int nid;
- 
- 	spin_lock(cache_lock);
--	for (nid = 0; nid < cache_count; nid++) {
--		if (node_online(nid) && cache[nid].nobjs)
-+	for_each_online_node(nid)
-+		if (cache[nid].nobjs)
- 			freed += kvm_mmu_empty_memory_cache(&cache[nid]);
--	}
- 	spin_unlock(cache_lock);
- 	return freed;
- }
-@@ -6741,8 +6749,7 @@ mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
- 			first_kvm = kvm;
- 		list_move_tail(&kvm->vm_list, &vm_list);
- 
--		freed += mmu_shrink_cache(&kvm->arch.split_shadow_page_cache,
--					  1,
-+		freed += mmu_shrink_cache(kvm->arch.split_shadow_page_cache,
- 					  &kvm->arch.split_shadow_page_cache_lock);
- 
- 		if (freed >= sc->nr_to_scan)
-@@ -6750,7 +6757,6 @@ mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
- 
- 		kvm_for_each_vcpu(i, vcpu, kvm) {
- 			freed += mmu_shrink_cache(vcpu->arch.mmu_shadow_page_cache,
--						  MAX_NUMNODES,
- 						  &vcpu->arch.mmu_shadow_page_cache_lock);
- 		}
  
 -- 
 2.39.0.314.g84b9a713c41-goog
