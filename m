@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B436544BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB8C6544DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235107AbiLVQB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 11:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S230037AbiLVQHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 11:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiLVQBZ (ORCPT
+        with ESMTP id S229798AbiLVQHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 11:01:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890D1102A;
-        Thu, 22 Dec 2022 08:01:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27AA961C36;
-        Thu, 22 Dec 2022 16:01:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BDDCC433D2;
-        Thu, 22 Dec 2022 16:01:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671724883;
-        bh=K2JjOPdLe6p7TeCT7N6YrUkgLNDqAeGFUTw14h5uQK8=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=mqfEIXW6a7u+sj73dJ+oSBV1AUqaUIdHLjrV6jTf1hQECOWSbol3Grgp/SRqPm3Y/
-         K42/eYnHCGQXG5KEolf8GVyZOUZSDEudP1AcF4FtVdN3+pDDtEFR51e/j65ANg5xZC
-         j6713OtEF6kB8JlCnmr1chvXMV6EXNcBnurhfw2fmpcQxjm+tK0jfUJJ2XQQi+RQof
-         IgGBGM6GnobAnpKq3xDccbB0gwMaDv/4HwOHioQe58c8eLNga9mMEmVvSEt6fFrDYN
-         KwGFkfKy3bI7Ke2+UlhRg7PeUdnoft/EuiB6HtEzmVRERA9xNIMnpWs8zKzGUZdEvJ
-         ivgIGmO7E5BDw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     aspriel@gmail.com, franky.lin@broadcom.com,
-        hante.meuleman@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        alsi@bang-olufsen.dk, rmk+kernel@armlinux.org.uk,
-        linus.walleij@linaro.org, marcan@marcan.st,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: brcmfmac: fix potential resource leak in brcmf_usb_probe_phase2()
-References: <20221120103807.7588-1-niejianglei2021@163.com>
-Date:   Thu, 22 Dec 2022 18:01:17 +0200
-In-Reply-To: <20221120103807.7588-1-niejianglei2021@163.com> (Jianglei Nie's
-        message of "Sun, 20 Nov 2022 18:38:07 +0800")
-Message-ID: <874jtnjulu.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 22 Dec 2022 11:07:19 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F18741F6;
+        Thu, 22 Dec 2022 08:07:16 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 44113AD7;
+        Thu, 22 Dec 2022 08:07:57 -0800 (PST)
+Received: from e126815.warwick.arm.com (e126815.arm.com [10.32.32.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 462723FAFB;
+        Thu, 22 Dec 2022 08:07:13 -0800 (PST)
+From:   James Clark <james.clark@arm.com>
+To:     linux-perf-users@vger.kernel.org, tanmay@marvell.com
+Cc:     sgoutham@marvell.com, gcherian@marvell.com, lcherian@marvell.com,
+        bbhushan2@marvell.com, James Clark <james.clark@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/7] perf cs_etm: Basic support for virtual/kernel timestamps
+Date:   Thu, 22 Dec 2022 16:03:20 +0000
+Message-Id: <20221222160328.3639989-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jianglei Nie <niejianglei2021@163.com> writes:
+Changes since v1:
 
-> brcmf_usb_probe_phase2() allocates resource for dev with brcmf_alloc().
-> The related resource should be released when the function gets some error.
-> But when brcmf_attach() fails, relevant resource is not released, which
-> will lead to resource leak.
->
-> Fix it by calling brcmf_free() when brcmf_attach() fails.
->
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> ---
->  drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c
-> index 85e18fb9c497..5d8c12b2c4d7 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c
-> @@ -1215,6 +1215,7 @@ static void brcmf_usb_probe_phase2(struct device *dev, int ret,
->  	return;
->  error:
->  	brcmf_dbg(TRACE, "failed: dev=%s, err=%d\n", dev_name(dev), ret);
-> +	brcmf_free(devinfo->dev);
->  	complete(&devinfo->dev_init_done);
->  	device_release_driver(dev);
->  }
+  * Add 3 refactor commits for sysfs reading around pmu.c as suggested
+    by Arnaldo here [1]
+  * The dependency on [2] has now reached mainline so is no longer
+    blocking
+  * Rebase on perf/core
+  
+[1]: https://lore.kernel.org/all/YnqVqq5QW%2Fb14oPZ@kernel.org/
+[2]: https://lore.kernel.org/all/20220503123537.1003035-1-german.gomez@arm.com/
 
-This doesn't look right. Now we would call brfmf_free() even before
-brcmf_alloc() is called.
+German Gomez (4):
+  perf pmu: Add function to check if a pmu file exists
+  perf cs_etm: Keep separate symbols for ETMv4 and ETE parameters
+  perf cs_etm: Record ts_source in AUXTRACE_INFO for ETMv4 and ETE
+  perf cs_etm: Set the time field in the synthetic samples
 
+James Clark (3):
+  perf: Remove duplication around EVENT_SOURCE_DEVICE_PATH
+  perf: Use perf_pmu__open_file() and perf_pmu__scan_file()
+  perf: Remove remaining duplication of bus/event_source/devices/...
+
+ tools/perf/arch/arm/util/auxtrace.c     |   5 +-
+ tools/perf/arch/arm/util/cs-etm.c       |  91 +++++++++++-
+ tools/perf/arch/x86/util/pmu.c          |  12 +-
+ tools/perf/tests/evsel-roundtrip-name.c |   3 +-
+ tools/perf/tests/parse-events.c         |   3 +-
+ tools/perf/util/cputopo.c               |   9 +-
+ tools/perf/util/cs-etm-base.c           |  34 +++--
+ tools/perf/util/cs-etm.c                |  86 +++++++++--
+ tools/perf/util/cs-etm.h                |  13 +-
+ tools/perf/util/pmu-hybrid.c            |  27 +---
+ tools/perf/util/pmu-hybrid.h            |   2 +-
+ tools/perf/util/pmu.c                   | 183 ++++++++++--------------
+ tools/perf/util/pmu.h                   |  10 +-
+ 13 files changed, 292 insertions(+), 186 deletions(-)
+
+
+base-commit: 573de010917836f198a4e579d40674991659668b
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.25.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
