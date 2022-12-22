@@ -2,179 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0DE654154
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4527654158
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiLVMv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S235279AbiLVMwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:52:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiLVMvY (ORCPT
+        with ESMTP id S235361AbiLVMwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:51:24 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336171FCD1;
-        Thu, 22 Dec 2022 04:51:23 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMAlwfd010892;
-        Thu, 22 Dec 2022 12:51:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dQWDc633Ytw2GCHBm5Z4OBT+5qdBrfSR64+yxyehY5U=;
- b=A6I4I3zXD+b6XJ2x5w2tRukd4ZStZVXv18iAI6N6UV6uAU8C7ymhuLXgb3KNO07CKAOR
- iIUHnY5Cjxfnfx5SDXCUkuNYB+A1o5FNXw7pn1c79NrwUOzPDHgthBurCF8cCLyZ2TR6
- j4tHPu/7TXL4fy473JjmBjK0YJgaUFaRAJsq+Yhl5ImXeGP1xwX4FOGTE4TMMRAeOCSk
- y5/s5WdFYEvbsRuD5MK8U//Vf6Y73EWq160A0S32FEsDXd35vWE6eTCnUQjD7rbZxDJ7
- zR9vRpgmbrXLBJui6GaV/quf9kS7Ps6jCJNsPq1dneLVlAFMui8j8ETra3z7PDB5HgSd Ng== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk90t5rse-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:51:11 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BMCpAaU005294
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:51:10 GMT
-Received: from [10.206.25.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 22 Dec
- 2022 04:51:06 -0800
-Message-ID: <acdda510-945f-ff68-5c8b-a1a0290bed6d@quicinc.com>
-Date:   Thu, 22 Dec 2022 18:21:03 +0530
+        Thu, 22 Dec 2022 07:52:01 -0500
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66552528D;
+        Thu, 22 Dec 2022 04:51:55 -0800 (PST)
+Received: by mail-qv1-f45.google.com with SMTP id d13so1177621qvj.8;
+        Thu, 22 Dec 2022 04:51:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GllrCyZoKpUhPvjdNIUyYRbhBs5yv+S16f965UWIIIk=;
+        b=mJP8AwvM71nB0RMmI86l7K/8iUfGLRV2iRIOA3ODoaTpCW+8S6480mMUuIgXsQZy6V
+         znnMctiYBtlaOpi2SyI8loTayrv6zvXuzDhtYFxbMDRk9nJQekhhjjFJrV4NbMB2ijv7
+         aYvcHqYpoHSlfWNPe08c48dPmielh1AqwXrjLxbxemSpK6SB7RtaJUePuQ+8Y0bqRR4j
+         hG+Ldbwhlapg9YP7b77PyhcgVE/h0Enmr9bvGFQYqRMyP5ul4MIrRDYMcvpHXFhbPC30
+         Y9hwxWXi+bDrStOaQrSsljsbno8LfQ9ypDa2pkq2RvI25yiDFdzDx6jyFEB4tILf/lA0
+         papQ==
+X-Gm-Message-State: AFqh2kqKwuOKO2fZwo9cx+TZ4y/MWcpA2sDl/3Dfle5FfEqr4us9NiqA
+        kIbAXs6yc37iWi7slJHktU7fFh8qIg9PpA==
+X-Google-Smtp-Source: AMrXdXvHXFs6oSpnb3ysFIMAPBvFS/GtzyuWqQVcOIfsUylQG5Dz3sAsna6RFJVO/WiGOdYu0NMpvw==
+X-Received: by 2002:a0c:ea22:0:b0:4bb:615d:4c4c with SMTP id t2-20020a0cea22000000b004bb615d4c4cmr7642560qvp.49.1671713514590;
+        Thu, 22 Dec 2022 04:51:54 -0800 (PST)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id r17-20020ae9d611000000b00704c62638f4sm8597qkk.89.2022.12.22.04.51.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 04:51:54 -0800 (PST)
+Received: by mail-yb1-f181.google.com with SMTP id e141so1840398ybh.3;
+        Thu, 22 Dec 2022 04:51:53 -0800 (PST)
+X-Received: by 2002:a25:d243:0:b0:702:90b4:2e24 with SMTP id
+ j64-20020a25d243000000b0070290b42e24mr398540ybg.365.1671713513672; Thu, 22
+ Dec 2022 04:51:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: usb: f_fs: Fix CFI failure in ki_complete
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>
-CC:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        John Keeping <john@metanate.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        "Udipto Goswami" <quic_ugoswami@quicinc.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "# 5 . 15" <stable@vger.kernel.org>
-References: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com>
- <Y5cuCMhFIaKraUyi@kroah.com>
- <abe47a47aa5d49878c58fc1199be18ea@AcuMS.aculab.com>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <abe47a47aa5d49878c58fc1199be18ea@AcuMS.aculab.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pFPZgNiXiluh-RTeQnpXqgMOU1DpSMA7
-X-Proofpoint-ORIG-GUID: pFPZgNiXiluh-RTeQnpXqgMOU1DpSMA7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-22_05,2022-12-22_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- spamscore=0 impostorscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
- suspectscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212220112
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221221000242.340202-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221221000242.340202-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <86o7rxawhn.wl-maz@kernel.org> <CAMuHMdX++dbcsxyGRqiRzgukeU4aoAi3hDV5zyfH1s11dFba-A@mail.gmail.com>
+ <CA+V-a8uRTPhQqtkQqUVtW=HE02YaW0oi=Os__OgtUgQVwWq+Mw@mail.gmail.com>
+In-Reply-To: <CA+V-a8uRTPhQqtkQqUVtW=HE02YaW0oi=Os__OgtUgQVwWq+Mw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 22 Dec 2022 13:51:41 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV0wKGk+EvTfCZJu0z_HYy7YaLLNya4z6=coASsbnkVBQ@mail.gmail.com>
+Message-ID: <CAMuHMdV0wKGk+EvTfCZJu0z_HYy7YaLLNya4z6=coASsbnkVBQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] irqchip: irq-renesas-rzg2l: Add support for
+ RZ/G2UL SoC
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Prabhakar,
 
+On Thu, Dec 22, 2022 at 12:50 PM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Wed, Dec 21, 2022 at 12:18 PM Geert Uytterhoeven
+> <geert@linux-m68k.org> wrote:
+> > On Wed, Dec 21, 2022 at 11:20 AM Marc Zyngier <maz@kernel.org> wrote:
+> > > On Wed, 21 Dec 2022 00:02:37 +0000,
+> > > Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > >
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > The IRQC block on RZ/G2UL SoC is almost identical to one found on the
+> > > > RZ/G2L SoC the only difference being it can support BUS_ERR_INT for
+> > > > which it has additional registers.
+> > > >
+> > > > This patch adds a new entry for "renesas,rzg2ul-irqc" compatible string
+> > > > and now that we have interrupt-names property the driver code parses the
+> > > > interrupts based on names and for backward compatibility we fallback to
+> > > > parse interrupts based on index.
+> > > >
+> > > > For now we will be using rzg2l_irqc_init() as a callback for RZ/G2UL SoC
+> > > > too and in future when the interrupt handler will be registered for
+> > > > BUS_ERR_INT we will have to implement a new callback.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > > > +/* Parse hierarchy domain interrupts ie only IRQ0-7 and TINT0-31 */
+> > > > +static int rzg2l_irqc_parse_hierarchy_interrupts(struct rzg2l_irqc_priv *priv,
+> > > > +                                              struct device_node *np)
+> > > > +{
+> > > > +     struct property *pp;
+> > > >       unsigned int i;
+> > > >       int ret;
+> > > >
+> > > > +     /*
+> > > > +      * first check if interrupt-names property exists if so parse them by name
+> > > > +      * or else parse them by index for backward compatibility.
+> > > > +      */
+> > > > +     pp = of_find_property(np, "interrupt-names", NULL);
+> > > > +     if (pp) {
+> > > > +             char *irq_name;
+> > > > +
+> > > > +             /* parse IRQ0-7 */
+> > > > +             for (i = 0; i < IRQC_IRQ_COUNT; i++) {
+> > > > +                     irq_name = kasprintf(GFP_KERNEL, "irq%d", i);
+> >
+> > %u
+> >
+> Ok.
+>
+> > > > +                     if (!irq_name)
+> > > > +                             return -ENOMEM;
+> > > > +
+> > > > +                     ret = rzg2l_irqc_parse_interrupt_by_name_to_fwspec(priv, np, irq_name, i);
+> > >
+> > > Am I the only one that find it rather odd to construct a name from an
+> > > index, only to get another index back?
+> >
+> > The issue is that there are two number ranges ("irq%u" and "tint%u"),
+> > stored in a single interrupts property.
+> >
+> > An alternative solution would be to get rid of the "interrupt-names",
+> > and use two separate prefixed interrupts properties instead, like is
+> > common for e.g. gpios: "irq-interrupts" and "tint-interrupts".
+> >
+> Maybe I will read all the interrupts based on index only for all the
+> SoCs and we still add interrupt-names in dt bindings with the
+> dt_binding check we can make sure all the interrupts for each SoC
+> exist in the DT and the driver still reads them based on index. Does
+> that sound good?
 
-On 14-12-22 11:05 pm, David Laight wrote:
-> From: Greg Kroah-Hartman
->> Sent: 12 December 2022 13:35
->>
->> On Mon, Dec 12, 2022 at 06:54:24PM +0530, Prashanth K wrote:
->>> Function pointer ki_complete() expects 'long' as its second
->>> argument, but we pass integer from ffs_user_copy_worker. This
->>> might cause a CFI failure, as ki_complete is an indirect call
->>> with mismatched prototype. Fix this by typecasting the second
->>> argument to long.
->>
->> "might"?  Does it or not?  If it does, why hasn't this been reported
->> before?
-> 
-> Does the cast even help at all.
-Actually I also have these same questions
-- why we haven't seen any instances other than this one?
-- why its not seen on other indirect function calls?
+Sure, sounds fine.
 
-Here is the the call stack of the failure that we got.
+You can postpone parsing interrupt-names in the driver (until a new
+SoC arrives that uses a different number of IRQ or TINT interrupts).
 
-[  323.288681][    T7] Kernel panic - not syncing: CFI failure (target: 
-0xffffffe5fc811f98)
-[  323.288710][    T7] CPU: 6 PID: 7 Comm: kworker/u16:0 Tainted: G S 
-    W  OE     5.15.41-android13-8-g5ffc5644bd20 #1
-[  323.288730][    T7] Workqueue: adb ffs_user_copy_worker.cfi_jt
-[  323.288752][    T7] Call trace:
-[  323.288755][    T7]  dump_backtrace.cfi_jt+0x0/0x8
-[  323.288772][    T7]  dump_stack_lvl+0x80/0xb8
-[  323.288785][    T7]  panic+0x180/0x444
-[  323.288797][    T7]  find_check_fn+0x0/0x218
-[  323.288810][    T7]  ffs_user_copy_worker+0x1dc/0x204
-[  323.288822][    T7]  kretprobe_trampoline.cfi_jt+0x0/0x8
-[  323.288837][    T7]  worker_thread+0x3ec/0x920
-[  323.288850][    T7]  kthread+0x168/0x1dc
-[  323.288859][    T7]  ret_from_fork+0x10/0x20
-[  323.288866][    T7] SMP: stopping secondary CPUs
+Gr{oetje,eeting}s,
 
-And from address to line translation, we got know the issue is from
-ffs_user_copy_worker+0x1dc/0x204
-		||
-io_data->kiocb->ki_complete(io_data->kiocb, ret);
+                        Geert
 
-And "find_check_fn" was getting invoked from ki_complete. Only thing 
-that I found suspicious about ki_complete() is its argument types. 
-That's why I pushed this patch here, so that we can discuss this out here.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Thanks in advance
-
-> 
-> ...
->>> -	io_data->kiocb->ki_complete(io_data->kiocb, ret);
->>> +	io_data->kiocb->ki_complete(io_data->kiocb, (long)ret);
-> ...
-> 
-> If definition of the parameter in the structure member ki_complete()
-> definition is 'long' then the compiler has to promote 'ret' to long
-> anyway. CFI has nothing to do with it.
-> 
-> OTOH if you've used a cast to assign a function with a
-> different prototype to ki_complete then 'all bets are off'
-> and you get all the run time errors you deserve.
-> CFI just converts some of them to compile time errors.
-> 
-> For instance if you assign xx_complete(long) to (*ki_complete)(int)
-> then it is very likely that xx_complete() will an argument
-> with some of the high bits set.
-> But adding a cast to the call - ki_complete((long)int_var)
-> will make absolutely no difference.
-> The compiler wont zero/sign extend int_var to 64bits for you,
-> that will just get optimised away and the high bits will
-> be unchanged.
-> 
-> You're description seems to be the other way around (which might
-> be safe, but CFI probably still barfs).
-> But you need to fix the indirect calls so the function types
-> match.
-So does that mean, we need to add casts in al indirect calls to match 
-the function signature?
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
