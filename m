@@ -2,185 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD956543A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B05654377
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiLVPFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S235205AbiLVPAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235574AbiLVPF1 (ORCPT
+        with ESMTP id S229608AbiLVPAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:05:27 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5E82B61C;
-        Thu, 22 Dec 2022 07:05:26 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMBHvfi030992;
-        Thu, 22 Dec 2022 15:05:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=Gya7rubpAwJcrKugU9ig5Vdy5rjuPokrmgg+3DKAtFk=;
- b=W0RqP4Dq2OBOzNLn6gZb6rUfLk8x6Z/rG9hyBW8mNCzROWsEMOhJywywVW+5JoRqvwmY
- Yie1al1eODBfLtBYWbHQYYu6JIOdV09vpQxhefzUGKIobx9FDPGgOYoezI7xO3dOBpuK
- E/3vSNmK10OrxfITNQzJubngwMgBe1n30XKPunppmFTvrS5I20v/L/3FLNH5uy1G9dhP
- PtfunxJm/WZjeW22bXFxImB9ERCfLlJQZQtzX7o5uvqFDAwPrNHFu++rcs+NTPiTdHSP
- XntvLcLQNA76zLotTswX6HaQAN+3kVDUOZ5PJIRGuj84sK9Vz/LeifrYku3LuuhfJIom 4g== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm8x4j1t1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 15:05:22 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BMF5LIp005563
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 15:05:21 GMT
-Received: from vpolimer-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 22 Dec 2022 06:59:47 -0800
-From:   Vinod Polimera <quic_vpolimer@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
-CC:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <robdclark@gmail.com>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <quic_kalyant@quicinc.com>, <dmitry.baryshkov@linaro.org>,
-        <quic_khsieh@quicinc.com>, <quic_vproddut@quicinc.com>,
-        <quic_bjorande@quicinc.com>, <quic_abhinavk@quicinc.com>,
-        <quic_sbillaka@quicinc.com>
-Subject: [PATCH v10 00/15] Add PSR support for eDP 
-Date:   Thu, 22 Dec 2022 20:29:17 +0530
-Message-ID: <1671721172-16078-1-git-send-email-quic_vpolimer@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 22 Dec 2022 10:00:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4131EC55;
+        Thu, 22 Dec 2022 07:00:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D57F4B81E0E;
+        Thu, 22 Dec 2022 15:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 69944C433F1;
+        Thu, 22 Dec 2022 15:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671721216;
+        bh=CMpa+PUj+j+rbRF2+Y0Z9BM8CsBNizxrpz30DyjWd4U=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=gETHPXTOUhxXueasRNU3fd75z8o5AxBwsvgbVjbScnR6L05XS3Wppy1oP0RSVuEca
+         KP+wNLZQa7FryLO8J2tX3IhHZdi4e0n444RQrFmnI5uFcbVSDJsD2wxLjkMbHNtVMA
+         vnBPOhh6BV90slOqGsI9f7mNgScZ440PFUWmEY48p46I3UQ+G+/e/geYvq88LvX63r
+         6gbthxT7gqQDJOZlJ/ZMokLxQqR6Q/hysRMTKe/XmqSxthKBprR8nOAAXdolX8GSbA
+         Blvyvq42iU9dBu0ukQfzJtw/xkv+Kcu759LPHGcSLU9flgbeBTOA1w2vAX63C648IE
+         0WGHzy1UaiXng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B79BC43159;
+        Thu, 22 Dec 2022 15:00:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: yH708T5851oBYUFtCaW4hvIU3w8DFhUO
-X-Proofpoint-ORIG-GUID: yH708T5851oBYUFtCaW4hvIU3w8DFhUO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-22_08,2022-12-22_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- suspectscore=0 phishscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
- lowpriorityscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212220131
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf: Remove unused field initialization
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167172121630.11988.10950237578875871796.git-patchwork-notify@kernel.org>
+Date:   Thu, 22 Dec 2022 15:00:16 +0000
+References: <20221221-bpf-syscall-v1-0-9550f5f2c3fc@chromium.org>
+In-Reply-To: <20221221-bpf-syscall-v1-0-9550f5f2c3fc@chromium.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
+        martin.lau@linux.dev, daniel@iogearbox.net, haoluo@google.com,
+        yhs@fb.com, andrii@kernel.org, ast@kernel.org, song@kernel.org,
+        sdf@google.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes in v2:
-  - Use dp bridge to set psr entry/exit instead of dpu_enocder.
-  - Don't modify whitespaces.
-  - Set self refresh aware from atomic_check.
-  - Set self refresh aware only if psr is supported.
-  - Provide a stub for msm_dp_display_set_psr.
-  - Move dp functions to bridge code.
+Hello:
 
-Changes in v3:
-  - Change callback names to reflect atomic interfaces.
-  - Move bridge callback change to separate patch as suggested by Dmitry.
-  - Remove psr function declaration from msm_drv.h.
-  - Set self_refresh_aware flag only if psr is supported.
-  - Modify the variable names to simpler form.
-  - Define bit fields for PSR settings.
-  - Add comments explaining the steps to enter/exit psr.
-  - Change DRM_INFO to drm_dbg_db. 
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-Changes in v4:
-  - Move the get crtc functions to drm_atomic.
-  - Add atomic functions for DP bridge too.
-  - Add ternary operator to choose eDP or DP ops.
-  - Return true/false instead of 1/0.
-  - mode_valid missing in the eDP bridge ops.
-  - Move the functions to get crtc into drm_atomic.c.
-  - Fix compilation issues.
-  - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
-  - Check for crtc state enable while reserving resources.
+On Wed, 21 Dec 2022 20:55:29 +0100 you wrote:
+> Maxlen is used by standard proc_handlers such as proc_dointvec(), but in this
+> case we have our own proc_handler. Remove the initialization.
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+> bpf: Trivial remove of unitialised field.
+> 
+> [...]
 
-Changes in v5:
-  - Move the mode_valid changes into a different patch.
-  - Complete psr_op_comp only when isr is set.
-  - Move the DP atomic callback changes to a different patch.
-  - Get crtc from drm connector state crtc.
-  - Move to separate patch for check for crtc state enable while
-reserving resources.
+Here is the summary with links:
+  - bpf: Remove unused field initialization
+    https://git.kernel.org/bpf/bpf-next/c/cfca00767feb
 
-Changes in v6:
-  - Remove crtc from dpu_encoder_virt struct.
-  - fix crtc check during vblank toggle crtc.
-  - Misc changes. 
-
-Changes in v7:
-  - Add fix for underrun issue on kasan build.
-
-Changes in v8:
-  - Drop the enc spinlock as it won't serve any purpose in
-protetcing conn state.(Dmitry/Doug)
-
-Changes in v9:
-  - Update commit message and fix alignment using spaces.(Marijn)
-  - Misc changes.(Marijn)
-
-Changes in v10:
-  - get crtc cached in dpu_enc during obj init.(Dmitry)
-
-Sankeerth Billakanti (1):
-  drm/msm/dp: disable self_refresh_aware after entering psr
-
-Vinod Polimera (14):
-  drm/msm/disp/dpu: cache crtc obj in the dpu_encoder during
-    initialization
-  drm: add helper functions to retrieve old and new crtc
-  drm/msm/dp: use atomic callbacks for DP bridge ops
-  drm/msm/dp: Add basic PSR support for eDP
-  drm/msm/dp: use the eDP bridge ops to validate eDP modes
-  drm/bridge: use atomic enable/disable callbacks for panel bridge
-  drm/bridge: add psr support for panel bridge callbacks
-  drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
-    functions
-  drm/msm/disp/dpu: check for crtc enable rather than crtc active to
-    release shared resources
-  drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
-  drm/msm/disp/dpu: get timing engine status from intf status register
-  drm/msm/disp/dpu: wait for extra vsync till timing engine status is
-    disabled
-  drm/msm/disp/dpu: reset the datapath after timing engine disable
-  drm/msm/disp/dpu: clear active interface in the datapath cleanup
-
- drivers/gpu/drm/bridge/panel.c                     |  68 ++++++-
- drivers/gpu/drm/drm_atomic.c                       |  60 ++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c           |  17 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  45 +++--
- .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  22 +++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   3 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  12 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        |   8 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   3 +-
- drivers/gpu/drm/msm/dp/dp_catalog.c                |  80 ++++++++
- drivers/gpu/drm/msm/dp/dp_catalog.h                |   4 +
- drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  80 ++++++++
- drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   3 +
- drivers/gpu/drm/msm/dp/dp_display.c                |  36 ++--
- drivers/gpu/drm/msm/dp/dp_display.h                |   2 +
- drivers/gpu/drm/msm/dp/dp_drm.c                    | 206 ++++++++++++++++++++-
- drivers/gpu/drm/msm/dp/dp_drm.h                    |   9 +-
- drivers/gpu/drm/msm/dp/dp_link.c                   |  36 ++++
- drivers/gpu/drm/msm/dp/dp_panel.c                  |  22 +++
- drivers/gpu/drm/msm/dp/dp_panel.h                  |   6 +
- drivers/gpu/drm/msm/dp/dp_reg.h                    |  27 +++
- include/drm/drm_atomic.h                           |   7 +
- 22 files changed, 696 insertions(+), 60 deletions(-)
-
+You are awesome, thank you!
 -- 
-2.7.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
