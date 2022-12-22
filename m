@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350B06540EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1656540ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235056AbiLVMUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
+        id S235163AbiLVMUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiLVMT6 (ORCPT
+        with ESMTP id S229817AbiLVMUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:19:58 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544231B3;
-        Thu, 22 Dec 2022 04:19:57 -0800 (PST)
-Received: from [192.168.1.139] ([37.4.248.22]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1Mum2d-1orce921Fj-00rsH0; Thu, 22 Dec 2022 13:19:54 +0100
-Message-ID: <9f42f88f-26bc-1e82-03a0-659c85c40469@i2se.com>
-Date:   Thu, 22 Dec 2022 13:19:54 +0100
+        Thu, 22 Dec 2022 07:20:02 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0766D1B3;
+        Thu, 22 Dec 2022 04:20:01 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p8KYK-00087V-Ce; Thu, 22 Dec 2022 13:20:00 +0100
+Message-ID: <64800063-4728-6984-f1ee-f6e8c9978cb7@leemhuis.info>
+Date:   Thu, 22 Dec 2022 13:20:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create platform
- devices for DT nodes without 'vdd-supply'
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:GqNMuyBQCZ0LHXhH96VILOKU4zFxWwFRmRhh4iYvQgG1kZZqqhL
- xm5blAxl+QrRkG6sabWPQxFUG1PKZMdmAUB84bFQRDJwL6H8BQlfbLGwx1e8ld/oVXffyXD
- L6wm40trIN7vJP4SOQavZAIYun67+aS3xbynQTX43mFzDldsam98zRMgn/OnKvvriRRvdQ/
- h4AYSEBLrE9Q6qz82JdjA==
-UI-OutboundReport: notjunk:1;M01:P0:/0Ieui5bFNQ=;GW4uyW33rPm00y8BpfIZbU4GvL2
- 3pOtyC0bjdE/fXItCvqq5GMnhxZLMAfpYDeg0FtAjo8/5SV+25/UJ+4By9KBFEx9hon0dzBYD
- NBL+H5bAmCxklr7U2QruKYHZPui+gyL4zfIVNxxsrm5VT2gHimfwyGgFZsXHFtxjupGRLlRr/
- dSe10U8SJEwajfX4W4Zt/A5dk2UCl5whDthB0RQa8Avtx508DA9k5c4EQeruQIxnt5a7DqB/2
- B9+u1cQcRm+t/Yk41TSMIvAPJZ9E/0GjzVRDn/boNXz6tTl63ANbl+x4gFprvr9FtJPk7N4Lm
- 4RUUTigc01o340NoLo9SJ6c0yTWVCqB4kzA3hkLNqLKM2cTVr5wGag2MUWcPAK0rlX5jI4t/s
- BNa99EH4Ry//plWdbhYz5q8qEkr3Fd1ayp575jUYaoOx3XinFxSHTKGhhVpS45lnq6CNoFmsU
- eImYD/0j2TUajv7YdIqiVJ8LwgFRZCvgqAGihiyV9MiVuJfhwkESe9kr1mYBzuDtherFt/bdI
- NJIOwlCxtDZrtxWeR90+P6HtY6CDfxfDTIHZrqeBDlXELtX3mVSmf2966d+nxltAyMDb40rYE
- 7xJ9S7FxDPYzAixCzzc0uFgzG3sitoizU82lHgtkohS1K0qZ81P7yx2t9r3RhsgV18MNw/y9a
- dSngartd9yFTNBPDi/wNSxe/LmCVRkGE0myEJsvEAg==
+ Thunderbird/102.5.1
+Subject: Re: [PULL] Networking for next-6.1 #forregzbot
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221004052000.2645894-1-kuba@kernel.org>
+ <6b971a4e-c7d8-411e-1f92-fda29b5b2fb9@kernel.org>
+ <d6c68083-25e3-3ff5-9b0d-8928d1e077f1@leemhuis.info>
+In-Reply-To: <d6c68083-25e3-3ff5-9b0d-8928d1e077f1@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671711602;d5608299;
+X-HE-SMSGID: 1p8KYK-00087V-Ce
 X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 22.12.22 um 03:26 schrieb Matthias Kaehlcke:
-> The primary task of the onboard_usb_hub driver is to control the
-> power of an onboard USB hub. The driver gets the regulator from the
-> device tree property "vdd-supply" of the hub's DT node. Some boards
-> have device tree nodes for USB hubs supported by this driver, but
-> don't specify a "vdd-supply". This is not an error per se, it just
-> means that the onboard hub driver can't be used for these hubs, so
-> don't create platform devices for such nodes.
->
-> This change doesn't completely fix the reported regression. It
-> should fix it for the RPi 3 B Plus and boards with similar hub
-> configurations (compatible DT nodes without "vdd-supply"), boards
-> that actually use the onboard hub driver could still be impacted
-> by the race conditions discussed in that thread. Not creating the
-> platform devices for nodes without "vdd-supply" is the right
-> thing to do, independently from the race condition, which will
-> be fixed in future patch.
->
-> Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-> Link: https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com/
-> Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+
+
+On 21.12.22 12:30, Thorsten Leemhuis wrote:
+> [Note: this mail contains only information for Linux kernel regression
+> tracking. Mails like these contain '#forregzbot' in the subject to make
+> then easy to spot and filter out. The author also tried to remove most
+> or all individuals from the list of recipients to spare them the hassle.]
+> 
+> On 16.12.22 11:49, Jiri Slaby wrote:
+>>
+>> On 04. 10. 22, 7:20, Jakub Kicinski wrote:
+>>> Joanne Koong (7):
+>>
+>>>        net: Add a bhash2 table hashed by port and address
+>>
+>> This makes regression tests of python-ephemeral-port-reserve to fail.
+> 
+> Thanks for the report. To be sure below issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced 28044fc1d495
+> #regzbot title new: regression tests of python-ephemeral-port-reserve fail
+> #regzbot ignore-activity
+
+#regzbot monitor:
+https://lore.kernel.org/all/20221221151258.25748-1-kuniyu@amazon.com/
+#regzbot fix: tcp: Add TIME_WAIT sockets in bhash2
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
