@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4819D654455
+	by mail.lfdr.de (Postfix) with ESMTP id 9F297654456
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 16:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235556AbiLVP1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 10:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
+        id S235577AbiLVP2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 10:28:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbiLVP12 (ORCPT
+        with ESMTP id S235516AbiLVP2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 10:27:28 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B3F2A53D;
-        Thu, 22 Dec 2022 07:27:27 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id u9so5819045ejo.0;
-        Thu, 22 Dec 2022 07:27:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nba1yEUQ4IspImoTxgBgulwRJGaLwUT3y2k3SAEhk2w=;
-        b=CaCIlnKjNyZ4IyoUl+CgZj1LqeAv9MAUxcCT859S9HP2t5qJm9Z4T8ey94mFBH8ttk
-         rRfDw3HtPeNHw+PyicPwUuEWNZKkQiijoLR4MytrrV+YDkcOxqCH9i9t9EWROX1eDlTG
-         /16W1xVzGdK/R2S8hFNqPaspaZhRiVygxVhZHBzaz5uxAVfcNYlqeEzqvGFepV1bwBcY
-         gACWjC5FWnUjp96e35P6klxU71HUaaF6DdRIGf/8S7Uir5/qtheBU+fiVk3o1j2uar9B
-         DPmWS7QT7jqvjX4YY62nbAocHeExvpWxEGASrJ5QGIBtylTjaIhuR/h7N4r3j6oPyxVb
-         cFiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nba1yEUQ4IspImoTxgBgulwRJGaLwUT3y2k3SAEhk2w=;
-        b=zsUbUOn5Bx6YFmwDnBfp5hhfSS3nIma79g/QvshFtSi5BJlISVqHhQ54DkNc0jMb8H
-         vZzcjDVsAXcOUYip8yLIvHTkmcUavj57Mxu7zBzljBIvPpVlh9iZ//bPUA5g5q3o9zrL
-         T6K46N7mLKE/LSYwT943Q6pcCryUxlIatIBqRb3/ZbQ01KuY+56RrJ3UN5D1soZtpta0
-         0ozeittyN5AwMOcsOaTkCqDwHUfYElWYoynC6Gl/TvOyZkv44mlyKewacdFmob6szI/i
-         8Bj4zVsbU7sPz+kUOvvS/SqYA+TbpfCjmxWADeOm7tX99p4DHn5Cf/o5Vxij6bsnPWkL
-         qYOQ==
-X-Gm-Message-State: AFqh2kqc6V+GAdLYJWrLNATFeDX/hSOw1H6CLriMZq2coWmpLgAncP8b
-        O/arimf3O5459TPAHn2DzBBqJhkzT6QVXqeJRl+MDOLD18w=
-X-Google-Smtp-Source: AMrXdXuKwHbEzVI/+VFZfpbd00bwED3WJ37vP8KCdY6EfPyam9i8faYgGpnmna4jNYZ3lVMwBm89LZRw3SLaZIlWnuM=
-X-Received: by 2002:a17:907:6f13:b0:7ad:e161:b026 with SMTP id
- sy19-20020a1709076f1300b007ade161b026mr792609ejc.760.1671722846022; Thu, 22
- Dec 2022 07:27:26 -0800 (PST)
+        Thu, 22 Dec 2022 10:28:05 -0500
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B026166;
+        Thu, 22 Dec 2022 07:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1671722883;
+        bh=rpA44R7emjI1qfvYw5PNQuISdxrQHVVRQfHfzR8tV+I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XtKGHoWZPqL/uWvKgIGwBbfsliUlaqCaZKBwUAxvR4ETlyzVenEeU/R1uNZNpBii9
+         qt0qqcVZsOeeaSdvOvPyz/sBdsp/7umSMIt0ngwu3st2G9kyg/Xm9LKSH8bZet40Pv
+         /9GendsgWKLq86hoZTOuRbByW239ktBrf80ho4iYrxX3jf1PrgMd7lMdmpHrbjkLfx
+         wP/sVDAqtdNvYXXCIUWwSH6hzO0FadaI4sia24RPwdy5dx2fF9m1rwF8lZqszlnI9l
+         Xg3eiak7cAuhU2rwV/r0UCJlork92zX9rbBwLPyq4qkTsoOG1tkNI10+d6X0wY/vCM
+         LcR+N0DOyvc3Q==
+Received: from [10.1.0.30] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NdDhz57syzc1J;
+        Thu, 22 Dec 2022 10:28:03 -0500 (EST)
+Message-ID: <9fad5641-ebd4-d2e5-6f87-2c409c336072@efficios.com>
+Date:   Thu, 22 Dec 2022 10:28:28 -0500
 MIME-Version: 1.0
-References: <20221222-hid-v1-0-f4a6c35487a5@weissschuh.net>
-In-Reply-To: <20221222-hid-v1-0-f4a6c35487a5@weissschuh.net>
-From:   David Rheinsberg <david.rheinsberg@gmail.com>
-Date:   Thu, 22 Dec 2022 16:27:14 +0100
-Message-ID: <CADyDSO7ui6cmhga-vjaxfw82gK6erDO54aYRWWqO4L6DKzNgug@mail.gmail.com>
-Subject: Re: [PATCH 0/8] HID: remove some unneeded exported symbols from hid.h
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 0/2] sched/membarrier, selftests: Introduce
+ MEMBARRIER_CMD_GET_REGISTRATIONS
+Content-Language: en-US
+To:     Michal Clapinski <mclapinski@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Andrei Vagin <avagin@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20221207164338.1535591-1-mclapinski@google.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221207164338.1535591-1-mclapinski@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On 2022-12-07 11:43, Michal Clapinski wrote:
+> This change provides a method to query previously issued registrations.
+> It's needed for CRIU (checkpoint/restore in userspace). Before this
+> change we had to issue private membarrier commands during checkpoint -
+> if they succeeded, they must have been registered. Unfortunately global
+> membarrier succeeds even on unregistered processes, so there was no way to
+> tell if MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED had been issued or not.
+> 
+> CRIU is run after the process has been frozen with ptrace, so we don't
+> have to worry too much about the result of running this command in parallel
+> with registration commands.
 
-On Thu, 22 Dec 2022 at 06:10, Thomas Wei=C3=9Fschuh <linux@weissschuh.net> =
-wrote:
-> Small cleanup to get rid of exports of the lowlevel hid drivers and to ma=
-ke
-> them const.
-[...]
-> Thomas Wei=C3=9Fschuh (8):
->       HID: letsketch: Use hid_is_usb()
->       HID: usbhid: Make hid_is_usb() non-inline
->       HID: Remove unused function hid_is_using_ll_driver()
->       HID: Unexport struct usb_hid_driver
->       HID: Unexport struct uhid_hid_driver
->       HID: Unexport struct hidp_hid_driver
->       HID: Unexport struct i2c_hid_ll_driver
->       HID: Make lowlevel driver structs const
+Peter, Paul, I'm OK with the proposed changes. Should we route this 
+through sched/core from the tip tree ?
 
-Yeah, it makes sense to avoid exposing the structs.
+For both patches:
 
-Reviewed-by: David Rheinsberg <david.rheinsberg@gmail.com>
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-Thanks
-David
+Thanks,
+
+Mathieu
+
+> 
+> Michal Clapinski (2):
+>    sched/membarrier: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
+>    selftests/membarrier: Test MEMBARRIER_CMD_GET_REGISTRATIONS
+> 
+>   include/uapi/linux/membarrier.h               |  4 ++
+>   kernel/sched/membarrier.c                     | 39 ++++++++++++++++++-
+>   .../membarrier/membarrier_test_impl.h         | 33 ++++++++++++++++
+>   .../membarrier/membarrier_test_multi_thread.c |  2 +-
+>   .../membarrier_test_single_thread.c           |  6 ++-
+>   5 files changed, 81 insertions(+), 3 deletions(-)
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
