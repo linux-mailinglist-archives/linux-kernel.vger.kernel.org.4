@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B62C6542F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF986542F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235598AbiLVO1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
+        id S235711AbiLVO14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235639AbiLVO1P (ORCPT
+        with ESMTP id S235728AbiLVO1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:27:15 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A97F2937C;
-        Thu, 22 Dec 2022 06:27:12 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id a17so1791002wrt.11;
-        Thu, 22 Dec 2022 06:27:12 -0800 (PST)
+        Thu, 22 Dec 2022 09:27:45 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BA12A27C;
+        Thu, 22 Dec 2022 06:27:39 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id b69so3148853edf.6;
+        Thu, 22 Dec 2022 06:27:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jQ4QUwxa2kqDBT4/Q2PZoVrlupcYXqtxCtZcztuQGJA=;
-        b=j8gzil4udi4y4TfA/y1t9rwmPfyz3IJhXQ7TDH1nA7EaUptIrbDlP1lg1nqlvaFFEw
-         0qFZEoDfk1EYEg+2hOYwImfjuOwru0GfO2AN9Wu2w/VQMmBC1jKcxuiQDsOr6G4N1VYU
-         Cc9lhPmdR5Nhc3c/28Nm1UehD87T5wp4r1mgHAp38SbOdYYnJP3qyuV+zJvpDrRldVCl
-         vY3wXwp8VWQfFc3wiKWEJK2z0RqBMg1+RI8/c/8cuIRPiCbKWtl4FQPyZSGgq0rzdNEg
-         ZWAYrFBO280WkIDNYzGoc+A2OHV0uh+IExGO40vFXl3KdXXMZHmEtD3lPiesO8iXiZzY
-         bsOg==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=O9UePTIdh8BLFeT/9sLTPNaa6psTC9fQZbGE7Nodn9I=;
+        b=hLYUbYUNOzWKT8UBWlJ51u2iJA1D9bz/x01b8uQLLe0r+lxgJcH5k7DKE2eVkOWQIX
+         glX/2BPYpbtrS/A/M+irYpogYerFjEv47Xq0hYcJQzcrnJEqlRV1meEpId/cZ/2bvBeu
+         eZwBTSz99uyZ/ohl5vAMMqjiYlUCKPpeaF3wEgfEFJ+l2tgmahGaoM8Kd5s5syhvL9Ft
+         v2aIxyD/oimeosAhZg6/4eFM/2BpVhYWFnKQuvp3/psKirkpTKnLrBVKO40G2ypqaaZv
+         wi/twPnbyp+yvlcPmDGN7wsiH4YMsec6chf6BXVT4e7mbNI+VLTGXp/P+XNlgysAxzfJ
+         oHmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jQ4QUwxa2kqDBT4/Q2PZoVrlupcYXqtxCtZcztuQGJA=;
-        b=zTbwqtE2iEsbLjs5RZJnIt5p6r9FLVeAdBPR5NFqrQ9o87gcyDA7sCyD0j4fxdU4tB
-         hIwpzFDbwNg1r5fQfnV4Mq0qA7zESgehQFOmrOCJ4rNr/70xsRVkMYC917ObPits9Rxz
-         4WhfVIVG1pu5PBgBRS4VXwXIPlUGYDqrilABB+GCg+h9AGPtJOJlELOmZaemgz8PGieI
-         e1wBk2QG24xLY2iqdFlUMXLd66B8e0sBrP69IGeMRG2gT4AWk3mufS/pwsgkoA0cRyhR
-         LEHWUPzahUg3ZV+UMJX13Ml7lkW414nN6D1jnzV881bXcmQu+0pZ/5CgMs+cDM5xaxJn
-         TxGw==
-X-Gm-Message-State: AFqh2kqimV86+2oofQx2+loSNU0gDOVDgCWQ3EDNvHqgLV8VN7VCzK+U
-        kU447cN0vGFWilKvkgYrqP8=
-X-Google-Smtp-Source: AMrXdXuY+SL8QN18Pyel9DFeEGBLkhS9OJM9rlFjcWLsJ+0Yq9yJJ8H0dL4VLGPf0i1oOAMGeCgZng==
-X-Received: by 2002:a5d:4803:0:b0:26a:b8e3:b772 with SMTP id l3-20020a5d4803000000b0026ab8e3b772mr3552073wrq.23.1671719230808;
-        Thu, 22 Dec 2022 06:27:10 -0800 (PST)
-Received: from suse.localnet (host-95-251-45-63.retail.telecomitalia.it. [95.251.45.63])
-        by smtp.gmail.com with ESMTPSA id n16-20020adffe10000000b002367ad808a9sm677734wrr.30.2022.12.22.06.27.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 06:27:10 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] fs/ufs: Replace kmap() with kmap_local_page()
-Date:   Thu, 22 Dec 2022 15:27:08 +0100
-Message-ID: <1884934.6tgchFWduM@suse>
-In-Reply-To: <Y6Pt7QXbXjaFpNjx@iweiny-desk3>
-References: <20221221172802.18743-1-fmdefrancesco@gmail.com>
- <20221221172802.18743-4-fmdefrancesco@gmail.com>
- <Y6Pt7QXbXjaFpNjx@iweiny-desk3>
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O9UePTIdh8BLFeT/9sLTPNaa6psTC9fQZbGE7Nodn9I=;
+        b=JfvxWhk+dYh6MRJOuCPB+knq76R+nDxJEe0C/kuzO2BB1DvTdcO4rGcluzfng8rjzm
+         qV/FK+/3/4j+egY6fUzGhobqnVT3WGECmMkCbH1Pp87vFXulvWfC1UdALHgsJu+2C3I/
+         LgtTp0OhrTduk3OxvvJwxpOU012xRZUHfx8vwU2BDwVr874yRJRTghZvQ8EVpWKj4poa
+         7rCA5K5v3/TFfrVUmhHYe7Yaw/lAiUOLbFE1XF/Eb/0BPyCrhzD/2yHmL5HHHhgbwoS2
+         WGnAD/iu8B6UbhAd1wFiFfB0tuh3L9f97Tvb8J/F3fiKEVf+1pLrQhm/cQavYTDyJdnE
+         kKnA==
+X-Gm-Message-State: AFqh2kroyRW4pOizHf6MoAEIbnbkzuV58rBXvvsRbkXGgVMSeH2AbzeC
+        jxRBnLNkgTD11k5ZKxu9XJ4=
+X-Google-Smtp-Source: AMrXdXuFTs5mURL/LSDTL8IcGuh27Bwo1dU7Yjt7h6xB4T5t6YKFMjM97FQ4834XnJSqneb7EOE2Ag==
+X-Received: by 2002:aa7:ccc2:0:b0:462:2e05:30ce with SMTP id y2-20020aa7ccc2000000b004622e0530cemr4663623edt.42.1671719257488;
+        Thu, 22 Dec 2022 06:27:37 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id l26-20020a056402125a00b0046b471596e6sm426812edw.57.2022.12.22.06.27.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 06:27:37 -0800 (PST)
+Message-ID: <88a5a9e3-9bc8-5966-22ec-5bdb1fa7a5b1@gmail.com>
+Date:   Thu, 22 Dec 2022 15:27:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v6 07/17] dt-bindings: display: rockchip: convert
+ analogix_dp-rockchip.txt to yaml
+To:     heiko@sntech.de
+Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+        linus.walleij@linaro.org, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
+        alim.akhtar@samsung.com, linux-samsung-soc@vger.kernel.org
+References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+Content-Language: en-US
+In-Reply-To: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,503 +86,233 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=C3=AC 22 dicembre 2022 06:41:01 CET Ira Weiny wrote:
-> On Wed, Dec 21, 2022 at 06:28:02PM +0100, Fabio M. De Francesco wrote:
-> > kmap() is being deprecated in favor of kmap_local_page().
-> >=20
-> > There are two main problems with kmap(): (1) It comes with an overhead =
-as
-> > the mapping space is restricted and protected by a global lock for
-> > synchronization and (2) it also requires global TLB invalidation when t=
-he
-> > kmap=E2=80=99s pool wraps and it might block when the mapping space is =
-fully
-> > utilized until a slot becomes available.
-> >=20
-> > With kmap_local_page() the mappings are per thread, CPU local, can take
-> > page faults, and can be called from any context (including interrupts).
-> > It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> > the tasks can be preempted and, when they are scheduled to run again, t=
-he
-> > kernel virtual addresses are restored and still valid.
-> >=20
-> > Since its use in fs/ufs is safe everywhere, it should be preferred.
-> >=20
-> > Therefore, replace kmap() with kmap_local_page() in fs/ufs. kunmap_loca=
-l()
-> > requires the mapping address, so return that address from ufs_get_page()
-> > to be used in ufs_put_page().
->=20
-> I don't see the calls to kunmap() in ufs_rename converted here?
->=20
-> Did I miss them?
->
+Convert analogix_dp-rockchip.txt to yaml.
 
-No, it's my fault.
-I must have used "grep" on all files in fs/ufs, but I forgot to run it :-(
+Changed:
+  Add power-domains property
+  File name
 
-While at this... I'm wondering whether or not we could benefit from a WARNI=
-NG=20
-about the use of kunmap(). I'm talking about adding this too to checkpatch.=
-pl,=20
-exactly as we already have it for catching the deprecated use of kmap().=20
-=20
->
-> I think those calls need to be changed to ufs_put_page() calls in a=20
-precursor
-> patch to this one unless I'm missing something.
->=20
+Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+---
+ .../display/rockchip/analogix_dp-rockchip.txt |  98 -----------------
+ .../rockchip/rockchip,analogix-dp.yaml        | 103 ++++++++++++++++++
+ 2 files changed, 103 insertions(+), 98 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/rockchip/analogix_dp-rockchip.txt
+ create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,analogix-dp.yaml
 
-Again I think that you are not missing anything and that your suggestion=20
-sounds good.
-
-I'll replace the three kunmap() + put_page() with three calls to=20
-ufs_put_page() in ufs_rename(). I'll do these changes in patch 3/4. Instead=
-=20
-the current 3/4 patch will move ahead and become 4/4.
-
->
-> > Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > ---
-> >=20
-> >  fs/ufs/dir.c | 75 ++++++++++++++++++++++++++++++++--------------------
-> >  1 file changed, 46 insertions(+), 29 deletions(-)
-> >=20
-> > diff --git a/fs/ufs/dir.c b/fs/ufs/dir.c
-> > index 9fa86614d2d1..ed3568da29a8 100644
-> > --- a/fs/ufs/dir.c
-> > +++ b/fs/ufs/dir.c
-> > @@ -61,9 +61,9 @@ static int ufs_commit_chunk(struct page *page, loff_t=
-=20
-pos,
-> > unsigned len)>=20
-> >  	return err;
-> > =20
-> >  }
-> >=20
-> > -static inline void ufs_put_page(struct page *page)
-> > +static inline void ufs_put_page(struct page *page, void *page_addr)
-> >=20
-> >  {
-> >=20
-> > -	kunmap(page);
-> > +	kunmap_local((void *)((unsigned long)page_addr & PAGE_MASK));
->=20
-> Any address in the page can be passed to kunmap_local() as this mask is d=
-one
-> internally.
->=20
-
-I know that any address can be passed and that the bitwise and is performed=
-=20
-internally in kunmap_local_indexed(). This is why I've never done something=
-=20
-like this in any other of my precedent conversions.=20
-
-However, I thought that Al should have had reasons to suggest to call=20
-kunmap_local() this way. Copy-pasted from one of his message (https://
-lore.kernel.org/lkml/Y4E++JERgUMoqfjG@ZenIV/) while commenting the one patc=
-h=20
-old conversions:
-
-=2D-- begin ---
-
- -static inline void ufs_put_page(struct page *page)
-> +inline void ufs_put_page(struct page *page, void *page_addr)
->  {
-> -	kunmap(page);
-> +	kunmap_local(page_addr);
-
-Make that
-	kunmap_local((void *)((unsigned long)page_addr & PAGE_MASK));
-and things become much easier.
-
->  	put_page(page);
->  }
-
-=2D-- end ---
-
-Did I misinterpret his words?
-However, it's my fault again because I should have asked why :-(
-
-> >  	put_page(page);
-> > =20
-> >  }
-> >=20
-> > @@ -76,7 +76,7 @@ ino_t ufs_inode_by_name(struct inode *dir, const stru=
-ct
-> > qstr *qstr)>=20
-> >  	de =3D ufs_find_entry(dir, qstr, &page);
-> >  	if (de) {
-> >  =09
-> >  		res =3D fs32_to_cpu(dir->i_sb, de->d_ino);
-> >=20
-> > -		ufs_put_page(page);
-> > +		ufs_put_page(page, de);
-> >=20
-> >  	}
-> >  	return res;
-> > =20
-> >  }
-> >=20
-> > @@ -99,18 +99,17 @@ void ufs_set_link(struct inode *dir, struct
-> > ufs_dir_entry *de,>=20
-> >  	ufs_set_de_type(dir->i_sb, de, inode->i_mode);
-> >  =09
-> >  	err =3D ufs_commit_chunk(page, pos, len);
-> >=20
-> > -	ufs_put_page(page);
-> > +	ufs_put_page(page, de);
-> >=20
-> >  	if (update_times)
-> >  =09
-> >  		dir->i_mtime =3D dir->i_ctime =3D current_time(dir);
-> >  =09
-> >  	mark_inode_dirty(dir);
-> > =20
-> >  }
-> >=20
-> > -static bool ufs_check_page(struct page *page)
-> > +static bool ufs_check_page(struct page *page, char *kaddr)
-> >=20
-> >  {
-> > =20
-> >  	struct inode *dir =3D page->mapping->host;
-> >  	struct super_block *sb =3D dir->i_sb;
-> >=20
-> > -	char *kaddr =3D page_address(page);
-> >=20
-> >  	unsigned offs, rec_len;
-> >  	unsigned limit =3D PAGE_SIZE;
-> >  	const unsigned chunk_mask =3D UFS_SB(sb)->s_uspi->s_dirblksize - 1;
-> >=20
-> > @@ -185,23 +184,32 @@ static bool ufs_check_page(struct page *page)
-> >=20
-> >  	return false;
-> > =20
-> >  }
-> >=20
-> > +/*
-> > + * Calls to ufs_get_page()/ufs_put_page() must be nested according to =
-the
-> > + * rules documented in kmap_local_page()/kunmap_local().
-> > + *
-> > + * NOTE: ufs_find_entry() and ufs_dotdot() act as calls to ufs_get_pag=
-e()
-> > + * and must be treated accordingly for nesting purposes.
-> > + */
-> >=20
-> >  static void *ufs_get_page(struct inode *dir, unsigned long n, struct p=
-age
-> >  **p) {
-> >=20
-> > +	char *kaddr;
-> > +
-> >=20
-> >  	struct address_space *mapping =3D dir->i_mapping;
-> >  	struct page *page =3D read_mapping_page(mapping, n, NULL);
-> >  	if (!IS_ERR(page)) {
-> >=20
-> > -		kmap(page);
-> > +		kaddr =3D kmap_local_page(page);
-> >=20
-> >  		if (unlikely(!PageChecked(page))) {
-> >=20
-> > -			if (!ufs_check_page(page))
-> > +			if (!ufs_check_page(page, kaddr))
-> >=20
-> >  				goto fail;
-> >  	=09
-> >  		}
-> >  		*p =3D page;
-> >=20
-> > -		return page_address(page);
-> > +		return kaddr;
-> >=20
-> >  	}
-> >  	return ERR_CAST(page);
-> > =20
-> >  fail:
-> > -	ufs_put_page(page);
-> > +	ufs_put_page(page, kaddr);
-> >=20
-> >  	return ERR_PTR(-EIO);
-> > =20
-> >  }
-> >=20
-> > @@ -227,6 +235,13 @@ ufs_next_entry(struct super_block *sb, struct
-> > ufs_dir_entry *p)>=20
-> >  					fs16_to_cpu(sb, p-
->d_reclen));
-> > =20
-> >  }
-> >=20
-> > +/*
-> > + * Calls to ufs_get_page()/ufs_put_page() must be nested according to =
-the
-> > + * rules documented in kmap_local_page()/kunmap_local().
-> > + *
-> > + * ufs_dotdot() acts as a call to ufs_get_page() and must be treated
-> > + * accordingly for nesting purposes.
-> > + */
-> >=20
-> >  struct ufs_dir_entry *ufs_dotdot(struct inode *dir, struct page **p)
-> >  {
-> > =20
-> >  	struct ufs_dir_entry *de =3D ufs_get_page(dir, 0, p);
-> >=20
-> > @@ -238,12 +253,15 @@ struct ufs_dir_entry *ufs_dotdot(struct inode *di=
-r,
-> > struct page **p)>=20
-> >  }
-> > =20
-> >  /*
-> >=20
-> > - *	ufs_find_entry()
-> > + * Finds an entry in the specified directory with the wanted name. It
-> > returns a + * pointer to the directory's entry. The page in which the=20
-entry
-> > was found is + * in the res_page out parameter. The page is returned=20
-mapped
-> > and unlocked. + * The entry is guaranteed to be valid.
-> >=20
-> >   *
-> >=20
-> > - * finds an entry in the specified directory with the wanted name. It
-> > - * returns the page in which the entry was found, and the entry itself
-> > - * (as a parameter - res_dir). Page is returned mapped and unlocked.
-> > - * Entry is guaranteed to be valid.
->=20
-> I don't follow why this comment needed changing for this patch.  It proba=
-bly
-> warrants it's own patch.
->=20
-
-Sure, the removal of the name of function is a different logical change, so=
-=20
-I'll probably leave it as it was.=20
-
-> > + * On Success ufs_put_page() should be called on *res_page.
-> > + *
-> > + * ufs_find_entry() acts as a call to ufs_get_page() and must be treat=
-ed
-> > + * accordingly for nesting purposes.
-> >=20
-> >   */
-
-But this last part should be still added. Am I wrong?
-
-> >  struct ufs_dir_entry *ufs_find_entry(struct inode *dir, const struct q=
-str=20
-*qstr,
-> >  				struct page **res_page)
-> >=20
-> > @@ -282,7 +300,7 @@ struct ufs_dir_entry *ufs_find_entry(struct inode=20
-*dir,
-> > const struct qstr *qstr,>=20
-> >  					goto found;
-> >  			=09
-> >  				de =3D ufs_next_entry(sb, de);
-> >  		=09
-> >  			}
-> >=20
-> > -			ufs_put_page(page);
-> > +			ufs_put_page(page, kaddr);
-> >=20
-> >  		}
-> >  		if (++n >=3D npages)
-> >  	=09
-> >  			n =3D 0;
-> >=20
-> > @@ -360,7 +378,7 @@ int ufs_add_link(struct dentry *dentry, struct inode
-> > *inode)>=20
-> >  			de =3D (struct ufs_dir_entry *) ((char *) de +=20
-rec_len);
-> >  	=09
-> >  		}
-> >  		unlock_page(page);
-> >=20
-> > -		ufs_put_page(page);
-> > +		ufs_put_page(page, kaddr);
-> >=20
-> >  	}
-> >  	BUG();
-> >  	return -EINVAL;
-> >=20
-> > @@ -390,7 +408,7 @@ int ufs_add_link(struct dentry *dentry, struct inode
-> > *inode)>=20
-> >  	mark_inode_dirty(dir);
-> >  	/* OFFSET_CACHE */
-> > =20
-> >  out_put:
-> > -	ufs_put_page(page);
-> > +	ufs_put_page(page, kaddr);
-> >=20
-> >  	return err;
-> > =20
-> >  out_unlock:
-> >  	unlock_page(page);
-> >=20
-> > @@ -468,13 +486,13 @@ ufs_readdir(struct file *file, struct dir_context
-> > *ctx)
-> >=20
-> >  					       ufs_get_de_namlen(sb,=20
-de),
-> >  					       fs32_to_cpu(sb, de-
->d_ino),
-> >  					       d_type)) {
-> >=20
-> > -					ufs_put_page(page);
-> > +					ufs_put_page(page, kaddr);
-> >=20
-> >  					return 0;
-> >  			=09
-> >  				}
-> >  		=09
-> >  			}
-> >  			ctx->pos +=3D fs16_to_cpu(sb, de->d_reclen);
-> >  	=09
-> >  		}
-> >=20
-> > -		ufs_put_page(page);
-> > +		ufs_put_page(page, kaddr);
-> >=20
-> >  	}
-> >  	return 0;
-> > =20
-> >  }
-> >=20
-> > @@ -485,10 +503,10 @@ ufs_readdir(struct file *file, struct dir_context
-> > *ctx)
-> >=20
-> >   * previous entry.
-> >   */
-> > =20
-> >  int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
-> >=20
-> > -		     struct page * page)
-> > +		     struct page *page)
-> >=20
-> >  {
-> > =20
-> >  	struct super_block *sb =3D inode->i_sb;
-> >=20
-> > -	char *kaddr =3D page_address(page);
-> > +	char *kaddr =3D (char *)((unsigned long)dir & PAGE_MASK);
->=20
-> I feel like this deserves a comment to clarify that dir points somewhere =
-in
-> the page we need the base address of.
-
-OK, it sounds reasonable.
-
-> >  	unsigned int from =3D offset_in_page(dir) &
-> >  	~(UFS_SB(sb)->s_uspi->s_dirblksize - 1); unsigned int to =3D
-> >  	offset_in_page(dir) + fs16_to_cpu(sb, dir->d_reclen); loff_t pos;
-> >=20
-> > @@ -527,7 +545,7 @@ int ufs_delete_entry(struct inode *inode, struct
-> > ufs_dir_entry *dir,>=20
-> >  	inode->i_ctime =3D inode->i_mtime =3D current_time(inode);
-> >  	mark_inode_dirty(inode);
-> > =20
-> >  out:
-> > -	ufs_put_page(page);
-> > +	ufs_put_page(page, kaddr);
-> >=20
-> >  	UFSD("EXIT\n");
-> >  	return err;
-> > =20
-> >  }
-> >=20
-> > @@ -551,8 +569,7 @@ int ufs_make_empty(struct inode * inode, struct ino=
-de
-> > *dir)>=20
-> >  		goto fail;
-> >  =09
-> >  	}
-> >=20
-> > -	kmap(page);
-> > -	base =3D (char*)page_address(page);
-> > +	base =3D kmap_local_page(page);
->=20
-> NIT: I'd make this conversion a separate patch.
->=20
-> Ira
->=20
-
-We've always done multiple conversions at the same time if in the same file=
-,=20
-even if they were unrelated.
-
-I don't understand why we want to change the usual procedure. Can you pleas=
-e=20
-elaborate a bit more on this topic?
-
-Thanks so much for finding the missing conversions and for your other comme=
-nts=20
-and advice on this patch.
-
-=46abio
-
-> >  	memset(base, 0, PAGE_SIZE);
-> >  =09
-> >  	de =3D (struct ufs_dir_entry *) base;
-> >=20
-> > @@ -569,7 +586,7 @@ int ufs_make_empty(struct inode * inode, struct ino=
-de
-> > *dir)>=20
-> >  	de->d_reclen =3D cpu_to_fs16(sb, chunk_size - UFS_DIR_REC_LEN(1));
-> >  	ufs_set_de_namlen(sb, de, 2);
-> >  	strcpy (de->d_name, "..");
-> >=20
-> > -	kunmap(page);
-> > +	kunmap_local(base);
-> >=20
-> >  	err =3D ufs_commit_chunk(page, 0, chunk_size);
-> > =20
-> >  fail:
-> > @@ -585,9 +602,9 @@ int ufs_empty_dir(struct inode * inode)
-> >=20
-> >  	struct super_block *sb =3D inode->i_sb;
-> >  	struct page *page =3D NULL;
-> >  	unsigned long i, npages =3D dir_pages(inode);
-> >=20
-> > +	char *kaddr;
-> >=20
-> >  	for (i =3D 0; i < npages; i++) {
-> >=20
-> > -		char *kaddr;
-> >=20
-> >  		struct ufs_dir_entry *de;
-> >  	=09
-> >  		kaddr =3D ufs_get_page(inode, i, &page);
-> >=20
-> > @@ -620,12 +637,12 @@ int ufs_empty_dir(struct inode * inode)
-> >=20
-> >  			}
-> >  			de =3D ufs_next_entry(sb, de);
-> >  	=09
-> >  		}
-> >=20
-> > -		ufs_put_page(page);
-> > +		ufs_put_page(page, kaddr);
-> >=20
-> >  	}
-> >  	return 1;
-> > =20
-> >  not_empty:
-> > -	ufs_put_page(page);
-> > +	ufs_put_page(page, kaddr);
-> >=20
-> >  	return 0;
-> > =20
-> >  }
-> >=20
-> > --
-> > 2.39.0
-
-
-
+diff --git a/Documentation/devicetree/bindings/display/rockchip/analogix_dp-rockchip.txt b/Documentation/devicetree/bindings/display/rockchip/analogix_dp-rockchip.txt
+deleted file mode 100644
+index 43561584c..000000000
+--- a/Documentation/devicetree/bindings/display/rockchip/analogix_dp-rockchip.txt
++++ /dev/null
+@@ -1,98 +0,0 @@
+-Rockchip RK3288 specific extensions to the Analogix Display Port
+-================================
+-
+-Required properties:
+-- compatible: "rockchip,rk3288-dp",
+-	      "rockchip,rk3399-edp";
+-
+-- reg: physical base address of the controller and length
+-
+-- clocks: from common clock binding: handle to dp clock.
+-	  of memory mapped region.
+-
+-- clock-names: from common clock binding:
+-	       Required elements: "dp" "pclk"
+-
+-- resets: Must contain an entry for each entry in reset-names.
+-	  See ../reset/reset.txt for details.
+-
+-- pinctrl-names: Names corresponding to the chip hotplug pinctrl states.
+-- pinctrl-0: pin-control mode. should be <&edp_hpd>
+-
+-- reset-names: Must include the name "dp"
+-
+-- rockchip,grf: this soc should set GRF regs, so need get grf here.
+-
+-- ports: there are 2 port nodes with endpoint definitions as defined in
+-  Documentation/devicetree/bindings/media/video-interfaces.txt.
+-    Port 0: contained 2 endpoints, connecting to the output of vop.
+-    Port 1: contained 1 endpoint, connecting to the input of panel.
+-
+-Optional property for different chips:
+-- clocks: from common clock binding: handle to grf_vio clock.
+-
+-- clock-names: from common clock binding:
+-	       Required elements: "grf"
+-
+-For the below properties, please refer to Analogix DP binding document:
+- * Documentation/devicetree/bindings/display/bridge/analogix_dp.txt
+-- phys (required)
+-- phy-names (required)
+-- hpd-gpios (optional)
+-- force-hpd (optional)
+--------------------------------------------------------------------------------
+-
+-Example:
+-	dp-controller: dp@ff970000 {
+-		compatible = "rockchip,rk3288-dp";
+-		reg = <0xff970000 0x4000>;
+-		interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+-		clocks = <&cru SCLK_EDP>, <&cru PCLK_EDP_CTRL>;
+-		clock-names = "dp", "pclk";
+-		phys = <&dp_phy>;
+-		phy-names = "dp";
+-
+-		rockchip,grf = <&grf>;
+-		resets = <&cru 111>;
+-		reset-names = "dp";
+-
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&edp_hpd>;
+-
+-
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-			edp_in: port@0 {
+-				reg = <0>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				edp_in_vopb: endpoint@0 {
+-					reg = <0>;
+-					remote-endpoint = <&vopb_out_edp>;
+-				};
+-				edp_in_vopl: endpoint@1 {
+-					reg = <1>;
+-					remote-endpoint = <&vopl_out_edp>;
+-				};
+-			};
+-
+-			edp_out: port@1 {
+-				reg = <1>;
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-				edp_out_panel: endpoint {
+-					reg = <0>;
+-					remote-endpoint = <&panel_in_edp>
+-				};
+-			};
+-		};
+-	};
+-
+-	pinctrl {
+-		edp {
+-			edp_hpd: edp-hpd {
+-				rockchip,pins = <7 11 RK_FUNC_2 &pcfg_pull_none>;
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip,analogix-dp.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip,analogix-dp.yaml
+new file mode 100644
+index 000000000..60dedf9b2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/rockchip/rockchip,analogix-dp.yaml
+@@ -0,0 +1,103 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/rockchip/rockchip,analogix-dp.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip specific extensions to the Analogix Display Port
++
++maintainers:
++  - Sandy Huang <hjc@rock-chips.com>
++  - Heiko Stuebner <heiko@sntech.de>
++
++properties:
++  compatible:
++    enum:
++      - rockchip,rk3288-dp
++      - rockchip,rk3399-edp
++
++  clocks:
++    minItems: 2
++    maxItems: 3
++
++  clock-names:
++    minItems: 2
++    items:
++      - const: dp
++      - const: pclk
++      - const: grf
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    const: dp
++
++  rockchip,grf:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      This SoC makes use of GRF regs.
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - resets
++  - reset-names
++  - rockchip,grf
++
++allOf:
++  - $ref: /schemas/display/bridge/analogix,dp.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/rk3288-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    dp@ff970000 {
++      compatible = "rockchip,rk3288-dp";
++      reg = <0xff970000 0x4000>;
++      interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
++      clocks = <&cru SCLK_EDP>, <&cru PCLK_EDP_CTRL>;
++      clock-names = "dp", "pclk";
++      phys = <&dp_phy>;
++      phy-names = "dp";
++      resets = <&cru 111>;
++      reset-names = "dp";
++      rockchip,grf = <&grf>;
++      pinctrl-0 = <&edp_hpd>;
++      pinctrl-names = "default";
++
++      ports {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        edp_in: port@0 {
++          reg = <0>;
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          edp_in_vopb: endpoint@0 {
++            reg = <0>;
++            remote-endpoint = <&vopb_out_edp>;
++          };
++          edp_in_vopl: endpoint@1 {
++            reg = <1>;
++            remote-endpoint = <&vopl_out_edp>;
++          };
++        };
++
++        edp_out: port@1 {
++          reg = <1>;
++
++          edp_out_panel: endpoint {
++            remote-endpoint = <&panel_in_edp>;
++          };
++        };
++      };
++    };
+--
+2.20.1
 
