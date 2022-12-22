@@ -2,139 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7E5654191
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53886654193
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235469AbiLVNRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 08:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S230304AbiLVNRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235372AbiLVNR1 (ORCPT
+        with ESMTP id S235394AbiLVNR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 08:17:27 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CA72B247;
+        Thu, 22 Dec 2022 08:17:28 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6922B250
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 05:17:27 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so5685573pjj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 05:17:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V3mjjY5oD2bC4wc6eiPV1Dq89HSgafk5fg8eT5Cs6OI=;
+        b=TvN2wOIu2j023gt7Gr/266m7XNbgaXcfTKr8Q7WLEcuinVQUT5k6MkdYQJnlDQ71jg
+         t8jCt0fFwNUE3f1zp4s9nU9py2ncUAzFTNjAOS6qQOgdmjkP4jg+QD+MyTeuJN8WLvv1
+         uBRPkUZl7Ky6q984VNVrGLpqBCIjICRyHW0600RmBW8yCe6M32TkjfGmBYGqydUYuTKE
+         9W3/uPni7VavdYXqRh6BoHCvabS5ixIqpXpSKkIvtzdLpz1VdjEzV1PNAz+h+0aNC9sO
+         UtkKkZ5kTAwhdF41mBKlDRonD3zxcSVqTumNcJiqx2hSVpM+T1zkpY4JhdiFPuRGeKIo
+         IEZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V3mjjY5oD2bC4wc6eiPV1Dq89HSgafk5fg8eT5Cs6OI=;
+        b=YlHcqG3/kBqL4kms7WNzfRjnWdIp6V/l0CcGypK3fvhAlPu/WauwEktUlOkQVsJCAn
+         nMc/sMjB4smyVnmt9JIameyeLCsnke4tKZP96OrsnN5tlRH30+39ytvQ0JV4bErto94o
+         pr5yN4DsH+iIyXrgSsXP2LLoBlMShj86bOfqn4DybzhnbAGUzhZYgJrGrV1lNQ9scoHS
+         We11gRBK1oq/cpJCHoKvKImF6Kr0LvOMZAoTTE50dqrmoufeO7VqaeGt86rPPXdLOTtl
+         VyLUfD1tZ5j6IocDMBdjtaspRoKiWieJuh48nqjIphqSs79c0MVeeuwTJuOEit7Q0PUp
+         29qg==
+X-Gm-Message-State: AFqh2koagbz57ziLOaYiblV9gHHC/OCcCfPBpIxUQJIuBEM/g8hibA4r
+        WmLZyqSKAOdz58iQdiYIhrNW
+X-Google-Smtp-Source: AMrXdXuN36BEUdpY92cMDd0JZE8pGcMks0DSzY5HQFsr+EB+wPIwelv0Zz/6eXbAXCGVtgELxSyacg==
+X-Received: by 2002:a17:902:ea91:b0:189:c6fb:f933 with SMTP id x17-20020a170902ea9100b00189c6fbf933mr20094759plb.28.1671715046817;
         Thu, 22 Dec 2022 05:17:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2XcHZF1PZLR2wIWpbwHYxjPC+APViKRD8vA3VUxcIvg=; b=KCXj9vIla9OYqKdFn9cR8kvNM7
-        aFCQeC8riSg8V400TR89vezYQDYLiis4eNRLNs8TpTaXaw65hlSoAk1r6vPtZd+exgqLf0ix1mWk/
-        7mD3VAmxpBkRslmasRJRs+fKtYpKnU1ADefum9T6WSCkywkO5VAsLjiapOTmMfHm3hWA+ZnPwbN/x
-        w/QRGrx3Tff9U3N5qrWzRNVImBPIIWUH62fHNh4gOn/lh1uA85Bq4VekD+WTPjngLVS9jAhxdeZUl
-        IsMAPZLgwBX86nVypWOAboNnZASXp2L/Ju1gXccS53q3KAKJFdUiOmNk/uvedjpjQbE+kHWV+JJwu
-        O+7WKnuA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1p8LR1-00Dq0t-2q;
-        Thu, 22 Dec 2022 13:16:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D4E3C30006D;
-        Thu, 22 Dec 2022 14:16:28 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5D8FC2CEAF0FB; Thu, 22 Dec 2022 14:16:28 +0100 (CET)
-Date:   Thu, 22 Dec 2022 14:16:28 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC][PATCH 05/12] arch: Introduce
- arch_{,try_}_cmpxchg128{,_local}()
-Message-ID: <Y6RYrHV3PK+FwW2p@hirez.programming.kicks-ass.net>
-References: <20221219153525.632521981@infradead.org>
- <20221219154119.154045458@infradead.org>
- <Y6OyAL2epKPHj+tr@boqun-archlinux>
+Received: from localhost.localdomain ([117.217.177.99])
+        by smtp.gmail.com with ESMTPSA id g12-20020a170902fe0c00b001896040022asm491570plj.190.2022.12.22.05.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 05:17:25 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com
+Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
+        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 00/16] Qcom: LLCC/EDAC: Fix base address used for LLCC banks
+Date:   Thu, 22 Dec 2022 18:46:40 +0530
+Message-Id: <20221222131656.49584-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6OyAL2epKPHj+tr@boqun-archlinux>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 05:25:20PM -0800, Boqun Feng wrote:
+The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
+accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
+This offset only works for some SoCs like SDM845 for which driver support
+was initially added.
+    
+But the later SoCs use different register stride that vary between the
+banks with holes in-between. So it is not possible to use a single register
+stride for accessing the CSRs of each bank. By doing so could result in a
+crash with the current drivers. So far this crash is not reported since
+EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
+driver extensively by triggering the EDAC IRQ (that's where each bank
+CSRs are accessed).
+    
+For fixing this issue, let's obtain the base address of each LLCC bank from
+devicetree and get rid of the fixed stride.
 
-> > +#define __CMPXCHG128(name, mb, cl...)					\
-> > +static __always_inline u128						\
-> > +__lse__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)		\
-> > +{									\
-> > +	union __u128_halves r, o = { .full = (old) },			\
-> > +			       n = { .full = (new) };			\
-> > +	register unsigned long x0 asm ("x0") = o.low;			\
-> > +	register unsigned long x1 asm ("x1") = o.high;			\
-> > +	register unsigned long x2 asm ("x2") = n.low;			\
-> > +	register unsigned long x3 asm ("x3") = n.high;			\
-> > +	register unsigned long x4 asm ("x4") = (unsigned long)ptr;	\
-> > +									\
-> > +	asm volatile(							\
-> > +	__LSE_PREAMBLE							\
-> > +	"	casp" #mb "\t%[old1], %[old2], %[new1], %[new2], %[v]\n"\
-> > +	: [old1] "+&r" (x0), [old2] "+&r" (x1),				\
-> > +	  [v] "+Q" (*(unsigned long *)ptr)				\
-> > +	: [new1] "r" (x2), [new2] "r" (x3), [ptr] "r" (x4),		\
-> 
-> Issue #1: the line below can be removed, otherwise..
-> 
-> > +	  [oldval1] "r" (r.low), [oldval2] "r" (r.high)			\
-> 
-> warning:
-> 
-> 	./arch/arm64/include/asm/atomic_lse.h: In function '__lse__cmpxchg128_mb':
-> 	./arch/arm64/include/asm/atomic_lse.h:309:27: warning: 'r.<U97b8>.low' is used uninitialized [-Wuninitialized]
-> 	  309 |           [oldval1] "r" (r.low), [oldval2] "r" (r.high)
-> 
-> 
-> > +	: cl);								\
-> > +									\
-> > +	r.low = x0; r.high = x1;					\
-> > +									\
-> > +	return r.full;							\
-> > +}
-> > +
-> > +__CMPXCHG128(   ,   )
-> > +__CMPXCHG128(_mb, al, "memory")
-> > +
-> > +#undef __CMPXCHG128
-> > +
-> >  #endif	/* __ASM_ATOMIC_LSE_H */
-> > --- a/arch/arm64/include/asm/cmpxchg.h
-> > +++ b/arch/arm64/include/asm/cmpxchg.h
-> > @@ -147,6 +147,19 @@ __CMPXCHG_DBL(_mb)
-> >  
-> >  #undef __CMPXCHG_DBL
-> >  
-> > +#define __CMPXCHG128(name)						\
-> > +static inline long __cmpxchg128##name(volatile u128 *ptr,		\
-> 
-> Issue #2: this should be
-> 
-> static inline u128 __cmpxchg128##name(..)
-> 
-> because cmpxchg* needs to return the old value.
+This series affects multiple platforms but I have only tested this on
+SM8250, SM8450, and SM6350. Testing on other platforms is welcomed.
 
-Duh.. fixed both. Pushed out to queue/core/wip-u128. I'll probably
-continue all this in two weeks (yay xmas break!).
+Thanks,
+Mani
+
+Changes in v4:
+
+* Added a patch that fixes the use-after-free bug in qcom_edac driver
+
+Changes in v3:
+
+* Brought back reg-names property for compatibility (Krzysztof)
+* Removed Fixes tag and stable list as backporting the drivers/binding/dts
+  patches alone would break (Krzysztof)
+* Fixed the uninitialized variable issue (Kbot)
+* Added a patch to make use of driver supplied polling interval (Luca)
+* Added a patch for module autoloading (Andrew)
+* Didn't collect Review tags from Sai as the dts patches were changed.
+
+Changes in v2:
+
+* Removed reg-names property and used index of reg property to parse LLCC
+  bank base address (Bjorn)
+* Collected Ack from Sai for binding
+* Added a new patch for polling mode (Luca)
+* Renamed subject of patches targeting SC7180 and SM6350
+
+Manivannan Sadhasivam (16):
+  dt-bindings: arm: msm: Update the maintainers for LLCC
+  dt-bindings: arm: msm: Fix register regions used for LLCC banks
+  arm64: dts: qcom: sdm845: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sc7180: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sc7280: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sc8280xp: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm8150: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm8250: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm8350: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm8450: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm6350: Fix the base addresses of LLCC banks
+  EDAC/device: Make use of poll_msec value in edac_device_ctl_info
+    struct
+  EDAC/qcom: Add platform_device_id table for module autoloading
+  EDAC/qcom: Do not pass llcc_driv_data as edac_device_ctl_info's
+    pvt_info
+  qcom: llcc/edac: Fix the base address used for accessing LLCC banks
+  qcom: llcc/edac: Support polling mode for ECC handling
+
+ .../bindings/arm/msm/qcom,llcc.yaml           | 128 ++++++++++++++++--
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          |   5 +-
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  10 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm6350.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm8350.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |   7 +-
+ drivers/edac/edac_device.c                    |   2 +-
+ drivers/edac/qcom_edac.c                      |  63 +++++----
+ drivers/soc/qcom/llcc-qcom.c                  |  85 ++++++------
+ include/linux/soc/qcom/llcc-qcom.h            |   6 +-
+ 14 files changed, 243 insertions(+), 95 deletions(-)
+
+-- 
+2.25.1
+
