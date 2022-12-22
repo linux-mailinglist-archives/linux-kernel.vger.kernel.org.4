@@ -2,134 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5415654309
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BBC65433A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 15:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235741AbiLVOaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 09:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
+        id S235854AbiLVOfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 09:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235694AbiLVOaM (ORCPT
+        with ESMTP id S235823AbiLVOe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 09:30:12 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BF32937D;
-        Thu, 22 Dec 2022 06:30:09 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id a1so3150401edf.5;
-        Thu, 22 Dec 2022 06:30:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Sr8iGvYv8Y+FUygmw8CozO+P35yD6ZFMgxS2kANtCbQ=;
-        b=VaczJC3DYayhT39mpuYMMNQmAe6pOd8vIUqq19xXuzH+xCl2aEgwN3IsaSTR1hH9Uk
-         uhePN9hjMzX2lQmaG5d/c05laMe4ShHPUzQGyeoa+ifSKElXnlrR7QVH1dHdGsEq4Dd7
-         j+2E9Nv5SN8HhYJ/3tCDbTmsiDzyETXjVCKKQ4CliNHJvrDaZRuVM2E5oFHZjHBq7ll3
-         rsTJIybJ3he9K3Hknr7Q3zVnh3000wSsLfVK4dAce7Eh+5sIc1uyQ1wXS2u08Cd+vcdM
-         uE7H5gbSfx73XuMy3cHOBtr37+FwZSQr5cPPCCtXwG8592mjHRMdiKKJtAASJxH7GfEe
-         HY9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sr8iGvYv8Y+FUygmw8CozO+P35yD6ZFMgxS2kANtCbQ=;
-        b=QVuHuI1cGPlvMMhIZOI57sRuqoPANulasJfxchZGwmhdJ336AWMDt14DTWKgPFF1Iv
-         h63hJ92UNGTBc2QLCYhYuwXwnWK6aPA1ZtsYGbeatleZ7PjSQnxQS651VLz0j/Ysq3eQ
-         Ya+8QP3TV81WXLFNHDaLLmDmlh8oqdWmISGbqE47m6suBCCjSz7ESBTM/I1P8hBMjEx+
-         mnYG2i+gdGxfsSza/PnNJRiA/WhrWndRvEGszZBAX7lNc12AiTOx0pLg1RBSCaNW11jY
-         AUsNxhDjtzHAlOPOJkfRk5fammyj8osu2wLscaZerbSUGkjV4JnLOGNyPix+sVTqE/PK
-         0i3g==
-X-Gm-Message-State: AFqh2kofzx+58hUChh+sI4eN4Ok69si7PnOBSu3grv0PIEIaiTOR6obe
-        lTV/P17bgLfCVDjKG8zAM/I=
-X-Google-Smtp-Source: AMrXdXurqoOFkI2ZF/Yr2+mXCk6PmZYuuFqlaFxmwRRIisoHNe/8QJlN0NWxlPobXkNO6fFrIoIZpw==
-X-Received: by 2002:a05:6402:33a:b0:47b:2524:5cf6 with SMTP id q26-20020a056402033a00b0047b25245cf6mr5189089edw.40.1671719408575;
-        Thu, 22 Dec 2022 06:30:08 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id h13-20020a0564020e0d00b0046b00a9eeb5sm427095edh.49.2022.12.22.06.30.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 06:30:08 -0800 (PST)
-Message-ID: <e7b78a73-0e89-d9e9-2ecc-a8a380635f64@gmail.com>
-Date:   Thu, 22 Dec 2022 15:30:06 +0100
+        Thu, 22 Dec 2022 09:34:57 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C572CC9C;
+        Thu, 22 Dec 2022 06:34:54 -0800 (PST)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMED0A2026702;
+        Thu, 22 Dec 2022 15:34:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=67fzNKXCkBzoxXsOTsF9p1AcsrU4OSEoaRnEhq/v5Jk=;
+ b=bDcJQ0x0Z3/kK3cGayQHg9jkb1RZrqRpzT/DnKLH0FDC1iaD7ALHU1r50ewhPeywwbbK
+ 6BG6EgDUpC2xDFF4xrfqXZ5RwK9UbORel4Lcx/PCk1VT8UEfWZ3vvKkkCjqvMIW3nkOl
+ MH901dSAqFm41vXdgb65H/k2aopeIqgC1L0B7Ho9Qzco7kb0u4m9BvhS5v7S4Cd+KuA8
+ G5bCIQ77H6nYI7sh0NAuodEiXoTxjRDIKrWltCV80lcgJi/IqNzMQw54uZUBLi7iLsQx
+ h4R6+b/zYHzoGw5NKD/vlfrkKa6buKzglzbFgvocrSV1mH3sj5OyYbKnZPy0OjRn+vpO XQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3mkc8jffr6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 15:34:24 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 08A2C100038;
+        Thu, 22 Dec 2022 15:32:11 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 88901229A83;
+        Thu, 22 Dec 2022 15:30:15 +0100 (CET)
+Received: from [10.201.21.217] (10.201.21.217) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Thu, 22 Dec
+ 2022 15:30:14 +0100
+Message-ID: <e2086a52-4db8-e247-43de-c78ffa479634@foss.st.com>
+Date:   Thu, 22 Dec 2022 15:30:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v6 10/17] ARM: dts: rockchip: rk3288: fix lvds node
-To:     heiko@sntech.de
-Cc:     hjc@rock-chips.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        airlied@gmail.com, daniel@ffwll.ch, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, philippe.cornu@foss.st.com,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
-        linus.walleij@linaro.org, inki.dae@samsung.com,
-        sw0312.kim@samsung.com, kyungmin.park@samsung.com,
-        alim.akhtar@samsung.com, linux-samsung-soc@vger.kernel.org
-References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 5/7] bus: stm32_sys_bus: add support for STM32MP15 and
+ STM32MP13 system bus
 Content-Language: en-US
-In-Reply-To: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <robh+dt@kernel.org>,
+        <Oleksii_Moisieiev@epam.com>, <linus.walleij@linaro.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <loic.pallardy@st.com>,
+        <devicetree@vger.kernel.org>, <mark.rutland@arm.com>,
+        <arnd@arndb.de>
+References: <20221221173055.11719-1-gatien.chevallier@foss.st.com>
+ <20221221173055.11719-6-gatien.chevallier@foss.st.com>
+ <ed8aa4d3-9570-eb72-a7d4-3b690adc3a6d@kernel.org>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <ed8aa4d3-9570-eb72-a7d4-3b690adc3a6d@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.201.21.217]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_07,2022-12-22_03,2022-06-22_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the conversion of rockchip,lvds.yaml a port@1 node
-is required, so add a node with label lvds_out.
-Also restyle.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
 
-Changed V6:
-  Restyle
+On 12/22/22 11:28, Krzysztof Kozlowski wrote:
+> On 21/12/2022 18:30, Gatien Chevallier wrote:
+>> This driver is checking the access rights of the different
+>> peripherals connected to the system bus. If access is denied,
+>> the associated device tree node is skipped so the platform bus
+>> does not probe it.
+>>
+>> Signed-off-by: Loic PALLARDY <loic.pallardy@st.com>
+>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>> ---
+>>   MAINTAINERS                 |   6 ++
+>>   drivers/bus/Kconfig         |   9 ++
+>>   drivers/bus/Makefile        |   1 +
+>>   drivers/bus/stm32_sys_bus.c | 180 ++++++++++++++++++++++++++++++++++++
+>>   4 files changed, 196 insertions(+)
+>>   create mode 100644 drivers/bus/stm32_sys_bus.c
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 886d3f69ee64..768a8272233e 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19522,6 +19522,12 @@ L:	linux-spi@vger.kernel.org
+>>   S:	Maintained
+>>   F:	drivers/spi/spi-stm32.c
+>>   
+>> +ST STM32 SYS BUS DRIVER
+>> +M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
+>> +S:	Maintained
+>> +F:	Documentation/devicetree/bindings/bus/st,sys-bus.yaml
+>> +F:	drivers/bus/stm32_sys_bus.c
+>> +
+>>   ST STPDDC60 DRIVER
+>>   M:	Daniel Nilsson <daniel.nilsson@flex.com>
+>>   L:	linux-hwmon@vger.kernel.org
+>> diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
+>> index 7bfe998f3514..638bf5839cb0 100644
+>> --- a/drivers/bus/Kconfig
+>> +++ b/drivers/bus/Kconfig
+>> @@ -163,6 +163,15 @@ config QCOM_SSC_BLOCK_BUS
+>>   	  i2c/spi/uart controllers, a hexagon core, and a clock controller
+>>   	  which provides clocks for the above.
+>>   
+>> +config STM32_SYS_BUS
+>> +	bool "STM32 System bus controller"
+>> +	depends on ARCH_STM32
+> 
+> || COMPILE_TEST
 
-Changed V5:
-  Rename title
----
- arch/arm/boot/dts/rk3288.dtsi | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Sure, I will add this in V3
 
-diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
-index fbb174729..9def3988e 100644
---- a/arch/arm/boot/dts/rk3288.dtsi
-+++ b/arch/arm/boot/dts/rk3288.dtsi
-@@ -1167,7 +1167,6 @@
+> 
+>> +	default MACH_STM32MP157 || MACH_STM32MP13
+>> +	help
+>> +	  Say y to enable device access right verification before device probing.
+>> +	  If access not granted, device won't be probed and an error message will
+>> +	  provide the reason.
+> 
+> (...)
+> 
+>> +
+>> +static int stm32_sys_bus_probe(struct platform_device *pdev)
+>> +{
+>> +	struct sys_bus_data *pdata;
+>> +	struct resource *res;
+>> +	void __iomem *mmio;
+>> +	struct stm32_sys_bus_match_data *mdata;
+>> +	struct device_node *np = pdev->dev.of_node;
+>> +
+>> +	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
+>> +	if (!pdata)
+>> +		return -ENOMEM;
+>> +
+>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +	mmio = devm_ioremap_resource(&pdev->dev, res);
+> 
+> Use helper for these two.
 
- 			lvds_in: port@0 {
- 				reg = <0>;
--
- 				#address-cells = <1>;
- 				#size-cells = <0>;
+Ok, I will use devm_platform_ioremap_resource()
 
-@@ -1175,11 +1174,16 @@
- 					reg = <0>;
- 					remote-endpoint = <&vopb_out_lvds>;
- 				};
-+
- 				lvds_in_vopl: endpoint@1 {
- 					reg = <1>;
- 					remote-endpoint = <&vopl_out_lvds>;
- 				};
- 			};
-+
-+			lvds_out: port@1 {
-+				reg = <1>;
-+			};
- 		};
- 	};
+> 
+>> +	if (IS_ERR(mmio))
+>> +		return PTR_ERR(mmio);
+>> +
+>> +	pdata->sys_bus_base = mmio;
+>> +
+>> +	mdata = (struct stm32_sys_bus_match_data *)of_device_get_match_data(&pdev->dev);
+> 
+> Why do you need the cast?
 
---
-2.20.1
+I do not :) TBH, mdata is not useful at all. Changing to directly assign 
+to pdata->pconf, that is now const there is no reason to modify it.
 
+> 
+>> +	if (!mdata)
+> 
+> Can you explain the case when this can actually happen? If it can, you
+> have bug in ID table.
+
+No I cannot as the driver is probed. It is only a sanity check, I can 
+remove it for V3. However the function can return NULL... Would you 
+prefer an explicit check on NULL or a simple removal?
+
+> 
+>> +		return -EINVAL;
+>> +
+>> +	pdata->pconf = mdata;
+>> +	pdata->dev = &pdev->dev;
+>> +
+>> +	platform_set_drvdata(pdev, pdata);
+>> +
+>> +	stm32_sys_bus_populate(pdata);
+>> +
+>> +	/* Populate all available nodes */
+>> +	return of_platform_populate(np, NULL, NULL, &pdev->dev);
+>> +}
+>> +
+>> +static const struct stm32_sys_bus_match_data stm32mp15_sys_bus_data = {
+>> +	.max_entries = STM32MP15_ETZPC_ENTRIES,
+>> +	.sys_bus_get_access = stm32_etzpc_get_access,
+>> +};
+>> +
+>> +static const struct stm32_sys_bus_match_data stm32mp13_sys_bus_data = {
+>> +	.max_entries = STM32MP13_ETZPC_ENTRIES,
+>> +	.sys_bus_get_access = stm32_etzpc_get_access,
+> 
+> It's the same as previous, drop.
+
+Yes, ops is useless, I will directly call stm32_etzpc_get_access() in V3.
+
+> 
+>> +};
+>> +
+>> +static const struct of_device_id stm32_sys_bus_of_match[] = {
+>> +	{ .compatible = "st,stm32mp15-sys-bus", .data = &stm32mp15_sys_bus_data },
+>> +	{ .compatible = "st,stm32mp13-sys-bus", .data = &stm32mp13_sys_bus_data },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, stm32_sys_bus_of_match);
+>> +
+>> +static struct platform_driver stm32_sys_bus_driver = {
+>> +	.probe  = stm32_sys_bus_probe,
+>> +	.driver = {
+>> +		.name = "stm32-sys-bus",
+>> +		.of_match_table = stm32_sys_bus_of_match,
+>> +	},
+>> +};
+>> +
+>> +static int __init stm32_sys_bus_init(void)
+>> +{
+>> +	return platform_driver_register(&stm32_sys_bus_driver);
+>> +}
+>> +arch_initcall(stm32_sys_bus_init);
+>> +
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Best regards,
+Gatien
