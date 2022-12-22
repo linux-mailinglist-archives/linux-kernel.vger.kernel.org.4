@@ -2,72 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C23065471B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDE965471C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiLVU10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:27:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S229763AbiLVU1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiLVU1X (ORCPT
+        with ESMTP id S230148AbiLVU1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 15:27:23 -0500
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6285411802;
-        Thu, 22 Dec 2022 12:27:22 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id s186so2910642oia.5;
-        Thu, 22 Dec 2022 12:27:22 -0800 (PST)
+        Thu, 22 Dec 2022 15:27:51 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C0B20991;
+        Thu, 22 Dec 2022 12:27:48 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id x25-20020a056830115900b00670932eff32so1745131otq.3;
+        Thu, 22 Dec 2022 12:27:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Er3i+1JlgcyOFG/kVKKJjYwxWB05X+LCSTj3O90dme8=;
+        b=K5DXoPdF6mYUCdv7slzx118lGzQ1ZtR1CdOXm8xo9Z3/ssV2GZFwafLyXuZmP8bucC
+         WsYsVLtFTaChoetHjxVJB6mH6EiadHvWAs0VXZ3uTyq6QmgpMveUYkpZX87fXwUD0eGU
+         MndWwI4RSKsspeyUCm+9mvXCdhPfokz7wEjeZKhi4+YoAbfS5wZeFDAYrfWGUm41YzhG
+         wMFJ2z7viyYcozAxuZCSHbpLOS86Fp/ARrOT8c65v7PohB1I1Hvvwq31ei0svtNRllu6
+         0p9PZgcSuXHH0T+4sxY+RptUjGBej0qMyrfE/gAlzqDsEPtx9reTBbM6To9QcH3hJt+g
+         MsZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ifO+UAb4xNHYoZtmeqbH6nY6NZq3pB8gzBwpCbepYe8=;
-        b=MxtE/Pl8qZIvgB0ej88cLB+wsombumY6+bPlFoH6laKG8CB9OTMeHMESYa7a9ODFns
-         LJ/FQIMP6UXoeKooSRm8uG3ifk8aShdbjXAjj5rF3b2ahBo/JEWxsXLdN5j2M/6Iu5eT
-         m6K8fAGMbzmd3SJM0h4t2hNKEsQdbCmbBE9Zt8rAi5hPjADERVGwcAQXqkM9kDi4LgvZ
-         gIe8wyXtv4M2Nk0CbP18svXRYbv+D5/7r2xOfEMr59Y46u5oA0FzYYVCLKPVDVbJVaUy
-         SD1mCDBG0un0bof/NOyw14S+IzzMAmVlthRO4X27I9Lxj9vyMttvuOAJen8muCy5yNy3
-         m5yg==
-X-Gm-Message-State: AFqh2kpEbEMtHfnd8Kal/E2VzplI0zYDPqQx8PB0pC+VxrNzuGtfLFUo
-        7NAzSAqlAvcxiXld0sEIyg==
-X-Google-Smtp-Source: AMrXdXsNV2YU4gEBnEdlry3c9jg4+8vMg41WSp11kX/VLN3MsjK7Vxqq46+/Co64urW6ujdTjBb0Fg==
-X-Received: by 2002:aca:3205:0:b0:35e:b08e:13e with SMTP id y5-20020aca3205000000b0035eb08e013emr8711520oiy.18.1671740841648;
-        Thu, 22 Dec 2022 12:27:21 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l1-20020a05687014c100b0013b92b3ac64sm687863oab.3.2022.12.22.12.27.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 12:27:21 -0800 (PST)
-Received: (nullmailer pid 2067521 invoked by uid 1000);
-        Thu, 22 Dec 2022 20:27:19 -0000
-Date:   Thu, 22 Dec 2022 14:27:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     inki.dae@samsung.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, daniel@ffwll.ch,
-        kyungmin.park@samsung.com, airlied@gmail.com, robh+dt@kernel.org,
-        alim.akhtar@samsung.com, sw0312.kim@samsung.com,
-        linux-samsung-soc@vger.kernel.org, jernej.skrabec@gmail.com,
-        robert.foss@linaro.org, linus.walleij@linaro.org, jonas@kwiboo.se,
-        Laurent.pinchart@ideasonboard.com, dri-devel@lists.freedesktop.org,
-        andrzej.hajda@intel.com, hjc@rock-chips.com,
-        neil.armstrong@linaro.org, philippe.cornu@foss.st.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, heiko@sntech.de,
-        krzysztof.kozlowski+dt@linaro.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 07/17] dt-bindings: display: rockchip: convert
- analogix_dp-rockchip.txt to yaml
-Message-ID: <167174083761.2067426.17125312795413534693.robh@kernel.org>
-References: <67771143-fd83-383d-41b2-68e8707134e8@gmail.com>
- <88a5a9e3-9bc8-5966-22ec-5bdb1fa7a5b1@gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Er3i+1JlgcyOFG/kVKKJjYwxWB05X+LCSTj3O90dme8=;
+        b=WGD5LgMqkCJ9ntJe+Z7zL3rT9hJJTUqfgOhirSE/71AG1HJHrR7RDdGJi+JzcLJAbB
+         DWbcXZMPDGUEcitWRB8uWFhiQ/BOs06jFuwi4hBqfxC6VQSYWZbqAePubH5yu/W+8MEw
+         WkwM6rF00M0jp5hOonPFaxHO9m2X9g+rBLv40u5CZkKxW6+LTKEZ70bBJ5RX/5Ldkv5P
+         NTdpeQIjzMoiWZ5DZ7lYqCr3+zz+MAZS2pvzaKeztPFHs49iNDrUzkUfsWJFe/Kra7Jw
+         NPSDm0jiIbOHwZlEi13sTRsZHvB7hDHCJn7Ccr66ocK+pbJ8t8jPkoNW/wMcl8l8IvB5
+         QeXg==
+X-Gm-Message-State: AFqh2kpIkgMEAsFrFjQKsRh/fg2DOFMP/eSg3oipj2fToZFIddLy8mDU
+        wW+z5sQnMRMwEKQYxJibnGI=
+X-Google-Smtp-Source: AMrXdXvjuc8mfbhTSza+sZFhmb4RoBau4oR/AZCMlqHQNhbcRlbzxyPJiSz7r9S7a1llxM3bXJ8Mpw==
+X-Received: by 2002:a9d:1c3:0:b0:661:dfeb:ea29 with SMTP id e61-20020a9d01c3000000b00661dfebea29mr3491346ote.14.1671740868007;
+        Thu, 22 Dec 2022 12:27:48 -0800 (PST)
+Received: from [127.0.0.1] ([179.97.37.151])
+        by smtp.gmail.com with ESMTPSA id u20-20020a9d4d94000000b0066871c3adb3sm757375otk.28.2022.12.22.12.27.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 12:27:47 -0800 (PST)
+Date:   Thu, 22 Dec 2022 17:27:42 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Clark Williams <williams@redhat.com>,
+        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Changbin Du <changbin.du@gmail.com>,
+        Hans-Peter Nilsson <hp@axis.com>,
+        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: Re: [GIT PULL] perf tools changes for v6.2: 2nd batch
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAHk-=wi4u5rpaPrOokekEg_5Sud=8SZhA=KTALXNOC_S89jKBg@mail.gmail.com>
+References: <20221222164914.508929-1-acme@kernel.org> <CAHk-=wi4u5rpaPrOokekEg_5Sud=8SZhA=KTALXNOC_S89jKBg@mail.gmail.com>
+Message-ID: <DD787D2F-37D7-45CF-A310-AA5EE6F0DECA@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88a5a9e3-9bc8-5966-22ec-5bdb1fa7a5b1@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,20 +89,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 22 Dec 2022 15:27:35 +0100, Johan Jonker wrote:
-> Convert analogix_dp-rockchip.txt to yaml.
-> 
-> Changed:
->   Add power-domains property
->   File name
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  .../display/rockchip/analogix_dp-rockchip.txt |  98 -----------------
->  .../rockchip/rockchip,analogix-dp.yaml        | 103 ++++++++++++++++++
->  2 files changed, 103 insertions(+), 98 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/rockchip/analogix_dp-rockchip.txt
->  create mode 100644 Documentation/devicetree/bindings/display/rockchip/rockchip,analogix-dp.yaml
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On December 22, 2022 4:14:20 PM GMT-03:00, Linus Torvalds <torvalds@linux-=
+foundation=2Eorg> wrote:
+>On Thu, Dec 22, 2022 at 8:49 AM Arnaldo Carvalho de Melo
+><acme@kernel=2Eorg> wrote:
+>>
+>>         Please consider pulling,
+>
+>I have pulled this, because it's purely tooling=2E
+
+Thanks=2E
+
+>HOWEVER=2E
+
+>You are now on my shit-list for violating the Christmas peace with a
+>pull request where most of the contents were not in linux-next, and
+>weren't fixes=2E
+
+>I'm PISSED=2E  Right now I am in the mindset of "I pulled this, but I
+>never *ever* want to see another pull request from this f*cker"=2E
+
+I'll get this to heart, people on the cc list: you too=2E
+
+>Get bent=2E
+
+Humpf, life sucks, I have to be like that, otherwise I'll bend again=2E=2E=
+=2E
+
+We'll be back to just getting automated responses=2E
+
+- Arnaldo=20
