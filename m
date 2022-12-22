@@ -2,81 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADDD6540F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 123BF6540FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiLVMYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
+        id S235252AbiLVM0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 07:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbiLVMYL (ORCPT
+        with ESMTP id S234727AbiLVM0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:24:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B09C183AC;
-        Thu, 22 Dec 2022 04:24:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 22 Dec 2022 07:26:34 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655E3E0B8;
+        Thu, 22 Dec 2022 04:26:33 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BECDB81D24;
-        Thu, 22 Dec 2022 12:24:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E355C433D2;
-        Thu, 22 Dec 2022 12:24:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671711847;
-        bh=EGV1FLXGeAfBW/AN9blfoRhMkgPaIuOv8joBl1M51Ig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZX08aJhtHUVOZIbOnywFerJMOKok3BcQofENGMkyDB1geWl/cirndb2cLEVJOockF
-         X+FW2Hckr4wOwZ1joG2Aty2s7PM0AzcFcyE5h5J0oVFA+JyP/YfgAbWKh/yD8wxqJQ
-         nC7NzUE4Dr52c25KdZklsH6CM5HrDCLDqFS4xZHzxVjVp5aN1oOzIg9xQkZNKuL2la
-         reuYUeL8brZXtTRnUrY9l4wcU8cDYptMgnVJlqwLu8G0CLOdlOaZuhynfQeHDWPPPP
-         /O3WMSiAtDVUuvFHAkc4U/minTa72zXKlkxFBVjnY3GNBlnV0BiBOdPE4fi/rXqJZb
-         u5qOv+MjPZwtA==
-Date:   Thu, 22 Dec 2022 13:24:04 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Message-ID: <20221222122404.GB44777@lothringen>
-References: <20221221004957.GA29021@lothringen>
- <0B1950D8-9319-4F25-B14B-4ED949A57BE0@joelfernandes.org>
- <20221221112629.GA29427@lothringen>
- <Y6MuFH2ZMY7mV06q@Boquns-Mac-mini.local>
- <20221221173005.GB37362@lothringen>
- <Y6NqYydTKFEwJIqN@boqun-archlinux>
- <20221222121612.GA44777@lothringen>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EF42D1EC0715;
+        Thu, 22 Dec 2022 13:26:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671711992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=77VLJhO0dwLBle+8mUKiXvGfN/pazGch3mXeBUAPVPY=;
+        b=lOSb1jh+bt4haey43HIMtwFGaW08ydiHmgjk3xxfbBWGiMNXQk23xbiaUrYp90mvplWzPC
+        2cHavs6VQEbZKGtynRweI+uHTVpXwFpzR2Lgv9R4Cva7Z+lS7RngC04mX3HhMe13k7ZmiS
+        JrnB9euVlgqs+68jIwsnpPYeoeI8Eik=
+Date:   Thu, 22 Dec 2022 13:26:25 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
+        ashish.kalra@amd.com, harald@profian.com
+Subject: Re: [PATCH RFC v7 02/64] KVM: x86: Add
+ KVM_CAP_UNMAPPED_PRIVATE_MEMORY
+Message-ID: <Y6RM8RRryLgK8KiB@zn.tnic>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-3-michael.roth@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221222121612.GA44777@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221214194056.161492-3-michael.roth@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 01:16:12PM +0100, Frederic Weisbecker wrote:
-> On Wed, Dec 21, 2022 at 12:19:47PM -0800, Boqun Feng wrote:
-> > On Wed, Dec 21, 2022 at 06:30:05PM +0100, Frederic Weisbecker wrote:
-> > By "same effect" you mean removing E results in the exist-clause
-> > triggered? If so, then our environments disagree with each other ;-)
-> 
-> Nope, removing D :-)
-> 
-> (And yeah probably I misread your previous mail and we weren't talking
-> about the same thing...)
+On Wed, Dec 14, 2022 at 01:39:54PM -0600, Michael Roth wrote:
+> This mainly indicates to KVM that it should expect all private guest
+> memory to be backed by private memslots. Ideally this would work
+> similarly for others archs, give or take a few additional flags, but
+> for now it's a simple boolean indicator for x86.
 
-Yeah checking that again, I got confused in the discussion between my two
-tests srcu-E and srcu-D. Anyway, you were right about the control dependency :)
+...
 
-> 
-> Thanks.
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index c7e9d375a902..cc9424ccf9b2 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1219,6 +1219,7 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
+>  #define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
+>  #define KVM_CAP_MEMORY_ATTRIBUTES 225
+> +#define KVM_CAP_UNMAPPED_PRIVATE_MEM 240
+
+Isn't this new cap supposed to be documented somewhere in
+Documentation/virt/kvm/api.rst ?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
