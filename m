@@ -2,83 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68202654566
+	by mail.lfdr.de (Postfix) with ESMTP id B4D11654567
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 17:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiLVQ45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 11:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
+        id S230438AbiLVQ5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 11:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiLVQ4w (ORCPT
+        with ESMTP id S230071AbiLVQ5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 11:56:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BBECE1D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:56:04 -0800 (PST)
+        Thu, 22 Dec 2022 11:57:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474BE15A3D
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:56:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671728163;
+        s=mimecast20190719; t=1671728174;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=HaGEUC5NpZEnqXuEjyTjG34ENE+oZENE152mO+Zr2Po=;
-        b=V1xQtp/vuHv81CssnakJAjgHnm6usPfuolEnUGDNfUm+/7T1qdrTdULtWedpCwlWqOqjzm
-        y1Dq5gGInBCMaziQ+MO6wvCVYNZQg5DtwbwPKXnTM2ZZGR8Sw4qrwZTu8racbsowBjRLdB
-        seC5EasBDKTbDYaSRwH+jfLRk/EexIk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=k/3du/op7s2XwFWnzrxCbjJ5sahmXWbdc2/voSAdWto=;
+        b=CPXFfuFMmE/IvbXuoYb9FNJk7V0JpWM2zjzFq1BKtp0e4i4lkhiuz7P4SF5imUpUS1pVnp
+        gnD9WujITD9hfKly4kTqASq8x3agn9cOzACH88IPSIHEK+EYmw1xp4EoxgwZsYVEsJh9rE
+        KP4wF38LHfY+Vtt6dftO+lQpYVpxrNY=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-563-RUMkhi07PZKW-dsXsrxIEA-1; Thu, 22 Dec 2022 11:56:01 -0500
-X-MC-Unique: RUMkhi07PZKW-dsXsrxIEA-1
-Received: by mail-wm1-f72.google.com with SMTP id m38-20020a05600c3b2600b003d23f8c6ebdso2317875wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:56:01 -0800 (PST)
+ us-mta-488-7DQtwwODPjmkMlkb5TasIw-1; Thu, 22 Dec 2022 11:56:13 -0500
+X-MC-Unique: 7DQtwwODPjmkMlkb5TasIw-1
+Received: by mail-wr1-f70.google.com with SMTP id j29-20020adfb31d000000b0024237066261so609749wrd.14
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 08:56:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HaGEUC5NpZEnqXuEjyTjG34ENE+oZENE152mO+Zr2Po=;
-        b=r9zV1QUF617CNzzYwh8GrqkzzrYYEs3TiLVrypOQ1linck5T35x7JaDrfYd/JZYWxB
-         DdcXKJxe6ggrLGHS6LwjXmILnJtc6R3kBQfSEu/VWCh33OAiZ2BNOcv8Nv8DSQQVt9Nr
-         dPkLLpvkCDO8MuCBSLWmURipE7w0+Zd1HQzjs2j4Fr8n79lx9fKVSBI2lWXbVutZyE+j
-         HLibA427q8RSOtcFW/Nd1M+CG//kDCU92j58jU+HC7lg+84OX6hNya/kQeVaYJfEivfp
-         oEKEiZiYz4EsSeXcjMNgAh/2pWxXCrYdTLnmwxfJvQbNvLb0taN/TfXxoWYDsEnpZdeE
-         wa9Q==
-X-Gm-Message-State: AFqh2krbFtzF6yiQBi6T2Egi7k2lwxTcg5KrLOLqosIfrJS/4XMlC86Z
-        FFnZPNKtFOEUdkq6R4qzNYoQoxtdnwXybu/QZuTQI9hkb95Q/eHcSnHNcZJOJ8zriOastxDul5K
-        oc1XenzIXgEKcaCRMRxd1vozi
-X-Received: by 2002:a5d:6808:0:b0:272:3a86:29c1 with SMTP id w8-20020a5d6808000000b002723a8629c1mr759667wru.16.1671728160176;
-        Thu, 22 Dec 2022 08:56:00 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtWwrFMKiteegNlODYaQZvnEoEKfVdIKNsvuEH6//zL/45YL8hFm/IfD7I/jdUsDJu9Z1X8QQ==
-X-Received: by 2002:a5d:6808:0:b0:272:3a86:29c1 with SMTP id w8-20020a5d6808000000b002723a8629c1mr759645wru.16.1671728159997;
-        Thu, 22 Dec 2022 08:55:59 -0800 (PST)
+        bh=k/3du/op7s2XwFWnzrxCbjJ5sahmXWbdc2/voSAdWto=;
+        b=ijDyxiHNZ42j6stKtJO7kzfSNmMeVyWFB1X8WMP76AQhALjw2eK558HHOjsQO7fvEw
+         1/JKjyRfN4w3WVJUojTbqetXcKsUJi72ix5l8p4b8wFPhDAirOuWp2lvsCAr19WBng87
+         VODFq+VXnXBm2Wh6pKJIRb1F+q/c1wKcNZHHp0B1PXVRFqCZtHjB6f4KovlbmNhTjyAJ
+         +ksApzgQrqG4nBhJuxcBDL97rAJKJoygu8u9PvR5CQUF0S8oP0t20ZWzzzdBFNvW2zBB
+         PzGXcVVxSlULVaSvgky0Wc479NK8h2rRmU+BMSueIheU3HWRJIsHn0UDbqLpffXV/jkC
+         SatA==
+X-Gm-Message-State: AFqh2ko0khJcRUU6MikJvKQuMpYrSJESIGBTVsV5wZu2Vz6KbouIOxrP
+        P4th6uu8ntrlJRgoCk+pkelY/4xZ/u6OSWtexmagX76diY70kFejZXAp0klz5qLHersvJhSBqSx
+        geY82Qu2JxGpvj1i5XCepgI1f
+X-Received: by 2002:a05:600c:250:b0:3d2:2043:9cbf with SMTP id 16-20020a05600c025000b003d220439cbfmr4851716wmj.10.1671728172059;
+        Thu, 22 Dec 2022 08:56:12 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXv4xgkg7KLH/hiCUKBDZiFlN4DrDAD2ZA/UncwoAvgYxklIzMidtoPS7acqKoDcVCRrc9wXfw==
+X-Received: by 2002:a05:600c:250:b0:3d2:2043:9cbf with SMTP id 16-20020a05600c025000b003d220439cbfmr4851708wmj.10.1671728171866;
+        Thu, 22 Dec 2022 08:56:11 -0800 (PST)
 Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id b7-20020a5d40c7000000b00241cfe6e286sm1019529wrq.98.2022.12.22.08.55.58
+        by smtp.gmail.com with ESMTPSA id n25-20020a7bc5d9000000b003d969a595fbsm1595610wmk.10.2022.12.22.08.56.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 08:55:59 -0800 (PST)
+        Thu, 22 Dec 2022 08:56:11 -0800 (PST)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Ben Segall <bsegall@google.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 1/7] sched/fair: Generalize asym_packing logic for
- SMT local sched group
-In-Reply-To: <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 3/7] sched: Teach arch_asym_cpu_priority() the idle
+ state of SMT siblings
+In-Reply-To: <20221222045505.GB407@ranerica-svr.sc.intel.com>
 References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
-Date:   Thu, 22 Dec 2022 16:55:58 +0000
-Message-ID: <xhsmhv8m3e5sx.mognet@vschneid.remote.csb>
+ <20221122203532.15013-4-ricardo.neri-calderon@linux.intel.com>
+ <e7d6c19b-593d-acfd-35af-73b1840be276@arm.com>
+ <20221212175433.GB27353@ranerica-svr.sc.intel.com>
+ <72ed59b5-c7e1-c425-d1b6-e8d703d11d7a@arm.com>
+ <20221222045505.GB407@ranerica-svr.sc.intel.com>
+Date:   Thu, 22 Dec 2022 16:56:10 +0000
+Message-ID: <xhsmhtu1ne5sl.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -91,88 +93,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/22 12:35, Ricardo Neri wrote:
-> @@ -8926,25 +8924,16 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
->               return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
->       }
+On 21/12/22 20:55, Ricardo Neri wrote:
+> On Wed, Dec 21, 2022 at 06:12:52PM +0100, Dietmar Eggemann wrote:
+>> Imagine an arch w/ SD_ASYM_PACKING on SMT & MC overwriting
+>> arch_asym_cpu_priority(). `bool check_smt` wouldn't be sufficient to
+>> know whether a call to something like sched_smt_siblings_idle()
+>> (is_core_idle()) which iterates over cpu_smt_mask(cpu) would make sense.
 >
-> -	/* @dst_cpu has SMT siblings. */
-> -
-> -	if (sg_is_smt) {
-> -		int local_busy_cpus = sds->local->group_weight -
-> -				      sds->local_stat.idle_cpus;
-> -		int busy_cpus_delta = sg_busy_cpus - local_busy_cpus;
-> -
-> -		if (busy_cpus_delta == 1)
-> -			return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
-> -
-> -		return false;
-> -	}
-> -
->       /*
-> -	 * @sg does not have SMT siblings. Ensure that @sds::local does not end
-> -	 * up with more than one busy SMT sibling and only pull tasks if there
-> -	 * are not busy CPUs (i.e., no CPU has running tasks).
-> +	 * @dst_cpu has SMT siblings. Do asym_packing load balancing only if
-> +	 * all its siblings are idle (moving tasks between physical cores in
-> +	 * which some SMT siblings are busy results in the same throughput).
-> +	 *
-> +	 * If the difference in the number of busy CPUs is two or more, let
-> +	 * find_busiest_group() take care of it. We only care if @sg has
-> +	 * exactly one busy CPU. This covers SMT and non-SMT sched groups.
->        */
-> -	if (!sds->local_stat.sum_nr_running)
-> +	if (sg_busy_cpus == 1 && !sds->local_stat.sum_nr_running)
->               return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
+> Agreed. I was hoping I could get away with this. x86 would not have the
+> the SD_ASYM_PACKING flag at the SMT level and Power7 would ignore
+> `check_smt`. :)
+>
+> Callers of sched_asym_prefer() could use the flags of the sched domain to
+> check if we are at the SMT level.
+>
+> I rescanned the code again and it looks like the needed sched domain flags
+> are available in all the places sched_asym_prefer() is called. The only
+> exception is asym_smt_can_pull_tasks(), but we already know that we don't
+> need such check. (We are looking for the sched group priority, regardless
+> of the idle state of the SMT siblings).
 >
 
-Some of this is new to me - I had missed the original series introducing
-this. However ISTM that this is conflating two concepts: SMT occupancy
-balancing, and asym packing.
+Given this is fed back to arch code, another option here would be to feed
+the topology level this is happening at. You get it via sd->level and it
+maps back into the arch's sched_domain_topology_level array.
 
-Take the !local_is_smt :: sg_busy_cpus >= 2 :: return true; path. It does
-not involve asym packing priorities at all. This can end up in an
-ASYM_PACKING load balance, which per calculate_imbalance() tries to move
-*all* tasks to the higher priority CPU - in the case of SMT balancing,
-we don't want to totally empty the core, just its siblings.
-
-Is there an ITMT/big.LITTLE (or however x86 calls it) case that invalidates
-the above?
-
-Say, what's not sufficient with the below? AFAICT the only thing that isn't
-covered is the sg_busy_cpus >= 2 thing, but IMO that's SMT balancing, not
-asym packing - if the current calculate_imbalance() doesn't do it, it
-should be fixed to do it. Looking at the
-
-  local->group_type == group_has_spare
-
-case, it looks like it should DTRT.
-
----
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 224107278471f..15eb2d3cff186 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -9176,12 +9176,15 @@ static inline bool
- sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs,
- 	   struct sched_group *group)
- {
--	/* Only do SMT checks if either local or candidate have SMT siblings */
--	if ((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
--	    (group->flags & SD_SHARE_CPUCAPACITY))
--		return asym_smt_can_pull_tasks(env->dst_cpu, sds, sgs, group);
-+	/*
-+	 * For SMT, env->idle != CPU_NOT_IDLE isn't sufficient, we need to make
-+	 * sure the whole core is idle.
-+	 */
-+	if (((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
-+	     (group->flags & SD_SHARE_CPUCAPACITY)) &&
-+	    !test_idle_cores(env->dst_cpu))
-+		return false;
- 
--	/* Neither env::dst_cpu nor group::asym_prefer_cpu have SMT siblings. */
- 	return sched_asym_prefer(env->dst_cpu, group->asym_prefer_cpu, false);
- }
- 
- 
+Though the SD flags are probably the more generic solution.
 
