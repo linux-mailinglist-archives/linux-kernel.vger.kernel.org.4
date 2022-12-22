@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC746539F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 00:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8B06539FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 01:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234606AbiLUX4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 18:56:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S232553AbiLVADN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 19:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbiLUX4R (ORCPT
+        with ESMTP id S230361AbiLVADK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 18:56:17 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA0911C34
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:56:16 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id ud5so1247016ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 15:56:16 -0800 (PST)
+        Wed, 21 Dec 2022 19:03:10 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13526250
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 16:03:06 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id m19so298309wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 16:03:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kzKr4ZLPbbYDXIuOCpfx81LlSsrLGEdfMdRYLeFSw+k=;
-        b=Nt/Ah4wHxyrJT+bJCzTkJrb+Kpqlj5ulu0x0LYjAlCbM2dpMHvo8tHN/PG2qY2xoVQ
-         It4j0qOIlqzR4oPj8AaYG+VPNCxvWR24V0VNDPae/+kRxUsN+0jrY02wnCkmBvJJr+OV
-         /nz2jAMOTT7vmMNlFvRo/wElJsBMbuPg9jvBBVu/E9m5I0Oo2vS/BQT04SOxssy4jdD5
-         Ml8XpGqKSsBdFPmpx/MchOL2ZrjM5nD03tS7V2Yn7JJqrrz+hgxsA2RZp9IwC4Cagt1l
-         oCQdfvJnx4C732/WUQWPiBF4gmIuEMWDtSz5uztga2PYJgxzELjWlNlzMNxJytB57ChO
-         pYRA==
+        bh=CNllVDs9Qyhjp9PrGXopMtZh54uW9rQgSBY6Q9L2kGM=;
+        b=KVTlayKDPZKGej0slx668biCWYZUYUsP+/RgpAhC2dIBXYGLL6Xd42VmnNCQnGKiN0
+         Ti8xztY7NPvLlDfKn0x/7x2HAnggy40U6Gg3LBRAd+jOxoK9a01MUVjDqh6WynYznAGx
+         dkgzgyw9Qlhn7zwBzmQTyMesRW9h6RschShSkXd7eZggM9gS4Dc9xwFitMzt0I/tMCaB
+         +/stG9omqsAFsEQeEQ1EDjVkMeBaI6d+0dbtvCWKXICg1Aga1fOOoGgsfpJovSrRPVzS
+         qFZT+kq9e+RuVHPF8L0O9vMvV3UaI6gHZAcSchK2/s3NI+A/g5zeXchck6u7iPKwuc6s
+         7vTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kzKr4ZLPbbYDXIuOCpfx81LlSsrLGEdfMdRYLeFSw+k=;
-        b=7/RK3vrT8IHQTfFgYZvc2kGQZ0VxyhARRLNZaZagOJ7Vki1kP5FrlE8UwvRsfpk03x
-         fzXKUD16bvFlCossOX+FJGjEJZT4N8FSIUIZ4wVPjC3LCEEcrM+FDDi2EggoSBO0KafR
-         Yhtd1tL9re83dMqsyXYSUd9dHJBNgsBbg/noPnlSlm9uhB9eX7m3aW9nl1n+zHljjzLN
-         eeH+ph2Clmq2YdG0aHQr8foNIgJRHQeTHkGImX6L0vCjUYf1Spc2Fh/xoFOjm2dKj3PM
-         QKdQW/FaP0LG/lL3J8uBeyu23z2VStLlG0+Nox75lzf2m+IsoyxlSAKJyKQM/H0cCVAV
-         N2BQ==
-X-Gm-Message-State: AFqh2kr0WjBezIYwYcC7AzaJNs4edHq4A4IZM2qGj9lda9oBi5TS2wjm
-        Lqj+g0tfJLO9rRktMguIfQpDHbkxSu/ViQDK6z+fKw==
-X-Google-Smtp-Source: AMrXdXtT4lAsSB+aVj4AyapyqkogksssT3KwyhSb9hwHva23TcfPgfqZrL9LlD/vnN96q8yi7ui9QbNfXm0qmOS6k6A=
-X-Received: by 2002:a17:906:8242:b0:7c1:9b74:d24d with SMTP id
- f2-20020a170906824200b007c19b74d24dmr276683ejx.561.1671666974521; Wed, 21 Dec
- 2022 15:56:14 -0800 (PST)
+        bh=CNllVDs9Qyhjp9PrGXopMtZh54uW9rQgSBY6Q9L2kGM=;
+        b=YPYVWOrFPjHY/kjFhFeLoaPXjN4igXg++JflI7qf79lSvN3LHlmn7i3y9UkRjaIEAQ
+         QZglAQd7FlNiZOwsShtSK997hPocufV+krtWQ5GndtxFkTUn/Tgq5+7xwqcOvdscc66m
+         /5e6s8S2m0gfJe352esLsrw0l6fDGIrZ9MnUWtKhOpP2qAEMp7LLHa9ishelk9rkqbVW
+         2+o/+dzvYGcm9xTbXRLqQ8DqzF0hi/deIPjGQ71hXpbZd3AH8PmXxhyizGr5jhDVR+jX
+         5sUbp9xIXyZg8KPlmvxe9NxXa7pVBhN2zDPVDs5M8sg0B/ghnlIGXoy36dmiCEigYBU5
+         XdWQ==
+X-Gm-Message-State: AFqh2krqd4F2jjR47fBb0P6NFHhvJUrIy3GFizqNXtaPDVjaNtEsyLAO
+        mrdQdhOHcXsMHpeLFvIdbECR53GZnELIJMx8ZkQ3wA==
+X-Google-Smtp-Source: AMrXdXssMeuEThAwiuA/nPhG8lWMTjYmTl90S+idsxGr6PF4pZQDqXoK9RYeSpQC0LZxyoBXCnn2H7m8lujbtZfJMgk=
+X-Received: by 2002:a1c:1901:0:b0:3cf:878c:6555 with SMTP id
+ 1-20020a1c1901000000b003cf878c6555mr291926wmz.38.1671667385359; Wed, 21 Dec
+ 2022 16:03:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20221221185540.2265771-1-robbarnes@google.com> <CABXOdTcHppsLTDTXBd9ikL+Hk8W4oW_NkWMhOJgmf9aDSW+FKA@mail.gmail.com>
-In-Reply-To: <CABXOdTcHppsLTDTXBd9ikL+Hk8W4oW_NkWMhOJgmf9aDSW+FKA@mail.gmail.com>
-From:   Rob Barnes <robbarnes@google.com>
-Date:   Wed, 21 Dec 2022 16:55:38 -0700
-Message-ID: <CA+Dqm32+G+PGYDw+KbYLN5unK3Q6Oc6cC6EJDhsQ2ZipKT+9Gw@mail.gmail.com>
-Subject: Re: [PATCH] drivers/cros_ec: Handle CrOS EC panics
-To:     Guenter Roeck <groeck@google.com>
-Cc:     Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dtor@chromium.org, Benson Leung <bleung@chromium.org>
+References: <20221021163703.3218176-1-jthoughton@google.com>
+ <20221021163703.3218176-34-jthoughton@google.com> <Y3VkIdVKRuq+fO0N@x1n>
+ <CADrL8HXixUPyTVmYMiwc11Ot5sDMsA3x7VhgXQjimJ93MSZihA@mail.gmail.com>
+ <Y6NdN2ADVCcK70ym@x1n> <CADrL8HXqE3s4ckxh0OU5onkhystj=1jMTS+S7GFeiO+kwBo0QQ@mail.gmail.com>
+ <Y6N9G0Y2j98V8Pnz@monkey> <Y6OEQB3dLSa083F6@x1n> <Y6OJUtVkvdptEgW7@monkey>
+In-Reply-To: <Y6OJUtVkvdptEgW7@monkey>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 21 Dec 2022 19:02:53 -0500
+Message-ID: <CADrL8HX997CguZWkH3vB4+cYjwLc0mYV4GkroE41bCLRqFiPpg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 33/47] userfaultfd: add UFFD_FEATURE_MINOR_HUGETLBFS_HGM
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Peter Xu <peterx@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -69,182 +87,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 1:07 PM Guenter Roeck <groeck@google.com> wrote:
+On Wed, Dec 21, 2022 at 5:32 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
 >
-> On Wed, Dec 21, 2022 at 10:56 AM Rob Barnes <robbarnes@google.com> wrote:
+> On 12/21/22 17:10, Peter Xu wrote:
+> > On Wed, Dec 21, 2022 at 01:39:39PM -0800, Mike Kravetz wrote:
+> > > On 12/21/22 15:21, James Houghton wrote:
+> > > > Thanks for bringing this up, Peter. I think the main reason was:
+> > > > having separate UFFD_FEATUREs clearly indicates to userspace what is
+> > > > and is not supported.
+> > >
+> > > IIRC, I think we wanted to initially limit the usage to the very
+> > > specific use case (live migration).  The idea is that we could then
+> > > expand usage as more use cases came to light.
+> > >
+> > > Another good thing is that userfaultfd has versioning built into the
+> > > API.  Thus a user can determine if HGM is enabled in their running
+> > > kernel.
 > >
-> > Add handler for CrOS EC panic events. When a panic is reported,
-> > poll EC log then force an orderly shutdown.
+> > I don't worry much on this one, afaiu if we have any way to enable hgm then
+> > the user can just try enabling it on a test vma, just like when an app
+> > wants to detect whether a new madvise() is present on the current host OS.
+
+That would be enough to test if HGM was merely present, but if
+specific features like 4K UFFDIO_CONTINUEs or 4K UFFDIO_WRITEPROTECTs
+were available. You could always check these by making a HugeTLB VMA
+and setting it up correctly for userfaultfd/etc., but that's a little
+messy.
+
 > >
-> > This will preserve the EC log leading up to the crash.
+> > Besides, I'm wondering whether something like /sys/kernel/vm/hugepages/hgm
+> > would work too.
+
+I'm not opposed to this.
+
 > >
-> > Signed-off-by: Rob Barnes <robbarnes@google.com>
-> > ---
-> >  drivers/platform/chrome/cros_ec_debugfs.c   | 24 +++++++++++++++++++++
-> >  drivers/platform/chrome/cros_ec_lpc.c       | 10 +++++++++
-> >  include/linux/platform_data/cros_ec_proto.h |  9 ++++++++
-> >  3 files changed, 43 insertions(+)
+> > >
+> > > > For UFFDIO_WRITEPROTECT, a user could remap huge pages into smaller
+> > > > pages by issuing a high-granularity UFFDIO_WRITEPROTECT. That isn't
+> > > > allowed as of this patch series, but it could be allowed in the
+> > > > future. To add support in the same way as this series, we would add
+> > > > another feature, say UFFD_FEATURE_WP_HUGETLBFS_HGM. I agree that
+> > > > having to add another feature isn't great; is this what you're
+> > > > concerned about?
+> > > >
+> > > > Considering MADV_ENABLE_HUGETLB...
+> > > > 1. If a user provides this, then the contract becomes: "the kernel may
+> > > > allow UFFDIO_CONTINUE and UFFDIO_WRITEPROTECT for HugeTLB at
+> > > > high-granularities, provided the support exists", but it becomes
+> > > > unclear to userspace to know what's supported and what isn't.
+> > > > 2. We would then need to keep track if a user explicitly enabled it,
+> > > > or if it got enabled automatically in response to memory poison, for
+> > > > example. Not a big problem, just a complication. (Otherwise, if HGM
+> > > > got enabled for poison, suddenly userspace would be allowed to do
+> > > > things it wasn't allowed to do before.)
 > >
-> > diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
-> > index 21d973fc6be2..31637a4e4cf9 100644
-> > --- a/drivers/platform/chrome/cros_ec_debugfs.c
-> > +++ b/drivers/platform/chrome/cros_ec_debugfs.c
-> > @@ -49,6 +49,7 @@ struct cros_ec_debugfs {
-> >         struct delayed_work log_poll_work;
-> >         /* EC panicinfo */
-> >         struct debugfs_blob_wrapper panicinfo_blob;
-> > +       struct notifier_block notifier_panic;
-> >  };
+> > We could alternatively have two flags for each vma: (a) hgm_advised and (b)
+> > hgm_enabled.  (a) always sets (b) but not vice versa.  We can limit poison
+> > to set (b) only.  For this patchset, it can be all about (a).
+
+My thoughts exactly. :)
+
 > >
-> >  /*
-> > @@ -437,6 +438,23 @@ static int cros_ec_create_panicinfo(struct cros_ec_debugfs *debug_info)
-> >         return ret;
-> >  }
+> > > > 3. This API makes sense for enabling HGM for something outside of
+> > > > userfaultfd, like MADV_DONTNEED.
+> > >
+> > > I think #3 is key here.  Once we start applying HGM to things outside
+> > > userfaultfd, then more thought will be required on APIs.  The API is
+> > > somewhat limited by design until the basic functionality is in place.
 > >
-> > +static int cros_ec_debugfs_panic_event(struct notifier_block *nb,
-> > +                                      unsigned long queued_during_suspend,
-> > +                                      void *_notify)
-> > +{
-> > +       struct cros_ec_debugfs *debug_info =
-> > +               container_of(nb, struct cros_ec_debugfs, notifier_panic);
-> > +
-> > +       if (debug_info->log_buffer.buf) {
-> > +               /* Force log poll work to run immediately */
-> > +               mod_delayed_work(debug_info->log_poll_work.wq, &debug_info->log_poll_work, 0);
-> > +               /* Block until log poll work finishes */
-> > +               flush_delayed_work(&debug_info->log_poll_work);
-> > +       }
-> > +
-> > +       return NOTIFY_DONE;
-> > +}
-> > +
-> >  static int cros_ec_debugfs_probe(struct platform_device *pd)
-> >  {
-> >         struct cros_ec_dev *ec = dev_get_drvdata(pd->dev.parent);
-> > @@ -473,6 +491,12 @@ static int cros_ec_debugfs_probe(struct platform_device *pd)
-> >         debugfs_create_u16("suspend_timeout_ms", 0664, debug_info->dir,
-> >                            &ec->ec_dev->suspend_timeout_ms);
+> > Mike, could you elaborate what's the major concern of having hgm used
+> > outside uffd and live migration use cases?
 > >
-> > +       debug_info->notifier_panic.notifier_call = cros_ec_debugfs_panic_event;
-> > +       ret = blocking_notifier_chain_register(&ec->ec_dev->panic_notifier,
-> > +                                              &debug_info->notifier_panic);
-> > +       if (ret)
-> > +               goto remove_debugfs;
-> > +
-> >         ec->debug_info = debug_info;
-> >
-> >         dev_set_drvdata(&pd->dev, ec);
-> > diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-> > index 7fc8f82280ac..21958c3b0c28 100644
-> > --- a/drivers/platform/chrome/cros_ec_lpc.c
-> > +++ b/drivers/platform/chrome/cros_ec_lpc.c
-> > @@ -21,6 +21,7 @@
-> >  #include <linux/platform_data/cros_ec_proto.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/printk.h>
-> > +#include <linux/reboot.h>
-> >  #include <linux/suspend.h>
-> >
-> >  #include "cros_ec.h"
-> > @@ -332,6 +333,15 @@ static void cros_ec_lpc_acpi_notify(acpi_handle device, u32 value, void *data)
-> >
-> >         if (value == ACPI_NOTIFY_DEVICE_WAKE)
-> >                 pm_system_wakeup();
-> > +
-> > +       if (value == ACPI_NOTIFY_CROS_EC_PANIC) {
-> > +               dev_err(ec_dev->dev,
-> > +                       "CrOS EC Panic Reported. Shutdown is imminent!");
+> > I feel like I miss something here.  I can understand we want to limit the
+> > usage only when the user specifies using hgm because we want to keep the
+> > old behavior intact.  However if we want another way to enable hgm it'll
+> > still need one knob anyway even outside uffd, and I thought that'll service
+> > the same purpose, or maybe not?
 >
-> dev_emerg() would seem to be more appropriate, given that we'll be
-> crashing a second later.
-
-Makes sense. Will do.
-
+> I am not opposed to using hgm outside the use cases targeted by this series.
 >
-> > +               blocking_notifier_call_chain(&ec_dev->panic_notifier, 0,
-> > +                                            ec_dev);
-> > +               /* Begin orderly shutdown. Force shutdown after 1 second. */
-> > +               hw_protection_shutdown("CrOS EC Panic", 1000);
+> It seems that when we were previously discussing the API we spent a bunch of
+> time going around in circles trying to get the API correct.  That is expected
+> as it is more difficult to take all users/uses/abuses of the API into account.
 >
-> That seems to be the wrong API. From its description:
+> Since the initial use case was fairly limited, it seemed like a good idea to
+> limit the API to userfaultfd.  In this way we could focus on the underlying
+> code/implementation and then expand as needed.  Of course, with an eye on
+> anything that may be a limiting factor in the future.
 >
->  * Initiate an emergency system shutdown in order to protect hardware from
->  * further damage. Usage examples include a thermal protection or a voltage or
->  * current regulator failures.
->
-> This is an EC crash that apparently can not be handled gracefully.
-> That has nothing to do with hardware protection. Why not just call
-> panic() ?
+> I was not aware of the uffd-wp use case, and am more than happy to discuss
+> expanding the API.
 
-I'm adding the ability for the EC to somewhat gracefully handle a
-class of panics. The EC will enter "system safe mode" aka limp mode.
-All tasks are disabled except for a few critical ones. The purpose of
-this mode is to give the OS a couple of seconds to extract info about
-the EC panic and shutdown as gracefully as possible. EC will still
-force a reset after 2 seconds.
+So considering two API choices:
 
-Since the EC is in a precarious, non deterministic state and the EC is
-at least partially responsible for thermal and power regulation, it is
-arguably a hardware protection event.
+1. What we have now: UFFD_FEATURE_MINOR_HUGETLBFS_HGM for
+UFFDIO_CONTINUE, and later UFFD_FEATURE_WP_HUGETLBFS_HGM for
+UFFDIO_WRITEPROTECT. For MADV_DONTNEED, we could just suddenly start
+allowing high-granularity choices (not sure if this is bad; we started
+allowing it for HugeTLB recently with no other API change, AFAIA).
 
-The primary motivation for allowing the OS to attempt an orderly
-shutdown is to sync user data and EC panic data to storage. Will panic
-sync storage? Or will that need to be a seperate call?
+2. MADV_ENABLE_HGM or something similar. The changes to
+UFFDIO_CONTINUE/UFFDIO_WRITEPROTECT/MADV_DONTNEED come automatically,
+provided they are implemented.
 
->
-> > +       }
->
-> It troubles me that this comes last. That means the entire
-> mkbp_event_supported handling executes first. What troubles me even
-> more is that 'value' is, with the exception of
-> ACPI_NOTIFY_DEVICE_WAKE, not checked at all. Presumably the EC sends
-> some well defined value if it has an event to report. I don't think it
-> is a good idea to depend on cros_ec_get_next_event() returning
-> something useful after the EC crashed.
+I don't mind one way or the other. Peter, I assume you prefer #2.
+Mike, what about you? If we decide on something other than #1, I'll
+make the change before sending v1 out.
 
-Could certainly move the ACPI_NOTIFY_CROS_EC_PANIC to the top. I think
-'value' will be 0x80 when there's MKBP events. I will validate this
-assumption.
-
-> How is this handled today ? Does the EC just reset the AP ?
-
-EC just immediately resets the AP and itself. System safe mode (see
-go/ec-system-safe-mode) will allow the EC to run a few seconds after
-some types of crashes.
-
-
-
->
-> >  }
-> >
-> >  static int cros_ec_lpc_probe(struct platform_device *pdev)
-> > diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-> > index e43107e0bee1..1c4487271836 100644
-> > --- a/include/linux/platform_data/cros_ec_proto.h
-> > +++ b/include/linux/platform_data/cros_ec_proto.h
-> > @@ -41,6 +41,13 @@
-> >  #define EC_MAX_REQUEST_OVERHEAD                1
-> >  #define EC_MAX_RESPONSE_OVERHEAD       32
-> >
-> > +/*
-> > + * EC panic is not covered by the standard (0-F) ACPI notify values.
-> > + * Arbitrarily choosing B0 to notify ec panic, which is in the 84-BF
-> > + * device specific ACPI notify range.
-> > + */
-> > +#define ACPI_NOTIFY_CROS_EC_PANIC      0xB0
-> > +
-> >  /*
-> >   * Command interface between EC and AP, for LPC, I2C and SPI interfaces.
-> >   */
-> > @@ -176,6 +183,8 @@ struct cros_ec_device {
-> >         /* The platform devices used by the mfd driver */
-> >         struct platform_device *ec;
-> >         struct platform_device *pd;
-> > +
-> > +       struct blocking_notifier_head panic_notifier;
-> >  };
-> >
-> >  /**
-> > --
-> > 2.39.0.314.g84b9a713c41-goog
-> >
+- James
