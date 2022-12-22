@@ -2,131 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B122654794
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB32654799
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 21:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbiLVU4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 15:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
+        id S235543AbiLVU7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 15:59:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiLVU4N (ORCPT
+        with ESMTP id S235498AbiLVU7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 15:56:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CC31D0F8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 12:55:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671742524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F0EDg+aKW31sZt/nNenws8XeVzJOg6ps93oALzUHu5c=;
-        b=GgqHZClNgNKOKOvjijCdPJ4tv+P/4wRmaylL0axN5Tzn+qXm13GQ2pKviFyuYmhkjZkZwG
-        r39Am+2qaFLvmItqKJ6KeVWspS7ElvwGnzJgG3KHEOC4iM+1YKL9JnNlKQqHymfkpcybL6
-        rNoMW0Dehtf/Gj+nwhlcoh4WhuYOZJY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-615-Gw7L4NaePVO3xdU5CBBExw-1; Thu, 22 Dec 2022 15:55:20 -0500
-X-MC-Unique: Gw7L4NaePVO3xdU5CBBExw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31C301C05AE6;
-        Thu, 22 Dec 2022 20:55:20 +0000 (UTC)
-Received: from t480s.fritz.box (unknown [10.39.193.53])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 168CE40C2064;
-        Thu, 22 Dec 2022 20:55:17 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Miaohe Lin <linmiaohe@huawei.com>, stable@vger.kernel.org
-Subject: [PATCH v1 2/2] mm/hugetlb: fix uffd-wp handling for migration entries in hugetlb_change_protection()
-Date:   Thu, 22 Dec 2022 21:55:11 +0100
-Message-Id: <20221222205511.675832-3-david@redhat.com>
-In-Reply-To: <20221222205511.675832-1-david@redhat.com>
-References: <20221222205511.675832-1-david@redhat.com>
+        Thu, 22 Dec 2022 15:59:51 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50CEDF7A;
+        Thu, 22 Dec 2022 12:59:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=isp1H2MjBGYeExMIQa379ifSGa8rRrUOUtT3JOLOum8=; b=rf6fdDNmqbzdyKaJHQopu8SuYV
+        ZF9vJ2GqCUaHNwbg5dqVV8bJhoE6h2r/JLQr7CkGmFWlVD/2o7WZv88m9cXbegJg1JUkOzZRdZKF4
+        LedQdranDq1BO4BSvVhWKvvy1TgyM7IbdtRVelmZwgEzet+O/OHskhUc6988CPlIDlFXJauL3cRgC
+        m8sfFhTUrr6QLpfLzS5OPtt6m0XXf5oA0zKZAwQT22cp0uNiuZj/DFI+q4lDi3S38bAlg+1/lQ8T8
+        LDX0pc9uiQsX5U0uqO1sUvLZ6PEkBc6SjXRIhfobNORaSwoTe18qoIkfjUbDgp7lSqlZo6/x5E+qz
+        JoIxhrfg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1p8Sev-00Dy4s-0K;
+        Thu, 22 Dec 2022 20:59:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B92453003D2;
+        Thu, 22 Dec 2022 21:59:21 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9039820167A87; Thu, 22 Dec 2022 21:59:21 +0100 (CET)
+Date:   Thu, 22 Dec 2022 21:59:21 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     syzbot <syzbot+b8e8c01c8ade4fe6e48f@syzkaller.appspotmail.com>,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        bpf@vger.kernel.org, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in put_pmu_ctx
+Message-ID: <Y6TFKdVJ9BY56fkI@hirez.programming.kicks-ass.net>
+References: <000000000000a20a2e05f029c577@google.com>
+ <Y6B3xEgkbmFUCeni@hirez.programming.kicks-ass.net>
+ <3a5a4738-2868-8f2f-f8b2-a28c10fbe25b@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a5a4738-2868-8f2f-f8b2-a28c10fbe25b@linux.dev>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have to update the uffd-wp SWP PTE bit independent of the type of
-migration entry. Currently, if we're unlucky and we want to install/clear
-the uffd-wp bit just while we're migrating a read-only mapped hugetlb page,
-we would miss to set/clear the uffd-wp bit.
+On Wed, Dec 21, 2022 at 10:42:39AM +0800, Chengming Zhou wrote:
 
-Further, if we're processing a readable-exclusive
-migration entry and neither want to set or clear the uffd-wp bit, we
-could currently end up losing the uffd-wp bit. Note that the same would
-hold for writable migrating entries, however, having a writable
-migration entry with the uffd-wp bit set would already mean that
-something went wrong.
+> > Does this help?
+> > 
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index e47914ac8732..bbff551783e1 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -12689,7 +12689,8 @@ SYSCALL_DEFINE5(perf_event_open,
+> >  	return event_fd;
+> >  
+> >  err_context:
+> > -	/* event->pmu_ctx freed by free_event() */
+> > +	put_pmu_ctx(event->pmu_ctx);
+> > +	event->pmu_ctx = NULL; /* _free_event() */
+> >  err_locked:
+> >  	mutex_unlock(&ctx->mutex);
+> >  	perf_unpin_context(ctx);
+> 
+> Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
+> 
+> While reviewing the code, I found perf_event_create_kernel_counter()
+> has the similar problem in the "err_pmu_ctx" error handling path:
 
-Note that the change from !is_readable_migration_entry ->
-writable_migration_entry is harmless and actually cleaner, as raised by
-Miaohe Lin and discussed in [1].
+Right you are, updated the patch, thanks!
 
-[1] https://lkml.kernel.org/r/90dd6a93-4500-e0de-2bf0-bf522c311b0c@huawei.com
+> CPU0					CPU1
+> perf_event_create_kernel_counter()
+>   // inc ctx refcnt
+>   find_get_context(task, event) (1)
+> 
+>   // inc pmu_ctx refcnt
+>   pmu_ctx = find_get_pmu_context()
+> 
+>   event->pmu_ctx = pmu_ctx
+>   ...
+>   goto err_pmu_ctx:
+>     // dec pmu_ctx refcnt
+>     put_pmu_ctx(pmu_ctx) (2)
+> 
+>     mutex_unlock(&ctx->mutex)
+>     // dec ctx refcnt
+>     put_ctx(ctx)
+> 					perf_event_exit_task_context()
+> 					  mutex_lock()
+> 					  mutex_unlock()
+> 					  // last refcnt put
+> 					  put_ctx()
+>     free_event(event)
+>       if (event->pmu_ctx) // True
+>         put_pmu_ctx() (3)
+>           // will access freed pmu_ctx or ctx
+> 
+>       if (event->ctx) // False
+>         put_ctx()
 
-Fixes: 60dfaad65aa9 ("mm/hugetlb: allow uffd wr-protect none ptes")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/hugetlb.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+This doesn't look right; iirc you can hit this without concurrency,
+something like so:
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 3a94f519304f..9552a6d1a281 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6516,10 +6516,9 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
- 		} else if (unlikely(is_hugetlb_entry_migration(pte))) {
- 			swp_entry_t entry = pte_to_swp_entry(pte);
- 			struct page *page = pfn_swap_entry_to_page(entry);
-+			pte_t newpte = pte;
- 
--			if (!is_readable_migration_entry(entry)) {
--				pte_t newpte;
--
-+			if (is_writable_migration_entry(entry)) {
- 				if (PageAnon(page))
- 					entry = make_readable_exclusive_migration_entry(
- 								swp_offset(entry));
-@@ -6527,13 +6526,15 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
- 					entry = make_readable_migration_entry(
- 								swp_offset(entry));
- 				newpte = swp_entry_to_pte(entry);
--				if (uffd_wp)
--					newpte = pte_swp_mkuffd_wp(newpte);
--				else if (uffd_wp_resolve)
--					newpte = pte_swp_clear_uffd_wp(newpte);
--				set_huge_pte_at(mm, address, ptep, newpte);
- 				pages++;
- 			}
-+
-+			if (uffd_wp)
-+				newpte = pte_swp_mkuffd_wp(newpte);
-+			else if (uffd_wp_resolve)
-+				newpte = pte_swp_clear_uffd_wp(newpte);
-+			if (!pte_same(pte, newpte))
-+				set_huge_pte_at(mm, address, ptep, newpte);
- 		} else if (unlikely(is_pte_marker(pte))) {
- 			/* No other markers apply for now. */
- 			WARN_ON_ONCE(!pte_marker_uffd_wp(pte));
--- 
-2.38.1
+
+	// note that when getting here, we've not passed
+	// perf_install_in_context() and event->ctx == NULL.
+err_pmu_ctx:
+	put_pmu_ctx();
+	put_ctx(); // last, actually frees ctx
+	..
+err_alloc:
+	free_event()
+	  _free_event()
+	    if (event->pmu_ctx) // true, because we forgot to clear
+	      put_pmu_ctx() // hits 0 because double put
+	        // goes and touch epc->ctx and UaF
+
 
