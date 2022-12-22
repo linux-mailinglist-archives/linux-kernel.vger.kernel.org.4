@@ -2,191 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8AC6545DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3206545E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiLVSOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
+        id S231368AbiLVSPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 13:15:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiLVSOn (ORCPT
+        with ESMTP id S230357AbiLVSPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:14:43 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2082B13D4E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:14:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671732882; x=1703268882;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MLsZoG3w/wofZAj98krLPXC/JPTNK5PARxNbIkVb9u0=;
-  b=az9uAuHUz5MTWTsRgog01e2pLsZKtGATyM1T9+/gsqECWb0fB1Xa2HMI
-   CyG+ktnvh7oxftQMWvonw15b8wQIr04wmqcOysCenq5KsYuPLwb7ZH1nQ
-   gJUWitz1Eqg2Wrf4Py5sYptmIyV5Fk5Jqz7dDpOJR40zHyYL8cCC/LZ6s
-   EjifODgMNRhE0Hmnl2lJGqpR899F+FbKiOCjL6AyDgG5i4AdBJzzlcKTB
-   nTyJlczBl3YFgTcRZtw9YKVHFDRtzGyxJdDZFZK4FNyib9J1aYfztN3Xi
-   xp9GNxWx3bBf2limANUkeBCgdfv2aXGih5YK+Og9bU0rse9EOlM14F+2S
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="406428319"
-X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
-   d="scan'208";a="406428319"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 10:14:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="682479432"
-X-IronPort-AV: E=Sophos;i="5.96,266,1665471600"; 
-   d="scan'208";a="682479432"
-Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Dec 2022 10:14:39 -0800
-Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p8Q5X-000C0Y-0g;
-        Thu, 22 Dec 2022 18:14:39 +0000
-Date:   Fri, 23 Dec 2022 02:13:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:haltnmi3slow.2022.12.21a] BUILD SUCCESS
- 86bee2e421da7c7aed829206357a82cdfb46b3b4
-Message-ID: <63a49e61.bVPOVTuj7Ggymwwx%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 22 Dec 2022 13:15:32 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AE11CB00
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:15:29 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id u4-20020a17090a518400b00223f7eba2c4so2665146pjh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 10:15:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=752C77UYWYC/kCXAv9m+o+bKyybany3JU3TCXHGZR0U=;
+        b=mnWHipNRICDDr9o9B9k9tzUHQ5DlJw7QNZU1NFFDGUJ/WFgmaKL6adljuLzxsRCR1T
+         yOt1llvxRLddf3o8tFdD1XSrfvJKY91Y6BA+Ue/bxbYYHAufNWWHf+w2InX7LDglGQta
+         9K3BVA4lZMYr2iIsmJ+f1M3V5mNVtVOBrDe0He7TJ193jL7X5zGQlNAIk8two/do47Qa
+         +IAmme0Ak9mW8lBakzH8LqHkhC04c8aYC5+Yadk9FKgybASwcKtR2kDtwpwTkfLtjN0F
+         Pf78IoRu0kt98rlTKH1ZJdwA91Ht9u39VkBXmY2L8neh0zXKIViW79WjZdA8w13OMOlE
+         OnLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=752C77UYWYC/kCXAv9m+o+bKyybany3JU3TCXHGZR0U=;
+        b=wRX2o9DzHc5lg747wVvjKv+nhI5VuhNfxCy1us68cClAAzzqq2lexR7lTsnn67gtj9
+         ZD/z5Ln8/iq5NEijlBwhGgXVq2ldlwNhqKYRrAbU0uypxVHqtJLXZqHjPXYOlnd6+Rp2
+         GgYOrjdN+27dPsfegoxZVER1AMrVohRAr2s1Y7i6wDXFEEYX63NSF5hh8NdjjPx5qQ4U
+         rV1H5XYEPBrIfoxOpqsjn6RF8Twpxq6xpLEEAaLfwE5wcGq0kHWDts7G1pM86tuiye6j
+         /cM6UJDgT/0ts3u9ZnHVNyTNiOagFZ3RUPnKZC/AKG5pnMDDSue00U59bRQ8JGbA7kV8
+         96WQ==
+X-Gm-Message-State: AFqh2krhrlTNvyOqo8SLHT6eYipHsU17ZBm6bhJQBjYN3GC0DvNPfSfO
+        uVAyzmDCD+Eosfe5FgetXrXVNQ==
+X-Google-Smtp-Source: AMrXdXtVsGTXmJ+OudFvpboyWukOEY96QmhFL3/LDUsVn+qtHCwo04yMbEQyfv9hcz3t0HxxdVHCiA==
+X-Received: by 2002:a17:903:41ca:b0:189:6624:58c0 with SMTP id u10-20020a17090341ca00b00189662458c0mr1174380ple.3.1671732928592;
+        Thu, 22 Dec 2022 10:15:28 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a7-20020a17090a70c700b00219feae9486sm3443216pjm.7.2022.12.22.10.15.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 10:15:28 -0800 (PST)
+Date:   Thu, 22 Dec 2022 18:15:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     "Huang, Kai" <kai.huang@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Hocko, Michal" <mhocko@suse.com>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        "tabba@google.com" <tabba@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "bfields@fieldses.org" <bfields@fieldses.org>,
+        "dhildenb@redhat.com" <dhildenb@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
+        "ddutile@redhat.com" <ddutile@redhat.com>,
+        "qperret@google.com" <qperret@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "vannapurve@google.com" <vannapurve@google.com>,
+        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
+        "hughd@google.com" <hughd@google.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "jlayton@kernel.org" <jlayton@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "steven.price@arm.com" <steven.price@arm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
+Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <Y6SevJt6XXOsmIBD@google.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
+ <5c6e2e516f19b0a030eae9bf073d555c57ca1f21.camel@intel.com>
+ <20221219075313.GB1691829@chaop.bj.intel.com>
+ <deba096c85e41c3a15d122f2159986a74b16770f.camel@intel.com>
+ <20221220072228.GA1724933@chaop.bj.intel.com>
+ <126046ce506df070d57e6fe5ab9c92cdaf4cf9b7.camel@intel.com>
+ <20221221133905.GA1766136@chaop.bj.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20221221133905.GA1766136@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git haltnmi3slow.2022.12.21a
-branch HEAD: 86bee2e421da7c7aed829206357a82cdfb46b3b4  Merge branch 'slownmi.2022.12.19a' into HEAD
+On Wed, Dec 21, 2022, Chao Peng wrote:
+> On Tue, Dec 20, 2022 at 08:33:05AM +0000, Huang, Kai wrote:
+> > On Tue, 2022-12-20 at 15:22 +0800, Chao Peng wrote:
+> > > On Mon, Dec 19, 2022 at 08:48:10AM +0000, Huang, Kai wrote:
+> > > > On Mon, 2022-12-19 at 15:53 +0800, Chao Peng wrote:
+> > But for non-restricted-mem case, it is correct for KVM to decrease page's
+> > refcount after setting up mapping in the secondary mmu, otherwise the page will
+> > be pinned by KVM for normal VM (since KVM uses GUP to get the page).
+> 
+> That's true. Actually even true for restrictedmem case, most likely we
+> will still need the kvm_release_pfn_clean() for KVM generic code. On one
+> side, other restrictedmem users like pKVM may not require page pinning
+> at all. On the other side, see below.
+> 
+> > 
+> > So what we are expecting is: for KVM if the page comes from restricted mem, then
+> > KVM cannot decrease the refcount, otherwise for normal page via GUP KVM should.
 
-elapsed time: 722m
+No, requiring the user (KVM) to guard against lack of support for page migration
+in restricted mem is a terrible API.  It's totally fine for restricted mem to not
+support page migration until there's a use case, but punting the problem to KVM
+is not acceptable.  Restricted mem itself doesn't yet support page migration,
+e.g. explosions would occur even if KVM wanted to allow migration since there is
+no notification to invalidate existing mappings.
 
-configs tested: 108
-configs skipped: 2
+> I argue that this page pinning (or page migration prevention) is not
+> tied to where the page comes from, instead related to how the page will
+> be used. Whether the page is restrictedmem backed or GUP() backed, once
+> it's used by current version of TDX then the page pinning is needed. So
+> such page migration prevention is really TDX thing, even not KVM generic
+> thing (that's why I think we don't need change the existing logic of
+> kvm_release_pfn_clean()). Wouldn't better to let TDX code (or who
+> requires that) to increase/decrease the refcount when it populates/drops
+> the secure EPT entries? This is exactly what the current TDX code does:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I agree that whether or not migration is supported should be controllable by the
+user, but I strongly disagree on punting refcount management to KVM (or TDX).
+The whole point of restricted mem is to support technologies like TDX and SNP,
+accomodating their special needs for things like page migration should be part of
+the API, not some footnote in the documenation.
 
-gcc tested configs:
-um                           x86_64_defconfig
-um                             i386_defconfig
-i386                                defconfig
-x86_64                              defconfig
-arc                                 defconfig
-x86_64                               rhel-8.3
-i386                 randconfig-a001-20221219
-s390                             allmodconfig
-x86_64                          rhel-8.3-func
-alpha                               defconfig
-x86_64                    rhel-8.3-kselftests
-i386                 randconfig-a003-20221219
-arm                                 defconfig
-s390                                defconfig
-x86_64               randconfig-a002-20221219
-x86_64                           allyesconfig
-x86_64               randconfig-a003-20221219
-s390                             allyesconfig
-i386                 randconfig-a002-20221219
-powerpc                           allnoconfig
-x86_64               randconfig-a001-20221219
-i386                 randconfig-a006-20221219
-i386                 randconfig-a005-20221219
-x86_64               randconfig-a004-20221219
-x86_64               randconfig-a006-20221219
-i386                 randconfig-a004-20221219
-x86_64               randconfig-a005-20221219
-mips                             allyesconfig
-i386                             allyesconfig
-ia64                             allmodconfig
-x86_64                           rhel-8.3-bpf
-arm                              allyesconfig
-m68k                             allyesconfig
-x86_64                           rhel-8.3-syz
-m68k                             allmodconfig
-arc                              allyesconfig
-arm64                            allyesconfig
-powerpc                          allmodconfig
-x86_64                         rhel-8.3-kunit
-alpha                            allyesconfig
-sh                               allmodconfig
-x86_64                           rhel-8.3-kvm
-riscv                randconfig-r042-20221218
-arc                  randconfig-r043-20221219
-arm                  randconfig-r046-20221219
-arc                  randconfig-r043-20221218
-s390                 randconfig-r044-20221218
-m68k                         apollo_defconfig
-arm                           viper_defconfig
-x86_64                            allnoconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-loongarch                        allmodconfig
-sparc                               defconfig
-sh                          sdk7786_defconfig
-nios2                         3c120_defconfig
-m68k                          atari_defconfig
-arm                          iop32x_defconfig
-arm                        oxnas_v6_defconfig
-arm                         nhk8815_defconfig
-powerpc                       eiger_defconfig
-xtensa                              defconfig
-m68k                                defconfig
-m68k                            mac_defconfig
-powerpc                      ep88xc_defconfig
-sh                               j2_defconfig
-i386                          randconfig-c001
-s390                 randconfig-r044-20221222
-arc                  randconfig-r043-20221222
-riscv                randconfig-r042-20221222
-arm                            lart_defconfig
-powerpc                 mpc837x_rdb_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
+It's not difficult to let the user communicate support for page migration, e.g.
+if/when restricted mem gains support, add a hook to restrictedmem_notifier_ops
+to signal support (or lack thereof) for page migration.  NULL == no migration,
+non-NULL == migration allowed.
 
-clang tested configs:
-x86_64                          rhel-8.3-rust
-i386                 randconfig-a014-20221219
-i386                 randconfig-a012-20221219
-i386                 randconfig-a013-20221219
-i386                 randconfig-a015-20221219
-x86_64               randconfig-a011-20221219
-i386                 randconfig-a016-20221219
-i386                 randconfig-a011-20221219
-x86_64               randconfig-a012-20221219
-x86_64               randconfig-a014-20221219
-x86_64               randconfig-a015-20221219
-x86_64               randconfig-a013-20221219
-arm                  randconfig-r046-20221218
-x86_64               randconfig-a016-20221219
-hexagon              randconfig-r041-20221218
-hexagon              randconfig-r045-20221219
-s390                 randconfig-r044-20221219
-hexagon              randconfig-r041-20221219
-hexagon              randconfig-r045-20221218
-riscv                randconfig-r042-20221219
-x86_64               randconfig-k001-20221219
-x86_64                        randconfig-k001
-s390                 randconfig-r044-20221221
-riscv                randconfig-r042-20221221
-hexagon              randconfig-r045-20221221
-hexagon              randconfig-r041-20221221
-i386                             allyesconfig
-arm                         s3c2410_defconfig
+We know that supporting page migration in TDX and SNP is possible, and we know
+that page migration will require a dedicated API since the backing store can't
+memcpy() the page.  I don't see any reason to ignore that eventuality.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+But again, unless I'm missing something, that's a future problem because restricted
+mem doesn't yet support page migration regardless of the downstream user.
