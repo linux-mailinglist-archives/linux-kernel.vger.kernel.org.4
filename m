@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2982E6545B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 18:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913326545C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 18:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiLVRqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 12:46:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S230438AbiLVRvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 12:51:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLVRqe (ORCPT
+        with ESMTP id S229734AbiLVRvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 12:46:34 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5426428E0B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 09:46:33 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id 17so2736777pll.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 09:46:33 -0800 (PST)
+        Thu, 22 Dec 2022 12:51:13 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2D4E6D
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 09:51:12 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id v3so1801213pgh.4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 09:51:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5a6MYzxLxJ9cZF4J+Y4/MrvHiFf7w3rJ2I+lZMCzt40=;
-        b=ZH7Vaxv1FUJg18u7x7abRr7/FN22Dk+FYxHnEs1mPzKAGTp9W1NsFbNs1iOK9oMin/
-         omj13uHbbyEbKobYMLfaomM+lvHlyAM6deebLNtC+LMvuWRenPb9Q7IgRhN/bea5wN2w
-         2J/irWavBy26bHuSQBQ3y7r0dajbTU6m22p4Zk/qyCCrAvcepU7xc/flYyhn3kZ/Vqm7
-         7M1fTimK1hFn8bmMrX+JVLertY/eRr+N0wFg78WJtk39ZbfHHvSw1wMZ842iaIohgTNY
-         Hh7agcHlx/6FxjQODCqiVklhQDOflOXiYOHqg9RxpKFsDJ6doeHxXuP+1uHGvZyTfFQW
-         V2QQ==
+        bh=ir+NOeunegWBFgMdpVr6IERtYeXv7QPwh+4VeaHIc2s=;
+        b=fnyiYHJ61BvkoFKP642PuC4+sz09mMW4pSP1DD1m3U4f/khEIQRXYi9KFHMtWhzq4M
+         Irrb66e5c8qdk6EZMGpv/W1aRalwGXC/Gcj7knrozwW3L+Q3tPsTQkBwZUQ+88DNorv9
+         hRKq2QKqdu4myCAwdDybTLJbtwpK+bsmIn2yuHxAKuXCvuo78PQA9uyM/yEEJH5KLQes
+         oEL1sQipkFKYpPiI+8nxXvtB4Tugyj0MnPTsIcRlu929jkxYA+XqH7jcS1/Su1FApIX2
+         zi15ik7Zy6WcA7qPs/Tqh8sJDYyPv4x1sy3Al9D2UdwRILKUK5JtWn3bp0UaJx+OnrRT
+         tvdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5a6MYzxLxJ9cZF4J+Y4/MrvHiFf7w3rJ2I+lZMCzt40=;
-        b=q6eZipG2LjGSyz6DEF76LWYlC/qhiJRaK4O5+IouVTb+A5q4XcichgdZchdIp5L+hI
-         20agfNhS+8DEZ0R9fyi8oIIjAo6WlqulDHkV1sTFT6jye5aOV2XCmVDLHLOzSQzSJpwc
-         +Avz5nupv1AgSWJE60ybTBYhW+A9sz7seH4Ej7lWOyUeT9YmPBGWAdSROt48Tih5AB7K
-         CAvYl0n8plxoQxRigyN/1tn2n0lnIu4MfnUsyTAaR9lyKlttxRV1gfTS0crBcdlguLuc
-         63EtuATAPjhs9jbD+V10OcyvfdVsZwSR2SsYz3ouSSdwsBYnFKmWZSfjehXzUnufHeYx
-         eW1Q==
-X-Gm-Message-State: AFqh2kqrs83oaH73KDyG0DjgG4OQ2ygfZU+uK5C/wdzEJp56BsfDTJQW
-        u9MUh8BeqW8CQ3bO6RVJgRFs+L4o5K5vQ12/Iq9sxQ==
-X-Google-Smtp-Source: AMrXdXszh/yXBCJiK4N8HAEFYMC+mx1dQ4CfVBMfjHlqZ5QMmEHl0xlMIGnuJn9u9Si0oUXt74oyHJ6WIoPYtzZVMMk=
-X-Received: by 2002:a17:902:a407:b0:189:f899:bc23 with SMTP id
- p7-20020a170902a40700b00189f899bc23mr359057plq.33.1671731192737; Thu, 22 Dec
- 2022 09:46:32 -0800 (PST)
+        bh=ir+NOeunegWBFgMdpVr6IERtYeXv7QPwh+4VeaHIc2s=;
+        b=zhnklAkIF9teehMSuMMjsKUzCsyUnRWamjJ9A5EO/Yu1QTrBJX0YSVQLz9b5fQK0iA
+         FvamMXLaQOBZm4ltghVgckjlZe7K6T0aRAnhVw2QqmzvVU7Qog45ikgx2DjzsiAHnyJy
+         F357VBrg8v9B0Dte4YsyyER7zLSjhyzuGaJn6y9adhXlveXZ2LcDy0NXAgn0J9fLsUMe
+         K/ND79P6bhQdeelZvCT+gkZFo9NIvfo88gwW8qBfj6Zpe00xSM/MXM9vohNUKwbijXYd
+         RLgDaVYGlVkqESE0TVmwuAb8mHS/Il9RedMokrHK+EXmeLLrXWdzB7V6OD4f4aolhCMN
+         M+Sw==
+X-Gm-Message-State: AFqh2kr09yEIqVOy8ip8ZHOwhUJflldh0oMHNag8dtZ9xdDANxHYl5FN
+        ROThGtpo2uSV9+CUmzJ2eqhtIpCpjF6dKv05sZQytw==
+X-Google-Smtp-Source: AMrXdXtLCR+XjuWbjIT/TBN/oxtbugMK0VGc4HPX25kpium9rXq7t6hC0axwkXz6uCKOZuk4ZBEc/rhdG75xJw/zOIc=
+X-Received: by 2002:a63:4943:0:b0:478:e6cf:c24c with SMTP id
+ y3-20020a634943000000b00478e6cfc24cmr482923pgk.365.1671731472157; Thu, 22 Dec
+ 2022 09:51:12 -0800 (PST)
 MIME-Version: 1.0
-References: <Y6Rq5F5NI0v1QQHM@kernel.org> <CAKwvOdkivaXffVPPTsceM_et4yOgYy3fuw9TmikcjRhDPyTqRA@mail.gmail.com>
-In-Reply-To: <CAKwvOdkivaXffVPPTsceM_et4yOgYy3fuw9TmikcjRhDPyTqRA@mail.gmail.com>
+References: <20221222162535.1578462-1-masahiroy@kernel.org>
+In-Reply-To: <20221222162535.1578462-1-masahiroy@kernel.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 22 Dec 2022 09:46:21 -0800
-Message-ID: <CAKwvOdm-6p0kDC9=4aLPG2VHhPFwYSFTO3W9-GgneoRw24jVpw@mail.gmail.com>
-Subject: Re: [PATCH 1/1 fyi] perf python: Fix splitting CC into compiler and options
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Khem Raj <raj.khem@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Fangrui Song <maskray@google.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
+Date:   Thu, 22 Dec 2022 09:51:00 -0800
+Message-ID: <CAKwvOdkN1b1gfQ=FP2-PUq-c=ycOwB27y-0eG2bmDzXuFOu1hA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] kbuild: refactor silent mode detection
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Nicolas Schier <nicolas@fjasle.eu>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -77,105 +69,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 9:45 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Thu, Dec 22, 2022 at 8:25 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> On Thu, Dec 22, 2022 at 6:34 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Just fyi, I'm carrying this in the perf tools tree.
-> >
-> > - Arnaldo
-> >
-> > ----
-> >
-> > Noticed this build failure on archlinux:base when building with clang:
-> >
-> >   clang-14: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
-> >
-> > In tools/perf/util/setup.py we check if clang supports that option, but
-> > since commit 3cad53a6f9cdbafa ("perf python: Account for multiple words
-> > in CC") this got broken as in the common case where CC="clang":
-> >
-> >   >>> cc="clang"
-> >   >>> print(cc.split()[0])
-> >   clang
-> >   >>> option="-ffat-lto-objects"
-> >   >>> print(str(cc.split()[1:]) + option)
-> >   []-ffat-lto-objects
-> >   >>>
-> >
-> > And then the Popen will call clang with that bogus option name that in
-> > turn will not produce the b"unknown argument" or b"is not supported"
-> > that this function uses to detect if the option is not available and
-> > thus later on clang will be called with an unknown/unsupported option.
-> >
-> > Fix it by looking if really there are options in the provided CC
-> > variable, and if so override 'cc' with the first token and append the
-> > options to the 'option' variable.
-> >
-> > Fixes: 3cad53a6f9cdbafa ("perf python: Account for multiple words in CC")
-> > Cc: Adrian Hunter <adrian.hunter@intel.com>
-> > Cc: Fangrui Song <maskray@google.com>
-> > Cc: Florian Fainelli <f.fainelli@gmail.com>
-> > Cc: Ian Rogers <irogers@google.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: John Keeping <john@metanate.com>
-> > Cc: Khem Raj <raj.khem@gmail.com>
-> > Cc: Leo Yan <leo.yan@linaro.org>
-> > Cc: Michael Petlan <mpetlan@redhat.com>
-> > Cc: Namhyung Kim <namhyung@kernel.org>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: Sedat Dilek <sedat.dilek@gmail.com>
-> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > ---
-> >  tools/perf/util/setup.py | 13 +++++++++++--
-> >  1 file changed, 11 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
-> > index 4f265d0222c454e2..c294db713677c0c2 100644
-> > --- a/tools/perf/util/setup.py
-> > +++ b/tools/perf/util/setup.py
-> > @@ -3,11 +3,20 @@ from subprocess import Popen, PIPE
-> >  from re import sub
-> >
-> >  cc = getenv("CC")
-> > -cc_is_clang = b"clang version" in Popen([cc.split()[0], "-v"], stderr=PIPE).stderr.readline()
-> > +
-> > +# Check if CC has options, as is the case in yocto, where it uses CC="cc --sysroot..."
-> > +cc_tokens = cc.split()
-> > +if len(cc_tokens) > 1:
-> > +    cc = cc_tokens[0]
+> Factor out $(findstring s,...).
 >
-> What if someone is using `CC="cache clang"`? Then cc is set to `cache`
-> and the cc_is_clang check below will fail.
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-s/cache/ccache/g
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+> ---
 >
-> > +    cc_options = " ".join([str(e) for e in cc_tokens[1:]]) + " "
-> > +else:
-> > +    cc_options = ""
-> > +
-> > +cc_is_clang = b"clang version" in Popen([cc, "-v"], stderr=PIPE).stderr.readline()
-> >  src_feature_tests  = getenv('srctree') + '/tools/build/feature'
-> >
-> >  def clang_has_option(option):
-> > -    cc_output = Popen([cc.split()[0], str(cc.split()[1:]) + option, path.join(src_feature_tests, "test-hello.c") ], stderr=PIPE).stderr.readlines()
-> > +    cc_output = Popen([cc, cc_options + option, path.join(src_feature_tests, "test-hello.c") ], stderr=PIPE).stderr.readlines()
-> >      return [o for o in cc_output if ((b"unknown argument" in o) or (b"is not supported" in o))] == [ ]
-> >
-> >  if cc_is_clang:
-> > --
-> > 2.38.1
-> >
+>  Makefile | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
+> diff --git a/Makefile b/Makefile
+> index 25247f931872..e8ce3e2b30d6 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -100,12 +100,12 @@ endif
+>  # make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
 >
+>  ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+> -silence:=$(findstring s,$(firstword -$(MAKEFLAGS)))
+> +short-opts := $(firstword -$(MAKEFLAGS))
+>  else
+> -silence:=$(findstring s,$(filter-out --%,$(MAKEFLAGS)))
+> +short-opts := $(filter-out --%,$(MAKEFLAGS))
+>  endif
+>
+> -ifeq ($(silence),s)
+> +ifneq ($(findstring s,$(short-opts)),)
+>  quiet=silent_
+>  KBUILD_VERBOSE = 0
+>  endif
 > --
-> Thanks,
-> ~Nick Desaulniers
-
+> 2.34.1
+>
 
 
 -- 
