@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6440D65463B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 19:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9A0654641
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 20:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235410AbiLVS60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 13:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S230299AbiLVTAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 14:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiLVS6Y (ORCPT
+        with ESMTP id S235432AbiLVTAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 13:58:24 -0500
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E59223397;
-        Thu, 22 Dec 2022 10:58:24 -0800 (PST)
-Received: by mail-ot1-f49.google.com with SMTP id k7-20020a056830168700b0067832816190so1611371otr.1;
-        Thu, 22 Dec 2022 10:58:24 -0800 (PST)
+        Thu, 22 Dec 2022 14:00:42 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B21BD90;
+        Thu, 22 Dec 2022 11:00:41 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso6625172pjp.4;
+        Thu, 22 Dec 2022 11:00:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7cFlHOhHC7/RmpQRJa9gEiaIHntvkmmoFbzYzTMby5Y=;
+        b=PlDDL7ZL3x2WUthmq9xSA5HiVbobKOOt85aMcEJ+jwTZK+rQ0xq/RfpsYssFH5TKHx
+         Wcyuyg14ZY8Iosw8PxR7zDjWKQrqTJ/IQb3h/6b3yzVvQB7fuEbgMf1+b3RU+Saf3U/y
+         wrDWe3IaUiW91k6F/fRo2Y+reuOk1joi8IJchc6vpSvDqXXh5KDUvvFvyxl2kzMAqccz
+         hQkUcZzdXB8q7MokCmCW25rEICuq5cTNRGrPXXbkmL0LCdcAznP/eC6PpPdRx4mtIiQe
+         FGTGZDb9Kp9uNM9jWyKNPDIpaOepaw0vBd+puiG5afsUybO/YcYPQBnufFRACNQcsjng
+         s5jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fhbyt8tYgm2186gecgii/47TQCYcaECmRYTmYzgGwIU=;
-        b=gl2ElP+Q/yfaIT8OvrcoXe9/SHAkXmXDk2swpE8IMaZ845oqAD6ViBUFUTty29UV+U
-         dk2glZRI1rb85lQ7Y23mKPy/oIMYY3Kx0N0UbjDEDoK+jvKly16D+BqiOd6QOnEUh2Cz
-         //SZPHdDfDtI9pDakOZGOjRllUTaOVZdzIiwT+B4Sr+DWW6cC7dJ9YNcCQ2FSsG1hwzL
-         FecxAkuCyXQMaC1Ed3wNMYw025hkeo7dYluEWNBbYhLHbimZafoS6SpBfLwUxKZuSRSQ
-         CZoNEhv2zidO/HO1fz8mmozwsTQVbiLnJ2F2xgN3UV3bdWhmCOdqKV0RiRctCIDnLFeU
-         xwWA==
-X-Gm-Message-State: AFqh2ko7jVvrzrmBx4CWn272eh1qOJfxY6s3OzEaL60yYWQJoQSnlmZf
-        EZwu2VaW5/BBLcn5W0MTCpu5Shki+g==
-X-Google-Smtp-Source: AMrXdXvVxDqgiagVMWlnoZXL5Ms8BxpgU7uL4iEG2MUuqKwAEKuN6mdiazLgqReWxfcghnO3M2QriQ==
-X-Received: by 2002:a9d:7507:0:b0:66d:a04b:eeac with SMTP id r7-20020a9d7507000000b0066da04beeacmr3123066otk.30.1671735503321;
-        Thu, 22 Dec 2022 10:58:23 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e20-20020a0568301f3400b0066e820696edsm667677oth.13.2022.12.22.10.58.22
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7cFlHOhHC7/RmpQRJa9gEiaIHntvkmmoFbzYzTMby5Y=;
+        b=WjNTwKU6i8ketZWDmg7990ingtLrN6gPYMMq8F8BH6ft4YkwwpltqPmiBsRMDZ7mqH
+         GTUQ4XjZNfslY7u84pzPg+hR1gNi+Nd45Js2/lurc2JVFeLiJVOnN8IjSTWT31NOYroV
+         Ps2LFSYTzXeEHv7OmqKnYZ6kJRATgY3HOZXehXbnoH/gAS9Ddt8C/UaNJ4sESzjJKpB7
+         JPHVulOZWdf83GpyCAJIB/A/8JA/R8ZTSDYQEJli3jZ4iLrxwnfRIDtAzLow/C7SmnJa
+         c8PJi912QHmDAY8d9ihy6witIn0SUcQsEjtmaibSg/Bxhxjrifb47FhkRSEQ1NDE6ZH6
+         N+Gw==
+X-Gm-Message-State: AFqh2krAGkdqoBKod/ZsvUM0zKxGpCvog5wy+L20KK1+sjVh7RFBCEIz
+        4+v7GrsvdyYBlDE5IF3OSfE=
+X-Google-Smtp-Source: AMrXdXu+d0bvQupICQM/vO8qDmVSJ5qhYWGOG6oHEIQSd01+pmglPRDQ4dBxKphtc9Ulgbv02Zp4uA==
+X-Received: by 2002:a17:903:22ca:b0:186:5fa1:1eae with SMTP id y10-20020a17090322ca00b001865fa11eaemr8858986plg.48.1671735640822;
+        Thu, 22 Dec 2022 11:00:40 -0800 (PST)
+Received: from mail.broadcom.net ([192.19.144.250])
+        by smtp.gmail.com with ESMTPSA id z6-20020a170902d54600b001925169e9f4sm61468plf.98.2022.12.22.11.00.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 10:58:23 -0800 (PST)
-Received: (nullmailer pid 1908218 invoked by uid 1000);
-        Thu, 22 Dec 2022 18:58:22 -0000
-Date:   Thu, 22 Dec 2022 12:58:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Emekcan Aras <emekcan.aras@arm.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Miguel Silva <rui.silva@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] adds corstone500 device tree
-Message-ID: <20221222185822.GB1897073-robh@kernel.org>
-References: <20221222123244.147238-1-emekcan.aras@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222123244.147238-1-emekcan.aras@arm.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Thu, 22 Dec 2022 11:00:40 -0800 (PST)
+From:   Kamal Dasu <kdasu.kdev@gmail.com>
+To:     keescook@chromium.org, linux-kernel@vger.kernel.org,
+        gmpy.liaowx@gmail.com, linux-mmc@vger.kernel.org,
+        CLoehle@hyperstone.com
+Cc:     f.fainelli@gmail.com, tony.luck@intel.com, anton@enomsg.org,
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Subject: [RFC v2 0/1] mmc: Add mmc pstore backend support
+Date:   Thu, 22 Dec 2022 13:59:47 -0500
+Message-Id: <20221222185948.12717-1-kdasu.kdev@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +68,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 12:32:42PM +0000, Emekcan Aras wrote:
-> Adds device tree and correspondent binding for ARM Corstone500 reference 
-> solution. 
-> 
-> Thanks for the comments, and sorry for the late reply. Most of the comments are
-> addressed except one.
-> 
-> @Krzysztof Kozlowski: Thanks a lot for the comments. I've tried to fixed all of 
-> them. Just have one question regarding having no dtsi or compatible platform.
-> Corstone500 is a reference hardware design, however there is no silicon solution
-> from it yet. And from device tree perspective, both FPGA and FVP (virtual 
-> platform) implementations are identical(same addresses and same nodes, etc.).
+v2 changes:
 
-Does the FVP support virtio devices? Other FVP models do.
+- Fixed rebase with upstream linux master
+- Fixed build warnings
 
-> So we didn't want to create a seperate dtsi file. What would you recommend here
-> ? Can you point me to a device tree from a similar platform?
-> 
-> Cheers,
-> Emek
-> 
-> Emekcan Aras (2):
->   arm: dts: arm: add arm corstone500 device tree
->   dt-bindings: Add Arm corstone500 platform
-> 
->  .../bindings/arm/arm,corstone500.yaml         |  30 +++
->  arch/arm/boot/dts/Makefile                    |   3 +-
->  arch/arm/boot/dts/corstone500.dts             | 182 ++++++++++++++++++
->  3 files changed, 214 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/arm/arm,corstone500.yaml
->  create mode 100644 arch/arm/boot/dts/corstone500.dts
-> 
-> -- 
-> 2.25.1
-> 
-> 
+Have been trying to provide mmc backend support for fs/pstore feature
+to be able to capture panic and dmesg logs to a emmc partition. The code is
+based on mtdpstore and used kernel mmctest also as reference to be able to
+send mmc rw requests. This code is work in progress and does not succssfully
+write to the mmc partition as expected when a magic sysrq panic is induced.
+
+Needed help from original authors and mmc core and host driver experts to
+comment on missing peices. To that end I am sending an RFC patch. I have
+confirmed by enabling dynamic debug that mmcpstore read and panic_write
+routines do get called by the fs/pstore/zone driver, however I do not see
+expected results mounted /sys/fs/pstore after a reboot.
+
+Kamal Dasu (1):
+  mmc: Add mmc pstore backend support
+
+ drivers/mmc/core/Kconfig     |  13 +
+ drivers/mmc/core/Makefile    |   1 +
+ drivers/mmc/core/block.c     |   4 +
+ drivers/mmc/core/block.h     |   9 +
+ drivers/mmc/core/mmcpstore.c | 592 +++++++++++++++++++++++++++++++++++
+ drivers/mmc/host/sdhci.c     |  20 ++
+ include/linux/mmc/host.h     |   3 +
+ 7 files changed, 642 insertions(+)
+ create mode 100644 drivers/mmc/core/mmcpstore.c
+
+-- 
+2.17.1
+
