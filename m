@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73820653AF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 04:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150F6653AF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 04:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiLVDkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 22:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S230336AbiLVDmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 22:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiLVDko (ORCPT
+        with ESMTP id S229601AbiLVDma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 22:40:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2838417E29
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 19:39:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671680396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j2K/BkWyYsT/Jk2fklfpa4mrCdOdKG4g2EgGgkbPYAo=;
-        b=UjnZSDcNIEGVRAbEFN0L4pZxKfCSf+TPhTXqLPgcGB/jFfqGiu8uPlvtgJiek6w2TACGBb
-        qfY6zJgxIDGj2L1pROIEaCB5j3U60cgVsUQvkppTlKyWvXHX3rNTbNdN+DtA+22lTWOmkq
-        YU8hjsq5/XOvqEPbVkUphqtcYTRkpIc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-136-2dlkGSn0MWyQ8eLUiSWLog-1; Wed, 21 Dec 2022 22:39:54 -0500
-X-MC-Unique: 2dlkGSn0MWyQ8eLUiSWLog-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 24FBC38173C0;
-        Thu, 22 Dec 2022 03:39:54 +0000 (UTC)
-Received: from [10.22.33.5] (unknown [10.22.33.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7BF902166B26;
-        Thu, 22 Dec 2022 03:39:53 +0000 (UTC)
-Message-ID: <a82092f5-abc8-584f-b2ba-f06c82ffbe7d@redhat.com>
-Date:   Wed, 21 Dec 2022 22:39:53 -0500
+        Wed, 21 Dec 2022 22:42:30 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0886E18E32;
+        Wed, 21 Dec 2022 19:42:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1671680547; bh=r0OzK6/K2zK5Ri/bmQhFWby+lEk9HX7/WMDoa3C7Fkk=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=NnkJ1A1dbqjBE70OU660pCVgKRucoC0VJ8e6wsSie6PM/ciyw2dttit9B3o/Br7hQ
+         Rf1CEoQLBZxCOPzP5r5J2NHxcb4YVzCXfr/toM9GdOrx4PTeyNs8U/aVCZrcLws6fY
+         1ME2915dW1OGHuKcFQupl7ouXjQO8+htsg+VDLPi4y2ocJhP4fX9owJMl4rfbF9Nat
+         ktqJ7oTjyLgKi6dT6riVI/iuWY+9eQLLrWCRU+St/gS+XxDj9/0VtyxLmZUoF0QRqa
+         rdgy0s1xxt3RBBRD0qFY7s90k3+Splfo0AUCbHQTyUxwKJD+aHk7RJf8yyt6tz+DqF
+         xlLb0KMxaDrhQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([212.114.172.145]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7R1J-1op3IE02Wr-017jnL; Thu, 22
+ Dec 2022 04:42:27 +0100
+Message-ID: <241c118c2fb60df744bbe351387fc29a34ff6ab9.camel@gmx.de>
+Subject: Re: regression: nfs mount (even idle) eventually hangs server
+From:   Mike Galbraith <efault@gmx.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     linux-nfs@vger.kernel.org
+Date:   Thu, 22 Dec 2022 04:42:26 +0100
+In-Reply-To: <360f3dcfb6cfbefdbcc42fc84c660995142a8645.camel@gmx.de>
+References: <65ed34338c69cb034295f2c9cbe0af684d65d30f.camel@gmx.de>
+         <360f3dcfb6cfbefdbcc42fc84c660995142a8645.camel@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [RFC PATCH] clocksource: Suspend the watchdog temporarily when
- high read lantency detected
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     Feng Tang <feng.tang@intel.com>, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Tim Chen <tim.c.chen@intel.com>
-References: <20221220082512.186283-1-feng.tang@intel.com>
- <6fb04ee9-ce77-4835-2ad1-b7f8419cfb77@redhat.com>
- <20221220183400.GY4001@paulmck-ThinkPad-P17-Gen-1>
- <Y6Ja+kYQAi4pppV6@feng-clx> <8a9bed0d-c166-37e9-24c3-8cea7a336c76@redhat.com>
- <20221222004032.GI4001@paulmck-ThinkPad-P17-Gen-1>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221222004032.GI4001@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:+oWVfH7B5raoTurhi7fj8NVL9M1ztZhwxkW89lsElb2Bgpq8rlH
+ 0rvvC+CnuhJwJ/Mek69PAe5RoiT7CREfoqm/JnOh8rM55TpAtwKqrIzoQ0vJNn7UA2y3liA
+ OCTxpIqCZ6SvIs482abPjBijIggIo/Hf4/EKbjyo1QK+mVtGlKSdDkxPl8+ooEQzjSVC/L0
+ RcAZoM9ZjqnRnEXTxMjSQ==
+UI-OutboundReport: notjunk:1;M01:P0:AWjDBLvWvi0=;Lk/fuvj0k2yLROYkIgLSmJod9Vf
+ iBO3sHjRlO0ZNzS8xiewX0L7Sj9BmuhpbUgfMnpKhhuwgkbKXFv+LI/Q73vBnXRuWK5bAjxr/
+ 7jj9V4aEluoAweSaCgnwiZC3wuE/O7Jbq4cqGC20sKfCBGIjVD9D0HXH9xeqJPT/UiGG2+KmJ
+ 3u3IEPmGWuuhpGOZkVMxob+5Bg7paWHGC2JeMaaL8Fdu71AWhzwT5S1/zEPZmGHXrsMA/tuxo
+ gnP4idWmhEuWcS9bO3voiPQNJUooSWz2fbHyndZ8iApYDSpsHiF/z3c0V8KZF5bE14ND/iWWi
+ Z74IzmhAm/bZX52Z5K6W1qL//9mCjwO1/NxUbf3KrBEunTvBlAPFaJpim+e/fuECSA7A8tNyx
+ NTBOIsTIM5V+yqe0LUm9syZAcS5NPlURQQngUevqBfi4AAM0WOZdUMRFoU3FIuwn5XoxtVUUo
+ uccr0ZJi2MqzmmEB06plEJ5UD9eLRxr9pkZAE6sC6HOF2nX5NYDbxRpmxXSdBJw/yKNT0SNC3
+ Y5f0fzbQ4FpaLOzlwXu3t9gG15yhl3rr6Y4rFcxHYpchF+xAflificNncrV2RUrc/xy33ftbf
+ eRPqvB3zXdnbT1GqEm0Y+9rbRDBXScgjj9t6BlxKunu4FuxY/OIWpiJ3AOCwx1Zserfu7yY5u
+ HwJU7d0yPaY0gEdV/UJnnI83UIPjWgZNoz+1j0jj6o/da7g4CPvht9mcJ9M9/tFVvxP3Tgkzy
+ 1aqajnLOo+pKvnV4a2MZpcCYGhjepdLiQLvAjNje+lkarF+5CNzcmsUbINdGmNMp6ewBiGJt5
+ 2kiCL0hdHkNwXIJ7+dcZXUeT+DTMH8yhx5zzDfJz0bohrNx/HLRwzmYp1dNHeQwal8GC3j7dp
+ Si+VHJX5xgnFQZevJ/ajtdNtWgyrlCD4qYxxKx5km1pd4+S4kchbaLg2lRae0F5q5rCCZ3xlH
+ B42O1jN9ytOwAihdGqrfD4+fgBg=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/22 19:40, Paul E. McKenney wrote:
-> commit 199dfa2ba23dd0d650b1482a091e2e15457698b7
-> Author: Paul E. McKenney<paulmck@kernel.org>
-> Date:   Wed Dec 21 16:20:25 2022 -0800
->
->      clocksource: Verify HPET and PMTMR when TSC unverified
->      
->      On systems with two or fewer sockets, when the boot CPU has CONSTANT_TSC,
->      NONSTOP_TSC, and TSC_ADJUST, clocksource watchdog verification of the
->      TSC is disabled.  This works well much of the time, but there is the
->      occasional system that meets all of these criteria, but which still
->      has a TSC that skews significantly from atomic-clock time.  This is
->      usually attributed to a firmware or hardware fault.  Yes, the various
->      NTP daemons do express their opinions of userspace-to-atomic-clock time
->      skew, but they put them in various places, depending on the daemon and
->      distro in question.  It would therefore be good for the kernel to have
->      some clue that there is a problem.
->      
->      The old behavior of marking the TSC unstable is a non-starter because a
->      great many workloads simply cannot tolerate the overheads and latencies
->      of the various non-TSC clocksources.  In addition, NTP-corrected systems
->      often seem to be able to tolerate significant kernel-space time skew as
->      long as the userspace time sources are within epsilon of atomic-clock
->      time.
->      
->      Therefore, when watchdog verification of TSC is disabled, enable it for
->      HPET and PMTMR (AKA ACPI PM timer).  This provides the needed in-kernel
->      time-skew diagnostic without degrading the system's performance.
->      
->      Signed-off-by: Paul E. McKenney<paulmck@kernel.org>
->      Cc: Thomas Gleixner<tglx@linutronix.de>
->      Cc: Ingo Molnar<mingo@redhat.com>
->      Cc: Borislav Petkov<bp@alien8.de>
->      Cc: Dave Hansen<dave.hansen@linux.intel.com>
->      Cc: "H. Peter Anvin"<hpa@zytor.com>
->      Cc: Daniel Lezcano<daniel.lezcano@linaro.org>
->      Cc: Feng Tang<feng.tang@intel.com>
->      Cc: Waiman Long <longman@redhat.com
->      Cc:<x86@kernel.org>
+On Wed, 2022-12-21 at 10:56 +0100, Mike Galbraith wrote:
+> > 6.1 didn't reproduce either, so it would appear to be a merge window b=
+ug.
 
-As I currently understand, you are trying to use TSC as a watchdog to 
-check against HPET and PMTMR. I do have 2 questions about this patch.
+Ah, not true, turning evolution loose in nfs mounted home and letting
+it refresh mailboxes while desktop box was kept busy jammed up 6.1.0 in
+fairly short order. =C2=A0
 
-First of all, why you need to use both HPET and PMTMR? Can you just use 
-one of those that are available. Secondly, is it possible to enable this 
-time-skew diagnostic for a limit amount of time instead running 
-indefinitely? The running of the clocksource watchdog itself will still 
-consume a tiny amount of CPU cycles.
+homer:..debug/tracing # grep WARNING: /netconsole.log2
+[ 3309.873094] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1655 __queue_=
+delayed_work+0x6a/0x90
+[ 3309.873446] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1657 __queue_=
+delayed_work+0x5a/0x90
+[ 3309.873780] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
+work+0x33b/0x3d0
+[ 3309.874120] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
+work+0x33b/0x3d0
+[ 3309.874452] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
+work+0x33b/0x3d0
+[ 3309.874783] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
+work+0x33b/0x3d0
+[ 3309.875099] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
+work+0x33b/0x3d0
+[ 3309.875426] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
+work+0x33b/0x3d0
+[ 3309.875745] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
+work+0x33b/0x3d0
+[ 3309.876064] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
+work+0x33b/0x3d0
+[ 3309.876383] WARNING: CPU: 1 PID: 78 at kernel/workqueue.c:1500 __queue_=
+work+0x33b/0x3d0
 
-Cheers,
-Longman
+Sigh.  Ok 6.0, batter up...
 
-
+	-Mike
