@@ -2,260 +2,436 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA77653F22
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF3C653F2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 12:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235327AbiLVLjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 06:39:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S235074AbiLVLmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 06:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiLVLjO (ORCPT
+        with ESMTP id S229707AbiLVLme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 06:39:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBF227916
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 03:38:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671709105;
+        Thu, 22 Dec 2022 06:42:34 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086DA27DDC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 03:42:31 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 444481EC06FB;
+        Thu, 22 Dec 2022 12:42:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671709350;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D2c/4EKQG1CyLBHCaqgEyAQsuYjRgCOdz9VhRLCzbvE=;
-        b=D5U0W3enjRMA/IFyqToQZvgfQ3Mf5tUPgm/vzDsPp9Rm0OMYk9KAXyLiBSOY3W+mtYRkg2
-        8rJ+Q2Onhta/UNnVoUTuKLvRjwx0JgVUq6jKvXBpjHGDzIncNCNorDajlzP5tFDgS/0bGH
-        GfjxUp5d8MPoMGQcVxBAxXzuizRgUlk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-427-zksao7wdMiaz9HNIn_nrIQ-1; Thu, 22 Dec 2022 06:38:22 -0500
-X-MC-Unique: zksao7wdMiaz9HNIn_nrIQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E186A101A521;
-        Thu, 22 Dec 2022 11:38:21 +0000 (UTC)
-Received: from localhost (ovpn-12-50.pek2.redhat.com [10.72.12.50])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 154C8112132C;
-        Thu, 22 Dec 2022 11:38:20 +0000 (UTC)
-Date:   Thu, 22 Dec 2022 19:38:14 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: Re: [PATCH v2 1/3] mm: vmalloc: Avoid of calling __find_vmap_area()
- twise in __vunmap()
-Message-ID: <Y6RBpl62gDoJiEu+@MiWiFi-R3L-srv>
-References: <20221221174454.1085130-1-urezki@gmail.com>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=dDn6wsvOhaITOIfV7/hN3JIe+cYEz0sHkQtXT0GmOaM=;
+        b=Pv3QCn5lQEHrgAxI8Vt9dDgQ6nRoFvISpxVeECwXnxY9a4gKIX64ebTwlMYnhERDDE+80j
+        ikNdYbiGj9Alyd1/+MUl/PMsZV3RkVWSaoLHoVpY53Z6592GSaefBclAM5vIJqHhdMrQct
+        vhVZFSzIYvzsJnHl6FqBZCrQWfOPY7Q=
+Date:   Thu, 22 Dec 2022 12:42:24 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     X86 ML <x86@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH -v2] x86/alternatives: Add alt_instr.flags
+Message-ID: <Y6RCoJEtxxZWwotd@zn.tnic>
+References: <20221219195312.7054-1-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221221174454.1085130-1-urezki@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221219195312.7054-1-bp@alien8.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/21/22 at 06:44pm, Uladzislau Rezki (Sony) wrote:
-> Currently __vunmap() path calls __find_vmap_area() two times. One on
-> entry to check that area exists, second time inside remove_vm_area()
-> function that also performs a new search of VA.
-> 
-> In order to improvie it from a performance point of view we split
-> remove_vm_area() into two new parts:
->   - find_unlink_vmap_area() that does a search and unlink from tree;
->   - __remove_vm_area() that does a removing but without searching.
-> 
-> In this case there is no any functional change for remove_vm_area()
-> whereas vm_remove_mappings(), where a second search happens, switches
-> to the __remove_vm_area() variant where already detached VA is passed
-> as a parameter, so there is no need to find it again.
+Yeah,
 
-I like this patch. This takes off the va->vm clearning too. Finally I
-don't need to worry about the va->flags clearing during unmapping
-when reading out vmap_block areas.
-> 
-> Performance wise, i use test_vmalloc.sh with 32 threads doing alloc
-> free on a 64-CPUs-x86_64-box:
-> 
-> perf without this patch:
-> -   31.41%     0.50%  vmalloc_test/10  [kernel.vmlinux]    [k] __vunmap
->    - 30.92% __vunmap
->       - 17.67% _raw_spin_lock
->            native_queued_spin_lock_slowpath
->       - 12.33% remove_vm_area
->          - 11.79% free_vmap_area_noflush
->             - 11.18% _raw_spin_lock
->                  native_queued_spin_lock_slowpath
->         0.76% free_unref_page
-> 
-> perf with this patch:
-> -   11.35%     0.13%  vmalloc_test/14  [kernel.vmlinux]    [k] __vunmap
->    - 11.23% __vunmap
->       - 8.28% find_unlink_vmap_area
->          - 7.95% _raw_spin_lock
->               7.44% native_queued_spin_lock_slowpath
->       - 1.93% free_vmap_area_noflush
->          - 0.56% _raw_spin_lock
->               0.53% native_queued_spin_lock_slowpath
->         0.60% __vunmap_range_noflush
-> 
-> __vunmap() consumes around ~20% less CPU cycles on this test.
-> 
-> Reported-by: Roman Gushchin <roman.gushchin@linux.dev>
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> ---
->  mm/vmalloc.c | 66 +++++++++++++++++++++++++++++++++-------------------
->  1 file changed, 42 insertions(+), 24 deletions(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 9e30f0b39203..28030d2441f1 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1825,9 +1825,11 @@ static void free_vmap_area_noflush(struct vmap_area *va)
->  	unsigned long va_start = va->va_start;
->  	unsigned long nr_lazy;
->  
-> -	spin_lock(&vmap_area_lock);
-> -	unlink_va(va, &vmap_area_root);
-> -	spin_unlock(&vmap_area_lock);
-> +	if (!list_empty(&va->list)) {
-> +		spin_lock(&vmap_area_lock);
-> +		unlink_va(va, &vmap_area_root);
-> +		spin_unlock(&vmap_area_lock);
-> +	}
->  
->  	nr_lazy = atomic_long_add_return((va->va_end - va->va_start) >>
->  				PAGE_SHIFT, &vmap_lazy_nr);
-> @@ -1871,6 +1873,19 @@ struct vmap_area *find_vmap_area(unsigned long addr)
->  	return va;
->  }
->  
-> +static struct vmap_area *find_unlink_vmap_area(unsigned long addr)
-> +{
-> +	struct vmap_area *va;
-> +
-> +	spin_lock(&vmap_area_lock);
-> +	va = __find_vmap_area(addr, &vmap_area_root);
-> +	if (va)
-> +		unlink_va(va, &vmap_area_root);
-> +	spin_unlock(&vmap_area_lock);
-> +
-> +	return va;
-> +}
-> +
->  /*** Per cpu kva allocator ***/
->  
->  /*
-> @@ -2591,6 +2606,20 @@ struct vm_struct *find_vm_area(const void *addr)
->  	return va->vm;
->  }
->  
-> +static struct vm_struct *__remove_vm_area(struct vmap_area *va)
-> +{
-> +	struct vm_struct *vm;
-> +
-> +	if (!va || !va->vm)
-> +		return NULL;
-> +
-> +	vm = va->vm;
-> +	kasan_free_module_shadow(vm);
-> +	free_unmap_vmap_area(va);
-> +
-> +	return vm;
-> +}
-> +
->  /**
->   * remove_vm_area - find and remove a continuous kernel virtual area
->   * @addr:	    base address
-> @@ -2607,22 +2636,8 @@ struct vm_struct *remove_vm_area(const void *addr)
->  
->  	might_sleep();
->  
-> -	spin_lock(&vmap_area_lock);
-> -	va = __find_vmap_area((unsigned long)addr, &vmap_area_root);
-> -	if (va && va->vm) {
-> -		struct vm_struct *vm = va->vm;
-> -
-> -		va->vm = NULL;
-> -		spin_unlock(&vmap_area_lock);
-> -
-> -		kasan_free_module_shadow(vm);
-> -		free_unmap_vmap_area(va);
-> -
-> -		return vm;
-> -	}
-> -
-> -	spin_unlock(&vmap_area_lock);
-> -	return NULL;
-> +	va = find_unlink_vmap_area((unsigned long) addr);
-> +	return __remove_vm_area(va);
->  }
->  
->  static inline void set_area_direct_map(const struct vm_struct *area,
-> @@ -2637,15 +2652,16 @@ static inline void set_area_direct_map(const struct vm_struct *area,
->  }
->  
->  /* Handle removing and resetting vm mappings related to the vm_struct. */
-> -static void vm_remove_mappings(struct vm_struct *area, int deallocate_pages)
-> +static void vm_remove_mappings(struct vmap_area *va, int deallocate_pages)
->  {
-> +	struct vm_struct *area = va->vm;
->  	unsigned long start = ULONG_MAX, end = 0;
->  	unsigned int page_order = vm_area_page_order(area);
->  	int flush_reset = area->flags & VM_FLUSH_RESET_PERMS;
->  	int flush_dmap = 0;
->  	int i;
->  
-> -	remove_vm_area(area->addr);
-> +	__remove_vm_area(va);
->  
->  	/* If this is not VM_FLUSH_RESET_PERMS memory, no need for the below. */
->  	if (!flush_reset)
-> @@ -2690,6 +2706,7 @@ static void vm_remove_mappings(struct vm_struct *area, int deallocate_pages)
->  static void __vunmap(const void *addr, int deallocate_pages)
->  {
->  	struct vm_struct *area;
-> +	struct vmap_area *va;
->  
->  	if (!addr)
->  		return;
-> @@ -2698,19 +2715,20 @@ static void __vunmap(const void *addr, int deallocate_pages)
->  			addr))
->  		return;
->  
-> -	area = find_vm_area(addr);
-> -	if (unlikely(!area)) {
-> +	va = find_unlink_vmap_area((unsigned long)addr);
-> +	if (unlikely(!va)) {
->  		WARN(1, KERN_ERR "Trying to vfree() nonexistent vm area (%p)\n",
->  				addr);
->  		return;
->  	}
->  
-> +	area = va->vm;
->  	debug_check_no_locks_freed(area->addr, get_vm_area_size(area));
->  	debug_check_no_obj_freed(area->addr, get_vm_area_size(area));
->  
->  	kasan_poison_vmalloc(area->addr, get_vm_area_size(area));
->  
-> -	vm_remove_mappings(area, deallocate_pages);
-> +	vm_remove_mappings(va, deallocate_pages);
->  
->  	if (deallocate_pages) {
->  		int i;
-> -- 
-> 2.30.2
-> 
+PeterZ had a much better idea for doing the split and hacking it in, it
+turned out to be the cleanest and straightforwardestest eva.
 
+So let's do it.
+
+---
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
+
+Add a struct alt_instr.flags field which will contain different flags
+controlling alternatives patching behavior.
+
+The initial idea was to be able to specify it as a separate macro
+parameter but that would mean touching all possible invocations of the
+alternatives macros and thus a lot of churn.
+
+What is more, as PeterZ suggested, being able to say ALT_NOT(feature) is
+very readable and explains exactly what is meant.
+
+So make the feature field a u32 where the patching flags are the upper
+u16 part of the dword quantity while the lower u16 word is the feature.
+
+The highest feature number currently is 0x26a (i.e., word 19) so we have
+plenty of space. If that becomes insufficient, the field can be extended
+to u64 which will then make struct alt_instr of the nice size of 16
+bytes (14 bytes currently).
+
+There should be no functional changes resulting from this.
+
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+---
+ arch/x86/include/asm/alternative.h            | 132 ++++++++++--------
+ arch/x86/kernel/alternative.c                 |  14 +-
+ tools/objtool/arch/x86/include/arch/special.h |   6 +-
+ 3 files changed, 85 insertions(+), 67 deletions(-)
+
+diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
+index 7659217f4d49..ad17cda8e5d2 100644
+--- a/arch/x86/include/asm/alternative.h
++++ b/arch/x86/include/asm/alternative.h
+@@ -6,8 +6,10 @@
+ #include <linux/stringify.h>
+ #include <asm/asm.h>
+ 
+-#define ALTINSTR_FLAG_INV	(1 << 15)
+-#define ALT_NOT(feat)		((feat) | ALTINSTR_FLAG_INV)
++#define ALT_FLAGS_SHIFT		16
++
++#define ALT_FLAG_NOT		BIT(0)
++#define ALT_NOT(feature)	((ALT_FLAG_NOT << ALT_FLAGS_SHIFT) | (feature))
+ 
+ #ifndef __ASSEMBLY__
+ 
+@@ -59,10 +61,27 @@
+ 	".long 999b - .\n\t"					\
+ 	".popsection\n\t"
+ 
++/*
++ * The patching flags are part of the upper bits of the @ft_flgs parameter when
++ * specifying them. The split is currently like this:
++ *
++ * [31... flags ...16][15... CPUID feature bit ...0]
++ *
++ * but since this is all hidden in the macros argument being split, those fields can be
++ * extended in the future to fit in a u64 or however the need arises.
++ */
+ struct alt_instr {
+ 	s32 instr_offset;	/* original instruction */
+ 	s32 repl_offset;	/* offset to replacement instruction */
+-	u16 cpuid;		/* cpuid bit set for replacement */
++
++	union {
++		struct {
++			u32 cpuid: 16;	/* CPUID bit set for replacement */
++			u32 flags: 16;	/* patching control flags */
++		};
++		u32 ft_flgs;
++	};
++
+ 	u8  instrlen;		/* length of original instruction */
+ 	u8  replacementlen;	/* length of new instruction */
+ } __packed;
+@@ -182,10 +201,10 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 		" - (" alt_slen ")), 0x90\n"							\
+ 	alt_end_marker ":\n"
+ 
+-#define ALTINSTR_ENTRY(feature, num)					      \
++#define ALTINSTR_ENTRY(ft_flgs, num)					      \
+ 	" .long 661b - .\n"				/* label           */ \
+ 	" .long " b_replacement(num)"f - .\n"		/* new instruction */ \
+-	" .word " __stringify(feature) "\n"		/* feature bit     */ \
++	" .4byte " __stringify(ft_flgs) "\n"		/* feature + flags */ \
+ 	" .byte " alt_total_slen "\n"			/* source len      */ \
+ 	" .byte " alt_rlen(num) "\n"			/* replacement len */
+ 
+@@ -194,20 +213,20 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 	b_replacement(num)":\n\t" newinstr "\n" e_replacement(num) ":\n"
+ 
+ /* alternative assembly primitive: */
+-#define ALTERNATIVE(oldinstr, newinstr, feature)			\
++#define ALTERNATIVE(oldinstr, newinstr, ft_flgs)			\
+ 	OLDINSTR(oldinstr, 1)						\
+ 	".pushsection .altinstructions,\"a\"\n"				\
+-	ALTINSTR_ENTRY(feature, 1)					\
++	ALTINSTR_ENTRY(ft_flgs, 1)					\
+ 	".popsection\n"							\
+ 	".pushsection .altinstr_replacement, \"ax\"\n"			\
+ 	ALTINSTR_REPLACEMENT(newinstr, 1)				\
+ 	".popsection\n"
+ 
+-#define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
++#define ALTERNATIVE_2(oldinstr, newinstr1, ft_flgs1, newinstr2, ft_flgs2) \
+ 	OLDINSTR_2(oldinstr, 1, 2)					\
+ 	".pushsection .altinstructions,\"a\"\n"				\
+-	ALTINSTR_ENTRY(feature1, 1)					\
+-	ALTINSTR_ENTRY(feature2, 2)					\
++	ALTINSTR_ENTRY(ft_flgs1, 1)					\
++	ALTINSTR_ENTRY(ft_flgs2, 2)					\
+ 	".popsection\n"							\
+ 	".pushsection .altinstr_replacement, \"ax\"\n"			\
+ 	ALTINSTR_REPLACEMENT(newinstr1, 1)				\
+@@ -215,21 +234,22 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 	".popsection\n"
+ 
+ /* If @feature is set, patch in @newinstr_yes, otherwise @newinstr_no. */
+-#define ALTERNATIVE_TERNARY(oldinstr, feature, newinstr_yes, newinstr_no) \
++#define ALTERNATIVE_TERNARY(oldinstr, ft_flgs, newinstr_yes, newinstr_no) \
+ 	ALTERNATIVE_2(oldinstr, newinstr_no, X86_FEATURE_ALWAYS,	\
+-		      newinstr_yes, feature)
+-
+-#define ALTERNATIVE_3(oldinsn, newinsn1, feat1, newinsn2, feat2, newinsn3, feat3) \
+-	OLDINSTR_3(oldinsn, 1, 2, 3)						\
+-	".pushsection .altinstructions,\"a\"\n"					\
+-	ALTINSTR_ENTRY(feat1, 1)						\
+-	ALTINSTR_ENTRY(feat2, 2)						\
+-	ALTINSTR_ENTRY(feat3, 3)						\
+-	".popsection\n"								\
+-	".pushsection .altinstr_replacement, \"ax\"\n"				\
+-	ALTINSTR_REPLACEMENT(newinsn1, 1)					\
+-	ALTINSTR_REPLACEMENT(newinsn2, 2)					\
+-	ALTINSTR_REPLACEMENT(newinsn3, 3)					\
++		      newinstr_yes, ft_flgs)
++
++#define ALTERNATIVE_3(oldinsn, newinsn1, ft_flgs1, newinsn2, ft_flgs2,	\
++			newinsn3, ft_flgs3)				\
++	OLDINSTR_3(oldinsn, 1, 2, 3)					\
++	".pushsection .altinstructions,\"a\"\n"				\
++	ALTINSTR_ENTRY(ft_flgs1, 1)					\
++	ALTINSTR_ENTRY(ft_flgs2, 2)					\
++	ALTINSTR_ENTRY(ft_flgs3, 3)					\
++	".popsection\n"							\
++	".pushsection .altinstr_replacement, \"ax\"\n"			\
++	ALTINSTR_REPLACEMENT(newinsn1, 1)				\
++	ALTINSTR_REPLACEMENT(newinsn2, 2)				\
++	ALTINSTR_REPLACEMENT(newinsn3, 3)				\
+ 	".popsection\n"
+ 
+ /*
+@@ -244,14 +264,14 @@ static inline int alternatives_text_reserved(void *start, void *end)
+  * For non barrier like inlines please define new variants
+  * without volatile and memory clobber.
+  */
+-#define alternative(oldinstr, newinstr, feature)			\
+-	asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, feature) : : : "memory")
++#define alternative(oldinstr, newinstr, ft_flgs)			\
++	asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flgs) : : : "memory")
+ 
+-#define alternative_2(oldinstr, newinstr1, feature1, newinstr2, feature2) \
+-	asm_inline volatile(ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2) ::: "memory")
++#define alternative_2(oldinstr, newinstr1, ft_flgs1, newinstr2, ft_flgs2) \
++	asm_inline volatile(ALTERNATIVE_2(oldinstr, newinstr1, ft_flgs1, newinstr2, ft_flgs2) ::: "memory")
+ 
+-#define alternative_ternary(oldinstr, feature, newinstr_yes, newinstr_no) \
+-	asm_inline volatile(ALTERNATIVE_TERNARY(oldinstr, feature, newinstr_yes, newinstr_no) ::: "memory")
++#define alternative_ternary(oldinstr, ft_flgs, newinstr_yes, newinstr_no) \
++	asm_inline volatile(ALTERNATIVE_TERNARY(oldinstr, ft_flgs, newinstr_yes, newinstr_no) ::: "memory")
+ 
+ /*
+  * Alternative inline assembly with input.
+@@ -261,8 +281,8 @@ static inline int alternatives_text_reserved(void *start, void *end)
+  * Argument numbers start with 1.
+  * Leaving an unused argument 0 to keep API compatibility.
+  */
+-#define alternative_input(oldinstr, newinstr, feature, input...)	\
+-	asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, feature)	\
++#define alternative_input(oldinstr, newinstr, ft_flgs, input...)	\
++	asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flgs)	\
+ 		: : "i" (0), ## input)
+ 
+ /*
+@@ -273,20 +293,20 @@ static inline int alternatives_text_reserved(void *start, void *end)
+  * Otherwise, if CPU has feature1, newinstr1 is used.
+  * Otherwise, oldinstr is used.
+  */
+-#define alternative_input_2(oldinstr, newinstr1, feature1, newinstr2,	     \
+-			   feature2, input...)				     \
+-	asm_inline volatile(ALTERNATIVE_2(oldinstr, newinstr1, feature1,     \
+-		newinstr2, feature2)					     \
++#define alternative_input_2(oldinstr, newinstr1, ft_flgs1, newinstr2,	     \
++			   ft_flgs2, input...)				     \
++	asm_inline volatile(ALTERNATIVE_2(oldinstr, newinstr1, ft_flgs1,     \
++		newinstr2, ft_flgs2)					     \
+ 		: : "i" (0), ## input)
+ 
+ /* Like alternative_input, but with a single output argument */
+-#define alternative_io(oldinstr, newinstr, feature, output, input...)	\
+-	asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, feature)	\
++#define alternative_io(oldinstr, newinstr, ft_flgs, output, input...)	\
++	asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flgs)	\
+ 		: output : "i" (0), ## input)
+ 
+ /* Like alternative_io, but for replacing a direct call with another one. */
+-#define alternative_call(oldfunc, newfunc, feature, output, input...)	\
+-	asm_inline volatile (ALTERNATIVE("call %P[old]", "call %P[new]", feature) \
++#define alternative_call(oldfunc, newfunc, ft_flgs, output, input...)	\
++	asm_inline volatile (ALTERNATIVE("call %P[old]", "call %P[new]", ft_flgs) \
+ 		: output : [old] "i" (oldfunc), [new] "i" (newfunc), ## input)
+ 
+ /*
+@@ -295,10 +315,10 @@ static inline int alternatives_text_reserved(void *start, void *end)
+  * Otherwise, if CPU has feature1, function1 is used.
+  * Otherwise, old function is used.
+  */
+-#define alternative_call_2(oldfunc, newfunc1, feature1, newfunc2, feature2,   \
++#define alternative_call_2(oldfunc, newfunc1, ft_flgs1, newfunc2, ft_flgs2,   \
+ 			   output, input...)				      \
+-	asm_inline volatile (ALTERNATIVE_2("call %P[old]", "call %P[new1]", feature1,\
+-		"call %P[new2]", feature2)				      \
++	asm_inline volatile (ALTERNATIVE_2("call %P[old]", "call %P[new1]", ft_flgs1,\
++		"call %P[new2]", ft_flgs2)				      \
+ 		: output, ASM_CALL_CONSTRAINT				      \
+ 		: [old] "i" (oldfunc), [new1] "i" (newfunc1),		      \
+ 		  [new2] "i" (newfunc2), ## input)
+@@ -347,10 +367,10 @@ static inline int alternatives_text_reserved(void *start, void *end)
+  * enough information for the alternatives patching code to patch an
+  * instruction. See apply_alternatives().
+  */
+-.macro altinstruction_entry orig alt feature orig_len alt_len
++.macro altinstr_entry orig alt ft_flgs orig_len alt_len
+ 	.long \orig - .
+ 	.long \alt - .
+-	.word \feature
++	.4byte \ft_flgs
+ 	.byte \orig_len
+ 	.byte \alt_len
+ .endm
+@@ -361,7 +381,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
+  * @newinstr. ".skip" directive takes care of proper instruction padding
+  * in case @newinstr is longer than @oldinstr.
+  */
+-.macro ALTERNATIVE oldinstr, newinstr, feature
++.macro ALTERNATIVE oldinstr, newinstr, ft_flgs
+ 140:
+ 	\oldinstr
+ 141:
+@@ -369,7 +389,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 142:
+ 
+ 	.pushsection .altinstructions,"a"
+-	altinstruction_entry 140b,143f,\feature,142b-140b,144f-143f
++	altinstr_entry 140b,143f,\ft_flgs,142b-140b,144f-143f
+ 	.popsection
+ 
+ 	.pushsection .altinstr_replacement,"ax"
+@@ -399,7 +419,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
+  * has @feature1, it replaces @oldinstr with @newinstr1. If CPU has
+  * @feature2, it replaces @oldinstr with @feature2.
+  */
+-.macro ALTERNATIVE_2 oldinstr, newinstr1, feature1, newinstr2, feature2
++.macro ALTERNATIVE_2 oldinstr, newinstr1, ft_flgs1, newinstr2, ft_flgs2
+ 140:
+ 	\oldinstr
+ 141:
+@@ -408,8 +428,8 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 142:
+ 
+ 	.pushsection .altinstructions,"a"
+-	altinstruction_entry 140b,143f,\feature1,142b-140b,144f-143f
+-	altinstruction_entry 140b,144f,\feature2,142b-140b,145f-144f
++	altinstr_entry 140b,143f,\ft_flgs1,142b-140b,144f-143f
++	altinstr_entry 140b,144f,\ft_flgs2,142b-140b,145f-144f
+ 	.popsection
+ 
+ 	.pushsection .altinstr_replacement,"ax"
+@@ -421,7 +441,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 	.popsection
+ .endm
+ 
+-.macro ALTERNATIVE_3 oldinstr, newinstr1, feature1, newinstr2, feature2, newinstr3, feature3
++.macro ALTERNATIVE_3 oldinstr, newinstr1, ft_flgs1, newinstr2, ft_flgs2, newinstr3, ft_flgs3
+ 140:
+ 	\oldinstr
+ 141:
+@@ -430,9 +450,9 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 142:
+ 
+ 	.pushsection .altinstructions,"a"
+-	altinstruction_entry 140b,143f,\feature1,142b-140b,144f-143f
+-	altinstruction_entry 140b,144f,\feature2,142b-140b,145f-144f
+-	altinstruction_entry 140b,145f,\feature3,142b-140b,146f-145f
++	altinstr_entry 140b,143f,\ft_flgs1,142b-140b,144f-143f
++	altinstr_entry 140b,144f,\ft_flgs2,142b-140b,145f-144f
++	altinstr_entry 140b,145f,\ft_flgs3,142b-140b,146f-145f
+ 	.popsection
+ 
+ 	.pushsection .altinstr_replacement,"ax"
+@@ -447,9 +467,9 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ .endm
+ 
+ /* If @feature is set, patch in @newinstr_yes, otherwise @newinstr_no. */
+-#define ALTERNATIVE_TERNARY(oldinstr, feature, newinstr_yes, newinstr_no) \
++#define ALTERNATIVE_TERNARY(oldinstr, ft_flgs, newinstr_yes, newinstr_no) \
+ 	ALTERNATIVE_2 oldinstr, newinstr_no, X86_FEATURE_ALWAYS,	\
+-	newinstr_yes, feature
++	newinstr_yes, ft_flgs
+ 
+ #endif /* __ASSEMBLY__ */
+ 
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 23cbfa8d34c5..4fd580ea3018 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -282,27 +282,25 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
+ 	 */
+ 	for (a = start; a < end; a++) {
+ 		int insn_buff_sz = 0;
+-		/* Mask away "NOT" flag bit for feature to test. */
+-		u16 feature = a->cpuid & ~ALTINSTR_FLAG_INV;
+ 
+ 		instr = (u8 *)&a->instr_offset + a->instr_offset;
+ 		replacement = (u8 *)&a->repl_offset + a->repl_offset;
+ 		BUG_ON(a->instrlen > sizeof(insn_buff));
+-		BUG_ON(feature >= (NCAPINTS + NBUGINTS) * 32);
++		BUG_ON(a->cpuid >= (NCAPINTS + NBUGINTS) * 32);
+ 
+ 		/*
+ 		 * Patch if either:
+ 		 * - feature is present
+-		 * - feature not present but ALTINSTR_FLAG_INV is set to mean,
++		 * - feature not present but ALT_FLAG_NOT is set to mean,
+ 		 *   patch if feature is *NOT* present.
+ 		 */
+-		if (!boot_cpu_has(feature) == !(a->cpuid & ALTINSTR_FLAG_INV))
++		if (!boot_cpu_has(a->cpuid) == !(a->flags & ALT_FLAG_NOT))
+ 			goto next;
+ 
+ 		DPRINTK("feat: %s%d*32+%d, old: (%pS (%px) len: %d), repl: (%px, len: %d)",
+-			(a->cpuid & ALTINSTR_FLAG_INV) ? "!" : "",
+-			feature >> 5,
+-			feature & 0x1f,
++			(a->flags & ALT_FLAG_NOT) ? "!" : "",
++			a->cpuid >> 5,
++			a->cpuid & 0x1f,
+ 			instr, instr, a->instrlen,
+ 			replacement, a->replacementlen);
+ 
+diff --git a/tools/objtool/arch/x86/include/arch/special.h b/tools/objtool/arch/x86/include/arch/special.h
+index f2918f789a0a..ca8131352994 100644
+--- a/tools/objtool/arch/x86/include/arch/special.h
++++ b/tools/objtool/arch/x86/include/arch/special.h
+@@ -11,11 +11,11 @@
+ #define JUMP_NEW_OFFSET		4
+ #define JUMP_KEY_OFFSET		8
+ 
+-#define ALT_ENTRY_SIZE		12
++#define ALT_ENTRY_SIZE		14
+ #define ALT_ORIG_OFFSET		0
+ #define ALT_NEW_OFFSET		4
+ #define ALT_FEATURE_OFFSET	8
+-#define ALT_ORIG_LEN_OFFSET	10
+-#define ALT_NEW_LEN_OFFSET	11
++#define ALT_ORIG_LEN_OFFSET	12
++#define ALT_NEW_LEN_OFFSET	13
+ 
+ #endif /* _X86_ARCH_SPECIAL_H */
+-- 
+2.35.1
+
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
