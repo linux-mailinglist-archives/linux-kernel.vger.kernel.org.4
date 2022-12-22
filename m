@@ -2,94 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC01654169
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 13:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE1865416F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 14:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235386AbiLVM5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 07:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
+        id S235104AbiLVNAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 08:00:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235167AbiLVM5N (ORCPT
+        with ESMTP id S229742AbiLVNAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 07:57:13 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84A5C09;
-        Thu, 22 Dec 2022 04:57:12 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id t2so1956812ply.2;
-        Thu, 22 Dec 2022 04:57:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=shgak+5Q2UJGQJ85fQXrp0MEzUzzc2nXkSpaCSHFJYQ=;
-        b=FcKTZen7yqObZyLVxp/FvVZ7ea8HzZe2c6uOTBFoi7g3bvvFbNxS69MvDGg046Y6un
-         2LeP2xDKu2GfR1YyG/aBRDuXAF0ecWQ8Csl3hbcVWuWf0bY9B0qsqtf++qNrc4XoWglU
-         7sq1XNpnuhVkAkm6nmtoBQRGunTiEs0fikUVrcAJYPT4W/S+xMeirwizvmIFvNcG0NKj
-         elRI9YWw1QUFmanPdZAO23zBuVVXSkxIZV42evQWC4a0bir2+suL+8q9eHgXsI2kAzHP
-         YUI31GiOOBZw7mFH2MbVypk9uQo+Zlsi6nhfVbkhYS21wyAoIIycudtzOE+Pbj/aUQVy
-         C4QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=shgak+5Q2UJGQJ85fQXrp0MEzUzzc2nXkSpaCSHFJYQ=;
-        b=R1sP2lipLMMXjocjmJnWAD3tKDhaYwrTlRbPCGA1tQXhiaaSAjui2OrN2t9cH3O4eY
-         RNUaAzUvCrIj5ft7adKLv6/8O1PSO7VOH9Q5CPOCy1+A2g6uHTtQDbP72qneM90wFpCU
-         syc/AqkYlmMuXAY1tX1dpzNNQhGBDuozbsxJ7+wFNDbBPYHKPiprw7bn1DofWtt55pr8
-         eWz5ENg11g/GrfO3oo1eJpDc9zUag4N8Y22E28GX3uawgeYqrwVG9LG9DpCeezl8pRL+
-         eMxtQdVyEPUW8BbyjzOLb29AnRdzp3miORnyYAAWnCWkcS+CUgP6W4BBUdQirJ1NO3w8
-         TxQg==
-X-Gm-Message-State: AFqh2krp4jgHWpfVjfHPTDpfWKJbg+W5M5l/sozWCXDqTBpGAlGssKTI
-        KBW18RzNPhraLkBQct+aWurTuIRNEbQ=
-X-Google-Smtp-Source: AMrXdXsd9OGV3/LNWKzCGh0+pYkG2ET1wu9v2lHLd6/kz1GWmcYM10Z3xGox/MgmSzx2r2SjbHrbvg==
-X-Received: by 2002:a17:902:7243:b0:189:30cd:8fa2 with SMTP id c3-20020a170902724300b0018930cd8fa2mr6203652pll.50.1671713832224;
-        Thu, 22 Dec 2022 04:57:12 -0800 (PST)
-Received: from [192.168.43.80] (subs03-180-214-233-71.three.co.id. [180.214.233.71])
-        by smtp.gmail.com with ESMTPSA id s6-20020a170902ea0600b001913c5fc051sm404944plg.274.2022.12.22.04.57.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 04:57:11 -0800 (PST)
-Message-ID: <4fbc9e89-24af-9d59-dab0-73925ac94df1@gmail.com>
-Date:   Thu, 22 Dec 2022 19:56:57 +0700
+        Thu, 22 Dec 2022 08:00:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C1BC09;
+        Thu, 22 Dec 2022 05:00:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7726DB81D2D;
+        Thu, 22 Dec 2022 13:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7D61C433D2;
+        Thu, 22 Dec 2022 13:00:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671714036;
+        bh=9W5wvIsudxlyGWjHXQF4tUGsiSCy97rCYsCSM77Fg00=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=dcnzhC9r1DlFOf5fxMK6qAK/mWD0n9P52cyC6lX/n411r5np52AZp3mrqa6wAnRNR
+         plT+6Mo/k5/VMd7IsD+D0UrZeTmKXhiqypuVaWuj9Uj/EHedpLogBWQ85eUhscJYVb
+         4/6UL3dLJB2O4Y8Jg2/UKJ+2snswaQhAVvVbYJUVsyOLpoA+2cNXsbUAn/3BSg20dP
+         HBiipcUVhQtcXkIyHkwDJiMdG5OoOjsFvKQ43S2L0gctF2n7XUkf5qRlPA+Hwy7Wd7
+         qB31vpwGubOk0lfVBs7e8IJTtxUczi4wA6YvYyuKEsi6xvzS3Caez5j5NShZGQC3Iu
+         +k02QLKYRa/Qg==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Pu Lehui <pulehui@huawei.com>,
+        Pu Lehui <pulehui@huaweicloud.com>
+Subject: Re: [RFC PATCH RESEND bpf-next 0/4] Support bpf trampoline for RV64
+In-Reply-To: <20221220021319.1655871-1-pulehui@huaweicloud.com>
+References: <20221220021319.1655871-1-pulehui@huaweicloud.com>
+Date:   Thu, 22 Dec 2022 14:00:33 +0100
+Message-ID: <87ili3a8zy.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] Documentation: stable: Add rule on what kind of patches
- are accepted
-Content-Language: en-US
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
-        gregkh@linuxfoundation.org, sashal@kernel.org, corbet@lwn.net
-Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joneslee@google.com
-References: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/22/22 16:16, Tudor Ambarus wrote:
-> The list of rules on what kind of patches are accepted, and which ones
-> are not into the “-stable” tree, did not mention anything about new
-> features and let the reader use its own judgement. One may be under the
-> impression that new features are not accepted at all, but that's not true:
-> new features are not accepted unless they fix a reported problem.
-> Update documentation with missing rule.
-> 
+Pu Lehui <pulehui@huaweicloud.com> writes:
 
-Are there any other examples of problems that can "only" be solved by
-introducing new features? Or new huge features that are virtually
-harder to backport?
+> BPF trampoline is the critical infrastructure of the bpf
+> subsystem, acting as a mediator between kernel functions
+> and BPF programs. Numerous important features, such as
+> using ebpf program for zero overhead kernel introspection,
+> rely on this key component. We can't wait to support bpf
+> trampoline on RV64. The implementation of bpf trampoline
+> was closely to x86 and arm64 for future development.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Thank you for working on this! BPF trampoline is the "missing piece"
+from getting proper kfunc support.
 
+Unfortunately, I wont be able to do a proper review until next week.
+
+
+Happy holidays,
+Bj=C3=B6rn
