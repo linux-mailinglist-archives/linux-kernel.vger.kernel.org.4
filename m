@@ -2,112 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29293653A4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 02:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D8B653A54
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 02:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234930AbiLVBZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Dec 2022 20:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S234834AbiLVBdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Dec 2022 20:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbiLVBZr (ORCPT
+        with ESMTP id S229854AbiLVBdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Dec 2022 20:25:47 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B601022;
-        Wed, 21 Dec 2022 17:25:45 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id a17so345362qvt.9;
-        Wed, 21 Dec 2022 17:25:45 -0800 (PST)
+        Wed, 21 Dec 2022 20:33:40 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C54520180
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 17:33:38 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3d2994e2d7dso6879887b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Dec 2022 17:33:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5SjxE/kmdtcXqhgloBP4CmAlPwzNLVF1sSk4Q1Ar3K0=;
-        b=paWiXvp0dQsJsqWrO4Gy0X1iAanI6fktRVeGa7V7CZt9vRMzDRH8/gxua/f90yB8y6
-         unLhrb+lg5Hd6uDFRyMBnrkCaKezH/bBAACpDD1IYyUkPzKW26e7CAVKuBaItLErkSX/
-         dyxXvsYw6c+aCHh3eOuBNk3IrYRw0NCC063nPGNYeX8aknUvVRF4P9f5hRCDffGWpDKf
-         wVAzaIsNrXyQovjYH6VD7Fj662ByrlFjBzmQrl/MsNGwvm5LVIWIwsvGvmI+c8puxJcI
-         gPiaK4hfti2cZFVyNnCskkuGXdYnm8yKdSnPnlS6rIcQYK8cBBnhFgH1ryk8MGUUDQtd
-         +ICw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NMbd6YPE3mDcFXMpMkb2Cl5GlR82hgSLYy3B2RTrJ24=;
+        b=iPqNqREydN6RH8EAKMfQ3krja3jcNSNIVXyMeSPbiv3qxfT4FujakOttz4xz/kwCTL
+         1mVtEICZPiGeTUVk4POhXMUHZH37mmgonWwjNnjArrl+/DCz3SeY7SsMEwdWCK74sD9P
+         lE7cPlcCJWrSpou2akxgz9Jk5oMCXH5z81cfXbrSqTisN8UthkUFeU4p0b9yhsCK19DA
+         njnNd2X85mAmuMLy7LWgQHO+pkek2nnztGnoUkwb5Dw7kFqbcxq2uYnELnLq93CtVPIn
+         ZKsellIp7I1uoHlT0RmELO6g+DhxSh56y/IeI/GglvztpBr3GeenQq7bFALVdUMKcLz2
+         pIkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5SjxE/kmdtcXqhgloBP4CmAlPwzNLVF1sSk4Q1Ar3K0=;
-        b=xxvJnkb2S7oJEES5aGXvTjn6ahr6LU9NHKk/SZEvvqAfYYSHoc3rN1ZgRhzqQzb6yP
-         S+EXs6oaz+y/88zGCQ1mTlo3p1YFMNXHmfUE2f8fgxlQqEqucYXJIrgLjC/FkYnkzEFo
-         PCEz3fCp3+0j4zw35tJGhe8nKzk4tGv05nQgLKnXkM+hx25/tH64a63BG+Mt1EnLBqQa
-         Mlbblz8HJr0+5jC2nCnRFN59rbZbDImGHATNEofjCIpq5gybuQayZlSba3TgCp9FsMVX
-         kWe91vrRIb0dDrguU7/sZgurRL/ABEituxiZwFYZnweM7dnipY/qMbVSpb5PJ8AuOlwm
-         iaKA==
-X-Gm-Message-State: AFqh2kpp+wW+MyKEcgztPk2Ii9wjzry/N0Bs9gUNI8HxZFtf5Ldvj/44
-        tQf5EQC+krMmvpzjF1sW/Mo=
-X-Google-Smtp-Source: AMrXdXvMtuRFFkZgbjz5/EL3muFQk2UMmzjVgG8U2gJR+0GYGfSP/lIPrJ8tSNM9q+2+piTMAYuW0g==
-X-Received: by 2002:a05:6214:3507:b0:4c7:7370:3c07 with SMTP id nk7-20020a056214350700b004c773703c07mr25344451qvb.13.1671672344864;
-        Wed, 21 Dec 2022 17:25:44 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id n17-20020a05620a223100b006fc40dafaa2sm11255394qkh.8.2022.12.21.17.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Dec 2022 17:25:44 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 6558C27C0054;
-        Wed, 21 Dec 2022 20:25:43 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 21 Dec 2022 20:25:43 -0500
-X-ME-Sender: <xms:FrKjY7ybWlKcpq44pOkbAwaH4Cqfv2iW2HoWaPUHjVVmFLTk1ztyVw>
-    <xme:FrKjYzRTxVlPMN2sDmpzSwuNXvK6k_KuAIZZmGlrAHq9Kz8chIwLTJCVL9SVzptbx
-    IYc-_MYWd9YjiOH-g>
-X-ME-Received: <xmr:FrKjY1V9FUXq8MaFkbXJRNye_y8BAcJU4d7A_yY1Bc2VhyyXTsmWVgWBKK4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeelgdefiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
-    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudff
-    iedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
-    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
-    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
-    hmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:FrKjY1gnAD621Usc2FOoJR6PUWSCEidlappQmTUWR-OVmUscPmKXRQ>
-    <xmx:FrKjY9CUzVqX9GTuJs5q2bsA-XiEU7qMUz5KQi8chq3E6W20y4XgfA>
-    <xmx:FrKjY-LY4W06F5Ptm5bBI1gQVEXvV2ZdF2ffcU1D2ui_Hh6OwJjslw>
-    <xmx:F7KjY7hkS6nQ7kWeHID3WVuJSiM7SEq8DM7L8NGDOUy-_f5jxtz1UJkjP-M>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 21 Dec 2022 20:25:42 -0500 (EST)
-Date:   Wed, 21 Dec 2022 17:25:20 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC][PATCH 05/12] arch: Introduce
- arch_{,try_}_cmpxchg128{,_local}()
-Message-ID: <Y6OyAL2epKPHj+tr@boqun-archlinux>
-References: <20221219153525.632521981@infradead.org>
- <20221219154119.154045458@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219154119.154045458@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NMbd6YPE3mDcFXMpMkb2Cl5GlR82hgSLYy3B2RTrJ24=;
+        b=PcfnK5u/10LGq68rqaSzErSnfHzMDDq0PtUbm7VzlS0GJmyWgbKXNrgYfsp/abPKjq
+         PdTsNc400RQdZMWfbG1ZWJr0r0Pcw1ye1uXrPyR64UJFm+cYN2o1Nun/+HaetQU4bZ9S
+         ra52mRvhTxOkZTSb1ucQBC06TDXXGvrlSErDzWJUGR/mg/FqFb1WpVhlcR8W7ZQjHRxJ
+         f4etEzs0cf01fmvYm91Svh1XN2wQjNsxGFuN5AXQ36yC7IBTD7GhRIM6kPPj5Xg4o3yk
+         iDXWTmzOBpT9qcmQMJ1hswrLuXFzzK001cilnKGgvbhUF9VJO016aI/xHOaTCcIKV2tM
+         Mi+Q==
+X-Gm-Message-State: AFqh2krqvlGUPeriEhJ2aFZ+NiNIBaO3rlmq1ki7kgQmyOfXNOKFRV23
+        0titXr5Zg82CpSlXlfHCC4XiBPQQT18=
+X-Google-Smtp-Source: AMrXdXvcJ5fLrALYrL4yvBVM/w1aVt0b+iVWdDkoO/EdJInehaqxYmryeUca4jH3vE1y2v9HTKl0f/ViE9by
+X-Received: from jackyli.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3b51])
+ (user=jackyli job=sendgmr) by 2002:a25:8487:0:b0:71d:a4ec:6069 with SMTP id
+ v7-20020a258487000000b0071da4ec6069mr435416ybk.613.1671672817363; Wed, 21 Dec
+ 2022 17:33:37 -0800 (PST)
+Date:   Thu, 22 Dec 2022 01:33:30 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221222013330.831474-1-jackyli@google.com>
+Subject: [PATCH] x86/mm/cpa: get rid of the cpa lock
+From:   Jacky Li <jackyli@google.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Marc Orr <marcorr@google.com>, Alper Gun <alpergun@google.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Jacky Li <jackyli@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,291 +74,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 04:35:30PM +0100, Peter Zijlstra wrote:
-> For all architectures that currently support cmpxchg_double()
-> implement the cmpxchg128() family of functions that is basically the
-> same but with a saner interface.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/arm64/include/asm/atomic_ll_sc.h |   38 +++++++++++++++++++++++
->  arch/arm64/include/asm/atomic_lse.h   |   33 +++++++++++++++++++-
->  arch/arm64/include/asm/cmpxchg.h      |   26 ++++++++++++++++
->  arch/s390/include/asm/cmpxchg.h       |   33 ++++++++++++++++++++
->  arch/x86/include/asm/cmpxchg_32.h     |    3 +
->  arch/x86/include/asm/cmpxchg_64.h     |   55 +++++++++++++++++++++++++++++++++-
->  6 files changed, 185 insertions(+), 3 deletions(-)
-> 
-> --- a/arch/arm64/include/asm/atomic_ll_sc.h
-> +++ b/arch/arm64/include/asm/atomic_ll_sc.h
-> @@ -326,6 +326,44 @@ __CMPXCHG_DBL(   ,        ,  ,         )
->  __CMPXCHG_DBL(_mb, dmb ish, l, "memory")
->  
->  #undef __CMPXCHG_DBL
-> +
-> +union __u128_halves {
-> +	u128 full;
-> +	struct {
-> +		u64 low, high;
-> +	};
-> +};
-> +
-> +#define __CMPXCHG128(name, mb, rel, cl)					\
-> +static __always_inline u128						\
-> +__ll_sc__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)	\
-> +{									\
-> +	union __u128_halves r, o = { .full = (old) },			\
-> +			       n = { .full = (new) };			\
-> +									\
-> +	asm volatile("// __cmpxchg128" #name "\n"			\
-> +	"	prfm	pstl1strm, %2\n"				\
-> +	"1:	ldxp	%0, %1, %2\n"					\
-> +	"	eor	%3, %0, %3\n"					\
-> +	"	eor	%4, %1, %4\n"					\
-> +	"	orr	%3, %4, %3\n"					\
-> +	"	cbnz	%3, 2f\n"					\
-> +	"	st" #rel "xp	%w3, %5, %6, %2\n"			\
-> +	"	cbnz	%w3, 1b\n"					\
-> +	"	" #mb "\n"						\
-> +	"2:"								\
-> +	: "=&r" (r.low), "=&r" (r.high), "+Q" (*(unsigned long *)ptr)	\
-> +	: "r" (o.low), "r" (o.high), "r" (n.low), "r" (n.high)		\
-> +	: cl);								\
-> +									\
-> +	return r.full;							\
-> +}
-> +
-> +__CMPXCHG128(   ,        ,  ,         )
-> +__CMPXCHG128(_mb, dmb ish, l, "memory")
-> +
-> +#undef __CMPXCHG128
-> +
->  #undef K
->  
->  #endif	/* __ASM_ATOMIC_LL_SC_H */
-> --- a/arch/arm64/include/asm/atomic_lse.h
-> +++ b/arch/arm64/include/asm/atomic_lse.h
-> @@ -151,7 +151,7 @@ __lse_atomic64_fetch_##op##name(s64 i, a
->  	"	" #asm_op #mb "	%[i], %[old], %[v]"			\
->  	: [v] "+Q" (v->counter),					\
->  	  [old] "=r" (old)						\
-> -	: [i] "r" (i) 							\
-> +	: [i] "r" (i)							\
->  	: cl);								\
->  									\
->  	return old;							\
-> @@ -324,4 +324,35 @@ __CMPXCHG_DBL(_mb, al, "memory")
->  
->  #undef __CMPXCHG_DBL
->  
-> +#define __CMPXCHG128(name, mb, cl...)					\
-> +static __always_inline u128						\
-> +__lse__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)		\
-> +{									\
-> +	union __u128_halves r, o = { .full = (old) },			\
-> +			       n = { .full = (new) };			\
-> +	register unsigned long x0 asm ("x0") = o.low;			\
-> +	register unsigned long x1 asm ("x1") = o.high;			\
-> +	register unsigned long x2 asm ("x2") = n.low;			\
-> +	register unsigned long x3 asm ("x3") = n.high;			\
-> +	register unsigned long x4 asm ("x4") = (unsigned long)ptr;	\
-> +									\
-> +	asm volatile(							\
-> +	__LSE_PREAMBLE							\
-> +	"	casp" #mb "\t%[old1], %[old2], %[new1], %[new2], %[v]\n"\
-> +	: [old1] "+&r" (x0), [old2] "+&r" (x1),				\
-> +	  [v] "+Q" (*(unsigned long *)ptr)				\
-> +	: [new1] "r" (x2), [new2] "r" (x3), [ptr] "r" (x4),		\
+This RFC is to solicit feedback on how to remove/disable the CPA lock
+for modern x86 CPUs. We suspect it can be removed for older x86 CPUs
+as well per the third bullet in our full reasoning below. However,
+offlist discussion at LPC suggested that doing so could be too risky
+because it is hard to test these changes on very old CPUs.
 
-Issue #1: the line below can be removed, otherwise..
+The cpa_lock was introduced in commit ad5ca55f6bdb ("x86, cpa: srlz
+cpa(), global flush tlb after splitting big page and before doing cpa")
+to solve a race condition where one cpu is splitting a large
+page entry along with changing the attribute, while another cpu with
+stale large tlb entries is also changing the page attributes.
 
-> +	  [oldval1] "r" (r.low), [oldval2] "r" (r.high)			\
+There are 3 reasons to remove/modify this cpa_lock today.
 
-warning:
+First, this cpa_lock is inefficient because it=E2=80=99s a global spin lock=
+.
+It only protects the race condition when multiple threads are
+modifying the same large page entry while preventing all
+parallelization when threads are updating different 4K page entries,
+which is much more common.
 
-	./arch/arm64/include/asm/atomic_lse.h: In function '__lse__cmpxchg128_mb':
-	./arch/arm64/include/asm/atomic_lse.h:309:27: warning: 'r.<U97b8>.low' is used uninitialized [-Wuninitialized]
-	  309 |           [oldval1] "r" (r.low), [oldval2] "r" (r.high)
+Second, as stated in arch/x86/include/asm/set_memory.h,
+	"the API does not provide exclusion between various callers -
+	including callers that operation on other mappings of the same
+	physical page."
+the caller should handle the race condition where two threads are
+modifying the same page entry. The API should only handle it when this
+race condition can crash the kernel, which might have been true back
+in 2008 because the commit cover letter mentioned
+	"If the two translations differ with respect to page frame or
+	attributes (e.g., permissions), processor behavior is
+	undefined and may be implementation specific. The processor
+	may use a page frame or attributes that correspond to neither
+	translation;"
+However it=E2=80=99s no longer true today per Intel's spec [1]:
+	"the TLBs may subsequently contain multiple translations for
+	the address range (one for each page size). A reference to a
+	linear address in the address range may use any of these
+	translations."
 
+Third, even though it=E2=80=99s possible in old hardware that this race
+condition can crash the kernel, this specific race condition that
+cpa_lock was trying to protect when introduced in 2008 has already
+been protected by pgd_lock today, thanks to the commit c0a759abf5a6
+("x86/mm/cpa: Move flush_tlb_all()") in 2018 that moves the
+flush_tlb_all() from outside pgd_lock to inside. Therefore today when
+one cpu is splitting the large page and changing attributes, the other
+cpu will need to wait until the global tlb flush is done and pgd_lock
+gets released, and after that there won=E2=80=99t be stale large tlb entrie=
+s
+to change within this cpu. (I did a talk in LPC [2] that has a pseudo
+code explaining why the race condition is protected by pgd_lock today)
 
-> +	: cl);								\
-> +									\
-> +	r.low = x0; r.high = x1;					\
-> +									\
-> +	return r.full;							\
-> +}
-> +
-> +__CMPXCHG128(   ,   )
-> +__CMPXCHG128(_mb, al, "memory")
-> +
-> +#undef __CMPXCHG128
-> +
->  #endif	/* __ASM_ATOMIC_LSE_H */
-> --- a/arch/arm64/include/asm/cmpxchg.h
-> +++ b/arch/arm64/include/asm/cmpxchg.h
-> @@ -147,6 +147,19 @@ __CMPXCHG_DBL(_mb)
->  
->  #undef __CMPXCHG_DBL
->  
-> +#define __CMPXCHG128(name)						\
-> +static inline long __cmpxchg128##name(volatile u128 *ptr,		\
+It=E2=80=99s true that with such old code, the cpa_lock might protect more
+race conditions than those that it was introduced to protect in 2008,
+or some old hardware may depend on the cpa_lock for undocumented
+behavior. So removing the lock directly might not be a good idea, but
+it probably should not mean that we need to keep the inefficient code
+forever. I would appreciate any suggestion to navigate this lock
+removal from the folks on the to and cc list.
 
-Issue #2: this should be
+[1] Intel=C2=AE 64 and IA-32 Architectures Software Developer=E2=80=99s Man=
+ual,
+Volume 3A: System Programming Guide, Part 1, Section 4.10.2.
+[2] https://youtu.be/LFJQ1PGGF7Q?t=3D330
 
-static inline u128 __cmpxchg128##name(..)
+Signed-off-by: Jacky Li <jackyli@google.com>
+---
+ arch/x86/mm/pat/set_memory.c | 18 +-----------------
+ 1 file changed, 1 insertion(+), 17 deletions(-)
 
-because cmpxchg* needs to return the old value.
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index 356758b7d4b4..84ad8198830f 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -62,14 +62,6 @@ enum cpa_warn {
+=20
+ static const int cpa_warn_level =3D CPA_PROTECT;
+=20
+-/*
+- * Serialize cpa() (for !DEBUG_PAGEALLOC which uses large identity mapping=
+s)
+- * using cpa_lock. So that we don't allow any other cpu, with stale large =
+tlb
+- * entries change the page attribute in parallel to some other cpu
+- * splitting a large page entry along with changing the attribute.
+- */
+-static DEFINE_SPINLOCK(cpa_lock);
+-
+ #define CPA_FLUSHTLB 1
+ #define CPA_ARRAY 2
+ #define CPA_PAGES_ARRAY 4
+@@ -1127,7 +1119,7 @@ __split_large_page(struct cpa_data *cpa, pte_t *kpte,=
+ unsigned long address,
+ 	 *  (e.g., permissions), processor behavior is undefined and may
+ 	 *  be implementation-specific."
+ 	 *
+-	 * We do this global tlb flush inside the cpa_lock, so that we
++	 * We do this global tlb flush inside the pgd_lock, so that we
+ 	 * don't allow any other cpu, with stale tlb entries change the
+ 	 * page attribute in parallel, that also falls into the
+ 	 * just split large page entry.
+@@ -1143,11 +1135,7 @@ static int split_large_page(struct cpa_data *cpa, pt=
+e_t *kpte,
+ {
+ 	struct page *base;
+=20
+-	if (!debug_pagealloc_enabled())
+-		spin_unlock(&cpa_lock);
+ 	base =3D alloc_pages(GFP_KERNEL, 0);
+-	if (!debug_pagealloc_enabled())
+-		spin_lock(&cpa_lock);
+ 	if (!base)
+ 		return -ENOMEM;
+=20
+@@ -1759,11 +1747,7 @@ static int __change_page_attr_set_clr(struct cpa_dat=
+a *cpa, int primary)
+ 		if (cpa->flags & (CPA_ARRAY | CPA_PAGES_ARRAY))
+ 			cpa->numpages =3D 1;
+=20
+-		if (!debug_pagealloc_enabled())
+-			spin_lock(&cpa_lock);
+ 		ret =3D __change_page_attr(cpa, primary);
+-		if (!debug_pagealloc_enabled())
+-			spin_unlock(&cpa_lock);
+ 		if (ret)
+ 			goto out;
+=20
+--=20
+2.39.0.314.g84b9a713c41-goog
 
-Regards,
-Boqun
-
-> +				      u128 old, u128 new)		\
-> +{									\
-> +	return __lse_ll_sc_body(_cmpxchg128##name,			\
-> +				ptr, old, new);				\
-> +}
-> +
-> +__CMPXCHG128(   )
-> +__CMPXCHG128(_mb)
-> +
-> +#undef __CMPXCHG128
-> +
->  #define __CMPXCHG_GEN(sfx)						\
->  static __always_inline unsigned long __cmpxchg##sfx(volatile void *ptr,	\
->  					   unsigned long old,		\
-> @@ -229,6 +242,19 @@ __CMPXCHG_GEN(_mb)
->  	__ret;									\
->  })
->  
-> +/* cmpxchg128 */
-> +#define system_has_cmpxchg128()		1
-> +
-> +#define arch_cmpxchg128(ptr, o, n)						\
-> +({										\
-> +	__cmpxchg128_mb((ptr), (o), (n));					\
-> +})
-> +
-> +#define arch_cmpxchg128_local(ptr, o, n)					\
-> +({										\
-> +	__cmpxchg128((ptr), (o), (n));						\
-> +})
-> +
->  #define __CMPWAIT_CASE(w, sfx, sz)					\
->  static inline void __cmpwait_case_##sz(volatile void *ptr,		\
->  				       unsigned long val)		\
-> --- a/arch/s390/include/asm/cmpxchg.h
-> +++ b/arch/s390/include/asm/cmpxchg.h
-> @@ -201,4 +201,37 @@ static __always_inline int __cmpxchg_dou
->  			 (unsigned long)(n1), (unsigned long)(n2));	\
->  })
->  
-> +#define system_has_cmpxchg128()		1
-> +
-> +static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
-> +{
-> +	asm volatile(
-> +		"	cdsg	%[old],%[new],%[ptr]\n"
-> +		: [old] "+&d" (old)
-> +		: [new] "d" (new),
-> +		  [ptr] "QS" (*(unsigned long *)ptr)
-> +		: "memory", "cc");
-> +	return old;
-> +}
-> +
-> +static __always_inline bool arch_try_cmpxchg128(volatile u128 *ptr, u128 *oldp, u128 new)
-> +{
-> +	u128 old = *oldp;
-> +	int cc;
-> +
-> +	asm volatile(
-> +		"	cdsg	%[old],%[new],%[ptr]\n"
-> +		"	ipm	%[cc]\n"
-> +		"	srl	%[cc],28\n"
-> +		: [cc] "=&d" (cc), [old] "+&d" (old)
-> +		: [new] "d" (new),
-> +		  [ptr] "QS" (*(unsigned long *)ptr)
-> +		: "memory", "cc");
-> +
-> +	if (unlikely(!cc))
-> +		*oldp = old;
-> +
-> +	return likely(cc);
-> +}
-> +
->  #endif /* __ASM_CMPXCHG_H */
-> --- a/arch/x86/include/asm/cmpxchg_32.h
-> +++ b/arch/x86/include/asm/cmpxchg_32.h
-> @@ -103,6 +103,7 @@ static inline bool __try_cmpxchg64(volat
->  
->  #endif
->  
-> -#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX8)
-> +#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX8)
-> +#define system_has_cmpxchg64()		boot_cpu_has(X86_FEATURE_CX8)
->  
->  #endif /* _ASM_X86_CMPXCHG_32_H */
-> --- a/arch/x86/include/asm/cmpxchg_64.h
-> +++ b/arch/x86/include/asm/cmpxchg_64.h
-> @@ -20,6 +20,59 @@
->  	arch_try_cmpxchg((ptr), (po), (n));				\
->  })
->  
-> -#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX16)
-> +union __u128_halves {
-> +	u128 full;
-> +	struct {
-> +		u64 low, high;
-> +	};
-> +};
-> +
-> +static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
-> +{
-> +	union __u128_halves o = { .full = old, }, n = { .full = new, };
-> +
-> +	asm volatile(LOCK_PREFIX "cmpxchg16b %[ptr]"
-> +		     : [ptr] "+m" (*ptr),
-> +		       "+a" (o.low), "+d" (o.high)
-> +		     : "b" (n.low), "c" (n.high)
-> +		     : "memory");
-> +
-> +	return o.full;
-> +}
-> +
-> +static __always_inline u128 arch_cmpxchg128_local(volatile u128 *ptr, u128 old, u128 new)
-> +{
-> +	union __u128_halves o = { .full = old, }, n = { .full = new, };
-> +
-> +	asm volatile("cmpxchg16b %[ptr]"
-> +		     : [ptr] "+m" (*ptr),
-> +		       "+a" (o.low), "+d" (o.high)
-> +		     : "b" (n.low), "c" (n.high)
-> +		     : "memory");
-> +
-> +	return o.full;
-> +}
-> +
-> +static __always_inline bool arch_try_cmpxchg128(volatile u128 *ptr, u128 *old, u128 new)
-> +{
-> +	union __u128_halves o = { .full = *old, }, n = { .full = new, };
-> +	bool ret;
-> +
-> +	asm volatile(LOCK_PREFIX "cmpxchg16b %[ptr]"
-> +		     CC_SET(e)
-> +		     : CC_OUT(e) (ret),
-> +		       [ptr] "+m" (*ptr),
-> +		       "+a" (o.low), "+d" (o.high)
-> +		     : "b" (n.low), "c" (n.high)
-> +		     : "memory");
-> +
-> +	if (unlikely(!ret))
-> +		*old = o.full;
-> +
-> +	return likely(ret);
-> +}
-> +
-> +#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX16)
-> +#define system_has_cmpxchg128()		boot_cpu_has(X86_FEATURE_CX16)
->  
->  #endif /* _ASM_X86_CMPXCHG_64_H */
-> 
-> 
