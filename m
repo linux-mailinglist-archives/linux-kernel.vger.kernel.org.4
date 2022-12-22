@@ -2,105 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBB56545AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 18:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716546545B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Dec 2022 18:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiLVRmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 12:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
+        id S229548AbiLVRqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 12:46:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiLVRmL (ORCPT
+        with ESMTP id S229639AbiLVRqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 12:42:11 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D7126AE4
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 09:42:09 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BMHfwJt006188
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Dec 2022 12:41:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1671730920; bh=f6z01DdAyMnBb6PZpXX+fUEyuTG6sMoKykdJjw3cE0I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=E2syviAxiNqtZfjPab0GQqH9xCVaTTz7tdpld3ahAsuUWooyvQIpIlxLa8RTi1x9j
-         ie9kXj4kkhu4B1a28LebWx6lKIkvvXKqxolT4FeXp8JgG/UqfMbe1wwQhV6Ot7Q5OA
-         yDuiX17iNNmI4lh2AseR67Zp2+m3sf1i3T2DLHRc2GSElSZ1/1knHcUHha9C6UYeYl
-         YsN3O6/tcL6GOX81mFnR+cVIdSLSE8DdFbnQaadp8KZvy9rMbwW/Ge6kbkjh/rAr/h
-         Gczs/WZ1oL/Qi6jUP9UJjYOgnYe+QDqHG/+on0DjkY3H3bIXpmMgsFgZXnQCSfDT3F
-         BI6oAWssizC/A==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 421A315C39F2; Thu, 22 Dec 2022 12:41:58 -0500 (EST)
-Date:   Thu, 22 Dec 2022 12:41:58 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Jun Nie <jun.nie@linaro.org>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>
-Subject: Re: [PATCH] ext4: fix underflow in group bitmap calculation
-Message-ID: <Y6SW5s/jFY1oWFe2@mit.edu>
-References: <20221222020244.1821308-1-jun.nie@linaro.org>
+        Thu, 22 Dec 2022 12:46:10 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB56F27DF8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 09:46:09 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id 17so2735888pll.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 09:46:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qHhliKvzm4vvNuNaV6vctgEM0op2JmWBd1k5SQa+DWA=;
+        b=PCjK9mhr6mkM+7AzwiJ9+cEGDS+4HvOaZwMcuzIGy9/otkpPwDDq59rVUcUuDaDr3s
+         00bVDZUga+ItOMbXXyko76Dkl/eWUc4ovh5R6Df5HEHjVjGEAnZGGW8yOisP1wzVqH0R
+         y89dtcWeGYZsjArvSpYajhEEfLe1+gGsdm3eW6T5NuTTYAXOqmz0Zd7Di3Eyd3PR6Pff
+         sGd53TOIWIBKUczUC0t9v2IS8Q6c1G0T5z/6nPTfmSO3AYA31PfCQ/QICufupX3OhVnQ
+         DDnw8dkdPqbP9/gGe/+bkSmsNRIKXdYSZCMdLykrRsTnog5kjF/BQ0a23U24Nj7tOQKI
+         5zLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qHhliKvzm4vvNuNaV6vctgEM0op2JmWBd1k5SQa+DWA=;
+        b=HGAWSQHWI5lkJSpMK+jDdSuULTzAa493bMw3a42KtLCLCEqenAAJPaw/UA9/aVq6q+
+         1jgpT2/5oQiP/jyXKRgzpr0zN4M7hBGX/TmQx/dfTYzo63qTVrLtPSUu7JFGEyZD9PKg
+         dQRembGoXSRVWY4rzxVH3oL3tA83WKCU3AKpOmUHxfrVV5nzIEav4hMUDu0nvbb/SZQI
+         bCoMq2kp4o7rChh2YRDQrB5ufe6Eybut8UfeH/voD7ZvDO7t9OJtvoNSc5Gxm2aQth4l
+         zsx7nIYd2nin+an/Bg4Zaxx6qkkRkfTLpev133r6BvyQlV6Nce7w69PpjvI1OURwy55G
+         x49w==
+X-Gm-Message-State: AFqh2kq+Wfvq2mHYF7pE3Xqs4LiPeeuLm2onzFpSo8L9fGif7HfRuJvk
+        3kT2i+rQy204r7MOrPCTivl9T5FO2nE+Tb81g8cjpw==
+X-Google-Smtp-Source: AMrXdXuy4ACgio1x1KqZVlOL0O79oGN73dqC6yIFFjP7ZFMlvpD5ZRD8r83fA7yeBSqf60g34AEcHdBCnlbkMgkIjUk=
+X-Received: by 2002:a17:90a:2b46:b0:221:77b5:d6b8 with SMTP id
+ y6-20020a17090a2b4600b0022177b5d6b8mr787642pjc.102.1671731168984; Thu, 22 Dec
+ 2022 09:46:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222020244.1821308-1-jun.nie@linaro.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <Y6Rq5F5NI0v1QQHM@kernel.org>
+In-Reply-To: <Y6Rq5F5NI0v1QQHM@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 22 Dec 2022 09:45:57 -0800
+Message-ID: <CAKwvOdkivaXffVPPTsceM_et4yOgYy3fuw9TmikcjRhDPyTqRA@mail.gmail.com>
+Subject: Re: [PATCH 1/1 fyi] perf python: Fix splitting CC into compiler and options
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Khem Raj <raj.khem@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 10:02:44AM +0800, Jun Nie wrote:
-> There is case that s_first_data_block is not 0 and block nr is smaller than
-> s_first_data_block when calculating group bitmap during allocation. This
-> underflow make index exceed es->s_groups_count in ext4_get_group_info()
-> and trigger the BUG_ON.
-> 
-> Fix it with protection of underflow.
+On Thu, Dec 22, 2022 at 6:34 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Just fyi, I'm carrying this in the perf tools tree.
+>
+> - Arnaldo
+>
+> ----
+>
+> Noticed this build failure on archlinux:base when building with clang:
+>
+>   clang-14: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+>
+> In tools/perf/util/setup.py we check if clang supports that option, but
+> since commit 3cad53a6f9cdbafa ("perf python: Account for multiple words
+> in CC") this got broken as in the common case where CC="clang":
+>
+>   >>> cc="clang"
+>   >>> print(cc.split()[0])
+>   clang
+>   >>> option="-ffat-lto-objects"
+>   >>> print(str(cc.split()[1:]) + option)
+>   []-ffat-lto-objects
+>   >>>
+>
+> And then the Popen will call clang with that bogus option name that in
+> turn will not produce the b"unknown argument" or b"is not supported"
+> that this function uses to detect if the option is not available and
+> thus later on clang will be called with an unknown/unsupported option.
+>
+> Fix it by looking if really there are options in the provided CC
+> variable, and if so override 'cc' with the first token and append the
+> options to the 'option' variable.
+>
+> Fixes: 3cad53a6f9cdbafa ("perf python: Account for multiple words in CC")
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Fangrui Song <maskray@google.com>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: John Keeping <john@metanate.com>
+> Cc: Khem Raj <raj.khem@gmail.com>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: Michael Petlan <mpetlan@redhat.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> ---
+>  tools/perf/util/setup.py | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+> index 4f265d0222c454e2..c294db713677c0c2 100644
+> --- a/tools/perf/util/setup.py
+> +++ b/tools/perf/util/setup.py
+> @@ -3,11 +3,20 @@ from subprocess import Popen, PIPE
+>  from re import sub
+>
+>  cc = getenv("CC")
+> -cc_is_clang = b"clang version" in Popen([cc.split()[0], "-v"], stderr=PIPE).stderr.readline()
+> +
+> +# Check if CC has options, as is the case in yocto, where it uses CC="cc --sysroot..."
+> +cc_tokens = cc.split()
+> +if len(cc_tokens) > 1:
+> +    cc = cc_tokens[0]
 
-When was this happening, and why?  If blocknr is less than
-s_first_data_block, this is either a insufficient input validation,
-insufficient validation to detection file system corruption. or some
-other kernel bug.
+What if someone is using `CC="cache clang"`? Then cc is set to `cache`
+and the cc_is_clang check below will fail.
 
-Looking quickly at the code and the repro, it appears that issue is
-that FS_IOC_GETFSMAP is getting passed a stating physical block of 0
-in fmh_keys[0] when on a file system with a blocksize of 1k (in which
-case s_first_data_block is 1).  It's unclear to me what
-FS_IOC_GETFSMAP should *do* when passed a value which requests that it
-provide a mapping for a block which is out of bounds (either too big,
-or too small)?.  Should it return an error?  Should it simply not
-return a mapping?  The map page for ioctl_getfsmap() doesn't shed any
-light on this question.
+> +    cc_options = " ".join([str(e) for e in cc_tokens[1:]]) + " "
+> +else:
+> +    cc_options = ""
+> +
+> +cc_is_clang = b"clang version" in Popen([cc, "-v"], stderr=PIPE).stderr.readline()
+>  src_feature_tests  = getenv('srctree') + '/tools/build/feature'
+>
+>  def clang_has_option(option):
+> -    cc_output = Popen([cc.split()[0], str(cc.split()[1:]) + option, path.join(src_feature_tests, "test-hello.c") ], stderr=PIPE).stderr.readlines()
+> +    cc_output = Popen([cc, cc_options + option, path.join(src_feature_tests, "test-hello.c") ], stderr=PIPE).stderr.readlines()
+>      return [o for o in cc_output if ((b"unknown argument" in o) or (b"is not supported" in o))] == [ ]
+>
+>  if cc_is_clang:
+> --
+> 2.38.1
+>
 
-Darrick, you designed the interface and wrote most of fs/ext4/fsmap.c.
-Can you let us know what is supposed to happen in this case?  Many
-thanks!!
 
-> Fixes: 72b64b594081ef ("ext4 uninline ext4_get_group_no_and_offset()")
-
-This makes ***no*** sense; the commit in question is from 2006, which
-means that in some jourisdictions it's old enough to drive a car.  :-)
-Futhermore, all it does is move the function from an inline function
-to a C file (in this case, balloc.c).  It also long predates
-introduction of FS_IOC_GETFSMAP support, which was in 2017.  
-
-I'm guessing you just did a "git blame" and blindly assumed that
-whatever commit last touched the C code in question was what
-introduced the problem?
-
-Anyway, please try to understand what is going on instead of doing the
-moral equivalent of taking a sledgehammer to the code until the
-reproducer stops triggering a BUG.  It's not enough to shut up the
-reproducer; you should understand what is happening, and why, and then
-strive to find the best fix to the problem.  Papering over problems in
-the end will result in more fragile code, and the goal of syzkaller is
-to improve kernel quality.  But syzkaller is just a tool and used
-wrongly, it can have the opposite effect.
-
-Regards,
-
-					- Ted
+-- 
+Thanks,
+~Nick Desaulniers
