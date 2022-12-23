@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50C865512A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C279765511D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbiLWODU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 09:03:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
+        id S236233AbiLWN4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 08:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiLWODR (ORCPT
+        with ESMTP id S229625AbiLWN4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 09:03:17 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DE0644A;
-        Fri, 23 Dec 2022 06:03:16 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 2240568AA6; Fri, 23 Dec 2022 15:03:13 +0100 (CET)
-Date:   Fri, 23 Dec 2022 15:03:12 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux.dev
-Subject: Re: [PATCH 2/2] vmalloc: reject vmap with VM_FLUSH_RESET_PERMS
-Message-ID: <20221223140312.GA26826@lst.de>
-References: <20221223092703.61927-1-hch@lst.de> <20221223092703.61927-3-hch@lst.de> <Y6WB2ZGoL7FaFK+f@lucifer>
+        Fri, 23 Dec 2022 08:56:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934901CB08;
+        Fri, 23 Dec 2022 05:56:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55CE261159;
+        Fri, 23 Dec 2022 13:56:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6F27C433EF;
+        Fri, 23 Dec 2022 13:55:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671803759;
+        bh=673eVZdC/GfX58ysM7w07tKQFUlrVkDiUm1PIYoKdyM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g/BSCjqu7hg/K4pc9tGtSy5rj1eAsp/A0zlbfM9o2MyP0/KjV/BX9Im2n+dPMwVJI
+         P+49aq0ThJXmB5B43mx8ze3bxvF9GLLmLdX3PJeuzUCCf5+mhh2THbUGg3b3zoZfhG
+         wTm2ri9pZx1bQ7SHg1YXk5H1CB7zrQF+HoaMHUPr26/bfIYO80ZmKCXYHkFKqbhJm4
+         s/GvZBtSO+ABiMus38wuIwBr4rvfKcPkZTbPhaAQS8zX2htjOtDc9P/8w8RByM577/
+         LdRoBUmKQyYRwvygeLXJLRFyQGQAssqss7TBNBmfCx+VeQ04oHqnnfFcgccQL5udVy
+         Z53SN6+oTXJoQ==
+Date:   Fri, 23 Dec 2022 14:09:08 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Hugo Villeneuve <hugo@hugovil.com>, hvilleneuve@dimonoff.com,
+        lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] dt-bindings: iio: adc: add ADS7924
+Message-ID: <20221223140908.3b4a5458@jic23-huawei>
+In-Reply-To: <01a5f912-10d2-d5fe-023e-e2e6613ac03b@linaro.org>
+References: <20221222203610.2571287-1-hugo@hugovil.com>
+        <20221222203610.2571287-4-hugo@hugovil.com>
+        <01a5f912-10d2-d5fe-023e-e2e6613ac03b@linaro.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6WB2ZGoL7FaFK+f@lucifer>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 10:24:25AM +0000, Lorenzo Stoakes wrote:
-> Might it be worth adding a specific vmap mask that explicitly indicates what
-> flags are permissible on vmap()? Then this could become e.g.:-
 > 
-> 	if (WARN_ON_ONCE(flags & ~VM_VMAP_PERMITTED_MASK))
-> 		return NULL;
+> > +    description:
+> > +      Child nodes needed for each channel that the platform uses.  
 > 
-> And would be self-documenting as to why we are disallowing flags (i.e. they are
-> not part of the permitted vmap mask).
+> I cannot understand this sentence at all. Instead describe the hardware
+> you are here representing. What's this?
 
-That's probably a good idea.  It might need some time to audit
-for use of all the flags, though.
+Needs rewording, but basically - "Which pins are connected to anything?"
+
+
