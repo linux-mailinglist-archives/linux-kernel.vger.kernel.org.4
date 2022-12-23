@@ -2,37 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B8F655081
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BFA655087
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236367AbiLWMl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 07:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
+        id S236001AbiLWMmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 07:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236362AbiLWMlF (ORCPT
+        with ESMTP id S230214AbiLWMmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 07:41:05 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201A21F4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 04:40:41 -0800 (PST)
-Received: from [2a02:8108:963f:de38:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1p8hLs-0001Cb-JF; Fri, 23 Dec 2022 13:40:40 +0100
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2022-12-23]
-Date:   Fri, 23 Dec 2022 12:40:39 +0000
-Message-Id: <167179914593.1360994.17503278527422432544@leemhuis.info>
-X-Mailer: git-send-email 2.38.1
-Content-Type: text/plain; charset="utf-8"
+        Fri, 23 Dec 2022 07:42:37 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57064C09
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 04:42:36 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id x11so7031788lfn.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 04:42:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4qmM61VuVsMz3hWuuFqDNaRjKZS92VzYxO6N789ZujY=;
+        b=GzHQdZkYbJbi++UjndFq62mZeWuRE3WGSuxDMVXmLN902lPb8HgvUAUqdopqgAGBhg
+         VR6Kq1YukRTl3z8CadkazNSj8nsB4G4DFmEsQR3TcAmSRB6smbjB4EvCgeo5mJU4HdxL
+         2emCJBSVRKrkk73fBvMPPhfOyTzzkg7FELbKBbz6BUpOF5rd69/y0RObWwNPuhPZ99BI
+         ga0B94N5/rQIloJ6auDs3UJcyOXTbMbR2WeH+tfYhJ0ONa2CJuH8N/JptqNUzmz2Ha+O
+         Zhgu4S0iWpBrSI+9CAyv0dKXPLjQMnDOLsi2btl1Z2CV15C4hIFdeHgZDkuTRwyXpV8y
+         om6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4qmM61VuVsMz3hWuuFqDNaRjKZS92VzYxO6N789ZujY=;
+        b=R6ISiWlRSDrdS787M+Waa29ruZ4EeszptcGssySZ8l+ZPoTiTQrlfe0RYGQj7ERohR
+         wZzonnqjjyH17PPNn/tAkJ86USxv0zbfk2qNrqZANxSFvSH/Wm7Q51NgnaoR8R1YAxKv
+         qKB0eg/sT53NFgb5180BZCqcs3lvjkJIefWzuggUSRQIctxz9rQSrcLnRpFownkmxmhP
+         6Jo2T77PNpi7h/34qT/z6uGDHh+Kz6Tn2A2xl6RrwOuDygpiPM1QOfvLNJgDXriWwyGZ
+         kNFPrP3dPOmxwgTzbW+WfcPgj3Y+SD18lZgoF91Ixxiowea4o4iFMPHKmJ0o4Lw66aWd
+         94Vg==
+X-Gm-Message-State: AFqh2koi3wuMYas34rnDnxsZDBlYBrHcvFt0YYHTs/HZ2duOqimZV6eS
+        ATU0Sa6h83xM4SUFiFEfuCumENe8a52+hfBq
+X-Google-Smtp-Source: AMrXdXuFBk1LXdG+7B9WICf/qlh6ef/eg1lbv2rOmQf21avxt//OWM2MxXaCWhSiuwsOs7OCsCWcIw==
+X-Received: by 2002:a05:6512:1115:b0:4aa:e120:b431 with SMTP id l21-20020a056512111500b004aae120b431mr3211495lfg.38.1671799354663;
+        Fri, 23 Dec 2022 04:42:34 -0800 (PST)
+Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
+        by smtp.gmail.com with ESMTPSA id b3-20020ac25623000000b004b4bae1a05asm504569lff.293.2022.12.23.04.42.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Dec 2022 04:42:34 -0800 (PST)
+Message-ID: <80ef7460-2c92-1636-96c7-c91b7d5c62e6@linaro.org>
+Date:   Fri, 23 Dec 2022 13:42:32 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671799242;739de44b;
-X-HE-SMSGID: 1p8hLs-0001Cb-JF
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 4/7] arm64: dts: qcom: sc8280xp: add missing i2c nodes
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>, Brian Masney <bmasney@redhat.com>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        quic_shazhuss@quicinc.com, robh+dt@kernel.org,
+        johan+linaro@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ahalaney@redhat.com, echanude@redhat.com
+References: <20221220192854.521647-1-bmasney@redhat.com>
+ <20221220192854.521647-5-bmasney@redhat.com>
+ <Y6WEzkcP31S2JGrL@hovoldconsulting.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <Y6WEzkcP31S2JGrL@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,185 +79,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus! Below you'll find regzbot's report about regression from this
-cycle the bot was told about or I became aware of. This is a kind of
-"extra report" now that the end of the merge window is close and the
-festival season is about to go into full swing. A few notes from my side:
-
-* The fix for "drm: amdgpu: use-after-free and random computer hangs" is
-in the drm pull Dave send in the past 24h:
-https://lore.kernel.org/amd-gfx/20221219104718.21677-1-christian.koenig@amd.com/
-
-* Christoph two days ago merged the fix for "dma-mapping: audio devices
-disappeared", not sure if it's heading your way already:
-https://lore.kernel.org/alsa-devel/20221220082009.569785-1-hch@lst.de/
-
-* The revert to fix the "usb: ulpi: various qemu test failures" issue is
-in the works:
-https://lore.kernel.org/lkml/20221222205302.45761-1-ftoth@exalondelft.nl/
-
-* I wondered if the issue "arm64: missing build-id in vmlinux breaks at
-least Fedora's kernel packaging" (on arm64) was worth a quick revert,
-but Masahiro and Ard don't think so:
-https://lore.kernel.org/lkml/CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com/
-
-* "wifi: mt76: wifi stopped working" needs more debugging and a simple
-revert afaics is not possible
-https://lore.kernel.org/lkml/CABXGCsMEnQd=gYKTd1knRsWuxCb=Etv5nAre%2BXJS_s5FgVteYA@mail.gmail.com/
-
-* "mm, slub: CONFIG_SLUB_TINY causes various build errors": this new
-option disables KASAN which allows other stuff to be enabled, that
-apparently were already broken; looks like the discussion stalled and
-needs a restart in the new year.
-https://lore.kernel.org/lkml/Y5hTTGf%2FRA2kpqOF@debian/
-
-BTW, a fix for a 6.1 regression causing random rpm install failures (
-https://lore.kernel.org/lkml/20221216163227.24648-1-vbabka@suse.cz/
-) is in the pile of changes Andrew's send your way in the past 24h. To
-me it feels kinda wrong that it took about one week to get this change
-into mainline, but maybe that's just me.
-
-Another revert to fix a input regression on one particular laptop sits
-in next (3c44e2b6cde6 ("Revert "Input: synaptics - switch touchpad on HP
-Laptop 15-da3001TU to RMI mode"")),
-
-The fix for the regression "net: regression tests of
-python-ephemeral-port-reserve fail" reported by Jiri is still discussed.
-
-HTH, Ciao, Thorsten
 
 
----
+On 23.12.2022 11:37, Johan Hovold wrote:
+> On Tue, Dec 20, 2022 at 02:28:51PM -0500, Brian Masney wrote:
+>> Add the missing nodes for the i2c buses that's present on this SoC.
+>>
+>> This work was derived from various patches that Qualcomm delivered
+>> to Red Hat in a downstream kernel.
+>>
+>> Signed-off-by: Brian Masney <bmasney@redhat.com>
+>> ---
+>> Changes from v2 to v3
+>> - None
+>>
+>> Changes from v1 to v2
+>> - Dropped qupX_ prefix from labels. (Johan)
+>>
+>>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 352 +++++++++++++++++++++++++
+>>  1 file changed, 352 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> index f1111cd7f679..a502d4e19d98 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>> @@ -813,6 +813,38 @@ qup2: geniqup@8c0000 {
+>>  
+>>  			status = "disabled";
+>>  
+>> +			i2c16: i2c@880000 {
+>> +				compatible = "qcom,geni-i2c";
+>> +				reg = <0 0x00880000 0 0x4000>;
+>> +				clocks = <&gcc GCC_QUPV3_WRAP2_S0_CLK>;
+>> +				clock-names = "se";
+>> +				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+> 
+> I'm aware that the two current i2c nodes has these two properties here
+> in the middle, but would you mind moving '#address-cells' and
+> '#size-cells' after 'reg' instead where I'd expect them to be?
+Hm.. we've been sticking them somewhere near the end for the longest
+time for every bus-like, or generally "i have childen" type node..
+I see it's a rather mixed bag in non-qcom SoCs, people just seem to
+put it wherever they please.. The dt spec doesn't seem to mention any
+preference fwiw.
 
-Hi, this is regzbot, the Linux kernel regression tracking bot.
-
-Currently I'm aware of 6 regressions in linux-mainline. Find the
-current status below and the latest on the web:
-
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
-
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-========================================================
-current cycle (v6.1.. aka v6.1-post), culprit identified
-========================================================
-
-
-[ *NEW* ] drm: amdgpu: use-after-free and random computer hangs
----------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CABXGCsNryN9Koz48DiSTPwTBSOKo0U0B3PnW3+gEf2B8n8u0GA@mail.gmail.com/
-https://lore.kernel.org/lkml/CABXGCsNryN9Koz48DiSTPwTBSOKo0U0B3PnW3%2BgEf2B8n8u0GA@mail.gmail.com/
-
-By Mikhail Gavrilov; 4 days ago; 6 activities, latest 0 days ago.
-Introduced in aab9cf7b6954
-
-Fix incoming:
-* drm/amdgpu: grab extra fence reference for drm_sched_job_add_dependency
-  https://lore.kernel.org/lkml/28c5c38b-de13-b2b5-0ffa-8a08d96391df@leemhuis.info/
-
-
-[ *NEW* ] usb: ulpi: various qemu test failures
------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20221220194334.GA942039@roeck-us.net/
-https://lore.kernel.org/lkml/20221220194334.GA942039@roeck-us.net/
-
-By Guenter Roeck; 2 days ago; 11 activities, latest 0 days ago.
-Introduced in 8a7b31d545d3
-
-Fix incoming:
-* Revert "usb: ulpi: defer ulpi_register on ulpi_read_id timeout"
-  https://lore.kernel.org/lkml/a858f1fc-1927-c4d1-3efe-f2aff23a2cbb@leemhuis.info/
-
-
-[ *NEW* ] arm64: missing build-id in vmlinux breaks at leas Fedora's kernel packaging
--------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com/
-https://lore.kernel.org/lkml/CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com/
-
-By Dennis Gilmore; 4 days ago; 4 activities, latest 1 days ago.
-Introduced in 994b7ac1697b
-
-Recent activities from: Ard Biesheuvel (1), Thorsten Leemhuis (1),
-  Masahiro Yamada (1), Dennis Gilmore (1)
-
-One patch associated with this regression:
-* Re: BUG: arm64: missing build-id from vmlinux
-  https://lore.kernel.org/lkml/CAMj1kXE%2BLBOBavOre1O8LTGPCmB8m58fbfo92Sx4WukyNAur-A@mail.gmail.com/
-  1 days ago, by Ard Biesheuvel
-
-
-[ *NEW* ] wifi: mt76: wifi stopped working
-------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CABXGCsMEnQd=gYKTd1knRsWuxCb=Etv5nAre+XJS_s5FgVteYA@mail.gmail.com/
-https://lore.kernel.org/lkml/CABXGCsMEnQd=gYKTd1knRsWuxCb=Etv5nAre%2BXJS_s5FgVteYA@mail.gmail.com/
-https://bugzilla.kernel.org/show_bug.cgi?id=216829
-
-By Mikhail Gavrilov and Mike Lothian; 2 days ago; 9 activities, latest 1 days ago.
-Introduced in cd372b8c99c5
-
-Recent activities from: Mikhail Gavrilov (4), Felix Fietkau (3), Lorenzo
-  Bianconi (2)
-
-4 patch postings are associated with this regression, the latest is this:
-* Re: [6.2][regression] after commit cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae stopping working wifi mt7921e
-  https://lore.kernel.org/lkml/3cb53fbd-0bee-22f9-bba2-6ac4a87db521@nbd.name/
-  1 days ago, by Felix Fietkau
-
-
-[ *NEW* ] dma-mapping: audio devices disappeared
-------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CABXGCsPnpu0TGHnvXM1we7q1t3tJAOYW2rA=AMvf7ZahcYvpRQ@mail.gmail.com/
-https://lore.kernel.org/lkml/CABXGCsPnpu0TGHnvXM1we7q1t3tJAOYW2rA=AMvf7ZahcYvpRQ@mail.gmail.com/
-
-By Mikhail Gavrilov; 7 days ago; 14 activities, latest 2 days ago.
-Introduced in ffcb75458460
-
-Fix incoming:
-* dma-mapping: reject GFP_COMP for noncohernt allocaions
-  https://lore.kernel.org/lkml/5dff36ee-bfe5-4596-b01d-0eaca1b552bd@leemhuis.info/
-
-
-[ *NEW* ] mm, slub: CONFIG_SLUB_TINY causes various build errors
-----------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/Y5hTTGf/RA2kpqOF@debian/
-https://lore.kernel.org/lkml/Y5hTTGf%2FRA2kpqOF@debian/
-
-By Sudip Mukherjee (Codethink); 10 days ago; 7 activities, latest 9 days ago.
-Introduced in e240e53ae0ab
-
-Recent activities from: Guenter Roeck (3), Vlastimil Babka (2), Sudip
-  Mukherjee (1), Sudip Mukherjee (Codethink) (1)
-
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/167077682369.767290.4323979751797298970@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
+Konrad
+> 
+> Same for the spi patch.
+> 
+> I can clean up the existing two nodes (and binding example) unless you
+> want to do it.
+> 
+>> +				power-domains = <&rpmhpd SC8280XP_CX>;
+>> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
+>> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
+>> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+>> +				status = "disabled";
+>> +			};
+> 
+> Johan
