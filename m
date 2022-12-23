@@ -2,121 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49816654F45
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88EE654F49
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236006AbiLWKnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 05:43:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        id S236038AbiLWKrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 05:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiLWKnP (ORCPT
+        with ESMTP id S229996AbiLWKrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 05:43:15 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1AE13D4E;
-        Fri, 23 Dec 2022 02:43:13 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id bi26-20020a05600c3d9a00b003d3404a89faso5105382wmb.1;
-        Fri, 23 Dec 2022 02:43:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3sTp5JTfMAw1HdBsJay3H4/W2Fv/qdhk10DrSJkAUZE=;
-        b=hvKBUAwrpUR51eiIcGjo6+MuoEOKYm5MljK1+R4gQH5DjjBk80ZzBkZhJGD4MJZY/A
-         AoVqxhVv+AKlOZJm/ym2X44XSh3tRtR9HCBZcpasCl8RKyBqq6OvCePoG3KUSbIFpRq+
-         yfVmrS06hior2EH4ivaK23FF4f5dKzp9juPXOWQO/gw1N7/JEd0nLhTr2kuwYGxq9iad
-         clRao/Gj19w4+J3JDI49I27mE8VCV2A66EwZzuAz9+b1DzcVAqLO7SX3JhoBAkxTmsgV
-         RTZfQHMh0+PwcveRwf6oVgWDtGkiSzK/o1VR66Ym4yWWEymB7Np5Egzoc1MbUxXF9O44
-         B9Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3sTp5JTfMAw1HdBsJay3H4/W2Fv/qdhk10DrSJkAUZE=;
-        b=PJtCrLYUnZVtZCB5ZEAoESEruZMBIJHg6LyMnoNPwt0SvBBkRtasHr8jx9E4wcO3r8
-         E0ZKA0nnIr1ZCysQGUUCSA050nukzaHmY6VOpIHP9tSt+1A0ygmDmaKOpXbXt3t7DOsi
-         J8rmvpRxHQSG49g9zdN0Fd6o2/MQB7jZyIJQs0FdUNCyi06OCyr5WR78L0oimKZoXWOg
-         DfpH40C+uuO5ZsAhjlHI3t04f3rLsVELpntDVWKHUPNDqFCF2hKxJAj+0RblUX0+lUCu
-         GJxtZEsy312ikku1QseHTKXXxnNqH4zsAv1qOkJpbIa4rvbDM5V7836ShxH1+nbMteHM
-         uuIA==
-X-Gm-Message-State: AFqh2kqjyibbobN4POKvteHjNwPR2U0h+BQ2mXlfAzv9g1CN3ml2717A
-        sBf0RLwjw4Kkp4s71vTT+M4=
-X-Google-Smtp-Source: AMrXdXuYojS3X51R0vF48LFu4TiFFMV/bLzPF78c4nTAwY3uXcAQwL+x8hCq72GF/yGAyjseUw9w4g==
-X-Received: by 2002:a05:600c:1d98:b0:3d3:3d51:7d4b with SMTP id p24-20020a05600c1d9800b003d33d517d4bmr6605907wms.29.1671792192199;
-        Fri, 23 Dec 2022 02:43:12 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id l7-20020a05600c4f0700b003d96c811d6dsm2259091wmq.30.2022.12.23.02.43.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 02:43:11 -0800 (PST)
-Date:   Fri, 23 Dec 2022 13:42:57 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     Miaoqian Lin <linmq006@gmail.com>, Vinod Koul <vkoul@kernel.org>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: plx_dma: Fix potential double free in
- plx_dma_create
-Message-ID: <Y6WGMd5hb2LoDyNL@kadam>
-References: <20221220061752.1120381-1-linmq006@gmail.com>
- <31659f35-453e-2a5a-2f93-e35ef1395ad7@deltatee.com>
+        Fri, 23 Dec 2022 05:47:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBA92EFA0;
+        Fri, 23 Dec 2022 02:47:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4A3EB82047;
+        Fri, 23 Dec 2022 10:47:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24284C433EF;
+        Fri, 23 Dec 2022 10:47:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671792449;
+        bh=ex9tUFVzc3QpNndS9PcMpEixDO6l3s3FIt9ke6UH+ZE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ka70E5tliEuEJuR8BXOIfpsdrB8M3Ypxmi8HmSwwAgr+652FYThaXtjy9LMDQ89n+
+         2n5/b2Ca34ShyUWa8l8C6bbRPwSt6koWzxNoTd860eZcPF6tdSZ87LxEnBwGXevYhD
+         lGioDkksupu6H8Tdi+tNbaXYi2XTogjCsFLJT3rDihEQ+W7v+PwKD+9bGbUANus4iV
+         a8ALJKh39Q7v00Hg5RhZVzrxj4L1ouW1ktcyYown5kKjg6Qo9zPm34rON2gYICJVqO
+         cO162Ao1DpYeAK4iUGx3W0N+rToXUhIr1d6g9NEAeS/8LbF2EC1AVaquHZ79Ad3dVY
+         IIABKhvvgyR2A==
+Date:   Fri, 23 Dec 2022 11:47:24 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] posix_acl: Use try_cmpxchg in get_acl
+Message-ID: <20221223104724.uurfko6bqzpjv5n5@wittgenstein>
+References: <20221221193540.10078-1-ubizjak@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <31659f35-453e-2a5a-2f93-e35ef1395ad7@deltatee.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221221193540.10078-1-ubizjak@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 09:35:38AM -0700, Logan Gunthorpe wrote:
+On Wed, Dec 21, 2022 at 08:35:40PM +0100, Uros Bizjak wrote:
+> Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old
+> in get_acl. x86 CMPXCHG instruction returns success in ZF flag,
+> so this change saves a compare after cmpxchg (and related move
+> instruction in front of cmpxchg).
 > 
+> No functional change intended.
 > 
-> On 2022-12-19 23:17, Miaoqian Lin wrote:
-> > When all references are dropped, callback function plx_dma_release()
-> > for put_device() will call kfree(plxdev) to release memory.
-> > Fix the error path to fix the possible double free.
-> >
-> > Fixes: 07503e6aefe4 ("dmaengine: plx_dma: add a missing put_device() on error path")
-> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> > ---
-> > Please correct me if I make mistakes, thanks for your review.
-> > ---
-> >  drivers/dma/plx_dma.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/dma/plx_dma.c b/drivers/dma/plx_dma.c
-> > index 12725fa1655f..bce724ff4e16 100644
-> > --- a/drivers/dma/plx_dma.c
-> > +++ b/drivers/dma/plx_dma.c
-> > @@ -546,8 +546,9 @@ static int plx_dma_create(struct pci_dev *pdev)
-> >  	return 0;
-> >  
-> >  put_device:
-> > -	put_device(&pdev->dev);
-> >  	free_irq(pci_irq_vector(pdev, 0),  plxdev);
-> > +	put_device(&pdev->dev);
-> > +	return rc;
-> >  free_plx:
-> >  	kfree(plxdev);
-> >  
-> 
-> 
-> Sorry, after reviewing, I don't think this patch is correct.
-> 
-> plx_dma_release() is called from dma_async_device_unregister() which
-> won't be called if dma_async_device_register() fails. It does not get
-> freed when the pci device is put. So I don't think this is a possible
-> double free.
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> ---
 
-I think instead of "double free" it Miaoqian meant "use after free".  It
-does look like a use after free to me.  Certainly there is no harm from
-applying the patch and it makes the code more obviously correct.
+Looks ok to me. But it's not urgent so I'll circle back to this post
+-rc1.
 
-regards,
-dan carpenter
-
+Thanks!
+Christian
