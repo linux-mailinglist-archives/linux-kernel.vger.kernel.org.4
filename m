@@ -2,323 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570F8654EE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DE8654EE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235990AbiLWJzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 04:55:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S236319AbiLWJzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 04:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236114AbiLWJya (ORCPT
+        with ESMTP id S229483AbiLWJyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 04:54:30 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE16379EC
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 01:52:57 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id n4so4553367plp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 01:52:57 -0800 (PST)
+        Fri, 23 Dec 2022 04:54:32 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5085DEBD
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 01:54:31 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id w20so4504014ply.12
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 01:54:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wVgAGkj+SjuhFiSBYtG1SjVAwKIoE0eDmxPhnITBIZ8=;
-        b=VumzJqwelKVRQ5UaXZUVpxoVWPcFionVHd0OBu1dkucxo5cto+xLHjk1fUh9PR++oz
-         zzbI0k782oKNaLoP95HAn0ysIPcrrkNyHPzagZoD7vO36TCz2zx6Snqc22VX1nwirZKc
-         qS5s0Pia2LHs1MThSS7Je4cglk4i3VqWVUCcAa7LC9o8th/MSuiCHzEh5lCdaDLQYyIU
-         Q4d8ycVZpBFXXMqwLPF/uVUrfIXNC1Rl8+jifT0q/ozBRrZRzXvtzyeAY3isO78ftnjS
-         Sd9KbhPM1VmuqqD2txaYqJj2/z96yX+/8m+JvjDyEJ0bmGusHmNb3eFd1N1o6nvY14WU
-         ozRQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KTme1RC2DwAv2XimvOMl4fSX9I4qxsVKRwQQ2YNUVto=;
+        b=RgKktLn/TQT/wQ5bd8DUVSJCfcvr5HTHA1b57i9sLLu7jMidAUbwYq6/+GpApOdnMW
+         bm+3dQ/hak6YKrwyqoQjJelfhhYdfNvZRRUIWUX5KadwYUnN5lw/Ydak5J2KJQwPmpmV
+         56I/p5jLttghMr72+mLCekUEwK7p3VilGUxBN2u120G+s4JywswENzP6YcdV0l6/PQ63
+         VN4uBUm6Kh0yAHQ2j97XNXI+qtx+xa9AsvYRAe2HL5aeHFfglSikH0sEyFVOzXfv19IT
+         5nak68W1XJeKOhZKkXpF+/m0EusC2kTwqdWr+MdfV4o1NnecgOa30AxxLjDHfEYrVxxi
+         bbwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wVgAGkj+SjuhFiSBYtG1SjVAwKIoE0eDmxPhnITBIZ8=;
-        b=lj5uyV+hpV64St6i80BPUepTDH+hy4y67QmXszOP9PdnlrnYvQaeQGlD7FjIAE+ZH+
-         dJkBowX8B8JoCgMjm8mRZ5BkNJ/3Vx1F8Xp8v2H2BcSRKbx0vbEvX8P02YpQZWgvSCSf
-         eNgmWGySX0LJHdYmfFsSvfN9tQY2pGZGcRNdyvRPv13+OhL0fRY3l7WFvpYBUhG9j2jX
-         ciZhD4X+SsmG3tna4DQdaQxQgbSf3wWUTXJUJjqNRTyxVgDhTcijPOjG9GOvE9rwotBA
-         hkBkIUrTjvO1NA7T9sxuNhG3v70XXA+6YDthEkiRzkwVmvHitV+GVRLakhYNEhmB8J8i
-         sbqQ==
-X-Gm-Message-State: AFqh2kqGrrhvDCPjpGuB3G9pWTZ8L0boIthFN3Qob5kaJB3gqPoo32os
-        C3Ae/lvzIjG6CQ2LfKzh44Sdqg==
-X-Google-Smtp-Source: AMrXdXuXfgxrVuqKhnkeIP4YGEWeP+yJCrx0AFP/PqvEF9rLB61LKqMJZX9sJCIDqqif3eWqBYU3kw==
-X-Received: by 2002:a17:903:200b:b0:192:467e:7379 with SMTP id s11-20020a170903200b00b00192467e7379mr7979235pla.49.1671789176839;
-        Fri, 23 Dec 2022 01:52:56 -0800 (PST)
-Received: from [10.254.61.32] ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170902654600b00189422a6b8bsm1991554pln.91.2022.12.23.01.52.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 01:52:56 -0800 (PST)
-Message-ID: <13d0add5-eca9-d27d-f51a-8e7a7efe5d06@bytedance.com>
-Date:   Fri, 23 Dec 2022 17:52:52 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KTme1RC2DwAv2XimvOMl4fSX9I4qxsVKRwQQ2YNUVto=;
+        b=Tr74tBGyazt4tGZnRjyVTWUJ/KaSn1AsqLDj/KrMfTvVwTCR0QkcpvLKCstx7ktWjV
+         mQchoopUbG8drVMLnNitp7McV4V9Jo9XjMr3C3EuzbkSXLEW0X1ajDxADhaMzYFYTjGE
+         I5Gd0+BbwL7AqYyShJoOobX3nyau1rPhfNtn4B6X8SiKpJ5c+tNC+6NIXHRM7Sv5yQV5
+         +Ro+InfjDfqqacWqZcij3P4hb1zxwbGs/8ByO0GKiZ0z5Ao96HVre2vxbyaF25faG3oM
+         37T5B705caQqLPHLnkut8PYT8qE1JX3m3rAzJ6EdpGPO284ucuSUaFQd9m4ES/MEPHon
+         0DkA==
+X-Gm-Message-State: AFqh2kp5O4WYlOOkpKFwuByG+GxyyTmwO2b7BVOhVHJphTHSsbMeSm12
+        KIfbq/2yisooHv4nR47ABMSqMY8mTA938WcYPcVfSA==
+X-Google-Smtp-Source: AMrXdXtVeazWf9gw9QzkduDrmThu+8/7C9asFQVbHLZ5tkYBWMCQrylxXgk188IvYiZQVcEbCsrglvmJ9iDX9YHzmOQ=
+X-Received: by 2002:a17:90b:485:b0:219:720c:29cb with SMTP id
+ bh5-20020a17090b048500b00219720c29cbmr935268pjb.76.1671789271110; Fri, 23 Dec
+ 2022 01:54:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.2.2
-Subject: Re: [PATCH v2] blk-throtl: Introduce sync and async queues for
- blk-throtl
-To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yinxin.x@bytedance.com
-References: <20221218111314.55525-1-hanjinke.666@bytedance.com>
- <20221221104246.37714-1-hanjinke.666@bytedance.com>
-From:   hanjinke <hanjinke.666@bytedance.com>
-In-Reply-To: <20221221104246.37714-1-hanjinke.666@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221222160328.3639989-1-james.clark@arm.com> <20221222160328.3639989-6-james.clark@arm.com>
+In-Reply-To: <20221222160328.3639989-6-james.clark@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Fri, 23 Dec 2022 09:54:19 +0000
+Message-ID: <CAJ9a7VjXKJk==Pt1rjMo12ROQJ4d4HD_TR+q+sC7N+HULiUCnQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] perf cs_etm: Keep separate symbols for ETMv4 and
+ ETE parameters
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-perf-users@vger.kernel.org, tanmay@marvell.com,
+        sgoutham@marvell.com, gcherian@marvell.com, lcherian@marvell.com,
+        bbhushan2@marvell.com, German Gomez <german.gomez@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-In the process of testing v2, threre is one issue need to solved.
-
-If a bio can't dispatch because of overlimit, a wait time will 
-calculated and the dispatch will exit. Then spin lock of request queue
-will be released and new io may be queued to the throtl queue. When it's
-time to dispatch the waiting bio, another bio(eg: from sync queue) may 
-be selected to dispatch instead of the waitting bio. The may lead the 
-waitting bio to be wait more than once. Iff the dispatched bio is 
-smaller than the waitting bio, slice will be trimmed after each diapatch
-,the bandwidth cannot be filled in this case.
-
-I will fix this issue and send the v3.
-
-Thanks.
-Jinke.
-
-
-在 2022/12/21 下午6:42, Jinke Han 写道:
-> From: Jinke Han <hanjinke.666@bytedance.com>
-> 
-> Now we don't distinguish sync write ios from normal buffer write ios
-> in blk-throtl. A bio with REQ_SYNC tagged always mean it will be wait
-> until write completion soon after it submit. So it's reasonable for sync
-> io to complete as soon as possible.
-> 
-> In our test, fio writes a 100g file in sequential 4k blocksize in
-> a container with low bps limit configured (wbps=10M). More than 1200
-> ios were throttled in blk-throtl queue and the avarage throtle time
-> of each io is 140s. At the same time, the operation of saving a small
-> file by vim will be blocked amolst 140s. As a fsync will be send by vim,
-> the sync ios of fsync will be blocked by a huge amount of buffer write
-> ios ahead. This is also a priority inversion problem within one cgroup.
-> In the database scene, things got really bad with blk-throtle enabled
-> as fsync is called very often.
-> 
-> This patch splits bio queue into sync and async queues for blk-throtl
-> and gives a huge priority to sync write ios. Sync queue only make sense
-> for write ios as we treat all read io as sync io. I think it's a nice
-> respond to the semantics of REQ_SYNC. Bios with REQ_META and REQ_PRIO
-> gains the same priority as they are important to fs. This may avoid
-> some potential priority inversion problems.
-> 
-> With this patch, do the same test above, the duration of the fsync sent
-> by vim drops to servral hundreds of milliseconds.
-> 
-> Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
-> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
+On Thu, 22 Dec 2022 at 16:07, James Clark <james.clark@arm.com> wrote:
+>
+> From: German Gomez <german.gomez@arm.com>
+>
+> Previously, adding a new parameter at the end of ETMv4 meant adding it
+> somewhere in the middle of ETE, which is not supported by the current
+> header version.
+>
+> Signed-off-by: German Gomez <german.gomez@arm.com>
+> Signed-off-by: James Clark <james.clark@arm.com>
 > ---
-> 
-> Changes in v2:
-> - Make the code more simple
-> 
->   block/blk-throttle.c | 105 +++++++++++++++++++++++++++++++++++++++----
->   block/blk-throttle.h |  12 ++++-
->   2 files changed, 108 insertions(+), 9 deletions(-)
-> 
-> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> index 847721dc2b2b..f3285c7da9f7 100644
-> --- a/block/blk-throttle.c
-> +++ b/block/blk-throttle.c
-> @@ -21,6 +21,13 @@
->   /* Total max dispatch from all groups in one round */
->   #define THROTL_QUANTUM 32
->   
-> +/* For write ios, dispatch 4 sync ios and 1 normal io in one loop */
-> +#define THROTL_SYNC_FACTOR 4
+>  tools/perf/arch/arm/util/cs-etm.c | 43 ++++++++++++++++++++++++++-----
+>  tools/perf/util/cs-etm-base.c     | 32 +++++++++++++++++------
+>  tools/perf/util/cs-etm.c          | 12 ++++-----
+>  tools/perf/util/cs-etm.h          | 11 +++++++-
+>  4 files changed, 76 insertions(+), 22 deletions(-)
+>
+> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
+> index a346d5f3dafa..b526ffe550a5 100644
+> --- a/tools/perf/arch/arm/util/cs-etm.c
+> +++ b/tools/perf/arch/arm/util/cs-etm.c
+> @@ -53,7 +53,15 @@ static const char * const metadata_etmv4_ro[] = {
+>         [CS_ETMV4_TRCIDR2]              = "trcidr/trcidr2",
+>         [CS_ETMV4_TRCIDR8]              = "trcidr/trcidr8",
+>         [CS_ETMV4_TRCAUTHSTATUS]        = "mgmt/trcauthstatus",
+> -       [CS_ETE_TRCDEVARCH]             = "mgmt/trcdevarch"
+> +};
 > +
-> +/* Only make sense for write ios, all read ios are treated as SYNC */
-> +#define SYNC	0
-> +#define ASYNC	1
+> +static const char * const metadata_ete_ro[] = {
+> +       [CS_ETE_TRCIDR0]                = "trcidr/trcidr0",
+> +       [CS_ETE_TRCIDR1]                = "trcidr/trcidr1",
+> +       [CS_ETE_TRCIDR2]                = "trcidr/trcidr2",
+> +       [CS_ETE_TRCIDR8]                = "trcidr/trcidr8",
+> +       [CS_ETE_TRCAUTHSTATUS]          = "mgmt/trcauthstatus",
+> +       [CS_ETE_TRCDEVARCH]             = "mgmt/trcdevarch",
+>  };
+>
+>  static bool cs_etm_is_etmv4(struct auxtrace_record *itr, int cpu);
+> @@ -617,7 +625,7 @@ static bool cs_etm_is_ete(struct auxtrace_record *itr, int cpu)
+>  {
+>         struct cs_etm_recording *ptr = container_of(itr, struct cs_etm_recording, itr);
+>         struct perf_pmu *cs_etm_pmu = ptr->cs_etm_pmu;
+> -       int trcdevarch = cs_etm_get_ro(cs_etm_pmu, cpu, metadata_etmv4_ro[CS_ETE_TRCDEVARCH]);
+> +       int trcdevarch = cs_etm_get_ro(cs_etm_pmu, cpu, metadata_ete_ro[CS_ETE_TRCDEVARCH]);
+>
+>         /*
+>          * ETE if ARCHVER is 5 (ARCHVER is 4 for ETM) and ARCHPART is 0xA13.
+> @@ -648,6 +656,31 @@ static void cs_etm_save_etmv4_header(__u64 data[], struct auxtrace_record *itr,
+>                                                      metadata_etmv4_ro[CS_ETMV4_TRCAUTHSTATUS]);
+>  }
+>
+> +static void cs_etm_save_ete_header(__u64 data[], struct auxtrace_record *itr, int cpu)
+> +{
+> +       struct cs_etm_recording *ptr = container_of(itr, struct cs_etm_recording, itr);
+> +       struct perf_pmu *cs_etm_pmu = ptr->cs_etm_pmu;
 > +
->   /* Throttling is performed over a slice and after that slice is renewed */
->   #define DFL_THROTL_SLICE_HD (HZ / 10)
->   #define DFL_THROTL_SLICE_SSD (HZ / 50)
-> @@ -241,11 +248,27 @@ static inline unsigned int throtl_bio_data_size(struct bio *bio)
->   	return bio->bi_iter.bi_size;
->   }
->   
-> -static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
-> +static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg,
-> +			      bool rw)
->   {
->   	INIT_LIST_HEAD(&qn->node);
-> -	bio_list_init(&qn->bios);
-> +	bio_list_init(&qn->bios[SYNC]);
-> +	bio_list_init(&qn->bios[ASYNC]);
->   	qn->tg = tg;
-> +	qn->dispatch_sync_cnt = (rw == READ) ? UINT_MAX : 0;
+> +       /* Get trace configuration register */
+> +       data[CS_ETE_TRCCONFIGR] = cs_etmv4_get_config(itr);
+> +       /* Get traceID from the framework */
+> +       data[CS_ETE_TRCTRACEIDR] = coresight_get_trace_id(cpu);
+> +       /* Get read-only information from sysFS */
+> +       data[CS_ETE_TRCIDR0] = cs_etm_get_ro(cs_etm_pmu, cpu,
+> +                                            metadata_ete_ro[CS_ETE_TRCIDR0]);
+> +       data[CS_ETE_TRCIDR1] = cs_etm_get_ro(cs_etm_pmu, cpu,
+> +                                            metadata_ete_ro[CS_ETE_TRCIDR1]);
+> +       data[CS_ETE_TRCIDR2] = cs_etm_get_ro(cs_etm_pmu, cpu,
+> +                                            metadata_ete_ro[CS_ETE_TRCIDR2]);
+> +       data[CS_ETE_TRCIDR8] = cs_etm_get_ro(cs_etm_pmu, cpu,
+> +                                            metadata_ete_ro[CS_ETE_TRCIDR8]);
+> +       data[CS_ETE_TRCAUTHSTATUS] = cs_etm_get_ro(cs_etm_pmu, cpu,
+> +                                                  metadata_ete_ro[CS_ETE_TRCAUTHSTATUS]);
+> +       /* ETE uses the same registers as ETMv4 plus TRCDEVARCH */
+> +       data[CS_ETE_TRCDEVARCH] = cs_etm_get_ro(cs_etm_pmu, cpu,
+> +                                               metadata_ete_ro[CS_ETE_TRCDEVARCH]);
 > +}
 > +
-> +#define BLK_THROTL_SYNC(bio) (bio->bi_opf & (REQ_SYNC | REQ_META | REQ_PRIO))
+>  static void cs_etm_get_metadata(int cpu, u32 *offset,
+>                                 struct auxtrace_record *itr,
+>                                 struct perf_record_auxtrace_info *info)
+> @@ -661,11 +694,7 @@ static void cs_etm_get_metadata(int cpu, u32 *offset,
+>         /* first see what kind of tracer this cpu is affined to */
+>         if (cs_etm_is_ete(itr, cpu)) {
+>                 magic = __perf_cs_ete_magic;
+> -               /* ETE uses the same registers as ETMv4 plus TRCDEVARCH */
+> -               cs_etm_save_etmv4_header(&info->priv[*offset], itr, cpu);
+> -               info->priv[*offset + CS_ETE_TRCDEVARCH] =
+> -                       cs_etm_get_ro(cs_etm_pmu, cpu,
+> -                                     metadata_etmv4_ro[CS_ETE_TRCDEVARCH]);
+> +               cs_etm_save_ete_header(&info->priv[*offset], itr, cpu);
+>
+>                 /* How much space was used */
+>                 increment = CS_ETE_PRIV_MAX;
+> diff --git a/tools/perf/util/cs-etm-base.c b/tools/perf/util/cs-etm-base.c
+> index 597542410854..282042c6e944 100644
+> --- a/tools/perf/util/cs-etm-base.c
+> +++ b/tools/perf/util/cs-etm-base.c
+> @@ -36,7 +36,20 @@ static const char * const cs_etmv4_priv_fmts[] = {
+>         [CS_ETMV4_TRCIDR2]      = "     TRCIDR2                        %llx\n",
+>         [CS_ETMV4_TRCIDR8]      = "     TRCIDR8                        %llx\n",
+>         [CS_ETMV4_TRCAUTHSTATUS] = "    TRCAUTHSTATUS                  %llx\n",
+> -       [CS_ETE_TRCDEVARCH]     = "     TRCDEVARCH                     %llx\n"
+> +};
 > +
-> +static inline void throtl_qnode_add_bio_list(struct throtl_qnode *qn,
-> +					     struct bio *bio)
-> +{
-> +	bool rw = bio_data_dir(bio);
-> +
-> +	if ((rw == READ) || BLK_THROTL_SYNC(bio))
-> +		bio_list_add(&qn->bios[SYNC], bio);
-> +	else
-> +		bio_list_add(&qn->bios[ASYNC], bio);
->   }
->   
->   /**
-> @@ -261,13 +284,34 @@ static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
->   static void throtl_qnode_add_bio(struct bio *bio, struct throtl_qnode *qn,
->   				 struct list_head *queued)
->   {
-> -	bio_list_add(&qn->bios, bio);
-> +	throtl_qnode_add_bio_list(qn, bio);
->   	if (list_empty(&qn->node)) {
->   		list_add_tail(&qn->node, queued);
->   		blkg_get(tg_to_blkg(qn->tg));
->   	}
->   }
->   
-> +static inline struct bio *throtl_qnode_bio_peek(struct throtl_qnode *qn)
-> +{
-> +	struct bio *bio;
-> +	int from = SYNC;
-> +
-> +	/* qn for read ios */
-> +	if (qn->dispatch_sync_cnt == UINT_MAX)
-> +		return bio_list_peek(&qn->bios[from]);
-> +
-> +	/* qn for write ios */
-> +	if (qn->dispatch_sync_cnt == THROTL_SYNC_FACTOR)
-> +		from = ASYNC;
-> +	bio = bio_list_peek(&qn->bios[from]);
-> +	if (!bio) {
-> +		from = 1 - from;
-> +		bio = bio_list_peek(&qn->bios[from]);
-> +	}
-> +
-> +	return bio;
-> +}
-> +
->   /**
->    * throtl_peek_queued - peek the first bio on a qnode list
->    * @queued: the qnode list to peek
-> @@ -281,11 +325,56 @@ static struct bio *throtl_peek_queued(struct list_head *queued)
->   		return NULL;
->   
->   	qn = list_first_entry(queued, struct throtl_qnode, node);
-> -	bio = bio_list_peek(&qn->bios);
-> +	bio = throtl_qnode_bio_peek(qn);
->   	WARN_ON_ONCE(!bio);
->   	return bio;
->   }
->   
-> +/**
-> + * throtl_qnode_bio_pop: pop a bio from a qnode
-> + * @qn: the qnode to pop a bio from
-> + *
-> + * For read io qn, just pop bio from sync queue and return.
-> + * For write io qn, the target queue to pop was determined by the dispatch_sync_cnt.
-> + * Try to pop bio from target queue, fetch the bio and return when it is not empty.
-> + * If the target queue empty, pop bio from other queue instead.
-> + */
-> +static inline struct bio *throtl_qnode_bio_pop(struct throtl_qnode *qn)
-> +{
-> +	struct bio *bio;
-> +	int from = SYNC;
-> +
-> +	/* qn for read ios */
-> +	if (qn->dispatch_sync_cnt == UINT_MAX)
-> +		return bio_list_pop(&qn->bios[from]);
-> +
-> +	/* qn for write ios */
-> +	if (qn->dispatch_sync_cnt == THROTL_SYNC_FACTOR)
-> +		from = ASYNC;
-> +
-> +	bio = bio_list_pop(&qn->bios[from]);
-> +	if (!bio) {
-> +		from = 1 - from;
-> +		bio = bio_list_pop(&qn->bios[from]);
-> +	}
-> +
-> +	if ((qn->dispatch_sync_cnt < THROTL_SYNC_FACTOR) &&
-> +		(from == SYNC))
-> +		qn->dispatch_sync_cnt++;
-> +	else if (from == ASYNC)
-> +		qn->dispatch_sync_cnt = 0;
-> +
-> +	return bio;
-> +}
-> +
-> +static inline bool throtl_qnode_empty(struct throtl_qnode *qn)
-> +{
-> +	if (bio_list_empty(&qn->bios[SYNC]) &&
-> +		bio_list_empty(&qn->bios[ASYNC]))
-> +		return true;
-> +	return false;
-> +}
-> +
->   /**
->    * throtl_pop_queued - pop the first bio form a qnode list
->    * @queued: the qnode list to pop a bio from
-> @@ -310,10 +399,10 @@ static struct bio *throtl_pop_queued(struct list_head *queued,
->   		return NULL;
->   
->   	qn = list_first_entry(queued, struct throtl_qnode, node);
-> -	bio = bio_list_pop(&qn->bios);
-> +	bio = throtl_qnode_bio_pop(qn);
->   	WARN_ON_ONCE(!bio);
->   
-> -	if (bio_list_empty(&qn->bios)) {
-> +	if (throtl_qnode_empty(qn)) {
->   		list_del_init(&qn->node);
->   		if (tg_to_put)
->   			*tg_to_put = qn->tg;
-> @@ -355,8 +444,8 @@ static struct blkg_policy_data *throtl_pd_alloc(gfp_t gfp,
->   	throtl_service_queue_init(&tg->service_queue);
->   
->   	for (rw = READ; rw <= WRITE; rw++) {
-> -		throtl_qnode_init(&tg->qnode_on_self[rw], tg);
-> -		throtl_qnode_init(&tg->qnode_on_parent[rw], tg);
-> +		throtl_qnode_init(&tg->qnode_on_self[rw], tg, rw);
-> +		throtl_qnode_init(&tg->qnode_on_parent[rw], tg, rw);
->   	}
->   
->   	RB_CLEAR_NODE(&tg->rb_node);
-> diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-> index ef4b7a4de987..55f3a9594e0d 100644
-> --- a/block/blk-throttle.h
-> +++ b/block/blk-throttle.h
-> @@ -28,8 +28,18 @@
->    */
->   struct throtl_qnode {
->   	struct list_head	node;		/* service_queue->queued[] */
-> -	struct bio_list		bios;		/* queued bios */
-> +	struct bio_list		bios[2];	/* queued bios */
->   	struct throtl_grp	*tg;		/* tg this qnode belongs to */
-> +
-> +	/*
-> +	 * 1) for write throtl_qnode:
-> +	 * [0, THROTL_SYNC_FACTOR-1]: dispatch sync io
-> +	 * [THROTL_SYNC_FACTOR]: dispatch async io
-> +	 *
-> +	 * 2) for read throtl_qnode:
-> +	 * UINT_MAX
-> +	 */
-> +	unsigned int dispatch_sync_cnt;         /* sync io dispatch counter */
->   };
->   
->   struct throtl_service_queue {
+> +static const char * const cs_ete_priv_fmts[] = {
+> +       [CS_ETM_MAGIC]          = "     Magic number                   %llx\n",
+> +       [CS_ETM_CPU]            = "     CPU                            %lld\n",
+> +       [CS_ETM_NR_TRC_PARAMS]  = "     NR_TRC_PARAMS                  %llx\n",
+> +       [CS_ETE_TRCCONFIGR]     = "     TRCCONFIGR                     %llx\n",
+> +       [CS_ETE_TRCTRACEIDR]    = "     TRCTRACEIDR                    %llx\n",
+> +       [CS_ETE_TRCIDR0]        = "     TRCIDR0                        %llx\n",
+> +       [CS_ETE_TRCIDR1]        = "     TRCIDR1                        %llx\n",
+> +       [CS_ETE_TRCIDR2]        = "     TRCIDR2                        %llx\n",
+> +       [CS_ETE_TRCIDR8]        = "     TRCIDR8                        %llx\n",
+> +       [CS_ETE_TRCAUTHSTATUS]  = "     TRCAUTHSTATUS                  %llx\n",
+> +       [CS_ETE_TRCDEVARCH]     = "     TRCDEVARCH                     %llx\n",
+>  };
+>
+>  static const char * const param_unk_fmt =
+> @@ -96,19 +109,22 @@ static int cs_etm__print_cpu_metadata_v1(u64 *val, int *offset)
+>                         else
+>                                 fprintf(stdout, cs_etm_priv_fmts[j], val[i]);
+>                 }
+> -       } else if (magic == __perf_cs_etmv4_magic || magic == __perf_cs_ete_magic) {
+> -               /*
+> -                * ETE and ETMv4 can be printed in the same block because the number of parameters
+> -                * is saved and they share the list of parameter names. ETE is also only supported
+> -                * in V1 files.
+> -                */
+> +       } else if (magic == __perf_cs_etmv4_magic) {
+>                 for (j = 0; j < total_params; j++, i++) {
+>                         /* if newer record - could be excess params */
+> -                       if (j >= CS_ETE_PRIV_MAX)
+> +                       if (j >= CS_ETMV4_PRIV_MAX)
+>                                 fprintf(stdout, param_unk_fmt, j, val[i]);
+>                         else
+>                                 fprintf(stdout, cs_etmv4_priv_fmts[j], val[i]);
+>                 }
+> +       } else if (magic == __perf_cs_ete_magic) {
+> +               for (j = 0; j < total_params; j++, i++) {
+> +                       /* if newer record - could be excess params */
+> +                       if (j >= CS_ETE_PRIV_MAX)
+> +                               fprintf(stdout, param_unk_fmt, j, val[i]);
+> +                       else
+> +                               fprintf(stdout, cs_ete_priv_fmts[j], val[i]);
+> +               }
+>         } else {
+>                 /* failure - note bad magic value and error out */
+>                 fprintf(stdout, magic_unk_fmt, magic);
+> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+> index 33303d03c2fa..879576d5f899 100644
+> --- a/tools/perf/util/cs-etm.c
+> +++ b/tools/perf/util/cs-etm.c
+> @@ -464,12 +464,12 @@ static void cs_etm__set_trace_param_ete(struct cs_etm_trace_params *t_params,
+>         u64 **metadata = etm->metadata;
+>
+>         t_params[idx].protocol = CS_ETM_PROTO_ETE;
+> -       t_params[idx].ete.reg_idr0 = metadata[idx][CS_ETMV4_TRCIDR0];
+> -       t_params[idx].ete.reg_idr1 = metadata[idx][CS_ETMV4_TRCIDR1];
+> -       t_params[idx].ete.reg_idr2 = metadata[idx][CS_ETMV4_TRCIDR2];
+> -       t_params[idx].ete.reg_idr8 = metadata[idx][CS_ETMV4_TRCIDR8];
+> -       t_params[idx].ete.reg_configr = metadata[idx][CS_ETMV4_TRCCONFIGR];
+> -       t_params[idx].ete.reg_traceidr = metadata[idx][CS_ETMV4_TRCTRACEIDR];
+> +       t_params[idx].ete.reg_idr0 = metadata[idx][CS_ETE_TRCIDR0];
+> +       t_params[idx].ete.reg_idr1 = metadata[idx][CS_ETE_TRCIDR1];
+> +       t_params[idx].ete.reg_idr2 = metadata[idx][CS_ETE_TRCIDR2];
+> +       t_params[idx].ete.reg_idr8 = metadata[idx][CS_ETE_TRCIDR8];
+> +       t_params[idx].ete.reg_configr = metadata[idx][CS_ETE_TRCCONFIGR];
+> +       t_params[idx].ete.reg_traceidr = metadata[idx][CS_ETE_TRCTRACEIDR];
+>         t_params[idx].ete.reg_devarch = metadata[idx][CS_ETE_TRCDEVARCH];
+>  }
+>
+> diff --git a/tools/perf/util/cs-etm.h b/tools/perf/util/cs-etm.h
+> index 5da50d5dae6b..c5925428afa9 100644
+> --- a/tools/perf/util/cs-etm.h
+> +++ b/tools/perf/util/cs-etm.h
+> @@ -82,7 +82,16 @@ enum {
+>   * added in header V1
+>   */
+>  enum {
+> -       CS_ETE_TRCDEVARCH = CS_ETMV4_PRIV_MAX,
+> +       /* Dynamic, configurable parameters */
+> +       CS_ETE_TRCCONFIGR = CS_ETM_COMMON_BLK_MAX_V1,
+> +       CS_ETE_TRCTRACEIDR,
+> +       /* RO, taken from sysFS */
+> +       CS_ETE_TRCIDR0,
+> +       CS_ETE_TRCIDR1,
+> +       CS_ETE_TRCIDR2,
+> +       CS_ETE_TRCIDR8,
+> +       CS_ETE_TRCAUTHSTATUS,
+> +       CS_ETE_TRCDEVARCH,
+>         CS_ETE_PRIV_MAX
+>  };
+>
+> --
+> 2.25.1
+>
+
+Reviewed-by: Mike Leach <mike.leach@linaro.org>
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
