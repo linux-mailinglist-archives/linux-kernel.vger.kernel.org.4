@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1324465517C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3329F655181
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236345AbiLWOl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 09:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
+        id S236265AbiLWOmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 09:42:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiLWOlz (ORCPT
+        with ESMTP id S230157AbiLWOms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 09:41:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76DC26A82
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 06:41:54 -0800 (PST)
+        Fri, 23 Dec 2022 09:42:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4AE40831;
+        Fri, 23 Dec 2022 06:42:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F654611DB
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 14:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A76DC433D2;
-        Fri, 23 Dec 2022 14:41:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26ABC61159;
+        Fri, 23 Dec 2022 14:42:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D39C433A4;
+        Fri, 23 Dec 2022 14:42:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671806513;
-        bh=37BtRM3lBO+1nDbvr3DPq5coHa2cgacS+AVXyWnLNOc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kox8nRoWLjje3Cjgbtjsl1MUkRM6pr89A0hlUvaZL1bXsWL6WvlOZT8S5LNQ437Ik
-         9MGEtfPFcaJvdgRCrlFQ1nWuCz8f4iAB8NwrZe3hhfkHWq3yJ7N6Z72IF6otN52F+P
-         QvaIQtXHPH5dWnGMu6tagb/hP9Lh+/8AzXx+a0gNepIwzX5CCRwejwtS4xlHRxGf2/
-         UQWBAU0CaKLo3GT9R2CObcJeSb3TvX31aIAhX383GjJFp7KgXe/XeMKYrH+nGRKjWG
-         ls9M/e9igPRFWQMahWwo7ivthVHTKTH/1JOstNMAxAKqpYpsBXRtl0YMaAHyaiQgIz
-         FjSJasnbusqFw==
-Date:   Fri, 23 Dec 2022 15:41:50 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     atomlin@atomlin.com, cl@linux.com, tglx@linutronix.de,
-        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
-        neelx@redhat.com, oleksandr@natalenko.name,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v11 3/6] mm/vmstat: manage per-CPU stats from CPU context
- when NOHZ full
-Message-ID: <20221223144150.GA79369@lothringen>
-References: <20221221165801.362118576@redhat.com>
- <20221221170436.330627967@redhat.com>
+        s=k20201202; t=1671806566;
+        bh=5WSz7TH//n5BtaNgZRfsk+p6ujzCP/EjZAPHDEoOC98=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=olxxz20sE9VTDEToVcepShp6ZZa4Bp12yaWtO7oOBQta+a/sXX0eD23TtaEu706n7
+         dYllP031b6JfCc338/j7dE0aRJtMYFMF/Op/BWYY8WZWIEBVWdrJ7HzTVX9VasJsvc
+         FIbWpnPNK0jmNoe230W4DUArvIoamRMJ6UTBnPmGxouLbp9VvM5uzgArb1twRsptbk
+         5FXgas+e0Pg/F1ZBUf9QUMamromNWImKk2vjlak7t2YQxzb3CMrVlNqxq94NAxHXg/
+         jwqxTlLhDxWKXzzZ8XjG2NQMdyte63X7IJl19pnT/P1llWf/iPkM9R/eE0CgUDTpiG
+         5v1zhFgOy0PVA==
+Received: by mail-lf1-f51.google.com with SMTP id b3so7355794lfv.2;
+        Fri, 23 Dec 2022 06:42:46 -0800 (PST)
+X-Gm-Message-State: AFqh2krGy2jhKjbScvaXFIjc4iButlvppwu/Z5hP9yzq65966IgiXCWC
+        ivBGd4I1EODyxXThdPoiRmj/HuuYBa6YAvsdE6E=
+X-Google-Smtp-Source: AMrXdXsMS+IGHzYDCdkiTlPt8UpinmgPDyHMg5CLbMsP3Lf2KPNsaQeyjjbVXhzNJHHGAEQZqz4efhVo1rex3aoEMIw=
+X-Received: by 2002:a19:a411:0:b0:4b6:e28c:276d with SMTP id
+ q17-20020a19a411000000b004b6e28c276dmr947831lfc.110.1671806564479; Fri, 23
+ Dec 2022 06:42:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221170436.330627967@redhat.com>
+References: <20221221105402.6598-1-markuss.broks@gmail.com>
+In-Reply-To: <20221221105402.6598-1-markuss.broks@gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 23 Dec 2022 15:42:33 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGUC7dsSwVEUsAMeAoqDYtbqrM7SDOJTXbPfi-LrcSk9g@mail.gmail.com>
+Message-ID: <CAMj1kXGUC7dsSwVEUsAMeAoqDYtbqrM7SDOJTXbPfi-LrcSk9g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] Add generic framebuffer support to EFI earlycon driver
+To:     Markuss Broks <markuss.broks@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Jami Kettunen <jami.kettunen@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Helge Deller <deller@gmx.de>, Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>, linux-doc@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,165 +75,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 01:58:04PM -0300, Marcelo Tosatti wrote:
-> @@ -194,21 +195,50 @@ void fold_vm_numa_events(void)
->  #endif
->  
->  #ifdef CONFIG_SMP
-> -static DEFINE_PER_CPU_ALIGNED(bool, vmstat_dirty);
-> +
-> +struct vmstat_dirty {
-> +	bool dirty;
-> +	bool cpuhotplug;
+(cc Andy)
 
-May be call it "online" for clarity. Also should it depend on CONFIG_FLUSH_WORK_ON_RESUME_USER?
 
-> +};
-> +
-> +static DEFINE_PER_CPU_ALIGNED(struct vmstat_dirty, vmstat_dirty_pcpu);
-> +static DEFINE_PER_CPU(struct delayed_work, vmstat_work);
-> +int sysctl_stat_interval __read_mostly = HZ;
->  
->  static inline void vmstat_mark_dirty(void)
->  {
-> -	this_cpu_write(vmstat_dirty, true);
-> +	struct vmstat_dirty *vms = this_cpu_ptr(&vmstat_dirty_pcpu);
-> +
-> +#ifdef CONFIG_FLUSH_WORK_ON_RESUME_USER
+On Wed, 21 Dec 2022 at 11:54, Markuss Broks <markuss.broks@gmail.com> wrote:
+>
+> Make the EFI earlycon driver be suitable for any linear framebuffers.
+> This should be helpful for early porting of boards with no other means of
+> output, like smartphones/tablets. There seems to be an issue with early_ioremap
+> function on ARM32, but I am unable to find the exact cause. It appears the mappings
+> returned by it are somehow incorrect, thus the driver is disabled on ARM.
 
-Please avoid ifdeffery in the middle of a function when possible.
-This block could be in a different function or use IS_ENABLED()
-for example.
+The reason that this driver is disabled on ARM is because the struct
+screen_info is not populated early enough, as it is retrieved from a
+UEFI configuration table.
 
-> +	int cpu = smp_processor_id();
-> +
-> +	if (tick_nohz_full_cpu(cpu) && !vms->dirty) {
-> +		struct delayed_work *dw;
-> +
-> +		dw = this_cpu_ptr(&vmstat_work);
-> +		if (!delayed_work_pending(dw) && !vms->cpuhotplug) {
-> +			unsigned long delay;
-> +
-> +			delay = round_jiffies_relative(sysctl_stat_interval);
-> +			queue_delayed_work_on(cpu, mm_percpu_wq, dw, delay);
-> +		}
-> +	}
-> +#endif
-> +	vms->dirty = true;
->  }
->  
->  static inline void vmstat_clear_dirty(void)
->  {
-> -	this_cpu_write(vmstat_dirty, false);
-> +	struct vmstat_dirty *vms = this_cpu_ptr(&vmstat_dirty_pcpu);
-> +
-> +	vms->dirty = false;
+early_ioremap() works fine on ARM as long as they mapping is torn down
+before paging_init()
 
-You could keep this_cpu_write(vmstat_dirty.dirty, false)
+> EFI early
+> console was disabled on IA64 previously because of missing early_memremap_prot,
+> and this is inherited to this driver.
+>
+> This patch also changes
 
->  }
->  
->  static inline bool is_vmstat_dirty(void)
->  {
-> -	return this_cpu_read(vmstat_dirty);
-> +	struct vmstat_dirty *vms = this_cpu_ptr(&vmstat_dirty_pcpu);
-> +
-> +	return vms->dirty;
+"This patch also changes ..." is usually a strong hint to self that
+the patches need to be split up.
 
-Ditto with this_cpu_read()?
-
->  }
->  
->  int calculate_pressure_threshold(struct zone *zone)
-> @@ -1981,13 +2008,18 @@ void quiet_vmstat(void)
->  	if (!is_vmstat_dirty())
->  		return;
->  
-> +	refresh_cpu_vm_stats(false);
-> +
-> +#ifdef CONFIG_FLUSH_WORK_ON_RESUME_USER
-
-This can use IS_ENABLED()
-
-> +	if (!user)
-> +		return;
->  	/*
-> -	 * Just refresh counters and do not care about the pending delayed
-> -	 * vmstat_update. It doesn't fire that often to matter and canceling
-> -	 * it would be too expensive from this path.
-> -	 * vmstat_shepherd will take care about that for us.
-> +	 * If the tick is stopped, cancel any delayed work to avoid
-> +	 * interruptions to this CPU in the future.
->  	 */
-> -	refresh_cpu_vm_stats(false);
-> +	if (delayed_work_pending(this_cpu_ptr(&vmstat_work)))
-> +		cancel_delayed_work(this_cpu_ptr(&vmstat_work));
-> +#endif
->  }
->  
->  /*
-> @@ -2008,8 +2040,15 @@ static void vmstat_shepherd(struct work_
->  	/* Check processors whose vmstat worker threads have been disabled */
->  	for_each_online_cpu(cpu) {
->  		struct delayed_work *dw = &per_cpu(vmstat_work, cpu);
-> +		struct vmstat_dirty *vms = per_cpu_ptr(&vmstat_dirty_pcpu, cpu);
->  
-> -		if (!delayed_work_pending(dw) && per_cpu(vmstat_dirty, cpu))
-> +#ifdef CONFIG_FLUSH_WORK_ON_RESUME_USER
-
-Same here.
-
-> +		/* NOHZ full CPUs manage their own vmstat flushing */
-> +		if (tick_nohz_full_cpu(cpu))
-> +			continue;
-> +#endif
-> +
-> +		if (!delayed_work_pending(dw) && vms->dirty)
->  			queue_delayed_work_on(cpu, mm_percpu_wq, dw, 0);
->  
->  		cond_resched();
-> @@ -2053,8 +2111,15 @@ static int vmstat_cpu_online(unsigned in
->  	return 0;
->  }
->  
-> +/*
-> + * ONLINE: The callbacks are invoked on the hotplugged CPU from the per CPU
-> + * hotplug thread with interrupts and preemption enabled.
-
-This is OFFLINE and the reason behind that comment is confusing.
-
-> + */
->  static int vmstat_cpu_down_prep(unsigned int cpu)
->  {
-> +	struct vmstat_dirty *vms = per_cpu_ptr(&vmstat_dirty_pcpu, cpu);
-> +
-> +	vms->cpuhotplug = true;
-
-this_cpu_write() ?
-
->  	cancel_delayed_work_sync(&per_cpu(vmstat_work, cpu));
->  	return 0;
->  }
-> +config FLUSH_WORK_ON_RESUME_USER
-> +	bool "Flush per-CPU vmstats on user return (for nohz full CPUs)"
-> +	depends on NO_HZ_FULL
-> +	default y
-> +
-> +	help
-> +	  By default, nohz full CPUs flush per-CPU vm statistics on return
-> +	  to userspace (to avoid additional interferences when executing
-> +	  userspace code). This has a small but measurable impact on
-> +	  system call performance. You can disable this to improve system call
-> +	  performance, at the expense of potential interferences to userspace
-> +	  execution.
-
-Can you move that below config CPU_ISOLATION ?
-
-Thanks!
-
-> +
->  # multi-gen LRU {
->  config LRU_GEN
->  	bool "Multi-Gen LRU"
-> 
-> 
+> behavior on EFI systems, by selecting the mapping type
+> based on if the framebuffer region intersects with system RAM. If it does, it's
+> common sense that it should be in RAM as a whole, and so the system RAM mapping is
+> used. It was tested to be working on my PC (Intel Z490 platform), as well as several
+> ARM64 boards (Samsung Galaxy S9 (Exynos), iPad Air 2, Xiaomi Mi Pad 4, ...).
+>
+> Markuss Broks (2):
+>   drivers: serial: earlycon: Pass device-tree node
+>   efi: earlycon: Add support for generic framebuffers and move to fbdev
+>     subsystem
+>
+>
+> v1 -> v2:
+>
+> - a new patch correcting serial/earlycon.c argument name to "offset" instead
+>   of "node"
+> - move IA64 exclusion from EFI earlycon Kconfig to earlycon driver Kconfig
+>   (IA64 has no early_memremap_prot)
+> - move driver from fbdev to console subsystem
+> - select EFI earlycon by default
+> - fetch stride manually from device-tree, as on some devices it seems stride
+>   doesn't match the horizontal resolution * bpp.
+> - use saner format (e.g. 1920x1080x32 instead of 1920,1080,32).
+>
+>
+> Markuss Broks (3):
+>   drivers: serial: earlycon: Pass device-tree node
+>   efi: earlycon: move to video/console to prepare for changes
+>   efi: earlycon: Add support for generic framebuffers
+>
+>  .../admin-guide/kernel-parameters.txt         |  12 +-
+>  MAINTAINERS                                   |   5 +
+>  drivers/firmware/efi/Kconfig                  |   7 +-
+>  drivers/firmware/efi/Makefile                 |   1 -
+>  drivers/firmware/efi/earlycon.c               | 246 --------------
+>  drivers/tty/serial/earlycon.c                 |   3 +
+>  drivers/video/console/Kconfig                 |  11 +
+>  drivers/video/console/Makefile                |   1 +
+>  drivers/video/console/earlycon.c              | 305 ++++++++++++++++++
+>  include/linux/serial_core.h                   |   1 +
+>  10 files changed, 336 insertions(+), 256 deletions(-)
+>  delete mode 100644 drivers/firmware/efi/earlycon.c
+>  create mode 100644 drivers/video/console/earlycon.c
+>
+> --
+> 2.39.0
+>
