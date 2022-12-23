@@ -2,213 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7946551FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8745F6551EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbiLWPWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 10:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S236477AbiLWPJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 10:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiLWPWE (ORCPT
+        with ESMTP id S230229AbiLWPJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 10:22:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F2ABC04;
-        Fri, 23 Dec 2022 07:22:02 -0800 (PST)
+        Fri, 23 Dec 2022 10:09:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464E226AA8;
+        Fri, 23 Dec 2022 07:09:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58479611DB;
-        Fri, 23 Dec 2022 15:22:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86187C433EF;
-        Fri, 23 Dec 2022 15:21:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEDA2B820E3;
+        Fri, 23 Dec 2022 15:09:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C34BAC433D2;
+        Fri, 23 Dec 2022 15:09:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671808920;
-        bh=CR9laOfT88DbZYkNVldbIf3CGCqsMBJWAm+kRPjVPGs=;
+        s=k20201202; t=1671808172;
+        bh=hGJV8NfEAgiKZPhXeSLUyu3Mj49AgkeGvUSxPgLre8Y=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Dijplt8YGygEEGyCGnk7z3rBvaPWMRyCN743cBBgB6ujWH/GmtrrKmb3hkXfvIlc6
-         gqD1AbN/hr7m6iA1PiWhOtcbKrlPbS1tSUJR1IX2MfGyHpVZKmkc37A9B2ubWweRnD
-         0U+VC4oHrcoGJ8un8Rp05EEPlKCqUvjlJZmKCpnSXa5RDTMxX8GO5GpW6Iw1xP0RbN
-         X64ysPKud/An5DmpBAzeSrzrRZMNoIRaX5iZxJrZd+geGi9jh6kRgLB8hZ5LhzOdnn
-         DIKEgJwu5zBvDi+66OaKUrDCMSbYak93gWfcjQn7hwjdSvepEBR8FzX4MwXlWm41Pa
-         0LM1Di/EEaNuA==
-Date:   Sat, 24 Dec 2022 00:21:57 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Song Chen <chensong_2000@189.cn>
-Cc:     rostedt@goodmis.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] kernel/trace: Provide default impelentations
- defined in trace_probe_tmpl.h
-Message-Id: <20221224002157.ce3caeee919d153fe4f56bc8@kernel.org>
-In-Reply-To: <1670228994-4020-1-git-send-email-chensong_2000@189.cn>
-References: <1670228994-4020-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        b=Qvk5TbD3vTqjbkY5KtyuXMG1uxY6xpidSbT3edsTeI0X7AQBNrqd4epcqjctSRXo0
+         qU2DE/5Z6/6IY8AY7osnz+pwWsBl0kfhCnhXpUEHGraJXj6u0NaYNPJZ7BBVnbJSCE
+         JIrbUfra74yqP/zSM1pDIYIEbwjvwlV5g7kOf333d+J1oVV+ZwsJOPeirnzPFzMvLK
+         F2G77ujc3oi77UwNXcyU9uP3/86WKtOGQ+syuhkh+QSYjAv6yDZW7PbfD8Rghz0rWt
+         sRuQkK6MorylWUJYQBGtJO1wz2YjbaFbc4svNtskNTNCc+pxVZjLByjJK/fCShPUKw
+         KIP0zquQ7VyVg==
+Date:   Fri, 23 Dec 2022 15:22:42 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/2] iio: adc: ti-adc128s052: Switch to use
+ spi_get_device_match_data()
+Message-ID: <20221223152242.2ee926eb@jic23-huawei>
+In-Reply-To: <20221214114944.83790-1-andriy.shevchenko@linux.intel.com>
+References: <20221214114944.83790-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+On Wed, 14 Dec 2022 13:49:43 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-On Mon,  5 Dec 2022 16:29:54 +0800
-Song Chen <chensong_2000@189.cn> wrote:
+> The spi_get_device_match_data() helps to get driver data from the
+> firmware node or SPI ID table. Use it instead of open coding.
+> 
+> While at it, switch ID tables to provide an acrual pointers to
+> the configuration data.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> 
+> Requires aea672d054a2 ("spi: Introduce spi_get_device_match_data()
+> helper") which is part of upstream as of today.
 
-> @@ -112,4 +112,133 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
->  	return ret;
+I rebased to get that (will rebase again on rc1).
+
+Applied to the togreg branch of iio.git and pushed out as testing
+to keep 0-day busy over my holidays.
+
+Jonathan
+
+> 
+>  drivers/iio/adc/ti-adc128s052.c | 39 +++++++++++++++------------------
+>  1 file changed, 18 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ti-adc128s052.c b/drivers/iio/adc/ti-adc128s052.c
+> index b3d5b9b7255b..9dfc625100b6 100644
+> --- a/drivers/iio/adc/ti-adc128s052.c
+> +++ b/drivers/iio/adc/ti-adc128s052.c
+> @@ -139,16 +139,11 @@ static void adc128_disable_regulator(void *reg)
+>  
+>  static int adc128_probe(struct spi_device *spi)
+>  {
+> +	const struct adc128_configuration *config;
+>  	struct iio_dev *indio_dev;
+> -	unsigned int config;
+>  	struct adc128 *adc;
+>  	int ret;
+>  
+> -	if (dev_fwnode(&spi->dev))
+> -		config = (unsigned long) device_get_match_data(&spi->dev);
+> -	else
+> -		config = spi_get_device_id(spi)->driver_data;
+> -
+>  	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*adc));
+>  	if (!indio_dev)
+>  		return -ENOMEM;
+> @@ -160,6 +155,8 @@ static int adc128_probe(struct spi_device *spi)
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+>  	indio_dev->info = &adc128_info;
+>  
+> +	config = spi_get_device_match_data(&spi->dev);
+> +
+>  	indio_dev->channels = adc128_config[config].channels;
+>  	indio_dev->num_channels = adc128_config[config].num_channels;
+>  
+> @@ -181,32 +178,32 @@ static int adc128_probe(struct spi_device *spi)
 >  }
 >  
-> +static nokprobe_inline int
-> +probe_mem_read_user(void *dest, void *src, size_t size)
-> +{
-> +	const void __user *uaddr =  (__force const void __user *)src;
-> +
-> +	return copy_from_user_nofault(dest, uaddr, size);
-> +}
-> +
-> +static nokprobe_inline int
-> +probe_mem_read(void *dest, void *src, size_t size)
-> +{
-> +#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-> +	if ((unsigned long)src < TASK_SIZE)
-> +		return probe_mem_read_user(dest, src, size);
-> +#endif
-> +	return copy_from_kernel_nofault(dest, src, size);
-> +}
-> +
+>  static const struct of_device_id adc128_of_match[] = {
+> -	{ .compatible = "ti,adc128s052", .data = (void*)0L, },
+> -	{ .compatible = "ti,adc122s021", .data = (void*)1L, },
+> -	{ .compatible = "ti,adc122s051", .data = (void*)1L, },
+> -	{ .compatible = "ti,adc122s101", .data = (void*)1L, },
+> -	{ .compatible = "ti,adc124s021", .data = (void*)2L, },
+> -	{ .compatible = "ti,adc124s051", .data = (void*)2L, },
+> -	{ .compatible = "ti,adc124s101", .data = (void*)2L, },
+> +	{ .compatible = "ti,adc128s052", .data = &adc128_config[0] },
+> +	{ .compatible = "ti,adc122s021", .data = &adc128_config[1] },
+> +	{ .compatible = "ti,adc122s051", .data = &adc128_config[1] },
+> +	{ .compatible = "ti,adc122s101", .data = &adc128_config[1] },
+> +	{ .compatible = "ti,adc124s021", .data = &adc128_config[2] },
+> +	{ .compatible = "ti,adc124s051", .data = &adc128_config[2] },
+> +	{ .compatible = "ti,adc124s101", .data = &adc128_config[2] },
+>  	{ /* sentinel */ },
+>  };
+>  MODULE_DEVICE_TABLE(of, adc128_of_match);
+>  
+>  static const struct spi_device_id adc128_id[] = {
+> -	{ "adc128s052", 0 },	/* index into adc128_config */
+> -	{ "adc122s021",	1 },
+> -	{ "adc122s051",	1 },
+> -	{ "adc122s101",	1 },
+> -	{ "adc124s021", 2 },
+> -	{ "adc124s051", 2 },
+> -	{ "adc124s101", 2 },
+> +	{ "adc128s052", (kernel_ulong_t)&adc128_config[0] },
+> +	{ "adc122s021",	(kernel_ulong_t)&adc128_config[1] },
+> +	{ "adc122s051",	(kernel_ulong_t)&adc128_config[1] },
+> +	{ "adc122s101",	(kernel_ulong_t)&adc128_config[1] },
+> +	{ "adc124s021", (kernel_ulong_t)&adc128_config[2] },
+> +	{ "adc124s051", (kernel_ulong_t)&adc128_config[2] },
+> +	{ "adc124s101", (kernel_ulong_t)&adc128_config[2] },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(spi, adc128_id);
+>  
+>  #ifdef CONFIG_ACPI
+>  static const struct acpi_device_id adc128_acpi_match[] = {
+> -	{ "AANT1280", 2 }, /* ADC124S021 compatible ACPI ID */
+> +	{ "AANT1280", (kernel_ulong_t)&adc128_config[2] },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, adc128_acpi_match);
 
-So, the error which kernel build bot found has been introduced by this patch.
-The easiest acceptable change will add
-
-#ifdef CONFIG_HAVE_REGS_AND_STACK_ACCESS_API
-
-here, and #endif after process_fetch_insn(). 
-
-Thank you,
-
-> +static nokprobe_inline unsigned long
-> +get_event_field(struct fetch_insn *code, void *rec)
-> +{
-> +	struct ftrace_event_field *field = code->data;
-> +	unsigned long val;
-> +	void *addr;
-> +
-> +	addr = rec + field->offset;
-> +
-> +	if (is_string_field(field)) {
-> +		switch (field->filter_type) {
-> +		case FILTER_DYN_STRING:
-> +			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
-> +			break;
-> +		case FILTER_RDYN_STRING:
-> +			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
-> +			break;
-> +		case FILTER_STATIC_STRING:
-> +			val = (unsigned long)addr;
-> +			break;
-> +		case FILTER_PTR_STRING:
-> +			val = (unsigned long)(*(char *)addr);
-> +			break;
-> +		default:
-> +			WARN_ON_ONCE(1);
-> +			return 0;
-> +		}
-> +		return val;
-> +	}
-> +
-> +	switch (field->size) {
-> +	case 1:
-> +		if (field->is_signed)
-> +			val = *(char *)addr;
-> +		else
-> +			val = *(unsigned char *)addr;
-> +		break;
-> +	case 2:
-> +		if (field->is_signed)
-> +			val = *(short *)addr;
-> +		else
-> +			val = *(unsigned short *)addr;
-> +		break;
-> +	case 4:
-> +		if (field->is_signed)
-> +			val = *(int *)addr;
-> +		else
-> +			val = *(unsigned int *)addr;
-> +		break;
-> +	default:
-> +		if (field->is_signed)
-> +			val = *(long *)addr;
-> +		else
-> +			val = *(unsigned long *)addr;
-> +		break;
-> +	}
-> +	return val;
-> +}
-> +
-> +/* Note that we don't verify it, since the code does not come from user space */
-> +static int
-> +process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-> +		   void *base)
-> +{
-> +	struct pt_regs *regs = rec;
-> +	unsigned long val;
-> +
-> +retry:
-> +	/* 1st stage: get value from context */
-> +	switch (code->op) {
-> +	case FETCH_OP_REG:
-> +		val = regs_get_register(regs, code->param);
-> +		break;
-> +	case FETCH_OP_STACK:
-> +		val = regs_get_kernel_stack_nth(regs, code->param);
-> +		break;
-> +	case FETCH_OP_STACKP:
-> +		val = kernel_stack_pointer(regs);
-> +		break;
-> +	case FETCH_OP_RETVAL:
-> +		val = regs_return_value(regs);
-> +		break;
-> +	case FETCH_OP_IMM:
-> +		val = code->immediate;
-> +		break;
-> +	case FETCH_OP_COMM:
-> +		val = (unsigned long)current->comm;
-> +		break;
-> +	case FETCH_OP_DATA:
-> +		val = (unsigned long)code->data;
-> +		break;
-> +#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-> +	case FETCH_OP_ARG:
-> +		val = regs_get_kernel_argument(regs, code->param);
-> +		break;
-> +#endif
-> +	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-> +		code++;
-> +		goto retry;
-> +	case FETCH_OP_TP_ARG:
-> +		val = get_event_field(code, rec);
-> +		break;
-> +	default:
-> +		return -EILSEQ;
-> +	}
-> +	code++;
-> +
-> +	return process_fetch_insn_bottom(code, val, dest, base);
-> +}
-> +NOKPROBE_SYMBOL(process_fetch_insn)
-> +
->  #endif /* __TRACE_PROBE_KERNEL_H_ */
-> -- 
-> 2.25.1
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
