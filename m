@@ -2,64 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198D865537F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4FF655381
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232862AbiLWSKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 13:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
+        id S231241AbiLWSMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbiLWSKc (ORCPT
+        with ESMTP id S230219AbiLWSMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:10:32 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB761D0FB;
-        Fri, 23 Dec 2022 10:10:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671819028; x=1703355028;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EHQ+fQ0PDjXdAmyvbXTIdBDCDsIgBAPhIBp4uzkZHPs=;
-  b=BcXvmIvSWExAjiCiiu1TGxHqn8xeszlfvQ6MuUAhTDorSWiywvvsUXkC
-   yeFSSkjOns3s5zYJIe/cfu6PGZrK5nyZnvOm67vvxhNeNu8u1TF9pDq0h
-   xqFyhroo5clKQR2J5ix+AN0kS0jyLlAG0bKO0F5NhT4gjixQSm/G19g0E
-   KJDWUu9jrOIhTzjQwN99HnkP8Em0GDNvYCoD0KYQND2U9dST3CF6oq239
-   wDwkaysVGlLsUu2f5GaE6ANyoYRr1PPqiNGo8Uo9Yz9GMJc/wHR2gWJZA
-   zurB/LBMRMqM3klahIz0pS83Fo0/pUCiPiVDWOjFgCVobnGXdOjwWNCWy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="303837404"
-X-IronPort-AV: E=Sophos;i="5.96,269,1665471600"; 
-   d="scan'208";a="303837404"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 10:10:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="980987420"
-X-IronPort-AV: E=Sophos;i="5.96,269,1665471600"; 
-   d="scan'208";a="980987420"
-Received: from nsbhole-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.21.195])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 10:10:26 -0800
-Message-ID: <2ed9702b67832e3e33ef352808124980206c1e95.camel@linux.intel.com>
-Subject: Re: [PATCH 0/2] intel_pstate: fix turbo not being used after a
- processor is rebooted
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Pratyush Yadav <ptyadav@amazon.de>
-Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devel@acpica.org
-Date:   Fri, 23 Dec 2022 10:10:26 -0800
-In-Reply-To: <mafs0k02jd8oh.fsf_-_@dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com>
-References: <20221221155203.11347-1-ptyadav@amazon.de>
-         <72bcd14eef038ec9181d30b3d196b0a872f47ccb.camel@linux.intel.com>
-         <mafs0k02jd8oh.fsf_-_@dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Fri, 23 Dec 2022 13:12:31 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AF5165B4;
+        Fri, 23 Dec 2022 10:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671819131; bh=7XkD7f85Pcv9AmvgSuqEDVDEKSRJ5Y36AiME/4pHDm8=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=lGy+M8ORIHCGFN2bFw4JOaoA9MNcQbcrRnF3PS9aKDyhHuk4Csce+ppI39uq0trom
+         /bLtRu3jiAFUnxnqj7xvU71DCk+XZBJEk/rTqbvw1Y2/sNo3V1LnRO00mwfdbJnD9b
+         h86yBAg6dPYfxpPsFN3sYLm8fwX860ADzdS1EdKE=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Fri, 23 Dec 2022 19:12:11 +0100 (CET)
+X-EA-Auth: K7gmOTf9sTkfNN11vh2VXVy7wKkBtlQ/+3fK4W5Dc46cmvYO17OUDMyxHj/pAV+n5z71H7Yn4CLNtlUX0xTn863Qzkval56Y
+Date:   Fri, 23 Dec 2022 23:42:02 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Hannes Reinecke <hare@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
+Subject: [PATCH] scsi: myrs: Use sysfs_emit in show function callsbacks
+Message-ID: <Y6XvcuFnqA8po5Ht@qemulion>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,52 +48,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pratyush,
+According to Documentation/filesystems/sysfs.rst, the show() callback
+function of kobject attributes should strictly use sysfs_emit instead
+of sprintf family functions.
 
-On Thu, 2022-12-22 at 11:39 +0100, Pratyush Yadav wrote:
-> 
-> Hi Srinivas,
-> 
-> On Wed, Dec 21 2022, srinivas pandruvada wrote:
-> > On Wed, 2022-12-21 at 16:52 +0100, Pratyush Yadav wrote:
-> > > When a processor is brought offline and online again, it is
-> > > unable to
-> > > use Turbo mode because the _PSS table does not contain the whole
-> > > turbo
-> > > frequency range, but only +1 MHz above the max non-turbo
-> > > frequency.
-> > > This
-> > > causes problems when ACPI processor driver tries to set frequency
-> > > constraints. See patch 2 for more details.
-> > > 
-I can reproduce on a Broadwell server platform. But not on a client
-system with acpi_ppc usage.
+Issue identified using the coccinelle device_attr_show.cocci script.
 
-Need to check what change broke this.
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ drivers/scsi/myrs.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-Thanks,
-Srinivas
+diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
+index 7eb8c39da366..f08b8731d6dd 100644
+--- a/drivers/scsi/myrs.c
++++ b/drivers/scsi/myrs.c
+@@ -939,7 +939,7 @@ static ssize_t raid_state_show(struct device *dev,
+ 	int ret;
 
-> > 
-> > Thanks,
-> > Srinivas
-> > 
-> > > Pratyush Yadav (2):
-> > >   acpi: processor: allow fixing up the frequency for a
-> > > performance
-> > > state
-> > >   cpufreq: intel_pstate: use acpi perflib to update turbo
-> > > frequency
-> > > 
-> > >  drivers/acpi/processor_perflib.c | 40
-> > > ++++++++++++++++++++++++++++++++
-> > >  drivers/cpufreq/intel_pstate.c   |  5 ++--
-> > >  include/acpi/processor.h         |  2 ++
-> > >  3 files changed, 45 insertions(+), 2 deletions(-)
-> > > 
-> > > --
-> > > 2.38.1
-> > > 
-> > 
-> 
+ 	if (!sdev->hostdata)
+-		return snprintf(buf, 16, "Unknown\n");
++		return sysfs_emit(buf, "Unknown\n");
+
+ 	if (sdev->channel >= cs->ctlr_info->physchan_present) {
+ 		struct myrs_ldev_info *ldev_info = sdev->hostdata;
+@@ -1058,7 +1058,7 @@ static ssize_t raid_level_show(struct device *dev,
+ 	const char *name = NULL;
+
+ 	if (!sdev->hostdata)
+-		return snprintf(buf, 16, "Unknown\n");
++		return sysfs_emit(buf, "Unknown\n");
+
+ 	if (sdev->channel >= cs->ctlr_info->physchan_present) {
+ 		struct myrs_ldev_info *ldev_info;
+@@ -1086,7 +1086,7 @@ static ssize_t rebuild_show(struct device *dev,
+ 	unsigned char status;
+
+ 	if (sdev->channel < cs->ctlr_info->physchan_present)
+-		return snprintf(buf, 32, "physical device - not rebuilding\n");
++		return sysfs_emit(buf, "physical device - not rebuilding\n");
+
+ 	ldev_info = sdev->hostdata;
+ 	ldev_num = ldev_info->ldev_num;
+@@ -1190,7 +1190,7 @@ static ssize_t consistency_check_show(struct device *dev,
+ 	unsigned short ldev_num;
+
+ 	if (sdev->channel < cs->ctlr_info->physchan_present)
+-		return snprintf(buf, 32, "physical device - not checking\n");
++		return sysfs_emit(buf, "physical device - not checking\n");
+
+ 	ldev_info = sdev->hostdata;
+ 	if (!ldev_info)
+@@ -1303,7 +1303,7 @@ static ssize_t serial_show(struct device *dev,
+
+ 	memcpy(serial, cs->ctlr_info->serial_number, 16);
+ 	serial[16] = '\0';
+-	return snprintf(buf, 16, "%s\n", serial);
++	return sysfs_emit(buf, "%s\n", serial);
+ }
+ static DEVICE_ATTR_RO(serial);
+
+@@ -1313,7 +1313,7 @@ static ssize_t ctlr_num_show(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct myrs_hba *cs = shost_priv(shost);
+
+-	return snprintf(buf, 20, "%d\n", cs->host->host_no);
++	return sysfs_emit(buf, "%d\n", cs->host->host_no);
+ }
+ static DEVICE_ATTR_RO(ctlr_num);
+
+@@ -1388,7 +1388,7 @@ static ssize_t model_show(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct myrs_hba *cs = shost_priv(shost);
+
+-	return snprintf(buf, 28, "%s\n", cs->model_name);
++	return sysfs_emit(buf, "%s\n", cs->model_name);
+ }
+ static DEVICE_ATTR_RO(model);
+
+@@ -1398,7 +1398,7 @@ static ssize_t ctlr_type_show(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct myrs_hba *cs = shost_priv(shost);
+
+-	return snprintf(buf, 4, "%d\n", cs->ctlr_info->ctlr_type);
++	return sysfs_emit(buf, "%d\n", cs->ctlr_info->ctlr_type);
+ }
+ static DEVICE_ATTR_RO(ctlr_type);
+
+@@ -1408,7 +1408,7 @@ static ssize_t cache_size_show(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct myrs_hba *cs = shost_priv(shost);
+
+-	return snprintf(buf, 8, "%d MB\n", cs->ctlr_info->cache_size_mb);
++	return sysfs_emit(buf, "%d MB\n", cs->ctlr_info->cache_size_mb);
+ }
+ static DEVICE_ATTR_RO(cache_size);
+
+@@ -1418,7 +1418,7 @@ static ssize_t firmware_show(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct myrs_hba *cs = shost_priv(shost);
+
+-	return snprintf(buf, 16, "%d.%02d-%02d\n",
++	return sysfs_emit(buf, "%d.%02d-%02d\n",
+ 			cs->ctlr_info->fw_major_version,
+ 			cs->ctlr_info->fw_minor_version,
+ 			cs->ctlr_info->fw_turn_number);
+@@ -1488,7 +1488,7 @@ static ssize_t disable_enclosure_messages_show(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct myrs_hba *cs = shost_priv(shost);
+
+-	return snprintf(buf, 3, "%d\n", cs->disable_enc_msg);
++	return sysfs_emit(buf, "%d\n", cs->disable_enc_msg);
+ }
+
+ static ssize_t disable_enclosure_messages_store(struct device *dev,
+--
+2.34.1
+
+
 
