@@ -2,79 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8219E654C86
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 07:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06A0654C8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 07:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235525AbiLWGjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 01:39:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
+        id S235633AbiLWGr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 01:47:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbiLWGi6 (ORCPT
+        with ESMTP id S235667AbiLWGrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 01:38:58 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725971BEB4;
-        Thu, 22 Dec 2022 22:38:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Ndcvr5qkYz4f3nqX;
-        Fri, 23 Dec 2022 14:38:48 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP3 (Coremail) with SMTP id _Ch0CgBH8yD6TKVjMP5SAQ--.29845S2;
-        Fri, 23 Dec 2022 14:38:51 +0800 (CST)
-Subject: Re: [PATCH 01/13] blk-mq: avoid sleep in blk_mq_alloc_request_hctx
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
-        ming.lei@redhat.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, john.garry@huawei.com
-References: <20221223125223.1687670-1-shikemeng@huaweicloud.com>
- <20221223125223.1687670-2-shikemeng@huaweicloud.com>
- <20221223053718.GA2676@lst.de>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <fd69227c-1350-c8fa-8231-5ca230cd2c43@huaweicloud.com>
-Date:   Fri, 23 Dec 2022 14:38:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Fri, 23 Dec 2022 01:47:08 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CCA1DA6F
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:47:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671778027; x=1703314027;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5tQjERKE0rKTVVuvCnvXwBiEENlTSnTM1GULZ7Q2xgw=;
+  b=beFimWGYKWxeZw/R0x+GwjRnB/FqK61zDiWNCCbdIn5UjqCmT98W2Jtf
+   ixty6oQKnKa1JhwAkV1QTNOI4yZP6o3gmWGO+TfnZAJrQvMPhUNb/rOkb
+   V9MoETU7clN3h1l0fjrfOw8F+wAfO//kbi5qYh3/e4N52HC2Ncti9fxpm
+   ii/MEoZclcO0Vet6zccVrKDuZX8zYJbenL6qCQ9HU0zObm7QSw6w4JYD7
+   zPLsZrr5sy9Ssnz5TCRbwV2+/zeOuEkYnpBtUyoqPnFXU2OP8Z/3YkSPK
+   gLoLv5ZSn5RYVv58DKUXR8mCJKdHjUEEnTRNKqb63xC+d34TLcBuqgg/C
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="318980178"
+X-IronPort-AV: E=Sophos;i="5.96,267,1665471600"; 
+   d="scan'208";a="318980178"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 22:47:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="684451764"
+X-IronPort-AV: E=Sophos;i="5.96,267,1665471600"; 
+   d="scan'208";a="684451764"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 22 Dec 2022 22:47:04 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p8bpg-000CV1-0R;
+        Fri, 23 Dec 2022 06:47:04 +0000
+Date:   Fri, 23 Dec 2022 14:46:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:haltnmi2.2022.12.19a] BUILD SUCCESS
+ f7f35d3e8eda8463384354a752a7c068fce216d5
+Message-ID: <63a54eb7.0SMnHNRcbWgMQAdm%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20221223053718.GA2676@lst.de>
-Content-Type: text/plain; charset=gbk
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: _Ch0CgBH8yD6TKVjMP5SAQ--.29845S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYj7kC6x804xWl14x267AKxVW8JVW5JwAF
-        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJ
-        UUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Christoph.
-on 12/23/2022 1:37 PM, Christoph Hellwig wrote:
-> On Fri, Dec 23, 2022 at 08:52:11PM +0800, Kemeng Shi wrote:
->> +	if (WARN_ON_ONCE(((!flags) & (BLK_MQ_REQ_NOWAIT | BLK_MQ_REQ_RESERVED))))
-> 
-> This check does not make any sense.  I think what you want is
-> 
-> 	if (WARN_ON_ONCE(!(flags & BLK_MQ_REQ_NOWAIT) ||
-> 	    WARN_ON_ONCE(!(flags & BLK_MQ_REQ_RESERVED))))
-This is exactly what I want and I will fix this in next version. Thanks.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git haltnmi2.2022.12.19a
+branch HEAD: f7f35d3e8eda8463384354a752a7c068fce216d5  x86/nmi: Test commit for exc_nmi handler not being reached
+
+elapsed time: 725m
+
+configs tested: 100
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+powerpc                           allnoconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+x86_64                              defconfig
+sh                               allmodconfig
+ia64                             allmodconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+x86_64                               rhel-8.3
+x86_64               randconfig-a003-20221219
+x86_64               randconfig-a001-20221219
+x86_64               randconfig-a004-20221219
+x86_64               randconfig-a002-20221219
+x86_64                           allyesconfig
+i386                                defconfig
+x86_64               randconfig-a006-20221219
+x86_64               randconfig-a005-20221219
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+riscv                randconfig-r042-20221218
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+m68k                             allmodconfig
+arc                  randconfig-r043-20221219
+i386                             allyesconfig
+arm                  randconfig-r046-20221219
+m68k                             allyesconfig
+arc                  randconfig-r043-20221218
+arm                                 defconfig
+s390                 randconfig-r044-20221218
+arc                              allyesconfig
+alpha                            allyesconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+x86_64                            allnoconfig
+i386                          randconfig-c001
+i386                 randconfig-a005-20221219
+i386                 randconfig-a002-20221219
+i386                 randconfig-a003-20221219
+i386                 randconfig-a006-20221219
+i386                 randconfig-a001-20221219
+i386                 randconfig-a004-20221219
+arm                        trizeps4_defconfig
+sh                            shmin_defconfig
+um                               alldefconfig
+powerpc                      makalu_defconfig
+m68k                        mvme147_defconfig
+powerpc                    amigaone_defconfig
+m68k                         amcore_defconfig
+m68k                        m5272c3_defconfig
+s390                 randconfig-r044-20221222
+arc                  randconfig-r043-20221222
+riscv                randconfig-r042-20221222
+sh                           se7724_defconfig
+sh                          rsk7203_defconfig
+arm                            xcep_defconfig
+mips                           xway_defconfig
+m68k                          multi_defconfig
+powerpc                 mpc8540_ads_defconfig
+mips                            ar7_defconfig
+openrisc                    or1ksim_defconfig
+sh                          lboxre2_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+
+clang tested configs:
+x86_64                          rhel-8.3-rust
+i386                 randconfig-a011-20221219
+i386                 randconfig-a014-20221219
+i386                 randconfig-a012-20221219
+i386                 randconfig-a013-20221219
+arm                  randconfig-r046-20221218
+i386                 randconfig-a015-20221219
+hexagon              randconfig-r041-20221218
+hexagon              randconfig-r045-20221219
+s390                 randconfig-r044-20221219
+i386                 randconfig-a016-20221219
+hexagon              randconfig-r041-20221219
+i386                          randconfig-a002
+hexagon              randconfig-r045-20221218
+i386                          randconfig-a004
+riscv                randconfig-r042-20221219
+i386                          randconfig-a006
+x86_64                        randconfig-k001
+x86_64               randconfig-a015-20221219
+x86_64               randconfig-a013-20221219
+x86_64               randconfig-a012-20221219
+x86_64               randconfig-a016-20221219
+x86_64               randconfig-a014-20221219
+x86_64               randconfig-a011-20221219
+x86_64               randconfig-k001-20221219
 
 -- 
-Best wishes
-Kemeng Shi
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
