@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28CD654A5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 02:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7DB654A5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 02:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236028AbiLWBKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 20:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S235941AbiLWBKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 20:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235891AbiLWBKJ (ORCPT
+        with ESMTP id S235914AbiLWBKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 20:10:09 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE522296
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 17:04:44 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id c184so3299983vsc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 17:04:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/gOWZAaD8SBIOiOmfYa59YShOa8ycZ4ayxBa1jRd7E=;
-        b=tmaHZMPcPeETZRodOkbShU4wP1wCu3ctqiGNC19OZf6gr4rulXNp5EZfuq4CH5y8N/
-         SVjpjpbPPAoe8VlZ3gMgUYszT5U8lshoTljFb0MQZurhw2j2r5wnY10LW6cdWwlX36hR
-         YTOaluFUI/V4/SVekarIA9spgFf4y2lXk/q1+Y0Gqn6rywM979v4uR0kB47S+NIuMsXh
-         2R7jCVy0/sMWNjjqT8SQjPMyy79DXKkv+t0nw31l8oNTDGGeVYFpeAanUoqSKZOi1lKH
-         C134VdbgAdl/NzxqVQQeNNpmdHAp/H6yhJv05N+nJNZYBVQGxQtoLjkQfbpMDug7svf7
-         4z2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X/gOWZAaD8SBIOiOmfYa59YShOa8ycZ4ayxBa1jRd7E=;
-        b=bYycSD5iessC0G/GNa4i4qf6/XwMneE81Fr4CJghSRZvtCmZ3aI09E+DJ+ol3YC2OK
-         02ckgnd6/SpHDq67EmHBKZnminMTubkP3YUOkEDyGVg+cw6KAJ9NDjFngIXEepYaWpcd
-         8lQP1uz4IVzCRDw+h9AxhGr/OQUIn+7T7dnebWrGtiHqXbgftqHWiopqSBy8gRb6pY5G
-         Hu537ydwl8XzR/84L2U45dPCvHzTYpvqsvoYTOhlj8vKvGgfsNg/ivQ6zSarDq2ctEMt
-         u4RVXPW5Qw6Nw6zKs7BAnqIa/2oBtm73Kc0K8TFLxwC6T6BLgyxkRmuoO/Qkfphf8YxC
-         EUmA==
-X-Gm-Message-State: AFqh2kpswVi2ZpZUg2kIkf4EwLF8jpbsvlNEtfMm6ytJyO4MfMw+7iB6
-        VKix6uQU8zf0SY4uVTiHr5ZPLwRS1O2MgBVUcKmV9ErECE3kiOmy
-X-Google-Smtp-Source: AMrXdXv7OoxaKXo2t6mAbAu8R8miK2JpT2IH8nH1wkesWFiDSJdnax1yDykm+3t9ZSiXE5Sin8BXXdg5tAj231ABRwI=
-X-Received: by 2002:a67:c486:0:b0:3aa:f64:fbfd with SMTP id
- d6-20020a67c486000000b003aa0f64fbfdmr975101vsk.15.1671757483050; Thu, 22 Dec
- 2022 17:04:43 -0800 (PST)
+        Thu, 22 Dec 2022 20:10:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182C895;
+        Thu, 22 Dec 2022 17:05:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94B96B81FBC;
+        Fri, 23 Dec 2022 01:05:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C266C433D2;
+        Fri, 23 Dec 2022 01:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671757506;
+        bh=7ahZpcyG2PSirGYeAzw4AdHX+r8zs2cmUr29y4fA5ZI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=N/3OZVNjxAo43ERVEk8Q+gsP1eAjJCti+aAdUjH9nl7KfcIIWHz/uK2h73HRAUwyx
+         gVYGcE3YYuPwk0zIb/NqIfNdUI1WRSmb8q4+OnQItO6xQy2foS5FwmlvoqtkAQ6Rca
+         mvYDOovL6DdR3t19NvrKK/PW67e3OyqHB6ihyIjPI+y6LTGW4Uu6SHTffkzCfxDKBc
+         Q9pZjsbQzwXMRRrjj0NatWEdZnaePOUlIDnUgwbqwTaY6SAJ6U5FwJ0kWohMVgSRsQ
+         Y3GhPCKMOFpvlgd7Sd2lGdN3OqllCNLq/ak6pKDiwH6HuurVaxjUw5OqaTY+b84esP
+         cViIQiHSY20NQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EC6665C1456; Thu, 22 Dec 2022 17:05:05 -0800 (PST)
+Date:   Thu, 22 Dec 2022 17:05:05 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Michal Clapinski <mclapinski@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrei Vagin <avagin@gmail.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/2] sched/membarrier, selftests: Introduce
+ MEMBARRIER_CMD_GET_REGISTRATIONS
+Message-ID: <20221223010505.GT4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221207164338.1535591-1-mclapinski@google.com>
+ <9fad5641-ebd4-d2e5-6f87-2c409c336072@efficios.com>
 MIME-Version: 1.0
-References: <20221221180848.20774-1-vishal.moola@gmail.com> <20221221180848.20774-5-vishal.moola@gmail.com>
-In-Reply-To: <20221221180848.20774-5-vishal.moola@gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 22 Dec 2022 18:04:07 -0700
-Message-ID: <CAOUHufbcp+VoNR1uonBYi6eEeoG_Td5N_E1hkyaj_gRmRc4vwg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] mm/swap: Convert deactivate_page() to folio_deactivate()
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Cc:     linux-mm@kvack.org, damon@lists.linux.dev,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        sj@kernel.org, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9fad5641-ebd4-d2e5-6f87-2c409c336072@efficios.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 11:10 AM Vishal Moola (Oracle)
-<vishal.moola@gmail.com> wrote:
->
-> Deactivate_page() has already been converted to use folios, this change
-> converts it to take in a folio argument instead of calling page_folio().
-> It also renames the function folio_deactivate() to be more consistent
-> with other folio functions.
+On Thu, Dec 22, 2022 at 10:28:28AM -0500, Mathieu Desnoyers wrote:
+> On 2022-12-07 11:43, Michal Clapinski wrote:
+> > This change provides a method to query previously issued registrations.
+> > It's needed for CRIU (checkpoint/restore in userspace). Before this
+> > change we had to issue private membarrier commands during checkpoint -
+> > if they succeeded, they must have been registered. Unfortunately global
+> > membarrier succeeds even on unregistered processes, so there was no way to
+> > tell if MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED had been issued or not.
+> > 
+> > CRIU is run after the process has been frozen with ptrace, so we don't
+> > have to worry too much about the result of running this command in parallel
+> > with registration commands.
+> 
+> Peter, Paul, I'm OK with the proposed changes. Should we route this through
+> sched/core from the tip tree ?
+> 
+> For both patches:
+> 
+> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-There is one more in mm/vmscan.c.
+Also for both patches:
 
-Please git grep.
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+
+> Thanks,
+> 
+> Mathieu
+> 
+> > 
+> > Michal Clapinski (2):
+> >    sched/membarrier: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
+> >    selftests/membarrier: Test MEMBARRIER_CMD_GET_REGISTRATIONS
+> > 
+> >   include/uapi/linux/membarrier.h               |  4 ++
+> >   kernel/sched/membarrier.c                     | 39 ++++++++++++++++++-
+> >   .../membarrier/membarrier_test_impl.h         | 33 ++++++++++++++++
+> >   .../membarrier/membarrier_test_multi_thread.c |  2 +-
+> >   .../membarrier_test_single_thread.c           |  6 ++-
+> >   5 files changed, 81 insertions(+), 3 deletions(-)
+> > 
+> 
+> -- 
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
+> 
