@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913E96552E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D94E16552F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbiLWQnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 11:43:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
+        id S231316AbiLWQqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 11:46:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiLWQnx (ORCPT
+        with ESMTP id S232237AbiLWQqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 11:43:53 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401FD13DFD
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:43:52 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g13so7698862lfv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:43:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eTitOekDuo3LDxAbgs9DMgMITmyXa1apsqpqb9tpvA4=;
-        b=YDZ+QC3ajRi287uTWq7UtytjZqIAAxgr0ZFbMut2vYqCMeL/PiRcAM7BoRDPOK4UCz
-         7wt5kGmny/krnwgRBlae3Qe342cpzgi9SRzaoMwzDgcgk/pPr2D/bvm4XIZTD3lHNY2m
-         xcGW8W1N5eUFSvdyCtakM/OJzAfJxEDkpntnrchRG2X/6mzhoMA7u1KW8rRm0NkxZHxR
-         ogLSukr3YjJA2JeiUi9D3jjOuLaseqEuqzOpJT/vHDE31A6xXC0jVq0IPmyDhU0el1Nn
-         wlwtw3TsfLJbhjVaGotk4XUsuLd2xauS8JncQ7A/+uru4vS87YKvkZCsdMkKycLi9TkG
-         HpjQ==
+        Fri, 23 Dec 2022 11:46:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB6BB7C
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:45:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671813948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2P7wb2jYiHju8X65PSWfviKi+RGDuevtVJeM6R/Rnj8=;
+        b=XvcpNZD2FwNsBinkVi/zP47jon+YgIAHeGhJwBqHBeSvW5cXxwQkCQgm7xbDgmLMGS++j3
+        1PkiTk7vXkDq+yMswi60+DIjiyRNvaEGCQFQCqj9FePygUkNvNI3p9qruSy+8LW7ZaKNgf
+        3M9U1xLHX4e11pL5vBYD9o1nR5swFl8=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-321-8g3J8zL9MROkfQ2vigFviQ-1; Fri, 23 Dec 2022 11:45:47 -0500
+X-MC-Unique: 8g3J8zL9MROkfQ2vigFviQ-1
+Received: by mail-ed1-f70.google.com with SMTP id s13-20020a056402520d00b0046c78433b54so4001670edd.16
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:45:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eTitOekDuo3LDxAbgs9DMgMITmyXa1apsqpqb9tpvA4=;
-        b=40ovr2y+Oi7r7mFP+zNSATjzU0awGZfJjJEpC7t7pJKI+P6+4VAp26Di27UX5IjanX
-         VPEQecujZjTriJMsymKGahbZFM2/hDQ0VYe0ay9Qe2O9oFo0Wa0I7BF59cAB3G69RHQF
-         w0I8YIc9cGnfVccjcqChbCDGFSyMOjN4ALnKl4eNDYJS2YVlYj2QJvDSXCbiBov7Gx3M
-         urXch/Ow4iJ1DKR9H53HM3LEYwIb+PxosKGq1DSAXmWYuuM2+0v7Tk8gjqxaFgc6ISHt
-         Fnk2zcRgmX24Ud/qjqrni1cxnon88zHX4ojPs+ZIZigvfv99KDwWUyV3I7lko9YJCZiW
-         hiYQ==
-X-Gm-Message-State: AFqh2krS6KgHg5MUei/LALhNTyJqopXR0Ur765WbWyWhfmQIYAz70Mwg
-        CoDKx7x7mbDKwYABTKLF8WA=
-X-Google-Smtp-Source: AMrXdXsbCmOcL5tModruIP+ddl5ZOymjj797oP0QUjzCh4udJGnP0p8WNmXeyxpDkbDlWJ+fsTRpmw==
-X-Received: by 2002:a05:6512:2828:b0:4b9:f5e5:8fbc with SMTP id cf40-20020a056512282800b004b9f5e58fbcmr3666477lfb.30.1671813830674;
-        Fri, 23 Dec 2022 08:43:50 -0800 (PST)
-Received: from pc636 (host-90-233-218-120.mobileonline.telia.com. [90.233.218.120])
-        by smtp.gmail.com with ESMTPSA id r9-20020a056512102900b004a05767bc07sm584203lfr.28.2022.12.23.08.43.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 08:43:50 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Fri, 23 Dec 2022 17:43:47 +0100
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: Re: [PATCH v3 1/3] mm: vmalloc: Avoid calling __find_vmap_area()
- twice in __vunmap()
-Message-ID: <Y6XawyzTqaUBb2xJ@pc636>
-References: <20221222190022.134380-1-urezki@gmail.com>
- <Y6Vkjr7DNEEv4MW5@infradead.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2P7wb2jYiHju8X65PSWfviKi+RGDuevtVJeM6R/Rnj8=;
+        b=Hm1fH+IkP0c08wL6pAG2If2x6q1ntJIOwSybF0LqThofudtOtFACgjUQJ5O2e4vI4o
+         +K4aGTUxySlx5e+qpNGC/8ecYxjmky8pBXEGNsD4lmurHE5jM61RuzxjujOQdgydNO/U
+         D3Lvex/zOoMBnCHDGRk0/44TlH2YIy80S6OwLti0omEt4mDSC9wNYJ3hcecr1VN8+465
+         Q5WCSx2V38Z5KW6avQaDh89xrhrtm8IRqm59y3mOn25PUdWeNjXqqqRsYDpjr2m55LA6
+         Hc5uig+ct97VTpYxDj300SmtAgiKkABY/aP6I9FNdlMCTE9v7YZiT7Nc7QXuPwxwhuUp
+         XzxQ==
+X-Gm-Message-State: AFqh2kpCPNxfNJ1gtoBVDnI5qTcYVjseEfSLkFtOTM4k+Ob4hwVnRw1h
+        nCZN99vmV9Xrkh+9+j2VM8CQY3Uj6wWn/sPyYcNj7ujPTf2blp5XPICAnxVTF7v9sd/ZzKXUZH3
+        SQ0LGcTN1ZcKLi/bx6jaE3HFc
+X-Received: by 2002:a17:906:eb8f:b0:7ae:5473:fdb8 with SMTP id mh15-20020a170906eb8f00b007ae5473fdb8mr8267922ejb.22.1671813945976;
+        Fri, 23 Dec 2022 08:45:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXukVWAYoII33XVIbh70Q55o2Wi4hGesgiBN++IKDnq0DyhaXO0YpEQLIHWdRG2I5tK3VKdEpg==
+X-Received: by 2002:a17:906:eb8f:b0:7ae:5473:fdb8 with SMTP id mh15-20020a170906eb8f00b007ae5473fdb8mr8267913ejb.22.1671813945751;
+        Fri, 23 Dec 2022 08:45:45 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id lr9-20020a170906fb8900b007be886f0db5sm1525901ejb.209.2022.12.23.08.45.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Dec 2022 08:45:45 -0800 (PST)
+Message-ID: <d0519826-79ae-38b4-5ec2-04c7e0874ef6@redhat.com>
+Date:   Fri, 23 Dec 2022 17:45:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6Vkjr7DNEEv4MW5@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 5.15 0/2] Fix kvm selftest build failures in linux-5.15.y
+Content-Language: en-US
+To:     Tyler Hicks <code@tyhicks.com>, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gavin Shan <gshan@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Karolina Drobnik <karolinadrobnik@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>
+References: <20221223000958.729256-1-code@tyhicks.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221223000958.729256-1-code@tyhicks.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 12:19:26AM -0800, Christoph Hellwig wrote:
-> On Thu, Dec 22, 2022 at 08:00:20PM +0100, Uladzislau Rezki (Sony) wrote:
-> > @@ -1825,9 +1825,8 @@ static void free_vmap_area_noflush(struct vmap_area *va)
-> >  	unsigned long va_start = va->va_start;
-> >  	unsigned long nr_lazy;
-> >  
-> > -	spin_lock(&vmap_area_lock);
-> > -	unlink_va(va, &vmap_area_root);
-> > -	spin_unlock(&vmap_area_lock);
-> > +	if (WARN_ON_ONCE(!list_empty(&va->list)))
-> > +		return;
+On 12/23/22 01:09, Tyler Hicks wrote:
+> From: "Tyler Hicks" <code@tyhicks.com>
 > 
-> I'd just drop this check as the function is not exported.
+> The backport of commit 05c2224d4b04 ("KVM: selftests: Fix number of
+> pages for memory slot in memslot_modification_stress_test") broke the
+> build of the KVM selftest memslot_modification_stress_test.c source file
+> in two ways:
 > 
->
-> Otherwise looks good:
+> - Incorrectly assumed that max_t() was defined despite commit
+>    5cf67a6051ea ("tools/include: Add _RET_IP_ and math definitions to
+>    kernel.h") not being present
+> - Incorrectly assumed that kvm_vm struct members could be directly
+>    accessed despite b530eba14c70 ("KVM: selftests: Get rid of
+>    kvm_util_internal.h") not being present
 > 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
->
-Thanks!
+> Backport the first commit, as it is simple enough. Work around the lack
+> of the second commit by using the accessors to get to the kvm_vm struct
+> members.
+> 
+> Note that the linux-6.0.y backport of commit 05c2224d4b04 ("KVM:
+> selftests: Fix number of pages for memory slot in
+> memslot_modification_stress_test") is fine because the two prerequisite
+> commits, mentioned above, are both present in v6.0.
+> 
+> Tyler
+> 
+> Karolina Drobnik (1):
+>    tools/include: Add _RET_IP_ and math definitions to kernel.h
+> 
+> Tyler Hicks (Microsoft) (1):
+>    KVM: selftests: Fix build regression by using accessor function
+> 
+>   tools/include/linux/kernel.h                                | 6 ++++++
+>   .../selftests/kvm/memslot_modification_stress_test.c        | 2 +-
+>   2 files changed, 7 insertions(+), 1 deletion(-)
+> 
 
+Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
---
-Uladzislau Rezki
