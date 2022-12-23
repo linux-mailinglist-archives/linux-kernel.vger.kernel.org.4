@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740CA6551C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EE96551CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiLWPCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 10:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
+        id S236459AbiLWPCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 10:02:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236454AbiLWPCB (ORCPT
+        with ESMTP id S236454AbiLWPCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 10:02:01 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141A4205D7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 07:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jGTZSdyngRKzjzBfe0/ecutPYFiMdCVieiSey3gpzJA=; b=zV2WPcOwTj1gVfuE6w/XIubUPl
-        yGenidnCU/e1jYunxjlqqEysto+FilWIltmsROkiL13dJpgWLfmqN0WdQbIHNH9FCjYexqz7Hx9KM
-        44Q4xV7c7j3tbShWe7nnYgkhylgOWlyrJIS8yjwLruG9X//wbZSou+UYERsZ+3QbHrDX7rcyyyGJu
-        klHS78xW1TDXW00iLqyQJbuf0r3D1E5wTwwmGuIdAgnwbAM+VleDFbgYv1EuxFlcJyC1IukNegK27
-        luLEWuysZ4T/ITBMApwNdGzrJliiikU0wqroVwYFi8H8/cv5wAmQy7/O4feXJyXgjXmsSMz+iiKam
-        6T4XvwRQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p8jYS-0099bz-9b; Fri, 23 Dec 2022 15:01:48 +0000
-Date:   Fri, 23 Dec 2022 07:01:48 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org,
-        syzbot+10d19d528d9755d9af22@syzkaller.appspotmail.com,
-        syzbot+70d5d5d83d03db2c813d@syzkaller.appspotmail.com,
-        syzbot+83cb0411d0fcf0a30fc1@syzkaller.appspotmail.com
-Subject: Re: [PATCH] umh: fix UAF when the process is being killed
-Message-ID: <Y6XC3Du9pFKQFNkt@bombadil.infradead.org>
-References: <m2bko8c0yh.fsf@gmail.com>
- <m2pmcoag55.fsf@gmail.com>
- <Y5kE2eAa8EZUxx5b@bombadil.infradead.org>
- <Y5oqxh2jnarlEKNG@bombadil.infradead.org>
- <m2o7s55gan.fsf@gmail.com>
- <m2ili43s2v.fsf@gmail.com>
- <Y6P2MUcTGU9LIrDg@bombadil.infradead.org>
- <m235983p58.fsf@gmail.com>
- <m2bknv3b1a.fsf@gmail.com>
- <m21qor3afi.fsf@gmail.com>
+        Fri, 23 Dec 2022 10:02:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1342523E9E
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 07:02:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE126B820EB
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 15:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B7EC433D2;
+        Fri, 23 Dec 2022 15:02:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671807749;
+        bh=zd/QTYB6Krn6kLSVc2hJyljzXGc2//xWd9XTYLs+684=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XccTNox/kpbWY+JJgvIr6vTUP2MsdpeZMHW+ea2M/alCkUGTeC6jxfCU7HoaMSu6z
+         PuPQD4tEOW6zwdkYzUj4zGgRrYawRhzU51OZCLxx9i1tAU/qC9xwclYKEobbfbjvNh
+         AjywA07owkHuwGnlm+rf7AE5lt1O8resKoyS8LA8=
+Date:   Fri, 23 Dec 2022 16:02:26 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        LLVM Mailing List <llvm@lists.linux.dev>
+Subject: Re: [PATCH v1] driver core: Silence 'unused-but-set variable' warning
+Message-ID: <Y6XDAiMAMLniR9PG@kroah.com>
+References: <20221223145137.3786601-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <m21qor3afi.fsf@gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221223145137.3786601-1-ammar.faizi@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 08:09:38PM +0800, Schspa Shi wrote:
+On Fri, Dec 23, 2022 at 09:51:37PM +0700, Ammar Faizi wrote:
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 > 
-> Attaching the full test program in case anyone wants to add some
-> comments.
+> Compiling with clang-16:
+> 
+>   drivers/base/module.c:36:6: error: variable 'no_warn' set but not \
+>   used [-Werror,-Wunused-but-set-variable]
+>           int no_warn;
+>               ^
+>   1 error generated.
+> 
+> A reason the @no_warn variable exists is:
+> sysfs_create_link() return value needs not be ignored to silence
+> another warning.
+> 
+> So don't remove @no_warn, but add a '(void)no_warn;'.
+> 
+> Cc: LLVM Mailing List <llvm@lists.linux.dev>
+> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> ---
+>  drivers/base/module.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/base/module.c b/drivers/base/module.c
+> index 46ad4d636731..42f0b3b9e7f8 100644
+> --- a/drivers/base/module.c
+> +++ b/drivers/base/module.c
+> @@ -59,22 +59,23 @@ void module_add_driver(struct module *mod, struct device_driver *drv)
+>  		return;
+>  
+>  	/* Don't check return codes; these calls are idempotent */
+>  	no_warn = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
+>  	driver_name = make_driver_name(drv);
+>  	if (driver_name) {
+>  		module_create_drivers_dir(mk);
+>  		no_warn = sysfs_create_link(mk->drivers_dir, &drv->p->kobj,
+>  					    driver_name);
+>  		kfree(driver_name);
+>  	}
+> +	(void)no_warn;
 
-Good stuff.
+Ick, no, that's horrid and is NOT ok for kernel code, sorry.
 
-That looks like a kernel sefltest. So you can just add it as an
-initial selftest for completion so lib/test_completion.c and extend
-lib/Kconfig.debug for a new kconfig symbol for it, and then just add
-a script on tools/testing/selftets/completion/ with a simple makefile
-which references a script which just calls modprobe. You can look at
-tools/testing/selftests/kmod/ for an example.
+Please fix the compiler, this is not a "fix" in any sense of the word
+and is not going to work at all for kernel code.
 
-But I still think you may want an SmPL Coccinelle grammer patch to hunt
-down other users with this pattern. The beneefit is that then you can
-use the same Coccinelle patch to also then *fix* the issue in other
-places.
+sorry,
 
-The current uaf on umh is not something I'm terribly concerned to be
-exploited in the wild. I don't think other use cases would be easier,
-but, all this work would close the gap completely.
-
-Thanks for doing this.
-
-  Luis
+greg k-h
