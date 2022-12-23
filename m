@@ -2,138 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F786553A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5806553AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbiLWS2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 13:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S231366AbiLWSi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbiLWS2w (ORCPT
+        with ESMTP id S230259AbiLWSi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:28:52 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932BF1EEE6
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:28:51 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id o31-20020a17090a0a2200b00223fedffb30so5647614pjo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:28:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uFmJ94vgdYtHsEMf0/KuGJB8O++/BC7ohIyt5Fgn7pI=;
-        b=ElgK4ZOatixFeDSXHWG1Ja36Gaa/aRySfgH6IWbKvHwrt+qWRmB8Q0V6Axbh6WUnIS
-         95A/hEHYA64Jr/hlfVkIc/NbGXmDDT1rwsY2QZorZnE25auressDUTSkJCD91hYmSBgT
-         3B58T79yKrzeMcWOjAtdRIiMm1gQfdBnlNI20=
+        Fri, 23 Dec 2022 13:38:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6CE101F0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:38:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671820686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DT/pRLoUUOx0KMR2s9yyiI/zbo/mAqi0ZYgS7h1VIJA=;
+        b=e5os1jnO3cMtf0G8+T8XTZcTei9unecx4rd5hcpIuW0eUmdDMx1ZGUD2U65katGtBfveZg
+        CF811ym7Qdf42ak5CMvZ7DmS+Eb3yelIQPy3R0mcZWPXjsm9ow2cEtAx+eScLCV0QNEJqx
+        4SNypy6NPvUqKj0IdqhGq6V3swcomxE=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-148-cYZdKcTUM92HgPXnjIQFWQ-1; Fri, 23 Dec 2022 13:38:04 -0500
+X-MC-Unique: cYZdKcTUM92HgPXnjIQFWQ-1
+Received: by mail-qk1-f199.google.com with SMTP id bi3-20020a05620a318300b00702545f73d5so3575729qkb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:38:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uFmJ94vgdYtHsEMf0/KuGJB8O++/BC7ohIyt5Fgn7pI=;
-        b=AoblCxMjadSdiPQ8+YVJD1DGNSPJaST6Pqt+h/MDwdp5e55VBxFDESBslo+/jdFHIZ
-         er7fhnqDVzcg0/smxoamwQpRZnn/pprKJczNux9P93W60dB2heCKlcPedWGC0feLmNrS
-         lDLbLPn+iJwcQiVlOJgJMySmw/by2CkANPC7UNVwHOzttJx9Yj6Z7cK7hCZwIPI/KIkr
-         m2C1C4OEUw0wkh9KKstD0KbGKnOENN94mhHsJCBOC+mK8UkMJrlF+LQhu/jAPG/LZR+L
-         AxFBl1NL3LLEdNwFm7VZgcypy4fKrY6DAX+S/2RkDHaqKiN9AWbIxfQ0CFehUhs914v9
-         KIDQ==
-X-Gm-Message-State: AFqh2kr2iptkdD5ej7mNQqS1RNKcGwFThtJeuT1Sdnw3edr8F5L7bXcS
-        jk2xgwQsOPA5Wxsz9ALgaNLLmA==
-X-Google-Smtp-Source: AMrXdXvdOaCB6ie+xu0/3TyseJFb8oYp2nnjiDsW9wbBkVz+xBXlhD9nOsqGw7ayHOFxxe0wYLovFw==
-X-Received: by 2002:a17:903:328e:b0:191:191f:e7af with SMTP id jh14-20020a170903328e00b00191191fe7afmr11434481plb.16.1671820130175;
-        Fri, 23 Dec 2022 10:28:50 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z5-20020a1709027e8500b00189c62eac37sm2727890pla.32.2022.12.23.10.28.49
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DT/pRLoUUOx0KMR2s9yyiI/zbo/mAqi0ZYgS7h1VIJA=;
+        b=RxNMe6KUcOanE7Dc7h0SQvsjkNGjpf8EXGV5PB2cHV92eVNMKTK8wTbbzANEKFO3J7
+         8tFFYJr05CJQOOD3+9q4gPUeBAnPv6Qfa6t6Ufns+6clTetFtEycC/tr7RmHtTILMHSc
+         0kugHPIYnpgV5cfnzRKbE8AK+5Wh47vRgC8BgAObfMNz3A1z+SQRm2+NugijhN3Fh/eI
+         oIvOrCk1UZLeRJwinFL+X88jSX+DYnHAU/uHH3I/FZJ4fpBUVj0xu6d517VhyC57nphe
+         2AuVDDQ/pqRaiJFABL+iBH+zv49Oo7CoMpVBuYh1xOsGVFw0Tcw3NbEPcABvo00Lecl+
+         smRA==
+X-Gm-Message-State: AFqh2kpPnbMQbIOm2wTzqvA4Rzm0VmrNDgF9QFvlywWBOkwZnltwPNMt
+        afQzc8hUiBeOSr/Ai9HehCTk1oFsZ6CnJc59O4PpJ/FENoFwxaH5tFVi8f8yatkE9lGanAJWP2a
+        ny3je5DNOnhiSfO8TcULQ3Uzg
+X-Received: by 2002:a05:6214:590c:b0:52c:2e58:c1b2 with SMTP id lp12-20020a056214590c00b0052c2e58c1b2mr11035225qvb.43.1671820684535;
+        Fri, 23 Dec 2022 10:38:04 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXspTCzUooGGhpqaW91lUCglSy3YUutb7cqTuUcey/CskEzzrEWCfexqxzhLAMtU54LFK1GW7w==
+X-Received: by 2002:a05:6214:590c:b0:52c:2e58:c1b2 with SMTP id lp12-20020a056214590c00b0052c2e58c1b2mr11035212qvb.43.1671820684347;
+        Fri, 23 Dec 2022 10:38:04 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-45-70-31-26-132.dsl.bell.ca. [70.31.26.132])
+        by smtp.gmail.com with ESMTPSA id y15-20020a05620a0e0f00b006fc2b672950sm2659807qkm.37.2022.12.23.10.38.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 10:28:49 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, Hyunwoo Kim <v4bel@theori.io>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org,
-        syzbot+b1e1f7feb407b56d0355@syzkaller.appspotmail.com,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] bpf: Always use maximal size for copy_array()
-Date:   Fri, 23 Dec 2022 10:28:44 -0800
-Message-Id: <20221223182836.never.866-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 23 Dec 2022 10:38:03 -0800 (PST)
+Date:   Fri, 23 Dec 2022 13:38:02 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 34/47] hugetlb: userfaultfd: add support for
+ high-granularity UFFDIO_CONTINUE
+Message-ID: <Y6X1isYeuZMxvDEC@x1n>
+References: <20221021163703.3218176-1-jthoughton@google.com>
+ <20221021163703.3218176-35-jthoughton@google.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2069; h=from:subject:message-id; bh=t1OBGhUbcR8nf2++QuxM7FqpZ9UFkmqZvOnliSZEUTE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjpfNcsRz8afKnm1B38atDy/LxrBm3b4UZpSVoEyiC oYseHr6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY6XzXAAKCRCJcvTf3G3AJkA0EA CQvcv59+py3Ot0bfishkg0yCD3rI/T6QxpeFBbXklzHVSMjI++zbfBaTXo91O4rwjrC2NoDxEPY0xx D5mr5lj2NDFwNMvff8tSRJyH7COrX9W7wMoHR38Bhp4klOmbWWIeLjL8weeD7vm+17jmOP/PtTo/wM ++vHN/270KNs9+XfDR81LRnRze89Oir88FBWTtQDVmyz1t/ILTosrmkczJ/WhTKOZD8epirnm883Id Ixer5RmOPNpZCNu8H0KM32WKmyClUDMdy5JBIAqCPd8mjWY0ke9b6zhExgu9z6oBLelR/WFkmAs45w ThqMBox1hgSWHHZPD3lPfbaLIdaR5YwO7VHlKdCzgnnt1Vp6KeuoDuOSHoiXpauzS2tB/NW41p+h6M 8C6fFzPZfF8sgLwXRpoOasVGgrdCCZAGd7TE3wS3KcPh7BlM9UI7Yr6O6I8gik9sQCvhis1jsxUmHD Pysboz4zLQPLmA9dhBFWLCBfUpQ8AWk8ytREuiNrPrX1mLI3vKrFGCY12vF0MPvg0h8RWG00+dOwrP XBcasg0ir+Jd3pdQDUwS3AW+t2/WFyJH6Id5UvAJX9t/GzhMYFTAhT+Z8W7AuUI3mhn8Qgih8/6n5l zLTvUzzDuG3+3qhaytMOM265N8GDR2JIsH3tXcSa7B6I0XzQ2+PqoOki0lMQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221021163703.3218176-35-jthoughton@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of counting on prior allocations to have sized allocations to
-the next kmalloc bucket size, always perform a krealloc that is at least
-ksize(dst) in size (which is a no-op), so the size can be correctly
-tracked by all the various allocation size trackers (KASAN,
-__alloc_size, etc).
+James,
 
-Reported-by: Hyunwoo Kim <v4bel@theori.io>
-Link: https://lore.kernel.org/bpf/20221223094551.GA1439509@ubuntu
-Fixes: ceb35b666d42 ("bpf/verifier: Use kmalloc_size_roundup() to match ksize() usage")
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- kernel/bpf/verifier.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+On Fri, Oct 21, 2022 at 04:36:50PM +0000, James Houghton wrote:
+> +	bool use_hgm = uffd_ctx_has_hgm(&dst_vma->vm_userfaultfd_ctx) &&
+> +		mode == MCOPY_ATOMIC_CONTINUE;
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a5255a0dcbb6..969e61bd6d39 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1054,6 +1054,8 @@ static void print_insn_state(struct bpf_verifier_env *env,
-  */
- static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t flags)
- {
-+	size_t alloc_bytes;
-+	void *orig = dst;
- 	size_t bytes;
- 
- 	if (ZERO_OR_NULL_PTR(src))
-@@ -1062,11 +1064,11 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
- 	if (unlikely(check_mul_overflow(n, size, &bytes)))
- 		return NULL;
- 
--	if (ksize(dst) < ksize(src)) {
--		kfree(dst);
--		dst = kmalloc_track_caller(kmalloc_size_roundup(bytes), flags);
--		if (!dst)
--			return NULL;
-+	alloc_bytes = max(ksize(orig), kmalloc_size_roundup(bytes));
-+	dst = krealloc(orig, alloc_bytes, flags);
-+	if (!dst) {
-+		kfree(orig);
-+		return NULL;
- 	}
- 
- 	memcpy(dst, src, bytes);
+Do you think in your new version use_hgm can work even for MISSING by
+default?
+
+I had a feeling that the major components are ready for that anyway.  Then
+no matter how HGM is enabled (assuming it'll switch to MADV, or even one
+can just register with MISSING+MINOR and enable the uffd HGM feature), an
+existing MISSING only app can easily switch to HGM support if it's on huge
+pages.
+
+Thanks,
+
 -- 
-2.34.1
+Peter Xu
 
