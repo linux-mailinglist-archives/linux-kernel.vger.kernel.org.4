@@ -2,178 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABA86553B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AD46553B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiLWSo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 13:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S232389AbiLWSwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbiLWSo0 (ORCPT
+        with ESMTP id S230400AbiLWSwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:44:26 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C731EEE6
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:44:25 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id v14so1574512qtq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:44:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ISSNi5g8+83vFNG4zUWTK5It3MNE4YXnaRha+djQqBw=;
-        b=XK7m6VhqBikWWDV2oOx6FkNGmZccdzxHEeN94hRuIrM5cJItYJ5Nyuph1fb1LDQXYV
-         fr/dPlX9rIKq3/rIoVy1E7VXbGiRbsPj9ylXuxCqVqviueaV8OWtW6SwqWYDIK7Dky5h
-         4sHL0aBImzrysKfCzxWKiX2MlyfRQtl8Ph+vg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ISSNi5g8+83vFNG4zUWTK5It3MNE4YXnaRha+djQqBw=;
-        b=C2xY7j2XWNR+3rj/4H7wKSOcEqcliqoVKMxv5ouUKyaVqZxwJNwPmPs6RjuIUREYBS
-         ARfWLdpWbNcaXvVSviPgR6tMZmF0Xli1onqRZui5OamUNX5HADH5f8XQY6JROQpvb2cb
-         UK4xY5TJ6WF9S2G7YpzZ+dqGdIWFoyI4r56dryJW0Usq+0iFCCJ8KOA/Z+DUI8/XevEp
-         p2hKRix3YzUcQ7dD/FDSMqzJtf6jcdBt/1IZVpZ0DTqHoWyWvRJU/T7QzHWXDqZn+sPZ
-         1xZCGfamMr3ehcoWVIbVQZSlVuivXGczpe8rCYWWs2K3NS0ajmNiwW0acGXhjSD5zFyI
-         DwTA==
-X-Gm-Message-State: AFqh2kp6+xpWzeTSLdVZsNm8YQFgYb2Iql+CbOFQtHiZ1j5WgkMjowbd
-        gD0fuBuhu0pEdRWewPPgEXRdLN26Dgd6H0md
-X-Google-Smtp-Source: AMrXdXsrI0bPEEl8UHDI472VEumdhvySNp9sFGX5HegGzbMyCFQr9pXIuvbYhGEzlWXOO7vD7hfKFA==
-X-Received: by 2002:a05:622a:1f17:b0:3a9:8370:63d4 with SMTP id ca23-20020a05622a1f1700b003a9837063d4mr22781073qtb.42.1671821064008;
-        Fri, 23 Dec 2022 10:44:24 -0800 (PST)
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com. [209.85.160.174])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05620a057000b006fa16fe93bbsm2610970qkp.15.2022.12.23.10.44.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 10:44:23 -0800 (PST)
-Received: by mail-qt1-f174.google.com with SMTP id c11so4325894qtn.11
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:44:23 -0800 (PST)
-X-Received: by 2002:a05:622a:5daa:b0:3a7:ef7b:6aa5 with SMTP id
- fu42-20020a05622a5daa00b003a7ef7b6aa5mr301991qtb.436.1671821062915; Fri, 23
- Dec 2022 10:44:22 -0800 (PST)
-MIME-Version: 1.0
-References: <Y5uprmSmSfYechX2@yury-laptop>
-In-Reply-To: <Y5uprmSmSfYechX2@yury-laptop>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 23 Dec 2022 10:44:07 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj_4xsWxLqPvkCV6eOJt7quXS8DyXn3zWw3W94wN=6yig@mail.gmail.com>
-Message-ID: <CAHk-=wj_4xsWxLqPvkCV6eOJt7quXS8DyXn3zWw3W94wN=6yig@mail.gmail.com>
-Subject: Re: [GIT PULL] bitmap changes for v6.2-rc1
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 23 Dec 2022 13:52:20 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A011C0;
+        Fri, 23 Dec 2022 10:52:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=sq+h7xxwjEN+CM9cjCKnsYhDwQInBq858tzYVswY1uU=; b=iI6VB8Px56eBWKTpPTPXYoIuz+
+        2CmFOeVPUfpH2P5EMeuo8yJk7Rz8Ll9ZC0AcASPRiAD3knu+3sCVaj2hzDEGGeuLvSu2hkqf/PgpV
+        EyUaddEAZGdyn3DhaJ/swU76l9p4qATy8RZc4gfNaidWlNXNO2U7XP9Oqae1AUpOyRms=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:49002 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1p8n9N-0003rs-G9; Fri, 23 Dec 2022 13:52:10 -0500
+Date:   Fri, 23 Dec 2022 13:52:09 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     hvilleneuve@dimonoff.com, lars@metafoo.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <20221223135209.f46617b6f23ff9b60a85ebe7@hugovil.com>
+In-Reply-To: <20221223141232.0f570f33@jic23-huawei>
+References: <20221222203610.2571287-1-hugo@hugovil.com>
+        <20221222203610.2571287-2-hugo@hugovil.com>
+        <20221223141232.0f570f33@jic23-huawei>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v1 1/3] iio: adc: Kconfig: add SPI interface mention to
+ AD7924 description
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 3:11 PM Yury Norov <yury.norov@gmail.com> wrote:
->
-> Please pull bitmap patches for v6.2. They spent in -next for more than
-> a week without any issues. The branch consists of:
+On Fri, 23 Dec 2022 14:12:32 +0000
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-So I've been holding off on this because these bitmap pulls have
-always scared me, and I wanted to have the time to actually look
-through them in detail before pulling.
+> On Thu, 22 Dec 2022 15:36:08 -0500
+> Hugo Villeneuve <hugo@hugovil.com> wrote:
+> 
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > The Analog Devices AD7924 uses an SPI interface. There is also a Texas
+> > Instruments ADS7924 which uses an I2C interface.
+> > 
+> > Adding the SPI mention to the AD7924 will help to avoid confusion
+> > between the two chips.
+> Hi Hugo,
+> 
+> Welcome to IIO.
+> 
+> I don't really mind this, but given they have different part numbers
+> and the similarly named TI part could just have easily been SPI
+> I'm not sure the clarification is really useful.
+> 
+> Also, under all the circumstances I can think of, if you can see the
+> help text you can also see the SPI dependence clearly listed.
+> 
+> Hence I think is just noise, though I'm guessing it reflects a
+> confusion you ran into!
+> 
+> Jonathan
 
-I'm back home, over the travel chaos, and while I have other pulls
-pending, they seem to be benign fixes so I started looking at this.
+Hi Jonathan,
+yes, I initially tought that the TI ADS7924 was already supported because of the AD7924 entry. I wrongly assumed that the parts were similar and TI just renamed it because they bought Analog Devices. I am pretty sure that I am not the only one having made a similar error :)
 
-And when looking at it, I did indeed finx what I think is a
-fundamental arithmetic bug.
+Of course, both chips differ not only because of their interface (SPI vs I2C), but also in their modes of operation and registers, interrupt pin presence (ADS7924), etc.
 
-That small_const_nbits_off() is simply buggy.
+But I can drop this patch if you want.
 
-Try this:
+Hugo V.
 
-        small_const_nbits_off(64,-1);
 
-and see it return true.
 
-The thing is, doing divides in C is something you need to be very
-careful about, because they do *not* behave nicely with signed values.
-They do the "mathematically intuitive" thing of truncating towards
-zero, but when you are talking about bit ranges like this, that is
-*NOT* what you want.
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  drivers/iio/adc/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+> > index 46c4fc2fc534..235319546974 100644
+> > --- a/drivers/iio/adc/Kconfig
+> > +++ b/drivers/iio/adc/Kconfig
+> > @@ -243,7 +243,7 @@ config AD7923
+> >  	select IIO_TRIGGERED_BUFFER
+> >  	help
+> >  	  Say yes here to build support for Analog Devices
+> > -	  AD7904, AD7914, AD7923, AD7924 4 Channel ADCs.
+> > +	  AD7904, AD7914, AD7923, AD7924 4 Channel SPI ADCs.
+> >  
+> >  	  To compile this driver as a module, choose M here: the
+> >  	  module will be called ad7923.
+> 
+> 
 
-The comment is fairly good, but it just doesn't match the code.
 
-If you want to check that 'nbits-1' and 'off' are in the same word,
-you simply should not use division at all. Sure, it would work, if you
-verify that they are both non-negative, but the fact is, even then
-it's just wrong, wrong, wrong. You want a shift operation or a masking
-operation.
-
-Honestly, in this case, I think the logical thing to do is "check that
-the upper bits are the same". The way you do that is probably
-something like
-
-   !((off) ^ ((nbits)-1) & ~(BITS_PER_LONG-1))
-
-which doesn't have the fundamental bug that the divide version has.
-
-So anyway, I won't be pulling this. I appreciate that you are trying
-to micro-optimize the bitop functions, but this is not the first time
-your pull requests have made me worried and caused me to not pull.
-This is such basic functionality that I really need these pull
-requests to be less worrisome.
-
-In other words, not only don't I want to see these kinds of bugs -
-please make sure that there isn't anythign that looks even *remotely*
-scary. The micro-optimizations had better be *so* obvious and so well
-thought through that I not only don't find bugs in them, I don't even
-get nervous about finding bugs.
-
-Side note: that whole small_const_nbits_off() thing could be possibly
-improved in other ways. It's actually unnecessarily strict (if it was
-correct, that is): we don't really require 'off' to be constant, what
-we *do* want is
-
- - "nbits > off" needs to be a compile-time true constant
-
- - that "off is in the same word as nbits-1" also needs to be a
-compile-time true constant.
-
-and the compiler could determine both of those to be the case even if
-'off' itself isn't a constant, if there is code around it that
-verifies it.
-
-For example, if you have code like this:
-
-        off = a & 7;
-        n = find_next_bit(bitmap, 64, off);
-
-then the compiler could still see that it's that "last word only"
-case, even though 'off' isn't actually a constant value.
-
-So you could try using a helper macro like
-
-   #define COMPILE_TIME_TRUE(x) (__builtin_constant_p(x) && (x))
-
-to handle those kinds of things. But again - the code needs to be
-OBVIOUSLY CORRECT. Make me feel those warm and fuzzies about it
-because it's so obviously safe and correct.
-
-That said, I see your test-cases for your micro-optimizations, but I'd
-also like to see references to where it actually improves real code.
-
-I know for a fact that 'small_const_nbits()' actually triggers in real
-life. I don't see that your 'small_const_nbits_off()' would trigger in
-real life in any situation that isn't already covered by
-'small_const_nbits()'.
-
-So convince me not only that the optimizations are obviously correct,
-but also that they actually matter.
-
-                Linus
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
