@@ -2,147 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC5F655033
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7E965503C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiLWMPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 07:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S236038AbiLWMRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 07:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiLWMPh (ORCPT
+        with ESMTP id S229625AbiLWMRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 07:15:37 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A7923D;
-        Fri, 23 Dec 2022 04:15:33 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id v11so4800636ljk.12;
-        Fri, 23 Dec 2022 04:15:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U5kHe4kFKe8GciyEd0D6yxSAat+6tJA2KlX+zERnbZM=;
-        b=JbCzdsM2tjp/t+U1y9Uc7NbFga0zKTuD7/qYbtgv8UBf1o7AMtZuB19gvXSDXg3q7G
-         4kyl/01zusivdIf07cOAv+wObyjy9K4zkdQYcg9CZihmigK8pRkaGG87jt7qb0HzQLny
-         1eAYThtFX6/mpvIZPoXNff+Ln8Th0BRsQ2KoSm5GODsoE8upEMYAZzoGoKh/IkVw2HfZ
-         DfX/Cs4+GcX/KSemC4ZQO3mZuK4mVVEGwb3MqSYsZ8nu9vFg+awCSPxGXgNSBE9apFya
-         +oekj3bvQAraJvqbbRIHrccZt3U9jdAf1s4DULioWPxser1gDcA8kLIvg+t4EHiIyAAF
-         ZYHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U5kHe4kFKe8GciyEd0D6yxSAat+6tJA2KlX+zERnbZM=;
-        b=gWh6gsdUljjir4zSBlQpyADpMgtOnDhAFyt9J32cvGa2qdU1QK2El/4f2ZFeepl4GD
-         Df3OUTahG2912ATO8biYR0j1iNINbuiJj9TJMRzfiVK+67l30X5iR0vQDUaEXCN4/9PB
-         SLeFXhqaDIqstABJmzGdcwycRpqZdpJz9pdt4VPboamqiNr/SwVrCzbGe70sy1Ok50x+
-         hMdvGjdZyjFwv1p/CZAbfeRQJ3pusp+iQlnYO+ELDtv+DvHJRVrTCs8svuqNV4nuY5wI
-         LxDdsVIbH0YKKbDYzkgJwbRMV15XEYzRDFBLxZtgj640E3c24zJTU7jJyVCV6px1N0yL
-         3FXg==
-X-Gm-Message-State: AFqh2kr6cXmsm8xv5hE+sR18+e+xBNg+ucogrf0NhOIApj2YiqRXD1gT
-        CZr7bAUfkChjkmq0C9woirc=
-X-Google-Smtp-Source: AMrXdXuFncqdpV7MwxrbpwS9opnJzxQzZgiu2wJohaBy5psBQl9VkPk8qgO3HzlJODeOzfBeXB4TDA==
-X-Received: by 2002:a2e:3a15:0:b0:27b:4a50:b85b with SMTP id h21-20020a2e3a15000000b0027b4a50b85bmr2309038lja.29.1671797731691;
-        Fri, 23 Dec 2022 04:15:31 -0800 (PST)
-Received: from [192.168.2.145] ([109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id u12-20020a2e2e0c000000b0025ebaef9570sm400766lju.40.2022.12.23.04.15.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 04:15:30 -0800 (PST)
-Message-ID: <a64e2aea-2e06-a72e-5ced-a86de4458c61@gmail.com>
-Date:   Fri, 23 Dec 2022 15:15:29 +0300
+        Fri, 23 Dec 2022 07:17:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BC51705D;
+        Fri, 23 Dec 2022 04:17:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96E37B81F79;
+        Fri, 23 Dec 2022 12:17:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9641FC433D2;
+        Fri, 23 Dec 2022 12:17:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671797855;
+        bh=y53x8lXyYR64l/smz2zQgk8Lf7afZG/j/c9CVS9PjXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mR6xYiP7fo++adZlDGC72FMuad71kevsTrvr+/2sNcmeqIpqOm2ub3ONgLARt43zc
+         +cUOPE8Kns+OWMVFi3WyUrSCfwgJxPGNqpvfWr8TeY9kZB5is7SJGKUZOmQAYC/cWt
+         eGiCET+r1Dgbbek1BX/AxvSyjp870LBSPbUPQfiZDpkRR+Rs+/2XioAO5JWUzG/CC+
+         KHhVu9joAmYXLhApfkgGw7sHwtNGTOez3szbutNxOeiRhpHGwS9HHYCtly/iVCoKW2
+         bnJbAXJaq7Y7TfQBhUL7GL6ld23l+3JhYgR0MUOj9XnaDmHxr8AB7lvEyroGLNxTwH
+         vkF9u+RL8VKpA==
+Date:   Fri, 23 Dec 2022 12:17:30 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Jesse Taube <mr.bossman075@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        lee.jones@linaro.org, michael@walle.cc,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [PATCH v2] drivers/mfd: simple-mfd-i2c: Add generic compatible
+Message-ID: <Y6WcWo1QoymocA/l@google.com>
+References: <20221202113226.114465-1-Mr.Bossman075@gmail.com>
+ <52c581ff-c2ee-8832-1f49-bcf40847d0b5@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 21/21] staging: media: tegra-video: add tegra20 variant
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-References: <20221128152336.133953-1-luca.ceresoli@bootlin.com>
- <20221128152336.133953-22-luca.ceresoli@bootlin.com>
- <30e6b040-aa82-f6a3-1ff6-baa2c0dcb0e2@gmail.com>
- <20221222100341.5882c19c@booty>
-Content-Language: en-US
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20221222100341.5882c19c@booty>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <52c581ff-c2ee-8832-1f49-bcf40847d0b5@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-22.12.2022 12:03, Luca Ceresoli пишет:
-> Hello Dmitry,
-> 
-> On Wed, 21 Dec 2022 00:40:20 +0300
-> Dmitry Osipenko <digetx@gmail.com> wrote:
-> 
->> 28.11.2022 18:23, Luca Ceresoli пишет:
->>> +static int tegra20_channel_capture_frame(struct tegra_vi_channel *chan,
->>> +					 struct tegra_channel_buffer *buf)
->>> +{
->>> +	u32 value;
->>> +	int err;
->>> +
->>> +	chan->next_out_sp_idx++;
->>> +
->>> +	tegra20_channel_vi_buffer_setup(chan, buf);
->>> +
->>> +	tegra20_vi_write(chan, TEGRA_VI_CAMERA_CONTROL, VI_CAMERA_CONTROL_VIP_ENABLE);
->>> +
->>> +	/* Wait for syncpt counter to reach frame start event threshold */
->>> +	err = host1x_syncpt_wait(chan->out_sp, chan->next_out_sp_idx,
->>> +				 TEGRA_VI_SYNCPT_WAIT_TIMEOUT, &value);  
->>
->> You're not using the "value" variable, it should be NULL.
-> 
-> Ah, sure, good catch.
-> 
->> The "chan->out_sp" looks redundant, it duplicates the chan->mw_ack_sp.
-> 
-> I agree it is redundant and can be improved.
-> 
->> AFAICS from the doc, T20 has two VI channels, and thus, two mw_ack_sp,
->> like T210.
-> 
-> I'm confused by this. In the current driver, each VI channel has an
-> array of 2 mw_ack_sp, the second of which is only used the ganged
-> CSI ports. I have no docs mentioning ganged ports so I don't know
-> exactly how they work and whether T20 might need more than 1 syncpt per
-> channel or not for CSI. Definitely when using VIP only one such syncpt
-> per each VI (or per each VIP, as per your reply to patch 1) is needed.
-> 
-> Bottom line: I think I can simply remove the out_sp and in the VIP code
-> always use chan->mw_ack_sp[0], and document that it's what is called OUT
-> in VIP terms.
-> 
-> Does this plan seem good?
+On Wed, 14 Dec 2022, Jesse Taube wrote:
 
-Older Tegra VI doesn't have ganged ports, but two memory/CSI channels.
-It feels to me that Tegra VI can capture both channels independently,
-though downstream driver stack used only one of the channels, IIRC.
+> Are there any updates?
 
-There is a VI header file from nvddk in downstream kernel, which is
-pretty much the doc by itself.
+Please refrain from top-posting.
 
-https://nv-tegra.nvidia.com/r/gitweb?p=linux-2.6.git;a=blob;f=arch/arm/mach-tegra/include/ap20/arvi.h;h=6ce52e8e9a7213e33466d34a71cf3af2b6944b8a;
+I'll get around to it after the merge-window has closed.
+
+> On 12/2/22 06:32, Jesse Taube wrote:
+> > Some devices may want to use this driver without having a specific
+> > compatible string. Add a generic compatible string to allow this.
+> > 
+> > Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> > ---
+> >   drivers/mfd/simple-mfd-i2c.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> > index f4c8fc3ee463..0bda0dd9276e 100644
+> > --- a/drivers/mfd/simple-mfd-i2c.c
+> > +++ b/drivers/mfd/simple-mfd-i2c.c
+> > @@ -73,6 +73,7 @@ static const struct simple_mfd_data silergy_sy7636a = {
+> >   };
+> >   static const struct of_device_id simple_mfd_i2c_of_match[] = {
+> > +	{ .compatible = "simple-mfd-i2c-generic" },
+> >   	{ .compatible = "kontron,sl28cpld" },
+> >   	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
+> >   	{}
+
+-- 
+Lee Jones [李琼斯]
