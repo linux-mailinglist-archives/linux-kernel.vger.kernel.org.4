@@ -2,83 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527BD654E5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6578654E64
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236214AbiLWJ12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 04:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S229658AbiLWJ3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 04:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236197AbiLWJ1U (ORCPT
+        with ESMTP id S236087AbiLWJ3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 04:27:20 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D301E3720E;
-        Fri, 23 Dec 2022 01:27:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=uj5J1LKb/4UIpagExHs49WqhLRVbYSUrTZ0b+D0WTrE=; b=nIi94Z7xg6PPdFGLsL4tc1cRkg
-        fk8vpDY3Qb3un4xD1x2lRvrSE26lm0N2VFu2vOaxEEGO0wHPAN1Yxwhvxql+tye9eIB5BRKK8X8XV
-        qanYlBggDmH2iPfyygKTQw+sRmJFClDwKQ2kuS5u26BxfEccIXUncjf++Bd5jYUx+wbGGQKfYdk4c
-        7/mdYbO9Mwpwbfp/CjA+1UI4MNSaFjOBU4i6+PdCtDeRCOcmkq8GcN830iPnmFv/pc+vl/vmUZblo
-        TDK7c8vj1Clg2JWlevxJIVFeIehSHNSv5VExgK9skZq/Qyl4aoiTv6ZetYah0ZlvZ0ESd3tYFwVPO
-        Judum79A==;
-Received: from [2001:4bb8:199:7829:8d88:c8b3:6416:2f03] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p8eKe-005hTn-Jv; Fri, 23 Dec 2022 09:27:13 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux.dev
-Subject: [PATCH 2/2] vmalloc: reject vmap with VM_FLUSH_RESET_PERMS
-Date:   Fri, 23 Dec 2022 10:27:03 +0100
-Message-Id: <20221223092703.61927-3-hch@lst.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221223092703.61927-1-hch@lst.de>
-References: <20221223092703.61927-1-hch@lst.de>
+        Fri, 23 Dec 2022 04:29:00 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920B637233;
+        Fri, 23 Dec 2022 01:28:58 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D0F4C6602CE0;
+        Fri, 23 Dec 2022 09:28:55 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671787737;
+        bh=HMLMMep+mcr89+itvPl0BOj1Xg+OhOyXlyh2zXtaR5w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=brejs5DLGzFiWPzayUdJwPiSDH5WJUJB3VeuSuz2fvhsfXTAKhUF1zSYlsTfE4jww
+         w6k1k54mM7TNZiTWWA4L0BN2OTVP5ontwkm/KSMq7sqyfX6HvCkj3EfzarEnOIyKMU
+         8G9UumpxeoWpXVbzMUBnPExW9Cke8DdxuVK4Iy3eZ0OvEzh4qEnCF0lyc7z+GVLqNe
+         XN0YjSK3uN70e7jQrH4kQXeWUGviFiAZ2GOP4gijKj2dtVzm50r+k7GYwjUji5Hyti
+         EFJxUN3LeJwEd/Bkj6FGBw6eIxtGT0NtYfNgAHpSsmJuy554PNbkvp8rvIldtlRixa
+         eobv4Zotx0ZvQ==
+Message-ID: <a9f9a86d-459e-314d-446e-e24b5ee469fe@collabora.com>
+Date:   Fri, 23 Dec 2022 10:28:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 08/25] dt-bindings: clock: mt8173: Add dummy clock ID
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        mturquette@baylibre.com
+Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wenst@chromium.org,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        fparent@baylibre.com, chun-jie.chen@mediatek.com,
+        sam.shih@mediatek.com, y.oudjana@protonmail.com,
+        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
+        ryder.lee@kernel.org, daniel@makrotopia.org,
+        jose.exposito89@gmail.com, yangyingliang@huawei.com,
+        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
+        ikjn@chromium.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        kernel@collabora.com
+References: <20221222114857.120060-1-angelogioacchino.delregno@collabora.com>
+ <20221222114857.120060-9-angelogioacchino.delregno@collabora.com>
+ <869ae494-d74e-03a0-3622-b3a2b0b10470@linaro.org>
+ <960b0707-f0e5-993b-3706-a7a275e0698f@collabora.com>
+ <46edd627-c128-b979-823f-0a94fe9d425b@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <46edd627-c128-b979-823f-0a94fe9d425b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VM_FLUSH_RESET_PERMS is just for use with vmalloc as it is tied to freeing
-the underlying pages.
+Il 23/12/22 10:26, Krzysztof Kozlowski ha scritto:
+> On 23/12/2022 10:21, AngeloGioacchino Del Regno wrote:
+>> Il 23/12/22 09:52, Krzysztof Kozlowski ha scritto:
+>>> On 22/12/2022 12:48, AngeloGioacchino Del Regno wrote:
+>>>> Some old MediaTek clock drivers are starting the clock count (so, the
+>>>> clock ID) from one instead of zero and this is logically incorrect,
+>>>> as we should start from 0.
+>>>> During a cleanup an issue emerged due to that and the cleanest and
+>>>> shortest way to keep devicetree backwards compatibility while still
+>>>> performing the well deserved cleanup is to add a dummy clock where
+>>>> needed, with ID 0.
+>>>
+>>> Unfortunately I do not understand at all why adding dummy (fake) ID
+>>> cleans anything here. Unifying IDs to start from 0 is not an argument on
+>>> DT bindings header IDs.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>>>
+>>
+>> All clocks are in one or multiple arrays, and if we don't register ID 0,
+>> devicetrees will reference the wrong clock, as the IDs will shift back by
+>> one during registration.
+> 
+> So what stops you to register some 0-dummy clock? Why do you need a
+> binding for it?
+> 
+>> This was done for a commonization of probe() and remove() callbacks for
+>> MediaTek clock drivers... since we have 3 affected SoCs (MT8173, MT2701
+>> and MT6779) out of *19* (soon 20), to me, it didn't make sense to write
+>> commonized code to address this just because of 3 out of 20 SoCs (note
+>> that each SoC has around 4 clock drivers).
+>>
+>> Any suggestion to keep this one short, while not touching dt-bindings?
+> 
+> Just add a clock or better empty entry in your table, without touching
+> bindings.
+> 
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- mm/vmalloc.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 9e30f0b3920325..88a644cde9fb12 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -2849,6 +2849,9 @@ void *vmap(struct page **pages, unsigned int count,
- 
- 	might_sleep();
- 
-+	if (WARN_ON_ONCE(flags & VM_FLUSH_RESET_PERMS))
-+		return NULL;
-+
- 	/*
- 	 * Your top guard is someone else's bottom guard. Not having a top
- 	 * guard compromises someone else's mappings too.
--- 
-2.35.1
+Okay, now that's embarassing - that's a simpler and obvious solution I
+should've thought of before sending this series. Heh.
 
+Thanks, by the way!
+
+Regards,
+Angelo
