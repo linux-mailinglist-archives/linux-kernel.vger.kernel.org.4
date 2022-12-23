@@ -2,112 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7955D654E84
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 355EB654E94
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236016AbiLWJmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 04:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
+        id S236178AbiLWJnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 04:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiLWJmt (ORCPT
+        with ESMTP id S236077AbiLWJnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 04:42:49 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A593578A;
-        Fri, 23 Dec 2022 01:42:49 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id i12so2919953qvs.2;
-        Fri, 23 Dec 2022 01:42:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d6m48Capw4esr7BRAr2uCfaQnqi6DTJEEbEkBGSU+S8=;
-        b=qixvvbS0zKEsE1IWMNk1avAg3bztMcDHoFNg1v4eXwCzENNJH4dH/Fqp0IV+kfu2i0
-         ZrUV67Dmx8CvRO1k6KlBd5I7EDWXXBYuHMcySiRvChV7nyUJWufNadOl1cl2d7krYBbW
-         7ZxkLKaEc/eNSXcEIy5eZPmokxJ2x26ialUuMRITOtTQ0RHGrM0al8RN0PX9S2jGLViv
-         Yy7gD9ULzpS91NIn2SvLprj3sle1rROhU4JMaITeJ8fu43aVfwQTKTovrrTWyRE7xs1t
-         PjFzsVNKr5/2jCjkcBiupUyWNa1CYC9P76wGThwNN09Ckh6vMlZfKaX1tUN8DDdr9pWI
-         JH6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d6m48Capw4esr7BRAr2uCfaQnqi6DTJEEbEkBGSU+S8=;
-        b=w2whrt3PFYm1dFQePWOGHzxPrXlBl0wRsk0QC1kcktU/rNJyEoGA+Qw8MJz1NrWUEE
-         szQRKg57QqjMgfkksvRCY+ubE9U4nOEa3joNnTy9aom2F5xF9BIjOCtn1XXMLv2oHbCe
-         dNi31nRzVwuaj+dErBvx/YOX12labiiM5u7wLXgQ14qrHn5JKV1UwP3er45wUbN6BYQY
-         j+AWcHtD+jYkfGyzOVdmI9+I7ZJLIikUz0eW9sqQMmzVOzwNf80vkqXMXhDh5gZ7f8DH
-         yyDono/ApHH6sviznB3hLgARwXMU8uNm/83mWCa+8vwAYMspc3G+ZtHnBmBPvcsxpP2v
-         M5pQ==
-X-Gm-Message-State: AFqh2koCzZ2BxKI/v6ngc6YiuRPz5WORuYFrz1jW4dawt56jT06JQeg5
-        2yU9eUTdkU+dfQlqXBYGatWa5ClI9cCCKB6MeEoUJmnTdfK30EB0F2aoMA==
-X-Google-Smtp-Source: AMrXdXtPjTeEoOwC9Lky1FEzV3LJQCo+adKpQLLSbRYxZqkGT7ftEEPTUMNJEvGBkP2Q0W9BZG5dscHLvrnSELfJb1A=
-X-Received: by 2002:a0c:90ef:0:b0:4e8:1593:e03d with SMTP id
- p102-20020a0c90ef000000b004e81593e03dmr525431qvp.90.1671788568178; Fri, 23
- Dec 2022 01:42:48 -0800 (PST)
+        Fri, 23 Dec 2022 04:43:10 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DFE3722C;
+        Fri, 23 Dec 2022 01:43:09 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5B7EC6602CE1;
+        Fri, 23 Dec 2022 09:43:07 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671788588;
+        bh=4EyQ1OjZT/baUayxYK+ueqc8j67gyi4x2llaOGk/ij8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=N8rBp5+Td/KdXaiYh1HKJVsvFExiZTNHsA4pbwlj2Ib5yTsKddTj2iqzedjY949yg
+         7V16FMf2Y9RNJFRj4xZYP3/cpaX4VGGMRWnhWHz9WBakWMPKhi3RAiwbdhPep1rIAT
+         ZR+Kfx6LVN/14FoLLIY9VH2qlukGG7RoDAqCGa+QGWVT17kvsOlINu8sWQ6hCNZm0e
+         ons2Cx3HgBuTv6r/WiDWoSJ0UJapkS+RsCAWND78w3aK/eym2XsmymuWsUqQXtQSwe
+         AGZ1HJ36EFjFk2r2DIy3MUqtNx59UhMl7DXftMgo2roTd+WIab8HYpSR1ftVE0vlUC
+         //DeYYDMtMFUw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     mturquette@baylibre.com
+Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        fparent@baylibre.com, chun-jie.chen@mediatek.com,
+        sam.shih@mediatek.com, y.oudjana@protonmail.com,
+        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
+        ryder.lee@kernel.org, daniel@makrotopia.org,
+        jose.exposito89@gmail.com, yangyingliang@huawei.com,
+        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
+        ikjn@chromium.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH v2 01/23] clk: mediatek: mt8192: Correctly unregister and free clocks on failure
+Date:   Fri, 23 Dec 2022 10:42:37 +0100
+Message-Id: <20221223094259.87373-2-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221223094259.87373-1-angelogioacchino.delregno@collabora.com>
+References: <20221223094259.87373-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-References: <Y6UdvrhLjS0/8Oic@VM-66-53-centos> <9a73d8fb-8a73-f8db-2ca7-51bf67cbf659@linaro.org>
-In-Reply-To: <9a73d8fb-8a73-f8db-2ca7-51bf67cbf659@linaro.org>
-From:   ty <zonyitoo@gmail.com>
-Date:   Fri, 23 Dec 2022 17:42:36 +0800
-Message-ID: <CAMmci2UkBVaBgYMF8JaZkL==b9-0AB90VPGK7SNdNV5w5Zyzhg@mail.gmail.com>
-Subject: Re: [PATCH v9 2/3] dt-bindings: arm: rockchip: Add EmbedFire LubanCat 1
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Wenhao Cui <lasstp5011@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Krzysztof,
+If anything fails during probe of the clock controller(s), unregister
+(and kfree!) whatever we have previously registered to leave with a
+clean state and prevent leaks.
 
-Sorry, we do not know the process, this is our first contribution to
-the Linux Kernel. There is no change since the last review of this
-file.
+Fixes: 710573dee31b ("clk: mediatek: Add MT8192 basic clocks support")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/clk/mediatek/clk-mt8192.c | 72 ++++++++++++++++++++++++-------
+ 1 file changed, 56 insertions(+), 16 deletions(-)
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E4=BA=8E2022=E5=B9=B4=
-12=E6=9C=8823=E6=97=A5=E5=91=A8=E4=BA=94 16:01=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 23/12/2022 04:17, Yuteng Zhong wrote:
-> > From: Wenhao Cui <lasstp5011@gmail.com>
-> >
-> > Add devicetree binding documentation for the EmbedFire LubanCat 1.
-> >
-> > Signed-off-by: Wenhao Cui <lasstp5011@gmail.com>
-> > Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
-> > ---
->
-> This is a friendly reminder during the review process.
->
-> It looks like you received a tag and forgot to add it.
->
-> If you do not know the process, here is a short explanation:
-> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-> versions. However, there's no need to repost patches *only* to add the
-> tags. The upstream maintainer will do that for acks received on the
-> version they apply.
->
-> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submi=
-tting-patches.rst#L540
->
-> If a tag was not added on purpose, please state why and what changed.
->
->
-> Best regards,
-> Krzysztof
->
+diff --git a/drivers/clk/mediatek/clk-mt8192.c b/drivers/clk/mediatek/clk-mt8192.c
+index 0e88588b2c49..eff66ca6c6a7 100644
+--- a/drivers/clk/mediatek/clk-mt8192.c
++++ b/drivers/clk/mediatek/clk-mt8192.c
+@@ -1100,27 +1100,61 @@ static int clk_mt8192_top_probe(struct platform_device *pdev)
+ 	if (IS_ERR(base))
+ 		return PTR_ERR(base);
+ 
+-	mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks), top_clk_data);
+-	mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs), top_clk_data);
+-	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
+-	mtk_clk_register_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), node, &mt8192_clk_lock,
+-			       top_clk_data);
+-	mtk_clk_register_composites(top_muxes, ARRAY_SIZE(top_muxes), base, &mt8192_clk_lock,
+-				    top_clk_data);
+-	mtk_clk_register_composites(top_adj_divs, ARRAY_SIZE(top_adj_divs), base, &mt8192_clk_lock,
+-				    top_clk_data);
+-	r = mtk_clk_register_gates(node, top_clks, ARRAY_SIZE(top_clks), top_clk_data);
++	r = mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks), top_clk_data);
+ 	if (r)
+ 		return r;
+ 
++	r = mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs), top_clk_data);
++	if (r)
++		goto unregister_fixed_clks;
++
++	r = mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
++	if (r)
++		goto unregister_early_factors;
++
++	r = mtk_clk_register_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), node,
++				   &mt8192_clk_lock, top_clk_data);
++	if (r)
++		goto unregister_factors;
++
++	r = mtk_clk_register_composites(top_muxes, ARRAY_SIZE(top_muxes), base,
++					&mt8192_clk_lock, top_clk_data);
++	if (r)
++		goto unregister_muxes;
++
++	r = mtk_clk_register_composites(top_adj_divs, ARRAY_SIZE(top_adj_divs), base,
++					&mt8192_clk_lock, top_clk_data);
++	if (r)
++		goto unregister_top_composites;
++
++	r = mtk_clk_register_gates(node, top_clks, ARRAY_SIZE(top_clks), top_clk_data);
++	if (r)
++		goto unregister_adj_divs_composites;
++
+ 	r = clk_mt8192_reg_mfg_mux_notifier(&pdev->dev,
+ 					    top_clk_data->hws[CLK_TOP_MFG_PLL_SEL]->clk);
+ 	if (r)
+-		return r;
+-
++		goto unregister_gates;
+ 
+ 	return of_clk_add_hw_provider(node, of_clk_hw_onecell_get,
+ 				      top_clk_data);
++
++unregister_gates:
++	mtk_clk_unregister_gates(top_clks, ARRAY_SIZE(top_clks), top_clk_data);
++unregister_adj_divs_composites:
++	mtk_clk_unregister_composites(top_adj_divs, ARRAY_SIZE(top_adj_divs), top_clk_data);
++unregister_top_composites:
++	mtk_clk_unregister_composites(top_muxes, ARRAY_SIZE(top_muxes), top_clk_data);
++unregister_muxes:
++	mtk_clk_unregister_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), top_clk_data);
++unregister_factors:
++	mtk_clk_unregister_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
++unregister_early_factors:
++	mtk_clk_unregister_factors(top_early_divs, ARRAY_SIZE(top_early_divs), top_clk_data);
++unregister_fixed_clks:
++	mtk_clk_unregister_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
++				      top_clk_data);
++	return r;
+ }
+ 
+ static int clk_mt8192_infra_probe(struct platform_device *pdev)
+@@ -1139,14 +1173,16 @@ static int clk_mt8192_infra_probe(struct platform_device *pdev)
+ 
+ 	r = mtk_register_reset_controller_with_dev(&pdev->dev, &clk_rst_desc);
+ 	if (r)
+-		goto free_clk_data;
++		goto unregister_gates;
+ 
+ 	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+ 	if (r)
+-		goto free_clk_data;
++		goto unregister_gates;
+ 
+ 	return r;
+ 
++unregister_gates:
++	mtk_clk_unregister_gates(infra_clks, ARRAY_SIZE(infra_clks), clk_data);
+ free_clk_data:
+ 	mtk_free_clk_data(clk_data);
+ 	return r;
+@@ -1168,10 +1204,12 @@ static int clk_mt8192_peri_probe(struct platform_device *pdev)
+ 
+ 	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+ 	if (r)
+-		goto free_clk_data;
++		goto unregister_gates;
+ 
+ 	return r;
+ 
++unregister_gates:
++	mtk_clk_unregister_gates(peri_clks, ARRAY_SIZE(peri_clks), clk_data);
+ free_clk_data:
+ 	mtk_free_clk_data(clk_data);
+ 	return r;
+@@ -1194,10 +1232,12 @@ static int clk_mt8192_apmixed_probe(struct platform_device *pdev)
+ 
+ 	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+ 	if (r)
+-		goto free_clk_data;
++		goto unregister_gates;
+ 
+ 	return r;
+ 
++unregister_gates:
++	mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
+ free_clk_data:
+ 	mtk_free_clk_data(clk_data);
+ 	return r;
+-- 
+2.39.0
+
