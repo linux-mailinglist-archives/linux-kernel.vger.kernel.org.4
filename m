@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BA0654EE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C39F0654EDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236142AbiLWJy4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Dec 2022 04:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
+        id S229735AbiLWJyg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Dec 2022 04:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235758AbiLWJyP (ORCPT
+        with ESMTP id S236235AbiLWJyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 04:54:15 -0500
+        Fri, 23 Dec 2022 04:54:06 -0500
 Received: from ex01.ufhost.com (unknown [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891C637F83;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892DC37F9F;
         Fri, 23 Dec 2022 01:48:19 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 12DD724E212;
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id BCEEE24E2A1;
         Fri, 23 Dec 2022 17:48:03 +0800 (CST)
-Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 23 Dec
+Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 23 Dec
  2022 17:48:03 +0800
 Received: from localhost.localdomain (183.27.97.120) by EXMBX161.cuchost.com
  (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 23 Dec
@@ -39,10 +39,12 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         Xingyu Wu <xingyu.wu@starfivetech.com>,
         Samin Guo <samin.guo@starfivetech.com>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 0/3] Add timer driver for StarFive JH7110 RISC-V SoC
-Date:   Fri, 23 Dec 2022 17:47:58 +0800
-Message-ID: <20221223094801.181315-1-xingyu.wu@starfivetech.com>
+Subject: [PATCH v1 1/3] dt-bindings: timer: Add timer for StarFive JH7110 SoC
+Date:   Fri, 23 Dec 2022 17:47:59 +0800
+Message-ID: <20221223094801.181315-2-xingyu.wu@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221223094801.181315-1-xingyu.wu@starfivetech.com>
+References: <20221223094801.181315-1-xingyu.wu@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [183.27.97.120]
@@ -58,66 +60,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch serises are to add timer driver for the StarFive JH7110
-RISC-V SoC. The first patch adds documentation to describe device
-tree bindings. The subsequent patch adds timer driver and support
-JH7110 SoC. The last patch adds device node about timer to JH7110
-dts.
+Add bindings for the timer on the JH7110
+RISC-V SoC by StarFive Technology Ltd.
 
-This timer has eight free-running 32 bit counters and uses four in
-StarFive JH7110 SoC. They support single-run mode and continuous-run
-mode.
-
-The last patch should be applied after the patchset [1]:
-[1] https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
-
-
-Xingyu Wu (3):
-  dt-bindings: timer: Add timer for StarFive JH7110 SoC
-  clocksource: Add StarFive timer driver
-  riscv: dts: jh7110: starfive: Add timer node
-
- .../timer/starfive,jh7110-timers.yaml         | 105 ++++
- MAINTAINERS                                   |   7 +
- arch/riscv/boot/dts/starfive/jh7110.dtsi      |  22 +
- drivers/clocksource/Kconfig                   |  12 +
- drivers/clocksource/Makefile                  |   1 +
- drivers/clocksource/timer-starfive.c          | 465 ++++++++++++++++++
- drivers/clocksource/timer-starfive.h          | 104 ++++
- 7 files changed, 716 insertions(+)
+Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+---
+ .../timer/starfive,jh7110-timers.yaml         | 105 ++++++++++++++++++
+ 1 file changed, 105 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
- create mode 100644 drivers/clocksource/timer-starfive.c
- create mode 100644 drivers/clocksource/timer-starfive.h
 
-
-base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
-prerequisite-patch-id: 6b1b43a55b9773bec61ab6c1bbaa54dccbac0837
-prerequisite-patch-id: 09c98554df52d17ba5fd604125f8cdd62cbe80d1
-prerequisite-patch-id: 29fe0b0c19b6f0cd31114ee9fe17fe9732047f33
-prerequisite-patch-id: c59d9908de90e09ba2b9a81aadbf9fb9f00c8f04
-prerequisite-patch-id: 94ac03d518993921bcfc9cc9f58d7da0c3528b51
-prerequisite-patch-id: 694f7400375f5b85581fc1821e427334507826f2
-prerequisite-patch-id: 699d49c4439dadb4b7cf900857f027d050cd6093
-prerequisite-patch-id: 40d773f5a19912f731ee5fd4739ed2e3c2157b07
-prerequisite-patch-id: 2bc3fd6df5dda116efe882045863d6c88aa81b3a
-prerequisite-patch-id: 735e62255c75801bdc4c0b4107850bce821ff7f5
-prerequisite-patch-id: b2a923b922e661fa6085185f33c1f1e733db9110
-prerequisite-patch-id: b2bbc28354075432f059344eba5a127a653475cf
-prerequisite-patch-id: 70eab7b7eee728afcd90e40f6743d1356f6d81ab
-prerequisite-patch-id: 6276b2a23818c65ff2ad3d65b562615690cffee9
-prerequisite-patch-id: d834ece14ffb525b8c3e661e78736692f33fca9b
-prerequisite-patch-id: 4c17a3ce4dae9b788795d915bf775630f5c43c53
-prerequisite-patch-id: dabb913fd478e97593e45c23fee4be9fd807f851
-prerequisite-patch-id: 22fa141f7f0f80a5d619e9f3f4cf161ad06f108e
-prerequisite-patch-id: f306819c257ea73aff8e06b17b5731053cdddfc8
-prerequisite-patch-id: 536114f0732646095ef5302a165672b3290d4c75
-prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
-prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
-prerequisite-patch-id: e09e995700a814a763aa304ad3881a7222acf556
-prerequisite-patch-id: 05803238293fcc90c8e83018a1103c41133a816c
-prerequisite-patch-id: d074c7ffa2917a9f754d5801e3f67bc980f9de4c
-prerequisite-patch-id: ef23fdf3466b3c713b3826e8545c8dd2bc6cc9d7
-prerequisite-patch-id: d5da3475c6a3588e11a1678feb565bdd459b548e
+diff --git a/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml b/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
+new file mode 100644
+index 000000000000..fe58dc056313
+--- /dev/null
++++ b/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
+@@ -0,0 +1,105 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/timer/starfive,jh7110-timers.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: StarFive Timers
++
++maintainers:
++  - Samin Guo <samin.guo@starfivetech.com>
++  - Xingyu Wu <xingyu.wu@starfivetech.com>
++
++properties:
++  compatible:
++    const: starfive,jh7110-timers
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    items:
++      - description: timer channel 0 interrupt
++      - description: timer channel 1 interrupt
++      - description: timer channel 2 interrupt
++      - description: timer channel 3 interrupt
++
++  interrupt-names:
++    items:
++      - const: timer0
++      - const: timer1
++      - const: timer2
++      - const: timer3
++
++  clocks:
++    items:
++      - description: timer channel 0 clock
++      - description: timer channel 1 clock
++      - description: timer channel 2 clock
++      - description: timer channel 3 clock
++      - description: APB clock
++
++  clock-names:
++    items:
++      - const: timer0
++      - const: timer1
++      - const: timer2
++      - const: timer3
++      - const: apb
++
++  resets:
++    items:
++      - description: timer channel 0 reset
++      - description: timer channel 1 reset
++      - description: timer channel 2 reset
++      - description: timer channel 3 reset
++      - description: APB reset
++
++  reset-names:
++    items:
++      - const: timer0
++      - const: timer1
++      - const: timer2
++      - const: timer3
++      - const: apb
++
++  clock-frequency:
++    description: The frequency of the clock that drives the counter, in Hz.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++  - resets
++  - reset-names
++  - clock-frequency
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    timer@13050000 {
++        compatible = "starfive,jh7110-timers";
++        reg = <0x13050000 0x10000>;
++        interrupts = <69>, <70>, <71> ,<72>;
++        interrupt-names = "timer0", "timer1", "timer2", "timer3";
++        clocks = <&clk 125>,
++                 <&clk 126>,
++                 <&clk 127>,
++                 <&clk 128>,
++                 <&clk 124>;
++        clock-names = "timer0", "timer1",
++                      "timer2", "timer3", "apb";
++        resets = <&rst 118>,
++                 <&rst 119>,
++                 <&rst 120>,
++                 <&rst 121>,
++                 <&rst 117>;
++        reset-names = "timer0", "timer1",
++                      "timer2", "timer3", "apb";
++        clock-frequency = <24000000>;
++    };
++
 -- 
 2.25.1
 
