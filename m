@@ -2,218 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B79655284
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E5E6552A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236301AbiLWQD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 11:03:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S231317AbiLWQTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 11:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiLWQDw (ORCPT
+        with ESMTP id S230504AbiLWQSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 11:03:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A5D379E1;
-        Fri, 23 Dec 2022 08:03:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C384B61506;
-        Fri, 23 Dec 2022 16:03:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE03C433D2;
-        Fri, 23 Dec 2022 16:03:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671811430;
-        bh=CmUH9OByAmfCEX6dhnmiGAFzKh+4JSJjcrx/3zhP8Wc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=B4KHp3xlUExVt2qI5q/7TrchTsQ+aUOj5gkMOeXR+3Zt02q/le2/UVpY/Kt/jyzXe
-         NDbSaGI3hp8T9jIWCPgUFqqWFjM6KXAsg9PRfHn5vMDV44cLZdKAfwP9wUPX/O+t5E
-         3qHvDAKC40IHevgx8lkaou+nJCO/64XYcgBdujI05+cdDxF6Xy1Xiw9Kp1KcQ0UwcR
-         kmCySDCg4vpN20UFkkngQDB2uuvEX5V7R/n/HwV/uX+g54HPWlbpUXzh7i6XfKe5e0
-         m8S4Vs/Yp6rXDivqXMQTECkuUEMaaWVZWbvDcDe0xh6oWMGOab46MiupGT+hBfb38G
-         d6M9zj71C9cLQ==
-Date:   Fri, 23 Dec 2022 16:16:59 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Daniel Beer <dlbeer@gmail.com>
-Cc:     linux-iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ad_sigma_delta: fix race between IRQ and completion
-Message-ID: <20221223161659.7652c95c@jic23-huawei>
-In-Reply-To: <63a01acb.a70a0220.9a08f.987d@mx.google.com>
-References: <63a01acb.a70a0220.9a08f.987d@mx.google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
+        Fri, 23 Dec 2022 11:18:44 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57BF1AF28
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:18:42 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id z26so7618083lfu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:18:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ssdvzhuee2XQDm50/3Dh08z9mzFiguEgbpNiLUtPtQk=;
+        b=UYjsne41U/8//XGrEZ6dq42DkOf4pl/H4mBwv95l7LC/HPOBxZBwIOHP512CSawS/V
+         ZXRxPXvOBUKILtZWA6ZCHDGiTWcfnPi5EujmFDoS/QYeXBeVfd9qGhjN0xdyqARDD2h9
+         WV4xJo5w7mJN3fK5yuHO7DCiAZh1cBTovHrXChNvE3TCggPvirfwVf/stzpztbef/jDR
+         ox7SMWCthNCXopIH0fL+A93HX0+5N2zKKbKGXHEEwh3wS/HFJB7V/lfin8nsd2xAAK2p
+         ZqNj2j1L4PYBVZYbqF1Y3cQ7ARbhV53zt3b2HXhYSrm+70WsNa9pUsC1Yux6sObo/tEQ
+         tPyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ssdvzhuee2XQDm50/3Dh08z9mzFiguEgbpNiLUtPtQk=;
+        b=fkLZZkN+zsnh+t4jSxT5SXLvQCE/uGrw720ElWhWGNjY169ZhnT3biETvW1uMC4wAA
+         W63moA4DneSUzJeRAwJ18CvZzhBmo4OmWvW/4KcjO9ajvEdN0Kab4TQ+vd5xy2Mth/ph
+         lXX+BsjoUjsYZN5ruPKRCuVHA9YvizogUjsMQcDmkTRXSMKG1362pzmcuAc7sTPEEhan
+         wbKvOQNNyM3SB4X18lOUMIJXrAVL6p2YP0RdD0g365GZTc44HEUHYwE/DoGdQoC6VnIR
+         /EK+miuU/92yOsbfrUX4ZLXm+zP1N2fgCiterlHJty3KjnTonnrP0y90gQKi0+sMab9A
+         18fQ==
+X-Gm-Message-State: AFqh2kofB6WbElojTz3FodIKgjkeosQyqErJE/FG3HqmL0nQuD1+MARL
+        s6q7x+/bILhPS3b8Ycrey7wpLg==
+X-Google-Smtp-Source: AMrXdXsWw512KHluUBDJzRaXuHifwQ7aus50gdJRaT8b2kbKkEG6+slseJlplBRP71EZhfMrDmokPQ==
+X-Received: by 2002:a19:f80c:0:b0:4b5:853c:ed30 with SMTP id a12-20020a19f80c000000b004b5853ced30mr2676054lff.23.1671812321141;
+        Fri, 23 Dec 2022 08:18:41 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id n18-20020a05651203f200b004b4f2a30e6csm581360lfq.0.2022.12.23.08.18.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 08:18:40 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/4] dt-bindings: phy: qcom,usb-snps-femto-v2: use fallback compatibles
+Date:   Fri, 23 Dec 2022 17:18:32 +0100
+Message-Id: <20221223161835.112079-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Dec 2022 20:48:46 +1300
-Daniel Beer <dlbeer@gmail.com> wrote:
+Document SoC-specific compatibles with generic fallback (e.g.
+qcom,usb-snps-hs-7nm-phy) already used in DTSI.  Add SoC-specific
+compatibles for PHY on SDX55 and SDX65.
 
-> ad_sigma_delta waits for a conversion which terminates with the firing
-> of a one-shot IRQ handler. In this handler, the interrupt is disabled
-> and a completion is set.
-> 
-> Meanwhile, the thread that initiated the conversion is waiting on the
-> completion to know when the conversion happened. If this wait times out,
-> the conversion is aborted and IRQs are disabled. But the IRQ may fire
-> anyway between the time the completion wait times out and the disabling
-> of interrupts. If this occurs, we get a double-disabled interrupt.
+This disallows usage of the qcom,usb-snps-hs-5nm-phy and
+qcom,usb-snps-hs-7nm-phy generic compatibles alone.  Do not touch
+remaining two compatibles - qcom,usb-snps-femto-v2-phy and
+qcom,sc8180x-usb-hs-phy - because there are no upstream users, so not
+sure what was the intention for them.
 
-Ouch and good work tracking it down.  just to check, did you see this
-bug happen in the wild or spotted by code inspection?
+This fixes warnings like:
 
-Given that timeout generally indicates hardware failure, I'm not sure
-how critical this is to fix.
+  sa8295p-adp.dtb: phy@88e5000: compatible: 'oneOf' conditional failed, one must be fixed:
+    ['qcom,sc8280xp-usb-hs-phy', 'qcom,usb-snps-hs-5nm-phy'] is too long
+    'qcom,sc8280xp-usb-hs-phy' is not one of ['qcom,sm8150-usb-hs-phy', 'qcom,sm8250-usb-hs-phy', 'qcom,sm8350-usb-hs-phy', 'qcom,sm8450-usb-hs-phy']
+    'qcom,usb-snps-hs-7nm-phy' was expected
 
-I don't think this fix fully closes the race - see inline.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/phy/qcom,usb-snps-femto-v2.yaml  | 33 +++++++++++--------
+ 1 file changed, 20 insertions(+), 13 deletions(-)
 
-Jonathan
-
-> 
-> This patch fixes that by wrapping the completion wait in a function that
-> handles timeouts correctly by synchronously disabling the interrupt and
-> then undoing the damage if it got disabled twice.
-> 
-> Fixes: af3008485ea0 ("iio:adc: Add common code for ADI Sigma Delta devices")
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Signed-off-by: Daniel Beer <dlbeer@gmail.com>
-> ---
->  drivers/iio/adc/ad_sigma_delta.c | 49 +++++++++++++++++++-------------
->  1 file changed, 30 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigma_delta.c
-> index d8570f620785..2f1702eeed56 100644
-> --- a/drivers/iio/adc/ad_sigma_delta.c
-> +++ b/drivers/iio/adc/ad_sigma_delta.c
-> @@ -202,6 +202,31 @@ int ad_sd_reset(struct ad_sigma_delta *sigma_delta,
->  }
->  EXPORT_SYMBOL_NS_GPL(ad_sd_reset, IIO_AD_SIGMA_DELTA);
->  
-> +static int ad_sd_wait_and_disable(struct ad_sigma_delta *sigma_delta,
-> +				  unsigned long timeout)
-> +{
-> +	const int ret = wait_for_completion_interruptible_timeout(
-> +			&sigma_delta->completion, timeout);
-> +
-> +	if (!ret) {
-> +		/* Just because the completion timed out, doesn't mean that the
-Multiline comment syntax in IIO is the
-/*
- * Just...
-
-form.
-
-> +		 * IRQ didn't fire. It might be in progress right now.
-> +		 */
-> +		disable_irq(sigma_delta->spi->irq);
-> +
-> +		/* The IRQ handler may have run after all. If that happened,
-
-Same for this comment.
-
-> +		 * then we will now have double-disabled the IRQ, and irq_dis
-> +		 * will be true (having been set in the handler).
-> +		 */
-> +		if (sigma_delta->irq_dis)
-> +			enable_irq(sigma_delta->spi->irq);
-> +		else
-> +			sigma_delta->irq_dis = true;
-
-I'd set this unconditionally.  It might already be set, but that shouldn't
-be a problem.
-
-Is this fix sufficient?  If the interrupt is being handled on a different
-CPU to the caller of this function, I think we can still race enough that
-this fails to fix it up.  Might need a spinlock to prevent that.
-
-  CPU 0                                        CPU 1
-ad_sd_data_rdy_trig_poll()               ad_sd_wait_and_disable()
-                                       
-                                         //wait_for_completion ends
-					
-Interrupt
-                                          disable_irq()
-					  if (sigma-delta->irq_dis) !true	
-					  else
-						sigma_delta->irq_dis = true
-
-disable_irq_nosync(irq)
-sigma_delta->irq_dis = true;
-
-So we still end up with a doubly disabled irq.  Add a spinlock to make the
-disable and the setting of sigma_delta->irq_dis atomic then it should all be fine.                
-
-
-
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  int ad_sd_calibrate(struct ad_sigma_delta *sigma_delta,
->  	unsigned int mode, unsigned int channel)
->  {
-> @@ -223,14 +248,11 @@ int ad_sd_calibrate(struct ad_sigma_delta *sigma_delta,
->  
->  	sigma_delta->irq_dis = false;
->  	enable_irq(sigma_delta->spi->irq);
-> -	timeout = wait_for_completion_timeout(&sigma_delta->completion, 2 * HZ);
-> -	if (timeout == 0) {
-> -		sigma_delta->irq_dis = true;
-> -		disable_irq_nosync(sigma_delta->spi->irq);
-> +	timeout = ad_sd_wait_and_disable(sigma_delta, 2 * HZ);
-> +	if (timeout == 0)
->  		ret = -EIO;
-> -	} else {
-> +	else
->  		ret = 0;
-> -	}
->  out:
->  	sigma_delta->keep_cs_asserted = false;
->  	ad_sigma_delta_set_mode(sigma_delta, AD_SD_MODE_IDLE);
-> @@ -296,8 +318,7 @@ int ad_sigma_delta_single_conversion(struct iio_dev *indio_dev,
->  
->  	sigma_delta->irq_dis = false;
->  	enable_irq(sigma_delta->spi->irq);
-> -	ret = wait_for_completion_interruptible_timeout(
-> -			&sigma_delta->completion, HZ);
-> +	ret = ad_sd_wait_and_disable(sigma_delta, HZ);
->  
->  	if (ret == 0)
->  		ret = -EIO;
-> @@ -314,11 +335,6 @@ int ad_sigma_delta_single_conversion(struct iio_dev *indio_dev,
->  		&raw_sample);
->  
->  out:
-> -	if (!sigma_delta->irq_dis) {
-> -		disable_irq_nosync(sigma_delta->spi->irq);
-> -		sigma_delta->irq_dis = true;
-> -	}
-> -
->  	sigma_delta->keep_cs_asserted = false;
->  	ad_sigma_delta_set_mode(sigma_delta, AD_SD_MODE_IDLE);
->  	sigma_delta->bus_locked = false;
-> @@ -411,12 +427,7 @@ static int ad_sd_buffer_postdisable(struct iio_dev *indio_dev)
->  	struct ad_sigma_delta *sigma_delta = iio_device_get_drvdata(indio_dev);
->  
->  	reinit_completion(&sigma_delta->completion);
-> -	wait_for_completion_timeout(&sigma_delta->completion, HZ);
-> -
-> -	if (!sigma_delta->irq_dis) {
-> -		disable_irq_nosync(sigma_delta->spi->irq);
-> -		sigma_delta->irq_dis = true;
-> -	}
-> +	ad_sd_wait_and_disable(sigma_delta, HZ);
->  
->  	sigma_delta->keep_cs_asserted = false;
->  	ad_sigma_delta_set_mode(sigma_delta, AD_SD_MODE_IDLE);
+diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+index 68e70961beb2..85d405e028b9 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml
+@@ -14,18 +14,25 @@ description: |
+ 
+ properties:
+   compatible:
+-    enum:
+-      - qcom,usb-snps-hs-5nm-phy
+-      - qcom,usb-snps-hs-7nm-phy
+-      - qcom,sc7280-usb-hs-phy
+-      - qcom,sc8180x-usb-hs-phy
+-      - qcom,sc8280xp-usb-hs-phy
+-      - qcom,sm6375-usb-hs-phy
+-      - qcom,sm8150-usb-hs-phy
+-      - qcom,sm8250-usb-hs-phy
+-      - qcom,sm8350-usb-hs-phy
+-      - qcom,sm8450-usb-hs-phy
+-      - qcom,usb-snps-femto-v2-phy
++    oneOf:
++      - enum:
++          - qcom,sc8180x-usb-hs-phy
++          - qcom,usb-snps-femto-v2-phy
++      - items:
++          - enum:
++              - qcom,sc8280xp-usb-hs-phy
++          - const: qcom,usb-snps-hs-5nm-phy
++      - items:
++          - enum:
++              - qcom,sc7280-usb-hs-phy
++              - qcom,sdx55-usb-hs-phy
++              - qcom,sdx65-usb-hs-phy
++              - qcom,sm6375-usb-hs-phy
++              - qcom,sm8150-usb-hs-phy
++              - qcom,sm8250-usb-hs-phy
++              - qcom,sm8350-usb-hs-phy
++              - qcom,sm8450-usb-hs-phy
++          - const: qcom,usb-snps-hs-7nm-phy
+ 
+   reg:
+     maxItems: 1
+@@ -160,7 +167,7 @@ examples:
+     #include <dt-bindings/clock/qcom,rpmh.h>
+     #include <dt-bindings/clock/qcom,gcc-sm8150.h>
+     phy@88e2000 {
+-        compatible = "qcom,sm8150-usb-hs-phy";
++        compatible = "qcom,sm8150-usb-hs-phy", "qcom,usb-snps-hs-7nm-phy";
+         reg = <0x088e2000 0x400>;
+         #phy-cells = <0>;
+ 
+-- 
+2.34.1
 
