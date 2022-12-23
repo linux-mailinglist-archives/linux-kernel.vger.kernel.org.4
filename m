@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E0F654FC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12373654FC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiLWLhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 06:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
+        id S231131AbiLWLhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 06:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiLWLhP (ORCPT
+        with ESMTP id S236196AbiLWLhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 06:37:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973FABE0F
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:36:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671795387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qZVGgPTNWGADuWoZI7HOeF7SAOUCre/9YcTHNf70vXc=;
-        b=H6HHVdQnzUe1ZS7vtRza/lStOFKvYvS6BCIk6E0UKQyP3HVwWhKUlWsu2aRkeo+lbjCRK7
-        r/vFjMOo/f9CbbP+AZADBrGNa4sf+H4J014hLt2uBmOMEzfmrCEBMIyiBofNLQ3ZqrMETJ
-        4SN0d0ZOa35oITRCSfjvb7biTC/FJgw=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-456-E3YoexrkOD6igwEfu8sVWw-1; Fri, 23 Dec 2022 06:36:26 -0500
-X-MC-Unique: E3YoexrkOD6igwEfu8sVWw-1
-Received: by mail-wr1-f71.google.com with SMTP id v14-20020adf8b4e000000b0024174021277so949939wra.13
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:36:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qZVGgPTNWGADuWoZI7HOeF7SAOUCre/9YcTHNf70vXc=;
-        b=pm1bTpEMbzjab4UkE0e4fxXga7BFEbZ8S2m1MF97wfVlqyBKfsnStl5QHcFFoL3fGW
-         6zzY5MEGHbsxotymAdeEwSAS4t4/xMhQ8uR7bjEE0CU0HdYHkQXA/attIMKuxZ9394Lg
-         YzFpzAJEOxKKjvLPJF4DuVvXndcwbaeXT6t0zGW+49C/oOU2hwWv//++RdKRIRZg7PGI
-         Cr9bnuRQjeP/PFOTg/NMX1FNwyHB9g3tqzQsiAdfI9O0mB+EhtNKVlhUdpIWG6aKwSnt
-         C5U33HEj0/RZH84BN712Oc1QjQsSPIKvNgNKFp3K2aLDO3/MBkeEMxeU7eb+B67BR5Cv
-         brqA==
-X-Gm-Message-State: AFqh2kqgLeHWUxDe6r1DGcnKHthwcaK15/b1So7R+PRqbaN9Y4Fl2Dgd
-        eyh18iYL75Pi70CGJ27OxXfyDMpLRDhMQmxfBm7xVBlFCF/gKR9sKkuOHK83egFMxuJXbMuNUu5
-        C7ZzNJeQDJU/fpwWppms1+W4C
-X-Received: by 2002:a05:600c:35d1:b0:3d3:58d1:2588 with SMTP id r17-20020a05600c35d100b003d358d12588mr6708982wmq.41.1671795385325;
-        Fri, 23 Dec 2022 03:36:25 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtkPN6eEWxTrC7lLZcH+iG3j7l0iPTvyPOAXtFD27IisrlURCW2ZiUXzav5J0iZsvhIwf0Ndw==
-X-Received: by 2002:a05:600c:35d1:b0:3d3:58d1:2588 with SMTP id r17-20020a05600c35d100b003d358d12588mr6708968wmq.41.1671795385026;
-        Fri, 23 Dec 2022 03:36:25 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:ab00:3d8e:16c4:a38d:2827? (p200300cbc707ab003d8e16c4a38d2827.dip0.t-ipconnect.de. [2003:cb:c707:ab00:3d8e:16c4:a38d:2827])
-        by smtp.gmail.com with ESMTPSA id x15-20020a1c7c0f000000b003c6bbe910fdsm11462465wmc.9.2022.12.23.03.36.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 03:36:24 -0800 (PST)
-Message-ID: <199991ec-bcd4-35b4-6835-0f1f13e11457@redhat.com>
-Date:   Fri, 23 Dec 2022 12:36:23 +0100
+        Fri, 23 Dec 2022 06:37:32 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C58C83EAC6
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:37:30 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9DA601FB;
+        Fri, 23 Dec 2022 03:38:11 -0800 (PST)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 377A73FA32;
+        Fri, 23 Dec 2022 03:37:29 -0800 (PST)
+Date:   Fri, 23 Dec 2022 11:37:27 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        f.fainelli@gmail.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, Ludvig.Parsson@axis.com
+Subject: Re: [PATCH 0/9] Rework SCMI initialization and probing sequence
+Message-ID: <Y6WS9/dmeGpS7wqV@e120937-lin>
+References: <20221222185049.737625-1-cristian.marussi@arm.com>
+ <CAFA6WYP++tYORr+-EDPF1EKakwJHaH+_WFq8kzWY-UU3yQJ7Gg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH linux-next] selftests/vm: ksm_functional_tests: fix a typo
- in comment
-Content-Language: en-US
-To:     yang.yang29@zte.com.cn, akpm@linux-foundation.org
-Cc:     shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.panda@zte.com.cn, xu.xin16@zte.com.cn
-References: <202212231050245952617@zte.com.cn>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <202212231050245952617@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFA6WYP++tYORr+-EDPF1EKakwJHaH+_WFq8kzWY-UU3yQJ7Gg@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.12.22 03:50, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
+On Fri, Dec 23, 2022 at 11:06:29AM +0530, Sumit Garg wrote:
+> On Fri, 23 Dec 2022 at 00:22, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> >
+> > Hi,
+> >
+> > under some configurations the SCMI core stack, which is now initialized
+> > as a whole at the subsys_initcall level, can be dependent on some other
+> > Kernel subsystems (like TEE) when some SCMI transport backend like optee
+> > is used.
 > 
-> Fix a typo of "comaring" which should be "comparing".
+> Thanks Cristian for the rework, but this doesn't seem to address
+> reluctance to carry forward the DT legacy (see [1]).
 > 
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> TLDR, it has led to misrepresentation of OP-TEE transport as follows:
+> 
+>     First represented as a platform device via DT (compatible =
+> "linaro,scmi-optee";) and then
+>     Migrated to being a TEE bus device (UUID: 0xa8cfe406, 0xd4f5,
+> 0x4a2e, 0x9f, 0x8d, 0xa2, 0x5d, 0xc7, 0x54, 0xc0, 0x99)
+> 
+> Do we really need to have a platform device for every SCMI transport?
+> 
+> [1] https://lore.kernel.org/lkml/CAFA6WYPwku8d7EiJ8rF5pVh568oy+jXMXLdxSr6r476e0SD2nw@mail.gmail.com/
+> 
 
-Two people to fix a typo, wow. :)
+Hi Sumit,
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+thanks for the feedback first of all.
 
--- 
+This series represents really a long standing point on my todo-list and it
+is meant to start addressing/reviewing the whole SCMI stack init/probe
+sequencing and transports setup while taking the chance/opportunity to
+fix the issue reported by Ludvig.
+
+The natural next step in my (and Sudeep) view would be to split out the SCMI
+transports too into proper full fledged drivers, that can be probed by their
+own susbsys eventually (when possible) and that will then register with the
+SCMI core as available transports; so that we can avoid some of the cruft
+when multiple backend subsystems are involved...
+
+...it is just that I have NOT dug deep into this further evolution and I did
+NOT want to do it in this series, but just starting laying out some basic rework
+toward this direction while fixing Ludvig issue. (... also because there are a
+lot of bit and pieces to get right in SCMI around protocols/modules and DT
+parsing and I was trying not to break too many things at a time :P...)
+
+Anyway, even in the perspective of the above possible evolution into full
+fledged drivers, I doubt that we can get rid completely of the DT based
+per-transport platform devices since their DT nodes can carry a bit of
+transport related information (even for auto-discoverable transport I think)
+
+...it will just be that such devices, bound to the compatibles, will be used
+probably in a different way (also for backward compatibility with DT
+bindings...)...indeed...such platform devices now DO carry some information
+about the underlying transport to use BUT most of all they represent also
+an SCMI platform instance, so that will not definitely go away completely,
+it will just loose most of the transport related functionalities
+
+..but... as said...I have not dived too much into this further evolution so
+I maybe wrong here on the details... anyway the plan going further, as spoken
+also with Sudeep offline, could/should be that depicted above.
+
+Not sure if this answers all of your questions but I'll keep you posted
+on this series and next evolutions...
+
 Thanks,
-
-David / dhildenb
-
+Cristian
