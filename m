@@ -2,88 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A9A655264
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F6A655213
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236576AbiLWPlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 10:41:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S236499AbiLWPbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 10:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236522AbiLWPlV (ORCPT
+        with ESMTP id S231423AbiLWPbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 10:41:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3314A1148;
-        Fri, 23 Dec 2022 07:41:20 -0800 (PST)
+        Fri, 23 Dec 2022 10:31:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C2D63FD;
+        Fri, 23 Dec 2022 07:31:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9E326158B;
-        Fri, 23 Dec 2022 15:41:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F15C433D2;
-        Fri, 23 Dec 2022 15:41:15 +0000 (UTC)
-Date:   Fri, 23 Dec 2022 10:41:13 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>, linux-sh@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-bluetooth@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, linux-scsi@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-ext4@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, bridge@lists.linux-foundation.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        lvs-devel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Subject: Re: [PATCH] treewide: Convert del_timer*() to timer_shutdown*()
-Message-ID: <20221223104113.0bc8d37f@gandalf.local.home>
-In-Reply-To: <20221220134519.3dd1318b@gandalf.local.home>
-References: <20221220134519.3dd1318b@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 313F16150C;
+        Fri, 23 Dec 2022 15:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C14B1C433D2;
+        Fri, 23 Dec 2022 15:31:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671809500;
+        bh=Yv990aidhbKkTEJvdoOyJvp9FxAYjDIxP+cgiiuIyv8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XJzBsc1QdbvzKgxYeXFnYdycVxsbK/dRc1bsNlglPTTPcjnbJP8qm8FYKqsOkicXH
+         g/9WQhIGbb3B5nXIv32QFQBi8vFpmvYBzZGqxFVNMVnMIdav4Dm2ff3l3Gk0IFpyYW
+         3aNhs6sOBGBbKSOuMXgYci0zn2r+hq9DAHnp7UzeRWPG37wPuNSMI2Pw6Chu+6pvY1
+         Kfd1Z84qlnVT8oi3jANw+UzuCa0YX6iEEPsVYEqb2rfram5zThKf/IuGK1zwZVyR1J
+         ijqpoxQa6Sc2JBTX2o6Ubou6YSF0zv7F76Q5AyqvIWG3gyGsUm16M3Red/aJ8DflPP
+         P6CxxBg8WenSA==
+Date:   Fri, 23 Dec 2022 15:44:50 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/2] iio: adc: ti-adc128s052: Switch to use
+ spi_get_device_match_data()
+Message-ID: <20221223154450.458771b8@jic23-huawei>
+In-Reply-To: <20221223152242.2ee926eb@jic23-huawei>
+References: <20221214114944.83790-1-andriy.shevchenko@linux.intel.com>
+        <20221223152242.2ee926eb@jic23-huawei>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Dec 2022 13:45:19 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, 23 Dec 2022 15:22:42 +0000
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-> [
->   Linus,
+> On Wed, 14 Dec 2022 13:49:43 +0200
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > 
->     I ran the script against your latest master branch:
->     commit b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
+> > The spi_get_device_match_data() helps to get driver data from the
+> > firmware node or SPI ID table. Use it instead of open coding.
+> > 
+> > While at it, switch ID tables to provide an acrual pointers to
+> > the configuration data.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> > 
+> > Requires aea672d054a2 ("spi: Introduce spi_get_device_match_data()
+> > helper") which is part of upstream as of today.  
 > 
->     As the timer_shutdown*() code is now in your tree, I figured
->     we can start doing the conversions. At least add the trivial ones
->     now as Thomas suggested that this gets applied at the end of the
->     merge window, to avoid conflicts with linux-next during the
->     development cycle. I can wait to Friday to run it again, and
->     resubmit.
+> I rebased to get that (will rebase again on rc1).
 > 
->     What is the best way to handle this?
-> ]
+> Applied to the togreg branch of iio.git and pushed out as testing
+> to keep 0-day busy over my holidays.
 
-Note, I just did a git remote update, checked out the latest, re-ran the
-script, and this patch hasn't changed.
+I take it back...  Build test failed...
 
--- Steve
+> 
+> Jonathan
+> 
+> > 
+> >  drivers/iio/adc/ti-adc128s052.c | 39 +++++++++++++++------------------
+> >  1 file changed, 18 insertions(+), 21 deletions(-)
+> > 
+> > diff --git a/drivers/iio/adc/ti-adc128s052.c b/drivers/iio/adc/ti-adc128s052.c
+> > index b3d5b9b7255b..9dfc625100b6 100644
+> > --- a/drivers/iio/adc/ti-adc128s052.c
+> > +++ b/drivers/iio/adc/ti-adc128s052.c
+> > @@ -139,16 +139,11 @@ static void adc128_disable_regulator(void *reg)
+> >  
+> >  static int adc128_probe(struct spi_device *spi)
+> >  {
+> > +	const struct adc128_configuration *config;
+> >  	struct iio_dev *indio_dev;
+> > -	unsigned int config;
+> >  	struct adc128 *adc;
+> >  	int ret;
+> >  
+> > -	if (dev_fwnode(&spi->dev))
+> > -		config = (unsigned long) device_get_match_data(&spi->dev);
+> > -	else
+> > -		config = spi_get_device_id(spi)->driver_data;
+> > -
+> >  	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*adc));
+> >  	if (!indio_dev)
+> >  		return -ENOMEM;
+> > @@ -160,6 +155,8 @@ static int adc128_probe(struct spi_device *spi)
+> >  	indio_dev->modes = INDIO_DIRECT_MODE;
+> >  	indio_dev->info = &adc128_info;
+> >  
+> > +	config = spi_get_device_match_data(&spi->dev);
+Takes a struct spi_device*
+
+Also, having opened code up to fix this, we have a spi_get_device_id() left
+just above that needs dealing with.
+
+And a lot of uses of config below that need fixing.
+
+I'm dropping this series until that's all fixed up.
+
+Jonathan
+
+
+
+> > +
+> >  	indio_dev->channels = adc128_config[config].channels;
+> >  	indio_dev->num_channels = adc128_config[config].num_channels;
+> >  
+> > @@ -181,32 +178,32 @@ static int adc128_probe(struct spi_device *spi)
+> >  }
+> >  
+> >  static const struct of_device_id adc128_of_match[] = {
+> > -	{ .compatible = "ti,adc128s052", .data = (void*)0L, },
+> > -	{ .compatible = "ti,adc122s021", .data = (void*)1L, },
+> > -	{ .compatible = "ti,adc122s051", .data = (void*)1L, },
+> > -	{ .compatible = "ti,adc122s101", .data = (void*)1L, },
+> > -	{ .compatible = "ti,adc124s021", .data = (void*)2L, },
+> > -	{ .compatible = "ti,adc124s051", .data = (void*)2L, },
+> > -	{ .compatible = "ti,adc124s101", .data = (void*)2L, },
+> > +	{ .compatible = "ti,adc128s052", .data = &adc128_config[0] },
+> > +	{ .compatible = "ti,adc122s021", .data = &adc128_config[1] },
+> > +	{ .compatible = "ti,adc122s051", .data = &adc128_config[1] },
+> > +	{ .compatible = "ti,adc122s101", .data = &adc128_config[1] },
+> > +	{ .compatible = "ti,adc124s021", .data = &adc128_config[2] },
+> > +	{ .compatible = "ti,adc124s051", .data = &adc128_config[2] },
+> > +	{ .compatible = "ti,adc124s101", .data = &adc128_config[2] },
+> >  	{ /* sentinel */ },
+> >  };
+> >  MODULE_DEVICE_TABLE(of, adc128_of_match);
+> >  
+> >  static const struct spi_device_id adc128_id[] = {
+> > -	{ "adc128s052", 0 },	/* index into adc128_config */
+> > -	{ "adc122s021",	1 },
+> > -	{ "adc122s051",	1 },
+> > -	{ "adc122s101",	1 },
+> > -	{ "adc124s021", 2 },
+> > -	{ "adc124s051", 2 },
+> > -	{ "adc124s101", 2 },
+> > +	{ "adc128s052", (kernel_ulong_t)&adc128_config[0] },
+> > +	{ "adc122s021",	(kernel_ulong_t)&adc128_config[1] },
+> > +	{ "adc122s051",	(kernel_ulong_t)&adc128_config[1] },
+> > +	{ "adc122s101",	(kernel_ulong_t)&adc128_config[1] },
+> > +	{ "adc124s021", (kernel_ulong_t)&adc128_config[2] },
+> > +	{ "adc124s051", (kernel_ulong_t)&adc128_config[2] },
+> > +	{ "adc124s101", (kernel_ulong_t)&adc128_config[2] },
+> >  	{ }
+> >  };
+> >  MODULE_DEVICE_TABLE(spi, adc128_id);
+> >  
+> >  #ifdef CONFIG_ACPI
+> >  static const struct acpi_device_id adc128_acpi_match[] = {
+> > -	{ "AANT1280", 2 }, /* ADC124S021 compatible ACPI ID */
+> > +	{ "AANT1280", (kernel_ulong_t)&adc128_config[2] },
+> >  	{ }
+> >  };
+> >  MODULE_DEVICE_TABLE(acpi, adc128_acpi_match);  
+> 
+
