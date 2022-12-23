@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE1B654BAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 04:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249C3654BAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 04:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236070AbiLWDR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 22:17:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34688 "EHLO
+        id S236077AbiLWDSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 22:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiLWDRX (ORCPT
+        with ESMTP id S235966AbiLWDSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 22:17:23 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6E93137E;
-        Thu, 22 Dec 2022 19:17:23 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id jn22so3766650plb.13;
-        Thu, 22 Dec 2022 19:17:23 -0800 (PST)
+        Thu, 22 Dec 2022 22:18:18 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CFB2098D;
+        Thu, 22 Dec 2022 19:18:17 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 7so2563449pga.1;
+        Thu, 22 Dec 2022 19:18:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
          :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eYiGrmsD33kbnsC1ctFQkhOOqCnqOHmLKFShgn5msm0=;
-        b=hCn4mJm22d3D3rll3METASgOTnhhlJ8cXe968jX0yXnrBAUhR+kbXwYcAw52wrLNaA
-         CIXdS6AP1v0bQyW7Hcn6DbLdI6m3+fc8MKYxBsF30EIqkLQCYru6CfsL54czOQicEHs+
-         sM+yOnXWhBfTPMwawZ/K8fI9Qm1DEHaRLkXCo69UKb6hjOjQcnnBOdJW2Rm9IjabV2x5
-         e80hbT80UwR3Qx11+nf3J3KAepEqdC3QjQVxd5nNldoG5AEUGiG6z1Gytu2Qhzi+K0rW
-         xjIK6pbdQ7Kqc5sfACVmQtXhyXSIs4jUqfgCSUjE7x+64SLDmjYP9Z6uzRpkutuWjob9
-         nbsQ==
+        bh=JvI3blinvaCjUYpwPXTVf3onR897jbDV84x4cQn3O60=;
+        b=Oc19VAEwOXUtxxtdKwHQqNGtQUP76Yf3FUW92uqTquY/TovWt5Tm3B57RyYb5bEhXk
+         NNqXzye01SuzGI3YviT/y5bf7uD/6bVA3Zd6OLIlDwXnIjXaodegdnJRKf3ot4qO5DIU
+         aM1HyhMD0QBOZT4l7gVjpw7sr5H2R0gvD0xm+NTNLvSZdC+Nm7uqKJ+4IIzF2KD+uVDl
+         zp4zwYvekI2aPz7dReOnZW7+hmIZkgEbfKHsP5tNm3NwyiwZEsSGi+r8z30Rcu6VlUzl
+         pOH46skNXMpcGaD/NLQlYMYPl56wWyVvoU0uqR4VhO6CHJlEu/kLihD/NO2CQpuJE4XT
+         kWrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
          :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eYiGrmsD33kbnsC1ctFQkhOOqCnqOHmLKFShgn5msm0=;
-        b=r1BvlyBFPW1DDao6FcC0al/DCUafZzDogNIkqJ0DCd4L1iivMMDktt9xNnb87TVsUC
-         60qfJB4fAOMUSDOSF4ibLx3nlnJSCVTGS2LShNEz0JjauJZDiGwrqW1n5wkU5O3c5IA0
-         Ibx9v9yGKC8w6sjilECzwKFej7fElFEM3Sb4vh5NCc6dGbQHjlaBariCmDFm867pkSlO
-         g094zk2QEDZM7giJhSfx4Ev5Q6toGgrp5B+wFknTz6apHLnzoy8QVzlb32Xa6Cmkc/F0
-         VOrsNV3kR799F2oShyX3q7qpfSRG8Hn4rxbarBwTPp9dFOTDDyBXtC14b78MEheLkF7k
-         XAkw==
-X-Gm-Message-State: AFqh2kpdiQZtw78rTd+htqaGY3/nyul3awFeONF5g7uYy5WOqh7FAJzt
-        rkHJ/nnSKKsR/CTfaBbNlZY=
-X-Google-Smtp-Source: AMrXdXsgvy46fTENjvXN+XI1fTqJI+3SswcLm62Kn8LvvIzBZsAEkVpKcaVGX8T7r4QkdEh4qN9VUw==
-X-Received: by 2002:a05:6a20:3d14:b0:af:b909:2b3f with SMTP id y20-20020a056a203d1400b000afb9092b3fmr12961373pzi.34.1671765442579;
-        Thu, 22 Dec 2022 19:17:22 -0800 (PST)
-Received: from VM-66-53-centos ([43.132.141.9])
-        by smtp.gmail.com with ESMTPSA id w2-20020a628202000000b0057ef1262347sm1454354pfd.19.2022.12.22.19.17.20
+        bh=JvI3blinvaCjUYpwPXTVf3onR897jbDV84x4cQn3O60=;
+        b=4w5HJIiPGJFed/hGYWn1gF8NjQv9wklmy0RnOM53+5jSXnbEyK9f+WQijSlUsPcTNS
+         xvcCTSD07qUEc5QFHXULZgKgcZwzGm7cL4aT7n5sPO1lgbvk0k7maU7d65H/oG7nA4KY
+         lCJ/1iUFYUVNxa4gld3r3HnaGMcIohXq3H9iPSjLYvZkC23gttfABorUqcs+hxyVAcHf
+         lwbj/4qDR+TEfwvka6Q/8/3BzUuIKPK3Wjk7J5ERzF2PlhClRYfwSO5BuoSBhGxHRgbW
+         zZB1GqBK9M20mdPokXnoTsclkskH2tNVW50Exbixi0gtiFp/pYcVpR91Cs/HGkjG13Qc
+         na+A==
+X-Gm-Message-State: AFqh2ko/e56azH34OW4PS6LbU8EpGpQn4r8rQHqnunf8Ykmk2sJyUuoF
+        qeuCX7BI+OQTcjG6rQFhbgg=
+X-Google-Smtp-Source: AMrXdXsPfVNkPFXAkqMaVrtsalGBoW5UqG9NuVGNJ1jY8X6HR3rNhraFmr4D2g6g0ZZeGHRgLWYbOg==
+X-Received: by 2002:a62:6102:0:b0:578:3bc0:57d7 with SMTP id v2-20020a626102000000b005783bc057d7mr8071802pfb.13.1671765497089;
+        Thu, 22 Dec 2022 19:18:17 -0800 (PST)
+Received: from VM-66-53-centos ([43.132.141.3])
+        by smtp.gmail.com with ESMTPSA id m27-20020a62a21b000000b0057fdaff3fa0sm1457473pff.15.2022.12.22.19.18.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 19:17:22 -0800 (PST)
-Date:   Fri, 23 Dec 2022 11:17:18 +0800
+        Thu, 22 Dec 2022 19:18:16 -0800 (PST)
+Date:   Fri, 23 Dec 2022 11:18:12 +0800
 From:   Yuteng Zhong <zonyitoo@gmail.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
@@ -58,12 +58,12 @@ Cc:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
         linux-rockchip@lists.infradead.org,
         Yuteng Zhong <zonyitoo@gmail.com>,
         Wenhao Cui <lasstp5011@gmail.com>
-Subject: [PATCH v9 2/3] dt-bindings: arm: rockchip: Add EmbedFire LubanCat 1
-Message-ID: <Y6UdvrhLjS0/8Oic@VM-66-53-centos>
+Subject: [PATCH v9 3/3] dt-bindings: vendor-prefixes: Document EmbedFire
+Message-ID: <Y6Ud9MhRjCVAYMCj@VM-66-53-centos>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6UdjhBD/Xa7ALya@VM-66-53-centos>
+In-Reply-To: <Y6UdvrhLjS0/8Oic@VM-66-53-centos>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,30 +76,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wenhao Cui <lasstp5011@gmail.com>
 
-Add devicetree binding documentation for the EmbedFire LubanCat 1.
+EmbedFire is a manufacturer of embed computers and education platform for
+embed devices from Dongguan.
+
+Add vendor prefix for it.
 
 Signed-off-by: Wenhao Cui <lasstp5011@gmail.com>
 Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
 ---
- Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-index 88ff4422a8c1..058ed707f3cd 100644
---- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-+++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-@@ -95,6 +95,11 @@ properties:
-           - const: elgin,rv1108-r1
-           - const: rockchip,rv1108
- 
-+      - description: EmbedFire LubanCat 1
-+        items:
-+          - const: embedfire,lubancat-1
-+          - const: rockchip,rk3566
-+
-       - description: Engicam PX30.Core C.TOUCH 2.0
-         items:
-           - const: engicam,px30-core-ctouch2
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 00493b962bd7..0f04ee30bdc2 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -396,6 +396,8 @@ patternProperties:
+     description: Elimo Engineering Ltd.
+   "^elpida,.*":
+     description: Elpida Memory, Inc.
++  "^embedfire,.*":
++    description: Dongguan EmbedFire Electronic Technology Co., Ltd.
+   "^embest,.*":
+     description: Shenzhen Embest Technology Co., Ltd.
+   "^emlid,.*":
 -- 
 2.27.0
 
