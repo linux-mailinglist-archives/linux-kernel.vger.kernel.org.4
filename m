@@ -2,146 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5406552F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6282F6552FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbiLWQ5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 11:57:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S232142AbiLWQ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 11:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbiLWQ5B (ORCPT
+        with ESMTP id S230453AbiLWQ6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 11:57:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE271D3;
-        Fri, 23 Dec 2022 08:56:58 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 62AA51EC0724;
-        Fri, 23 Dec 2022 17:56:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1671814616;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=eIrwyfehmxU3S8OfAsjHXXxAvKGYqWtRXnlHsmPvMIs=;
-        b=sQpLqtBZNyzt9lCkh02Tv1TArmXNvAYkccThgPqKToX+E4uRVMeRWpB6DQOtn0UgGq7QfH
-        xnfQYy4dQI8JTVvBFgPDRc1+UI8QVqekXcGosVLwwJkrENFYZi9w4fEUexsMn6EYHGTJQO
-        Vhfz7bb9sk0ICgmVHhqqvOh8tEjrjhY=
-Date:   Fri, 23 Dec 2022 17:56:50 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, vbabka@suse.cz,
-        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
-        ashish.kalra@amd.com, harald@profian.com,
-        Nikunj A Dadhania <nikunj@amd.com>
-Subject: Re: [PATCH RFC v7 03/64] KVM: SVM: Advertise private memory support
- to KVM
-Message-ID: <Y6Xd0ruz3kMij/5F@zn.tnic>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-4-michael.roth@amd.com>
+        Fri, 23 Dec 2022 11:58:19 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024491D3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:58:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=n3ckuVjd+kf/Enh4S8aX3LjBb7aTur9Q4f8tyMM3MaY=; b=eTVnoJr3m7/74zcHBx2nqnM6pR
+        vRuXjuU7ECwpnGlWDEcqYQC3lRL7UgO2IuQGPHRODtOXwEkCLQU6Dd7xDImeUksWAW1vHTZFC1CHH
+        YPAcmcMhSHjY5MIWES2IgM1rL1G3JJqwrSDD0qvvfmzI/otKMqTykzeGwtyeCNy/YBPMUGUNmbT1m
+        PdGgR1/o3hlmjre8IJpSphepYlcWcz3/A0XalD7vSdYYRrptThG9OUA90iitf5ymps2GQF2Ko5L7o
+        6HXKo8y2H7NXnpO4AMZAgB336Mu1wTj6i4942GjTSMr5wMtdm6HxnGZT6SzHeVDveftOxtUCZBncE
+        b2Hi/Fag==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p8lN9-00AAbn-KE; Fri, 23 Dec 2022 16:58:15 +0000
+Date:   Fri, 23 Dec 2022 08:58:15 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Keith Busch <kbusch@meta.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Tony Battersby <tonyb@cybernetics.com>,
+        Kernel Team <kernel-team@meta.com>,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCHv2 11/11] dmapool: link blocks across pages
+Message-ID: <Y6XeJ2mzd8p73J93@infradead.org>
+References: <20221216201625.2362737-1-kbusch@meta.com>
+ <20221216201625.2362737-12-kbusch@meta.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221214194056.161492-4-michael.roth@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221216201625.2362737-12-kbusch@meta.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 01:39:55PM -0600, Michael Roth wrote:
-> +       bool (*private_mem_enabled)(struct kvm *kvm);
+On Fri, Dec 16, 2022 at 12:16:25PM -0800, Keith Busch wrote:
+>  	unsigned int size;
+>  	unsigned int allocation;
+>  	unsigned int boundary;
+> +	size_t nr_blocks;
+> +	size_t nr_active;
+> +	size_t nr_pages;
 
-This looks like a function returning boolean to me. IOW, you can
-simplify this to:
+Should these be unsigned int like the counters above?
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index 82ba4a564e58..4449aeff0dff 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -129,6 +129,7 @@ KVM_X86_OP(msr_filter_changed)
- KVM_X86_OP(complete_emulated_msr)
- KVM_X86_OP(vcpu_deliver_sipi_vector)
- KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
-+KVM_X86_OP_OPTIONAL_RET0(private_mem_enabled);
- 
- #undef KVM_X86_OP
- #undef KVM_X86_OP_OPTIONAL
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 1da0474edb2d..1b4b89ddeb55 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1574,6 +1574,7 @@ struct kvm_x86_ops {
- 
- 	void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
- 			     int root_level);
-+	bool (*private_mem_enabled)(struct kvm *kvm);
- 
- 	bool (*has_wbinvd_exit)(void);
- 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index ce362e88a567..73b780fa4653 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4680,6 +4680,14 @@ static int svm_vm_init(struct kvm *kvm)
- 	return 0;
- }
- 
-+static bool svm_private_mem_enabled(struct kvm *kvm)
-+{
-+	if (sev_guest(kvm))
-+		return kvm->arch.upm_mode;
-+
-+	return IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING);
-+}
-+
- static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.name = "kvm_amd",
- 
-@@ -4760,6 +4768,8 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 
- 	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
- 
-+	.private_mem_enabled = svm_private_mem_enabled,
-+
- 	.has_wbinvd_exit = svm_has_wbinvd_exit,
- 
- 	.get_l2_tsc_offset = svm_get_l2_tsc_offset,
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 823646d601db..9a1ca59d36a4 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12556,6 +12556,11 @@ void __user * __x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
- }
- EXPORT_SYMBOL_GPL(__x86_set_memory_region);
- 
-+bool kvm_arch_has_private_mem(struct kvm *kvm)
-+{
-+	return static_call(kvm_x86_private_mem_enabled)(kvm);
-+}
-+
- void kvm_arch_pre_destroy_vm(struct kvm *kvm)
- {
- 	kvm_mmu_pre_destroy_vm(kvm);
+> +static inline struct dma_block *pool_block_pop(struct dma_pool *pool)
+> +{
+> +	struct dma_block *block = pool->next_block;
+> +
+> +	if (block) {
+> +		pool->next_block = block->next_block;
+> +		pool->nr_active++;
+> +	}
+> +	return block;
+> +}
+> +
+> +static inline void pool_block_push(struct dma_pool *pool, struct dma_block *block,
+> +				 dma_addr_t dma)
+> +{
+> +	block->dma = dma;
+> +	block->next_block = pool->next_block;
+> +	pool->next_block = block;
+> +}
 
--- 
-Regards/Gruss,
-    Boris.
+Any point in marking these inline vs just letting the ocmpile do
+it's job?
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> @@ -162,6 +176,10 @@ struct dma_pool *dma_pool_create(const char *name, struct device *dev,
+>  	retval->size = size;
+>  	retval->boundary = boundary;
+>  	retval->allocation = allocation;
+> +	retval->nr_blocks = 0;
+> +	retval->nr_active = 0;
+> +	retval->nr_pages = 0;
+> +	retval->next_block = NULL;
+
+Maybe just switch to kzmalloc so that you don't have to bother
+initializing invdividual fields.  It's not like dma_pool_create is
+called from anything near a fast path.
+
+>  static void pool_initialise_page(struct dma_pool *pool, struct dma_page *page)
+>  {
+> +	unsigned int next_boundary = pool->boundary, offset = 0;
+> +	struct dma_block *block;
+> +
+> +	while (offset + pool->size <= pool->allocation) {
+> +		if (offset + pool->size > next_boundary) {
+> +			offset = next_boundary;
+>  			next_boundary += pool->boundary;
+> +			continue;
+>  		}
+> +
+> +		block = page->vaddr + offset;
+> +		pool_block_push(pool, block, page->dma + offset);
+
+So I guess with this pool_initialise_page needs to be called under
+the lock anyway, but just doing it silently in the previous patch
+seems a bit odd.
+
+> +static inline void pool_check_block(struct dma_pool *pool, struct dma_block *block,
+> +				    gfp_t mem_flags)
+
+I didn't spot this earlier, but inline on a relatively expensive debug
+helper is a bit silly.
+
+Otherwise this looks like a nice improvement by using a better and
+simpler data structure.
