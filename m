@@ -2,85 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74743654AA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34467654AA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235392AbiLWCAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 21:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
+        id S235355AbiLWCC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 21:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiLWCAR (ORCPT
+        with ESMTP id S229603AbiLWCCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 21:00:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AAEC75E;
-        Thu, 22 Dec 2022 18:00:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A45E661E08;
-        Fri, 23 Dec 2022 02:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0939AC433F0;
-        Fri, 23 Dec 2022 02:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671760816;
-        bh=fwvSWB2s9SlQYbz2JB6wiQ2msaLPGTMWu5lU92DYC+E=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=btHwIS4z9bWPNKT/itvQrcnefxYcnYFFv9qBBqDBUODtO65DqipfHJY3Ju8IxftQf
-         qOOUE6EgQamu+0KE+UM0z+UuK9L8ODhufAiGUYnv59Y4NJsIXYCSGSsxo3q+brqQWh
-         vE2ECsxds1R2GvYQoOwL+lk0IiqoUrwpDCOXAclbrIC8M676lhpH+eg/TVKiD2XqBG
-         Lujz/0WF5VAsmJV5ujV9wtJQP0ygb03OAz5csnAGpjMCO4fd/yeK8R7KMU61N5x3IY
-         wBoFnzbOnqjDyft7f+DxUC7nIz9BJmQ/TcLE+PepokxANS3S3pfYvdCJIKQbP4d/uV
-         n/ZPNDYKmrOrw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E05A9C5C7C4;
-        Fri, 23 Dec 2022 02:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 22 Dec 2022 21:02:23 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B659205D6;
+        Thu, 22 Dec 2022 18:02:22 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id v14so34074qtq.3;
+        Thu, 22 Dec 2022 18:02:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CRsG7CUx+87J7Pu6OLcyLz9sGZD18C5xpw5JeWDMppU=;
+        b=NWETL1fFKFE3+ojt7+70iA/Nvi3AaW8xgGrrNit6XW4IHkhisvH3W5uB/QDHeHXg25
+         d3Zj/hU2pfIU6XEwsLAmJyYe5ZDemKMXcJdyXIFn2S9T3fL6hCEc+QtYriQMCr+VGFwO
+         xf33e98T+99P3dZ4L4jFsf1ngO5ecRStii971iY5HLSnHAvnGwUkLBoVUcvTqZbvRk/f
+         S3auB8EtZBCbQ2gosPTcLAVGufyJHQerrtZFObRuvV+o4SQVbu66cECKFP0VCjFpSB85
+         OuesCyKXkgovqmBHRqzRXisZvce0ZR/APFJOqGXCPaFeh+Bk+jyBRP+3O18GSfL0tvEr
+         +FDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CRsG7CUx+87J7Pu6OLcyLz9sGZD18C5xpw5JeWDMppU=;
+        b=Hs0KjJwoXo97xvSzuOlzxtU+oVw8AqGNChaK0KEwyQDdK4Kk9o+5XyR1fqAHcf0uy3
+         wqsIuXAOOgUJNl8mhz8IIp1KqQYb84eAw9cdS19H7FSReJUakbyzIyHnTTYdLiE0mN6N
+         RVLPeXbtEZ3Q73GKHECo/KW+ohKAgovbg+6r0V5HVTGWUHu7zt8Ioic12HvI8ew5K8h7
+         hU340Y9/CzUbwqnd/y+5jPsJYDeY0CefDOmTmI2Llrpujuqu2rkpKVb3uZzYPbH1DR/p
+         HiUl+jgumI0PpOKNGWr7BZLYmjPOw3S4UeFlnDtW/ERgoNKHcB2EWIrl15ozRYrgPL/L
+         CmYA==
+X-Gm-Message-State: AFqh2krSUf17hvYqlIsahiYCP1cdjXNRFaJEf7uwQmABnjKT6DQA4a/V
+        DdRreHLlx9ix3Yl+IdjpntoX/sVmsvT61qis3ObEwsxCdWxzmeKv9k4=
+X-Google-Smtp-Source: AMrXdXuWSqU9d0Naa73zgKXG+2bkUBzdDeP5cYxNUvvg/+0hbFt+UqGRN8bc84H09RnD47HVcWQGoACYey3s3j/RNXk=
+X-Received: by 2002:ac8:5147:0:b0:3a5:6047:c75c with SMTP id
+ h7-20020ac85147000000b003a56047c75cmr171489qtn.434.1671760941496; Thu, 22 Dec
+ 2022 18:02:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] powerpc: dts: t208x: Disable 10G on MAC1 and MAC2
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167176081591.4251.11693761416005779690.git-patchwork-notify@kernel.org>
-Date:   Fri, 23 Dec 2022 02:00:15 +0000
-References: <20221216172937.2960054-1-sean.anderson@seco.com>
-In-Reply-To: <20221216172937.2960054-1-sean.anderson@seco.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        christophe.leroy@csgroup.eu, npiggin@gmail.com, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, camelia.groza@nxp.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y6Kc650FuvHFWxP0@VM-66-53-centos> <20221222172504.GA1741501-robh@kernel.org>
+ <2863440.ElGaqSPkdT@diego>
+In-Reply-To: <2863440.ElGaqSPkdT@diego>
+From:   ty <zonyitoo@gmail.com>
+Date:   Fri, 23 Dec 2022 10:02:10 +0800
+Message-ID: <CAMmci2VfvMoY9qZ5fjM7VkxBjTimx_Wps_5eMxS9GJsiTM9rkg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] arm64: dts: rockchip: Add RK3566 LubanCat 1
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Rob Herring <robh@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, DHDAXCW <lasstp5011@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Acknowledged. Fix will be in v8.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 16 Dec 2022 12:29:37 -0500 you wrote:
-> There aren't enough resources to run these ports at 10G speeds. Disable
-> 10G for these ports, reverting to the previous speed.
-> 
-> Fixes: 36926a7d70c2 ("powerpc: dts: t208x: Mark MAC1 and MAC2 as 10G")
-> Reported-by: Camelia Alexandra Groza <camelia.groza@nxp.com>
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,v2] powerpc: dts: t208x: Disable 10G on MAC1 and MAC2
-    https://git.kernel.org/netdev/net/c/8d8bee13ae9e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Heiko St=C3=BCbner <heiko@sntech.de> =E4=BA=8E2022=E5=B9=B412=E6=9C=8823=E6=
+=97=A5=E5=91=A8=E4=BA=94 03:10=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi Rob,
+>
+> Am Donnerstag, 22. Dezember 2022, 18:25:04 CET schrieb Rob Herring:
+> > On Wed, Dec 21, 2022 at 01:43:07PM +0800, Yuteng Zhong wrote:
+> > > LubanCat 1 is a Rockchip RK3566 SBC based
+> > > is developed by EmbedFire Electronics Co., Ltd.
+> > > Mini Linux Card Type Cheap Computer Development Board
+> > > It has the following characteristics:
+> > > - MicroSD card slot, onboard eMMC flash memory
+> > > - 1GbE Realtek RTL8211F Ethernet Transceiver
+> > > - 1 USB Type-C port (power and USB2.0 OTG)
+> > > - 1 USB 3.0 Host port
+> > > - 3 USB 2.0 Host ports
+> > > - 1 HDMI
+> > > - 1 infrared receiver
+> > > - 1 MIPI DSI
+> > > - 1 MIPI CSI
+> > > - 1 x 4-section headphone jack
+> > > - Mini PCIe socket (USB or PCIe)
+> > > - 1 SIM Card slot
+> > > - 1 SYS LED and 1 PWR LED
+> > > - 40-pin GPIO expansion header
+> > >
+> > > Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
+> > > Signed-off-by: DHDAXCW <lasstp5011@gmail.com>
+> >
+> > DHDAXCW is a legal name?
+> >
+> > The person sending the patch email should be last.
+>
+> We're on v7 already [0] and at least the Authorship + separate binding
+> issue got fixed meanwhile - haven't looked at the whitespace issue there =
+yet.
+>
+>
+> Heiko
+>
+>
+> [0] https://lore.kernel.org/all/Y6MlrbGKiIVc6tXt@VM-66-53-centos/
+>
+> > > ---
+> > >
+> > > Changed in V2:
+> > >   - Remove RNG node
+> > > Changed in V3:
+> > >   - Modify all node names
+> > >
+> > > ---
+> > >  .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+> >
+> > Bindings should be separate patch.
+> >
+> > >  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+> > >  .../boot/dts/rockchip/rk3566-lubancat-1.dts   | 600 ++++++++++++++++=
+++
+> >
+> > Fix all the whitespace errors checkpatch.pl complains about.
+> >
+>
+>
+>
+>
