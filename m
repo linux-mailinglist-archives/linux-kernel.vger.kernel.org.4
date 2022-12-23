@@ -2,158 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B949E65563B
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 00:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6966556AB
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 01:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbiLWXjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 18:39:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S233282AbiLXAWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 19:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233145AbiLWXja (ORCPT
+        with ESMTP id S233533AbiLXAWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 18:39:30 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B8D24F2C
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 15:37:42 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id i21-20020a056e021d1500b003041b04e3ebso3264032ila.7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 15:37:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=abW9eO7hhwarVLkkJyHp+PNS3L1/OX8HA8B9tTuHJUU=;
-        b=QiKYui+91wL0nWvi0D7kXkSdKLMQyl0M9ii6cFFKTZ+zSfYrjO6bDkuzxnXLnROL/J
-         NWYo5v6cKx/oABzpsht1dCj9EJX0c8+0bDExPoy0gQHNfsRDmhWCiW3A+vo6M4uKChoz
-         KBrZ/8QDPztU1cOeSMT79+W9s8zwDKhxZdtkB616IUHmWpboycnKATJxBlAf6DWZxxXs
-         +GE0sd+fDJYkvWtdqhRCG+zhDvPtfkm7XpS5Rm0VgsMy5egDFosyPDODIaIMoGzj48W6
-         vQLCge6Qj2L3wmFM5n4PoyiFFq7eiIjm3/85Cl3vOR0q8ynfrV2aoz0c3oj0Sht+Y59n
-         MPDA==
-X-Gm-Message-State: AFqh2kpiujMjv5CivffJch9Y+rhywJ+RmutzZcIQnPz6SexFHN4pJegi
-        OAKFHGnAVcMEgUd0i/pFKxMydL4APyfPe8WS8PhTHE+DE38n
-X-Google-Smtp-Source: AMrXdXsHFU70lLDf+O1R092JYxGVrF0CiK4W8Pvyf84i+Fq9sQ/AZDjNJ2QYUY29fqiODG/TG1PuKouKhNIxPrKThDmDCq9//HUT
+        Fri, 23 Dec 2022 19:22:33 -0500
+Received: from 7.mo546.mail-out.ovh.net (7.mo546.mail-out.ovh.net [46.105.45.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40DD1AA18
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 16:22:29 -0800 (PST)
+Received: from ex4.mail.ovh.net (unknown [10.111.208.63])
+        by mo546.mail-out.ovh.net (Postfix) with ESMTPS id 920EF24CA9;
+        Fri, 23 Dec 2022 23:42:40 +0000 (UTC)
+Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
+ DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Sat, 24 Dec 2022 00:42:38 +0100
+From:   Quentin Deslandes <qde@naccy.de>
+To:     <qde@naccy.de>
+CC:     <kernel-team@meta.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Dmitrii Banshchikov <me@ubique.spb.ru>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH bpf-next v3 00/16] bpfilter
+Date:   Sat, 24 Dec 2022 00:40:08 +0100
+Message-ID: <20221223234127.474463-1-qde@naccy.de>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:81c:b0:6da:46b4:85f6 with SMTP id
- z28-20020a056602081c00b006da46b485f6mr841342iow.147.1671838662168; Fri, 23
- Dec 2022 15:37:42 -0800 (PST)
-Date:   Fri, 23 Dec 2022 15:37:42 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000094982205f0874589@google.com>
-Subject: [syzbot] [jfs?] [fat?] general protection fault in txEnd
-From:   syzbot <syzbot+1d096d31de6a0491b55e@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [37.65.8.229]
+X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
+ (172.16.2.91)
+X-Ovh-Tracer-Id: 4391572586693783159
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -85
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgddufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeejgeehueefjeeihfeugefftdehtdeikeduvdettefgieekffekuefgveekgedvheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhusghunhhtuhdrtghomhenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdpsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvg
+ hrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhsughfsehgohhoghhlvgdrtghomhdpkhhpshhinhhghheskhgvrhhnvghlrdhorhhgpdhjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdphihhshesfhgsrdgtohhmpdhsohhngheskhgvrhhnvghlrdhorhhgpdhmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprghnughrihhisehkvghrnhgvlhdrohhrghdpuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdgrshhtsehkvghrnhgvlhdrohhrghdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheegiedpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The patchset is based on the patches from David S. Miller [1],
+Daniel Borkmann [2], and Dmitrii Banshchikov [3].
 
-syzbot found the following issue on:
+The main goal of the patchset is to prepare bpfilter for
+iptables' configuration blob parsing and code generation.
 
-HEAD commit:    aeba12b26c79 Merge tag 'nfsd-6.2-1' of git://git.kernel.or..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17485bf0480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4d348fc1e0f483c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=1d096d31de6a0491b55e
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=117aef10480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15206090480000
+The patchset introduces data structures and code for matches,
+targets, rules and tables. Beside that the code generation
+is introduced.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/661fe33f851b/disk-aeba12b2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c938bdcf3ad0/vmlinux-aeba12b2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e7f738de30b7/bzImage-aeba12b2.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/9ee3cffc6151/mount_0.gz
+The first version of the code generation supports only "inline"
+mode - all chains and their rules emit instructions in linear
+approach.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1d096d31de6a0491b55e@syzkaller.appspotmail.com
+Things that are not implemented yet:
+  1) The process of switching from the previous BPF programs to the
+     new set isn't atomic.
+  2) No support of device ifindex - it's hardcoded
+  3) No helper subprog for counters update
 
-ERROR: (device loop0): remounting filesystem as read-only
-general protection fault, probably for non-canonical address 0xdffffc0000000029: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000148-0x000000000000014f]
-CPU: 1 PID: 5116 Comm: syz-executor317 Not tainted 6.1.0-syzkaller-13781-gaeba12b26c79 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:txEnd+0x1dc/0x560 fs/jfs/jfs_txnmgr.c:534
-Code: 00 84 c0 0f 85 d8 02 00 00 66 41 89 1e 41 0f b7 c5 89 05 e7 5c 0b 0f 4c 8b 74 24 08 49 8d 9e 4c 01 00 00 48 89 d8 48 c1 e8 03 <42> 8a 04 20 84 c0 0f 85 c8 02 00 00 8b 2b 8d 75 ff 89 33 31 ff e8
-RSP: 0018:ffffc90003d5f9f0 EFLAGS: 00010203
-RAX: 0000000000000029 RBX: 000000000000014c RCX: 0000000000000000
-RDX: ffff88807eb93a80 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 1ffff920004c6227 R08: ffffffff830c3c2f R09: fffffbfff20fb43a
-R10: fffffbfff20fb43a R11: 1ffffffff20fb439 R12: dffffc0000000000
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000110
-FS:  00007f2738801700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f273fc23000 CR3: 000000007e7a4000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- add_missing_indices fs/jfs/jfs_dtree.c:2658 [inline]
- jfs_readdir+0x277c/0x44b0 fs/jfs/jfs_dtree.c:3004
- iterate_dir+0x257/0x5f0
- __do_sys_getdents fs/readdir.c:286 [inline]
- __se_sys_getdents+0x1db/0x4d0 fs/readdir.c:271
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f273fc76709
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f27388012f8 EFLAGS: 00000246 ORIG_RAX: 000000000000004e
-RAX: ffffffffffffffda RBX: 00007f273fd017b0 RCX: 00007f273fc76709
-RDX: 000000000000004c RSI: 0000000020000100 RDI: 0000000000000004
-RBP: 0030656c69662f2e R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 61746f7571727375
-R13: 726765746e696f6e R14: 7261637369646f6e R15: 00007f273fd017b8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:txEnd+0x1dc/0x560 fs/jfs/jfs_txnmgr.c:534
-Code: 00 84 c0 0f 85 d8 02 00 00 66 41 89 1e 41 0f b7 c5 89 05 e7 5c 0b 0f 4c 8b 74 24 08 49 8d 9e 4c 01 00 00 48 89 d8 48 c1 e8 03 <42> 8a 04 20 84 c0 0f 85 c8 02 00 00 8b 2b 8d 75 ff 89 33 31 ff e8
-RSP: 0018:ffffc90003d5f9f0 EFLAGS: 00010203
-RAX: 0000000000000029 RBX: 000000000000014c RCX: 0000000000000000
-RDX: ffff88807eb93a80 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 1ffff920004c6227 R08: ffffffff830c3c2f R09: fffffbfff20fb43a
-R10: fffffbfff20fb43a R11: 1ffffffff20fb439 R12: dffffc0000000000
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000110
-FS:  00007f2738801700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f273fc23000 CR3: 000000007e7a4000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	00 84 c0 0f 85 d8 02 	add    %al,0x2d8850f(%rax,%rax,8)
-   7:	00 00                	add    %al,(%rax)
-   9:	66 41 89 1e          	mov    %bx,(%r14)
-   d:	41 0f b7 c5          	movzwl %r13w,%eax
-  11:	89 05 e7 5c 0b 0f    	mov    %eax,0xf0b5ce7(%rip)        # 0xf0b5cfe
-  17:	4c 8b 74 24 08       	mov    0x8(%rsp),%r14
-  1c:	49 8d 9e 4c 01 00 00 	lea    0x14c(%r14),%rbx
-  23:	48 89 d8             	mov    %rbx,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 8a 04 20          	mov    (%rax,%r12,1),%al <-- trapping instruction
-  2e:	84 c0                	test   %al,%al
-  30:	0f 85 c8 02 00 00    	jne    0x2fe
-  36:	8b 2b                	mov    (%rbx),%ebp
-  38:	8d 75 ff             	lea    -0x1(%rbp),%esi
-  3b:	89 33                	mov    %esi,(%rbx)
-  3d:	31 ff                	xor    %edi,%edi
-  3f:	e8                   	.byte 0xe8
+Another problem is using iptables' blobs for tests and filter
+table initialization. While it saves lines something more
+maintainable should be done here.
 
+The plan for the next iteration:
+  1) Add a helper program for counters update
+  2) Handle ifindex
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Patches 1/2 adds definitions of the used types.
+Patch 3 adds logging to bpfilter.
+Patch 4 adds an associative map.
+Patch 5 add runtime context structure.
+Patches 6/7 add code generation infrastructure and TC code generator.
+Patches 8/9/10/11/12 add code for matches, targets, rules and table.
+Patch 13 adds code generation for table.
+Patch 14 handles hooked setsockopt(2) calls.
+Patch 15 adds filter table
+Patch 16 uses prepared code in main().
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Due to poor hardware availability on my side, I've not been able to
+benchmark those changes. I plan to get some numbers for the next iteration.
+
+FORWARD filter chain is now supported, however, it's attached to
+TC INGRESS along with INPUT filter chain. This is due to XDP not supporting
+multiple programs to be attached. I could generate a single program
+out of both INPUT and FORWARD chains, but that would prevent another
+BPF program to be attached to the interface anyway. If a solution
+exists to attach both those programs to XDP while allowing for other
+programs to be attached, it requires more investigation. In the meantime,
+INPUT and FORWARD filtering is supported using TC.
+
+Most of the code in this series was written by Dmitrii Banshchikov,
+my changes are limited to v3. I've tried to reflect this fact in the
+commits by adding 'Co-developed-by:' and 'Signed-off-by:' for Dmitrii,
+please tell me this was done the wrong way.
+
+v2 -> v3
+Chains:
+  * Add support for FORWARD filter chain.
+  * Add generation of BPF bytecode to assess whether a packet should be
+    forwarded or not, using bpf_fib_lookup().
+  * Allow for multiple programs to be attached to TC.
+  * Allow for multiple TC hooks to be used.
+Code generation:
+  * Remove duplicated BPF bytecode generation.
+  * Fix a bug regarding jump offset during generation.
+  * Remove support for XDP from the series, as it's not currently
+    used.
+Table:
+  * Add new filter_table_update_counters() virtual call. It updates
+    the table's counter stored in the ipt_entry structure. This way,
+    when iptables tries to fetch the values of the counters, bpfilter only
+    has to copy the ipt_entry cached in the table structure.
+Logging:
+  * Refactor logging primitives.
+Sockopts:
+  * Add support for userspace counters querying.
+Rule:
+  * Store the rule's index inside struct rule, to each counters'
+    map usage.
+
+v1 -> v2
+Maps:
+  * Use map_upsert instead of separate map_insert and map_update
+Matches:
+  * Add a new virtual call - gen_inline. The call is used for
+  * inline generating of a rule's match.
+Targets:
+  * Add a new virtual call - gen_inline. The call is used for inline
+    generating of a rule's target.
+Rules:
+  * Add code generation for rules
+Table:
+  * Add struct table_ops
+  * Add map for table_ops
+  * Add filter table
+  * Reorganize the way filter table is initialized
+Sockopts:
+  * Install/uninstall BPF programs while handling
+    IPT_SO_SET_REPLACE
+Code generation:
+  * Add first version of the code generation
+Dependencies:
+  * Add libbpf
+
+v0 -> v1
+IO:
+  * Use ssize_t in pvm_read, pvm_write for total_bytes
+  * Move IO functions into sockopt.c and main.c
+Logging:
+  * Use LOGLEVEL_EMERG, LOGLEVEL_NOTICE, LOGLEVE_DEBUG
+    while logging to /dev/kmsg
+  * Prepend log message with <n> where n is log level
+  * Conditionally enable BFLOG_DEBUG messages
+  * Merge bflog.{h,c} into context.h
+Matches:
+  * Reorder fields in struct match_ops for tight packing
+  * Get rid of struct match_ops_map
+  * Rename udp_match_ops to xt_udp
+  * Use XT_ALIGN macro
+  * Store payload size in match size
+  * Move udp match routines into a separate file
+Targets:
+  * Reorder fields in struct target_ops for tight packing
+  * Get rid of struct target_ops_map
+  * Add comments for convert_verdict function
+Rules:
+  * Add validation
+Tables:
+  * Combine table_map and table_list into table_index
+  * Add validation
+Sockopts:
+  * Handle IPT_SO_GET_REVISION_TARGET
+
+1. https://lore.kernel.org/patchwork/patch/902785/
+2. https://lore.kernel.org/patchwork/patch/902783/
+3. https://kernel.ubuntu.com/~cking/stress-ng/stress-ng.pdf
+
+Quentin Deslandes (16):
+  bpfilter: add types for usermode helper
+  tools: add bpfilter usermode helper header
+  bpfilter: add logging facility
+  bpfilter: add map container
+  bpfilter: add runtime context
+  bpfilter: add BPF bytecode generation infrastructure
+  bpfilter: add support for TC bytecode generation
+  bpfilter: add match structure
+  bpfilter: add support for src/dst addr and ports
+  bpfilter: add target structure
+  bpfilter: add rule structure
+  bpfilter: add table structure
+  bpfilter: add table code generation
+  bpfilter: add setsockopt() support
+  bpfilter: add filter table
+  bpfilter: handle setsockopt() calls
+
+ include/uapi/linux/bpfilter.h                 |  154 +++
+ net/bpfilter/Makefile                         |   16 +-
+ net/bpfilter/codegen.c                        | 1040 +++++++++++++++++
+ net/bpfilter/codegen.h                        |  183 +++
+ net/bpfilter/context.c                        |  168 +++
+ net/bpfilter/context.h                        |   24 +
+ net/bpfilter/filter-table.c                   |  344 ++++++
+ net/bpfilter/filter-table.h                   |   18 +
+ net/bpfilter/logger.c                         |   52 +
+ net/bpfilter/logger.h                         |   80 ++
+ net/bpfilter/main.c                           |  132 ++-
+ net/bpfilter/map-common.c                     |   51 +
+ net/bpfilter/map-common.h                     |   19 +
+ net/bpfilter/match.c                          |   55 +
+ net/bpfilter/match.h                          |   37 +
+ net/bpfilter/rule.c                           |  286 +++++
+ net/bpfilter/rule.h                           |   37 +
+ net/bpfilter/sockopt.c                        |  533 +++++++++
+ net/bpfilter/sockopt.h                        |   15 +
+ net/bpfilter/table.c                          |  391 +++++++
+ net/bpfilter/table.h                          |   59 +
+ net/bpfilter/target.c                         |  203 ++++
+ net/bpfilter/target.h                         |   57 +
+ net/bpfilter/xt_udp.c                         |  111 ++
+ tools/include/uapi/linux/bpfilter.h           |  175 +++
+ .../testing/selftests/bpf/bpfilter/.gitignore |    8 +
+ tools/testing/selftests/bpf/bpfilter/Makefile |   57 +
+ .../selftests/bpf/bpfilter/bpfilter_util.h    |   80 ++
+ .../selftests/bpf/bpfilter/test_codegen.c     |  338 ++++++
+ .../testing/selftests/bpf/bpfilter/test_map.c |   63 +
+ .../selftests/bpf/bpfilter/test_match.c       |   69 ++
+ .../selftests/bpf/bpfilter/test_rule.c        |   56 +
+ .../selftests/bpf/bpfilter/test_target.c      |   83 ++
+ .../selftests/bpf/bpfilter/test_xt_udp.c      |   48 +
+ 34 files changed, 4999 insertions(+), 43 deletions(-)
+ create mode 100644 net/bpfilter/codegen.c
+ create mode 100644 net/bpfilter/codegen.h
+ create mode 100644 net/bpfilter/context.c
+ create mode 100644 net/bpfilter/context.h
+ create mode 100644 net/bpfilter/filter-table.c
+ create mode 100644 net/bpfilter/filter-table.h
+ create mode 100644 net/bpfilter/logger.c
+ create mode 100644 net/bpfilter/logger.h
+ create mode 100644 net/bpfilter/map-common.c
+ create mode 100644 net/bpfilter/map-common.h
+ create mode 100644 net/bpfilter/match.c
+ create mode 100644 net/bpfilter/match.h
+ create mode 100644 net/bpfilter/rule.c
+ create mode 100644 net/bpfilter/rule.h
+ create mode 100644 net/bpfilter/sockopt.c
+ create mode 100644 net/bpfilter/sockopt.h
+ create mode 100644 net/bpfilter/table.c
+ create mode 100644 net/bpfilter/table.h
+ create mode 100644 net/bpfilter/target.c
+ create mode 100644 net/bpfilter/target.h
+ create mode 100644 net/bpfilter/xt_udp.c
+ create mode 100644 tools/include/uapi/linux/bpfilter.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/.gitignore
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/Makefile
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_codegen.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_map.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_match.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_rule.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_target.c
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
+
+--
+2.38.1
