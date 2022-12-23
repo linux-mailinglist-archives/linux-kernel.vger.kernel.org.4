@@ -2,97 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05701655340
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 18:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05336655347
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 18:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbiLWRbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 12:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S232830AbiLWRdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 12:33:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiLWRbO (ORCPT
+        with ESMTP id S232797AbiLWRdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 12:31:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7232199
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 09:31:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 23 Dec 2022 12:33:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B45CE0E6
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 09:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671816755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=irTTKPz9+3XCkH+mnF14sPmi7va2E9MR/xi/DvTBAa/1faZIytDFjDBfFHKfpJNSSnSz7n
+        eRF6jt88muneIeKuhDMUeZLSog/qPl/cVGr4qDThVU6Fi4dBctOIEXNf0X+CufO38B/AvW
+        gVVrsjg8Gb/LcsYtCL6NwcnQhR9PJJc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-169-Uq5iMQCHPDyi7U6l5UhdmQ-1; Fri, 23 Dec 2022 12:32:32 -0500
+X-MC-Unique: Uq5iMQCHPDyi7U6l5UhdmQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11AB3B820E4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 17:31:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF6AC433D2;
-        Fri, 23 Dec 2022 17:31:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671816670;
-        bh=fgXCLKllqkTCFcfNQk0a1yJ2up7pVcPAhTTWJrO18Uw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LBAf03ZRc2RIIPJwGh4VAPTSrPWKDmgaPJqBGC61Rqig7wTFQ9vu/i5Cuc0wf0LAK
-         DzhilCsBlJ7bDvXUEOK8RE8fp4nlGInRPGcs609jSjNj3rZHm7jzqCU6u9ItG0brrs
-         Dqo+kbLSWglXCvdtnvyV7Hro1y+K4BYMEV/VumSCtAOWYNRKP1l129Fzv5+BfKbBcb
-         b7EwsO7hD6WPjRfc8Cg1lNEaqVrMOivJ7UHzN0yLocC1/7/n2zCnjjg89cqy3wXXkH
-         FaRD1RrRJm4Ft/5X2GfpE/+v+BDrWZMgrJz6YYfi7ZAcDpGgyOAAXo+n88rehcI4Ns
-         6heHSrgQC/Zmg==
-Date:   Fri, 23 Dec 2022 10:31:08 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        LLVM Mailing List <llvm@lists.linux.dev>
-Subject: Re: [PATCH v1] driver core: Silence 'unused-but-set variable' warning
-Message-ID: <Y6Xl3M7Tx+c2SCa9@dev-arch.thelio-3990X>
-References: <20221223145137.3786601-1-ammar.faizi@intel.com>
- <Y6XDAiMAMLniR9PG@kroah.com>
- <7f61b046-c6f2-1dd6-98e9-e5b49b3c7dde@gnuweeb.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EA2721C25E83;
+        Fri, 23 Dec 2022 17:32:31 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A38D440C2064;
+        Fri, 23 Dec 2022 17:32:31 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH 0/5] KVM: x86/mmu: TDP MMU fixes for 6.2
+Date:   Fri, 23 Dec 2022 12:32:27 -0500
+Message-Id: <20221223173227.1624175-1-pbonzini@redhat.com>
+In-Reply-To: <20221213033030.83345-1-seanjc@google.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7f61b046-c6f2-1dd6-98e9-e5b49b3c7dde@gnuweeb.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 10:31:57PM +0700, Ammar Faizi wrote:
-> On 12/23/22 10:02 PM, Greg Kroah-Hartman wrote:
-> > Ick, no, that's horrid and is NOT ok for kernel code, sorry.
-> > 
-> > Please fix the compiler, this is not a "fix" in any sense of the word
-> > and is not going to work at all for kernel code.
+Queued, thanks.
 
-It is possible that the compiler should not emit
--Wunused-but-set-variable when the variable is assigned the return
-value of a function marked with __attribute__((warn_unused_result)) but
-neither compiler does that today, you'll see the exact same warning from
-GCC 12.2.0:
+Paolo
 
-  drivers/base/module.c: In function ‘module_add_driver’:
-  drivers/base/module.c:36:13: error: variable ‘no_warn’ set but not used [-Werror=unused-but-set-variable]
-     36 |         int no_warn;
-        |             ^~~~~~~
-  cc1: all warnings being treated as errors
 
-This has come up before too:
-
-https://lore.kernel.org/20210726201924.3202278-2-morbo@google.com/
-
-> Agree.
-> 
-> Sorry for the noise. It turned out I messed up my clang compiler flags.
-> I forgot to do a "git reset --hard" before recompiling.
-> 
-> This has nothing todo with the upstream kernel.
-
-This warning is in W=1, which are warnings that we want to turn on at
-some point but the current instances need to be fixed first, so I would
-say this is still relevant to the upstream kernel.
-
-Cheers,
-Nathan
