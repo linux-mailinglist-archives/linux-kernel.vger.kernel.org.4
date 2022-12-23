@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D57654B52
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5A3654B58
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235911AbiLWCwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 21:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S235834AbiLWCyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 21:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbiLWCwO (ORCPT
+        with ESMTP id S230298AbiLWCx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 21:52:14 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1069B2180C;
-        Thu, 22 Dec 2022 18:52:13 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NdWtM3l67z4y3Zt;
-        Fri, 23 Dec 2022 10:52:11 +0800 (CST)
-Received: from szxlzmapp02.zte.com.cn ([10.5.231.79])
-        by mse-fl2.zte.com.cn with SMTP id 2BN2q3Jf060236;
-        Fri, 23 Dec 2022 10:52:03 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Fri, 23 Dec 2022 10:52:04 +0800 (CST)
-Date:   Fri, 23 Dec 2022 10:52:04 +0800 (CST)
-X-Zmail-TransId: 2b0463a517d4ffffffffadba9bb8
-X-Mailer: Zmail v1.0
-Message-ID: <202212231052044562664@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <kvalo@kernel.org>
-Cc:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <akpm@linux-foundation.org>,
-        <songmuchun@bytedance.com>, <brauner@kernel.org>,
-        <julia.lawall@inria.fr>, <gustavoars@kernel.org>,
-        <jason@zx2c4.com>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIG5ldC1uZXh0XSB3aWZpOiBhaXJvOiB1c2Ugc3Ryc2NweSgpIHRvIGluc3RlYWQgb2Ygc3RybmNweSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2BN2q3Jf060236
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 63A517DB.001 by FangMail milter!
-X-FangMail-Envelope: 1671763931/4NdWtM3l67z4y3Zt/63A517DB.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63A517DB.001/4NdWtM3l67z4y3Zt
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 22 Dec 2022 21:53:56 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD2F21813;
+        Thu, 22 Dec 2022 18:53:50 -0800 (PST)
+From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1671764028;
+        bh=ipHZgib+Lby6GodEXoPKlNcMMUGuBYXzjHfoe9lgkqQ=;
+        h=From:Subject:Date:To:Cc:From;
+        b=V57zR7NVxVnHAK6Oz4c1V6nN+1UiHYX48OjoLrRy2jhbJPXGnMP7IN2EVBkfyb3B8
+         Kl0SPxsPbXhrR/SfTB9z+RyYkD6aiPXwubReL6t57UA7Wk5o/IqyRlek5EfcbkQLXD
+         mkmhjB5FVqPFYRMTRAecjXoXIqzEIBIeYXt9a2Ms=
+Subject: [PATCH 0/2] HID: i2c-hid: use standard debugging APIs
+Date:   Fri, 23 Dec 2022 02:53:34 +0000
+Message-Id: <20221223-hid-dbg-v1-0-f641e80263eb@weissschuh.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAC8YpWMC/x2M0QqDMAwAf0XyvMAaUcZ+RfbQJtEGpJOWDUH8d
+ 4OPdxx3QNNq2uDdHVD1b82+xSE8OuAcy6Jo4gz0JApEPWYTlLQgCwcZRnmxKnidYlNMNRbO3pff
+ urrcqs623/vpc54XWJQVwG4AAAA=
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.11.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1671764024; l=1180;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=ipHZgib+Lby6GodEXoPKlNcMMUGuBYXzjHfoe9lgkqQ=;
+ b=TG7tPdchLgspc33yI9e12sHfbf7zDVwCH5El/E3t/LqYCDQX4yBCp8VCBOuRbyy1BXDfyGi2mqfs
+ PtVWoscXDFG64zJ/PusGL9nUVh8GXAfI47MCB98L6CAcRwpr0pOj
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+When trying to debug i2c-hid I was not able to use the builtin debug
+mechanism because the "debug" module parameter is not writable.
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL-terminated strings.
+We can change i2c-hid to use the standard kernel debugging APIs which are
+more discoverable and have more features.
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
+There is a bit of a stilistic conflict between consistently using
+i2c_hid_dbg() and consistently using dev_<level>().
+
+The second patch aligns debugging on i2c_hid_dbg().
+If this is unneeded, feel free to drop it.
+
+It would also be easy to just use dev_dbg() everywhere for consistency.
+
+To: Jiri Kosina <jikos@kernel.org>
+To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: linux-input@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+
 ---
- drivers/net/wireless/cisco/airo.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thomas Weißschuh (2):
+      HID: i2c-hid: switch to standard debugging APIs
+      HID: i2c-hid: use uniform debugging APIs
 
-diff --git a/drivers/net/wireless/cisco/airo.c b/drivers/net/wireless/cisco/airo.c
-index 7c4cc5f5e1eb..600a64f671ce 100644
---- a/drivers/net/wireless/cisco/airo.c
-+++ b/drivers/net/wireless/cisco/airo.c
-@@ -6067,8 +6067,7 @@ static int airo_get_nick(struct net_device *dev,
- 	struct airo_info *local = dev->ml_priv;
+ drivers/hid/i2c-hid/i2c-hid-core.c | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
+---
+base-commit: 8395ae05cb5a2e31d36106e8c85efa11cda849be
+change-id: 20221223-hid-dbg-cdc1d56d8cee
 
- 	readConfigRid(local, 1);
--	strncpy(extra, local->config.nodeName, 16);
--	extra[16] = '\0';
-+	strscpy(extra, local->config.nodeName, 17);
- 	dwrq->length = strlen(extra);
-
- 	return 0;
+Best regards,
 -- 
-2.15.2
+Thomas Weißschuh <linux@weissschuh.net>
