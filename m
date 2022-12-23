@@ -2,172 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5311C655104
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2715A655106
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236330AbiLWNaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 08:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S236351AbiLWNal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 08:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236305AbiLWNaH (ORCPT
+        with ESMTP id S236336AbiLWNaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 08:30:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE70B1DC
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:29:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671802163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=VvD5WoRcVCyUBj6AIlF+qids3aC+FV9CJvkUAki9soU=;
-        b=AYqay1NCW13/anCLEjQtQ+MGMsINp290C+/eisEjj3QgQkuHTeGQroqddnS3Ex0RBSoQ8B
-        fky1Hofe1BF5CxqZE5tz/Ea6oMsl40TxT0RQSjbwq8rWpLFfsLr84k9H9ogcbnl7VYEsMW
-        sAVF7/+e9oxBbh/zOOPna6p619FqZ7A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-fIf4VAwANFeEED7cN8yb-w-1; Fri, 23 Dec 2022 08:29:21 -0500
-X-MC-Unique: fIf4VAwANFeEED7cN8yb-w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 91F4685C6E0;
-        Fri, 23 Dec 2022 13:29:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F0DF32026D4B;
-        Fri, 23 Dec 2022 13:29:20 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] rxrpc: Fix aborting of unexposed client calls
-From:   David Howells <dhowells@redhat.com>
-To:     marc.dionne@auristor.com
-Cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
+        Fri, 23 Dec 2022 08:30:39 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0529B1ED
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:30:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671802212; bh=hh/P3iw4eBs4c5XAeMc1qUpSafty1+QfORKyRMiRZao=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=n1B1LDqv6ibhdD+F1if+LE9+mv3hvjRnOo21E/+Buuu/QjyNmPF3pI3b5VtGru07X
+         VGsjkCkaavKuJamlbNN2SaDCwCy23PBBGErKX7Z/88J6wW0Pia1zIq+U4IlMCgJeqU
+         a+62jC2eDd1Lu8pE9/6K/+aCv/S11cQ/Pe3OnoWM=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Fri, 23 Dec 2022 14:30:12 +0100 (CET)
+X-EA-Auth: MYGhqpJwe1OkJiLuBz/mYu+NlbOxDTxwSvtBnShGmqmsf/chpNNZBWpBSU29/z8cdyBFOs/MbjLq++Sv/DHCZGsYyjHVbdB5
+Date:   Fri, 23 Dec 2022 19:00:05 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Date:   Fri, 23 Dec 2022 13:29:20 +0000
-Message-ID: <167180216018.2546024.11271443310737773038.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
+Subject: Re: [PATCH] drm/i915/gvt: Replace DEFINE_SIMPLE_ATTRIBUTE by
+ DEFINE_DEBUGFS_ATTRIBUTE
+Message-ID: <Y6WtXSMDcYDyGZt4@qemulion>
+References: <Y5yX01RC4B22j5w8@qemulion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5yX01RC4B22j5w8@qemulion>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a client call gets completed early, before any DATA packets have been
-transmitted, say by getting interrupted by a signal, it may still cause the
-transmission of an ABORT packet (which is pointless).
+On Fri, Dec 16, 2022 at 09:37:47PM +0530, Deepak R Varma wrote:
+> The DEFINE_DEBUGFS_ATTRIBUTE macro has implementation for protecting the
+> read/write file operations from removal race conditions. This further
+> enables using debugfs_create_file_unsafe() function since there is no need
+> for a proxy file operations struct for protection. Hence replace the
+> DEFINE_SIMPLE_ATTRIBUTE macro by DEFINE_DEBUGFS_ATTRIBUTE and the
+> debugfs_create_file() by the lightweight debugfs_create_file_unsafe()
+> versions.
+>
+> This issue was identified using the coccinelle debugfs_simple_attr.cocci
+> semantic patch.
+>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
 
-Further, because the call didn't go through rxrpc_expose_client_call(), the
-connection channel's call counter didn't get incremented.  This means that
-the next call on that channel will have the same callNumber, and the server
-will probably just abort it, causing an I/O error in kafs.
+Hello,
+May I please request a review and feedback on this change proposal?
 
-This, for example, can sometimes be induced with git checkout as that uses
-an alarm to advance the progress display.  The signal generated may
-interrupt the call whilst it's waiting for a channel, but the call still
-sets up even if it is pending an abort, and then sends an abort instead of
-the first data.
+Thank you,
+./drv
 
-Fix this by the following means:
 
- (1) Always mark service calls as exposed (RXRPC_CALL_EXPOSED).
-
- (2) Don't mark client calls as exposed until they have data to transmit.
-
- (3) Don't send an ABORT packet unless exposed.
-
- (4) Do the connection of client calls after processing call-pokes so that
-     early aborts have a chance to get dealt with first (it narrows the
-     window, but can't eliminate it).
-
-Reported-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-afs@lists.infradead.org
----
-
- net/rxrpc/call_event.c  |    6 ++++--
- net/rxrpc/call_object.c |    1 +
- net/rxrpc/call_state.c  |    3 ++-
- net/rxrpc/io_thread.c   |    6 +++---
- 4 files changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
-index 91df6fbede9c..148bb7fc0415 100644
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -305,9 +305,11 @@ static void rxrpc_decant_prepared_tx(struct rxrpc_call *call)
- {
- 	struct rxrpc_txbuf *txb;
- 
--	if (rxrpc_is_client_call(call) &&
--	    !test_bit(RXRPC_CALL_EXPOSED, &call->flags))
-+	if (!test_bit(RXRPC_CALL_EXPOSED, &call->flags)) {
-+		if (list_empty(&call->tx_sendmsg))
-+			return;
- 		rxrpc_expose_client_call(call);
-+	}
- 
- 	while ((txb = list_first_entry_or_null(&call->tx_sendmsg,
- 					       struct rxrpc_txbuf, call_link))) {
-diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
-index 45cc16c1be15..75b6ad542fdc 100644
---- a/net/rxrpc/call_object.c
-+++ b/net/rxrpc/call_object.c
-@@ -455,6 +455,7 @@ void rxrpc_incoming_call(struct rxrpc_sock *rx,
- 	call->cong_tstamp	= skb->tstamp;
- 
- 	rxrpc_set_call_state(call, RXRPC_CALL_SERVER_SECURING);
-+	__set_bit(RXRPC_CALL_EXPOSED, &call->flags);
- 
- 	spin_lock(&conn->state_lock);
- 
-diff --git a/net/rxrpc/call_state.c b/net/rxrpc/call_state.c
-index 59a5588805ac..fae42f733e85 100644
---- a/net/rxrpc/call_state.c
-+++ b/net/rxrpc/call_state.c
-@@ -49,7 +49,8 @@ bool rxrpc_abort_call(struct rxrpc_call *call, rxrpc_seq_t seq,
- 	if (!rxrpc_set_call_completion(call, RXRPC_CALL_LOCALLY_ABORTED,
- 				       abort_code, error))
- 		return false;
--	rxrpc_send_abort_packet(call);
-+	if (test_bit(RXRPC_CALL_EXPOSED, &call->flags))
-+		rxrpc_send_abort_packet(call);
- 	return true;
- }
- 
-diff --git a/net/rxrpc/io_thread.c b/net/rxrpc/io_thread.c
-index 48e8bfd6e2ef..34d4a3a5cb72 100644
---- a/net/rxrpc/io_thread.c
-+++ b/net/rxrpc/io_thread.c
-@@ -435,9 +435,6 @@ int rxrpc_io_thread(void *data)
- 				       &local->client_conn_flags))
- 			rxrpc_discard_expired_client_conns(local);
- 
--		if (!list_empty(&local->new_client_calls))
--			rxrpc_connect_client_calls(local);
--
- 		/* Deal with calls that want immediate attention. */
- 		if ((call = list_first_entry_or_null(&local->call_attend_q,
- 						     struct rxrpc_call,
-@@ -452,6 +449,9 @@ int rxrpc_io_thread(void *data)
- 			continue;
- 		}
- 
-+		if (!list_empty(&local->new_client_calls))
-+			rxrpc_connect_client_calls(local);
-+
- 		/* Process received packets and errors. */
- 		if ((skb = __skb_dequeue(&rx_queue))) {
- 			struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
+> ---
+> Please note: The changes are compile tested only.
+>
+>  drivers/gpu/drm/i915/gvt/debugfs.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/gvt/debugfs.c b/drivers/gpu/drm/i915/gvt/debugfs.c
+> index 9f1c209d9251..a45a43c35a6b 100644
+> --- a/drivers/gpu/drm/i915/gvt/debugfs.c
+> +++ b/drivers/gpu/drm/i915/gvt/debugfs.c
+> @@ -147,9 +147,9 @@ vgpu_scan_nonprivbb_set(void *data, u64 val)
+>  	return 0;
+>  }
+>
+> -DEFINE_SIMPLE_ATTRIBUTE(vgpu_scan_nonprivbb_fops,
+> -			vgpu_scan_nonprivbb_get, vgpu_scan_nonprivbb_set,
+> -			"0x%llx\n");
+> +DEFINE_DEBUGFS_ATTRIBUTE(vgpu_scan_nonprivbb_fops,
+> +			 vgpu_scan_nonprivbb_get, vgpu_scan_nonprivbb_set,
+> +			 "0x%llx\n");
+>
+>  /**
+>   * intel_gvt_debugfs_add_vgpu - register debugfs entries for a vGPU
+> @@ -165,8 +165,8 @@ void intel_gvt_debugfs_add_vgpu(struct intel_vgpu *vgpu)
+>  	debugfs_create_bool("active", 0444, vgpu->debugfs, &vgpu->active);
+>  	debugfs_create_file("mmio_diff", 0444, vgpu->debugfs, vgpu,
+>  			    &vgpu_mmio_diff_fops);
+> -	debugfs_create_file("scan_nonprivbb", 0644, vgpu->debugfs, vgpu,
+> -			    &vgpu_scan_nonprivbb_fops);
+> +	debugfs_create_file_unsafe("scan_nonprivbb", 0644, vgpu->debugfs, vgpu,
+> +				   &vgpu_scan_nonprivbb_fops);
+>  }
+>
+>  /**
+> --
+> 2.34.1
+>
 
 
