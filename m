@@ -2,118 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B04A654A5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 02:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B28CD654A5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 02:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235897AbiLWBEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 20:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S236028AbiLWBKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 20:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236011AbiLWBEN (ORCPT
+        with ESMTP id S235891AbiLWBKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 20:04:13 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEE03B40E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 17:00:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=i55yqMw7UiyH1xNurgBfK94U5GH1dlBUGi1FYvhEPBg=; b=t+72N1/TGPUacKpnVrefNvaNt/
-        KYKrZm04j9eGokNk0GyGAkrWm2YQw0gDQJnTYpa/WDDaV2bjJgKwxinBRbm5y04MgtTOk7FmUdmMy
-        biO/2hKas47XdOnsac0AYtboXZhRy7vi+U3sMBKncKZe9ecdKxEA8rcpUuElW+/309fkrZn+QLDpA
-        zci6DO+9JQvZd3vrMr082N81jFquQMqIn8yU7aHQGmgLpZyKMTpofD6DVtGdcndd7dt+7S3eTheRQ
-        y+W2vPlVROBL4WU1wHk9Z7KX4V3XSVGzBjKpjZ9qogRuTUb6llKHiemzHyQ0BWaNmrNbwEgnmec+J
-        y9TckUqA==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p8WPv-001Uh6-69; Fri, 23 Dec 2022 01:00:07 +0000
-Message-ID: <e1680223-2819-172e-20ea-daea3282e9eb@infradead.org>
-Date:   Thu, 22 Dec 2022 17:00:06 -0800
+        Thu, 22 Dec 2022 20:10:09 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE522296
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 17:04:44 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id c184so3299983vsc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 17:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X/gOWZAaD8SBIOiOmfYa59YShOa8ycZ4ayxBa1jRd7E=;
+        b=tmaHZMPcPeETZRodOkbShU4wP1wCu3ctqiGNC19OZf6gr4rulXNp5EZfuq4CH5y8N/
+         SVjpjpbPPAoe8VlZ3gMgUYszT5U8lshoTljFb0MQZurhw2j2r5wnY10LW6cdWwlX36hR
+         YTOaluFUI/V4/SVekarIA9spgFf4y2lXk/q1+Y0Gqn6rywM979v4uR0kB47S+NIuMsXh
+         2R7jCVy0/sMWNjjqT8SQjPMyy79DXKkv+t0nw31l8oNTDGGeVYFpeAanUoqSKZOi1lKH
+         C134VdbgAdl/NzxqVQQeNNpmdHAp/H6yhJv05N+nJNZYBVQGxQtoLjkQfbpMDug7svf7
+         4z2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X/gOWZAaD8SBIOiOmfYa59YShOa8ycZ4ayxBa1jRd7E=;
+        b=bYycSD5iessC0G/GNa4i4qf6/XwMneE81Fr4CJghSRZvtCmZ3aI09E+DJ+ol3YC2OK
+         02ckgnd6/SpHDq67EmHBKZnminMTubkP3YUOkEDyGVg+cw6KAJ9NDjFngIXEepYaWpcd
+         8lQP1uz4IVzCRDw+h9AxhGr/OQUIn+7T7dnebWrGtiHqXbgftqHWiopqSBy8gRb6pY5G
+         Hu537ydwl8XzR/84L2U45dPCvHzTYpvqsvoYTOhlj8vKvGgfsNg/ivQ6zSarDq2ctEMt
+         u4RVXPW5Qw6Nw6zKs7BAnqIa/2oBtm73Kc0K8TFLxwC6T6BLgyxkRmuoO/Qkfphf8YxC
+         EUmA==
+X-Gm-Message-State: AFqh2kpswVi2ZpZUg2kIkf4EwLF8jpbsvlNEtfMm6ytJyO4MfMw+7iB6
+        VKix6uQU8zf0SY4uVTiHr5ZPLwRS1O2MgBVUcKmV9ErECE3kiOmy
+X-Google-Smtp-Source: AMrXdXv7OoxaKXo2t6mAbAu8R8miK2JpT2IH8nH1wkesWFiDSJdnax1yDykm+3t9ZSiXE5Sin8BXXdg5tAj231ABRwI=
+X-Received: by 2002:a67:c486:0:b0:3aa:f64:fbfd with SMTP id
+ d6-20020a67c486000000b003aa0f64fbfdmr975101vsk.15.1671757483050; Thu, 22 Dec
+ 2022 17:04:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: kismet: WARNING: unmet direct dependencies detected for
- IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>
-References: <202212221206.Lt61kYrt-lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202212221206.Lt61kYrt-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221221180848.20774-1-vishal.moola@gmail.com> <20221221180848.20774-5-vishal.moola@gmail.com>
+In-Reply-To: <20221221180848.20774-5-vishal.moola@gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 22 Dec 2022 18:04:07 -0700
+Message-ID: <CAOUHufbcp+VoNR1uonBYi6eEeoG_Td5N_E1hkyaj_gRmRc4vwg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] mm/swap: Convert deactivate_page() to folio_deactivate()
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     linux-mm@kvack.org, damon@lists.linux.dev,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        sj@kernel.org, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 21, 2022 at 11:10 AM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+>
+> Deactivate_page() has already been converted to use folios, this change
+> converts it to take in a folio argument instead of calling page_folio().
+> It also renames the function folio_deactivate() to be more consistent
+> with other folio functions.
 
+There is one more in mm/vmscan.c.
 
-On 12/21/22 20:49, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   9d2f6060fe4c3b49d0cdc1dce1c99296f33379c8
-> commit: 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1 riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
-> date:   6 weeks ago
-> config: riscv-kismet-CONFIG_IOMMU_IO_PGTABLE_LPAE-CONFIG_IPMMU_VMSA-0-0
-> reproduce:
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
->         # 1. reproduce by kismet
->            # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
->            kismet --linux-ksrc=linux --selectees CONFIG_IOMMU_IO_PGTABLE_LPAE --selectors CONFIG_IPMMU_VMSA -a=riscv
->         # 2. reproduce by make
->            # save the config file to linux source tree
->            cd linux
->            make ARCH=riscv olddefconfig
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> kismet warnings: (new ones prefixed by >>)
->>> kismet: WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
->    .config:4814:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' invalid for ARCH_MMAP_RND_BITS
->    
->    WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
->      Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
->      Selected by [y]:
->      - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
-> 
-
-Maybe this:
-
----
- drivers/iommu/Kconfig |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
---- a/drivers/iommu/Kconfig
-+++ b/drivers/iommu/Kconfig
-@@ -32,7 +32,8 @@ config IOMMU_IO_PGTABLE
- config IOMMU_IO_PGTABLE_LPAE
- 	bool "ARMv7/v8 Long Descriptor Format"
- 	select IOMMU_IO_PGTABLE
--	depends on ARM || ARM64 || (COMPILE_TEST && !GENERIC_ATOMIC64)
-+	depends on ARM || ARM64 || ARCH_RENESAS || \
-+		(COMPILE_TEST && !GENERIC_ATOMIC64)
- 	help
- 	  Enable support for the ARM long descriptor pagetable format.
- 	  This allocator supports 4K/2M/1G, 16K/32M and 64K/512M page
-
-
-or is way off?
-
--- 
-~Randy
+Please git grep.
