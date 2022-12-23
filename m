@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E615C654E71
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14F1654E73
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235993AbiLWJeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 04:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S236016AbiLWJer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 04:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235669AbiLWJd7 (ORCPT
+        with ESMTP id S229822AbiLWJen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 04:33:59 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0270379C6;
-        Fri, 23 Dec 2022 01:33:55 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 0BB5F68AA6; Fri, 23 Dec 2022 10:33:52 +0100 (CET)
-Date:   Fri, 23 Dec 2022 10:33:51 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Christoph Hellwig <hch@lst.de>, axboe@meta.com, sagi@grimberg.me,
-        kbusch@kernel.org, linux-nvme@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH] docs, nvme: add a feature and quirk policy document
-Message-ID: <20221223093351.GA8028@lst.de>
-References: <20221215125130.261098-1-hch@lst.de> <87zgboddb7.fsf@meer.lwn.net> <20221215132622.GA21083@lst.de> <20221221083450.GA23903@lst.de> <87mt7g27lv.fsf@meer.lwn.net> <20221222160920.GA10193@lst.de> <87zgbfma5w.fsf@meer.lwn.net>
+        Fri, 23 Dec 2022 04:34:43 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CDEA140C4;
+        Fri, 23 Dec 2022 01:34:42 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1p8eRs-0003Qe-00; Fri, 23 Dec 2022 10:34:40 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 2DC68C254F; Fri, 23 Dec 2022 10:34:31 +0100 (CET)
+Date:   Fri, 23 Dec 2022 10:34:31 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes for v6.2
+Message-ID: <20221223093431.GA4961@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87zgbfma5w.fsf@meer.lwn.net>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 01:54:35PM -0700, Jonathan Corbet wrote:
-> I'm not really a fan of adding more top-level directories; one of these
-> years I'd like to try to move things in the opposite direction.  That is
-> a battle for another day, though; for now let's just go with this and
-> get the document merged.
+The following changes since commit 4c587a982603d7e7e751b4925809a1512099a690:
 
-I though about that, but could not thing of a good subdirectory.
+  MIPS: OCTEON: warn only once if deprecated link status is being used (2022-12-09 23:37:46 +0100)
 
-> 
-> That said, I suspect you'll add a build warning about the new document
-> not being included in any toctree.  Fixing that would involve adding a
-> basic index.rst to the new directory and adding that to a file like
-> Documentation/subsystem-apis.rst.
+are available in the Git repository at:
 
-The new document is included in
-Documentation/maintainer/maintainer-entry-profile.rst in this path.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.2_1
 
-I also did check for new warnings and did not see any, even if that's
-a little difficult with the rather chatty shpinx output.
+for you to fetch changes up to 24b333a866a10d4be47b9968b9c05a3e9f326ff5:
+
+  MIPS: dts: bcm63268: Add missing properties to the TWD node (2022-12-21 10:46:10 +0100)
+
+----------------------------------------------------------------
+Fixes due to DT changes
+
+----------------------------------------------------------------
+Florian Fainelli (1):
+      MIPS: dts: bcm63268: Add missing properties to the TWD node
+
+Sergio Paracuellos (1):
+      MIPS: ralink: mt7621: avoid to init common ralink reset controller
+
+ arch/mips/boot/dts/brcm/bcm63268.dtsi | 2 ++
+ arch/mips/ralink/of.c                 | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
