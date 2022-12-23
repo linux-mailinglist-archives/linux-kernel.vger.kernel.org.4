@@ -2,237 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3946553CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 20:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E606553CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 20:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbiLWTNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 14:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S231757AbiLWTVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 14:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiLWTNj (ORCPT
+        with ESMTP id S230387AbiLWTVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 14:13:39 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FC61D31C
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 11:13:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671822815; bh=P9f871po8Uo8UcGE1zsHMZs+AHZmF24K1+rDfxehJFg=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=XYi4v4kjIJPxH5cMqOqux+jnljqI4aGLjBVynUZX7MqoP0XwfSblwKXX/K47nslBh
-         JteUa7VIZINGpeGYS9z/nsIjO/HAChIW2URxlosO70GpL20lNM9PLVls+BImZR2Te3
-         A+c0S5liHmaN6JE4za868OVSWkYk19QCem1cFyI4=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri, 23 Dec 2022 20:13:35 +0100 (CET)
-X-EA-Auth: CMqPvAe+WFpNOZSsoaT9NF8Tn+9lylTO4aSUXsNYPCJGfjNIJGotu0X7tsZnjdIXiEZvpsqJUdLq/TDoTmJfrf1JinuelhvK
-Date:   Sat, 24 Dec 2022 00:43:30 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] most: core: Use sysfs_emit in show function callsbacks
-Message-ID: <Y6X92vLgEu7DKxLl@qemulion>
+        Fri, 23 Dec 2022 14:21:10 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96CA15FF6
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 11:21:07 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id i12so3725869qvs.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 11:21:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FNOI+4YsCoriXa+jAbkfl0PAV9y45Z4GDfwb84r0IxM=;
+        b=EH3VOEn4KiBrDh9Eayqn7WPIGvMVTZEKsGw8EeIXGaR8IgpGLa8b+Wg+EtzOmefIpy
+         TD0Cy5trn/PiNHqEeLrPjGMuhZWsOq/6H3UwaWaYwrZuD4mmyKZu0QQhLUZlT1xU0LEV
+         MCUBlGeOhcO4JUQ50ADbHYl2i6Q6zGCtWe66Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FNOI+4YsCoriXa+jAbkfl0PAV9y45Z4GDfwb84r0IxM=;
+        b=hSqf4w23wN0TQdwOTwT+bcEaTG/r+180Cn3kyWf65AgEOvePU/gsXvLO/vcj+TRD4O
+         OKJspMGAuHEKS/DwWCPiwSvAytmS3Z2VqYjKbaNryxeV0fqIlm1FkJ+IP0FIk2tWoMIJ
+         wzp51V3Wn4g8xVVZRaW1sI3LTAtVrUuFX4Z/0O41PZuNjBGMxa87K4tX2D/bkBGgXyaY
+         3zIz0XgtlSSe+KWBEENLurFT9NELIzMc5le3WVTVFKYY31gyBUtssSUe2xdEqd8cMxUe
+         TC7mnKnwFEMFEx/2IXwv1BPc02U/uQwP2AfHyFKOmy/tM0slp7zNXxbw4riMoC4Rxqbm
+         5SEA==
+X-Gm-Message-State: AFqh2kqxlMOFl/U5l+LyNfvFBgKx6dQ3JyzGvXK3ZjIDRKO5Xbflv8og
+        x4ssn3sJZudPdzPlXyL3xP4kwd46aGozID7u
+X-Google-Smtp-Source: AMrXdXu0Y3ktkSUOWsLwpW7tY2xfe+4Z8TFqpIsMztgTa4c4/Kfq0Ttf+aYYHfv+z29fx6fwf1ppiQ==
+X-Received: by 2002:a0c:fe64:0:b0:51e:e977:8b80 with SMTP id b4-20020a0cfe64000000b0051ee9778b80mr13043362qvv.29.1671823266798;
+        Fri, 23 Dec 2022 11:21:06 -0800 (PST)
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com. [209.85.219.42])
+        by smtp.gmail.com with ESMTPSA id q27-20020a37f71b000000b006cec8001bf4sm2693302qkj.26.2022.12.23.11.21.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Dec 2022 11:21:06 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id i2so1982509qvq.13
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 11:21:06 -0800 (PST)
+X-Received: by 2002:a05:6214:1185:b0:4c6:608c:6b2c with SMTP id
+ t5-20020a056214118500b004c6608c6b2cmr458369qvv.130.1671823265794; Fri, 23 Dec
+ 2022 11:21:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <87y1qy2yit.wl-tiwai@suse.de>
+In-Reply-To: <87y1qy2yit.wl-tiwai@suse.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 23 Dec 2022 11:20:50 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgB054c1hX=2xco+S38cJQVZrj8ukSShLkM359THFQ2+Q@mail.gmail.com>
+Message-ID: <CAHk-=wgB054c1hX=2xco+S38cJQVZrj8ukSShLkM359THFQ2+Q@mail.gmail.com>
+Subject: Re: [GIT PULL] sound updates for 6.2-rc1 (#2)
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to Documentation/filesystems/sysfs.rst, the show() callback
-function of kobject attributes should strictly use sysfs_emit instead
-of sprintf family functions.
+On Fri, Dec 23, 2022 at 2:41 AM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> A few more updates for 6.2 since the last PR: most of changes are
+> about ASoC device-specific fixes.
+>
+> - Lots of ASoC Intel AVS extensions and refactoring
 
-Issue identified using the coccinelle device_attr_show.cocci script.
+Hmm. This doesn't exactly seem to be fixes.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/most/core.c | 61 ++++++++++++++++++++++-----------------------
- 1 file changed, 30 insertions(+), 31 deletions(-)
+It does seem to have been in linux-next, so I don't hate it, but I'm
+not super-happy about the timing of this all.
 
-diff --git a/drivers/most/core.c b/drivers/most/core.c
-index e4412c7d25b0..f9ca6a7d885c 100644
---- a/drivers/most/core.c
-+++ b/drivers/most/core.c
-@@ -208,8 +208,8 @@ static ssize_t number_of_packet_buffers_show(struct device *dev,
- 	struct most_channel *c = to_channel(dev);
- 	unsigned int i = c->channel_id;
+I really was hoping that the last few days of the merge window had
+been for actual fixes rather than for new development.
 
--	return snprintf(buf, PAGE_SIZE, "%d\n",
--			c->iface->channel_vector[i].num_buffers_packet);
-+	return sysfs_emit(buf, "%d\n",
-+			  c->iface->channel_vector[i].num_buffers_packet);
- }
-
- static ssize_t number_of_stream_buffers_show(struct device *dev,
-@@ -219,8 +219,8 @@ static ssize_t number_of_stream_buffers_show(struct device *dev,
- 	struct most_channel *c = to_channel(dev);
- 	unsigned int i = c->channel_id;
-
--	return snprintf(buf, PAGE_SIZE, "%d\n",
--			c->iface->channel_vector[i].num_buffers_streaming);
-+	return sysfs_emit(buf, "%d\n",
-+			  c->iface->channel_vector[i].num_buffers_streaming);
- }
-
- static ssize_t size_of_packet_buffer_show(struct device *dev,
-@@ -230,8 +230,8 @@ static ssize_t size_of_packet_buffer_show(struct device *dev,
- 	struct most_channel *c = to_channel(dev);
- 	unsigned int i = c->channel_id;
-
--	return snprintf(buf, PAGE_SIZE, "%d\n",
--			c->iface->channel_vector[i].buffer_size_packet);
-+	return sysfs_emit(buf, "%d\n",
-+			  c->iface->channel_vector[i].buffer_size_packet);
- }
-
- static ssize_t size_of_stream_buffer_show(struct device *dev,
-@@ -241,8 +241,8 @@ static ssize_t size_of_stream_buffer_show(struct device *dev,
- 	struct most_channel *c = to_channel(dev);
- 	unsigned int i = c->channel_id;
-
--	return snprintf(buf, PAGE_SIZE, "%d\n",
--			c->iface->channel_vector[i].buffer_size_streaming);
-+	return sysfs_emit(buf, "%d\n",
-+			  c->iface->channel_vector[i].buffer_size_streaming);
- }
-
- static ssize_t channel_starving_show(struct device *dev,
-@@ -251,7 +251,7 @@ static ssize_t channel_starving_show(struct device *dev,
- {
- 	struct most_channel *c = to_channel(dev);
-
--	return snprintf(buf, PAGE_SIZE, "%d\n", c->is_starving);
-+	return sysfs_emit(buf, "%d\n", c->is_starving);
- }
-
- static ssize_t set_number_of_buffers_show(struct device *dev,
-@@ -260,7 +260,7 @@ static ssize_t set_number_of_buffers_show(struct device *dev,
- {
- 	struct most_channel *c = to_channel(dev);
-
--	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.num_buffers);
-+	return sysfs_emit(buf, "%d\n", c->cfg.num_buffers);
- }
-
- static ssize_t set_buffer_size_show(struct device *dev,
-@@ -269,7 +269,7 @@ static ssize_t set_buffer_size_show(struct device *dev,
- {
- 	struct most_channel *c = to_channel(dev);
-
--	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.buffer_size);
-+	return sysfs_emit(buf, "%d\n", c->cfg.buffer_size);
- }
-
- static ssize_t set_direction_show(struct device *dev,
-@@ -279,10 +279,10 @@ static ssize_t set_direction_show(struct device *dev,
- 	struct most_channel *c = to_channel(dev);
-
- 	if (c->cfg.direction & MOST_CH_TX)
--		return snprintf(buf, PAGE_SIZE, "tx\n");
-+		return sysfs_emit(buf, "tx\n");
- 	else if (c->cfg.direction & MOST_CH_RX)
--		return snprintf(buf, PAGE_SIZE, "rx\n");
--	return snprintf(buf, PAGE_SIZE, "unconfigured\n");
-+		return sysfs_emit(buf, "rx\n");
-+	return sysfs_emit(buf, "unconfigured\n");
- }
-
- static ssize_t set_datatype_show(struct device *dev,
-@@ -294,10 +294,9 @@ static ssize_t set_datatype_show(struct device *dev,
-
- 	for (i = 0; i < ARRAY_SIZE(ch_data_type); i++) {
- 		if (c->cfg.data_type & ch_data_type[i].most_ch_data_type)
--			return snprintf(buf, PAGE_SIZE, "%s",
--					ch_data_type[i].name);
-+			return sysfs_emit(buf, "%s", ch_data_type[i].name);
- 	}
--	return snprintf(buf, PAGE_SIZE, "unconfigured\n");
-+	return sysfs_emit(buf, "unconfigured\n");
- }
-
- static ssize_t set_subbuffer_size_show(struct device *dev,
-@@ -306,7 +305,7 @@ static ssize_t set_subbuffer_size_show(struct device *dev,
- {
- 	struct most_channel *c = to_channel(dev);
-
--	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.subbuffer_size);
-+	return sysfs_emit(buf, "%d\n", c->cfg.subbuffer_size);
- }
-
- static ssize_t set_packets_per_xact_show(struct device *dev,
-@@ -315,7 +314,7 @@ static ssize_t set_packets_per_xact_show(struct device *dev,
- {
- 	struct most_channel *c = to_channel(dev);
-
--	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.packets_per_xact);
-+	return sysfs_emit(buf, "%d\n", c->cfg.packets_per_xact);
- }
-
- static ssize_t set_dbr_size_show(struct device *dev,
-@@ -323,7 +322,7 @@ static ssize_t set_dbr_size_show(struct device *dev,
- {
- 	struct most_channel *c = to_channel(dev);
-
--	return snprintf(buf, PAGE_SIZE, "%d\n", c->cfg.dbr_size);
-+	return sysfs_emit(buf, "%d\n", c->cfg.dbr_size);
- }
-
- #define to_dev_attr(a) container_of(a, struct device_attribute, attr)
-@@ -395,7 +394,7 @@ static ssize_t description_show(struct device *dev,
- {
- 	struct most_interface *iface = dev_get_drvdata(dev);
-
--	return snprintf(buf, PAGE_SIZE, "%s\n", iface->description);
-+	return sysfs_emit(buf, "%s\n", iface->description);
- }
-
- static ssize_t interface_show(struct device *dev,
-@@ -406,25 +405,25 @@ static ssize_t interface_show(struct device *dev,
-
- 	switch (iface->interface) {
- 	case ITYPE_LOOPBACK:
--		return snprintf(buf, PAGE_SIZE, "loopback\n");
-+		return sysfs_emit(buf, "loopback\n");
- 	case ITYPE_I2C:
--		return snprintf(buf, PAGE_SIZE, "i2c\n");
-+		return sysfs_emit(buf, "i2c\n");
- 	case ITYPE_I2S:
--		return snprintf(buf, PAGE_SIZE, "i2s\n");
-+		return sysfs_emit(buf, "i2s\n");
- 	case ITYPE_TSI:
--		return snprintf(buf, PAGE_SIZE, "tsi\n");
-+		return sysfs_emit(buf, "tsi\n");
- 	case ITYPE_HBI:
--		return snprintf(buf, PAGE_SIZE, "hbi\n");
-+		return sysfs_emit(buf, "hbi\n");
- 	case ITYPE_MEDIALB_DIM:
--		return snprintf(buf, PAGE_SIZE, "mlb_dim\n");
-+		return sysfs_emit(buf, "mlb_dim\n");
- 	case ITYPE_MEDIALB_DIM2:
--		return snprintf(buf, PAGE_SIZE, "mlb_dim2\n");
-+		return sysfs_emit(buf, "mlb_dim2\n");
- 	case ITYPE_USB:
--		return snprintf(buf, PAGE_SIZE, "usb\n");
-+		return sysfs_emit(buf, "usb\n");
- 	case ITYPE_PCIE:
--		return snprintf(buf, PAGE_SIZE, "pcie\n");
-+		return sysfs_emit(buf, "pcie\n");
- 	}
--	return snprintf(buf, PAGE_SIZE, "unknown\n");
-+	return sysfs_emit(buf, "unknown\n");
- }
-
- static DEVICE_ATTR_RO(description);
---
-2.34.1
-
-
-
+                  Linus
