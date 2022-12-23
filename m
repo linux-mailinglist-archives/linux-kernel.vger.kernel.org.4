@@ -2,197 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3526655384
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1E7655387
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbiLWSOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 13:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S231373AbiLWSPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiLWSO2 (ORCPT
+        with ESMTP id S230390AbiLWSPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:14:28 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D180517067
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:14:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ghOtXneWXYWKmjhZuXYMtDsYM7QSz/lfbIgjF/ogmxo=; b=nQo0Z1XZQPSXzY28KMkZqUgT2t
-        pA9GoqMjLAxT4ybTgXpyrcfHFyqAFhyyrUE1fPiVriWj7tN1kx+qVYrL5oYzj3fZ7yUxDasuc+O7X
-        GwuPY++2FGXt4fFO8PdgzDKQEVNxaBDqVB2Q0x0RXbGwwHqsKInr+hyPO1OtMzHUGt6uyrWyMMII0
-        OThKhMD0fZwgprAHo9Xq9A2/erenGzbAry0MgQpbhBpsY+IPQBO0LtvUOM1UMF2a45m3E7A6aRdo/
-        Yapsmc9UDKGwbbu5koHLoI88ne1ISvntEZcbZIc/or8trEFHef7nJRTGRYshpWFTrCXe7hSecTPRq
-        OHviIFkw==;
-Received: from [187.36.234.139] (helo=[192.168.1.195])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1p8mYY-008mCi-G5; Fri, 23 Dec 2022 19:14:06 +0100
-Message-ID: <e1a04aa7-3411-c5a2-2079-7de59ffa78f0@igalia.com>
-Date:   Fri, 23 Dec 2022 15:12:50 -0300
+        Fri, 23 Dec 2022 13:15:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43981AF2B;
+        Fri, 23 Dec 2022 10:15:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F17461919;
+        Fri, 23 Dec 2022 18:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA7DC433D2;
+        Fri, 23 Dec 2022 18:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671819314;
+        bh=NiVajSFPPFqGldwaar4lNEf0E5Gdd9NlU7W0HAx2VhI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=gyHnQmBJFl2vv8jVN6OeEuwun0S2EP77VBzvvevoW3hqW4u1OhwU94XHDv/OSEe2w
+         C5QS7RKPo6u2gU2CYgeVzeCXbXNZBc2PfPUgsf8O9vguavlyueE4jyF7+RcT3/9SPL
+         GkAHZvY6raVRpp114bu1ouxlOib28E8shzOBbGFkp71dAPUUMGtW1/PwXFG4wzz2gM
+         FIRsqO1UhTIVZylL66KVvTlvF1dNqxvHk78QXBQCnnx/BFO8eAtZRXJD4Yac7PU9Kf
+         SKjZtsp0sJ7T/VtlWBMWXH205yeXe8hWkWMtfG11Cmbb9mnMxwG96CzsYGFYxI/g4C
+         GnQ5bTSd9fAoA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5AA915C0865; Fri, 23 Dec 2022 10:15:14 -0800 (PST)
+Date:   Fri, 23 Dec 2022 10:15:14 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
+Message-ID: <20221223181514.GZ4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221222185314.GR4001@paulmck-ThinkPad-P17-Gen-1>
+ <F492F726-00AA-4FC8-A5E5-BBF006CE946C@joelfernandes.org>
+ <20221222194511.GS4001@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YScrnuSuWx69oJK+-+9Rdncn5kOSw0-SaWwwABix-Tb+A@mail.gmail.com>
+ <CAEXW_YR=sx58kKRgvypduejx8jCGyDhMRBmZQNxtH3s0PS4u2g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 0/7] Introduce debugfs device-centered functions
-To:     Melissa Wen <mwen@igalia.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Wambui Karuga <wambui@karuga.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221219120621.15086-1-mcanal@igalia.com>
- <20221219124947.vk5y3o2tdxhqu7s5@mail.igalia.com>
- <Y6SR8iRMHyhDQ4JZ@phenom.ffwll.local>
-Content-Language: en-US
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
-In-Reply-To: <Y6SR8iRMHyhDQ4JZ@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAEXW_YR=sx58kKRgvypduejx8jCGyDhMRBmZQNxtH3s0PS4u2g@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/22/22 14:20, Daniel Vetter wrote:
-> On Mon, Dec 19, 2022 at 11:49:47AM -0100, Melissa Wen wrote:
->> On 12/19, Maíra Canal wrote:
->>> This series introduces the initial structure to make DRM debugfs more
->>> device-centered and it is the first step to drop the
->>> drm_driver->debugfs_init hooks in the future [1].
->>>
->>> Currently, DRM debugfs files are created using drm_debugfs_create_files()
->>> on request. The first patch of this series makes it possible for DRM devices
->>> for creating debugfs files during drm_dev_register(). For it, it introduces
->>> two new functions that can be used by the drivers: drm_debugfs_add_files()
->>> and drm_debugfs_add_file(). The requests are added to a list and are created
->>> all at once during drm_dev_register(). Moreover, the first patch was based on
->>> this RFC series [2].
->>>
->>> The main difference between the RFC series and the current series is the
->>> creation of a new fops structure to accommodate the new structs and, also,
->>> the creation of a new drm_debugfs_open. Moreover, the new series uses
->>> device-managed allocation, returns memory allocation errors, and converts
->>> more drivers to the new structure.
->>>
->>> Moreover, since v3, the ability to create debugfs files at late_register hooks was
->>> added. In previous versions, modeset components weren't able to create debugfs
->>> files at late_register hooks as the registration of drm_minor happens before the
->>> registration of the modeset abstractions. So, the third patch fixes this problem
->>> by adding a drm_debugfs_late_register() function. Thanks to Melissa Wen for
->>> catching this problem!
->>>
->>> Apart from the third patch, the series looks similiar from its last version.
->>>
->>> [1] https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/todo.rst#n506
->>> [2] https://lore.kernel.org/dri-devel/20200513114130.28641-2-wambui.karugax@gmail.com/
->>>
->>> Best Regards,
->>> - Maíra Canal
->>>
->>> ---
->>>
->>> v1 -> v2: https://lore.kernel.org/dri-devel/20221122190314.185015-1-mcanal@igalia.com/T/#t
->>>
->>> - Fix compilation errors in the second patch (kernel test robot).
->>> - Drop debugfs_init hook from vkms (Maíra Canal).
->>> - Remove return values and error handling to debugfs related
->>> functions (Jani Nikula).
->>> - Remove entry from list after the file is created, so that drm_debugfs_init
->>> can be called more than once (Maíra Canal).
->>>
->>> v2 -> v3: https://lore.kernel.org/dri-devel/20221123220725.1272155-1-mcanal@igalia.com/
->>>
->>> - Rebase on top of drm-misc-next
->>>
->>> v3 -> v4: https://lore.kernel.org/dri-devel/20221207132325.140393-1-mcanal@igalia.com/
->>>
->>> - Add Maxime's Reviewed-by tags
->>> - Add the ability to create debugfs files at late_register hooks (Melissa Wen).
->>
->> Hi Maíra,
->>
->> Thanks for addressing all comments.
->>
->> Maybe Danvet has some inputs for the late_register approach.
-> 
-> I think as a stop-gap (really need to get this stuff landed so people can
-> start to use it) this is ok, but long term I think the right fix is to
-> roll out the same pre-register infrastructure for connector and crtc too.
-> That way drivers don't need to split their setup code into init and
-> register anymore, which is the point of this entire rework.
-> 
-> If you want, you can adjust the todo accordingly, but we do already have
-> the paragraph about connector/crtc.
-> 
-> But we can do that later on, because this is definitely a great way
-> forward. Thanks a lot for pushing this forward!
-> 
->> Anyway, LGTM and the entire series is:
->>
->> Reviewed-by: Melissa Wen <mwen@igalia.com>
-> 
-> On the series: Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+On Fri, Dec 23, 2022 at 11:12:06AM -0500, Joel Fernandes wrote:
+> On Thu, Dec 22, 2022 at 11:43 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+> [...]
+> > > > >>>> On Dec 22, 2022, at 11:43 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > >>>
+> > > > >>> ﻿On Thu, Dec 22, 2022 at 01:40:10PM +0100, Frederic Weisbecker wrote:
+> > > > >>>>> On Wed, Dec 21, 2022 at 12:11:42PM -0500, Mathieu Desnoyers wrote:
+> > > > >>>>> On 2022-12-21 06:59, Frederic Weisbecker wrote:
+> > > > >>>>>>> On Tue, Dec 20, 2022 at 10:34:19PM -0500, Mathieu Desnoyers wrote:
+> > > > >>>>> [...]
+> > > > >>>>>>>
+> > > > >>>>>>> The memory ordering constraint I am concerned about here is:
+> > > > >>>>>>>
+> > > > >>>>>>> * [...] In addition,
+> > > > >>>>>>> * each CPU having an SRCU read-side critical section that extends beyond
+> > > > >>>>>>> * the return from synchronize_srcu() is guaranteed to have executed a
+> > > > >>>>>>> * full memory barrier after the beginning of synchronize_srcu() and before
+> > > > >>>>>>> * the beginning of that SRCU read-side critical section. [...]
+> > > > >>>>>>>
+> > > > >>>>>>> So if we have a SRCU read-side critical section that begins after the beginning
+> > > > >>>>>>> of synchronize_srcu, but before its first memory barrier, it would miss the
+> > > > >>>>>>> guarantee that the full memory barrier is issued before the beginning of that
+> > > > >>>>>>> SRCU read-side critical section. IOW, that memory barrier needs to be at the
+> > > > >>>>>>> very beginning of the grace period.
+> > > > >>>>>>
+> > > > >>>>>> I'm confused, what's wrong with this ?
+> > > > >>>>>>
+> > > > >>>>>> UPDATER                  READER
+> > > > >>>>>> -------                  ------
+> > > > >>>>>> STORE X = 1              STORE srcu_read_lock++
+> > > > >>>>>> // rcu_seq_snap()        smp_mb()
+> > > > >>>>>> smp_mb()                 READ X
+> > > > >>>>>> // scans
+> > > > >>>>>> READ srcu_read_lock
+> > > > >>>>>
+> > > > >>>>> What you refer to here is only memory ordering of the store to X and load
+> > > > >>>>> from X wrt loading/increment of srcu_read_lock, which is internal to the
+> > > > >>>>> srcu implementation. If we really want to model the provided high-level
+> > > > >>>>> memory ordering guarantees, we should consider a scenario where SRCU is used
+> > > > >>>>> for its memory ordering properties to synchronize other variables.
+> > > > >>>>>
+> > > > >>>>> I'm concerned about the following Dekker scenario, where synchronize_srcu()
+> > > > >>>>> and srcu_read_lock/unlock would be used instead of memory barriers:
+> > > > >>>>>
+> > > > >>>>> Initial state: X = 0, Y = 0
+> > > > >>>>>
+> > > > >>>>> Thread A                   Thread B
+> > > > >>>>> ---------------------------------------------
+> > > > >>>>> STORE X = 1                STORE Y = 1
+> > > > >>>>> synchronize_srcu()
+> > > > >>>>>                          srcu_read_lock()
+> > > > >>>>>                          r1 = LOAD X
+> > > > >>>>>                          srcu_read_unlock()
+> > > > >>>>> r0 = LOAD Y
+> > > > >>>>>
+> > > > >>>>> BUG_ON(!r0 && !r1)
+> > > > >>>>>
+> > > > >>>>> So in the synchronize_srcu implementation, there appears to be two
+> > > > >>>>> major scenarios: either srcu_gp_start_if_needed starts a gp or expedited gp,
+> > > > >>>>> or it uses an already started gp/expedited gp. When snapshotting with
+> > > > >>>>> rcu_seq_snap, the fact that the memory barrier is after the ssp->srcu_gp_seq
+> > > > >>>>> load means that it does not order prior memory accesses before that load.
+> > > > >>>>> This sequence value is then used to identify which gp_seq to wait for when
+> > > > >>>>> piggy-backing on another already-started gp. I worry about reordering
+> > > > >>>>> between STORE X = 1 and load of ssp->srcu_gp_seq, which is then used to
+> > > > >>>>> piggy-back on an already-started gp.
+> > > > >>>>>
+> > > > >>>>> I suspect that the implicit barrier in srcu_read_lock() invoked at the
+> > > > >>>>> beginning of srcu_gp_start_if_needed() is really the barrier that makes
+> > > > >>>>> all this behave as expected. But without documentation it's rather hard to
+> > > > >>>>> follow.
+> > > > >>>>
+> > > > >>>> Oh ok I see now. It might be working that way by accident or on forgotten
+> > > > >>>> purpose. In any case, we really want to add a comment above that
+> > > > >>>> __srcu_read_lock_nmisafe() call.
+> > > > >>>
+> > > > >>> Another test for the safety (or not) of removing either D or E is
+> > > > >>> to move that WRITE_ONCE() to follow (or, respectively, precede) the
+> > > > >>> adjacent scans.
+> > > > >>
+> > > > >> Good idea, though I believe the MBs that the above talk about are not the flip ones. They are the ones in synchronize_srcu() beginning and end, that order with respect to grace period start and end.
+> > > > >>
+> > > > >> So that (flipping MBs) is unrelated, or did I miss something?
+> > > > >
+> > > > > The thought is to manually similate in the source code the maximum
+> > > > > memory-reference reordering that a maximally hostile compiler and CPU
+> > > > > would be permitted to carry out.  So yes, given that there are other
+> > > > > memory barriers before and after, these other memory barriers limit how
+> > > > > far the flip may be moved in the source code.
+> > > > >
+> > > > > Here I am talking about the memory barriers associated with the flip,
+> > > > > but the same trick can of course be applied to other memory barriers.
+> > > > > In general, remove a given memory barrier and (in the source code)
+> > > > > maximally rearrange the memory references that were previously ordered
+> > > > > by the memory barrier in question.
+> > > > >
+> > > > > Again, the presence of other memory barriers will limit the permitted
+> > > > > maximal source-code rearrangement.
+> > > >
+> > > >
+> > > > Makes sense if the memory barrier is explicit. In this case, the memory barriers are implicit apparently, with a srcu_read_lock() in the beginning of synchronize_rcu() having the implicit / indirect memory barrier. So I am not sure if that can be implemented without breaking SRCU readers.
+> > >
+> > > First, are we talking about the same barrier?  I am talking about E.
 
-Applied this series to drm-misc-next.
+Apologies.  I am a bit fixated on E because it is the one you guys
+proposed eliminating.  ;-)
 
-Best Regards,
-- Maíra Canal
+> > No, in the last part you replied to above, Mathieu and Frederic were
+> > talking about the need for memory barriers in synchronize_srcu(). That
+> > has nothing to do with E:
+> > <quote>
+> >  I suspect that the implicit barrier in srcu_read_lock() invoked at the
+> >  beginning of srcu_gp_start_if_needed() is really the barrier that makes
+> >  all this behave as expected.
+> > </quote>
+> >
+> > We need to order code prior to synchronize_srcu() wrt the start of the
+> > grace period, so that readers that started after the grace period
+> > started see those side-effects as they may not be waited on (they are
+> > too late).
+> 
+> My thought is this is achieved by the srcu_read_lock() before the
+> grace period is started, and the start of the grace period (which is
+> basically the smp_mb() in the first scan).
+> 
+> So from memory ordering PoV, if synchronize_rcu() spans the GP, and
+> readers don't span the GP, that means the reader does not span the
+> synchronize_rcu() which is the GP guarantee.
+> 
+> But I could be missing something. I will dig more on my side. Thanks.
 
->>
->>>
->>> ---
->>>
->>> Maíra Canal (7):
->>>    drm/debugfs: create device-centered debugfs functions
->>>    drm: use new debugfs device-centered functions on DRM core files
->>>    drm/debugfs: create debugfs late register functions
->>>    drm/vc4: use new debugfs device-centered functions
->>>    drm/v3d: use new debugfs device-centered functions
->>>    drm/vkms: use new debugfs device-centered functions
->>>    drm/todo: update the debugfs clean up task
->>>
->>>   Documentation/gpu/todo.rst            |   9 +--
->>>   drivers/gpu/drm/drm_atomic.c          |  11 ++-
->>>   drivers/gpu/drm/drm_client.c          |  11 ++-
->>>   drivers/gpu/drm/drm_debugfs.c         | 102 +++++++++++++++++++++++---
->>>   drivers/gpu/drm/drm_drv.c             |   3 +
->>>   drivers/gpu/drm/drm_framebuffer.c     |  11 ++-
->>>   drivers/gpu/drm/drm_gem_vram_helper.c |  11 ++-
->>>   drivers/gpu/drm/drm_internal.h        |   5 ++
->>>   drivers/gpu/drm/drm_mode_config.c     |   2 +
->>>   drivers/gpu/drm/v3d/v3d_debugfs.c     |  22 +++---
->>>   drivers/gpu/drm/vc4/vc4_bo.c          |  10 +--
->>>   drivers/gpu/drm/vc4/vc4_crtc.c        |   7 +-
->>>   drivers/gpu/drm/vc4/vc4_debugfs.c     |  36 ++-------
->>>   drivers/gpu/drm/vc4/vc4_dpi.c         |   5 +-
->>>   drivers/gpu/drm/vc4/vc4_drv.c         |   1 -
->>>   drivers/gpu/drm/vc4/vc4_drv.h         |  32 ++------
->>>   drivers/gpu/drm/vc4/vc4_dsi.c         |   6 +-
->>>   drivers/gpu/drm/vc4/vc4_hdmi.c        |  12 +--
->>>   drivers/gpu/drm/vc4/vc4_hvs.c         |  24 ++----
->>>   drivers/gpu/drm/vc4/vc4_v3d.c         |  14 +---
->>>   drivers/gpu/drm/vc4/vc4_vec.c         |   6 +-
->>>   drivers/gpu/drm/vkms/vkms_drv.c       |  17 ++---
->>>   include/drm/drm_debugfs.h             |  41 +++++++++++
->>>   include/drm/drm_device.h              |  15 ++++
->>>   24 files changed, 233 insertions(+), 180 deletions(-)
->>>
->>> -- 
->>> 2.38.1
->>>
-> 
-> 
-> 
+Could you please specifically identify that srcu_read_lock()?
+
+Also which version you are looking at.  ;-)
+
+							Thanx, Paul
