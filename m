@@ -2,112 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE174655174
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97409655177
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236271AbiLWOhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 09:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S236301AbiLWOkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 09:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiLWOhx (ORCPT
+        with ESMTP id S230239AbiLWOkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 09:37:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CE237FA8;
-        Fri, 23 Dec 2022 06:37:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66D12611DB;
-        Fri, 23 Dec 2022 14:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB422C433F2;
-        Fri, 23 Dec 2022 14:37:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671806271;
-        bh=X3m6JwJmkeHyk0BNor7qqjk1g6puhJN41xsYyHkX7lE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JSfWpy9MdKCbP509p6W/5f5fDmk4LYq303A8u0NFc1DG3N18ETt9SGIBlbGtYwINd
-         kTNNeuNoI2A6LZrRi1iAdOT5YzPKX9XSDL58MdAV7L85YLwjTB2V60rbPF/QyvgUaN
-         c/OxBRbgUUzO/1xG7h4mEOvGlC9riOpi2AtroTy+uLvJurGf/JN123cIZkIgVOKe6B
-         QqdnqRetx7Z6Amv0SpDh3sMfGpq71lzG1mgs1ZulQsU4ji4rZX/ShvRx6838pQYLcJ
-         OZe3WoYPiRIN9lY45VDfk4Ao5/VtI0EnEr26xVlxv1hsyLxNh/SPRvIxzCrasz4tFf
-         HgsttMM3VKOBA==
-Received: by mail-lj1-f182.google.com with SMTP id e13so2657143ljn.0;
-        Fri, 23 Dec 2022 06:37:51 -0800 (PST)
-X-Gm-Message-State: AFqh2koMIgiyMa3A+hznBDiq7oEzF80B/2RdvS/Kf4wMSLvo3qt2kvin
-        W5/51mri5sk/pZDMSt9aSgIRx5HRbo2CfQykzns=
-X-Google-Smtp-Source: AMrXdXuaiwY1SI2xVJtYy5XhYz03ZT0uLMIQ55gjgyy1WIPT8IDHFTg3LmFnIiB7XrcHV4GdgTx8aNu3qUsL25yzTZw=
-X-Received: by 2002:a2e:910b:0:b0:279:bbff:a928 with SMTP id
- m11-20020a2e910b000000b00279bbffa928mr420239ljg.415.1671806269834; Fri, 23
- Dec 2022 06:37:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20221219091004.562-1-johan+linaro@kernel.org>
-In-Reply-To: <20221219091004.562-1-johan+linaro@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 23 Dec 2022 15:37:38 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHggvi9LRXKdEGWEs1xzOpD85H_S3CYQOX3byNaemSkZw@mail.gmail.com>
-Message-ID: <CAMj1kXHggvi9LRXKdEGWEs1xzOpD85H_S3CYQOX3byNaemSkZw@mail.gmail.com>
-Subject: Re: [PATCH] efi: fix NULL-deref in init error path
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Li Heng <liheng40@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Dec 2022 09:40:33 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E16837FA8;
+        Fri, 23 Dec 2022 06:40:31 -0800 (PST)
+Received: from hednb3.intra.ispras.ru (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id CF5DE40737B8;
+        Fri, 23 Dec 2022 14:40:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru CF5DE40737B8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1671806425;
+        bh=EhcMZIauTuOelwIwzHF+SwckBgMoMMbhnIK4cfP049Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=ZN2d9wc1csXf2o6f6UXQjMhGVzmhPifJTTac+l5OK9RFPfW/tHUi7BOPKbpCFpxuE
+         nf5dP9/VM50u7tB7FW6Kvqeb3qo8czZAnixVYqM+4BFrheXEP79DzXdsNffmPu0FJm
+         6O6zz7gJ/u4U1mtdTSHbD7SOeYqmvvhtlWiUhoJA=
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Brandt <chris.brandt@renesas.com>
+Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH v2] clk: renesas: cpg-mssr: Fix use after free if cpg_mssr_common_init() failed
+Date:   Fri, 23 Dec 2022 17:40:17 +0300
+Message-Id: <1671806417-32623-1-git-send-email-khoroshilov@ispras.ru>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <CAMuHMdXehA_n78nLXCwBdKV=So=6Vzjt5eye7ZE4bS_BvHnzEA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Dec 2022 at 10:10, Johan Hovold <johan+linaro@kernel.org> wrote:
->
-> In case runtime services are not supported or have been disabled the
-> runtime services workqueue will never have been allocated.
->
-> Do not try to destroy the workqueue unconditionally in the unlikely
-> event that EFI initialisation fails to avoid dereferencing a NULL
-> pointer.
->
-> Fixes: 98086df8b70c ("efi: add missed destroy_workqueue when efisubsys_init fails")
-> Cc: stable@vger.kernel.org
-> Cc: Li Heng <liheng40@huawei.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+If cpg_mssr_common_init() fails after assigning priv to global variable
+cpg_mssr_priv, it deallocates priv, but cpg_mssr_priv keeps dangling
+pointer that potentially can be used later.
 
-Thanks for the fix - I will queue it up after -rc1
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> ---
->  drivers/firmware/efi/efi.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> index 09716eebe8ac..a2b0cbc8741c 100644
-> --- a/drivers/firmware/efi/efi.c
-> +++ b/drivers/firmware/efi/efi.c
-> @@ -394,8 +394,8 @@ static int __init efisubsys_init(void)
->         efi_kobj = kobject_create_and_add("efi", firmware_kobj);
->         if (!efi_kobj) {
->                 pr_err("efi: Firmware registration failed.\n");
-> -               destroy_workqueue(efi_rts_wq);
-> -               return -ENOMEM;
-> +               error = -ENOMEM;
-> +               goto err_destroy_wq;
->         }
->
->         if (efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE |
-> @@ -443,7 +443,10 @@ static int __init efisubsys_init(void)
->  err_put:
->         kobject_put(efi_kobj);
->         efi_kobj = NULL;
-> -       destroy_workqueue(efi_rts_wq);
-> +err_destroy_wq:
-> +       if (efi_rts_wq)
-> +               destroy_workqueue(efi_rts_wq);
-> +
->         return error;
->  }
->
-> --
-> 2.37.4
->
+Fixes: 1f7db7bbf031 ("clk: renesas: cpg-mssr: Add early clock support")
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+v2: Move cpg_mssr_priv assignment just before return 0; instead of
+clearing it as Geert Uytterhoeven <geert@linux-m68k.org> suggested.
+ drivers/clk/renesas/renesas-cpg-mssr.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
+index 1a0cdf001b2f..5dce9779324d 100644
+--- a/drivers/clk/renesas/renesas-cpg-mssr.c
++++ b/drivers/clk/renesas/renesas-cpg-mssr.c
+@@ -989,7 +989,6 @@ static int __init cpg_mssr_common_init(struct device *dev,
+ 		goto out_err;
+ 	}
+ 
+-	cpg_mssr_priv = priv;
+ 	priv->num_core_clks = info->num_total_core_clks;
+ 	priv->num_mod_clks = info->num_hw_mod_clks;
+ 	priv->last_dt_core_clk = info->last_dt_core_clk;
+@@ -1019,6 +1018,8 @@ static int __init cpg_mssr_common_init(struct device *dev,
+ 	if (error)
+ 		goto out_err;
+ 
++	cpg_mssr_priv = priv;
++
+ 	return 0;
+ 
+ out_err:
+-- 
+2.7.4
+
