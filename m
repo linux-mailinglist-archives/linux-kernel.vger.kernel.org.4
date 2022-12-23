@@ -2,117 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8A86550D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A955E6550DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236246AbiLWNU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 08:20:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
+        id S236252AbiLWNVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 08:21:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236222AbiLWNUt (ORCPT
+        with ESMTP id S236308AbiLWNVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 08:20:49 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E046116D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:20:45 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id p36so7052238lfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:20:45 -0800 (PST)
+        Fri, 23 Dec 2022 08:21:33 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3378E44974;
+        Fri, 23 Dec 2022 05:21:17 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id n3so3323620pfq.10;
+        Fri, 23 Dec 2022 05:21:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KgXa7/ukKMDocBnSe76XCFCBNMSd8+VIWyqtqQC5em4=;
-        b=ny+RJdlJjYX4oriRqkBq5wTqCbuZUgAFx0hsZrYWJaHlP8hrJKv9pFyAA8Cwb3lRTR
-         NgVZdfRm3Y1OPp6uofb4Zhi4QXoZmzwcI5pd29DYiHGEV7QRm089RMQBYwmS+xGbhMe/
-         eWKloaNTsFNb3BsZcjhNQVinnpnQBW89XjICfXYJYJqdkSvEagu5hsFNQ8WWVSEj2cie
-         61pGJF66HZC88lZaIE9tcw1RwtXedBru1NW2+rj6yrAiAHiDB0JjQ+vwrCuQdIkvkLgO
-         u+fAdgQmPSgAq9cYKkltJ8NciyxSMlT3qv7a3vdSyw1kNiuxWyN/GWGvnqJdpuZ8K52E
-         816g==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z4AG8ZZAFogjfwzHjl2Zwy13JMVfLYspm2kIeKu5RAM=;
+        b=YFvxBo3CIvOFONwM24N+B4GChp/tDyPFsL9gpPxWQix4dzBvi7JiaJYk6u1kOCubBy
+         1dmQR+wRvyGHw1Ra/dy9OVLrJwAqadhsvXGuRYx3HI0c+DAQo+CcCdwZNXd+uSjAS958
+         iUJqgq1583TEV6MV7c5/9RWIv0jqnX+tJBtr8dLSXWycq1ovxaXDIK5LSfmNIQXC7XP2
+         Yxn8a5PlPe73PpOcCVc0M5xW/Zk6jhWuYtgRp0QCxwTFakjnv8As7cTnjS4KrWLEbFxy
+         bhTtbb08wev5HXLTmsWKcSRy5OQYwXBlrBiWJ56APDOJ6RcwDgDHBo4U5CVyPrEJNvW/
+         LUvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KgXa7/ukKMDocBnSe76XCFCBNMSd8+VIWyqtqQC5em4=;
-        b=3KzVcYzncKsH4TH+ZOLdyHp6PxdBFcVaU/DIGfig6EYHfh5gvySX7FrOxx3kev5ZyU
-         6u9KR/tH77xHxVSMh2V2b/8t81sy7dBE/Wt/ecdtEpXrxBd/WD7jR4+8tiIk136YG18t
-         9VAjZiV1FezygeHxbGuo97mDe2cRR4bZmxw+ZYpI8HNUhcFx1ryfTM6+I1QBEmlHtI6w
-         giuxruIM6YQqYlIu+lrTLKB1jxzfH/kaksvmmZ//HV7LTcTXyLVEqPX7NR0Q785YFfKB
-         ccSwAPPhkw9iro2S9zCM5FC/A/56kuBX7GYDXkzI+4DAHPjy4Y564YfuefqbwlXrDe+Y
-         QKYQ==
-X-Gm-Message-State: AFqh2kpDdY8xT6MziWWDX7Ux/foxp3cwak/pWLvK+KH+P94C5IGZ2248
-        LkpdGePowNFhrj6igvq0XxlVwA==
-X-Google-Smtp-Source: AMrXdXu99h0V8bKpeI66+rDGMCQJOZIp9zbdyJJu4Sggxux8Uel0/kwII85uWGyqk4iAICAyAKAyMw==
-X-Received: by 2002:ac2:5088:0:b0:4b9:a91c:b0cb with SMTP id f8-20020ac25088000000b004b9a91cb0cbmr2846591lfm.57.1671801643924;
-        Fri, 23 Dec 2022 05:20:43 -0800 (PST)
-Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id d13-20020a056512368d00b0049478cc4eb9sm516424lfs.230.2022.12.23.05.20.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 05:20:43 -0800 (PST)
-Message-ID: <40ce6134-e3e8-c3c7-8ba0-539b1ce3fc7c@linaro.org>
-Date:   Fri, 23 Dec 2022 14:20:42 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z4AG8ZZAFogjfwzHjl2Zwy13JMVfLYspm2kIeKu5RAM=;
+        b=3eeAxKecZGUtVFen9e1aNi79uzk0k4z+FxZlicShCIKiJ7zb0Uq6YUxx5yBD1H2K7H
+         zg2m6eBC2fNwAlfDqOf0zTk0JQco3AleId82HUBYKUNC01aq5WwRX2KbydE2FOcDzp5V
+         HwtSKaFXCUJruycsPsRdeL69BC7Hwb8knqIC4EVRuBEEYZKg2eeCUkG3c42kjuNsPqUP
+         0TqKdLpuVDyjx6+3YJTJEhe3RogENkqMcGFrvDKhYIJeb3zrr2SNUQIbqmRdAAfYSpYl
+         twyMxPWWH1+fi8nWpJ2OCXEnwPvvGAYf7m0CG3PlFTjEO1jXUYpBTghuo6lHNeNi+y9U
+         7neA==
+X-Gm-Message-State: AFqh2kqjo37HE9wRRNPBpT+R33DHUTgsE3tpQembjwKxDSCioJu0foTj
+        PGuTyCVKsbVqoOemU5CKVpE=
+X-Google-Smtp-Source: AMrXdXt2Wvde7aBgxHP+dorQ0fEfjwbBLHIHJCPhl9hvJkUZfepmEk4xGUhmoX+5uVJpDihztQAL4A==
+X-Received: by 2002:a05:6a00:1ca4:b0:566:900d:51f2 with SMTP id y36-20020a056a001ca400b00566900d51f2mr10010111pfw.33.1671801676599;
+        Fri, 23 Dec 2022 05:21:16 -0800 (PST)
+Received: from localhost.localdomain ([110.147.198.134])
+        by smtp.gmail.com with ESMTPSA id l66-20020a622545000000b00571bdf45888sm2492153pfl.154.2022.12.23.05.21.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 05:21:16 -0800 (PST)
+From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Jamie Bainbridge <jamie.bainbridge@gmail.com>,
+        Abhishek Rawal <rawal.abhishek92@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next] icmp: Add counters for rate limits
+Date:   Sat, 24 Dec 2022 00:21:01 +1100
+Message-Id: <12d652c903f1d67434b683606cf3f5f0f9df861a.1671801634.git.jamie.bainbridge@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 3/5] arm64: dts: qcom: sm6125-seine: Provide regulators to
- SDHCI 1
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221222203636.250190-1-marijn.suijten@somainline.org>
- <20221222203636.250190-4-marijn.suijten@somainline.org>
- <abd83b0c-ae33-98f7-a1e7-49f227246ebd@linaro.org>
- <20221223130813.qk7thawdueugb5z4@SoMainline.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221223130813.qk7thawdueugb5z4@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There are multiple ICMP rate limiting mechanisms:
 
+* Global limits: net.ipv4.icmp_msgs_burst/icmp_msgs_per_sec
+* v4 per-host limits: net.ipv4.icmp_ratelimit/ratemask
+* v6 per-host limits: net.ipv6.icmp_ratelimit/ratemask
 
-On 23.12.2022 14:08, Marijn Suijten wrote:
-> On 2022-12-23 13:00:18, Konrad Dybcio wrote:
->>
->>
->> On 22.12.2022 21:36, Marijn Suijten wrote:
->>> While SDHCI 1 appears to work out of the box, we cannot rely on the
->>> bootloader-enabled regulators nor expect them to remain enabled (e.g.
->>> when finally dropping pd_ignore_unused).
->>
->> Unrelated, unused-yet-enabled (as far as Linux is concerned, anyway,
->> it doesn't know the state of smd rpm regulators unless you add
->> regulator-boot-on) regulators get swept by "regulator cleanup".
-> 
-> That's exactly the point made here: at least this way Linux knows that
-> these regulators should remain enabled.  Even if it doesn't know about
-> many others and would fall flat on its face regardless when disabling
-> others as part of regulator cleanup.
-> 
-> Unless you meant something different?
-I meant that regulators are not handled by pd_ignore_unused, but rather
-by a similar mechanism.
+However, when ICMP output is limited, there is no way to tell
+which limit has been hit or even if the limits are responsible
+for the lack of ICMP output.
 
-Konrad
-> 
-> - Marijn
+Add counters for each of the cases above. As we are within
+local_bh_disable(), use the __INC stats variant.
+
+Example output:
+
+ # nstat -sz "*RateLimit*"
+ IcmpOutRateLimitGlobal          134                0.0
+ IcmpOutRateLimitHost            770                0.0
+ Icmp6OutRateLimitHost           84                 0.0
+
+Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Suggested-by: Abhishek Rawal <rawal.abhishek92@gmail.com>
+---
+ include/uapi/linux/snmp.h | 3 +++
+ net/ipv4/icmp.c           | 3 +++
+ net/ipv4/proc.c           | 8 +++++---
+ net/ipv6/icmp.c           | 4 ++++
+ net/ipv6/proc.c           | 1 +
+ 5 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/include/uapi/linux/snmp.h b/include/uapi/linux/snmp.h
+index 6600cb0164c2beb6f140beaa0bd4ea44e9443b0c..26f33a4c253d75c6661f6606aef9d8fd61baa476 100644
+--- a/include/uapi/linux/snmp.h
++++ b/include/uapi/linux/snmp.h
+@@ -95,6 +95,8 @@ enum
+ 	ICMP_MIB_OUTADDRMASKS,			/* OutAddrMasks */
+ 	ICMP_MIB_OUTADDRMASKREPS,		/* OutAddrMaskReps */
+ 	ICMP_MIB_CSUMERRORS,			/* InCsumErrors */
++	ICMP_MIB_RATELIMITGLOBAL,		/* OutRateLimitGlobal */
++	ICMP_MIB_RATELIMITHOST,			/* OutRateLimitHost */
+ 	__ICMP_MIB_MAX
+ };
+ 
+@@ -112,6 +114,7 @@ enum
+ 	ICMP6_MIB_OUTMSGS,			/* OutMsgs */
+ 	ICMP6_MIB_OUTERRORS,			/* OutErrors */
+ 	ICMP6_MIB_CSUMERRORS,			/* InCsumErrors */
++	ICMP6_MIB_RATELIMITHOST,		/* OutRateLimitHost */
+ 	__ICMP6_MIB_MAX
+ };
+ 
+diff --git a/net/ipv4/icmp.c b/net/ipv4/icmp.c
+index 46aa2d65e40ab63dc2d343997d13c85fd6a51b7a..8cebb476b3ab1833b4efe073efc57dbdfeffd21d 100644
+--- a/net/ipv4/icmp.c
++++ b/net/ipv4/icmp.c
+@@ -296,6 +296,7 @@ static bool icmpv4_global_allow(struct net *net, int type, int code)
+ 	if (icmp_global_allow())
+ 		return true;
+ 
++	__ICMP_INC_STATS(net, ICMP_MIB_RATELIMITGLOBAL);
+ 	return false;
+ }
+ 
+@@ -325,6 +326,8 @@ static bool icmpv4_xrlim_allow(struct net *net, struct rtable *rt,
+ 	if (peer)
+ 		inet_putpeer(peer);
+ out:
++	if (!rc)
++		__ICMP_INC_STATS(net, ICMP_MIB_RATELIMITHOST);
+ 	return rc;
+ }
+ 
+diff --git a/net/ipv4/proc.c b/net/ipv4/proc.c
+index f88daace9de3e1e747c67710f55a198758243482..eaf1d3113b62f7dc93fdc7b7c4041140ac63bf69 100644
+--- a/net/ipv4/proc.c
++++ b/net/ipv4/proc.c
+@@ -353,7 +353,7 @@ static void icmp_put(struct seq_file *seq)
+ 	seq_puts(seq, "\nIcmp: InMsgs InErrors InCsumErrors");
+ 	for (i = 0; icmpmibmap[i].name; i++)
+ 		seq_printf(seq, " In%s", icmpmibmap[i].name);
+-	seq_puts(seq, " OutMsgs OutErrors");
++	seq_puts(seq, " OutMsgs OutErrors OutRateLimitGlobal OutRateLimitHost");
+ 	for (i = 0; icmpmibmap[i].name; i++)
+ 		seq_printf(seq, " Out%s", icmpmibmap[i].name);
+ 	seq_printf(seq, "\nIcmp: %lu %lu %lu",
+@@ -363,9 +363,11 @@ static void icmp_put(struct seq_file *seq)
+ 	for (i = 0; icmpmibmap[i].name; i++)
+ 		seq_printf(seq, " %lu",
+ 			   atomic_long_read(ptr + icmpmibmap[i].index));
+-	seq_printf(seq, " %lu %lu",
++	seq_printf(seq, " %lu %lu %lu %lu",
+ 		snmp_fold_field(net->mib.icmp_statistics, ICMP_MIB_OUTMSGS),
+-		snmp_fold_field(net->mib.icmp_statistics, ICMP_MIB_OUTERRORS));
++		snmp_fold_field(net->mib.icmp_statistics, ICMP_MIB_OUTERRORS),
++		snmp_fold_field(net->mib.icmp_statistics, ICMP_MIB_RATELIMITGLOBAL),
++		snmp_fold_field(net->mib.icmp_statistics, ICMP_MIB_RATELIMITHOST));
+ 	for (i = 0; icmpmibmap[i].name; i++)
+ 		seq_printf(seq, " %lu",
+ 			   atomic_long_read(ptr + (icmpmibmap[i].index | 0x100)));
+diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
+index 9d92d51c475779f7af72b1c4ea35d4d482874db0..79c769c0d1138de1a73363a58362804657ae83c0 100644
+--- a/net/ipv6/icmp.c
++++ b/net/ipv6/icmp.c
+@@ -183,6 +183,7 @@ static bool icmpv6_global_allow(struct net *net, int type)
+ 	if (icmp_global_allow())
+ 		return true;
+ 
++	__ICMP_INC_STATS(net, ICMP_MIB_RATELIMITGLOBAL);
+ 	return false;
+ }
+ 
+@@ -224,6 +225,9 @@ static bool icmpv6_xrlim_allow(struct sock *sk, u8 type,
+ 		if (peer)
+ 			inet_putpeer(peer);
+ 	}
++	if (!res)
++		__ICMP6_INC_STATS(net, ip6_dst_idev(dst),
++				  ICMP6_MIB_RATELIMITHOST);
+ 	dst_release(dst);
+ 	return res;
+ }
+diff --git a/net/ipv6/proc.c b/net/ipv6/proc.c
+index d6306aa46bb1eb768ab77aae6a494640ed462157..e20b3705c2d2accedad4aac75064c33f733a80be 100644
+--- a/net/ipv6/proc.c
++++ b/net/ipv6/proc.c
+@@ -94,6 +94,7 @@ static const struct snmp_mib snmp6_icmp6_list[] = {
+ 	SNMP_MIB_ITEM("Icmp6OutMsgs", ICMP6_MIB_OUTMSGS),
+ 	SNMP_MIB_ITEM("Icmp6OutErrors", ICMP6_MIB_OUTERRORS),
+ 	SNMP_MIB_ITEM("Icmp6InCsumErrors", ICMP6_MIB_CSUMERRORS),
++	SNMP_MIB_ITEM("Icmp6OutRateLimitHost", ICMP6_MIB_RATELIMITHOST),
+ 	SNMP_MIB_SENTINEL
+ };
+ 
+-- 
+2.39.0
+
