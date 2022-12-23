@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB9D6553AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA276553AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiLWSiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 13:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S231802AbiLWSkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:40:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiLWSiS (ORCPT
+        with ESMTP id S230387AbiLWSkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:38:18 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F2C1572D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:38:17 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id 6so1080692pfz.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:38:17 -0800 (PST)
+        Fri, 23 Dec 2022 13:40:07 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BEF1D327
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:40:04 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso9483391pjp.4
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:40:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CW9ynGpyjmuCezhF9Kq7f7NKurQgILbHoK/L47Sljak=;
-        b=Tg+yTmrUOpub9jPzeOSe/knrEZ6RY3m9OQ5CK6BDl4jQKCl6Q+hnVuatiSQPkW3rPp
-         48SrWGvZK6bcFcbAM0V1l5XeI+vADV5TFkpscYA4JxxWNVmi1d4Yq3MMRlFhA4fhdnIR
-         2TTXWuQyrnThJzg2nf/7WyB4vXTi9I157zx7E=
+        bh=/K5s6GQ5c0Fl7h8Q3vjGYSICC8DwtoPDk3CYf+DbHR0=;
+        b=bBjEl+jjssxnMJPc+K1JNmIFXEx2lWOLSHwlOQ/M3JiZ58DP+dad09cwvP8wsY1FYU
+         UkHtTeG7i9TaXVCNDzwlbqyj2ZezrKd06FybmG8T4GF8DkYbJRJE5KupEi8zCYWt2/Oj
+         HeVm5TOzkkwncKxD/gB9vB4CNxhy08X0/FEFk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CW9ynGpyjmuCezhF9Kq7f7NKurQgILbHoK/L47Sljak=;
-        b=F97mnlJZCs0p+xkGCkLlLz+WU1+Uymhdnn39is8jdFiFzHxgMK/faaAl+wR/knUCEH
-         /+6VuJGCbc0fRDvmiePtDzAh9tdf1TKQApf11Re7P0MdgvWuv//4Gh/b4REcaNnikBi4
-         EcYIgC+jIfVGzhgJrIXqJT2QGGfc7UGxs6r3oiKC046eXuiCkCoNQOCgYcQcSIHe8oCI
-         a+uUEGxxi5J9y/LJgr5EX4DWlJpfPPYWQVRAP2vVFzgGyEB/11a7JP6bm4UufpSdy7Om
-         ObPqQ0lf+8MtIZF4RG9izKeHx7pRzZFtfGN9fZQPIXRXFrD9X71+BXMIATdZ9HuX9ZFF
-         AH9Q==
-X-Gm-Message-State: AFqh2kql7NImtgiqrCILhdG6QbLL7V9kX5B4tO57eMZI21D0ejffRiVq
-        sbTaC/mGDHbjFj7C+1qfq8sdrA==
-X-Google-Smtp-Source: AMrXdXvg+F4zX2N/Y03oI5smbzuOJ1581f+Z24O3HjAcj5Wmm6vQviICCBZxy1Uta+SaHSPUV+2JcA==
-X-Received: by 2002:a62:1c52:0:b0:577:ac84:cf8f with SMTP id c79-20020a621c52000000b00577ac84cf8fmr11560802pfc.34.1671820696951;
-        Fri, 23 Dec 2022 10:38:16 -0800 (PST)
+        bh=/K5s6GQ5c0Fl7h8Q3vjGYSICC8DwtoPDk3CYf+DbHR0=;
+        b=nfbd7rr+3D/ZRxRUAIjv76HpXYtVLENbXyR2PQZmTFeEHqY6YRWHLMplMEnDNtufoW
+         jZhfqBg4ZpxW6fupeKOXceJgXBKJ2ZCCJ1U3o2W/C0RFrzdspTRaJYRYFWdjK0D6XzUi
+         BTo/zahTXjNgelxP/fp8e3yq6vK8qYH6tSgAA9zX/fOaLpGRO+fuVOCu4j6khhai3Q9L
+         TvsVZMln0KwuJy43KgxsYEqD9ZqQSfJ/yu47j2AZhcSCzZlBEyZWVTqeSlVfdDKg6y2N
+         Bru+AUbCzyzxPp51lsH3JOUPZMS4qBWHvsREjSAd0Ctt+2UaW+Zjo0wbAzmkopmDCKZ8
+         Hjmg==
+X-Gm-Message-State: AFqh2kp9KUaxEQEqn+ZTKx31Pj2UhM0VGe+Ca0nGgnGeoL0lZGRHjgq2
+        +7geu+1qiqe7ajoAR0ANk5Wi0A==
+X-Google-Smtp-Source: AMrXdXs+QHPmxwDy7aPJ1g+JYLej95aQhHI3yqa4ZuGWIBwyQi/3+rmMhhK70nTpgnK71s48rvMTEg==
+X-Received: by 2002:a05:6a21:788f:b0:b2:2e66:482d with SMTP id bf15-20020a056a21788f00b000b22e66482dmr17159162pzc.50.1671820804375;
+        Fri, 23 Dec 2022 10:40:04 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i184-20020a6287c1000000b00574ee8d8779sm2843186pfe.65.2022.12.23.10.38.16
+        by smtp.gmail.com with ESMTPSA id f17-20020a63f751000000b0047712e4bc51sm2576700pgk.55.2022.12.23.10.40.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 10:38:16 -0800 (PST)
-Date:   Fri, 23 Dec 2022 10:38:15 -0800
+        Fri, 23 Dec 2022 10:40:03 -0800 (PST)
+Date:   Fri, 23 Dec 2022 10:40:03 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Connor O'Brien <connoro@google.com>,
-        John Stultz <jstultz@google.com>,
-        Kees Cook <keescook@chromium.org>, kernel-team@android.com,
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
         kernel test robot <lkp@intel.com>,
-        Luca Stefani <luca@osomprivacy.com>,
-        Midas Chien <midaschieh@google.com>,
-        Tony Luck <tony.luck@intel.com>, Wei Wang <wvw@google.com>
-Subject: [GIT PULL] pstore updates for v6.2-rc1-fixes
-Message-ID: <202212231038.955181AC@keescook>
+        Kristina Martsenko <kristina.martsenko@arm.com>,
+        linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        tangmeng <tangmeng@uniontech.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [GIT PULL] kernel hardening fixes for v6.2-rc1
+Message-ID: <202212231039.504D027B9@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,43 +89,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Linus,
 
-Please pull these pstore fixes for v6.2-rc1.
+Please pull these kernel hardening fixes for v6.2-rc1. (Yay typos.)
 
 Thanks!
 
 -Kees
 
-The following changes since commit e6b842741b4f39007215fd7e545cb55aa3d358a2:
+The following changes since commit d272e01fa0a2f15c5c331a37cd99c6875c7b7186:
 
-  pstore: Avoid kcore oops by vmap()ing with VM_IOREMAP (2022-12-05 16:15:09 -0800)
+  ksmbd: replace one-element arrays with flexible-array members (2022-12-02 13:14:29 -0800)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/pstore-v6.2-rc1-fixes
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/hardening-v6.2-rc1-fixes
 
-for you to fetch changes up to beca3e311a49cd3c55a056096531737d7afa4361:
+for you to fetch changes up to cf8016408d880afe9c5dc495af40dc2932874e77:
 
-  pstore: Properly assign mem_type property (2022-12-23 10:34:25 -0800)
-
-----------------------------------------------------------------
-pstore updates for v6.2-rc1-fixes
-
-- Switch pmsg_lock to an rt_mutex to avoid priority inversion (John Stultz)
-
-- Correctly assign mem_type property (Luca Stefani)
+  cfi: Fix CFI failure with KASAN (2022-12-23 10:04:31 -0800)
 
 ----------------------------------------------------------------
-John Stultz (2):
-      pstore: Switch pmsg_lock to an rt_mutex to avoid priority inversion
-      pstore: Make sure CONFIG_PSTORE_PMSG selects CONFIG_RT_MUTEXES
+kernel hardening fixes for v6.2-rc1
 
-Luca Stefani (1):
-      pstore: Properly assign mem_type property
+- Fix CFI failure with KASAN (Sami Tolvanen)
 
- fs/pstore/Kconfig | 1 +
- fs/pstore/pmsg.c  | 7 ++++---
- fs/pstore/ram.c   | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+- Fix LKDTM + CFI under GCC 7 and 8 (Kristina Martsenko)
+
+- Limit CONFIG_ZERO_CALL_USED_REGS to Clang > 15.0.6 (Nathan Chancellor)
+
+- Ignore "contents" argument in LoadPin's LSM hook handling
+
+- Fix paste-o in /sys/kernel/warn_count API docs
+
+- Use READ_ONCE() consistently for oops/warn limit reading
+
+----------------------------------------------------------------
+Kees Cook (3):
+      LoadPin: Ignore the "contents" argument of the LSM hooks
+      docs: Fix path paste-o for /sys/kernel/warn_count
+      exit: Use READ_ONCE() for all oops/warn limit reads
+
+Kristina Martsenko (1):
+      lkdtm: cfi: Make PAC test work with GCC 7 and 8
+
+Nathan Chancellor (1):
+      security: Restrict CONFIG_ZERO_CALL_USED_REGS to gcc or clang > 15.0.6
+
+Sami Tolvanen (1):
+      cfi: Fix CFI failure with KASAN
+
+ Documentation/ABI/testing/sysfs-kernel-warn_count |  2 +-
+ drivers/misc/lkdtm/cfi.c                          |  6 ++++-
+ kernel/Makefile                                   |  3 ---
+ kernel/exit.c                                     |  6 +++--
+ kernel/panic.c                                    |  7 ++++--
+ security/Kconfig.hardening                        |  3 +++
+ security/loadpin/loadpin.c                        | 30 ++++++++++++++---------
+ 7 files changed, 36 insertions(+), 21 deletions(-)
 
 -- 
 Kees Cook
