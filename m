@@ -2,147 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E57654FF5
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE76655002
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236233AbiLWMB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 07:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S236103AbiLWMCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 07:02:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236124AbiLWMBF (ORCPT
+        with ESMTP id S236136AbiLWMBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 07:01:05 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D493EAFB
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 04:00:21 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id y25so6830499lfa.9
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 04:00:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+nI2AU4o1rjXUcHSb6ceGhhVZddIcB3diHI1Vs6E0sA=;
-        b=wYiUKAFBZEUkbsZwdujqm4J1yb5X29oD24XfGz46xCp9h/qSU+voasAkOmhjpuEjO6
-         FlW9kE47xCidQdI/Y8Xt7fjpCk/BE8T4vb1Apm+0RW+2vz2k1BppYFsxldOXc8eiyUXq
-         pzanpdYdUmYZUuhLt4KqyeGQXVF9TmtNMqAAXBMZSkkajwEEWoBP1EoLLUZtBq/dZkIy
-         A1X1ii9m6dGEsIVHkCP2mztVBzuhE9xtSgUzsz4ePsKFua3K9xbtgKaKYSWt5hOTw8sZ
-         R1nusnDS0zWTDmpd8qaSwagx+HkpfKZP4HYWS0Zjyc/WQ5YqfhoPcBMprsU+oPAfzlwl
-         qZiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+nI2AU4o1rjXUcHSb6ceGhhVZddIcB3diHI1Vs6E0sA=;
-        b=E0egsxhcjlg50B92g4galz7Xxh/Skx7hwDRTMyN2RwD2dTRtOVa8S26c2biGbixdsy
-         g0T98z3Bo4xh4zpy8QOeXop0n6crOOTCqaxi6LJiua18YKOvrhrv6Fb7he5ye8sPV0YZ
-         YW8LrphDINeCKyBZ5fVADxfkX+BC7GIGclm522JdvKmqVM1jzpa7J9j9fFVGklPjO9m+
-         65IytC8WFGDFKJ2Sr/3unHkFje9uhdmNc9Wr2e3H6Hiv/ISwe525Dp510BO8IRN74whq
-         OOEuFc4KdrtECCbEeAV6sQ4gfZkY6MEK17sGaUX7AY1McUrTf5WLVjynRbspbGnHrXbb
-         oO0Q==
-X-Gm-Message-State: AFqh2kp+/Uqg7uencpa96Utv5XS9fROoydme8ef8sHx8sF15lp4vkDwX
-        FBYnxzqFmPZt1jvLp8ebkiheIg==
-X-Google-Smtp-Source: AMrXdXug02SHrEVae3snmuyspNlzmnJVxG+7NJO2UAAxHzVtSBinSDncn8yFVh+3wYWsf/EjFHsiBA==
-X-Received: by 2002:a05:6512:2508:b0:4b5:9b8f:cc82 with SMTP id be8-20020a056512250800b004b59b8fcc82mr2838920lfb.0.1671796820161;
-        Fri, 23 Dec 2022 04:00:20 -0800 (PST)
-Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05651234cc00b0047f7722b73csm497112lfr.142.2022.12.23.04.00.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 04:00:19 -0800 (PST)
-Message-ID: <abd83b0c-ae33-98f7-a1e7-49f227246ebd@linaro.org>
-Date:   Fri, 23 Dec 2022 13:00:18 +0100
+        Fri, 23 Dec 2022 07:01:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295A744950
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 04:00:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671796824;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ir6hlC98ha96yugZ9Hax992a/pYSGiooy4Ha/NQOKs8=;
+        b=XkDZXW/BPuo9BTFbPRr8pczsiN6Zd63sZpqyZ3KQoYfeLbuxZULUJHFS6LkPE6VMd8BfpH
+        JB2CydDTXieQVqS06lzKQx1534qYogJo0ryWRs3ufirIutj5MRwceA8P+FqJlNLQRtfESp
+        cuIZAn0G4K2Llirf1WzUj/lNLaaa2Fo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-605-bQNyeoZkPCWAllvQZmKw4A-1; Fri, 23 Dec 2022 07:00:20 -0500
+X-MC-Unique: bQNyeoZkPCWAllvQZmKw4A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7F7A21C25E87;
+        Fri, 23 Dec 2022 12:00:20 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C4B262166B34;
+        Fri, 23 Dec 2022 12:00:19 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH net-next 03/19] rxrpc: Make the local endpoint hold a ref on a
+ connected call
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, dhowells@redhat.com,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Fri, 23 Dec 2022 12:00:19 +0000
+Message-ID: <167179681923.2516210.12904779383912537114.stgit@warthog.procyon.org.uk>
+In-Reply-To: <167179679960.2516210.10739247907156079872.stgit@warthog.procyon.org.uk>
+References: <167179679960.2516210.10739247907156079872.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 3/5] arm64: dts: qcom: sm6125-seine: Provide regulators to
- SDHCI 1
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221222203636.250190-1-marijn.suijten@somainline.org>
- <20221222203636.250190-4-marijn.suijten@somainline.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221222203636.250190-4-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Make the local endpoint and it's I/O thread hold a reference on a connected
+call until that call is disconnected.  Without this, we're reliant on
+either the AF_RXRPC socket to hold a ref (which is dropped when the call is
+released) or a queued work item to hold a ref (the work item is being
+replaced with the I/O thread).
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+---
+
+ include/trace/events/rxrpc.h |    3 +++
+ net/rxrpc/call_object.c      |    2 ++
+ net/rxrpc/conn_client.c      |    6 +++---
+ net/rxrpc/conn_object.c      |   25 +++++++++++++++----------
+ 4 files changed, 23 insertions(+), 13 deletions(-)
+
+diff --git a/include/trace/events/rxrpc.h b/include/trace/events/rxrpc.h
+index 5f9dd7389536..b526d982da7e 100644
+--- a/include/trace/events/rxrpc.h
++++ b/include/trace/events/rxrpc.h
+@@ -148,6 +148,7 @@
+ 	E_(rxrpc_client_to_idle,		"->Idle")
+ 
+ #define rxrpc_call_traces \
++	EM(rxrpc_call_get_io_thread,		"GET iothread") \
+ 	EM(rxrpc_call_get_input,		"GET input   ") \
+ 	EM(rxrpc_call_get_kernel_service,	"GET krnl-srv") \
+ 	EM(rxrpc_call_get_notify_socket,	"GET notify  ") \
+@@ -160,6 +161,7 @@
+ 	EM(rxrpc_call_new_prealloc_service,	"NEW prealloc") \
+ 	EM(rxrpc_call_put_discard_prealloc,	"PUT disc-pre") \
+ 	EM(rxrpc_call_put_discard_error,	"PUT disc-err") \
++	EM(rxrpc_call_put_io_thread,		"PUT iothread") \
+ 	EM(rxrpc_call_put_input,		"PUT input   ") \
+ 	EM(rxrpc_call_put_kernel,		"PUT kernel  ") \
+ 	EM(rxrpc_call_put_poke,			"PUT poke    ") \
+@@ -173,6 +175,7 @@
+ 	EM(rxrpc_call_see_activate_client,	"SEE act-clnt") \
+ 	EM(rxrpc_call_see_connect_failed,	"SEE con-fail") \
+ 	EM(rxrpc_call_see_connected,		"SEE connect ") \
++	EM(rxrpc_call_see_disconnected,		"SEE disconn ") \
+ 	EM(rxrpc_call_see_distribute_error,	"SEE dist-err") \
+ 	EM(rxrpc_call_see_input,		"SEE input   ") \
+ 	EM(rxrpc_call_see_release,		"SEE release ") \
+diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
+index 89dcf60b1158..239fc3c75079 100644
+--- a/net/rxrpc/call_object.c
++++ b/net/rxrpc/call_object.c
+@@ -453,6 +453,8 @@ void rxrpc_incoming_call(struct rxrpc_sock *rx,
+ 		BUG();
+ 	}
+ 
++	rxrpc_get_call(call, rxrpc_call_get_io_thread);
++
+ 	/* Set the channel for this call.  We don't get channel_lock as we're
+ 	 * only defending against the data_ready handler (which we're called
+ 	 * from) and the RESPONSE packet parser (which is only really
+diff --git a/net/rxrpc/conn_client.c b/net/rxrpc/conn_client.c
+index e4063c4f4bb2..1edd65883c55 100644
+--- a/net/rxrpc/conn_client.c
++++ b/net/rxrpc/conn_client.c
+@@ -725,8 +725,11 @@ int rxrpc_connect_call(struct rxrpc_sock *rx,
+ 
+ 	rxrpc_discard_expired_client_conns(&rxnet->client_conn_reaper);
+ 
++	rxrpc_get_call(call, rxrpc_call_get_io_thread);
++
+ 	bundle = rxrpc_prep_call(rx, call, cp, srx, gfp);
+ 	if (IS_ERR(bundle)) {
++		rxrpc_put_call(call, rxrpc_call_get_io_thread);
+ 		ret = PTR_ERR(bundle);
+ 		goto out;
+ 	}
+@@ -820,7 +823,6 @@ void rxrpc_disconnect_client_call(struct rxrpc_bundle *bundle, struct rxrpc_call
+ 	_enter("c=%x", call->debug_id);
+ 
+ 	spin_lock(&bundle->channel_lock);
+-	set_bit(RXRPC_CALL_DISCONNECTED, &call->flags);
+ 
+ 	/* Calls that have never actually been assigned a channel can simply be
+ 	 * discarded.
+@@ -912,8 +914,6 @@ void rxrpc_disconnect_client_call(struct rxrpc_bundle *bundle, struct rxrpc_call
+ 
+ out:
+ 	spin_unlock(&bundle->channel_lock);
+-	_leave("");
+-	return;
+ }
+ 
+ /*
+diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
+index 3c8f83dacb2b..354a5ecb34ee 100644
+--- a/net/rxrpc/conn_object.c
++++ b/net/rxrpc/conn_object.c
+@@ -178,6 +178,9 @@ void rxrpc_disconnect_call(struct rxrpc_call *call)
+ {
+ 	struct rxrpc_connection *conn = call->conn;
+ 
++	set_bit(RXRPC_CALL_DISCONNECTED, &call->flags);
++	rxrpc_see_call(call, rxrpc_call_see_disconnected);
++
+ 	call->peer->cong_ssthresh = call->cong_ssthresh;
+ 
+ 	if (!hlist_unhashed(&call->error_link)) {
+@@ -186,18 +189,20 @@ void rxrpc_disconnect_call(struct rxrpc_call *call)
+ 		spin_unlock(&call->peer->lock);
+ 	}
+ 
+-	if (rxrpc_is_client_call(call))
+-		return rxrpc_disconnect_client_call(conn->bundle, call);
++	if (rxrpc_is_client_call(call)) {
++		rxrpc_disconnect_client_call(conn->bundle, call);
++	} else {
++		spin_lock(&conn->bundle->channel_lock);
++		__rxrpc_disconnect_call(conn, call);
++		spin_unlock(&conn->bundle->channel_lock);
+ 
+-	spin_lock(&conn->bundle->channel_lock);
+-	__rxrpc_disconnect_call(conn, call);
+-	spin_unlock(&conn->bundle->channel_lock);
++		conn->idle_timestamp = jiffies;
++		if (atomic_dec_and_test(&conn->active))
++			rxrpc_set_service_reap_timer(
++				conn->rxnet, jiffies + rxrpc_connection_expiry);
++	}
+ 
+-	set_bit(RXRPC_CALL_DISCONNECTED, &call->flags);
+-	conn->idle_timestamp = jiffies;
+-	if (atomic_dec_and_test(&conn->active))
+-		rxrpc_set_service_reap_timer(conn->rxnet,
+-					     jiffies + rxrpc_connection_expiry);
++	rxrpc_put_call(call, rxrpc_call_put_io_thread);
+ }
+ 
+ /*
 
 
-On 22.12.2022 21:36, Marijn Suijten wrote:
-> While SDHCI 1 appears to work out of the box, we cannot rely on the
-> bootloader-enabled regulators nor expect them to remain enabled (e.g.
-> when finally dropping pd_ignore_unused).
-Unrelated, unused-yet-enabled (as far as Linux is concerned, anyway,
-it doesn't know the state of smd rpm regulators unless you add
-regulator-boot-on) regulators get swept by "regulator cleanup".
-
-  Provide it the necessary l24
-> and l11 regulators now that PM6125 regulators have been made available
-> on this board.
-> 
-> As usual regulator voltages are decreased to the maximum voted by the
-> downstream driver for safety.  No other hardware feeds off of these
-> regulators anyway (except UFS, which isn't used on the seine board in
-> favour of a DV6DMB eMMC card connected to SDHCI 1).
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  .../boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts     | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> index 15b43cff210b..eaddbe522695 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> @@ -348,7 +348,8 @@ pm6125_l10: l10 {
->  
->  		pm6125_l11: l11 {
->  			regulator-min-microvolt = <1800000>;
-> -			regulator-max-microvolt = <1952000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-allow-set-load;
->  		};
->  
->  		pm6125_l12: l12 {
-> @@ -413,7 +414,8 @@ pm6125_l23: l23 {
->  
->  		pm6125_l24: l24 {
->  			regulator-min-microvolt = <2944000>;
-> -			regulator-max-microvolt = <3304000>;
-> +			regulator-max-microvolt = <2950000>;
-> +			regulator-allow-set-load;
->  		};
->  	};
->  };
-> @@ -437,6 +439,8 @@ sd-cd-pins {
->  };
->  
->  &sdhc_1 {
-> +	vmmc-supply = <&pm6125_l24>;
-> +	vqmmc-supply = <&pm6125_l11>;
->  	status = "okay";
->  };
->  
