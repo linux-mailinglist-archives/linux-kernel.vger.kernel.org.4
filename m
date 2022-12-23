@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB8E6549AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 01:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272306549AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 01:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235746AbiLWAOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 19:14:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S235795AbiLWAOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 19:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235443AbiLWAOF (ORCPT
+        with ESMTP id S235573AbiLWAOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 19:14:05 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B66028705
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 16:14:05 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id h6-20020a17090aa88600b00223fccff2efso3940718pjq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 16:14:05 -0800 (PST)
+        Thu, 22 Dec 2022 19:14:09 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F6D2873B
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 16:14:07 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id me18-20020a17090b17d200b00219f8dc7cb3so3945759pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 16:14:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xlm4N5CTIk+gx1iR2xF2yQo3rvmps98CLQF90zWQYoY=;
-        b=jq9yJkP+aFqI9u8i8zl7BZbwNgH9lWiHnMROFDPqV7emq/6CZ1BBaf50MTKk4axAHc
-         P9sABC18Xnp2N7bHZ4fpyynjIqDrHu6Gm9tsTlRRzSwwn3W0i3ulLy0Xl61kd3MxS1Sb
-         2NHztbMkbWmYzJGnjb2t3WQGs6TpLSrUBIBYBU8VNN912lCHyUFwtnC5bk9HsB8Ggfis
-         +y7p+8FCdWi7jdfSSDQNlmCl+FJTT2KJdcPfFDlhmohQqs3qvR9KClcOBwCwtol5jTBA
-         0rS1T8RuAY6ZCMdhuzRsWhPMXMYwBH531gG+eFKkv7DZNMnSsCUeFcAWqVBQ6TTT5aix
-         XKRw==
+        bh=EZopER/s4tiFrvreBNvA+OQLVRUFqUiISvcp+c+5UHk=;
+        b=HUHXH4BEFdjasI8KjN0DUcFgQ332DM1EZL/VY94UC6Bde5YG+dsLST21wPEJeWfbWE
+         wY4rri7V8MWRDYmpHskMTKvqqoxLZBtWuJC7SsHzFUIHkRoL0PTqLj7lSni34hAjQObJ
+         xlXyImG913s4gNZ8WDm9+nM7U9HGJqblab9uMnFqkO+wPGJc1j5U63dgGp+POZhikZLP
+         j/rXDR7gmy5jND0wk+OXc9YgUJodEbji4Jn4yijCKodYA82gSADK6f7xteIR75w0gdzX
+         tsixo1K5xYhwzfwRZhv6jAu4TVv612TEO75bFQbxpJ3LOTl3mCEK6W07rf9eGXcjdcjY
+         DPNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xlm4N5CTIk+gx1iR2xF2yQo3rvmps98CLQF90zWQYoY=;
-        b=JCifJ9v5AieusW65AvpCaQrof3u3dfWiHJBjaYqtkmhg3L/YxmfLdegzdjN5bJwhlD
-         endckrIeMq0n4r4YFNIhFw2rh/vRezQuc/QLeUL5ytnew31dSPGUSdtO46FUTeqrsNQ4
-         YOWDQgMHMcxHAL11eg+QB/Rc2/IbsrsF+dLG5pRaW89OGrmCjJg907uQpxA0LYJi9oQI
-         m5xLizOIJFjOGRQVs4Eqp0UgrTCREyO99apN5o+F0e0vTw8/KhuuYRh86Sm0HiHDp4l4
-         oloLvYnmXvCUQnCZjabT+5FTlIxmLP1zyiemOJY26IZp/aHWQ8gjTNeIqqv0e7IUFUMH
-         BJBQ==
-X-Gm-Message-State: AFqh2kpA/Ce9LoUpQ3Q3yEzAktozTXw8wzkE/F7OqADh/8lFeByHY8a/
-        6sNshflhkzJSKnhS2TiPe/SwjIpRzfdMaSvs
-X-Google-Smtp-Source: AMrXdXsWc72htDtUWZS0yotugRgHtIHt8ahcLWxwxO5Sze+CNKRIKcpoRG+ZfMoKpk9Dv/2eij/H1pcN0LxZ3IDY
+        bh=EZopER/s4tiFrvreBNvA+OQLVRUFqUiISvcp+c+5UHk=;
+        b=eT00iv3ELABzGMjUd/UhT8wrfcIA7Vs4Y6qLGob0UMa50VA4colwarYdgqQNFX0dXU
+         0sZHSNek8Cs2jCuGrqKHM/H9lHZzWQAHaRFgSBQMbyNPDKmyEBtbnIyuHpcXOZYC/T58
+         sdXQx5taB5vH/XnqNKY02UTAe/dM/KquabZo4LY58JEGufaq3FtP0/mVbAYndvn5H9dL
+         VU51+zKKBHuuZ9EhnbWtx7blyroF+tFJZzxclcic+bdTH9GH6BohOp0JjL2qnCROFsgs
+         Wlj5wyScEBcda5Gg/C33vgLtCq9QT+wX1yldPJywY+7opLq2pIOy/u0DB56klAwUCYjq
+         xz3A==
+X-Gm-Message-State: AFqh2ko+XrSwEbamS7sv8QyNFLacbics6QR9o5TWY5XHM5Itb4zPLNqW
+        K6UQLw8VwAwjA8lvmDO+6fp/hZRFjl0ImZA1
+X-Google-Smtp-Source: AMrXdXtsCOLxwkxPeGE9Ol/zssDLd6SOwLmrDr2Pr3mBLzctCLIMEiKmUCf6u6bVUNGHfgsoNz3vV5wWK10EBiv+
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:903:32c3:b0:191:3e01:39b3 with SMTP
- id i3-20020a17090332c300b001913e0139b3mr400196plr.5.1671754444373; Thu, 22
- Dec 2022 16:14:04 -0800 (PST)
-Date:   Fri, 23 Dec 2022 00:13:48 +0000
+ (user=vannapurve job=sendgmr) by 2002:a62:3042:0:b0:576:f200:210 with SMTP id
+ w63-20020a623042000000b00576f2000210mr505612pfw.67.1671754446844; Thu, 22 Dec
+ 2022 16:14:06 -0800 (PST)
+Date:   Fri, 23 Dec 2022 00:13:49 +0000
 In-Reply-To: <20221223001352.3873203-1-vannapurve@google.com>
 Mime-Version: 1.0
 References: <20221223001352.3873203-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221223001352.3873203-5-vannapurve@google.com>
-Subject: [V3 PATCH 4/8] KVM: selftests: Split SEV VM creation logic
+Message-ID: <20221223001352.3873203-6-vannapurve@google.com>
+Subject: [V3 PATCH 5/8] KVM: selftests: Enable pagetable mapping for SEV VMs
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -85,72 +85,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Split SEV VM creation logic to allow additional modifications
-to SEV VM configuration e.g. adding memslots.
+Enable pagetable tracking and mapping for SEV VMs to allow guest code to
+execute guest_map_region_shared/private APIs.
 
 Signed-off-by: Vishal Annapurve <vannapurve@google.com>
 ---
- .../selftests/kvm/include/x86_64/sev.h        |  4 ++++
- tools/testing/selftests/kvm/lib/x86_64/sev.c  | 20 ++++++++++++++++---
- 2 files changed, 21 insertions(+), 3 deletions(-)
+ tools/testing/selftests/kvm/lib/x86_64/sev.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/sev.h b/tools/testing/selftests/kvm/include/x86_64/sev.h
-index 1148db928d0b..6bf2015fff7a 100644
---- a/tools/testing/selftests/kvm/include/x86_64/sev.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/sev.h
-@@ -19,4 +19,8 @@ bool is_kvm_sev_supported(void);
- struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t policy, void *guest_code,
- 					   struct kvm_vcpu **cpu);
- 
-+struct kvm_vm *sev_vm_init_with_one_vcpu(uint32_t policy, void *guest_code,
-+					   struct kvm_vcpu **cpu);
-+
-+void sev_vm_finalize(struct kvm_vm *vm, uint32_t policy);
- #endif /* SELFTEST_KVM_SEV_H */
 diff --git a/tools/testing/selftests/kvm/lib/x86_64/sev.c b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-index 49c62f25363e..96d3dbc2ba74 100644
+index 96d3dbc2ba74..0dfffdc224d6 100644
 --- a/tools/testing/selftests/kvm/lib/x86_64/sev.c
 +++ b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-@@ -215,7 +215,7 @@ static void sev_vm_measure(struct kvm_vm *vm)
+@@ -215,6 +215,8 @@ static void sev_vm_measure(struct kvm_vm *vm)
  	pr_debug("\n");
  }
  
--struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t policy, void *guest_code,
-+struct kvm_vm *sev_vm_init_with_one_vcpu(uint32_t policy, void *guest_code,
++#define GUEST_PGT_MIN_VADDR     0x10000
++
+ struct kvm_vm *sev_vm_init_with_one_vcpu(uint32_t policy, void *guest_code,
  					   struct kvm_vcpu **cpu)
  {
- 	enum vm_guest_mode mode = VM_MODE_PXXV48_4K;
-@@ -231,14 +231,28 @@ struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t policy, void *guest_code,
- 	*cpu = vm_vcpu_add(vm, 0, guest_code);
- 	kvm_vm_elf_load(vm, program_invocation_name);
+@@ -224,6 +226,7 @@ struct kvm_vm *sev_vm_init_with_one_vcpu(uint32_t policy, void *guest_code,
  
-+	pr_info("SEV guest created, policy: 0x%x, size: %lu KB\n", policy,
-+		nr_pages * vm->page_size / 1024);
-+	return vm;
-+}
+ 	vm = ____vm_create(mode, nr_pages);
+ 
++	vm_set_pgt_alloc_tracking(vm);
+ 	kvm_sev_ioctl(vm, KVM_SEV_INIT, NULL);
+ 
+ 	configure_sev_pte_masks(vm);
+@@ -238,6 +241,8 @@ struct kvm_vm *sev_vm_init_with_one_vcpu(uint32_t policy, void *guest_code,
+ 
+ void sev_vm_finalize(struct kvm_vm *vm, uint32_t policy)
+ {
++	vm_map_page_table(vm, GUEST_PGT_MIN_VADDR);
 +
-+void sev_vm_finalize(struct kvm_vm *vm, uint32_t policy)
-+{
  	sev_vm_launch(vm, policy);
  
  	sev_vm_measure(vm);
- 
- 	sev_vm_launch_finish(vm);
-+}
- 
--	pr_info("SEV guest created, policy: 0x%x, size: %lu KB\n", policy,
--		nr_pages * vm->page_size / 1024);
-+struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t policy, void *guest_code,
-+					   struct kvm_vcpu **cpu)
-+{
-+	struct kvm_vm *vm;
-+
-+	vm = sev_vm_init_with_one_vcpu(policy, guest_code, cpu);
-+
-+	sev_vm_finalize(vm, policy);
- 
- 	return vm;
- }
 -- 
 2.39.0.314.g84b9a713c41-goog
 
