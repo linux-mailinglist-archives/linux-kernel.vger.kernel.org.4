@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457B5654A93
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 02:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5CF654A95
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 02:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiLWBzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 20:55:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
+        id S235750AbiLWBzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 20:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiLWBzO (ORCPT
+        with ESMTP id S230022AbiLWBzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 20:55:14 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597ED218BD;
-        Thu, 22 Dec 2022 17:55:14 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d3so3643237plr.10;
-        Thu, 22 Dec 2022 17:55:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=srfyvT9Du35tqYJ7381ERyAs8xUzuRO4CHRPOvNkoCQ=;
-        b=g6jDtfgABgcUkGmH/9Xy+64QNxKFTXo7Fxgc7UF4nHEKi0elkWyNdzUA0Q9NC1n6nt
-         6Jye5Fy3ttPq+UPUARhwIItgtNTbRT//XihpFY3Ru/t2FCCtnHrZWymcEWH61L+WQkMP
-         xGCVwuzSh+ahlFdmMJOhUYmwgH5/yuJhYdL9GuzQcx+UeWO4fCLYcZHcGiUHaqL/6g5T
-         CYM8/Dl9BaDdSuWpPeoFKDOdr3wVanLuJ+jPlBUg8C3QgY5ijWq88Wr/U7aLAuV4UC/S
-         eKmQMqs/7FA5VRBgC09k2xJ4m3Ar8meijXDKHnm67OebcITHy415+UlTJg7Bhja5ctvz
-         nZ4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=srfyvT9Du35tqYJ7381ERyAs8xUzuRO4CHRPOvNkoCQ=;
-        b=Z4t+K3jkdUPohr3uDOs7q/TLksSfcalqVTZjuKg13wmsLqkbpYYMfqO3Ybj0rlKXHO
-         2JPcAiJqKb+3f+i1D8LD0Xz/OXsgrF3C3rOR2pzZcLyPre2LDJ4A6tNMMYfuPfa0X7X6
-         vB49Rufz7067bGLbZqaA3dS/2nQ213rP8AD3aSsLt3bunrDM2W418tDKQ5uFrOpGKBgS
-         FV6e+ZoDA5/61HtiRT02qG7xU1Ep0b4icDhh7atHrI6BY81oAy8gllF+pfenDRqUyluX
-         bPFOpjUUOjW89gpqoj0WjHU9gLNplOlczX507bKTaF7fFOFLR65O9eem8jAeLpWV7Y+J
-         DR9w==
-X-Gm-Message-State: AFqh2koWdbKgp5Ke1gPWLjoQun6It4V3LwSm847wuaO3e+JdWDt0+ls4
-        2ZTx6wHBCBXVTivrcdFu3kfu9NBzqqI=
-X-Google-Smtp-Source: AMrXdXubmd0pUwnZdbokkePY9fPYiYY3PSxppIA15h4hNtcYXdvp5EkYv96DvF5REQN+42UW/fa2ZA==
-X-Received: by 2002:a17:90a:1701:b0:223:4785:1458 with SMTP id z1-20020a17090a170100b0022347851458mr8568635pjd.45.1671760513826;
-        Thu, 22 Dec 2022 17:55:13 -0800 (PST)
-Received: from [192.168.43.80] (subs03-180-214-233-82.three.co.id. [180.214.233.82])
-        by smtp.gmail.com with ESMTPSA id ne2-20020a17090b374200b001ef8ab65052sm1202532pjb.11.2022.12.22.17.55.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 17:55:13 -0800 (PST)
-Message-ID: <65421f5e-6af7-ac1b-d1ec-209c3e45edac@gmail.com>
-Date:   Fri, 23 Dec 2022 08:55:08 +0700
+        Thu, 22 Dec 2022 20:55:16 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6B3218BD;
+        Thu, 22 Dec 2022 17:55:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3F0B9CE1C2B;
+        Fri, 23 Dec 2022 01:55:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E47C433D2;
+        Fri, 23 Dec 2022 01:55:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671760512;
+        bh=7+FMQzhkdUuBY613R/cYs3AH1Nhez93yWDo3mNZV11k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UEUyNKx2i1LZAVFYds1BlBgyPm/Ik7cpS8U7LfeCdyg6rN34F2MxFbpWcB99oJhWY
+         z3PCM+xeXJc8le1cBwEWvQgHqE+zizdVCc4EUggVJTBdAm0up55elIPXsA9sD3udvn
+         egfjkJqY68Ty9hr//Cwd/0R2imFrjdY7DYeYlQVxFgF9Q0OUNI4ahLOXrdlwppZIB6
+         IGhXVuGjgxPiqZ+dXPaQBHuwYPZJmwzRe0TKQx92R0ZBjDHgjG9XG1UG2kB1/5SaK9
+         lLwTXBmiVtso4HCVs5oQGkXY15JlAV0Smt/mRzag40XxsQXH3LS8gDdBUvVpwnDEtY
+         scu31Ntzcd6dQ==
+Date:   Thu, 22 Dec 2022 17:55:10 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Alvin =?UTF-8?B?xaBpcHJhZ2E=?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>
+Subject: Re: [PATCH v5 net-next 04/10] dt-bindings: net: dsa: utilize base
+ definitions for standard dsa switches
+Message-ID: <20221222175510.7ca0b563@kernel.org>
+In-Reply-To: <Y6S5Ple5SURq0QSU@colin-ia-desktop>
+References: <20221210033033.662553-1-colin.foster@in-advantage.com>
+        <20221210033033.662553-5-colin.foster@in-advantage.com>
+        <1df417b5-a924-33d4-a302-eb526f7124b4@arinc9.com>
+        <Y5TJw+zcEDf2ItZ5@euler>
+        <c1e40b58-4459-2929-64f3-3e20f36f6947@arinc9.com>
+        <20221212165147.GA1092706-robh@kernel.org>
+        <Y5d5F9IODF4xhcps@COLIN-DESKTOP1.localdomain>
+        <Y6S5Ple5SURq0QSU@colin-ia-desktop>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] Documentation: stable: Add rule on what kind of patches
- are accepted
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
-        gregkh@linuxfoundation.org, sashal@kernel.org, corbet@lwn.net
-Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joneslee@google.com
-References: <20221222091658.1975240-1-tudor.ambarus@linaro.org>
- <4fbc9e89-24af-9d59-dab0-73925ac94df1@gmail.com>
- <5fe3c17b-44c3-1e1a-9ac5-1db8766120f4@linaro.org>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <5fe3c17b-44c3-1e1a-9ac5-1db8766120f4@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/22/22 20:01, Tudor Ambarus wrote:
->> Are there any other examples of problems that can "only" be solved by
->> introducing new features? Or new huge features that are virtually
->> harder to backport?
->>
-> 
-> Here's an example:
-> https://lore.kernel.org/linux-kernel/20221222083545.1972489-1-tudor.ambarus@linaro.org/
+On Thu, 22 Dec 2022 12:08:30 -0800 Colin Foster wrote:
+> Heads up on my plan for this. I plan to re-submit this on Monday after
+> the merge window with the change where I move the $ref: dsa-port.yaml#
+> to outside the allOf: section, and remove the object type as the above
+> code suggests. Hopefully that's the right step to take.
 
-I have seen that, but is there an answer for the latter question that
-I have asked before?
-
--- 
-An old man doll... just what I always wanted! - Clara
-
+FWIW in case you mean Mon, Dec 26th and net-next -- we extended 
+the period of net-next being closed until Jan:
+https://lore.kernel.org/all/20221215092531.133ce653@kernel.org/
