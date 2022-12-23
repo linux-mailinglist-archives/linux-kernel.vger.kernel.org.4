@@ -2,132 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A6B6549DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 01:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 331FB6549E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 01:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiLWAzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 19:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S229785AbiLWA5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 19:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiLWAzX (ORCPT
+        with ESMTP id S229524AbiLWA5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 19:55:23 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D69C21259;
-        Thu, 22 Dec 2022 16:55:18 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1443a16b71cso4407245fac.13;
-        Thu, 22 Dec 2022 16:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jrXYNrQBTvwm5ci+yZvQJOUeh50hcJmA0AcwoEvKjqo=;
-        b=Dt2/YI7FLlGpPodOaERqxcPF5edwtNrT6F3ULIEs+86T6q6lNxHAAQvKf5jcaSghKE
-         sRdFhT8Ys8J7SxK5gdV0xOrp+H4bwbl51PTGloiH9xAubw+ta3ZgD4p0kBtBUV3P+Uqv
-         atYSK9xbh+ebysr/3zlU3GS7yjawYoddJY+hAXiUKwxWEML2JmNeYFgdxFOz7KotQaIT
-         St0qfhsviAMFVjYx46tWfCZf/ab7DvcvtuWT3r9sVsXe7bm1hHrrke0DOXkTBoxRrhbJ
-         AOKjT7+K7fLz3XiXVgziG/6LcsL+h2pV7QYW1f+CbhMVS0bgeiB1IcbM9mmk/ahI0jNM
-         +CvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jrXYNrQBTvwm5ci+yZvQJOUeh50hcJmA0AcwoEvKjqo=;
-        b=wFISvWlc2SQvodUGK4nU9nGYJsUXiExGcPgVTJnixjAh5TyXI9vMiPoVZsVGgm9OWB
-         IMY6foASDlEg7fkgyMYynDIIaSXLzW0Q08/J7l+Dw/Re8CxADX+euR4A29Oa4KwoPUe8
-         HG6lN2cfrClq7jwhpuvvsndWKgtjj+ZvRo806Qc7uQOV1fiV02gxli3MiwXVBrorzdqQ
-         Lc5A/FzZLDEMq+3c3vXz4XB18wm9qU6ZxbXIYHJZShjH9VxFqU+oA1lft1MYzgkz5vvz
-         nG8uOLsk4sqEMqVyJaX9zWAMbKOA1Y3kQvM062HxCOlHve5HwTls8lfm/sdmXtL3EmEr
-         YpBA==
-X-Gm-Message-State: AFqh2kpT2QCZbpVgkSnU8huiGiiSbB3Mlaxlol7jn6G6P9RhDOFjjYpP
-        vA0oZh3xn7efsAdBhpUe3k2ht2qc1Po=
-X-Google-Smtp-Source: AMrXdXt2liwJEGraAOCv5U06fS33bED+3NZjifWq1+qZMjCYqRTO1sx38seCHdywHIz3UNhKh7U+YA==
-X-Received: by 2002:a05:6870:9f89:b0:144:ace9:ef83 with SMTP id xm9-20020a0568709f8900b00144ace9ef83mr3752485oab.57.1671756917385;
-        Thu, 22 Dec 2022 16:55:17 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a15-20020a05687073cf00b00144bb1013e6sm957382oan.4.2022.12.22.16.55.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 16:55:16 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 22 Dec 2022 16:55:14 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: wdat_wdt: Avoid unimplemented get_timeleft
-Message-ID: <20221223005514.GA3188712@roeck-us.net>
-References: <20221221-wdat_wdt-timeleft-v1-1-8e8a314c36cc@weissschuh.net>
+        Thu, 22 Dec 2022 19:57:08 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D3B20993;
+        Thu, 22 Dec 2022 16:57:07 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BMH1F8S028064;
+        Thu, 22 Dec 2022 16:56:54 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=QulrNgaOUK33IV9vkpmdoeKHE6HJxWkxmTMgRZ9iX8o=;
+ b=cJoR/Ig7bO7dXKthOJCTJqolR7aibYfABybEHhSvL+2KvyIHRuQbxzq8fwN9WhwJt1AR
+ gafyR2K8AWD5Dshv4WIpmZwCKmt3daRkmDhmwOD/7VVn2vfiA/pZk2CQwmoOztQfLiwV
+ 85MLfx7Pt7P7+izKAVyKu1x2/0RSyalDGuvM7bCD4fWu3LlwcM38h9NDGVCWVxIBZBfC
+ kDvMIo4wczk0LYQmJUUqYWvdu6APfbcJV6264ZShMpybmfJLMCaBUnxdFxSjApQ2fXLL
+ 4i8oTRFphnbZejNYLMltfDx+hLveK8NKjCLalT7qmRSfENNO+Zb/l5WIk0AOXswFNDm4 UQ== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3mhe5rv0ts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 22 Dec 2022 16:56:54 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 22 Dec
+ 2022 16:56:51 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Thu, 22 Dec 2022 16:56:51 -0800
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id C16F23F705C;
+        Thu, 22 Dec 2022 16:56:48 -0800 (PST)
+From:   Geetha sowjanya <gakula@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <pabeni@redhat.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <sbhatta@marvell.com>, <hkelam@marvell.com>,
+        <gakula@marvell.com>, <sgoutham@marvell.com>
+Subject: [PATCH net] octeontx2-pf: Fix lmtst Id used in aura free
+Date:   Fri, 23 Dec 2022 06:26:45 +0530
+Message-ID: <20221223005645.8709-1-gakula@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221221-wdat_wdt-timeleft-v1-1-8e8a314c36cc@weissschuh.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: C8wYzdYiF0iOqmTIWj8YSg--lELqOcO_
+X-Proofpoint-ORIG-GUID: C8wYzdYiF0iOqmTIWj8YSg--lELqOcO_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-22_12,2022-12-22_03,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 11:43:31PM +0000, Thomas Weiﬂschuh wrote:
-> As per the specification the action QUERY_COUNTDOWN_PERIOD is optional.
-> If the action is not implemented by the physical device the driver would
-> always report "0" from get_timeleft().
-> Avoid confusing userspace by only providing get_timeleft() when
-> implemented by the hardware.
-> 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+Current code uses per_cpu pointer to get the lmtst_id mapped to
+the core on which aura_free() is executed. Using per_cpu pointer
+without preemption disable causing mismatch between lmtst_id and
+core on which pointer gets freed. This patch fixes the issue by
+disabling preemption around aura_free.
 
-Assuming that there can be only one of those watchdogs in the system,
+This patch also addresses the memory reservation issue,
+currently NIX, NPA queue context memory is being allocated using
+GFP_KERNEL flag which inturns allocates from memory reserved for
+CMA_DMA. Sizing CMA_DMA memory is getting difficult due to this
+dependency, the more number of interfaces enabled the more the
+CMA_DMA memory requirement.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+To fix this issue, GFP_KERNEL flag is replaced with GFP_ATOMIC,
+with this memory will be allocated from unreserved memory.
 
-Guenter
+Fixes: ef6c8da71eaf ("octeontx2-pf: cn10K: Reserve LMTST lines per core")
+Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
+Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+---
+ .../ethernet/marvell/octeontx2/af/common.h    |  2 +-
+ .../marvell/octeontx2/nic/otx2_common.c       | 30 +++++++++++++------
+ 2 files changed, 22 insertions(+), 10 deletions(-)
 
-> ---
->  drivers/watchdog/wdat_wdt.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/wdat_wdt.c b/drivers/watchdog/wdat_wdt.c
-> index ce7a4a9e4b03..0ba99bed59fc 100644
-> --- a/drivers/watchdog/wdat_wdt.c
-> +++ b/drivers/watchdog/wdat_wdt.c
-> @@ -301,13 +301,12 @@ static const struct watchdog_info wdat_wdt_info = {
->  	.identity = "wdat_wdt",
->  };
->  
-> -static const struct watchdog_ops wdat_wdt_ops = {
-> +static struct watchdog_ops wdat_wdt_ops = {
->  	.owner = THIS_MODULE,
->  	.start = wdat_wdt_start,
->  	.stop = wdat_wdt_stop,
->  	.ping = wdat_wdt_ping,
->  	.set_timeout = wdat_wdt_set_timeout,
-> -	.get_timeleft = wdat_wdt_get_timeleft,
->  };
->  
->  static int wdat_wdt_probe(struct platform_device *pdev)
-> @@ -436,6 +435,9 @@ static int wdat_wdt_probe(struct platform_device *pdev)
->  		list_add_tail(&instr->node, instructions);
->  	}
->  
-> +	if (wdat->instructions[ACPI_WDAT_GET_CURRENT_COUNTDOWN])
-> +		wdat_wdt_ops.get_timeleft = wdat_wdt_get_timeleft;
-> +
->  	wdat_wdt_boot_status(wdat);
->  	wdat_wdt_set_running(wdat);
->  
-> 
-> ---
-> base-commit: 0a924817d2ed9396401e0557c6134276d2e26382
-> change-id: 20221221-wdat_wdt-timeleft-b38d0db39d9f
-> 
-> Best regards,
-> -- 
-> Thomas Weiﬂschuh <linux@weissschuh.net>
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/common.h b/drivers/net/ethernet/marvell/octeontx2/af/common.h
+index 8931864ee110..4b4be9ca4d2f 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/af/common.h
+@@ -61,7 +61,7 @@ static inline int qmem_alloc(struct device *dev, struct qmem **q,
+ 	qmem->entry_sz = entry_sz;
+ 	qmem->alloc_sz = (qsize * entry_sz) + OTX2_ALIGN;
+ 	qmem->base = dma_alloc_attrs(dev, qmem->alloc_sz, &qmem->iova,
+-				     GFP_KERNEL, DMA_ATTR_FORCE_CONTIGUOUS);
++				     GFP_ATOMIC, DMA_ATTR_FORCE_CONTIGUOUS);
+ 	if (!qmem->base)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+index 9e10e7471b88..88f8772a61cd 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+@@ -1012,6 +1012,7 @@ static void otx2_pool_refill_task(struct work_struct *work)
+ 	rbpool = cq->rbpool;
+ 	free_ptrs = cq->pool_ptrs;
+ 
++	get_cpu();
+ 	while (cq->pool_ptrs) {
+ 		if (otx2_alloc_rbuf(pfvf, rbpool, &bufptr)) {
+ 			/* Schedule a WQ if we fails to free atleast half of the
+@@ -1031,6 +1032,7 @@ static void otx2_pool_refill_task(struct work_struct *work)
+ 		pfvf->hw_ops->aura_freeptr(pfvf, qidx, bufptr + OTX2_HEAD_ROOM);
+ 		cq->pool_ptrs--;
+ 	}
++	put_cpu();
+ 	cq->refill_task_sched = false;
+ }
+ 
+@@ -1368,6 +1370,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
+ 	if (err)
+ 		goto fail;
+ 
++	get_cpu();
+ 	/* Allocate pointers and free them to aura/pool */
+ 	for (qidx = 0; qidx < hw->tot_tx_queues; qidx++) {
+ 		pool_id = otx2_get_pool_idx(pfvf, AURA_NIX_SQ, qidx);
+@@ -1376,18 +1379,24 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
+ 		sq = &qset->sq[qidx];
+ 		sq->sqb_count = 0;
+ 		sq->sqb_ptrs = kcalloc(num_sqbs, sizeof(*sq->sqb_ptrs), GFP_KERNEL);
+-		if (!sq->sqb_ptrs)
+-			return -ENOMEM;
++		if (!sq->sqb_ptrs) {
++			err = -ENOMEM;
++			goto err_mem;
++		}
+ 
+ 		for (ptr = 0; ptr < num_sqbs; ptr++) {
+-			if (otx2_alloc_rbuf(pfvf, pool, &bufptr))
+-				return -ENOMEM;
++			err = otx2_alloc_rbuf(pfvf, pool, &bufptr);
++			if (err)
++				goto err_mem;
+ 			pfvf->hw_ops->aura_freeptr(pfvf, pool_id, bufptr);
+ 			sq->sqb_ptrs[sq->sqb_count++] = (u64)bufptr;
+ 		}
+ 	}
+ 
+-	return 0;
++err_mem:
++	put_cpu();
++	return err ? -ENOMEM : 0;
++
+ fail:
+ 	otx2_mbox_reset(&pfvf->mbox.mbox, 0);
+ 	otx2_aura_pool_free(pfvf);
+@@ -1426,18 +1435,21 @@ int otx2_rq_aura_pool_init(struct otx2_nic *pfvf)
+ 	if (err)
+ 		goto fail;
+ 
++	get_cpu();
+ 	/* Allocate pointers and free them to aura/pool */
+ 	for (pool_id = 0; pool_id < hw->rqpool_cnt; pool_id++) {
+ 		pool = &pfvf->qset.pool[pool_id];
+ 		for (ptr = 0; ptr < num_ptrs; ptr++) {
+-			if (otx2_alloc_rbuf(pfvf, pool, &bufptr))
+-				return -ENOMEM;
++			err = otx2_alloc_rbuf(pfvf, pool, &bufptr);
++			if (err)
++				goto err_mem;
+ 			pfvf->hw_ops->aura_freeptr(pfvf, pool_id,
+ 						   bufptr + OTX2_HEAD_ROOM);
+ 		}
+ 	}
+-
+-	return 0;
++err_mem:
++	put_cpu();
++	return err ? -ENOMEM : 0;
+ fail:
+ 	otx2_mbox_reset(&pfvf->mbox.mbox, 0);
+ 	otx2_aura_pool_free(pfvf);
+-- 
+2.25.1
+
