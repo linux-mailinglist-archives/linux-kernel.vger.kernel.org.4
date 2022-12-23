@@ -2,97 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAA4655421
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 21:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC9B65541C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 21:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbiLWUJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 15:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiLWUIm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233182AbiLWUIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 23 Dec 2022 15:08:42 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B00114013;
-        Fri, 23 Dec 2022 12:08:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671826053; bh=14iqMvlBXFPuwkQ+tLG2S5XN85mJQwSd2VCBQKPJQ2Y=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=f0BJtlf27AF0+t+MM3ffTfbc27/OI2QI5s8yF7lyYk5rFUwmhlbtPzrXHxKh3uujF
-         MnffusfnpFL/TGEvFTKCd4sGZ4t2iE2zxSomAzblls8VrMt7ZgHEh4+TEUtfU+yVhm
-         TxeH/lakgM8h4h/e6X2o4s/w1+VlTTarA1/Y3Ctc=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri, 23 Dec 2022 21:07:31 +0100 (CET)
-X-EA-Auth: Po/4f9zZ+atWMjHK+A87Io28wXW8i5FBiLXWDIn25T46cPd5/Uz1Wn/w8JYRR2v0y1QrBCN0KtmTW1c08UzSGJFyccq4Ei6n
-Date:   Sat, 24 Dec 2022 01:37:26 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] scsi: scsi_transport_sas: Use sysfs_emit in show function
- callsbacks
-Message-ID: <Y6YKfp1bHZm3UZpf@qemulion>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232428AbiLWUIh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 23 Dec 2022 15:08:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B8B13F21
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 12:08:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B686FB80A26
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 20:08:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 65691C433D2;
+        Fri, 23 Dec 2022 20:08:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671826113;
+        bh=5rCuwx60PAGyYzejORrmURo2MBtSfJ6GDgThJgNrgqo=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ZSDo25rdCkc4ftQt9yOLnq/XPYGVsPZRbEDmuWKMwoGiGhPAg4qbai1d6nL/Cz1UQ
+         0xgbHaJf9FEPWO90nmC74J9nGQxf/jqVQC55lJQA9PDIJVv9WW6EohTSnigNMnlN4w
+         mXCFnES///jihlXWcMWYQXE4l/rg09VbJxSGH0XoTU4YFz6uuPz7B/VVua3E7yhO3t
+         KFJBqe6s3LI/z7TnyyLkTnc1jh4U9DDB6VQYIwumWG2MyLCCvIxb0mFdGABKC0SYYl
+         CJGDgfDx/rdJmggYuAKxbj3yYwpR6hdwuPurNBOi0n7mSLOF5Zuuc717BgOenkfkxO
+         /BGxqI9rAIJJw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 50885C395DF;
+        Fri, 23 Dec 2022 20:08:33 +0000 (UTC)
+Subject: Re: [GIT PULL] dma-mapping fixes for Linux 6.2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y6W+k0hUkeRaXCTO@infradead.org>
+References: <Y6W+k0hUkeRaXCTO@infradead.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y6W+k0hUkeRaXCTO@infradead.org>
+X-PR-Tracked-Remote: git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-2022-12-23
+X-PR-Tracked-Commit-Id: 3622b86f49f84e52fb41fee9eb55f9290613dfc3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 59d2c635f6cfb0a8c7e5acb06b10c4e587fbfd1a
+Message-Id: <167182611332.4135.10054718204972322093.pr-tracker-bot@kernel.org>
+Date:   Fri, 23 Dec 2022 20:08:33 +0000
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to Documentation/filesystems/sysfs.rst, the show() callback
-function of kobject attributes should strictly use sysfs_emit() instead
-of sprintf() family functions.
+The pull request you sent on Fri, 23 Dec 2022 15:43:31 +0100:
 
-Issue identified using the coccinelle device_attr_show.cocci script.
+> git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-2022-12-23
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/scsi/scsi_transport_sas.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/59d2c635f6cfb0a8c7e5acb06b10c4e587fbfd1a
 
-diff --git a/drivers/scsi/scsi_transport_sas.c b/drivers/scsi/scsi_transport_sas.c
-index 74b99f2b0b74..5504067adcf1 100644
---- a/drivers/scsi/scsi_transport_sas.c
-+++ b/drivers/scsi/scsi_transport_sas.c
-@@ -522,7 +522,7 @@ show_sas_device_type(struct device *dev,
- 	struct sas_phy *phy = transport_class_to_phy(dev);
+Thank you!
 
- 	if (!phy->identify.device_type)
--		return snprintf(buf, 20, "none\n");
-+		return sysfs_emit(buf, "none\n");
- 	return get_sas_device_type_names(phy->identify.device_type, buf);
- }
- static DEVICE_ATTR(device_type, S_IRUGO, show_sas_device_type, NULL);
-@@ -569,7 +569,7 @@ show_sas_phy_enable(struct device *dev, struct device_attribute *attr,
- {
- 	struct sas_phy *phy = transport_class_to_phy(dev);
-
--	return snprintf(buf, 20, "%d\n", phy->enabled);
-+	return sysfs_emit(buf, "%d\n", phy->enabled);
- }
-
- static DEVICE_ATTR(enable, S_IRUGO | S_IWUSR, show_sas_phy_enable,
-@@ -1177,7 +1177,7 @@ show_sas_rphy_device_type(struct device *dev,
- 	struct sas_rphy *rphy = transport_class_to_rphy(dev);
-
- 	if (!rphy->identify.device_type)
--		return snprintf(buf, 20, "none\n");
-+		return sysfs_emit(buf, "none\n");
- 	return get_sas_device_type_names(
- 			rphy->identify.device_type, buf);
- }
---
-2.34.1
-
-
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
