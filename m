@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A89654E45
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A810654E47
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbiLWJV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 04:21:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S236077AbiLWJYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 04:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiLWJVy (ORCPT
+        with ESMTP id S230050AbiLWJYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 04:21:54 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F8D36D55;
-        Fri, 23 Dec 2022 01:21:52 -0800 (PST)
+        Fri, 23 Dec 2022 04:24:35 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2341336D57;
+        Fri, 23 Dec 2022 01:24:34 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 65E826602CE0;
-        Fri, 23 Dec 2022 09:21:48 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 658426602CE0;
+        Fri, 23 Dec 2022 09:24:31 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671787309;
-        bh=Mc0bWw+2ZOlU+dRs3SSvjXiOIF7bw8SFi5D1wdx3WNY=;
+        s=mail; t=1671787472;
+        bh=7V70gBK9OEYmEAkkBN5wXw8RnXXhhRdhdQHkoaIpKe0=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aCNeJ1hxA0hginYoSEGFRhVRO1AfFK2Qdop5YtXtV2+1aKrIt9CqGhsBiFAzQO58J
-         ejzeBlWRimbpXnmUcqH/v7OZStCgQRoUL0kerseYQDzakK+fTMGs6TUCTtgGGzbTyP
-         fr/BIbAcV/Qd0457Zl1PMdEm7/N2cGXMfk4XU4qewO6ipQKS3RKvCPGzE6d/goU/oi
-         t/MuOHoIYAnu5R0k4e08d+oc2p3/cp45t2Cy38SnSQHoBESHJ2kVfKoJZCZ+pHgJmz
-         gOFHNykoWMD2WiISo1ZTYmfr9xQ+k9sKh6wq2Ynxq2qHrsDLJakp3i9ll6t1K7XeeX
-         Mt7ICtpBGORgg==
-Message-ID: <960b0707-f0e5-993b-3706-a7a275e0698f@collabora.com>
-Date:   Fri, 23 Dec 2022 10:21:45 +0100
+        b=e40NHzKsNV0hq7vDwiqkRViojw4UT/GWvfQZe52ysa1cvePOe18EWgepLZN4n4d6j
+         1S8e/WdCUw1BK0mZRM+4BmBgLdhDbvoTHtWKuW2HnhP5jp/rUJFsnHtMkbUnP+NLu7
+         brdjvrGrJf1umNrOH/uQosX8RgKB4RH68nFS2AMP4q93Ut0Nfas6um+iBWL6RXqYFo
+         Suox9ULMMGlmn9L4cqq66PgFMyfxqkbPM/6Grz1JVts0XvWpDNkwIIPK2+37eLv+ta
+         lKzkSeY6dfUiucvo28cW/UnhIFs1/o0/P7uWZUMVDHv3xg9Wyf8IKyWFFHgO0xG/mP
+         65hpcuUzoCM8Q==
+Message-ID: <bfc4c7b5-3d5b-e087-1e33-1c461e361802@collabora.com>
+Date:   Fri, 23 Dec 2022 10:24:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH v1 08/25] dt-bindings: clock: mt8173: Add dummy clock ID
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-References: <20221222114857.120060-1-angelogioacchino.delregno@collabora.com>
- <20221222114857.120060-9-angelogioacchino.delregno@collabora.com>
- <869ae494-d74e-03a0-3622-b3a2b0b10470@linaro.org>
+Subject: Re: [PATCH v5 1/2] stmmac: dwmac-mediatek: enable 2ns delay only for
+ special cases
 Content-Language: en-US
+To:     Biao Huang <biao.huang@mediatek.com>, Andrew Lunn <andrew@lunn.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        macpaul.lin@mediatek.com
+References: <20221223015029.24978-1-biao.huang@mediatek.com>
+ <20221223015029.24978-2-biao.huang@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <869ae494-d74e-03a0-3622-b3a2b0b10470@linaro.org>
+In-Reply-To: <20221223015029.24978-2-biao.huang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,36 +72,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/12/22 09:52, Krzysztof Kozlowski ha scritto:
-> On 22/12/2022 12:48, AngeloGioacchino Del Regno wrote:
->> Some old MediaTek clock drivers are starting the clock count (so, the
->> clock ID) from one instead of zero and this is logically incorrect,
->> as we should start from 0.
->> During a cleanup an issue emerged due to that and the cleanest and
->> shortest way to keep devicetree backwards compatibility while still
->> performing the well deserved cleanup is to add a dummy clock where
->> needed, with ID 0.
+Il 23/12/22 02:50, Biao Huang ha scritto:
+> In current driver, MAC will always enable 2ns delay in RGMII mode,
+> but that will lead to transmission failures for "rgmii-id"/"rgmii-txid"
+> cases.
 > 
-> Unfortunately I do not understand at all why adding dummy (fake) ID
-> cleans anything here. Unifying IDs to start from 0 is not an argument on
-> DT bindings header IDs.
+> Modify the implementation of fix_mac_speed() to ensure the 2ns delay
+> will only take effect for "rgmii-rxid"/"rgmii" cases, then user can
+> choose phy-mode freely.
 > 
-> Best regards,
-> Krzysztof
-> 
-> 
+> Fixes: f2d356a6ab71 ("stmmac: dwmac-mediatek: add support for mt8195")
+> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
 
-All clocks are in one or multiple arrays, and if we don't register ID 0,
-devicetrees will reference the wrong clock, as the IDs will shift back by
-one during registration.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-This was done for a commonization of probe() and remove() callbacks for
-MediaTek clock drivers... since we have 3 affected SoCs (MT8173, MT2701
-and MT6779) out of *19* (soon 20), to me, it didn't make sense to write
-commonized code to address this just because of 3 out of 20 SoCs (note
-that each SoC has around 4 clock drivers).
 
-Any suggestion to keep this one short, while not touching dt-bindings?
-
-Regards,
-Angelo
