@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CD8654D25
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 09:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE2D654D27
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 09:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236025AbiLWICE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 03:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S235944AbiLWICh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 03:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiLWIB4 (ORCPT
+        with ESMTP id S235979AbiLWICU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 03:01:56 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9CD33CE6
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 00:01:52 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id y25so6109688lfa.9
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 00:01:52 -0800 (PST)
+        Fri, 23 Dec 2022 03:02:20 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C37132BBC;
+        Fri, 23 Dec 2022 00:02:15 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so4309513pjm.2;
+        Fri, 23 Dec 2022 00:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8TQnzqH82SvQ7sJUIb95QiBqANoSmjRADQ8HXRaKeGo=;
-        b=laX6CMBEHL7EUfJH496zLDpje81hgAz9YUzZOLGBqlK1mrnWF0ZnxAsCa9RVayRmxU
-         phW2gyFp1TGFHEmGDrgvoUMyZLn1K7yGoseHDNhwtSQKXa/bJvzLBBy78xKHgy4Z3AOi
-         lfAns6L4cM8jfV2VWrpeQNRLQWRzpZCAoKjoJn8R7u58hMDGywg2YD8Tca5YKXdZm9e9
-         25zz28uYvL2PcRXvGfqnXnllZ36ANyovOhobn9WIfddHSoMsdHnS5f8IsugoNSqVH4I5
-         jAM1ueitx4R/EURYfk1pLF4eHLNyVO8YpFoT6bE9IEC0PCRSDLC93dDyj2/te1lmH9K1
-         pxEQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X8Ls5/kQVunWm/uNe5oSA/n8SDtFGQLttrFEz9WUHqE=;
+        b=UnIP20Owvbq5rIM5Y6e7Y/Vq5IWPNGxKJ6ZFs5+elEOg+RUelSQgr8J7HfvHHAYfnV
+         6JkG31C4YSMIjZkUCULq8BJGYgP2/gMmc3NQIkCIS4t7ley10zSkOlecrTYFPIgubIdZ
+         Eksi+4Ic7eeaj2qY8rxIn3IN5ezFeHIlI73oUtNoQd1WI7CaJiW7R8t4vqYiLIWRuLwP
+         TXxYW1N4CUhKwg4Y925ugcaUPPkHI+reaodRGr4wtg8VGWOGdGS8aF2AoOfUq56zQhAc
+         wfWDwP+aqjMufscJHlza0S5HVbBtJps5SguIFAuNDZUcoKGF9+NPBrt2MVVd3BAZJl7j
+         nwnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8TQnzqH82SvQ7sJUIb95QiBqANoSmjRADQ8HXRaKeGo=;
-        b=f8xJJ1O/hZGz0QZiMJwWSo1YM4j5xY9kE/XSwZ70/4GXJyHKr/DBVKgAPPq+EgWpMF
-         ptbs4EbjNbbgF4qt7PGAOzu148SF77dsgtFhKDoO/XfVclgZ2sc0vi3dVShytvqPUGeF
-         wk+IzDrQ7GXweZr8HcSyfCaR4RfMDRveQVvBRUVhtSGUkzEFlB+fjpsgiLlIFICGcoqK
-         n8q4xVbLmuXErKU3SySEiNECZsMLFzx59SqW8PTjqdUhBN3wrSFW64ZwUNxh4jPBrtFu
-         Onuz+UG64KEu7VAuCdwnQd9bVGJScg8A+J+KCylpXEo1urKvkMlbBGh5RwGu72JJzV/J
-         DWhg==
-X-Gm-Message-State: AFqh2kpgseFmAYAQFkXaFFtGjKuZ0NzUhHOlyv4KdrIqR7UIrR9LjbEo
-        pXWfC787d3t5dRE0CKB7nA55DdAlgug+IDZk
-X-Google-Smtp-Source: AMrXdXuGO/ZSogTkRDNw22+r/TpFw7Rhrh/MFMaj/vVX8Bk7grMsV5aNsENVA9T9S8Qf3E7ZS/gCHA==
-X-Received: by 2002:a19:2d59:0:b0:4b5:1414:415f with SMTP id t25-20020a192d59000000b004b51414415fmr3091792lft.59.1671782510766;
-        Fri, 23 Dec 2022 00:01:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z11-20020a056512370b00b0049c29389b98sm413584lfr.151.2022.12.23.00.01.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 00:01:50 -0800 (PST)
-Message-ID: <97100086-8521-f05b-f939-605c84e3cfe1@linaro.org>
-Date:   Fri, 23 Dec 2022 09:01:49 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X8Ls5/kQVunWm/uNe5oSA/n8SDtFGQLttrFEz9WUHqE=;
+        b=GYurQbLcjC8+2cMQKCi0yUZtx7aaT5g+r/8u+/FDhDfLfZQKq9riNds6P1/xLdVXbm
+         Pnt9ynKqEigybnD0jK4iZorYiyhoBO5+L6oYZ6kD5sTAqUlS+H9us4wpoR4iA09VB2eQ
+         cqGg/gArcE6YLHz3keLx9c5hIVIjxdE8mg5q4YBobQr1EVqN6IQ0gTLJSOmci1kdsDzR
+         bSQiQDGk92e9FyZrOTDFoy8a4BYbgQ6Oz0RZI8rf7A+E/3bNZ7+33EWds30rCxYxa4JZ
+         OYTO+aC6lRXnyDreJJs82wambgv9lVsaeweSRMf4TlfR226Res5MRaalg56VvlHNqu0r
+         CL9Q==
+X-Gm-Message-State: AFqh2komDrN6HxyrBIM/lWBWNiEOE25zTsR21yNWQ9Cp0NRjzDwTxl8H
+        1wcDxcs/DegCz1WuXBV7ra1J0hOKq+hfSzD4Qk4=
+X-Google-Smtp-Source: AMrXdXtJkBLCmWP2QQzYoUOSUOK/0gC+hRiSsrUJTLsZXEjBr6jKWnocHZpHYMgmFICLj9OGr0jRmC/i8ia9AgTlXBg=
+X-Received: by 2002:a17:902:ba93:b0:188:ca57:8945 with SMTP id
+ k19-20020a170902ba9300b00188ca578945mr414950pls.116.1671782534859; Fri, 23
+ Dec 2022 00:02:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v9 3/3] dt-bindings: vendor-prefixes: Document EmbedFire
-Content-Language: en-US
-To:     Yuteng Zhong <zonyitoo@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Wenhao Cui <lasstp5011@gmail.com>
-References: <Y6Ud9MhRjCVAYMCj@VM-66-53-centos>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y6Ud9MhRjCVAYMCj@VM-66-53-centos>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221222072603.1175248-1-korantwork@gmail.com>
+ <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev> <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
+In-Reply-To: <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
+From:   Xinghui Li <korantwork@gmail.com>
+Date:   Fri, 23 Dec 2022 16:02:03 +0800
+Message-ID: <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
+Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Jonathan Derrick <jonathan.derrick@linux.dev>,
+        nirmal.patel@linux.intel.com, lpieralisi@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/12/2022 04:18, Yuteng Zhong wrote:
-> From: Wenhao Cui <lasstp5011@gmail.com>
-> 
-> EmbedFire is a manufacturer of embed computers and education platform for
-> embed devices from Dongguan.
-> 
-> Add vendor prefix for it.
-> 
-> Signed-off-by: Wenhao Cui <lasstp5011@gmail.com>
-> Signed-off-by: Yuteng Zhong <zonyitoo@gmail.com>
-> ---
+Keith Busch <kbusch@kernel.org> =E4=BA=8E2022=E5=B9=B412=E6=9C=8823=E6=97=
+=A5=E5=91=A8=E4=BA=94 05:56=E5=86=99=E9=81=93=EF=BC=9A
+>
+> With 12 drives and only 6 CPUs, the bypass mode is going to get more irq
+> context switching. Sounds like the non-bypass mode is aggregating and
+> spreading interrupts across the cores better, but there's probably some
+> cpu:drive count tipping point where performance favors the other way.
 
+We found that tunning the interrupt aggregation can also bring the
+drive performance back to normal.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> The fio jobs could also probably set their cpus_allowed differently to
+> get better performance in the bypass mode.
 
-Best regards,
-Krzysztof
+We used the cpus_allowed in FIO to fix 12 dirves in 6 different CPU.
 
+By the way, sorry for emailing twice, the last one had the format problem.
