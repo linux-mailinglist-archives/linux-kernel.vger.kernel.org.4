@@ -2,119 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C92655202
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFCD65520C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236492AbiLWPZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 10:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S236477AbiLWPaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 10:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236477AbiLWPZZ (ORCPT
+        with ESMTP id S230229AbiLWPah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 10:25:25 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF3FBC04;
-        Fri, 23 Dec 2022 07:25:23 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id co23so4875047wrb.4;
-        Fri, 23 Dec 2022 07:25:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I02zLCc3L9Vr4Pgf+3/wKwOrK6n4hccBX4ktlYit2UY=;
-        b=c4m4X9M/xPPNj/v8+Kkf5y5+5BSX4GZSZ2151sK2+8N+AEWubxmGRYPTrRLPrHKElv
-         e3720UnRSAhwxH7PGsgPDAqmEm+A8uZcvWt19GfXhy0ZCjkZyG5V834cyKAL/EyMSiwn
-         FRShKo9mDwO2MF/lxe6pUFP8z8QpE5mZfjXidStD8FXbA//Wsm9XHewUxgfOFso9EJ01
-         7o7LXeAuxs5ClqlWHoKIEKEDgAMf/QZekAHdn0vh4XMjbY0+LKrpDBq/FqZbH45YCTZd
-         /N4X9FuPGcF6vKF+tWQ5xCsy5RrVKS7S72SrHz0f07vUuWTe9uOZMcisYIX4w2vgTylq
-         V7pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I02zLCc3L9Vr4Pgf+3/wKwOrK6n4hccBX4ktlYit2UY=;
-        b=BMoM0cSKvgMAZZGiqo8r35yCi1PkRY2ExncNPmIsjetQ7HM4EwRhSIXZfm3cveVqHk
-         0ZIFxJVZVwjk60wqDyG0+1E4ga1By65loqQu5vddRINRBtLC3IGJ2Hh17rTvVJwI1VkD
-         HORwwSF93D/J0kCSgDd7voK08X5PlJHQv3TUFFALNjUXXIRIn7PT8aHAiHCmz2OTvMHS
-         JVsOHEmC9nohVvRjwAdlW6CDsN52YVYN2t38JnKO0qvpk4ZXPy4tzgZKit7FjLzDmSc2
-         7XmrU3ghlgYAtp/I+mFxBQzuY1RI305Bzl+sumFEHBuNf9beL/q+k1VStzGJ1OcyXWAe
-         RjFQ==
-X-Gm-Message-State: AFqh2kqxS8sgiY7s2/ImASIfvzBBknaquNaIerBrz6n8hbmVSuLWQl5C
-        AgGrQBfnALR4Nly5BrUwC14=
-X-Google-Smtp-Source: AMrXdXtuhXBuZ5KqjB11un5Uda/BfZM3z+g/fpqt+KxkiSy1KgNZR1aeMy4s9hQ0phETTkGG2JhVBQ==
-X-Received: by 2002:adf:f04d:0:b0:268:2ab2:baa4 with SMTP id t13-20020adff04d000000b002682ab2baa4mr6416249wro.54.1671809122439;
-        Fri, 23 Dec 2022 07:25:22 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id i13-20020a5d558d000000b00241e5b917d0sm4013973wrv.36.2022.12.23.07.25.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 07:25:21 -0800 (PST)
-Date:   Fri, 23 Dec 2022 18:25:18 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH v2 5/7] vc04_services: vchiq_arm: Drop VCHIQ_RETRY usage
- on disconnect
-Message-ID: <Y6XIXuccQD1RuBty@kadam>
-References: <20221219115725.11992-1-umang.jain@ideasonboard.com>
- <20221219115725.11992-6-umang.jain@ideasonboard.com>
- <8fcbdf54-98ae-6a06-ecaf-591a43b863a1@i2se.com>
+        Fri, 23 Dec 2022 10:30:37 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8417D28E39;
+        Fri, 23 Dec 2022 07:30:35 -0800 (PST)
+Received: from [10.10.2.52] (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id B30BF419E9DF;
+        Fri, 23 Dec 2022 15:30:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru B30BF419E9DF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1671809433;
+        bh=15re7tpdxmaMVBlLdOWHlN3lMS0FUvQBYHlPoBkU+xw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=LNmA7k98kEbmaHytw6PHEmCUz4JylYRFA7V3Rcn5Beh1Bnd98pVol0b8iyY2fDC4O
+         st4Iw4G1myK/J5a+hnDgYUAK2VAB6StIixs1cEoxkxc7eWJNXakk8uOPIFcA8aPiLl
+         /+tKlmY8+067/0zAmV54pluNBbFbeTTQLsYdaK6g=
+Subject: Re: [lvc-project] [PATCH] net-wan: Add check for NULL for utdm in
+ ucc_hdlc_probe
+To:     Ekaterina Esina <eesina@astralinux.ru>,
+        Zhao Qiang <qiang.zhao@nxp.com>
+Cc:     lvc-project@linuxtesting.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linuxppc-dev@lists.ozlabs.org,
+        "David S . Miller" <davem@davemloft.net>
+References: <20221223143225.23153-1-eesina@astralinux.ru>
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ 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
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <1c4eaa0c-cb14-83c3-304f-9cf2567f7d31@ispras.ru>
+Date:   Fri, 23 Dec 2022 18:30:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8fcbdf54-98ae-6a06-ecaf-591a43b863a1@i2se.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221223143225.23153-1-eesina@astralinux.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 12:07:56PM +0100, Stefan Wahren wrote:
-> Hi Umang,
+On 23.12.2022 17:32, Ekaterina Esina wrote:
+> If uhdlc_priv_tsa != 1 then utdm is not initialized.
+> And if ret != NULL then goto undo_uhdlc_init, where utdm is dereferenced.
+> Same if dev == NULL.
 > 
-> Am 19.12.22 um 12:57 schrieb Umang Jain:
-> > Drop the usage of VCHIQ_RETRY when the vchiq has connection status
-> > VCHIQ_CONNSTATE_DISCONNECTED. Disconnected status will not be valid to
-> > carry on a retry, replace the VCHIQ_RETRY with -ENOTCONN.
-> > 
-> > This patch removes the usage of vCHIQ_RETRY completely and act as
-> > intermediatory to address the TODO item:
-> > 	* Get rid of custom function return values
-> > for vc04_services/interface.
-> > 
-> > Fixes: 71bad7f08641 ("staging: add bcm2708 vchiq driver")
-> please drop this fixes tag since this commit doesn't fix a real issue and
-> also shouldn't be applied to stable.
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Signed-off-by: Ekaterina Esina <eesina@astralinux.ru>
+> ---
+>  drivers/net/wan/fsl_ucc_hdlc.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/wan/fsl_ucc_hdlc.c b/drivers/net/wan/fsl_ucc_hdlc.c
+> index 22edea6ca4b8..2ddb0f71e648 100644
+> --- a/drivers/net/wan/fsl_ucc_hdlc.c
+> +++ b/drivers/net/wan/fsl_ucc_hdlc.c
+> @@ -1243,7 +1243,9 @@ static int ucc_hdlc_probe(struct platform_device *pdev)
+>  free_dev:
+>  	free_netdev(dev);
+>  undo_uhdlc_init:
+> -	iounmap(utdm->siram);
+> +	if (utdm != NULL) {
+> +		iounmap(utdm->siram);
+> +	}
+>  unmap_si_regs:
+>  	iounmap(utdm->si_regs);
+>  free_utdm:
 
-I asked Umang to add the Fixes tag based on the patch description and
-based on that it seemed like a behavior change just from looking at
-the patch.
 
-But actually you are right that the fixes tag is not required.
+But what is about iounmap(utdm->si_regs); that dereferences utdm a few
+lines below?
 
-The vchiq_send_remote_use() function is never called (dead code).  The
-vchiq_send_remote_use_active() function now returns a mix of custom
-error codes and negative error codes.  (Ugly).  The caller only tests
-for VCHIQ_SUCCESS so this code does not change behavior.  I really feel
-like the commit description needs to be clearer on this.
-
-The fixes tag is not really about stable.  Stable uses the tag, but the
-fixes tag is appropriate whenever there is a bug fix.
-
-regards,
-dan carpenter
+--
+Alexey
 
