@@ -2,231 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B80654F98
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1212B654F99
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiLWLSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 06:18:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
+        id S235814AbiLWLWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 06:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiLWLSm (ORCPT
+        with ESMTP id S229613AbiLWLWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 06:18:42 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802B212AE0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:18:41 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id y4so4675621ljc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:18:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BN78cS6rE9Yp4B3TRTbxmbnWU/S5h0cAk1EFG+5tItQ=;
-        b=uUe6o9Cmm9zvEzHBBsQSg3P4exeeOEsHNZBzcvpO+Nf+oFHMrAJE1KJkbjKlBGj6Vm
-         Bb2rK2s4t81FW6t2SWizTZNrH4BZVxG0Zc4U4PVO5ZMaHf7AfovVTAovpMQ/+t0L7/qM
-         /GvpVlACV3K6MltxN+RNcoAI398QVpDcBqylhrJINlYM23f6Wpf4GkEVYoNel9ZXvD3W
-         lnBuYhrklSFfC9h0X+5gZGwd+d28CNa4GBofaNqQXyhSZttpBVr58VnFYB7jFPRZIwpy
-         Cf/XkF5iBvRCK8jdllUr0AYvC58UrmoAT5Lxfl2GUE0JVDLc1rs+b8cKMoOoXBsjEyqb
-         dVPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BN78cS6rE9Yp4B3TRTbxmbnWU/S5h0cAk1EFG+5tItQ=;
-        b=V4o9ryWS/OExBctIgaNlgnS/63g/6FLx2Mkc4TuF5HD+v3cc1d4SsQTTsVBraa6LFT
-         DPw5v7pRFrS5fJpev8DhARiqTWW1ikPCbJAAJ4biuZLYRrQH9/nCsZdbEXFtiKMKe8XD
-         WSJhLNZdTzwRzuSZ5nwyyiINpjYLo7hE76lUNnbQhgfZf5BPsWD0iIfVZzQfkF/gNv7O
-         YtOfkybkYMufDCYuIEJ6l3u75oNWxKNtOiE11wjucasOvVxKtncm3DxdYFWbwjBC8IQ3
-         1e3+cq6uLM1fu/5+M8Ez25wEeTVjS0NcomeGb16e9XDdfeZ3isw7eXXBo8nLDEeCbtm8
-         GlBA==
-X-Gm-Message-State: AFqh2korQpj+sdp6eg8e4DYXjosiE8XpD84/SHK6WyF3gLaAjLX0Nbix
-        EWfRbUS01tG6bANHCe50ao5d9Q==
-X-Google-Smtp-Source: AMrXdXvUGRb5NIIujgOVvZRAbSbFSTLCDIcNtu4d6J9ydxgw8Bi+S2NGSfpVFQYVlEhTe0voPcEhMw==
-X-Received: by 2002:a2e:8945:0:b0:27f:958a:9279 with SMTP id b5-20020a2e8945000000b0027f958a9279mr2475446ljk.1.1671794319703;
-        Fri, 23 Dec 2022 03:18:39 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q13-20020a056512210d00b004b5732080d1sm483280lfr.150.2022.12.23.03.18.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 03:18:39 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: clock: qcom,spmi-clkdiv: convert to DT schema
-Date:   Fri, 23 Dec 2022 12:18:35 +0100
-Message-Id: <20221223111835.37610-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 23 Dec 2022 06:22:33 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2086.outbound.protection.outlook.com [40.107.21.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4856578
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:22:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A6sxt0s2HfvgM7k5noge3sa/eh1Ux3PUibEGzAzaZtbentJQFzQuwHpCY/XvBcf61QyKwolRtsHjaA9A875QrfdsXMeh4AeIri4PMV9Q8Q+MUliGBV0n17gR8ppwf/7xSTVqBu/0Uedmky1d/Pv8L1c3fAqhC9uQskj1ihaaxV1fnZW7qQcdeNP6octvJKM0wdyKPK/+I8AJ/SAwWpfKp8RJS8X/SzPUIogyCNYjHEYkIrKFRTf3SDXAn9xtRkHXYVVzKSoP/jtCaBTbo3afE9d7+6WEmnrcr7VJbSwcmnkil6DrT6S4zb3+AdqlPVh6jkDaiKDhX9549rVVWowr/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JJF2UW8SaXBnAzSW9KgBc/INWzWC4QnKOmjTyI3DV1g=;
+ b=Bs2RMjOpD3oe8jGm6RNZsCxdeU5WflB1161wmCh18CPnisWM6p+PH480Hm0Z4LnIsxYa4FJumBYaL0KH4pDWHsY5Kx+P9soE6RO9pEGf/4GT+URVRHE370B6ZQV+Y8kGhg8CXCCjGHEQjeeUpUYvJl2sVt3Zl93QGE8FkYKuv47n76rLtgf5Tyl4aqTGP+luuWfD3APCIzz9VNcoSdpcHn0/yjuQ2osu1mKT8oW21c8TVKjrXV/h23Eq11YTbDu/mJfaCL0WDfH9iNtC6zXtQ8LAaAL+NkMl5u/k+tfNhra8F3U6zhozNNLpoCy6igJaxpYuLtm2O2ql27HsZVgyRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JJF2UW8SaXBnAzSW9KgBc/INWzWC4QnKOmjTyI3DV1g=;
+ b=ASucqjS7CPip9cmraxftM558UOCpjT8kggJFbHbG/nTL7qEVdsz+fFDDGTva/TLp5SHbvbToLK4nd+jiVx9S0y3uhSdoZS3Qb0VxeJku/qQQUqImSr0vEN2KSh5t/hgdx5wrbDTUAdoxW8tC2kicmi1cg/4FEOjm28Zd0q6YOiBSc824VFoxFKM/wo0bV7ZlAE6kc9/02FdOPEBgBsf60MJr7DObvBVPE4odplCI0CwMwo2smVj5ZHS5XkNbfpN2LqiMemaaFLFArUaYXckjNd1Cd9+TEulFOj9Mx7+5cAUcsNcpz12Qk5xm0pq5RX3wKv+lm+Q4ovjEHmalJliSxA==
+Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5b6::22)
+ by DU0PR10MB6803.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:478::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Fri, 23 Dec
+ 2022 11:22:30 +0000
+Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::6180:97c1:d0ad:56a9]) by AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::6180:97c1:d0ad:56a9%2]) with mapi id 15.20.5944.013; Fri, 23 Dec 2022
+ 11:22:30 +0000
+From:   "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
+To:     "manfred@colorfullife.com" <manfred@colorfullife.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+CC:     "1vier1@web.de" <1vier1@web.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>
+Subject: Re: [PATCH 3/3] kernel/irq/manage.c: disable_irq() might sleep.
+Thread-Topic: [PATCH 3/3] kernel/irq/manage.c: disable_irq() might sleep.
+Thread-Index: AQHZEV/GZzBrhyYxKkmDnOs4JW58Ta52XjsAgAT44YCAAAfTgA==
+Date:   Fri, 23 Dec 2022 11:22:30 +0000
+Message-ID: <9593a9758731af70bdb6ad4f73af3ddc102571f1.camel@siemens.com>
+References: <20221216150155.200389-1-manfred@colorfullife.com>
+         <20221216150441.200533-1-manfred@colorfullife.com>
+         <20221216150441.200533-3-manfred@colorfullife.com>
+         <ca1972cec9724189b5a97a09069f3ee4f8c3f97c.camel@siemens.com>
+         <1540f1d0-4fda-aaf4-acda-f5aaa6952a00@colorfullife.com>
+In-Reply-To: <1540f1d0-4fda-aaf4-acda-f5aaa6952a00@colorfullife.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR10MB6867:EE_|DU0PR10MB6803:EE_
+x-ms-office365-filtering-correlation-id: 3133c84c-36a6-474a-01ca-08dae4d7fac8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Cz9m0n2OP8g6qTlWrpEL0/pic5KxgOH0xeSXXiu8cKibUdW1m9MDyBiufe/t3lAwMoOWLohJq8nZ4sfUGEbCmd7ahsjI4K3xQZ2bJCJD2W396Jn1WWjEktEOVEyFYzJ0IPSiqj/pd3KLNJ13LfJYSUaxHXiF7MLzOKvGvTGHd7tJMBZ70CNGzSTvPP3/CqXT2P4RIBD+3HTWIuIMX8HeI0rivkr3baGMeBoAvaBFXhFuz9WrsGiVqyvLMsdI1lTFSjEVMZOHvJZ1XWqvqJBb2uFTOzix7RCqBXR3ijW3/MKEntJizIxj1Afa+LGwyWT41fbwmnG9ksWFFIcC88D2JtERLWBQqyPf2sP+DjiWweEFFkAiEnGsYrMow4rbH1hwjFYurB7dsObxYhFcqF+2w9GYfPUUl8DATKXbzfKbA8pQFDZemYO25EbtPLWTgb4sAylhi8WkmK16WTHR+w+vEtpaTWSc0GLCtm3N14IHlDf9MVoS73Yi2OicDEqzyZTwFCQiz4IplMmgOaNbDlF4YeESLCTU3/aBktDtBJ/ZqnoYQ/dvuPY/rYWZFjIvknUf0E5Aha+C0Lpff+xEPJrMunJksRv3uzWp5ivT4KRIVxQbIUP4yizsmCvRe62ZrxtaDad3JDlk4hup0e5k9tOvFYiy5CEg6V/YN2ttDqhVnaxTCzZjoMes5KKCYZL513fABbosjbBl3QR2buutzBlWHripmWaHCGoX/0MtvCN0rPrrtoFiThSSwRPF8Ul+YAJxLDWVFNgbFG+tkI07i1dasQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(346002)(376002)(366004)(451199015)(83380400001)(2616005)(86362001)(316002)(15974865002)(122000001)(38100700002)(82960400001)(36756003)(38070700005)(8936002)(66446008)(2906002)(66946007)(110136005)(64756008)(66476007)(76116006)(54906003)(66556008)(4001150100001)(4326008)(5660300002)(91956017)(4744005)(8676002)(6512007)(41300700001)(186003)(55236004)(6506007)(26005)(478600001)(6486002)(71200400001)(18886075002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bnphN1BweFBwSzMzeVVKZ1JoKzd3OHVWMlh4YlRCYXVieVVLUFh1TUROYVNX?=
+ =?utf-8?B?bDM4WCtKQ0wwNGdiU1BqZEZ3RmVSTGduZDI3VTFHZFdtWkdWb1dGSi9IcXBw?=
+ =?utf-8?B?RkFKQ2xhU2djaDE3MjgxZ3JYZWFrVWlFeEhaVjRDZ3NrMlJYZ1BDYWgyaWw3?=
+ =?utf-8?B?ZExOcVFwbCtZOVMrY3VGYVN4di8wRHkzT05UWGpaMFh5d2t2NVZPOWpaQVBX?=
+ =?utf-8?B?KzVzZHU2eCtlU1A3SmZIYThmMlZsYzBvVEFuSTY3V0VnOERhV0x4RG9zTlhE?=
+ =?utf-8?B?R09BcUJwNFVkeE9JZy9UZmd0MjcrUkQzZThNSk0zN0pyM2ZjY1pUNlZHcHFa?=
+ =?utf-8?B?ZzlHSHlOSXNrUTFsb1VhVHRqNHVuSHJQOTgzSFhDMUtPNEtDc3haSVdtMXN3?=
+ =?utf-8?B?clZNdXNOV2xmTEp1Sm9HczFTM3Z0dmdHT1YwZWoxWmFsY0VlYkpwNG9lT1RS?=
+ =?utf-8?B?bHBDekNRKzlncC9vN2g4TUFHZC9EYUkrV3EzYVF4RjhDYlV3YlZmNUU1UUpL?=
+ =?utf-8?B?eWpoWlJsbjFYbXVDT08xYWFMaDJEUThsTXBEem40ejRWQm5XMG1NcHcwN2E5?=
+ =?utf-8?B?THc5KzBMQlJ3bXdpcEl1a0JtdkJlNXBoNkpiZUs5NFg2THpLbWlaYytINjRK?=
+ =?utf-8?B?NFhqbVRKSEtFeGE0bHRBM0hyTE45MDVObDFJM1JaTWxQd3ZxSkxEOVIrQ3Jj?=
+ =?utf-8?B?UmM4QUc0ZW5YRFlmcHRmdHU0Q0kyelJsWW5LcVI1cXRWV3FENEJPeEtNWVpY?=
+ =?utf-8?B?SFZXT3BNdHVIaml6bUxCVXdNdUk4VnF5WklnbWFCUmxPSkFxd3YyWFhOM3kw?=
+ =?utf-8?B?NmZxaWRKSGFlNFpaRW9JMWhKSTlUQXFEbCtyN292eHhONit5OFlUNUtqUGVj?=
+ =?utf-8?B?eDVsc2xQUFFGZmxERVpkZW1nMDFtT201NmY2K0loN2w2ZURIVG93WEt5eUxI?=
+ =?utf-8?B?NVJGeFlLc3BYSWd3bHlMOTdTMVR1REdYVVpWczVPSW1Hekd2aUtYNGgvbXdz?=
+ =?utf-8?B?OFYrQ0o5ck9XZCs2K1F1MnV2MHlqMDhlUVdlbkhiU1NTYTVIcXJVUHQrRmdC?=
+ =?utf-8?B?L2M1T2g0QmNxKzN4OG5iSEtFUlQzREV6bktuT016WTVPQnhieWdxb0FubzNh?=
+ =?utf-8?B?SGx4NW45Y3dGTTJKRXpwQzh3emNhTkwrd2doRGRlSUFhZmNnOXUvek9GMzdF?=
+ =?utf-8?B?YjMzUW56QnZkVTlzS2ljS3JoZ2kzdmRFTnd2Y2JXM0dQUmxFbXNoS2hBbm9T?=
+ =?utf-8?B?S3ZWWncwTzh6djZBcW8rY3FEUllENmpmR2ZkRHhrUWVDYThoQzcyazdtSEtl?=
+ =?utf-8?B?S052dUMzL1dsNGFaSHFSa29YWEdMdjh2bjdva0ZuWEhOK2R4NjBRODVZTUNp?=
+ =?utf-8?B?cHR3QU82S1VSR1FCTjhiNVIwVWRBeU5SbXErTXM4dXNUQXFweUJJVjRiV1g1?=
+ =?utf-8?B?M3JKOVYveDdyYnl6YW9wVG1mNFdERnJXMmdkZmkyWDVrVFppMlVFTWQ3WFNk?=
+ =?utf-8?B?cU9sZXFsWXhtRVNlcXc4QzNqUXNpOFZGaUVyOVdueFRETlZlQ3lZOS94cjBJ?=
+ =?utf-8?B?VlZILzRtenVaY0JiVXhBWkMzUDJSZG1FS3Niek1UTHBReEtST284cXZrWStY?=
+ =?utf-8?B?bHhSZWNJUWZxM0RpdW4vMnQyK0taSVoydXhDZXoxMzlNanh3eGEyOXZaYzdH?=
+ =?utf-8?B?ODlaSnYxaDRLQ2pHanZ1TTVleGc2Y0F4Q0QxMXZ2OXNWY1NQUlZvR29Tck12?=
+ =?utf-8?B?ZDdZVVBlNlJoWjkyVkFSQ2VQbkNoR05ISnNHN2pVQ2hvYVdzZXhFZENERlEw?=
+ =?utf-8?B?OTRHb2lXZm9McEM3NVVZWkc2TkY0T2c3QW9zektab3JzaDNTcE9IMkVrdmRi?=
+ =?utf-8?B?a1ZUWWN1Sk4yTk13VGgvdzFpWFBtaUVLZkxJclcrOGZyL001bHJXRmplcHRk?=
+ =?utf-8?B?RnErYnF1aUZvNjdkSVJiSTRRODY0WCtZaitMMjlBWFE5NXZjWHRRd00wcTNI?=
+ =?utf-8?B?bThYMFJvOVpHYlZGVlpLYlZuNTRwY0lCVXIyRG1PdU1PUlYvREJTY3lpNzJs?=
+ =?utf-8?B?UW52T2NIL3NEek5kVHlLK3ZrUDVLOStXWVRnTTZRQk5rbWZLb2s5cHMzVjJq?=
+ =?utf-8?B?MzNyaVZDMlN5eTRMTFRFbTBuWXhlVlpNTnRkL3FmUkpYYkY5c0Q4R0pRanVp?=
+ =?utf-8?Q?LD2OW1Cl+KkWfz3+KQZDUZA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0C3BC4D982ED054FA428FFE28FE5683F@EURPRD10.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3133c84c-36a6-474a-01ca-08dae4d7fac8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Dec 2022 11:22:30.2234
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /0SyChiBe6E6WLgeewf8rzMtg061kGCXz4wz3gjEYf/kaYfYN9R4puQLM6hwxkhmbeg6vEOE5oX2qi/Qz/7dpaHmyTss3+wtwLx6HNagayU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB6803
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Qualcomm SPMI PMIC clock divider bindings to DT schema.
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/clock/qcom,spmi-clkdiv.txt       | 59 ---------------
- .../bindings/clock/qcom,spmi-clkdiv.yaml      | 71 +++++++++++++++++++
- 2 files changed, 71 insertions(+), 59 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.txt
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.txt b/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.txt
-deleted file mode 100644
-index 7474aba36607..000000000000
---- a/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.txt
-+++ /dev/null
-@@ -1,59 +0,0 @@
--Qualcomm Technologies, Inc. SPMI PMIC clock divider (clkdiv)
--
--clkdiv configures the clock frequency of a set of outputs on the PMIC.
--These clocks are typically wired through alternate functions on
--gpio pins.
--
--=======================
--Properties
--=======================
--
--- compatible
--	Usage:      required
--	Value type: <string>
--	Definition: must be "qcom,spmi-clkdiv".
--
--- reg
--	Usage:      required
--	Value type: <prop-encoded-array>
--	Definition: base address of CLKDIV peripherals.
--
--- qcom,num-clkdivs
--	Usage:      required
--	Value type: <u32>
--	Definition: number of CLKDIV peripherals.
--
--- clocks:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: reference to the xo clock.
--
--- clock-names:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must be "xo".
--
--- #clock-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: shall contain 1.
--
--=======
--Example
--=======
--
--pm8998_clk_divs: clock-controller@5b00 {
--	compatible = "qcom,spmi-clkdiv";
--	reg = <0x5b00>;
--	#clock-cells = <1>;
--	qcom,num-clkdivs = <3>;
--	clocks = <&xo_board>;
--	clock-names = "xo";
--
--	assigned-clocks = <&pm8998_clk_divs 1>,
--			  <&pm8998_clk_divs 2>,
--			  <&pm8998_clk_divs 3>;
--	assigned-clock-rates = <9600000>,
--			       <9600000>,
--			       <9600000>;
--};
-diff --git a/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.yaml b/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.yaml
-new file mode 100644
-index 000000000000..16c95ad6c9d1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/qcom,spmi-clkdiv.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SPMI PMIC clock divider
-+
-+maintainers:
-+  - Bjorn Andersson <andersson@kernel.org>
-+  - Stephen Boyd <sboyd@kernel.org>
-+
-+description: |
-+  Qualcomm SPMI PMIC clock divider configures the clock frequency of a set of
-+  outputs on the PMIC.  These clocks are typically wired through alternate
-+  functions on GPIO pins.
-+
-+properties:
-+  compatible:
-+    const: qcom,spmi-clkdiv
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Board XO source
-+
-+  clock-names:
-+    items:
-+      - const: xo
-+
-+  "#clock-cells":
-+    const: 1
-+
-+  qcom,num-clkdivs:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Number of CLKDIV peripherals.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - "#clock-cells"
-+  - qcom,num-clkdivs
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    pmic {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        clock-controller@5b00 {
-+            compatible = "qcom,spmi-clkdiv";
-+            reg = <0x5b00>;
-+            clocks = <&xo_board>;
-+            clock-names = "xo";
-+            #clock-cells = <1>;
-+            qcom,num-clkdivs = <3>;
-+
-+            assigned-clocks = <&pm8998_clk_divs 1>,
-+                              <&pm8998_clk_divs 2>,
-+                              <&pm8998_clk_divs 3>;
-+            assigned-clock-rates = <9600000>,
-+                                   <9600000>,
-+                                   <9600000>;
-+        };
-+    };
--- 
-2.34.1
-
+SGVsbG8gTWFuZnJlZCwNCg0KT24gRnJpLCAyMDIyLTEyLTIzIGF0IDExOjU0ICswMTAwLCBNYW5m
+cmVkIFNwcmF1bCB3cm90ZToNCj4gPiBJJ20gbm90IHN1cmUgYWJvdXQgdGhpcywgbGF0ZXN0IHdh
+aXRfZXZlbnQoKSBpbnNpZGUNCj4gPiBzeW5jaHJvbml6ZV9pcnEoKQ0KPiA+IGhhcyBpdCBhbHJl
+YWR5Lg0KPiA+IA0KPiA+ID4gwqAgwqDCoMKgwqDCoMKgwqDCoGlmICghX19kaXNhYmxlX2lycV9u
+b3N5bmMoaXJxKSkNCj4gPiA+IMKgIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3lu
+Y2hyb25pemVfaXJxKGlycSk7DQo+ID4gPiDCoCDCoH0NCj4gDQo+IFRoYXQgaXMgdGhlIHdob2xl
+IHBvaW50OiBtaWdodF9zbGVlcCgpIHNob3VsZCBiZSBhbHdheXMgY2FsbGVkLiBXZQ0KPiBhcmUg
+DQo+IGNsYXJpZnlpbmcgYW4gQVBJIGRlZmluaXRpb24uIEV2ZXJ5b25lIHdobyB1c2VzIGRpc2Fi
+bGVfaXJxKCkgZnJvbSANCj4gbm9uLXNsZWVwaW5nIGNvbnRleHQgc2hvdWxkIGdldCBhIHdhcm5p
+bmcsIDEwMCUgb2YgdGhlIHRpbWUuDQo+IA0KPiBOb3QganVzdCB3aXRoaW4gc3luY2hyb25pemVf
+aXJxKCkgaWYgdGhlcmUgaXMgYW4gYWN0aXZlIHRocmVhZGVkIGlycSANCj4gaGFuZGxlci4NCg0K
+QXMgSSByZWFkIGl0LCBpdCB3aWxsIHdhcm4gYWxtb3N0IGFsd2F5cywgZXZlbiB3aXRob3V0IHRo
+cmVhZGVkIGhhbmRsZXINCmNvbmZpZ3VyZWQsIG9ubHkgaW4gc29tZSBlcnJvciBjYXNlcyBpdCB3
+aWxsIG5vdCB3YXJuLiBJJ20ganVzdA0KdGhpbmtpbmcgdGhhdCBkaXNhYmxlX2lycSgpIG1pZ2h0
+IGJlIGluIGEgaG90IHBhdGggYW5kIHRoaXMgaXMgYmVpbmcNCmNoZWNrZWQgYW55d2F5IHR3byBj
+YWxscyBkZWVwZXIuIEJ1dCBJIGRvbid0IGhhdmUgYSBzdHJvbmcgb3BpbmlvbiBvbg0KdGhhdCBh
+bmQgaXQgbG9va3MgbGlrZSBpdCBoYXMgYmVlbiB0YWtlbiBpbnRvIG1tIHRyZWUgYWxyZWFkeS4N
+Cg0KLS0gDQpBbGV4YW5kZXIgU3ZlcmRsaW4NClNpZW1lbnMgQUcNCnd3dy5zaWVtZW5zLmNvbQ0K
