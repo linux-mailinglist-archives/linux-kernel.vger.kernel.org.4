@@ -2,50 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F13065519C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB38F6551C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbiLWOvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 09:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        id S236448AbiLWPBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 10:01:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiLWOu4 (ORCPT
+        with ESMTP id S236294AbiLWPBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 09:50:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93B6A455;
-        Fri, 23 Dec 2022 06:50:55 -0800 (PST)
+        Fri, 23 Dec 2022 10:01:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0E61A049;
+        Fri, 23 Dec 2022 07:01:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4682561159;
-        Fri, 23 Dec 2022 14:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4128EC433D2;
-        Fri, 23 Dec 2022 14:50:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A487D61222;
+        Fri, 23 Dec 2022 15:01:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C20C433EF;
+        Fri, 23 Dec 2022 15:00:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671807054;
-        bh=4K2LR1mKGCEDbOYGpT+xa0qQCRxGXiezsVQLLM1EEPA=;
+        s=k20201202; t=1671807663;
+        bh=+cPN06iR+FJEMfv2mTx0XNV6VXZ5Qctv1M+WFipu4ls=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N8YX3WO7Uxxpmwr1uYiej8yKMS+4faMag0f7Ev5bIdH8mkFpBuf2lQrW3jK7fMCrX
-         AUw1xVHFHYiyReiPKvpSy863KaW4mJXFt0wFl43cW8SKxtu7QeWhVTqlUKrK9yOpjr
-         FWOGgdCHtSBYHgH+XjDopMMCol9KyGBoSE0f0anjxVNQ/gzXtth+zeEWh8/bT5Sshz
-         6hSOXRtwcpYM5O5i+8Syuyoo0+XHL5cvKko262+wB8cQgnunm2dpp0NLMqNn6twMik
-         n2PI3At0xGEE/aWRimUPFcFPAVJSc2leHe9/RE7jixjv866kfP82+98+qDayeYZnbA
-         YbyJZ+b/CUAzw==
-Date:   Fri, 23 Dec 2022 15:04:03 +0000
+        b=J1Urkm7VFGHh57uzsAiORHYw/nQoa4a9HyjNghQnl602IRm7tgvYwc9noSBHbnLTm
+         fvrXxCzvU16lxLxwVJuhyScoij4llqO9OOfTnOkW5apiEqNNnykWueC3gepY0rO3u/
+         dYnBQ3uAPKxQT305ylkk0AJOZK/6dRG+btz3yJWyyC5YjylAOawK2PwMwzQ5VxxrIZ
+         9PusdRD915P8Zn26OlXjou974bA8gT3W+yaWSbScwPfRNYxDn7J7Ewfm4+OEaEICYd
+         9mus6WXsKIUK3ghnTOt8sdAnha+aHA3R79rxcYEoGRjmruhqhT9Mru5iKtRnhwXfkk
+         gXivql7ux66Hw==
+Date:   Fri, 23 Dec 2022 15:14:10 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Olivier Moysan <olivier.moysan@foss.st.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-iio@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iio: adc: stm32-dfsdm: add id registers support
-Message-ID: <20221223150403.0566863e@jic23-huawei>
-In-Reply-To: <20221222090806.934879-1-olivier.moysan@foss.st.com>
-References: <20221222090806.934879-1-olivier.moysan@foss.st.com>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Robert Marko <robimarko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: qcom-spmi-adc5: Suppress probe-deferral error
+ message
+Message-ID: <20221223151410.630113f8@jic23-huawei>
+In-Reply-To: <20221216234212.5rm3uwzci2zjq67d@SoMainline.org>
+References: <20221216190945.902754-1-marijn.suijten@somainline.org>
+        <20221216234212.5rm3uwzci2zjq67d@SoMainline.org>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -59,237 +70,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Dec 2022 10:08:06 +0100
-Olivier Moysan <olivier.moysan@foss.st.com> wrote:
+On Sat, 17 Dec 2022 00:42:12 +0100
+Marijn Suijten <marijn.suijten@somainline.org> wrote:
 
-> Add support of identification registers to STM32 DFSDM
-> to allow hardware capabilities discovery and configuration check.
-> The number of filters and channels, are read from registers,
-> when they are available.
+> Whoops, that tile must of course have started with:
 > 
-> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
-Hi Olivier,
+>     iio: adc: qcom-spmi-adc5:
+> 
+> instead of blindly copying the suffix from the thermal monitor patch
+> (this driver is not a thermal monitor...).  I'll send a v2 if there are
+> no other objections, unless this can be fixed up when the patch is
+> applied.
+Fixed up whilst applying.
 
-A few minor comments inline.  The fact that this facility only exists
-on some supported parts needs a little more documentation.
-
-Thanks
+Applied to the togreg branch of iio.git, but only pushed out as testing for
+now as I want to rebase the branch on rc1 once available.
 
 Jonathan
 
-> ---
->  drivers/iio/adc/stm32-dfsdm-core.c | 93 +++++++++++++++++++++++++-----
->  drivers/iio/adc/stm32-dfsdm.h      | 69 ++++++++++++++++------
->  2 files changed, 127 insertions(+), 35 deletions(-)
 > 
-> diff --git a/drivers/iio/adc/stm32-dfsdm-core.c b/drivers/iio/adc/stm32-dfsdm-core.c
-> index a3d4de6ba4c2..7f1e4767d4ff 100644
-> --- a/drivers/iio/adc/stm32-dfsdm-core.c
-> +++ b/drivers/iio/adc/stm32-dfsdm-core.c
-> @@ -6,6 +6,7 @@
->   * Author(s): Arnaud Pouliquen <arnaud.pouliquen@st.com> for STMicroelectronics.
->   */
->  
-> +#include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/iio/iio.h>
->  #include <linux/iio/sysfs.h>
-> @@ -20,6 +21,7 @@
->  #include "stm32-dfsdm.h"
->  
-
-As we now have a situation where we 'either' set ipid or
-num_filters + num_channels and that's non obvious, I'd like to see some
-documentation for this structure to explain what is going on.
-
->  struct stm32_dfsdm_dev_data {
-> +	u32 ipid;
->  	unsigned int num_filters;
->  	unsigned int num_channels;
->  	const struct regmap_config *regmap_cfg;
-> @@ -27,8 +29,6 @@ struct stm32_dfsdm_dev_data {
->  
->  #define STM32H7_DFSDM_NUM_FILTERS	4
->  #define STM32H7_DFSDM_NUM_CHANNELS	8
-> -#define STM32MP1_DFSDM_NUM_FILTERS	6
-> -#define STM32MP1_DFSDM_NUM_CHANNELS	8
->  
->  static bool stm32_dfsdm_volatile_reg(struct device *dev, unsigned int reg)
->  {
-> @@ -75,8 +75,7 @@ static const struct regmap_config stm32mp1_dfsdm_regmap_cfg = {
->  };
->  
->  static const struct stm32_dfsdm_dev_data stm32mp1_dfsdm_data = {
-> -	.num_filters = STM32MP1_DFSDM_NUM_FILTERS,
-> -	.num_channels = STM32MP1_DFSDM_NUM_CHANNELS,
-> +	.ipid = STM32MP15_IPIDR_NUMBER,
->  	.regmap_cfg = &stm32mp1_dfsdm_regmap_cfg,
->  };
->  
-> @@ -295,6 +294,66 @@ static const struct of_device_id stm32_dfsdm_of_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, stm32_dfsdm_of_match);
->  
-> +static int stm32_dfsdm_probe_identification(struct platform_device *pdev,
-> +					    struct dfsdm_priv *priv,
-> +					    const struct stm32_dfsdm_dev_data *dev_data)
-> +{
-> +	struct device_node *np = pdev->dev.of_node;
-> +	struct device_node *child;
-> +	struct stm32_dfsdm *dfsdm = &priv->dfsdm;
-> +	const char *compat;
-> +	int ret, count = 0;
-> +	u32 id, val;
-> +
-> +	if (!dev_data->ipid) {
-> +		dfsdm->num_fls = dev_data->num_filters;
-> +		dfsdm->num_chs = dev_data->num_channels;
-> +		return 0;
-> +	}
-> +
-> +	ret = regmap_read(dfsdm->regmap, DFSDM_IPIDR, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	id = FIELD_GET(DFSDM_IPIDR_MASK, val);
-
-As mentioned below. This is the whole register, so I would not bother
-masking it.
-
-> +	if (id != dev_data->ipid) {
-> +		dev_err(&pdev->dev, "Unexpected IP version: 0x%x", id);
-> +		return -EINVAL;
-> +	}
-> +
-> +	for_each_child_of_node(np, child) {
-> +		ret = of_property_read_string(child, "compatible", &compat);
-> +		if (ret)
-> +			continue;
-> +		/* Count only child nodes with dfsdm compatible */
-> +		if (strstr(compat, "dfsdm"))
-> +			count++;
-> +	}
-> +
-> +	ret = regmap_read(dfsdm->regmap, DFSDM_HWCFGR, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	dfsdm->num_fls = FIELD_GET(DFSDM_HWCFGR_NBF_MASK, val);
-> +	dfsdm->num_chs = FIELD_GET(DFSDM_HWCFGR_NBT_MASK, val);
-> +
-> +	if (count > dfsdm->num_fls) {
-> +		dev_err(&pdev->dev, "Unexpected child number: %d", count);
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = regmap_read(dfsdm->regmap, DFSDM_VERR, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	dev_dbg(&pdev->dev, "DFSDM version: %lu.%lu. %d channels/%d filters\n",
-> +		FIELD_GET(DFSDM_VERR_MAJREV_MASK, val),
-> +		FIELD_GET(DFSDM_VERR_MINREV_MASK, val),
-> +		dfsdm->num_chs, dfsdm->num_fls);
-> +
-> +	return 0;
-> +}
-> +
-
-> diff --git a/drivers/iio/adc/stm32-dfsdm.h b/drivers/iio/adc/stm32-dfsdm.h
-> index 4afc1f528b78..4f230e2a7692 100644
-> --- a/drivers/iio/adc/stm32-dfsdm.h
-> +++ b/drivers/iio/adc/stm32-dfsdm.h
-> @@ -13,25 +13,28 @@
->  
->  /*
->   * STM32 DFSDM - global register map
-> - * ________________________________________________________
-> - * | Offset |                 Registers block             |
-> - * --------------------------------------------------------
-> - * | 0x000  |      CHANNEL 0 + COMMON CHANNEL FIELDS      |
-> - * --------------------------------------------------------
-> - * | 0x020  |                CHANNEL 1                    |
-> - * --------------------------------------------------------
-> - * | ...    |                .....                        |
-> - * --------------------------------------------------------
-> - * | 0x0E0  |                CHANNEL 7                    |
-> - * --------------------------------------------------------
-> - * | 0x100  |      FILTER  0 + COMMON  FILTER FIELDs      |
-> - * --------------------------------------------------------
-> - * | 0x200  |                FILTER  1                    |
-> - * --------------------------------------------------------
-> - * | 0x300  |                FILTER  2                    |
-> - * --------------------------------------------------------
-> - * | 0x400  |                FILTER  3                    |
-> - * --------------------------------------------------------
-> + * __________________________________________________________
-> + * | Offset   |                 Registers block             |
-
-Original alignment is odd.  Maybe pull that "Registers block"
-somewhere near central?
-
-> + * ----------------------------------------------------------
-> + * | 0x000    |      CHANNEL 0 + COMMON CHANNEL FIELDS      |
-> + * ----------------------------------------------------------
-> + * | 0x020    |                CHANNEL 1                    |
-> + * ----------------------------------------------------------
-> + * | ...      |                .....                        |
-> + * ----------------------------------------------------------
-> + * | 0x20 x n |                CHANNEL n                    |
-> + * ----------------------------------------------------------
-> + * | 0x100    |      FILTER  0 + COMMON FILTER FIELDs       |
-> + * ----------------------------------------------------------
-> + * | 0x200    |                FILTER  1                    |
-> + * ----------------------------------------------------------
-> + * |          |                .....                        |
-> + * ----------------------------------------------------------
-> + * | 0x100 x m|                FILTER  m                    |
-> + * ----------------------------------------------------------
-> + * ----------------------------------------------------------
-> + * | 0x7F0-7FC|         Identification registers            |
-> + * ----------------------------------------------------------
-
-Nicer to future proof it a little and add at least one or
-two more spaces before the column separator.
-
->   */
->  
->  /*
-> @@ -231,6 +234,34 @@
->  #define DFSDM_AWCFR_AWHTF_MASK	GENMASK(15, 8)
->  #define DFSDM_AWCFR_AWHTF(v)	FIELD_PREP(DFSDM_AWCFR_AWHTF_MASK, v)
->  
-> +/*
-> + * Identification register definitions
-> + */
-> +#define DFSDM_HWCFGR		0x7F0
-> +#define DFSDM_VERR		0x7F4
-> +#define DFSDM_IPIDR		0x7F8
-> +#define DFSDM_SIDR		0x7FC
-> +
-> +/* HWCFGR: Hardware configuration register */
-> +#define DFSDM_HWCFGR_NBT_SHIFT	0
-> +#define DFSDM_HWCFGR_NBT_MASK	GENMASK(7, 0)
-> +#define DFSDM_HWCFGR_NBF_SHIFT	8
-> +#define DFSDM_HWCFGR_NBF_MASK	GENMASK(15, 8)
-> +
-> +/* VERR: Version register */
-> +#define DFSDM_VERR_MINREV_SHIFT	0
-> +#define DFSDM_VERR_MINREV_MASK	GENMASK(3, 0)
-> +#define DFSDM_VERR_MAJREV_SHIFT	4
-> +#define DFSDM_VERR_MAJREV_MASK	GENMASK(7, 4)
-> +
-> +/* IPDR: Identification register */
-> +#define DFSDM_IPIDR_MASK	GENMASK(31, 0)
-Isn't this the whole register?  Under those circumstances, 
-I don't see any point in having a mask.
-> +
-> +/* SIDR: Size identification register */
-> +#define DFSDM_SIDR_MASK		GENMASK(31, 0)
-> +
-> +#define STM32MP15_IPIDR_NUMBER	0x00110031
-> +
->  /* DFSDM filter order  */
->  enum stm32_dfsdm_sinc_order {
->  	DFSDM_FASTSINC_ORDER, /* FastSinc filter type */
+> On 2022-12-16 20:09:45, Marijn Suijten wrote:
+> > Much like 807efb7102e8 ("thermal: qcom-spmi-adc-tm5: suppress
+> > probe-deferral error message") the ADC5 driver also spams a similar
+> > probe-deferral error on startup when a channel is not yet available:
+> > 
+> >     [    0.343136] qcom-spmi-adc-tm5 1c40000.spmi:pmic@0:adc-tm@3500: get dt data failed: -517
+> > 
+> > Suppress it by using dev_err_probe instead, which also takes care of
+> > storing the message as reason for deferring.
+> > 
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > ---
+> >  drivers/iio/adc/qcom-spmi-adc5.c | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
+> > index 821fee60a765..69cc36004b5a 100644
+> > --- a/drivers/iio/adc/qcom-spmi-adc5.c
+> > +++ b/drivers/iio/adc/qcom-spmi-adc5.c
+> > @@ -894,10 +894,8 @@ static int adc5_probe(struct platform_device *pdev)
+> >  	mutex_init(&adc->lock);
+> >  
+> >  	ret = adc5_get_fw_data(adc);
+> > -	if (ret) {
+> > -		dev_err(dev, "adc get dt data failed\n");
+> > -		return ret;
+> > -	}
+> > +	if (ret)
+> > +		return dev_err_probe(dev, ret, "adc get dt data failed\n");
+> >  
+> >  	irq_eoc = platform_get_irq(pdev, 0);
+> >  	if (irq_eoc < 0) {
+> > -- 
+> > 2.39.0
+> >   
+> 
+> Apologies for the clumsiness.
+> 
+> - Marijn
 
