@@ -2,202 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1E7655387
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F06F865538B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbiLWSPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 13:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
+        id S231404AbiLWSPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:15:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbiLWSPQ (ORCPT
+        with ESMTP id S231435AbiLWSPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:15:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43981AF2B;
-        Fri, 23 Dec 2022 10:15:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F17461919;
-        Fri, 23 Dec 2022 18:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA7DC433D2;
-        Fri, 23 Dec 2022 18:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671819314;
-        bh=NiVajSFPPFqGldwaar4lNEf0E5Gdd9NlU7W0HAx2VhI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=gyHnQmBJFl2vv8jVN6OeEuwun0S2EP77VBzvvevoW3hqW4u1OhwU94XHDv/OSEe2w
-         C5QS7RKPo6u2gU2CYgeVzeCXbXNZBc2PfPUgsf8O9vguavlyueE4jyF7+RcT3/9SPL
-         GkAHZvY6raVRpp114bu1ouxlOib28E8shzOBbGFkp71dAPUUMGtW1/PwXFG4wzz2gM
-         FIRsqO1UhTIVZylL66KVvTlvF1dNqxvHk78QXBQCnnx/BFO8eAtZRXJD4Yac7PU9Kf
-         SKjZtsp0sJ7T/VtlWBMWXH205yeXe8hWkWMtfG11Cmbb9mnMxwG96CzsYGFYxI/g4C
-         GnQ5bTSd9fAoA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5AA915C0865; Fri, 23 Dec 2022 10:15:14 -0800 (PST)
-Date:   Fri, 23 Dec 2022 10:15:14 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC 0/2] srcu: Remove pre-flip memory barrier
-Message-ID: <20221223181514.GZ4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221222185314.GR4001@paulmck-ThinkPad-P17-Gen-1>
- <F492F726-00AA-4FC8-A5E5-BBF006CE946C@joelfernandes.org>
- <20221222194511.GS4001@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YScrnuSuWx69oJK+-+9Rdncn5kOSw0-SaWwwABix-Tb+A@mail.gmail.com>
- <CAEXW_YR=sx58kKRgvypduejx8jCGyDhMRBmZQNxtH3s0PS4u2g@mail.gmail.com>
+        Fri, 23 Dec 2022 13:15:39 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285A61E717
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:15:37 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id b3so8008928lfv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:15:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CMkaNS6uOrb3D/0kArTYvqSqllKQ1UyONAfya7XClCA=;
+        b=cee0DxFYkfwQEw34e2mDPCBPHQiakE8mCBUi8vVzvNg9TSRfwPL5y4nI2U3jPBr7W6
+         aQqjVPyNM80fqCRVpCJZhcftBq207Rg5spm3CiAbRZrGUYnnAJ8kJ/w75ymQmuH1Bhmp
+         fyYroAmrSMoCaA57pK6Ti0sFrnL7g2TUKVkX9j5rtQ/BjzDL0a+qHYNQZeCdQxJfnWxO
+         axs4SrU3W1rQUbqUIlbk7yQIQx54fKJG3S74Pc/HKI6T4h86v53pM2ZJVUOuRpqsHBCf
+         FxDhrnlD/EddETcA8n+FrCE5JspFBauFqwOZ5P2/gbkzvY/WMfPlspo7dUYvky0nnzl2
+         +RnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CMkaNS6uOrb3D/0kArTYvqSqllKQ1UyONAfya7XClCA=;
+        b=4dcorApG14IUmq6yXwLqlOBHYlAkMbT2Kvi1+xD7n5g3qE8IrkiPHilNusMX0jz3sT
+         3Kn7hFgX6lx3ud+k25Ss06UtNP6EKDKh0atxAHVXvqVIOUhC000EMbn7ZtiFqOGkcMZO
+         j+obd+ElRb1iJPwZY5jHGryYhnMZobsLTl3zKbmtKQJy6vM0WrxBWZK7nJh79+DCePrB
+         HqFhkWJ41oY2wQLfiRistZ4+WGLAozcnun6nQELe5mgf7Hronhia/C36EBbr4ogjvxhZ
+         LbT3TPTtZFZCLPsLT1hU98xDZXVr6R3Ga1P55gcfRWT7GMU7Xc2Gysmm8yTq2G1qXTHE
+         YN5w==
+X-Gm-Message-State: AFqh2kq6eV1lWW0uN65UMiv29QiBXDFb0tAskSzyBFyvtG+gVcR0Prm8
+        rCxDCkA9PmkZyUOZ0v21d3fDmQ==
+X-Google-Smtp-Source: AMrXdXuSe9oHqaAYvBlNeeWbuqVFOSg5lsAHJITWWPA7bEZcLVtnTx9oVng0bWGOZczwtVtCBkVgXw==
+X-Received: by 2002:a05:6512:1383:b0:4b6:ed8b:4f11 with SMTP id p3-20020a056512138300b004b6ed8b4f11mr3488771lfa.53.1671819335407;
+        Fri, 23 Dec 2022 10:15:35 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id u9-20020ac258c9000000b004bb8a796a6bsm609785lfo.66.2022.12.23.10.15.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Dec 2022 10:15:34 -0800 (PST)
+Message-ID: <9c7cb68c-6516-6087-92ad-e707d8b122ed@linaro.org>
+Date:   Fri, 23 Dec 2022 20:15:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YR=sx58kKRgvypduejx8jCGyDhMRBmZQNxtH3s0PS4u2g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0
+ and PCIe1
+Content-Language: en-GB
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bhelgaas@google.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221222133123.50676-1-manivannan.sadhasivam@linaro.org>
+ <20221222133123.50676-4-manivannan.sadhasivam@linaro.org>
+ <e756516a-a5e2-a6ac-fd7f-71726766fa81@linaro.org>
+ <20221223174555.GE4587@thinkpad>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221223174555.GE4587@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 11:12:06AM -0500, Joel Fernandes wrote:
-> On Thu, Dec 22, 2022 at 11:43 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> [...]
-> > > > >>>> On Dec 22, 2022, at 11:43 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > >>>
-> > > > >>> ﻿On Thu, Dec 22, 2022 at 01:40:10PM +0100, Frederic Weisbecker wrote:
-> > > > >>>>> On Wed, Dec 21, 2022 at 12:11:42PM -0500, Mathieu Desnoyers wrote:
-> > > > >>>>> On 2022-12-21 06:59, Frederic Weisbecker wrote:
-> > > > >>>>>>> On Tue, Dec 20, 2022 at 10:34:19PM -0500, Mathieu Desnoyers wrote:
-> > > > >>>>> [...]
-> > > > >>>>>>>
-> > > > >>>>>>> The memory ordering constraint I am concerned about here is:
-> > > > >>>>>>>
-> > > > >>>>>>> * [...] In addition,
-> > > > >>>>>>> * each CPU having an SRCU read-side critical section that extends beyond
-> > > > >>>>>>> * the return from synchronize_srcu() is guaranteed to have executed a
-> > > > >>>>>>> * full memory barrier after the beginning of synchronize_srcu() and before
-> > > > >>>>>>> * the beginning of that SRCU read-side critical section. [...]
-> > > > >>>>>>>
-> > > > >>>>>>> So if we have a SRCU read-side critical section that begins after the beginning
-> > > > >>>>>>> of synchronize_srcu, but before its first memory barrier, it would miss the
-> > > > >>>>>>> guarantee that the full memory barrier is issued before the beginning of that
-> > > > >>>>>>> SRCU read-side critical section. IOW, that memory barrier needs to be at the
-> > > > >>>>>>> very beginning of the grace period.
-> > > > >>>>>>
-> > > > >>>>>> I'm confused, what's wrong with this ?
-> > > > >>>>>>
-> > > > >>>>>> UPDATER                  READER
-> > > > >>>>>> -------                  ------
-> > > > >>>>>> STORE X = 1              STORE srcu_read_lock++
-> > > > >>>>>> // rcu_seq_snap()        smp_mb()
-> > > > >>>>>> smp_mb()                 READ X
-> > > > >>>>>> // scans
-> > > > >>>>>> READ srcu_read_lock
-> > > > >>>>>
-> > > > >>>>> What you refer to here is only memory ordering of the store to X and load
-> > > > >>>>> from X wrt loading/increment of srcu_read_lock, which is internal to the
-> > > > >>>>> srcu implementation. If we really want to model the provided high-level
-> > > > >>>>> memory ordering guarantees, we should consider a scenario where SRCU is used
-> > > > >>>>> for its memory ordering properties to synchronize other variables.
-> > > > >>>>>
-> > > > >>>>> I'm concerned about the following Dekker scenario, where synchronize_srcu()
-> > > > >>>>> and srcu_read_lock/unlock would be used instead of memory barriers:
-> > > > >>>>>
-> > > > >>>>> Initial state: X = 0, Y = 0
-> > > > >>>>>
-> > > > >>>>> Thread A                   Thread B
-> > > > >>>>> ---------------------------------------------
-> > > > >>>>> STORE X = 1                STORE Y = 1
-> > > > >>>>> synchronize_srcu()
-> > > > >>>>>                          srcu_read_lock()
-> > > > >>>>>                          r1 = LOAD X
-> > > > >>>>>                          srcu_read_unlock()
-> > > > >>>>> r0 = LOAD Y
-> > > > >>>>>
-> > > > >>>>> BUG_ON(!r0 && !r1)
-> > > > >>>>>
-> > > > >>>>> So in the synchronize_srcu implementation, there appears to be two
-> > > > >>>>> major scenarios: either srcu_gp_start_if_needed starts a gp or expedited gp,
-> > > > >>>>> or it uses an already started gp/expedited gp. When snapshotting with
-> > > > >>>>> rcu_seq_snap, the fact that the memory barrier is after the ssp->srcu_gp_seq
-> > > > >>>>> load means that it does not order prior memory accesses before that load.
-> > > > >>>>> This sequence value is then used to identify which gp_seq to wait for when
-> > > > >>>>> piggy-backing on another already-started gp. I worry about reordering
-> > > > >>>>> between STORE X = 1 and load of ssp->srcu_gp_seq, which is then used to
-> > > > >>>>> piggy-back on an already-started gp.
-> > > > >>>>>
-> > > > >>>>> I suspect that the implicit barrier in srcu_read_lock() invoked at the
-> > > > >>>>> beginning of srcu_gp_start_if_needed() is really the barrier that makes
-> > > > >>>>> all this behave as expected. But without documentation it's rather hard to
-> > > > >>>>> follow.
-> > > > >>>>
-> > > > >>>> Oh ok I see now. It might be working that way by accident or on forgotten
-> > > > >>>> purpose. In any case, we really want to add a comment above that
-> > > > >>>> __srcu_read_lock_nmisafe() call.
-> > > > >>>
-> > > > >>> Another test for the safety (or not) of removing either D or E is
-> > > > >>> to move that WRITE_ONCE() to follow (or, respectively, precede) the
-> > > > >>> adjacent scans.
-> > > > >>
-> > > > >> Good idea, though I believe the MBs that the above talk about are not the flip ones. They are the ones in synchronize_srcu() beginning and end, that order with respect to grace period start and end.
-> > > > >>
-> > > > >> So that (flipping MBs) is unrelated, or did I miss something?
-> > > > >
-> > > > > The thought is to manually similate in the source code the maximum
-> > > > > memory-reference reordering that a maximally hostile compiler and CPU
-> > > > > would be permitted to carry out.  So yes, given that there are other
-> > > > > memory barriers before and after, these other memory barriers limit how
-> > > > > far the flip may be moved in the source code.
-> > > > >
-> > > > > Here I am talking about the memory barriers associated with the flip,
-> > > > > but the same trick can of course be applied to other memory barriers.
-> > > > > In general, remove a given memory barrier and (in the source code)
-> > > > > maximally rearrange the memory references that were previously ordered
-> > > > > by the memory barrier in question.
-> > > > >
-> > > > > Again, the presence of other memory barriers will limit the permitted
-> > > > > maximal source-code rearrangement.
-> > > >
-> > > >
-> > > > Makes sense if the memory barrier is explicit. In this case, the memory barriers are implicit apparently, with a srcu_read_lock() in the beginning of synchronize_rcu() having the implicit / indirect memory barrier. So I am not sure if that can be implemented without breaking SRCU readers.
-> > >
-> > > First, are we talking about the same barrier?  I am talking about E.
-
-Apologies.  I am a bit fixated on E because it is the one you guys
-proposed eliminating.  ;-)
-
-> > No, in the last part you replied to above, Mathieu and Frederic were
-> > talking about the need for memory barriers in synchronize_srcu(). That
-> > has nothing to do with E:
-> > <quote>
-> >  I suspect that the implicit barrier in srcu_read_lock() invoked at the
-> >  beginning of srcu_gp_start_if_needed() is really the barrier that makes
-> >  all this behave as expected.
-> > </quote>
-> >
-> > We need to order code prior to synchronize_srcu() wrt the start of the
-> > grace period, so that readers that started after the grace period
-> > started see those side-effects as they may not be waited on (they are
-> > too late).
+On 23/12/2022 19:45, Manivannan Sadhasivam wrote:
+> On Fri, Dec 23, 2022 at 07:18:32PM +0200, Dmitry Baryshkov wrote:
+>> On 22/12/2022 15:31, Manivannan Sadhasivam wrote:
+>>> Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
+>>> endpoint devices using GIC-ITS MSI controller. Add support for it.
+>>>
+>>> Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
+>>> msi-map-mask of 0xff00, all the 32 devices under these two busses can
+>>> share the same Device ID.
+>>>
+>>> The GIC-ITS MSI implementation provides an advantage over internal MSI
+>>> implementation using Locality-specific Peripheral Interrupts (LPI) that
+>>> would allow MSIs to be targeted for each CPU core.
+>>>
+>>> It should be noted that the MSIs for BDF (1:0.0) only works with Device
+>>> ID of 0x5980 and 0x5a00. Hence, the IDs are swapped.
+>>>
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>> ---
+>>>    arch/arm64/boot/dts/qcom/sm8450.dtsi | 20 ++++++++++++++------
+>>>    1 file changed, 14 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>> index 570475040d95..c4dd5838fac6 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>> @@ -1733,9 +1733,13 @@ pcie0: pci@1c00000 {
+>>>    			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+>>>    				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
+>>> -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+>>> -			interrupt-names = "msi";
+>>> -			#interrupt-cells = <1>;
+>>> +			/*
+>>> +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5980.
+>>> +			 * Hence, the IDs are swapped.
+>>> +			 */
+>>> +			msi-map = <0x0 &gic_its 0x5981 0x1>,
+>>> +				  <0x100 &gic_its 0x5980 0x1>;
+>>
+>> This definitely doesn't match what has been used in the downstream.
+>>
 > 
-> My thought is this is achieved by the srcu_read_lock() before the
-> grace period is started, and the start of the grace period (which is
-> basically the smp_mb() in the first scan).
+> Yes, I do not know why the downstream Device ID doesn't work. I tried finding
+> the answer within Qcom but didn't get any answer so far :/ So I just went with
+> the value that works on multiple boards.
+
+Ugh :-(
+
 > 
-> So from memory ordering PoV, if synchronize_rcu() spans the GP, and
-> readers don't span the GP, that means the reader does not span the
-> synchronize_rcu() which is the GP guarantee.
+>> Also if I understand correctly this change would prevent us from using
+>> multiple MSI interrupts for the connected device, as the last value of the
+>> 0x100 mapping is 0x1, while the vendor kernel uses <0x100 &its 0x5981 0x20>.
+>>
 > 
-> But I could be missing something. I will dig more on my side. Thanks.
+> Not true. The controller can still support multiple MSIs for the endpoint
+> devices but the only difference is, it would use the same Device ID for all.
 
-Could you please specifically identify that srcu_read_lock()?
+I see, please excuse me then. But don't we have to define multiple MSI 
+vectors here too?
 
-Also which version you are looking at.  ;-)
+> 
+> The Qcom GIC-ITS implementation could only support 32 Device IDs. By specifying
+> the size of 0x20, a separate Device ID would be used for each devices of bus 1.
+> But if a PCIe switch is connected and the bus count becomes > 1, then the MSI
+> allocation would fail because Device IDs are exhausted.
+> 
+> The downstream implementation just assumes that there will be only bus 1 and I
+> do not want to follow that assumption.
+> 
+> That's why I used "msi-map-mask" property of value "0xff00" here, as that will
+> allow all the devices under the bus 1 to share the same Device ID. For now I
+> only mapped bus 1, but extending that in the future for other busses is simple.
+> 
+> Thanks,
+> Mani
+> 
+>> Do you know by chance, why do we differ from the vendor dtsi?
+>>
+>>> +			msi-map-mask = <0xff00>;
+>>>    			interrupt-map-mask = <0 0 0 0x7>;
+>>>    			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+>>>    					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+>>> @@ -1842,9 +1846,13 @@ pcie1: pci@1c08000 {
+>>>    			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
+>>>    				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
+>>> -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
+>>> -			interrupt-names = "msi";
+>>> -			#interrupt-cells = <1>;
+>>> +			/*
+>>> +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5a00.
+>>> +			 * Hence, the IDs are swapped.
+>>> +			 */
+>>> +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
+>>> +				  <0x100 &gic_its 0x5a00 0x1>;
+>>> +			msi-map-mask = <0xff00>;
+>>>    			interrupt-map-mask = <0 0 0 0x7>;
+>>>    			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+>>>    					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+>>
+>> -- 
+>> With best wishes
+>> Dmitry
+>>
+> 
 
-							Thanx, Paul
+-- 
+With best wishes
+Dmitry
+
