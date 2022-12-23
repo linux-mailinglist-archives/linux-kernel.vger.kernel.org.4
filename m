@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EE2655157
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FDE655159
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236396AbiLWOY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 09:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
+        id S236406AbiLWOZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 09:25:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbiLWOYx (ORCPT
+        with ESMTP id S236398AbiLWOY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 09:24:53 -0500
+        Fri, 23 Dec 2022 09:24:58 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41117389FD;
-        Fri, 23 Dec 2022 06:24:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA063EACC;
+        Fri, 23 Dec 2022 06:24:57 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id 95EA27E2BE;
-        Fri, 23 Dec 2022 14:24:47 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 959477E294;
+        Fri, 23 Dec 2022 14:24:52 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1671805491;
-        bh=oWmzG5ovwki5HhFnqDbqYkTDAdh4eDUJl7OeVnUrGBs=;
+        s=default; t=1671805496;
+        bh=36kRhPHHUdU7fJ7TrqmVEqnC9MhObrpC3zL5rKf5PmU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e8mFEf26Gx1RBt4uZi7mowHRQxlD8plFc+63Y7K8VG1D0+145z3LEXfvZ9c11us/m
-         pCzvfidENFn5qmD+4SA3QDoXtmAqA2PaEiaHR/zF3E3Om0N6hNca44Quh7tMUBpSpl
-         1E2gt1BzwL0zAo3YLuAQF0wFgZ+Dw/m2mnolWnwE/qv7L4LnLGszr1vQMcEAHxvMIM
-         0ZvpcQXzESrBi6GEiJkPoCun5DpxlTxa9PEaugFsNCUMZ4wt7YrauZlXVcO2LHBD7W
-         Ue6OlKQlGQamHoX2QIGGdyfyAMtZSUIZTyhx9pY1wNOyHhd4Ay4HGsagdPYn941bjI
-         bYKuPUbpa1gUw==
+        b=QY00C9VEs5iLtoDJTH60avD25mN1yk8Wh/CY+oLn0a+zSoFrI4UfpRDls0UyuUywx
+         jLNt5XArojl5fzAp5z40SEIycAz5sbVJpuaPJUT1A+2psgHQ5qWZ8K4j0mBa5qgzQs
+         8T5fEZgUGLQjbHKkoEPkKal8ecW4B0yEi2iuY7yBvfA7287RD49l0I/jLZtXyNQQ4g
+         ch2de72lD9hJQBHr3vpd4e3OYeWcJtWcUi+5Suqzg/4KKL5Wp2jBI01So9WPNJVEDm
+         Xbc67OaO6ArnP0WKHn8T4q2B/pDY1cPaONyYDyBqv9zrbd9jTVwKtGP8U6UeBaTMsj
+         wzFNgLwGcyhTw==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Robert Moore <robert.moore@intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>
@@ -41,9 +41,9 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>, Len Brown <lenb@kernel.org>,
         ACPICA Mailing List <devel@acpica.org>,
         LLVM Mailing List <llvm@lists.linux.dev>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [PATCH v1 1/2] ACPI: Silence missing prototype warnings
-Date:   Fri, 23 Dec 2022 21:24:18 +0700
-Message-Id: <20221223142419.3781410-2-ammar.faizi@intel.com>
+Subject: [PATCH v1 2/2] ACPICA: Silence 'unused-but-set variable' warning
+Date:   Fri, 23 Dec 2022 21:24:19 +0700
+Message-Id: <20221223142419.3781410-3-ammar.faizi@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221223142419.3781410-1-ammar.faizi@intel.com>
 References: <20221223142419.3781410-1-ammar.faizi@intel.com>
@@ -60,50 +60,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Compiling with clang-16:
+@num_carats is used for debugging, passed to the 'ACPI_DEBUG_PRINT()'
+macro. But this macro will expand to nothing when debug is disabled,
+resulting in the following (clang-16):
 
-  drivers/acpi/acpi_lpit.c:142:6: error: no previous prototype \
-  for function 'acpi_init_lpit' [-Werror,-Wmissing-prototypes]
+  drivers/acpi/acpica/nsaccess.c:295:6: error: variable 'num_carats' set \
+  but not used [-Werror,-Wunused-but-set-variable]
+        u32 num_carats;
+            ^
+  1 error generated.
 
-  drivers/acpi/ioapic.c:212:6: error: no previous prototype \
-  for function 'pci_ioapic_remove' [-Werror,-Wmissing-prototypes]
-
-  drivers/acpi/ioapic.c:229:5: error: no previous prototype \
-  for function 'acpi_ioapic_remove' [-Werror,-Wmissing-prototypes]
-
-Include "internal.h" to silence them.
+Move the variable declaration inside the else block to reduce the scope,
+then add '(void)num_carats' to silence the warning when debug is disabled.
 
 Cc: LLVM Mailing List <llvm@lists.linux.dev>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- drivers/acpi/acpi_lpit.c | 1 +
- drivers/acpi/ioapic.c    | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/acpi/acpica/nsaccess.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/acpi/acpi_lpit.c b/drivers/acpi/acpi_lpit.c
-index 50540d4d4948..3843d2576d3f 100644
---- a/drivers/acpi/acpi_lpit.c
-+++ b/drivers/acpi/acpi_lpit.c
-@@ -10,6 +10,7 @@
- #include <linux/acpi.h>
- #include <asm/msr.h>
- #include <asm/tsc.h>
-+#include "internal.h"
+diff --git a/drivers/acpi/acpica/nsaccess.c b/drivers/acpi/acpica/nsaccess.c
+index a0c1a665dfc1..d73d052c5b3b 100644
+--- a/drivers/acpi/acpica/nsaccess.c
++++ b/drivers/acpi/acpica/nsaccess.c
+@@ -292,7 +292,6 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
+ 	struct acpi_namespace_node *current_node = NULL;
+ 	struct acpi_namespace_node *this_node = NULL;
+ 	u32 num_segments;
+-	u32 num_carats;
+ 	acpi_name simple_name;
+ 	acpi_object_type type_to_check_for;
+ 	acpi_object_type this_search_type;
+@@ -394,6 +393,7 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
+ 					  "Path is absolute from root [%p]\n",
+ 					  this_node));
+ 		} else {
++			u32 num_carats = 0;
+ 			/* Pathname is relative to current scope, start there */
  
- struct lpit_residency_info {
- 	struct acpi_generic_address gaddr;
-diff --git a/drivers/acpi/ioapic.c b/drivers/acpi/ioapic.c
-index a690c7b18623..6677955b4a8e 100644
---- a/drivers/acpi/ioapic.c
-+++ b/drivers/acpi/ioapic.c
-@@ -24,6 +24,7 @@
- #include <linux/acpi.h>
- #include <linux/pci.h>
- #include <acpi/acpi.h>
-+#include "internal.h"
+ 			ACPI_DEBUG_PRINT((ACPI_DB_NAMES,
+@@ -406,7 +406,6 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
+ 			 * the parent node for each prefix instance.
+ 			 */
+ 			this_node = prefix_node;
+-			num_carats = 0;
+ 			while (*path == (u8) AML_PARENT_PREFIX) {
  
- struct acpi_pci_ioapic {
- 	acpi_handle	root_handle;
+ 				/* Name is fully qualified, no search rules apply */
+@@ -449,6 +448,7 @@ acpi_ns_lookup(union acpi_generic_state *scope_info,
+ 						  "Search scope is [%4.4s], path has %u carat(s)\n",
+ 						  acpi_ut_get_node_name
+ 						  (this_node), num_carats));
++				(void)num_carats;
+ 			}
+ 		}
+ 
 -- 
 Ammar Faizi
 
