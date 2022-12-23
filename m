@@ -2,150 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6D965517B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1324465517C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236328AbiLWOlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 09:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
+        id S236345AbiLWOl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 09:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiLWOld (ORCPT
+        with ESMTP id S230239AbiLWOlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 09:41:33 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253EAB85D;
-        Fri, 23 Dec 2022 06:41:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671806492; x=1703342492;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0+6p+VS1oE94n8QNDeI1T8hMST+L9ogs9AORZAYfFCo=;
-  b=Mon3qRVuQo8EKaLJPfUgIGWwRgt9OIzhoUKdJUKbJJpiO2QbXw7MHv5M
-   egtdJB/yBxiBEpP0LMiadYSaUgrBanZsL3c1dU8n4v3ilZYfBO7TcHL5B
-   4SIcUYxrdxOwLSnIBJMhKdHCy1oKF1EgZzXMSNcNaRgNBI1khheWpzpqo
-   0k3BhUVFTd1uunG7NckIHrOagLKNBJyD7TEYWOW9Ut43qsg1T5o3wJkgQ
-   wbRuVMYk2lNkUHhtjXNINCYWlSZBfviU7CPLAY9BOwvMHIFcumGzyJ7if
-   22wybmTlHKxcEF6WPljBkXf9nN/ul9J0CRzZop/ZhOk/p80GkIPsMvhyk
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="406579808"
-X-IronPort-AV: E=Sophos;i="5.96,268,1665471600"; 
-   d="scan'208";a="406579808"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 06:41:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="720664512"
-X-IronPort-AV: E=Sophos;i="5.96,268,1665471600"; 
-   d="scan'208";a="720664512"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Dec 2022 06:41:29 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2BNEfRpL017707;
-        Fri, 23 Dec 2022 14:41:27 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Prashanth K <quic_prashk@quicinc.com>,
-        David Laight <David.Laight@aculab.com>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        John Keeping <john@metanate.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Udipto Goswami <quic_ugoswami@quicinc.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Subject: Re: usb: f_fs: Fix CFI failure in ki_complete
-Date:   Fri, 23 Dec 2022 15:41:19 +0100
-Message-Id: <20221223144119.1840796-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <Y6VvEmfgbQOmW2cN@kadam>
-References: <1670851464-8106-1-git-send-email-quic_prashk@quicinc.com> <Y5cuCMhFIaKraUyi@kroah.com> <abe47a47aa5d49878c58fc1199be18ea@AcuMS.aculab.com> <acdda510-945f-ff68-5c8b-a1a0290bed6d@quicinc.com> <Y6VvEmfgbQOmW2cN@kadam>
+        Fri, 23 Dec 2022 09:41:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76DC26A82
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 06:41:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F654611DB
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 14:41:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A76DC433D2;
+        Fri, 23 Dec 2022 14:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671806513;
+        bh=37BtRM3lBO+1nDbvr3DPq5coHa2cgacS+AVXyWnLNOc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kox8nRoWLjje3Cjgbtjsl1MUkRM6pr89A0hlUvaZL1bXsWL6WvlOZT8S5LNQ437Ik
+         9MGEtfPFcaJvdgRCrlFQ1nWuCz8f4iAB8NwrZe3hhfkHWq3yJ7N6Z72IF6otN52F+P
+         QvaIQtXHPH5dWnGMu6tagb/hP9Lh+/8AzXx+a0gNepIwzX5CCRwejwtS4xlHRxGf2/
+         UQWBAU0CaKLo3GT9R2CObcJeSb3TvX31aIAhX383GjJFp7KgXe/XeMKYrH+nGRKjWG
+         ls9M/e9igPRFWQMahWwo7ivthVHTKTH/1JOstNMAxAKqpYpsBXRtl0YMaAHyaiQgIz
+         FjSJasnbusqFw==
+Date:   Fri, 23 Dec 2022 15:41:50 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     atomlin@atomlin.com, cl@linux.com, tglx@linutronix.de,
+        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
+        neelx@redhat.com, oleksandr@natalenko.name,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v11 3/6] mm/vmstat: manage per-CPU stats from CPU context
+ when NOHZ full
+Message-ID: <20221223144150.GA79369@lothringen>
+References: <20221221165801.362118576@redhat.com>
+ <20221221170436.330627967@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221221170436.330627967@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <error27@gmail.com>
-Date: Fri, 23 Dec 2022 12:04:18 +0300
+On Wed, Dec 21, 2022 at 01:58:04PM -0300, Marcelo Tosatti wrote:
+> @@ -194,21 +195,50 @@ void fold_vm_numa_events(void)
+>  #endif
+>  
+>  #ifdef CONFIG_SMP
+> -static DEFINE_PER_CPU_ALIGNED(bool, vmstat_dirty);
+> +
+> +struct vmstat_dirty {
+> +	bool dirty;
+> +	bool cpuhotplug;
 
-> On Thu, Dec 22, 2022 at 06:21:03PM +0530, Prashanth K wrote:
-> > 
-> > 
-> > On 14-12-22 11:05 pm, David Laight wrote:
-> > > From: Greg Kroah-Hartman
-> > > > Sent: 12 December 2022 13:35
-> > > > 
-> > > > On Mon, Dec 12, 2022 at 06:54:24PM +0530, Prashanth K wrote:
-> > > > > Function pointer ki_complete() expects 'long' as its second
-> > > > > argument, but we pass integer from ffs_user_copy_worker. This
-> > > > > might cause a CFI failure, as ki_complete is an indirect call
-> > > > > with mismatched prototype. Fix this by typecasting the second
-> > > > > argument to long.
-> > > > 
-> > > > "might"?  Does it or not?  If it does, why hasn't this been reported
-> > > > before?
-> > > 
-> > > Does the cast even help at all.
-> > Actually I also have these same questions
-> > - why we haven't seen any instances other than this one?
-> > - why its not seen on other indirect function calls?
-> > 
-> > Here is the the call stack of the failure that we got.
-> > 
-> > [  323.288681][    T7] Kernel panic - not syncing: CFI failure (target:
-> > 0xffffffe5fc811f98)
-> > [  323.288710][    T7] CPU: 6 PID: 7 Comm: kworker/u16:0 Tainted: G S    W
-> > OE     5.15.41-android13-8-g5ffc5644bd20 #1
-> > [  323.288730][    T7] Workqueue: adb ffs_user_copy_worker.cfi_jt
-> > [  323.288752][    T7] Call trace:
-> > [  323.288755][    T7]  dump_backtrace.cfi_jt+0x0/0x8
-> > [  323.288772][    T7]  dump_stack_lvl+0x80/0xb8
-> > [  323.288785][    T7]  panic+0x180/0x444
-> > [  323.288797][    T7]  find_check_fn+0x0/0x218
-> > [  323.288810][    T7]  ffs_user_copy_worker+0x1dc/0x204
-> > [  323.288822][    T7]  kretprobe_trampoline.cfi_jt+0x0/0x8
-> > [  323.288837][    T7]  worker_thread+0x3ec/0x920
-> > [  323.288850][    T7]  kthread+0x168/0x1dc
-> > [  323.288859][    T7]  ret_from_fork+0x10/0x20
-> > [  323.288866][    T7] SMP: stopping secondary CPUs
-> > 
-> > And from address to line translation, we got know the issue is from
-> > ffs_user_copy_worker+0x1dc/0x204
-> > 		||
-> > io_data->kiocb->ki_complete(io_data->kiocb, ret);
-> > 
-> > And "find_check_fn" was getting invoked from ki_complete. Only thing that I
-> > found suspicious about ki_complete() is its argument types. That's why I
-> > pushed this patch here, so that we can discuss this out here.
+May be call it "online" for clarity. Also should it depend on CONFIG_FLUSH_WORK_ON_RESUME_USER?
+
+> +};
+> +
+> +static DEFINE_PER_CPU_ALIGNED(struct vmstat_dirty, vmstat_dirty_pcpu);
+> +static DEFINE_PER_CPU(struct delayed_work, vmstat_work);
+> +int sysctl_stat_interval __read_mostly = HZ;
+>  
+>  static inline void vmstat_mark_dirty(void)
+>  {
+> -	this_cpu_write(vmstat_dirty, true);
+> +	struct vmstat_dirty *vms = this_cpu_ptr(&vmstat_dirty_pcpu);
+> +
+> +#ifdef CONFIG_FLUSH_WORK_ON_RESUME_USER
+
+Please avoid ifdeffery in the middle of a function when possible.
+This block could be in a different function or use IS_ENABLED()
+for example.
+
+> +	int cpu = smp_processor_id();
+> +
+> +	if (tick_nohz_full_cpu(cpu) && !vms->dirty) {
+> +		struct delayed_work *dw;
+> +
+> +		dw = this_cpu_ptr(&vmstat_work);
+> +		if (!delayed_work_pending(dw) && !vms->cpuhotplug) {
+> +			unsigned long delay;
+> +
+> +			delay = round_jiffies_relative(sysctl_stat_interval);
+> +			queue_delayed_work_on(cpu, mm_percpu_wq, dw, delay);
+> +		}
+> +	}
+> +#endif
+> +	vms->dirty = true;
+>  }
+>  
+>  static inline void vmstat_clear_dirty(void)
+>  {
+> -	this_cpu_write(vmstat_dirty, false);
+> +	struct vmstat_dirty *vms = this_cpu_ptr(&vmstat_dirty_pcpu);
+> +
+> +	vms->dirty = false;
+
+You could keep this_cpu_write(vmstat_dirty.dirty, false)
+
+>  }
+>  
+>  static inline bool is_vmstat_dirty(void)
+>  {
+> -	return this_cpu_read(vmstat_dirty);
+> +	struct vmstat_dirty *vms = this_cpu_ptr(&vmstat_dirty_pcpu);
+> +
+> +	return vms->dirty;
+
+Ditto with this_cpu_read()?
+
+>  }
+>  
+>  int calculate_pressure_threshold(struct zone *zone)
+> @@ -1981,13 +2008,18 @@ void quiet_vmstat(void)
+>  	if (!is_vmstat_dirty())
+>  		return;
+>  
+> +	refresh_cpu_vm_stats(false);
+> +
+> +#ifdef CONFIG_FLUSH_WORK_ON_RESUME_USER
+
+This can use IS_ENABLED()
+
+> +	if (!user)
+> +		return;
+>  	/*
+> -	 * Just refresh counters and do not care about the pending delayed
+> -	 * vmstat_update. It doesn't fire that often to matter and canceling
+> -	 * it would be too expensive from this path.
+> -	 * vmstat_shepherd will take care about that for us.
+> +	 * If the tick is stopped, cancel any delayed work to avoid
+> +	 * interruptions to this CPU in the future.
+>  	 */
+> -	refresh_cpu_vm_stats(false);
+> +	if (delayed_work_pending(this_cpu_ptr(&vmstat_work)))
+> +		cancel_delayed_work(this_cpu_ptr(&vmstat_work));
+> +#endif
+>  }
+>  
+>  /*
+> @@ -2008,8 +2040,15 @@ static void vmstat_shepherd(struct work_
+>  	/* Check processors whose vmstat worker threads have been disabled */
+>  	for_each_online_cpu(cpu) {
+>  		struct delayed_work *dw = &per_cpu(vmstat_work, cpu);
+> +		struct vmstat_dirty *vms = per_cpu_ptr(&vmstat_dirty_pcpu, cpu);
+>  
+> -		if (!delayed_work_pending(dw) && per_cpu(vmstat_dirty, cpu))
+> +#ifdef CONFIG_FLUSH_WORK_ON_RESUME_USER
+
+Same here.
+
+> +		/* NOHZ full CPUs manage their own vmstat flushing */
+> +		if (tick_nohz_full_cpu(cpu))
+> +			continue;
+> +#endif
+> +
+> +		if (!delayed_work_pending(dw) && vms->dirty)
+>  			queue_delayed_work_on(cpu, mm_percpu_wq, dw, 0);
+>  
+>  		cond_resched();
+> @@ -2053,8 +2111,15 @@ static int vmstat_cpu_online(unsigned in
+>  	return 0;
+>  }
+>  
+> +/*
+> + * ONLINE: The callbacks are invoked on the hotplugged CPU from the per CPU
+> + * hotplug thread with interrupts and preemption enabled.
+
+This is OFFLINE and the reason behind that comment is confusing.
+
+> + */
+>  static int vmstat_cpu_down_prep(unsigned int cpu)
+>  {
+> +	struct vmstat_dirty *vms = per_cpu_ptr(&vmstat_dirty_pcpu, cpu);
+> +
+> +	vms->cpuhotplug = true;
+
+this_cpu_write() ?
+
+>  	cancel_delayed_work_sync(&per_cpu(vmstat_work, cpu));
+>  	return 0;
+>  }
+> +config FLUSH_WORK_ON_RESUME_USER
+> +	bool "Flush per-CPU vmstats on user return (for nohz full CPUs)"
+> +	depends on NO_HZ_FULL
+> +	default y
+> +
+> +	help
+> +	  By default, nohz full CPUs flush per-CPU vm statistics on return
+> +	  to userspace (to avoid additional interferences when executing
+> +	  userspace code). This has a small but measurable impact on
+> +	  system call performance. You can disable this to improve system call
+> +	  performance, at the expense of potential interferences to userspace
+> +	  execution.
+
+Can you move that below config CPU_ISOLATION ?
+
+Thanks!
+
+> +
+>  # multi-gen LRU {
+>  config LRU_GEN
+>  	bool "Multi-Gen LRU"
 > 
-> I think the problem is more likely whatever ->ki_complete() points to
-> but I have no idea what that is on your system.  You're using an Android
-> kernel so it could be something out of tree as well...
-
-Correct, CFI would *never* trigger a failure due to passing int as
-long. It triggers only on prototype-implementation mismatches. The
-author should go and check carefully whether there are any places
-where some implementation differs and then ::ki_complete() gets
-passed with a function typecast. Also, there can be places where a
-proto has an argument as enum and an implementation has it as int.
-Compilers don't warn on such mismatches, CFI does. The latest LLVM
-Git snapshot with `-Wcast-function-type-strict` enabled could help
-hunt such.
-
 > 
-> regards,
-> dan carpenter
-
-Thanks,
-Olek
