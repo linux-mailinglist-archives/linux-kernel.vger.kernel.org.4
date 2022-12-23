@@ -2,192 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06F865538B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2074C65538E
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiLWSPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 13:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
+        id S231661AbiLWSRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbiLWSPj (ORCPT
+        with ESMTP id S231338AbiLWSRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:15:39 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285A61E717
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:15:37 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id b3so8008928lfv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:15:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CMkaNS6uOrb3D/0kArTYvqSqllKQ1UyONAfya7XClCA=;
-        b=cee0DxFYkfwQEw34e2mDPCBPHQiakE8mCBUi8vVzvNg9TSRfwPL5y4nI2U3jPBr7W6
-         aQqjVPyNM80fqCRVpCJZhcftBq207Rg5spm3CiAbRZrGUYnnAJ8kJ/w75ymQmuH1Bhmp
-         fyYroAmrSMoCaA57pK6Ti0sFrnL7g2TUKVkX9j5rtQ/BjzDL0a+qHYNQZeCdQxJfnWxO
-         axs4SrU3W1rQUbqUIlbk7yQIQx54fKJG3S74Pc/HKI6T4h86v53pM2ZJVUOuRpqsHBCf
-         FxDhrnlD/EddETcA8n+FrCE5JspFBauFqwOZ5P2/gbkzvY/WMfPlspo7dUYvky0nnzl2
-         +RnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CMkaNS6uOrb3D/0kArTYvqSqllKQ1UyONAfya7XClCA=;
-        b=4dcorApG14IUmq6yXwLqlOBHYlAkMbT2Kvi1+xD7n5g3qE8IrkiPHilNusMX0jz3sT
-         3Kn7hFgX6lx3ud+k25Ss06UtNP6EKDKh0atxAHVXvqVIOUhC000EMbn7ZtiFqOGkcMZO
-         j+obd+ElRb1iJPwZY5jHGryYhnMZobsLTl3zKbmtKQJy6vM0WrxBWZK7nJh79+DCePrB
-         HqFhkWJ41oY2wQLfiRistZ4+WGLAozcnun6nQELe5mgf7Hronhia/C36EBbr4ogjvxhZ
-         LbT3TPTtZFZCLPsLT1hU98xDZXVr6R3Ga1P55gcfRWT7GMU7Xc2Gysmm8yTq2G1qXTHE
-         YN5w==
-X-Gm-Message-State: AFqh2kq6eV1lWW0uN65UMiv29QiBXDFb0tAskSzyBFyvtG+gVcR0Prm8
-        rCxDCkA9PmkZyUOZ0v21d3fDmQ==
-X-Google-Smtp-Source: AMrXdXuSe9oHqaAYvBlNeeWbuqVFOSg5lsAHJITWWPA7bEZcLVtnTx9oVng0bWGOZczwtVtCBkVgXw==
-X-Received: by 2002:a05:6512:1383:b0:4b6:ed8b:4f11 with SMTP id p3-20020a056512138300b004b6ed8b4f11mr3488771lfa.53.1671819335407;
-        Fri, 23 Dec 2022 10:15:35 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id u9-20020ac258c9000000b004bb8a796a6bsm609785lfo.66.2022.12.23.10.15.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 10:15:34 -0800 (PST)
-Message-ID: <9c7cb68c-6516-6087-92ad-e707d8b122ed@linaro.org>
-Date:   Fri, 23 Dec 2022 20:15:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0
- and PCIe1
-Content-Language: en-GB
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bhelgaas@google.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        Fri, 23 Dec 2022 13:17:10 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0855B1EEDE;
+        Fri, 23 Dec 2022 10:17:07 -0800 (PST)
+Received: from whitebuilder.lan (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3045D6602CDF;
+        Fri, 23 Dec 2022 18:17:04 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1671819425;
+        bh=WtkH3zd/DfeHPZ0Re8eGGq82FSkjo7m3N6d2l6hBATE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dII6bpvdM6HM6sNU54FfXTO4/cp04kUdbmAG9Ts3HYVnzAJJVe1yPWSg4KhclwCP/
+         AN+tcSg2VzuAXtxQwt+S7is5T+FMi161WvIRGgU2HtwDBMrfpZPCUZQ4ATlfcKM97J
+         BA7Y8+ojbBSsHHwInjNQVy2i2XjRLoLMMPHYUqQJ9RRP+iTwSmS+bt0gThlPS5XC8B
+         0bKPRZrKtgs8ocu9L5rLg01IZiTyvx38+pTn4BIigb32TkcIlEXUHjWIKUIz00CmRQ
+         cPJWTeBkhH3mJj4+wD8hzFZXfKPdM8KMSMadYjXUQhtz5XkuoUK5Zs/U++DCDl6dKr
+         M3D0sKG4/3nKA==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Robert Mader <robert.mader@collabora.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
-References: <20221222133123.50676-1-manivannan.sadhasivam@linaro.org>
- <20221222133123.50676-4-manivannan.sadhasivam@linaro.org>
- <e756516a-a5e2-a6ac-fd7f-71726766fa81@linaro.org>
- <20221223174555.GE4587@thinkpad>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221223174555.GE4587@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: [PATCH v2] hantro: Fix JPEG encoder ENUM_FRMSIZE on RK3399
+Date:   Fri, 23 Dec 2022 13:16:47 -0500
+Message-Id: <20221223181647.720918-1-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/12/2022 19:45, Manivannan Sadhasivam wrote:
-> On Fri, Dec 23, 2022 at 07:18:32PM +0200, Dmitry Baryshkov wrote:
->> On 22/12/2022 15:31, Manivannan Sadhasivam wrote:
->>> Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
->>> endpoint devices using GIC-ITS MSI controller. Add support for it.
->>>
->>> Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
->>> msi-map-mask of 0xff00, all the 32 devices under these two busses can
->>> share the same Device ID.
->>>
->>> The GIC-ITS MSI implementation provides an advantage over internal MSI
->>> implementation using Locality-specific Peripheral Interrupts (LPI) that
->>> would allow MSIs to be targeted for each CPU core.
->>>
->>> It should be noted that the MSIs for BDF (1:0.0) only works with Device
->>> ID of 0x5980 and 0x5a00. Hence, the IDs are swapped.
->>>
->>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>> ---
->>>    arch/arm64/boot/dts/qcom/sm8450.dtsi | 20 ++++++++++++++------
->>>    1 file changed, 14 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->>> index 570475040d95..c4dd5838fac6 100644
->>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->>> @@ -1733,9 +1733,13 @@ pcie0: pci@1c00000 {
->>>    			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
->>>    				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
->>> -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
->>> -			interrupt-names = "msi";
->>> -			#interrupt-cells = <1>;
->>> +			/*
->>> +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5980.
->>> +			 * Hence, the IDs are swapped.
->>> +			 */
->>> +			msi-map = <0x0 &gic_its 0x5981 0x1>,
->>> +				  <0x100 &gic_its 0x5980 0x1>;
->>
->> This definitely doesn't match what has been used in the downstream.
->>
-> 
-> Yes, I do not know why the downstream Device ID doesn't work. I tried finding
-> the answer within Qcom but didn't get any answer so far :/ So I just went with
-> the value that works on multiple boards.
+Since 79c987de8b354, enumerating framesize on format set with "MODE_NONE"
+(any raw formats) is reporting an invalid frmsize.
 
-Ugh :-(
+  Size: Stepwise 0x0 - 0x0 with step 0/0
 
-> 
->> Also if I understand correctly this change would prevent us from using
->> multiple MSI interrupts for the connected device, as the last value of the
->> 0x100 mapping is 0x1, while the vendor kernel uses <0x100 &its 0x5981 0x20>.
->>
-> 
-> Not true. The controller can still support multiple MSIs for the endpoint
-> devices but the only difference is, it would use the same Device ID for all.
+Before this change, the driver would return EINVAL, which is also invalid but
+worked in GStreamer. The original intent was not to implement it, hence the
+-ENOTTY return in this change. While drivers should implement ENUM_FRMSIZE for
+all formats and queues, this change is limited in scope to fix the regression.
 
-I see, please excuse me then. But don't we have to define multiple MSI 
-vectors here too?
+This fixes taking picture in Gnome Cheese software, or any software using
+GSteamer to encode JPEG with hardware acceleration.
 
-> 
-> The Qcom GIC-ITS implementation could only support 32 Device IDs. By specifying
-> the size of 0x20, a separate Device ID would be used for each devices of bus 1.
-> But if a PCIe switch is connected and the bus count becomes > 1, then the MSI
-> allocation would fail because Device IDs are exhausted.
-> 
-> The downstream implementation just assumes that there will be only bus 1 and I
-> do not want to follow that assumption.
-> 
-> That's why I used "msi-map-mask" property of value "0xff00" here, as that will
-> allow all the devices under the bus 1 to share the same Device ID. For now I
-> only mapped bus 1, but extending that in the future for other busses is simple.
-> 
-> Thanks,
-> Mani
-> 
->> Do you know by chance, why do we differ from the vendor dtsi?
->>
->>> +			msi-map-mask = <0xff00>;
->>>    			interrupt-map-mask = <0 0 0 0x7>;
->>>    			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
->>>    					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
->>> @@ -1842,9 +1846,13 @@ pcie1: pci@1c08000 {
->>>    			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
->>>    				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
->>> -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
->>> -			interrupt-names = "msi";
->>> -			#interrupt-cells = <1>;
->>> +			/*
->>> +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5a00.
->>> +			 * Hence, the IDs are swapped.
->>> +			 */
->>> +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
->>> +				  <0x100 &gic_its 0x5a00 0x1>;
->>> +			msi-map-mask = <0xff00>;
->>>    			interrupt-map-mask = <0 0 0 0x7>;
->>>    			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
->>>    					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
->>
->> -- 
->> With best wishes
->> Dmitry
->>
-> 
+Fixes: 79c987de8b354 ("media: hantro: Use post processor scaling capacities")
+Reported-by: Robert Mader <robert.mader@collabora.com>
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+---
+ drivers/media/platform/verisilicon/hantro_v4l2.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+index 2c7a805289e7b..30e650edaea8a 100644
+--- a/drivers/media/platform/verisilicon/hantro_v4l2.c
++++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+@@ -161,8 +161,11 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
+ 	}
+ 
+ 	/* For non-coded formats check if postprocessing scaling is possible */
+-	if (fmt->codec_mode == HANTRO_MODE_NONE && hantro_needs_postproc(ctx, fmt)) {
+-		return hanto_postproc_enum_framesizes(ctx, fsize);
++	if (fmt->codec_mode == HANTRO_MODE_NONE) {
++		if (hantro_needs_postproc(ctx, fmt))
++			return hanto_postproc_enum_framesizes(ctx, fsize);
++		else
++			return -ENOTTY;
+ 	} else if (fsize->index != 0) {
+ 		vpu_debug(0, "invalid frame size index (expected 0, got %d)\n",
+ 			  fsize->index);
 -- 
-With best wishes
-Dmitry
+2.38.1
 
