@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2389D655095
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE34654C14
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 05:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiLWMsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 07:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S235722AbiLWEyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 23:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiLWMsM (ORCPT
+        with ESMTP id S229667AbiLWExd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 07:48:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E961D309;
-        Fri, 23 Dec 2022 04:48:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7888960A6F;
-        Fri, 23 Dec 2022 12:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A861C433D2;
-        Fri, 23 Dec 2022 12:48:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671799689;
-        bh=W7+OtaE26Rq0/9/+5FJNb9Z0lJvsOAo1uMNomxGwQJ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qJcXi3fucQHnXd3o2I2+N9Bs26xTYvCP7xNkNb1vZTDpUyn7247GyYGhN7LKbKGTo
-         BoPp344HafMfcLwcuEXRTM4M3RkewjBouGm+sps/dyrLpq4a/dLrkY4bMhcp9nkBJg
-         OQQp6rihXVpHKPLgAsG9JYJnXgR/ssZGZkTKrxDxJNdDthG4VmwedvYCJOpdorq/VZ
-         7PNkFYNIMMZ973yd1g+kkUiZCzGkY3+18uPZtSHef50p5LQNQGAeqpQzuU+NLZu1wA
-         pyBltWG3/f6Ud/MN/jz6GeuwTOmXljBt5Pt6BxJ2Wx41BX/FoSWVZHJ+lnizrL012K
-         fG3osmZuvbdJg==
-Date:   Fri, 23 Dec 2022 12:48:03 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-leds@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 2/3] dt-bindings: leds: add worldsemi,ws2812b
-Message-ID: <Y6Wjg3j6QLNFEbiY@google.com>
-References: <20221212045558.69602-1-gch981213@gmail.com>
- <20221212045558.69602-3-gch981213@gmail.com>
- <c592dd31-5e9a-c2a2-1c70-46b7cffa9c5d@linaro.org>
+        Thu, 22 Dec 2022 23:53:33 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B98BC19;
+        Thu, 22 Dec 2022 20:53:31 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NdZZF6Hlbz4f3p1W;
+        Fri, 23 Dec 2022 12:53:25 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgDXjbFHNKVjpOduAQ--.93S2;
+        Fri, 23 Dec 2022 12:53:28 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     axboe@kernel.dk, dwagner@suse.de, hare@suse.de,
+        ming.lei@redhat.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     hch@lst.de, john.garry@huawei.com, shikemeng@huaweicloud.com
+Subject: [PATCH 00/13] A few bugfix and cleanup patches for blk-mq
+Date:   Fri, 23 Dec 2022 20:52:10 +0800
+Message-Id: <20221223125223.1687670-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c592dd31-5e9a-c2a2-1c70-46b7cffa9c5d@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-CM-TRANSID: gCh0CgDXjbFHNKVjpOduAQ--.93S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1xXF4fKry7XFWDAF1DZFb_yoW8Jw4kpF
+        43GFnxGa1fJry2qr1fAw47AF9avF4kGrW7JwnxC34rJr4DCryUJrWkWa1fZry0yFZxCanr
+        WF18Xw1YkF1Iqa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
+        x2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjTRNg
+        AwUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,111 +59,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Dec 2022, Krzysztof Kozlowski wrote:
+Hi, this series contain several bugfix patches to fix potential io
+hung and a few cleanup patches to remove stale codes and unnecessary
+check. Most changes are in request issue and dispatch path. Thanks.
 
-> On 12/12/2022 05:55, Chuanhong Guo wrote:
-> > Add dt binding schema for WorldSemi WS2812B driven using SPI
-> > bus.
-> > 
-> > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> > ---
-> > Changes since v1:
-> > remove linux driver reference from description
-> > remove some obvious descriptions
-> > fix unit address regex in multi-led property
-> > drop various minItems
-> > add maxItems = 1 to reg
-> > fix node names and property orders in binding example
-> > drop -spi from compatible string
-> > add default-brightness
-> > 
-> > Change since v2:
-> > drop "this patch" from commit message
-> > rename leds to led-controller
-> > drop default-brightness and default-intensity
-> > 
-> > Change since v3:
-> > reword commit title
-> > 
-> >  .../bindings/leds/worldsemi,ws2812b.yaml      | 116 ++++++++++++++++++
-> >  1 file changed, 116 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
-> > new file mode 100644
-> > index 000000000000..548c05ac3d31
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
-> > @@ -0,0 +1,116 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/leds/worldsemi,ws2812b.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: WS2812B LEDs driven using SPI
-> > +
-> > +maintainers:
-> > +  - Chuanhong Guo <gch981213@gmail.com>
-> > +
-> > +description: |
-> > +  WorldSemi WS2812B is a individually addressable LED chip that can be chained
-> > +  together and controlled individually using a single wire.
-> > +  This binding describes a chain of WS2812B LEDs connected to the SPI MOSI pin.
-> > +  Typical setups includes connecting the data pin of the LED chain to MOSI as
-> > +  the only device or using CS and MOSI with a tri-state voltage-level shifter
-> > +  for the data pin.
-> > +  The SPI frequency needs to be 2.105MHz~2.85MHz for the timing to be correct
-> > +  and the controller needs to send all the bytes continuously.
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: worldsemi,ws2812b
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  spi-max-frequency:
-> > +    minimum: 2105000
-> > +    maximum: 2850000
-> > +
-> > +  "#address-cells":
-> > +    const: 1
-> > +
-> > +  "#size-cells":
-> > +    const: 0
-> > +
-> > +patternProperties:
-> > +  "^multi-led@[0-9a-f]+$":
-> > +    type: object
-> > +    $ref: leds-class-multicolor.yaml#
-> > +    unevaluatedProperties: false
-> > +
-> > +    properties:
-> > +      color-index:
-> > +        description: |
-> > +          A 3-item array specifying color of each components in this LED. It
-> > +          should be one of the LED_COLOR_ID_* prefixed definitions from the
-> > +          header include/dt-bindings/leds/common.h. Defaults to
-> > +          <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>
-> > +          if unspecified.
-> > +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> > +        maxItems: 3
-> 
-> In general I am fine with it, although there is still question for
-> adding more multi-color defines in binding headers to replace this
-> property - GRB/RBG/GBR and even more for RGBW.
-> 
-> Pavel, Lee, any thoughts from your side?
+Kemeng Shi (13):
+  blk-mq: avoid sleep in blk_mq_alloc_request_hctx
+  blk-mq: remove stale comment for blk_mq_sched_mark_restart_hctx
+  blk-mq: wait on correct sbitmap_queue in blk_mq_mark_tag_wait
+  blk-mq: Fix potential io hung for shared sbitmap per tagset
+  blk-mq: remove unnecessary list_empty check in
+    blk_mq_try_issue_list_directly
+  blk-mq: remove unncessary error count and flush in
+    blk_mq_plug_issue_direct
+  blk-mq: remove error count and unncessary flush in
+    blk_mq_try_issue_list_directly
+  blk-mq: simplify flush check in blk_mq_dispatch_rq_list
+  blk-mq: remove unnecessary error count and check in
+    blk_mq_dispatch_rq_list
+  blk-mq: remove set bd->last when get driver tag for next request fails
+  blk-mq: remove unncessary from_schedule parameter in
+    blk_mq_plug_issue_direct
+  blk-mq: use switch/case to improve readability in
+    blk_mq_try_issue_list_directly
+  blk-mq: correct stale comment of .get_budget
 
-Nothing from me yet.
-
-If Pavel doesn't respond soon, I'll get around to doing a full sweep
-after the merge-window has closed.  Actually, most likely the new year
-now.
+ block/blk-mq-sched.c |   7 ++-
+ block/blk-mq.c       | 103 ++++++++++++++++++-------------------------
+ 2 files changed, 46 insertions(+), 64 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
+2.30.0
+
