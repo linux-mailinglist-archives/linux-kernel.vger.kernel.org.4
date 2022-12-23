@@ -2,105 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B992655124
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E603655138
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236201AbiLWN72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 08:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
+        id S236341AbiLWOPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 09:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiLWN70 (ORCPT
+        with ESMTP id S229625AbiLWOPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 08:59:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370401D0E3;
-        Fri, 23 Dec 2022 05:59:26 -0800 (PST)
+        Fri, 23 Dec 2022 09:15:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4627B13EA4;
+        Fri, 23 Dec 2022 06:15:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DBE71B820DE;
-        Fri, 23 Dec 2022 13:59:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE1FBC433D2;
-        Fri, 23 Dec 2022 13:59:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA13560F74;
+        Fri, 23 Dec 2022 14:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE6DC433D2;
+        Fri, 23 Dec 2022 14:15:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671803963;
-        bh=WPtNm1cTst+I617Sj6ukNNMQUAzdhQ/FmsPYjUxXZlI=;
+        s=k20201202; t=1671804948;
+        bh=kC/5ICblD4LB7IvS8fwCTmiK5DQUeaEZVETPs8nZAZ8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p1tFthkoFcQXl0H0K0HFxtpdqbQnGM+8Uh/9YPlJ3yi/MpWhXmo97Amk57v8e49+C
-         qkAIIBXCrF9Wa2soLC80y9C63bBetwgBBXt+G/ktlitIvHDMbzn2TuqlLdW8/U4rZf
-         yIDiwVHh+SILxUgWKK0J617kEfmjAWmq7q9mlebv31HGz7gxbAArUhj4RvctzISS4D
-         v2dFCtkq/ZJ00HxsQWL1FBuAospZjPsbMhZXm7BsZyskPM5RfcXV/w9HE+u8jnRgzp
-         0BJ12g5WPwzRI5HMcu+iXdA/7bs+Js8um4k/K6PTea0Sg8Cbw4E9MQ7+aalon2JUlu
-         ECJISIhpJXFjA==
-Date:   Fri, 23 Dec 2022 14:12:32 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     hvilleneuve@dimonoff.com, lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] iio: adc: Kconfig: add SPI interface mention to
- AD7924 description
-Message-ID: <20221223141232.0f570f33@jic23-huawei>
-In-Reply-To: <20221222203610.2571287-2-hugo@hugovil.com>
-References: <20221222203610.2571287-1-hugo@hugovil.com>
-        <20221222203610.2571287-2-hugo@hugovil.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        b=gzVYtBIoG1z48keDm9V4HVDC/PGhcmFIQJFHTrA2l9xP8AREJ1f+fog6mveB2ZHur
+         m29UFSZCbhrbQRA0Wb0UVY5hRJOx5IUasz6U40uqG2I/XnJ+KHrvub6dq30gutvMaS
+         wI/GlLpxn7Y0MWex1CbTd/NsjiY4njntP4z/oPKVCakXUCmCGy/cr6gEtuDMJdyrJp
+         zBvpEnS+J10mzT9or1kldLX3HxHc+bueLw+8XEZ38Qx7O7WoE8GWJapH5kked6UyqO
+         1QY+FYKVgHcYT6ZA909f7d7SwD/uyqe25G7GgmRmLQ9L48B+Y3kiWqPRpHuVEJ8aGI
+         hsCK9o8EAcPIw==
+Date:   Fri, 23 Dec 2022 23:15:45 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Song Chen <chensong_2000@189.cn>
+Cc:     rostedt@goodmis.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] kernel/trace: remove calling regs_* when
+ compiling HEXAGON
+Message-Id: <20221223231545.e619f35b321192fbaa2f4cf9@kernel.org>
+In-Reply-To: <1670229017-4106-1-git-send-email-chensong_2000@189.cn>
+References: <1670229017-4106-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Dec 2022 15:36:08 -0500
-Hugo Villeneuve <hugo@hugovil.com> wrote:
+On Mon,  5 Dec 2022 16:30:17 +0800
+Song Chen <chensong_2000@189.cn> wrote:
 
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> kernel test robot reports below errors:
 > 
-> The Analog Devices AD7924 uses an SPI interface. There is also a Texas
-> Instruments ADS7924 which uses an I2C interface.
+> In file included from kernel/trace/trace_events_synth.c:22:
+> >> kernel/trace/trace_probe_kernel.h:203:9: error: call to
+> undeclared function 'regs_get_register'; ISO C99 and later
+> do not support implicit function declarations
+> [-Wimplicit-function-declaration]
+>                    val = regs_get_register(regs, code->param);
 > 
-> Adding the SPI mention to the AD7924 will help to avoid confusion
-> between the two chips.
-Hi Hugo,
-
-Welcome to IIO.
-
-I don't really mind this, but given they have different part numbers
-and the similarly named TI part could just have easily been SPI
-I'm not sure the clarification is really useful.
-
-Also, under all the circumstances I can think of, if you can see the
-help text you can also see the SPI dependence clearly listed.
-
-Hence I think is just noise, though I'm guessing it reflects a
-confusion you ran into!
-
-Jonathan
-
-
+> HEXAGON doesn't define and implement those reg_* functions
+> underneath arch/hexagon as well as other archs. To remove
+> those errors, i have to include those function calls in
+> "CONFIG_HEXAGON"
 > 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> It looks ugly, but i don't know any other way to fix it,
+> this patch can be reverted after reg_* have been in place
+> in arch/hexagon.
+> 
+
+Sorry, NACK. This is too add-hoc patch and this is introduced
+by your patch. Do not introduce an issue and fix it later in
+the same series.
+Please fix it in your first patch. Maybe you should make another
+header file for those APIs.
+
+Thank you, 
+
+> Signed-off-by: Song Chen <chensong_2000@189.cn>
+> Reported-by: kernel test robot <lkp@intel.com>
 > ---
->  drivers/iio/adc/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  kernel/trace/trace_probe_kernel.h | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-> index 46c4fc2fc534..235319546974 100644
-> --- a/drivers/iio/adc/Kconfig
-> +++ b/drivers/iio/adc/Kconfig
-> @@ -243,7 +243,7 @@ config AD7923
->  	select IIO_TRIGGERED_BUFFER
->  	help
->  	  Say yes here to build support for Analog Devices
-> -	  AD7904, AD7914, AD7923, AD7924 4 Channel ADCs.
-> +	  AD7904, AD7914, AD7923, AD7924 4 Channel SPI ADCs.
+> diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
+> index 8c42abe0dacf..7e958b7f07e5 100644
+> --- a/kernel/trace/trace_probe_kernel.h
+> +++ b/kernel/trace/trace_probe_kernel.h
+> @@ -130,8 +130,7 @@ probe_mem_read(void *dest, void *src, size_t size)
+>  	return copy_from_kernel_nofault(dest, src, size);
+>  }
 >  
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called ad7923.
+> -static nokprobe_inline unsigned long
+> -get_event_field(struct fetch_insn *code, void *rec)
+> +static unsigned long get_event_field(struct fetch_insn *code, void *rec)
+>  {
+>  	struct ftrace_event_field *field = code->data;
+>  	unsigned long val;
+> @@ -194,23 +193,41 @@ static int
+>  process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+>  		   void *base)
+>  {
+> +#ifndef CONFIG_HEXAGON
+>  	struct pt_regs *regs = rec;
+> +#endif
+>  	unsigned long val;
+>  
+>  retry:
+>  	/* 1st stage: get value from context */
+>  	switch (code->op) {
+>  	case FETCH_OP_REG:
+> +#ifdef CONFIG_HEXAGON
+> +		val = 0;
+> +#else
+>  		val = regs_get_register(regs, code->param);
+> +#endif
+>  		break;
+>  	case FETCH_OP_STACK:
+> +#ifdef CONFIG_HEXAGON
+> +		val = 0;
+> +#else
+>  		val = regs_get_kernel_stack_nth(regs, code->param);
+> +#endif
+>  		break;
+>  	case FETCH_OP_STACKP:
+> +#ifdef CONFIG_HEXAGON
+> +		val = 0;
+> +#else
+>  		val = kernel_stack_pointer(regs);
+> +#endif
+>  		break;
+>  	case FETCH_OP_RETVAL:
+> +#ifdef CONFIG_HEXAGON
+> +		val = 0;
+> +#else
+>  		val = regs_return_value(regs);
+> +#endif
+>  		break;
+>  	case FETCH_OP_IMM:
+>  		val = code->immediate;
+> -- 
+> 2.25.1
+> 
 
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
