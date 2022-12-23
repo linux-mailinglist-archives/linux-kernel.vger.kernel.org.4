@@ -2,71 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E309265503E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FD5655045
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236118AbiLWMSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 07:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S236087AbiLWMYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 07:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236087AbiLWMSR (ORCPT
+        with ESMTP id S230245AbiLWMYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 07:18:17 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF81F36D49
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 04:18:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671797896; x=1703333896;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KmXo4AXCeJKBTGcrdkKie6uM2Xn8mujdz1X+RV3yfy8=;
-  b=Jxgv7pwBfA25EkCC41vZ3tnY7T9ukUTMkhzB4a3ScCkVj8RkqiJqkRVH
-   BOxnWJuX+uOCsXdtwW99u5glEk/PvCxWGQo6a0I83S25B7IjVB2QAeJNE
-   FZtSUvYyKQ+TEbeg41eKY/qMovXGez1aird8OEpfFQ5tSqUxDlfM3uZvA
-   EjtX6on9wQoB8l/RVJLT6eFRjyNXti/3Jh88PXjHbtT3QFN0Km53td3eQ
-   Fl0Niq3Fapcdf8VICted4ClY9P4khUG3ZQzJ2GvyHKnmtk1pZ3CxiMefv
-   9LiiLgWetDmsedxY8OR8O0JZodYxAdcGWXCGic6YN727gX1r7gg4nD9Vn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="317969026"
-X-IronPort-AV: E=Sophos;i="5.96,268,1665471600"; 
-   d="scan'208";a="317969026"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 04:18:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="684522243"
-X-IronPort-AV: E=Sophos;i="5.96,268,1665471600"; 
-   d="scan'208";a="684522243"
-Received: from mirabhat-mobl1.amr.corp.intel.com (HELO [10.213.188.137]) ([10.213.188.137])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 04:18:14 -0800
-Message-ID: <0095266f-1422-8be6-f4ac-5e561da1165a@linux.intel.com>
-Date:   Fri, 23 Dec 2022 12:18:12 +0000
+        Fri, 23 Dec 2022 07:24:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E590F5AC
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 04:23:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671798201;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S1HwigiBXzR+33Qj15n947bgxDdgr8XCfr3PoMuFRgU=;
+        b=OksW7+8JTlb57VYBNwUoh6Xkdr0peBpELtWsliRLGyDRMQG7mRkEWe0coqVhuQSwRnRga+
+        kb+w/GO7AskebC55j9Qc5mLGpkiR2UuKlKH/iob+0w7dmYm9muTdKmYStnpZ4Jgt/DZ972
+        QhzXHGv/Mg31v1hF9UV2ZUFriA0TwkA=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-2-oAkneZtIMOetQwisBbJ3hg-1; Fri, 23 Dec 2022 07:22:17 -0500
+X-MC-Unique: oAkneZtIMOetQwisBbJ3hg-1
+Received: by mail-qk1-f197.google.com with SMTP id l16-20020a05620a28d000b00704af700820so3081803qkp.5
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 04:22:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S1HwigiBXzR+33Qj15n947bgxDdgr8XCfr3PoMuFRgU=;
+        b=ier4vHrkK5AiqaJNn/dp8X88YMv7VSj0Eor+erigbmeKGI7wPqG11xB1ZVa5HGzMM4
+         WW7j1NFTyjUowPvM+oVvZhxUShEg7yQpCKYUgN6b9ffd5GMmMxvADuwwMq/JzGQ23Mb5
+         Pl00dMRS2H1tIx0+XWkJvxYy2x5u6pLSaZyLK5+iEGuprpgiPQcRmqn01TBOS2sPHlb7
+         /o5cq7Q+n9pmOEgIgTeb2Ty6bmjd4NRNsHk4lYfYv+uIwF89D0w/ygSy5a7pLx0gDzpE
+         P9HU2jp56nm3dwrPrbS6CpdUtIzoCNgRnrTkX1ugCXVtOIogYrA3eF8z9iBX//Xy4IRH
+         T6Nw==
+X-Gm-Message-State: AFqh2koQfNOMy2+h72oVSNmqJHb+Ca9Db+3+RWmoTMhHq8lHBVoXc3md
+        iQM1VorxovO7x91y7d6mvYrxty+EKz6JZyiQbxzxLlGebz96lZ9CRdgjv+aP1Xe4IYLmF+MtHsP
+        x1JnA5t+RrNzfjpiPLZftDocd
+X-Received: by 2002:a05:622a:1a08:b0:3ab:6e0c:166b with SMTP id f8-20020a05622a1a0800b003ab6e0c166bmr4586396qtb.47.1671798137062;
+        Fri, 23 Dec 2022 04:22:17 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtuy/cAgKKIkhssIauVBEFzgx+91czS0/pNhPTxFAecy61AF1+PjIa+q0FQV4Y++aFHwlCWHg==
+X-Received: by 2002:a05:622a:1a08:b0:3ab:6e0c:166b with SMTP id f8-20020a05622a1a0800b003ab6e0c166bmr4586371qtb.47.1671798136823;
+        Fri, 23 Dec 2022 04:22:16 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id q27-20020a37f71b000000b006cec8001bf4sm2119584qkj.26.2022.12.23.04.22.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 04:22:15 -0800 (PST)
+Date:   Fri, 23 Dec 2022 07:22:14 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        quic_shazhuss@quicinc.com, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, johan+linaro@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
+        echanude@redhat.com
+Subject: Re: [PATCH v3 4/7] arm64: dts: qcom: sc8280xp: add missing i2c nodes
+Message-ID: <Y6WddnmaREQlt9gq@x1>
+References: <20221220192854.521647-1-bmasney@redhat.com>
+ <20221220192854.521647-5-bmasney@redhat.com>
+ <Y6WEzkcP31S2JGrL@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: LOOKS GOOD: Possible regression in drm/i915 driver: memleak
-Content-Language: en-US
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, jani.nikula@linux.intel.com,
-        joonas.lahtinen@linux.intel.com,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        intel-gfx@lists.freedesktop.org
-References: <f849cc70-b21f-6476-ba26-08989d1243c2@alu.unizg.hr>
- <05424a5351a847786377a548dba0759917d8046c.camel@linux.intel.com>
- <15ef1bb9-7312-5d98-8bf0-0af1a37cfd2a@linux.intel.com>
- <619bdecc-cf87-60a4-f50d-836f4c073ea7@alu.unizg.hr>
- <8e080674-36ab-9260-046e-f4e3c931a3b9@alu.unizg.hr>
- <96661293-32d7-0bb4-fb0e-28086eaaecc3@linux.intel.com>
- <d8d62c8a-32e0-9975-5ed5-b832bb8df549@alu.unizg.hr>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <d8d62c8a-32e0-9975-5ed5-b832bb8df549@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6WEzkcP31S2JGrL@hovoldconsulting.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,90 +84,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 22/12/2022 15:21, Mirsad Goran Todorovac wrote:
-> On 12/22/2022 09:04, Tvrtko Ursulin wrote:
->> On 22/12/2022 00:12, Mirsad Goran Todorovac wrote:
->>> On 20. 12. 2022. 20:34, Mirsad Todorovac wrote:
->>>
->>> As I hear no reply from Tvrtko, and there is already 1d5h uptime with 
->>> no leaks (but
->>> the kworker with memstick_check nag I couldn't bisect on the only box 
->>> that reproduced it,
->>> because something in hw was not supported in pre 4.16 kernels on the 
->>> Lenovo V530S-07ICB.
->>> Or I am doing something wrong.)
->>>
->>> However, now I can find the memstick maintainers thanks to Tvrtko's 
->>> hint.
->>>
->>> If you no longer require my service, I would close this on my behalf.
->>>
->>> I hope I did not cause too much trouble. The knowledgeable knew that 
->>> this was not a security
->>> risk, but only a bug. (30 leaks of 64 bytes each were hardly to 
->>> exhaust memory in any realistic
->>> time.)
->>>
->>> However, having some experience with software development, I always 
->>> preferred bugs reported
->>> and fixed rather than concealed and lying in wait (or worse, found 
->>> first by a motivated
->>> adversary.) Forgive me this rant, I do not live from writing kernel 
->>> drivers, this is just a
->>> pet project as of time being ...
-> Hi,
->> It is not forgotten - I was trying to reach out to the original author 
->> of the fixlet which worked for you. If that fails I will take it up on 
->> myself, but need to set aside some time to get into the exact problem 
->> space before I can vouch for the fix and send it on my own.
-> That's good news. Possibly with some assistance I could bisect on pre 
-> 4.16 kernels with the additional drivers.
-
-Sorry, maybe I am confused, but from where does 4.16 come?
-
->> In the meantime definitely thanks a lot for testing this quickly and 
->> reporting back!
-> Not at all, I considered it a privilege to assist your team.
->> What will happen next is, that when either the original author or 
->> myself are ready to send out the fix as a proper patch, you will be 
->> copied on it via the "Reported-by" and possibly "Tested-by" tags. 
->> Latter is if the patch remains identical. If it changes we might 
->> kindly ask you to re-test if possible.
+On Fri, Dec 23, 2022 at 11:37:02AM +0100, Johan Hovold wrote:
+> On Tue, Dec 20, 2022 at 02:28:51PM -0500, Brian Masney wrote:
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > index f1111cd7f679..a502d4e19d98 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > @@ -813,6 +813,38 @@ qup2: geniqup@8c0000 {
+> >  
+> >  			status = "disabled";
+> >  
+> > +			i2c16: i2c@880000 {
+> > +				compatible = "qcom,geni-i2c";
+> > +				reg = <0 0x00880000 0 0x4000>;
+> > +				clocks = <&gcc GCC_QUPV3_WRAP2_S0_CLK>;
+> > +				clock-names = "se";
+> > +				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
+> > +				#address-cells = <1>;
+> > +				#size-cells = <0>;
 > 
-> I've seen the published patch and it seems like the same two lines 
-> change (-1/+1).
-> In case of a change, I will attempt to test with the same config, setup 
-> and running programs.
-
-Yes it is the same diff so no need to re-test really.
-
-> I may need to correct myself in regard as to security aspect of this 
-> patch as addressed in 786555987207.
+> I'm aware that the two current i2c nodes has these two properties here
+> in the middle, but would you mind moving '#address-cells' and
+> '#size-cells' after 'reg' instead where I'd expect them to be?
 > 
-> QUOTE:
+> Same for the spi patch.
 > 
->      Currently we create a new mmap_offset for every call to
->      mmap_offset_ioctl. This exposes ourselves to an abusive client that 
-> may
->      simply create new mmap_offsets ad infinitum, which will exhaust 
-> physical
->      memory and the virtual address space. In addition to the exhaustion, a
->      very long linear list of mmap_offsets causes other clients using the
->      object to incur long list walks -- these long lists can also be
->      generated by simply having many clients generate their own 
-> mmap_offset.
-> 
-> It is unobvious whether the bug that caused chrome to trigger 30 
-> memleaks could be exploited by an
-> abusive script to exhaust larger parts of kernel memory and possibly 
-> crash the kernel?
+> I can clean up the existing two nodes (and binding example) unless you
+> want to do it.
 
-Indeed. Attackers imagination can be pretty impressive so I'd rather 
-assume it is exploitable than that it isn't. Luckily it is "just" a 
-memory leak rather and information leak or worse. Hopefully we can merge 
-the fix soon, as soon as a willing reviewer is found.
+I'll clean up the existing nodes, qcom,i2c-geni-qcom.yaml, and
+qcom,geni-se.yaml in my next version.
 
-Regards,
+Brian
 
-Tvrtko
