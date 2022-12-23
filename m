@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245FF655634
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 00:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A6065560D
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 00:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbiLWXeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 18:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S232053AbiLWXdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 18:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbiLWXdO (ORCPT
+        with ESMTP id S231201AbiLWXdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 18:33:14 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003FF1144B;
-        Fri, 23 Dec 2022 15:33:13 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BNNT8Fv016249;
+        Fri, 23 Dec 2022 18:33:11 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B015510FE1;
+        Fri, 23 Dec 2022 15:33:10 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BNNVeMA006265;
         Fri, 23 Dec 2022 23:32:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=HcJRJO3bS0aEzBawFv2YTqL9+yT53g5gAXCz77w7QI8=;
- b=jhWHnJXAPUQmenQqF51zAIf94LHxSlYeWFVQN6A+M2LoYdt4ONYk9qsBVMZW9YlzNaZx
- WoWMB6P22H4y3GWQad8WiYI5grwIJW0HToxl8RAku4RJxoBzyZVKyPEw6X67/biDDAsC
- xwdZiz+tT/eewKkPGpuAzN6gxchfb/q2r3aUpg5KLMQYLQUWREtBqgUm/V10cpP2B5B9
- +baPzhlwkRzcRIOUSySY4bkIL0ZDRmtM/N+/kWYbeKm/s6nHZ84UffIk1AV7hymy6n0Y
- p7mXB9wTcEIcRroK+xwQieuwTRTQhfAUvY1sLiMpdh6KaTBnhmCwvk6zQIGPGlkLKg27 pg== 
+ bh=fkNAURL5gttqswe5kK5CQ4y4LJGceGJEIBEg9TOK9Gg=;
+ b=kly7uSxnaWatqqC/1AdLckQHMBdWUfA67P+qCNK1u1coCyrZ9Z/gDJLV2gKX2Mz9YC4Q
+ T/LOiwMEcOpjyntnRvcS8P9i60d2HBmxuvmOIXts1PrGRGvD7DeU+TS68c5xEU/NgGdZ
+ DxUqgqFsIKFQy2Wd5D6g0q+ji2MquD10OVPi7vMlz1jdEpj2eZ2DQubW6zqF1x+SL/69
+ iX7VSn/4R4chGRSz7G6lWy8MIwYM7fR/KQGL0Bp0C5mvZLsonmK9V5wEsS6S/pY7NrdW
+ hxEjQmns5XJ3Z45bwemnpHutOdIrFwtF0z0U0dyEM6nx5gHTcr1OSlpqqSK4skmPMzqf IQ== 
 Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm8x4n4ex-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm3cjx2m4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 23 Dec 2022 23:32:46 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BNNWjs5009841
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BNNWjsh009844
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 23 Dec 2022 23:32:45 GMT
 Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
@@ -50,9 +50,9 @@ CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
         <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
         <quic_plai@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [RFC PATCH 05/14] sound: usb: Export USB SND APIs for modules
-Date:   Fri, 23 Dec 2022 15:31:51 -0800
-Message-ID: <20221223233200.26089-6-quic_wcheng@quicinc.com>
+Subject: [RFC PATCH 06/14] usb: core: hcd: Introduce USB HCD APIs for interrupter management
+Date:   Fri, 23 Dec 2022 15:31:52 -0800
+Message-ID: <20221223233200.26089-7-quic_wcheng@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221223233200.26089-1-quic_wcheng@quicinc.com>
 References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
@@ -63,156 +63,176 @@ X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lWD0lW3dlx79i52S_coF9PjwJhGmksbZ
-X-Proofpoint-ORIG-GUID: lWD0lW3dlx79i52S_coF9PjwJhGmksbZ
+X-Proofpoint-GUID: Tn96v1UrYOBAhISXPCFgbKG2XHIA2fSb
+X-Proofpoint-ORIG-GUID: Tn96v1UrYOBAhISXPCFgbKG2XHIA2fSb
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-23_08,2022-12-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- suspectscore=0 phishscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
- lowpriorityscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=906
+ impostorscore=0 spamscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
  definitions=main-2212230197
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some vendor modules will utilize useful parsing and endpoint management
-APIs to start audio playback/capture.
+For USB HCDs that can support multiple USB interrupters, expose functions
+that class drivers can utilize for setting up secondary interrupters.
+Class drivers can pass this information to its respective clients, i.e.
+a dedicated DSP.
 
 Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 ---
- sound/usb/card.c     |  2 ++
- sound/usb/endpoint.c |  2 ++
- sound/usb/helper.c   |  1 +
- sound/usb/pcm.c      |  9 ++++++---
- sound/usb/pcm.h      | 12 ++++++++++++
- 5 files changed, 23 insertions(+), 3 deletions(-)
+ drivers/usb/core/hcd.c  | 86 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb.h     |  7 ++++
+ include/linux/usb/hcd.h | 16 +++++++-
+ 3 files changed, 108 insertions(+), 1 deletion(-)
 
-diff --git a/sound/usb/card.c b/sound/usb/card.c
-index 212f55a7683c..396e5a34e23b 100644
---- a/sound/usb/card.c
-+++ b/sound/usb/card.c
-@@ -1068,6 +1068,7 @@ int snd_usb_autoresume(struct snd_usb_audio *chip)
- 	}
- 	return 0;
- }
-+EXPORT_SYMBOL(snd_usb_autoresume);
- 
- void snd_usb_autosuspend(struct snd_usb_audio *chip)
- {
-@@ -1081,6 +1082,7 @@ void snd_usb_autosuspend(struct snd_usb_audio *chip)
- 	for (i = 0; i < chip->num_interfaces; i++)
- 		usb_autopm_put_interface(chip->intf[i]);
- }
-+EXPORT_SYMBOL(snd_usb_autosuspend);
- 
- static int usb_audio_suspend(struct usb_interface *intf, pm_message_t message)
- {
-diff --git a/sound/usb/endpoint.c b/sound/usb/endpoint.c
-index 310cd6fb0038..1663f9e9cb4b 100644
---- a/sound/usb/endpoint.c
-+++ b/sound/usb/endpoint.c
-@@ -858,6 +858,7 @@ snd_usb_endpoint_open(struct snd_usb_audio *chip,
- 	mutex_unlock(&chip->mutex);
- 	return ep;
- }
-+EXPORT_SYMBOL_GPL(snd_usb_endpoint_open);
- 
- /*
-  * snd_usb_endpoint_set_sync: Link data and sync endpoints
-@@ -1525,6 +1526,7 @@ int snd_usb_endpoint_get_clock_rate(struct snd_usb_audio *chip, int clock)
- 	mutex_unlock(&chip->mutex);
- 	return rate;
- }
-+EXPORT_SYMBOL(snd_usb_endpoint_prepare);
- 
- /**
-  * snd_usb_endpoint_start: start an snd_usb_endpoint
-diff --git a/sound/usb/helper.c b/sound/usb/helper.c
-index a4410267bf70..b4ed9ef3eeb3 100644
---- a/sound/usb/helper.c
-+++ b/sound/usb/helper.c
-@@ -62,6 +62,7 @@ void *snd_usb_find_csint_desc(void *buffer, int buflen, void *after, u8 dsubtype
- 	}
- 	return NULL;
- }
-+EXPORT_SYMBOL_GPL(snd_usb_find_csint_desc);
- 
- /*
-  * Wrapper for usb_control_msg().
-diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
-index 8ed165f036a0..624f555c6657 100644
---- a/sound/usb/pcm.c
-+++ b/sound/usb/pcm.c
-@@ -87,7 +87,7 @@ static snd_pcm_uframes_t snd_usb_pcm_pointer(struct snd_pcm_substream *substream
- /*
-  * find a matching audio format
-  */
--static const struct audioformat *
-+const struct audioformat *
- find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
- 	    unsigned int rate, unsigned int channels, bool strict_match,
- 	    struct snd_usb_substream *subs)
-@@ -147,8 +147,9 @@ find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
- 	}
- 	return found;
- }
-+EXPORT_SYMBOL(find_format);
- 
--static const struct audioformat *
-+const struct audioformat *
- find_substream_format(struct snd_usb_substream *subs,
- 		      const struct snd_pcm_hw_params *params)
- {
-@@ -156,6 +157,7 @@ find_substream_format(struct snd_usb_substream *subs,
- 			   params_rate(params), params_channels(params),
- 			   true, subs);
- }
-+EXPORT_SYMBOL(find_substream_format);
- 
- static int init_pitch_v1(struct snd_usb_audio *chip, int ep)
- {
-@@ -418,7 +420,7 @@ int snd_usb_pcm_resume(struct snd_usb_stream *as)
- 	return 0;
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 8300baedafd2..90ead90faf1d 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1579,6 +1579,92 @@ int usb_hcd_submit_urb (struct urb *urb, gfp_t mem_flags)
+ 	return status;
  }
  
--static void close_endpoints(struct snd_usb_audio *chip,
-+void close_endpoints(struct snd_usb_audio *chip,
- 			    struct snd_usb_substream *subs)
- {
- 	if (subs->data_endpoint) {
-@@ -432,6 +434,7 @@ static void close_endpoints(struct snd_usb_audio *chip,
- 		subs->sync_endpoint = NULL;
- 	}
- }
-+EXPORT_SYMBOL(close_endpoints);
- 
- /*
-  * hw_params callback
-diff --git a/sound/usb/pcm.h b/sound/usb/pcm.h
-index 493a4e34d78d..43a4a03dfce7 100644
---- a/sound/usb/pcm.h
-+++ b/sound/usb/pcm.h
-@@ -13,4 +13,16 @@ void snd_usb_preallocate_buffer(struct snd_usb_substream *subs);
- int snd_usb_audioformat_set_sync_ep(struct snd_usb_audio *chip,
- 				    struct audioformat *fmt);
- 
-+void close_endpoints(struct snd_usb_audio *chip,
-+			    struct snd_usb_substream *subs);
-+int configure_endpoints(struct snd_usb_audio *chip,
-+			       struct snd_usb_substream *subs);
++/**
++ * usb_free_interrupter - free an interrupter
++ * @udev: usb device which requested the interrupter
++ * @intr_num: interrupter number to free
++ *
++ * Release the USB HCD interrupter that was reserved by a USB class driver.
++ **/
++int usb_free_interrupter(struct usb_device *udev, int intr_num)
++{
++	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
++	int ret = 0;
 +
-+const struct audioformat *
-+find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
-+	    unsigned int rate, unsigned int channels, bool strict_match,
-+	    struct snd_usb_substream *subs);
-+const struct audioformat *
-+find_substream_format(struct snd_usb_substream *subs,
-+		      const struct snd_pcm_hw_params *params);
- #endif /* __USBAUDIO_PCM_H */
++	if (hcd->driver->free_interrupter)
++		ret = hcd->driver->free_interrupter(hcd, intr_num);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(usb_free_interrupter);
++
++/**
++ * usb_set_interruper - Reserve an interrupter
++ * @udev: usb device which requested the interrupter
++ * @intr_num: interrupter number to reserve
++ * @dma: iova address to event ring
++ *
++ * Request for a specific interrupter to be reserved for a USB class driver.
++ * This will return the base address to the event ring that was allocated to
++ * the specific interrupter.
++ **/
++phys_addr_t usb_set_interruper(struct usb_device *udev, int intr_num,
++							dma_addr_t *dma)
++{
++	struct usb_hcd *hcd;
++	phys_addr_t pa = 0;
++
++	hcd = bus_to_hcd(udev->bus);
++	if (hcd->driver->update_interrupter)
++		pa = hcd->driver->update_interrupter(hcd, intr_num, dma);
++
++	return pa;
++}
++EXPORT_SYMBOL_GPL(usb_set_interruper);
++
++/**
++ * usb_hcd_get_transfer_resource - Retrieve USB EP resource information
++ * @udev: usb device
++ * @ep: usb ep to retrieve resource information
++ * @dma: iova address to transfer resource
++ *
++ * Request for USB EP transfer resource which is used for submitting
++ * transfers to the USB HCD.
++ **/
++phys_addr_t usb_hcd_get_transfer_resource(struct usb_device *udev,
++				struct usb_host_endpoint *ep, dma_addr_t *dma)
++{
++	struct usb_hcd *hcd;
++	phys_addr_t pa = 0;
++
++	hcd = bus_to_hcd(udev->bus);
++	if (hcd->driver->get_transfer_resource)
++		pa = hcd->driver->get_transfer_resource(udev, ep, dma);
++
++	return pa;
++}
++EXPORT_SYMBOL_GPL(usb_hcd_get_transfer_resource);
++
++/**
++ * usb_hcd_stop_endpoint - Halt USB EP transfers
++ * @udev: usb device
++ * @ep: usb ep to stop
++ *
++ * Stop pending transfers on a specific USB endpoint.
++ **/
++int usb_hcd_stop_endpoint(struct usb_device *udev,
++					struct usb_host_endpoint *ep)
++{
++	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
++	int ret = 0;
++
++	if (hcd->driver->stop_endpoint)
++		ret = hcd->driver->stop_endpoint(hcd, udev, ep);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(usb_hcd_stop_endpoint);
++
+ /*-------------------------------------------------------------------------*/
+ 
+ /* this makes the hcd giveback() the urb more quickly, by kicking it
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index d4afeeec1e1a..2f71cd4fb6e0 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1724,6 +1724,13 @@ static inline void usb_fill_int_urb(struct urb *urb,
+ 	urb->start_frame = -1;
+ }
+ 
++extern int usb_free_interrupter(struct usb_device *udev, int intr_num);
++extern phys_addr_t usb_set_interruper(struct usb_device *udev,
++						int intr_num, dma_addr_t *dma);
++extern int usb_hcd_stop_endpoint(struct usb_device *udev,
++						struct usb_host_endpoint *ep);
++extern phys_addr_t usb_hcd_get_transfer_resource(struct usb_device *udev,
++						struct usb_host_endpoint *ep, dma_addr_t *dma);
+ extern void usb_init_urb(struct urb *urb);
+ extern struct urb *usb_alloc_urb(int iso_packets, gfp_t mem_flags);
+ extern void usb_free_urb(struct urb *urb);
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index b51c07111729..f5bce80b2e40 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -343,7 +343,21 @@ struct hc_driver {
+ 	int	(*free_streams)(struct usb_hcd *hcd, struct usb_device *udev,
+ 		struct usb_host_endpoint **eps, unsigned int num_eps,
+ 		gfp_t mem_flags);
+-
++	/* Frees an interrupter from the current client, and makes it available
++	 * for use.
++	 */
++	int (*free_interrupter)(struct usb_hcd *hcd, int intr_num);
++	/* Request an interrupter from the current allocated pool.  Will provide
++	 * the address to the allocated ring.
++	 */
++	phys_addr_t (*update_interrupter)(struct usb_hcd *hcd, int intr_num,
++		dma_addr_t *dma);
++	/* Fetch transfer/ep ring address */
++	phys_addr_t (*get_transfer_resource)(struct usb_device *udev,
++		struct usb_host_endpoint *ep, dma_addr_t *dma);
++	/* Stop transfers on a particular endpoint */
++	int	(*stop_endpoint)(struct usb_hcd *hcd, struct usb_device *udev,
++		struct usb_host_endpoint *ep);
+ 	/* Bandwidth computation functions */
+ 	/* Note that add_endpoint() can only be called once per endpoint before
+ 	 * check_bandwidth() or reset_bandwidth() must be called.
