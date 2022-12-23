@@ -2,188 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4939C654CA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 07:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2BD654CA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 07:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbiLWG5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 01:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        id S235877AbiLWG5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 01:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiLWG5r (ORCPT
+        with ESMTP id S229630AbiLWG5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 01:57:47 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E16140F9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:57:42 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id x22so10029168ejs.11
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:57:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yswg7rMmhxbBUpoVnt35yC1P/QAchcZKkUcdaMOuKIY=;
-        b=Qp6FkpLML6AVjNhVUTui+QJ76pgWaEmNyndUMzVKcrLjfjKzFw9evUg1jnwwj+m9Jn
-         nRVX8T97DZJK5R2RgPv3SnQW4PfCks7SFuIIk2LRmwLlzAy1FpV+yLZbinrnkuoW4bbF
-         8Zwnj++7yponDy5YwLr9CW0Zcs8cccj9ERRoSmIhl+mb/ruX3Wk1OiShLreVoUkiRHXL
-         GP5A1fy+PcSfr+4JgWHx5xCkYt4v1kmVfPC6KXEctO7ZXxPp6Ilm4zszX/XBJPx3nVD3
-         pDDRghO6xGN36SSmX0GKaJJyxa266hJGUPdVUKFT5sEE1mC0+nq7qKxronrUj6wpF6ju
-         AP5Q==
+        Fri, 23 Dec 2022 01:57:38 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC6B13F71
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:57:34 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id n15-20020a056e021baf00b0030387c2e1d3so2264551ili.5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:57:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yswg7rMmhxbBUpoVnt35yC1P/QAchcZKkUcdaMOuKIY=;
-        b=vxDUvZU2ihejTEX4bhbfMilu6yOp0AeG3B26XcQDwy05nWBvBlDZ5PxLtIb+FkNZP8
-         n+ZCM6AglT/lVuz9qK6kUnthlvmKSSzDf5adDzLV31g/gfwOdkmAwYHb1XPmH4M2HFHx
-         j8LyIaad5YhXrw0Kog1gprWElTYoqLElnoxLXNl6PI62kmjr04gqYcY0Fm0KjwLGglRw
-         Q3FGgrfvJu5Yz9qVwXPxRW7bMMwhJPYB3bj2S2CHwU9xLFol+6wWBy6Ugd9yLYL2mq6g
-         v7i5a4CrhkTGns7NeXq/YPXAGYRyTxqUuR/+lGyeu7k39TNJZZdhfyCK+MteyJ2RC/Co
-         Q4qw==
-X-Gm-Message-State: AFqh2krO3cpHoU2NOrU62PC0vwQD6SWa8ndhyE0qBgPebuPOIdNbTIFB
-        fqAe+4pp7aRnAu4w64Q0H/MssF1uq06jrSwcGjY=
-X-Google-Smtp-Source: AMrXdXvi65TdNtln+0GgUG2IhQZbLB02RGrVSF8kgdogr8WTpK8VbsOYnnE8p1dKjyAPUXkkbuVqOQpwtuxBZPdcBAE=
-X-Received: by 2002:a17:906:1945:b0:7c0:bb4c:e792 with SMTP id
- b5-20020a170906194500b007c0bb4ce792mr702023eje.618.1671778660629; Thu, 22 Dec
- 2022 22:57:40 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KMSbyUfyO6NDTW70zNN+3BdvFcUTCl3kbP4QW5G+jko=;
+        b=oOZfXtDA/A5/8LN7jgoFmnVehoM9QvZQQomlFpYsVAGfu8IQb6TyLjJV9wVzY6JpmV
+         TO+y7Rprhap+6chv/lMGMGwt+3mKPq5yR2pdtwOq44aD1gATheuZ2eAIO3auVdEVnmZF
+         RmsW1vE6Yhtmp4h81qf5io8LmRet5iofWOWegifJPyHdNSYVAMeCSZUFAfkRDW74NA26
+         IWOVkKZxkkcXHINXNBuXoYkTpm3ONJTgX8svF+YGnLQc9yY1nbYwAgAQnzW+r2h1sCK9
+         c32ORkjNB1kvQQn69dp3crFcFFmBPIJA+dT6doFE23aWsZmNkbGxLGsgdc6urzhlo/k/
+         7L6w==
+X-Gm-Message-State: AFqh2krUcTkHI4QSKq610s9wsSrSmJS5QZ578D9L3KaNWAJ9tDq2Xa/K
+        nEW0qLwyM7+Evf+w0qfAPmFhOG1PftgyirgUsErSAdI1UagQ
+X-Google-Smtp-Source: AMrXdXtP7XurYqc2ojv9IS+bGffVewCZgVpsXvQwms0Gy4bgBL9R8/FI6PCfsO1oCwI+33XStFvuf01LnmjduQE0EIUW73bWY+Us
 MIME-Version: 1.0
-References: <20221216185012.2342675-1-abdulras@google.com> <CAEUhbmUsFt0H-Dd3XHjuk6sUq0hrV9SFU=1jD2LQ10xywZOZiA@mail.gmail.com>
- <CAO8XFHv_wV_oSuS+e412yr6vjm-44Vf2gJuMO4FvgPeodhWQww@mail.gmail.com>
- <CAEUhbmX6PE_E8PCEp4mo8Fpjtc-Pm-tmpxws0UKCp715qB+qRg@mail.gmail.com> <CAO8XFHvrbj86gcBpN7z7n_cGk2wLHND=t0k+QtYgzZGMQOLpsA@mail.gmail.com>
-In-Reply-To: <CAO8XFHvrbj86gcBpN7z7n_cGk2wLHND=t0k+QtYgzZGMQOLpsA@mail.gmail.com>
-From:   Bin Meng <bmeng.cn@gmail.com>
-Date:   Fri, 23 Dec 2022 14:57:30 +0800
-Message-ID: <CAEUhbmW-EH4tQr4sXQAJ6iuwO31iWEE=XQXpTMVBp8fX66LDxg@mail.gmail.com>
-Subject: Re: [PATCH] riscv: avoid enabling vectorized code generation
-To:     Saleem Abdulrasool <abdulras@google.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Received: by 2002:a92:c54f:0:b0:303:3119:420e with SMTP id
+ a15-20020a92c54f000000b003033119420emr815440ilj.320.1671778653727; Thu, 22
+ Dec 2022 22:57:33 -0800 (PST)
+Date:   Thu, 22 Dec 2022 22:57:33 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cc732d05f0794cf7@google.com>
+Subject: [syzbot] WARNING: refcount bug in gadgetfs_kill_sb
+From:   syzbot <syzbot+ac031e7435393ad05df6@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, hbh25y@gmail.com, jomajm@gmail.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mingo@kernel.org, rdunlap@infradead.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On Thu, Dec 22, 2022 at 11:23 PM Saleem Abdulrasool <abdulras@google.com> wrote:
->
-> On Thu, Dec 22, 2022 at 1:41 AM Bin Meng <bmeng.cn@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > On Thu, Dec 22, 2022 at 1:39 AM Saleem Abdulrasool <abdulras@google.com> wrote:
-> > >
-> > > On Wed, Dec 21, 2022 at 8:17 AM Bin Meng <bmeng.cn@gmail.com> wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > On Sat, Dec 17, 2022 at 3:12 AM Saleem Abdulrasool <abdulras@google.com> wrote:
-> > > > >
-> > > > > The compiler is free to generate vectorized operations for zero'ing
-> > > > > memory.  The kernel does not use the vector unit on RISCV, similar to
-> > > > > architectures such as x86 where we use `-mno-mmx` et al to prevent the
-> > > > > implicit vectorization.  Perform a similar check for
-> > > > > `-mno-implicit-float` to avoid this on RISC-V targets.
-> > > > >
-> > > > > Signed-off-by: Saleem Abdulrasool <abdulras@google.com>
-> > > > > ---
-> > > > >  arch/riscv/Makefile | 4 ++++
-> > > > >  1 file changed, 4 insertions(+)
-> > > > >
-> > > > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > > > > index 0d13b597cb55..68433476a96e 100644
-> > > > > --- a/arch/riscv/Makefile
-> > > > > +++ b/arch/riscv/Makefile
-> > > > > @@ -89,6 +89,10 @@ KBUILD_AFLAGS_MODULE += $(call as-option,-Wa$(comma)-mno-relax)
-> > > > >  # architectures.  It's faster to have GCC emit only aligned accesses.
-> > > > >  KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
-> > > > >
-> > > > > +# Ensure that we do not vectorize the kernel code when the `v` extension is
-> > > > > +# enabled.  This mirrors the `-mno-mmx` et al on x86.
-> > > > > +KBUILD_CFLAGS += $(call cc-option,-mno-implicit-float)
-> > > >
-> > > > This looks like an LLVM flag, but not GCC.
-> > >
-> > > Correct, this is a clang flag, though I imagine that GCC will need a
-> > > similar flag once it receives support for the V extension.
-> > >
-> > > > Can you elaborate what exact combination (compiler flag and source)
-> > > > would cause an issue?
-> > >
-> > > The particular case that I was using was simply `clang -target
-> > > riscv64-unknown-linux-musl -march=rv64gcv` off of main.
-> > >
-> > > > From your description, I guess it's that when enabling V extension in
-> > > > LLVM, the compiler tries to use vector instructions to zero memory,
-> > > > correct?
-> > >
-> > > Correct.
-> >
-> > Thanks for the confirmation.
-> >
-> > >
-> > > > Can you confirm LLVM does not emit any float instructions (like F/D
-> > > > extensions) because the flag name suggests something like "float"?
-> > >
-> > > The `-mno-implicit-float` should disable any such emission.  I assume
-> > > that you are worried about the case without the flag?  I'm not 100%
-> > > certain without this flag, but the RISCV build with this flag has been
-> > > running smoothly locally for a while.
-> > >
-> > >
-> >
-> > I still have some questions about the `-mno-implicit-float` option's behavior.
-> >
-> > - If this option is not on, does the compiler emit any F/D extension
-> > instruction for zero'ing memory when -march=rv64g? I want to know
-> > whether the `-mno-implicit-float` option only takes effect when "v"
-> > appears on the -march string.
->
-> AFAIK, and from a quick test, no, it will not.  That also makes sense
-> since the F/D/Q handling is not as likely to be useful for generating
-> a 0-filled array.  No, the use of `-mno-implicit-float` is not guarded
-> by the use of the vector extension, but it does only impact the
-> vectorized code generation (the loop vectorizer, load/store
-> vectorizer, and SLP vectorizer).
+syzbot found the following issue on:
 
-Thank you. The quick test you did seems to match what the LLVM commit [1] says:
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1310cd10480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=ac031e7435393ad05df6
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=151fd1f0480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=122eacc8480000
 
-    "It also disables implicit uses of scalar FP, but I don't know if
-we have any of those for RISC-V."
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
 
-[1] https://github.com/llvm/llvm-project/commit/549231d38e10de7371adb85f5452d42ad42f4201
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ac031e7435393ad05df6@syzkaller.appspotmail.com
 
->
-> > - If the answer to the above question is no, I wonder why the option
-> > is called `-mno-implicit-float` as float suggests the FPU usage, but
-> > actually it is about vectorization. The Clang documentation says
-> > almost nothing about this option.
->
-> The flag itself is from GCC, it was added for the ARM architecture, to
-> prefer using the scalar core over the VFP register set as ARM uses the
-> VFP for vectorized operations.  As it so happens, internally in LLVM,
-> the loop vectorizer uses the (internal) `NoImplicitFloat` function
-> attribute to prevent the loop from being vectorized, and the flag that
-> controls this is exposed as `-mimplicit-float` and
-> `-mno-implicit-float`.
->
+------------[ cut here ]------------
+refcount_t: underflow; use-after-free.
+WARNING: CPU: 1 PID: 3448 at lib/refcount.c:28 refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+Modules linked in:
+CPU: 1 PID: 3448 Comm: syz-executor242 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+lr : refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+sp : ffff800012ed3c60
+x29: ffff800012ed3c60 x28: ffff80000c40fe48 x27: 0000000000000006
+x26: ffff0000c70d6508 x25: 0000000000000000 x24: ffff0000c70d6400
+x23: 0000000000000000 x22: ffff80000f183000 x21: 0000000000000000
+x20: 0000000000000003 x19: ffff80000d95e000 x18: 000000000000030d
+x17: ffff80000c0cd83c x16: ffff80000dbe6158 x15: ffff0000cdd34ec0
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000cdd34ec0
+x11: ff808000081c4d64 x10: 0000000000000000 x9 : 6a9cd14bd183ed00
+x8 : 6a9cd14bd183ed00 x7 : ffff80000816678c x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000006 x1 : 0000000100000000 x0 : 0000000000000026
+Call trace:
+ refcount_warn_saturate+0x1a0/0x1c8 lib/refcount.c:28
+ __refcount_sub_and_test include/linux/refcount.h:283 [inline]
+ __refcount_dec_and_test include/linux/refcount.h:315 [inline]
+ refcount_dec_and_test include/linux/refcount.h:333 [inline]
+ put_dev drivers/usb/gadget/legacy/inode.c:159 [inline]
+ gadgetfs_kill_sb+0xd4/0x104 drivers/usb/gadget/legacy/inode.c:2086
+ deactivate_locked_super+0x70/0xe8 fs/super.c:332
+ vfs_get_super fs/super.c:1190 [inline]
+ get_tree_single+0x98/0xe8 fs/super.c:1207
+ gadgetfs_get_tree+0x28/0x38 drivers/usb/gadget/legacy/inode.c:2068
+ vfs_get_tree+0x40/0x140 fs/super.c:1531
+ vfs_fsconfig_locked fs/fsopen.c:232 [inline]
+ __do_sys_fsconfig fs/fsopen.c:439 [inline]
+ __se_sys_fsconfig fs/fsopen.c:314 [inline]
+ __arm64_sys_fsconfig+0x758/0x818 fs/fsopen.c:314
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+irq event stamp: 442
+hardirqs last  enabled at (441): [<ffff80000816681c>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (441): [<ffff80000816681c>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4968
+hardirqs last disabled at (442): [<ffff80000c084084>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (360): [<ffff80000801c82c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (358): [<ffff80000801c7f8>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
 
-It seems GCC does not have such a flag. Thanks for the history
-introduction. It was introduced on Arm to disable vectorized operation
-using VFP, hence it was named as -no-implict-float. But IMHO the
-option is badly named. Maybe -no-implicit-vectorization better fits
-what it really does.
 
-FWIW,
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Regards,
-Bin
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
