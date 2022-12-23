@@ -2,131 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7451654F26
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF47654F29
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235843AbiLWKXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 05:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S235897AbiLWKYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 05:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiLWKXh (ORCPT
+        with ESMTP id S229734AbiLWKY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 05:23:37 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB42C6149
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:23:36 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id z19-20020a921a53000000b0030b90211df1so2466598ill.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:23:36 -0800 (PST)
+        Fri, 23 Dec 2022 05:24:28 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E729C1FFB9;
+        Fri, 23 Dec 2022 02:24:27 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso5844559wme.5;
+        Fri, 23 Dec 2022 02:24:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CRuUJZVOpUtgPvjJSw65Ev7JgBrVcaaYMlRw59e9HHo=;
+        b=aKDfNpRXZ27jsLjGo3FBvyZVLAnFXagcPNocTyT8aZNnWT5jO3bG9yr+ZtkR3R+XQB
+         rwB35v6+Oo4WigU65Z+wI/bekDZ2yxSCox341aiSxK5S6iyTfgCNGuvFX3H2ulB58IM/
+         qppT5/mM4+jUO4B/15KM8irHnM7SVwf7dl9mKm15Q/1feN1QPZIPDE+Ex352sLWYnDNr
+         zvwE+jGsjnHqrQ/87Yxost4XxnWU+8r38zNrapRMJzx18Mm1WzWR+/xJ/h8dJ+6TmmhU
+         ZhwZyzKC4DSyj8R45zXrbkHiKoA7ebU7eopWFpiIi/AcQw+nJbEwctHFfQAzQ4oB81+M
+         2cQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kSw1HwKF/eWcNkkUwxqcpEhUNy2Y9H9WRREHpIRhyjw=;
-        b=SYfKf6aq8oPV6bdwhMHxD1hNSXRmHmhBOBBbtVR0WJ3UkhrUhBsepJA0AVm70ve5kq
-         Ec/zrxPlldn7Uu/LWi5KFumTU8DgS1u87GeBY9q4FZ78uKaoejPlXSXHVcI4yYVCByOx
-         qsILA6g8ppilOGvf+Pr+Bx5QROsJlgqUOjGjzQPjXwWdqmjVrAaot7eZ5onNRMbJTkZb
-         IQsIKJc8QEFcxaWwV4HnZSrzcSxlf0tKZI5KNx375eTvay1IykxUIp+2FhmKNlsdEHTm
-         z9oIKomyt223NaRn+7mGN/5/Kcyr6tgf9Hw2/RSysmIc0SIMsQLK+B8LSuCiuJGVoLYa
-         IbOw==
-X-Gm-Message-State: AFqh2koVDT3wwZLw9tcwARmMTEZN8CmhAcA/IhYwwaiFhXY7wrORtzsP
-        hD4eE1TNw+TBAWwbZu+Y3LT4SRK2+yPKeiHZoZgYrLlEobml
-X-Google-Smtp-Source: AMrXdXsq+eWgR/9KTn/obApYMnY7hOwtxY+UDnCsagU9f+UQ9yURO2H/YZnW57qEkyaAv8MDpd8ZMr+VnJJKY2lbi3kQDRBhOQoF
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CRuUJZVOpUtgPvjJSw65Ev7JgBrVcaaYMlRw59e9HHo=;
+        b=q/iKd1ZjM3NfwhwiudLvs1HjGnF2FdNJfLmhHXN5svL65Hu4vubwZKsY+z4zQd8o+j
+         H2MmwJNSnuGQTf5SkgA1ia/XISr6HGCddRAG+U6yyjAerTxnxlQ7yXIhMqYpZYkBqOfp
+         DWBqclL8o7n/2rf3b82I/xnOEUd0VHlM5p0RXvXlfLFHF780dQoTnZqkWsF68zKQf2hu
+         gyder/DnDiewt16/j786CXWZsETLkD6ytbm0XNaJCoEAkJQ3nhSfOgalLG/SFCSogBfk
+         e2FPv+/3QZ1RaCwD1OeKRroskxOxL1akx8cVbpcPNhGnzNwO/5+vTbPd0ELP+qVaMHDl
+         7D+Q==
+X-Gm-Message-State: AFqh2kqV/tyHr2SuzCltuK647OtP5l9dp44Dd97I49V5BuVbzU6kpz3d
+        TcXREF3MTL0IDYNXJD7WUVw=
+X-Google-Smtp-Source: AMrXdXuqkbabnF7DzHU0Ej1s4hVLvQJ+bsyuWTyXaxsjS1VNZXTjdjD4EiZQnf6FSm8KN1A3U8ddKQ==
+X-Received: by 2002:a05:600c:a4f:b0:3d3:5c35:8919 with SMTP id c15-20020a05600c0a4f00b003d35c358919mr6783088wmq.30.1671791066352;
+        Fri, 23 Dec 2022 02:24:26 -0800 (PST)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id f1-20020a5d5681000000b002714b3d2348sm2880136wrv.25.2022.12.23.02.24.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 02:24:25 -0800 (PST)
+Date:   Fri, 23 Dec 2022 10:24:25 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH 2/2] vmalloc: reject vmap with VM_FLUSH_RESET_PERMS
+Message-ID: <Y6WB2ZGoL7FaFK+f@lucifer>
+References: <20221223092703.61927-1-hch@lst.de>
+ <20221223092703.61927-3-hch@lst.de>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9587:0:b0:6e2:cbf3:9c9c with SMTP id
- a7-20020a5d9587000000b006e2cbf39c9cmr639610ioo.34.1671791016259; Fri, 23 Dec
- 2022 02:23:36 -0800 (PST)
-Date:   Fri, 23 Dec 2022 02:23:36 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a9b84f05f07c2d1f@google.com>
-Subject: [syzbot] [jfs?] UBSAN: array-index-out-of-bounds in dbAllocDmapLev
-From:   syzbot <syzbot+853a6f4dfa3cf37d3aea@syzkaller.appspotmail.com>
-To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        mudongliangabcd@gmail.com, paskripkin@gmail.com, r33s3n6@gmail.com,
-        shaggy@kernel.org, syzkaller-bugs@googlegroups.com,
-        wuhoipok@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221223092703.61927-3-hch@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Dec 23, 2022 at 10:27:03AM +0100, Christoph Hellwig wrote:
+> VM_FLUSH_RESET_PERMS is just for use with vmalloc as it is tied to freeing
+> the underlying pages.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  mm/vmalloc.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 9e30f0b3920325..88a644cde9fb12 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -2849,6 +2849,9 @@ void *vmap(struct page **pages, unsigned int count,
+>
+>  	might_sleep();
+>
+> +	if (WARN_ON_ONCE(flags & VM_FLUSH_RESET_PERMS))
+> +		return NULL;
+> +
 
-syzbot found the following issue on:
+Might it be worth adding a specific vmap mask that explicitly indicates what
+flags are permissible on vmap()? Then this could become e.g.:-
 
-HEAD commit:    0a924817d2ed Merge tag '6.2-rc-smb3-client-fixes-part2' of..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=161140ff880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4e2d7bfa2d6d5a76
-dashboard link: https://syzkaller.appspot.com/bug?extid=853a6f4dfa3cf37d3aea
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14eedba0480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13760874480000
+	if (WARN_ON_ONCE(flags & ~VM_VMAP_PERMITTED_MASK))
+		return NULL;
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b0959a409a79/disk-0a924817.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/388daa76797b/vmlinux-0a924817.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b9d2d406c075/bzImage-0a924817.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/c5bcb129d7ea/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+853a6f4dfa3cf37d3aea@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 32768
-================================================================================
-UBSAN: array-index-out-of-bounds in fs/jfs/jfs_dmap.c:1964:6
-index -84 is out of range for type 's8 [341]'
-CPU: 1 PID: 5074 Comm: syz-executor352 Not tainted 6.1.0-syzkaller-14321-g0a924817d2ed #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_out_of_bounds+0xe0/0x110 lib/ubsan.c:282
- dbAllocDmapLev+0x3c6/0x420 fs/jfs/jfs_dmap.c:1964
- dbAllocCtl+0x113/0x970 fs/jfs/jfs_dmap.c:1808
- dbAllocAG+0x28b/0x1100 fs/jfs/jfs_dmap.c:1349
- dbAlloc+0x661/0xc90 fs/jfs/jfs_dmap.c:873
- dtSplitUp fs/jfs/jfs_dtree.c:974 [inline]
- dtInsert+0xc0e/0x6b80 fs/jfs/jfs_dtree.c:863
- jfs_create+0x736/0xb10 fs/jfs/namei.c:137
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12ac/0x2dd0 fs/namei.c:3711
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fe62a3507c9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe095987c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fe62a3507c9
-RDX: 000000000000275a RSI: 0000000020000040 RDI: 00000000ffffff9c
-RBP: 00007fe62a310060 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fe62a3100f0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+And would be self-documenting as to why we are disallowing flags (i.e. they are
+not part of the permitted vmap mask).
