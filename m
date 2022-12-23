@@ -2,77 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0171E6553DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 20:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D786D6553DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 20:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbiLWTb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 14:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        id S231758AbiLWTe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 14:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiLWTbz (ORCPT
+        with ESMTP id S230195AbiLWTeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 14:31:55 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811A81F9E6;
-        Fri, 23 Dec 2022 11:31:54 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BNJV0jN3004810
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Fri, 23 Dec 2022 11:31:03 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BNJV0jN3004810
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022120601; t=1671823865;
-        bh=8U3L5z1AFR94Ur4HvgFf3agP7oLPg6/0b60n1Rc2c/4=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=hGys46pcf8iXwpubOAabv5YFxZB2dujq1N3fwxUDjpx1gwXM9NKRY2gfjaXKEENxR
-         N2JMsyOYoDRuKID3Vf4f5wlNVfCnwa21fhkcu3QquU5uItaNJ8l6Z3Q6fSHNIovYqW
-         WV14O2GaxSdGWCI3s0qp+jfqAUWoajIAMCvUQ06dk4MoizxQYMBfEsilHRYt3HktQo
-         M964NM6veTBPKPkeQQEQXWfP/mt0M/lEub0JOwrzoMO2pjU+Z/Y/ejTeNdCZEyupLK
-         6Fryj+ZlS+WY1Gl3FR99z3xljDm+HX4f60/z63j5ityGw4d2VMr37ehsuykH/02MVg
-         tTXyGnr+RKYcA==
-Date:   Fri, 23 Dec 2022 11:30:58 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     "Li, Xin3" <xin3.li@intel.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: Re: [RFC PATCH 22/32] x86/fred: FRED initialization code
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y6RXCJNn8xyl7g7u@hirez.programming.kicks-ass.net>
-References: <20221220063658.19271-1-xin3.li@intel.com> <20221220063658.19271-23-xin3.li@intel.com> <Y6GELyEJeKY3dEqJ@hirez.programming.kicks-ass.net> <16972e64-7d7b-ad8c-f8dc-6dcab69e629e@citrix.com> <Y6GIN5Uf7Qd43A9U@hirez.programming.kicks-ass.net> <BN6PR1101MB2161C51C6068026D9C442460A8EB9@BN6PR1101MB2161.namprd11.prod.outlook.com> <0D72CCA1-A0B6-487B-A6B9-7341020D28A2@zytor.com> <Y6RXCJNn8xyl7g7u@hirez.programming.kicks-ass.net>
-Message-ID: <77C92705-B15D-4680-8587-CAEB48BEDDA1@zytor.com>
+        Fri, 23 Dec 2022 14:34:25 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B7F1F9E6;
+        Fri, 23 Dec 2022 11:34:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671823994; bh=WO06F4+3LP+PUS7vNlhJpQqJsk7T8QkJB749mQn/WnA=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=IFyt1uTY+qT7XW9kPNJzWSXVrmOQNgSWmwHi1AzIi8X56iP+bgALulyAaKt+OQBDL
+         L3N1JCRV9rHAixgvlRm0FhqkTqzJBh4eJedH00Y27XdrHs09CKacAvThcoWSUrgPsK
+         Fq9Yd2UM8qF5+r98V4QmbXUTASd6DSVJJosvFUrA=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Fri, 23 Dec 2022 20:33:14 +0100 (CET)
+X-EA-Auth: tYf7JlHV5yJoXQVqHEb8JXftfLRxMz/Bd0h2loUWHyS4uY67PTszEL7O2O+kd3l5uZ1DlSw/x0zHZyD+UcxbPUmDaKJy+Q7/
+Date:   Sat, 24 Dec 2022 01:03:07 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Don Brace <don.brace@microchip.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] scsi: hpsa: Use sysfs_emit in show function callsbacks
+Message-ID: <Y6YCcyihZCWZH9dj@qemulion>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On December 22, 2022 5:09:28 AM PST, Peter Zijlstra <peterz@infradead=2Eorg=
-> wrote:
->On Tue, Dec 20, 2022 at 09:44:33PM -0800, H=2E Peter Anvin wrote:
->
->> Right, this is one major reason for putting #DB/NMI in a separate stack=
- level=2E
->
->But with the IST they each have their own stack, with FRED they'll share
->this small stack=2E
+According to Documentation/filesystems/sysfs.rst, the show() callback
+function of kobject attributes should strictly use sysfs_emit instead
+of sprintf family functions. Also, merge split lines wherever possible
+due to shortened length of lines.
 
-So make the stack larger if you think we need it=2E You still end up using=
- less total stack space with FRED=2E
+Issue identified using the coccinelle device_attr_show.cocci script.
+
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ drivers/scsi/hpsa.c | 39 ++++++++++++++++++---------------------
+ 1 file changed, 18 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index 4dbf51e2623a..1fc359cd05f3 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -525,8 +525,7 @@ static ssize_t host_show_firmware_revision(struct device *dev,
+ 	if (!h->hba_inquiry_data)
+ 		return 0;
+ 	fwrev = &h->hba_inquiry_data[32];
+-	return snprintf(buf, 20, "%c%c%c%c\n",
+-		fwrev[0], fwrev[1], fwrev[2], fwrev[3]);
++	return sysfs_emit(buf, "%c%c%c%c\n", fwrev[0], fwrev[1], fwrev[2], fwrev[3]);
+ }
+
+ static ssize_t host_show_commands_outstanding(struct device *dev,
+@@ -535,8 +534,7 @@ static ssize_t host_show_commands_outstanding(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ctlr_info *h = shost_to_hba(shost);
+
+-	return snprintf(buf, 20, "%d\n",
+-			atomic_read(&h->commands_outstanding));
++	return sysfs_emit(buf, "%d\n", atomic_read(&h->commands_outstanding));
+ }
+
+ static ssize_t host_show_transport_mode(struct device *dev,
+@@ -546,7 +544,7 @@ static ssize_t host_show_transport_mode(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+
+ 	h = shost_to_hba(shost);
+-	return snprintf(buf, 20, "%s\n",
++	return sysfs_emit(buf, "%s\n",
+ 		h->transMethod & CFGTBL_Trans_Performant ?
+ 			"performant" : "simple");
+ }
+@@ -558,7 +556,7 @@ static ssize_t host_show_hp_ssd_smart_path_status(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+
+ 	h = shost_to_hba(shost);
+-	return snprintf(buf, 30, "HP SSD Smart Path %s\n",
++	return sysfs_emit(buf, "HP SSD Smart Path %s\n",
+ 		(h->acciopath_status == 1) ?  "enabled" : "disabled");
+ }
+
+@@ -642,7 +640,7 @@ static ssize_t host_show_resettable(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+
+ 	h = shost_to_hba(shost);
+-	return snprintf(buf, 20, "%d\n", ctlr_is_resettable(h->board_id));
++	return sysfs_emit(buf, "%d\n", ctlr_is_resettable(h->board_id));
+ }
+
+ static inline int is_logical_dev_addr_mode(unsigned char scsi3addr[])
+@@ -721,7 +719,7 @@ static ssize_t lunid_show(struct device *dev,
+ 	}
+ 	memcpy(lunid, hdev->scsi3addr, sizeof(lunid));
+ 	spin_unlock_irqrestore(&h->lock, flags);
+-	return snprintf(buf, 20, "0x%8phN\n", lunid);
++	return sysfs_emit(buf, "0x%8phN\n", lunid);
+ }
+
+ static ssize_t unique_id_show(struct device *dev,
+@@ -743,13 +741,13 @@ static ssize_t unique_id_show(struct device *dev,
+ 	}
+ 	memcpy(sn, hdev->device_id, sizeof(sn));
+ 	spin_unlock_irqrestore(&h->lock, flags);
+-	return snprintf(buf, 16 * 2 + 2,
+-			"%02X%02X%02X%02X%02X%02X%02X%02X"
+-			"%02X%02X%02X%02X%02X%02X%02X%02X\n",
+-			sn[0], sn[1], sn[2], sn[3],
+-			sn[4], sn[5], sn[6], sn[7],
+-			sn[8], sn[9], sn[10], sn[11],
+-			sn[12], sn[13], sn[14], sn[15]);
++	return sysfs_emit(buf,
++			  "%02X%02X%02X%02X%02X%02X%02X%02X"
++			  "%02X%02X%02X%02X%02X%02X%02X%02X\n",
++			  sn[0], sn[1], sn[2], sn[3],
++			  sn[4], sn[5], sn[6], sn[7],
++			  sn[8], sn[9], sn[10], sn[11],
++			  sn[12], sn[13], sn[14], sn[15]);
+ }
+
+ static ssize_t sas_address_show(struct device *dev,
+@@ -772,7 +770,7 @@ static ssize_t sas_address_show(struct device *dev,
+ 	sas_address = hdev->sas_address;
+ 	spin_unlock_irqrestore(&h->lock, flags);
+
+-	return snprintf(buf, PAGE_SIZE, "0x%016llx\n", sas_address);
++	return sysfs_emit(buf, "0x%016llx\n", sas_address);
+ }
+
+ static ssize_t host_show_hp_ssd_smart_path_enabled(struct device *dev,
+@@ -796,10 +794,9 @@ static ssize_t host_show_hp_ssd_smart_path_enabled(struct device *dev,
+ 	spin_unlock_irqrestore(&h->lock, flags);
+
+ 	if (hdev->devtype == TYPE_DISK || hdev->devtype == TYPE_ZBC)
+-		return snprintf(buf, 20, "%d\n", offload_enabled);
++		return sysfs_emit(buf, "%d\n", offload_enabled);
+ 	else
+-		return snprintf(buf, 40, "%s\n",
+-				"Not applicable for a controller");
++		return sysfs_emit(buf, "%s\n", "Not applicable for a controller");
+ }
+
+ #define MAX_PATHS 8
+@@ -895,7 +892,7 @@ static ssize_t host_show_ctlr_num(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+
+ 	h = shost_to_hba(shost);
+-	return snprintf(buf, 20, "%d\n", h->ctlr);
++	return sysfs_emit(buf, "%d\n", h->ctlr);
+ }
+
+ static ssize_t host_show_legacy_board(struct device *dev,
+@@ -905,7 +902,7 @@ static ssize_t host_show_legacy_board(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+
+ 	h = shost_to_hba(shost);
+-	return snprintf(buf, 20, "%d\n", h->legacy_board ? 1 : 0);
++	return sysfs_emit(buf, "%d\n", h->legacy_board ? 1 : 0);
+ }
+
+ static DEVICE_ATTR_RO(raid_level);
+--
+2.34.1
+
+
+
