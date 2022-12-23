@@ -2,117 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8A0654B09
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A2D654B0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235998AbiLWCMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 21:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S235902AbiLWCPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 21:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235989AbiLWCLr (ORCPT
+        with ESMTP id S235957AbiLWCP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 21:11:47 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780B220F75
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 18:10:49 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id i7so3381304wrv.8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 18:10:48 -0800 (PST)
+        Thu, 22 Dec 2022 21:15:27 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDDC2657E;
+        Thu, 22 Dec 2022 18:13:11 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 78so2472765pgb.8;
+        Thu, 22 Dec 2022 18:13:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eHjoTnRNTZFA0ZBsqDkIXARH9jeUb+0DAfgRumKgoyA=;
-        b=lBDQtSit+1LqfmJbT1uhbKUQP17QT6jOYcXSoMTBTOZLa2xXlUhOmhQKhAvtRFKopi
-         Ay1nv3bo5Xrq8o5PcsK6DjS4wliQlovmoSSTSpInMaUc8mErA8Ro1SyVnrhidsTAfAzl
-         SFv5CVFN01XmU0CiED1g7Wh6QdmlHPrvuSv0YkFUQWkCjCY4Crb582wgyPwFIVloO4iv
-         UVn9aehPzGoeFjylzhnKGyO4yMuMEQIiQ/My8GmvBzObXQ4uLD6kmTKz3PeVzkTgXorZ
-         RvAw4sA4vGMjWnfUnjv7wxYrvC92tR8p5w0OpByZ87hIyTzNOnVlEOFoKOix2lgJCbH3
-         zzzQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fv83sILRpdPDju6R9bwpPHliUEsFsFUyc/dbMvww/eY=;
+        b=L9N/WyPIseuqFdRkaF/UjdKRVnKl/YPV+cw9Zzr/bVwG7U+pnmawxLFt6oC4GYfZl5
+         5OTDOGp5Sv6kBdUxd4zxlFyP0arPQ1gP1iQU5C3tWa3iC/oFbAWDR8THSvihtlXzxR9w
+         LPQU/52bv8JGe0H6X2Moysv/YJbnTsvmT2xphrTAerxfXuserbALUfdIZ08y3wEsFwYZ
+         yD5hJUFCnZfk4w7OvL65caDFsKACCRa80ochQKr+zTLvHwu/ULv3pA+2kJ0dfLa88UDW
+         SbVrWG6UAI5PBoy54k4PQ01awA3bLU1mfFLVinQKwFNe0/FwCSzjd05cBHVXyRwaLGoy
+         reBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eHjoTnRNTZFA0ZBsqDkIXARH9jeUb+0DAfgRumKgoyA=;
-        b=qOmAaATHRZy05AaJRRuZvfSiAag4VDRgaepJ16V5d4KqsapPxTER6eCknrNOxmoC7m
-         PpHOX4zr81FBP+YUONRwLM9Wa2NEqpdDY9sPCkxUEOQFAGb61gg7f4tfGIeaB4STF/ct
-         hki1WZabPizOu0Q7tenLFNBBZPyZuOMrzm5QrH2f0t05cLp5cDkjsRCDEBxLDw4Dwj5h
-         vnDXHtDhdpvT0PwdxDbH7mASuPYDT2AtkMXmz8eEh7Vj8U79lQsfR9hzsGoesf2WQYcQ
-         7EvNfXcAXE3YjGp+ppGATZVFIWPCMRpDvINggwPlPMeSjynMN1hhvgUsh2MAclSgrnBy
-         KRlw==
-X-Gm-Message-State: AFqh2ko6e4zlclN7/ETHZCzFCkRnJ3Rd0C4+8l+d+TOQxM1ZUk72cNg6
-        RAhF45KdNuGsMZfYbPlS8OeikxEeocPO0kCWS8g=
-X-Google-Smtp-Source: AMrXdXsjlvDyNSKBvKq4fxfuBOK1I1bluwc0R6MKJ8g3VyJ6MY+VRGeAv1iWAuoPLG8kUzwNT8Trjg==
-X-Received: by 2002:a5d:4950:0:b0:26e:7604:6575 with SMTP id r16-20020a5d4950000000b0026e76046575mr3878257wrs.65.1671761447428;
-        Thu, 22 Dec 2022 18:10:47 -0800 (PST)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id j11-20020a5d452b000000b0022cc0a2cbecsm1849725wra.15.2022.12.22.18.10.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 18:10:47 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org, dianders@chromium.org,
-        david@ixit.cz, krzysztof.kozlowski+dt@linaro.org,
-        swboyd@chromium.org, konrad.dybcio@somainline.org,
-        agross@kernel.org, andersson@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        bryan.odonoghue@linaro.org
-Subject: [PATCH v6 18/18] arm64: dts: qcom: sm8250: Add compat qcom,sm8250-dsi-ctrl
-Date:   Fri, 23 Dec 2022 02:10:25 +0000
-Message-Id: <20221223021025.1646636-19-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221223021025.1646636-1-bryan.odonoghue@linaro.org>
-References: <20221223021025.1646636-1-bryan.odonoghue@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fv83sILRpdPDju6R9bwpPHliUEsFsFUyc/dbMvww/eY=;
+        b=AVWzl2qoUmQjZax4qiTkwc/a9MzjlfUmHlSFKwCJ+ZQfl7l7MIVMLK/PmrCDHQfb+r
+         UKrdre3I4eWx810d0JNh4bCBwKE6H6Ez8Lp8INPqYdS4hezqRSJO+JZjN3CljoNNj5VN
+         OtOhQpeZ/PcJIQ96nuQGOHnQlRZB6BCIAG2IkaEse9riFLAG5xOFU9eUmMBJqVLZXt9t
+         o6/TyQsEjkNO8IKfF3hYpfK09WUNVziv1Gm1yBAmjsiy9la+fMi+bZt0fFHU1mXlXR0x
+         WdgMLsjnzWIBbep4jZ3Et0IyNOMY9B8rLBSm4M87QfLSgtHIyV9N5WbfsagdrAJgNtIU
+         fr9Q==
+X-Gm-Message-State: AFqh2kqxPv3OqwQm6AUgadtEbPhpVyEMfksBy/LlOPW5Nq4a1/m0JlJm
+        i/cbFMOSjIkTYYUrjlagaXQ=
+X-Google-Smtp-Source: AMrXdXuHlQaLGVeaQ6tC4E3lw5u7txRz+nS3SToycQ+iwH6FlwJZoMDxhM2TmgcpkbwagmAjZ9/MzQ==
+X-Received: by 2002:aa7:9794:0:b0:577:f836:6bcb with SMTP id o20-20020aa79794000000b00577f8366bcbmr9694825pfp.29.1671761581818;
+        Thu, 22 Dec 2022 18:13:01 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id p66-20020a622945000000b00561dcfa700asm1326991pfp.107.2022.12.22.18.12.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 18:13:01 -0800 (PST)
+Message-ID: <f5196090-ce8b-43a7-bfb6-e060881b2ea2@gmail.com>
+Date:   Fri, 23 Dec 2022 10:12:52 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.0
+Subject: Re: [PATCH v2 01/15] perf/x86/lbr: Simplify the exposure check for
+ the LBR_INFO registers
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kan.liang@linux.intel.com, wei.w.wang@intel.com,
+        Andi Kleen <ak@linux.intel.com>,
+        "Paolo Bonzini - Distinguished Engineer (kernel-recipes.org) (KVM HoF)" 
+        <pbonzini@redhat.com>, Jim Mattson <jmattson@google.com>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yang Weijiang <weijiang.yang@intel.com>
+References: <20221125040604.5051-1-weijiang.yang@intel.com>
+ <20221125040604.5051-2-weijiang.yang@intel.com>
+ <449b561a-7053-8994-bcfe-581c0abb8d85@gmail.com>
+ <Y6SWxEZrIqDPD69l@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <Y6SWxEZrIqDPD69l@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add silicon specific compatible qcom,sm8250-dsi-ctrl to the
-mdss-dsi-ctrl block. This allows us to differentiate the specific bindings
-for sm8250 against the yaml documentation.
+On 23/12/2022 1:41 am, Sean Christopherson wrote:
+> On Thu, Dec 22, 2022, Like Xu wrote:
+>> Hi Peter, would you help apply this one in your tip/perf tree,
+>> as it doesn't seem to be closely tied to the KVM changes. Thanks.
+>>
+>> On 25/11/2022 12:05 pm, Yang Weijiang wrote:
+>>> From: Like Xu <like.xu@linux.intel.com>
+>>>
+>>> The x86_pmu.lbr_info is 0 unless explicitly initialized, so there's
+>>> no point checking x86_pmu.intel_cap.lbr_format.
+>>>
+>>> Cc: Peter Zijlstra <peterz@infradead.org>
+>>> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+>>> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+>>> Signed-off-by: Like Xu <like.xu@linux.intel.com>
+>>> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+>>> ---
+>>>    arch/x86/events/intel/lbr.c | 4 +---
+>>>    1 file changed, 1 insertion(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+>>> index 4dbde69c423b..e7caabfa1377 100644
+>>> --- a/arch/x86/events/intel/lbr.c
+>>> +++ b/arch/x86/events/intel/lbr.c
+>>> @@ -1606,12 +1606,10 @@ void __init intel_pmu_arch_lbr_init(void)
+>>>     */
+>>>    void x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
+>>>    {
+>>> -	int lbr_fmt = x86_pmu.intel_cap.lbr_format;
+>>> -
+>>>    	lbr->nr = x86_pmu.lbr_nr;
+>>>    	lbr->from = x86_pmu.lbr_from;
+>>>    	lbr->to = x86_pmu.lbr_to;
+>>> -	lbr->info = (lbr_fmt == LBR_FORMAT_INFO) ? x86_pmu.lbr_info : 0;
+>>> +	lbr->info = x86_pmu.lbr_info;
+> 
+> This stable-worthy a bug fix, no?  E.g. won't the existing code misreport lbr->info
+> if the format is LBR_FORMAT_INFO2?
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Sure, we need "Cc: stable@vger.kernel.org" in order not to lose misprediction 
+and cycles
+information on the LBR_FORMAT_INFO2 platforms like Goldmont plus.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index dab5579946f35..9240132efa75e 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -4050,7 +4050,8 @@ opp-460000000 {
- 			};
- 
- 			dsi0: dsi@ae94000 {
--				compatible = "qcom,mdss-dsi-ctrl";
-+				compatible = "qcom,sm8250-dsi-ctrl",
-+					     "qcom,mdss-dsi-ctrl";
- 				reg = <0 0x0ae94000 0 0x400>;
- 				reg-names = "dsi_ctrl";
- 
-@@ -4141,7 +4142,8 @@ dsi0_phy: phy@ae94400 {
- 			};
- 
- 			dsi1: dsi@ae96000 {
--				compatible = "qcom,mdss-dsi-ctrl";
-+				compatible = "qcom,sm8250-dsi-ctrl",
-+					     "qcom,mdss-dsi-ctrl";
- 				reg = <0 0x0ae96000 0 0x400>;
- 				reg-names = "dsi_ctrl";
- 
--- 
-2.38.1
-
+> 
+>>>    }
+>>>    EXPORT_SYMBOL_GPL(x86_perf_get_lbr);
