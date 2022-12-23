@@ -2,168 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4FF655381
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3526655384
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbiLWSMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 13:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
+        id S231338AbiLWSOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiLWSMb (ORCPT
+        with ESMTP id S230390AbiLWSO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:12:31 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AF5165B4;
-        Fri, 23 Dec 2022 10:12:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671819131; bh=7XkD7f85Pcv9AmvgSuqEDVDEKSRJ5Y36AiME/4pHDm8=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=lGy+M8ORIHCGFN2bFw4JOaoA9MNcQbcrRnF3PS9aKDyhHuk4Csce+ppI39uq0trom
-         /bLtRu3jiAFUnxnqj7xvU71DCk+XZBJEk/rTqbvw1Y2/sNo3V1LnRO00mwfdbJnD9b
-         h86yBAg6dPYfxpPsFN3sYLm8fwX860ADzdS1EdKE=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri, 23 Dec 2022 19:12:11 +0100 (CET)
-X-EA-Auth: K7gmOTf9sTkfNN11vh2VXVy7wKkBtlQ/+3fK4W5Dc46cmvYO17OUDMyxHj/pAV+n5z71H7Yn4CLNtlUX0xTn863Qzkval56Y
-Date:   Fri, 23 Dec 2022 23:42:02 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Hannes Reinecke <hare@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
-Subject: [PATCH] scsi: myrs: Use sysfs_emit in show function callsbacks
-Message-ID: <Y6XvcuFnqA8po5Ht@qemulion>
+        Fri, 23 Dec 2022 13:14:28 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D180517067
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:14:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ghOtXneWXYWKmjhZuXYMtDsYM7QSz/lfbIgjF/ogmxo=; b=nQo0Z1XZQPSXzY28KMkZqUgT2t
+        pA9GoqMjLAxT4ybTgXpyrcfHFyqAFhyyrUE1fPiVriWj7tN1kx+qVYrL5oYzj3fZ7yUxDasuc+O7X
+        GwuPY++2FGXt4fFO8PdgzDKQEVNxaBDqVB2Q0x0RXbGwwHqsKInr+hyPO1OtMzHUGt6uyrWyMMII0
+        OThKhMD0fZwgprAHo9Xq9A2/erenGzbAry0MgQpbhBpsY+IPQBO0LtvUOM1UMF2a45m3E7A6aRdo/
+        Yapsmc9UDKGwbbu5koHLoI88ne1ISvntEZcbZIc/or8trEFHef7nJRTGRYshpWFTrCXe7hSecTPRq
+        OHviIFkw==;
+Received: from [187.36.234.139] (helo=[192.168.1.195])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1p8mYY-008mCi-G5; Fri, 23 Dec 2022 19:14:06 +0100
+Message-ID: <e1a04aa7-3411-c5a2-2079-7de59ffa78f0@igalia.com>
+Date:   Fri, 23 Dec 2022 15:12:50 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 0/7] Introduce debugfs device-centered functions
+To:     Melissa Wen <mwen@igalia.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        Emma Anholt <emma@anholt.net>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Wambui Karuga <wambui@karuga.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221219120621.15086-1-mcanal@igalia.com>
+ <20221219124947.vk5y3o2tdxhqu7s5@mail.igalia.com>
+ <Y6SR8iRMHyhDQ4JZ@phenom.ffwll.local>
+Content-Language: en-US
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <Y6SR8iRMHyhDQ4JZ@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to Documentation/filesystems/sysfs.rst, the show() callback
-function of kobject attributes should strictly use sysfs_emit instead
-of sprintf family functions.
+On 12/22/22 14:20, Daniel Vetter wrote:
+> On Mon, Dec 19, 2022 at 11:49:47AM -0100, Melissa Wen wrote:
+>> On 12/19, Maíra Canal wrote:
+>>> This series introduces the initial structure to make DRM debugfs more
+>>> device-centered and it is the first step to drop the
+>>> drm_driver->debugfs_init hooks in the future [1].
+>>>
+>>> Currently, DRM debugfs files are created using drm_debugfs_create_files()
+>>> on request. The first patch of this series makes it possible for DRM devices
+>>> for creating debugfs files during drm_dev_register(). For it, it introduces
+>>> two new functions that can be used by the drivers: drm_debugfs_add_files()
+>>> and drm_debugfs_add_file(). The requests are added to a list and are created
+>>> all at once during drm_dev_register(). Moreover, the first patch was based on
+>>> this RFC series [2].
+>>>
+>>> The main difference between the RFC series and the current series is the
+>>> creation of a new fops structure to accommodate the new structs and, also,
+>>> the creation of a new drm_debugfs_open. Moreover, the new series uses
+>>> device-managed allocation, returns memory allocation errors, and converts
+>>> more drivers to the new structure.
+>>>
+>>> Moreover, since v3, the ability to create debugfs files at late_register hooks was
+>>> added. In previous versions, modeset components weren't able to create debugfs
+>>> files at late_register hooks as the registration of drm_minor happens before the
+>>> registration of the modeset abstractions. So, the third patch fixes this problem
+>>> by adding a drm_debugfs_late_register() function. Thanks to Melissa Wen for
+>>> catching this problem!
+>>>
+>>> Apart from the third patch, the series looks similiar from its last version.
+>>>
+>>> [1] https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/todo.rst#n506
+>>> [2] https://lore.kernel.org/dri-devel/20200513114130.28641-2-wambui.karugax@gmail.com/
+>>>
+>>> Best Regards,
+>>> - Maíra Canal
+>>>
+>>> ---
+>>>
+>>> v1 -> v2: https://lore.kernel.org/dri-devel/20221122190314.185015-1-mcanal@igalia.com/T/#t
+>>>
+>>> - Fix compilation errors in the second patch (kernel test robot).
+>>> - Drop debugfs_init hook from vkms (Maíra Canal).
+>>> - Remove return values and error handling to debugfs related
+>>> functions (Jani Nikula).
+>>> - Remove entry from list after the file is created, so that drm_debugfs_init
+>>> can be called more than once (Maíra Canal).
+>>>
+>>> v2 -> v3: https://lore.kernel.org/dri-devel/20221123220725.1272155-1-mcanal@igalia.com/
+>>>
+>>> - Rebase on top of drm-misc-next
+>>>
+>>> v3 -> v4: https://lore.kernel.org/dri-devel/20221207132325.140393-1-mcanal@igalia.com/
+>>>
+>>> - Add Maxime's Reviewed-by tags
+>>> - Add the ability to create debugfs files at late_register hooks (Melissa Wen).
+>>
+>> Hi Maíra,
+>>
+>> Thanks for addressing all comments.
+>>
+>> Maybe Danvet has some inputs for the late_register approach.
+> 
+> I think as a stop-gap (really need to get this stuff landed so people can
+> start to use it) this is ok, but long term I think the right fix is to
+> roll out the same pre-register infrastructure for connector and crtc too.
+> That way drivers don't need to split their setup code into init and
+> register anymore, which is the point of this entire rework.
+> 
+> If you want, you can adjust the todo accordingly, but we do already have
+> the paragraph about connector/crtc.
+> 
+> But we can do that later on, because this is definitely a great way
+> forward. Thanks a lot for pushing this forward!
+> 
+>> Anyway, LGTM and the entire series is:
+>>
+>> Reviewed-by: Melissa Wen <mwen@igalia.com>
+> 
+> On the series: Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-Issue identified using the coccinelle device_attr_show.cocci script.
+Applied this series to drm-misc-next.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/scsi/myrs.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+Best Regards,
+- Maíra Canal
 
-diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
-index 7eb8c39da366..f08b8731d6dd 100644
---- a/drivers/scsi/myrs.c
-+++ b/drivers/scsi/myrs.c
-@@ -939,7 +939,7 @@ static ssize_t raid_state_show(struct device *dev,
- 	int ret;
-
- 	if (!sdev->hostdata)
--		return snprintf(buf, 16, "Unknown\n");
-+		return sysfs_emit(buf, "Unknown\n");
-
- 	if (sdev->channel >= cs->ctlr_info->physchan_present) {
- 		struct myrs_ldev_info *ldev_info = sdev->hostdata;
-@@ -1058,7 +1058,7 @@ static ssize_t raid_level_show(struct device *dev,
- 	const char *name = NULL;
-
- 	if (!sdev->hostdata)
--		return snprintf(buf, 16, "Unknown\n");
-+		return sysfs_emit(buf, "Unknown\n");
-
- 	if (sdev->channel >= cs->ctlr_info->physchan_present) {
- 		struct myrs_ldev_info *ldev_info;
-@@ -1086,7 +1086,7 @@ static ssize_t rebuild_show(struct device *dev,
- 	unsigned char status;
-
- 	if (sdev->channel < cs->ctlr_info->physchan_present)
--		return snprintf(buf, 32, "physical device - not rebuilding\n");
-+		return sysfs_emit(buf, "physical device - not rebuilding\n");
-
- 	ldev_info = sdev->hostdata;
- 	ldev_num = ldev_info->ldev_num;
-@@ -1190,7 +1190,7 @@ static ssize_t consistency_check_show(struct device *dev,
- 	unsigned short ldev_num;
-
- 	if (sdev->channel < cs->ctlr_info->physchan_present)
--		return snprintf(buf, 32, "physical device - not checking\n");
-+		return sysfs_emit(buf, "physical device - not checking\n");
-
- 	ldev_info = sdev->hostdata;
- 	if (!ldev_info)
-@@ -1303,7 +1303,7 @@ static ssize_t serial_show(struct device *dev,
-
- 	memcpy(serial, cs->ctlr_info->serial_number, 16);
- 	serial[16] = '\0';
--	return snprintf(buf, 16, "%s\n", serial);
-+	return sysfs_emit(buf, "%s\n", serial);
- }
- static DEVICE_ATTR_RO(serial);
-
-@@ -1313,7 +1313,7 @@ static ssize_t ctlr_num_show(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct myrs_hba *cs = shost_priv(shost);
-
--	return snprintf(buf, 20, "%d\n", cs->host->host_no);
-+	return sysfs_emit(buf, "%d\n", cs->host->host_no);
- }
- static DEVICE_ATTR_RO(ctlr_num);
-
-@@ -1388,7 +1388,7 @@ static ssize_t model_show(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct myrs_hba *cs = shost_priv(shost);
-
--	return snprintf(buf, 28, "%s\n", cs->model_name);
-+	return sysfs_emit(buf, "%s\n", cs->model_name);
- }
- static DEVICE_ATTR_RO(model);
-
-@@ -1398,7 +1398,7 @@ static ssize_t ctlr_type_show(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct myrs_hba *cs = shost_priv(shost);
-
--	return snprintf(buf, 4, "%d\n", cs->ctlr_info->ctlr_type);
-+	return sysfs_emit(buf, "%d\n", cs->ctlr_info->ctlr_type);
- }
- static DEVICE_ATTR_RO(ctlr_type);
-
-@@ -1408,7 +1408,7 @@ static ssize_t cache_size_show(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct myrs_hba *cs = shost_priv(shost);
-
--	return snprintf(buf, 8, "%d MB\n", cs->ctlr_info->cache_size_mb);
-+	return sysfs_emit(buf, "%d MB\n", cs->ctlr_info->cache_size_mb);
- }
- static DEVICE_ATTR_RO(cache_size);
-
-@@ -1418,7 +1418,7 @@ static ssize_t firmware_show(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct myrs_hba *cs = shost_priv(shost);
-
--	return snprintf(buf, 16, "%d.%02d-%02d\n",
-+	return sysfs_emit(buf, "%d.%02d-%02d\n",
- 			cs->ctlr_info->fw_major_version,
- 			cs->ctlr_info->fw_minor_version,
- 			cs->ctlr_info->fw_turn_number);
-@@ -1488,7 +1488,7 @@ static ssize_t disable_enclosure_messages_show(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct myrs_hba *cs = shost_priv(shost);
-
--	return snprintf(buf, 3, "%d\n", cs->disable_enc_msg);
-+	return sysfs_emit(buf, "%d\n", cs->disable_enc_msg);
- }
-
- static ssize_t disable_enclosure_messages_store(struct device *dev,
---
-2.34.1
-
-
-
+>>
+>>>
+>>> ---
+>>>
+>>> Maíra Canal (7):
+>>>    drm/debugfs: create device-centered debugfs functions
+>>>    drm: use new debugfs device-centered functions on DRM core files
+>>>    drm/debugfs: create debugfs late register functions
+>>>    drm/vc4: use new debugfs device-centered functions
+>>>    drm/v3d: use new debugfs device-centered functions
+>>>    drm/vkms: use new debugfs device-centered functions
+>>>    drm/todo: update the debugfs clean up task
+>>>
+>>>   Documentation/gpu/todo.rst            |   9 +--
+>>>   drivers/gpu/drm/drm_atomic.c          |  11 ++-
+>>>   drivers/gpu/drm/drm_client.c          |  11 ++-
+>>>   drivers/gpu/drm/drm_debugfs.c         | 102 +++++++++++++++++++++++---
+>>>   drivers/gpu/drm/drm_drv.c             |   3 +
+>>>   drivers/gpu/drm/drm_framebuffer.c     |  11 ++-
+>>>   drivers/gpu/drm/drm_gem_vram_helper.c |  11 ++-
+>>>   drivers/gpu/drm/drm_internal.h        |   5 ++
+>>>   drivers/gpu/drm/drm_mode_config.c     |   2 +
+>>>   drivers/gpu/drm/v3d/v3d_debugfs.c     |  22 +++---
+>>>   drivers/gpu/drm/vc4/vc4_bo.c          |  10 +--
+>>>   drivers/gpu/drm/vc4/vc4_crtc.c        |   7 +-
+>>>   drivers/gpu/drm/vc4/vc4_debugfs.c     |  36 ++-------
+>>>   drivers/gpu/drm/vc4/vc4_dpi.c         |   5 +-
+>>>   drivers/gpu/drm/vc4/vc4_drv.c         |   1 -
+>>>   drivers/gpu/drm/vc4/vc4_drv.h         |  32 ++------
+>>>   drivers/gpu/drm/vc4/vc4_dsi.c         |   6 +-
+>>>   drivers/gpu/drm/vc4/vc4_hdmi.c        |  12 +--
+>>>   drivers/gpu/drm/vc4/vc4_hvs.c         |  24 ++----
+>>>   drivers/gpu/drm/vc4/vc4_v3d.c         |  14 +---
+>>>   drivers/gpu/drm/vc4/vc4_vec.c         |   6 +-
+>>>   drivers/gpu/drm/vkms/vkms_drv.c       |  17 ++---
+>>>   include/drm/drm_debugfs.h             |  41 +++++++++++
+>>>   include/drm/drm_device.h              |  15 ++++
+>>>   24 files changed, 233 insertions(+), 180 deletions(-)
+>>>
+>>> -- 
+>>> 2.38.1
+>>>
+> 
+> 
+> 
