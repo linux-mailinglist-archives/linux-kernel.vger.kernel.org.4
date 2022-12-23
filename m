@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5A3654B58
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A64654B57
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235834AbiLWCyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 21:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
+        id S235699AbiLWCyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 21:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiLWCx4 (ORCPT
+        with ESMTP id S229675AbiLWCxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 21:53:56 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD2F21813;
+        Thu, 22 Dec 2022 21:53:54 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360B22180C;
         Thu, 22 Dec 2022 18:53:50 -0800 (PST)
 From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
         s=mail; t=1671764028;
-        bh=ipHZgib+Lby6GodEXoPKlNcMMUGuBYXzjHfoe9lgkqQ=;
-        h=From:Subject:Date:To:Cc:From;
-        b=V57zR7NVxVnHAK6Oz4c1V6nN+1UiHYX48OjoLrRy2jhbJPXGnMP7IN2EVBkfyb3B8
-         Kl0SPxsPbXhrR/SfTB9z+RyYkD6aiPXwubReL6t57UA7Wk5o/IqyRlek5EfcbkQLXD
-         mkmhjB5FVqPFYRMTRAecjXoXIqzEIBIeYXt9a2Ms=
-Subject: [PATCH 0/2] HID: i2c-hid: use standard debugging APIs
+        bh=tp5IQDd66HLaPMlHoJO8oXKo0WL+92UpGzSydpX6ai0=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=AMwilpGQDPP/ws734/mKVdWFmLNZ9dK60BkBTUALWMycuOhW3RPwTX+0zqo76hVR5
+         5z48pYagnvvB+0M4xqFN7h1GZ9ODLPam/AOVmP+mPnwxSQa365TUKmBYrL9xyZ5LUn
+         Q91rAK9QuVW3SSVSNxDzZUpVDtAAs6XPbSws5Niw=
 Date:   Fri, 23 Dec 2022 02:53:34 +0000
-Message-Id: <20221223-hid-dbg-v1-0-f641e80263eb@weissschuh.net>
+Subject: [PATCH 1/2] HID: i2c-hid: switch to standard debugging APIs
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAC8YpWMC/x2M0QqDMAwAf0XyvMAaUcZ+RfbQJtEGpJOWDUH8d
- 4OPdxx3QNNq2uDdHVD1b82+xSE8OuAcy6Jo4gz0JApEPWYTlLQgCwcZRnmxKnidYlNMNRbO3pff
- urrcqs623/vpc54XWJQVwG4AAAA=
+Message-Id: <20221223-hid-dbg-v1-1-f641e80263eb@weissschuh.net>
+References: <20221223-hid-dbg-v1-0-f641e80263eb@weissschuh.net>
+In-Reply-To: <20221223-hid-dbg-v1-0-f641e80263eb@weissschuh.net>
 To:     Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.11.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1671764024; l=1180;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1671764024; l=1216;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=ipHZgib+Lby6GodEXoPKlNcMMUGuBYXzjHfoe9lgkqQ=;
- b=TG7tPdchLgspc33yI9e12sHfbf7zDVwCH5El/E3t/LqYCDQX4yBCp8VCBOuRbyy1BXDfyGi2mqfs
- PtVWoscXDFG64zJ/PusGL9nUVh8GXAfI47MCB98L6CAcRwpr0pOj
+ bh=tp5IQDd66HLaPMlHoJO8oXKo0WL+92UpGzSydpX6ai0=;
+ b=3sQ6cV6Ra3YIWhahC/1T8wR2PjNCVNqOr8YLeqWW4DYvSYvsTtD3JxL3eHh5f5ZK36XfDKb1D8gs
+ yKxHy15qBWLs2TUL4hYaU3NJfWuGSnxvHEjTZeIru+R2ipudb/BZ
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -53,37 +52,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When trying to debug i2c-hid I was not able to use the builtin debug
-mechanism because the "debug" module parameter is not writable.
+Instead of implementing a custom form of dynamic debugging we can use
+the standard debugging APIs. If the kernel is built with
+CONFIG_DYNAMIC_DEBUG this will be more discoverable and featureful.
 
-We can change i2c-hid to use the standard kernel debugging APIs which are
-more discoverable and have more features.
+Also the previous module parameter "debug" is read-only so it can't
+actually be enabled.
 
-There is a bit of a stilistic conflict between consistently using
-i2c_hid_dbg() and consistently using dev_<level>().
-
-The second patch aligns debugging on i2c_hid_dbg().
-If this is unneeded, feel free to drop it.
-
-It would also be easy to just use dev_dbg() everywhere for consistency.
-
-To: Jiri Kosina <jikos@kernel.org>
-To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: linux-input@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-
 ---
-Thomas Weißschuh (2):
-      HID: i2c-hid: switch to standard debugging APIs
-      HID: i2c-hid: use uniform debugging APIs
+ drivers/hid/i2c-hid/i2c-hid-core.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
- drivers/hid/i2c-hid/i2c-hid-core.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
----
-base-commit: 8395ae05cb5a2e31d36106e8c85efa11cda849be
-change-id: 20221223-hid-dbg-cdc1d56d8cee
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+index b86b62f97108..b4ed21f25600 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -67,16 +67,7 @@
+ #define I2C_HID_PWR_ON		0x00
+ #define I2C_HID_PWR_SLEEP	0x01
+ 
+-/* debug option */
+-static bool debug;
+-module_param(debug, bool, 0444);
+-MODULE_PARM_DESC(debug, "print a lot of debug information");
+-
+-#define i2c_hid_dbg(ihid, fmt, arg...)					  \
+-do {									  \
+-	if (debug)							  \
+-		dev_printk(KERN_DEBUG, &(ihid)->client->dev, fmt, ##arg); \
+-} while (0)
++#define i2c_hid_dbg(ihid, ...) dev_dbg(&(ihid)->client->dev, __VA_ARGS__)
+ 
+ struct i2c_hid_desc {
+ 	__le16 wHIDDescLength;
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.39.0
