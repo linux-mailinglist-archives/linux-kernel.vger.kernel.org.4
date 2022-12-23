@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB7A654F37
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4205B654F3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235981AbiLWKep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 05:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
+        id S236038AbiLWKgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 05:36:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235961AbiLWKeg (ORCPT
+        with ESMTP id S235961AbiLWKgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 05:34:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB692A513;
-        Fri, 23 Dec 2022 02:34:35 -0800 (PST)
+        Fri, 23 Dec 2022 05:36:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4A59FE6;
+        Fri, 23 Dec 2022 02:36:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E23FCB81F51;
-        Fri, 23 Dec 2022 10:34:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71693C433EF;
-        Fri, 23 Dec 2022 10:34:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DE7461EF7;
+        Fri, 23 Dec 2022 10:36:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B331CC433EF;
+        Fri, 23 Dec 2022 10:36:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671791672;
-        bh=pEi8Xz8eJjlzeyiiqC2lEqhANSejOYDD0mFpyX2uWuE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=eW2jtyLMcW3/uyA2m81/elhA84ITXUJule7OAiN127fzxnFeDPL0Fq46yzyM813kn
-         ih9KB2sABJCG5hny9r8ntswKfpvPrlCTm348KMDCQRfGCxZH49ygd53GlKyTBGYn4C
-         A6IoWRNEBJX/KtKL0aD6bju7wlTuoA1sF8JFcFU1ozhn3SxsgslkwqU6JfN5LkxIoJ
-         RZubC+ZApPOsHTZF77HRVRf7rt5TDHVHo43Uda8zvlwHHmZ4Ik0KHXtZH788SvS7S/
-         9B4e/1M2jwRk0Qd3pswBk5z/dQaik6BuVMC+EQLg2XH5Oihj08k/el83ECY8aVgczb
-         MNeESw4sEqg1Q==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-rockchip@lists.infradead.org,
-        Johan Jonker <jbx6244@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to its
- own schema
-In-Reply-To: <CAL_JsqLo4qZRTOu7UR_AN_jHNgiFZp39dsXYwWnD_njyDQfmAA@mail.gmail.com>
-References: <20221219191038.1973807-1-robh@kernel.org>
- <20221219191038.1973807-2-robh@kernel.org> <87bknya5lv.fsf@balbi.sh>
- <CAL_JsqLo4qZRTOu7UR_AN_jHNgiFZp39dsXYwWnD_njyDQfmAA@mail.gmail.com>
-Date:   Fri, 23 Dec 2022 12:34:26 +0200
-Message-ID: <875ye29znx.fsf@balbi.sh>
+        s=k20201202; t=1671791769;
+        bh=eZD5BxLrkoE7tEpFxJxI8Uz6LeurunxaeI9o5eKYFb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=niEqGPdyHdKEd57c7eFcCZPQhlb1KqdNq5/MURbXAlq3Cbi3LLntlYJ6B1TuIITSq
+         k6tBxPt4e6M35xnt5g5hQl3+pbOjez0EeQpn/ktWzA9Xydk+C1ge4mPNuFb4eNl9J0
+         4gxNrkKxEJybhQEOEMs1O/ZYQ6DRImDK1TOphNoJ3iDF8lMzFZQ/KiqcautQB1XeOx
+         2S4ci4tA3aIO/LEZ+jqhpvWDQQE0ePYmLeXWaEewH2i0hUP96RFQliRsKbR65usZaL
+         D7ItaSWju8D6yrZ0bTu9aj0e+P3pRh1MnDdctWbhL5/2Vt3vZlbR4ECMlzuQaD1K3G
+         GDylTKDNVtLfg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p8fQE-0004X8-VV; Fri, 23 Dec 2022 11:37:03 +0100
+Date:   Fri, 23 Dec 2022 11:37:02 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        quic_shazhuss@quicinc.com, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, johan+linaro@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
+        echanude@redhat.com
+Subject: Re: [PATCH v3 4/7] arm64: dts: qcom: sc8280xp: add missing i2c nodes
+Message-ID: <Y6WEzkcP31S2JGrL@hovoldconsulting.com>
+References: <20221220192854.521647-1-bmasney@redhat.com>
+ <20221220192854.521647-5-bmasney@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220192854.521647-5-bmasney@redhat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,72 +61,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Tue, Dec 20, 2022 at 02:28:51PM -0500, Brian Masney wrote:
+> Add the missing nodes for the i2c buses that's present on this SoC.
+> 
+> This work was derived from various patches that Qualcomm delivered
+> to Red Hat in a downstream kernel.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> ---
+> Changes from v2 to v3
+> - None
+> 
+> Changes from v1 to v2
+> - Dropped qupX_ prefix from labels. (Johan)
+> 
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 352 +++++++++++++++++++++++++
+>  1 file changed, 352 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index f1111cd7f679..a502d4e19d98 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -813,6 +813,38 @@ qup2: geniqup@8c0000 {
+>  
+>  			status = "disabled";
+>  
+> +			i2c16: i2c@880000 {
+> +				compatible = "qcom,geni-i2c";
+> +				reg = <0 0x00880000 0 0x4000>;
+> +				clocks = <&gcc GCC_QUPV3_WRAP2_S0_CLK>;
+> +				clock-names = "se";
+> +				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
 
-Rob Herring <robh@kernel.org> writes:
+I'm aware that the two current i2c nodes has these two properties here
+in the middle, but would you mind moving '#address-cells' and
+'#size-cells' after 'reg' instead where I'd expect them to be?
 
-> On Tue, Dec 20, 2022 at 1:37 AM Felipe Balbi <balbi@kernel.org> wrote:
->>
->> Rob Herring <robh@kernel.org> writes:
->>
->> > The rockchip,dwc3.yaml schema defines a single DWC3 node, but the RK33=
-99
->> > uses the discouraged parent wrapper node and child 'generic' DWC3 node.
->>
->> Why discouraged? Splitting those two separate devices (yes, they are
->> separate physical modules) has greatly simplified e.g. power management
->> and encapsulation of the core module.
->
-> Sometimes they are separate and that's fine, but often it's just
-> different clocks, resets, etc. and that's no different from every
-> other block.
+Same for the spi patch.
 
-Right, then the argument is that all other blocks are not modelling the
-HW as they should :)
+I can clean up the existing two nodes (and binding example) unless you
+want to do it.
 
-> If there's wrapper registers or something clearly extra, then I agree
-> a wrapper parent node makes sense.
+> +				power-domains = <&rpmhpd SC8280XP_CX>;
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
+> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
+> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+> +				status = "disabled";
+> +			};
 
-There's always wrapper-specific registers. Some wrappers even add custom
-functionality. IIRC Qcom added a HW-based URB "scheduler" or some sort.
-
-> Otherwise, for cases like RK3399, I don't think it does, but we're
-> stuck with it now.
->
-> Also, we have this pattern pretty much nowhere else and DWC3 is not
-> special.
-
-No, it's not. But it could just be the first example of the driver
-actually modelling the underlying HW.
-
-In any case, I was just curious with your opinion that this model is
-discouraged, as it's not stated anywhere in the kernel's documentation.
-
-Happy holidays
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmOlhDIRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQho6y4DXKpES1VA/+OxcarujRFwHa95+X7YWZNI3bmUDtKLPg
-zOuwZkJQMoBBmV1QrVIkSmewZR2eZUmrYznXlswNWu3wt2UsCvGfFT3HenhSko17
-ZdT8suhbRWZwDaQNm4uDeP9z+37gKn5NcwA6namgAVymsAb/voLQK/bkNth7LupJ
-eY9Lh7D3xTfO1eZ23fBd9AQjQZGa6r7FKcH5tCwO4X+2OLWNY08hGTZVRfoJoIyZ
-pJNt0rorl/a21j5JeGQwO0VST2/cQHmRDMzdTc4/3KFiy4Gx3Qq5/cp0Klv5qZ8y
-vkKbCoZpxCgnUqc0DwxATeYVtQXnHnzoO0ahHgA7kM8Ap9DJWbbvZq+WupHXbmzK
-P0eoRAS4V3OlG7GCjRFEU6TzrsVjl3Tgm+ILc8yiUXVlQcq40I1BXwZtzgY+qNVy
-Lk4Z2ZLXDi8MKilK64bHW9dZaJq4k5ZjerXgFQYW2bvUJT1rk9EP+tisanKLelpS
-Oggd3zZRk9PCg0cAvvN/4OOmBa/PtINXHX5Tb9zjVSGgbjqRDGJG+BfYpQ/ZTOF+
-+qFx0ie5fLktEwcHGlqx/IZ0lFqOc6iSRDMzIJBnfVx0aanuuk/S+cAiTAg5TLYN
-pMcfABi0dtDsanrSVlOGd2SOW1019+rPlN3jemigQ8dTawudC0/A93l65/4qyGiA
-+R+1a/ubZhs=
-=MZmx
------END PGP SIGNATURE-----
---=-=-=--
+Johan
