@@ -2,86 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3502F655360
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 18:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFD9655372
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbiLWR42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 12:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S232790AbiLWSHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiLWR4Z (ORCPT
+        with ESMTP id S230489AbiLWSH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 12:56:25 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4311C1BEA9;
-        Fri, 23 Dec 2022 09:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=5tyPCZzSf4fJF+O4ymtoHkWVf8rcASMcDBrCq5a8OMQ=; b=zEDelKH6Vhu+vv0S4WXkVMCVqi
-        73AmPD/hDUGQQXoPo3EbZvvu2XqCYPfaXaIys3k4qDmPfOljTx30+o2voz3zLy/bIo+S+cw13WQbC
-        vgb1jRdBDv2Mq5ocaw63REvfUA5SY7ahu9lB0gRGAriIztYi4GxiG9ndT8Ey54ZrIcBg=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48998 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1p8mHI-0003Bs-3Y; Fri, 23 Dec 2022 12:56:16 -0500
-Date:   Fri, 23 Dec 2022 12:56:15 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        hvilleneuve@dimonoff.com, lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <20221223125615.4932b8ac2a8d0cf82b4807e8@hugovil.com>
-In-Reply-To: <20221223140908.3b4a5458@jic23-huawei>
-References: <20221222203610.2571287-1-hugo@hugovil.com>
-        <20221222203610.2571287-4-hugo@hugovil.com>
-        <01a5f912-10d2-d5fe-023e-e2e6613ac03b@linaro.org>
-        <20221223140908.3b4a5458@jic23-huawei>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Fri, 23 Dec 2022 13:07:28 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465CF15A35
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:07:27 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id n4so5606139plp.1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 10:07:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YNX34iDEDxhm/E73u2ryfjAMjkVi+n5xnZV2QkAaR8Y=;
+        b=B2pQNduQHUwfqdHCdaOSiaNR7q68ettEq3dUpGBPNb0sTtZvKsYwmkKSzUB5qdw/lV
+         vsRPFX4RsX8ALAsgJhE8acYKHoqJvOAuPlel3zp14FztNUmVMbfVgmkeFlc40Tw/JGR6
+         W0UTXJ/2e9iivuwCSOdbxkpg9lITujhaGfv1Pk4lBIZRivylOuRxESQtdO8HpCTG+2Rd
+         NxQSrit5JJ9rudyvZY5phz4kGh5CiMNDSvvZytbN61wCApficmhdGFoaiqQWGiBuH+oy
+         zC6JSqk8dF4YljZcV3RJppACZ6ZUPatI/IOSUsjJC/3ZZpOmX0t9irb6JyUF7+k50nJQ
+         B0Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YNX34iDEDxhm/E73u2ryfjAMjkVi+n5xnZV2QkAaR8Y=;
+        b=DvcEK7UlCYDgBiW2eACUK7HCUfE0QfLqGrBOdCKkviBzHwO3Q5PhIUdrsEgoLx5mGX
+         csHQLJJMv0VgWWvPZfW07TR1aikFxk1yEZDE+KAxGxZWg7PL9fLeF6NKVKlqfd6KWFYf
+         woc6N6GvsjTs0tIwKBjSwxVEWuDjPuDiU0qf1svHwDAV3I8ZdLmkxs7VvpwYra+dONn8
+         18BZdpD5YEHk9ALdc6lZzSzpxxi9njrmoI++mwqTwZ8sYYRZzVS5MGxkBdxJBKXeiuww
+         6aJL8vkE9BTflHs/epDZfbGPQslBTstFFmrkoQ+K9bwDesL3AM8QXIK/V67naZf4K0j9
+         0jog==
+X-Gm-Message-State: AFqh2kp+VP2Xrsx43EzLCa4HXaPszwbdBGJbw+QjpzK62XbJ2+7YSE3k
+        1mgVPwooeMSt7igEVzpp+o0EhRQH7y6ofc+bAXcIYA==
+X-Google-Smtp-Source: AMrXdXskn96xRY553YKd1nrPaJh3C6uD/jtUl/8ZfvlJSCTFs8haNJjns05KLdYBkqDSQobKq75Nsy9TPJmWu3O4YIk=
+X-Received: by 2002:a17:902:b690:b0:174:7d26:812f with SMTP id
+ c16-20020a170902b69000b001747d26812fmr658130pls.63.1671818846456; Fri, 23 Dec
+ 2022 10:07:26 -0800 (PST)
+MIME-Version: 1.0
+References: <20221207154939.2532830-1-jeffxu@google.com> <20221207154939.2532830-4-jeffxu@google.com>
+ <202212080821.5AE7EE99@keescook> <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+ <Y5yS8wCnuYGLHMj4@x1n> <CALmYWFsDhX76zbcyhYAW-u0BBwD+m+TKpt4_pZTMt+22zHhrGQ@mail.gmail.com>
+ <20221216094259.bec91e4abd6cf54a05ce2813@linux-foundation.org>
+ <CALmYWFsNp87a5uVQUAb4PG0khFN8Xxd=ibh9Q7g-Y0XW1Mn-8Q@mail.gmail.com>
+ <202212161233.85C9783FB@keescook> <CALmYWFuENPRvCAOF6of=Ufct5jjAbJ=iDyH7eODhdbm24uAK3Q@mail.gmail.com>
+ <20221216140641.bf6e47b7c4f5a53f34c8cf9a@linux-foundation.org>
+ <CALmYWFuqAruM=Brh_54hWL+HiKD+RABK4y+hzd4phOzOZ_0=CA@mail.gmail.com> <f185bb42-b29c-977e-312e-3349eea15383@linuxfoundation.org>
+In-Reply-To: <f185bb42-b29c-977e-312e-3349eea15383@linuxfoundation.org>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Fri, 23 Dec 2022 10:06:49 -0800
+Message-ID: <CALmYWFs3Qm_89e8cCcVu0otrZpMVe3rWxqANAQwQDJgaK3S+oA@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Xu <peterx@redhat.com>, jeffxu@chromium.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v1 3/3] dt-bindings: iio: adc: add ADS7924
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Dec 2022 14:09:08 +0000
-Jonathan Cameron <jic23@kernel.org> wrote:
+On Tue, Dec 20, 2022 at 8:55 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 12/16/22 16:40, Jeff Xu wrote:
+> > On Fri, Dec 16, 2022 at 2:06 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >>
+> >> On Fri, 16 Dec 2022 13:46:58 -0800 Jeff Xu <jeffxu@google.com> wrote:
+> >>
+> >>> On Fri, Dec 16, 2022 at 12:35 PM Kees Cook <keescook@chromium.org> wrote:
+> >>>>
+> >>>> On Fri, Dec 16, 2022 at 10:11:44AM -0800, Jeff Xu wrote:
+> >>>>> Once per boot seems too little, it would be nice if we can list all processes.
+> >>>>> I agree ratelimited might be too much.
+> >>>>> There is a feature gap here for logging.
+> >>>>>
+> >>>>> Kees, what do you think ?
+> >>>>
+> >>>> I agree once per boot is kind of frustrating "I fixed the one warning,
+> >>>> oh, now it's coming from a different process". But ratelimit is, in
+> >>>> retrospect, still too often.
+> >>>>
+> >>>> Let's go with per boot -- this should be noisy "enough" to get the
+> >>>> changes in API into the callers without being too much of a hassle.
+> >>>>
+> >>> Agreed.  Let's go with per boot.
+> >>>
+> >>> Hi Andrew, what is your preference ? I can send a patch  or you
+> >>> directly fix it in mm-unstable ?
+> >>
+> >> Like this?
+> >>
+> > Yes. Thanks!
+> >
+>
+> Sorry jumping into this discussion a bit late. Is it possible to provide
+> a way to enable full logging as a debug option to tag more processes?
+>
+Codewise it is possible, maybe by adding a sysctl or CONFIG_, but I am not sure
+the best practice to do this with the kernel?
 
-> > 
-> > > +    description:
-> > > +      Child nodes needed for each channel that the platform uses.  
-> > 
-> > I cannot understand this sentence at all. Instead describe the hardware
-> > you are here representing. What's this?
-> 
-> Needs rewording, but basically - "Which pins are connected to anything?"
+Kees/Andrew, do you have suggestions ?
 
-Hi Jonathan and Krzysztof,
-when writing this driver a few months ago, I used as a starting point the C source file and the YAML file of the TI ADS1015 driver.
+Thanks
+Jeff
 
-I cannot say that I fully understand the sentence myself :) So I will reword it.
 
-I will also take care of the other dt-bindings comments for version 2.
-
-Thank you for your feedback.
-
-Hugo V.
-
--- 
-Hugo Villeneuve <hugo@hugovil.com>
+> thanks,
+> -- Shuah
+>
