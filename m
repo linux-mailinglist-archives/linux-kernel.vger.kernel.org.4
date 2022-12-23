@@ -2,115 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20C2654FE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD95654FEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236159AbiLWL6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 06:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S236202AbiLWL61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 06:58:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbiLWL6K (ORCPT
+        with ESMTP id S236190AbiLWL6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 06:58:10 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D4F389E4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:58:08 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id e13so2226014ljn.0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:58:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OgMzkLILK20b7S/WdbW/m5kHtD9mxGJd9SzCKoYEzp8=;
-        b=v7bQHHsDdQZ/1FzJpP/p10HIN6kJQvyDwG5WCrgLGMGURxTpT9SXzfZEt4C7ebYGoh
-         t3+5+CAyAW76NK4+4hCEWZX3cWgYujTU40D+mYXSjSpHE0+UCPE9jgK/23VRNHx9GUej
-         g5QNbDjFVrn6RUd2D1CFtT2oAsxAVUpPFFHWzLyvEd6zgFsRl7bvqXbHDQ48UjeOpxpN
-         jSckirBvaFWrX8gB58QZ6nlBWrby6IPcY4DGbNNQ97QwpQK8rxc3/A4ilb/mjDsWAYj8
-         2cFVMDQLThYCW48udOr/solkMOlDJ4AZwkdFKBKtNGgJ2dkUl7kj+FPedJMBho8fTi/G
-         0gpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OgMzkLILK20b7S/WdbW/m5kHtD9mxGJd9SzCKoYEzp8=;
-        b=IbfesRGIBcTsXRTaI935GigpAUxrpsFuk7KXzlXmV2E3rEOGpCMQAAoZ1Bu8jpxjSK
-         1VM/eHkMlAeKs/brodKOQYco7ZOfEsPSpLNFDNVxnJb/JY/KiDcWnUDr8qsXYn0fuOWK
-         Y5V419xLryaEkrJ7nnuRlXjYIxvNaRNdKt6nxrM4ZeL9MgBOk1v2CKtnMXf1t9PhfDQk
-         +CIVlWp2t8SoDpnFU87qVBMQiAl/ljWPs6YfN6zJmAg4QqM1fjWvRyr6YdicZ/Uj6XxF
-         63T3alzpxTR0TRxek1HlXUlEwG9+sOoDXSLukbsoWyUmRM1M+AFz8s3BH5M/i+g90vNz
-         /+9g==
-X-Gm-Message-State: AFqh2krWPhz8K7XitJUabMS5UyLIziCmL0EX8jeVu4Alw/1+zdvjeKgQ
-        EwY7qXgDLuI/auyOxphqA+qB0g==
-X-Google-Smtp-Source: AMrXdXs7RCplmjKOYqftihEA/uWhOD8fKxV2H0Rj+AM2oxiMV6vIzOQFMNoOK7Bh3kdESIlvgTXF0A==
-X-Received: by 2002:a05:651c:33c:b0:279:e86c:7101 with SMTP id b28-20020a05651c033c00b00279e86c7101mr2330238ljp.8.1671796686184;
-        Fri, 23 Dec 2022 03:58:06 -0800 (PST)
-Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id bj31-20020a2eaa9f000000b0027facd123a0sm338301ljb.106.2022.12.23.03.58.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 03:58:05 -0800 (PST)
-Message-ID: <a269dfa5-ea7e-f6eb-40af-bc6303119c34@linaro.org>
-Date:   Fri, 23 Dec 2022 12:58:04 +0100
+        Fri, 23 Dec 2022 06:58:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BFB2A52C;
+        Fri, 23 Dec 2022 03:58:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A418FB81F79;
+        Fri, 23 Dec 2022 11:58:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C92C433D2;
+        Fri, 23 Dec 2022 11:58:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671796698;
+        bh=7UDYSxlkDDaNW5ftAXb8G8ePe4j/p7uAI3fhM2qdCso=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TqpAIqHv6kdmAZivRdBN1M1HG1iu9Ndn58Zyt94uFkM5LXDvjtg3X5YNuMqPCme7L
+         MEOovVo9B29e7jXH904pZrslNgSyNTHKnzTXI9jeVcegUxfW5GXNuCOgzv/QuvySBH
+         blbaDc3cqJDfvP/aLpXGH0z8dsNo2aFh7qyK9ESoJwJ4uf6Yx2uIMksH7UjMMED3dv
+         aGqazSPi0KcVLZfOgr6pG4IO6n0cqMyZbh7HEyNKAACKn4FA+2RHKa4o96VdBVtXnI
+         hewJTAdgPE2YtNI4s0CIS4smdKnzN2/8EllP9pyxHsIZLskWnpu5Q7C+4qFj9hmZuI
+         n28jGg0wxDUjQ==
+Date:   Fri, 23 Dec 2022 11:58:13 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v4] leds: simatic-ipc-leds-gpio: make sure we have the
+ GPIO providing driver
+Message-ID: <Y6WX1Y9GZmvxqlCc@google.com>
+References: <20221007153323.1326-1-henning.schild@siemens.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/5] arm64: dts: qcom: sm6125-seine: Provide regulators to
- HS USB2 PHY
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221222203636.250190-1-marijn.suijten@somainline.org>
- <20221222203636.250190-3-marijn.suijten@somainline.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221222203636.250190-3-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221007153323.1326-1-henning.schild@siemens.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 07 Oct 2022, Henning Schild wrote:
 
-
-On 22.12.2022 21:36, Marijn Suijten wrote:
-> Document the use of l7, l10 and l15 in the High Speed Qualcomm USB2 PHY,
-> in order to keep the regulators voted on when USB is active.
+> If we register a "leds-gpio" platform device for GPIO pins that do not
+> exist we get a -EPROBE_DEFER and the probe will be tried again later.
+> If there is no driver to provide that pin we will poll forever and also
+> create a lot of log messages.
 > 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> So check if that GPIO driver is configured, if so it will come up
+> eventually. If not, we exit our probe function early and do not even
+> bother registering the "leds-gpio". This method was chosen over "Kconfig
+> depends" since this way we can add support for more devices and GPIO
+> backends more easily without "depends":ing on all GPIO backends.
+> 
+> Fixes: a6c80bec3c93 ("leds: simatic-ipc-leds-gpio: Add GPIO version of Siemens driver")
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts | 3 +++
->  1 file changed, 3 insertions(+)
+What happened in versions 1 through 3?  Please provide a change-log.
+
+>  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> index 4f825c55692b..15b43cff210b 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
-> @@ -147,6 +147,9 @@ &gpi_dma0 {
->  };
+> diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.c b/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> index b9eeb8702df0..fb8d427837db 100644
+> --- a/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> +++ b/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> @@ -77,6 +77,8 @@ static int simatic_ipc_leds_gpio_probe(struct platform_device *pdev)
 >  
->  &hsusb_phy1 {
-> +	vdd-supply = <&pm6125_l7>;
-> +	vdda-pll-supply = <&pm6125_l10>;
-> +	vdda-phy-dpdm-supply = <&pm6125_l15>;
->  	status = "okay";
->  };
->  
+>  	switch (plat->devmode) {
+>  	case SIMATIC_IPC_DEVICE_127E:
+> +		if (!IS_ENABLED(CONFIG_PINCTRL_BROXTON))
+> +			return -ENODEV;
+
+I see that there is an unfortunate precedent for this in the lines
+below.  However, I also see that the commit which added it was not
+reviewed by Pavel.
+
+This is an interesting problem, due to the different devices we're
+attempting to support in this single driver using different
+GPIO/PINCTRL drivers, which is unusual.  We usually resolve these kinds of
+issues as a Kconfig 'depends' line which covers the whole driver.
+
+Would 'depends GPIO_F7188X || PINCTRL_BROXTON' be a suitable
+replacement, I wonder?  If it's possible for SIMATIC_IPC_DEVICE_127E to
+be probing when only GPIO_F7188X is enabled?  If so, this would result
+in the same scenario.
+
+It also seems wrong for -EPROBE_DEFER to loop indefinitely.  Surely in
+some valid circumstances dependencies are never satisfied?
+
+>  		simatic_ipc_led_gpio_table = &simatic_ipc_led_gpio_table_127e;
+>  		break;
+>  	case SIMATIC_IPC_DEVICE_227G:
+> -- 
+> 2.35.1
+> 
+
+-- 
+Lee Jones [李琼斯]
