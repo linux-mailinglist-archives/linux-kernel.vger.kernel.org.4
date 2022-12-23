@@ -2,350 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B798654C5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 07:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E21654C5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 07:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiLWGBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 01:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S230106AbiLWGKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 01:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiLWGBS (ORCPT
+        with ESMTP id S229656AbiLWGKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 01:01:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E375962EF
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:00:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671775231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=tV0aITuMxX7JXMP8l/mhTvmsIIk8GUyyDmCSCHHJZEE=;
-        b=H+sBxmFaUedHVdtmRujiWiZSIGGRmf2Rx4fBaQyh070B1NLFn+ue1Erx2/d+LluLnYP/kQ
-        M8etJRmdgnn2gzxekXDNmKU1YJCQ30kzOcED7je02U4E2oCYGulELletBpQiHVn+z4Z/OD
-        UUiwIJV4c0V47VEk4C7z4XvohQcm4Tw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-458-QWPt_bOKN46b2cPvy3DvJw-1; Fri, 23 Dec 2022 01:00:27 -0500
-X-MC-Unique: QWPt_bOKN46b2cPvy3DvJw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0424129ABA32;
-        Fri, 23 Dec 2022 06:00:27 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-12-204.pek2.redhat.com [10.72.12.204])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6F8532026D4B;
-        Fri, 23 Dec 2022 06:00:23 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     sgarzare@redhat.com, eperezma@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, xieyongji@bytedance.com, hch@lst.de
-Subject: [PATCH] vdpa_sim: get rid of DMA ops
-Date:   Fri, 23 Dec 2022 14:00:21 +0800
-Message-Id: <20221223060021.28011-1-jasowang@redhat.com>
+        Fri, 23 Dec 2022 01:10:45 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF114BC9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:10:43 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so4126393pjd.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:10:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tXPdrlpALcCWkBm8FPPkV2XlgJO2+LLb79iteN7EJJo=;
+        b=dGLEQau5Zp3bvpscFMxHQgEVrw/iveBPjD0OXR7qdPyUHLojRCQxTr7gwpP5ScN3B8
+         Xu6PdnRJhf0E95jDgMRinj5IheV4xSsMZy/J03g4mUa1cgbhuNK8HNCMCQXoXoXx0ndx
+         b2yH30Ey4JmJrd+tdZX8sSLcuje7Z3ovMRWbxQpOXqtJFm0mE4mazzVv3i9b8Y1UM+Ue
+         /r23SlqV65qu1p56ybQoyD5gMv0hwQqq4nWpmEJsLApPbuVdDmVkOhYJOC+thbs72+0N
+         lXu/XE052b1l7TIAkKRwM6Fc2D2KSqRfnVYnbEl+X6t3vs6aNz9kUFOHCeS7UeIkcH0e
+         LhyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tXPdrlpALcCWkBm8FPPkV2XlgJO2+LLb79iteN7EJJo=;
+        b=Y/I2a4UE56BJLxjBsjJ8f2JMtU+Gm9xVwGgJyn1hU8UYWjmyqrnbtkhQDpC2/cQNOz
+         fgvkyiE8qAuZNiAXafJpKYwLCmlpS7BGAu8eCNJhPGuD0/kJ4VTznK5sApYMJJnJDqtF
+         6R3kLUl/UFKWZLvqS9On5EhsUdBGv2IP8rwgADBJ8eHFhnwwXN5RyUhdZbfvoiIrkmsn
+         1UTJnxrmFgft2D4iEI4EO6rPVELRfYa3+HtWWJRT6D+99cR++NL+A8NNMcSZhsf0vbFL
+         2m3exsdrKrrjo28nagbQRiHQIYCGdm6wkrp+3yJSzwb3xka2rj2pWg6t+jUmX9Zz2v1o
+         FhNg==
+X-Gm-Message-State: AFqh2krRk2KzXugh890MiicvbtCqhIU4bYuOxz7cruTedZO8td+kpo23
+        rqc8ebvnEATQSrSrAo6vYUpXyQ==
+X-Google-Smtp-Source: AMrXdXtwTGljJ/AUqSzEc+83rOc+y0OY4t/wqHgum5eZKlI3BX9oazUJe4IGHrQ1wvanyW9N8SKCDg==
+X-Received: by 2002:a17:902:ce10:b0:189:af28:fd8d with SMTP id k16-20020a170902ce1000b00189af28fd8dmr10843064plg.1.1671775843250;
+        Thu, 22 Dec 2022 22:10:43 -0800 (PST)
+Received: from leoy-yangtze.lan (n058152048149.netvigator.com. [58.152.48.149])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170902654600b00188f3970d4asm1503343pln.163.2022.12.22.22.10.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 22:10:42 -0800 (PST)
+Date:   Fri, 23 Dec 2022 14:10:34 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-perf-users@vger.kernel.org, tanmay@marvell.com,
+        sgoutham@marvell.com, gcherian@marvell.com, lcherian@marvell.com,
+        bbhushan2@marvell.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] perf: Remove remaining duplication of
+ bus/event_source/devices/...
+Message-ID: <Y6VGWm0LtiVNvTmI@leoy-yangtze.lan>
+References: <20221222160328.3639989-1-james.clark@arm.com>
+ <20221222160328.3639989-4-james.clark@arm.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221222160328.3639989-4-james.clark@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We used to (ab)use the DMA ops for setting up identical mappings in
-the IOTLB. This patch tries to get rid of the those unnecessary DMA
-ops by maintaining a simple identical/passthrough mappings by
-default. When bound to virtio_vdpa driver, DMA API will simply use PA
-as the IOVA and we will be all fine. When the vDPA bus tries to setup
-customized mapping (e.g when bound to vhost-vDPA), the
-identical/passthrough mapping will be removed.
+On Thu, Dec 22, 2022 at 04:03:23PM +0000, James Clark wrote:
+> Use the new perf_pmu__pathname_scnprintf() instead. No functional
+> changes.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-Signed-off-by: Jason Wang <jasowang@redhat.com>
----
-Note:
-- This patch depends on the series "[PATCH V3 0/4] Vendor stats
-  support in vdpasim_net"
----
- drivers/vdpa/vdpa_sim/vdpa_sim.c | 170 ++++---------------------------
- drivers/vdpa/vdpa_sim/vdpa_sim.h |   2 +-
- 2 files changed, 22 insertions(+), 150 deletions(-)
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 45d3f84b7937..187fa3a0e5d5 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -17,7 +17,6 @@
- #include <linux/vringh.h>
- #include <linux/vdpa.h>
- #include <linux/vhost_iotlb.h>
--#include <linux/iova.h>
- #include <uapi/linux/vdpa.h>
- 
- #include "vdpa_sim.h"
-@@ -45,13 +44,6 @@ static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
- 	return container_of(vdpa, struct vdpasim, vdpa);
- }
- 
--static struct vdpasim *dev_to_sim(struct device *dev)
--{
--	struct vdpa_device *vdpa = dev_to_vdpa(dev);
--
--	return vdpa_to_sim(vdpa);
--}
--
- static void vdpasim_vq_notify(struct vringh *vring)
- {
- 	struct vdpasim_virtqueue *vq =
-@@ -104,8 +96,12 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
- 				 &vdpasim->iommu_lock);
- 	}
- 
--	for (i = 0; i < vdpasim->dev_attr.nas; i++)
-+	for (i = 0; i < vdpasim->dev_attr.nas; i++) {
- 		vhost_iotlb_reset(&vdpasim->iommu[i]);
-+		vhost_iotlb_add_range(&vdpasim->iommu[i], 0, ULONG_MAX,
-+				      0, VHOST_MAP_RW);
-+		vdpasim->iommu_pt[i] = true;
-+	}
- 
- 	vdpasim->running = true;
- 	spin_unlock(&vdpasim->iommu_lock);
-@@ -115,133 +111,6 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
- 	++vdpasim->generation;
- }
- 
--static int dir_to_perm(enum dma_data_direction dir)
--{
--	int perm = -EFAULT;
--
--	switch (dir) {
--	case DMA_FROM_DEVICE:
--		perm = VHOST_MAP_WO;
--		break;
--	case DMA_TO_DEVICE:
--		perm = VHOST_MAP_RO;
--		break;
--	case DMA_BIDIRECTIONAL:
--		perm = VHOST_MAP_RW;
--		break;
--	default:
--		break;
--	}
--
--	return perm;
--}
--
--static dma_addr_t vdpasim_map_range(struct vdpasim *vdpasim, phys_addr_t paddr,
--				    size_t size, unsigned int perm)
--{
--	struct iova *iova;
--	dma_addr_t dma_addr;
--	int ret;
--
--	/* We set the limit_pfn to the maximum (ULONG_MAX - 1) */
--	iova = alloc_iova(&vdpasim->iova, size >> iova_shift(&vdpasim->iova),
--			  ULONG_MAX - 1, true);
--	if (!iova)
--		return DMA_MAPPING_ERROR;
--
--	dma_addr = iova_dma_addr(&vdpasim->iova, iova);
--
--	spin_lock(&vdpasim->iommu_lock);
--	ret = vhost_iotlb_add_range(&vdpasim->iommu[0], (u64)dma_addr,
--				    (u64)dma_addr + size - 1, (u64)paddr, perm);
--	spin_unlock(&vdpasim->iommu_lock);
--
--	if (ret) {
--		__free_iova(&vdpasim->iova, iova);
--		return DMA_MAPPING_ERROR;
--	}
--
--	return dma_addr;
--}
--
--static void vdpasim_unmap_range(struct vdpasim *vdpasim, dma_addr_t dma_addr,
--				size_t size)
--{
--	spin_lock(&vdpasim->iommu_lock);
--	vhost_iotlb_del_range(&vdpasim->iommu[0], (u64)dma_addr,
--			      (u64)dma_addr + size - 1);
--	spin_unlock(&vdpasim->iommu_lock);
--
--	free_iova(&vdpasim->iova, iova_pfn(&vdpasim->iova, dma_addr));
--}
--
--static dma_addr_t vdpasim_map_page(struct device *dev, struct page *page,
--				   unsigned long offset, size_t size,
--				   enum dma_data_direction dir,
--				   unsigned long attrs)
--{
--	struct vdpasim *vdpasim = dev_to_sim(dev);
--	phys_addr_t paddr = page_to_phys(page) + offset;
--	int perm = dir_to_perm(dir);
--
--	if (perm < 0)
--		return DMA_MAPPING_ERROR;
--
--	return vdpasim_map_range(vdpasim, paddr, size, perm);
--}
--
--static void vdpasim_unmap_page(struct device *dev, dma_addr_t dma_addr,
--			       size_t size, enum dma_data_direction dir,
--			       unsigned long attrs)
--{
--	struct vdpasim *vdpasim = dev_to_sim(dev);
--
--	vdpasim_unmap_range(vdpasim, dma_addr, size);
--}
--
--static void *vdpasim_alloc_coherent(struct device *dev, size_t size,
--				    dma_addr_t *dma_addr, gfp_t flag,
--				    unsigned long attrs)
--{
--	struct vdpasim *vdpasim = dev_to_sim(dev);
--	phys_addr_t paddr;
--	void *addr;
--
--	addr = kmalloc(size, flag);
--	if (!addr) {
--		*dma_addr = DMA_MAPPING_ERROR;
--		return NULL;
--	}
--
--	paddr = virt_to_phys(addr);
--
--	*dma_addr = vdpasim_map_range(vdpasim, paddr, size, VHOST_MAP_RW);
--	if (*dma_addr == DMA_MAPPING_ERROR) {
--		kfree(addr);
--		return NULL;
--	}
--
--	return addr;
--}
--
--static void vdpasim_free_coherent(struct device *dev, size_t size,
--				  void *vaddr, dma_addr_t dma_addr,
--				  unsigned long attrs)
--{
--	struct vdpasim *vdpasim = dev_to_sim(dev);
--
--	vdpasim_unmap_range(vdpasim, dma_addr, size);
--
--	kfree(vaddr);
--}
--
--static const struct dma_map_ops vdpasim_dma_ops = {
--	.map_page = vdpasim_map_page,
--	.unmap_page = vdpasim_unmap_page,
--	.alloc = vdpasim_alloc_coherent,
--	.free = vdpasim_free_coherent,
--};
--
- static const struct vdpa_config_ops vdpasim_config_ops;
- static const struct vdpa_config_ops vdpasim_batch_config_ops;
- 
-@@ -289,7 +158,6 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 	dev->dma_mask = &dev->coherent_dma_mask;
- 	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
- 		goto err_iommu;
--	set_dma_ops(dev, &vdpasim_dma_ops);
- 	vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
- 
- 	vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
-@@ -306,6 +174,11 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 	if (!vdpasim->iommu)
- 		goto err_iommu;
- 
-+	vdpasim->iommu_pt = kmalloc_array(vdpasim->dev_attr.nas,
-+					  sizeof(*vdpasim->iommu_pt), GFP_KERNEL);
-+	if (!vdpasim->iommu_pt)
-+		goto err_iommu;
-+
- 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
- 		vhost_iotlb_init(&vdpasim->iommu[i], max_iotlb_entries, 0);
- 
-@@ -317,13 +190,6 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 		vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
- 				 &vdpasim->iommu_lock);
- 
--	ret = iova_cache_get();
--	if (ret)
--		goto err_iommu;
--
--	/* For simplicity we use an IOVA allocator with byte granularity */
--	init_iova_domain(&vdpasim->iova, 1, 0);
--
- 	vdpasim->vdpa.dma_dev = dev;
- 
- 	return vdpasim;
-@@ -639,6 +505,7 @@ static int vdpasim_set_map(struct vdpa_device *vdpa, unsigned int asid,
- 
- 	iommu = &vdpasim->iommu[asid];
- 	vhost_iotlb_reset(iommu);
-+	vdpasim->iommu_pt[asid] = false;
- 
- 	for (map = vhost_iotlb_itree_first(iotlb, start, last); map;
- 	     map = vhost_iotlb_itree_next(map, start, last)) {
-@@ -667,6 +534,10 @@ static int vdpasim_dma_map(struct vdpa_device *vdpa, unsigned int asid,
- 		return -EINVAL;
- 
- 	spin_lock(&vdpasim->iommu_lock);
-+	if (vdpasim->iommu_pt[asid]) {
-+		vhost_iotlb_reset(&vdpasim->iommu[asid]);
-+		vdpasim->iommu_pt[asid] = false;
-+	}
- 	ret = vhost_iotlb_add_range_ctx(&vdpasim->iommu[asid], iova,
- 					iova + size - 1, pa, perm, opaque);
- 	spin_unlock(&vdpasim->iommu_lock);
-@@ -682,6 +553,11 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
- 	if (asid >= vdpasim->dev_attr.nas)
- 		return -EINVAL;
- 
-+	if (vdpasim->iommu_pt[asid]) {
-+		vhost_iotlb_reset(&vdpasim->iommu[asid]);
-+		vdpasim->iommu_pt[asid] = false;
-+	}
-+
- 	spin_lock(&vdpasim->iommu_lock);
- 	vhost_iotlb_del_range(&vdpasim->iommu[asid], iova, iova + size - 1);
- 	spin_unlock(&vdpasim->iommu_lock);
-@@ -701,15 +577,11 @@ static void vdpasim_free(struct vdpa_device *vdpa)
- 		vringh_kiov_cleanup(&vdpasim->vqs[i].in_iov);
- 	}
- 
--	if (vdpa_get_dma_dev(vdpa)) {
--		put_iova_domain(&vdpasim->iova);
--		iova_cache_put();
--	}
--
- 	kvfree(vdpasim->buffer);
- 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
- 		vhost_iotlb_reset(&vdpasim->iommu[i]);
- 	kfree(vdpasim->iommu);
-+	kfree(vdpasim->iommu_pt);
- 	kfree(vdpasim->vqs);
- 	kfree(vdpasim->config);
- }
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index d2a08c0abad7..770ef3408619 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -64,7 +64,7 @@ struct vdpasim {
- 	/* virtio config according to device type */
- 	void *config;
- 	struct vhost_iotlb *iommu;
--	struct iova_domain iova;
-+	bool *iommu_pt;
- 	void *buffer;
- 	u32 status;
- 	u32 generation;
--- 
-2.25.1
-
+> ---
+>  tools/perf/util/pmu.c | 17 +++++------------
+>  1 file changed, 5 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index faaeec1e15aa..15b852b3c401 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -574,8 +574,6 @@ static void pmu_read_sysfs(void)
+>   * Uncore PMUs have a "cpumask" file under sysfs. CPU PMUs (e.g. on arm/arm64)
+>   * may have a "cpus" file.
+>   */
+> -#define SYS_TEMPLATE_ID	"./bus/event_source/devices/%s/identifier"
+> -
+>  static struct perf_cpu_map *pmu_cpumask(char *name)
+>  {
+>  	struct perf_cpu_map *cpus;
+> @@ -616,9 +614,9 @@ static char *pmu_id(const char *name)
+>  	char path[PATH_MAX], *str;
+>  	size_t len;
+>  
+> -	snprintf(path, PATH_MAX, SYS_TEMPLATE_ID, name);
+> +	perf_pmu__pathname_scnprintf(path, PATH_MAX, name, "identifier");
+>  
+> -	if (sysfs__read_str(path, &str, &len) < 0)
+> +	if (filename__read_str(path, &str, &len) < 0)
+>  		return NULL;
+>  
+>  	str[len - 1] = 0; /* remove line feed */
+> @@ -864,16 +862,11 @@ pmu_find_alias_name(const char *name __maybe_unused)
+>  	return NULL;
+>  }
+>  
+> -static int pmu_max_precise(const char *name)
+> +static int pmu_max_precise(struct perf_pmu *pmu)
+>  {
+> -	char path[PATH_MAX];
+>  	int max_precise = -1;
+>  
+> -	scnprintf(path, PATH_MAX,
+> -		 "bus/event_source/devices/%s/caps/max_precise",
+> -		 name);
+> -
+> -	sysfs__read_int(path, &max_precise);
+> +	perf_pmu__scan_file(pmu, "caps/max_precise", "%d", &max_precise);
+>  	return max_precise;
+>  }
+>  
+> @@ -932,7 +925,7 @@ static struct perf_pmu *pmu_lookup(const char *lookup_name)
+>  	pmu->is_uncore = pmu_is_uncore(name);
+>  	if (pmu->is_uncore)
+>  		pmu->id = pmu_id(name);
+> -	pmu->max_precise = pmu_max_precise(name);
+> +	pmu->max_precise = pmu_max_precise(pmu);
+>  	pmu_add_cpu_aliases(&aliases, pmu);
+>  	pmu_add_sys_aliases(&aliases, pmu);
+>  
+> -- 
+> 2.25.1
+> 
