@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4206654C28
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 06:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A74F654C35
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 06:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235667AbiLWFIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 00:08:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
+        id S229820AbiLWF2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 00:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232343AbiLWFIj (ORCPT
+        with ESMTP id S229524AbiLWF2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 00:08:39 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C457412D06
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 21:08:38 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BN58Nt5028962
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Dec 2022 00:08:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1671772109; bh=Hxq17Aov0v/KEYVnWVgtHO8L2e6gITsXnqdXSO6e9Jk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=AIZ/pxKeWK7zNWoPx661pcQl/feqj9NaMwe4olcs6TRUTkfTCtaEGNTPEgHY3ACft
-         XHoSq85MAtEvHThQjXqKLvZE0yO2j4mUre1EHBxZajTidCDepZdaXx7Gfego2hMQKu
-         J+ib/Igmd956kAD9AGoWLkpappJRKim5NcKK/n6jOROl1QvC9syCiZRu67osICsZUZ
-         djYcMIcfb+ijnRGN7YEXfj+h+glvvlJO25NI5CfCDqkRuZRBrosPSr+OMpQ12PEXU6
-         0/4u1jLXliMChxKvqgYWk/P3cXe67cB8uzmQ0RLFXkmAzKE2uywIYFkVBM5xFpDvz9
-         YX8EeAiJ/MByA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id BD14F15C39F2; Fri, 23 Dec 2022 00:08:23 -0500 (EST)
-Date:   Fri, 23 Dec 2022 00:08:23 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Jun Nie <jun.nie@linaro.org>, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: fix underflow in group bitmap calculation
-Message-ID: <Y6U3x3Cs8Mzaakkx@mit.edu>
-References: <20221222020244.1821308-1-jun.nie@linaro.org>
- <Y6SW5s/jFY1oWFe2@mit.edu>
- <Y6SdOzSr5CW5nQl/@magnolia>
+        Fri, 23 Dec 2022 00:28:47 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729281CB30;
+        Thu, 22 Dec 2022 21:28:45 -0800 (PST)
+Received: from [IPV6:2401:4900:1f3f:d076:4da6:b729:f032:ed0a] (unknown [IPv6:2401:4900:1f3f:d076:4da6:b729:f032:ed0a])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C736F93;
+        Fri, 23 Dec 2022 06:28:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671773322;
+        bh=Lew3jrQRHjRkccU+AQDJAFQBxkdZnuSTUagLXbMqiIk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pnQNdZrdaRnxHqDRXI7NV3hu+0Ab9FozDptohx38HkRCag0hE1WY//6HScF5/p8CA
+         1+lj5CkbuJGybjA1Ll+W2tK3wl1bNa+pjZMkLHzpAaMQsh+UVGZ9J0WbgxWv85h74B
+         ww4AbXvhY0REUucqOCdF4JDquO76LzbCcOTlno9Y=
+Message-ID: <3c864c60-91a6-9ef4-367e-3c8d453b765b@ideasonboard.com>
+Date:   Fri, 23 Dec 2022 10:58:31 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6SdOzSr5CW5nQl/@magnolia>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 1/4] staging: vc04_services: Stop leaking platform
+ device on error path
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adrien Thierry <athierry@redhat.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+References: <20221222191500.515795-1-umang.jain@ideasonboard.com>
+ <20221222191500.515795-2-umang.jain@ideasonboard.com>
+ <Y6S+d512bYo2BF0O@pendragon.ideasonboard.com>
+From:   Umang Jain <umang.jain@ideasonboard.com>
+In-Reply-To: <Y6S+d512bYo2BF0O@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 10:08:59AM -0800, Darrick J. Wong wrote:
-> 
-> Question -- on a 1k-block filesystem, are the first 1024 bytes of the
-> device *reserved* by ext4 for whatever bootloader crud goes in there?
-> Or is that space undefined in the filesystem specification?
-> 
-> I never did figure that out when I was writing the ondisk specification
-> that's in the kernel, but maybe you remember?
+Hi,
 
-That's an interesting (and philosophical) question.  The ext2 file
-system never had a formal specification, and this part of the file
-system format was devised by Remy Card before I had gotten involved
-with ext2.  (I first got started writing e2fsprogs; which replaced the
-previous file system utilities, which were forked from minix's tools,
-and which were quite inefficient.)
+On 12/23/22 2:00 AM, Laurent Pinchart wrote:
+> Hi Umang,
+>
+> Thank you for the patch.
+>
+> On Fri, Dec 23, 2022 at 12:44:57AM +0530, Umang Jain wrote:
+>> vchiq driver registers the child platform devices in
+>> vchiq_register_child(). However, in the registration error code path,
+>> currently the driver is leaking platform devices by not destroying the
+>> return platform device. Plug this leak using platform_device_put() as
+>> mentioned in the documentation for platform_device_register().
+>>
+>> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+>> ---
+>>   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+>> index dc33490ba7fb..fc7ea7ba97b2 100644
+>> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+>> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+>> @@ -1779,6 +1779,7 @@ vchiq_register_child(struct platform_device *pdev, const char *name)
+>>   	child = platform_device_register_full(&pdevinfo);
+>>   	if (IS_ERR(child)) {
+>>   		dev_warn(&pdev->dev, "%s not registered\n", name);
+>> +		platform_device_put(child);
+> If IS_ERR(child), what do you expect platform_device_put(child) to do ?
+> And have you read the implementation of platform_device_register_full()
+> ?
 
-In favor of it being undefined, the first 1024 bytes are not part of
-any block group in an ext2 file system with a 1k block size.  (The
-first block group is composed of physical blocks 1 through 8192
-inclusive when the block size is 1k.  Whereas if the blocksize is 4k,
-the first block group is composed of physical blocks 0 through 32767.)
-In addition, the status of the first 1024 bytes is not controlled by
-an ext2 block allocation bitmap.
+Errr, yeah - it is handling the platform_device_put() as well. Stupid me!
 
-One could also argue that to the extent that ext2 was derived the ext
-file system, which in turn was derived from Minix --- and Minix File
-System (which does have a specification, explicitly states that "block
-0" is reserved for the Bootloader, with "Block 1" being the location
-of the superblock.  But Minix only supports a 1k blocksize, and
-doesn't have the concept of FFS-style block (cylinder) groups.
+(dropping this patch for v3)
+>
+>>   		child = NULL;
+>>   	}
+>>   
 
-So I'd come down on the side which states that the first 1024 bytes
-are "undefined" on a 1k block file system.
-
-(One could also aruge that they are "undefined" on a 2k and 4k block
-file system, but the first 1024 bytes are part of "block 0", and on 2k
-and 4k block file systems, "block 0" is part of a block group.)
-
-> If those first 1024 bytes are defined to be reserved in the ondisk
-> format, then you could return a mapping for those bytes with the owner
-> code set to EXT4_FMR_OWN_UNKNOWN.
-> 
-> If, however, the space is undefined, then going off this statement in
-> the manpage:
-> 
-> "For example, if the low key (fsmap_head.fmh_keys[0]) is set to (8:0,
-> 36864, 0, 0, 0), the filesystem  will  only  return  records for extents
-> starting at or above 36 KiB on disk."
-> 
-> I think the 'at or above' clause means that ext4 should not pass back
-> any mapping for the byte range 0-1023 on a 1k-block filesystem.
-
-Sure, sounds good to me.
-
-						- Ted
