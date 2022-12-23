@@ -2,88 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A810654E47
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571A7654E4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbiLWJYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 04:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S236000AbiLWJYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 04:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiLWJYf (ORCPT
+        with ESMTP id S236181AbiLWJYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 04:24:35 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2341336D57;
-        Fri, 23 Dec 2022 01:24:34 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 658426602CE0;
-        Fri, 23 Dec 2022 09:24:31 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671787472;
-        bh=7V70gBK9OEYmEAkkBN5wXw8RnXXhhRdhdQHkoaIpKe0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=e40NHzKsNV0hq7vDwiqkRViojw4UT/GWvfQZe52ysa1cvePOe18EWgepLZN4n4d6j
-         1S8e/WdCUw1BK0mZRM+4BmBgLdhDbvoTHtWKuW2HnhP5jp/rUJFsnHtMkbUnP+NLu7
-         brdjvrGrJf1umNrOH/uQosX8RgKB4RH68nFS2AMP4q93Ut0Nfas6um+iBWL6RXqYFo
-         Suox9ULMMGlmn9L4cqq66PgFMyfxqkbPM/6Grz1JVts0XvWpDNkwIIPK2+37eLv+ta
-         lKzkSeY6dfUiucvo28cW/UnhIFs1/o0/P7uWZUMVDHv3xg9Wyf8IKyWFFHgO0xG/mP
-         65hpcuUzoCM8Q==
-Message-ID: <bfc4c7b5-3d5b-e087-1e33-1c461e361802@collabora.com>
-Date:   Fri, 23 Dec 2022 10:24:29 +0100
+        Fri, 23 Dec 2022 04:24:50 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF4D36D75;
+        Fri, 23 Dec 2022 01:24:48 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id 65so2955999pfx.9;
+        Fri, 23 Dec 2022 01:24:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=orXscDtt29LqpDRe6wK6B/AU7SCWY/jfRNSdBz0C1y4=;
+        b=DjSst1Lek0ia3PAbJusa8L5QlcZnlLDEVd7VD1TBFPLpRf8spVFbwnF1AbFS2swoZI
+         ah5ls7vaB/L5/dksk+qMl2p1CZ4m9XJuW3RgekEGqt5c/8MxEU8d5S4aUoY01tl7em+m
+         LHiXf5Bnm328HBTJhg8YLQ9TRjOytLYiConI+j+jTZx0pz3m4hOnVyKBqNL341t9mTd1
+         IHlPBVXhl56NT1zQe3ElCdT57H3+IvgIN59Tdcsm6eTQvFYnlyFOAYnTdaBtpF1533Hx
+         VJVSLQD0oEf0CiXuPznHqNU6I73v4WBuCFdAtdtp49dSmsJtn4N9SdaFZoSalsQ3f/7u
+         1Wpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=orXscDtt29LqpDRe6wK6B/AU7SCWY/jfRNSdBz0C1y4=;
+        b=4Rka7NADcBZt4LXElFR29rjgC+RmDx+umEezQlYGdMtAkkN+13Miu/mdC6sAQCzU26
+         U1gpMomu5dSj9XOGUr4nzH1EHyLi0dHPs8b9zmRnKKoTtNIb2AIX1RLy6kyRVox8K+qc
+         WiHovB9P7aw64HnAYJkWwJhq1uqu3aYR33pjjpKCdRhpRI+d1xcd7sQO1OtoDFW4BSUn
+         q2YCtA8ub/x2Tay+jHjpsa7POnLT73HguzpmiEQEn7eegVfv1ekl1l09b1HVjntxaZLN
+         U8eKLgA7MIJ6qu9bk5zyhKz+ra9wsOg0fm3EgPdbLA66s9HBimPuIyuRDHmBY7hdErjD
+         7pig==
+X-Gm-Message-State: AFqh2krqcCNJlNqCYhIKgS1ti/nRwhZuLxaBwtZoPvnyPl+nUvonf6Yo
+        lksjvXGy8M2lfltjSL5ZODM=
+X-Google-Smtp-Source: AMrXdXt/1M/o4TumvC8WjfGzap2s/M5TpoCv6P/Y4R33giSQBOoqkWeuw4HNb6z2XeTMOXICsP8JHg==
+X-Received: by 2002:aa7:914e:0:b0:574:35fd:379e with SMTP id 14-20020aa7914e000000b0057435fd379emr10666022pfi.2.1671787488104;
+        Fri, 23 Dec 2022 01:24:48 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-5.three.co.id. [180.214.232.5])
+        by smtp.gmail.com with ESMTPSA id w3-20020aa79543000000b00576e4c7b9ecsm2042927pfq.214.2022.12.23.01.24.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Dec 2022 01:24:47 -0800 (PST)
+Message-ID: <04c86814-b7bc-0943-2142-96eb16fb534b@gmail.com>
+Date:   Fri, 23 Dec 2022 16:24:43 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 1/2] stmmac: dwmac-mediatek: enable 2ns delay only for
- special cases
+ Thunderbird/102.6.1
+Subject: Re: [PATCH RESEND linux-next v3] docs: proc.rst: add softnet_stat to
+ /proc/net table
+To:     yang.yang29@zte.com.cn, corbet@lwn.net, kuba@kernel.org
+Cc:     davem@davemloft.net, hannes@cmpxchg.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <202212231104299193047@zte.com.cn>
 Content-Language: en-US
-To:     Biao Huang <biao.huang@mediatek.com>, Andrew Lunn <andrew@lunn.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        macpaul.lin@mediatek.com
-References: <20221223015029.24978-1-biao.huang@mediatek.com>
- <20221223015029.24978-2-biao.huang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221223015029.24978-2-biao.huang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <202212231104299193047@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/12/22 02:50, Biao Huang ha scritto:
-> In current driver, MAC will always enable 2ns delay in RGMII mode,
-> but that will lead to transmission failures for "rgmii-id"/"rgmii-txid"
-> cases.
+On 12/23/22 10:04, yang.yang29@zte.com.cn wrote:
+> From: Yang Yang <yang.yang29@zte.com.cn>
 > 
-> Modify the implementation of fix_mac_speed() to ensure the 2ns delay
-> will only take effect for "rgmii-rxid"/"rgmii" cases, then user can
-> choose phy-mode freely.
+> /proc/net/softnet_stat exists for a long time, but proc.rst miss it.
+> Softnet_stat shows some statistics of struct softnet_data of online
+> CPUs. Struct softnet_data manages incoming and output packets
+> on per-CPU queues. Note that fastroute and cpu_collision in
+> softnet_stat are obsolete and their value is always 0.
 > 
-> Fixes: f2d356a6ab71 ("stmmac: dwmac-mediatek: add support for mt8195")
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Thanks for pinging me by resending! Indeed I always forget to review
+this due to busy time.
 
+Anyway, LGTM.
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+-- 
+An old man doll... just what I always wanted! - Clara
 
