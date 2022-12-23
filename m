@@ -2,196 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2A0654F31
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB7A654F37
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235722AbiLWKeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 05:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
+        id S235981AbiLWKep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 05:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiLWKeF (ORCPT
+        with ESMTP id S235961AbiLWKeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 05:34:05 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C7D28732
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:34:05 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id x3so4610521pjv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:34:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BBTCDvfK9c6UzSIP6NvqIg7a0cCvfRzIEpaDRlTGr6g=;
-        b=6BvXIbIt7BQVxem2tvhC4ERzYcCfvWO7F3SH5gRhOzYBj/FjV0Gl0c7lgFDz+VnFGB
-         +XHW71Fh4/VmiuZwK2v1+YCJNLwbG8y/EmUkdIVktfjj4IBZtPtvimtVAozFLhBhk8ff
-         jtxna/DmfEZfhvxdWyydcDkgRVJzV/Txj6utwA0UJ++fR1N44Pi9wBo0pdZ9mQvRYHuf
-         L+FJqvLM0ni+6dGDV3IUNw+XgZ8IjNi+ToJY+lkb5v4h7fCNYhOwWY0ZzuJDel2Vj5Cl
-         5SM4UTrowuK+uuvmSDorOVMGTFLRW/o9dGjk8Oo/WEgWsShfR4Lrmad819Si7TTHqovP
-         xW9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BBTCDvfK9c6UzSIP6NvqIg7a0cCvfRzIEpaDRlTGr6g=;
-        b=yrBzRtpXnHwwwloWb3vDHZrO3I2V40VyMkjfFTbDHwcEuxHLFzR43pingUvY3cFBE3
-         hXcT6pCH1sLcbVMXGbKvFuCEIWcEaEXs4ZYCCwAqVKpklEYytbX4kn7H51h4y7MTtVLl
-         IoNrxnSxjC2nlJY3S0NJr/qHUB91EvoSR6mTSZSqLUr4Dii5niYO+qI86fpa5jY90N1h
-         XLbeA4YFdjtk63TT9P4vWoDAaEzM9EHMvfNbid7rgJ5FITkak4qDQOElIeu34i3+1eu/
-         +Uv4uRgDcRyXGUwq8rZN4/OGJDTNQBBbVBcgyuooLCNh/1xCljkI6xWtmr8tv5m3Twz4
-         +1Uw==
-X-Gm-Message-State: AFqh2koxPGsv38WxGP6P6cTJ2DaCZZQ/BbdH8UuPqmfQbOpGp4j40fVx
-        glDagKK3Kt6WOOoCck5ZwA+kug==
-X-Google-Smtp-Source: AMrXdXt4frh17OKkII7wCsRH33HrHYaBUd4pxgWzU1EVBLJ1w0YN64ECz2V2da0PKyp6pX4ljx/obg==
-X-Received: by 2002:a17:90a:c690:b0:21a:2d8:bf98 with SMTP id n16-20020a17090ac69000b0021a02d8bf98mr25385402pjt.10.1671791644599;
-        Fri, 23 Dec 2022 02:34:04 -0800 (PST)
-Received: from localhost.localdomain ([2409:8a28:e6b:a810:15ee:4139:496a:7697])
-        by smtp.gmail.com with ESMTPSA id q7-20020a17090a430700b0020bfd6586c6sm1976207pjg.7.2022.12.23.02.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 02:34:04 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org
-Cc:     juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v6 2/2] sched/core: Reorganize ttwu_do_wakeup() and ttwu_do_activate()
-Date:   Fri, 23 Dec 2022 18:32:57 +0800
-Message-Id: <20221223103257.4962-2-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221223103257.4962-1-zhouchengming@bytedance.com>
-References: <20221223103257.4962-1-zhouchengming@bytedance.com>
+        Fri, 23 Dec 2022 05:34:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB692A513;
+        Fri, 23 Dec 2022 02:34:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E23FCB81F51;
+        Fri, 23 Dec 2022 10:34:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71693C433EF;
+        Fri, 23 Dec 2022 10:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671791672;
+        bh=pEi8Xz8eJjlzeyiiqC2lEqhANSejOYDD0mFpyX2uWuE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=eW2jtyLMcW3/uyA2m81/elhA84ITXUJule7OAiN127fzxnFeDPL0Fq46yzyM813kn
+         ih9KB2sABJCG5hny9r8ntswKfpvPrlCTm348KMDCQRfGCxZH49ygd53GlKyTBGYn4C
+         A6IoWRNEBJX/KtKL0aD6bju7wlTuoA1sF8JFcFU1ozhn3SxsgslkwqU6JfN5LkxIoJ
+         RZubC+ZApPOsHTZF77HRVRf7rt5TDHVHo43Uda8zvlwHHmZ4Ik0KHXtZH788SvS7S/
+         9B4e/1M2jwRk0Qd3pswBk5z/dQaik6BuVMC+EQLg2XH5Oihj08k/el83ECY8aVgczb
+         MNeESw4sEqg1Q==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-rockchip@lists.infradead.org,
+        Johan Jonker <jbx6244@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: usb: rockchip,dwc3: Move RK3399 to its
+ own schema
+In-Reply-To: <CAL_JsqLo4qZRTOu7UR_AN_jHNgiFZp39dsXYwWnD_njyDQfmAA@mail.gmail.com>
+References: <20221219191038.1973807-1-robh@kernel.org>
+ <20221219191038.1973807-2-robh@kernel.org> <87bknya5lv.fsf@balbi.sh>
+ <CAL_JsqLo4qZRTOu7UR_AN_jHNgiFZp39dsXYwWnD_njyDQfmAA@mail.gmail.com>
+Date:   Fri, 23 Dec 2022 12:34:26 +0200
+Message-ID: <875ye29znx.fsf@balbi.sh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ttwu_do_activate() is used for a complete wakeup, in which we will
-activate_task() and use ttwu_do_wakeup() to mark the task runnable
-and perform wakeup-preemption, also call class->task_woken() callback
-and update the rq->idle_stamp.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Since ttwu_runnable() is not a complete wakeup, don't need all those
-done in ttwu_do_wakeup(), so we can move those to ttwu_do_activate()
-to simplify ttwu_do_wakeup(), making it only mark the task runnable
-to be reused in ttwu_runnable() and try_to_wake_up().
+Rob Herring <robh@kernel.org> writes:
 
-This patch should not have any functional changes.
+> On Tue, Dec 20, 2022 at 1:37 AM Felipe Balbi <balbi@kernel.org> wrote:
+>>
+>> Rob Herring <robh@kernel.org> writes:
+>>
+>> > The rockchip,dwc3.yaml schema defines a single DWC3 node, but the RK33=
+99
+>> > uses the discouraged parent wrapper node and child 'generic' DWC3 node.
+>>
+>> Why discouraged? Splitting those two separate devices (yes, they are
+>> separate physical modules) has greatly simplified e.g. power management
+>> and encapsulation of the core module.
+>
+> Sometimes they are separate and that's fine, but often it's just
+> different clocks, resets, etc. and that's no different from every
+> other block.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- kernel/sched/core.c | 64 ++++++++++++++++++++++-----------------------
- 1 file changed, 31 insertions(+), 33 deletions(-)
+Right, then the argument is that all other blocks are not modelling the
+HW as they should :)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 607a5430b192..3936b3328500 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3623,14 +3623,39 @@ ttwu_stat(struct task_struct *p, int cpu, int wake_flags)
- }
- 
- /*
-- * Mark the task runnable and perform wakeup-preemption.
-+ * Mark the task runnable.
-  */
--static void ttwu_do_wakeup(struct rq *rq, struct task_struct *p, int wake_flags,
--			   struct rq_flags *rf)
-+static inline void ttwu_do_wakeup(struct task_struct *p)
- {
--	check_preempt_curr(rq, p, wake_flags);
- 	WRITE_ONCE(p->__state, TASK_RUNNING);
- 	trace_sched_wakeup(p);
-+}
-+
-+static void
-+ttwu_do_activate(struct rq *rq, struct task_struct *p, int wake_flags,
-+		 struct rq_flags *rf)
-+{
-+	int en_flags = ENQUEUE_WAKEUP | ENQUEUE_NOCLOCK;
-+
-+	lockdep_assert_rq_held(rq);
-+
-+	if (p->sched_contributes_to_load)
-+		rq->nr_uninterruptible--;
-+
-+#ifdef CONFIG_SMP
-+	if (wake_flags & WF_MIGRATED)
-+		en_flags |= ENQUEUE_MIGRATED;
-+	else
-+#endif
-+	if (p->in_iowait) {
-+		delayacct_blkio_end(p);
-+		atomic_dec(&task_rq(p)->nr_iowait);
-+	}
-+
-+	activate_task(rq, p, en_flags);
-+	check_preempt_curr(rq, p, wake_flags);
-+
-+	ttwu_do_wakeup(p);
- 
- #ifdef CONFIG_SMP
- 	if (p->sched_class->task_woken) {
-@@ -3660,31 +3685,6 @@ static void ttwu_do_wakeup(struct rq *rq, struct task_struct *p, int wake_flags,
- #endif
- }
- 
--static void
--ttwu_do_activate(struct rq *rq, struct task_struct *p, int wake_flags,
--		 struct rq_flags *rf)
--{
--	int en_flags = ENQUEUE_WAKEUP | ENQUEUE_NOCLOCK;
--
--	lockdep_assert_rq_held(rq);
--
--	if (p->sched_contributes_to_load)
--		rq->nr_uninterruptible--;
--
--#ifdef CONFIG_SMP
--	if (wake_flags & WF_MIGRATED)
--		en_flags |= ENQUEUE_MIGRATED;
--	else
--#endif
--	if (p->in_iowait) {
--		delayacct_blkio_end(p);
--		atomic_dec(&task_rq(p)->nr_iowait);
--	}
--
--	activate_task(rq, p, en_flags);
--	ttwu_do_wakeup(rq, p, wake_flags, rf);
--}
--
- /*
-  * Consider @p being inside a wait loop:
-  *
-@@ -3726,8 +3726,7 @@ static int ttwu_runnable(struct task_struct *p, int wake_flags)
- 			update_rq_clock(rq);
- 			check_preempt_curr(rq, p, wake_flags);
- 		}
--		WRITE_ONCE(p->__state, TASK_RUNNING);
--		trace_sched_wakeup(p);
-+		ttwu_do_wakeup(p);
- 		ret = 1;
- 	}
- 	__task_rq_unlock(rq, &rf);
-@@ -4093,8 +4092,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
- 			goto out;
- 
- 		trace_sched_waking(p);
--		WRITE_ONCE(p->__state, TASK_RUNNING);
--		trace_sched_wakeup(p);
-+		ttwu_do_wakeup(p);
- 		goto out;
- 	}
- 
--- 
-2.37.2
+> If there's wrapper registers or something clearly extra, then I agree
+> a wrapper parent node makes sense.
 
+There's always wrapper-specific registers. Some wrappers even add custom
+functionality. IIRC Qcom added a HW-based URB "scheduler" or some sort.
+
+> Otherwise, for cases like RK3399, I don't think it does, but we're
+> stuck with it now.
+>
+> Also, we have this pattern pretty much nowhere else and DWC3 is not
+> special.
+
+No, it's not. But it could just be the first example of the driver
+actually modelling the underlying HW.
+
+In any case, I was just curious with your opinion that this model is
+discouraged, as it's not stated anywhere in the kernel's documentation.
+
+Happy holidays
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmOlhDIRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQho6y4DXKpES1VA/+OxcarujRFwHa95+X7YWZNI3bmUDtKLPg
+zOuwZkJQMoBBmV1QrVIkSmewZR2eZUmrYznXlswNWu3wt2UsCvGfFT3HenhSko17
+ZdT8suhbRWZwDaQNm4uDeP9z+37gKn5NcwA6namgAVymsAb/voLQK/bkNth7LupJ
+eY9Lh7D3xTfO1eZ23fBd9AQjQZGa6r7FKcH5tCwO4X+2OLWNY08hGTZVRfoJoIyZ
+pJNt0rorl/a21j5JeGQwO0VST2/cQHmRDMzdTc4/3KFiy4Gx3Qq5/cp0Klv5qZ8y
+vkKbCoZpxCgnUqc0DwxATeYVtQXnHnzoO0ahHgA7kM8Ap9DJWbbvZq+WupHXbmzK
+P0eoRAS4V3OlG7GCjRFEU6TzrsVjl3Tgm+ILc8yiUXVlQcq40I1BXwZtzgY+qNVy
+Lk4Z2ZLXDi8MKilK64bHW9dZaJq4k5ZjerXgFQYW2bvUJT1rk9EP+tisanKLelpS
+Oggd3zZRk9PCg0cAvvN/4OOmBa/PtINXHX5Tb9zjVSGgbjqRDGJG+BfYpQ/ZTOF+
++qFx0ie5fLktEwcHGlqx/IZ0lFqOc6iSRDMzIJBnfVx0aanuuk/S+cAiTAg5TLYN
+pMcfABi0dtDsanrSVlOGd2SOW1019+rPlN3jemigQ8dTawudC0/A93l65/4qyGiA
++R+1a/ubZhs=
+=MZmx
+-----END PGP SIGNATURE-----
+--=-=-=--
