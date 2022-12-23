@@ -2,189 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988BF654ED5
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BA0654EE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235525AbiLWJwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 04:52:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S236142AbiLWJy4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 23 Dec 2022 04:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236238AbiLWJvR (ORCPT
+        with ESMTP id S235758AbiLWJyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 04:51:17 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20623.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::623])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004C8532F9;
-        Fri, 23 Dec 2022 01:46:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ntEVMQhmTyuEE4aI7/95Pu7JCmTXOWhJO6PXrqHxd5QLknljh0dr7Q6qvJARe0RWWEvD6gdnFWkelr+AfdJEx4SfuLru8xS7gKR7vP8S+AESLgSJiKhTGyrfIj8goP6qycFkjrsQufTuXdj8k3XI3/D6ySN3NH4nR6ZGEOigIA1+jCMzSlJhKKNjdlXscYDI/+OcrjzseuOquTPF7oymAD9nF8DACw5XVARgXwsMJi9JdxEUCCeY+cspC4dOnJZxFphUPDDIudRqZIs6eEMhIXN55vuQVDLmJhkZPFiajFoCNbhCVcyniaS6X3og6NMEx6Fh3Iz9slMNCvgcgEx68Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3RvGZfYD+G/FTQ8q/x7aHO2SJ7lH52wWIS3WHPY1Dz4=;
- b=MzxxpdTVD+9XDt/ArgHjSyAw/nYdjv3Up9Im1rZLDXpmNyTR15WM600TstQUpspuhnKZ10n0l3n0ggY58hq1vqvCANk0+0Q4xfqFr9tngJJeNC0dpKXKVyHYW6yayd/Yxa6nZLx5LYB3k5It9muE+dtxVYuHz1s0mc8OaYPC9jMHo9bYXjKrxsJEiwJoly9CLiS0KvT69S+76rlh4aJ0WLirE3VZagtPknolLLW63ijtCn9PLsOYWXPU87FcNqKeJ00Job2tU7K2erDL5x3JSnEoG9zrqWi+G/jSqyzqEabimxbqlZzZYJVhdmIfPn8r6VRSbNQSkRYUXQ32q7CIYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3RvGZfYD+G/FTQ8q/x7aHO2SJ7lH52wWIS3WHPY1Dz4=;
- b=jK+pxbq5yY/fuRF/cQMqob9gM83fM4sJ8Ry9Y2U0A8gR6UiZty5Vm0bB6skDT4DN8Ox2UjD3xB4rArWYsTnkhJkxerbfrpB0QVi7+JgwsrINvLYZznhtJF+CrVhHK09llkdmh2g75DU13YzQbXdjhfzCsHn4fJgliEJofRxkFuA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by MN2PR12MB4238.namprd12.prod.outlook.com (2603:10b6:208:199::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Fri, 23 Dec
- 2022 09:45:47 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::45ef:724b:4b64:b98]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::45ef:724b:4b64:b98%3]) with mapi id 15.20.5944.013; Fri, 23 Dec 2022
- 09:45:36 +0000
-Message-ID: <bce86f79-9757-530b-b34e-1d2a71281e75@amd.com>
-Date:   Fri, 23 Dec 2022 15:15:25 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v8 05/13] cpufreq: amd-pstate: optimize driver working
- mode selection in amd_pstate_param()
-Content-Language: en-US
-To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
-        Mario.Limonciello@amd.com, ray.huang@amd.com,
-        viresh.kumar@linaro.org
-Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221219064042.661122-1-perry.yuan@amd.com>
- <20221219064042.661122-6-perry.yuan@amd.com>
-From:   Wyes Karny <wyes.karny@amd.com>
-In-Reply-To: <20221219064042.661122-6-perry.yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA0PR01CA0099.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:af::7) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        Fri, 23 Dec 2022 04:54:15 -0500
+Received: from ex01.ufhost.com (unknown [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891C637F83;
+        Fri, 23 Dec 2022 01:48:19 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 12DD724E212;
+        Fri, 23 Dec 2022 17:48:03 +0800 (CST)
+Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 23 Dec
+ 2022 17:48:03 +0800
+Received: from localhost.localdomain (183.27.97.120) by EXMBX161.cuchost.com
+ (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 23 Dec
+ 2022 17:48:02 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 0/3] Add timer driver for StarFive JH7110 RISC-V SoC
+Date:   Fri, 23 Dec 2022 17:47:58 +0800
+Message-ID: <20221223094801.181315-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|MN2PR12MB4238:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3d25ea5-6f62-49ac-4b3c-08dae4ca7171
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A55iuc+8Z4H4HPaMHFMBcfBiYRo9YLCQ8q0t2F1FDOF8zsQomqIfCQgsT+dvuEtsqF5DJBem1/tOT6zh586In3lbBlluHbtoGYG4AbzpBt3n9pcz+/8cE26Fdx+4Xv/ncZI/SFaHvsKb/Z5/QMwRZ862au/O8tJQ+gGXN2m5c1jBV5oeSbUDoD5YDGpEvEjd8sMUnJDv/pX5JkBYgDazaB7/mksA5cwTQ0THwPS9Y3TtLuDY7B6WhlOgfm2VfOxao5+dbsR2UhMS68H6qVVJWKLeB1SmTjs1DnJyDvnE57RXD5ldJ2D8qNM7O+sk0WP0mi4Q2twNFcYdhN5eKOxOhiPgLjUrvIdne1If52ALnx5+92qiCHLxgqt9LC07GpZUZ9X1qDZeJxi7Nwd0yOyjIEyfxJz8KiMRyV6o8CD2qDeYjg5VOoz12ZV1fPBJJsta1CB1xUT46w+bVnijm+QpHm/uyJrQQgyUl7MprpYjGvKOk4KvZ8dwQN5peeVIV6f2/5Ef9BVzXk1fKCO3aDNEKpkIoOxLH65dhcflE3CZ79LcnDnRPlEqs5gjkxAM+HK9yOHvRZmSqLO9qAxYGDsY/fx7Rzn+kSdkY7ApHRswXGynMNxkjOlmp5hFtYmOyYttkFaJEHOrJk9A3d3G/moFREO5eOPP+RuhiaDQELCO2VyYFQUxf/4nXk0uxCsoVYIEN+blAx6d3SR8iAkMlzia7Ogroh0BYWLeBKazYaprq/4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(39860400002)(346002)(396003)(451199015)(2906002)(44832011)(316002)(36756003)(86362001)(2616005)(83380400001)(6486002)(26005)(6666004)(31696002)(38100700002)(478600001)(186003)(6512007)(31686004)(4326008)(53546011)(8936002)(41300700001)(6506007)(66476007)(5660300002)(66556008)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjdvcTBVa0srYzNIUXRCU2hUc252dXBOaWRSV3FCSFJaeVpvOC9qVXpwQXZu?=
- =?utf-8?B?eXBvSVZidFg1cWM5Zm0rd1cvUit3L09jc3ltWXdFKzhubUdiRzlIOStmQito?=
- =?utf-8?B?RWFReFQwc3pRbTcrMnFLZENucjJCMWU3K0dBS3craUo5VExwUGZmcnc2U1RL?=
- =?utf-8?B?UFNtWTAvS0d6TFg5NnFPaWg3V1ZwVWh1KzJxZjhPTTd2amt2TDNneTFhQXRS?=
- =?utf-8?B?c3Z5L2t5aytEMDBxTTI1T2JYQXB2VUp6bU5lUUdaWEdOUE94eEJlTzNRSXRP?=
- =?utf-8?B?UlBKSXJwZ2lqc2NmS3RmOHF6aS83L2FVZXZlNkRiNEdmTVkrTFc4Y2dhemFB?=
- =?utf-8?B?M3RyT2FBMHpLcjE1bWczWFhnVUgyQnd4ejh6OWNPcmFqeFIyRmhVZ3BubkxJ?=
- =?utf-8?B?REdFZktOQzJlTjY3dm54Sm02Q1AwV2pwVlF6MitVL2M4eHdzY1VQQ2dMRDE0?=
- =?utf-8?B?NWk5dTdkRVVuZ1BMai9veWxicG5PNXhIdXJNamN5eUgvZEMwUWVOVTdkSm5S?=
- =?utf-8?B?WGVLZDJkU1cweTk5U0J3S2p2eDg3Y0NRaXFjak9OUDQ5M1JDY2lLLzY4dnZw?=
- =?utf-8?B?TWtVS1dKRG9PNmFDd3owRkNUQ0o5cldzUGpVZEVML2NjWlBVMjgxL3BmKytO?=
- =?utf-8?B?T2lrR0VwWWREcU16RGg0Uk8vN2FvOWU0SjJPRXMrUjJoVXVGa2NrZjRWVitN?=
- =?utf-8?B?WGNZcjNPUUZreWJDK0JQV1ZmMTdrY0pRUzBsTkwzTS9ncm44azNoMXZub3JN?=
- =?utf-8?B?cUhGSGt6eWc5aTVLT1gyTy9iSnExdlU3cWdQUkZER2N5WkRUSzFnMkw2Zm5Q?=
- =?utf-8?B?NUxtei8vY1ZXMEgrTzF1ZTk1N2crbXdnNjdOOWF4WnNHdUpHM3krRGNtMERE?=
- =?utf-8?B?QmZyYkM2cGlyMm40Z1BDM3E4RDlCUnkzMUpZOFFZMlQzQkkwL3V5WjlhTm1l?=
- =?utf-8?B?Tk54ems2Nm1NT3F6bitieCtKZEhUbUhKekVnWVlpRlAweE52d000N3B3MjIx?=
- =?utf-8?B?MkdRRCs1dmxuWmtSa2Vuc29xTkpUMVpNMVo4WGMvc2lsb3QxM0VEZVllaFU1?=
- =?utf-8?B?UlZwdU5VcTkrN2dhNmxzWHpsN3F4UUl6eWtWNE5tNVlNYUVocFZrRG14dUlw?=
- =?utf-8?B?U0JzR0pxMVc3VWsyTjFDbnVrMG9lYlZqR1NkN1JyWFdzbGVlN3lQUk5HVUZm?=
- =?utf-8?B?WXYyRURDeFF6d0M1dythOW9ubUdPaGFhUjdDMzJpaUd0RmltcDIyWVZBQWlj?=
- =?utf-8?B?cHRlNDQ1ZkM1MC9YdU41TUxscnNUejQzbHFGSVVSTlVhZ3ovNzF3V05meTRw?=
- =?utf-8?B?ZXJ3bzVtTlQ3RUJGZko2MGhId2hEQWJ2SXJINUJZcUg3SFlwbnczS0ljZ1hC?=
- =?utf-8?B?cVRNS1RoYStVYXB6M1RTUUo3bGJML1NjOVh1dXRDV1lnaGcxMmhkL0ZRNDZN?=
- =?utf-8?B?WG1ZZ0RkV3crU3dhTkorWFdqTERzSTBsSjdHWCsyVHhzS3ZhKzBZdzN0OE9H?=
- =?utf-8?B?R3Z2dFlxMXhNdGtGVjNjZEhnUW1tQ1JFalltYjFEcXBBMitnMTk5N2ZIZTRT?=
- =?utf-8?B?ZGM5cGtSRzFuWXpmVnptNngxYURQSXV2YXFZVXNSS3NyREZkYjUrOEVyMkJI?=
- =?utf-8?B?N2M3ODVOZjVFU3d2MVpJeTB3ZEE1cTRZaU82aTNlR29lMXF4bkdWa1Nxa1k3?=
- =?utf-8?B?ekhQbjZRRzhraDVCVEdJcllCUm9Xd1Y3RjJuK3MwYzRZSjY3d2g5aFRNaWJO?=
- =?utf-8?B?T3BUZitXVmVBdks2aHE3NUhUTjFqTG50bHJiM3QweUl2OWNxQTVYdVRaaFlK?=
- =?utf-8?B?QVFIQURkUUVyazRWbDhqdmw4TDhGY21ZSlBhV2Z0R0VWNGIxam5TQ0RqdzJY?=
- =?utf-8?B?L0pGZ29mQnZBVHlzYkMxdjIySzNZSm53QVM0L1loL0E2Wk1xWXZrcHpHTE1a?=
- =?utf-8?B?OUhFSmRGcVFPcnUxakRvZVR3dHhmRTFyQmxGdG80SWR3UkFpV3pLMy9FYTc2?=
- =?utf-8?B?YzR4ZUQyUGFBVGd5RGhwZzd3Uk1HUDZmVkIwbjJKa04wT2FlWnlTc2pwOFha?=
- =?utf-8?B?bGszYjlSNnBzRkNBVkdFblQyV2l5R3hEeFVqbDgwNTNnTmJUTnV4Wk5LS0VD?=
- =?utf-8?Q?Nh66oEm8f+aCRig5AvuSiskyq?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3d25ea5-6f62-49ac-4b3c-08dae4ca7171
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2022 09:45:36.7873
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KQ5Jw8zkwOzrAE2xtok1c7dO5rPFoSa/hzxnMY+TcygF91aA6w4zxmLDb/5JzLElv8h5evX2itG2EHyUxGuvYA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4238
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.97.120]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX161.cuchost.com
+ (172.16.6.71)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch serises are to add timer driver for the StarFive JH7110
+RISC-V SoC. The first patch adds documentation to describe device
+tree bindings. The subsequent patch adds timer driver and support
+JH7110 SoC. The last patch adds device node about timer to JH7110
+dts.
+
+This timer has eight free-running 32 bit counters and uses four in
+StarFive JH7110 SoC. They support single-run mode and continuous-run
+mode.
+
+The last patch should be applied after the patchset [1]:
+[1] https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
 
 
-On 12/19/2022 12:10 PM, Perry Yuan wrote:
---------------------->8-----------------------------
->  
-> +/**
-> + * enum amd_pstate_mode - driver working mode of amd pstate
-> + */
-> +
-> +enum amd_pstate_mode {
-> +	/** @AMD_PSTATE_DISABLE: Driver mode is disabled */
-> +	AMD_PSTATE_DISABLE = 0,
-> +
-> +	/** @AMD_PSTATE_PASSIVE: Drier mode is passive mode */
-> +	AMD_PSTATE_PASSIVE = 1,
-> +
-> +	/** @AMD_PSTATE_ACTIVE: Driver mode is active mode */
-> +	AMD_PSTATE_ACTIVE = 2,
-> +
-> +	/** @AMD_PSTATE_GUIDE: Driver mode is guided mode */
-> +	AMD_PSTATE_GUIDE = 3,
-> +
-> +	/** @AMD_PSTATE_MAX */
-> +	AMD_PSTATE_MAX = 4,
-> +};
+Xingyu Wu (3):
+  dt-bindings: timer: Add timer for StarFive JH7110 SoC
+  clocksource: Add StarFive timer driver
+  riscv: dts: jh7110: starfive: Add timer node
 
-IMO the above enum is self explanatory we don't need to annotate.
+ .../timer/starfive,jh7110-timers.yaml         | 105 ++++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  22 +
+ drivers/clocksource/Kconfig                   |  12 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/timer-starfive.c          | 465 ++++++++++++++++++
+ drivers/clocksource/timer-starfive.h          | 104 ++++
+ 7 files changed, 716 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
+ create mode 100644 drivers/clocksource/timer-starfive.c
+ create mode 100644 drivers/clocksource/timer-starfive.h
 
-what about below?
 
-/**
- * enum amd_pstate_mode - driver working mode
- * All supported modes are explained in kernel-parameters.txt
- */
-enum amd_pstate_mode {
-	AMD_PSTATE_DISABLE = 0,
-	AMD_PSTATE_PASSIVE,
-	AMD_PSTATE_ACTIVE,
-	AMD_PSTATE_MAX,
-};
-
-Plz remove GUIDED mode here because it allows user to pass "amd_pstate=guided"
-in kernel cmdline. Therefore it breaks the driver flow without guided patches.
-I can update the enum in my guided patch.
-
-> +
-> +static const char * const amd_pstate_mode_string[] = {
-> +	[AMD_PSTATE_DISABLE]     = "disable",
-> +	[AMD_PSTATE_PASSIVE]     = "passive",
-> +	[AMD_PSTATE_ACTIVE]      = "active",
-> +	[AMD_PSTATE_GUIDE]      = "guide",
-> +	NULL,
-> +};
-> +
->  #endif /* _LINUX_AMD_PSTATE_H */
-
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+prerequisite-patch-id: 6b1b43a55b9773bec61ab6c1bbaa54dccbac0837
+prerequisite-patch-id: 09c98554df52d17ba5fd604125f8cdd62cbe80d1
+prerequisite-patch-id: 29fe0b0c19b6f0cd31114ee9fe17fe9732047f33
+prerequisite-patch-id: c59d9908de90e09ba2b9a81aadbf9fb9f00c8f04
+prerequisite-patch-id: 94ac03d518993921bcfc9cc9f58d7da0c3528b51
+prerequisite-patch-id: 694f7400375f5b85581fc1821e427334507826f2
+prerequisite-patch-id: 699d49c4439dadb4b7cf900857f027d050cd6093
+prerequisite-patch-id: 40d773f5a19912f731ee5fd4739ed2e3c2157b07
+prerequisite-patch-id: 2bc3fd6df5dda116efe882045863d6c88aa81b3a
+prerequisite-patch-id: 735e62255c75801bdc4c0b4107850bce821ff7f5
+prerequisite-patch-id: b2a923b922e661fa6085185f33c1f1e733db9110
+prerequisite-patch-id: b2bbc28354075432f059344eba5a127a653475cf
+prerequisite-patch-id: 70eab7b7eee728afcd90e40f6743d1356f6d81ab
+prerequisite-patch-id: 6276b2a23818c65ff2ad3d65b562615690cffee9
+prerequisite-patch-id: d834ece14ffb525b8c3e661e78736692f33fca9b
+prerequisite-patch-id: 4c17a3ce4dae9b788795d915bf775630f5c43c53
+prerequisite-patch-id: dabb913fd478e97593e45c23fee4be9fd807f851
+prerequisite-patch-id: 22fa141f7f0f80a5d619e9f3f4cf161ad06f108e
+prerequisite-patch-id: f306819c257ea73aff8e06b17b5731053cdddfc8
+prerequisite-patch-id: 536114f0732646095ef5302a165672b3290d4c75
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: e09e995700a814a763aa304ad3881a7222acf556
+prerequisite-patch-id: 05803238293fcc90c8e83018a1103c41133a816c
+prerequisite-patch-id: d074c7ffa2917a9f754d5801e3f67bc980f9de4c
+prerequisite-patch-id: ef23fdf3466b3c713b3826e8545c8dd2bc6cc9d7
+prerequisite-patch-id: d5da3475c6a3588e11a1678feb565bdd459b548e
 -- 
-Thanks & Regards,
-Wyes
+2.25.1
+
