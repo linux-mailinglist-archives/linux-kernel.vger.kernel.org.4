@@ -2,150 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B4965510C
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C3265510F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235627AbiLWNl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 08:41:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S230284AbiLWNo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 08:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiLWNlz (ORCPT
+        with ESMTP id S230157AbiLWNoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 08:41:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285F1186F9;
-        Fri, 23 Dec 2022 05:41:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D313CB82033;
-        Fri, 23 Dec 2022 13:41:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F6A3C433D2;
-        Fri, 23 Dec 2022 13:41:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671802911;
-        bh=iy9TCYFDK/6ge2wxUO12WDZJ23hlv+fXg+Yxp1If4xw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I8eiHvbbBm5AyKg3zm0Y/3zLb/1xtgnIxiv8omT3hfi8DcB1Se8NYNXQibX8yhntK
-         SZVQ9UOYPa4NXE5BGPXpTQjosmRTXitCjxlITgBAlbuxKQtuS4/iGpdvTASQCypNht
-         +wGVD/OtzDpQJqP9xvHJn/gGHdW+8C1fpoJu0SRCrV07g47ze5+DtW0bWnC844K2xM
-         eqIdZU//S9pYqW7P3L+W7pMfgOfcFWHHCcu4cvQUoQq4a/djyMCRC+8bpz15UWiv/V
-         +iTx9X/TdnlU2luT72ox8AqMBCxkETWT96uPriXrR4zIAzNHFG7T3XvD7jQQ13bHNG
-         kRj3aKktHAJ1A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p8iJs-0008Q9-1R; Fri, 23 Dec 2022 14:42:40 +0100
-Date:   Fri, 23 Dec 2022 14:42:40 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>
-Subject: Re: [PATCH] usb: misc: onboard_usb_hub: Don't defer probing for
- 'incomplete' DT nodes
-Message-ID: <Y6WwUCtexEnF1PWY@hovoldconsulting.com>
-References: <20221220004427.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
- <Y6FqiA/SoZHr36jl@hovoldconsulting.com>
- <Y6HDXiRzaAZ+3uTp@google.com>
+        Fri, 23 Dec 2022 08:44:25 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDCB379FF
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:44:24 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id j5-20020a5d9d05000000b006e2f0c28177so1898526ioj.17
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:44:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/+brZE1BuxQx4JJ7arfpIPSEPG2D5qK+YSbmXqrC2Fw=;
+        b=to4U/uGMFMtv9dmuEbLz/7AEjWI3WYN6YOb+ZDmc35LHDBefqhbGLX2K8r2nZP5HCM
+         4xCw2lvN4YYwdyEC49zccPtTf4KqmpWZhAqUszpRCfo9Lu/r592MWLx9stu2Brp42Abz
+         6Tml1eVANxnjd55Tq9xY6Auke819IhNEJSuWwQdYcw/4t0jCxANJcyBofX10wgsO05P7
+         G7pInskQAwN9stxKD93oRJ6i162LhQlBV34xHzh8z11E9U4LdridBtwkOEr9lOlTFea0
+         X4290i23bXwfPovpnM145bZPAnr9tgwDfQFY/MraenVNnldUaq2n+ZqnbKW7mRwtmZ5U
+         t/kg==
+X-Gm-Message-State: AFqh2krm5LlA/b/hou00e6rv1zk7kPg6W61+5iZJ6SmO5V0t52shvES/
+        pxtvm9lkGCcrT6lnQBgSx6s+PY61TyhKbvs3FTyeLD5jYHTJ
+X-Google-Smtp-Source: AMrXdXsbjmejxcAu5y04i/9VO2XqcPgHRXri3ilUuNNAnRUPtRp3qE+GkuTf2WssNCexpgOFvScBGJ/OthNs97njrrhPElJIcyzz
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6HDXiRzaAZ+3uTp@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:4a11:0:b0:304:c58f:2149 with SMTP id
+ m17-20020a924a11000000b00304c58f2149mr769399ilf.154.1671803064236; Fri, 23
+ Dec 2022 05:44:24 -0800 (PST)
+Date:   Fri, 23 Dec 2022 05:44:24 -0800
+In-Reply-To: <20221223114849.2150-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c7413e05f07efb02@google.com>
+Subject: Re: [syzbot] WARNING: refcount bug in gadgetfs_kill_sb
+From:   syzbot <syzbot+ac031e7435393ad05df6@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 02:15:19PM +0000, Matthias Kaehlcke wrote:
-> Hi Johan,
-> 
-> On Tue, Dec 20, 2022 at 08:55:52AM +0100, Johan Hovold wrote:
-> > On Tue, Dec 20, 2022 at 12:45:01AM +0000, Matthias Kaehlcke wrote:
-> > > Some boards have device tree nodes for USB hubs supported by the
-> > > onboard_usb_hub driver, but the nodes don't have all properties
-> > > needed for the driver to work properly (which is not necessarily
-> > > an error in the DT). Currently _find_onboard_hub() returns
-> > > -EPROBE_DEFER in such cases, which results in an unusable USB hub,
-> > > since successive probes fail in the same way. Use the absence of
-> > > the "vdd" supply as an indicator of such 'incomplete' DT nodes
-> > > and return -ENODEV.
-> > > 
-> > > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-> > > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-> > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > > ---
-> > > 
-> > >  drivers/usb/misc/onboard_usb_hub.c | 9 +++++++++
-> > >  1 file changed, 9 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-> > > index d63c63942af1..2968da515016 100644
-> > > --- a/drivers/usb/misc/onboard_usb_hub.c
-> > > +++ b/drivers/usb/misc/onboard_usb_hub.c
-> > > @@ -363,6 +363,15 @@ static struct onboard_hub *_find_onboard_hub(struct device *dev)
-> > >  	hub = dev_get_drvdata(&pdev->dev);
-> > >  	put_device(&pdev->dev);
-> > >  
-> > > +	/*
-> > > +	 * Some boards have device tree nodes for USB hubs supported by this
-> > > +	 * driver, but the nodes don't have all properties needed for the driver
-> > > +	 * to work properly. Use the absence of the "vdd" supply as an indicator
-> > > +	 * of such nodes.
-> > > +	 */
-> > > +	if (!of_get_property(pdev->dev.of_node, "vdd", NULL))
-> > > +		return ERR_PTR(-ENODEV);
-> > 
-> > Does this not break your original use case? Don't you want "vdd-supply"
-> > here?
-> 
-> Ouch, yes it does (to a certain degree). Thanks for pointing it out. My
-> sanity check didn't catch this because the platform driver still probes
-> successfully and powers the hub on.
-> 
-> > That said, this seems like the wrong property to look for both in
-> > principle and as it is described as optional by the binding:
-> > 
-> > 	Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
-> > 
-> > It seems that you should use the compatible property and check that it
-> > holds one of the expected values:
-> > 
-> >  - usbbda,5411
-> >  - usbbda,411
-> > 
-> > rather than treat every hub node as describing a realtek hub (AFAIK,
-> > there is no generic binding for this yet).
-> 
-> The driver only probes for specific hub models, among them the Microchip
-> USB2514B hub with which Stefan encountered the regression [1].
-> 
-> My initial assumption when writing this driver was that the existence of
-> a node for a supported hub means that the driver should be used. However
-> the regression encountered by Stefan makes clear that this assumption is
-> incorrect. It's not common, but a device tree may have nodes for onboard
-> USB devices, among them hubs (which might become more common with this
-> driver). Not in all instances the hub nodes were added with the intention
-> of using this driver for power sequencing the hub (e.g. [2]). 
+Hello,
 
-Yeah, you can't assume that. The DT bindings for USB has been around
-since before your onboard-hub driver.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-> The
-> compatible string alone doesn't indicate that the onboard_hub driver
-> should be instantiated for a given hub, which is why I'm using the
-> existence of "vdd-supply" as indicator.
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4880 } 2641 jiffies s: 2057 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-I don't have time to review this in details, but checking for a specific
-supply like this just seems wrong (as other have since also pointed out
-in comments to your v2). There could be hubs which just need to deassert
-a reset pin for example, and some of the bindings do not even mandate a
-regulator as I mentioned above.
 
-Johan
+Tested on:
+
+commit:         8395ae05 Merge tag 'scsi-misc' of git://git.kernel.org..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=15632254480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=17aadd57f57472c2
+dashboard link: https://syzkaller.appspot.com/bug?extid=ac031e7435393ad05df6
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=172f58ff880000
+
