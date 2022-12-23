@@ -2,206 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E49654D4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 09:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4840E654D49
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 09:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235905AbiLWIMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 03:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235659AbiLWIMi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S235669AbiLWIMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 23 Dec 2022 03:12:38 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3569128E2C;
-        Fri, 23 Dec 2022 00:12:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MOOiaS8BIxOFFaRRKeElU3EosJ0+Ul32It6U5DJZP6qOLXA2qPC6WhUnY7yia6j5W0bxXpD909Eh5uCnPoG4MxLBWD6CGbKymZxWRR/1XXGidLXtEtVDMgDIEmharETW1GFhxuaajDPX/YtnWb8KDp0Vm/zfiCg3awsWLkyP4AyZcjqKsSfBJ8UZR/9OnJq8zjQ2GvuqffPGyFeclZ04dHSymLfNTjF6TL7BYn0oV/Q1IskHZPF2ExQqOFXF+XgBFphU37jGZodmn5Zkl2xNSDe62swCsK1ygXmVft3ZnCIZrgzDBSWpzpBptQCoS2OHcCfP6zm3HVTLMm+VumqvLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v2AHQBvcbOSX+AtRJ9MXimYXJzw3OcgxG/oD4gU/qTg=;
- b=QgNXY5Ty8kvFc1ttpPCYYr7CmJHACh1BA3XfRndslZtpCPOMOeGP11NWYeibZEUldtgTcTMO2fMHz/VC4ibj5ZLioZYGnlWJ3UVGjMBE6XuRiaX5sjWHS4+qrl8peepooZhaDSKtRmpjdhZC0CDkqBPHjh+5o3RiDRaBspOgu1e99p9+d5rx0UG/5VV4UkQLsR+bh+BVpA8ArMuWiEIQj/rLQZ3hczPWTjeN7ne9PozZCvJzuMZWOkHmdcu7pnCzJzH6OYivZzWntpM1zMUVLV6xLsovBxvmtY2SWus39lFnDdxSIv+/J7MMFZDrUYFOfjydGthPii3n+073B5qQIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v2AHQBvcbOSX+AtRJ9MXimYXJzw3OcgxG/oD4gU/qTg=;
- b=MWqqaS+iKzXI3BNQYzgwF2he1vmFbPl3m19jAmJ1jBYae7FVfZL8TQgl8h0Kg1z8DHLZqXyEi/ghoB9qbKSVpWyBFCIgwTOUSJp0z73qcIqfQzKy0dpCWM58iii3wFWExa9tn2qhQEXOmZt/8/xDC/ujimFEpWpGwPgwqwtUOoI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- PH7PR12MB7985.namprd12.prod.outlook.com (2603:10b6:510:27b::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5924.16; Fri, 23 Dec 2022 08:12:34 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::2443:424:1c7c:17cc]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::2443:424:1c7c:17cc%6]) with mapi id 15.20.5857.023; Fri, 23 Dec 2022
- 08:12:34 +0000
-Date:   Fri, 23 Dec 2022 16:12:13 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "Karny, Wyes" <Wyes.Karny@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 08/13] cpufreq: amd-pstate: implement suspend and
- resume callbacks
-Message-ID: <Y6Vi3f/1z7QZKGCI@amd.com>
-References: <20221219064042.661122-1-perry.yuan@amd.com>
- <20221219064042.661122-9-perry.yuan@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219064042.661122-9-perry.yuan@amd.com>
-X-ClientProxiedBy: TY2PR0101CA0016.apcprd01.prod.exchangelabs.com
- (2603:1096:404:92::28) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229959AbiLWIMf (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 23 Dec 2022 03:12:35 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D2228E2C
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 00:12:34 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id f34so6145225lfv.10
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 00:12:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SYVZ8+9h5TaYp25FjSDR2jXhSPbQaP7Gr8Ll3NIuGQk=;
+        b=B/iKqnlEGIhLwnv1quGV8MJLHUTf008Jaed7bDyyOczv94ZE2cnIQ0TdGGmDWxDXM4
+         0zODOlGgjRXw/BlTJ0LGS5eoZIJ7W9NQAR2FSZy93sSaIUMM5Q+syr92X9EIl3D/lRWq
+         Hfb5B7Fy+AAUaasHPTSk/0ZjWeKtC96cwpNVsbABTlJIij1sWBREQQiGVkZuwdbtuKT+
+         cQ3ICC8r8JqeVSvCUkfoP3/yAJDeGI5th8soBrSLm6Z8A4UwKO9jqUvfHMm93DigIvG/
+         wDrWHsbfRjE4KE21ZldvhQZCwyDRpPvhrRqMF9zuZhkKwa9FYRpXlJwx5hHG1bCsl9jt
+         FzhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SYVZ8+9h5TaYp25FjSDR2jXhSPbQaP7Gr8Ll3NIuGQk=;
+        b=rZrQ85M8d0NZN51O/4e4uij/I1Sd2iu0XpY/BjLUoZOHByKOkeTIJNjD7PLnaUACxK
+         SYwP+n/8fCdG6QgSbpO2oeDOARiH/8IgGJiBGLyu7e/12mp0N9OsvMGnjmiRQrz+nGEq
+         YwaZCis/k21NOxJiOJZnCwPMEONSmzyrD10y9RgAccXkOPp6vStY/a7Le/bRAU+BgpJA
+         n72IhRwzlMI8t6mBJ43sHaJC0sxWYin02zYzXp8ay16jI2XEuPjLzct8xzuR7w/aMDdP
+         Kpzj+40192Mo3NDQs91Oz+Nw4PkMmEXI1AyAzzHE2sy0bhDIeZQfSuVhWsfrNIFsUM7Q
+         Ewzg==
+X-Gm-Message-State: AFqh2kodPXh8s0GtHgWAm3KTDCpgh5czLKAngptGdutWB7IA24NKD/Kj
+        xILFJSgMtlgJDiH9i5xjYL8fsg==
+X-Google-Smtp-Source: AMrXdXvl72h7PzLSw0eEcPahBVERYar0f+JBK3mVwVFNkP/pRqDGUB4lQPHVjvZNDIQivwsK2v65JQ==
+X-Received: by 2002:a05:6512:32cf:b0:4b4:6490:cbf1 with SMTP id f15-20020a05651232cf00b004b46490cbf1mr2677026lfg.15.1671783152848;
+        Fri, 23 Dec 2022 00:12:32 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a22-20020ac25e76000000b004b58d457f2dsm420515lfr.61.2022.12.23.00.12.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Dec 2022 00:12:32 -0800 (PST)
+Message-ID: <9636776f-d7f5-02cf-7290-69dbba6de6ab@linaro.org>
+Date:   Fri, 23 Dec 2022 09:12:31 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|PH7PR12MB7985:EE_
-X-MS-Office365-Filtering-Correlation-Id: f39d7c36-6352-4163-75db-08dae4bd7257
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HvKxiGIxkRbwyLsbDmBcQqmGuMLrwvw+pSJjtsttzOby0J6R6f7MBNqgrzlcqwYaNWHhp+spU1xKWL1AGC7SZUABcpAu6ItouWfiqxv7O/e5EJ4qg+v0NM7vEI7vk4d4OZv5+iJFTu/hW4J2eKZkSB4HBdpmhJD6hBJ8mryTxVmtG/46KqBS9qrZHJdXq9mCOZgVwxMBZbcKhU/GaKqbj0IyXOtYLWijOQBm3fKV2pLij2iCg/0zPE4VLnw0oVulw/EwNZmsvngkJW/j/C2KrVxt3LT2QycjNSiahWGshyDT8noHz1qPQcmYketE6SCeDvCkfm8VY+e0lvDvbEjirdY5BfcJJAOrm/Z+O2D/uXhQDt/f6yRFESUCD4hSexM3StS6H0emI2kmtq5z00fV16UbBjx/+vLH0l8S697MhH3yQYD9sznrBGdOw4swWcZVcdWIw/CZOGL/C22V5H7H536obHRHFRnnAc2l40vAk2m1WBxvzNoKakjdEv4t9R4hDAm8TBWJSMn0VFNCQLIkiW0zgiiluGqLMskKVeoaSmEFjiCRRiZN9Mlss0dMtN97pAC09Lf2LrVyn8x5AH0OMlVNU3uYHYhDgsHRJwDvh1948WYzCvF8ymSBl9qcfZef8dMLuIceXmpr62Cf4lQNaA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199015)(478600001)(6486002)(6506007)(86362001)(186003)(2616005)(6512007)(66476007)(37006003)(66556008)(26005)(316002)(6636002)(66946007)(6666004)(54906003)(83380400001)(36756003)(2906002)(38100700002)(41300700001)(4326008)(8676002)(15650500001)(6862004)(8936002)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Sz01k0PNkSahNa4vvCdUR3RknsYPNMWL10yg3QnWWNMccxHJAf9/VOpjQVJr?=
- =?us-ascii?Q?AHk0KJShAwlxEmj9fbFHvsL8l88WcQGEJa7xSP56HPXkFlQ7qsFI2Xr1LSTt?=
- =?us-ascii?Q?pU4GJbMU71L7E8HGaPcKOyvCWDdEtoCfJ/dGk1j9A0L6ixb1ar/opTTJEFeq?=
- =?us-ascii?Q?V8cP+44sKrfIe2XDnSHD4xm06nSUD5MhwqvioGV0EBgNQEW1gTlNRY5nJLPF?=
- =?us-ascii?Q?mDoERJ93qRS+Fd91ouIqPsprD8RhAT6yydtVt3K7jDRbOkt0JgApnt0uogB7?=
- =?us-ascii?Q?+yvhlf7iZWhsYYVGp54zO2yB/usy+xIRF9qo1cTEoDPwuiYJ1mx/+INmpNpL?=
- =?us-ascii?Q?iE7vAAN3FRSPmpEMSHscNIxPtYjjN3JzeJIWcyE9ZM+OHira6NUAGiG1O93a?=
- =?us-ascii?Q?jhDAQ5spCyiz2o81xZdchDLGt5dQJQxoWpkqQyMmc/eseBhnZNd3xx48x9oQ?=
- =?us-ascii?Q?QIZ0ljOrcpuEJqdXpkS7cUIUhaO1ZU+RvqqxoaD5sI3RfEU4Q4oA/t9/eOla?=
- =?us-ascii?Q?yiJ/erZSwJJpUlx8OcHO0BQuVHKChB3n+G9W+AMrzN7710chCLEBegroHOoX?=
- =?us-ascii?Q?1dKclgq+DA1ZbC+tP87dJJYbvmQB5yEyRbtSMtYMEA+Do7IT/SBNjPYJWixC?=
- =?us-ascii?Q?T4xSyZOHL8yNdQG5zl4vrkXNr8IbWMhu23WwxOlvzfSNKGuGhaeZbzWJavIk?=
- =?us-ascii?Q?yqKlkEnyuEYqL/+VhZVP1uGRNAUA3svIuTkLYiq9SOluUABwB+HKegKKN+Bc?=
- =?us-ascii?Q?cARC7/SpLUWrKj5MR08eF+xHVLAnNzPv5SGtDo3Hb12j+kYPGLXg3eah63fC?=
- =?us-ascii?Q?g0xNio8Q20Q3XiT0fJtZNAZSljBuJx132/TeFm3ZR9/NEd19qaLgyEmNl+Iv?=
- =?us-ascii?Q?1mjBAD2B1GsI5nVQ41AJzxlXJavwe2N6LnVbuf41jSy+ObdB8DJ7qJN/4bUK?=
- =?us-ascii?Q?/1hhWwGxVMYmrzp4p3M8hPiBAM/9SqoYDgqVLPBNylyIbn/q1qiRr37RlrwK?=
- =?us-ascii?Q?U8y9jIpQ6K2dWEtO7s/ngmzDLjYETp4st+pcGPRIZE8cwtgjp0ypNWllPSSa?=
- =?us-ascii?Q?dTzvQ0eauC4aChgvDQNdtbYs6aJkILw/+1GiPGZz+8qys+dgMuDmE4a/4DJa?=
- =?us-ascii?Q?AykJuwAGKu9JsNC/HDfNfzvQvydV3mLm7lGc2t/NiqJ+XJvUaSh5dFvxOHQP?=
- =?us-ascii?Q?IpkntMitYNrsoWMKUtLwiHP1VqeI2cvtXlADB9gnmncDx9+AXgSnezLe6e+e?=
- =?us-ascii?Q?MOfHsPsu6VY6fLH7GJlkhbU5enFhRF4LLTzEpnCMPnH/q7OvpZ6jOzKqtFYi?=
- =?us-ascii?Q?HAmdnq1BZVCy5/I5SfQU3LQYCCEbLYJeQ6PZljPiUOd6h1J7vML601gM4OCV?=
- =?us-ascii?Q?tPUu1kM/TQe+MDEKJ+qgD6sdxQgBhFNSMvDHWL3iRp6lA5bNzw0gWl5iMSt1?=
- =?us-ascii?Q?HD1zOQQGEBap+pJN100VKUc5SOV1SNIGa/M43SahqjdDgeynNOIBCFIoyXwQ?=
- =?us-ascii?Q?JAY/bsDudP/OaFFEo+E4PQJB5bOgl68bZNXAAzM0Foeo6LxBOLLvvSaM78fd?=
- =?us-ascii?Q?/tnrkMwI96/xbMc6mhj2jgxm3alAy2OFMbHs2n13?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f39d7c36-6352-4163-75db-08dae4bd7257
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2022 08:12:34.6038
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7caSZaf0CrD9t8zDa4ot+MtR/YxxFU4SNL1Ba1y3MheP/pTKq/YaLEbDbN40p2Ucr1u1Q5YkSwWegXyI/BtZnw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7985
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/4] dt-bindings: display: Add Himax HX8394 panel
+ controller bindings
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Ondrej Jirman <megi@xff.cz>, Robert Mader <robert.mader@posteo.de>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        =?UTF-8?Q?Kamil_Trzci=c5=84ski?= <ayufan@ayufan.eu>,
+        Martijn Braam <martijn@brixit.nl>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221222223830.2494900-1-javierm@redhat.com>
+ <20221222223830.2494900-3-javierm@redhat.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221222223830.2494900-3-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 02:40:37PM +0800, Yuan, Perry wrote:
-> From: Perry Yuan <Perry.Yuan@amd.com>
-> 
-> add suspend and resume support for the AMD processors by amd_pstate_epp
-> driver instance.
-> 
-> When the CPPC is suspended, EPP driver will set EPP profile to 'power'
-> profile and set max/min perf to lowest perf value.
-> When resume happens, it will restore the MSR registers with
-> previous cached value.
-> 
-> Reviewed-by: Mario Limonciello <Mario.Limonciello@amd.com>
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+On 22/12/2022 23:38, Javier Martinez Canillas wrote:
+> Add device tree bindings for panels based on the Himax HX8394 controller,
+> such as the HannStar HSD060BHW4 720x1440 TFT LCD panel that is connected
+> through a MIPI-DSI video interface.
 
-Acked-by: Huang Rui <ray.huang@amd.com>
+Subject: drop second, redundant "bindings".
 
+> 
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 > ---
->  drivers/cpufreq/amd-pstate.c | 41 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index cb647f55a169..fc12d35bc7bd 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1107,6 +1107,45 @@ static int amd_pstate_epp_verify_policy(struct cpufreq_policy_data *policy)
->  	return 0;
->  }
->  
-> +static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
-> +{
-> +        struct amd_cpudata *cpudata = all_cpu_data[policy->cpu];
-> +        int ret;
-> +
-> +        /* avoid suspending when EPP is not enabled */
-> +        if (cppc_state != AMD_PSTATE_ACTIVE)
-> +                return 0;
-> +
-> +        /* set this flag to avoid setting core offline*/
-> +        cpudata->suspended = true;
-> +
-> +        /* disable CPPC in lowlevel firmware */
-> +        ret = amd_pstate_enable(false);
-> +        if (ret)
-> +                pr_err("failed to suspend, return %d\n", ret);
-> +
-> +        return 0;
-> +}
-> +
-> +static int amd_pstate_epp_resume(struct cpufreq_policy *policy)
-> +{
-> +        struct amd_cpudata *cpudata = all_cpu_data[policy->cpu];
-> +
-> +        if (cpudata->suspended) {
-> +                mutex_lock(&amd_pstate_limits_lock);
-> +
-> +                /* enable amd pstate from suspend state*/
-> +                amd_pstate_epp_reenable(cpudata);
-> +
-> +                mutex_unlock(&amd_pstate_limits_lock);
-> +
-> +                cpudata->suspended = false;
-> +        }
-> +
-> +        return 0;
-> +}
-> +
-> +
->  static struct cpufreq_driver amd_pstate_driver = {
->  	.flags		= CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
->  	.verify		= amd_pstate_verify,
-> @@ -1129,6 +1168,8 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
->  	.update_limits	= amd_pstate_epp_update_limits,
->  	.offline	= amd_pstate_epp_cpu_offline,
->  	.online		= amd_pstate_epp_cpu_online,
-> +	.suspend	= amd_pstate_epp_suspend,
-> +	.resume		= amd_pstate_epp_resume,
->  	.name		= "amd_pstate_epp",
->  	.attr		= amd_pstate_epp_attr,
->  };
-> -- 
-> 2.34.1
+>  .../bindings/display/panel/himax,hx8394.yaml  | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+> new file mode 100644
+> index 000000000000..a8084e95f2fe
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/panel/himax,hx8394.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Himax HX8394 MIPI-DSI LCD panel controller device tree bindings
+
+Drop "device tree bindings"
+
+> +
+> +maintainers:
+> +  - Javier Martinez Canillas <javierm@redhat.com>
+> +
+> +description:
+> +  Device tree bindings for panels based on the Himax HX8394 controller,
+> +  such as the HannStar HSD060BHW4 720x1440 TFT LCD panel connected with
+> +  a MIPI-DSI video interface.
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      # HannStar HSD060BHW4 5.99" 720x1440 TFT LCD panel
+> +      - hannstar,hsd060bhw4
+> +
+> +  port: true
+
+Put the port next to other "true" properties.
+
+> +  reg:
+> +    maxItems: 1
+> +    description: DSI virtual channel
+> +
+
+With three above:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
