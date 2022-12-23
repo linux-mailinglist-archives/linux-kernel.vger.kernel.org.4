@@ -2,137 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C81065506F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE39655079
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 13:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236192AbiLWMgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 07:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S235895AbiLWMjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 07:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236037AbiLWMgP (ORCPT
+        with ESMTP id S235525AbiLWMjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 07:36:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55D8CE14;
-        Fri, 23 Dec 2022 04:36:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 82BD1CE1C02;
-        Fri, 23 Dec 2022 12:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2346C433EF;
-        Fri, 23 Dec 2022 12:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671798969;
-        bh=n7o5FyRp8aqmeQey/jwHnRjsTG0BSFtAdy5HqXln5+w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZkTtw+XehNlk0wWO3Dti5b/jDFAyOMVmly6pmFI1jIk4C5u3KB/gQDMDZxZsTpdn7
-         vEq4efzlnfePoRH5uXAcJ2Hc0clgvZLb8A5acvdfygnkIJxn+9mws2FhLcVtGn67iB
-         8YpKwcztjWr+KSCpWxPARMV/loh/buV11OQWNgJhAwewyf45d6Pnv4z5x+PWz4um1o
-         XOnuzVn6a9MaYLlAQiWoGle3iyaaOseDK4wWcKq8zAginc7tJiQYWOaNEBS1cxXgYZ
-         5p0szPTJJtJj166RayMIVRRbBSHNrWE03Og18MUE0vUuQ1PsQyrsSJNNJ+RXg07d/y
-         yp7Oz8tQhb4wg==
-Date:   Fri, 23 Dec 2022 12:36:04 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: Re: [PATCH v11 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
-Message-ID: <Y6WgtNZfeLMwPhCh@google.com>
-References: <20221116205822.1128275-1-Naresh.Solanki@9elements.com>
- <20221116205822.1128275-3-Naresh.Solanki@9elements.com>
- <Y3YJ2EkYNW+gA+/R@google.com>
- <5d9e41b8-7b2a-d60b-3e92-641cea5a9f4a@9elements.com>
- <Y5HXWk4d5J9VgFBV@google.com>
- <921915e5-6b36-9d2d-ebd7-632403e3086a@9elements.com>
- <Y5mbyICg22UVFASw@google.com>
- <50212c7a-6525-4a91-f9a3-c60024b5e91d@9elements.com>
+        Fri, 23 Dec 2022 07:39:37 -0500
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFA6193DB;
+        Fri, 23 Dec 2022 04:39:34 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VXwwMWV_1671799163;
+Received: from srmbuffer011165236051.sqa.eu95(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VXwwMWV_1671799163)
+          by smtp.aliyun-inc.com;
+          Fri, 23 Dec 2022 20:39:30 +0800
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+To:     John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>
+Subject: [PATCH v4 0/6] Add metrics for neoverse-n2
+Date:   Fri, 23 Dec 2022 20:37:19 +0800
+Message-Id: <1671799045-1108027-1-git-send-email-renyu.zj@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <50212c7a-6525-4a91-f9a3-c60024b5e91d@9elements.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022, Naresh Solanki wrote:
+Changes since v3:
+- Add ipc_rate metric;
+- Drop the PublicDescription;
+- Describe PEutilization metrics in more detail;
+- Link: https://lore.kernel.org/all/1669310088-13482-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-> Hi Lee,
-> 
-> On 14-12-2022 03:17 pm, Lee Jones wrote:
-> > On Wed, 14 Dec 2022, Naresh Solanki wrote:
-> > 
-> > > Hi Lee
-> > > 
-> > > On 08-12-2022 05:53 pm, Lee Jones wrote:
-> > > > On Fri, 18 Nov 2022, Naresh Solanki wrote:
-> > > > 
-> > > > > 
-> > > > > 
-> > > > > On 17-11-2022 03:45 pm, Lee Jones wrote:
-> > > > > > On Wed, 16 Nov 2022, Naresh Solanki wrote:
-> > > > > > 
-> > > > > > > From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> > > > > > > 
-> > > > > > > Implement a regulator driver with IRQ support for fault management.
-> > > > > > > Written against documentation [1] and [2] and tested on real hardware.
-> > > > > > > 
-> > > > > > > Every channel has its own regulator supplies nammed 'vss1-supply' and
-> > > > > > > 'vss2-supply'. The regulator supply is used to determine the output
-> > > > > > > voltage, as the smart switch provides no output regulation.
-> > > > > > > The driver requires the 'shunt-resistor-micro-ohms' property to be
-> > > > > > > present in Device Tree to properly calculate current related
-> > > > > > > values.
-> > > > > > > 
-> > > > > > > Datasheet links:
-> > > > > > > 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
-> > > > > > > 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
-> > > > > > > 
-> > > > > > > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> > > > > > > Co-developed-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > > > > > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > > > > > > Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> > > > > > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> > > > > > > ---
-> > > > > > >     drivers/mfd/Kconfig         |  12 +++++
-> > > > > > >     drivers/mfd/Makefile        |   1 +
-> > > > > > >     drivers/mfd/max597x.c       |  93 +++++++++++++++++++++++++++++++++
-> > > > > > >     include/linux/mfd/max597x.h | 101 ++++++++++++++++++++++++++++++++++++
-> > > > > > >     4 files changed, 207 insertions(+)
-> > > > > > >     create mode 100644 drivers/mfd/max597x.c
-> > > > > > >     create mode 100644 include/linux/mfd/max597x.h
-> > > > > > 
-> > > > > > Ignoring my comments won't make them go away. :)
-> > > > > > 
-> > > > > > Please tell me why you need a whole new driver, instead of adding
-> > > > > > support to simple-mfd-i2c?
-> > > > > > 
-> > > > > I felt current implementation to be simpler, clearer & straight forward.
-> > > > 
-> > > > If you can make it work with simple-mfd-i2c, please do so.
-> > > simple-mfd-i2c doesn't has mechanism to pass device type(max5978 vs
-> > > max5970).
-> > 
-> > `git grep silergy,sy7636a -- drivers/mfd`
-> I did check the driver but there is no mechanism to distinguish between chip
-> variant i.e., 597x-regulator driver should be able to distinguish between
-> max5978 vs max5970 chip type.
+Changes since v2:
+- Correct the furmula of Branch metrics;
+- Add more PE utilization metrics;
+- Add more TLB metrics;
+- Add “ScaleUnit” for some metrics;
+- Add a newline at the end of the file;
+- Link: https://lore.kernel.org/all/1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-How is it doing that presently?
+Changes since v1: 
+- Corrected formula for topdown L1 due to wrong counts for stall_slot and
+  stall_slot_frontend; 
+- Link: https://lore.kernel.org/all/1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-Why can't the Regulator driver read the DT or match on the parent's
-compatible for itself?
 
-Providing a 100 line driver just to figure out a single value that is
-only going to be used in a single driver is a no-go.  Please find a
-better way to solve this.
+This series add six metricgroups for neoverse-n2, among which, the formula of
+topdown L1 is from ARM sbsa7.0 platform design document [0], D37-38.
+
+However, due to the wrong count of stall_slot and stall_slot_frontend on
+neoverse-n2, the real stall_slot and real stall_slot_frontend need to
+subtract cpu_cycles,  so correct the expression of topdown metrics.
+Reference from ARM neoverse-n2 errata notice [1], D117.
+
+Since neoverse-n2 does not yet support topdown L2, metricgroups such as Cache,
+TLB, Branch, InstructionsMix, and PEutilization are added to help further
+analysis of performance bottlenecks. Reference from ARM PMU guide [2][3].
+
+[0] https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
+[1] https://documentation-service.arm.com/static/636a66a64e6cf12278ad89cb?token=
+[2] https://documentation-service.arm.com/static/628f8fa3dfaf015c2b76eae8?token=
+[3] https://documentation-service.arm.com/static/62cfe21e31ea212bb6627393?token=
+
+
+$./perf list
+...
+Metric Groups:
+
+Branch:
+  branch_miss_pred_rate
+       [The rate of branches mis-predited to the overall branches]
+  branch_mpki
+       [The rate of branches mis-predicted per kilo instructions]
+  branch_pki
+       [The rate of branches retired per kilo instructions]
+Cache:
+  l1d_cache_miss_rate
+       [The rate of L1 D-Cache misses to the overall L1 D-Cache]
+  l1d_cache_mpki
+       [The rate of L1 D-Cache misses per kilo instructions]
+...
+
+
+$sudo ./perf stat -M TLB false_sharing 2
+
+ Performance counter stats for 'false_sharing 2':
+
+            31,561      L2D_TLB                          #     18.8 %  l2_tlb_miss_rate      (43.23%)
+             5,944      L2D_TLB_REFILL                                                       (43.23%)
+             2,248      L1I_TLB_REFILL                   #      0.1 %  l1i_tlb_miss_rate     (43.85%)
+         2,203,195      L1I_TLB                                                              (43.85%)
+       328,647,380      L1D_TLB                          #      0.0 %  l1d_tlb_miss_rate     (44.32%)
+            26,347      L1D_TLB_REFILL                                                       (44.32%)
+           747,319      L1I_TLB                          #      0.0 %  itlb_walk_rate        (43.74%)
+               310      ITLB_WALK                                                            (43.74%)
+       839,420,454      INST_RETIRED                     #     0.00 itlb_mpki                (42.77%)
+               212      ITLB_WALK                                                            (42.77%)
+               468      DTLB_WALK                        #      0.0 %  dtlb_walk_rate        (42.28%)
+       265,405,802      L1D_TLB                                                              (42.28%)
+       790,874,367      INST_RETIRED                     #     0.00 dtlb_mpki                (42.33%)
+                23      DTLB_WALK                                                            (42.33%)
+
+       0.515904553 seconds time elapsed
+
+       1.410313000 seconds user
+       0.000000000 seconds sys
+
+
+$sudo ./perf stat -M TopDownL1 false_sharing 2
+
+ Performance counter stats for 'false_sharing 2':
+
+     4,310,905,590      cpu_cycles                       #      0.0 %  bad_speculation
+                                                  #      4.0 %  retiring              (66.87%)
+    25,009,763,735      stall_slot                                                           (66.87%)
+       855,659,327      op_spec                                                              (66.87%)
+       854,335,288      op_retired                                                           (66.87%)
+     4,330,308,058      cpu_cycles                       #     27.1 %  frontend_bound        (66.99%)
+    10,207,186,460      stall_slot_frontend                                                  (66.99%)
+     4,316,583,673      cpu_cycles                       #     69.4 %  backend_bound         (66.65%)
+    14,979,136,808      stall_slot_backend                                                   (66.65%)
+
+       0.572056818 seconds time elapsed
+
+       1.572143000 seconds user
+       0.004010000 seconds sys
+
+
+Jing Zhang (6):
+  perf vendor events arm64: Add topdown L1 metrics for neoverse-n2
+  perf vendor events arm64: Add TLB metrics for neoverse-n2
+  perf vendor events arm64: Add cache metrics for neoverse-n2
+  perf vendor events arm64: Add branch metrics for neoverse-n2
+  perf vendor events arm64: Add PE utilization metrics for neoverse-n2
+  perf vendor events arm64: Add instruction mix metrics for neoverse-n2
+
+ .../arch/arm64/arm/neoverse-n2/metrics.json        | 277 +++++++++++++++++++++
+ 1 file changed, 277 insertions(+)
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
 
 -- 
-Lee Jones [李琼斯]
+1.8.3.1
+
