@@ -2,87 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B317B654B55
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA722654B5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 03:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiLWCx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 21:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
+        id S235872AbiLWCzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 21:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiLWCxy (ORCPT
+        with ESMTP id S229675AbiLWCzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 21:53:54 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3292D21269;
-        Thu, 22 Dec 2022 18:53:50 -0800 (PST)
-From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1671764028;
-        bh=B99KsiMvt1tHeatg1X68sSjUpUUP66/qiYRoMzEGvSg=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=Ed1YIJRuwxAWxH+Jlch5EZIqTvS9nUgRMrj7OWwj17Yrqj1N9Yodo6ryVWSKu83jZ
-         7aQlNa3PlMPBz/IY5i3IF57cQPJBETE6NITo/wp5mcJQPxRuJCCqLWTq6AjJMw9MxE
-         mK2MHr6RW2mUBT0OahxHXpdYkWA9cfqX5yDUbzhQ=
-Date:   Fri, 23 Dec 2022 02:53:35 +0000
-Subject: [PATCH 2/2] HID: i2c-hid: use uniform debugging APIs
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221223-hid-dbg-v1-2-f641e80263eb@weissschuh.net>
-References: <20221223-hid-dbg-v1-0-f641e80263eb@weissschuh.net>
-In-Reply-To: <20221223-hid-dbg-v1-0-f641e80263eb@weissschuh.net>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.11.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1671764024; l=1238;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=B99KsiMvt1tHeatg1X68sSjUpUUP66/qiYRoMzEGvSg=;
- b=mQnHRn/UVse5r6MZaKGtGUi7cQMTj6a4EGaSfTS1kuP4EBYXIefrXWIcTajmWpHcC+sSZZliL1Qg
- 0wGv6Np5DJrSoVBGM7lynSwM8FGNPYdSsriDIY5K0a+L2M+uy8Zu
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 22 Dec 2022 21:55:02 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300812127D;
+        Thu, 22 Dec 2022 18:55:01 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NdWxb5sYmz8QrkZ;
+        Fri, 23 Dec 2022 10:54:59 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl1.zte.com.cn with SMTP id 2BN2ssGA080385;
+        Fri, 23 Dec 2022 10:54:54 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Fri, 23 Dec 2022 10:54:55 +0800 (CST)
+Date:   Fri, 23 Dec 2022 10:54:55 +0800 (CST)
+X-Zmail-TransId: 2b0463a5187f776b084c
+X-Mailer: Zmail v1.0
+Message-ID: <202212231054555312754@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <simon@thekelleys.org.uk>
+Cc:     <kvalo@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
+        <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIG5ldC1uZXh0XSB3aWZpOiBhdG1lbDogdXNlIHN0cnNjcHkoKSB0byBpbnN0ZWFkIG9mIHN0cm5jcHkoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2BN2ssGA080385
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63A51883.000 by FangMail milter!
+X-FangMail-Envelope: 1671764099/4NdWxb5sYmz8QrkZ/63A51883.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63A51883.000/4NdWxb5sYmz8QrkZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only two locations in i2c-hid are using the standard dev_dbg() APIs.
-The rest are all using the custom i2c_hid_dbg(), which in turn uses
-dev_dbg().
+From: Xu Panda <xu.panda@zte.com.cn>
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL-terminated strings.
+
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
 ---
- drivers/hid/i2c-hid/i2c-hid-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/atmel/atmel.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
-index b4ed21f25600..c83c93716782 100644
---- a/drivers/hid/i2c-hid/i2c-hid-core.c
-+++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-@@ -850,7 +850,7 @@ static int i2c_hid_init_irq(struct i2c_client *client)
- 	unsigned long irqflags = 0;
- 	int ret;
- 
--	dev_dbg(&client->dev, "Requesting IRQ: %d\n", client->irq);
-+	i2c_hid_dbg(ihid, "Requesting IRQ: %d\n", client->irq);
- 
- 	if (!irq_get_trigger_type(client->irq))
- 		irqflags = IRQF_TRIGGER_LOW;
-@@ -994,7 +994,7 @@ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
- 	/* Make sure there is something at this address */
- 	ret = i2c_smbus_read_byte(client);
- 	if (ret < 0) {
--		dev_dbg(&client->dev, "nothing at this address: %d\n", ret);
-+		i2c_hid_dbg(ihid, "nothing at this address: %d\n", ret);
- 		ret = -ENXIO;
- 		goto err_powered;
- 	}
+diff --git a/drivers/net/wireless/atmel/atmel.c b/drivers/net/wireless/atmel/atmel.c
+index 7c2d1c588156..dda4027c6a31 100644
+--- a/drivers/net/wireless/atmel/atmel.c
++++ b/drivers/net/wireless/atmel/atmel.c
+@@ -2651,8 +2651,7 @@ static int atmel_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 
+ 		priv->firmware = new_firmware;
+ 		priv->firmware_length = com.len;
+-		strncpy(priv->firmware_id, com.id, 31);
+-		priv->firmware_id[31] = '\0';
++		strscpy(priv->firmware_id, com.id, 32);
+ 		break;
+
+ 	case ATMELRD:
 -- 
-2.39.0
+2.15.2
