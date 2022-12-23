@@ -2,183 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F6A655213
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94562655269
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 16:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236499AbiLWPbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 10:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S236475AbiLWPsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 10:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbiLWPbn (ORCPT
+        with ESMTP id S236205AbiLWPr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 10:31:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C2D63FD;
-        Fri, 23 Dec 2022 07:31:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 313F16150C;
-        Fri, 23 Dec 2022 15:31:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C14B1C433D2;
-        Fri, 23 Dec 2022 15:31:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671809500;
-        bh=Yv990aidhbKkTEJvdoOyJvp9FxAYjDIxP+cgiiuIyv8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XJzBsc1QdbvzKgxYeXFnYdycVxsbK/dRc1bsNlglPTTPcjnbJP8qm8FYKqsOkicXH
-         g/9WQhIGbb3B5nXIv32QFQBi8vFpmvYBzZGqxFVNMVnMIdav4Dm2ff3l3Gk0IFpyYW
-         3aNhs6sOBGBbKSOuMXgYci0zn2r+hq9DAHnp7UzeRWPG37wPuNSMI2Pw6Chu+6pvY1
-         Kfd1Z84qlnVT8oi3jANw+UzuCa0YX6iEEPsVYEqb2rfram5zThKf/IuGK1zwZVyR1J
-         ijqpoxQa6Sc2JBTX2o6Ubou6YSF0zv7F76Q5AyqvIWG3gyGsUm16M3Red/aJ8DflPP
-         P6CxxBg8WenSA==
-Date:   Fri, 23 Dec 2022 15:44:50 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v1 1/2] iio: adc: ti-adc128s052: Switch to use
- spi_get_device_match_data()
-Message-ID: <20221223154450.458771b8@jic23-huawei>
-In-Reply-To: <20221223152242.2ee926eb@jic23-huawei>
-References: <20221214114944.83790-1-andriy.shevchenko@linux.intel.com>
-        <20221223152242.2ee926eb@jic23-huawei>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
+        Fri, 23 Dec 2022 10:47:58 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC08330F40
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 07:47:57 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 38CEE68AA6; Fri, 23 Dec 2022 16:47:54 +0100 (CET)
+Date:   Fri, 23 Dec 2022 16:47:54 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     oe-kbuild@lists.linux.dev, Sagi Grimberg <sagi@grimberg.me>,
+        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: drivers/nvme/host/auth.c:950 nvme_auth_init_ctrl() warn:
+ missing error code? 'ret'
+Message-ID: <20221223154754.GA30339@lst.de>
+References: <202212222333.vrYfUBqM-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212222333.vrYfUBqM-lkp@intel.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Dec 2022 15:22:42 +0000
-Jonathan Cameron <jic23@kernel.org> wrote:
+Based on the code in nvme_auth_generate_key I assume this is intentional,
+but the code looks really confusing.
 
-> On Wed, 14 Dec 2022 13:49:43 +0200
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > The spi_get_device_match_data() helps to get driver data from the
-> > firmware node or SPI ID table. Use it instead of open coding.
-> > 
-> > While at it, switch ID tables to provide an acrual pointers to
-> > the configuration data.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> > 
-> > Requires aea672d054a2 ("spi: Introduce spi_get_device_match_data()
-> > helper") which is part of upstream as of today.  
-> 
-> I rebased to get that (will rebase again on rc1).
-> 
-> Applied to the togreg branch of iio.git and pushed out as testing
-> to keep 0-day busy over my holidays.
-
-I take it back...  Build test failed...
-
-> 
-> Jonathan
-> 
-> > 
-> >  drivers/iio/adc/ti-adc128s052.c | 39 +++++++++++++++------------------
-> >  1 file changed, 18 insertions(+), 21 deletions(-)
-> > 
-> > diff --git a/drivers/iio/adc/ti-adc128s052.c b/drivers/iio/adc/ti-adc128s052.c
-> > index b3d5b9b7255b..9dfc625100b6 100644
-> > --- a/drivers/iio/adc/ti-adc128s052.c
-> > +++ b/drivers/iio/adc/ti-adc128s052.c
-> > @@ -139,16 +139,11 @@ static void adc128_disable_regulator(void *reg)
-> >  
-> >  static int adc128_probe(struct spi_device *spi)
-> >  {
-> > +	const struct adc128_configuration *config;
-> >  	struct iio_dev *indio_dev;
-> > -	unsigned int config;
-> >  	struct adc128 *adc;
-> >  	int ret;
-> >  
-> > -	if (dev_fwnode(&spi->dev))
-> > -		config = (unsigned long) device_get_match_data(&spi->dev);
-> > -	else
-> > -		config = spi_get_device_id(spi)->driver_data;
-> > -
-> >  	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*adc));
-> >  	if (!indio_dev)
-> >  		return -ENOMEM;
-> > @@ -160,6 +155,8 @@ static int adc128_probe(struct spi_device *spi)
-> >  	indio_dev->modes = INDIO_DIRECT_MODE;
-> >  	indio_dev->info = &adc128_info;
-> >  
-> > +	config = spi_get_device_match_data(&spi->dev);
-Takes a struct spi_device*
-
-Also, having opened code up to fix this, we have a spi_get_device_id() left
-just above that needs dealing with.
-
-And a lot of uses of config below that need fixing.
-
-I'm dropping this series until that's all fixed up.
-
-Jonathan
+Hannes, Sagi, what do you think of something like this:
 
 
-
-> > +
-> >  	indio_dev->channels = adc128_config[config].channels;
-> >  	indio_dev->num_channels = adc128_config[config].num_channels;
-> >  
-> > @@ -181,32 +178,32 @@ static int adc128_probe(struct spi_device *spi)
-> >  }
-> >  
-> >  static const struct of_device_id adc128_of_match[] = {
-> > -	{ .compatible = "ti,adc128s052", .data = (void*)0L, },
-> > -	{ .compatible = "ti,adc122s021", .data = (void*)1L, },
-> > -	{ .compatible = "ti,adc122s051", .data = (void*)1L, },
-> > -	{ .compatible = "ti,adc122s101", .data = (void*)1L, },
-> > -	{ .compatible = "ti,adc124s021", .data = (void*)2L, },
-> > -	{ .compatible = "ti,adc124s051", .data = (void*)2L, },
-> > -	{ .compatible = "ti,adc124s101", .data = (void*)2L, },
-> > +	{ .compatible = "ti,adc128s052", .data = &adc128_config[0] },
-> > +	{ .compatible = "ti,adc122s021", .data = &adc128_config[1] },
-> > +	{ .compatible = "ti,adc122s051", .data = &adc128_config[1] },
-> > +	{ .compatible = "ti,adc122s101", .data = &adc128_config[1] },
-> > +	{ .compatible = "ti,adc124s021", .data = &adc128_config[2] },
-> > +	{ .compatible = "ti,adc124s051", .data = &adc128_config[2] },
-> > +	{ .compatible = "ti,adc124s101", .data = &adc128_config[2] },
-> >  	{ /* sentinel */ },
-> >  };
-> >  MODULE_DEVICE_TABLE(of, adc128_of_match);
-> >  
-> >  static const struct spi_device_id adc128_id[] = {
-> > -	{ "adc128s052", 0 },	/* index into adc128_config */
-> > -	{ "adc122s021",	1 },
-> > -	{ "adc122s051",	1 },
-> > -	{ "adc122s101",	1 },
-> > -	{ "adc124s021", 2 },
-> > -	{ "adc124s051", 2 },
-> > -	{ "adc124s101", 2 },
-> > +	{ "adc128s052", (kernel_ulong_t)&adc128_config[0] },
-> > +	{ "adc122s021",	(kernel_ulong_t)&adc128_config[1] },
-> > +	{ "adc122s051",	(kernel_ulong_t)&adc128_config[1] },
-> > +	{ "adc122s101",	(kernel_ulong_t)&adc128_config[1] },
-> > +	{ "adc124s021", (kernel_ulong_t)&adc128_config[2] },
-> > +	{ "adc124s051", (kernel_ulong_t)&adc128_config[2] },
-> > +	{ "adc124s101", (kernel_ulong_t)&adc128_config[2] },
-> >  	{ }
-> >  };
-> >  MODULE_DEVICE_TABLE(spi, adc128_id);
-> >  
-> >  #ifdef CONFIG_ACPI
-> >  static const struct acpi_device_id adc128_acpi_match[] = {
-> > -	{ "AANT1280", 2 }, /* ADC124S021 compatible ACPI ID */
-> > +	{ "AANT1280", (kernel_ulong_t)&adc128_config[2] },
-> >  	{ }
-> >  };
-> >  MODULE_DEVICE_TABLE(acpi, adc128_acpi_match);  
-> 
+diff --git a/drivers/nvme/common/auth.c b/drivers/nvme/common/auth.c
+index d90e4f0c08b7b9..a07eb4cd9ce173 100644
+--- a/drivers/nvme/common/auth.c
++++ b/drivers/nvme/common/auth.c
+@@ -455,28 +455,18 @@ int nvme_auth_gen_shared_secret(struct crypto_kpp *dh_tfm,
+ }
+ EXPORT_SYMBOL_GPL(nvme_auth_gen_shared_secret);
+ 
+-int nvme_auth_generate_key(u8 *secret, struct nvme_dhchap_key **ret_key)
++struct nvme_dhchap_key *nvme_auth_generate_key(u8 *secret)
+ {
+-	struct nvme_dhchap_key *key;
+ 	u8 key_hash;
+ 
+-	if (!secret) {
+-		*ret_key = NULL;
+-		return 0;
+-	}
++	if (!secret)
++		return NULL;
+ 
+ 	if (sscanf(secret, "DHHC-1:%hhd:%*s:", &key_hash) != 1)
+-		return -EINVAL;
++		return ERR_PTR(-EINVAL);
+ 
+ 	/* Pass in the secret without the 'DHHC-1:XX:' prefix */
+-	key = nvme_auth_extract_key(secret + 10, key_hash);
+-	if (IS_ERR(key)) {
+-		*ret_key = NULL;
+-		return PTR_ERR(key);
+-	}
+-
+-	*ret_key = key;
+-	return 0;
++	return nvme_auth_extract_key(secret + 10, key_hash);
+ }
+ EXPORT_SYMBOL_GPL(nvme_auth_generate_key);
+ 
+diff --git a/drivers/nvme/host/auth.c b/drivers/nvme/host/auth.c
+index bb0abbe4491cdc..c808652966a94f 100644
+--- a/drivers/nvme/host/auth.c
++++ b/drivers/nvme/host/auth.c
+@@ -943,16 +943,19 @@ int nvme_auth_init_ctrl(struct nvme_ctrl *ctrl)
+ 	INIT_WORK(&ctrl->dhchap_auth_work, nvme_ctrl_auth_work);
+ 	if (!ctrl->opts)
+ 		return 0;
+-	ret = nvme_auth_generate_key(ctrl->opts->dhchap_secret,
+-			&ctrl->host_key);
+-	if (ret)
+-		return ret;
+-	ret = nvme_auth_generate_key(ctrl->opts->dhchap_ctrl_secret,
+-			&ctrl->ctrl_key);
+-	if (ret)
++
++	ctrl->host_key = nvme_auth_generate_key(ctrl->opts->dhchap_secret);
++	if (IS_ERR(ctrl->host_key)) {
++		ret = PTR_ERR(ctrl->host_key);
++		goto out;
++	}
++	ctrl->ctrl_key = nvme_auth_generate_key(ctrl->opts->dhchap_ctrl_secret);
++	if (IS_ERR(ctrl->ctrl_key)) {
++		ret = PTR_ERR(ctrl->ctrl_key);
+ 		goto err_free_dhchap_secret;
++	}
+ 
+-	if (!ctrl->opts->dhchap_secret && !ctrl->opts->dhchap_ctrl_secret)
++	if (!ctrl->host_key && !ctrl->ctrl_key)
+ 		return ret;
+ 
+ 	ctrl->dhchap_ctxs = kvcalloc(ctrl_max_dhchaps(ctrl),
+@@ -972,9 +975,10 @@ int nvme_auth_init_ctrl(struct nvme_ctrl *ctrl)
+ 	return 0;
+ err_free_dhchap_ctrl_secret:
+ 	nvme_auth_free_key(ctrl->ctrl_key);
+-	ctrl->ctrl_key = NULL;
+ err_free_dhchap_secret:
++	ctrl->ctrl_key = NULL;
+ 	nvme_auth_free_key(ctrl->host_key);
++out:
+ 	ctrl->host_key = NULL;
+ 	return ret;
+ }
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index f72fc3bd07c348..6245f1c87c5ba8 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -3751,11 +3751,10 @@ static ssize_t nvme_ctrl_dhchap_secret_store(struct device *dev,
+ 	nvme_auth_stop(ctrl);
+ 	if (strcmp(dhchap_secret, opts->dhchap_secret)) {
+ 		struct nvme_dhchap_key *key, *host_key;
+-		int ret;
+ 
+-		ret = nvme_auth_generate_key(dhchap_secret, &key);
+-		if (ret)
+-			return ret;
++		key = nvme_auth_generate_key(dhchap_secret);
++		if (IS_ERR(key))
++			return PTR_ERR(key);
+ 		kfree(opts->dhchap_secret);
+ 		opts->dhchap_secret = dhchap_secret;
+ 		host_key = ctrl->host_key;
+@@ -3805,11 +3804,10 @@ static ssize_t nvme_ctrl_dhchap_ctrl_secret_store(struct device *dev,
+ 	nvme_auth_stop(ctrl);
+ 	if (strcmp(dhchap_secret, opts->dhchap_ctrl_secret)) {
+ 		struct nvme_dhchap_key *key, *ctrl_key;
+-		int ret;
+ 
+-		ret = nvme_auth_generate_key(dhchap_secret, &key);
+-		if (ret)
+-			return ret;
++		key = nvme_auth_generate_key(dhchap_secret);
++		if (IS_ERR(key))
++			return PTR_ERR(key);
+ 		kfree(opts->dhchap_ctrl_secret);
+ 		opts->dhchap_ctrl_secret = dhchap_secret;
+ 		ctrl_key = ctrl->ctrl_key;
+diff --git a/include/linux/nvme-auth.h b/include/linux/nvme-auth.h
+index dcb8030062ddaf..df82d7950ee204 100644
+--- a/include/linux/nvme-auth.h
++++ b/include/linux/nvme-auth.h
+@@ -28,7 +28,7 @@ struct nvme_dhchap_key *nvme_auth_extract_key(unsigned char *secret,
+ 					      u8 key_hash);
+ void nvme_auth_free_key(struct nvme_dhchap_key *key);
+ u8 *nvme_auth_transform_key(struct nvme_dhchap_key *key, char *nqn);
+-int nvme_auth_generate_key(u8 *secret, struct nvme_dhchap_key **ret_key);
++struct nvme_dhchap_key *nvme_auth_generate_key(u8 *secret);
+ int nvme_auth_augmented_challenge(u8 hmac_id, u8 *skey, size_t skey_len,
+ 				  u8 *challenge, u8 *aug, size_t hlen);
+ int nvme_auth_gen_privkey(struct crypto_kpp *dh_tfm, u8 dh_gid);
 
