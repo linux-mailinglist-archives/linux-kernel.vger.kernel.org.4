@@ -2,154 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B9E65532F
+	by mail.lfdr.de (Postfix) with ESMTP id A32B3655330
 	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 18:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiLWRSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 12:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S231699AbiLWRTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 12:19:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbiLWRSg (ORCPT
+        with ESMTP id S230175AbiLWRT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 12:18:36 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34B61572D
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 09:18:34 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id g13so7807703lfv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 09:18:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JDIg5CY2JaKsFGB2lcAV6dA1ibP6/hePKm8xnPYIyyI=;
-        b=yJYm1pAib+wICXrxYFK2jPIHwFRLEozpLEIbNnVCzvDCKe57uaavGiw8OzXMIkiSmK
-         MtyeKQ/SbZ4dyFTXrbaaU9HIwVOVsq6OJO++fDkt7DGCKA2f3z9LH2d/47PWDBF+R+cQ
-         jdprSYLmZ5CtNgP5aRuyDhRb8NzAPxz9DVNo0n9SI7FHebWfZDApLN9spi7YvEhnY8qw
-         2qO9PevYIMP7+qozKR7/eazXOGQRlqpviBxRFzQOf/A0tUrNWCAp0mTN/n/W8Lajdd4D
-         9JlBthW3JAKGjligd5tCxEonP4T/NdKOjZkzBpvz4zIs3Il0j9/fpUm/WPtHY3N0kGEx
-         xXnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JDIg5CY2JaKsFGB2lcAV6dA1ibP6/hePKm8xnPYIyyI=;
-        b=g9inu0g1lryuHzf35hznP0CbLYlbpA6qKOedjnu3cRVVmfXqk727xko423BFwDx+EO
-         E6o4cGCq4x/Suv1iNnRG/EiwMlKZ5+qrs+hd6z2cD+VgPpeMd/B0ezwIChBorHEqhG24
-         IQ/ZlefhsZzNcpr/aG2hpAFmQVQkfiLa2vFi5doqG+Op33MD8AuZ4cqGK0uKv7/BcJDA
-         XrQLDaFy17AY5kPptbb4JAtrsWFb6CpB/XIij4aMwvrdrF6/n7OqJAVXraD4o/Ub8I+u
-         mXgyEBuiODAOCIorqGMz7R98rKhYyA6sq4guvurj3LJUXQL7JsUUl511tH03xizQyCfl
-         Q2Kg==
-X-Gm-Message-State: AFqh2krLL+IArfBoswQTg1BkjUoX1v6a0RGqbFdZsPUpv6l0EaeE/mz0
-        fhsu1U0ssKdG0frbWPbxhiRZaA==
-X-Google-Smtp-Source: AMrXdXvvsu3U+CTeN5RlwXk8JTCbHz7bldvaiykJXtPi5Io9oYhMPsqrmNZh1jnU3+4uazLFhiVYhQ==
-X-Received: by 2002:ac2:46c3:0:b0:4b5:39fa:6de with SMTP id p3-20020ac246c3000000b004b539fa06demr3156696lfo.41.1671815913128;
-        Fri, 23 Dec 2022 09:18:33 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id c26-20020ac2531a000000b004a6f66eed7fsm591039lfh.165.2022.12.23.09.18.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 09:18:32 -0800 (PST)
-Message-ID: <e756516a-a5e2-a6ac-fd7f-71726766fa81@linaro.org>
-Date:   Fri, 23 Dec 2022 19:18:32 +0200
+        Fri, 23 Dec 2022 12:19:28 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1DD18E1E;
+        Fri, 23 Dec 2022 09:19:27 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 486351C09F5; Fri, 23 Dec 2022 18:19:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1671815965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+0UrgH0jqhMRGfRbM1wFe/1v9kgVhQ5r3uRgXLy6wIE=;
+        b=Xfr5fbK9bQ1mAK91/UIOhuteRcvSftS7VVmyX4yfGwGkoaC4faxx23iMnDS1Dw2Bz0RMmO
+        x4Za0PQ8y89VP9N1jKpergXHnAzxg9IqlWF0oedpmkWEuTTEf+tQWdW+mbvNWWrGIBBE86
+        4dUg/miaVgJSWXybeOGMGuuryN8l8vY=
+Date:   Fri, 23 Dec 2022 18:19:24 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-leds@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 2/3] dt-bindings: leds: add worldsemi,ws2812b
+Message-ID: <Y6XjHNCLXY9s1IOF@duo.ucw.cz>
+References: <20221212045558.69602-1-gch981213@gmail.com>
+ <20221212045558.69602-3-gch981213@gmail.com>
+ <c592dd31-5e9a-c2a2-1c70-46b7cffa9c5d@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0
- and PCIe1
-Content-Language: en-GB
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     bhelgaas@google.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221222133123.50676-1-manivannan.sadhasivam@linaro.org>
- <20221222133123.50676-4-manivannan.sadhasivam@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221222133123.50676-4-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="SCGWCqnR6E4g+gaj"
+Content-Disposition: inline
+In-Reply-To: <c592dd31-5e9a-c2a2-1c70-46b7cffa9c5d@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/12/2022 15:31, Manivannan Sadhasivam wrote:
-> Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
-> endpoint devices using GIC-ITS MSI controller. Add support for it.
-> 
-> Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
-> msi-map-mask of 0xff00, all the 32 devices under these two busses can
-> share the same Device ID.
-> 
-> The GIC-ITS MSI implementation provides an advantage over internal MSI
-> implementation using Locality-specific Peripheral Interrupts (LPI) that
-> would allow MSIs to be targeted for each CPU core.
-> 
-> It should be noted that the MSIs for BDF (1:0.0) only works with Device
-> ID of 0x5980 and 0x5a00. Hence, the IDs are swapped.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8450.dtsi | 20 ++++++++++++++------
->   1 file changed, 14 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 570475040d95..c4dd5838fac6 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -1733,9 +1733,13 @@ pcie0: pci@1c00000 {
->   			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
->   				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
->   
-> -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
-> -			interrupt-names = "msi";
-> -			#interrupt-cells = <1>;
-> +			/*
-> +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5980.
-> +			 * Hence, the IDs are swapped.
-> +			 */
-> +			msi-map = <0x0 &gic_its 0x5981 0x1>,
-> +				  <0x100 &gic_its 0x5980 0x1>;
 
-This definitely doesn't match what has been used in the downstream.
+--SCGWCqnR6E4g+gaj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Also if I understand correctly this change would prevent us from using 
-multiple MSI interrupts for the connected device, as the last value of 
-the 0x100 mapping is 0x1, while the vendor kernel uses <0x100 &its 
-0x5981 0x20>.
+Hi!
 
-Do you know by chance, why do we differ from the vendor dtsi?
+> > Add dt binding schema for WorldSemi WS2812B driven using SPI
+> > bus.
+> >=20
+> > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> > ---
+> > Changes since v1:
+> > remove linux driver reference from description
+> > remove some obvious descriptions
+> > fix unit address regex in multi-led property
+> > drop various minItems
+> > add maxItems =3D 1 to reg
+> > fix node names and property orders in binding example
+> > drop -spi from compatible string
+> > add default-brightness
+> >=20
+> > Change since v2:
+> > drop "this patch" from commit message
+> > rename leds to led-controller
+> > drop default-brightness and default-intensity
+> >=20
+> > Change since v3:
+> > reword commit title
+> >=20
+> >  .../bindings/leds/worldsemi,ws2812b.yaml      | 116 ++++++++++++++++++
+> >  1 file changed, 116 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/leds/worldsemi,ws=
+2812b.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.y=
+aml b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+> > new file mode 100644
+> > index 000000000000..548c05ac3d31
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+> > @@ -0,0 +1,116 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/leds/worldsemi,ws2812b.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: WS2812B LEDs driven using SPI
+> > +
+> > +maintainers:
+> > +  - Chuanhong Guo <gch981213@gmail.com>
+> > +
+> > +description: |
+> > +  WorldSemi WS2812B is a individually addressable LED chip that can be=
+ chained
+> > +  together and controlled individually using a single wire.
+> > +  This binding describes a chain of WS2812B LEDs connected to the SPI =
+MOSI pin.
+> > +  Typical setups includes connecting the data pin of the LED chain to =
+MOSI as
+> > +  the only device or using CS and MOSI with a tri-state voltage-level =
+shifter
+> > +  for the data pin.
+> > +  The SPI frequency needs to be 2.105MHz~2.85MHz for the timing to be =
+correct
+> > +  and the controller needs to send all the bytes continuously.
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: worldsemi,ws2812b
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  spi-max-frequency:
+> > +    minimum: 2105000
+> > +    maximum: 2850000
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > +patternProperties:
+> > +  "^multi-led@[0-9a-f]+$":
+> > +    type: object
+> > +    $ref: leds-class-multicolor.yaml#
+> > +    unevaluatedProperties: false
+> > +
+> > +    properties:
+> > +      color-index:
+> > +        description: |
+> > +          A 3-item array specifying color of each components in this L=
+ED. It
+> > +          should be one of the LED_COLOR_ID_* prefixed definitions fro=
+m the
+> > +          header include/dt-bindings/leds/common.h. Defaults to
+> > +          <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>
+> > +          if unspecified.
+> > +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +        maxItems: 3
+>=20
+> In general I am fine with it, although there is still question for
+> adding more multi-color defines in binding headers to replace this
+> property - GRB/RBG/GBR and even more for RGBW.
+>=20
+> Pavel, Lee, any thoughts from your side?
 
-> +			msi-map-mask = <0xff00>;
->   			interrupt-map-mask = <0 0 0 0x7>;
->   			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
->   					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-> @@ -1842,9 +1846,13 @@ pcie1: pci@1c08000 {
->   			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
->   				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
->   
-> -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
-> -			interrupt-names = "msi";
-> -			#interrupt-cells = <1>;
-> +			/*
-> +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5a00.
-> +			 * Hence, the IDs are swapped.
-> +			 */
-> +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
-> +				  <0x100 &gic_its 0x5a00 0x1>;
-> +			msi-map-mask = <0xff00>;
->   			interrupt-map-mask = <0 0 0 0x7>;
->   			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
->   					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+This really needs to mention the name this hardware is known as -- I
+believe it is NeoPixel.
 
--- 
-With best wishes
-Dmitry
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
+--SCGWCqnR6E4g+gaj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY6XjHAAKCRAw5/Bqldv6
+8gn+AJ0b+738lBlAYPSkvgIHfBMIWAWRCQCeOxXAYeDwNQi2NW+1vd6cfdGQO3E=
+=zmmk
+-----END PGP SIGNATURE-----
+
+--SCGWCqnR6E4g+gaj--
