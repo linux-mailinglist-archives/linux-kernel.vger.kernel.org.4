@@ -2,111 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6CF6550F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4956550FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 14:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiLWNXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 08:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S236243AbiLWNZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 08:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236394AbiLWNWg (ORCPT
+        with ESMTP id S236205AbiLWNZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 08:22:36 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF33140B1
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:22:34 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id g13so7083060lfv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:22:34 -0800 (PST)
+        Fri, 23 Dec 2022 08:25:53 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E31313CFC
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:25:52 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id o31-20020a17090a0a2200b00223fedffb30so4971335pjo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 05:25:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=soK7jySXnMg+Xdlxcdmo/Eg51l8gaiSZN7O3V9Ct6Xk=;
-        b=IqNmHhVsCfTAgOHaRBvTZKBF4razBaSskjsQcg+rG9urIs/WEtBAflh+0equkNZiKA
-         sabxiqptQdmjUy6ImZVedbL8du+0tz9TOCXlNr6tKAZmVouYORBJ2mxZauoySO36DJjx
-         kdFmkYmSXbJhG4VtY7BlqL/8W9QYq8PFVwLJ+aOBJd250mYW8CRJwyTGXvX+GyNA2f8a
-         4SDDutWWOPyWr/YpP+T8uHTG+UB59ND7SzTHRFBf0fyvt/f7f/CGjWCYuHZbsssAg+sh
-         Uh11JkU1lwZAuZnsnS5W9gSBOyt6onsIkML4HOEJF/qLaaOJrn1Ud61DXz7Je1QToo+H
-         HpdA==
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jiT9KYDx3RWtZOPtEp+4OpN+KsQgOdSJKLeTP2zJWcs=;
+        b=GkBa160SclbJh4m4+Uvp0lPozlPivWtIJN0Ejk04u5nAj/brwEzVRt0PVJCx0DFy4B
+         cjQlwmXKnSoFJjWvq4NQZHUOL4jD+fcp680/1S2mx8RmC1R5F1noBoBbtbpPxxrjnZTF
+         F2PC6MW6KblVmd3dTCn3dNBnKhSuNmHakt+b82Jm+DmgUN4Yxagsoxo9Lobf/19Bk8hS
+         bT9AYYB5MqfoimYFLS/gGwVBm5h7j2ZTdoDhiTFtV4nRbrt1fCaq6Vtwr6Z7Cn/bwNsT
+         2FdjeQo2h2vSxMbZc+wRSINIfsDs5tDOOGGdH08Qqk4MdDc9UJNmCHnQOidfb7RbHMZT
+         atGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=soK7jySXnMg+Xdlxcdmo/Eg51l8gaiSZN7O3V9Ct6Xk=;
-        b=W2eMnTwvVUNuSXx9HSFQRcbQFpmoOYy72E8pQ33Ev+pi1jp2wZLcRRpDkXplTjV5Uh
-         6NIg3eX6RxmPo46Je8fSx6Yp9HpSFQchbi1WIL5wJ7FrEK7a2TC6XhTyejHZWaaWLp1a
-         OdoxVBJKKG8/yQt+nJhBI3clBeXie9S0sm5lPYI698y5NOzdVzfA+IKAp5FBTk5Tx+Ft
-         ATVJ6EPTfCuOwmzM380V0M9MoKm6HAF0qc1z3hN6kwG6XSV4ELDR/6bpTahhxeT5fl7k
-         5bIjpOEnQejESEkkQ0G2IoGZLyCpwsZ5gqNmxQ91xT67EZHEhFxSyPO+djzhXCahCY00
-         TNtw==
-X-Gm-Message-State: AFqh2konFqCWsgxoZCP22MB9hf06waN5M4CV33BSt19l6ccL1J8FXNZW
-        Pa1543FpaOatOpqjKP6tKbRwEQ==
-X-Google-Smtp-Source: AMrXdXvv9z4x3R54XG2AyKYluKMMU/SALua3H4ram8M1439Lhk6UnS8nP/KK9czWrq4nsEKvfzHxvg==
-X-Received: by 2002:a05:6512:2216:b0:4b5:959f:6498 with SMTP id h22-20020a056512221600b004b5959f6498mr3354518lfu.62.1671801753301;
-        Fri, 23 Dec 2022 05:22:33 -0800 (PST)
-Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id du13-20020a056512298d00b00492b494c4e8sm521957lfb.298.2022.12.23.05.22.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 05:22:32 -0800 (PST)
-Message-ID: <dfd52b43-216d-29e8-e6ba-e2257d972eeb@linaro.org>
-Date:   Fri, 23 Dec 2022 14:22:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] arm64: dts: qcom: sm8450: correct Soundwire wakeup
- interrupt name
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jiT9KYDx3RWtZOPtEp+4OpN+KsQgOdSJKLeTP2zJWcs=;
+        b=hEWB7fV7B3WAVtDuFOjb8eldvERYm4PPpXGAlA1GWNg5mSLPObhNONuy2KiBlfY46j
+         JO5mJXRq3al7yMNJfExMo9tvjQzEBbUdzTcv+0CIGoMGI8EWjmhfBbREK8fHl6A/Nrfg
+         3V7r92KJYHq9n2x0M/aIT/YSJimL63yLR46DEHwCBSHQDDN9vqYchQD+NKoKqZAnbdxr
+         MC6ZPPzwOraYPrpwVFEPivCaOIV34ZS3CDWUg9jnT+eZWfA035LONHvVuLuKUA05Omfk
+         Vriq7Sd31CugbNr3wzk4Fe/UHygILhz8ls+vhlxhylw4ABnkeCB6+JkWrTWqyu+n2w2r
+         /XZQ==
+X-Gm-Message-State: AFqh2kqAenlaFnR/LJclcwhS0cgEcc8kqgeIlaHmtcQxHEJ1i4RBPc+g
+        8ShO1AfM7XK7slS/VRHOmM6Owayd7HA8a054+n4=
+X-Google-Smtp-Source: AMrXdXti9h/NrRYG5tbJrKi6OGMy8J3N5HQuTT5LyCzyDyi8oa6oBJO6uPoipFdscTyMJ6g5+ihMgA==
+X-Received: by 2002:a05:6a20:bb10:b0:ad:2c7c:9510 with SMTP id fc16-20020a056a20bb1000b000ad2c7c9510mr10966527pzb.19.1671801952092;
+        Fri, 23 Dec 2022 05:25:52 -0800 (PST)
+Received: from archl-hc1b.. ([45.112.3.26])
+        by smtp.gmail.com with ESMTPSA id m3-20020a635803000000b0047681fa88d1sm1308587pgb.53.2022.12.23.05.25.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 05:25:51 -0800 (PST)
+From:   Anand Moon <anand@edgeble.ai>
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Anand Moon <anand@edgeble.ai>, Jagan Teki <jagan@edgeble.ai>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221223132121.81130-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221223132121.81130-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCHv1 linux-next 2/4] ARM: dts: rockchip: rv1126: Add rgmiim1 pin-control
+Date:   Fri, 23 Dec 2022 13:22:31 +0000
+Message-Id: <20221223132235.16149-2-anand@edgeble.ai>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221223132235.16149-1-anand@edgeble.ai>
+References: <20221223132235.16149-1-anand@edgeble.ai>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add ethernet pin-control for rv1126 SoC.
 
+Signed-off-by: Anand Moon <anand@edgeble.ai>
+Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+---
+ arch/arm/boot/dts/rv1126-pinctrl.dtsi | 42 +++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-On 23.12.2022 14:21, Krzysztof Kozlowski wrote:
-> The bindings expect second Soundwire interrupt to be "wakeup" (Linux
-> driver takes by index):
-> 
->   sm8450-hdk.dtb: soundwire-controller@33b0000: interrupt-names:1: 'wakeup' was expected
-> 
-> Fixes: 14341e76dbc7 ("arm64: dts: qcom: sm8450: add Soundwire and LPASS")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+diff --git a/arch/arm/boot/dts/rv1126-pinctrl.dtsi b/arch/arm/boot/dts/rv1126-pinctrl.dtsi
+index 4bc419cc1210..b77021772781 100644
+--- a/arch/arm/boot/dts/rv1126-pinctrl.dtsi
++++ b/arch/arm/boot/dts/rv1126-pinctrl.dtsi
+@@ -11,6 +11,14 @@
+  * by adding changes at end of this file.
+  */
+ &pinctrl {
++	clk_out_ethernet {
++		/omit-if-no-ref/
++		clk_out_ethernetm1_pins: clk-out-ethernetm1-pins {
++			rockchip,pins =
++				/* clk_out_ethernet_m1 */
++				<2 RK_PC5 2 &pcfg_pull_none>;
++		};
++	};
+ 	emmc {
+ 		/omit-if-no-ref/
+ 		emmc_rstnout: emmc-rstnout {
+@@ -61,6 +69,40 @@ i2c0_xfer: i2c0-xfer {
+ 				<0 RK_PB5 1 &pcfg_pull_none_drv_level_0_smt>;
+ 		};
+ 	};
++	rgmii {
++		/omit-if-no-ref/
++		rgmiim1_pins: rgmiim1-pins {
++			rockchip,pins =
++				/* rgmii_mdc_m1 */
++				<2 RK_PC2 2 &pcfg_pull_none>,
++				/* rgmii_mdio_m1 */
++				<2 RK_PC1 2 &pcfg_pull_none>,
++				/* rgmii_rxclk_m1 */
++				<2 RK_PD3 2 &pcfg_pull_none>,
++				/* rgmii_rxd0_m1 */
++				<2 RK_PB5 2 &pcfg_pull_none>,
++				/* rgmii_rxd1_m1 */
++				<2 RK_PB6 2 &pcfg_pull_none>,
++				/* rgmii_rxd2_m1 */
++				<2 RK_PC7 2 &pcfg_pull_none>,
++				/* rgmii_rxd3_m1 */
++				<2 RK_PD0 2 &pcfg_pull_none>,
++				/* rgmii_rxdv_m1 */
++				<2 RK_PB4 2 &pcfg_pull_none>,
++				/* rgmii_txclk_m1 */
++				<2 RK_PD2 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txd0_m1 */
++				<2 RK_PC3 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txd1_m1 */
++				<2 RK_PC4 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txd2_m1 */
++				<2 RK_PD1 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txd3_m1 */
++				<2 RK_PA4 2 &pcfg_pull_none_drv_level_3>,
++				/* rgmii_txen_m1 */
++				<2 RK_PC6 2 &pcfg_pull_none_drv_level_3>;
++		};
++	};
+ 	sdmmc0 {
+ 		/omit-if-no-ref/
+ 		sdmmc0_bus4: sdmmc0-bus4 {
+-- 
+2.39.0
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 570475040d95..eb3318516243 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -2263,7 +2263,7 @@ swr2: soundwire-controller@33b0000 {
->  			reg = <0 0x33b0000 0 0x2000>;
->  			interrupts-extended = <&intc GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
->  					      <&intc GIC_SPI 520 IRQ_TYPE_LEVEL_HIGH>;
-> -			interrupt-names = "core", "wake";
-> +			interrupt-names = "core", "wakeup";
->  
->  			clocks = <&vamacro>;
->  			clock-names = "iface";
