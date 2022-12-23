@@ -2,94 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C06654DCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 09:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0318654DD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 09:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235914AbiLWIqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 03:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S235899AbiLWIrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 03:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbiLWIqI (ORCPT
+        with ESMTP id S229627AbiLWIrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 03:46:08 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB0E36C4A
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 00:46:07 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id n1so4352488ljg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 00:46:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QE5x/YHXDWRPjvo3INvzf9eW0AqWG4KOCYcWWHFNs5c=;
-        b=HfK2iqtUqLynVYeF98KolAv3uTHiyOMJJ/YXBu7eoF2bPaMHrs7xsw1qOVHtEBx34C
-         oiTiNTQ6Ri11ubFhqch4tNxKg7yd1/PvT1iEeoeGrxVLCrG824uRZyhJhDdjORtqIk8G
-         9wadQ2uVm7aaBvpkMhRvpxlyoHK+pn3GDc6EwjP7AQhrlnDsp0Oh+v0WxvoSbLwHEAZG
-         D3tAjhWlXsV6HA7posZa5shSGNb1js/ByrlgPeqTlbzAO36fxqPFqHItc8ivbnhkchgA
-         n7zI5/5h9B8NXM0MhizgVYSYxOx4ai/VAetVzoE2Ic5g6cq+xdFqSTcVlkLJ2QsxeZJG
-         1Gdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QE5x/YHXDWRPjvo3INvzf9eW0AqWG4KOCYcWWHFNs5c=;
-        b=5Ah7owCfmMXMiiyUXHHA5bLTf0gLaLdi5CNDh4ttD9A8qTRdVDryUQt58O3qiIA08V
-         yJT7D+zH3RrGXt57q7HcNCrhNeP1r/BkRLBEaemFfgIa6Xl8JG/gRp5XsAos0k+n96bu
-         418EvOyM3IfsSKST05tcyRE4xFQ/3sNvxLPl/e8RFejA0YqWpn53M2O0J5774HfAc1P5
-         VHqQY25NiU2XbFnWYiRBCgO1ixj9DRxpjn3mv/KuEFURUzT7YkeD1Vmh+hdvASU+Xdtd
-         U3687R2FNy/k/qGvbg45AYfu0IoPzg7jOeFoG+D8DOQLehfDjTD2mbkKtfZL12g7Qg69
-         bTIg==
-X-Gm-Message-State: AFqh2kpGvcA5Jb3n6MZUBGeuCaUUur/ZjT7GD6q0fJQyQaYYWxhf6eMd
-        Oxd9Tstj0uRLZCfUrzo4kwTPBZ5XLOYEvrru
-X-Google-Smtp-Source: AMrXdXs2CRlbCqLBwpb0LzmClNpcjd5TMplYWOYDQVh9ajQ5CIofJoWeX6+m3SQlTXSznTBsgJ4doQ==
-X-Received: by 2002:a05:651c:12c1:b0:277:42bd:dfe6 with SMTP id 1-20020a05651c12c100b0027742bddfe6mr2429045lje.3.1671785165984;
-        Fri, 23 Dec 2022 00:46:05 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f4-20020a05651c02c400b0026c42f67eb8sm322977ljo.7.2022.12.23.00.46.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 00:46:05 -0800 (PST)
-Message-ID: <1f5ccf57-2e20-691c-eee9-3f800a93c3a3@linaro.org>
-Date:   Fri, 23 Dec 2022 09:46:04 +0100
+        Fri, 23 Dec 2022 03:47:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710ED178A3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 00:47:46 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1p8diN-0001Rx-FY; Fri, 23 Dec 2022 09:47:39 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1p8diM-0007f3-IX; Fri, 23 Dec 2022 09:47:38 +0100
+Date:   Fri, 23 Dec 2022 09:47:38 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/5] arm64: dts: imx8mm: correct iomuxc-gpr compatible
+Message-ID: <20221223084738.g3zftmxvqldv4bbz@pengutronix.de>
+References: <20221223025703.15784-1-peng.fan@oss.nxp.com>
+ <20221223025703.15784-4-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] dt-bindings: mmc: fsl-imx-esdhc: update binding for
- i.MX50 and i.MX7D
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, ulf.hansson@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-References: <20221223030347.17093-1-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221223030347.17093-1-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221223025703.15784-4-peng.fan@oss.nxp.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/12/2022 04:03, Peng Fan (OSS) wrote:
+Hi Peng,
+
+On 22-12-23, Peng Fan (OSS) wrote:
 > From: Peng Fan <peng.fan@nxp.com>
 > 
-> i.MX50 eSDHC is compatible with i.MX53. i.MX7D uSDHC is compatible with
-> i.MX6SL. So update for them.
+> The IOMUX Controller General purpose register group are unique almost
+> per SoC, i.MX8MM is not compatible with i.MX6Q. So correct it.
 > 
 > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mm.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> index 4ee89fdcf59b..6bcc170d7b84 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> @@ -551,7 +551,7 @@ iomuxc: pinctrl@30330000 {
+>  			};
+>  
+>  			gpr: iomuxc-gpr@30340000 {
 
+For 8mn/p you adapting the name to syscon, this should be done here as
+well.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Regards,
+  Marco
 
-Best regards,
-Krzysztof
-
+> -				compatible = "fsl,imx8mm-iomuxc-gpr", "fsl,imx6q-iomuxc-gpr", "syscon";
+> +				compatible = "fsl,imx8mm-iomuxc-gpr", "syscon";
+>  				reg = <0x30340000 0x10000>;
+>  			};
+>  
+> -- 
+> 2.37.1
+> 
+> 
+> 
