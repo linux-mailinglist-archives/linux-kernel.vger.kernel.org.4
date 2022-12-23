@@ -2,140 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3585654F2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0907E654F34
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235897AbiLWKbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 05:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
+        id S230312AbiLWKej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 05:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiLWKbd (ORCPT
+        with ESMTP id S235429AbiLWKeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 05:31:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C7027DF1;
-        Fri, 23 Dec 2022 02:31:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABB9F61DB3;
-        Fri, 23 Dec 2022 10:31:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 015C4C433EF;
-        Fri, 23 Dec 2022 10:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671791490;
-        bh=6wmYFAAcZgXeEqTN//fhHTM54kWAbw0UyCStoqODi6s=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=BEyR8WP6WX3GtZpTZwyvh6OGrEFdaVlUcmfPF3c/2LEX4kyhwln3qYDDOeVFlTGuw
-         7DrYKRNNPzm2aA4AWpm9QiLKqrk75STh/zZjnVhHDcboCUL8fv1NWdcLfTUP/KyhI6
-         QGJPalphACsy+K7uM6ZKjrNy3ZdPIEK29DPBm7VxwNl3RrElL3xW0W200UGni6gReT
-         bvKOUaIvd04RL0CbsKQJzs78ub+efKUqAs6kAZL/OE+K/Zc/fKOJD60EM+0buIpBs0
-         xk2dGqETA6m4gdoxm37WekG/7yw82X2mM6t9eb7hHOgOpkcbqRRpo1m/wxXR7dSOrG
-         SISfWKOcCFjKA==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-rockchip@lists.infradead.org,
-        Johan Jonker <jbx6244@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains
- property
-In-Reply-To: <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
-References: <20221219191038.1973807-1-robh@kernel.org>
- <87edsua5q4.fsf@balbi.sh>
- <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
-Date:   Fri, 23 Dec 2022 12:31:01 +0200
-Message-ID: <878riy9ztm.fsf@balbi.sh>
+        Fri, 23 Dec 2022 05:34:25 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F6927DF1
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:33:58 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id b2so4608844pld.7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:33:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I5Sm9Ccj2qcEeR/s7nTr8U/5P4ZeiJGl77hvijQ2XZ4=;
+        b=rTdFYxkJ5D7p5t2kErJf2y21stnHGD0lfybzshpQXFYwzCFNLTwkLL14O1fYzvcz6Y
+         I5JT8Yy6T5fTIc4j/iH5s6R8AlvclPfJuPed4Gww/48tQuSoII8V8SS2BehVqAfuoK4f
+         nuAb5JZDDocrwvDREJ1z7R/cQFDNr/OdcsM6AuiPwmcrpQe2jJq2hrTd/qU6JmmPLBv7
+         ilPvPmrqfm8r/DISz9zGCcH5Z9JHmVRGtHzENo5PGK8bskJIZMaHvDb96984CnbnKI3N
+         74wlmxAFPGkT0QiV8VbDQbnwomJ5gcCB9RsJndPcK2leo1WLRxAfwJ8J3YiFOhAJk/5N
+         vQ6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I5Sm9Ccj2qcEeR/s7nTr8U/5P4ZeiJGl77hvijQ2XZ4=;
+        b=q2SM+FoE8JyqYj7tLvLFbOQr54o0sZY3d7Es2wmVGTiAsmZVGM/cQd8GjwBFfCDNWG
+         6kyqjH1l9wJ0Cke0rxFsiFdScWkK2H+bHEFQgDfac1XSlIsgr5Q68rDeYRrlvVqIa0ae
+         zv0cGv/gAAL32WUF14Khx0s4GPaf3JLeASWBBO2PZEqSRvb84G9XBGblR/nlbeWuxw+n
+         bLbDggTvnd8QKVHd7HrrYoveQHAhkPjAm+bEX5IJFJxYAugvaIfh223OAsZ0OoSVtXip
+         OFYjStu+cx0kITRYgHOVm4oLiPyCu6EbSr9MSZaPWU4GmV/4VCteHaacqSS4AjTOJRCw
+         OclA==
+X-Gm-Message-State: AFqh2kpEL8KAz4oyO/iBP5qmRem1fapgkhTwtzEJcyLqr1M/m4uKtL3C
+        DuVNVgGe6rbPWfi7jd1YbyCYew==
+X-Google-Smtp-Source: AMrXdXsV4V8MgH803jIRErPqoLdxeRFXtQKMaSd0UqA6c9wY2uMHBBMqcuLzgv099zg2xaAd5LP15Q==
+X-Received: by 2002:a17:90a:6904:b0:219:8e19:6ebf with SMTP id r4-20020a17090a690400b002198e196ebfmr10118238pjj.0.1671791638135;
+        Fri, 23 Dec 2022 02:33:58 -0800 (PST)
+Received: from localhost.localdomain ([2409:8a28:e6b:a810:15ee:4139:496a:7697])
+        by smtp.gmail.com with ESMTPSA id q7-20020a17090a430700b0020bfd6586c6sm1976207pjg.7.2022.12.23.02.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 02:33:57 -0800 (PST)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org
+Cc:     juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH v6 1/2] sched/core: Minor optimize ttwu_runnable()
+Date:   Fri, 23 Dec 2022 18:32:56 +0800
+Message-Id: <20221223103257.4962-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+ttwu_runnable() is used as a fast wakeup path when the wakee task
+is running on CPU or runnable on RQ, in both cases we can just
+set its state to TASK_RUNNING to prevent a sleep.
 
+If the wakee task is on_cpu running, we don't need to update_rq_clock()
+or check_preempt_curr().
 
-Hi,
+But if the wakee task is on_rq && !on_cpu (e.g. an IRQ hit before
+the task got to schedule() and the task been preempted), we should
+check_preempt_curr() to see if it can preempt the current running.
 
-Rob Herring <robh@kernel.org> writes:
->> > The Rockchip RK3399 DWC3 node has 'power-domain' property which isn't
->> > allowed by the schema:
->> >
->> > usb@fe900000: Unevaluated properties are not allowed ('power-domains' =
-was unexpected)
->> >
->> > Allow DWC3 nodes to have a single power-domains entry. We could instead
->> > move the power-domains property to the parent wrapper node, but the
->> > could be an ABI break (Linux shouldn't care). Also, we don't want to
->> > encourage the pattern of wrapper nodes just to define resources such as
->> > clocks, resets, power-domains, etc. when not necessary.
->> >
->> > Signed-off-by: Rob Herring <robh@kernel.org>
->> > ---
->> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
->> >  1 file changed, 3 insertions(+)
->> >
->> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Do=
-cumentation/devicetree/bindings/usb/snps,dwc3.yaml
->> > index 6d78048c4613..bcefd1c2410a 100644
->> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> > @@ -91,6 +91,9 @@ properties:
->> >          - usb2-phy
->> >          - usb3-phy
->> >
->> > +  power-domains:
->> > +    maxItems: 1
->>
->> AFAICT this can be incorrect. Also, you could have Cc the dwc3
->> maintainer to get comments.
->
-> When we have a user with more and know what each one is, then we can
-> extend it. All the other users (upstream), put 'power-domains' in the
+This also removes the class->task_woken() callback from ttwu_runnable(),
+which wasn't required per the RT/DL implementations: any required push
+operation would have been queued during class->set_next_task() when p
+got preempted.
 
-Won't that be an ABI break at that point? You'll change the maximum
-number of power-domains.
+ttwu_runnable() also loses the update to rq->idle_stamp, as by definition
+the rq cannot be idle in this scenario.
 
-> wrapper node. But this is what we need now for RK3399.
->
-> I used get_maintainers.pl. If that's the wrong output, fix it please.
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Suggested-by: Valentin Schneider <vschneid@redhat.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+v6:
+ - Improve the comment in ttwu_runnable() per Steve. Thanks!
 
-@Thinh, perhaps you should add dwc3 binding file to the list of
-maintained files for you?
+v5:
+ - Split the reorganization and optimization into two patches
+   per Chen Yu. Thanks!
 
-=2D-=20
-balbi
+v4:
+ - s/This patch reorg/Reorganize/ per Bagas Sanjaya. Thanks!
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+v3:
+ - Improve the changelog per Valentin Schneider. Thanks!
 
------BEGIN PGP SIGNATURE-----
+v2:
+ - keep check_preempt_curr() for on_rq && !on_cpu case in ttwu_runnable(),
+   per Valentin Schneider.
+ - reorg ttwu_do_wakeup() and ttwu_do_activate() code, so ttwu_do_wakeup()
+   can be reused in ttwu_runnable(), per Peter Zijlstra.
+ - reuse ttwu_do_wakeup() in try_to_wake_up() (p == current) fast path too,
+   so ttwu_do_wakeup() become the only place we mark task runnable.
+---
+ kernel/sched/core.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmOlg2URHGJhbGJpQGtl
-cm5lbC5vcmcACgkQho6y4DXKpERo4hAApZSXiZmGtrVhLB64SCqHD9+VJbt4amWz
-ePO7l7j7gpou9fF4lDUnWBaoAE1xnpv/6Hr64fq5D540UXFW0pfwV+WFMSm86fjU
-jlqErZlbMAb/0oj0E0YVBN0zA4Mi7VjWuO5Q99bEdcaBr6aBQAD2/mcODQhfWHbv
-ZPmK5psZh/yoeaQBVExyJHPi3Bi/hCpZPhVkWnfUgBEUfGMeNigXloqg0jp8+tzD
-ClgH1LBw8dW5Oa2/z63C9XLYGL0KB/gsVMMGyWUY2u2v/xqJ+sLyAPzYX1JIqJq3
-MiyKJVSGplfOBa5GSGaKehTfPwAG8Du7CP3K3+9ydU/TWw3lg/fQ5UbYRBr/Q4SC
-5S3micolyaEIWkW4XyrWgPSr/eq4A5vVZWRAqEEKvyBGKGxsZZqRkFoxzhYHd8FO
-pIkBRI/kLtIhFDkXZ5e1HvmvsGgJJcRAZfawaw8RoY6sJgkQquxgKW3ob7Aeb6jK
-seY4rLlxzDmdzlqrPyXFxVNrUNn/JW1KoY5sYfAQumBdM7PSR/xNN1NYAGJAI4on
-UpKSIuTwKgMzM6i69wioIRK0QV1y3yvTdYB/umO+YT1sCKLaRX998O2Z33i6TCTv
-LDwdv8JqXQFyIn8IecdLA9qsKsqApS67M4n+38SLyBkvttJtNGka1afH5PFJNt95
-jLwjgQSUmDI=
-=6qAf
------END PGP SIGNATURE-----
---=-=-=--
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 314c2c0219d9..607a5430b192 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3718,9 +3718,16 @@ static int ttwu_runnable(struct task_struct *p, int wake_flags)
+ 
+ 	rq = __task_rq_lock(p, &rf);
+ 	if (task_on_rq_queued(p)) {
+-		/* check_preempt_curr() may use rq clock */
+-		update_rq_clock(rq);
+-		ttwu_do_wakeup(rq, p, wake_flags, &rf);
++		if (!task_on_cpu(rq, p)) {
++			/*
++			 * When on_rq && !on_cpu the task is preempted, see if
++			 * it should preempt the task that is current now.
++			 */
++			update_rq_clock(rq);
++			check_preempt_curr(rq, p, wake_flags);
++		}
++		WRITE_ONCE(p->__state, TASK_RUNNING);
++		trace_sched_wakeup(p);
+ 		ret = 1;
+ 	}
+ 	__task_rq_unlock(rq, &rf);
+-- 
+2.37.2
+
