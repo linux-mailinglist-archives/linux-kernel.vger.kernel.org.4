@@ -2,85 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B903E6555EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 00:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B78F06555F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 00:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbiLWXQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 18:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S231201AbiLWXQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 18:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiLWXP6 (ORCPT
+        with ESMTP id S230131AbiLWXQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 18:15:58 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700B111808;
-        Fri, 23 Dec 2022 15:15:56 -0800 (PST)
-Received: from [IPv6:2804:14d:72b4:8284:32a8:8167:f815:2895] (unknown [IPv6:2804:14d:72b4:8284:32a8:8167:f815:2895])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dwlsalmeida)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9D9A86602BF9;
-        Fri, 23 Dec 2022 23:15:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671837354;
-        bh=CAp1gtyw+Vjt15RCYF5T8+05xn1NEUQ8J9Mvv1bxvTQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=F/DKa+h9/h+/rHhv0HRwLqhtF4tYj8CbJh0nwYfVkatN3bJKVJgTTigMsaxtG4oLc
-         OUOhvBOgigNj4vvwx9GxfOz+aFaJCVL845ZMeDkLBjfTu7FCQn1FTfYvaAijaNUyqA
-         GL95kWiwUHU9+uEcDcBogAsXUM1FJ0/WgjOJb+40qUD/IGhw606vick8EW8xPc4Dbw
-         gHyI97gKK/CxMBdXaCn0y2tiGQrAQEK6bqz+O2c1mt7Vz8R2UKKm3su8mnG5cikrOx
-         h17IY4rxSHqYb01cjz8Kk0txGV77LcI8vyCl6Ig/Pk/BKxkHLi8H5qd0kP0AfyHotr
-         H4XKBflOoDKuQ==
-Message-ID: <cb95838c835aa91cd69e7067c8a3b747f89d2e95.camel@collabora.com>
-Subject: Re: [PATCH v1 7/9] media: verisilicon: Add Rockchip AV1 decoder
-From:   Daniel Almeida <daniel.almeida@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        nicolas.dufresne@collabora.co.uk
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Date:   Fri, 23 Dec 2022 20:15:38 -0300
-In-Reply-To: <d7025e7e-246f-a7f4-f0b5-d1290a38a96c@collabora.com>
-References: <20221219155616.848690-1-benjamin.gaignard@collabora.com>
-         <20221219155616.848690-8-benjamin.gaignard@collabora.com>
-         <092f76873a914c52c5157a21401be6cf78e3f188.camel@ndufresne.ca>
-         <be1ff517-765d-c97f-8cce-3f359cd0015c@collabora.com>
-         <4afdce546b2f10cf97e12f8325232483efeea1ce.camel@ndufresne.ca>
-         <d7025e7e-246f-a7f4-f0b5-d1290a38a96c@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 
+        Fri, 23 Dec 2022 18:16:43 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC831D642
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 15:16:41 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id m15so3123906ilq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 15:16:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wo8+qziymdofRv3UJT9Vr9QEs/JxpV0VfpNVZ4a+DD4=;
+        b=YAOggKjqGks5q6E6bbeBGXMAkHu90HOkHroiwF6ex86LsVjJ/0yQzaIbd5QI5R5jZ0
+         siRkbHK2ZocCTF21MTjD5Fuf+SIgjz6+OjwtTOi0UEMuxuj9G6nfIO5fpOeY9Bi55Ewk
+         aFdwufpJTV0hoxzNQ4Xos9zykeGJrsb7i4/as=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wo8+qziymdofRv3UJT9Vr9QEs/JxpV0VfpNVZ4a+DD4=;
+        b=XMXiCt6IxtguuWyjqMIwCtxeciNJoh+I7wYrH/eZluw+exiFzNX3lc58oNR9qdaE0R
+         OWK00OxdJ+RJfsAQTT3nVRzOQRKT8RgSZZ5N3q/fsVwXNYlR0AEQJTY2yPdiK+K8lGNc
+         bDf8qTy5npJMXfadRD1Mn/RpoIqPpRoBBZNbpdiG0PuXJSv1P0lg5GjHwLhVB42Pi4lG
+         nvEcUvzDSQ94/zFl38wrtT8u21xVdbBODeEY48GhVAdc7rsLZ7znk0ivW0GASfWJ4wPK
+         2uUStgFSfw3rRR0iaxWUsuSjsc0ntCqQQXJIQT5KnYmqPRUa4SUn9UWlwOcUB8i7UkEd
+         QVoQ==
+X-Gm-Message-State: AFqh2kp3Y7Xh8A3WeUqoAl6/63HMPA9atVfW1S39QPca89cevzb8fUsa
+        tYwf6SdYPcr9IVO49HJkauwwNQ==
+X-Google-Smtp-Source: AMrXdXtBCjEBL3y0Ms4Y0lvLazdMaD09uL52cX3vuS/Jzd+aLpCpsyh+6V4TXnGydLIPvhXO6sNOUg==
+X-Received: by 2002:a92:6403:0:b0:303:18a7:815 with SMTP id y3-20020a926403000000b0030318a70815mr7324272ilb.17.1671837400889;
+        Fri, 23 Dec 2022 15:16:40 -0800 (PST)
+Received: from [10.211.55.3] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id z9-20020a056638214900b0038a57c147dbsm1346255jaj.122.2022.12.23.15.16.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Dec 2022 15:16:40 -0800 (PST)
+Message-ID: <207bdc58-c0f6-8a95-70bb-fee7d4749bd6@ieee.org>
+Date:   Fri, 23 Dec 2022 17:16:38 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: enable IPA in
+ sc7280-herobrine-lte-sku.dtsi
+To:     Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, agross@kernel.org,
+        quic_sibis@quicinc.com, elder@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221215224552.1232449-1-elder@linaro.org>
+ <Y5vDXm4oo2cn3etX@google.com>
+ <CAD=FV=XsUXCzjKbLvOd7M-CPQi13pf9dvpvLwLQnsoL0m-5xCQ@mail.gmail.com>
+Content-Language: en-US
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <CAD=FV=XsUXCzjKbLvOd7M-CPQi13pf9dvpvLwLQnsoL0m-5xCQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +	int cur_offset[V4L2_AV1_NUM_REF_FRAMES - 1];
-> > +	int cur_roffset[V4L2_AV1_NUM_REF_FRAMES - 1];
->=20
-> This looks like V4L2_AV1_REFS_PER_FRAME. Daniel, should be remove
-> this
-> V4L2_AV1_NUM_REF_FRAMES ? Its redundant with
-> V4L2_AV1_TOTAL_REFS_PER_FRAME ...
+On 12/22/22 4:39 PM, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Dec 15, 2022 at 5:01 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+>>
+>> On Thu, Dec 15, 2022 at 04:45:52PM -0600, Alex Elder wrote:
+>>
+>>> Subject: arm64: dts: qcom: sc7280: enable IPA in sc7280-herobrine-lte-sku.dtsi
 
-Hi. These are different. NUM_REF_FRAMES is the size of the "DPB" while
-TOTAL_REFS_PER_FRAME is the maximum number of references a frame can
-use. It just so happens that in AV1 these two are close in absolute
-value (i.e. 7 vs 8).
+I'll post an update with your suggested subject line.
 
-Using VP9 as a comparison, the DPB size is still 8, but REFS_PER_FRAME
-is 3 (meaning a frame can specificy LAST, GOLDEN and ALTREF values).
+Thanks!
 
-As this is per spec and a mere convenience, I vote for keeping it.=20
+					-Alex
 
--- Daniel
+>>
+>> nit: that sounds as if IPA wasn't enabled previously. It would be
+>> clearer to say something like: "sc7280: only enable IPA for boards
+>> with a modem".
+>>
+>>> IPA is only needed on a platform if it includes a modem, and not all
+>>> SC7280 SoC variants do.  The file "sc7280-herobrine-lte-sku.dtsi" is
+>>> used to encapsulate definitions related to Chrome OS SC7280 devices
+>>> where a modem is present, and that's the proper place for the IPA
+>>> node to be enabled.
+>>>
+>>> Currently IPA is enabled in "sc7280-idp.dtsi", which is included by
+>>> DTS files for Qualcomm reference platforms (all of which include the
+>>> modem).  That also includes "sc7280-herobrine-lte-sku.dtsi", so
+>>> enabling IPA there would make it unnecessary for "sc7280-idp.dtsi"
+>>> to enable it.
+>>>
+>>> The only other place IPA is enabled is "sc7280-qcard.dtsi".
+>>> That file is included only by "sc7280-herobrine.dtsi", which
+>>> is (eventually) included only by these top-level DTS files:
+>>>    sc7280-herobrine-crd.dts
+>>>    sc7280-herobrine-herobrine-r1.dts
+>>>    sc7280-herobrine-evoker.dts
+>>>    sc7280-herobrine-evoker-lte.dts
+>>>    sc7280-herobrine-villager-r0.dts
+>>>    sc7280-herobrine-villager-r1.dts
+>>>    sc7280-herobrine-villager-r1-lte.dts
+>>> All of but two of these include "sc7280-herobrine-lte-sku.dtsi", and
+>>> for those cases, enabling IPA there means there is no need for it to
+>>> be enabled in "sc7280-qcard.dtsi".
+>>>
+>>> The two remaining cases will no longer enable IPA as a result of
+>>> this change:
+>>>    sc7280-herobrine-evoker.dts
+>>>    sc7280-herobrine-villager-r1.dts
+>>> Both of these have "lte" counterparts, and are meant to represent
+>>> board variants that do *not* have a modem.
+>>>
+>>> This is exactly the desired configuration.
+>>>
+>>> Signed-off-by: Alex Elder <elder@linaro.org>
+>>> Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+>>> Tested-by: Sibi Sankar <quic_sibis@quicinc.com>
+>>
+>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> 
+> I'd agree that the subject like proposed by Matthias sounds better. In any case:
+> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
