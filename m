@@ -2,121 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9849E6552C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 362D26552CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbiLWQ0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 11:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
+        id S231696AbiLWQ1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 11:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiLWQ0o (ORCPT
+        with ESMTP id S230390AbiLWQ1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 11:26:44 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B235FFF;
-        Fri, 23 Dec 2022 08:26:43 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id jo4so13064825ejb.7;
-        Fri, 23 Dec 2022 08:26:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wxDL+X8NmnukiauYcA33D3M1w50IAdYmljuXwdjMwII=;
-        b=Ic2NXkxd20lD/6DOmo7za4NfqIesYZ5KwzWGj7PL1MVAd2X5VqAHmFFZkOritE9yWN
-         Xi5samHQOW698C7ygZU0xxC2y46eMVFto07/yxTfKVCNuyXEOmuscQ/al+VDnTPri+SH
-         UhIF5kv3Q2PgaXjY+y+WtJSSDEsjj026I1HnfcIOg2KCgH+nlb7fVhbtCu+/c4tu32XL
-         wuVL7XghWdcFN7D8eL7jqcYBTvdsawX/JyHkRnX+Rg0H/PrebkBKbo1NlFOv6pKSBFGk
-         3urNCu1b3kktdvtW3pX4R7iA7BJCHV4ofK7zmO8Y8Tw/7CAmRhh+otuZpvulGkJUnTsD
-         tb5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wxDL+X8NmnukiauYcA33D3M1w50IAdYmljuXwdjMwII=;
-        b=U3u6t6Mg5qGX4cUvKQPJdwQgLTzu1mtao48BHn24t+OaTuAiNj9n/Ieq5eL8zdFgKk
-         OMk9y2Sjz04dTJDmUTxLzF8q+orKSF4Vlx8Hn++jV7Z/vxIZGtpduchM2k1cl59PIWt8
-         HJwwxh5AnMEwRdTtWOiZJL1pXYEzZG2zJAOYEOUN8l0HXi1aCuRj60uJkZFZyVorlNY8
-         D8Uyz/9xPJGljmgwWj1IMJLmdJeqGO7jEtYC7zJDUMCsHG+xfLjfdHzNKDhRI5n4jv2/
-         yyBfO5K5W3rzVSj1VBxg/uXO806RT3TYYAzmRogDwbKrI1dB+WtKE7rt7e6YHske1Qvw
-         XgIg==
-X-Gm-Message-State: AFqh2kpXvS3dE75L0Rv18uIw+yXoMSbnrkgi8qOdL2nyemzKgYc/rVdd
-        un/cSVR33lQN6CrkGrVqMUKeOoZP3sM=
-X-Google-Smtp-Source: AMrXdXsPIDPmGkpmye/C3rLElx/wzoe7cpMFawUaJnMnOf6cyBcP9awLfAw/jesDD6tBb7XqMmdw/Q==
-X-Received: by 2002:a17:906:5dd2:b0:7c1:7010:f413 with SMTP id p18-20020a1709065dd200b007c17010f413mr12371630ejv.19.1671812802210;
-        Fri, 23 Dec 2022 08:26:42 -0800 (PST)
-Received: from localhost ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with UTF8SMTPSA id fu19-20020a170907b01300b00781be3e7badsm1550295ejc.53.2022.12.23.08.26.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 08:26:41 -0800 (PST)
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     linux-iio@vger.kernel.org
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] iio: adc: ep93xx: Add OF support
-Date:   Fri, 23 Dec 2022 17:26:36 +0100
-Message-Id: <20221223162636.6488-2-alexander.sverdlin@gmail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221223162636.6488-1-alexander.sverdlin@gmail.com>
-References: <20221223162636.6488-1-alexander.sverdlin@gmail.com>
+        Fri, 23 Dec 2022 11:27:19 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67265F6D;
+        Fri, 23 Dec 2022 08:27:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tvgYFs2FAZdH+/felJr+94xqrzl/poYnFOMsR5Dg6fA=; b=n7lcCdiEfcq8NCgXEDNF/0Z4ci
+        tIOpRAdjDXVUvE+5DzvrJ/9KcCMujjvsihTERwfIZtXtW7cfaSsL8gKUqzMyoqVPAuofBgFa35SaB
+        eQ1a1u6TOi/d/R7Vm5HFe4N9BX10usAzaGFrUU15vE/Rp65o4AsfVdY7lDi7fEDOqTAv29Gk+rfsP
+        x0FQmjE4t+01NANuuhbsYP+Q46PaNZUvkjZbeCs5rLNn0M9gxprited5koJ9kFvTzc2h7pRCrgsrh
+        rRT4+62twBnE/keGANDiY5jPmax6kiPnXxTrwnrL02TafuDXWZfPgmANs4Q8lAfIEfRfYyeh0pO/9
+        m+4fvEuw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p8kt4-009yDY-Rs; Fri, 23 Dec 2022 16:27:10 +0000
+Date:   Fri, 23 Dec 2022 08:27:10 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [RFC PATCH] mm: remove zap_page_range and change callers to use
+ zap_vma_page_range
+Message-ID: <Y6XW3hMtB7PrTSM5@infradead.org>
+References: <20221216192012.13562-1-mike.kravetz@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221216192012.13562-1-mike.kravetz@oracle.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prepare for EP93xx conversion to DT.
+>  		unsigned long size = vma->vm_end - vma->vm_start;
+>  
+>  		if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_AA64].dm))
+> -			zap_page_range(vma, vma->vm_start, size);
+> +			zap_vma_page_range(vma, vma->vm_start, size);
+>  #ifdef CONFIG_COMPAT_VDSO
+>  		if (vma_is_special_mapping(vma, vdso_info[VDSO_ABI_AA32].dm))
+> -			zap_page_range(vma, vma->vm_start, size);
+> +			zap_vma_page_range(vma, vma->vm_start, size);
+>  #endif
 
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
----
-Changelog:
-v3: Removed comma, of_match_ptr() protection and the ifdefs
+So for something called zap_vma_page_range I'd expect to just pass
+the vma and zap all of it, which this and many other callers want
+anyway.
 
- drivers/iio/adc/ep93xx_adc.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> +++ b/arch/s390/mm/gmap.c
+> @@ -722,7 +722,7 @@ void gmap_discard(struct gmap *gmap, unsigned long from, unsigned long to)
+>  		if (is_vm_hugetlb_page(vma))
+>  			continue;
+>  		size = min(to - gaddr, PMD_SIZE - (gaddr & ~PMD_MASK));
+> -		zap_page_range(vma, vmaddr, size);
+> +		zap_vma_page_range(vma, vmaddr, size);
 
-diff --git a/drivers/iio/adc/ep93xx_adc.c b/drivers/iio/adc/ep93xx_adc.c
-index fd5a9404c8dc..a35e6cead67d 100644
---- a/drivers/iio/adc/ep93xx_adc.c
-+++ b/drivers/iio/adc/ep93xx_adc.c
-@@ -21,6 +21,7 @@
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/platform_device.h>
-+#include <linux/of.h>
- 
- /*
-  * This code could benefit from real HR Timers, but jiffy granularity would
-@@ -227,9 +228,16 @@ static int ep93xx_adc_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct of_device_id ep93xx_adc_of_ids[] = {
-+	{ .compatible = "cirrus,ep9301-adc" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, ep93xx_adc_of_ids);
-+
- static struct platform_driver ep93xx_adc_driver = {
- 	.driver = {
- 		.name = "ep93xx-adc",
-+		.of_match_table = ep93xx_adc_of_ids,
- 	},
- 	.probe = ep93xx_adc_probe,
- 	.remove = ep93xx_adc_remove,
--- 
-2.39.0
-
+And then just call zap_page_range_single directly for those that
+don't want to zap the entire vma.
