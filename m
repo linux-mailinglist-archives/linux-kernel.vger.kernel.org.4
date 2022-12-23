@@ -2,276 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4402F654F64
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD0E654F61
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236131AbiLWK6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 05:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S236095AbiLWK6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 05:58:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbiLWK6o (ORCPT
+        with ESMTP id S229658AbiLWK6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 05:58:44 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F443B401;
-        Fri, 23 Dec 2022 02:58:42 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BNAwQ5R069200;
-        Fri, 23 Dec 2022 04:58:26 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1671793106;
-        bh=45OPl7Bj08ZVyfYP3E/yQDieU4oItwI+NG29HLaBmyY=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=RwK2BPjYyNZ1OLL5KgYCMy0evnBNd9cPf2aXi5oZHHeCxrsFpfOUnZU0xy+PvDH5O
-         VS32f4fciEP9mEnSUJgk1lj4wyBQTEuGqSsScZhtkQtk3VVG/Uoz2lcVzMg3y5MJwP
-         3ABwJrQP8ERLgOAraSF2iTohFug9T9xekqwLbs18=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BNAwQuU081253
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 23 Dec 2022 04:58:26 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 23
- Dec 2022 04:58:26 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Fri, 23 Dec 2022 04:58:26 -0600
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BNAwMbn057393;
-        Fri, 23 Dec 2022 04:58:22 -0600
-Message-ID: <73577808-b133-62d4-2c16-670d6a49b067@ti.com>
-Date:   Fri, 23 Dec 2022 16:28:21 +0530
+        Fri, 23 Dec 2022 05:58:35 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F8E37F86
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:58:34 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id r6-20020a92cd86000000b00304b2d1c2d7so2506683ilb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:58:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cpRfc9myrRtLZbAhtYKQUfGx7AvxeJybhN9iGZKvqqk=;
+        b=tn8jBnCPPqD93qUWvcyg0VXFEB4c0BDcQPZW3hXhnvwAnVGPPHRRGcTzz1OK4XRFQf
+         St0i71tKAjGFLNaSwEsUjxeCTGD6bIZRbiW+CcJltDVi6ppuiDc+Dcmg6Q9WvR1Iu6RX
+         h7Sa4qrILm6jCZk49tCA0YqO0ZWEtDPMhPnvDpcSfTh7Z+8fXuyyvGXQyYzRuRFLgF35
+         1kxZdWcuYcfesGewYIGvTfG1bPFavhRfdF8j9O54t1uOsbkldqXeAYSAUxuvJccpyCmq
+         Nl4OndtC7kJPw3mChl5XRrvOXkE7wNOAukY63qReAu7Zx6THywEUzxSZZySrjnxqkvma
+         Yqbw==
+X-Gm-Message-State: AFqh2krAJP1v2EIoPuBc8HKHYboleL1EXimp63K2jr0FpkJOechMA80y
+        LLfOZ3WvMdDrzAgft7b1bPXz3c6AwmyfvNjmJP3IkZnjgHV4
+X-Google-Smtp-Source: AMrXdXtijusQp38lPCtOMRGD5s4+WEgUnAfeuys0koQqvxqs7Tgp/B4cj7f7G00ppMtc+M2PQqm+tIX22dNwcCzgr7ks6kyUrSvX
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v12 5/6] remoteproc: pru: Add pru_rproc_set_ctable()
- function
-Content-Language: en-US
-To:     MD Danish Anwar <danishanwar@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <srk@ti.com>, <linux-remoteproc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221216053313.2974826-1-danishanwar@ti.com>
- <20221216053313.2974826-6-danishanwar@ti.com>
-From:   Md Danish Anwar <a0501179@ti.com>
-In-Reply-To: <20221216053313.2974826-6-danishanwar@ti.com>
+X-Received: by 2002:a05:6638:4918:b0:38c:8ef9:c68b with SMTP id
+ cx24-20020a056638491800b0038c8ef9c68bmr828122jab.298.1671793113760; Fri, 23
+ Dec 2022 02:58:33 -0800 (PST)
+Date:   Fri, 23 Dec 2022 02:58:33 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000af090905f07caa86@google.com>
+Subject: [syzbot] [btrfs?] BUG: unable to handle kernel paging request in btrfs_is_subpage
+From:   syzbot <syzbot+24c9c27b31ab0c22173b@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
+Hello,
 
-Can you please review this patch.
+syzbot found the following issue on:
 
-Thanks,
-Danish.
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=166ff01b880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=24c9c27b31ab0c22173b
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-On 16/12/22 11:03, MD Danish Anwar wrote:
-> From: Roger Quadros <rogerq@ti.com>
-> 
-> Some firmwares expect the OS drivers to configure the CTABLE
-> entries publishing dynamically allocated memory regions. For
-> example, the PRU Ethernet firmwares use the C28 and C30 entries
-> for retrieving the Shared RAM and System SRAM (OCMC) areas
-> allocated by the PRU Ethernet client driver.
-> 
-> Provide a way for users to do that through a new API,
-> pru_rproc_set_ctable(). The API returns 0 on success and
-> a negative value on error.
-> 
-> NOTE:
-> The programmable CTABLE entries are typically re-programmed by
-> the PRU firmwares when dealing with a certain block of memory
-> during block processing. This API provides an interface to the
-> PRU client drivers to publish a dynamically allocated memory
-> block with the PRU firmware using a CTABLE entry instead of a
-> negotiated address in shared memory. Additional synchronization
-> may be needed between the PRU client drivers and firmwares if
-> different addresses needs to be published at run-time reusing
-> the same CTABLE entry.
-> 
-> CTABLE for stands for "constant table".
-> Each CTable entry just holds the upper address bits so PRU can
-> reference to external memory with larger address bits.
-> 
-> For use case please see
-> prueth_sw_emac_config() in "drivers/net/ethernet/ti/prueth_switch.c"
-> 
->             /* Set in constant table C28 of PRUn to ICSS Shared memory */
->              pru_rproc_set_ctable(prueth->pru0, PRU_C28, sharedramaddr);
->              pru_rproc_set_ctable(prueth->pru1, PRU_C28, sharedramaddr);
-> 
->             /* Set in constant table C30 of PRUn to OCMC memory */
->              pru_rproc_set_ctable(prueth->pru0, PRU_C30, ocmcaddr);
->              pru_rproc_set_ctable(prueth->pru1, PRU_C30, ocmcaddr);
-> 
-> Signed-off-by: Andrew F. Davis <afd@ti.com>
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Roger Quadros <rogerq@ti.com>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> ---
->  drivers/remoteproc/pru_rproc.c | 59 ++++++++++++++++++++++++++++++++++
->  include/linux/pruss.h          | 22 +++++++++++++
->  2 files changed, 81 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-> index 8e2fbe392ef3..176186882acf 100644
-> --- a/drivers/remoteproc/pru_rproc.c
-> +++ b/drivers/remoteproc/pru_rproc.c
-> @@ -120,6 +120,7 @@ struct pru_private_data {
->   * @mapped_irq: virtual interrupt numbers of created fw specific mapping
->   * @pru_interrupt_map: pointer to interrupt mapping description (firmware)
->   * @pru_interrupt_map_sz: pru_interrupt_map size
-> + * @rmw_lock: lock for read, modify, write operations on registers
->   * @dbg_single_step: debug state variable to set PRU into single step mode
->   * @dbg_continuous: debug state variable to restore PRU execution mode
->   * @evt_count: number of mapped events
-> @@ -137,6 +138,7 @@ struct pru_rproc {
->  	unsigned int *mapped_irq;
->  	struct pru_irq_rsc *pru_interrupt_map;
->  	size_t pru_interrupt_map_sz;
-> +	spinlock_t rmw_lock;
->  	u32 dbg_single_step;
->  	u32 dbg_continuous;
->  	u8 evt_count;
-> @@ -153,6 +155,23 @@ void pru_control_write_reg(struct pru_rproc *pru, unsigned int reg, u32 val)
->  	writel_relaxed(val, pru->mem_regions[PRU_IOMEM_CTRL].va + reg);
->  }
->  
-> +static inline
-> +void pru_control_set_reg(struct pru_rproc *pru, unsigned int reg,
-> +			 u32 mask, u32 set)
-> +{
-> +	u32 val;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&pru->rmw_lock, flags);
-> +
-> +	val = pru_control_read_reg(pru, reg);
-> +	val &= ~mask;
-> +	val |= (set & mask);
-> +	pru_control_write_reg(pru, reg, val);
-> +
-> +	spin_unlock_irqrestore(&pru->rmw_lock, flags);
-> +}
-> +
->  static struct rproc *__pru_rproc_get(struct device_node *np, int index)
->  {
->  	struct rproc *rproc;
-> @@ -269,6 +288,45 @@ void pru_rproc_put(struct rproc *rproc)
->  }
->  EXPORT_SYMBOL_GPL(pru_rproc_put);
->  
-> +/**
-> + * pru_rproc_set_ctable() - set the constant table index for the PRU
-> + * @rproc: the rproc instance of the PRU
-> + * @c: constant table index to set
-> + * @addr: physical address to set it to
-> + *
-> + * Return: 0 on success, or errno in error case.
-> + */
-> +int pru_rproc_set_ctable(struct rproc *rproc, enum pru_ctable_idx c, u32 addr)
-> +{
-> +	struct pru_rproc *pru = rproc->priv;
-> +	unsigned int reg;
-> +	u32 mask, set;
-> +	u16 idx;
-> +	u16 idx_mask;
-> +
-> +	if (IS_ERR_OR_NULL(rproc))
-> +		return -EINVAL;
-> +
-> +	if (!rproc->dev.parent || !is_pru_rproc(rproc->dev.parent))
-> +		return -ENODEV;
-> +
-> +	/* pointer is 16 bit and index is 8-bit so mask out the rest */
-> +	idx_mask = (c >= PRU_C28) ? 0xFFFF : 0xFF;
-> +
-> +	/* ctable uses bit 8 and upwards only */
-> +	idx = (addr >> 8) & idx_mask;
-> +
-> +	/* configurable ctable (i.e. C24) starts at PRU_CTRL_CTBIR0 */
-> +	reg = PRU_CTRL_CTBIR0 + 4 * (c >> 1);
-> +	mask = idx_mask << (16 * (c & 1));
-> +	set = idx << (16 * (c & 1));
-> +
-> +	pru_control_set_reg(pru, reg, mask, set);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(pru_rproc_set_ctable);
-> +
->  static inline u32 pru_debug_read_reg(struct pru_rproc *pru, unsigned int reg)
->  {
->  	return readl_relaxed(pru->mem_regions[PRU_IOMEM_DEBUG].va + reg);
-> @@ -940,6 +998,7 @@ static int pru_rproc_probe(struct platform_device *pdev)
->  	pru->rproc = rproc;
->  	pru->fw_name = fw_name;
->  	pru->client_np = NULL;
-> +	spin_lock_init(&pru->rmw_lock);
->  	mutex_init(&pru->lock);
->  
->  	for (i = 0; i < ARRAY_SIZE(mem_names); i++) {
-> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
-> index 6ea737e995e9..a6bc3df92fee 100644
-> --- a/include/linux/pruss.h
-> +++ b/include/linux/pruss.h
-> @@ -28,13 +28,29 @@ enum pruss_pru_id {
->  	PRUSS_NUM_PRUS,
->  };
->  
-> +/*
-> + * enum pru_ctable_idx - Configurable Constant table index identifiers
-> + */
-> +enum pru_ctable_idx {
-> +	PRU_C24 = 0,
-> +	PRU_C25,
-> +	PRU_C26,
-> +	PRU_C27,
-> +	PRU_C28,
-> +	PRU_C29,
-> +	PRU_C30,
-> +	PRU_C31,
-> +};
-> +
->  struct device_node;
-> +struct rproc;
->  
->  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
->  
->  struct rproc *pru_rproc_get(struct device_node *np, int index,
->  			    enum pruss_pru_id *pru_id);
->  void pru_rproc_put(struct rproc *rproc);
-> +int pru_rproc_set_ctable(struct rproc *rproc, enum pru_ctable_idx c, u32 addr);
->  
->  #else
->  
-> @@ -46,6 +62,12 @@ pru_rproc_get(struct device_node *np, int index, enum pruss_pru_id *pru_id)
->  
->  static inline void pru_rproc_put(struct rproc *rproc) { }
->  
-> +static inline int pru_rproc_set_ctable(struct rproc *rproc,
-> +				       enum pru_ctable_idx c, u32 addr)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
->  #endif /* CONFIG_PRU_REMOTEPROC */
->  
->  static inline bool is_pru_rproc(struct device *dev)
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+24c9c27b31ab0c22173b@syzkaller.appspotmail.com
+
+Unable to handle kernel paging request at virtual address 0000000000002074
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=0000000168eff000
+[0000000000002074] pgd=0800000157b7a003, p4d=0800000157b7a003, pud=08000001576b7003, pmd=0000000000000000
+Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 23070 Comm: syz-executor.5 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : btrfs_is_subpage+0x20/0xb8 fs/btrfs/subpage.c:68
+lr : btrfs_is_subpage+0x20/0xb8 fs/btrfs/subpage.c:67
+sp : ffff800014153540
+x29: ffff800014153540 x28: 0000000000000001 x27: dead000000000100
+x26: fffffc0004d5c9c8 x25: ffff000118d6bda8 x24: ffff800014153a78
+x23: 0000000000000001 x22: 05ffc00000002005 x21: 05ffc00000002005
+x20: fffffc0004d5c9c0 x19: 0000000000000000 x18: 00000000000000c0
+x17: ffff80000dda8198 x16: ffff80000dbe6158 x15: ffff00011bf91a40
+x14: 0000000000000000 x13: 00000000ffffffff x12: 0000000000040000
+x11: 000000000003ffff x10: ffff800013105000 x9 : ffff80000923be40
+x8 : 0000000000040000 x7 : ffff8000095d6cf4 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : fffffbffeffe3910 x3 : 0000000000005651
+x2 : ffff00011700cb00 x1 : fffffc0004d5c9c0 x0 : 0000000000000000
+Call trace:
+ btrfs_is_subpage+0x20/0xb8 fs/btrfs/subpage.c:67
+ wait_subpage_spinlock+0x30/0xd4 fs/btrfs/inode.c:8152
+ __btrfs_release_folio fs/btrfs/inode.c:8178 [inline]
+ btrfs_release_folio+0xc8/0x228 fs/btrfs/inode.c:8188
+ filemap_release_folio+0xc0/0x238 mm/filemap.c:3948
+ shrink_folio_list+0xdbc/0x337c mm/vmscan.c:1982
+ shrink_inactive_list+0x30c/0x54c mm/vmscan.c:2489
+ shrink_list mm/vmscan.c:2728 [inline]
+ shrink_lruvec+0x218/0x5b4 mm/vmscan.c:5923
+ shrink_node_memcgs+0x13c/0x2c4 mm/vmscan.c:6110
+ shrink_node+0xb4/0x600 mm/vmscan.c:6141
+ shrink_zones+0x1bc/0x408 mm/vmscan.c:6379
+ do_try_to_free_pages+0xd0/0x42c mm/vmscan.c:6441
+ try_to_free_mem_cgroup_pages+0x174/0x244 mm/vmscan.c:6756
+ try_charge_memcg+0x1a8/0x650 mm/memcontrol.c:2681
+ try_charge mm/memcontrol.c:2823 [inline]
+ mem_cgroup_charge_skmem+0x50/0x150 mm/memcontrol.c:7209
+ sock_reserve_memory+0x88/0x144 net/core/sock.c:1018
+ sk_setsockopt+0xb54/0x1694 net/core/sock.c:1518
+ sock_setsockopt+0x48/0x60 net/core/sock.c:1542
+ __sys_setsockopt+0x21c/0x31c net/socket.c:2248
+ __do_sys_setsockopt net/socket.c:2263 [inline]
+ __se_sys_setsockopt net/socket.c:2260 [inline]
+ __arm64_sys_setsockopt+0x30/0x44 net/socket.c:2260
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: 910003fd aa0103f4 aa0003f3 97c1aafa (b9607675) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	910003fd 	mov	x29, sp
+   4:	aa0103f4 	mov	x20, x1
+   8:	aa0003f3 	mov	x19, x0
+   c:	97c1aafa 	bl	0xffffffffff06abf4
+* 10:	b9607675 	ldr	w21, [x19, #8308] <-- trapping instruction
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
