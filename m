@@ -2,284 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EB9654E68
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4B1654E6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 10:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbiLWJ3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 04:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S230171AbiLWJbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 04:31:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236160AbiLWJ3P (ORCPT
+        with ESMTP id S229483AbiLWJbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 04:29:15 -0500
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0334036D71
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 01:29:11 -0800 (PST)
-X-UUID: 7d4311e6ee30446498370e3383998856-20221223
-X-CPASD-INFO: 52648073b6d0463481704968378616f7@foJwVGViZWOOVqZ8g3l-blhiZ2BkZVa
-        HdXFYZl9mkleVhH5xTV5nX1V9gnNXZF5dXFV3dnBQYmBhXVJ3i3-XblBgXoZgUZB3hHRwVGheZw==
-X-CLOUD-ID: 52648073b6d0463481704968378616f7
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:173.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:364.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:3,DUF:11092,ACD:180,DCD:180,SL:0,EISP:0,AG:0,CFC:0.547,CFSR:0.057,UAT:0
-        ,RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:
-        0,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 7d4311e6ee30446498370e3383998856-20221223
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 7d4311e6ee30446498370e3383998856-20221223
-X-User: xurui@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xurui@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1526182169; Fri, 23 Dec 2022 17:29:09 +0800
-From:   xurui <xurui@kylinos.cn>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        xurui <xurui@kylinos.cn>, kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] drm/amdgpu: Retry DDC probing on DVI on failure if we got an HPD interrupt
-Date:   Fri, 23 Dec 2022 17:28:58 +0800
-Message-Id: <20221223092858.1830944-1-xurui@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 23 Dec 2022 04:31:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8989337216;
+        Fri, 23 Dec 2022 01:31:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80F85B81F7B;
+        Fri, 23 Dec 2022 09:31:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B1B6C433EF;
+        Fri, 23 Dec 2022 09:31:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671787865;
+        bh=xA1Tx7JkHcV8FOp/jol19NqCgZItuHMSfahylt7MBpA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KXvNY8W9UJfHIpPUdhbgE5uE+7r/+oC/3ofod6sMT7hKY/GYPOKu1g+rBPaTOiFt7
+         EEJLpKlwXYm3JIjYUBRy2GDfuCk1bcJUG/UUZBKuueZCGkbWjaiJXq0+dPwG6mpAWV
+         G9TwODol66irgmG7oNYtM9mYi44D1W3MB86kerjbB1acFRbmGEA2lAay6ejRQxVeBx
+         aGfoKktprtLjR8ZwaWUga5O8RAB+NVY1TLMTciZfMpcgnLRWztk6BBAUKHGYaFdpun
+         /pkvWZ27ogCkddt+LigjRHU3jT4IaPxRmxzy4cOb8bp584PEj7yjqtpb6RShbdfNnm
+         Uity8hvPhGoBg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p8ePF-0002hr-Hb; Fri, 23 Dec 2022 10:31:58 +0100
+Date:   Fri, 23 Dec 2022 10:31:57 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        quic_shazhuss@quicinc.com, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, johan+linaro@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
+        echanude@redhat.com
+Subject: Re: [PATCH v3 1/7] arm64: dts: qcom: sc8280xp: rename qup2_uart17 to
+ uart17
+Message-ID: <Y6V1jfP6wBe8RCWi@hovoldconsulting.com>
+References: <20221220192854.521647-1-bmasney@redhat.com>
+ <20221220192854.521647-2-bmasney@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221220192854.521647-2-bmasney@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HPD signals on DVI ports can be fired off before the pins required for
-DDC probing actually make contact, due to the pins for HPD making
-contact first. This results in a HPD signal being asserted but DDC
-probing failing, resulting in hotplugging occasionally failing.
+On Tue, Dec 20, 2022 at 02:28:48PM -0500, Brian Masney wrote:
+> In preparation for adding the missing SPI and I2C nodes to
+> sc8280xp.dtsi, it was decided to rename all of the existing qupX_
+> uart, spi, and i2c nodes to drop the qupX_ prefix. Let's go ahead
+> and rename qup2_uart17 to uart17. Note that some nodes are moved in the
+> file by this patch to preserve the expected sort order in the file.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> Link: https://lore.kernel.org/lkml/20221212182314.1902632-1-bmasney@redhat.com/
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Rescheduling the hotplug work for a second when we run into an HPD
-signal with a failing DDC probe usually gives enough time for the rest
-of the connector's pins to make contact, and fixes this issue.
-
-Signed-off-by: xurui <xurui@kylinos.cn>
-Reported-by: kernel test robot<lkp@intel.com>
----
-V1 -> V2: Fixed a compilation error
-
- drivers/gpu/drm/amd/amdgpu/amdgpu.h           |  2 +-
- .../gpu/drm/amd/amdgpu/amdgpu_connectors.c    | 22 ++++++++++++++++++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_display.c   |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h      |  1 +
- drivers/gpu/drm/amd/amdgpu/dce_v10_0.c        |  6 ++---
- drivers/gpu/drm/amd/amdgpu/dce_v11_0.c        |  6 ++---
- drivers/gpu/drm/amd/amdgpu/dce_v6_0.c         |  6 ++---
- drivers/gpu/drm/amd/amdgpu/dce_v8_0.c         |  6 ++---
- 8 files changed, 36 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-index 6b74df446694..b1d901fe578e 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-@@ -870,7 +870,7 @@ struct amdgpu_device {
- 	struct amdgpu_vkms_output       *amdgpu_vkms_output;
- 	struct amdgpu_mode_info		mode_info;
- 	/* For pre-DCE11. DCE11 and later are in "struct amdgpu_device->dm" */
--	struct work_struct		hotplug_work;
-+	struct delayed_work         hotplug_work;
- 	struct amdgpu_irq_src		crtc_irq;
- 	struct amdgpu_irq_src		vline0_irq;
- 	struct amdgpu_irq_src		vupdate_irq;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-index 2ebbc6382a06..d2abd334b1b5 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-@@ -996,13 +996,33 @@ amdgpu_connector_dvi_detect(struct drm_connector *connector, bool force)
- 		}
- 	}
- 
-+	if (amdgpu_connector->detected_hpd_without_ddc) {
-+		force = true;
-+		amdgpu_connector->detected_hpd_without_ddc = false;
-+	}
-+
- 	if (!force && amdgpu_connector_check_hpd_status_unchanged(connector)) {
- 		ret = connector->status;
- 		goto exit;
- 	}
- 
--	if (amdgpu_connector->ddc_bus)
-+	if (amdgpu_connector->ddc_bus) {
- 		dret = amdgpu_display_ddc_probe(amdgpu_connector, false);
-+
-+		/* Sometimes the pins required for the DDC probe on DVI
-+		 * connectors don't make contact at the same time that the ones
-+		 * for HPD do. If the DDC probe fails even though we had an HPD
-+		 * signal, try again later
-+		 */
-+		if (!dret && !force &&
-+		    amdgpu_display_hpd_sense(adev, amdgpu_connector->hpd.hpd)) {
-+			DRM_DEBUG_KMS("hpd detected without ddc, retrying in 1 second\n");
-+			amdgpu_connector->detected_hpd_without_ddc = true;
-+			schedule_delayed_work(&adev->hotplug_work,
-+					      msecs_to_jiffies(1000));
-+			goto exit;
-+		}
-+	}
- 	if (dret) {
- 		amdgpu_connector->detected_by_load = false;
- 		amdgpu_connector_free_edid(connector);
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-index b22471b3bd63..a876648e3d7a 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
-@@ -63,7 +63,7 @@
- void amdgpu_display_hotplug_work_func(struct work_struct *work)
- {
- 	struct amdgpu_device *adev = container_of(work, struct amdgpu_device,
--						  hotplug_work);
-+						  hotplug_work.work);
- 	struct drm_device *dev = adev_to_drm(adev);
- 	struct drm_mode_config *mode_config = &dev->mode_config;
- 	struct drm_connector *connector;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-index 8a39300b1a84..93c73faa5714 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-@@ -534,6 +534,7 @@ struct amdgpu_connector {
- 	void *con_priv;
- 	bool dac_load_detect;
- 	bool detected_by_load; /* if the connection status was determined by load */
-+	bool detected_hpd_without_ddc; /* if an HPD signal was detected on DVI, but ddc probing failed */
- 	uint16_t connector_object_id;
- 	struct amdgpu_hpd hpd;
- 	struct amdgpu_router router;
-diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
-index 248f1a4e915f..e85e57933cc4 100644
---- a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
-@@ -2837,7 +2837,7 @@ static int dce_v10_0_sw_init(void *handle)
- 	if (r)
- 		return r;
- 
--	INIT_WORK(&adev->hotplug_work,
-+	INIT_DELAYED_WORK(&adev->hotplug_work,
- 		  amdgpu_display_hotplug_work_func);
- 
- 	drm_kms_helper_poll_init(adev_to_drm(adev));
-@@ -2902,7 +2902,7 @@ static int dce_v10_0_hw_fini(void *handle)
- 
- 	dce_v10_0_pageflip_interrupt_fini(adev);
- 
--	flush_work(&adev->hotplug_work);
-+	flush_delayed_work(&adev->hotplug_work);
- 
- 	return 0;
- }
-@@ -3302,7 +3302,7 @@ static int dce_v10_0_hpd_irq(struct amdgpu_device *adev,
- 
- 	if (disp_int & mask) {
- 		dce_v10_0_hpd_int_ack(adev, hpd);
--		schedule_work(&adev->hotplug_work);
-+		schedule_delayed_work(&adev->hotplug_work, 0);
- 		DRM_DEBUG("IH: HPD%d\n", hpd + 1);
- 	}
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
-index cd9c19060d89..6b406bb7f3f3 100644
---- a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
-@@ -2956,7 +2956,7 @@ static int dce_v11_0_sw_init(void *handle)
- 	if (r)
- 		return r;
- 
--	INIT_WORK(&adev->hotplug_work,
-+	INIT_DELAYED_WORK(&adev->hotplug_work,
- 		  amdgpu_display_hotplug_work_func);
- 
- 	drm_kms_helper_poll_init(adev_to_drm(adev));
-@@ -3032,7 +3032,7 @@ static int dce_v11_0_hw_fini(void *handle)
- 
- 	dce_v11_0_pageflip_interrupt_fini(adev);
- 
--	flush_work(&adev->hotplug_work);
-+	flush_delayed_work(&adev->hotplug_work);
- 
- 	return 0;
- }
-@@ -3426,7 +3426,7 @@ static int dce_v11_0_hpd_irq(struct amdgpu_device *adev,
- 
- 	if (disp_int & mask) {
- 		dce_v11_0_hpd_int_ack(adev, hpd);
--		schedule_work(&adev->hotplug_work);
-+		schedule_delayed_work(&adev->hotplug_work, 0);
- 		DRM_DEBUG("IH: HPD%d\n", hpd + 1);
- 	}
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
-index 76323deecc58..2aa21eec0e06 100644
---- a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
-@@ -2715,7 +2715,7 @@ static int dce_v6_0_sw_init(void *handle)
- 		return r;
- 
- 	/* Pre-DCE11 */
--	INIT_WORK(&adev->hotplug_work,
-+	INIT_DELAYED_WORK(&adev->hotplug_work,
- 		  amdgpu_display_hotplug_work_func);
- 
- 	drm_kms_helper_poll_init(adev_to_drm(adev));
-@@ -2776,7 +2776,7 @@ static int dce_v6_0_hw_fini(void *handle)
- 
- 	dce_v6_0_pageflip_interrupt_fini(adev);
- 
--	flush_work(&adev->hotplug_work);
-+	flush_delayed_work(&adev->hotplug_work);
- 
- 	return 0;
- }
-@@ -3103,7 +3103,7 @@ static int dce_v6_0_hpd_irq(struct amdgpu_device *adev,
- 		tmp = RREG32(mmDC_HPD1_INT_CONTROL + hpd_offsets[hpd]);
- 		tmp |= DC_HPD1_INT_CONTROL__DC_HPD1_INT_ACK_MASK;
- 		WREG32(mmDC_HPD1_INT_CONTROL + hpd_offsets[hpd], tmp);
--		schedule_work(&adev->hotplug_work);
-+		schedule_delayed_work(&adev->hotplug_work, 0);
- 		DRM_DEBUG("IH: HPD%d\n", hpd + 1);
- 	}
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
-index 01cf3ab111cb..9da338889d36 100644
---- a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
-@@ -2739,7 +2739,7 @@ static int dce_v8_0_sw_init(void *handle)
- 		return r;
- 
- 	/* Pre-DCE11 */
--	INIT_WORK(&adev->hotplug_work,
-+	INIT_DELAYED_WORK(&adev->hotplug_work,
- 		  amdgpu_display_hotplug_work_func);
- 
- 	drm_kms_helper_poll_init(adev_to_drm(adev));
-@@ -2802,7 +2802,7 @@ static int dce_v8_0_hw_fini(void *handle)
- 
- 	dce_v8_0_pageflip_interrupt_fini(adev);
- 
--	flush_work(&adev->hotplug_work);
-+	flush_delayed_work(&adev->hotplug_work);
- 
- 	return 0;
- }
-@@ -3195,7 +3195,7 @@ static int dce_v8_0_hpd_irq(struct amdgpu_device *adev,
- 		tmp = RREG32(mmDC_HPD1_INT_CONTROL + hpd_offsets[hpd]);
- 		tmp |= DC_HPD1_INT_CONTROL__DC_HPD1_INT_ACK_MASK;
- 		WREG32(mmDC_HPD1_INT_CONTROL + hpd_offsets[hpd], tmp);
--		schedule_work(&adev->hotplug_work);
-+		schedule_delayed_work(&adev->hotplug_work, 0);
- 		DRM_DEBUG("IH: HPD%d\n", hpd + 1);
- 	}
- 
--- 
-2.25.1
-
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
