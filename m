@@ -2,336 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED73655655
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 01:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05576655643
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 00:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiLXAAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 19:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S231287AbiLWXu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 18:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiLXAA2 (ORCPT
+        with ESMTP id S231140AbiLWXuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 19:00:28 -0500
-X-Greylist: delayed 304 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 16:00:26 PST
-Received: from 2.mo547.mail-out.ovh.net (2.mo547.mail-out.ovh.net [46.105.35.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C28815F19
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 16:00:24 -0800 (PST)
-Received: from ex4.mail.ovh.net (unknown [10.111.172.9])
-        by mo547.mail-out.ovh.net (Postfix) with ESMTPS id 5F61A20ECA;
-        Fri, 23 Dec 2022 23:52:21 +0000 (UTC)
-Received: from dev-fedora-x86-64.naccy.de (37.65.8.229) by
- DAG10EX1.indiv4.local (172.16.2.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sat, 24 Dec 2022 00:52:19 +0100
-From:   Quentin Deslandes <qde@naccy.de>
-To:     <qde@naccy.de>
-CC:     <kernel-team@meta.com>, Dmitrii Banshchikov <me@ubique.spb.ru>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH bpf-next v3 09/16] bpfilter: add support for src/dst addr and ports
-Date:   Sat, 24 Dec 2022 00:40:17 +0100
-Message-ID: <20221223234127.474463-10-qde@naccy.de>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221223234127.474463-1-qde@naccy.de>
-References: <20221223234127.474463-1-qde@naccy.de>
+        Fri, 23 Dec 2022 18:50:23 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09754120BB;
+        Fri, 23 Dec 2022 15:50:22 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F9BE4DD;
+        Sat, 24 Dec 2022 00:50:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1671839420;
+        bh=6ImSr7rlBEjCoRKJeakfOzt5VfKkrZOSbEQ1vcPpdmQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S41nSowMD/xkek3LxCDRoHM74JOa/hTt/1cm5WPsVwv2SAbfRSrLxd0PcZEoQn8g/
+         qSDLWflV0nc2iKplqstJ2c3B2iwsM4msVCD1pQPgZqqZOfB4pTHA6721CSjqQRuvBO
+         +URKfEKxhobgkGq/2D6JQgc66AOTsr8Q7TntD594=
+Date:   Sat, 24 Dec 2022 01:50:15 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Roderick Colenbrander <thunderbird2k@gmail.com>
+Cc:     Ivan Mironov <mironov.ivan@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] HID: sony: Support for DS4 clones that do not implement
+ feature report 0x81
+Message-ID: <Y6Y+t0hw1ynJQKXd@pendragon.ideasonboard.com>
+References: <20210113173402.17030-1-mironov.ivan@gmail.com>
+ <8a2463a97af411e4167f3c4abc2d4be6447e51ac.camel@gmail.com>
+ <Y6TaqXproHyRSThH@pendragon.ideasonboard.com>
+ <CAEc3jaCTu+WYP6zikKXX2igTvq5GUKX2Y1fpF0q5ZBaNMytgSA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [37.65.8.229]
-X-ClientProxiedBy: CAS6.indiv4.local (172.16.1.6) To DAG10EX1.indiv4.local
- (172.16.2.91)
-X-Ovh-Tracer-Id: 4554828075903086199
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrheefgdduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogetfedtuddqtdduucdludehmdenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpefsuhgvnhhtihhnucffvghslhgrnhguvghsuceoqhguvgesnhgrtggthidruggvqeenucggtffrrghtthgvrhhnpeduledugfeileetvdelieeujedttedtvedtgfetteevfeejhfffkeeujeetfffgudenucfkphepuddvjedrtddrtddruddpfeejrdeihedrkedrvddvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehquggvsehnrggttgihrdguvgeqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepshgufhesghhoohhglhgvrdgtohhmpdgsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhmhihkohhlrghlsehfsgdrtghomhdpphgrsggvnhhisehrvgguhhgrthdrtghomhdpkhhusggrsehkvghrnhgvlhdrohhrghdpvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdpuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvth
- dpjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhhrgholhhuohesghhoohhglhgvrdgtohhmpdhlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhkphhsihhnghhhsehkvghrnhgvlhdrohhrghdpjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdihhhhssehfsgdrtghomhdpshhonhhgsehkvghrnhgvlhdrohhrghdpmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdgrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdgurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprghstheskhgvrhhnvghlrdhorhhgpdhmvgesuhgsihhquhgvrdhsphgsrdhruhdpkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheegjedpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAEc3jaCTu+WYP6zikKXX2igTvq5GUKX2Y1fpF0q5ZBaNMytgSA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement support for source and destination addresses and ports
-matching.
+Hi Roderick,
 
-Co-developed-by: Dmitrii Banshchikov <me@ubique.spb.ru>
-Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
-Signed-off-by: Quentin Deslandes <qde@naccy.de>
----
- net/bpfilter/Makefile                         |   2 +-
- net/bpfilter/context.c                        |   2 +-
- net/bpfilter/match.h                          |   2 +
- net/bpfilter/xt_udp.c                         | 111 ++++++++++++++++++
- .../testing/selftests/bpf/bpfilter/.gitignore |   1 +
- tools/testing/selftests/bpf/bpfilter/Makefile |   6 +-
- .../selftests/bpf/bpfilter/test_xt_udp.c      |  48 ++++++++
- 7 files changed, 168 insertions(+), 4 deletions(-)
- create mode 100644 net/bpfilter/xt_udp.c
- create mode 100644 tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
+On Fri, Dec 23, 2022 at 03:41:09PM -0800, Roderick Colenbrander wrote:
+> Try the new hid-playstation driver for Linux 6.2 (download from git or wait
+> until rc1). We added ds4 support to it and the Mac address handling code is
+> different. It may work for your device. I intend to remove ds4 from
+> hid-sony later.
 
-diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
-index 2f8d867a6038..345341a9ee30 100644
---- a/net/bpfilter/Makefile
-+++ b/net/bpfilter/Makefile
-@@ -13,7 +13,7 @@ $(LIBBPF_A):
- userprogs := bpfilter_umh
- bpfilter_umh-objs := main.o logger.o map-common.o
- bpfilter_umh-objs += context.o codegen.o
--bpfilter_umh-objs += match.o
-+bpfilter_umh-objs += match.o xt_udp.o
- bpfilter_umh-userldlibs := $(LIBBPF_A) -lelf -lz
- userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
- 
-diff --git a/net/bpfilter/context.c b/net/bpfilter/context.c
-index b5e172412fab..f420fb8b6507 100644
---- a/net/bpfilter/context.c
-+++ b/net/bpfilter/context.c
-@@ -16,7 +16,7 @@
- #include "map-common.h"
- #include "match.h"
- 
--static const struct match_ops *match_ops[] = { };
-+static const struct match_ops *match_ops[] = { &xt_udp };
- 
- static int init_match_ops_map(struct context *ctx)
- {
-diff --git a/net/bpfilter/match.h b/net/bpfilter/match.h
-index c6541e6a6567..7de3d2a07dc5 100644
---- a/net/bpfilter/match.h
-+++ b/net/bpfilter/match.h
-@@ -29,6 +29,8 @@ struct match {
- 	const struct bpfilter_ipt_match *ipt_match;
- };
- 
-+extern const struct match_ops xt_udp;
-+
- int init_match(struct context *ctx, const struct bpfilter_ipt_match *ipt_match,
- 	       struct match *match);
- 
-diff --git a/net/bpfilter/xt_udp.c b/net/bpfilter/xt_udp.c
-new file mode 100644
-index 000000000000..c78cd4341f81
---- /dev/null
-+++ b/net/bpfilter/xt_udp.c
-@@ -0,0 +1,111 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ * Copyright (c) 2022 Meta Platforms, Inc. and affiliates.
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include <linux/filter.h>
-+#include <linux/netfilter/x_tables.h>
-+#include <linux/netfilter/xt_tcpudp.h>
-+#include <linux/udp.h>
-+
-+#include <arpa/inet.h>
-+#include <errno.h>
-+
-+#include "codegen.h"
-+#include "context.h"
-+#include "logger.h"
-+#include "match.h"
-+
-+static int xt_udp_check(struct context *ctx,
-+			const struct bpfilter_ipt_match *ipt_match)
-+{
-+	const struct xt_udp *udp;
-+
-+	udp = (const struct xt_udp *)&ipt_match->data;
-+
-+	if (udp->invflags & XT_UDP_INV_MASK) {
-+		BFLOG_ERR("cannot check match 'udp': invalid flags\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int xt_udp_gen_inline_ports(struct codegen *ctx, int regno, bool inv,
-+				   const u16 (*ports)[2])
-+{
-+	if ((*ports)[0] == 0 && (*ports)[1] == 65535) {
-+		if (inv)
-+			EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+				   BPF_JMP_IMM(BPF_JA, 0, 0, 0));
-+	} else if ((*ports)[0] == (*ports)[1]) {
-+		const u16 port = htons((*ports)[0]);
-+
-+		EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+			   BPF_JMP_IMM((inv ? BPF_JEQ : BPF_JNE), regno, port, 0));
-+	} else {
-+		EMIT_LITTLE_ENDIAN(ctx, BPF_ENDIAN(BPF_TO_BE, regno, 16));
-+		EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+			   BPF_JMP_IMM(inv ? BPF_JGT : BPF_JLT, regno, (*ports)[0], 0));
-+		EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+			   BPF_JMP_IMM(inv ? BPF_JLT : BPF_JGT, regno, (*ports)[1], 0));
-+	}
-+
-+	return 0;
-+}
-+
-+static int xt_udp_gen_inline(struct codegen *ctx, const struct match *match)
-+{
-+	const struct xt_udp *udp;
-+	int r;
-+
-+	udp = (const struct xt_udp *)&match->ipt_match->data;
-+
-+	EMIT(ctx, BPF_MOV64_REG(CODEGEN_REG_SCRATCH1, CODEGEN_REG_L4));
-+	EMIT(ctx, BPF_ALU64_IMM(BPF_ADD, CODEGEN_REG_SCRATCH1, sizeof(struct udphdr)));
-+	r = ctx->codegen_ops->load_packet_data_end(ctx, CODEGEN_REG_DATA_END);
-+	if (r) {
-+		BFLOG_ERR("failed to generate code to load packet data end: %s",
-+			  STRERR(r));
-+		return r;
-+	}
-+
-+	EMIT_FIXUP(ctx, CODEGEN_FIXUP_NEXT_RULE,
-+		   BPF_JMP_REG(BPF_JGT, CODEGEN_REG_SCRATCH1, CODEGEN_REG_DATA_END, 0));
-+
-+	EMIT(ctx, BPF_LDX_MEM(BPF_H, CODEGEN_REG_SCRATCH4, CODEGEN_REG_L4,
-+			      offsetof(struct udphdr, source)));
-+	EMIT(ctx, BPF_LDX_MEM(BPF_H, CODEGEN_REG_SCRATCH5, CODEGEN_REG_L4,
-+			      offsetof(struct udphdr, dest)));
-+
-+	r = xt_udp_gen_inline_ports(ctx, CODEGEN_REG_SCRATCH4,
-+				    udp->invflags & XT_UDP_INV_SRCPT,
-+				    &udp->spts);
-+	if (r) {
-+		BFLOG_ERR("failed to generate code to match source ports: %s",
-+			  STRERR(r));
-+		return r;
-+	}
-+
-+	r = xt_udp_gen_inline_ports(ctx, CODEGEN_REG_SCRATCH5,
-+				    udp->invflags & XT_UDP_INV_DSTPT,
-+				    &udp->dpts);
-+	if (r) {
-+		BFLOG_ERR("failed to generate code to match destination ports: %s",
-+			  STRERR(r));
-+		return r;
-+	}
-+
-+	return 0;
-+}
-+
-+const struct match_ops xt_udp = {
-+	.name = "udp",
-+	.size = XT_ALIGN(sizeof(struct xt_udp)),
-+	.revision = 0,
-+	.check = xt_udp_check,
-+	.gen_inline = xt_udp_gen_inline
-+};
-diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
-index 9ac1b3caf246..f84cc86493df 100644
---- a/tools/testing/selftests/bpf/bpfilter/.gitignore
-+++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
-@@ -2,3 +2,4 @@
- tools/**
- test_map
- test_match
-+test_xt_udp
-diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
-index 10642c1d6a87..97f8d596de36 100644
---- a/tools/testing/selftests/bpf/bpfilter/Makefile
-+++ b/tools/testing/selftests/bpf/bpfilter/Makefile
-@@ -12,6 +12,7 @@ CFLAGS += -Wall -g -pthread -I$(TOOLSINCDIR) -I$(APIDIR) -I$(BPFILTERSRCDIR)
- 
- TEST_GEN_PROGS += test_map
- TEST_GEN_PROGS += test_match
-+TEST_GEN_PROGS += test_xt_udp
- 
- KSFT_KHDR_INSTALL := 1
- 
-@@ -35,11 +36,12 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
- 
- BPFILTER_MAP_SRCS := $(BPFILTERSRCDIR)/map-common.c
- BPFILTER_CODEGEN_SRCS := $(BPFILTERSRCDIR)/codegen.c $(BPFOBJ) -lelf -lz
--BPFILTER_MATCH_SRCS := $(BPFILTERSRCDIR)/match.c
-+BPFILTER_MATCH_SRCS := $(BPFILTERSRCDIR)/match.c $(BPFILTERSRCDIR)/xt_udp.c
- 
--BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS)
-+BPFILTER_COMMON_SRCS := $(BPFILTER_MAP_SRCS) $(BPFILTER_CODEGEN_SRCS)
- BPFILTER_COMMON_SRCS += $(BPFILTERSRCDIR)/context.c $(BPFILTERSRCDIR)/logger.c
- BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS)
- 
- $(OUTPUT)/test_map: test_map.c $(BPFILTER_MAP_SRCS)
- $(OUTPUT)/test_match: test_match.c $(BPFILTER_COMMON_SRCS)
-+$(OUTPUT)/test_xt_udp: test_xt_udp.c $(BPFILTER_COMMON_SRCS)
-diff --git a/tools/testing/selftests/bpf/bpfilter/test_xt_udp.c b/tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
-new file mode 100644
-index 000000000000..c0898b0eca30
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpfilter/test_xt_udp.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+
-+#include <linux/netfilter/x_tables.h>
-+#include <linux/netfilter/xt_tcpudp.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#include "context.h"
-+#include "logger.h"
-+#include "match.h"
-+
-+#include "bpfilter_util.h"
-+
-+FIXTURE(test_xt_udp)
-+{
-+	struct context ctx;
-+	struct {
-+		struct xt_entry_match match;
-+		struct xt_udp udp;
-+
-+	} ipt_match;
-+	struct match match;
-+};
-+
-+FIXTURE_SETUP(test_xt_udp)
-+{
-+	logger_set_file(stderr);
-+	ASSERT_EQ(0, create_context(&self->ctx));
-+};
-+
-+FIXTURE_TEARDOWN(test_xt_udp)
-+{
-+	free_context(&self->ctx);
-+};
-+
-+TEST_F(test_xt_udp, init)
-+{
-+	init_entry_match((struct xt_entry_match *)&self->ipt_match,
-+			 sizeof(self->ipt_match), 0, "udp");
-+	ASSERT_EQ(init_match(&self->ctx,
-+			     (const struct bpfilter_ipt_match *)&self->ipt_match,
-+			     &self->match),
-+		 0);
-+}
-+
-+TEST_HARNESS_MAIN
+I'll give that a try, but it will take a while. I don't have access to
+the hardware at the moment, I was testing this at a friend's place,
+after their son was disappointed that the game controller he had just
+bought didn't work with RetroPie. When the boy will be a bit older I'll
+have to teach him to compile his own kernel ;-)
+
+> On Thu, Dec 22, 2022, 2:43 PM Laurent Pinchart wrote:
+> > On Sat, Feb 13, 2021 at 09:02:45AM +0500, Ivan Mironov wrote:
+> > > Ignore this patch, I am working on a better one.
+> >
+> > Have you managed to write a better patch ? I've successfuly tested this
+> > one with a PS4 controller clone.
+> >
+> > > On Wed, 2021-01-13 at 22:34 +0500, Ivan Mironov wrote:
+> > > > There are clones of DualShock 4 that are very similar to the originals,
+> > > > except of 1) they do not support HID feature report 0x81 and 2) they do
+> > > > not have any USB Audio interfaces despite they physically have audio
+> > > > jack.
+> > > >
+> > > > Such controllers are working fine with Linux when connected via
+> > > > Bluetooth, but not when connected via USB. Here is how failed USB
+> > > > connection attempt looks in log:
+> > > >
+> > > >     usb 1-5: New USB device found, idVendor=054c, idProduct=05c4, bcdDevice= 1.00
+> > > >     usb 1-5: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> > > >     usb 1-5: Product: Wireless Controller
+> > > >     usb 1-5: Manufacturer: Sony Computer Entertainment
+> > > >     sony 0003:054C:05C4.0007: failed to retrieve feature report 0x81 with the DualShock 4 MAC address
+> > > >     sony 0003:054C:05C4.0007: hidraw6: USB HID v81.11 Gamepad [Sony Computer Entertainment Wireless Controller] on usb-0000:00:14.0-5/input0
+> > > >     sony 0003:054C:05C4.0007: failed to claim input
+> > > >
+> > > > This patch adds support of using feature report 0x12 as a fallback for
+> > > > Bluetooth MAC address retrieval. Feature report 0x12 also seems to be
+> > > > used by DS4Windows[1] for all DS4 controllers.
+> > > >
+> > > > [1] https://github.com/Ryochan7/DS4Windows/blob/1b74a4440089f38a24ee2c2483c1d733a0692b8f/DS4Windows/HidLibrary/HidDevice.cs#L479
+> > > >
+> > > > Signed-off-by: Ivan Mironov <mironov.ivan@gmail.com>
+> > > > ---
+> > > >  drivers/hid/hid-sony.c | 72 ++++++++++++++++++++++++++++++------------
+> > > >  1 file changed, 52 insertions(+), 20 deletions(-)
+> > > >
+> > > > diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
+> > > > index e3a557dc9ffd..97df12180e45 100644
+> > > > --- a/drivers/hid/hid-sony.c
+> > > > +++ b/drivers/hid/hid-sony.c
+> > > > @@ -491,6 +491,7 @@ struct motion_output_report_02 {
+> > > >
+> > > >
+> > > >  #define DS4_FEATURE_REPORT_0x02_SIZE 37
+> > > >  #define DS4_FEATURE_REPORT_0x05_SIZE 41
+> > > > +#define DS4_FEATURE_REPORT_0x12_SIZE 16
+> > > >  #define DS4_FEATURE_REPORT_0x81_SIZE 7
+> > > >  #define DS4_FEATURE_REPORT_0xA3_SIZE 49
+> > > >  #define DS4_INPUT_REPORT_0x11_SIZE 78
+> > > > @@ -2593,6 +2594,53 @@ static int sony_get_bt_devaddr(struct sony_sc *sc)
+> > > >     return 0;
+> > > >  }
+> > > >
+> > > >
+> > > > +static int sony_get_usb_ds4_devaddr(struct sony_sc *sc)
+> > > > +{
+> > > > +   u8 *buf = NULL;
+> > > > +   int ret;
+> > > > +
+> > > > +   buf = kmalloc(max(DS4_FEATURE_REPORT_0x12_SIZE, DS4_FEATURE_REPORT_0x81_SIZE), GFP_KERNEL);
+> > > > +   if (!buf)
+> > > > +           return -ENOMEM;
+> > > > +
+> > > > +   /*
+> > > > +    * The MAC address of a DS4 controller connected via USB can be
+> > > > +    * retrieved with feature report 0x81. The address begins at
+> > > > +    * offset 1.
+> > > > +    */
+> > > > +   ret = hid_hw_raw_request(sc->hdev, 0x81, buf,
+> > > > +                   DS4_FEATURE_REPORT_0x81_SIZE, HID_FEATURE_REPORT,
+> > > > +                   HID_REQ_GET_REPORT);
+> > > > +   if (ret == DS4_FEATURE_REPORT_0x81_SIZE) {
+> > > > +           memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+> > > > +           goto out_free;
+> > > > +   }
+> > > > +   dbg_hid("%s: hid_hw_raw_request(..., 0x81, ...) returned %d\n", __func__, ret);
+> > > > +
+> > > > +   /*
+> > > > +    * Some variants do not implement feature report 0x81 at all.
+> > > > +    * Fortunately, feature report 0x12 also contains the MAC address of
+> > > > +    * a controller.
+> > > > +    */
+> > > > +   ret = hid_hw_raw_request(sc->hdev, 0x12, buf,
+> > > > +                   DS4_FEATURE_REPORT_0x12_SIZE, HID_FEATURE_REPORT,
+> > > > +                   HID_REQ_GET_REPORT);
+> > > > +   if (ret == DS4_FEATURE_REPORT_0x12_SIZE) {
+> > > > +           memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+> > > > +           goto out_free;
+> > > > +   }
+> > > > +   dbg_hid("%s: hid_hw_raw_request(..., 0x12, ...) returned %d\n", __func__, ret);
+> > > > +
+> > > > +   hid_err(sc->hdev, "failed to retrieve feature reports 0x81 and 0x12 with the DualShock 4 MAC address\n");
+> > > > +   ret = ret < 0 ? ret : -EINVAL;
+> > > > +
+> > > > +out_free:
+> > > > +
+> > > > +   kfree(buf);
+> > > > +
+> > > > +   return ret;
+> > > > +}
+> > > > +
+> > > >  static int sony_check_add(struct sony_sc *sc)
+> > > >  {
+> > > >     u8 *buf = NULL;
+> > > > @@ -2613,26 +2661,9 @@ static int sony_check_add(struct sony_sc *sc)
+> > > >                     return 0;
+> > > >             }
+> > > >     } else if (sc->quirks & (DUALSHOCK4_CONTROLLER_USB | DUALSHOCK4_DONGLE)) {
+> > > > -           buf = kmalloc(DS4_FEATURE_REPORT_0x81_SIZE, GFP_KERNEL);
+> > > > -           if (!buf)
+> > > > -                   return -ENOMEM;
+> > > > -
+> > > > -           /*
+> > > > -            * The MAC address of a DS4 controller connected via USB can be
+> > > > -            * retrieved with feature report 0x81. The address begins
+> > at
+> > > > -            * offset 1.
+> > > > -            */
+> > > > -           ret = hid_hw_raw_request(sc->hdev, 0x81, buf,
+> > > > -                           DS4_FEATURE_REPORT_0x81_SIZE, HID_FEATURE_REPORT,
+> > > > -                           HID_REQ_GET_REPORT);
+> > > > -
+> > > > -           if (ret != DS4_FEATURE_REPORT_0x81_SIZE) {
+> > > > -                   hid_err(sc->hdev, "failed to retrieve feature report 0x81 with the DualShock 4 MAC address\n");
+> > > > -                   ret = ret < 0 ? ret : -EINVAL;
+> > > > -                   goto out_free;
+> > > > -           }
+> > > > -
+> > > > -           memcpy(sc->mac_address, &buf[1], sizeof(sc->mac_address));
+> > > > +           ret = sony_get_usb_ds4_devaddr(sc);
+> > > > +           if (ret < 0)
+> > > > +                   return ret;
+> > > >
+> > > >
+> > > >             snprintf(sc->hdev->uniq, sizeof(sc->hdev->uniq),
+> > > >                      "%pMR", sc->mac_address);
+> > > > @@ -2670,6 +2701,7 @@ static int sony_check_add(struct sony_sc *sc)
+> > > >             return 0;
+> > > >     }
+> > > >
+> > > >
+> > > > +   dbg_hid("%s: retrieved MAC address: %s\n", __func__, sc->hdev->uniq);
+> > > >     ret = sony_check_add_dev_list(sc);
+> > > >
+> > > >
+> > > >  out_free:
+
 -- 
-2.38.1
+Regards,
 
+Laurent Pinchart
