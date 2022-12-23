@@ -2,114 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0F26552B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5626552B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiLWQV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 11:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
+        id S231922AbiLWQWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 11:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiLWQVR (ORCPT
+        with ESMTP id S231338AbiLWQV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 11:21:17 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6EEB7D7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:21:14 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id x11so5508288ljh.7
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:21:14 -0800 (PST)
+        Fri, 23 Dec 2022 11:21:57 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1522BDB
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:21:54 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso1270082wmb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:21:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dYVyisN/1CFHnXWJIqkehSm2uoYfT/wTJfVZDQ/+DVE=;
-        b=NCOEh9D/bNqWA5XTFZ60lySOYnIpQa+96P6SqznFbOeL6v6OdCLC7XCYtqlnMoIi7y
-         p+mUe0YMEX/F1jPKxOheyI2cpWhhAoqTNwRYeZnGI9j6nYPRiOpQSzh7kjeH2aDkkNg/
-         Womedpb8jyh5fPGBgM0iwtj2CEaZe+wSgNW/vL4wduVUJHSn+M8f9Z+ICd2WKCGG096p
-         O/xeCICYDdG7fHty21hER+ZOVrIej/d3HbPxQPr0qNFO2vCtmgB+GbWI4I+6Sw8v9/uS
-         trqcfaWyJZ2eeUcWPZeeY9Twit6PSGqyCaXcGKwSnG4CwVIGRH8NQOaBcfYFdruuASBF
-         vNqg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hI2AAVr0GajMn6R38dDdetCgvikhxBGvAxzi6T7wg0k=;
+        b=dKMhvPsIEPUzoTnSdzSjitUM9MyhEDdt1DRMWa6rATPUveG38LwbqZbzfbilPnfYAS
+         QB3uHYH7tC3JTz2ZkWc0V9Idq8vxuz0FYSCybrP91h/UZzUL2mg5Jr557+PsdoS7VqzX
+         XitIerrhDf4YB8JIeW2oySG+bQ3uXAnO7hFwHIB5NNxSa9RrtcHxUnpMmtz8966m60fg
+         TE0J3FXayCITuJRn6pYEjzxyvaNi95AZCqs7SLiuooH4TuMvzy/fogS3YgYe7oN8GqMr
+         PY9aGsK1ITqcFQy+s81WvDiN119e7t6DV10U2HJIQnH1Tf08FJwQchAI0gfLnlJfeVH3
+         pqew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dYVyisN/1CFHnXWJIqkehSm2uoYfT/wTJfVZDQ/+DVE=;
-        b=p7y50ayG0HcS+C0gsauoeRFroG5v9rnAyq2jNAmg01Kufw5fFkNMPHbly8cOHk1r2Y
-         nOkzTcS9TlF+Dmf5kfgLTw9R2fLFT//igNShYHNBK6V0pUIa1dnTvxrjtV0zxMKC6lxC
-         Sr+SxQGABWF5/vc0BaLd2whj9I6C2Do7TxTJESPafS73Z2v0K2EU0lNuL1LWmiOHSn05
-         V2aQs8w3oT+c7sN9xjiT1i8kuo9+8PIVmwFj+3pbgUhNllHfgJXzKWFA/G0891lkKOrG
-         lz6WD8Q2bzJaNV7PTMVZJ9kSLqxJmMzPoVqp0ICZnGq5gPkWgSOHHu0kjLwpm57RsXI9
-         4G4Q==
-X-Gm-Message-State: AFqh2kqg9OaRgIOs4G3G8uoGMluGQCVmvsjLax3uZEqyt/19bH7amFGw
-        2AW1AP2HENLJKo8Acbq2eSLacw==
-X-Google-Smtp-Source: AMrXdXtG77fus5WAw6rqU/rd5XFEMTUvaZTbdeki21w593nLJmL2dJyYLncYNytMYA5uw6KKXaKdrg==
-X-Received: by 2002:a2e:bf25:0:b0:27f:ac86:8db7 with SMTP id c37-20020a2ebf25000000b0027fac868db7mr1814787ljr.44.1671812473343;
-        Fri, 23 Dec 2022 08:21:13 -0800 (PST)
-Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id x10-20020a2e880a000000b002771057e0e5sm497638ljh.76.2022.12.23.08.21.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 08:21:12 -0800 (PST)
-Message-ID: <35a193b5-8c78-d24c-45bd-8092c7852260@linaro.org>
-Date:   Fri, 23 Dec 2022 17:21:09 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hI2AAVr0GajMn6R38dDdetCgvikhxBGvAxzi6T7wg0k=;
+        b=us5ah6rfWfdye5EIsObowHbQT5uHhyWo+d9tkYF2CQHr6hmKJbqNMRn0wYFa2F4ess
+         bcPCoDkfeQoBA3lzShLvcQu8N/xJZP1s2blpn15nQk5epVBqKNFJS2lvY53dpNR2xHLb
+         S1lWDxMrZNRtY/iKRx2NRzOcNihYgkecY/+ki2Qx74yBLnUviv1f36d6Hw/GEHabxFAK
+         CwiWUgLcS2Xf7IFKZv7drmXnwFFlKbrgyg0W/9SEzwtZC/Ft//dJhsxvH//itLMIl93B
+         Rt+0getXyQDwNVt6VxdP9fn8J+18mg/gTcmRT6rqMNaK7Qq8nVc8QADMt618pEsz9pdA
+         vWaQ==
+X-Gm-Message-State: AFqh2krE+2WPQKa8dkHaxFYzBu3Mdug25QwVGwvGtoQ/kqKeJ6jyEeXx
+        BtukBtXZjkw2is2eiocJp5YkQHpzpdgAA4gV
+X-Google-Smtp-Source: AMrXdXvcv7aKaagigLS48DwM5czqYbY//VUKgxMMwbvv/+ONNDRe6/3C7KVWfc17NL49kXOVZ0OtZg==
+X-Received: by 2002:a1c:19c4:0:b0:3d1:ebdf:d592 with SMTP id 187-20020a1c19c4000000b003d1ebdfd592mr7529261wmz.22.1671812513280;
+        Fri, 23 Dec 2022 08:21:53 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id w20-20020a1cf614000000b003cf4d99fd2asm4895248wmc.6.2022.12.23.08.21.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 08:21:52 -0800 (PST)
+Date:   Fri, 23 Dec 2022 19:21:49 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     oe-kbuild@lists.linux.dev, Sagi Grimberg <sagi@grimberg.me>,
+        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: drivers/nvme/host/auth.c:950 nvme_auth_init_ctrl() warn: missing
+ error code? 'ret'
+Message-ID: <Y6XVnWCNx6cB7Itw@kadam>
+References: <202212222333.vrYfUBqM-lkp@intel.com>
+ <20221223154754.GA30339@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/4] ARM: dts: qcom: sdx55: add specific compatible for
- USB HS PHY
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221223161835.112079-1-krzysztof.kozlowski@linaro.org>
- <20221223161835.112079-2-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221223161835.112079-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221223154754.GA30339@lst.de>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23.12.2022 17:18, Krzysztof Kozlowski wrote:
-> Add SoC-specific compatible to the USB HS PHY to match other devices and
-> bindings.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  arch/arm/boot/dts/qcom-sdx55.dtsi | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-sdx55.dtsi b/arch/arm/boot/dts/qcom-sdx55.dtsi
-> index f1c0dab40992..5408ff715fbf 100644
-> --- a/arch/arm/boot/dts/qcom-sdx55.dtsi
-> +++ b/arch/arm/boot/dts/qcom-sdx55.dtsi
-> @@ -214,7 +214,8 @@ blsp1_uart3: serial@831000 {
->  		};
+On Fri, Dec 23, 2022 at 04:47:54PM +0100, Christoph Hellwig wrote:
+> diff --git a/drivers/nvme/host/auth.c b/drivers/nvme/host/auth.c
+> index bb0abbe4491cdc..c808652966a94f 100644
+> --- a/drivers/nvme/host/auth.c
+> +++ b/drivers/nvme/host/auth.c
+> @@ -943,16 +943,19 @@ int nvme_auth_init_ctrl(struct nvme_ctrl *ctrl)
+>  	INIT_WORK(&ctrl->dhchap_auth_work, nvme_ctrl_auth_work);
+>  	if (!ctrl->opts)
+>  		return 0;
+> -	ret = nvme_auth_generate_key(ctrl->opts->dhchap_secret,
+> -			&ctrl->host_key);
+> -	if (ret)
+> -		return ret;
+> -	ret = nvme_auth_generate_key(ctrl->opts->dhchap_ctrl_secret,
+> -			&ctrl->ctrl_key);
+> -	if (ret)
+> +
+> +	ctrl->host_key = nvme_auth_generate_key(ctrl->opts->dhchap_secret);
+> +	if (IS_ERR(ctrl->host_key)) {
+> +		ret = PTR_ERR(ctrl->host_key);
+> +		goto out;
+> +	}
+> +	ctrl->ctrl_key = nvme_auth_generate_key(ctrl->opts->dhchap_ctrl_secret);
+> +	if (IS_ERR(ctrl->ctrl_key)) {
+> +		ret = PTR_ERR(ctrl->ctrl_key);
+>  		goto err_free_dhchap_secret;
+> +	}
 >  
->  		usb_hsphy: phy@ff4000 {
-> -			compatible = "qcom,usb-snps-hs-7nm-phy";
-> +			compatible = "qcom,sdx55-usb-hs-phy",
-> +				     "qcom,usb-snps-hs-7nm-phy";
-same as in 3/4
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> -	if (!ctrl->opts->dhchap_secret && !ctrl->opts->dhchap_ctrl_secret)
+> +	if (!ctrl->host_key && !ctrl->ctrl_key)
+>  		return ret;
 
-Konrad
->  			reg = <0x00ff4000 0x114>;
->  			status = "disabled";
->  			#phy-cells = <0>;
+ret is uninitialized now.
+
+regards,
+dan carpenter
+
