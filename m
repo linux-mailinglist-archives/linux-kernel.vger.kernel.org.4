@@ -2,82 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF336553FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 20:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CC16553DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 20:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiLWTmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 14:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S231970AbiLWTeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 14:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232720AbiLWTlx (ORCPT
+        with ESMTP id S230366AbiLWTeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 14:41:53 -0500
-X-Greylist: delayed 417 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 23 Dec 2022 11:41:52 PST
-Received: from out-160.mta0.migadu.com (out-160.mta0.migadu.com [IPv6:2001:41d0:1004:224b::a0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707BA20BCB
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 11:41:51 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh; s=key1;
-        t=1671824095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Cuo2mCxNwzlaaPMVGjwAgwxjj9yvcLc2q0fziXRbFVU=;
-        b=NeIx+4APL6Bbg5KKboUjBG2eMNXJamoYBXirkOAWVHWdr5z58oL0yA1l2v/nNg/Vn43YVS
-        VcEuaxYCoir6rAKF9EQk1ZNgSTPYJzQVmgHffQICsaZh/P1+KAxDQ5hDBWALfLdtUGUHxV
-        K2WaUZukdiczgakdeTuyhv3d2vXkkwE=
-From:   Rayyan Ansari <rayyan@ansari.sh>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Rayyan Ansari <rayyan@ansari.sh>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ARM: dts: qcom: pm8226: add IADC node
-Date:   Fri, 23 Dec 2022 19:34:03 +0000
-Message-Id: <20221223193403.781355-4-rayyan@ansari.sh>
-In-Reply-To: <20221223193403.781355-1-rayyan@ansari.sh>
-References: <20221223193403.781355-1-rayyan@ansari.sh>
+        Fri, 23 Dec 2022 14:34:25 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9185E2018E;
+        Fri, 23 Dec 2022 11:34:24 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BNJY7kW3005320
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 23 Dec 2022 11:34:08 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BNJY7kW3005320
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022120601; t=1671824048;
+        bh=IrboZx5CPC/dL/EdCsJXRS0OtXozRdw6gy0xC4hc90I=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=R5pLy9wg3IEoVnGbPbdm89AwneJqiYGnORrjHZQGNU+Paj35segoutCkPgDjLEYEx
+         ykh5cC1tDtHw4Q8U1Ww7NZ+8B9VuYfHGv/NrrMX5JbDR0Kx8TqRz8DSNygppgJPy/b
+         wmLkB+wbiOEHzsRoqoupa8JUtS2oMhFtig5tQpMuV93UUB8yPV0kU5qbUEmPcbKqe1
+         Inf9JJBwsBUh+5q78j8dLNq2SSeDWKTe4zJphbTpISrDMawJNqV+B+2+WCNkj406RK
+         Xrk1n55tRsZ/QxGMBE4kqkMcUPjs49vIP2ncJxGAAutBpLnDm1tkCCaTsvpXvCkc6G
+         DDybFYu/EihVw==
+Date:   Fri, 23 Dec 2022 11:34:05 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "Li, Xin3" <xin3.li@intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [RFC PATCH 14/32] x86/fred: header file with FRED definitions
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Y6RVvRg20Xc6IR4k@hirez.programming.kicks-ass.net>
+References: <20221220063658.19271-1-xin3.li@intel.com> <20221220063658.19271-15-xin3.li@intel.com> <Y6F4s0K2b2G8aMve@hirez.programming.kicks-ass.net> <BN6PR1101MB21615569318BD964A2855F44A8EB9@BN6PR1101MB2161.namprd11.prod.outlook.com> <Y6RVvRg20Xc6IR4k@hirez.programming.kicks-ass.net>
+Message-ID: <BBD4EA67-C076-4718-93C6-EB25A59C342B@zytor.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a node for the current ADC (IADC) found in PM8226.
+On December 22, 2022 5:03:57 AM PST, Peter Zijlstra <peterz@infradead=2Eorg=
+> wrote:
+>On Wed, Dec 21, 2022 at 02:58:06AM +0000, Li, Xin3 wrote:
+>
+>> > > +/* Flags above the CS selector (regs->csl) */
+>> > > +#define FRED_CSL_ENABLE_NMI		_BITUL(28)
+>> > > +#define FRED_CSL_ALLOW_SINGLE_STEP	_BITUL(25)
+>> > > +#define FRED_CSL_INTERRUPT_SHADOW	_BITUL(24)
+>> >=20
+>> > What's the state of IBT WAIT-FOR-ENDBR vs this? That really should al=
+so get a
+>> > high CS bit=2E
+>>=20
+>> FRED does provide more possibilities :)
+>
+>That's not an answer=2E IBT has a clear defect and FRED *should* fix it=
+=2E
 
-Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
----
- arch/arm/boot/dts/qcom-pm8226.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi b/arch/arm/boot/dts/qcom-pm8226.dtsi
-index 403324a35cf5..82470549f240 100644
---- a/arch/arm/boot/dts/qcom-pm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
-@@ -88,6 +88,12 @@ adc-chan@f {
- 			};
- 		};
- 
-+		pm8226_iadc: iadc@3600 {
-+			compatible = "qcom,spmi-iadc";
-+			reg = <0x3600>;
-+			interrupts = <0x0 0x36 0x0 IRQ_TYPE_EDGE_RISING>;
-+		};
-+
- 		rtc@6000 {
- 			compatible = "qcom,pm8941-rtc";
- 			reg = <0x6000>, <0x6100>;
--- 
-2.39.0
-
+You are not wrong, of course=2E That being said, we have not wanted to hit=
+ch too many things to the FRED baseline, lest it ends up delayed for implem=
+entation/validation reasons=2E The important thing is that FRED *does* prov=
+ide the mechanism for addressing that even if it does not make the first im=
+plementation=2E
