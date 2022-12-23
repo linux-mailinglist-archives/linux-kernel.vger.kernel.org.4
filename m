@@ -2,117 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06E7654F80
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203ED654F8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiLWLNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 06:13:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S236112AbiLWLPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 06:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiLWLNl (ORCPT
+        with ESMTP id S229735AbiLWLP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 06:13:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF0533E;
-        Fri, 23 Dec 2022 03:13:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4109B61F1F;
-        Fri, 23 Dec 2022 11:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86546C433EF;
-        Fri, 23 Dec 2022 11:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671794018;
-        bh=6k6qPOMW3plUmLr9uKjqG2VachpkpHPBQRLd+3OwQss=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Khjxud6QJi8oVSJXQBZmrqMYL9NAC+3GSwrI48dwsPyr+fbgwyg0MOaaAz+BAluLG
-         PRlhI2p2WZfMf3vB4xCAMfw8LhtQSXuT83ggO7UsneOEbGkHcla0M5+A7FLYijZLH0
-         45GFDDWnXZ4Hn3TahkVpRQeQ78zDybWLTOIEcCqgMAET1mr8HI5weIX4AyAY2JVHaT
-         WTH7JfdjK8bcC5kT5nzIN1/C7jF+Plk+T81oLw+3CQs/NhS4K0B7kKkVOb+QbQK/ho
-         SvgzbEzCSljlg3XBEmMB7AvC8TAit6WydPd9AnTB33qCr3OlOmJMXsSyerykOZLnYI
-         0f4Z2Wp+0HoHA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p8g0V-00050v-5Q; Fri, 23 Dec 2022 12:14:31 +0100
-Date:   Fri, 23 Dec 2022 12:14:31 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Daniel Beer <daniel.beer@igorinstitute.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Michael Zaidman <michael.zaidman@gmail.com>,
-        Christina Quast <contact@christina-quast.de>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH] hid-ft260: add UART support.
-Message-ID: <Y6WNl6+ySy8zcSyg@hovoldconsulting.com>
-References: <638c51a2.170a0220.3af16.18f8@mx.google.com>
- <Y4xX7ILXMFHZtJkv@kroah.com>
- <20221204091247.GA11195@nyquist.nev>
- <Y4xqyRERBdr8fT7F@kroah.com>
- <20221205012403.GA14904@nyquist.nev>
- <Y5G2PBEprjPp3FKR@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5G2PBEprjPp3FKR@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 23 Dec 2022 06:15:28 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6378AE95;
+        Fri, 23 Dec 2022 03:15:24 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 00301C01B; Fri, 23 Dec 2022 12:15:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1671794136; bh=VN5EBYZqJL3wQsJ8/hshGhgSI3cKSXMIvWYt8/UPKFM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GvUwMFT0Q6aYikdx7+ZWM69hPxdNa0tfsCa0zyvxN5AGOR2mzoqBpf5hTdluw552j
+         NcUZVbAwPk+Q6QaLM4SBJfXG+uMh/thXSBkscaP5OT0xD293L485SbIlwyDCXmMRXw
+         XuhsCzHTxUI0HsaNHe8EUcnfuvcOLcktHEy0qbbs+e0FZFJOJSxOmeZ2yDrwgpB2GO
+         z0vWfoxc2UcneQr8p2jGupykyZVkvsqnMt+GPv3ONNQpT0+DwCucO8kV11bnfAMDFv
+         2BqTq5QbMtBGQ15ytRRB3G+SW1zZwVmAgzZ5uEBQ3ChszRytXobxC9uAm1zknvW2ZM
+         sXAbXW3iaI7dg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 020A0C009;
+        Fri, 23 Dec 2022 12:15:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1671794135; bh=VN5EBYZqJL3wQsJ8/hshGhgSI3cKSXMIvWYt8/UPKFM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jOIbSBD9sy53EBNLvHZoaDht+SWLUur99xN+t8rN/Iq/KOSSsXhz4OWts8/XOVvid
+         qlAAqfzFC9tbdEuxgkSPLQa8lzc1K0uElivb3PlF8i4ISlgDGEkZY6A5lhN8jtLcto
+         Wtx8rDPRuogYQQ8uC9CbllnziA94bauWo6LYrbBAT3Pqa0OVBVHiZ0KAPDIn4W05X3
+         NFliLgwxrTvX6x5M5Ranzgo6zkEOJ/SCHk/jO8sUeFNfo9RKKBEwvT2bt+pjyPmnPf
+         ia1ohKTTHEXS00Sx/lYinTD1j3jdujTQnafgAxkE4WWjubNP8q65wZ/RrTyFX6OK2V
+         9SZvqifuhhKgw==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id c8efe9ed;
+        Fri, 23 Dec 2022 11:15:18 +0000 (UTC)
+Date:   Fri, 23 Dec 2022 20:15:03 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net
+Subject: [GIT PULL] 9p fixes for 6.2-rc1
+Message-ID: <Y6WNt21HKZmWTG3/@codewreck.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 11:02:36AM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Dec 05, 2022 at 02:24:03PM +1300, Daniel Beer wrote:
-> > On Sun, Dec 04, 2022 at 10:39:21AM +0100, Greg Kroah-Hartman wrote:
-> > > > Thanks for reviewing. This device is quite strange -- it presents itself
-> > > > as a USB HID, but it provides both an I2C master and a UART. The
-> > > > existing driver supports only the I2C functionality currently.
+The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
 
-> > > > > A whole new major for just a single tty port?  Please no, use dynamic
-> > > > > majors if you have to, or better yet, tie into the usb-serial
-> > > > > implementation (this is a USB device, right?) and then you don't have to
-> > > > > mess with this at all.
-> > > > 
-> > > > As far as I understand it, I don't think usb-serial is usable, due to
-> > > > the fact that this is already an HID driver.
-> > > 
-> > > That should not be a restriction at all.  You are adding a tty device to
-> > > this driver, no reason you can't interact with usb-serial instead.  That
-> > > way you share the correct userspace tty name and major/minor numbers and
-> > > all userspace tools should "just work" as they know that name and how to
-> > > interact with it already.
-> > > 
-> > > Try doing that instead of your own "raw" tty device please.
-> > 
-> > Maybe I've misunderstood something. The reason I thought usb-serial was
-> > unusable in this instance was that I couldn't see a way to create a port
-> > except via usb-serial's own probe function (otherwise, the API looked
-> > fine).
-> > 
-> > I don't know whether I'm looking at a serial or an I2C interface until
-> > after it's already been probed by HID core, I have a struct hid_device
-> > and I've asked what type of interface it is via an HID feature report.
-> > This can't be determined otherwise, because strapping pins affect the
-> > presentation of interfaces.
-> > 
-> > At that point, I (currently) call uart_add_one_port. I might have missed
-> > it, but I didn't see anything analogous in the usb-serial API. Am I
-> > going about this the wrong way?
-> 
-> I thought that this could be done, but I might be wrong.  Johan, any
-> ideas?
+  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
 
-It seems to me like this should be implemented as a new tty driver as
-neither USB-serial or serial (core) is a good fit for such a HID device.
+are available in the Git repository at:
 
-So this appears to be right approach in general:
+  https://github.com/martinetd/linux tags/9p-for-6.2-rc1
 
-	https://lore.kernel.org/all/20221207220617.116082-1-contact@christina-quast.de/
+for you to fetch changes up to 1a4f69ef15ec29b213e2b086b2502644e8ef76ee:
 
-Johan
+  9p/client: fix data race on req->status (2022-12-13 13:02:15 +0900)
+
+----------------------------------------------------------------
+9p-for-6.2-rc1
+
+- improve p9_check_errors to check buffer size instead of msize when possible
+(e.g. not zero-copy)
+- some more syzbot and KCSAN fixes
+- minor headers include cleanup
+
+----------------------------------------------------------------
+Christian Schoenebeck (2):
+      net/9p: distinguish zero-copy requests
+      net/9p: fix response size check in p9_check_errors()
+
+Christophe JAILLET (2):
+      9p/fs: Remove unneeded idr.h #include
+      9p/net: Remove unneeded idr.h #include
+
+Dominique Martinet (2):
+      9p/xen: do not memcpy header into req->rc
+      9p/client: fix data race on req->status
+
+Schspa Shi (1):
+      9p: set req refcount to zero to avoid uninitialized usage
+
+ fs/9p/fid.c            |  1 -
+ fs/9p/v9fs.c           |  1 -
+ fs/9p/vfs_addr.c       |  1 -
+ fs/9p/vfs_dentry.c     |  1 -
+ fs/9p/vfs_dir.c        |  1 -
+ fs/9p/vfs_file.c       |  1 -
+ fs/9p/vfs_inode.c      |  1 -
+ fs/9p/vfs_inode_dotl.c |  1 -
+ fs/9p/vfs_super.c      |  1 -
+ include/net/9p/9p.h    |  2 ++
+ net/9p/client.c        | 33 ++++++++++++++++++++++-----------
+ net/9p/trans_fd.c      | 13 ++++++-------
+ net/9p/trans_rdma.c    |  5 ++---
+ net/9p/trans_virtio.c  | 10 +++++-----
+ net/9p/trans_xen.c     |  8 +++++---
+ 15 files changed, 42 insertions(+), 38 deletions(-)
+--
+Dominique
