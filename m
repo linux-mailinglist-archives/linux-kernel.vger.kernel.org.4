@@ -2,117 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203ED654F8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B80654F98
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 12:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbiLWLPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 06:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S230120AbiLWLSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 06:18:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiLWLP2 (ORCPT
+        with ESMTP id S229735AbiLWLSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 06:15:28 -0500
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6378AE95;
-        Fri, 23 Dec 2022 03:15:24 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 00301C01B; Fri, 23 Dec 2022 12:15:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1671794136; bh=VN5EBYZqJL3wQsJ8/hshGhgSI3cKSXMIvWYt8/UPKFM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GvUwMFT0Q6aYikdx7+ZWM69hPxdNa0tfsCa0zyvxN5AGOR2mzoqBpf5hTdluw552j
-         NcUZVbAwPk+Q6QaLM4SBJfXG+uMh/thXSBkscaP5OT0xD293L485SbIlwyDCXmMRXw
-         XuhsCzHTxUI0HsaNHe8EUcnfuvcOLcktHEy0qbbs+e0FZFJOJSxOmeZ2yDrwgpB2GO
-         z0vWfoxc2UcneQr8p2jGupykyZVkvsqnMt+GPv3ONNQpT0+DwCucO8kV11bnfAMDFv
-         2BqTq5QbMtBGQ15ytRRB3G+SW1zZwVmAgzZ5uEBQ3ChszRytXobxC9uAm1zknvW2ZM
-         sXAbXW3iaI7dg==
+        Fri, 23 Dec 2022 06:18:42 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802B212AE0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:18:41 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id y4so4675621ljc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 03:18:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BN78cS6rE9Yp4B3TRTbxmbnWU/S5h0cAk1EFG+5tItQ=;
+        b=uUe6o9Cmm9zvEzHBBsQSg3P4exeeOEsHNZBzcvpO+Nf+oFHMrAJE1KJkbjKlBGj6Vm
+         Bb2rK2s4t81FW6t2SWizTZNrH4BZVxG0Zc4U4PVO5ZMaHf7AfovVTAovpMQ/+t0L7/qM
+         /GvpVlACV3K6MltxN+RNcoAI398QVpDcBqylhrJINlYM23f6Wpf4GkEVYoNel9ZXvD3W
+         lnBuYhrklSFfC9h0X+5gZGwd+d28CNa4GBofaNqQXyhSZttpBVr58VnFYB7jFPRZIwpy
+         Cf/XkF5iBvRCK8jdllUr0AYvC58UrmoAT5Lxfl2GUE0JVDLc1rs+b8cKMoOoXBsjEyqb
+         dVPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BN78cS6rE9Yp4B3TRTbxmbnWU/S5h0cAk1EFG+5tItQ=;
+        b=V4o9ryWS/OExBctIgaNlgnS/63g/6FLx2Mkc4TuF5HD+v3cc1d4SsQTTsVBraa6LFT
+         DPw5v7pRFrS5fJpev8DhARiqTWW1ikPCbJAAJ4biuZLYRrQH9/nCsZdbEXFtiKMKe8XD
+         WSJhLNZdTzwRzuSZ5nwyyiINpjYLo7hE76lUNnbQhgfZf5BPsWD0iIfVZzQfkF/gNv7O
+         YtOfkybkYMufDCYuIEJ6l3u75oNWxKNtOiE11wjucasOvVxKtncm3DxdYFWbwjBC8IQ3
+         1e3+cq6uLM1fu/5+M8Ez25wEeTVjS0NcomeGb16e9XDdfeZ3isw7eXXBo8nLDEeCbtm8
+         GlBA==
+X-Gm-Message-State: AFqh2korQpj+sdp6eg8e4DYXjosiE8XpD84/SHK6WyF3gLaAjLX0Nbix
+        EWfRbUS01tG6bANHCe50ao5d9Q==
+X-Google-Smtp-Source: AMrXdXvUGRb5NIIujgOVvZRAbSbFSTLCDIcNtu4d6J9ydxgw8Bi+S2NGSfpVFQYVlEhTe0voPcEhMw==
+X-Received: by 2002:a2e:8945:0:b0:27f:958a:9279 with SMTP id b5-20020a2e8945000000b0027f958a9279mr2475446ljk.1.1671794319703;
+        Fri, 23 Dec 2022 03:18:39 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q13-20020a056512210d00b004b5732080d1sm483280lfr.150.2022.12.23.03.18.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 03:18:39 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: clock: qcom,spmi-clkdiv: convert to DT schema
+Date:   Fri, 23 Dec 2022 12:18:35 +0100
+Message-Id: <20221223111835.37610-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 020A0C009;
-        Fri, 23 Dec 2022 12:15:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1671794135; bh=VN5EBYZqJL3wQsJ8/hshGhgSI3cKSXMIvWYt8/UPKFM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jOIbSBD9sy53EBNLvHZoaDht+SWLUur99xN+t8rN/Iq/KOSSsXhz4OWts8/XOVvid
-         qlAAqfzFC9tbdEuxgkSPLQa8lzc1K0uElivb3PlF8i4ISlgDGEkZY6A5lhN8jtLcto
-         Wtx8rDPRuogYQQ8uC9CbllnziA94bauWo6LYrbBAT3Pqa0OVBVHiZ0KAPDIn4W05X3
-         NFliLgwxrTvX6x5M5Ranzgo6zkEOJ/SCHk/jO8sUeFNfo9RKKBEwvT2bt+pjyPmnPf
-         ia1ohKTTHEXS00Sx/lYinTD1j3jdujTQnafgAxkE4WWjubNP8q65wZ/RrTyFX6OK2V
-         9SZvqifuhhKgw==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id c8efe9ed;
-        Fri, 23 Dec 2022 11:15:18 +0000 (UTC)
-Date:   Fri, 23 Dec 2022 20:15:03 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net
-Subject: [GIT PULL] 9p fixes for 6.2-rc1
-Message-ID: <Y6WNt21HKZmWTG3/@codewreck.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
+Convert Qualcomm SPMI PMIC clock divider bindings to DT schema.
 
-  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/clock/qcom,spmi-clkdiv.txt       | 59 ---------------
+ .../bindings/clock/qcom,spmi-clkdiv.yaml      | 71 +++++++++++++++++++
+ 2 files changed, 71 insertions(+), 59 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.yaml
 
-are available in the Git repository at:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.txt b/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.txt
+deleted file mode 100644
+index 7474aba36607..000000000000
+--- a/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.txt
++++ /dev/null
+@@ -1,59 +0,0 @@
+-Qualcomm Technologies, Inc. SPMI PMIC clock divider (clkdiv)
+-
+-clkdiv configures the clock frequency of a set of outputs on the PMIC.
+-These clocks are typically wired through alternate functions on
+-gpio pins.
+-
+-=======================
+-Properties
+-=======================
+-
+-- compatible
+-	Usage:      required
+-	Value type: <string>
+-	Definition: must be "qcom,spmi-clkdiv".
+-
+-- reg
+-	Usage:      required
+-	Value type: <prop-encoded-array>
+-	Definition: base address of CLKDIV peripherals.
+-
+-- qcom,num-clkdivs
+-	Usage:      required
+-	Value type: <u32>
+-	Definition: number of CLKDIV peripherals.
+-
+-- clocks:
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: reference to the xo clock.
+-
+-- clock-names:
+-	Usage: required
+-	Value type: <stringlist>
+-	Definition: must be "xo".
+-
+-- #clock-cells:
+-	Usage: required
+-	Value type: <u32>
+-	Definition: shall contain 1.
+-
+-=======
+-Example
+-=======
+-
+-pm8998_clk_divs: clock-controller@5b00 {
+-	compatible = "qcom,spmi-clkdiv";
+-	reg = <0x5b00>;
+-	#clock-cells = <1>;
+-	qcom,num-clkdivs = <3>;
+-	clocks = <&xo_board>;
+-	clock-names = "xo";
+-
+-	assigned-clocks = <&pm8998_clk_divs 1>,
+-			  <&pm8998_clk_divs 2>,
+-			  <&pm8998_clk_divs 3>;
+-	assigned-clock-rates = <9600000>,
+-			       <9600000>,
+-			       <9600000>;
+-};
+diff --git a/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.yaml b/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.yaml
+new file mode 100644
+index 000000000000..16c95ad6c9d1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,spmi-clkdiv.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,spmi-clkdiv.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SPMI PMIC clock divider
++
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++  - Stephen Boyd <sboyd@kernel.org>
++
++description: |
++  Qualcomm SPMI PMIC clock divider configures the clock frequency of a set of
++  outputs on the PMIC.  These clocks are typically wired through alternate
++  functions on GPIO pins.
++
++properties:
++  compatible:
++    const: qcom,spmi-clkdiv
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Board XO source
++
++  clock-names:
++    items:
++      - const: xo
++
++  "#clock-cells":
++    const: 1
++
++  qcom,num-clkdivs:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Number of CLKDIV peripherals.
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - "#clock-cells"
++  - qcom,num-clkdivs
++
++additionalProperties: false
++
++examples:
++  - |
++    pmic {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        clock-controller@5b00 {
++            compatible = "qcom,spmi-clkdiv";
++            reg = <0x5b00>;
++            clocks = <&xo_board>;
++            clock-names = "xo";
++            #clock-cells = <1>;
++            qcom,num-clkdivs = <3>;
++
++            assigned-clocks = <&pm8998_clk_divs 1>,
++                              <&pm8998_clk_divs 2>,
++                              <&pm8998_clk_divs 3>;
++            assigned-clock-rates = <9600000>,
++                                   <9600000>,
++                                   <9600000>;
++        };
++    };
+-- 
+2.34.1
 
-  https://github.com/martinetd/linux tags/9p-for-6.2-rc1
-
-for you to fetch changes up to 1a4f69ef15ec29b213e2b086b2502644e8ef76ee:
-
-  9p/client: fix data race on req->status (2022-12-13 13:02:15 +0900)
-
-----------------------------------------------------------------
-9p-for-6.2-rc1
-
-- improve p9_check_errors to check buffer size instead of msize when possible
-(e.g. not zero-copy)
-- some more syzbot and KCSAN fixes
-- minor headers include cleanup
-
-----------------------------------------------------------------
-Christian Schoenebeck (2):
-      net/9p: distinguish zero-copy requests
-      net/9p: fix response size check in p9_check_errors()
-
-Christophe JAILLET (2):
-      9p/fs: Remove unneeded idr.h #include
-      9p/net: Remove unneeded idr.h #include
-
-Dominique Martinet (2):
-      9p/xen: do not memcpy header into req->rc
-      9p/client: fix data race on req->status
-
-Schspa Shi (1):
-      9p: set req refcount to zero to avoid uninitialized usage
-
- fs/9p/fid.c            |  1 -
- fs/9p/v9fs.c           |  1 -
- fs/9p/vfs_addr.c       |  1 -
- fs/9p/vfs_dentry.c     |  1 -
- fs/9p/vfs_dir.c        |  1 -
- fs/9p/vfs_file.c       |  1 -
- fs/9p/vfs_inode.c      |  1 -
- fs/9p/vfs_inode_dotl.c |  1 -
- fs/9p/vfs_super.c      |  1 -
- include/net/9p/9p.h    |  2 ++
- net/9p/client.c        | 33 ++++++++++++++++++++++-----------
- net/9p/trans_fd.c      | 13 ++++++-------
- net/9p/trans_rdma.c    |  5 ++---
- net/9p/trans_virtio.c  | 10 +++++-----
- net/9p/trans_xen.c     |  8 +++++---
- 15 files changed, 42 insertions(+), 38 deletions(-)
---
-Dominique
