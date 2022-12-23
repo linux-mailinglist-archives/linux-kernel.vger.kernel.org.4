@@ -2,72 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF860654C71
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 07:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7B7654C75
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 07:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiLWGZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 01:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
+        id S230199AbiLWG0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 01:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiLWGZo (ORCPT
+        with ESMTP id S229630AbiLWG0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 01:25:44 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA04E5;
-        Thu, 22 Dec 2022 22:25:41 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1p8bUa-009jLe-9h; Fri, 23 Dec 2022 14:25:17 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 23 Dec 2022 14:25:16 +0800
-Date:   Fri, 23 Dec 2022 14:25:16 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, dhowells@redhat.com,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Tadeusz Struk <tadeusz.struk@intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [v2 PATCH] lib/mpi: Fix buffer overrun when SG is too long
-Message-ID: <Y6VJzBcN3LvY5j60@gondor.apana.org.au>
-References: <20221209150633.1033556-1-roberto.sassu@huaweicloud.com>
- <Y5OGr59A9wo86rYY@sol.localdomain>
- <fa8a307541735ec9258353d8ccb75c20bb22aafe.camel@huaweicloud.com>
- <Y5bxJ5UZNPzxwtoy@gondor.apana.org.au>
- <0f80852578436dbba7a0fce03d86c3fa2d38c571.camel@huaweicloud.com>
- <Y6FjQPZiJYTEG1zI@gondor.apana.org.au>
- <a04e6458-6814-97fc-f03a-617809e2e6ce@huaweicloud.com>
- <Y6IbWA5aZeBnn4n2@gmail.com>
- <Y6Kthn+rIUnCEJWz@gondor.apana.org.au>
- <Y6NySck5p/DXhSUJ@sol.localdomain>
+        Fri, 23 Dec 2022 01:26:33 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA6A388A
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:26:33 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so7959042pjj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 22:26:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RGmoXJ75UXpNguUssjM7gnVJdq2PHsHw6DOwMdQhd2Q=;
+        b=LiYGPk+RqxHs5M5OWdfSnYZT6kJZi867YaEu8A6+RNNoFt2PoNKtMwLDAW9Rt4Iivv
+         1qwY5zE8Rw4/08Be+4hmRMmhaUfsJwUgK1B8+bEBvvS7Xz/bUZfK7mNS7Wf1R5UYdvWF
+         TXPhqFs6tJd3F7vueo2hkRDF50OORGLirfd7x3LopSqorYYCHYZt1aLVYZLSDG2Ad4Q3
+         3Kux99K40eoK6tKRRcRyoeu+vD+Jxh9P/gwoMYXp0wPMo4EwTAWdumjrbNDdqKmTAcwG
+         wEjx/wpt+HfyDsnzwlRzIkqCIZbpX1sxg2XcYWimTnk5eDRExqL3Q1SQYz1Fjte71ov1
+         FEyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RGmoXJ75UXpNguUssjM7gnVJdq2PHsHw6DOwMdQhd2Q=;
+        b=S8irvL6WwpMhnCA/a1OvaUK7XoO0dY2UKIryqZ54DHdoMMHJsK72kascLuEHTOh23W
+         npKkbfLbLm+/MQeyaJ7e1L3c07c+oBonsy7NyULdMhgjs67afvEgABzIAG5//MDBmsjn
+         MBC+B07ZasKIva8w3hFblIT4qxkMB/jLutzS/aesjRc70j+G8j1OOP1jp6IgqSbdAo8N
+         SkqVJ0Qropr6HAeFJLjqUwVTQsCRMlXm5qHrC4tdkcxzqDpfACrpNAwXj2DWfwNpEdwf
+         sF5tN96hPBns8QfHZVeoQx5kEmNKONUav0E2yTKZ2hvmoXruS0NVMyEEEoMJjiHthRoI
+         QbuA==
+X-Gm-Message-State: AFqh2kpKIF3XPT6nfXEuGlypokoZ0YjOE1LzwIqHn55Lx3a1Iy5L6BUf
+        EmqRkcelqO6Xa58CbeFdWiBs5g==
+X-Google-Smtp-Source: AMrXdXtY8I/N4ldtzRd+EoFIog+Fh+aszryhhGlTn3TaciroaBWQKNCtk/Do3bV1ZV7huZPBInglgA==
+X-Received: by 2002:a17:90a:7803:b0:223:fe74:eb0b with SMTP id w3-20020a17090a780300b00223fe74eb0bmr9731120pjk.12.1671776792405;
+        Thu, 22 Dec 2022 22:26:32 -0800 (PST)
+Received: from leoy-yangtze.lan (n058152048149.netvigator.com. [58.152.48.149])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a034300b002191e769546sm1553663pjf.4.2022.12.22.22.26.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 22:26:31 -0800 (PST)
+Date:   Fri, 23 Dec 2022 14:26:25 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-perf-users@vger.kernel.org, tanmay@marvell.com,
+        sgoutham@marvell.com, gcherian@marvell.com, lcherian@marvell.com,
+        bbhushan2@marvell.com, German Gomez <german.gomez@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] perf pmu: Add function to check if a pmu file
+ exists
+Message-ID: <Y6VKEfsGu0Pteb8e@leoy-yangtze.lan>
+References: <20221222160328.3639989-1-james.clark@arm.com>
+ <20221222160328.3639989-5-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6NySck5p/DXhSUJ@sol.localdomain>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221222160328.3639989-5-james.clark@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 12:53:29PM -0800, Eric Biggers wrote:
->
-> That's fine, I guess.  One quirk of the above approach is that if the last
-> needed element of the scatterlist has a lot of extra pages, this will iterate
-> through all those extra pages, processing 0 bytes from each.  It could just stop
-> when done.  I suppose it's not worth worrying about that case, though.
+On Thu, Dec 22, 2022 at 04:03:24PM +0000, James Clark wrote:
+> From: German Gomez <german.gomez@arm.com>
+> 
+> Add a utility function perf_pmu__file_exists() to check if a given pmu
+> file exists in the sysfs filesystem.
+> 
+> Signed-off-by: German Gomez <german.gomez@arm.com>
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  tools/perf/util/pmu.c | 14 ++++++++++++++
+>  tools/perf/util/pmu.h |  2 ++
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index 15b852b3c401..b72b2d892949 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -1739,6 +1739,20 @@ int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt,
+>  	return ret;
+>  }
+>  
+> +bool perf_pmu__file_exists(struct perf_pmu *pmu, const char *name)
+> +{
+> +	char path[PATH_MAX];
+> +	struct stat statbuf;
+> +
+> +	if (!perf_pmu__pathname_scnprintf(path, PATH_MAX, pmu->name, name))
+> +		return false;
+> +
+> +	if (!file_available(path))
+> +		return false;
+> +
+> +	return stat(path, &statbuf) == 0;
 
-Ideally this should be handled in the sg_miter interface, IOW,
-it should allow us to cap the SG list at a certain number of bytes
-as opposed to a certain number of entries.
+Can we simply return the returned value from file_available() and skip
+calling stat()?  Because file_available() invokes access() to detect if
+a file is existed or not, so here calling stat() is redundant.
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Thanks,
+Leo
+
+> +}
+> +
+>  static int perf_pmu__new_caps(struct list_head *list, char *name, char *value)
+>  {
+>  	struct perf_pmu_caps *caps = zalloc(sizeof(*caps));
+> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+> index 8f39e2d17fb1..c1d138fe9602 100644
+> --- a/tools/perf/util/pmu.h
+> +++ b/tools/perf/util/pmu.h
+> @@ -230,6 +230,8 @@ bool pmu_have_event(const char *pname, const char *name);
+>  
+>  int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt, ...) __scanf(3, 4);
+>  
+> +bool perf_pmu__file_exists(struct perf_pmu *pmu, const char *name);
+> +
+>  int perf_pmu__test(void);
+>  
+>  struct perf_event_attr *perf_pmu__get_default_config(struct perf_pmu *pmu);
+> -- 
+> 2.25.1
+> 
