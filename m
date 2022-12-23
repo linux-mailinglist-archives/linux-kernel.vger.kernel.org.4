@@ -2,111 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53A1654F3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C8F654F41
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbiLWKjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 05:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
+        id S235981AbiLWKlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 05:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiLWKjF (ORCPT
+        with ESMTP id S229625AbiLWKlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 05:39:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E5A64F2;
-        Fri, 23 Dec 2022 02:39:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 23 Dec 2022 05:41:01 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D60613CCB
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:41:00 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D896261F0D;
-        Fri, 23 Dec 2022 10:39:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3911DC433D2;
-        Fri, 23 Dec 2022 10:39:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671791944;
-        bh=s6qRPXwQzEgfyS6IxjcUK5ThQGqqJZl9J/0fvlAQn4I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HclwobKldECH8GnXaXBwYwVA9BZMh8Jjbh0SOGfUPIkLcSZioevrBsUZp8y6n5Lv7
-         nwpvD4GTppWuNTlvkaZ9J3WnUkygRQUxZONxiFk79hF5oVs4IAZbG5XQ48vXeJnFTk
-         2IUT0aIvm2Y3FHhWJGZtQQqzjhg8wq7pGeJz5CYtdejMRWwxj5UoRqTfHvbAmUEqpZ
-         8HtGwzKonttFDQjokKmXiMxrVRm3qTCXaWgInQg9n1vyphI8E9vyTkPOgb9p9Ufndx
-         EpIesrggkQ/1x4svge6Fq8HAwYT5IZiJuQIFTSu9iltzabftkMtoRFyly62CsmCPiq
-         tBQHP4/6SyOYA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p8fT3-0004Zy-H0; Fri, 23 Dec 2022 11:39:57 +0100
-Date:   Fri, 23 Dec 2022 11:39:57 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        quic_shazhuss@quicinc.com, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, johan+linaro@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
-        echanude@redhat.com
-Subject: Re: [PATCH v3 5/7] arm64: dts: qcom: sc8280xp: add missing spi nodes
-Message-ID: <Y6WFfSedn7hvEeAA@hovoldconsulting.com>
-References: <20221220192854.521647-1-bmasney@redhat.com>
- <20221220192854.521647-6-bmasney@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221220192854.521647-6-bmasney@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CBAA01FF2E;
+        Fri, 23 Dec 2022 10:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1671792058; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=/Ii5W9H2n/zhjAZZ5Mt2Lz4SNtNC8ZE5DVLhjo0xVBY=;
+        b=e9xvXTSA8kVqD7QSH1Km4O1I06yYOizi5m2PHrjkQcnBX3lsAQfmX7yH5HoUJCk0KLrx1q
+        sYgD0TKQMhvrkDiEWdoVrlshTUNBGdh86TnoZIYXyTnZHjXmW8ho9ZpQ4Ip6rXGRJmaQVp
+        S81PxTGRsiRrhjzrqBTNZ3f2AJ9Uz68=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1671792058;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=/Ii5W9H2n/zhjAZZ5Mt2Lz4SNtNC8ZE5DVLhjo0xVBY=;
+        b=RJFcpDCaXTV6eWStcDpD8EkbCnk8KV5jXZFqqOsYjDbVxAbH+h1R9z7izTSXTTBc7IGbJ2
+        pDMJBUt2FpyqRZAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD0F6138E4;
+        Fri, 23 Dec 2022 10:40:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dxKLKbqFpWN6DgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 23 Dec 2022 10:40:58 +0000
+Date:   Fri, 23 Dec 2022 11:40:58 +0100
+Message-ID: <87y1qy2yit.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound updates for 6.2-rc1 (#2)
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 02:28:52PM -0500, Brian Masney wrote:
-> Add the missing nodes for the spi buses that's present on this SoC.
-> 
-> This work was derived from various patches that Qualcomm delivered
-> to Red Hat in a downstream kernel.
-> 
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
-> ---
-> Changes from v2 to v3
-> - None
-> 
-> Changes from v1 to v2
-> - Dropped qupX_ prefix from labels. (Johan)
-> - Dropped spi-max-frequency property from spi nodes. (Shazad)
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 360 +++++++++++++++++++++++++
->  1 file changed, 360 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index a502d4e19d98..4591d411f5fb 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -829,6 +829,21 @@ i2c16: i2c@880000 {
->  				status = "disabled";
->  			};
->  
-> +			spi16: spi@880000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0 0x00880000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S0_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
+Linus,
 
-So please move this two after 'reg' as well.
+please pull another sound updates for v6.2-rc1 from:
 
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +				                <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_2 0>,
-> +				                <&aggre1_noc MASTER_QUP_2 0 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core", "qup-config", "qup-memory";
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.2-rc1-2
 
-Shouldn't the spi version of these nodes also have a power-domain
-property?
+The topmost commit is 6bf5f9a8b408a6ce5aba6119f305b5b8f1238025
 
-> +				status = "disabled";
-> +			};
+----------------------------------------------------------------
 
-Johan
+More sound updates for 6.2-rc1
+
+A few more updates for 6.2 since the last PR: most of changes are
+about ASoC device-specific fixes.
+
+- Lots of ASoC Intel AVS extensions and refactoring
+- Quirks for ASoC Intel SOF as well as regression fixes
+- ASoC Mediatek and Rockchip fixes
+- Intel HD-audio HDMI workarounds
+- Usual HD- and USB-audio device-specific quirks
+
+----------------------------------------------------------------
+
+Bard Liao (1):
+      ASoC: Intel: sof_realtek_common: set ret = 0 as initial value
+
+Brent Lu (1):
+      ASoC: Intel: sof_rt5682: add jsl_rt5682 board config
+
+Cezary Rojewski (23):
+      ALSA: hda: Allow for compress stream to hdac_ext_stream assignment
+      ALSA: hda: Prepare for compress stream support
+      ALSA: hda: Interrupt servicing and BDL setup for compress streams
+      ASoC: Intel: avs: Introduce avs_log_buffer_status_locked()
+      ASoC: Intel: avs: Drop fifo_lock
+      ASoC: Intel: avs: Introduce debug-context aware helpers
+      ASoC: Intel: avs: Make enable_logs() dependent on DEBUG_FS
+      ASoC: Intel: avs: Drop usage of debug members in non-debug code
+      ASoC: Intel: avs: Add data probing requests
+      ASoC: Intel: avs: Probe compress operations
+      ASoC: Intel: avs: Data probing soc-component
+      ASoC: Intel: avs: Add probe machine board
+      ASoC: Intel: avs: Probing and firmware tracing over debugfs
+      ASoC: Intel: avs: Gather remaining logs on strace_release()
+      ASoC: Intel: avs: Allow for dumping FW_REGS area
+      ASoC: Intel: avs: Allow for dumping debug window snapshot
+      ASoC: Intel: Skylake: Update pipe_config_idx before filling BE params
+      ASoC: Intel: Skylake: Remove skl_tplg_is_multi_fmt()
+      ASoC: Intel: Skylake: Drop pipe_config_idx
+      ASoC: Intel: Skylake: Introduce single place for pipe-config selection
+      ASoC: Intel: Skylake: Fix driver hang during shutdown
+      ASoC: Intel: Skylake: Use SG allocation for SKL-based firmware load
+      ALSA: hda: Error out if invalid stream is being setup
+
+Chancel Liu (1):
+      ASoC: soc-pcm.c: Clear DAIs parameters after stream_active is updated
+
+Edward Pacman (1):
+      ALSA: hda/realtek: Add quirk for Lenovo TianYi510Pro-14IOB
+
+Gongjun Song (2):
+      ASoC: Intel: sof_sdw: use common helpers for all Realtek amps
+      ASoC: Intel: soc-acpi: update codec addr on 0C11/0C4F product
+
+Hans de Goede (2):
+      ASoC: Intel: bytcr_rt5640: Add quirk for the Advantech MICA-071 tablet
+      ASoC: rt5670: Remove unbalanced pm_runtime_put()
+
+Jaroslav Kysela (1):
+      ALSA: usb-audio: Add new quirk FIXED_RATE for JBL Quantum810 Wireless
+
+Jiao Zhou (1):
+      ALSA: hda/hdmi: Add HP Device 0x8711 to force connect list
+
+Jiapeng Chong (2):
+      ASoC: codecs: wcd-clsh: Remove the unused function
+      ALSA: azt3328: Remove the unused function snd_azf3328_codec_outl()
+
+Kai Vehmanen (5):
+      ALSA: hda/hdmi: fix i915 silent stream programming flow
+      ALSA: hda/hdmi: set default audio parameters for KAE silent-stream
+      ALSA: hda/hdmi: fix stream-id config keep-alive for rt suspend
+      ASoC: SOF: Intel: pci-tgl: unblock S5 entry if DMA stop has failed"
+      ASoC: SOF: Revert: "core: unregister clients and machine drivers in .shutdown"
+
+Krzysztof Kozlowski (1):
+      ASoC: lochnagar: Fix unused lochnagar_of_match warning
+
+Marek Szyprowski (1):
+      ASoC: wm8994: Fix potential deadlock
+
+Marek Vasut (1):
+      ASoC: dt-bindings: fsl-sai: Reinstate i.MX93 SAI compatible string
+
+Moises Cardona (1):
+      ASoC: Intel: Add HP Stream 8 to bytcr_rt5640.c
+
+Wang Jingjin (2):
+      ASoC: rockchip: pdm: Add missing clk_disable_unprepare() in rockchip_pdm_runtime_resume()
+      ASoC: rockchip: spdif: Add missing clk_disable_unprepare() in rk_spdif_runtime_resume()
+
+Wang Yufen (3):
+      ASoC: mediatek: mt8173-rt5650-rt5514: fix refcount leak in mt8173_rt5650_rt5514_dev_probe()
+      ASoC: audio-graph-card: fix refcount leak of cpu_ep in __graph_for_each_link()
+      ASoC: mediatek: mt8183: fix refcount leak in mt8183_mt6358_ts3a227_max98357_dev_probe()
+
+YC Hung (2):
+      ASoC: mediatek: mt8195: add sof be ops to check audio active
+      ASoC: SOF: mediatek: initialize panic_info to zero
+
+Yang Yingliang (1):
+      ASoC: sof_es8336: fix possible use-after-free in sof_es8336_remove()
+
+wangdicheng (1):
+      ALSA: usb-audio: add the quirk for KT0206 device
+
+ye xingchen (1):
+      ASoC: imx-audmux: use sysfs_emit() to instead of scnprintf()
+
+---
+ .../devicetree/bindings/sound/fsl,sai.yaml         |   1 +
+ include/sound/hda_codec.h                          |   1 +
+ include/sound/hdaudio_ext.h                        |   2 +
+ sound/hda/ext/hdac_ext_stream.c                    |  41 ++
+ sound/hda/hdac_controller.c                        |   4 +-
+ sound/hda/hdac_stream.c                            |  54 ++-
+ sound/pci/azt3328.c                                |   9 -
+ sound/pci/hda/hda_codec.c                          |   3 +-
+ sound/pci/hda/patch_hdmi.c                         | 120 +++++-
+ sound/pci/hda/patch_realtek.c                      |  27 ++
+ sound/soc/codecs/lochnagar-sc.c                    |   2 +-
+ sound/soc/codecs/rt5670.c                          |   2 -
+ sound/soc/codecs/wcd-clsh-v2.c                     |   6 -
+ sound/soc/codecs/wm8994.c                          |   5 +
+ sound/soc/fsl/imx-audmux.c                         |   3 +-
+ sound/soc/generic/audio-graph-card.c               |   4 +-
+ sound/soc/intel/Kconfig                            |   1 +
+ sound/soc/intel/avs/Makefile                       |   4 +
+ sound/soc/intel/avs/apl.c                          |  24 +-
+ sound/soc/intel/avs/avs.h                          |  80 +++-
+ sound/soc/intel/avs/board_selection.c              |  33 ++
+ sound/soc/intel/avs/boards/Kconfig                 |   8 +
+ sound/soc/intel/avs/boards/Makefile                |   2 +
+ sound/soc/intel/avs/boards/probe.c                 |  64 +++
+ sound/soc/intel/avs/core.c                         |   2 +
+ sound/soc/intel/avs/debugfs.c                      | 436 +++++++++++++++++++++
+ sound/soc/intel/avs/ipc.c                          |   2 +-
+ sound/soc/intel/avs/messages.c                     | 104 ++++-
+ sound/soc/intel/avs/messages.h                     |  53 +++
+ sound/soc/intel/avs/pcm.c                          |   6 +-
+ sound/soc/intel/avs/probes.c                       | 313 +++++++++++++++
+ sound/soc/intel/avs/registers.h                    |   3 +-
+ sound/soc/intel/avs/skl.c                          |  17 +-
+ sound/soc/intel/avs/utils.c                        |  22 --
+ sound/soc/intel/boards/Makefile                    |   3 +-
+ sound/soc/intel/boards/bytcr_rt5640.c              |  25 ++
+ sound/soc/intel/boards/sof_es8336.c                |   2 +-
+ sound/soc/intel/boards/sof_realtek_common.c        |   3 +-
+ sound/soc/intel/boards/sof_rt5682.c                |   6 +
+ sound/soc/intel/boards/sof_sdw.c                   |  10 +-
+ sound/soc/intel/boards/sof_sdw_common.h            |  20 +-
+ sound/soc/intel/boards/sof_sdw_rt1316.c            | 239 -----------
+ sound/soc/intel/boards/sof_sdw_rt1318.c            | 120 ------
+ .../boards/{sof_sdw_rt1308.c => sof_sdw_rt_amp.c}  | 139 +++++--
+ sound/soc/intel/common/soc-acpi-intel-jsl-match.c  |   5 +
+ sound/soc/intel/common/soc-acpi-intel-rpl-match.c  |   2 +-
+ sound/soc/intel/skylake/skl-sst-cldma.c            |  27 +-
+ sound/soc/intel/skylake/skl-topology.c             |  73 ++--
+ sound/soc/intel/skylake/skl-topology.h             |   1 -
+ sound/soc/intel/skylake/skl.c                      |   5 +-
+ sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c   |   7 +-
+ .../mt8183/mt8183-mt6358-ts3a227-max98357.c        |  14 +-
+ sound/soc/mediatek/mt8195/mt8195-mt6359.c          |  30 ++
+ sound/soc/rockchip/rockchip_pdm.c                  |   1 +
+ sound/soc/rockchip/rockchip_spdif.c                |   1 +
+ sound/soc/soc-pcm.c                                |  20 +-
+ sound/soc/sof/core.c                               |   9 -
+ sound/soc/sof/intel/hda-dsp.c                      |  72 ++++
+ sound/soc/sof/intel/hda.h                          |   1 +
+ sound/soc/sof/intel/tgl.c                          |   2 +-
+ sound/soc/sof/mediatek/mtk-adsp-common.c           |   2 +-
+ sound/usb/card.h                                   |   1 +
+ sound/usb/endpoint.c                               |  16 +-
+ sound/usb/endpoint.h                               |   3 +-
+ sound/usb/implicit.c                               |   6 +-
+ sound/usb/implicit.h                               |   2 +-
+ sound/usb/pcm.c                                    |  36 +-
+ sound/usb/pcm.h                                    |   2 +
+ sound/usb/quirks-table.h                           |   2 +
+ sound/usb/quirks.c                                 |   2 +
+ sound/usb/usbaudio.h                               |   4 +
+ 71 files changed, 1731 insertions(+), 640 deletions(-)
+ create mode 100644 sound/soc/intel/avs/boards/probe.c
+ create mode 100644 sound/soc/intel/avs/debugfs.c
+ create mode 100644 sound/soc/intel/avs/probes.c
+ delete mode 100644 sound/soc/intel/boards/sof_sdw_rt1316.c
+ delete mode 100644 sound/soc/intel/boards/sof_sdw_rt1318.c
+ rename sound/soc/intel/boards/{sof_sdw_rt1308.c => sof_sdw_rt_amp.c} (59%)
+
