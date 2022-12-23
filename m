@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5626552B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D29676552BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 17:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbiLWQWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 11:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S231143AbiLWQWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 11:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiLWQV5 (ORCPT
+        with ESMTP id S231338AbiLWQWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 11:21:57 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1522BDB
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:21:54 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id fm16-20020a05600c0c1000b003d96fb976efso1270082wmb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:21:54 -0800 (PST)
+        Fri, 23 Dec 2022 11:22:37 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5381AB7F7
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:22:36 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id x11so7695391lfn.0
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 08:22:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hI2AAVr0GajMn6R38dDdetCgvikhxBGvAxzi6T7wg0k=;
-        b=dKMhvPsIEPUzoTnSdzSjitUM9MyhEDdt1DRMWa6rATPUveG38LwbqZbzfbilPnfYAS
-         QB3uHYH7tC3JTz2ZkWc0V9Idq8vxuz0FYSCybrP91h/UZzUL2mg5Jr557+PsdoS7VqzX
-         XitIerrhDf4YB8JIeW2oySG+bQ3uXAnO7hFwHIB5NNxSa9RrtcHxUnpMmtz8966m60fg
-         TE0J3FXayCITuJRn6pYEjzxyvaNi95AZCqs7SLiuooH4TuMvzy/fogS3YgYe7oN8GqMr
-         PY9aGsK1ITqcFQy+s81WvDiN119e7t6DV10U2HJIQnH1Tf08FJwQchAI0gfLnlJfeVH3
-         pqew==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EMPz0MtuVMWlwIKG4Db0qbIbQdeIr2p2KQ20CqF4p88=;
+        b=wes4jimP9QZ7W14rfnCeo8l4yJ9ydId4GOHcDaUdSJV7vxbzYP85Wc+igPDGPwrboG
+         jxZIUHQoaa7Ehg4XGeMdQRsVWge91MG8XSGvV6iVFZpFkVvjXENpbw55HqdvMtpyhw0s
+         KJHazRSzjXY35ApKTYhqwGAU75rk0ALgaDWHuNLZrVjZKkfdC74v/uz8t1jucV34G9BV
+         CORYnLMrPQR+qVL4IFGQYa5HXPeUYhDjrUllhv6A8zxrASohbBwmkg0az4rZ94M759WY
+         LuJdqnHdQOlcs9xHcPXQibIZh/Cpxd8wEaztMVXAl6E9yFZ1ecdTJPuzXLjTR028BVgf
+         xvmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hI2AAVr0GajMn6R38dDdetCgvikhxBGvAxzi6T7wg0k=;
-        b=us5ah6rfWfdye5EIsObowHbQT5uHhyWo+d9tkYF2CQHr6hmKJbqNMRn0wYFa2F4ess
-         bcPCoDkfeQoBA3lzShLvcQu8N/xJZP1s2blpn15nQk5epVBqKNFJS2lvY53dpNR2xHLb
-         S1lWDxMrZNRtY/iKRx2NRzOcNihYgkecY/+ki2Qx74yBLnUviv1f36d6Hw/GEHabxFAK
-         CwiWUgLcS2Xf7IFKZv7drmXnwFFlKbrgyg0W/9SEzwtZC/Ft//dJhsxvH//itLMIl93B
-         Rt+0getXyQDwNVt6VxdP9fn8J+18mg/gTcmRT6rqMNaK7Qq8nVc8QADMt618pEsz9pdA
-         vWaQ==
-X-Gm-Message-State: AFqh2krE+2WPQKa8dkHaxFYzBu3Mdug25QwVGwvGtoQ/kqKeJ6jyEeXx
-        BtukBtXZjkw2is2eiocJp5YkQHpzpdgAA4gV
-X-Google-Smtp-Source: AMrXdXvcv7aKaagigLS48DwM5czqYbY//VUKgxMMwbvv/+ONNDRe6/3C7KVWfc17NL49kXOVZ0OtZg==
-X-Received: by 2002:a1c:19c4:0:b0:3d1:ebdf:d592 with SMTP id 187-20020a1c19c4000000b003d1ebdfd592mr7529261wmz.22.1671812513280;
-        Fri, 23 Dec 2022 08:21:53 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id w20-20020a1cf614000000b003cf4d99fd2asm4895248wmc.6.2022.12.23.08.21.52
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EMPz0MtuVMWlwIKG4Db0qbIbQdeIr2p2KQ20CqF4p88=;
+        b=AxgXt5U6zUoQuBgMp7EsOSMgXOotuVpTHavGKIZm31pHrx7SvKVpRsxz5HQ5cIDkaB
+         ircj0xGHkoFYqKkJWCbSNP8CtYXUC9GaguS1Pt420Iox2R5S6omyCKEYM9VjF6N/1fvD
+         pYE4QYGDNOCTrMlhRwiBH6qVoC/dv0thLKI0gBdSOQzBrH6UrwGz2OC2PYA+4B6dDxN6
+         FomPOj1BfwrXarNm6DKdUDSNKZE+Q3BqsX3USCGdAZgdt5XzYxAzmASzqCPLvnrLBwBc
+         euoBQFTwRBUwmE/atlVal1uzBk16eZ1Kj/ktqLL1PDus74XPofxaVJ/P9aLA75TfLVgX
+         smCw==
+X-Gm-Message-State: AFqh2kqjF/9QZI3eraLU2jkk+qAATWJjFrGiv310LLBFOxlenUBoVxj8
+        /DWBpc/K83RxHjjxwWrIagEv9A==
+X-Google-Smtp-Source: AMrXdXsscBAwhaF92Zi0fKqEgTfluKLygxgolteoWlx2FymqcR2KSq5QVpVFyyeX0eMLzwmBRzKY/A==
+X-Received: by 2002:a05:6512:3a8f:b0:4c8:5f19:ccb8 with SMTP id q15-20020a0565123a8f00b004c85f19ccb8mr3391639lfu.48.1671812554766;
+        Fri, 23 Dec 2022 08:22:34 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id m7-20020a056512358700b004b55da14ba8sm569758lfr.291.2022.12.23.08.22.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 08:21:52 -0800 (PST)
-Date:   Fri, 23 Dec 2022 19:21:49 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     oe-kbuild@lists.linux.dev, Sagi Grimberg <sagi@grimberg.me>,
-        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        Fri, 23 Dec 2022 08:22:34 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: drivers/nvme/host/auth.c:950 nvme_auth_init_ctrl() warn: missing
- error code? 'ret'
-Message-ID: <Y6XVnWCNx6cB7Itw@kadam>
-References: <202212222333.vrYfUBqM-lkp@intel.com>
- <20221223154754.GA30339@lst.de>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: iio: adc: maxim,max1363: fix interface typo
+Date:   Fri, 23 Dec 2022 17:22:31 +0100
+Message-Id: <20221223162231.120216-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221223154754.GA30339@lst.de>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 04:47:54PM +0100, Christoph Hellwig wrote:
-> diff --git a/drivers/nvme/host/auth.c b/drivers/nvme/host/auth.c
-> index bb0abbe4491cdc..c808652966a94f 100644
-> --- a/drivers/nvme/host/auth.c
-> +++ b/drivers/nvme/host/auth.c
-> @@ -943,16 +943,19 @@ int nvme_auth_init_ctrl(struct nvme_ctrl *ctrl)
->  	INIT_WORK(&ctrl->dhchap_auth_work, nvme_ctrl_auth_work);
->  	if (!ctrl->opts)
->  		return 0;
-> -	ret = nvme_auth_generate_key(ctrl->opts->dhchap_secret,
-> -			&ctrl->host_key);
-> -	if (ret)
-> -		return ret;
-> -	ret = nvme_auth_generate_key(ctrl->opts->dhchap_ctrl_secret,
-> -			&ctrl->ctrl_key);
-> -	if (ret)
-> +
-> +	ctrl->host_key = nvme_auth_generate_key(ctrl->opts->dhchap_secret);
-> +	if (IS_ERR(ctrl->host_key)) {
-> +		ret = PTR_ERR(ctrl->host_key);
-> +		goto out;
-> +	}
-> +	ctrl->ctrl_key = nvme_auth_generate_key(ctrl->opts->dhchap_ctrl_secret);
-> +	if (IS_ERR(ctrl->ctrl_key)) {
-> +		ret = PTR_ERR(ctrl->ctrl_key);
->  		goto err_free_dhchap_secret;
-> +	}
->  
-> -	if (!ctrl->opts->dhchap_secret && !ctrl->opts->dhchap_ctrl_secret)
-> +	if (!ctrl->host_key && !ctrl->ctrl_key)
->  		return ret;
+Correct inteface->interface in description.
 
-ret is uninitialized now.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/iio/adc/maxim,max1363.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-regards,
-dan carpenter
+diff --git a/Documentation/devicetree/bindings/iio/adc/maxim,max1363.yaml b/Documentation/devicetree/bindings/iio/adc/maxim,max1363.yaml
+index e04f09f35601..96f3f535fe34 100644
+--- a/Documentation/devicetree/bindings/iio/adc/maxim,max1363.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/maxim,max1363.yaml
+@@ -10,7 +10,7 @@ maintainers:
+   - Jonathan Cameron <jic23@kernel.org>
+ 
+ description: |
+-   Family of ADCs with i2c inteface, internal references and threshold
++   Family of ADCs with i2c interface, internal references and threshold
+    monitoring.
+ 
+ properties:
+-- 
+2.34.1
 
