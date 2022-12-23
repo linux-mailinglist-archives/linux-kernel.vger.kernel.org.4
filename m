@@ -2,190 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0ABF654D77
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 09:28:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E6C654D71
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 09:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236074AbiLWI2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 03:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
+        id S236010AbiLWI1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 03:27:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLWI2f (ORCPT
+        with ESMTP id S229603AbiLWI1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 03:28:35 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819DE33CF1;
-        Fri, 23 Dec 2022 00:28:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671784114; x=1703320114;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=ZGaAHoTLI1U3Y/sWtoppFD46fIsTwSzhwP5untsoPlg=;
-  b=TRxKNGLOjccub1WzjErkePAqOrTmGo1u0QlIldeg7I1Bd661kPG2a1gP
-   XEmshtW8F7M/BgIJfRFYK4mkVA7gvD/WUyhjPO8Hfo/dYJTWhbvKuIWB4
-   8ropu77dYZ2f3+CTCeuwLVhdixBD5nVfiEcfeKKDan0djfAS1clx9MLW6
-   2pgMlkodjhuNe9sOUdMru1VVvTPq2a9mX8oM3dkrSJbtkL2hTfBV0WFbM
-   XMaX0oq8hv3qeZwv3da3HyHBDufeD1Uup75qvNuLlbz72WZUJBHIvnvx/
-   zqScXknCQZaWtS0Mbda3y/T92RAAVun9lhXnhYf14DPyEVim+e8BZ0yBG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="300634950"
-X-IronPort-AV: E=Sophos;i="5.96,267,1665471600"; 
-   d="scan'208";a="300634950"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 00:28:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10569"; a="602140158"
-X-IronPort-AV: E=Sophos;i="5.96,267,1665471600"; 
-   d="scan'208";a="602140158"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga003.jf.intel.com with ESMTP; 23 Dec 2022 00:28:21 -0800
-Date:   Fri, 23 Dec 2022 16:24:06 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Huang, Kai" <kai.huang@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        "tabba@google.com" <tabba@google.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "bfields@fieldses.org" <bfields@fieldses.org>,
-        "dhildenb@redhat.com" <dhildenb@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "mail@maciej.szmigiero.name" <mail@maciej.szmigiero.name>,
-        "ddutile@redhat.com" <ddutile@redhat.com>,
-        "qperret@google.com" <qperret@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "vannapurve@google.com" <vannapurve@google.com>,
-        "naoya.horiguchi@nec.com" <naoya.horiguchi@nec.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "yu.c.zhang@linux.intel.com" <yu.c.zhang@linux.intel.com>,
-        "hughd@google.com" <hughd@google.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "steven.price@arm.com" <steven.price@arm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
-Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221223082406.GB1829090@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
- <5c6e2e516f19b0a030eae9bf073d555c57ca1f21.camel@intel.com>
- <20221219075313.GB1691829@chaop.bj.intel.com>
- <deba096c85e41c3a15d122f2159986a74b16770f.camel@intel.com>
- <20221220072228.GA1724933@chaop.bj.intel.com>
- <126046ce506df070d57e6fe5ab9c92cdaf4cf9b7.camel@intel.com>
- <20221221133905.GA1766136@chaop.bj.intel.com>
- <Y6SevJt6XXOsmIBD@google.com>
+        Fri, 23 Dec 2022 03:27:05 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B24735783;
+        Fri, 23 Dec 2022 00:27:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C1034CE19AA;
+        Fri, 23 Dec 2022 08:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 708DCC433EF;
+        Fri, 23 Dec 2022 08:26:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671784019;
+        bh=S/h2/jz6BvSyXxWapChHGU15QNpEWrYlgU5djKg/2Zg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Zt9r9Im+gL7T0VXp+ERzWAuFRBDdlKareGSeeR/DgbaxWnv6Op1DgQ01aj8kHLoCL
+         LaASiEQ1B3PFLAh7ztfa1ETi83GZSKo7Bx6DZbWtw0+lwUWo+FKzfe/uoKxjIaW6x8
+         3lhDVuOC0SxCyLce2CfKhYbc40MQHRH6yKKTcjCsXsYbJKOYjQp4NTJEziQCuzs35a
+         Nut/hgvL0KrkmAUM/Q1qH+bZAgWOXjJlVGt80DD4HYfKVC2uaTcGtJtqApLzBq+2G+
+         6XcddpJ8YTC8w3EoqpQidOZzkzFxe1U3/6XtHNLZOCpQWthU70DvEClpaELUaOY0qi
+         NxlT3hBt5Fh/g==
+Message-ID: <36611392-5bdd-4f08-6748-d36c6ffcd470@kernel.org>
+Date:   Fri, 23 Dec 2022 09:26:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6SevJt6XXOsmIBD@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 1/2] arm: dts: arm: add arm corstone500 device tree
+Content-Language: en-US
+To:     Emekcan Aras <emekcan.aras@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Miguel Silva <rui.silva@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221222123244.147238-1-emekcan.aras@arm.com>
+ <20221222123244.147238-2-emekcan.aras@arm.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20221222123244.147238-2-emekcan.aras@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 06:15:24PM +0000, Sean Christopherson wrote:
-> On Wed, Dec 21, 2022, Chao Peng wrote:
-> > On Tue, Dec 20, 2022 at 08:33:05AM +0000, Huang, Kai wrote:
-> > > On Tue, 2022-12-20 at 15:22 +0800, Chao Peng wrote:
-> > > > On Mon, Dec 19, 2022 at 08:48:10AM +0000, Huang, Kai wrote:
-> > > > > On Mon, 2022-12-19 at 15:53 +0800, Chao Peng wrote:
-> > > But for non-restricted-mem case, it is correct for KVM to decrease page's
-> > > refcount after setting up mapping in the secondary mmu, otherwise the page will
-> > > be pinned by KVM for normal VM (since KVM uses GUP to get the page).
-> > 
-> > That's true. Actually even true for restrictedmem case, most likely we
-> > will still need the kvm_release_pfn_clean() for KVM generic code. On one
-> > side, other restrictedmem users like pKVM may not require page pinning
-> > at all. On the other side, see below.
-> > 
-> > > 
-> > > So what we are expecting is: for KVM if the page comes from restricted mem, then
-> > > KVM cannot decrease the refcount, otherwise for normal page via GUP KVM should.
+On 22/12/2022 13:32, Emekcan Aras wrote:
+> Corstone500[0] is a platform from arm, which includes Cortex-A cores and
+> ideal starting point for feature rich System on Chip (SoC) designs
+> based on the Cortex-A5 core.
 > 
-> No, requiring the user (KVM) to guard against lack of support for page migration
-> in restricted mem is a terrible API.  It's totally fine for restricted mem to not
-> support page migration until there's a use case, but punting the problem to KVM
-> is not acceptable.  Restricted mem itself doesn't yet support page migration,
-> e.g. explosions would occur even if KVM wanted to allow migration since there is
-> no notification to invalidate existing mappings.
+> These device trees contains the necessary bits to support the
+> Corstone 500 FVP (Fixed Virtual Platform) and the
+> FPGA MPS3 board.
 > 
-> > I argue that this page pinning (or page migration prevention) is not
-> > tied to where the page comes from, instead related to how the page will
-> > be used. Whether the page is restrictedmem backed or GUP() backed, once
-> > it's used by current version of TDX then the page pinning is needed. So
-> > such page migration prevention is really TDX thing, even not KVM generic
-> > thing (that's why I think we don't need change the existing logic of
-> > kvm_release_pfn_clean()). Wouldn't better to let TDX code (or who
-> > requires that) to increase/decrease the refcount when it populates/drops
-> > the secure EPT entries? This is exactly what the current TDX code does:
+> 0: https://developer.arm.com/documentation/102262/0000
 > 
-> I agree that whether or not migration is supported should be controllable by the
-> user, but I strongly disagree on punting refcount management to KVM (or TDX).
-> The whole point of restricted mem is to support technologies like TDX and SNP,
-> accomodating their special needs for things like page migration should be part of
-> the API, not some footnote in the documenation.
-
-I never doubt page migration should be part of restrictedmem API, but
-that's not an initial implementing as we all agreed? Then before that
-API being introduced, we need find a solution to prevent page migration
-for TDX. Other than refcount management, do we have any other workable
-solution? 
-
+> Signed-off-by: Emekcan Aras <emekcan.aras@arm.com>
+> ---
+>  arch/arm/boot/dts/Makefile        |   3 +-
+>  arch/arm/boot/dts/corstone500.dts | 182 ++++++++++++++++++++++++++++++
+>  2 files changed, 184 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm/boot/dts/corstone500.dts
 > 
-> It's not difficult to let the user communicate support for page migration, e.g.
-> if/when restricted mem gains support, add a hook to restrictedmem_notifier_ops
-> to signal support (or lack thereof) for page migration.  NULL == no migration,
-> non-NULL == migration allowed.
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> index 6aa7dc4db2fc..4dc4df0707dc 100644
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -1465,7 +1465,8 @@ dtb-$(CONFIG_ARCH_VEXPRESS) += \
+>  	vexpress-v2p-ca5s.dtb \
+>  	vexpress-v2p-ca9.dtb \
+>  	vexpress-v2p-ca15-tc1.dtb \
+> -	vexpress-v2p-ca15_a7.dtb
+> +	vexpress-v2p-ca15_a7.dtb \
+> +	corstone500.dtb
 
-I know.
+Why this is vexpress platform? If it is true, then add it to vexpress
+bindings... It's confusingi and looks disorganized - some bindings here,
+some platform there. Who is overseeing it? Who is maintaining? Who keeps
+it consistent with other Arm platforms?
 
-> 
-> We know that supporting page migration in TDX and SNP is possible, and we know
-> that page migration will require a dedicated API since the backing store can't
-> memcpy() the page.  I don't see any reason to ignore that eventuality.
+>  dtb-$(CONFIG_ARCH_VIRT) += \
+>  	xenvm-4.2.dtb
+>  dtb-$(CONFIG_ARCH_VT8500) += \
+> diff --git a/arch/arm/boot/dts/corstone500.dts b/arch/arm/boot/dts/corstone500.dts
+> new file mode 100644
+> index 000000000000..bcca7d736c85
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/corstone500.dts
+> @@ -0,0 +1,182 @@
+> +// SPDX-License-Identifier: GPL-2.0 or MIT
+> +/*
+> + * Copyright (c) 2022, Arm Limited. All rights reserved.
+> + *
+> + */
+> +
+> +
 
-No, I'm not ignoring it. It's just about the short-term page migration
-prevention before that dedicated API being introduced.
+kbuild reports that patch does not build. :(
 
-> 
-> But again, unless I'm missing something, that's a future problem because restricted
-> mem doesn't yet support page migration regardless of the downstream user.
+Except that other topics which you did not solve from previous case:
+1. Missing maintainers entry
+2. One binding file for your Corstone platforms, not for each of it.
+3. failing `dtbs_check` (at least failing due to non-compiling DTS).
+4. Subject prefix not matching other arm platforms.
 
-It's true a future problem for page migration support itself, but page
-migration prevention is not a future problem since TDX pages need to be
-pinned before page migration gets supported.
 
-Thanks,
-Chao
+Best regards,
+Krzysztof
+
