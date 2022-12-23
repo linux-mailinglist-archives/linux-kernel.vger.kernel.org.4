@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2074C65538E
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED47655390
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 19:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbiLWSRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 13:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S231946AbiLWSRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 13:17:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiLWSRK (ORCPT
+        with ESMTP id S231681AbiLWSRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 13:17:10 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0855B1EEDE;
-        Fri, 23 Dec 2022 10:17:07 -0800 (PST)
-Received: from whitebuilder.lan (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3045D6602CDF;
-        Fri, 23 Dec 2022 18:17:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671819425;
-        bh=WtkH3zd/DfeHPZ0Re8eGGq82FSkjo7m3N6d2l6hBATE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dII6bpvdM6HM6sNU54FfXTO4/cp04kUdbmAG9Ts3HYVnzAJJVe1yPWSg4KhclwCP/
-         AN+tcSg2VzuAXtxQwt+S7is5T+FMi161WvIRGgU2HtwDBMrfpZPCUZQ4ATlfcKM97J
-         BA7Y8+ojbBSsHHwInjNQVy2i2XjRLoLMMPHYUqQJ9RRP+iTwSmS+bt0gThlPS5XC8B
-         0bKPRZrKtgs8ocu9L5rLg01IZiTyvx38+pTn4BIigb32TkcIlEXUHjWIKUIz00CmRQ
-         cPJWTeBkhH3mJj4+wD8hzFZXfKPdM8KMSMadYjXUQhtz5XkuoUK5Zs/U++DCDl6dKr
-         M3D0sKG4/3nKA==
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Robert Mader <robert.mader@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hantro: Fix JPEG encoder ENUM_FRMSIZE on RK3399
-Date:   Fri, 23 Dec 2022 13:16:47 -0500
-Message-Id: <20221223181647.720918-1-nicolas.dufresne@collabora.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 23 Dec 2022 13:17:15 -0500
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61BE1EC46;
+        Fri, 23 Dec 2022 10:17:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=nBRat498cDUujGXOy3Rn1VDh9qVr3oFVyIebhUBpEH8=; b=C8SjCfzhsTwI4Xgpx7BFX45kkP
+        nyKxBSHrZfU+UM6Ufo0ydrWy/WRg845dG9g7ni38zqkqIS3K5TgN5IHIvAat4UwdDD9+L24h+XTiA
+        /EToU8fFGhFLzLjomnwxTPWe4QJEFgxWQSEUHJMvZEj7gqorqoZi6jD0BtKsTzGLKPyLu6BjOpPRQ
+        9JLCURSQ0HbWhuSd2LEnB8wT58dQKIiIPjwy7JHJ1OohOPu0nQfVvwVj2Rauf3Jd5CmxyGHdmbMai
+        OmUquDbcGuOilq18KhjQtScU3xU+Q9ZkIJCz+T2v6AtnkvAGBJyr+E2c+vNBPTCNOc3fGeDewLeTU
+        rX2g/p9g==;
+Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1p8mbR-00FOq0-RX; Fri, 23 Dec 2022 11:17:07 -0700
+Message-ID: <0130c5fe-81ff-537c-bbf4-15bb27876c98@deltatee.com>
+Date:   Fri, 23 Dec 2022 11:17:04 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Miaoqian Lin <linmq006@gmail.com>, Vinod Koul <vkoul@kernel.org>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221220061752.1120381-1-linmq006@gmail.com>
+ <31659f35-453e-2a5a-2f93-e35ef1395ad7@deltatee.com> <Y6WGMd5hb2LoDyNL@kadam>
+Content-Language: en-CA
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <Y6WGMd5hb2LoDyNL@kadam>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 24.64.144.200
+X-SA-Exim-Rcpt-To: error27@gmail.com, linmq006@gmail.com, vkoul@kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] dmaengine: plx_dma: Fix potential double free in
+ plx_dma_create
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 79c987de8b354, enumerating framesize on format set with "MODE_NONE"
-(any raw formats) is reporting an invalid frmsize.
 
-  Size: Stepwise 0x0 - 0x0 with step 0/0
 
-Before this change, the driver would return EINVAL, which is also invalid but
-worked in GStreamer. The original intent was not to implement it, hence the
--ENOTTY return in this change. While drivers should implement ENUM_FRMSIZE for
-all formats and queues, this change is limited in scope to fix the regression.
+On 2022-12-23 03:42, Dan Carpenter wrote:
+> On Tue, Dec 20, 2022 at 09:35:38AM -0700, Logan Gunthorpe wrote:
+>>
+>>
+>> On 2022-12-19 23:17, Miaoqian Lin wrote:
+>>> When all references are dropped, callback function plx_dma_release()
+>>> for put_device() will call kfree(plxdev) to release memory.
+>>> Fix the error path to fix the possible double free.
+>>>
+>>> Fixes: 07503e6aefe4 ("dmaengine: plx_dma: add a missing put_device() on error path")
+>>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>>> ---
+>>> Please correct me if I make mistakes, thanks for your review.
+>>> ---
+>>>  drivers/dma/plx_dma.c | 3 ++-
+>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/dma/plx_dma.c b/drivers/dma/plx_dma.c
+>>> index 12725fa1655f..bce724ff4e16 100644
+>>> --- a/drivers/dma/plx_dma.c
+>>> +++ b/drivers/dma/plx_dma.c
+>>> @@ -546,8 +546,9 @@ static int plx_dma_create(struct pci_dev *pdev)
+>>>  	return 0;
+>>>  
+>>>  put_device:
+>>> -	put_device(&pdev->dev);
+>>>  	free_irq(pci_irq_vector(pdev, 0),  plxdev);
+>>> +	put_device(&pdev->dev);
+>>> +	return rc;
+>>>  free_plx:
+>>>  	kfree(plxdev);
+>>>  
+>>
+>>
+>> Sorry, after reviewing, I don't think this patch is correct.
+>>
+>> plx_dma_release() is called from dma_async_device_unregister() which
+>> won't be called if dma_async_device_register() fails. It does not get
+>> freed when the pci device is put. So I don't think this is a possible
+>> double free.
+> 
+> I think instead of "double free" it Miaoqian meant "use after free".  It
+> does look like a use after free to me.  Certainly there is no harm from
+> applying the patch and it makes the code more obviously correct.
 
-This fixes taking picture in Gnome Cheese software, or any software using
-GSteamer to encode JPEG with hardware acceleration.
+Yeah, moving the put_device() up would certainly look more correct.
 
-Fixes: 79c987de8b354 ("media: hantro: Use post processor scaling capacities")
-Reported-by: Robert Mader <robert.mader@collabora.com>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
- drivers/media/platform/verisilicon/hantro_v4l2.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+But I think it's actually not a bug either because plx_dma_create() is
+called from the pci probe function, so the pci device cannot go away.
 
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index 2c7a805289e7b..30e650edaea8a 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -161,8 +161,11 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
- 	}
- 
- 	/* For non-coded formats check if postprocessing scaling is possible */
--	if (fmt->codec_mode == HANTRO_MODE_NONE && hantro_needs_postproc(ctx, fmt)) {
--		return hanto_postproc_enum_framesizes(ctx, fsize);
-+	if (fmt->codec_mode == HANTRO_MODE_NONE) {
-+		if (hantro_needs_postproc(ctx, fmt))
-+			return hanto_postproc_enum_framesizes(ctx, fsize);
-+		else
-+			return -ENOTTY;
- 	} else if (fsize->index != 0) {
- 		vpu_debug(0, "invalid frame size index (expected 0, got %d)\n",
- 			  fsize->index);
--- 
-2.38.1
-
+Logan
