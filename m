@@ -2,155 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F226654CFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 08:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09194654CFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 08:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235878AbiLWHrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 02:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        id S235897AbiLWHrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 02:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLWHrI (ORCPT
+        with ESMTP id S235881AbiLWHrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 02:47:08 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1A825EA8;
-        Thu, 22 Dec 2022 23:47:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1671781611; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=WAmnG/7WmBojD5yX/BMhJvXhQP81hfEKSP6Bz+Ki3Tr1FisxiO0jZXfXvuyNae8hXIW4kbhLZdMeEt2TXQmLxnJw69ZimeiorMXRBd59rWNl14NMLIHBUZwgosrRQ1jQJ9xq+lIjkOQ+nx9//il/FWw/EqWM1peXWMdzWmmq02E=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1671781611; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=OPemjbTg3A1NAV8ZaqaXhvWUyc8aIggBEADkKRR9l40=; 
-        b=DdicahY5LwXcRCIviVf8bCRVTGEzwGsuOKgQJQANy5AzOUVwSe8QG+I3RRb0df+9LoUiY03EO+aB9rvJXdrrXUP4iQ4QhYqGIq77DjpTYPo3FRxrOh7dqMensaoekocLNaRZCnm5M7MmsGBWJd9/sbP97uRAHtvIzhKY0O2NwZU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1671781611;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=OPemjbTg3A1NAV8ZaqaXhvWUyc8aIggBEADkKRR9l40=;
-        b=V9DGAhl5Ovyl2TN1MqS2IxkBaHNh9hec2F5INe5PdvTAWx3TWrwpc3EKlLRHTfmq
-        sOxMSTsSwvAZ+FMb4AptqhZZqsTlUnEPIScXFOeucCF4i7m+aEIIF2e2Xo3yzvjpq8D
-        JaDObqqylLueTLy1YXfhyxUNgDRgOJElEBa55hoQ=
-Received: from edelgard.fodlan.icenowy.me (120.85.98.209 [120.85.98.209]) by mx.zohomail.com
-        with SMTPS id 167178160951175.93162783383423; Thu, 22 Dec 2022 23:46:49 -0800 (PST)
-Message-ID: <aa9fdfc04c3b6a3bba688bac244a157242faab82.camel@icenowy.me>
-Subject: Re: [PATCH v2 1/2] usb: misc: onboard_usb_hub: Don't create
- platform devices for DT nodes without 'vdd-supply'
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>, stable@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Date:   Fri, 23 Dec 2022 15:46:45 +0800
-In-Reply-To: <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
-References: <20221222022605.v2.1.If5e7ec83b1782e4dffa6ea759416a27326c8231d@changeid>
-         <CAD=FV=XNxZ3iDYAAqKWqDVLihJ63Du4L7kDdKO55avR9nghc5A@mail.gmail.com>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        Fri, 23 Dec 2022 02:47:33 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E94430F46;
+        Thu, 22 Dec 2022 23:47:32 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id v23so4275136pju.3;
+        Thu, 22 Dec 2022 23:47:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YR55G9jjoRMMPsmodTNiLbx+TyjEdvtvdLYurZPfaN8=;
+        b=o2QV5EjfyGwQymBw3MiEVEiXoA9BcDha8F88P5QvkSg0GlCM2Y3uo0JzqLAhVB2s+O
+         5qOuTNMEdk8y8JioagUG7IRQoJhHf8OrwSSObO+dEW6uLf2W1Dy364CD10Zva7bZ7XGR
+         Epam6lhOQuTDExs/R8NSV4MBwgvfwklMcu+CeR+8fNiQWlKQ/ndaEM4beM402UmSklbj
+         u+KloBT+B8xQ3MqHzzQjZjc265cNLsD7Ra44FsJY9KX0oibk++Rx8yFjfqYR7QercVZv
+         ATEfWNl6c6SK2C/t/azCvRA+uM+zcGMSw34/HXFIxml0c8uTPLw8LjSq4F8+y1dBUFCZ
+         I1ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YR55G9jjoRMMPsmodTNiLbx+TyjEdvtvdLYurZPfaN8=;
+        b=EeYcBP1Z1rQCkoblkAFa9lZ0I6QcPTChDs/xmSDM7xEoVlJJbcRoM/c8EGPycYrg3r
+         /LYHj+8lCsriqjA6X/EOxvM4k95kTrTkTPvPMzo2ptE7OLUViplEqixLHBebrm3b5fTC
+         W18qQvlTFTLVC6xknxye6LGfcGxSFqrr0sTXKTh8u3F4QIBoBi3rGx4zAvGjQstVvJFC
+         lhZ2/r3jgG237+UaeOlTc+5oOkVJoyP6KR/71xkdJYYrGgJwUnLlzlNBFBq5CFaoRzmy
+         RsqOPYn/caDdQupuPYzp21vB9XjkGgKyZuOjtO7rtluxz6kNyEZL6zV5AXQwHyreSpad
+         cLFw==
+X-Gm-Message-State: AFqh2kpY9udMJvYvbf00IZMXhP9qPQ/5Xg1bjN0U650iGxa+stdWHwMH
+        TY7am5Y96wwd/8F0Xgq76OouAgqInrDkkM35
+X-Google-Smtp-Source: AMrXdXtL0LpOWA6q8EssuMIA2u9mczls2uCvJtiRIEW/JUe3R3Bcafg4y8eUESEbyyGQJw8FXA++Cg==
+X-Received: by 2002:a17:90a:ce8d:b0:219:34cb:476c with SMTP id g13-20020a17090ace8d00b0021934cb476cmr9682964pju.9.1671781651605;
+        Thu, 22 Dec 2022 23:47:31 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id y15-20020a17090ad70f00b00218daa55e5fsm1699552pju.12.2022.12.22.23.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Dec 2022 23:47:31 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Rob Herring <robh@kernel.org>, Eric Anholt <eric@anholt.net>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        linux-input@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] input: raspberrypi-ts: Fix refcount leak in rpi_ts_probe
+Date:   Fri, 23 Dec 2022 11:46:53 +0400
+Message-Id: <20221223074657.810346-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-12-22=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 11:26 -0800=EF=BC=
-=8CDoug Anderson=E5=86=99=E9=81=93=EF=BC=9A
-> Hi,
->=20
-> On Wed, Dec 21, 2022 at 6:26 PM Matthias Kaehlcke <mka@chromium.org>
-> wrote:
-> >=20
-> > The primary task of the onboard_usb_hub driver is to control the
-> > power of an onboard USB hub. The driver gets the regulator from the
-> > device tree property "vdd-supply" of the hub's DT node. Some boards
-> > have device tree nodes for USB hubs supported by this driver, but
-> > don't specify a "vdd-supply". This is not an error per se, it just
-> > means that the onboard hub driver can't be used for these hubs, so
-> > don't create platform devices for such nodes.
-> >=20
-> > This change doesn't completely fix the reported regression. It
-> > should fix it for the RPi 3 B Plus and boards with similar hub
-> > configurations (compatible DT nodes without "vdd-supply"), boards
-> > that actually use the onboard hub driver could still be impacted
-> > by the race conditions discussed in that thread. Not creating the
-> > platform devices for nodes without "vdd-supply" is the right
-> > thing to do, independently from the race condition, which will
-> > be fixed in future patch.
-> >=20
-> > Fixes: 8bc063641ceb ("usb: misc: Add onboard_usb_hub driver")
-> > Link:
-> > https://lore.kernel.org/r/d04bcc45-3471-4417-b30b-5cf9880d785d@i2se.com=
-/
-> > Reported-by: Stefan Wahren <stefan.wahren@i2se.com>
-> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> > ---
-> >=20
-> > Changes in v2:
-> > - don't create platform devices when "vdd-supply" is missing,
-> > =C2=A0 rather than returning an error from _find_onboard_hub()
-> > - check for "vdd-supply" not "vdd" (Johan)
-> > - updated subject and commit message
-> > - added 'Link' tag (regzbot)
-> >=20
-> > =C2=A0drivers/usb/misc/onboard_usb_hub_pdevs.c | 13 +++++++++++++
-> > =C2=A01 file changed, 13 insertions(+)
->=20
-> I'm a tad bit skeptical.
->=20
-> It somehow feels a bit too much like "inside knowledge" to add this
-> here. I guess the "onboard_usb_hub_pdevs.c" is already pretty
-> entangled with "onboard_usb_hub.c", but I'd rather the "pdevs" file
-> keep the absolute minimum amount of stuff in it and all of the
-> details
-> be in the other file.
->=20
-> If this was the only issue though, I'd be tempted to let it slide. As
-> it is, I'm kinda worried that your patch will break Alexander Stein,
-> who should have been CCed (I've CCed him now) or Icenowy Zheng (also
-> CCed now). I believe those folks are using the USB hub driver
-> primarily to drive a reset GPIO. Looking at the example in the
-> bindings for one of them (genesys,gl850g.yaml), I even see that the
-> reset-gpio is specified but not a vdd-supply. I think you'll break
-> that?
+rpi_firmware_get() take reference, we need to release it in error paths
+as well. Use devm_rpi_firmware_get() helper to handling the resources.
+Also remove the existing rpi_firmware_put().
 
-Well technically in my final DT a regulator is included (to have the
-Vbus enabled when enabling the hub), however I am still against this
-patch, because the driver should work w/o vdd-supply (or w/o reset-
-gpios), and changing this behavior is a DT binding stability breakage.
+Fixes: 0b9f28fed3f7 ("Input: add official Raspberry Pi's touchscreen driver")
+Fixes: 3b8ddff780b7 ("input: raspberrypi-ts: Release firmware handle when not needed")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+changes in v2:
+- use devm_rpi_firmware_get().
+- remove rpi_firmware_put().
+---
+ drivers/input/touchscreen/raspberrypi-ts.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-In addition the kernel never fails because of a lacking regulator
-unless explicitly forbid dummy regulators.
-
-BTW USB is a discoverable bus, and if a hub do not need special
-handlement, it just does not need to appear in the DT, thus no onboard
-hub DT node.
-
->=20
-> In general, it feels like it should actually be fine to create the
-> USB
-> hub driver even if vdd isn't supplied. Sure, it won't do a lot, but
-> it
-> shouldn't actively hurt anything. You'll just be turning off and on
-> bogus regulators and burning a few CPU cycles. I guess the problem is
-> some race condition that you talk about in the commit message. I'd
-> rather see that fixed... That being said, if we want to be more
-> efficient and not burn CPU cycles and memory in Stefan Wahren's case,
-> maybe the USB hub driver itself could return a canonical error value
-> from its probe when it detects that it has no useful job and then
-> "onboard_usb_hub_pdevs" could just silently bail out?
-
-I agree.
+diff --git a/drivers/input/touchscreen/raspberrypi-ts.c b/drivers/input/touchscreen/raspberrypi-ts.c
+index 5000f5fd9ec3..45c575df994e 100644
+--- a/drivers/input/touchscreen/raspberrypi-ts.c
++++ b/drivers/input/touchscreen/raspberrypi-ts.c
+@@ -134,7 +134,7 @@ static int rpi_ts_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 	}
+ 
+-	fw = rpi_firmware_get(fw_node);
++	fw = devm_rpi_firmware_get(&pdev->dev, fw_node);
+ 	of_node_put(fw_node);
+ 	if (!fw)
+ 		return -EPROBE_DEFER;
+@@ -160,7 +160,6 @@ static int rpi_ts_probe(struct platform_device *pdev)
+ 	touchbuf = (u32)ts->fw_regs_phys;
+ 	error = rpi_firmware_property(fw, RPI_FIRMWARE_FRAMEBUFFER_SET_TOUCHBUF,
+ 				      &touchbuf, sizeof(touchbuf));
+-	rpi_firmware_put(fw);
+ 	if (error || touchbuf != 0) {
+ 		dev_warn(dev, "Failed to set touchbuf, %d\n", error);
+ 		return error;
+-- 
+2.25.1
 
