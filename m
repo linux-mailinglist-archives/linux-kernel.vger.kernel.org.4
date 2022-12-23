@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A430465533F
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 18:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05701655340
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 18:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbiLWRbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 12:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S232706AbiLWRbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 12:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiLWRbN (ORCPT
+        with ESMTP id S231645AbiLWRbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 12:31:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12075BF74
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 09:30:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671816625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=deNXT8hNeTJkuV52qcNJ9spcFBZRdWwkDFHQUIuDxdI=;
-        b=J9IIbJsqGb8IMWNiArrcAIre0fYVhFvdhk/rlpsQWWj2cwF4GtYPSYWzOa7KJtc7DxYX8i
-        3VNUu7eAQ3ptHoB6TFqC3f2ET4sGA+HRi8U+pSAmFdrHfs4NHbnIA+MwzpCFOI5WDPvQ/z
-        i1YjkqrodG959qA4cTU8ArYFxqxBr48=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-342-jnDw-f54NuiA8fsyCT79Hg-1; Fri, 23 Dec 2022 12:30:23 -0500
-X-MC-Unique: jnDw-f54NuiA8fsyCT79Hg-1
-Received: by mail-ed1-f70.google.com with SMTP id t17-20020a056402525100b00478b85eecedso4064711edd.18
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 09:30:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=deNXT8hNeTJkuV52qcNJ9spcFBZRdWwkDFHQUIuDxdI=;
-        b=T78CXrdDFFMzClCaZa+S8kbKjFQAwj8X/ovQyGqeYUpWMOlOLSH/nN28/W+CTHYbTk
-         dEKgXqkYyEtxnVDph2DR6WCcoiQugWaLsyg5aRK3yf62aotrxQlToS1qDKheVqbntkAw
-         a1ffDo1F2cKmjfvRKyLGpr+AiKgNcoP21PJzdcKRCvzHaKZw4J7cl7o5/PE9mjcIIhzP
-         rPoq1V8J2KIgfyf9ZFnEMYueNmoMXE0nhTww8bktGl2M5C8yN49dEq0MsNy62rLmbC35
-         P7KYKkx2whB/bN0Xy0XfAXK6glQP22cMAMniJv6W4UqmVV+Q5C4OMPmmLJO/zyOQFeDl
-         9qbg==
-X-Gm-Message-State: AFqh2krdp5qE2Y9H5FqhG27B1HbZ4lijyKx85YMfbfyWz4R5d+HDiDxh
-        5YrBR4iHgX6AswNWn36hphITWQ8p2YWf5UgG4WDzZRZZXbjbTgHqu52Kx90Fc3Lm2tBAxiePrnQ
-        EGLKhlNMGRpQNZr505o2eY1we
-X-Received: by 2002:a05:6402:1a4a:b0:472:2d7e:8c6d with SMTP id bf10-20020a0564021a4a00b004722d7e8c6dmr8624285edb.28.1671816622480;
-        Fri, 23 Dec 2022 09:30:22 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvBky2Bt9aX6KGCMIxzE8iMEIeQBlbZmQ7EvyOXS6mwqJQY5NixNV1YBTWb9By9zIbdMbDjRA==
-X-Received: by 2002:a05:6402:1a4a:b0:472:2d7e:8c6d with SMTP id bf10-20020a0564021a4a00b004722d7e8c6dmr8624275edb.28.1671816622261;
-        Fri, 23 Dec 2022 09:30:22 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id l26-20020a056402125a00b0046b471596e6sm1710656edw.57.2022.12.23.09.30.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 09:30:21 -0800 (PST)
-Message-ID: <70872206-7a75-0a19-3df5-a97207e710fa@redhat.com>
-Date:   Fri, 23 Dec 2022 18:30:20 +0100
+        Fri, 23 Dec 2022 12:31:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7232199
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 09:31:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11AB3B820E4
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 17:31:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF6AC433D2;
+        Fri, 23 Dec 2022 17:31:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671816670;
+        bh=fgXCLKllqkTCFcfNQk0a1yJ2up7pVcPAhTTWJrO18Uw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LBAf03ZRc2RIIPJwGh4VAPTSrPWKDmgaPJqBGC61Rqig7wTFQ9vu/i5Cuc0wf0LAK
+         DzhilCsBlJ7bDvXUEOK8RE8fp4nlGInRPGcs609jSjNj3rZHm7jzqCU6u9ItG0brrs
+         Dqo+kbLSWglXCvdtnvyV7Hro1y+K4BYMEV/VumSCtAOWYNRKP1l129Fzv5+BfKbBcb
+         b7EwsO7hD6WPjRfc8Cg1lNEaqVrMOivJ7UHzN0yLocC1/7/n2zCnjjg89cqy3wXXkH
+         FaRD1RrRJm4Ft/5X2GfpE/+v+BDrWZMgrJz6YYfi7ZAcDpGgyOAAXo+n88rehcI4Ns
+         6heHSrgQC/Zmg==
+Date:   Fri, 23 Dec 2022 10:31:08 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        LLVM Mailing List <llvm@lists.linux.dev>
+Subject: Re: [PATCH v1] driver core: Silence 'unused-but-set variable' warning
+Message-ID: <Y6Xl3M7Tx+c2SCa9@dev-arch.thelio-3990X>
+References: <20221223145137.3786601-1-ammar.faizi@intel.com>
+ <Y6XDAiMAMLniR9PG@kroah.com>
+ <7f61b046-c6f2-1dd6-98e9-e5b49b3c7dde@gnuweeb.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 3/4] KVM: nVMX: Don't muck with allowed sec exec
- controls on CPUID changes
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aaron Lewis <aaronlewis@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>
-References: <20221213062306.667649-1-seanjc@google.com>
- <20221213062306.667649-4-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221213062306.667649-4-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7f61b046-c6f2-1dd6-98e9-e5b49b3c7dde@gnuweeb.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/13/22 07:23, Sean Christopherson wrote:
-> Don't modify the set of allowed secondary execution controls, i.e. the
-> virtual MSR_IA32_VMX_PROCBASED_CTLS2, in response to guest CPUID changes.
-> To avoid breaking old userspace that never sets the VMX MSRs, i.e. relies
-> on KVM to provide a consistent vCPU model, keep the existing behavior if
-> userspace has never written MSR_IA32_VMX_PROCBASED_CTLS2.
+On Fri, Dec 23, 2022 at 10:31:57PM +0700, Ammar Faizi wrote:
+> On 12/23/22 10:02 PM, Greg Kroah-Hartman wrote:
+> > Ick, no, that's horrid and is NOT ok for kernel code, sorry.
+> > 
+> > Please fix the compiler, this is not a "fix" in any sense of the word
+> > and is not going to work at all for kernel code.
+
+It is possible that the compiler should not emit
+-Wunused-but-set-variable when the variable is assigned the return
+value of a function marked with __attribute__((warn_unused_result)) but
+neither compiler does that today, you'll see the exact same warning from
+GCC 12.2.0:
+
+  drivers/base/module.c: In function ‘module_add_driver’:
+  drivers/base/module.c:36:13: error: variable ‘no_warn’ set but not used [-Werror=unused-but-set-variable]
+     36 |         int no_warn;
+        |             ^~~~~~~
+  cc1: all warnings being treated as errors
+
+This has come up before too:
+
+https://lore.kernel.org/20210726201924.3202278-2-morbo@google.com/
+
+> Agree.
 > 
-> KVM should not modify the VMX capabilities presented to L1 based on CPUID
-> as doing so may discard explicit settings provided by userspace.  E.g. if
-> userspace does KVM_SET_MSRS => KVM_SET_CPUID and disables a feature in
-> the VMX MSRs but not CPUID (to prevent exposing the feature to L2), then
-> stuffing the VMX MSRs during KVM_SET_CPUID will expose the feature to L2
-> against userspace's wishes.
+> Sorry for the noise. It turned out I messed up my clang compiler flags.
+> I forgot to do a "git reset --hard" before recompiling.
+> 
+> This has nothing todo with the upstream kernel.
 
-The commit message doesn't explain *why* KVM_SET_CPUID would be done 
-before KVM_SET_MSRS.  The presence of certain MSRs or bits within is 
-signaled by CPUID bits, and even though KVM is more lenient on 
-host-initiated MSR writes it still verifies in general that the bits are 
-valid.
+This warning is in W=1, which are warnings that we want to turn on at
+some point but the current instances need to be fixed first, so I would
+say this is still relevant to the upstream kernel.
 
-For now I applied patch 1 and (with a reworded comment) patch 2.  I'm 
-not opposed to the rest, but I would like to better understand the 
-reason for them.  (If it has been reported to the mailing list, please 
-add a "Link" trailer too).
-
-Paolo
-
+Cheers,
+Nathan
