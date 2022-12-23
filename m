@@ -2,215 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABDF654F2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3585654F2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 11:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbiLWKZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 05:25:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S235897AbiLWKbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 05:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235917AbiLWKZP (ORCPT
+        with ESMTP id S230019AbiLWKbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 05:25:15 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4396720347
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:25:14 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id p36so6528116lfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 02:25:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qp7d3U94zoNgKH8Si35nk2bX1fIT5hDmVOTvD+2+xiI=;
-        b=a3ULL3KPekXKim5IREGJDUsn1quNjynauNOaAghWct3ih2A4vxASjkyY6wPjt04RtX
-         Q3AjFmIl7yo0PQ8hzApg7fj9xmTj1z635ssGsJ47EZawHIfne8i146+urbheMecDQH5S
-         SvUd335pD022tMegpq9jS8Ej5SA3af3lsSaQJpkNZLHZpQ2d4NQIPEdGZPXDPDyXIcUD
-         7mkhis/VlcF2dZ3yM8aA14gu0DsfD9/QgT6JQUIDVMZNnhWxycAne2BGhieDPq/eVK/y
-         r52AGEFWG8n+iS8dFQHahkDolvqcA90Izkog4mRVps/eGTZB3A2U/cyfhRPBhcjbDimv
-         BwGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qp7d3U94zoNgKH8Si35nk2bX1fIT5hDmVOTvD+2+xiI=;
-        b=tap2/efAOmIYx0KjENxNcnlac9Pyjjz3XB89wuBXaYKoEcZ8M/fzsuoMShX/0uO1x/
-         UT9R2Ag5TZWY8rssKlWAS8dKrjQ7mWUTA3DHybGhBO2TNgrzdOBboDXH3USCY6vVWh31
-         rVhRCaM5ttMxxKatn7ufNPs5JvAf+pxBYfkia5qLAK7YuoX1T/95nT0jarILc0KrgZI0
-         F8r3mLa6wLHAuac5IBlPJcwCWu1l9iRN8iZK9B27+gzKFwvj+D2Uec5l/Tyw3bVwOaM4
-         QZ9xGccIrW8nIcdwAcJTAFFf7Gjii3vqVKPAt3TAQtyoKxa70LAaO2LUFFp+RzEkYZah
-         YI2g==
-X-Gm-Message-State: AFqh2kravXHNbgh+eOL8X/SrCsiB9cf7x/oCH9Mnk9x799VdmbBxyXVq
-        ynTevHhxXfit0TMJORntGumZaw==
-X-Google-Smtp-Source: AMrXdXtmvRecxvsCwLnWMZT22Fb49dhaElQD52LdPUWmeeJ8sDPLBSeNLZ4a44nht9Y4xxtkSEfCvw==
-X-Received: by 2002:ac2:5589:0:b0:4b5:5c9b:18c with SMTP id v9-20020ac25589000000b004b55c9b018cmr2361943lfg.34.1671791112607;
-        Fri, 23 Dec 2022 02:25:12 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m14-20020a056512358e00b004a4754c5db5sm471219lfr.244.2022.12.23.02.25.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 02:25:12 -0800 (PST)
-Message-ID: <179e66a8-c6c0-6d3e-4f4a-6b884f532572@linaro.org>
-Date:   Fri, 23 Dec 2022 11:25:11 +0100
+        Fri, 23 Dec 2022 05:31:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C7027DF1;
+        Fri, 23 Dec 2022 02:31:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABB9F61DB3;
+        Fri, 23 Dec 2022 10:31:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 015C4C433EF;
+        Fri, 23 Dec 2022 10:31:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671791490;
+        bh=6wmYFAAcZgXeEqTN//fhHTM54kWAbw0UyCStoqODi6s=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=BEyR8WP6WX3GtZpTZwyvh6OGrEFdaVlUcmfPF3c/2LEX4kyhwln3qYDDOeVFlTGuw
+         7DrYKRNNPzm2aA4AWpm9QiLKqrk75STh/zZjnVhHDcboCUL8fv1NWdcLfTUP/KyhI6
+         QGJPalphACsy+K7uM6ZKjrNy3ZdPIEK29DPBm7VxwNl3RrElL3xW0W200UGni6gReT
+         bvKOUaIvd04RL0CbsKQJzs78ub+efKUqAs6kAZL/OE+K/Zc/fKOJD60EM+0buIpBs0
+         xk2dGqETA6m4gdoxm37WekG/7yw82X2mM6t9eb7hHOgOpkcbqRRpo1m/wxXR7dSOrG
+         SISfWKOcCFjKA==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-rockchip@lists.infradead.org,
+        Johan Jonker <jbx6244@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains
+ property
+In-Reply-To: <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
+References: <20221219191038.1973807-1-robh@kernel.org>
+ <87edsua5q4.fsf@balbi.sh>
+ <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
+Date:   Fri, 23 Dec 2022 12:31:01 +0200
+Message-ID: <878riy9ztm.fsf@balbi.sh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v1 1/3] dt-bindings: timer: Add timer for StarFive JH7110
- SoC
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-References: <20221223094801.181315-1-xingyu.wu@starfivetech.com>
- <20221223094801.181315-2-xingyu.wu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221223094801.181315-2-xingyu.wu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/12/2022 10:47, Xingyu Wu wrote:
-> Add bindings for the timer on the JH7110
-> RISC-V SoC by StarFive Technology Ltd.
-
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
-> 
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
->  .../timer/starfive,jh7110-timers.yaml         | 105 ++++++++++++++++++
->  1 file changed, 105 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml b/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
-> new file mode 100644
-> index 000000000000..fe58dc056313
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/starfive,jh7110-timers.yaml
-> @@ -0,0 +1,105 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/timer/starfive,jh7110-timers.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive Timers
+Hi,
 
+Rob Herring <robh@kernel.org> writes:
+>> > The Rockchip RK3399 DWC3 node has 'power-domain' property which isn't
+>> > allowed by the schema:
+>> >
+>> > usb@fe900000: Unevaluated properties are not allowed ('power-domains' =
+was unexpected)
+>> >
+>> > Allow DWC3 nodes to have a single power-domains entry. We could instead
+>> > move the power-domains property to the parent wrapper node, but the
+>> > could be an ABI break (Linux shouldn't care). Also, we don't want to
+>> > encourage the pattern of wrapper nodes just to define resources such as
+>> > clocks, resets, power-domains, etc. when not necessary.
+>> >
+>> > Signed-off-by: Rob Herring <robh@kernel.org>
+>> > ---
+>> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
+>> >  1 file changed, 3 insertions(+)
+>> >
+>> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Do=
+cumentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> > index 6d78048c4613..bcefd1c2410a 100644
+>> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> > @@ -91,6 +91,9 @@ properties:
+>> >          - usb2-phy
+>> >          - usb3-phy
+>> >
+>> > +  power-domains:
+>> > +    maxItems: 1
+>>
+>> AFAICT this can be incorrect. Also, you could have Cc the dwc3
+>> maintainer to get comments.
+>
+> When we have a user with more and know what each one is, then we can
+> extend it. All the other users (upstream), put 'power-domains' in the
 
-Not enough, really not enough. Describe the hardware.
+Won't that be an ABI break at that point? You'll change the maximum
+number of power-domains.
 
-> +
-> +maintainers:
-> +  - Samin Guo <samin.guo@starfivetech.com>
-> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: starfive,jh7110-timers
+> wrapper node. But this is what we need now for RK3399.
+>
+> I used get_maintainers.pl. If that's the wrong output, fix it please.
 
-Why plural "timers", not "timer"? The module is usually called timer -
-see other hardware that type.
+@Thinh, perhaps you should add dwc3 binding file to the list of
+maintained files for you?
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: timer channel 0 interrupt
-> +      - description: timer channel 1 interrupt
-> +      - description: timer channel 2 interrupt
-> +      - description: timer channel 3 interrupt
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: timer0
-> +      - const: timer1
-> +      - const: timer2
-> +      - const: timer3
+=2D-=20
+balbi
 
-I would just drop the names, not really useful. Unless you plan to add
-here some generic interrupt (like you did for clock-names)?
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +
-> +  clocks:
-> +    items:
-> +      - description: timer channel 0 clock
-> +      - description: timer channel 1 clock
-> +      - description: timer channel 2 clock
-> +      - description: timer channel 3 clock
-> +      - description: APB clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: timer0
-> +      - const: timer1
-> +      - const: timer2
-> +      - const: timer3
-> +      - const: apb
-> +
-> +  resets:
-> +    items:
-> +      - description: timer channel 0 reset
-> +      - description: timer channel 1 reset
-> +      - description: timer channel 2 reset
-> +      - description: timer channel 3 reset
-> +      - description: APB reset
-> +
-> +  reset-names:
-> +    items:
-> +      - const: timer0
-> +      - const: timer1
-> +      - const: timer2
-> +      - const: timer3
-> +      - const: apb
-> +
-> +  clock-frequency:
-> +    description: The frequency of the clock that drives the counter, in Hz.
+-----BEGIN PGP SIGNATURE-----
 
-Why do you need it? Use common clk framework to get that frequency.
-
-Also, sort the nodes somehow, e.g.
-compatible/reg/clocks/clock-frequency/interrupts/resets.
-
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - reset-names
-> +  - clock-frequency
-> +
-> +unevaluatedProperties: false
-
-Did you test the binding?
-
-
-Best regards,
-Krzysztof
-
+iQJFBAEBCAAvFiEEg3wK/NVnD14JZqsmho6y4DXKpEQFAmOlg2URHGJhbGJpQGtl
+cm5lbC5vcmcACgkQho6y4DXKpERo4hAApZSXiZmGtrVhLB64SCqHD9+VJbt4amWz
+ePO7l7j7gpou9fF4lDUnWBaoAE1xnpv/6Hr64fq5D540UXFW0pfwV+WFMSm86fjU
+jlqErZlbMAb/0oj0E0YVBN0zA4Mi7VjWuO5Q99bEdcaBr6aBQAD2/mcODQhfWHbv
+ZPmK5psZh/yoeaQBVExyJHPi3Bi/hCpZPhVkWnfUgBEUfGMeNigXloqg0jp8+tzD
+ClgH1LBw8dW5Oa2/z63C9XLYGL0KB/gsVMMGyWUY2u2v/xqJ+sLyAPzYX1JIqJq3
+MiyKJVSGplfOBa5GSGaKehTfPwAG8Du7CP3K3+9ydU/TWw3lg/fQ5UbYRBr/Q4SC
+5S3micolyaEIWkW4XyrWgPSr/eq4A5vVZWRAqEEKvyBGKGxsZZqRkFoxzhYHd8FO
+pIkBRI/kLtIhFDkXZ5e1HvmvsGgJJcRAZfawaw8RoY6sJgkQquxgKW3ob7Aeb6jK
+seY4rLlxzDmdzlqrPyXFxVNrUNn/JW1KoY5sYfAQumBdM7PSR/xNN1NYAGJAI4on
+UpKSIuTwKgMzM6i69wioIRK0QV1y3yvTdYB/umO+YT1sCKLaRX998O2Z33i6TCTv
+LDwdv8JqXQFyIn8IecdLA9qsKsqApS67M4n+38SLyBkvttJtNGka1afH5PFJNt95
+jLwjgQSUmDI=
+=6qAf
+-----END PGP SIGNATURE-----
+--=-=-=--
