@@ -2,121 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE546554A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 21:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941796554AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 22:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbiLWU7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 15:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
+        id S230522AbiLWVPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 16:15:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiLWU7D (ORCPT
+        with ESMTP id S229650AbiLWVPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 15:59:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829C8FE0
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 12:58:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671829094;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+fwm2GPP6ljPqAqBro6/G3VDNHOYIU57et0/yW+eCIc=;
-        b=UREvj5LCLHRBMtb0tcciFNpbRu1q76VwN+E9urCcXY0jKD/EdkGmeSFr4Ia/aIX7I494jK
-        t6uTqQIzu5ljkUc1WEtKgsFYp+yC3VNk3l+m83r9YQuZEa8stAIQsmuD6JvabLR8PJ7wru
-        ZSukDjxMP6SeHjdsXfrZX5vySR785Oo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-102-DY3seawPP0iOemf_cqltyg-1; Fri, 23 Dec 2022 15:58:13 -0500
-X-MC-Unique: DY3seawPP0iOemf_cqltyg-1
-Received: by mail-wm1-f72.google.com with SMTP id a6-20020a05600c224600b003d1f3ed49adso1398345wmm.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 12:58:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+fwm2GPP6ljPqAqBro6/G3VDNHOYIU57et0/yW+eCIc=;
-        b=jygtYYi3HBZhYm0YZDM9Ksz9LxLw6zXn8OV4LfCE28Gk1mb8Pfx7XizlzipVql4VdF
-         IiKiVbUvYApHSAh6UOpXzkM7vCOJxKAQYukKC70RqEEaGbokOB2F6ImmhjZwDuheHfXr
-         zOKLg6ascEVcoLnfsdvRbidWuk3+KyTG2qvg9BKrmIFy5RltC8/2qr45XTmmzWFO+Akh
-         pQK1g4qT8cpSuVWX1COv70L3Ho4uNmsbOhrAYLSWwE9y/IJCrokZ4M9kFJysO+1PEUxO
-         4lfdbZvYpThD6FzHm3RVXwOl4bkktpbJbYki0yXOSwHXcWGBI1oMyrZl0bBm1QV9xVfg
-         defw==
-X-Gm-Message-State: AFqh2kpt2MFJMcBsuhE/CPcOLfeTnqlVCNzpIihdMn92OQzR1DS7S4kC
-        z60yRLtDS5VD6kLXuf5sAn7RXxJbeQapjx1D34D76SS4+EHSa1NEfFiirjmOgRFfmNzOnc0R2Kk
-        p8eOYCDJZFt4O/G7TDxaI68xb
-X-Received: by 2002:a1c:4b04:0:b0:3c6:f0b8:74e6 with SMTP id y4-20020a1c4b04000000b003c6f0b874e6mr8362266wma.4.1671829092197;
-        Fri, 23 Dec 2022 12:58:12 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvwTJdWPrVbJTWxaWnNIPcDrG7XtjeUPiYxWUCSByVOVLFXktOF9FLaUHm7oBMX/AGjv+cu/w==
-X-Received: by 2002:a1c:4b04:0:b0:3c6:f0b8:74e6 with SMTP id y4-20020a1c4b04000000b003c6f0b874e6mr8362254wma.4.1671829092002;
-        Fri, 23 Dec 2022 12:58:12 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id 19-20020a05600c021300b003c5571c27a1sm6585681wmi.32.2022.12.23.12.58.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 12:58:11 -0800 (PST)
-Message-ID: <ad5471ab-643c-fe4d-13cd-4984d4bb4ee9@redhat.com>
-Date:   Fri, 23 Dec 2022 21:58:10 +0100
+        Fri, 23 Dec 2022 16:15:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FF1B1FE;
+        Fri, 23 Dec 2022 13:15:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95C5961842;
+        Fri, 23 Dec 2022 21:15:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86FBAC433EF;
+        Fri, 23 Dec 2022 21:15:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671830112;
+        bh=hMpQQNYK95cKuQwDk/zAG80cKOmSryIgdedTMIx1SF8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ogqwyKefV3Obx8cU+3fu5TsIGJETglAJ6stHhNCSa7k2Ry5Ba9OB9yJgD7+sRMTcc
+         apPnpnaamAHiM+C2tqxA2W05sPQ2rbUuegF7z4L0B1zmcjpvA3rQNgb/zZuPAfupHA
+         h7qI3PvX2RFVdJDt9QAKZLn78C0xRh4rYSXQ09F/5GbdRFSrDNyIK3lAdvOcSOd3hm
+         2TKI9JJnqMGOX5XYxrLZMwoNvsgM6L7iCDfxFilrODBFEgi+EDLtfGHGuthR5qkj6J
+         CE+YJyLGYuAUtaJND85aYHT1H22Z1Hbrd+R6Qo467nOggUInxs3da7mOATmZslH8e6
+         Gt8azMO2vCY2w==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org
+Subject: [PATCH] entry/rcu: Check TIF_RESCHED _after_ delayed RCU wake-up
+Date:   Fri, 23 Dec 2022 22:15:07 +0100
+Message-Id: <20221223211507.84249-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/4] drm: panel: Add Himax HX8394 panel controller driver
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-kernel@vger.kernel.org, Ondrej Jirman <megi@xff.cz>,
-        Robert Mader <robert.mader@posteo.de>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        =?UTF-8?Q?Kamil_Trzci=c5=84ski?= <ayufan@ayufan.eu>,
-        Martijn Braam <martijn@brixit.nl>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        dri-devel@lists.freedesktop.org
-References: <20221222223830.2494900-1-javierm@redhat.com>
- <20221222223830.2494900-2-javierm@redhat.com> <Y6VyJhz9DTjaDUDa@ravnborg.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <Y6VyJhz9DTjaDUDa@ravnborg.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sam,
+RCU sometimes needs to perform a delayed wake up for specific kthreads
+handling callbacks offloading (RCU_NOCB). This is handled through timers
+and upon entry to idle (also guest and user on nohz_full).
 
-On 12/23/22 10:17, Sam Ravnborg wrote:
-> Hi Javier.
-> 
-> On Thu, Dec 22, 2022 at 11:38:27PM +0100, Javier Martinez Canillas wrote:
->> From: Kamil Trzciński <ayufan@ayufan.eu>
->>
->> The driver is for panels based on the Himax HX8394 controller, such as the
->> HannStar HSD060BHW4 720x1440 TFT LCD panel that uses a MIPI-DSI interface.
-> 
-> A few comments/nitpicks in the following.
-> I have been away for a while, and paged out most of my panel knowledge,
-> so read it all with that in mind.
->
+However the delayed wake-up on kernel exit is actually performed after
+the thread flags are fetched towards the fast path check for work to
+do on exit to user. As a result, and if there is no other pending work
+to do upon that kernel exit, the current task will resume to userspace
+with TIF_RESCHED set and the pending wake up ignored.
 
-Thanks a lot for your feedback! I agree with your comments and will address
-those in the next iteration.
+Fix this with fetching the thread flags _after_ the delayed RCU-nocb
+kthread wake-up.
+
+Fixes: 47b8ff194c1f ("entry: Explicitly flush pending rcuog wakeup before last rescheduling point")
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+---
+ kernel/entry/common.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index 846add8394c4..a134e26b58c6 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -192,13 +192,14 @@ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
  
-> In general - very nicely written driver.
-> 
-> 	Sam
-> 
-
+ static void exit_to_user_mode_prepare(struct pt_regs *regs)
+ {
+-	unsigned long ti_work = read_thread_flags();
++	unsigned long ti_work;
+ 
+ 	lockdep_assert_irqs_disabled();
+ 
+ 	/* Flush pending rcuog wakeup before the last need_resched() check */
+ 	tick_nohz_user_enter_prepare();
+ 
++	ti_work = read_thread_flags();
+ 	if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
+ 		ti_work = exit_to_user_mode_loop(regs, ti_work);
+ 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.25.1
 
