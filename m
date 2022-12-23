@@ -2,144 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718726549CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 01:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8351B6549D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 01:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235443AbiLWAhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Dec 2022 19:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        id S230060AbiLWAlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Dec 2022 19:41:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLWAhV (ORCPT
+        with ESMTP id S229656AbiLWAlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Dec 2022 19:37:21 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC48DF3A
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 16:37:20 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id p4so3528359pjk.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 16:37:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5qpVu3sN2GuUThZ9RB+4eYZTG5/t0SB6qmR3AbS+l70=;
-        b=B8R3XSgXnZA0zY5ZIdpmzNALRNnKsAfqFMLI/F+HF96zJYmqg1RNfhTugB8bwKI8A2
-         JS/Y6GRPNC3bxfTQCrdpS/9K/kg2Lr6+RHAiBOrwY5KMWHe7ixr5p9ST9I6V2CdjBoQW
-         utBDn9+m+81ByW1uwDLF2LCDyCILvdtt27LVTPhR5xnYw17Qhp8OzxxUN+OC0WbfgeyF
-         OJHSL9IpNLDgSNZ8DTQRpKT2MgorAXNG7vnzvJERj00cpKqFnRlol438XrI30+88e00T
-         aTN9PmkIoWMfS2sV12MkOTVjfYk520RDEMd6Mi5dYYe4rhkOYnXeilicT614LDtZ6Pug
-         UAHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5qpVu3sN2GuUThZ9RB+4eYZTG5/t0SB6qmR3AbS+l70=;
-        b=WUvwyK9Fz7901TW4Y+vCt8wAjcqAwJAcn3t7UZevCUH52N1goiBvIGV1pVPs/+4i4u
-         l8KA/+w7pQEzJi23X38rtkvvtJxntm5XNw1V0dRU5m07NMJLI6N03Q4y9TYvwC1TbIxb
-         w6vTPB+QXp+MBl2/6yMbFnMlOh242zKNBZkvEL22oMeaYhXm/55g1KUQLtcWo4K/p0Oy
-         R0GQk+6tXHoFs5OJUHdtUNcr+BeAnn6CNRt4TwqDPfuQ4qugfI0Rm4nUGU9JwzcQunPt
-         bB8idmYhU9t3DpLBTVxI6HFjH8Qwgme4m4Km2jGP8faz7Jn9jHS/KxWin/4nWGkgH/64
-         o0Dw==
-X-Gm-Message-State: AFqh2kpBGE6V3NyKCeXyrV9CvulBjZri8u5W88zzVROFFMYFYh6/w039
-        lfyHk3S7Nz5aJ/USdqDLVzjyxg==
-X-Google-Smtp-Source: AMrXdXsjr7g6zJgmvJf2nNP86FhM3dZ2aK3tAps43yzHeFgEfsriOphjFvjgXLdFPCH3uTD/vS0vNQ==
-X-Received: by 2002:a17:90a:408d:b0:223:e2df:8030 with SMTP id l13-20020a17090a408d00b00223e2df8030mr1083496pjg.2.1671755840213;
-        Thu, 22 Dec 2022 16:37:20 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l7-20020a17090b078700b00218fb3bec27sm1103723pjz.56.2022.12.22.16.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 16:37:19 -0800 (PST)
-Date:   Fri, 23 Dec 2022 00:37:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        shuah@kernel.org, bgardon@google.com, oupton@google.com,
-        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com,
-        pgonda@google.com, andrew.jones@linux.dev
-Subject: Re: [V3 PATCH 2/2] KVM: selftests: x86: Add native hypercall support
-Message-ID: <Y6T4PJfF3nGU25Ee@google.com>
-References: <20221222230458.3828342-1-vannapurve@google.com>
- <20221222230458.3828342-3-vannapurve@google.com>
+        Thu, 22 Dec 2022 19:41:06 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F90EDEAA
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Dec 2022 16:41:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=imsK8yQRr0h6fwP6rbqJ2xAJ74fIuelOZhWGi3JmFe0=; b=EKxOx4MVQYqC0lg92BlH8jzFSG
+        +7DxNNz3C3c5qW49jwK2ok+KRV5gBeoqcESqb+n8sch6NUG+uqfHAKjcHmyRRGqMEvAlh0Xqazzli
+        tSY2MztQG8gkwG9CvnJvc7E5g6MOiGtE10CAGA8RZQbWFKPhVbzEAoy2zXo4omLERAGQVbAuK75DI
+        BUYHufHxdfjBhgnoYlaaOI4rR/uIrx+IBniBqf+BN7I/6hfXuskWZC3Tf2WnXg02TkzHubhSFEUZR
+        MoRL5QIpG2hj7DS+NRikZz6MsAYcGhPuMfrbuSSJ3O6HE7ezTp4cGsHVTkj0lIUz9kzjefLnGXj3F
+        hKH70+dA==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p8W7K-001Miv-Hp; Fri, 23 Dec 2022 00:40:54 +0000
+Message-ID: <77e77c4f-0cde-090d-5918-c1a5f85ea5fb@infradead.org>
+Date:   Thu, 22 Dec 2022 16:40:53 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222230458.3828342-3-vannapurve@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: ld.lld: error: undefined symbol: devm_ti_sci_get_handle
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+References: <202212222201.6lgWXMZT-lkp@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202212222201.6lgWXMZT-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022, Vishal Annapurve wrote:
-> Add an API to execute hypercall as per the cpu type by checking the
-> underlying CPU. KVM emulates vmcall/vmmcall instruction by modifying
-> guest memory contents with hypercall instruction as per the cpu type.
+
+
+On 12/22/22 06:45, kernel test robot wrote:
+> Hi Philipp,
 > 
-> Confidential VMs need to execute hypercall instruction without it being
-> emulated by KVM as KVM can not modify guest memory contents.
+> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 > 
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> ---
->  .../selftests/kvm/include/x86_64/processor.h   |  3 +++
->  .../selftests/kvm/lib/x86_64/processor.c       | 18 ++++++++++++++++++
->  2 files changed, 21 insertions(+)
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   9d2f6060fe4c3b49d0cdc1dce1c99296f33379c8
+> commit: a6af504184c981efd253f986e6fc54db57b1d39f reset: ti-sci: Allow building under COMPILE_TEST
+> date:   8 months ago
+> config: arm-randconfig-r046-20221222
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 98b13979fb05f3ed288a900deb843e7b27589e58)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a6af504184c981efd253f986e6fc54db57b1d39f
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout a6af504184c981efd253f986e6fc54db57b1d39f
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 > 
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> index 4d5dd9a467e1..3617f83bb2e5 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> @@ -1039,6 +1039,9 @@ uint64_t *vm_get_page_table_entry(struct kvm_vm *vm, uint64_t vaddr);
->  uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
->  		       uint64_t a3);
->  
-> +uint64_t kvm_native_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
-> +		       uint64_t a3);
-> +
->  void __vm_xsave_require_permission(int bit, const char *name);
->  
->  #define vm_xsave_require_permission(perm)	\
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> index 1e93bb3cb058..429e55f2609f 100644
-> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> @@ -1202,6 +1202,24 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
->  	return r;
->  }
->  
-> +uint64_t kvm_native_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: undefined symbol: devm_ti_sci_get_handle
+>    >>> referenced by reset-ti-sci.c:229 (drivers/reset/reset-ti-sci.c:229)
+>    >>>               reset/reset-ti-sci.o:(ti_sci_reset_probe) in archive drivers/built-in.a
 
-Just do this in kvm_hypercall().  David didn't say "don't do that", he said "don't
-do that in a single patch".  Except for fix_hypercall_test, selftests should always
-use the native hypercall instruction and not rely on KVM's patching, e.g. patching
-will go sideways if someone gets clever and makes guest code not-writable.
+Two (2) patches have been posted for this build error (in chronological order):
 
-> +		       uint64_t a3)
+2022-10-29:
+  https://lore.kernel.org/lkml/20221030055636.3139-1-rdunlap@infradead.org/
+2022-12-15:
+  https://lore.kernel.org/all/20221215170036.2308972-1-arnd@kernel.org/
 
-Align parameters.
+Can someone apply one of them or at least comment on them?
+Philipp?
 
-> +{
-> +	uint64_t r;
-> +
-> +	if (is_amd_cpu()) {
-
-Curly brace is unnecessary.  Though I think I'd prefer to not duplicate the asm
-blob (too many darn inputs).  It's a little ugly, but I prefer it over duplicating
-the entire blob.  The approach could also likely be macrofied for other hypercall
-usage (future problem).
-
-	asm volatile("test %[use_vmmcall], %[use_vmmcall]\n\t"
-		     "jnz 1f\n\t"
-		     "vmcall\n\t"
-		     "jmp 2f\n\t"
-		     "1: vmmcall\n\t"
-		     "2:"
-		     : "=a"(r)
-		     : "a"(nr), "b"(a0), "c"(a1), "d"(a2), "S"(a3),
-		       [use_vmmcall] "r" (is_amd_cpu()));
-	return r;
+thanks.
+-- 
+~Randy
