@@ -2,156 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E603655138
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE2D65513B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Dec 2022 15:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236341AbiLWOPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 09:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S236303AbiLWOQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 09:16:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiLWOPu (ORCPT
+        with ESMTP id S229625AbiLWOQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 09:15:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4627B13EA4;
-        Fri, 23 Dec 2022 06:15:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 23 Dec 2022 09:16:33 -0500
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83638186F8;
+        Fri, 23 Dec 2022 06:16:32 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA13560F74;
-        Fri, 23 Dec 2022 14:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE6DC433D2;
-        Fri, 23 Dec 2022 14:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671804948;
-        bh=kC/5ICblD4LB7IvS8fwCTmiK5DQUeaEZVETPs8nZAZ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gzVYtBIoG1z48keDm9V4HVDC/PGhcmFIQJFHTrA2l9xP8AREJ1f+fog6mveB2ZHur
-         m29UFSZCbhrbQRA0Wb0UVY5hRJOx5IUasz6U40uqG2I/XnJ+KHrvub6dq30gutvMaS
-         wI/GlLpxn7Y0MWex1CbTd/NsjiY4njntP4z/oPKVCakXUCmCGy/cr6gEtuDMJdyrJp
-         zBvpEnS+J10mzT9or1kldLX3HxHc+bueLw+8XEZ38Qx7O7WoE8GWJapH5kked6UyqO
-         1QY+FYKVgHcYT6ZA909f7d7SwD/uyqe25G7GgmRmLQ9L48B+Y3kiWqPRpHuVEJ8aGI
-         hsCK9o8EAcPIw==
-Date:   Fri, 23 Dec 2022 23:15:45 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Song Chen <chensong_2000@189.cn>
-Cc:     rostedt@goodmis.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] kernel/trace: remove calling regs_* when
- compiling HEXAGON
-Message-Id: <20221223231545.e619f35b321192fbaa2f4cf9@kernel.org>
-In-Reply-To: <1670229017-4106-1-git-send-email-chensong_2000@189.cn>
-References: <1670229017-4106-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ms.lwn.net (Postfix) with ESMTPSA id E78EF4E5;
+        Fri, 23 Dec 2022 14:16:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E78EF4E5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1671804992; bh=2To79WNMTF4K2+fkid8avf169IweySAkg3+yKw0TyYo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=blnjTx6Luu5jxoHHHqqqEhrSVJY3AocV2e6LZRXSggmhh4QE3rKtiLbqhYMCwVmJP
+         z6LyNSuLmWZUq3Ez5BqefVzKlpjzKTDuQLKzhGfG9GmnJF5HducAh+uTckpxjPYHBi
+         Q8THCAHlLWjGHoE+Xiil55euKp98gqsvcRnhGD26mUQEaudii2jjznpuCRpKoUkHTc
+         qmL/a57NYZrQaodlFqHwcyzrKeDt0iDFQiZ4bWk2M7l5+UZuJC0mMEZhCtxX6uhXvw
+         0ImFiIu/nP6alzxOI8LNPZL6+E+UWTsB6nY1NzRCS15b6mvhbiNeXMhVx2XfkEkfzJ
+         VSScmSK6j/P6g==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Christoph Hellwig <hch@lst.de>, axboe@meta.com, sagi@grimberg.me,
+        kbusch@kernel.org, linux-nvme@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH] docs, nvme: add a feature and quirk policy document
+In-Reply-To: <20221223093351.GA8028@lst.de>
+References: <20221215125130.261098-1-hch@lst.de>
+ <87zgboddb7.fsf@meer.lwn.net> <20221215132622.GA21083@lst.de>
+ <20221221083450.GA23903@lst.de> <87mt7g27lv.fsf@meer.lwn.net>
+ <20221222160920.GA10193@lst.de> <87zgbfma5w.fsf@meer.lwn.net>
+ <20221223093351.GA8028@lst.de>
+Date:   Fri, 23 Dec 2022 07:16:31 -0700
+Message-ID: <87sfh6mchs.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  5 Dec 2022 16:30:17 +0800
-Song Chen <chensong_2000@189.cn> wrote:
+Christoph Hellwig <hch@lst.de> writes:
 
-> kernel test robot reports below errors:
-> 
-> In file included from kernel/trace/trace_events_synth.c:22:
-> >> kernel/trace/trace_probe_kernel.h:203:9: error: call to
-> undeclared function 'regs_get_register'; ISO C99 and later
-> do not support implicit function declarations
-> [-Wimplicit-function-declaration]
->                    val = regs_get_register(regs, code->param);
-> 
-> HEXAGON doesn't define and implement those reg_* functions
-> underneath arch/hexagon as well as other archs. To remove
-> those errors, i have to include those function calls in
-> "CONFIG_HEXAGON"
-> 
-> It looks ugly, but i don't know any other way to fix it,
-> this patch can be reverted after reg_* have been in place
-> in arch/hexagon.
-> 
+> On Thu, Dec 22, 2022 at 01:54:35PM -0700, Jonathan Corbet wrote:
+>> I'm not really a fan of adding more top-level directories; one of these
+>> years I'd like to try to move things in the opposite direction.  That is
+>> a battle for another day, though; for now let's just go with this and
+>> get the document merged.
+>
+> I though about that, but could not thing of a good subdirectory.
 
-Sorry, NACK. This is too add-hoc patch and this is introduced
-by your patch. Do not introduce an issue and fix it later in
-the same series.
-Please fix it in your first patch. Maybe you should make another
-header file for those APIs.
+We can paint that shed another day :)
 
-Thank you, 
+>> That said, I suspect you'll add a build warning about the new document
+>> not being included in any toctree.  Fixing that would involve adding a
+>> basic index.rst to the new directory and adding that to a file like
+>> Documentation/subsystem-apis.rst.
+>
+> The new document is included in
+> Documentation/maintainer/maintainer-entry-profile.rst in this path.
 
-> Signed-off-by: Song Chen <chensong_2000@189.cn>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  kernel/trace/trace_probe_kernel.h | 21 +++++++++++++++++++--
->  1 file changed, 19 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
-> index 8c42abe0dacf..7e958b7f07e5 100644
-> --- a/kernel/trace/trace_probe_kernel.h
-> +++ b/kernel/trace/trace_probe_kernel.h
-> @@ -130,8 +130,7 @@ probe_mem_read(void *dest, void *src, size_t size)
->  	return copy_from_kernel_nofault(dest, src, size);
->  }
->  
-> -static nokprobe_inline unsigned long
-> -get_event_field(struct fetch_insn *code, void *rec)
-> +static unsigned long get_event_field(struct fetch_insn *code, void *rec)
->  {
->  	struct ftrace_event_field *field = code->data;
->  	unsigned long val;
-> @@ -194,23 +193,41 @@ static int
->  process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
->  		   void *base)
->  {
-> +#ifndef CONFIG_HEXAGON
->  	struct pt_regs *regs = rec;
-> +#endif
->  	unsigned long val;
->  
->  retry:
->  	/* 1st stage: get value from context */
->  	switch (code->op) {
->  	case FETCH_OP_REG:
-> +#ifdef CONFIG_HEXAGON
-> +		val = 0;
-> +#else
->  		val = regs_get_register(regs, code->param);
-> +#endif
->  		break;
->  	case FETCH_OP_STACK:
-> +#ifdef CONFIG_HEXAGON
-> +		val = 0;
-> +#else
->  		val = regs_get_kernel_stack_nth(regs, code->param);
-> +#endif
->  		break;
->  	case FETCH_OP_STACKP:
-> +#ifdef CONFIG_HEXAGON
-> +		val = 0;
-> +#else
->  		val = kernel_stack_pointer(regs);
-> +#endif
->  		break;
->  	case FETCH_OP_RETVAL:
-> +#ifdef CONFIG_HEXAGON
-> +		val = 0;
-> +#else
->  		val = regs_return_value(regs);
-> +#endif
->  		break;
->  	case FETCH_OP_IMM:
->  		val = code->immediate;
-> -- 
-> 2.25.1
-> 
+Duh sorry, I'm not quite sure what I was thinking there.
 
+> I also did check for new warnings and did not see any, even if that's
+> a little difficult with the rather chatty shpinx output.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Someday we'll get all those warnings gone...I hope...
+
+Meanwhile, if it's useful:
+
+Acked-by: Jonathan Corbet <corbet@lwn.net>
+
+Thanks,
+
+jon
