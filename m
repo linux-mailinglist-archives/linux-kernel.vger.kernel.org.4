@@ -2,36 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7BB65595A
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C3665595F
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiLXIhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 03:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
+        id S229693AbiLXIkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 03:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiLXIht (ORCPT
+        with ESMTP id S229485AbiLXIkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 03:37:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF953B4BF;
-        Sat, 24 Dec 2022 00:37:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42F3D6020F;
-        Sat, 24 Dec 2022 08:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 028CDC433D2;
-        Sat, 24 Dec 2022 08:37:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1671871066;
-        bh=d2QlW2jzxm0TheGGe7a2wTTUh4ptonZr6C3QaKWYxXc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iadjt2PB/+8hlq5sX0aFgfK0T8sL1rQnLHW6s3+sx17rYBsMB9sRXxGNBy1oc92Mx
-         hbwtI7HyFV0CTdczeQj0pH4BxokJGe22rSu5IO2tKWeHZofZHaagRJnLavaB2iN3Lj
-         lOjvP2EYFglCh0pDxQfioVks+iIVEU1D9M0H7nQM=
-Date:   Sat, 24 Dec 2022 09:37:43 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Deepak R Varma <drv@mailo.com>
+        Sat, 24 Dec 2022 03:40:18 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F3B12D3E;
+        Sat, 24 Dec 2022 00:40:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671871208; bh=N/uQxjT+1+iGIoYVplsII3AkhcPL0am2LgaSxxryuWM=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=LG+VZmfV/9mkT+gbHT2Kb8Do2V8XPevFJSHePhm770sqCBblasva9gktaLnBcvdu6
+         Nb+A1eR1B27/IrpPSMrThy1XeuNohX9ZZyL6WXCPOICdftWTWvAUoGDlxAIRyAS4YH
+         iWb4zm0ILfO4qwgMeRji8dcBu1qrh300R8KjG/lM=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat, 24 Dec 2022 09:40:08 +0100 (CET)
+X-EA-Auth: Gagyupn+vvbazE/cHYUasNTGfC1/PKzXCTPk2qcRVlMJnST/ehCQ4jmIVe5ClO1X/S6ScWbLypWXPgn1svmJqGQOQQX4VR9p
+Date:   Sat, 24 Dec 2022 14:10:02 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Jiri Slaby <jirislaby@kernel.org>,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -39,48 +36,58 @@ Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>
 Subject: Re: [PATCH v2] tty: serial: dz: convert atomic_* to refcount_* APIs
  for irq_guard
-Message-ID: <Y6a6VyNwJ8yM44Rq@kroah.com>
+Message-ID: <Y6a64uR1uYxq3Qi/@qemulion>
 References: <Y6a1iJpxV0xV+NhP@qemulion>
+ <Y6a6VyNwJ8yM44Rq@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6a1iJpxV0xV+NhP@qemulion>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y6a6VyNwJ8yM44Rq@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 24, 2022 at 01:47:12PM +0530, Deepak R Varma wrote:
-> The refcount_* APIs are designed to address known issues with the
-> atomic_t APIs for reference counting. They provide following distinct
-> advantages:
->    - protect the reference counters from overflow/underflow
->    - avoid use-after-free errors
->    - provide improved memory ordering guarantee schemes
->    - neater and safer.
-> Hence, replace the atomic_* APIs by their equivalent refcount_t
-> API functions.
-> 
-> This patch proposal address the following warnings generated by
-> the atomic_as_refcounter.cocci coccinelle script
-> atomic_add_return(-1, ...)
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
+On Sat, Dec 24, 2022 at 09:37:43AM +0100, Greg Kroah-Hartman wrote:
+> On Sat, Dec 24, 2022 at 01:47:12PM +0530, Deepak R Varma wrote:
+> > The refcount_* APIs are designed to address known issues with the
+> > atomic_t APIs for reference counting. They provide following distinct
+> > advantages:
+> >    - protect the reference counters from overflow/underflow
+> >    - avoid use-after-free errors
+> >    - provide improved memory ordering guarantee schemes
+> >    - neater and safer.
+> > Hence, replace the atomic_* APIs by their equivalent refcount_t
+> > API functions.
+> >
+> > This patch proposal address the following warnings generated by
+> > the atomic_as_refcounter.cocci coccinelle script
+> > atomic_add_return(-1, ...)
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+>
+> This depends on the previous patch you sent, so why wasn't this a patch
+> series?  Always send patches as a series, otherwise I would have
+> attempted to apply this one first and it would have failed.  You will
+> recieve 0-day reports about that happening over the next few days as our
+> testing infrastructure will also be confused.
 
-This depends on the previous patch you sent, so why wasn't this a patch
-series?  Always send patches as a series, otherwise I would have
-attempted to apply this one first and it would have failed.  You will
-recieve 0-day reports about that happening over the next few days as our
-testing infrastructure will also be confused.
+My apologies. I will send in the patches in a series and highlight the
+dependency as well. Sorry.
 
-Please fix and resend all changes you wish to have done to this driver
-together.
+./drv
 
-thanks,
+>
+> Please fix and resend all changes you wish to have done to this driver
+> together.
+>
+> thanks,
+>
+> greg k-h
 
-greg k-h
+
