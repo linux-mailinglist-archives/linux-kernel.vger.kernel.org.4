@@ -2,122 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63ACE655A50
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 15:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCCC655A52
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 15:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiLXOSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 09:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S230511AbiLXO3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 09:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiLXOSd (ORCPT
+        with ESMTP id S230343AbiLXO3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 09:18:33 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DA5BF51;
-        Sat, 24 Dec 2022 06:18:32 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BOEHKE5017121;
-        Sat, 24 Dec 2022 14:17:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=QPI7CpkeNFA37K/s5S0XM4qXRqVAmViGI/VD+Yhp8As=;
- b=ELcJd5umWvX6pyMYDKCF6jqNCvGskWCVALpcd+5YEIRILjVk/uut+GGZK6t0Y5giDrLr
- lApGMjf3hIp3KOjYYiBTfqYYba0Cw+ro/A37pcdXcauD9ksXECAiyEQIYvc/oTGGBrYu
- IsK2ojWh2fqqBAtMEU1X/n7LhcXFvoCj8GevHamC4tnp67KV9VOqUh73SMEzwWJ1UBOL
- ewcVxxkd3TCFlToOYlJ8ON6Nq8XK8H8syHo2xEUMUFrj+0fCGfhAGLA19MoXlRXzskMJ
- cq07ZJxHHmAfbtWrTk/9PsiYD9/Wr19UDB/E260BjD+lKno6dBT94pBCpBNJ+97Doj3w 1A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mnrd18j0v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Dec 2022 14:17:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BOEHJJE025679
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Dec 2022 14:17:19 GMT
-Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Sat, 24 Dec 2022 06:17:16 -0800
-From:   Mao Jinlong <quic_jinlmao@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tingwei <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH] coresight: cti: Add PM runtime call in enable_store
-Date:   Sat, 24 Dec 2022 22:17:00 +0800
-Message-ID: <20221224141700.20891-1-quic_jinlmao@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 24 Dec 2022 09:29:44 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075D9DF9B
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 06:29:41 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id v126so7926235ybv.2
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 06:29:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mbcutGH6OL7LuSP42at3fK5Z1YIFoEUC0KBJRJ/ehLg=;
+        b=o/D+RD6UfC13biE/yqQzwpWU6ouvKMvajgU41qpaL3psqSD8JDUscjZXrZxO75n0Wy
+         hHDMfTyQRqxZ0BSElRccT1toOMAUwjS2Wjzg7k2hWdbXQNYFm0aZBlQyI/s0tG+Ks64z
+         YYBk6AUAhmOpuww5ky43AGCmJ2WYt1kiwaUr7eBuwzKhEywzPno/1KaHKys80LbyVZVG
+         ly4/Xy3RRRXLji1hb0pTaBVkjayPjXWaxlkYnISGy29CNIXUscAG7XGEsvM2h/czLMhs
+         dnwf0bnL2xrkYIb0vD7xt1BbfdtHKNeR7oVoLhuJ7QKUq9+zmA4AC7FrNmzt8njD2WmX
+         JVAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mbcutGH6OL7LuSP42at3fK5Z1YIFoEUC0KBJRJ/ehLg=;
+        b=aQ4XliGkYJrFe/IQD5elS/OyvzpfZLSpY5ZLyOgOEgMbMXbgHYQbQbstlRVfSYTXnb
+         X71sLS9XJpDoEtwjwxTV/jZwjsri4Fvp7kC127OJlf2EdlcGo1Vv8ABs6C2+qWdI++IF
+         u3jG/RYkC6KL4X5k6+DszrG6BjtgI6YPY2uGOpBuZZyCrpKKczqhobwNFUCki6FJCxgo
+         WSAK7jSGLwSfNhmj/11OkLLjcDVGnRhhddiyYeHOwcpyeNjE4un+1KbPf9gXu2/xjAyD
+         EppIKW3tP7C6hOkKsGSJ3/ltRALEvns1ZvgaSXSxSGDSDUPxlhE5TQh4ECFjrU2tDZo+
+         KVrw==
+X-Gm-Message-State: AFqh2kqQqw+JOzOaXvbdWoB0K5gvT563ZdVnfnXeg/w9xtr1yQFxOC/o
+        z2CH897/j8Gc5yVGffGThlYl26EmUgUQOORLb+CNPg==
+X-Google-Smtp-Source: AMrXdXuAv8OyH+cafe6ZRM/QujXFFE6/O1p5c35GQydmuCBIMhPqc0FHSLHxWlN2i8ZOcK6L+qZ5K5UtAV6gJh8mDtw=
+X-Received: by 2002:a25:d496:0:b0:70c:4fa3:2cce with SMTP id
+ m144-20020a25d496000000b0070c4fa32ccemr1816768ybf.539.1671892180573; Sat, 24
+ Dec 2022 06:29:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: KV26Nt-TXqsfPjBy2G7NHCkG8XcOWXKd
-X-Proofpoint-GUID: KV26Nt-TXqsfPjBy2G7NHCkG8XcOWXKd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-24_06,2022-12-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
- spamscore=0 malwarescore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 phishscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212240119
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221223132235.16149-1-anand@edgeble.ai>
+In-Reply-To: <20221223132235.16149-1-anand@edgeble.ai>
+From:   Jagan Teki <jagan@edgeble.ai>
+Date:   Sat, 24 Dec 2022 19:59:28 +0530
+Message-ID: <CA+VMnFz8nQ2DnD6L9cPmoRqk+uohRqTEpak9g=WGJnSBoONmrA@mail.gmail.com>
+Subject: Re: [PATCHv1 linux-next 1/4] dt-bindings: net: rockchip-dwmac: fix
+ rv1126 compatible warning
+To:     Anand Moon <anand@edgeble.ai>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        David Wu <david.wu@rock-chips.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 6746eae4bbad ("coresight: cti: Fix hang in cti_disable_hw()")
-PM runtime calls are removed from cti_enable_hw/cti_disable_hw. When
-enabling CTI by writing enable sysfs node, clock for accessing CTI
-register won't be enabled. Device will crash due to register access
-issue. Add PM runtime call in enable_store to fix this issue.
+On Fri, 23 Dec 2022 at 18:55, Anand Moon <anand@edgeble.ai> wrote:
+>
+> Fix compatible string for RV1126 gmac, and constrain it to
+> be compatible with Synopsys dwmac 4.20a.
+>
+> fix below warning
+> arch/arm/boot/dts/rv1126-edgeble-neu2-io.dtb: ethernet@ffc40000:
+>                  compatible: 'oneOf' conditional failed, one must be fixed:
+>         ['rockchip,rv1126-gmac', 'snps,dwmac-4.20a'] is too long
+>         'rockchip,rv1126-gmac' is not one of ['rockchip,rk3568-gmac', 'rockchip,rk3588-gmac']
+>
+> Signed-off-by: Anand Moon <anand@edgeble.ai>
+> Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+> ---
 
-Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
----
- drivers/hwtracing/coresight/coresight-cti-sysfs.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-cti-sysfs.c b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
-index 6d59c815ecf5..b1ed424ae043 100644
---- a/drivers/hwtracing/coresight/coresight-cti-sysfs.c
-+++ b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
-@@ -108,10 +108,17 @@ static ssize_t enable_store(struct device *dev,
- 	if (ret)
- 		return ret;
- 
--	if (val)
-+	if (val) {
-+		ret = pm_runtime_resume_and_get(dev->parent);
-+		if (ret)
-+			return ret;
- 		ret = cti_enable(drvdata->csdev);
--	else
-+		if (ret)
-+			pm_runtime_put(dev->parent);
-+	} else {
- 		ret = cti_disable(drvdata->csdev);
-+		pm_runtime_put(dev->parent);
-+	}
- 	if (ret)
- 		return ret;
- 	return size;
--- 
-2.17.1
-
+Please add Fixes above SoB.
