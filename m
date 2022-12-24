@@ -2,81 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4BFA655919
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC38165591C
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbiLXIQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 03:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S230208AbiLXIRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 03:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiLXIP5 (ORCPT
+        with ESMTP id S229650AbiLXIR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 03:15:57 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF97B4AB;
-        Sat, 24 Dec 2022 00:15:56 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p8zhC-0001iT-N5; Sat, 24 Dec 2022 09:15:54 +0100
-Message-ID: <3ca60b3e-4f7e-5a31-b74e-e4f01e576430@leemhuis.info>
-Date:   Sat, 24 Dec 2022 09:15:54 +0100
+        Sat, 24 Dec 2022 03:17:29 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A48DFA2;
+        Sat, 24 Dec 2022 00:17:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671869837; bh=zGGbbuCFDi0fJZzEl65qs35uUNliyt5H98E+AQuRzag=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=DP/vkiJcSd3PEEg4xqskXiTahRViQ5P31ekegAAxCjs8dmmtAFWZcgKt/Wglp7Zlp
+         QeS+N88LUL1FHh9X3D7sGKeoGWTstOR5P1yCvZxtyotnkEX9eA3C3kCx7kTnrKOekI
+         lOGgWSwuAjkmkMIzZysPmMhON7k56VI0wbg2i8No=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat, 24 Dec 2022 09:17:17 +0100 (CET)
+X-EA-Auth: AEXDKs6VnpWAu5Q/NjyGfE/fHcrNKz18IDs33rsfJowVHSNknlD1UBEkvSnQchuJuGLbhSZu2gpwXZOXrGnOapzGsmtiYOie
+Date:   Sat, 24 Dec 2022 13:47:12 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH v2] tty: serial: dz: convert atomic_* to refcount_* APIs for
+ irq_guard
+Message-ID: <Y6a1iJpxV0xV+NhP@qemulion>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [git pull] Input updates for v6.1-rc5
-Content-Language: en-US, de-DE
-To:     Aman Dhoot <amandhoot12@gmail.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-References: <940462e95c8eea934b8823aa189dbddece6bee95.camel@gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <940462e95c8eea934b8823aa189dbddece6bee95.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671869756;7a9c16e5;
-X-HE-SMSGID: 1p8zhC-0001iT-N5
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CCing Dmitry]
+The refcount_* APIs are designed to address known issues with the
+atomic_t APIs for reference counting. They provide following distinct
+advantages:
+   - protect the reference counters from overflow/underflow
+   - avoid use-after-free errors
+   - provide improved memory ordering guarantee schemes
+   - neater and safer.
+Hence, replace the atomic_* APIs by their equivalent refcount_t
+API functions.
 
-Hi, this is your Linux kernel regression tracker.
+This patch proposal address the following warnings generated by
+the atomic_as_refcounter.cocci coccinelle script
+atomic_add_return(-1, ...)
 
-On 24.12.22 08:49, Aman Dhoot wrote:
-> If I use synaptics touchpad in legacy PS/2 mode.keyboard and touchpad
-> stop working randomly because of TLP, if I uninstall tlp it resolves
-> the keyboard touchpad stops working randomly issue. But I see good
-> battery life in my system using tlp by switching touchpad from legacy
-> PS/2 mode to RMI mode resolves the problem. this way i can use tlp and
-> keyboard touchpad works without any problem.
-> 
-> In my dmesg log I don't have msg "psmouse serio1: synaptics: SMbus
-> companion is not ready yet".
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
 
-Well, if I got this right the situation is like this: your change
-ac5408991ea6 ("Input: synaptics - switch touchpad on HP Laptop
-15-da3001TU to RMI mode") breaks things for some users and hence will be
-reverted per the "no regressions rule" (
-https://docs.kernel.org/process/handling-regressions.html ).
+Changes in v2:
+   1. Separate the combined change into one variable per patch as
+      suggested by gregkh@linuxfoundation.org
+   2. There was additional feedback on validating the change as it appeared to
+      modify the existing logic. However, I found that the logic does not
+      change with the proposed refcount_* APIs used in this change. Hence that
+      feedback is not applied in this version.
 
-To get this reapplied someone needs to work with those people that are
-affected by the regression to ensure this continue working if the
-touchpad is in RMI mode (maybe it depends on the BIOS, the revsition,
-the kernel config, or something else). IOW: a better change is needed
-that doesn't break things for others. If that's not possible maybe there
-is some other solution for you. Is there maybe a kernel parameter you
-can apply to switch the device to RMI mode on your machine?
+Please Note:
+   The patch is compile tested using dec_station.defconfig for MIPS architecture.
 
-HTH, Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker'
-hat)
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+ drivers/tty/serial/dz.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
+index b70edc248f8b..0aa59a9beeb7 100644
+--- a/drivers/tty/serial/dz.c
++++ b/drivers/tty/serial/dz.c
+@@ -46,7 +46,6 @@
+ #include <linux/tty.h>
+ #include <linux/tty_flip.h>
+
+-#include <linux/atomic.h>
+ #include <linux/refcount.h>
+ #include <linux/io.h>
+ #include <asm/bootinfo.h>
+@@ -77,7 +76,7 @@ struct dz_port {
+ struct dz_mux {
+ 	struct dz_port		dport[DZ_NB_PORT];
+ 	refcount_t		map_guard;
+-	atomic_t		irq_guard;
++	refcount_t		irq_guard;
+ 	int			initialised;
+ };
+
+@@ -400,18 +399,16 @@ static int dz_startup(struct uart_port *uport)
+ 	struct dz_port *dport = to_dport(uport);
+ 	struct dz_mux *mux = dport->mux;
+ 	unsigned long flags;
+-	int irq_guard;
+ 	int ret;
+ 	u16 tmp;
+
+-	irq_guard = atomic_add_return(1, &mux->irq_guard);
+-	if (irq_guard != 1)
++	refcount_inc(&mux->irq_guard);
++	if (refcount_read(&mux->irq_guard) != 1)
+ 		return 0;
+
+-	ret = request_irq(dport->port.irq, dz_interrupt,
+-			  IRQF_SHARED, "dz", mux);
++	ret = request_irq(dport->port.irq, dz_interrupt, IRQF_SHARED, "dz", mux);
+ 	if (ret) {
+-		atomic_add(-1, &mux->irq_guard);
++		refcount_dec(&mux->irq_guard);
+ 		printk(KERN_ERR "dz: Cannot get IRQ %d!\n", dport->port.irq);
+ 		return ret;
+ 	}
+@@ -441,15 +438,13 @@ static void dz_shutdown(struct uart_port *uport)
+ 	struct dz_port *dport = to_dport(uport);
+ 	struct dz_mux *mux = dport->mux;
+ 	unsigned long flags;
+-	int irq_guard;
+ 	u16 tmp;
+
+ 	spin_lock_irqsave(&dport->port.lock, flags);
+ 	dz_stop_tx(&dport->port);
+ 	spin_unlock_irqrestore(&dport->port.lock, flags);
+
+-	irq_guard = atomic_add_return(-1, &mux->irq_guard);
+-	if (!irq_guard) {
++	if (refcount_dec_and_test(&mux->irq_guard)) {
+ 		/* Disable interrupts.  */
+ 		tmp = dz_in(dport, DZ_CSR);
+ 		tmp &= ~(DZ_RIE | DZ_TIE);
+--
+2.34.1
+
+
+
