@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE394655877
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 06:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7A6655872
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 06:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbiLXFZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 00:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S230160AbiLXFU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 00:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiLXFZJ (ORCPT
+        with ESMTP id S229445AbiLXFUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 00:25:09 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081FEBE11
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 21:25:08 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id j16so5163030qtv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 21:25:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BvE2awRwFzFbxJ18OKrhIqmcucLQ6AvTFfNUPm7G5WM=;
-        b=k6yGb/e8VmV5KYVZsTahb9RS1DKkPk395PBpTV6Q0c0DCTyRc82+Q8HoH8NgoHMKlu
-         k0OJAqWW+dtvDsPiUy+FHoe2+HNwiRoRulbbb/udOX5BbqyGakPkGPqYwtw//+x8CJNH
-         LgqkLvXGhZp7vBGd/aGwXhmFxSo/qDjCyUXHaVuYpgTeIrv1fjIQiX83kC67SV+3rW/n
-         Prew+NQNkcr42MsV06oBUb6os+U5uPv4Ocej1jDMD9c3BVENdFVTXiv3gsleYn8W+Tlm
-         fkaLLbvNvYxPcDoryiGUIf4ka6vhmNl57zxitj1ZSgqZX6C55cy+MeUN99MLsdp/X6Ew
-         iPyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BvE2awRwFzFbxJ18OKrhIqmcucLQ6AvTFfNUPm7G5WM=;
-        b=TWgmsJjq1ZVFUYIjIbbpHQWH0EK4p8rItB9asCW0TcTVh6nO8uHQMT2ZY4Bd3+oZAm
-         nGECoabNaHR8UR/F8zJFW4Z6BDPqks/mrJG+Vl6YkiFwN2pJ+4SWEAm+51dzg/gf0NiX
-         pS9ZdA/4kJGGDRgN8rsIVD3+qK5kW53AK6Dd/zkpF9omZSN2I6gAgQcdOp8wuOmKrXS8
-         tPKc1bu/fVLD3VmtN3MLOFYID/gSYo9BsbaZ6upNxwn3wmB7JArze5kpWQdPUDAeHlH5
-         WLQohkH5+lRvUGIK+xsW2MFs9Pv3AkhQh2pWcneNSTMQseE1/GqHsWOoVFlxSjPbeubI
-         3Wxg==
-X-Gm-Message-State: AFqh2kpmrnkSBUZJusOo5wzcCtBDm7erm+DZzdmn5AEemhFSMUZT7GAe
-        SmknxvDU8G8X+TLNiBU/ymRjdA==
-X-Google-Smtp-Source: AMrXdXvarlLSAFP/bDWauq4ZnQA3IIy1ziyTyivTcJn+nGyKDos6haGrFxuYk8OoGGeRKpx00w3VuA==
-X-Received: by 2002:ac8:649:0:b0:3a6:93d7:873f with SMTP id e9-20020ac80649000000b003a693d7873fmr14076523qth.49.1671859507050;
-        Fri, 23 Dec 2022 21:25:07 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id v2-20020a05620a440200b006fed2788751sm3654004qkp.76.2022.12.23.21.25.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 21:25:06 -0800 (PST)
-Date:   Fri, 23 Dec 2022 21:24:56 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Christoph Hellwig <hch@infradead.org>
-cc:     Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: 6.2 nvme-pci: something wrong
-Message-ID: <572cfcc0-197a-9ead-9cb-3c5bf5e735@google.com>
+        Sat, 24 Dec 2022 00:20:25 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9C018687;
+        Fri, 23 Dec 2022 21:20:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671859223; x=1703395223;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S40gLU/6WKa7SgaWDOJhy4OtsZ/xWarbNmOK4WXAaGM=;
+  b=CYj+eaxdpW+hPgKNz9iOZbpXVS/xoukVd/yNt4TECJFh21hTKCgFZoir
+   U/qX+vRD/kLSp1wPmaNMowPpaQjUk63D9q86PcnofOfe8EHReGOwZYmOp
+   UxbSKS1ptxBqxI+tCzvxW93ms5skSDrYR4uyKBlaVEwFtAsmCq87WgV33
+   9iN4zW0/ppJraKZ/i62mDgQLbCfRGqxcaK7llKRkmstaggwcdZPJVbY6t
+   31F1XfvVraqmYZXdJU47fgvg8FUntiOcLeY5oAQO+G5NxgzIsXR7HU8yx
+   6fK1OUKahWTHYTS7NRLO6qn232e0yYs5jj42x8FdpttznrKRx2pSrCY08
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="320466535"
+X-IronPort-AV: E=Sophos;i="5.96,270,1665471600"; 
+   d="scan'208";a="320466535"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 21:20:23 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="826428622"
+X-IronPort-AV: E=Sophos;i="5.96,270,1665471600"; 
+   d="scan'208";a="826428622"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 21:20:21 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rcu: Safe access to rcu_node structure's->exp_tasks
+Date:   Sat, 24 Dec 2022 13:25:53 +0800
+Message-Id: <20221224052553.263199-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+For kernels built with CONFIG_PREEMPT_RCU=y, the following scenario
+can result system oops.
 
-There's something wrong with the nvme-pci heading for 6.2-rc1:
-no problem booting here on this Lenovo ThinkPad X1 Carbon 5th,
-but under load...
+           CPU1                                           CPU2
+rcu_preempt_deferred_qs_irqrestore                rcu_print_task_exp_stall
+  if (special.b.blocked)                            READ_ONCE(rnp->exp_tasks) != NULL
+    raw_spin_lock_rcu_node
+    np = rcu_next_node_entry(t, rnp)
+    if (&t->rcu_node_entry == rnp->exp_tasks)
+      WRITE_ONCE(rnp->exp_tasks, np)
+      ....
+      raw_spin_unlock_irqrestore_rcu_node
+                                                    raw_spin_lock_irqsave_rcu_node
+                                                    t = list_entry(rnp->exp_tasks->prev,
+                                                        struct task_struct, rcu_node_entry)
+                                                    (if rnp->exp_tasks is NULL
+                                                       will trigger oops)
 
-nvme nvme0: I/O 0 (I/O Cmd) QID 2 timeout, aborting
-nvme nvme0: I/O 1 (I/O Cmd) QID 2 timeout, aborting
-nvme nvme0: I/O 2 (I/O Cmd) QID 2 timeout, aborting
-nvme nvme0: I/O 3 (I/O Cmd) QID 2 timeout, aborting
-nvme nvme0: Abort status: 0x0
-nvme nvme0: Abort status: 0x0
-nvme nvme0: Abort status: 0x0
-nvme nvme0: Abort status: 0x0
-nvme nvme0: I/O 0 QID 2 timeout, reset controller
+This problem is that CPU2 accesses rcu_node structure's->exp_tasks
+without holding the rcu_node structure's ->lock and CPU2 did not
+observe CPU1's change to rcu_node structure's->exp_tasks in time,
+if rcu_node structure's->exp_tasks is set null pointer by CPU1, after
+that CPU2 accesses members of rcu_node structure's->exp_tasks will
+trigger oops.
 
-...and more, until I just have to poweroff and reboot.
+This commit therefore allows rcu_node structure's->exp_tasks to be
+accessed while holding rcu_node structure's ->lock.
 
-Bisection points to your
-0da7feaa5913 ("nvme-pci: use the tagset alloc/free helpers")
-And that does revert cleanly, giving a kernel which shows no problem.
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tree_exp.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-I've spent a while comparing old nvme_pci_alloc_tag_set() and new
-nvme_alloc_io_tag_set(), I do not know my way around there at all
-and may be talking nonsense, but it did look as if there might now
-be a difference in the queue_depth, sqsize, q_depth conversions.
-
-I'm running load successfully with the patch below, but I strongly
-suspect that the right patch will be somewhere else: over to you!
-
-Hugh
-
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -4926,7 +4926,7 @@ int nvme_alloc_io_tag_set(struct nvme_ct
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index 7cc4856da081..902e7c8709c7 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -803,9 +803,11 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
+ 	int ndetected = 0;
+ 	struct task_struct *t;
  
- 	memset(set, 0, sizeof(*set));
- 	set->ops = ops;
--	set->queue_depth = ctrl->sqsize + 1;
-+	set->queue_depth = ctrl->sqsize;
- 	/*
- 	 * Some Apple controllers requires tags to be unique across admin and
- 	 * the (only) I/O queue, so reserve the first 32 tags of the I/O queue.
+-	if (!READ_ONCE(rnp->exp_tasks))
+-		return 0;
+ 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
++	if (!READ_ONCE(rnp->exp_tasks)) {
++		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
++		return 0;
++	}
+ 	t = list_entry(rnp->exp_tasks->prev,
+ 		       struct task_struct, rcu_node_entry);
+ 	list_for_each_entry_continue(t, &rnp->blkd_tasks, rcu_node_entry) {
+-- 
+2.25.1
+
