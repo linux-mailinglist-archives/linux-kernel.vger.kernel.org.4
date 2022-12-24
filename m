@@ -2,120 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B82A65592C
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADB1655957
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiLXIUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 03:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        id S230282AbiLXIgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 03:36:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiLXIUl (ORCPT
+        with ESMTP id S229487AbiLXIgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 03:20:41 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A32BC31
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 00:20:40 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id x33-20020a056a0018a100b00577808a75c9so3616285pfh.13
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 00:20:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qHBgmM5FyY8tFESb+UZtZ7YHBNCfgMkVXvmSjVkn95c=;
-        b=YIdgdTDlm/0rnNXmV/Ouxem7vSavubkjE/mlXtu3l2VNJp+VcHRwcxAqLRlRCht33T
-         RjLRwnMH+83r29SKKJIBeQCmhsdRiiPnHm5RybHePQWkJtrnUBA8wvZoTReit57ZSQgj
-         rb79t5GaIQFUYM+TelnB/YDfk3efw2LoXwE83oTT7NsNN0yVZUilRddaPER0eHid1zOn
-         rFXxu33AQ1X9TIKISEarvlDOHXaIVzVHkuQDAvEdPao9/mUtIRnGOziez9pbYJtslSrk
-         9oofFPc8G704Z1XNJl+3ESz0Xb773tj4avam3C858QsEl+9wi5oCzl9RAxGV4CrpOS/U
-         Na7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qHBgmM5FyY8tFESb+UZtZ7YHBNCfgMkVXvmSjVkn95c=;
-        b=LgLOrDcLkSppSqOdr7+pgeuWSwjJxcnu7PBWud5qU0aUS4J3A7Gd+FV6OeFEb4O/Fu
-         Zio//6Ud97Jn0KFSx7VIdSHysBNwaNftdknwf1QipwLlRBd6Lc6SH1/VquhblFJWJcWS
-         qicP8apOaZO1M9Aey4g+Dbg3dEhD/vdLrAbINhEb8oFOjMTp0aFan4IchKciaGpki+wY
-         AGkbDWXqHWNDRKHbwncOq7JHGBWB9+a1wgVlkmLP4AJ4xK8lxE2zXpyGmb95yKlbjUjv
-         hbd/+3rIKI9d6NNARefKm3d1pw6TPA+GvRHTalIGix63jK3Zf8UBOXEIZ6sQvezmSbMI
-         RpPg==
-X-Gm-Message-State: AFqh2koJfN5coKfsq4P6YZJszl6KgJ6MD56AtDwa9d/8o8oTbgKOhYf4
-        98YrsDiltAWHWLj6cvZlbyZxQWcszZ51
-X-Google-Smtp-Source: AMrXdXtpnA9oa+kcg8UCtzsH2+zbPi8cE8h5FFqA3g8bAXygXEp5KA+R6LlQvnatJIrsuUCVCjwgqNmjUsVJ
-X-Received: from zokeefe3.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1b6])
- (user=zokeefe job=sendgmr) by 2002:a17:90a:f018:b0:21a:150d:fe63 with SMTP id
- bt24-20020a17090af01800b0021a150dfe63mr1313517pjb.73.1671870039401; Sat, 24
- Dec 2022 00:20:39 -0800 (PST)
-Date:   Sat, 24 Dec 2022 00:20:35 -0800
-In-Reply-To: <20221224082035.3197140-1-zokeefe@google.com>
-Mime-Version: 1.0
-References: <20221224082035.3197140-1-zokeefe@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221224082035.3197140-2-zokeefe@google.com>
-Subject: [PATCH v3 2/2] mm/shmem: restore SHMEM_HUGE_DENY precedence over MADV_COLLAPSE
-From:   "Zach O'Keefe" <zokeefe@google.com>
-To:     linux-mm@kvack.org
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Zach O'Keefe" <zokeefe@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 24 Dec 2022 03:36:51 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7E2B4BF
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 00:36:50 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 067F95D6C5;
+        Sat, 24 Dec 2022 08:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1671871009; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pQmV03gr63zIxEQLJlp/l/rFVDlME2OpuCUf6vLIDyc=;
+        b=BnQNR0IkFYcvrcSEOCLDi0VvAmkm6IveJMLqJ/fNJ2bJ1fHvFxvBi/g5HN5HDg8DeHt4pk
+        RtUqsfsLN9fQa5/aCi1vE9OUE8E4hqtGpX4Zoo6keBFG95sGwef1rxyxx1MiTpuihs0qlm
+        4bd+ymt/zCCHTUSU8/PwX88bzNVRctQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1671871009;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pQmV03gr63zIxEQLJlp/l/rFVDlME2OpuCUf6vLIDyc=;
+        b=TFkc4DCz5hCevAVl4ouqaOTEAw7OVy5oNYm4DDoVMrm+n1b639uBam5Kl4Zu1cR3rh2gWf
+        nTtTAmaGF5jF+2Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D6A7E13489;
+        Sat, 24 Dec 2022 08:36:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id V9alMyC6pmM8WwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 24 Dec 2022 08:36:48 +0000
+Date:   Sat, 24 Dec 2022 09:36:48 +0100
+Message-ID: <87tu1lxknz.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] sound updates for 6.2-rc1 (#2)
+In-Reply-To: <CAHk-=wgB054c1hX=2xco+S38cJQVZrj8ukSShLkM359THFQ2+Q@mail.gmail.com>
+References: <87y1qy2yit.wl-tiwai@suse.de>
+        <CAHk-=wgB054c1hX=2xco+S38cJQVZrj8ukSShLkM359THFQ2+Q@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SHMEM_HUGE_DENY is for emergency use by the admin, to disable allocation
-of shmem huge pages if, for example, a dangerous bug is found in their
-usage: see "deny" in Documentation/mm/transhuge.rst.  An app using
-madvise(,,MADV_COLLAPSE) should not be allowed to override it: restore
-its precedence over shmem_huge_force.
+On Fri, 23 Dec 2022 20:20:50 +0100,
+Linus Torvalds wrote:
+> 
+> On Fri, Dec 23, 2022 at 2:41 AM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > A few more updates for 6.2 since the last PR: most of changes are
+> > about ASoC device-specific fixes.
+> >
+> > - Lots of ASoC Intel AVS extensions and refactoring
+> 
+> Hmm. This doesn't exactly seem to be fixes.
+> 
+> It does seem to have been in linux-next, so I don't hate it, but I'm
+> not super-happy about the timing of this all.
+> 
+> I really was hoping that the last few days of the merge window had
+> been for actual fixes rather than for new development.
 
-Restore SHMEM_HUGE_DENY precedence over MADV_COLLAPSE.
+To be fair, those patches have been submitted and merged to ASoC
+subtree already before the merge window opened, but it was slipped
+from my first PR that was sent earlier due to my vacation, and now
+they were caught in this second PR.  So it'd be only me to be blamed
+to submit a PR at a late date and not mention that.
 
-Fixes: 7c6c6cc4d3a2 ("mm/shmem: add flag to enforce shmem THP in hugepage_vma_check()")
-Suggested-by: Hugh Dickins <hughd@google.com>
-Signed-off-by: Zach O'Keefe <zokeefe@google.com>
-Cc: Yang Shi <shy828301@gmail.com>
-Cc: stable@vger.kernel.org
----
-v2->v3: Add 'Cc: stable@vger.kernel.org' as per stable-kernel-rules.
-v1->v2: Update changelog, and add note explaining rationale for
-	backporting  (Andrew Morton).
+In anyway, those should have been cooked enough long in linux-next,
+so I don't think we need to worry too much.
 
-Request to backport this to 6.1.X stable.  We'd like SHMEM_HUGE_DENY to
-take precedence over MADV_COLLAPSE.  If we make this change later, it
-will be a userspace API change.  As such, 6.1 cannot be allowed to
-continue as-is, and we should fix up the code there.
----
- mm/shmem.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/mm/shmem.c b/mm/shmem.c
-index c301487be5fb..0005ab2c29af 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -478,12 +478,10 @@ bool shmem_is_huge(struct vm_area_struct *vma, struct inode *inode,
- 	if (vma && ((vma->vm_flags & VM_NOHUGEPAGE) ||
- 	    test_bit(MMF_DISABLE_THP, &vma->vm_mm->flags)))
- 		return false;
--	if (shmem_huge_force)
--		return true;
--	if (shmem_huge == SHMEM_HUGE_FORCE)
--		return true;
- 	if (shmem_huge == SHMEM_HUGE_DENY)
- 		return false;
-+	if (shmem_huge_force || shmem_huge == SHMEM_HUGE_FORCE)
-+		return true;
- 
- 	switch (SHMEM_SB(inode->i_sb)->huge) {
- 	case SHMEM_HUGE_ALWAYS:
--- 
-2.39.0.314.g84b9a713c41-goog
+thanks,
 
+Takashi
