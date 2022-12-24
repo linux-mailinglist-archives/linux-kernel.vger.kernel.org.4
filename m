@@ -2,152 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A16655B60
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 22:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7544655B62
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 22:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbiLXVoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 16:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
+        id S230490AbiLXVqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 16:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiLXVoJ (ORCPT
+        with ESMTP id S230372AbiLXVqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 16:44:09 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A82CBC16
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:44:08 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id b3so11473430lfv.2
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:44:08 -0800 (PST)
+        Sat, 24 Dec 2022 16:46:47 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BDBBE1A
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:46:46 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id c9so427571pfj.5
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:46:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=E6YG72yT6P2Xf4EVWM2/oNdMhJIz+PxjF3DxMSN/2MY=;
-        b=L6W+ILV89UzVX4p54i0Aiyfx2Tj/2KmrlTtXJVEpnFUvSw3ZjBtUuLoZQqzAx4Vqkr
-         PJBuaxG9/LCh4jNEFDEbr66CKzjdOcQn3v6IRjWzyu8LX/6UQvshUDAUsaMlkEhZJ6jg
-         EE/3aRAt6A5+FxIpP2y49WOc7zmUXaf2vfQ+1eacxJQWkrot30TygoNd6aW8hIRWBrTV
-         GWCgGZRPCJu/BdvW/+4wdSXmCYAYnY643YYxWQ5pqYdH83Z6xfv1voRe0VPym09rAKqw
-         8aZwS/Zu+D6SyDB2+cGTI4EjKJ+MnbnFATjF3nF7oyCMj7IvY4+BEc9IVQsHk60Q+Ffn
-         b0tA==
+        d=sladewatkins.net; s=googled;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O3UxsimBVOhEDuKfSuQBk+/BzoqRkKBz/Nr1j/ZryG8=;
+        b=pvsrtHUzIjjg31V+IH/mGznvfjfwaNZDh0KiqTKR+D9Qp0tWJs97bpm4mhN5kW3pQt
+         OkRylP6veOvbgsdOaq3/x/m4d4dTH9ZDPaMWkmmnK02OoF7Xzpp+wtyerfdn9ClqqG/9
+         U9rpKaLAWkrv5ZFoUPjFw+3Gy91H5HOaJuwMmV7DvjkSyJ1SLqub9OaDLBSWcr18YZH5
+         46p0CwJ/hDRTUUvu3BY03NQwjNEAL5uNZsg1P75CIC/cQlgdAezkZyduQXl6f75R1m8B
+         WA/2IHud3doEE+gz3Okydd2VATvQEiJJ/O/Wf8Q8LGepTE0YHxR/LGVG1FqGkHEhNd7A
+         42YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E6YG72yT6P2Xf4EVWM2/oNdMhJIz+PxjF3DxMSN/2MY=;
-        b=1AWm7+LMKS/Gg8D/nbxaIQSuimu/TJ8BPBzay8srQKVOl+oRL0x1WJCjMAOjKIdsM8
-         Gv0N9RwXPdr4NZDlNvrTg+hRAD0lEbbctcW1/Od8vCmqM2T4jytaY53x/4l0S7GiAZO2
-         1LnLmCsfrU1ll8tFXJ3iUJs6wtiujeRhiCaLDsf04y7Y0cG5OIeMioSF0rZXZWampjTN
-         t9KK1PRndrnwlTEebWmlouSMJvqwc328QZuRnh+9jXYRDJgCGHal3IiXzLg6TrIntPuX
-         SHniSgYI38d+GwbSfPdkhyEUBwOxUnH185CSNvKDxh+Td+HCP0cNkK/11YtEKIKtlibL
-         PEcg==
-X-Gm-Message-State: AFqh2kqlrtO/ZOBJ5Djo6NCDIM8CdUuMEa0G455ub55EOQ+GvGNt7jjV
-        DYHP8+8cP6UXwPg13ANnpRJW7Q==
-X-Google-Smtp-Source: AMrXdXtLymnfGtKqLGeilvw3UM7v35kiK5lgoSFpB1glWTmqhP7U2DQerc3OoHluZnDBc5HE0oSiCQ==
-X-Received: by 2002:a05:6512:168d:b0:4ca:fd5f:ce82 with SMTP id bu13-20020a056512168d00b004cafd5fce82mr794946lfb.49.1671918246547;
-        Sat, 24 Dec 2022 13:44:06 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o4-20020ac25b84000000b004aa3d587c84sm1110903lfn.200.2022.12.24.13.44.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Dec 2022 13:44:06 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: clock: qcom,camcc-sm8250: extend clocks and power domains
-Date:   Sat, 24 Dec 2022 22:44:04 +0100
-Message-Id: <20221224214404.18280-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O3UxsimBVOhEDuKfSuQBk+/BzoqRkKBz/Nr1j/ZryG8=;
+        b=dbiXoJaFOaZjv4mZ0W5o3RA7xkoYzsVX9N9xCWKbtg/V24EN7oZH1SUtwSJk364IH2
+         Toe3vM45vSjovXRbfmSBZTdsjT8JM3IIVdjTLImHhBYaOsij30udEL8FlwBss+j5Jak/
+         5+5D/VCgdkfDTp+Oq/yfPSWOlKgWOgh72ewCTlac0r77BubJrb8pIy6b14et/4fS35fX
+         QoGUo/Aw4vtdD4ksDQEuK3fb9+64m4zZqVU8GZvINT7iiRK72h1CoEAZczlr8ctQNk++
+         Ad6Wm1iE748tobUuQTHhaQAlWN2ZIxUyQtDAvPnMFJWEOoGkBny3NTaIK3xCcqY8o+CO
+         qRMg==
+X-Gm-Message-State: AFqh2kpgt7A0P81HihBodGyBpWBI3q0kBiak02gE7WEQ30ljS+/8KlwN
+        mMQb9Dg1kSc1H8X1wE8BISTYLn/8NM0OsryKmI98c7JiHRMskvu1OqM=
+X-Google-Smtp-Source: AMrXdXt0YkaBTrpFdunDUREJLDj9yvlHL4xI+4nHdNaNW/k6tF7R0vqMBDOeqky0agrYPB5X5UyL0/+Wjr719wDOP8c=
+X-Received: by 2002:a63:5b15:0:b0:479:3bf5:df35 with SMTP id
+ p21-20020a635b15000000b004793bf5df35mr586451pgb.572.1671918406048; Sat, 24
+ Dec 2022 13:46:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221224101139.sgvhr2n3pbrs4agm@pali> <Y6bvh48kTTzbMX6M@kroah.com>
+ <20221224133425.vlcxbaaynihiom4a@pali> <Y6cXRbGUsarzoJEw@zn.tnic>
+ <20221224154842.o4ngrwmskduowttm@pali> <Y6chm9khdG4pmNhN@zn.tnic>
+ <20221224160055.ln3dbhx7dnut7dwi@pali> <Y6cma26FKzBQD8AN@zn.tnic>
+ <20221224163602.6bqr32tkf2ulx6po@pali> <Y6dsWVspi9tGNid5@kbusch-mbp.dhcp.thefacebook.com>
+ <20221224213646.zyosaq7hnlsaje4b@pali>
+In-Reply-To: <20221224213646.zyosaq7hnlsaje4b@pali>
+From:   Slade Watkins <srw@sladewatkins.net>
+Date:   Sat, 24 Dec 2022 16:46:35 -0500
+Message-ID: <CA+pv=HPUgxxJjOJBki1jDjR+Abk3W9=SZ3RxSsB-YYucKBFdaQ@mail.gmail.com>
+Subject: Re: [PATCH] pktcdvd: remove driver.
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     Keith Busch <kbusch@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Thomas Maier <balagi@justmail.de>, linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add clocks and properties (power-domains, required-opps) already used in
-SM8250 DTS:
+On Sat, Dec 24, 2022 at 4:39 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
+> And based on my experience, users (including me) are using distributions
+> LTS kernels in production. So do not forget that it takes lot of time
+> until some distributions switch from one LTS version to another LTS
+> version and so it would take lot of time until deprecation warning is
+> visible to user. (Maybe deprecation information could be "backported" to
+> LTS kernels?)
 
-  sm8250-hdk.dtb: clock-controller@ad00000: clocks: [[46, 10], [44, 0], [44, 1], [45]] is too long
-  sm8250-hdk.dtb: clock-controller@ad00000: clock-names:0: 'bi_tcxo' was expected
-  sm8250-hdk.dtb: clock-controller@ad00000: 'power-domains', 'required-opps' do not match any of the regexes: 'pinctrl-[0-9]+'
+Yeah, my main server (which I don't use for dev work) is on an LTS
+kernel, same with my primary workstation, so I'm also using LTS
+kernels in prod.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/clock/qcom,camcc-sm8250.yaml     | 20 +++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+Would definitely appreciate it if those deprecation warnings are
+visible (and maybe even backported?) if added... would certainly help
+make transitioning from one LTS to the next easier.
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,camcc-sm8250.yaml b/Documentation/devicetree/bindings/clock/qcom,camcc-sm8250.yaml
-index 93ec1f598e6e..426335a2841c 100644
---- a/Documentation/devicetree/bindings/clock/qcom,camcc-sm8250.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,camcc-sm8250.yaml
-@@ -21,12 +21,16 @@ properties:
- 
-   clocks:
-     items:
-+      - description: AHB
-       - description: Board XO source
-+      - description: Board active XO source
-       - description: Sleep clock source
- 
-   clock-names:
-     items:
-+      - const: iface
-       - const: bi_tcxo
-+      - const: bi_tcxo_ao
-       - const: sleep_clk
- 
-   '#clock-cells':
-@@ -38,9 +42,18 @@ properties:
-   '#power-domain-cells':
-     const: 1
- 
-+  power-domains:
-+    items:
-+      - description: MMCX power domain
-+
-   reg:
-     maxItems: 1
- 
-+  required-opps:
-+    maxItems: 1
-+    description:
-+      OPP node describing required MMCX performance point.
-+
- required:
-   - compatible
-   - reg
-@@ -54,13 +67,16 @@ additionalProperties: false
- 
- examples:
-   - |
-+    #include <dt-bindings/clock/qcom,gcc-sm8250.h>
-     #include <dt-bindings/clock/qcom,rpmh.h>
-     clock-controller@ad00000 {
-       compatible = "qcom,sm8250-camcc";
-       reg = <0x0ad00000 0x10000>;
--      clocks = <&rpmhcc RPMH_CXO_CLK>,
-+      clocks = <&gcc GCC_CAMERA_AHB_CLK>,
-+               <&rpmhcc RPMH_CXO_CLK>,
-+               <&rpmhcc RPMH_CXO_CLK_A>,
-                <&sleep_clk>;
--      clock-names = "bi_tcxo", "sleep_clk";
-+      clock-names = "iface", "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
-       #clock-cells = <1>;
-       #reset-cells = <1>;
-       #power-domain-cells = <1>;
--- 
-2.34.1
+>
+> In any case I would prefer some documented webpage with all deprecation
+> information. Like there is releases webpage which says exact day when
+> particular LTS version is EOL: https://kernel.org/category/releases.html
 
+I would as well, maybe it could go somewhere in Documentation? Not
+sure, that's way beyond me.
+
+-- Slade
