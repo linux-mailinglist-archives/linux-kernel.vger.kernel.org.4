@@ -2,186 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E31D6559E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 12:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F196559E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 12:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiLXLN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 06:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
+        id S230499AbiLXLUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 06:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiLXLNZ (ORCPT
+        with ESMTP id S229570AbiLXLUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 06:13:25 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50EDEE3A
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 03:13:22 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id c124so7552823ybb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 03:13:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+T3Wi0FxR+aQY00oUGjtUElYaHTEjFLNV0YO6IaCnFM=;
-        b=h9NJv1kP89kJ0GRcE9rjnc9YCWp4VMHvr8ipvZd7g47/fBlTBStvfj/laeLc8/ZWsD
-         V6IcD9VA8qRhL8mwoqQFlpnQhyQOCp9+Ws/f3jdZ7EBR5d9sgBPouZdU2KD3q21J+0Ae
-         6HlcYgtwZ2/C6xwPx0oxIwZBOEpIzx/BoHBHi4gGWiBHsrTZNCPFZX0CVmHLdjni4zOv
-         9S6Yo1COwWNOdWNDzkk2x7pzyhodJw3hQ16bGBrlDncDmJTzpU0C8cVxWqR7Jylxy2Aw
-         MkQL35cKpcdk3hkQUBrQafmtADcPfeiUWQFqYOFB2We6o9Ip3h8DaryqoqP075yi1+AZ
-         f+nA==
+        Sat, 24 Dec 2022 06:20:41 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FE16563
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 03:20:39 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id e9-20020a056e020b2900b003036757d5caso4022864ilu.10
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 03:20:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+T3Wi0FxR+aQY00oUGjtUElYaHTEjFLNV0YO6IaCnFM=;
-        b=ieEc8N37FvydZO+NyBkcb8Dn2V3layPuyTsQhmnMjkI4UysILvQ54gKnPXdUxdcgLo
-         Kz8wU4QH4s308rAw8B03Ez9/tiFBL3HV1FBik9+7qkamdSjhdnaDE512gdKlIgPxy4Gt
-         Ll5D6+3C67r0uJ6aR2TjEp2Lm1qV8yl850tDrc1Ql2Xqj6hazKE3KNFtjMjRENF5D+fj
-         EEG3t+JzEkb8PSQSeEDaJzjJ59Lko/Assonksv2ZX6DqKJDO23G1iIuaxNvnHZrlGbea
-         MuHgd2oSp15Yt9sm07YCCsdHDDagHGb/MDnz9HJS2jilcCrN4RLCon8H+h1wVwzl89uj
-         Zvbw==
-X-Gm-Message-State: AFqh2kp5/3sKvLrXRbGbOz6rwsrFJvRyUzBY/0W2jtYTupGb2xly4p3N
-        OcIGIaxoNwvsfpwdvm2lJzfOkcHuHDB87TkDAc60FQ==
-X-Google-Smtp-Source: AMrXdXsdBrBzp3zIBNfzByhXKd6O3hYee5f3EPjHDp6AKPkLSeGQkpzTN0Cw8ffKmOR7kJb9uytDzpFHXF6QEkIqiDA=
-X-Received: by 2002:a25:aa0d:0:b0:76d:bea0:8a05 with SMTP id
- s13-20020a25aa0d000000b0076dbea08a05mr391174ybi.153.1671880401925; Sat, 24
- Dec 2022 03:13:21 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mUv0RwlyjdgUjh0+HYkzgr/rkjxvgJXSMOp/NGjbVGU=;
+        b=dCmwIRteUzvRxTdsLlL6oQLD1jbxLEVfsx9Q6R1AVo4OXo4gT8K7j7OYOy6U7pdtpy
+         z3CMMj9OyM/AF2qdY/kgTYIo0yHne+gn35mUMVHccUNQtC/CVD9jpOrDfivC7RjnGyDV
+         c4mcgpYLd3K9vz11Pgl9trKAor+9scWUbZm3JmeGwzDZKHN5se3x3vfxh5cpiHZtFTyw
+         /BpQh675u1hMqeCr8PJdhsTYxos3Yskza0RmLOqKa8KT/CHsxZQyhO6DWTBkuTaxic+J
+         gc9dJGD/PDuN08w+AFZnCRZETfSmoUvWAwio1TYmkQGQ9yIqs6xwRzlLgk3/fFWZzIeA
+         2Ztw==
+X-Gm-Message-State: AFqh2krhBCu9jd3kFc1rMrLdUsIjNAaZXgS/Drlu1hXdzqA4flafDGt8
+        GNzq9MYdupEMPI5y8T195fsE3EMBwTRxDP0LTrZXniASr6oQ
+X-Google-Smtp-Source: AMrXdXs0zOZFycFBjQ12cz5afe1Cx96EvARpqsdFbLzaBjvWRWk3DBcXk58tBNBxpwCtgAexEQtI2ezwPxHCPOxPhNAxM1pB0gTY
 MIME-Version: 1.0
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com> <20221223233200.26089-9-quic_wcheng@quicinc.com>
-In-Reply-To: <20221223233200.26089-9-quic_wcheng@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 24 Dec 2022 13:13:11 +0200
-Message-ID: <CAA8EJppsK=L69AaBgj=MzWp-ess3NSn=gPYf8-3QtJVqEVqGzw@mail.gmail.com>
-Subject: Re: [RFC PATCH 08/14] usb: dwc3: Add DT parameter to specify maximum
- number of interrupters
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_jackp@quicinc.com, quic_plai@quicinc.com
+X-Received: by 2002:a02:a488:0:b0:374:e77e:d3d8 with SMTP id
+ d8-20020a02a488000000b00374e77ed3d8mr992174jam.103.1671880839225; Sat, 24 Dec
+ 2022 03:20:39 -0800 (PST)
+Date:   Sat, 24 Dec 2022 03:20:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000087698205f0911707@google.com>
+Subject: [syzbot] [f2fs?] possible deadlock in f2fs_do_map_lock
+From:   syzbot <syzbot+b392b861663de30af8e0@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 24 Dec 2022 at 01:33, Wesley Cheng <quic_wcheng@quicinc.com> wrote:
->
-> Allow for the DWC3 host driver to pass along a XHCI property that defines
-> how many interrupters to allocate.  This is in relation for the number of
-> event rings that can be potentially used by other processors within the
-> system.
->
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  drivers/usb/dwc3/core.c | 12 ++++++++++++
->  drivers/usb/dwc3/core.h |  2 ++
->  drivers/usb/dwc3/host.c |  5 ++++-
->  3 files changed, 18 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 476b63618511..67d6f0ae81d2 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1446,6 +1446,7 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->         u8                      tx_thr_num_pkt_prd = 0;
->         u8                      tx_max_burst_prd = 0;
->         u8                      tx_fifo_resize_max_num;
-> +       u8                      num_hc_interrupters;
->         const char              *usb_psy_name;
->         int                     ret;
->
-> @@ -1468,6 +1469,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->          */
->         tx_fifo_resize_max_num = 6;
->
-> +       /* default to a single XHCI interrupter */
-> +       num_hc_interrupters = 1;
-> +
->         dwc->maximum_speed = usb_get_maximum_speed(dev);
->         dwc->max_ssp_rate = usb_get_maximum_ssp_rate(dev);
->         dwc->dr_mode = usb_get_dr_mode(dev);
-> @@ -1511,6 +1515,12 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->                                 &tx_thr_num_pkt_prd);
->         device_property_read_u8(dev, "snps,tx-max-burst-prd",
->                                 &tx_max_burst_prd);
-> +       device_property_read_u8(dev, "snps,num-hc-interrupters",
-> +                               &num_hc_interrupters);
+Hello,
 
-bindings change?
+syzbot found the following issue on:
 
-> +       /* DWC3 core allowed to have a max of 8 interrupters */
-> +       if (num_hc_interrupters > 8)
-> +               num_hc_interrupters = 8;
-> +
->         dwc->do_fifo_resize = device_property_read_bool(dev,
->                                                         "tx-fifo-resize");
->         if (dwc->do_fifo_resize)
-> @@ -1589,6 +1599,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->         dwc->imod_interval = 0;
->
->         dwc->tx_fifo_resize_max_num = tx_fifo_resize_max_num;
-> +
-> +       dwc->num_hc_interrupters = num_hc_interrupters;
->  }
->
->  /* check whether the core supports IMOD */
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 8f9959ba9fd4..09037299da53 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1050,6 +1050,7 @@ struct dwc3_scratchpad_array {
->   * @tx_max_burst_prd: max periodic ESS transmit burst size
->   * @tx_fifo_resize_max_num: max number of fifos allocated during txfifo resize
->   * @clear_stall_protocol: endpoint number that requires a delayed status phase
-> + * @num_hc_interrupters: number of host controller interrupters
->   * @hsphy_interface: "utmi" or "ulpi"
->   * @connected: true when we're connected to a host, false otherwise
->   * @softconnect: true when gadget connect is called, false when disconnect runs
-> @@ -1275,6 +1276,7 @@ struct dwc3 {
->         u8                      tx_max_burst_prd;
->         u8                      tx_fifo_resize_max_num;
->         u8                      clear_stall_protocol;
-> +       u8                      num_hc_interrupters;
->
->         const char              *hsphy_interface;
->
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index f6f13e7f1ba1..52a284fdd704 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -66,7 +66,7 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
->
->  int dwc3_host_init(struct dwc3 *dwc)
->  {
-> -       struct property_entry   props[4];
-> +       struct property_entry   props[5];
->         struct platform_device  *xhci;
->         int                     ret, irq;
->         int                     prop_idx = 0;
-> @@ -112,6 +112,9 @@ int dwc3_host_init(struct dwc3 *dwc)
->         if (DWC3_VER_IS_WITHIN(DWC3, ANY, 300A))
->                 props[prop_idx++] = PROPERTY_ENTRY_BOOL("quirk-broken-port-ped");
->
-> +       props[prop_idx++] = PROPERTY_ENTRY_U8("num-hc-interrupters",
-> +                                                               dwc->num_hc_interrupters);
-> +
->         if (prop_idx) {
->                 ret = device_create_managed_software_node(&xhci->dev, props, NULL);
->                 if (ret) {
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=10f880e8480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=b392b861663de30af8e0
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b392b861663de30af8e0@syzkaller.appspotmail.com
+
+F2FS-fs (loop5): invalid crc value
+F2FS-fs (loop5): Found nat_bits in checkpoint
+F2FS-fs (loop5): Mounted with checkpoint version = 48b305e4
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0 Not tainted
+------------------------------------------------------
+syz-executor.5/8612 is trying to acquire lock:
+ffff00011158a4e0 (&sbi->node_change){++++}-{3:3}, at: f2fs_do_map_lock+0x5c/0x88
+
+but task is already holding lock:
+ffff00010db4bd90 (mapping.invalidate_lock#7){++++}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ffff00010db4bd90 (mapping.invalidate_lock#7){++++}-{3:3}, at: f2fs_vm_page_mkwrite+0x18c/0x9a4 fs/f2fs/file.c:104
+
+which lock already depends on the new lock.
 
 
+the existing dependency chain (in reverse order) is:
 
--- 
-With best wishes
-Dmitry
+-> #4 (mapping.invalidate_lock#7){++++}-{3:3}:
+       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
+       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+       filemap_fault+0x104/0x7fc mm/filemap.c:3127
+       f2fs_filemap_fault+0x2c/0x54 fs/f2fs/file.c:44
+       __do_fault+0x60/0x358 mm/memory.c:4202
+       do_shared_fault mm/memory.c:4608 [inline]
+       do_fault+0x23c/0x550 mm/memory.c:4686
+       handle_pte_fault mm/memory.c:4954 [inline]
+       __handle_mm_fault mm/memory.c:5096 [inline]
+       handle_mm_fault+0x78c/0xa48 mm/memory.c:5217
+       __do_page_fault arch/arm64/mm/fault.c:508 [inline]
+       do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:608
+       do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:691
+       do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:827
+       el1_abort+0x3c/0x5c arch/arm64/kernel/entry-common.c:367
+       el1h_64_sync_handler+0x60/0xac arch/arm64/kernel/entry-common.c:427
+       el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:579
+       __arch_copy_to_user+0x104/0x234 arch/arm64/lib/copy_template.S:135
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #3 (&mm->mmap_lock){++++}-{3:3}:
+       __might_fault+0x7c/0xb4 mm/memory.c:5645
+       _copy_to_user include/linux/uaccess.h:143 [inline]
+       copy_to_user include/linux/uaccess.h:169 [inline]
+       f2fs_ioc_get_encryption_pwsalt fs/f2fs/file.c:2349 [inline]
+       __f2fs_ioctl+0x3204/0x3318 fs/f2fs/file.c:4151
+       f2fs_ioctl+0x74/0xbc fs/f2fs/file.c:4224
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #2 (&sbi->sb_lock){++++}-{3:3}:
+       down_write+0x5c/0x88 kernel/locking/rwsem.c:1562
+       f2fs_down_write fs/f2fs/f2fs.h:2205 [inline]
+       f2fs_handle_error+0x9c/0x17c fs/f2fs/super.c:3898
+       f2fs_check_nid_range fs/f2fs/node.c:39 [inline]
+       add_free_nid+0x4d8/0x50c fs/f2fs/node.c:2282
+       scan_nat_page fs/f2fs/node.c:2384 [inline]
+       __f2fs_build_free_nids fs/f2fs/node.c:2490 [inline]
+       f2fs_build_free_nids+0x680/0x8f4 fs/f2fs/node.c:2528
+       f2fs_build_node_manager+0x624/0x64c fs/f2fs/node.c:3313
+       f2fs_fill_super+0x1470/0x1e90 fs/f2fs/super.c:4306
+       mount_bdev+0x1b8/0x210 fs/super.c:1401
+       f2fs_mount+0x44/0x58 fs/f2fs/super.c:4580
+       legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+       vfs_get_tree+0x40/0x140 fs/super.c:1531
+       do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+       path_mount+0x358/0x890 fs/namespace.c:3370
+       do_mount fs/namespace.c:3383 [inline]
+       __do_sys_mount fs/namespace.c:3591 [inline]
+       __se_sys_mount fs/namespace.c:3568 [inline]
+       __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #1 (&nm_i->nat_tree_lock){++++}-{3:3}:
+       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
+       f2fs_down_read fs/f2fs/f2fs.h:2180 [inline]
+       f2fs_get_node_info+0x74/0x458 fs/f2fs/node.c:560
+       __write_node_page+0x244/0xfcc fs/f2fs/node.c:1613
+       f2fs_sync_node_pages+0x888/0xdb0 fs/f2fs/node.c:2017
+       block_operations+0x288/0x400 fs/f2fs/checkpoint.c:1270
+       f2fs_write_checkpoint+0x210/0x568 fs/f2fs/checkpoint.c:1650
+       kill_f2fs_super+0xec/0x194 fs/f2fs/super.c:4606
+       deactivate_locked_super+0x70/0xe8 fs/super.c:332
+       deactivate_super+0xd0/0xd4 fs/super.c:363
+       cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
+       __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+       task_work_run+0x100/0x148 kernel/task_work.c:179
+       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+       do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1132
+       prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+       exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+       el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #0 (&sbi->node_change){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
+       f2fs_do_map_lock+0x5c/0x88
+       f2fs_vm_page_mkwrite+0x324/0x9a4 fs/f2fs/file.c:116
+       do_page_mkwrite+0x74/0x288 mm/memory.c:2977
+       do_shared_fault mm/memory.c:4618 [inline]
+       do_fault+0x274/0x550 mm/memory.c:4686
+       handle_pte_fault mm/memory.c:4954 [inline]
+       __handle_mm_fault mm/memory.c:5096 [inline]
+       handle_mm_fault+0x78c/0xa48 mm/memory.c:5217
+       __do_page_fault arch/arm64/mm/fault.c:508 [inline]
+       do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:608
+       do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:691
+       do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:827
+       el1_abort+0x3c/0x5c arch/arm64/kernel/entry-common.c:367
+       el1h_64_sync_handler+0x60/0xac arch/arm64/kernel/entry-common.c:427
+       el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:579
+       __arch_copy_to_user+0x104/0x234 arch/arm64/lib/copy_template.S:135
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+other info that might help us debug this:
+
+Chain exists of:
+  &sbi->node_change --> &mm->mmap_lock --> mapping.invalidate_lock#7
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(mapping.invalidate_lock#7);
+                               lock(&mm->mmap_lock);
+                               lock(mapping.invalidate_lock#7);
+  lock(&sbi->node_change);
+
+ *** DEADLOCK ***
+
+3 locks held by syz-executor.5/8612:
+ #0: ffff00010fb7cbc8 (&mm->mmap_lock){++++}-{3:3}, at: mmap_read_lock include/linux/mmap_lock.h:117 [inline]
+ #0: ffff00010fb7cbc8 (&mm->mmap_lock){++++}-{3:3}, at: do_page_fault+0x3c8/0x79c arch/arm64/mm/fault.c:593
+ #1: ffff00011c1c9558 (sb_pagefaults#3){.+.+}-{0:0}, at: sb_start_pagefault include/linux/fs.h:1930 [inline]
+ #1: ffff00011c1c9558 (sb_pagefaults#3){.+.+}-{0:0}, at: f2fs_vm_page_mkwrite+0x160/0x9a4 fs/f2fs/file.c:99
+ #2: ffff00010db4bd90 (mapping.invalidate_lock#7){++++}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ #2: ffff00010db4bd90 (mapping.invalidate_lock#7){++++}-{3:3}, at: f2fs_vm_page_mkwrite+0x18c/0x9a4 fs/f2fs/file.c:104
+
+stack backtrace:
+CPU: 0 PID: 8612 Comm: syz-executor.5 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
+ check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
+ f2fs_do_map_lock+0x5c/0x88
+ f2fs_vm_page_mkwrite+0x324/0x9a4 fs/f2fs/file.c:116
+ do_page_mkwrite+0x74/0x288 mm/memory.c:2977
+ do_shared_fault mm/memory.c:4618 [inline]
+ do_fault+0x274/0x550 mm/memory.c:4686
+ handle_pte_fault mm/memory.c:4954 [inline]
+ __handle_mm_fault mm/memory.c:5096 [inline]
+ handle_mm_fault+0x78c/0xa48 mm/memory.c:5217
+ __do_page_fault arch/arm64/mm/fault.c:508 [inline]
+ do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:608
+ do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:827
+ el1_abort+0x3c/0x5c arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0x60/0xac arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:579
+ __arch_copy_to_user+0x104/0x234 arch/arm64/lib/copy_template.S:135
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
