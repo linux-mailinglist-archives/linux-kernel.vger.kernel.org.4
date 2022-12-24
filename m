@@ -2,162 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5806A6558CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 08:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F866558CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 08:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiLXHOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 02:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S229667AbiLXHOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 02:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLXHOA (ORCPT
+        with ESMTP id S229613AbiLXHOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 02:14:00 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B885FD2C;
-        Fri, 23 Dec 2022 23:13:58 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id z8-20020a05600c220800b003d33b0bda11so6153371wml.0;
-        Fri, 23 Dec 2022 23:13:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TRIB/uqq1D1ds14eihu2u9/Z/nUyFPPLNm+Ijo9Q/C8=;
-        b=dJhcufzpI8v7auHG2F7vYYXvc4SKzUN3cGCkrzIwmcp8j/CDEqE6qve3Q7qfMsiCvB
-         pj2xFJ9JrATBheS0CPByKqX7fhozBw7ONDd3Z6LQo47As9CiEyLHPHewEPQ0d12crCXG
-         tLH7t760elDFi3wBXyYFkS1wpq28v5MFWUvuMFtBNILtP1p2GRhDCYsGOkPgeJfjFddQ
-         r/2NIl7kDf3w/pOuuAH2NF+3jSE7KIKJSa1kfbiakwQ2aQpf9n4pSAC6TuMZ3THCbrnT
-         6aQA/tMF7D6llq7+ROkxBVtbsZ9+rhxAzNFpMAnw0KlwuFyMhdefhzz7ZaRAy9eqQxyA
-         3bWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TRIB/uqq1D1ds14eihu2u9/Z/nUyFPPLNm+Ijo9Q/C8=;
-        b=d0FChr+4An8/cKnDKKG13zJ3djnhuOd95S/9o5EidoIdhpU5f7iYbkgbfw7ipziGg/
-         Wkd60UCL9XroapK41kLQsWO9oNz3KCqicSKK/Xt2rQxEtHC26DSrxSD/2uz7HgRqGgcW
-         IzscWM0z55D9QI5fC+GIAPn0CirOkR+91fAfiO7wOd+A0IJvqgMW70fn0xgZnAGnS2yL
-         lv5fKMThgg32CXYVbrQMJWIKNDKNUlH016+dIblFPUJv+ouXuydW+x8fp32vuQZbw2ht
-         gaTAtdXIppLAWF0aY6jO1RTSuOmU8Ip/OT9trMdtLv2Vs6F8Zcdao7aIrdDZmtUjAnr4
-         2DDQ==
-X-Gm-Message-State: AFqh2kqjn7N4psvZxPaE3S+B5U3h2MX64WhBQTaXMx28IqIWD3F+tglr
-        7/hZC7vKXBLpnXJ9G6Hds7o=
-X-Google-Smtp-Source: AMrXdXs1TWgBnGsltnpH+XplZfqjbDa61uyuzwMISc+4HbT/go1y6J3QQ9zAkCYFUJsj8oLlBzOzsA==
-X-Received: by 2002:a05:600c:4f48:b0:3c6:f7ff:6f87 with SMTP id m8-20020a05600c4f4800b003c6f7ff6f87mr9065324wmq.11.1671866036633;
-        Fri, 23 Dec 2022 23:13:56 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id t184-20020a1c46c1000000b003b4a699ce8esm11568562wma.6.2022.12.23.23.13.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 23:13:56 -0800 (PST)
-Date:   Sat, 24 Dec 2022 10:13:52 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, mturquette@baylibre.com
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, sboyd@kernel.org,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v2 10/23] clk: mediatek: mt8173: Break down clock drivers
- and allow module build
-Message-ID: <202212240437.1D3FXJyP-lkp@intel.com>
+        Sat, 24 Dec 2022 02:14:46 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BF210041;
+        Fri, 23 Dec 2022 23:14:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lmUHEYf8bFrxNnNTMUfukWsojK4GI28KYKGOVlj0iYI=; b=2e/jQz6Dv0j0VBQKGvzfghgA8g
+        M/ohDLU0ubltlL2vXEOGw5i8/4BarelV2yogFYxjlaTYrRxy7Got8bADvYx3WE6Eup4GOXB/pk3dj
+        BVs+5tVQTEm9N0gUOYS9PMLhPPepAHp26sT34g/1Qs3/cSWzWPVnbqozQvHMh2reyDxuxW8dOrtLj
+        tqD0maPplQ5JRdiOJbhZkD++Sj5grmwne6ceJJGIWBFvDOeIGbjpT8pL5axVtwZxuecFVNl+TMldR
+        Wp/vIs0zgUfIMz3dGWVj2O9+PY4aqSMGkIdDI8nxf7BhVX0hIb1pCacHcE4jLHq9nNTL1iFpSCZ45
+        LzRrZjkg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p8yjf-00FsG8-V5; Sat, 24 Dec 2022 07:14:24 +0000
+Date:   Fri, 23 Dec 2022 23:14:23 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: 6.2 nvme-pci: something wrong
+Message-ID: <Y6amzxU7choHAXWi@infradead.org>
+References: <572cfcc0-197a-9ead-9cb-3c5bf5e735@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221223094259.87373-11-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <572cfcc0-197a-9ead-9cb-3c5bf5e735@google.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi AngeloGioacchino,
+On Fri, Dec 23, 2022 at 09:24:56PM -0800, Hugh Dickins wrote:
+> Hi Christoph,
+> 
+> There's something wrong with the nvme-pci heading for 6.2-rc1:
+> no problem booting here on this Lenovo ThinkPad X1 Carbon 5th,
+> but under load...
+> 
+> nvme nvme0: I/O 0 (I/O Cmd) QID 2 timeout, aborting
+> nvme nvme0: I/O 1 (I/O Cmd) QID 2 timeout, aborting
+> nvme nvme0: I/O 2 (I/O Cmd) QID 2 timeout, aborting
+> nvme nvme0: I/O 3 (I/O Cmd) QID 2 timeout, aborting
+> nvme nvme0: Abort status: 0x0
+> nvme nvme0: Abort status: 0x0
+> nvme nvme0: Abort status: 0x0
+> nvme nvme0: Abort status: 0x0
+> nvme nvme0: I/O 0 QID 2 timeout, reset controller
+> 
+> ...and more, until I just have to poweroff and reboot.
+> 
+> Bisection points to your
+> 0da7feaa5913 ("nvme-pci: use the tagset alloc/free helpers")
+> And that does revert cleanly, giving a kernel which shows no problem.
+> 
+> I've spent a while comparing old nvme_pci_alloc_tag_set() and new
+> nvme_alloc_io_tag_set(), I do not know my way around there at all
+> and may be talking nonsense, but it did look as if there might now
+> be a difference in the queue_depth, sqsize, q_depth conversions.
+> 
+> I'm running load successfully with the patch below, but I strongly
+> suspect that the right patch will be somewhere else: over to you!
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for the report!  The patch is definitively wrong, ->sqsize
+hold one of the awful so called 'zeroes based values' in NVMe,
+where 0 means 1, and thus have a built-in one off.  We should
+probably convert it to a sane value at read time, but that's a
+separate discussion.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/clk-mediatek-mt8192-Correctly-unregister-and-free-clocks-on-failure/20221223-174705
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20221223094259.87373-11-angelogioacchino.delregno%40collabora.com
-patch subject: [PATCH v2 10/23] clk: mediatek: mt8173: Break down clock drivers and allow module build
-config: parisc-randconfig-m031-20221219
-compiler: hppa-linux-gcc (GCC) 12.1.0
+I suspect your controller is one of those where we quirk the size,
+and the commit you bisected fails to reflects that in the common
+sqsizse value.  The patch below should be the minimum fix, and in
+the long term, the duplicate bookkeeping for it in the PCI driver
+should go away:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-
-smatch warnings:
-drivers/clk/mediatek/clk-mt8173-apmixedsys.c:95 clk_mt8173_apmixed_probe() warn: passing zero to 'PTR_ERR'
-
-vim +/PTR_ERR +95 drivers/clk/mediatek/clk-mt8173-apmixedsys.c
-
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   85  static int clk_mt8173_apmixed_probe(struct platform_device *pdev)
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   86  {
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   87  	struct device_node *node = pdev->dev.of_node;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   88  	struct clk_hw_onecell_data *clk_data;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   89  	void __iomem *base;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   90  	struct clk_hw *hw;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   91  	int r;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   92  
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   93  	base = of_iomap(node, 0);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   94  	if (!base)
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  @95  		return PTR_ERR(base);
-
-return -ENOMEM?
-
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   96  
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   97  	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   98  	if (IS_ERR_OR_NULL(clk_data))
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23   99  		return -ENOMEM;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  100  
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  101  	r = mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  102  	if (r)
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  103  		goto free_clk_data;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  104  
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  105  	hw = mtk_clk_register_ref2usb_tx("ref2usb_tx", "clk26m", base + REGOFF_REF2USB);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  106  	if (IS_ERR(hw)) {
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  107  		r = PTR_ERR(hw);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  108  		dev_err(&pdev->dev, "Failed to register ref2usb_tx: %d\n", r);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  109  		goto unregister_plls;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  110  	}
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  111  	clk_data->hws[CLK_APMIXED_REF2USB_TX] = hw;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  112  
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  113  	hw = devm_clk_hw_register_divider(&pdev->dev, "hdmi_ref", "tvdpll_594m", 0,
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  114  					  base + REGOFF_HDMI_REF, 16, 3,
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  115  					  CLK_DIVIDER_POWER_OF_TWO, NULL);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  116  	clk_data->hws[CLK_APMIXED_HDMI_REF] = hw;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  117  
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  118  	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  119  	if (r)
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  120  		goto unregister_ref2usb;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  121  
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  122  	return 0;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  123  
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  124  unregister_ref2usb:
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  125  	mtk_clk_unregister_ref2usb_tx(clk_data->hws[CLK_APMIXED_REF2USB_TX]);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  126  unregister_plls:
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  127  	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  128  free_clk_data:
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  129  	mtk_free_clk_data(clk_data);
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  130  	return r;
-c10b45573221c8 AngeloGioacchino Del Regno 2022-12-23  131  }
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
-
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index f0f8027644bbf8..a73c0ee7bd1892 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -2536,7 +2536,6 @@ static int nvme_pci_enable(struct nvme_dev *dev)
+ 
+ 	dev->q_depth = min_t(u32, NVME_CAP_MQES(dev->ctrl.cap) + 1,
+ 				io_queue_depth);
+-	dev->ctrl.sqsize = dev->q_depth - 1; /* 0's based queue depth */
+ 	dev->db_stride = 1 << NVME_CAP_STRIDE(dev->ctrl.cap);
+ 	dev->dbs = dev->bar + 4096;
+ 
+@@ -2577,7 +2576,7 @@ static int nvme_pci_enable(struct nvme_dev *dev)
+ 		dev_warn(dev->ctrl.device, "IO queue depth clamped to %d\n",
+ 			 dev->q_depth);
+ 	}
+-
++	dev->ctrl.sqsize = dev->q_depth - 1; /* 0's based queue depth */
+ 
+ 	nvme_map_cmb(dev);
+ 
