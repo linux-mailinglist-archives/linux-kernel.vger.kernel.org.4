@@ -2,152 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A72655ABC
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 17:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73AF5655ABE
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 17:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiLXQep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 11:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        id S231321AbiLXQgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 11:36:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiLXQem (ORCPT
+        with ESMTP id S229688AbiLXQgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 11:34:42 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BF6BC24;
-        Sat, 24 Dec 2022 08:34:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671899673; bh=JOlABxyXfYqHNmeXEA2u7PKdxsmIADwnMI+IIPAofYs=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=G7fRU4wGfAc6gzasYNgExIne6OeHxLd2yQwgYqH9UVM9hGaioJ7GT+snkxYaZHzmF
-         T9rz25g8S5NVnzAC5x63nQIRo7d0WY5dNkAVSHrJJct00oswLDiQ/RkyEtlq3STeTa
-         A/YzBd4wTuc4D//7kxpGMBaj/TN4pLeXbOQkf9ns=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 24 Dec 2022 17:34:33 +0100 (CET)
-X-EA-Auth: u5gVJF6h2z6ranrprLxW6HFUwyiomyX6r//ovjc1j/VosSoEw1Ak2Lw/JbyumNnUO9AM56Ey8DrPTbNA0EQfj9lOo+WcqNpx
-Date:   Sat, 24 Dec 2022 22:04:28 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH 2/2] tty: serial: dz: convert atomic_* to refcount_* APIs for
- irq_guard
-Message-ID: <51ef854f77779c82010379420139993e12c38776.1671898144.git.drv@mailo.com>
-References: <cover.1671898144.git.drv@mailo.com>
+        Sat, 24 Dec 2022 11:36:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1461E108C;
+        Sat, 24 Dec 2022 08:36:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4DD160A72;
+        Sat, 24 Dec 2022 16:36:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5F4C433D2;
+        Sat, 24 Dec 2022 16:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671899765;
+        bh=0EIF4T19puak+3zPaJRrkSbrt6wgIvpIz8iwaG3dJ0Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s+BFRJUSedEvY9T5lGayUDSkctnWHtfApja+MyvYVuDUmYA7wm8OiEbPxWCYSn5ul
+         LO5XJ7Jw3m/XGi1mnR5tcus1XwySWF+hf0TM561w5rKVu9tHulwZqTwNa7Mb+cObG8
+         9uvkb3WJtJfpT1XvgdNmN1J/988k+YnXJ/ZOyAn0c4fSaUbf4SQV2xt0caPfuRNGoZ
+         8AS2N3PWPjFoxlroy9Z14MvUk+DlAV3BrvRO3FvMEMxEW0N9atIUgqLUcJF1ZNW4BQ
+         z4ydc0GEXtR0U0FIaeW+U8B/+prc9CETEy+kpjDZ8jF/bY1QBFrvEMG+pl/aKqkRMQ
+         iYwIJbTNUQ8tw==
+Received: by pali.im (Postfix)
+        id 2C2B8720; Sat, 24 Dec 2022 17:36:02 +0100 (CET)
+Date:   Sat, 24 Dec 2022 17:36:02 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Thomas Maier <balagi@justmail.de>, linux-block@vger.kernel.org
+Subject: Re: [PATCH] pktcdvd: remove driver.
+Message-ID: <20221224163602.6bqr32tkf2ulx6po@pali>
+References: <20221224095353.w32xhmyzlft6qi4v@pali>
+ <Y6bObzIoHrJMotI3@kroah.com>
+ <20221224101139.sgvhr2n3pbrs4agm@pali>
+ <Y6bvh48kTTzbMX6M@kroah.com>
+ <20221224133425.vlcxbaaynihiom4a@pali>
+ <Y6cXRbGUsarzoJEw@zn.tnic>
+ <20221224154842.o4ngrwmskduowttm@pali>
+ <Y6chm9khdG4pmNhN@zn.tnic>
+ <20221224160055.ln3dbhx7dnut7dwi@pali>
+ <Y6cma26FKzBQD8AN@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1671898144.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y6cma26FKzBQD8AN@zn.tnic>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The refcount_* APIs are designed to address known issues with the
-atomic_t APIs for reference counting. They provide following distinct
-advantages:
-   - protect the reference counters from overflow/underflow
-   - avoid use-after-free errors
-   - provide improved memory ordering guarantee schemes
-   - neater and safer.
-Hence, replace the atomic_* APIs by their equivalent refcount_t
-API functions.
+On Saturday 24 December 2022 17:18:51 Borislav Petkov wrote:
+> On Sat, Dec 24, 2022 at 05:00:55PM +0100, Pali Rohár wrote:
+> > Maybe it would be a wise to read a documentation which is in the kernel
+> > source tree?
+> 
+> I guess you mean udftools...
 
-This patch proposal address the following warnings generated by
-the atomic_as_refcounter.cocci coccinelle script
-atomic_add_return(-1, ...)
+Yes, pktcdvd tools (pktsetup, pktcdvd-check, cdrwtool) are (for
+historical reasons) in udftools project. Ok, maybe it is unintuitive to
+find them here but it is documented in kernel tree.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Please Note:
-   1. The patch is compile tested using dec_station.defconfig for MIPS architecture.
-   2. This patch should be applied after patch 1/2 of this series due to
-      dependency.
+> > Or at least read the deletion patch itself as it is linked from there?
+> 
+> You mean the documentation file is pointed at there?
 
-Changes in v3:
-   1. Include the individual patches in a series and highlight dependency.
-      Feedback provided by gregkh@linuxfoundation.org
+Yes. In Kconfig option which is being removed, is a documentation link
 
-Changes in v2:
-   1. Separate the combined change into one variable per patch as
-      suggested by gregkh@linuxfoundation.org
+-	  See the file <file:Documentation/cdrom/packet-writing.rst>
+-	  for further information on the use of this driver.
 
+> > Or what else could be easier than this?
+> 
+> Well, apparently it ain't as easy because people do not necessarily see
+> it how you see it. That's why I'm asking.
 
- drivers/tty/serial/dz.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+Yes, in more cases it is not easy. But in this case, when kernel in-tree
+documentation about this driver was updated in the last year, it is lot
+of easier than in other cases to get more information about it.
 
-diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
-index b70edc248f8b..0aa59a9beeb7 100644
---- a/drivers/tty/serial/dz.c
-+++ b/drivers/tty/serial/dz.c
-@@ -46,7 +46,6 @@
- #include <linux/tty.h>
- #include <linux/tty_flip.h>
+I sent this patch to keep links up-to-date for packet-writing.rst file:
+https://lore.kernel.org/linux-doc/20220210192200.30828-1-pali@kernel.org/
+(and it was merged)
 
--#include <linux/atomic.h>
- #include <linux/refcount.h>
- #include <linux/io.h>
- #include <asm/bootinfo.h>
-@@ -77,7 +76,7 @@ struct dz_port {
- struct dz_mux {
- 	struct dz_port		dport[DZ_NB_PORT];
- 	refcount_t		map_guard;
--	atomic_t		irq_guard;
-+	refcount_t		irq_guard;
- 	int			initialised;
- };
+In documentation are mentioned 3 projects which are related to packet
+writing and all have valid homepages with contact information.
 
-@@ -400,18 +399,16 @@ static int dz_startup(struct uart_port *uport)
- 	struct dz_port *dport = to_dport(uport);
- 	struct dz_mux *mux = dport->mux;
- 	unsigned long flags;
--	int irq_guard;
- 	int ret;
- 	u16 tmp;
+> I have removed ancient stuff in the past myself and it is not always
+> easy to go dig out who uses it and whether it is used at all in the
+> first place.
+> 
+> And people do not always reply and projects are dead and they maybe use
+> it but the machine which has this hw hasn't been booted for a decade and
+> it ain't worth the enegry to power it back on and so so on and so on...
+> 
+> So you don't have to get all worked up about it - if it is really used,
+> I'm sure the maintainers involved will do the right decision. The point
+> is, finding out whether something still has users and with the latest
+> kernel is not always trivial.
 
--	irq_guard = atomic_add_return(1, &mux->irq_guard);
--	if (irq_guard != 1)
-+	refcount_inc(&mux->irq_guard);
-+	if (refcount_read(&mux->irq_guard) != 1)
- 		return 0;
-
--	ret = request_irq(dport->port.irq, dz_interrupt,
--			  IRQF_SHARED, "dz", mux);
-+	ret = request_irq(dport->port.irq, dz_interrupt, IRQF_SHARED, "dz", mux);
- 	if (ret) {
--		atomic_add(-1, &mux->irq_guard);
-+		refcount_dec(&mux->irq_guard);
- 		printk(KERN_ERR "dz: Cannot get IRQ %d!\n", dport->port.irq);
- 		return ret;
- 	}
-@@ -441,15 +438,13 @@ static void dz_shutdown(struct uart_port *uport)
- 	struct dz_port *dport = to_dport(uport);
- 	struct dz_mux *mux = dport->mux;
- 	unsigned long flags;
--	int irq_guard;
- 	u16 tmp;
-
- 	spin_lock_irqsave(&dport->port.lock, flags);
- 	dz_stop_tx(&dport->port);
- 	spin_unlock_irqrestore(&dport->port.lock, flags);
-
--	irq_guard = atomic_add_return(-1, &mux->irq_guard);
--	if (!irq_guard) {
-+	if (refcount_dec_and_test(&mux->irq_guard)) {
- 		/* Disable interrupts.  */
- 		tmp = dz_in(dport, DZ_CSR);
- 		tmp &= ~(DZ_RIE | DZ_TIE);
---
-2.34.1
-
-
-
+I agree that finding out such information is hard. But do not take me
+wrong, but if people are lazy and do not look into in-tree kernel
+documentation and check it, then I'm loosing motivation to keep in-tree
+kernel documentation up-to-date...
