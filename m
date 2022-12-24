@@ -2,172 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BBE6556A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 01:21:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E2E6556B4
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 01:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbiLXAVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 23 Dec 2022 19:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
+        id S232728AbiLXA31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 23 Dec 2022 19:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbiLXAVb (ORCPT
+        with ESMTP id S230312AbiLXA3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 23 Dec 2022 19:21:31 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CAB11449
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 16:21:30 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id m15so3174401ilq.2
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 16:21:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ho+2OT1cU7+wj0oYRnyuh0fOK7IL6ZBjbwYcTjcTdno=;
-        b=AyiY51eZhjTqZRG99hBVw6wwzSDUx43zUw7FN0Uzj5vXJTDwLz8Tta5aVy3ElXlLz6
-         P6/So66wT8hTKZYIENEHkvZ/2cxahmTyth4W4b1y4KM9lCTk6jD+qnNPECtGWsRj9uOC
-         UBa50bMx8KAnSiXE0wN4GpkwJeynSJ+25K60zUGB7j0BBt34SotpDT0pS0oIllaJraW6
-         5t2ZNzcvPS53rcc1i4j9ThDNcb8TuWruMHdtD49d9ywLHz+Nc/fqdsC8KElZYiqFOCjM
-         ZPevv+k+vHATA5sxtmn7zTixMRlTYvFsHl4Jsg46yIjwvpvqHpbmYzW4TKbpjC5nghcK
-         JVAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ho+2OT1cU7+wj0oYRnyuh0fOK7IL6ZBjbwYcTjcTdno=;
-        b=maIpbyLoCLOwZ3MnkDHdpDsJLIE1DYRJEExV1n5zypT9JE+63O4XST/SPcEy4VvHmc
-         3cU5AWG6/kO4sNzhTrpuKBHR71y3PwM/vMvvi9iCwMwT1ffXn/hk7Q642w1a5O9cVcNZ
-         O99VKIgNp1fE/9TXNN6QgQUEk8sOxq1HgdSK8rk4EtRNc6ZZBsKbEJiRW1aaPmiF+PjB
-         0Nror37+QWdxZIxosZYRZ2amHPpfOrDfmOy9efQ/Te0ejQGvj+pa7RFQnQtF6ZY4quYH
-         0VCQBP/wtUYGM7iXy3K8qYWUsXTMqKA7wiBhWwnU/ymGGV80kCbHd+EDEbEt9sbLGx7A
-         C77g==
-X-Gm-Message-State: AFqh2kpFAwV70lN/syTxED2u/1gBDygiBFctA/ah8OO0dJ208kKeuMWX
-        o6I90dy6M6GCELq4SP1lJ8b56Q==
-X-Google-Smtp-Source: AMrXdXu1eLtbh7BBL6jqdRe+hyXD7o6lzlMV3Vy0CczN8IOLP7VsHnIIaZ2IBk2nRvGOQXrIBleS+Q==
-X-Received: by 2002:a05:6e02:1246:b0:303:2d1e:f28c with SMTP id j6-20020a056e02124600b003032d1ef28cmr6928313ilq.24.1671841289495;
-        Fri, 23 Dec 2022 16:21:29 -0800 (PST)
-Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id x39-20020a0294aa000000b0038a0182e0casm1381189jah.11.2022.12.23.16.21.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 16:21:29 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org
-Cc:     quic_sibis@quicinc.com, mka@chromium.org, dianders@chromium.org,
-        elder@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] arm64: dts: qcom: sc7280: only enable IPA for boards with a modem
-Date:   Fri, 23 Dec 2022 18:21:26 -0600
-Message-Id: <20221224002126.1518552-1-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 23 Dec 2022 19:29:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0FA1A39D;
+        Fri, 23 Dec 2022 16:29:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DA6161FA3;
+        Sat, 24 Dec 2022 00:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DBA3C433EF;
+        Sat, 24 Dec 2022 00:29:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671841762;
+        bh=D8/RRmXxBlCJ2dVDP24Osx4Ge5pXkhUGS6I0xtbmJAk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kNN9dy/dfj7FTGUzLGg1SoUiugSuLsPVjUWqAixbaBX1u6JyoukzydQA/PdNV6oN0
+         rOZRD65ZuHZFS1UzhiJa3iHgJV3Za1/xQyw0u28069NFlgomZFpMOI7DNOguECforX
+         J63jA1GEB9qzpowrMJYpA1SMVHmrDthJiavxffL4j/7yK+nZsLgOSeSWOh2jWb7K6q
+         8jFhYFW+ANVqEGPmXdecOG82dLwqpV7jZdkFXgQygfBuSnmCUYn0CQHrsFGN23bF3b
+         DFMPCT34BiC8AEFlZzVfxgw6EB/+ICogP51r/rnM8gBakBYpEBPRQAHB8eAihCLaXF
+         Z4sRcJ3SxZtzQ==
+Date:   Fri, 23 Dec 2022 19:29:21 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.15 41/46] net: dpaa2: publish MAC stringset to
+ ethtool -S even if MAC is missing
+Message-ID: <Y6ZH4YCuBSiPDMNd@sashalap>
+References: <20221218161244.930785-1-sashal@kernel.org>
+ <20221218161244.930785-41-sashal@kernel.org>
+ <20221219115402.evv5x2dzrb7tlwmn@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221219115402.evv5x2dzrb7tlwmn@skbuf>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPA is only needed on a platform if it includes a modem, and not all
-SC7280 SoC variants do.  The file "sc7280-herobrine-lte-sku.dtsi" is
-used to encapsulate definitions related to Chrome OS SC7280 devices
-where a modem is present, and that's the proper place for the IPA
-node to be enabled.
+On Mon, Dec 19, 2022 at 01:54:02PM +0200, Vladimir Oltean wrote:
+>Hi Sasha,
+>
+>On Sun, Dec 18, 2022 at 11:12:39AM -0500, Sasha Levin wrote:
+>> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+>>
+>> [ Upstream commit 29811d6e19d795efcf26644b66c4152abbac35a6 ]
+>>
+>> DPNIs and DPSW objects can connect and disconnect at runtime from DPMAC
+>> objects on the same fsl-mc bus. The DPMAC object also holds "ethtool -S"
+>> unstructured counters. Those counters are only shown for the entity
+>> owning the netdev (DPNI, DPSW) if it's connected to a DPMAC.
+>>
+>> The ethtool stringset code path is split into multiple callbacks, but
+>> currently, connecting and disconnecting the DPMAC takes the rtnl_lock().
+>> This blocks the entire ethtool code path from running, see
+>> ethnl_default_doit() -> rtnl_lock() -> ops->prepare_data() ->
+>> strset_prepare_data().
+>>
+>> This is going to be a problem if we are going to no longer require
+>> rtnl_lock() when connecting/disconnecting the DPMAC, because the DPMAC
+>> could appear between ops->get_sset_count() and ops->get_strings().
+>> If it appears out of the blue, we will provide a stringset into an array
+>> that was dimensioned thinking the DPMAC wouldn't be there => array
+>> accessed out of bounds.
+>>
+>> There isn't really a good way to work around that, and I don't want to
+>> put too much pressure on the ethtool framework by playing locking games.
+>> Just make the DPMAC counters be always available. They'll be zeroes if
+>> the DPNI or DPSW isn't connected to a DPMAC.
+>>
+>> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+>> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+>> Reviewed-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+>> Tested-by: Ioana Ciornei <ioana.ciornei@nxp.com>
+>> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> ---
+>
+>I think the algorithm has a problem in that it has a tendency to
+>auto-pick preparatory patches which eliminate limitations that are
+>preventing future development from taking place, rather than patches
+>which fix present issues in the given code base.
 
-Currently IPA is enabled in "sc7280-idp.dtsi", which is included by
-DTS files for Qualcomm reference platforms (all of which include the
-modem).  That also includes "sc7280-herobrine-lte-sku.dtsi", so
-enabling IPA there would make it unnecessary for "sc7280-idp.dtsi"
-to enable it.
+Yeah, I'd agree. I think that the tricky part is that preperatory
+patches usually resolve an issue, but it's not clear whether it's
+something that affects users, or is just a theoretical limitation needed
+by future patches.
 
-The only other place IPA is enabled is "sc7280-qcard.dtsi".
-That file is included only by "sc7280-herobrine.dtsi", which
-is (eventually) included only by these top-level DTS files:
-  sc7280-herobrine-crd.dts
-  sc7280-herobrine-herobrine-r1.dts
-  sc7280-herobrine-evoker.dts
-  sc7280-herobrine-evoker-lte.dts
-  sc7280-herobrine-villager-r0.dts
-  sc7280-herobrine-villager-r1.dts
-  sc7280-herobrine-villager-r1-lte.dts
-All of but two of these include "sc7280-herobrine-lte-sku.dtsi", and
-for those cases, enabling IPA there means there is no need for it to
-be enabled in "sc7280-qcard.dtsi".
+>In this case, the patch is part of a larger series which was at the
+>boundary between "next" work and "stable" work (patch 07/12 of this)
+>https://patchwork.kernel.org/project/netdevbpf/cover/20221129141221.872653-1-vladimir.oltean@nxp.com/
+>
+>Due to the volume of that rework, I intended it to go to "next", even
+>though backporting the entire series to "stable" could have its own
+>merits. But picking just patch 07/12 out of that series is pointless,
+>so please drop this patch from the queue for 5.15, 6.0 and 6.1, please.
 
-The two remaining cases will no longer enable IPA as a result of
-this change:
-  sc7280-herobrine-evoker.dts
-  sc7280-herobrine-villager-r1.dts
-Both of these have "lte" counterparts, and are meant to represent
-board variants that do *not* have a modem.
+Now dropped, thanks!
 
-This is exactly the desired configuration.
-
-Signed-off-by: Alex Elder <elder@linaro.org>
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
-Tested-by: Sibi Sankar <quic_sibis@quicinc.com>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
----
-v3:  Rewrote the subject line as suggested by Matthias
-v2:  Moved &ipa node update earlier, and status property to end
-
- arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi | 5 +++++
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi               | 5 -----
- arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi             | 5 -----
- 3 files changed, 5 insertions(+), 10 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-index ad66e5e9db4ed..c5309b25d0860 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-@@ -20,6 +20,11 @@ mba_mem: memory@9c700000 {
- 	};
- };
- 
-+&ipa {
-+	modem-init;
-+	status = "okay";
-+};
-+
- &remoteproc_mpss {
- 	compatible = "qcom,sc7280-mss-pil";
- 	iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index f7efb9966afd1..0ddbe7f732bd9 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -376,11 +376,6 @@ &gpi_dma1 {
- 	status = "okay";
- };
- 
--&ipa {
--	status = "okay";
--	modem-init;
--};
--
- &lpass_cpu {
- 	status = "okay";
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-index df49564ae6dc1..cd6ee84b36fd4 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi
-@@ -336,11 +336,6 @@ vreg_bob: bob {
- 
- /* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
- 
--&ipa {
--	status = "okay";
--	modem-init;
--};
--
- &lpass_va_macro {
- 	vdd-micb-supply = <&vreg_bob>;
- };
 -- 
-2.34.1
-
+Thanks,
+Sasha
