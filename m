@@ -2,70 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2576558E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 08:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E8A6558E2
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 08:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiLXHRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 02:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
+        id S230019AbiLXHUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 02:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiLXHRC (ORCPT
+        with ESMTP id S229457AbiLXHUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 02:17:02 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6CDF32;
-        Fri, 23 Dec 2022 23:17:00 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bx10so6323802wrb.0;
-        Fri, 23 Dec 2022 23:17:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XYdZuRzobQmIoU+GUW5xOEJnXoxJQHcF7omPb4wLhQE=;
-        b=eq72v+3LBcvOBON4Ls8rGWFwmCnNJ9OoeCpYt2shZ7Ig+ysrUxOmn9O11XkB6/zY5s
-         aMC049QaZskHhQ4SRo08bepBWyFG+c2jdBMUY/oO5LFX+2EWeK6heXXIzUJnRRbwLbqk
-         r0JM+zP3L++NEEyKLOnrWzxnv4/etWfrwRAkW4bueLz7YXb5SO9WLJVTYOcIwpGFNrfa
-         qmBtdsPFf1+iKGbNt4PEWFZTMPkARWda5C8Rv1VvK08SobuZGHuPwoi9h2iIrBaGcbPL
-         uqU68dwGSxGevUWA9iiqaotddgjnh38XJohEa0VW+yfW6hm0ptId0uRHXrJtY09ItW9u
-         ZfrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XYdZuRzobQmIoU+GUW5xOEJnXoxJQHcF7omPb4wLhQE=;
-        b=N3U42WV8yh5KB26d6srPvAmcfqH01E+SC9DsoG7I3p5WXgq/ABI0vmsrzQcSnm31gZ
-         okGBl9A76EVVGPdIhrm2pYWsfe6C3qFn68IvsArbJwlXy4WouPKcRKBiEjwCgmoGZH2Y
-         PdgznCRkybATvrUPe/dEsn6dXhcuLj5T5uTRPQggo8iF9Z19fVpdBQ4pVoW2tliXYHnv
-         PsTB8D1Xj9a7DF1lp8z6vQfMmuhYwyJgzPxMHSBppTlmd6vXZEX1KHOCP3pNH9P5Ho/U
-         blVraGiLjmGJlggqqMfgdZGhzgEHTt6ReS9IXI7Z11cLlUPcfPtnBaiMzH83hxBzoA0x
-         FX/A==
-X-Gm-Message-State: AFqh2kqiLsrQWCkkqiLAojnGF0iax7ESVSY2dobujsixuWseiC/xJr7b
-        1WvqkbWViQRYGsLaSH+85Fc=
-X-Google-Smtp-Source: AMrXdXsBK3+3LWL4MW0/QLZP0R0349A+rn33at/1vXHt8anZlbc/DKK8ciK4wp9oBd2h+g0CELjmww==
-X-Received: by 2002:adf:ec88:0:b0:242:52b6:9054 with SMTP id z8-20020adfec88000000b0024252b69054mr8030764wrn.58.1671866219446;
-        Fri, 23 Dec 2022 23:16:59 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id k16-20020a056000005000b002258235bda3sm4865843wrx.61.2022.12.23.23.16.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 23:16:59 -0800 (PST)
-Date:   Sat, 24 Dec 2022 10:16:56 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, wenyang.linux@foxmail.com,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        Wen Yang <wenyang.linux@foxmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] eventfd: use a generic helper instead of an open coded
- wait_event
-Message-ID: <202212240819.6KA20geM-lkp@intel.com>
+        Sat, 24 Dec 2022 02:20:51 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2216404
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 23:20:50 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p8yps-0000x0-Oo; Sat, 24 Dec 2022 08:20:48 +0100
+Message-ID: <f1770b7c-d287-a255-0298-2523ce3a9565@leemhuis.info>
+Date:   Sat, 24 Dec 2022 08:20:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_B38979DE0FF3B9B3EA887A37487B123BBD05@qq.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [6.2][regression] after commit
+ ffcb754584603adf7039d7972564fbf6febdc542 all sound devices disappeared (due
+ BUG at mm/page_alloc.c:3592!) #forregzbot
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     alsa-devel@alsa-project.org,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <CABXGCsPnpu0TGHnvXM1we7q1t3tJAOYW2rA=AMvf7ZahcYvpRQ@mail.gmail.com>
+ <5dff36ee-bfe5-4596-b01d-0eaca1b552bd@leemhuis.info>
+In-Reply-To: <5dff36ee-bfe5-4596-b01d-0eaca1b552bd@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671866450;edf446c9;
+X-HE-SMSGID: 1p8yps-0000x0-Oo
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,60 +47,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/wenyang-linux-foxmail-com/eventfd-use-a-generic-helper-instead-of-an-open-coded-wait_event/20221222-234947
-patch link:    https://lore.kernel.org/r/tencent_B38979DE0FF3B9B3EA887A37487B123BBD05%40qq.com
-patch subject: [PATCH] eventfd: use a generic helper instead of an open coded wait_event
-config: i386-randconfig-m021
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+On 22.12.22 13:17, Thorsten Leemhuis wrote:
+> [Note: this mail contains only information for Linux kernel regression
+> tracking. Mails like these contain '#forregzbot' in the subject to make
+> then easy to spot and filter out. The author also tried to remove most
+> or all individuals from the list of recipients to spare them the hassle.]
+> 
+> On 15.12.22 15:17, Mikhail Gavrilov wrote:
+>> Hi,
+>> The kernel 6.2 preparation cycle has begun and yesterday after the
+>> kernel was updated on my Fedora Rawhide all audio devices disappeared.
+> 
+> Thanks for the report. To be sure below issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced ffcb754584603adf
+> #regzbot title dma-mapping: audio devices disappeared
+> #regzbot monitor:
+> https://lore.kernel.org/all/20221220082009.569785-1-hch@lst.de/
+> #regzbot fix: dma-mapping: reject GFP_COMP for noncohernt allocaions
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+The typo in the subject of the fix was fixed, hence this is needed:
 
-smatch warnings:
-fs/eventfd.c:254 eventfd_read() warn: inconsistent returns '&ctx->wqh.lock'.
-
-vim +254 fs/eventfd.c
-
-12aceb89b0bce1 Jens Axboe     2020-05-01  226  static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
-e1ad7468c77ddb Davide Libenzi 2007-05-10  227  {
-12aceb89b0bce1 Jens Axboe     2020-05-01  228  	struct file *file = iocb->ki_filp;
-b6364572d641c8 Eric Biggers   2018-01-06  229  	struct eventfd_ctx *ctx = file->private_data;
-b6364572d641c8 Eric Biggers   2018-01-06  230  	__u64 ucnt = 0;
-e1ad7468c77ddb Davide Libenzi 2007-05-10  231  
-12aceb89b0bce1 Jens Axboe     2020-05-01  232  	if (iov_iter_count(to) < sizeof(ucnt))
-b6364572d641c8 Eric Biggers   2018-01-06  233  		return -EINVAL;
-d48eb233159522 Davide Libenzi 2007-05-18  234  	spin_lock_irq(&ctx->wqh.lock);
-12aceb89b0bce1 Jens Axboe     2020-05-01  235  	if (!ctx->count) {
-12aceb89b0bce1 Jens Axboe     2020-05-01  236  		if ((file->f_flags & O_NONBLOCK) ||
-12aceb89b0bce1 Jens Axboe     2020-05-01  237  		    (iocb->ki_flags & IOCB_NOWAIT)) {
-12aceb89b0bce1 Jens Axboe     2020-05-01  238  			spin_unlock_irq(&ctx->wqh.lock);
-12aceb89b0bce1 Jens Axboe     2020-05-01  239  			return -EAGAIN;
-12aceb89b0bce1 Jens Axboe     2020-05-01  240  		}
-c908f8e6a3a1eb Wen Yang       2022-12-22  241  
-c908f8e6a3a1eb Wen Yang       2022-12-22  242  		if (wait_event_interruptible_locked_irq(ctx->wqh, ctx->count))
-12aceb89b0bce1 Jens Axboe     2020-05-01  243  			return -ERESTARTSYS;
-
-spin_unlock_irq(&ctx->wqh.lock);
-
-e1ad7468c77ddb Davide Libenzi 2007-05-10  244  	}
-b6364572d641c8 Eric Biggers   2018-01-06  245  	eventfd_ctx_do_read(ctx, &ucnt);
-9f0deaa12d832f Dylan Yudaken  2022-08-16  246  	current->in_eventfd = 1;
-e1ad7468c77ddb Davide Libenzi 2007-05-10  247  	if (waitqueue_active(&ctx->wqh))
-a9a08845e9acbd Linus Torvalds 2018-02-11  248  		wake_up_locked_poll(&ctx->wqh, EPOLLOUT);
-9f0deaa12d832f Dylan Yudaken  2022-08-16  249  	current->in_eventfd = 0;
-d48eb233159522 Davide Libenzi 2007-05-18  250  	spin_unlock_irq(&ctx->wqh.lock);
-12aceb89b0bce1 Jens Axboe     2020-05-01  251  	if (unlikely(copy_to_iter(&ucnt, sizeof(ucnt), to) != sizeof(ucnt)))
-b6364572d641c8 Eric Biggers   2018-01-06  252  		return -EFAULT;
-cb289d6244a37c Davide Libenzi 2010-01-13  253  
-12aceb89b0bce1 Jens Axboe     2020-05-01 @254  	return sizeof(ucnt);
-cb289d6244a37c Davide Libenzi 2010-01-13  255  }
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
-
+#regzbot fix: 3622b86f49f8
