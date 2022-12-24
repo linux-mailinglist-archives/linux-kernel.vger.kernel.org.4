@@ -2,128 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E67655ACB
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 18:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2032655ADA
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 18:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbiLXRDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 12:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
+        id S231407AbiLXRhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 12:37:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiLXRDh (ORCPT
+        with ESMTP id S229570AbiLXRhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 12:03:37 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C3919F
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 09:03:33 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id q18-20020a056830441200b006704633f258so4521877otv.0
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 09:03:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xDlIxtzFcin724wRP1TAXrvd23TGKko3POM23PcIaBI=;
-        b=z1KWdGBZC89gZpYSCRr1oZkEt8jV+HfKDyk8FypwZ5NTFMIln9Yl9nv4DhkuxSIJZx
-         sMclWkPGni/eoSbKlLt/uUPM/MQDF1t6ahZs91Xi8vSA+q2dTjUHOTDvt5Fm25gGzwt1
-         sA2vjgwIUYYrgMLa7d6b8BAN5iHM8CEvv3D4Ss5Tr0LVr9ZUSeFL/CPV9ssg3B7f3B5J
-         5Jxqw4gyk08cyx84CBEaLgfUjY9UuPOnSgpiVyQnRU0jPPxGvkYhcgnHoIAu06fOB05R
-         7xeXCSH8ja56+FbkBVJF/wDI/lIs8pkttD2Hy5UM6/0CxYpL6YhTyzgueJevhEvhEcZ8
-         aFLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xDlIxtzFcin724wRP1TAXrvd23TGKko3POM23PcIaBI=;
-        b=GhxwHl5oCWUm2ttCgVg3iy2pG7907npoUiP9YeaKvsLicPSDOuiq20E4HvwwEwy6ag
-         ve/n03ZGyCQ6Zn1xF6zp6SL4uH0KvAuRuiuEfj18SdiQ4m2QPr5LPTDvmjY5hBG13NuT
-         PaxVnIs7IOiD/Y+2a8/4fKF4f0MGyDWc7AUpUpE0u53SYymkdUbmC+Mpvwe7ZzHFve2p
-         eaprDVMqba3L85N1PAm5BWnIfzfPnvr0ZUGUB3m3ejobIb7XleMgs7TJiGZnbLngqLIr
-         oe6B+xtV/UuzceHST9HshCfjV70PcE3/7tMGmibk1GSW+znFoCBVxI4ikUB5BTuUWOJL
-         yUbw==
-X-Gm-Message-State: AFqh2koSyK5D1CndYYCFZWg7klj4Kr/lIrQQbas6SvzQW46WiX9njxD6
-        irwc/HB2vx3TzJYXzNw/hRFqNg==
-X-Google-Smtp-Source: AMrXdXvR9oTlcOMyZG0PSyHKf68zvuLkUYdRRGXmxCKna6gl2HjlGFAb/VNsEKBf/P6+4dUZANgRnw==
-X-Received: by 2002:a9d:6004:0:b0:66e:ab28:cced with SMTP id h4-20020a9d6004000000b0066eab28ccedmr11631750otj.13.1671901413027;
-        Sat, 24 Dec 2022 09:03:33 -0800 (PST)
-Received: from eze-laptop ([190.11.62.130])
-        by smtp.gmail.com with ESMTPSA id w2-20020a9d6382000000b00670679748f9sm3221172otk.49.2022.12.24.09.03.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Dec 2022 09:03:31 -0800 (PST)
-Date:   Sat, 24 Dec 2022 14:03:25 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>, kernel@collabora.com,
-        Robert Mader <robert.mader@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hantro: Fix JPEG encoder ENUM_FRMSIZE on RK3399
-Message-ID: <Y6cw3dU8Ku2+aL9y@eze-laptop>
-References: <20221223181647.720918-1-nicolas.dufresne@collabora.com>
- <8d13ffb9-74cb-00f9-072a-0614e341e1ef@collabora.com>
+        Sat, 24 Dec 2022 12:37:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386ADB495;
+        Sat, 24 Dec 2022 09:37:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 650AAB8016A;
+        Sat, 24 Dec 2022 17:37:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE2EC433EF;
+        Sat, 24 Dec 2022 17:37:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671903468;
+        bh=nYcWuSjcESsZ5VXztzLbQ7LJL41H+JOcVMbwnylZLtg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=I0oe+9V1xS1zeEMkIdc2aXawFTFIA/31l/cmCGZJvHg+mQAP97w/P+vTQ0yGyZ2Dx
+         mPsYePJweuwyrz44F+JqAYl9K6Vvnlx7K7U5TMbOZDQQ7ZGAa3jeoL7i90Sj4VlQE1
+         CXGK/8PJzpw3hRmZG/pTvbkGpD8Qw6UTzaV6q0A8QvuI27X4eRs2mgTQqG1rwIR54O
+         dFf2iwhA25N62OG0W/1HAwrWVNmOuyQiVe8YsqkMDo8M/Uwa9ALxmKM8BKWlLOCUrX
+         xjdx0aqODD0RuqhjeLh3TsPeoXgyCleLJDryf9paD+n0Rv/OMJMUHeD31gDfA7e6rh
+         JcY+sioFWx60g==
+Received: by mail-vs1-f41.google.com with SMTP id a66so7113933vsa.6;
+        Sat, 24 Dec 2022 09:37:48 -0800 (PST)
+X-Gm-Message-State: AFqh2kpHYMXCmyOZn68wL8ttc8Ku4GWR6uz6hQeKYGTkyC3uKK/oSzfv
+        enNU/EHp2p9Wo9KOvBBINmMOUeS5PLLWXn2lRg==
+X-Google-Smtp-Source: AMrXdXtKXEUztiMvfY6flDDIpwstBFgjPj+zjwH0rvgfz8ANqanfZUsuih29ncY94VFNBjWNBmT9Hf2nN/vuKoASosc=
+X-Received: by 2002:a67:fb05:0:b0:3bf:754b:15c5 with SMTP id
+ d5-20020a67fb05000000b003bf754b15c5mr1661989vsr.85.1671903467016; Sat, 24 Dec
+ 2022 09:37:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8d13ffb9-74cb-00f9-072a-0614e341e1ef@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221219191038.1973807-1-robh@kernel.org> <87edsua5q4.fsf@balbi.sh>
+ <CAL_JsqKgGWN93QJ=V34=X3hC2bgdcd3vwO0Mne-8z8HOfVDz-g@mail.gmail.com>
+ <878riy9ztm.fsf@balbi.sh> <20221223235712.h54lggnjjuu3weol@synopsys.com>
+In-Reply-To: <20221223235712.h54lggnjjuu3weol@synopsys.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Sat, 24 Dec 2022 11:37:35 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+gCi8g0jY2ic1tJebc_JijMU-GntWQg09q+X41O3=1RA@mail.gmail.com>
+Message-ID: <CAL_Jsq+gCi8g0jY2ic1tJebc_JijMU-GntWQg09q+X41O3=1RA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: snps,dwc3: Allow power-domains property
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        Johan Jonker <jbx6244@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 24, 2022 at 09:03:59AM +0100, Benjamin Gaignard wrote:
-> 
-> Le 23/12/2022 à 19:16, Nicolas Dufresne a écrit :
-> > Since 79c987de8b354, enumerating framesize on format set with "MODE_NONE"
-> > (any raw formats) is reporting an invalid frmsize.
-> > 
-> >    Size: Stepwise 0x0 - 0x0 with step 0/0
-> > 
-> > Before this change, the driver would return EINVAL, which is also invalid but
-> > worked in GStreamer. The original intent was not to implement it, hence the
-> > -ENOTTY return in this change. While drivers should implement ENUM_FRMSIZE for
-> > all formats and queues, this change is limited in scope to fix the regression.
-> > 
-> > This fixes taking picture in Gnome Cheese software, or any software using
-> > GSteamer to encode JPEG with hardware acceleration.
-> > 
-> > Fixes: 79c987de8b354 ("media: hantro: Use post processor scaling capacities")
-> > Reported-by: Robert Mader <robert.mader@collabora.com>
-> > Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> 
-> Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> 
+On Fri, Dec 23, 2022 at 5:57 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>
+> Hi,
+>
+> On Fri, Dec 23, 2022, Felipe Balbi wrote:
+> >
+> > Hi,
+> >
+> > Rob Herring <robh@kernel.org> writes:
+> > >> > The Rockchip RK3399 DWC3 node has 'power-domain' property which isn't
+> > >> > allowed by the schema:
+> > >> >
+> > >> > usb@fe900000: Unevaluated properties are not allowed ('power-domains' was unexpected)
+> > >> >
+> > >> > Allow DWC3 nodes to have a single power-domains entry. We could instead
+> > >> > move the power-domains property to the parent wrapper node, but the
+> > >> > could be an ABI break (Linux shouldn't care). Also, we don't want to
+> > >> > encourage the pattern of wrapper nodes just to define resources such as
+> > >> > clocks, resets, power-domains, etc. when not necessary.
+> > >> >
+> > >> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > >> > ---
+> > >> >  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 3 +++
+> > >> >  1 file changed, 3 insertions(+)
+> > >> >
+> > >> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > >> > index 6d78048c4613..bcefd1c2410a 100644
+> > >> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > >> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> > >> > @@ -91,6 +91,9 @@ properties:
+> > >> >          - usb2-phy
+> > >> >          - usb3-phy
+> > >> >
+> > >> > +  power-domains:
+> > >> > +    maxItems: 1
+> > >>
+> > >> AFAICT this can be incorrect. Also, you could have Cc the dwc3
+> > >> maintainer to get comments.
+>
+> Felipe is correct. We have 2 power-domains: Core domain and PMU.
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Power management unit? Performance management unit?
 
-Thanks,
-Ezequiel
+That doesn't change that the rk3399 is 1 and we're stuck with it. So I
+can say 1 or 2 domains, or we add the 2nd domain when someone needs
+it.
 
-> > ---
-> >   drivers/media/platform/verisilicon/hantro_v4l2.c | 7 +++++--
-> >   1 file changed, 5 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> > index 2c7a805289e7b..30e650edaea8a 100644
-> > --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-> > +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> > @@ -161,8 +161,11 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
-> >   	}
-> >   	/* For non-coded formats check if postprocessing scaling is possible */
-> > -	if (fmt->codec_mode == HANTRO_MODE_NONE && hantro_needs_postproc(ctx, fmt)) {
-> > -		return hanto_postproc_enum_framesizes(ctx, fsize);
-> > +	if (fmt->codec_mode == HANTRO_MODE_NONE) {
-> > +		if (hantro_needs_postproc(ctx, fmt))
-> > +			return hanto_postproc_enum_framesizes(ctx, fsize);
-> > +		else
-> > +			return -ENOTTY;
-> >   	} else if (fsize->index != 0) {
-> >   		vpu_debug(0, "invalid frame size index (expected 0, got %d)\n",
-> >   			  fsize->index);
+Rob
