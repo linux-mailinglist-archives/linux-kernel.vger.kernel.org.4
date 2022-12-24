@@ -2,103 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7544655B62
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 22:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72322655B64
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 22:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbiLXVqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 16:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S230203AbiLXVui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 16:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiLXVqr (ORCPT
+        with ESMTP id S229445AbiLXVuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 16:46:47 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BDBBE1A
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:46:46 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id c9so427571pfj.5
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:46:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O3UxsimBVOhEDuKfSuQBk+/BzoqRkKBz/Nr1j/ZryG8=;
-        b=pvsrtHUzIjjg31V+IH/mGznvfjfwaNZDh0KiqTKR+D9Qp0tWJs97bpm4mhN5kW3pQt
-         OkRylP6veOvbgsdOaq3/x/m4d4dTH9ZDPaMWkmmnK02OoF7Xzpp+wtyerfdn9ClqqG/9
-         U9rpKaLAWkrv5ZFoUPjFw+3Gy91H5HOaJuwMmV7DvjkSyJ1SLqub9OaDLBSWcr18YZH5
-         46p0CwJ/hDRTUUvu3BY03NQwjNEAL5uNZsg1P75CIC/cQlgdAezkZyduQXl6f75R1m8B
-         WA/2IHud3doEE+gz3Okydd2VATvQEiJJ/O/Wf8Q8LGepTE0YHxR/LGVG1FqGkHEhNd7A
-         42YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O3UxsimBVOhEDuKfSuQBk+/BzoqRkKBz/Nr1j/ZryG8=;
-        b=dbiXoJaFOaZjv4mZ0W5o3RA7xkoYzsVX9N9xCWKbtg/V24EN7oZH1SUtwSJk364IH2
-         Toe3vM45vSjovXRbfmSBZTdsjT8JM3IIVdjTLImHhBYaOsij30udEL8FlwBss+j5Jak/
-         5+5D/VCgdkfDTp+Oq/yfPSWOlKgWOgh72ewCTlac0r77BubJrb8pIy6b14et/4fS35fX
-         QoGUo/Aw4vtdD4ksDQEuK3fb9+64m4zZqVU8GZvINT7iiRK72h1CoEAZczlr8ctQNk++
-         Ad6Wm1iE748tobUuQTHhaQAlWN2ZIxUyQtDAvPnMFJWEOoGkBny3NTaIK3xCcqY8o+CO
-         qRMg==
-X-Gm-Message-State: AFqh2kpgt7A0P81HihBodGyBpWBI3q0kBiak02gE7WEQ30ljS+/8KlwN
-        mMQb9Dg1kSc1H8X1wE8BISTYLn/8NM0OsryKmI98c7JiHRMskvu1OqM=
-X-Google-Smtp-Source: AMrXdXt0YkaBTrpFdunDUREJLDj9yvlHL4xI+4nHdNaNW/k6tF7R0vqMBDOeqky0agrYPB5X5UyL0/+Wjr719wDOP8c=
-X-Received: by 2002:a63:5b15:0:b0:479:3bf5:df35 with SMTP id
- p21-20020a635b15000000b004793bf5df35mr586451pgb.572.1671918406048; Sat, 24
- Dec 2022 13:46:46 -0800 (PST)
+        Sat, 24 Dec 2022 16:50:35 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54A2BC8A
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:50:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671918615; bh=3RMRR8G3aQrYrRNzBtDZFRRHfOs5HasLm+7fpYUXFwE=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=d/Etw4X6d93jWGYSzsp6rv9fqXVnPLxVIC2NnQu6nBgnbV+7zOMV7Vx7EX98dM6uz
+         NTDIZDg3HujpuLm14VUBP7F62msc0ixOr/a6qwOLmwFzu2wWJteuiuMyXRj3g0c1m+
+         NphzZl/wHIScbUXRf9xxkzR7s8yRRdn5W96wkQgM=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat, 24 Dec 2022 22:50:15 +0100 (CET)
+X-EA-Auth: 4MfYGIvEIKR+4dpyaHgInVQhNCzEG5VrXxDsSwjZeiLhfOmGuLNBhBjxVhFiQgk3p6BWsoLG3Mg7GfMSDYbYv5g8lOMevslW
+Date:   Sun, 25 Dec 2022 03:20:08 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] drm/i915: convert i915_active.count from atomic_t to
+ refcount_t
+Message-ID: <Y6d0EDmyqJILVoRw@qemulion>
 MIME-Version: 1.0
-References: <20221224101139.sgvhr2n3pbrs4agm@pali> <Y6bvh48kTTzbMX6M@kroah.com>
- <20221224133425.vlcxbaaynihiom4a@pali> <Y6cXRbGUsarzoJEw@zn.tnic>
- <20221224154842.o4ngrwmskduowttm@pali> <Y6chm9khdG4pmNhN@zn.tnic>
- <20221224160055.ln3dbhx7dnut7dwi@pali> <Y6cma26FKzBQD8AN@zn.tnic>
- <20221224163602.6bqr32tkf2ulx6po@pali> <Y6dsWVspi9tGNid5@kbusch-mbp.dhcp.thefacebook.com>
- <20221224213646.zyosaq7hnlsaje4b@pali>
-In-Reply-To: <20221224213646.zyosaq7hnlsaje4b@pali>
-From:   Slade Watkins <srw@sladewatkins.net>
-Date:   Sat, 24 Dec 2022 16:46:35 -0500
-Message-ID: <CA+pv=HPUgxxJjOJBki1jDjR+Abk3W9=SZ3RxSsB-YYucKBFdaQ@mail.gmail.com>
-Subject: Re: [PATCH] pktcdvd: remove driver.
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Keith Busch <kbusch@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Thomas Maier <balagi@justmail.de>, linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 24, 2022 at 4:39 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
-> And based on my experience, users (including me) are using distributions
-> LTS kernels in production. So do not forget that it takes lot of time
-> until some distributions switch from one LTS version to another LTS
-> version and so it would take lot of time until deprecation warning is
-> visible to user. (Maybe deprecation information could be "backported" to
-> LTS kernels?)
+The refcount_* APIs are designed to address known issues with the
+atomic_t APIs for reference counting. They provide following distinct
+advantages:
+   - protect the reference counters from overflow/underflow
+   - avoid use-after-free errors
+   - provide improved memory ordering guarantee schemes
+   - neater and safer.
+Hence, convert the atomic_t count member variable and associated
+atomic_*() API calls to equivalent refcount_t type and refcount_*() API
+calls.
 
-Yeah, my main server (which I don't use for dev work) is on an LTS
-kernel, same with my primary workstation, so I'm also using LTS
-kernels in prod.
+This patch proposal address the following warnings generated by
+the atomic_as_refcounter.cocci coccinelle script
+	atomic_add_unless
 
-Would definitely appreciate it if those deprecation warnings are
-visible (and maybe even backported?) if added... would certainly help
-make transitioning from one LTS to the next easier.
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Please note: Proposed changes are compile tested only.
 
->
-> In any case I would prefer some documented webpage with all deprecation
-> information. Like there is releases webpage which says exact day when
-> particular LTS version is EOL: https://kernel.org/category/releases.html
+ drivers/gpu/drm/i915/i915_active.c       | 24 +++++++++++++-----------
+ drivers/gpu/drm/i915/i915_active.h       |  6 +++---
+ drivers/gpu/drm/i915/i915_active_types.h |  4 ++--
+ 3 files changed, 18 insertions(+), 16 deletions(-)
 
-I would as well, maybe it could go somewhere in Documentation? Not
-sure, that's way beyond me.
+diff --git a/drivers/gpu/drm/i915/i915_active.c b/drivers/gpu/drm/i915/i915_active.c
+index 7412abf166a8..4a8d873b4347 100644
+--- a/drivers/gpu/drm/i915/i915_active.c
++++ b/drivers/gpu/drm/i915/i915_active.c
+@@ -133,7 +133,7 @@ __active_retire(struct i915_active *ref)
+ 	GEM_BUG_ON(i915_active_is_idle(ref));
 
--- Slade
+ 	/* return the unused nodes to our slabcache -- flushing the allocator */
+-	if (!atomic_dec_and_lock_irqsave(&ref->count, &ref->tree_lock, flags))
++	if (!refcount_dec_and_lock_irqsave(&ref->count, &ref->tree_lock, &flags))
+ 		return;
+
+ 	GEM_BUG_ON(rcu_access_pointer(ref->excl.fence));
+@@ -179,8 +179,8 @@ active_work(struct work_struct *wrk)
+ {
+ 	struct i915_active *ref = container_of(wrk, typeof(*ref), work);
+
+-	GEM_BUG_ON(!atomic_read(&ref->count));
+-	if (atomic_add_unless(&ref->count, -1, 1))
++	GEM_BUG_ON(!refcount_read(&ref->count));
++	if (refcount_dec_not_one(&ref->count))
+ 		return;
+
+ 	__active_retire(ref);
+@@ -189,8 +189,8 @@ active_work(struct work_struct *wrk)
+ static void
+ active_retire(struct i915_active *ref)
+ {
+-	GEM_BUG_ON(!atomic_read(&ref->count));
+-	if (atomic_add_unless(&ref->count, -1, 1))
++	GEM_BUG_ON(!refcount_read(&ref->count));
++	if (refcount_dec_not_one(&ref->count))
+ 		return;
+
+ 	if (ref->flags & I915_ACTIVE_RETIRE_SLEEPS) {
+@@ -354,7 +354,7 @@ void __i915_active_init(struct i915_active *ref,
+ 	ref->cache = NULL;
+
+ 	init_llist_head(&ref->preallocated_barriers);
+-	atomic_set(&ref->count, 0);
++	refcount_set(&ref->count, 0);
+ 	__mutex_init(&ref->mutex, "i915_active", mkey);
+ 	__i915_active_fence_init(&ref->excl, NULL, excl_retire);
+ 	INIT_WORK(&ref->work, active_work);
+@@ -445,7 +445,7 @@ int i915_active_add_request(struct i915_active *ref, struct i915_request *rq)
+
+ 	if (replace_barrier(ref, active)) {
+ 		RCU_INIT_POINTER(active->fence, NULL);
+-		atomic_dec(&ref->count);
++		refcount_dec(&ref->count);
+ 	}
+ 	if (!__i915_active_fence_set(active, fence))
+ 		__i915_active_acquire(ref);
+@@ -488,14 +488,16 @@ i915_active_set_exclusive(struct i915_active *ref, struct dma_fence *f)
+ bool i915_active_acquire_if_busy(struct i915_active *ref)
+ {
+ 	debug_active_assert(ref);
+-	return atomic_add_unless(&ref->count, 1, 0);
++	return refcount_add_not_zero(1, &ref->count);
+ }
+
+ static void __i915_active_activate(struct i915_active *ref)
+ {
+ 	spin_lock_irq(&ref->tree_lock); /* __active_retire() */
+-	if (!atomic_fetch_inc(&ref->count))
++	if (!refcount_inc_not_zero(&ref->count)) {
++		refcount_inc(&ref->count);
+ 		debug_active_activate(ref);
++	}
+ 	spin_unlock_irq(&ref->tree_lock);
+ }
+
+@@ -757,7 +759,7 @@ int i915_sw_fence_await_active(struct i915_sw_fence *fence,
+ void i915_active_fini(struct i915_active *ref)
+ {
+ 	debug_active_fini(ref);
+-	GEM_BUG_ON(atomic_read(&ref->count));
++	GEM_BUG_ON(refcount_read(&ref->count));
+ 	GEM_BUG_ON(work_pending(&ref->work));
+ 	mutex_destroy(&ref->mutex);
+
+@@ -927,7 +929,7 @@ int i915_active_acquire_preallocate_barrier(struct i915_active *ref,
+
+ 		first = first->next;
+
+-		atomic_dec(&ref->count);
++		refcount_dec(&ref->count);
+ 		intel_engine_pm_put(barrier_to_engine(node));
+
+ 		kmem_cache_free(slab_cache, node);
+diff --git a/drivers/gpu/drm/i915/i915_active.h b/drivers/gpu/drm/i915/i915_active.h
+index 7eb44132183a..116c7c28466a 100644
+--- a/drivers/gpu/drm/i915/i915_active.h
++++ b/drivers/gpu/drm/i915/i915_active.h
+@@ -193,14 +193,14 @@ void i915_active_release(struct i915_active *ref);
+
+ static inline void __i915_active_acquire(struct i915_active *ref)
+ {
+-	GEM_BUG_ON(!atomic_read(&ref->count));
+-	atomic_inc(&ref->count);
++	GEM_BUG_ON(!refcount_read(&ref->count));
++	refcount_inc(&ref->count);
+ }
+
+ static inline bool
+ i915_active_is_idle(const struct i915_active *ref)
+ {
+-	return !atomic_read(&ref->count);
++	return !refcount_read(&ref->count);
+ }
+
+ void i915_active_fini(struct i915_active *ref);
+diff --git a/drivers/gpu/drm/i915/i915_active_types.h b/drivers/gpu/drm/i915/i915_active_types.h
+index b02a78ac87db..152a3a25d9f7 100644
+--- a/drivers/gpu/drm/i915/i915_active_types.h
++++ b/drivers/gpu/drm/i915/i915_active_types.h
+@@ -7,7 +7,7 @@
+ #ifndef _I915_ACTIVE_TYPES_H_
+ #define _I915_ACTIVE_TYPES_H_
+
+-#include <linux/atomic.h>
++#include <linux/refcount.h>
+ #include <linux/dma-fence.h>
+ #include <linux/llist.h>
+ #include <linux/mutex.h>
+@@ -23,7 +23,7 @@ struct i915_active_fence {
+ struct active_node;
+
+ struct i915_active {
+-	atomic_t count;
++	refcount_t count;
+ 	struct mutex mutex;
+
+ 	spinlock_t tree_lock;
+--
+2.34.1
+
+
+
