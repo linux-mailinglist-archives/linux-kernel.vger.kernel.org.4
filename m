@@ -2,62 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4F9655B48
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 22:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242FB655B53
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 22:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiLXVSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 16:18:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S230316AbiLXVYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 16:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiLXVSL (ORCPT
+        with ESMTP id S229655AbiLXVYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 16:18:11 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED3EA468
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:18:09 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id 124so5327830pfy.0
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:18:09 -0800 (PST)
+        Sat, 24 Dec 2022 16:24:20 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CC0AE61
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:24:19 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d3so7841776plr.10
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:24:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sladewatkins.net; s=googled;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=n0tEj2KHHLXlRs/DpFrhZLI9re/SQ5h+K4lQdCJqf/I=;
-        b=Eu7JWJQgRap8U5kq6yICeqv5y9X6K6LbFwtdlCPwE2B3a4ZEyTXIqC7BTmr4Sj5879
-         jgJrU9zMgnCDVRWV9+DnE8ejx4MwHkJbkJMAqRMz9u0QBfMkmEYrMRP6+C9O2HpiJ5gU
-         uQxQp7AN1ymhz2AMNbHK8K+rYPMMTR+kGMthRUcMWlWHSyhzwwZGw7Tr5djGL3+zOfN4
-         4qXOvJeAdHJts1GkZ7LOUttNb8ppSk5g6mAeDqyhDCIxNCG8fwVlLCKsbulL279cpPj8
-         sWv1GolkamqSCBKAkWiCWtXmKs/0P44hxgTVogfWnPQfPaNAjLI/5gx9jgeOX9tD2Bxm
-         ttNg==
+        bh=O7iUW2yvLkltdJ+802lqDxjH4K6OrXY0D1JeDdF3S9E=;
+        b=EZbEFdk/4VytSmEsom5jkRfrt7725OovIF6pGEOEMPd4rC1NNZYoDFjRjzeRUreWOL
+         ynDybyobQH27InarSzLpWQ9iyd/lmERXpIdRfUQeAQqb5chcYYHTDXDdRR845nXnJkE7
+         fn3nvIApiPI3z13VkU6Z1vkxDAz0pXgRpvhOTY3jKjeLZzQQwuH7eSODc27nbP04f4oH
+         4UMvrLlYZvJ2zI6k8hEI2Iq4Ih+1VTyOqyEdD7Xcox3YNrTkiZYdrun8Gkp2J13ONj/y
+         TOMaEDtq0H0sh56QLOUWA2+YIsHBVYy+Cswc9eMkyNVmOd6nI9HsWghT9t8r6HvpIEuc
+         WadQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=n0tEj2KHHLXlRs/DpFrhZLI9re/SQ5h+K4lQdCJqf/I=;
-        b=cnHeEbeZLM5LTRsHAHQLUJ8Rj+ot/Uw5EWcZz063+NcP1OuOR7QxP4S9eRQ968ELGk
-         qJvura61CWejoB+HzXjOFTiRvwgJVIenwDrJC0379qAKhFnVKPx7ez2kIq6qjbfaUTrO
-         hqj4Fiixpr9lUb48wdYK16gaOrj8cCBSnizobg5u/Eq7Z7Z1MKYrvgpv+mvu2PG1+0Eb
-         e1XOHOATiY1WUu64PkVGhkxhvUhCj6qyhx5IC8swAbNvSHbAeIu0l8kH6w7sSl9VniCH
-         LATZQPcFSx8RKiqM+a/5bXoin5QA+5Hc3XriqXDWM9LjWr2v/rs5B8zjhrA0+mtJLxdf
-         VruA==
-X-Gm-Message-State: AFqh2kpMaJEnlvzwIHQqOzOwEovqRxmWPX+ZYV7Q3i3gjY/+Lxpk2G3h
-        5NMEMatNQrgvObFeEcwQYozTxwoAbnbgIN3vSGcwAw==
-X-Google-Smtp-Source: AMrXdXudlR3eJWqL676SrUiUQ2KL6TdVyqZp+yAys+Xtb3e9mJru5OHtHaaQ4dUt6Bl6SBfXkPhTpieAoEN9ExP/jnw=
-X-Received: by 2002:a63:161d:0:b0:46f:6225:c2f9 with SMTP id
- w29-20020a63161d000000b0046f6225c2f9mr564361pgl.225.1671916689378; Sat, 24
- Dec 2022 13:18:09 -0800 (PST)
+        bh=O7iUW2yvLkltdJ+802lqDxjH4K6OrXY0D1JeDdF3S9E=;
+        b=fnHT7Qxk67OqSK2OtGByrTNBev8x6uCIGj+JuEfUwmxG5+Z15olAi9R5ieYUkASKd7
+         9pYAvOQanSo89hMuijZVtQJFWdZUmq7L1wlcJ9PcNe1Op7BZuYh3pP6i+8KkCP03Qz4Y
+         MwD7A+2wqcNQIf0TbcyV36ljTmHZO07Dd0Kauq7aOXMdTej9PRvmoCC//PNo/Ar/gs+w
+         D1f30tn6BudMYsQPJyjKqtC2k37fHUFej6WFRVIugmMiW84NA/gtLpjzgcqj72B5LWkr
+         TZcV5X3RjG4Ml5ytuDuC88miIryyJJKIaixlZO2jJTbq2/CBOrmqieSxE7PFsTstNJJN
+         EceA==
+X-Gm-Message-State: AFqh2koyQkr54jfNtfr6QWTnG/wf6RJPRtH04tLP5jDkGqtzQAFw7/Vk
+        1STkjRp+yfQ3u39SBm+PhhnUv+ysOrL65FhAciIXjg==
+X-Google-Smtp-Source: AMrXdXufSdzDq92KU6O4AEt6bGZwOQ4Kh8UTOP3WX1snLwgRIm8pHsfb3BR79NcWRxjinsFrfjD9knwbA/uHq88zD7I=
+X-Received: by 2002:a17:90a:b301:b0:218:fb5c:a762 with SMTP id
+ d1-20020a17090ab30100b00218fb5ca762mr1562383pjr.241.1671917057817; Sat, 24
+ Dec 2022 13:24:17 -0800 (PST)
 MIME-Version: 1.0
-References: <d7bb31547e9bbf6684801a7bbd857810@umbiko.net>
-In-Reply-To: <d7bb31547e9bbf6684801a7bbd857810@umbiko.net>
+References: <20221223132235.16149-1-anand@edgeble.ai> <CA+VMnFz8nQ2DnD6L9cPmoRqk+uohRqTEpak9g=WGJnSBoONmrA@mail.gmail.com>
+In-Reply-To: <CA+VMnFz8nQ2DnD6L9cPmoRqk+uohRqTEpak9g=WGJnSBoONmrA@mail.gmail.com>
 From:   Slade Watkins <srw@sladewatkins.net>
-Date:   Sat, 24 Dec 2022 16:17:58 -0500
-Message-ID: <CA+pv=HO1mvnN5XZHkWDjWr=NJHJZxjcstiY4qtJGJ6mfsqPfQw@mail.gmail.com>
-Subject: Re: rtla osnoise hist: average duration is always zero
-To:     Andreas Ziegler <br015@umbiko.net>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+Date:   Sat, 24 Dec 2022 16:24:07 -0500
+Message-ID: <CA+pv=HP8ckG8dsh-uZ6=k2nMGDGbw3gnh2b1ZWV31mzuYsjNig@mail.gmail.com>
+Subject: Re: [PATCHv1 linux-next 1/4] dt-bindings: net: rockchip-dwmac: fix
+ rv1126 compatible warning
+To:     Jagan Teki <jagan@edgeble.ai>
+Cc:     Anand Moon <anand@edgeble.ai>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        David Wu <david.wu@rock-chips.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -69,11 +77,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 24, 2022 at 7:48 AM Andreas Ziegler <br015@umbiko.net> wrote:
+On Sat, Dec 24, 2022 at 9:30 AM Jagan Teki <jagan@edgeble.ai> wrote:
 >
-> -- Observed in, but not limited to, Linux 6.1.1
+> On Fri, 23 Dec 2022 at 18:55, Anand Moon <anand@edgeble.ai> wrote:
+> >
+> > Fix compatible string for RV1126 gmac, and constrain it to
+> > be compatible with Synopsys dwmac 4.20a.
+> >
+> > fix below warning
+> > arch/arm/boot/dts/rv1126-edgeble-neu2-io.dtb: ethernet@ffc40000:
+> >                  compatible: 'oneOf' conditional failed, one must be fixed:
+> >         ['rockchip,rv1126-gmac', 'snps,dwmac-4.20a'] is too long
+> >         'rockchip,rv1126-gmac' is not one of ['rockchip,rk3568-gmac', 'rockchip,rk3588-gmac']
+> >
+> > Signed-off-by: Anand Moon <anand@edgeble.ai>
+> > Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+> > ---
+>
+> Please add Fixes above SoB.
 
-Wait, "but not limited to"? What does that mean? Are there more
-versions affected?
+That and, shouldn't the Signed-off-by: tags be reversed if Anand is
+sending this?
+
+Confused,
 
 -- Slade
