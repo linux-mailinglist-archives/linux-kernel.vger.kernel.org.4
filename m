@@ -2,213 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6ED3655A28
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 13:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 256A3655A2C
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 13:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiLXMnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 07:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S230393AbiLXMyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 07:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiLXMnV (ORCPT
+        with ESMTP id S229485AbiLXMyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 07:43:21 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AE3B848
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 04:43:20 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id gv5-20020a17090b11c500b00223f01c73c3so9328927pjb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 04:43:20 -0800 (PST)
+        Sat, 24 Dec 2022 07:54:01 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB976D100
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 04:53:59 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id 1so10343144lfz.4
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 04:53:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hku3trGz8x4JXrmOHI8NFJ1bCCPcWV/c0fRyuHQ+QbI=;
-        b=brEQNuy8dUoV4T2nzqlhHgh9O/toBGWE33wVpTv35fO3kUX9tYqJ7gNoQLW/RJ0A1p
-         zLqS21XURtAlB+ZAfKJiLLGTesl5zCWBOV1mta8jNZapMAcQHrdMI9tXV2wvuuM5+jZ0
-         WXAxcZMfe9ue2iltsVOsVSTkmNzhsn5URZH6Z1h+5wcqzcbqbJak2omvjz61EoJapRPJ
-         VKyo+C33ceI6gld7912RkkLRTDkUyYao2nKLiM/rGWVBarrXLE7wFYnbd0DNV/HlPCjL
-         oeo8TslIR9R31Ag9ltolKEXGRiS9SEfITCyJ+FRgvSB80G6UOq1rRr1uY1df+IAjc20C
-         BKIQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zv9IznoKeqq4XhdztR/BEG3Np/4v5us6ivTnhTur1yY=;
+        b=VEhDA7Skf/Euj6CB+4WOCDIlaiEh0+vrmGApjwwGSqvB0tFz/UXpDq0ZiY4SYLaGW7
+         F+RlU2Tv3bcdEnYc/wfC/3+iq8KSub7YapZDDv/NbMQndGiukFR+ngew9IuA8LRZ85yO
+         zO5uuoASGTB7c/KJ5vySrRPIXE1aPQEcwdEyDnEMRm0elCf5sbEbs3GUIMaFnTZn7+FJ
+         ZeJJmbqTCSWxDiZWPEcam5KztnZnB4KO+ENgQwIjCEJAJMMyDD59ShhSDVRFPXn61Xh9
+         TjwT86HXVR1Hw0ziAJ6TjlWpHchzxGc3JO20eHOl5BHtbpDDe0TBQZ6hetr4nmlQJV8J
+         b+Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hku3trGz8x4JXrmOHI8NFJ1bCCPcWV/c0fRyuHQ+QbI=;
-        b=X2Q0w2Ixv6nRjdEqmPy8++1DrZjlkKQnxr2AORRIBgVqU1eRtyk6kIr/f3Kzyw00kW
-         7fSxlIgEDeF5r30l/5ppjlDybU4k/bVzgGLOV8ucoon/QlfmwXCufGTizY3JHSUxT3/+
-         /6NBEF3Dw3NtBIXG2fiCu9nBngXuZxJcrKzSi8HpWHiV2xrj+7/HAmmVjY2Xt4vMZY/v
-         fdjl46ZIqjrS4ggonnbuE5VaphKdUjmvdPPcriB+8Ce58sPxjDnL4PWsUkD7soW8FifH
-         VbYs+tlDmipu0U1kAUCAkxyK5gztKm4ZWUp1cs1/8dN/KO/DidRSARZbrWLmwQOmQqgT
-         NLAQ==
-X-Gm-Message-State: AFqh2kol8sTQeXYAUjkZjOKxdXRtMJ/ox3BbUgkA1n+Hs3IPzVBujcGT
-        vp42rT5IIXkZH2QXUhFwugA=
-X-Google-Smtp-Source: AMrXdXsLbN964DC73bKkCFHB9NpvSSBc7/OcD9P/Bzd0q7V3Xd7gQBPkhgxvPPrXzmBAKsd1NNgPHw==
-X-Received: by 2002:a17:902:6b4b:b0:189:8790:73b1 with SMTP id g11-20020a1709026b4b00b00189879073b1mr23597014plt.65.1671885799706;
-        Sat, 24 Dec 2022 04:43:19 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-28.three.co.id. [180.214.232.28])
-        by smtp.gmail.com with ESMTPSA id bf4-20020a170902b90400b00186b7443082sm4013786plb.195.2022.12.24.04.43.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Dec 2022 04:43:19 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 5029010056A; Sat, 24 Dec 2022 19:43:15 +0700 (WIB)
-Date:   Sat, 24 Dec 2022 19:43:15 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jeff Chua <jeff.chua.linux@gmail.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: Re: f2fs write error Linux v6.2
-Message-ID: <Y6bz4wOC0nwu2yGU@debian.me>
-References: <CAAJw_Ztzyh-GNTJYpXbA0CeJv2Rz=fLZKE6_Q=7JMmM+s9yHXQ@mail.gmail.com>
- <CAAJw_Ztb0mJVkHtBhryf=9g8CA0fZZRa8HVio8GCGUSLOvqa7A@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zv9IznoKeqq4XhdztR/BEG3Np/4v5us6ivTnhTur1yY=;
+        b=KpVxXqvUjqJ0WP1Qd0lAEEyD7ozTL8R/sWZijzeTvh1rGDhzD7p2HeM8wYCTVwA3ZU
+         GRhxtQDGdSqRYV8vikwtJHyN7wgM1s/GisInAO2N+0ak38Pjrynh9SpJBm12//V07vcc
+         +6cDim0GFCfVMI/jJ7ZekI1ePgLRFUvpNmQJuXEQX0FZpO2q/WLZCHD+/CW+xCTf3TEa
+         J7CUom7zDam7c/fdc/qst45RP0393iAPd9xByf4FBP6VWXt955rNRszS8bxt3+AfyT4/
+         V5BZVumWF+SxkMe08lXVNmZ3A7IK4Vl7DDc/aNeLyLWcVroPyMZoHIcsUziRCMoYpFDk
+         xb7g==
+X-Gm-Message-State: AFqh2krwP8ySE8FiqUT+txI9z9yCjkUal1xl8EzImt/57Mgl+yEVUIvZ
+        ucaffBdypPMwlM8348y7x0BQng==
+X-Google-Smtp-Source: AMrXdXuodh9FHymbmpohqNn+aN73HnLyNMGQMfaM4A8CMcQthOis9+U3w2QaUyRVjC6UF3jQ0FdJzQ==
+X-Received: by 2002:ac2:5e9d:0:b0:4b6:ec97:a629 with SMTP id b29-20020ac25e9d000000b004b6ec97a629mr3352154lfq.35.1671886438132;
+        Sat, 24 Dec 2022 04:53:58 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id x30-20020a0565123f9e00b0048a9e899693sm952658lfa.16.2022.12.24.04.53.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Dec 2022 04:53:57 -0800 (PST)
+Message-ID: <9d2c05f6-af5a-2d79-02ea-85c49e244957@linaro.org>
+Date:   Sat, 24 Dec 2022 13:53:56 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="73V9cWVAnlvQOfAi"
-Content-Disposition: inline
-In-Reply-To: <CAAJw_Ztb0mJVkHtBhryf=9g8CA0fZZRa8HVio8GCGUSLOvqa7A@mail.gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 2/3] dt-bindings: leds: add worldsemi,ws2812b
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-leds@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221212045558.69602-1-gch981213@gmail.com>
+ <20221212045558.69602-3-gch981213@gmail.com>
+ <c592dd31-5e9a-c2a2-1c70-46b7cffa9c5d@linaro.org>
+ <Y6XjHNCLXY9s1IOF@duo.ucw.cz>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y6XjHNCLXY9s1IOF@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 23/12/2022 18:19, Pavel Machek wrote:
+> Hi!
+> 
+>>> Add dt binding schema for WorldSemi WS2812B driven using SPI
+>>> bus.
+>>>
+>>> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+>>> ---
+>>> Changes since v1:
+>>> remove linux driver reference from description
+>>> remove some obvious descriptions
+>>> fix unit address regex in multi-led property
+>>> drop various minItems
+>>> add maxItems = 1 to reg
+>>> fix node names and property orders in binding example
+>>> drop -spi from compatible string
+>>> add default-brightness
+>>>
+>>> Change since v2:
+>>> drop "this patch" from commit message
+>>> rename leds to led-controller
+>>> drop default-brightness and default-intensity
+>>>
+>>> Change since v3:
+>>> reword commit title
+>>>
+>>>  .../bindings/leds/worldsemi,ws2812b.yaml      | 116 ++++++++++++++++++
+>>>  1 file changed, 116 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+>>> new file mode 100644
+>>> index 000000000000..548c05ac3d31
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+>>> @@ -0,0 +1,116 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/leds/worldsemi,ws2812b.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: WS2812B LEDs driven using SPI
+>>> +
+>>> +maintainers:
+>>> +  - Chuanhong Guo <gch981213@gmail.com>
+>>> +
+>>> +description: |
+>>> +  WorldSemi WS2812B is a individually addressable LED chip that can be chained
+>>> +  together and controlled individually using a single wire.
+>>> +  This binding describes a chain of WS2812B LEDs connected to the SPI MOSI pin.
+>>> +  Typical setups includes connecting the data pin of the LED chain to MOSI as
+>>> +  the only device or using CS and MOSI with a tri-state voltage-level shifter
+>>> +  for the data pin.
+>>> +  The SPI frequency needs to be 2.105MHz~2.85MHz for the timing to be correct
+>>> +  and the controller needs to send all the bytes continuously.
+>>> +
+>>> +allOf:
+>>> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: worldsemi,ws2812b
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  spi-max-frequency:
+>>> +    minimum: 2105000
+>>> +    maximum: 2850000
+>>> +
+>>> +  "#address-cells":
+>>> +    const: 1
+>>> +
+>>> +  "#size-cells":
+>>> +    const: 0
+>>> +
+>>> +patternProperties:
+>>> +  "^multi-led@[0-9a-f]+$":
+>>> +    type: object
+>>> +    $ref: leds-class-multicolor.yaml#
+>>> +    unevaluatedProperties: false
+>>> +
+>>> +    properties:
+>>> +      color-index:
+>>> +        description: |
+>>> +          A 3-item array specifying color of each components in this LED. It
+>>> +          should be one of the LED_COLOR_ID_* prefixed definitions from the
+>>> +          header include/dt-bindings/leds/common.h. Defaults to
+>>> +          <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>
+>>> +          if unspecified.
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +        maxItems: 3
+>>
+>> In general I am fine with it, although there is still question for
+>> adding more multi-color defines in binding headers to replace this
+>> property - GRB/RBG/GBR and even more for RGBW.
+>>
+>> Pavel, Lee, any thoughts from your side?
+> 
+> This really needs to mention the name this hardware is known as -- I
+> believe it is NeoPixel.
 
---73V9cWVAnlvQOfAi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We wait here for feedback on colors... The binding is re-implementing
+color, just because of combinations GRB/RBG/GBR, which could be achieved
+with new color defines.
 
-On Sat, Dec 24, 2022 at 01:48:55PM +0800, Jeff Chua wrote:
-> Got the following error in latest linux-6.2-git with just vim (:w
-> file1). No problem with linux-6.1.1
->=20
-> 2022-12-22T14:09:51.419409+08:00 [localhost] kernel: BUG: kernel NULL
-> pointer dereference, address: 0000000000000024
-> 2022-12-22T14:09:51.419422+08:00 [localhost] kernel: #PF: supervisor
-> write access in kernel mode
-> 2022-12-22T14:09:51.419423+08:00 [localhost] kernel: #PF:
-> error_code(0x0002) - not-present page
-> 2022-12-22T14:09:51.419424+08:00 [localhost] kernel: PGD 147b63067 P4D
-> 147b63067 PUD 177d5c067 PMD 0
-> 2022-12-22T14:09:51.419424+08:00 [localhost] kernel: Oops: 0002 [#7] PREE=
-MPT SMP
-> 2022-12-22T14:09:51.419428+08:00 [localhost] kernel: CPU: 6 PID: 22891
-> Comm: vi Tainted: G     UD            6.1.0 #11
-> 2022-12-22T14:09:51.419428+08:00 [localhost] kernel: Hardware name:
-> LENOVO 21CCS1GL00/21CCS1GL00, BIOS N3AET69W (1.34 ) 12/05/2022
-> 2022-12-22T14:09:51.419428+08:00 [localhost] kernel: RIP:
-> 0010:f2fs_issue_flush+0x10e/0x180
-> 2022-12-22T14:09:51.419429+08:00 [localhost] kernel: Code: ba 01 00 00
-> 00 be 03 00 00 00 e8 ad e8 d5 ff 48 83 3b 00 74 1e 48 89 e7 e8 7f c1
-> 84 00 f0 ff 4b 24 8b 44 24 2c e9 66 ff ff ff <f0> ff 43 24 e9 4a ff ff
-> ff 45 31 ff 4c 87 7b 28 4d 85 ff 74 d6 44
-> 2022-12-22T14:09:51.419429+08:00 [localhost] kernel: RSP:
-> 0018:ffffc90000b13df0 EFLAGS: 00010246
-> 2022-12-22T14:09:51.419430+08:00 [localhost] kernel: RAX:
-> ffff888101caccc0 RBX: 0000000000000000 RCX: 0000000000000000
-> 2022-12-22T14:09:51.419430+08:00 [localhost] kernel: RDX:
-> 0000000010000088 RSI: 000000000005a844 RDI: ffff8881027bf000
-> 2022-12-22T14:09:51.419431+08:00 [localhost] kernel: RBP:
-> ffff8881027bf000 R08: 0000000000000000 R09: ffff8881027bf2a8
-> 2022-12-22T14:09:51.419431+08:00 [localhost] kernel: R10:
-> 0000000000000000 R11: 0000000000000000 R12: 0000000000000024
-> 2022-12-22T14:09:51.419432+08:00 [localhost] kernel: R13:
-> 000000000005a844 R14: 000000000005a844 R15: 0000000000000000
-> 2022-12-22T14:09:51.419432+08:00 [localhost] kernel: FS:
-> 00007ff03fdf0b80(0000) GS:ffff88883f380000(0000)
-> knlGS:0000000000000000
-> 2022-12-22T14:09:51.419432+08:00 [localhost] kernel: CS:  0010 DS:
-> 0000 ES: 0000 CR0: 0000000080050033
-> 2022-12-22T14:09:51.419433+08:00 [localhost] kernel: CR2:
-> 0000000000000024 CR3: 000000013d64e006 CR4: 0000000000770ee0
-> 2022-12-22T14:09:51.419433+08:00 [localhost] kernel: PKRU: 55555554
-> 2022-12-22T14:09:51.419434+08:00 [localhost] kernel: Call Trace:
-> 2022-12-22T14:09:51.419434+08:00 [localhost] kernel: <TASK>
-> 2022-12-22T14:09:51.419435+08:00 [localhost] kernel: ?
-> preempt_count_add+0x63/0x90
-> 2022-12-22T14:09:51.419435+08:00 [localhost] kernel: ?
-> preempt_count_add+0x63/0x90
-> 2022-12-22T14:09:51.419435+08:00 [localhost] kernel: ?
-> preempt_count_add+0x63/0x90
-> 2022-12-22T14:09:51.419436+08:00 [localhost] kernel:
-> f2fs_do_sync_file+0x489/0x650
-> 2022-12-22T14:09:51.419436+08:00 [localhost] kernel: __x64_sys_fsync+0x2f=
-/0x60
-> 2022-12-22T14:09:51.419437+08:00 [localhost] kernel: do_syscall_64+0x35/0=
-x80
-> 2022-12-22T14:09:51.419437+08:00 [localhost] kernel:
-> entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> 2022-12-22T14:09:51.419438+08:00 [localhost] kernel: RIP: 0033:0x7ff03fee=
-f20b
-> 2022-12-22T14:09:51.419438+08:00 [localhost] kernel: Code: 3d 00 f0 ff
-> ff 77 48 c3 0f 1f 80 00 00 00 00 48 83 ec 18 89 7c 24 0c e8 a3 a2 f8
-> ff 8b 7c 24 0c 41 89 c0 b8 4a 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35
-> 44 89 c7 89 44 24 0c e8 01 a3 f8 ff 8b 44
-> 2022-12-22T14:09:51.419438+08:00 [localhost] kernel: RSP:
-> 002b:00007ffe6ecca530 EFLAGS: 00000293 ORIG_RAX: 000000000000004a
-> 2022-12-22T14:09:51.419439+08:00 [localhost] kernel: RAX:
-> ffffffffffffffda RBX: 0000000000000001 RCX: 00007ff03feef20b
-> 2022-12-22T14:09:51.419439+08:00 [localhost] kernel: RDX:
-> 0000000000000002 RSI: 0000000000000002 RDI: 0000000000000003
-> 2022-12-22T14:09:51.419440+08:00 [localhost] kernel: RBP:
-> 0000000000002000 R08: 0000000000000000 R09: 00000000024bcfb0
-> 2022-12-22T14:09:51.419440+08:00 [localhost] kernel: R10:
-> fffffffffffff4bf R11: 0000000000000293 R12: 00000000000006b7
-> 2022-12-22T14:09:51.419440+08:00 [localhost] kernel: R13:
-> 000000000000003d R14: 0000000000000000 R15: 00000000024a1680
-> 2022-12-22T14:09:51.419441+08:00 [localhost] kernel: </TASK>
-> 2022-12-22T14:09:51.419441+08:00 [localhost] kernel: Modules linked
-> in: [last unloaded: ecc]
-> 2022-12-22T14:09:51.419442+08:00 [localhost] kernel: CR2: 0000000000000024
-> 2022-12-22T14:09:51.419442+08:00 [localhost] kernel: ---[ end trace
-> 0000000000000000 ]---
-> 2022-12-22T14:09:51.419443+08:00 [localhost] kernel: RIP:
-> 0010:f2fs_issue_flush+0x10e/0x180
-> 2022-12-22T14:09:51.419443+08:00 [localhost] kernel: Code: ba 01 00 00
-> 00 be 03 00 00 00 e8 ad e8 d5 ff 48 83 3b 00 74 1e 48 89 e7 e8 7f c1
-> 84 00 f0 ff 4b 24 8b 44 24 2c e9 66 ff ff ff <f0> ff 43 24 e9 4a ff ff
-> ff 45 31 ff 4c 87 7b 28 4d 85 ff 74 d6 44
-> 2022-12-22T14:09:51.419443+08:00 [localhost] kernel: RSP:
-> 0018:ffffc90003903df0 EFLAGS: 00010246
-> 2022-12-22T14:09:51.419444+08:00 [localhost] kernel: RAX:
-> ffff888100106d80 RBX: 0000000000000000 RCX: 0000000000000000
-> 2022-12-22T14:09:51.419444+08:00 [localhost] kernel: RDX:
-> 0000000010000088 RSI: 0000000000b0e2ba RDI: ffff888116227000
-> 2022-12-22T14:09:51.419445+08:00 [localhost] kernel: RBP:
-> ffff888116227000 R08: 0000000000000000 R09: ffff8881162272a8
-> 2022-12-22T14:09:51.419445+08:00 [localhost] kernel: R10:
-> 0000000000000000 R11: 0000000000000000 R12: 0000000000000024
-> 2022-12-22T14:09:51.419445+08:00 [localhost] kernel: R13:
-> 0000000000b0e2ba R14: 0000000000b0e2ba R15: 0000000000000000
-> 2022-12-22T14:09:51.419446+08:00 [localhost] kernel: FS:
-> 00007ff03fdf0b80(0000) GS:ffff88883f380000(0000)
-> knlGS:0000000000000000
-> 2022-12-22T14:09:51.419446+08:00 [localhost] kernel: CS:  0010 DS:
-> 0000 ES: 0000 CR0: 0000000080050033
-> 2022-12-22T14:09:51.419446+08:00 [localhost] kernel: CR2:
-> 0000000000000024 CR3: 000000013d64e006 CR4: 0000000000770ee0
-> 2022-12-22T14:09:51.419447+08:00 [localhost] kernel: PKRU: 55555554
+Best regards,
+Krzysztof
 
-Thanks for the report! I'm adding this to regzbot:
-
-#regzbot ^introduced v6.1.1..v6.2
-#regzbot title f2fs: kernel NULL pointer dereference when writing file
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---73V9cWVAnlvQOfAi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY6bz3gAKCRD2uYlJVVFO
-owUUAQCppJJJG4N/qhLBTOEB/w+WcOZaHxDB5LbG9H8iI112VAD8C4I8cLR6ojGF
-YOsgfnR9fQFRH2NX8sLkmR/ynHm8FQk=
-=YH4j
------END PGP SIGNATURE-----
-
---73V9cWVAnlvQOfAi--
