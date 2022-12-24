@@ -2,218 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72322655B64
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 22:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8B5655B69
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 23:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiLXVui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 16:50:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
+        id S230294AbiLXWCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 17:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLXVuf (ORCPT
+        with ESMTP id S229445AbiLXWB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 16:50:35 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54A2BC8A
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:50:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671918615; bh=3RMRR8G3aQrYrRNzBtDZFRRHfOs5HasLm+7fpYUXFwE=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=d/Etw4X6d93jWGYSzsp6rv9fqXVnPLxVIC2NnQu6nBgnbV+7zOMV7Vx7EX98dM6uz
-         NTDIZDg3HujpuLm14VUBP7F62msc0ixOr/a6qwOLmwFzu2wWJteuiuMyXRj3g0c1m+
-         NphzZl/wHIScbUXRf9xxkzR7s8yRRdn5W96wkQgM=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 24 Dec 2022 22:50:15 +0100 (CET)
-X-EA-Auth: 4MfYGIvEIKR+4dpyaHgInVQhNCzEG5VrXxDsSwjZeiLhfOmGuLNBhBjxVhFiQgk3p6BWsoLG3Mg7GfMSDYbYv5g8lOMevslW
-Date:   Sun, 25 Dec 2022 03:20:08 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] drm/i915: convert i915_active.count from atomic_t to
- refcount_t
-Message-ID: <Y6d0EDmyqJILVoRw@qemulion>
+        Sat, 24 Dec 2022 17:01:59 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674E2655C
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 14:01:58 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g13so11478077lfv.7
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 14:01:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c2Wdg2w70NZ3btt5KhGF10ut/ZEVWqlfNtQcOg6cBTA=;
+        b=T2V2ee1L8pTp81pYKXnG+LGVAP/nuyeju2gXg+ggWGlZ0KQbVV5M/guSwNo30N2RkQ
+         VPFlOPJJoEK7+mEuF/O6yywL5I3mk7/DZzxqZ/q+KwDmvxc/M9N/0Fp13IZpJSvoOlY9
+         QqWmbRkpvTM9rKDWTy1/1xwOOAPNBj7hIBwLe+voU9MRXzG88WgfPEV3hUkcdMmbbFFE
+         EWCa9E0aPKz5QPtJLGuUgHU5slZOdKslS2eEdmSUJCk9Rglf6/AJwZqBaTo9A/L/zL85
+         RKzZviEGdJjXbsoGFnD68MCD+cS3DGY/tt6OJ7sG1t+8+z8hXNON0XoEVphV4Upealxo
+         cUxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c2Wdg2w70NZ3btt5KhGF10ut/ZEVWqlfNtQcOg6cBTA=;
+        b=MGkSwd6AdTkqiZSkbDCzIl1ixbWktrBjdmlcZeumUIvm7QYQjc9FogfLf8vE+uG1uB
+         9V36COu4FxQllX1pkpqCjpWOUQ9RrGYZ46PM8V5Nu3DKrjUECpyjvm50qUnbfqXrc+tz
+         zfrJTsmgi2KGuU5fyHINEi0PQnPhMxElhrumLW8328bz/wJIIlNOMUaFcx53L7Hr+pYP
+         x6I7v6dDvoPQfj6WyVzNLFoucJye2DNzyCQXaDvL3trPNDJ4r0Cuymyzn3wp6l/wTNzW
+         xcJglUQKqYWAXIw5sr5B+SFycvTu6Xw02jaUJOgCkrThe+i5CX39RQ7OYLYFdzkN+Aj7
+         ze4Q==
+X-Gm-Message-State: AFqh2krtAxizm2Oc/U016UEJl/D78Wn6i+euP/4FEtG3QpeoMJViq2zM
+        8J7UiEEy6tc2jC3n71ByERc=
+X-Google-Smtp-Source: AMrXdXs4tJQwnAKp32P/PRxoMaQVUKIGMJpB9UtCVF4KRKekYvmvJjE8kOD4oRBCVbvQTO9PuyeRGQ==
+X-Received: by 2002:a05:6512:c24:b0:4b5:964d:499b with SMTP id z36-20020a0565120c2400b004b5964d499bmr4688117lfu.34.1671919316624;
+        Sat, 24 Dec 2022 14:01:56 -0800 (PST)
+Received: from [10.0.0.100] (host-185-69-38-8.kaisa-laajakaista.fi. [185.69.38.8])
+        by smtp.gmail.com with ESMTPSA id y1-20020a0565123f0100b00492e3a8366esm1116625lfa.9.2022.12.24.14.01.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Dec 2022 14:01:56 -0800 (PST)
+Message-ID: <66ef2f70-9405-fe09-7927-143084286d1b@gmail.com>
+Date:   Sun, 25 Dec 2022 00:03:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+To:     Nicolas Frayer <nfrayer@baylibre.com>, nm@ti.com,
+        ssantosh@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        grygorii.strashko@ti.com, khilman@baylibre.com,
+        mkorpershoek@baylibre.com
+References: <20221221200513.676744-1-nfrayer@baylibre.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+Subject: Re: [PATCH] soc: ti: k3-ringacc: Add try_module_get() to
+ k3_dmaring_request_dual_ring()
+In-Reply-To: <20221221200513.676744-1-nfrayer@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The refcount_* APIs are designed to address known issues with the
-atomic_t APIs for reference counting. They provide following distinct
-advantages:
-   - protect the reference counters from overflow/underflow
-   - avoid use-after-free errors
-   - provide improved memory ordering guarantee schemes
-   - neater and safer.
-Hence, convert the atomic_t count member variable and associated
-atomic_*() API calls to equivalent refcount_t type and refcount_*() API
-calls.
+Hi Nicolas,
 
-This patch proposal address the following warnings generated by
-the atomic_as_refcounter.cocci coccinelle script
-	atomic_add_unless
+On 21/12/2022 22:05, Nicolas Frayer wrote:
+> When the k3 ring accelerator driver has been modified to add module build
+> support, try_module_get() and module_put() have been added to update the
+> module refcnt. One code path has not been updated and it has introduced
+> an issue where the refcnt is decremented by module_put() in
+> k3_ringacc_ring_free() without being incremented previously.
+> Adding try_module_get() to k3_dmaring_request_dual_ring() ensures the
+> refcnt is kept up to date.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Please note: Proposed changes are compile tested only.
+Good catch!
+I had never had my hands on a device with DMSS (BCDMA/PKDMA) and the
+original module support was developed and tested on devices with UDMA.
 
- drivers/gpu/drm/i915/i915_active.c       | 24 +++++++++++++-----------
- drivers/gpu/drm/i915/i915_active.h       |  6 +++---
- drivers/gpu/drm/i915/i915_active_types.h |  4 ++--
- 3 files changed, 18 insertions(+), 16 deletions(-)
+can you add the fixes tag along with my reviewed by tag?
 
-diff --git a/drivers/gpu/drm/i915/i915_active.c b/drivers/gpu/drm/i915/i915_active.c
-index 7412abf166a8..4a8d873b4347 100644
---- a/drivers/gpu/drm/i915/i915_active.c
-+++ b/drivers/gpu/drm/i915/i915_active.c
-@@ -133,7 +133,7 @@ __active_retire(struct i915_active *ref)
- 	GEM_BUG_ON(i915_active_is_idle(ref));
+Fixes: c07f216a8b72 ("soc: ti: k3-ringacc: Allow the driver to be built as module")
+Reviewed-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 
- 	/* return the unused nodes to our slabcache -- flushing the allocator */
--	if (!atomic_dec_and_lock_irqsave(&ref->count, &ref->tree_lock, flags))
-+	if (!refcount_dec_and_lock_irqsave(&ref->count, &ref->tree_lock, &flags))
- 		return;
+> 
+> Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
+> ---
+>   drivers/soc/ti/k3-ringacc.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/soc/ti/k3-ringacc.c b/drivers/soc/ti/k3-ringacc.c
+> index e01e4d815230a..8f131368a7586 100644
+> --- a/drivers/soc/ti/k3-ringacc.c
+> +++ b/drivers/soc/ti/k3-ringacc.c
+> @@ -406,6 +406,11 @@ static int k3_dmaring_request_dual_ring(struct k3_ringacc *ringacc, int fwd_id,
+>   
+>   	mutex_lock(&ringacc->req_lock);
+>   
+> +	if (!try_module_get(ringacc->dev->driver->owner)) {
+> +		ret = -EINVAL;
+> +		goto err_module_get;
+> +	}
+> +
+>   	if (test_bit(fwd_id, ringacc->rings_inuse)) {
+>   		ret = -EBUSY;
+>   		goto error;
+> @@ -421,6 +426,8 @@ static int k3_dmaring_request_dual_ring(struct k3_ringacc *ringacc, int fwd_id,
+>   	return 0;
+>   
+>   error:
+> +	module_put(ringacc->dev->driver->owner);
+> +err_module_get:
+>   	mutex_unlock(&ringacc->req_lock);
+>   	return ret;
+>   }
 
- 	GEM_BUG_ON(rcu_access_pointer(ref->excl.fence));
-@@ -179,8 +179,8 @@ active_work(struct work_struct *wrk)
- {
- 	struct i915_active *ref = container_of(wrk, typeof(*ref), work);
-
--	GEM_BUG_ON(!atomic_read(&ref->count));
--	if (atomic_add_unless(&ref->count, -1, 1))
-+	GEM_BUG_ON(!refcount_read(&ref->count));
-+	if (refcount_dec_not_one(&ref->count))
- 		return;
-
- 	__active_retire(ref);
-@@ -189,8 +189,8 @@ active_work(struct work_struct *wrk)
- static void
- active_retire(struct i915_active *ref)
- {
--	GEM_BUG_ON(!atomic_read(&ref->count));
--	if (atomic_add_unless(&ref->count, -1, 1))
-+	GEM_BUG_ON(!refcount_read(&ref->count));
-+	if (refcount_dec_not_one(&ref->count))
- 		return;
-
- 	if (ref->flags & I915_ACTIVE_RETIRE_SLEEPS) {
-@@ -354,7 +354,7 @@ void __i915_active_init(struct i915_active *ref,
- 	ref->cache = NULL;
-
- 	init_llist_head(&ref->preallocated_barriers);
--	atomic_set(&ref->count, 0);
-+	refcount_set(&ref->count, 0);
- 	__mutex_init(&ref->mutex, "i915_active", mkey);
- 	__i915_active_fence_init(&ref->excl, NULL, excl_retire);
- 	INIT_WORK(&ref->work, active_work);
-@@ -445,7 +445,7 @@ int i915_active_add_request(struct i915_active *ref, struct i915_request *rq)
-
- 	if (replace_barrier(ref, active)) {
- 		RCU_INIT_POINTER(active->fence, NULL);
--		atomic_dec(&ref->count);
-+		refcount_dec(&ref->count);
- 	}
- 	if (!__i915_active_fence_set(active, fence))
- 		__i915_active_acquire(ref);
-@@ -488,14 +488,16 @@ i915_active_set_exclusive(struct i915_active *ref, struct dma_fence *f)
- bool i915_active_acquire_if_busy(struct i915_active *ref)
- {
- 	debug_active_assert(ref);
--	return atomic_add_unless(&ref->count, 1, 0);
-+	return refcount_add_not_zero(1, &ref->count);
- }
-
- static void __i915_active_activate(struct i915_active *ref)
- {
- 	spin_lock_irq(&ref->tree_lock); /* __active_retire() */
--	if (!atomic_fetch_inc(&ref->count))
-+	if (!refcount_inc_not_zero(&ref->count)) {
-+		refcount_inc(&ref->count);
- 		debug_active_activate(ref);
-+	}
- 	spin_unlock_irq(&ref->tree_lock);
- }
-
-@@ -757,7 +759,7 @@ int i915_sw_fence_await_active(struct i915_sw_fence *fence,
- void i915_active_fini(struct i915_active *ref)
- {
- 	debug_active_fini(ref);
--	GEM_BUG_ON(atomic_read(&ref->count));
-+	GEM_BUG_ON(refcount_read(&ref->count));
- 	GEM_BUG_ON(work_pending(&ref->work));
- 	mutex_destroy(&ref->mutex);
-
-@@ -927,7 +929,7 @@ int i915_active_acquire_preallocate_barrier(struct i915_active *ref,
-
- 		first = first->next;
-
--		atomic_dec(&ref->count);
-+		refcount_dec(&ref->count);
- 		intel_engine_pm_put(barrier_to_engine(node));
-
- 		kmem_cache_free(slab_cache, node);
-diff --git a/drivers/gpu/drm/i915/i915_active.h b/drivers/gpu/drm/i915/i915_active.h
-index 7eb44132183a..116c7c28466a 100644
---- a/drivers/gpu/drm/i915/i915_active.h
-+++ b/drivers/gpu/drm/i915/i915_active.h
-@@ -193,14 +193,14 @@ void i915_active_release(struct i915_active *ref);
-
- static inline void __i915_active_acquire(struct i915_active *ref)
- {
--	GEM_BUG_ON(!atomic_read(&ref->count));
--	atomic_inc(&ref->count);
-+	GEM_BUG_ON(!refcount_read(&ref->count));
-+	refcount_inc(&ref->count);
- }
-
- static inline bool
- i915_active_is_idle(const struct i915_active *ref)
- {
--	return !atomic_read(&ref->count);
-+	return !refcount_read(&ref->count);
- }
-
- void i915_active_fini(struct i915_active *ref);
-diff --git a/drivers/gpu/drm/i915/i915_active_types.h b/drivers/gpu/drm/i915/i915_active_types.h
-index b02a78ac87db..152a3a25d9f7 100644
---- a/drivers/gpu/drm/i915/i915_active_types.h
-+++ b/drivers/gpu/drm/i915/i915_active_types.h
-@@ -7,7 +7,7 @@
- #ifndef _I915_ACTIVE_TYPES_H_
- #define _I915_ACTIVE_TYPES_H_
-
--#include <linux/atomic.h>
-+#include <linux/refcount.h>
- #include <linux/dma-fence.h>
- #include <linux/llist.h>
- #include <linux/mutex.h>
-@@ -23,7 +23,7 @@ struct i915_active_fence {
- struct active_node;
-
- struct i915_active {
--	atomic_t count;
-+	refcount_t count;
- 	struct mutex mutex;
-
- 	spinlock_t tree_lock;
---
-2.34.1
-
-
-
+-- 
+Péter
