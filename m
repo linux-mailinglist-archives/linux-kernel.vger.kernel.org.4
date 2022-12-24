@@ -2,128 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAC5655971
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E208655976
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiLXIvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 03:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
+        id S229534AbiLXIx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 03:53:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiLXIvQ (ORCPT
+        with ESMTP id S229445AbiLXIxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 03:51:16 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C013B634A;
-        Sat, 24 Dec 2022 00:51:13 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BO8l2R0008795;
-        Sat, 24 Dec 2022 08:50:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=OW+eLGSz1Heim9HIqKFjzlkSom2T4l1aNalgqaBNqGk=;
- b=pc/T0q5BtY5mgFJUeBeTpYbgJT8izfPC37HG0gDiBTDc+mHpBJebnrqoO0C5miXNQwq2
- ku9rsCBQFCFWXp4xHXMbh/N+JrAjfs6NjG7iwaVr+85yca4YatIGay6dQEct1GByzYME
- eXt/ptb3/+mGz/PIlXcaHTGmaNip8HKxxYlatViyslFvQshEmXi0kWFHSEL9GP2+3BAb
- cQaE8WdD7vhCNTnHUxQD4A9ywTy+IIlTGNHWqil4ZQELTEb2ZMVFfGYk7TUOChd6Dn6D
- jzL9LZ6teWtS+Fp2GwU37+m2O/PM222tpQuJIBl1tCF8jx3K5B/GpvVYzt+To6b9QTey HQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mnstf88yt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Dec 2022 08:50:21 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BO8oJZZ015040
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Dec 2022 08:50:19 GMT
-Received: from [10.110.37.149] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sat, 24 Dec
- 2022 00:50:18 -0800
-Message-ID: <ec40628c-ac9e-7043-21c6-5b21231928a8@quicinc.com>
-Date:   Sat, 24 Dec 2022 00:50:18 -0800
+        Sat, 24 Dec 2022 03:53:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392ABB1DA
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 00:53:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671871990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bE7Zv2G1RB6/xbT09U4GJ5lBkbria+fSg3I0JpKpvfY=;
+        b=cZ8b7BG10rJD0SAxaISFb6syBwP0GS3WN+Phb9Oqj0PvFvWPbZsSUWhRlsDoGKGZHvYGOk
+        mMU/6OZ2VwyMaE74Yhd0QWRmZ582Uh3ZkP7tY1w/3bq5VGn2n6ZB6C6aQdTStbICK+8T6W
+        mFSPRV7+oHt1ZgBQ2YRDAJKWZGluv5o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-IhNY73X2NEqzIjJDEiA0Iw-1; Sat, 24 Dec 2022 03:53:05 -0500
+X-MC-Unique: IhNY73X2NEqzIjJDEiA0Iw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64B9229AA2C1;
+        Sat, 24 Dec 2022 08:53:05 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C990340C2064;
+        Sat, 24 Dec 2022 08:53:04 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     paul@xen.org, seanjc@google.com, dwmw2@infradead.org,
+        Michal Luczaj <mhal@rbox.co>
+Subject: [PATCH] KVM: x86/xen: Fix SRCU/RCU usage in readers of evtchn_ports
+Date:   Sat, 24 Dec 2022 03:53:04 -0500
+Message-Id: <20221224085304.1629042-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH 12/14] sound: soc: qcom: qusb6: Ensure PCM format is
- supported by USB audio device
-Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-13-quic_wcheng@quicinc.com>
- <6e5da084-d2fb-4b84-1c3c-cd428ee111ec@omp.ru>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <6e5da084-d2fb-4b84-1c3c-cd428ee111ec@omp.ru>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: h0uFfLzZYSailoaNKNxVSBUrq-SUnT9X
-X-Proofpoint-ORIG-GUID: h0uFfLzZYSailoaNKNxVSBUrq-SUnT9X
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-24_02,2022-12-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- clxscore=1011 phishscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
- mlxscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212240074
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
+evtchnfd must be protected by either kvm->lock or SRCU.  Use
+the former in kvm_xen_eventfd_update(), since the lock is being
+taken anyway; kvm_xen_hcall_evtchn_send() instead is a reader
+and does not need kvm->lock, so extend the SRCU critical section
+there.
 
-On 12/24/2022 12:19 AM, Sergey Shtylyov wrote:
-> Hello!
-> 
-> On 12/24/22 2:31 AM, Wesley Cheng wrote:
-> 
->> Check for if the PCM format is supported during the hw_params callback.  If
->> the profile is not supported then the userspace ALSA entity will receive an
->> error, and can take further action.
->>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>   sound/soc/qcom/qdsp6/q6usb.c | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/sound/soc/qcom/qdsp6/q6usb.c b/sound/soc/qcom/qdsp6/q6usb.c
->> index a9da6dec6c6f..128e0974db4e 100644
->> --- a/sound/soc/qcom/qdsp6/q6usb.c
->> +++ b/sound/soc/qcom/qdsp6/q6usb.c
->> @@ -42,7 +42,14 @@ static int q6usb_hw_params(struct snd_pcm_substream *substream,
->>   			   struct snd_pcm_hw_params *params,
->>   			   struct snd_soc_dai *dai)
->>   {
->> -	return 0;
->> +	struct q6usb_port_data *data = dev_get_drvdata(dai->dev);
->> +	int direction = substream->stream;
->> +	int ret;
-> 
->     You don't seem to need this variable, just use *return*
-> snd_soc_usb_find_format(...) >
+It is also important to use rcu_read_{lock,unlock}() in
+kvm_xen_hcall_evtchn_send(), because idr_remove() will *not*
+use synchronize_srcu() to wait for readers to complete.
 
-Thanks for catching this... Will fix it in the next submission I make. 
-Happy holidays!
+Co-developed-by: Michal Luczaj <mhal@rbox.co>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ arch/x86/kvm/xen.c | 36 +++++++++++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 11 deletions(-)
 
-Thanks
-Wesley Cheng
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index d7af40240248..935f845d005c 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -1825,20 +1825,23 @@ static int kvm_xen_eventfd_update(struct kvm *kvm,
+ {
+ 	u32 port = data->u.evtchn.send_port;
+ 	struct evtchnfd *evtchnfd;
++	int ret;
+ 
+ 	if (!port || port >= max_evtchn_port(kvm))
+ 		return -EINVAL;
+ 
++	/* Protect writes to evtchnfd as well as the idr lookup.  */
+ 	mutex_lock(&kvm->lock);
+ 	evtchnfd = idr_find(&kvm->arch.xen.evtchn_ports, port);
+-	mutex_unlock(&kvm->lock);
+ 
++	ret = -ENOENT;
+ 	if (!evtchnfd)
+-		return -ENOENT;
++		goto out_unlock;
+ 
+ 	/* For an UPDATE, nothing may change except the priority/vcpu */
++	ret = -EINVAL;
+ 	if (evtchnfd->type != data->u.evtchn.type)
+-		return -EINVAL;
++		goto out_unlock;
+ 
+ 	/*
+ 	 * Port cannot change, and if it's zero that was an eventfd
+@@ -1846,20 +1849,21 @@ static int kvm_xen_eventfd_update(struct kvm *kvm,
+ 	 */
+ 	if (!evtchnfd->deliver.port.port ||
+ 	    evtchnfd->deliver.port.port != data->u.evtchn.deliver.port.port)
+-		return -EINVAL;
++		goto out_unlock;
+ 
+ 	/* We only support 2 level event channels for now */
+ 	if (data->u.evtchn.deliver.port.priority != KVM_IRQ_ROUTING_XEN_EVTCHN_PRIO_2LEVEL)
+-		return -EINVAL;
++		goto out_unlock;
+ 
+-	mutex_lock(&kvm->lock);
+ 	evtchnfd->deliver.port.priority = data->u.evtchn.deliver.port.priority;
+ 	if (evtchnfd->deliver.port.vcpu_id != data->u.evtchn.deliver.port.vcpu) {
+ 		evtchnfd->deliver.port.vcpu_id = data->u.evtchn.deliver.port.vcpu;
+ 		evtchnfd->deliver.port.vcpu_idx = -1;
+ 	}
++	ret = 0;
++out_unlock:
+ 	mutex_unlock(&kvm->lock);
+-	return 0;
++	return ret;
+ }
+ 
+ /*
+@@ -2005,19 +2009,23 @@ static bool kvm_xen_hcall_evtchn_send(struct kvm_vcpu *vcpu, u64 param, u64 *r)
+ 	gpa_t gpa;
+ 	int idx;
+ 
++	/*
++	 * evtchnfd is protected by kvm->srcu; the idr lookup instead
++	 * is protected by RCU.
++	 */
+ 	idx = srcu_read_lock(&vcpu->kvm->srcu);
+ 	gpa = kvm_mmu_gva_to_gpa_system(vcpu, param, NULL);
+-	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+ 
+ 	if (!gpa || kvm_vcpu_read_guest(vcpu, gpa, &send, sizeof(send))) {
+ 		*r = -EFAULT;
+-		return true;
++		goto out_handled;
+ 	}
+ 
+-	/* The evtchn_ports idr is protected by vcpu->kvm->srcu */
++	rcu_read_lock();
+ 	evtchnfd = idr_find(&vcpu->kvm->arch.xen.evtchn_ports, send.port);
++	rcu_read_unlock();
+ 	if (!evtchnfd)
+-		return false;
++		goto out_not_handled;
+ 
+ 	if (evtchnfd->deliver.port.port) {
+ 		int ret = kvm_xen_set_evtchn(&evtchnfd->deliver.port, vcpu->kvm);
+@@ -2028,7 +2036,13 @@ static bool kvm_xen_hcall_evtchn_send(struct kvm_vcpu *vcpu, u64 param, u64 *r)
+ 	}
+ 
+ 	*r = 0;
++out_handled:
++	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+ 	return true;
++
++out_not_handled:
++	srcu_read_unlock(&vcpu->kvm->srcu, idx);
++	return false;
+ }
+ 
+ void kvm_xen_init_vcpu(struct kvm_vcpu *vcpu)
+-- 
+2.31.1
 
