@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B672D655999
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 10:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4DC65599C
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 10:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiLXJRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 04:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S230442AbiLXJTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 04:19:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLXJRt (ORCPT
+        with ESMTP id S229445AbiLXJTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 04:17:49 -0500
+        Sat, 24 Dec 2022 04:19:36 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C026548
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 01:17:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31FADEF7
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 01:18:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1671873421;
+        s=mimecast20190719; t=1671873528;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1WJ5IG512JK4HdlC/w+MEPT5hs4wW6eIO1tcvJBoFHE=;
-        b=Tc7Xku+IyC+S1yNG6F9lUgTbJAW9zwMUFY5tiu4muqOWCHMn9wR0kyD4xg9R10/IYe4i3c
-        1qDtcsfEA1WMUQ8qFRCQw8aqkvLZIjBSa0s6IocG9WGUOEBfwgQtcvT/wSbr8+1uG8iofw
-        kSCnc/6WnZVZy5zT5iFhn6bYlpDHSuw=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=QxublDXwR8D5DtOHl7/e/B0PH3ei1t0qPkoztnwEfr0=;
+        b=YckDRl4pP5qwwXpncp/C5tiOFvGB5uIAqZ+vmAgd90CBt/Y6pOD96/XhivMRpckjpFO/Bm
+        voTLHnv9RCbYMh69oDY6Q9SJZdDA7r3FSojFUHSndV9PBUFffwLtcqGOJI/rUBtAO6gJLY
+        24MFjN/dbUIgs43r1bsZAj/GOTWpdRY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-244-qRVfgIYEPzuFhK5xGnvSGw-1; Sat, 24 Dec 2022 04:16:59 -0500
-X-MC-Unique: qRVfgIYEPzuFhK5xGnvSGw-1
-Received: by mail-ed1-f69.google.com with SMTP id z20-20020a05640240d400b0047028edd264so4993834edb.20
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 01:16:59 -0800 (PST)
+ us-mta-392-R7vz1YLbP-61hN5nFDdP9g-1; Sat, 24 Dec 2022 04:18:38 -0500
+X-MC-Unique: R7vz1YLbP-61hN5nFDdP9g-1
+Received: by mail-ed1-f70.google.com with SMTP id c12-20020a05640227cc00b00482f50927bcso991886ede.6
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 01:18:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1WJ5IG512JK4HdlC/w+MEPT5hs4wW6eIO1tcvJBoFHE=;
-        b=ZaNpIwC97VBbF82oYdEZt4pmUm6Gg2TZcnrpB3x1J619SnWkk1HXF45HRSbL/Xf44D
-         G1UUVwBExNeKsWdwBkEZz+aALN6w0lLe79tnu+qF3HVh1GeCsK11n9veSPvbRSTHAiq9
-         Mj22EkL4C23UvexInqp6hCk4tAsMjF1x+I2sf7+sMmOpRe4V0j95e/XlEgdhE9Xso8bv
-         JidrZRfI77n+cz+mY55+vyNs5mk6RUJfShe2Jb6Um5e3lT9qcVzMu1VYDG4Q8oLWiaee
-         bT9oTwK/jduy5RRp58oR2WgQdeZXFptrQ4ENEoofOsZikzO0KPKg77Sd0PZua+gqY4og
-         Q8qQ==
-X-Gm-Message-State: AFqh2kqsgfnr86QrvkRih1rPh+b3hGse+a0GgaKKi2P7Eq2zEVn7cJHt
-        o/oKzGZBb24zP+ILxd8xlbvwjXWmqru8TT6F9QFmIOCwbtab/Oz7xttcEv0J+j5WVjYuWqRaOHi
-        SwpRvsVEFS8DPBH/VMpWuoXTz
-X-Received: by 2002:a17:906:2813:b0:7c0:f9ef:23a2 with SMTP id r19-20020a170906281300b007c0f9ef23a2mr12170054ejc.30.1671873418346;
-        Sat, 24 Dec 2022 01:16:58 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvxPdiaG4E8UewTBDKGwk+RrHY5iIcLLbOD+rhwdwS97aEIalcuCrM4uQvmfbCxpmo46L3Qww==
-X-Received: by 2002:a17:906:2813:b0:7c0:f9ef:23a2 with SMTP id r19-20020a170906281300b007c0f9ef23a2mr12170039ejc.30.1671873418109;
-        Sat, 24 Dec 2022 01:16:58 -0800 (PST)
+        bh=QxublDXwR8D5DtOHl7/e/B0PH3ei1t0qPkoztnwEfr0=;
+        b=0W0NvOW7UstMzArthWWUIGsqutEGGLm6xMdjECY9HPk5IG2D3LADZPjdW3or8foUXs
+         Bx1oY3iUvbci6cJkDZbLn0irRGWON/MJFS/QKQ3iMlHF9tUUdMh70vSQvM1QzygBM38y
+         8SxSC4JItvJwbyrflyyvVsxymMb4Ji+X3XrNkpUDz98jaPnFpoZKJL/6qiAyarM4e5xA
+         +5tQyW60RpdMgPHLZ+UVNnAKdhIfPsPpdVqHIjYzOuigEL4MguPXoBLBwhphgoiO75NF
+         ep/am3TaHoqV6jLM/1mCorQ58pS01ohs/Iom2MzzFP6y99szvKtjO1rm/BFF2z2H35JE
+         v9xg==
+X-Gm-Message-State: AFqh2kojwtxishqB2JP3BiFkk9mTUC/Q9kh+LoWcYwTyGqJphDJEfuEP
+        m4GSNRk16FSf3s1UhrO03/rdG8ou/wMYheiJEWlAALRZUv5pLau9O4rCuCYgtf76Q62Uv01TIUI
+        WYPRBg1En6ucTJJNLK3CIxqIT
+X-Received: by 2002:a17:907:20b0:b0:7d3:8159:f361 with SMTP id pw16-20020a17090720b000b007d38159f361mr10353250ejb.36.1671873517897;
+        Sat, 24 Dec 2022 01:18:37 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuzaX4Vch7tXx6y3KWiTjg6uUOEDxqKJ4lnD0J2K3STImlt9Y+l7L7jqIYGtkrdkVnkKuq68w==
+X-Received: by 2002:a17:907:20b0:b0:7d3:8159:f361 with SMTP id pw16-20020a17090720b000b007d38159f361mr10353228ejb.36.1671873517691;
+        Sat, 24 Dec 2022 01:18:37 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id gf3-20020a170906e20300b007bff9fb211fsm2323104ejb.57.2022.12.24.01.16.55
+        by smtp.googlemail.com with ESMTPSA id kx20-20020a170907775400b0078d3f96d293sm2338931ejc.30.2022.12.24.01.18.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Dec 2022 01:16:57 -0800 (PST)
-Message-ID: <f53ed5b9-156c-e809-08e2-050217a970a5@redhat.com>
-Date:   Sat, 24 Dec 2022 10:16:55 +0100
+        Sat, 24 Dec 2022 01:18:37 -0800 (PST)
+Message-ID: <4f789996-28aa-1d9c-f918-03de663d28b8@redhat.com>
+Date:   Sat, 24 Dec 2022 10:18:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 09/14] KVM: selftests: Explicitly disable builtins for
- mem*() overrides
+Subject: Re: [PATCH 10/14] KVM: selftests: Include lib.mk before consuming
+ $(CC)
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -83,9 +83,9 @@ Cc:     James Morse <james.morse@arm.com>,
         Aaron Lewis <aaronlewis@google.com>,
         Raghavendra Rao Ananta <rananta@google.com>
 References: <20221213001653.3852042-1-seanjc@google.com>
- <20221213001653.3852042-10-seanjc@google.com>
+ <20221213001653.3852042-11-seanjc@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221213001653.3852042-10-seanjc@google.com>
+In-Reply-To: <20221213001653.3852042-11-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -99,18 +99,19 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 12/13/22 01:16, Sean Christopherson wrote:
-> Explicitly disable the compiler's builtin memcmp(), memcpy(), and
-> memset().  Because only lib/string_override.c is built with -ffreestanding,
-> the compiler reserves the right to do what it wants and can try to link the
-> non-freestanding code to its own crud.
-> 
->    /usr/bin/x86_64-linux-gnu-ld: /lib/x86_64-linux-gnu/libc.a(memcmp.o): in function `memcmp_ifunc':
->    (.text+0x0): multiple definition of `memcmp'; tools/testing/selftests/kvm/lib/string_override.o:
->    tools/testing/selftests/kvm/lib/string_override.c:15: first defined here
->    clang: error: linker command failed with exit code 1 (use -v to see invocation)
+> Include lib.mk before consuming $(CC) and document that lib.mk overwrites
+> $(CC) unless make was invoked with -e or $(CC) was specified after make
+> (which apparently makes the environment override the Makefile?!?!).
 
-Hmm, that's weird though.  I think it's an effect of ifunc and maybe 
-even a linker bug.  The patch makes sense anyway.
+Yes, it does.  In projects that don't use configure or similar, you 
+might have seen
+
+CFLAGS = -O2 -g
+
+to be overridden with "make CFLAGS=-g" if optimization is undesirable.
 
 Paolo
+
+> Including lib.mk after using it for probing, e.g. for -no-pie, can lead
+> to weirdness.
 
