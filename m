@@ -2,112 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7A6655872
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 06:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CE7655873
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 06:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiLXFU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 00:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S231176AbiLXFUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 00:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLXFUZ (ORCPT
+        with ESMTP id S229534AbiLXFUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 24 Dec 2022 00:20:25 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9C018687;
-        Fri, 23 Dec 2022 21:20:23 -0800 (PST)
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116E018688
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 21:20:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671859223; x=1703395223;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=S40gLU/6WKa7SgaWDOJhy4OtsZ/xWarbNmOK4WXAaGM=;
-  b=CYj+eaxdpW+hPgKNz9iOZbpXVS/xoukVd/yNt4TECJFh21hTKCgFZoir
-   U/qX+vRD/kLSp1wPmaNMowPpaQjUk63D9q86PcnofOfe8EHReGOwZYmOp
-   UxbSKS1ptxBqxI+tCzvxW93ms5skSDrYR4uyKBlaVEwFtAsmCq87WgV33
-   9iN4zW0/ppJraKZ/i62mDgQLbCfRGqxcaK7llKRkmstaggwcdZPJVbY6t
-   31F1XfvVraqmYZXdJU47fgvg8FUntiOcLeY5oAQO+G5NxgzIsXR7HU8yx
-   6fK1OUKahWTHYTS7NRLO6qn232e0yYs5jj42x8FdpttznrKRx2pSrCY08
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="320466535"
+  t=1671859225; x=1703395225;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=voB+nAyHNEktsQe6rbbt2Lz35Dw3Tx7cQbow3+txWcE=;
+  b=Y3wtqrMyQEHG7+sQ/yg6IUIZd8sAmku10+zO0deLNJYihLWW317jTabW
+   YLn88IkHsDSlscdl097T/l5OV6rR8u50l7wAkh3S8I036Zu8bJLY8Xi5J
+   n3mNbWyldSraGNdBG2UZnDpnT2IHPlVHTqRwbb8nBWnajUkV13TWgIpfU
+   3e4P7RPg2VjRQiIClUvKQCUmvE9Z3767oIdMiUTQf97AbKFyz74CXowT4
+   q6Xsp6k1LmvduI/XpP+15r3f9QGVBPsofvSTscmwqssgOuaW6yLmOTBqa
+   R6Ds1jxCo/n0WuYnoFbaKfsTnnII4SXIJY6Np2R8eI9LgF1uTBbct6Y2d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="318050896"
 X-IronPort-AV: E=Sophos;i="5.96,270,1665471600"; 
-   d="scan'208";a="320466535"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 21:20:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="826428622"
+   d="scan'208";a="318050896"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 21:20:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10570"; a="645730540"
 X-IronPort-AV: E=Sophos;i="5.96,270,1665471600"; 
-   d="scan'208";a="826428622"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2022 21:20:21 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Safe access to rcu_node structure's->exp_tasks
-Date:   Sat, 24 Dec 2022 13:25:53 +0800
-Message-Id: <20221224052553.263199-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+   d="scan'208";a="645730540"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga007.jf.intel.com with ESMTP; 23 Dec 2022 21:20:24 -0800
+Date:   Fri, 23 Dec 2022 21:28:50 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 4/7] sched/fair: Introduce sched_smt_siblings_idle()
+Message-ID: <20221224052850.GA8245@ranerica-svr.sc.intel.com>
+References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
+ <20221122203532.15013-5-ricardo.neri-calderon@linux.intel.com>
+ <xhsmhsfh7e5s9.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmhsfh7e5s9.mognet@vschneid.remote.csb>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For kernels built with CONFIG_PREEMPT_RCU=y, the following scenario
-can result system oops.
+On Thu, Dec 22, 2022 at 04:56:22PM +0000, Valentin Schneider wrote:
+> On 22/11/22 12:35, Ricardo Neri wrote:
+> > Architectures that implement arch_asym_cpu_priority() may need to know the
+> > idle state of the SMT siblings of a CPU. The scheduler has this information
+> > and functionality. Expose it.
+> >
+> > Move the existing functionality outside of the NUMA code.
+> >
+> 
+> test_idle_cores() does something similar without an iteration, did you
+> consider using that instead?
 
-           CPU1                                           CPU2
-rcu_preempt_deferred_qs_irqrestore                rcu_print_task_exp_stall
-  if (special.b.blocked)                            READ_ONCE(rnp->exp_tasks) != NULL
-    raw_spin_lock_rcu_node
-    np = rcu_next_node_entry(t, rnp)
-    if (&t->rcu_node_entry == rnp->exp_tasks)
-      WRITE_ONCE(rnp->exp_tasks, np)
-      ....
-      raw_spin_unlock_irqrestore_rcu_node
-                                                    raw_spin_lock_irqsave_rcu_node
-                                                    t = list_entry(rnp->exp_tasks->prev,
-                                                        struct task_struct, rcu_node_entry)
-                                                    (if rnp->exp_tasks is NULL
-                                                       will trigger oops)
+IIUC, test_idle_cores() returns true if there is at least one idle core in
+the package. In my case, I need to know the idle state of only the SMT
+siblings of a specific CPU. Am I missing something?
 
-This problem is that CPU2 accesses rcu_node structure's->exp_tasks
-without holding the rcu_node structure's ->lock and CPU2 did not
-observe CPU1's change to rcu_node structure's->exp_tasks in time,
-if rcu_node structure's->exp_tasks is set null pointer by CPU1, after
-that CPU2 accesses members of rcu_node structure's->exp_tasks will
-trigger oops.
-
-This commit therefore allows rcu_node structure's->exp_tasks to be
-accessed while holding rcu_node structure's ->lock.
-
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tree_exp.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 7cc4856da081..902e7c8709c7 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -803,9 +803,11 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
- 	int ndetected = 0;
- 	struct task_struct *t;
- 
--	if (!READ_ONCE(rnp->exp_tasks))
--		return 0;
- 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
-+	if (!READ_ONCE(rnp->exp_tasks)) {
-+		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-+		return 0;
-+	}
- 	t = list_entry(rnp->exp_tasks->prev,
- 		       struct task_struct, rcu_node_entry);
- 	list_for_each_entry_continue(t, &rnp->blkd_tasks, rcu_node_entry) {
--- 
-2.25.1
-
+Thanks and BR,
+Ricardo
