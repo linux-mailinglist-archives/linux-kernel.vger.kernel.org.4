@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2D1655A00
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 12:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 862D8655A03
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 12:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiLXLn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 06:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
+        id S231286AbiLXLoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 06:44:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiLXLnq (ORCPT
+        with ESMTP id S231159AbiLXLnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 06:43:46 -0500
+        Sat, 24 Dec 2022 06:43:47 -0500
 Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 248DDA44F
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 03:43:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5F1ABF4A
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 03:43:43 -0800 (PST)
 Received: from cgk-Precision-3650-Tower.. (unknown [219.141.235.82])
-        by APP-03 (Coremail) with SMTP id rQCowABXXpbf5aZj9dVkCA--.18955S10;
+        by APP-03 (Coremail) with SMTP id rQCowABXXpbf5aZj9dVkCA--.18955S11;
         Sat, 24 Dec 2022 19:43:28 +0800 (CST)
 From:   Chen Guokai <chenguokai17@mails.ucas.ac.cn>
 To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
@@ -24,18 +24,18 @@ To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
         sfr@canb.auug.org.au
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         liaochang1@huawei.com, Chen Guokai <chenguokai17@mails.ucas.ac.cn>
-Subject: [PATCH v5 6/9] riscv/kprobe: Add code to check if kprobe can be optimized
-Date:   Sat, 24 Dec 2022 19:43:12 +0800
-Message-Id: <20221224114315.850130-7-chenguokai17@mails.ucas.ac.cn>
+Subject: [PATCH v5 7/9] riscv/kprobe: Prepare detour buffer for optimized kprobe
+Date:   Sat, 24 Dec 2022 19:43:13 +0800
+Message-Id: <20221224114315.850130-8-chenguokai17@mails.ucas.ac.cn>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221224114315.850130-1-chenguokai17@mails.ucas.ac.cn>
 References: <20221224114315.850130-1-chenguokai17@mails.ucas.ac.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABXXpbf5aZj9dVkCA--.18955S10
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw4xZw4DJr1rKr15AryDGFg_yoW7JFyxpF
-        sYka4YqrW8JFZagrWfAws5Jr4Syws5Gr48try7K34Fyw12qr9Iganakr4avFnxGF40gr17
-        AF40yry8uFy3ZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: rQCowABXXpbf5aZj9dVkCA--.18955S11
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gr1fWw45Xw48JF4DZF4fXwb_yoWDJF45pa
+        95CwnxXF4UZFn7Cry7t3Z5Jr4Sqws5Jws7Grs7GFW5tan7KrW5Xan2g345Xr15G3yqgry7
+        ua45JryUuF9xXrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUQF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
         kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
@@ -51,7 +51,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGw4xZw4DJr1rKr15AryDGFg_yoW7JFyxpF
         xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
         wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSApnUUUUU=
 X-Originating-IP: [219.141.235.82]
-X-CM-SenderInfo: xfkh0w5xrntxyrx6ztxlovh3xfdvhtffof0/1tbiBwMKE2OmnMtotgAAsR
+X-CM-SenderInfo: xfkh0w5xrntxyrx6ztxlovh3xfdvhtffof0/1tbiCQUKE2OmnPBm9QAAsv
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,145 +62,319 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Liao Chang <liaochang1@huawei.com>
 
-This patch add code to check if kprobe can be optimized, regular kprobe
-replaces single instruction with EBREAK or C.EBREAK, it just requires
-the instrumented instruction support execute out-of-line or simulation,
-while optimized kprobe patch AUIPC/JALR pair to do a long jump, it makes
-everything more compilated, espeically for kernel that is hybrid RVI and
-RVC binary, although AUIPC/JALR just need 8 bytes space, the bytes to
-patch are 10 bytes long at worst case to ensure no RVI would be
-truncated, so there are four methods to patch optimized kprobe.
+This patch introduce code to prepare instruction slot for optimized
+kprobe, the instruction slot for regular kprobe just records two
+instructions, first one is the original instruction replaced by EBREAK,
+the second one is EBREAK for single-step. While instruction slot for
+optimized kprobe is larger, beside execute instruction out-of-line, it
+also contains a standalone stackframe for calling kprobe handler.
 
-  - Replace 2 RVI with AUIPC/JALR.
-  - Replace 4 RVC with AUIPC/JALR.
-  - Replace 2 RVC and 1 RVI with AUIPC/JALR.
-  - Replace 3 RVC and 1 RVI with AUIPC/JALR, and patch C.NOP into last
-    two bytes for alignment.
+All optimized instruction slots consis of 5 major parts, which copied
+from the assembly code template in opt_trampoline.S.
 
-So it has to find out a instruction window large enough to patch
-AUIPC/JALR from the address instrumented breakpoint, meanwhile, ensure
-no instruction has chance to jump into the range of patched window.
+	SAVE REGS
+	CALL optimized_callback
+	RESTORE REGS
+	EXECUTE INSNS OUT-OF-LINE
+	RETURN BACK
+
+Although most instructions in each slot are same, these slots still have
+a bit difference in their payload, it is result from three parts:
+
+  - 'CALL optimized_callback', the relative offset for 'call'
+    instruction is different for each kprobe.
+  - 'EXECUTE INSN OUT-OF-LINE', no doubt.
+  - 'RETURN BACK', the chosen free register is reused here as the
+     destination register of jumping back.
+
+So it also need to customize the slot payload for each optimized kprobe.
 
 Signed-off-by: Liao Chang <liaochang1@huawei.com>
 Co-developed-by: Chen Guokai <chenguokai17@mails.ucas.ac.cn>
 Signed-off-by: Chen Guokai <chenguokai17@mails.ucas.ac.cn>
 ---
- arch/riscv/kernel/probes/opt.c | 98 ++++++++++++++++++++++++++++++++--
- 1 file changed, 93 insertions(+), 5 deletions(-)
+ arch/riscv/include/asm/kprobes.h          |  16 +++
+ arch/riscv/kernel/probes/opt.c            |  76 +++++++++++++
+ arch/riscv/kernel/probes/opt_trampoline.S | 125 ++++++++++++++++++++++
+ 3 files changed, 217 insertions(+)
 
+diff --git a/arch/riscv/include/asm/kprobes.h b/arch/riscv/include/asm/kprobes.h
+index e85130c9112f..e40c837d0a1d 100644
+--- a/arch/riscv/include/asm/kprobes.h
++++ b/arch/riscv/include/asm/kprobes.h
+@@ -46,10 +46,26 @@ bool kprobe_single_step_handler(struct pt_regs *regs);
+ /* optinsn template addresses */
+ extern __visible kprobe_opcode_t optprobe_template_entry[];
+ extern __visible kprobe_opcode_t optprobe_template_end[];
++extern __visible kprobe_opcode_t optprobe_template_save[];
++extern __visible kprobe_opcode_t optprobe_template_call[];
++extern __visible kprobe_opcode_t optprobe_template_insn[];
++extern __visible kprobe_opcode_t optprobe_template_return[];
+ 
+ #define MAX_OPTINSN_SIZE				\
+ 	((unsigned long)optprobe_template_end -		\
+ 	 (unsigned long)optprobe_template_entry)
++#define DETOUR_SAVE_OFFSET				\
++	((unsigned long)optprobe_template_save -	\
++	 (unsigned long)optprobe_template_entry)
++#define DETOUR_CALL_OFFSET				\
++	((unsigned long)optprobe_template_call -	\
++	 (unsigned long)optprobe_template_entry)
++#define DETOUR_INSN_OFFSET				\
++	((unsigned long)optprobe_template_insn -	\
++	 (unsigned long)optprobe_template_entry)
++#define DETOUR_RETURN_OFFSET				\
++	((unsigned long)optprobe_template_return -	\
++	 (unsigned long)optprobe_template_entry)
+ 
+ /*
+  * For RVI and RVC hybird encoding kernel, althought long jump just needs
 diff --git a/arch/riscv/kernel/probes/opt.c b/arch/riscv/kernel/probes/opt.c
-index a0d2ab39e3fa..258a283c906d 100644
+index 258a283c906d..bc232fce5b39 100644
 --- a/arch/riscv/kernel/probes/opt.c
 +++ b/arch/riscv/kernel/probes/opt.c
-@@ -271,15 +271,103 @@ static void find_free_registers(struct kprobe *kp, struct optimized_kprobe *op,
- 	*ra = (kw == 1UL) ? 0 : __builtin_ctzl(kw & ~1UL);
+@@ -11,9 +11,37 @@
+ #include <linux/kprobes.h>
+ #include <asm/kprobes.h>
+ #include <asm/patch.h>
++#include <asm/asm-offsets.h>
+ 
+ #include "simulate-insn.h"
+ #include "decode-insn.h"
++#include "../../net/bpf_jit.h"
++
++static void
++optimized_callback(struct optimized_kprobe *op, struct pt_regs *regs)
++{
++	unsigned long flags;
++	struct kprobe_ctlblk *kcb;
++
++	/* Save skipped registers */
++	regs->epc = (unsigned long)op->kp.addr;
++	regs->orig_a0 = ~0UL;
++
++	local_irq_save(flags);
++	kcb = get_kprobe_ctlblk();
++
++	if (kprobe_running()) {
++		kprobes_inc_nmissed_count(&op->kp);
++	} else {
++		__this_cpu_write(current_kprobe, &op->kp);
++		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
++		opt_pre_handler(&op->kp, regs);
++		__this_cpu_write(current_kprobe, NULL);
++	}
++	local_irq_restore(flags);
++}
++
++NOKPROBE_SYMBOL(optimized_callback)
+ 
+ static inline int in_auipc_jalr_range(long val)
+ {
+@@ -30,6 +58,11 @@ static inline int in_auipc_jalr_range(long val)
+ #endif
  }
  
-+static bool insn_jump_into_range(unsigned long addr, unsigned long start,
-+				 unsigned long end)
-+{
-+	kprobe_opcode_t insn = *(kprobe_opcode_t *)addr;
-+	unsigned long target, offset = GET_INSN_LENGTH(insn);
-+
-+#ifdef CONFIG_RISCV_ISA_C
-+	if (offset == RVC_INSN_LEN) {
-+		if (riscv_insn_is_c_beqz(insn) || riscv_insn_is_c_bnez(insn))
-+			target = addr + rvc_branch_imme(insn);
-+		else if (riscv_insn_is_c_jal(insn) || riscv_insn_is_c_j(insn))
-+			target = addr + rvc_jal_imme(insn);
-+		else
-+			target = 0;
-+		return (target >= start) && (target < end);
-+	}
-+#endif
-+
-+	if (riscv_insn_is_branch(insn))
-+		target = addr + rvi_branch_imme(insn);
-+	else if (riscv_insn_is_jal(insn))
-+		target = addr + rvi_jal_imme(insn);
-+	else
-+		target = 0;
-+	return (target >= start) && (target < end);
-+}
-+
-+static int search_copied_insn(unsigned long paddr, struct optimized_kprobe *op)
-+{
-+	int i =  1;
-+	unsigned long offset = GET_INSN_LENGTH(*(kprobe_opcode_t *)paddr);
-+
-+	while ((i++ < MAX_COPIED_INSN) && (offset < 2 * RVI_INSN_LEN)) {
-+		if (riscv_probe_decode_insn((probe_opcode_t *)paddr + offset,
-+					    NULL) != INSN_GOOD)
-+			return -1;
-+		offset += GET_INSN_LENGTH(*(kprobe_opcode_t *)(paddr + offset));
-+	}
-+
-+	op->optinsn.length = offset;
-+	return 0;
-+}
++#define DETOUR_ADDR(code, offs) \
++	((void *)((unsigned long)(code) + (offs)))
++#define DETOUR_INSN(code, offs) \
++	(*(kprobe_opcode_t *)((unsigned long)(code) + (offs)))
 +
  /*
-- * If two free registers can be found at the beginning of both
-- * the start and the end of replaced code, it can be optimized
-- * Also, in-function jumps need to be checked to make sure that
-- * there is no jump to the second instruction to be replaced
-+ * The kprobe can be optimized when no in-function jump reaches to the
-+ * instructions replaced by optimized jump instructions(AUIPC/JALR).
-  */
- static bool can_optimize(unsigned long paddr, struct optimized_kprobe *op)
+  * Copy optprobe assembly code template into detour buffer and modify some
+  * instructions for each kprobe.
+@@ -38,6 +71,49 @@ static void prepare_detour_buffer(kprobe_opcode_t *code, kprobe_opcode_t *slot,
+ 				  int rd, struct optimized_kprobe *op,
+ 				  kprobe_opcode_t opcode)
  {
--	return false;
-+	int ret;
-+	unsigned long addr, size = 0, offset = 0;
-+	struct kprobe *kp = get_kprobe((kprobe_opcode_t *)paddr);
++	long offs;
++	unsigned long data;
++
++	memcpy(code, optprobe_template_entry, MAX_OPTINSN_SIZE);
++
++	/* Step1: record optimized_kprobe pointer into detour buffer */
++	memcpy(DETOUR_ADDR(code, DETOUR_SAVE_OFFSET), &op, sizeof(op));
 +
 +	/*
-+	 * Skip optimization if kprobe has been disarmed or instrumented
-+	 * instruction support XOI.
++	 * Step2
++	 * auipc ra, 0     --> aupic ra, HI20.{optimized_callback - pc}
++	 * jalr  ra, 0(ra) --> jalr  ra, LO12.{optimized_callback - pc}(ra)
 +	 */
-+	if (!kp || (riscv_probe_decode_insn(&kp->opcode, NULL) != INSN_GOOD))
-+		return false;
++	offs = (unsigned long)&optimized_callback -
++	       (unsigned long)DETOUR_ADDR(slot, DETOUR_CALL_OFFSET);
++	DETOUR_INSN(code, DETOUR_CALL_OFFSET) =
++				rv_auipc(1, (offs + (1 << 11)) >> 12);
++	DETOUR_INSN(code, DETOUR_CALL_OFFSET + 0x4) =
++				rv_jalr(1, 1, offs & 0xFFF);
++
++	/* Step3: copy replaced instructions into detour buffer */
++	memcpy(DETOUR_ADDR(code, DETOUR_INSN_OFFSET), op->kp.addr,
++	       op->optinsn.length);
++	memcpy(DETOUR_ADDR(code, DETOUR_INSN_OFFSET), &opcode,
++	       GET_INSN_LENGTH(opcode));
++
++	/* Step4: record return address of long jump into detour buffer */
++	data = (unsigned long)op->kp.addr + op->optinsn.length;
++	memcpy(DETOUR_ADDR(code, DETOUR_RETURN_OFFSET), &data, sizeof(data));
 +
 +	/*
-+	 * Find a instruction window large enough to contain a pair
-+	 * of AUIPC/JALR, and ensure each instruction in this window
-+	 * supports XOI.
++	 * Step5
++	 * auipc ra, 0      --> auipc rd, 0
++	 * ld/w  ra, -4(ra) --> ld/w  rd, -8(rd)
++	 * jalr  x0,  0(ra) --> jalr  x0,  0(rd)
 +	 */
-+	ret = search_copied_insn(paddr, op);
-+	if (ret)
-+		return false;
-+
-+	if (!kallsyms_lookup_size_offset(paddr, &size, &offset))
-+		return false;
-+
-+	/* Check there is enough space for relative jump(AUIPC/JALR) */
-+	if (size - offset <= op->optinsn.length)
-+		return false;
-+
-+	/*
-+	 * Decode instructions until function end, check any instruction
-+	 * don't jump into the window used to emit optprobe(AUIPC/JALR).
-+	 */
-+	addr = paddr - offset;
-+	while (addr < paddr) {
-+		if (insn_jump_into_range(addr, paddr + RVC_INSN_LEN,
-+					 paddr + op->optinsn.length))
-+			return false;
-+		addr += GET_INSN_LENGTH(*(kprobe_opcode_t *)addr);
-+	}
-+
-+	addr = paddr + op->optinsn.length;
-+	while (addr < paddr - offset + size) {
-+		if (insn_jump_into_range(addr, paddr + RVC_INSN_LEN,
-+					 paddr + op->optinsn.length))
-+			return false;
-+		addr += GET_INSN_LENGTH(*(kprobe_opcode_t *)addr);
-+	}
-+
-+	return true;
++	DETOUR_INSN(code, DETOUR_RETURN_OFFSET + 0x8) = rv_auipc(rd, 0);
++#if __riscv_xlen == 32
++	DETOUR_INSN(code, DETOUR_RETURN_OFFSET + 0xC) = rv_lw(rd, -8, rd);
++#else
++	DETOUR_INSN(code, DETOUR_RETURN_OFFSET + 0xC) = rv_ld(rd, -8, rd);
++#endif
++	DETOUR_INSN(code, DETOUR_RETURN_OFFSET + 0x10) = rv_jalr(0, rd, 0);
  }
  
- int arch_prepared_optinsn(struct arch_optimized_insn *optinsn)
+ /* Registers the first usage of which is the destination of instruction */
+diff --git a/arch/riscv/kernel/probes/opt_trampoline.S b/arch/riscv/kernel/probes/opt_trampoline.S
+index 16160c4367ff..75e34e373cf2 100644
+--- a/arch/riscv/kernel/probes/opt_trampoline.S
++++ b/arch/riscv/kernel/probes/opt_trampoline.S
+@@ -1,12 +1,137 @@
+ /* SPDX-License-Identifier: GPL-2.0-only */
+ /*
+  * Copyright (C) 2022 Guokai Chen
++ * Copyright (C) 2022 Liao, Chang <liaochang1@huawei.com>
+  */
+ 
+ #include <linux/linkage.h>
+ 
++#include <asm/asm.h>
+ #incldue <asm/csr.h>
+ #include <asm/asm-offsets.h>
+ 
+ SYM_ENTRY(optprobe_template_entry, SYM_L_GLOBAL, SYM_A_NONE)
++	addi  sp, sp, -(PT_SIZE_ON_STACK)
++	REG_S x1,  PT_RA(sp)
++	REG_S x2,  PT_SP(sp)
++	REG_S x3,  PT_GP(sp)
++	REG_S x4,  PT_TP(sp)
++	REG_S x5,  PT_T0(sp)
++	REG_S x6,  PT_T1(sp)
++	REG_S x7,  PT_T2(sp)
++	REG_S x8,  PT_S0(sp)
++	REG_S x9,  PT_S1(sp)
++	REG_S x10, PT_A0(sp)
++	REG_S x11, PT_A1(sp)
++	REG_S x12, PT_A2(sp)
++	REG_S x13, PT_A3(sp)
++	REG_S x14, PT_A4(sp)
++	REG_S x15, PT_A5(sp)
++	REG_S x16, PT_A6(sp)
++	REG_S x17, PT_A7(sp)
++	REG_S x18, PT_S2(sp)
++	REG_S x19, PT_S3(sp)
++	REG_S x20, PT_S4(sp)
++	REG_S x21, PT_S5(sp)
++	REG_S x22, PT_S6(sp)
++	REG_S x23, PT_S7(sp)
++	REG_S x24, PT_S8(sp)
++	REG_S x25, PT_S9(sp)
++	REG_S x26, PT_S10(sp)
++	REG_S x27, PT_S11(sp)
++	REG_S x28, PT_T3(sp)
++	REG_S x29, PT_T4(sp)
++	REG_S x30, PT_T5(sp)
++	REG_S x31, PT_T6(sp)
++	/* Update fp is friendly for stacktrace */
++	addi  s0, sp, (PT_SIZE_ON_STACK)
++	j 1f
++
++SYM_ENTRY(optprobe_template_save, SYM_L_GLOBAL, SYM_A_NONE)
++	/*
++	 * Step1:
++	 * Filled with the pointer to optimized_kprobe data
++	 */
++	.dword 0
++1:
++	/* Load optimize_kprobe pointer from .dword below */
++	auipc a0, 0
++	REG_L a0, -8(a0)
++	add   a1, sp, x0
++
++SYM_ENTRY(optprobe_template_call, SYM_L_GLOBAL, SYM_A_NONE)
++	/*
++	 * Step2:
++	 * <IMME> of AUIPC/JALR are modified to the offset to optimized_callback
++	 * jump target is loaded from above .dword.
++	 */
++	auipc ra, 0
++	jalr  ra, 0(ra)
++
++	REG_L x1,  PT_RA(sp)
++	REG_L x3,  PT_GP(sp)
++	REG_L x4,  PT_TP(sp)
++	REG_L x5,  PT_T0(sp)
++	REG_L x6,  PT_T1(sp)
++	REG_L x7,  PT_T2(sp)
++	REG_L x8,  PT_S0(sp)
++	REG_L x9,  PT_S1(sp)
++	REG_L x10, PT_A0(sp)
++	REG_L x11, PT_A1(sp)
++	REG_L x12, PT_A2(sp)
++	REG_L x13, PT_A3(sp)
++	REG_L x14, PT_A4(sp)
++	REG_L x15, PT_A5(sp)
++	REG_L x16, PT_A6(sp)
++	REG_L x17, PT_A7(sp)
++	REG_L x18, PT_S2(sp)
++	REG_L x19, PT_S3(sp)
++	REG_L x20, PT_S4(sp)
++	REG_L x21, PT_S5(sp)
++	REG_L x22, PT_S6(sp)
++	REG_L x23, PT_S7(sp)
++	REG_L x24, PT_S8(sp)
++	REG_L x25, PT_S9(sp)
++	REG_L x26, PT_S10(sp)
++	REG_L x27, PT_S11(sp)
++	REG_L x28, PT_T3(sp)
++	REG_L x29, PT_T4(sp)
++	REG_L x30, PT_T5(sp)
++	REG_L x31, PT_T6(sp)
++	REG_L x2,  PT_SP(sp)
++	addi  sp, sp, (PT_SIZE_ON_STACK)
++
++SYM_ENTRY(optprobe_template_insn, SYM_L_GLOBAL, SYM_A_NONE)
++	/*
++	 * Step3:
++	 * NOPS will be replaced by the probed instruction, at worst case 3 RVC
++	 * and 1 RVI instructions is about to execute out of line.
++	 */
++	nop
++	nop
++	nop
++	nop
++	nop
++	nop
++	nop
++	nop
++	nop
++	nop
++	j 2f
++
++SYM_ENTRY(optprobe_template_return, SYM_L_GLOBAL, SYM_A_NONE)
++	/*
++	 * Step4:
++	 * Filled with the return address of long jump(AUIPC/JALR)
++	 */
++	.dword 0
++2:
++	/*
++	 * Step5:
++	 * The <RA> of AUIPC/LD/JALR will be replaced for each kprobe,
++	 * used to read return address saved in .dword above.
++	 */
++	auipc ra, 0
++	REG_L ra, -8(ra)
++	jalr  x0, 0(ra)
+ SYM_ENTRY(optprobe_template_end, SYM_L_GLOBAL, SYM_A_NONE)
 -- 
 2.34.1
 
