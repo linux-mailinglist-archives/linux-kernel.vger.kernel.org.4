@@ -2,68 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00518655904
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 08:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7438D655906
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 08:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiLXHti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 02:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S230134AbiLXHwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 02:52:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLXHtg (ORCPT
+        with ESMTP id S229445AbiLXHwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 02:49:36 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802E818381;
-        Fri, 23 Dec 2022 23:49:35 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so10625893pjj.2;
-        Fri, 23 Dec 2022 23:49:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:in-reply-to:date
-         :cc:to:from:subject:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lnbK1C3tAl/B2kMzA6I4NYD3A/jljt/Z9ocUnpOLO+Q=;
-        b=DPFd27v9ZneQw/vC3dnJwX9CYcmbAofwuES94tzew+/v7LODNWUsv7o6ZDkeJt4l0u
-         KYxynWfxj4X2jAxvhrkJmBTvuFZHdAvgKQ6yaVyb0NjUX0Y0babzUU3mCFgwJWKBfe80
-         yqW3B62PJHCZzrAYLd+gpWKI+IfaCO8K2Zb8u12X2QoWxHfpur4kHGQWW7SrSRb3Fzbp
-         MT54pj1IDct1IFUe+IkjKL18+7yu/PJJsnAyfKcDUcriwD8o7HZo/JUmAvD6tnEO/OyF
-         kpZcd0hwN49KM8JXPy0Pt20vHJ7Q2yEtnnFel2wVgDM0bmUnKUp6ogL/icXAZgEea2eu
-         UtXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:in-reply-to:date
-         :cc:to:from:subject:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lnbK1C3tAl/B2kMzA6I4NYD3A/jljt/Z9ocUnpOLO+Q=;
-        b=dorcXju7n58lSInZ3PduYNW7pJzLzvIzbI6aHMmXgxsDjP5Mt4Sc4rgXDZsUN6TYos
-         IEUtIKZqG2oU49Qszz0Cm9Zt9GzKKeQp8aF1PrRwaZ3QME2/55UcY3cvA5ocPe3Q3fUb
-         Z5MBaHZislT9fHKGjOqB9ZY2uH2p8EIj8LESaP6+w3CEqwG/dEduWg3Vyylkb2wa3t3E
-         gN+CSIpNSv5lV3E5exVHG3NkFdEhhddyNYREm6xjxcyS9ryvLAjk6a16b1TjcQ44IANl
-         2AgMhfEEBXP8p6KNctnPEk+W1Y2mj1IrNcfbXOgjH2ZkFzg+8wsbXOpeZy0NyrX6oRoP
-         OMEg==
-X-Gm-Message-State: AFqh2kr8N4Upjt7wqd3ReLaiIinYWobPaJ9b2kp5yszdiJnL0LETf30T
-        AIjZSkg7srWM6X/wkH7KvwqkZoYufIZ7U4YN
-X-Google-Smtp-Source: AMrXdXv0WhnfodhW7VqymWGEUW62ifeHh96+2bdq8+w12z/ycCj0c6SVfBg0bcDKLNVFzcR4KErb7w==
-X-Received: by 2002:a17:902:ee41:b0:189:8f0c:d314 with SMTP id 1-20020a170902ee4100b001898f0cd314mr13892493plo.39.1671868175087;
-        Fri, 23 Dec 2022 23:49:35 -0800 (PST)
-Received: from [192.168.122.138] ([49.36.41.210])
-        by smtp.gmail.com with ESMTPSA id c16-20020a170903235000b0016d773aae60sm3534002plh.19.2022.12.23.23.49.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Dec 2022 23:49:34 -0800 (PST)
-Message-ID: <940462e95c8eea934b8823aa189dbddece6bee95.camel@gmail.com>
-Subject: Re: [git pull] Input updates for v6.1-rc5 #forregzbot
-From:   Aman Dhoot <amandhoot12@gmail.com>
-To:     regressions@leemhuis.info
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 24 Dec 2022 13:19:31 +0530
-In-Reply-To: <343bc8a5-a426-8f6a-70b9-3877f53c003f@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        Sat, 24 Dec 2022 02:52:07 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A33186AA;
+        Fri, 23 Dec 2022 23:52:06 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p8zK7-0002jH-51; Sat, 24 Dec 2022 08:52:03 +0100
+Message-ID: <dedcb972-e934-53c2-f933-c25afa5c65a4@leemhuis.info>
+Date:   Sat, 24 Dec 2022 08:52:02 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: 6.2 nvme-pci: something wrong #forregzbot
+Content-Language: en-US, de-DE
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <572cfcc0-197a-9ead-9cb-3c5bf5e735@google.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <572cfcc0-197a-9ead-9cb-3c5bf5e735@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1671868326;d43034ff;
+X-HE-SMSGID: 1p8zK7-0002jH-51
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,13 +44,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If I use synaptics touchpad in legacy PS/2 mode.keyboard and touchpad
-stop working randomly because of TLP, if I uninstall tlp it resolves
-the keyboard touchpad stops working randomly issue. But I see good
-battery life in my system using tlp by switching touchpad from legacy
-PS/2 mode to RMI mode resolves the problem. this way i can use tlp and
-keyboard touchpad works without any problem.
+[Note: this mail contains only information for Linux kernel regression
+tracking. Mails like these contain '#forregzbot' in the subject to make
+then easy to spot and filter out. The author also tried to remove most
+or all individuals from the list of recipients to spare them the hassle.]
 
-In my dmesg log I don't have msg "psmouse serio1: synaptics: SMbus
-companion is not ready yet".
+On 24.12.22 06:24, Hugh Dickins wrote:
+> 
+> There's something wrong with the nvme-pci heading for 6.2-rc1:
+> no problem booting here on this Lenovo ThinkPad X1 Carbon 5th,
+> but under load...> [...]
+> Bisection points to your
+> 0da7feaa5913 ("nvme-pci: use the tagset alloc/free helpers")
+> And that does revert cleanly, giving a kernel which shows no problem.
+> [...]
 
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced 0da7feaa5913
+#regzbot title nvme-pci: problems under load
+#regzbot ignore-activity
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.ns.
