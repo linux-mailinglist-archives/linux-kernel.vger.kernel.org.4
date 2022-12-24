@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2D0655891
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 06:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E19655890
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 06:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbiLXF6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 00:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S229831AbiLXF6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 00:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiLXF6d (ORCPT
+        with ESMTP id S229487AbiLXF6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 00:58:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A5611A05
-        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 21:58:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14DFCB8213E
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 05:58:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49417C433D2;
-        Sat, 24 Dec 2022 05:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671861509;
-        bh=uLCqzEDC7jZshVTitUpPbVlxqEqcXcWdhQ+wKrZOuBs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oY69dP0YwPKeVzIAPzTOQCQss/orLy++K0YqkKnEAuTue4N2+LU2HR8pxHD9Il0L+
-         6PePIx2s2ATD8bWTEQj/ZY4aHfrmXWSBt+bfORUk5xffQCIv7kG+i3dHMChhmcJ3Ea
-         xzfTQHJjEGmU3fqeYPVA8VPjT1yF4NOwW5U0jSENu2ahzADqPV/+FPWYxZTSfEbwLF
-         0OSlbrAb1RhokURUAZV7ef1Xg65sXHl1frUbvyKHBT4BUZ2zkgpPvNpk/50QdgG+1n
-         c826LYOjcF7JcaGf0jXL1FmlWPXrp2M/w40vDDyYad6Q+staSRWe6p0pbgNucOsHzU
-         Yd3bN4RqnWn2A==
-Date:   Fri, 23 Dec 2022 22:58:27 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     ndesaulniers@google.com, trix@redhat.com,
-        akpm@linux-foundation.org, geert+renesas@glider.be,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH linux-next] lib: Dhrystone: initialize ret value
-Message-ID: <Y6aVA9M/wxsi/KKh@dev-arch.thelio-3990X>
-References: <20221224050640.64427-1-zhouzhouyi@gmail.com>
+        Sat, 24 Dec 2022 00:58:32 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4259311A05
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 21:58:31 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id h9-20020a92c269000000b00303494c4f3eso3667217ild.15
+        for <linux-kernel@vger.kernel.org>; Fri, 23 Dec 2022 21:58:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ccPAkKh6VRAWfW9CvYc2pSlVZ7nRt/UwqQWtOX0Glo=;
+        b=FMxnbc9bv5CCLdV5gk2vH8IPJ52xYWj4OF9Zddax6EsdOo+UcmnXTai04JHa5BipCC
+         OPtZwie2z3aRoQVvTiNOFgtCacqpgvXVgBkdDAYvWs/B3D1uzsWUyTg08HnL4GY6GjAQ
+         NkXlaq8rtz1dPVZJQWsTX4qUAEefwIkmiT/Dpaow7/o5HMeXcav75ZJbVpBw61eoLh6D
+         WR54UluxY8UNDy3Vn+HIlvJTLg3bUkyD+k8eQDdvuRb9S5oCIfVT9m7jeqLkt95pKMar
+         aoee/fF9p4IPEd0KFLX28Mfg9yz0ULYqsu6lDyMysDsvKtFm+F41/rHO5cauFI4s10DI
+         Acrg==
+X-Gm-Message-State: AFqh2ko2ODlSuIlciKMNrcy7437HEFkOa80bgloAlXPyek+bBMkIGExr
+        YBIR0mRA99jg/iLsdIESW0OVO1xZMH/Blb4FiZm/EyLcJVIr
+X-Google-Smtp-Source: AMrXdXsajYZzj1x4h9Ao4zBDfUwXaavd+cCjSmrFcalRPO3mKAJ6sNxMLsjbjz3yx4tUg6RY7/rTVYkoLx7E+Q6kSqL8SpVqbujL
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221224050640.64427-1-zhouzhouyi@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:f801:0:b0:6e3:134:3a97 with SMTP id
+ o1-20020a6bf801000000b006e301343a97mr887582ioh.64.1671861510633; Fri, 23 Dec
+ 2022 21:58:30 -0800 (PST)
+Date:   Fri, 23 Dec 2022 21:58:30 -0800
+In-Reply-To: <000000000000abc46005e9f9e943@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007483a605f08c97a2@google.com>
+Subject: Re: [syzbot] [jfs?] kernel BUG in txUnlock
+From:   syzbot <syzbot+a63afa301d1258d09267@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 24, 2022 at 01:06:40PM +0800, Zhouyi Zhou wrote:
-> Initialize ret value whenever 'if' condition is false in dhry_run_set.
-> 
-> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> ---
-> Dear Developers:
-> When I invoke make bzImage LLVM=1, clang complains followings:
-> lib/dhry_run.c:61:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false
-> 
-> Fix above complain by initialize the ret value.
-> 
-> Thanks
-> Zhouyi
+syzbot has found a reproducer for the following issue on:
 
-Thank you for the patch! I think this has already been fixed:
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=11fbab64480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=a63afa301d1258d09267
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1779a650480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16346274480000
 
-https://lore.kernel.org/20221219221045.0ABAEC433D2@smtp.kernel.org/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/4aaac3b4e5ee/mount_0.gz
 
--next is on a break so it won't be there for a bit:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a63afa301d1258d09267@syzkaller.appspotmail.com
 
-https://lore.kernel.org/20221220112148.64f183ce@canb.auug.org.au/
+BUG at fs/jfs/jfs_txnmgr.c:926 assert(mp->nohomeok > 0)
+------------[ cut here ]------------
+kernel BUG at fs/jfs/jfs_txnmgr.c:926!
+Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 90 Comm: jfsCommit Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : txUnlock+0x6f4/0x738 fs/jfs/jfs_txnmgr.c:926
+lr : txUnlock+0x6f4/0x738 fs/jfs/jfs_txnmgr.c:926
+sp : ffff80000fe93d30
+x29: ffff80000fe93d70 x28: ffff800012902000 x27: 0000000000000002
+x26: ffff80000efd4308 x25: ffff80000efd4000 x24: ffff0000cd24d000
+x23: ffff80000efd4000 x22: 0000000000000048 x21: ffff80000efd42b4
+x20: ffff80000efd4000 x19: 0000000000000000 x18: 00000000000000c0
+x17: ffff80000dda8198 x16: ffff80000dbe6158 x15: ffff0000c0fd1a40
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c0fd1a40
+x11: ff808000081c4d64 x10: 0000000000000000 x9 : 1da0f0d83d883600
+x8 : 1da0f0d83d883600 x7 : ffff80000c091ebc x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0001fefddcd0 x1 : 0000000100000000 x0 : 0000000000000037
+Call trace:
+ txUnlock+0x6f4/0x738 fs/jfs/jfs_txnmgr.c:926
+ txLazyCommit fs/jfs/jfs_txnmgr.c:2677 [inline]
+ jfs_lazycommit+0x228/0x4b8 fs/jfs/jfs_txnmgr.c:2727
+ kthread+0x12c/0x158 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+Code: 910d7021 91288c63 528073c2 94cbec2c (d4210000) 
+---[ end trace 0000000000000000 ]---
 
-Cheers,
-Nathan
-
-> --
->  lib/dhry_run.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/lib/dhry_run.c b/lib/dhry_run.c
-> index 31a1d442e4a0..be86e5126c29 100644
-> --- a/lib/dhry_run.c
-> +++ b/lib/dhry_run.c
-> @@ -64,6 +64,7 @@ static int dhry_run_set(const char *val, const struct kernel_param *kp)
->  			return ret;
->  	} else {
->  		dhry_run = true;
-> +		ret = 0;
->  	}
->  
->  	if (dhry_run && system_state == SYSTEM_RUNNING)
-> -- 
-> 2.34.1
-> 
