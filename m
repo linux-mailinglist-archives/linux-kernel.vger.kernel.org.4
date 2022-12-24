@@ -2,75 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B35965589E
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 07:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759596558A9
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 07:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiLXGXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 01:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
+        id S231319AbiLXGhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 01:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiLXGXG (ORCPT
+        with ESMTP id S229503AbiLXGhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 01:23:06 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5958164BC;
-        Fri, 23 Dec 2022 22:23:04 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NfDW62ZMgz4f3k6G;
-        Sat, 24 Dec 2022 14:22:58 +0800 (CST)
-Received: from [10.67.109.184] (unknown [10.67.109.184])
-        by APP2 (Coremail) with SMTP id Syh0CgC3XevBmqZjip+oAQ--.41973S2;
-        Sat, 24 Dec 2022 14:22:59 +0800 (CST)
-Message-ID: <b3fb772a-db85-05ca-a1bf-4781526fae1d@huaweicloud.com>
-Date:   Sat, 24 Dec 2022 14:22:57 +0800
+        Sat, 24 Dec 2022 01:37:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14756330;
+        Fri, 23 Dec 2022 22:37:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4415B81CD9;
+        Sat, 24 Dec 2022 06:37:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A653BC433D2;
+        Sat, 24 Dec 2022 06:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1671863856;
+        bh=/38IVuA7PEniyulc/5p3MH83Z0S0l/GkZGr7fxcOHlU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e/xs47NrvMxbZrOcspCL/f131I/YtyPzR+JHr+exRnFQOLDCy3RH30sVbJvJUQ/X5
+         AUoKWGqQubnv5O4Nbjwoid1bx+c2taE7D7KNKgLFAKE9j7JtXN3cS4aKzXX4XvNxEb
+         bOfWEIWXSLwgIA9fZLyZBh6mHnagkn1EMNXa36Us=
+Date:   Sat, 24 Dec 2022 07:37:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     neal_liu@aspeedtech.com, joel@jms.id.au, andrew@aj.id.au,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v3] usb: gadget: aspeed_udc: Add check for
+ dma_alloc_coherent
+Message-ID: <Y6aeLMAu+XCYTxt6@kroah.com>
+References: <20221224025001.24503-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC PATCH RESEND bpf-next 0/4] Support bpf trampoline for RV64
-Content-Language: en-US
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Pu Lehui <pulehui@huawei.com>
-References: <20221220021319.1655871-1-pulehui@huaweicloud.com>
- <87ili3a8zy.fsf@all.your.base.are.belong.to.us>
-From:   Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <87ili3a8zy.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgC3XevBmqZjip+oAQ--.41973S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XrW3Jr4fCF1kGFyUZw1rCrg_yoWfZrgEkr
-        ZxtrySvr45ta1Dtw1Ygw43urZxXr40qFyvyrWUXFZ2k395ZF1kXFn8u39xArWfZ3ySqFnx
-        tF98AFyxAasFvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbIxYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221224025001.24503-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,33 +55,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Dec 24, 2022 at 10:50:01AM +0800, Jiasheng Jiang wrote:
+> Yes, it is the same as mine.
+> As the previous patch had not been merged into the Linux kernel,
+> my tool found the same error and report it.
+> And both of us chose the most concise way to fix the error.
+> That is why the patches are the same.
 
+I have no context at all here, what does this refer to?
 
-On 2022/12/22 21:00, Björn Töpel wrote:
-> Pu Lehui <pulehui@huaweicloud.com> writes:
-> 
->> BPF trampoline is the critical infrastructure of the bpf
->> subsystem, acting as a mediator between kernel functions
->> and BPF programs. Numerous important features, such as
->> using ebpf program for zero overhead kernel introspection,
->> rely on this key component. We can't wait to support bpf
->> trampoline on RV64. The implementation of bpf trampoline
->> was closely to x86 and arm64 for future development.
-> 
-> Thank you for working on this! BPF trampoline is the "missing piece"
-> from getting proper kfunc support.
-> 
-> Unfortunately, I wont be able to do a proper review until next week.
-> 
+confused,
 
-Take your time, it might take several rounds of optimization. Yep, riscv 
-bpf will look more complete when bpf trampoline and kfunc are supported.
-
-Anyway, have a nice christmas holidays.😄
-
-Lehui
-
-> 
-> Happy holidays,
-> Björn
-
+greg k-h
