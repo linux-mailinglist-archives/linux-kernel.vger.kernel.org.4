@@ -2,150 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17DE6558FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 08:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00518655904
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 08:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbiLXHo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 02:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
+        id S229613AbiLXHti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 02:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLXHo5 (ORCPT
+        with ESMTP id S229445AbiLXHtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 02:44:57 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2648CC756;
-        Fri, 23 Dec 2022 23:44:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671867879; bh=EPkYose1e3yrKl5ykxyOmyiDf9URlXGGrlEnGyZvwbI=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=Puz3PNdxyeZkpG+Qvhmha/U0cVogMsMqOUNdzVnd5AhWwo4kgUowfyrPO8FGJJlCd
-         Rc3gCV7B16GYp8VeMtfrUdO53ANowjIa+Xww/+i3duYG4gg05sxv2aIBmv+/KRH5qO
-         UYVNX2KVeV/FHWrJEmletzzFmD64uSDJTSylfZUs=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 24 Dec 2022 08:44:39 +0100 (CET)
-X-EA-Auth: gJnmbxUVyJjJm0gxPqKRmKfx/xtAurON5XX5Cu+SW9Mkhn5NcZjfZnpRmtOvQMsB4fsWi30SoQudVSDFIctPWmBnsG8vec0w
-Date:   Sat, 24 Dec 2022 13:14:32 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v2] tty: serial: dz: convert atomic_* to refcount_* APIs
-Message-ID: <Y6at4MyYmIuy2Ctc@qemulion>
+        Sat, 24 Dec 2022 02:49:36 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802E818381;
+        Fri, 23 Dec 2022 23:49:35 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so10625893pjj.2;
+        Fri, 23 Dec 2022 23:49:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:in-reply-to:date
+         :cc:to:from:subject:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lnbK1C3tAl/B2kMzA6I4NYD3A/jljt/Z9ocUnpOLO+Q=;
+        b=DPFd27v9ZneQw/vC3dnJwX9CYcmbAofwuES94tzew+/v7LODNWUsv7o6ZDkeJt4l0u
+         KYxynWfxj4X2jAxvhrkJmBTvuFZHdAvgKQ6yaVyb0NjUX0Y0babzUU3mCFgwJWKBfe80
+         yqW3B62PJHCZzrAYLd+gpWKI+IfaCO8K2Zb8u12X2QoWxHfpur4kHGQWW7SrSRb3Fzbp
+         MT54pj1IDct1IFUe+IkjKL18+7yu/PJJsnAyfKcDUcriwD8o7HZo/JUmAvD6tnEO/OyF
+         kpZcd0hwN49KM8JXPy0Pt20vHJ7Q2yEtnnFel2wVgDM0bmUnKUp6ogL/icXAZgEea2eu
+         UtXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:in-reply-to:date
+         :cc:to:from:subject:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lnbK1C3tAl/B2kMzA6I4NYD3A/jljt/Z9ocUnpOLO+Q=;
+        b=dorcXju7n58lSInZ3PduYNW7pJzLzvIzbI6aHMmXgxsDjP5Mt4Sc4rgXDZsUN6TYos
+         IEUtIKZqG2oU49Qszz0Cm9Zt9GzKKeQp8aF1PrRwaZ3QME2/55UcY3cvA5ocPe3Q3fUb
+         Z5MBaHZislT9fHKGjOqB9ZY2uH2p8EIj8LESaP6+w3CEqwG/dEduWg3Vyylkb2wa3t3E
+         gN+CSIpNSv5lV3E5exVHG3NkFdEhhddyNYREm6xjxcyS9ryvLAjk6a16b1TjcQ44IANl
+         2AgMhfEEBXP8p6KNctnPEk+W1Y2mj1IrNcfbXOgjH2ZkFzg+8wsbXOpeZy0NyrX6oRoP
+         OMEg==
+X-Gm-Message-State: AFqh2kr8N4Upjt7wqd3ReLaiIinYWobPaJ9b2kp5yszdiJnL0LETf30T
+        AIjZSkg7srWM6X/wkH7KvwqkZoYufIZ7U4YN
+X-Google-Smtp-Source: AMrXdXv0WhnfodhW7VqymWGEUW62ifeHh96+2bdq8+w12z/ycCj0c6SVfBg0bcDKLNVFzcR4KErb7w==
+X-Received: by 2002:a17:902:ee41:b0:189:8f0c:d314 with SMTP id 1-20020a170902ee4100b001898f0cd314mr13892493plo.39.1671868175087;
+        Fri, 23 Dec 2022 23:49:35 -0800 (PST)
+Received: from [192.168.122.138] ([49.36.41.210])
+        by smtp.gmail.com with ESMTPSA id c16-20020a170903235000b0016d773aae60sm3534002plh.19.2022.12.23.23.49.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 23:49:34 -0800 (PST)
+Message-ID: <940462e95c8eea934b8823aa189dbddece6bee95.camel@gmail.com>
+Subject: Re: [git pull] Input updates for v6.1-rc5 #forregzbot
+From:   Aman Dhoot <amandhoot12@gmail.com>
+To:     regressions@leemhuis.info
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sat, 24 Dec 2022 13:19:31 +0530
+In-Reply-To: <343bc8a5-a426-8f6a-70b9-3877f53c003f@leemhuis.info>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1+deb11u1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The refcount_* APIs are designed to address known issues with the
-atomic_t APIs for reference counting. They provide following distinct
-advantages
-   - protect the reference counters from overflow/underflow
-   - avoid use-after-free errors
-   - provide improved memory ordering guarantee schemes
-   - neater and safer.
-Hence, replace the atomic_* APIs by their equivalent refcount_t
-API functions.
+If I use synaptics touchpad in legacy PS/2 mode.keyboard and touchpad
+stop working randomly because of TLP, if I uninstall tlp it resolves
+the keyboard touchpad stops working randomly issue. But I see good
+battery life in my system using tlp by switching touchpad from legacy
+PS/2 mode to RMI mode resolves the problem. this way i can use tlp and
+keyboard touchpad works without any problem.
 
-This patch proposal address the following warnings generated by
-the atomic_as_refcounter.cocci coccinelle script
-atomic_add_return(-1, ...)
-
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-
-Changes in v2:
-   1. Separate the combined change into one variable per patch as
-      suggested by gregkh@linuxfoundation.org
-   2. There was additional feedback on validating the change as it appeared to
-      modify the existing logic. However, I found that the logic does not
-      change with the proposed refcount_* APIs used in this change. Hence that
-      feedback is not applied in this version.
-
-
- drivers/tty/serial/dz.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
-index 6b7ed7f2f3ca..b70edc248f8b 100644
---- a/drivers/tty/serial/dz.c
-+++ b/drivers/tty/serial/dz.c
-@@ -47,6 +47,7 @@
- #include <linux/tty_flip.h>
-
- #include <linux/atomic.h>
-+#include <linux/refcount.h>
- #include <linux/io.h>
- #include <asm/bootinfo.h>
-
-@@ -75,7 +76,7 @@ struct dz_port {
-
- struct dz_mux {
- 	struct dz_port		dport[DZ_NB_PORT];
--	atomic_t		map_guard;
-+	refcount_t		map_guard;
- 	atomic_t		irq_guard;
- 	int			initialised;
- };
-@@ -662,13 +663,11 @@ static const char *dz_type(struct uart_port *uport)
- static void dz_release_port(struct uart_port *uport)
- {
- 	struct dz_mux *mux = to_dport(uport)->mux;
--	int map_guard;
-
- 	iounmap(uport->membase);
- 	uport->membase = NULL;
-
--	map_guard = atomic_add_return(-1, &mux->map_guard);
--	if (!map_guard)
-+	if (refcount_dec_and_test(&mux->map_guard))
- 		release_mem_region(uport->mapbase, dec_kn_slot_size);
- }
-
-@@ -687,23 +686,19 @@ static int dz_map_port(struct uart_port *uport)
- static int dz_request_port(struct uart_port *uport)
- {
- 	struct dz_mux *mux = to_dport(uport)->mux;
--	int map_guard;
- 	int ret;
-
--	map_guard = atomic_add_return(1, &mux->map_guard);
--	if (map_guard == 1) {
--		if (!request_mem_region(uport->mapbase, dec_kn_slot_size,
--					"dz")) {
--			atomic_add(-1, &mux->map_guard);
--			printk(KERN_ERR
--			       "dz: Unable to reserve MMIO resource\n");
-+	refcount_inc(&mux->map_guard);
-+	if (refcount_read(&mux->map_guard) == 1) {
-+		if (!request_mem_region(uport->mapbase, dec_kn_slot_size, "dz")) {
-+			refcount_dec(&mux->map_guard);
-+			printk(KERN_ERR "dz: Unable to reserve MMIO resource\n");
- 			return -EBUSY;
- 		}
- 	}
- 	ret = dz_map_port(uport);
- 	if (ret) {
--		map_guard = atomic_add_return(-1, &mux->map_guard);
--		if (!map_guard)
-+		if (refcount_dec_and_test(&mux->map_guard))
- 			release_mem_region(uport->mapbase, dec_kn_slot_size);
- 		return ret;
- 	}
---
-2.34.1
-
-
+In my dmesg log I don't have msg "psmouse serio1: synaptics: SMbus
+companion is not ready yet".
 
