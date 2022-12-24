@@ -2,91 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEEC655B58
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 22:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3CF655B5C
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 22:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiLXVgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 16:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S230403AbiLXVoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 16:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbiLXVgw (ORCPT
+        with ESMTP id S230060AbiLXVoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 16:36:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0E4B84E;
-        Sat, 24 Dec 2022 13:36:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BD8FB80185;
-        Sat, 24 Dec 2022 21:36:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2334C433EF;
-        Sat, 24 Dec 2022 21:36:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671917808;
-        bh=VQb7MWoNP9XDTkn0OWRtjf3EugByIlCRVMC/M3almsA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rZsPP1nFOp7YzD+5De0+81DKldhptG7WatoTqh1zff33rJ1f1TAULH8TXbotcIzR7
-         lOnDF9nnL39sd5CpKhAZ58pgPnyw/QZ8DJBFdsg2GyB3wO+Fa8lwydOT/lTtDE0fHV
-         q5mpZmYgy+WFUjCo4NvR6EPIoRddwNAVHH2PeukCASz5CC5Vg2eU00XfteMy6FjgzY
-         koJO5bE2oHZkJuUZqWokeKwAihguUCAl57xX7Ij5b4tKrGFFogSa4eO5qynJBFK2RB
-         xK7O8SG9/QyWbBuHcmob+/z9yox7BGLKE9jg15kqBZeOte9/0Y183xuYnqn2Wn0zcY
-         V+aBsbdsfqY3w==
-Received: by pali.im (Postfix)
-        id 2F4C1720; Sat, 24 Dec 2022 22:36:46 +0100 (CET)
-Date:   Sat, 24 Dec 2022 22:36:46 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Thomas Maier <balagi@justmail.de>, linux-block@vger.kernel.org
-Subject: Re: [PATCH] pktcdvd: remove driver.
-Message-ID: <20221224213646.zyosaq7hnlsaje4b@pali>
-References: <20221224101139.sgvhr2n3pbrs4agm@pali>
- <Y6bvh48kTTzbMX6M@kroah.com>
- <20221224133425.vlcxbaaynihiom4a@pali>
- <Y6cXRbGUsarzoJEw@zn.tnic>
- <20221224154842.o4ngrwmskduowttm@pali>
- <Y6chm9khdG4pmNhN@zn.tnic>
- <20221224160055.ln3dbhx7dnut7dwi@pali>
- <Y6cma26FKzBQD8AN@zn.tnic>
- <20221224163602.6bqr32tkf2ulx6po@pali>
- <Y6dsWVspi9tGNid5@kbusch-mbp.dhcp.thefacebook.com>
+        Sat, 24 Dec 2022 16:44:00 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C3BBC16
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:43:58 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id bq39so3651885lfb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 13:43:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tzz+BP69NAct4xSytGrEtJG8lGhPYUMzf/5vG9X4+Ps=;
+        b=w8U8ZHfSAS0HK7Nj9h2jGYe8lct0qZlXSdiyx7S4Q707B0DTMdFZDG8uifTX3jp/Qu
+         5/DvyefC9yxvCCiK3rb0SQQjKxDoIZlM/JgqCPd6wp1+OhtjgS6cLZEBQn2yxJrDgc1F
+         r8s3Vt0ohIZ9jz1zFL015Z3+ddZRx1LN11+HVUN/gaBZZv01oO3bO/7tToBSFvdb0v9p
+         OGXTKIwRdg4e4gjirE0jyH0OVpJa/lB3bk2S/vA/FHrAto0XllJZmkRioNFD4N0ZndRO
+         fKnRznYqDrCT4BgLPih1VVi9iBqjztfGXbyHPlf0j2iro6TETC2a1FqG+WDnrsgkFmXI
+         jUjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tzz+BP69NAct4xSytGrEtJG8lGhPYUMzf/5vG9X4+Ps=;
+        b=UU1fGSDe3acdFehl/td74F9J811iKHMyTs6kxFtoaWjbn7y0xvMzI7adPn/Nm3+cxu
+         c+scf/DYY2Go48RnuoXXoacHFWmgrSKMAiSEvL1oU2qsk6jb/FYIbSHUR5fvWY89HIpL
+         QaAKEJYT+lwKW5FJ8UTZvjVzFzBnsE/w4KP2JA5Ct3vZR5h9gYVvTuZviPVM0VHYBis6
+         hn+pd0++28CdeAehxBIyz1x5qeF3nCtWq0/U7UGnY6ee9f8sfR+zebdgpFjcLCPs1CtH
+         ebMo0xXQIUHiRVI522qKCTyND6bmcU6xdgdXjdKuYAtvvJFKjRyhYb2dL1DomN79RRSo
+         PdmQ==
+X-Gm-Message-State: AFqh2koJtXgLajw8s2cibof9zpiodQrAvL4ZhjFue3FiQkRN+jlH7xnV
+        Yg7YIKYOxo3IKN0MwNXPBzSinA==
+X-Google-Smtp-Source: AMrXdXtLkrVO94d3AI+pDVIzVjoeW9kMIQB460bixhhadhOrpeWKsfMz5O1mCw12RV1VBi3tVyNzFQ==
+X-Received: by 2002:a19:7414:0:b0:4b4:bea4:15c9 with SMTP id v20-20020a197414000000b004b4bea415c9mr4302729lfe.21.1671918236644;
+        Sat, 24 Dec 2022 13:43:56 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id j13-20020ac2454d000000b004c7d0ed9619sm1117861lfm.123.2022.12.24.13.43.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Dec 2022 13:43:56 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: sm8350: correct SDHCI interconnect arguments
+Date:   Sat, 24 Dec 2022 22:43:51 +0100
+Message-Id: <20221224214351.18215-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6dsWVspi9tGNid5@kbusch-mbp.dhcp.thefacebook.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 24 December 2022 14:17:13 Keith Busch wrote:
-> As a matter of procedure, could patches deprecating modules perhaps add
-> a loud kernel warning message somewhere in the module's execution path
-> as a means to mitigate any surprises for people using it?
+The interconnect providers accept only one argument (cells == 1), so fix
+a copy&paste from SM8450:
 
-Sounds like a good idea. But it is needed to find a place for "somewhere".
-And message should contain what does that deprecation means. Because for
-more software products it means that software is being replaced by
-another one. So it could be confusing that it is just needed to switch
-from module A to module B and that is all. But for this case there is no
-replacement.
+  sm8350-hdk.dtb: mmc@8804000: interconnects: [[74, 9, 0], [75, 1, 0], [76, 2, 0], [77, 36, 0]] is too long
 
-And based on my experience, users (including me) are using distributions
-LTS kernels in production. So do not forget that it takes lot of time
-until some distributions switch from one LTS version to another LTS
-version and so it would take lot of time until deprecation warning is
-visible to user. (Maybe deprecation information could be "backported" to
-LTS kernels?)
+Fixes: 60477435e4de ("arm64: dts: qcom: sm8350: Add SDHCI2")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-In any case I would prefer some documented webpage with all deprecation
-information. Like there is releases webpage which says exact day when
-particular LTS version is EOL: https://kernel.org/category/releases.html
+---
+
+Fix for v6.2-rc merge window.
+---
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 4fc15cc69b8c..0726930c9e28 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -2382,8 +2382,8 @@ sdhc_2: mmc@8804000 {
+ 				 <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "iface", "core", "xo";
+ 			resets = <&gcc GCC_SDCC2_BCR>;
+-			interconnects = <&aggre2_noc MASTER_SDCC_2 0 &mc_virt SLAVE_EBI1 0>,
+-					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_SDCC_2 0>;
++			interconnects = <&aggre2_noc MASTER_SDCC_2 &mc_virt SLAVE_EBI1>,
++					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_SDCC_2>;
+ 			interconnect-names = "sdhc-ddr","cpu-sdhc";
+ 			iommus = <&apps_smmu 0x4a0 0x0>;
+ 			power-domains = <&rpmhpd SM8350_CX>;
+-- 
+2.34.1
+
