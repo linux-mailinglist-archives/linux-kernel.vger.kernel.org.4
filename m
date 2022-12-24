@@ -2,105 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715D365590F
-	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F7D655913
+	for <lists+linux-kernel@lfdr.de>; Sat, 24 Dec 2022 09:12:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiLXIEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 03:04:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S230297AbiLXIMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 03:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLXIEF (ORCPT
+        with ESMTP id S229445AbiLXIMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 03:04:05 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30CF2606;
-        Sat, 24 Dec 2022 00:04:03 -0800 (PST)
-Received: from [IPV6:2a01:e0a:120:3210:9071:5495:b8e6:e417] (unknown [IPv6:2a01:e0a:120:3210:9071:5495:b8e6:e417])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 116216602CE4;
-        Sat, 24 Dec 2022 08:04:01 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671869041;
-        bh=gwiI8vPLAipPEAg6suP/Gdgsidzj+89aU3MlnmFb6CI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fudwGN1x/TMpFiYZC3wdz3auwHOAy9z/AbFYWiGILCgmSIFO6lQOvhTqFGHu54D2B
-         h84fruUR8owRI43OQx6xmLr4ss9+Me0O0gZvTrdMzrCffz4E9BSk7O/oqC4NcrfqUl
-         9g6EtkBgY8cDBaBhQFtXdElBNrb7GgV7jjEdK3UsJb5ttPf/WMmOwNlZ29swZIgSVC
-         wQyz25uUHNahL5Ov0ONvcQ+4ESsyaR5R9HyHvme7OC5PLS9XT/Lu5MsN9iw+Ec6quZ
-         z3gBAL+AZtV8DAuaXhH7HLL8yjag6NxFPdVST6ntOkMUEEN8NWDsFCAjDMcdq846hM
-         5qEtr/gIrZjtA==
-Message-ID: <8d13ffb9-74cb-00f9-072a-0614e341e1ef@collabora.com>
-Date:   Sat, 24 Dec 2022 09:03:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] hantro: Fix JPEG encoder ENUM_FRMSIZE on RK3399
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     kernel@collabora.com, Robert Mader <robert.mader@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221223181647.720918-1-nicolas.dufresne@collabora.com>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <20221223181647.720918-1-nicolas.dufresne@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 24 Dec 2022 03:12:16 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D08D13B
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 00:12:15 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id pi14-20020a17090b1e4e00b0021d20da7a51so6181086pjb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 00:12:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CLNnJd70ppyA/NycQ0X3RpMhQCUPbfoR/CeGZ2SECtc=;
+        b=KvJVzUtz4kTrA5zSMYZsEaF5rzMBMjUkNdUpmskBApF6t9+qSaYHK35X8ZMt7v36Va
+         TiOrYOTKQS+jN5D9i7C+qkRZ3j0fulIHp72+Uc328W/QtqOseEMLXqvEfy9tf6Jemgg9
+         aR2dN1MvkwRKrALxrMBa50w7wHDzxmZbGJTXfWY8snWJ7yZO81TKhba1pp1Z1GyYVyZv
+         25si/eIHF48gJEGGDDO/Pw24iQWOgduzQY6FY2yGjdRJvQkhz7YR3+LsX5BkI0vnYkJy
+         6+p6ss7S7BcyxnCJFmie3egThN21Rwq7OUUrgGzL2zr/81XUjihHEiiq8Uy1h/y6s6kt
+         yKmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CLNnJd70ppyA/NycQ0X3RpMhQCUPbfoR/CeGZ2SECtc=;
+        b=NREhn7xrxqujtVOZ1Nmjai62gs5oMOULRKtXAcF0PNqhIwNWwNM5xir5FrhJ3mDnGM
+         ofqigQdaNm8HQaWObeDDJdO+85TUiTuHUrWqihTmgXMpNn73faVjIb3jhSMAdaqqT8mZ
+         mIlg50Kiyd87ib+2jU136NniiHQpSG3/yU5ue2vfMfhLFWoFMu1AqVfrXsMP0whjhUh0
+         kh9cMzzOCgq1PHA7YJYzwP4/+1s51Vcaxgl1HcccEU8IEmeI8qQEUozClEC5ticQgla3
+         y33FvgZoFSYCpYSYtquXk+7lJgNgXfKS3pUfT1IoSXVedo4j1Zi+WIQymPtEwH0fEC/z
+         IudA==
+X-Gm-Message-State: AFqh2kpAmMEzcl6KPBIEozqcckzW7skZbhv2Ue6Ce2QmGbzFbjMOChnC
+        kkvHiK4UuC/awehLOBVi0WQt+uUX7njw
+X-Google-Smtp-Source: AMrXdXvlobVQR1nR7URHxL5LDAGlAhiApaUyxcnX2240pREAOBx3+kodfs1Ymkh1gJJFeZfRR/8gHJLc9Tyc
+X-Received: from zokeefe3.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1b6])
+ (user=zokeefe job=sendgmr) by 2002:a17:902:ce06:b0:188:fd3f:cb06 with SMTP id
+ k6-20020a170902ce0600b00188fd3fcb06mr614142plg.23.1671869535430; Sat, 24 Dec
+ 2022 00:12:15 -0800 (PST)
+Date:   Sat, 24 Dec 2022 00:12:02 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+Message-ID: <20221224081203.3193960-1-zokeefe@google.com>
+Subject: [PATCH v2 1/2] mm/MADV_COLLAPSE: don't expand collapse when vm_end is
+ past requested end
+From:   "Zach O'Keefe" <zokeefe@google.com>
+To:     linux-mm@kvack.org
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Zach O'Keefe" <zokeefe@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+MADV_COLLAPSE acts on one hugepage-aligned/sized region at a time, until
+it has collapsed all eligible memory contained within the bounds
+supplied by the user.
 
-Le 23/12/2022 à 19:16, Nicolas Dufresne a écrit :
-> Since 79c987de8b354, enumerating framesize on format set with "MODE_NONE"
-> (any raw formats) is reporting an invalid frmsize.
->
->    Size: Stepwise 0x0 - 0x0 with step 0/0
->
-> Before this change, the driver would return EINVAL, which is also invalid but
-> worked in GStreamer. The original intent was not to implement it, hence the
-> -ENOTTY return in this change. While drivers should implement ENUM_FRMSIZE for
-> all formats and queues, this change is limited in scope to fix the regression.
->
-> This fixes taking picture in Gnome Cheese software, or any software using
-> GSteamer to encode JPEG with hardware acceleration.
->
-> Fixes: 79c987de8b354 ("media: hantro: Use post processor scaling capacities")
-> Reported-by: Robert Mader <robert.mader@collabora.com>
-> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+At the top of each hugepage iteration we (re)lock mmap_lock and
+(re)validate the VMA for eligibility and update variables that might
+have changed while mmap_lock was dropped.  One thing that might occur,
+is that the VMA could be resized, and as such, we refetch vma->vm_end
+to make sure we don't collapse past the end of the VMA's new end.
 
-Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+However, it's possible that when refetching vma>vm_end that we expand the
+region acted on by MADV_COLLAPSE if vma->vm_end is greater than size+len
+supplied by the user.
 
-> ---
->   drivers/media/platform/verisilicon/hantro_v4l2.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> index 2c7a805289e7b..30e650edaea8a 100644
-> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-> @@ -161,8 +161,11 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
->   	}
->   
->   	/* For non-coded formats check if postprocessing scaling is possible */
-> -	if (fmt->codec_mode == HANTRO_MODE_NONE && hantro_needs_postproc(ctx, fmt)) {
-> -		return hanto_postproc_enum_framesizes(ctx, fsize);
-> +	if (fmt->codec_mode == HANTRO_MODE_NONE) {
-> +		if (hantro_needs_postproc(ctx, fmt))
-> +			return hanto_postproc_enum_framesizes(ctx, fsize);
-> +		else
-> +			return -ENOTTY;
->   	} else if (fsize->index != 0) {
->   		vpu_debug(0, "invalid frame size index (expected 0, got %d)\n",
->   			  fsize->index);
+The consequence here is that we may attempt to collapse more memory than
+requested, possibly yielding either "too much success" or "false
+failure" user-visible results.  An example of the former is if we
+MADV_COLLAPSE the first 4MiB of a 2TiB mmap()'d file, the incorrect
+refetch would cause the operation to block for much longer than
+anticipated as we attempt to collapse the entire TiB region.  An example
+of the latter is that applying MADV_COLLPSE to a 4MiB file mapped to the
+start of a 6MiB VMA will successfully collapse the first 4MiB, then
+incorrectly attempt to collapse the last hugepage-aligned/sized region
+-- fail (since readahead/page cache lookup will fail) -- and report a
+failure to the user.
+
+Don't expand the acted-on region when refetching vma->vm_end.
+
+Fixes: 4d24de9425f7 ("mm: MADV_COLLAPSE: refetch vm_end after reacquiring mmap_lock")
+Reported-by: Hugh Dickins <hughd@google.com>
+Signed-off-by: Zach O'Keefe <zokeefe@google.com>
+Cc: Yang Shi <shy828301@gmail.com>
+---
+v1->v2 : Updated changelog to make clear what user-visible issues this
+	 patch addresses, as well makes the case for backporting (Andrew
+	 Morton).
+
+While there aren't any stability risks, without this patch there exist
+trivial examples where MADV_COLLAPSE won't work; as such, this should be
+backported to stable 6.1.X to make MADV_COLLAPSE dependable in such
+cases.
+
+v1: https://lore.kernel.org/linux-mm/CAAa6QmRx_b2UCJWE2XZ3=3c3-_N3R4cDGX6Wm4OT7qhFC6U_SQ@mail.gmail.com/T/#m6c91da3cdbd9b1d1ebb29d415962deb158a2c658
+---
+ mm/khugepaged.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 5cb401aa2b9d..b4d2ec0a94ed 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -2649,7 +2649,7 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+ 				goto out_nolock;
+ 			}
+ 
+-			hend = vma->vm_end & HPAGE_PMD_MASK;
++			hend = min(hend, vma->vm_end & HPAGE_PMD_MASK);
+ 		}
+ 		mmap_assert_locked(mm);
+ 		memset(cc->node_load, 0, sizeof(cc->node_load));
+-- 
+2.39.0.314.g84b9a713c41-goog
+
