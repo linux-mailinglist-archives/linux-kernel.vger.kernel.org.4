@@ -2,151 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538CF655D61
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 15:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CA2655D6F
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 16:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiLYOcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 09:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S229697AbiLYPJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 10:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLYOcD (ORCPT
+        with ESMTP id S229498AbiLYPJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 09:32:03 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23535C04;
-        Sun, 25 Dec 2022 06:31:53 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id C1C7424DFCE;
-        Sun, 25 Dec 2022 22:31:44 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 25 Dec
- 2022 22:31:44 +0800
-Received: from [192.168.2.237] (113.72.145.114) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 25 Dec
- 2022 22:31:43 +0800
-Message-ID: <e23460e8-0ca4-b20b-e48e-faeca4f30e88@starfivetech.com>
-Date:   Sun, 25 Dec 2022 22:31:41 +0800
+        Sun, 25 Dec 2022 10:09:37 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938695FE3
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 07:09:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1671980971; bh=JbAethzpN7nG0wyvMkJzQiQv8OlJxBl91l6miBYz0Nk=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=BV5vHNAVx1e/43nCEdOqcUs8eTIfHoxAmmzp+gTIUGqHpE7l3InpEvyE80hfV0PwH
+         aqr41iwS2IbMlBJvwNsVPBakz+BVHTX3CE1KYyBj2H+D0Eqzau/k+T2Br5vGIG56VR
+         IhsZz+L3okJuaOW0pPOONVbgbrfcjiMd6ej8yReY=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sun, 25 Dec 2022 16:09:31 +0100 (CET)
+X-EA-Auth: Grnebmk61o2Ytl3xXoo8eI+B/Z+hTR6IkbcdeL7dstezlgCqOfUiYXf7/B+fI6UnsFS+ceP+79I10fP+LlSD+n417BF7f6Ck
+Date:   Sun, 25 Dec 2022 20:39:25 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Nicolas Palix <nicolas.palix@imag.fr>, cocci@inria.fr,
+        linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] coccinelle: api/atomic_as_refcounter: include message type
+ in output
+Message-ID: <Y6hnpcLiHmJaQbeE@qemulion>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-From:   Hal Feng <hal.feng@starfivetech.com>
-Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
- device tree
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-7-hal.feng@starfivetech.com> <Y6Ipv0BUummgqNaw@spud>
-Content-Language: en-US
-In-Reply-To: <Y6Ipv0BUummgqNaw@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.114]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Dec 2022 21:31:43 +0000, Conor Dooley wrote:
-> On Tue, Dec 20, 2022 at 09:12:46AM +0800, Hal Feng wrote:
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> > 
-> > Add initial device tree for the JH7110 RISC-V SoC by StarFive
-> > Technology Ltd.
-> > 
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> > Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-> > Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
-> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> > ---
-> 
-> FWIW, this cpu-map is now the default in linux, so you no longer *need*
-> to add it for that purpose - but there's obviously no harm in being
-> explicit for other operating systems etc. (IOW, don't remove it!)
-> 
-> > +		cpu-map {
-> > +			cluster0 {
-> > +				core0 {
-> > +					cpu = <&S76_0>;
-> > +				};
-> > +
-> > +				core1 {
-> > +					cpu = <&U74_1>;
-> > +				};
-> > +
-> > +				core2 {
-> > +					cpu = <&U74_2>;
-> > +				};
-> > +
-> > +				core3 {
-> > +					cpu = <&U74_3>;
-> > +				};
-> > +
-> > +				core4 {
-> > +					cpu = <&U74_4>;
-> > +				};
-> > +			};
-> > +		};
-> > +	};
-> 
-> > +		syscrg: clock-controller@13020000 {
-> 
-> For obvious reasons, I cannot apply this until both the clock & pinctrl
-> bindings are in my tree - but you know that already.
-> 
-> > +			compatible = "starfive,jh7110-syscrg";
-> > +			reg = <0x0 0x13020000 0x0 0x10000>;
-> > +			clocks = <&osc>, <&gmac1_rmii_refin>,
-> > +				 <&gmac1_rgmii_rxin>,
-> > +				 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
-> > +				 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
-> > +				 <&tdm_ext>, <&mclk_ext>;
-> 
-> As Krzk asked - are these clocks really all inputs to the SoC?
+A common practice is to grep for "WARNING" or "ERROR" text in the report
+output from a coccinelle semantic patch script. So, include the test
+"WARNING: " in the report output generated by the semantic patch for
+desired filtering of the output. Also improves the readability of the
+output. Here is an example of the old and new outputs reported:
 
-Yes, they are all external clock sources inputted to the SoC. They are
-used as root clocks or optional parent clocks in clock tree.
+    xyz_file.c:131:39-40: atomic_add_unless
+    xyz_file.c:131:39-40: WARNING: atomic_add_unless
 
-> 
-> > +			clock-names = "osc", "gmac1_rmii_refin",
-> > +				      "gmac1_rgmii_rxin",
-> > +				      "i2stx_bclk_ext", "i2stx_lrck_ext",
-> > +				      "i2srx_bclk_ext", "i2srx_lrck_ext",
-> > +				      "tdm_ext", "mclk_ext";
-> > +			#clock-cells = <1>;
-> > +			#reset-cells = <1>;
-> > +		};
-> > +
-> > +		gpio: gpio@13040000 {
-> 
-> > +		gpioa: gpio@17020000 {
-> 
-> Out of curiousity, why gpio & gpioa?
+    xyz_file.c:196:6-25: atomic_dec_and_test variation before object free at line 208.
+    xyz_file.c:196:6-25: WARNING: atomic_dec_and_test variation before object free at line 208.
 
-Oh, is it easier to read if I change "gpio" and "gpioa"
-to "sysgpio" and "aongpio"? Thanks.
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ scripts/coccinelle/api/atomic_as_refcounter.cocci | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Best regards,
-Hal
+diff --git a/scripts/coccinelle/api/atomic_as_refcounter.cocci b/scripts/coccinelle/api/atomic_as_refcounter.cocci
+index e63d52408b86..bbe5b2932933 100644
+--- a/scripts/coccinelle/api/atomic_as_refcounter.cocci
++++ b/scripts/coccinelle/api/atomic_as_refcounter.cocci
+@@ -55,7 +55,7 @@ identifier fname6 =~ ".*call_rcu.*";
+ p1 << r1.p1;
+ p2 << r1.p2;
+ @@
+-msg = "atomic_dec_and_test variation before object free at line %s."
++msg = "WARNING: atomic_dec_and_test variation before object free at line %s."
+ coccilib.report.print_report(p1[0], msg % (p2[0].line))
+
+ @r4 exists@
+@@ -88,7 +88,7 @@ fname@p2(y, ...);
+ p1 << r4.p1;
+ p2 << r4.p2;
+ @@
+-msg = "atomic_dec_and_test variation before object free at line %s."
++msg = "WARNING: atomic_dec_and_test variation before object free at line %s."
+ coccilib.report.print_report(p1[0], msg % (p2[0].line))
+
+ @r2 exists@
+@@ -107,7 +107,7 @@ atomic64_add_unless(&(a)->x,-1,1)@p1
+ @script:python depends on report@
+ p1 << r2.p1;
+ @@
+-msg = "atomic_add_unless"
++msg = "WARNING: atomic_add_unless"
+ coccilib.report.print_report(p1[0], msg)
+
+ @r3 exists@
+@@ -126,5 +126,5 @@ x = atomic64_add_return@p1(-1, ...);
+ @script:python depends on report@
+ p1 << r3.p1;
+ @@
+-msg = "x = atomic_add_return(-1, ...)"
++msg = "WARNING: x = atomic_add_return(-1, ...)"
+ coccilib.report.print_report(p1[0], msg)
+--
+2.34.1
+
+
+
