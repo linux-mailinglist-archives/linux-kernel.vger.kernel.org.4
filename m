@@ -2,121 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47932655D27
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 13:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E43655CF4
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 12:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231195AbiLYMHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 07:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S230079AbiLYLvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 06:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiLYMGv (ORCPT
+        with ESMTP id S229631AbiLYLu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 07:06:51 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 333422DD1;
-        Sun, 25 Dec 2022 04:06:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=lYD3w
-        XNUFmWhBTXZjF8aH8HBuUSp1esXXHCXlQj+fyE=; b=IcoUKgmsGm8ucyKR4cN+B
-        8QK0lLQE+SwzwGYuZkxT9BVLBdegzV7bh2gwTEoZmfqX15BkA8H0czvOYPEN3EmE
-        eqk7xhnN6ak33aP1xYi32BpoY8dnSIPIBiGa1zuZXBLRphahExjSaGCoCU8AY7pE
-        jgePJqc/XiiKcgSvY9ePXU=
-Received: from ProDesk.. (unknown [58.22.7.114])
-        by zwqz-smtp-mta-g4-1 (Coremail) with SMTP id _____wC3jPniOKhjahJ1AA--.53952S2;
-        Sun, 25 Dec 2022 19:49:58 +0800 (CST)
-From:   Andy Yan <andyshrk@163.com>
-To:     heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
-        piotr.oniszczuk@gmail.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
-Cc:     Andy Yan <andyshrk@163.com>
-Subject: [PATCH 2/2] arm64: dts: rockchip: Enable wifi module AP6398s for rk3566 box demo
-Date:   Sun, 25 Dec 2022 19:49:53 +0800
-Message-Id: <20221225114953.3518595-1-andyshrk@163.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221225114915.3518502-1-andyshrk@163.com>
-References: <20221225114915.3518502-1-andyshrk@163.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wC3jPniOKhjahJ1AA--.53952S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJF15Xw47Jr4rWr1kKF18uFg_yoW8AFWrpa
-        sxCrZYgr1kCr4jganxXrn5Xrn5C395ta1vkwnrua4fKr1S9a1kGF1Uurn5AFn8WF48Xa1Y
-        9rs8Aa43Wrs2qw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zMKZXNUUUUU=
-X-Originating-IP: [58.22.7.114]
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbivBriXmASacxd7AABs9
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_SORBS_WEB,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Sun, 25 Dec 2022 06:50:58 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EA4B3E
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 03:50:52 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id s22so9351368ljp.5
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 03:50:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AlnLyJ2BHwOq0v6YM5eXS65npGm8qINlxvZC0I9lVgQ=;
+        b=KOqteYkKtgJyR7TLsHd/wtr0yFSNfCI7LJtbi9Wlvv5KF6a0t/eXNn1I7Roio0Scku
+         zNS2DGEaTz8AGBPLyxNItIrD8GNHNd0DlMWT74LWYXLYXVycJOljbXNDdj9LkpjVgrlr
+         AuWUuhzEas2Y1VMrEgLemv5neOV+jEkICHzacQ7nYrTx8pN61PMr41cSQY7iq3mNjaxn
+         qg91Dl4xt7E/+E7VL/mNEYIQIo7AVoG+4MoA5pD09aLogjvZdqFj1C/9JtMUyZvuym1T
+         L56tniLHtEPckCPXgBMqzCp6qWO096my1InWmhbPOfsO2AuyCIEOV3232g//OfmPzhHr
+         YMwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AlnLyJ2BHwOq0v6YM5eXS65npGm8qINlxvZC0I9lVgQ=;
+        b=qOqLOip2pn6d76IQtCpvpRPhlKuwTJIo3XGn9bOI6HyvblUAmaZ1vzK00/evcyKhZ1
+         9aynU/NF/cicY2iLX6uypTzRceIN4yj7qt2BoGopvWFWIGUcasuAUOzHF3Mv7myoAAAK
+         /P9qnHd8M8z22NNPPpm7ElN37eoaWcAoEy0IdAizpAJD307Ajublbr7VtsUU1L3uBuWt
+         ZWKJWNvJpbLwrCo+i8Xf7vAPtyDGlWqXk2kxR0dPTdq3W2E3tHk/Y7mPk7IDubiUwt9t
+         BpYgHhk9nDkgm8DzII8T07LF2QxedQDBraidZcFZ/jjm/R0OBEoG/BUS4zyyijTVbSno
+         RhEw==
+X-Gm-Message-State: AFqh2kqCmBZAZuSIH2hHY8H/aKwPT9qN07mgN3jqpSuWA+qXWRGUl9I6
+        gYS+YCI3SCpH5KBZq0IooAyo4B/uThCp+Q==
+X-Google-Smtp-Source: AMrXdXtpqOE8xzMIpqCUQKOF5Tiwvjms5Ci7tnoMpNH9CEC1oMyD5hsNVBnD033CgGolSrP4plkqHg==
+X-Received: by 2002:a2e:8244:0:b0:276:dc01:8058 with SMTP id j4-20020a2e8244000000b00276dc018058mr4260997ljh.1.1671969050971;
+        Sun, 25 Dec 2022 03:50:50 -0800 (PST)
+Received: from [10.0.207.73] ([185.32.8.213])
+        by smtp.gmail.com with ESMTPSA id bj31-20020a2eaa9f000000b0027facd123a0sm959608ljb.106.2022.12.25.03.50.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 25 Dec 2022 03:50:49 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (1.0)
+Subject: Re: drivers/gpio/gpio-exar.c:52 exar_offset_to_sel_addr() warn: replace divide condition 'pin / 8' with 'pin >= 8'
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+X-Mailer: iPhone Mail (16H71)
+In-Reply-To: <F701A496-22A6-4E3B-B3CB-E5BCF4C30502@gmail.com>
+Date:   Sun, 25 Dec 2022 12:50:46 +0100
+Cc:     oe-kbuild@lists.linux.dev, Qingtao Cao <qingtao.cao.au@gmail.com>,
+        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C430F7E6-723B-4EA8-BA87-00C84676BD4F@gmail.com>
+References: <202212181140.EAWl7FKx-lkp@intel.com> <3D147284-AF8C-4414-9BE1-C83032B6C15D@gmail.com> <Y6dTX2wx/SXlswGC@kadam> <F701A496-22A6-4E3B-B3CB-E5BCF4C30502@gmail.com>
+To:     Dan Carpenter <error27@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a AP6398s wifi/bt module on this board.
-Fix the sdmmc1 dt node to make wifi work.
 
-Fixes: 2e0537b16b25 ("arm64: dts: rockchip: Add dts for rockchip rk3566 box demo board")
 
-Signed-off-by: Andy Yan <andyshrk@163.com>
----
+L=C3=A4hetetty iPhonesta
 
- .../boot/dts/rockchip/rk3566-box-demo.dts     | 26 ++++++++++++++++---
- 1 file changed, 22 insertions(+), 4 deletions(-)
+> Andy Shevchenko <andy.shevchenko@gmail.com> kirjoitti 25.12.2022 kello 12.=
+45:
+>=20
+>=20
+>=20
+> L=C3=A4hetetty iPhonesta
+>=20
+>>> Dan Carpenter <error27@gmail.com> kirjoitti 24.12.2022 kello 20.30:
+>>>=20
+>>> On Sat, Dec 24, 2022 at 05:19:27PM +0100, Andy Shevchenko wrote:
+>>>=20
+>>>=20
+>>> L=C3=A4hetetty iPhonesta
+>>>=20
+>>>> Dan Carpenter <error27@gmail.com> kirjoitti 23.12.2022 kello 11.54:
+>>>>=20
+>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git master
+>>>> head:   f9ff5644bcc04221bae56f922122f2b7f5d24d62
+>>>> commit: 5134272f9f3f71d4e1f3aa15cb09321af49b3646 gpio: exar: access MPI=
+O registers on cascaded chips
+>>>> config: ia64-randconfig-m031-20221218
+>>>> compiler: ia64-linux-gcc (GCC) 12.1.0
+>>>>=20
+>>>> If you fix the issue, kindly add following tag where applicable
+>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>> | Reported-by: Dan Carpenter <error27@gmail.com>
+>>>>=20
+>>>> smatch warnings:
+>>>> drivers/gpio/gpio-exar.c:52 exar_offset_to_sel_addr() warn: replace div=
+ide condition 'pin / 8' with 'pin >=3D 8'
+>>>> drivers/gpio/gpio-exar.c:62 exar_offset_to_lvl_addr() warn: replace div=
+ide condition 'pin / 8' with 'pin >=3D 8'
+>>>>=20
+>>>=20
+>>>=20
+>>>=20
+>>> I don=E2=80=99t think this is a good advice. If we want to limit that, w=
+e need
+>>> to check also upper limit. But. The GPIO framework does that. So,
+>>> changing / to >=3D is bogus.
+>>=20
+>>=20
+>> How is checking pin / 8 not mathematically equivalent to pin >=3D 8?
+>=20
+> The point is that semantically the / is better in case this code will ever=
+ support more than two banks of pins.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-index d956496d5221..6c0c24226b52 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-box-demo.dts
-@@ -324,8 +324,12 @@ wifi_enable_h: wifi-enable-h {
- 			rockchip,pins = <2 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
- 		};
- 
-+		wifi_host_wake_h: wifi-host-wake-l {
-+			rockchip,pins = <2 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+
- 		wifi_32k: wifi-32k {
--			rockchip,pins = <0 RK_PB0 2 &pcfg_pull_none>;
-+			rockchip,pins = <2 RK_PC6 1 &pcfg_pull_none>;
- 		};
- 	};
- 
-@@ -391,16 +395,30 @@ &sdmmc0 {
- };
- 
- &sdmmc1 {
-+	/* WiFi & BT combo module AMPAK AP6398S */
-+	#address-cells = <1>;
-+	#size-cells = <0>;
- 	bus-width = <4>;
-+	clock-frequency = <150000000>;
-+	cap-sdio-irq;
- 	cap-sd-highspeed;
--	disable-wp;
-+	sd-uhs-sdr104;
-+	keep-power-in-suspend;
- 	mmc-pwrseq = <&sdio_pwrseq>;
- 	non-removable;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&sdmmc1_bus4 &sdmmc1_cmd &sdmmc1_clk>;
--	vmmc-supply = <&vcc_3v3>;
--	vqmmc-supply = <&vcca_1v8>;
- 	status = "okay";
-+
-+	brcmf: wifi@1 {
-+		compatible = "brcm,bcm4329-fmac";
-+		reg = <1>;
-+		interrupt-parent = <&gpio2>;
-+		interrupts = <RK_PB2 GPIO_ACTIVE_HIGH>;
-+		interrupt-names = "host-wake";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wifi_host_wake_h>;
-+	};
- };
- 
- &spdif {
--- 
-2.25.1
+On top of that it=E2=80=99s paired with pin % 8.
 
+
+>=20
+>> I don't understand this code at all.  The divide is inscrutable  Is it
+>> storing something in in the lower 3 bits and something in bit 4?  In
+>> that case it might be nicer to just check (pin & BIT(4)).
+>>=20
+>> regards,
+>> dan carpenter
+>>=20
+>>>=20
+>>>=20
+>>>> vim +52 drivers/gpio/gpio-exar.c
+>>>>=20
+>>>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  47  static unsigned int
+>>>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  48  exar_offset_to_sel_a=
+ddr(struct exar_gpio_chip *exar_gpio, unsigned int offset)
+>>>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  49  {
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02  50      unsigned int pin=
+ =3D exar_gpio->first_pin + (offset % 16);
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02  51      unsigned int cas=
+caded =3D offset / 16;
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02 @52      unsigned int add=
+r =3D pin / 8 ? EXAR_OFFSET_MPIOSEL_HI : EXAR_OFFSET_MPIOSEL_LO;
+>>>>=20
+>>>> Why not change this to pin > 8 instead.  Comparisons are faster than
+>>>> divide ops.  Way more readable too.
+>>>>=20
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02  53 =20
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02  54      return addr + (c=
+ascaded ? exar_gpio->cascaded_offset : 0);
+>>>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  55  }
+>>>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  56 =20
+>>>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  57  static unsigned int
+>>>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  58  exar_offset_to_lvl_a=
+ddr(struct exar_gpio_chip *exar_gpio, unsigned int offset)
+>>>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  59  {
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02  60      unsigned int pin=
+ =3D exar_gpio->first_pin + (offset % 16);
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02  61      unsigned int cas=
+caded =3D offset / 16;
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02 @62      unsigned int add=
+r =3D pin / 8 ? EXAR_OFFSET_MPIOLVL_HI : EXAR_OFFSET_MPIOLVL_LO;
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02  63 =20
+>>>> 5134272f9f3f71 Qingtao Cao         2022-09-02  64      return addr + (c=
+ascaded ? exar_gpio->cascaded_offset : 0);
+>>>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  65  }
+>>>>=20
+>>>> --=20
+>>>> 0-DAY CI Kernel Test Service
+>>>> https://01.org/lkp
+>>>>=20
