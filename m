@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD18655C90
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 08:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32EDA655C91
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 08:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiLYHqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 02:46:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
+        id S229778AbiLYHrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 02:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLYHqF (ORCPT
+        with ESMTP id S229441AbiLYHrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 02:46:05 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F874389
-        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 23:46:00 -0800 (PST)
+        Sun, 25 Dec 2022 02:47:32 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB45F389
+        for <linux-kernel@vger.kernel.org>; Sat, 24 Dec 2022 23:47:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1671954340; bh=kIWqE+E0JGmITgwgejM1umauZcQEjS6DlPrgkewDNns=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=hT8MGQHcwFZ8TaF+9tq5nChzLggDwzzja91VJqbvKNvCKAnhKui11JMSsW0i8q1If
-         qsBUW+1m+HS40TMC+Ur9SwupmyqUbU+jln4fxsedC3RMtpzbii5+Vj6BVnDsBNGC+H
-         rd+0L45mbwqUrYooK1GF0t/9g9Cr/75Ftu7UytgM=
+        t=1671954441; bh=bMU9mUk6Hw98H87DEnX7EHpdpzuEKQ/x1ECaFF4/Tjs=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=WoKWM9VvSJNpSWwSlYreTc9B1hYNk1x3PboZuTaB1HhSe6SWVn/eicjg78bZIOy/W
+         eTDiRPhAqEJMdNcqg15+KFVqfJj8WUd/eAXKSoQaBQl/F9rIjESa97M/TSHn9M2h/R
+         IGRQu6SybExcB1yNLx1US6dnbdiz3bpfi5FeVIZk=
 Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
         via ip-206.mailobj.net [213.182.55.206]
-        Sun, 25 Dec 2022 08:45:40 +0100 (CET)
-X-EA-Auth: SrvNuKhM0jsdFEciaDSFOfF6CMnwpo7D7zWfDAnDFd1e6Yf782WQEAuKphbmRKBT0KjVVog75FmD0Hxg2u8fWFVw5HseKqx2
-Date:   Sun, 25 Dec 2022 13:15:33 +0530
+        Sun, 25 Dec 2022 08:47:20 +0100 (CET)
+X-EA-Auth: AfL6MqEJGDGV6JwNRF6Xqw+evEf5XMzyYLv3rVlGa1tumfShUReZEyAisWYF+hg9A2xGSkVbcOSB4UUd+Q+csLUK2zJ/IhsQ
+Date:   Sun, 25 Dec 2022 13:17:15 +0530
 From:   Deepak R Varma <drv@mailo.com>
 To:     Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
@@ -39,11 +39,14 @@ To:     Jani Nikula <jani.nikula@linux.intel.com>,
 Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>,
         Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v2 0/2] convert i915_active.count from atomic_t to refcount_t
-Message-ID: <cover.1671952191.git.drv@mailo.com>
+Subject: [PATCH v2 1/2] drm/i915: convert i915_active.count from atomic_t to
+ refcount_t
+Message-ID: <fe31efd659622839c7f7bc2890d9e3411bbfa7cd.1671952191.git.drv@mailo.com>
+References: <cover.1671952191.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1671952191.git.drv@mailo.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -53,52 +56,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Transition the reference count member variable count of struct i915_active from
-atomic_t type to refcount_t type. This proposal is based on issues identified
-using the atomic_as_refcounter.cocci Coccinelle semantic patch script.
+The refcount_* APIs are designed to address known issues with the
+atomic_t APIs for reference counting. They provide following distinct
+advantages:
+   - protect the reference counters from overflow/underflow
+   - avoid use-after-free errors
+   - provide improved memory ordering guarantee schemes
+   - neater and safer.
+Hence, convert the atomic_t count member variable and associated
+atomic_*() API calls to equivalent refcount_t type and refcount_*() API
+calls.
 
-Patch 1/2: proposes to convert the base implementation of variable count from
-	   atomic_t to refcount_t. This also includes the transition of
-	   atomic_*() API calls to their equivalent refcount_*() API calls.
+This patch proposal address the following warnings generated by
+the atomic_as_refcounter.cocci coccinelle script
+	atomic_add_unless
 
-Patch 2/2: proposes to transition the atomic_*() API calls in i915 selftest
-	   use cases to their equivalent refcount_*() API calls.
-
-Please Note:
-   1. Patch 1/2 should be applied before patch 2/2 due to interdependency.
-   2. I did not enable to the selftest and debug configurations earlier while
-      building the i915 base driver. With the build failures reported by the
-      Kernel Test Robot, I have now included those changes. I did not find any
-      other configurations that required additional atomic_* API call transition
-      for this member variable of struct i915_active. Please let me know if there
-      are other related disabled configurations that I should be enable for
-      additional code coverage.
-   3. Any guidance on working with i915/selftests would be very helpful for my
-      learning.
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Please note:
+   1. Proposed changes are compile tested only.
+   2. This patch 1/2 is required to be applied before patch 2/2 due to
+      interdependency.
 
 Changes in v2:
-   1. Patch series introduced.
+   1. Patch added to the patch series.
    2. Handle build issues Reported-by: kernel test robot <lkp@intel.com>
       Earlier a standalone patch was sent for the i915 base driver only. The
-      Kernel Test Robot reported failure for additional atomic_*() calls specific
-      to i915 debugging support when enabled. This version now includes those
-      changes as well.
-   3. Handle build issues Reported-by: kernel test robot <lkp@intel.com> for i915/selftests
-      Include changes for i915/selftests use cases for atomic_* to refcount_*
-      transition.
+      Kernel Test Robot reported build failure for additional atomic_*() calls
+      specific to i915 debugging support when enabled. This version now includes
+      those changes as well.
 
 
-Deepak R Varma (2):
-  drm/i915: convert i915_active.count from atomic_t to refcount_t
-  drm/i915/selftests: Convert atomic_* API calls for i915_active.count
-    refcount_*
+ drivers/gpu/drm/i915/i915_active.c       | 28 +++++++++++++-----------
+ drivers/gpu/drm/i915/i915_active.h       |  6 ++---
+ drivers/gpu/drm/i915/i915_active_types.h |  4 ++--
+ 3 files changed, 20 insertions(+), 18 deletions(-)
 
- drivers/gpu/drm/i915/i915_active.c           | 28 +++++++++++---------
- drivers/gpu/drm/i915/i915_active.h           |  6 ++---
- drivers/gpu/drm/i915/i915_active_types.h     |  4 +--
- drivers/gpu/drm/i915/selftests/i915_active.c |  8 +++---
- 4 files changed, 24 insertions(+), 22 deletions(-)
+diff --git a/drivers/gpu/drm/i915/i915_active.c b/drivers/gpu/drm/i915/i915_active.c
+index 7412abf166a8..5e58d8b1e947 100644
+--- a/drivers/gpu/drm/i915/i915_active.c
++++ b/drivers/gpu/drm/i915/i915_active.c
+@@ -92,14 +92,14 @@ static void debug_active_init(struct i915_active *ref)
+ static void debug_active_activate(struct i915_active *ref)
+ {
+ 	lockdep_assert_held(&ref->tree_lock);
+-	if (!atomic_read(&ref->count)) /* before the first inc */
++	if (!refcount_read(&ref->count)) /* before the first inc */
+ 		debug_object_activate(ref, &active_debug_desc);
+ }
 
+ static void debug_active_deactivate(struct i915_active *ref)
+ {
+ 	lockdep_assert_held(&ref->tree_lock);
+-	if (!atomic_read(&ref->count)) /* after the last dec */
++	if (!refcount_read(&ref->count)) /* after the last dec */
+ 		debug_object_deactivate(ref, &active_debug_desc);
+ }
+
+@@ -133,7 +133,7 @@ __active_retire(struct i915_active *ref)
+ 	GEM_BUG_ON(i915_active_is_idle(ref));
+
+ 	/* return the unused nodes to our slabcache -- flushing the allocator */
+-	if (!atomic_dec_and_lock_irqsave(&ref->count, &ref->tree_lock, flags))
++	if (!refcount_dec_and_lock_irqsave(&ref->count, &ref->tree_lock, &flags))
+ 		return;
+
+ 	GEM_BUG_ON(rcu_access_pointer(ref->excl.fence));
+@@ -179,8 +179,8 @@ active_work(struct work_struct *wrk)
+ {
+ 	struct i915_active *ref = container_of(wrk, typeof(*ref), work);
+
+-	GEM_BUG_ON(!atomic_read(&ref->count));
+-	if (atomic_add_unless(&ref->count, -1, 1))
++	GEM_BUG_ON(!refcount_read(&ref->count));
++	if (refcount_dec_not_one(&ref->count))
+ 		return;
+
+ 	__active_retire(ref);
+@@ -189,8 +189,8 @@ active_work(struct work_struct *wrk)
+ static void
+ active_retire(struct i915_active *ref)
+ {
+-	GEM_BUG_ON(!atomic_read(&ref->count));
+-	if (atomic_add_unless(&ref->count, -1, 1))
++	GEM_BUG_ON(!refcount_read(&ref->count));
++	if (refcount_dec_not_one(&ref->count))
+ 		return;
+
+ 	if (ref->flags & I915_ACTIVE_RETIRE_SLEEPS) {
+@@ -354,7 +354,7 @@ void __i915_active_init(struct i915_active *ref,
+ 	ref->cache = NULL;
+
+ 	init_llist_head(&ref->preallocated_barriers);
+-	atomic_set(&ref->count, 0);
++	refcount_set(&ref->count, 0);
+ 	__mutex_init(&ref->mutex, "i915_active", mkey);
+ 	__i915_active_fence_init(&ref->excl, NULL, excl_retire);
+ 	INIT_WORK(&ref->work, active_work);
+@@ -445,7 +445,7 @@ int i915_active_add_request(struct i915_active *ref, struct i915_request *rq)
+
+ 	if (replace_barrier(ref, active)) {
+ 		RCU_INIT_POINTER(active->fence, NULL);
+-		atomic_dec(&ref->count);
++		refcount_dec(&ref->count);
+ 	}
+ 	if (!__i915_active_fence_set(active, fence))
+ 		__i915_active_acquire(ref);
+@@ -488,14 +488,16 @@ i915_active_set_exclusive(struct i915_active *ref, struct dma_fence *f)
+ bool i915_active_acquire_if_busy(struct i915_active *ref)
+ {
+ 	debug_active_assert(ref);
+-	return atomic_add_unless(&ref->count, 1, 0);
++	return refcount_add_not_zero(1, &ref->count);
+ }
+
+ static void __i915_active_activate(struct i915_active *ref)
+ {
+ 	spin_lock_irq(&ref->tree_lock); /* __active_retire() */
+-	if (!atomic_fetch_inc(&ref->count))
++	if (!refcount_inc_not_zero(&ref->count)) {
++		refcount_inc(&ref->count);
+ 		debug_active_activate(ref);
++	}
+ 	spin_unlock_irq(&ref->tree_lock);
+ }
+
+@@ -757,7 +759,7 @@ int i915_sw_fence_await_active(struct i915_sw_fence *fence,
+ void i915_active_fini(struct i915_active *ref)
+ {
+ 	debug_active_fini(ref);
+-	GEM_BUG_ON(atomic_read(&ref->count));
++	GEM_BUG_ON(refcount_read(&ref->count));
+ 	GEM_BUG_ON(work_pending(&ref->work));
+ 	mutex_destroy(&ref->mutex);
+
+@@ -927,7 +929,7 @@ int i915_active_acquire_preallocate_barrier(struct i915_active *ref,
+
+ 		first = first->next;
+
+-		atomic_dec(&ref->count);
++		refcount_dec(&ref->count);
+ 		intel_engine_pm_put(barrier_to_engine(node));
+
+ 		kmem_cache_free(slab_cache, node);
+diff --git a/drivers/gpu/drm/i915/i915_active.h b/drivers/gpu/drm/i915/i915_active.h
+index 7eb44132183a..116c7c28466a 100644
+--- a/drivers/gpu/drm/i915/i915_active.h
++++ b/drivers/gpu/drm/i915/i915_active.h
+@@ -193,14 +193,14 @@ void i915_active_release(struct i915_active *ref);
+
+ static inline void __i915_active_acquire(struct i915_active *ref)
+ {
+-	GEM_BUG_ON(!atomic_read(&ref->count));
+-	atomic_inc(&ref->count);
++	GEM_BUG_ON(!refcount_read(&ref->count));
++	refcount_inc(&ref->count);
+ }
+
+ static inline bool
+ i915_active_is_idle(const struct i915_active *ref)
+ {
+-	return !atomic_read(&ref->count);
++	return !refcount_read(&ref->count);
+ }
+
+ void i915_active_fini(struct i915_active *ref);
+diff --git a/drivers/gpu/drm/i915/i915_active_types.h b/drivers/gpu/drm/i915/i915_active_types.h
+index b02a78ac87db..152a3a25d9f7 100644
+--- a/drivers/gpu/drm/i915/i915_active_types.h
++++ b/drivers/gpu/drm/i915/i915_active_types.h
+@@ -7,7 +7,7 @@
+ #ifndef _I915_ACTIVE_TYPES_H_
+ #define _I915_ACTIVE_TYPES_H_
+
+-#include <linux/atomic.h>
++#include <linux/refcount.h>
+ #include <linux/dma-fence.h>
+ #include <linux/llist.h>
+ #include <linux/mutex.h>
+@@ -23,7 +23,7 @@ struct i915_active_fence {
+ struct active_node;
+
+ struct i915_active {
+-	atomic_t count;
++	refcount_t count;
+ 	struct mutex mutex;
+
+ 	spinlock_t tree_lock;
 --
 2.34.1
 
