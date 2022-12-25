@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6EE655DE8
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 17:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB0E655DED
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 18:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiLYQ6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 11:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S231440AbiLYRAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 12:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiLYQ6p (ORCPT
+        with ESMTP id S231404AbiLYQ77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 11:58:45 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292662708;
-        Sun, 25 Dec 2022 08:58:43 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id bi26-20020a05600c3d9a00b003d3404a89faso6990744wmb.1;
-        Sun, 25 Dec 2022 08:58:43 -0800 (PST)
+        Sun, 25 Dec 2022 11:59:59 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D07938BE;
+        Sun, 25 Dec 2022 08:59:58 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id o15so6511245wmr.4;
+        Sun, 25 Dec 2022 08:59:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h7OOtV+QVbdxLe2zaY1Y8skumo3pXeAcCWn4UwsrYSU=;
-        b=k9oxVF/bSpJsOU+AaRxSnPM/xjAyu4p/qojemeUpd+EJQaPobEcG7aNSxhz8utG5BB
-         63sCbaj6JgHHt7kvfrOzGIHjoWkiMCdG/iGJ/ZliyQK+D1lgPCBKMnzhgYeasF1/Zlde
-         zMjnjxTvbp9lUCrg5HdOF8n/NOMxVNQAj7Jne2yI4sytO1do0NkOYhYps4JIoofVayNN
-         4JAoV490Gg/erNA1lgEttt3ZJmbOk+XwAGLmymy19DwcJ/RjM7lfXd3SJi932LGi3VBB
-         H7Hi4UMh5oXDGx5ykowfULCTWV5eLzUpSiNrkA5VpjX9sP2LQyJUw24awUmeOC7cSK1a
-         lQVw==
+        bh=W7Uxgqg5mAtgEreFJVlyY9FG6dh29sWzofDPJcOPslk=;
+        b=W+z5fHTW0GWZfXeF5Fz+zx0jp9fjQpYyWv/sgsDVZguqzeap9vHyRDwo8Pd3tg6PHk
+         O0Gyr/CHU/wSZJYlL5ASoF2XVE370spCTn7F5hxACWF4dMnLNxew9n/Q2ZEv0mjNm6Hf
+         6bDTzqaQd3Kp64PYuMNdhjg/sTFuHHENKsP6YS5HO+v20avYKx1rQTrk/nxPJSE7kdUH
+         P35nPj+Eprgyl+f0bwnG99lXoiy6hh8ffynJbLXuQVgz/Se1eRm9Z2m83yhF+mFT9/Ok
+         7duSnv4dibiRHVZjNvAWURAd97D3uIelrZlUwR1aTnDq5uhuqQilq7VLqf7zj8DcYofN
+         VSrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h7OOtV+QVbdxLe2zaY1Y8skumo3pXeAcCWn4UwsrYSU=;
-        b=hZnf4ObRm34X85TKcWuWYn6FV2+w6LSHOOYIEsgUc1xQ6fYtUEFWaQbjoZYA9rm3Uj
-         HgafXm9fFe5KMLIjvSV+Rdjkgu1UEuiB1gSnwPUMh0pmsOO0fnXxwG2XA1CJH7q57G6q
-         P/1AKUZYtIJd2K0CsdnKTUh9gEizInpPeqXyaj0oE50z6K2o2NZHcDFErQvZpdKqjfmL
-         jTZ4iNPGQ8OTcY5zVOaIVgHVsik9GMDCIm56Tt1UT9v8Y0V5+bUfTc82oSPpdjkFS92c
-         MTlDiI5lABVNkKUhhXdbQ/dqlFIGNgQBIX8jdhWINL6EETtIWGpMw7L3Tk7dPh9WZNa8
-         /afw==
-X-Gm-Message-State: AFqh2kpNEz2CH0QzZ28+Btl3+/HPMBC9CK3i740NeNW0QrGeQgPn8dve
-        +Dzr8/XbkEWczh6qc4ngvo/37KS+RVY=
-X-Google-Smtp-Source: AMrXdXvsg/rN+q9bc8EnUBMY2RX6WRlxL2/ybZaW8rPlnsknVwZdk5BDKDte4NmMLwW2sl/dE7S8cA==
-X-Received: by 2002:a05:600c:4fcf:b0:3d1:d396:1ade with SMTP id o15-20020a05600c4fcf00b003d1d3961ademr11491503wmq.9.1671987521327;
-        Sun, 25 Dec 2022 08:58:41 -0800 (PST)
+        bh=W7Uxgqg5mAtgEreFJVlyY9FG6dh29sWzofDPJcOPslk=;
+        b=VpPa6lzJzk6ZDcEG7dvLZVka/e+gSW/YjzB8zi1JaXrOiLGGkQ+GcTp0KFSUaFHnhm
+         ASck7QiPHV0zPPerhPyzzhyAMjlJDKmtuGRfm/a6BCWFtIU7YiaJ3JyxQ5f2Ui8Vpqfr
+         vzTaSCv45l1ITlh6zAvHJT3zfQrKUponZ64LNlk+zq41FjB1bBRAZhOm9iJdYexder09
+         seWVL9pEUWs/KlLTxNPiD/9ho5usq5MiAIPHq+9X+JLrZaV8f/iKhxVx05O9VwNA86tB
+         9xCi11uJ6gq+ED8dd1yEmgGRzaImiZdpj2wwQPsDnmg0kVuLoEQqQ+8wr+y7yAhLbr8J
+         xDOg==
+X-Gm-Message-State: AFqh2kqFjItVa5oL1pn5etsSs9R8IJsygIEHW5YIWU6dZ8iP1xuqcrEJ
+        VeXqKUrWK+bSzQUCodWSX5hkX3jzA+o=
+X-Google-Smtp-Source: AMrXdXuT2E457V230n2bDHOPYEK+CtL4Z9J9GgfherN++wEWxFmuDoWgzzapKU7pA2H3QSlks2mPTw==
+X-Received: by 2002:a1c:7c0f:0:b0:3d5:816e:2fb2 with SMTP id x15-20020a1c7c0f000000b003d5816e2fb2mr12060163wmc.14.1671987596475;
+        Sun, 25 Dec 2022 08:59:56 -0800 (PST)
 Received: from localhost.localdomain (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id l7-20020a05600c4f0700b003d96c811d6dsm9965244wmq.30.2022.12.25.08.58.40
+        by smtp.gmail.com with ESMTPSA id l42-20020a05600c1d2a00b003d23928b654sm17734371wms.11.2022.12.25.08.59.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Dec 2022 08:58:41 -0800 (PST)
+        Sun, 25 Dec 2022 08:59:56 -0800 (PST)
 From:   Angel Iglesias <ang.iglesiasg@gmail.com>
 To:     linux-iio@vger.kernel.org
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] iio: pressure: bmp280: Add support for new sensor BMP580
-Date:   Sun, 25 Dec 2022 17:58:00 +0100
-Message-Id: <5a1c9341102fdce2f49d151f0cba76f1ba9ba279.1671986815.git.ang.iglesiasg@gmail.com>
+Subject: [PATCH 4/5] dt-bindings: iio: pressure: bmp085: Add BMP580 compatible string
+Date:   Sun, 25 Dec 2022 17:59:21 +0100
+Message-Id: <778a9d07ad1d88e036cc1ddd9c3fa53390b906a3.1671986815.git.ang.iglesiasg@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <cover.1671986815.git.ang.iglesiasg@gmail.com>
 References: <cover.1671986815.git.ang.iglesiasg@gmail.com>
@@ -79,801 +77,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds compatibility with the new sensor generation, the BMP580.
-
-The measurement and initialization codepaths are adapted from
-the device datasheet and the repository from manufacturer at
-https://github.com/boschsensortec/BMP5-Sensor-API.
+Add bosch,bmp580 to compatible string for the new family of sensors.
+This family includes the BMP580 and BMP581 sensors. The register map
+in this family presents significant departures from previous generations.
 
 Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
 
-diff --git a/drivers/iio/pressure/Kconfig b/drivers/iio/pressure/Kconfig
-index c9453389e4f7..1c18e3b2c501 100644
---- a/drivers/iio/pressure/Kconfig
-+++ b/drivers/iio/pressure/Kconfig
-@@ -17,14 +17,14 @@ config ABP060MG
- 	  will be called abp060mg.
+diff --git a/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml b/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml
+index 72cd2c2d3f17..f52c4794e21b 100644
+--- a/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml
++++ b/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml
+@@ -17,6 +17,7 @@ description: |
+     https://www.bosch-sensortec.com/bst/products/all_products/bmp280
+     https://www.bosch-sensortec.com/bst/products/all_products/bme280
+     https://www.bosch-sensortec.com/bst/products/all_products/bmp380
++    https://www.bosch-sensortec.com/bst/products/all_products/bmp580
  
- config BMP280
--	tristate "Bosch Sensortec BMP180/BMP280/BMP380 pressure sensor I2C driver"
-+	tristate "Bosch Sensortec BMP180/BMP280/BMP380/BMP580 pressure sensor I2C driver"
- 	depends on (I2C || SPI_MASTER)
- 	select REGMAP
- 	select BMP280_I2C if (I2C)
- 	select BMP280_SPI if (SPI_MASTER)
- 	help
--	  Say yes here to build support for Bosch Sensortec BMP180, BMP280 and
--	  BMP380 pressure and temperature sensors. Also supports the BME280 with
-+	  Say yes here to build support for Bosch Sensortec BMP180, BMP280, BMP380
-+	  and BMP580 pressure and temperature sensors. Also supports the BME280 with
- 	  an additional humidity sensor channel.
+ properties:
+   compatible:
+@@ -26,6 +27,7 @@ properties:
+       - bosch,bmp280
+       - bosch,bme280
+       - bosch,bmp380
++      - bosch,bmp580
  
- 	  To compile this driver as a module, choose M here: the core module
-diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-index c37cf2caec68..005dbaf18607 100644
---- a/drivers/iio/pressure/bmp280-core.c
-+++ b/drivers/iio/pressure/bmp280-core.c
-@@ -13,6 +13,7 @@
-  * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf
-  * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf
-  * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp388-ds001.pdf
-+ * https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp581-ds004.pdf
-  *
-  * Notice:
-  * The link to the bmp180 datasheet points to an outdated version missing these changes:
-@@ -130,6 +131,41 @@ enum bmp380_odr {
- 	BMP380_ODR_0_0015HZ,
- };
- 
-+enum bmp580_odr {
-+	BMP580_ODR_240HZ,
-+	BMP580_ODR_218HZ,
-+	BMP580_ODR_199HZ,
-+	BMP580_ODR_179HZ,
-+	BMP580_ODR_160HZ,
-+	BMP580_ODR_149HZ,
-+	BMP580_ODR_140HZ,
-+	BMP580_ODR_129HZ,
-+	BMP580_ODR_120HZ,
-+	BMP580_ODR_110HZ,
-+	BMP580_ODR_100HZ,
-+	BMP580_ODR_89HZ,
-+	BMP580_ODR_80HZ,
-+	BMP580_ODR_70HZ,
-+	BMP580_ODR_60HZ,
-+	BMP580_ODR_50HZ,
-+	BMP580_ODR_45HZ,
-+	BMP580_ODR_40HZ,
-+	BMP580_ODR_35HZ,
-+	BMP580_ODR_30HZ,
-+	BMP580_ODR_25HZ,
-+	BMP580_ODR_20HZ,
-+	BMP580_ODR_15HZ,
-+	BMP580_ODR_10HZ,
-+	BMP580_ODR_5HZ,
-+	BMP580_ODR_4HZ,
-+	BMP580_ODR_3HZ,
-+	BMP580_ODR_2HZ,
-+	BMP580_ODR_1HZ,
-+	BMP580_ODR_0_5HZ,
-+	BMP580_ODR_0_25HZ,
-+	BMP580_ODR_0_125HZ,
-+};
-+
- struct bmp280_data {
- 	struct device *dev;
- 	struct mutex lock;
-@@ -1361,6 +1397,399 @@ static const struct bmp280_chip_info bmp380_chip_info = {
- 	.preinit = bmp380_preinit,
- };
- 
-+enum bmp580_commands {
-+	BMP580_SOFT_RESET_CMD,
-+	BMP580_NVM_WRITE_CMD,
-+	BMP580_NVM_READ_CMD,
-+	BMP580_EXT_MODE_CMD,
-+};
-+
-+/*
-+ * Helper function to send a command to BMP5XX sensors.
-+ *
-+ * BMP5xx sensors have a series of commands actionable
-+ * writing specific sequences on the CMD register:
-+ * SOFT_RESET: performs a reset of the system.
-+ * NVM_READ: read the contents of a user position of the nvm memory.
-+ * NVM_WRITE: write new data to a user position of the nvm memory.
-+ * EXT_MODE: enable extended mode with additional debug pages.
-+ */
-+static int bmp580_cmd(struct bmp280_data *data, enum bmp580_commands cmd)
-+{
-+	unsigned long deadline;
-+	unsigned int reg;
-+	int ret;
-+
-+	switch (cmd) {
-+	case BMP580_SOFT_RESET_CMD:
-+		/* Send reset word */
-+		ret = regmap_write(data->regmap, BMP580_REG_CMD, BMP580_CMD_SOFT_RESET);
-+		if (ret) {
-+			dev_err(data->dev, "failed to send reset command to device\n");
-+			return ret;
-+		}
-+		/* Wait 2ms for reset completion */
-+		usleep_range(2000, 2500);
-+		/* Dummy read of chip_id */
-+		ret = regmap_read(data->regmap, BMP580_REG_CHIP_ID, &reg);
-+		if (ret) {
-+			dev_err(data->dev, "failed to reestablish comms after reset\n");
-+			return ret;
-+		}
-+		/* Check if POR bit is set on interrupt reg */
-+		ret = regmap_read(data->regmap, BMP580_REG_INT_STATUS, &reg);
-+		if (ret) {
-+			dev_err(data->dev, "error reading interrupt status register\n");
-+			return ret;
-+		}
-+		if (!(reg & BMP580_INT_STATUS_POR_MASK)) {
-+			dev_err(data->dev, "error resetting sensor\n");
-+			return -EINVAL;
-+		}
-+		break;
-+	case BMP580_NVM_WRITE_CMD:
-+	case BMP580_NVM_READ_CMD:
-+		/* Check nvm ready flag */
-+		ret = regmap_read(data->regmap, BMP580_REG_STATUS, &reg);
-+		if (ret) {
-+			dev_err(data->dev, "failed to check nvm status\n");
-+			return ret;
-+		}
-+		if (!(reg & BMP580_STATUS_NVM_RDY_MASK)) {
-+			dev_err(data->dev, "sensor's nvm is not ready\n");
-+			return -EIO;
-+		}
-+		/* Send NVM operation sequence */
-+		ret = regmap_write(data->regmap, BMP580_REG_CMD, BMP580_CMD_NVM_OP_SEQ_0);
-+		if (ret) {
-+			dev_err(data->dev, "failed to send nvm operation's first sequence\n");
-+			return ret;
-+		}
-+		if (cmd == BMP580_NVM_WRITE_CMD) {
-+			/* Send write sequence */
-+			ret = regmap_write(data->regmap, BMP580_REG_CMD,
-+					   BMP580_CMD_NVM_WRITE_SEQ_1);
-+			if (ret) {
-+				dev_err(data->dev, "failed to send nvm write sequence\n");
-+				return ret;
-+			}
-+			/* Datasheet says on 4.8.1.2 it takes approximately 10ms */
-+			usleep_range(10000, 10500);
-+			deadline = jiffies + msecs_to_jiffies(10);
-+		} else {
-+			/* Send read sequence */
-+			ret = regmap_write(data->regmap, BMP580_REG_CMD,
-+					   BMP580_CMD_NVM_READ_SEQ_1);
-+			if (ret) {
-+				dev_err(data->dev, "failed to send nvm read sequence\n");
-+				return ret;
-+			}
-+			/* Datasheet says on 4.8.1.1 it takes approximately 200us */
-+			usleep_range(200, 250);
-+			deadline = jiffies + usecs_to_jiffies(200);
-+		}
-+		if (ret) {
-+			dev_err(data->dev, "failed to write command sequence\n");
-+			return -EIO;
-+		}
-+		/* Wait until NVM is ready again */
-+		do {
-+			ret = regmap_read(data->regmap, BMP580_REG_STATUS, &reg);
-+			if (ret) {
-+				dev_err(data->dev, "failed to check nvm status\n");
-+				reg &= ~BMP580_STATUS_NVM_RDY_MASK;
-+			}
-+		} while (time_before(jiffies, deadline) && !(reg & BMP580_STATUS_NVM_RDY_MASK));
-+
-+		if (!(reg & BMP580_STATUS_NVM_RDY_MASK)) {
-+			dev_err(data->dev,
-+				"reached timeout waiting for nvm operation completion\n");
-+			return -ETIMEDOUT;
-+		}
-+		/* Checks nvm error flags */
-+		if ((reg & BMP580_STATUS_NVM_ERR_MASK) || (reg & BMP580_STATUS_NVM_CMD_ERR_MASK)) {
-+			dev_err(data->dev, "error processing nvm operation\n");
-+			return -EIO;
-+		}
-+		break;
-+	case BMP580_EXT_MODE_CMD:
-+		ret = regmap_write(data->regmap, BMP580_REG_CMD, BMP580_CMD_EXTMODE_SEQ_0);
-+		if (ret) {
-+			dev_err(data->dev, "failed to send ext_mode first sequence\n");
-+			return ret;
-+		}
-+		ret = regmap_write(data->regmap, BMP580_REG_CMD, BMP580_CMD_EXTMODE_SEQ_1);
-+		if (ret) {
-+			dev_err(data->dev, "failed to send ext_mode second sequence\n");
-+			return ret;
-+		}
-+		ret = regmap_write(data->regmap, BMP580_REG_CMD, BMP580_CMD_EXTMODE_SEQ_2);
-+		if (ret) {
-+			dev_err(data->dev, "failed to send ext_mode second sequence\n");
-+			return ret;
-+		}
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * Contrary to previous sensors families, compensation algorithm is builtin.
-+ * We are only required to read the register raw data and adapt the ranges
-+ * for what is expected on IIO ABI.
-+ */
-+
-+static int bmp580_read_temp(struct bmp280_data *data, int *val)
-+{
-+	s32 raw_temp;
-+	int ret;
-+
-+	ret = regmap_bulk_read(data->regmap, BMP580_REG_TEMP_XLSB, data->buf,
-+			       sizeof(data->buf));
-+	if (ret) {
-+		dev_err(data->dev, "failed to read temperature\n");
-+		return ret;
-+	}
-+
-+	raw_temp = get_unaligned_le24(data->buf);
-+	if (raw_temp == BMP580_TEMP_SKIPPED) {
-+		dev_err(data->dev, "reading temperature skipped\n");
-+		return -EIO;
-+	}
-+
-+	/*
-+	 * Temperature is returned in Celsius degrees in fractional
-+	 * form down 2^16. We reescale by x1000 to return milli Celsius
-+	 * to respect IIO ABI.
-+	 */
-+	*val = (raw_temp * 1000) >> 16;
-+	return IIO_VAL_INT;
-+}
-+
-+static int bmp580_read_press(struct bmp280_data *data, int *val, int *val2)
-+{
-+	u32 raw_press;
-+	int ret;
-+
-+	ret = regmap_bulk_read(data->regmap, BMP580_REG_PRESS_XLSB, data->buf,
-+			       sizeof(data->buf));
-+	if (ret) {
-+		dev_err(data->dev, "failed to read pressure\n");
-+		return ret;
-+	}
-+
-+	raw_press = get_unaligned_le24(data->buf);
-+	if (raw_press == BMP580_PRESS_SKIPPED) {
-+		dev_err(data->dev, "reading pressure skipped\n");
-+		return -EIO;
-+	}
-+	/*
-+	 * Pressure is returned in Pascals in fractional form down 2^16.
-+	 * We reescale /1000 to convert to kilopascal to respect IIO ABI.
-+	 */
-+	*val = raw_press;
-+	*val2 = 64000; // 2^6 * 1000
-+	return IIO_VAL_FRACTIONAL;
-+}
-+
-+static const int bmp580_odr_table[][2] = {
-+	[BMP580_ODR_240HZ] =	{240, 0},
-+	[BMP580_ODR_218HZ] =	{218, 0},
-+	[BMP580_ODR_199HZ] =	{199, 0},
-+	[BMP580_ODR_179HZ] =	{179, 0},
-+	[BMP580_ODR_160HZ] =	{160, 0},
-+	[BMP580_ODR_149HZ] =	{149, 0},
-+	[BMP580_ODR_140HZ] =	{140, 0},
-+	[BMP580_ODR_129HZ] =	{129, 0},
-+	[BMP580_ODR_120HZ] =	{120, 0},
-+	[BMP580_ODR_110HZ] =	{110, 0},
-+	[BMP580_ODR_100HZ] =	{100, 0},
-+	[BMP580_ODR_89HZ] =	{89, 0},
-+	[BMP580_ODR_80HZ] =	{80, 0},
-+	[BMP580_ODR_70HZ] =	{70, 0},
-+	[BMP580_ODR_60HZ] =	{60, 0},
-+	[BMP580_ODR_50HZ] =	{50, 0},
-+	[BMP580_ODR_45HZ] =	{45, 0},
-+	[BMP580_ODR_40HZ] =	{40, 0},
-+	[BMP580_ODR_35HZ] =	{35, 0},
-+	[BMP580_ODR_30HZ] =	{30, 0},
-+	[BMP580_ODR_25HZ] =	{25, 0},
-+	[BMP580_ODR_20HZ] =	{20, 0},
-+	[BMP580_ODR_15HZ] =	{15, 0},
-+	[BMP580_ODR_10HZ] =	{10, 0},
-+	[BMP580_ODR_5HZ] =	{5, 0},
-+	[BMP580_ODR_4HZ] =	{4, 0},
-+	[BMP580_ODR_3HZ] =	{3, 0},
-+	[BMP580_ODR_2HZ] =	{2, 0},
-+	[BMP580_ODR_1HZ] =	{1, 0},
-+	[BMP580_ODR_0_5HZ] =	{0, 500000},
-+	[BMP580_ODR_0_25HZ] =	{0, 250000},
-+	[BMP580_ODR_0_125HZ] =	{0, 125000},
-+};
-+
-+static int bmp580_preinit(struct bmp280_data *data)
-+{
-+	unsigned int reg;
-+	int ret;
-+
-+	/* Issue soft-reset command */
-+	ret = bmp580_cmd(data, BMP580_SOFT_RESET_CMD);
-+	if (ret)
-+		return ret;
-+	/* Post powerup sequence */
-+	ret = regmap_read(data->regmap, BMP580_REG_CHIP_ID, &reg);
-+	if (ret)
-+		return ret;
-+	if (reg != BMP580_CHIP_ID) {
-+		dev_err(data->dev, "preinit: unexpected chip_id\n");
-+		return ret;
-+	}
-+	ret = regmap_read(data->regmap, BMP580_REG_STATUS, &reg);
-+	if (ret)
-+		return ret;
-+	/* Check nvm status */
-+	if (!(reg & BMP580_STATUS_NVM_RDY_MASK) || (reg & BMP580_STATUS_NVM_ERR_MASK)) {
-+		dev_err(data->dev, "preinit: nvm error on powerup sequence\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int bmp580_chip_config(struct bmp280_data *data)
-+{
-+	bool change = false, aux;
-+	unsigned int tmp;
-+	u8 reg_val;
-+	int ret;
-+
-+	/* Sets sensor in standby mode */
-+	ret = regmap_update_bits(data->regmap, BMP580_REG_ODR_CONFIG,
-+				 BMP580_MODE_MASK | BMP580_ODR_DEEPSLEEP_DIS,
-+				 BMP580_ODR_DEEPSLEEP_DIS |
-+				 FIELD_PREP(BMP580_MODE_MASK, BMP580_MODE_SLEEP));
-+	if (ret) {
-+		dev_err(data->dev, "failed to change sensor to standby mode\n");
-+		return ret;
-+	}
-+	/* From datasheet's table 4: electrical characteristics */
-+	usleep_range(2500, 3000);
-+
-+	/* Set default DSP mode settings */
-+	reg_val = FIELD_PREP(BMP580_DSP_COMP_MASK, BMP580_DSP_PRESS_TEMP_COMP_EN) |
-+		  BMP580_DSP_SHDW_IIR_TEMP_EN | BMP580_DSP_SHDW_IIR_PRESS_EN;
-+
-+	ret = regmap_update_bits(data->regmap, BMP580_REG_DSP_CONFIG,
-+				 BMP580_DSP_COMP_MASK |
-+				 BMP580_DSP_SHDW_IIR_TEMP_EN |
-+				 BMP580_DSP_SHDW_IIR_PRESS_EN, reg_val);
-+
-+	/* Configure oversampling */
-+	reg_val = FIELD_PREP(BMP580_OSR_TEMP_MASK, data->oversampling_temp) |
-+		  FIELD_PREP(BMP580_OSR_PRESS_MASK, data->oversampling_press) |
-+		  BMP580_OSR_PRESS_EN;
-+
-+	ret = regmap_update_bits_check(data->regmap, BMP580_REG_OSR_CONFIG,
-+				       BMP580_OSR_TEMP_MASK | BMP580_OSR_PRESS_MASK |
-+				       BMP580_OSR_PRESS_EN,
-+				       reg_val, &aux);
-+	if (ret) {
-+		dev_err(data->dev, "failed to write oversampling register\n");
-+		return ret;
-+	}
-+	change = change || aux;
-+
-+	/* Configure output data rate */
-+	ret = regmap_update_bits_check(data->regmap, BMP580_REG_ODR_CONFIG, BMP580_ODR_MASK,
-+				       FIELD_PREP(BMP580_ODR_MASK, data->sampling_freq),
-+				       &aux);
-+	if (ret) {
-+		dev_err(data->dev, "failed to write ODR configuration register\n");
-+		return ret;
-+	}
-+	change = change || aux;
-+
-+	/* Set filter data */
-+	reg_val = FIELD_PREP(BMP580_DSP_IIR_PRESS_MASK, data->iir_filter_coeff) |
-+		  FIELD_PREP(BMP580_DSP_IIR_TEMP_MASK, data->iir_filter_coeff);
-+
-+	ret = regmap_update_bits_check(data->regmap, BMP580_REG_DSP_IIR,
-+				       BMP580_DSP_IIR_PRESS_MASK |
-+				       BMP580_DSP_IIR_TEMP_MASK,
-+				       reg_val, &aux);
-+	if (ret) {
-+		dev_err(data->dev, "failed to write config register\n");
-+		return ret;
-+	}
-+	change = change || aux;
-+
-+	/* Restore sensor to normal operation mode */
-+	ret = regmap_write_bits(data->regmap, BMP580_REG_ODR_CONFIG,
-+				BMP580_MODE_MASK,
-+				FIELD_PREP(BMP580_MODE_MASK, BMP580_MODE_NORMAL));
-+	if (ret) {
-+		dev_err(data->dev, "failed to set normal mode\n");
-+		return ret;
-+	}
-+	/* From datasheet's table 4: electrical characteristics */
-+	usleep_range(3000, 3500);
-+
-+	if (change) {
-+		/*
-+		 * Check if ODR and OSR settings are valid or we are
-+		 * operating in a degraded mode.
-+		 */
-+		ret = regmap_read(data->regmap, BMP580_REG_EFF_OSR, &tmp);
-+		if (ret) {
-+			dev_err(data->dev, "error reading effective OSR register\n");
-+			return ret;
-+		}
-+		if (!(tmp & BMP580_EFF_OSR_VALID_ODR)) {
-+			dev_warn(data->dev, "OSR and ODR incompatible settings detected\n");
-+			/* Set current OSR settings from data on effective OSR */
-+			data->oversampling_temp = FIELD_GET(BMP580_EFF_OSR_TEMP_MASK, tmp);
-+			data->oversampling_press = FIELD_GET(BMP580_EFF_OSR_PRESS_MASK, tmp);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const int bmp580_oversampling_avail[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
-+static const int bmp580_iir_filter_coeffs_avail[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
-+
-+static const struct bmp280_chip_info bmp580_chip_info = {
-+	.id_reg = BMP580_REG_CHIP_ID,
-+	.chip_id = BMP580_CHIP_ID,
-+	.start_up_time = 2000,
-+	.channels = bmp380_channels,
-+	.num_channels = 2,
-+
-+	.oversampling_temp_avail = bmp580_oversampling_avail,
-+	.num_oversampling_temp_avail = ARRAY_SIZE(bmp580_oversampling_avail),
-+	.oversampling_temp_default = ilog2(1),
-+
-+	.oversampling_press_avail = bmp580_oversampling_avail,
-+	.num_oversampling_press_avail = ARRAY_SIZE(bmp580_oversampling_avail),
-+	.oversampling_press_default = ilog2(4),
-+
-+	.sampling_freq_avail = bmp580_odr_table,
-+	.num_sampling_freq_avail = ARRAY_SIZE(bmp580_odr_table) * 2,
-+	.sampling_freq_default = BMP580_ODR_50HZ,
-+
-+	.iir_filter_coeffs_avail = bmp580_iir_filter_coeffs_avail,
-+	.num_iir_filter_coeffs_avail = ARRAY_SIZE(bmp580_iir_filter_coeffs_avail),
-+	.iir_filter_coeff_default = 2,
-+
-+	.chip_config = bmp580_chip_config,
-+	.read_temp = bmp580_read_temp,
-+	.read_press = bmp580_read_press,
-+	.read_calib = NULL,
-+	.preinit = bmp580_preinit,
-+};
-+
- static int bmp180_measure(struct bmp280_data *data, u8 ctrl_meas)
- {
- 	const int conversion_time_max[] = { 4500, 7500, 13500, 25500 };
-@@ -1713,6 +2142,9 @@ int bmp280_common_probe(struct device *dev,
- 	case BMP380:
- 		chip_info = &bmp380_chip_info;
- 		break;
-+	case BMP580:
-+		chip_info = &bmp580_chip_info;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -1779,9 +2211,10 @@ int bmp280_common_probe(struct device *dev,
- 	 */
- 	if (data->chip_info->preinit) {
- 		ret = data->chip_info->preinit(data);
--		dev_err(dev, "error running preinit tasks");
--		if (ret < 0)
-+		if (ret) {
-+			dev_err(dev, "error running preinit tasks\n");
- 			return ret;
-+		}
- 	}
- 
- 	ret = data->chip_info->chip_config(data);
-@@ -1795,11 +2228,12 @@ int bmp280_common_probe(struct device *dev,
- 	 * non-volatile memory during production". Let's read them out at probe
- 	 * time once. They will not change.
- 	 */
--
--	ret = data->chip_info->read_calib(data);
--	if (ret < 0)
--		return dev_err_probe(data->dev, ret,
--				     "failed to read calibration coefficients\n");
-+	if (data->chip_info->read_calib) {
-+		ret = data->chip_info->read_calib(data);
-+		if (ret < 0)
-+			return dev_err_probe(data->dev, ret,
-+					     "failed to read calibration coefficients\n");
-+	}
- 
- 	/*
- 	 * Attempt to grab an optional EOC IRQ - only the BMP085 has this
-diff --git a/drivers/iio/pressure/bmp280-i2c.c b/drivers/iio/pressure/bmp280-i2c.c
-index 59921e8cd592..c52d2b477bb7 100644
---- a/drivers/iio/pressure/bmp280-i2c.c
-+++ b/drivers/iio/pressure/bmp280-i2c.c
-@@ -22,6 +22,9 @@ static int bmp280_i2c_probe(struct i2c_client *client)
- 	case BMP380:
- 		regmap_config = &bmp380_regmap_config;
- 		break;
-+	case BMP580:
-+		regmap_config = &bmp580_regmap_config;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -45,6 +48,7 @@ static const struct of_device_id bmp280_of_i2c_match[] = {
- 	{ .compatible = "bosch,bmp280", .data = (void *)BMP280 },
- 	{ .compatible = "bosch,bme280", .data = (void *)BME280 },
- 	{ .compatible = "bosch,bmp380", .data = (void *)BMP380 },
-+	{ .compatible = "bosch,bmp580", .data = (void *)BMP580 },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, bmp280_of_i2c_match);
-@@ -55,6 +59,7 @@ static const struct i2c_device_id bmp280_i2c_id[] = {
- 	{"bmp280", BMP280 },
- 	{"bme280", BME280 },
- 	{"bmp380", BMP380 },
-+	{"bmp580", BMP580 },
- 	{ },
- };
- MODULE_DEVICE_TABLE(i2c, bmp280_i2c_id);
-diff --git a/drivers/iio/pressure/bmp280-regmap.c b/drivers/iio/pressure/bmp280-regmap.c
-index c98c67970265..3ee56720428c 100644
---- a/drivers/iio/pressure/bmp280-regmap.c
-+++ b/drivers/iio/pressure/bmp280-regmap.c
-@@ -115,6 +115,54 @@ static bool bmp380_is_volatile_reg(struct device *dev, unsigned int reg)
- 	}
- }
- 
-+static bool bmp580_is_writeable_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case BMP580_REG_NVM_DATA_MSB:
-+	case BMP580_REG_NVM_DATA_LSB:
-+	case BMP580_REG_NVM_ADDR:
-+	case BMP580_REG_ODR_CONFIG:
-+	case BMP580_REG_OSR_CONFIG:
-+	case BMP580_REG_INT_SOURCE:
-+	case BMP580_REG_INT_CONFIG:
-+	case BMP580_REG_OOR_THR_MSB:
-+	case BMP580_REG_OOR_THR_LSB:
-+	case BMP580_REG_OOR_CONFIG:
-+	case BMP580_REG_OOR_RANGE:
-+	case BMP580_REG_IF_CONFIG:
-+	case BMP580_REG_FIFO_CONFIG:
-+	case BMP580_REG_FIFO_SEL:
-+	case BMP580_REG_DSP_CONFIG:
-+	case BMP580_REG_DSP_IIR:
-+	case BMP580_REG_CMD:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static bool bmp580_is_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	switch (reg) {
-+	case BMP580_REG_NVM_DATA_MSB:
-+	case BMP580_REG_NVM_DATA_LSB:
-+	case BMP580_REG_FIFO_COUNT:
-+	case BMP580_REG_INT_STATUS:
-+	case BMP580_REG_PRESS_XLSB:
-+	case BMP580_REG_PRESS_LSB:
-+	case BMP580_REG_PRESS_MSB:
-+	case BMP580_REG_FIFO_DATA:
-+	case BMP580_REG_TEMP_XLSB:
-+	case BMP580_REG_TEMP_LSB:
-+	case BMP580_REG_TEMP_MSB:
-+	case BMP580_REG_EFF_OSR:
-+	case BMP580_REG_STATUS:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- const struct regmap_config bmp280_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
-@@ -138,3 +186,15 @@ const struct regmap_config bmp380_regmap_config = {
- 	.volatile_reg = bmp380_is_volatile_reg,
- };
- EXPORT_SYMBOL_NS(bmp380_regmap_config, IIO_BMP280);
-+
-+const struct regmap_config bmp580_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+
-+	.max_register = BMP580_REG_CMD,
-+	.cache_type = REGCACHE_RBTREE,
-+
-+	.writeable_reg = bmp580_is_writeable_reg,
-+	.volatile_reg = bmp580_is_volatile_reg,
-+};
-+EXPORT_SYMBOL_NS(bmp580_regmap_config, IIO_BMP280);
-diff --git a/drivers/iio/pressure/bmp280-spi.c b/drivers/iio/pressure/bmp280-spi.c
-index 4a2df5b5d838..5653c3c33081 100644
---- a/drivers/iio/pressure/bmp280-spi.c
-+++ b/drivers/iio/pressure/bmp280-spi.c
-@@ -69,6 +69,9 @@ static int bmp280_spi_probe(struct spi_device *spi)
- 	case BMP380:
- 		regmap_config = &bmp380_regmap_config;
- 		break;
-+	case BMP580:
-+		regmap_config = &bmp580_regmap_config;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -96,6 +99,7 @@ static const struct of_device_id bmp280_of_spi_match[] = {
- 	{ .compatible = "bosch,bmp280", },
- 	{ .compatible = "bosch,bme280", },
- 	{ .compatible = "bosch,bmp380", },
-+	{ .compatible = "bosch,bmp580", },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, bmp280_of_spi_match);
-@@ -106,6 +110,7 @@ static const struct spi_device_id bmp280_spi_id[] = {
- 	{ "bmp280", BMP280 },
- 	{ "bme280", BME280 },
- 	{ "bmp380", BMP380 },
-+	{ "bmp580", BMP580 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(spi, bmp280_spi_id);
-diff --git a/drivers/iio/pressure/bmp280.h b/drivers/iio/pressure/bmp280.h
-index efc31bc84708..27d2abc17d01 100644
---- a/drivers/iio/pressure/bmp280.h
-+++ b/drivers/iio/pressure/bmp280.h
-@@ -3,6 +3,107 @@
- #include <linux/device.h>
- #include <linux/regmap.h>
- 
-+/* BMP580 specific registers */
-+#define BMP580_REG_CMD			0x7E
-+#define BMP580_REG_EFF_OSR		0x38
-+#define BMP580_REG_ODR_CONFIG		0x37
-+#define BMP580_REG_OSR_CONFIG		0x36
-+#define BMP580_REG_IF_CONFIG		0x13
-+#define BMP580_REG_REV_ID		0x02
-+#define BMP580_REG_CHIP_ID		0x01
-+/* OOR allows to configure a pressure alarm */
-+#define BMP580_REG_OOR_CONFIG		0x35
-+#define BMP580_REG_OOR_RANGE		0x34
-+#define BMP580_REG_OOR_THR_MSB		0x33
-+#define BMP580_REG_OOR_THR_LSB		0x32
-+/* DSP registers (IIR filters) */
-+#define BMP580_REG_DSP_IIR		0x31
-+#define BMP580_REG_DSP_CONFIG		0x30
-+/* NVM access registers */
-+#define BMP580_REG_NVM_DATA_MSB		0x2D
-+#define BMP580_REG_NVM_DATA_LSB		0x2C
-+#define BMP580_REG_NVM_ADDR		0x2B
-+/* Status registers */
-+#define BMP580_REG_STATUS		0x28
-+#define BMP580_REG_INT_STATUS		0x27
-+#define BMP580_REG_CHIP_STATUS		0x11
-+/* Data registers */
-+#define BMP580_REG_FIFO_DATA		0x29
-+#define BMP580_REG_PRESS_MSB		0x22
-+#define BMP580_REG_PRESS_LSB		0x21
-+#define BMP580_REG_PRESS_XLSB		0x20
-+#define BMP580_REG_TEMP_MSB		0x1F
-+#define BMP580_REG_TEMP_LSB		0x1E
-+#define BMP580_REG_TEMP_XLSB		0x1D
-+/* FIFO config registers */
-+#define BMP580_REG_FIFO_SEL		0x18
-+#define BMP580_REG_FIFO_COUNT		0x17
-+#define BMP580_REG_FIFO_CONFIG		0x16
-+/* Interruptions config registers */
-+#define BMP580_REG_INT_SOURCE		0x15
-+#define BMP580_REG_INT_CONFIG		0x14
-+
-+#define BMP580_CMD_NOOP			0x00
-+#define BMP580_CMD_EXTMODE_SEQ_0	0x73
-+#define BMP580_CMD_EXTMODE_SEQ_1	0xB4
-+#define BMP580_CMD_EXTMODE_SEQ_2	0x69
-+#define BMP580_CMD_NVM_OP_SEQ_0		0x5D
-+#define BMP580_CMD_NVM_READ_SEQ_1	0xA5
-+#define BMP580_CMD_NVM_WRITE_SEQ_1	0xA0
-+#define BMP580_CMD_SOFT_RESET		0xB6
-+
-+#define BMP580_INT_STATUS_POR_MASK	BIT(4)
-+
-+#define BMP580_STATUS_CORE_RDY_MASK	BIT(0)
-+#define BMP580_STATUS_NVM_RDY_MASK	BIT(1)
-+#define BMP580_STATUS_NVM_ERR_MASK	BIT(2)
-+#define BMP580_STATUS_NVM_CMD_ERR_MASK	BIT(3)
-+
-+#define BMP580_OSR_PRESS_MASK		GENMASK(5, 3)
-+#define BMP580_OSR_TEMP_MASK		GENMASK(2, 0)
-+#define BMP580_OSR_PRESS_EN		BIT(6)
-+#define BMP580_EFF_OSR_PRESS_MASK	GENMASK(5, 3)
-+#define BMP580_EFF_OSR_TEMP_MASK	GENMASK(2, 0)
-+#define BMP580_EFF_OSR_VALID_ODR	BIT(7)
-+
-+#define BMP580_ODR_MASK			GENMASK(6, 2)
-+#define BMP580_MODE_MASK		GENMASK(1, 0)
-+#define BMP580_MODE_SLEEP		0
-+#define BMP580_MODE_NORMAL		1
-+#define BMP580_MODE_FORCED		2
-+#define BMP580_MODE_CONTINOUS		3
-+#define BMP580_ODR_DEEPSLEEP_DIS	BIT(7)
-+
-+#define BMP580_DSP_COMP_MASK		GENMASK(1, 0)
-+#define BMP580_DSP_COMP_DIS		0
-+#define BMP580_DSP_TEMP_COMP_EN		1
-+/*
-+ * In section 7.27 of datasheet, modes 2 and 3 are technically the same.
-+ * Pressure compensation means also enabling temperature compensation
-+ */
-+#define BMP580_DSP_PRESS_COMP_EN	2
-+#define BMP580_DSP_PRESS_TEMP_COMP_EN	3
-+#define BMP580_DSP_IIR_FORCED_FLUSH	BIT(2)
-+#define BMP580_DSP_SHDW_IIR_TEMP_EN	BIT(3)
-+#define BMP580_DSP_FIFO_IIR_TEMP_EN	BIT(4)
-+#define BMP580_DSP_SHDW_IIR_PRESS_EN	BIT(5)
-+#define BMP580_DSP_FIFO_IIR_PRESS_EN	BIT(6)
-+#define BMP580_DSP_OOR_IIR_PRESS_EN	BIT(7)
-+
-+#define BMP580_DSP_IIR_PRESS_MASK	GENMASK(5, 3)
-+#define BMP580_DSP_IIR_TEMP_MASK	GENMASK(2, 0)
-+#define BMP580_FILTER_OFF		0
-+#define BMP580_FILTER_1X		1
-+#define BMP580_FILTER_3X		2
-+#define BMP580_FILTER_7X		3
-+#define BMP580_FILTER_15X		4
-+#define BMP580_FILTER_31X		5
-+#define BMP580_FILTER_63X		6
-+#define BMP580_FILTER_127X		7
-+
-+#define BMP580_TEMP_SKIPPED		0x7f7f7f
-+#define BMP580_PRESS_SKIPPED		0x7f7f7f
-+
- /* BMP380 specific registers */
- #define BMP380_REG_CMD			0x7E
- #define BMP380_REG_CONFIG		0x1F
-@@ -180,6 +281,7 @@
- #define BMP280_REG_RESET		0xE0
- #define BMP280_REG_ID			0xD0
- 
-+#define BMP580_CHIP_ID			0x50
- #define BMP380_CHIP_ID			0x50
- #define BMP180_CHIP_ID			0x55
- #define BMP280_CHIP_ID			0x58
-@@ -197,12 +299,14 @@ enum bmp280_variant {
- 	BMP280,
- 	BME280,
- 	BMP380,
-+	BMP580,
- };
- 
- /* Regmap configurations */
- extern const struct regmap_config bmp180_regmap_config;
- extern const struct regmap_config bmp280_regmap_config;
- extern const struct regmap_config bmp380_regmap_config;
-+extern const struct regmap_config bmp580_regmap_config;
- 
- /* Probe called from different transports */
- int bmp280_common_probe(struct device *dev,
+   reg:
+     maxItems: 1
 -- 
 2.39.0
 
