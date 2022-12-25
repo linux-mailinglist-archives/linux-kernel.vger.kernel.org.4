@@ -2,234 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02380655E52
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 22:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDE1655E57
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 22:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiLYVUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 16:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
+        id S231286AbiLYV0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 16:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLYVUV (ORCPT
+        with ESMTP id S229445AbiLYV0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 16:20:21 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4D055AC
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 13:20:19 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p9YPo-0005qL-Hn; Sun, 25 Dec 2022 22:20:16 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p9YPn-001j9R-2u; Sun, 25 Dec 2022 22:20:15 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p9YPm-007tzD-Eq; Sun, 25 Dec 2022 22:20:14 +0100
-Date:   Sun, 25 Dec 2022 22:20:11 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     kernel@pengutronix.de, Nicolas Palix <nicolas.palix@imag.fr>,
-        linux-kernel@vger.kernel.org, cocci@inria.fr
-Subject: Re: coccinelle: How to remove a return at the end of a void function?
-Message-ID: <20221225212011.6il5egocxtx5zupa@pengutronix.de>
-References: <20221224115657.kqyocti356cwm7hc@pengutronix.de>
- <alpine.DEB.2.22.394.2212241326310.2711@hadrien>
+        Sun, 25 Dec 2022 16:26:43 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73EB100C;
+        Sun, 25 Dec 2022 13:26:41 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id fc4so22959134ejc.12;
+        Sun, 25 Dec 2022 13:26:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I/E1jZmkwb1esjiwXZMefQocpoKRbXtxkKRar3SCHMA=;
+        b=az3jv0s85qiKaR442hQ2uE40XDD1xitIGabb+yE0b1hXUJKM4MAGrtp5RnvBrUbeNo
+         v2swLM9C9V8UOav15rdymBS/ExyElRz39AJoxm/pMtzJSS4O2+6/8Ex4HaHbhoxG9a7W
+         pFI99tBdvcmVVuLFpNbiTqka7lXP7YA4hbX7DrWC6MWs7oajo7Dp5kGgHQiDjow3BYw2
+         oLwpXx+ZaBRYhiT6odPADTODxH6oRDrbvhBebuCwWSieYRa1PVaAzR0TP9PkH1VL7/Om
+         gcepUpbf4Z5ohVp+6JeNwWsCABY2C5rMpV/2qVepLu5N4/j/Uu99iJkkI1pJARbY8HD8
+         QLPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I/E1jZmkwb1esjiwXZMefQocpoKRbXtxkKRar3SCHMA=;
+        b=WbDc4ajjLgfHuSTHG7tsnkFqRXuEG+zL94YJNCyoqY+Lrb7eVCT/aLcW4gJV8AzZFd
+         qWMNUaB6sBSQIdNv0AzIbMKfvhHkFxgnMOQ0krkC2dYCUyMilNYuob3lTVUavcAQkLMb
+         4nkPb8P2VYImOdwF+I2DWDc6s5U4Gr9rZX/j8BjR+spQrdoKZSuxQ19X9P42/q5No7i+
+         lxVURKMjX9BnGhFtSii146KA6Z5fy4zG0WaCOCkxgGYI5s53dQ0YV2SxzEKviUl9GPdJ
+         RHXJ0s0wobYY+cad64ASBb0VF9Hl4wWor7TJrJRBpnSWWg00p1Tzj5KUJEFzKP8BPOGL
+         I5qg==
+X-Gm-Message-State: AFqh2kq3i7heRcFMjRkxdSl4YX4+yGIEphtXtey6eS5jFjlsnkTnbaQj
+        8CGYt6I7wKdL3Mo0SOtaaWQ=
+X-Google-Smtp-Source: AMrXdXvNfb+HnZA1tZA4Lpc1SIwFbLT4cjW/FBQ7b4LKAbTVQpf6Nwx5iz+9YwBlZ2ksbG/a+Fcu6w==
+X-Received: by 2002:a17:906:a186:b0:82d:e2a6:4b0d with SMTP id s6-20020a170906a18600b0082de2a64b0dmr14248970ejy.18.1672003600133;
+        Sun, 25 Dec 2022 13:26:40 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c23-c49f-b200-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c49f:b200::e63])
+        by smtp.googlemail.com with ESMTPSA id ku22-20020a170907789600b007c10d47e748sm4062567ejc.36.2022.12.25.13.26.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Dec 2022 13:26:39 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-amlogic@lists.infradead.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jbrunet@baylibre.com,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v1 0/4] clk: meson: switch from .round_rate to .determine_rate
+Date:   Sun, 25 Dec 2022 22:26:28 +0100
+Message-Id: <20221225212632.2760126-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ki4pjegaar3myre7"
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2212241326310.2711@hadrien>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The goal of this series is to switch the meson sub-drivers to use
+clk_ops.determine_rate instead of clk_ops.round_rate. The former has
+lower precision (2^31 instead of 2^32 on 32-bit systems). Also the idea
+of the .determine_rate callback is that is replaces .round_rate so the
+latter can be removed at some point.
 
---ki4pjegaar3myre7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No functional changes (apart from the 2^31 to 2^32 difference mentioned
+bove) intended.
 
-Hello Julia,
 
-first of all thanks for your quick answer.
+Martin Blumenstingl (4):
+  clk: meson: mpll: Switch from .round_rate to .determine_rate
+  clk: meson: dualdiv: switch from .round_rate to .determine_rate
+  clk: meson: sclk-div: switch from .round_rate to .determine_rate
+  clk: meson: clk-cpu-dyndiv: switch from .round_rate to .determine_rate
 
-On Sat, Dec 24, 2022 at 01:28:04PM +0100, Julia Lawall wrote:
-> On Sat, 24 Dec 2022, Uwe Kleine-K=F6nig wrote:
-> > A simplified spatch looks as follows:
-> >
-> > -------->8--------
-> > virtual patch
-> >
-> > @p1@
-> > identifier pdev;
-> > @@
-> > -int
-> > +void
-> >  rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
-> >  <...
-> > -return 0;
-> > +return;
-> >  ...>
-> >  }
-> > -------->8--------
-> >
-> > This results in:
-> >
-> > -------->8--------
-> > diff -u -p a/drivers/mmc/host/rtsx_usb_sdmmc.c b/drivers/mmc/host/rtsx_=
-usb_sdmmc.c
-> > --- a/drivers/mmc/host/rtsx_usb_sdmmc.c
-> > +++ b/drivers/mmc/host/rtsx_usb_sdmmc.c
-> > @@ -1379,13 +1379,13 @@ static int rtsx_usb_sdmmc_drv_probe(stru
-> >         return 0;
-> >  }
-> >
-> > -static int rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev)
-> > +static void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev)
-> >  {
-> >         struct rtsx_usb_sdmmc *host =3D platform_get_drvdata(pdev);
-> >         struct mmc_host *mmc;
-> >
-> >         if (!host)
-> > -               return 0;
-> > +               return;
-> >
-> >         mmc =3D host->mmc;
-> >         host->host_removal =3D true;
-> > @@ -1416,7 +1416,7 @@ static int rtsx_usb_sdmmc_drv_remove(str
-> >         dev_dbg(&(pdev->dev),
-> >                 ": Realtek USB SD/MMC module has been removed\n");
-> >
-> > -       return 0;
-> > +       return;
-> >  }
-> >
-> >  #ifdef CONFIG_PM
-> > -------->8--------
-> >
-> > which is as intended. Now I want to remove the useless "return;" at the
-> > end of the function, however adding
-> >
-> > -------->8--------
-> > @p2 depends on p1@
-> > identifier pdev;
-> > @@
-> >  void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
-> >  ...
-> > -return;
-> >  }
-> > -------->8--------
-> >
-> > to the spatch doesn't (only) do the intended:
->=20
-> The problem is that Coccinelle is following the control-flow through the
-> function, and all of the returns are at the end of a control.flow path.
-> The simple, hacky solution is to change the return;s into some function
-> call Return();, then do like the above for Return(); and then change the
-> Return();s back to return;s
+ drivers/clk/meson/clk-cpu-dyndiv.c |  9 ++++-----
+ drivers/clk/meson/clk-dualdiv.c    | 21 +++++++++++++--------
+ drivers/clk/meson/clk-mpll.c       | 20 +++++++++++++-------
+ drivers/clk/meson/sclk-div.c       | 11 ++++++-----
+ 4 files changed, 36 insertions(+), 25 deletions(-)
 
-OK, I tried, but somehow coccinelle refuse to work after I introduced
-Return(), even replacing them by return; doesn't work:
+-- 
+2.39.0
 
--------->8--------
-virtual patch
-
-@p1@
-identifier pdev;
-@@
--int
-+void
- rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
- ...
--return 0;
-+Return();
- ...
- }
-
-@p2@
-identifier pdev;
-@@
- void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
- ...
--Return();
-+return;
- ...
- }
--------->8--------
-
-results in
-
--------->8--------
-$ /usr/bin/spatch --debug -D patch --very-quiet --cocci-file scripts/coccin=
-elle/api/test.cocci --patch . --dir drivers/mmc/host/rtsx_usb_sdmmc.c -I ./=
-arch/x86/include -I ./arch/x86/include/generated -I ./include -I ./arch/x86=
-/include/uapi -I ./arch/x86/include/generated/uapi -I ./include/uapi -I ./i=
-nclude/generated/uapi --include ./include/linux/compiler-version.h --includ=
-e ./include/linux/kconfig.h --jobs 4 --chunksize 1
-diff -u -p a/drivers/mmc/host/rtsx_usb_sdmmc.c b/drivers/mmc/host/rtsx_usb_=
-sdmmc.c
---- a/drivers/mmc/host/rtsx_usb_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_usb_sdmmc.c
-@@ -1385,7 +1385,7 @@ static int rtsx_usb_sdmmc_drv_remove(str
- 	struct mmc_host *mmc;
-
- 	if (!host)
--		return 0;
-+		Return();
-
- 	mmc =3D host->mmc;
- 	host->host_removal =3D true;
-@@ -1416,7 +1416,7 @@ static int rtsx_usb_sdmmc_drv_remove(str
- 	dev_dbg(&(pdev->dev),
- 		": Realtek USB SD/MMC module has been removed\n");
-
--	return 0;
-+	Return();
- }
-
- #ifdef CONFIG_PM
--------->8--------
-
-Adding --debug doesn't give any hints.
-
-(And if I add another hunk inbeetween removing Return at the end of the
-function there is no effect either.)
-
-Do I need to split that in two spatches to make coccinelle cooperate?
-
-(If it matters, this is coccinelle as shipped by Debian, Version
-1.1.1.deb-2)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ki4pjegaar3myre7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOovogACgkQwfwUeK3K
-7AkDrAgAgRfDs2k7V4+HC3weOMPwPKgObjnDeQbPp/DLiOB56rRtLYow+Tdl1Vio
-v0U5HR25ngVdGO1ZbSDm5lfg0QIgv17e7+3Ko6IS/oj4JHA10MWvMZ+dcrvhT8Kz
-2bu+W2EMMbDBCYVh586E3BuoQrsVysn4BFh2QKpBWjjKS2giwPaAp7n5HgjMt3Ve
-iA0YGlao8I1CK/gVCu7GzVW8n/wfpatYIVts1y+P3a8bZk+SylCYAjwl0GGHq9fO
-OVQmhGjvHoXuBeTGRyvgjCr3Sc/LW93rOZnyu0SQUPBsLQVtiYTASyV/jBH19wu1
-Dg1+GinznKY6cCeb7vDoL/1DHpo7+g==
-=Kwk3
------END PGP SIGNATURE-----
-
---ki4pjegaar3myre7--
