@@ -2,180 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80C5655DA1
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 17:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037D9655DA3
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 17:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiLYQ0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 11:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S231167AbiLYQbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 11:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLYQ0o (ORCPT
+        with ESMTP id S229445AbiLYQbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 11:26:44 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07961114;
-        Sun, 25 Dec 2022 08:26:41 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 6CDB924E1EA;
-        Mon, 26 Dec 2022 00:26:34 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 26 Dec
- 2022 00:26:34 +0800
-Received: from [192.168.2.237] (113.72.145.114) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 26 Dec
- 2022 00:26:33 +0800
-Message-ID: <7a7bccb1-4d47-3d32-36e6-4aab7b5b8dad@starfivetech.com>
-Date:   Mon, 26 Dec 2022 00:26:32 +0800
+        Sun, 25 Dec 2022 11:31:01 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B303CD8D
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 08:31:00 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id p4so8969378pjk.2
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 08:31:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XxEsTy06Oh25aSy/ePhQdR4Tfj415l4tPZX892gUaE4=;
+        b=Ld/WyWWg7SKttdArD9C1M6llGiNK6XaPFQQGgoju0Ngbx/mv3ZX2WvaYLzCALstkwn
+         879LEa+hJNyV6HffokmGELk22YbISIP9YNakIkpfYfaXr8oZUlma71dW5V70vcofQt+t
+         meVT2z/HIw2KeKfzlkAnb+6agHvW2NidEmenE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XxEsTy06Oh25aSy/ePhQdR4Tfj415l4tPZX892gUaE4=;
+        b=2cB+NzGrmMWDW+KCG9iwCwjZR4gxQiKfqiBH5m5S7zvYS/QHQNVJTkVapRhJ5TDn4E
+         rOysFAjGx2Vj00DYm1LuERiXAM+/CwRPC+oQVeRC8rHOKj1JF9LbHpuAzVrsJIeUM8lt
+         esgbsl4+5OamkjvlNkt06e4BCtEG7+Bm/FWJyNKQ6wRg6D5zYkI/PZdrUut5tBGDUOb1
+         gYlWbtKHm5+MjZ1IUUB/nXmPWIIPxYTDppMhVj468z86qGHCYT3dMzGTIRUvHfjOZujv
+         aZkyVsi0ameZV2GTR5fA/cNgtwt/glTV5HDRKdnLNNZsQVhCrb+VJB2EhLhnocvKL9Jo
+         i4Pg==
+X-Gm-Message-State: AFqh2krlKBMWP5JfqQZ19IrcY9THa3E0+6qjtC4T8O1Aoo/saMFWJ7Ow
+        6VP4NhgeeiEO3fmKb2tsc47YcpAHf60UbI8NlZAjmQ==
+X-Google-Smtp-Source: AMrXdXsmXEbmI056D1fsZsm3Brc1ZAsRy94APhIiLAmEaKX/ic6SHTelKfPYnHrBVdaygzvQSavKqwb6fh16mn/WVQM=
+X-Received: by 2002:a17:90a:8a91:b0:219:1c3f:985d with SMTP id
+ x17-20020a17090a8a9100b002191c3f985dmr1288231pjn.111.1671985860052; Sun, 25
+ Dec 2022 08:31:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 07/11] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221220005054.34518-1-hal.feng@starfivetech.com>
- <20221220005054.34518-8-hal.feng@starfivetech.com> <Y6JB37Pd5TZoGMy4@spud>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <Y6JB37Pd5TZoGMy4@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.114]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221223005645.8709-1-gakula@marvell.com>
+In-Reply-To: <20221223005645.8709-1-gakula@marvell.com>
+From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
+Date:   Sun, 25 Dec 2022 22:00:48 +0530
+Message-ID: <CALs4sv3CZjrcC0nqH=RtTBp_aJ3Dd9Q-f7DJUo-+rq-vjVHA4Q@mail.gmail.com>
+Subject: Re: [PATCH net] octeontx2-pf: Fix lmtst Id used in aura free
+To:     Geetha sowjanya <gakula@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net,
+        edumazet@google.com, sbhatta@marvell.com, hkelam@marvell.com,
+        sgoutham@marvell.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000048c92b05f0a98bc1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Dec 2022 23:14:39 +0000, Conor Dooley wrote:
-> On Tue, Dec 20, 2022 at 08:50:50AM +0800, Hal Feng wrote:
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> > 
-> > Add bindings for the system clock and reset generator (SYSCRG) on the
-> > JH7110 RISC-V SoC by StarFive Ltd.
-> > 
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> > ---
-> >  .../clock/starfive,jh7110-syscrg.yaml         |  80 +++++++
-> >  MAINTAINERS                                   |   8 +-
-> >  .../dt-bindings/clock/starfive,jh7110-crg.h   | 207 ++++++++++++++++++
-> >  .../dt-bindings/reset/starfive,jh7110-crg.h   | 142 ++++++++++++
-> >  4 files changed, 434 insertions(+), 3 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
-> >  create mode 100644 include/dt-bindings/clock/starfive,jh7110-crg.h
-> >  create mode 100644 include/dt-bindings/reset/starfive,jh7110-crg.h
-> > 
-> > diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
-> > new file mode 100644
-> > index 000000000000..ec81504dcb27
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
-> > @@ -0,0 +1,80 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/clock/starfive,jh7110-syscrg.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: StarFive JH7110 System Clock and Reset Generator
-> > +
-> > +maintainers:
-> > +  - Emil Renner Berthing <kernel@esmil.dk>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: starfive,jh7110-syscrg
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Main Oscillator (24 MHz)
-> > +      - description: GMAC1 RMII reference
-> > +      - description: GMAC1 RGMII RX
-> > +      - description: External I2S TX bit clock
-> > +      - description: External I2S TX left/right channel clock
-> > +      - description: External I2S RX bit clock
-> > +      - description: External I2S RX left/right channel clock
-> > +      - description: External TDM clock
-> > +      - description: External audio master clock
-> 
-> So, from peeking at the clock driver & the dt - it looks like a bunch of
-> these are not actually required?
+--00000000000048c92b05f0a98bc1
+Content-Type: text/plain; charset="UTF-8"
 
-These clocks are used as root clocks or optional parent clocks in clock tree.
-Some of them are optional, but they are required if we want to describe the
-complete clock tree of JH7110 SoC.
+On Fri, Dec 23, 2022 at 6:27 AM Geetha sowjanya <gakula@marvell.com> wrote:
+>
+> Current code uses per_cpu pointer to get the lmtst_id mapped to
+> the core on which aura_free() is executed. Using per_cpu pointer
+> without preemption disable causing mismatch between lmtst_id and
+> core on which pointer gets freed. This patch fixes the issue by
+> disabling preemption around aura_free.
+>
+> This patch also addresses the memory reservation issue,
+> currently NIX, NPA queue context memory is being allocated using
+> GFP_KERNEL flag which inturns allocates from memory reserved for
+> CMA_DMA. Sizing CMA_DMA memory is getting difficult due to this
+> dependency, the more number of interfaces enabled the more the
+> CMA_DMA memory requirement.
+>
+> To fix this issue, GFP_KERNEL flag is replaced with GFP_ATOMIC,
+> with this memory will be allocated from unreserved memory.
+>
+> Fixes: ef6c8da71eaf ("octeontx2-pf: cn10K: Reserve LMTST lines per core")
 
-> I'd have ploughed through this, but having read Krzysztof's comments on
-> the DTS I'm not sure that this binding is correct.
-> https://lore.kernel.org/linux-riscv/20221220011247.35560-1-hal.feng@starfivetech.com/T/#mdf67621a2344dce801aa8015d4963593a2c28bcc
-> 
-> I *think* the DT is correct - the fixed clocks are all inputs from clock
-> sources on the board and as such they are empty in soc.dtsi and are
-> populated in board.dts?
+Two separate issues are being fixed. I think these two fixes should be
+separate patches.
 
-Yes, the fixed clocks are all clock sources on the board and input to the SoC.
+> Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
+> Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+> ---
+>  .../ethernet/marvell/octeontx2/af/common.h    |  2 +-
+>  .../marvell/octeontx2/nic/otx2_common.c       | 30 +++++++++++++------
+>  2 files changed, 22 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/common.h b/drivers/net/ethernet/marvell/octeontx2/af/common.h
+> index 8931864ee110..4b4be9ca4d2f 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/af/common.h
+> +++ b/drivers/net/ethernet/marvell/octeontx2/af/common.h
+> @@ -61,7 +61,7 @@ static inline int qmem_alloc(struct device *dev, struct qmem **q,
+>         qmem->entry_sz = entry_sz;
+>         qmem->alloc_sz = (qsize * entry_sz) + OTX2_ALIGN;
+>         qmem->base = dma_alloc_attrs(dev, qmem->alloc_sz, &qmem->iova,
+> -                                    GFP_KERNEL, DMA_ATTR_FORCE_CONTIGUOUS);
+> +                                    GFP_ATOMIC, DMA_ATTR_FORCE_CONTIGUOUS);
+>         if (!qmem->base)
+>                 return -ENOMEM;
+>
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> index 9e10e7471b88..88f8772a61cd 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> @@ -1012,6 +1012,7 @@ static void otx2_pool_refill_task(struct work_struct *work)
+>         rbpool = cq->rbpool;
+>         free_ptrs = cq->pool_ptrs;
+>
+> +       get_cpu();
+>         while (cq->pool_ptrs) {
+>                 if (otx2_alloc_rbuf(pfvf, rbpool, &bufptr)) {
+>                         /* Schedule a WQ if we fails to free atleast half of the
+> @@ -1031,6 +1032,7 @@ static void otx2_pool_refill_task(struct work_struct *work)
+>                 pfvf->hw_ops->aura_freeptr(pfvf, qidx, bufptr + OTX2_HEAD_ROOM);
+>                 cq->pool_ptrs--;
+>         }
+> +       put_cpu();
+>         cq->refill_task_sched = false;
+>  }
+>
+> @@ -1368,6 +1370,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
+>         if (err)
+>                 goto fail;
+>
+> +       get_cpu();
+>         /* Allocate pointers and free them to aura/pool */
+>         for (qidx = 0; qidx < hw->tot_tx_queues; qidx++) {
+>                 pool_id = otx2_get_pool_idx(pfvf, AURA_NIX_SQ, qidx);
+> @@ -1376,18 +1379,24 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
+>                 sq = &qset->sq[qidx];
+>                 sq->sqb_count = 0;
+>                 sq->sqb_ptrs = kcalloc(num_sqbs, sizeof(*sq->sqb_ptrs), GFP_KERNEL);
+> -               if (!sq->sqb_ptrs)
+> -                       return -ENOMEM;
+> +               if (!sq->sqb_ptrs) {
+> +                       err = -ENOMEM;
+> +                       goto err_mem;
+> +               }
+>
+>                 for (ptr = 0; ptr < num_sqbs; ptr++) {
+> -                       if (otx2_alloc_rbuf(pfvf, pool, &bufptr))
+> -                               return -ENOMEM;
+> +                       err = otx2_alloc_rbuf(pfvf, pool, &bufptr);
+> +                       if (err)
+> +                               goto err_mem;
+>                         pfvf->hw_ops->aura_freeptr(pfvf, pool_id, bufptr);
+>                         sq->sqb_ptrs[sq->sqb_count++] = (u64)bufptr;
+>                 }
+>         }
+>
+> -       return 0;
+> +err_mem:
+> +       put_cpu();
+> +       return err ? -ENOMEM : 0;
+> +
+>  fail:
+>         otx2_mbox_reset(&pfvf->mbox.mbox, 0);
+>         otx2_aura_pool_free(pfvf);
+> @@ -1426,18 +1435,21 @@ int otx2_rq_aura_pool_init(struct otx2_nic *pfvf)
+>         if (err)
+>                 goto fail;
+>
+> +       get_cpu();
+>         /* Allocate pointers and free them to aura/pool */
+>         for (pool_id = 0; pool_id < hw->rqpool_cnt; pool_id++) {
+>                 pool = &pfvf->qset.pool[pool_id];
+>                 for (ptr = 0; ptr < num_ptrs; ptr++) {
+> -                       if (otx2_alloc_rbuf(pfvf, pool, &bufptr))
+> -                               return -ENOMEM;
+> +                       err = otx2_alloc_rbuf(pfvf, pool, &bufptr);
+> +                       if (err)
+> +                               goto err_mem;
+>                         pfvf->hw_ops->aura_freeptr(pfvf, pool_id,
+>                                                    bufptr + OTX2_HEAD_ROOM);
+>                 }
+>         }
+> -
+> -       return 0;
+> +err_mem:
+> +       put_cpu();
+> +       return err ? -ENOMEM : 0;
+>  fail:
+>         otx2_mbox_reset(&pfvf->mbox.mbox, 0);
+>         otx2_aura_pool_free(pfvf);
+> --
+> 2.25.1
+>
 
-> 
-> However, are they all actually required? In the driver I see:
-> 	JH71X0__MUX(JH7110_SYSCLK_GMAC1_RX, "gmac1_rx", 2,
-> 		    JH7110_SYSCLK_GMAC1_RGMII_RXIN,
-> 		    JH7110_SYSCLK_GMAC1_RMII_RTX),
-> That macro is:
-> #define JH71X0__MUX(_idx, _name, _nparents, ...) [_idx] = {			\
-> 	.name = _name,								\
-> 	.flags = 0,								\
-> 	.max = ((_nparents) - 1) << JH71X0_CLK_MUX_SHIFT,			\
-> 	.parents = { __VA_ARGS__ },						\
-> }
-> 
-> AFAICT, RMII reference feeds RMII_RTX & RGMII RX *is* RGMII_RXIN?
-> Does that mean you need to populate only one of GMAC1 RMII reference
-> and GMAC1 RMGII RX and the other is optional?
+--00000000000048c92b05f0a98bc1
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Yes, actually only one of them is chosen as the root clock
-source of the clock "gmac1_rx".
-
-> 
-> What have I missed?
-> 
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: osc
-> > +      - const: gmac1_rmii_refin
-> > +      - const: gmac1_rgmii_rxin
-> > +      - const: i2stx_bclk_ext
-> > +      - const: i2stx_lrck_ext
-> > +      - const: i2srx_bclk_ext
-> > +      - const: i2srx_lrck_ext
-> > +      - const: tdm_ext
-> > +      - const: mclk_ext
-> 
-> If all clocks are in fact required though, isn't this kinda pointless to
-> have since we already know that the order is fixed from the "clocks"
-> property?
-> Krzk/Rob?
-
-The clock-names are used to easily identify these clocks in the clock driver.
-
-Best regards,
-Hal
+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
+OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
+dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
+fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
+9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
+pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
+25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
+Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPYxTIXEZf5V5qSuWCe9XorgTgCkq72/
+j98d+clOVJECMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTIy
+NTE2MzEwMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQCYFRjlAmYmV/TMu/9FpMx1RSZ4gWRUCiegB/X7nFzzCGbf1CoI
+1BFRsq/syecf2tAmjn5eI8YjuXw/lW69QZu15BI/3JkfXKlJnVT4RLxj97Q5DC6S80kNDaa1LToe
+bcGXTy9RcJCOMdur4XMzXrv+7ItkSd0jXEr9yANzrHZPYkW/R6QJiXkz/VNqVRsCttzwkVIKXRxo
+wqdBuDtflLQywWeJxy5QVPxhhirzq8U/SeuhA1vYgqPaE76jdYoLGfn3LhRdTqEEGz3iSSfAfZml
+hZpksYil3K/VRH34zg8S+n2HlPzA9kXePSvyr/yqh9kBdYMZmn9KaXHFJ/GrbwD9
+--00000000000048c92b05f0a98bc1--
