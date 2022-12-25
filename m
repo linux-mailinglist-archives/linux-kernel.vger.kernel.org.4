@@ -2,422 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF708655CDA
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 11:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F184655CDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 11:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiLYKan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 05:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
+        id S230432AbiLYKgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 05:36:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiLYKak (ORCPT
+        with ESMTP id S229489AbiLYKgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 05:30:40 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EC9E94;
-        Sun, 25 Dec 2022 02:30:35 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 23A8D24DFCE;
-        Sun, 25 Dec 2022 18:30:27 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 25 Dec
- 2022 18:30:27 +0800
-Received: from [192.168.125.65] (113.72.146.158) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 25 Dec
- 2022 18:30:25 +0800
-Message-ID: <d81cabc8-0229-1acf-03da-9a988a53a890@starfivetech.com>
-Date:   Sun, 25 Dec 2022 18:31:31 +0800
+        Sun, 25 Dec 2022 05:36:12 -0500
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD1F333
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 02:36:10 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id a17so8120956wrt.11
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 02:36:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EchhkTTeWj/l3b3OSWkA05dF2p08TbkhmMoG0JUIzmI=;
+        b=3MKclYL8+T2N34KGlnOq+rOKBd2v0XXc0PGk/0EqoyQGxU2LcPSfDRo0KaHDDnSUqk
+         uvYgKn/Vhkyh4aMUXPp4hg0sLARAKvoiECD70O4VGqpU5SaplvbwdZVEiuj5SMGHco5f
+         soZ5XZjRyLgrivNn4tet61B1eqvxsnMvNBjXrNKsWfaFBv7lgU/Tuk791d1salM793vO
+         8GBh6RByTgc3LXW6t8AjiVW9RvYgedyRBmi9bqKVDWiXvHH3/wEA/lYnQXXqUy6U3zyQ
+         sKmDkkTCsMG0ZIehcdVJxBZlYGueSQ9/nMEBf3x+hYqNZKbIE0sAmPCV6cBXDWpWQ1dr
+         30Nw==
+X-Gm-Message-State: AFqh2ko+Ufdvk/Js/A2mEsvbaL3U3+dHUKTWhuwobVSk+gtqVWt6S1GX
+        urPg8zEqbHW8nq+kqAYxLcY=
+X-Google-Smtp-Source: AMrXdXsZq0rGK2qT91H/thFx92Zy0/jrCMOZJYqtAFXAt1xuzx3RGwe+7pwKbhV7MjxXHLdnch9mYg==
+X-Received: by 2002:a5d:4008:0:b0:242:17d3:a9fc with SMTP id n8-20020a5d4008000000b0024217d3a9fcmr9668380wrp.30.1671964569227;
+        Sun, 25 Dec 2022 02:36:09 -0800 (PST)
+Received: from [192.168.64.177] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id b2-20020adff242000000b0023662245d3csm7619890wrp.95.2022.12.25.02.36.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Dec 2022 02:36:08 -0800 (PST)
+Message-ID: <594b768a-9311-da86-1619-5435d3f720f5@grimberg.me>
+Date:   Sun, 25 Dec 2022 12:36:07 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
- device tree
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: drivers/nvme/host/auth.c:950 nvme_auth_init_ctrl() warn: missing
+ error code? 'ret'
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-7-hal.feng@starfivetech.com>
- <ebb27bb2-158c-8207-7184-0d5b5ca0ce14@linaro.org>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <ebb27bb2-158c-8207-7184-0d5b5ca0ce14@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Christoph Hellwig <hch@lst.de>, Dan Carpenter <error27@gmail.com>
+Cc:     oe-kbuild@lists.linux.dev, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <202212222333.vrYfUBqM-lkp@intel.com>
+ <20221223154754.GA30339@lst.de>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <20221223154754.GA30339@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.146.158]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Dec 2022 11:10:11 +0100, Krzysztof Kozlowski wrote:
-> On 20/12/2022 02:12, Hal Feng wrote:
->> From: Emil Renner Berthing <kernel@esmil.dk>
->> 
->> Add initial device tree for the JH7110 RISC-V SoC by StarFive
->> Technology Ltd.
->> 
->> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
->> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
->> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
->> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> ---
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 411 +++++++++++++++++++++++
->>  1 file changed, 411 insertions(+)
->>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> new file mode 100644
->> index 000000000000..64d260ea1f29
->> --- /dev/null
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -0,0 +1,411 @@
->> +// SPDX-License-Identifier: GPL-2.0 OR MIT
->> +/*
->> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
->> + */
->> +
->> +/dts-v1/;
->> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
->> +#include <dt-bindings/reset/starfive,jh7110-crg.h>
->> +
->> +/ {
->> +	compatible = "starfive,jh7110";
->> +	#address-cells = <2>;
->> +	#size-cells = <2>;
->> +
->> +	cpus {
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		S76_0: cpu@0 {
->> +			compatible = "sifive,u74-mc", "riscv";
->> +			reg = <0>;
->> +			d-cache-block-size = <64>;
->> +			d-cache-sets = <64>;
->> +			d-cache-size = <8192>;
->> +			d-tlb-sets = <1>;
->> +			d-tlb-size = <40>;
->> +			device_type = "cpu";
->> +			i-cache-block-size = <64>;
->> +			i-cache-sets = <64>;
->> +			i-cache-size = <16384>;
->> +			i-tlb-sets = <1>;
->> +			i-tlb-size = <40>;
->> +			mmu-type = "riscv,sv39";
->> +			next-level-cache = <&ccache>;
->> +			riscv,isa = "rv64imac";
->> +			tlb-split;
->> +			status = "disabled";
->> +
->> +			cpu0_intc: interrupt-controller {
->> +				compatible = "riscv,cpu-intc";
->> +				interrupt-controller;
->> +				#interrupt-cells = <1>;
->> +			};
->> +		};
->> +
->> +		U74_1: cpu@1 {
->> +			compatible = "sifive,u74-mc", "riscv";
->> +			reg = <1>;
->> +			d-cache-block-size = <64>;
->> +			d-cache-sets = <64>;
->> +			d-cache-size = <32768>;
->> +			d-tlb-sets = <1>;
->> +			d-tlb-size = <40>;
->> +			device_type = "cpu";
->> +			i-cache-block-size = <64>;
->> +			i-cache-sets = <64>;
->> +			i-cache-size = <32768>;
->> +			i-tlb-sets = <1>;
->> +			i-tlb-size = <40>;
->> +			mmu-type = "riscv,sv39";
->> +			next-level-cache = <&ccache>;
->> +			riscv,isa = "rv64imafdc";
->> +			tlb-split;
->> +
->> +			cpu1_intc: interrupt-controller {
->> +				compatible = "riscv,cpu-intc";
->> +				interrupt-controller;
->> +				#interrupt-cells = <1>;
->> +			};
->> +		};
->> +
->> +		U74_2: cpu@2 {
->> +			compatible = "sifive,u74-mc", "riscv";
->> +			reg = <2>;
->> +			d-cache-block-size = <64>;
->> +			d-cache-sets = <64>;
->> +			d-cache-size = <32768>;
->> +			d-tlb-sets = <1>;
->> +			d-tlb-size = <40>;
->> +			device_type = "cpu";
->> +			i-cache-block-size = <64>;
->> +			i-cache-sets = <64>;
->> +			i-cache-size = <32768>;
->> +			i-tlb-sets = <1>;
->> +			i-tlb-size = <40>;
->> +			mmu-type = "riscv,sv39";
->> +			next-level-cache = <&ccache>;
->> +			riscv,isa = "rv64imafdc";
->> +			tlb-split;
->> +
->> +			cpu2_intc: interrupt-controller {
->> +				compatible = "riscv,cpu-intc";
->> +				interrupt-controller;
->> +				#interrupt-cells = <1>;
->> +			};
->> +		};
->> +
->> +		U74_3: cpu@3 {
->> +			compatible = "sifive,u74-mc", "riscv";
->> +			reg = <3>;
->> +			d-cache-block-size = <64>;
->> +			d-cache-sets = <64>;
->> +			d-cache-size = <32768>;
->> +			d-tlb-sets = <1>;
->> +			d-tlb-size = <40>;
->> +			device_type = "cpu";
->> +			i-cache-block-size = <64>;
->> +			i-cache-sets = <64>;
->> +			i-cache-size = <32768>;
->> +			i-tlb-sets = <1>;
->> +			i-tlb-size = <40>;
->> +			mmu-type = "riscv,sv39";
->> +			next-level-cache = <&ccache>;
->> +			riscv,isa = "rv64imafdc";
->> +			tlb-split;
->> +
->> +			cpu3_intc: interrupt-controller {
->> +				compatible = "riscv,cpu-intc";
->> +				interrupt-controller;
->> +				#interrupt-cells = <1>;
->> +			};
->> +		};
->> +
->> +		U74_4: cpu@4 {
->> +			compatible = "sifive,u74-mc", "riscv";
->> +			reg = <4>;
->> +			d-cache-block-size = <64>;
->> +			d-cache-sets = <64>;
->> +			d-cache-size = <32768>;
->> +			d-tlb-sets = <1>;
->> +			d-tlb-size = <40>;
->> +			device_type = "cpu";
->> +			i-cache-block-size = <64>;
->> +			i-cache-sets = <64>;
->> +			i-cache-size = <32768>;
->> +			i-tlb-sets = <1>;
->> +			i-tlb-size = <40>;
->> +			mmu-type = "riscv,sv39";
->> +			next-level-cache = <&ccache>;
->> +			riscv,isa = "rv64imafdc";
->> +			tlb-split;
->> +
->> +			cpu4_intc: interrupt-controller {
->> +				compatible = "riscv,cpu-intc";
->> +				interrupt-controller;
->> +				#interrupt-cells = <1>;
->> +			};
->> +		};
->> +
->> +		cpu-map {
->> +			cluster0 {
->> +				core0 {
->> +					cpu = <&S76_0>;
->> +				};
->> +
->> +				core1 {
->> +					cpu = <&U74_1>;
->> +				};
->> +
->> +				core2 {
->> +					cpu = <&U74_2>;
->> +				};
->> +
->> +				core3 {
->> +					cpu = <&U74_3>;
->> +				};
->> +
->> +				core4 {
->> +					cpu = <&U74_4>;
->> +				};
->> +			};
->> +		};
->> +	};
->> +
->> +	osc: osc {
+
+
+On 12/23/22 17:47, Christoph Hellwig wrote:
+> Based on the code in nvme_auth_generate_key I assume this is intentional,
+> but the code looks really confusing.
 > 
-> Node names should be generic, so why this is "osc" and other oscillators
-> are not "osc"?
-
-Only "osc" and "rtc_osc" are oscillators, the rest are clock sources provided
-through gpio. I will modify the node names according to your link below. So
-
-	osc: oscillator {
-
+> Hannes, Sagi, what do you think of something like this:
 > 
 > 
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	rtc_osc: rtc_osc {
-> 
-> No underscores in node names. Generic node names (so each of them
-> starting or ending with clock).
+> diff --git a/drivers/nvme/common/auth.c b/drivers/nvme/common/auth.c
+> index d90e4f0c08b7b9..a07eb4cd9ce173 100644
+> --- a/drivers/nvme/common/auth.c
+> +++ b/drivers/nvme/common/auth.c
+> @@ -455,28 +455,18 @@ int nvme_auth_gen_shared_secret(struct crypto_kpp *dh_tfm,
+>   }
+>   EXPORT_SYMBOL_GPL(nvme_auth_gen_shared_secret);
+>   
+> -int nvme_auth_generate_key(u8 *secret, struct nvme_dhchap_key **ret_key)
+> +struct nvme_dhchap_key *nvme_auth_generate_key(u8 *secret)
+>   {
+> -	struct nvme_dhchap_key *key;
+>   	u8 key_hash;
+>   
+> -	if (!secret) {
+> -		*ret_key = NULL;
+> -		return 0;
+> -	}
+> +	if (!secret)
+> +		return NULL;
+>   
+>   	if (sscanf(secret, "DHHC-1:%hhd:%*s:", &key_hash) != 1)
+> -		return -EINVAL;
+> +		return ERR_PTR(-EINVAL);
+>   
+>   	/* Pass in the secret without the 'DHHC-1:XX:' prefix */
+> -	key = nvme_auth_extract_key(secret + 10, key_hash);
+> -	if (IS_ERR(key)) {
+> -		*ret_key = NULL;
+> -		return PTR_ERR(key);
+> -	}
+> -
+> -	*ret_key = key;
+> -	return 0;
+> +	return nvme_auth_extract_key(secret + 10, key_hash);
+>   }
+>   EXPORT_SYMBOL_GPL(nvme_auth_generate_key);
+>   
+> diff --git a/drivers/nvme/host/auth.c b/drivers/nvme/host/auth.c
+> index bb0abbe4491cdc..c808652966a94f 100644
+> --- a/drivers/nvme/host/auth.c
+> +++ b/drivers/nvme/host/auth.c
+> @@ -943,16 +943,19 @@ int nvme_auth_init_ctrl(struct nvme_ctrl *ctrl)
+>   	INIT_WORK(&ctrl->dhchap_auth_work, nvme_ctrl_auth_work);
+>   	if (!ctrl->opts)
+>   		return 0;
+> -	ret = nvme_auth_generate_key(ctrl->opts->dhchap_secret,
+> -			&ctrl->host_key);
+> -	if (ret)
+> -		return ret;
+> -	ret = nvme_auth_generate_key(ctrl->opts->dhchap_ctrl_secret,
+> -			&ctrl->ctrl_key);
+> -	if (ret)
+> +
+> +	ctrl->host_key = nvme_auth_generate_key(ctrl->opts->dhchap_secret);
+> +	if (IS_ERR(ctrl->host_key)) {
 
-Will change this line to
+nvme_auth_generate_key can return NULL, so in this case we should avoid
+calling it if the secret is null here.
 
-	rtc_osc: oscillator {
-
-> 
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	gmac0_rmii_refin: gmac0_rmii_refin {
-> 
-> Same problem... and actually you have way too many fixed clocks which do
-
-Will change the node names as follows.
-
-	gmac0_rmii_refin: clock {
-		...
-	};
-
-	gmac0_rgmii_rxin: clock {
-		...
-	};
-	...
-
-> nothing. It looks like you avoid to define proper clock controller.
-> What's the point for all these clocks? These are no-op.
-
-These are all external fixed rate clocks inputted to the SoC. They are the root
-clocks of the clock tree made by clock drivers. Their ops are provided in
-drivers/clk/clk-fixed-rate.c.
-
-> 
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	gmac0_rgmii_rxin: gmac0_rgmii_rxin {
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	gmac1_rmii_refin: gmac1_rmii_refin {
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	gmac1_rgmii_rxin: gmac1_rgmii_rxin {
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	i2stx_bclk_ext: i2stx_bclk_ext {
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	i2stx_lrck_ext: i2stx_lrck_ext {
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	i2srx_bclk_ext: i2srx_bclk_ext {
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	i2srx_lrck_ext: i2srx_lrck_ext {
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	tdm_ext: tdm_ext {
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	mclk_ext: mclk_ext {
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +	};
->> +
->> +	soc {
->> +		compatible = "simple-bus";
->> +		interrupt-parent = <&plic>;
->> +		#address-cells = <2>;
->> +		#size-cells = <2>;
->> +		ranges;
->> +
->> +		clint: clint@2000000 {
-> 
-> Node names should be generic.
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Change it to 
-
-		clint: timer@2000000 {
-
-> 
->> +			compatible = "starfive,jh7110-clint", "sifive,clint0";
->> +			reg = <0x0 0x2000000 0x0 0x10000>;
->> +			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
->> +					      <&cpu1_intc 3>, <&cpu1_intc 7>,
->> +					      <&cpu2_intc 3>, <&cpu2_intc 7>,
->> +					      <&cpu3_intc 3>, <&cpu3_intc 7>,
->> +					      <&cpu4_intc 3>, <&cpu4_intc 7>;
->> +		};
->> +
->> +		plic: plic@c000000 {
-> 
-> Node names should be generic, so interrupt-controller
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Change it to 
-
-		plic: interrupt-controller@c000000 {
-
-Best regards,
-Hal
-
-> 
->> +			compatible = "starfive,jh7110-plic", "sifive,plic-1.0.0";
->> +			reg = <0x0 0xc000000 0x0 0x4000000>;
->> +			interrupts-extended = <&cpu0_intc 11>,
->> +					      <&cpu1_intc 11>, <&cpu1_intc 9>,
->> +					      <&cpu2_intc 11>, <&cpu2_intc 9>,
->> +					      <&cpu3_intc 11>, <&cpu3_intc 9>,
->> +					      <&cpu4_intc 11>, <&cpu4_intc 9>;
->> +			interrupt-controller;
->> +			#interrupt-cells = <1>;
->> +			#address-cells = <0>;
->> +			riscv,ndev = <136>;
->> +		};
+Other than that, this looks good.
+Although I think that for this specific report, we should do a simple
+fix and then make the code look better.
