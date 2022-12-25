@@ -2,191 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02297655CF6
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 12:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA81C655D23
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 13:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiLYLvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 06:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
+        id S231152AbiLYMGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 07:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLYLvA (ORCPT
+        with ESMTP id S230468AbiLYMFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 06:51:00 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F81BA0;
-        Sun, 25 Dec 2022 03:50:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1671968822;
-        bh=cigTGUVAg3Yj9PBuOXrP7a8GktisvMkb4W/saccjwJQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ma/xkta6H/Vvu8O4rhc4uZyrSkGoLzcj0u3e+4+TsD4ecPjO4RdiTm8nzUIpHBg8t
-         yODU1TLBIFTfdJLVBlQPzfNkaUw4INHVjuJ4gklf1gC+4NS7bQxFhZdLTJComCawxT
-         FoNsX+YKxX2QusrfdnIZzotnf9ovGBKNZvqERLVsG8XKa+QpTP+3jnz5cduXBc6ZJb
-         XDpzyAP8rRElSmXpRYqE6Flyu5JYhkA9jbHoa88IAt8F0oKr/i8WXIlnG/A1H+x37k
-         jIamcERWlvttUqlamw9zawJZdLhlNurOM2MxVzlYyQE7NYgmOINTAzmtKMDzqbr6AT
-         fINsT6KW8DG/g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [157.180.225.172] ([157.180.225.172]) by web-mail.gmx.net
- (3c-app-gmx-bap38.server.lan [172.19.172.108]) (via HTTP); Sun, 25 Dec 2022
- 12:47:02 +0100
+        Sun, 25 Dec 2022 07:05:47 -0500
+X-Greylist: delayed 923 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 25 Dec 2022 04:05:43 PST
+Received: from m12.mail.163.com (m12.mail.163.com [123.126.96.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAC8A33A;
+        Sun, 25 Dec 2022 04:05:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=F9gkZ
+        SD7c3nHA5BZkH+F7JuoJmI7vSuVT8KI2Bn7tWA=; b=GF6VvIkzIQMGURMLwbd2R
+        PNbfFdLcd0irg7U0TbGa9rqYWhEv/GeUaHJ/4Q1MttnYsZXEAxvGv+hj31nzWafo
+        uhS2LPL1GGnGYTTfuR2KTwy+hTwYOEGQnP8SHNf0FgrMOyWczgif0ZybMwmDq8Vy
+        3XPF88GR1Nhxvybg92dR8U=
+Received: from ProDesk.. (unknown [58.22.7.114])
+        by smtp19 (Coremail) with SMTP id R9xpCgA33rq7OKhjaKYnCw--.48484S2;
+        Sun, 25 Dec 2022 19:49:19 +0800 (CST)
+From:   Andy Yan <andyshrk@163.com>
+To:     heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
+        piotr.oniszczuk@gmail.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
+Cc:     Andy Yan <andyshrk@163.com>
+Subject: [PATCH 0/2] rk3566 box demo io domain and network fix
+Date:   Sun, 25 Dec 2022 19:49:15 +0800
+Message-Id: <20221225114915.3518502-1-andyshrk@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <trinity-b51cbf64-8df3-4a0b-883a-dbb7443eb954-1671968822286@3c-app-gmx-bap38>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        devicetree@vger.kernel.org
-Subject: Aw: Re: [next v7 8/8] arm64: dts: mt7986: add Bananapi R3
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 25 Dec 2022 12:47:02 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <Y6dMWFy7gChG88j0@makrotopia.org>
-References: <20221127114142.156573-1-linux@fw-web.de>
- <20221127114142.156573-9-linux@fw-web.de> <Y6dMWFy7gChG88j0@makrotopia.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:10CT/kHfUVpSwqOqwS7PiCBR0/UkRQWIuyHUPEIPBF4ZQybqHeav5erxkfhPt6CkPU6ev
- P2jwPeR/U1/CsU0cypsmIs4UKNmh6TMGRmE9N8BKS0TbhXVNMX4nifJlVBx0/sT+mC1DTHpe7Lm0
- ZWTvo5zBoXH7rzgei9CR+fXrJGdfl+LYJmaNbBJV9dJV3cfgTHqW/IWi9dXZWuu9PEWsGOdppoeX
- JFIMemszjkAeplliNJluXNK5PmagMPT+eXXsMkTHO3XWdQck6hJrq/ckQvChW3JNDndJB1bzqU4q
- GY=
-UI-OutboundReport: notjunk:1;M01:P0:pwFcvI8EngI=;Xzb4kTlhYwuChZI1qpgA1uiBqPU
- 0VRdCykSt9KTXu8yY9kmRrx7TUx5EFBj/CWBFLhFCAuUvqO+4VGvbUWKt0/ui4Stz591phL4x
- V6D2S/PlSOoK+x7PH/19JEuZKEr5cZZhv/LAaLdmWxmbQ6Ch8dMf/wUp1jZ/eXMG6DQ5sj46p
- EXO5bAt6xkRITCny9gY4QR1XL7ITdV97qUPfmQRubcACLurNRiTr1QjoIHgepkenO2tKABFEZ
- aJlUCiDQm5KNF8h4qRZgm+UrvL87097zlMkEmBYS0EhImEM4apgdFixunpgiN9VC0tE6hKIN0
- RulXsPDMfJyIbonqk8r0HLhEzVeqs6enS34vIqnFEbe8J51x8eU6Jg6NdGPFevExob8aDMeA5
- r4qRPKfr7LrlcIZgNnTPkmGZlLHG8op2cuELClFACNBxSYklDi61bGdcrGZ7zgWk3QN5sMjFd
- KlKgPUWpw5/2Ky/5xfMK3GT7p3vDoQsfCHWpotsshwNqzEVX7wneqQHwqgxD//E/bDFOw5OMa
- ok4obFcCNMkLzPS+ofYi4/P0dL4DeC2uH2WDbe3VoYjcV/6sH3jn/5XmyqldDIs+E5Djrt7LP
- QLVtrJzCxdBJwNbpDlCK6jlqsRSUyIk7Auv2qYiSoTNGfBqQuwpHW2LI5G2C0x3uOnx2kkzUP
- sFzbOVN9r/dTxS9JeWVf4mH3r5urzdXFrMvBaujgNVJ3jt6wvufj84Ejbe88doESaimya4+QF
- +jTNS8V4hj1DozC05FKDuBggiU2hqUxx5Q6lGPoMFa94cU4cBp5hYxx4dU5WsG6eYssc0MUJe
- v7pKBoXRZTACH/SOAAOVa4uzu3j406KqJjqu430gP7Hiw=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: R9xpCgA33rq7OKhjaKYnCw--.48484S2
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvj4RAOzVDUUUU
+X-Originating-IP: [58.22.7.114]
+X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/xtbBEgDiXmI0VoFerQAAsc
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_SORBS_WEB,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
 
-> Gesendet: Samstag, 24. Dezember 2022 um 20:00 Uhr
-> Von: "Daniel Golle" <daniel@makrotopia.org>
+The rk3566 box demo has a gmac and a ap6398s wifi demo,
+These two patches add the io domain setting make gmac
+work well, and fix the sdmmc1 dt nod to make wifi work.
 
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dtso
-> > @@ -0,0 +1,30 @@
-> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > +/*
-> > + * Copyright (C) 2021 MediaTek Inc.
-> > + * Author: Sam.Shih <sam.shih@mediatek.com>
-> > + */
-> > +
-> > +/dts-v1/;
-> > +/plugin/;
-> > +
-> > +/ {
-> > +	compatible =3D "bananapi,bpi-r3", "mediatek,mt7986a";
-> > +	model =3D "Bananapi BPI-R3 (emmc)";
->
-> Why do you set the model string here?
 
-seems to be a left over from testing where i wanted to see which base-dtb =
-was
-loaded without comparing mmc-node settings. Was easier to see with model-s=
-tring :)
+Andy Yan (2):
+  arm64: dts: rockchip: rk3566-box-demo: add io domain setting
+  arm64: dts: rockchip: Enable wifi module AP6398s for rk3566 box demo
 
-> > +
-> > +	fragment@0 {
-> > +		target-path =3D "/soc/mmc@11230000";
-> > +		__overlay__ {
-> > +			bus-width =3D <8>;
-> > +			max-frequency =3D <200000000>;
-> > +			cap-mmc-highspeed;
-> > +			mmc-hs200-1_8v;
-> > +			mmc-hs400-1_8v;
-> > +			hs400-ds-delay =3D <0x14014>;
-> > +			non-removable;
-> > +			no-sd;
-> > +			no-sdio;
-> > +			status =3D "okay";
-> > +		};
-> > +	};
-> > +};
+ .../boot/dts/rockchip/rk3566-box-demo.dts     | 37 +++++++++++++++++--
+ 1 file changed, 33 insertions(+), 4 deletions(-)
 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts =
-b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
-> > new file mode 100644
-> > index 000000000000..618d3bb2f32f
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+-- 
+2.25.1
 
-> > +&mdio {
-> > +	switch: switch@31 {
-> > +		compatible =3D "mediatek,mt7531";
-> > +		reg =3D <31>;
-> > +		reset-gpios =3D <&pio 5 GPIO_ACTIVE_HIGH>;
->
-> Please add:
->
->                 interrupt-controller;
->                 #interrupt-cells =3D <1>;
->                 interrupt-parent =3D <&pio>;
->                 interrupts =3D <66 IRQ_TYPE_LEVEL_HIGH>;
->
-> to have IRQ driven phy status instead of having to poll the link status
-> of the 5x rj-45 ports.
-> The value comes from schematics (pin AD24, GPIO66, 7531_INT) and I've
-> tested this on my board.
-
-ok, if you have it tested i add these properties in next version (and test=
- it too).
-I wait for tphy-binding to be applied to next (pcie and xhci already in to=
-rvalds/master).
-
-> > +	};
-> > +};
-> > +
-
-> > +&spi0 {
-> > +	pinctrl-names =3D "default";
-> > +	pinctrl-0 =3D <&spi_flash_pins>;
-> > +	cs-gpios =3D <0>, <0>;
->
-> I don't think those bogus cs-gpios here and for spi1 below are needed.
-
-can drop them in next version
-
-> > +	status =3D "okay";
-> > +};
-> > +
-> > +&spi1 {
-> > +	pinctrl-names =3D "default";
-> > +	pinctrl-0 =3D <&spic_pins>;
-> > +	cs-gpios =3D <0>, <0>;
-> > +	status =3D "okay";
-> > +};
-> > +
-
-regards Frank
