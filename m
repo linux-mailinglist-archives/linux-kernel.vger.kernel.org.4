@@ -2,189 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCF0655D1F
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 13:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8CD655D2A
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 13:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiLYMBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 07:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
+        id S231281AbiLYMHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 07:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiLYMAl (ORCPT
+        with ESMTP id S231140AbiLYMHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 07:00:41 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A16B646C
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 03:59:48 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id y25so12871283lfa.9
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 03:59:48 -0800 (PST)
+        Sun, 25 Dec 2022 07:07:39 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16C6130
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 04:07:38 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-45c11d1bfc8so122980847b3.9
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 04:07:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VJm2wioESvThzzMOuzKJ3QtCPr7g0JfFvuAg6gEUcPI=;
-        b=LiRgMi1qkQ2+Ds7g9/JAYO4WUSM4FJmGIlvOD7cjtAb5RdlPgbnz502iHgVI+Q093a
-         lyGWP0Jss+EmDo1QcTzafJXnnlJaoGsD/5kQ+wfELfx7hs+kixmS6ANmTMVqNSCzDAJ1
-         u6MlwmI8y4H2UD3/FOBS5gxJ92miBatL/e2PkVVyjUlHt8JivFAx/55o9rBhNCrrRL4W
-         2AQo+nlvvnNBfmESBQRfL6czWQ8lfe2GOqW5jTMTj7HO5T4puwssyH8HriVa0+An3g2Q
-         uMC2ma/b4clP8Y0jOmLqWP7oXEuY28OgzvQvO44KifylJdOIua2nUutHqDQiMNhgBdJX
-         fxGg==
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UKTQU6JpYT/i5Ge3ms9B5Uj7VN4LVhAh6fCSSObj+sc=;
+        b=t3E2z8YQO7Chfw3KwTr+LNsg7PTaNF52eqrqdBYBkzM1tA4UQrsAclrqVSDjXCuD3O
+         y5kjlu2dfzHHhfK3NwbUMG7U2XZFrFXl3MhCwWTvZCcoATjtSUfYkILJSqfA6JD4lX67
+         T3KQv9/+BH2C4+stqsYdcez2W300sxdvo1PrXTgJg98Bi2Fz+K7wjUY6DU0CPKioTJm+
+         2BUIYFZfXGe717FXUA50jUcjFI2AoA4NmI2KYHYQcYVLFiC8z8fArRUZ1FI6yoRYwEgQ
+         iVZJeu58k0B+DM3QioyTSx6WHidCkuXcBXKHNN4ZGuRDyvj4oaV87FpWPPDSt+HbumVJ
+         +3UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VJm2wioESvThzzMOuzKJ3QtCPr7g0JfFvuAg6gEUcPI=;
-        b=0CyYFis5li0UCBsPaUbhVdelz5Pu8aBoFotOSbAPejruIqSlUbwfu8t7qlsrwtfnCL
-         wMNDcCmnDu0ksvAsISdQebgKyTNr+qFYsfxfYp21mYsVoR/zEwk1eJBHtixnEV6ZweS+
-         iTHBM3CADBKwDH8Rymbrm0vysCZk83+cik2oiAC7ffyPtgL/ZdxKQQGYSEY8nspdBlNx
-         uoBgIgN3DY0FNJLjgavnNPX41uIJXvR4xAvcmgwVq66/3J4mv6iGGPiLuh3jNnvIB1vJ
-         JljjJbkmb57ZVe2vrpxgwA9YMqkE+J+kR98M+XOPZ1rFOEIN7el+mtxwgrTbeujUB1u/
-         IJHQ==
-X-Gm-Message-State: AFqh2kp1mwyoLD44J657N9ADCVW9xaLX3SwSpYjjw/0QZd8QemLM30hQ
-        Zy6lRBltf8qlBhkKX4MgQt+Y0g==
-X-Google-Smtp-Source: AMrXdXtZbcr1lewm33QSNJ02le4poAH1iJiWRMNcmbXeb/Tk88AaBN5cBHC8rGSoz6Usb0/FzIq/tA==
-X-Received: by 2002:a05:6512:32cc:b0:4ca:d81c:f172 with SMTP id f12-20020a05651232cc00b004cad81cf172mr4589490lfg.43.1671969587983;
-        Sun, 25 Dec 2022 03:59:47 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v10-20020ac258ea000000b004b501497b6fsm1338615lfo.148.2022.12.25.03.59.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Dec 2022 03:59:47 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UKTQU6JpYT/i5Ge3ms9B5Uj7VN4LVhAh6fCSSObj+sc=;
+        b=aUugfSv23IDWZ6iIVdXvVg7T6MpDTMYqn3dDDcJ/LKTbSE7Oc78N0aHbbPr0CCYMia
+         JS967GEgGuBVtby5fgRCjVZuUcwxT0Zpw5+1sNUP7JWCenwjiuET5xNJXdKbC+p6U5m+
+         EFDkht88eL0iGqQriplVeMz5xEnyHyoHlost2H6bMdVf1hEoNJCfNSpYC6P3VpleHfw2
+         R04wz+Zkfsk3H9rimIy6qm+DLza/iEnQZH0YU6Dn6vxyoLwRBbjVRL/0/N1Qk0gIE5mL
+         10O7k7eo8X9x8i/H0ouMcR5MS0uz2Emm6RL1KAGAeOLxERtITJU2Y3ehppnfbwSFWCnb
+         QglA==
+X-Gm-Message-State: AFqh2kp66Lrinr0+UKXKT3xXReAGy4CrNlM0SuyWLErIuq+5Q0vlQ7UO
+        UyQ+VNcyjFOUMc/2NJW5d9V4U96uxtBXkoyfT2R4gg==
+X-Google-Smtp-Source: AMrXdXu9DkaN9Y80+F8H02K1xM663fXeLzgYkxqYtnCcRfU0jLJ0G9d/MxK3qm5Et9wUWnmTmGnB26hq2K567oTY0Ys=
+X-Received: by 2002:a05:690c:80c:b0:46d:89d7:498f with SMTP id
+ bx12-20020a05690c080c00b0046d89d7498fmr613972ywb.461.1671970057918; Sun, 25
+ Dec 2022 04:07:37 -0800 (PST)
+MIME-Version: 1.0
+References: <20221223132235.16149-1-anand@edgeble.ai> <CA+VMnFz8nQ2DnD6L9cPmoRqk+uohRqTEpak9g=WGJnSBoONmrA@mail.gmail.com>
+ <CA+pv=HP8ckG8dsh-uZ6=k2nMGDGbw3gnh2b1ZWV31mzuYsjNig@mail.gmail.com>
+In-Reply-To: <CA+pv=HP8ckG8dsh-uZ6=k2nMGDGbw3gnh2b1ZWV31mzuYsjNig@mail.gmail.com>
+From:   Jagan Teki <jagan@edgeble.ai>
+Date:   Sun, 25 Dec 2022 17:37:27 +0530
+Message-ID: <CA+VMnFwGHk9OEZWjxWUqGqzwrxgRqy9VZ+tP2Ada5ErPo_dSVw@mail.gmail.com>
+Subject: Re: [PATCHv1 linux-next 1/4] dt-bindings: net: rockchip-dwmac: fix
+ rv1126 compatible warning
+To:     Slade Watkins <srw@sladewatkins.net>
+Cc:     Anand Moon <anand@edgeble.ai>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy: correct clocks per variants
-Date:   Sun, 25 Dec 2022 12:59:44 +0100
-Message-Id: <20221225115944.55425-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221225115944.55425-1-krzysztof.kozlowski@linaro.org>
-References: <20221225115944.55425-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Heiko Stuebner <heiko@sntech.de>,
+        David Wu <david.wu@rock-chips.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Different variants of Qualcomm USB3 DP PHY take different clocks
-(according to upstream DTS and Linux driver):
+On Sun, 25 Dec 2022 at 02:54, Slade Watkins <srw@sladewatkins.net> wrote:
+>
+> On Sat, Dec 24, 2022 at 9:30 AM Jagan Teki <jagan@edgeble.ai> wrote:
+> >
+> > On Fri, 23 Dec 2022 at 18:55, Anand Moon <anand@edgeble.ai> wrote:
+> > >
+> > > Fix compatible string for RV1126 gmac, and constrain it to
+> > > be compatible with Synopsys dwmac 4.20a.
+> > >
+> > > fix below warning
+> > > arch/arm/boot/dts/rv1126-edgeble-neu2-io.dtb: ethernet@ffc40000:
+> > >                  compatible: 'oneOf' conditional failed, one must be fixed:
+> > >         ['rockchip,rv1126-gmac', 'snps,dwmac-4.20a'] is too long
+> > >         'rockchip,rv1126-gmac' is not one of ['rockchip,rk3568-gmac', 'rockchip,rk3588-gmac']
+> > >
+> > > Signed-off-by: Anand Moon <anand@edgeble.ai>
+> > > Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+> > > ---
+> >
+> > Please add Fixes above SoB.
+>
+> That and, shouldn't the Signed-off-by: tags be reversed if Anand is
+> sending this?
 
-  sc7280-herobrine-crd.dtb: phy-wrapper@88e9000: clocks: [[43, 151], [39, 0], [43, 153]] is too short
-  sc7280-herobrine-crd.dtb: phy-wrapper@88e9000: clock-names:1: 'cfg_ahb' was expected
-  ...
-  sm8250-hdk.dtb: phy@88e9000: clocks: [[46, 185], [44, 0], [46, 187]] is too short
-  sm8250-hdk.dtb: phy@88e9000: clock-names:1: 'cfg_ahb' was expected
+Agreed, Anand will resend the patch with SoB removed. thanks.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../phy/qcom,sc7180-qmp-usb3-dp-phy.yaml      | 72 ++++++++++++++++---
- 1 file changed, 62 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
-index 97d94c685d7b..2e19a434c669 100644
---- a/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
-@@ -51,18 +51,12 @@ properties:
-   ranges: true
- 
-   clocks:
--    items:
--      - description: Phy aux clock.
--      - description: Phy config clock.
--      - description: 19.2 MHz ref clk.
--      - description: Phy common block aux clock.
-+    minItems: 3
-+    maxItems: 4
- 
-   clock-names:
--    items:
--      - const: aux
--      - const: cfg_ahb
--      - const: ref
--      - const: com_aux
-+    minItems: 3
-+    maxItems: 4
- 
-   power-domains:
-     maxItems: 1
-@@ -171,6 +165,64 @@ required:
-   - vdda-phy-supply
-   - vdda-pll-supply
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,sc7180-qmp-usb3-dp-phy
-+            - qcom,sdm845-qmp-usb3-dp-phy
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: Phy aux clock
-+            - description: Phy config clock
-+            - description: 19.2 MHz ref clk
-+            - description: Phy common block aux clock
-+        clock-names:
-+          items:
-+            - const: aux
-+            - const: cfg_ahb
-+            - const: ref
-+            - const: com_aux
-+
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,sc8180x-qmp-usb3-dp-phy
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: Phy aux clock
-+            - description: 19.2 MHz ref clk
-+            - description: Phy common block aux clock
-+        clock-names:
-+          items:
-+            - const: aux
-+            - const: ref
-+            - const: com_aux
-+
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,sm8250-qmp-usb3-dp-phy
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: Phy aux clock
-+            - description: Board XO source
-+            - description: Phy common block aux clock
-+        clock-names:
-+          items:
-+            - const: aux
-+            - const: ref_clk_src
-+            - const: com_aux
-+
- additionalProperties: false
- 
- examples:
--- 
-2.34.1
-
+Jagan.
