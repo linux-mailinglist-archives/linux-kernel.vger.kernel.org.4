@@ -2,221 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21602655D95
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 16:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D23655D98
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 16:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiLYPvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 10:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49838 "EHLO
+        id S229738AbiLYP5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 10:57:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiLYPvs (ORCPT
+        with ESMTP id S229592AbiLYP5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 10:51:48 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D23261E
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 07:51:46 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id o10-20020a056e02102a00b003006328df7bso5762807ilj.17
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 07:51:46 -0800 (PST)
+        Sun, 25 Dec 2022 10:57:38 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77DD2BE1;
+        Sun, 25 Dec 2022 07:57:36 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id t17so22091047eju.1;
+        Sun, 25 Dec 2022 07:57:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dKOoFYMb23hz5hGId4Wz/IenSn26vXqIKiFsqflZL3w=;
+        b=G4KJclbw5GwJaoCKFjIVpXJ+c8XB0NTbwbsigkAbGPGNtFPMZxsNeFywGxlAsugOsq
+         NkUX0ibiNDXP8IiVenK1vFtLsL23TiDKe2BTOwnQNTYvVRINeBfWzS5bWrRQeO65M1ze
+         4zM/dbJgTGwb3LCf5atAIp+Hm2z9aKKV/YaZx7xcEptk8imV2EFB/tGy8CEbyIKIBFzR
+         J50eP1cwe1a5BfnojwKJyfVaGKxun45Ihxr8fBQORw1NWYfS+21p6LrjeZGtpxOpEq4d
+         b9F/INPHLTYgJB7gqHdB/aeceeYu9inq5TlXkr0PbcCb2gLt0kHA8dvzdL4tfHYEEFmg
+         lk+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8TrQckoKvz3w5GOc/SCODLpLecT+ozdvYKg/HaqgeK4=;
-        b=yz+2203XcWFXdYiugEf8HmN9d585yylX/pN8mS3LQZ4LKXEMPvnK66Vz8WMG43nZJn
-         hYQh7dhBeGfu1iTU/IYQx4SYKLfwYUo7DjEPe4l2d0NLClpquXu6ITZT2HIZqvAqTBtV
-         IGA8AYXb5cw7ghuA/RoRBmJpwSkYnoKiOkEodDIVc0HQRZMhUOTsn9iJ+qQM9RLydYgF
-         Xvf7XxstClH+OhnOlC2434jCV9i4tRTulZT0grPFCXbn+0F05cDj66ewxKYxb7tbN5z0
-         plPTQfcLRDUJvVf0mLwYtOjhhql3CJBQh/nkZ90gYKY5hWJx1QOcoYY4YB5CQynBL/I2
-         k7kg==
-X-Gm-Message-State: AFqh2kqDNRFATvbwoP9soQJX/6bprMsn1VlLfhmEbe1bVWU0dtY9zdLL
-        gbwT/tCyDQiHG+lH97ijWJBOLuWZcwNsjoTMJ3FA7axGFiQB
-X-Google-Smtp-Source: AMrXdXvM/RGYXZpLup5ds5LVkKHdP6YaO5O1eaHxdKwrZOGkSbuuMGAMEGLbnA6vkfvY05fTo1gXqRhyl9LLp0VBv9lZ5sgSD26V
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dKOoFYMb23hz5hGId4Wz/IenSn26vXqIKiFsqflZL3w=;
+        b=fk4V0isJJxuKQDTDz6XVezZ5EaY4FF4l7EVgl0PknHqRrP+rNM2R/gr34bnsYawizj
+         j0ValTR2eExcOmqFMlgO8N5LE2nSy0VVTdr+s8IuguhVdbO4IDbbO4oqMA/ewmLgELfJ
+         uMpSIU5UzwNJgmIFhnwfbIjdHZCnbWTPN2rZpS51GKHKN5si1QPsd61ZAnBUdAxEHuZV
+         BzoajJERAdnnHwHizIaJ3AP3pdqZiNFRZU8Z7y+EuPCy90SWK2oTJj1jzFaPJ/yMf2cf
+         glMVzPa7bdJriafj7pQBxvA/kWUPxdeVUJ8DZXIZWs+0m8XK2QB+Z99iG0A2eaKiS5aD
+         uDYw==
+X-Gm-Message-State: AFqh2kqzD4zRMKngv67Dj+v/gWFO6BhtvrAEhIHoN1I7AqyIrfRuPevi
+        Dn9GD7yRCkQHSfxDWF2g8U5KaY/V3nBvfev/wD8=
+X-Google-Smtp-Source: AMrXdXtNijvwutA6ANdLMosvdoUrJbJuHXtFWb3RoFGMSdC2EFjz2bT/l4tuccig/fJ05iLdUbZHsgaROUk6fDOH5SA=
+X-Received: by 2002:a17:906:a383:b0:840:2076:5310 with SMTP id
+ k3-20020a170906a38300b0084020765310mr1257471ejz.371.1671983854957; Sun, 25
+ Dec 2022 07:57:34 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:cf43:0:b0:30b:c00c:24ce with SMTP id
- c3-20020a92cf43000000b0030bc00c24cemr1614093ilr.94.1671983506130; Sun, 25 Dec
- 2022 07:51:46 -0800 (PST)
-Date:   Sun, 25 Dec 2022 07:51:46 -0800
-In-Reply-To: <0000000000007e22cb05dd7cbada@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f40e6d05f0a8fec7@google.com>
-Subject: Re: [syzbot] [gfs2?] BUG: sleeping function called from invalid
- context in do_page_fault (3)
-From:   syzbot <syzbot+2845b2dfa28dec36e215@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, boqun.feng@gmail.com,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
-        longman@redhat.com, mingo@redhat.com, peterz@infradead.org,
-        rpeterso@redhat.com, syzkaller-bugs@googlegroups.com,
-        will@kernel.org
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Sun, 25 Dec 2022 23:56:59 +0800
+Message-ID: <CAO4mrfdy+3umc43dtHudvjU8ec-PzAhrwPNqXS3n1vxQN24nng@mail.gmail.com>
+Subject: BUG: unable to handle kernel NULL pointer dereference in try_to_wake_up
+To:     dhowells@redhat.com, marc.dionne@auristor.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzkaller@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Dear Linux Developers,
 
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=11b79928480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=2845b2dfa28dec36e215
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=156dcd50480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1337f2e4480000
+Recently, when using our tool to fuzz kernel, the following crash was triggered.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/9d323fcb08fb/mount_0.gz
+HEAD commit:  e45fb347b630 Linux 6.1.0-next-20221220
+git tree: linux-next
+compiler: clang 12.0.0
+console output:
+https://drive.google.com/file/d/1d2Bl86zvgz1mdE-cYUT3lnbPGAagNUZf/view?usp=share_link
+kernel config: https://drive.google.com/file/d/1mMD6aopttKDGK4aYUlgiwAk6bOQHivd-/view?usp=share_link
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2845b2dfa28dec36e215@syzkaller.appspotmail.com
+Unfortunately, I do not have a reproducer for this crash. It seems
+like when dereferencing p->pi_lock->raw_lock->val->counter, null ptr
+deref is triggered.
 
-gfs2: fsid=syz:syz.0:  H: s:SH f:H e:0 p:4002 [syz-executor363] __gfs2_lookup+0x5c/0x1dc fs/gfs2/inode.c:870
-BUG: sleeping function called from invalid context at arch/arm64/mm/fault.c:599
-in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 4011, name: syz-executor363
-preempt_count: 0, expected: 0
-RCU nest depth: 1, expected: 0
-3 locks held by syz-executor363/4011:
- #0: 
-ffff0000cfa98dd0
- (
-&type->i_mutex_dir_key
-#8
-){.+.+}-{3:3}
-, at: inode_lock_shared include/linux/fs.h:766 [inline]
-, at: open_last_lookups fs/namei.c:3480 [inline]
-, at: path_openat+0x2e4/0x11c4 fs/namei.c:3711
- #1: 
-ffff80000d4a4640
- (
-rcu_read_lock
-){....}-{1:2}, at: rcu_lock_acquire+0x10/0x4c include/linux/rcupdate.h:303
- #2: 
-ffff0000c0e15648
- (
-&mm->mmap_lock){++++}-{3:3}, at: mmap_read_trylock include/linux/mmap_lock.h:136 [inline]
-&mm->mmap_lock){++++}-{3:3}, at: do_page_fault+0x1ec/0x79c arch/arm64/mm/fault.c:589
-CPU: 1 PID: 4011 Comm: syz-executor363 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- __might_resched+0x208/0x218 kernel/sched/core.c:9908
- __might_sleep+0x48/0x78 kernel/sched/core.c:9837
- do_page_fault+0x214/0x79c arch/arm64/mm/fault.c:599
- do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:691
- do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:827
- el1_abort+0x3c/0x5c arch/arm64/kernel/entry-common.c:367
- el1h_64_sync_handler+0x60/0xac arch/arm64/kernel/entry-common.c:427
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:579
- rcu_read_lock include/linux/rcupdate.h:739 [inline]
- dump_holder fs/gfs2/glock.c:2332 [inline]
- gfs2_dump_glock+0x4f4/0x904 fs/gfs2/glock.c:2447
- gfs2_consist_inode_i+0x68/0x88 fs/gfs2/util.c:465
- gfs2_dirent_scan+0x2dc/0x3b4 fs/gfs2/dir.c:602
- gfs2_dirent_search+0x134/0x494 fs/gfs2/dir.c:850
- gfs2_dir_search+0x58/0x130 fs/gfs2/dir.c:1650
- gfs2_lookupi+0x23c/0x354 fs/gfs2/inode.c:323
- __gfs2_lookup+0x5c/0x1dc fs/gfs2/inode.c:870
- gfs2_atomic_open+0x74/0x148 fs/gfs2/inode.c:1274
- atomic_open fs/namei.c:3276 [inline]
- lookup_open fs/namei.c:3384 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x67c/0x11c4 fs/namei.c:3711
- do_filp_open+0xdc/0x1b8 fs/namei.c:3741
- do_sys_openat2+0xb8/0x22c fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000021
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000113364000
-[0000000000000021] pgd=0800000111d8b003, p4d=0800000111d8b003, pud=0800000111d8c003, pmd=0000000000000000
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
+
+BUG: kernel NULL pointer dereference, address: 0000000000000834
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0002) - not-present page
+PGD 56ef4067 P4D 56ef4067 PUD 58112067 PMD 0
+Oops: 0002 [#1] PREEMPT SMP
+CPU: 0 PID: 12 Comm: ksoftirqd/0 Not tainted 6.1.0-next-20221220 #6
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0010:arch_atomic_try_cmpxchg arch/x86/include/asm/atomic.h:202 [inline]
+RIP: 0010:atomic_try_cmpxchg_acquire
+include/linux/atomic/atomic-instrumented.h:543 [inline]
+RIP: 0010:queued_spin_lock include/asm-generic/qspinlock.h:111 [inline]
+RIP: 0010:do_raw_spin_lock include/linux/spinlock.h:186 [inline]
+RIP: 0010:__raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline]
+RIP: 0010:_raw_spin_lock_irqsave+0x4e/0xa0 kernel/locking/spinlock.c:162
+Code: 48 c7 04 24 00 00 00 00 9c 8f 04 24 48 89 df e8 88 fb 8d fc 48
+8b 1c 24 fa bd 01 00 00 00 bf 01 00 00 00 e8 a4 9c 66 fc 31 c0 <3e> 41
+0f b1 2e 75 1c 65 48 8b 04 25 28 00 00 00 48 3b 44 24 08 75
+RSP: 0018:ffffc90000497908 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: 0000000000000246 RCX: ffffffff84ad1b08
+RDX: 0000000000000996 RSI: 0000000000000000 RDI: 0000000000000001
+RBP: 0000000000000001 R08: 0001c9000049790f R09: 0000000000000000
+R10: 0001ffffffffffff R11: 0001c90000497908 R12: 0000000000000834
+R13: ffffffff84446de0 R14: 0000000000000834 R15: ffff888061b71700
+FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000834 CR3: 0000000057b36000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ try_to_wake_up+0x3d/0x430 kernel/sched/core.c:4100
+ rxrpc_wake_up_io_thread net/rxrpc/ar-internal.h:967 [inline]
+ rxrpc_encap_rcv+0xc7/0xf0 net/rxrpc/io_thread.c:40
+ udp_queue_rcv_one_skb+0x64c/0x750 net/ipv4/udp.c:2164
+ udp_queue_rcv_skb+0x53d/0x5c0 net/ipv4/udp.c:2241
+ __udp4_lib_mcast_deliver net/ipv4/udp.c:2333 [inline]
+ __udp4_lib_rcv+0x1c66/0x1d00 net/ipv4/udp.c:2468
+ udp_rcv+0x4b/0x50 net/ipv4/udp.c:2655
+ ip_protocol_deliver_rcu+0x380/0x720 net/ipv4/ip_input.c:205
+ ip_local_deliver_finish net/ipv4/ip_input.c:233 [inline]
+ NF_HOOK include/linux/netfilter.h:302 [inline]
+ ip_local_deliver+0x210/0x340 net/ipv4/ip_input.c:254
+ dst_input include/net/dst.h:454 [inline]
+ ip_rcv_finish net/ipv4/ip_input.c:449 [inline]
+ NF_HOOK include/linux/netfilter.h:302 [inline]
+ ip_rcv+0x1b1/0x260 net/ipv4/ip_input.c:569
+ __netif_receive_skb_one_core net/core/dev.c:5482 [inline]
+ __netif_receive_skb+0x8b/0x1b0 net/core/dev.c:5596
+ process_backlog+0x23f/0x3b0 net/core/dev.c:5924
+ __napi_poll+0x65/0x420 net/core/dev.c:6485
+ napi_poll net/core/dev.c:6552 [inline]
+ net_rx_action+0x37e/0x730 net/core/dev.c:6663
+ __do_softirq+0xf2/0x2c9 kernel/softirq.c:571
+ run_ksoftirqd+0x1f/0x30 kernel/softirq.c:934
+ smpboot_thread_fn+0x308/0x4a0 kernel/smpboot.c:164
+ kthread+0x1a9/0x1e0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 Modules linked in:
-CPU: 1 PID: 4011 Comm: syz-executor363 Tainted: G        W          6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : pid_is_meaningful fs/gfs2/glock.c:1464 [inline]
-pc : dump_holder fs/gfs2/glock.c:2333 [inline]
-pc : gfs2_dump_glock+0x4f4/0x904 fs/gfs2/glock.c:2447
-lr : rcu_read_lock include/linux/rcupdate.h:739 [inline]
-lr : dump_holder fs/gfs2/glock.c:2332 [inline]
-lr : gfs2_dump_glock+0x498/0x904 fs/gfs2/glock.c:2447
-sp : ffff800013503600
-x29: ffff8000135037d0 x28: ffff80000cd3bac3 x27: ffff0000d1c12218
-x26: 0000000000000fa2 x25: ffff8000135037a1 x24: ffff0000d07809a0
-x23: 0000000000000001 x22: 0000000000000040 x21: ffff80000d4a4640
-x20: ffff80000d95c000 x19: ffff0000d0780a20 x18: 00000000000003a2
-x17: 000000000000b67e x16: ffff80000dbe6158 x15: ffff0000d07f9a40
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000d07f9a40
-x11: ff8080000926ce78 x10: 0000000000000000 x9 : ffff80000926ce78
-x8 : ffff0000d07f9a40 x7 : ffff800009273590 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000002
-x2 : 0000000000000008 x1 : ffff80000ce893cb x0 : 0000000000000001
-Call trace:
- rcu_read_lock include/linux/rcupdate.h:739 [inline]
- dump_holder fs/gfs2/glock.c:2332 [inline]
- gfs2_dump_glock+0x4f4/0x904 fs/gfs2/glock.c:2447
- gfs2_consist_inode_i+0x68/0x88 fs/gfs2/util.c:465
- gfs2_dirent_scan+0x2dc/0x3b4 fs/gfs2/dir.c:602
- gfs2_dirent_search+0x134/0x494 fs/gfs2/dir.c:850
- gfs2_dir_search+0x58/0x130 fs/gfs2/dir.c:1650
- gfs2_lookupi+0x23c/0x354 fs/gfs2/inode.c:323
- __gfs2_lookup+0x5c/0x1dc fs/gfs2/inode.c:870
- gfs2_atomic_open+0x74/0x148 fs/gfs2/inode.c:1274
- atomic_open fs/namei.c:3276 [inline]
- lookup_open fs/namei.c:3384 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x67c/0x11c4 fs/namei.c:3711
- do_filp_open+0xdc/0x1b8 fs/namei.c:3741
- do_sys_openat2+0xb8/0x22c fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: 91178800 9117ec42 391e2688 97bcdabc (794042f4) 
+CR2: 0000000000000834
 ---[ end trace 0000000000000000 ]---
+RIP: 0010:arch_atomic_try_cmpxchg arch/x86/include/asm/atomic.h:202 [inline]
+RIP: 0010:atomic_try_cmpxchg_acquire
+include/linux/atomic/atomic-instrumented.h:543 [inline]
+RIP: 0010:queued_spin_lock include/asm-generic/qspinlock.h:111 [inline]
+RIP: 0010:do_raw_spin_lock include/linux/spinlock.h:186 [inline]
+RIP: 0010:__raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:111 [inline]
+RIP: 0010:_raw_spin_lock_irqsave+0x4e/0xa0 kernel/locking/spinlock.c:162
+Code: 48 c7 04 24 00 00 00 00 9c 8f 04 24 48 89 df e8 88 fb 8d fc 48
+8b 1c 24 fa bd 01 00 00 00 bf 01 00 00 00 e8 a4 9c 66 fc 31 c0 <3e> 41
+0f b1 2e 75 1c 65 48 8b 04 25 28 00 00 00 48 3b 44 24 08 75
+RSP: 0018:ffffc90000497908 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: 0000000000000246 RCX: ffffffff84ad1b08
+RDX: 0000000000000996 RSI: 0000000000000000 RDI: 0000000000000001
+RBP: 0000000000000001 R08: 0001c9000049790f R09: 0000000000000000
+R10: 0001ffffffffffff R11: 0001c90000497908 R12: 0000000000000834
+R13: ffffffff84446de0 R14: 0000000000000834 R15: ffff888061b71700
+FS:  0000000000000000(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000834 CR3: 0000000057b36000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	91178800 	add	x0, x0, #0x5e2
-   4:	9117ec42 	add	x2, x2, #0x5fb
-   8:	391e2688 	strb	w8, [x20, #1929]
-   c:	97bcdabc 	bl	0xfffffffffef36afc
-* 10:	794042f4 	ldrh	w20, [x23, #32] <-- trapping instruction
+   0: 48 c7 04 24 00 00 00 movq   $0x0,(%rsp)
+   7: 00
+   8: 9c                   pushfq
+   9: 8f 04 24             popq   (%rsp)
+   c: 48 89 df             mov    %rbx,%rdi
+   f: e8 88 fb 8d fc       callq  0xfc8dfb9c
+  14: 48 8b 1c 24           mov    (%rsp),%rbx
+  18: fa                   cli
+  19: bd 01 00 00 00       mov    $0x1,%ebp
+  1e: bf 01 00 00 00       mov    $0x1,%edi
+  23: e8 a4 9c 66 fc       callq  0xfc669ccc
+  28: 31 c0                 xor    %eax,%eax
+* 2a: 3e 41 0f b1 2e       cmpxchg %ebp,%ds:(%r14) <-- trapping instruction
+  2f: 75 1c                 jne    0x4d
+  31: 65 48 8b 04 25 28 00 mov    %gs:0x28,%rax
+  38: 00 00
+  3a: 48 3b 44 24 08       cmp    0x8(%rsp),%rax
+  3f: 75                   .byte 0x75
 
+Best,
+Wei
