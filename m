@@ -2,72 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5791655CF1
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 12:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02297655CF6
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 12:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLYLpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 06:45:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S230429AbiLYLvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 06:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLYLpU (ORCPT
+        with ESMTP id S229441AbiLYLvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 06:45:20 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C79C63B0
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 03:45:19 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id g14so9327476ljh.10
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 03:45:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oNBdokWVuXQlx6FNiZ+Zj44DcO3NL7lCH80r7XQkshY=;
-        b=D5p5Krd752aMQt20o6QtLehHIMPjwAZOflmOgfY+41tBdmydbbGJtZNCIJLtPOxypa
-         Z7tgkrS1mS5PxgrwsYrrL8jynlBvDXhrJrv+hlClZmkmDGmk2paF1RomZtqr//Qout87
-         MlBRLR0D6OJP3yIpgA+NxKc9JpTSORODvuMOKRyBmIWA7Ms5s0YxqXzyEcRJYB91qWde
-         Cbw3/uoguWPMbnjA9MCWHAvscP0iorU369X4hnrW6hFP/mvdNbtJ7lSkYnjw5b4OhTW6
-         A9oIBHZ0zKeOZryA/P1QkyluFUfPvkBGBh62MLRR+R9mwyzkgP1OfoWDnUZ9Yn+Hblbe
-         DN/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oNBdokWVuXQlx6FNiZ+Zj44DcO3NL7lCH80r7XQkshY=;
-        b=yArOE1flwVpTiKQYMWQrjRpjKbIZ3s0F+51kSenkCQXClfU8Hre7TwB8i0la862Fi7
-         pdy+KeEh1upDI+dbStEa7CCpxgXy8F4B72zy2U0tGxYNJgY3zOy/0vZtQyLId+HbCUZ8
-         46aq38llqX/ehzDTXGvg0AGtMXwMLwRuBaZOXXEPBXE6xFH4dUKe2H+vLg4S8dXV7dtI
-         Gmnyp5oej2K7R+jBmUt/S0ixAbR48ehUgA8gThpgC7zk3VGHykSIzx5V7jI6Gwy85JOS
-         uqcF8srT9xF9Fe0zCSjO3Q7QyrmOv9rHrUlcCyah4DbFSXUMwnWfVJIZfOx1GS70MNRT
-         Qh8Q==
-X-Gm-Message-State: AFqh2kp06hWgeOk1NpXDSvsEwj05ha404zQ5cqMgmZme03cW8IcbKI5F
-        5201pCeRi3J9YTkbb7NqD94=
-X-Google-Smtp-Source: AMrXdXtzX40wVw87LHtyKDiS4tRL70JbSjbYr/1TvYLItLW8xORf4YKejZP41bfV01zWekXxDgKCqQ==
-X-Received: by 2002:a2e:a402:0:b0:279:daf5:f24c with SMTP id p2-20020a2ea402000000b00279daf5f24cmr3832998ljn.24.1671968717643;
-        Sun, 25 Dec 2022 03:45:17 -0800 (PST)
-Received: from [10.0.207.73] ([185.32.8.213])
-        by smtp.gmail.com with ESMTPSA id q185-20020a2e2ac2000000b00279a7266874sm1009451ljq.98.2022.12.25.03.45.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 25 Dec 2022 03:45:16 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: drivers/gpio/gpio-exar.c:52 exar_offset_to_sel_addr() warn: replace divide condition 'pin / 8' with 'pin >= 8'
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-X-Mailer: iPhone Mail (16H71)
-In-Reply-To: <Y6dTX2wx/SXlswGC@kadam>
-Date:   Sun, 25 Dec 2022 12:45:12 +0100
-Cc:     oe-kbuild@lists.linux.dev, Qingtao Cao <qingtao.cao.au@gmail.com>,
-        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
+        Sun, 25 Dec 2022 06:51:00 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F81BA0;
+        Sun, 25 Dec 2022 03:50:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1671968822;
+        bh=cigTGUVAg3Yj9PBuOXrP7a8GktisvMkb4W/saccjwJQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Ma/xkta6H/Vvu8O4rhc4uZyrSkGoLzcj0u3e+4+TsD4ecPjO4RdiTm8nzUIpHBg8t
+         yODU1TLBIFTfdJLVBlQPzfNkaUw4INHVjuJ4gklf1gC+4NS7bQxFhZdLTJComCawxT
+         FoNsX+YKxX2QusrfdnIZzotnf9ovGBKNZvqERLVsG8XKa+QpTP+3jnz5cduXBc6ZJb
+         XDpzyAP8rRElSmXpRYqE6Flyu5JYhkA9jbHoa88IAt8F0oKr/i8WXIlnG/A1H+x37k
+         jIamcERWlvttUqlamw9zawJZdLhlNurOM2MxVzlYyQE7NYgmOINTAzmtKMDzqbr6AT
+         fINsT6KW8DG/g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [157.180.225.172] ([157.180.225.172]) by web-mail.gmx.net
+ (3c-app-gmx-bap38.server.lan [172.19.172.108]) (via HTTP); Sun, 25 Dec 2022
+ 12:47:02 +0100
+MIME-Version: 1.0
+Message-ID: <trinity-b51cbf64-8df3-4a0b-883a-dbb7443eb954-1671968822286@3c-app-gmx-bap38>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        devicetree@vger.kernel.org
+Subject: Aw: Re: [next v7 8/8] arm64: dts: mt7986: add Bananapi R3
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 25 Dec 2022 12:47:02 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <Y6dMWFy7gChG88j0@makrotopia.org>
+References: <20221127114142.156573-1-linux@fw-web.de>
+ <20221127114142.156573-9-linux@fw-web.de> <Y6dMWFy7gChG88j0@makrotopia.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:10CT/kHfUVpSwqOqwS7PiCBR0/UkRQWIuyHUPEIPBF4ZQybqHeav5erxkfhPt6CkPU6ev
+ P2jwPeR/U1/CsU0cypsmIs4UKNmh6TMGRmE9N8BKS0TbhXVNMX4nifJlVBx0/sT+mC1DTHpe7Lm0
+ ZWTvo5zBoXH7rzgei9CR+fXrJGdfl+LYJmaNbBJV9dJV3cfgTHqW/IWi9dXZWuu9PEWsGOdppoeX
+ JFIMemszjkAeplliNJluXNK5PmagMPT+eXXsMkTHO3XWdQck6hJrq/ckQvChW3JNDndJB1bzqU4q
+ GY=
+UI-OutboundReport: notjunk:1;M01:P0:pwFcvI8EngI=;Xzb4kTlhYwuChZI1qpgA1uiBqPU
+ 0VRdCykSt9KTXu8yY9kmRrx7TUx5EFBj/CWBFLhFCAuUvqO+4VGvbUWKt0/ui4Stz591phL4x
+ V6D2S/PlSOoK+x7PH/19JEuZKEr5cZZhv/LAaLdmWxmbQ6Ch8dMf/wUp1jZ/eXMG6DQ5sj46p
+ EXO5bAt6xkRITCny9gY4QR1XL7ITdV97qUPfmQRubcACLurNRiTr1QjoIHgepkenO2tKABFEZ
+ aJlUCiDQm5KNF8h4qRZgm+UrvL87097zlMkEmBYS0EhImEM4apgdFixunpgiN9VC0tE6hKIN0
+ RulXsPDMfJyIbonqk8r0HLhEzVeqs6enS34vIqnFEbe8J51x8eU6Jg6NdGPFevExob8aDMeA5
+ r4qRPKfr7LrlcIZgNnTPkmGZlLHG8op2cuELClFACNBxSYklDi61bGdcrGZ7zgWk3QN5sMjFd
+ KlKgPUWpw5/2Ky/5xfMK3GT7p3vDoQsfCHWpotsshwNqzEVX7wneqQHwqgxD//E/bDFOw5OMa
+ ok4obFcCNMkLzPS+ofYi4/P0dL4DeC2uH2WDbe3VoYjcV/6sH3jn/5XmyqldDIs+E5Djrt7LP
+ QLVtrJzCxdBJwNbpDlCK6jlqsRSUyIk7Auv2qYiSoTNGfBqQuwpHW2LI5G2C0x3uOnx2kkzUP
+ sFzbOVN9r/dTxS9JeWVf4mH3r5urzdXFrMvBaujgNVJ3jt6wvufj84Ejbe88doESaimya4+QF
+ +jTNS8V4hj1DozC05FKDuBggiU2hqUxx5Q6lGPoMFa94cU4cBp5hYxx4dU5WsG6eYssc0MUJe
+ v7pKBoXRZTACH/SOAAOVa4uzu3j406KqJjqu430gP7Hiw=
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <F701A496-22A6-4E3B-B3CB-E5BCF4C30502@gmail.com>
-References: <202212181140.EAWl7FKx-lkp@intel.com> <3D147284-AF8C-4414-9BE1-C83032B6C15D@gmail.com> <Y6dTX2wx/SXlswGC@kadam>
-To:     Dan Carpenter <error27@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_QP_LONG_LINE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,98 +89,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
 
+> Gesendet: Samstag, 24. Dezember 2022 um 20:00 Uhr
+> Von: "Daniel Golle" <daniel@makrotopia.org>
 
-L=C3=A4hetetty iPhonesta
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dtso
+> > @@ -0,0 +1,30 @@
+> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> > +/*
+> > + * Copyright (C) 2021 MediaTek Inc.
+> > + * Author: Sam.Shih <sam.shih@mediatek.com>
+> > + */
+> > +
+> > +/dts-v1/;
+> > +/plugin/;
+> > +
+> > +/ {
+> > +	compatible =3D "bananapi,bpi-r3", "mediatek,mt7986a";
+> > +	model =3D "Bananapi BPI-R3 (emmc)";
+>
+> Why do you set the model string here?
 
-> Dan Carpenter <error27@gmail.com> kirjoitti 24.12.2022 kello 20.30:
->=20
->> On Sat, Dec 24, 2022 at 05:19:27PM +0100, Andy Shevchenko wrote:
->>=20
->>=20
->> L=C3=A4hetetty iPhonesta
->>=20
->>> Dan Carpenter <error27@gmail.com> kirjoitti 23.12.2022 kello 11.54:
->>>=20
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.g=
-it master
->>> head:   f9ff5644bcc04221bae56f922122f2b7f5d24d62
->>> commit: 5134272f9f3f71d4e1f3aa15cb09321af49b3646 gpio: exar: access MPIO=
- registers on cascaded chips
->>> config: ia64-randconfig-m031-20221218
->>> compiler: ia64-linux-gcc (GCC) 12.1.0
->>>=20
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>> | Reported-by: Dan Carpenter <error27@gmail.com>
->>>=20
->>> smatch warnings:
->>> drivers/gpio/gpio-exar.c:52 exar_offset_to_sel_addr() warn: replace divi=
-de condition 'pin / 8' with 'pin >=3D 8'
->>> drivers/gpio/gpio-exar.c:62 exar_offset_to_lvl_addr() warn: replace divi=
-de condition 'pin / 8' with 'pin >=3D 8'
->>>=20
->>=20
->>=20
->>=20
->> I don=E2=80=99t think this is a good advice. If we want to limit that, we=
- need
->> to check also upper limit. But. The GPIO framework does that. So,
->> changing / to >=3D is bogus.
->=20
->=20
-> How is checking pin / 8 not mathematically equivalent to pin >=3D 8?
+seems to be a left over from testing where i wanted to see which base-dtb =
+was
+loaded without comparing mmc-node settings. Was easier to see with model-s=
+tring :)
 
-The point is that semantically the / is better in case this code will ever s=
-upport more than two banks of pins.
+> > +
+> > +	fragment@0 {
+> > +		target-path =3D "/soc/mmc@11230000";
+> > +		__overlay__ {
+> > +			bus-width =3D <8>;
+> > +			max-frequency =3D <200000000>;
+> > +			cap-mmc-highspeed;
+> > +			mmc-hs200-1_8v;
+> > +			mmc-hs400-1_8v;
+> > +			hs400-ds-delay =3D <0x14014>;
+> > +			non-removable;
+> > +			no-sd;
+> > +			no-sdio;
+> > +			status =3D "okay";
+> > +		};
+> > +	};
+> > +};
 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts =
+b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+> > new file mode 100644
+> > index 000000000000..618d3bb2f32f
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
 
-> I don't understand this code at all.  The divide is inscrutable  Is it
-> storing something in in the lower 3 bits and something in bit 4?  In
-> that case it might be nicer to just check (pin & BIT(4)).
->=20
-> regards,
-> dan carpenter
->=20
->>=20
->>=20
->>> vim +52 drivers/gpio/gpio-exar.c
->>>=20
->>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  47  static unsigned int
->>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  48  exar_offset_to_sel_ad=
-dr(struct exar_gpio_chip *exar_gpio, unsigned int offset)
->>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  49  {
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02  50      unsigned int pin =3D=
- exar_gpio->first_pin + (offset % 16);
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02  51      unsigned int casc=
-aded =3D offset / 16;
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02 @52      unsigned int addr=
- =3D pin / 8 ? EXAR_OFFSET_MPIOSEL_HI : EXAR_OFFSET_MPIOSEL_LO;
->>>=20
->>> Why not change this to pin > 8 instead.  Comparisons are faster than
->>> divide ops.  Way more readable too.
->>>=20
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02  53 =20
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02  54      return addr + (ca=
-scaded ? exar_gpio->cascaded_offset : 0);
->>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  55  }
->>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  56 =20
->>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  57  static unsigned int
->>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  58  exar_offset_to_lvl_ad=
-dr(struct exar_gpio_chip *exar_gpio, unsigned int offset)
->>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  59  {
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02  60      unsigned int pin =3D=
- exar_gpio->first_pin + (offset % 16);
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02  61      unsigned int casc=
-aded =3D offset / 16;
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02 @62      unsigned int addr=
- =3D pin / 8 ? EXAR_OFFSET_MPIOLVL_HI : EXAR_OFFSET_MPIOLVL_LO;
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02  63 =20
->>> 5134272f9f3f71 Qingtao Cao         2022-09-02  64      return addr + (ca=
-scaded ? exar_gpio->cascaded_offset : 0);
->>> 696868d0a79c21 Bartosz Golaszewski 2020-09-30  65  }
->>>=20
->>> --=20
->>> 0-DAY CI Kernel Test Service
->>> https://01.org/lkp
->>>=20
+> > +&mdio {
+> > +	switch: switch@31 {
+> > +		compatible =3D "mediatek,mt7531";
+> > +		reg =3D <31>;
+> > +		reset-gpios =3D <&pio 5 GPIO_ACTIVE_HIGH>;
+>
+> Please add:
+>
+>                 interrupt-controller;
+>                 #interrupt-cells =3D <1>;
+>                 interrupt-parent =3D <&pio>;
+>                 interrupts =3D <66 IRQ_TYPE_LEVEL_HIGH>;
+>
+> to have IRQ driven phy status instead of having to poll the link status
+> of the 5x rj-45 ports.
+> The value comes from schematics (pin AD24, GPIO66, 7531_INT) and I've
+> tested this on my board.
+
+ok, if you have it tested i add these properties in next version (and test=
+ it too).
+I wait for tphy-binding to be applied to next (pcie and xhci already in to=
+rvalds/master).
+
+> > +	};
+> > +};
+> > +
+
+> > +&spi0 {
+> > +	pinctrl-names =3D "default";
+> > +	pinctrl-0 =3D <&spi_flash_pins>;
+> > +	cs-gpios =3D <0>, <0>;
+>
+> I don't think those bogus cs-gpios here and for spi1 below are needed.
+
+can drop them in next version
+
+> > +	status =3D "okay";
+> > +};
+> > +
+> > +&spi1 {
+> > +	pinctrl-names =3D "default";
+> > +	pinctrl-0 =3D <&spic_pins>;
+> > +	cs-gpios =3D <0>, <0>;
+> > +	status =3D "okay";
+> > +};
+> > +
+
+regards Frank
