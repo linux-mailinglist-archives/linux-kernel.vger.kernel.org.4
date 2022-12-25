@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB0E655DED
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 18:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A412655DF0
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 18:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbiLYRAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 12:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
+        id S231374AbiLYRBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 12:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbiLYQ77 (ORCPT
+        with ESMTP id S231230AbiLYRBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 11:59:59 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D07938BE;
-        Sun, 25 Dec 2022 08:59:58 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id o15so6511245wmr.4;
-        Sun, 25 Dec 2022 08:59:57 -0800 (PST)
+        Sun, 25 Dec 2022 12:01:30 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B923F2675;
+        Sun, 25 Dec 2022 09:01:28 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso6489533wmo.1;
+        Sun, 25 Dec 2022 09:01:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W7Uxgqg5mAtgEreFJVlyY9FG6dh29sWzofDPJcOPslk=;
-        b=W+z5fHTW0GWZfXeF5Fz+zx0jp9fjQpYyWv/sgsDVZguqzeap9vHyRDwo8Pd3tg6PHk
-         O0Gyr/CHU/wSZJYlL5ASoF2XVE370spCTn7F5hxACWF4dMnLNxew9n/Q2ZEv0mjNm6Hf
-         6bDTzqaQd3Kp64PYuMNdhjg/sTFuHHENKsP6YS5HO+v20avYKx1rQTrk/nxPJSE7kdUH
-         P35nPj+Eprgyl+f0bwnG99lXoiy6hh8ffynJbLXuQVgz/Se1eRm9Z2m83yhF+mFT9/Ok
-         7duSnv4dibiRHVZjNvAWURAd97D3uIelrZlUwR1aTnDq5uhuqQilq7VLqf7zj8DcYofN
-         VSrA==
+        bh=Cba7a4CNg3T6ktAC4rnAyxADOxp4yPgdrX7lNI9dXpg=;
+        b=H0Aj/Vinm/zwqMAF2JdMoqdNwUcHXNSZjxw25hpLmoeQGxLZI7rhyg8fk0QBLTcJYY
+         mhF6/2ucKw07Yr2DZfM/rhjEMG5/43flkqnOFoERH2L96XanqNyYJKepIbnkeaD3Ka7w
+         SubIsAasXZO5nNE1TplUqh1R3/ESoKEjY5AQHJAvM1wDD5HwkMK7NcYLPO7p4MeJUvkh
+         owE1G92lGsAMkFtAdTB63cc9dh9y5xlVzoaCtZk8WycsKUGODr1cvElxx3BX31vQkI6q
+         lBT4InUeoVf4s+fXggMZaDHCanExMhRcx1fvLgmrsmLG9iKRb8v79wxlBSCy7qXu5cjb
+         tWlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W7Uxgqg5mAtgEreFJVlyY9FG6dh29sWzofDPJcOPslk=;
-        b=VpPa6lzJzk6ZDcEG7dvLZVka/e+gSW/YjzB8zi1JaXrOiLGGkQ+GcTp0KFSUaFHnhm
-         ASck7QiPHV0zPPerhPyzzhyAMjlJDKmtuGRfm/a6BCWFtIU7YiaJ3JyxQ5f2Ui8Vpqfr
-         vzTaSCv45l1ITlh6zAvHJT3zfQrKUponZ64LNlk+zq41FjB1bBRAZhOm9iJdYexder09
-         seWVL9pEUWs/KlLTxNPiD/9ho5usq5MiAIPHq+9X+JLrZaV8f/iKhxVx05O9VwNA86tB
-         9xCi11uJ6gq+ED8dd1yEmgGRzaImiZdpj2wwQPsDnmg0kVuLoEQqQ+8wr+y7yAhLbr8J
-         xDOg==
-X-Gm-Message-State: AFqh2kqFjItVa5oL1pn5etsSs9R8IJsygIEHW5YIWU6dZ8iP1xuqcrEJ
-        VeXqKUrWK+bSzQUCodWSX5hkX3jzA+o=
-X-Google-Smtp-Source: AMrXdXuT2E457V230n2bDHOPYEK+CtL4Z9J9GgfherN++wEWxFmuDoWgzzapKU7pA2H3QSlks2mPTw==
-X-Received: by 2002:a1c:7c0f:0:b0:3d5:816e:2fb2 with SMTP id x15-20020a1c7c0f000000b003d5816e2fb2mr12060163wmc.14.1671987596475;
-        Sun, 25 Dec 2022 08:59:56 -0800 (PST)
+        bh=Cba7a4CNg3T6ktAC4rnAyxADOxp4yPgdrX7lNI9dXpg=;
+        b=nnr4PlGcu1w6ll0EUz3rQCV2AdOpdUsKDj6FqFhT+f8seQJK0BraJWasrLujvYAKsM
+         T1TNHx2qMhwxU7OyCoAmORigkExn6KHVkuHIxoVONDwVZTXI92lJzsmLkzI0Agl05/VM
+         uIt0WsI/06AN00xqn/iBTpUG7a2JyW3Smi3pgZggcXF6PknsLQ8CVkECuYbJANAUcyLL
+         L5UaNqh676/nLnVzgWSJd3yknHAuQFSZYSvTNcxcSVZ2HerV2QRJWD82T9UcF7PnEAwG
+         1IoYE6EzJDYDNRK9GkLWqlgYGrMJxyWLNoyHIYh7ZKeTa9KBI3h4AxeS+0zeQ+Aqjvcf
+         srEg==
+X-Gm-Message-State: AFqh2kpv4+FD3/8my4Y2HtytgyJwaVyvroxxO7dwjQ3noacBdzh5LRiI
+        iAtwdHTe/Ekdl608A0HUdIWNVoF2aP0=
+X-Google-Smtp-Source: AMrXdXsQlRHT5tu3MNUAE/vWmOJHVJFZx1mw+qmYgPECdDHia48mL8hq6+j4kxauC+pBVCx5LIUrwg==
+X-Received: by 2002:a05:600c:5008:b0:3cf:6f4d:c25d with SMTP id n8-20020a05600c500800b003cf6f4dc25dmr11618497wmr.21.1671987687086;
+        Sun, 25 Dec 2022 09:01:27 -0800 (PST)
 Received: from localhost.localdomain (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id l42-20020a05600c1d2a00b003d23928b654sm17734371wms.11.2022.12.25.08.59.55
+        by smtp.gmail.com with ESMTPSA id k2-20020a05600c1c8200b003d974076f13sm5812308wms.3.2022.12.25.09.01.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Dec 2022 08:59:56 -0800 (PST)
+        Sun, 25 Dec 2022 09:01:26 -0800 (PST)
 From:   Angel Iglesias <ang.iglesiasg@gmail.com>
 To:     linux-iio@vger.kernel.org
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] dt-bindings: iio: pressure: bmp085: Add BMP580 compatible string
-Date:   Sun, 25 Dec 2022 17:59:21 +0100
-Message-Id: <778a9d07ad1d88e036cc1ddd9c3fa53390b906a3.1671986815.git.ang.iglesiasg@gmail.com>
+Subject: [PATCH 5/5] iio: pressure: bmp280: Add nvmem operations for BMP580
+Date:   Sun, 25 Dec 2022 18:00:53 +0100
+Message-Id: <b902ef9ee60a6dd05f002916853ba23826eccf9a.1671986815.git.ang.iglesiasg@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <cover.1671986815.git.ang.iglesiasg@gmail.com>
 References: <cover.1671986815.git.ang.iglesiasg@gmail.com>
@@ -77,32 +77,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bosch,bmp580 to compatible string for the new family of sensors.
-This family includes the BMP580 and BMP581 sensors. The register map
-in this family presents significant departures from previous generations.
+The pressure sensor BMP580 contains a non-volatile memory that stores
+trimming and configuration params. That memory provides an programmable
+user range of three 2-byte words.
 
 Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
 
-diff --git a/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml b/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml
-index 72cd2c2d3f17..f52c4794e21b 100644
---- a/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml
-+++ b/Documentation/devicetree/bindings/iio/pressure/bmp085.yaml
-@@ -17,6 +17,7 @@ description: |
-     https://www.bosch-sensortec.com/bst/products/all_products/bmp280
-     https://www.bosch-sensortec.com/bst/products/all_products/bme280
-     https://www.bosch-sensortec.com/bst/products/all_products/bmp380
-+    https://www.bosch-sensortec.com/bst/products/all_products/bmp580
+diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
+index 005dbaf18607..4e0d89a71eab 100644
+--- a/drivers/iio/pressure/bmp280-core.c
++++ b/drivers/iio/pressure/bmp280-core.c
+@@ -28,6 +28,7 @@
+ #include <linux/bitfield.h>
+ #include <linux/device.h>
+ #include <linux/module.h>
++#include <linux/nvmem-provider.h>
+ #include <linux/regmap.h>
+ #include <linux/delay.h>
+ #include <linux/iio/iio.h>
+@@ -1628,8 +1629,140 @@ static const int bmp580_odr_table[][2] = {
+ 	[BMP580_ODR_0_125HZ] =	{0, 125000},
+ };
  
- properties:
-   compatible:
-@@ -26,6 +27,7 @@ properties:
-       - bosch,bmp280
-       - bosch,bme280
-       - bosch,bmp380
-+      - bosch,bmp580
++const int bmp580_nvmem_addrs[] = { 0x20, 0x21, 0x22 };
++
++static int bmp580_nvmem_read(void *priv, unsigned int offset, void *val,
++			     size_t bytes)
++{
++	struct bmp280_data *data = priv;
++	u16 *dst = val;
++	int ret, addr;
++
++	pm_runtime_get_sync(data->dev);
++	mutex_lock(&data->lock);
++
++	/* Set sensor in standby mode */
++	ret = regmap_update_bits(data->regmap, BMP580_REG_ODR_CONFIG,
++				 BMP580_MODE_MASK | BMP580_ODR_DEEPSLEEP_DIS,
++				 BMP580_ODR_DEEPSLEEP_DIS |
++				 FIELD_PREP(BMP580_MODE_MASK, BMP580_MODE_SLEEP));
++	if (ret) {
++		dev_err(data->dev, "failed to change sensor to standby mode\n");
++		return ret;
++	}
++	/* Wait standby transition time */
++	usleep_range(2500, 3000);
++
++	while (bytes >= sizeof(u16)) {
++		addr = bmp580_nvmem_addrs[offset / sizeof(u16)];
++
++		ret = regmap_write(data->regmap, BMP580_REG_NVM_ADDR,
++				   FIELD_PREP(BMP580_NVM_ROW_ADDR_MASK, addr));
++		if (ret) {
++			dev_err(data->dev, "error writing nvm address\n");
++			goto exit;
++		}
++
++		ret = bmp580_cmd(data, BMP580_NVM_READ_CMD);
++		if (ret)
++			goto exit;
++
++		ret = regmap_bulk_read(data->regmap, BMP580_REG_NVM_DATA_LSB, &data->le16,
++				       sizeof(data->le16));
++		if (ret) {
++			dev_err(data->dev, "error reading nvm data regs\n");
++			goto exit;
++		}
++
++		*dst++ = le16_to_cpu(data->le16);
++		bytes -= sizeof(u16);
++		offset += sizeof(u16);
++	}
++exit:
++	/* Restore chip config */
++	data->chip_info->chip_config(data);
++	mutex_unlock(&data->lock);
++	pm_runtime_mark_last_busy(data->dev);
++	pm_runtime_put_autosuspend(data->dev);
++	return ret;
++}
++
++static int bmp580_nvmem_write(void *priv, unsigned int offset, void *val,
++			      size_t bytes)
++{
++	struct bmp280_data *data = priv;
++	u16 *buf = val;
++	int ret, addr;
++
++	pm_runtime_get_sync(data->dev);
++	mutex_lock(&data->lock);
++
++	/* Set sensor in standby mode */
++	ret = regmap_update_bits(data->regmap, BMP580_REG_ODR_CONFIG,
++				 BMP580_MODE_MASK | BMP580_ODR_DEEPSLEEP_DIS,
++				 BMP580_ODR_DEEPSLEEP_DIS |
++				 FIELD_PREP(BMP580_MODE_MASK, BMP580_MODE_SLEEP));
++	if (ret) {
++		dev_err(data->dev, "failed to change sensor to standby mode\n");
++		return ret;
++	}
++	/* Wait standby transition time */
++	usleep_range(2500, 3000);
++
++	while (bytes >= sizeof(u16)) {
++		addr = bmp580_nvmem_addrs[offset / sizeof(u16)];
++
++		ret = regmap_write(data->regmap, BMP580_REG_NVM_ADDR, BMP580_NVM_PROG_EN |
++				   FIELD_PREP(BMP580_NVM_ROW_ADDR_MASK, addr));
++		if (ret) {
++			dev_err(data->dev, "error writing nvm address\n");
++			goto exit;
++		}
++		data->le16 = cpu_to_le16(*buf++);
++
++		ret = regmap_bulk_write(data->regmap, BMP580_REG_NVM_DATA_LSB, &data->le16,
++					sizeof(data->le16));
++		if (ret) {
++			dev_err(data->dev, "error writing LSB NVM data regs\n");
++			goto exit;
++		}
++
++		ret = bmp580_cmd(data, BMP580_NVM_WRITE_CMD);
++		if (ret)
++			goto exit;
++
++		/* Disable programming mode bit */
++		ret = regmap_update_bits(data->regmap, BMP580_REG_NVM_ADDR,
++					 BMP580_NVM_PROG_EN, 0);
++		if (ret) {
++			dev_err(data->dev, "error resetting nvm write\n");
++			goto exit;
++		}
++
++		bytes -= sizeof(u16);
++		offset += sizeof(u16);
++	}
++exit:
++	/* Restore chip config */
++	data->chip_info->chip_config(data);
++	mutex_unlock(&data->lock);
++	pm_runtime_mark_last_busy(data->dev);
++	pm_runtime_put_autosuspend(data->dev);
++	return ret;
++}
++
+ static int bmp580_preinit(struct bmp280_data *data)
+ {
++	struct nvmem_config config = {
++		.dev = data->dev,
++		.priv = data,
++		.name = "bmp580_nvmem",
++		.word_size = sizeof(u16),
++		.stride = sizeof(u16),
++		.size = 3 * sizeof(u16),
++		.reg_read = bmp580_nvmem_read,
++		.reg_write = bmp580_nvmem_write,
++	};
+ 	unsigned int reg;
+ 	int ret;
  
-   reg:
-     maxItems: 1
+@@ -1653,8 +1786,8 @@ static int bmp580_preinit(struct bmp280_data *data)
+ 		dev_err(data->dev, "preinit: nvm error on powerup sequence\n");
+ 		return ret;
+ 	}
+-
+-	return 0;
++	/* Register nvmem device */
++	return PTR_ERR_OR_ZERO(devm_nvmem_register(config.dev, &config));
+ }
+ 
+ static int bmp580_chip_config(struct bmp280_data *data)
+diff --git a/drivers/iio/pressure/bmp280.h b/drivers/iio/pressure/bmp280.h
+index 27d2abc17d01..e2a093a4f767 100644
+--- a/drivers/iio/pressure/bmp280.h
++++ b/drivers/iio/pressure/bmp280.h
+@@ -101,6 +101,9 @@
+ #define BMP580_FILTER_63X		6
+ #define BMP580_FILTER_127X		7
+ 
++#define BMP580_NVM_ROW_ADDR_MASK	GENMASK(5, 0)
++#define BMP580_NVM_PROG_EN		BIT(6)
++
+ #define BMP580_TEMP_SKIPPED		0x7f7f7f
+ #define BMP580_PRESS_SKIPPED		0x7f7f7f
+ 
 -- 
 2.39.0
 
