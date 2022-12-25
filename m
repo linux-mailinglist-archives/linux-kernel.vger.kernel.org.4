@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8CD655D2A
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 13:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE22655D3D
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 13:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbiLYMHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 07:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S229824AbiLYMs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 07:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiLYMHj (ORCPT
+        with ESMTP id S229445AbiLYMs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 07:07:39 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16C6130
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 04:07:38 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-45c11d1bfc8so122980847b3.9
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 04:07:38 -0800 (PST)
+        Sun, 25 Dec 2022 07:48:26 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2F8F60;
+        Sun, 25 Dec 2022 04:48:25 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id d4so287419wrw.6;
+        Sun, 25 Dec 2022 04:48:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UKTQU6JpYT/i5Ge3ms9B5Uj7VN4LVhAh6fCSSObj+sc=;
-        b=t3E2z8YQO7Chfw3KwTr+LNsg7PTaNF52eqrqdBYBkzM1tA4UQrsAclrqVSDjXCuD3O
-         y5kjlu2dfzHHhfK3NwbUMG7U2XZFrFXl3MhCwWTvZCcoATjtSUfYkILJSqfA6JD4lX67
-         T3KQv9/+BH2C4+stqsYdcez2W300sxdvo1PrXTgJg98Bi2Fz+K7wjUY6DU0CPKioTJm+
-         2BUIYFZfXGe717FXUA50jUcjFI2AoA4NmI2KYHYQcYVLFiC8z8fArRUZ1FI6yoRYwEgQ
-         iVZJeu58k0B+DM3QioyTSx6WHidCkuXcBXKHNN4ZGuRDyvj4oaV87FpWPPDSt+HbumVJ
-         +3UA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Wk1BYg8FM+pEOgDUvLnl6H2w5OLbpMOtJjAehLPuXXg=;
+        b=YHiNy0AmTytHP/zM9DGOTXAdMVIWPHQKGN7JAJo6k+uIomMU75y8IHyPEW+ES0OPdr
+         M/+FA3SefMb7j5210TxukQhIYcpJOzlHYzq/dJ2mbqVM7OC90BvO2+tNBU7RXjHfGHpA
+         8MV3QQhFxANj+r9fYGZjR7hR5SF1/LOP+/OBVJeKHB5EJnkLIhpe99srhnuDwIRFpGeb
+         58S19os2iTMy2PrOAXYL2nYfWnx2ZFrdxSRgodtYPV8ddBtikcqUxqbxLlemcUJR0j1y
+         PBOtRSXMPqsp9BWYKw/nq8l9UedKeXsYf8ZR/tt+OzA9ebBGfVYHL6n3RSznSiQy+J/3
+         WXYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UKTQU6JpYT/i5Ge3ms9B5Uj7VN4LVhAh6fCSSObj+sc=;
-        b=aUugfSv23IDWZ6iIVdXvVg7T6MpDTMYqn3dDDcJ/LKTbSE7Oc78N0aHbbPr0CCYMia
-         JS967GEgGuBVtby5fgRCjVZuUcwxT0Zpw5+1sNUP7JWCenwjiuET5xNJXdKbC+p6U5m+
-         EFDkht88eL0iGqQriplVeMz5xEnyHyoHlost2H6bMdVf1hEoNJCfNSpYC6P3VpleHfw2
-         R04wz+Zkfsk3H9rimIy6qm+DLza/iEnQZH0YU6Dn6vxyoLwRBbjVRL/0/N1Qk0gIE5mL
-         10O7k7eo8X9x8i/H0ouMcR5MS0uz2Emm6RL1KAGAeOLxERtITJU2Y3ehppnfbwSFWCnb
-         QglA==
-X-Gm-Message-State: AFqh2kp66Lrinr0+UKXKT3xXReAGy4CrNlM0SuyWLErIuq+5Q0vlQ7UO
-        UyQ+VNcyjFOUMc/2NJW5d9V4U96uxtBXkoyfT2R4gg==
-X-Google-Smtp-Source: AMrXdXu9DkaN9Y80+F8H02K1xM663fXeLzgYkxqYtnCcRfU0jLJ0G9d/MxK3qm5Et9wUWnmTmGnB26hq2K567oTY0Ys=
-X-Received: by 2002:a05:690c:80c:b0:46d:89d7:498f with SMTP id
- bx12-20020a05690c080c00b0046d89d7498fmr613972ywb.461.1671970057918; Sun, 25
- Dec 2022 04:07:37 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wk1BYg8FM+pEOgDUvLnl6H2w5OLbpMOtJjAehLPuXXg=;
+        b=omIRn/X/YBL7n6QTteyVXhX6Rck9IqlJHaLTL+hfcJiybfw7+LROX5A7ueC+i4YlfS
+         92KGhFNtT/Zr8HgnLF3FyHQEBDLWx8h8VIgfJc6cEaQmZiW+YfLvlJseyE0JCAqqTJyP
+         YSm9PJL+1c/lOouOVAjmq6ENK2FQMB7Yqs/AwL/Pc6n4cJHlyxzHGEu3PK13za/brsql
+         AkOPKmUoBj7BdAi4cWip1F+1w8J7pd36/O6OO7GOroKaDUsgYeUrPkcgLCdtwvpGik0O
+         APQpY/sWkiimbJ7GbDNVImvG1wNtWgpwEouSFMf20Owz4tZJjrEIsGTq4opBqFVlzugJ
+         M3Qg==
+X-Gm-Message-State: AFqh2kqQbBb4A04RbsN31miqBYNu79V1D7RnEjn0ByhGeJGGgPrgr++1
+        vN24qCEftud4dq3uh644MZqGYF7QxPPEa5VBePU=
+X-Google-Smtp-Source: AMrXdXsx0pPjFgu/n8lPaCTSb+6KPZ4hC0xDpuJIX+7IWbqDf6CjFGfegRUnmN1X3F1HeoBXqGZHY8pfUUl/X7KgcQ0=
+X-Received: by 2002:a5d:4e4b:0:b0:242:4ab7:5a19 with SMTP id
+ r11-20020a5d4e4b000000b002424ab75a19mr275499wrt.389.1671972503776; Sun, 25
+ Dec 2022 04:48:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20221223132235.16149-1-anand@edgeble.ai> <CA+VMnFz8nQ2DnD6L9cPmoRqk+uohRqTEpak9g=WGJnSBoONmrA@mail.gmail.com>
- <CA+pv=HP8ckG8dsh-uZ6=k2nMGDGbw3gnh2b1ZWV31mzuYsjNig@mail.gmail.com>
-In-Reply-To: <CA+pv=HP8ckG8dsh-uZ6=k2nMGDGbw3gnh2b1ZWV31mzuYsjNig@mail.gmail.com>
-From:   Jagan Teki <jagan@edgeble.ai>
-Date:   Sun, 25 Dec 2022 17:37:27 +0530
-Message-ID: <CA+VMnFwGHk9OEZWjxWUqGqzwrxgRqy9VZ+tP2Ada5ErPo_dSVw@mail.gmail.com>
-Subject: Re: [PATCHv1 linux-next 1/4] dt-bindings: net: rockchip-dwmac: fix
- rv1126 compatible warning
-To:     Slade Watkins <srw@sladewatkins.net>
-Cc:     Anand Moon <anand@edgeble.ai>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        David Wu <david.wu@rock-chips.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Hao Peng <flyingpenghao@gmail.com>
+Date:   Sun, 25 Dec 2022 20:48:26 +0800
+Message-ID: <CAPm50aKYh-qXt_MmQvbSH6Tye=yxrwAp_x_jcJHh=8ZoA=1P_A@mail.gmail.com>
+Subject: [PATCH v2] KVM: use unified srcu interface function
+To:     pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,30 +64,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 25 Dec 2022 at 02:54, Slade Watkins <srw@sladewatkins.net> wrote:
->
-> On Sat, Dec 24, 2022 at 9:30 AM Jagan Teki <jagan@edgeble.ai> wrote:
-> >
-> > On Fri, 23 Dec 2022 at 18:55, Anand Moon <anand@edgeble.ai> wrote:
-> > >
-> > > Fix compatible string for RV1126 gmac, and constrain it to
-> > > be compatible with Synopsys dwmac 4.20a.
-> > >
-> > > fix below warning
-> > > arch/arm/boot/dts/rv1126-edgeble-neu2-io.dtb: ethernet@ffc40000:
-> > >                  compatible: 'oneOf' conditional failed, one must be fixed:
-> > >         ['rockchip,rv1126-gmac', 'snps,dwmac-4.20a'] is too long
-> > >         'rockchip,rv1126-gmac' is not one of ['rockchip,rk3568-gmac', 'rockchip,rk3588-gmac']
-> > >
-> > > Signed-off-by: Anand Moon <anand@edgeble.ai>
-> > > Signed-off-by: Jagan Teki <jagan@edgeble.ai>
-> > > ---
-> >
-> > Please add Fixes above SoB.
->
-> That and, shouldn't the Signed-off-by: tags be reversed if Anand is
-> sending this?
+From: Peng Hao <flyingpeng@tencent.com>
 
-Agreed, Anand will resend the patch with SoB removed. thanks.
+kvm->irq_routing is protected by kvm->irq_srcu.
 
-Jagan.
+Signed-off-by: Peng Hao <flyingpeng@tencent.com>
+---
+ virt/kvm/irqchip.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/virt/kvm/irqchip.c b/virt/kvm/irqchip.c
+index 1e567d1f6d3d..d3ccfe922880 100644
+--- a/virt/kvm/irqchip.c
++++ b/virt/kvm/irqchip.c
+@@ -18,6 +18,10 @@
+ #include <linux/export.h>
+ #include <trace/events/kvm.h>
+
++#define kvm_get_irq_routing(kvm) \
++       srcu_dereference_check((kvm)->irq_routing, &(kvm)->irq_srcu,    \
++                               lockdep_is_held(&(kvm)->irq_lock))
++
+ int kvm_irq_map_gsi(struct kvm *kvm,
+                    struct kvm_kernel_irq_routing_entry *entries, int gsi)
+ {
+@@ -25,8 +29,7 @@ int kvm_irq_map_gsi(struct kvm *kvm,
+        struct kvm_kernel_irq_routing_entry *e;
+        int n = 0;
+
+-       irq_rt = srcu_dereference_check(kvm->irq_routing, &kvm->irq_srcu,
+-                                       lockdep_is_held(&kvm->irq_lock));
++       irq_rt = kvm_get_irq_routing(kvm);
+        if (irq_rt && gsi < irq_rt->nr_rt_entries) {
+                hlist_for_each_entry(e, &irq_rt->map[gsi], link) {
+                        entries[n] = *e;
+@@ -216,7 +219,7 @@ int kvm_set_irq_routing(struct kvm *kvm,
+        }
+
+        mutex_lock(&kvm->irq_lock);
+-       old = rcu_dereference_protected(kvm->irq_routing, 1);
++       old = kvm_get_irq_routing(kvm);
+        rcu_assign_pointer(kvm->irq_routing, new);
+        kvm_irq_routing_update(kvm);
+        kvm_arch_irq_routing_update(kvm);
+--
+2.27.0
