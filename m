@@ -2,131 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C10655D70
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 16:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D951A655D75
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 16:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiLYPMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 10:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
+        id S231131AbiLYPS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 10:18:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiLYPMh (ORCPT
+        with ESMTP id S229832AbiLYPSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 10:12:37 -0500
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7354055B3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 07:12:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1671981151;
-        bh=4gyYfY5apDGW/eosN7O7fVTHYhGTtevXrZrItFuw+RY=;
-        h=From:To:Cc:Subject:Date;
-        b=oCmK1U64X3go8UcSnrgV6qFnym0HtnCed4YNAPNwKfmCaLXI1yySo3kRZ68diGU1b
-         b37ecjYL+UoOl0km5kKiLFt533fvGIjG/qZ3P+D33UVfE8JfUAtdF29/cpChCEPMF8
-         Xa1WojyhKF8xh1mx5Skash0OOC+5T7hVSqwUfMQ0=
-Received: from wen-VirtualBox.lan ([222.182.118.62])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id 2CC05057; Sun, 25 Dec 2022 23:11:12 +0800
-X-QQ-mid: xmsmtpt1671981072toki2hhed
-Message-ID: <tencent_13506618BF90E7B2AA796A9920DC49BEF407@qq.com>
-X-QQ-XMAILINFO: MR/iVh5QLeie/LjKgMA5F+5e/BGMMcXVUrtcQ09uXcIXZnVQf2Y9PHof42Hm7R
-         q+XXsqJsIHOfpYJo0o4QBA5TKF3Uc2f68G9HY9qzQRS3RzjoDHtdthbpx8rG1dDCGG1B3R/WV9hY
-         zldUkH98qcXF84DEoj23T9yQthTbJcEiN40XmEuBnnjr3xXNqjJE5LcgmH/uSYRGlbJ3W3qqn5nk
-         u+706JgKWAODSz1tTRWoyxMQJeRUtkpey58LQ+Iw+iP3D8iDNTXU00EaYrp99nGMOsbDtolcQieT
-         l/phISKm6/qxu+Yv1vcxRl8IZPwMtyrsklf+EMJp5AIPN0d2+0TCV+r9vY7ckVehWLLSzGs4IyJR
-         DIXN5XVDTHOTQYFNRE6wzP8nAAbIOts9HJja6YST1Yo+vEypZrUaEhgZ6p+i+d29YhNBpinchcp4
-         XiCssglylaikQStP+FpxAYxgKwQO3B0s43R+q2Z/IfpZYJzMQIc8EIPRQgXnZfZUWy+a14xPBaIN
-         +epWLj/ugm5rl9a9C8KRVL2h07+/XXdU3mhHzcPFhd+PK7ZrOAc3F3m1VcYWganATKyx2b2N+Wo/
-         bTVEB0LpySwjsue1liZ2WJl8k1jLaGnBeUth8PDJOhEmtqNxmNmd64UmQG9UIdxetHKHPfPwnjEe
-         nQ9I8JJXYJJrOdx+RvawZ6U05ywm0UgUlKZSFaPnpY1fkQaQwslH8t77Wq0czQNkHLA/AvZkaGZo
-         nTfk8CNqaw1M2nsg4X4Q7G5KG74xdBypNO459NmlSnqZoSxGHjgfLjmrLEckGuBHHFJj20Ua9XFh
-         4HQWNvGUjHnZzE7cu7bX/kxJ8Ef3Mf+OqtY+ZsHzRPDe4viliLz/Ps1BHmEIXDe1wc8/TNnSEM5x
-         mkjtVLii37EdkmSf+7FlkHswi4WiaF1xY9BqB0xzfOE9Sr0nmOc0kLBDEvNweIDrKZXNCOc2DWiD
-         Sad9Y6pZHJmrw2CubzocZDW0VkTkrhUsW1djvqn+MSrCWrHTdOi/keu3MqbCbqLyDzvN3WcSo=
-From:   wenyang.linux@foxmail.com
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>
-Cc:     Wen Yang <wenyang.linux@foxmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        =?UTF-8?q?Harry=C2=A0Wentland=C2=A0?= <harry.wentland@amd.com>,
-        =?UTF-8?q?Leo=C2=A0Li=C2=A0?= <sunpeng.li@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] =?UTF-8?q?drm/amd/display:=C2=A0fix=C2=A0array-bounds?= =?UTF-8?q?=C2=A0errors=C2=A0in=20dc=5Fstream=5Fremove=5Fwriteback()?=
-Date:   Sun, 25 Dec 2022 23:10:58 +0800
-X-OQ-MSGID: <20221225151058.749344-1-wenyang.linux@foxmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 25 Dec 2022 10:18:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5694F60D9;
+        Sun, 25 Dec 2022 07:18:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B767B8072F;
+        Sun, 25 Dec 2022 15:18:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D797C433F0;
+        Sun, 25 Dec 2022 15:18:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671981498;
+        bh=VpGs+wgQvn4nopc1zVna92m+pXcpav9pdxWW3SwSjoc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jh7FT5QwpZXqUGxdeuVAKyjWHlRu4LXncDmnDxCbaDPyX1b37ve16iwxcm7vaxFiD
+         2jc0JH45sRXbFdmROBBxj+pCyoOAQRiNPkFEFY8jH9W16YK46aMVjwHe9qd3v0iVUW
+         8D1hwAzIyjeCHNXmjqbolb9Lh5XviXOdDAH2dTfN+ppfQ08hxsRah8bHKRh7kvI5ac
+         imH0UGSJF4Y6C9VqJw3Bj7rDa+bcddaoyA9tILTNYWBzPG1Uwp+W5tskgsOoyH10IQ
+         4w0lpgyOR6j9PO7nSVYwX8qDCbL91D7rPzX936LOBKdFGa2Q/2ANoAKDoNbiwyABSI
+         lSSEiYyaK8mhQ==
+Date:   Sun, 25 Dec 2022 15:18:12 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Dennis Gilmore <dennis@ausil.us>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: Re: [PATCH] arch: fix broken BuildID for arm64 and riscv
+Message-ID: <Y6hptEk8FmISixLS@spud>
+References: <20221224192751.810363-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="K+NAhlStwZgY8Rt3"
+Content-Disposition: inline
+In-Reply-To: <20221224192751.810363-1-masahiroy@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Yang <wenyang.linux@foxmail.com>
 
-The following errors occurred when using gcc 7.5.0-3ubuntu1~18.04:
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: In function ‘dc_stream_remove_writeback’:
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c:543:55: warning: array subscript is above array bounds [-Warray-bounds]
-     stream->writeback_info[j] = stream->writeback_info[i];
-                                 ~~~~~~~~~~~~~~~~~~~~~~^~~
-Add a check to make sure that num_wb_info won't overflowing the writeback_info buffer.
+--K+NAhlStwZgY8Rt3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 6fbefb84a98e ("drm/amd/display: Add DC core changes for DCN2")
+On Sun, Dec 25, 2022 at 04:27:51AM +0900, Masahiro Yamada wrote:
+> Dennis Gilmore reports that the BuildID is missing in the arm64 vmlinux
+> since commit 994b7ac1697b ("arm64: remove special treatment for the
+> link order of head.o").
+>=20
+> The issue is that the type of .notes section, which contains the BuildID,
+> changed from NOTES to PROGBITS.
+>=20
+> Ard Biesheuvel figured out that whichever object gets linked first gets
+> to decide the type of a section, and the PROGBITS type is the result of
+> the compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
+>=20
+> While Ard provided a fix for arm64, I want to fix this globally because
+> the same issue is happening on riscv since commit 2348e6bf4421 ("riscv:
+> remove special treatment for the link order of head.o"). This problem
+> will happen in general for other architectures if they start to drop
+> unneeded entries from scripts/head-object-list.txt.
+>=20
+> Discard .note.GNU-stack in include/asm-generic/vmlinux.lds.h.
+>=20
+> riscv needs to change its linker script so that DISCARDS comes before
+> the .notes section.
 
-Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
-Cc: Aurabindo Pillai <aurabindo.pillai@amd.com>
-Cc: Hamza Mahfooz <hamza.mahfooz@amd.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Harry Wentland <harry.wentland@amd.com>
-Cc: Leo Li <sunpeng.li@amd.com>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/gpu/drm/amd/display/dc/core/dc_stream.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Hey Mashiro,
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-index 20e534f73513..9825c30f2ca0 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-@@ -481,6 +481,7 @@ bool dc_stream_add_writeback(struct dc *dc,
- 	}
- 
- 	if (!isDrc) {
-+		ASSERT(stream->num_wb_info + 1 <= MAX_DWB_PIPES);
- 		stream->writeback_info[stream->num_wb_info++] = *wb_info;
- 	}
- 
-@@ -526,6 +527,11 @@ bool dc_stream_remove_writeback(struct dc *dc,
- 		return false;
- 	}
- 
-+	if (stream->num_wb_info > MAX_DWB_PIPES) {
-+		dm_error("DC: num_wb_info is invalid!\n");
-+		return false;
-+	}
-+
- //	stream->writeback_info[dwb_pipe_inst].wb_enabled = false;
- 	for (i = 0; i < stream->num_wb_info; i++) {
- 		/*dynamic update*/
-@@ -540,7 +546,8 @@ bool dc_stream_remove_writeback(struct dc *dc,
- 		if (stream->writeback_info[i].wb_enabled) {
- 			if (j < i)
- 				/* trim the array */
--				stream->writeback_info[j] = stream->writeback_info[i];
-+				memcpy(&stream->writeback_info[j], &stream->writeback_info[i],
-+						sizeof(struct dc_writeback_info));
- 			j++;
- 		}
- 	}
--- 
-2.25.1
+No idea why I decided to look at patchwork today, but this seems to
+break the build on RISC-V, there's a whole load of the following in the
+output:
+`.LPFE4' referenced in section `__patchable_function_entries' of kernel/tra=
+ce/trace_selftest_dynamic.o: defined in discarded section `.text.exit' of k=
+ernel/trace/trace_selftest_dynamic.o
 
+I assume that's what's doing it, but given the day that's in it - I
+haven't looked into this any further, nor gone and fished the logs out of
+the builder.
+
+Thanks,
+Conor.
+
+>=20
+> Link: https://lore.kernel.org/lkml/CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-L=
+CQc=3D74D=3DxE=3DrA@mail.gmail.com/
+> Fixes: 994b7ac1697b ("arm64: remove special treatment for the link order =
+of head.o")
+> Fixes: 2348e6bf4421 ("riscv: remove special treatment for the link order =
+of head.o")
+> Reported-by: Dennis Gilmore <dennis@ausil.us>
+> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>=20
+>  arch/riscv/kernel/vmlinux.lds.S   | 4 ++--
+>  include/asm-generic/vmlinux.lds.h | 1 +
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.=
+lds.S
+> index 4e6c88aa4d87..1865a258e560 100644
+> --- a/arch/riscv/kernel/vmlinux.lds.S
+> +++ b/arch/riscv/kernel/vmlinux.lds.S
+> @@ -31,6 +31,8 @@ PECOFF_FILE_ALIGNMENT =3D 0x200;
+> =20
+>  SECTIONS
+>  {
+> +	DISCARDS
+> +
+>  	/* Beginning of code and text segment */
+>  	. =3D LOAD_OFFSET;
+>  	_start =3D .;
+> @@ -141,7 +143,5 @@ SECTIONS
+>  	STABS_DEBUG
+>  	DWARF_DEBUG
+>  	ELF_DETAILS
+> -
+> -	DISCARDS
+>  }
+>  #endif /* CONFIG_XIP_KERNEL */
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
+nux.lds.h
+> index a94219e9916f..2993b790fe98 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -1007,6 +1007,7 @@
+>  	*(.modinfo)							\
+>  	/* ld.bfd warns about .gnu.version* even when not emitted */	\
+>  	*(.gnu.version*)						\
+> +	*(.note.GNU-stack)	/* emitted as PROGBITS */
+> =20
+>  #define DISCARDS							\
+>  	/DISCARD/ : {							\
+> --=20
+> 2.34.1
+>=20
+
+--K+NAhlStwZgY8Rt3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6hprwAKCRB4tDGHoIJi
+0l9RAQDXyhrQnr6kGR3PoaIXcvTa5dsQBWOMb61JO0FkgzjwYAEAkDzn+fYdakxz
+5UB/bAYVBrV22oXa0H/xak2PwjZ+AQA=
+=xIjn
+-----END PGP SIGNATURE-----
+
+--K+NAhlStwZgY8Rt3--
