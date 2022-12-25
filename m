@@ -2,124 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B62655D45
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 14:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFED655D52
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 14:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbiLYNII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 08:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        id S229714AbiLYNrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 08:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiLYNIG (ORCPT
+        with ESMTP id S229631AbiLYNrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 08:08:06 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10olkn2097.outbound.protection.outlook.com [40.92.42.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14E12AE1
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 05:08:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MrERy4yRZL+rrbLbnMMBzg5Gy8XZGOWqGv9RQB+1Og36FCjfXlrbL8QzhUbIkZkYO2Ko47Sxgycz+31i8nxFXI4TZaISMLXon+yrmAO2jlaikV01TaJ9BtUTCyyQ+kbU3rp0yuI8dfG2NdcP5AY5/qieonEk7dEdDIf/R1NeowBUjRbiBVA7Te7ukQvGivmEo/Lu+T0OEnjNZXYXPDRp4db6sIecENCVYEm7+zeEjbGkiOReLQ0GlOLN4dTUdXVfSzCU5Pi5jsEY0tU7nIiuG8REuFkTp+8eZAhMOMie/Dyz9/5ChBIAezTdde2LtW5L3G3kB1s5acjeACc50yg0Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i70PE5ROE0KJsfZfo5FuB+kRnETSKd9aAspN0WEqVJ8=;
- b=XFQByTYN23qS/Rg9SIzDNymADHgXW8lKrXy7WIlFq05VAy8gzPxNa8iu8dNCjJ1PWnxbciZpr9C/iomOprFuPhjSkgVHQpTxLm33qVKxdTE+KMMbtILGjUGt85dge/r0czN1qdYG66+v606bBO4WQqs6W+HiodWh4m6ZhQFYogjdzEZUYP0V7ujdYbdqZknbNqjGfTE0yPOXw6Bg9zVvvHzDdsRZ+wvU/eSHLRP9FMmviVZdvCOVGuo3cacGTrbuYm++mHSot4wWhyVSE4FXJuiUrFfJhR2O8TSgz/Kpe00KmedBsmN0XkOhMIfnATGACla1CeVQ+LDG/jqm3jbL9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i70PE5ROE0KJsfZfo5FuB+kRnETSKd9aAspN0WEqVJ8=;
- b=HWsY8uNjl4f7ggF9ajm/f2yPGyYTsgWpplhSnIkQTyCmBpvXJb/Mw4KyPK+16gjiquyo1MD1ORrvYJpJD1XILp6RRuWYxCmdHc3K57z6/90mpOviNmDrnOkE8X4xCP5g1YLYLu1iRX8nqPW7nKiYMCn+LOl+L32GJZAcx8v3IBjlW1iGzYgu3JCJcrsCMtL0W5hRcuLWWb4IClX9BpWrtM+9Cpcq9u5rtm/z1gU+GtVaYmu9H1e1EaIgQOkklCDghxQwgNEB4YEnlhXUce6G56jAQ+9Q6W/rtMa1MfE2CBqljWk7zhh3ORJXuS5HQ/N84eadls37yv4GEiTF+FXWhQ==
-Received: from PH0P220MB0460.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:e8::5) by
- BL1P220MB0804.NAMP220.PROD.OUTLOOK.COM (2603:10b6:208:39f::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.12; Sun, 25 Dec 2022 13:08:00 +0000
-Received: from PH0P220MB0460.NAMP220.PROD.OUTLOOK.COM
- ([fe80::4699:74fd:8699:27b8]) by PH0P220MB0460.NAMP220.PROD.OUTLOOK.COM
- ([fe80::4699:74fd:8699:27b8%4]) with mapi id 15.20.5944.016; Sun, 25 Dec 2022
- 13:07:59 +0000
-Date:   Sun, 25 Dec 2022 15:07:53 +0200
-From:   Roi L <roeilev321_@outlook.com>
-To:     tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] x86: kvm: Fixed a pointer coding style issue
-Message-ID: <PH0P220MB046007160DEDD6FFA11E4F52DDEF9@PH0P220MB0460.NAMP220.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-TMN:  [LOozkymh4Au2in4LWTOTpCdILA8MtVZc]
-X-ClientProxiedBy: AS4PR09CA0010.eurprd09.prod.outlook.com
- (2603:10a6:20b:5e0::14) To PH0P220MB0460.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:510:e8::5)
-X-Microsoft-Original-Message-ID: <Y6hLKWrM2Y0efFMI@outlook.com>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0P220MB0460:EE_|BL1P220MB0804:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b3db8c7-b1ae-4e53-99a5-08dae6790c0f
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XDucLC+VYonqH5jFHWgWXDp4j7QWaz9OgfkBgb/Pj9E7IeeEnDo7DaMzy18JPHPQLemfXmLDj43zBlSXppCGbQNkdD+H94hr99PAAGv9Q2iSvf1LYKrwnMGvWMl5bvIoF9K9BS58h5x1n4ImAKaCoUu7QX2aGZPZgw4aNKTlR0cNbvciU8M9bDq6i8o/R7KgsVDxDLPaCsczmcsULCqIMiCoIg+tRYBmf7XGAKMAfqqVY+5B0b1RbAk9X/JZt76WkLJB+MpiwzURKGpRaRhlZ/7TvEpFmsVAkX4XK6VF1XoSzwbCn5KivsrrVX5sLUqYK0bbXITM8z+x/wtlYtOtuyvnKpw9cfKalBBFetum+nhbnaqQxPiQW0SuDDsJe7yBAVOp2hWxAaeFXb+AvgtIEMX/gIWtxnaSjTVKkh/RzH6mw8+CXMvR7e8+/7w9KGXK02l9Z7rdzkKneaSJM6plNWgmFPZEdUogOh2euRZhpR4+C/7o4ZdNhBKHzowmvxLXD58BCMQl2ED9lcfIpEr0JtenffJLXspaq43fEjABrrTLIaMP2rVAYiERXLRyliNZD7Td7WCHk4Ekr+Zo9oZBCZfp6HM1eKth+sptANkZySc=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6iz5NIpyPWi2k6xPJIHxIP/NfBxGNrTs8YAIuax3z4RzjF47T4C7ynYl1/FX?=
- =?us-ascii?Q?Zq+c9FNTGZnHLhf1FxKZpM9Ccf/4vrhb08JrT0lF6x1wU5nQVgtDay3wUv7X?=
- =?us-ascii?Q?zEZFP96ts5io/ywthN5PDEIdlMSBY4cDskfmy1FqAcfq3AbOLaxg6eQE3EnP?=
- =?us-ascii?Q?U6vWr9q5bv15i4c2XgoMXKSKeFamopJEbGaYkXR9UhK8YzzfoAsezURiXlmK?=
- =?us-ascii?Q?IA9Rzg3ZaSzOGf9Xb6J9XLSv4WkcGDWe/LWJTE6BI7wTlz4bEPsUo3EZeyq0?=
- =?us-ascii?Q?iKXDUrB3/YL3XT8NtfcGUyfeofaxG4ZJgtHVic3fqGh16rwosV1Ph/Ze3KrH?=
- =?us-ascii?Q?ARh3kgoU4GV96mPm7d8sPZIOmjiEyxFJPrM2UGAsbKh9gFgCSqYnYfzzQCgN?=
- =?us-ascii?Q?Cop7V3cVFw0UBhZ2l12RCDsbQVsye6jOJSA2Q0iYyI26h8pTZHzCgQz/HLoc?=
- =?us-ascii?Q?w7fKEJGCIQ4lcwt32EuvcqwWYKg9iBL2ZGvZKNwf75bZ0UWRIX/unFJCPkHf?=
- =?us-ascii?Q?Ta2IAiyXE/nXONTVOazfPRIQiukstYjxHYtaMFANlQG6hxvD3kzMXkvGoNtN?=
- =?us-ascii?Q?K0Wyp8RaUV4LYXTr1r8NF2s4Mq4QK1WRiebBdH2cJolk/n9VmCOOARIS1Jdt?=
- =?us-ascii?Q?q1TxzVYhmcgv8QRSIZb17NXtRovoSjrT/6mjDbfyRyzbA98GPMsOsm5kYbDR?=
- =?us-ascii?Q?tSGv7wNQAAtNBUBve1mRy1q7Y070yZj2n3q/kd+q8oZx6ilA6O6GUDNsSiv9?=
- =?us-ascii?Q?h2geiZ7T1gZ54rD1JY8bV5lsfNyt+8pkXPpALHZ2AihmXBBPDeVsbQDy89a0?=
- =?us-ascii?Q?a0vQyGpGMVtmrEc+PMQ1EwdDDqFqqUfN1QTEGTgz5hl1eIMA85BnFP0vOtm7?=
- =?us-ascii?Q?hI+X991gUvTrUutnuwvoaCJ/z+6CyP6g9LwHDgQPLIvoQVM7rXLk2kDFDlf4?=
- =?us-ascii?Q?T06xhAHzaFqUJDdEt7X8zUlwmAE3pBmthGNTd6gvJR68Cbf6+qQAqAMBFO55?=
- =?us-ascii?Q?lccdNi05FXUAmhQKIpll5PTVdXArtsulciYUJeQMX7iUSdmFJPfu0hKRMhzi?=
- =?us-ascii?Q?jXszklGCmRqWnMJJQh6N30hpbv5Lv7ou6vWtzk666oQMf3VjRybQzxpPtIJW?=
- =?us-ascii?Q?4nbVCWAQSDnZiF1UHUEN9B0bRluBMrRCwfpsnQGTI+Vjcvpa2CgNfTxdn5vM?=
- =?us-ascii?Q?iy98sToGEaTuGaeu9XrONHldjrNHjHAKTBxtzjGxPsSJq0/8xZYEXNiW3nmH?=
- =?us-ascii?Q?nTyc0Mf2AHrOnP50d9UqODCyoqLS142/Hj7fXkmquw=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b3db8c7-b1ae-4e53-99a5-08dae6790c0f
-X-MS-Exchange-CrossTenant-AuthSource: PH0P220MB0460.NAMP220.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Dec 2022 13:07:59.8032
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1P220MB0804
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 25 Dec 2022 08:47:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DFD10A3
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 05:47:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A925CB8069C
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 13:47:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 583DDC433EF;
+        Sun, 25 Dec 2022 13:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671976022;
+        bh=PY1bLPnS7e394SC/ISRUmzLJPCq1gI47uGpbqTIctsA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Jb4J/Z54ttWtnmW8Sl2PzpqJaHFF0fRPo0rUZsgH+W4bQnrYrA6q+NPUFmuaeeg5/
+         lh7xUs/L4q+Wn95e8gdhayUXI6+M+Ikao/w/IxCmnRhU1s4MFimYXfyhbwISg3Gf5q
+         UxIhEQKHNNSMCzk9L+78YfeMNfENLDooyY0t4Mb6qSCzBEyAeD5yW+tdXcD65xIJd3
+         50R9HNd5Ckyi9bzuv+/nem2m94Qwz4bTobHyXFCpsfBSl0wb/bWHq5WftaNvpqMJYE
+         ixmwxvhaZwhxvJ5+8fOTK0DBy9jYqMpWl8wpZB8+7IrQ60xELVPZwonS2W1Ut/NJTn
+         n9C9JRw3RBOXQ==
+Received: from host81-132-227-111.range81-132.btcentralplus.com ([81.132.227.111] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p9RLA-00F58P-1f;
+        Sun, 25 Dec 2022 13:47:00 +0000
+Date:   Sun, 25 Dec 2022 13:45:36 +0000
+Message-ID: <875ydzfvgf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v4 7/7] KVM: arm64: Normalize cache configuration
+In-Reply-To: <20221221204016.658874-8-akihiko.odaki@daynix.com>
+References: <20221221204016.658874-1-akihiko.odaki@daynix.com>
+        <20221221204016.658874-8-akihiko.odaki@daynix.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 81.132.227.111
+X-SA-Exim-Rcpt-To: akihiko.odaki@daynix.com, broonie@kernel.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, mathieu.poirier@linaro.org, oliver.upton@linux.dev, suzuki.poulose@arm.com, alexandru.elisei@arm.com, james.morse@arm.com, will@kernel.org, catalin.marinas@arm.com, asahi@lists.linux.dev, alyssa@rosenzweig.io, sven@svenpeter.dev, marcan@marcan.st
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed a pointer coding style issue.
+On Wed, 21 Dec 2022 20:40:16 +0000,
+Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+> 
+> Before this change, the cache configuration of the physical CPU was
+> exposed to vcpus. This is problematic because the cache configuration a
+> vcpu sees varies when it migrates between vcpus with different cache
+> configurations.
+> 
+> Fabricate cache configuration from the sanitized value, which holds the
+> CTR_EL0 value the userspace sees regardless of which physical CPU it
+> resides on.
+> 
+> CLIDR_EL1 and CCSIDR_EL1 are now writable from the userspace so that
+> the VMM can restore the values saved with the old kernel.
+> 
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> ---
+>  arch/arm64/include/asm/cache.h    |   3 +
+>  arch/arm64/include/asm/kvm_host.h |   4 +
+>  arch/arm64/kvm/reset.c            |   1 +
+>  arch/arm64/kvm/sys_regs.c         | 229 +++++++++++++++++-------------
+>  4 files changed, 141 insertions(+), 96 deletions(-)
 
-Signed-off-by: Roi L <roeilev321_@outlook.com>
----
- arch/x86/kvm/x86.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[...]
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 312aea1854ae..6a10a4c79361 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12199,7 +12199,7 @@ void kvm_arch_sync_events(struct kvm *kvm)
-  * address, i.e. its accessibility is not guaranteed, and must be
-  * accessed via __copy_{to,from}_user().
-  */
--void __user * __x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
-+void __user *__x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
- 				      u32 size)
- {
- 	int i, r;
+>  /* Which cache CCSIDR represents depends on CSSELR value. */
+> -static u32 get_ccsidr(u32 csselr)
+> +static u32 get_ccsidr(struct kvm_vcpu *vcpu, u32 csselr)
+> +{
+> +	if (vcpu->arch.ccsidr)
+> +		return vcpu->arch.ccsidr[csselr];
+> +
+> +	/*
+> +	 * Fabricate a CCSIDR value as the overriding value does not exist.
+> +	 * The real CCSIDR value will not be used as it can vary by the
+> +	 * physical CPU which the vcpu currently resides in.
+> +	 *
+> +	 * The line size is determined with get_min_cache_line_size(), which
+> +	 * should be valid for all CPUs even if they have different cache
+> +	 * configuration.
+> +	 *
+> +	 * The associativity bits are cleared, meaning the geometry of all data
+> +	 * and unified caches (which are guaranteed to be PIPT and thus
+> +	 * non-aliasing) are 1 set and 1 way.
+> +	 * Guests should not be doing cache operations by set/way at all, and
+> +	 * for this reason, we trap them and attempt to infer the intent, so
+> +	 * that we can flush the entire guest's address space at the appropriate
+> +	 * time. The exposed geometry minimizes the number of the traps.
+> +	 * [If guests should attempt to infer aliasing properties from the
+> +	 * geometry (which is not permitted by the architecture), they would
+> +	 * only do so for virtually indexed caches.]
+> +	 */
+> +	return get_min_cache_line_size(csselr) << CCSIDR_EL1_LineSize_SHIFT;
+
+It'd be nice to have a comment that says this relies on CCSIDR_EL1
+being allowed to return an UNKNOWN value when CSSELR_EL1 does not
+specify an implemented cache level (you always return something with
+the I or D line-size).
+
+> +}
+> +
+> +static int set_ccsidr(struct kvm_vcpu *vcpu, u32 csselr, u32 val)
+>  {
+> -	u32 ccsidr;
+> +	u8 line_size = FIELD_GET(CCSIDR_EL1_LineSize, val);
+> +	u32 *ccsidr = vcpu->arch.ccsidr;
+> +	u32 i;
+> +
+> +	if ((val & CCSIDR_EL1_RES0) || line_size < get_min_cache_line_size(csselr))
+> +		return -EINVAL;
+> +
+> +	if (!ccsidr) {
+> +		if (val == get_ccsidr(vcpu, csselr))
+> +			return 0;
+> +
+> +		ccsidr = kmalloc_array(CSSELR_MAX, sizeof(u32), GFP_KERNEL);
+> +		if (!ccsidr)
+> +			return -ENOMEM;
+> +
+> +		for (i = 0; i < CSSELR_MAX; i++)
+> +			ccsidr[i] = get_ccsidr(vcpu, i);
+> +
+> +		vcpu->arch.ccsidr = ccsidr;
+> +	}
+>  
+> -	/* Make sure noone else changes CSSELR during this! */
+> -	local_irq_disable();
+> -	write_sysreg(csselr, csselr_el1);
+> -	isb();
+> -	ccsidr = read_sysreg(ccsidr_el1);
+> -	local_irq_enable();
+> +	ccsidr[csselr] = val;
+>  
+> -	return ccsidr;
+> +	return 0;
+>  }
+>  
+>  /*
+> @@ -1281,10 +1332,64 @@ static bool access_clidr(struct kvm_vcpu *vcpu, struct sys_reg_params *p,
+>  	if (p->is_write)
+>  		return write_to_read_only(vcpu, p, r);
+>  
+> -	p->regval = read_sysreg(clidr_el1);
+> +	p->regval = __vcpu_sys_reg(vcpu, r->reg);
+>  	return true;
+>  }
+>  
+> +/*
+> + * Fabricate a CLIDR_EL1 value instead of using the real value, which can vary
+> + * by the physical CPU which the vcpu currently resides in.
+> + */
+> +static void reset_clidr(struct kvm_vcpu *vcpu, const struct sys_reg_desc *r)
+> +{
+> +	u64 ctr_el0 = read_sanitised_ftr_reg(SYS_CTR_EL0);
+> +	u64 clidr;
+> +	u8 loc;
+> +
+> +	if ((ctr_el0 & CTR_EL0_IDC) || cpus_have_const_cap(ARM64_HAS_STAGE2_FWB)) {
+
+Having looked into this again, I *think* we can drop the FWB check, as
+the above read_sanitised_ftr_reg() is populated from
+read_cpuid_effective_cachetype(), which factors in the *effects* of
+FWB.
+
+Please check though, as I only had a cursory look.
+
+> +		/*
+> +		 * Data cache clean to the PoU is not required so LoUU and LoUIS
+> +		 * will not be set and a unified cache, which will be marked as
+> +		 * LoC, will be added.
+> +		 *
+> +		 * If not DIC, let the unified cache L2 so that an instruction
+> +		 * cache can be added as L1 later.
+> +		 */
+> +		loc = (ctr_el0 & CTR_EL0_DIC) ? 1 : 2;
+> +		clidr = CACHE_TYPE_UNIFIED << CLIDR_CTYPE_SHIFT(loc);
+> +	} else {
+> +		/*
+> +		 * Data cache clean to the PoU is required so let L1 have a data
+> +		 * cache and mark it as LoUU and LoUIS. As L1 has a data cache,
+> +		 * it can be marked as LoC too.
+> +		 */
+> +		loc = 1;
+> +		clidr = 1 << CLIDR_LOUU_SHIFT;
+> +		clidr |= 1 << CLIDR_LOUIS_SHIFT;
+> +		clidr |= CACHE_TYPE_DATA << CLIDR_CTYPE_SHIFT(1);
+> +	}
+> +
+> +	/*
+> +	 * Instruction cache invalidation to the PoU is required so let L1 have
+> +	 * an instruction cache. If L1 already has a data cache, it will be
+> +	 * CACHE_TYPE_SEPARATE.
+> +	 */
+> +	if (!(ctr_el0 & CTR_EL0_DIC))
+> +		clidr |= CACHE_TYPE_INST << CLIDR_CTYPE_SHIFT(1);
+> +
+> +	clidr |= loc << CLIDR_LOC_SHIFT;
+> +
+> +	/*
+> +	 * Add tag cache unified to data cache. Allocation tags and data are
+> +	 * unified in a cache line so that it looks valid even if there is only
+> +	 * one cache line.
+> +	 */
+> +	if (kvm_has_mte(vcpu->kvm))
+> +		clidr |= 2 << CLIDR_TTYPE_SHIFT(loc);
+> +
+> +	__vcpu_sys_reg(vcpu, r->reg) = clidr;
+> +}
+> +
+>  static bool access_csselr(struct kvm_vcpu *vcpu, struct sys_reg_params *p,
+>  			  const struct sys_reg_desc *r)
+>  {
+> @@ -1306,22 +1411,12 @@ static bool access_ccsidr(struct kvm_vcpu *vcpu, struct sys_reg_params *p,
+>  		return write_to_read_only(vcpu, p, r);
+>  
+>  	csselr = vcpu_read_sys_reg(vcpu, CSSELR_EL1);
+> -	p->regval = get_ccsidr(csselr);
+> +	csselr &= CSSELR_EL1_Level | CSSELR_EL1_InD;
+> +	if (csselr >= CSSELR_MAX)
+> +		return undef_access(vcpu, p, r);
+
+I really dislike this UNDEF injection. Yes, this is allowed, but this
+is also inconsistent, as you can still set random values of TnD and
+not suffer an UNDEF. It also doesn't check for the values that have
+been advertised in CLIDR_EL1. I'd rather you return something without
+creating havoc.
+
+> +
+> +	p->regval = get_ccsidr(vcpu, csselr);
+>  
+> -	/*
+> -	 * Guests should not be doing cache operations by set/way at all, and
+> -	 * for this reason, we trap them and attempt to infer the intent, so
+> -	 * that we can flush the entire guest's address space at the appropriate
+> -	 * time.
+> -	 * To prevent this trapping from causing performance problems, let's
+> -	 * expose the geometry of all data and unified caches (which are
+> -	 * guaranteed to be PIPT and thus non-aliasing) as 1 set and 1 way.
+> -	 * [If guests should attempt to infer aliasing properties from the
+> -	 * geometry (which is not permitted by the architecture), they would
+> -	 * only do so for virtually indexed caches.]
+> -	 */
+> -	if (!(csselr & 1)) // data or unified cache
+> -		p->regval &= ~GENMASK(27, 3);
+>  	return true;
+>  }
+>  
+> @@ -1610,7 +1705,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>  	{ SYS_DESC(SYS_CNTKCTL_EL1), NULL, reset_val, CNTKCTL_EL1, 0},
+>  
+>  	{ SYS_DESC(SYS_CCSIDR_EL1), access_ccsidr },
+> -	{ SYS_DESC(SYS_CLIDR_EL1), access_clidr },
+> +	{ SYS_DESC(SYS_CLIDR_EL1), access_clidr, reset_clidr, CLIDR_EL1 },
+
+Maybe I wasn't clear enough in my previous reviews, so allow me to put
+it bluntly: you MUST validate CLIDR_EL1 as it is written from
+userspace, and refuse CLIDR_EL1.{LoUU,LoC,LoUIS} values that cannot be
+safely handled on this host.
+
+For example, restoring CLIDR_EL1.LoC=0, which implies a CTR_EL0.IDC
+behaviour, cannot be restored on a host that cannot offer the IDC
+behaviour. This is a critical aspect, as the guest will otherwise
+observe something that looks like memory corruption.
+
+So these 3 values must be checked across the board, and you must not
+accept a zero value if the HW has a non-zero value for the same
+field.  The main difficultly I can see is that this needs to be
+tracked on all CPUs, probably as some boot-time information, and
+result in a sanitised version of CLIDR_EL1, just like we do for
+CTR_EL0.
+
+Thanks,
+
+	M.
+
 -- 
-2.34.1
-
+Without deviation from the norm, progress is not possible.
