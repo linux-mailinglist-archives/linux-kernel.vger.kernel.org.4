@@ -2,126 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000E0655BFA
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 01:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6F2655C06
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 01:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiLYAPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 19:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S230191AbiLYA2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 19:28:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLYAPB (ORCPT
+        with ESMTP id S229445AbiLYA2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 19:15:01 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B393899;
-        Sat, 24 Dec 2022 16:14:59 -0800 (PST)
-Received: from [IPV6:2003:c7:df11:b00:fc6d:91a:a11d:a091] (p200300c7df110b00fc6d091aa11da091.dip0.t-ipconnect.de [IPv6:2003:c7:df11:b00:fc6d:91a:a11d:a091])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: rmader)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8100B6601B06;
-        Sun, 25 Dec 2022 00:14:56 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671927297;
-        bh=Ssm3igtjYoF1mqISjvcxMuDfQYYSzbscwC6hQ4FM+xM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eLpvf+vxIZZrECDM65IenJkrV8/2zA+B/WEGfgbHXf58IX96XfZIXxwfOKd5IYkXL
-         sSmbnoqVHGNK0eQajyJ/S4Rd8yeUjOIgHN+b0E2j5HbcBPDxmk6mkJT0TfP9LTdiUC
-         jebC1NnO42xOE2JlcVQ/8QaRdlsEU7dvdmyj7qybSsI4GZVSHRARYxVq4ABkY8f9DR
-         elSvubXQO352g3sOB3JYaLQffWbYQKyGqiC+J749vmMe02vFE/YBjn9LHB6DBpFpW2
-         t865uwz+IZ0pfhB+LgDYS6VoiIXDxR6SL5kv51956jkCJRkC+Chgvd1kkN/0SXc38n
-         fzK5fRRjRENbQ==
-Message-ID: <9cb9a6dc-1bc6-ce32-0948-8f87014aae87@collabora.com>
-Date:   Sun, 25 Dec 2022 01:14:53 +0100
+        Sat, 24 Dec 2022 19:28:21 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B797E658F;
+        Sat, 24 Dec 2022 16:28:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671928100; x=1703464100;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=uNm9/E9vQwOQhQmRGADmicSeDE6R/5EWg07gbn3dlB4=;
+  b=elI4GEBtrmlcZZ1lkvMjwfk/V6MsBQngM63bUnkEtfrfGEOpROE38ZV8
+   lCBgpE923OvBo7pzaKj58Xkxnl/WQNB4wG94lLrhhNlgqxFRF30jzGdiM
+   VOlE8qZi0k4ToV5SVETjLCs10VkWMW2N70YkjpPc2LBZLAxYIjNP4jC4l
+   CTHwTTQxKp4T6y81JemY/FCU9LifQbeYRWJOzolKcips8bQd1LoLMLQ6q
+   Ju3DT5R4GmX1F8WUw6pgRq7BGIj5SEs1wluY7tYS1genOVlL9nIVp8whc
+   DXQ7G9I9u1RzG8oXoIis31XPI0Gjc0FeiV1TDRD0t6/wmuhgFnQkox3KH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="319158882"
+X-IronPort-AV: E=Sophos;i="5.96,272,1665471600"; 
+   d="scan'208";a="319158882"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2022 16:28:20 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="654475609"
+X-IronPort-AV: E=Sophos;i="5.96,272,1665471600"; 
+   d="scan'208";a="654475609"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2022 16:28:20 -0800
+Message-ID: <8e2cc66f7dadcfb04099aac7c4eef0b02075c91b.camel@linux.intel.com>
+Subject: Re: [PATCH 0/2] intel_pstate: fix turbo not being used after a
+ processor is rebooted
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Pratyush Yadav <ptyadav@amazon.de>
+Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@acpica.org
+Date:   Sat, 24 Dec 2022 16:28:19 -0800
+In-Reply-To: <2ed9702b67832e3e33ef352808124980206c1e95.camel@linux.intel.com>
+References: <20221221155203.11347-1-ptyadav@amazon.de>
+         <72bcd14eef038ec9181d30b3d196b0a872f47ccb.camel@linux.intel.com>
+         <mafs0k02jd8oh.fsf_-_@dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com>
+         <2ed9702b67832e3e33ef352808124980206c1e95.camel@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] hantro: Fix JPEG encoder ENUM_FRMSIZE on RK3399
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>, kernel@collabora.com,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221223181647.720918-1-nicolas.dufresne@collabora.com>
- <8d13ffb9-74cb-00f9-072a-0614e341e1ef@collabora.com>
- <Y6cw3dU8Ku2+aL9y@eze-laptop>
-Content-Language: en-US
-From:   Robert Mader <robert.mader@collabora.com>
-In-Reply-To: <Y6cw3dU8Ku2+aL9y@eze-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.12.22 18:03, Ezequiel Garcia wrote:
-> On Sat, Dec 24, 2022 at 09:03:59AM +0100, Benjamin Gaignard wrote:
->> Le 23/12/2022 à 19:16, Nicolas Dufresne a écrit :
->>> Since 79c987de8b354, enumerating framesize on format set with "MODE_NONE"
->>> (any raw formats) is reporting an invalid frmsize.
->>>
->>>     Size: Stepwise 0x0 - 0x0 with step 0/0
->>>
->>> Before this change, the driver would return EINVAL, which is also invalid but
->>> worked in GStreamer. The original intent was not to implement it, hence the
->>> -ENOTTY return in this change. While drivers should implement ENUM_FRMSIZE for
->>> all formats and queues, this change is limited in scope to fix the regression.
->>>
->>> This fixes taking picture in Gnome Cheese software, or any software using
->>> GSteamer to encode JPEG with hardware acceleration.
->>>
->>> Fixes: 79c987de8b354 ("media: hantro: Use post processor scaling capacities")
->>> Reported-by: Robert Mader <robert.mader@collabora.com>
->>> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->> Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>
-> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->
+On Fri, 2022-12-23 at 10:10 -0800, srinivas pandruvada wrote:
+> Hi Pratyush,
+> 
+> On Thu, 2022-12-22 at 11:39 +0100, Pratyush Yadav wrote:
+> > 
+> > Hi Srinivas,
+> > 
+> > On Wed, Dec 21 2022, srinivas pandruvada wrote:
+> > > On Wed, 2022-12-21 at 16:52 +0100, Pratyush Yadav wrote:
+> > > > When a processor is brought offline and online again, it is
+> > > > unable to
+> > > > use Turbo mode because the _PSS table does not contain the whole
+> > > > turbo
+> > > > frequency range, but only +1 MHz above the max non-turbo
+> > > > frequency.
+> > > > This
+> > > > causes problems when ACPI processor driver tries to set frequency
+> > > > constraints. See patch 2 for more details.
+> > > > 
+> I can reproduce on a Broadwell server platform. But not on a client
+> system with acpi_ppc usage.
+> 
+> Need to check what change broke this.
+
+When PPC limits enforcement changed to PM QOS, this broke. Previously
+acpi_processor_get_platform_limit() was not enforcing any limits. It
+was just setting variable. So any update done after
+acpi_register_performance_state() call to pr->performance-
+>states[ppc].core_frequency, was effective.
+
+We don't really need to call
+	ret = freq_qos_update_request(&pr->perflib_req,
+			pr->performance->states[ppc].core_frequency *
+1000);
+
+if the PPC is not changed. When PPC is changed, this gets called again,
+so then we can call the above function to update cpufreq limit.
+
+The below change fixed for me.
+
+diff --git a/drivers/acpi/processor_perflib.c
+b/drivers/acpi/processor_perflib.c
+index 757a98f6d7a2..c6ced89c00dd 100644
+--- a/drivers/acpi/processor_perflib.c
++++ b/drivers/acpi/processor_perflib.c
+@@ -75,6 +75,11 @@ static int acpi_processor_get_platform_limit(struct
+acpi_processor *pr)
+        pr_debug("CPU %d: _PPC is %d - frequency %s limited\n", pr->id,
+                       (int)ppc, ppc ? "" : "not");
+ 
++       if (ppc == pr->performance_platform_limit) {
++               pr_debug("CPU %d: _PPC is %d - frequency not
+changed\n", pr->id, ppc);
++               return 0;
++       }
++
+        pr->performance_platform_limit = (int)ppc;
+ 
+        if (ppc >= pr->performance->state_count ||
+
+Thanks,
+Srinivas
+
+> 
 > Thanks,
-> Ezequiel
+> Srinivas
+> 
+> > > 
+> > > Thanks,
+> > > Srinivas
+> > > 
+> > > > Pratyush Yadav (2):
+> > > >   acpi: processor: allow fixing up the frequency for a
+> > > > performance
+> > > > state
+> > > >   cpufreq: intel_pstate: use acpi perflib to update turbo
+> > > > frequency
+> > > > 
+> > > >  drivers/acpi/processor_perflib.c | 40
+> > > > ++++++++++++++++++++++++++++++++
+> > > >  drivers/cpufreq/intel_pstate.c   |  5 ++--
+> > > >  include/acpi/processor.h         |  2 ++
+> > > >  3 files changed, 45 insertions(+), 2 deletions(-)
+> > > > 
+> > > > --
+> > > > 2.38.1
+> > > > 
+> > > 
+> > 
+> 
 
-Tested-by: Robert Mader <robert.mader@collabora.com>
-
-Thanks a lot for this Christmas present, confirmed that it fixes the 
-affected apps / use-cases for me :)
-
->
->>> ---
->>>    drivers/media/platform/verisilicon/hantro_v4l2.c | 7 +++++--
->>>    1 file changed, 5 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
->>> index 2c7a805289e7b..30e650edaea8a 100644
->>> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
->>> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
->>> @@ -161,8 +161,11 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
->>>    	}
->>>    	/* For non-coded formats check if postprocessing scaling is possible */
->>> -	if (fmt->codec_mode == HANTRO_MODE_NONE && hantro_needs_postproc(ctx, fmt)) {
->>> -		return hanto_postproc_enum_framesizes(ctx, fsize);
->>> +	if (fmt->codec_mode == HANTRO_MODE_NONE) {
->>> +		if (hantro_needs_postproc(ctx, fmt))
->>> +			return hanto_postproc_enum_framesizes(ctx, fsize);
->>> +		else
->>> +			return -ENOTTY;
->>>    	} else if (fsize->index != 0) {
->>>    		vpu_debug(0, "invalid frame size index (expected 0, got %d)\n",
->>>    			  fsize->index);
-
--- 
-Robert Mader
-Consultant Software Developer
-
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
 
