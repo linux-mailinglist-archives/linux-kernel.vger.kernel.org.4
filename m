@@ -2,161 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6F2655C06
-	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 01:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB7D655C14
+	for <lists+linux-kernel@lfdr.de>; Sun, 25 Dec 2022 02:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbiLYA2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 24 Dec 2022 19:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S229604AbiLYB2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 24 Dec 2022 20:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLYA2V (ORCPT
+        with ESMTP id S229441AbiLYB2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 24 Dec 2022 19:28:21 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B797E658F;
-        Sat, 24 Dec 2022 16:28:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671928100; x=1703464100;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uNm9/E9vQwOQhQmRGADmicSeDE6R/5EWg07gbn3dlB4=;
-  b=elI4GEBtrmlcZZ1lkvMjwfk/V6MsBQngM63bUnkEtfrfGEOpROE38ZV8
-   lCBgpE923OvBo7pzaKj58Xkxnl/WQNB4wG94lLrhhNlgqxFRF30jzGdiM
-   VOlE8qZi0k4ToV5SVETjLCs10VkWMW2N70YkjpPc2LBZLAxYIjNP4jC4l
-   CTHwTTQxKp4T6y81JemY/FCU9LifQbeYRWJOzolKcips8bQd1LoLMLQ6q
-   Ju3DT5R4GmX1F8WUw6pgRq7BGIj5SEs1wluY7tYS1genOVlL9nIVp8whc
-   DXQ7G9I9u1RzG8oXoIis31XPI0Gjc0FeiV1TDRD0t6/wmuhgFnQkox3KH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="319158882"
-X-IronPort-AV: E=Sophos;i="5.96,272,1665471600"; 
-   d="scan'208";a="319158882"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2022 16:28:20 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="654475609"
-X-IronPort-AV: E=Sophos;i="5.96,272,1665471600"; 
-   d="scan'208";a="654475609"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2022 16:28:20 -0800
-Message-ID: <8e2cc66f7dadcfb04099aac7c4eef0b02075c91b.camel@linux.intel.com>
-Subject: Re: [PATCH 0/2] intel_pstate: fix turbo not being used after a
- processor is rebooted
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Pratyush Yadav <ptyadav@amazon.de>
-Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devel@acpica.org
-Date:   Sat, 24 Dec 2022 16:28:19 -0800
-In-Reply-To: <2ed9702b67832e3e33ef352808124980206c1e95.camel@linux.intel.com>
-References: <20221221155203.11347-1-ptyadav@amazon.de>
-         <72bcd14eef038ec9181d30b3d196b0a872f47ccb.camel@linux.intel.com>
-         <mafs0k02jd8oh.fsf_-_@dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com>
-         <2ed9702b67832e3e33ef352808124980206c1e95.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        Sat, 24 Dec 2022 20:28:35 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DF3B4BB;
+        Sat, 24 Dec 2022 17:28:34 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id j28so4222161ila.9;
+        Sat, 24 Dec 2022 17:28:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gRpYtnpGHDyDiD3CgctrwyEpPrHlIsvIW1qOn5G6hEQ=;
+        b=PW/nffsaEDuYpJow7BF21cHssKEKP9sc8mu+7YN3Wy/K3jfK0sVNdDxJavjgXYVvwo
+         8lUBw0qwPfyQuDO8b2gL2EbsMYpqlRee+SQjBCSePKVUjpge7Z3NGowlmtxKNq/gqY/L
+         ODBpQVOxWN34GZjEXCkIaeJPrvVWdClLpvw4qmW8FFGWO5nxJa42L7wNSVPAAeG2ovSB
+         LsH/2RoVXDKGnXnxqqDVVO6prRpHUj+IbEscD3nR+tPbcxK4u5Xux/vqT5zzGwezNla3
+         /L+r4lJkbAUDa65+ovUMvjZyQQ4T8Lm8jY7lXVaUHHvXLf9QzY8xdOScwHtLB6Uk+sSo
+         5feQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gRpYtnpGHDyDiD3CgctrwyEpPrHlIsvIW1qOn5G6hEQ=;
+        b=t/ONokd5XnQNlSMc3uqGTrY4ETp17D8VO0Srb2DbM3yD0L01w2unYnUMZNiV2mHNCo
+         VALD3jJs3/rjCvNnY/bTaTtdn8XEQbeDxAp4eKiYOfUsXKuNQjU63aS0Tv74uJSPkXnL
+         UWiF3VPjAkUOxx5pKqwBCUvBPWRr7QQ6lY3QQk7r768uJg6dYYx3L4mqxG0spmKCs7k1
+         QsW5cPo0oAIFRl+DQXAOSYM6GjRzpX2HCIFraNF4MsIHDpKn/+FAQMp3S7SsKNdq4LTh
+         LGqRcKsBFdz0X3hvOAGMcSE1JFkFPXG2nbXWbBJ1+V50LFTFnkvgEZLII38aeHW4xoIP
+         EpDw==
+X-Gm-Message-State: AFqh2kpk2kuSV7b3R4XIVxReXl7AFfg+M2bD9QvfA5xkN2oMqct/jCQ5
+        a42LYZMkAJeJSC+yba4oE9INzzJwczA=
+X-Google-Smtp-Source: AMrXdXsAiOUoiJpu0NlINaJRTgOYeoCrdklOAQ0mlRbkJ6YBPVE5lrWUUq12Ohx8pEoAqGKbgnsXhA==
+X-Received: by 2002:a92:cd0c:0:b0:30b:d25b:e0f5 with SMTP id z12-20020a92cd0c000000b0030bd25be0f5mr9686330iln.27.1671931713810;
+        Sat, 24 Dec 2022 17:28:33 -0800 (PST)
+Received: from aford-IdeaCentre-A730.lan ([2601:447:d001:9aea:c6f8:5d92:f3af:e321])
+        by smtp.gmail.com with ESMTPSA id y11-20020a92d20b000000b00302a772730esm2179838ily.54.2022.12.24.17.28.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Dec 2022 17:28:33 -0800 (PST)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH V4 1/2] dt-bindings: arm: Add Beacon EmbeddedWorks i.MX8M Plus kit
+Date:   Sat, 24 Dec 2022 19:28:18 -0600
+Message-Id: <20221225012820.206328-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-12-23 at 10:10 -0800, srinivas pandruvada wrote:
-> Hi Pratyush,
-> 
-> On Thu, 2022-12-22 at 11:39 +0100, Pratyush Yadav wrote:
-> > 
-> > Hi Srinivas,
-> > 
-> > On Wed, Dec 21 2022, srinivas pandruvada wrote:
-> > > On Wed, 2022-12-21 at 16:52 +0100, Pratyush Yadav wrote:
-> > > > When a processor is brought offline and online again, it is
-> > > > unable to
-> > > > use Turbo mode because the _PSS table does not contain the whole
-> > > > turbo
-> > > > frequency range, but only +1 MHz above the max non-turbo
-> > > > frequency.
-> > > > This
-> > > > causes problems when ACPI processor driver tries to set frequency
-> > > > constraints. See patch 2 for more details.
-> > > > 
-> I can reproduce on a Broadwell server platform. But not on a client
-> system with acpi_ppc usage.
-> 
-> Need to check what change broke this.
+Add DT compatible string for a Beacon EmbeddedWorks development
+kit based on the i.MX8M Plus from NXP.
 
-When PPC limits enforcement changed to PM QOS, this broke. Previously
-acpi_processor_get_platform_limit() was not enforcing any limits. It
-was just setting variable. So any update done after
-acpi_register_performance_state() call to pr->performance-
->states[ppc].core_frequency, was effective.
+Signed-off-by: Adam Ford <aford173@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-We don't really need to call
-	ret = freq_qos_update_request(&pr->perflib_req,
-			pr->performance->states[ppc].core_frequency *
-1000);
-
-if the PPC is not changed. When PPC is changed, this gets called again,
-so then we can call the above function to update cpufreq limit.
-
-The below change fixed for me.
-
-diff --git a/drivers/acpi/processor_perflib.c
-b/drivers/acpi/processor_perflib.c
-index 757a98f6d7a2..c6ced89c00dd 100644
---- a/drivers/acpi/processor_perflib.c
-+++ b/drivers/acpi/processor_perflib.c
-@@ -75,6 +75,11 @@ static int acpi_processor_get_platform_limit(struct
-acpi_processor *pr)
-        pr_debug("CPU %d: _PPC is %d - frequency %s limited\n", pr->id,
-                       (int)ppc, ppc ? "" : "not");
- 
-+       if (ppc == pr->performance_platform_limit) {
-+               pr_debug("CPU %d: _PPC is %d - frequency not
-changed\n", pr->id, ppc);
-+               return 0;
-+       }
-+
-        pr->performance_platform_limit = (int)ppc;
- 
-        if (ppc >= pr->performance->state_count ||
-
-Thanks,
-Srinivas
-
-> 
-> Thanks,
-> Srinivas
-> 
-> > > 
-> > > Thanks,
-> > > Srinivas
-> > > 
-> > > > Pratyush Yadav (2):
-> > > >   acpi: processor: allow fixing up the frequency for a
-> > > > performance
-> > > > state
-> > > >   cpufreq: intel_pstate: use acpi perflib to update turbo
-> > > > frequency
-> > > > 
-> > > >  drivers/acpi/processor_perflib.c | 40
-> > > > ++++++++++++++++++++++++++++++++
-> > > >  drivers/cpufreq/intel_pstate.c   |  5 ++--
-> > > >  include/acpi/processor.h         |  2 ++
-> > > >  3 files changed, 45 insertions(+), 2 deletions(-)
-> > > > 
-> > > > --
-> > > > 2.38.1
-> > > > 
-> > > 
-> > 
-> 
-
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 05b5276a0e14..4a92e0b2b890 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -931,6 +931,7 @@ properties:
+       - description: i.MX8MP based Boards
+         items:
+           - enum:
++              - beacon,imx8mp-beacon-kit  # i.MX8MP Beacon Development Kit
+               - dh,imx8mp-dhcom-som       # i.MX8MP DHCOM SoM
+               - dh,imx8mp-dhcom-pdk2      # i.MX8MP DHCOM SoM on PDK2 board
+               - fsl,imx8mp-evk            # i.MX8MP EVK Board
+-- 
+2.34.1
 
