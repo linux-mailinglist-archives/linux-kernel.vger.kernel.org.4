@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A54C656225
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 12:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3564A656536
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 22:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbiLZLRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 06:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S232351AbiLZV6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 16:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiLZLRm (ORCPT
+        with ESMTP id S229614AbiLZV6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 06:17:42 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA0F62EE;
-        Mon, 26 Dec 2022 03:17:37 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id g16so828007plq.12;
-        Mon, 26 Dec 2022 03:17:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ndX3aqFP5QuEDhvL4ldT5jQnDdYTin+9vnF0038Ulgg=;
-        b=RphvVQzwFXgVoTS5jqEvakUba+uXRziyjLAqub7pHS+ZxoTKe1DC6NcicuVTOMjJ59
-         QjADRpuZusVxBx0L5uhUDwYWUkbY4Nn91UdQ7NguH0j2ac9hhJgZDMeQagI/DLejcTve
-         NCzT0s18AeKXfqavujK8qYIIHkoWkx3HsN4hLcNpgvTwFr/VxV1mUG/INW6/+fKec3fQ
-         kHyfaC+GIL+oVgOp6Mbgs9UVGtNd0X/TeoltDnW9j4RqOoc3vsvAPsfB7MaexZLSQe+G
-         vWX3aKbdrUgRq09zjHjSjmbhmu3f5DPdA++MWDNYinIQyerdfqGTI4R9P6KUj8a/n7J1
-         J+cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ndX3aqFP5QuEDhvL4ldT5jQnDdYTin+9vnF0038Ulgg=;
-        b=WvsnffwsgSIX5fgWKqFiZ0YxTt0uwpYSsdKMt55u6WGg6bFsHuIgMe7ixfEmperpfj
-         1TBYeMrzOy4WYR1iGu9RR1VtmZnnDPwaGPyvixrnUy9gzlHA0M59oApqLAvjdnUzkk81
-         C0a2DCcnw/muM7mIechFMegGVZnnn77rAsD3Phua94lBc8g1uVkUs4qrBAr+0yBO1kq8
-         VI029ZOdtBmoZF+qOFoza94U8VG+41FV/fEf0/+lJRWdMgTRnUhcCQ16mdZiChU0XXTa
-         QmNtQ1UZsv20N/MuiOAIdvquhsHG2rTnL4cZbzxBRILoRXeaAW0Z64qpq+vLfaO6/zCs
-         z+gg==
-X-Gm-Message-State: AFqh2krRf9B6b/l3sajth05sI7ODoYONtPJUbk3zKeTrARJnbt2+YatL
-        /seye3/CX/79wFGWVoFVLQs=
-X-Google-Smtp-Source: AMrXdXvyf7fgBvsBrFaC8Q2Bx7zb02JCWMfOL9SqfqIbHMsH0YCX802LXrGHzUZDESkNe49KfuNFpQ==
-X-Received: by 2002:a05:6a20:ce4b:b0:b2:ed11:284e with SMTP id id11-20020a056a20ce4b00b000b2ed11284emr10544156pzb.52.1672053457446;
-        Mon, 26 Dec 2022 03:17:37 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id dw6-20020a17090b094600b00223f495dc28sm6281490pjb.14.2022.12.26.03.17.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 03:17:37 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] KVM: x86: Fix a typo about msrs_to_save_all[] in kvm_init_msr_list()
-Date:   Mon, 26 Dec 2022 19:17:10 +0800
-Message-Id: <20221226111710.51831-4-likexu@tencent.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221226111710.51831-1-likexu@tencent.com>
-References: <20221226111710.51831-1-likexu@tencent.com>
+        Mon, 26 Dec 2022 16:58:51 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED87D21BF;
+        Mon, 26 Dec 2022 13:58:49 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5089E2086A;
+        Mon, 26 Dec 2022 21:58:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1672091928; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YhWabLpDTnB6UAKrZK6Tl8sha0fVHHbdbYiBlIIK1Gw=;
+        b=a2EH1N3/k5SUHfA5iOFWkrfswcbGtIUi74pCD8ZD5vyLDQMM5oRWnCtEeCR9yls0ieXCrf
+        sycybsVxiodF6JV8RILj3Zi0OxzABSOv6Ws1od+VeFzNRb9DgDB5pdcAmnaQD/prPs0e7d
+        ZbO8PRXiYjNsfK10mrM8zx8U485LbGM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1672091928;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YhWabLpDTnB6UAKrZK6Tl8sha0fVHHbdbYiBlIIK1Gw=;
+        b=GIk2YrUc5+FF2R+STO1MGJBTsXHiE546B7216vGBxvDQjXxqM9KA1fQRHj+GeL8fKBtL6X
+        4bMuUKS0oJYP9WDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3811313456;
+        Mon, 26 Dec 2022 21:58:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4QM2DRgZqmMxOAAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 26 Dec 2022 21:58:48 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E3B74A0733; Mon, 26 Dec 2022 12:18:48 +0100 (CET)
+Date:   Mon, 26 Dec 2022 12:18:48 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     paolo.valente@linaro.org, axboe@kernel.dk, jack@suse.cz,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com
+Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bfq_exit_icq_bfqq
+Message-ID: <20221226111848.oorzy2mecnrignzc@quack3>
+References: <20221226030605.1437081-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221226030605.1437081-1-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Mon 26-12-22 11:06:05, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> Commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
+> will access 'bic->bfqq' in bic_set_bfqq(), however, bfq_exit_icq_bfqq()
+> can free bfqq first, and then call bic_set_bfqq(), which will cause uaf.
+> 
+> Fix the problem by moving bfq_exit_bfqq() behind bic_set_bfqq().
+> 
+> Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
+> Reported-by: Yi Zhang <yi.zhang@redhat.com>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-The commit 7a5ee6edb42e ("KVM: X86: Fix initialization of MSR lists")
-changed the variable name from msrs_to_save[] to msrs_to_save_all[]
-but it still misused "msrs_to_saved_all[]" in kvm_init_msr_list(). Fix it.
+Thanks for the patch! Feel free to add:
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/kvm/x86.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index fcb9c317df59..b419ff9cef3b 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -7012,7 +7012,7 @@ static void kvm_init_msr_list(void)
- 	unsigned i;
- 
- 	BUILD_BUG_ON_MSG(KVM_PMC_MAX_FIXED != 3,
--			 "Please update the fixed PMCs in msrs_to_saved_all[]");
-+			 "Please update the fixed PMCs in msrs_to_save_all[]");
- 
- 	num_msrs_to_save = 0;
- 	num_emulated_msrs = 0;
+								Honza
+
+> ---
+>  block/bfq-iosched.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 16f43bbc575a..ccf2204477a5 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -5317,8 +5317,8 @@ static void bfq_exit_icq_bfqq(struct bfq_io_cq *bic, bool is_sync)
+>  		unsigned long flags;
+>  
+>  		spin_lock_irqsave(&bfqd->lock, flags);
+> -		bfq_exit_bfqq(bfqd, bfqq);
+>  		bic_set_bfqq(bic, NULL, is_sync);
+> +		bfq_exit_bfqq(bfqd, bfqq);
+>  		spin_unlock_irqrestore(&bfqd->lock, flags);
+>  	}
+>  }
+> -- 
+> 2.31.1
+> 
 -- 
-2.39.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
