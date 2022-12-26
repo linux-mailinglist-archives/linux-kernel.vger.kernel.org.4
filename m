@@ -2,88 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682AF6564CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 20:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BE16564CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 20:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiLZTXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 14:23:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S232280AbiLZTZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 14:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLZTXs (ORCPT
+        with ESMTP id S229568AbiLZTZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 14:23:48 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E492AFD
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 11:23:47 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id kw15so27537520ejc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 11:23:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=n3b01VwtEzai+EREaidblo11c5/qk2N8EUh1vLnvfDs=;
-        b=OLFtGaHMl0AVoG6H78hZtg6oaBSftd3cLEWMfAdCjNh1UcZo29YT7gFRjgl8rtwuVV
-         peNihXzPab7mIe9RjA/esbx7wRAdSJSOsN9BaDFyOOtnMM3XSKLKeMBd/EysyPlRBMjW
-         4WOJS8Dz5GSAxnbup2UyCOJ59+RqDYHXNmnMf0MqXzNh05a0l+GQ0QF4wg8d2rH7p8pu
-         zjKWbg7pFTKhzrK3ZfLgBE7o+pGZ4su7mBMSm7bKaUDfu7i0sMhe/EUZ6+xBt9+XFg1h
-         QovnA/++AqN+40HO5QHySL8fYkKXZrAJc3bc3Xki+SrFRc2We7lGkCJ4eXH+lwlDmaDF
-         dchQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n3b01VwtEzai+EREaidblo11c5/qk2N8EUh1vLnvfDs=;
-        b=OIWf311OhTKMBXzTvUSvhmBksVaEmog4s9iEqsxQIlIMJDUmaXxdBy0yW0UIcg49SI
-         i3+6HP2t/s+MAW2OOwGTSo0dkGXnKefRMAipkRnCr6+s25vxicbEP7LhD63jDl9yQIi5
-         WolhiMrofkrJmFVZPIfAex2UGLIPs6DfOIf/eR6OZafaXNeNt74CLHrznoFoad3FUvpt
-         jtW6IjSW87N6Dl5fluUgSBQQQTn5+6IgvEHFrJebRgchaJTGltS5zMXAHRTitkbimCoP
-         7Xh4rMGcYCKCOHOpFsqt8I/Nb4VxSaBydry0e8DBC5S3vKgFJpA9nnUoMbdMMpn9jbGh
-         OhIA==
-X-Gm-Message-State: AFqh2kpu69tSHuikxtMClw/mCGbF8hWN1vEjDbd8h5vCOzxCBdAZ+SFL
-        kx9rWksTYto0N7YXlQbrdnuqr5mdkGMd1AQzFoxJJw==
-X-Google-Smtp-Source: AMrXdXvbiUXpYsruHSQzJqwM+PIVVjTo6P7g/8Fc9ZI0VrIn+GYFFMpTPvnj0QDLZr+oJBf6nuUTOlr+QSfEUBRgahk=
-X-Received: by 2002:a17:906:d212:b0:7c4:f402:9766 with SMTP id
- w18-20020a170906d21200b007c4f4029766mr1144497ejz.232.1672082625661; Mon, 26
- Dec 2022 11:23:45 -0800 (PST)
+        Mon, 26 Dec 2022 14:25:43 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0751E5;
+        Mon, 26 Dec 2022 11:25:41 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F2ED904;
+        Mon, 26 Dec 2022 20:25:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672082738;
+        bh=WYeeL1tFF+mdzsb2TM6BHvYLKX8R50jHZODrjsruKHs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=S5NzcHdiEbMPUSAbbGRYD0sJQJohu7zh7qlHjj4J4nygU8l8lGEqOWMXM9JENVvsH
+         DlRd5+/ID9CoXxxVbq+lFdZT7WLhYmboH976MgMqdeDFrjAA1ySbKtcoO8rTNmXw7b
+         9Jk79VqgYYnyKVGE8OuDSPHFpVKNjsnDE0An1EEM=
+Message-ID: <61729020-0977-521a-6137-3bd89f300652@ideasonboard.com>
+Date:   Mon, 26 Dec 2022 21:25:34 +0200
 MIME-Version: 1.0
-References: <20221225040821.8395-1-steev@kali.org> <20221226004727.204986-1-steev@kali.org>
- <ee597e4b-2656-3852-4daa-f3db7abe6db0@linaro.org>
-In-Reply-To: <ee597e4b-2656-3852-4daa-f3db7abe6db0@linaro.org>
-From:   Steev Klimaszewski <steev@kali.org>
-Date:   Mon, 26 Dec 2022 13:23:34 -0600
-Message-ID: <CAKXuJqi-ApBGHewYEhnJJR_s-xf5EAfJA2J1ieww9eZjXYFUYQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: c630: Fix firmware paths
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org,
-        devicetree@vger.kernel.org, konrad.dybcio@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 7/8] media: i2c: add DS90UB913 driver
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <20221208104006.316606-8-tomi.valkeinen@ideasonboard.com>
+ <Y5YiazDtaxtLJyL0@pendragon.ideasonboard.com>
+ <4d349785-ca37-d930-db3c-2581bba9fde0@ideasonboard.com>
+ <7ddd576f-6e8a-7581-178c-2e8575227811@ideasonboard.com>
+ <Y6nSVlmlweUuUwJf@pendragon.ideasonboard.com>
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y6nSVlmlweUuUwJf@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 26, 2022 at 6:04 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 26/12/2022 01:47, Steev Klimaszewski wrote:
-> > The firmware paths were pointing to qcom/manufacturer whereas other
-> > devices have them under qcom/chipset/manufacturer, so fix this up on the
-> > c630, so we follow the same standard setup.
-> >
-> > Signed-off-by: Steev Klimaszewski <steev@kali.org>
->
-> Do not attach your patches to some other threads. It messes with reading
-> and applying.
->
-> Best regards,
-> Krzysztof
->
-Sorry, I screwed up my first patch, and this was supposed to be a v2
-of that one.  I'll do better on other submissions.
+On 26/12/2022 18:56, Laurent Pinchart wrote:
+> Hi Tomi,
+> 
+> On Wed, Dec 14, 2022 at 08:36:47AM +0200, Tomi Valkeinen wrote:
+>> On 14/12/2022 08:29, Tomi Valkeinen wrote:
+>>
+>>>> wondering if the struct device of the DS90UB913 could be passed instead
+>>>> of the port, to avoid passing the port throught
+>>>> ds90ub9xx_platform_data.
+>>>
+>>> Interesting thought. That would limit the number of remote i2c busses to
+>>> one, though. Not a problem for FPD-Link, but I wonder if that's assuming
+>>> too much for the future users. Then again, this is an in-kernel API so
+>>> we could extend it later if needed. So I'll try this out and see if I
+>>> hit any issues.
+>>
+>> Right, so the issue with this one would be that it would prevent a
+>> single device uses. E.g. a single chip which acts as an ATR (similar to
+>> i2c-mux chips), i.e. it contains both the main and the remote i2c busses.
+> 
+> I don't think I understand this, sorry.
+
+What you are suggesting above means that we'd have a separate device for 
+each port of the ATR. Which is fine in our current case, as the i2c 
+master busses are behind separate remote devices.
+
+But if you consider a case similar to i2c-mux, where we have a single 
+chip with the slave bus and, say, 4 master busses. We would probably 
+have only a single device for that.
+
+  Tomi
+
