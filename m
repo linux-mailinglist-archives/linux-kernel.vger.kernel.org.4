@@ -2,100 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6888656505
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 21:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3462C65650F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 21:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiLZUoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 15:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
+        id S231422AbiLZUwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 15:52:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiLZUoI (ORCPT
+        with ESMTP id S229522AbiLZUv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 15:44:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8503325EC;
-        Mon, 26 Dec 2022 12:44:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4041FB80D68;
-        Mon, 26 Dec 2022 20:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51726C433EF;
-        Mon, 26 Dec 2022 20:44:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672087444;
-        bh=VLhGkOHxbqetrgJSPLuZfKUGT1KN0pIDoxofw9mA2Jw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BaRZ3mCREa+kLUp5TDH7ap3HWYze/UUbPBAAOV501rVkFpg9IJfJfco0Mduf/PHuM
-         WbmConD42iTDblIo9JtxYbuxDPU5LV969xNFTFJChhok3zLYN4OeG7Xh8XiSwbDDLq
-         vFrxVIqMZU9AGAD/f1N5vbJsPUBuGgDPVdGNuv+w6DswNVS8v6JZItJmucQAi4BILf
-         R9pBjahfOUYA9ib/VwrBG3df6NOyUcMYJ6isZYIyfjCS29DR4UU0RJf3ukanPAtPwd
-         wjZUERuQRSJ4en+w/QHiEG/2bVBzhfMUrNPBsHyVpvLj1XLcpS8KRAoNi6F21B/S0Y
-         Ru9W5pX2h0lYQ==
-Date:   Mon, 26 Dec 2022 20:43:58 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        zhiquan1.li@intel.com
-Subject: Re: [PATCH v2 14/18] x86/sgx: Add EPC OOM path to forcefully reclaim
- EPC
-Message-ID: <Y6oHjrLCbDzWh7nE@kernel.org>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
- <20221202183655.3767674-15-kristen@linux.intel.com>
- <Y5IBCOuF8X7jEK3+@kernel.org>
- <cb5abce531c1b14118de419ba68c2a501b016873.camel@linux.intel.com>
- <e5aff02b-713c-ccd8-7211-d07ff6d7adb2@intel.com>
- <Y5duYxIHtSpK1qkj@google.com>
+        Mon, 26 Dec 2022 15:51:59 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0F12704;
+        Mon, 26 Dec 2022 12:51:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=RmcwEiUuBcsPcxa9rXqRz+kxCkmwHP3oMR9AYtZDyRE=;
+  b=sFudRSyHAzYqAqG0nTxNPmPWzl8i8bxlVoaErjN2PdafVnecjD/itMVL
+   +t3B/ua4tjJHecArA6aIoAl1m66xUYbwDyuLTqCKS5Sbmd8GKzu7o+Eqv
+   5S/SHVL088HkksQeowudAJELh1R1VsPBprUdfKruldxUgLq7hukM9nXct
+   k=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.96,276,1665439200"; 
+   d="scan'208";a="85104477"
+Received: from 214.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.214])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2022 21:51:56 +0100
+Date:   Mon, 26 Dec 2022 21:51:55 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Deepak R Varma <drv@mailo.com>
+cc:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Nicolas Palix <nicolas.palix@imag.fr>, cocci@inria.fr,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH v2] coccinelle: api/atomic_as_refcounter: include message
+ type in output
+In-Reply-To: <Y6mIQIubjvg7aX11@qemulion>
+Message-ID: <alpine.DEB.2.22.394.2212262151450.2933@hadrien>
+References: <Y6mIQIubjvg7aX11@qemulion>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5duYxIHtSpK1qkj@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 06:09:39PM +0000, Sean Christopherson wrote:
-> On Fri, Dec 09, 2022, Dave Hansen wrote:
-> > On 12/9/22 08:05, Kristen Carlson Accardi wrote:
-> > > Aside from that though, I don't think that killing enclaves makes sense
-> > > outside the context of cgroup limits. 
-> > 
-> > I think it makes a lot of sense in theory.  Whatever situation we get
-> > into with a cgroup's EPC we can also get into with the whole system's EPC.
-> > 
-> > *But*, it's orders of magnitude harder to hit on the whole system.
-> 
-> ...
-> 
-> > If someone wants to extend this OOM support to system-wide EPC later, then go
-> > ahead.  But, I don't think it makes a lot of sense to invert this series for
-> > it.
-> 
-> +1 from the peanut gallery.  With VMM EPC oversubscription suport, no sane VMM
-> will oversubscribe VEPC pages.  And for VA pages, supporting swap of VA pages is
-> likely a more userspace-friendly approach if system-wide EPC OOM is a concern.
 
-When swapping VA pages the topology of the VA page cache for swapped VA
-pages is the main question. It is compromise between how long swap-in and
-swap-out can take, and how generic solution it be, meaning how deep
-hierarchies you want to build, or is just a flat list of parent VA pages
-"good enough".
 
-Also, there's the question whether it should be a global cache, per cgroup
-and so forth.
+On Mon, 26 Dec 2022, Deepak R Varma wrote:
 
-Implementing any solution is not overly complicated. Locking in these
-options is what puzzles me.
+> A common practice is to grep for "WARNING" or "ERROR" text in the report
+> output from a Coccinelle semantic patch script. So, include the text
+> "WARNING: " in the report output generated by the semantic patch for
+> desired filtering of the output. Also improves the readability of the
+> output. Here is an example of the old and new outputs reported:
+>
+>     xyz_file.c:131:39-40: atomic_add_unless
+>     xyz_file.c:131:39-40: WARNING: atomic_add_unless
+>
+>     xyz_file.c:196:6-25: atomic_dec_and_test variation before object free at line 208.
+>     xyz_file.c:196:6-25: WARNING: atomic_dec_and_test variation before object free at line 208.
+>
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
 
-BR, Jarkko
+Applied, thanks.
+
+> ---
+>
+> Changes in v2:
+>    1. Correct word test to text in patch description. Feedback from Markus.Elfring@web.de
+>
+>
+>  scripts/coccinelle/api/atomic_as_refcounter.cocci | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/scripts/coccinelle/api/atomic_as_refcounter.cocci b/scripts/coccinelle/api/atomic_as_refcounter.cocci
+> index e63d52408b86..bbe5b2932933 100644
+> --- a/scripts/coccinelle/api/atomic_as_refcounter.cocci
+> +++ b/scripts/coccinelle/api/atomic_as_refcounter.cocci
+> @@ -55,7 +55,7 @@ identifier fname6 =~ ".*call_rcu.*";
+>  p1 << r1.p1;
+>  p2 << r1.p2;
+>  @@
+> -msg = "atomic_dec_and_test variation before object free at line %s."
+> +msg = "WARNING: atomic_dec_and_test variation before object free at line %s."
+>  coccilib.report.print_report(p1[0], msg % (p2[0].line))
+>
+>  @r4 exists@
+> @@ -88,7 +88,7 @@ fname@p2(y, ...);
+>  p1 << r4.p1;
+>  p2 << r4.p2;
+>  @@
+> -msg = "atomic_dec_and_test variation before object free at line %s."
+> +msg = "WARNING: atomic_dec_and_test variation before object free at line %s."
+>  coccilib.report.print_report(p1[0], msg % (p2[0].line))
+>
+>  @r2 exists@
+> @@ -107,7 +107,7 @@ atomic64_add_unless(&(a)->x,-1,1)@p1
+>  @script:python depends on report@
+>  p1 << r2.p1;
+>  @@
+> -msg = "atomic_add_unless"
+> +msg = "WARNING: atomic_add_unless"
+>  coccilib.report.print_report(p1[0], msg)
+>
+>  @r3 exists@
+> @@ -126,5 +126,5 @@ x = atomic64_add_return@p1(-1, ...);
+>  @script:python depends on report@
+>  p1 << r3.p1;
+>  @@
+> -msg = "x = atomic_add_return(-1, ...)"
+> +msg = "WARNING: x = atomic_add_return(-1, ...)"
+>  coccilib.report.print_report(p1[0], msg)
+> --
+> 2.34.1
+>
+>
+>
+>
