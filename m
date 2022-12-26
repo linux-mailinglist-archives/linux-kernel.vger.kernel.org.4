@@ -2,114 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2A86562E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 14:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9026562EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 14:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiLZNlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 08:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
+        id S229954AbiLZNuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 08:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiLZNlq (ORCPT
+        with ESMTP id S229635AbiLZNuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 08:41:46 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D6A2726;
-        Mon, 26 Dec 2022 05:41:45 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BQDbdKr020011;
-        Mon, 26 Dec 2022 13:41:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=+pg1t18HnFboBWRaHnKx1274JxUaiw2mejfdOM/OO8o=;
- b=lyZxgAI2M8z719BKcT6VsoIfHtc5cLPyKNwY2WxH6QCputLnJHjaWUwQDfRAvRKhAO8i
- MK5buk1aEOYOX8mhZPfAwzp28K9MO7qT4PmikmJW3InlZN4fFmGsdSatogSCdl1F/A5w
- WzQlN08DxEpWfOXMVRjZ/ofV6P3WK27xuG3/EbAcJ+R76CRvJSzo0Dvj4CpOjlosHYJw
- uBMvESJyF3RUhNGQ1NX7G7km7R1uJIwzV9kfcZMcobPazijws1QAmJsVjrLH+6gaHNDQ
- pwmV8SbjYpxrONTa4i4qHsP4OxMAWvJhvrjfCMj3kOVPgfNUuAqftBX50hgXUYekERYZ fQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mqb01b4kx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Dec 2022 13:41:20 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2BQDbqpN023134;
-        Mon, 26 Dec 2022 13:41:19 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mqb01b4gv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Dec 2022 13:41:19 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2BQDc5Le022488;
-        Mon, 26 Dec 2022 13:41:17 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3mnrpfhqcm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Dec 2022 13:41:17 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2BQDfEF846793156
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 26 Dec 2022 13:41:15 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DD24B20043;
-        Mon, 26 Dec 2022 13:41:14 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1835B20040;
-        Mon, 26 Dec 2022 13:41:14 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.171.43.88])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 26 Dec 2022 13:41:14 +0000 (GMT)
-Date:   Mon, 26 Dec 2022 14:41:09 +0100
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Jonathan Toppins <jtoppins@redhat.com>
-Cc:     linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
-        dzickus@redhat.com, ihuguet@redhat.com, ivecera@redhat.com,
-        jtornosm@redhat.com, kheib@redhat.com,
-        linux-kernel@vger.kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com, Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: Re: [PATCH next v2] kbuild: add ability to make source rpm buildable
- using koji
-Message-ID: <Y6mkdYQYmjUz7bqV@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <d6d5ce3169da8559cd20d20889849546cc69be50.1669042125.git.jtoppins@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d6d5ce3169da8559cd20d20889849546cc69be50.1669042125.git.jtoppins@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FS0Jf90b8LcwRI5ayI1DcEOFzobAgp1a
-X-Proofpoint-GUID: dmGEJh88DkRXRMfMCEi33pggv9UbOibU
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 26 Dec 2022 08:50:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2238A10D4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 05:49:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672062563;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zUK8ohDvHrqcANf/NgU5DC4WBrgNFcEfShtnNkgckEM=;
+        b=O4MI79toXJnEL7uzduGYR9A2y3+ObMwOyFBlON8EAmeYRDjWbao+ELwsc3ap8z5aijVjwW
+        PVSYsjmt7x3xokGugenWapj812X40MePXf54Tp4pFMHwUeZCT/xEyYcGsZDQmwSZp1poT+
+        Pfty1GG6KAB61pSyhjrdpoG446/NOl4=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-281-M5PxgIjzNyWH-dGmtcIH4g-1; Mon, 26 Dec 2022 08:49:22 -0500
+X-MC-Unique: M5PxgIjzNyWH-dGmtcIH4g-1
+Received: by mail-wm1-f70.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso5638655wmb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 05:49:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zUK8ohDvHrqcANf/NgU5DC4WBrgNFcEfShtnNkgckEM=;
+        b=zmuWTcAJMbL5ejo0VcsamQagJQRh8sy86q4nEkOZb7AlmgjR160vy00NWPWB2bf0I3
+         KqCKO/0HUUfgLHXQ7KLUcw/ta23/8s+GWkyIQvyj8d+bHOmIrVZ7BIrrFAdqEAlY476+
+         h3KmKvaK22gYgdf+B4rBVof8dY3lViev6QQ8l7sfjoJmsEiGKqi+NHM+EOdiYubfG0zF
+         xJcFqKLv3b0h9N0BgdiRu5TXiLXUxabNAJPy0Ere/xLeXK2oiBPfh/Rh5LbLnQDEqkdT
+         FIeDcvY5owtuO2JUCgO0koBMUSQy0WMCqr0ctUVoGQZ0OI7wGFOTHyNi4xcJh6dHfq3x
+         sGww==
+X-Gm-Message-State: AFqh2kpLw4RuynbscAcQIhBmbiTI0ZIJqvzRnEoRE1wOWlil+fhALZ+Z
+        /d4IqBaUv5LNRDreK+mtHWVgFwrnNJs8448r2GPdOmhrTuYp2tZuS2RkOx74gaAknZZPUSrsjvH
+        w0Md/sOhrg3zG4MkpZvEFAe6qH2bO5tIvFyPHCBgcOnWNLBIaND5HU9a8kipGBIaa/gZ+4qD6BU
+        o=
+X-Received: by 2002:a5d:53cd:0:b0:261:d8be:3047 with SMTP id a13-20020a5d53cd000000b00261d8be3047mr12086650wrw.3.1672062560830;
+        Mon, 26 Dec 2022 05:49:20 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtsZFk+AKv2denQ6Lk8VrO7aAH7Y5BneyC/FpbtIetK0t17olrLdqcrM70WD3U/nREM6lduGQ==
+X-Received: by 2002:a5d:53cd:0:b0:261:d8be:3047 with SMTP id a13-20020a5d53cd000000b00261d8be3047mr12086623wrw.3.1672062560498;
+        Mon, 26 Dec 2022 05:49:20 -0800 (PST)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id a18-20020adfed12000000b0027cfd9463d7sm3340947wro.110.2022.12.26.05.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 05:49:19 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ondrej Jirman <megi@xff.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Robert Mader <robert.mader@posteo.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        =?UTF-8?q?Kamil=20Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Martijn Braam <martijn@brixit.nl>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH v2 0/4] Add PinePhone Pro display support
+Date:   Mon, 26 Dec 2022 14:49:04 +0100
+Message-Id: <20221226134909.2822179-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-26_10,2022-12-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 impostorscore=0 spamscore=0 mlxscore=0
- priorityscore=1501 phishscore=0 clxscore=1011 mlxlogscore=796 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212260117
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 09:48:45AM -0500, Jonathan Toppins wrote:
+This series add support for the display present in the PinePhone Pro.
 
-Hi Jonathan, Ivan et al,
+Patch #1 adds a driver for panels using the Himax HX8394 panel controller,
+such as the HSD060BHW4 720x1440 TFT LCD panel present in the PinePhone Pro.
 
-This patch causes a regression on 6.2-rc1 when rpm-pkg target
-is specified on non-rpm system (i.e s390 running Ubuntu). The
-offending chunk is:
+Patch #2 adds a devicetree binding schema for this driver and patch #3 adds
+an entry for the driver in the MAINTAINERS file.
 
-> @@ -49,6 +51,9 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
->  	URL: https://www.kernel.org
->  $S	Source: kernel-$__KERNELRELEASE.tar.gz
->  	Provides: $PROVIDES
-> +$S	BuildRequires: bc binutils bison dwarves elfutils-libelf-devel flex
-> +$S	BuildRequires: gcc make openssl openssl-devel perl python3 rsync
-> +
->  	# $UTS_MACHINE as a fallback of _arch in case
->  	# /usr/lib/rpm/platform/*/macros was not included.
->  	%define _arch %{?_arch:$UTS_MACHINE}
+Finally patch #4 adds the needed devicetree nodes in the PinePhone Pro DTS,
+to enable both the display and the touchscreen. This makes the upstream DTS
+much more usable and will allow for example to enable support for the phone
+in the Fedora distribution.
+
+I only added myself as the maintainer for the driver because I don't know
+if Kamil and Ondrej that worked in the driver would be interested. Please
+let me know folks if you are, and I can add you too in the next revision.
+
+This is a v2 of the patch-set that addresses issues pointed out in v1:
+
+https://lore.kernel.org/all/20221222223830.2494900-1-javierm@redhat.com/T/#m692655a06093fe8df0d8748b3df338e57494af2a
+
+The patches were tested on a PinePhone Pro Explorer Edition using a Fedora
+37 Workstation image.
+
+Best regards,
+Javier
+
+Changes in v2:
+- Add year to driver's copyright notice (Sam Ravnborg)
+- Remove unused <video/display_timing.h> header include (Sam Ravnborg).
+- Use mipi_dsi_dcs_write_seq() helper and drop custom macro (Sam Ravnborg).
+- Drop unnecessary info messages and move useful one to debug (Sam Ravnborg).
+- Drop redundant "bindings" in subject (Krzysztof Kozlowski).
+- Drop "device tree bindings" in title (Krzysztof Kozlowski).
+- Put port next to other "true" properties (Krzysztof Kozlowski).
+- Add Krzysztof Kozlowski's Reviewed-by tag.
+- Fix regulator node names (Maya Matuszczyk).
+- Drop non-existent "poweroff-in-suspend" property (Maya Matuszczyk).
+- Remove unnecessary comments in panel node (Maya Matuszczyk).
+
+Javier Martinez Canillas (2):
+  dt-bindings: display: Add Himax HX8394 panel controller
+  MAINTAINERS: Add entry for Himax HX8394 panel controller driver
+
+Kamil Trzciński (1):
+  drm: panel: Add Himax HX8394 panel controller driver
+
+Ondrej Jirman (1):
+  arm64: dts: rk3399-pinephone-pro: Add internal display support
+
+ .../bindings/display/panel/himax,hx8394.yaml  |  65 +++
+ MAINTAINERS                                   |   7 +
+ .../dts/rockchip/rk3399-pinephone-pro.dts     | 123 +++++
+ drivers/gpu/drm/panel/Kconfig                 |  12 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-himax-hx8394.c    | 446 ++++++++++++++++++
+ 6 files changed, 654 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-himax-hx8394.c
+
+-- 
+2.38.1
+
