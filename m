@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A188C655F8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 04:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16151655F95
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 04:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiLZDlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 22:41:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
+        id S231589AbiLZDlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 22:41:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiLZDld (ORCPT
+        with ESMTP id S231519AbiLZDlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 22:41:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFC1DE6;
-        Sun, 25 Dec 2022 19:41:32 -0800 (PST)
+        Sun, 25 Dec 2022 22:41:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17794DED
+        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 19:41:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2068560C6E;
-        Mon, 26 Dec 2022 03:41:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A737C433F0;
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD464B80BE8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 03:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 839F2C433F2;
         Mon, 26 Dec 2022 03:41:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672026091;
-        bh=ZSlkkJLLxbJ0+GMqD8986Fnf7w6C4j9KYioAc8sZBaE=;
+        bh=qUZEN6W7y7OuPntU93SjMLBdCDZTk+7Ju05902v72Lg=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=L34Zt5NoDXQqbBpZ1Z0RVBWl02XgiQmqnnEi8wKlW/wuW3Et0NTUIWXooD+T0N20x
-         VvrghjGwliRb7M1TK510HW6o4kIifLM0a7sqLQrSovVob+gjyHZMYGjaFebfkdQAqu
-         0OnX0kkYirSKAZS6gatDDvJxu/qIgqeojZ4Wb7eTAVdtU8/P7oQXBu9dp23DrcYJuJ
-         02LrjAkfGQwDGxw3qdCtsviqaz/5gzaKJe7+3gl+NdIcw483AzwAjddFB2766qvA9x
-         Jy7YmsXxBGYuAyTuFSrymYAqMzvg08GBSnfWYm6VfdGsaMjwG2y4z3NW0azsDbfbwa
-         r4HIjfe6qSPeQ==
+        b=icxUaio29DepW/UNWwEHJyKi5srX5Qi+bViML+50CCHvteLNM8QGKWMuWBoYZcQY7
+         j3md/7VT07vjANsWCq5ZovwCmNNG+zQ3M/bTFkVlJ0sq1Xd0uJGiOKFpsBthdkcaGi
+         qrk4fUO7LnA7iH2u/wIAlkuUv+3YXREiDQSrJlUTL4WRWAYc50RYNJdtKPk+bF71eK
+         u0UvfoXOibKjyBEdlJxROIep0SDNgOnBvymNnIEU7rE1ag7NZrU5SzLXdfMFSbEG0X
+         jqXIx6PPES+G5jidawpN5qNhIjDRDnJ5dYQwdp/1MF3Jt0x11oqs38TL73zRsmZV8C
+         yYWInE1J78z6Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5FB24F82DEC;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 67F45E5250A;
         Mon, 26 Dec 2022 03:41:31 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] firmware: coreboot: Register bus in module init
+Subject: Re: [RESEND PATCH v13] firmware: google: Implement cbmem in sysfs driver
 From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <167202609138.9518.12964660345062034201.git-patchwork-notify@kernel.org>
+Message-Id: <167202609142.9518.10226408413168947580.git-patchwork-notify@kernel.org>
 Date:   Mon, 26 Dec 2022 03:41:31 +0000
-References: <20221019180934.1.If29e167d8a4771b0bf4a39c89c6946ed764817b9@changeid>
-In-Reply-To: <20221019180934.1.If29e167d8a4771b0bf4a39c89c6946ed764817b9@changeid>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     gregkh@linuxfoundation.org, bleung@chromium.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        samuel@sholland.org, jwerner@chromium.org, swboyd@chromium.org,
-        linux@roeck-us.net, stable@vger.kernel.org
+References: <20221104161528.531248-1-jrosenth@chromium.org>
+In-Reply-To: <20221104161528.531248-1-jrosenth@chromium.org>
+To:     Jack Rosenthal <jrosenth@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        gregkh@linuxfoundation.org, swboyd@chromium.org,
+        tzungbi@kernel.org, groeck@chromium.org, jwerner@chromium.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,23 +62,19 @@ Hello:
 This patch was applied to chrome-platform/linux.git (for-next)
 by Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
 
-On Wed, 19 Oct 2022 18:10:53 -0700 you wrote:
-> The coreboot_table driver registers a coreboot bus while probing a
-> "coreboot_table" device representing the coreboot table memory region.
-> Probing this device (i.e., registering the bus) is a dependency for the
-> module_init() functions of any driver for this bus (e.g.,
-> memconsole-coreboot.c / memconsole_driver_init()).
+On Fri,  4 Nov 2022 10:15:28 -0600 you wrote:
+> The CBMEM area is a downward-growing memory region used by coreboot to
+> dynamically allocate tagged data structures ("CBMEM entries") that
+> remain resident during boot.
 > 
-> With synchronous probe, this dependency works OK, as the link order in
-> the Makefile ensures coreboot_table_driver_init() (and thus,
-> coreboot_table_probe()) completes before a coreboot device driver tries
-> to add itself to the bus.
+> This implements a driver which exports access to the CBMEM entries
+> via sysfs under /sys/bus/coreboot/devices/cbmem-<id>.
 > 
 > [...]
 
 Here is the summary with links:
-  - firmware: coreboot: Register bus in module init
-    https://git.kernel.org/chrome-platform/c/65946690ed8d
+  - [RESEND,v13] firmware: google: Implement cbmem in sysfs driver
+    https://git.kernel.org/chrome-platform/c/19d54020883c
 
 You are awesome, thank you!
 -- 
