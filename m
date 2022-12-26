@@ -2,346 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5459265649F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 19:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF406564A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 19:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232372AbiLZS2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 13:28:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
+        id S231489AbiLZSii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 13:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiLZS2E (ORCPT
+        with ESMTP id S229686AbiLZSig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 13:28:04 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D42C2602
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 10:27:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1672079251; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=SHc/ON51cmEcO+KMVREgFjICBLLWv+31xt+9K9HbrUOFFzFrWR4X05sT/aj83kSGyJ28mIHfuePy1btgJ2BHutwVdBL6kBSzIEscWnewBZrq9sUwbgYYBOZaOQgRGvbc/70VVgvBy4KnE0nJPg7l1t1nbmi6ypKcOIHlTev6zkI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1672079251; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=iZz7X6e3jG+2rIkRvN509bNCkZ80pmjJN8lTLn7L8aw=; 
-        b=DPQx/LedyPUCyP9Wz7WhDXzQKXE5CYv7/rRGmLWheM0B6u7zy790TLyrIMChUsDBW89hXISeSwnM9wFsOzetfFBuSQ+bWChpFGKaBCjaiNw3Rv3W0cKaV8Lz4BjDCSWIsNnfHvE+9eG7+EMgaZEHxhaB5uM8ZYIsAI/x0Rhho3k=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672079251;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=iZz7X6e3jG+2rIkRvN509bNCkZ80pmjJN8lTLn7L8aw=;
-        b=PEW98Az5UHd5oXVvOMoOBMdPN6CqhGtY0J8wOrmMQWif3Mymzp9kGTN7uX5i4dTD
-        jo/1/jiyetnfAyBvzDX+QGdwatYO33zwhi+hcHtHPlSbeq+ggXpd9SDrGHupglWNlH7
-        PNXjzPPINCO5B50IxGwQGzRMMSad5aT94Vz02gGI=
-Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1672079249651919.8699845763142; Mon, 26 Dec 2022 23:57:29 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Simon Ser <contact@emersion.fr>,
-        Jim Cromie <jim.cromie@gmail.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <877f3cc8dc9a1b8c3dbdcbb096ecb460f59a70d4.1672078853.git.code@siddh.me>
-Subject: [PATCH v3 10/10] drm/drm_lease: Remove usage of deprecated DRM_DEBUG_LEASE
-Date:   Mon, 26 Dec 2022 23:57:22 +0530
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1672078853.git.code@siddh.me>
-References: <cover.1672078853.git.code@siddh.me>
+        Mon, 26 Dec 2022 13:38:36 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30B9BCF
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 10:38:34 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so7002938otk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 10:38:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UGh9r/jsaAqCGWD2zZzfloJ7Dxl5ALoC+WNsAoZ68QE=;
+        b=YZsJ/Wu7AFPAlBVYQOPgdZtWosIzrLAQGlhcflCG2EY4ougLWYFay53fuOXuOFF+Uf
+         k5/YnjEKXz8mA+ADDhkA97pZ1ney65rlBPCyulxUjQhtG8nGB312pQoxPfZbZa8wFp5p
+         qmHhD2rGafOqIpKInmSXlKp8BVBiiI58KiGUTHr2e6SC4uqt6grugodLPzowZqk8wqCL
+         18B6VWuJJLR+TDhl84lf37STtVPu1haz9Qn1c6OH4BGd4RABfnW1HNxIwiizMnHhOdBz
+         gPXVVye+lmTgQuks2e4JKdJeFtKPQ2zMvT7zGzZRSPvBD4tmlMO3cez3GiQA6DM6PixG
+         I2tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UGh9r/jsaAqCGWD2zZzfloJ7Dxl5ALoC+WNsAoZ68QE=;
+        b=svGYZv7AIO0TpSkv3aq5hLyMD//SItEGS2z5rPS3iCODpgGW/bJIfXJuPMUGpVoRab
+         r7NaRmOPlx3cTKufUXjw1uuI3brRuGdIlhfD8w8sQ/0151StytP+o818jz4MnfrV8Xgz
+         fqRdWk3ixAze8uNBHJ3HAJOBIHHBzk7jjO57bkc83hL6k4qoQJ0sCpxqoDVASd5wB+d+
+         FKwsUdYnTV3mdTlyptM6GfFsqlCabF1AGFva3sgQkGwyqu83TcLmt5gfWr66vTMX/ZG7
+         BugZnW5gU2fsxWhpMKNFcNjCykRNFt7p1eQNk24ikRIt4QJwXZAc7UviToBq4Kgk7xTU
+         PhyA==
+X-Gm-Message-State: AFqh2koB4BFCTN2Nryb0dtFb+D8q0NDObwr/xOs/6tuHuVfjoFSrGvtf
+        8GBI/E3y62yQhksE0ssDWortSNkcIRMZgQjFskTa/w==
+X-Google-Smtp-Source: AMrXdXt5SjHOi+TWqO0LV+UDUGSbTzxqs+KFHbaCN4ODYEykVdplk0Q24mZQeayTPNtb1D6EbXC1S+xwLm5fcmuv0VA=
+X-Received: by 2002:a05:6830:108d:b0:678:202c:1b93 with SMTP id
+ y13-20020a056830108d00b00678202c1b93mr1321705oto.160.1672079914091; Mon, 26
+ Dec 2022 10:38:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221222011529.3471280-1-dhavale@google.com> <Y6PFfEnJE3g98X/e@debian>
+In-Reply-To: <Y6PFfEnJE3g98X/e@debian>
+From:   Sandeep Dhavale <dhavale@google.com>
+Date:   Mon, 26 Dec 2022 10:38:23 -0800
+Message-ID: <CAB=BE-Qh72tB+z9zRxqiC7Jg+RVcip1+vHJXopuzykR08FYiCA@mail.gmail.com>
+Subject: Re: [PATCH] EROFS: Replace erofs_unzipd workqueue with per-cpu threads
+To:     Sandeep Dhavale <dhavale@google.com>, Gao Xiang <xiang@kernel.org>,
+        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        kernel-team@android.com, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm_print.h says DRM_DEBUG_LEASE is deprecated in favor of
-drm_dbg_lease().
+On Wed, Dec 21, 2022 at 6:48 PM Gao Xiang <xiang@kernel.org> wrote:
+>
+> Hi Sandeen,
+>
+> On Thu, Dec 22, 2022 at 01:15:29AM +0000, Sandeep Dhavale wrote:
+> > Using per-cpu thread pool we can reduce the scheduling latency compared
+> > to workqueue implementation. With this patch scheduling latency and
+> > variation is reduced as per-cpu threads are SCHED_FIFO kthread_workers.
+> >
+> > The results were evaluated on arm64 Android devices running 5.10 kernel.
+> >
+> > The table below shows resulting improvements of total scheduling latency
+> > for the same app launch benchmark runs with 50 iterations. Scheduling
+> > latency is the latency between when the task (workqueue kworker vs
+> > kthread_worker) became eligible to run to when it actually started
+> > running.
+> > +-------------------------+-----------+----------------+---------+
+> > |                         | workqueue | kthread_worker |  diff   |
+> > +-------------------------+-----------+----------------+---------+
+> > | Average (us)            |     15253 |           2914 | -80.89% |
+> > | Median (us)             |     14001 |           2912 | -79.20% |
+> > | Minimum (us)            |      3117 |           1027 | -67.05% |
+> > | Maximum (us)            |     30170 |           3805 | -87.39% |
+> > | Standard deviation (us) |      7166 |            359 |         |
+> > +-------------------------+-----------+----------------+---------+
+> >
+> > Signed-off-by: Sandeep Dhavale <dhavale@google.com>
+>
+> Thanks for the patch.  Generally, This path looks good to me (compared
+> with softirq context.)
+>
+> With the background at LPC 22, I can see how important such low latency
+> requirement is needed for Android upstream and AOSP.  However, could you
+> add some link or some brief background to other folks without such
+> impression?
+>
+> > ---
+> >  fs/erofs/zdata.c | 84 +++++++++++++++++++++++++++++++++++-------------
+> >  fs/erofs/zdata.h |  4 ++-
+> >  2 files changed, 64 insertions(+), 24 deletions(-)
+> >
+> > diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+> > index ccf7c55d477f..646667dbe615 100644
+> > --- a/fs/erofs/zdata.c
+> > +++ b/fs/erofs/zdata.c
+> > @@ -8,6 +8,7 @@
+> >  #include "compress.h"
+> >  #include <linux/prefetch.h>
+> >  #include <linux/psi.h>
+> > +#include <linux/slab.h>
+> >
+> >  #include <trace/events/erofs.h>
+> >
+> > @@ -184,26 +185,56 @@ typedef tagptr1_t compressed_page_t;
+> >  #define tag_compressed_page_justfound(page) \
+> >       tagptr_fold(compressed_page_t, page, 1)
+> >
+> > -static struct workqueue_struct *z_erofs_workqueue __read_mostly;
+> > +static struct kthread_worker **z_erofs_kthread_pool;
+> >
+> > -void z_erofs_exit_zip_subsystem(void)
+> > +static void z_erofs_destroy_kthread_pool(void)
+> >  {
+> > -     destroy_workqueue(z_erofs_workqueue);
+> > -     z_erofs_destroy_pcluster_pool();
+> > +     unsigned long cpu;
+> > +
+> > +     for_each_possible_cpu(cpu) {
+> > +             if (z_erofs_kthread_pool[cpu]) {
+> > +                     kthread_destroy_worker(z_erofs_kthread_pool[cpu]);
+> > +                     z_erofs_kthread_pool[cpu] = NULL;
+> > +             }
+> > +     }
+> > +     kfree(z_erofs_kthread_pool);
+> >  }
+> >
+> > -static inline int z_erofs_init_workqueue(void)
+> > +static int z_erofs_create_kthread_workers(void)
+> >  {
+> > -     const unsigned int onlinecpus = num_possible_cpus();
+> > +     unsigned long cpu;
+> > +     struct kthread_worker *worker;
+> > +
+> > +     for_each_possible_cpu(cpu) {
+> > +             worker = kthread_create_worker_on_cpu(cpu, 0, "z_erofs/%ld", cpu);
+>
+> how about calling them as erofs_worker/%ld, since in the future they
+> can also be used for other uses (like verification or decryption).
+>
+Sure, it makes sense.
 
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
-Reviewed-by: Simon Ser <contact@emersion.fr>
----
- drivers/gpu/drm/drm_lease.c | 64 ++++++++++++++++++++-----------------
- 1 file changed, 34 insertions(+), 30 deletions(-)
+> > +             if (IS_ERR(worker)) {
+> > +                     z_erofs_destroy_kthread_pool();
+> > +                     return -ENOMEM;
+> > +             }
+> > +             sched_set_fifo(worker->task);
+>
+> Could we add some kernel configuration option to enable/disable this,
+> since I'm not sure if all users need RT threads.
+>
+Ok, will do.
+> > +             z_erofs_kthread_pool[cpu] = worker;
+> > +     }
+> > +     return 0;
+> > +}
+> >
+> > -     /*
+> > -      * no need to spawn too many threads, limiting threads could minimum
+> > -      * scheduling overhead, perhaps per-CPU threads should be better?
+> > -      */
+> > -     z_erofs_workqueue = alloc_workqueue("erofs_unzipd",
+> > -                                         WQ_UNBOUND | WQ_HIGHPRI,
+> > -                                         onlinecpus + onlinecpus / 4);
+> > -     return z_erofs_workqueue ? 0 : -ENOMEM;
+> > +static int z_erofs_init_kthread_pool(void)
+> > +{
+> > +     int err;
+> > +
+> > +     z_erofs_kthread_pool = kcalloc(num_possible_cpus(),
+> > +                     sizeof(struct kthread_worker *), GFP_ATOMIC);
+> > +     if (!z_erofs_kthread_pool)
+> > +             return -ENOMEM;
+> > +     err = z_erofs_create_kthread_workers();
+> > +
+> > +     return err;
+> > +}
+> > +
+> > +
+> > +void z_erofs_exit_zip_subsystem(void)
+> > +{
+> > +     z_erofs_destroy_kthread_pool();
+> > +     z_erofs_destroy_pcluster_pool();
+> >  }
+> >
+> >  int __init z_erofs_init_zip_subsystem(void)
+> > @@ -211,10 +242,16 @@ int __init z_erofs_init_zip_subsystem(void)
+> >       int err = z_erofs_create_pcluster_pool();
+> >
+> >       if (err)
+> > -             return err;
+> > -     err = z_erofs_init_workqueue();
+> > +             goto out_error_pcluster_pool;
+> > +
+> > +     err = z_erofs_init_kthread_pool();
+> >       if (err)
+> > -             z_erofs_destroy_pcluster_pool();
+> > +             goto out_error_kthread_pool;
+> > +
+> > +     return err;
+> > +out_error_kthread_pool:
+> > +     z_erofs_destroy_pcluster_pool();
+> > +out_error_pcluster_pool:
+> >       return err;
+> >  }
+> >
+> > @@ -1143,7 +1180,7 @@ static void z_erofs_decompress_queue(const struct z_erofs_decompressqueue *io,
+> >       }
+> >  }
+> >
+> > -static void z_erofs_decompressqueue_work(struct work_struct *work)
+> > +static void z_erofs_decompressqueue_kthread_work(struct kthread_work *work)
+> >  {
+> >       struct z_erofs_decompressqueue *bgq =
+> >               container_of(work, struct z_erofs_decompressqueue, u.work);
+> > @@ -1170,15 +1207,16 @@ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+> >
+> >       if (atomic_add_return(bios, &io->pending_bios))
+> >               return;
+> > -     /* Use workqueue and sync decompression for atomic contexts only */
+> > +     /* Use kthread_workers and sync decompression for atomic contexts only */
+> >       if (in_atomic() || irqs_disabled()) {
+> > -             queue_work(z_erofs_workqueue, &io->u.work);
+> > +             kthread_queue_work(z_erofs_kthread_pool[raw_smp_processor_id()],
+> > +                            &io->u.work);
+>
+> Should we need to handle cpu online/offline as well?
+>
+Ok, let me try to add cpuhp support. I will work on V2.
 
-diff --git a/drivers/gpu/drm/drm_lease.c b/drivers/gpu/drm/drm_lease.c
-index c442d5e766d1..08b4f29f8b61 100644
---- a/drivers/gpu/drm/drm_lease.c
-+++ b/drivers/gpu/drm/drm_lease.c
-@@ -213,11 +213,11 @@ static struct drm_master *drm_lease_create(struct drm=
-_master *lessor, struct idr
- =09int id;
- =09void *entry;
-=20
--=09DRM_DEBUG_LEASE("lessor %d\n", lessor->lessee_id);
-+=09drm_dbg_lease(dev, "lessor %d\n", lessor->lessee_id);
-=20
- =09lessee =3D drm_master_create(lessor->dev);
- =09if (!lessee) {
--=09=09DRM_DEBUG_LEASE("drm_master_create failed\n");
-+=09=09drm_dbg_lease(dev, "drm_master_create failed\n");
- =09=09return ERR_PTR(-ENOMEM);
- =09}
-=20
-@@ -231,7 +231,7 @@ static struct drm_master *drm_lease_create(struct drm_m=
-aster *lessor, struct idr
- =09=09=09error =3D -EBUSY;
-=20
- =09=09if (error !=3D 0) {
--=09=09=09DRM_DEBUG_LEASE("object %d failed %d\n", object, error);
-+=09=09=09drm_dbg_lease(dev, "object %d failed %d\n", object, error);
- =09=09=09goto out_lessee;
- =09=09}
- =09}
-@@ -249,7 +249,8 @@ static struct drm_master *drm_lease_create(struct drm_m=
-aster *lessor, struct idr
-=20
- =09/* Move the leases over */
- =09lessee->leases =3D *leases;
--=09DRM_DEBUG_LEASE("new lessee %d %p, lessor %d %p\n", lessee->lessee_id, =
-lessee, lessor->lessee_id, lessor);
-+=09drm_dbg_lease(dev, "new lessee %d %p, lessor %d %p\n",
-+=09=09      lessee->lessee_id, lessee, lessor->lessee_id, lessor);
-=20
- =09mutex_unlock(&dev->mode_config.idr_mutex);
- =09return lessee;
-@@ -268,7 +269,7 @@ void drm_lease_destroy(struct drm_master *master)
-=20
- =09mutex_lock(&dev->mode_config.idr_mutex);
-=20
--=09DRM_DEBUG_LEASE("drm_lease_destroy %d\n", master->lessee_id);
-+=09drm_dbg_lease(dev, "drm_lease_destroy %d\n", master->lessee_id);
-=20
- =09/* This master is referenced by all lessees, hence it cannot be destroy=
-ed
- =09 * until all of them have been
-@@ -277,7 +278,8 @@ void drm_lease_destroy(struct drm_master *master)
-=20
- =09/* Remove this master from the lessee idr in the owner */
- =09if (master->lessee_id !=3D 0) {
--=09=09DRM_DEBUG_LEASE("remove master %d from device list of lessees\n", ma=
-ster->lessee_id);
-+=09=09drm_dbg_lease(dev, "remove master %d from device list of lessees\n",
-+=09=09=09      master->lessee_id);
- =09=09idr_remove(&(drm_lease_owner(master)->lessee_idr), master->lessee_id=
-);
- =09}
-=20
-@@ -292,7 +294,7 @@ void drm_lease_destroy(struct drm_master *master)
- =09=09drm_master_put(&master->lessor);
- =09}
-=20
--=09DRM_DEBUG_LEASE("drm_lease_destroy done %d\n", master->lessee_id);
-+=09drm_dbg_lease(dev, "drm_lease_destroy done %d\n", master->lessee_id);
- }
-=20
- static void _drm_lease_revoke(struct drm_master *top)
-@@ -308,7 +310,8 @@ static void _drm_lease_revoke(struct drm_master *top)
- =09 * the tree is fully connected, we can do this without recursing
- =09 */
- =09for (;;) {
--=09=09DRM_DEBUG_LEASE("revoke leases for %p %d\n", master, master->lessee_=
-id);
-+=09=09drm_dbg_lease(master->dev, "revoke leases for %p %d\n",
-+=09=09=09      master, master->lessee_id);
-=20
- =09=09/* Evacuate the lease */
- =09=09idr_for_each_entry(&master->leases, entry, object)
-@@ -408,7 +411,7 @@ static int fill_object_idr(struct drm_device *dev,
-=20
- =09ret =3D validate_lease(dev, object_count, objects, universal_planes);
- =09if (ret) {
--=09=09DRM_DEBUG_LEASE("lease validation failed\n");
-+=09=09drm_dbg_lease(dev, "lease validation failed\n");
- =09=09goto out_free_objects;
- =09}
-=20
-@@ -418,7 +421,7 @@ static int fill_object_idr(struct drm_device *dev,
- =09=09struct drm_mode_object *obj =3D objects[o];
- =09=09u32 object_id =3D objects[o]->id;
-=20
--=09=09DRM_DEBUG_LEASE("Adding object %d to lease\n", object_id);
-+=09=09drm_dbg_lease(dev, "Adding object %d to lease\n", object_id);
-=20
- =09=09/*
- =09=09 * We're using an IDR to hold the set of leased
-@@ -430,8 +433,8 @@ static int fill_object_idr(struct drm_device *dev,
- =09=09 */
- =09=09ret =3D idr_alloc(leases, &drm_lease_idr_object , object_id, object_=
-id + 1, GFP_KERNEL);
- =09=09if (ret < 0) {
--=09=09=09DRM_DEBUG_LEASE("Object %d cannot be inserted into leases (%d)\n"=
-,
--=09=09=09=09=09object_id, ret);
-+=09=09=09drm_dbg_lease(dev, "Object %d cannot be inserted into leases (%d)=
-\n",
-+=09=09=09=09      object_id, ret);
- =09=09=09goto out_free_objects;
- =09=09}
- =09=09if (obj->type =3D=3D DRM_MODE_OBJECT_CRTC && !universal_planes) {
-@@ -439,15 +442,15 @@ static int fill_object_idr(struct drm_device *dev,
-=20
- =09=09=09ret =3D idr_alloc(leases, &drm_lease_idr_object, crtc->primary->b=
-ase.id, crtc->primary->base.id + 1, GFP_KERNEL);
- =09=09=09if (ret < 0) {
--=09=09=09=09DRM_DEBUG_LEASE("Object primary plane %d cannot be inserted in=
-to leases (%d)\n",
--=09=09=09=09=09=09object_id, ret);
-+=09=09=09=09drm_dbg_lease(dev, "Object primary plane %d cannot be inserted=
- into leases (%d)\n",
-+=09=09=09=09=09      object_id, ret);
- =09=09=09=09goto out_free_objects;
- =09=09=09}
- =09=09=09if (crtc->cursor) {
- =09=09=09=09ret =3D idr_alloc(leases, &drm_lease_idr_object, crtc->cursor-=
->base.id, crtc->cursor->base.id + 1, GFP_KERNEL);
- =09=09=09=09if (ret < 0) {
--=09=09=09=09=09DRM_DEBUG_LEASE("Object cursor plane %d cannot be inserted =
-into leases (%d)\n",
--=09=09=09=09=09=09=09object_id, ret);
-+=09=09=09=09=09drm_dbg_lease(dev, "Object cursor plane %d cannot be insert=
-ed into leases (%d)\n",
-+=09=09=09=09=09=09      object_id, ret);
- =09=09=09=09=09goto out_free_objects;
- =09=09=09=09}
- =09=09=09}
-@@ -490,14 +493,14 @@ int drm_mode_create_lease_ioctl(struct drm_device *de=
-v,
- =09=09return -EOPNOTSUPP;
-=20
- =09if (cl->flags && (cl->flags & ~(O_CLOEXEC | O_NONBLOCK))) {
--=09=09DRM_DEBUG_LEASE("invalid flags\n");
-+=09=09drm_dbg_lease(dev, "invalid flags\n");
- =09=09return -EINVAL;
- =09}
-=20
- =09lessor =3D drm_file_get_master(lessor_priv);
- =09/* Do not allow sub-leases */
- =09if (lessor->lessor) {
--=09=09DRM_DEBUG_LEASE("recursive leasing not allowed\n");
-+=09=09drm_dbg_lease(dev, "recursive leasing not allowed\n");
- =09=09ret =3D -EINVAL;
- =09=09goto out_lessor;
- =09}
-@@ -520,7 +523,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09=09=09=09      object_count, object_ids);
- =09=09kfree(object_ids);
- =09=09if (ret) {
--=09=09=09DRM_DEBUG_LEASE("lease object lookup failed: %i\n", ret);
-+=09=09=09drm_dbg_lease(dev, "lease object lookup failed: %i\n", ret);
- =09=09=09idr_destroy(&leases);
- =09=09=09goto out_lessor;
- =09=09}
-@@ -534,7 +537,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09=09goto out_lessor;
- =09}
-=20
--=09DRM_DEBUG_LEASE("Creating lease\n");
-+=09drm_dbg_lease(dev, "Creating lease\n");
- =09/* lessee will take the ownership of leases */
- =09lessee =3D drm_lease_create(lessor, &leases);
-=20
-@@ -545,7 +548,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09}
-=20
- =09/* Clone the lessor file to create a new file for us */
--=09DRM_DEBUG_LEASE("Allocating lease file\n");
-+=09drm_dbg_lease(dev, "Allocating lease file\n");
- =09lessee_file =3D file_clone_open(lessor_file);
- =09if (IS_ERR(lessee_file)) {
- =09=09ret =3D PTR_ERR(lessee_file);
-@@ -560,7 +563,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09lessee_priv->authenticated =3D 1;
-=20
- =09/* Pass fd back to userspace */
--=09DRM_DEBUG_LEASE("Returning fd %d id %d\n", fd, lessee->lessee_id);
-+=09drm_dbg_lease(dev, "Returning fd %d id %d\n", fd, lessee->lessee_id);
- =09cl->fd =3D fd;
- =09cl->lessee_id =3D lessee->lessee_id;
-=20
-@@ -568,7 +571,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
- =09fd_install(fd, lessee_file);
-=20
- =09drm_master_put(&lessor);
--=09DRM_DEBUG_LEASE("drm_mode_create_lease_ioctl succeeded\n");
-+=09drm_dbg_lease(dev, "drm_mode_create_lease_ioctl succeeded\n");
- =09return 0;
-=20
- out_lessee:
-@@ -579,7 +582,7 @@ int drm_mode_create_lease_ioctl(struct drm_device *dev,
-=20
- out_lessor:
- =09drm_master_put(&lessor);
--=09DRM_DEBUG_LEASE("drm_mode_create_lease_ioctl failed: %d\n", ret);
-+=09drm_dbg_lease(dev, "drm_mode_create_lease_ioctl failed: %d\n", ret);
- =09return ret;
- }
-=20
-@@ -601,7 +604,7 @@ int drm_mode_list_lessees_ioctl(struct drm_device *dev,
- =09=09return -EOPNOTSUPP;
-=20
- =09lessor =3D drm_file_get_master(lessor_priv);
--=09DRM_DEBUG_LEASE("List lessees for %d\n", lessor->lessee_id);
-+=09drm_dbg_lease(dev, "List lessees for %d\n", lessor->lessee_id);
-=20
- =09mutex_lock(&dev->mode_config.idr_mutex);
-=20
-@@ -610,7 +613,8 @@ int drm_mode_list_lessees_ioctl(struct drm_device *dev,
- =09=09/* Only list un-revoked leases */
- =09=09if (!idr_is_empty(&lessee->leases)) {
- =09=09=09if (count_lessees > count) {
--=09=09=09=09DRM_DEBUG_LEASE("Add lessee %d\n", lessee->lessee_id);
-+=09=09=09=09drm_dbg_lease(dev, "Add lessee %d\n",
-+=09=09=09=09=09      lessee->lessee_id);
- =09=09=09=09ret =3D put_user(lessee->lessee_id, lessee_ids + count);
- =09=09=09=09if (ret)
- =09=09=09=09=09break;
-@@ -619,7 +623,7 @@ int drm_mode_list_lessees_ioctl(struct drm_device *dev,
- =09=09}
- =09}
-=20
--=09DRM_DEBUG_LEASE("Lessor leases to %d\n", count);
-+=09drm_dbg_lease(dev, "Lessor leases to %d\n", count);
- =09if (ret =3D=3D 0)
- =09=09arg->count_lessees =3D count;
-=20
-@@ -651,7 +655,7 @@ int drm_mode_get_lease_ioctl(struct drm_device *dev,
- =09=09return -EOPNOTSUPP;
-=20
- =09lessee =3D drm_file_get_master(lessee_priv);
--=09DRM_DEBUG_LEASE("get lease for %d\n", lessee->lessee_id);
-+=09drm_dbg_lease(dev, "get lease for %d\n", lessee->lessee_id);
-=20
- =09mutex_lock(&dev->mode_config.idr_mutex);
-=20
-@@ -665,7 +669,7 @@ int drm_mode_get_lease_ioctl(struct drm_device *dev,
- =09count =3D 0;
- =09idr_for_each_entry(object_idr, entry, object) {
- =09=09if (count_objects > count) {
--=09=09=09DRM_DEBUG_LEASE("adding object %d\n", object);
-+=09=09=09drm_dbg_lease(dev, "adding object %d\n", object);
- =09=09=09ret =3D put_user(object, object_ids + count);
- =09=09=09if (ret)
- =09=09=09=09break;
-@@ -696,7 +700,7 @@ int drm_mode_revoke_lease_ioctl(struct drm_device *dev,
- =09struct drm_master *lessee;
- =09int ret =3D 0;
-=20
--=09DRM_DEBUG_LEASE("revoke lease for %d\n", arg->lessee_id);
-+=09drm_dbg_lease(dev, "revoke lease for %d\n", arg->lessee_id);
-=20
- =09/* Can't lease without MODESET */
- =09if (!drm_core_check_feature(dev, DRIVER_MODESET))
---=20
-2.35.1
+> Thanks,
+> Gao Xiang
 
-
+Thanks,
+Sandeep.
