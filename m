@@ -2,149 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D90D65659A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 23:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A0265659D
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 23:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbiLZWvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 17:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S232531AbiLZWwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 17:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbiLZWuv (ORCPT
+        with ESMTP id S232591AbiLZWvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 17:50:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EBE2657;
-        Mon, 26 Dec 2022 14:50:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15F8DB80DB4;
-        Mon, 26 Dec 2022 22:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70B18C433D2;
-        Mon, 26 Dec 2022 22:50:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672095047;
-        bh=tkSpVVjv/nV+XYJhqA1quZ54G/qu34LwdP3dgR/CNa0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Cv9admjKnRTsrrXUqVkooE5cwmrOTtgKmj2VwQxoDDP7eeDvT9o5Dgy/6mOo/qdWp
-         Z3vEvPT8Y2ElP5INS41StaKtU11U3Xf+FgKBV3j4oicXNVsqGQueuD2vDXXFb0V4TR
-         hv316bXcRdSnmrAI2AuMQjg0894qB2SV1U9OWF5ceZGGTuAiE7DP+He0JIBJUMFik9
-         yyHAlIDd5Vwzf5Ohv3UDQ2nU3OymMTy8FVgsQje3ifxNwdZZyfpLUccy8dHRhwFGjh
-         Qt5QSQCh0kjfU7EphWjHC4cehN3DfARSaqs/A5swYsSbFtZTMjP/iPdL2qU/yw92Ae
-         DsR4UDDD+pVtg==
-Date:   Mon, 26 Dec 2022 16:50:45 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     bhelgaas@google.com, Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Stefan Roese <sr@denx.de>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David E. Box" <david.e.box@linux.intel.com>
-Subject: Re: [PATCH] PCI/portdrv: Avoid enabling AER on Thunderbolt devices
-Message-ID: <20221226225045.GA400369@bhelgaas>
+        Mon, 26 Dec 2022 17:51:52 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A518270D;
+        Mon, 26 Dec 2022 14:51:51 -0800 (PST)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BQIkpil020208;
+        Mon, 26 Dec 2022 17:51:48 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3mny7a21a1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Dec 2022 17:51:48 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2BQMplc1001067
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 26 Dec 2022 17:51:47 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 26 Dec 2022 17:51:46 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Mon, 26 Dec 2022 17:51:46 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 26 Dec 2022 17:51:46 -0500
+Received: from okan.localdomain ([10.158.19.61])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2BQMpWj3032761;
+        Mon, 26 Dec 2022 17:51:35 -0500
+From:   Okan Sahin <okan.sahin@analog.com>
+To:     <okan.sahin@analog.com>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v2 0/5] Add MAX77541/MAX77540 PMIC Support
+Date:   Tue, 27 Dec 2022 01:51:21 +0300
+Message-ID: <20221226225123.105907-1-okan.sahin@analog.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221226153048.1208359-1-kai.heng.feng@canonical.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: 4t3jV0QDdGBjTUW4Ij6vDr-WiHnAoj0E
+X-Proofpoint-GUID: 4t3jV0QDdGBjTUW4Ij6vDr-WiHnAoj0E
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-26_18,2022-12-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ phishscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 clxscore=1015 spamscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=874 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212260193
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc David]
+MFD, regulator and ADC driver and related bindings for MAX77540/MAX77541.
+The patches are requeired to be applied in sequence.
 
-Hi Kai-Heng,
+Changes in v2:
+* Patch 1: "drivers: mfd: Add MAX77541/MAX77540 PMIC Support"
+  * Drop "this patch adds" from commit message.
+  * Drop redundant blank lines.
+  * Drop module version
+  * Use definition for parameter of devm_mfd_add_devices(.., -1,..)
+  * Use desc in chip_info to adding desc for different devices.
+  * Add missing headers and forward declarations.
+  * Drop unused elements from max77541_dev struct
+  * Add chip_info into max77541_dev struct to identify different devices.
+* Patch 2: "dt-bindings: mfd: adi,max77541.yaml Add MAX77541 bindings"
+  * Drop "this patch adds" from commit message.
+  * Fix $ref path
+  * Drop adc part under allOf
+  * Keep only one example (more complex one)
+  * Fix make dt_binding_check errors.(trailing space, No newline)
+* Patch 3: "drivers: regulator: Add MAX77541 Regulator Support"
+  * Drop "this patch adds" from commit message.
+  * Add trailing comma for required structs.
+  * Fix wrong indentation.
+  * Drop redundant blank lines.
+  * Drop max77541_regulator_dev struct.
+  * Use "regulator_desc *desc" for both regulator
+    regarding to "max77541->id"
+* Patch 4: "dt-bindings: regulator: max77541-regulator.yaml Add MAX77541
+            Regulator bindings"
+  * Drop "this patch adds" from commit message.
+  * Chance filename (matching compatible), so adi,max77541-regulator.yaml
+  * Fix make dt_binding_check errors.(trailing space, No newline)
+* Patch 5: "drivers: iio: adc: Add MAX77541 ADC Support"
+  * Drop "this patch adds" from commit message.
+  * Drop redundant blank lines.
+  * Fix wrong include path.
+  * Use switch instead of if-else for range setting in max77541_adc_scale
+  * Move max77541_adc_range enum from max77541.h to here.
+  * Use definition from units.h
+  * Drop unused elements from max77541_adc_iio struct
+  * Drop the .data from platform_device_id
 
-Thanks for the report and the debugging!
+Okan Sahin (5):
+  drivers: mfd: Add MAX77541/MAX77540 PMIC Support
+  dt-bindings: mfd: adi,max77541.yaml Add MAX77541 bindings
+  drivers: regulator: Add MAX77541 Regulator Support
+  dt-bindings: regulator: adi,max77541-regulator.yaml Add MAX77541
+    Regulator bindings
+  drivers: iio: adc: Add MAX77541 ADC Support
 
-On Mon, Dec 26, 2022 at 11:30:31PM +0800, Kai-Heng Feng wrote:
-> We are seeing igc ethernet device on Thunderbolt dock stops working
-> after S3 resume because of AER error, or even make S3 resume freeze:
-> pcieport 0000:00:1d.0: AER: Multiple Corrected error received: 0000:00:1d.0
-> pcieport 0000:00:1d.0: PCIe Bus Error: severity=Corrected, type=Transaction Layer, (Receiver ID)
-> pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00008000/00002000
-> pcieport 0000:00:1d.0:    [15] HeaderOF
-> pcieport 0000:00:1d.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:00:1d.0
-> pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
-> pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-> pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 0a000052 00000000 00000000
+ .../devicetree/bindings/mfd/adi,max77541.yaml | 102 ++++++++
+ .../regulator/adi,max77541-regulator.yaml     |  44 ++++
+ MAINTAINERS                                   |  11 +
+ drivers/iio/adc/Kconfig                       |  11 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/max77541-adc.c                | 199 ++++++++++++++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77541.c                        | 244 ++++++++++++++++++
+ drivers/regulator/Kconfig                     |   9 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/max77541-regulator.c        | 161 ++++++++++++
+ include/linux/mfd/max77541.h                  | 108 ++++++++
+ 13 files changed, 905 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77541.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
+ create mode 100644 drivers/iio/adc/max77541-adc.c
+ create mode 100644 drivers/mfd/max77541.c
+ create mode 100644 drivers/regulator/max77541-regulator.c
+ create mode 100644 include/linux/mfd/max77541.h
 
-From a very quick look, I think 34...... ......52 is a PTM message (as
-you suggest below).
+-- 
+2.30.2
 
-> pcieport 0000:00:1d.0: AER:   Error of this Agent is reported first
-> pcieport 0000:04:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> pcieport 0000:04:01.0:   device [8086:1136] error status/mask=00300000/00000000
-> pcieport 0000:04:01.0:    [20] UnsupReq               (First)
-> pcieport 0000:04:01.0:    [21] ACSViol
-> pcieport 0000:04:01.0: AER:   TLP Header: 34000000 04000052 00000000 00000000
-> thunderbolt 0000:05:00.0: AER: can't recover (no error_detected callback)
-> 
-> This supposedly should be fixed by commit c01163dbd1b8 ("PCI/PM: Always disable
-> PTM for all devices during suspend"), but somehow it doesn't work for
-> this case.
-> 
-> By dumping the PCI_PTM_CTRL register on resume, it turns out PTM is
-> already flipped on by either the Thunderbolt dock firmware or the host
-> BIOS. Writing 0 to PCI_PTM_CTRL yields the same result.
-
-Can you share your debug patch and corresponding dmesg log in the
-bugzilla?
-
-> Windows is however not affected by this issue, by using WinDbg's !pci
-> command, it shows that AER is not enabled for devices connected via
-> Thunderbolt port, and that's the reason why Windows doesn't exhibit the
-> issue.
-> 
-> So turn a blind eye on external Thunderbolt devices like Windows does by
-> disabling AER.
-
-Unless there's something in the PCIe or Thunderbolt spec that says AER
-shouldn't be used on external devices, I think we need to figure out
-the root cause before disabling AER on all removable devices.
-
-The dmesg in the bugzilla below is from an HP ZBook Fury 16.  Do you
-see this on any other platforms?  Do you have any HP BIOS contacts to
-ask about this?
-
-It seems like a firmware defect to enable PTM without knowing whether
-upstream devices have PTM enabled.
-
-We could leave PTM enabled on upstream devices when suspending, but
-that apparently prevents some low-power states.  Adding David since he
-worked on that.
-
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216850
-> Cc: Mario Limonciello <mario.limonciello@amd.com>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/pci/pcie/portdrv.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> index 2cc2e60bcb396..59d00e20e57bf 100644
-> --- a/drivers/pci/pcie/portdrv.c
-> +++ b/drivers/pci/pcie/portdrv.c
-> @@ -237,7 +237,8 @@ static int get_port_device_capability(struct pci_dev *dev)
->  	if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
->               pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
->  	    dev->aer_cap && pci_aer_available() &&
-> -	    (pcie_ports_native || host->native_aer))
-> +	    (pcie_ports_native || host->native_aer) &&
-> +	    !dev_is_removable(&dev->dev))
->  		services |= PCIE_PORT_SERVICE_AER;
->  #endif
->  
-> -- 
-> 2.34.1
-> 
