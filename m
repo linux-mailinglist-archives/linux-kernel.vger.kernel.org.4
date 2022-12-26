@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FAB6563DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68556563DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiLZPld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 10:41:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
+        id S229947AbiLZPqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 10:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiLZPlb (ORCPT
+        with ESMTP id S229612AbiLZPqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 10:41:31 -0500
+        Mon, 26 Dec 2022 10:46:04 -0500
 Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A141088
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:41:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A917273
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:46:02 -0800 (PST)
 Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 852C01B7;
-        Mon, 26 Dec 2022 15:37:58 +0000 (UTC)
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 6FB751B7;
+        Mon, 26 Dec 2022 15:42:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1672069078;
-        bh=TlzcMNZu1ovWQoSQAD3PXjyrNmnDTozhzJJwdXzf4Nw=;
+        d=paragon-software.com; s=mail; t=1672069351;
+        bh=B2DaB7WWHJqDDPT074JtcIYqB7GPsr9A6JYSY3UQo6U=;
         h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=R8T/sYnEn8GYuZvIX+08kFtW8bA4UrZiXLc/BUveEmJ+z0j5UbXnCpDmAXGLodl9T
-         saYXSR9BuVCV2dbMxMqyuhcHaJJEPid2pz8MOT3cbnh2B6UCrGEtv0ZUjJR2URCmTb
-         9ZjfSmp3oTsPr0W+0lpz3IauTpMQGj2zepgYV2F8=
+        b=KisxStYY6RKSCjV14OMqd1AN9M4b3jpleHIjMtPr3h29CgBn3f0X2HXXGEJq8nWJt
+         if0GrKCYq5FkJrJBDunwO2IPuOTvpj8bXpNTZwisTbeqZXXwHqEwrq2rSIT/mb9MlZ
+         +OesJkgYwfq10M8OILeN+tGiPJBznsAaSRcmrNrw=
 Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id CECFB1D33;
-        Mon, 26 Dec 2022 15:41:27 +0000 (UTC)
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id C87941D33;
+        Mon, 26 Dec 2022 15:46:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1672069287;
-        bh=TlzcMNZu1ovWQoSQAD3PXjyrNmnDTozhzJJwdXzf4Nw=;
+        d=paragon-software.com; s=mail; t=1672069560;
+        bh=B2DaB7WWHJqDDPT074JtcIYqB7GPsr9A6JYSY3UQo6U=;
         h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=kapAm05Tn7Et37qzEtTpKYHE+tBuO75miXfvm6hF5RoXI54ndxMqMvRoDQAguOGSV
-         pSQ6noanPET+FTjacynTUXPRIxT4JVT9nWjAXTYArEx7ip4WVsuGLG/1UITbUXm37R
-         /fFUKYXOz6KklFHsTdlqjjj1z9Bjf/dyJHQjKp6k=
+        b=srLL5s6WA8Db3RMquWKLg6OnexE9pPc8SUk1CPAhDg/PW+n+sCZJWAf6qCHIeIHz5
+         Jbxon/PRMqq8hv0wxvajo3z8YvuMaCGvUDARgSXOyMhuC5VbcPOGWwP1zD3kG2Bm6B
+         m5UCY2cH9bUBn+vR5xHkRumXIgJR9FKSDHNFCyRE=
 Received: from [192.168.211.153] (192.168.211.153) by
  vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 26 Dec 2022 18:41:27 +0300
-Message-ID: <49383f48-0796-3f84-d21b-1a92b92f64e3@paragon-software.com>
-Date:   Mon, 26 Dec 2022 19:41:26 +0400
+ 15.1.2375.7; Mon, 26 Dec 2022 18:46:00 +0300
+Message-ID: <d7805125-cd44-3dba-8f79-95c989844191@paragon-software.com>
+Date:   Mon, 26 Dec 2022 19:45:59 +0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH] fs/ntfs3: Fix leaked mount_options if fill_super failed
+Subject: Re: [PATCH] fs/ntfs3: Fix slab-out-of-bounds in ntfs_trim_fs()
 Content-Language: en-US
-To:     Chen Zhongjin <chenzhongjin@huawei.com>, <ntfs3@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-CC:     <kari.argillander@gmail.com>
-References: <20221122092518.231347-1-chenzhongjin@huawei.com>
+To:     Shigeru Yoshida <syoshida@redhat.com>
+CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+References: <20221130145705.488351-1-syoshida@redhat.com>
 From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <20221122092518.231347-1-chenzhongjin@huawei.com>
+In-Reply-To: <20221130145705.488351-1-syoshida@redhat.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [192.168.211.153]
@@ -66,49 +65,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.11.2022 13:25, Chen Zhongjin wrote:
-> '9b75450d6c58 ("fs/ntfs3: Fix memory leak if fill_super failed")'
-> Previous patch fixed leaked sbi when fill_super failed but forgot to put
-> mount_options and left it leaked as kmemleak reported:
+On 30.11.2022 18:57, Shigeru Yoshida wrote:
+> ntfs_trim_fs() should loop with wnd->nwnd, not wnd->nbits.  KASAN
+> detects this as an out-of-bounds access like below:
 >
-> unreferenced object 0xffff888107c353c0 (size 32):
->    backtrace:
->      [<00000000cf2c8c32>] kmalloc_trace+0x27/0x110
->      [<000000000184a864>] ntfs_init_fs_context+0x4c/0x540 [ntfs3]
->      [<000000008ded85aa>] alloc_fs_context+0x50e/0x940
->      [<00000000c225e601>] path_mount+0x747/0x1930
->      [<000000007bf15a5f>] do_mount+0xf3/0x110
->      ...
-> unreferenced object 0xffff888101fdc2d0 (size 8):
->    backtrace:
->      [<00000000d0cba437>] __kmalloc_node_track_caller+0x4c/0x1c0
->      [<00000000923513f8>] kmemdup_nul+0x37/0xb0
->      [<000000007a9b98ed>] vfs_parse_fs_string+0xc5/0x150
->      [<00000000afbd0594>] generic_parse_monolithic+0x140/0x1c0
->      [<00000000e97e814e>] path_mount+0xf09/0x1930
->      [<000000007bf15a5f>] do_mount+0xf3/0x110
->      ...
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
+> Read of size 2 at addr ffff8881745b4f02 by task repro/19678
 >
-> Fixes: 610f8f5a7baf ("fs/ntfs3: Use new api for mounting")
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-2.fc37 04/01/2014
+> Call Trace:
+>   <TASK>
+> dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
+> print_report (mm/kasan/report.c:285 mm/kasan/report.c:395)
+> ? __virt_addr_valid (arch/x86/mm/physaddr.c:66)
+> ? __phys_addr (arch/x86/mm/physaddr.c:32 (discriminator 4))
+> ? ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
+> ? ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
+> kasan_report (mm/kasan/report.c:162 mm/kasan/report.c:497)
+> ? ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
+> ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
+> ntfs_ioctl (fs/ntfs3/file.c:41 fs/ntfs3/file.c:57)
+> ? ntfs_fiemap (fs/ntfs3/file.c:51)
+> ? bpf_lsm_file_ioctl (./include/linux/lsm_hook_defs.h:165)
+> ? ntfs_fiemap (fs/ntfs3/file.c:51)
+> __x64_sys_ioctl (fs/ioctl.c:52 fs/ioctl.c:870 fs/ioctl.c:856 fs/ioctl.c:856)
+> do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+> entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+>
+> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
 > ---
->   fs/ntfs3/super.c | 1 +
->   1 file changed, 1 insertion(+)
+>   fs/ntfs3/bitmap.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
-> index 47012c9bf505..c0e45f170701 100644
-> --- a/fs/ntfs3/super.c
-> +++ b/fs/ntfs3/super.c
-> @@ -1281,6 +1281,7 @@ static int ntfs_fill_super(struct super_block *sb, struct fs_context *fc)
->   	 * Free resources here.
->   	 * ntfs_fs_free will be called with fc->s_fs_info = NULL
->   	 */
-> +	put_mount_options(sbi->options);
->   	put_ntfs(sbi);
->   	sb->s_fs_info = NULL;
+> diff --git a/fs/ntfs3/bitmap.c b/fs/ntfs3/bitmap.c
+> index e92bbd754365..1930640be31a 100644
+> --- a/fs/ntfs3/bitmap.c
+> +++ b/fs/ntfs3/bitmap.c
+> @@ -1424,7 +1424,7 @@ int ntfs_trim_fs(struct ntfs_sb_info *sbi, struct fstrim_range *range)
+>   
+>   	down_read_nested(&wnd->rw_lock, BITMAP_MUTEX_CLUSTERS);
+>   
+> -	for (; iw < wnd->nbits; iw++, wbit = 0) {
+> +	for (; iw < wnd->nwnd; iw++, wbit = 0) {
+>   		CLST lcn_wnd = iw * wbits;
+>   		struct buffer_head *bh;
 >   
 
 Thanks for work, this bug has already been fixed:
 
-https://lore.kernel.org/ntfs3/20220823103205.1380235-1-syoshida@redhat.com/
+https://lore.kernel.org/ntfs3/20221001070024.1366018-1-abdun.nihaal@gmail.com/
 
