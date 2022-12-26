@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC0B6563D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A1E6563D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbiLZPbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 10:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S232101AbiLZPc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 10:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiLZPbk (ORCPT
+        with ESMTP id S229623AbiLZPcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 10:31:40 -0500
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7372135;
-        Mon, 26 Dec 2022 07:31:38 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 9281E42832;
-        Mon, 26 Dec 2022 15:31:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1672068697;
-        bh=0MdCug5jtApVxCbACAza5eayqP2DubrBGd6UD6PDHQU=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=l2Js2VpTmoMTGvjnbPFLWivfBUPBu2r/d4McFVg49MR6NpOCUJ1qkdwm3n51ExOkf
-         dzi3vJI1lHc2Ma2FnBgQTZKhmyOfKVn5a6aD1LBDfxHWRs+xUJQ3Rl/AhX3+iqYB/J
-         CC6h9sB4zp933VItC20tE/xhsk9JU9Lrmg9RPqFlJtgRSgUF7G8WwXHxxMxKiZCgtg
-         JHdp4WyfUBCcWIE67i3aklMSzCr87Rp/NYTGNLhC++aOg2lMO/Ju17sPbq3wuceK+9
-         +r7EenhFLjksUR9qSh8ORprA5ZXNOWsG4xK96a4Mkqtgo7cQXE1OD8fM0LQ+BeYbnm
-         xjvxedttKn1Gw==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     bhelgaas@google.com
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Stefan Roese <sr@denx.de>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI/portdrv: Avoid enabling AER on Thunderbolt devices
-Date:   Mon, 26 Dec 2022 23:30:31 +0800
-Message-Id: <20221226153048.1208359-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 26 Dec 2022 10:32:54 -0500
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9B3135
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:32:54 -0800 (PST)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 066941B7;
+        Mon, 26 Dec 2022 15:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1672068563;
+        bh=WT35hMT9jxm/IKBWPqha2GgcIHPteMyxzD8d33LTOfg=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Ank7OaIWU+Nt6zYsbdvQ7WhrLjhQkfxE48OhiX1xNQt0vwJATLuvbxwHgLRqZihKf
+         Uos3vniVdQc9dLyH+tCN15pm4+xMz0APXAmNTXFbuPcP3rkyb9nNoxoJI5NSbRqY80
+         1TrbWKeUciT/ThC2RyrAfPWu9H44E7JbyH4dSsas=
+Received: from [192.168.211.153] (192.168.211.153) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 26 Dec 2022 18:32:51 +0300
+Message-ID: <ee0d2ffb-d563-f823-967e-1869126d636a@paragon-software.com>
+Date:   Mon, 26 Dec 2022 19:32:50 +0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] fs/ntfs3: Validate attribute data and valid sizes
+Content-Language: en-US
+To:     Abdun Nihaal <abdun.nihaal@gmail.com>
+CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <skhan@linuxfoundation.org>,
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        <syzbot+fa4648a5446460b7b963@syzkaller.appspotmail.com>
+References: <20221114115314.183818-1-abdun.nihaal@gmail.com>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20221114115314.183818-1-abdun.nihaal@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.211.153]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We are seeing igc ethernet device on Thunderbolt dock stops working
-after S3 resume because of AER error, or even make S3 resume freeze:
-pcieport 0000:00:1d.0: AER: Multiple Corrected error received: 0000:00:1d.0
-pcieport 0000:00:1d.0: PCIe Bus Error: severity=Corrected, type=Transaction Layer, (Receiver ID)
-pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00008000/00002000
-pcieport 0000:00:1d.0:    [15] HeaderOF
-pcieport 0000:00:1d.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:00:1d.0
-pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
-pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 0a000052 00000000 00000000
-pcieport 0000:00:1d.0: AER:   Error of this Agent is reported first
-pcieport 0000:04:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-pcieport 0000:04:01.0:   device [8086:1136] error status/mask=00300000/00000000
-pcieport 0000:04:01.0:    [20] UnsupReq               (First)
-pcieport 0000:04:01.0:    [21] ACSViol
-pcieport 0000:04:01.0: AER:   TLP Header: 34000000 04000052 00000000 00000000
-thunderbolt 0000:05:00.0: AER: can't recover (no error_detected callback)
-
-This supposedly should be fixed by commit c01163dbd1b8 ("PCI/PM: Always disable
-PTM for all devices during suspend"), but somehow it doesn't work for
-this case.
-
-By dumping the PCI_PTM_CTRL register on resume, it turns out PTM is
-already flipped on by either the Thunderbolt dock firmware or the host
-BIOS. Writing 0 to PCI_PTM_CTRL yields the same result.
-
-Windows is however not affected by this issue, by using WinDbg's !pci
-command, it shows that AER is not enabled for devices connected via
-Thunderbolt port, and that's the reason why Windows doesn't exhibit the
-issue.
-
-So turn a blind eye on external Thunderbolt devices like Windows does by
-disabling AER.
-
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216850
-Cc: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/pci/pcie/portdrv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-index 2cc2e60bcb396..59d00e20e57bf 100644
---- a/drivers/pci/pcie/portdrv.c
-+++ b/drivers/pci/pcie/portdrv.c
-@@ -237,7 +237,8 @@ static int get_port_device_capability(struct pci_dev *dev)
- 	if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
-              pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
- 	    dev->aer_cap && pci_aer_available() &&
--	    (pcie_ports_native || host->native_aer))
-+	    (pcie_ports_native || host->native_aer) &&
-+	    !dev_is_removable(&dev->dev))
- 		services |= PCIE_PORT_SERVICE_AER;
- #endif
- 
--- 
-2.34.1
-
+On 14.11.2022 15:53, Abdun Nihaal wrote:
+> The data_size and valid_size fields of non resident attributes should be
+> less than the its alloc_size field, but this is not checked in
+> ntfs_read_mft function.
+>
+> Syzbot reports a allocation order warning due to a large unchecked value
+> of data_size getting assigned to inode->i_size which is then passed to
+> kcalloc.
+>
+> Add sanity check for ensuring that the data_size and valid_size fields
+> are not larger than alloc_size field.
+>
+> Link: https://syzkaller.appspot.com/bug?extid=fa4648a5446460b7b963
+> Reported-and-tested-by: syzbot+fa4648a5446460b7b963@syzkaller.appspotmail.com
+> Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
+> Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
+> ---
+>
+> Please apply this instead of my previous patch.
+>
+> Changes in v2:
+>   Correct the format used for the Fixes tag.
+>
+>   fs/ntfs3/inode.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+> index 970bb7c357c7..763dd982a43a 100644
+> --- a/fs/ntfs3/inode.c
+> +++ b/fs/ntfs3/inode.c
+> @@ -132,6 +132,13 @@ static struct inode *ntfs_read_mft(struct inode *inode,
+>   	if (le16_to_cpu(attr->name_off) + attr->name_len > asize)
+>   		goto out;
+>   
+> +	if (attr->non_res) {
+> +		t64 = le64_to_cpu(attr->nres.alloc_size);
+> +		if (le64_to_cpu(attr->nres.data_size) > t64 ||
+> +		    le64_to_cpu(attr->nres.valid_size) > t64)
+> +			goto out;
+> +	}
+> +
+>   	switch (attr->type) {
+>   	case ATTR_STD:
+>   		if (attr->non_res ||
+Hello. Your patch has been already applied.
