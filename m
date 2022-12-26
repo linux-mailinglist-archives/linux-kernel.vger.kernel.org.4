@@ -2,96 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFBA6564C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 20:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 409E16564C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 20:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiLZTLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 14:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S232253AbiLZTQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 14:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLZTLk (ORCPT
+        with ESMTP id S229568AbiLZTQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 14:11:40 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DA6E2E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 11:11:30 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id j9so1543339qvt.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 11:11:30 -0800 (PST)
+        Mon, 26 Dec 2022 14:16:27 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9E0E1F;
+        Mon, 26 Dec 2022 11:16:26 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id kw15so27506959ejc.10;
+        Mon, 26 Dec 2022 11:16:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ki8erFK6+zdeqp6mmQ4ZeNXpW07xxtnIN5dQM+gH9tw=;
-        b=I1Hb9MtthY1UsgJEjiEuH/h+pQZyfWJ8Lk4kX5EOkterJ0kgKclSV/OQBqRcS6yQwU
-         NbQ3epR46cWs/444OUfZIfKQIWn/8ovKUKFCITCvtr0FTxYYRIaNMIpUkdks74UOj05t
-         DrPlKj9HbOBDYgL8wzoFtWIZBStSjVvu3aOX+e3NKG2lraOnRLuVIyLlMcMa9rzE928B
-         XG4WOqxB0LRxqyDEMwgZsww5ZQgFcpfvTiFYFp7fYtFjP1+2Oz/35ZyartbG5iuzpPya
-         dZZCV9NjrhSjIitJ+vJLH1Znk+4p6Y3Pm+uammvg38Y7qcS1YhlibUaEOg2+6b/4+zDA
-         VGHA==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ktegGSSkOxqIFuwhGHmtZ6WhTHs3PairIl7GArHTdQ=;
+        b=WxBgfmx/IwkWtSjVIku2yMAWQ0NkWyJzPzt7iYPtmClzE8skyen0tBRFjGPBWydRSQ
+         JUEwFhT0JgMT2lf2CkG35mVj9clPZPUlEDdyZAxZ2dvyRs6orYqjnfeRAjUK126mOetd
+         H+EAQRkwHBQ+NZbJCIepOW1hF9ovSMe3h19JPcwklAEJklGb7NmzylVsHLJMdEIY0iU0
+         LTPzFEWh6TY8Mkd5H1CvxyUabUqrmBG+E9Rr2UPfIhCroIfW1rvSroSk0dlDp34b0DYx
+         bpAbNg8yy7bjAgjZAiEYdC7x/uqY0VZ5gTvc5fJEPQ8Pl94fe4PrbUdtR0jt6Gu2yifR
+         goVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ki8erFK6+zdeqp6mmQ4ZeNXpW07xxtnIN5dQM+gH9tw=;
-        b=vy2y40BnYJjdOGVmgn1V+eeDyf22dxCHpEL6TeWjOGiMFbihzwDU+E8qEk+fi037mo
-         DRCI5/qWe43Oq6RSWfRVVZNlhU8eG6/qi9UiCKjKSW/dZtrkphPGRyZJhdIMCF2Vd23/
-         CNkob9jQ8nrGeP44OR42zLtEgIhqA9BOLYuaKNm5L7DRmF8/jct6UGzkiS1k3QdehdsA
-         3yrLoiQQM6t2fAIhaG1CCijddm+4EYjwpoqrjTcLN6JmH/rbXA6Zma4wuTkuMekzXYPD
-         K/JbK9xEwjc857qBFX2dGXZhjwdEn1EeGACHhb4+SDiqeHM15tk1UBYJhUjGzM0H8YD/
-         06BQ==
-X-Gm-Message-State: AFqh2kqV2+xbzx/DWcobrFeeQSAafTa6hMBqxcBEy50kEq9U73UchprN
-        nS03upXcP8Y8zS/kxwzt5yoedw==
-X-Google-Smtp-Source: AMrXdXtG2kCsUCujjb7Nl8fxazyAzG36Qd03gN+F64PW5mgkrbEPsJjA9XvdNXeIYxOZWIF1tNasWw==
-X-Received: by 2002:a0c:ec41:0:b0:530:c834:b3e with SMTP id n1-20020a0cec41000000b00530c8340b3emr2875483qvq.0.1672081889805;
-        Mon, 26 Dec 2022 11:11:29 -0800 (PST)
-Received: from [127.0.0.1] ([216.250.210.0])
-        by smtp.gmail.com with ESMTPSA id u7-20020a05620a430700b006cbc6e1478csm8145190qko.57.2022.12.26.11.11.26
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ktegGSSkOxqIFuwhGHmtZ6WhTHs3PairIl7GArHTdQ=;
+        b=fmd0PX5mvZjjSO6HKAUpqr4JJkFMuX2JOxWFfo0qV4cK97dIqLT3UoVvRK/5F4o6eC
+         T56Ro6LnGnz4Fxbh+JUTdnvCgeJvTAOjZoyCtF4yRujXQXhD/xSbzUhbrkVKeTr3oI3Z
+         7B9yajRBKQXGNmDw/eJWeAWrZWuCkp/2IaaFDDTgelwaSSjpUmPM2lFjlQQHnlQTViVK
+         GB+DxLJ/cy+RWgN8vstXsqPIVjY3lC9uJQxX0m4eulEXZ8CCHnQC8tUM1B3vqNfkeLKC
+         P1at0kjr0IbYjY3kLlvsc6WpG/nl3WQ4Pd+uuh34wFgeMe5WMUrjox3TE0xepNnQOruf
+         Vjiw==
+X-Gm-Message-State: AFqh2kqBW94BnBgoqrW/GKEL95ZhxUzSDLaOptWVKN/wilU4BrA5h9Yy
+        RP2eKn3BoPoEcKSDR3wY5w8L2ajDUR8=
+X-Google-Smtp-Source: AMrXdXusUJQ+D0KmgNnXGBKiQrL8JCdhgnRj0835vNO/Rgx/BscxViE5TiF0n0WYZysxT6n4E/9l1g==
+X-Received: by 2002:a17:906:b053:b0:7ad:ca80:5669 with SMTP id bj19-20020a170906b05300b007adca805669mr20703141ejb.64.1672082184609;
+        Mon, 26 Dec 2022 11:16:24 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c23-c42e-1300-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c42e:1300::e63])
+        by smtp.googlemail.com with ESMTPSA id p18-20020a170906141200b007c08091ad7esm5079673ejc.208.2022.12.26.11.16.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 11:11:29 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     paolo.valente@linaro.org, jack@suse.cz,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com
-In-Reply-To: <20221226030605.1437081-1-yukuai1@huaweicloud.com>
-References: <20221226030605.1437081-1-yukuai1@huaweicloud.com>
-Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bfq_exit_icq_bfqq
-Message-Id: <167208188642.23141.13167280199462782271.b4-ty@kernel.dk>
-Date:   Mon, 26 Dec 2022 12:11:26 -0700
+        Mon, 26 Dec 2022 11:16:24 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     johannes@sipsolutions.net, linux-wireless@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH] mac80211: Drop stations iterator where the iterator function may sleep
+Date:   Mon, 26 Dec 2022 20:16:09 +0100
+Message-Id: <20221226191609.2934234-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-05166
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        T_SPF_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This reverts commit acb99b9b2a08f ("mac80211: Add stations iterator
+where the iterator function may sleep"). A different approach was found
+for the rtw88 driver where most of the problematic locks were converted
+to a driver-local mutex. Drop ieee80211_iterate_stations() because there
+are no users of that function.
 
-On Mon, 26 Dec 2022 11:06:05 +0800, Yu Kuai wrote:
-> Commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
-> will access 'bic->bfqq' in bic_set_bfqq(), however, bfq_exit_icq_bfqq()
-> can free bfqq first, and then call bic_set_bfqq(), which will cause uaf.
-> 
-> Fix the problem by moving bfq_exit_bfqq() behind bic_set_bfqq().
-> 
-> 
-> [...]
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+ include/net/mac80211.h | 21 ---------------------
+ net/mac80211/util.c    | 13 -------------
+ 2 files changed, 34 deletions(-)
 
-Applied, thanks!
-
-[1/1] block, bfq: fix uaf for bfqq in bfq_exit_icq_bfqq
-      commit: 246cf66e300b76099b5dbd3fdd39e9a5dbc53f02
-
-Best regards,
+diff --git a/include/net/mac80211.h b/include/net/mac80211.h
+index 689da327ce2e..b421a1bfc7c5 100644
+--- a/include/net/mac80211.h
++++ b/include/net/mac80211.h
+@@ -5888,9 +5888,6 @@ void ieee80211_iterate_active_interfaces_atomic(struct ieee80211_hw *hw,
+  * This function iterates over the interfaces associated with a given
+  * hardware that are currently active and calls the callback for them.
+  * This version can only be used while holding the wiphy mutex.
+- * The driver must not call this with a lock held that it can also take in
+- * response to callbacks from mac80211, and it must not call this within
+- * callbacks made by mac80211 - both would result in deadlocks.
+  *
+  * @hw: the hardware struct of which the interfaces should be iterated over
+  * @iter_flags: iteration flags, see &enum ieee80211_interface_iteration_flags
+@@ -5904,24 +5901,6 @@ void ieee80211_iterate_active_interfaces_mtx(struct ieee80211_hw *hw,
+ 						struct ieee80211_vif *vif),
+ 					     void *data);
+ 
+-/**
+- * ieee80211_iterate_stations - iterate stations
+- *
+- * This function iterates over all stations associated with a given
+- * hardware that are currently uploaded to the driver and calls the callback
+- * function for them.
+- * This function allows the iterator function to sleep, when the iterator
+- * function is atomic @ieee80211_iterate_stations_atomic can be used.
+- *
+- * @hw: the hardware struct of which the interfaces should be iterated over
+- * @iterator: the iterator function to call, cannot sleep
+- * @data: first argument of the iterator function
+- */
+-void ieee80211_iterate_stations(struct ieee80211_hw *hw,
+-				void (*iterator)(void *data,
+-						 struct ieee80211_sta *sta),
+-				void *data);
+-
+ /**
+  * ieee80211_iterate_stations_atomic - iterate stations
+  *
+diff --git a/net/mac80211/util.c b/net/mac80211/util.c
+index 6f5407038459..bc8c285355a1 100644
+--- a/net/mac80211/util.c
++++ b/net/mac80211/util.c
+@@ -868,19 +868,6 @@ static void __iterate_stations(struct ieee80211_local *local,
+ 	}
+ }
+ 
+-void ieee80211_iterate_stations(struct ieee80211_hw *hw,
+-				void (*iterator)(void *data,
+-						 struct ieee80211_sta *sta),
+-				void *data)
+-{
+-	struct ieee80211_local *local = hw_to_local(hw);
+-
+-	mutex_lock(&local->sta_mtx);
+-	__iterate_stations(local, iterator, data);
+-	mutex_unlock(&local->sta_mtx);
+-}
+-EXPORT_SYMBOL_GPL(ieee80211_iterate_stations);
+-
+ void ieee80211_iterate_stations_atomic(struct ieee80211_hw *hw,
+ 			void (*iterator)(void *data,
+ 					 struct ieee80211_sta *sta),
 -- 
-Jens Axboe
-
+2.39.0
 
