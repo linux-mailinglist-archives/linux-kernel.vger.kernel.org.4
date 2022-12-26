@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09716562D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 14:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A4C6562DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 14:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiLZNWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 08:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        id S230084AbiLZNhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 08:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiLZNWI (ORCPT
+        with ESMTP id S229450AbiLZNhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 08:22:08 -0500
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F487108E;
-        Mon, 26 Dec 2022 05:22:08 -0800 (PST)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4Ngdjq4r8HzDqLj;
-        Mon, 26 Dec 2022 13:22:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1672060927; bh=vEYts1uMHyn4/h2FyWsp/C9eLztnREVMaaqa0shY+YE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=U9ATEQLEKlBv0rJ82ll+3zsWcQKWbbiC0QwYHzIRcQYAiaRo60jlZVtiKjO12Brf1
-         XFwI6+DK0DTybVuYSAJe/NINCxgC5k0GoPDI0oEEff0YDpYxSsqTyEnpL8MhTNgIdi
-         lgBhn7xPsYASrF0H2b4Dm/OFqLd9xcycmZotD/zQ=
-X-Riseup-User-ID: 01D9A1F4E75E980968F1411AAE4D9A50DB0BF7FB0060C386A51B1181B5729B22
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4Ngdjn5rMBz5vtm;
-        Mon, 26 Dec 2022 13:22:05 +0000 (UTC)
-Message-ID: <6cf1bb06-86b5-2c55-aec2-e2c414a05b66@riseup.net>
-Date:   Mon, 26 Dec 2022 10:22:02 -0300
+        Mon, 26 Dec 2022 08:37:22 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C37219C;
+        Mon, 26 Dec 2022 05:37:20 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p9nfL-00088C-EJ; Mon, 26 Dec 2022 14:37:19 +0100
+Message-ID: <985064d2-fe9c-a02b-21f1-e6ce93c594c0@leemhuis.info>
+Date:   Mon, 26 Dec 2022 14:37:19 +0100
 MIME-Version: 1.0
-Subject: Re: [PATCH] HID: uclogic: Use KUNIT_EXPECT_MEMEQ
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, mairacanal@riseup.net,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221226125736.18053-1-jose.exposito89@gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20221226125736.18053-1-jose.exposito89@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [6.2][regression] after commit
+ 947a629988f191807d2d22ba63ae18259bb645c5 btrfs volume periodical forced
+ switch to readonly after a lot of disk writes #forregzbot
+Content-Language: en-US, de-DE
+To:     Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <CABXGCsNzVxo4iq-tJSGm_kO1UggHXgq6CdcHDL=z5FL4njYXSQ@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CABXGCsNzVxo4iq-tJSGm_kO1UggHXgq6CdcHDL=z5FL4njYXSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1672061840;637a1322;
+X-HE-SMSGID: 1p9nfL-00088C-EJ
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/26/22 09:57, José Expósito wrote:
-> Commit b8a926bea8b1 ("kunit: Introduce KUNIT_EXPECT_MEMEQ and
-> KUNIT_EXPECT_MEMNEQ macros") introduced a new macro to compare blocks of
-> memory and, if the test fails, print the result in a human friendly
-> format. For example, this is the output of a test failure:
-> 
->   Expected res == params->expected, but
->       res ==
->        01  02  aa  00  00  00  03  bb  00 <00> 00  04  05
->       params->expected ==
->        01  02  aa  00  00  00  03  bb  00 <01> 00  04  05
-> 
-> Use this new macro to replace KUNIT_EXPECT_EQ + memcmp.
-> 
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+[Note: this mail contains only information for Linux kernel regression
+tracking. Mails like these contain '#forregzbot' in the subject to make
+then easy to spot and filter out. The author also tried to remove most
+or all individuals from the list of recipients to spare them the hassle.]
 
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
-
-Best Regards,
-- Maíra Canal
-
-> ---
->   drivers/hid/hid-uclogic-rdesc-test.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+On 25.12.22 22:32, Mikhail Gavrilov wrote:
+> Hi,
+> It is curious but it happens only on machine which have BTRFS volume
+> combined from two high speed nvme (pcie 4) SSD in RAID 0. On machines
+> with BTRFS volume from one HDD the bug does not appear.
 > 
-> diff --git a/drivers/hid/hid-uclogic-rdesc-test.c b/drivers/hid/hid-uclogic-rdesc-test.c
-> index b429c541bf2f..90bf4e586e01 100644
-> --- a/drivers/hid/hid-uclogic-rdesc-test.c
-> +++ b/drivers/hid/hid-uclogic-rdesc-test.c
-> @@ -197,8 +197,7 @@ static void hid_test_uclogic_template(struct kunit *test)
->   					   params->param_list,
->   					   params->param_num);
->   	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, res);
-> -	KUNIT_EXPECT_EQ(test, 0,
-> -			memcmp(res, params->expected, params->template_size));
-> +	KUNIT_EXPECT_MEMEQ(test, res, params->expected, params->template_size);
->   	kfree(res);
->   }
->   
+> To bisect the problematic commit, I had to sweat a lot. At each step,
+> I downloaded the 150 GB game "Assassin's Creed Valhalla" 4 times and
+> deleted it. For make sure that the commit previous to
+> 947a629988f191807d2d22ba63ae18259bb645c5 is definitely not affected by
+> the bug, I downloaded this game 10 times, which should have provided
+> more than 1.5 Tb of data writing to the btrfs volume.
+> 
+> Here is result of my bisection:
+> 947a629988f191807d2d22ba63ae18259bb645c5 is the first bad commit
+> [...]
+> Before going to readonly, the preceding line in kernel log display a message:
+> [ 1908.029663] BTRFS: error (device nvme0n1p3: state A) in
+> btrfs_run_delayed_refs:2147: errno=-5 IO failure
+> 
+> I also attached a full kernel log.
+
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced 947a629988f191807d2d22ba63ae18259bb64
+#regzbot title btrfs: volume periodical forced switch to readonly after
+a lot of disk writes
+#regzbot ignore-activity
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
