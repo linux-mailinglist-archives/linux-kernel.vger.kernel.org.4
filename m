@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08676562BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 13:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 062C06562B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 13:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbiLZM4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 07:56:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
+        id S230292AbiLZMzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 07:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiLZM4I (ORCPT
+        with ESMTP id S229502AbiLZMzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 07:56:08 -0500
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D149F20F
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 04:55:42 -0800 (PST)
+        Mon, 26 Dec 2022 07:55:09 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5EE24A;
+        Mon, 26 Dec 2022 04:55:08 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id g25-20020a7bc4d9000000b003d97c8d4941so1687011wmk.4;
+        Mon, 26 Dec 2022 04:55:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1672059343; x=1703595343;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nGPV+dVLZeBC/w0lA6JVr4tplCAJavJwgNHjYdO+wl4=;
-  b=uFbocRnt/CGtPoIhPL/CZ2czNIgweq9DWjz2+jbqX7gdPHTt/xy6/OqN
-   FQroGuZf4IgwkQ+7n7fR/P+ww2I2VX20CXlSIjMvjBke3oYGYxdwjt9WE
-   I3c9GZEvEPJYG9k+9ONHXDmoYjDTIZl/DpW+UFukXtNE27gw8ggjZ5obM
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.96,275,1665446400"; 
-   d="scan'208";a="165249425"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2022 12:55:42 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com (Postfix) with ESMTPS id 3540F41727;
-        Mon, 26 Dec 2022 12:55:42 +0000 (UTC)
-Received: from EX19D004ANA004.ant.amazon.com (10.37.240.146) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Mon, 26 Dec 2022 12:55:41 +0000
-Received: from 147ddab5055b.ant.amazon.com.com (10.43.162.221) by
- EX19D004ANA004.ant.amazon.com (10.37.240.146) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
- Mon, 26 Dec 2022 12:55:38 +0000
-From:   Hayato Kiwata <haytok@amazon.co.jp>
-To:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Hayato Kiwata <haytok@amazon.co.jp>,
-        Hayato Kiwata <simplelpmis6@gmail.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>
-Subject: [PATCH v1] seccomp: Fix the comment for seccomp_check_filter().
-Date:   Mon, 26 Dec 2022 21:53:18 +0900
-Message-ID: <20221226125317.14465-1-haytok@amazon.co.jp>
-X-Mailer: git-send-email 2.35.1
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=go4tve/Op9RygAUFtopjfFh/CZKE0zEfnvvG7nESATk=;
+        b=c8ZvrltCQdzj8L4d54KkYOebmwCkj1586jCOfO9hZkUf2+Eo2iKLi7TcSwjiY9g0w+
+         SaQVW27TnlmNMgeKpsqSpOrjcviIE70e5HNvsdxmLZOlCsBA2Ddb6KojCeDi8iT1QvI9
+         JzAdySj0a8tWBW/tuaxBfLBD2OmzesZ8f7o1tcvb0vrkdjB8mWXTkxlN8ZIeG7E7r4Mp
+         LNAvpLcZfCXB56RSpubURKVi5wPjj39C6ml2zAxVaiXmnPHGKGjvrheK7tn4d0iQSa3/
+         VbcaODCA6OEZCoR3kkZSUPEEcy1eGqaUrc3WkXyjzj/ABr9ZOXbLAWptx0J6hIPlAt2+
+         j3Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=go4tve/Op9RygAUFtopjfFh/CZKE0zEfnvvG7nESATk=;
+        b=tUw96IBXxnnYMJKRjI44jUjfTFBTLIOY3UNVoqPGMIwNKjac22KpBly36xj28psQ36
+         6xb0GbcrhXpzIZm0mqexY1C1WGnpguh2qcY6mOlNFIWbo0BN9jn6U00W7wxZc3eS0BQt
+         u/OWpDAVxLgqYBaEb/jjlWy3ffRhq7s8sPulsa1poln9fOy5TzZYipHGxE5SNqctImz9
+         r5hD5B9DpqfIFoNUKZd2xhdhSgkGCYGmjv37gzILCNKEJETNgk44BzXcQeVbE3o0Wxu/
+         Rmorp5j1qaCj7pmuSQJyiSRdnYxw55jk/Hj/RmQCa0pwr6PrczIeRoI5q4uclizUh9NX
+         KECQ==
+X-Gm-Message-State: AFqh2krZcwj32RRAoI5TUvD4RnxqmGI8MMvn/MuI1HnBqhRvDxN6JScI
+        Ylc27ict/PdyT478UbjcUhI=
+X-Google-Smtp-Source: AMrXdXtjEVEFZLzSyoStT9Kj6tBwQJE4D7bQ2cUpq8U38CgZHYINOKjoo5N1ROeqxyLB0k2BxlMIug==
+X-Received: by 2002:a05:600c:2112:b0:3d3:396e:5e36 with SMTP id u18-20020a05600c211200b003d3396e5e36mr12856292wml.0.1672059307214;
+        Mon, 26 Dec 2022 04:55:07 -0800 (PST)
+Received: from localhost.localdomain ([94.73.32.212])
+        by smtp.gmail.com with ESMTPSA id y24-20020a05600c365800b003cf894dbc4fsm13684497wmq.25.2022.12.26.04.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 04:55:06 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH 0/6] HID: uclogic: Add support for XP-PEN Deco PRO SW and MW
+Date:   Mon, 26 Dec 2022 13:54:48 +0100
+Message-Id: <20221226125454.16106-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.221]
-X-ClientProxiedBy: EX13D39UWA002.ant.amazon.com (10.43.160.20) To
- EX19D004ANA004.ant.amazon.com (10.37.240.146)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,33 +71,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comment of the seccomp_check_filter() contains a removed function,
-seccomp_bpf_load(). This comment needs to be corrected as it may be
-misleading to future readers.
+Hi!
 
-seccomp_bpf_load() was removed in the commit bd4cf0ed331a ("net: filter:
-rework/optimize internal BPF interpreter's instruction set"). Previously,
-seccomp_bpf_load() was used to create an object of struct seccomp_data.
-However, this is done inside populate_seccomp_data() now.
+This series add support for the XP-PEN Deco PRO SW and MW drawing
+tablets.
 
-Signed-off-by: Hayato Kiwata <haytok@amazon.co.jp>
----
- kernel/seccomp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Both tablets are similar, the only difference between them is their
+size and their IDs. I own one of them and Andreas helped me test the
+other one, so thanks a lot!
 
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index d653d8426de9..3a93595f4989 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -167,7 +167,7 @@ static void populate_seccomp_data(struct seccomp_data *sd)
-  *
-  * Takes a previously checked filter (by bpf_check_classic) and
-  * redirects all filter code that loads struct sk_buff data
-- * and related data through seccomp_bpf_load.  It also
-+ * and related data through populate_seccomp_data().  It also
-  * enforces length and alignment checking of those loads.
-  *
-  * Returns 0 if the rule set is legal or -EINVAL if not.
+Please note that this series might cause conflicts with [1], but they
+should be really easy to fix/I can rebase once it is merged.
+
+About the patches:
+
+ - The first patch introduces a quirks to be able to fix the frame type
+   reported by these devices.
+ - The second patch adds another quirks to know whether a tablet has
+   battery or not. I didn't find any difference in the information
+   reported by the firmware nor in the Windows driver to obtain this
+   information, so I added a manual flag.
+ - The fourth patch adds a generic mechanism to schedule jobs when an
+   event is received, in this case, to reconnect the tablet.
+ - The last two patches add support for the tablets.
+
+Best wishes,
+José Expósito
+
+[1] [PATCH] HID: uclogic: Add support for XP-PEN Deco 01 V2
+    https://lore.kernel.org/linux-input/20221226123456.14822-1-jose.exposito89@gmail.com/T/
+
+José Expósito (6):
+  HID: uclogic: Add frame type quirk
+  HID: uclogic: Add battery quirk
+  HID: uclogic: Refactor UGEEv2 probe magic data
+  HID: uclogic: Handle wireless device reconnection
+  HID: uclogic: Add support for XP-PEN Deco Pro SW
+  HID: uclogic: Add support for XP-PEN Deco Pro MW
+
+ drivers/hid/hid-ids.h                 |   2 +
+ drivers/hid/hid-input.c               |   4 +
+ drivers/hid/hid-uclogic-core-test.c   | 105 ++++++++++++++++++++++
+ drivers/hid/hid-uclogic-core.c        |  61 +++++++++----
+ drivers/hid/hid-uclogic-params-test.c |  16 ++++
+ drivers/hid/hid-uclogic-params.c      | 124 ++++++++++++++++++++++++--
+ drivers/hid/hid-uclogic-params.h      |  40 +++++++++
+ drivers/hid/hid-uclogic-rdesc.c       |   6 ++
+ drivers/hid/hid-uclogic-rdesc.h       |   5 ++
+ 9 files changed, 338 insertions(+), 25 deletions(-)
+ create mode 100644 drivers/hid/hid-uclogic-core-test.c
+
 -- 
-2.35.1
+2.38.1
 
