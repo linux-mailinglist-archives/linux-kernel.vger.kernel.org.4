@@ -2,393 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861AC65615C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 10:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC02656154
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 09:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbiLZJHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 04:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        id S231786AbiLZI5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 03:57:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbiLZJG5 (ORCPT
+        with ESMTP id S229486AbiLZI5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 04:06:57 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A526245;
-        Mon, 26 Dec 2022 01:06:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672045616; x=1703581616;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9VwFcHjI2djGRZ7ATPeTvKkkTknomx6yyxv7AqlnT7I=;
-  b=QKzhdydFHTqJ7/AHCnHVqNq1ClsKtDDMp83lIikjD3gxOu7E/82UVNz3
-   WSmWuGY/cKZb9bn/5oV2R0TWMcr1VKKsn7GkVnVGL81Em9JK9KmoPR+Td
-   HidziDwhKQztNFzm33/G8kpP/Q7Kx35DiJ3NboyrK0mGqqLnXF4x25OBu
-   uDpUQimMMsSPIrqwbKsTg0Dvp4owT2kf2BdzbGKcaXxe2RBU2ru4SDpG+
-   OXtPss2Za0gMeW20cpHEq8TAiXLjXwSUGcu2f1uSlGEjs3IxrbN42b92r
-   YbzQbkpr8n+Ws7RcPDNEjBiMxEmPVUzkci9pIkgqiDPLbOnNGn55Pgxyy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="318213971"
-X-IronPort-AV: E=Sophos;i="5.96,275,1665471600"; 
-   d="scan'208";a="318213971"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2022 01:06:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="826835213"
-X-IronPort-AV: E=Sophos;i="5.96,275,1665471600"; 
-   d="scan'208";a="826835213"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga005.jf.intel.com with ESMTP; 26 Dec 2022 01:06:53 -0800
-Date:   Mon, 26 Dec 2022 16:56:49 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     linux-fpga@vger.kernel.org, conor.dooley@microchip.com,
-        mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH] fpga: microchip-spi: move SPI I/O buffers out of stack
-Message-ID: <Y6lh0e+Jz5Y6ehwc@yilunxu-OptiPlex-7050>
-References: <20221223123854.8023-1-i.bornyakov@metrotek.ru>
+        Mon, 26 Dec 2022 03:57:13 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C9A5F7D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 00:57:12 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id q190so5433387iod.10
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 00:57:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y9TbX3Ceh1FvaBv664udZf8XfrOpdKKd1+DeV95MdyU=;
+        b=Bi5owdA6WovVAMZcv9Xg7UtskNw4+684vpuoZJeflxtV3ZDO4PKd2iJDfmLTyqqNpq
+         lOVR9fPEoBWOyeiHd85xuiPaMJnyBllR19W6q6zN8qOmAkm9E7Kl+IrfWMsltiZ4cmA1
+         C+ow+S7IbcqHZPmSLrl2qKxwome1/bjEv8xaM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y9TbX3Ceh1FvaBv664udZf8XfrOpdKKd1+DeV95MdyU=;
+        b=p+RK+dvZiRsDR2W0R1S+pP2NY3iGO8Wm9JtMVwz2UH0hzI8sZ7b0BQLuTCLht2IOJY
+         Hu1UY5odGIoOrwkFZj2OrOp+oYRFSO5rhXginvqRDNpAykQ5apjm/146FrlwnbuVRr7I
+         lDvFhiZ/VHtq04IKpEIBRSd+SOO5udVz15CBg9g2/EyBJ5Eqp1B6tMeVVBrtedQQNTQW
+         FzGEp30tJ9ww0mHCRCNcBMehsqY9BRELKCCQRsp5cHrsMZRhWAnSSM+wXtUGy/F/lGhT
+         kbXKQitXf4qtyL1VH5gM8Q6oHGewLV7BHroevw/ncPzgILWr8B5dZag2Psc8wvhONs9j
+         yPtQ==
+X-Gm-Message-State: AFqh2koZH3Ve4jBsfXeJRB3019nQZdmnEu3xM/RTvFHvAW61lDA3QNMn
+        x93EvnWD4L5p55D3SbfRFRVwrKoL06qnTnp5u/o9ng==
+X-Google-Smtp-Source: AMrXdXvZZwiu7qagoS6yQmOv/xa7NoF2r1prkxbf2PgG2eUjFk6I49fFzrxM9Ian30iQB4AcDtL7g9FaZUcFi4kfwfI=
+X-Received: by 2002:a6b:490f:0:b0:6e3:29a8:47a with SMTP id
+ u15-20020a6b490f000000b006e329a8047amr1409337iob.209.1672045032266; Mon, 26
+ Dec 2022 00:57:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221223123854.8023-1-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221124102056.393220-1-treapking@chromium.org>
+ <20221124102056.393220-7-treapking@chromium.org> <a2a8cd80-a614-e96f-90ab-a98c60527344@linaro.org>
+In-Reply-To: <a2a8cd80-a614-e96f-90ab-a98c60527344@linaro.org>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Mon, 26 Dec 2022 16:57:01 +0800
+Message-ID: <CAEXTbpeYZTeWvnGtRo3i7eGSAoQnkSmcpV=SS8MZA+an3SHUwQ@mail.gmail.com>
+Subject: Re: [PATCH v6 6/7] dt/bindings: drm/bridge: it6505: Add mode-switch support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        dri-devel@lists.freedesktop.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-acpi@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Xin Ji <xji@analogixsemi.com>, Lyude Paul <lyude@redhat.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-23 at 15:38:54 +0300, Ivan Bornyakov wrote:
-> As spi-summary doc says:
->  > I/O buffers use the usual Linux rules, and must be DMA-safe.
->  > You'd normally allocate them from the heap or free page pool.
->  > Don't use the stack, or anything that's declared "static".
-> 
-> Replace spi_write() with spi_write_then_read(), which is dma-safe for
-> on-stack buffers. Use allocated buffers for transfers used in
-> spi_sync_transfer().
-> 
-> Although everything works OK with stack-located I/O buffers, better
-> follow the doc to be safe.
-> 
-> While at it, replace busy loop in mpf_poll_status() routine with
-> read_poll_timeout() macro. Original busy loop is not too reliable, as it
-> takes different times on different systems.
+Hi Krzysztof,
 
-Yes, I see there are several intents in this patch, spi dma safe fix, busy
-loop change, coding style ...
+On Mon, Nov 28, 2022 at 5:02 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 24/11/2022 11:20, Pin-yen Lin wrote:
+> > ITE IT6505 can be used in systems to switch the DP traffic between
+> > two downstreams, which can be USB Type-C DisplayPort alternate mode
+> > lane or regular DisplayPort output ports.
+> >
+> > Update the binding to accommodate this usage by introducing a
+> > data-lanes and a mode-switch property on endpoints.
+> >
+> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> >
+> > ---
+> >
+> > Changes in v6:
+> > - Remove switches node and use endpoints and data-lanes property to
+> >   describe the connections.
+> >
+> >  .../bindings/display/bridge/ite,it6505.yaml   | 94 ++++++++++++++++++-
+> >  1 file changed, 90 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> > index 833d11b2303a..b4b9881c7759 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
+> > @@ -52,9 +52,53 @@ properties:
+> >      maxItems: 1
+> >      description: extcon specifier for the Power Delivery
+> >
+> > -  port:
+> > -    $ref: /schemas/graph.yaml#/properties/port
+> > -    description: A port node pointing to DPI host port node
+> > +  data-lanes:
+> > +    maxItems: 1
+> > +    description: restrict the dp output data-lanes with value of 1-4
+>
+> Hm, where is the definition of this type? For example it comes with
+> video-interfaces, which you did not reference here.
+>
+Actually I messed up here with another accepted patch:
+https://lore.kernel.org/all/20221103091243.96036-2-allen.chen@ite.com.tw/
 
-Could you help split them, one change for each patch?
+This and the next new property have been added in that patch.
+> > +
+> > +  max-pixel-clock-khz:
+>
+> There is no such unit accepted:
+> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+>
+> > +    maxItems: 1
+>
+> maxItems of what type? What is this?
+>
+> > +    description: restrict max pixel clock
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+>
+> This is incompatible change... how do you handle now ABI break?
+>
+This is also added in another patch, and currently we don't have any
+upstream it6505 users now.
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+>
+> Why changing the ref?
 
-> 
-> Fixes: 5f8d4a900830 ("fpga: microchip-spi: add Microchip MPF FPGA manager")
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> ---
->  drivers/fpga/microchip-spi.c | 145 +++++++++++++++++++----------------
->  1 file changed, 80 insertions(+), 65 deletions(-)
-> 
-> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-> index 7436976ea904..dfb4e071db86 100644
-> --- a/drivers/fpga/microchip-spi.c
-> +++ b/drivers/fpga/microchip-spi.c
-> @@ -6,6 +6,7 @@
->  #include <asm/unaligned.h>
->  #include <linux/delay.h>
->  #include <linux/fpga/fpga-mgr.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/spi/spi.h>
-> @@ -33,7 +34,6 @@
->  
->  #define	MPF_BITS_PER_COMPONENT_SIZE	22
->  
-> -#define	MPF_STATUS_POLL_RETRIES		10000
->  #define	MPF_STATUS_BUSY			BIT(0)
->  #define	MPF_STATUS_READY		BIT(1)
->  #define	MPF_STATUS_SPI_VIOLATION	BIT(2)
-> @@ -42,46 +42,55 @@
->  struct mpf_priv {
->  	struct spi_device *spi;
->  	bool program_mode;
-> +	u8 *tx;
-> +	u8 *rx;
+The `unevaluatedProperties: false` in
+`/schemas/graph.yaml#/properties/port` does not allow me to add new
+properties here.
+>
+> > +        unevaluatedProperties: false
+> > +        description: A port node pointing to DPI host port node
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/properties/port-base
+> > +        description:
+> > +          Video port for panel or connector.
+> > +
+> > +        patternProperties:
+> > +          "^endpoint@[01]$":
+> > +            $ref: /schemas/media/video-interfaces.yaml#
+> > +            type: object
+> > +            unevaluatedProperties: false
+> > +
+> > +            properties:
+> > +              reg:
+> > +                maxItems: 1
+> > +
+> > +              remote-endpoint: true
+> > +
+> > +              data-lanes:
+> > +                minItems: 1
+> > +                uniqueItems: true
+> > +                items:
+> > +                  - enum: [ 0, 1, 2, 3]
+>
+> Same problem as your previouspatch.
+>
+> > +
+> > +              mode-switch:
+> > +                type: boolean
+> > +                description: Register this node as a Type-C mode switch or not.
+> > +
+> > +         required:
+> > +        - reg
+> > +           - remote-endpoint
+> >
+> >  required:
+> >    - compatible
+> > @@ -62,7 +106,7 @@ required:
+> >    - pwr18-supply
+> >    - interrupts
+> >    - reset-gpios
+> > -  - extcon
+> > +  - ports
+> >
+> >  additionalProperties: false
+> >
+> > @@ -92,3 +136,45 @@ examples:
+> >              };
+> >          };
+> >      };
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +    &i2c3 {
+> > +        clock-frequency = <100000>;
+> > +
+> > +        it6505dptx: it6505dptx@5c {
+>
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>
+I'll fix this in v7.
+> > +            compatible = "ite,it6505";
+> > +            interrupts = <8 IRQ_TYPE_LEVEL_LOW 8 0>;
+> > +            reg = <0x5c>;
+> > +            pinctrl-names = "default";
+> > +            pinctrl-0 = <&it6505_pins>;
+> > +            ovdd-supply = <&mt6366_vsim2_reg>;
+> > +            pwr18-supply = <&pp1800_dpbrdg_dx>;
+> > +            reset-gpios = <&pio 177 0>;
+> > +            hpd-gpios = <&pio 10 0>;
+> > +
+> > +            ports {
+> > +                #address-cells = <1>;
+> > +                #size-cells = <0>;
+> > +                port@0 {
+> > +                    reg = <0>;
+> > +                    it6505_in: endpoint {
+> > +                        remote-endpoint = <&dpi_out>;
+> > +                    };
+> > +                };
+> > +                port@1 {
+> > +                    reg = <1>;
+> > +                    ite_typec0: endpoint@0 {
+> > +                        mode-switch;
+> > +                        data-lanes = <0 1>;
+>
+> Does not look like you tested the bindings. Please run `make
+> dt_binding_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Sorry for not checking the documentation and testing the patches
+before submitting this.
 
-u8 tx  __aligned(ARCH_KMALLOC_MINALIGN);
-u8 rx;
+I'll fix the errors in v7.
 
-Is that OK?
-
->  };
->  
-> -static int mpf_read_status(struct spi_device *spi)
-> +static int mpf_read_status(struct mpf_priv *priv)
->  {
-> -	u8 status = 0, status_command = MPF_SPI_READ_STATUS;
-> -	struct spi_transfer xfers[2] = { 0 };
-> -	int ret;
-> -
->  	/*
->  	 * HW status is returned on MISO in the first byte after CS went
->  	 * active. However, first reading can be inadequate, so we submit
->  	 * two identical SPI transfers and use result of the later one.
->  	 */
-> -	xfers[0].tx_buf = &status_command;
-> -	xfers[1].tx_buf = &status_command;
-> -	xfers[0].rx_buf = &status;
-> -	xfers[1].rx_buf = &status;
-> -	xfers[0].len = 1;
-> -	xfers[1].len = 1;
-> -	xfers[0].cs_change = 1;
-> +	struct spi_transfer xfers[2] = {
-> +		{
-> +			.tx_buf = priv->tx,
-> +			.rx_buf = priv->rx,
-> +			.len = 1,
-> +			.cs_change = 1,
-> +		}, {
-> +			.tx_buf = priv->tx,
-> +			.rx_buf = priv->rx,
-> +			.len = 1,
-> +		},
-> +	};
-> +	u8 status;
-> +	int ret;
->  
-> -	ret = spi_sync_transfer(spi, xfers, 2);
-> +	*priv->tx = MPF_SPI_READ_STATUS;
-> +
-> +	ret = spi_sync_transfer(priv->spi, xfers, 2);
-> +	if (ret)
-> +		return ret;
-> +
-> +	status = *priv->rx;
->  
->  	if ((status & MPF_STATUS_SPI_VIOLATION) ||
->  	    (status & MPF_STATUS_SPI_ERROR))
-> -		ret = -EIO;
-> +		return -EIO;
->  
-> -	return ret ? : status;
-> +	return status;
->  }
->  
->  static enum fpga_mgr_states mpf_ops_state(struct fpga_manager *mgr)
->  {
->  	struct mpf_priv *priv = mgr->priv;
-> -	struct spi_device *spi;
->  	bool program_mode;
->  	int status;
->  
-> -	spi = priv->spi;
->  	program_mode = priv->program_mode;
-> -	status = mpf_read_status(spi);
-> +	status = mpf_read_status(priv);
->  
->  	if (!program_mode && !status)
->  		return FPGA_MGR_STATE_OPERATING;
-> @@ -186,51 +195,47 @@ static int mpf_ops_parse_header(struct fpga_manager *mgr,
->  }
->  
->  /* Poll HW status until busy bit is cleared and mask bits are set. */
-> -static int mpf_poll_status(struct spi_device *spi, u8 mask)
-> +static int mpf_poll_status(struct mpf_priv *priv, u8 mask)
->  {
-> -	int status, retries = MPF_STATUS_POLL_RETRIES;
-> -
-> -	while (retries--) {
-> -		status = mpf_read_status(spi);
-> -		if (status < 0)
-> -			return status;
-> +	int ret, status;
->  
-> -		if (status & MPF_STATUS_BUSY)
-> -			continue;
-> -
-> -		if (!mask || (status & mask))
-> -			return status;
-> -	}
-> +	ret = read_poll_timeout(mpf_read_status, status,
-> +				(status < 0) ||
-> +				(!(status & MPF_STATUS_BUSY) &&
-> +				 (!mask || (status & mask))),
-> +				0, 2 * USEC_PER_SEC, false, priv);
-
-use a MACRO for timeout value.
-
-Thanks,
-Yilun
-
-> +	if (ret < 0)
-> +		return ret;
->  
-> -	return -EBUSY;
-> +	return status;
->  }
->  
-> -static int mpf_spi_write(struct spi_device *spi, const void *buf, size_t buf_size)
-> +static int mpf_spi_write(struct mpf_priv *priv, const void *buf, size_t buf_size)
->  {
-> -	int status = mpf_poll_status(spi, 0);
-> +	int status = mpf_poll_status(priv, 0);
->  
->  	if (status < 0)
->  		return status;
->  
-> -	return spi_write(spi, buf, buf_size);
-> +	return spi_write_then_read(priv->spi, buf, buf_size, NULL, 0);
->  }
->  
-> -static int mpf_spi_write_then_read(struct spi_device *spi,
-> +static int mpf_spi_write_then_read(struct mpf_priv *priv,
->  				   const void *txbuf, size_t txbuf_size,
->  				   void *rxbuf, size_t rxbuf_size)
->  {
->  	const u8 read_command[] = { MPF_SPI_READ_DATA };
->  	int ret;
->  
-> -	ret = mpf_spi_write(spi, txbuf, txbuf_size);
-> +	ret = mpf_spi_write(priv, txbuf, txbuf_size);
->  	if (ret)
->  		return ret;
->  
-> -	ret = mpf_poll_status(spi, MPF_STATUS_READY);
-> +	ret = mpf_poll_status(priv, MPF_STATUS_READY);
->  	if (ret < 0)
->  		return ret;
->  
-> -	return spi_write_then_read(spi, read_command, sizeof(read_command),
-> +	return spi_write_then_read(priv->spi, read_command, sizeof(read_command),
->  				   rxbuf, rxbuf_size);
->  }
->  
-> @@ -242,7 +247,6 @@ static int mpf_ops_write_init(struct fpga_manager *mgr,
->  	const u8 isc_en_command[] = { MPF_SPI_ISC_ENABLE };
->  	struct mpf_priv *priv = mgr->priv;
->  	struct device *dev = &mgr->dev;
-> -	struct spi_device *spi;
->  	u32 isc_ret = 0;
->  	int ret;
->  
-> @@ -251,9 +255,7 @@ static int mpf_ops_write_init(struct fpga_manager *mgr,
->  		return -EOPNOTSUPP;
->  	}
->  
-> -	spi = priv->spi;
-> -
-> -	ret = mpf_spi_write_then_read(spi, isc_en_command, sizeof(isc_en_command),
-> +	ret = mpf_spi_write_then_read(priv, isc_en_command, sizeof(isc_en_command),
->  				      &isc_ret, sizeof(isc_ret));
->  	if (ret || isc_ret) {
->  		dev_err(dev, "Failed to enable ISC: spi_ret %d, isc_ret %u\n",
-> @@ -261,7 +263,7 @@ static int mpf_ops_write_init(struct fpga_manager *mgr,
->  		return -EFAULT;
->  	}
->  
-> -	ret = mpf_spi_write(spi, program_mode, sizeof(program_mode));
-> +	ret = mpf_spi_write(priv, program_mode, sizeof(program_mode));
->  	if (ret) {
->  		dev_err(dev, "Failed to enter program mode: %d\n", ret);
->  		return ret;
-> @@ -272,13 +274,32 @@ static int mpf_ops_write_init(struct fpga_manager *mgr,
->  	return 0;
->  }
->  
-> +static int mpf_spi_frame_write(struct mpf_priv *priv, const char *buf)
-> +{
-> +	struct spi_transfer xfers[2] = {
-> +		{
-> +			.tx_buf = priv->tx,
-> +			.len = 1,
-> +		}, {
-> +			.tx_buf = buf,
-> +			.len = MPF_SPI_FRAME_SIZE,
-> +		},
-> +	};
-> +	int ret;
-> +
-> +	ret = mpf_poll_status(priv, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*priv->tx = MPF_SPI_FRAME;
-> +
-> +	return spi_sync_transfer(priv->spi, xfers, ARRAY_SIZE(xfers));
-> +}
-> +
->  static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
->  {
-> -	u8 spi_frame_command[] = { MPF_SPI_FRAME };
-> -	struct spi_transfer xfers[2] = { 0 };
->  	struct mpf_priv *priv = mgr->priv;
->  	struct device *dev = &mgr->dev;
-> -	struct spi_device *spi;
->  	int ret, i;
->  
->  	if (count % MPF_SPI_FRAME_SIZE) {
-> @@ -287,19 +308,8 @@ static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count
->  		return -EINVAL;
->  	}
->  
-> -	spi = priv->spi;
-> -
-> -	xfers[0].tx_buf = spi_frame_command;
-> -	xfers[0].len = sizeof(spi_frame_command);
-> -
->  	for (i = 0; i < count / MPF_SPI_FRAME_SIZE; i++) {
-> -		xfers[1].tx_buf = buf + i * MPF_SPI_FRAME_SIZE;
-> -		xfers[1].len = MPF_SPI_FRAME_SIZE;
-> -
-> -		ret = mpf_poll_status(spi, 0);
-> -		if (ret >= 0)
-> -			ret = spi_sync_transfer(spi, xfers, ARRAY_SIZE(xfers));
-> -
-> +		ret = mpf_spi_frame_write(priv, buf + i * MPF_SPI_FRAME_SIZE);
->  		if (ret) {
->  			dev_err(dev, "Failed to write bitstream frame %d/%zu\n",
->  				i, count / MPF_SPI_FRAME_SIZE);
-> @@ -317,12 +327,9 @@ static int mpf_ops_write_complete(struct fpga_manager *mgr,
->  	const u8 release_command[] = { MPF_SPI_RELEASE };
->  	struct mpf_priv *priv = mgr->priv;
->  	struct device *dev = &mgr->dev;
-> -	struct spi_device *spi;
->  	int ret;
->  
-> -	spi = priv->spi;
-> -
-> -	ret = mpf_spi_write(spi, isc_dis_command, sizeof(isc_dis_command));
-> +	ret = mpf_spi_write(priv, isc_dis_command, sizeof(isc_dis_command));
->  	if (ret) {
->  		dev_err(dev, "Failed to disable ISC: %d\n", ret);
->  		return ret;
-> @@ -330,7 +337,7 @@ static int mpf_ops_write_complete(struct fpga_manager *mgr,
->  
->  	usleep_range(1000, 2000);
->  
-> -	ret = mpf_spi_write(spi, release_command, sizeof(release_command));
-> +	ret = mpf_spi_write(priv, release_command, sizeof(release_command));
->  	if (ret) {
->  		dev_err(dev, "Failed to exit program mode: %d\n", ret);
->  		return ret;
-> @@ -361,6 +368,14 @@ static int mpf_probe(struct spi_device *spi)
->  	if (!priv)
->  		return -ENOMEM;
->  
-> +	priv->tx = devm_kmalloc(dev, 1, GFP_KERNEL);
-> +	if (!priv->tx)
-> +		return -ENOMEM;
-> +
-> +	priv->rx = devm_kmalloc(dev, 1, GFP_KERNEL);
-> +	if (!priv->rx)
-> +		return -ENOMEM;
-> +
->  	priv->spi = spi;
->  
->  	mgr = devm_fpga_mgr_register(dev, "Microchip Polarfire SPI FPGA Manager",
-> -- 
-> 2.38.2
-> 
-> 
+Best regards,
+Pin-yen
+>
+> Best regards,
+> Krzysztof
+>
