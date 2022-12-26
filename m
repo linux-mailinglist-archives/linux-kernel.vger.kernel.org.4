@@ -2,155 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2783656059
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F2865605F
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbiLZGWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 01:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        id S231588AbiLZGZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 01:25:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbiLZGWL (ORCPT
+        with ESMTP id S229595AbiLZGZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 01:22:11 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC38CE94;
-        Sun, 25 Dec 2022 22:22:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1672035723; bh=GDHFwQ+mzNVO8tXrPxkpmH7kCXWh+gmGE1QJOJY+O2k=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=KRWQfLsPNi7V684fnPONHl8hLjSA0dbqB3t+hS20Z29fNB+rphOXn6eubUxR/MyUn
-         e+8gcHLJaPy+sNXFL7eXiCVqpiHcaxV0C1Q2qvOXucnCL7TCXbc83ljD4tOCUd/3LX
-         NvuiYMfaa2c4vb1WlCKKJBqmE+9iWqicgYdv93Rk=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon, 26 Dec 2022 07:22:03 +0100 (CET)
-X-EA-Auth: JPuPCVnsPUHVX6fV9c4oPjInOpNb3lNqkiXEQHyuAO/QACxRTgn4sUjTxTo0R5U8cjru0XMUvLKmt5an8YCt8Ubm8K73dt/k
-Date:   Mon, 26 Dec 2022 11:51:57 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v4 2/2] tty: serial: dz: convert atomic_* to refcount_* APIs
- for irq_guard
-Message-ID: <51ef854f77779c82010379420139993e12c38776.1671898144.git.drv@mailo.com>
-References: <cover.1671898144.git.drv@mailo.com>
+        Mon, 26 Dec 2022 01:25:04 -0500
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFC33A5;
+        Sun, 25 Dec 2022 22:25:03 -0800 (PST)
+Received: by mail-pl1-f173.google.com with SMTP id d3so10002798plr.10;
+        Sun, 25 Dec 2022 22:25:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3HjLQD394T0N1zzJlCWkPmDMa8LBCihXMtLb1cY2QxY=;
+        b=1E+viyUg/XZ8Z5CQ+SYv8X8aMw/yv5HTGDnsTC9s3EkLfXALKJt3ZdmVFGScTMklIK
+         1qLtf1xmQE2zEKQYsB/DEuWFzsQkEMqUBUUndC+lWBNZNgrEJhB9jPBiSAjTMEXyWxMS
+         dG3kVOg2jE/IKUChGZX5EwwMZYl0B3UbLZJ/Ff/3s+mypLwwsP2HImY6sZ6XQ9g+Jp/h
+         9QtuZheSzmbBEeUOEQDT3W9mLE2OvvW/HbaJwK+Vptl1aVjgctc/U24ALTUlQKmT7GQa
+         4fQ/54QWwjaOoOI8SsuCgbViaraH+cxNZp8yfeqryzxq60RaxNIdYSLfln7q9qzTF/D7
+         QgKA==
+X-Gm-Message-State: AFqh2kogbLqLYD7YKb79GD2NqrzIvC8XDkhlh6HzAttRW0mso78vW3ZP
+        u38nAdDwxrv5hDiq0aBR/KLcJjQBAviBSw==
+X-Google-Smtp-Source: AMrXdXsiFaWJunLQMje24SK02J3FZLosXdKBXBxsj3/hkBJj6hx+0hywlrB4BMWV0SIPyUZ1hNl7DA==
+X-Received: by 2002:a17:902:7207:b0:189:6457:4e14 with SMTP id ba7-20020a170902720700b0018964574e14mr17765585plb.8.1672035902353;
+        Sun, 25 Dec 2022 22:25:02 -0800 (PST)
+Received: from [192.168.0.21] ([125.191.247.116])
+        by smtp.gmail.com with ESMTPSA id o4-20020a170902d4c400b00188b5d25438sm6293402plg.35.2022.12.25.22.24.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Dec 2022 22:25:01 -0800 (PST)
+Message-ID: <aa085d47-1163-6133-ed71-88eedb47dabe@ooseel.net>
+Date:   Mon, 26 Dec 2022 15:24:57 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1671898144.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3] usbnet: optimize usbnet_bh() to reduce CPU load
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Greg KH <greg@kroah.com>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221221075924.1141346-1-lsahn@ooseel.net>
+ <070c6690ad7ea537a7081bc9faa0f78861751bc4.camel@redhat.com>
+Content-Language: en-US
+From:   Leesoo Ahn <lsahn@ooseel.net>
+In-Reply-To: <070c6690ad7ea537a7081bc9faa0f78861751bc4.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The refcount_* APIs are designed to address known issues with the
-atomic_t APIs for reference counting. They provide following distinct
-advantages:
-   - protect the reference counters from overflow/underflow
-   - avoid use-after-free errors
-   - provide improved memory ordering guarantee schemes
-   - neater and safer.
-Hence, replace the atomic_* APIs by their equivalent refcount_t
-API functions.
-
-This patch proposal address the following warnings generated by
-the atomic_as_refcounter.cocci coccinelle script
-atomic_add_return(-1, ...)
-
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
-Please Note:
-   1. The patch is compile tested using dec_station.defconfig for MIPS architecture.
-   2. This patch should be applied after patch 1/2 of this series due to
-      dependency.
-
-Changes in v4:
-   1. Add the patch version label.
-
-Changes in v3:
-   1. Include the individual patches in a series and highlight dependency.
-      Feedback provided by gregkh@linuxfoundation.org
-
-Changes in v2:
-   1. Separate the combined change into one variable per patch as
-      suggested by gregkh@linuxfoundation.org
 
 
- drivers/tty/serial/dz.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+22. 12. 22. 20:13에 Paolo Abeni 이(가) 쓴 글:
+> On Wed, 2022-12-21 at 16:59 +0900, Leesoo Ahn wrote:
+>> The current source pushes skb into dev->done queue by calling
+>> skb_queue_tail() and then pop it by calling skb_dequeue() to branch to
+>> rx_cleanup state for freeing urb/skb in usbnet_bh(). It takes extra CPU
+>> load, 2.21% (skb_queue_tail) as follows.
+>>
+>> -   11.58%     0.26%  swapper          [k] usbnet_bh
+>>     - 11.32% usbnet_bh
+>>        - 6.43% skb_dequeue
+>>             6.34% _raw_spin_unlock_irqrestore
+>>        - 2.21% skb_queue_tail
+>>             2.19% _raw_spin_unlock_irqrestore
+>>        - 1.68% consume_skb
+>>           - 0.97% kfree_skbmem
+>>                0.80% kmem_cache_free
+>>             0.53% skb_release_data
+>>
+>> To reduce the extra CPU load use return values jumping to rx_cleanup
+>> state directly to free them instead of calling skb_queue_tail() and
+>> skb_dequeue() for push/pop respectively.
+>>
+>> -    7.87%     0.25%  swapper          [k] usbnet_bh
+>>     - 7.62% usbnet_bh
+>>        - 4.81% skb_dequeue
+>>             4.74% _raw_spin_unlock_irqrestore
+>>        - 1.75% consume_skb
+>>           - 0.98% kfree_skbmem
+>>                0.78% kmem_cache_free
+>>             0.58% skb_release_data
+>>          0.53% smsc95xx_rx_fixup
+>>
+>> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
+>> ---
+>> v3:
+>>    - Replace return values with proper -ERR values in rx_process()
+>>
+>> v2:
+>>    - Replace goto label with return statement to reduce goto entropy
+>>    - Add CPU load information by perf in commit message
+>>
+>> v1 at:
+>>    https://patchwork.kernel.org/project/netdevbpf/patch/20221217161851.829497-1-lsahn@ooseel.net/
+> 
+> This looks like net-next material.
+> 
+> We have already submitted the networking pull request to Linus
+> for v6.2 and therefore net-next is closed for new drivers, features,
+> code refactoring and optimizations. We are currently accepting
+> bug fixes only.
+> 
+> Please repost when net-next reopens after Jan 2nd, including the
+> expected 'net-next' tag into the subject line
+> 
+> RFC patches sent for review only are obviously welcome at any time.
+> 
+> [...]
+> 
+>> @@ -1528,13 +1526,14 @@ static void usbnet_bh (struct timer_list *t)
+>>   		entry = (struct skb_data *) skb->cb;
+>>   		switch (entry->state) {
+>>   		case rx_done:
+>> -			entry->state = rx_cleanup;
+>> -			rx_process (dev, skb);
+>> +			if (rx_process(dev, skb))
+>> +				goto cleanup;
+> 
+> You can avoid this additional label (which is a little confusing inside
+> a switch) factoring out a usb_free_skb(skb) helper and calling it here
+> and under the rx_cleanup case.
 
-diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
-index b70edc248f8b..0aa59a9beeb7 100644
---- a/drivers/tty/serial/dz.c
-+++ b/drivers/tty/serial/dz.c
-@@ -46,7 +46,6 @@
- #include <linux/tty.h>
- #include <linux/tty_flip.h>
+Thank you for the information and feedback, it will be in v4 when 
+net-next reopens.
 
--#include <linux/atomic.h>
- #include <linux/refcount.h>
- #include <linux/io.h>
- #include <asm/bootinfo.h>
-@@ -77,7 +76,7 @@ struct dz_port {
- struct dz_mux {
- 	struct dz_port		dport[DZ_NB_PORT];
- 	refcount_t		map_guard;
--	atomic_t		irq_guard;
-+	refcount_t		irq_guard;
- 	int			initialised;
- };
-
-@@ -400,18 +399,16 @@ static int dz_startup(struct uart_port *uport)
- 	struct dz_port *dport = to_dport(uport);
- 	struct dz_mux *mux = dport->mux;
- 	unsigned long flags;
--	int irq_guard;
- 	int ret;
- 	u16 tmp;
-
--	irq_guard = atomic_add_return(1, &mux->irq_guard);
--	if (irq_guard != 1)
-+	refcount_inc(&mux->irq_guard);
-+	if (refcount_read(&mux->irq_guard) != 1)
- 		return 0;
-
--	ret = request_irq(dport->port.irq, dz_interrupt,
--			  IRQF_SHARED, "dz", mux);
-+	ret = request_irq(dport->port.irq, dz_interrupt, IRQF_SHARED, "dz", mux);
- 	if (ret) {
--		atomic_add(-1, &mux->irq_guard);
-+		refcount_dec(&mux->irq_guard);
- 		printk(KERN_ERR "dz: Cannot get IRQ %d!\n", dport->port.irq);
- 		return ret;
- 	}
-@@ -441,15 +438,13 @@ static void dz_shutdown(struct uart_port *uport)
- 	struct dz_port *dport = to_dport(uport);
- 	struct dz_mux *mux = dport->mux;
- 	unsigned long flags;
--	int irq_guard;
- 	u16 tmp;
-
- 	spin_lock_irqsave(&dport->port.lock, flags);
- 	dz_stop_tx(&dport->port);
- 	spin_unlock_irqrestore(&dport->port.lock, flags);
-
--	irq_guard = atomic_add_return(-1, &mux->irq_guard);
--	if (!irq_guard) {
-+	if (refcount_dec_and_test(&mux->irq_guard)) {
- 		/* Disable interrupts.  */
- 		tmp = dz_in(dport, DZ_CSR);
- 		tmp &= ~(DZ_RIE | DZ_TIE);
---
-2.34.1
-
-
-
+Best regards,
+Leesoo
