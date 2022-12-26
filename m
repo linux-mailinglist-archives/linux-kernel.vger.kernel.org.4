@@ -2,148 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFCA656494
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 19:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF1065649A
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 19:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbiLZSYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 13:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S232295AbiLZS2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 13:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiLZSYO (ORCPT
+        with ESMTP id S231124AbiLZS2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 13:24:14 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A546A25D7;
-        Mon, 26 Dec 2022 10:24:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672079053; x=1703615053;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=4PC/rO7q4a/aiRxZxAXzbYiW0GcNhwpPNQ+hpbSkUY0=;
-  b=ZGP+WiS6bSsFMGcocZMGcJkuGUSf2DWRjj6q6yKZjMaf+G3+uw5bADaW
-   mlJqcKmGWzLjv0uxIR0wyfrxkVfoKth7yE4MG00EnQPY1vwonicG3l+q4
-   gyssqr3KCz2LQU77msaWtiYFSK2KP8sKjkaiU06qxZa0XUxZamg4SaLJR
-   KwV4n/s/b8zey992s0wkRW8czB92V//IGlV2Hq2egKL25S3dPPBe3WZCi
-   w+3G0a/HTA8nWqSi0NGrOsU1ZYS7jQiAWChEgfiNDAfulRuWf9MiqoStV
-   g/zdWD/HdL/RtIqIWVedBnfH1MlUGWRCzyxTZr4jGy4hao2SYdxjTcRpf
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="347790819"
-X-IronPort-AV: E=Sophos;i="5.96,276,1665471600"; 
-   d="scan'208";a="347790819"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2022 10:24:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="721309772"
-X-IronPort-AV: E=Sophos;i="5.96,276,1665471600"; 
-   d="scan'208";a="721309772"
-Received: from ptelkov-mobl2.ccr.corp.intel.com ([10.249.41.4])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2022 10:24:09 -0800
-Date:   Mon, 26 Dec 2022 20:24:06 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        linux-fpga@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        system@metrotek.ru
-Subject: Re: [PATCH v2 2/3] fpga: microchip-spi: rewrite status polling in
- a time measurable way
-In-Reply-To: <20221226142326.8111-3-i.bornyakov@metrotek.ru>
-Message-ID: <5386279-3ce-fa0-ed5-494cb12ae6d@linux.intel.com>
-References: <20221226142326.8111-1-i.bornyakov@metrotek.ru> <20221226142326.8111-3-i.bornyakov@metrotek.ru>
+        Mon, 26 Dec 2022 13:28:02 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705E82616
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 10:28:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1672079247; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=T4zgpSfZc+/VBFtGSYx5HyvXwtTw5zCEStYx0EwPza9+yUJTI8pLHdYeuR5vnCLSHo42WbmxR8s6/Ze2CzRAHhlTn8+shQdOyRdVk+/rstjv+5/ZQHR7ZSZyGu+AQlJk6T9+EGg0GpmjCfVkL+VPIdv3aV0RBonnE1sRn07PGCk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1672079247; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=q/mG3jwl7R4iGvK6jkz4z/JFsV5/iqv31VbL7HAnCZ4=; 
+        b=DIqx8KukaUEDyLkyXUSFF9KQ3rLpOHqBwfaNaitGp+eQC/ZebCOzqgESjZ+5s+8Ogy2jFwxJTwwX7ZZEEby8Q+nu01RqQ0BSuPfzRe594np8ZOlxIUYTiQC8dOxSgEgw5TWXR4lJ3djepjY9CkAaA8yquJ2xJg/b7Qv49anChnw=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672079247;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=q/mG3jwl7R4iGvK6jkz4z/JFsV5/iqv31VbL7HAnCZ4=;
+        b=PUa6sNFu2Dk9rKeyCjdQA3ocED1Fg7V47RS0K5wPjWW1EPiaLC3dIXHJ2vyzAAxp
+        ds6p7zh+48xEQAXmcSg8uB8ZANy0WXbEX4/v3qQvOFwioA3ae+GexlqbbAvuLF2XIPj
+        Ti9E07uotqhHmEG8jNHZVv4z7+237tYt7Uxq9VWo=
+Received: from kampyooter.. (110.226.31.37 [110.226.31.37]) by mx.zoho.in
+        with SMTPS id 1672079246242825.1574247688241; Mon, 26 Dec 2022 23:57:26 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Simon Ser <contact@emersion.fr>,
+        Jim Cromie <jim.cromie@gmail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <cover.1672078853.git.code@siddh.me>
+Subject: [PATCH v3 00/10] drm: Remove usage of deprecated DRM_* macros
+Date:   Mon, 26 Dec 2022 23:57:12 +0530
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Dec 2022, Ivan Bornyakov wrote:
+This patchset aims to remove usages of deprecated DRM_* macros from the
+files residing in drivers/gpu/drm root.
 
-> Original busy loop with retries count in mpf_poll_status() is not too
-> reliable, as it takes different times on different systems. Replace it
-> with read_poll_timeout() macro.
-> 
-> Fixes: 5f8d4a900830 ("fpga: microchip-spi: add Microchip MPF FPGA manager")
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> ---
->  drivers/fpga/microchip-spi.c | 25 +++++++++++--------------
->  1 file changed, 11 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-> index e72fedd93a27..f3ddfab87499 100644
-> --- a/drivers/fpga/microchip-spi.c
-> +++ b/drivers/fpga/microchip-spi.c
-> @@ -6,6 +6,7 @@
->  #include <asm/unaligned.h>
->  #include <linux/delay.h>
->  #include <linux/fpga/fpga-mgr.h>
-> +#include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/spi/spi.h>
-> @@ -33,7 +34,7 @@
->  
->  #define	MPF_BITS_PER_COMPONENT_SIZE	22
->  
-> -#define	MPF_STATUS_POLL_RETRIES		10000
-> +#define	MPF_STATUS_POLL_TIMEOUT		(2 * USEC_PER_SEC)
->  #define	MPF_STATUS_BUSY			BIT(0)
->  #define	MPF_STATUS_READY		BIT(1)
->  #define	MPF_STATUS_SPI_VIOLATION	BIT(2)
-> @@ -197,21 +198,17 @@ static int mpf_ops_parse_header(struct fpga_manager *mgr,
->  /* Poll HW status until busy bit is cleared and mask bits are set. */
->  static int mpf_poll_status(struct mpf_priv *priv, u8 mask)
->  {
-> -	int status, retries = MPF_STATUS_POLL_RETRIES;
-> +	int ret, status;
->  
-> -	while (retries--) {
-> -		status = mpf_read_status(priv);
-> -		if (status < 0)
-> -			return status;
-> -
-> -		if (status & MPF_STATUS_BUSY)
-> -			continue;
-> -
-> -		if (!mask || (status & mask))
-> -			return status;
-> -	}
-> +	ret = read_poll_timeout(mpf_read_status, status,
-> +				(status < 0) ||
-> +				(!(status & MPF_STATUS_BUSY) &&
-> +				 (!mask || (status & mask))),
+In process, I found out that NULL as first argument of drm_dbg_* wasn't
+working, but it was listed as the alternative in deprecation comment,
+so I fixed that before removing usages of DRM_DEBUG_* macros. Courtesy
+discussion on v1, I added support for NULL in drm_()* macros too in this
+v3.
 
-I'm just noting that this code does not match function's comment 
-(neither pre nor post diff code). The comment claims "mask bits are set" 
-but the code tests "any mask bit set". 
+This patchset should be applied in order as changes might be dependent.
 
-However, currently it causes no issue because only MPF_STATUS_READY is 
-passed and it's BIT(1).
 
-I think the condition matching to the comment would be this (IMHO, it is 
-also slightly simpler because !mask doesn't need to be special cased):
+Please review and let me know if any errors are there, and hopefully
+this gets accepted.
 
-((status & (MPF_STATUS_BUSY | mask)) == mask)
+---
+Changes in v3:
+- Added support for NULL is __drm_printk and thus by extension to drm_()*.
+- Thus, converted dropped pr_()* changes to drm_*(NULL, ...).
+- Rebased to drm-misc-next and resulting appropriate changes.
 
-(But not necessarily to be changed in this patch.)
+Changes in v2:
+- Removed conversions to pr_*() in DRM_INFO, DRM_NOTE, and DRM_ERROR change=
+s.
+- Due to above, DRM_NOTE usage cannot be removed and the patch is dropped.
+- DRY: NULL support is now achieved by way of a separate function.
 
--- 
- i.
+Siddh Raman Pant (10):
+  drm/print: Fix and add support for NULL as first argument in drm_*
+    macros
+  drm: Remove usage of deprecated DRM_INFO
+  drm: Remove usage of deprecated DRM_NOTE
+  drm: Remove usage of deprecated DRM_ERROR
+  drm: Remove usage of deprecated DRM_DEBUG
+  drm: Remove usage of deprecated DRM_DEBUG_DRIVER
+  drm: Remove usage of deprecated DRM_DEBUG_KMS
+  drm: Remove usage of deprecated DRM_DEBUG_PRIME
+  drm/drm_blend: Remove usage of deprecated DRM_DEBUG_ATOMIC
+  drm/drm_lease: Remove usage of deprecated DRM_DEBUG_LEASE
 
-> +				0, MPF_STATUS_POLL_TIMEOUT, false, priv);
-> +	if (ret < 0)
-> +		return ret;
->  
-> -	return -EBUSY;
-> +	return status;
->  }
->  
->  static int mpf_spi_write(struct mpf_priv *priv, const void *buf, size_t buf_size)
-> 
+ drivers/gpu/drm/drm_agpsupport.c        |   4 +-
+ drivers/gpu/drm/drm_blend.c             |  13 ++-
+ drivers/gpu/drm/drm_bridge.c            |   8 +-
+ drivers/gpu/drm/drm_bufs.c              | 122 ++++++++++++------------
+ drivers/gpu/drm/drm_client_modeset.c    | 118 +++++++++++++----------
+ drivers/gpu/drm/drm_color_mgmt.c        |   4 +-
+ drivers/gpu/drm/drm_connector.c         |  28 +++---
+ drivers/gpu/drm/drm_context.c           |  18 ++--
+ drivers/gpu/drm/drm_crtc.c              |  36 ++++---
+ drivers/gpu/drm/drm_crtc_helper.c       |  62 ++++++------
+ drivers/gpu/drm/drm_debugfs_crc.c       |   8 +-
+ drivers/gpu/drm/drm_displayid.c         |   6 +-
+ drivers/gpu/drm/drm_dma.c               |  10 +-
+ drivers/gpu/drm/drm_drv.c               |  26 ++---
+ drivers/gpu/drm/drm_edid.c              |  17 ++--
+ drivers/gpu/drm/drm_file.c              |  18 ++--
+ drivers/gpu/drm/drm_flip_work.c         |   2 +-
+ drivers/gpu/drm/drm_framebuffer.c       |   3 +-
+ drivers/gpu/drm/drm_gem.c               |   7 +-
+ drivers/gpu/drm/drm_gem_dma_helper.c    |   6 +-
+ drivers/gpu/drm/drm_gem_shmem_helper.c  |   6 +-
+ drivers/gpu/drm/drm_hashtab.c           |  10 +-
+ drivers/gpu/drm/drm_ioc32.c             |  13 +--
+ drivers/gpu/drm/drm_ioctl.c             |  24 ++---
+ drivers/gpu/drm/drm_irq.c               |   4 +-
+ drivers/gpu/drm/drm_kms_helper_common.c |   2 +-
+ drivers/gpu/drm/drm_lease.c             |  68 ++++++-------
+ drivers/gpu/drm/drm_legacy_misc.c       |   4 +-
+ drivers/gpu/drm/drm_lock.c              |  36 +++----
+ drivers/gpu/drm/drm_mipi_dbi.c          |  19 ++--
+ drivers/gpu/drm/drm_mipi_dsi.c          |  12 +--
+ drivers/gpu/drm/drm_mm.c                |   8 +-
+ drivers/gpu/drm/drm_mode_config.c       |   2 +-
+ drivers/gpu/drm/drm_mode_object.c       |   6 +-
+ drivers/gpu/drm/drm_modes.c             |  36 +++----
+ drivers/gpu/drm/drm_modeset_helper.c    |   2 +-
+ drivers/gpu/drm/drm_pci.c               |  14 +--
+ drivers/gpu/drm/drm_plane.c             |  46 ++++-----
+ drivers/gpu/drm/drm_probe_helper.c      |  39 ++++----
+ drivers/gpu/drm/drm_rect.c              |   4 +-
+ drivers/gpu/drm/drm_scatter.c           |  19 ++--
+ drivers/gpu/drm/drm_syncobj.c           |   2 +-
+ drivers/gpu/drm/drm_sysfs.c             |  22 ++---
+ drivers/gpu/drm/drm_vm.c                |  45 +++++----
+ include/drm/drm_print.h                 |  97 +++++++++++++------
+ 45 files changed, 565 insertions(+), 491 deletions(-)
+
+--=20
+2.35.1
+
 
