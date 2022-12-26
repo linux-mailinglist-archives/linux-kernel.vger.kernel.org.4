@@ -2,117 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5D46564AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 19:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE1D65656B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 23:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbiLZSqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 13:46:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S232455AbiLZWgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 17:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLZSqH (ORCPT
+        with ESMTP id S232457AbiLZWgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 13:46:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90A4BF9;
-        Mon, 26 Dec 2022 10:46:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 346B360EF7;
-        Mon, 26 Dec 2022 18:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8DDC433EF;
-        Mon, 26 Dec 2022 18:45:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672080361;
-        bh=11fqsHGDwlwZxXJ1I41qluVDDxZF3poiwCovlkcoHk8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FYKcKWr0aibziaNfZxLDzsqJAbxmWqPqNL9fzxTN/GiM2Es+IyAru6i78RMDQBZLE
-         AJUFihUysrNIL0HrQ7zpLpvvkdPgE0VYc5vBp4fKBFnNNQlMhrbm00lvDfpgtSLKKg
-         eim1FHPTBoPExSY3hwYvEfmjXyOtt1Dj67HK9QqTjVJo+p9qc5cgbAewgJVrZCOzT4
-         0tHVbx22psxKKIAqN+WZbenpOIcf+3onOeOwXutik0uK8+veuaP18Ac4NPX6bRlKWt
-         SyA2x9mAeRdasCG3zdQ0tBnmM0ej0+jVoZ/9M/lHcope8kbXIpFPT6m44J+tUvdMjC
-         F/6LEe+RzHNJg==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Dennis Gilmore <dennis@ausil.us>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2] arch: fix broken BuildID for arm64 and riscv
-Date:   Tue, 27 Dec 2022 03:45:37 +0900
-Message-Id: <20221226184537.744960-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 26 Dec 2022 17:36:07 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A692C62CA;
+        Mon, 26 Dec 2022 14:35:58 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id r11so11122647oie.13;
+        Mon, 26 Dec 2022 14:35:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CeNBUbGDn4xdCtwlj9RAq3WVYSRQB1KO/qTg4Zks/mQ=;
+        b=pvHO42EuO/mAupnhbTOgWtf9GznhAtzr1LlJzFej3jmLp60wCKfFgLVHK9AuAMykuC
+         cO7fQNlDQohdns1ekcuXxKPYLF+MUBSl+Paq1ef8RGO8bEGd2RKAdEiifHEbT8Gyzxrh
+         6v469Xh881hDP0RQRB5DzzjxjLULCv5KLcZWs9yue8cJUMI5V40K5dP160TGHkDPKjAf
+         rH1AKLLh4T7mLiBwbNhGBo+cDhn66oBLCmRKUx5PVXK3zpPSI7QjytswsXlyyKMM+zIs
+         IkAOle22LMwJ9eM1zYCQi4TiFmJgAEAozrumQSxLSzkxhxdDdgmOXELWHX1axiDv7BJZ
+         sxYg==
+X-Gm-Message-State: AFqh2koQPnlvuiAA15z+tx/rXKGvzVRzbgRYIg1psoBZ1gCwJJ2FeBtS
+        k938CQ6tqRyVQ1tQxtkfAQ==
+X-Google-Smtp-Source: AMrXdXuGQBnK4GOOz4Pj3nDQschEzoMDzY1DtfzGyYcgjBm1xOpSHACbLIjWALed+TtwJIUTCNanJQ==
+X-Received: by 2002:a05:6808:f0c:b0:361:12d7:c160 with SMTP id m12-20020a0568080f0c00b0036112d7c160mr11272590oiw.10.1672094157949;
+        Mon, 26 Dec 2022 14:35:57 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:80e8:2792:eb0e:539f:f657:547b])
+        by smtp.gmail.com with ESMTPSA id a19-20020a056808129300b003436fa2c23bsm5263764oiw.7.2022.12.26.14.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 14:35:57 -0800 (PST)
+Received: (nullmailer pid 37959 invoked by uid 1000);
+        Mon, 26 Dec 2022 18:49:07 -0000
+Date:   Mon, 26 Dec 2022 12:49:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     s.hauer@pengutronix.de, linux-imx@nxp.com,
+        Peng Fan <peng.fan@nxp.com>, krzysztof.kozlowski+dt@linaro.org,
+        festevam@gmail.com, shawnguo@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/5] dt-bindings: soc: imx: add IOMUXC GPR support
+Message-ID: <167208054642.37890.16783213190353315745.robh@kernel.org>
+References: <20221223025703.15784-1-peng.fan@oss.nxp.com>
+ <20221223025703.15784-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221223025703.15784-2-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dennis Gilmore reports that the BuildID is missing in the arm64 vmlinux
-since commit 994b7ac1697b ("arm64: remove special treatment for the
-link order of head.o").
 
-The issue is that the type of .notes section, which contains the BuildID,
-changed from NOTES to PROGBITS.
+On Fri, 23 Dec 2022 10:56:59 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add binding doc for i.MX IOMUX Controller General Purpose Registers
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../bindings/soc/imx/fsl,imx-iomuxc-gpr.yaml  | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx-iomuxc-gpr.yaml
+> 
 
-Ard Biesheuvel figured out that whichever object gets linked first gets
-to decide the type of a section. The PROGBITS type is the result of the
-compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
-
-While Ard provided a fix for arm64, I want to fix this globally because
-the same issue is happening on riscv since commit 2348e6bf4421 ("riscv:
-remove special treatment for the link order of head.o"). This problem
-will happen in general for other architectures if they start to drop
-unneeded entries from scripts/head-object-list.txt.
-
-Discard .note.GNU-stack in include/asm-generic/vmlinux.lds.h.
-
-Link: https://lore.kernel.org/lkml/CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com/
-Fixes: 994b7ac1697b ("arm64: remove special treatment for the link order of head.o")
-Fixes: 2348e6bf4421 ("riscv: remove special treatment for the link order of head.o")
-Reported-by: Dennis Gilmore <dennis@ausil.us>
-Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-Changes in v2:
-  - discard .note.GNU-stack before .notes because many architectures
-    call DISCARDS at the end of their linker scripts
-
- include/asm-generic/vmlinux.lds.h | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index a94219e9916f..659bf3b31c91 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -891,7 +891,12 @@
- #define PRINTK_INDEX
- #endif
- 
-+/*
-+ * Discard .note.GNU-stack, which is emitted as PROGBITS by the compiler.
-+ * Otherwise, the type of .notes section would become PROGBITS instead of NOTES.
-+ */
- #define NOTES								\
-+	/DISCARD/ : { *(.note.GNU-stack) }				\
- 	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
- 		BOUNDED_SECTION_BY(.note.*, _notes)			\
- 	} NOTES_HEADERS							\
--- 
-2.34.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
