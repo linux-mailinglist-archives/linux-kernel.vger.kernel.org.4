@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 322D3656573
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 23:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9BF656539
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 23:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbiLZWhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 17:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
+        id S232225AbiLZWCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 17:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232504AbiLZWgQ (ORCPT
+        with ESMTP id S229522AbiLZWCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 17:36:16 -0500
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E86D29A;
-        Mon, 26 Dec 2022 14:36:06 -0800 (PST)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1441d7d40c6so13803707fac.8;
-        Mon, 26 Dec 2022 14:36:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gd7h3ftOlRZgWS17O9lpNRf7y+BcCuyyNMntDSSxUI8=;
-        b=4AuHOH/niwFm4B5TcdR1/MiGttA9/4VdACzNGKSgYbPXkcwq0BqNOhyIBOs3fsml1z
-         BJHjOzAcaq01RmyU2RoTOLB9a943fqnjJ4B/SlbE2c9Jf7hdwwbVvRC5x/Vr1QLmfkBM
-         jqgVikRIY4tsndp0/PMBz3DuGlvO7mk7UfJCUK2IpGL8Ekb3Ec4rXe+aOhPIsvazWdwd
-         0w7dGrSEAwkiCrD6uIzgnUbIzofI+weSxUH5SRumkuAhpdt+T6o6LW65oRWXyI7y73ha
-         KyLfkG78aTOmSGEY2Q4vDYC5cYLwEf5raHRVZI9qet2h4IND7xcMY51cV/PXvur8ybNB
-         N05g==
-X-Gm-Message-State: AFqh2kpcLjhesc3EbLLamIr7YVnt0iun6DMd6uIj8+FK27IXKZwEV4yA
-        fYX/3N9ySBNNpZdBuIQcFX15/0xyxA==
-X-Google-Smtp-Source: AMrXdXvlImhitnYDbaRz3WRGUTuHJKfOVSDWrP/aMMwNqrnB5QrRh0QVVvlpZXvPyB6tchgNZ0o7pg==
-X-Received: by 2002:a05:6870:a54c:b0:14c:4479:84a6 with SMTP id p12-20020a056870a54c00b0014c447984a6mr9439484oal.52.1672094165689;
-        Mon, 26 Dec 2022 14:36:05 -0800 (PST)
-Received: from robh_at_kernel.org ([2605:ef80:80e8:2792:eb0e:539f:f657:547b])
-        by smtp.gmail.com with ESMTPSA id w9-20020a056871060900b0012763819bcasm5418018oan.50.2022.12.26.14.36.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 14:36:05 -0800 (PST)
-Received: (nullmailer pid 76410 invoked by uid 1000);
-        Mon, 26 Dec 2022 22:01:20 -0000
-Date:   Mon, 26 Dec 2022 16:01:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Anand Moon <anand@edgeble.ai>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        linux-rockchip@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
-        David Wu <david.wu@rock-chips.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jagan Teki <jagan@edgeble.ai>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 26 Dec 2022 17:02:21 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6563265F;
+        Mon, 26 Dec 2022 14:02:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E3B82CE0E79;
+        Mon, 26 Dec 2022 22:02:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1732C433EF;
+        Mon, 26 Dec 2022 22:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672092137;
+        bh=ry6lx+uexHhl+KAnI+uFm4EaQ8KJmvU/sxNXOfCYXu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jsdalTDD884x4PWJj5rh7s/dUmy4mcwNC7yb8uxB7yOFTwR+SVlYpUnv9rWhbU4QM
+         UtcPcWhnl+4bs17JHduLwRWmBk/zp9fBW4+NisAuun//upx7NJE8GCS3P1JSX6B2qI
+         s+wc4Za+v28XorBxEVu4xqKa8oZEl30bpl35bGiOMF/h7U1mIPIYmVLlybWALoj49+
+         Zyd13FmdEFRGngRKL0AT85sRbazxODqx2WTz3b1lr91PpRlAt7Oo1iFanVxrUCYE/6
+         yHhTmViJlhlbgMBGJREvC69nIkaoINMO+qqoXlcHLHQa8CbepamcSzfBDXRsPv3axd
+         cw2nqaCZetXEg==
+Date:   Mon, 26 Dec 2022 22:02:11 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCHv2 linux-next 1/4] dt-bindings: net: rockchip-dwmac: fix
- rv1126 compatible warning
-Message-ID: <167209208042.76358.12497793083674238127.robh@kernel.org>
-References: <20221226063625.1913-1-anand@edgeble.ai>
+        linux-riscv@lists.infradead.org, Dennis Gilmore <dennis@ausil.us>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: Re: [PATCH] arch: fix broken BuildID for arm64 and riscv
+Message-ID: <Y6oZ40fEArg7MJGo@spud>
+References: <20221224192751.810363-1-masahiroy@kernel.org>
+ <Y6hptEk8FmISixLS@spud>
+ <CAK7LNAT39aZEw=0209ovYZ2kxtOaA2a51=XD9=LqYHjkTOEK4g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3A7DtNG3krRkXmgE"
 Content-Disposition: inline
-In-Reply-To: <20221226063625.1913-1-anand@edgeble.ai>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAK7LNAT39aZEw=0209ovYZ2kxtOaA2a51=XD9=LqYHjkTOEK4g@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,25 +68,96 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 26 Dec 2022 06:36:19 +0000, Anand Moon wrote:
-> Fix compatible string for RV1126 gmac, and constrain it to
-> be compatible with Synopsys dwmac 4.20a.
-> 
-> fix below warning
-> $ make CHECK_DTBS=y rv1126-edgeble-neu2-io.dtb
-> arch/arm/boot/dts/rv1126-edgeble-neu2-io.dtb: ethernet@ffc40000:
-> 		 compatible: 'oneOf' conditional failed, one must be fixed:
->         ['rockchip,rv1126-gmac', 'snps,dwmac-4.20a'] is too long
->         'rockchip,rv1126-gmac' is not one of ['rockchip,rk3568-gmac', 'rockchip,rk3588-gmac']
-> 
-> Fixes: b36fe2f43662 ("dt-bindings: net: rockchip-dwmac: add rv1126 compatible")
-> Signed-off-by: Anand Moon <anand@edgeble.ai>
-> ---
-> v2: drop SoB of Jagan Teki
->     added Fix tags and update the commit message of the warning.
-> ---
->  Documentation/devicetree/bindings/net/rockchip-dwmac.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+--3A7DtNG3krRkXmgE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Rob Herring <robh@kernel.org>
+Hey Masahiro,
+
+On Tue, Dec 27, 2022 at 04:06:35AM +0900, Masahiro Yamada wrote:
+> On Mon, Dec 26, 2022 at 12:18 AM Conor Dooley <conor@kernel.org> wrote:
+> > On Sun, Dec 25, 2022 at 04:27:51AM +0900, Masahiro Yamada wrote:
+> > > Dennis Gilmore reports that the BuildID is missing in the arm64 vmlin=
+ux
+> > > since commit 994b7ac1697b ("arm64: remove special treatment for the
+> > > link order of head.o").
+> > >
+> > > The issue is that the type of .notes section, which contains the Buil=
+dID,
+> > > changed from NOTES to PROGBITS.
+> > >
+> > > Ard Biesheuvel figured out that whichever object gets linked first ge=
+ts
+> > > to decide the type of a section, and the PROGBITS type is the result =
+of
+> > > the compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
+> > >
+> > > While Ard provided a fix for arm64, I want to fix this globally becau=
+se
+> > > the same issue is happening on riscv since commit 2348e6bf4421 ("risc=
+v:
+> > > remove special treatment for the link order of head.o"). This problem
+> > > will happen in general for other architectures if they start to drop
+> > > unneeded entries from scripts/head-object-list.txt.
+> > >
+> > > Discard .note.GNU-stack in include/asm-generic/vmlinux.lds.h.
+> > >
+> > > riscv needs to change its linker script so that DISCARDS comes before
+> > > the .notes section.
+> >
+> > No idea why I decided to look at patchwork today, but this seems to
+> > break the build on RISC-V, there's a whole load of the following in the
+> > output:
+> > `.LPFE4' referenced in section `__patchable_function_entries' of kernel=
+/trace/trace_selftest_dynamic.o: defined in discarded section `.text.exit' =
+of kernel/trace/trace_selftest_dynamic.o
+> >
+> > I assume that's what's doing it, but given the day that's in it - I
+> > haven't looked into this any further, nor gone and fished the logs out =
+of
+> > the builder.
+>=20
+>=20
+> arch/riscv/kernel/vmlinux.lds.S clearly says:
+> /* we have to discard exit text and such at runtime, not link time */
+>=20
+> riscv already relies on the linker not discarding EXIT_{TEXT,DATA}
+> so riscv should define RUNTIME_DISCARD_EXIT like x86, arm64.
+
+Huh, fair enough. The diff for that appears to be trivial, but I was not
+able to correctly determine a fixes tag. I may have erred in my
+history-diving, but it's a wee bit hard to determine the correct fixes
+tag. That comment about runtime discards appears to date back to
+commit fbe934d69eb7 ("RISC-V: Build Infrastructure") in 2017 -
+apparently pre-dating the addition of the define in the first place.
+
+Commit 84d5f77fc2ee ("x86, vmlinux.lds: Add RUNTIME_DISCARD_EXIT to
+generic DISCARDS") added it to x86 but not to arm64 - but it seems like
+it was added to arm during a later reword. Does that make 84d5f77fc2ee
+the correct one to mark it as a fix of & riscv was just overlooked when
+the define was added?
+
+
+> Anyway, I came up with a simpler patch, so I do not need to
+> touch around arch linker scripts.
+>=20
+> I sent v2.
+> https://lore.kernel.org/lkml/20221226184537.744960-1-masahiroy@kernel.org=
+/T/#u
+
+Sweet, thanks. Hopefully the automation likes that version better :)
+
+
+--3A7DtNG3krRkXmgE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6oZ4wAKCRB4tDGHoIJi
+0vx8AP9KqS1+Wa8jonc1+vZRskZt+Z6ZPC4i6vIUI3Y9GBVSwgEApJRM44pmtZPa
+H1qE+gJ/vNyix6QqYiMlLy5OV2vFwQo=
+=FbKh
+-----END PGP SIGNATURE-----
+
+--3A7DtNG3krRkXmgE--
