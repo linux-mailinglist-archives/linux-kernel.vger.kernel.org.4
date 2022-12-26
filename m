@@ -2,109 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33B665660D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 00:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6122656611
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 00:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbiLZXep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 18:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S232444AbiLZXfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 18:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbiLZXeR (ORCPT
+        with ESMTP id S229886AbiLZXf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 18:34:17 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5517267C
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 15:34:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0501ECE0E60
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5C2AC433F1;
-        Mon, 26 Dec 2022 23:34:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672097652;
-        bh=hI0abZTfZBfmL7iS41Sw/Kw7JuoSmWB5bH2uy6CIx0Q=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=SO5NI+Q8paXlF7tZMy3yL1VvIsR8LUFy1NOHEw7fxL2wJT08iQDN+HPe7hAd8wQhi
-         S3KaqrRQ9EbvAvIbrCXgjuvBrzpBjnaYGlHkb6RCYX//PeRwmmlnjW//sVi9eJ8CDm
-         JTvetu5X0ghrAQRcJFc5j1PIHsxC7cir5nh7NAVE3vgWgdaKzarPSvYph/n+ERPmpe
-         NDO562ouyEeJdZ94jfLHSy3WHyvWL0F5Af5oEQAakm3QdzWWyT53XdiSh6VkYN6qdH
-         0GzKgFEt6e7ljg7Fe+dWG2cG+M6GVwfC6GZbD+hNygvg/6WZ1KOdu+7unjIn5E7OqJ
-         G/mDKqY4Yb45w==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Yong Zhi <yong.zhi@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        "balamurugan . c" <balamurugan.c@intel.com>,
-        Libin Yang <libin.yang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        alsa-devel@alsa-project.org
-In-Reply-To: <20221222042624.557869-1-ajye_huang@compal.corp-partner.google.com>
-References: <20221222042624.557869-1-ajye_huang@compal.corp-partner.google.com>
-Subject: Re: [PATCH v3] ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
-Message-Id: <167209764839.330820.10080062555953013632.b4-ty@kernel.org>
-Date:   Mon, 26 Dec 2022 23:34:08 +0000
+        Mon, 26 Dec 2022 18:35:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B32E5FC4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 15:34:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672097685;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ng2g0yYWgbxIEbydIqQjZjaHCJ47pT59sGYfx/xB8K8=;
+        b=ZflK0ltgLxrn8+MAjKtVzXDsBcN1zBlpgsOyNtRTWMYT++D867PbbVZfleCSBJTsfca+gJ
+        A++3BXoolMglZEpP8vTlc6UdEUlrdfqlBow334PgJx6T6CkUsAlv3ViPv1cG3yrmyqUIpl
+        bCiPZhu0KSENzrnjnH7nCvU2k+wjJik=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-353-vPcaGh2dP62KJasFmjyVhA-1; Mon, 26 Dec 2022 18:34:44 -0500
+X-MC-Unique: vPcaGh2dP62KJasFmjyVhA-1
+Received: by mail-ed1-f69.google.com with SMTP id y20-20020a056402271400b0046c9a6ec30fso8186372edd.14
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 15:34:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ng2g0yYWgbxIEbydIqQjZjaHCJ47pT59sGYfx/xB8K8=;
+        b=ZhPzopRdqCL6HIZb5pERm2BE5o34jDHmC0CMw3WOicQKeviEqDK330eZQADM0wr2zG
+         iesoCrTWdkM/KI1kTc4akoca3pgjehRL9inoFS7oPQqyaddzQTo/NmeDiintqR4CNKKH
+         /KJBUTSqJOFeU84O29lPfTA23HgHI/+CnMwUYK7M6XvDamQSnTsjxljHQMYY1VM5HW5a
+         +YoSXZPqRbxuPpdQeSq2m9D5YzYIx+QI/jQ5ZAOQqRs4hInweJyv0ajcsKOs2R1kE7Uv
+         X7deXYu6p1zqcHts+oh82s4WUV/xCMpG/CNOdQFA0Nqn9TsFJ0PHrwzrKSH3hyYK8CzB
+         s6bg==
+X-Gm-Message-State: AFqh2koIfS6GHnZgMpz5JYWCUWOZdrqOvaaEAlqRM9ajKiWOZwoEGPAw
+        kQuBXrBy2HFzDujlQ/X8oLHW5Y1nd7UmGP0xqepNJgd15n3JiwibJ0OqemJyUKcXb/abDGpz0fo
+        9+/9rxFc6xzeS04dIJRVRQTcI
+X-Received: by 2002:a17:906:fcc1:b0:7c0:e310:3191 with SMTP id qx1-20020a170906fcc100b007c0e3103191mr23119260ejb.11.1672097683422;
+        Mon, 26 Dec 2022 15:34:43 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsIxLGY2K01obTyBFYBUFcxFDUBn2jzDJ0KXH7WGcJg6MHOSb0Gfde2xZleQL0FFlTneSfHXQ==
+X-Received: by 2002:a17:906:fcc1:b0:7c0:e310:3191 with SMTP id qx1-20020a170906fcc100b007c0e3103191mr23119251ejb.11.1672097683222;
+        Mon, 26 Dec 2022 15:34:43 -0800 (PST)
+Received: from redhat.com ([2.52.151.85])
+        by smtp.gmail.com with ESMTPSA id d24-20020a50fb18000000b004615f7495e0sm5154391edq.8.2022.12.26.15.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 15:34:42 -0800 (PST)
+Date:   Mon, 26 Dec 2022 18:34:39 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
+        eperezma@redhat.com
+Subject: Re: [PATCH 3/4] virtio_ring: introduce a per virtqueue waitqueue
+Message-ID: <20221226183348-mutt-send-email-mst@kernel.org>
+References: <20221226074908.8154-1-jasowang@redhat.com>
+ <20221226074908.8154-4-jasowang@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-7ab1d
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221226074908.8154-4-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Dec 2022 12:26:24 +0800, Ajye Huang wrote:
-> This patch adds the driver data for two nau8318 speaker amplifiers on
-> SSP1 and nau8825 on SSP0 for ADL platform.
+On Mon, Dec 26, 2022 at 03:49:07PM +0800, Jason Wang wrote:
+> This patch introduces a per virtqueue waitqueue to allow driver to
+> sleep and wait for more used. Two new helpers are introduced to allow
+> driver to sleep and wake up.
 > 
-> The nau8315 and nau8318 are both Nuvoton Amp chips. They use the same
-> Amp driver nau8315.c. The acpi_device_id for nau8315 is "NVTN2010",
-> for nau8318 is "NVTN2012".
-> The nau8825 is one of Nuvoton headset codec, and its acpi_device_id is
-> "10508825".
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+> Changes since V1:
+> - check virtqueue_is_broken() as well
+> - use more_used() instead of virtqueue_get_buf() to allow caller to
+>   get buffers afterwards
+> ---
+>  drivers/virtio/virtio_ring.c | 29 +++++++++++++++++++++++++++++
+>  include/linux/virtio.h       |  3 +++
+>  2 files changed, 32 insertions(+)
 > 
-> [...]
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 5cfb2fa8abee..9c83eb945493 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/kmsan.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/wait.h>
+>  #include <xen/xen.h>
+>  
+>  #ifdef DEBUG
+> @@ -60,6 +61,7 @@
+>  			"%s:"fmt, (_vq)->vq.name, ##args);	\
+>  		/* Pairs with READ_ONCE() in virtqueue_is_broken(). */ \
+>  		WRITE_ONCE((_vq)->broken, true);		       \
+> +		wake_up_interruptible(&(_vq)->wq);		       \
+>  	} while (0)
+>  #define START_USE(vq)
+>  #define END_USE(vq)
+> @@ -203,6 +205,9 @@ struct vring_virtqueue {
+>  	/* DMA, allocation, and size information */
+>  	bool we_own_ring;
+>  
+> +	/* Wait for buffer to be used */
+> +	wait_queue_head_t wq;
+> +
+>  #ifdef DEBUG
+>  	/* They're supposed to lock for us. */
+>  	unsigned int in_use;
+> @@ -2024,6 +2029,8 @@ static struct virtqueue *vring_create_virtqueue_packed(
+>  	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
+>  		vq->weak_barriers = false;
+>  
+> +	init_waitqueue_head(&vq->wq);
+> +
+>  	err = vring_alloc_state_extra_packed(&vring_packed);
+>  	if (err)
+>  		goto err_state_extra;
+> @@ -2517,6 +2524,8 @@ static struct virtqueue *__vring_new_virtqueue(unsigned int index,
+>  	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
+>  		vq->weak_barriers = false;
+>  
+> +	init_waitqueue_head(&vq->wq);
+> +
+>  	err = vring_alloc_state_extra_split(vring_split);
+>  	if (err) {
+>  		kfree(vq);
+> @@ -2654,6 +2663,8 @@ static void vring_free(struct virtqueue *_vq)
+>  {
+>  	struct vring_virtqueue *vq = to_vvq(_vq);
+>  
+> +	wake_up_interruptible(&vq->wq);
+> +
+>  	if (vq->we_own_ring) {
+>  		if (vq->packed_ring) {
+>  			vring_free_queue(vq->vq.vdev,
+> @@ -2863,4 +2874,22 @@ const struct vring *virtqueue_get_vring(struct virtqueue *vq)
+>  }
+>  EXPORT_SYMBOL_GPL(virtqueue_get_vring);
+>  
+> +int virtqueue_wait_for_used(struct virtqueue *_vq)
+> +{
+> +	struct vring_virtqueue *vq = to_vvq(_vq);
+> +
+> +	/* TODO: Tweak the timeout. */
+> +	return wait_event_interruptible_timeout(vq->wq,
+> +	       virtqueue_is_broken(_vq) || more_used(vq), HZ);
 
-Applied to
+There's no good timeout. Let's not even go there, if device goes
+bad it should set the need reset bit.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Thanks!
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_wait_for_used);
+> +
+> +void virtqueue_wake_up(struct virtqueue *_vq)
+> +{
+> +	struct vring_virtqueue *vq = to_vvq(_vq);
+> +
+> +	wake_up_interruptible(&vq->wq);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_wake_up);
+> +
+>  MODULE_LICENSE("GPL");
+> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+> index dcab9c7e8784..2eb62c774895 100644
+> --- a/include/linux/virtio.h
+> +++ b/include/linux/virtio.h
+> @@ -72,6 +72,9 @@ void *virtqueue_get_buf(struct virtqueue *vq, unsigned int *len);
+>  void *virtqueue_get_buf_ctx(struct virtqueue *vq, unsigned int *len,
+>  			    void **ctx);
+>  
+> +int virtqueue_wait_for_used(struct virtqueue *vq);
+> +void virtqueue_wake_up(struct virtqueue *vq);
+> +
+>  void virtqueue_disable_cb(struct virtqueue *vq);
+>  
+>  bool virtqueue_enable_cb(struct virtqueue *vq);
+> -- 
+> 2.25.1
 
-[1/1] ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
-      commit: ba7523bb0f494fc440d3a9bb0b665cfcaa192d0c
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
