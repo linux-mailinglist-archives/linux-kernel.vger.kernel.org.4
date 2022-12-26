@@ -2,219 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECCC65604F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E94656049
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbiLZGSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 01:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
+        id S231447AbiLZGJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 01:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiLZGSV (ORCPT
+        with ESMTP id S229447AbiLZGJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 01:18:21 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66781D44;
-        Sun, 25 Dec 2022 22:18:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672035499; x=1703571499;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qfu14WkIiuZfo4zU64RGaAgof8CDTKmbyj8//bXWVr0=;
-  b=Sr18OcO/70QDfaIGQ82PGMHCSEe0K82T0yOf090lRU1nsCoiW0WyIvzY
-   u5aTKiFrCGwef+YKRjIOe6ZRPrnokcobkhQ2z8EKxkv7wAy3M7Nc9m773
-   pz4c+FaeI3WOZE11AbNhtIS9C1m315h2fJGIk4WMBsCdhAz07I/BZdUB+
-   /7YnkGksaQltJUYU3swoTkK+QT0q88PIGNOVKfErtSjEQE3n8+8iCwJ51
-   IyTW/ECA25RSJqX9S+Ihdh5sR1Hm/P48kdrAAkZs5pTwdoOSHhFrQ7vz8
-   +j2okRQbUmEzusSYjDWnRBCF+AeEHHDHyOA1mrBc5E1URoSzSwOoW1FyO
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="384947829"
-X-IronPort-AV: E=Sophos;i="5.96,274,1665471600"; 
-   d="scan'208";a="384947829"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2022 22:18:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="646089660"
-X-IronPort-AV: E=Sophos;i="5.96,274,1665471600"; 
-   d="scan'208";a="646089660"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga007.jf.intel.com with ESMTP; 25 Dec 2022 22:18:13 -0800
-Date:   Mon, 26 Dec 2022 14:08:10 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.kishore.manne@amd.com>
-Cc:     michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
-        trix@redhat.com, ronak.jain@xilinx.com, gregkh@linuxfoundation.org,
-        tanmay.shah@xilinx.com, ben.levinsky@amd.com,
-        harsha.harsha@xilinx.com, rajan.vaja@xilinx.com,
-        mathieu.poirier@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] fpga: zynqmp-fpga: Adds status interface
-Message-ID: <Y6k6ShPtAFYzmDIy@yilunxu-OptiPlex-7050>
-References: <20221223115850.2572573-1-nava.kishore.manne@amd.com>
- <20221223115850.2572573-3-nava.kishore.manne@amd.com>
+        Mon, 26 Dec 2022 01:09:25 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E8B10EB;
+        Sun, 25 Dec 2022 22:09:24 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id c184so9593903vsc.3;
+        Sun, 25 Dec 2022 22:09:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lfki3V/T9BQf+eM6KggzcNa6f7OxNbzodamBA6ifMZ4=;
+        b=dH6IWILqcoXENdUHqOzMK6tzo8WZOA4S9GthNk/Q/I9SVYqDGxbPG+hQu1YZx/slB+
+         xX7wh0dRTmtQlGzd/0FqNU+RDvvOSuYpcD8Nqqhv2nw+fuYIfmv6eun28ix/CE8Z0aDI
+         xZjOXuX7MhHZwL+51QB0344oIKcsal1BKnX8DK6uFr5z2mHUQv1PUi8ZnUimaSBXndok
+         9ReDCx428ensQQJtnZnr8GPtFQsj3WCU8++zgGGiu+xtDEJEb5h/SLEnollgK2zXP5lK
+         zySrrfoGok5H7Szpmll4s2GFGp4yZxtFW8sO9tHPnQOdafFYds8XNPQlfEsX2XyM2wlQ
+         vgtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lfki3V/T9BQf+eM6KggzcNa6f7OxNbzodamBA6ifMZ4=;
+        b=b+XtzdRT+TVex9opHhoLS053DPxsZS+UUYz9IfBp2w7lkggKu+0Y2sl9lIXt/6T0Ul
+         GB986DX/qtCxL9D1IrjBamEKBH+/ys9jGcFrudImxpg/Uc2jV+h/qPvRc8hP7QPAkFeZ
+         l7MTNzcU3PE2rHMMkrQO6bHrQNDFMIIKNHUD9vUPBg09DFfqn86Pqw2cr9ZuRyevlx+1
+         3IdeX8fh7TqGNfC/0EwdvsAzQyEAJsJQdzlo8gpaZSltJuVClf8/7v3zpCMmctwFPjbP
+         0HefSOW4FDyzkU8x6w8veFpgkmOo2hBwS9wjY+rEn7/ArQsuf2QKxZyGFtOgh5W+yLou
+         +9SQ==
+X-Gm-Message-State: AFqh2krMz/3GB5XUyvp7nYh2KM8O8ImDtSkOv6LZxOA5AhpDqB0Ay7xk
+        QiGcMXtoCqGdJ8q33aaS1udwre1l3dkIfO/Y34oJiHZkRwk=
+X-Google-Smtp-Source: AMrXdXtfqoM1J0r4CfJYBK8FpLCF7iq3Yw975ZXFd4aNXzxxtB/HidriwnoQNjXVaOYXgxO4icwrCJLhgsE+J41DvfM=
+X-Received: by 2002:a67:f9c1:0:b0:3b1:1713:ba0e with SMTP id
+ c1-20020a67f9c1000000b003b11713ba0emr1800521vsq.2.1672034963288; Sun, 25 Dec
+ 2022 22:09:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221223115850.2572573-3-nava.kishore.manne@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Y6kXjFeRH3Y970ss@ip-172-31-85-199.ec2.internal>
+In-Reply-To: <Y6kXjFeRH3Y970ss@ip-172-31-85-199.ec2.internal>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Mon, 26 Dec 2022 08:09:10 +0200
+Message-ID: <CAOQ4uxi-YZTUGvnaEqZW9Jjyn7+=RGdJB5fkT_rt00xwiS5KEA@mail.gmail.com>
+Subject: Re: memory leak in xfs_init_local_fork
+To:     Xingyuan Mo <hdthky0@gmail.com>
+Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-23 at 17:28:50 +0530, Nava kishore Manne wrote:
-> Adds status interface for zynqmp-fpga, It's a read only interface
-> which allows the user to get the Programmable Logic(PL) configuration
-> status.
-> 
-> Usage:
-> To read the Programmable Logic(PL) configuration status
->         cat /sys/class/fpga_manager/<fpga>/device/status
-> 
-> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
-> ---
-> Changes for v2:
->               - Updated status messages handling logic as suggested by Xu Yilun.
-> 
-> Changes for v3:
->               - Updated status interface handling logic (Restrict the status
->                 interface to the device-specific instead of handled by the core)
->                 as suggested by Xu Yilun.
-> 
-> Changes for v4:
->               - Limit the error strings to one word for each as suggested by
->                 Xu Yilun
+On Mon, Dec 26, 2022 at 5:39 AM Xingyuan Mo <hdthky0@gmail.com> wrote:
+>
+> Hello,
+>
+> Recently, when using our local Syzkaller to fuzz kernel, the following bug was
+> triggered.
+>
+> git tree: stable
+> branch: linux-5.10.y
+> HEAD commit: 1a9148dfd8e03835dc7617cee696dd18c0000e99
+> compiler: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+>
+> I have included the C repro, the Syzkaller config file and the config file used
+> to compile the kernel.
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: Xingyuan Mo <hdthky0@gmail.com>
+>
+> The bug report is as follows:
+>
+> BUG: memory leak
 
-Please fix the comments from Greg,
+Hi Xingyuan,
 
-https://lore.kernel.org/all/Y0fYjyXrMEo6M76k@kroah.com/
+Let me put it this way - there are much worse bugs in v5.10 than
+a memory leak generated by a fuzzed image
+and there are far easier ways to take up system memory as a privileged user.
 
-> 
->  drivers/fpga/zynqmp-fpga.c | 87 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 87 insertions(+)
-> 
-> diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
-> index c60f20949c47..81d3e18527ee 100644
-> --- a/drivers/fpga/zynqmp-fpga.c
-> +++ b/drivers/fpga/zynqmp-fpga.c
-> @@ -15,6 +15,37 @@
->  /* Constant Definitions */
->  #define IXR_FPGA_DONE_MASK	BIT(3)
->  
-> +/* Error Register */
-> +#define IXR_FPGA_ERR_CRC_ERR		BIT(0)
-> +#define IXR_FPGA_ERR_SECURITY_ERR	BIT(16)
-> +
-> +/* Signal Status Register */
-> +#define IXR_FPGA_END_OF_STARTUP		BIT(4)
-> +#define IXR_FPGA_GST_CFG_B		BIT(5)
-> +#define IXR_FPGA_INIT_B_INTERNAL	BIT(11)
-> +#define IXR_FPGA_DONE_INTERNAL_SIGNAL	BIT(13)
-> +
-> +/* FPGA error status. */
-> +enum {
-> +	ZYNQMP_FPGA_STATUS_CRC_ERR,
-> +	ZYNQMP_FPGA_STATUS_SECURITY_ERR,
-> +	ZYNQMP_FPGA_STATUS_DEVICE_INIT_ERR,
-> +	ZYNQMP_FPGA_STATUS_SIGNAL_ERR,
-> +	ZYNQMP_FPGA_STATUS_HIGH_Z_STATE_ERR,
-> +	ZYNQMP_FPGA_STATUS_EOS_ERR,
-> +	ZYNQMP_FPGA_MGR_STATUS_FIRMWARE_REQ_ERR,
-> +};
-> +
-> +static const char * const zynqmp_fpga_error_statuses[] = {
-> +	[ZYNQMP_FPGA_STATUS_CRC_ERR] = "CRC-Error",
-> +	[ZYNQMP_FPGA_STATUS_SECURITY_ERR] = "Security-Error",
-> +	[ZYNQMP_FPGA_STATUS_DEVICE_INIT_ERR] = "Initialization-Error",
-> +	[ZYNQMP_FPGA_STATUS_SIGNAL_ERR] = "Internal-Signal-Error",
-> +	[ZYNQMP_FPGA_STATUS_HIGH_Z_STATE_ERR] = "I/Os-High-Z-state",
-> +	[ZYNQMP_FPGA_STATUS_EOS_ERR] = "Sequence-Error",
-> +	[ZYNQMP_FPGA_MGR_STATUS_FIRMWARE_REQ_ERR] = "Firmware-Error",
-> +};
-> +
->  /**
->   * struct zynqmp_fpga_priv - Private data structure
->   * @dev:	Device data structure
-> @@ -77,6 +108,54 @@ static enum fpga_mgr_states zynqmp_fpga_ops_state(struct fpga_manager *mgr)
->  	return FPGA_MGR_STATE_UNKNOWN;
->  }
->  
-> +static ssize_t status_show(struct device *dev,
-> +			   struct device_attribute *attr, char *buf)
-> +{
-> +	unsigned long status = 0;
-> +	ssize_t len = 0;
-> +	u32 reg_val;
-> +	int ret;
-> +	u8 i;
-> +
-> +	ret = zynqmp_pm_fpga_get_config_status(&reg_val);
-> +	if (!ret) {
-> +		if (reg_val & IXR_FPGA_ERR_CRC_ERR)
-> +			status |= ZYNQMP_FPGA_STATUS_CRC_ERR;
-> +		if (reg_val & IXR_FPGA_ERR_SECURITY_ERR)
-> +			status |= ZYNQMP_FPGA_STATUS_SECURITY_ERR;
-> +		if (!(reg_val & IXR_FPGA_INIT_B_INTERNAL))
-> +			status |= ZYNQMP_FPGA_STATUS_DEVICE_INIT_ERR;
-> +		if (!(reg_val & IXR_FPGA_DONE_INTERNAL_SIGNAL))
-> +			status |= ZYNQMP_FPGA_STATUS_SIGNAL_ERR;
-> +		if (!(reg_val & IXR_FPGA_GST_CFG_B))
-> +			status |= ZYNQMP_FPGA_STATUS_HIGH_Z_STATE_ERR;
-> +		if (!(reg_val & IXR_FPGA_END_OF_STARTUP))
-> +			status |= ZYNQMP_FPGA_STATUS_EOS_ERR;
-> +	} else {
-> +		status = ZYNQMP_FPGA_MGR_STATUS_FIRMWARE_REQ_ERR;
-> +	}
-> +
-> +	for_each_set_bit(i, &status, ARRAY_SIZE(zynqmp_fpga_error_statuses))
-> +		len += sysfs_emit_at(buf, len, "%s ",
-> +				     zynqmp_fpga_error_statuses[i]);
-> +
-> +	if (len)
-> +		buf[len - 1] = '\n';
-> +
-> +	return len;
-> +}
-> +
-> +static DEVICE_ATTR_RO(status);
-> +
-> +static struct attribute *zynqmp_fpga_device_attrs[] = {
-> +	&dev_attr_status.attr,
-> +	NULL,
-> +};
-> +
-> +static const struct attribute_group zynqmp_fpga_attr_group = {
-> +	.attrs = zynqmp_fpga_device_attrs,
-> +};
-> +
->  static const struct fpga_manager_ops zynqmp_fpga_ops = {
->  	.state = zynqmp_fpga_ops_state,
->  	.write_init = zynqmp_fpga_ops_write_init,
-> @@ -88,6 +167,7 @@ static int zynqmp_fpga_probe(struct platform_device *pdev)
->  	struct device *dev = &pdev->dev;
->  	struct zynqmp_fpga_priv *priv;
->  	struct fpga_manager *mgr;
-> +	int ret;
->  
->  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->  	if (!priv)
-> @@ -95,6 +175,13 @@ static int zynqmp_fpga_probe(struct platform_device *pdev)
->  
->  	priv->dev = dev;
->  
-> +	/* Add the device attributes */
-> +	ret = sysfs_create_group(&dev->kobj, &zynqmp_fpga_attr_group);
-> +	if (ret) {
-> +		dev_err(dev, "Error creating sysfs files\n");
-> +		return ret;
-> +	}
-> +
->  	mgr = devm_fpga_mgr_register(dev, "Xilinx ZynqMP FPGA Manager",
->  				     &zynqmp_fpga_ops, priv);
->  	return PTR_ERR_OR_ZERO(mgr);
-> -- 
-> 2.25.1
-> 
+You would have to demonstrate the severity of a bug in order to justify
+the work and the risk involved with patching v5.10.
+
+Thanks,
+Amir.
+
+
+> unreferenced object 0xffff888104d9b100 (size 64):
+>   comm "syz-executor163", pid 258, jiffies 4294772370 (age 13.800s)
+>   hex dump (first 32 bytes):
+>     00 22 02 00 06 06 00 78 61 74 74 72 31 78 61 74  .".....xattr1xat
+>     74 72 31 00 00 00 00 00 00 00 00 32 78 61 74 74  tr1........2xatt
+>   backtrace:
+>     [<00000000ed987fcc>] kmemleak_alloc_recursive include/linux/kmemleak.h:43 [inline]
+>     [<00000000ed987fcc>] slab_post_alloc_hook mm/slab.h:534 [inline]
+>     [<00000000ed987fcc>] slab_alloc_node mm/slub.c:2896 [inline]
+>     [<00000000ed987fcc>] slab_alloc mm/slub.c:2904 [inline]
+>     [<00000000ed987fcc>] __kmalloc+0x19c/0x850 mm/slub.c:3967
+>     [<00000000293e3034>] kmalloc include/linux/slab.h:557 [inline]
+>     [<00000000293e3034>] kmem_alloc+0x131/0x310 fs/xfs/kmem.c:21
+>     [<00000000c01e339f>] xfs_init_local_fork+0xf8/0x180 fs/xfs/libxfs/xfs_inode_fork.c:52
+>     [<0000000016f4ae7f>] xfs_iformat_local+0x181/0x340 fs/xfs/libxfs/xfs_inode_fork.c:91
+>     [<00000000815b5848>] xfs_iformat_attr_fork+0x1a4/0x1f0 fs/xfs/libxfs/xfs_inode_fork.c:302
+>     [<000000004cf4bc61>] xfs_inode_from_disk+0x592/0x5f0 fs/xfs/libxfs/xfs_inode_buf.c:268
+>     [<0000000067a7ee06>] xfs_iget_cache_miss fs/xfs/xfs_icache.c:516 [inline]
+>     [<0000000067a7ee06>] xfs_iget+0x7a3/0x17d0 fs/xfs/xfs_icache.c:653
+>     [<000000008cff65b8>] xfs_lookup+0x123/0x260 fs/xfs/xfs_inode.c:687
+>     [<000000004d7ec325>] xfs_vn_lookup+0xa8/0x110 fs/xfs/xfs_iops.c:267
+>     [<00000000265d1ca5>] __lookup_hash+0xa4/0xf0 fs/namei.c:1447
+>     [<0000000040f86cb0>] do_renameat2+0x37f/0x7b0 fs/namei.c:4404
+>     [<00000000967d8465>] __do_sys_rename fs/namei.c:4498 [inline]
+>     [<00000000967d8465>] __se_sys_rename fs/namei.c:4496 [inline]
+>     [<00000000967d8465>] __x64_sys_rename+0x2c/0x40 fs/namei.c:4496
+>     [<000000001f16c835>] do_syscall_64+0x35/0x50 arch/x86/entry/common.c:46
+>     [<000000004c35f0dd>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>
+>
+> Best Regards,
+> Xingyuan Mo
