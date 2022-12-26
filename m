@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A0365620A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 12:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B3265620C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 12:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiLZLAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 06:00:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S229447AbiLZLCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 06:02:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiLZLAF (ORCPT
+        with ESMTP id S231777AbiLZLCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 06:00:05 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35602EB;
-        Mon, 26 Dec 2022 03:00:03 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p9lD5-0007aa-H5; Mon, 26 Dec 2022 11:59:59 +0100
-Message-ID: <35c73172-4e06-3877-56bd-133f9192adc3@leemhuis.info>
-Date:   Mon, 26 Dec 2022 11:59:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [6.2][regression] after commit
- cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae stopping working wifi mt7921e
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        Felix Fietkau <nbd@nbd.name>
-Cc:     lorenzo@kernel.org, sujuan.chen@mediatek.com,
-        Linux List Kernel Mailing <linux-wireless@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-References: <CABXGCsMEnQd=gYKTd1knRsWuxCb=Etv5nAre+XJS_s5FgVteYA@mail.gmail.com>
- <678adc67-9e46-3eef-f274-c951b121570f@nbd.name>
- <CABXGCsMUbs+bf=tWnx98r4v_JzVmYdVyOos9EhcGJ6jnEwathA@mail.gmail.com>
- <a30d8580-936a-79e4-c1c7-70f3d3b8da35@nbd.name>
- <CABXGCsNJKy2SQffeU+uaua5SM_77YiGKdPLRdzSF3F+ShpF+5w@mail.gmail.com>
- <3cb53fbd-0bee-22f9-bba2-6ac4a87db521@nbd.name>
- <CABXGCsOarWTb9+ofcd14bLGuWEQOTqRQQ0bXP57mhVjnpjcEQQ@mail.gmail.com>
- <69ccf9f3-ce2e-600d-00b3-51ccc4a73011@leemhuis.info>
-Content-Language: en-US, de-DE
-In-Reply-To: <69ccf9f3-ce2e-600d-00b3-51ccc4a73011@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1672052403;98b3c717;
-X-HE-SMSGID: 1p9lD5-0007aa-H5
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 26 Dec 2022 06:02:01 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FC2111A;
+        Mon, 26 Dec 2022 03:02:00 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NgZc64BqMz8QrkZ;
+        Mon, 26 Dec 2022 19:01:58 +0800 (CST)
+Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
+        by mse-fl2.zte.com.cn with SMTP id 2BQB1qBG066734;
+        Mon, 26 Dec 2022 19:01:52 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Mon, 26 Dec 2022 19:01:55 +0800 (CST)
+Date:   Mon, 26 Dec 2022 19:01:55 +0800 (CST)
+X-Zmail-TransId: 2b0363a97f23ffffffffc970d89d
+X-Mailer: Zmail v1.0
+Message-ID: <202212261901554408949@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <don.brace@microchip.com>
+Cc:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <storagedev@microchip.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
+        <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNjc2k6IHNtYXJ0cHFpOiB1c2Ugc3Ryc2NweSgpIHRvIGluc3RlYWQgb2Ygc3RybmNweSgp?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2BQB1qBG066734
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63A97F26.000 by FangMail milter!
+X-FangMail-Envelope: 1672052518/4NgZc64BqMz8QrkZ/63A97F26.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63A97F26.000/4NgZc64BqMz8QrkZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,47 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Xu Panda <xu.panda@zte.com.cn>
 
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL-terminated strings.
 
-On 24.12.22 08:55, Thorsten Leemhuis wrote:
-> 
-> 
-> On 22.12.22 07:47, Mikhail Gavrilov wrote:
->> On Wed, Dec 21, 2022 at 10:17 PM Felix Fietkau <nbd@nbd.name> wrote:
->>>
->>> Sorry, I worked on a tree that had other pending fixes applied.
->>> Please try this:
->>>
->>>
->>> --- a/drivers/net/wireless/mediatek/mt76/dma.c
->>> +++ b/drivers/net/wireless/mediatek/mt76/dma.c
->>> @@ -205,6 +205,52 @@ mt76_dma_queue_reset(struct mt76_dev *dev, struct mt76_queue *q)
->>>         mt76_dma_sync_idx(dev, q);
->>>   }
->> [cutted]
->>>   EXPORT_SYMBOL_GPL(mt76_rx_token_consume);
->>>
->>
->> I confirms after applying this patch the issue was gone (wifi works as
->> before commit cd372b8c99c5a5cf6a464acebb7e4a79af7ec8ae).
->>
->> Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
->>
-> 
-> TWIMC, there are two more reports that at least to my eyes look like
-> they are about the problem discussed here:
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=216829
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
+---
+ drivers/scsi/smartpqi/smartpqi_init.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Stupid me, this one...
-
-> https://bugzilla.kernel.org/show_bug.cgi?id=216839
-
-...is about 6.1.y and thus likely something else. Apologies.
-
-FWIW & for completeness, according to a comment from Lorenzo Bianconi
-the latter bug report is fixed by:
-https://patchwork.kernel.org/project/linux-wireless/patch/20221217085624.52077-1-nbd@nbd.name/
-("wifi: mac80211: fix initialization of rx->link and rx->link_sta")
-
-Ciao, Thorsten
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index d0446d4d4465..1f8f3aee37b6 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -996,9 +996,8 @@ static int pqi_write_driver_version_to_host_wellness(
+ 	buffer->driver_version_tag[1] = 'V';
+ 	put_unaligned_le16(sizeof(buffer->driver_version),
+ 		&buffer->driver_version_length);
+-	strncpy(buffer->driver_version, "Linux " DRIVER_VERSION,
+-		sizeof(buffer->driver_version) - 1);
+-	buffer->driver_version[sizeof(buffer->driver_version) - 1] = '\0';
++	strscpy(buffer->driver_version, "Linux " DRIVER_VERSION,
++		sizeof(buffer->driver_version));
+ 	buffer->dont_write_tag[0] = 'D';
+ 	buffer->dont_write_tag[1] = 'W';
+ 	buffer->end_tag[0] = 'Z';
+-- 
+2.15.2
