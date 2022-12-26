@@ -2,344 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05296562C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 14:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE6F6562C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 14:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbiLZNFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 08:05:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
+        id S232048AbiLZNGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 08:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiLZNFU (ORCPT
+        with ESMTP id S229715AbiLZNGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 08:05:20 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9834810B0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 05:05:18 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id jn22so10648443plb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 05:05:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nE7yJwFAP/zkGtRmnIRtac0TUO9NfSKJNGcyhbdNgL8=;
-        b=EIWRvUG6w6BpGVljPLu29Cqw6SgK7myTN/ND1p0+c2x0VTOiDgEe1nnuW8IEHGfs5o
-         W0BQM/QzfWsNhJhfVoh5AJQOEsvEfgLfn17K+ffzcKKYP7gzpffhtP6upvfKzm0pOsVG
-         +vYFIjSHnl0LNwf/vKmuzPOMjpU5X0KwYedp7hbO/aAXUCuufM46gia2OGwTZ4ozuPRQ
-         AjSsGg9+/TNkFCPdVRNrsqygIblFi2UNP5fLXcqYQZshNfHXhJWDlyBUzez1GTZY64HQ
-         YT3gIYPTZTqtIG91CMcLLMVzm0erxIVx+QaDWaPnlN5snLcLmxivoiArUd97keTo8NtD
-         1x1A==
+        Mon, 26 Dec 2022 08:06:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA91243
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 05:05:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672059947;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5HwcZaA2sM/B/lkvzfdRvvoZ71F34zcgGLsOqes2MUk=;
+        b=JLRsAifTEc5NSa5xfoN3q+vW8DS4RgZMCmWsZ2SKi0OAngK+x4nAhVYauLkQVNTDbKKmNK
+        f/sSg+TfiRpVZCu+ta1KV/rvbXMMvF2h0cXnYvFKQy5UBuyw6pJi0XZetbuM4fiBuuOT6l
+        lPSS/0DaEmu/J3Tz3i4fzknuASmlLAs=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-606-z7k38wfPP969VL0yPp2W_w-1; Mon, 26 Dec 2022 08:05:46 -0500
+X-MC-Unique: z7k38wfPP969VL0yPp2W_w-1
+Received: by mail-wr1-f72.google.com with SMTP id r10-20020adfa14a000000b0025ba73dff40so1505616wrr.12
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 05:05:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nE7yJwFAP/zkGtRmnIRtac0TUO9NfSKJNGcyhbdNgL8=;
-        b=p+EsNjCtD+WbZwdNQWZaulUVL0wKYgyqyAQmdyxPUWfnRHm+Mc62utt9z1yAh9TJhi
-         9OCpoOBpaLxDKKdxKaLf+c+Izcs4h7Cx9uCg5LXCk1H9+Qjn8yr2lJo2HmxyWN4mRPTB
-         U+4ugMtN9PyGk9ReDxwdaMEoRk5kHHdrOUsQPJBuzzaN/LYH2eF4RGn8LNYvmsXNcEUc
-         3sLR87MSILIPJkWuk8DnYS3kXl4qXLX/MDdA03pMT/EUQj7YPnxFuVWtBRT7svU4FEUq
-         WRrmLregmfS5gfBeJidcxUGr81i32LfBvF06IUF9jnUhfSGFjdRnafAIQIpGwoaYCaTx
-         FaMQ==
-X-Gm-Message-State: AFqh2kqwwd9UGeBS5aojMb9urCpOSOV/ZLwS3DAOzbU+ZeISK47GopeU
-        NDq2qSsjmFFKPTCQ5FXq81zGBQ==
-X-Google-Smtp-Source: AMrXdXtUvINrZ/n8z0Jp/5N0BXqODp6VXuLXA41j83K8qQeg7cVGSbF3p/54kbFdxLImuG9eQHrFxQ==
-X-Received: by 2002:a17:902:ba8e:b0:189:db2b:ac1a with SMTP id k14-20020a170902ba8e00b00189db2bac1amr31991745pls.36.1672059917944;
-        Mon, 26 Dec 2022 05:05:17 -0800 (PST)
-Received: from localhost.localdomain ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id y12-20020a17090322cc00b00182d25a1e4bsm7037697plg.259.2022.12.26.05.05.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 05:05:17 -0800 (PST)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yinxin.x@bytedance.com,
-        Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH v3] blk-throtl: Introduce sync and async queues for blk-throtl
-Date:   Mon, 26 Dec 2022 21:05:05 +0800
-Message-Id: <20221226130505.7186-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5HwcZaA2sM/B/lkvzfdRvvoZ71F34zcgGLsOqes2MUk=;
+        b=hUfLShiX09SXDOZNcxIUTn2ZIzbHKTWCShbMyCfMecZVXPz6uHt7K0DysrWpuiyPjR
+         ayzNXi9wMu/BvchuIjFZfSyAITqQ+mUtfKXBObvM+6aBZh9/TbBhR5cccgFlyBe25nzR
+         IbRjkl9ShqIYk5leEsBPPbxL1u5PsCAsFSlG0niC44Fy5k9QVhiRyjJ7FiOCeintRcw/
+         uiavRV1e3dpSVDkp542kFVpRHAeW2PTIEJqI6LLwO8bO2MFSOFT2CRd94W/nW2eAOzkt
+         Y6tt5XfNK7eED53f5eioWp0+xll9awTg5CqJziNCqz8gFr1M+s95pKs50JQOO35NRZiT
+         cTrw==
+X-Gm-Message-State: AFqh2kply5Gki6chM7o+5BDSMH4M5TMGczhERAkLGRlzdTt0iLrlVMZ6
+        joKlDOs4YiNFL58n2wFG7gyFnGgBnIiwFCj8TWRjpa4UF5QzqwiUOuzwfv+2dpB3dMT1MOkCc7z
+        7crj4bcxLG/nyO1WmVz4zps/k
+X-Received: by 2002:a05:600c:34d0:b0:3d6:b691:b80d with SMTP id d16-20020a05600c34d000b003d6b691b80dmr12927822wmq.21.1672059945399;
+        Mon, 26 Dec 2022 05:05:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuB8uWC1YkrMzvSoNX2/+CoR/kzQ1LiWZ0PSZdafOK0oPqeMekB++8piVRthVz4KooVG2Xcdg==
+X-Received: by 2002:a05:600c:34d0:b0:3d6:b691:b80d with SMTP id d16-20020a05600c34d000b003d6b691b80dmr12927789wmq.21.1672059945137;
+        Mon, 26 Dec 2022 05:05:45 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id o27-20020a05600c511b00b003c6f8d30e40sm20234587wms.31.2022.12.26.05.05.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Dec 2022 05:05:44 -0800 (PST)
+Message-ID: <e575579e-3db3-6f67-1351-614f752234bf@redhat.com>
+Date:   Mon, 26 Dec 2022 14:05:42 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 4/4] arm64: dts: rk3399-pinephone-pro: Add internal
+ display support
+Content-Language: en-US
+To:     Maya Matuszczyk <maccraft123mc@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Ondrej Jirman <megi@xff.cz>,
+        Robert Mader <robert.mader@posteo.de>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        =?UTF-8?Q?Kamil_Trzci=c5=84ski?= <ayufan@ayufan.eu>,
+        Martijn Braam <martijn@brixit.nl>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+References: <20221222223830.2494900-1-javierm@redhat.com>
+ <20221222223830.2494900-5-javierm@redhat.com>
+ <CAO_Mup+P-QMDfVzpg_eg=gmoHUzm6+Kipaq-4q=kdVdS0_xp6A@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAO_Mup+P-QMDfVzpg_eg=gmoHUzm6+Kipaq-4q=kdVdS0_xp6A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+Hello Maya,
 
-Now we don't distinguish sync write ios from normal buffer write ios
-in blk-throtl. A bio with REQ_SYNC tagged always mean it will be wait
-until write completion soon after it submit. So it's reasonable for sync
-io to complete as soon as possible.
+I'm going through this now and addressing your comments.
 
-In our test, fio writes a 100g file in sequential 4k blocksize in
-a container with low bps limit configured (wbps=10M). More than 1200
-ios were throttled in blk-throtl queue and the avarage throtle time
-of each io is 140s. At the same time, the operation of saving a small
-file by vim will be blocked amolst 140s. As a fsync will be send by vim,
-the sync ios of fsync will be blocked by a huge amount of buffer write
-ios ahead. This is also a priority inversion problem within one cgroup.
-In the database scene, things got really bad with blk-throtle enabled
-as fsync is called very often.
+On 12/22/22 23:57, Maya Matuszczyk wrote:
 
-This patch splits bio queue into sync and async queues for blk-throtl
-and gives a huge priority to sync write ios. Sync queue only make sense
-for write ios as we treat all read io as sync io. I think it's a nice
-respond to the semantics of REQ_SYNC. Bios with REQ_META and REQ_PRIO
-gains the same priority as they are important to fs. This may avoid
-some potential priority inversion problems.
+[...]
 
-With this patch, do the same test above, the duration of the fsync sent
-by vim drops to several hundreds of milliseconds.
+>> +       /* MIPI DSI panel 1.8v supply */
+>> +       vcc1v8_lcd: vcc1v8-lcd {
+> Node names should be generic, for example "vcc1v8-lcd-regulator".
+>
 
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
-Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
----
+Fixed.
+ 
+>> +               compatible = "regulator-fixed";
+>> +               enable-active-high;
+> Is this really needed?
+> You can set the polarity in "gpios" property.
+>
 
-Changes in v2
-- Make code more simple.
-Changes in v3
-- Fix mismatch of waiting bio and the next dispatched bio.
-- Rename dispatch_sync_cnt to disp_sync_cnt.
-- Add more notes.
+I understand that it is needed. The regulator-fixing binding says:
 
- block/blk-throttle.c | 135 ++++++++++++++++++++++++++++++++++++++++---
- block/blk-throttle.h |  13 ++++-
- 2 files changed, 139 insertions(+), 9 deletions(-)
+  enable-active-high:
+    description:
+      Polarity of GPIO is Active high. If this property is missing,
+      the default assumed is Active low.
+    type: boolean
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 847721dc2b2b..c4db7873dfa8 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -21,6 +21,13 @@
- /* Total max dispatch from all groups in one round */
- #define THROTL_QUANTUM 32
+and indeed by looking at the source in drivers/gpio/gpiolib-of.c, there is
+a check for this property in the of_gpio_flags_quirks() function:
+
+static void of_gpio_flags_quirks(const struct device_node *np,
+				 const char *propname,
+				 enum of_gpio_flags *flags,
+				 int index)
+{
+	/*
+	 * Some GPIO fixed regulator quirks.
+	 * Note that active low is the default.
+	 */
+	if (IS_ENABLED(CONFIG_REGULATOR) &&
+	    (of_device_is_compatible(np, "regulator-fixed") ||
+	     of_device_is_compatible(np, "reg-fixed-voltage") ||
+	     (!(strcmp(propname, "enable-gpio") &&
+		strcmp(propname, "enable-gpios")) &&
+	      of_device_is_compatible(np, "regulator-gpio")))) {
+		bool active_low = !of_property_read_bool(np,
+							 "enable-active-high");
+		/*
+		 * The regulator GPIO handles are specified such that the
+		 * presence or absence of "enable-active-high" solely controls
+		 * the polarity of the GPIO line. Any phandle flags must
+		 * be actively ignored.
+		 */
+		if ((*flags & OF_GPIO_ACTIVE_LOW) && !active_low) {
+			pr_warn("%s GPIO handle specifies active low - ignored\n",
+				of_node_full_name(np));
+			*flags &= ~OF_GPIO_ACTIVE_LOW;
+		}
+		if (active_low)
+			*flags |= OF_GPIO_ACTIVE_LOW;
+	}
+...
+}
+
+So I'll keep those.
  
-+/* For write ios, dispatch 4 sync ios and 1 normal io in one loop */
-+#define THROTL_SYNC_FACTOR 4
-+
-+/* Only make sense for write ios, all read ios are treated as SYNC */
-+#define SYNC	0
-+#define ASYNC	1
-+
- /* Throttling is performed over a slice and after that slice is renewed */
- #define DFL_THROTL_SLICE_HD (HZ / 10)
- #define DFL_THROTL_SLICE_SSD (HZ / 50)
-@@ -88,6 +95,7 @@ struct throtl_data
- };
+>> +               regulator-name = "vcc1v8_lcd";
+>> +               regulator-min-microvolt = <1800000>;
+>> +               regulator-max-microvolt = <1800000>;
+>> +               vin-supply = <&vcc3v3_sys>;
+>> +               gpio = <&gpio3 RK_PA5 GPIO_ACTIVE_HIGH>;
+> Is this a typo? Documentation says "gpios"
+>
+
+Documentation/devicetree/bindings/gpio/gpio.txt indeed says "gpios" but "gpio"
+is also supported for older DT that are using bindings that got it wrong. See
+commits e7ae65ced7dd ("gpio: mention in DT binding doc that <name>-gpio is
+deprecated") and dd34c37aa3e8 ("gpio: of: Allow -gpio suffix for property names").
+
+The regulator-fixed bindings is such an example. See that its bindings schema
+Documentation/devicetree/bindings/regulator/regulator.yaml mentions "gpio" and
+not "gpios", also in the example.
+
+So until that is fixed, I would prefer to stick with that's documented in the
+regulator-fixed bindings doc.
  
- static void throtl_pending_timer_fn(struct timer_list *t);
-+static inline struct bio *throtl_qnode_bio_list_pop(struct throtl_qnode *qn);
- 
- static inline struct blkcg_gq *tg_to_blkg(struct throtl_grp *tg)
- {
-@@ -241,11 +249,28 @@ static inline unsigned int throtl_bio_data_size(struct bio *bio)
- 	return bio->bi_iter.bi_size;
- }
- 
--static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
-+static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg,
-+			      bool rw)
- {
- 	INIT_LIST_HEAD(&qn->node);
--	bio_list_init(&qn->bios);
-+	bio_list_init(&qn->bios[SYNC]);
-+	bio_list_init(&qn->bios[ASYNC]);
- 	qn->tg = tg;
-+	qn->disp_sync_cnt = (rw == READ) ? UINT_MAX : 0;
-+	qn->next_to_disp = NULL;
-+}
-+
-+#define BLK_THROTL_SYNC(bio) (bio->bi_opf & (REQ_SYNC | REQ_META | REQ_PRIO))
-+
-+static inline void throtl_qnode_add_bio_list(struct throtl_qnode *qn,
-+					     struct bio *bio)
-+{
-+	bool rw = bio_data_dir(bio);
-+
-+	if ((rw == READ) || BLK_THROTL_SYNC(bio))
-+		bio_list_add(&qn->bios[SYNC], bio);
-+	else
-+		bio_list_add(&qn->bios[ASYNC], bio);
- }
- 
- /**
-@@ -261,13 +286,45 @@ static void throtl_qnode_init(struct throtl_qnode *qn, struct throtl_grp *tg)
- static void throtl_qnode_add_bio(struct bio *bio, struct throtl_qnode *qn,
- 				 struct list_head *queued)
- {
--	bio_list_add(&qn->bios, bio);
-+	throtl_qnode_add_bio_list(qn, bio);
- 	if (list_empty(&qn->node)) {
- 		list_add_tail(&qn->node, queued);
- 		blkg_get(tg_to_blkg(qn->tg));
- 	}
- }
- 
-+/**
-+ * throtl_qnode_bio_peek - peek a bio for a qn
-+ * @qn: the qnode to peek from
-+ *
-+ * For read qn, just peek bio from the SYNC queue and return.
-+ * For write qn, we first ask the next_to_disp for bio and will pop a bio
-+ * to fill it if it's NULL. The next_to_disp is used to pin the bio for
-+ * next to dispatch. It is necessary. In the dispatching  process, a peeked
-+ * bio may can't be dispatched due to lack of budget and has to wait, the
-+ * dispatching process may give up and the spin lock of the request queue
-+ * will be released. New bio may be queued in as the spin lock were released.
-+ * When it's time to dispatch the waiting bio, another bio may be selected to
-+ * check the limit and may be dispatched. If the dispatched bio is smaller
-+ * than the waiting bio, the bandwidth may be hard to satisfied as we may
-+ * trim the slice after each dispatch.
-+ * So pinning the next_to_disp to make sure that the waiting bio and the
-+ * dispatched one later always the same one in case that the spin lock of
-+ * queue was released and re-holded.
-+ */
-+static inline struct bio *throtl_qnode_bio_peek(struct throtl_qnode *qn)
-+{
-+	/* qn for read ios */
-+	if (qn->disp_sync_cnt == UINT_MAX)
-+		return bio_list_peek(&qn->bios[SYNC]);
-+
-+	/* qn for write ios */
-+	if (!qn->next_to_disp)
-+		qn->next_to_disp  = throtl_qnode_bio_list_pop(qn);
-+
-+	return qn->next_to_disp;
-+}
-+
- /**
-  * throtl_peek_queued - peek the first bio on a qnode list
-  * @queued: the qnode list to peek
-@@ -281,11 +338,73 @@ static struct bio *throtl_peek_queued(struct list_head *queued)
- 		return NULL;
- 
- 	qn = list_first_entry(queued, struct throtl_qnode, node);
--	bio = bio_list_peek(&qn->bios);
-+	bio = throtl_qnode_bio_peek(qn);
- 	WARN_ON_ONCE(!bio);
- 	return bio;
- }
- 
-+/**
-+ * throtl_qnode_bio_pop: pop a bio from sync/async queue
-+ * @qn: the qnode to pop a bio from
-+ *
-+ * For write io qn, the target queue to pop was determined by the disp_sync_cnt.
-+ * Try to pop bio from target queue, fetch the bio and return it when it is not
-+ * empty. If the target queue empty, pop bio from another queue instead.
-+ */
-+static inline struct bio *throtl_qnode_bio_list_pop(struct throtl_qnode *qn)
-+{
-+	struct bio *bio;
-+	int from = SYNC;
-+
-+	if (qn->disp_sync_cnt == THROTL_SYNC_FACTOR)
-+		from = ASYNC;
-+
-+	bio = bio_list_pop(&qn->bios[from]);
-+	if (!bio) {
-+		from = 1 - from;
-+		bio = bio_list_pop(&qn->bios[from]);
-+	}
-+
-+	if ((qn->disp_sync_cnt < THROTL_SYNC_FACTOR) &&
-+		(from == SYNC))
-+		qn->disp_sync_cnt++;
-+	else
-+		qn->disp_sync_cnt = 0;
-+
-+	return bio;
-+}
-+
-+/**
-+ * throtl_qnode_bio_pop: pop a bio from a qnode
-+ * @qn: the qnode to pop a bio from
-+ */
-+static inline struct bio *throtl_qnode_bio_pop(struct throtl_qnode *qn)
-+{
-+	struct bio *bio;
-+
-+	/* qn for read ios */
-+	if (qn->disp_sync_cnt == UINT_MAX)
-+		return bio_list_pop(&qn->bios[SYNC]);
-+
-+	/* qn for write ios */
-+	if (qn->next_to_disp) {
-+		bio = qn->next_to_disp;
-+		qn->next_to_disp = NULL;
-+		return bio;
-+	}
-+
-+	return throtl_qnode_bio_list_pop(qn);
-+}
-+
-+static inline bool throtl_qnode_empty(struct throtl_qnode *qn)
-+{
-+	if (!qn->next_to_disp &&
-+		bio_list_empty(&qn->bios[SYNC]) &&
-+		bio_list_empty(&qn->bios[ASYNC]))
-+		return true;
-+	return false;
-+}
-+
- /**
-  * throtl_pop_queued - pop the first bio form a qnode list
-  * @queued: the qnode list to pop a bio from
-@@ -310,10 +429,10 @@ static struct bio *throtl_pop_queued(struct list_head *queued,
- 		return NULL;
- 
- 	qn = list_first_entry(queued, struct throtl_qnode, node);
--	bio = bio_list_pop(&qn->bios);
-+	bio = throtl_qnode_bio_pop(qn);
- 	WARN_ON_ONCE(!bio);
- 
--	if (bio_list_empty(&qn->bios)) {
-+	if (throtl_qnode_empty(qn)) {
- 		list_del_init(&qn->node);
- 		if (tg_to_put)
- 			*tg_to_put = qn->tg;
-@@ -355,8 +474,8 @@ static struct blkg_policy_data *throtl_pd_alloc(gfp_t gfp,
- 	throtl_service_queue_init(&tg->service_queue);
- 
- 	for (rw = READ; rw <= WRITE; rw++) {
--		throtl_qnode_init(&tg->qnode_on_self[rw], tg);
--		throtl_qnode_init(&tg->qnode_on_parent[rw], tg);
-+		throtl_qnode_init(&tg->qnode_on_self[rw], tg, rw);
-+		throtl_qnode_init(&tg->qnode_on_parent[rw], tg, rw);
- 	}
- 
- 	RB_CLEAR_NODE(&tg->rb_node);
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index ef4b7a4de987..bd4fff65b6d9 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -28,8 +28,19 @@
-  */
- struct throtl_qnode {
- 	struct list_head	node;		/* service_queue->queued[] */
--	struct bio_list		bios;		/* queued bios */
-+	struct bio_list		bios[2];	/* queued bios */
- 	struct throtl_grp	*tg;		/* tg this qnode belongs to */
-+
-+	struct bio		*next_to_disp;	/* pinned for next to dispatch */
-+	/*
-+	 * 1) for write throtl_qnode:
-+	 * [0, THROTL_SYNC_FACTOR-1]: dispatch sync io
-+	 * [THROTL_SYNC_FACTOR]: dispatch async io
-+	 *
-+	 * 2) for read throtl_qnode:
-+	 * UINT_MAX
-+	 */
-+	unsigned int disp_sync_cnt;         /* sync io dispatch counter */
- };
- 
- struct throtl_service_queue {
+[...]
+
+>> +       touchscreen@14 {
+>> +               compatible = "goodix,gt917s";
+>> +               reg = <0x14>;
+>> +               interrupt-parent = <&gpio3>;
+>> +               interrupts = <RK_PB5 IRQ_TYPE_EDGE_RISING>;
+>> +               irq-gpios = <&gpio3 RK_PB5 GPIO_ACTIVE_HIGH>;
+>> +               reset-gpios = <&gpio3 RK_PB4 GPIO_ACTIVE_HIGH>;
+>> +               AVDD28-supply = <&vcc3v0_touch>;
+>> +               VDDIO-supply = <&vcc3v0_touch>;
+>> +               touchscreen-size-x = <720>;
+>> +               touchscreen-size-y = <1440>;
+>> +               poweroff-in-suspend;
+> Are you really sure this property exists in touchscreen driver's dt bindings?
+>
+
+It's not indeed. I've dropped that now.
+
+[...]
+
+>> +               vcc-supply = <&vcc2v8_lcd>; // 2v8
+> What is the purpose of that comment?
+> 
+>> +               iovcc-supply = <&vcc1v8_lcd>; // 1v8
+
+Yeah, not that useful. I've removed those two now.
+
 -- 
-2.20.1
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
