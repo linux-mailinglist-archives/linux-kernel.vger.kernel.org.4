@@ -2,117 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68556563DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F28EE6563E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiLZPqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 10:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
+        id S232107AbiLZPqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 10:46:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiLZPqE (ORCPT
+        with ESMTP id S229612AbiLZPqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 10:46:04 -0500
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A917273
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:46:02 -0800 (PST)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 6FB751B7;
-        Mon, 26 Dec 2022 15:42:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1672069351;
-        bh=B2DaB7WWHJqDDPT074JtcIYqB7GPsr9A6JYSY3UQo6U=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=KisxStYY6RKSCjV14OMqd1AN9M4b3jpleHIjMtPr3h29CgBn3f0X2HXXGEJq8nWJt
-         if0GrKCYq5FkJrJBDunwO2IPuOTvpj8bXpNTZwisTbeqZXXwHqEwrq2rSIT/mb9MlZ
-         +OesJkgYwfq10M8OILeN+tGiPJBznsAaSRcmrNrw=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id C87941D33;
-        Mon, 26 Dec 2022 15:46:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1672069560;
-        bh=B2DaB7WWHJqDDPT074JtcIYqB7GPsr9A6JYSY3UQo6U=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=srLL5s6WA8Db3RMquWKLg6OnexE9pPc8SUk1CPAhDg/PW+n+sCZJWAf6qCHIeIHz5
-         Jbxon/PRMqq8hv0wxvajo3z8YvuMaCGvUDARgSXOyMhuC5VbcPOGWwP1zD3kG2Bm6B
-         m5UCY2cH9bUBn+vR5xHkRumXIgJR9FKSDHNFCyRE=
-Received: from [192.168.211.153] (192.168.211.153) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 26 Dec 2022 18:46:00 +0300
-Message-ID: <d7805125-cd44-3dba-8f79-95c989844191@paragon-software.com>
-Date:   Mon, 26 Dec 2022 19:45:59 +0400
+        Mon, 26 Dec 2022 10:46:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A027B273;
+        Mon, 26 Dec 2022 07:46:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 297A5B80D53;
+        Mon, 26 Dec 2022 15:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FD6C433D2;
+        Mon, 26 Dec 2022 15:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672069606;
+        bh=Uom+2CEda3eC3rPnPw0DKcEougkX6GjwzRBssTnD6Gs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MWzoRhJwRGnll7yOMD/n+cgYf8e03UbOxRsiMrQ8Zg++abhIBxGWn8pxvrLD+FY39
+         Atdjw8CEQGfEGQpIeBPgVcRsvP3fT4AelGEOUzVBhCyffHXP0gTfwOXWxfelCqlAfh
+         r1kWxT6udO6TtKf4aj1peMSW/6oI+iGoN87eUV0Xl1q7tDWQEVeDuIXmmzCSDOEh89
+         x0W0aWjfwFdGNzZeY0YyIURurkWZEKJ+gtiHsQvS0IPy0LQdrfR0LtiK8PJryLcl3v
+         87WMlGohnJuQVVnV0n+g+6vd7kkYNgWouleYf8YywuhF4yuZLOn69XmX09QQzu5BB6
+         Rq4DohehooXBw==
+Received: by pali.im (Postfix)
+        id 6B7E49D7; Mon, 26 Dec 2022 16:46:43 +0100 (CET)
+Date:   Mon, 26 Dec 2022 16:46:43 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     bhelgaas@google.com, Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Stefan Roese <sr@denx.de>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI/portdrv: Avoid enabling AER on Thunderbolt devices
+Message-ID: <20221226154643.kidhqooedmijj3iw@pali>
+References: <20221226153048.1208359-1-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] fs/ntfs3: Fix slab-out-of-bounds in ntfs_trim_fs()
-Content-Language: en-US
-To:     Shigeru Yoshida <syoshida@redhat.com>
-CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-References: <20221130145705.488351-1-syoshida@redhat.com>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <20221130145705.488351-1-syoshida@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.211.153]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221226153048.1208359-1-kai.heng.feng@canonical.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.11.2022 18:57, Shigeru Yoshida wrote:
-> ntfs_trim_fs() should loop with wnd->nwnd, not wnd->nbits.  KASAN
-> detects this as an out-of-bounds access like below:
->
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-> Read of size 2 at addr ffff8881745b4f02 by task repro/19678
->
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-2.fc37 04/01/2014
-> Call Trace:
->   <TASK>
-> dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
-> print_report (mm/kasan/report.c:285 mm/kasan/report.c:395)
-> ? __virt_addr_valid (arch/x86/mm/physaddr.c:66)
-> ? __phys_addr (arch/x86/mm/physaddr.c:32 (discriminator 4))
-> ? ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-> ? ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-> kasan_report (mm/kasan/report.c:162 mm/kasan/report.c:497)
-> ? ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-> ntfs_trim_fs (fs/ntfs3/bitmap.c:1434)
-> ntfs_ioctl (fs/ntfs3/file.c:41 fs/ntfs3/file.c:57)
-> ? ntfs_fiemap (fs/ntfs3/file.c:51)
-> ? bpf_lsm_file_ioctl (./include/linux/lsm_hook_defs.h:165)
-> ? ntfs_fiemap (fs/ntfs3/file.c:51)
-> __x64_sys_ioctl (fs/ioctl.c:52 fs/ioctl.c:870 fs/ioctl.c:856 fs/ioctl.c:856)
-> do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
-> entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
->
-> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+On Monday 26 December 2022 23:30:31 Kai-Heng Feng wrote:
+> We are seeing igc ethernet device on Thunderbolt dock stops working
+> after S3 resume because of AER error, or even make S3 resume freeze:
+
+Hello! Is igc ethernet the only device which does not work after resume?
+Or do you have also more devices to test and check for this issue?
+
+I'm asking it just because to know if we are dealing with one device or
+there are lot of more. Because if it is just one device then it could be
+better to disable AER only for one targeted device instead of all. Error
+reporting is a feature which may help to detect broken HW unit and be useful.
+
+> pcieport 0000:00:1d.0: AER: Multiple Corrected error received: 0000:00:1d.0
+> pcieport 0000:00:1d.0: PCIe Bus Error: severity=Corrected, type=Transaction Layer, (Receiver ID)
+> pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00008000/00002000
+> pcieport 0000:00:1d.0:    [15] HeaderOF
+> pcieport 0000:00:1d.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+> pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+> pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+> pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 0a000052 00000000 00000000
+> pcieport 0000:00:1d.0: AER:   Error of this Agent is reported first
+> pcieport 0000:04:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> pcieport 0000:04:01.0:   device [8086:1136] error status/mask=00300000/00000000
+> pcieport 0000:04:01.0:    [20] UnsupReq               (First)
+> pcieport 0000:04:01.0:    [21] ACSViol
+> pcieport 0000:04:01.0: AER:   TLP Header: 34000000 04000052 00000000 00000000
+> thunderbolt 0000:05:00.0: AER: can't recover (no error_detected callback)
+> 
+> This supposedly should be fixed by commit c01163dbd1b8 ("PCI/PM: Always disable
+> PTM for all devices during suspend"), but somehow it doesn't work for
+> this case.
+> 
+> By dumping the PCI_PTM_CTRL register on resume, it turns out PTM is
+> already flipped on by either the Thunderbolt dock firmware or the host
+> BIOS. Writing 0 to PCI_PTM_CTRL yields the same result.
+> 
+> Windows is however not affected by this issue, by using WinDbg's !pci
+> command, it shows that AER is not enabled for devices connected via
+> Thunderbolt port, and that's the reason why Windows doesn't exhibit the
+> issue.
+
+Could you try to manually enable AER on Windows (via touching PCIe
+config registers) if Windows can trigger this issue too, or not?
+
+> So turn a blind eye on external Thunderbolt devices like Windows does by
+> disabling AER.
+> 
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216850
+> Cc: Mario Limonciello <mario.limonciello@amd.com>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > ---
->   fs/ntfs3/bitmap.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/ntfs3/bitmap.c b/fs/ntfs3/bitmap.c
-> index e92bbd754365..1930640be31a 100644
-> --- a/fs/ntfs3/bitmap.c
-> +++ b/fs/ntfs3/bitmap.c
-> @@ -1424,7 +1424,7 @@ int ntfs_trim_fs(struct ntfs_sb_info *sbi, struct fstrim_range *range)
->   
->   	down_read_nested(&wnd->rw_lock, BITMAP_MUTEX_CLUSTERS);
->   
-> -	for (; iw < wnd->nbits; iw++, wbit = 0) {
-> +	for (; iw < wnd->nwnd; iw++, wbit = 0) {
->   		CLST lcn_wnd = iw * wbits;
->   		struct buffer_head *bh;
->   
-
-Thanks for work, this bug has already been fixed:
-
-https://lore.kernel.org/ntfs3/20221001070024.1366018-1-abdun.nihaal@gmail.com/
-
+>  drivers/pci/pcie/portdrv.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+> index 2cc2e60bcb396..59d00e20e57bf 100644
+> --- a/drivers/pci/pcie/portdrv.c
+> +++ b/drivers/pci/pcie/portdrv.c
+> @@ -237,7 +237,8 @@ static int get_port_device_capability(struct pci_dev *dev)
+>  	if ((pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT ||
+>               pci_pcie_type(dev) == PCI_EXP_TYPE_RC_EC) &&
+>  	    dev->aer_cap && pci_aer_available() &&
+> -	    (pcie_ports_native || host->native_aer))
+> +	    (pcie_ports_native || host->native_aer) &&
+> +	    !dev_is_removable(&dev->dev))
+>  		services |= PCIE_PORT_SERVICE_AER;
+>  #endif
+>  
+> -- 
+> 2.34.1
+> 
