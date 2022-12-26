@@ -2,248 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706A36564D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 20:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01FA6564FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 21:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbiLZTwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 14:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
+        id S230330AbiLZUkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 15:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiLZTwK (ORCPT
+        with ESMTP id S229547AbiLZUkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 14:52:10 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EC2111E
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 11:52:09 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id c133so10935784oif.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 11:52:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qWYSPSIrfkoYnJg6m/4VcDHxK65kqTI6ZG2tXU8qx+w=;
-        b=UbcpRYnTJjxlME36wtgQ5f20bT5geXurrwccbIL394ZNHpdSCNl3EyqsPQ1JeaHlsK
-         cHQWbPGtH6i1F/HuDqjc7CCjTgZU43olU5MP5zmuUsTThT/pemAQEnXjvqdh9EPtPNL0
-         XuG4SiZZsc7dx8eZC8x5xTkpc66IUBqCU2Bo+qRTmPW/qmk8cy5N1GTD0b8/tplfI7l2
-         mCLs7O6bHqJwVvGb3X71VE6PXhgRzw6I3Igf7ieo2Ht+0egjfLGUNv09bwvjTsBCIO5f
-         lh8psYltFS2eq9/QVAR277OBsqSUnWft5a3WiqocnNKDWvHPjCyIGRpKeILBQWjIFYdZ
-         kQKg==
+        Mon, 26 Dec 2022 15:40:37 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D90F10C7
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 12:40:36 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id i7-20020a056e021b0700b003033a763270so7604298ilv.19
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 12:40:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qWYSPSIrfkoYnJg6m/4VcDHxK65kqTI6ZG2tXU8qx+w=;
-        b=4dBP2m8l02oIOGn8vqyyY0Mi3ltY+A6lh70WKJkmPbi4t9ez8UvyLe6eV56TYKmJch
-         g02YYjIUkGbaRx81XmfHMhkhIP+w4dq/kZOJstRqSssBj8U4wWVzfv7+TJ4qdBm1haaC
-         4ny+gGZdAeHpw8keYioZkkkX1KA67RjuhYPdy4KRLUkacRb9hA12Q55qDud5/JcmiRoe
-         xaqiurTQz6wv7+Gzj+fSa6P2t9zSsfEoB1SHIIoqi3of/l7+/frMgT4Cfz8aoumwLYF/
-         LMj6Ur5WZ0pC1QZhKa/1EOBm+6nOWv6+Epct3TJkKYO9/xfXxNr5kEYhqNpG6jUFKfmM
-         FXzw==
-X-Gm-Message-State: AFqh2kq2LiJcb8h34HqgcDeB8y3skl2iGuXIIiNYmkvUG6x7o3dUFfZG
-        XW5KhFPz7ivWxxcims6PtSg=
-X-Google-Smtp-Source: AMrXdXuwjRIcU16EO93gGMXeyGGQE/Upxzw2RQdQeZyeNFIm9fuvLBuBoWArYSDUyneIcCoYbdCwxw==
-X-Received: by 2002:a05:6808:2021:b0:35c:2a72:72c2 with SMTP id q33-20020a056808202100b0035c2a7272c2mr11054001oiw.0.1672084328880;
-        Mon, 26 Dec 2022 11:52:08 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f13-20020a9d5e8d000000b0066eab2ec808sm5680696otl.1.2022.12.26.11.52.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 11:52:08 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 26 Dec 2022 11:52:06 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: Linux 6.2-rc1
-Message-ID: <20221226195206.GA2626419@roeck-us.net>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g6LPm+7jf2gMUBY5UKDDtmShLVXC7oKCmLg+EK6Jv1c=;
+        b=Bdpnp9o/hmdW5j21WKopta8kpv/smQwweNM+z07SfYm916wAGm+KagVjwnCEKTjKHH
+         xpvCJEjeIMyKkyDaz5199SJhipsfoRQWq2h+iRRaEe4A9dwa0U1PfYqtiYqhJ+hXasMK
+         /Gkp7dRPowW8FpiU+PW9leMpaFaiZ/khdWkXgtSPe/RYdPuqWEbP6/S1GOHQ2VLhb33u
+         UYEIf7b3XsyiUfvK4xkZpWAeZ7nVOnER1rHvMHYBfK2OsHmHGR9W/w9tz2MVg/R6xcmO
+         db4aQRJuUOOeOHGl8FGBQZXRIAaDz1ShYSWKqDmA670/LOwPGqt4sgoktIAfnPZEiohx
+         9MMQ==
+X-Gm-Message-State: AFqh2kqj/1gGac1GmgM9GUP98WdqyUz1LyzsvjhdYAgTS77Kc5IiNvFb
+        cNpyvuui31MDoGuoH/4zNa37McQqQS8OcSl2B1+dljKb2egP
+X-Google-Smtp-Source: AMrXdXuX2fiHsarqGhJtMvhB81vRP0OlhyTwSe2bQXrd8HDgG1Zoq0+lHE2jszckuRcXGv/bizGK0tpgTfZHXKJPG4wZPB53ZyPU
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:2a47:b0:6e3:8c1:35cf with SMTP id
+ k7-20020a0566022a4700b006e308c135cfmr1513362iov.12.1672087235425; Mon, 26 Dec
+ 2022 12:40:35 -0800 (PST)
+Date:   Mon, 26 Dec 2022 12:40:35 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b37bea05f0c125be@google.com>
+Subject: [syzbot] [gfs2?] BUG: unable to handle kernel NULL pointer
+ dereference in gfs2_rgrp_dump
+From:   syzbot <syzbot+da0fc229cc1ff4bb2e6d@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 25, 2022 at 02:07:05PM -0800, Linus Torvalds wrote:
-> So it's Christmas Day here, but it's also Sunday afternoon two weeks
-> after the 6.2 merge window opened. So holidays or not, the kernel
-> development show must go on.
-> 
-> Thanks to a lot of people sending their pull requests early, I got
-> much of the merge window work done before the holidays started in
-> earnest, and mostly before my pre-xmas travel. So despite flight
-> delays, missed connections, and the resulting airport hotel
-> excursions, the merge window mostly went smoothly, and there was no
-> reason to delay rc1.
-> 
-> That said, realistically I expect most people to be on vacation for at
-> least another week, so I wouldn't be surprised if we end up with a
-> delayed final release due to the season. But it's too early to worry
-> about that yet, we'll just have to see how it goes.
-> 
-> Also, 6.2 looks like it's a bigger release (certainly bigger than 6.1
-> was). The summary below is, as usual, just my merge log: we've got
-> about 13.5k commits from ~1800 people in total in this merge window,
-> which is actually not that far off the total size of the whole 6.1
-> release. But let's hope that despite the size, and despite the likely
-> slow start of the post-merge-window calming down period, we'll have a
-> smooth release.
-> 
+Hello,
 
-Test results:
+syzbot found the following issue on:
 
-Build results:
-	total: 155 pass: 151 fail: 4
-Failed builds:
-	powerpc:allmodconfig
-	sh:defconfig
-	sh:shx3_defconfig
-	xtensa:allmodconfig
-Qemu test results:
-	total: 500 pass: 498 fail: 2
-Failed tests:
-	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:net,default:zynq-zc702:rootfs
-	arm:xilinx-zynq-a9:multi_v7_defconfig:usb0:mem128:zynq-zed:rootfs
+HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=11859c50480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
+dashboard link: https://syzkaller.appspot.com/bug?extid=da0fc229cc1ff4bb2e6d
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101babb4480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10bfb18c480000
 
-Details below.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/0bee075b0175/mount_0.gz
 
-Guenter
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+da0fc229cc1ff4bb2e6d@syzkaller.appspotmail.com
 
----
-Build errors
-============
+ri_length = 1
+ri_data0 = 19
+ri_data = 2060
+ri_bitbytes = 514
+start=0 len=514 offset=128
+gfs2: fsid=syz:syz.s:  R: n:18 f:00 b:0/0 i:0 q:0 r:0 e:0
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000004
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=000000010e23f000
+[0000000000000004] pgd=080000010b804003, p4d=080000010b804003, pud=080000010a4e8003, pmd=0000000000000000
+Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 3072 Comm: syz-executor147 Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : gfs2_rgrp_dump+0xa0/0x138 fs/gfs2/rgrp.c:2313
+lr : gfs2_rgrp_dump+0x90/0x138
+sp : ffff80000fb93780
+x29: ffff80000fb937a0 x28: ffff0000cb82a000 x27: ffff0000cb82a000
+x26: ffff0000ca4de000 x25: 0000000000000808 x24: 000000000000080c
+x23: 000000000001c103 x22: ffff0000ca4de000 x21: 0000000000000000
+x20: ffff80000fb937e0 x19: ffff0000ca4de080 x18: 00000000000000c0
+x17: ffff80000dda8198 x16: ffff80000dbe6158 x15: ffff0000c6800000
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c6800000
+x11: ff808000092a5154 x10: 0000000000000000 x9 : ffff8000092a5154
+x8 : 0000000000000000 x7 : ffff80000c091ebc x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0001fefbecd0 x1 : ffff80000cc9c685 x0 : 0000000000000000
+Call trace:
+ gfs2_rgrp_dump+0xa0/0x138 fs/gfs2/rgrp.c:2312
+ gfs2_consist_rgrpd_i+0x78/0xe4 fs/gfs2/util.c:480
+ read_rindex_entry fs/gfs2/rgrp.c:931 [inline]
+ gfs2_ri_update+0x398/0x7e4 fs/gfs2/rgrp.c:1001
+ gfs2_rindex_update+0x1b0/0x21c fs/gfs2/rgrp.c:1051
+ init_inodes+0x11c/0x184 fs/gfs2/ops_fstype.c:917
+ gfs2_fill_super+0x630/0x874 fs/gfs2/ops_fstype.c:1247
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1324
+ gfs2_get_tree+0x30/0xc0 fs/gfs2/ops_fstype.c:1330
+ vfs_get_tree+0x40/0x140 fs/super.c:1531
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x890 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: f94036c8 f001cfa1 911a1421 aa1503e0 (2940a909) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	f94036c8 	ldr	x8, [x22, #104]
+   4:	f001cfa1 	adrp	x1, 0x39f7000
+   8:	911a1421 	add	x1, x1, #0x685
+   c:	aa1503e0 	mov	x0, x21
+* 10:	2940a909 	ldp	w9, w10, [x8, #4] <-- trapping instruction
 
-Building powerpc:allmodconfig ... failed
---------------
-Error log:
-In file included from include/linux/string.h:253,
-                 from arch/powerpc/include/asm/paca.h:16,
-                 from arch/powerpc/include/asm/current.h:13,
-                 from include/linux/thread_info.h:23,
-                 from include/asm-generic/preempt.h:5,
-                 from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                 from include/linux/preempt.h:78,
-                 from include/linux/spinlock.h:56,
-                 from include/linux/wait.h:9,
-                 from include/linux/wait_bit.h:8,
-                 from include/linux/fs.h:6,
-                 from fs/f2fs/inline.c:9:
-fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
-include/linux/fortify-string.h:59:33: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]
-   59 | #define __underlying_memset     __builtin_memset
-      |                                 ^
-include/linux/fortify-string.h:337:9: note: in expansion of macro '__underlying_memset'
-  337 |         __underlying_memset(p, c, __fortify_size);                      \
-      |         ^~~~~~~~~~~~~~~~~~~
-include/linux/fortify-string.h:345:25: note: in expansion of macro '__fortify_memset_chk'
-  345 | #define memset(p, c, s) __fortify_memset_chk(p, c, s,                   \
-      |                         ^~~~~~~~~~~~~~~~~~~~
-fs/f2fs/inline.c:430:9: note: in expansion of macro 'memset'
-  430 |         memset(dst.bitmap + src.nr_bitmap, 0, dst.nr_bitmap - src.nr_bitmap);
-      |         ^~~~~~
-cc1: all warnings being treated as errors
-
-xtensa:allmodconfig
-
-Building xtensa:allmodconfig ... failed
---------------
-Error log:
-kernel/kcsan/kcsan_test.c: In function '__report_matches':
-kernel/kcsan/kcsan_test.c:257:1: error: the frame size of 1680 bytes is larger than 1536 bytes
-
-Bisect for both points to commit e240e53ae0abb08 ("mm, slub: add
-CONFIG_SLUB_TINY").  Reverting it on its own is not possible, but
-reverting the following two patches fixes the problem.
-
-149b6fa228ed mm, slob: rename CONFIG_SLOB to CONFIG_SLOB_DEPRECATED
-e240e53ae0ab mm, slub: add CONFIG_SLUB_TINY
-
-Context: CONFIG_SLUB_TINY is enabled with allmodconfig builds.
-This enables some previously disabled configurations and disables
-some previously enabled configurations. Not sure if that is a good
-thing or a bad thing, but it does result in the above errors.
 
 ---
-sh:defconfig
-sh:shx3_defconfig
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Building sh:defconfig ... failed
---------------
-Error log:
-In file included from <command-line>:
-In function 'follow_pmd_mask',
-    inlined from 'follow_pud_mask' at mm/gup.c:735:9,
-    inlined from 'follow_p4d_mask' at mm/gup.c:752:9,
-    inlined from 'follow_page_mask' at mm/gup.c:809:9:
-include/linux/compiler_types.h:358:45: error: call to '__compiletime_assert_263' declared with attribute error: Unsupported access size for {READ,WRITE}_ONCE().
-  358 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-
-Bisect points to commit 0862ff059c9e ("sh/mm: Make pmd_t similar to pte_t").
-This commit introduces
-
--typedef struct { unsigned long long pmd; } pmd_t;
-+typedef struct {
-+       struct {
-+               unsigned long pmd_low;
-+               unsigned long pmd_high;
-+       };
-+       unsigned long long pmd;
-+} pmd_t;
-
-That should probably be "typedef union", not "typedef struct".
-
-=============
-
-Runtime:
-
-Boot tests of arm:xilinx-zynq-a9 fail after
-
-[    5.849451] ci_hdrc ci_hdrc.0: failed to register ULPI interface
-[    5.849577] ci_hdrc: probe of ci_hdrc.0 failed with error -110
-
-Caused by commit 8a7b31d545d3 ("usb: ulpi: defer ulpi_register on
-ulpi_read_id timeout"). Revert is pending.
-
----
-
-Not exactly a regression, but worth mentioning:
-
-CONFIG_MEMCPY_KUNIT_TEST now sometimes takes several minutes to
-execute in qemu. On top of that, it may result in hung task timeouts
-if the hung task timeout is set to low values (45 seconds and below).
-Example, seen with s390:
-
-...
-[   18.494320]     ok 2 memcpy_test
-[   52.969037]     ok 3 memcpy_large_test
-...
-[   52.974505]     ok 4 memmove_test
-[   87.325400]     ok 5 memmove_large_test
-[  143.562760] INFO: task swapper/0:1 blocked for more than 46 seconds.
-...
-[  143.564441] Call Trace:
-[  143.564689]  [<0000000000f1ec80>] __schedule+0x370/0x720
-[  143.565175]  [<0000000000f1f098>] schedule+0x68/0x110
-[  143.565374]  [<0000000000f278d4>] schedule_timeout+0xc4/0x160
-[  143.565603]  [<0000000000f1fde2>] __wait_for_common+0xda/0x250
-[  143.565816]  [<0000000000903c90>] kunit_try_catch_run+0x98/0x178
-[  143.566029]  [<0000000000f05c9c>] kunit_run_case_catch_errors+0x7c/0xb8
-[  143.566956]  [<00000000009023c0>] kunit_run_tests+0x220/0x638
-...
-
-That is too much for my test bed. I dropped this test as result. This means
-that extending the tests has, at least in the context of my testing, the
-opposite effect.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
