@@ -2,68 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519F4656355
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 15:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8BF65632C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 15:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbiLZOXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 09:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        id S232118AbiLZOWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 09:22:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiLZOWo (ORCPT
+        with ESMTP id S231857AbiLZOWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 09:22:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E136302;
-        Mon, 26 Dec 2022 06:22:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EF6360EB3;
-        Mon, 26 Dec 2022 14:22:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72CF0C433F1;
-        Mon, 26 Dec 2022 14:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672064540;
-        bh=5u2bH7VJtM/e+LvuxtpQp+PsRT4F9kDqvViUS/4AlLc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=tYsbgvlgOJaF8H1SdFzVwT/R2HizKskvG/7ePvtZ1Zah8Nowv0dae2/QH1uUXQEqN
-         tX4oe095AgKLScJipg2QqH6fNYTdZPSsTR0sYqL/rSidlPk6T0S7zfLoTVNYWh65nG
-         zuZYflHj8oifrjrkkGFs9qvR7uvaXg0ZiRsEK+oaBK/3425Ow6YEgPrqkj3OvCty7+
-         J0F/0Nw1OTfl5g4GFaxoQXERgnMDONqMT3jkeLy4zuNVil9TnTAV0R6SM7irCbfJ81
-         kvQ/bXiol65QJi1ZruhYHP+0nhxUyS8O1Zdk72l1CUaWTszATm4fxQLZIxpCKc/1Vw
-         rJiMOl47B5OIw==
-Received: by pali.im (Postfix)
-        id 2D6729D7; Mon, 26 Dec 2022 15:22:20 +0100 (CET)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     linux-fsdevel@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, linux-cifs@vger.kernel.org,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jan Kara <jack@suse.cz>, "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Luis de Bethencourt <luisbg@kernel.org>,
-        Salah Triki <salah.triki@gmail.com>,
-        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, Dave Kleikamp <shaggy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kari Argillander <kari.argillander@gmail.com>,
-        Viacheslav Dubeyko <slava@dubeyko.com>
-Subject: [RFC PATCH v2 18/18] nls: Drop broken nls_utf8 module
-Date:   Mon, 26 Dec 2022 15:21:50 +0100
-Message-Id: <20221226142150.13324-19-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221226142150.13324-1-pali@kernel.org>
-References: <20221226142150.13324-1-pali@kernel.org>
+        Mon, 26 Dec 2022 09:22:08 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04049262A
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 06:22:07 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id i15so15675410edf.2
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 06:22:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G+7qtVYjcqPvE/k1QEDEyz+eQy6Hwuj22SxfubsIkZo=;
+        b=QNaZe3TYok5E4UMDykUVs1doSqbl+yF9VyivY/zRr6IQnDZc5rsv03mxU+CHu4WafX
+         cBoh45oOUzxF22snszZEwDCw9m2HV8LR0u9J1PyQ08WL5WhnYejulbrjUkzKOlb8gc7a
+         GzVE4b5amh8Bm/nSDFtX82NJsQ9jxwO5FjhEYKpxNJiZ6RwRmlCMtXiEo1YpVP2dQQfb
+         dOt8FnYp9LAW7x2UHL2X1koeF4tUsQjpGMOhPolMaKepoV7h2TB1jUlvM/l58cLzskOB
+         MixrBiyNSF8+BR8udIRXu4H+kQKlcszmobTbThAuYAfHMBNp03yopvtlwKvf+E15NFkm
+         AAig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G+7qtVYjcqPvE/k1QEDEyz+eQy6Hwuj22SxfubsIkZo=;
+        b=mVV3P5f7i9KUWTOTLcO2WvoaLcrR0Up5vzkPfdVuUae9WtEMIGprK1sfdYqZFjR0fb
+         8D+boJvxfpFomPkCEGjcsYC7y5iNqfg5v6FJrwvYI3boAfJV9LYgWhggtyhWMxk7kvAG
+         eEMEE2K6UvKLPJu8N0RenngLZmKuXThVdHO1mrxwptuVfeCjrYI/qptmEq3ZOg3nZlnl
+         IA0AjpxMfUYb8rBHZi7RVr3EVbFvZNTW+YsbYV29RigzLjg1m87v1ObJOkRFHdeiwwkL
+         WLfL5sO8d0WqRqXypPy/ucXJ/2svX/WscUaGooqZMogcJUjdB3toZomoWIkQmO9YlTKb
+         HMhw==
+X-Gm-Message-State: AFqh2kreUoF2vHgu5vVBg0AgpRdc/IJ63Wdi1cwhsCtP+gqQ1qtXBEOa
+        wyLqCQl0d8PuFZwGgcsaq5PxZw==
+X-Google-Smtp-Source: AMrXdXtsIOWE06vpaTx7Hf5jTPvQqXas9JhYDADYc43XOYx0B8ZZsf6FzMSbIBcmmS5uIo/d3P8wSg==
+X-Received: by 2002:a05:6402:390b:b0:465:f6a9:cb7b with SMTP id fe11-20020a056402390b00b00465f6a9cb7bmr15926698edb.12.1672064525630;
+        Mon, 26 Dec 2022 06:22:05 -0800 (PST)
+Received: from [192.168.0.173] ([82.77.81.131])
+        by smtp.gmail.com with ESMTPSA id s14-20020a056402014e00b0048263de5aa6sm3622014edu.75.2022.12.26.06.22.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Dec 2022 06:22:04 -0800 (PST)
+Message-ID: <32ddf1f8-eda1-da00-a3dc-901c4ee61217@linaro.org>
+Date:   Mon, 26 Dec 2022 16:22:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] [v2] mtd: cfi: allow building spi-intel standalone
+Content-Language: en-US
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Walle <michael@walle.cc>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
+        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Mauro Lima <mauro.lima@eclypsium.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221220141352.1486360-1-arnd@kernel.org>
+ <cae6328b-5204-a1ab-810d-8fb64e466453@linaro.org>
+ <20221220165701.5696df1a@xps-13>
+ <026225c6-f17f-e9da-b7c0-5d3473a97e89@linaro.org>
+In-Reply-To: <026225c6-f17f-e9da-b7c0-5d3473a97e89@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,127 +88,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NLS table for utf8 is broken and cannot be fixed.
 
-Now that all filesystems are using utf8s_to_utf16s()/utf16s_to_utf8s()
-functions for converting between UTF-8 and UTF-16, and functions
-utf8_to_utf32()/utf32_to_utf8() for converting between UTF-8 and Unicode
-code points, there is no need to have this broken utf8 NLS module in kernel
-tree anymore.
 
-There is no user of this utf8 NLS module, so completely drop it,
+On 21.12.2022 08:49, Tudor Ambarus wrote:
+> 
+> 
+> On 20.12.2022 17:57, Miquel Raynal wrote:
+>> Hi Tudor,
+>>
+> 
+> Hi,
+> 
+>> tudor.ambarus@linaro.org wrote on Tue, 20 Dec 2022 17:44:49 +0200:
+>>
+>>> Hi, Arnd,
+>>>
+>>> On 20.12.2022 16:13, Arnd Bergmann wrote:
+>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>>
+>>>> When MTD or MTD_CFI_GEOMETRY is disabled, the spi-intel driver
+>>>> fails to build, as it includes the shared CFI header:
+>>>>
+>>>> include/linux/mtd/cfi.h:62:2: error: #warning No CONFIG_MTD_CFI_Ix 
+>>>> selected. No NOR chip support can work. [-Werror=cpp]
+>>>>      62 | #warning No CONFIG_MTD_CFI_Ix selected. No NOR chip 
+>>>> support can work.
+>>>>
+>>>> linux/mtd/spi-nor.h does not actually need to include cfi.h, so
+>>>> remove the inclusion here to fix the warning. This uncovers a
+>>>> missing #include in spi-nor/core.c so add that there to
+>>>> prevent a different build issue.
+>>>>
+>>>> Fixes: e23e5a05d1fd ("mtd: spi-nor: intel-spi: Convert to SPI MEM")
+>>>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> Looks good to me. I'll let the linux-0day bot run over it and apply it
+>>> once -rc1 is out.
+>>
+>> The issue sometimes produces build errors, shall I send it through a
+>> fixes PR instead?
+>>
+> 
+> Yes, that I was thinking about.
+> 
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- fs/nls/Kconfig    |  9 -------
- fs/nls/Makefile   |  1 -
- fs/nls/nls_utf8.c | 67 -----------------------------------------------
- 3 files changed, 77 deletions(-)
- delete mode 100644 fs/nls/nls_utf8.c
+Seems that I shouldn't push to mtd/fixes, so:
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-diff --git a/fs/nls/Kconfig b/fs/nls/Kconfig
-index c7857e36adbb..8f82cf30a493 100644
---- a/fs/nls/Kconfig
-+++ b/fs/nls/Kconfig
-@@ -608,13 +608,4 @@ config NLS_MAC_TURKISH
- 
- 	  If unsure, say Y.
- 
--config NLS_UTF8
--	tristate "NLS UTF-8"
--	help
--	  If you want to display filenames with native language characters
--	  from the Microsoft FAT file system family or from JOLIET CD-ROMs
--	  correctly on the screen, you need to include the appropriate
--	  input/output character sets. Say Y here for the UTF-8 encoding of
--	  the Unicode/ISO9646 universal character set.
--
- endif # NLS
-diff --git a/fs/nls/Makefile b/fs/nls/Makefile
-index ac54db297128..e573db7fc173 100644
---- a/fs/nls/Makefile
-+++ b/fs/nls/Makefile
-@@ -42,7 +42,6 @@ obj-$(CONFIG_NLS_ISO8859_14)	+= nls_iso8859-14.o
- obj-$(CONFIG_NLS_ISO8859_15)	+= nls_iso8859-15.o
- obj-$(CONFIG_NLS_KOI8_R)	+= nls_koi8-r.o
- obj-$(CONFIG_NLS_KOI8_U)	+= nls_koi8-u.o nls_koi8-ru.o
--obj-$(CONFIG_NLS_UTF8)		+= nls_utf8.o
- obj-$(CONFIG_NLS_MAC_CELTIC)    += mac-celtic.o
- obj-$(CONFIG_NLS_MAC_CENTEURO)  += mac-centeuro.o
- obj-$(CONFIG_NLS_MAC_CROATIAN)  += mac-croatian.o
-diff --git a/fs/nls/nls_utf8.c b/fs/nls/nls_utf8.c
-deleted file mode 100644
-index afcfbc4a14db..000000000000
---- a/fs/nls/nls_utf8.c
-+++ /dev/null
-@@ -1,67 +0,0 @@
--/*
-- * Module for handling utf8 just like any other charset.
-- * By Urban Widmark 2000
-- */
--
--#include <linux/module.h>
--#include <linux/kernel.h>
--#include <linux/string.h>
--#include <linux/nls.h>
--#include <linux/errno.h>
--
--static unsigned char identity[256];
--
--static int uni2char(wchar_t uni, unsigned char *out, int boundlen)
--{
--	int n;
--
--	if (boundlen <= 0)
--		return -ENAMETOOLONG;
--
--	n = utf32_to_utf8(uni, out, boundlen);
--	if (n < 0) {
--		*out = '?';
--		return -EINVAL;
--	}
--	return n;
--}
--
--static int char2uni(const unsigned char *rawstring, int boundlen, wchar_t *uni)
--{
--	int n;
--	unicode_t u;
--
--	n = utf8_to_utf32(rawstring, boundlen, &u);
--	if (n < 0 || u > MAX_WCHAR_T) {
--		*uni = 0x003f;	/* ? */
--		return -EINVAL;
--	}
--	*uni = (wchar_t) u;
--	return n;
--}
--
--static struct nls_table table = {
--	.charset	= "utf8",
--	.uni2char	= uni2char,
--	.char2uni	= char2uni,
--	.charset2lower	= identity,	/* no conversion */
--	.charset2upper	= identity,
--};
--
--static int __init init_nls_utf8(void)
--{
--	int i;
--	for (i=0; i<256; i++)
--		identity[i] = i;
--
--        return register_nls(&table);
--}
--
--static void __exit exit_nls_utf8(void)
--{
--        unregister_nls(&table);
--}
--
--module_init(init_nls_utf8)
--module_exit(exit_nls_utf8)
--MODULE_LICENSE("Dual BSD/GPL");
--- 
-2.20.1
 
