@@ -2,124 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FD365601D
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 06:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA04B65602C
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 06:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiLZF0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 00:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S229998AbiLZFkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 00:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiLZF0O (ORCPT
+        with ESMTP id S229748AbiLZFks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 00:26:14 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FD555A3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 21:26:10 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so13940466pjj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 21:26:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LF9Mm3NqqH1nEG/wEah3Sd4XDD5tbfZrQgSyrQTtptI=;
-        b=ZwNZ39F5tgP/LmtcnHq6P1mt1fj6IDl0R4Ff2oPDtgYyy3gp3vWSgx5th50vG394dt
-         hM5ENWhp6uzpqpEZlsbx3YmTo+2wniMh/K6FYX9wJ8BQHvNtk9MloVceTOyuu0d+3ltT
-         vZ5rRjRPG95043TvJh6z7AT3/Mrans94SvF1c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LF9Mm3NqqH1nEG/wEah3Sd4XDD5tbfZrQgSyrQTtptI=;
-        b=o4pU22cBja2dK/nhdGfOvg7Nf3SswcW1pIqlIS+soTzqLMd8pS8fPZ7PMsg4vL5LWi
-         LdSDRpE+93zdFWsYdGtEPVf1r7N0aeY4qc4aiIjB40yLq9bZumASCJ3GakBhlTHHAwaW
-         DbrCgJUsyHQlFCB1cet9M9Ni9b10kP0Co4f5ESJKBpwAQ1ixzu31d9hLPzTshvIepa7A
-         5gXQ3E2M2PllfdvuGCKTLjrrnrYIoTMoqdyTRNvXKKlHDNOTtbB3omLpiiOxJB9FjKSN
-         Kgfh4Ujrdew9TSERpi/hMoE6M3T+cIxIdgoJse0ZaeVrK9zOu2kDwTVG29AL3ITq1uDV
-         ywKg==
-X-Gm-Message-State: AFqh2kpeolwnZMs7Z4taZC/Q+jNELvAlXpOMMiS6pWC0l6y/CcEmWcSa
-        jfmxig3EQIbnEE5OWl6yM4SSaw==
-X-Google-Smtp-Source: AMrXdXuUS+LEcZOWr2OsiwuQkSRBZt8oLI1kuQXopUgaEZ4Qu8l/Ipbgt8vQUGRyp0msSc4GtvINKw==
-X-Received: by 2002:a17:902:f550:b0:192:7258:15b5 with SMTP id h16-20020a170902f55000b00192725815b5mr7105435plf.50.1672032370405;
-        Sun, 25 Dec 2022 21:26:10 -0800 (PST)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:db30:c4d:3ee:e697])
-        by smtp.gmail.com with ESMTPSA id je20-20020a170903265400b001926c38cd42sm2966161plb.192.2022.12.25.21.26.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Dec 2022 21:26:10 -0800 (PST)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] media: hantro: Use core-generated bus_info value
-Date:   Mon, 26 Dec 2022 13:26:06 +0800
-Message-Id: <20221226052606.144109-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        Mon, 26 Dec 2022 00:40:48 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97307E8;
+        Sun, 25 Dec 2022 21:40:47 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BQ5UZPa024990;
+        Mon, 26 Dec 2022 05:40:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=aj/dFU/j7P3LxmLkkQI/79Xsrctnv4HD+wCspp1smKw=;
+ b=VVPjjM9Xok/UEBBVd/7Qpl+1lM70iY6bkUicD8edkeJETTGzJ7Lbf6b2Mh25i5PRbNzv
+ kXySoC5qwby8si2/iLUB1eVl1KiLfZthlpLpNdqoVVHsRulG9uIEXjIBiJBsf3LfYdxS
+ xNsa0Lv6X4W5BtA6ANLpj5xtMDebvZJI+V8j3S+8OwU7aoZACvBo2TFuTYkBMYWoFLl2
+ kOM6pGzlQ7saa4mhPMZ1cXggaEFb29yyw2ia6/67fXQH++62rUWc3ws0JW/0B4zLzHkm
+ 9AUbKvfflRtzU4B0+TYqgsClXaBzs6QvCD7DtWpVRsIuhBGCITinLVMuN65dId89KOcG dg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mnreg2rfc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Dec 2022 05:40:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BQ5eVT1021340
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Dec 2022 05:40:31 GMT
+Received: from [10.216.63.118] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 25 Dec
+ 2022 21:40:27 -0800
+Message-ID: <dd9ff450-917d-792d-debc-a504ff6ca8bd@quicinc.com>
+Date:   Mon, 26 Dec 2022 11:10:23 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] clk: qcom: lpasscc: Add resets for SC7280 audioreach
+ clock controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>
+References: <1671618061-6329-1-git-send-email-quic_srivasam@quicinc.com>
+ <1671618061-6329-3-git-send-email-quic_srivasam@quicinc.com>
+ <efde6373-f788-5c0c-4712-7b9caf7ad3d4@linaro.org>
+ <e7edd629-986f-3e64-f9db-5ee68cf4e6f3@quicinc.com>
+ <60e388df-cd03-3e88-e9c5-460ebdde29c5@linaro.org>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <60e388df-cd03-3e88-e9c5-460ebdde29c5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: _y8M7bvYB71A7VqTqbyCWY0WqTTJOr9E
+X-Proofpoint-ORIG-GUID: _y8M7bvYB71A7VqTqbyCWY0WqTTJOr9E
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-26_02,2022-12-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 mlxlogscore=999 spamscore=0 clxscore=1015 suspectscore=0
+ priorityscore=1501 malwarescore=0 phishscore=0 bulkscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212260047
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Hantro driver uses a hardcoded value for the bus_info field in the
-media device and |struct v4l2_capability|. This worked well when there
-was just one device. However with the iMX.8 series we are now seeing
-two Hantro blocks on the same chip. The static bus_info is no longer
-sufficient for differentiating devices.
 
-Since commit f2d8b6917f3b ("media: v4l: ioctl: Set bus_info in
-v4l_querycap()"), the V4L2 core provides a default value for the
-bus_info field for platform and PCI devices. This value will match
-the default value for media devices added by commit cef699749f37
-("media: mc: Set bus_info in media_device_init()"). These defaults
-are stable and device-specific.
+On 12/22/2022 4:14 PM, Krzysztof Kozlowski wrote:
+Thanks for Your Time Krzyszto!!!
+> On 21/12/2022 14:18, Srinivasa Rao Mandadapu wrote:
+>> On 12/21/2022 4:09 PM, Krzysztof Kozlowski wrote:
+>> Thanks for your time Krzysztof!!!
+>>> On 21/12/2022 11:21, Srinivasa Rao Mandadapu wrote:
+>>>> The clock gating control for TX/RX/WSA core bus clocks would be required
+>>>> to be reset(moved from hardware control) from audio core driver. Thus
+>>>> add the support for the reset clocks in audioreach based clock driver.
+>>>>
+>>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>>> ---
+>>>>    drivers/clk/qcom/lpasscc-sc7280.c | 18 ++++++++++++++++++
+>>>>    1 file changed, 18 insertions(+)
+>>>>
+>>>> diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
+>>>> index 5c1e17b..d81d81b 100644
+>>>> --- a/drivers/clk/qcom/lpasscc-sc7280.c
+>>>> +++ b/drivers/clk/qcom/lpasscc-sc7280.c
+>>>> @@ -12,10 +12,12 @@
+>>>>    #include <linux/regmap.h>
+>>>>    
+>>>>    #include <dt-bindings/clock/qcom,lpass-sc7280.h>
+>>>> +#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
+>>> These are bindings for different device.
+>> They are not exactly for different device. It's for same device with
+>> ADSP enabled platforms.
+>>
+>> Basically lpassaudiocc-sc7280.c and lpasscorecc-sc7280.c are for legacy
+>> path.
+>>
+>> lpasscc-sc7280.c is for ADSP based AudioReach Solution.
+> I see two different devices:
+> lpasscc@3000000
+> clock-controller@3300000
+>
+> clock inputs and outputs are different, so it does not look like for
+> same device.
 
-Drop the static bus_info values from the hantro driver and use the
-defaults.
+Actually, even though there are 2 different device nodes, they are being 
+used exclusively.
 
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
-Changes since v1:
-- Dropped unrelated Makefile change
+In ADSP enabled path(on same sc7280 based platform it's enabled for some 
+vendors) only lpasscc node is being used
 
- drivers/media/platform/verisilicon/hantro_drv.c  | 2 --
- drivers/media/platform/verisilicon/hantro_v4l2.c | 2 --
- 2 files changed, 4 deletions(-)
+and legacy path nodes are being disabled due to register region conflicts.
 
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 8cb4a68c9119..b0aeedae7b65 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -1050,8 +1050,6 @@ static int hantro_probe(struct platform_device *pdev)
- 
- 	vpu->mdev.dev = vpu->dev;
- 	strscpy(vpu->mdev.model, DRIVER_NAME, sizeof(vpu->mdev.model));
--	strscpy(vpu->mdev.bus_info, "platform: " DRIVER_NAME,
--		sizeof(vpu->mdev.bus_info));
- 	media_device_init(&vpu->mdev);
- 	vpu->mdev.ops = &hantro_m2m_media_ops;
- 	vpu->v4l2_dev.mdev = &vpu->mdev;
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index 2c7a805289e7..c1a116031013 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -142,8 +142,6 @@ static int vidioc_querycap(struct file *file, void *priv,
- 
- 	strscpy(cap->driver, vpu->dev->driver->name, sizeof(cap->driver));
- 	strscpy(cap->card, vdev->name, sizeof(cap->card));
--	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform: %s",
--		 vpu->dev->driver->name);
- 	return 0;
- }
- 
--- 
-2.39.0.314.g84b9a713c41-goog
+Below is the patch for the same:
+https://patchwork.kernel.org/project/linux-arm-msm/patch/1671702170-24781-8-git-send-email-quic_srivasam@quicinc.com/
 
+>
+> Best regards,
+> Krzysztof
+>
