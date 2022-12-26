@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF9E65660E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 00:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B33B665660D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 00:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiLZXei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 18:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S232475AbiLZXep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 18:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232475AbiLZXeM (ORCPT
+        with ESMTP id S232495AbiLZXeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 18:34:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B202726
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 15:34:09 -0800 (PST)
+        Mon, 26 Dec 2022 18:34:17 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5517267C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 15:34:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C353160F5A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C29EBC433D2;
-        Mon, 26 Dec 2022 23:34:04 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0501ECE0E60
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:34:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5C2AC433F1;
+        Mon, 26 Dec 2022 23:34:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672097648;
-        bh=cDwu4kM8l3cgFD8Zxb1eDDB1DVSOVJ1DhZGICqs0pmQ=;
+        s=k20201202; t=1672097652;
+        bh=hI0abZTfZBfmL7iS41Sw/Kw7JuoSmWB5bH2uy6CIx0Q=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=C95e+8c64hIE8JKGxitFFNlla73ZMlVfdmZmc6486jHMzIb0CDVVAhLSMU/Si6mub
-         lGmDJb3PAhehUUUIQkky8A88xGqxuwDPf4aQrOwsu71+rhWjGLp29JdlHB+KXVtzj1
-         0ZaQlYAsR8nngpwZTi3KfO8Cz91Dj9bzr6KPxYxP2e7/f51QPz3HocGKEXd39n+yqO
-         5T6LicKw/SfJiuUxbUEkg5Wl6kvzPpg5hIgOng85CxUjtJV8kElsGRxul1PwR+hQ83
-         66p6aMMX5PEibVS+t5Q7X6Th6d6gMwlse2PJKTAddoI/sOXM8YU2jLBJdxyqUpJ9jW
-         wbx84QRIG5vlg==
+        b=SO5NI+Q8paXlF7tZMy3yL1VvIsR8LUFy1NOHEw7fxL2wJT08iQDN+HPe7hAd8wQhi
+         S3KaqrRQ9EbvAvIbrCXgjuvBrzpBjnaYGlHkb6RCYX//PeRwmmlnjW//sVi9eJ8CDm
+         JTvetu5X0ghrAQRcJFc5j1PIHsxC7cir5nh7NAVE3vgWgdaKzarPSvYph/n+ERPmpe
+         NDO562ouyEeJdZ94jfLHSy3WHyvWL0F5Af5oEQAakm3QdzWWyT53XdiSh6VkYN6qdH
+         0GzKgFEt6e7ljg7Fe+dWG2cG+M6GVwfC6GZbD+hNygvg/6WZ1KOdu+7unjIn5E7OqJ
+         G/mDKqY4Yb45w==
 From:   Mark Brown <broonie@kernel.org>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+To:     linux-kernel@vger.kernel.org,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        "balamurugan . c" <balamurugan.c@intel.com>,
+        Libin Yang <libin.yang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
         Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
         Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
-        "balamurugan.c" <balamurugan.c@intel.com>,
-        Gongjun Song <gongjun.song@intel.com>,
-        Mac Chiang <mac.chiang@intel.com>,
-        David Lin <CTLIN0@nuvoton.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221221132559.2402341-1-arnd@kernel.org>
-References: <20221221132559.2402341-1-arnd@kernel.org>
-Subject: Re: [PATCH] ASoC: Intel: fix sof-nau8825 link failure
-Message-Id: <167209764451.330820.11826897991352846067.b4-ty@kernel.org>
-Date:   Mon, 26 Dec 2022 23:34:04 +0000
+        alsa-devel@alsa-project.org
+In-Reply-To: <20221222042624.557869-1-ajye_huang@compal.corp-partner.google.com>
+References: <20221222042624.557869-1-ajye_huang@compal.corp-partner.google.com>
+Subject: Re: [PATCH v3] ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
+Message-Id: <167209764839.330820.10080062555953013632.b4-ty@kernel.org>
+Date:   Mon, 26 Dec 2022 23:34:08 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -66,13 +69,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Dec 2022 14:25:48 +0100, Arnd Bergmann wrote:
-> The snd-soc-sof_nau8825.ko module fails to link unless the
-> sof_realtek_common support is also enabled:
+On Thu, 22 Dec 2022 12:26:24 +0800, Ajye Huang wrote:
+> This patch adds the driver data for two nau8318 speaker amplifiers on
+> SSP1 and nau8825 on SSP0 for ADL platform.
 > 
-> ERROR: modpost: "sof_rt1015p_codec_conf" [sound/soc/intel/boards/snd-soc-sof_nau8825.ko] undefined!
-> ERROR: modpost: "sof_rt1015p_dai_link" [sound/soc/intel/boards/snd-soc-sof_nau8825.ko] undefined!
-> 
+> The nau8315 and nau8318 are both Nuvoton Amp chips. They use the same
+> Amp driver nau8315.c. The acpi_device_id for nau8315 is "NVTN2010",
+> for nau8318 is "NVTN2012".
+> The nau8825 is one of Nuvoton headset codec, and its acpi_device_id is
+> "10508825".
 > 
 > [...]
 
@@ -82,8 +87,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: Intel: fix sof-nau8825 link failure
-      commit: 63f3d99b7efe4c5404a9388c05780917099cecf4
+[1/1] ASoC: Intel: sof_nau8825: add variant with nau8318 amplifier.
+      commit: ba7523bb0f494fc440d3a9bb0b665cfcaa192d0c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
