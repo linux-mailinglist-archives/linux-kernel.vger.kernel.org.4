@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6B6656032
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 06:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF81656035
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 06:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbiLZFrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 00:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
+        id S231519AbiLZFr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 00:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLZFrt (ORCPT
+        with ESMTP id S229741AbiLZFrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 00:47:49 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A87260A;
-        Sun, 25 Dec 2022 21:47:48 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so9878031pjj.4;
-        Sun, 25 Dec 2022 21:47:48 -0800 (PST)
+        Mon, 26 Dec 2022 00:47:51 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE725260A;
+        Sun, 25 Dec 2022 21:47:50 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so2059683pjk.3;
+        Sun, 25 Dec 2022 21:47:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uLSvcKUr/LzSUoeSULqWf9KKBJSvPiEYMba+dOztS9o=;
-        b=byes3/YMeMFY8pdHEKz8Gs/g8Yy7sGiGQ4Y6gjhniUhuANAyCrF3y06fynIumCQosc
-         esDeoH0ocS1+LUY8jCkoxZ3aDFxyiItmohAl77wacBOEgwMO5+Yuv4Yycx3akTapUiQt
-         AYJNf8Z7wysPsQApsaNsZNw1OwjMIgPvDkT7MMjy7dHLe8DHxf7PpvIfIUWaE+BgPG3b
-         05doglK0ZFJDMOs3sWhbbFl6rVZclTJ4EEsDiqWCCinCorxxX4Fe685tds1pAnY6DiH8
-         fFRlzm0lQviQ6Y2iTakjaFSxccIJ5KBreqSv+PRdPIKkR3ZfUiZxrOi4AgUO6ocWAKCL
-         lOUg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=87f0TKfgjxiemevwHpQhVGmMoe8NuCN8KvjmmGoJcKg=;
+        b=Un99RLgoUgD6VwGxVDiAWbe0ZBFbzdTF/PS3A/DVSjbwc9FYLekIr+QFeg923zh4Re
+         4mGJeCzpmHxuBho1xhQx6gjiOPVp9yWqOmj+K0ehgoufuCuRejM3yC5Hol9GNkenjeFk
+         0aWbXrX3/q51C6PMpQ7ZS1laJZZeH0At2w1hdsYBz7jh4Ty7sF7Y7jdywEaAyIUYtzVc
+         3dDJy46pRBwtaAVku9ulK6uli8QhpKEDw2saJVmvCc302hIoXpFZFvnPvy9IeNd2yU/t
+         UgqwMj6jd0BCoZf5saDtgq9/A/g22o+NjTYSKxQW33sAZrCYN65L+YUfEsayWrWZgjZt
+         G9cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uLSvcKUr/LzSUoeSULqWf9KKBJSvPiEYMba+dOztS9o=;
-        b=Lz8RKK7vgITF379G/aILIGQYwF88vAbfHOSYU8dtqTB+/gw6m7zKVi0ktjloWx2P0z
-         IWjgRsk3iuLWNvRtIY/FJGoicNjfvIOVz5X9Yoy4qg4PJblG9tafnbxUvfz8MGzj2fx1
-         l1z3ZQKqoMoMZ6ljSmvhp8pFOKETgcFFvypvKW/pJtR03BBkiLx2X+1N86bu66R5kefk
-         0Ioh4On7clJqhTSdvixIOsXeopKNRgVRDEJtYOnoUof2ls87s2SbgvoMDsFH2c3sggoh
-         Uz7OSd9cU17mHvacWMVMFp0A3HGACovJDHtqcaKLDnyNmwGYcO1/HjSeEG7Hx1uGevHV
-         97UA==
-X-Gm-Message-State: AFqh2kpf6GMTLDOU1wkCRFVyWZJljXmKikxFH41uZ6L+O+BjNohKD+Rb
-        zdUm6tMieymvqxu8ZxEYL1E=
-X-Google-Smtp-Source: AMrXdXuBted3i4+UVKCqyGp2Q7zGVCsdurIC+MAFR9FedgpvSKF7wRz2qQ87sbh7EYngvNMpWlHARg==
-X-Received: by 2002:a05:6a20:9e05:b0:af:9391:449 with SMTP id ms5-20020a056a209e0500b000af93910449mr21599493pzb.45.1672033668239;
-        Sun, 25 Dec 2022 21:47:48 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=87f0TKfgjxiemevwHpQhVGmMoe8NuCN8KvjmmGoJcKg=;
+        b=6xXaXtG1jYXQwED/JNyftc+beBiXZQIB4h7/z1mh6+boPxz6j00EnFDyot/zMOuM5N
+         ILkFnq1PYhoqswek7/O5HAQwozRLjn9gp5tt2kYd+6nC9GiHBRjoRQKhVPqnlEmVGfQK
+         FGQyrKiu54/0I8kcQG53QmoUlz+8zgRDf0RkiGHmzEqZ7m3qlDLZbGk0D1L6Yog8W1Kz
+         7RC78jIdsHNHngFE4qFyVIXHKXLE5TztGpKCbZIBZRl2q7SjduSIcXoc6/JWH8wjeFwF
+         cHUQWbxNfed5LHk1Sw3fHU0N61HUTvPlXhHyrIOsiPRiX6QUA7Fbbe0KBi3JhXg3n1lj
+         /9fg==
+X-Gm-Message-State: AFqh2krYiqaqM4exqn3mP4nhF7zmX4QCbrGx2TnGewG6pYJXdVnfMEaO
+        rjXICfH5e4UHgek1vlCKkL0=
+X-Google-Smtp-Source: AMrXdXvJ52ah+JhJWrYHL09E1VzFUCxLqP8oKoLx9D+Iyg46GZa5OCS49wuCUy4jevmOlvMgK1tqig==
+X-Received: by 2002:a05:6a20:2d1e:b0:af:6f24:b154 with SMTP id g30-20020a056a202d1e00b000af6f24b154mr23355221pzl.60.1672033670203;
+        Sun, 25 Dec 2022 21:47:50 -0800 (PST)
 Received: from localhost.localdomain (1-34-79-176.hinet-ip.hinet.net. [1.34.79.176])
-        by smtp.gmail.com with ESMTPSA id h35-20020a632123000000b004785d99321asm5618242pgh.86.2022.12.25.21.47.46
+        by smtp.gmail.com with ESMTPSA id h35-20020a632123000000b004785d99321asm5618242pgh.86.2022.12.25.21.47.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Dec 2022 21:47:47 -0800 (PST)
+        Sun, 25 Dec 2022 21:47:50 -0800 (PST)
 From:   Potin Lai <potin.lai.pt@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -57,10 +58,12 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Patrick Williams <patrick@stwcx.xyz>,
         Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH 0/2] ARM: dts: aspeed: bletchley: Update Bletchley devicetree
-Date:   Mon, 26 Dec 2022 13:45:33 +0800
-Message-Id: <20221226054535.2836110-1-potin.lai.pt@gmail.com>
+Subject: [PATCH 1/2] ARM: dts: aspeed: bletchley: rename flash1 label
+Date:   Mon, 26 Dec 2022 13:45:34 +0800
+Message-Id: <20221226054535.2836110-2-potin.lai.pt@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221226054535.2836110-1-potin.lai.pt@gmail.com>
+References: <20221226054535.2836110-1-potin.lai.pt@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,15 +76,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update Bletchley BMC devicetree.
+In OpenBMC, phosphor-software-manager use "alt-bmc" for secondary falsh
+label.
+Rename flash1 label to "alt-bmc" to support dual image feature inOpenBMC.
 
-Potin Lai (2):
-  ARM: dts: aspeed: bletchley: rename flash1 label
-  ARM: dts: aspeed: bletchley: enable wdtrst1
+Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+---
+ arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+index a619eec70633..791f83aaac50 100644
+--- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
+@@ -307,7 +307,7 @@ flash@0 {
+ 	flash@1 {
+ 		status = "okay";
+ 		m25p,fast-read;
+-		label = "flash1";
++		label = "alt-bmc";
+ 		spi-max-frequency = <50000000>;
+ 	};
+ };
 -- 
 2.31.1
 
