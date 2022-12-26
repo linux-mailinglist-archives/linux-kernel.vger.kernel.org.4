@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABB1656057
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2783656059
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbiLZGVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 01:21:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S231576AbiLZGWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 01:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiLZGVa (ORCPT
+        with ESMTP id S231571AbiLZGWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 01:21:30 -0500
+        Mon, 26 Dec 2022 01:22:11 -0500
 Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12873B2;
-        Sun, 25 Dec 2022 22:21:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC38CE94;
+        Sun, 25 Dec 2022 22:22:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1672035681; bh=uFrbNVkn7n9rxA1NLtUce9mAgFhlod5ARsnj8K3UUcM=;
+        t=1672035723; bh=GDHFwQ+mzNVO8tXrPxkpmH7kCXWh+gmGE1QJOJY+O2k=;
         h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
          MIME-Version:Content-Type:In-Reply-To;
-        b=ERdvn50rRuPCUzxdwg//5RIZppsas2rAWWePB4C5O3y/m5wBpsJVbYF5vJGL/rFR5
-         SZ3DMIn6LBGuPVIkvQqRnsS3YGRNAEQ+y3nf3Iz0jeP9Jn3TkYKaTolYP7mEeVXr2y
-         ZUrO+4FdAerTmDCK43NqdACEE+5oeg4nNVJF3EJw=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        b=KRWQfLsPNi7V684fnPONHl8hLjSA0dbqB3t+hS20Z29fNB+rphOXn6eubUxR/MyUn
+         e+8gcHLJaPy+sNXFL7eXiCVqpiHcaxV0C1Q2qvOXucnCL7TCXbc83ljD4tOCUd/3LX
+         NvuiYMfaa2c4vb1WlCKKJBqmE+9iWqicgYdv93Rk=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
         via ip-206.mailobj.net [213.182.55.206]
-        Mon, 26 Dec 2022 07:21:21 +0100 (CET)
-X-EA-Auth: 2G7FOCDhWn/KgIH5Y8JkLrUpHHrxI1EWDB4qyNikXJrX2OABEqd6AROAhfOuJhdbV3mEF676CM+IiSBJQhC2mSry28Fvcpmw
-Date:   Mon, 26 Dec 2022 11:51:16 +0530
+        Mon, 26 Dec 2022 07:22:03 +0100 (CET)
+X-EA-Auth: JPuPCVnsPUHVX6fV9c4oPjInOpNb3lNqkiXEQHyuAO/QACxRTgn4sUjTxTo0R5U8cjru0XMUvLKmt5an8YCt8Ubm8K73dt/k
+Date:   Mon, 26 Dec 2022 11:51:57 +0530
 From:   Deepak R Varma <drv@mailo.com>
 To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,9 +35,9 @@ To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
 Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>,
         Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v4 1/2] tty: serial: dz: convert atomic_* to refcount_* APIs
- for map_guard
-Message-ID: <d85c7441b96ce387d9010142efc3469d53b6aedc.1671898144.git.drv@mailo.com>
+Subject: [PATCH v4 2/2] tty: serial: dz: convert atomic_* to refcount_* APIs
+ for irq_guard
+Message-ID: <51ef854f77779c82010379420139993e12c38776.1671898144.git.drv@mailo.com>
 References: <cover.1671898144.git.drv@mailo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -54,7 +54,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The refcount_* APIs are designed to address known issues with the
 atomic_t APIs for reference counting. They provide following distinct
-advantages
+advantages:
    - protect the reference counters from overflow/underflow
    - avoid use-after-free errors
    - provide improved memory ordering guarantee schemes
@@ -70,11 +70,11 @@ Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
 Please Note:
    1. The patch is compile tested using dec_station.defconfig for MIPS architecture.
-   2. This patch should be applied before patch 2/2 of this series due to
+   2. This patch should be applied after patch 1/2 of this series due to
       dependency.
 
 Changes in v4:
-   1. None.
+   1. Add the patch version label.
 
 Changes in v3:
    1. Include the individual patches in a series and highlight dependency.
@@ -83,82 +83,72 @@ Changes in v3:
 Changes in v2:
    1. Separate the combined change into one variable per patch as
       suggested by gregkh@linuxfoundation.org
-   2. There was additional feedback on validating the change as it appeared to
-      modify the existing logic. However, I found that the logic does not
-      change with the proposed refcount_* APIs used in this change. Hence that
-      feedback is not applied in this version.
 
 
-
- drivers/tty/serial/dz.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
+ drivers/tty/serial/dz.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
-index 6b7ed7f2f3ca..b70edc248f8b 100644
+index b70edc248f8b..0aa59a9beeb7 100644
 --- a/drivers/tty/serial/dz.c
 +++ b/drivers/tty/serial/dz.c
-@@ -47,6 +47,7 @@
+@@ -46,7 +46,6 @@
+ #include <linux/tty.h>
  #include <linux/tty_flip.h>
 
- #include <linux/atomic.h>
-+#include <linux/refcount.h>
+-#include <linux/atomic.h>
+ #include <linux/refcount.h>
  #include <linux/io.h>
  #include <asm/bootinfo.h>
-
-@@ -75,7 +76,7 @@ struct dz_port {
-
+@@ -77,7 +76,7 @@ struct dz_port {
  struct dz_mux {
  	struct dz_port		dport[DZ_NB_PORT];
--	atomic_t		map_guard;
-+	refcount_t		map_guard;
- 	atomic_t		irq_guard;
+ 	refcount_t		map_guard;
+-	atomic_t		irq_guard;
++	refcount_t		irq_guard;
  	int			initialised;
  };
-@@ -662,13 +663,11 @@ static const char *dz_type(struct uart_port *uport)
- static void dz_release_port(struct uart_port *uport)
- {
- 	struct dz_mux *mux = to_dport(uport)->mux;
--	int map_guard;
 
- 	iounmap(uport->membase);
- 	uport->membase = NULL;
-
--	map_guard = atomic_add_return(-1, &mux->map_guard);
--	if (!map_guard)
-+	if (refcount_dec_and_test(&mux->map_guard))
- 		release_mem_region(uport->mapbase, dec_kn_slot_size);
- }
-
-@@ -687,23 +686,19 @@ static int dz_map_port(struct uart_port *uport)
- static int dz_request_port(struct uart_port *uport)
- {
- 	struct dz_mux *mux = to_dport(uport)->mux;
--	int map_guard;
+@@ -400,18 +399,16 @@ static int dz_startup(struct uart_port *uport)
+ 	struct dz_port *dport = to_dport(uport);
+ 	struct dz_mux *mux = dport->mux;
+ 	unsigned long flags;
+-	int irq_guard;
  	int ret;
+ 	u16 tmp;
 
--	map_guard = atomic_add_return(1, &mux->map_guard);
--	if (map_guard == 1) {
--		if (!request_mem_region(uport->mapbase, dec_kn_slot_size,
--					"dz")) {
--			atomic_add(-1, &mux->map_guard);
--			printk(KERN_ERR
--			       "dz: Unable to reserve MMIO resource\n");
-+	refcount_inc(&mux->map_guard);
-+	if (refcount_read(&mux->map_guard) == 1) {
-+		if (!request_mem_region(uport->mapbase, dec_kn_slot_size, "dz")) {
-+			refcount_dec(&mux->map_guard);
-+			printk(KERN_ERR "dz: Unable to reserve MMIO resource\n");
- 			return -EBUSY;
- 		}
- 	}
- 	ret = dz_map_port(uport);
+-	irq_guard = atomic_add_return(1, &mux->irq_guard);
+-	if (irq_guard != 1)
++	refcount_inc(&mux->irq_guard);
++	if (refcount_read(&mux->irq_guard) != 1)
+ 		return 0;
+
+-	ret = request_irq(dport->port.irq, dz_interrupt,
+-			  IRQF_SHARED, "dz", mux);
++	ret = request_irq(dport->port.irq, dz_interrupt, IRQF_SHARED, "dz", mux);
  	if (ret) {
--		map_guard = atomic_add_return(-1, &mux->map_guard);
--		if (!map_guard)
-+		if (refcount_dec_and_test(&mux->map_guard))
- 			release_mem_region(uport->mapbase, dec_kn_slot_size);
+-		atomic_add(-1, &mux->irq_guard);
++		refcount_dec(&mux->irq_guard);
+ 		printk(KERN_ERR "dz: Cannot get IRQ %d!\n", dport->port.irq);
  		return ret;
  	}
+@@ -441,15 +438,13 @@ static void dz_shutdown(struct uart_port *uport)
+ 	struct dz_port *dport = to_dport(uport);
+ 	struct dz_mux *mux = dport->mux;
+ 	unsigned long flags;
+-	int irq_guard;
+ 	u16 tmp;
+
+ 	spin_lock_irqsave(&dport->port.lock, flags);
+ 	dz_stop_tx(&dport->port);
+ 	spin_unlock_irqrestore(&dport->port.lock, flags);
+
+-	irq_guard = atomic_add_return(-1, &mux->irq_guard);
+-	if (!irq_guard) {
++	if (refcount_dec_and_test(&mux->irq_guard)) {
+ 		/* Disable interrupts.  */
+ 		tmp = dz_in(dport, DZ_CSR);
+ 		tmp &= ~(DZ_RIE | DZ_TIE);
 --
 2.34.1
 
