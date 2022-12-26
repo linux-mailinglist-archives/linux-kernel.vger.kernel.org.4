@@ -2,100 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0386563CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E41C6563D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbiLZPTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 10:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        id S231951AbiLZPWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 10:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiLZPTd (ORCPT
+        with ESMTP id S230296AbiLZPWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 10:19:33 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A251260ED;
-        Mon, 26 Dec 2022 07:19:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=CJ0s4RC8ixikC2btIIdHDJkIJhgIxIMo2x6A5xpALMk=; b=5Y2X3l4ayBSYhKB92xci3QHhza
-        3+rZitQO+VAVq7GdeQsfaKzvkXLi3YAd5W/LiKV+lsp1KUfeDV6auyENA1c0Dn9bJ3HvJHZsNevHg
-        Gedc5W2EBEAPzoAp15tYOHjSOeFhzkiTzreplDFmPnrLOA8oLtfIpitn+TeH3i8UnUCM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p9pG4-000VyF-Uc; Mon, 26 Dec 2022 16:19:20 +0100
-Date:   Mon, 26 Dec 2022 16:19:20 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Biao Huang =?utf-8?B?KOm7hOW9qik=?= <Biao.Huang@mediatek.com>
-Cc:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
-        "joabreu@synopsys.com" <joabreu@synopsys.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Macpaul Lin =?utf-8?B?KOael+aZuuaWjCk=?= 
-        <Macpaul.Lin@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v5 1/2] stmmac: dwmac-mediatek: enable 2ns delay only for
- special cases
-Message-ID: <Y6m7eNdWVL3IKFj2@lunn.ch>
-References: <20221223015029.24978-1-biao.huang@mediatek.com>
- <20221223015029.24978-2-biao.huang@mediatek.com>
- <Y6W4vwJHG+6PI8fd@lunn.ch>
- <4a82aa5437e496e2b65b77ef08d7897a4b23f7e5.camel@mediatek.com>
+        Mon, 26 Dec 2022 10:22:14 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF71D8B
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:22:13 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id c7so7365195pfc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:22:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SCxtBabUysBaYhzIMRtIgAEFJNmq4iDUZJtVs/JoTbE=;
+        b=DhWDpLv1Hzt+y0FCZQ2+Rgr70YABzLVXsndXhWVg2p3hdV6c+PRrm7YrYSYn+I7Ji+
+         nxZYnl08C4/f9OFo2TCz//eLgqnBl12ziufp1pzrZmMerB/gXD7w7sgUiVS+u8tUfSHw
+         TW/AhyX4UztskjTWy5anRRsc9NJ7bc5BGKhN6OmODdC/khqte7Fm+7F1zI7jsthLX1i4
+         TbJ8A3npQqk/rmlmRAKUCE9sFoKAnvrk3Mvx+uRSOqpjy79w0eTUOIh/VFTKYW+GayRw
+         I7KyqWey47Wrgk/r63l2waaKf4puDOej0ReRU4q04ni86Y3iCfkdbBDuKDudJcfABqKi
+         c5VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SCxtBabUysBaYhzIMRtIgAEFJNmq4iDUZJtVs/JoTbE=;
+        b=xnF7RV98QVsYkZxrfAohQwkCgKKd5kcSnGtLTfOaMZ0M+EVQ/SDC5Tno1QH5lvt0XQ
+         F4y2AR2SokJ5LT0Y/lpxpHyT2yFbowROQEviiO1LvHvqMYzJXE9o0t9/WlZSmapRtqbV
+         Vi1+iidRDbGTOtV2K4dgSoXYIFluFUn1P6Ax3XuNalYPHM7c3UuAVx3Ym6W088gAYkBO
+         4RSQbX4oQxdJYgQqVryq15jABHcQ8UQwTZrvDDmarayJBUTI0V5deoaDz06G956Go/X5
+         9XK520AVRWW6hjuGkfWLDPh6AAq/zjJT3X0bGJdEYVr5ZmhtCM0JCGz4VdutN7q785gE
+         LsFg==
+X-Gm-Message-State: AFqh2kr34OAqtEYoK4O/CfYlfvvQh9xiIFYcaK9kIkzdf6zy+3MFKIaC
+        6Alq+12jXl4IRqdse7q0zLHYP+FW61jSW3CN9PRyNg==
+X-Google-Smtp-Source: AMrXdXt88qdWKQ/Ho8+GODeFdumZGOGXPG+H+BznbpljV+Ae00tgM+RH5mlu0ydSTUL3laAUlBzWCR2rqeX531Ivo84=
+X-Received: by 2002:a63:5646:0:b0:477:31bc:348f with SMTP id
+ g6-20020a635646000000b0047731bc348fmr916709pgm.72.1672068133204; Mon, 26 Dec
+ 2022 07:22:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4a82aa5437e496e2b65b77ef08d7897a4b23f7e5.camel@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221226063625.1913-1-anand@edgeble.ai> <20221226063625.1913-4-anand@edgeble.ai>
+ <d0eafc59-6718-f904-132a-1a6dbd083878@gmail.com>
+In-Reply-To: <d0eafc59-6718-f904-132a-1a6dbd083878@gmail.com>
+From:   Anand Moon <anand@edgeble.ai>
+Date:   Mon, 26 Dec 2022 20:52:02 +0530
+Message-ID: <CACF1qnecc1J2hzuPSNf8g8Wchy1c+nsGeBZ2yo79=0QjF93QcA@mail.gmail.com>
+Subject: Re: [PATCHv2 linux-next 4/4] ARM: dts: rockchip: rv1126: Enable
+ Ethernet for Neu2-IO
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> We don't want to restrict phy-mode to rgmii-id only, so I don't think
-> we need mask RXID bit, then, User can use rgmii-rxid/-txid/-id as their
-> will.
+Hi Johan,
 
-The phy-mode is a property of the board. It describes what delays are
-required, in addition to what the board itself provides via extra long
-lines. As such, there is no choice, it is set by physics.
+Thanks for your review comments.
 
-How you implement those delays is then up to the MAC and PHY. 95% of
-all MAC drivers simply pass phy-mode to the PHY and let the PHY add
-the delays. The Renesas MAC driver is one of the exceptions, it often
-adds the delays, and then passes a different phy-mode to the PHY in
-order that there are not double delays.
+On Mon, 26 Dec 2022 at 18:16, Johan Jonker <jbx6244@gmail.com> wrote:
+>
+>
+>
+> On 12/26/22 07:36, Anand Moon wrote:
+> > Rockchip RV1126 has GMAC 10/100/1000M ethernet controller.
+> > Enable ethernet node on Neu2-IO board.
+> >
+> > Signed-off-by: Anand Moon <anand@edgeble.ai>
+> > ---
+> > drop SoB of Jagan Teki
+> > ---
+> >  arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts | 37 ++++++++++++++++++++
+> >  1 file changed, 37 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts b/arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts
+> > index dded0a12f0cd..bd592026eae6 100644
+> > --- a/arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts
+> > +++ b/arch/arm/boot/dts/rv1126-edgeble-neu2-io.dts
+> > @@ -22,6 +22,43 @@ chosen {
+> >       };
+> >  };
+> >
+> > +&gmac {
+> > +     clock_in_out = "input";
+> > +     pinctrl-names = "default";
+> > +     pinctrl-0 = <&rgmiim1_pins &clk_out_ethernetm1_pins>;
+> > +     phy-mode = "rgmii";
+> > +     phy-handle = <&phy>;
+>
+> > +     assigned-clocks = <&cru CLK_GMAC_SRC>, <&cru CLK_GMAC_TX_RX>,
+> > +                     <&cru CLK_GMAC_ETHERNET_OUT>;
+>
+> align
+>
+Ok,
+> > +     assigned-clock-parents = <&cru CLK_GMAC_SRC_M1>, <&cru RGMII_MODE_CLK>;
+> > +     assigned-clock-rates = <125000000>, <0>, <25000000>;
+> > +     phy-supply = <&vcc_3v3>;
+> > +     tx_delay = <0x2a>;
+> > +     rx_delay = <0x1a>;
+> > +     status = "okay";
+> > +};
+> > +
+> > +&mdio {
+>
+> > +     phy: phy@0 {
+>
+> use ethernet-phy
+>
+Ok,
+> no '#phy-cells' here
+>
+> > +             compatible = "ethernet-phy-id001c.c916",
+> > +                            "ethernet-phy-ieee802.3-c22";
+>
+> align
+>
+Ok,
+> > +             reg = <0x0>;
+> > +             pinctrl-names = "default";
+> > +             pinctrl-0 = <&eth_phy_rst>;
+> > +             reset-assert-us = <20000>;
+> > +             reset-deassert-us = <100000>;
+> > +             reset-gpios = <&gpio0 RK_PB6 GPIO_ACTIVE_LOW>;
+> > +     };
+> > +};
+> > +
+> > +&pinctrl {
+>
+> > +     ethernet {
+>
+> Maybe use a node name more in line with where it is used.
+Ok,
+>
+> > +             eth_phy_rst: eth-phy-rst {
+> > +                     rockchip,pins = <0 RK_PB6 RK_FUNC_GPIO &pcfg_pull_down>;
+> > +             };
+> > +     };
+> > +};
+> > +
+> >  &sdmmc {
+> >       bus-width = <4>;
+> >       cap-mmc-highspeed;
 
-So you can be different to everybody else, have MAC do one delay, and
-the PHY do the other. Just be aware that nobody else does this, no DT
-developers will expect it, etc.
-
-Or you can just do what everybody else does and let the PHY add the
-delays.
-
-What some MACs do is implement rx-internal-delay-ps and
-tx-internal-delay-ps These allow fine tuning of the delays. These are
-expected to be small values, adding 10s or 100s of pico seconds. They
-are not expected to be 2000ps.
-
-    Andrew
+Thanks
+-Anand
