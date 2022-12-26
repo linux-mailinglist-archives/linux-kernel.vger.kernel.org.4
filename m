@@ -2,107 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709A2656037
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 06:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7AE656046
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiLZFr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 00:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S229725AbiLZGGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 01:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiLZFrx (ORCPT
+        with ESMTP id S229447AbiLZGGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 00:47:53 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A913F260E;
-        Sun, 25 Dec 2022 21:47:52 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id u7so9940281plq.11;
-        Sun, 25 Dec 2022 21:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7wEGGRHRkx/TYRoHQuQncfk8iOkoqIh2z64vF46qnf0=;
-        b=mvnKo8Dht5BCyRbWOJ6vL4yn9X6VUG0JbqB3eNm8lm8pZuRyXvqPTdmHGWLb7j5yzB
-         oLpOeYvyxk48FOQ4mbwf68Yvj57sUDZqE2FVmvyftvQsO7AeAyHcMigDWwm2zqLFCWeF
-         /zmcTYHXXUopTq4fnuZBTTi4pt6PXjOAtWARo6FRbtykNX3a9YNZJriT9Hfbeiee8SsX
-         heRXfpRv9rgMp2Lg5FtuyzvPoce3WVxILoi0VPVfISPPm+Nk5J58ldCo+bsV1O8LTEHm
-         WKBzPon997+hnqDbNOXjY54l8/Bez+EF2k1Bb5sMAoZ5vPRBANnKu61nBzgMSzc1Dmrd
-         XBjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7wEGGRHRkx/TYRoHQuQncfk8iOkoqIh2z64vF46qnf0=;
-        b=tuxQMq5Pk5ZR7O1WjVJc9AF7bjv/LNI8Ybuqhqr1+bS7K6KvSQAYaJ0kUVb+QrPiAQ
-         BLyyawHJGOPLx9GAk77Zq2H+cOvJu6dUIg3GIzQhzLwtzptmYjV1yESWyUy3f+5uVKlF
-         45O46rpL7DQjUexW9x0Ulv0N/XSBUvqWGNj63NzjjMg2tkpcsmWxPm/gvq65YpKW4/Ru
-         ruTTnoDLQjCTlKIiH3mGSqsxXMECimJhxw+YEyUqYeQ1ZKfjIpc15RUr+l6z+qVfW1CH
-         uhpOJgrCc5gZpaTbi1so1PCXB7sx5bw/YwcxIueDXyN9FQ3KmOHSLPtR9H0QmVwovGE+
-         Wnng==
-X-Gm-Message-State: AFqh2kp8fybvw4GPCxHvlm6Iw3cUbm7w/fYJ2+2+3dhM5KL/PNaQv2v6
-        aNs7yQawnXG2RLp8zAm5Cvg=
-X-Google-Smtp-Source: AMrXdXs7+NiJLm422uByXe9Fru36TSxkliQGdLRp8JIE/sc04ObaCwZkPx97G+RoodJZ3fwcZbCOmQ==
-X-Received: by 2002:a05:6a21:169b:b0:aa:7346:2d94 with SMTP id np27-20020a056a21169b00b000aa73462d94mr22372940pzb.25.1672033672186;
-        Sun, 25 Dec 2022 21:47:52 -0800 (PST)
-Received: from localhost.localdomain (1-34-79-176.hinet-ip.hinet.net. [1.34.79.176])
-        by smtp.gmail.com with ESMTPSA id h35-20020a632123000000b004785d99321asm5618242pgh.86.2022.12.25.21.47.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Dec 2022 21:47:51 -0800 (PST)
-From:   Potin Lai <potin.lai.pt@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH 2/2] ARM: dts: aspeed: bletchley: enable wdtrst1
-Date:   Mon, 26 Dec 2022 13:45:35 +0800
-Message-Id: <20221226054535.2836110-3-potin.lai.pt@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221226054535.2836110-1-potin.lai.pt@gmail.com>
-References: <20221226054535.2836110-1-potin.lai.pt@gmail.com>
+        Mon, 26 Dec 2022 01:06:39 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC13E45;
+        Sun, 25 Dec 2022 22:06:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672034798; x=1703570798;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oA+2akBz8f9G0yJVLVSJpvfu0UZtDt88sO01ckh/aVc=;
+  b=EAfeNH4G0xIfKz2N9H7wwQBJJ1Jhxx6vkwOpxRpyqO1fzwdMPx4NS8D1
+   EHVPqzdoeXo0QpRPraPwHLxzhDXV0UH6rjDGs5nhbTTEMJgbGAfvWjZAw
+   Sur1cwA/mw2Mqv1CETsWqVqPYjO1PrdXBsbYXHOgEGLls9EoFnZqfzpzw
+   ltO3KMk3bSPj3u8nPlwZ3XNG18O4ullB78089VN6iMir9czvYsOe8rqJA
+   eZq1MmMfgbjOQs6PsTnJsI3LrRZ2s7V+4pB5QxDMKj6h67aohdcTrMj8D
+   cVaQEcBtx+S/mWp1nJvwaZVSNCdtnfZxDjN7lturCs1WvKRlFdnMfK/2W
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="304027728"
+X-IronPort-AV: E=Sophos;i="5.96,274,1665471600"; 
+   d="scan'208";a="304027728"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2022 22:06:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="721177000"
+X-IronPort-AV: E=Sophos;i="5.96,274,1665471600"; 
+   d="scan'208";a="721177000"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Dec 2022 22:06:32 -0800
+Date:   Mon, 26 Dec 2022 13:56:29 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
+        trix@redhat.com, ronak.jain@xilinx.com, gregkh@linuxfoundation.org,
+        tanmay.shah@xilinx.com, ben.levinsky@amd.com,
+        harsha.harsha@xilinx.com, rajan.vaja@xilinx.com,
+        mathieu.poirier@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] firmware: xilinx: Add pm api function for PL
+ config reg readback
+Message-ID: <Y6k3jXv+J7C43akc@yilunxu-OptiPlex-7050>
+References: <20221223115850.2572573-1-nava.kishore.manne@amd.com>
+ <20221223115850.2572573-2-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221223115850.2572573-2-nava.kishore.manne@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable WDTRST1 external signal to send a reset pluse to peripherals while
-BMC reset.
+On 2022-12-23 at 17:28:49 +0530, Nava kishore Manne wrote:
+> Adds PM API for performing Programmable Logic(PL) configuration
+> register readback. It provides an interface to the firmware(pmufw)
+> to readback the FPGA configuration register.
+> 
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+> changes for v2:
+>               - None.
+> 
+> Changes for v3:
+>               - Updated API and config reg read-back handling logic
+>               - Updated the commit msg to align with the changes.
+> 
+> Changes for v4:
+>               - Fix some minor coding issues. No functional changes.
+>               - Updated Return value comments as suggested by Xu Yilun.
+> 
+>  drivers/firmware/xilinx/zynqmp.c     | 33 ++++++++++++++++++++++++++++
+>  include/linux/firmware/xlnx-zynqmp.h | 10 +++++++++
+>  2 files changed, 43 insertions(+)
+> 
+> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
+> index ff5cabe70a2b..ca954e1119b5 100644
+> --- a/drivers/firmware/xilinx/zynqmp.c
+> +++ b/drivers/firmware/xilinx/zynqmp.c
+> @@ -941,6 +941,39 @@ int zynqmp_pm_fpga_get_status(u32 *value)
+>  }
+>  EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_status);
+>  
+> +/**
+> + * zynqmp_pm_fpga_get_config_status - Get the FPGA configuration status.
+> + * @value: Buffer to store FPGA configuration status.
+> + *
+> + * This function provides access to the pmufw to get the FPGA configuration
+> + * status
+> + *
+> + * Return: 0 on success, a negative value on error
+> + */
+> +int zynqmp_pm_fpga_get_config_status(u32 *value)
+> +{
+> +	u32 buf, phys_lower_addr, phys_upper_addr;
 
-Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
----
- arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Why naming them phys_xxx?
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-index 791f83aaac50..050ed7e810fa 100644
---- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-@@ -1064,3 +1064,14 @@ pinctrl_gpiov2_unbiased_default: gpiov2 {
- 		bias-disable;
- 	};
- };
-+
-+&wdt1 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_wdtrst1_default>;
-+	aspeed,reset-type = "soc";
-+	aspeed,external-signal;
-+	aspeed,ext-push-pull;
-+	aspeed,ext-active-high;
-+	aspeed,ext-pulse-duration = <256>;
-+};
--- 
-2.31.1
+> +	u32 ret_payload[PAYLOAD_ARG_CNT];
+> +	int ret;
+> +
+> +	if (!value)
+> +		return -EINVAL;
+> +
+> +	phys_lower_addr = lower_32_bits((u64)&buf);
+> +	phys_upper_addr = upper_32_bits((u64)&buf);
+> +
+> +	ret = zynqmp_pm_invoke_fn(PM_FPGA_READ,
+> +				  XILINX_ZYNQMP_PM_FPGA_CONFIG_STAT_OFFSET,
+> +				  phys_lower_addr, phys_upper_addr,
+> +				  XILINX_ZYNQMP_PM_FPGA_READ_CONFIG_REG,
+> +				  ret_payload);
+> +
+> +	*value = ret_payload[1];
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(zynqmp_pm_fpga_get_config_status);
+> +
+>  /**
+>   * zynqmp_pm_pinctrl_request - Request Pin from firmware
+>   * @pin: Pin number to request
+> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
+> index 76d2b3ebad84..29e8964f4297 100644
+> --- a/include/linux/firmware/xlnx-zynqmp.h
+> +++ b/include/linux/firmware/xlnx-zynqmp.h
+> @@ -70,6 +70,10 @@
+>  #define XILINX_ZYNQMP_PM_FPGA_FULL	0x0U
+>  #define XILINX_ZYNQMP_PM_FPGA_PARTIAL	BIT(0)
+>  
+> +/* FPGA Status Reg */
+> +#define XILINX_ZYNQMP_PM_FPGA_CONFIG_STAT_OFFSET	7U
+> +#define XILINX_ZYNQMP_PM_FPGA_READ_CONFIG_REG		0U
+> +
+>  /*
+>   * Node IDs for the Error Events.
+>   */
+> @@ -117,6 +121,7 @@ enum pm_api_id {
+>  	PM_CLOCK_GETRATE = 42,
+>  	PM_CLOCK_SETPARENT = 43,
+>  	PM_CLOCK_GETPARENT = 44,
+> +	PM_FPGA_READ = 46,
+>  	PM_SECURE_AES = 47,
+>  	PM_FEATURE_CHECK = 63,
+>  };
+> @@ -505,6 +510,7 @@ int zynqmp_pm_register_sgi(u32 sgi_num, u32 reset);
+>  int zynqmp_pm_set_sd_config(u32 node, enum pm_sd_config_type config, u32 value);
+>  int zynqmp_pm_set_gem_config(u32 node, enum pm_gem_config_type config,
+>  			     u32 value);
+> +int zynqmp_pm_fpga_get_config_status(u32 *value);
 
+Is it better put it along with zynqmp_pm_fpga_get_status()?
+
+Thanks,
+Yilun
+
+>  #else
+>  static inline int zynqmp_pm_get_api_version(u32 *version)
+>  {
+> @@ -790,6 +796,10 @@ static inline int zynqmp_pm_set_gem_config(u32 node,
+>  	return -ENODEV;
+>  }
+>  
+> +static inline int zynqmp_pm_fpga_get_config_status(u32 *value)
+> +{
+> +	return -ENODEV;
+> +}
+>  #endif
+>  
+>  #endif /* __FIRMWARE_ZYNQMP_H__ */
+> -- 
+> 2.25.1
+> 
