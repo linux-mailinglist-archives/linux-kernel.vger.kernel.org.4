@@ -2,124 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C658656100
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 09:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9B0656102
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 09:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiLZIAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 03:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
+        id S231781AbiLZIE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 03:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiLZIAF (ORCPT
+        with ESMTP id S231585AbiLZIE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 03:00:05 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F44B115E;
-        Mon, 26 Dec 2022 00:00:03 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 17so10227159pll.0;
-        Mon, 26 Dec 2022 00:00:03 -0800 (PST)
+        Mon, 26 Dec 2022 03:04:27 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2991169
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 00:04:23 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id u19so24778463ejm.8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 00:04:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=snF9FgPM3QZjb6wYG/8ShchxVTbs8eu54AlMx41SJXI=;
-        b=I9kpb2beBVnPOjsLJGcv0RYiBxwiJwxcOTw40CumIZc1EnhS/GQAT4QRDqEBM5sSYf
-         Wd0CZdozC+zvNZ7cefd7AMsfQMn8aUnwQfQ/uf7n6zSgQA1Ebim0kWEsrEKkU4KiHbf5
-         CTAKlSW3/BWnXqb8ZO7yZcTq22RASfUWsBbIgpvirQGHePw9rpt4KRdY3+r+VSGYlaL6
-         J6oyvXqwS5xVcMVIHNV/tuuCBQMpa2kDLG7bIuzQRnXNP65cDWBWSS8XymH/O7pfjYzN
-         Cf09qjoM18+lqqsA9DjGW8bHSTBHxh79FnzS3q9y4D1zUfjg9aGHptcrwmvICxm1/7BI
-         kZlQ==
+        bh=yazwz3rKKYGoJc4/RODm75wP9Gxei4CxcZJhPtgB2nU=;
+        b=sb54ryAb0Hf0aPxdFNo8YpoaTMFT502S2XGeBjd2Sigr8svWlWphRv9Am88uS1YC84
+         VBmD2ZRW5dJJGme+gWPT0CcB8E0asGj4r6MQuHPbTs5SIHeulJJO8Iapwfb/MCYrV7Ce
+         KO2OiHTy609NVFYnElAKXeqQk3SAisqz67Rx/NcsYPcG4ZD2+hvbjeYyU4iXb7crG4ma
+         veYjG8x81T/msyszjh0TbmtPUEpTHOqTAjli+M0AyPJbujyLOcvEkZuyLyzVMA20PeTz
+         X49jhSjPjPl8orqeVLZ+mTDCfuG6GAMaQ+mA5vUxsW0/GpQoMEd5LuGjGWXfg44Mwec5
+         NWJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=snF9FgPM3QZjb6wYG/8ShchxVTbs8eu54AlMx41SJXI=;
-        b=NFzv5Plj9UpRLa47HCk05zMKxlGP3/OcBKtET8od6IqMVC+imTQ0ZRjqot+sEUxhvf
-         //ZGyoAPsmzendWsHheiSKV2L2f81VEfrScVQGNQtonOfpynytBi/3lvsboxvoYzSoG+
-         rVdiG5eOg50Od/KwAbx3oFovYdhDAVKSzcHGxbDQGWs0D7q4pDL4yEKCMZYaIjM5fZae
-         1nOSqhk3O57pW8tzQil5JmSCGZ03MnVffezABl7ESk9GKwYYBLonKeWUT2/tamyEzduD
-         vv4Arlj79DrTjI6+rWfr5I2edKahEs8VW5ZPcmk1TLLSfkP/y8Q8ygOR0EZ22FtxxHv5
-         HQGA==
-X-Gm-Message-State: AFqh2kp+6dldAtf1XuokYcuc6k5U1kUiAD5NdD9yuNJ+rBT1xkcl9apT
-        VGgYU0GSPOHydExemnVsIwg=
-X-Google-Smtp-Source: AMrXdXsYDTq8QKHNt6PaId85nRz+73j5VQZcvOKpuC70WJG4kZTU8GY496g9fIp6s4h43XrC3tqXlg==
-X-Received: by 2002:a17:902:7e03:b0:192:70f1:b34 with SMTP id b3-20020a1709027e0300b0019270f10b34mr6048820plm.19.1672041603032;
-        Mon, 26 Dec 2022 00:00:03 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id s19-20020a170903201300b00187197c4999sm6447717pla.167.2022.12.25.23.59.53
+        bh=yazwz3rKKYGoJc4/RODm75wP9Gxei4CxcZJhPtgB2nU=;
+        b=GZLmwqvPphEAN+SahwJVdkLgkzzV8JxsT/YyKwUd0/aqn+GhTnM2JCNz95zL7lYZ1s
+         VNwK4FuwPWUztqGDzF1+lLuxqsTAh2otx94y0xKeZ5D+3Je/1SKUSDfo3iC0qwRcWgk+
+         PHJ2HGfNzKMw6wP1ns+D9HFC7onW7sJGqGLpoiShBhzQW3mDLumyBdqsTETYh5o0nSAf
+         XabeUMC9dYqCsKxyahYH6Rj24W3hQz4PzXsejnbCmwNiu9tFweDXh1yUTL94AIzwyIqX
+         cI7kkULmFEDTmLFtmiE8lvHthmvGA0t7ohw4QAVNCmYD/BD+mlwmv3MNDjALAlPAcwlI
+         HKiA==
+X-Gm-Message-State: AFqh2kqgiXYRnRY+EAYlkO4pmLwpUWpvALdTfxrlBSTSzLFn8MgKEzTO
+        ypKnZM7qWW7cGn5jI34HiCeadQ==
+X-Google-Smtp-Source: AMrXdXv8kRfN77ZyulKPLZjmzBBNeuxEGjUqmksPVYsTHWFZi5eW5K5zrDa3zK6FazbCFrQvtrKthw==
+X-Received: by 2002:a17:906:bcd5:b0:7c0:a49a:1 with SMTP id lw21-20020a170906bcd500b007c0a49a0001mr14797222ejb.71.1672041862411;
+        Mon, 26 Dec 2022 00:04:22 -0800 (PST)
+Received: from [192.168.0.173] ([82.77.81.131])
+        by smtp.gmail.com with ESMTPSA id mj26-20020a170906af9a00b0073d71792c8dsm4549388ejb.180.2022.12.26.00.04.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Dec 2022 00:00:02 -0800 (PST)
-Message-ID: <ee43a3ce-2b66-f660-39cc-32cdc0cf6587@gmail.com>
-Date:   Mon, 26 Dec 2022 15:59:52 +0800
+        Mon, 26 Dec 2022 00:04:22 -0800 (PST)
+Message-ID: <9927a8c3-40cf-2c69-46c6-f660ff2422b1@linaro.org>
+Date:   Mon, 26 Dec 2022 10:04:20 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V2 11/18] Drivers: hv: vmbus: Decrypt vmbus ring
- buffer
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 3/3] mtd: spi-nor: Add support for IS25LX256 operating
+ in 1S-8S-8S octal read mode
 Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-12-ltykernel@gmail.com>
- <BYAPR21MB1688329AFB42391E92051E9CD7E09@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB1688329AFB42391E92051E9CD7E09@BYAPR21MB1688.namprd21.prod.outlook.com>
+To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+Cc:     greg.malysa@timesys.com,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "open list:SPI NOR SUBSYSTEM" <linux-mtd@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221202135539.271936-1-nathan.morrison@timesys.com>
+ <20221202135539.271936-4-nathan.morrison@timesys.com>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20221202135539.271936-4-nathan.morrison@timesys.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/2022 2:25 AM, Michael Kelley (LINUX) wrote:
-> From: Tianyu Lan<ltykernel@gmail.com>  Sent: Friday, November 18, 2022 7:46 PM
->> The ring buffer is remapped in the hv_ringbuffer_init()
->> and it should be with decrypt flag in order to share it
->> with hypervisor in sev-snp enlightened guest.
-> FWIW, the change in this patch is included in Patch 9
-> in my vTOM-related patch series.
-> 
+Hi, Nathan,
 
-I will rebase next version on your series. Thanks for reminder.
+The series is starting to look good, but I'll need another version,
+please.
+
+On 02.12.2022 15:55, Nathan Barrett-Morrison wrote:
+> This adds the IS25LX256 chip into the ISSI flash_info parts table
+
+Describe your changes in imperative mood, e.g. "Add support for
+S25LX256" instead of "This adds ..."
+
+It may worth to re-read
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+once in a while.
+
+> 
+> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+> ---
+>   drivers/mtd/spi-nor/issi.c | 32 ++++++++++++++++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+> 
+> diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
+> index 89a66a19d754..362bc3603d8f 100644
+> --- a/drivers/mtd/spi-nor/issi.c
+> +++ b/drivers/mtd/spi-nor/issi.c
+> @@ -29,6 +29,35 @@ static const struct spi_nor_fixups is25lp256_fixups = {
+>   	.post_bfpt = is25lp256_post_bfpt_fixups,
+>   };
+>   
+> +static int
+> +is25lx256_post_bfpt_fixups(struct spi_nor *nor,
+> +			   const struct sfdp_parameter_header *bfpt_header,
+> +			   const struct sfdp_bfpt *bfpt)
+> +{
+> +	/*
+> +	 * IS25LX256 supports both 1S-1S-8S and 1S-8S-8S.
+> +	 * However, the BFPT does not contain any information denoting this
+> +	 * functionality, so the proper fast read opcodes are never setup.
+> +	 * We're correcting this issue via the fixup below.  Page program
+> +	 * commands are detected and setup properly via the 4BAIT lookup.
+> +	 */
+> +	params->hwcaps.mask |= SNOR_HWCAPS_READ_1_1_8;
+
+add a reference to params, the build fails here.
+
+> +	spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_1_1_8],
+> +				  0, 8, SPINOR_OP_READ_1_1_8,
+> +				  SNOR_PROTO_1_1_8);
+> +
+> +	params->hwcaps.mask |= SNOR_HWCAPS_READ_1_8_8;
+> +	spi_nor_set_read_settings(&params->reads[SNOR_CMD_READ_1_8_8],
+> +				  0, 16, SPINOR_OP_READ_1_8_8,
+> +				  SNOR_PROTO_1_8_8);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct spi_nor_fixups is25lx256_fixups = {
+> +	.post_bfpt = is25lx256_post_bfpt_fixups,
+> +};
+> +
+>   static void pm25lv_nor_late_init(struct spi_nor *nor)
+>   {
+>   	struct spi_nor_erase_map *map = &nor->params->erase_map;
+> @@ -74,6 +103,9 @@ static const struct flash_info issi_nor_parts[] = {
+>   		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+>   		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
+>   		.fixups = &is25lp256_fixups },
+> +	{ "is25lx256", INFO(0x9d5a19, 0, 0, 0)
+> +		PARSE_SFDP
+> +		.fixups = &is25lx256_fixups },
+
+For every new flash addition or update, we ask contributors to do some
+little tests. Would you please run the commands from below and send us
+the output?
+
+# dd if=/dev/urandom of=./qspi_test bs=1M count=6
+6+0 records in
+6+0 records out
+
+# mtd_debug write /dev/mtd4 0 6291456 qspi_test
+Copied 6291456 bytes from qspi_test to address 0x00000000 in flash
+
+# mtd_debug erase /dev/mtd4 0 6291456
+Erased 6291456 bytes from address 0x00000000 in flash
+
+# mtd_debug read /dev/mtd4 0 6291456 qspi_read
+Copied 6291456 bytes from address 0x00000000 in flash to qspi_read
+
+# hexdump qspi_read
+0000000 ffff ffff ffff ffff ffff ffff ffff ffff
+*
+
+0600000
+
+# mtd_debug write /dev/mtd4 0 6291456 qspi_test
+Copied 6291456 bytes from qspi_test to address 0x00000000 in flash
+
+# mtd_debug read /dev/mtd4 0 6291456 qspi_read
+Copied 6291456 bytes from address 0x00000000 in flash to qspi_read
+
+# sha1sum qspi_test qspi_read
+57f8d4fee65622104e24276e865f662844f12242  qspi_test
+57f8d4fee65622104e24276e865f662844f12242  qspi_read
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/partname
+is25wp256
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/jedec_id
+9d7019
+
+# cat /sys/bus/spi/devices/spi0.0/spi-nor/manufacturer
+issi
+
+# xxd -p /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+53464450060101ff00060110300000ff9d05010380000002ffffffffffff
+ffffffffffffffffffffffffffffffffffffe520f9ffffffff0f44eb086b
+083b80bbfeffffffffff00ffffff44eb0c200f5210d800ff234ac90082d8
+11cecccd68467a757a75f7aed55c4a422cfff030faa9ffffffffffffffff
+ffffffffffffffff501950169ff9c0648fefffff
+
+# md5sum /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
+ba14818b9ec42713f24d94d66bb90ba0  /sys/bus/spi/devices/spi0.0/spi-nor/sfdp
