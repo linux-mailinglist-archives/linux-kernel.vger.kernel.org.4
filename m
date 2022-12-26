@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB39C6562AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 13:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08676562BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 13:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbiLZMuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 07:50:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
+        id S232109AbiLZM4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 07:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLZMuC (ORCPT
+        with ESMTP id S232136AbiLZM4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 07:50:02 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B62CD0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 04:50:02 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id ge16so6938209pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 04:50:02 -0800 (PST)
+        Mon, 26 Dec 2022 07:56:08 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D149F20F
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 04:55:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/GvTGLH9wrG1dCqu/5/WQGE+DMEzGakELb3zwl+tBa0=;
-        b=ZV6CAnSyA36rapcnwmd3Ep0yrUgrs2XPBHldnl9/I1+k3g9Bk716X71MufTHnAY3GQ
-         bMmgi3O0Ms7TbWrlQ+BjHWPBExSBpHUJeIc61ksqlsNAZDMR/2DiQgXvW+uKwApuUJmP
-         oCrIC8jSdeVaNpZ+sNvWBi+3rHSV58j/MdEOg0sa0G3bKibSSOFRwnJcdbCsaPyNXyfW
-         adkhgB5FZFR78N7UaIJVOmP6VDwXIcXmztwkEdMT+9wcRaWIUrDopBp3Of+5QR+4Mm6w
-         JTZ6J/BVfWRB+C/31ca0C1zMUafmloMUNQW/RlBhUeGfzMDpTrZlPmSkz6hYQW4dtARN
-         oINg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/GvTGLH9wrG1dCqu/5/WQGE+DMEzGakELb3zwl+tBa0=;
-        b=Lj7GMElbop9ytxsZAd5i/7TxEn1UTEKCkjkZvKaDhUUxYMgRcySv7+p9aMTrK/1Sku
-         SoeRv4d4ftFdutt/HXVDRaQjQ74z29qP0cCmcAYPZd3kfHaPbHnALQ+WWgPoNqHeEiUH
-         AcrB6JOfzrRJ9tlo33XGlab1N1vTAzrR4vi5oitZZqC8GhwV3ooHKk6wR8aTq0awTPpK
-         03UKsu83genOIHIwtTJszLXUE7PGDKKLdtXjCH1I7EuKlzJ0V7ntJWA9zqM8u38m75Et
-         hmO0d9NpmMx5mWnRFQK0oDCnaXX+Jb+Krt1O++z6PurWDeBUgos6S9hbiHzM56gntKUc
-         nhfw==
-X-Gm-Message-State: AFqh2kosEIrbVMusu2Na5L0WAe1oxrg8PLlXFaRQjGR5GFeBkI/BPMpx
-        DqT8fM9QmuyXKJaCw6aaZ3IrkQRqU51CwQ==
-X-Google-Smtp-Source: AMrXdXucTJQJGxJert5x9oCW51PRvCm9yYuQlnzdBAx1nImYk8WxmCI/3VAmxgakvv6m6fkqd0Gi1A==
-X-Received: by 2002:a17:902:f80c:b0:185:441e:90dd with SMTP id ix12-20020a170902f80c00b00185441e90ddmr21235067plb.67.1672059001254;
-        Mon, 26 Dec 2022 04:50:01 -0800 (PST)
-Received: from local ([202.131.133.59])
-        by smtp.gmail.com with ESMTPSA id n18-20020a170902f61200b001783f964fe3sm7128299plg.113.2022.12.26.04.49.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 04:50:00 -0800 (PST)
-Date:   Mon, 26 Dec 2022 18:19:56 +0530
-From:   Anup Sharma <anupnewsmail@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH] staging: rtl8723bs: hal: Fix spelling mistakes in comments
-Message-ID: <Y6mYdPlqIK1VgQ0Z@local>
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1672059343; x=1703595343;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nGPV+dVLZeBC/w0lA6JVr4tplCAJavJwgNHjYdO+wl4=;
+  b=uFbocRnt/CGtPoIhPL/CZ2czNIgweq9DWjz2+jbqX7gdPHTt/xy6/OqN
+   FQroGuZf4IgwkQ+7n7fR/P+ww2I2VX20CXlSIjMvjBke3oYGYxdwjt9WE
+   I3c9GZEvEPJYG9k+9ONHXDmoYjDTIZl/DpW+UFukXtNE27gw8ggjZ5obM
+   Q=;
+X-IronPort-AV: E=Sophos;i="5.96,275,1665446400"; 
+   d="scan'208";a="165249425"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2022 12:55:42 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-f7c754c9.us-west-2.amazon.com (Postfix) with ESMTPS id 3540F41727;
+        Mon, 26 Dec 2022 12:55:42 +0000 (UTC)
+Received: from EX19D004ANA004.ant.amazon.com (10.37.240.146) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Mon, 26 Dec 2022 12:55:41 +0000
+Received: from 147ddab5055b.ant.amazon.com.com (10.43.162.221) by
+ EX19D004ANA004.ant.amazon.com (10.37.240.146) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
+ Mon, 26 Dec 2022 12:55:38 +0000
+From:   Hayato Kiwata <haytok@amazon.co.jp>
+To:     Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Hayato Kiwata <haytok@amazon.co.jp>,
+        Hayato Kiwata <simplelpmis6@gmail.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: [PATCH v1] seccomp: Fix the comment for seccomp_check_filter().
+Date:   Mon, 26 Dec 2022 21:53:18 +0900
+Message-ID: <20221226125317.14465-1-haytok@amazon.co.jp>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.221]
+X-ClientProxiedBy: EX13D39UWA002.ant.amazon.com (10.43.160.20) To
+ EX19D004ANA004.ant.amazon.com (10.37.240.146)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,80 +67,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-They are appear to be spelling mistakes, initially identified in a codespell report and never been addressed so far.
+The comment of the seccomp_check_filter() contains a removed function,
+seccomp_bpf_load(). This comment needs to be corrected as it may be
+misleading to future readers.
 
-Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+seccomp_bpf_load() was removed in the commit bd4cf0ed331a ("net: filter:
+rework/optimize internal BPF interpreter's instruction set"). Previously,
+seccomp_bpf_load() was used to create an object of struct seccomp_data.
+However, this is done inside populate_seccomp_data() now.
+
+Signed-off-by: Hayato Kiwata <haytok@amazon.co.jp>
 ---
- drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ kernel/seccomp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c b/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
-index f1fc077ed29c..0fcae6871108 100644
---- a/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
-+++ b/drivers/staging/rtl8723bs/hal/rtl8723b_hal_init.c
-@@ -653,7 +653,7 @@ static void Hal_EfusePowerSwitch(
- 
- 
- 	if (PwrState) {
--		/*  To avoid cannot access efuse regsiters after disable/enable several times during DTM test. */
-+		/*  To avoid cannot access efuse registers after disable/enable several times during DTM test. */
- 		/*  Suggested by SD1 IsaacHsu. 2013.07.08, added by tynli. */
- 		tempval = rtw_read8(padapter, SDIO_LOCAL_BASE|SDIO_REG_HSUS_CTRL);
- 		if (tempval & BIT(0)) { /*  SDIO local register is suspend */
-@@ -1693,7 +1693,7 @@ void rtl8723b_InitBeaconParameters(struct adapter *padapter)
- 	rtw_write8(padapter, REG_BCNDMATIM, BCN_DMA_ATIME_INT_TIME_8723B); /*  2ms */
- 
- 	/*  Suggested by designer timchen. Change beacon AIFS to the largest number */
--	/*  beacause test chip does not contension before sending beacon. by tynli. 2009.11.03 */
-+	/*  because test chip does not contension before sending beacon. by tynli. 2009.11.03 */
- 	rtw_write16(padapter, REG_BCNTCFG, 0x660F);
- 
- 	pHalData->RegBcnCtrlVal = rtw_read8(padapter, REG_BCN_CTRL);
-@@ -2089,7 +2089,7 @@ void Hal_EfuseParseIDCode(struct adapter *padapter, u8 *hwinfo)
- 	u16 EEPROMId;
- 
- 
--	/*  Checl 0x8129 again for making sure autoload status!! */
-+	/*  Check 0x8129 again for making sure autoload status!! */
- 	EEPROMId = le16_to_cpu(*((__le16 *)hwinfo));
- 	if (EEPROMId != RTL_EEPROM_ID) {
- 		pEEPROM->bautoload_fail_flag = true;
-@@ -2510,7 +2510,7 @@ static void rtl8723b_cal_txdesc_chksum(struct tx_desc *ptxdesc)
- 	/*  Clear first */
- 	ptxdesc->txdw7 &= cpu_to_le32(0xffff0000);
- 
--	/*  checksume is always calculated by first 32 bytes, */
-+	/*  checksum is always calculated by first 32 bytes, */
- 	/*  and it doesn't depend on TX DESC length. */
- 	/*  Thomas, Lucas@SD4, 20130515 */
- 	count = 16;
-@@ -2723,7 +2723,7 @@ static void rtl8723b_fill_default_txdesc(
- 	 * multicast / mgnt frame should be controlled by Hw because Fw
- 	 * will also send null data which we cannot control when Fw LPS
- 	 * enable.
--	 * --> default enable non-Qos data sequense number. 2010.06.23.
-+	 * --> default enable non-Qos data sequence number. 2010.06.23.
- 	 * by tynli.
- 	 * (2) Enable HW SEQ control for beacon packet, because we use
- 	 * Hw beacon.
-@@ -2777,7 +2777,7 @@ void rtl8723b_fill_fake_txdesc(
- 	SET_TX_DESC_PKT_SIZE_8723B(pDesc, BufferLen); /*  Buffer size + command header */
- 	SET_TX_DESC_QUEUE_SEL_8723B(pDesc, QSLT_MGNT); /*  Fixed queue of Mgnt queue */
- 
--	/*  Set NAVUSEHDR to prevent Ps-poll AId filed to be changed to error vlaue by Hw. */
-+	/*  Set NAVUSEHDR to prevent Ps-poll AId filed to be changed to error value by Hw. */
- 	if (IsPsPoll) {
- 		SET_TX_DESC_NAV_USE_HDR_8723B(pDesc, 1);
- 	} else {
-@@ -3406,7 +3406,7 @@ void SetHwReg8723B(struct adapter *padapter, u8 variable, u8 *val)
- 				/*  polling bit, and No Write enable, and address */
- 				ulCommand = CAM_CONTENT_COUNT*ucIndex+i;
- 				ulCommand = ulCommand | CAM_POLLINIG | CAM_WRITE;
--				/*  write content 0 is equall to mark invalid */
-+				/*  write content 0 is equal to mark as invalid */
- 				rtw_write32(padapter, WCAMI, ulContent);  /* mdelay(40); */
- 				rtw_write32(padapter, RWCAM, ulCommand);  /* mdelay(40); */
- 			}
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index d653d8426de9..3a93595f4989 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -167,7 +167,7 @@ static void populate_seccomp_data(struct seccomp_data *sd)
+  *
+  * Takes a previously checked filter (by bpf_check_classic) and
+  * redirects all filter code that loads struct sk_buff data
+- * and related data through seccomp_bpf_load.  It also
++ * and related data through populate_seccomp_data().  It also
+  * enforces length and alignment checking of those loads.
+  *
+  * Returns 0 if the rule set is legal or -EINVAL if not.
 -- 
-2.34.1
+2.35.1
 
