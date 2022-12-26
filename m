@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC516560D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 08:39:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB706560D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 08:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbiLZHjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 02:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S231755AbiLZHkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 02:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiLZHjs (ORCPT
+        with ESMTP id S231740AbiLZHjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 02:39:48 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8515FCF;
-        Sun, 25 Dec 2022 23:39:44 -0800 (PST)
+        Mon, 26 Dec 2022 02:39:53 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C02DB6;
+        Sun, 25 Dec 2022 23:39:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1672040385; x=1703576385;
+  t=1672040392; x=1703576392;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/rDIr06Ya8FrrFC7WG0rQNpWeQWxKLIOjBpNInJ2h64=;
-  b=bIt1IcfNjoXP97twsANQ+nBdyZJX/z/LwTAmNhNQB07Ou0hY8HdU/8CS
-   TteWbjjk+wFrZaL3Wj8daEwAN444muf81CZN7qy9uNq/A9gmtLwQtjlqD
-   EeqUX6A7rfEo94Rt6SXROmRJQyCmuv0SVCDMY7WZzvWcUVleWW+FeRqMu
-   MMSHlgapQm6N8ECvuBOyIFwjYAd3Wu5/askbMr1ocFYXAEm1i3ER3TkI3
-   st9S6Cf2ngN1tojEWiGLIG/ZadahTeIQX2MAwsN3AeUEDOx+qqPrxpbNH
-   hkfFc/laDsNc/0tUPtawIvdP6gCNZ+viOqzOvrCBJ4ZDLBM1SNilTpUvH
-   A==;
+  bh=reO+M9uPJUrQnHFQ7lgJPRd7DsLi8yc69h6qz1liBlc=;
+  b=ZIR4bdh/lXHIh/vXMjlhlWZA0sABu9NkqTo48ElKk9JP9hUMubDj/65G
+   jeUYxwSRgQ92w4En4q86GSRPT5mktIwF/dl/SOLBp1W8p6knMMvKuFVh3
+   iYVuv5uKkR8Q6as4OwKUVJKOBMMGrhdYqqYjlY0PFMxI1gKW7l3YDY0T/
+   Fx7g0nQmu1lc8epfq0soD/S/6TtuU8YXEI9QJm+QztzXnKMqUYOzX8rwR
+   UjXXKJetRNTyfOZMeW8aVkxWF2lMLOf/P4A2m4iVnDGqeKDzMKIghXQVO
+   TGKqmw3Wcbe0q7HPfFoe22bgSMUoh75IumsoOqT4PYttgMgNPYnU1Z1Zh
+   w==;
 X-IronPort-AV: E=Sophos;i="5.96,274,1665471600"; 
-   d="scan'208";a="194420560"
+   d="scan'208";a="193216540"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Dec 2022 00:39:44 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Dec 2022 00:39:51 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 26 Dec 2022 00:39:44 -0700
+ 15.1.2507.16; Mon, 26 Dec 2022 00:39:51 -0700
 Received: from che-lt-i64410lx.amer.actel.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Mon, 26 Dec 2022 00:39:39 -0700
+ 15.1.2507.16 via Frontend Transport; Mon, 26 Dec 2022 00:39:46 -0700
 From:   Balamanikandan Gunasundar 
         <balamanikandan.gunasundar@microchip.com>
 To:     <ludovic.desroches@microchip.com>, <nicolas.ferre@microchip.com>,
@@ -48,9 +48,9 @@ To:     <ludovic.desroches@microchip.com>, <nicolas.ferre@microchip.com>,
         <hari.prasathge@microchip.com>, <dmitry.torokhov@gmail.com>,
         <ulf.hansson@linaro.org>
 CC:     <balamanikandan.gunasundar@microchip.com>
-Subject: [PATCH v3 1/2] mmc: atmel-mci: Convert to gpio descriptors
-Date:   Mon, 26 Dec 2022 13:09:07 +0530
-Message-ID: <20221226073908.17317-2-balamanikandan.gunasundar@microchip.com>
+Subject: [PATCH v3 2/2] mmc: atmel-mci: move atmel MCI header file
+Date:   Mon, 26 Dec 2022 13:09:08 +0530
+Message-ID: <20221226073908.17317-3-balamanikandan.gunasundar@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221226073908.17317-1-balamanikandan.gunasundar@microchip.com>
 References: <20221226073908.17317-1-balamanikandan.gunasundar@microchip.com>
@@ -67,214 +67,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the legacy GPIO APIs with gpio descriptor consumer interface.
-
-To maintain backward compatibility, we rely on the "cd-inverted"
-property to manage the invertion flag instead of GPIO property.
+Move the contents of linux/atmel-mci.h into
+drivers/mmc/host/atmel-mci.c as it is only used in one file
 
 Signed-off-by: Balamanikandan Gunasundar <balamanikandan.gunasundar@microchip.com>
 ---
- drivers/mmc/host/atmel-mci.c | 78 +++++++++++++++++-------------------
- include/linux/atmel-mci.h    |  4 +-
- 2 files changed, 39 insertions(+), 43 deletions(-)
+ drivers/mmc/host/atmel-mci.c | 39 +++++++++++++++++++++++++++++-
+ include/linux/atmel-mci.h    | 46 ------------------------------------
+ 2 files changed, 38 insertions(+), 47 deletions(-)
+ delete mode 100644 include/linux/atmel-mci.h
 
 diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-index 67b2cd166e56..6ab43733ba9f 100644
+index 6ab43733ba9f..b48e440a2df8 100644
 --- a/drivers/mmc/host/atmel-mci.c
 +++ b/drivers/mmc/host/atmel-mci.c
-@@ -11,7 +11,6 @@
- #include <linux/dmaengine.h>
- #include <linux/dma-mapping.h>
- #include <linux/err.h>
--#include <linux/gpio.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-@@ -19,7 +18,8 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
--#include <linux/of_gpio.h>
-+#include <linux/irq.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/scatterlist.h>
- #include <linux/seq_file.h>
-@@ -389,8 +389,8 @@ struct atmel_mci_slot {
- #define ATMCI_CARD_NEED_INIT	1
- #define ATMCI_SHUTDOWN		2
+@@ -30,7 +30,6 @@
+ #include <linux/mmc/host.h>
+ #include <linux/mmc/sdio.h>
  
--	int			detect_pin;
--	int			wp_pin;
-+	struct gpio_desc        *detect_pin;
-+	struct gpio_desc	*wp_pin;
- 	bool			detect_is_active_high;
+-#include <linux/atmel-mci.h>
+ #include <linux/atmel_pdc.h>
+ #include <linux/pm.h>
+ #include <linux/pm_runtime.h>
+@@ -41,6 +40,8 @@
+ #include <asm/unaligned.h>
+ #include "../core/pwrseq.h"
  
- 	struct timer_list	detect_timer;
-@@ -638,7 +638,10 @@ atmci_of_init(struct platform_device *pdev)
- 			pdata->slot[slot_id].bus_width = 1;
- 
- 		pdata->slot[slot_id].detect_pin =
--			of_get_named_gpio(cnp, "cd-gpios", 0);
-+			devm_fwnode_gpiod_get(&pdev->dev, of_fwnode_handle(cnp),
-+					      "cd", GPIOD_IN, "cd-gpios");
-+		if (IS_ERR(pdata->slot[slot_id].detect_pin))
-+			pdata->slot[slot_id].detect_pin = NULL;
- 
- 		pdata->slot[slot_id].detect_is_active_high =
- 			of_property_read_bool(cnp, "cd-inverted");
-@@ -647,7 +650,10 @@ atmci_of_init(struct platform_device *pdev)
- 			of_property_read_bool(cnp, "non-removable");
- 
- 		pdata->slot[slot_id].wp_pin =
--			of_get_named_gpio(cnp, "wp-gpios", 0);
-+			devm_fwnode_gpiod_get(&pdev->dev, of_fwnode_handle(cnp),
-+					      "wp", GPIOD_IN, "wp-gpios");
-+		if (IS_ERR(pdata->slot[slot_id].wp_pin))
-+			pdata->slot[slot_id].wp_pin = NULL;
- 	}
- 
- 	return pdata;
-@@ -1511,8 +1517,8 @@ static int atmci_get_ro(struct mmc_host *mmc)
- 	int			read_only = -ENOSYS;
- 	struct atmel_mci_slot	*slot = mmc_priv(mmc);
- 
--	if (gpio_is_valid(slot->wp_pin)) {
--		read_only = gpio_get_value(slot->wp_pin);
-+	if (slot->wp_pin) {
-+		read_only = gpiod_get_value(slot->wp_pin);
- 		dev_dbg(&mmc->class_dev, "card is %s\n",
- 				read_only ? "read-only" : "read-write");
- 	}
-@@ -1525,8 +1531,8 @@ static int atmci_get_cd(struct mmc_host *mmc)
- 	int			present = -ENOSYS;
- 	struct atmel_mci_slot	*slot = mmc_priv(mmc);
- 
--	if (gpio_is_valid(slot->detect_pin)) {
--		present = !(gpio_get_value(slot->detect_pin) ^
-+	if (slot->detect_pin) {
-+		present = !(gpiod_get_raw_value(slot->detect_pin) ^
- 			    slot->detect_is_active_high);
- 		dev_dbg(&mmc->class_dev, "card is %spresent\n",
- 				present ? "" : "not ");
-@@ -1639,8 +1645,8 @@ static void atmci_detect_change(struct timer_list *t)
- 	if (test_bit(ATMCI_SHUTDOWN, &slot->flags))
- 		return;
- 
--	enable_irq(gpio_to_irq(slot->detect_pin));
--	present = !(gpio_get_value(slot->detect_pin) ^
-+	enable_irq(gpiod_to_irq(slot->detect_pin));
-+	present = !(gpiod_get_raw_value(slot->detect_pin) ^
- 		    slot->detect_is_active_high);
- 	present_old = test_bit(ATMCI_CARD_PRESENT, &slot->flags);
- 
-@@ -2241,9 +2247,9 @@ static int atmci_init_slot(struct atmel_mci *host,
- 	dev_dbg(&mmc->class_dev,
- 	        "slot[%u]: bus_width=%u, detect_pin=%d, "
- 		"detect_is_active_high=%s, wp_pin=%d\n",
--		id, slot_data->bus_width, slot_data->detect_pin,
-+		id, slot_data->bus_width, desc_to_gpio(slot_data->detect_pin),
- 		slot_data->detect_is_active_high ? "true" : "false",
--		slot_data->wp_pin);
-+		desc_to_gpio(slot_data->wp_pin));
- 
- 	mmc->ops = &atmci_ops;
- 	mmc->f_min = DIV_ROUND_UP(host->bus_hz, 512);
-@@ -2279,51 +2285,43 @@ static int atmci_init_slot(struct atmel_mci *host,
- 
- 	/* Assume card is present initially */
- 	set_bit(ATMCI_CARD_PRESENT, &slot->flags);
--	if (gpio_is_valid(slot->detect_pin)) {
--		if (devm_gpio_request(&host->pdev->dev, slot->detect_pin,
--				      "mmc_detect")) {
--			dev_dbg(&mmc->class_dev, "no detect pin available\n");
--			slot->detect_pin = -EBUSY;
--		} else if (gpio_get_value(slot->detect_pin) ^
--				slot->detect_is_active_high) {
-+	if (slot->detect_pin) {
-+		if (gpiod_get_raw_value(slot->detect_pin) ^
-+		    slot->detect_is_active_high) {
- 			clear_bit(ATMCI_CARD_PRESENT, &slot->flags);
- 		}
-+	} else {
-+		dev_dbg(&mmc->class_dev, "no detect pin available\n");
- 	}
- 
--	if (!gpio_is_valid(slot->detect_pin)) {
-+	if (!slot->detect_pin) {
- 		if (slot_data->non_removable)
- 			mmc->caps |= MMC_CAP_NONREMOVABLE;
- 		else
- 			mmc->caps |= MMC_CAP_NEEDS_POLL;
- 	}
- 
--	if (gpio_is_valid(slot->wp_pin)) {
--		if (devm_gpio_request(&host->pdev->dev, slot->wp_pin,
--				      "mmc_wp")) {
--			dev_dbg(&mmc->class_dev, "no WP pin available\n");
--			slot->wp_pin = -EBUSY;
--		}
--	}
-+	if (!slot->wp_pin)
-+		dev_dbg(&mmc->class_dev, "no WP pin available\n");
- 
- 	host->slot[id] = slot;
- 	mmc_regulator_get_supply(mmc);
--	mmc_pwrseq_alloc(slot->mmc);
- 	mmc_add_host(mmc);
- 
--	if (gpio_is_valid(slot->detect_pin)) {
-+	if (slot->detect_pin) {
- 		int ret;
- 
- 		timer_setup(&slot->detect_timer, atmci_detect_change, 0);
- 
--		ret = request_irq(gpio_to_irq(slot->detect_pin),
--				atmci_detect_interrupt,
--				IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
--				"mmc-detect", slot);
-+		ret = request_irq(gpiod_to_irq(slot->detect_pin),
-+				  atmci_detect_interrupt,
-+				  IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
-+				  "mmc-detect", slot);
- 		if (ret) {
- 			dev_dbg(&mmc->class_dev,
- 				"could not request IRQ %d for detect pin\n",
--				gpio_to_irq(slot->detect_pin));
--			slot->detect_pin = -EBUSY;
-+				gpiod_to_irq(slot->detect_pin));
-+			slot->detect_pin = NULL;
- 		}
- 	}
- 
-@@ -2342,10 +2340,8 @@ static void atmci_cleanup_slot(struct atmel_mci_slot *slot,
- 
- 	mmc_remove_host(slot->mmc);
- 
--	if (gpio_is_valid(slot->detect_pin)) {
--		int pin = slot->detect_pin;
--
--		free_irq(gpio_to_irq(pin), slot);
-+	if (slot->detect_pin) {
-+		free_irq(gpiod_to_irq(slot->detect_pin), slot);
- 		del_timer_sync(&slot->detect_timer);
- 	}
- 
-diff --git a/include/linux/atmel-mci.h b/include/linux/atmel-mci.h
-index 1491af38cc6e..017e7d8f6126 100644
---- a/include/linux/atmel-mci.h
-+++ b/include/linux/atmel-mci.h
-@@ -26,8 +26,8 @@
-  */
- struct mci_slot_pdata {
- 	unsigned int		bus_width;
--	int			detect_pin;
--	int			wp_pin;
-+	struct gpio_desc        *detect_pin;
-+	struct gpio_desc	*wp_pin;
- 	bool			detect_is_active_high;
- 	bool			non_removable;
++#define ATMCI_MAX_NR_SLOTS	2
++
+ /*
+  * Superset of MCI IP registers integrated in Atmel AT91 Processor
+  * Registers and bitfields marked with [2] are only available in MCI2
+@@ -202,6 +203,42 @@ enum atmci_pdc_buf {
+ 	PDC_SECOND_BUF,
  };
+ 
++/**
++ * struct mci_slot_pdata - board-specific per-slot configuration
++ * @bus_width: Number of data lines wired up the slot
++ * @detect_pin: GPIO pin wired to the card detect switch
++ * @wp_pin: GPIO pin wired to the write protect sensor
++ * @detect_is_active_high: The state of the detect pin when it is active
++ * @non_removable: The slot is not removable, only detect once
++ *
++ * If a given slot is not present on the board, @bus_width should be
++ * set to 0. The other fields are ignored in this case.
++ *
++ * Any pins that aren't available should be set to a negative value.
++ *
++ * Note that support for multiple slots is experimental -- some cards
++ * might get upset if we don't get the clock management exactly right.
++ * But in most cases, it should work just fine.
++ */
++struct mci_slot_pdata {
++	unsigned int		bus_width;
++	struct gpio_desc        *detect_pin;
++	struct gpio_desc	*wp_pin;
++	bool			detect_is_active_high;
++	bool			non_removable;
++};
++
++/**
++ * struct mci_platform_data - board-specific MMC/SDcard configuration
++ * @dma_slave: DMA slave interface to use in data transfers.
++ * @slot: Per-slot configuration data.
++ */
++struct mci_platform_data {
++	void			*dma_slave;
++	dma_filter_fn		dma_filter;
++	struct mci_slot_pdata	slot[ATMCI_MAX_NR_SLOTS];
++};
++
+ struct atmel_mci_caps {
+ 	bool    has_dma_conf_reg;
+ 	bool    has_pdc;
+diff --git a/include/linux/atmel-mci.h b/include/linux/atmel-mci.h
+deleted file mode 100644
+index 017e7d8f6126..000000000000
+--- a/include/linux/atmel-mci.h
++++ /dev/null
+@@ -1,46 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __LINUX_ATMEL_MCI_H
+-#define __LINUX_ATMEL_MCI_H
+-
+-#include <linux/types.h>
+-#include <linux/dmaengine.h>
+-
+-#define ATMCI_MAX_NR_SLOTS	2
+-
+-/**
+- * struct mci_slot_pdata - board-specific per-slot configuration
+- * @bus_width: Number of data lines wired up the slot
+- * @detect_pin: GPIO pin wired to the card detect switch
+- * @wp_pin: GPIO pin wired to the write protect sensor
+- * @detect_is_active_high: The state of the detect pin when it is active
+- * @non_removable: The slot is not removable, only detect once
+- *
+- * If a given slot is not present on the board, @bus_width should be
+- * set to 0. The other fields are ignored in this case.
+- *
+- * Any pins that aren't available should be set to a negative value.
+- *
+- * Note that support for multiple slots is experimental -- some cards
+- * might get upset if we don't get the clock management exactly right.
+- * But in most cases, it should work just fine.
+- */
+-struct mci_slot_pdata {
+-	unsigned int		bus_width;
+-	struct gpio_desc        *detect_pin;
+-	struct gpio_desc	*wp_pin;
+-	bool			detect_is_active_high;
+-	bool			non_removable;
+-};
+-
+-/**
+- * struct mci_platform_data - board-specific MMC/SDcard configuration
+- * @dma_slave: DMA slave interface to use in data transfers.
+- * @slot: Per-slot configuration data.
+- */
+-struct mci_platform_data {
+-	void			*dma_slave;
+-	dma_filter_fn		dma_filter;
+-	struct mci_slot_pdata	slot[ATMCI_MAX_NR_SLOTS];
+-};
+-
+-#endif /* __LINUX_ATMEL_MCI_H */
 -- 
 2.25.1
 
