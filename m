@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03896560E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 08:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAC36560E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 08:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbiLZHr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 02:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S231679AbiLZHsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 02:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLZHrZ (ORCPT
+        with ESMTP id S229486AbiLZHsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 02:47:25 -0500
+        Mon, 26 Dec 2022 02:48:47 -0500
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0EDD2640;
-        Sun, 25 Dec 2022 23:47:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 361D038BA;
+        Sun, 25 Dec 2022 23:48:46 -0800 (PST)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BQ7jg4C3018991, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BQ7jg4C3018991
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BQ7lfvfF020287, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BQ7lfvfF020287
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 26 Dec 2022 15:45:42 +0800
+        Mon, 26 Dec 2022 15:47:41 +0800
 Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Mon, 26 Dec 2022 15:46:35 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ 15.1.2375.32; Mon, 26 Dec 2022 15:48:34 +0800
+Received: from localhost.localdomain (172.21.132.192) by
  RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 26 Dec 2022 15:46:35 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Mon, 26 Dec 2022 15:46:35 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     "icon@mricon.com" <icon@mricon.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Jens Schleusener" <Jens.Schleusener@fossies.org>,
-        Konstantin Ryabitsev <mricon@kernel.org>
-Subject: RE: [PATCH v2] wifi: rtlwifi: rtl8723ae: fix obvious spelling error tyep->type
-Thread-Topic: [PATCH v2] wifi: rtlwifi: rtl8723ae: fix obvious spelling error
- tyep->type
-Thread-Index: AQHZFvs+eP0nSLMTWUKthJH9b6EQHa5/zlXg
-Date:   Mon, 26 Dec 2022 07:46:35 +0000
-Message-ID: <cdcfe0b56ee749658fdf1bf6470e3dbb@realtek.com>
-References: <20221222-rtl8723ae-typo-fix-v2-1-71b6b67df3f5@mricon.com>
-In-Reply-To: <20221222-rtl8723ae-typo-fix-v2-1-71b6b67df3f5@mricon.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEyLzI2IOS4iuWNiCAwNDozNzowMA==?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ 15.1.2375.7; Mon, 26 Dec 2022 15:48:34 +0800
+From:   <hildawu@realtek.com>
+To:     <marcel@holtmann.org>
+CC:     <johan.hedberg@gmail.com>, <luiz.dentz@gmail.com>,
+        <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <apusaka@chromium.org>, <yinghsu@chromium.org>,
+        <max.chou@realtek.com>, <alex_lu@realsil.com.cn>,
+        <kidman@realtek.com>
+Subject: [PATCH v5] Bluetooth: btusb: Work around spotty SCO quality
+Date:   Mon, 26 Dec 2022 15:48:29 +0800
+Message-ID: <20221226074829.8682-1-hildawu@realtek.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [172.21.132.192]
+X-ClientProxiedBy: RTEXH36506.realtek.com.tw (172.21.6.27) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 12/26/2022 07:28:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEyLzI2IKRXpMggMDQ6Mzc6MDA=?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,49 +68,289 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS29uc3RhbnRpbiBSeWFi
-aXRzZXYgdmlhIEI0IFN1Ym1pc3Npb24gRW5kcG9pbnQgPGRldm51bGwraWNvbi5tcmljb24uY29t
-QGtlcm5lbC5vcmc+DQo+IFNlbnQ6IFNhdHVyZGF5LCBEZWNlbWJlciAyNCwgMjAyMiAyOjIwIEFN
-DQo+IFRvOiBQaW5nLUtlIFNoaWggPHBrc2hpaEByZWFsdGVrLmNvbT47IEthbGxlIFZhbG8gPGt2
-YWxvQGtlcm5lbC5vcmc+OyBEYXZpZCBTLiBNaWxsZXIgPGRhdmVtQGRhdmVtbG9mdC5uZXQ+Ow0K
-PiBFcmljIER1bWF6ZXQgPGVkdW1hemV0QGdvb2dsZS5jb20+OyBKYWt1YiBLaWNpbnNraSA8a3Vi
-YUBrZXJuZWwub3JnPjsgUGFvbG8gQWJlbmkgPHBhYmVuaUByZWRoYXQuY29tPg0KPiBDYzogbGlu
-dXgtd2lyZWxlc3NAdmdlci5rZXJuZWwub3JnOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51
-eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBKZW5zDQo+IFNjaGxldXNlbmVyIDxKZW5zLlNjaGxl
-dXNlbmVyQGZvc3NpZXMub3JnPjsgS29uc3RhbnRpbiBSeWFiaXRzZXYgPG1yaWNvbkBrZXJuZWwu
-b3JnPjsgS29uc3RhbnRpbg0KPiBSeWFiaXRzZXYgPGljb25AbXJpY29uLmNvbT4NCj4gU3ViamVj
-dDogW1BBVENIIHYyXSB3aWZpOiBydGx3aWZpOiBydGw4NzIzYWU6IGZpeCBvYnZpb3VzIHNwZWxs
-aW5nIGVycm9yIHR5ZXAtPnR5cGUNCj4gDQo+IEZyb206IEtvbnN0YW50aW4gUnlhYml0c2V2IDxp
-Y29uQG1yaWNvbi5jb20+DQo+IA0KPiBUaGlzIGFwcGVhcnMgdG8gYmUgYW4gb2J2aW91cyBzcGVs
-bGluZyBlcnJvciwgaW5pdGlhbGx5IGlkZW50aWZpZWQgaW4gYQ0KPiBjb2Rlc3BlbGwgcmVwb3J0
-IGFuZCBuZXZlciBhZGRyZXNzZWQuDQo+IA0KPiBSZXBvcnRlZC1ieTogSmVucyBTY2hsZXVzZW5l
-ciA8SmVucy5TY2hsZXVzZW5lckBmb3NzaWVzLm9yZz4NCj4gTGluazogaHR0cHM6Ly9idWd6aWxs
-YS5rZXJuZWwub3JnL3Nob3dfYnVnLmNnaT9pZD0yMDU4OTENCj4gU2lnbmVkLW9mZi1ieTogS29u
-c3RhbnRpbiBSeWFiaXRzZXYgPGljb25AbXJpY29uLmNvbT4NCg0KQWNrZWQtYnk6IFBpbmctS2Ug
-U2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0KDQo+IC0tLQ0KPiBDaGFuZ2VzIGluIHYyOg0KPiAt
-IFVwZGF0ZWQgY29tbWl0IHN1YmplY3QgYmFzZWQgb24gZmVlZGJhY2suDQo+IC0gTGluayB0byB2
-MTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIyMTIyMi1ydGw4NzIzYWUtdHlwby1maXgt
-djEtMS04NDg0MzRiMTc5YzdAbXJpY29uLmNvbQ0KPiAtLS0NCj4gIGRyaXZlcnMvbmV0L3dpcmVs
-ZXNzL3JlYWx0ZWsvcnRsd2lmaS9ydGw4NzIzYWUvaGFsX2J0X2NvZXhpc3QuaCB8IDIgKy0NCj4g
-IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsd2lmaS9ydGw4NzIzYWUv
-aGFsX2J0X2NvZXhpc3QuaA0KPiBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL3JlYWx0ZWsvcnRsd2lm
-aS9ydGw4NzIzYWUvaGFsX2J0X2NvZXhpc3QuaA0KPiBpbmRleCAwNDU1YTM3MTJmM2UuLjEyY2Rl
-Y2RhZmMzMiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVhbHRlay9ydGx3
-aWZpL3J0bDg3MjNhZS9oYWxfYnRfY29leGlzdC5oDQo+ICsrKyBiL2RyaXZlcnMvbmV0L3dpcmVs
-ZXNzL3JlYWx0ZWsvcnRsd2lmaS9ydGw4NzIzYWUvaGFsX2J0X2NvZXhpc3QuaA0KPiBAQCAtMTE2
-LDcgKzExNiw3IEBAIHZvaWQgcnRsODcyM2VfZG1fYnRfaHdfY29leF9hbGxfb2ZmKHN0cnVjdCBp
-ZWVlODAyMTFfaHcgKmh3KTsNCj4gIGxvbmcgcnRsODcyM2VfZG1fYnRfZ2V0X3J4X3NzKHN0cnVj
-dCBpZWVlODAyMTFfaHcgKmh3KTsNCj4gIHZvaWQgcnRsODcyM2VfZG1fYnRfYmFsYW5jZShzdHJ1
-Y3QgaWVlZTgwMjExX2h3ICpodywNCj4gIAkJCSAgICBib29sIGJhbGFuY2Vfb24sIHU4IG1zMCwg
-dTggbXMxKTsNCj4gLXZvaWQgcnRsODcyM2VfZG1fYnRfYWdjX3RhYmxlKHN0cnVjdCBpZWVlODAy
-MTFfaHcgKmh3LCB1OCB0eWVwKTsNCj4gK3ZvaWQgcnRsODcyM2VfZG1fYnRfYWdjX3RhYmxlKHN0
-cnVjdCBpZWVlODAyMTFfaHcgKmh3LCB1OCB0eXBlKTsNCj4gIHZvaWQgcnRsODcyM2VfZG1fYnRf
-YmJfYmFja19vZmZfbGV2ZWwoc3RydWN0IGllZWU4MDIxMV9odyAqaHcsIHU4IHR5cGUpOw0KPiAg
-dTggcnRsODcyM2VfZG1fYnRfY2hlY2tfY29leF9yc3NpX3N0YXRlKHN0cnVjdCBpZWVlODAyMTFf
-aHcgKmh3LA0KPiAgCQkJCQl1OCBsZXZlbF9udW0sIHU4IHJzc2lfdGhyZXNoLA0KPiANCj4gLS0t
-DQo+IGJhc2UtY29tbWl0OiA4MzBiM2M2OGMxZmIxZTkxNzYwMjhkMDJlZjg2ZjNjZjc2YWEyNDc2
-DQo+IGNoYW5nZS1pZDogMjAyMjEyMjItcnRsODcyM2FlLXR5cG8tZml4LTVjYzdmZGI3ZWQ2Zg0K
-PiANCj4gQmVzdCByZWdhcmRzLA0KPiAtLQ0KPiBLb25zdGFudGluIFJ5YWJpdHNldiA8aWNvbkBt
-cmljb24uY29tPg0KPiANCj4gLS0tLS0tUGxlYXNlIGNvbnNpZGVyIHRoZSBlbnZpcm9ubWVudCBi
-ZWZvcmUgcHJpbnRpbmcgdGhpcyBlLW1haWwuDQo=
+From: Hilda Wu <hildawu@realtek.com>
+
+When streaming HFP, every few minutes a brief pause in audio can be
+heard on some platforms with Realtek Bluetooth. Linux based products
+may be encountered, but because of the different implementation of
+upper-level SCO services, the situation would not necessarily impact
+customer experience. But when the issue occurs, the system will see
+the SCO packet for unknown connection handle messages.
+
+Note: This issue affects (e)SCO only, does not affect ACLs.
+The duplicate data affected the invalid connection handle only
+occurs in Realtek BT.
+This is to filter out the duplicate packet for avoiding influence.
+
+The btmon trace gives a better idea of what we're filtering.
+The following excerpts are part of SCO packets in the HCI log:
+
+> SCO Data RX: Handle 11 flags 0x00 dlen 72      #23327 [hci0] 132.343418
+        8c a3 55 4f 8a d5 56 e9 35 56 37 8d 55 87 53 55  ..UO..V.5V7.U.SU
+        59 66 d5 57 1d b5 54 00 01 08 ad 00 00 e0 10 00  Yf.W..T.........
+        00 00 85 c6 d5 60 e9 b5 52 94 6d 54 e4 9b 55 b1  .....`..R.mT..U.
+        b6 d5 62 91 b5 57 84 6d 56 e4 5b 55 75 c6 d5 51  ..b..W.mV.[Uu..Q
+        2d b5 53 9a 6d 54 a5 1b                          -.S.mT..
+< SCO Data TX: Handle 11 flags 0x00 dlen 72      #23328 [hci0] 132.343600
+        01 c8 ad 00 00 aa db ba aa a9 72 b4 d9 5d af 14  ..........r..]..
+        53 0c 75 b0 a6 f3 8a 51 b3 54 17 b1 a6 d5 62 c5  S.u....Q.T....b.
+        d5 6b 35 29 8d c5 1c 56 4c 24 96 9b 8d b5 d7 1a  .k5)...VL$......
+        b2 8d bc da 3b 8c 46 ae 1d 4d a4 04 01 f8 ad 00  ....;.F..M......
+        00 3d ec bb a9 98 8b 28                          .=.....(
+> SCO Data RX: Handle 11 flags 0x00 dlen 72      #23329 [hci0] 132.353419
+        55 55 c6 d5 62 29 b5 57 b2 6d 54 00 01 38 ad 00  UU..b).W.mT..8..
+        00 e0 10 00 00 00 0b 00 d5 62 55 c6 57 b2 29 b5  .........bU.W.).
+        00 01 6d 54 00 00 38 ad 00 00 e0 10 00 00 00 92  ..mT..8.........
+        36 d5 5a ed b5 58 6c 6d 55 b3 1b 55 6b 26 d5 52  6.Z..XlmU..Uk&.R
+        d1 b5 54 23 6d 56 82 db                          ..T#mV..
+< SCO Data TX: Handle 11 flags 0x00 dlen 72      #23330 [hci0] 132.353581
+        6d 5b be db 89 34 66 e9 fa 99 a6 6e e5 6d 9f 1a  m[...4f....n.m..
+        1c 57 d2 66 92 63 98 99 a9 3b 8a 6c 3e 5b 5a 34  .W.f.c...;.l>[Z4
+        a4 96 e2 21 21 8c f8 88 0f 3d e0 52 48 85 18 00  ...!!....=.RH...
+        01 08 ad 00 00 0c eb ba a9 a8 28 ca 9a d0 3c 33  ..........(...<3
+        45 4a f9 90 fb ca 4b 39                          EJ....K9
+> SCO Data RX: Handle 2901 flags 0x0a dlen 54    #23331 [hci0] 132.373416
+        d5 48 a9 b5 56 aa 6d 56 d2 db 55 75 36 d5 56 2d  .H..V.mV..Uu6.V-
+        b5 57 5b 6d 54 00 0b 00 48 01 c8 ad 00 00 e0 10  .W[mT...H.......
+        00 00 00 5e c6 d5 56 e1 b5 56 43 6d 55 ca db 55  ...^..V..VCmU..U
+        7d c6 d5 5b 31 b5
+
+We handle is HCI SCO Data RX packets.
+The packet 23327 was a normal HCI SCO Data RX packet.
+The packet 23329 was the abnormal HCI SCO Data RX packet.
+The packet 23331 was the invalid connection handle affected by the
+packet 23329 abnormal HCI SCO Data RX packet.
+
+So we expect to filter the packet 23329 SCO data RX packet case.
+As you can see the packet 23329, the packet's connection handle
+(0x0B 00/11) and length (0x48/72) is normal.
+This btmon trace is SCO packets in USB alternate setting 3, payload
+length is 72 bytes that consist of three SCO data packets.
+After our investigation, we found that the anomaly is due to the
+intermediate composition data.
+There is duplicate data in the intermediate composition data, but it
+affects packet combination. The system parses the next packet of the
+connection handle mistake, so the system shows unknown connection
+handle messages.
+
+This commit can estimate and find out its abnormal rule to filter the
+duplicate packet out for avoiding influence.
+Check fragments and filter out the abnormal packet, and then it will
+not affect the system parsing of the connection handle subsequent.
+This commit can filter out the invalid connection handle and avoid the
+spotty SCO quality.
+
+Signed-off-by: Alex Lu <alex_lu@realsil.com.cn>
+Signed-off-by: Hilda Wu <hildawu@realtek.com>
+---
+Changes in v5:
+ - Fix typos in the commit log.
+
+Changes in v4:
+ - Fix typos and add more in commit description.
+ - Modify comparison method.
+
+Changes in v3:
+ - Use the vendor function to replace btus_recv_isoc
+ - Additional info: The comparison of btrtl_usb_recv_isoc here is
+   for invalid handle, the invalid handle shouldn't appear.
+   So we try to find out the rule and filter out this.
+
+Changes in v2:
+ - Separate commits for functions
+---
+---
+ drivers/bluetooth/btrtl.c | 33 ++++++++++++++++
+ drivers/bluetooth/btrtl.h |  7 ++++
+ drivers/bluetooth/btusb.c | 80 ++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 119 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
+index 69c3fe649ca7..a0a33d2467ef 100644
+--- a/drivers/bluetooth/btrtl.c
++++ b/drivers/bluetooth/btrtl.c
+@@ -944,6 +944,39 @@ int btrtl_get_uart_settings(struct hci_dev *hdev,
+ }
+ EXPORT_SYMBOL_GPL(btrtl_get_uart_settings);
+ 
++int btrtl_usb_recv_isoc(u16 pos, u8 *data, u8 *p, u16 wMaxPacketSize)
++{
++	u8 *prev;
++	u8 tmp[8];
++	u8 zero[1] = {0};
++	u32 *prev_frag_a;
++	u32 *prev_frag_b;
++
++	/* Issue was found when alt was set to 3 or bigger */
++	if (wMaxPacketSize < 25)
++		return 0;
++
++	/* The first fragment is always correct. */
++	if (pos < wMaxPacketSize)
++		return 0;
++
++	if (memcmp(p, zero, sizeof(zero))) {
++		prev = data + (pos - wMaxPacketSize);
++		memcpy(tmp, prev + 4, 8);
++		prev_frag_a = (u32 *)(tmp);
++		prev_frag_b = (u32 *)(tmp + 4);
++		*prev_frag_a = swahw32(*prev_frag_a);
++		*prev_frag_b = swahw32(*prev_frag_b);
++
++		/* Check the current fragment with the previous one. */
++		if (!memcmp(p, prev, 2) && !memcmp(p + 2, tmp, 8))
++			return -1;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(btrtl_usb_recv_isoc);
++
+ MODULE_AUTHOR("Daniel Drake <drake@endlessm.com>");
+ MODULE_DESCRIPTION("Bluetooth support for Realtek devices ver " VERSION);
+ MODULE_VERSION(VERSION);
+diff --git a/drivers/bluetooth/btrtl.h b/drivers/bluetooth/btrtl.h
+index ebf0101c959b..893f1eae57e2 100644
+--- a/drivers/bluetooth/btrtl.h
++++ b/drivers/bluetooth/btrtl.h
+@@ -83,6 +83,7 @@ int btrtl_get_uart_settings(struct hci_dev *hdev,
+ 			    struct btrtl_device_info *btrtl_dev,
+ 			    unsigned int *controller_baudrate,
+ 			    u32 *device_baudrate, bool *flow_control);
++int btrtl_usb_recv_isoc(u16 pos, u8 *data, u8 *buffer, u16 wMaxPacketSize);
+ 
+ #else
+ 
+@@ -126,4 +127,10 @@ static inline int btrtl_get_uart_settings(struct hci_dev *hdev,
+ 	return -ENOENT;
+ }
+ 
++static inline int btrtl_usb_recv_isoc(u16 pos, u8 *data, u8 *buffer,
++					u16 wMaxPacketSize)
++{
++	return -EOPNOTSUPP;
++}
++
+ #endif
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index afd2f08ffe30..47e4dcaec948 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -792,6 +792,7 @@ struct btusb_data {
+ 	int (*recv_event)(struct hci_dev *hdev, struct sk_buff *skb);
+ 	int (*recv_acl)(struct hci_dev *hdev, struct sk_buff *skb);
+ 	int (*recv_bulk)(struct btusb_data *data, void *buffer, int count);
++	int (*recv_isoc)(struct btusb_data *data, void *buffer, int count);
+ 
+ 	int (*setup_on_usb)(struct hci_dev *hdev);
+ 
+@@ -1394,7 +1395,7 @@ static void btusb_isoc_complete(struct urb *urb)
+ 
+ 			hdev->stat.byte_rx += length;
+ 
+-			if (btusb_recv_isoc(data, urb->transfer_buffer + offset,
++			if (data->recv_isoc(data, urb->transfer_buffer + offset,
+ 					    length) < 0) {
+ 				bt_dev_err(hdev, "corrupted SCO packet");
+ 				hdev->stat.err_rx++;
+@@ -2492,6 +2493,80 @@ static int btusb_setup_realtek(struct hci_dev *hdev)
+ 	return ret;
+ }
+ 
++static int btusb_recv_isoc_realtek(struct btusb_data *data, void *buffer,
++				   int count)
++{
++	struct sk_buff *skb;
++	unsigned long flags;
++	int err = 0;
++	u16 wMaxPacketSize = le16_to_cpu(data->isoc_rx_ep->wMaxPacketSize);
++
++	spin_lock_irqsave(&data->rxlock, flags);
++	skb = data->sco_skb;
++
++	while (count) {
++		int len;
++
++		if (!skb) {
++			skb = bt_skb_alloc(HCI_MAX_SCO_SIZE, GFP_ATOMIC);
++			if (!skb) {
++				err = -ENOMEM;
++				break;
++			}
++
++			hci_skb_pkt_type(skb) = HCI_SCODATA_PKT;
++			hci_skb_expect(skb) = HCI_SCO_HDR_SIZE;
++		}
++
++		len = min_t(uint, hci_skb_expect(skb), count);
++
++		/* Gaps in audio could be heard while streaming WBS using USB
++		 * alt settings 3 on some platforms, since this is only used
++		 * with RTK chips so let vendor function detect it.
++		 */
++		if (!btusb_find_altsetting(data, 6) &&
++			test_bit(BTUSB_USE_ALT3_FOR_WBS, &data->flags)) {
++			err = btrtl_usb_recv_isoc(skb->len, skb->data, buffer,
++						wMaxPacketSize);
++			if (err)
++				break;
++		}
++
++		skb_put_data(skb, buffer, len);
++
++		count -= len;
++		buffer += len;
++		hci_skb_expect(skb) -= len;
++
++		if (skb->len == HCI_SCO_HDR_SIZE) {
++			/* Complete SCO header */
++			struct hci_sco_hdr *hdr = hci_sco_hdr(skb);
++
++			hci_skb_expect(skb) = hdr->dlen;
++
++			if (skb_tailroom(skb) < hci_skb_expect(skb) ||
++			    !btusb_validate_sco_handle(data->hdev, hdr)) {
++				kfree_skb(skb);
++				skb = NULL;
++
++				err = -EILSEQ;
++				break;
++			}
++		}
++
++		if (!hci_skb_expect(skb)) {
++			/* Complete frame */
++			hci_recv_frame(data->hdev, skb);
++			skb = NULL;
++		}
++	}
++
++	data->sco_skb = skb;
++	spin_unlock_irqrestore(&data->rxlock, flags);
++
++	return err;
++}
++
+ /* UHW CR mapping */
+ #define MTK_BT_MISC		0x70002510
+ #define MTK_BT_SUBSYS_RST	0x70002610
+@@ -3924,6 +3999,7 @@ static int btusb_probe(struct usb_interface *intf,
+ 
+ 	data->recv_event = hci_recv_frame;
+ 	data->recv_bulk = btusb_recv_bulk;
++	data->recv_isoc = btusb_recv_isoc;
+ 
+ 	if (id->driver_info & BTUSB_INTEL_COMBINED) {
+ 		/* Allocate extra space for Intel device */
+@@ -4097,6 +4173,8 @@ static int btusb_probe(struct usb_interface *intf,
+ 		hdev->shutdown = btrtl_shutdown_realtek;
+ 		hdev->cmd_timeout = btusb_rtl_cmd_timeout;
+ 
++		data->recv_isoc = btusb_recv_isoc_realtek;
++
+ 		/* Realtek devices need to set remote wakeup on auto-suspend */
+ 		set_bit(BTUSB_WAKEUP_AUTOSUSPEND, &data->flags);
+ 		set_bit(BTUSB_USE_ALT3_FOR_WBS, &data->flags);
+-- 
+2.17.1
+
