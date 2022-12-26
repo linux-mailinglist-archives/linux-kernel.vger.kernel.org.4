@@ -2,143 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139096560F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 08:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C658656100
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 09:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbiLZHwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 02:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S231795AbiLZIAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 03:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbiLZHwP (ORCPT
+        with ESMTP id S231585AbiLZIAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 02:52:15 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1067B1FD;
-        Sun, 25 Dec 2022 23:51:23 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NgVN56L4qz4f3mS7;
-        Mon, 26 Dec 2022 15:51:17 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgCHpzF3UqljJA0HAg--.46167S3;
-        Mon, 26 Dec 2022 15:51:20 +0800 (CST)
-Subject: Re: [PATCH RESEND v2 5/5] sbitmap: correct wake_batch recalculation
- to avoid potential IO hung
-To:     Jan Kara <jack@suse.cz>, Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kbusch@kernel.org,
-        Laibin Qiu <qiulaibin@huawei.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20221222143353.598042-1-shikemeng@huaweicloud.com>
- <20221222143353.598042-6-shikemeng@huaweicloud.com>
- <20221222134146.khucy5afnxwl75px@quack3>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <d00297d7-a77a-770a-1cd7-1632f8ae77e0@huaweicloud.com>
-Date:   Mon, 26 Dec 2022 15:50:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 26 Dec 2022 03:00:05 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F44B115E;
+        Mon, 26 Dec 2022 00:00:03 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id 17so10227159pll.0;
+        Mon, 26 Dec 2022 00:00:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=snF9FgPM3QZjb6wYG/8ShchxVTbs8eu54AlMx41SJXI=;
+        b=I9kpb2beBVnPOjsLJGcv0RYiBxwiJwxcOTw40CumIZc1EnhS/GQAT4QRDqEBM5sSYf
+         Wd0CZdozC+zvNZ7cefd7AMsfQMn8aUnwQfQ/uf7n6zSgQA1Ebim0kWEsrEKkU4KiHbf5
+         CTAKlSW3/BWnXqb8ZO7yZcTq22RASfUWsBbIgpvirQGHePw9rpt4KRdY3+r+VSGYlaL6
+         J6oyvXqwS5xVcMVIHNV/tuuCBQMpa2kDLG7bIuzQRnXNP65cDWBWSS8XymH/O7pfjYzN
+         Cf09qjoM18+lqqsA9DjGW8bHSTBHxh79FnzS3q9y4D1zUfjg9aGHptcrwmvICxm1/7BI
+         kZlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=snF9FgPM3QZjb6wYG/8ShchxVTbs8eu54AlMx41SJXI=;
+        b=NFzv5Plj9UpRLa47HCk05zMKxlGP3/OcBKtET8od6IqMVC+imTQ0ZRjqot+sEUxhvf
+         //ZGyoAPsmzendWsHheiSKV2L2f81VEfrScVQGNQtonOfpynytBi/3lvsboxvoYzSoG+
+         rVdiG5eOg50Od/KwAbx3oFovYdhDAVKSzcHGxbDQGWs0D7q4pDL4yEKCMZYaIjM5fZae
+         1nOSqhk3O57pW8tzQil5JmSCGZ03MnVffezABl7ESk9GKwYYBLonKeWUT2/tamyEzduD
+         vv4Arlj79DrTjI6+rWfr5I2edKahEs8VW5ZPcmk1TLLSfkP/y8Q8ygOR0EZ22FtxxHv5
+         HQGA==
+X-Gm-Message-State: AFqh2kp+6dldAtf1XuokYcuc6k5U1kUiAD5NdD9yuNJ+rBT1xkcl9apT
+        VGgYU0GSPOHydExemnVsIwg=
+X-Google-Smtp-Source: AMrXdXsYDTq8QKHNt6PaId85nRz+73j5VQZcvOKpuC70WJG4kZTU8GY496g9fIp6s4h43XrC3tqXlg==
+X-Received: by 2002:a17:902:7e03:b0:192:70f1:b34 with SMTP id b3-20020a1709027e0300b0019270f10b34mr6048820plm.19.1672041603032;
+        Mon, 26 Dec 2022 00:00:03 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id s19-20020a170903201300b00187197c4999sm6447717pla.167.2022.12.25.23.59.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Dec 2022 00:00:02 -0800 (PST)
+Message-ID: <ee43a3ce-2b66-f660-39cc-32cdc0cf6587@gmail.com>
+Date:   Mon, 26 Dec 2022 15:59:52 +0800
 MIME-Version: 1.0
-In-Reply-To: <20221222134146.khucy5afnxwl75px@quack3>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgCHpzF3UqljJA0HAg--.46167S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF4xGF13KFW8CFW3ZF1UJrb_yoW5uF47p3
-        yrKFsrKw4vyrWIkrZrJw4UZF129a1DKrnxGF1SvrWrAw15Gr9I9r4FgFZ5uwn2vFs7GF45
-        A343GrZ3CayjyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQzVbUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH V2 11/18] Drivers: hv: vmbus: Decrypt vmbus ring
+ buffer
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20221119034633.1728632-1-ltykernel@gmail.com>
+ <20221119034633.1728632-12-ltykernel@gmail.com>
+ <BYAPR21MB1688329AFB42391E92051E9CD7E09@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <BYAPR21MB1688329AFB42391E92051E9CD7E09@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-ÔÚ 2022/12/22 21:41, Jan Kara Ð´µÀ:
-> On Thu 22-12-22 22:33:53, Kemeng Shi wrote:
->> Commit 180dccb0dba4f ("blk-mq: fix tag_get wait task can't be awakened")
->> mentioned that in case of shared tags, there could be just one real
->> active hctx(queue) because of lazy detection of tag idle. Then driver tag
->> allocation may wait forever on this real active hctx(queue) if wake_batch
->> is > hctx_max_depth where hctx_max_depth is available tags depth for the
->> actve hctx(queue). However, the condition wake_batch > hctx_max_depth is
->> not strong enough to avoid IO hung as the sbitmap_queue_wake_up will only
->> wake up one wait queue for each wake_batch even though there is only one
->> waiter in the woken wait queue. After this, there is only one tag to free
->> and wake_batch may not be reached anymore. Commit 180dccb0dba4f ("blk-mq:
->> fix tag_get wait task can't be awakened") methioned that driver tag
->> allocation may wait forever. Actually, the inactive hctx(queue) will be
->> truely idle after at most 30 seconds and will call blk_mq_tag_wakeup_all
->> to wake one waiter per wait queue to break the hung. But IO hung for 30
->> seconds is also not acceptable. Set batch size to small enough that depth
->> of the shared hctx(queue) is enough to wake up all of the queues like
->> sbq_calc_wake_batch do to fix this potential IO hung.
->>
->> Although hctx_max_depth will be clamped to at least 4 while wake_batch
->> recalculation does not do the clamp, the wake_batch will be always
->> recalculated to 1 when hctx_max_depth <= 4.
->>
->> Fixes: 180dccb0dba4 ("blk-mq: fix tag_get wait task can't be awakened")
->> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> 
-> So the condition in sbitmap_queue_recalculate_wake_batch() also seemed
-> strange to me and the changelogs of commits 180dccb0dba4 and 10825410b95
-> ("blk-mq: Fix wrong wakeup batch configuration which will cause hang")
-> didn't add much confidence about the magic batch setting to 4. Let me add
-> to CC original author of this code if he has any thoughts on why using
-> wake batch of 4 is safe for cards with say 32 tags in case active_users is
-> currently 32. Because I don't see why that is correct either.
+On 12/15/2022 2:25 AM, Michael Kelley (LINUX) wrote:
+> From: Tianyu Lan<ltykernel@gmail.com>  Sent: Friday, November 18, 2022 7:46 PM
+>> The ring buffer is remapped in the hv_ringbuffer_init()
+>> and it should be with decrypt flag in order to share it
+>> with hypervisor in sev-snp enlightened guest.
+> FWIW, the change in this patch is included in Patch 9
+> in my vTOM-related patch series.
 > 
 
-If I remember this correctly, the reason to use 4 here in the first
-place is to avoid performance degradation. And for why this is safe
-because 4 * 8 = 32. Someone is waiting for tag means 32 tags is all
-grabbed, and wake batch of 4 will make sure at least 8 wait queues will
-be awaken. It's right some waitqueue might only have one waiter, but I
-don't think this will cause io hang.
-
-Thanks,
-Kuai
-> 								Honza
-> 
->> ---
->>   lib/sbitmap.c | 5 +----
->>   1 file changed, 1 insertion(+), 4 deletions(-)
->>
->> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
->> index b6d3bb1c3675..804fe99783e4 100644
->> --- a/lib/sbitmap.c
->> +++ b/lib/sbitmap.c
->> @@ -458,13 +458,10 @@ void sbitmap_queue_recalculate_wake_batch(struct sbitmap_queue *sbq,
->>   					    unsigned int users)
->>   {
->>   	unsigned int wake_batch;
->> -	unsigned int min_batch;
->>   	unsigned int depth = (sbq->sb.depth + users - 1) / users;
->>   
->> -	min_batch = sbq->sb.depth >= (4 * SBQ_WAIT_QUEUES) ? 4 : 1;
->> -
->>   	wake_batch = clamp_val(depth / SBQ_WAIT_QUEUES,
->> -			min_batch, SBQ_WAKE_BATCH);
->> +			1, SBQ_WAKE_BATCH);
->>   
->>   	WRITE_ONCE(sbq->wake_batch, wake_batch);
->>   }
->> -- 
->> 2.30.0
->>
-
+I will rebase next version on your series. Thanks for reminder.
