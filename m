@@ -2,147 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F2865605F
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 881C3656065
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbiLZGZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 01:25:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
+        id S231620AbiLZG3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 01:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiLZGZE (ORCPT
+        with ESMTP id S229595AbiLZG3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 01:25:04 -0500
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFC33A5;
-        Sun, 25 Dec 2022 22:25:03 -0800 (PST)
-Received: by mail-pl1-f173.google.com with SMTP id d3so10002798plr.10;
-        Sun, 25 Dec 2022 22:25:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3HjLQD394T0N1zzJlCWkPmDMa8LBCihXMtLb1cY2QxY=;
-        b=1E+viyUg/XZ8Z5CQ+SYv8X8aMw/yv5HTGDnsTC9s3EkLfXALKJt3ZdmVFGScTMklIK
-         1qLtf1xmQE2zEKQYsB/DEuWFzsQkEMqUBUUndC+lWBNZNgrEJhB9jPBiSAjTMEXyWxMS
-         dG3kVOg2jE/IKUChGZX5EwwMZYl0B3UbLZJ/Ff/3s+mypLwwsP2HImY6sZ6XQ9g+Jp/h
-         9QtuZheSzmbBEeUOEQDT3W9mLE2OvvW/HbaJwK+Vptl1aVjgctc/U24ALTUlQKmT7GQa
-         4fQ/54QWwjaOoOI8SsuCgbViaraH+cxNZp8yfeqryzxq60RaxNIdYSLfln7q9qzTF/D7
-         QgKA==
-X-Gm-Message-State: AFqh2kogbLqLYD7YKb79GD2NqrzIvC8XDkhlh6HzAttRW0mso78vW3ZP
-        u38nAdDwxrv5hDiq0aBR/KLcJjQBAviBSw==
-X-Google-Smtp-Source: AMrXdXsiFaWJunLQMje24SK02J3FZLosXdKBXBxsj3/hkBJj6hx+0hywlrB4BMWV0SIPyUZ1hNl7DA==
-X-Received: by 2002:a17:902:7207:b0:189:6457:4e14 with SMTP id ba7-20020a170902720700b0018964574e14mr17765585plb.8.1672035902353;
-        Sun, 25 Dec 2022 22:25:02 -0800 (PST)
-Received: from [192.168.0.21] ([125.191.247.116])
-        by smtp.gmail.com with ESMTPSA id o4-20020a170902d4c400b00188b5d25438sm6293402plg.35.2022.12.25.22.24.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Dec 2022 22:25:01 -0800 (PST)
-Message-ID: <aa085d47-1163-6133-ed71-88eedb47dabe@ooseel.net>
-Date:   Mon, 26 Dec 2022 15:24:57 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3] usbnet: optimize usbnet_bh() to reduce CPU load
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Greg KH <greg@kroah.com>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Mon, 26 Dec 2022 01:29:03 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786602717;
+        Sun, 25 Dec 2022 22:29:02 -0800 (PST)
+Received: from toolbox.int.toradex.com ([213.55.224.88]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MYyF3-1pNBG31Bx5-00VflN;
+ Mon, 26 Dec 2022 07:28:37 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
+        Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Reinhold Mueller <reinhold.mueller@emtrion.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221221075924.1141346-1-lsahn@ooseel.net>
- <070c6690ad7ea537a7081bc9faa0f78861751bc4.camel@redhat.com>
-Content-Language: en-US
-From:   Leesoo Ahn <lsahn@ooseel.net>
-In-Reply-To: <070c6690ad7ea537a7081bc9faa0f78861751bc4.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: [PATCH v1 0/5] arm64: dts: freescale: prepare and add apalis imx8 support
+Date:   Mon, 26 Dec 2022 07:28:18 +0100
+Message-Id: <20221226062824.53113-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:zWOs8xApvpqIG8s5SFmkYnLAIoUa1a2eUZ9VMOOL+tATVRXgIUt
+ sMhcNzSqb1n25fja0k9YMefy30/NCbMsC2iVCcKHA+dvFg6GGQWdGoLYT2BIFA09KZkTha+
+ 7VVZBNInq8nmbSS/7+eKZPkPYp76aU76TcXenQmKgn4ZmfvLtc4iLxnweIdJbk/F1yKWP3W
+ DHO2vZ/G/qFLmRVp1jnSw==
+UI-OutboundReport: notjunk:1;M01:P0:WA1IJCENxCY=;msBFNFwKnfpxEEIWrovicaMEtC1
+ TUemo4J9KoHaZICgQIMWaNVdvw2GDj1FVKhraRRSI1aMHAZq8YZsDXQUrQfLsRCa8L+gqFEz6
+ oanpyQPgzAmIwYhMkxlt0ROGe/WpEfqkoOBwpkbNdFSI4vmjcSml+fWyUZoQrd2xxhNBRdTNr
+ vhqWs5sGV+Kc6L4r9s8achLSA1hhwlTwQK8451mGch/qoyEzhCZ//i+Wxg2GVJ79rJ6sWQ9vE
+ +1ho/pFWrWbqOeFCt9pUnjzG8z7pYqcg+/PxP7Rjn5znikBD2wq54ZSbJ++ih7rS07awuV6wd
+ SWTODmNEoQW8j8q4alzUTN773Mv43kUwe0qEviXtc9KNpRGRHmfJ8h43ANxqz5rUdbyrRvbRD
+ SG0KjsEahh3vA6DR0wt/V9R7QGbBYE89WfExaDPIW2r3t8yE8+IE0JBKF7rxUaTNGc8xukA5L
+ XCRh3/E05JcTGNkc7r033QUYGlQEFQdqwPdt0OthlUzOTXpmTG6ES9fdnN67vADNEtBdw7JWb
+ adtjeAY25y70CX6RW3vnLx3ja/50L5k4UypWsabCEQCPAlJ+AN5L7dA0/mq9wn3cAQCo8Bhae
+ DYcL1ocPtwGRb8qvZARJ97XgoYq5WwdpYkaRnTqZ5S39aeBUvmbZKUJNwZ+ErhTg+ZxG5g0P0
+ gDv9U+7Ld35a1uh9mffeTxh1KgKbIgZOWkicvVtK5g==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
 
-22. 12. 22. 20:13에 Paolo Abeni 이(가) 쓴 글:
-> On Wed, 2022-12-21 at 16:59 +0900, Leesoo Ahn wrote:
->> The current source pushes skb into dev->done queue by calling
->> skb_queue_tail() and then pop it by calling skb_dequeue() to branch to
->> rx_cleanup state for freeing urb/skb in usbnet_bh(). It takes extra CPU
->> load, 2.21% (skb_queue_tail) as follows.
->>
->> -   11.58%     0.26%  swapper          [k] usbnet_bh
->>     - 11.32% usbnet_bh
->>        - 6.43% skb_dequeue
->>             6.34% _raw_spin_unlock_irqrestore
->>        - 2.21% skb_queue_tail
->>             2.19% _raw_spin_unlock_irqrestore
->>        - 1.68% consume_skb
->>           - 0.97% kfree_skbmem
->>                0.80% kmem_cache_free
->>             0.53% skb_release_data
->>
->> To reduce the extra CPU load use return values jumping to rx_cleanup
->> state directly to free them instead of calling skb_queue_tail() and
->> skb_dequeue() for push/pop respectively.
->>
->> -    7.87%     0.25%  swapper          [k] usbnet_bh
->>     - 7.62% usbnet_bh
->>        - 4.81% skb_dequeue
->>             4.74% _raw_spin_unlock_irqrestore
->>        - 1.75% consume_skb
->>           - 0.98% kfree_skbmem
->>                0.78% kmem_cache_free
->>             0.58% skb_release_data
->>          0.53% smsc95xx_rx_fixup
->>
->> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
->> ---
->> v3:
->>    - Replace return values with proper -ERR values in rx_process()
->>
->> v2:
->>    - Replace goto label with return statement to reduce goto entropy
->>    - Add CPU load information by perf in commit message
->>
->> v1 at:
->>    https://patchwork.kernel.org/project/netdevbpf/patch/20221217161851.829497-1-lsahn@ooseel.net/
-> 
-> This looks like net-next material.
-> 
-> We have already submitted the networking pull request to Linus
-> for v6.2 and therefore net-next is closed for new drivers, features,
-> code refactoring and optimizations. We are currently accepting
-> bug fixes only.
-> 
-> Please repost when net-next reopens after Jan 2nd, including the
-> expected 'net-next' tag into the subject line
-> 
-> RFC patches sent for review only are obviously welcome at any time.
-> 
-> [...]
-> 
->> @@ -1528,13 +1526,14 @@ static void usbnet_bh (struct timer_list *t)
->>   		entry = (struct skb_data *) skb->cb;
->>   		switch (entry->state) {
->>   		case rx_done:
->> -			entry->state = rx_cleanup;
->> -			rx_process (dev, skb);
->> +			if (rx_process(dev, skb))
->> +				goto cleanup;
-> 
-> You can avoid this additional label (which is a little confusing inside
-> a switch) factoring out a usb_free_skb(skb) helper and calling it here
-> and under the rx_cleanup case.
+Add support for lsio_pwm0-3, add io-channel-cells property for ADC
+nodes, set lpspi0 max frequency to 60MHz, add toradex,apalis-imx8 et al.
+to dt-bindings and finally, add initial support for Apalis iMX8.
 
-Thank you for the information and feedback, it will be in v4 when 
-net-next reopens.
 
-Best regards,
-Leesoo
+Marcel Ziswiler (2):
+  dt-bindings: arm: fsl: add toradex,apalis-imx8 et al.
+  arm64: dts: freescale: add initial support for apalis imx8 aka quadmax
+
+Max Krummenacher (1):
+  arm64: dts: fsl-imx8qm-device.dtsi: add io-channel-cells to adc nodes
+
+Philippe Schenker (2):
+  arm64: dts: freescale: imx8-ss-lsio: add support for lsio_pwm0-3
+  arm64: dts: freescale: imx8-ss-dma: set lpspi0 max frequency to 60mhz
+
+ .../devicetree/bindings/arm/fsl.yaml          |   12 +
+ arch/arm64/boot/dts/freescale/Makefile        |    5 +
+ .../boot/dts/freescale/imx8-apalis-eval.dtsi  |  146 ++
+ .../dts/freescale/imx8-apalis-ixora-v1.1.dtsi |  214 +++
+ .../dts/freescale/imx8-apalis-ixora-v1.2.dtsi |  264 +++
+ .../boot/dts/freescale/imx8-apalis-v1.1.dtsi  | 1510 +++++++++++++++++
+ .../arm64/boot/dts/freescale/imx8-ss-dma.dtsi |    4 +-
+ .../boot/dts/freescale/imx8-ss-lsio.dtsi      |   48 +
+ .../boot/dts/freescale/imx8qm-apalis-eval.dts |   16 +
+ .../freescale/imx8qm-apalis-ixora-v1.1.dts    |   16 +
+ .../dts/freescale/imx8qm-apalis-v1.1-eval.dts |   16 +
+ .../imx8qm-apalis-v1.1-ixora-v1.1.dts         |   16 +
+ .../imx8qm-apalis-v1.1-ixora-v1.2.dts         |   16 +
+ .../dts/freescale/imx8qm-apalis-v1.1.dtsi     |   17 +
+ .../boot/dts/freescale/imx8qm-apalis.dtsi     |  342 ++++
+ 15 files changed, 2641 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-eval.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.1.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-ixora-v1.2.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8-apalis-v1.1.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-eval.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-ixora-v1.1.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-eval.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.1.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1-ixora-v1.2.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis-v1.1.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8qm-apalis.dtsi
+
+-- 
+2.35.1
+
