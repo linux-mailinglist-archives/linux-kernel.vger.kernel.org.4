@@ -2,99 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85ABD6561E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 11:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5386561F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 11:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbiLZKd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 05:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
+        id S231379AbiLZKkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 05:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiLZKdX (ORCPT
+        with ESMTP id S229484AbiLZKkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 05:33:23 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35586161
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 02:33:21 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NgYz03ZqSz4f3p0c
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 18:33:16 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgBH_rFreKlj6SMxAg--.54373S6;
-        Mon, 26 Dec 2022 18:33:19 +0800 (CST)
-From:   Hou Tao <houtao@huaweicloud.com>
-To:     linux-cachefs@redhat.com
-Cc:     David Howells <dhowells@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-erofs@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org,
-        Jingbo Xu <jefflexu@linux.alibaba.com>, houtao1@huawei.com
-Subject: [PATCH v2 2/2] fscache: Add the missing smp_mb__after_atomic() before wake_up_bit()
-Date:   Mon, 26 Dec 2022 18:33:09 +0800
-Message-Id: <20221226103309.953112-3-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20221226103309.953112-1-houtao@huaweicloud.com>
-References: <20221226103309.953112-1-houtao@huaweicloud.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBH_rFreKlj6SMxAg--.54373S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7tryxXF18tr4DCF48ZF47Arb_yoW8Gr18pr
-        Z5WFySqay8X39rt3yDJw17u34SgrWUKanrGr10y3WUZF4FqrWFv3WSkas8u3W7C398Xry3
-        ZF15K3y3XF1UZr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjxU2GYLDUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
+        Mon, 26 Dec 2022 05:40:10 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6EC10DF;
+        Mon, 26 Dec 2022 02:40:07 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NgZ6s5zfdz4xVnH;
+        Mon, 26 Dec 2022 18:40:05 +0800 (CST)
+Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
+        by mse-fl1.zte.com.cn with SMTP id 2BQAe1xc048557;
+        Mon, 26 Dec 2022 18:40:01 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Mon, 26 Dec 2022 18:40:04 +0800 (CST)
+Date:   Mon, 26 Dec 2022 18:40:04 +0800 (CST)
+X-Zmail-TransId: 2b0363a97a04fffffffff67e1b98
+X-Mailer: Zmail v1.0
+Message-ID: <202212261840048448622@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <james.bottomley@hansenpartnership.com>
+Cc:     <deller@gmx.de>, <linux-parisc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
+        <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIHBhcmlzYzogdXNlIHN0cnNjcHkoKSB0byBpbnN0ZWFkIG9mIHN0cm5jcHkoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2BQAe1xc048557
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63A97A05.000 by FangMail milter!
+X-FangMail-Envelope: 1672051205/4NgZ6s5zfdz4xVnH/63A97A05.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63A97A05.000/4NgZ6s5zfdz4xVnH
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
+From: Xu Panda <xu.panda@zte.com.cn>
 
-fscache_create_volume_work() uses wake_up_bit() to wake up the processes
-which are waiting for the completion of volume creation. According to
-comments in wake_up_bit() and waitqueue_active(), an extra smp_mb() is
-needed to guarantee the memory order between FSCACHE_VOLUME_CREATING
-flag and waitqueue_active() before invoking wake_up_bit().
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL-terminated strings.
 
-Considering clear_bit_unlock() before wake_up_bit() is an atomic
-operation, use smp_mb__after_atomic() instead of smp_mb() to provide
-such guarantee.
-
-Signed-off-by: Hou Tao <houtao1@huawei.com>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
 ---
- fs/fscache/volume.c | 5 +++++
- 1 file changed, 5 insertions(+)
+change for v2
+ - sizeof(in) is better and simplified, thanks for Helge Deller.
+---
+ drivers/parisc/pdc_stable.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
-index fc3dd3bc851d..734d17f404e7 100644
---- a/fs/fscache/volume.c
-+++ b/fs/fscache/volume.c
-@@ -281,6 +281,11 @@ static void fscache_create_volume_work(struct work_struct *work)
- 				 fscache_access_acquire_volume_end);
- 
- 	clear_bit_unlock(FSCACHE_VOLUME_CREATING, &volume->flags);
-+	/*
-+	 * Paired with barrier in wait_on_bit(). Check wake_up_bit() and
-+	 * waitqueue_active() for details.
-+	 */
-+	smp_mb__after_atomic();
- 	wake_up_bit(&volume->flags, FSCACHE_VOLUME_CREATING);
- 	fscache_put_volume(volume, fscache_volume_put_create_work);
- }
+diff --git a/drivers/parisc/pdc_stable.c b/drivers/parisc/pdc_stable.c
+index d6af5726ddf3..d3075445260b 100644
+--- a/drivers/parisc/pdc_stable.c
++++ b/drivers/parisc/pdc_stable.c
+@@ -274,8 +274,7 @@ pdcspath_hwpath_write(struct pdcspath_entry *entry, const char *buf, size_t coun
+
+ 	/* We'll use a local copy of buf */
+ 	count = min_t(size_t, count, sizeof(in)-1);
+-	strncpy(in, buf, count);
+-	in[count] = '\0';
++	strscpy(in, buf, sizeof(in));
+ 	
+ 	/* Let's clean up the target. 0xff is a blank pattern */
+ 	memset(&hwpath, 0xff, sizeof(hwpath));
+@@ -388,8 +387,7 @@ pdcspath_layer_write(struct pdcspath_entry *entry, const char *buf, size_t count
+
+ 	/* We'll use a local copy of buf */
+ 	count = min_t(size_t, count, sizeof(in)-1);
+-	strncpy(in, buf, count);
+-	in[count] = '\0';
++	strscpy(in, buf, sizeof(in));
+ 	
+ 	/* Let's clean up the target. 0 is a blank pattern */
+ 	memset(&layers, 0, sizeof(layers));
+@@ -756,8 +754,7 @@ static ssize_t pdcs_auto_write(struct kobject *kobj,
+
+ 	/* We'll use a local copy of buf */
+ 	count = min_t(size_t, count, sizeof(in)-1);
+-	strncpy(in, buf, count);
+-	in[count] = '\0';
++	strscpy(in, buf, sizeof(in));
+
+ 	/* Current flags are stored in primary boot path entry */
+ 	pathentry = &pdcspath_entry_primary;
 -- 
-2.29.2
-
+2.15.2
