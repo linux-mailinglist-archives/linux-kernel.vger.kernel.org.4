@@ -2,114 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DD9655F9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 04:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FFE655FA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 04:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiLZDqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 25 Dec 2022 22:46:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S231552AbiLZD6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 25 Dec 2022 22:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiLZDqo (ORCPT
+        with ESMTP id S229595AbiLZD6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 25 Dec 2022 22:46:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0240F2F3
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 19:45:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672026357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LPML0T2odU1efvKA6TB4e9nlnB9KljoL+oggFMgoV7U=;
-        b=WXhnkygWPPM60oI96phUUIGCVhP35UX7c145IMZokDkpAdSoOF6u+o6GDEKf92Ws+DPKH4
-        vBoOYH85PMlf7bmL3JdlwNdL3AxRkxFBeqHW0Q0GpCJEfvxEgm7dl9qOx00fchXwDxcIh+
-        0K9RYeMAiO7K8LuJhDeOKwOH9rtHmRE=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-611-bstLblnIPLa_CotG03swuA-1; Sun, 25 Dec 2022 22:45:55 -0500
-X-MC-Unique: bstLblnIPLa_CotG03swuA-1
-Received: by mail-ot1-f72.google.com with SMTP id cj4-20020a056830640400b0066dee63bd77so5776559otb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 25 Dec 2022 19:45:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LPML0T2odU1efvKA6TB4e9nlnB9KljoL+oggFMgoV7U=;
-        b=PcawFN+id6nclfCqYhaQ51jBHstgs2+3y664pALK+EP3iyZeAV9d+qUJNBL6GOBf36
-         0vUerD16MR5cv+YeiCJl3SOrqkrGMLVEXId7cy5BFgNUKGCtcZ0Yq0f4yzVrakj/7MlT
-         8bc6nBvOcLP9IwcCDDJkI30ztPMQuXlBbEtUc4IMG3V3GxwnszhRQX60SkoEk3GYoHeN
-         2MAdRsfn90CyoN4vnXNuogalrTo5xEXSlCxbSo3JXrXOhEChtEkEwEAivB39GTk3stkf
-         Cu8tCljKsIJaTMSsvM0kFdSHAl63AN01T50/I2xdhmPKZkCEo0/BX2vRo/37REfoW8dW
-         kZZQ==
-X-Gm-Message-State: AFqh2krJD5xhmUpnfbw0AjTPEXsxIRRP5raJrufBSYvj+qcAnRkhbdge
-        +pvZXHNOMi4UPSqe9VWWs3vVpEE35urx9DbYjhKnJOdHCEK/J6PKr/mfpjMnKyt9Bd41b4zSYUd
-        9WS3yOTQV7HIdwt4w+jcRU6wbpc8I53r6y7CmufoT
-X-Received: by 2002:a05:6830:4a3:b0:670:8334:ccf2 with SMTP id l3-20020a05683004a300b006708334ccf2mr1092695otd.201.1672026354897;
-        Sun, 25 Dec 2022 19:45:54 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv4l8sal78jwmSmfNpp5adoBH8DFpxNZ4rOpa5yo3+kGZLSJd99jDWK2hJIcSUrI33x/vEuSXvdG0zyZB3QQ+8=
-X-Received: by 2002:a05:6830:4a3:b0:670:8334:ccf2 with SMTP id
- l3-20020a05683004a300b006708334ccf2mr1092684otd.201.1672026354707; Sun, 25
- Dec 2022 19:45:54 -0800 (PST)
+        Sun, 25 Dec 2022 22:58:20 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5057F26D4;
+        Sun, 25 Dec 2022 19:58:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672027099; x=1703563099;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Zg69wlDFLaNoP+dcrRtsKjwz24O2TMBqloyI+EYtQ6w=;
+  b=eTBMRSp8j+dcx7i79/CLL4me/HpzdjzmrbRg+esQjg8198SFr6fKE9Hk
+   CPlVi8Zn6THoRhP+Mxpi+g6VJxOV1+2C1Ehb4MhYoWY0Bf+2Od6+1V90E
+   sMGiPAyHGqabojhIBl3iJc6qPcYW9EC+1mYGnMbkjxDirFD02DxQTbw/W
+   SOufQyzf6vx9g/spKPspv3D9nbBp5JtcYmSWRYXYWceLti8XqNgykEE33
+   JqBATeSqHAjuPdjSYQxoqLObq0og9unCoThxRhvVvl6IdtsL1/C3P2WNj
+   2wh5K2APbqF2AVgiUYMlTc7W2a7EFQzILjXMocEKIECzB3cTpbBDJoZH0
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="347708222"
+X-IronPort-AV: E=Sophos;i="5.96,274,1665471600"; 
+   d="scan'208";a="347708222"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2022 19:58:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10571"; a="794985158"
+X-IronPort-AV: E=Sophos;i="5.96,274,1665471600"; 
+   d="scan'208";a="794985158"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Dec 2022 19:58:16 -0800
+Date:   Mon, 26 Dec 2022 11:48:12 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Russ Weight <russell.h.weight@intel.com>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Marco Pagani <marpagan@redhat.com>
+Subject: Re: [PATCH v2 1/1] fpga: m10bmc-sec: Fix probe rollback
+Message-ID: <Y6kZfHOCb18qmaeP@yilunxu-OptiPlex-7050>
+References: <20221214144952.8392-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-References: <20221222060427.21626-1-jasowang@redhat.com> <20221222060427.21626-5-jasowang@redhat.com>
- <CAJs=3_D6sug80Bb9tnAw5T0_NaL_b=u8ZMcwZtd-dy+AH_yqzQ@mail.gmail.com>
- <CACGkMEv4YxuqrSx_HW2uWgXXSMOFCzTJCCD_EVhMwegsL8SoCg@mail.gmail.com>
- <CAJs=3_Akv1zoKy_HARjnqMdNsy_n34TzzGA6a25xrkF2rCnqwg@mail.gmail.com>
- <CACGkMEvtgr=pDpcZeE4+ssh+PiL0k2B2+3kzdDmEvxxe=2mtGA@mail.gmail.com> <CAJs=3_BqDqEoXGiU9zCNfGNqEjd1eijqkE_8_mb3nC=GwQoxHA@mail.gmail.com>
-In-Reply-To: <CAJs=3_BqDqEoXGiU9zCNfGNqEjd1eijqkE_8_mb3nC=GwQoxHA@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 26 Dec 2022 11:45:43 +0800
-Message-ID: <CACGkMEs=YrtP-GT_MKoZdORtYCD09QdmZGpgQUHMOMLG_eX-FA@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq command
-To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
-Cc:     mst@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
-        eperezma@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221214144952.8392-1-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 3:39 PM Alvaro Karsz <alvaro.karsz@solid-run.com> wrote:
->
-> > This needs to be proposed to the virtio spec first. And actually we
-> > need more than this:
-> >
-> > 1) we still need a way to deal with the device without this feature
-> > 2) driver can't depend solely on what is advertised by the device (e.g
-> > device can choose to advertise a very long timeout)
->
-> I think that I wasn't clear, sorry.
-> I'm not talking about a new virtio feature, I'm talking about a situation when:
-> * virtio_net issues a control command.
-> * the device gets the command, but somehow, completes the command
-> after timeout.
-> * virtio_net assumes that the command failed (timeout), and issues a
-> different control command.
-> * virtio_net will then call virtqueue_wait_for_used, and will
-> immediately get the previous response (If I'm not wrong).
->
-> So, this is not a new feature that I'm proposing, just a situation
-> that may occur due to cvq timeouts.
->
-> Anyhow, your solution calling BAD_RING if we reach a timeout should
-> prevent this situation.
+On 2022-12-14 at 16:49:52 +0200, Ilpo Järvinen wrote:
+> Handle probe error rollbacks properly to avoid leaks.
+> 
+> Fixes: 5cd339b370e2 ("fpga: m10bmc-sec: add max10 secure update functions")
+> Reviewed-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Marco Pagani <marpagan@redhat.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-Right, that is the goal.
+I assume this should be in stable kernel, so
+ 
+ Cc: stable@vger.kernel.org
 
-Thanks
+If OK, I could add it myself.
 
->
-> Thanks
->
+Thanks,
+Yilun
 
+> ---
+> I don't know if the previous one fell through cracks so resending this.
+> 
+> v2:
+> - Resending v1 with Marco's Rev-by
+> 
+>  drivers/fpga/intel-m10-bmc-sec-update.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> index 79d48852825e..03f1bd81c434 100644
+> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> @@ -574,20 +574,27 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
+>  	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
+>  			sec->fw_name_id);
+>  	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
+> -	if (!sec->fw_name)
+> -		return -ENOMEM;
+> +	if (!sec->fw_name) {
+> +		ret = -ENOMEM;
+> +		goto fw_name_fail;
+> +	}
+>  
+>  	fwl = firmware_upload_register(THIS_MODULE, sec->dev, sec->fw_name,
+>  				       &m10bmc_ops, sec);
+>  	if (IS_ERR(fwl)) {
+>  		dev_err(sec->dev, "Firmware Upload driver failed to start\n");
+> -		kfree(sec->fw_name);
+> -		xa_erase(&fw_upload_xa, sec->fw_name_id);
+> -		return PTR_ERR(fwl);
+> +		ret = PTR_ERR(fwl);
+> +		goto fw_uploader_fail;
+>  	}
+>  
+>  	sec->fwl = fwl;
+>  	return 0;
+> +
+> +fw_uploader_fail:
+> +	kfree(sec->fw_name);
+> +fw_name_fail:
+> +	xa_erase(&fw_upload_xa, sec->fw_name_id);
+> +	return ret;
+>  }
+>  
+>  static int m10bmc_sec_remove(struct platform_device *pdev)
+> -- 
+> 2.30.2
+> 
