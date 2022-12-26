@@ -2,90 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EB66563C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A59C6563C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 16:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiLZPR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 10:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S229554AbiLZPRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 10:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiLZPRW (ORCPT
+        with ESMTP id S229581AbiLZPRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Dec 2022 10:17:22 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4D92BF4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:17:20 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id g14so11408041ljh.10
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:17:20 -0800 (PST)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0866147
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:17:21 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id o6so16285515lfi.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 07:17:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NE9vhGolKZh4qk6h13gH/hif2BGc/nXGsk3gcrABu0s=;
-        b=Snp+V/1JNPEJWCzyjiW0XERLLTqxUhNzRMR7zbzie3Y5TIPw/Tlz0FXyAozn4yu5RH
-         /BC42f+bsjZ6gT4yXvHJ9YcfBFs43KgD8CRFZGunLDgpu0uT/oaPbfXKEtVdBzEpaLN3
-         LrB2mlQX93L30I/tRaEBUVSiuWsyqnniotLc0NnkH+oWRwL72gPS66O4yxi2iav/w+Zd
-         LjK6XdUBdn0Fx49TxCfq3MuhO5puSLKvUDDL2sFHdUnODG60EjXtVdJSQ8CMlpQ6q1J6
-         VQTiSZ2XhHGCx9sWGVweBdfgWVt8y9AMzfMDk+tp0h+wKdCZxInhaR7UmPWOTDcGg+A2
-         vfWQ==
+        bh=1to2uzMb5gHsULNbiAWEZW6gYBOiA4Yrmeu1xgxInA4=;
+        b=NXBSy1TdU7+NwxlykhvA7FOKbXnsZHfX/j0mGpnkIC4SJWoSmcrUjwMERdBwBw2GbK
+         48f8uv/1RWuUdd/+3XisSHcYK3IYNsq5eZjgx4K7XMXqT70i9Jw+NUDBOXFRQjCRDMpX
+         yGTUw+Redr5RTiI6HdSuBEvTPP9v5W3N0pBulhH6fUIhzI8NnFyNehinTtpKLHQacgWX
+         dlZn5CY2jsqGoXT2Nf+gTLugCrkEN7PqoNyO7yQ5C/ECU/3dVMdRhyPbtbN83XD2MvTw
+         Xz7Pv5cNH9CCfCuBmYNRJZL8byRyJqBL2XH8iPio4sQnJuG0JmS2B/mvHKAgra2lEoiQ
+         l6Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NE9vhGolKZh4qk6h13gH/hif2BGc/nXGsk3gcrABu0s=;
-        b=L14qEEaRYaWyjCwgAPnHPioJtJJiC9v1qTDRRNXCr1SDtZZuSzDVNwhgUBaVcwdSyS
-         B/3EtYchFInket4DsZ6u1c7JsfdLHkH6iQHQCH74nrFN1fLFPaBe+v+SUFWIP6S9hDzs
-         BLPxTe4a83DEJma3U0DnVhVvH4zioFXrvjzoEQnG34k16TLF/7U09KqnphJNrxqGhxYY
-         v4SytM6/+QIPLC77HTxRVI3mRSkAqX1F5FNouX28rsggtBUBmIyDZ0jGdYR6rU/PkyfU
-         5ncENvJZeUUbJg9V0IngFIAVlYmcaPyx/qQf/BQ1B4JS77JrVYrbn89zznGK06vG8nCJ
-         cObA==
-X-Gm-Message-State: AFqh2kqdj2uZn5pWVxc1O6fNNKRySRjNzrIVmTJsNSN4i8kghwgqS1rq
-        sqiO/jf02im1frHK6LdHD68IBA==
-X-Google-Smtp-Source: AMrXdXuLyt4i7NA9WzbUQrj7oRqYpVf8cgATRPCrU4EG9oywAaIM6lbk0rHTzoFGKzlVMlYlclyIDw==
-X-Received: by 2002:a2e:3c11:0:b0:27f:c557:697a with SMTP id j17-20020a2e3c11000000b0027fc557697amr377016lja.53.1672067839073;
+        bh=1to2uzMb5gHsULNbiAWEZW6gYBOiA4Yrmeu1xgxInA4=;
+        b=ODLIniDSaRczd9tG8wf0LKIUGFeJxdYg3gJNOag8jHGeq2lAMQuVEieFEid+iNbtkk
+         KxGgH7ggeDHM6JXFJ/IQ5cnOKWjEVjjPb1GPL8i4x2McUeMHs5jmjoz0fMIUZXQVQc4R
+         LFwzVd78XbfN0J/VRCnotJ3Pgg8jDmmoYp6Xp0WlVZKxjZCBWOfBOGCn80XBu7hUa5CN
+         uPJL+PnqxD657tmR+bBFKqFxITnW58d0nGZKp5mGBRX/mNrOsNniXhEPWaW7hzpOOSRi
+         zeVQRNUKhn+IE2UWc0MNbOCPZGpGer/HpQBYW+bXv9A0wQhUvGCsiRw0ahU0YIWUsyn9
+         3/hw==
+X-Gm-Message-State: AFqh2kqmKURagPEoAGPUD9KYrVYonwV8krQ/13pkg+7qYQADxkqSQst/
+        BqfPL9bMrRhG9WSCV1dWg+B5vlhwvXSPjJiX
+X-Google-Smtp-Source: AMrXdXs7tlGeEaGy2jmnzVoJYfmxn+y+eVvTdm0w/Qdq2IMJbQV7aYtK3lNsiaeQVsaa/70GTTvfXQ==
+X-Received: by 2002:a05:6512:3589:b0:4b1:feb:a338 with SMTP id m9-20020a056512358900b004b10feba338mr5155597lfr.46.1672067839969;
         Mon, 26 Dec 2022 07:17:19 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k2-20020ac24562000000b004b4ea0f4e7fsm1821286lfm.299.2022.12.26.07.17.18
+        by smtp.gmail.com with ESMTPSA id k2-20020ac24562000000b004b4ea0f4e7fsm1821286lfm.299.2022.12.26.07.17.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 07:17:18 -0800 (PST)
+        Mon, 26 Dec 2022 07:17:19 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] arm64: dts: exynos: use 8-bit for SPI IR LED duty-cycle in TM2
-Date:   Mon, 26 Dec 2022 16:17:12 +0100
-Message-Id: <167206781676.20416.5753749208705846208.b4-ty@linaro.org>
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFT 1/3] arm64: dts: exynos: drop pwm-names from MAX77843 haptic in TM2
+Date:   Mon, 26 Dec 2022 16:17:13 +0100
+Message-Id: <167206781676.20416.12002120244036112733.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221204104242.117558-1-krzysztof.kozlowski@linaro.org>
-References: <20221204104242.117558-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221204113839.151816-1-krzysztof.kozlowski@linaro.org>
+References: <20221204113839.151816-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 4 Dec 2022 11:42:42 +0100, Krzysztof Kozlowski wrote:
-> The 'duty-cycle' of SPI IR LED property is u8:
+On Sun, 4 Dec 2022 12:38:37 +0100, Krzysztof Kozlowski wrote:
+> MAX77843 haptici driver does not take 'pwm-names' property:
 > 
->   exynos/exynos5433-tm2e.dtb: irled@0: duty-cycle:0: [0, 0, 0, 60] is too long
+>   exynos5433-tm2.dtb: pmic@66: motor-driver: 'pwm-names' does not match any of the regexes: 'pinctrl-[0-9]+'
 > 
 > 
 
 Applied, thanks!
 
-[1/1] arm64: dts: exynos: use 8-bit for SPI IR LED duty-cycle in TM2
-      https://git.kernel.org/krzk/linux/c/254b8f4b219211e1e2fb6c91edd96aa583c78720
+[1/3] arm64: dts: exynos: drop pwm-names from MAX77843 haptic in TM2
+      https://git.kernel.org/krzk/linux/c/0f2d502c32d9bf3e26a9a8fc865bae945b15ecf2
+[2/3] arm64: dts: exynos: drop clock-frequency from CPU nodes in TM2
+      https://git.kernel.org/krzk/linux/c/82d865b5da8786237b0b700e31b468a20dbd5c4c
+[3/3] arm64: dts: exynos: correct properties of MAX98504 in TM2
+      https://git.kernel.org/krzk/linux/c/0d6460bc6f4ced858bf099f198ea5b02ffcff4d7
 
 Best regards,
 -- 
