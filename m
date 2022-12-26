@@ -2,95 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DCC656067
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49424656069
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 07:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbiLZG3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 01:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        id S231736AbiLZGaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 01:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbiLZG3G (ORCPT
+        with ESMTP id S231672AbiLZG3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 01:29:06 -0500
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324922721;
-        Sun, 25 Dec 2022 22:29:05 -0800 (PST)
+        Mon, 26 Dec 2022 01:29:41 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5685F8E;
+        Sun, 25 Dec 2022 22:29:16 -0800 (PST)
 Received: from toolbox.int.toradex.com ([213.55.224.88]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M7ZR3-1oy3BU45KB-00xGnx;
- Mon, 26 Dec 2022 07:28:52 +0100
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LnyM2-1oco4W2UPY-00g0XW;
+ Mon, 26 Dec 2022 07:28:57 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Li <Frank.Li@nxp.com>,
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
+        Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Peng Fan <peng.fan@nxp.com>, Rob Herring <robh+dt@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/5] arm64: dts: freescale: imx8-ss-dma: set lpspi0 max frequency to 60mhz
-Date:   Mon, 26 Dec 2022 07:28:21 +0100
-Message-Id: <20221226062824.53113-4-marcel@ziswiler.com>
+Subject: [PATCH v1 4/5] dt-bindings: arm: fsl: add toradex,apalis-imx8 et al.
+Date:   Mon, 26 Dec 2022 07:28:22 +0100
+Message-Id: <20221226062824.53113-5-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221226062824.53113-1-marcel@ziswiler.com>
 References: <20221226062824.53113-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:mX+NwCoKzly8YDShwLrPiykPYlu1ZZ8hdnLoY/LvolpMjFIHtIA
- k59rkxzevjN27sip+hTpd9V1iFIcZvGom2VufJnykLEA2CQnF7ne91y0D+5RpHHfmIOWl50
- fNHz9NH789LQjrxF1puPLKcAfsaoyLioHgfDj4w/vsomOnJMLqzUJJdx/sStICIparoGxIe
- 6bBSgzEdNkvhOH4HnRiaw==
-UI-OutboundReport: notjunk:1;M01:P0:C5jOOl+uNDU=;DTdXVGdHU08tLOEy5cfZ2NL9II6
- xOeO5ARdr8iTCqMYzCgbI+AOtmZnxCmcsI00MgWNNV8Gvn0WvpgZqZ7VXm152t69fINsRob7I
- Zzwo8r1S2HJSItZgOqQgqH87TCsls1+WEt6fNj2buu4lDEHUqo65YRNHus6/rqYjHyssOE9zj
- A82d5bCvb8LC2scbiAqfBCIJa1fgeCcz8UXmfvVYvHqiU5MiVjq5Kbqze6fe0Ip4dRNoTL+mk
- 7euAjGEWYdb67WZRu9Aa1Ufzq+eFWArExrSz8uOB4Pdsuf4Gyn4CdmIdXiuhbJYnOwT5qnoOr
- S3MaQAWybNRqhm3x6isKxZg8KFpeJNpeCerFYYVIJU5enDKMJ3ruTgglBQOVbFsxqo2TyOSvn
- BuaB5LJastXeDzpUd4llFgaHWBdleV0ViPkH2Eg4jVXGFYvj8jlQNIKTHuPDRNf8UYFgCXWYO
- kQMwh8TjzJbDy7TkNRxM88ZHZizgw6MxWeQfKR3cQ0kmkpQEhevOZu2/9sJ1bUBHqc8ID2FpT
- kdta4203X3fRAQLCxJT6NnH03hbxA4XGBmYgddK5Loy6IbJ4vnY1VDajrJImA6D2IRgfSQTlQ
- T83BeygP9/ESMs4UNOoWF6odFM3NCKN4sEwh8SulfosOGTZsVwyKredYlcbSF5KH3c+QPrqxL
- 5mS241RbkL4aBGvI94ig5dT6FApHok9bCsLsvFmnAg==
+X-Provags-ID: V03:K1:YfcOHUI4zLCZ01BIL0cERKXjNgxgTBxsAdXKvB01ZAyXo7JoUcP
+ y7pOnSnWC22LqhA6VYNi2Das17uFYp4/xmTchA+KO48EsC1BzVrHNItQyYDuPDmU8OaVc1e
+ yGI/NpPXYxUKsoYO+Oxq9OV/BZKlv3xtDM3gMzTcBSNyf12LChyoWkV6vfANe4dk4uWltgA
+ 6wNd52g8rMY3+rQ3n6Ngw==
+UI-OutboundReport: notjunk:1;M01:P0:/XG4OYaBPrA=;GcAxdGVu4blLOR5OBnSYMaydRxL
+ rvXAbHLzzs6sqJ4ya9Cskio5DdjAGPs/6Ns4PDc/Eeqk8ONbfxZyRH8cNRJOgFSY8Dqf5Lksj
+ mLWmSl2Yx1D/BItLdlpBByNcoGCndggnB0HhHtSY5UUuJruCUIy052GDhygvl+DIeqXY16MLS
+ 2DFGAzg7R8BjhmoqPfd+xmgPtLAON74vKKmXVUpuSg5cc2Ko8nZlC8qQRQEHaQ/PZIi1nJdEI
+ qBnfrVrq3UiX1sLzVOtI6QCe02A6AcVeK26FDXHyseDS5ApXxsygXGFGDRh7EBemRcWalB2AQ
+ neUwWT+ZxR/O1G8hK0MDt1RW8gfia7xOtHWS2iZkwoIIqiiYEcR1GkRvea1K4yt5nIn6sJux8
+ 4E3izshfRhNuVbO8PWbrX6FoEn4lgu6spyAPLEkkIqI8GyGodv1et4/5uw2N4VA7z/RNcvKmz
+ Wd0BWMEKar8p9ekK4HozTcLtCIrvGOKZd4TaTYNAIkKozJLKzGdc1El7pREqvXCekaReZhkOg
+ ViNyA+H/6GKrcH16d8zQH6QjVuq/nM2L5/gg70SoSq+pCZr9b3yz1bofdNbGqZcZeeRtqnMi6
+ i1kMTIN+EgnxA8wwVYCVE386yM3PIO6WRYVB0wJeMQTlhLbGUggAkoF4GEPBeAKWwB0U210ks
+ 2JOrXh1TwSL2b57/Uvj3OP3CHD6wMqPF/018hgZNtQ==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Schenker <philippe.schenker@toradex.com>
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-60MHz is the maximum frequency mentioned in the datasheet for
-master mode. Set that to 60MHz to match lpspi2.
+Add toradex,apalis-imx8 for the Apalis iMX8 aka QuadMax modules and the
+carrier boards (Apalis Evaluation board as well as Ixora V1.1 and V1.2)
+they may be mated in.
 
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/arm/fsl.yaml | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-index 6e5ef8b69bf8..6ccf926b77a5 100644
---- a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-@@ -31,7 +31,7 @@ lpspi0: spi@5a000000 {
- 			 <&spi0_lpcg 1>;
- 		clock-names = "per", "ipg";
- 		assigned-clocks = <&clk IMX_SC_R_SPI_0 IMX_SC_PM_CLK_PER>;
--		assigned-clock-rates = <20000000>;
-+		assigned-clock-rates = <60000000>;
- 		power-domains = <&pd IMX_SC_R_SPI_0>;
- 		status = "disabled";
- 	};
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 05b5276a0e14..48cccb5e362f 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -1035,6 +1035,18 @@ properties:
+         items:
+           - enum:
+               - fsl,imx8qm-mek           # i.MX8QM MEK Board
++              - toradex,apalis-imx8      # Apalis iMX8 Modules
++          - const: fsl,imx8qm
++
++      - description: i.MX8QM Boards with Toradex Apalis iMX8 Modules
++        items:
++          - enum:
++              - toradex,apalis-imx8-eval            # Apalis iMX8 Module on Apalis Evaluation Board
++              - toradex,apalis-imx8-v1.1-eval       # Apalis iMX8 V1.1Module on Apalis Eval. Board
++              - toradex,apalis-imx8-ixora-v1.1      # Apalis iMX8 Module on Ixora V1.1 Carrier Board
++              - toradex,apalis-imx8-v1.1-ixora-v1.1 # Apalis iMX8 V1.1 Module on Ixora V1.1 C. Board
++              - toradex,apalis-imx8-v1.1-ixora-v1.2 # Apalis iMX8 V1.1 Module on Ixora V1.2 C. Board
++          - const: toradex,apalis-imx8
+           - const: fsl,imx8qm
+ 
+       - description: i.MX8QXP based Boards
 -- 
 2.35.1
 
