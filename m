@@ -2,126 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E02D656513
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 22:04:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A40656516
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 22:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbiLZVEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 16:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
+        id S232217AbiLZVK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 16:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiLZVEE (ORCPT
+        with ESMTP id S229522AbiLZVKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 16:04:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2CF1144
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 13:04:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3771B80D41
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 21:04:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32541C433EF;
-        Mon, 26 Dec 2022 21:04:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672088640;
-        bh=RrC2UFeJ5OcV6CtCFnGV1SEMl0pRTD3ZrD0EjoM85ZM=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=PxQS6MshRotttfQfYFz4wHOtKM+FM5xX3PHNogxCpCppj6zOIBOOtZfbS3w38r2k9
-         hzMc/5kiBULmF9fdrauS8SI9hnRecxGs5mW/28cZFkj4CzoZyRTELDaDQ0XBgeKFu/
-         Q0PyJpILMI8w8zATYsY9zzuJTK+tai2/N3Jtp+zoYRvokGM+NnkfzbRmlYA+KDKJ+K
-         2YSToyVA4D5F4Qfo2krx4JtqBF2z3avmMkny8ZLYVM4RfqTAyn6PP/4dV45aI187v2
-         DS+UwPyrcqVhBwZA8OjFmvTC9ZMplTbprhjAonsek/EeEiFJeqMn5lgV2aFCSPsZoC
-         g2bHJv8AoVcEA==
-Date:   Mon, 26 Dec 2022 13:03:59 -0800
-From:   Kees Cook <kees@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mon, 26 Dec 2022 16:10:55 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EEA2C9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 13:10:52 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-46198b81e5eso162000377b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 13:10:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=J42NUGnXu0h1Bk+E7TEH0cHs4zW3jQgz63YOfaT6R4o=;
+        b=fby4OLKH151VRJ789hGfQSzmSqrajYxiS1+T9qg9bHTp+RXOFP/V3aRAhFJUl5vWPZ
+         1ykwsyhFC5LgVppphf7/qcAbKo2P6zoINlbpSWIy8K1tz2j0Rzqy6/J9ImNUMRBZ2uA0
+         vmRJ82oh0K1rykgKC9Ha8M6/RD8vgkiP+QAKMPKjFX5W9OylsOYJuxJICNYwqasd/gOa
+         dDZO/HNF6Bl0+U3M7+n+4gHQ8/5vJvlbLrh2OBmu9hU5gjuhAxjeG3uSbnqXFtuKfF6e
+         FNA7ZSd3YeCbMaTXfahRF9AxA+smQVAKaH2f9TuNPYKJD3nlvleMCjKsK+KeoGWCPkZa
+         A2Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J42NUGnXu0h1Bk+E7TEH0cHs4zW3jQgz63YOfaT6R4o=;
+        b=UxCvWS68h6rJ1BeIwM6WA4bIuP7+IGPP96h4BUT3QE3U1Sm1EEvWNz0NsXeHKQM7tK
+         13pwQgTioobEtiRENccJXDrsbpBCTVQwCWNMXP7hrK/tpxJyvWU+yVo2osY8E7oBqD9E
+         0oQWAa+mCRNCOuhjcVfAkBUQOX2/nLQay5FWDL1wSEoLbqQrYRbEdqdtyD/JtH6CVTgw
+         km/qFAc4hsfjwNO82eBXcSsVfXamKxCKMJIxRWzxVJ4jbXtIiQQnZAHru5kxorQ+7X+9
+         e9sVJ4JUMw1sW98AP7Twt1tLMaOis85mUzAWhM/wlBp2Q4ElAqBVwxGOMHxGSujLlw4q
+         hcnA==
+X-Gm-Message-State: AFqh2kp4G6Zk8lXq91E9wSuIqn6E/YiXY/4nurAL9wDDissAhCHy/Y9e
+        z5jykNv7m8mykl5VQx4ceEw+4zG2pVpn/2gdAsw=
+X-Google-Smtp-Source: AMrXdXuaO5nlhJdGAif73syg1E/b8OKy2N1GeWi2BHkG+X5AvoIJrKTqDG8y7z95SzhUZk0+NNnvIaLtU1OB++fu638=
+X-Received: by 2002:a05:690c:444:b0:3b6:4fa2:1a10 with SMTP id
+ bj4-20020a05690c044400b003b64fa21a10mr2295613ywb.48.1672089051413; Mon, 26
+ Dec 2022 13:10:51 -0800 (PST)
+MIME-Version: 1.0
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+ <20221226195206.GA2626419@roeck-us.net>
+In-Reply-To: <20221226195206.GA2626419@roeck-us.net>
+From:   Max Filippov <jcmvbkbc@gmail.com>
+Date:   Mon, 26 Dec 2022 13:10:40 -0800
+Message-ID: <CAMo8BfKR2quFYBKmVdgmFfhP0y2jCTwKB7Det9o0a6PYuJkP3A@mail.gmail.com>
+Subject: Re: Linux 6.2-rc1
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Peter Zijlstra <peterz@infradead.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Kees Cook <keescook@chromium.org>
-Subject: Re: Linux 6.2-rc1
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAHk-=whD1zMyt4c7g6-+tWvVweyb-6oHMT_+ZVHqe1EXwtFpCQ@mail.gmail.com>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com> <20221226195206.GA2626419@roeck-us.net> <CAHk-=whD1zMyt4c7g6-+tWvVweyb-6oHMT_+ZVHqe1EXwtFpCQ@mail.gmail.com>
-Message-ID: <DA632860-284E-4923-8863-9D2745DD289E@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On December 26, 2022 12:56:29 PM PST, Linus Torvalds <torvalds@linux-founda=
-tion=2Eorg> wrote:
->On Mon, Dec 26, 2022 at 11:52 AM Guenter Roeck <linux@roeck-us=2Enet> wro=
-te:
->>
->> fs/f2fs/inline=2Ec: In function 'f2fs_move_inline_dirents':
->> include/linux/fortify-string=2Eh:59:33: error: '__builtin_memset' point=
-er overflow between offset [28, 898293814] and size [-898293787, -1] [-Werr=
-or=3Darray-bounds]
->> fs/f2fs/inline=2Ec:430:9: note: in expansion of macro 'memset'
->>   430 |         memset(dst=2Ebitmap + src=2Enr_bitmap, 0, dst=2Enr_bitm=
-ap - src=2Enr_bitmap);
->>       |         ^~~~~~
+On Mon, Dec 26, 2022 at 12:44 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> xtensa:allmodconfig
 >
->Well, that's unfortunate=2E
-
-I'll look into this=2E
-
-> [=2E=2E=2E]
->> Not exactly a regression, but worth mentioning:
->>
->> CONFIG_MEMCPY_KUNIT_TEST now sometimes takes several minutes to
->> execute in qemu=2E On top of that, it may result in hung task timeouts
->> if the hung task timeout is set to low values (45 seconds and below)=2E
->> Example, seen with s390:
->>
->> =2E=2E=2E
->> [   18=2E494320]     ok 2 memcpy_test
->> [   52=2E969037]     ok 3 memcpy_large_test
->> =2E=2E=2E
->> [   52=2E974505]     ok 4 memmove_test
->> [   87=2E325400]     ok 5 memmove_large_test
->> [  143=2E562760] INFO: task swapper/0:1 blocked for more than 46 second=
-s=2E
->> =2E=2E=2E
->> [  143=2E564441] Call Trace:
->> [  143=2E564689]  [<0000000000f1ec80>] __schedule+0x370/0x720
->> [  143=2E565175]  [<0000000000f1f098>] schedule+0x68/0x110
->> [  143=2E565374]  [<0000000000f278d4>] schedule_timeout+0xc4/0x160
->> [  143=2E565603]  [<0000000000f1fde2>] __wait_for_common+0xda/0x250
->> [  143=2E565816]  [<0000000000903c90>] kunit_try_catch_run+0x98/0x178
->> [  143=2E566029]  [<0000000000f05c9c>] kunit_run_case_catch_errors+0x7c=
-/0xb8
->> [  143=2E566956]  [<00000000009023c0>] kunit_run_tests+0x220/0x638
->> =2E=2E=2E
->>
->> That is too much for my test bed=2E I dropped this test as result=2E Th=
-is means
->> that extending the tests has, at least in the context of my testing, th=
-e
->> opposite effect=2E
+> Building xtensa:allmodconfig ... failed
+> --------------
+> Error log:
+> kernel/kcsan/kcsan_test.c: In function '__report_matches':
+> kernel/kcsan/kcsan_test.c:257:1: error: the frame size of 1680 bytes is larger than 1536 bytes
 >
->Kees? This indeed seems counter-productive=2E=2E
+> Bisect for both points to commit e240e53ae0abb08 ("mm, slub: add
+> CONFIG_SLUB_TINY").  Reverting it on its own is not possible, but
+> reverting the following two patches fixes the problem.
+>
+> 149b6fa228ed mm, slob: rename CONFIG_SLOB to CONFIG_SLOB_DEPRECATED
+> e240e53ae0ab mm, slub: add CONFIG_SLUB_TINY
+>
+> Context: CONFIG_SLUB_TINY is enabled with allmodconfig builds.
+> This enables some previously disabled configurations and disables
+> some previously enabled configurations. Not sure if that is a good
+> thing or a bad thing, but it does result in the above errors.
 
-Hrm, that is not supposed to take THAT long=2E=2E=2E But yes a cross-arxh =
-qemu run would be slow=2E :(
+For xtensa I've posted the following fix:
+https://lore.kernel.org/lkml/20221223074238.4092772-1-jcmvbkbc@gmail.com/
+I suspect that previously KCSAN was disabled in allmodconfig builds for xtensa.
 
-The changes there were to help find any future memcpy problem (like seen w=
-hile porting the i386 memcpy asm=2E=2E=2E) I'll try to get this reduced=2E =
-Dropping the test isn't so great=2E :)
-
-
-
---=20
-Kees Cook
+-- 
+Thanks.
+-- Max
