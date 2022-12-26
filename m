@@ -2,191 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A138656147
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 09:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 769EC65614B
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 09:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbiLZIre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 03:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
+        id S231623AbiLZItV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 03:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbiLZIrb (ORCPT
+        with ESMTP id S231910AbiLZItQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 03:47:31 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64C5103;
-        Mon, 26 Dec 2022 00:47:29 -0800 (PST)
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1ML9yc-1pRnzT1FT8-00IDmA; Mon, 26
- Dec 2022 09:47:26 +0100
-Content-Type: multipart/mixed; boundary="------------ayHqvGI0q04d6op00JQAIbv0"
-Message-ID: <0036622d-53f7-eaba-f720-6dd9bdca28ad@gmx.com>
-Date:   Mon, 26 Dec 2022 16:47:16 +0800
+        Mon, 26 Dec 2022 03:49:16 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E37B1D0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 00:49:14 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id z144so5443569iof.3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 00:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2GeevI+7bf+WdnjCpmvJ+ryR3Rl0w6Jx09kir3h8qMo=;
+        b=A9q8tX198F/2Z/0BSktVTjH8jcNAq1fdLNcR5/WqXtgUvu36TiKPpvatfDNeleCBNv
+         lkNJTFuEQZMnTD9qhgg6HKcGsFqiS9jvvpMSdNyiREwvfRXKbQGuZhkmQAg4Yf9MJBd0
+         0a3PRkzf2unQBF24GU5DTrxglocRfR4jJ/8Ko=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2GeevI+7bf+WdnjCpmvJ+ryR3Rl0w6Jx09kir3h8qMo=;
+        b=2xwUoexNHSRfT/6IDE6/7TM8FreJM9BfaouK5nTQQqoVpaWRFzbIPHwC6RHzmtq8sC
+         Y+DsDMo88x3c9tEpxh9K+PqL9bwryW1lSrrKlYZDVCTsASk0oMmAa8ypUCZfYjBVHjJ+
+         J9UUcnND0VeGzhCnv1z+O9IGkfHAug2snXibFELyO0x+wmolQTHBE0QWZhKS6kShXR9c
+         WUXLwZFWa8ImhQbqj1Y+BYQPTKt7ye0ifGO3I718zsqr5mDwRjIi43EMBVzkYWX/kni0
+         1bjIUMdih8ANBxeGDtadxtkdFD7b6Tg9ZI8je4f/r8ESiJcKyM3uy9RlaU88OKSnfSvZ
+         tN2w==
+X-Gm-Message-State: AFqh2kqhisiu/bgqn+Io6c94PLmgPxIg0YoF83HwCWTOnzl0fmxyqSGk
+        AcKsGk8fRNy+kGuvpKo2GiLDg8/taylf6cWUyiQzXQ==
+X-Google-Smtp-Source: AMrXdXuoIUzBqmDwKs1PuREjFiXYUco2lpJxyc5dz0d+UodE12xrOWp1ECASRqgdbQyL/HzV1vUTTbOYxbxmKfzXt3E=
+X-Received: by 2002:a6b:7a0a:0:b0:6e9:b3db:b5ce with SMTP id
+ h10-20020a6b7a0a000000b006e9b3dbb5cemr1327069iom.179.1672044553677; Mon, 26
+ Dec 2022 00:49:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     wqu@suse.com, dsterba@suse.com,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-References: <CABXGCsNzVxo4iq-tJSGm_kO1UggHXgq6CdcHDL=z5FL4njYXSQ@mail.gmail.com>
- <f68699c3-ec5e-d8e8-f101-6e9a7020ac81@gmx.com>
- <CABXGCsNrm3ddn3p_ECSRe+yQeoF3KojTFvy-CpXNzi9ADkbnvQ@mail.gmail.com>
- <18b5fa1e-7d1e-4560-c98b-d7ac5fc87c3a@gmx.com>
- <CABXGCsM5y6m=pLX7tyE-RB1yuHEgZh3fxDu5ESfTRxEnW+djZA@mail.gmail.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [6.2][regression] after commit
- 947a629988f191807d2d22ba63ae18259bb645c5 btrfs volume periodical forced
- switch to readonly after a lot of disk writes
-In-Reply-To: <CABXGCsM5y6m=pLX7tyE-RB1yuHEgZh3fxDu5ESfTRxEnW+djZA@mail.gmail.com>
-X-Provags-ID: V03:K1:c/o9oxf5gRtPg6nNIODqSNwpQ+WmR5bFK9QrH3IoQgpaCVRNoNY
- fWByYbEuhHTDqsYKdlMnaCqMpFb2TwvouFPnuc4ig3Xm5jr+Y4U3auFGjmniZKTjdTeWGa+
- caHwEMOqQGLqswKUqCGX5qL6wtfJy83SN0Paam+09cS3F6ZiBBbCmgbH6SGN4TSswiRtUwi
- SbMCGxAFWqQw3/kRO3FLQ==
-UI-OutboundReport: notjunk:1;M01:P0:w188Ug7Ygos=;nNRh2DrG+NfxJBjYvJ1Aatq8wuj
- +CHWE9YJYA4HIy2tRy5vmZp0f/l42Uev50eZjHpqetbZcSR2h9Z7k5wkB/gDnetLlrW8dc/mx
- FpqusZS8tvhmQSLqNxceMw7StsP1KZ3RtK8JErmty2nPTRNLOWLiMcS/5oo/tMSWicG/XfO1t
- PNekl1HouNXVrZwjDU2Xl3I7Y31dve9mqiuOu0CK3wbQL6ZbbCOCwMXx+3Udj+KwERHaYQ0wm
- vBqu4TZLmM/zeF+N+b7l9KmmY6rZUxHI3wQ/+zYW6QtS5vmgPJpV6N1l1mLyvhHRw7Oxgw5r8
- ESHolmxJoZWyvjL8tpIXZNsb7wgWY6AvXmLu0Ayr4Ot+6+VOYAEb9juF5wW/tGmu0QdcitQtP
- r+KxSHUQemCF7y/7Ljd3MznqAx1Lb9IKWrtUAOtLM/CbdQQn06LxxC8qE3FBLeG0tjqIuZSL8
- 6K3gsLhDUjaVYhii60eP2AnaamhETbzXJue855Y7c4JKaO1pY8VUQcvq17HpdOJJrekPIc1WS
- rXvtakBrO7M9rvbmaFKQzmDO9BIZ2aXoaBwuoAYpn8u45j8FNBGk2AMCES0UlTiuAzkLq8AWl
- zliIaD83IxddF5M2F+1ITlvlroSjIcWHlQmoaFhAwqs5geGBj7u341OpcHlJFGa2zh1w6kES2
- pUjWg9F9GTTKDgidI+Vuxwrk8yJbp9Xkh8NesU6KAWMokzfhK0yArOKq8isR5mBLDNJNK8y/w
- bOZkEXh5ZmAy8yzxd/8+MtrGCtFiyUA/MQW6CvGB1iHGmd0ysQQa/Al3O9TjpmuufPF1irHgX
- nllBEK8vuoaNiF8KHKFOyqeOxwkpcwCT/WLNFBtgFdBDT0YKFtZkJAs/5ZAHkOMOHS6NQRof9
- 7EPWlBvc1t9UfxFVRlXbqmEBp6jULjXhH6TCbeR1aLgKyH8qltCxz4ov2zOAp1A7mYP33FA05
- bs5AwH+FGdicy52YlBv6xUbGMkc=
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221124102056.393220-1-treapking@chromium.org>
+ <20221124102056.393220-4-treapking@chromium.org> <00cc31a2-39b1-9bb3-5b79-3c6d51cd5d51@linaro.org>
+In-Reply-To: <00cc31a2-39b1-9bb3-5b79-3c6d51cd5d51@linaro.org>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Mon, 26 Dec 2022 16:49:02 +0800
+Message-ID: <CAEXTbpfhBCWvZCziyc6chR2Vjc=SJSxYfYpdX8gd8PkG4G0+3w@mail.gmail.com>
+Subject: Re: [PATCH v6 3/7] dt-bindings: drm/bridge: anx7625: Add mode-switch support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        dri-devel@lists.freedesktop.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-acpi@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Xin Ji <xji@analogixsemi.com>, Lyude Paul <lyude@redhat.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------ayHqvGI0q04d6op00JQAIbv0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Krzysztof,
 
+Thanks for the review.
 
+On Mon, Nov 28, 2022 at 4:58 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 24/11/2022 11:20, Pin-yen Lin wrote:
+> > Analogix 7625 can be used in systems to switch the DP traffic between
+> > two downstreams, which can be USB Type-C DisplayPort alternate mode
+> > lane or regular DisplayPort output ports.
+> >
+> > Update the binding to accommodate this usage by introducing a
+> > data-lanes and a mode-switch property on endpoints.
+> >
+> > Also include the link to the product brief in the bindings.
+> >
+> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> >
+> > ---
+> >
+> > Changes in v6:
+> > - Remove switches node and use endpoints and data-lanes property to
+> >   describe the connections.
+>
+> Except missing testing few things...
+>
+> >
+> >  .../display/bridge/analogix,anx7625.yaml      | 73 ++++++++++++++++++-
+> >  1 file changed, 71 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > index 4590186c4a0b..5fdbf1f3bab8 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> > @@ -12,7 +12,8 @@ maintainers:
+> >
+> >  description: |
+> >    The ANX7625 is an ultra-low power 4K Mobile HD Transmitter
+> > -  designed for portable devices.
+> > +  designed for portable devices. Product brief is available at
+> > +  https://www.analogix.com/en/system/files/AA-002291-PB-6-ANX7625_ProductBrief.pdf
+> >
+> >  properties:
+> >    compatible:
+> > @@ -112,10 +113,36 @@ properties:
+> >                data-lanes: true
+> >
+> >        port@1:
+> > -        $ref: /schemas/graph.yaml#/properties/port
+> > +        $ref: /schemas/graph.yaml#/properties/port-base
+>
+> I don't understand why you are changing this line.
 
-On 2022/12/26 16:15, Mikhail Gavrilov wrote:
-> On Mon, Dec 26, 2022 at 8:29 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
->>
->>
->> OK, indeed a level mismatch.
->>
->>   From the remaining lines, it shows we're failing at
->> do_free_extent_accounting(), which failed at the btrfs_del_csums().
->>
->> And inside btrfs_del_csums(), what we do are all regular btree
->> operations, thus the tree level check should work without problem.
->>
->> Thus it seems to be a corrupted csum tree.
-> 
-> Do I need to debug anything else to understand the cause of the error?
-> Thanks.
+Without this change, the `unevaluatedProperties: false` in
+`/schemas/graph.yaml#/properties/port` does not allow me to add new
+properties.
+>
+> >          description:
+> >            Video port for panel or connector.
+> >
+> > +        patternProperties:
+> > +          "^endpoint@[01]$":
+> > +            $ref: /schemas/media/video-interfaces.yaml#
+> > +            type: object
+> > +            unevaluatedProperties: false
+> > +
+> > +            properties:
+> > +              reg:
+> > +                maxItems: 1
+> > +
+> > +              remote-endpoint: true
+> > +
+> > +              data-lanes:
+> > +                minItems: 1
+> > +                uniqueItems: true
+>
+> These are confusing... you allow only one item, so why minItems and
+> uniqueItems?
 
-With the check output, it's indeed a runtime error.
-(At least no corruption to your fs)
+What I want to use is something like:
+```
+items:
+  enum: [0,1, 2, 3]
+```
+That is, all the items should be an integer between 0 and 3. I'll
+update this to a stricter version in v7.
+>
+> > +                items:
+> > +                  - enum: [ 0, 1, 2, 3]
+> > +
+> > +              mode-switch:
+> > +                type: boolean
+> > +                description: Register this node as a Type-C mode switch or not.
+> > +
+> > +            required:
+> > +              - reg
+> > +              - remote-endpoint
+> > +
+> >      required:
+> >        - port@0
+> >        - port@1
+> > @@ -186,3 +213,45 @@ examples:
+> >              };
+> >          };
+> >      };
+> > +  - |
+> > +    &i2c3 {
+> > +     anx_bridge_dp: anx7625-dp@58 {
+>
+> Messed up indentation.
+I'll fix this in the next version.
+>
+> > +         compatible = "analogix,anx7625
+>
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+I'll update this in v7.
+>
+> ";
+> > +         reg = <0x58>;
+>
+> Best regards,
+> Krzysztof
+>
 
-And it can be some call paths not properly initializing the level to check.
-
-Here is the new debug patch.
-It should be applied without any previous debug patch.
-
-Thanks,
-Qu
-
-
-> 
->> Could you please run "btrfs check --readonly" from a liveCD?
->> There are tons of possible false alerts if ran on a RW mounted fs.
->>
-> 
-> # btrfs check --readonly /dev/nvme0n1p3
-> Opening filesystem to check...
-> Checking filesystem on /dev/nvme0n1p3
-> UUID: 40e0b5d2-df54-46e0-b6f4-2f868296271d
-> [1/7] checking root items
-> [2/7] checking extents
-> [3/7] checking free space tree
-> [4/7] checking fs roots
-> [5/7] checking only csums items (without verifying data)
-> [6/7] checking root refs
-> [7/7] checking quota groups skipped (not enabled on this FS)
-> found 6828416307200 bytes used, no error found
-> total csum bytes: 6651838248
-> total tree bytes: 16378380288
-> total fs tree bytes: 7483179008
-> total extent tree bytes: 1228210176
-> btree space waste bytes: 2413299694
-> file data blocks allocated: 6899999100928
->   referenced 7488299450368
-> [root@localhost-live ~]#
-> 
-> With liveCD looks like all OK (no errors found).
-> 
---------------ayHqvGI0q04d6op00JQAIbv0
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-btrfs-add-extra-debug-for-level-mismatch.patch"
-Content-Disposition: attachment;
- filename="0001-btrfs-add-extra-debug-for-level-mismatch.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSBjOTkzMmQ0MDU5NGRhNjA2NTEyNWI3NmI1NWJkOWNlYTFmYWJjODEyIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpNZXNzYWdlLUlkOiA8Yzk5MzJkNDA1OTRkYTYwNjUxMjViNzZi
-NTViZDljZWExZmFiYzgxMi4xNjcyMDQ0MzkyLmdpdC53cXVAc3VzZS5jb20+CkZyb206IFF1
-IFdlbnJ1byA8d3F1QHN1c2UuY29tPgpEYXRlOiBNb24sIDI2IERlYyAyMDIyIDE2OjQ0OjA4
-ICswODAwClN1YmplY3Q6IFtQQVRDSF0gYnRyZnM6IGFkZCBleHRyYSBkZWJ1ZyBmb3IgbGV2
-ZWwgbWlzbWF0Y2gKCkN1cnJlbnRseSBJIGFzc3VtZSB0aGVyZSBpcyBzb21lIHJhY2Ugb3Ig
-dW5pbml0aWFsaXplZCB2YWx1ZSBmb3IKY2hlY2s6OmxldmVsLgoKVGhlIGV4dHJhIG91dHB1
-dCBhcmUgZm9yIHR3byBsb2NhdGlvbnM6CgotIHZhbGlkYXRlX2V4dGVudF9idWZmZXIoKQog
-IE91dHB1dCB0aGUgZXJyb3IgbWVzc2FnZSBmb3IgcmVhZCBlcnJvciBhbmQgdGhlIG1lbWJl
-cnMgb2YgY2hlY2suCgotIHJlYWRfZXh0ZW50X2J1ZmZlcl9wYWdlcygpCiAgVGhpcyB3aWxs
-IGR1bXAgdGhlIHN0YWNrIGZvciB1cyB0byBjYXRjaCB0aGUgb2ZmZW5kZXIuCgpTaWduZWQt
-b2ZmLWJ5OiBRdSBXZW5ydW8gPHdxdUBzdXNlLmNvbT4KLS0tCiBmcy9idHJmcy9kaXNrLWlv
-LmMgICB8IDE1ICsrKysrKysrKysrKystLQogZnMvYnRyZnMvZXh0ZW50X2lvLmMgfCAxMiAr
-KysrKysrKysrKy0KIDIgZmlsZXMgY2hhbmdlZCwgMjQgaW5zZXJ0aW9ucygrKSwgMyBkZWxl
-dGlvbnMoLSkKCmRpZmYgLS1naXQgYS9mcy9idHJmcy9kaXNrLWlvLmMgYi9mcy9idHJmcy9k
-aXNrLWlvLmMKaW5kZXggZjhiNTk1NWYwMDNmLi42MmU2YWQ5MDliMTkgMTAwNjQ0Ci0tLSBh
-L2ZzL2J0cmZzL2Rpc2staW8uYworKysgYi9mcy9idHJmcy9kaXNrLWlvLmMKQEAgLTUzMCw2
-ICs1MzAsMTAgQEAgc3RhdGljIGludCB2YWxpZGF0ZV9leHRlbnRfYnVmZmVyKHN0cnVjdCBl
-eHRlbnRfYnVmZmVyICplYiwKIAl9CiAKIAlpZiAoZm91bmRfbGV2ZWwgIT0gY2hlY2stPmxl
-dmVsKSB7CisJCWJ0cmZzX2VycihlYi0+ZnNfaW5mbywKKyJsZXZlbCB2ZXJpZnkgZmFpbGVk
-IG9uIGxvZ2ljYWwgJWxsdSBtaXJyb3IgJXUgd2FudGVkICV1IGZvdW5kICV1IiwKKwkJCSAg
-ZWItPnN0YXJ0LCBlYi0+cmVhZF9taXJyb3IsIGNoZWNrLT5sZXZlbCwKKwkJCSAgZm91bmRf
-bGV2ZWwpOwogCQlyZXQgPSAtRUlPOwogCQlnb3RvIG91dDsKIAl9CkBAIC01ODEsMTMgKzU4
-NSwyMCBAQCBzdGF0aWMgaW50IHZhbGlkYXRlX2V4dGVudF9idWZmZXIoc3RydWN0IGV4dGVu
-dF9idWZmZXIgKmViLAogCWlmIChmb3VuZF9sZXZlbCA+IDAgJiYgYnRyZnNfY2hlY2tfbm9k
-ZShlYikpCiAJCXJldCA9IC1FSU87CiAKK291dDoKIAlpZiAoIXJldCkKIAkJc2V0X2V4dGVu
-dF9idWZmZXJfdXB0b2RhdGUoZWIpOwotCWVsc2UKKwllbHNlIHsKIAkJYnRyZnNfZXJyKGZz
-X2luZm8sCiAJCSJyZWFkIHRpbWUgdHJlZSBibG9jayBjb3JydXB0aW9uIGRldGVjdGVkIG9u
-IGxvZ2ljYWwgJWxsdSBtaXJyb3IgJXUiLAogCQkJICBlYi0+c3RhcnQsIGViLT5yZWFkX21p
-cnJvcik7Ci1vdXQ6CisJCWJ0cmZzX2VycihlYi0+ZnNfaW5mbywKKyJjaGVjayBvd25lcl9y
-b290PSVsbHUgdHJhbnNpZD0lbGx1IGZpcnN0X2tleT0oJWxsdSAldSAlbGx1KSBoYXNfZmly
-c3Rfa2V5PSVkIGxldmVsPSV1IiwKKwkJCSAgY2hlY2stPm93bmVyX3Jvb3QsCisJCQkgIGNo
-ZWNrLT50cmFuc2lkLCBjaGVjay0+Zmlyc3Rfa2V5Lm9iamVjdGlkLAorCQkJICBjaGVjay0+
-Zmlyc3Rfa2V5LnR5cGUsIGNoZWNrLT5maXJzdF9rZXkub2Zmc2V0LAorCQkJICBjaGVjay0+
-aGFzX2ZpcnN0X2tleSwgY2hlY2stPmxldmVsKTsKKwl9CiAJcmV0dXJuIHJldDsKIH0KIApk
-aWZmIC0tZ2l0IGEvZnMvYnRyZnMvZXh0ZW50X2lvLmMgYi9mcy9idHJmcy9leHRlbnRfaW8u
-YwppbmRleCA4M2RkM2FhNTk2NjMuLjVmMjY3MzQ1ZWY5NCAxMDA2NDQKLS0tIGEvZnMvYnRy
-ZnMvZXh0ZW50X2lvLmMKKysrIGIvZnMvYnRyZnMvZXh0ZW50X2lvLmMKQEAgLTUwMDUsOCAr
-NTAwNSwxOCBAQCBpbnQgcmVhZF9leHRlbnRfYnVmZmVyX3BhZ2VzKHN0cnVjdCBleHRlbnRf
-YnVmZmVyICplYiwgaW50IHdhaXQsIGludCBtaXJyb3JfbnVtLAogCWZvciAoaSA9IDA7IGkg
-PCBudW1fcGFnZXM7IGkrKykgewogCQlwYWdlID0gZWItPnBhZ2VzW2ldOwogCQl3YWl0X29u
-X3BhZ2VfbG9ja2VkKHBhZ2UpOwotCQlpZiAoIVBhZ2VVcHRvZGF0ZShwYWdlKSkKKwkJaWYg
-KCFQYWdlVXB0b2RhdGUocGFnZSkpIHsKIAkJCXJldCA9IC1FSU87CisJCQlidHJmc19lcnIo
-ZWItPmZzX2luZm8sCisicmVhZCBmYWlsZWQsIGNoZWNrIG93bmVyX3Jvb3Q9JWxsdSB0cmFu
-c2lkPSVsbHUgaGFzX2ZpcnN0X2tleT0lZCBmaXJzdF9rZXk9KCVsbHUgJXUgJWxsdSkgbGV2
-ZWw9JXUiLAorCQkJCSAgY2hlY2stPm93bmVyX3Jvb3QsIGNoZWNrLT50cmFuc2lkLAorCQkJ
-CSAgY2hlY2stPmhhc19maXJzdF9rZXksCisJCQkJICBjaGVjay0+Zmlyc3Rfa2V5Lm9iamVj
-dGlkLAorCQkJCSAgY2hlY2stPmZpcnN0X2tleS50eXBlLAorCQkJCSAgY2hlY2stPmZpcnN0
-X2tleS5vZmZzZXQsCisJCQkJICBjaGVjay0+bGV2ZWwpOworCQkJZHVtcF9zdGFjaygpOwor
-CQl9CiAJfQogCiAJcmV0dXJuIHJldDsKLS0gCjIuMzkuMAoK
-
---------------ayHqvGI0q04d6op00JQAIbv0--
+Best regards,
+Pin-yen
