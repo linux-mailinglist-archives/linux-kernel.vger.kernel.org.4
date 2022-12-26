@@ -2,145 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA04B65602C
-	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 06:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6B6656032
+	for <lists+linux-kernel@lfdr.de>; Mon, 26 Dec 2022 06:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiLZFkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 00:40:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
+        id S231367AbiLZFrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 00:47:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiLZFks (ORCPT
+        with ESMTP id S229486AbiLZFrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 00:40:48 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97307E8;
-        Sun, 25 Dec 2022 21:40:47 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BQ5UZPa024990;
-        Mon, 26 Dec 2022 05:40:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=aj/dFU/j7P3LxmLkkQI/79Xsrctnv4HD+wCspp1smKw=;
- b=VVPjjM9Xok/UEBBVd/7Qpl+1lM70iY6bkUicD8edkeJETTGzJ7Lbf6b2Mh25i5PRbNzv
- kXySoC5qwby8si2/iLUB1eVl1KiLfZthlpLpNdqoVVHsRulG9uIEXjIBiJBsf3LfYdxS
- xNsa0Lv6X4W5BtA6ANLpj5xtMDebvZJI+V8j3S+8OwU7aoZACvBo2TFuTYkBMYWoFLl2
- kOM6pGzlQ7saa4mhPMZ1cXggaEFb29yyw2ia6/67fXQH++62rUWc3ws0JW/0B4zLzHkm
- 9AUbKvfflRtzU4B0+TYqgsClXaBzs6QvCD7DtWpVRsIuhBGCITinLVMuN65dId89KOcG dg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mnreg2rfc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Dec 2022 05:40:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BQ5eVT1021340
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Dec 2022 05:40:31 GMT
-Received: from [10.216.63.118] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 25 Dec
- 2022 21:40:27 -0800
-Message-ID: <dd9ff450-917d-792d-debc-a504ff6ca8bd@quicinc.com>
-Date:   Mon, 26 Dec 2022 11:10:23 +0530
+        Mon, 26 Dec 2022 00:47:49 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A87260A;
+        Sun, 25 Dec 2022 21:47:48 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so9878031pjj.4;
+        Sun, 25 Dec 2022 21:47:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uLSvcKUr/LzSUoeSULqWf9KKBJSvPiEYMba+dOztS9o=;
+        b=byes3/YMeMFY8pdHEKz8Gs/g8Yy7sGiGQ4Y6gjhniUhuANAyCrF3y06fynIumCQosc
+         esDeoH0ocS1+LUY8jCkoxZ3aDFxyiItmohAl77wacBOEgwMO5+Yuv4Yycx3akTapUiQt
+         AYJNf8Z7wysPsQApsaNsZNw1OwjMIgPvDkT7MMjy7dHLe8DHxf7PpvIfIUWaE+BgPG3b
+         05doglK0ZFJDMOs3sWhbbFl6rVZclTJ4EEsDiqWCCinCorxxX4Fe685tds1pAnY6DiH8
+         fFRlzm0lQviQ6Y2iTakjaFSxccIJ5KBreqSv+PRdPIKkR3ZfUiZxrOi4AgUO6ocWAKCL
+         lOUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uLSvcKUr/LzSUoeSULqWf9KKBJSvPiEYMba+dOztS9o=;
+        b=Lz8RKK7vgITF379G/aILIGQYwF88vAbfHOSYU8dtqTB+/gw6m7zKVi0ktjloWx2P0z
+         IWjgRsk3iuLWNvRtIY/FJGoicNjfvIOVz5X9Yoy4qg4PJblG9tafnbxUvfz8MGzj2fx1
+         l1z3ZQKqoMoMZ6ljSmvhp8pFOKETgcFFvypvKW/pJtR03BBkiLx2X+1N86bu66R5kefk
+         0Ioh4On7clJqhTSdvixIOsXeopKNRgVRDEJtYOnoUof2ls87s2SbgvoMDsFH2c3sggoh
+         Uz7OSd9cU17mHvacWMVMFp0A3HGACovJDHtqcaKLDnyNmwGYcO1/HjSeEG7Hx1uGevHV
+         97UA==
+X-Gm-Message-State: AFqh2kpf6GMTLDOU1wkCRFVyWZJljXmKikxFH41uZ6L+O+BjNohKD+Rb
+        zdUm6tMieymvqxu8ZxEYL1E=
+X-Google-Smtp-Source: AMrXdXuBted3i4+UVKCqyGp2Q7zGVCsdurIC+MAFR9FedgpvSKF7wRz2qQ87sbh7EYngvNMpWlHARg==
+X-Received: by 2002:a05:6a20:9e05:b0:af:9391:449 with SMTP id ms5-20020a056a209e0500b000af93910449mr21599493pzb.45.1672033668239;
+        Sun, 25 Dec 2022 21:47:48 -0800 (PST)
+Received: from localhost.localdomain (1-34-79-176.hinet-ip.hinet.net. [1.34.79.176])
+        by smtp.gmail.com with ESMTPSA id h35-20020a632123000000b004785d99321asm5618242pgh.86.2022.12.25.21.47.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Dec 2022 21:47:47 -0800 (PST)
+From:   Potin Lai <potin.lai.pt@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai.pt@gmail.com>
+Subject: [PATCH 0/2] ARM: dts: aspeed: bletchley: Update Bletchley devicetree
+Date:   Mon, 26 Dec 2022 13:45:33 +0800
+Message-Id: <20221226054535.2836110-1-potin.lai.pt@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] clk: qcom: lpasscc: Add resets for SC7280 audioreach
- clock controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <robh+dt@kernel.org>, <broonie@kernel.org>,
-        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>
-References: <1671618061-6329-1-git-send-email-quic_srivasam@quicinc.com>
- <1671618061-6329-3-git-send-email-quic_srivasam@quicinc.com>
- <efde6373-f788-5c0c-4712-7b9caf7ad3d4@linaro.org>
- <e7edd629-986f-3e64-f9db-5ee68cf4e6f3@quicinc.com>
- <60e388df-cd03-3e88-e9c5-460ebdde29c5@linaro.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <60e388df-cd03-3e88-e9c5-460ebdde29c5@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _y8M7bvYB71A7VqTqbyCWY0WqTTJOr9E
-X-Proofpoint-ORIG-GUID: _y8M7bvYB71A7VqTqbyCWY0WqTTJOr9E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-26_02,2022-12-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 mlxlogscore=999 spamscore=0 clxscore=1015 suspectscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212260047
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Update Bletchley BMC devicetree.
 
-On 12/22/2022 4:14 PM, Krzysztof Kozlowski wrote:
-Thanks for Your Time Krzyszto!!!
-> On 21/12/2022 14:18, Srinivasa Rao Mandadapu wrote:
->> On 12/21/2022 4:09 PM, Krzysztof Kozlowski wrote:
->> Thanks for your time Krzysztof!!!
->>> On 21/12/2022 11:21, Srinivasa Rao Mandadapu wrote:
->>>> The clock gating control for TX/RX/WSA core bus clocks would be required
->>>> to be reset(moved from hardware control) from audio core driver. Thus
->>>> add the support for the reset clocks in audioreach based clock driver.
->>>>
->>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>>> ---
->>>>    drivers/clk/qcom/lpasscc-sc7280.c | 18 ++++++++++++++++++
->>>>    1 file changed, 18 insertions(+)
->>>>
->>>> diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
->>>> index 5c1e17b..d81d81b 100644
->>>> --- a/drivers/clk/qcom/lpasscc-sc7280.c
->>>> +++ b/drivers/clk/qcom/lpasscc-sc7280.c
->>>> @@ -12,10 +12,12 @@
->>>>    #include <linux/regmap.h>
->>>>    
->>>>    #include <dt-bindings/clock/qcom,lpass-sc7280.h>
->>>> +#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
->>> These are bindings for different device.
->> They are not exactly for different device. It's for same device with
->> ADSP enabled platforms.
->>
->> Basically lpassaudiocc-sc7280.c and lpasscorecc-sc7280.c are for legacy
->> path.
->>
->> lpasscc-sc7280.c is for ADSP based AudioReach Solution.
-> I see two different devices:
-> lpasscc@3000000
-> clock-controller@3300000
->
-> clock inputs and outputs are different, so it does not look like for
-> same device.
+Potin Lai (2):
+  ARM: dts: aspeed: bletchley: rename flash1 label
+  ARM: dts: aspeed: bletchley: enable wdtrst1
 
-Actually, even though there are 2 different device nodes, they are being 
-used exclusively.
+ arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-In ADSP enabled path(on same sc7280 based platform it's enabled for some 
-vendors) only lpasscc node is being used
+-- 
+2.31.1
 
-and legacy path nodes are being disabled due to register region conflicts.
-
-Below is the patch for the same:
-https://patchwork.kernel.org/project/linux-arm-msm/patch/1671702170-24781-8-git-send-email-quic_srivasam@quicinc.com/
-
->
-> Best regards,
-> Krzysztof
->
