@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB1C65682B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA148656837
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiL0IHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 03:07:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
+        id S230013AbiL0IK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 03:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiL0IHE (ORCPT
+        with ESMTP id S229844AbiL0IKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 03:07:04 -0500
+        Tue, 27 Dec 2022 03:10:21 -0500
 Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C06633C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:07:01 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id g13so18633404lfv.7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:07:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44E965A6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:10:19 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id y25so18650623lfa.9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:10:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OJ/7FKaYQPbSQfr8IKqXAW5Ibx9zEMr06Yb1xIgzRps=;
-        b=JXlN4p1JR20ckkY81K15D3vNl6qOqL5zutcruCZy/SHUKJcdfVQRNhDvv10crJZRR8
-         XGquJa2AFr4KLIdLCfjeBsib8JLQRtt/LakZITiEDuKKtZFHiw+f2cAY3MVMTCM2h7/j
-         DzL27PwrkjGANH3vRRg4yh/OraSPbD2SGc8MT3JOpDtbb9jWxoA5K3CQN2iVSPI5qOXd
-         ISo4sB6EnTdF6qPtxtUj+aA4lrWhrBD/oJRElE1ErtRPezc3WtysT6ridQpdSdHPA2Xw
-         M/NG0LiQRbTzqkfGmaC6NV4h/GpL6nl7F15PsEGVx+9XWAcsPN8kZUnTrFy2eMQiXikD
-         /H0Q==
+        bh=wCYHbxHWnWYY7tZ4H0UhQ5PUVEgDjPe+BXvjxGYqJRE=;
+        b=I2NrB8W1olYs8aDi8D6AgwGHmQOx6Q6w80is4wEh108GPccO6rvIdd1cdztaHdw6p9
+         LICStazFg0X2HEnszNDnv6fDOsoyA/SPj/golzNIyitKASbSi3LNTOvfLA4Xfkuab3bI
+         MFsXCnZVvRUutwum3+gkpyfBoRIuTDKdS84g6XIx5cDtyZ+YF+ruxFTouBJbr9zgPQqe
+         K+CW2OBjjLP+3sqOGbaTqtOxVnZl4z7rNDWxoL1jWJ3MYDyZaUhVj3zDDDa+nNL4rbE6
+         iHtLGdu8iv0il0VXgPuh+eeYoaOwOFHjh9T9c/mFAzUDRvkFhsZJlgmewXOnV4IRAlVk
+         6k9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJ/7FKaYQPbSQfr8IKqXAW5Ibx9zEMr06Yb1xIgzRps=;
-        b=hQddRSZYxwxI7gNE4hoooOWEPUyaIk5IJyH5P9zo6bvVo6fwsd94RvkviiGaOdXBka
-         CtFw54Ndx1yQT87SZflJnJ/9mW3RCQ+EF33YeSnPfnkbqfoWHxYdyK3moJerMRi9K1IJ
-         yfuVCWpSPGWhLmRi+YDWFFG/CgCJRjRo95A5o8hDzLfMMbDuUdex7KVrNYELokT425Qw
-         Y6c4lxNDcX9oegp8tQrCoetf9kzxGBSQB+ep96AMvExMLv+ZU5+fcsLpmfK6jhd9lMg4
-         QmRmzuRvwB8hsC2VGXFZCLCx4PRh2zh2VhzIZ7rUUi0ZbtcRCH8vWdvKw/Xn75aqFsW8
-         9t4w==
-X-Gm-Message-State: AFqh2koMpPf6gEHJZRTsmOQvDM36NcpjkJibEwRcGToQAU7ssUHnOLS0
-        pdOmltZBE/1LFKAC5LiNLGDevA==
-X-Google-Smtp-Source: AMrXdXuOPt5JMrtcl95yqiO17abJPoW67fI3p5WipJORLY/dTnnw7KGxlUmcQDy458TGWtVsrYHb1g==
-X-Received: by 2002:a05:6512:3c82:b0:4b5:adae:b6be with SMTP id h2-20020a0565123c8200b004b5adaeb6bemr10160824lfv.42.1672128420011;
-        Tue, 27 Dec 2022 00:07:00 -0800 (PST)
+        bh=wCYHbxHWnWYY7tZ4H0UhQ5PUVEgDjPe+BXvjxGYqJRE=;
+        b=WBu9n409ppe3EnXkQJPoIjyz8WXdj4cHXk28iMrz6pQxGO5HaG9PIlHHTt0YQ0Sakf
+         LgVfPOvrIr/tg0XMLNChZ2DgRJqG/8vVx55XOwOJDmOV5wd3+lSXHHuk+gWMe8WFd2fy
+         8CQeD10CVwcMWtOKYU224R3Sr/X/A3qB+5aJHj9sEMPd3GrG2pa07TbtkTlDPNRAr46Z
+         qoVveTOJ1+WAVslmKp2CEVLY1OjFyAxOQ5Aza9M4BRfWM3wj9viqL2+Pskv4j2E+Yr2E
+         uh2KoUASJnsxRKH383n/7bak3MGKgFL0jMnT+mAj83FtNVeKKYog09Nzq7LPNI5yc9p7
+         AVLQ==
+X-Gm-Message-State: AFqh2kojHgMBluRCYi2IC3QO1/xfL5X4T5vb0mOSHdS1MjzOjmTXivvG
+        sQGUPHHUgHohw9lZdIxnQaiTww==
+X-Google-Smtp-Source: AMrXdXt2DIN5Gj2xtHFHBMjJp8E4i8/4isztDv37CttrVPWaAwDqhKA0w9BU/g1FQYRzYxCkMsMnVQ==
+X-Received: by 2002:a05:6512:1116:b0:4a4:68b7:dee8 with SMTP id l22-20020a056512111600b004a468b7dee8mr8042309lfg.68.1672128618052;
+        Tue, 27 Dec 2022 00:10:18 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056512024b00b004b57277474esm2147571lfo.106.2022.12.27.00.06.58
+        by smtp.gmail.com with ESMTPSA id m1-20020a197101000000b004b094730074sm2140275lfc.267.2022.12.27.00.10.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 00:06:59 -0800 (PST)
-Message-ID: <9a2ae843-1cc8-b3c7-1d63-da56547f81c8@linaro.org>
-Date:   Tue, 27 Dec 2022 09:06:58 +0100
+        Tue, 27 Dec 2022 00:10:17 -0800 (PST)
+Message-ID: <7f6a2072-f26b-e2f0-9c07-d2ea43c8c4bc@linaro.org>
+Date:   Tue, 27 Dec 2022 09:10:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [net PATCH 1/2] dt-bindings: net: marvell,orion-mdio: Fix error
+Subject: Re: [net PATCH 2/2] dt-bindings: net: marvell,orion-mdio: Fix
+ examples
 Content-Language: en-US
 To:     =?UTF-8?Q?Micha=c5=82_Grzelak?= <mig@semihalf.com>,
         devicetree@vger.kernel.org
@@ -65,9 +66,9 @@ Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         chris.packham@alliedtelesis.co.nz, netdev@vger.kernel.org,
         upstream@semihalf.com, linux-kernel@vger.kernel.org
 References: <20221227010523.59328-1-mig@semihalf.com>
- <20221227010523.59328-2-mig@semihalf.com>
+ <20221227010523.59328-3-mig@semihalf.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221227010523.59328-2-mig@semihalf.com>
+In-Reply-To: <20221227010523.59328-3-mig@semihalf.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,38 +82,59 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 27/12/2022 02:05, Michał Grzelak wrote:
-> Fix 'unevaluated properties error' during 'make dtbs_check' appearing on
-> arm device trees by defining generic 'ethernet-phy' subnode in
-> marvell,orion-mdio.yaml.
+> As stated in marvell-orion-mdio.txt deleted in 'commit 0781434af811f
+> ("dt-bindings: net: orion-mdio: Convert to JSON schema")' if
 
-Instead of long test just paste a bit of warning message. Much easier to
-read.
+Drop '' quotes.
+
+BTW, read the original binding to find the answer for your first patch.
+
+
+> 'interrupts' property is present, width of 'reg' should be 0x84.
+> Otherwise, width of 'reg' should be 0x4. Fix 'examples:' and extend it
+> by second example from marvell-orion-mdio.txt.
+
+The original binding did not say that, unless you mean giving different
+examples? Examples are not a binding.
 
 > 
-> Fixes: 0781434af811f ("dt-bindings: net: orion-mdio: Convert to JSON
-> schema")
-
-Don't wrap tags.
-
 > Signed-off-by: Michał Grzelak <mig@semihalf.com>
 > ---
->  Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+>  .../devicetree/bindings/net/marvell,orion-mdio.yaml  | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 > 
 > diff --git a/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
-> index d2906b4a0f59..2b2b3f8709fc 100644
+> index 2b2b3f8709fc..d260794e92c5 100644
 > --- a/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
 > +++ b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
-> @@ -35,6 +35,10 @@ properties:
->      minItems: 1
->      maxItems: 4
+> @@ -47,9 +47,10 @@ unevaluatedProperties: false
 >  
-> +patternProperties:
-> +  '^ethernet-phy':
+>  examples:
+>    - |
+> +    // MDIO binding with interrupt
+>      mdio@d0072004 {
+>        compatible = "marvell,orion-mdio";
+> -      reg = <0xd0072004 0x4>;
+> +      reg = <0xd0072004 0x84>;
+>        #address-cells = <1>;
+>        #size-cells = <0>;
+>        interrupts = <30>;
+> @@ -62,3 +63,12 @@ examples:
+>          reg = <1>;
+>        };
+>      };
+> +
+> +  - |
+> +    // MDIO binding without interrupt
+> +    mdio@d0072004 {
+> +      compatible = "marvell,orion-mdio";
+> +      reg = <0xd0072004 0x4>;
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +    };
 
-ethernet-phy@ is already accepted via mdio, so this looks wrong. You
-need to rather fix the DTS.
-
+Why? The same compatible, the same nodes. No differences. Missing pieces
+is not a big difference justifying new example.
 
 Best regards,
 Krzysztof
