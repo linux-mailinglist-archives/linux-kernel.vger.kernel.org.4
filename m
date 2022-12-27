@@ -2,166 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA994656FD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 22:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D569F656FD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 22:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232236AbiL0VKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 16:10:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
+        id S232846AbiL0VKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 16:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbiL0VJW (ORCPT
+        with ESMTP id S232836AbiL0VJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 16:09:22 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B3B26D;
-        Tue, 27 Dec 2022 13:07:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672175221; bh=OL5WJhJ3/ioUTccUP2H6ZJHZm++nEKN5MiFWcaZshkI=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=DP1X3adLdzt3xnBG3I0B9VUWlDhKza6IbdAs40Qoe/bPk3oB4A+eZOBtyvYpW0ppF
-         VKlADVUoLV255aRFH2P6g7Os4xXiKumbLF5yWAhXH6h0IpeuxIs0hsiyIgapKEfIpk
-         Mr/7enpe72LseWOrkj3IG7rGXXGLRNgmbtEqCPJkM9667QYESkhYbLC7f5ugS883do
-         w5wlWUPT0LlOyCXAMnTBZpSRkOHCHDZ1DFEyfp5HZMeH2SRqU0V4HT06AA+sPwMImI
-         dtu9zVhJ2Tdnj3Jz0dCy05W1a4kFLd8W59zYAEX7cFq0kIs1/d40QIyrRkpbRiKEEg
-         Kn45IwDeNEXlA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.190.3]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MrQJ5-1oX6Re0szP-00oYBV; Tue, 27
- Dec 2022 22:07:01 +0100
-Message-ID: <aaf6a109-ac1b-c22a-88b7-0414b3265857@gmx.de>
-Date:   Tue, 27 Dec 2022 22:06:59 +0100
+        Tue, 27 Dec 2022 16:09:24 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DE622D;
+        Tue, 27 Dec 2022 13:07:56 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BRKrAxv005531;
+        Tue, 27 Dec 2022 21:07:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=33cI4kCZpU9jHyUxIKbVSh4H+8vw4e4ZvFaKA1z1Xl8=;
+ b=oDXqDyMhJMLOorTlS4H/ZcOeV2yQ0HVKovXmaijUwtIiBuvFbLzMq/X9mAN/caHPH84W
+ +tDHzBKEqHDvYkmgLdyok7lvek7uvTiwoOMFe6SdzDfE+pf5iSSAbxQdSTcXYq4XYf36
+ wrcAM6Jc/muicbC5jwL4UTztcQIvKx3+cuZA7VHzaPNLqMl71ttcEdAByIe4rOdf0/5W
+ Ec2qVcDVFxrsruvW0PWHuFhOtJzHdxqxp7Ue0pBDlqQWbRzinBoll97wHZwKW+TOtd4H
+ aK+L8up4jbYPLXyy0kGw6NQb1oH2M4v+Mmm98b4B+aizFHO12dA1Qx1Q+sQ8t3Ne26YL mQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mntqf5g97-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Dec 2022 21:07:08 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BRL77v5028849
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Dec 2022 21:07:07 GMT
+Received: from [10.110.31.102] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 27 Dec
+ 2022 13:07:06 -0800
+Message-ID: <730d8cbc-c391-6d77-2374-713f539d38b6@quicinc.com>
+Date:   Tue, 27 Dec 2022 13:07:05 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] fbdev: make offb driver tristate
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
-        linuxppc-dev@lists.ozlabs.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        llvm@lists.linux.dev
-References: <20221126000401.25302-1-rdunlap@infradead.org>
- <46e8cf0d-ab47-59b1-6c87-53d2d63a5bf6@suse.de>
- <f8c6eb94-10ee-07a8-ea48-d4fae60fc9ae@gmx.de>
- <Y6s96iuc3NRN5tS4@dev-arch.thelio-3990X>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH 04/14] sound: usb: card: Introduce USB SND vendor op
+ callbacks
 Content-Language: en-US
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <Y6s96iuc3NRN5tS4@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:pmufG/yBB7w10j8I7juqQ1B39xUxP8hRiEiNAVefeU+Zrc6CndG
- P8D13De0yweY4iSpmMFzYgs6fOK5FY/JajFhHgVW2MhBJFSnDzKgrXKxbm67ZiGG77ZOXyu
- FLsoDQkkcIufDRIPC8QEKCG9C/E/xdgEsK+r6KUlD4LVKleVqgJN1rYSFrY3/kFHkS0k90G
- 3aibwRR9tFFMx1kg3m9XA==
-UI-OutboundReport: notjunk:1;M01:P0:4m/m/TKe8EY=;8px+0lBpXJqhmDlMMqcatGE6fyR
- kwdAiq3U2LOYRCxMiNVKvGCCqgYC7ouanOJGEqPMwm2bYQgcwkpZQa8H5cF9bZQj34BAIsZsA
- 1XaKbiPO6NpfRjtEEMZtMJxLLjyQml/if2W/d9BlP9bs9nHhn/x81lApHGsN8lRiie2Hw5s65
- CkGmlTfGpZqQFfR3vl7BrvMn8H4VBnh9fqZQP/Qax0iIoCeVG57nvtJwaUGFKx1Te4GHsigtp
- qyYqRalAbUye9HFVHulSa43FI7QDfWFz2FHzyrboHoSvQ4m2xPUpU6QY+Ux9j2ZRBr78JqaDN
- cLZz6NQUsojzhZ7gPHpjMdyART5prM6RQozcOlq0WB/yyNqsD7UqbWQWFAsV3oVafcDG8X6gf
- xAYOzoEoYGRMmpt3htPz1nJYi+fKuvOOWmc2eG6edLfPAH3KtnnZQtpvfgWt7cVkLqbtWWoPC
- CB8xkIdRQglorW4K8x1cCNApA3rr6y26eFaZKXjO87lEhOg5QOnz5XTSn3XgZ2d9FmFaYsFMc
- 3NVsCgZ2gE0BFa1lem1NlLGvpU/bgrnCIZppeqOe+xhZ5+fw5t+KVVhVXmg1x1PDaY/o1cJJ5
- p5YQfhICbF/Eh1NNjPo7XKtVU4NqOxXWhh+SyAiNabpDIxUEx3phW6Iw5RwSvqeOijsriYAT6
- KBZLy4gdPEg9p0Yq9h6tzRUSB183VmBIaM4L1toY6RF1VO2tS5fCRb9GQUp25gmkTRG8CSVbx
- ejQSOttkcoVUXEb64ETtnJNUVv6KF5bHR96YTiNAqjSryZd5VJLZJ4Hfagb4S6XgT69FXReDu
- pmU6YXRpUtZQNzcqZ3A9mqEJPS8H35jtEqXcPR54RKvB+gPOlKqmyw4DEMc5O+Ew+og53U+LL
- MpDMGXwo0jV2Nu1DrSFMLj6Hw9g9KHRXCGYL6LdvIrIT1jl2QayH61cYho1wZiYKrCMhf+e4c
- gkwanbkBWZCZ56wz9awOPy+2nJk=
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_plai@quicinc.com>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-5-quic_wcheng@quicinc.com>
+ <CAA8EJprFD53zmECHJ44FpjztRjwsMym2QP_Gk-JWya-SL_ryHA@mail.gmail.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <CAA8EJprFD53zmECHJ44FpjztRjwsMym2QP_Gk-JWya-SL_ryHA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7CZl33Ocf1ue6_djQegt5-iJFt_uzPMd
+X-Proofpoint-ORIG-GUID: 7CZl33Ocf1ue6_djQegt5-iJFt_uzPMd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-27_16,2022-12-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 adultscore=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=959 clxscore=1015 mlxscore=0
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212270176
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/27/22 19:48, Nathan Chancellor wrote:
-> On Sat, Dec 10, 2022 at 05:35:06PM +0100, Helge Deller wrote:
->> On 11/26/22 14:40, Thomas Zimmermann wrote:
->>> Am 26.11.22 um 01:04 schrieb Randy Dunlap:
->>>> Make the offb (Open Firmware frame buffer) driver tristate,
->>>> i.e., so that it can be built as a loadable module.
->>>>
->>>> However, it still depends on the setting of DRM_OFDRM
->>>> so that both of these drivers cannot be builtin at the same time
->>>> nor can one be builtin and the other one a loadable module.
->>>>
->>>> Build-tested successfully with all combination of DRM_OFDRM and FB_OF=
-.
->>>>
->>>> This fixes a build issue that Michal reported when FB_OF=3Dy and
->>>> DRM_OFDRM=3Dm:
->>>>
->>>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x58): u=
-ndefined reference to `cfb_fillrect'
->>>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x60): u=
-ndefined reference to `cfb_copyarea'
->>>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x68): u=
-ndefined reference to `cfb_imageblit'
->>>>
->>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->>>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
->>>> Cc: Masahiro Yamada <masahiroy@kernel.org>
->>>> Cc: Thomas Zimmermann <tzimmermann@suse.de>
->>>> Cc: Michal Such=C3=A1nek <msuchanek@suse.de>
->>>> Cc: linuxppc-dev@lists.ozlabs.org
->>>> Cc: Daniel Vetter <daniel@ffwll.ch>
->>>> Cc: Helge Deller <deller@gmx.de>
->>>> Cc: linux-fbdev@vger.kernel.org
->>>> Cc: dri-devel@lists.freedesktop.org
->>>
->>> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Hi Dmitry,
+
+On 12/24/2022 3:03 AM, Dmitry Baryshkov wrote:
+> Hi,
+> 
+> On Sat, 24 Dec 2022 at 01:33, Wesley Cheng <quic_wcheng@quicinc.com> wrote:
 >>
->> applied.
->
-> Is this going to make it to Linus soon? We are now seeing this error in
-> our CI, which has the configuration describe in this commit.
->
-> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/=
-3785609002/jobs/6437398666#step:5:149
->
-> https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integrati=
-on2/builds/2JUMSmjAoSJoKfl6PPjfU66JGit/build.log
-
-
-It didn't applied cleanly earlier.
-I've now added it to the fbdev for-next branch, and if no problems
-show up in the next few days I'll push it before next weekend.
-https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.git/log=
-/?h=3Dfor-next
-
-Helge
-
-
-> Cheers,
-> Nathan
->
->>>> ---
->>>>  =C2=A0 drivers/video/fbdev/Kconfig |=C2=A0=C2=A0=C2=A0 4 ++--
->>>>  =C2=A0 1 file changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff -- a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
->>>> --- a/drivers/video/fbdev/Kconfig
->>>> +++ b/drivers/video/fbdev/Kconfig
->>>> @@ -456,8 +456,8 @@ config FB_ATARI
->>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 chipset found in Ataris.
->>>>  =C2=A0 config FB_OF
->>>> -=C2=A0=C2=A0=C2=A0 bool "Open Firmware frame buffer device support"
->>>> -=C2=A0=C2=A0=C2=A0 depends on (FB =3D y) && PPC && (!PPC_PSERIES || =
-PCI)
->>>> +=C2=A0=C2=A0=C2=A0 tristate "Open Firmware frame buffer device suppo=
-rt"
->>>> +=C2=A0=C2=A0=C2=A0 depends on FB && PPC && (!PPC_PSERIES || PCI)
->>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 depends on !DRM_OFDRM
->>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select APERTURE_HELPERS
->>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select FB_CFB_FILLRECT
->>>
+>> Allow for different vendors to be notified on USB SND connect/disconnect
+>> seqeunces.  This allows for vendor USB SND modules to properly initialize
+>> and populate internal structures with references to the USB SND chip
+>> device.
+> 
+> The commit message definitely needs some improvement. We do not notify
+> vendors on SND connect/disconnect events.
+> 
+> 
 >>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   sound/usb/card.c | 22 ++++++++++++++++++++++
+>>   sound/usb/card.h |  7 +++++++
+>>   2 files changed, 29 insertions(+)
 >>
+>> diff --git a/sound/usb/card.c b/sound/usb/card.c
+>> index 26268ffb8274..212f55a7683c 100644
+>> --- a/sound/usb/card.c
+>> +++ b/sound/usb/card.c
+>> @@ -117,6 +117,21 @@ MODULE_PARM_DESC(skip_validation, "Skip unit descriptor validation (default: no)
+>>   static DEFINE_MUTEX(register_mutex);
+>>   static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
+>>   static struct usb_driver usb_audio_driver;
+>> +static struct snd_usb_vendor_ops *vendor_ops;
+>> +
+>> +int snd_usb_register_vendor_ops(struct snd_usb_vendor_ops *ops)
+> 
+> platform ops?
+> 
 
+Will change it.
+
+>> +{
+>> +       vendor_ops = ops;
+>> +       return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(snd_usb_register_vendor_ops);
+> 
+> What happens if several platforms try to register different ops? I saw
+> from the patch 09/14 that you register these ops unconditionally. If
+> other devices follow your approach there is an obvious conflict.
+> 
+
+Thank you for the review.
+
+That is true.  I don't think there is a proper need to have multiple 
+vendor ops being registered, so maybe just returning an error for if ops 
+are already registered is sufficient.
+
+Thanks
+Wesley Cheng
