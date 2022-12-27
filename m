@@ -2,202 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB554656C7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 16:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A23B1656C85
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 16:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbiL0PZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 10:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S230147AbiL0P1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 10:27:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231925AbiL0PYY (ORCPT
+        with ESMTP id S231515AbiL0P05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 10:24:24 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E650FBE11
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 07:24:13 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so9493477wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 07:24:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u5v670RnvXQHaK7BPqiIorVRaX1GKbnuWfqnGGHIrUc=;
-        b=KWtwIE/xKjJGRYwgHdjbJ5oEzE297qgQsTfpzrqj12loSnHqlNKP1boQLyH7R60JR3
-         la78PHUE2+17kraDPhWdaJ5BP5bWtz4vRzQXO/yEp0OXN9EBNmn9xLt1fB338+WYK3np
-         Sj8ULTe7gLrKgI+m719GD6Tr9/QUt0rNo39poULiwdEES6STbJUvH0JxS3QBWXB8bv9o
-         3YHdML0W28K69r+1vyvZPbAwqcVK9EzyOj1tsu2rD24hVzm4I17POvf8OiviWyuA2vUG
-         Br/xZQEmaulbVqREv02ootcl4vxuvqxNaKRwwnV9TXLLCPU5RDprNHi+zfe4bAJCE598
-         cV4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u5v670RnvXQHaK7BPqiIorVRaX1GKbnuWfqnGGHIrUc=;
-        b=Oq9/yWemZNNiI2ovrmIzUQ7PBGlkUuzZX8UowG8MTy2oZGWaY5Wds+h422d9cDFNB0
-         oJ6XA5Iw7+IR8ehxKmp95C7/WWfVmu19fVuC0WVE1u1oYcMnes0jYbVce+n4U0XStb8K
-         hw8U0TVDHy6iQegHUng0Uvc7y+IQI5ad09/H4uUZySZO1rstdiN2okdMNHXU6hWhPr1u
-         XMedlNcvRkkNqK2SipknbTnZgIiq6q7wf8mpeuy3kpoIBAB+WeO/Ydxmt082eZZbCEsL
-         ZQE+basBnjN35r2WgThQn07nSQ/IHIJ9q+ATABgNvHdqvHdyzHPa0qpwYcVsD6iTImew
-         DE0g==
-X-Gm-Message-State: AFqh2kqc2ExJOxo/B4xtQ0Fxgt3DIfS7BU3qqem0uUmT7HorlEt1Oj2C
-        tSUQcA0FnfwPFkVDfmyUMUiM+g7rGtVwBzFVi0QcxA==
-X-Google-Smtp-Source: AMrXdXuSzwDoJ6X1Bn+x9aZGRPKQGOV8eYes2ofQx8kntRsc5q0KLBhVUSL9B/zcJemMH05hBJCv15ApC7D4l1DTnoo=
-X-Received: by 2002:a05:600c:1c86:b0:3cf:71e4:75b with SMTP id
- k6-20020a05600c1c8600b003cf71e4075bmr1650214wms.114.1672154652376; Tue, 27
- Dec 2022 07:24:12 -0800 (PST)
+        Tue, 27 Dec 2022 10:26:57 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCB2BE29;
+        Tue, 27 Dec 2022 07:26:15 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BRFHU7i008363;
+        Tue, 27 Dec 2022 15:26:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=cQuov8Lsh/tXQZFD39e9xtjcqLKxIfKQlLX3E4n7Biw=;
+ b=XXGFz2Q/iZ2aKDdAXYwp9BAWjCdh8+kDJLQj5v1DhXuURLtcD1V+abkFYmVNhXcT+cZc
+ +SbmfvEHCU1vp9bdbXBnczc0EmxC3UmsgaMZEqi9hgeY5R5Oe2fw1T28tm7qVVD6BFFY
+ TreRgCL7xAul4+u1ZNCv56RwR8RAIf1Penv7k3etzXqVqxd0UfqUYwsQdVB+xlb3W/QD
+ w+jaZy7nOqS/guaAGsoWnBKy/OCt5x9PgHGhaZ+ICZnjdN2YTxgX5myTsVn8kaU4kGxq
+ hP0qSAYD0VBaPK14JDanCktEciYf4WjtpktYKPaUsITUbwV5GA0sYkoA55QbuGvkhxL+ Aw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mnrrrwesj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Dec 2022 15:26:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BRFQ26Q016618
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Dec 2022 15:26:02 GMT
+Received: from [10.50.35.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 27 Dec
+ 2022 07:25:56 -0800
+Message-ID: <18bf4ed9-bb12-aed8-4746-e7c7549769d3@quicinc.com>
+Date:   Tue, 27 Dec 2022 20:55:38 +0530
 MIME-Version: 1.0
-References: <20221216185012.2342675-1-abdulras@google.com> <CAEUhbmUsFt0H-Dd3XHjuk6sUq0hrV9SFU=1jD2LQ10xywZOZiA@mail.gmail.com>
- <CAO8XFHv_wV_oSuS+e412yr6vjm-44Vf2gJuMO4FvgPeodhWQww@mail.gmail.com>
- <CAEUhbmX6PE_E8PCEp4mo8Fpjtc-Pm-tmpxws0UKCp715qB+qRg@mail.gmail.com>
- <CAO8XFHvrbj86gcBpN7z7n_cGk2wLHND=t0k+QtYgzZGMQOLpsA@mail.gmail.com> <CAEUhbmW-EH4tQr4sXQAJ6iuwO31iWEE=XQXpTMVBp8fX66LDxg@mail.gmail.com>
-In-Reply-To: <CAEUhbmW-EH4tQr4sXQAJ6iuwO31iWEE=XQXpTMVBp8fX66LDxg@mail.gmail.com>
-From:   Saleem Abdulrasool <abdulras@google.com>
-Date:   Tue, 27 Dec 2022 07:24:00 -0800
-Message-ID: <CAO8XFHsjciBKho-9Kzw7v8anBZm1+DD5ZnMLmhZNxUUYZTU-FQ@mail.gmail.com>
-Subject: Re: [PATCH] riscv: avoid enabling vectorized code generation
-To:     Bin Meng <bmeng.cn@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V20 1/7] dt-bindings: Added the yaml bindings for DCC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>
+References: <cover.1672068481.git.quic_schowdhu@quicinc.com>
+ <fd3b99b07bd40612a76313429635026471d273ef.1672068481.git.quic_schowdhu@quicinc.com>
+ <38352fbb-663f-71f7-b7ef-d539b98fc423@linaro.org>
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+In-Reply-To: <38352fbb-663f-71f7-b7ef-d539b98fc423@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: hT04q8f8EPGySm3XWtJeXpOC9gCuiou7
+X-Proofpoint-ORIG-GUID: hT04q8f8EPGySm3XWtJeXpOC9gCuiou7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-27_11,2022-12-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 mlxscore=0 malwarescore=0 spamscore=0
+ phishscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212270126
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 10:57 PM Bin Meng <bmeng.cn@gmail.com> wrote:
->
-> Hi,
->
-> On Thu, Dec 22, 2022 at 11:23 PM Saleem Abdulrasool <abdulras@google.com> wrote:
-> >
-> > On Thu, Dec 22, 2022 at 1:41 AM Bin Meng <bmeng.cn@gmail.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Thu, Dec 22, 2022 at 1:39 AM Saleem Abdulrasool <abdulras@google.com> wrote:
-> > > >
-> > > > On Wed, Dec 21, 2022 at 8:17 AM Bin Meng <bmeng.cn@gmail.com> wrote:
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > On Sat, Dec 17, 2022 at 3:12 AM Saleem Abdulrasool <abdulras@google.com> wrote:
-> > > > > >
-> > > > > > The compiler is free to generate vectorized operations for zero'ing
-> > > > > > memory.  The kernel does not use the vector unit on RISCV, similar to
-> > > > > > architectures such as x86 where we use `-mno-mmx` et al to prevent the
-> > > > > > implicit vectorization.  Perform a similar check for
-> > > > > > `-mno-implicit-float` to avoid this on RISC-V targets.
-> > > > > >
-> > > > > > Signed-off-by: Saleem Abdulrasool <abdulras@google.com>
-> > > > > > ---
-> > > > > >  arch/riscv/Makefile | 4 ++++
-> > > > > >  1 file changed, 4 insertions(+)
-> > > > > >
-> > > > > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > > > > > index 0d13b597cb55..68433476a96e 100644
-> > > > > > --- a/arch/riscv/Makefile
-> > > > > > +++ b/arch/riscv/Makefile
-> > > > > > @@ -89,6 +89,10 @@ KBUILD_AFLAGS_MODULE += $(call as-option,-Wa$(comma)-mno-relax)
-> > > > > >  # architectures.  It's faster to have GCC emit only aligned accesses.
-> > > > > >  KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
-> > > > > >
-> > > > > > +# Ensure that we do not vectorize the kernel code when the `v` extension is
-> > > > > > +# enabled.  This mirrors the `-mno-mmx` et al on x86.
-> > > > > > +KBUILD_CFLAGS += $(call cc-option,-mno-implicit-float)
-> > > > >
-> > > > > This looks like an LLVM flag, but not GCC.
-> > > >
-> > > > Correct, this is a clang flag, though I imagine that GCC will need a
-> > > > similar flag once it receives support for the V extension.
-> > > >
-> > > > > Can you elaborate what exact combination (compiler flag and source)
-> > > > > would cause an issue?
-> > > >
-> > > > The particular case that I was using was simply `clang -target
-> > > > riscv64-unknown-linux-musl -march=rv64gcv` off of main.
-> > > >
-> > > > > From your description, I guess it's that when enabling V extension in
-> > > > > LLVM, the compiler tries to use vector instructions to zero memory,
-> > > > > correct?
-> > > >
-> > > > Correct.
-> > >
-> > > Thanks for the confirmation.
-> > >
-> > > >
-> > > > > Can you confirm LLVM does not emit any float instructions (like F/D
-> > > > > extensions) because the flag name suggests something like "float"?
-> > > >
-> > > > The `-mno-implicit-float` should disable any such emission.  I assume
-> > > > that you are worried about the case without the flag?  I'm not 100%
-> > > > certain without this flag, but the RISCV build with this flag has been
-> > > > running smoothly locally for a while.
-> > > >
-> > > >
-> > >
-> > > I still have some questions about the `-mno-implicit-float` option's behavior.
-> > >
-> > > - If this option is not on, does the compiler emit any F/D extension
-> > > instruction for zero'ing memory when -march=rv64g? I want to know
-> > > whether the `-mno-implicit-float` option only takes effect when "v"
-> > > appears on the -march string.
-> >
-> > AFAIK, and from a quick test, no, it will not.  That also makes sense
-> > since the F/D/Q handling is not as likely to be useful for generating
-> > a 0-filled array.  No, the use of `-mno-implicit-float` is not guarded
-> > by the use of the vector extension, but it does only impact the
-> > vectorized code generation (the loop vectorizer, load/store
-> > vectorizer, and SLP vectorizer).
->
-> Thank you. The quick test you did seems to match what the LLVM commit [1] says:
->
->     "It also disables implicit uses of scalar FP, but I don't know if
-> we have any of those for RISC-V."
->
-> [1] https://github.com/llvm/llvm-project/commit/549231d38e10de7371adb85f5452d42ad42f4201
->
-> >
-> > > - If the answer to the above question is no, I wonder why the option
-> > > is called `-mno-implicit-float` as float suggests the FPU usage, but
-> > > actually it is about vectorization. The Clang documentation says
-> > > almost nothing about this option.
-> >
-> > The flag itself is from GCC, it was added for the ARM architecture, to
-> > prefer using the scalar core over the VFP register set as ARM uses the
-> > VFP for vectorized operations.  As it so happens, internally in LLVM,
-> > the loop vectorizer uses the (internal) `NoImplicitFloat` function
-> > attribute to prevent the loop from being vectorized, and the flag that
-> > controls this is exposed as `-mimplicit-float` and
-> > `-mno-implicit-float`.
-> >
->
-> It seems GCC does not have such a flag. Thanks for the history
-> introduction. It was introduced on Arm to disable vectorized operation
-> using VFP, hence it was named as -no-implict-float. But IMHO the
-> option is badly named. Maybe -no-implicit-vectorization better fits
-> what it really does.
 
-The option is present on ARM GCC, but not RISC-V GCC.  Sure, the
-option could be better named - personally, I'd prefer
-`-mgeneral-regs-only` to match the x86 convention which leaves it
-sufficiently generalised that future extensions would easily fit into
-the behavioural control.  Much like the Linux kernel's prime
-directive: "we do not break userspace'', the LLVM toolchain has a
-similar view point: options which have shipped are considered
-permanent.  Even if renamed, it would be an alias and the old option
-sticks around in near perpetuity.
 
-> FWIW,
-> Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
->
-> Regards,
-> Bin
+On 12/27/2022 1:51 PM, Krzysztof Kozlowski wrote:
+> On 26/12/2022 17:52, Souradeep Chowdhury wrote:
+>> Documentation for Data Capture and Compare(DCC) device tree bindings
+>> in yaml format.
+> 
+> Use subject prefixes matching the subsystem (which you can get for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching).
+> 
+> Subject: drop second, redundant "bindings". Drop "yaml" (also unrelated).
+> 
+> Use proper imperative mode.
+> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
+Ack
+
+> 
+>>
+>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   .../devicetree/bindings/soc/qcom/qcom,dcc.yaml     | 44 ++++++++++++++++++++++
+>>   1 file changed, 44 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml
+>> new file mode 100644
+>> index 0000000..ac3b51b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml
+>> @@ -0,0 +1,44 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/soc/qcom/qcom,dcc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Data Capture and Compare
+>> +
+>> +maintainers:
+>> +  - Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+>> +
+>> +description: |
+>> +    DCC (Data Capture and Compare) is a DMA engine which is used to save
+>> +    configuration data or system memory contents during catastrophic failure
+>> +    or SW trigger. DCC is used to capture and store data for debugging purpose
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - qcom,sm8150-dcc
+>> +          - qcom,sc7280-dcc
+>> +          - qcom,sc7180-dcc
+>> +          - qcom,sdm845-dcc
+>> +      - const: qcom,dcc
+>> +
+>> +  reg:
+>> +    items:
+>> +      - description: DCC base
+>> +      - description: DCC RAM base
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    dma@10a2000{
+>> +        compatible = "qcom,sm8150-dcc","qcom,dcc";
+> 
+> Missing space between compatibles.
+
+Ack
+
+> 
+> Best regards,
+> Krzysztof
+> 
