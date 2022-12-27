@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13D0656A56
+	by mail.lfdr.de (Postfix) with ESMTP id 95AEE656A55
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbiL0MAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 07:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
+        id S232060AbiL0MAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 07:00:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbiL0L7a (ORCPT
+        with ESMTP id S232109AbiL0L7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Dec 2022 06:59:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5ABB877;
-        Tue, 27 Dec 2022 03:59:17 -0800 (PST)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24734B7F5;
+        Tue, 27 Dec 2022 03:59:18 -0800 (PST)
 Date:   Tue, 27 Dec 2022 11:59:16 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1672142356;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cylJvI8osvyqey7DWdSttpYewiFgqulFKxAGNRWbU9Q=;
-        b=RJ3s7HOdzQ73h6p2/salRUkx2HJnvgmuzIErHDVXhL13xXLTFij/cnA0CfAOzsrpLIlfoF
-        tYOre6M+/kl4ZXsorbqlYbKNruguEuK3M6GHK/TFEMZSnO/E9u5WwWQixp/58/PQyDMF9T
-        JdG23Ze3UYvp0MSF6R7za+5j2wsgb37i6W4WSc+BLlVinKFm6I3agkc67VRd0o4056931h
-        px/pdQDtsV6Dq6Dcd2gws5IBbeODoP7tSvRN5MrhIQiW+tIOrugeERllOr+Kyu9LSpqpfw
-        rfhtIRw6YjeMJEJrz+d92WSxNanho6Ar8bgOICC8g8I2cIGaeXzqubcvxItP2A==
+        bh=5iqAaKJfRk6rZtNTrGoo86R4tttMmLNYvpxtFe/8uMQ=;
+        b=a2bc7NZ0C4QuX7KiujnTBhlwvSlrRfOLQ4QGtQRNMLr4WJK5ORVr/uOMtpp2KzQ4c7JvVw
+        HyUO6dnmtVZkYdycX3oukMOeWmX2orVW/q2VFKv5Ey8O0eXHs8nB1Y6dQllubgh9ZRLYXK
+        N2NMJAfLgV7h2UbjMAzGik1cuG8L9c6s18RpxWVBZFi9CvASVG4nuhNed/SbLNOEcbKGtw
+        u/nCqL/5EDJiuQx2/pgah2AAjw9sZNJGkebOu60cmIT3EUUoV0ZdbMuYNGlTE6f8EhMOig
+        fFNypQngHcjpm/xVbpUrSuHqKoRh6ALLLtoPHT6vZ6j+AfF04Gt/jPDfvQMalg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1672142356;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cylJvI8osvyqey7DWdSttpYewiFgqulFKxAGNRWbU9Q=;
-        b=DnL5x7QW4rRij6OpHW+MLTgFmUGMPzbtPtDPw9gRIfUeISWRC5jX0Z7EFRXjMdvzx9LdzC
-        g9E2t1wMonDUyyBA==
-From:   "tip-bot2 for Masami Hiramatsu (Google)" <tip-bot2@linutronix.de>
+        bh=5iqAaKJfRk6rZtNTrGoo86R4tttMmLNYvpxtFe/8uMQ=;
+        b=Qkq88T6V+9wSNySeT77jwo/lEkusWNf66uaM8mSKjI62l3MBFtYrqs5nWqFfpqWPWazral
+        ubFwLU6coi/n2zBg==
+From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/kprobes: Fix kprobes instruction boudary check
- with CONFIG_RETHUNK
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        stable@vger.kernel.org, x86@kernel.org,
+Subject: [tip: x86/urgent] x86/calldepth: Fix incorrect init section references
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <167146051026.1374301.392728975473572291.stgit@devnote3>
-References: <167146051026.1374301.392728975473572291.stgit@devnote3>
+In-Reply-To: <20221215164334.968863-1-arnd@kernel.org>
+References: <20221215164334.968863-1-arnd@kernel.org>
 MIME-Version: 1.0
-Message-ID: <167214235617.4906.15076844034764823176.tip-bot2@tip-bot2>
+Message-ID: <167214235637.4906.10804629490623439525.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,70 +66,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     1993bf97992df2d560287f3c4120eda57426843d
-Gitweb:        https://git.kernel.org/tip/1993bf97992df2d560287f3c4120eda57426843d
-Author:        Masami Hiramatsu (Google) <mhiramat@kernel.org>
-AuthorDate:    Mon, 19 Dec 2022 23:35:10 +09:00
+Commit-ID:     ade8c20847fcc3f4de08b35f730ec04ef29ddbdc
+Gitweb:        https://git.kernel.org/tip/ade8c20847fcc3f4de08b35f730ec04ef29ddbdc
+Author:        Arnd Bergmann <arnd@arndb.de>
+AuthorDate:    Thu, 15 Dec 2022 17:43:23 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 27 Dec 2022 12:51:58 +01:00
 
-x86/kprobes: Fix kprobes instruction boudary check with CONFIG_RETHUNK
+x86/calldepth: Fix incorrect init section references
 
-Since the CONFIG_RETHUNK and CONFIG_SLS will use INT3 for stopping
-speculative execution after RET instruction, kprobes always failes to
-check the probed instruction boundary by decoding the function body if
-the probed address is after such sequence. (Note that some conditional
-code blocks will be placed after function return, if compiler decides
-it is not on the hot path.)
+The addition of callthunks_translate_call_dest means that
+skip_addr() and patch_dest() can no longer be discarded
+as part of the __init section freeing:
 
-This is because kprobes expects kgdb puts the INT3 as a software
-breakpoint and it will replace the original instruction.
-But these INT3 are not such purpose, it doesn't need to recover the
-original instruction.
+WARNING: modpost: vmlinux.o: section mismatch in reference: callthunks_translate_call_dest.cold (section: .text.unlikely) -> skip_addr (section: .init.text)
+WARNING: modpost: vmlinux.o: section mismatch in reference: callthunks_translate_call_dest.cold (section: .text.unlikely) -> patch_dest (section: .init.text)
+WARNING: modpost: vmlinux.o: section mismatch in reference: is_callthunk.cold (section: .text.unlikely) -> skip_addr (section: .init.text)
+ERROR: modpost: Section mismatches detected.
+Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.
 
-To avoid this issue, kprobes checks whether the INT3 is owned by
-kgdb or not, and if so, stop decoding and make it fail. The other
-INT3 will come from CONFIG_RETHUNK/CONFIG_SLS and those can be
-treated as a one-byte instruction.
-
-Fixes: e463a09af2f0 ("x86: Add straight-line-speculation mitigation")
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Fixes: b2e9dfe54be4 ("x86/bpf: Emit call depth accounting if required")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/167146051026.1374301.392728975473572291.stgit@devnote3
+Link: https://lkml.kernel.org/r/20221215164334.968863-1-arnd@kernel.org
 ---
- arch/x86/kernel/kprobes/core.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ arch/x86/kernel/callthunks.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 6629968..b36f3c3 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -37,6 +37,7 @@
- #include <linux/extable.h>
- #include <linux/kdebug.h>
- #include <linux/kallsyms.h>
-+#include <linux/kgdb.h>
- #include <linux/ftrace.h>
- #include <linux/kasan.h>
- #include <linux/moduleloader.h>
-@@ -281,12 +282,15 @@ static int can_probe(unsigned long paddr)
- 		if (ret < 0)
- 			return 0;
+diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
+index 7d2c75e..ffea98f 100644
+--- a/arch/x86/kernel/callthunks.c
++++ b/arch/x86/kernel/callthunks.c
+@@ -119,7 +119,7 @@ static bool is_coretext(const struct core_text *ct, void *addr)
+ 	return within_module_coretext(addr);
+ }
  
-+#ifdef CONFIG_KGDB
- 		/*
--		 * Another debugging subsystem might insert this breakpoint.
--		 * In that case, we can't recover it.
-+		 * If there is a dynamically installed kgdb sw breakpoint,
-+		 * this function should not be probed.
- 		 */
--		if (insn.opcode.bytes[0] == INT3_INSN_OPCODE)
-+		if (insn.opcode.bytes[0] == INT3_INSN_OPCODE &&
-+		    kgdb_has_hit_break(addr))
- 			return 0;
-+#endif
- 		addr += insn.length;
- 	}
+-static __init_or_module bool skip_addr(void *dest)
++static bool skip_addr(void *dest)
+ {
+ 	if (dest == error_entry)
+ 		return true;
+@@ -181,7 +181,7 @@ static const u8 nops[] = {
+ 	0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+ };
  
+-static __init_or_module void *patch_dest(void *dest, bool direct)
++static void *patch_dest(void *dest, bool direct)
+ {
+ 	unsigned int tsize = SKL_TMPL_SIZE;
+ 	u8 *pad = dest - tsize;
