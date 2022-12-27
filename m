@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22178656A34
+	by mail.lfdr.de (Postfix) with ESMTP id 70D91656A35
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiL0L6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 06:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S231867AbiL0L6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 06:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbiL0L5z (ORCPT
+        with ESMTP id S231517AbiL0L55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 06:57:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447329FE2;
-        Tue, 27 Dec 2022 03:57:54 -0800 (PST)
+        Tue, 27 Dec 2022 06:57:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C499FD7;
+        Tue, 27 Dec 2022 03:57:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01BE5B80ED9;
-        Tue, 27 Dec 2022 11:57:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFFC3C433D2;
-        Tue, 27 Dec 2022 11:57:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12E77B80F91;
+        Tue, 27 Dec 2022 11:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F15C433EF;
+        Tue, 27 Dec 2022 11:57:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672142271;
-        bh=bZfJB2u0JwifyT37HdrvtWpabXNKxyHB+8ikOAbuUfc=;
+        s=k20201202; t=1672142273;
+        bh=MWHvjZhXqCXibASs7/ji0PRKFTI00JPAvF8xc89D7D8=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Oe8l7CqGmdtTHu5NKFrc5orRriJxmtJnJyfRPuzG4Jux8CIxuF4voUB9UD8eFgs/Q
-         FfXgOsvbKddzGRjvJN7F8iUrUaxlkKy0B7rUu9hQZtyn1CN5BbtDkUgH11NgmDgDqS
-         51IKuXsa9SF34JBEisoPeLF7PCcMxKA2KW3M+olaY8FOqx7Mlmy8hLUsB+qQbG3WcG
-         rVegO4/Cl6RRQ/lDtvCmXQECh0p0LlSEKmTqnIHbIwBIoOkCF0pP808KMn5Jlknqdt
-         AwYANQqeqZu0+Mh3Cmad2O+xads++G9JYfzpfhgWu17c++rVJfVvuyJJYixoND9KRJ
-         0Z3BMtuZ1Hozw==
+        b=XM/8z0a45B6yUWd7xT3hiXC4zWIB54DuzDwZIcSpMYLn6a76XZGm86Ge8jBR8XwMF
+         7YXiMtcbVx5r6RV8N3YAs4JJEfndGdWWrt3A6VOiBwCMNUB9jOcJWbx0xIY/6bIjQZ
+         TbkRao9okje45BY8i/2tfuALwz/JAP+rOtJ2+N4CpRj53/4jO9QiMfFVYB9QadmXMh
+         WfzCMUvXiWSUSvOyk99lryaZnSMMdt4ZuCSKqRuBcclTcp4thyAmZz/P3Y63iDt646
+         V++MOhThhrdFlyMqsncqkCz0VQEq/EXECfFv0Vm9gT8ZY+vSLByzGaCnaeArE0QAbs
+         z4xRQYIwJMJEA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Witold Sadowski <wsadowski@marvell.com>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jpawar@cadence.com,
-        pthombar@cadence.com, konrad@cadence.com, wbartczak@marvell.com,
-        wzmuda@marvell.com
-In-Reply-To: <20221219144254.20883-1-wsadowski@marvell.com>
-References: <20221219144254.20883-1-wsadowski@marvell.com>
-Subject: Re: (subset) [PATCH 0/7] Support for Marvell modifications for Cadence XSPI
-Message-Id: <167214226970.88639.17320415439798476005.b4-ty@kernel.org>
-Date:   Tue, 27 Dec 2022 11:57:49 +0000
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221225-mtk-spi-fixes-v1-0-bb6c14c232f8@chromium.org>
+References: <20221225-mtk-spi-fixes-v1-0-bb6c14c232f8@chromium.org>
+Subject: Re: [PATCH] spi: mediatek: Enable irq before the spi registration
+Message-Id: <167214227202.88639.2335851712877417463.b4-ty@kernel.org>
+Date:   Tue, 27 Dec 2022 11:57:52 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -56,14 +59,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Dec 2022 06:42:47 -0800, Witold Sadowski wrote:
-> This patch series is fixing bugs, and adding support for
-> Marvell changes for Cadence XSPI IP.
-> It includes:
-> - Polling mode support
-> - Changes for modebyte handling
-> - Busycycles calculations
-> - Marvell specific IP changes
+On Sun, 25 Dec 2022 09:37:12 +0100, Ricardo Ribalda wrote:
+> If the irq is enabled after the spi si registered, there can be a race
+> with the initialization of the devices on the spi bus.
+> 
+> Eg:
+> mtk-spi 1100a000.spi: spi-mem transfer timeout
+> spi-nor: probe of spi0.0 failed with error -110
+> Unable to handle kernel NULL pointer dereference at virtual address
+> 0000000000000010
+> ...
+> Call trace:
+>  mtk_spi_can_dma+0x0/0x2c
 > 
 > [...]
 
@@ -73,8 +80,8 @@ Applied to
 
 Thanks!
 
-[1/7] spi: cadence: Fix busy cycles calculation
-      commit: e8bb8f19e73a1e855e54788f8673b9b49e46b5cd
+[1/1] spi: mediatek: Enable irq before the spi registration
+      commit: b24cded8c065d7cef8690b2c7b82b828cce57708
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
