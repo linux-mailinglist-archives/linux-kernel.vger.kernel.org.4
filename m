@@ -2,175 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4CC656E7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C67656E81
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiL0T7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
+        id S230381AbiL0UFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 15:05:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiL0T7h (ORCPT
+        with ESMTP id S229488AbiL0UFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:59:37 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A870BEA6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:59:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672171176; x=1703707176;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=P9OAup9Nk4N79eYejsY+gr14Gv51Mur6RbmKGRBrLPM=;
-  b=WURsR1w40QqzgkuoKuRWJ4x/Sgj/SAGBiJxaPSCU5GDIGxeP50y0cYW4
-   HdeUi0jsP3hUBKFfJ/QVMvazGFqtxbHez5TDqHf1Y58sCa6fRghA1gnMf
-   ZIKvTwG8NlTxmE5zh7Y1Vde4gX53VUQhjPbMPMPVE6meVOr7WGn6t/guA
-   G2BZx2/i9reGuljK5ahTx+wq9cjntUXwM+kSDwM8awMK45UXl9NNhDgVE
-   6f+Q/RQNWjEoCGMDd0KTpXNktfWBD4ZjFgEA+eUKq3V1Qkcces5IVe2fv
-   arwwy6uDBJ97I9XiAVOl5zsVApDL0O6dzgu+R2zTI6OlTBi7WpdB5ftRg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="308504026"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="308504026"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 11:59:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="683711017"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="683711017"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga008.jf.intel.com with ESMTP; 27 Dec 2022 11:59:36 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 27 Dec 2022 11:59:35 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 27 Dec 2022 11:59:35 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 27 Dec 2022 11:59:35 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BnfM2bYbL47bdkrnhoZvVBu4PHsWefWEfkefhORYCh/8/NRiNZd/DfXzlw+w0exXoz/FmMqCcWn7FNWRk0Hd9opZ31O2wxHy5nac/sCd/icxm3it8fsOToY9QIxC9FsX6+hpYELGr8K4ychT1kANalbLHyB2AZgtFUi06d08TU08K6YtzWxX13RhOJgIVc0RPw1hrnOqB9kxaBVtkdpbKO2kFRMP/NYW8OM43cMRHoJuJ5aHQUbswFyI1enC9Fi9aDqqX5doKZuT3RbiSmu1I+lYWIytzEt3iG8/oOvnKFjPx5DRPt6PjPTkzLtUdonCWq1o0DtRxG0Gc47DqU/KtQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uIAzgZql+P+8Xk77A7Ua3lMORJQ2TjDMPhTCydKj/3Q=;
- b=FyJjrYd9RvFQVQiqSpD8vdXJlLm9K9vzKUc4MBKwjtiXjB6Q3r91AiUhyN9ttE61MPH68wOpnbB0iGn39vzLnwmpSzMfWSE5+JixlqkOCNJ5prVoayZS+rvZCg75UjC9aFb8yLFYX1FV1uKVt7Vm26l34lOVoxHpAURdlBCzyKOZMF3m3tDypqeOf7qqkyXyX3RQO6yXrZLwV7C9F6DAKSg3PSQ7tAIhCXCBw1S1xpR5UMK9s5baTBdpfgFl28XEijv2D1NUxCU/RsIeFM4VZMuCFy1j4vo37yWD8o0781m7RgZ0x0Yh6XAwxZj1bantwaPAnxktnutLYgixrHsK1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
- by DM4PR11MB5536.namprd11.prod.outlook.com (2603:10b6:5:39b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Tue, 27 Dec
- 2022 19:59:31 +0000
-Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::570c:84d0:3c30:3282]) by SJ1PR11MB6201.namprd11.prod.outlook.com
- ([fe80::570c:84d0:3c30:3282%7]) with mapi id 15.20.5944.016; Tue, 27 Dec 2022
- 19:59:31 +0000
-Date:   Tue, 27 Dec 2022 11:59:28 -0800
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Thomas Gleixner <tglx@linutronix.de>, X86-kernel <x86@kernel.org>,
-        "LKML Mailing List" <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH v2 1/6] x86/microcode/core: Move microcode_check() to
- cpu/microcode/core.c
-Message-ID: <Y6tOoF8HBOkFR97C@a4bf019067fa.jf.intel.com>
-References: <20221227192340.8358-1-ashok.raj@intel.com>
- <20221227192340.8358-2-ashok.raj@intel.com>
- <Y6tMgcU2aGbx/6yt@zn.tnic>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y6tMgcU2aGbx/6yt@zn.tnic>
-X-ClientProxiedBy: SJ0PR03CA0260.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::25) To SJ1PR11MB6201.namprd11.prod.outlook.com
- (2603:10b6:a03:45c::14)
+        Tue, 27 Dec 2022 15:05:10 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E27F66;
+        Tue, 27 Dec 2022 12:05:09 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 453AE3200437;
+        Tue, 27 Dec 2022 15:05:04 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 27 Dec 2022 15:05:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1672171503; x=
+        1672257903; bh=VjL3QHQ1FqAv53MFAG08izRQ9PQo2V3hf0q1/plGrn4=; b=U
+        8ncaJ4P0J2JntFjVv3X8yMYPeuOj/n+TE2DJZekm1wiRsLSlU80WqUMiVOrX+05Y
+        j2nRx83luQbYFN7xDk9SaxR76PgdSCQ7qRMGEYJCbpM4ZhmKhdvGAJpKdk7Hu/GE
+        9aKZTgVJ3mL7Z/c12QZUVj6si9rinD0yBd7gu7KdZ+zHboIZdFPR2+6FL1f/z4Dj
+        RPkBwySAusuRINLGR69CMYY5rXWGIr5K7pUXPEIiEO+pJrlo33L5w9qce9Fe/WqG
+        QAtBZSUYglDjRzxlJEs8kDUu7/lDKnDMj1++7lC8PkeMFQQOZ7J4zsHj+HK7KjiL
+        5b3cJrxai7Vfv47ms15bg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1672171503; x=
+        1672257903; bh=VjL3QHQ1FqAv53MFAG08izRQ9PQo2V3hf0q1/plGrn4=; b=k
+        DeIin9w8Vfoxl2A6m21K9AugOpLWIfRlccb/3P4Uiw8oJ+mJIzl3QTBUmvD9g05C
+        yDkLw5u/TC48wFLUjVyTXyeH8xsVWypDGl0ZLdSB6GvKyXkMxMeO8b4R+MSis0bc
+        SISwpfhhcYLKjULFxMDzrlSPdh9stlyAq1tPxLGTqIEI0QYJanzS3hLuSr9jUlNw
+        ijr+hs0S/Oqec1nI0VaYcagbVgsiLx9HOJkb1P8jjugByA6oyy48SzHAyfv9v20K
+        0B3kj008TcPouhsKJKEmaBoCuAL6Ivqk1OfzrVZodvA4xAWBMw81bL0Xha0AjgQd
+        PQF8K+zEKCMFPuab88m3Q==
+X-ME-Sender: <xms:70-rY75T6SKO6hWBUUbdi17jPmQLP9-jku3wyIPZ0u1yrA277pfSMA>
+    <xme:70-rYw54s71pl5jDs6O3N-TMJrFdoUsE696BwSxNj1KGx8SRB3oT4vXlm9Z6MD72y
+    XRJMHUJT6UALRn67g>
+X-ME-Received: <xmr:70-rYycKj8vAblei4m6cs_od4tRoREyTT1QwZBdZ0Ii2wbnIwmvpQQL2kB0yzZZunMEw8cqpA78RPtsvKWgLqNbTAVtH-tDF2-YExbO5cLPDimd28YUMZCpYMg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedriedtgddufeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeffjeefkeekfeffvdetveeuffeuhfegieethedvieffudeufeev
+    vdejfeduleejgeenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhpmhhushhuphhpoh
+    hrthdrmhgupdguvghvihgtvghtrhgvvgdrohhrghdpphhrihhsmhhitgdrihhonecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlse
+    hshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:70-rY8LI3aHaYuG2GOIAyef8WnimoNtwOFE_GlmauW0KnVV7wOafcA>
+    <xmx:70-rY_KK6LhdKJbg0dPVgf_Kx8cJVE-FbMCRb8SoIg83iN0aUlXFoQ>
+    <xmx:70-rY1wx1xshFLOVKC9940GVliZb_ZRupqNZmGfqx3T8B9RNRCjubA>
+    <xmx:70-rYxxTTNzqY6Tf2KMjiATCeW1dw0srjaacuNBZ_MKYaSdYYykhmA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 27 Dec 2022 15:05:01 -0500 (EST)
+Message-ID: <8bbe4e7b-ae35-ab68-bb0b-72c201ea1256@sholland.org>
+Date:   Tue, 27 Dec 2022 14:05:01 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|DM4PR11MB5536:EE_
-X-MS-Office365-Filtering-Correlation-Id: 353e3c73-319b-45b3-901a-08dae844de26
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D7kWN3raxjEuCCQE1shDlG4ZWvxtaN3l4luEsUZ/jWgH9nlqe3ctiqTk0rHghkc0f8v1Fj2395IuyiDICMhFLkwX+rPCEwv9g3/4zT2RpjlIzyNWNQURRmDS8s5qZ0EIyDSn+lNBvRPXIJeuOW5PEITON1itzoy2X9kUj7N0LaESORCaiOZ2T96sN/h2tUCjPnV00H6Hwf+0/pJXgFuSGdqmySU1wCdpvVvOzBLFyL3rWeJtPgl6PWe+crLuglHpmim5w4wze9FPWu0DuyPj4Y8vVrXptmJucB77wcA1k+OI0iR47G3CnFgllD9BeB764Lhzn3yI6tzfTFjJzwiGIHcrIYl+xvsG4qqoQqb9UzM9c/0RAaXnnwFJuIgdk60uCSv1xaIKzC9Catvgt60qxedUycQX/fD/do6u8YczbyBNr46q0QPu5kWTsKAvB07Onm4u5Zy+5+AVHS/gPTktsfDGmSMTO2H3kEHcgwPMXGZa49B/1XorwARJvRijZDjKyM1MsZEz5I5sXdu87WzLVldx3xehJ1iGCEy6En5ceBrbpkpQqHSdXkjJYMIYfOuFMoEr+cZjH5jzLEU4nbbq0VV6ccqVESEnuAaFGnQ0h91A9RAFi63AX2Jg+YhDrauvKIz8sJt77jW5EbWiF23OULFKXxFiJ71sim5e8GsYhUU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(346002)(376002)(136003)(366004)(451199015)(38100700002)(82960400001)(83380400001)(4326008)(86362001)(8676002)(66556008)(6916009)(66476007)(41300700001)(66946007)(316002)(54906003)(2906002)(8936002)(5660300002)(4744005)(186003)(44832011)(26005)(6512007)(966005)(478600001)(6486002)(6666004)(107886003)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d5xC1LIVa3AC4xvMf9/HCUCYk1g3883mJ0PqkGzlGiWGJvFCQD1saF/nqTyk?=
- =?us-ascii?Q?7FDYRO60johfwNtfL9SZeaiWEc6w1q52IgcbRjDw9wT5u0A2uycaPHZ/SHrs?=
- =?us-ascii?Q?kPezWW3s/azVTCsa5wWnoZVMG1v2EY8cBijdF5FMrnYlbBAi5qVCpwVFTSut?=
- =?us-ascii?Q?7fsB4/8ce36/9FKEn+u1NmYLBHphOQkblBsoJHfS6AL6pCBjnfh+UMCP8Nda?=
- =?us-ascii?Q?RRErrszEwd0xwJLK8gi88jT3YaYJ/rG0XKTuwy7h7vFnpO8Lrpzae2VUP/wq?=
- =?us-ascii?Q?zj7y4qUzI56fCMXbocLfR4A0Z1C7oFfFYkzHUR/wBkGyVnP0YDA1iiPJ3tuY?=
- =?us-ascii?Q?IXyUb947PlI4tEE1PVBYBVEAvj04iKU1/etF3d/Uu5naXhZKkhN9eGE3hRx7?=
- =?us-ascii?Q?7J80yizAXon7bAyXhs8b/jGMHVqux1RejToC4Lyx5PwhvDGrVLwUF7uNUSeS?=
- =?us-ascii?Q?Ry96f0vWg46mBU+968x+sJobs90lMts76yhexDjtaeh6vtq5Qj74hD8zvKY/?=
- =?us-ascii?Q?xy5UOdY/wZonH0oib2X+tzaPX/tqx3YxKtAhcJq4dBqYmFVDWHwCRoa40yCj?=
- =?us-ascii?Q?8FRyAf4aUIKDssLektjMW+GqO4Ig2MWX7SKoG3ySNlpGztu4MxwHupH2CPzh?=
- =?us-ascii?Q?8axMIQDlb2AkXfXA15vKau+mbncrXbouRRzFUuwfKgXWDM1quv14MAOfKXRT?=
- =?us-ascii?Q?mDaVNDAvbmFfXwTFXnDtgeJaL9AB6m44lcxZKuEaF6aPLs9HwZc1LgvlCRtb?=
- =?us-ascii?Q?m0H942ETFSjbhDEsyNFknqT5nS2xANKrhMvh3oVcbjwsbM1kLC1AFV6ahHDo?=
- =?us-ascii?Q?QD8UryKW/jXONgMIxb/rhdyqeBx8Dry+l80htprnBXp1xSz697R2X9J2FFVw?=
- =?us-ascii?Q?0V8KB4ROTNdIghoGoADF8HH/fX5YHOtCK6qhpRBwyiAhHVHKYtd5NOp1iAIW?=
- =?us-ascii?Q?34mTnpv5D9MebixQz5ADE0g+Kpc5t0w9tpSmvAxm6QF6TcABX4d+Cg52/LV3?=
- =?us-ascii?Q?97uA20Abhq0dqm5b4RVUQ6qvSnrkionPyUpcGZumjX8xSIzZIAoFO3P7CMbx?=
- =?us-ascii?Q?tDyq9GZl/jmu59+6cAm+L3w9zxQJqMOubxRC9ggjd7yb4gY0/GtE/jAQUEH8?=
- =?us-ascii?Q?v7o8jnzfCUlgxgxOe/LvJtuzh3x0Hj8xDPjeJA9SawUZWr63yyzwXQjMbsLf?=
- =?us-ascii?Q?wHxL8VdsRbjqEOrQytxOFppVOfrjIp4PYokeyuYeETv8RNhYvC17axgssirQ?=
- =?us-ascii?Q?3LExNH9FTY+gItdFk5XpArcM4n+3tZz+OpwUn5G/BylBXAa7gAZLm6zZiX6Y?=
- =?us-ascii?Q?1PutP+Q8Ns3nsvTgQywnQ5c3tCTUES0V7VscY9APSi9HcizlrDwcggncdaD/?=
- =?us-ascii?Q?c3P5KN6O3s5RLMb80fbttkBIAKKXb74+UzMeT5RrenbgIhz9rBUEV2d+3tDr?=
- =?us-ascii?Q?cgXTXdQqd3t+NCo6WV2wgmutcNnBG4fhgdcEFoXOehix9dkKUMUdaqVjToCf?=
- =?us-ascii?Q?aJ5OrDp/NN/i6w5D1hfdEID0xYOm+dyhETN4pBhGc6LuuEQM0UpSNdB6OMM9?=
- =?us-ascii?Q?SkxmlTbO/LbRfHrWdbrcx6ZxJBefLIAwlbgL5QaBlpBYDiQn0AUnMIHoY/p2?=
- =?us-ascii?Q?Fg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 353e3c73-319b-45b3-901a-08dae844de26
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Dec 2022 19:59:31.0085
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f5A5/tRDP1WXxb9Xu8cw3cUOnqsiVhANfryt4vsc4tI752zzDMyLSpL1ohz+4QsGv4GdVfV03r3ESeSnhSLSsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5536
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        atishp@rivosinc.com
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, apatel@ventanamicro.com,
+        will@kernel.org, mark.rutland@arm.com, opensbi@lists.infradead.org
+References: <20221227194056.3891216-1-conor@kernel.org>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v2] dt-bindings: riscv: add SBI PMU event mappings
+In-Reply-To: <20221227194056.3891216-1-conor@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 08:50:25PM +0100, Borislav Petkov wrote:
-> On Tue, Dec 27, 2022 at 11:23:35AM -0800, Ashok Raj wrote:
-> > microcode_check() is only called from microcode/core.c. Move it and make
-> > it static to prepare for upcoming fix for false negative when checking CPU
-> > features after a microcode update. Also move get_cpu_cap() to processor.h
-> > for general use outside of arch/x86/kernel/cpu/cpu.h
-> 
-> I thought we agreed not to do this:
-> 
-> https://lore.kernel.org/r/Y44bbZMMf8I6Lzl/@zn.tnic
-> 
-> Or was this a misunderstanding?
+Hi Conor,
 
-Bah... you are correct, I should drop this one.
+On 12/27/22 13:40, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> The SBI PMU extension requires a firmware to be aware of the event to
+> counter/mhpmevent mappings supported by the hardware. OpenSBI may use
+> DeviceTree to describe the PMU mappings. This binding is currently
+> described in markdown in OpenSBI (since v1.0 in Dec 2021) & used by QEMU
+> since v7.2.0.
+> 
+> Import the binding for use while validating dtb dumps from QEMU and
+> upcoming hardware (eg JH7110 SoC) that will make use of the event
+> mapping.
+> 
+> Link: https://github.com/riscv-software-src/opensbi/blob/master/docs/pmu_support.md
+> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc # Performance Monitoring Unit Extension
+> Co-developed-by: Atish Patra <atishp@rivosinc.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Changes in v2:
+> - use the schema mechanism for dependancies between properties
+> - +CC perf maintainers...
+> - move the matrix element descriptions into regular item descriptions
+>   rather than doing so freeform in the property description
+> - drop some description text that no longer applies since changes were
+>   made to the SBI spec
+> - drop mention of the "generic platform" which is OpenSBI specific
+> - drop the min/max items from the matrices, they don't appear to be
+>   needed?
+> ---
+>  .../devicetree/bindings/perf/riscv,pmu.yaml   | 154 ++++++++++++++++++
+>  1 file changed, 154 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/perf/riscv,pmu.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/perf/riscv,pmu.yaml b/Documentation/devicetree/bindings/perf/riscv,pmu.yaml
+> new file mode 100644
+> index 000000000000..b50b69ed4599
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/perf/riscv,pmu.yaml
+> @@ -0,0 +1,154 @@
+> +# SPDX-License-Identifier: BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/perf/riscv,pmu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: RISC-V SBI PMU events
+> +
+> +maintainers:
+> +  - Atish Patra <atishp@rivosinc.com>
+> +
+> +description: |
+> +  SBI PMU extension supports allow supervisor software to configure, start &
+> +  stop any performance counter at anytime. Thus, a user can leverage full
+> +  capability of performance analysis tools such as perf if the SBI PMU
+> +  extension is enabled. The OpenSBI implementation makes the following
+> +  assumptions about the hardware platform:
+> +
+> +    The platform must provide information about PMU event to counter mapping
+> +    via device tree or platform specific hooks. Otherwise, the SBI PMU
+> +    extension will not be enabled.
+> +
+> +    The platforms should provide information about the PMU event selector
+> +    values that should be encoded in the expected value of MHPMEVENTx while
+> +    configuring MHPMCOUNTERx for that specific event. This can be done via a
+> +    device tree or platform specific hooks. The exact value to be written to
+> +    the MHPMEVENTx is completely dependent on the platform.
+> +
+> +    For information on the SBI spec see:
+> +      https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/riscv-sbi.adoc
+> +
+> +properties:
+> +  compatible:
+> +    const: riscv,pmu
+> +
+> +  riscv,event-to-mhpmevent:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    description:
+> +      Represents an ONE-to-ONE mapping between a PMU event and the event
+> +      selector value that platform expects to be written to the MHPMEVENTx CSR
+> +      for that event.
+> +      The mapping is encoded in an matrix format where each element represents
+> +      an event.
+> +      This property shouldn't encode any raw hardware event.
+> +    items:
+> +      - description: event idx
 
-I'll fix it up
+It might be good to clarify that this refers specifically to "event_idx"
+from the SBI specification.
 
-Cheers,
-Ashok
+> +      - description: upper 32 bits of the event selector value for MHPMEVENTx
+> +      - description: lower 32 bits of the event selector value for MHPMEVENTx
+
+Since you are describing the the columns of the matrix here, I believe
+these entries need to go under two levels of "items:". The same applies
+for the other properties.
+
+> +
+> +  riscv,event-to-mhpmcounters:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    description:
+> +      Represents a MANY-to-MANY mapping between a range of events and all the
+> +      MHPMCOUNTERx in a bitmap format that can be used to monitor these range
+> +      of events. The information is encoded in an matrix format where each
+> +      element represents a certain range of events and corresponding counters.
+> +      This property shouldn't encode any raw event.
+> +    items:
+> +      - description: upper 32 bits of the pmu event id
+> +      - description: lower 32 bits of the pmu event id
+
+These two cells represent the start and end of a range of 32-bit values
+(again the "event_idx" from the SBI specification), not 32-bit
+components of a 64-bit value.
+
+Regards,
+Samuel
+
+> +      - description: bitmap of MHPMCOUNTERx for this event
+> +
+> +  riscv,raw-event-to-mhpmcounters:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    description:
+> +      Represents an ONE-to-MANY or MANY-to-MANY mapping between the rawevent(s)
+> +      and all the MHPMCOUNTERx in a bitmap format that can be used to monitor
+> +      that raw event.
+> +      The encoding of the raw events are platform specific. The information is
+> +      encoded in a matrix format where each element represents the specific raw
+> +      event(s).
+> +      If a platform directly encodes each raw PMU event as a unique ID, the
+> +      value of variant must be 0xffffffff_ffffffff.
+> +    items:
+> +      - description:
+> +          upper 32 invariant bits for the range of events
+> +      - description:
+> +          lower 32 invariant bits for the range of events
+> +      - description:
+> +          upper 32 bits of the variant bit mask for the range of events
+> +      - description:
+> +          lower 32 bits of the variant bit mask for the range of events
+> +      - description:
+> +          bitmap of all MHPMCOUNTERx that can monitor the range of events
+> +
+> +dependencies:
+> +  "riscv,event-to-mhpmevent": [ "riscv,event-to-mhpmcounters" ]
+> +  "riscv,event-to-mhpmcounters": [ "riscv,event-to-mhpmevent" ]
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pmu {
+> +        compatible = "riscv,pmu";
+> +        riscv,event-to-mhpmevent = <0x0000B 0x0000 0x0001>;
+> +        riscv,event-to-mhpmcounters = <0x00001 0x00001 0x00000001>,
+> +                                      <0x00002 0x00002 0x00000004>,
+> +                                      <0x00003 0x0000A 0x00000ff8>,
+> +                                      <0x10000 0x10033 0x000ff000>;
+> +        riscv,raw-event-to-mhpmcounters =
+> +            /* For event ID 0x0002 */
+> +            <0x0000 0x0002 0xffffffff 0xffffffff 0x00000f8>,
+> +            /* For event ID 0-4 */
+> +            <0x0 0x0 0xffffffff 0xfffffff0 0x00000ff0>,
+> +            /* For event ID 0xffffffff0000000f - 0xffffffff000000ff */
+> +            <0xffffffff 0x0 0xffffffff 0xffffff0f 0x00000ff0>;
+> +    };
+> +
+> +  - |
+> +    /*
+> +     * For HiFive Unmatched board the encodings can be found here
+> +     * https://sifive.cdn.prismic.io/sifive/1a82e600-1f93-4f41-b2d8-86ed8b16acba_fu740-c000-manual-v1p6.pdf
+> +     * This example also binds standard SBI PMU hardware id's to U74 PMU event
+> +     * codes, U74 uses a bitfield for events encoding, so several U74 events
+> +     * can be bound to single perf id.
+> +     * See SBI PMU hardware id's in OpenSBI's include/sbi/sbi_ecall_interface.h
+> +     */
+> +    pmu {
+> +          compatible = "riscv,pmu";
+> +          riscv,event-to-mhpmevent =
+> +              /* SBI_PMU_HW_CACHE_REFERENCES -> Instruction or Data cache/ITIM busy */
+> +              <0x00003 0x00000000 0x1801>,
+> +              /* SBI_PMU_HW_CACHE_MISSES -> Instruction or Data cache miss or MMIO access */
+> +              <0x00004 0x00000000 0x0302>,
+> +              /* SBI_PMU_HW_BRANCH_INSTRUCTIONS -> Conditional branch retired */
+> +              <0x00005 0x00000000 0x4000>,
+> +              /* SBI_PMU_HW_BRANCH_MISSES -> Branch or jump misprediction */
+> +              <0x00006 0x00000000 0x6001>,
+> +              /* L1D_READ_MISS -> Data cache miss or MMIO access */
+> +              <0x10001 0x00000000 0x0202>,
+> +              /* L1D_WRITE_ACCESS -> Data cache write-back */
+> +              <0x10002 0x00000000 0x0402>,
+> +              /* L1I_READ_ACCESS -> Instruction cache miss */
+> +              <0x10009 0x00000000 0x0102>,
+> +              /* LL_READ_MISS -> UTLB miss */
+> +              <0x10011 0x00000000 0x2002>,
+> +              /* DTLB_READ_MISS -> Data TLB miss */
+> +              <0x10019 0x00000000 0x1002>,
+> +              /* ITLB_READ_MISS-> Instruction TLB miss */
+> +              <0x10021 0x00000000 0x0802>;
+> +          riscv,event-to-mhpmcounters = <0x00003 0x00006 0x18>,
+> +                                        <0x10001 0x10002 0x18>,
+> +                                        <0x10009 0x10009 0x18>,
+> +                                        <0x10011 0x10011 0x18>,
+> +                                        <0x10019 0x10019 0x18>,
+> +                                        <0x10021 0x10021 0x18>;
+> +          riscv,raw-event-to-mhpmcounters = <0x0 0x0 0xffffffff 0xfc0000ff 0x18>,
+> +                                            <0x0 0x1 0xffffffff 0xfff800ff 0x18>,
+> +                                            <0x0 0x2 0xffffffff 0xffffe0ff 0x18>;
+> +    };
+
