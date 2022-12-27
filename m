@@ -2,106 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D68656D0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 17:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F816656D0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 17:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbiL0QkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 11:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S229849AbiL0Qky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 11:40:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbiL0QkE (ORCPT
+        with ESMTP id S231614AbiL0QkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 11:40:04 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65910BE21
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 08:40:03 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id a17so12836286wrt.11
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 08:40:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cw3nBe3CGhcfnKtGwrrNWBSIrYIsB4PimiF7AYGIkj4=;
-        b=l5DU0CeFe/Dwop56+d8FNknh5cU6SnidV++R9cHeQIXvg7VzQ7ecmIE4aviNn2thWi
-         OWFWAuqQDHTp2Pnl97gRhlgDA2lDWBfNo1VJX8lXp3thu20jrelYp9j176omTpVhsVWH
-         zwAjMSfFdC+HP/O/ByKDpQowpHjoUu1leo26o8kRG50JQzY1fHokM0KhbZWLQ2B083q8
-         F4RBN3k8obZXKe+8GHNsgascjxxU4cfZzLvnNogsPt5OuCMgvkIpaHkWNrFR9ud9ee/Y
-         O6N0gvWOLfJc+57v5l5wQ3Tjal9qKa4dEKRg7RdMXuPjb9EGYDwVT72DP+dr4Cbua+mg
-         E09A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cw3nBe3CGhcfnKtGwrrNWBSIrYIsB4PimiF7AYGIkj4=;
-        b=fUq2DyGwKTWfWbz30bJvwKAIrA9JOFLZ3c47CeJTGZW9Nc4S+MVN9rWfnAbCXC348h
-         PvINn74wAR/z09H36sM/PWdZBWAh1Wkah1zY59Wi/ofjGHAG8HZyZSpRYPMn0HQTp0/v
-         No5jqYAHSRjXl+aq5Qt6Ztoxm2Xs2W39wnIvVl3p7UC6KBeEcUk6vgptEeEmm8inxJF7
-         2dEaa8qf60GwdIkGEHj3Amhj7+j8hd4xi7JJEKAMhdGN/ffOy3wDWPtY+S37LJTD9Qbn
-         Jy5de6lPmzrWURFrGhO7ulNA5tt64uJKsxL0IFMv9+lNDKk8a67ofANx7fDYpDpU/wm0
-         In8Q==
-X-Gm-Message-State: AFqh2kr0tXcAYjT9CDpsjKpJe90S35/OOJFNkvKveCf+PPWFJt+Rzk5M
-        0deMtSbOf1fyfmzR//AfsBuis67bP0j81dmfNLFYqA==
-X-Google-Smtp-Source: AMrXdXu37Vk/sOFghLi4oCjsH9UWemvjpnq5KxtAAXVQ7A6H1wyebOwPsYEKIK8EfK2+MyuEkI1bmcmn0EzCzJh7sAY=
-X-Received: by 2002:adf:8b93:0:b0:26b:361a:52f1 with SMTP id
- o19-20020adf8b93000000b0026b361a52f1mr1096779wra.655.1672159201919; Tue, 27
- Dec 2022 08:40:01 -0800 (PST)
-MIME-Version: 1.0
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-36-jthoughton@google.com> <Y6TQaZaB+PKObfNs@x1n>
-In-Reply-To: <Y6TQaZaB+PKObfNs@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Tue, 27 Dec 2022 11:39:50 -0500
-Message-ID: <CADrL8HV+v9NgJyX87Dd6XMYPqe1mUNqxYxJX520Xr2x9SktdZw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 35/47] userfaultfd: require UFFD_FEATURE_EXACT_ADDRESS
- when using HugeTLB HGM
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+        Tue, 27 Dec 2022 11:40:24 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3061BE23;
+        Tue, 27 Dec 2022 08:40:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672159222; x=1703695222;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=IRATqieH5GzTgS6odrliQ0LbeJjujXJnPHSE5feiNho=;
+  b=CvmKrK72CG1B3J2i9iaOgIN3OE6jyZDxsBwxRdpCtFONBXm4NHm/0BBR
+   EhACz6/M/tISnAt+K/IsXIMgXnY8eNPFJCNdpJmUUkkdXCEOKEcxmwJ9t
+   OwfjNalkW0exHGcB0S59XkSDbsNxApFBPmi8gZ0roIQxoeTIqNmoBKEUL
+   rQtmN/5MQpdkcevzHWz6rVgCmMR/TGt1CY58a5JEgMSmsryr8vClkbaGF
+   ZxruJR8gaA/vEucUp37CtNZJxxHN+hu9Bnh75VTsfFtESmPey0V1TmqH8
+   pn8pSvVXKg9/uJ4sf3wpPzdkh4j3o3i1Jq0X36GXja3ctJtiWHNkpeSAD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="321958438"
+X-IronPort-AV: E=Sophos;i="5.96,278,1665471600"; 
+   d="scan'208";a="321958438"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 08:40:22 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="741781189"
+X-IronPort-AV: E=Sophos;i="5.96,278,1665471600"; 
+   d="scan'208";a="741781189"
+Received: from admiller-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.206.1])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 08:40:21 -0800
+Message-ID: <33dd969d9bdb1eb93f8f2a2167efeb535455cf74.camel@linux.intel.com>
+Subject: Re: [PATCH 0/2] intel_pstate: fix turbo not being used after a
+ processor is rebooted
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Pratyush Yadav <ptyadav@amazon.de>
+Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@acpica.org
+Date:   Tue, 27 Dec 2022 08:40:21 -0800
+In-Reply-To: <mafs07cycdfh4.fsf_-_@amazon.de>
+References: <20221221155203.11347-1-ptyadav@amazon.de>
+         <72bcd14eef038ec9181d30b3d196b0a872f47ccb.camel@linux.intel.com>
+         <mafs0k02jd8oh.fsf_-_@dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com>
+         <2ed9702b67832e3e33ef352808124980206c1e95.camel@linux.intel.com>
+         <8e2cc66f7dadcfb04099aac7c4eef0b02075c91b.camel@linux.intel.com>
+         <mafs07cycdfh4.fsf_-_@amazon.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 4:47 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Oct 21, 2022 at 04:36:51PM +0000, James Houghton wrote:
-> > @@ -1990,6 +1990,17 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
-> >               ~(UFFD_FEATURE_MINOR_HUGETLBFS | UFFD_FEATURE_MINOR_SHMEM);
-> >  #ifndef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-> >       uffdio_api.features &= ~UFFD_FEATURE_MINOR_HUGETLBFS_HGM;
-> > +#else
+On Tue, 2022-12-27 at 16:38 +0100, Pratyush Yadav wrote:
+> Hi Srinivas,
+> 
+> On Sat, Dec 24 2022, srinivas pandruvada wrote:
+> 
+> > On Fri, 2022-12-23 at 10:10 -0800, srinivas pandruvada wrote:
+> > > Hi Pratyush,
+> > > 
+> > > On Thu, 2022-12-22 at 11:39 +0100, Pratyush Yadav wrote:
+> > > > 
+> > > > Hi Srinivas,
+> > > > 
+> > > > On Wed, Dec 21 2022, srinivas pandruvada wrote:
+> > > > > On Wed, 2022-12-21 at 16:52 +0100, Pratyush Yadav wrote:
+> > > > > > When a processor is brought offline and online again, it is
+> > > > > > unable to
+> > > > > > use Turbo mode because the _PSS table does not contain the
+> > > > > > whole
+> > > > > > turbo
+> > > > > > frequency range, but only +1 MHz above the max non-turbo
+> > > > > > frequency.
+> > > > > > This
+> > > > > > causes problems when ACPI processor driver tries to set
+> > > > > > frequency
+> > > > > > constraints. See patch 2 for more details.
+> > > > > > 
+> > > I can reproduce on a Broadwell server platform. But not on a
+> > > client
+> > > system with acpi_ppc usage.
+> > > 
+> > > Need to check what change broke this.
+> > 
+> > When PPC limits enforcement changed to PM QOS, this broke.
+> > Previously
+> > acpi_processor_get_platform_limit() was not enforcing any limits.
+> > It
+> > was just setting variable. So any update done after
+> > acpi_register_performance_state() call to pr->performance-
+> > > states[ppc].core_frequency, was effective.
+> > 
+> > We don't really need to call
+> >         ret = freq_qos_update_request(&pr->perflib_req,
+> >                         pr->performance->states[ppc].core_frequency
+> > *
+> > 1000);
+> > 
+> > if the PPC is not changed. When PPC is changed, this gets called
+> > again,
+> > so then we can call the above function to update cpufreq limit.
+> > 
+> > The below change fixed for me.
+> 
+> Right. 
+I think, this is the only change you require to fix this. In addition
+set pr->performance_platform_limit = 0 in
+acpi_processor_unregister_performance().
+
+Thanks,
+Srinivas
+
+> Should I re-roll my patches with your diff below then? Or do you
+> think my patches should be good to merge as-is?
+> 
+> > 
+> > diff --git a/drivers/acpi/processor_perflib.c
+> > b/drivers/acpi/processor_perflib.c
+> > index 757a98f6d7a2..c6ced89c00dd 100644
+> > --- a/drivers/acpi/processor_perflib.c
+> > +++ b/drivers/acpi/processor_perflib.c
+> > @@ -75,6 +75,11 @@ static int
+> > acpi_processor_get_platform_limit(struct
+> > acpi_processor *pr)
+> >         pr_debug("CPU %d: _PPC is %d - frequency %s limited\n", pr-
+> > >id,
+> >                        (int)ppc, ppc ? "" : "not");
+> > 
+> > +       if (ppc == pr->performance_platform_limit) {
+> > +               pr_debug("CPU %d: _PPC is %d - frequency not
+> > changed\n", pr->id, ppc);
+> > +               return 0;
+> > +       }
 > > +
-> > +     ret = -EINVAL;
-> > +     if ((uffdio_api.features & UFFD_FEATURE_MINOR_HUGETLBFS_HGM) &&
-> > +         !(uffdio_api.features & UFFD_FEATURE_EXACT_ADDRESS))
->
-> This check needs to be done upon "features" or "ctx_features", rather than
-> "uffdio_api.features".  The latter is the one we'll report to the user only.
+> >         pr->performance_platform_limit = (int)ppc;
+> > 
+> >         if (ppc >= pr->performance->state_count ||
+> > 
+> 
 
-Ack, thanks Peter. I'm going to drop this patch given the API change
-(switching to MADV_SPLIT).
-
-- James
