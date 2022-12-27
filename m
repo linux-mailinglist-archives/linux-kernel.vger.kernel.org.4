@@ -2,184 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E31C6569A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 11:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C5765699D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 11:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiL0Kwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 05:52:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S229679AbiL0KwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 05:52:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiL0Kwj (ORCPT
+        with ESMTP id S230026AbiL0KwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 05:52:39 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6471E3;
-        Tue, 27 Dec 2022 02:52:37 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NhBB91s4Sz9xHvM;
-        Tue, 27 Dec 2022 18:45:05 +0800 (CST)
-Received: from [10.48.132.132] (unknown [10.48.132.132])
-        by APP1 (Coremail) with SMTP id LxC2BwAXnAdPzqpjpWtJAA--.20242S2;
-        Tue, 27 Dec 2022 11:52:13 +0100 (CET)
-Message-ID: <ab3b1aee-2140-2899-f37e-8f71ea67ea20@huaweicloud.com>
-Date:   Tue, 27 Dec 2022 11:51:52 +0100
+        Tue, 27 Dec 2022 05:52:05 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E548AA479;
+        Tue, 27 Dec 2022 02:52:02 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 262641EC02FE;
+        Tue, 27 Dec 2022 11:52:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672138321;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=7wsM9e/T5jFmAKOSFCalMkh4dI5J+2K4eCkXRgsYmo8=;
+        b=C+4r1rC5FKIlTfYqTx3bdvejoL3qLxrMNBIyYEuO3uBoFG22UeJfL25ny1lFyFMDG0mxaH
+        bkFGlloegp21piRKOmH03lLE4GVVoJ3BYxx5+qlBbzJDYRmfjLfw6eGHU/eGsExFzPeklb
+        9vImevDL8aT0AYPt2Zse5Kk+mj3ko7s=
+Date:   Tue, 27 Dec 2022 11:51:56 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kim Phillips <kim.phillips@amd.com>
+Cc:     x86@kernel.org, Babu Moger <Babu.Moger@amd.com>,
+        Borislav Petkov <bp@amd.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Alexey Kardashevskiy <aik@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/7] x86/cpu: Make X86_FEATURE_LFENCE_RDTSC a
+ scattered feature bit
+Message-ID: <Y6rOTM6Q7AZekpoc@zn.tnic>
+References: <20221205233235.622491-1-kim.phillips@amd.com>
+ <20221205233235.622491-4-kim.phillips@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v4 2/2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     dhowells@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, ebiggers@kernel.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-References: <20221227094632.2797203-1-roberto.sassu@huaweicloud.com>
- <20221227094632.2797203-2-roberto.sassu@huaweicloud.com>
-Content-Language: en-US
-In-Reply-To: <20221227094632.2797203-2-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwAXnAdPzqpjpWtJAA--.20242S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFWfuF18KFWfWr48GF17KFg_yoWrAw4xpF
-        Z8WrWUKry5Jrn2krZxCa18t3yrA3y8A3Wagw4fJw13CrnxZrWkGry29r47Wry7JrykXry8
-        tr4kWws5Wr1DXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4MKCgACsl
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221205233235.622491-4-kim.phillips@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/27/2022 10:46 AM, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Mon, Dec 05, 2022 at 05:32:31PM -0600, Kim Phillips wrote:
+> It's a part of the CPUID 0x80000021 leaf, and will be grouped
+> with other feature bits to being propagated via kvm_set_cpu_caps()
+> instead of open-coding them in __do_cpuid_func().
 > 
-> Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> mapping") checks that both the signature and the digest reside in the
-> linear mapping area.
+> Unlike the other CPUID 0x80000021 EAX feature bits,
+> X86_FEATURE_LFENCE_RDTSC already had an entry in cpufeatures.h.
 > 
-> However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> stack support"), made it possible to move the stack in the vmalloc area,
-> which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> adjacent pages.
-> 
-> Always make a copy of the signature and digest in the same buffer used to
-> store the key and its parameters, and pass them to sg_set_buf(). Prefer it
-> to conditionally doing the copy if necessary, to keep the code simple. The
-> buffer allocated with kmalloc() is in the linear mapping area.
-> 
-> Cc: stable@vger.kernel.org # 4.9.x
-> Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-> Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
 > ---
->   crypto/asymmetric_keys/public_key.c | 39 ++++++++++++++++-------------
->   1 file changed, 22 insertions(+), 17 deletions(-)
+>  arch/x86/kernel/cpu/scattered.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-> index 2f8352e88860..a479e32cb280 100644
-> --- a/crypto/asymmetric_keys/public_key.c
-> +++ b/crypto/asymmetric_keys/public_key.c
-> @@ -360,9 +360,10 @@ int public_key_verify_signature(const struct public_key *pkey,
->   	struct crypto_wait cwait;
->   	struct crypto_akcipher *tfm;
->   	struct akcipher_request *req;
-> -	struct scatterlist src_sg[2];
-> +	struct scatterlist src_sg;
->   	char alg_name[CRYPTO_MAX_ALG_NAME];
-> -	char *key, *ptr;
-> +	char *buf, *ptr;
-> +	size_t buf_len;
->   	int ret;
->   
->   	pr_devel("==>%s()\n", __func__);
-> @@ -400,34 +401,38 @@ int public_key_verify_signature(const struct public_key *pkey,
->   	if (!req)
->   		goto error_free_tfm;
->   
-> -	key = kmalloc(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-> -		      GFP_KERNEL);
-> -	if (!key)
-> +	buf_len = max_t(size_t, pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-> +			sig->s_size + sig->digest_size);
-> +
-> +	buf = kmalloc(buf_len, GFP_KERNEL);
-> +	if (!buf)
->   		goto error_free_req;
->   
-> -	memcpy(key, pkey->key, pkey->keylen);
-> -	ptr = key + pkey->keylen;
-> +	memcpy(buf, pkey->key, pkey->keylen);
-> +	ptr = buf + pkey->keylen;
->   	ptr = pkey_pack_u32(ptr, pkey->algo);
->   	ptr = pkey_pack_u32(ptr, pkey->paramlen);
->   	memcpy(ptr, pkey->params, pkey->paramlen);
->   
->   	if (pkey->key_is_private)
-> -		ret = crypto_akcipher_set_priv_key(tfm, key, pkey->keylen);
-> +		ret = crypto_akcipher_set_priv_key(tfm, buf, pkey->keylen);
->   	else
-> -		ret = crypto_akcipher_set_pub_key(tfm, key, pkey->keylen);
-> +		ret = crypto_akcipher_set_pub_key(tfm, buf, pkey->keylen);
->   	if (ret)
-> -		goto error_free_key;
-> +		goto error_free_buf;
->   
->   	if (strcmp(pkey->pkey_algo, "sm2") == 0 && sig->data_size) {
->   		ret = cert_sig_digest_update(sig, tfm);
->   		if (ret)
-> -			goto error_free_key;
-> +			goto error_free_buf;
->   	}
->   
-> -	sg_init_table(src_sg, 2);
-> -	sg_set_buf(&src_sg[0], sig->s, sig->s_size);
-> -	sg_set_buf(&src_sg[1], sig->digest, sig->digest_size);
-> -	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
-> +	memcpy(buf, sig->s, sig->s_size);
-> +	memcpy(buf + sig->s_size, sig->digest, sig->digest_size);
-> +
-> +	sg_init_table(&src_sg, 1);
-> +	sg_set_buf(&src_sg, buf, sig->s_size + sig->digest_size);
+> diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
+> index d0734cc19d37..caa03466cd9e 100644
+> --- a/arch/x86/kernel/cpu/scattered.c
+> +++ b/arch/x86/kernel/cpu/scattered.c
+> @@ -46,6 +46,7 @@ static const struct cpuid_bit cpuid_bits[] = {
+>  	{ X86_FEATURE_PROC_FEEDBACK,    CPUID_EDX, 11, 0x80000007, 0 },
+>  	{ X86_FEATURE_MBA,		CPUID_EBX,  6, 0x80000008, 0 },
+>  	{ X86_FEATURE_NO_NESTED_DATA_BP,CPUID_EAX,  0, 0x80000021, 0 },
+> +	{ X86_FEATURE_LFENCE_RDTSC,	CPUID_EAX,  2, 0x80000021, 0 },
 
-Ops, didn't commit the changes. Will send a new version soon.
+Hmm, so this patchset keeps growing and growing with new bits.
 
-Roberto
+Perhaps my initial suggestion to make it a scattered one doesn't make
+a whole lot of sense anymore.
 
-> +	akcipher_request_set_crypt(req, &src_sg, NULL, sig->s_size,
->   				   sig->digest_size);
->   	crypto_init_wait(&cwait);
->   	akcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG |
-> @@ -435,8 +440,8 @@ int public_key_verify_signature(const struct public_key *pkey,
->   				      crypto_req_done, &cwait);
->   	ret = crypto_wait_req(crypto_akcipher_verify(req), &cwait);
->   
-> -error_free_key:
-> -	kfree(key);
-> +error_free_buf:
-> +	kfree(buf);
->   error_free_req:
->   	akcipher_request_free(req);
->   error_free_tfm:
+/me goes and looks at CPUID_Fn80000021_EAX [Extended Feature 2 EAX] (Core::X86::Cpuid::FeatureExt2Eax)
 
+Yah, judging by what's there in that leaf, we are likely to use a lot
+more bits in the future I think you should go back to
+
+https://lore.kernel.org/lkml/20221104213651.141057-2-kim.phillips@amd.com/
+
+But please state in that commit message that the majority of the feature
+bits in CPUID_Fn80000021_EAX will be used in the kernel and thus a
+separate leaf makes sense.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
