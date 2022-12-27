@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D8D6566FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 04:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539996566FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 04:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiL0DIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 22:08:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
+        id S229945AbiL0DI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 22:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiL0DIs (ORCPT
+        with ESMTP id S229730AbiL0DIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 22:08:48 -0500
+        Mon, 26 Dec 2022 22:08:51 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C5AEA5
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 19:08:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D03EA5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 19:08:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672110527; x=1703646527;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KrwatNXBHmOV083eFx1LnqNZgGE3IkeAeiegROk1x90=;
-  b=jcGiP/FA01mpAiIvfG864L6B4/ZaNDzoR9dNjKLBpqROFiKFlOaCysU3
-   rj+5WCn97pTrnBjvgutd4BTlSaXeBPAo0j6QWwgguXJzD3kDOE1I2p/Yb
-   EehyUFux8pakEYOWU25jUJzwrQ/RZzf98Vy32CYaS6HjIgtVFfLcYSW/N
-   nUNmy0IalOvexpuOkYme1wTrGIYf/myslZlJobSGWHXkkO220Tvu9A5tT
-   gF3qfysbjACbzEw1S5YwrwYGnM8c6rBKSfDXIgvyK2Dm5/A5DIs9X4R8e
-   oEz4YVoZb2VXmXNumVzAtMg+nsLXm69CbZsttwTK35EaUHGVurKz9Khd1
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="321869763"
+  t=1672110530; x=1703646530;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=RtCIdg8lGqV2ZfTQEm450k++h2Jppj7vK0WjZsYLBB4=;
+  b=Tc9jXW+9Us16qBC9de3bu6MpqQ3urXbbPwP8N6GoX5nnTlQjFrAQLTH8
+   p/Eo5I1hOikIRLOpF2U/JuSt778O69NCwbAIyxjBzweEVCUM+3AeEGSZ/
+   TiycKnfRd2P6DjIgGm4csODFF8JE8k/S8KQjn0A1c0GjOwqn9Gb12N4EK
+   KopZNgBevj0KXt6+s3sdqxOc6/m446Y1hGZVKn4i6yjWcFffnKA6YyfZc
+   fS6Tgvza4cFfU0km0ebkhbKoFRCdR8vOJLbBdeBQStchRoGb0GpVgJcD5
+   GMWobYaiLLrQ0mEfF7pS6vlKvrliKtoTj1vGr28GrkWDyqVA8aKc9kGWS
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="321869746"
 X-IronPort-AV: E=Sophos;i="5.96,277,1665471600"; 
-   d="scan'208";a="321869763"
+   d="scan'208";a="321869746"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2022 19:08:47 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="652917524"
+X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="652917515"
 X-IronPort-AV: E=Sophos;i="5.96,277,1665471600"; 
-   d="scan'208";a="652917524"
+   d="scan'208";a="652917515"
 Received: from ppogotov-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.62.152])
   by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2022 19:08:39 -0800
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 7C728109CB8; Tue, 27 Dec 2022 06:08:36 +0300 (+03)
+        id 84BC110BBAD; Tue, 27 Dec 2022 06:08:36 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -59,10 +59,12 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv13 00/16] Linear Address Masking enabling
-Date:   Tue, 27 Dec 2022 06:08:13 +0300
-Message-Id: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv13 01/16] x86: Allow atomic MM_CONTEXT flags setting
+Date:   Tue, 27 Dec 2022 06:08:14 +0300
+Message-Id: <20221227030829.12508-2-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.38.2
+In-Reply-To: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
+References: <20221227030829.12508-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,151 +77,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linear Address Masking[1] (LAM) modifies the checking that is applied to
-64-bit linear addresses, allowing software to use of the untranslated
-address bits for metadata.
+So far there's no need in atomic setting of MM context flags in
+mm_context_t::flags. The flags set early in exec and never change
+after that.
 
-The capability can be used for efficient address sanitizers (ASAN)
-implementation and for optimizations in JITs and virtual machines.
+LAM enabling requires atomic flag setting.
 
-The patchset brings support for LAM for userspace addresses. Only LAM_U57 at
-this time.
+Convert the field to unsigned long and MM_CONTEXT_* accesses with
+__set_bit() and test_bit().
 
-Please review and consider applying.
+No functional changes.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+---
+ arch/x86/entry/vsyscall/vsyscall_64.c | 2 +-
+ arch/x86/include/asm/mmu.h            | 6 +++---
+ arch/x86/include/asm/mmu_context.h    | 2 +-
+ arch/x86/kernel/process_64.c          | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-v13:
-  - Fix race between untagged_addr() and LAM enabling:
-    + Do not allow to enable LAM after the process spawned the second thread;
-    + untagged_addr() untags the address according to rules of the current
-      process;
-    + untagged_addr_remote() can be used for untagging addresses for foreign
-      process. It requires mmap lock for the target process to be taken;
-v12:
-  - Rebased onto tip/x86/mm;
-  - Drop VM_WARN_ON() that may produce false-positive on race between context
-    switch and LAM enabling;
-  - Adjust comments explain possible race;
-  - User READ_ONCE() in mm_lam_cr3_mask();
-  - Do not assume &init_mm == mm in initialize_tlbstate_and_flush();
-  - Ack by Andy;
-v11:
-  - Move untag_mask to /proc/$PID/status;
-  - s/SVM/SVA/g;
-  - static inline arch_pgtable_dma_compat() instead of macros;
-  - Replace pasid_valid() with mm_valid_pasid();
-  - Acks from Ashok and Jacob (forgot to apply from v9);
-v10:
-  - Rebased to v6.1-rc1;
-  - Add selftest for SVM vs LAM;
-v9:
-  - Fix race between LAM enabling and check that KVM memslot address doesn't
-    have any tags;
-  - Reduce untagged_addr() overhead until the first LAM user;
-  - Clarify SVM vs. LAM semantics;
-  - Use mmap_lock to serialize LAM enabling;
-v8:
-  - Drop redundant smb_mb() in prctl_enable_tagged_addr();
-  - Cleanup code around build_cr3();
-  - Fix commit messages;
-  - Selftests updates;
-  - Acked/Reviewed/Tested-bys from Alexander and Peter;
-v7:
-  - Drop redundant smb_mb() in prctl_enable_tagged_addr();
-  - Cleanup code around build_cr3();
-  - Fix commit message;
-  - Fix indentation;
-v6:
-  - Rebased onto v6.0-rc1
-  - LAM_U48 excluded from the patchet. Still available in the git tree;
-  - add ARCH_GET_MAX_TAG_BITS;
-  - Fix build without CONFIG_DEBUG_VM;
-  - Update comments;
-  - Reviewed/Tested-by from Alexander;
-v5:
-  - Do not use switch_mm() in enable_lam_func()
-  - Use mb()/READ_ONCE() pair on LAM enabling;
-  - Add self-test by Weihong Zhang;
-  - Add comments;
-v4:
-  - Fix untagged_addr() for LAM_U48;
-  - Remove no-threads restriction on LAM enabling;
-  - Fix mm_struct access from /proc/$PID/arch_status
-  - Fix LAM handling in initialize_tlbstate_and_flush()
-  - Pack tlb_state better;
-  - Comments and commit messages;
-v3:
-  - Rebased onto v5.19-rc1
-  - Per-process enabling;
-  - API overhaul (again);
-  - Avoid branches and costly computations in the fast path;
-  - LAM_U48 is in optional patch.
-v2:
-  - Rebased onto v5.18-rc1
-  - New arch_prctl(2)-based API
-  - Expose status of LAM (or other thread features) in
-    /proc/$PID/arch_status
-
-[1] ISE, Chapter 10. https://cdrdv2.intel.com/v1/dl/getContent/671368
-
-Kirill A. Shutemov (11):
-  x86: Allow atomic MM_CONTEXT flags setting
-  x86: CPUID and CR3/CR4 flags for Linear Address Masking
-  x86/mm: Handle LAM on context switch
-  mm: Introduce untagged_addr_remote()
-  x86/uaccess: Provide untagged_addr() and remove tags before address
-    check
-  x86/mm: Provide arch_prctl() interface for LAM
-  x86/mm: Reduce untagged_addr() overhead until the first LAM user
-  mm: Expose untagging mask in /proc/$PID/status
-  iommu/sva: Replace pasid_valid() helper with mm_valid_pasid()
-  x86/mm/iommu/sva: Make LAM and SVA mutually exclusive
-  selftests/x86/lam: Add test cases for LAM vs thread creation
-
-Weihong Zhang (5):
-  selftests/x86/lam: Add malloc and tag-bits test cases for
-    linear-address masking
-  selftests/x86/lam: Add mmap and SYSCALL test cases for linear-address
-    masking
-  selftests/x86/lam: Add io_uring test cases for linear-address masking
-  selftests/x86/lam: Add inherit test cases for linear-address masking
-  selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for
-    linear-address masking
-
- arch/arm64/include/asm/mmu_context.h        |    6 +
- arch/sparc/include/asm/mmu_context_64.h     |    6 +
- arch/sparc/include/asm/uaccess_64.h         |    2 +
- arch/x86/entry/vsyscall/vsyscall_64.c       |    2 +-
- arch/x86/include/asm/cpufeatures.h          |    1 +
- arch/x86/include/asm/mmu.h                  |   16 +-
- arch/x86/include/asm/mmu_context.h          |   49 +-
- arch/x86/include/asm/processor-flags.h      |    2 +
- arch/x86/include/asm/tlbflush.h             |   34 +
- arch/x86/include/asm/uaccess.h              |   52 +-
- arch/x86/include/uapi/asm/prctl.h           |    5 +
- arch/x86/include/uapi/asm/processor-flags.h |    6 +
- arch/x86/kernel/process.c                   |    6 +
- arch/x86/kernel/process_64.c                |   59 +-
- arch/x86/kernel/traps.c                     |    6 +-
- arch/x86/mm/tlb.c                           |   53 +-
- drivers/iommu/iommu-sva.c                   |    8 +-
- drivers/vfio/vfio_iommu_type1.c             |    2 +-
- fs/proc/array.c                             |    6 +
- fs/proc/task_mmu.c                          |    2 +-
- include/linux/ioasid.h                      |    9 -
- include/linux/mm.h                          |   11 -
- include/linux/mmu_context.h                 |   14 +
- include/linux/sched/mm.h                    |    8 +-
- include/linux/uaccess.h                     |   22 +
- mm/debug.c                                  |    1 +
- mm/gup.c                                    |    4 +-
- mm/madvise.c                                |    5 +-
- mm/migrate.c                                |    2 +-
- tools/testing/selftests/x86/Makefile        |    2 +-
- tools/testing/selftests/x86/lam.c           | 1241 +++++++++++++++++++
- 31 files changed, 1580 insertions(+), 62 deletions(-)
- create mode 100644 tools/testing/selftests/x86/lam.c
-
+diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
+index 4af81df133ee..ed320e145cf9 100644
+--- a/arch/x86/entry/vsyscall/vsyscall_64.c
++++ b/arch/x86/entry/vsyscall/vsyscall_64.c
+@@ -317,7 +317,7 @@ static struct vm_area_struct gate_vma __ro_after_init = {
+ struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
+ {
+ #ifdef CONFIG_COMPAT
+-	if (!mm || !(mm->context.flags & MM_CONTEXT_HAS_VSYSCALL))
++	if (!mm || test_bit(MM_CONTEXT_HAS_VSYSCALL, &mm->context.flags))
+ 		return NULL;
+ #endif
+ 	if (vsyscall_mode == NONE)
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index 5d7494631ea9..efa3eaee522c 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -9,9 +9,9 @@
+ #include <linux/bits.h>
+ 
+ /* Uprobes on this MM assume 32-bit code */
+-#define MM_CONTEXT_UPROBE_IA32	BIT(0)
++#define MM_CONTEXT_UPROBE_IA32		0
+ /* vsyscall page is accessible on this MM */
+-#define MM_CONTEXT_HAS_VSYSCALL	BIT(1)
++#define MM_CONTEXT_HAS_VSYSCALL		1
+ 
+ /*
+  * x86 has arch-specific MMU state beyond what lives in mm_struct.
+@@ -39,7 +39,7 @@ typedef struct {
+ #endif
+ 
+ #ifdef CONFIG_X86_64
+-	unsigned short flags;
++	unsigned long flags;
+ #endif
+ 
+ 	struct mutex lock;
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index b8d40ddeab00..53ef591a6166 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -181,7 +181,7 @@ static inline void arch_exit_mmap(struct mm_struct *mm)
+ static inline bool is_64bit_mm(struct mm_struct *mm)
+ {
+ 	return	!IS_ENABLED(CONFIG_IA32_EMULATION) ||
+-		!(mm->context.flags & MM_CONTEXT_UPROBE_IA32);
++		!test_bit(MM_CONTEXT_UPROBE_IA32, &mm->context.flags);
+ }
+ #else
+ static inline bool is_64bit_mm(struct mm_struct *mm)
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 4e34b3b68ebd..8b06034e8c70 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -671,7 +671,7 @@ void set_personality_64bit(void)
+ 	task_pt_regs(current)->orig_ax = __NR_execve;
+ 	current_thread_info()->status &= ~TS_COMPAT;
+ 	if (current->mm)
+-		current->mm->context.flags = MM_CONTEXT_HAS_VSYSCALL;
++		__set_bit(MM_CONTEXT_HAS_VSYSCALL, &current->mm->context.flags);
+ 
+ 	/* TBD: overwrites user setup. Should have two bits.
+ 	   But 64bit processes have always behaved this way,
+@@ -708,7 +708,7 @@ static void __set_personality_ia32(void)
+ 		 * uprobes applied to this MM need to know this and
+ 		 * cannot use user_64bit_mode() at that time.
+ 		 */
+-		current->mm->context.flags = MM_CONTEXT_UPROBE_IA32;
++		__set_bit(MM_CONTEXT_UPROBE_IA32, &current->mm->context.flags);
+ 	}
+ 
+ 	current->personality |= force_personality32;
 -- 
 2.38.2
+
