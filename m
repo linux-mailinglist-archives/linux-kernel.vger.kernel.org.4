@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7224E656E06
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 19:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E18656E09
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 19:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbiL0SkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 13:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S230290AbiL0Sr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 13:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiL0SkN (ORCPT
+        with ESMTP id S229533AbiL0Sr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 13:40:13 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08271D13B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 10:40:06 -0800 (PST)
+        Tue, 27 Dec 2022 13:47:27 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D38C75B;
+        Tue, 27 Dec 2022 10:47:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1672166397; bh=RwCjMF4IElXUvBXwhEZqyWB6/DKy3YsKX+XdaMVUsvM=;
+        t=1672166840; bh=2S5RKj0QcrEEWtKwPpcpUFIPdyQBeGymwnI0h0TfvRs=;
         h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
          Content-Type;
-        b=WKhCbjYRrGHbYaCyfgvtIeC2qSJLkYQMbGwa+AM5w7bOVHkJQ3H58YhWrEqta4t9Q
-         VW51Sb0djGuJcCafSzqKSCbJ1ZC9W8yZvEo6Ch6xvt7HeJSlESl1dy1dUAUpqc0gaL
-         +hyUvApOiOVYurgKLif3aGbv8JCrIKB2A3uTQQFw=
+        b=EOtp/gR6nr6ZW/pSEkYSxekMI8r5UnfYcoO2Pf2xk/LBvOWDb1wH49l4YGMByWn5L
+         AnvfirxsAA73fuPF9E5CAvEYL0DFPaVuDtHnauBqMJOy10BwGTum8Sqao91s97vqkg
+         d5c+qYhj/d08u58hOv5ihIdQ9lOP+pcoevt/ZNlM=
 Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
         via ip-206.mailobj.net [213.182.55.206]
-        Tue, 27 Dec 2022 19:39:57 +0100 (CET)
-X-EA-Auth: 9pilygPs5f1CcxVxTT74knypQP9F1WtW7YJ8Z3yo0hcU4sAac4BT157vjGdHaAt+fnEHQI+rYwZqjWcWe1ZLRBNrPrqhMvCS
-Date:   Wed, 28 Dec 2022 00:09:51 +0530
+        Tue, 27 Dec 2022 19:47:20 +0100 (CET)
+X-EA-Auth: eh4aWBOqXM8zlyBx5vUHM3kW6Z6FtHguRCMzJAdXbIklLRAt3EolwzZIKCDoMaD+B/ThxNFpJgI8lL6S2B4v0iKyaCm/776g
+Date:   Wed, 28 Dec 2022 00:17:16 +0530
 From:   Deepak R Varma <drv@mailo.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+To:     Thierry Reding <thierry.reding@gmail.com>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
         Praveen Kumar <kumarpraveen@linux.microsoft.com>,
         Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] drm/amd/display: No need for Null pointer check before kfree
-Message-ID: <Y6s7989gmBZldV/S@qemulion>
+Subject: [PATCH] gpu: host1x: No need for Null pointer check before kfree
+Message-ID: <Y6s9tOVk5A8NFmyH@qemulion>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -63,38 +59,23 @@ Issue reported by ifnullfree.cocci Coccinelle semantic patch script.
 
 Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c | 3 +--
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/gpu/host1x/fence.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-index 3ce0ee0d012f..694a9d3d92ae 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-@@ -577,8 +577,7 @@ void dcn3_clk_mgr_construct(
-
- void dcn3_clk_mgr_destroy(struct clk_mgr_internal *clk_mgr)
+diff --git a/drivers/gpu/host1x/fence.c b/drivers/gpu/host1x/fence.c
+index df428bcbae69..42498902947f 100644
+--- a/drivers/gpu/host1x/fence.c
++++ b/drivers/gpu/host1x/fence.c
+@@ -93,8 +93,7 @@ static void host1x_syncpt_fence_release(struct dma_fence *f)
  {
--	if (clk_mgr->base.bw_params)
--		kfree(clk_mgr->base.bw_params);
-+	kfree(clk_mgr->base.bw_params);
+ 	struct host1x_syncpt_fence *sf = to_host1x_fence(f);
 
- 	if (clk_mgr->wm_range_table)
- 		dm_helpers_free_gpu_mem(clk_mgr->base.ctx, DC_MEM_ALLOC_TYPE_GART,
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
-index 200fcec19186..ba9814f88f48 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn32/dcn32_clk_mgr.c
-@@ -783,8 +783,7 @@ void dcn32_clk_mgr_construct(
+-	if (sf->waiter)
+-		kfree(sf->waiter);
++	kfree(sf->waiter);
 
- void dcn32_clk_mgr_destroy(struct clk_mgr_internal *clk_mgr)
- {
--	if (clk_mgr->base.bw_params)
--		kfree(clk_mgr->base.bw_params);
-+	kfree(clk_mgr->base.bw_params);
-
- 	if (clk_mgr->wm_range_table)
- 		dm_helpers_free_gpu_mem(clk_mgr->base.ctx, DC_MEM_ALLOC_TYPE_GART,
+ 	dma_fence_free(f);
+ }
 --
 2.34.1
 
