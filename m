@@ -2,85 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2364656E39
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 660F9656E3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiL0TVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S231702AbiL0TVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiL0TUy (ORCPT
+        with ESMTP id S229679AbiL0TVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:20:54 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974EC115C;
-        Tue, 27 Dec 2022 11:20:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672168852; x=1703704852;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DBW05D8jURN+a9kSEVt1uU2bkDRoWz4gCfkvdZ6Tv4k=;
-  b=ArAUL0FFtUor1LPP7YMg5oN6h0OY7JCMnRYOuam6x9J6r7fnWpBoGZcK
-   YEbn1kKqDsVHp5Ht9TV75JUMlDW4f3RaL4vPFDSbkDSLmCxCHp8oobTKh
-   3PaaaiTlQovDOb0aRPvG8+yKNCIV163jiHC3fTi0XgAgcM/QUyIfFpogM
-   iRlIxo5c4DtVdfyIqbPzq26pJzsfv3XUcKvv6a0pdo/LKg9Thk7XiY0H9
-   F91lfPhGwIUO1oiIabT9eCsciEzE11RLrkOGRsLytaYsWIokGa/Q1NV6H
-   DrvcRL6emzVIC2o2YHBPgVYIcfsbZNlgzm8SoYC7efnkPuLWtkUyj1ED8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="321981242"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="321981242"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 11:20:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="898444467"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="898444467"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Dec 2022 11:20:50 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pAFVI-000C5H-2y;
-        Tue, 27 Dec 2022 21:20:48 +0200
-Date:   Tue, 27 Dec 2022 21:20:48 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 1/1] pinctrl: intel: Convert to
- generic_handle_domain_irq()
-Message-ID: <Y6tFkOv29kww6Fqm@smile.fi.intel.com>
-References: <20221219122722.3639-1-andriy.shevchenko@linux.intel.com>
- <Y6B2RUCQ1ImSUOsq@black.fi.intel.com>
+        Tue, 27 Dec 2022 14:21:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCF095A0;
+        Tue, 27 Dec 2022 11:20:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59E6561226;
+        Tue, 27 Dec 2022 19:20:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A31B8C433F0;
+        Tue, 27 Dec 2022 19:20:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672168852;
+        bh=MqsS38ApDgq02vqqGG6mvUVIL0HVzihDGlS5x4jYiPM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MwJjTCPiyZjERTr6u9tuz3mfo6PcsnEEZrPSdVoFOPlfh+KLjxSRIrm4EV9hcw7zP
+         BRGz+TY+iQ/zPF9fbkao8b1GctKRqTr8h99bAUmNhe3ClNXAgp/G1UQbvgYpaBAn5x
+         CTTNKrItbmtJMKW8TkLbJLoW9rTGpiKkF2JM8BEmwimeF5HNE+2Ks5cEu8902ev9p3
+         fyGWVa2/Et2kt7RSg4m6/k5bR4ub0kjI9WvvZvCsygVSLn7Sk6R6ct2pP+6M801/Ht
+         C5NVxLUtJ3OuBWrz1nox53tHEtsGl+6E2y6rZ4bPdo7kvWSQYc5ui26UX/oXwKRSgu
+         7tq5Bh0Xp10Og==
+Date:   Tue, 27 Dec 2022 13:20:49 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mani@kernel.org, lpieralisi@kernel.org, kw@linux.com,
+        svarbanov@mm-sol.com, shawn.guo@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/9] arm64: dts: qcom: ipq8074: fix Gen3 PCIe QMP PHY
+Message-ID: <20221227192049.zk5gqhpnq2m7baqa@builder.lan>
+References: <20221116214841.1116735-1-robimarko@gmail.com>
+ <20221116214841.1116735-2-robimarko@gmail.com>
+ <20221205215253.itobukkyiecn7xi7@builder.lan>
+ <CAOX2RU5C6uYKS4Hc7NBwnzRju1=gzewrEHudMksUAL1XdKcfCQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6B2RUCQ1ImSUOsq@black.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAOX2RU5C6uYKS4Hc7NBwnzRju1=gzewrEHudMksUAL1XdKcfCQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 04:33:41PM +0200, Mika Westerberg wrote:
-> On Mon, Dec 19, 2022 at 02:27:22PM +0200, Andy Shevchenko wrote:
-> > Replace construct that matches generic_handle_irq(irq_find_mapping())
-> > to a single call to generic_handle_domain_irq().
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Tue, Dec 06, 2022 at 10:51:40AM +0100, Robert Marko wrote:
+> On Mon, 5 Dec 2022 at 22:52, Bjorn Andersson <andersson@kernel.org> wrote:
+> >
+> > On Wed, Nov 16, 2022 at 10:48:34PM +0100, Robert Marko wrote:
+> > > IPQ8074 comes in 2 silicon versions:
+> > > * v1 with 2x Gen2 PCIe ports and QMP PHY-s
+> > > * v2 with 1x Gen3 and 1x Gen2 PCIe ports and QMP PHY-s
+> > >
+> > > v2 is the final and production version that is actually supported by the
+> > > kernel, however it looks like PCIe related nodes were added for the v1 SoC.
+> > >
+> > > Now that we have Gen3 QMP PHY support, we can start fixing the PCIe support
+> > > by fixing the Gen3 QMP PHY node first.
+> > >
+> > > Change the compatible to the Gen3 QMP PHY, correct the register space start
+> > > and size, add the missing misc PCS register space.
+> > >
+> >
+> > Does this imply that the current node doesn't actually work?
 > 
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Hi Bjorn,
+> Yes, the node is for a completely different PHY generation, basically
+> PCIe on IPQ8074
+> is completely broken, hence this patch series.
+> 
+> >
+> > If that's the case, could we perhaps adopt Johan Hovolds' new binding
+> > and drop the subnode in favor of just a flat reg covering the whole
+> > QMP region?
+> 
+> I have not seen that so far, any examples?
+> 
 
-Pushed to my review and testing queue, thanks|
+See
+Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml in
+v6.2-rc1.
 
--- 
-With Best Regards,
-Andy Shevchenko
+The idea is to, at least, use this for all new platforms introduced.
 
+And if the current definition doesn't actually work I suggest that we
+replace it with the new one.
 
+Regards,
+Bjorn
