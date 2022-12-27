@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802ED656A99
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DE3656C36
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 15:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiL0MJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 07:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S230308AbiL0Otq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 09:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiL0MJa (ORCPT
+        with ESMTP id S231691AbiL0Otm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 07:09:30 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A14D28E;
-        Tue, 27 Dec 2022 04:09:24 -0800 (PST)
-X-UUID: b577b09f170e4a47b15f5bf7bf6e3c1a-20221227
+        Tue, 27 Dec 2022 09:49:42 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340501E1;
+        Tue, 27 Dec 2022 06:49:34 -0800 (PST)
+X-UUID: 9b6e7d4255a243188de105872ffbd502-20221227
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
         h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ZYhjIXpUxLFLAxdNKrtJBR6ZBD1h3ZRO4PIhBpFBTnM=;
         b=f8Sfn4ap8N+FevHT8+MLt9yNpqdpMda9VOe0HIXr2gmhVgX7EpUoasCg8OG+DQdp/iAITpCFqqXbSzcmfiyCnyIzYWred7Hfo87tvG9Old/oaR6nJ6NecHQ1saEy1uqFuN/3UBJ5pr7IBQ1Iqnj/tsXeFpKJELSzDDRJpuVoC3Y=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:5e83e1e5-2ce0-4812-a485-307be4f61c77,IP:0,U
+X-CID-O-INFO: VERSION:1.1.14,REQID:a5013427-dde8-4d0e-b6ac-357c1ca01e60,IP:0,U
         RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
         :release,TS:-5
-X-CID-META: VersionHash:dcaaed0,CLOUDID:da3c18f4-ff42-4fb0-b929-626456a83c14,B
+X-CID-META: VersionHash:dcaaed0,CLOUDID:1c618b8a-8530-4eff-9f77-222cf6e2895b,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: b577b09f170e4a47b15f5bf7bf6e3c1a-20221227
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+X-UUID: 9b6e7d4255a243188de105872ffbd502-20221227
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <roger.lu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 403926579; Tue, 27 Dec 2022 20:09:18 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+        with ESMTP id 1549339595; Tue, 27 Dec 2022 22:49:31 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id 15.2.792.3;
+ Tue, 27 Dec 2022 14:49:31 +0000
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 27 Dec 2022 20:09:17 +0800
+ 15.2.792.15; Tue, 27 Dec 2022 20:09:18 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
  15.2.792.15 via Frontend Transport; Tue, 27 Dec 2022 20:09:17 +0800
@@ -61,8 +64,8 @@ Content-Type: text/plain
 X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
