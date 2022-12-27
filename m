@@ -2,137 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCA9656726
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 04:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84EF65672A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 04:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiL0Dmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 22:42:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
+        id S229877AbiL0Dsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 22:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiL0Dmg (ORCPT
+        with ESMTP id S229543AbiL0Dsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 22:42:36 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B92616B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 19:42:35 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id z9-20020a6be009000000b006e0577c3686so4046927iog.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 19:42:35 -0800 (PST)
+        Mon, 26 Dec 2022 22:48:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F98C2702
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 19:47:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672112867;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=o1hZLNXBMRorOqtx9oPycEFZQJRnhLcRbVQCtG3oSBs=;
+        b=fu0glbpfN/6+Ocz6gmjQwwabNj4699dk3HZLSPNxfT85BAKAljecTSa819HdVqRoHtjZC6
+        ir2HBLL9wy/Ft4+D3SX8OJdkDGgQsE15bFYSKTd7fKFBB27Sjv2Wh6x2lJLU6ucclQtA81
+        PR1go2App7oJeU89xHn90xi+uOR5uH0=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-168-j-rINIRtNbaAUDxp4ZpCHw-1; Mon, 26 Dec 2022 22:47:46 -0500
+X-MC-Unique: j-rINIRtNbaAUDxp4ZpCHw-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1437fb9949bso5770736fac.5
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 19:47:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HT6NQ6ZRebuvpIly3+Uy5dHIc3hJIKXVu5Ccu6rq1p0=;
-        b=xDrAVzrbxHBU0WBOUBPIBfwICeUVmTaUQEAy3FAIZsuacaN1fWFuwnUhtL+8Z45kNm
-         uCTwVaq8zjR+pgnPhQBl/wZT83uNQ1l/TYkPbTS5gDUDKhRZqxyzgLAqblTL+HJqjPvA
-         M1Gi43gqMY56rwAS1qyIR/K45FGnB94xg+opeENiiiMyuztD5Uf1Bh5tdNFDc4xZtO3R
-         GHq6c8srhOXzfQcsDnSdP8pLINqw2/P7//aO+7HLvV0iK8BqG55DP6aSWxRxfqw5cQDC
-         MbSP84eFOOgc2IlMGmV+43/B2Vi2Mkv37HNuZdrsoSjbYDkjoMsT8tCCp62VqgF3WQF8
-         +bFw==
-X-Gm-Message-State: AFqh2kopXABpCVrfT1j2B6LrqBnzBxHMgr3/bUKDb+h3ifV3Ya7XgLsz
-        50Nfxij4mnDTLMdo6Xw7IWF/Tyi4x7NN+VW+FmhAPaluv/Au
-X-Google-Smtp-Source: AMrXdXvEBUw/+j92DS13gGV1YYD8pfVnt1DDN1C+6fGvxMOtNoH67qiCOWXbqOO6jJk3Q4Xggs0aQqVHRKyEDMp0Ip8nP86GqhOt
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o1hZLNXBMRorOqtx9oPycEFZQJRnhLcRbVQCtG3oSBs=;
+        b=q4/T9NMuwi357Qz4NYHIKaH0rZV3xy6bNZRUPjRQOn/218VcVeqcUnWVFZmbx0mRvc
+         tYpPja7XQXeIW3cSrhMqchv6spDL6Hr30n7/nkY4vyRAo59U5UJJGJ8yBplUSAjfpRg+
+         51kifDVzHewtUL+9m1w8MLeeS/IsQ3TAeMAJevfc9OkRy0M86Gi9ZLfbGgvVJnNj1Ahj
+         g+s81oM00mm2V1QeLxpo9bh6p3xbl4/kTD+oZsLw65GDrgy97zQzxqyyDgb4YGBiZ54W
+         sh6039K1wXUd+mcr3c4r8tu5TT/71hikkw+kb99iX3RlhuAFiuBhLSe7DOAuShhIrCLG
+         mtRg==
+X-Gm-Message-State: AFqh2kraIlkIILWkLXUHugtLZrDzJjh2aB2MKWxHF7qO+rKw2QsOIkjb
+        Tr7SYuue2ZUCtlzMyPEbSr6nmtGQFD2aY+VvoNVFfVsNH4bM9JpjaLnvU8OEPDRzQqvP0dWFk+U
+        BPocPunRls25NMGfMvLOeC5v/QS9J4V+jkjvxqgrC
+X-Received: by 2002:a05:6870:3d97:b0:144:b22a:38d3 with SMTP id lm23-20020a0568703d9700b00144b22a38d3mr1321677oab.280.1672112865596;
+        Mon, 26 Dec 2022 19:47:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuBQ4cEkt4jn/adSCLJl1vc6Exv4RmhhMEQtw3ZaT4aCCWDhZtot/2yJeEX77WcRCiDwyeeL1Gf55fW+jYaRlA=
+X-Received: by 2002:a05:6870:3d97:b0:144:b22a:38d3 with SMTP id
+ lm23-20020a0568703d9700b00144b22a38d3mr1321670oab.280.1672112865324; Mon, 26
+ Dec 2022 19:47:45 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:7a03:0:b0:303:395:7359 with SMTP id
- v3-20020a927a03000000b0030303957359mr1670658ilc.253.1672112554932; Mon, 26
- Dec 2022 19:42:34 -0800 (PST)
-Date:   Mon, 26 Dec 2022 19:42:34 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dc83d605f0c70a11@google.com>
-Subject: [syzbot] [nilfs2?] kernel BUG in folio_end_writeback
-From:   syzbot <syzbot+7e5cf1d80677ec185e63@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, konishi.ryusuke@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
+References: <20221226074908.8154-1-jasowang@redhat.com> <20221226074908.8154-4-jasowang@redhat.com>
+ <20221226183348-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20221226183348-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 27 Dec 2022 11:47:34 +0800
+Message-ID: <CACGkMEsJYn=4mC-+QKnkHi+zjZsRL+m+mdyuLemPhsZDi_hcEw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] virtio_ring: introduce a per virtqueue waitqueue
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
+        eperezma@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Dec 27, 2022 at 7:34 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Mon, Dec 26, 2022 at 03:49:07PM +0800, Jason Wang wrote:
+> > This patch introduces a per virtqueue waitqueue to allow driver to
+> > sleep and wait for more used. Two new helpers are introduced to allow
+> > driver to sleep and wake up.
+> >
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > ---
+> > Changes since V1:
+> > - check virtqueue_is_broken() as well
+> > - use more_used() instead of virtqueue_get_buf() to allow caller to
+> >   get buffers afterwards
+> > ---
+> >  drivers/virtio/virtio_ring.c | 29 +++++++++++++++++++++++++++++
+> >  include/linux/virtio.h       |  3 +++
+> >  2 files changed, 32 insertions(+)
+> >
+> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > index 5cfb2fa8abee..9c83eb945493 100644
+> > --- a/drivers/virtio/virtio_ring.c
+> > +++ b/drivers/virtio/virtio_ring.c
+> > @@ -13,6 +13,7 @@
+> >  #include <linux/dma-mapping.h>
+> >  #include <linux/kmsan.h>
+> >  #include <linux/spinlock.h>
+> > +#include <linux/wait.h>
+> >  #include <xen/xen.h>
+> >
+> >  #ifdef DEBUG
+> > @@ -60,6 +61,7 @@
+> >                       "%s:"fmt, (_vq)->vq.name, ##args);      \
+> >               /* Pairs with READ_ONCE() in virtqueue_is_broken(). */ \
+> >               WRITE_ONCE((_vq)->broken, true);                       \
+> > +             wake_up_interruptible(&(_vq)->wq);                     \
+> >       } while (0)
+> >  #define START_USE(vq)
+> >  #define END_USE(vq)
+> > @@ -203,6 +205,9 @@ struct vring_virtqueue {
+> >       /* DMA, allocation, and size information */
+> >       bool we_own_ring;
+> >
+> > +     /* Wait for buffer to be used */
+> > +     wait_queue_head_t wq;
+> > +
+> >  #ifdef DEBUG
+> >       /* They're supposed to lock for us. */
+> >       unsigned int in_use;
+> > @@ -2024,6 +2029,8 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> >       if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
+> >               vq->weak_barriers = false;
+> >
+> > +     init_waitqueue_head(&vq->wq);
+> > +
+> >       err = vring_alloc_state_extra_packed(&vring_packed);
+> >       if (err)
+> >               goto err_state_extra;
+> > @@ -2517,6 +2524,8 @@ static struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> >       if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
+> >               vq->weak_barriers = false;
+> >
+> > +     init_waitqueue_head(&vq->wq);
+> > +
+> >       err = vring_alloc_state_extra_split(vring_split);
+> >       if (err) {
+> >               kfree(vq);
+> > @@ -2654,6 +2663,8 @@ static void vring_free(struct virtqueue *_vq)
+> >  {
+> >       struct vring_virtqueue *vq = to_vvq(_vq);
+> >
+> > +     wake_up_interruptible(&vq->wq);
+> > +
+> >       if (vq->we_own_ring) {
+> >               if (vq->packed_ring) {
+> >                       vring_free_queue(vq->vq.vdev,
+> > @@ -2863,4 +2874,22 @@ const struct vring *virtqueue_get_vring(struct virtqueue *vq)
+> >  }
+> >  EXPORT_SYMBOL_GPL(virtqueue_get_vring);
+> >
+> > +int virtqueue_wait_for_used(struct virtqueue *_vq)
+> > +{
+> > +     struct vring_virtqueue *vq = to_vvq(_vq);
+> > +
+> > +     /* TODO: Tweak the timeout. */
+> > +     return wait_event_interruptible_timeout(vq->wq,
+> > +            virtqueue_is_broken(_vq) || more_used(vq), HZ);
+>
+> There's no good timeout. Let's not even go there, if device goes
+> bad it should set the need reset bit.
 
-syzbot found the following issue on:
+The problem is that we can't depend on the device. If it takes too
+long for the device to respond to cvq, there's a high possibility that
+the device is buggy or even malicious. We can have a higher timeout
+here and it should be still better than waiting forever (the cvq
+commands need to be serialized so it needs to hold a lock anyway
+(RTNL) ).
 
-HEAD commit:    0a924817d2ed Merge tag '6.2-rc-smb3-client-fixes-part2' of..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16228274480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4e2d7bfa2d6d5a76
-dashboard link: https://syzkaller.appspot.com/bug?extid=7e5cf1d80677ec185e63
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14494888480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11c189f8480000
+Thanks
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/b0959a409a79/disk-0a924817.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/388daa76797b/vmlinux-0a924817.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b9d2d406c075/bzImage-0a924817.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/166e13821ab4/mount_0.gz
+>
+>
+> > +}
+> > +EXPORT_SYMBOL_GPL(virtqueue_wait_for_used);
+> > +
+> > +void virtqueue_wake_up(struct virtqueue *_vq)
+> > +{
+> > +     struct vring_virtqueue *vq = to_vvq(_vq);
+> > +
+> > +     wake_up_interruptible(&vq->wq);
+> > +}
+> > +EXPORT_SYMBOL_GPL(virtqueue_wake_up);
+> > +
+> >  MODULE_LICENSE("GPL");
+> > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+> > index dcab9c7e8784..2eb62c774895 100644
+> > --- a/include/linux/virtio.h
+> > +++ b/include/linux/virtio.h
+> > @@ -72,6 +72,9 @@ void *virtqueue_get_buf(struct virtqueue *vq, unsigned int *len);
+> >  void *virtqueue_get_buf_ctx(struct virtqueue *vq, unsigned int *len,
+> >                           void **ctx);
+> >
+> > +int virtqueue_wait_for_used(struct virtqueue *vq);
+> > +void virtqueue_wake_up(struct virtqueue *vq);
+> > +
+> >  void virtqueue_disable_cb(struct virtqueue *vq);
+> >
+> >  bool virtqueue_enable_cb(struct virtqueue *vq);
+> > --
+> > 2.25.1
+>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7e5cf1d80677ec185e63@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at mm/filemap.c:1615!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 15 Comm: ksoftirqd/0 Not tainted 6.1.0-syzkaller-14321-g0a924817d2ed #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:folio_end_writeback+0x34d/0x530 mm/filemap.c:1615
-Code: 84 87 00 00 00 e8 13 5a d2 ff e9 36 fd ff ff e8 09 5a d2 ff 4c 89 f7 48 c7 c6 20 84 f8 8a e8 ca 3a 10 00 0f 0b e8 f3 59 d2 ff <0f> 0b e8 ec 59 d2 ff 4c 89 f7 48 c7 c6 60 86 f8 8a e8 ad 3a 10 00
-RSP: 0018:ffffc90000147b88 EFLAGS: 00010246
-RAX: ffffffff81b9813d RBX: 0000000000000082 RCX: ffff88813fefba80
-RDX: 0000000080000100 RSI: ffffffff8aedcc60 RDI: ffffffff8b4bbfe0
-RBP: 1ffffd40000ed426 R08: dffffc0000000000 R09: fffffbfff1d2cabe
-R10: fffffbfff1d2cabe R11: 1ffffffff1d2cabd R12: ffffea000076a134
-R13: dffffc0000000000 R14: ffffea000076a100 R15: 1ffffd40000ed420
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ff727105718 CR3: 00000000291ab000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- end_bio_bh_io_sync+0xb1/0x110 fs/buffer.c:2655
- req_bio_endio block/blk-mq.c:794 [inline]
- blk_update_request+0x51c/0x1040 block/blk-mq.c:926
- blk_mq_end_request+0x39/0x70 block/blk-mq.c:1053
- blk_complete_reqs block/blk-mq.c:1131 [inline]
- blk_done_softirq+0x119/0x160 block/blk-mq.c:1136
- __do_softirq+0x277/0x738 kernel/softirq.c:571
- run_ksoftirqd+0xa2/0x100 kernel/softirq.c:934
- smpboot_thread_fn+0x533/0xa10 kernel/smpboot.c:164
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:folio_end_writeback+0x34d/0x530 mm/filemap.c:1615
-Code: 84 87 00 00 00 e8 13 5a d2 ff e9 36 fd ff ff e8 09 5a d2 ff 4c 89 f7 48 c7 c6 20 84 f8 8a e8 ca 3a 10 00 0f 0b e8 f3 59 d2 ff <0f> 0b e8 ec 59 d2 ff 4c 89 f7 48 c7 c6 60 86 f8 8a e8 ad 3a 10 00
-RSP: 0018:ffffc90000147b88 EFLAGS: 00010246
-RAX: ffffffff81b9813d RBX: 0000000000000082 RCX: ffff88813fefba80
-RDX: 0000000080000100 RSI: ffffffff8aedcc60 RDI: ffffffff8b4bbfe0
-RBP: 1ffffd40000ed426 R08: dffffc0000000000 R09: fffffbfff1d2cabe
-R10: fffffbfff1d2cabe R11: 1ffffffff1d2cabd R12: ffffea000076a134
-R13: dffffc0000000000 R14: ffffea000076a100 R15: 1ffffd40000ed420
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ff727105718 CR3: 00000000291ab000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
