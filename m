@@ -2,136 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591C0656E6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F35F656E76
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiL0Twm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:52:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S230151AbiL0TyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiL0Twk (ORCPT
+        with ESMTP id S229566AbiL0Tx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:52:40 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897BA101E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:52:38 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id u19so33985490ejm.8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MqHaR9sjfvD/myYgTCGg8KetMxcHxaTjMlGqG5MAO9k=;
-        b=XgnfCcvzBuSiJzDiv7aDolyIPTPWFRvNbzy4Ek6y5tWZ3l29g6hywBSS4horRwif36
-         OYAzH01aL7EYhASMi2GptFgKiMIGLNbPVArxcmQW51DS3JhaYKQe7jjU5SDaoiVSb9Yf
-         tkmrscmvnv5CDQdxEypaNxOZapoqzdnkoQXr0V7lueUUsBgDG5vKwWcYOCmffZ9c+z22
-         9Es2pr2McwlTd35rHhn8pFynHTqIyVFMRt7XhTHQ4emwKRs1u7WHQy4nSoPOP3k9/3TJ
-         yaoHYhk3kG0Rw8+if3RReiYQP097rH+Za2Jx9WRmB5dPaTsnFhEY2kwKpzZ1VGTZO6vE
-         ZFLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MqHaR9sjfvD/myYgTCGg8KetMxcHxaTjMlGqG5MAO9k=;
-        b=kpS2n/klez1zd0onXFSk7TOogXjbqIwgmDqVdKuLVLVm7NKOw2DYZx29mA90dJgQwj
-         VpMYRyEN/wwZWl6N/I769TRFuAAu4UBwkFFY0st7mi7geRhbFOWnnRnsjleK/aKwsBYu
-         H53H5COgPz13OyOOAxlGbGYlF66I8yDxLcwh8oNvo8UOtzxb+/r5VUEuVdDB4SOedZe6
-         ko7yiuNEpZH5Hh4qmbgSO82HJWMWC0TiWNo4u/VN99ryAQIHYKZCaaov/M4rEdw0v0yy
-         CmMKS4VZeAwWlxsWRd50So4PsXJi1nzsk6IESHaIN1KFIYFHiCADwtMQGcyDMbK2pz7z
-         pGmw==
-X-Gm-Message-State: AFqh2kqwPSKVmQ0seMC/n6jsFINuhFIgyznxEuIBAckMuKWFo3CuYJ8y
-        c1iZcLxNcC8O5tma8IrOm/rrWPEhFZJFb78F1Scepulz8EVJCA==
-X-Google-Smtp-Source: AMrXdXs/pk0YCljtxtK78Y3Xive93hSL4gDgPHkNPnnjTEs8+Q8lSEOQTg4n6iQUcm4UvjSjlfByjnxvRbFKFa+FqTs=
-X-Received: by 2002:a17:906:1cc2:b0:7ad:9ad7:e882 with SMTP id
- i2-20020a1709061cc200b007ad9ad7e882mr2168940ejh.520.1672170757022; Tue, 27
- Dec 2022 11:52:37 -0800 (PST)
+        Tue, 27 Dec 2022 14:53:57 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ABF110E;
+        Tue, 27 Dec 2022 11:53:54 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id ac6a96e2c458935b; Tue, 27 Dec 2022 20:53:52 +0100
+Received: from kreacher.localnet (unknown [213.134.183.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id DA62D28A34C8;
+        Tue, 27 Dec 2022 20:53:51 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Pratyush Yadav <ptyadav@amazon.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v1 2/2] cpufreq: intel_pstate: Drop ACPI _PSS states table patching
+Date:   Tue, 27 Dec 2022 20:52:36 +0100
+Message-ID: <5908813.lOV4Wx5bFT@kreacher>
+In-Reply-To: <12138067.O9o76ZdvQC@kreacher>
+References: <12138067.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-10-vipinsh@google.com>
-In-Reply-To: <20221222023457.1764-10-vipinsh@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 27 Dec 2022 11:52:25 -0800
-Message-ID: <CANgfPd9xu5yw+k4WfCQKVsouM5mKtMNG_Kd7_tokkJm=ha4JTA@mail.gmail.com>
-Subject: Re: [Patch v3 9/9] KVM: x86/mmu: Reduce default cache size in KVM
- from 40 to PT64_ROOT_MAX_LEVEL
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.183.5
+X-CLIENT-HOSTNAME: 213.134.183.5
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedriedtgddufedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrddukeefrdehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekfedrhedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehpthihrggurghvsegrmhgriihonhdruggvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhn
+ ihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 6:35 PM Vipin Sharma <vipinsh@google.com> wrote:
->
-> KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE is set to 40 without any specific
-> reason. Reduce default size to PT64_ROOT_MAX_LEVEL, which is currently
-> 5.
->
-> Change mmu_pte_list_desc_cache size to what is needed as it is more than
-> 5 but way less than 40.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Why do you say more than 5? At least to resolve a page fault we'll
-never need more than 4 pages on a system with 5 level paging since the
-root is already allocated.
+After making acpi_processor_get_platform_limit() use the "no limit"
+value for its frequency QoS request when _PPC returns 0, it is not
+necessary to replace the frequency corresponding to the first _PSS
+return package entry with the maximum turbo frequency of the given
+CPU in intel_pstate_init_acpi_perf_limits() any more, so drop the
+code doing that along with the comment explaining it.
 
->
-> Tested by running dirty_log_perf_test on both tdp and shadow MMU with 48
-> vcpu and 2GB/vcpu size on a 2 NUMA node machine. No impact on
-> performance noticed.
->
-> Ran perf on dirty_log_perf_test and found kvm_mmu_get_free_page() calls
-> reduced by ~3300 which is near to 48 (vcpus) * 2 (nodes) * 35 (cache
-> size).
->
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  arch/x86/include/asm/kvm_types.h | 2 +-
->  arch/x86/kvm/mmu/mmu.c           | 7 ++++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm_types.h b/arch/x86/include/asm/kvm_types.h
-> index 08f1b57d3b62..752dab218a62 100644
-> --- a/arch/x86/include/asm/kvm_types.h
-> +++ b/arch/x86/include/asm/kvm_types.h
-> @@ -2,6 +2,6 @@
->  #ifndef _ASM_X86_KVM_TYPES_H
->  #define _ASM_X86_KVM_TYPES_H
->
-> -#define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE 40
-> +#define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE PT64_ROOT_MAX_LEVEL
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/intel_pstate.c |   14 --------------
+ 1 file changed, 14 deletions(-)
 
-Please add a comment explaining why this value was chosen.
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -452,20 +452,6 @@ static void intel_pstate_init_acpi_perf_
+ 			 (u32) cpu->acpi_perf_data.states[i].control);
+ 	}
+ 
+-	/*
+-	 * The _PSS table doesn't contain whole turbo frequency range.
+-	 * This just contains +1 MHZ above the max non turbo frequency,
+-	 * with control value corresponding to max turbo ratio. But
+-	 * when cpufreq set policy is called, it will call with this
+-	 * max frequency, which will cause a reduced performance as
+-	 * this driver uses real max turbo frequency as the max
+-	 * frequency. So correct this frequency in _PSS table to
+-	 * correct max turbo frequency based on the turbo state.
+-	 * Also need to convert to MHz as _PSS freq is in MHz.
+-	 */
+-	if (!global.turbo_disabled)
+-		cpu->acpi_perf_data.states[0].core_frequency =
+-					policy->cpuinfo.max_freq / 1000;
+ 	cpu->valid_pss_table = true;
+ 	pr_debug("_PPC limits will be enforced\n");
+ 
 
->
->  #endif /* _ASM_X86_KVM_TYPES_H */
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 7454bfc49a51..f89d933ff380 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -677,11 +677,12 @@ static int mmu_topup_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
->
->  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
->  {
-> -       int r, nid;
-> +       int r, nid, desc_capacity;
->
->         /* 1 rmap, 1 parent PTE per level, and the prefetched rmaps. */
-> -       r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
-> -                                      1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
-> +       desc_capacity = 1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM;
-> +       r = __kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
-> +                                        desc_capacity, desc_capacity);
->         if (r)
->                 return r;
->
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+
+
