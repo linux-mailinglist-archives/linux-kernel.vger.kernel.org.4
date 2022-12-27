@@ -2,161 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6127656DD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 19:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C01656DDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 19:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiL0SHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 13:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S230246AbiL0SIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 13:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiL0SHs (ORCPT
+        with ESMTP id S230178AbiL0SIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 13:07:48 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D70F1D;
-        Tue, 27 Dec 2022 10:07:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672164467; x=1703700467;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6/9t+3QiTlrzSMckrPusT+JZOCoszJNNpwdQ2a2LLAE=;
-  b=myneTD6uqN2FF8RH/T2O/wTUEU5JtECK9igbXffWYbCCiQ8OywTeoVug
-   ScF6mMmyDmGqcaMm/RpvgJECZEgytpd+idNcEXtKXH8RghldYQXetiO93
-   5uci738HZ75s9o6YLubV9evvvOR8zw8TpgTtJCeO8UsUOy7G2PS28WQdG
-   nEOHiL6NWoBqGRm+j46ILdYQVhpkHR7reFvZ3vPTwvDn2JFUYZ2yzzMh9
-   eL1gEIcNwyfK6g7OAUi0AoHsCJ3s6TivxDOKrTBX8imlmmalc8aupxXad
-   OGuaQ+Biiak92SLmYoU1tXztc3Y17b/M71Dh7eJko/dAI6zHINUxHfePJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="322715035"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="322715035"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 10:07:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="653093224"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="653093224"
-Received: from wilsona1-mobl3.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.223.115])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 10:07:22 -0800
-Message-ID: <61b3d3720ac4bfd1fc8b7dcd09f58dd5a2de3cca.camel@linux.intel.com>
-Subject: Re: [PATCH 0/2] intel_pstate: fix turbo not being used after a
- processor is rebooted
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Pratyush Yadav <ptyadav@amazon.de>, linux-pm@vger.kernel.org,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devel@acpica.org
-Date:   Tue, 27 Dec 2022 10:07:22 -0800
-In-Reply-To: <CAJZ5v0hFOA97FAq=CwGXgXTkC8aS_vyHjXuaFUppXktrG62H6w@mail.gmail.com>
-References: <20221221155203.11347-1-ptyadav@amazon.de>
-         <72bcd14eef038ec9181d30b3d196b0a872f47ccb.camel@linux.intel.com>
-         <mafs0k02jd8oh.fsf_-_@dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com>
-         <2ed9702b67832e3e33ef352808124980206c1e95.camel@linux.intel.com>
-         <8e2cc66f7dadcfb04099aac7c4eef0b02075c91b.camel@linux.intel.com>
-         <mafs07cycdfh4.fsf_-_@amazon.de>
-         <33dd969d9bdb1eb93f8f2a2167efeb535455cf74.camel@linux.intel.com>
-         <CAJZ5v0hFOA97FAq=CwGXgXTkC8aS_vyHjXuaFUppXktrG62H6w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 27 Dec 2022 13:08:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5A6F22;
+        Tue, 27 Dec 2022 10:08:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96888B8117A;
+        Tue, 27 Dec 2022 18:08:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692BEC433EF;
+        Tue, 27 Dec 2022 18:08:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672164507;
+        bh=Dk53CrhfhfmbIX1qYUefjJ5yOfddXAGZ6MMYK4h0Pl0=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=A5d28eAKT2f1nkoZZh4cBix3FJwqkMpFyoyiC396ciF+D/iiGcLERFQRjY/Fpz4dd
+         ruTysSEEjHCdd+RAUsfnSVcUpWOGoU5fd7o8CkvmiuD48QWeP6/2PwfbI5POME4iM2
+         uwNt/Zytos5Kel4NDu4NP3YFXKM/Z9f9XkyPjsvBwR0CVSIlaXT5p2OXaDnIVf30Vn
+         Oc4QMD2nOIlm9vbfTtKxnBk6/Mb5co/BW+NaqD2tuzFBwoNpgrGsE9UAK/nlBnlTbW
+         eywu0qHvroThNMbm+osyVL0MlAexqbYEfTTanr57gT37ufeMRsrqmSAwetj7v8dbhL
+         lju8nxJk1ZHGA==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     linux-arm-msm@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        mani@kernel.org, devicetree@vger.kernel.org,
+        konrad.dybcio@linaro.org, agross@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski@linaro.org, mathieu.poirier@linaro.org
+Subject: Re: (subset) [PATCH v3 00/15] dt-bindings: remoteproc: qcom: split and reorganize PAS/PIL
+Date:   Tue, 27 Dec 2022 12:08:25 -0600
+Message-Id: <167216450118.745591.6304578385014026556.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20221124184333.133911-1-krzysztof.kozlowski@linaro.org>
+References: <20221124184333.133911-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-12-27 at 18:02 +0100, Rafael J. Wysocki wrote:
-> On Tue, Dec 27, 2022 at 5:40 PM srinivas pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > 
-> > On Tue, 2022-12-27 at 16:38 +0100, Pratyush Yadav wrote:
-> > > Hi Srinivas,
-> > > 
-> > > On Sat, Dec 24 2022, srinivas pandruvada wrote:
-> > > 
-> > > > On Fri, 2022-12-23 at 10:10 -0800, srinivas pandruvada wrote:
-> > > > > Hi Pratyush,
-> > > > > 
-> > > > > On Thu, 2022-12-22 at 11:39 +0100, Pratyush Yadav wrote:
-> > > > > > 
-> > > > > > Hi Srinivas,
-> > > > > > 
-> > > > > > On Wed, Dec 21 2022, srinivas pandruvada wrote:
-> > > > > > > On Wed, 2022-12-21 at 16:52 +0100, Pratyush Yadav wrote:
-> > > > > > > > When a processor is brought offline and online again,
-> > > > > > > > it is
-> > > > > > > > unable to
-> > > > > > > > use Turbo mode because the _PSS table does not contain
-> > > > > > > > the
-> > > > > > > > whole
-> > > > > > > > turbo
-> > > > > > > > frequency range, but only +1 MHz above the max non-
-> > > > > > > > turbo
-> > > > > > > > frequency.
-> > > > > > > > This
-> > > > > > > > causes problems when ACPI processor driver tries to set
-> > > > > > > > frequency
-> > > > > > > > constraints. See patch 2 for more details.
-> > > > > > > > 
-> > > > > I can reproduce on a Broadwell server platform. But not on a
-> > > > > client
-> > > > > system with acpi_ppc usage.
-> > > > > 
-> > > > > Need to check what change broke this.
-> > > > 
-> > > > When PPC limits enforcement changed to PM QOS, this broke.
-> > > > Previously
-> > > > acpi_processor_get_platform_limit() was not enforcing any
-> > > > limits.
-> > > > It
-> > > > was just setting variable. So any update done after
-> > > > acpi_register_performance_state() call to pr->performance-
-> > > > > states[ppc].core_frequency, was effective.
-> > > > 
-> > > > We don't really need to call
-> > > >         ret = freq_qos_update_request(&pr->perflib_req,
-> > > >                         pr->performance-
-> > > > >states[ppc].core_frequency
-> > > > *
-> > > > 1000);
-> > > > 
-> > > > if the PPC is not changed. When PPC is changed, this gets
-> > > > called
-> > > > again,
-> > > > so then we can call the above function to update cpufreq limit.
-> > > > 
-> > > > The below change fixed for me.
-> > > 
-> > > Right.
-> > I think, this is the only change you require to fix this. In
-> > addition
-> > set pr->performance_platform_limit = 0 in
-> > acpi_processor_unregister_performance().
+On Thu, 24 Nov 2022 19:43:18 +0100, Krzysztof Kozlowski wrote:
+> Changes since v2
+> ================
+> 1. Allow only one or two clocks, after dropping clocks related to PIL binding.
+> 2. Drop if:then: for the clock and put it directly under properties
+> 3. Merge two if:then: clauses for setting interrupts.
+> 4. New patches: DTS fixes, qcom,adsp: drop resets and qcom,halt-regs,
+>    qcom,qcs404-pas, qcom,sc7180-pas and last msm8996-slpi-pil fix.
 > 
-> Not really, because if the limit is set to a lower frequency and then
-> reset to _PSS[0], it needs to be set back to "no limit".
-> 
+> [...]
 
-If PPC becomes 0 again after ppc > 0 during dynamic PPC change, pr-
->performance_platform_limit will not match current PPC, so will set to
-PPC 0 performance ( which is already patched by driver after return
-from acpi_register_performance_state()).
+Applied, thanks!
 
-But fine, you can always set freq qos to FREQ_QOS_MAX_DEFAULT_VALUE for
-PPC 0 as you are doing in your patch.
+[05/15] dt-bindings: remoteproc: qcom,adsp: drop resets and qcom,halt-regs
+        commit: c97c4b480fcba2e6ebfacb3990d8b9092916d986
+[06/15] dt-bindings: remoteproc: qcom,adsp: split common part
+        commit: ea5a10ae295425c9f52577d91b2e45290291d242
+[07/15] dt-bindings: remoteproc: qcom,sm8350-pas: split into separate file
+        commit: 4e8b39a4d38ebb192ebff977d8a961fd97e7ce5f
+[08/15] dt-bindings: remoteproc: qcom,sm8150-pas: split into separate file
+        commit: db292776589f1fcbcf2fc6eaebe40a3a2abb4521
+[09/15] dt-bindings: remoteproc: qcom,sm6350-pas: split into separate file
+        commit: 41729b772c13105ee126ee6fe1bf2cd93c7bd258
+[10/15] dt-bindings: remoteproc: qcom,sc8280xp-pas: split into separate file
+        commit: 397c619cad8109f5904466ee76d5a1533d2f1590
+[11/15] dt-bindings: remoteproc: qcom,sc8180x-pas: split into separate file
+        commit: 4b4157518f1ab1276cd08dfab0e51b1409c22e40
+[12/15] dt-bindings: remoteproc: qcom,sdx55-pas: split into separate file
+        commit: b6f8410eab9270000b8b13b88bc038e9f27c2c45
+[13/15] dt-bindings: remoteproc: qcom,qcs404-pas: split into separate file
+        commit: 255d7a9581ed4506dddf993aad9dc27bff8296d1
+[14/15] dt-bindings: remoteproc: qcom,sc7180-pas: split into separate file
+        commit: 8bb92d6fd0b3788b4270eff547cb42cb64db1bff
+[15/15] dt-bindings: remoteproc: qcom,adsp: correct msm8996-slpi-pil clocks
+        commit: 569d3a7580bcbc463920b0d84ca5caf23e808f90
 
-Thanks,
-Srinivas
-
-
-
-
-> I'll send a patch for that in a while.
-
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
