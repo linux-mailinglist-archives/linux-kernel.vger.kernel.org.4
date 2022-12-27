@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B896566ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 03:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720476566EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 03:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiL0Crt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 21:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S229586AbiL0CwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 21:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiL0Crr (ORCPT
+        with ESMTP id S229445AbiL0CwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 21:47:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C39EBC
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 18:47:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C70D260F88
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 02:47:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39326C433EF
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 02:47:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672109265;
-        bh=oRMGUMlgunHooW71GZYStFhBEOASFjUHuzyMLPFO5nI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sWA9GVrGqs4e3Y5+Kl2jqEBRl4eu8CO0PdGIDjicGvBgyGkgX6OP9efEV9YScvhyu
-         CoPGiEaEf5Tbg2DgOSFWHbYygi8eDBq/1mI/1mZ+w1x0/6UGol3QPm45RDfv1WhL9+
-         i7YQpSFb/uEsHDHiaaiz7oRr8nKW/d1sT4CQ+ZnIl4ZkXKdE6xnXbbp3oLrXjTIpGB
-         qrnXvctpfRvyRFUe0ErQJplAWNvgNs+6cKAjMhnBwIsKQMlFrNCdFtIk3a76RWs2vm
-         YP4MbW7LHrz9hOWw69OoO7b+7tmx+8INs9nxBgp2CjTc74HYuWVZ1Y7CKYPpTGw23A
-         8yB5g1HTCQbwg==
-Received: by mail-ej1-f41.google.com with SMTP id vm8so22383323ejc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 18:47:45 -0800 (PST)
-X-Gm-Message-State: AFqh2kpOyZadI9M5Oe1ieZy38Teu9oUO++EcRS2d2NOGVXwmUKJJZ9D1
-        +8vpcjkyXkgmye0z6bTQGscMNJUHIyfz4AzUBsc=
-X-Google-Smtp-Source: AMrXdXthsdPTILqUKdwYJbA6dO5Mg2riMPD3ExObckEClQ8JKtfwUxkDwiocogZDo29fnoQw7dNbmSuVWY9OPVWl844=
-X-Received: by 2002:a17:906:a20c:b0:814:356f:91a8 with SMTP id
- r12-20020a170906a20c00b00814356f91a8mr1126860ejy.74.1672109263267; Mon, 26
- Dec 2022 18:47:43 -0800 (PST)
+        Mon, 26 Dec 2022 21:52:15 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CD5B38
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 18:52:14 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id a14so8127420pfa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 18:52:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L0YjVWIlmCitavVVHffm/x0dEW/XaK8FourNyKarE0k=;
+        b=YzESosf+nlKTT23zBm0t3f5ER72MzGJwb8rgU72vdWQ+KNUKNiVlnxFONiSFk9IB66
+         b7MCTfNPtEHlrg9WTgugDQdjTtuSSi9Y/LKrMviQOYmQfqVDQ5RBTg1IFFsvEfX8XKqD
+         usjzFoE6eZu9xL7ngAOPy+/Fb5zCN+DNPfF37ZP4B8HFp2hOj9wCeAFQpHbH5s0jTsyW
+         FcJdubWUggu39K93nNr82hZSpbmhpuTOHw3Jh4TKxiV5UetK3bR2zrwKZ2/pztfYEB1t
+         gy4bldf8NkfFcdKLjzhVfVVXOU/+ljXOXab5gdXKDVDx6y67pXMjcDRS6Mh+TDYo9IdV
+         9hsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L0YjVWIlmCitavVVHffm/x0dEW/XaK8FourNyKarE0k=;
+        b=tIpgjTUgkdyctbkMxOx1I2BdNpiaO0+J8Q8MB5mAmYnJwoiTIyLssdO+JwGIVUqKjH
+         yW3+lQznJPocS9iEGSCej9/BUjmzBL3P/QjzcjgQewuIOk+MvvfmVDeCD6WPGJYUXc0r
+         b0+hRiFmmM3Gvq7m/+EHvf16Jt4g/vb7yJL6kIn5J0Ao+XvnzhvoETAToHiPe64L/aad
+         vs1Hn6W6pWTTO9jvFGN+nP93mT1lSvQyDME9h64OPahILM4wwt3XWVOI5WaSj3CxrGkw
+         O44h/oYzeHO/Gp2elfjJtETyqvxBHc5ryMeupeiwn4qj8fUm9HfH28pA15GFHYjfjAi1
+         cPNg==
+X-Gm-Message-State: AFqh2krmR+BlyxpBuh77RjIntWGAAtp8KBEEipDfh0G57WctKR0NjtE7
+        NPuaTTDa8liKzdmUutREd1Ycwb2HeNJVfIyB
+X-Google-Smtp-Source: AMrXdXuXaxySOhmgosC390iLmKoofuQ5utwHIKl3HLf4ZpkgFZXo1ReEublXCZHePMnem6/QShViZA==
+X-Received: by 2002:aa7:9f90:0:b0:578:795e:c8d3 with SMTP id z16-20020aa79f90000000b00578795ec8d3mr23332171pfr.29.1672109534164;
+        Mon, 26 Dec 2022 18:52:14 -0800 (PST)
+Received: from localhost ([122.172.82.107])
+        by smtp.gmail.com with ESMTPSA id y13-20020aa793cd000000b0056be4dbd4besm7493465pff.111.2022.12.26.18.52.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 18:52:13 -0800 (PST)
+Date:   Tue, 27 Dec 2022 08:22:11 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Perry Yuan <perry.yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
+        ray.huang@amd.com, Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 08/13] cpufreq: amd-pstate: implement suspend and
+ resume callbacks
+Message-ID: <20221227025211.jjkmwtwg6whgavgd@vireshk-i7>
+References: <20221225163442.2205660-1-perry.yuan@amd.com>
+ <20221225163442.2205660-9-perry.yuan@amd.com>
 MIME-Version: 1.0
-References: <20221227020258.303900-1-uwu@icenowy.me>
-In-Reply-To: <20221227020258.303900-1-uwu@icenowy.me>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 27 Dec 2022 10:47:31 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSGvEnTqEqR9f+zU8T3VS8FoCtsgSk=9hz6cWxAL630zQ@mail.gmail.com>
-Message-ID: <CAJF2gTSGvEnTqEqR9f+zU8T3VS8FoCtsgSk=9hz6cWxAL630zQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] riscv: errata: fix T-Head dcache.cva encoding
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221225163442.2205660-9-perry.yuan@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,96 +75,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good catch. But I hope c906/910 can directly use paddr here. It's
-unnecessary to cause software translation & mmu translation here.
-
-diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-index b0add983530a..30650a0c4481 100644
---- a/arch/riscv/mm/dma-noncoherent.c
-+++ b/arch/riscv/mm/dma-noncoherent.c
-@@ -24,13 +24,13 @@ void arch_sync_dma_for_device(phys_addr_t paddr,
-size_t size,
-
-        switch (dir) {
-        case DMA_TO_DEVICE:
--               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-+               ALT_CMO_OP(clean, vaddr, paddr, size, riscv_cbom_block_size);
-                break;
-        case DMA_FROM_DEVICE:
--               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-+               ALT_CMO_OP(clean, vaddr, paddr, size, riscv_cbom_block_size);
-                break;
-        case DMA_BIDIRECTIONAL:
--               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-+               ALT_CMO_OP(flush, vaddr, paddr, size, riscv_cbom_block_size);
-                break;
-        default:
-                break;
-@@ -47,7 +47,7 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
-                break;
-        case DMA_FROM_DEVICE:
-        case DMA_BIDIRECTIONAL:
--               ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-+               ALT_CMO_OP(flush, vaddr, paddr, size, riscv_cbom_block_size);
-                break;
-        default:
-                break;
-@@ -57,8 +57,9 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
- void arch_dma_prep_coherent(struct page *page, size_t size)
- {
-        void *flush_addr = page_address(page);
-+       phys_addr_t paddr = PFN_PHYS(page_to_pfn(x));
-
--       ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size);
-+       ALT_CMO_OP(flush, flush_addr, paddr, size, riscv_cbom_block_size);
- }
-
-On Tue, Dec 27, 2022 at 10:03 AM Icenowy Zheng <uwu@icenowy.me> wrote:
->
-> The dcache.cva encoding shown in the comments are wrong, it's for
-> dcache.cval1 (which is restricted to L1) instead.
->
-> Fix this in the comment and in the hardcoded instruction.
->
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+On 26-12-22, 00:34, Perry Yuan wrote:
+> From: Perry Yuan <Perry.Yuan@amd.com>
+> 
+> add suspend and resume support for the AMD processors by amd_pstate_epp
+> driver instance.
+> 
+> When the CPPC is suspended, EPP driver will set EPP profile to 'power'
+> profile and set max/min perf to lowest perf value.
+> When resume happens, it will restore the MSR registers with
+> previous cached value.
+> 
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Reviewed-by: Mario Limonciello <Mario.Limonciello@amd.com>
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 > ---
-> The code is tested on a LiteX SoC with OpenC906 core, and it
-> successfully boots to Systemd on a SD card connected to LiteSDCard.
->
-> This change should be not noticable on C906, but on multi-core C910
-> cluster it should fixes something. Unfortunately TH1520 seems to be not
-> so ready to test mainline patches on.
->
->  arch/riscv/include/asm/errata_list.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> index 4180312d2a70..605800bd390e 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -102,7 +102,7 @@ asm volatile(ALTERNATIVE(                                           \
->   * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
->   *   0000001    01001      rs1       000      00000  0001011
->   * dcache.cva rs1 (clean, virtual address)
-> - *   0000001    00100      rs1       000      00000  0001011
-> + *   0000001    00101      rs1       000      00000  0001011
->   *
->   * dcache.cipa rs1 (clean then invalidate, physical address)
->   * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> @@ -115,7 +115,7 @@ asm volatile(ALTERNATIVE(                                           \
->   *   0000000    11001     00000      000      00000  0001011
->   */
->  #define THEAD_inval_A0 ".long 0x0265000b"
-> -#define THEAD_clean_A0 ".long 0x0245000b"
-> +#define THEAD_clean_A0 ".long 0x0255000b"
->  #define THEAD_flush_A0 ".long 0x0275000b"
->  #define THEAD_SYNC_S   ".long 0x0190000b"
->
-> --
-> 2.38.1
->
+>  drivers/cpufreq/amd-pstate.c | 40 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index c671f4955766..e3676d1a85c7 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1041,6 +1041,44 @@ static int amd_pstate_epp_verify_policy(struct cpufreq_policy_data *policy)
+>  	return 0;
+>  }
+>  
+> +static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
+> +{
+> +	struct amd_cpudata *cpudata = policy->driver_data;
+> +	int ret;
+> +
+> +	/* avoid suspending when EPP is not enabled */
+> +	if (cppc_state != AMD_PSTATE_ACTIVE)
+> +		return 0;
+> +
+> +	/* set this flag to avoid setting core offline*/
+> +	cpudata->suspended = true;
+> +
+> +	/* disable CPPC in lowlevel firmware */
+> +	ret = amd_pstate_enable(false);
+> +	if (ret)
+> +		pr_err("failed to suspend, return %d\n", ret);
+> +
+> +	return 0;
+> +}
+> +
+> +static int amd_pstate_epp_resume(struct cpufreq_policy *policy)
+> +{
+> +	struct amd_cpudata *cpudata = policy->driver_data;
+> +
+> +	if (cpudata->suspended) {
 
+When will resume get called without being suspended first ?
+
+> +		mutex_lock(&amd_pstate_limits_lock);
+> +
+> +		/* enable amd pstate from suspend state*/
+> +		amd_pstate_epp_reenable(cpudata);
+> +
+> +		mutex_unlock(&amd_pstate_limits_lock);
+> +
+> +		cpudata->suspended = false;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static struct cpufreq_driver amd_pstate_driver = {
+>  	.flags		= CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
+>  	.verify		= amd_pstate_verify,
+> @@ -1062,6 +1100,8 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
+>  	.exit		= amd_pstate_epp_cpu_exit,
+>  	.offline	= amd_pstate_epp_cpu_offline,
+>  	.online		= amd_pstate_epp_cpu_online,
+> +	.suspend	= amd_pstate_epp_suspend,
+> +	.resume		= amd_pstate_epp_resume,
+>  	.name		= "amd_pstate_epp",
+>  	.attr		= amd_pstate_epp_attr,
+>  };
+> -- 
+> 2.34.1
 
 -- 
-Best Regards
- Guo Ren
+viresh
