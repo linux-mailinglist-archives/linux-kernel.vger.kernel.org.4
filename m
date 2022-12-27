@@ -2,62 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8279E6568D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0376568FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiL0J1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
+        id S229844AbiL0JoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:44:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiL0J1l (ORCPT
+        with ESMTP id S229542AbiL0JoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 04:27:41 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958D265DB;
-        Tue, 27 Dec 2022 01:27:38 -0800 (PST)
-Date:   Tue, 27 Dec 2022 09:27:35 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672133256;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=07xF+6hRsc8ELTl0SNyOAwoLSpIteGOwrjyGZCLRCn8=;
-        b=RLE07RZ/tyYyMP4j3LN60BcXEAEeLNlrwcYZL79TCgA02kLeeuX/HpOLtYIrPBAUSXM23K
-        1IV3mR4o/FtiROktP4o/D1mwbYs8fw0lw5f2q3ZKqApljBWbjioB0ueWqzdpZYCnC3xFm1
-        5eIJAmDiXnaNNpeD3pgiT5xBme3onXykiE+0aDQsCszKrQMOa5ON9gL4LO0OrFYYEXCwDz
-        tU+17DixqGKYd5MuFecK98HpLccLm5HI7nwor7wGda7f0h2xxSuPtNDFlS/tFGD6h/WRPx
-        oUA7+IiKxCYv9R/zfL0NaQjOl3aoCMD9D5EuZxfHwl5262tchbB2TeC/YCBG+Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672133256;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=07xF+6hRsc8ELTl0SNyOAwoLSpIteGOwrjyGZCLRCn8=;
-        b=8bGUdMimCid6n2lBETtuNL/1nNrhGbVUAjcBLJUP7fFo1hUDYrDf9nrIlXomK9LH+nDU0i
-        LSxFz4w+VBG2zNCw==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode/AMD: Handle multiple glued
- containers properly
-Cc:     Borislav Petkov <bp@suse.de>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221219210656.5140-2-bp@alien8.de>
-References: <20221219210656.5140-2-bp@alien8.de>
+        Tue, 27 Dec 2022 04:44:13 -0500
+X-Greylist: delayed 907 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Dec 2022 01:44:11 PST
+Received: from m12.mail.163.com (m12.mail.163.com [123.126.96.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 602F66426;
+        Tue, 27 Dec 2022 01:44:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
+        Content-Type; bh=piEYGKH6inOH91OCnUIJCy9szOxTHTai4yvOgkcq8A8=;
+        b=eDtSTVFJidGmMoSyVS/NRjP2dwZrx00+j3PQT+u5NfqtNWtiqOk+Chu0Z9e+QD
+        7bYK6vMocTHttZsHPpLBqKjPppxpNj9JIFUKW8ot/fz3DNnYoCLoOFhjAw7je/ZN
+        79AgeE6x3Mueo1xZUomRll0mLqC/5Vb5vE8PZLmyz0vxc=
+Received: from ubuntu.localdomain (unknown [220.180.239.55])
+        by smtp18 (Coremail) with SMTP id JNxpCgCHe9vAuqpjUwIWDA--.62780S2;
+        Tue, 27 Dec 2022 17:28:34 +0800 (CST)
+From:   =?UTF-8?q?Duke=20Xin=28=E8=BE=9B=E5=AE=89=E6=96=87=29?= 
+        <duke_xinanwen@163.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jerry.meng@quectel.com, duke.xin@quectel.com,
+        =?UTF-8?q?Duke=20Xin=28=E8=BE=9B=E5=AE=89=E6=96=87=29?= 
+        <duke_xinanwen@163.com>
+Subject: [PATCH] USB: serial: option: add Quectel EM05-G modem
+Date:   Tue, 27 Dec 2022 01:28:25 -0800
+Message-Id: <20221227092825.116404-1-duke_xinanwen@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <167213325509.4906.5221750679090599711.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: JNxpCgCHe9vAuqpjUwIWDA--.62780S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxury5Gw48ArWfKr4rWrW8Xrb_yoWrZw4rpa
+        18AaySvFyrXF17W3ZIkr1xuFWrKan7Wr47C3ZrZr4fXFZxArs7tr1UArZ2qrnF9r4FyF4v
+        q398C3yxGFykJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRQVy5UUUUU=
+X-Originating-IP: [220.180.239.55]
+X-CM-SenderInfo: 5gxnvsp0lqt0xzhqqiywtou0bp/1tbiyALke1p7I+H-6QAAsg
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,86 +55,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/microcode branch of tip:
+The EM05-G modem has 2 USB configurations that are configurable via the AT
+command AT+QCFG="usbnet",[ 0 | 2 ] which make the modem enumerate with
+the following interfaces, respectively:
 
-Commit-ID:     ba73e369b706a853cdafa60570854fecec9f9fdd
-Gitweb:        https://git.kernel.org/tip/ba73e369b706a853cdafa60570854fecec9f9fdd
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Mon, 19 Dec 2022 22:06:56 +01:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 26 Dec 2022 06:41:05 +01:00
+"RMNET" : AT + DIAG + NMEA + Modem + QMI
+"MBIM"  : MBIM + AT + DIAG + NMEA + Modem
 
-x86/microcode/AMD: Handle multiple glued containers properly
+The detailed description of the USB configuration for each mode as follows:
 
-It can happen that - especially during testing - the microcode
-blobs of all families are all glued together in the initrd. The
-current code doesn't check whether the current container matched
-a microcode patch and continues to the next one, which leads to
-save_microcode_in_initrd_amd() to look at the next and thus wrong one:
+RMNET Mode
+--------------
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 21 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=030C Rev= 3.18
+S:  Manufacturer=Quectel
+S:  Product=Quectel EM05-G
+C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-  microcode: parse_container: ucode: 0xffff88807e9d9082
-  microcode: verify_patch: buf: 0xffff88807e9d90ce, buf_size: 26428
-  microcode: verify_patch: proc_id: 0x8082, patch_fam: 0x17, this family: 0x17
-  microcode: verify_patch: buf: 0xffff88807e9d9d56, buf_size: 23220
-  microcode: verify_patch: proc_id: 0x8012, patch_fam: 0x17, this family: 0x17
-  microcode: parse_container: MATCH: eq_id: 0x8012, patch proc_rev_id: 0x8012
+MBIM Mode
+--------------
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=030C Rev= 3.18
+S:  Manufacturer=Quectel
+S:  Product=Quectel EM05-G
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-<-- matching patch found
-
-  microcode: verify_patch: buf: 0xffff88807e9da9de, buf_size: 20012
-  microcode: verify_patch: proc_id: 0x8310, patch_fam: 0x17, this family: 0x17
-  microcode: verify_patch: buf: 0xffff88807e9db666, buf_size: 16804
-  microcode: Invalid type field (0x414d44) in container file section header.
-  microcode: Patch section fail
-
-<-- checking chokes on the microcode magic value of the next container.
-
-  microcode: parse_container: saving container 0xffff88807e9d9082
-  microcode: save_microcode_in_initrd_amd: scanned containers, data: 0xffff88807e9d9082, size: 9700a
-
-and now if there's a next (and last container) it'll use that in
-save_microcode_in_initrd_amd() and not find a proper patch, ofc.
-
-Fix that by moving the out: label up, before the desc->mc check which
-jots down the pointer of the matching patch and is used to signal to the
-caller that it has found a matching patch in the current container.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20221219210656.5140-2-bp@alien8.de
+Signed-off-by: Duke Xin(辛安文) <duke_xinanwen@163.com>
 ---
- arch/x86/kernel/cpu/microcode/amd.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/usb/serial/option.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
-index 339c966..d144f91 100644
---- a/arch/x86/kernel/cpu/microcode/amd.c
-+++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -330,8 +330,9 @@ static size_t parse_container(u8 *ucode, size_t size, struct cont_desc *desc)
- 		ret = verify_patch(x86_family(desc->cpuid_1_eax), buf, size, &patch_size, true);
- 		if (ret < 0) {
- 			/*
--			 * Patch verification failed, skip to the next
--			 * container, if there's one:
-+			 * Patch verification failed, skip to the next container, if
-+			 * there is one. Before exit, check whether that container has
-+			 * found a patch already. If so, use it.
- 			 */
- 			goto out;
- 		} else if (ret > 0) {
-@@ -350,6 +351,7 @@ skip:
- 		size -= patch_size + SECTION_HDR_SIZE;
- 	}
- 
-+out:
- 	/*
- 	 * If we have found a patch (desc->mc), it means we're looking at the
- 	 * container which has a patch for this CPU so return 0 to mean, @ucode
-@@ -364,7 +366,6 @@ skip:
- 		return 0;
- 	}
- 
--out:
- 	return orig_size - size;
- }
- 
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index dee79c7d82d5..d4c914f3b8bf 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -255,6 +255,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EP06			0x0306
+ #define QUECTEL_PRODUCT_EM05G			0x030a
+ #define QUECTEL_PRODUCT_EM060K			0x030b
++#define QUECTEL_PRODUCT_EM05G_CS		0x030C
+ #define QUECTEL_PRODUCT_EM05G_SG		0x0311
+ #define QUECTEL_PRODUCT_EM12			0x0512
+ #define QUECTEL_PRODUCT_RM500Q			0x0800
+@@ -1163,6 +1164,8 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(6) | ZLP },
+ 	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_SG, 0xff),
+ 	  .driver_info = RSVD(6) | ZLP },
++	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_CS, 0xff),
++	  .driver_info = RSVD(6) | ZLP },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0x00, 0x40) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
+-- 
+2.25.1
+
