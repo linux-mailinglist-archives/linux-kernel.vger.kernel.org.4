@@ -2,233 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E7D656D5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E2A656D58
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbiL0ROR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 12:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S231651AbiL0RON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 12:14:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbiL0ROJ (ORCPT
+        with ESMTP id S232006AbiL0ROG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 12:14:09 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA042B86C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 09:14:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672161247; x=1703697247;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=pyu5M35zQN01hXPUqWatuRrmKFr9K+2FFGt8nTIemGE=;
-  b=Cf0h+emJ+FOBB8YvGl8KsK8Hlf1QRDJOZtK0Mtxh32Le1E3YvlDqubBe
-   a0JRdd1BtZcwVQu4boASvC6x/4MUxaxYVk+RMeS8G6xQ8XE035QITcLAt
-   EECVZALEWKlo1xALWtRoL02wEpXvA2+JEp7yvWxbX2LStcINBonHAsVrK
-   /3FsIz690SkhMN83Ji6syDcaN9Pt+PLrgBLelEBa1GI1Dslv6ILC+IiZn
-   izmfn4S4rkAq0vYcBGcfivQMlnP4deeGkz3D/apiD8NGPlyeI7SoUBKo2
-   5PY1nbdjJIBWxiCR+WCqxUl/oSmZgR68qp4EFATmhX0JkjgxKB8zLXy0p
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="304233276"
-X-IronPort-AV: E=Sophos;i="5.96,278,1665471600"; 
-   d="scan'208";a="304233276"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 09:14:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="716388068"
-X-IronPort-AV: E=Sophos;i="5.96,278,1665471600"; 
-   d="scan'208";a="716388068"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Dec 2022 09:14:06 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 27 Dec 2022 09:14:05 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 27 Dec 2022 09:14:05 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 27 Dec 2022 09:14:05 -0800
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.45) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 27 Dec 2022 09:14:04 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OMT2yNr+i2h9qY4qi/AH1xcgT91BCzmTf0o6k3ZwB+y7Dfrv1FlmFeFErbeCMVDdoVSu68fCUmfEdOupmZGEI1e70BRLxGcvSZBCL2Pvt/l/E/y8H/91L7KiOyVA+DX45ufsibCdl5aPDDhmYHhFekjRXzbqDABmdSZQK15Tl+fTkBUxAUxFjGTxHtgSoslGO8We6UJXdywpGC945u/CFRzwZMbutFNJhsBXSSfIEQdJPInShl3/L0BwrmxZPYClOrt1PME/9jiFybK9yMbIUxuk6TvPD+NmJhZ7pM3f7xonf25QuwipDLxPOmFtA2UQV8vVBB94IrNsYSGaVnZb6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NyNthrvMKRoSGcTxw9DBzjOfKbIC5ZtkqQgYY58ePVQ=;
- b=JbEM5l16lSPCUIFikbSnA9kCrW/AspLCNtFGWLt2cSvdjLqrWIh825xTTfI/ebi1Yq3up1IkZccxcpMqFlO6GF3FqOQ/rTsLhDVvkk3Hjwad2tX5iq+ZVh1mZX8j4e4tcG3Dr3JZhigtIYxf05BUkDPKPt0lfl4TRRVqBUisZ7d94vZCex4ZTExUYxxUqj/B5EShe2uw9mRhM+YANhvQ+adNcT0iKKMA6lpKWSmU5PRH7NMjLMZjmU3V3UngnuHrpg32Kx6nJT8moZWaAcDbGCm4Lt61SxkWHCLODYelg0kycA4+qSjb1bs2YTfF3dn2vSAnQNZXg57vAKePlrTQ7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by PH7PR11MB5818.namprd11.prod.outlook.com (2603:10b6:510:132::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 27 Dec
- 2022 17:14:02 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::499c:efe3:4397:808]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::499c:efe3:4397:808%9]) with mapi id 15.20.5944.013; Tue, 27 Dec 2022
- 17:14:02 +0000
-Date:   Tue, 27 Dec 2022 12:13:56 -0500
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Deepak R Varma <drv@mailo.com>
-CC:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        "Saurabh Singh Sengar" <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Subject: Re: [PATCH] drm/i915/fbc: Avoid full proxy f_ops for FBC debug
- attributes
-Message-ID: <Y6sn1BmhFJFssW0h@intel.com>
-References: <Y6qmNW6cOHjGwn03@qemulion>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y6qmNW6cOHjGwn03@qemulion>
-X-ClientProxiedBy: BYAPR05CA0069.namprd05.prod.outlook.com
- (2603:10b6:a03:74::46) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Tue, 27 Dec 2022 12:14:06 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81317BF7F;
+        Tue, 27 Dec 2022 09:14:00 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id e63fe3dbb9936d4b; Tue, 27 Dec 2022 18:13:58 +0100
+Received: from kreacher.localnet (unknown [213.134.183.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 92CD428A349B;
+        Tue, 27 Dec 2022 18:13:57 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Pratyush Yadav <ptyadav@amazon.de>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@acpica.org
+Subject: Re: [PATCH 0/2] intel_pstate: fix turbo not being used after a processor is rebooted
+Date:   Tue, 27 Dec 2022 18:13:56 +0100
+Message-ID: <12136852.O9o76ZdvQC@kreacher>
+In-Reply-To: <CAJZ5v0hFOA97FAq=CwGXgXTkC8aS_vyHjXuaFUppXktrG62H6w@mail.gmail.com>
+References: <20221221155203.11347-1-ptyadav@amazon.de> <33dd969d9bdb1eb93f8f2a2167efeb535455cf74.camel@linux.intel.com> <CAJZ5v0hFOA97FAq=CwGXgXTkC8aS_vyHjXuaFUppXktrG62H6w@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|PH7PR11MB5818:EE_
-X-MS-Office365-Filtering-Correlation-Id: 13e12e56-f4f9-4026-fe66-08dae82dc02c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Y+Vj3Uk3S9EflgmhKEbiG1y1NnNJKKgqvnfNK0NgAFVzFovR7JDk+4lmkh/ExBBbK+nQ3CdAUC7N26TGc6gULsEPVlbRMoAWNQQAcalQazL+KJSeDarpRmYq1qELiKood+rac0atMxUBeDx1qAZe+k8SViPPAuv5HgmeCTQ6/XOxXFmOW67JY9pNaI8JkXC6uktczTWXRpWlI3Wr/6qM56RT8OzNA1WeV8pukLTpxlfuxzsfAr+lDSSjOUmSLjvo3DyFgzZvLs2y1KnV0w4otBe6RHILZtIEF9oxSIaq+obp5CxT1y31+hoLDbKvYksu69gr+Q5q+HBhrvKqfsxyQ6J+iOOYgrzTMzTtnf4y0Pw7zhMjQO/PgoyXAvpwDbr9ufEUji6Fc15QgHuNMoMKfl/kNcksIMPMfG0DcSMkhrFyGjvuJ9oemhtpIguOE8fa7aVMCtQMPgZ0zj910mx1t4lHBavNH7lRv5rNnZ/HABVDZgLJ0Gj38gXDwMnvJ1qQKWpE3O8mEnXnNdZA4/cZgEeHkgkXOB4aIF5NuuDKLHQjXv/Ho30jrcHA7dPoW0ldh+Gbeo3YErIBtdE4xnF+WSgzrzjg9AWc/bKgIeveMX/aLTQ2UCfmYDikGK0JKHM/p+rwyJzysKeEX4+ppZZSFg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(376002)(396003)(346002)(136003)(451199015)(6506007)(41300700001)(316002)(8936002)(2906002)(5660300002)(66556008)(66476007)(86362001)(8676002)(6916009)(7416002)(44832011)(66946007)(54906003)(4326008)(26005)(6512007)(82960400001)(186003)(38100700002)(6666004)(36756003)(83380400001)(2616005)(6486002)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Q2Im8FNB1d/hn72bwPJIj8XMGJsH45M/rMV8Tv0X+M7loNn8/SlPiWVHLPWB?=
- =?us-ascii?Q?NP4DIESQQG5q9kjxR4VSa3fW/o5orJkBTrUF4Wjw4FSFkpJU2iHgr/ynmdv+?=
- =?us-ascii?Q?WEr3sVRQ8ZJRBolfw8t1QEhIQGFgdY/Rd7DYDa0jF+DT52+iqLDhKaGUnW+w?=
- =?us-ascii?Q?5Icw493kABr+Y++hF60IKTcoM6ifHB7c/E230TkHsWDKuCKm/INDZzzO4crq?=
- =?us-ascii?Q?8CyuWs2JkG7vro6Yoq5q0BQgBsTJdKPVLYAZWRcj3bN8ITSk5AH9o7MzlQY7?=
- =?us-ascii?Q?YzY+70Zn015eyWD46cB9HSFgW5ZksDBpiWeTX2JciAEVe10mLcXn+QMywHxh?=
- =?us-ascii?Q?k9v95TzT0fz9gVsLgQHLm39Va3kwimyczzqqdXQfd2Mdub9J+rEZEcCzp52q?=
- =?us-ascii?Q?mIivXfSqxDYUQ/M2bEJckKS+dmGHP0picLtfIIV3JerjUJn56QszK94a7G+j?=
- =?us-ascii?Q?MH6gkljbJNZwBDaliLL4yGZ4VS1cxEKtdQLah/FPOEjZx/R9nY9Rp8tRLSOM?=
- =?us-ascii?Q?ycTHbTp2AScQK5m13amWiUU02y3rlVXe/vh1OZW3+xAb2Ci50+Y9rqGBj0jH?=
- =?us-ascii?Q?cTaxE5lpxdnftw9BU3JWogh+8Nf9No7T8i487jpyDO+sA/eDXiKI2sR6wl0Q?=
- =?us-ascii?Q?yOSKx/MehXVZBkpj/Ly/v1XytnAuxM6F08+PNkDLR58OvoSDoFF32uYog924?=
- =?us-ascii?Q?i4xwBYrzK7TLxlRyLMA1wbYm6Vc+ExWeti/eYVKS7yduEcko5HPXrAI1KbIv?=
- =?us-ascii?Q?c7RcmPMx00KZxCoE5Y5yRXtOzycmHRYDcmF3Ph6karsGCHWdKgGnyp1TK9Iv?=
- =?us-ascii?Q?1ajqwJzSZJ+Kd7Gefsz/8ZQGDBlituii6mkhuUL9nzjESgL2Xb88KrC3uxWH?=
- =?us-ascii?Q?v5HrSGba5NPmK59AN52oL/+F1XkVmO+0XhQP2W3GJwWWxaV5V8FHkPOe5lIr?=
- =?us-ascii?Q?IL1y5UugytETevN7OGhDxxs2XcPm+OKMSWWVp9RXwl1sDT66N1rWYR4nSRtV?=
- =?us-ascii?Q?ME4kiHxK4pwE2Pd3d/o6kIoDYUNBOHhJCEToQeO0q8DHFtBmC8jo8c1H2apR?=
- =?us-ascii?Q?/13G84djme/ca+PGJl6h5WPJ/yuFDpAtLt+G84fWvB87M6Jwg69A4yR6OYKG?=
- =?us-ascii?Q?Z/aXH7udpyNBA9Kz1FUsuScj6EBppK3bUcRNPlbg/sdXncneVAvwWQdHlbaD?=
- =?us-ascii?Q?AlXTtm8ahn569c+SeqKkcWUjw4jSijbBKq3bzkvQ4g986P/73HcafG4CFcnd?=
- =?us-ascii?Q?6DXUyaJ2jDeAzmuJfClB1RwQKl3CTqbznMoP5zKKcomCxB+GjZXN4l1pxLaA?=
- =?us-ascii?Q?YzmrWYB3ier78IM0zdq4lpBuq/+EME2/uX2L27U256P22JkHUHT+Q5XbZgK8?=
- =?us-ascii?Q?s3BD4qUb3ThSF2NN3OwnG02l2lV0Baris+3CgsbKku/wPoxPkZOE1LSla95I?=
- =?us-ascii?Q?kdFqkt+orP1V3iwOk2LDmaZO/0ImqshwPjbkW6Q+HnDvHqAgn0WxRR4WPLD4?=
- =?us-ascii?Q?I+RIkgnyB73u4pJCr3501ZRRpzqJHRNrFqTPvEx0/+D0yl1Kbucj0doCbeCU?=
- =?us-ascii?Q?zLZ97UsYYAFDZPD4G+3n+Y+c7GRB4qBZU1F8FZ0rhhOvU6wiqs3fr/vtIVSu?=
- =?us-ascii?Q?RA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13e12e56-f4f9-4026-fe66-08dae82dc02c
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Dec 2022 17:14:02.4986
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ey3nvggNnmHCCW3NJe5sZWhc2/SDFKwPwaWC3I1kdgV9eUg3f7yFGSx2BwvQHqvGFn8nbgpt0qmC6XQVLI8ZOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5818
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.183.5
+X-CLIENT-HOSTNAME: 213.134.183.5
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedriedtgdeljecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekfedrheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeefrdehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpthihrggurghvsegrmhgriihonhdruggvpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvnhgssehk
+ vghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggvvhgvlhesrggtphhitggrrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 01:30:53PM +0530, Deepak R Varma wrote:
-> Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
-> function adds the overhead of introducing a proxy file operation
-> functions to wrap the original read/write inside file removal protection
-> functions. This adds significant overhead in terms of introducing and
-> managing the proxy factory file operations structure and function
-> wrapping at runtime.
-> As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
-> with debugfs_create_file_unsafe() is suggested to be used instead.  The
-> DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
-> debugfs_file_put() wrappers to protect the original read and write
-> function calls for the debug attributes. There is no need for any
-> runtime proxy file operations to be managed by the debugfs core.
+On Tuesday, December 27, 2022 6:02:50 PM CET Rafael J. Wysocki wrote:
+> On Tue, Dec 27, 2022 at 5:40 PM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >
+> > On Tue, 2022-12-27 at 16:38 +0100, Pratyush Yadav wrote:
+> > > Hi Srinivas,
+> > >
+> > > On Sat, Dec 24 2022, srinivas pandruvada wrote:
+> > >
+> > > > On Fri, 2022-12-23 at 10:10 -0800, srinivas pandruvada wrote:
+> > > > > Hi Pratyush,
+> > > > >
+> > > > > On Thu, 2022-12-22 at 11:39 +0100, Pratyush Yadav wrote:
+> > > > > >
+> > > > > > Hi Srinivas,
+> > > > > >
+> > > > > > On Wed, Dec 21 2022, srinivas pandruvada wrote:
+> > > > > > > On Wed, 2022-12-21 at 16:52 +0100, Pratyush Yadav wrote:
+> > > > > > > > When a processor is brought offline and online again, it is
+> > > > > > > > unable to
+> > > > > > > > use Turbo mode because the _PSS table does not contain the
+> > > > > > > > whole
+> > > > > > > > turbo
+> > > > > > > > frequency range, but only +1 MHz above the max non-turbo
+> > > > > > > > frequency.
+> > > > > > > > This
+> > > > > > > > causes problems when ACPI processor driver tries to set
+> > > > > > > > frequency
+> > > > > > > > constraints. See patch 2 for more details.
+> > > > > > > >
+> > > > > I can reproduce on a Broadwell server platform. But not on a
+> > > > > client
+> > > > > system with acpi_ppc usage.
+> > > > >
+> > > > > Need to check what change broke this.
+> > > >
+> > > > When PPC limits enforcement changed to PM QOS, this broke.
+> > > > Previously
+> > > > acpi_processor_get_platform_limit() was not enforcing any limits.
+> > > > It
+> > > > was just setting variable. So any update done after
+> > > > acpi_register_performance_state() call to pr->performance-
+> > > > > states[ppc].core_frequency, was effective.
+> > > >
+> > > > We don't really need to call
+> > > >         ret = freq_qos_update_request(&pr->perflib_req,
+> > > >                         pr->performance->states[ppc].core_frequency
+> > > > *
+> > > > 1000);
+> > > >
+> > > > if the PPC is not changed. When PPC is changed, this gets called
+> > > > again,
+> > > > so then we can call the above function to update cpufreq limit.
+> > > >
+> > > > The below change fixed for me.
+> > >
+> > > Right.
+> > I think, this is the only change you require to fix this. In addition
+> > set pr->performance_platform_limit = 0 in
+> > acpi_processor_unregister_performance().
 > 
-> This Change is reported by the debugfs_simple_attr.cocci Coccinelle
-> semantic patch.
+> Not really, because if the limit is set to a lower frequency and then
+> reset to _PSS[0], it needs to be set back to "no limit".
+> 
+> I'll send a patch for that in a while.
 
-I just checked here with
-$ make coccicheck M=drivers/gpu/drm/i915/ MODE=context COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
+This has not been tested beyond compilation, so please be careful.
 
-The part reported by the this script is the s/SIMPLE/DEBUGFS
-but the change to the unsafe option is not.
+---
+ drivers/acpi/processor_perflib.c |   27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
-This commit message is not explaining why the unsafe is the suggested
-or who suggested it.
+Index: linux-pm/drivers/acpi/processor_perflib.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_perflib.c
++++ linux-pm/drivers/acpi/processor_perflib.c
+@@ -53,6 +53,8 @@ static int acpi_processor_get_platform_l
+ {
+ 	acpi_status status = 0;
+ 	unsigned long long ppc = 0;
++	s32 qos_value;
++	int index;
+ 	int ret;
+ 
+ 	if (!pr)
+@@ -72,17 +74,30 @@ static int acpi_processor_get_platform_l
+ 		}
+ 	}
+ 
++	index = ppc;
++
++	if (pr->performance_platform_limit == index ||
++	    ppc >= pr->performance->state_count)
++		return 0;
++
+ 	pr_debug("CPU %d: _PPC is %d - frequency %s limited\n", pr->id,
+-		       (int)ppc, ppc ? "" : "not");
++		 index, index ? "is" : "is not");
+ 
+-	pr->performance_platform_limit = (int)ppc;
++	pr->performance_platform_limit = index;
+ 
+-	if (ppc >= pr->performance->state_count ||
+-	    unlikely(!freq_qos_request_active(&pr->perflib_req)))
++	if (unlikely(!freq_qos_request_active(&pr->perflib_req)))
+ 		return 0;
+ 
+-	ret = freq_qos_update_request(&pr->perflib_req,
+-			pr->performance->states[ppc].core_frequency * 1000);
++	/*
++	 * If _PPC returns 0, it means that all of the available states can be
++	 * used ("no limit").
++	 */
++	if (index == 0)
++		qos_value = FREQ_QOS_MAX_DEFAULT_VALUE;
++	else
++		qos_value = pr->performance->states[index].core_frequency * 1000;
++
++	ret = freq_qos_update_request(&pr->perflib_req, qos_value);
+ 	if (ret < 0) {
+ 		pr_warn("Failed to update perflib freq constraint: CPU%d (%d)\n",
+ 			pr->id, ret);
 
-If you remove the unsafe part feel free to resend adding:
 
-Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-(to both patches, this and the drrs one.
 
-Also, it looks like you could contribute with other 2 patches:
-drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:64:0-23: WARNING: pxp_terminate_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
-drivers/gpu/drm/i915/gvt/debugfs.c:150:0-23: WARNING: vgpu_scan_nonprivbb_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
-
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
->  drivers/gpu/drm/i915/display/intel_fbc.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/display/intel_fbc.c b/drivers/gpu/drm/i915/display/intel_fbc.c
-> index b5ee5ea0d010..4b481e2f908b 100644
-> --- a/drivers/gpu/drm/i915/display/intel_fbc.c
-> +++ b/drivers/gpu/drm/i915/display/intel_fbc.c
-> @@ -1809,10 +1809,10 @@ static int intel_fbc_debugfs_false_color_set(void *data, u64 val)
->  	return 0;
->  }
-> 
-> -DEFINE_SIMPLE_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
-> -			intel_fbc_debugfs_false_color_get,
-> -			intel_fbc_debugfs_false_color_set,
-> -			"%llu\n");
-> +DEFINE_DEBUGFS_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
-> +			 intel_fbc_debugfs_false_color_get,
-> +			 intel_fbc_debugfs_false_color_set,
-> +			 "%llu\n");
-> 
->  static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
->  				  struct dentry *parent)
-> @@ -1821,8 +1821,8 @@ static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
->  			    fbc, &intel_fbc_debugfs_status_fops);
-> 
->  	if (fbc->funcs->set_false_color)
-> -		debugfs_create_file("i915_fbc_false_color", 0644, parent,
-> -				    fbc, &intel_fbc_debugfs_false_color_fops);
-> +		debugfs_create_file_unsafe("i915_fbc_false_color", 0644, parent,
-> +					   fbc, &intel_fbc_debugfs_false_color_fops);
->  }
-> 
->  void intel_fbc_crtc_debugfs_add(struct intel_crtc *crtc)
-> --
-> 2.34.1
-> 
-> 
-> 
