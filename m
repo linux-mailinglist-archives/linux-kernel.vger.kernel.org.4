@@ -2,136 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C33656FC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 22:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0A1656FCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 22:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbiL0VKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 16:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S231426AbiL0VKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 16:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232347AbiL0VJQ (ORCPT
+        with ESMTP id S232820AbiL0VJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 16:09:16 -0500
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BE5DEB3;
-        Tue, 27 Dec 2022 13:06:06 -0800 (PST)
-Received: by mail-io1-f44.google.com with SMTP id h6so7428647iof.9;
-        Tue, 27 Dec 2022 13:06:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vv+ZjSlUuwa317vbQX/rH0BLAZD6zsIjkQVH3w5ABrI=;
-        b=ofPrzENKSDMOhKOytTnY4pk2WDF2jJNabvG1NNyZ0t+nDUODMzO0KnzFOhuIxNl/Al
-         AVlNQNEAKivhHsdAOE3zhunzNWNCKqBsSGZUT7pg0ly2T2dRVdYfTpzj5YuQZ1RsRHX4
-         inZqV5J+YOVQpMzMFf2X2Q8AX6SF7NannlgJuXLSOmePGBV1ftBp1lS5+9/Dt9lSUyXp
-         YMRl3sBOkoQcjvMlpvZckvgwk09pAFysWK6sRQZpHaMgtYaH2MwDLSFbYOsysIqRER14
-         nuOEIl3uauDrzuRqVAv1tRJkckxsrmBKWaIueqjgftUM4pabOWwAqohi2ZQV9qmi5xTa
-         4lPw==
-X-Gm-Message-State: AFqh2krwlOxHsxPMImAZHmRwl1s964f5Eni80lBVaFzAwAbBPPaqK5o2
-        nB+H1AXKc+sGMc0wyiPYeeWUSOGpSPdS0egBfou7qHhvG7Y=
-X-Google-Smtp-Source: AMrXdXvqUTIEjJrVWh/GKZcTQ0dBCWvu6Y4+VwEEP+Yr6/xefP8UNRmpiD7FCKGXfsOEVS1BrX2uGnQTfeQAIZ36d9Q=
-X-Received: by 2002:a02:8562:0:b0:38a:4fbc:b85a with SMTP id
- g89-20020a028562000000b0038a4fbcb85amr1858364jai.277.1672175166010; Tue, 27
- Dec 2022 13:06:06 -0800 (PST)
+        Tue, 27 Dec 2022 16:09:22 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1797A396;
+        Tue, 27 Dec 2022 13:07:34 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BRKx1oH028995;
+        Tue, 27 Dec 2022 21:06:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=1uhLU5AfBzQHfS2v22R1XGgfpb7X30fYPSm78dQqBO0=;
+ b=ihTCo4qqNMz0jpHc8k6+p31Zm9UHg2BppgNNu7i+v83cYdtE6G3DPgsmebzWePVGutp9
+ rb8vl9Bi7viJl2fQAk21SOsC9GLYAvZce6899TjAA+3kwI1cKrGrsbK8nnK8b+9Q9s73
+ iPmqs4lM5kR0n3KjbUWLIv/ygLciT6i0z3qjrVa96O/dAQMlmhr3/4aYjoE6vl3SCfp1
+ cDCJvO5WojXeRsKcKxXqmFSEfzJDAMhpTHfPICxOSqxYUOAGXoZkYTWG4OsXbjeBpYPw
+ S7SLWzhgsOre7nYUNRlo9kNtDupxPRWkddHrhN3FZQeR4mpb98ftTYU2d9VkLfn7CvSq Rw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mr1r1guwx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Dec 2022 21:06:38 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BRL6b7P008573
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Dec 2022 21:06:37 GMT
+Received: from [10.110.31.102] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 27 Dec
+ 2022 13:06:36 -0800
+Message-ID: <cd0b6275-ec26-d364-6a38-6607230d82cf@quicinc.com>
+Date:   Tue, 27 Dec 2022 13:06:35 -0800
 MIME-Version: 1.0
-References: <20221227130701.124278-1-yangjihong1@huawei.com>
-In-Reply-To: <20221227130701.124278-1-yangjihong1@huawei.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 27 Dec 2022 13:05:54 -0800
-Message-ID: <CAM9d7chDPQ9_J5=XLWbhp2AztiyVwTaRjTf20reCdriseTvX_A@mail.gmail.com>
-Subject: Re: [PATCH] perf record: Fix coredump with --overwrite and --max-size
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, jiwei.sun@windriver.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH 03/14] ASoC: qcom: Add USB backend ASoC driver for Q6
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <lgirdwood@gmail.com>, <andersson@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <Thinh.Nguyen@synopsys.com>,
+        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <agross@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_plai@quicinc.com>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <20221223233200.26089-4-quic_wcheng@quicinc.com> <Y6bAQ8hDLkvrvjQQ@kroah.com>
+ <Y6rtdy4NPfi/KOqd@sirena.org.uk> <Y6r26VfIfpE8zpPY@kroah.com>
+ <Y6sLH+8nVFImL0Oo@sirena.org.uk>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <Y6sLH+8nVFImL0Oo@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: vi3zFIMNnJv1JDR_lUmFjx81nWldrRnX
+X-Proofpoint-ORIG-GUID: vi3zFIMNnJv1JDR_lUmFjx81nWldrRnX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-27_16,2022-12-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=506 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 spamscore=0 impostorscore=0 adultscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212270176
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 5:10 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> When --overwrite and --max-size options of perf record are used together,
-> a segmentation fault occurs. The following is an example:
->
->  # perf record -e sched:sched* --overwrite --max-size 1M -a -- sleep 1
->   [ perf record: Woken up 1 times to write data ]
->   perf: Segmentation fault
->   Obtained 1 stack frames.
->   [0xc4c67f]
->   Segmentation fault (core dumped)
->
-> backtrace of the core file is as follows:
->
->   #0  0x0000000000417990 in process_locked_synthesized_event (tool=0x0, event=0x15, sample=0x1de0, machine=0xf8) at builtin-record.c:630
->   #1  0x000000000057ee53 in perf_event__synthesize_threads (nr_threads_synthesize=21, mmap_data=<optimized out>, needs_mmap=<optimized out>, machine=0x17ad9b0, process=<optimized out>, tool=0x0) at util/synthetic-events.c:1950
->   #2  __machine__synthesize_threads (nr_threads_synthesize=0, data_mmap=<optimized out>, needs_mmap=<optimized out>, process=<optimized out>, threads=0x8, target=0x8, tool=0x0, machine=0x17ad9b0) at util/synthetic-events.c:1936
->   #3  machine__synthesize_threads (machine=0x17ad9b0, target=0x8, threads=0x8, needs_mmap=<optimized out>, data_mmap=<optimized out>, nr_threads_synthesize=0) at util/synthetic-events.c:1947
->   #4  0x000000000040165d in record__synthesize (tail=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2010
->   #5  0x0000000000403989 in __cmd_record (argc=<optimized out>, argv=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2810
->   #6  0x00000000004196ba in record__init_thread_user_masks (rec=0xbe2520 <record>, cpus=0x17a65f0) at builtin-record.c:3837
->   #7  record__init_thread_masks (rec=0xbe2520 <record>) at builtin-record.c:3938
->   #8  cmd_record (argc=1, argv=0x7ffdd692dc60) at builtin-record.c:4241
->   #9  0x00000000004b701d in pager_command_config (var=0x0, value=0x15 <error: Cannot access memory at address 0x15>, data=0x1de0) at perf.c:117
->   #10 0x00000000004b732b in get_leaf_frame_caller_aarch64 (sample=0xfffffffb, thread=0x0, usr_idx=<optimized out>) at util/arm64-frame-pointer-unwind-support.c:56
->   #11 0x0000000000406331 in execv_dashed_external (argv=0x7ffdd692d9e8) at perf.c:410
->   #12 run_argv (argcp=<synthetic pointer>, argv=<synthetic pointer>) at perf.c:431
->   #13 main (argc=<optimized out>, argv=0x7ffdd692d9e8) at perf.c:562
+Hi Mark/Greg,
 
-I'm not sure this callstack is correct.
+On 12/27/2022 7:11 AM, Mark Brown wrote:
+> On Tue, Dec 27, 2022 at 02:45:13PM +0100, Greg KH wrote:
+>> On Tue, Dec 27, 2022 at 01:04:55PM +0000, Mark Brown wrote:
+>>> On Sat, Dec 24, 2022 at 10:02:59AM +0100, Greg KH wrote:
+> 
+>>>>> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> 
+>>>> All of the code in this patch series is older than 2022 as I know it has
+>>>> been in shipping devices for many years.  Please use the proper
+>>>> copyright year to make your lawyers happy...
+> 
+>>> Are you *positive* about this.  Based on some preparatory discussions
+>>> the Qualcomm people had with Takashi and I it seemed like this was a new
+>>> version of existing concepts.  I'm sure they had something already but
+>>> it's not obvious to me that they're just posting the same code.
+> 
+>> I thought that this same code has been shipping in devices for a few
+>> years now in the last few Samsung phone models.  Is this not the same
+>> code that is in those devices?
+> 
+>> If not, why not, what happened to that codebase that makes it not worthy
+>> of being submitted upstream?
+> 
+> I don't specifically know anything about that code but I'd expect that
+> for out of tree code breaking new ground like this there'd be a strong
+> likelyhood that there'd be design level issues and that's what the pre
+> submission discussions were all about - how to fit the concept into the
+> kernel subsystems in a way that might be maintainable.  There's also
+> been the whole transition to their new DSP firmware going on.  It's
+> possible that what was shipped was implemented in the same way with the
+> same code but I'd not assume that this is the case without actually
+> comparing the two.
 
->
-> The reason is that record__bytes_written accesses the freed memory rec->thread_data,
-> The process is as follows:
->   __cmd_record
->     -> record__free_thread_data
->       -> zfree(&rec->thread_data)         // free rec->thread_data
->     -> record__synthesize
->       -> perf_event__synthesize_id_index
->         -> process_synthesized_event
->           -> record__write
->             -> record__bytes_written     // access rec->thread_data
->
-> In the overwrite scenario, to synthesize non-sample events,
-> we do not need to check perf size limit.
+It's correct that all the ASoC related patches are new, and didn't exist 
+previously in QC products.  It is due to the fact that Android has a 
+different ALSA userspace concept which allowed for a lot of the Q6 audio 
+front end (AFE) communication to be done from userspace, I believe. 
+This is the reason that we had to introduce this new ASoC based design.
 
-Hmm.. I think we should prevent this kind of access after
-record__free_thread_data().  We may set nr_threads to 0
-and save the bytes_written for threads separately.
+I can't comment much more about the Android ALSA design, maybe @Patrick 
+Lai can.
 
-Thanks,
-Namhyung
-
-
->
-> Fixes: 6d57581659f7 ("perf record: Add support for limit perf output file size")
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->  tools/perf/builtin-record.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index 29dcd454b8e2..c5f169150d63 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -260,7 +260,7 @@ static int record__write(struct record *rec, struct mmap *map __maybe_unused,
->         else
->                 rec->bytes_written += size;
->
-> -       if (record__output_max_size_exceeded(rec) && !done) {
-> +       if (!rec->opts.tail_synthesize && record__output_max_size_exceeded(rec) && !done) {
->                 fprintf(stderr, "[ perf record: perf size limit reached (%" PRIu64 " KB),"
->                                 " stopping session ]\n",
->                                 record__bytes_written(rec) >> 10);
-> --
-> 2.17.1
->
+Thanks
+Wesley Cheng
