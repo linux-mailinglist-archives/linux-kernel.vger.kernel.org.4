@@ -2,78 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E274F656852
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B7B656855
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiL0IRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 03:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S230048AbiL0ISz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 03:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiL0IRc (ORCPT
+        with ESMTP id S229936AbiL0ISR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 03:17:32 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798252604;
-        Tue, 27 Dec 2022 00:17:31 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VYCh-M8_1672129042;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VYCh-M8_1672129042)
+        Tue, 27 Dec 2022 03:18:17 -0500
+Received: from out30-8.freemail.mail.aliyun.com (out30-8.freemail.mail.aliyun.com [115.124.30.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF2F6457
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:18:16 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VYCurfl_1672129087;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VYCurfl_1672129087)
           by smtp.aliyun-inc.com;
-          Tue, 27 Dec 2022 16:17:29 +0800
+          Tue, 27 Dec 2022 16:18:14 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     james.smart@broadcom.com
-Cc:     dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+To:     lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
         Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] scsi: lpfc: lpfc_bsg: Remove set but unused variable 'offset'
-Date:   Tue, 27 Dec 2022 16:16:34 +0800
-Message-Id: <20221227081634.52182-1-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] mfd: max8925: Remove the unused function irq_to_max8925()
+Date:   Tue, 27 Dec 2022 16:18:05 +0800
+Message-Id: <20221227081805.54185-1-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable offset is not effectively used in the function, so delete it.
+The function irq_to_max8925() is defined in the max8925-core.c
+file, but not called elsewhere, so remove this unused function.
 
-drivers/scsi/lpfc/lpfc_bsg.c:2806:11: warning: variable 'offset' set but not used.
+drivers/mfd/max8925-core.c:472:40: warning: unused function 'irq_to_max8925'.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3559
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3561
 Reported-by: Abaci Robot <abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/scsi/lpfc/lpfc_bsg.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/mfd/max8925-core.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
-index 852b025e2fec..dd304f899f78 100644
---- a/drivers/scsi/lpfc/lpfc_bsg.c
-+++ b/drivers/scsi/lpfc/lpfc_bsg.c
-@@ -2803,7 +2803,7 @@ diag_cmd_data_alloc(struct lpfc_hba *phba,
+diff --git a/drivers/mfd/max8925-core.c b/drivers/mfd/max8925-core.c
+index eb3f061c8ee6..0246bbe80354 100644
+--- a/drivers/mfd/max8925-core.c
++++ b/drivers/mfd/max8925-core.c
+@@ -469,12 +469,6 @@ static struct max8925_irq_data max8925_irqs[] = {
+ 	},
+ };
+ 
+-static inline struct max8925_irq_data *irq_to_max8925(struct max8925_chip *chip,
+-						      int irq)
+-{
+-	return &max8925_irqs[irq - chip->irq_base];
+-}
+-
+ static irqreturn_t max8925_irq(int irq, void *data)
  {
- 	struct lpfc_dmabufext *mlist = NULL;
- 	struct lpfc_dmabufext *dmp;
--	int cnt, offset = 0, i = 0;
-+	int cnt, i = 0;
- 	struct pci_dev *pcidev;
- 
- 	pcidev = phba->pcidev;
-@@ -2854,7 +2854,6 @@ diag_cmd_data_alloc(struct lpfc_hba *phba,
- 		bpl++;
- 
- 		i++;
--		offset += cnt;
- 		size -= cnt;
- 	}
- 
+ 	struct max8925_chip *chip = data;
 -- 
 2.20.1.7.g153144c
 
