@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E40C6568A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96EF16568A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiL0JAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:00:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        id S230461AbiL0JAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiL0I74 (ORCPT
+        with ESMTP id S229762AbiL0I75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 03:59:56 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EEB6547
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:59:55 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id 1so18792292lfz.4
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:59:55 -0800 (PST)
+        Tue, 27 Dec 2022 03:59:57 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB70765F
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:59:56 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id x11so13148821ljh.7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:59:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+2jyW9oO0L5sNCKiAMzOgDIduuGoHpIUZwCicD1bQoE=;
-        b=JZwQsVMJwgbf4ouWgI08xzLNj+/D8oyBQ8PoAqZARN0yaW4A8CxuEuOwYLDHx17Gss
-         NHdf06fE9IX/K7zs+g2eqa/zfQMX4ok/VnNLf6rio6lQtB4acPnR7vOsxn8bRvbqqR17
-         1GLCvkjqjmxDY49wwhquuLix2RMqrHPg/5ur+f306SwwOSkiIDqIkm65FGOHJLCDdhfp
-         bZlEuDZ2DgYaVG4tIm17Qj5xCpxmochtftkM45RetZeqOnrnRcn8B2PKlQ7bTECAoR45
-         csZpT37naqT61J8ClA4tbWBjIi806Xv0jjgi5kdv+rcn73ZhTgatiyzqNPHePWxaVbYY
-         t2fQ==
+        bh=ewBi19F5rXDvPAl4arROpl57FFDvAATlcWCR8UrBTc4=;
+        b=ZL0RTjYtiTVU2WOwh2NUdPlltWQJooucmSNNh2/gaRWGMmPUo1/f+lDB2GgWA02fge
+         g/GDJ+CdYP/pc57Ngp1gR+7cA44ACBid8rGDJl1+RCRavUm99L/6LG3+5hVCrby8smVF
+         OKFAWVpwWds71Yd1I05TX8dmf5fGlkVN8i07ZjSXpxkqxMKQkNP4M/PNtNHVHCXkKdhh
+         G7BQ4+tXI1pJWUC7Ce4JHfX0QIc13XTT9ZCbq/lCBl8GjyImwmXdKPrLotSo6ycn5Rp/
+         vckkWBeRHrEYPzlJHe5nrAPMD9uJRlJwgyyVffVTlOC4sCtux9OgFAXXI8ejoMHiFwCf
+         4iOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+2jyW9oO0L5sNCKiAMzOgDIduuGoHpIUZwCicD1bQoE=;
-        b=ESFMIDYkzb/uJhndXURcgqQ1KWRj12b/819Qnvq19zIo9Xd0AeR0LF3ECTca30UNrI
-         y3eq12KBW8mBSNUTEgZoZs4eh1OsFP8fIhVMBI5CeHHU7B4sP0xd8A1FRPCD3ywhO+7s
-         NapEc2RwwDDned9c0M3yP8QV7UVfdMN5kzQDoVARb3oOiFQX40wHLRZhcm0fG1p5nlmu
-         A8An6lyZ+Je3iIDirVT1Pv0cJLQSz/1B8toP58yCd8lYrW4e8vv8uWurJLYNb/Jr6/af
-         ufU6HuQ9yTY3GuLOmi94CSsNiDGIAIFxNd+1+r9iFpkAHn9KPN37facC9wQE/9rKyNsb
-         l2tg==
-X-Gm-Message-State: AFqh2koQoC/rxsIFdqtzX5b08RP4196Gu60aCtsvgQFP5VsHBlem+5Nz
-        yqKCRZEX6OIK9QuvlRS9CBBowA==
-X-Google-Smtp-Source: AMrXdXucTjCQ6gkyUd6reb6FyMHIo0JTFApHHKAuiP95qwebl7407ISTva+utaDjhqpWRmUt+tiAmQ==
-X-Received: by 2002:ac2:55ab:0:b0:4b4:f19a:5aed with SMTP id y11-20020ac255ab000000b004b4f19a5aedmr7038882lfg.49.1672131594248;
-        Tue, 27 Dec 2022 00:59:54 -0800 (PST)
+        bh=ewBi19F5rXDvPAl4arROpl57FFDvAATlcWCR8UrBTc4=;
+        b=08BeflWHFxcbLDCT0egqAAKKgmZPireqFezUb5RKGlhGIgfWN8obPsuzOTmipLygMY
+         SgPLb4Je0c8+nJB4gh2SRHuE7cn8ZVZ1YYw2q1l1YLBO+pD1kdmnbgaFZ3FKJGcsI0b0
+         0l0edz7lch3PcyAmA2Nj06GNfaGeislu5FO0xicXHUcpk88vc6CiDanuRM2Kwe9x+X1p
+         0j2xd20wQ5KZB1/Vmleb1fihbK4mzvZJinJHkcON6UzJR4x2HT3igf3KtmtHLqWlf+kL
+         TeXv1wTHIlcJ5lVQmFLPtIj3P7LEWYMSfJY+9OQvCP5ujW3BA/cBu3VKN5gi2oUl7p24
+         3c2A==
+X-Gm-Message-State: AFqh2kotHCiaRXGYSDSJOQh28rSk3fNDqT5jKnIcg5xEDv7iX1bScYLC
+        1NQxi9bOy714W0D8Z3KDcao7Ow==
+X-Google-Smtp-Source: AMrXdXtEJ0IXXXeHfxAVzoEs7V6Xjo/5d+ieHP1plHxTO/EMvQMZ9tNJCAZCafaSRq3v9Tx0n6kA0w==
+X-Received: by 2002:a2e:95d9:0:b0:27f:bf70:e55c with SMTP id y25-20020a2e95d9000000b0027fbf70e55cmr1674857ljh.28.1672131595121;
+        Tue, 27 Dec 2022 00:59:55 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a18-20020a05651c031200b0026bf0d71b1esm1534837ljp.93.2022.12.27.00.59.53
+        by smtp.gmail.com with ESMTPSA id a18-20020a05651c031200b0026bf0d71b1esm1534837ljp.93.2022.12.27.00.59.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 00:59:53 -0800 (PST)
+        Tue, 27 Dec 2022 00:59:54 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     JaimeLiao <jaimeliao.tw@gmail.com>, linux-kernel@vger.kernel.org
+To:     ye.xingchen@zte.com.cn, ssantosh@kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        juliensu@mxic.com.tw, leoyu@mxic.com.tw, alvinzhou@mxic.com.tw,
-        jaimeliao@mxic.com.tw
-Subject: Re: [PATCH] memory: renesas-rpc-if: Fix missing setting address
-Date:   Tue, 27 Dec 2022 09:59:45 +0100
-Message-Id: <167213158106.15520.12651563480098587733.b4-ty@linaro.org>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux-next] memory: ti-emif-pm: Use device_get_match_data() to simplify the code
+Date:   Tue, 27 Dec 2022 09:59:46 +0100
+Message-Id: <167213158108.15520.8320653916524293610.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221123025141.4012-1-jaimeliao.tw@gmail.com>
-References: <20221123025141.4012-1-jaimeliao.tw@gmail.com>
+In-Reply-To: <202211171939327684154@zte.com.cn>
+References: <202211171939327684154@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -73,17 +72,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 10:51:41 +0800, JaimeLiao wrote:
-> In the RPC manual mode, if the data direction is not set
-> (such as the flash erase command), the address misses the
-> setting.
+On Thu, 17 Nov 2022 19:39:32 +0800 (CST), ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Directly get the match data with device_get_match_data().
 > 
 > 
 
 Applied, thanks!
 
-[1/1] memory: renesas-rpc-if: Fix missing setting address
-      https://git.kernel.org/krzk/linux-mem-ctrl/c/21a1234f82cbf4258445072bb23c38fed2ce6cb3
+[1/1] memory: ti-emif-pm: Use device_get_match_data() to simplify the code
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/271c9a97dec87341bdaea685f3502a0ed0e4a1af
 
 Best regards,
 -- 
