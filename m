@@ -2,63 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D02656910
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2651656913
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiL0JsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:48:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
+        id S229836AbiL0Jth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiL0JsG (ORCPT
+        with ESMTP id S229601AbiL0Jtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 04:48:06 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A4695B4;
-        Tue, 27 Dec 2022 01:47:58 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Nh8ld02syz9xrpD;
-        Tue, 27 Dec 2022 17:40:29 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwCHXGMgv6pjVHJIAA--.38704S3;
-        Tue, 27 Dec 2022 10:47:33 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     dhowells@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, ebiggers@kernel.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v4 2/2] KEYS: asymmetric: Copy sig and digest in public_key_verify_signature()
-Date:   Tue, 27 Dec 2022 10:46:32 +0100
-Message-Id: <20221227094632.2797203-2-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221227094632.2797203-1-roberto.sassu@huaweicloud.com>
-References: <20221227094632.2797203-1-roberto.sassu@huaweicloud.com>
+        Tue, 27 Dec 2022 04:49:35 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9E636467;
+        Tue, 27 Dec 2022 01:49:32 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.31:47026.1348480059
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 59D06100135;
+        Tue, 27 Dec 2022 17:49:29 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-79f476db8-srhz2 with ESMTP id c198b5c1616f443babc5733098c2abe3 for mhiramat@kernel.org;
+        Tue, 27 Dec 2022 17:49:30 CST
+X-Transaction-ID: c198b5c1616f443babc5733098c2abe3
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <6f64c5bd-2746-37e5-7e07-1c828fd6b90e@189.cn>
+Date:   Tue, 27 Dec 2022 17:49:28 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 4/4] kernel/trace: remove calling regs_* when compiling
+ HEXAGON
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     rostedt@goodmis.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+References: <1670229017-4106-1-git-send-email-chensong_2000@189.cn>
+ <20221223231545.e619f35b321192fbaa2f4cf9@kernel.org>
+Content-Language: en-US
+From:   Song Chen <chensong_2000@189.cn>
+In-Reply-To: <20221223231545.e619f35b321192fbaa2f4cf9@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwCHXGMgv6pjVHJIAA--.38704S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF4xCry8tF47try5uF1UAwb_yoWrWr15pF
-        s5WrWxtry5Gr1xCrZ5Cw40y345A3y8A3Wagw4fCw1fCrnxZrWkCryI9r43Wry7JrykXry8
-        tr4vgw4rWr1DXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-        JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-        0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-        JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwI
-        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jn9N3UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4MKCgAAsn
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,111 +55,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-mapping") checks that both the signature and the digest reside in the
-linear mapping area.
 
-However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-stack support"), made it possible to move the stack in the vmalloc area,
-which is not contiguous, and thus not suitable for sg_set_buf() which needs
-adjacent pages.
+在 2022/12/23 22:15, Masami Hiramatsu (Google) 写道:
+> On Mon,  5 Dec 2022 16:30:17 +0800
+> Song Chen <chensong_2000@189.cn> wrote:
+> 
+>> kernel test robot reports below errors:
+>>
+>> In file included from kernel/trace/trace_events_synth.c:22:
+>>>> kernel/trace/trace_probe_kernel.h:203:9: error: call to
+>> undeclared function 'regs_get_register'; ISO C99 and later
+>> do not support implicit function declarations
+>> [-Wimplicit-function-declaration]
+>>                     val = regs_get_register(regs, code->param);
+>>
+>> HEXAGON doesn't define and implement those reg_* functions
+>> underneath arch/hexagon as well as other archs. To remove
+>> those errors, i have to include those function calls in
+>> "CONFIG_HEXAGON"
+>>
+>> It looks ugly, but i don't know any other way to fix it,
+>> this patch can be reverted after reg_* have been in place
+>> in arch/hexagon.
+>>
+> 
+> Sorry, NACK. This is too add-hoc patch and this is introduced
+> by your patch. Do not introduce an issue and fix it later in
+> the same series.
+> Please fix it in your first patch. Maybe you should make another
+> header file for those APIs.
+> 
+> Thank you,
+I tried not no add a new header file, but looks like i have to, to avoid 
+triggering warnings and errors of kernel robot.
 
-Always make a copy of the signature and digest in the same buffer used to
-store the key and its parameters, and pass them to sg_set_buf(). Prefer it
-to conditionally doing the copy if necessary, to keep the code simple. The
-buffer allocated with kmalloc() is in the linear mapping area.
+Thanks
 
-Cc: stable@vger.kernel.org # 4.9.x
-Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-Suggested-by: Eric Biggers <ebiggers@kernel.org>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- crypto/asymmetric_keys/public_key.c | 39 ++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 17 deletions(-)
+Song
 
-diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-index 2f8352e88860..a479e32cb280 100644
---- a/crypto/asymmetric_keys/public_key.c
-+++ b/crypto/asymmetric_keys/public_key.c
-@@ -360,9 +360,10 @@ int public_key_verify_signature(const struct public_key *pkey,
- 	struct crypto_wait cwait;
- 	struct crypto_akcipher *tfm;
- 	struct akcipher_request *req;
--	struct scatterlist src_sg[2];
-+	struct scatterlist src_sg;
- 	char alg_name[CRYPTO_MAX_ALG_NAME];
--	char *key, *ptr;
-+	char *buf, *ptr;
-+	size_t buf_len;
- 	int ret;
- 
- 	pr_devel("==>%s()\n", __func__);
-@@ -400,34 +401,38 @@ int public_key_verify_signature(const struct public_key *pkey,
- 	if (!req)
- 		goto error_free_tfm;
- 
--	key = kmalloc(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
--		      GFP_KERNEL);
--	if (!key)
-+	buf_len = max_t(size_t, pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-+			sig->s_size + sig->digest_size);
-+
-+	buf = kmalloc(buf_len, GFP_KERNEL);
-+	if (!buf)
- 		goto error_free_req;
- 
--	memcpy(key, pkey->key, pkey->keylen);
--	ptr = key + pkey->keylen;
-+	memcpy(buf, pkey->key, pkey->keylen);
-+	ptr = buf + pkey->keylen;
- 	ptr = pkey_pack_u32(ptr, pkey->algo);
- 	ptr = pkey_pack_u32(ptr, pkey->paramlen);
- 	memcpy(ptr, pkey->params, pkey->paramlen);
- 
- 	if (pkey->key_is_private)
--		ret = crypto_akcipher_set_priv_key(tfm, key, pkey->keylen);
-+		ret = crypto_akcipher_set_priv_key(tfm, buf, pkey->keylen);
- 	else
--		ret = crypto_akcipher_set_pub_key(tfm, key, pkey->keylen);
-+		ret = crypto_akcipher_set_pub_key(tfm, buf, pkey->keylen);
- 	if (ret)
--		goto error_free_key;
-+		goto error_free_buf;
- 
- 	if (strcmp(pkey->pkey_algo, "sm2") == 0 && sig->data_size) {
- 		ret = cert_sig_digest_update(sig, tfm);
- 		if (ret)
--			goto error_free_key;
-+			goto error_free_buf;
- 	}
- 
--	sg_init_table(src_sg, 2);
--	sg_set_buf(&src_sg[0], sig->s, sig->s_size);
--	sg_set_buf(&src_sg[1], sig->digest, sig->digest_size);
--	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
-+	memcpy(buf, sig->s, sig->s_size);
-+	memcpy(buf + sig->s_size, sig->digest, sig->digest_size);
-+
-+	sg_init_table(&src_sg, 1);
-+	sg_set_buf(&src_sg, buf, sig->s_size + sig->digest_size);
-+	akcipher_request_set_crypt(req, &src_sg, NULL, sig->s_size,
- 				   sig->digest_size);
- 	crypto_init_wait(&cwait);
- 	akcipher_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG |
-@@ -435,8 +440,8 @@ int public_key_verify_signature(const struct public_key *pkey,
- 				      crypto_req_done, &cwait);
- 	ret = crypto_wait_req(crypto_akcipher_verify(req), &cwait);
- 
--error_free_key:
--	kfree(key);
-+error_free_buf:
-+	kfree(buf);
- error_free_req:
- 	akcipher_request_free(req);
- error_free_tfm:
--- 
-2.25.1
-
+> 
+>> Signed-off-by: Song Chen <chensong_2000@189.cn>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> ---
+>>   kernel/trace/trace_probe_kernel.h | 21 +++++++++++++++++++--
+>>   1 file changed, 19 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
+>> index 8c42abe0dacf..7e958b7f07e5 100644
+>> --- a/kernel/trace/trace_probe_kernel.h
+>> +++ b/kernel/trace/trace_probe_kernel.h
+>> @@ -130,8 +130,7 @@ probe_mem_read(void *dest, void *src, size_t size)
+>>   	return copy_from_kernel_nofault(dest, src, size);
+>>   }
+>>   
+>> -static nokprobe_inline unsigned long
+>> -get_event_field(struct fetch_insn *code, void *rec)
+>> +static unsigned long get_event_field(struct fetch_insn *code, void *rec)
+>>   {
+>>   	struct ftrace_event_field *field = code->data;
+>>   	unsigned long val;
+>> @@ -194,23 +193,41 @@ static int
+>>   process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+>>   		   void *base)
+>>   {
+>> +#ifndef CONFIG_HEXAGON
+>>   	struct pt_regs *regs = rec;
+>> +#endif
+>>   	unsigned long val;
+>>   
+>>   retry:
+>>   	/* 1st stage: get value from context */
+>>   	switch (code->op) {
+>>   	case FETCH_OP_REG:
+>> +#ifdef CONFIG_HEXAGON
+>> +		val = 0;
+>> +#else
+>>   		val = regs_get_register(regs, code->param);
+>> +#endif
+>>   		break;
+>>   	case FETCH_OP_STACK:
+>> +#ifdef CONFIG_HEXAGON
+>> +		val = 0;
+>> +#else
+>>   		val = regs_get_kernel_stack_nth(regs, code->param);
+>> +#endif
+>>   		break;
+>>   	case FETCH_OP_STACKP:
+>> +#ifdef CONFIG_HEXAGON
+>> +		val = 0;
+>> +#else
+>>   		val = kernel_stack_pointer(regs);
+>> +#endif
+>>   		break;
+>>   	case FETCH_OP_RETVAL:
+>> +#ifdef CONFIG_HEXAGON
+>> +		val = 0;
+>> +#else
+>>   		val = regs_return_value(regs);
+>> +#endif
+>>   		break;
+>>   	case FETCH_OP_IMM:
+>>   		val = code->immediate;
+>> -- 
+>> 2.25.1
+>>
+> 
+> 
