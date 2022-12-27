@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9679C656ACB
+	by mail.lfdr.de (Postfix) with ESMTP id E36F3656ACC
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbiL0MP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 07:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
+        id S231972AbiL0MQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 07:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbiL0MOl (ORCPT
+        with ESMTP id S232118AbiL0MOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Dec 2022 07:14:41 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C2BE97;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4266EAE;
         Tue, 27 Dec 2022 04:13:54 -0800 (PST)
 Date:   Tue, 27 Dec 2022 12:13:51 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uEI2h/BRCO33DzPTWoOw6K+Y/WyQpvpk6lfZm4s29SM=;
-        b=i6adXOC4ZtiVB3QhOIhGRnX+ByYG1Jbcqb7fjAv/PfdCFLfCo7qhctq5gNedQqwvwv+CMT
-        f4fCpdW5DA/HCpBGOfXnzf5589b2n/aX2O5ayPFPXVl+8jbrGYvgKdI1ET6PmVHd2Izmzt
-        9LTBXkUG98IS2ODmA9cDy+Qki3p2biP8alpw+dXcom2VIXq5T68ngckPzKHbOX1m95g4T5
-        dgrYJHbLpZOYuFAuhHOJ3mHLkY4O7EYhsM+2ioLBC+kajC26O32ZuCepjHiKJevjbmQlYO
-        bFifKe3yGZOSKmfMxeeIYH7su8X8PvalXELaZwa67QIx22vGqpAaaQZ9BARa4w==
+        bh=4TfBq1x+gmsL+8qg80jLPOcg/ef3xJeXazRbhO7StmM=;
+        b=fyut8b7hlECCqetXG4gH18U8HS1PzXnk8zsUB3ApQHBWvS6Q1HOvIpal4ppxt0L751M8R3
+        vKaV0nauFevnayLZ3pE4FQ7UMEOFIXyr8Bg3b72lwPt1K6YHK7Rje/euMBiWRm5/OVcGFL
+        iv27S3ihbZVXtMSK6f4Ru55ihe+x/LwPLc55frpNAnbo7Ovl8ZKVdm7KHi2vX5kqjylBZk
+        PojxURW2tZW+FDYb4sTv9NFgL6QHXi39g2s3eXUdhfxsFJwa14z8mKE6Gl17Nm1t27PqoW
+        WtKn9jY/bEjh/QouXrqFMJzd7HU4Co5QxbeS4VTp5I2J7phLv6xqio6yCekaNA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1672143231;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uEI2h/BRCO33DzPTWoOw6K+Y/WyQpvpk6lfZm4s29SM=;
-        b=Qsy1piDnaPlM8pgZD0aPZFycWaL9hdPaIi/pASnHXUt5t/DKkOaqJ10k+xAcyjUzceCmS4
-        1Y4+ZAFTuFDs+mBA==
+        bh=4TfBq1x+gmsL+8qg80jLPOcg/ef3xJeXazRbhO7StmM=;
+        b=CsEYAFFfSvgXgtrNMbZxGmy332oX4TgjxrEz+Z506drVyxPcp/zik9iYLfWJgeL4Mc73yb
+        0Q8D8aArYixO0NCQ==
 From:   "tip-bot2 for Mathieu Desnoyers" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] selftests/rseq: Implement rseq mm_cid field support
+Subject: [tip: sched/core] rseq: Extend struct rseq with per-memory-map concurrency ID
 Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221122203932.231377-11-mathieu.desnoyers@efficios.com>
-References: <20221122203932.231377-11-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221122203932.231377-9-mathieu.desnoyers@efficios.com>
+References: <20221122203932.231377-9-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Message-ID: <167214323114.4906.1139384318093660637.tip-bot2@tip-bot2>
+Message-ID: <167214323153.4906.14464853919693066880.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,31 +66,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     18c2355838e76788f61849f4d83513b103d68b95
-Gitweb:        https://git.kernel.org/tip/18c2355838e76788f61849f4d83513b103d68b95
+Commit-ID:     f7b01bb0b57f994a44ea6368536b59062b796381
+Gitweb:        https://git.kernel.org/tip/f7b01bb0b57f994a44ea6368536b59062b796381
 Author:        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-AuthorDate:    Tue, 22 Nov 2022 15:39:12 -05:00
+AuthorDate:    Tue, 22 Nov 2022 15:39:10 -05:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 27 Dec 2022 12:52:12 +01:00
 
-selftests/rseq: Implement rseq mm_cid field support
+rseq: Extend struct rseq with per-memory-map concurrency ID
 
-Add support for the mm_cid field (per-memory-map concurrency ID) of
-struct rseq to rseq selftests.
+If a memory map has fewer threads than there are cores on the system, or
+is limited to run on few cores concurrently through sched affinity or
+cgroup cpusets, the concurrency IDs will be values close to 0, thus
+allowing efficient use of user-space memory for per-cpu data structures.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20221122203932.231377-11-mathieu.desnoyers@efficios.com
+Link: https://lore.kernel.org/r/20221122203932.231377-9-mathieu.desnoyers@efficios.com
 ---
- tools/testing/selftests/rseq/rseq-abi.h |  9 +++++++++
- tools/testing/selftests/rseq/rseq.h     | 10 ++++++++++
- 2 files changed, 19 insertions(+)
+ include/uapi/linux/rseq.h |  9 +++++++++
+ kernel/rseq.c             | 11 ++++++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/rseq/rseq-abi.h b/tools/testing/selftests/rseq/rseq-abi.h
-index a1faa91..fb4ec8a 100644
---- a/tools/testing/selftests/rseq/rseq-abi.h
-+++ b/tools/testing/selftests/rseq/rseq-abi.h
-@@ -156,6 +156,15 @@ struct rseq_abi {
+diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+index 1cb90a4..c233aae 100644
+--- a/include/uapi/linux/rseq.h
++++ b/include/uapi/linux/rseq.h
+@@ -140,6 +140,15 @@ struct rseq {
  	__u32 node_id;
  
  	/*
@@ -106,24 +108,45 @@ index a1faa91..fb4ec8a 100644
  	 * Flexible array member at end of structure, after last feature field.
  	 */
  	char end[];
-diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
-index fd17d0e..10ebf13 100644
---- a/tools/testing/selftests/rseq/rseq.h
-+++ b/tools/testing/selftests/rseq/rseq.h
-@@ -191,6 +191,16 @@ static inline uint32_t rseq_current_node_id(void)
- 	return RSEQ_ACCESS_ONCE(rseq_get_abi()->node_id);
- }
+diff --git a/kernel/rseq.c b/kernel/rseq.c
+index 193cfcc..9de6e35 100644
+--- a/kernel/rseq.c
++++ b/kernel/rseq.c
+@@ -90,12 +90,15 @@ static int rseq_update_cpu_node_id(struct task_struct *t)
+ 	struct rseq __user *rseq = t->rseq;
+ 	u32 cpu_id = raw_smp_processor_id();
+ 	u32 node_id = cpu_to_node(cpu_id);
++	u32 mm_cid = task_mm_cid(t);
  
-+static inline bool rseq_mm_cid_available(void)
-+{
-+	return (int) rseq_feature_size >= rseq_offsetofend(struct rseq_abi, mm_cid);
-+}
-+
-+static inline uint32_t rseq_current_mm_cid(void)
-+{
-+	return RSEQ_ACCESS_ONCE(rseq_get_abi()->mm_cid);
-+}
-+
- static inline void rseq_clear_rseq_cs(void)
++	WARN_ON_ONCE((int) mm_cid < 0);
+ 	if (!user_write_access_begin(rseq, t->rseq_len))
+ 		goto efault;
+ 	unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
+ 	unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
+ 	unsafe_put_user(node_id, &rseq->node_id, efault_end);
++	unsafe_put_user(mm_cid, &rseq->mm_cid, efault_end);
+ 	/*
+ 	 * Additional feature fields added after ORIG_RSEQ_SIZE
+ 	 * need to be conditionally updated only if
+@@ -113,7 +116,8 @@ efault:
+ 
+ static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
  {
- 	RSEQ_WRITE_ONCE(rseq_get_abi()->rseq_cs.arch.ptr, 0);
+-	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0;
++	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0,
++	    mm_cid = 0;
+ 
+ 	/*
+ 	 * Reset cpu_id_start to its initial state (0).
+@@ -133,6 +137,11 @@ static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
+ 	if (put_user(node_id, &t->rseq->node_id))
+ 		return -EFAULT;
+ 	/*
++	 * Reset mm_cid to its initial state (0).
++	 */
++	if (put_user(mm_cid, &t->rseq->mm_cid))
++		return -EFAULT;
++	/*
+ 	 * Additional feature fields added after ORIG_RSEQ_SIZE
+ 	 * need to be conditionally reset only if
+ 	 * t->rseq_len != ORIG_RSEQ_SIZE.
