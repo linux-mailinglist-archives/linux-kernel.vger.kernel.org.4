@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54975656B40
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 14:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4ED4656B42
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 14:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiL0NH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 08:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        id S231728AbiL0NHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 08:07:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbiL0NHB (ORCPT
+        with ESMTP id S231707AbiL0NHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:07:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3D4277;
-        Tue, 27 Dec 2022 05:07:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF1D06115E;
-        Tue, 27 Dec 2022 13:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D62C43392;
-        Tue, 27 Dec 2022 13:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672146419;
-        bh=ftKw9JxdN7OkfKbeAVWrxvHtpZk1v1+kLM5uE4WBFzg=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=J9jBpf7YpIT/KUPBfiL0ijOMl3up/EqOTWovYRw6AiDyR7ZiTWaN/IZV4HsfbVAj8
-         GNrb0VSw3cJAsithpiUHhWeGY+yeBW0hzhbOL3zdgOFSE0G56hqwnD7JHIqfnyXV0o
-         OSzveBmxCUQGzT2OSV9PGd7WnGt0otzMVFg5ywu0gHNFX7IVkGKRPgsQSEyxeEskKO
-         lFydyFgMn7Fsiy81AsVE+Tcpf8Mg/xBP69hYNlO8h8seZAnLBnYNWPR9i6E/XkXyGh
-         8hcMH+OhpXF7SjazH1HYRm5yHGJNNxDN17oeC3H/JknK8zltzkb+1JQ67GK+/t4Oxc
-         FEIRKZsi3nUuQ==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 13:06:38 +0000
-Subject: [PATCH 4/4] kselftest/arm64: Only enumerate power of two VLs in syscall-abi
+        Tue, 27 Dec 2022 08:07:07 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFA065B2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 05:07:05 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id z26so19556402lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 05:07:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fryBc2ReBKYkm7biN0NMY5X+SgbelRAYfE7u3q3Vjvc=;
+        b=g1+FfsFLLO3Au2G2wQyk+87Ld6OTtPTu2OndtMJegNU20G1rTnG0h0PB61VJ4AhU4m
+         VFv161Um8Wtc4TPXv/gOObd5JhEtosjD1hS/0yTSJZmkSZ5CeQFGdUhL7sch8k4xHqj3
+         H1DvbfoukxNChz4bTCYSaKQbAbI5PfNqibuCDeapOgwB9abfSyowXdQjIuMNcCnu6s7h
+         4PM2ToaHrf2kTR0eAJ2Bm5NcVNHJmKJRYchXCTRcyr19A0OmFgXChM2O0COzcHDvpPNk
+         KTFVQXZs27Vci23VfQ4fmimwjET/uVnnUMsmmcY6JqnJZe+zFr46JsCRh/Y9nNVa3bnR
+         s+9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fryBc2ReBKYkm7biN0NMY5X+SgbelRAYfE7u3q3Vjvc=;
+        b=2wdpxXRTNCu/iBLAOBF4kAVUFmsV07KMgqhB5u7vBnG9nNeOq4TFDnWsPIcKd1CaTp
+         FiSQ4HjgCBC3EJJYDkmDTYytBETNVCYgUT72HRsPn+vwV+XWnqzGE13YuhTLBDt5voxE
+         iz0V8gwde4OLH9QbgwdV5kdKtgKT4ZQzx/rzT4JlUWc46J++oEPgvrF2ow1CD8znhXqa
+         dakeHCE/FQcOnyMZwoOVa+iJZyBSDMmV+IXa4sUmZZELbN0brfMvy0pcdlQNJKV7z52D
+         6Z3CGlZ5yWgUA/qlOI39gfaO13ujnhZAlNGqYlSKDIOhBdpvH76ONaRVjw3XIkMoNZLZ
+         RRdg==
+X-Gm-Message-State: AFqh2kqxIyAKVYlaAIhJseV1dIdPXVcbt+ESvEDDEWqkg9dqNPKLCZiE
+        bO2vwKfVAqAEY+HrspNn7k9aNA==
+X-Google-Smtp-Source: AMrXdXuEJ2vq5a5iMYzw9r11cWpAKWUMFX8b3JRMjpyzCwOIaKmFhfpmQPHLLXnrMGdf3awwezLogg==
+X-Received: by 2002:a05:6512:210c:b0:4a4:68b7:deda with SMTP id q12-20020a056512210c00b004a468b7dedamr5468462lfr.54.1672146423528;
+        Tue, 27 Dec 2022 05:07:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q27-20020ac246fb000000b004b48e0f619asm2295003lfo.48.2022.12.27.05.07.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Dec 2022 05:07:02 -0800 (PST)
+Message-ID: <02e8c75f-658f-320c-7c90-64ccf2beccbe@linaro.org>
+Date:   Tue, 27 Dec 2022 14:07:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 0/3] StarFive's SDIO/eMMC driver support
+Content-Language: en-US
+To:     William Qiu <william.qiu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@linux.starfivetech.com>,
+        linux-kernel@vger.kernel.org
+References: <20221227115856.460790-1-william.qiu@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221227115856.460790-1-william.qiu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221223-arm64-syscall-abi-sme-only-v1-4-4fabfbd62087@kernel.org>
-References: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
-In-Reply-To: <20221223-arm64-syscall-abi-sme-only-v1-0-4fabfbd62087@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2013; i=broonie@kernel.org;
- h=from:subject:message-id; bh=ftKw9JxdN7OkfKbeAVWrxvHtpZk1v1+kLM5uE4WBFzg=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu3oGR4UZqgD9m8L8fGlfTnGhEn85EVEwGm03O0/
- uGhK1kCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6rt6AAKCRAk1otyXVSH0GAxB/
- 0UF4ItAsSeRKn4TpESZ/DpfbOEkcF+ZzIdEuMKfESo072yQk+0JjHZulbv6n7to3jH5QfL1oJrvquA
- q4U/L7nbAOgaVe5C+9VYu4LDxNnfE7f9zmtCrT/9FrZTF+ZGxVpcerEcZ+nVWGYPWrOEKKQCDDaWf0
- h3DMQXbxveAaw/7DmCZxddZ3joC9VaoJaoxi9bcwwkd74tlpJAFRfiqlQ7vlX5z616Tl9gF562mAyC
- gAFVzJNTHKpRCE9J8PUzIOn0vteUImFQpCNFhjR60qeL59MkOscmVYIJlnPfLOmRkn9GLffkxIZNhs
- jA0at65HqbaaqP3U7u7NQTcp7Cjjmk
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,51 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As documented in issue C215 in the known issues list for DDI0487I.a [1] Arm
-will be making a retroactive change to SVE to remove the possibility of
-selecting non power of two vector lengths. This has no impact on existing
-physical implementations but most virtual implementations have implemented
-the full range of permissible vector lengths.
+On 27/12/2022 12:58, William Qiu wrote:
+> Hi,
+> 
+> This patchset adds initial rudimentary support for the StarFive
+> designware mobile storage host controller driver. And this driver will
+> be used in StarFive's VisionFive 2 board. The main purpose of adding
+> this driver is to accommodate the ultra-high speed mode of eMMC.
+> 
+> The last patch should be applied after the patchset [1]:
+> [1] https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
 
-Since virtual implementations are noticeably slow in general and the larger
-vector lengths amplify the issue there's a useful improvement in runtime
-from only covering the vector lengths that will exist in practical systems,
-adjust our enumeration accordingly. We have other tests that aim to cover
-the enumeration interfaces.
+It's a duplicate? Why do I have two of them in mailbox? Isn't this v3 then?
 
-For symmetry we apply the same change to the eumeration for SME vector
-lengths, though the power of two restriction was already present for SME
-so there is no impact on the set of vector lengths tested.
+Best regards,
+Krzysztof
 
-[1] https://developer.arm.com/documentation/102105/ia-00/
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/abi/syscall-abi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/arm64/abi/syscall-abi.c b/tools/testing/selftests/arm64/abi/syscall-abi.c
-index 7c9b6e947040..8afcbf6861fd 100644
---- a/tools/testing/selftests/arm64/abi/syscall-abi.c
-+++ b/tools/testing/selftests/arm64/abi/syscall-abi.c
-@@ -444,7 +444,7 @@ void sve_count_vls(void)
- 	/*
- 	 * Enumerate up to SVE_VQ_MAX vector lengths
- 	 */
--	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
-+	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
- 		vl = prctl(PR_SVE_SET_VL, vq * 16);
- 		if (vl == -1)
- 			ksft_exit_fail_msg("PR_SVE_SET_VL failed: %s (%d)\n",
-@@ -470,7 +470,7 @@ void sme_count_vls(void)
- 	/*
- 	 * Enumerate up to SVE_VQ_MAX vector lengths
- 	 */
--	for (vq = SVE_VQ_MAX; vq > 0; --vq) {
-+	for (vq = SVE_VQ_MAX; vq > 0; vq /= 2) {
- 		vl = prctl(PR_SME_SET_VL, vq * 16);
- 		if (vl == -1)
- 			ksft_exit_fail_msg("PR_SME_SET_VL failed: %s (%d)\n",
-
--- 
-2.30.2
