@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8336568D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8279E6568D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiL0J1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        id S230088AbiL0J1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiL0J1l (ORCPT
+        with ESMTP id S229922AbiL0J1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Dec 2022 04:27:41 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CCC8FE4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958D265DB;
         Tue, 27 Dec 2022 01:27:38 -0800 (PST)
 Date:   Tue, 27 Dec 2022 09:27:35 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G45h4mJydrKFB6s8sXYpIuCSVW4EG73G4/kyR75n868=;
-        b=3SzKXc4LhqdGwdqkjGyOyxF1MSKtUV4Ysszh/8ig5Xz1WLy6x/rJnk9InINxN1McmI15L3
-        boxgqGhksKZiLXjrXZexFWBd7ewCp999KdCVYJDfy7+owPX0SEvs+vVClV/jaQkqDQkFc+
-        Yg1wad4YJ1nrhYrE/4mxVn9BlqT9YPe0DiV0giqhcKyrLZrqawIOmyIeA07xGjBK5pHlH3
-        9LufzGmTxNGd3QkTmQVtI7FX4xwcyQNHUzkCenKkHhCgf6BBEx415RpQDtIENqp2zTsdnw
-        9Fk39WCq7GBQVy3QFlvFf1Ufto535f41hTYVlwhwuSA7ohQ+hFR0AtOUFEVIlA==
+        bh=07xF+6hRsc8ELTl0SNyOAwoLSpIteGOwrjyGZCLRCn8=;
+        b=RLE07RZ/tyYyMP4j3LN60BcXEAEeLNlrwcYZL79TCgA02kLeeuX/HpOLtYIrPBAUSXM23K
+        1IV3mR4o/FtiROktP4o/D1mwbYs8fw0lw5f2q3ZKqApljBWbjioB0ueWqzdpZYCnC3xFm1
+        5eIJAmDiXnaNNpeD3pgiT5xBme3onXykiE+0aDQsCszKrQMOa5ON9gL4LO0OrFYYEXCwDz
+        tU+17DixqGKYd5MuFecK98HpLccLm5HI7nwor7wGda7f0h2xxSuPtNDFlS/tFGD6h/WRPx
+        oUA7+IiKxCYv9R/zfL0NaQjOl3aoCMD9D5EuZxfHwl5262tchbB2TeC/YCBG+Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1672133256;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=G45h4mJydrKFB6s8sXYpIuCSVW4EG73G4/kyR75n868=;
-        b=CVboox00EBIs6KYnorra7EA+EDYbBVcPqJRrg3zxj8hIc9MB0XkFN80Jci4FvscViv9/Kp
-        IkJp+H5XoKoBAqAQ==
+        bh=07xF+6hRsc8ELTl0SNyOAwoLSpIteGOwrjyGZCLRCn8=;
+        b=8bGUdMimCid6n2lBETtuNL/1nNrhGbVUAjcBLJUP7fFo1hUDYrDf9nrIlXomK9LH+nDU0i
+        LSxFz4w+VBG2zNCw==
 From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode/AMD: Rename a couple of functions
+Subject: [tip: x86/microcode] x86/microcode/AMD: Handle multiple glued
+ containers properly
 Cc:     Borislav Petkov <bp@suse.de>,
         "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221219210656.5140-1-bp@alien8.de>
-References: <20221219210656.5140-1-bp@alien8.de>
+In-Reply-To: <20221219210656.5140-2-bp@alien8.de>
+References: <20221219210656.5140-2-bp@alien8.de>
 MIME-Version: 1.0
-Message-ID: <167213325533.4906.16900730747128544891.tip-bot2@tip-bot2>
+Message-ID: <167213325509.4906.5221750679090599711.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,89 +67,84 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/microcode branch of tip:
 
-Commit-ID:     61de9b7036f26448a1916291c456f62dd6bf07ea
-Gitweb:        https://git.kernel.org/tip/61de9b7036f26448a1916291c456f62dd6bf07ea
+Commit-ID:     ba73e369b706a853cdafa60570854fecec9f9fdd
+Gitweb:        https://git.kernel.org/tip/ba73e369b706a853cdafa60570854fecec9f9fdd
 Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Mon, 19 Dec 2022 22:06:55 +01:00
+AuthorDate:    Mon, 19 Dec 2022 22:06:56 +01:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 26 Dec 2022 06:30:31 +01:00
+CommitterDate: Mon, 26 Dec 2022 06:41:05 +01:00
 
-x86/microcode/AMD: Rename a couple of functions
+x86/microcode/AMD: Handle multiple glued containers properly
 
-- Rename apply_microcode_early_amd() to early_apply_microcode():
-simplify the name so that it is clear what it does and when does it do
-it.
+It can happen that - especially during testing - the microcode
+blobs of all families are all glued together in the initrd. The
+current code doesn't check whether the current container matched
+a microcode patch and continues to the next one, which leads to
+save_microcode_in_initrd_amd() to look at the next and thus wrong one:
 
-- Rename __load_ucode_amd() to find_blobs_in_containers(): the new name
-actually explains what it does.
+  microcode: parse_container: ucode: 0xffff88807e9d9082
+  microcode: verify_patch: buf: 0xffff88807e9d90ce, buf_size: 26428
+  microcode: verify_patch: proc_id: 0x8082, patch_fam: 0x17, this family: 0x17
+  microcode: verify_patch: buf: 0xffff88807e9d9d56, buf_size: 23220
+  microcode: verify_patch: proc_id: 0x8012, patch_fam: 0x17, this family: 0x17
+  microcode: parse_container: MATCH: eq_id: 0x8012, patch proc_rev_id: 0x8012
 
-Document some.
+<-- matching patch found
 
-No functional changes.
+  microcode: verify_patch: buf: 0xffff88807e9da9de, buf_size: 20012
+  microcode: verify_patch: proc_id: 0x8310, patch_fam: 0x17, this family: 0x17
+  microcode: verify_patch: buf: 0xffff88807e9db666, buf_size: 16804
+  microcode: Invalid type field (0x414d44) in container file section header.
+  microcode: Patch section fail
+
+<-- checking chokes on the microcode magic value of the next container.
+
+  microcode: parse_container: saving container 0xffff88807e9d9082
+  microcode: save_microcode_in_initrd_amd: scanned containers, data: 0xffff88807e9d9082, size: 9700a
+
+and now if there's a next (and last container) it'll use that in
+save_microcode_in_initrd_amd() and not find a proper patch, ofc.
+
+Fix that by moving the out: label up, before the desc->mc check which
+jots down the pointer of the matching patch and is used to signal to the
+caller that it has found a matching patch in the current container.
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20221219210656.5140-1-bp@alien8.de
+Link: https://lore.kernel.org/r/20221219210656.5140-2-bp@alien8.de
 ---
- arch/x86/kernel/cpu/microcode/amd.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ arch/x86/kernel/cpu/microcode/amd.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
-index 56471f7..339c966 100644
+index 339c966..d144f91 100644
 --- a/arch/x86/kernel/cpu/microcode/amd.c
 +++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -414,8 +414,7 @@ static int __apply_microcode_amd(struct microcode_amd *mc)
-  *
-  * Returns true if container found (sets @desc), false otherwise.
-  */
--static bool
--apply_microcode_early_amd(u32 cpuid_1_eax, void *ucode, size_t size, bool save_patch)
-+static bool early_apply_microcode(u32 cpuid_1_eax, void *ucode, size_t size, bool save_patch)
- {
- 	struct cont_desc desc = { 0 };
- 	u8 (*patch)[PATCH_MAX_SIZE];
-@@ -481,7 +480,7 @@ static bool get_builtin_microcode(struct cpio_data *cp, unsigned int family)
- 	return false;
- }
- 
--static void __load_ucode_amd(unsigned int cpuid_1_eax, struct cpio_data *ret)
-+static void find_blobs_in_containers(unsigned int cpuid_1_eax, struct cpio_data *ret)
- {
- 	struct ucode_cpu_info *uci;
- 	struct cpio_data cp;
-@@ -511,11 +510,11 @@ void __init load_ucode_amd_bsp(unsigned int cpuid_1_eax)
- {
- 	struct cpio_data cp = { };
- 
--	__load_ucode_amd(cpuid_1_eax, &cp);
-+	find_blobs_in_containers(cpuid_1_eax, &cp);
- 	if (!(cp.data && cp.size))
- 		return;
- 
--	apply_microcode_early_amd(cpuid_1_eax, cp.data, cp.size, true);
-+	early_apply_microcode(cpuid_1_eax, cp.data, cp.size, true);
- }
- 
- void load_ucode_amd_ap(unsigned int cpuid_1_eax)
-@@ -546,11 +545,11 @@ void load_ucode_amd_ap(unsigned int cpuid_1_eax)
- 		}
+@@ -330,8 +330,9 @@ static size_t parse_container(u8 *ucode, size_t size, struct cont_desc *desc)
+ 		ret = verify_patch(x86_family(desc->cpuid_1_eax), buf, size, &patch_size, true);
+ 		if (ret < 0) {
+ 			/*
+-			 * Patch verification failed, skip to the next
+-			 * container, if there's one:
++			 * Patch verification failed, skip to the next container, if
++			 * there is one. Before exit, check whether that container has
++			 * found a patch already. If so, use it.
+ 			 */
+ 			goto out;
+ 		} else if (ret > 0) {
+@@ -350,6 +351,7 @@ skip:
+ 		size -= patch_size + SECTION_HDR_SIZE;
  	}
  
--	__load_ucode_amd(cpuid_1_eax, &cp);
-+	find_blobs_in_containers(cpuid_1_eax, &cp);
- 	if (!(cp.data && cp.size))
- 		return;
++out:
+ 	/*
+ 	 * If we have found a patch (desc->mc), it means we're looking at the
+ 	 * container which has a patch for this CPU so return 0 to mean, @ucode
+@@ -364,7 +366,6 @@ skip:
+ 		return 0;
+ 	}
  
--	apply_microcode_early_amd(cpuid_1_eax, cp.data, cp.size, false);
-+	early_apply_microcode(cpuid_1_eax, cp.data, cp.size, false);
+-out:
+ 	return orig_size - size;
  }
  
- static enum ucode_state
-@@ -816,6 +815,7 @@ static int verify_and_add_patch(u8 family, u8 *fw, unsigned int leftover,
- 	return 0;
- }
- 
-+/* Scan the blob in @data and add microcode patches to the cache. */
- static enum ucode_state __load_microcode_amd(u8 family, const u8 *data,
- 					     size_t size)
- {
