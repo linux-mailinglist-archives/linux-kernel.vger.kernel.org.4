@@ -2,152 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A220D656883
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8336568D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiL0Ikl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 03:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
+        id S230203AbiL0J1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:27:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiL0Iki (ORCPT
+        with ESMTP id S229578AbiL0J1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 03:40:38 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EB52E8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:40:35 -0800 (PST)
-Received: from dggpemm100009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nh7KG5YD5zkWpv;
-        Tue, 27 Dec 2022 16:36:02 +0800 (CST)
-Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 27 Dec
- 2022 16:40:33 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH RFC] arm64/vmalloc: use module region only for module_alloc() if CONFIG_RANDOMIZE_BASE is set
-Date:   Tue, 27 Dec 2022 17:26:34 +0800
-Message-ID: <20221227092634.445212-1-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Dec 2022 04:27:41 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CCC8FE4;
+        Tue, 27 Dec 2022 01:27:38 -0800 (PST)
+Date:   Tue, 27 Dec 2022 09:27:35 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672133256;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G45h4mJydrKFB6s8sXYpIuCSVW4EG73G4/kyR75n868=;
+        b=3SzKXc4LhqdGwdqkjGyOyxF1MSKtUV4Ysszh/8ig5Xz1WLy6x/rJnk9InINxN1McmI15L3
+        boxgqGhksKZiLXjrXZexFWBd7ewCp999KdCVYJDfy7+owPX0SEvs+vVClV/jaQkqDQkFc+
+        Yg1wad4YJ1nrhYrE/4mxVn9BlqT9YPe0DiV0giqhcKyrLZrqawIOmyIeA07xGjBK5pHlH3
+        9LufzGmTxNGd3QkTmQVtI7FX4xwcyQNHUzkCenKkHhCgf6BBEx415RpQDtIENqp2zTsdnw
+        9Fk39WCq7GBQVy3QFlvFf1Ufto535f41hTYVlwhwuSA7ohQ+hFR0AtOUFEVIlA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672133256;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G45h4mJydrKFB6s8sXYpIuCSVW4EG73G4/kyR75n868=;
+        b=CVboox00EBIs6KYnorra7EA+EDYbBVcPqJRrg3zxj8hIc9MB0XkFN80Jci4FvscViv9/Kp
+        IkJp+H5XoKoBAqAQ==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/microcode] x86/microcode/AMD: Rename a couple of functions
+Cc:     Borislav Petkov <bp@suse.de>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221219210656.5140-1-bp@alien8.de>
+References: <20221219210656.5140-1-bp@alien8.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167213325533.4906.16900730747128544891.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After I add a 10GB pmem device, I got the following error message when
-insert module:
+The following commit has been merged into the x86/microcode branch of tip:
 
- insmod: vmalloc error: size 16384, vm_struct allocation failed,
- mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
+Commit-ID:     61de9b7036f26448a1916291c456f62dd6bf07ea
+Gitweb:        https://git.kernel.org/tip/61de9b7036f26448a1916291c456f62dd6bf07ea
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Mon, 19 Dec 2022 22:06:55 +01:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Mon, 26 Dec 2022 06:30:31 +01:00
 
-If CONFIG_RANDOMIZE_BASE is set, the module region can be located in the
-vmalloc region entirely. Although module_alloc() can fall back to a 2GB
-window if ARM64_MODULE_PLTS is set, the module region is still easily
-exhausted because the module region is located at bottom of vmalloc region
-and the vmalloc region is allocated from bottom to top.
+x86/microcode/AMD: Rename a couple of functions
 
-Skip module region if not calling from module_alloc().
+- Rename apply_microcode_early_amd() to early_apply_microcode():
+simplify the name so that it is clear what it does and when does it do
+it.
 
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+- Rename __load_ucode_amd() to find_blobs_in_containers(): the new name
+actually explains what it does.
+
+Document some.
+
+No functional changes.
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20221219210656.5140-1-bp@alien8.de
 ---
- arch/arm64/include/asm/vmalloc.h | 26 ++++++++++++++++++++++++++
- include/linux/vmalloc.h          |  9 +++++++++
- mm/vmalloc.c                     |  4 ++++
- 3 files changed, 39 insertions(+)
+ arch/x86/kernel/cpu/microcode/amd.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/include/asm/vmalloc.h b/arch/arm64/include/asm/vmalloc.h
-index 38fafffe699f..4feff546b11b 100644
---- a/arch/arm64/include/asm/vmalloc.h
-+++ b/arch/arm64/include/asm/vmalloc.h
-@@ -31,4 +31,30 @@ static inline pgprot_t arch_vmap_pgprot_tagged(pgprot_t prot)
- 	return pgprot_tagged(prot);
- }
- 
-+#ifdef CONFIG_RANDOMIZE_BASE
-+extern u64 module_alloc_base;
-+#define arch_vmap_skip_module_region arch_vmap_skip_module_region
-+static inline void arch_vmap_skip_module_region(unsigned long *addr,
-+						unsigned long vstart,
-+						unsigned long size,
-+						unsigned long align)
-+{
-+	u64 module_alloc_end = module_alloc_base + MODULES_VSIZE;
-+
-+	if (vstart == module_alloc_base)
-+		return;
-+
-+	if (IS_ENABLED(CONFIG_KASAN_GENERIC) ||
-+	    IS_ENABLED(CONFIG_KASAN_SW_TAGS))
-+		/* don't exceed the static module region - see module_alloc() */
-+		module_alloc_end = MODULES_END;
-+
-+	if ((module_alloc_base >= *addr + size) ||
-+	    (module_alloc_end <= *addr))
-+		return;
-+
-+	*addr = ALIGN(module_alloc_end, align);
-+}
-+#endif
-+
- #endif /* _ASM_ARM64_VMALLOC_H */
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 096d48aa3437..55ef97325b84 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -122,6 +122,15 @@ static inline pgprot_t arch_vmap_pgprot_tagged(pgprot_t prot)
- }
- #endif
- 
-+#ifndef arch_vmap_skip_module_region
-+static inline void arch_vmap_skip_module_region(unsigned long *addr,
-+						unsigned long vstart,
-+						unsigned long size,
-+						unsigned long align)
-+{
-+}
-+#endif
-+
- /*
-  *	Highlevel APIs for driver use
+diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+index 56471f7..339c966 100644
+--- a/arch/x86/kernel/cpu/microcode/amd.c
++++ b/arch/x86/kernel/cpu/microcode/amd.c
+@@ -414,8 +414,7 @@ static int __apply_microcode_amd(struct microcode_amd *mc)
+  *
+  * Returns true if container found (sets @desc), false otherwise.
   */
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index ca71de7c9d77..c840d673052e 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1236,6 +1236,8 @@ is_within_this_va(struct vmap_area *va, unsigned long size,
- 	else
- 		nva_start_addr = ALIGN(vstart, align);
+-static bool
+-apply_microcode_early_amd(u32 cpuid_1_eax, void *ucode, size_t size, bool save_patch)
++static bool early_apply_microcode(u32 cpuid_1_eax, void *ucode, size_t size, bool save_patch)
+ {
+ 	struct cont_desc desc = { 0 };
+ 	u8 (*patch)[PATCH_MAX_SIZE];
+@@ -481,7 +480,7 @@ static bool get_builtin_microcode(struct cpio_data *cp, unsigned int family)
+ 	return false;
+ }
  
-+	arch_vmap_skip_module_region(&nva_start_addr, vstart, size, align);
-+
- 	/* Can be overflowed due to big size or alignment. */
- 	if (nva_start_addr + size < nva_start_addr ||
- 			nva_start_addr < vstart)
-@@ -1523,6 +1525,8 @@ __alloc_vmap_area(struct rb_root *root, struct list_head *head,
- 	else
- 		nva_start_addr = ALIGN(vstart, align);
+-static void __load_ucode_amd(unsigned int cpuid_1_eax, struct cpio_data *ret)
++static void find_blobs_in_containers(unsigned int cpuid_1_eax, struct cpio_data *ret)
+ {
+ 	struct ucode_cpu_info *uci;
+ 	struct cpio_data cp;
+@@ -511,11 +510,11 @@ void __init load_ucode_amd_bsp(unsigned int cpuid_1_eax)
+ {
+ 	struct cpio_data cp = { };
  
-+	arch_vmap_skip_module_region(&nva_start_addr, vstart, size, align);
-+
- 	/* Check the "vend" restriction. */
- 	if (nva_start_addr + size > vend)
- 		return vend;
--- 
-2.25.1
-
+-	__load_ucode_amd(cpuid_1_eax, &cp);
++	find_blobs_in_containers(cpuid_1_eax, &cp);
+ 	if (!(cp.data && cp.size))
+ 		return;
+ 
+-	apply_microcode_early_amd(cpuid_1_eax, cp.data, cp.size, true);
++	early_apply_microcode(cpuid_1_eax, cp.data, cp.size, true);
+ }
+ 
+ void load_ucode_amd_ap(unsigned int cpuid_1_eax)
+@@ -546,11 +545,11 @@ void load_ucode_amd_ap(unsigned int cpuid_1_eax)
+ 		}
+ 	}
+ 
+-	__load_ucode_amd(cpuid_1_eax, &cp);
++	find_blobs_in_containers(cpuid_1_eax, &cp);
+ 	if (!(cp.data && cp.size))
+ 		return;
+ 
+-	apply_microcode_early_amd(cpuid_1_eax, cp.data, cp.size, false);
++	early_apply_microcode(cpuid_1_eax, cp.data, cp.size, false);
+ }
+ 
+ static enum ucode_state
+@@ -816,6 +815,7 @@ static int verify_and_add_patch(u8 family, u8 *fw, unsigned int leftover,
+ 	return 0;
+ }
+ 
++/* Scan the blob in @data and add microcode patches to the cache. */
+ static enum ucode_state __load_microcode_amd(u8 family, const u8 *data,
+ 					     size_t size)
+ {
