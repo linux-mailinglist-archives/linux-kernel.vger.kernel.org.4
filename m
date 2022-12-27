@@ -2,79 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA076566DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 03:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B6E6566E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 03:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiL0Cdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 21:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S229804AbiL0CgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 21:36:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiL0Cd3 (ORCPT
+        with ESMTP id S229767AbiL0CgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Dec 2022 21:33:29 -0500
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43B9610CA;
-        Mon, 26 Dec 2022 18:33:18 -0800 (PST)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Tue, 27 Dec
- 2022 10:32:17 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.15.35]
-Date:   Tue, 27 Dec 2022 10:32:17 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "KaiLong Wang" <wangkailong@jari.cn>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: scsi_transport_sas: Fix the following coccicheck
- warning:
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Mon, 26 Dec 2022 21:36:11 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5E4F0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 18:36:09 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id i20so9613379qtw.9
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 18:36:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vtremblay.dev; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jpAvCEdu1kVeU0YM58vsxaj6GEPGZM7b3Qm6JDjndG8=;
+        b=JGIwR1UBlrv2p0wBIJSUgS8ugkY5Ec6W8mRLX8A+cjDt37aGeKmNGcfMagSt43JKI5
+         xjC3QnvDrMJ4+l/WoebPcBfqHiCqPsLCOkl21jGNsHS8dywA5hAAeJaWm30jmCMH+wGv
+         JcOvsFZFleiAFtjZR4vqw5K78D817Nwyapfv1Qzflmx5Tt/lJICurM1MPqKQldIV5aML
+         w+IBcuIMUtYR1IheY6BzFTE5qc6lqM4P747KBkxOUKoYaKdF8I1UeIbGXDfL7Mn876Eh
+         ERKJpcYdUxPtGFFoWtZCGhVX0ILiyFGShXp7hwtbYN8USPU9qsJEmuPq2i2ISKg3gwTU
+         4fog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jpAvCEdu1kVeU0YM58vsxaj6GEPGZM7b3Qm6JDjndG8=;
+        b=BQ2MQlb2dm7p0B5tnGg/tYx5ft5GFJwyxm8o/hSRgaGhl2aqG8PGjjrSyGvrwxMvg6
+         w5kkKbNvEm4lvom8KSptR6D+0NcLz5SC/TRoTsPVkYSmYH6QqS3sHtxH59jXupnw/dCe
+         mXiE3neij86QH/DS/dIuhQT0X4oPuK1gaCshBWxcs8NoxOiwC+mWFkynPhJPfPWAooBv
+         p0FyXPcxmYgfoJc6aGC1/sRs5d9P1etoyDcTVDKKnnFo5Y/Py95zoLJHMt58SVQ841oH
+         HQ6+J3G1mlegc4i/70QzvqBOPTL3O79mZ7ohwpzazoB47dB72vORzQUehsp75ql2i7Jf
+         MjOA==
+X-Gm-Message-State: AFqh2kol18O5DMNgeKT0v7uDWFsDz9LP+VaR02EDW6XRR3/+xpI2QEJz
+        Rn/YLNeHh1+EcBLfsqzO9wGeTg==
+X-Google-Smtp-Source: AMrXdXtZTBYh5L2AJIEwR9te4GxguPn8H1pxkPFfdiYNuA8pd2iLbdcCefDEkeQ9ZKbfKUicAECCeA==
+X-Received: by 2002:ac8:568a:0:b0:3a6:348c:5159 with SMTP id h10-20020ac8568a000000b003a6348c5159mr23612448qta.26.1672108568548;
+        Mon, 26 Dec 2022 18:36:08 -0800 (PST)
+Received: from vtremblay.. (modemcable190.194-177-173.mc.videotron.ca. [173.177.194.190])
+        by smtp.gmail.com with ESMTPSA id l8-20020a37f908000000b006fcab4da037sm8612322qkj.39.2022.12.26.18.36.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 18:36:08 -0800 (PST)
+From:   Vincent Tremblay <vincent@vtremblay.dev>
+Cc:     vincent@vtremblay.dev, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Marek Vasut <marex@denx.de>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        Samuel Holland <samuel@sholland.org>,
+        "Greg.Schwendimann@infineon.com" <Greg.Schwendimann@infineon.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: trivial-devices: Add silabs,em3581
+Date:   Mon, 26 Dec 2022 21:35:47 -0500
+Message-Id: <20221227023550.569547-1-vincent@vtremblay.dev>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20221224041825.171345-1-vincent@vtremblay.dev>
+References: <20221224041825.171345-1-vincent@vtremblay.dev>
 MIME-Version: 1.0
-Message-ID: <4a48b6f.39a.185516c69cd.Coremail.wangkailong@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwCXn+AxWapj12IKAA--.229W
-X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQADB2FEYx0G1gAVsb
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
-        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CmRyaXZlcnMvc2NzaS9zY3NpX3RyYW5zcG9ydF9zYXMuYzo1MjU6OS0xNzogV0FSTklORzogdXNl
-IHNjbnByaW50ZiBvciBzcHJpbnRmCmRyaXZlcnMvc2NzaS9zY3NpX3RyYW5zcG9ydF9zYXMuYzo1
-NzI6OC0xNjogV0FSTklORzogdXNlIHNjbnByaW50ZiBvciBzcHJpbnRmCmRyaXZlcnMvc2NzaS9z
-Y3NpX3RyYW5zcG9ydF9zYXMuYzoxMTgwOjktMTc6IFdBUk5JTkc6IHVzZSBzY25wcmludGYgb3Ig
-c3ByaW50ZgoKU2lnbmVkLW9mZi1ieTogS2FpTG9uZyBXYW5nIDx3YW5na2FpbG9uZ0BqYXJpLmNu
-PgotLS0KIGRyaXZlcnMvc2NzaS9zY3NpX3RyYW5zcG9ydF9zYXMuYyB8IDYgKysrLS0tCiAxIGZp
-bGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvc2NzaS9zY3NpX3RyYW5zcG9ydF9zYXMuYyBiL2RyaXZlcnMvc2NzaS9zY3NpX3Ry
-YW5zcG9ydF9zYXMuYwppbmRleCA3NGI5OWYyYjBiNzQuLjU1MDQwNjdhZGNmMSAxMDA2NDQKLS0t
-IGEvZHJpdmVycy9zY3NpL3Njc2lfdHJhbnNwb3J0X3Nhcy5jCisrKyBiL2RyaXZlcnMvc2NzaS9z
-Y3NpX3RyYW5zcG9ydF9zYXMuYwpAQCAtNTIyLDcgKzUyMiw3IEBAIHNob3dfc2FzX2RldmljZV90
-eXBlKHN0cnVjdCBkZXZpY2UgKmRldiwKIAlzdHJ1Y3Qgc2FzX3BoeSAqcGh5ID0gdHJhbnNwb3J0
-X2NsYXNzX3RvX3BoeShkZXYpOwogCiAJaWYgKCFwaHktPmlkZW50aWZ5LmRldmljZV90eXBlKQot
-CQlyZXR1cm4gc25wcmludGYoYnVmLCAyMCwgIm5vbmVcbiIpOworCQlyZXR1cm4gc3lzZnNfZW1p
-dChidWYsICJub25lXG4iKTsKIAlyZXR1cm4gZ2V0X3Nhc19kZXZpY2VfdHlwZV9uYW1lcyhwaHkt
-PmlkZW50aWZ5LmRldmljZV90eXBlLCBidWYpOwogfQogc3RhdGljIERFVklDRV9BVFRSKGRldmlj
-ZV90eXBlLCBTX0lSVUdPLCBzaG93X3Nhc19kZXZpY2VfdHlwZSwgTlVMTCk7CkBAIC01NjksNyAr
-NTY5LDcgQEAgc2hvd19zYXNfcGh5X2VuYWJsZShzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBk
-ZXZpY2VfYXR0cmlidXRlICphdHRyLAogewogCXN0cnVjdCBzYXNfcGh5ICpwaHkgPSB0cmFuc3Bv
-cnRfY2xhc3NfdG9fcGh5KGRldik7CiAKLQlyZXR1cm4gc25wcmludGYoYnVmLCAyMCwgIiVkXG4i
-LCBwaHktPmVuYWJsZWQpOworCXJldHVybiBzeXNmc19lbWl0KGJ1ZiwgIiVkXG4iLCBwaHktPmVu
-YWJsZWQpOwogfQogCiBzdGF0aWMgREVWSUNFX0FUVFIoZW5hYmxlLCBTX0lSVUdPIHwgU19JV1VT
-Uiwgc2hvd19zYXNfcGh5X2VuYWJsZSwKQEAgLTExNzcsNyArMTE3Nyw3IEBAIHNob3dfc2FzX3Jw
-aHlfZGV2aWNlX3R5cGUoc3RydWN0IGRldmljZSAqZGV2LAogCXN0cnVjdCBzYXNfcnBoeSAqcnBo
-eSA9IHRyYW5zcG9ydF9jbGFzc190b19ycGh5KGRldik7CiAKIAlpZiAoIXJwaHktPmlkZW50aWZ5
-LmRldmljZV90eXBlKQotCQlyZXR1cm4gc25wcmludGYoYnVmLCAyMCwgIm5vbmVcbiIpOworCQly
-ZXR1cm4gc3lzZnNfZW1pdChidWYsICJub25lXG4iKTsKIAlyZXR1cm4gZ2V0X3Nhc19kZXZpY2Vf
-dHlwZV9uYW1lcygKIAkJCXJwaHktPmlkZW50aWZ5LmRldmljZV90eXBlLCBidWYpOwogfQotLSAK
-Mi4zNi4xCg==
+Add Silicon Labs EM3581 Zigbee SoC to trivial-devices.
+
+Signed-off-by: Vincent Tremblay <vincent@vtremblay.dev>
+---
+Changes in v2:
+ - Add missing documentation in trivial-devices
+
+ Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+index f5c0a6283e61..5a3ccbce8c23 100644
+--- a/Documentation/devicetree/bindings/trivial-devices.yaml
++++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+@@ -323,6 +323,8 @@ properties:
+           - sensortek,stk8ba50
+             # SGX Sensortech VZ89X Sensors
+           - sgx,vz89x
++            # Silicon Labs EM3581 Zigbee SoC with SPI interface
++          - silabs,em3581
+             # Relative Humidity and Temperature Sensors
+           - silabs,si7020
+             # Skyworks SKY81452: Six-Channel White LED Driver with Touch Panel Bias Supply
+-- 
+2.37.2
+
