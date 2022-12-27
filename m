@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E462D6569F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A36D6569F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiL0LaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 06:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
+        id S229593AbiL0LbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 06:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiL0LaF (ORCPT
+        with ESMTP id S229445AbiL0LbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 06:30:05 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978096569
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 03:30:03 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id bq39so11434997lfb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 03:30:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aN3V6trDzvXSYtL26lx3FV7PuCk2Xl5LGxwnUm2VEh4=;
-        b=D6oARKb10jppciRnCilQ32Dej7uYF6DSTuvY/IP+oORmU/pLbrptAk5OvgLB7b/LGz
-         oV7OFaGBSJvYCcJ3rAVE0CPVtzVzFcW2cR8kTME64K70KdZ/lptsknSNE/p30R/f21LA
-         3lM1SXOztnLyMbdSVbrcivQ2061TJzTVnxqf7On/F8qq0kRkjnkZa18PgdDC9Hv+ignV
-         W7vIpGaICcqC0D2lGZKXk+fsw5IaD7DBbJ086Nzn4G0d7mVLzFf87cZ9EIvcFel5+6gU
-         NvZHoLsyoB/h+VSobCXAqiX1fM8XhxpwhGTqkRsnQVH1lmhvjuujtsXH4pA3l/sDDVQo
-         wYHA==
+        Tue, 27 Dec 2022 06:31:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B5BA192
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 03:30:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672140630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oGv9k8005FBNEl5oXuDWY94GE+vOxjP7VpH4ecTd4rU=;
+        b=FAFCm7GLWraoRYVszpA+tpIsbIjo1sFRKAK9XhgfMDvEuo/1a/vsVbKGoOTOdo4idJ65jJ
+        dLf53wSXDxpu85gG30ZxDDyMobncEF4q8jDofPtFwSbKgHmV9N0qHrSDOk+vSmTwwvFIPc
+        cyi+if15HGpL1D90bX/3GJ0k1yvr64s=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-86-WHpbwB3JMdyg6AezKnwkbQ-1; Tue, 27 Dec 2022 06:30:21 -0500
+X-MC-Unique: WHpbwB3JMdyg6AezKnwkbQ-1
+Received: by mail-ej1-f71.google.com with SMTP id qb2-20020a1709077e8200b00842b790008fso9041681ejc.21
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 03:30:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aN3V6trDzvXSYtL26lx3FV7PuCk2Xl5LGxwnUm2VEh4=;
-        b=M4dfkU45YDFwlyVX2bsYjaTX6G4A0QKHXUnjQoAEeEvXCsf5DTAIph+sBjLmtWcuBV
-         vz6yXiK3HfS2C3Yt5oYl1JfP+6gulxXmTOlGrkxQPdyrxwafbuH0EW0IIumRKZ2hW9pf
-         3offnuGktvRC0NKJzoJ88hQ1gLgOtWwIm8IbTK5TwYBckhQ2y41iZzd/qpZwJEtSHWV8
-         G7i9R7gBZvVF7y/Fh2p0eHcFliD018NhGbFoCP/h6RergMP27NuwUhYhHbYYRj2okkNK
-         CtUcqK8Gwm/obu36Gi71hEfjT9n7VB7X+rSvlf3voVgJdu2sU1yR0K/Kod3s8+Ee+4Lj
-         GEYQ==
-X-Gm-Message-State: AFqh2krgjawJOl4oiwsPK5lsH8tqx2Xy79KJbjDb+rf58aiGuK1SXa86
-        ibK7HD/gdQuzWgmJCW0iM/NClA==
-X-Google-Smtp-Source: AMrXdXuQCFF6EAuPGhKVlnd9xb+jRbrMxibY4uYGpnnSUw158af9QxPKYTxPgBMtBgUBq5JAQ+Szdg==
-X-Received: by 2002:a05:6512:6cb:b0:4a4:68b7:e71a with SMTP id u11-20020a05651206cb00b004a468b7e71amr6566622lff.4.1672140601477;
-        Tue, 27 Dec 2022 03:30:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k2-20020ac24562000000b004b4ea0f4e7fsm2192712lfm.299.2022.12.27.03.30.00
+        bh=oGv9k8005FBNEl5oXuDWY94GE+vOxjP7VpH4ecTd4rU=;
+        b=cWJ4t03bAz6YWp1FHSjpZ00lWbSAYpgF3T/L/Kb3jhF2FsqURPMUR+bz6TKVZ6QlZY
+         9eN0G293BIC1RN6fXv7mZ6fv0bvB0L5U86HtvZ9theL0imd1bZpCKpJ/1tqVMTr74R7n
+         bTffJsJy0/dvjcvNPyhrnrSw9tmeAfOtFLurpGoa+jGzb8hcXEwry9oniNPrYB41LxsO
+         JywyuS8N39NEbq8Lob3bjcgNGxu99Jgyb/bW5/8EHy43NN/lkyi4s9sRRDbzvcpOox6J
+         SkemQnfAaHTSaxAlyow+2nqPlGmNQ7gvMsycN8iFwBLQzxY6yNFVONrNiQr8oTZ/zrgU
+         bycg==
+X-Gm-Message-State: AFqh2kotnxMQi9Hda3BYkOQq64GaUsN4fWCB/2232v0M6h21FHV3LI79
+        EA/x9bxXTkqUYthrR+G/Wp/GCkw4CiYG5RHxmzk30pFmRSgvEiEct9gUOZMBGU5rxBnfTCtxp+/
+        unegtqktQ8kDrUU8iU2rIGjpQ
+X-Received: by 2002:a17:906:60cb:b0:84b:b481:6188 with SMTP id f11-20020a17090660cb00b0084bb4816188mr8790621ejk.64.1672140620078;
+        Tue, 27 Dec 2022 03:30:20 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtu3f76H+toSIJ9WDPQZhTt310Tkxh5P/vCKasw2HN49sYmKeuJlbnWgpwEXfI4aEG4fmqMiA==
+X-Received: by 2002:a17:906:60cb:b0:84b:b481:6188 with SMTP id f11-20020a17090660cb00b0084bb4816188mr8790602ejk.64.1672140619837;
+        Tue, 27 Dec 2022 03:30:19 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id p11-20020a1709060dcb00b00782fbb7f5f7sm5838806eji.113.2022.12.27.03.30.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 03:30:01 -0800 (PST)
-Message-ID: <e1725365-2751-ea09-7699-012f4ee3cd1b@linaro.org>
-Date:   Tue, 27 Dec 2022 12:29:59 +0100
+        Tue, 27 Dec 2022 03:30:19 -0800 (PST)
+Message-ID: <1f157cca-a71e-cdee-4427-e1f4bb1b1115@redhat.com>
+Date:   Tue, 27 Dec 2022 12:30:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 3/4] ARM: dts: qcom: sdx65: add specific compatible for
- USB HS PHY
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221223161835.112079-1-krzysztof.kozlowski@linaro.org>
- <20221223161835.112079-3-krzysztof.kozlowski@linaro.org>
- <d6fcecda-2f78-bd75-579b-672f6db779a2@linaro.org>
- <6a9506a5-caf0-0977-af75-0a4e4c0e3a0f@linaro.org>
- <542a4f6f-931a-3e0a-bd5d-1344339651ea@linaro.org>
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4 19/32] KVM: x86: Explicitly track all possibilities for
+ APIC map's logical modes
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <542a4f6f-931a-3e0a-bd5d-1344339651ea@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+References: <20221001005915.2041642-1-seanjc@google.com>
+ <20221001005915.2041642-20-seanjc@google.com>
+ <96c369fb2042e8722256d36c9b2ccf4a930752d1.camel@redhat.com>
+ <Y5y7VK9yk5qbfKVN@google.com> <Y50AhU1UwocNE/+M@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y50AhU1UwocNE/+M@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/12/2022 12:14, Konrad Dybcio wrote:
+On 12/17/22 00:34, Sean Christopherson wrote:
+> On Fri, Dec 16, 2022, Sean Christopherson wrote:
+>> On Thu, Dec 08, 2022, Maxim Levitsky wrote:
 > 
+> ...
 > 
-> On 24.12.2022 14:12, Krzysztof Kozlowski wrote:
->> On 23/12/2022 17:20, Konrad Dybcio wrote:
->>>
->>>
->>> On 23.12.2022 17:18, Krzysztof Kozlowski wrote:
->>>> Add SoC-specific compatible to the USB HS PHY to match other devices and
->>>> bindings.
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>  arch/arm/boot/dts/qcom-sdx65.dtsi | 3 ++-
->>>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi b/arch/arm/boot/dts/qcom-sdx65.dtsi
->>>> index b073e0c63df4..d3c661d7650d 100644
->>>> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
->>>> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
->>>> @@ -219,7 +219,8 @@ blsp1_uart3: serial@831000 {
->>>>  		};
->>>>  
->>>>  		usb_hsphy: phy@ff4000 {
->>>> -			compatible = "qcom,usb-snps-hs-7nm-phy";
->>>> +			compatible = "qcom,sdx65-usb-hs-phy",
->>>> +				     "qcom,usb-snps-hs-7nm-phy";
->>> Not sure if the newline is necessary, but still:
->>>
->>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> @@ -282,7 +291,8 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>>>>   		if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
+>>>>   			new->phys_map[xapic_id] = apic;
+>>>>   
+>>>> -		if (!kvm_apic_sw_enabled(apic))
+>>>> +		if (new->logical_mode == KVM_APIC_MODE_MAP_DISABLED ||
+>>>> +		    !kvm_apic_sw_enabled(apic))
+>>>>   			continue;
+>>> Very minor nitpick: it feels to me that code that updates the logical mode of the
+>>> map, might be better to be in a function, or in 'if', like
 >>
->> It is over 80 - up to 90 - and we still keep 80-limit in coding style.
-> Torvalds said 100 is fine a year a go or so.
+>> An if-statement would be rough due to the indentation.  A function works well
+>> though, especially if both the physical and logical chunks are put into helpers.
+>> E.g. the patch at the bottom (with other fixup for this patch) yields:
+>>
+>> 	new->max_apic_id = max_id;
+>> 	new->logical_mode = KVM_APIC_MODE_SW_DISABLED;
+>>
+>> 	kvm_for_each_vcpu(i, vcpu, kvm) {
+>> 		if (!kvm_apic_present(vcpu))
+>> 			continue;
+>>
+>> 		if (kvm_recalculate_phys_map(new, vcpu, &xapic_id_mismatch)) {
+>> 			kvfree(new);
+>> 			new = NULL;
+>> 			goto out;
+>> 		}
+>>
+>> 		kvm_recalculate_logical_map(new, vcpu);
+>> 	}
+>>
+>> I'll tack that patch on at the end of the series if it looks ok.
 
-Yes - when it increases the readability. When it does not, the limit by
-coding style is still 80. Otherwise the coding style would be updated,
-which did not happen:
+Yes, please send as a follow up.
 
-https://lore.kernel.org/all/20220119160642.140e84c6@gandalf.local.home/
-
-
-
-
-Best regards,
-Krzysztof
+Paolo
 
