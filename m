@@ -2,99 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FDE6567FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AB56567F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiL0HyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 02:54:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S230057AbiL0Hsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 02:48:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiL0HyD (ORCPT
+        with ESMTP id S229561AbiL0Hse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 02:54:03 -0500
-X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Dec 2022 23:54:01 PST
-Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567926561
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:54:01 -0800 (PST)
-Received: (qmail 7681 invoked from network); 27 Dec 2022 07:47:15 -0000
-Received: from dyn.ipv6.net-htp.de ([2a02:560:5628:3900:ecef:1c71:d0b:2fa4]:49250 HELO daneel.sf-tec.de) (auth=eike@sf-mail.de)
-        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
-        for <james.bottomley@hansenpartnership.com>; Tue, 27 Dec 2022 08:47:15 +0100
-From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
-To:     james.bottomley@hansenpartnership.com, yang.yang29@zte.com.cn
-Cc:     deller@gmx.de, linux-parisc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xu.panda@zte.com.cn,
-        yang.yang29@zte.com.cn
-Subject: Re: [PATCH linux-next v2] parisc: use strscpy() to instead of strncpy()
-Date:   Tue, 27 Dec 2022 08:47:05 +0100
-Message-ID: <2298026.kkTNVCUfUN@daneel.sf-tec.de>
-In-Reply-To: <202212261840048448622@zte.com.cn>
-References: <202212261840048448622@zte.com.cn>
+        Tue, 27 Dec 2022 02:48:34 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132D2E1A;
+        Mon, 26 Dec 2022 23:48:29 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B471C24E2B2;
+        Tue, 27 Dec 2022 15:48:21 +0800 (CST)
+Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Dec
+ 2022 15:48:21 +0800
+Received: from [192.168.120.49] (171.223.208.138) by EXMBX173.cuchost.com
+ (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Dec
+ 2022 15:48:20 +0800
+Message-ID: <25fce6e7-604e-6c07-3ff1-b65a5115a491@starfivetech.com>
+Date:   Tue, 27 Dec 2022 15:48:18 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2316597.IaFIOm8ydW"; micalg="pgp-sha1"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 2/9] dt-bindings: net: snps,dwmac: Update the maxitems
+ number of resets and reset-names
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
+ <20221216070632.11444-3-yanhong.wang@starfivetech.com>
+ <040b56b1-c65c-34c3-e4a1-5cae4428d1d2@linaro.org>
+ <7f4339df-6616-120f-f16a-cd38a2b6ea1d@starfivetech.com>
+ <1a696768-45ef-0144-07f3-d356af9659e5@linaro.org>
+Content-Language: en-US
+From:   yanhong wang <yanhong.wang@starfivetech.com>
+In-Reply-To: <1a696768-45ef-0144-07f3-d356af9659e5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX173.cuchost.com
+ (172.16.6.93)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart2316597.IaFIOm8ydW
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Rolf Eike Beer <eike-kernel@sf-tec.de>
-To: james.bottomley@hansenpartnership.com, yang.yang29@zte.com.cn
-Date: Tue, 27 Dec 2022 08:47:05 +0100
-Message-ID: <2298026.kkTNVCUfUN@daneel.sf-tec.de>
-In-Reply-To: <202212261840048448622@zte.com.cn>
-References: <202212261840048448622@zte.com.cn>
 
-Am Montag, 26. Dezember 2022, 11:40:04 CET schrieb yang.yang29@zte.com.cn:
-> From: Xu Panda <xu.panda@zte.com.cn>
+
+On 2022/12/20 17:21, Krzysztof Kozlowski wrote:
+> On 20/12/2022 07:48, yanhong wang wrote:
 > 
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL-terminated strings.
+>>>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>>> index e26c3e76ebb7..7870228b4cd3 100644
+>>>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+>>>> @@ -133,12 +133,19 @@ properties:
+>>>>          - ptp_ref
+>>>>  
+>>>>    resets:
+>>>> -    maxItems: 1
+>>>> -    description:
+>>>> -      MAC Reset signal.
+>>>> +    minItems: 1
+>>>> +    maxItems: 3
+>>>> +    additionalItems: true
+>>>> +    items:
+>>>> +      - description: MAC Reset signal
+>>>>  
+>>>>    reset-names:
+>>>> -    const: stmmaceth
+>>>> +    minItems: 1
+>>>> +    maxItems: 3
+>>>> +    additionalItems: true
+>>>> +    contains:
+>>>> +      enum:
+>>>> +        - stmmaceth
+>>>
+>>> No, this is highly unspecific and you know affect all the schemas using
+>>> snps,dwmac.yaml. Both lists must be specific - for your device and for
+>>> others.
+>>>
+>> 
+>> I have tried to define the resets in "starfive,jh71x0-dwmac.yaml", but it can not over-write the maxItems limit in "snps,dwmac.yaml",therefore, it will report error "reset-names: ['stmmaceth', 'ahb'] is too long"  running "make dt_binding_check". Do you have any suggestions to deal with this situation?
 > 
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
-> ---
-> change for v2
->  - sizeof(in) is better and simplified, thanks for Helge Deller.
-> ---
->  drivers/parisc/pdc_stable.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+> The solution is not to affect all schemas with allowing anything as reset.
 > 
-> diff --git a/drivers/parisc/pdc_stable.c b/drivers/parisc/pdc_stable.c
-> index d6af5726ddf3..d3075445260b 100644
-> --- a/drivers/parisc/pdc_stable.c
-> +++ b/drivers/parisc/pdc_stable.c
-> @@ -274,8 +274,7 @@ pdcspath_hwpath_write(struct pdcspath_entry *entry,
-> const char *buf, size_t coun
+> If you need more items for your case, you can change snps,dwmac.yaml and
+> add constraints in allOf:if:then: allowing it only for your compatible.
+> There are plenty of examples how this is done, e.g.:
 > 
->  	/* We'll use a local copy of buf */
->  	count = min_t(size_t, count, sizeof(in)-1);
-> -	strncpy(in, buf, count);
-> -	in[count] = '\0';
-> +	strscpy(in, buf, sizeof(in));
+> https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
+> 
 
-What is "count" now needed for? Looks like a write only variable at least in 
-these hunks.
+Thanks. Refer to the definition in the example and update the definition as follows:
 
-Eike
---nextPart2316597.IaFIOm8ydW
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+snps,dwmac.yaml[Partial Content]:
 
------BEGIN PGP SIGNATURE-----
+properties:
+  resets:
+    maxItems: 1
+    description:
+      MAC Reset signal.
 
-iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCY6qi+QAKCRBcpIk+abn8
-TreFAJsGRGXqTM4D8ib9NJdGgqNbpJTmUgCeNNVn9q3szniJshUbN+h2L4zJ5sI=
-=oo7x
------END PGP SIGNATURE-----
+  reset-names:
+    const: stmmaceth
 
---nextPart2316597.IaFIOm8ydW--
+allOf:
+  - if:
+      properties:
+        compatible:
+          contains:
+            const: starfive,jh7110-dwmac
+
+    then:
+      properties:
+        resets:
+          minItems: 2
+          maxItems: 2
+        reset-names:
+          items:
+            - const: stmmaceth
+            - const: ahb
+      required:
+        - resets
+        - reset-names
 
 
+starfive,jh7110-dwmac.yaml[Partial Content]:
 
+properties:
+  resets:
+    items:
+      - description: MAC Reset signal.
+      - description: AHB Reset signal.
+
+  reset-names:
+    items:
+      - const: stmmaceth
+      - const: ahb
+
+allOf:
+  - $ref: snps,dwmac.yaml#
+
+It will also report error "reset-names: ['stmmaceth', 'ahb'] is too long"  running "make dt_binding_check" with 'starfive,jh7110-dwmac.yaml'. Do you have any better suggestions to solve this problem?
+
+>> 
+>>> Best regards,
+>>> Krzysztof
+>>>
+> 
+> Best regards,
+> Krzysztof
+> 
