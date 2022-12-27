@@ -2,164 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5DC6567EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FDE6567FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiL0Hoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 02:44:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
+        id S230266AbiL0HyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 02:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiL0Hoc (ORCPT
+        with ESMTP id S230286AbiL0HyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 02:44:32 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6E563FF
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:44:30 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id cf42so18609455lfb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:44:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aOVYkZxxKsbhw75iIPorGD6czBegT76jGDD2E1ugnSw=;
-        b=EkUsdF1Xsu/m2xxqaQd6vkNWPP72fGbMXmWvG3FRb05pNjBEbhl22BY8CbCkowAnPT
-         0TM6ijjMC8IycOqIgIpFi3PQiEnyjbHjIGZj533TQxJQZQ8ZLPBOPYZ7E8VW6TNHLlE3
-         JzDDdNXMToh/0OEzwcsmIsK+lvDCtVRphNnDmMOTv6xLIBB6BQ8nXat+dESmbf3P0J3/
-         +vkJNqqUDojmMskeGTK3d1FX/2KZ7NcPE8FqOt/8gJMGE/BAPyvB1ZtUEDThTEcO3ZiM
-         3yyhg0lknpwJJ8xALJ0j5ZRD8iXAaTIm/O+L3uYpkRvyA0XzMLShMH3KARcyaszRVr+d
-         NkNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aOVYkZxxKsbhw75iIPorGD6czBegT76jGDD2E1ugnSw=;
-        b=IQPr5asD/3G1pMpT2JuW8nDANlnNwyoUIFVsTtAvlZkYobBFf2n+1GrwzRPJgdzsvz
-         Ox72otwvjOo0sEeLYnk5wwqGwcNvGletBHqqIEJ5vJzClgGKmcTtygBjzKJzwfQjbezv
-         Xm7Xd571pzrJk7YM8x7kcQxS75a2OrZLVQcpd2HPR7BNfQK+S9TefdwtueMnb8j1vHa3
-         n9zlTLYgK2Hg2uAE179VZ4lFtK3WwkNIWsqsoDQGkAfFxIQQ9mB3Sv8Th70WbiTWX0iF
-         UBZ4F9DQBzbFOe02iPgcBfq6BlTmMU2/L8/zHXzzVgxCHLQJZLbzlgCp8pqiJk7r7LEN
-         61Yw==
-X-Gm-Message-State: AFqh2koXXwWuJWjhwlABlyfT4O4cmf44u3aAQFYbJiCLFXWhf9hgHJPk
-        WpsTvYDgBoAhSF9PO3WNr83axw==
-X-Google-Smtp-Source: AMrXdXsFrxQWaAaSLuxH3iop/N0+P56sRuckOjOr9ApBjTDbXw5HqvDHjO+M3IQbjGPyO2dFQnqbHw==
-X-Received: by 2002:a05:6512:39ce:b0:4b4:e559:8b10 with SMTP id k14-20020a05651239ce00b004b4e5598b10mr6697970lfu.24.1672127068773;
-        Mon, 26 Dec 2022 23:44:28 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a14-20020a056512390e00b004b5872a7003sm2153971lfu.98.2022.12.26.23.44.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Dec 2022 23:44:28 -0800 (PST)
-Message-ID: <f47cab97-2c8c-a3d5-b362-774f970dffd3@linaro.org>
-Date:   Tue, 27 Dec 2022 08:44:26 +0100
+        Tue, 27 Dec 2022 02:54:03 -0500
+X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Dec 2022 23:54:01 PST
+Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567926561
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:54:01 -0800 (PST)
+Received: (qmail 7681 invoked from network); 27 Dec 2022 07:47:15 -0000
+Received: from dyn.ipv6.net-htp.de ([2a02:560:5628:3900:ecef:1c71:d0b:2fa4]:49250 HELO daneel.sf-tec.de) (auth=eike@sf-mail.de)
+        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
+        for <james.bottomley@hansenpartnership.com>; Tue, 27 Dec 2022 08:47:15 +0100
+From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
+To:     james.bottomley@hansenpartnership.com, yang.yang29@zte.com.cn
+Cc:     deller@gmx.de, linux-parisc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xu.panda@zte.com.cn,
+        yang.yang29@zte.com.cn
+Subject: Re: [PATCH linux-next v2] parisc: use strscpy() to instead of strncpy()
+Date:   Tue, 27 Dec 2022 08:47:05 +0100
+Message-ID: <2298026.kkTNVCUfUN@daneel.sf-tec.de>
+In-Reply-To: <202212261840048448622@zte.com.cn>
+References: <202212261840048448622@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/4] dt-bindings: display: Add Himax HX8394 panel
- controller
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Ondrej Jirman <megi@xff.cz>, Robert Mader <robert.mader@posteo.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        =?UTF-8?Q?Kamil_Trzci=c5=84ski?= <ayufan@ayufan.eu>,
-        Martijn Braam <martijn@brixit.nl>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20221226134909.2822179-1-javierm@redhat.com>
- <20221226134909.2822179-3-javierm@redhat.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221226134909.2822179-3-javierm@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart2316597.IaFIOm8ydW"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/12/2022 14:49, Javier Martinez Canillas wrote:
-> Add device tree bindings for panels based on the Himax HX8394 controller,
-> such as the HannStar HSD060BHW4 720x1440 TFT LCD panel that is connected
-> through a MIPI-DSI video interface.
+--nextPart2316597.IaFIOm8ydW
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Rolf Eike Beer <eike-kernel@sf-tec.de>
+To: james.bottomley@hansenpartnership.com, yang.yang29@zte.com.cn
+Date: Tue, 27 Dec 2022 08:47:05 +0100
+Message-ID: <2298026.kkTNVCUfUN@daneel.sf-tec.de>
+In-Reply-To: <202212261840048448622@zte.com.cn>
+References: <202212261840048448622@zte.com.cn>
+
+Am Montag, 26. Dezember 2022, 11:40:04 CET schrieb yang.yang29@zte.com.cn:
+> From: Xu Panda <xu.panda@zte.com.cn>
 > 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> The implementation of strscpy() is more robust and safer.
+> That's now the recommended way to copy NUL-terminated strings.
+> 
+> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com>
 > ---
+> change for v2
+>  - sizeof(in) is better and simplified, thanks for Helge Deller.
+> ---
+>  drivers/parisc/pdc_stable.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 > 
-> Changes in v2:
-> - Drop redundant "bindings" in subject (Krzysztof Kozlowski).
-> - Drop "device tree bindings" in title (Krzysztof Kozlowski).
-> - Put port next to other "true" properties (Krzysztof Kozlowski).
-> - Add Krzysztof Kozlowski's Reviewed-by tag.
+> diff --git a/drivers/parisc/pdc_stable.c b/drivers/parisc/pdc_stable.c
+> index d6af5726ddf3..d3075445260b 100644
+> --- a/drivers/parisc/pdc_stable.c
+> +++ b/drivers/parisc/pdc_stable.c
+> @@ -274,8 +274,7 @@ pdcspath_hwpath_write(struct pdcspath_entry *entry,
+> const char *buf, size_t coun
 > 
->  .../bindings/display/panel/himax,hx8394.yaml  | 65 +++++++++++++++++++
->  1 file changed, 65 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
-> new file mode 100644
-> index 000000000000..bead3f0b05c5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
-> @@ -0,0 +1,65 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/panel/himax,hx8394.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Himax HX8394 MIPI-DSI LCD panel controller
-> +
-> +maintainers:
-> +  - Javier Martinez Canillas <javierm@redhat.com>
-> +
-> +description:
-> +  Device tree bindings for panels based on the Himax HX8394 controller,
-> +  such as the HannStar HSD060BHW4 720x1440 TFT LCD panel connected with
-> +  a MIPI-DSI video interface.
-> +
-> +allOf:
-> +  - $ref: panel-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      # HannStar HSD060BHW4 5.99" 720x1440 TFT LCD panel
-> +      - hannstar,hsd060bhw4
-> +
-> +  vcc-supply:
-> +    description: Panel power supply
-> +
-> +  iovcc-supply:
-> +    description: I/O voltage supply
-> +
-> +  port: true
-> +
-> +  reset-gpios: true
-> +
-> +  backlight: true
-> +
-> +required:
-> +  - compatible
-> +  - vcc-supply
-> +  - iovcc-supply
-> +  - port
+>  	/* We'll use a local copy of buf */
+>  	count = min_t(size_t, count, sizeof(in)-1);
+> -	strncpy(in, buf, count);
+> -	in[count] = '\0';
+> +	strscpy(in, buf, sizeof(in));
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+What is "count" now needed for? Looks like a write only variable at least in 
+these hunks.
 
-Best regards,
-Krzysztof
+Eike
+--nextPart2316597.IaFIOm8ydW
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCY6qi+QAKCRBcpIk+abn8
+TreFAJsGRGXqTM4D8ib9NJdGgqNbpJTmUgCeNNVn9q3szniJshUbN+h2L4zJ5sI=
+=oo7x
+-----END PGP SIGNATURE-----
+
+--nextPart2316597.IaFIOm8ydW--
+
+
 
