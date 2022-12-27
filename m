@@ -2,78 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF701656942
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73408656943
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiL0J45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        id S229836AbiL0J5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiL0J41 (ORCPT
+        with ESMTP id S231204AbiL0J43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 04:56:27 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298A7B498
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:55:18 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id z26so18955066lfu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IPELBybm3OZnPzS1qLb2eKjz0NHNGczcyBgATwq2AJ8=;
-        b=a3UtnFcbLnbcl0VpqfiGS+3wdLVd8cVaF6vWs6Z73JN9u8GKOcwuHvZ7PeFo2Fz8Gb
-         Dg33aK8GsX9rXOk5JHLN+UFwwLtUGge2vDJcLxDgKQBj0UlrAwxvRdTyIlqjOBxb6uL2
-         3r8wy+ifXw9wMu+5ohSWs57+ivuQsve9TeeIsGrOCr3I2UKbfLcVTzYjnN3o5GN79Z8V
-         4aixJ758qbUSfUaK04lAaM+3z/IdBQ94CY7xifFwzdw5ESD37q6+CFXOjjzRg1KEvOb9
-         bx3izGa6470MaOEzPMLBZD6oRxIvl+pgygrs7v2swp3COdc38cNfCwdd7rXSjYmxbKqi
-         A25Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IPELBybm3OZnPzS1qLb2eKjz0NHNGczcyBgATwq2AJ8=;
-        b=XBqXegOwmvvXMLTKlP6lwlSFMN7qLmw+OFTfCiXaHm8IkseM3igFy1CMLGd0NUPH2+
-         AaEpMzqxnUE9QqZXQawotPWzbxa+4y9cN3xsxGbMWPeTja26LBEZdI3gIp67fS9ND3+w
-         Kz0IC5ZBmbMMVRKRtw0pIDxU6evEIRWMmKzCrrfRWtZgo0WpY55QtDhwXS1BF8gxkDZI
-         3/SlBQjr7lUrWJbdP42cwYaIDT4Usx/KkhTuP4NSUEtcfh/Bx6I5ehZYUHvHSDnRCUfz
-         iu7tFn92msFF8VtCsKqwLCs6FC4xW8Mefue2tFbdlJHFc6RWFJj78BO966JndYZ0X3qU
-         zusg==
-X-Gm-Message-State: AFqh2kpLLqksPZPYl/DS2WYxCtgVJXAdrGSPzYrElEnz8pBHP+/M1zot
-        3Evtn33hf3VdlQFANl6A5JBg3yiYYv6641BR
-X-Google-Smtp-Source: AMrXdXtltf4vB2TNQasjCgOUGdVW5TjMPZt530L9JnGeaOu3jfGKIVxewdonxiUQ0BeVA82qYm+DzA==
-X-Received: by 2002:a19:f514:0:b0:4b5:61e8:8934 with SMTP id j20-20020a19f514000000b004b561e88934mr5295350lfb.64.1672134916572;
-        Tue, 27 Dec 2022 01:55:16 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o17-20020a05651205d100b00498f77cfa63sm2211382lfo.280.2022.12.27.01.55.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 01:55:16 -0800 (PST)
-Message-ID: <1cc66b84-fcf3-2801-57ad-94430fa38055@linaro.org>
-Date:   Tue, 27 Dec 2022 10:55:14 +0100
+        Tue, 27 Dec 2022 04:56:29 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D970B1D2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:55:25 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pA6g7-00084I-Km; Tue, 27 Dec 2022 10:55:23 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pA6g4-0022i6-Lq; Tue, 27 Dec 2022 10:55:20 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pA6g3-008GVS-Rf; Tue, 27 Dec 2022 10:55:19 +0100
+Date:   Tue, 27 Dec 2022 10:55:17 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Nicolas Palix <nicolas.palix@imag.fr>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de, cocci@inria.fr
+Subject: Re: coccinelle: How to remove a return at the end of a void function?
+Message-ID: <20221227095517.mzjmqse5wvaielev@pengutronix.de>
+References: <20221224115657.kqyocti356cwm7hc@pengutronix.de>
+ <alpine.DEB.2.22.394.2212241326310.2711@hadrien>
+ <20221225212011.6il5egocxtx5zupa@pengutronix.de>
+ <be39f7d-31ab-24c-61c5-6daabdef9267@inria.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v10 3/7] dt-bindings: arm: nuvoton: Add bindings for NPCM
- GFXI
-Content-Language: en-US
-To:     Marvin Lin <milkfafa@gmail.com>, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andrzej.p@collabora.com
-Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        kwliu@nuvoton.com, kflin@nuvoton.com
-References: <20221227095123.2447948-1-milkfafa@gmail.com>
- <20221227095123.2447948-4-milkfafa@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221227095123.2447948-4-milkfafa@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t4ou3e5qjzu7togz"
+Content-Disposition: inline
+In-Reply-To: <be39f7d-31ab-24c-61c5-6daabdef9267@inria.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,17 +55,287 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/12/2022 10:51, Marvin Lin wrote:
-> Add dt-bindings document for Graphics Core Information (GFXI) node. It
-> is used by NPCM video driver to retrieve Graphics core information.
-> 
-> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The comment about subject from v8 applies here as well. Once you receive
-a comment apply it everywhere, fix all the issues, not only one.
+--t4ou3e5qjzu7togz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hello Julia,
 
-Best regards,
-Krzysztof
+On Mon, Dec 26, 2022 at 05:02:35PM +0100, Julia Lawall wrote:
+> On Sun, 25 Dec 2022, Uwe Kleine-K=F6nig wrote:
+>=20
+> > Hello Julia,
+> >
+> > first of all thanks for your quick answer.
+> >
+> > On Sat, Dec 24, 2022 at 01:28:04PM +0100, Julia Lawall wrote:
+> > > On Sat, 24 Dec 2022, Uwe Kleine-K=F6nig wrote:
+> > > > A simplified spatch looks as follows:
+> > > >
+> > > > -------->8--------
+> > > > virtual patch
+> > > >
+> > > > @p1@
+> > > > identifier pdev;
+> > > > @@
+> > > > -int
+> > > > +void
+> > > >  rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
+> > > >  <...
+> > > > -return 0;
+> > > > +return;
+> > > >  ...>
+> > > >  }
+> > > > -------->8--------
+> > > >
+> > > > This results in:
+> > > >
+> > > > -------->8--------
+> > > > diff -u -p a/drivers/mmc/host/rtsx_usb_sdmmc.c b/drivers/mmc/host/r=
+tsx_usb_sdmmc.c
+> > > > --- a/drivers/mmc/host/rtsx_usb_sdmmc.c
+> > > > +++ b/drivers/mmc/host/rtsx_usb_sdmmc.c
+> > > > @@ -1379,13 +1379,13 @@ static int rtsx_usb_sdmmc_drv_probe(stru
+> > > >         return 0;
+> > > >  }
+> > > >
+> > > > -static int rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev)
+> > > > +static void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev)
+> > > >  {
+> > > >         struct rtsx_usb_sdmmc *host =3D platform_get_drvdata(pdev);
+> > > >         struct mmc_host *mmc;
+> > > >
+> > > >         if (!host)
+> > > > -               return 0;
+> > > > +               return;
+> > > >
+> > > >         mmc =3D host->mmc;
+> > > >         host->host_removal =3D true;
+> > > > @@ -1416,7 +1416,7 @@ static int rtsx_usb_sdmmc_drv_remove(str
+> > > >         dev_dbg(&(pdev->dev),
+> > > >                 ": Realtek USB SD/MMC module has been removed\n");
+> > > >
+> > > > -       return 0;
+> > > > +       return;
+> > > >  }
+> > > >
+> > > >  #ifdef CONFIG_PM
+> > > > -------->8--------
+> > > >
+> > > > which is as intended. Now I want to remove the useless "return;" at=
+ the
+> > > > end of the function, however adding
+> > > >
+> > > > -------->8--------
+> > > > @p2 depends on p1@
+> > > > identifier pdev;
+> > > > @@
+> > > >  void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
+> > > >  ...
+> > > > -return;
+> > > >  }
+> > > > -------->8--------
+> > > >
+> > > > to the spatch doesn't (only) do the intended:
+> > >
+> > > The problem is that Coccinelle is following the control-flow through =
+the
+> > > function, and all of the returns are at the end of a control.flow pat=
+h.
+> > > The simple, hacky solution is to change the return;s into some functi=
+on
+> > > call Return();, then do like the above for Return(); and then change =
+the
+> > > Return();s back to return;s
+> >
+> > OK, I tried, but somehow coccinelle refuse to work after I introduced
+> > Return(), even replacing them by return; doesn't work:
+> >
+> > -------->8--------
+> > virtual patch
+> >
+> > @p1@
+> > identifier pdev;
+> > @@
+> > -int
+> > +void
+> >  rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
+> >  ...
+> > -return 0;
+> > +Return();
+> >  ...
+> >  }
+> >
+> > @p2@
+> > identifier pdev;
+> > @@
+> >  void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
+> >  ...
+> > -Return();
+> > +return;
+> >  ...
+> >  }
+>=20
+> The problem is that a control-flow path at this point can have multiple
+> calls to Return();  You pattern only matches when every control-flow path
+> through the code has exactly one Return().
 
+Ah, ok. This wasn't clear to me from reading the documentation (e.g.
+https://coccinelle.gitlabpages.inria.fr/website/docs/main_grammar.html)
+=20
+> You should have one rule that removes the final Return();
+>=20
+>  @p2@
+>  identifier pdev;
+>  @@
+>   void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
+>   ...
+>  -Return();
+>   }
+>=20
+> Then another rule to remove the others:
+>=20
+>  @p2@
+>  identifier pdev;
+>  @@
+>   void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
+>   <...
+>  -Return();
+>  +return;
+>   ...>
+>   }
+
+I now have
+
+-------->8--------
+virtual patch
+
+@p1@
+identifier pdev;
+@@
+-int
++void
+ rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
+ ...
+-return 0;
++Return();
+ ...
+ }
+
+@p2@
+identifier pdev;
+@@
+ void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
+ ...
+-Return();
+ }
+
+@p3@
+identifier pdev;
+@@
+ void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev) {
+ <...
+-Return();
++return;
+ ...>
+ }
+-------->8--------
+
+But there p2 suffers from the same problem and only matches
+code paths with exactly 1 Return(). So the above results in
+
+-------->8--------
+diff -u -p a/drivers/mmc/host/rtsx_usb_sdmmc.c b/drivers/mmc/host/rtsx_usb_=
+sdmmc.c
+--- a/drivers/mmc/host/rtsx_usb_sdmmc.c
++++ b/drivers/mmc/host/rtsx_usb_sdmmc.c
+@@ -1379,13 +1379,13 @@ static int rtsx_usb_sdmmc_drv_probe(stru
+        return 0;
+ }
+
+-static int rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev)
++static void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev)
+ {
+        struct rtsx_usb_sdmmc *host =3D platform_get_drvdata(pdev);
+        struct mmc_host *mmc;
+
+        if (!host)
+-               return 0;
++               return;
+
+        mmc =3D host->mmc;
+        host->host_removal =3D true;
+@@ -1416,7 +1416,7 @@ static int rtsx_usb_sdmmc_drv_remove(str
+        dev_dbg(&(pdev->dev),
+                ": Realtek USB SD/MMC module has been removed\n");
+
+-       return 0;
++       return;
+ }
+
+ #ifdef CONFIG_PM
+-------->8--------
+
+and only if I remove the "if (!host) return 0;" block before patch
+generation, the final return is also dropped.=20
+
+I think this is good enough for me, as there are not too many cases like
+the above. If there is spatch that does the desired change (i.e.
+
+-------->8--------
+diff -u -p a/drivers/mmc/host/rtsx_usb_sdmmc.c b/drivers/mmc/host/rtsx_usb_=
+sdmmc.c
+--- a/drivers/mmc/host/rtsx_usb_sdmmc.c
++++ b/drivers/mmc/host/rtsx_usb_sdmmc.c
+@@ -1379,13 +1379,11 @@ static int rtsx_usb_sdmmc_drv_probe(stru
+        return 0;
+ }
+
+-static int rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev)
++static void rtsx_usb_sdmmc_drv_remove(struct platform_device *pdev)
+ {
+        struct rtsx_usb_sdmmc *host =3D platform_get_drvdata(pdev);
+        struct mmc_host *mmc;
+
+        if (!host)
+-               return 0;
++               return;
+
+        mmc =3D host->mmc;
+        host->host_removal =3D true;
+@@ -1416,7 +1416,7 @@ static int rtsx_usb_sdmmc_drv_remove(str
+        dev_dbg(&(pdev->dev),
+                ": Realtek USB SD/MMC module has been removed\n");
+-
+-       return 0;
+ }
+
+ #ifdef CONFIG_PM
+-------->8--------
+) I'd be happy to hear and learn about it.
+
+Thanks
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--t4ou3e5qjzu7togz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOqwQIACgkQwfwUeK3K
+7AlaUQf+Pcfi/G+8ytKf0fujae79ImbfP5j3cieCyCRmFZoysWDC1zzQhhu6+Lcn
+1nwIypCsa9bW7LtZ+Zuu+r8rJMF+WMRoNtFZWyxLAlrkjmLNZTiTQlKUXamBHhMS
+CtqPMluANCpVzsD2lc/bM/LhrZvqt+svIYMy/8SJj8ShqC8J+kJmi8PgP0ofpBlu
+b5kqRUMdkNxz3/WppZ756D5rbdqyXHAydJZvavUbzU2eOFR61kOaydACjtRyr00w
+OtezgQWgrDLzcwvsfSUVD9uEV74jpYEjM57l1C2jWWHHQMVBpK6w5CNwZj5Zn3kz
+B9lljLL3ZPrrVw3VLAnnWl81308ydg==
+=1Wto
+-----END PGP SIGNATURE-----
+
+--t4ou3e5qjzu7togz--
