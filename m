@@ -2,171 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0F0656DD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 19:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6127656DD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 19:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiL0SGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 13:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
+        id S230129AbiL0SHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 13:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiL0SGd (ORCPT
+        with ESMTP id S229488AbiL0SHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 13:06:33 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243E5E41
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 10:06:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1672164379; bh=zxrGV6ifTSulE8N2ayWJie6beCLzXxvXheTGblxTLLs=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=B4bGLAbPTHDpDzDsq2ZoF4DeF6HGS1ca9ihDIZcfWW+tCnThRA0v7BRSHhEOZGxWz
-         kRuCYX2l1nRFP8ThXknOG+g1kL0LmPcriI5WSZMK3Y0oNiqLrqT+PkRyuiaVmwsY7E
-         PKHjWJEx41k6jwVe1iB/Egr4DV1Ie9sqPh4oi990=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue, 27 Dec 2022 19:06:19 +0100 (CET)
-X-EA-Auth: hdHTa+YVHebgj2OAtim6AI745HMESDa2jC0+qkCFj+4bzh86fKH9DBcOPTM07YbedQtiHDmjnZF3xVa34huFJF/71vlwbbK6
-Date:   Tue, 27 Dec 2022 23:36:13 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH] drm/i915/fbc: Avoid full proxy f_ops for FBC debug
- attributes
-Message-ID: <Y6s0FSK9+F+/oKSf@qemulion>
-References: <Y6qmNW6cOHjGwn03@qemulion>
- <Y6sn1BmhFJFssW0h@intel.com>
+        Tue, 27 Dec 2022 13:07:48 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D70F1D;
+        Tue, 27 Dec 2022 10:07:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672164467; x=1703700467;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6/9t+3QiTlrzSMckrPusT+JZOCoszJNNpwdQ2a2LLAE=;
+  b=myneTD6uqN2FF8RH/T2O/wTUEU5JtECK9igbXffWYbCCiQ8OywTeoVug
+   ScF6mMmyDmGqcaMm/RpvgJECZEgytpd+idNcEXtKXH8RghldYQXetiO93
+   5uci738HZ75s9o6YLubV9evvvOR8zw8TpgTtJCeO8UsUOy7G2PS28WQdG
+   nEOHiL6NWoBqGRm+j46ILdYQVhpkHR7reFvZ3vPTwvDn2JFUYZ2yzzMh9
+   eL1gEIcNwyfK6g7OAUi0AoHsCJ3s6TivxDOKrTBX8imlmmalc8aupxXad
+   OGuaQ+Biiak92SLmYoU1tXztc3Y17b/M71Dh7eJko/dAI6zHINUxHfePJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="322715035"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="322715035"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 10:07:23 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="653093224"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="653093224"
+Received: from wilsona1-mobl3.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.223.115])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 10:07:22 -0800
+Message-ID: <61b3d3720ac4bfd1fc8b7dcd09f58dd5a2de3cca.camel@linux.intel.com>
+Subject: Re: [PATCH 0/2] intel_pstate: fix turbo not being used after a
+ processor is rebooted
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Pratyush Yadav <ptyadav@amazon.de>, linux-pm@vger.kernel.org,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@acpica.org
+Date:   Tue, 27 Dec 2022 10:07:22 -0800
+In-Reply-To: <CAJZ5v0hFOA97FAq=CwGXgXTkC8aS_vyHjXuaFUppXktrG62H6w@mail.gmail.com>
+References: <20221221155203.11347-1-ptyadav@amazon.de>
+         <72bcd14eef038ec9181d30b3d196b0a872f47ccb.camel@linux.intel.com>
+         <mafs0k02jd8oh.fsf_-_@dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com>
+         <2ed9702b67832e3e33ef352808124980206c1e95.camel@linux.intel.com>
+         <8e2cc66f7dadcfb04099aac7c4eef0b02075c91b.camel@linux.intel.com>
+         <mafs07cycdfh4.fsf_-_@amazon.de>
+         <33dd969d9bdb1eb93f8f2a2167efeb535455cf74.camel@linux.intel.com>
+         <CAJZ5v0hFOA97FAq=CwGXgXTkC8aS_vyHjXuaFUppXktrG62H6w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6sn1BmhFJFssW0h@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 12:13:56PM -0500, Rodrigo Vivi wrote:
-> On Tue, Dec 27, 2022 at 01:30:53PM +0530, Deepak R Varma wrote:
-> > Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
-> > function adds the overhead of introducing a proxy file operation
-> > functions to wrap the original read/write inside file removal protection
-> > functions. This adds significant overhead in terms of introducing and
-> > managing the proxy factory file operations structure and function
-> > wrapping at runtime.
-> > As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
-> > with debugfs_create_file_unsafe() is suggested to be used instead.  The
-> > DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
-> > debugfs_file_put() wrappers to protect the original read and write
-> > function calls for the debug attributes. There is no need for any
-> > runtime proxy file operations to be managed by the debugfs core.
-> >
-> > This Change is reported by the debugfs_simple_attr.cocci Coccinelle
-> > semantic patch.
->
-> I just checked here with
-> $ make coccicheck M=drivers/gpu/drm/i915/ MODE=context COCCI=./scripts/coccinelle/api/debugfs/debugfs_simple_attr.cocci
+On Tue, 2022-12-27 at 18:02 +0100, Rafael J. Wysocki wrote:
+> On Tue, Dec 27, 2022 at 5:40 PM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> > 
+> > On Tue, 2022-12-27 at 16:38 +0100, Pratyush Yadav wrote:
+> > > Hi Srinivas,
+> > > 
+> > > On Sat, Dec 24 2022, srinivas pandruvada wrote:
+> > > 
+> > > > On Fri, 2022-12-23 at 10:10 -0800, srinivas pandruvada wrote:
+> > > > > Hi Pratyush,
+> > > > > 
+> > > > > On Thu, 2022-12-22 at 11:39 +0100, Pratyush Yadav wrote:
+> > > > > > 
+> > > > > > Hi Srinivas,
+> > > > > > 
+> > > > > > On Wed, Dec 21 2022, srinivas pandruvada wrote:
+> > > > > > > On Wed, 2022-12-21 at 16:52 +0100, Pratyush Yadav wrote:
+> > > > > > > > When a processor is brought offline and online again,
+> > > > > > > > it is
+> > > > > > > > unable to
+> > > > > > > > use Turbo mode because the _PSS table does not contain
+> > > > > > > > the
+> > > > > > > > whole
+> > > > > > > > turbo
+> > > > > > > > frequency range, but only +1 MHz above the max non-
+> > > > > > > > turbo
+> > > > > > > > frequency.
+> > > > > > > > This
+> > > > > > > > causes problems when ACPI processor driver tries to set
+> > > > > > > > frequency
+> > > > > > > > constraints. See patch 2 for more details.
+> > > > > > > > 
+> > > > > I can reproduce on a Broadwell server platform. But not on a
+> > > > > client
+> > > > > system with acpi_ppc usage.
+> > > > > 
+> > > > > Need to check what change broke this.
+> > > > 
+> > > > When PPC limits enforcement changed to PM QOS, this broke.
+> > > > Previously
+> > > > acpi_processor_get_platform_limit() was not enforcing any
+> > > > limits.
+> > > > It
+> > > > was just setting variable. So any update done after
+> > > > acpi_register_performance_state() call to pr->performance-
+> > > > > states[ppc].core_frequency, was effective.
+> > > > 
+> > > > We don't really need to call
+> > > >         ret = freq_qos_update_request(&pr->perflib_req,
+> > > >                         pr->performance-
+> > > > >states[ppc].core_frequency
+> > > > *
+> > > > 1000);
+> > > > 
+> > > > if the PPC is not changed. When PPC is changed, this gets
+> > > > called
+> > > > again,
+> > > > so then we can call the above function to update cpufreq limit.
+> > > > 
+> > > > The below change fixed for me.
+> > > 
+> > > Right.
+> > I think, this is the only change you require to fix this. In
+> > addition
+> > set pr->performance_platform_limit = 0 in
+> > acpi_processor_unregister_performance().
+> 
+> Not really, because if the limit is set to a lower frequency and then
+> reset to _PSS[0], it needs to be set back to "no limit".
+> 
 
-Hello Rodrigo,
-Thank you so much for your review and feedback on the patch proposal.
+If PPC becomes 0 again after ppc > 0 during dynamic PPC change, pr-
+>performance_platform_limit will not match current PPC, so will set to
+PPC 0 performance ( which is already patched by driver after return
+from acpi_register_performance_state()).
 
->
-> The part reported by the this script is the s/SIMPLE/DEBUGFS
-> but the change to the unsafe option is not.
+But fine, you can always set freq qos to FREQ_QOS_MAX_DEFAULT_VALUE for
+PPC 0 as you are doing in your patch.
 
-If you look at the original commit of this coccinelle file, it calls out the
-need for pairing debugfs_create_file_unsafe() as well. Please review this
-
-commitID: 5103068eaca2: ("debugfs, coccinelle: check for obsolete DEFINE_SIMPLE_ATTRIBUTE() usage")
-
-Based on my review of the code, the functions debugfs_create_file() and
-debugfs_create_file_unsafe(), both internally call __debugfs_create_file().
-However, they pass debugfs_full_proxy_file_operations and
-debugfs_open_proxy_file_operations respectively to it. The former represents the
-full proxy factory, where as the later one is lightweight open proxy
-implementation of the file operations structure.
-
->
-> This commit message is not explaining why the unsafe is the suggested
-> or who suggested it.
-
-If you find the response above accurate, I will include these details about
-the _unsafe() function in my commit message in v2.
-
->
-> If you remove the unsafe part feel free to resend adding:
-
-Please confirm you still believe switching to _unsafe() is not necessary.
-
->
-> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> (to both patches, this and the drrs one.
->
-> Also, it looks like you could contribute with other 2 patches:
-> drivers/gpu/drm/i915/pxp/intel_pxp_debugfs.c:64:0-23: WARNING: pxp_terminate_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
-> drivers/gpu/drm/i915/gvt/debugfs.c:150:0-23: WARNING: vgpu_scan_nonprivbb_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
-
-Yes, these are on my list. Was waiting for a feedback on the first submission
-before I send more similar patches.
-
-Appreciate your time and the feedback.
+Thanks,
+Srinivas
 
 
-Regards,
-./drv
 
->
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >  drivers/gpu/drm/i915/display/intel_fbc.c | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/i915/display/intel_fbc.c b/drivers/gpu/drm/i915/display/intel_fbc.c
-> > index b5ee5ea0d010..4b481e2f908b 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_fbc.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_fbc.c
-> > @@ -1809,10 +1809,10 @@ static int intel_fbc_debugfs_false_color_set(void *data, u64 val)
-> >  	return 0;
-> >  }
-> >
-> > -DEFINE_SIMPLE_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
-> > -			intel_fbc_debugfs_false_color_get,
-> > -			intel_fbc_debugfs_false_color_set,
-> > -			"%llu\n");
-> > +DEFINE_DEBUGFS_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
-> > +			 intel_fbc_debugfs_false_color_get,
-> > +			 intel_fbc_debugfs_false_color_set,
-> > +			 "%llu\n");
-> >
-> >  static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
-> >  				  struct dentry *parent)
-> > @@ -1821,8 +1821,8 @@ static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
-> >  			    fbc, &intel_fbc_debugfs_status_fops);
-> >
-> >  	if (fbc->funcs->set_false_color)
-> > -		debugfs_create_file("i915_fbc_false_color", 0644, parent,
-> > -				    fbc, &intel_fbc_debugfs_false_color_fops);
-> > +		debugfs_create_file_unsafe("i915_fbc_false_color", 0644, parent,
-> > +					   fbc, &intel_fbc_debugfs_false_color_fops);
-> >  }
-> >
-> >  void intel_fbc_crtc_debugfs_add(struct intel_crtc *crtc)
-> > --
-> > 2.34.1
-> >
-> >
-> >
 
+> I'll send a patch for that in a while.
 
