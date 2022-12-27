@@ -2,146 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E374656809
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DEB656810
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbiL0H4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 02:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S230147AbiL0H5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 02:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiL0H4h (ORCPT
+        with ESMTP id S230447AbiL0H5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 02:56:37 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0D822B
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:56:35 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id z26so18624570lfu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:56:35 -0800 (PST)
+        Tue, 27 Dec 2022 02:57:30 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E253B04
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:57:24 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id x24so2784693uaf.4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:57:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8WuMw1xwUmkvx1h2GnGHJDy1rb1dF/1yR0eeP+XHqUE=;
-        b=jEt+H0sIzTDMrC46wwmBRxgvOnXOqGSvl4AsoMdywtGliYMuEY0mZTuppDUFRcbRL8
-         kBQGXMSowKdl+TnU9P7ClAQ5QIHkoYrnu3opf4evev2RiouC9Pxw7b4X30Q/Gire5C97
-         ZesWvU5nj0ueDQrsGRaB2NyXSFtSwY1FRokH6WLsbNt/KeRSYM/RIpkJvORetfvr3Meo
-         NagP2L2qbneYJFDWPtt9BVONmClEc6daath3YRNAD9tDmJTsjov/vGBPfazz7fXqDMDM
-         rSdWmvJGrNTc2bSh8rx3SMbLUf0pZvWqfWJs2zSTd/PjrmgN+AWRjV4MjPPttSegkMeK
-         npoA==
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7v/WSJyZmtBjH1RduwJIBnIVDn9u078UD/StpnslVx0=;
+        b=mDjhdOb+37hZkSU5zz/DbB2FXU0Pc/729sq2tkWFJiYAVkgTfJKuUpOSXeo0P8EzEI
+         bhvix75DeyyFatTBY3VZFtz+3N0uYxzvYQyIRe3J2bhYKTyltbqH3tHftOLiqj30uybe
+         u4Ctr0Gk9w3V2DMnaAWShGbvxy33VSLGYTfcJXxyi0g6ADHstijwy8Mb6Ux2lh5SlkIF
+         ylW1Upb/0Njy0ENduTaULY90gM/vB/jM/88JULcTRxcNXIchHnvyUw6EzkLggnuEyXNi
+         nNZ9AVJDThH5Gy1xpZyGD5iPmx+Ez0gJ4ZgmpLUj6TOx1lWdtd2mxwaRoFaJNuny/6aF
+         3XNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8WuMw1xwUmkvx1h2GnGHJDy1rb1dF/1yR0eeP+XHqUE=;
-        b=12ND/9ZcFOLWePBKfotnisfMEXBT3f08SoJ6ynj/bb20ax8hHEpaweJMKAacvI5r7B
-         O1lxU2xN8AnRdUSjepUSXKcO6QNyboz8MMuj94Fja1QfjkW4vbkvsvzUd/6mw+dnOTpz
-         bvaqjK2yLgCSC8y7CdA9yzhwp8w1e2DyrVgdy0fequiTGulIkz75Xkhwqbo68cc0vgdD
-         T11cAQqWDEy+xWWoXy22GTrEcsB6qAz1x1KgAAm/OPHif8fGkD8WDwm3GSDsWMH6PEup
-         UAAUVoLd4uuUM73yj1lwAZnT2jSMKPcfXXSdAz3ZNr5s1p44o3PA6jLcLXulzbxmwdGA
-         +0DA==
-X-Gm-Message-State: AFqh2kp3MJa3I20uQ+WMt63fsBjVoiCk93FFRIRwtUNKdW5X1kEhxGaA
-        VmOQcNdP8c/TCsQNLUXj2BmA9A==
-X-Google-Smtp-Source: AMrXdXt2q3Ep0rj20rZ5YXTMNhfcIunDyoATdR7QajPp5jcaK3MhVR7n8zAiVSM2/cT79k6RVUIyFg==
-X-Received: by 2002:a05:6512:139c:b0:4b6:e3d5:a8c2 with SMTP id p28-20020a056512139c00b004b6e3d5a8c2mr6914233lfa.13.1672127794149;
-        Mon, 26 Dec 2022 23:56:34 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056512360f00b004cafb150134sm1614410lfs.67.2022.12.26.23.56.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Dec 2022 23:56:33 -0800 (PST)
-Message-ID: <74fd9706-119e-c6c3-4c64-c7ee419ce4bb@linaro.org>
-Date:   Tue, 27 Dec 2022 08:56:32 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7v/WSJyZmtBjH1RduwJIBnIVDn9u078UD/StpnslVx0=;
+        b=kzg4ffwPBQYL1WXKTeQm8CIRpI2nu90kCtV9gUnYhLJyhJMG/xXJQhVDMzwpLtF/M9
+         kVn93z21v0lDTWuZvDK/q37OIVG7O41bcd00O4/SlOM2jzRqO+ku+ytNf7jSBi1DL0Xg
+         GEp2DBVljIBWpdfJTF0WUrhe5uHLjmbzN7EOFncx8aRf1clCQBAZkFB6N9alHJz5byFh
+         JxpOCjSBCWGOBKECxcFjJ96/3BPBit4um0S21Wk7JEc7wnRb9PhRUbO1PwkEyArEH4Ln
+         kZWjdbuDd2Wn2f4iPNc/+6OjP1l2On+wZGkbB0XXu6D0OAiZOS7xgLfnqjVIfcCsqqZa
+         nC+w==
+X-Gm-Message-State: AFqh2kpwH/kWPjZns0NmgmzbrWENIRWO6P6BgUkFPZddd0Bqzmm5VLB0
+        DH07gbGjJnSlIK4yqji2mrB3uqZ7mtBc7uGb8nDQrw==
+X-Google-Smtp-Source: AMrXdXsR/ThovcjSI43AaK4Fos8vXu6n0K3qiqUEOlotWF5yGcagJgxiHP0FtJUsV9OnUNvEQSj+hEYwL6OSgTbFwqU=
+X-Received: by 2002:ab0:2398:0:b0:3fe:c0cb:aa43 with SMTP id
+ b24-20020ab02398000000b003fec0cbaa43mr1886262uan.72.1672127843661; Mon, 26
+ Dec 2022 23:57:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 4/5] dt-bindings: regulator:
- adi,max77541-regulator.yaml Add MAX77541 Regulator bindings
-Content-Language: en-US
-To:     Okan Sahin <okan.sahin@analog.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:VOLTAGE AND CURRENT REGULATOR FRAMEWORK" 
-        <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20221226223839.103460-1-okan.sahin@analog.com>
- <20221226223839.103460-5-okan.sahin@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221226223839.103460-5-okan.sahin@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221227022528.609839-1-mie@igel.co.jp> <20221227022528.609839-3-mie@igel.co.jp>
+ <CACGkMEtAaYpuZtS0gx_m931nFzcvqSNK9BhvUZH_tZXTzjgQCg@mail.gmail.com>
+ <20221227020425-mutt-send-email-mst@kernel.org> <CANXvt5pXkS=TTOU0+Lkx6CjcV7xvDHRS6FbFikJ4Ww8832sg8g@mail.gmail.com>
+ <20221227025534-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20221227025534-mutt-send-email-mst@kernel.org>
+From:   Shunsuke Mie <mie@igel.co.jp>
+Date:   Tue, 27 Dec 2022 16:57:12 +0900
+Message-ID: <CANXvt5qh885mi7shJ9jiZbCBeSVR7=bDhx29GnpL1ZHymb_Rxw@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/9] vringh: remove vringh_iov and unite to vringh_kiov
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/12/2022 23:38, Okan Sahin wrote:
-> The bindings for MAX77541 and MAX77540
-> regulator drivers.
-
-1. Again:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-2. Please wrap commit message according to Linux coding style /
-submission process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
-
-3. Subject: drop second, redundant "bindings".
-
-
-> 
-> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
-> ---
->  .../regulator/adi,max77541-regulator.yaml     | 44 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml b/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
-> new file mode 100644
-> index 000000000000..67d48bfcb627
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
-> @@ -0,0 +1,44 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/adi,max77541-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Buck Converter for MAX77540/MAX77541
-> +
-> +maintainers:
-> +  - Okan Sahin <okan.sahin@analog.com>
-> +
-> +description: |
-> +  This is a part of device tree bindings for ADI MAX77540/MAX77541
-> +
-> +  The buck converter is represented as a sub-node of the PMIC node on the device tree.
-> +
-> +  The device has two buck regulators.
-> +  See also Documentation/devicetree/bindings/mfd/adi,max77541.yaml for
-> +  additional information and example.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,max77540-regulator
-> +      - adi,max77541-regulator
-> +
-> +patternProperties:
-> +  "^BUCK[12]$":
-
-Old DT example was correct - lowercase node names.
-
-Best regards,
-Krzysztof
-
+2022=E5=B9=B412=E6=9C=8827=E6=97=A5(=E7=81=AB) 16:56 Michael S. Tsirkin <ms=
+t@redhat.com>:
+>
+> On Tue, Dec 27, 2022 at 04:13:49PM +0900, Shunsuke Mie wrote:
+> > 2022=E5=B9=B412=E6=9C=8827=E6=97=A5(=E7=81=AB) 16:05 Michael S. Tsirkin=
+ <mst@redhat.com>:
+> > >
+> > > On Tue, Dec 27, 2022 at 02:04:03PM +0800, Jason Wang wrote:
+> > > > On Tue, Dec 27, 2022 at 10:25 AM Shunsuke Mie <mie@igel.co.jp> wrot=
+e:
+> > > > >
+> > > > > struct vringh_iov is defined to hold userland addresses. However,=
+ to use
+> > > > > common function, __vring_iov, finally the vringh_iov converts to =
+the
+> > > > > vringh_kiov with simple cast. It includes compile time check code=
+ to make
+> > > > > sure it can be cast correctly.
+> > > > >
+> > > > > To simplify the code, this patch removes the struct vringh_iov an=
+d unifies
+> > > > > APIs to struct vringh_kiov.
+> > > > >
+> > > > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+> > > >
+> > > > While at this, I wonder if we need to go further, that is, switch t=
+o
+> > > > using an iov iterator instead of a vringh customized one.
+> > > >
+> > > > Thanks
+> > >
+> > > Possibly, but when doing changes like this one needs to be careful
+> > > to avoid breaking all the inlining tricks vringh relies on for
+> > > performance.
+> > Definitely, I'm evaluating the performance using vringh_test. I'll add =
+a
+> > result of the evaluation. But, If there are other evaluation methods, c=
+ould you
+> > please tell me?
+>
+> high level tests over virtio blk and net are possible, but let's
+> start with vringh_test.
+Ok, I'll do it.
+> > > --
+> > > MST
+> > >
+> >
+> > Best,
+> > Shunsuke
+>
