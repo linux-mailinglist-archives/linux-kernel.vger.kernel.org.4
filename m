@@ -2,235 +2,610 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C966865714D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 00:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2793657150
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 00:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbiL0Xgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 18:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        id S232681AbiL0XjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 18:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbiL0XgJ (ORCPT
+        with ESMTP id S232766AbiL0Xik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 18:36:09 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF0ADF2E;
-        Tue, 27 Dec 2022 15:32:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672183951; x=1703719951;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=C0ISVSZmiHrPnsdw/bp4qNy0TFlSPvtn168wqt27n3g=;
-  b=SlhZf0qLSC0E2NoYgK8Y7eekiz1zss5XOgRwhHxtgREoNph1mWXnYLDB
-   7Y8Q3Yur+i3qteU3vUUjgVHsa9/V7GXQ8FIG/23HACVFxQX2vqDHPbIXA
-   hyonf74zXX7okpwaoKmFf36e2gfBAYafxTfjXm0xzXVYhm03VIrrWRfR9
-   KdkI/e4yTK0j9QfXrtgllBkNXqFu/EaD8T7XmgpnyhFupIzJc8ecuYFrC
-   Z0iJHUyzDT9/BxQJAsscq2R4Zcb+Bm9k6amDBR4J30ogJTJHXpSfpVvV0
-   sOjTvp4oohqnl/J8B0yDEIDKLu2Lc5RFPillv9Ea7et8p0cnbyLo2HLaW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="319496448"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="319496448"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 15:31:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="721628472"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="721628472"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Dec 2022 15:31:41 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 27 Dec 2022 15:31:40 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 27 Dec 2022 15:31:40 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 27 Dec 2022 15:31:40 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HFp9W/bvPtikufpvwMV929X6tWOVt5jA+iQ/hVDasxBaXV322HbmLtWLENVA+U4MzAbJTUYZLfB0bIJ6caQw2IXgtIpu7HCieK+l8jTRTg05Yt/EncpvI91ncQK41e+RidIZCg2pngRWHGfGokuh2x8BnfEp62eCEvvWkM7eSHOHHC5B5ck0DUqbpgNyKAcpZoHoTtZqsdgYjJ2w/qDdAqT4rduAG6wVz81TKz1fX1HEnUMmsJscS8koGG2Iqt5xj+Z4fuo4OLcb+xByRFk4hhy48waDvmTx/KEoxT7YAxswkv36xnW0GLwu5GwAgq4lGkAOQHIdD2/6SnYaqfbuuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C0ISVSZmiHrPnsdw/bp4qNy0TFlSPvtn168wqt27n3g=;
- b=LfFRA6GxamLgHwvv1Msa+BmX6rh7kKjf2z+WPSbX3hx4lIIhU1qXg8JA8g/LVobSvrr8BWIPBkEylYyurvq8Z7tdLFnDM38OI1EKv/Dk/fcDpxSN4UXL45rzy35NJ22BFvJh4abWs05Kj8M8SsSHKrXJEP7PMrHuV4Fceg4fDYcZFTcIbqAhNB8Fan51i2SdzipCYm1Y1HKcf7XWGWPwtiPtqwXPyrx7i637ui0qGepoqwkGVbN3jUnu/fECHyztkC0NtR5EvGfr5KXBGDXc+Y7qVVKmqpebd0lgLYNHTv2WcLMk0Xr9rzS79eQRsKKVng/pdBnPDT6LWhEwdPb4EQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by CY5PR11MB6090.namprd11.prod.outlook.com (2603:10b6:930:2e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.12; Tue, 27 Dec
- 2022 23:31:37 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::7ed5:a749:7b4f:ceff]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::7ed5:a749:7b4f:ceff%5]) with mapi id 15.20.5944.016; Tue, 27 Dec 2022
- 23:31:37 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "bp@alien8.de" <bp@alien8.de>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "x86@kernel.org" <x86@kernel.org>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v4 11/39] x86/mm: Update pte_modify for _PAGE_COW
-Thread-Topic: [PATCH v4 11/39] x86/mm: Update pte_modify for _PAGE_COW
-Thread-Index: AQHZBq9emZWK0Ia1IEy8YRukVHWfCa6BwyUAgADGMgA=
-Date:   Tue, 27 Dec 2022 23:31:37 +0000
-Message-ID: <060f1009199b09b7f8b9698e9f6f8375d9d1b66d.camel@intel.com>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
-         <20221203003606.6838-12-rick.p.edgecombe@intel.com>
-         <Y6raFBB+oVx+2WXl@zn.tnic>
-In-Reply-To: <Y6raFBB+oVx+2WXl@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.38.4 (3.38.4-1.fc33) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|CY5PR11MB6090:EE_
-x-ms-office365-filtering-correlation-id: 2b2478a1-cd87-46dc-d760-08dae8627f9d
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pdgn2lfFTuqnUOeUzYMLgsve0H8tfLa56Bmab0FGIqYK5aI7OE3IwHA4dMFRqjQhNB5f+e3+OiEuyX+5yfWpOj3NBW9zj6Ann+o5VLfVfT4JW9E3is7XUdnR3YC8D3ftUPmfCuSvCjqwkT/GH8BGQ/4Gq/1wOrSpbcMna6Tla8aEEvxZN7+QO7WS8kiXujYqLlS8kycxYRW3tiYyEmJfXi97K0tno+sk4GF8JVt3T5AoUQRPDi7bCiAKo35q2tb9kSOTYi10B3DrisZmj2hWHjTUqdUGLaHny73PzlWBeueQEQugmBZOIT2j/n3cklfgUfxVHz91bDyd8SMHjWrWwCaI4A2P6KpN6Qogz7649VnGcUbvdxN7wwn9+udzw4A9DDkxLOQRRlgxJar33BNxss0KuzP0nIGuC9yiLJnlrKVjCBrRKhGgCBGgetV140ciP8Y2IbxxEPpOMkifztGbsygZth+AUEH0BOTcUo4cmn9bwZQwI/VUPtLSgCvkSE/Al1oNcfxyH9Mr3ws7hqHY0vkX+2zPRkmS1rw5MK3s8DJN2j929hV+qp+AcfsNMrAsjH5H2wTDMQsIvGwnVvXr7Is3T0N8OevOl7z9JiAJqfs9uuYQyei8MP90dxfmGKJAvBvEEYIutBR6nHaRgFOtzEaq/HGB4uJ/vHhe/QpBkuiYlY24NC7HoVNu8N/ukZSNi3DW9l9sYuDqv48tmRg1qg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199015)(6486002)(41300700001)(8936002)(2616005)(71200400001)(36756003)(478600001)(5660300002)(7416002)(7406005)(82960400001)(38070700005)(4001150100001)(38100700002)(122000001)(2906002)(91956017)(83380400001)(6916009)(316002)(54906003)(86362001)(66476007)(64756008)(66946007)(4326008)(66556008)(66446008)(8676002)(6512007)(26005)(76116006)(6506007)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S2JQb2g1SHViNk5INE8zUWNjNy9mYmtKYWg2YVd1MTF3MXR5cVVxd2k5WVRK?=
- =?utf-8?B?bkNFZ1hiSWJuemM0MTBiK2N6bEsxZTlYcjQ3NUdHamhkRk5oU01VdEtKQU1E?=
- =?utf-8?B?ZnkrRXNabUlMckRkOWZjVHBhSFhJa1BGbEYyOWVTUVBZT1pTZGpSMkNVTmZk?=
- =?utf-8?B?clpoeVpIVWd3Z3k1NVF5QVZBMVVZZE8yNXh3Yjg2NjMxMWtaRDBRR2JyV0lI?=
- =?utf-8?B?ZTZOUnhBSnIyV0M1Z2lKVldFNEw1NzcxUmtNVkNMb2czSkRQSlFnUDlaWnov?=
- =?utf-8?B?WGxSczB1SUhRK0RYeEF3SFFiMGxQUHVpalVLWUVTUkZUUGNEcHJmU004NWVp?=
- =?utf-8?B?UklJY3JhcERVRGdjSVlqWXlHWlNZSzcvQk9DblN5Vjd2eTBhb2dnSTJuamtR?=
- =?utf-8?B?QzcxYy9HcEU3MEtTUmN5SGZCWGtydDU1eGE5Tkp2bml3Wi9RNjVnUUpCNG5P?=
- =?utf-8?B?Q1JTZkZvbEVBMjdXd3hPUmx3d0hRR1BEUWZWbHJWamxueFk3VUNkN09keWgr?=
- =?utf-8?B?Ukp3U21EUjNleC9jSGErbC9HQ3FJemQ2R3RRYUcza0pQODdKZHp5TUN4SVFz?=
- =?utf-8?B?NVlHUENxK1hldVpabWhOL1BLbExtak9TMnBzY3dyM0g5RVVYaDNUWmc0enhw?=
- =?utf-8?B?VUhuZ2w1UGx3NzBLa05wVFlXK1V0WmR5K1NjWkVncTRQMG1ZTnFMbGlyVUJY?=
- =?utf-8?B?VDZSeUhWMXRINThraUJOZXo4VVFYZVpoVFlmWE5zWm83WlhxbWt1eUh1bnNx?=
- =?utf-8?B?VDRYbEF6cHZVa09FS1V0RUlack5uaU51ODRTRTZGSVMzVmNoRzZadjIrRG96?=
- =?utf-8?B?SmxUTmhBOWhhQjgxVFBVT0l2MUN3RzA1UUxNMHNKSW4zSTFtZFRJK2VqYWFy?=
- =?utf-8?B?Mmt4a0dCWWxDczMwL09SNmhXeU1jWW52enppdlRuOTZIb2JlZ1ljakN4b2cr?=
- =?utf-8?B?bllFWUtUQUxhRWxiL3RUbDlOYkt3YXU2Y0RYUkhEcFhHeTAxQVdXTHBYMGp5?=
- =?utf-8?B?OVpocXlLTWNRZjRpV3d6ZXJ4WXFZRUwyMkJXTGJvai8zM0dGT1RwdXExa1Y5?=
- =?utf-8?B?cVBGS3NaeEVTYUozdFI4MEJmc3VFdFo2aHYvanVOSHJDYlZkU2hKL1k0U3dP?=
- =?utf-8?B?d201bGtmanRRYXV4ZjFwUkhtOFFYdjgvNXI3OWczNVhmMXQzS0t1aXB6U2NK?=
- =?utf-8?B?eTdEMFNGcUdzcjJXczRTUGk1SnpEZVowTHFkWXFLbnp4dU5FdkpOdGJ0Z05m?=
- =?utf-8?B?SjdqU0dFQ2pXNkJBQXErMUtmb2gxQ0IvdEhKa0VyeFllZ2ZlVDVFRzc5Y1U0?=
- =?utf-8?B?TTJDUjc0azF0TnlER2tuSVpYcStOK29OaEphc3VJYXlTNE1KRzR3QlhJMTJH?=
- =?utf-8?B?RVdHTnFya3M3WEJUc2szUTJxcmlTWHRzVmlnYXNVaWV6bmFONUpuSmRtZVRQ?=
- =?utf-8?B?VVg2SkdZMjk3akV5L2lvNXdHbURRdG5GQU9sbFNRK2RlVm5CWC9ob2FzaUtj?=
- =?utf-8?B?UGtRWG1DS3ZDUy9IOHNjeTgzcW5hRVlaZEJYN3BMRkE2alJSSVBKY2NkNFVN?=
- =?utf-8?B?MisvWTBOSTM4K0xYS2Y1VTd5b1JsaEVnNCtRdnRpK0FEOEdzdExiVXpoanJs?=
- =?utf-8?B?L0ltMURjMWVyUWJERUk1Z2dtVVR1WVNkTnZSTS9WenloMVJoU2c3MGRGUTB0?=
- =?utf-8?B?Yk1NL0tNRHdwaWI2WnE3VGVSSWIxaGpPekMwTGZ5SWZicGN5V2h4NGUvZjRu?=
- =?utf-8?B?czdHY3JjTmxCeFNFMGF1cFJMb3ExSEtkQ3BSUXVUY1BxZ1VKd0xneHdxM3Jr?=
- =?utf-8?B?VnpwdG0wQy9OVGdINVIreVNQRXhQN2hnMFllblUzYTJONEg2THQ5dGxvM2ZD?=
- =?utf-8?B?cUV1dHB6K3lTeHJ3Qjc4Y3ZTVjFDK2drdjVYeWhPVVRqeSthUGFOSGx4Lzh0?=
- =?utf-8?B?eUJLYks3dTBBTkd0ZEhwaGV1cVc5czVGM3d5cWFwVWRCNnpqdW0zbzdkK3lt?=
- =?utf-8?B?OXNreHNsdXdicUozRFlyMGFQMDgrT0xLWDBqSVJyNVVrbXcyTmgrbnQ4cUZk?=
- =?utf-8?B?aXhURlNNR05FVDFuemxHWWcyaTIzcCtrR2lCNTJtMEkwYVhHeE1jVk0rMDlS?=
- =?utf-8?B?K0ZhZ2t0azh3Z2M3Z1FMTzBMRFh5SkVwZUJ5a3VRZ2FUQUY1eEhSR3RCczAv?=
- =?utf-8?Q?jlV3lasS9N+C6Xyv0AGlZuc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <18A945B9940B2542BD812B371C2F9104@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 27 Dec 2022 18:38:40 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8CEEE3C;
+        Tue, 27 Dec 2022 15:34:14 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 60E3C2D9;
+        Wed, 28 Dec 2022 00:34:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672184047;
+        bh=Z3U0NTl94DkXk19JV6N3/Hc2n/WuJ6GXhzwGIIf0YIk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dIu88hTwW3ZXJZg75zr8dXrdecfB8wmwhE9gN8wgG35frpG6iYDIlxS8JiBcCGZre
+         ZHecMXNoqyHKt5dl9m5ncxZ8tU6jvIK3h48tDBF9seg6r9fShOvF0PhaXjyfbvZY2y
+         Vj59FSQTQvFCa5sySXy64ipay0j85lO7nLGUsePA=
+Date:   Wed, 28 Dec 2022 01:34:03 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, Max Staudt <mstaudt@chromium.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Yunke Cao <yunkec@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] media: uvcvideo: Do power management granularly
+Message-ID: <Y6uA6yKo1jjSlWvU@pendragon.ideasonboard.com>
+References: <20220920-resend-powersave-v5-0-692e6df6c1e2@chromium.org>
+ <20220920-resend-powersave-v5-2-692e6df6c1e2@chromium.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b2478a1-cd87-46dc-d760-08dae8627f9d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Dec 2022 23:31:37.1367
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KPQI959kB0nKhwB1huprTx7VLBMdb5C11BrNbfZRuawW7ifjfpWSRUulmH41AyY4ojKP9awmNydiCrCSdc5GdSBwsfQWvcw0fjagP85hFiY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6090
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-powersave-v5-2-692e6df6c1e2@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTEyLTI3IGF0IDEyOjQyICswMTAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6
-DQo+IE9uIEZyaSwgRGVjIDAyLCAyMDIyIGF0IDA0OjM1OjM4UE0gLTA4MDAsIFJpY2sgRWRnZWNv
-bWJlIHdyb3RlOg0KPiA+IMKgc3RhdGljIGlubGluZSBwdGVfdCBwdGVfbW9kaWZ5KHB0ZV90IHB0
-ZSwgcGdwcm90X3QgbmV3cHJvdCkNCj4gPiDCoHsNCj4gPiArwqDCoMKgwqDCoMKgwqBwdGV2YWxf
-dCBfcGFnZV9jaGdfbWFza19ub19kaXJ0eSA9IF9QQUdFX0NIR19NQVNLICYNCj4gPiB+X1BBR0Vf
-RElSVFk7DQo+ID4gwqDCoMKgwqDCoMKgwqDCoHB0ZXZhbF90IHZhbCA9IHB0ZV92YWwocHRlKSwg
-b2xkdmFsID0gdmFsOw0KPiA+ICvCoMKgwqDCoMKgwqDCoHB0ZV90IHB0ZV9yZXN1bHQ7DQo+ID4g
-wqANCj4gPiDCoMKgwqDCoMKgwqDCoMKgLyoNCj4gPiDCoMKgwqDCoMKgwqDCoMKgICogQ2hvcCBv
-ZmYgdGhlIE5YIGJpdCAoaWYgcHJlc2VudCksIGFuZCBhZGQgdGhlIE5YIHBvcnRpb24NCj4gPiBv
-Zg0KPiA+IMKgwqDCoMKgwqDCoMKgwqAgKiB0aGUgbmV3cHJvdCAoaWYgcHJlc2VudCk6DQo+ID4g
-wqDCoMKgwqDCoMKgwqDCoCAqLw0KPiA+IC3CoMKgwqDCoMKgwqDCoHZhbCAmPSBfUEFHRV9DSEdf
-TUFTSzsNCj4gPiAtwqDCoMKgwqDCoMKgwqB2YWwgfD0gY2hlY2tfcGdwcm90KG5ld3Byb3QpICYg
-fl9QQUdFX0NIR19NQVNLOw0KPiA+ICvCoMKgwqDCoMKgwqDCoHZhbCAmPSBfcGFnZV9jaGdfbWFz
-a19ub19kaXJ0eTsNCj4gPiArwqDCoMKgwqDCoMKgwqB2YWwgfD0gY2hlY2tfcGdwcm90KG5ld3By
-b3QpICYgfl9wYWdlX2NoZ19tYXNrX25vX2RpcnR5Ow0KPiA+IMKgwqDCoMKgwqDCoMKgwqB2YWwg
-PSBmbGlwX3Byb3Rub25lX2d1YXJkKG9sZHZhbCwgdmFsLCBQVEVfUEZOX01BU0spOw0KPiA+IC3C
-oMKgwqDCoMKgwqDCoHJldHVybiBfX3B0ZSh2YWwpOw0KPiA+ICsNCj4gPiArwqDCoMKgwqDCoMKg
-wqBwdGVfcmVzdWx0ID0gX19wdGUodmFsKTsNCj4gPiArDQo+ID4gK8KgwqDCoMKgwqDCoMKgLyoN
-Cj4gPiArwqDCoMKgwqDCoMKgwqAgKiBEaXJ0eSBiaXQgaXMgbm90IHByZXNlcnZlZCBhYm92ZSBz
-byBpdCBjYW4gYmUgZG9uZQ0KPiANCj4gSnVzdCBmb3IgbXkgb3duIHVuZGVyc3RhbmRpbmc6IGFy
-ZSB5b3Ugc2F5aW5nIGhlcmUgdGhhdA0KPiBmbGlwX3Byb3Rub25lX2d1YXJkKCkgbWlnaHQgZW5k
-IHVwIHNldHRpbmcgX1BBR0VfRElSVFkgaW4gdmFsLi4uDQo+IA0KPiA+ICvCoMKgwqDCoMKgwqDC
-oCAqIGluIGEgc3BlY2lhbCB3YXkgZm9yIHRoZSBzaGFkb3cgc3RhY2sgY2FzZSwgd2hlcmUgaXQN
-Cj4gPiArwqDCoMKgwqDCoMKgwqAgKiBuZWVkcyB0byBzZXQgX1BBR0VfQ09XLiBwdGVfbWtjb3co
-KSB3aWxsIGRvIHRoaXMgaW4NCj4gPiArwqDCoMKgwqDCoMKgwqAgKiB0aGUgY2FzZSBvZiBzaGFk
-b3cgc3RhY2suDQo+ID4gK8KgwqDCoMKgwqDCoMKgICovDQo+ID4gK8KgwqDCoMKgwqDCoMKgaWYg
-KHB0ZV9kaXJ0eShwdGVfcmVzdWx0KSkNCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgcHRlX3Jlc3VsdCA9IHB0ZV9ta2NvdyhwdGVfcmVzdWx0KTsNCj4gDQo+IC4uLiBhbmQgaW4g
-dGhhdCBjYXNlIHdlIG5lZWQgdG8gdHVybiBpdCBpbnRvIGEgX1BBR0VfQ09XIHNldHRpbmc/DQo+
-IA0KVGhlIGNvbW1lbnQgaXMgcmVmZXJyaW5nIHRvIHRoZSBkaXJ0eSBiaXRzIHBvc3NpYmx5IGNv
-bWluZyBmcm9tDQpuZXdwcm90LCBidXQgbG9va2luZyBhdCBpdCBub3cgSSB0aGluayB0aGUgY29k
-ZSB3YXMgYnJva2VuIHRyeWluZyB0bw0KZml4IHRoZSByZWNlbnQgc29mdCBkaXJ0eSB0ZXN0IGJy
-ZWFrYWdlLiBOb3cgaXQgbWlnaHQgbG9zZSBwcmUtZXhpc3RpbmcNCmRpcnR5IGJpdHMgaW4gdGhl
-IHB0ZSB1bmVzc2FyaWx5Li4uIEkgdGhpbmsuIEknbSB0ZW1wb3JhcmlseSB3aXRob3V0DQphY2Nl
-c3MgdG8gbXkgdGVzdCBlcXVpcG1lbnQgc28gd2lsbCBoYXZlIHRvIGdldCBiYWNrIHRvIHlvdSBv
-biB0aGlzLg0KVGhhbmtzIGZvciBmbGFnZ2luZyB0aGF0IHNvbWV0aGluZyBsb29rcyBvZmYuDQoN
-Cg==
+Hi Ricardo,
+
+Thank you for the patch.
+
+On Tue, Dec 06, 2022 at 03:06:56PM +0100, Ricardo Ribalda wrote:
+> Instead of suspending/resume the USB device at open()/close(), do it
+> when the device is actually used.
+> 
+> This way we can reduce the power consumption when a service is holding
+> the video device and leaving it in an idle state.
+> 
+> Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+> Reviewed-by: Max Staudt <mstaudt@chromium.org>
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_v4l2.c | 198 +++++++++++++++++++++++++++++++--------
+>  1 file changed, 161 insertions(+), 37 deletions(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> index 1389a87b8ae1..2e8f78bd1e4e 100644
+> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> @@ -25,6 +25,46 @@
+>  
+>  #include "uvcvideo.h"
+>  
+> +/* ------------------------------------------------------------------------
+> + * UVC power management
+> + */
+> +
+> +static int uvc_pm_get(struct uvc_streaming *stream)
+> +{
+> +	int ret;
+> +
+> +	ret = usb_autopm_get_interface(stream->dev->intf);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&stream->dev->lock);
+> +	if (!stream->dev->users)
+> +		ret = uvc_status_start(stream->dev, GFP_KERNEL);
+> +	if (!ret)
+> +		stream->dev->users++;
+> +	mutex_unlock(&stream->dev->lock);
+> +
+> +	if (ret)
+> +		usb_autopm_put_interface(stream->dev->intf);
+> +
+> +	return ret;
+> +}
+> +
+> +static void uvc_pm_put(struct uvc_streaming *stream)
+> +{
+> +	mutex_lock(&stream->dev->lock);
+> +	if (WARN_ON(!stream->dev->users)) {
+> +		mutex_unlock(&stream->dev->lock);
+> +		return;
+> +	}
+> +	stream->dev->users--;
+> +	if (!stream->dev->users)
+> +		uvc_status_stop(stream->dev);
+> +	mutex_unlock(&stream->dev->lock);
+> +
+> +	usb_autopm_put_interface(stream->dev->intf);
+> +}
+> +
+>  /* ------------------------------------------------------------------------
+>   * UVC ioctls
+>   */
+> @@ -249,6 +289,9 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
+>  	 * developers test their webcams with the Linux driver as well as with
+>  	 * the Windows driver).
+>  	 */
+> +	ret = uvc_pm_get(stream);
+> +	if (ret)
+> +		return ret;
+>  	mutex_lock(&stream->mutex);
+>  	if (stream->dev->quirks & UVC_QUIRK_PROBE_EXTRAFIELDS)
+>  		probe->dwMaxVideoFrameSize =
+> @@ -257,6 +300,7 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
+>  	/* Probe the device. */
+>  	ret = uvc_probe_video(stream, probe);
+>  	mutex_unlock(&stream->mutex);
+> +	uvc_pm_put(stream);
+
+Sprinkling get/put calls around ioctls individually is error-prone. For
+instance, I think you're missing uvc_xu_ctrl_query() already, and
+possibly other ioctls. It would be better to wrap the ioctl calls only
+level up, essentially doing something like
+
+@@ -1432,6 +1490,7 @@ static long uvc_v4l2_compat_ioctl32(struct file *file,
+ 		     unsigned int cmd, unsigned long arg)
+ {
+ 	struct uvc_fh *handle = file->private_data;
++	struct uvc_streaming *stream = handle->stream;
+ 	union {
+ 		struct uvc_xu_control_mapping xmap;
+ 		struct uvc_xu_control_query xqry;
+@@ -1439,36 +1498,41 @@ static long uvc_v4l2_compat_ioctl32(struct file *file,
+ 	void __user *up = compat_ptr(arg);
+ 	long ret;
+
++	ret = uvc_pm_get(stream);
++	if (ret)
++		return ret;
++
+ 	switch (cmd) {
+ 	case UVCIOC_CTRL_MAP32:
+ 		ret = uvc_v4l2_get_xu_mapping(&karg.xmap, up);
+ 		if (ret)
+-			return ret;
++			break;
+ 		ret = uvc_ioctl_ctrl_map(handle->chain, &karg.xmap);
+ 		if (ret)
+-			return ret;
++			break;
+ 		ret = uvc_v4l2_put_xu_mapping(&karg.xmap, up);
+ 		if (ret)
+-			return ret;
+-
++			break;
+ 		break;
+
+ 	case UVCIOC_CTRL_QUERY32:
+ 		ret = uvc_v4l2_get_xu_query(&karg.xqry, up);
+ 		if (ret)
+-			return ret;
++			break;
+ 		ret = uvc_xu_ctrl_query(handle->chain, &karg.xqry);
+ 		if (ret)
+-			return ret;
++			break;
+ 		ret = uvc_v4l2_put_xu_query(&karg.xqry, up);
+ 		if (ret)
+-			return ret;
++			break;
+ 		break;
+
+ 	default:
+-		return -ENOIOCTLCMD;
++		ret = -ENOIOCTLCMD;
++		break;
+ 	}
+
++	uvc_pm_put(stream);
+ 	return ret;
+ }
+ #endif
+@@ -1558,7 +1622,7 @@ const struct v4l2_file_operations uvc_fops = {
+ 	.owner		= THIS_MODULE,
+ 	.open		= uvc_v4l2_open,
+ 	.release	= uvc_v4l2_release,
+-	.unlocked_ioctl	= video_ioctl2,
++	.unlocked_ioctl	= uvc_v4l2_ioctl,
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl32	= uvc_v4l2_compat_ioctl32,
+ #endif
+
+This means, however, that we'll call uvc_pm_get() and uvc_pm_put()
+around more ioctls. As we're using usb_autopm_put_interface(), I assume
+that the USB core delays device suspend, so it's not much of an issue,
+we won't actually suspend the device synchronously every time, and if
+userspace issues ioctls with short intervals (less than 2s with the
+default kernel configuration), it should be fine.
+
+(Side note: I've looked at the USB autosuspend implementation, and it
+seems to use pm_runtime_put_sync(), with manual autosuspend handling in
+the RPM suspend handler. I got scared and ran away without making sure
+it actually has a low cost as stated above :-S)
+
+However, I'm more bother by the fact that the status endpoint polling is
+started and stopped synchronously for each ioctl call, for two reasons.
+One of them is the overhead of doing so for each ioctl call. It would be
+made worse by wrapping the top-level ioctl handlers with get/put calls,
+but it's already an issue without that.
+
+The other reason is that I think it introduces a regression. UVC devices
+can implement asynchronous controls, to report the new value of a
+control at a later time. This is used for controls that take time to be
+set, typically all controls related to physical motors (pan/tilt for
+instance). The uvcvideo driver sends control change events to userspace
+in that case. With this patch, and with commit "media: uvcvideo: Only
+create input devs if hw supports it" merged, if an aplication opens a
+video device but doesn't start streaming, the status URB will be killed
+as soon as a S_CTRL ioctl returns, which will prevent asynchronous event
+reporting from working.
+
+It seems that one way to fix this would be to start/stop the status
+endpoint polling in the resume/suspend handlers. I haven't investigated
+though. I may give it a try, so please ping me on IRC before you resume
+work on this. Feel free to comment by e-mail on the above though, and
+tell me where I got it wrong :-)
+
+>  	if (ret < 0)
+>  		return ret;
+>  
+> @@ -408,8 +452,8 @@ static int uvc_v4l2_get_streamparm(struct uvc_streaming *stream,
+>  	return 0;
+>  }
+>  
+> -static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+> -		struct v4l2_streamparm *parm)
+> +static int __uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+> +				     struct v4l2_streamparm *parm)
+>  {
+>  	struct uvc_streaming_control probe;
+>  	struct v4l2_fract timeperframe;
+> @@ -419,9 +463,6 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+>  	unsigned int i;
+>  	int ret;
+>  
+> -	if (parm->type != stream->type)
+> -		return -EINVAL;
+> -
+>  	if (parm->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+>  		timeperframe = parm->parm.capture.timeperframe;
+>  	else
+> @@ -495,6 +536,25 @@ static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+>  	return 0;
+>  }
+>  
+> +static int uvc_v4l2_set_streamparm(struct uvc_streaming *stream,
+> +				   struct v4l2_streamparm *parm)
+> +{
+> +	int ret;
+> +
+> +	if (parm->type != stream->type)
+> +		return -EINVAL;
+> +
+> +	ret = uvc_pm_get(stream);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = __uvc_v4l2_set_streamparm(stream, parm);
+> +
+> +	uvc_pm_put(stream);
+> +
+> +	return ret;
+> +}
+> +
+>  /* ------------------------------------------------------------------------
+>   * Privilege management
+>   */
+> @@ -559,36 +619,29 @@ static int uvc_v4l2_open(struct file *file)
+>  {
+>  	struct uvc_streaming *stream;
+>  	struct uvc_fh *handle;
+> -	int ret = 0;
+>  
+>  	stream = video_drvdata(file);
+>  	uvc_dbg(stream->dev, CALLS, "%s\n", __func__);
+>  
+> -	ret = usb_autopm_get_interface(stream->dev->intf);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>  	/* Create the device handle. */
+>  	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
+> -	if (handle == NULL) {
+> -		usb_autopm_put_interface(stream->dev->intf);
+> +	if (!handle)
+>  		return -ENOMEM;
+> -	}
+>  
+> -	mutex_lock(&stream->dev->lock);
+> -	if (stream->dev->users == 0) {
+> -		ret = uvc_status_start(stream->dev, GFP_KERNEL);
+> -		if (ret < 0) {
+> -			mutex_unlock(&stream->dev->lock);
+> -			usb_autopm_put_interface(stream->dev->intf);
+> +	/*
+> +	 * If the uvc evdev exists we cannot suspend when the device
+
+s/uvc evdev/UVC input device/
+
+> +	 * is idle. Otherwise we will miss button actions.
+> +	 */
+> +	if (stream->dev->input) {
+> +		int ret;
+> +
+> +		ret = uvc_pm_get(stream);
+> +		if (ret) {
+>  			kfree(handle);
+>  			return ret;
+>  		}
+>  	}
+>  
+> -	stream->dev->users++;
+> -	mutex_unlock(&stream->dev->lock);
+> -
+>  	v4l2_fh_init(&handle->vfh, &stream->vdev);
+>  	v4l2_fh_add(&handle->vfh);
+>  	handle->chain = stream->chain;
+> @@ -610,6 +663,16 @@ static int uvc_v4l2_release(struct file *file)
+>  	if (uvc_has_privileges(handle))
+>  		uvc_queue_release(&stream->queue);
+>  
+> +	/*
+> +	 * Release cannot happen at the same time as streamon/streamoff
+> +	 * no need to take the stream->mutex.
+
+There seems to be something missing here, maybe
+
+	 * Release cannot happen at the same time as streamon/streamoff, so
+	 * there is no need to take the stream->mutex.
+
+> +	 */
+> +	if (handle->is_streaming)
+> +		uvc_pm_put(stream);
+> +
+> +	if (stream->dev->input)
+> +		uvc_pm_put(stream);
+> +
+>  	/* Release the file handle. */
+>  	uvc_dismiss_privileges(handle);
+>  	v4l2_fh_del(&handle->vfh);
+> @@ -617,12 +680,6 @@ static int uvc_v4l2_release(struct file *file)
+>  	kfree(handle);
+>  	file->private_data = NULL;
+>  
+> -	mutex_lock(&stream->dev->lock);
+> -	if (--stream->dev->users == 0)
+> -		uvc_status_stop(stream->dev);
+> -	mutex_unlock(&stream->dev->lock);
+> -
+> -	usb_autopm_put_interface(stream->dev->intf);
+>  	return 0;
+>  }
+>  
+> @@ -849,9 +906,17 @@ static int uvc_ioctl_streamon(struct file *file, void *fh,
+>  
+>  	if (handle->is_streaming)
+>  		goto unlock;
+> +
+> +	ret = uvc_pm_get(stream);
+> +	if (ret)
+> +		goto unlock;
+> +
+>  	ret = uvc_queue_streamon(&stream->queue, type);
+>  	handle->is_streaming = !ret;
+>  
+> +	if (!handle->is_streaming)
+> +		uvc_pm_put(stream);
+> +
+>  unlock:
+>  	mutex_unlock(&stream->mutex);
+>  
+> @@ -875,6 +940,9 @@ static int uvc_ioctl_streamoff(struct file *file, void *fh,
+>  	ret = uvc_queue_streamoff(&stream->queue, type);
+>  	handle->is_streaming = !!ret;
+>  
+> +	if (!handle->is_streaming)
+> +		uvc_pm_put(stream);
+> +
+>  unlock:
+>  	mutex_unlock(&stream->mutex);
+>  
+> @@ -928,6 +996,7 @@ static int uvc_ioctl_g_input(struct file *file, void *fh, unsigned int *input)
+>  {
+>  	struct uvc_fh *handle = fh;
+>  	struct uvc_video_chain *chain = handle->chain;
+> +	struct uvc_streaming *stream = handle->stream;
+>  	u8 *buf;
+>  	int ret;
+>  
+> @@ -941,9 +1010,16 @@ static int uvc_ioctl_g_input(struct file *file, void *fh, unsigned int *input)
+>  	if (!buf)
+>  		return -ENOMEM;
+>  
+> +	ret = uvc_pm_get(stream);
+> +	if (ret) {
+> +		kfree(buf);
+> +		return ret;
+> +	}
+> +
+>  	ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR, chain->selector->id,
+>  			     chain->dev->intfnum,  UVC_SU_INPUT_SELECT_CONTROL,
+>  			     buf, 1);
+> +	uvc_pm_put(stream);
+>  	if (!ret)
+>  		*input = *buf - 1;
+>  
+> @@ -956,6 +1032,7 @@ static int uvc_ioctl_s_input(struct file *file, void *fh, unsigned int input)
+>  {
+>  	struct uvc_fh *handle = fh;
+>  	struct uvc_video_chain *chain = handle->chain;
+> +	struct uvc_streaming *stream = handle->stream;
+>  	u8 *buf;
+>  	int ret;
+>  
+> @@ -977,10 +1054,17 @@ static int uvc_ioctl_s_input(struct file *file, void *fh, unsigned int input)
+>  	if (!buf)
+>  		return -ENOMEM;
+>  
+> +	ret = uvc_pm_get(stream);
+> +	if (ret) {
+> +		kfree(buf);
+> +		return ret;
+> +	}
+> +
+>  	*buf = input + 1;
+>  	ret = uvc_query_ctrl(chain->dev, UVC_SET_CUR, chain->selector->id,
+>  			     chain->dev->intfnum, UVC_SU_INPUT_SELECT_CONTROL,
+>  			     buf, 1);
+> +	uvc_pm_put(stream);
+>  	kfree(buf);
+>  
+>  	return ret;
+> @@ -991,8 +1075,15 @@ static int uvc_ioctl_queryctrl(struct file *file, void *fh,
+>  {
+>  	struct uvc_fh *handle = fh;
+>  	struct uvc_video_chain *chain = handle->chain;
+> +	struct uvc_streaming *stream = handle->stream;
+> +	int ret;
+>  
+> -	return uvc_query_v4l2_ctrl(chain, qc);
+> +	ret = uvc_pm_get(stream);
+> +	if (ret)
+> +		return ret;
+> +	ret = uvc_query_v4l2_ctrl(chain, qc);
+> +	uvc_pm_put(stream);
+> +	return ret;
+>  }
+>  
+>  static int uvc_ioctl_query_ext_ctrl(struct file *file, void *fh,
+> @@ -1000,10 +1091,15 @@ static int uvc_ioctl_query_ext_ctrl(struct file *file, void *fh,
+>  {
+>  	struct uvc_fh *handle = fh;
+>  	struct uvc_video_chain *chain = handle->chain;
+> +	struct uvc_streaming *stream = handle->stream;
+>  	struct v4l2_queryctrl qc = { qec->id };
+>  	int ret;
+>  
+> +	ret = uvc_pm_get(stream);
+> +	if (ret)
+> +		return ret;
+>  	ret = uvc_query_v4l2_ctrl(chain, &qc);
+> +	uvc_pm_put(stream);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -1049,6 +1145,7 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
+>  {
+>  	struct uvc_fh *handle = fh;
+>  	struct uvc_video_chain *chain = handle->chain;
+> +	struct uvc_streaming *stream = handle->stream;
+>  	struct v4l2_ext_control *ctrl = ctrls->controls;
+>  	unsigned int i;
+>  	int ret;
+> @@ -1073,22 +1170,30 @@ static int uvc_ioctl_g_ext_ctrls(struct file *file, void *fh,
+>  		return 0;
+>  	}
+>  
+> +	ret = uvc_pm_get(stream);
+> +	if (ret)
+> +		return ret;
+>  	ret = uvc_ctrl_begin(chain);
+> -	if (ret < 0)
+> +	if (ret < 0) {
+> +		uvc_pm_put(stream);
+>  		return ret;
+> +	}
+>  
+>  	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
+>  		ret = uvc_ctrl_get(chain, ctrl);
+>  		if (ret < 0) {
+>  			uvc_ctrl_rollback(handle);
+>  			ctrls->error_idx = i;
+> -			return ret;
+> +			goto done;
+>  		}
+>  	}
+>  
+>  	ctrls->error_idx = 0;
+>  
+> -	return uvc_ctrl_rollback(handle);
+> +	ret = uvc_ctrl_rollback(handle);
+> +done:
+> +	uvc_pm_put(stream);
+> +	return ret;
+>  }
+>  
+>  static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
+> @@ -1097,6 +1202,7 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
+>  {
+>  	struct v4l2_ext_control *ctrl = ctrls->controls;
+>  	struct uvc_video_chain *chain = handle->chain;
+> +	struct uvc_streaming *stream = handle->stream;
+>  	unsigned int i;
+>  	int ret;
+>  
+> @@ -1104,9 +1210,15 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	ret = uvc_pm_get(stream);
+> +	if (ret)
+> +		return ret;
+> +
+>  	ret = uvc_ctrl_begin(chain);
+> -	if (ret < 0)
+> +	if (ret < 0) {
+> +		uvc_pm_put(stream);
+>  		return ret;
+> +	}
+>  
+>  	for (i = 0; i < ctrls->count; ++ctrl, ++i) {
+>  		ret = uvc_ctrl_set(handle, ctrl);
+> @@ -1114,16 +1226,20 @@ static int uvc_ioctl_s_try_ext_ctrls(struct uvc_fh *handle,
+>  			uvc_ctrl_rollback(handle);
+>  			ctrls->error_idx = ioctl == VIDIOC_S_EXT_CTRLS ?
+>  						    ctrls->count : i;
+> -			return ret;
+> +			goto done;
+>  		}
+>  	}
+>  
+>  	ctrls->error_idx = 0;
+>  
+>  	if (ioctl == VIDIOC_S_EXT_CTRLS)
+> -		return uvc_ctrl_commit(handle, ctrls);
+> +		ret = uvc_ctrl_commit(handle, ctrls);
+>  	else
+> -		return uvc_ctrl_rollback(handle);
+> +		ret = uvc_ctrl_rollback(handle);
+> +
+> +done:
+> +	uvc_pm_put(stream);
+> +	return ret;
+>  }
+>  
+>  static int uvc_ioctl_s_ext_ctrls(struct file *file, void *fh,
+> @@ -1147,8 +1263,16 @@ static int uvc_ioctl_querymenu(struct file *file, void *fh,
+>  {
+>  	struct uvc_fh *handle = fh;
+>  	struct uvc_video_chain *chain = handle->chain;
+> +	struct uvc_streaming *stream = handle->stream;
+> +	int ret;
+>  
+> -	return uvc_query_v4l2_menu(chain, qm);
+> +	ret = uvc_pm_get(stream);
+> +	if (ret)
+> +		return ret;
+> +	ret = uvc_query_v4l2_menu(chain, qm);
+> +	uvc_pm_put(stream);
+> +
+> +	return ret;
+>  }
+>  
+>  static int uvc_ioctl_g_selection(struct file *file, void *fh,
+
+-- 
+Regards,
+
+Laurent Pinchart
