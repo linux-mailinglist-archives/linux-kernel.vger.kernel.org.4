@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC2B656CBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 17:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE060656CBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 17:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiL0QC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 11:02:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        id S231448AbiL0QCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 11:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiL0QCt (ORCPT
+        with ESMTP id S229736AbiL0QCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 11:02:49 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D7CF20
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 08:02:47 -0800 (PST)
+        Tue, 27 Dec 2022 11:02:48 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3104EA9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 08:02:46 -0800 (PST)
 From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
         s=mail; t=1672156964;
-        bh=xSg7Iuav8suoTduBbOb9CQOu+RLLR8Kat74NxAQM5+M=;
-        h=From:Subject:Date:To:Cc:From;
-        b=pB7BvWCkxtxYBTl3id+BJnTPVNSz4l85aPymbB6t7MN5MOaoHoOsd0iRKzheEd4+B
-         PRKiYXMoI9B7+X0wUG1yu4PgurHiPqOCwdo6s7WlRFtsyPAf8lOaVjj/7AfLNNxYbm
-         cInKJbhKUPP7hf2HM2HA5iq0pmi03XmpJZwu0zJk=
-Subject: [PATCH v2 0/8] reduce maximum memory usage
+        bh=kT8j13gOnAKWYlSV+YMQw4TiVnvJKl0cCOa21YM32M0=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=NryKx8/WX4EttN2Wi7A01V/T+QeFOxPEcOYewudl8K5pU06HrP1jzw1Q1U/9g/UnF
+         BaS2e9pdkU0JrXbUgolwwWI9nN4ODSobyrqO+IQk5DABU29VMAviScn9H34JGMgyX1
+         B3iiNyzM33rdyzepT8vFzQdaHGMxvMGu6CH7arxU=
 Date:   Tue, 27 Dec 2022 16:00:57 +0000
-Message-Id: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
+Subject: [PATCH v2 1/8] objtool: make struct entries[] static and const
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIALkWq2MC/3WNTQqDQAyFryJZN8VEsKWr3qO4cJzYmaIzMFFLE
- e/e0H1Xj+/xfnZQKVEUbtUORbaoMScDPlUwhD49BaM3Bq6ZianF7F5LzhPOMufywbr1rnFXNxIR
- WMn1KuhKn4ZgtbROk5kh6mLh38lGJo+/exthje3I3jfiLw3x/S1RVYewhnOSBbrjOL4wC4cGtgA
- AAA==
+Message-Id: <20221216-objtool-memory-v2-1-17968f85a464@weissschuh.net>
+References: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
+In-Reply-To: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org,
         Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.11.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1672156865; l=1789;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1672156865; l=1357;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=xSg7Iuav8suoTduBbOb9CQOu+RLLR8Kat74NxAQM5+M=;
- b=Pryh6ZlQfLoaMXdHAG1AJBDrwlIp9neEIvLGw8009KmFhCr53XZG0K5u0/QEq3qYZLhu21A1kdV7
- sHXaM4aWDQdzJLSD1//NBoDs13d7JzlLy1/533Lm9BhDNzyEndhe
+ bh=kT8j13gOnAKWYlSV+YMQw4TiVnvJKl0cCOa21YM32M0=;
+ b=KVBj9VZ9YQSV25Jq2t8yb7ci7FBwnt5YjyakqphuIDIRCP6beV5l2wrS/0h8KA8/9ibZai5PYDGO
+ 8HfVrMblAEPjhqpksBwKtiEl3VZG0yIzdaDrrLGbQJkoy4ZiEGjG
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
@@ -54,46 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The processing of vmlinux.o with objtool is the most memory-intensive step
-of a kernel build. By reducing the maximum memory usage here we can reduce
-the maximum memory usage of the whole kernel build.
-Therefore memory pressure on memory starved machines is relieved during
-kernel builds and the build is faster as less swapping has to occur.
+This data is not modified and not used outside of special.c.
 
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: linux-kernel@vger.kernel.org
+Also adapt its users to the constness.
+
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-
 ---
-Changes in v2:
-- Warn on out of range values for reloc->type
-- Also reduce size of struct special_alt
-- Note: v1 did not make it to the lists, only to individual recipients
+ tools/objtool/special.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
----
-Thomas Weißschuh (8):
-      objtool: make struct entries[] static and const
-      objtool: make struct check_options static
-      objtool: allocate multiple structures with calloc()
-      objtool: introduce function elf_reloc_set_type
-      objtool: reduce memory usage of struct reloc
-      objtool: optimize layout of struct symbol
-      objtool: optimize layout of struct special_alt
-      objtool: explicitly cleanup resources on success
+diff --git a/tools/objtool/special.c b/tools/objtool/special.c
+index 9c8d827f69af..baa85c31526b 100644
+--- a/tools/objtool/special.c
++++ b/tools/objtool/special.c
+@@ -26,7 +26,7 @@ struct special_entry {
+ 	unsigned char key; /* jump_label key */
+ };
+ 
+-struct special_entry entries[] = {
++static const struct special_entry entries[] = {
+ 	{
+ 		.sec = ".altinstructions",
+ 		.group = true,
+@@ -65,7 +65,7 @@ static void reloc_to_sec_off(struct reloc *reloc, struct section **sec,
+ 	*off = reloc->sym->offset + reloc->addend;
+ }
+ 
+-static int get_alt_entry(struct elf *elf, struct special_entry *entry,
++static int get_alt_entry(struct elf *elf, const struct special_entry *entry,
+ 			 struct section *sec, int idx,
+ 			 struct special_alt *alt)
+ {
+@@ -139,7 +139,7 @@ static int get_alt_entry(struct elf *elf, struct special_entry *entry,
+  */
+ int special_get_alts(struct elf *elf, struct list_head *alts)
+ {
+-	struct special_entry *entry;
++	const struct special_entry *entry;
+ 	struct section *sec;
+ 	unsigned int nr_entries;
+ 	struct special_alt *alt;
 
- tools/objtool/builtin-check.c           |  4 ++-
- tools/objtool/check.c                   |  6 ++--
- tools/objtool/elf.c                     | 56 +++++++++++++++++++--------------
- tools/objtool/include/objtool/builtin.h |  2 --
- tools/objtool/include/objtool/elf.h     | 13 +++++---
- tools/objtool/include/objtool/special.h |  2 +-
- tools/objtool/special.c                 |  6 ++--
- 7 files changed, 51 insertions(+), 38 deletions(-)
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20221216-objtool-memory-06db3b8bf111
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.39.0
