@@ -2,134 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87077656F93
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B356656FA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiL0UsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 15:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
+        id S232306AbiL0UzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 15:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232571AbiL0Ur0 (ORCPT
+        with ESMTP id S231533AbiL0Uyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 15:47:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6976610B63;
-        Tue, 27 Dec 2022 12:37:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03140B81200;
-        Tue, 27 Dec 2022 20:36:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB44CC433F0;
-        Tue, 27 Dec 2022 20:36:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672173397;
-        bh=7GAhUVPk5YI7ewRGZ86uAAGhaY7+K7QbOHgacS5sfoc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=StZcyexodOX4htY5pObw5VH/s6BrU3jvtnGNS33AwnFGk7L2hYvxh/COk++Dzr/eK
-         Wc24f67ui3nzvi41i49jLpSfRWuQ9QOOS6kv01a4HlBfsVlxxIfsjaNbX9T0mWze6E
-         hGsUxfWB7bTGe7PfvzrcUpYTB9Am1uW25H9bZ9twB5is018CLRV86+UJlKSBFTOZ34
-         RTw68FPxLigmGhSWhlaGaGf2Xqh07aBEHT6usiFS6KVJs09dqM/wI1Qa68gO2wcFeK
-         Qy4b4KvKyu3Tp1fAiB9e4MGm0bMF+kQeZkWYCmI0qHBL1t/26GWO2kPpquTcYU/9po
-         9R3G5d0nKyCDg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Terry Junge <linuxhid@cosmicgizmosystems.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 3/3] HID: plantronics: Additional PIDs for double volume key presses quirk
-Date:   Tue, 27 Dec 2022 15:36:25 -0500
-Message-Id: <20221227203626.1214890-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221227203626.1214890-1-sashal@kernel.org>
-References: <20221227203626.1214890-1-sashal@kernel.org>
+        Tue, 27 Dec 2022 15:54:46 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C321615A11;
+        Tue, 27 Dec 2022 12:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672173668; x=1703709668;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ne94dgkkzGg53jyZDGuBXcIDhwnjy96fv/eeDJXON+4=;
+  b=M5w5O+YzbQlouT+7V+zqOsJUS7LvFktyGaT+Mq3Q+TWicrO+LTszOn4p
+   ECs78AP9ceDMiJ6vgyzFWVeJ+G79NjtyfS+96yfzSNHTB5i+qDnFSMqb5
+   U9bVdeFZz21MV05eT5Lr/xW85wbf/+1xw740L23erTsx/7AWxiaifQ9Mz
+   j9RMTeXnYiw25Bmeo9M7ogFh5uXr6Ppj0COQitezLpWArLH4gAc8DAy81
+   hD2GJxAe1TWCMOocfyx+gOs4HMxoLBTRo339Mr4aPartQIYABlZvO3cTL
+   f/8d3Ws5pAhpM4uNe1u5F0QKNUOglQ31sFNqlf4Hbbp5lUTrghGVwOtJ5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="321990502"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="321990502"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 12:40:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="630780123"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="630780123"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 12:40:51 -0800
+Message-ID: <24821308109ba20d845e11caf32bede92fec5d8e.camel@linux.intel.com>
+Subject: Re: [PATCH v1 1/2] ACPI: processor: perflib: Use the "no limit"
+ frequency QoS
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     Pratyush Yadav <ptyadav@amazon.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Date:   Tue, 27 Dec 2022 12:40:51 -0800
+In-Reply-To: <12138067.O9o76ZdvQC@kreacher>
+References: <12138067.O9o76ZdvQC@kreacher>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Terry Junge <linuxhid@cosmicgizmosystems.com>
+On Tue, 2022-12-27 at 20:51 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> When _PPC returns 0, it means that the CPU frequency is not limited
+> by
+> the platform firmware, so make acpi_processor_get_platform_limit()
+> update the frequency QoS request used by it to "no limit" in that
+> case
+> and avoid updating the QoS request when the _PPC return value has not
+> changed.
+> 
+> This addresses a problem with limiting CPU frequency artificially on
+> some systems after CPU offline/online to the frequency that
+> corresponds
+> to the first entry in the _PSS return package.
+> 
+> While at it, move the _PPC return value check against the state count
+> earlier to avoid setting performance_platform_limit to an invalid
+> value.
+> 
+> Reported-by: Pratyush Yadav <ptyadav@amazon.de>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/acpi/processor_perflib.c |   27 +++++++++++++++++++++------
+>  1 file changed, 21 insertions(+), 6 deletions(-)
+> 
+> Index: linux-pm/drivers/acpi/processor_perflib.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/processor_perflib.c
+> +++ linux-pm/drivers/acpi/processor_perflib.c
+> @@ -53,6 +53,8 @@ static int acpi_processor_get_platform_l
+>  {
+>         acpi_status status = 0;
+>         unsigned long long ppc = 0;
+> +       s32 qos_value;
+> +       int index;
+>         int ret;
+>  
+>         if (!pr)
+> @@ -72,17 +74,30 @@ static int acpi_processor_get_platform_l
+>                 }
+>         }
+>  
+> +       index = ppc;
+> +
+> +       if (pr->performance_platform_limit == index ||
+> +           ppc >= pr->performance->state_count)
+> +               return 0;
 
-[ Upstream commit 3d57f36c89d8ba32b2c312f397a37fd1a2dc7cfc ]
+Do we need to re initialize pr->performance_platform_limit to 0 in
+acpi_processor_unregister_performance()?
 
-I no longer work for Plantronics (aka Poly, aka HP) and do not have
-access to the headsets in order to test. However, as noted by Maxim,
-the other 32xx models that share the same base code set as the 3220
-would need the same quirk. This patch adds the PIDs for the rest of
-the Blackwire 32XX product family that require the quirk.
+If PPC was 1 before the offline and after online the above check will
+cause it to return as the pr->performance_platform_limit is not
+changed. Not sure if the PM QOS state is preserved after offline and
+online. This is stored in a per CPU variable, not in dynamically
+allocated memory which will be reallocated during online again.
 
-Plantronics Blackwire 3210 Series (047f:c055)
-Plantronics Blackwire 3215 Series (047f:c057)
-Plantronics Blackwire 3225 Series (047f:c058)
 
-Quote from previous patch by Maxim Mikityanskiy
-Plantronics Blackwire 3220 Series (047f:c056) sends HID reports twice
-for each volume key press. This patch adds a quirk to hid-plantronics
-for this product ID, which will ignore the second volume key press if
-it happens within 5 ms from the last one that was handled.
+Thanks,
+Srinivas
 
-The patch was tested on the mentioned model only, it shouldn't affect
-other models, however, this quirk might be needed for them too.
-Auto-repeat (when a key is held pressed) is not affected, because the
-rate is about 3 times per second, which is far less frequent than once
-in 5 ms.
-End quote
+> +
+>         pr_debug("CPU %d: _PPC is %d - frequency %s limited\n", pr-
+> >id,
+> -                      (int)ppc, ppc ? "" : "not");
+> +                index, index ? "is" : "is not");
+>  
+> -       pr->performance_platform_limit = (int)ppc;
+> +       pr->performance_platform_limit = index;
+>  
+> -       if (ppc >= pr->performance->state_count ||
+> -           unlikely(!freq_qos_request_active(&pr->perflib_req)))
+> +       if (unlikely(!freq_qos_request_active(&pr->perflib_req)))
+>                 return 0;
+>  
+> -       ret = freq_qos_update_request(&pr->perflib_req,
+> -                       pr->performance->states[ppc].core_frequency *
+> 1000);
+> +       /*
+> +        * If _PPC returns 0, it means that all of the available
+> states can be
+> +        * used ("no limit").
+> +        */
+> +       if (index == 0)
+> +               qos_value = FREQ_QOS_MAX_DEFAULT_VALUE;
+> +       else
+> +               qos_value = pr->performance-
+> >states[index].core_frequency * 1000;
+> +
+> +       ret = freq_qos_update_request(&pr->perflib_req, qos_value);
+>         if (ret < 0) {
+>                 pr_warn("Failed to update perflib freq constraint:
+> CPU%d (%d)\n",
+>                         pr->id, ret);
+> 
+> 
+> 
 
-Signed-off-by: Terry Junge <linuxhid@cosmicgizmosystems.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hid/hid-ids.h         | 3 +++
- drivers/hid/hid-plantronics.c | 9 +++++++++
- 2 files changed, 12 insertions(+)
-
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 1f641870d860..4d69551dbc52 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -816,7 +816,10 @@
- #define USB_DEVICE_ID_ORTEK_WKB2000	0x2000
- 
- #define USB_VENDOR_ID_PLANTRONICS	0x047f
-+#define USB_DEVICE_ID_PLANTRONICS_BLACKWIRE_3210_SERIES	0xc055
- #define USB_DEVICE_ID_PLANTRONICS_BLACKWIRE_3220_SERIES	0xc056
-+#define USB_DEVICE_ID_PLANTRONICS_BLACKWIRE_3215_SERIES	0xc057
-+#define USB_DEVICE_ID_PLANTRONICS_BLACKWIRE_3225_SERIES	0xc058
- 
- #define USB_VENDOR_ID_PANASONIC		0x04da
- #define USB_DEVICE_ID_PANABOARD_UBT780	0x1044
-diff --git a/drivers/hid/hid-plantronics.c b/drivers/hid/hid-plantronics.c
-index 460711c1124a..3b75cadd543f 100644
---- a/drivers/hid/hid-plantronics.c
-+++ b/drivers/hid/hid-plantronics.c
-@@ -201,9 +201,18 @@ static int plantronics_probe(struct hid_device *hdev,
- }
- 
- static const struct hid_device_id plantronics_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_PLANTRONICS,
-+					 USB_DEVICE_ID_PLANTRONICS_BLACKWIRE_3210_SERIES),
-+		.driver_data = PLT_QUIRK_DOUBLE_VOLUME_KEYS },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_PLANTRONICS,
- 					 USB_DEVICE_ID_PLANTRONICS_BLACKWIRE_3220_SERIES),
- 		.driver_data = PLT_QUIRK_DOUBLE_VOLUME_KEYS },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_PLANTRONICS,
-+					 USB_DEVICE_ID_PLANTRONICS_BLACKWIRE_3215_SERIES),
-+		.driver_data = PLT_QUIRK_DOUBLE_VOLUME_KEYS },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_PLANTRONICS,
-+					 USB_DEVICE_ID_PLANTRONICS_BLACKWIRE_3225_SERIES),
-+		.driver_data = PLT_QUIRK_DOUBLE_VOLUME_KEYS },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_PLANTRONICS, HID_ANY_ID) },
- 	{ }
- };
--- 
-2.35.1
 
