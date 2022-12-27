@@ -2,76 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB75656CBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 17:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 829B9656CC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 17:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbiL0QCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 11:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S229965AbiL0QOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 11:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiL0QCs (ORCPT
+        with ESMTP id S229588AbiL0QOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 11:02:48 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F92D73
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 08:02:46 -0800 (PST)
-From:   Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1672156964;
-        bh=WygJ1LogaMt7MCTVMz5LRPbo5ugX1SmSSa6UqeJvw4g=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=BoJrCV32q5+ZX9E7hByJLWwo7fCfvpmrC+NI8JWcOJ4OXoeUmNeiVkEBNdl97cP1C
-         fJis5QnFfTipBbfr/kazHgOWmDYa959RnH3GmpbfKBFf9M6NczsoKxwpF+JPI0LJie
-         WZVNrCY9ff0/sfMvuCOLEQSrVuANtVqmphzTycXY=
-Date:   Tue, 27 Dec 2022 16:01:04 +0000
-Subject: [PATCH v2 8/8] objtool: explicitly cleanup resources on success
+        Tue, 27 Dec 2022 11:14:23 -0500
+Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 16F1DCDC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 08:14:21 -0800 (PST)
+Received: from mail.didiglobal.com (unknown [10.79.65.12])
+        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id A20A511002B812;
+        Wed, 28 Dec 2022 00:14:17 +0800 (CST)
+Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 28 Dec 2022 00:14:17 +0800
+Date:   Wed, 28 Dec 2022 00:14:00 +0800
+X-MD-Sfrom: tiozhang@didiglobal.com
+X-MD-SrcIP: 10.79.65.12
+From:   Tio Zhang <tiozhang@didiglobal.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <pmladek@suse.com>,
+        <zyhtheonly@gmail.com>, <zyhtheonly@yeah.net>, <zwp10758@gmail.com>
+Subject: [PATCH] sched: print parent comm in sched_show_task()
+Message-ID: <20221227161400.GA7646@didi-ThinkCentre-M930t-N000>
+Mail-Followup-To: mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        zyhtheonly@gmail.com, zyhtheonly@yeah.net, zwp10758@gmail.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221216-objtool-memory-v2-8-17968f85a464@weissschuh.net>
-References: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
-In-Reply-To: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas =?utf-8?q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.11.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1672156865; l=618;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=WygJ1LogaMt7MCTVMz5LRPbo5ugX1SmSSa6UqeJvw4g=;
- b=MRmJd1QRpDgL/iIJ/DCBZTdg4HCDjlAvrgtCTCrxDptY+z/uSoHWpLTa0PFHkm8zAL2huAiioeNH
- ElsMGfVWBLCXo8f9Z0XTYkwtKZVjIAmY8TzWcVqvEtLc+YOAf6Er
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.79.64.101]
+X-ClientProxiedBy: ZJY03-PUBMBX-01.didichuxing.com (10.79.71.12) To
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously the file was only closed and resources properly freed on
-errors, not on normal exits.
+Knowing who the parent is might be useful for debugging.
+For example, we can sometimes resolve kernel hung tasks by stopping
+the person who begins those hung tasks.
+With the parent's name printed in sched_show_task(),
+it might be helpful to let people know which "service" should be operated.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Tio Zhang <tiozhang@didiglobal.com>
 ---
- tools/objtool/builtin-check.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/sched/core.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 7c175198d09f..e11c766b98ce 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -229,5 +229,7 @@ int objtool_run(int argc, const char **argv)
- 	if (file->elf->changed)
- 		return elf_write(file->elf);
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index cb2aa2b54c7a..6f4aef0fed58 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8854,6 +8854,7 @@ void sched_show_task(struct task_struct *p)
+ {
+ 	unsigned long free = 0;
+ 	int ppid;
++	char pcomm[TASK_COMM_LEN];
  
-+	elf_close(file->elf);
-+
- 	return 0;
- }
-
+ 	if (!try_get_task_stack(p))
+ 		return;
+@@ -8867,11 +8868,13 @@ void sched_show_task(struct task_struct *p)
+ #endif
+ 	ppid = 0;
+ 	rcu_read_lock();
+-	if (pid_alive(p))
++	if (pid_alive(p)) {
+ 		ppid = task_pid_nr(rcu_dereference(p->real_parent));
++		get_task_comm(pcomm, rcu_dereference(p->real_parent));
++	}
+ 	rcu_read_unlock();
+-	pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d flags:0x%08lx\n",
+-		free, task_pid_nr(p), ppid,
++	pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d parent:%-15.15s flags:0x%08lx\n",
++		free, task_pid_nr(p), ppid, pcomm,
+ 		read_task_thread_flags(p));
+ 
+ 	print_worker_info(KERN_INFO, p);
 -- 
-2.39.0
+2.17.1
+
