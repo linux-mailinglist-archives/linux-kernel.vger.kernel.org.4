@@ -2,160 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5354656AF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DD9656AF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbiL0MZZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Dec 2022 07:25:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
+        id S231318AbiL0MZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 07:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiL0MYV (ORCPT
+        with ESMTP id S232230AbiL0MZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 07:24:21 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE83112D;
-        Tue, 27 Dec 2022 04:22:33 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5AB9724E00A;
-        Tue, 27 Dec 2022 20:22:31 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Dec
- 2022 20:22:31 +0800
-Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
- by EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Tue, 27 Dec 2022 20:22:30 +0800
-From:   William Qiu <william.qiu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        William Qiu <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 3/3] riscv: dts: starfive: Add mmc node
-Date:   Tue, 27 Dec 2022 20:22:27 +0800
-Message-ID: <20221227122227.460921-4-william.qiu@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221227122227.460921-1-william.qiu@starfivetech.com>
-References: <20221227122227.460921-1-william.qiu@starfivetech.com>
+        Tue, 27 Dec 2022 07:25:02 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6137662
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 04:24:27 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so8092437otk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 04:24:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dV8isNUppacynWpg45DwTWA/VWjEAGzXX+K9/4Lkct8=;
+        b=f/t4KgC7HXwvjrgBON1ICJtbFLbtYnJ2nherC2JR9NUcExu5ff+BgHVgj4o3OXLQsY
+         Mn6f8wfgXRGyF+04P283Mg7rUnYeLvXKjeVQHQ4lr5p69FWd893lW8b0ij1+Zsi734A5
+         JcnU1ith+6I6Y8q9iuTjrjrqYssm+ol/Nj5XdUsPtaYMfD2xN7sa2TGezWYBr9AzYMaj
+         98se/PLLZwNinK5LxUUmlAXkP/WlUgOGPYxhxE62+LkuXg6DF4yxsyR6gwgfDzcoO0om
+         mmY7VzoEr/CzpxjWdbO61mmpuAcGalOMO2rgn9RSxcTZmBMaHh5l7lcL0EAbcfpTiXGq
+         4Xdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dV8isNUppacynWpg45DwTWA/VWjEAGzXX+K9/4Lkct8=;
+        b=56EqslPzHLiZzze8fa6mZFqjotJN96sDS1Fh9I95fu9srpvDCYTLYiMaRE4E7FTDWy
+         Nfxf1PNHpm4puIUOCUXErlqq7t7yvR/gAkkmWg6p9S3rTJ0ncXB3WNnCTKDNjpdmMvae
+         GkVltg4U/TsvLtF5yv0HVRQ5NhMr/uEI8BLVEvChDf1rL8JBuYgCu78VMk5d/a3Kr/ae
+         IJxDTlF86ql1jZGBGqDNJvxiQFC2FrlnvGCaFH43Fw6CjQPWHjgPyvA9s51Hh44aL7c7
+         B6xJBwL8fxRWtzGhTTmPnJ04IquMU53f0BzaoaWSdpvAJ3fUjxmsE5yFT6DFH5FBfT/u
+         tbpw==
+X-Gm-Message-State: AFqh2krEIoctVbkCpxmpPiuhnMHi6vsOuLwm0ccBkgcYm3MS56tbGQvU
+        uvvR3D6eaauJ7+Xm80sdueQhtg9Q/7H+4IqK
+X-Google-Smtp-Source: AMrXdXvnTqQsEGOxkGO4mFjcmw+KnpvIu+qJjoICn+Nl3zlT9BcRo1dMNL/QyQWHQH7BEV9i5calcg==
+X-Received: by 2002:a05:6830:1251:b0:670:7865:133c with SMTP id s17-20020a056830125100b006707865133cmr10578090otp.13.1672143866971;
+        Tue, 27 Dec 2022 04:24:26 -0800 (PST)
+Received: from ?IPV6:2804:14d:5c5e:4698:e4b6:5a8e:5e17:7db3? ([2804:14d:5c5e:4698:e4b6:5a8e:5e17:7db3])
+        by smtp.gmail.com with ESMTPSA id s6-20020a9d7586000000b0066ca61230casm6471717otk.8.2022.12.27.04.24.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Dec 2022 04:24:26 -0800 (PST)
+Message-ID: <e527f418-1cfc-df4d-614f-873128bb1368@mojatatu.com>
+Date:   Tue, 27 Dec 2022 09:24:22 -0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next v6 0/4] net/sched: retpoline wrappers for tc
+Content-Language: en-US
+To:     Rudi Heitbaum <rudi@heitbaum.com>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, kuniyu@amazon.com, linux-kernel@vger.kernel.org
+References: <20221206135513.1904815-1-pctammela@mojatatu.com>
+ <20221227083317.GA1025927@82a1e6c4c19b>
+From:   Pedro Tammela <pctammela@mojatatu.com>
+In-Reply-To: <20221227083317.GA1025927@82a1e6c4c19b>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the mmc node for the StarFive JH7110 SoC.
-Set sdioo node to emmc and set sdio1 node to sd.
+On 27/12/2022 05:33, Rudi Heitbaum wrote:
+> Hi Pedro,
+> 
+> Compiling kernel 6.2-rc1 fails on x86_64 when CONFIG_NET_CLS or
+> CONFIG_NET_CLS_ACT is not set, when CONFIG_RETPOLINE=y is set.
+> 
+> Does tc_wrapper RETPOLINE need a dependency on NET_CLS/NET_CLS_ACT
+> to be added? Or a default?
+> 
+> net/sched/sch_api.c: In function 'pktsched_init':
+> net/sched/sch_api.c:2306:9: error: implicit declaration of function
+> 'tc_wrapper_init' [-Werror=implicit-function-declaration]
+>   2306 |         tc_wrapper_init();
+>        |         ^~~~~~~~~~~~~~~
+> cc1: some warnings being treated as errors
+> make[3]: *** [scripts/Makefile.build:252: net/sched/sch_api.o] Error 1
+> make[2]: *** [scripts/Makefile.build:504: net/sched] Error 2
+> make[1]: *** [scripts/Makefile.build:504: net] Error 2
+> 
+> below is the relevent lines from the .config file.
+> 
+> $ grep -e RETPOLINE -e NET_CLS projects/Generic/linux/linux.x86_64.conf
+> CONFIG_RETPOLINE=y
+> # CONFIG_NET_CLS_BASIC is not set
+> # CONFIG_NET_CLS_TCINDEX is not set
+> # CONFIG_NET_CLS_ROUTE4 is not set
+> # CONFIG_NET_CLS_FW is not set
+> # CONFIG_NET_CLS_U32 is not set
+> # CONFIG_NET_CLS_RSVP is not set
+> # CONFIG_NET_CLS_RSVP6 is not set
+> # CONFIG_NET_CLS_FLOW is not set
+> # CONFIG_NET_CLS_CGROUP is not set
+> # CONFIG_NET_CLS_BPF is not set
+> # CONFIG_NET_CLS_FLOWER is not set
+> # CONFIG_NET_CLS_MATCHALL is not set
+> # CONFIG_NET_CLS_ACT is not set
+> 
 
-Signed-off-by: William Qiu <william.qiu@starfivetech.com>
----
- .../jh7110-starfive-visionfive-v2.dts         | 25 ++++++++++++
- arch/riscv/boot/dts/starfive/jh7110.dtsi      | 38 +++++++++++++++++++
- 2 files changed, 63 insertions(+)
+Hi Rudi,
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-index c8946cf3a268..d8244fd1f5a0 100644
---- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-@@ -47,6 +47,31 @@ &clk_rtc {
- 	clock-frequency = <32768>;
- };
- 
-+&mmc0 {
-+	max-frequency = <100000000>;
-+	card-detect-delay = <300>;
-+	bus-width = <8>;
-+	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	non-removable;
-+	cap-mmc-hw-reset;
-+	post-power-on-delay-ms = <200>;
-+	status = "okay";
-+};
+Thanks for the report.
+Could you try the following patch?
+
+diff --git a/include/net/tc_wrapper.h b/include/net/tc_wrapper.h
+index ceed2fc089ff..d323fffb839a 100644
+--- a/include/net/tc_wrapper.h
++++ b/include/net/tc_wrapper.h
+@@ -216,6 +216,8 @@ static inline int tc_classify(struct sk_buff *skb, 
+const struct tcf_proto *tp,
+         return tp->classify(skb, tp, res);
+  }
+
++#endif /* CONFIG_NET_CLS */
 +
-+&mmc1 {
-+	max-frequency = <100000000>;
-+	card-detect-delay = <300>;
-+	bus-width = <4>;
-+	no-sdio;
-+	no-mmc;
-+	broken-cd;
-+	cap-sd-highspeed;
-+	post-power-on-delay-ms = <200>;
-+	status = "okay";
-+};
-+
- &gmac0_rmii_refin {
- 	clock-frequency = <50000000>;
- };
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index c22e8f1d2640..08a780d2c0f4 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -331,6 +331,11 @@ aoncrg: clock-controller@17000000 {
- 			#reset-cells = <1>;
- 		};
- 
-+		syscon: syscon@13030000 {
-+			compatible = "starfive,syscon", "syscon";
-+			reg = <0x0 0x13030000 0x0 0x1000>;
-+		};
-+
- 		gpio: gpio@13040000 {
- 			compatible = "starfive,jh7110-sys-pinctrl";
- 			reg = <0x0 0x13040000 0x0 0x10000>;
-@@ -433,5 +438,38 @@ uart5: serial@12020000 {
- 			reg-shift = <2>;
- 			status = "disabled";
- 		};
-+
-+		/* unremovable emmc as mmcblk0 */
-+		mmc0: mmc@16010000 {
-+			compatible = "starfive,jh7110-mmc";
-+			reg = <0x0 0x16010000 0x0 0x10000>;
-+			clocks = <&syscrg JH7110_SYSCLK_SDIO0_AHB>,
-+				 <&syscrg JH7110_SYSCLK_SDIO0_SDCARD>;
-+			clock-names = "biu","ciu";
-+			resets = <&syscrg JH7110_SYSRST_SDIO0_AHB>;
-+			reset-names = "reset";
-+			interrupts = <74>;
-+			fifo-depth = <32>;
-+			fifo-watermark-aligned;
-+			data-addr = <0>;
-+			starfive,syscon = <&syscon 0x14 0x1a 0x7c000000>;
-+			status = "disabled";
-+		};
-+
-+		mmc1: mmc@16020000 {
-+			compatible = "starfive,jh7110-mmc";
-+			reg = <0x0 0x16020000 0x0 0x10000>;
-+			clocks = <&syscrg JH7110_SYSCLK_SDIO1_AHB>,
-+				 <&syscrg JH7110_SYSCLK_SDIO1_SDCARD>;
-+			clock-names = "biu","ciu";
-+			resets = <&syscrg JH7110_SYSRST_SDIO1_AHB>;
-+			reset-names = "reset";
-+			interrupts = <75>;
-+			fifo-depth = <32>;
-+			fifo-watermark-aligned;
-+			data-addr = <0>;
-+			starfive,syscon = <&syscon 0x9c 0x1 0x3e>;
-+			status = "disabled";
-+		};
- 	};
- };
--- 
-2.34.1
+  static inline void tc_wrapper_init(void)
+  {
+  #ifdef CONFIG_X86
+@@ -224,8 +226,6 @@ static inline void tc_wrapper_init(void)
+  #endif
+  }
+
+-#endif /* CONFIG_NET_CLS */
+-
+  #else
+
+  #define TC_INDIRECT_SCOPE static
+
 
