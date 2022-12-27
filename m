@@ -2,65 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BB06568F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B95656901
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiL0Jiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:38:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S230511AbiL0Jo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:44:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiL0Jio (ORCPT
+        with ESMTP id S230026AbiL0JoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 04:38:44 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D99395B1;
-        Tue, 27 Dec 2022 01:38:40 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 0E8D324E052;
-        Tue, 27 Dec 2022 17:38:33 +0800 (CST)
-Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Dec
- 2022 17:38:33 +0800
-Received: from [192.168.120.49] (171.223.208.138) by EXMBX173.cuchost.com
- (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Dec
- 2022 17:38:31 +0800
-Message-ID: <134a2ead-e272-c32e-b14f-a9e98c8924ac@starfivetech.com>
-Date:   Tue, 27 Dec 2022 17:38:30 +0800
+        Tue, 27 Dec 2022 04:44:21 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDAA6467;
+        Tue, 27 Dec 2022 01:44:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1672134220;
+        bh=YTCy4JEIxOF81L2tkx2q9iUbicPXUbuTb5BUmkJ6Svk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Wh5879NVfovwfw6MPcWgTOF9m3eH52aFbDRk39uA3E/Ad8jO78miYBrYzLlJF5pMU
+         Z/UdSo+F+IVHBl4CwgqCHGrr01zACXS6fv/QbFvG3momTUWkqdfdyx4si1efPaw9MC
+         DnEq8H1/ZSxxSyssbOlQHKPaHX8WdiEWupzDlpgm4ZZQ+SxdbRBsvVZhRNQmcgY67N
+         xFlyatiBM4/v74Klw4ZNdSwdnBDXnT37cPlmpvRc73Y/LndBRfGihBJq1CUwRf9wde
+         pTg0E8Vuf68U2J6P9402diqrE70zLoUY26yyzQTnLuVbKBg+9Fn6nwrBGwG/sPwzES
+         YeJJ13pXhrFBg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.153.252] ([217.61.153.252]) by web-mail.gmx.net
+ (3c-app-gmx-bap27.server.lan [172.19.172.97]) (via HTTP); Tue, 27 Dec 2022
+ 10:43:40 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 5/9] dt-bindings: net: motorcomm: add support for
- Motorcomm YT8531
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
+Message-ID: <trinity-256904b6-bbb5-4424-9686-50ec7fa14f26-1672134220733@3c-app-gmx-bap27>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
- <20221216070632.11444-6-yanhong.wang@starfivetech.com>
- <994718d8-f3ee-af5e-bda7-f913f66597ce@linaro.org>
-From:   yanhong wang <yanhong.wang@starfivetech.com>
-In-Reply-To: <994718d8-f3ee-af5e-bda7-f913f66597ce@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX173.cuchost.com
- (172.16.6.93)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        devicetree@vger.kernel.org
+Subject: Aw: Re: [next v7 8/8] arm64: dts: mt7986: add Bananapi R3
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 27 Dec 2022 10:43:40 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <Y6dMWFy7gChG88j0@makrotopia.org>
+References: <20221127114142.156573-1-linux@fw-web.de>
+ <20221127114142.156573-9-linux@fw-web.de> <Y6dMWFy7gChG88j0@makrotopia.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:bFXzqV914PcH77ozsLVgYaS5I0Vqyn3RZhEoaWQjT7lE8jUeDSGhl7uuTVF9Ur9aotjQ0
+ kJ2zzC2KY87PZVu/kmymoEKe35/OcBtOMhCh69+CaSU97Q9IEwbEKdPDdi/4klIWCuVChTeJcIkj
+ hNsZM0Mk1Pfs9vpZZDPsUz9DoYXK9kS1qRfMMLvmCZPLC+4Lg7e58vZ42EilOMyj+xsYwdzqZSLK
+ J90OlPs5STS14EAJX6MQoYcvaIcSTZQ03+8S8dvHZIAn5qg8LuC3GTwkABj7y/Yk0/0CSu38KfiW
+ d4=
+UI-OutboundReport: notjunk:1;M01:P0:6NV/Op75bNk=;g9hXBa/jc9i8FeIMnr5EwLzU8mP
+ pXy4CNgfhS7gmAFE0ch8bzzVD4MlzuFhtB3o+MMaWTQLz2nPUUmFrJlFzSta1yOb8PU7iyKU5
+ OXisXe7c1ZvK5X1CAp4UfhyKjzW9fMULB7hwrMdnb/k3+VUATHoTV3l7/KPVpqAfQSaURykhF
+ ipfIzASaFOKmYQnmCBC4AxLKWd53ooLwStPuXeLKOtiPVevdUo3UEI4/lz+p8o2Y3X+vIROQE
+ ZfoVuEA0iRmK4a1gWvKnGxv7qbNJEbKnLYNgUWgOjecdxhIFjw2KTSxk0mFMDYU5/YYSsU0aU
+ F8+G0W5mOzeDcZqnvelHmfLFjoey6M+9dhZWnZ9o7zpEM1ejDSmLXKsqHtWgkKYxVZ7N2caG9
+ m+XTEc/j83X71YCecqGZJmpw7AtbLBtSByXOOSYfdwiTNaCdNFjHsRwXNc4Ea05X+7gJWttRr
+ YNN8cWsLINNoA4WR7SujssEI/iW28LJjQeLyStTd+lAy0S8v7LMBGUs0+UZCM5S5ehpMgXr/l
+ N2640kTns3x2PLA1AqqpTsHmQquIryxs+UWYJuoGQDL9GtMIEtonpvMH6TYsssBBqC/WRSs7d
+ 9igluMBSsF/x+U/YR9n5VtcttsmzHP6mVawxBOuKxgmb8G1sP7dBKz2ibbPzZbzm0PyS/soEx
+ uDGzKN7P9Cav1VO8e9MfFgLeX5/MGVD6BKkWKRiAlsCccIJqWZ4Cxh5ORwCRHwy51F/Gy3p28
+ dV9CToPtm7wPOJ4yoFykebIIKFKlw7gZMlz4mt5nfUPlMGvHeqe0bv+dlcBNWpTUvT7c3yPer
+ arRA4ipNplPCK3LO4coyP2Lgq/Y0w57gR5GD3RAHFdFdU=
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,162 +90,49 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+> Gesendet: Samstag, 24. Dezember 2022 um 20:00 Uhr
+> Von: "Daniel Golle" <daniel@makrotopia.org>
 
-On 2022/12/16 19:15, Krzysztof Kozlowski wrote:
-> On 16/12/2022 08:06, Yanhong Wang wrote:
->> Add support for Motorcomm Technology YT8531 10/100/1000 Ethernet PHY.
->> The document describe details of clock delay train configuration.
->> 
->> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> 
-> Missing vendor prefix documentation. I don't think you tested this at
-> all with checkpatch and dt_binding_check.
-> 
->> ---
->>  .../bindings/net/motorcomm,yt8531.yaml        | 111 ++++++++++++++++++
->>  MAINTAINERS                                   |   1 +
->>  2 files changed, 112 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/net/motorcomm,yt8531.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/net/motorcomm,yt8531.yaml b/Documentation/devicetree/bindings/net/motorcomm,yt8531.yaml
->> new file mode 100644
->> index 000000000000..c5b8a09a78bb
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/net/motorcomm,yt8531.yaml
->> @@ -0,0 +1,111 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/net/motorcomm,yt8531.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Motorcomm YT8531 Gigabit Ethernet PHY
->> +
->> +maintainers:
->> +  - Yanhong Wang <yanhong.wang@starfivetech.com>
->> +
-> 
-> Why there is no reference to ethernet-phy.yaml?
-> 
->> +select:
->> +  properties:
->> +    $nodename:
->> +      pattern: "^ethernet-phy(@[a-f0-9]+)?$"
-> 
-> I don't think that's correct approach. You know affect all phys.
-> 
->> +
->> +  required:
->> +    - $nodename
->> +
->> +properties:
->> +  $nodename:
->> +    pattern: "^ethernet-phy(@[a-f0-9]+)?$"
-> 
-> Just reference ethernet-phy.yaml.
-> 
->> +
->> +  reg:
->> +    minimum: 0
->> +    maximum: 31
->> +    description:
->> +      The ID number for the PHY.
-> 
-> Drop duplicated properties.
-> 
->> +
->> +  rxc_dly_en:
-> 
-> No underscores in node names. Missing vendor prefix. Both apply to all
-> your other custom properties, unless they are not custom but generic.
-> 
-> Missing ref.
-> 
->> +    description: |
->> +      RGMII Receive PHY Clock Delay defined with fixed 2ns.This is used for
-> 
-> After every full stop goes space.
-> 
->> +      PHY that have configurable RX internal delays. If this property set
->> +      to 1, then automatically add 2ns delay pad for Receive PHY clock.
-> 
-> Nope, this is wrong. You wrote now boolean property as enum.
-> 
->> +    enum: [0, 1]
->> +    default: 0
->> +
->> +  rx_delay_sel:
->> +    description: |
->> +      This is supplement to rxc_dly_en property,and it can
->> +      be specified in 150ps(pico seconds) steps. The effective
->> +      delay is: 150ps * N.
-> 
-> Nope. Use proper units and drop all this register stuff.
-> 
->> +    minimum: 0
->> +    maximum: 15
->> +    default: 0
->> +
->> +  tx_delay_sel_fe:
->> +    description: |
->> +      RGMII Transmit PHY Clock Delay defined in pico seconds.This is used for
->> +      PHY's that have configurable TX internal delays when speed is 100Mbps
->> +      or 10Mbps. It can be specified in 150ps steps, the effective delay
->> +      is: 150ps * N.
-> 
-> The binding is in very poor shape. Please look carefully in
-> example-schema. All my previous comments apply everywhere.
-> 
->> +    minimum: 0
->> +    maximum: 15
->> +    default: 15
->> +
->> +  tx_delay_sel:
->> +    description: |
->> +      RGMII Transmit PHY Clock Delay defined in pico seconds.This is used for
->> +      PHY's that have configurable TX internal delays when speed is 1000Mbps.
->> +      It can be specified in 150ps steps, the effective delay is: 150ps * N.
->> +    minimum: 0
->> +    maximum: 15
->> +    default: 1
->> +
->> +  tx_inverted_10:
->> +    description: |
->> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
->> +      Transmit PHY Clock delay train configuration when speed is 10Mbps.
->> +      0: original   1: inverted
->> +    enum: [0, 1]
->> +    default: 0
->> +
->> +  tx_inverted_100:
->> +    description: |
->> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
->> +      Transmit PHY Clock delay train configuration when speed is 100Mbps.
->> +      0: original   1: inverted
->> +    enum: [0, 1]
->> +    default: 0
->> +
->> +  tx_inverted_1000:
->> +    description: |
->> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
->> +      Transmit PHY Clock delay train configuration when speed is 1000Mbps.
->> +      0: original   1: inverted
->> +    enum: [0, 1]
->> +    default: 0
->> +
->> +required:
->> +  - reg
->> +
->> +additionalProperties: true
-> 
-> This must be false. After referencing ethernet-phy this should be
-> unevaluatedProperties: false.
-> 
-> 
+> > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
 
-Thanks. Parts of this patch exist already, after discussion unanimity was achieved,
-i will remove the parts of YT8531 in the next version.
+> > +&spi0 {
+> > +	pinctrl-names =3D "default";
+> > +	pinctrl-0 =3D <&spi_flash_pins>;
+> > +	cs-gpios =3D <0>, <0>;
+>
+> I don't think those bogus cs-gpios here and for spi1 below are needed.
 
-> Best regards,
-> Krzysztof
-> 
+at first look it seems it is needed...as i get this trace with 6.2:
+
+[    2.145931] pc : mtk_spi_can_dma+0x0/0x34
+[    2.155212] lr : mtk_spi_interrupt+0x74/0x360
+
+[    2.091801] mtk-spi 1100a000.spi: spi-mem transfer timeout
+[    2.097310] spi-nor: probe of spi0.0 failed with error -110
+[    2.102930] Unable to handle kernel read from unreadable memory at virt=
+ual address 0000000000000010
+
+but i get the same trace when reverting the cs-gpios change....seems somet=
+hing is broken in 6.2-rc1
+
+6.1 works without the bogus cs-gpios (and the mt7531 interrupt-change)...
+
+have tried reverting this commit, but it does not fix the issue:
+
+8330e9e8269b 2022-12-07 spi: spi-mtk-nor: Add recovery mechanism for dma r=
+ead timeout
+
+any idea without doing a bisect?
+
+regards Frank
+
+> > +	status =3D "okay";
+> > +};
+> > +
+> > +&spi1 {
+> > +	pinctrl-names =3D "default";
+> > +	pinctrl-0 =3D <&spic_pins>;
+> > +	cs-gpios =3D <0>, <0>;
+> > +	status =3D "okay";
+> > +};
+
