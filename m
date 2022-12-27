@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE717656890
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D86D656891
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiL0IxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 03:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S230142AbiL0IyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 03:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiL0Iw6 (ORCPT
+        with ESMTP id S229496AbiL0IyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 03:52:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2479A21B5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:52:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 27 Dec 2022 03:54:10 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2479821B5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:54:08 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98E6F60FBC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 08:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF98CC433EF;
-        Tue, 27 Dec 2022 08:52:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672131177;
-        bh=Z194cUyzUzLCYhqb7iJzQShl9/IPzyNO267kinhb2ec=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BBVAMzUpLerii4C4u0aeAZeYrjprDwKvn69wCmsXO47Kza3Yzrhg98L+/EqRI8bV+
-         Z0OHEhcerZHLnM/6i6b537jtOxVMOcWTBtOhhO7lg1aNeIw/gnwT9gbTjpyI/HK46a
-         wXQCPzrRcbRVo2FXvkkWwvW6YykxGKyQD7E3o1UKek/2GrLNX6Yc+B3Jql8QvA5x4s
-         KDHCWwdV+GL1UVeB74CFqu5BV6i3U/C8WUMv1+McXnbERbEb4YSNmP7yszROkpT39Y
-         3n3AsSD02Mi7S1Stc3ZrLoleLAsLBVM0jD56l8zdLRVnUfxaralFRisK8YF83f1oJz
-         38V6yuGVdGArA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pA5hf-0003MK-TT; Tue, 27 Dec 2022 09:52:56 +0100
-Date:   Tue, 27 Dec 2022 09:52:55 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ali Mirghasemi <ali.mirghasemi1376@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Add usb serial support for quectel modules
-Message-ID: <Y6qyZ4Vp5Dmc/339@hovoldconsulting.com>
-References: <20221225185657.3962-1-ali.mirghasemi1376@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221225185657.3962-1-ali.mirghasemi1376@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3FCBC6032A;
+        Tue, 27 Dec 2022 08:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1672131247; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5JP7NlsjxZPXUXT4QtzWwyBIF6ntDtZWKZSUZGf8DaI=;
+        b=KsPqrNdDU6Kr7Kpq/03+n290KuyffHVVVBtUG8+Ci3z8nmdQZ80EW7XECETcbnNB/u/xYV
+        66aJLzUIi/3IQI+QoX/NfJZuCS34wfL49TCvP+Q/A6g6LkJkN0AMW+llFJ0Uzd5sXjRMni
+        ReQ9BwY6nvEKrEvv1OHvuFDYq4RUE4Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1672131247;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5JP7NlsjxZPXUXT4QtzWwyBIF6ntDtZWKZSUZGf8DaI=;
+        b=H4+tzfRo1wRI4CLMEwEd/EdCcggWhNwCG2XlUzatsZHmYo3o1cOa89KuRgq10QWuJJj+RS
+        eSYYpYdcMH0eeaDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1CBBF13913;
+        Tue, 27 Dec 2022 08:54:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Om1BBq+yqmPkfAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 27 Dec 2022 08:54:07 +0000
+Date:   Tue, 27 Dec 2022 09:54:06 +0100
+Message-ID: <87wn6d1b2p.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Chris Chiu <chris.chiu@canonical.com>
+Cc:     tiwai@suse.com, perex@perex.cz, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Apply dual codec fixup for Dell Latitude laptops
+In-Reply-To: <20221226114303.4027500-1-chris.chiu@canonical.com>
+References: <20221226114303.4027500-1-chris.chiu@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 25, 2022 at 10:26:57PM +0330, Ali Mirghasemi wrote:
-> Add support for following modules
-> - EC200U
-> - EC200A
+On Mon, 26 Dec 2022 12:43:03 +0100,
+Chris Chiu wrote:
+> 
+> The Dell Latiture 3340/3440/3540 laptops with Realtek ALC3204 have
+> dual codecs and need the ALC1220_FIXUP_GB_DUAL_CODECS to fix the
+> conflicts of Master controls. The existing headset mic fixup for
+> Dell is also required to enable the jack sense and the headset mic.
+> 
+> Introduce a new fixup to fix the dual codec and headset mic issues
+> for particular Dell laptops since other old Dell laptops with the
+> same codec configuration are already well handled by the fixup in
+> alc269_fallback_pin_fixup_tbl[].
+> 
+> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
 
-You need to sign-off on your patches here. Make sure you have read and
-understood Documentation/process/submitting-patches.rst.
+Thanks, applied.
 
-You should also CC the linux-usb list.
 
-Please also use the common prefix for USB serial in your Subject and
-include the output of the usb-devices command for these devices in the
-commit message along with a description of which interfaces are used for
-what.
-
-Here's a recent example of what this may look like:
-
-	https://lore.kernel.org/all/20221214043546.10339-1-duke_xinanwen@163.com/
-
-Johan
+Takashi
