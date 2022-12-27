@@ -2,166 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE7E656DAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9442656DB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiL0RqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 12:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
+        id S232036AbiL0Rq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 12:46:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbiL0Rpr (ORCPT
+        with ESMTP id S232322AbiL0RqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 12:45:47 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC537D45;
-        Tue, 27 Dec 2022 09:45:43 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BRGPsQ8026025;
-        Tue, 27 Dec 2022 17:45:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=D8mQaUr11uzwiRfKn/NUkh8jxLn0rwEAYG1hxGjXyqk=;
- b=MAjgLu5WrJ1vR1GP+fgS6OJHB7eszmc9qY07DGpFMEXGSmXrOpcymxOeHa4ZxvYR3NLV
- N2zyWLySgrwBrA9MJwAIxX8TEZk9z0mVG3kgDZ6Ht3zRIx90H4ex9Bjd67ZgIkA1E1Fe
- j4PAFnwZ7Hsy3PeQQPvqsMhgG7Wtn8zq1ZCvr5SwSKAYAhfJW0+Hw2irExxEXk8r6Y8V
- 0txwHGf+sXGGvAkKOVQhJboxOIim5VD79zTemOPNcG2A6x+8R9Qi9uU3+/0KVYUnvvew
- keImu41ydWJB/sr0mP4SHsQ1UUgm52NcCyadVhb16JSTXouOrjaa+8i9whJGx0u0//Ds RQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mnsna56jk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Dec 2022 17:45:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BRHjSEZ008820
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Dec 2022 17:45:28 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 27 Dec 2022 09:45:27 -0800
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
-        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <airlied@gmail.com>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v16 5/5] drm/msm/dp: add support of max dp link rate
-Date:   Tue, 27 Dec 2022 09:45:03 -0800
-Message-ID: <1672163103-31254-6-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1672163103-31254-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1672163103-31254-1-git-send-email-quic_khsieh@quicinc.com>
+        Tue, 27 Dec 2022 12:46:20 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B927A1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 09:46:19 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id b24-20020a05600c4a9800b003d21efdd61dso9818094wmp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 09:46:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DVFRVr+KSZVMPZ3bgSDdZDe07uyPuIo4qVJD0MUcklk=;
+        b=W8Ob3EalTIaJEmIgGrDiEKysh0LW0YZhynxgWPgL6Pi6xg9ydA858Ee0hblIBW0PkX
+         tAP1+NMzbsNcJRZmRdlBPmgiorNMU+MOEZcrxzwgaBeWS1H/HcGT6qK1/4z1iAEpulMh
+         LPnjJ/Jm6UM/KyB+Mu2vk4rRpgUqzy/mtyKZ6srgf6uHjIPDSFG8EaAnnvXDcVD2YPnf
+         B+c1baPu+1PFs6tTOosatJ15bOI25XNZ+XpY2Zfrr8SkDsSnt4y2v66jdy4hrGxOMX6j
+         Sh4jEp2ulcRSoxm+sMrubuF4q/MAUFl8g+EmeVeaKPaSFDwfwTH5NWYDhkUZg9Dd3S7H
+         q0sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DVFRVr+KSZVMPZ3bgSDdZDe07uyPuIo4qVJD0MUcklk=;
+        b=cv8k70FblVR5/WwjX2xL0DmBBTCcagM/IUuirJa/7fe2OXb6JoCbyQUoIAzT59B5ii
+         vX1MLJsILzI1aR/OFIWV/JIapjS78qGtO/vF5BLdxA6VZ340VoNxSihebLew0a0241OY
+         +C3nfV78oq+TNK5cwaS0LOgBRUvytSR8kfDwCP+Sw6D8mL3eOhR7VRT+RCM78SXoseca
+         X9gKWWscE237WGkaAVIDjiGAnIj99HrO/sTNSVsJ+lLfbzLEK4Wm5BGwLTEb5FXlu3IJ
+         FBIflqRgm6bQ0Uu5JNUGCR1LgtIjsmERJMrhFE6ag8+G4k/O4xMOW0UbaJ+IH49tp64z
+         LyDA==
+X-Gm-Message-State: AFqh2kr2yyfj+7vkz1X6nYMK/zuUjqNTHUtvjWhmrEmlBjgDRiRGWNuW
+        d6YCB/lE5Ah/u/qBd3zrMXU=
+X-Google-Smtp-Source: AMrXdXvV4a0JiJpRVeLMRsu3XEv+j2nk1w/KzSd1wjIF29yB4VcySisYxf7shoAANy63dbKQZ7PW2A==
+X-Received: by 2002:a05:600c:44c9:b0:3d1:f6b3:2ce3 with SMTP id f9-20020a05600c44c900b003d1f6b32ce3mr20476801wmo.35.1672163177667;
+        Tue, 27 Dec 2022 09:46:17 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n25-20020a7bc5d9000000b003d969a595fbsm18060238wmk.10.2022.12.27.09.46.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Dec 2022 09:46:16 -0800 (PST)
+Date:   Tue, 27 Dec 2022 20:46:13 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     oe-kbuild@lists.linux.dev, Qingtao Cao <qingtao.cao.au@gmail.com>,
+        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: drivers/gpio/gpio-exar.c:52 exar_offset_to_sel_addr() warn:
+ replace divide condition 'pin / 8' with 'pin >= 8'
+Message-ID: <Y6svZX++B5TYRHBT@kadam>
+References: <202212181140.EAWl7FKx-lkp@intel.com>
+ <3D147284-AF8C-4414-9BE1-C83032B6C15D@gmail.com>
+ <Y6dTX2wx/SXlswGC@kadam>
+ <F701A496-22A6-4E3B-B3CB-E5BCF4C30502@gmail.com>
+ <C430F7E6-723B-4EA8-BA87-00C84676BD4F@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _vHwEC8DoreHEPlJuWft3X5gkdeHYPgp
-X-Proofpoint-ORIG-GUID: _vHwEC8DoreHEPlJuWft3X5gkdeHYPgp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-27_13,2022-12-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- impostorscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
- mlxlogscore=999 bulkscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212270146
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <C430F7E6-723B-4EA8-BA87-00C84676BD4F@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default, HBR2 (5.4G) is the max link rate be supported. This patch
-uses the actual limit specified by DT and removes the artificial
-limitation to 5.4 Gbps. Supporting HBR3 is a consequence of that.
+On Sun, Dec 25, 2022 at 12:50:46PM +0100, Andy Shevchenko wrote:
+> 
+> 
+> Lähetetty iPhonesta
+> 
+> > Andy Shevchenko <andy.shevchenko@gmail.com> kirjoitti 25.12.2022 kello 12.45:
+> > 
+> > 
+> > 
+> > Lähetetty iPhonesta
+> > 
+> >>> Dan Carpenter <error27@gmail.com> kirjoitti 24.12.2022 kello 20.30:
+> >>> 
+> >>> On Sat, Dec 24, 2022 at 05:19:27PM +0100, Andy Shevchenko wrote:
+> >>> 
+> >>> 
+> >>> Lähetetty iPhonesta
+> >>> 
+> >>>> Dan Carpenter <error27@gmail.com> kirjoitti 23.12.2022 kello 11.54:
+> >>>> 
+> >>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> >>>> head:   f9ff5644bcc04221bae56f922122f2b7f5d24d62
+> >>>> commit: 5134272f9f3f71d4e1f3aa15cb09321af49b3646 gpio: exar: access MPIO registers on cascaded chips
+> >>>> config: ia64-randconfig-m031-20221218
+> >>>> compiler: ia64-linux-gcc (GCC) 12.1.0
+> >>>> 
+> >>>> If you fix the issue, kindly add following tag where applicable
+> >>>> | Reported-by: kernel test robot <lkp@intel.com>
+> >>>> | Reported-by: Dan Carpenter <error27@gmail.com>
+> >>>> 
+> >>>> smatch warnings:
+> >>>> drivers/gpio/gpio-exar.c:52 exar_offset_to_sel_addr() warn: replace divide condition 'pin / 8' with 'pin >= 8'
+> >>>> drivers/gpio/gpio-exar.c:62 exar_offset_to_lvl_addr() warn: replace divide condition 'pin / 8' with 'pin >= 8'
+> >>>> 
+> >>> 
+> >>> 
+> >>> 
+> >>> I don’t think this is a good advice. If we want to limit that, we need
+> >>> to check also upper limit. But. The GPIO framework does that. So,
+> >>> changing / to >= is bogus.
+> >> 
+> >> 
+> >> How is checking pin / 8 not mathematically equivalent to pin >= 8?
+> > 
+> > The point is that semantically the / is better in case this code will ever support more than two banks of pins.
+> 
+> On top of that it’s paired with pin % 8.
+> 
 
-Changes in v2:
--- add max link rate from dtsi
+I noticed that, but it's a common bug though that a lot of people
+accidentally write if (pin / 8) when if ((pin % 8) == 0) is intended.
 
-Changes in v3:
--- parser max_data_lanes and max_dp_link_rate from dp_out endpoint
+For example:
 
-Changes in v4:
--- delete unnecessary pr_err
+drivers/rtc/rtc-m48t59.c
+   132          M48T59_WRITE((bin2bcd(tm->tm_mon + 1) & 0x1F), M48T59_MONTH);
+   133          M48T59_WRITE(bin2bcd(year % 100), M48T59_YEAR);
+   134  
+   135          if (pdata->type == M48T59RTC_TYPE_M48T59 && (year / 100))
+                                                             ^^^^^^^^^^
+This code is pretty clearly an example of where people accidentally uses
+/ to mean "divides cleanly".  (I have not patched or reported this code,
+btw so if anyone wants an easy patch to send it's available).
 
-Changes in v5:
--- split parser function into different patch
+   136                  val = (M48T59_WDAY_CEB | M48T59_WDAY_CB);
+   137          val |= (bin2bcd(tm->tm_wday) & 0x07);
+   138          M48T59_WRITE(val, M48T59_WDAY);
 
-Changes in v9:
--- revised commit test
-
-Changes in v13:
--- repalced "properity" with "property"
-
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 4 ++++
- drivers/gpu/drm/msm/dp/dp_panel.c   | 7 ++++---
- drivers/gpu/drm/msm/dp/dp_panel.h   | 1 +
- 3 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index bfd0aef..edee550 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -390,6 +390,10 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
- 	struct edid *edid;
- 
- 	dp->panel->max_dp_lanes = dp->parser->max_dp_lanes;
-+	dp->panel->max_dp_link_rate = dp->parser->max_dp_link_rate;
-+
-+	drm_dbg_dp(dp->drm_dev, "max_lanes=%d max_link_rate=%d\n",
-+		dp->panel->max_dp_lanes, dp->panel->max_dp_link_rate);
- 
- 	rc = dp_panel_read_sink_caps(dp->panel, dp->dp_display.connector);
- 	if (rc)
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-index 5149ceb..1800d89 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.c
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-@@ -75,12 +75,13 @@ static int dp_panel_read_dpcd(struct dp_panel *dp_panel)
- 	link_info->rate = drm_dp_bw_code_to_link_rate(dpcd[DP_MAX_LINK_RATE]);
- 	link_info->num_lanes = dpcd[DP_MAX_LANE_COUNT] & DP_MAX_LANE_COUNT_MASK;
- 
-+	/* Limit data lanes from data-lanes of endpoint property of dtsi */
- 	if (link_info->num_lanes > dp_panel->max_dp_lanes)
- 		link_info->num_lanes = dp_panel->max_dp_lanes;
- 
--	/* Limit support upto HBR2 until HBR3 support is added */
--	if (link_info->rate >= (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
--		link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
-+	/* Limit link rate from link-frequencies of endpoint property of dtsi */
-+	if (link_info->rate > dp_panel->max_dp_link_rate)
-+		link_info->rate = dp_panel->max_dp_link_rate;
- 
- 	drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
- 	drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
-diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h b/drivers/gpu/drm/msm/dp/dp_panel.h
-index d861197a..f04d021 100644
---- a/drivers/gpu/drm/msm/dp/dp_panel.h
-+++ b/drivers/gpu/drm/msm/dp/dp_panel.h
-@@ -50,6 +50,7 @@ struct dp_panel {
- 
- 	u32 vic;
- 	u32 max_dp_lanes;
-+	u32 max_dp_link_rate;
- 
- 	u32 max_bw_code;
- };
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+regards,
+dan carpenter
 
