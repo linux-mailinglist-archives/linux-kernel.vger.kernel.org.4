@@ -2,103 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7355656E95
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 938FC656E98
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiL0USi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 15:18:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
+        id S229608AbiL0UU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 15:20:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiL0US3 (ORCPT
+        with ESMTP id S229566AbiL0UUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 15:18:29 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B150BC765;
-        Tue, 27 Dec 2022 12:18:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672172308; x=1703708308;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MPJuJRJSJFNtkmyjPg3s/23K/mJ7CjlZZ3hB3ocfIvM=;
-  b=KDbMbC8vLJg0jdCBxB3xpR6ZDbMr1/n2c290uWwn3BLldwGDAh7HbEqK
-   hSsnMMMeHcxr3R9FOVhuJJlk55jnwjqpFY9NkOV96u4UPrjoOrHdm1Eck
-   /6E/7AtGa6vHr2UPYLbIWsN0XDBCY6rv6Sjr+x5rF0AbpRXEr4eVDCUcM
-   FwW7FDnHZ/e4AoNJVSk+MZ2TZ3HnIxLdtyqwmw6h72+G8GfMyMnhFonJD
-   2HZb/rI4+nW/d3gE9u/3LTW99YxEvQT7fg4eeL1OA1ch/KDchc41kjzkP
-   KaNNHk/LleenlGYGmKe2LMDY6hYeafO/tfp4y1BYV9+3+0SxMLzKjyJ1l
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="318429896"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="318429896"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 12:18:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="716425849"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="716425849"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Dec 2022 12:18:27 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pAGP3-000Dse-26;
-        Tue, 27 Dec 2022 22:18:25 +0200
-Date:   Tue, 27 Dec 2022 22:18:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] platform/x86: simatic-ipc: correct name of a model
-Message-ID: <Y6tTEVjnS+RjAi9b@smile.fi.intel.com>
-References: <20221222103720.8546-1-henning.schild@siemens.com>
- <20221222103720.8546-2-henning.schild@siemens.com>
- <Y6RRInVaXtOGr8hA@smile.fi.intel.com>
- <20221222150443.722e5bf8@md1za8fc.ad001.siemens.net>
+        Tue, 27 Dec 2022 15:20:22 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A5C32A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 12:20:20 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id h6so7378122iof.9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 12:20:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oUdac+MaBje7dX/XEq6/cPZiPaJDSdQLf+a0j0f0Qqs=;
+        b=H6vvZyL1skdR13RvGEshUaU8gUIScSnwMf3TGZ6LIUQCjoVdwDNOD8cjd7ALF0m3hz
+         HtJDrnlnBlorNyxICsJfwlgL91qpBG+rXe9NYupt4qAehTEqtRUjW8Eh92/6N6EVOhM6
+         4EiwtdcdRSl0T5NkiAdWwQ8SXiWyIgmxTqaT1sxAuXk9npXkczgTlvoxJDYi1YnNYKqZ
+         eWGU90oL3qgHk/5Rjz9xHGETlWWYZEitZyMyZfw/25Fv261NyDDYoI5i4OKZQ2uJnCNg
+         v2+Dd0eDxPvZJmmc8Vk48QZAA8bLLuuzATPixi6n8lTckyjWHZZhmTdWrstrdzt6jqBU
+         ho3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oUdac+MaBje7dX/XEq6/cPZiPaJDSdQLf+a0j0f0Qqs=;
+        b=Oj2FeQWxs9lYhrm+eQ+5PboEY7HlVogyzLOd/cPQUJBafyfkpNoO0XyjDiTMrTQpiS
+         er/Dl3eLRbClVE3jZJMGv+yqvjxNXZYbDrSYYVbvbbfcU4Jcgv3xS2kxJt26Evj7Ksnf
+         8xaVjI5CW174z4ag2nItskmy86q25B+q98HjjVuo1CczOV9ME9LNAMDsI1fcJ0ceS4dm
+         exqiJUBcwxCNiOifqmcq5OaaUwPgtKeuWmNvE+19tGFqGYFKUbBr1sRrrwAre/VBsrrl
+         A5fPobXE4eyIoy6ZyA2tWd4IuKu516WEMlevD3l4OmDbqph4TLz2T5nArxdzrmaOqP3L
+         JiJw==
+X-Gm-Message-State: AFqh2kp/hZ9gtlH/7KOw1u/J57XtcWOgMR56uJ+YCx4+CzKptcT97m8u
+        xAjvne5uNJ8XXm7OkUjWUqXQdlIu4hJEOJGDFYcB9A==
+X-Google-Smtp-Source: AMrXdXs4LQM1m7FgXjaY8gGUH1zxONsQeP5eBG3gk7IFl8MKFT+TJ3hPwJyZ7yEfUyWs3ni8d1UZgbvOe0kRgu/3i1U=
+X-Received: by 2002:a02:340b:0:b0:38a:2499:c04b with SMTP id
+ x11-20020a02340b000000b0038a2499c04bmr1852258jae.72.1672172419223; Tue, 27
+ Dec 2022 12:20:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222150443.722e5bf8@md1za8fc.ad001.siemens.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221212183720.4062037-1-vipinsh@google.com> <20221212183720.4062037-3-vipinsh@google.com>
+In-Reply-To: <20221212183720.4062037-3-vipinsh@google.com>
+From:   Aaron Lewis <aaronlewis@google.com>
+Date:   Tue, 27 Dec 2022 20:20:08 +0000
+Message-ID: <CAAAPnDH3sg4rmHi7uirOB5oYwr-Ub+O0+fxdg5XiO5oCU0i1OQ@mail.gmail.com>
+Subject: Re: [Patch v4 02/13] KVM: x86: Add a KVM-only leaf for CPUID_8000_0007_EDX
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        dmatlack@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 22, 2022 at 03:04:43PM +0100, Henning Schild wrote:
-> Am Thu, 22 Dec 2022 14:44:18 +0200
-> schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > On Thu, Dec 22, 2022 at 11:37:19AM +0100, Henning Schild wrote:
-> > > What we called IPC427G should be renamed to BX-39A to be more in
-> > > line with the actual product name.  
-> > 
-> > Can you tell what does the current name mean?
-> 
-> 427G is an internal prototype name using the naming scheme that these
-> kind of machines used to use for several generations. For some reason
-> the naming scheme was changed and the public product name is BX-39A.
-> 
-> Please do not ask me why. But if you would happen to own such a device
-> you would know it as BX-39A _only_.
-> 
-> > Depending on that I would consider either your approach here or
-> > perhaps just adding a comment in each of the places.
-> 
-> Mentioning the name 427G, even as a comment, does not make much sense.
-> Since the box is for sale it is called BX-39A and was never called 427G.
-> 
-> I used the internal prototype name and only recently learned that never
-> became the final name. And this cleanup makes sure nobody gets
-> confused.
+On Mon, Dec 12, 2022 at 6:37 PM Vipin Sharma <vipinsh@google.com> wrote:
+>
+> From: Vitaly Kuznetsov <vkuznets@redhat.com>
+>
+> CPUID_8000_0007_EDX may come handy when X86_FEATURE_CONSTANT_TSC
+> needs to be checked.
+>
+> No functional change intended.
+>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/cpuid.c         | 8 ++++++--
+>  arch/x86/kvm/reverse_cpuid.h | 7 +++++++
+>  2 files changed, 13 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 723502181a3a..42913695fedd 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -701,6 +701,10 @@ void kvm_set_cpu_caps(void)
+>         if (!tdp_enabled && IS_ENABLED(CONFIG_X86_64))
+>                 kvm_cpu_cap_set(X86_FEATURE_GBPAGES);
+>
+> +       kvm_cpu_cap_init_kvm_defined(CPUID_8000_0007_EDX,
+> +               SF(CONSTANT_TSC)
+> +       );
+> +
+>         kvm_cpu_cap_mask(CPUID_8000_0008_EBX,
+>                 F(CLZERO) | F(XSAVEERPTR) |
+>                 F(WBNOINVD) | F(AMD_IBPB) | F(AMD_IBRS) | F(AMD_SSBD) | F(VIRT_SSBD) |
+> @@ -1153,8 +1157,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+>                 entry->edx &= ~GENMASK(17, 16);
+>                 break;
+>         case 0x80000007: /* Advanced power management */
+> -               /* invariant TSC is CPUID.80000007H:EDX[8] */
+> -               entry->edx &= (1 << 8);
+> +               cpuid_entry_override(entry, CPUID_8000_0007_EDX);
+> +
+>                 /* mask against host */
+>                 entry->edx &= boot_cpu_data.x86_power;
+>                 entry->eax = entry->ebx = entry->ecx = 0;
+> diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
+> index 203fdad07bae..25b9b51abb20 100644
+> --- a/arch/x86/kvm/reverse_cpuid.h
+> +++ b/arch/x86/kvm/reverse_cpuid.h
+> @@ -14,6 +14,7 @@
+>  enum kvm_only_cpuid_leafs {
+>         CPUID_12_EAX     = NCAPINTS,
+>         CPUID_7_1_EDX,
+> +       CPUID_8000_0007_EDX,
+>         NR_KVM_CPU_CAPS,
+>
+>         NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
+> @@ -42,6 +43,9 @@ enum kvm_only_cpuid_leafs {
+>  #define X86_FEATURE_AVX_NE_CONVERT      KVM_X86_FEATURE(CPUID_7_1_EDX, 5)
+>  #define X86_FEATURE_PREFETCHITI         KVM_X86_FEATURE(CPUID_7_1_EDX, 14)
+>
+> +/* CPUID level 0x80000007 (EDX). */
+> +#define KVM_X86_FEATURE_CONSTANT_TSC   KVM_X86_FEATURE(CPUID_8000_0007_EDX, 8)
+> +
+>  struct cpuid_reg {
+>         u32 function;
+>         u32 index;
+> @@ -67,6 +71,7 @@ static const struct cpuid_reg reverse_cpuid[] = {
+>         [CPUID_12_EAX]        = {0x00000012, 0, CPUID_EAX},
+>         [CPUID_8000_001F_EAX] = {0x8000001f, 0, CPUID_EAX},
+>         [CPUID_7_1_EDX]       = {         7, 1, CPUID_EDX},
+> +       [CPUID_8000_0007_EDX] = {0x80000007, 0, CPUID_EDX},
+>  };
+>
+>  /*
+> @@ -97,6 +102,8 @@ static __always_inline u32 __feature_translate(int x86_feature)
+>                 return KVM_X86_FEATURE_SGX1;
+>         else if (x86_feature == X86_FEATURE_SGX2)
+>                 return KVM_X86_FEATURE_SGX2;
+> +       else if (x86_feature == X86_FEATURE_CONSTANT_TSC)
+> +               return KVM_X86_FEATURE_CONSTANT_TSC;
+>
+>         return x86_feature;
+>  }
+> --
+> 2.39.0.rc1.256.g54fd8350bd-goog
+>
 
-Thanks for clarifications!
+I believe this version of the patch should have been taken instead of:
+https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?h=queue&id=42b76c1ae40b89716c7a804cb575a4b52eb4e12f
 
--- 
-With Best Regards,
-Andy Shevchenko
+I think it should be kvm_cpu_cap_init_kvm_defined() rather than
+kvm_cpu_cap_init_scattered().
 
-
+I'm getting this:
+arch/x86/kvm/cpuid.c:705:2: error: call to undeclared function
+'kvm_cpu_cap_init_scattered'; ISO C99 and later do not support
+implicit function declarations [-Wimplicit-function-declaration]
+        kvm_cpu_cap_init_scattered(CPUID_8000_0007_EDX,
+        ^
+arch/x86/kvm/cpuid.c:705:2: note: did you mean 'kvm_cpu_cap_init_kvm_defined'?
+arch/x86/kvm/cpuid.c:553:6: note: 'kvm_cpu_cap_init_kvm_defined' declared here
+void kvm_cpu_cap_init_kvm_defined(enum kvm_only_cpuid_leafs leaf, u32 mask)
+     ^
+1 error generated.
