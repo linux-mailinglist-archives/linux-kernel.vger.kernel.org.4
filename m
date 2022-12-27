@@ -2,201 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B292A656E64
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D11F656E66
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiL0TfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:35:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
+        id S230354AbiL0ThX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbiL0Te7 (ORCPT
+        with ESMTP id S229891AbiL0ThV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:34:59 -0500
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2CEB1F3;
-        Tue, 27 Dec 2022 11:34:58 -0800 (PST)
-Received: by mail-il1-f180.google.com with SMTP id y2so7186885ily.5;
-        Tue, 27 Dec 2022 11:34:58 -0800 (PST)
+        Tue, 27 Dec 2022 14:37:21 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7F9D122
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:37:20 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-47fc4e98550so53411527b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:37:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TDuSRMT7LeuW6RQ7N+xypX5CPMcCsvqhVlnHymvmVtI=;
+        b=rEZX25ycDQZ1thQanMnm+pHbQa936C7pegvTyeEJbbP0xHMpnpylJ/PxzJHrDDGqCm
+         uh9TvIADFBvJpo0yFkZgHkBkdDfpmVSAU+FKksylfr1HrbmquN5Wff0v1DclOXJ3uGpM
+         LZddDRee3hQpJtoqDzbXQ2IXnexVIDhN9FgN0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/q0Crof8q8V+8RgYswk3311L1UJGwtVfuTGMKthNFUs=;
-        b=KJAeQ6skYR75Ke+GBlomXpMNaNZWm6fulYY6cxlx38ym03Mus+2MtMSvMojMYWU+Jh
-         V4pcRE6MjYVxmR3SBedIFR+uKMNFTY9Xqkls+CoQ4bTaGV97ZxUIG3K3xDhOiv2Frv15
-         zBwXsyCAcN1TRcR8VNpoNbFA9Rrcfn8krHcuvJaT6yUN8rXrFh53Xokum771igSX8vIY
-         /9aF+cqcTRxQ5/C58sbnYo3lbiZnjEODh0frcGU52zDpg+VWMKEpOUDrOSxuLfngcWti
-         GcvKSkuJBkdEVeq+h3jJfB97fOybY1BarqsGqJDSiw7N4nLYxw91Anz84mLGfveHrn/w
-         Qtyg==
-X-Gm-Message-State: AFqh2kpI3liDNlaitHIrn9xBCVjaAJm79Y8Pfcp2idjuUnUN6gef7VgW
-        GSFuX/uViVviKWfbJRi76o+iQNHAaA2t66GxNdE=
-X-Google-Smtp-Source: AMrXdXtNnVeSYo/va+NN4uk0nfPAAZe6QzH+3hbmSvbLNNQv34wXMdFTh9dK7dNU3pg17ptjyoYj2WshgZGT+JrjXJw=
-X-Received: by 2002:a92:ceca:0:b0:30b:8e9:1047 with SMTP id
- z10-20020a92ceca000000b0030b08e91047mr2350445ilq.271.1672169697504; Tue, 27
- Dec 2022 11:34:57 -0800 (PST)
+        bh=TDuSRMT7LeuW6RQ7N+xypX5CPMcCsvqhVlnHymvmVtI=;
+        b=1YLv4+PhKs15h0+fzh2cbWPzf/ubelBSjaKV4qA93zPAOQ2FCOVWfLCX/kWrSdkELj
+         TR/rbItMCTJXSd7dmsnDjpEDhNqnb8/GoKdpHi/ja0aDLTpCKsORs6Vdjz1Zf4k0SYoo
+         Eyt7ISZgH6HnARM30hHXX3K/UwgGIsrooCemf133+6N5mntzkCRPCs6o+gFZGbV5Hz9y
+         OTzEvhOr6phVdZQzHEnU3g1EKzogmhKkLwso/VGeVU3ebFXR0GyKQyM4wtnswNOnQ8Un
+         0/tYeHwS12VKmSGEaY98OD2KvjoCXdtNrqLtfgbG2QWO4i441LVCUVkA2tPhnmcO+4v3
+         sktg==
+X-Gm-Message-State: AFqh2kpRuubocLgMorrCXH09oSnlmTfzqEgshsJJCzpU/JT0kqQ+H3Vk
+        v5IF5biyL1zVwo/fz7lGBA6tzRcRQ2y/l11i76oCAg==
+X-Google-Smtp-Source: AMrXdXtk1VEXi6sU/cPZRwXTFvEyMW0TOBsoND8twqKnIwU8PKZUmc1bpUOjkUgxf0ckeok/mCZ824hGpaMayafFoCw=
+X-Received: by 2002:a0d:ff86:0:b0:47a:a05b:7d0d with SMTP id
+ p128-20020a0dff86000000b0047aa05b7d0dmr859893ywf.230.1672169839892; Tue, 27
+ Dec 2022 11:37:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20221226085703.95081-1-yangjihong1@huawei.com>
-In-Reply-To: <20221226085703.95081-1-yangjihong1@huawei.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 27 Dec 2022 11:34:46 -0800
-Message-ID: <CAM9d7cjoFCqEBVwA+_D5ZNOnVcUo1Y6fysZmG0-uvqm9kUBJGA@mail.gmail.com>
-Subject: Re: [PATCH] perf help: Use HAVE_LIBTRACEEVENT to filter out
- unsupported commands
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221227110335.2923359-1-javierm@redhat.com> <20221227110335.2923359-2-javierm@redhat.com>
+ <CAMty3ZAaHKJ21D8mE=HU3D3KOGAiZ7vfmW_Hgc-E5JO5S+tMNA@mail.gmail.com> <CABxcv=kwtk21UbOwaV4tq=BpPsrYmnTrzuhybjbknipqk5R-fA@mail.gmail.com>
+In-Reply-To: <CABxcv=kwtk21UbOwaV4tq=BpPsrYmnTrzuhybjbknipqk5R-fA@mail.gmail.com>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Wed, 28 Dec 2022 01:07:08 +0530
+Message-ID: <CAMty3ZDESyJoWMO_BgHzUJN=hLV0dH6y=3B9ogOsSUvaTMqarQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: display: Add Himax HX8394 panel controller
+To:     Javier Martinez Canillas <javier@dowhile0.org>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        devicetree@vger.kernel.org, Robert Mader <robert.mader@posteo.de>,
+        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
+        Neal Gompa <ngompa13@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Martijn Braam <martijn@brixit.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Ondrej Jirman <megi@xff.cz>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Kamil_Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Dec 28, 2022 at 12:58 AM Javier Martinez Canillas
+<javier@dowhile0.org> wrote:
+>
+> Hello Jagan,
+>
+> On Tue, Dec 27, 2022 at 7:16 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
+>
+> [...]
+>
+> > > +allOf:
+> > > +  - $ref: panel-common.yaml#
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      # HannStar HSD060BHW4 5.99" 720x1440 TFT LCD panel
+> > > +      - hannstar,hsd060bhw4
+> >
+> > Parent controller can have a compatible where the associated panels
+> > will be enum list.
+> >
+>
+> I'm not sure to follow what you meant. Could you please elaborate?
 
-On Mon, Dec 26, 2022 at 1:00 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> Commands such as kmem, kwork, lock, sched, trace and timechart depend on
-> libtraceevent, these commands need to be isolated using HAVE_LIBTRACEEVENT
-> macro when cmdlist generation.
->
-> The output of the generate-cmdlist.sh script is as follows:
->
->   # ./util/generate-cmdlist.sh
->   /* Automatically generated by ./util/generate-cmdlist.sh */
->   struct cmdname_help
->   {
->       char name[16];
->       char help[80];
->   };
->
->   static struct cmdname_help common_cmds[] = {
->     {"annotate", "Read perf.data (created by perf record) and display annotated code"},
->     {"archive", "Create archive with object files with build-ids found in perf.data file"},
->     {"bench", "General framework for benchmark suites"},
->     {"buildid-cache", "Manage build-id cache."},
->     {"buildid-list", "List the buildids in a perf.data file"},
->     {"c2c", "Shared Data C2C/HITM Analyzer."},
->     {"config", "Get and set variables in a configuration file."},
->     {"daemon", "Run record sessions on background"},
->     {"data", "Data file related processing"},
->     {"diff", "Read perf.data files and display the differential profile"},
->     {"evlist", "List the event names in a perf.data file"},
->     {"ftrace", "simple wrapper for kernel's ftrace functionality"},
->     {"inject", "Filter to augment the events stream with additional information"},
->     {"iostat", "Show I/O performance metrics"},
->     {"kallsyms", "Searches running kernel for symbols"},
->     {"kvm", "Tool to trace/measure kvm guest os"},
->     {"list", "List all symbolic event types"},
->     {"mem", "Profile memory accesses"},
->     {"record", "Run a command and record its profile into perf.data"},
->     {"report", "Read perf.data (created by perf record) and display the profile"},
->     {"script", "Read perf.data (created by perf record) and display trace output"},
->     {"stat", "Run a command and gather performance counter statistics"},
->     {"test", "Runs sanity tests."},
->     {"top", "System profiling tool."},
->     {"version", "display the version of perf binary"},
->   #ifdef HAVE_LIBELF_SUPPORT
->     {"probe", "Define new dynamic tracepoints"},
->   #endif /* HAVE_LIBELF_SUPPORT */
->   #if defined(HAVE_LIBTRACEEVENT) && (defined(HAVE_LIBAUDIT_SUPPORT) || defined(HAVE_SYSCALL_TABLE_SUPPORT))
->     {"trace", "strace inspired tool"},
->   #endif /* HAVE_LIBTRACEEVENT && (HAVE_LIBAUDIT_SUPPORT || HAVE_SYSCALL_TABLE_SUPPORT) */
->   #ifdef HAVE_LIBTRACEEVENT
->     {"kmem", "Tool to trace/measure kernel memory properties"},
->     {"kwork", "Tool to trace/measure kernel work properties (latencies)"},
->     {"lock", "Analyze lock events"},
->     {"sched", "Tool to trace/measure scheduler properties (latencies)"},
->     {"timechart", "Tool to visualize total system behavior during a workload"},
->   #endif /* HAVE_LIBTRACEEVENT */
->   };
->
-> Fixes: 378ef0f5d9d7 ("perf build: Use libtraceevent from the system")
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+compatible:
+    items:
+      - enum:
+          - hannstar,hsd060bhw4
+      - const: himax,hx8394
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+himax,hx8394 is the actual controller and is denoted as fallback compatible.
 
-Thanks,
-Namhyung
-
-
-> ---
->  tools/perf/command-list.txt         | 10 +++++-----
->  tools/perf/util/generate-cmdlist.sh | 19 +++++++++++++++++--
->  2 files changed, 22 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/perf/command-list.txt b/tools/perf/command-list.txt
-> index 8fcab5ad00c5..e8d2762adade 100644
-> --- a/tools/perf/command-list.txt
-> +++ b/tools/perf/command-list.txt
-> @@ -16,20 +16,20 @@ perf-ftrace                 mainporcelain common
->  perf-inject                    mainporcelain common
->  perf-iostat                    mainporcelain common
->  perf-kallsyms                  mainporcelain common
-> -perf-kmem                      mainporcelain common
-> +perf-kmem                      mainporcelain traceevent
->  perf-kvm                       mainporcelain common
-> -perf-kwork                     mainporcelain common
-> +perf-kwork                     mainporcelain traceevent
->  perf-list                      mainporcelain common
-> -perf-lock                      mainporcelain common
-> +perf-lock                      mainporcelain traceevent
->  perf-mem                       mainporcelain common
->  perf-probe                     mainporcelain full
->  perf-record                    mainporcelain common
->  perf-report                    mainporcelain common
-> -perf-sched                     mainporcelain common
-> +perf-sched                     mainporcelain traceevent
->  perf-script                    mainporcelain common
->  perf-stat                      mainporcelain common
->  perf-test                      mainporcelain common
-> -perf-timechart                 mainporcelain common
-> +perf-timechart                 mainporcelain traceevent
->  perf-top                       mainporcelain common
->  perf-trace                     mainporcelain audit
->  perf-version                   mainporcelain common
-> diff --git a/tools/perf/util/generate-cmdlist.sh b/tools/perf/util/generate-cmdlist.sh
-> index c3cef36d4176..1b5140e5ce99 100755
-> --- a/tools/perf/util/generate-cmdlist.sh
-> +++ b/tools/perf/util/generate-cmdlist.sh
-> @@ -38,7 +38,7 @@ do
->  done
->  echo "#endif /* HAVE_LIBELF_SUPPORT */"
->
-> -echo "#if defined(HAVE_LIBAUDIT_SUPPORT) || defined(HAVE_SYSCALL_TABLE_SUPPORT)"
-> +echo "#if defined(HAVE_LIBTRACEEVENT) && (defined(HAVE_LIBAUDIT_SUPPORT) || defined(HAVE_SYSCALL_TABLE_SUPPORT))"
->  sed -n -e 's/^perf-\([^        ]*\)[   ].* audit*/\1/p' command-list.txt |
->  sort |
->  while read cmd
-> @@ -51,5 +51,20 @@ do
->             p
->       }' "Documentation/perf-$cmd.txt"
->  done
-> -echo "#endif /* HAVE_LIBELF_SUPPORT */"
-> +echo "#endif /* HAVE_LIBTRACEEVENT && (HAVE_LIBAUDIT_SUPPORT || HAVE_SYSCALL_TABLE_SUPPORT) */"
-> +
-> +echo "#ifdef HAVE_LIBTRACEEVENT"
-> +sed -n -e 's/^perf-\([^        ]*\)[   ].* traceevent.*/\1/p' command-list.txt |
-> +sort |
-> +while read cmd
-> +do
-> +     sed -n '
-> +     /^NAME/,/perf-'"$cmd"'/H
-> +     ${
-> +            x
-> +            s/.*perf-'"$cmd"' - \(.*\)/  {"'"$cmd"'", "\1"},/
-> +            p
-> +     }' "Documentation/perf-$cmd.txt"
-> +done
-> +echo "#endif /* HAVE_LIBTRACEEVENT */"
->  echo "};"
-> --
-> 2.17.1
->
+Jagan.
