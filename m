@@ -2,206 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FE4656DBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC71656DC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiL0RzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 12:55:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        id S229987AbiL0R4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 12:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiL0RzV (ORCPT
+        with ESMTP id S229533AbiL0R4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 12:55:21 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764E9C75B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 09:55:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672163720; x=1703699720;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=3t2zGvsbIvsA1cQoM4f6pVNLC6//Nqq8z/31mc5E0zM=;
-  b=PeQIB4ldP0PXGcLrEyY0j+yZ/OYgxk+IwcX1boxbBLLrnBdPbinDUmdQ
-   +5yDbcgtM7N988mLCncBc6pGLW2zHi8jU4Kb6CdhI5FGuRsfHUBBzAnOw
-   EpXCzW1aKzq4L3WnVDHc6JcdYSJ05ceFSL2L/Oof8pGvtFpfc/p7ni8E4
-   Lo+kUOXKaPqSHKe4qCmglCG0TKN+hVCE16z+H1Xo+pa2OK7UOScKQspkH
-   tjsxHGjg27OXyiaBTQbiOEluJkIZNSNKA/FBSiCms+jKSP0HjEmAA7Kfb
-   IMobWjGuBoXfBg2sDhAitpSBtzxXXUR912pfjq2EFqoaCRN16TxVl56XQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="347934695"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="347934695"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 09:55:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="716396009"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="716396009"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Dec 2022 09:55:19 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 27 Dec 2022 09:55:19 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 27 Dec 2022 09:55:19 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 27 Dec 2022 09:55:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Oa383E57RqGRvrqphuEbvLA7LMpVu1y4zrlzCXs54Xn21MIJgnaUtnR3DwPeiwXcFXRu1mWL3/ZjpYp40/upJq0QdLtMkhDBC4T3PA92zLlU2XB4Qu1cxpLdskYkN/+rV+53e8bO1bIcS/CJmhBR7/qjDCdTHZffZrH8nkR/nyMQmMA7cEuBN1be/gtBTgks1JmRgQyBIJIOqCHLGmHhIeH58eT6kKjLMeoLomoODttgshHdbMWrlrj4KkuDi3oZvNMwvqI0whNZHXlV8tyfR8iShUZVas3r7D37XN1+WvXeOIN9Eml27EF9aka8o88tALC0QNMQfPQeKOjmydQDdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3t2zGvsbIvsA1cQoM4f6pVNLC6//Nqq8z/31mc5E0zM=;
- b=GcqT8ehUKSWxBLnIQn3icksiW1F5YBBLLd4A62Pfhn9mSTaJaXd/DhPvqFgsICfQ0CG2DAqqBfbXfJClq4uJ0NL6qyJMvf9DTOBQHu9LAdIuwL7f/rBcxg2coZ+4mpA0B/WJzeQM6zIC0d+PplohIR7ek6wtg5rSWr1GvizxPLbwbKh9nqqqFXD5UqxTcM+aVJ1yVuG5vEfzwyFES2TgGUY28JrM9QBnwtu/dLFaqoQup31od7ineXQEtuQbi21vbmKqdKz2xdlu+b475YGCnU4SSe9tmuHZ4mHFBhHuvon2PRYjypN4K6rRBXcrtVoaE+5Kv3PblTU7/p+QdfRKYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM8PR11MB5751.namprd11.prod.outlook.com (2603:10b6:8:12::16) by
- IA1PR11MB7199.namprd11.prod.outlook.com (2603:10b6:208:418::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 27 Dec
- 2022 17:55:17 +0000
-Received: from DM8PR11MB5751.namprd11.prod.outlook.com
- ([fe80::8901:2af2:6e02:c95c]) by DM8PR11MB5751.namprd11.prod.outlook.com
- ([fe80::8901:2af2:6e02:c95c%5]) with mapi id 15.20.5924.016; Tue, 27 Dec 2022
- 17:55:17 +0000
-From:   "Teres Alexis, Alan Previn" <alan.previn.teres.alexis@intel.com>
-To:     "ddavenport@chromium.org" <ddavenport@chromium.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "Heikkila, Juha-pekka" <juha-pekka.heikkila@intel.com>
-Subject: Re: [Intel-gfx] [PATCH] drm/i915/display: Check source height is > 0
-Thread-Topic: [Intel-gfx] [PATCH] drm/i915/display: Check source height is > 0
-Thread-Index: AQHZGbedEZslNx+p3U+H+RVl79kTVq6CBh2A
-Date:   Tue, 27 Dec 2022 17:55:17 +0000
-Message-ID: <e9cfd7b7b23294592192869bd16a20596f3276c2.camel@intel.com>
-References: <20221226225246.1.I15dff7bb5a0e485c862eae61a69096caf12ef29f@changeid>
-In-Reply-To: <20221226225246.1.I15dff7bb5a0e485c862eae61a69096caf12ef29f@changeid>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR11MB5751:EE_|IA1PR11MB7199:EE_
-x-ms-office365-filtering-correlation-id: f747ea14-a906-46ab-26d8-08dae8338387
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dWiHPoYaWKli/oZzt95kmhbMtyA0tKduZ6TyTZKgn7CIPLMHtWrHqzof3bpRu9e7QdmymTh/zWICTxuhguvIGIVPF44OZYSTLckkEhDVPMRWrRnVxwi7MvvwH+oHHD1IGZKfNpgXkwDRf5T3AKonWAscNPjbtbau4ISTZtJ+TCGHHh5SRJrtDCGPV2zIAVCbhOXU2ffWKx/eb2UsTSH4lOC7VfKG9hvE4FU1tbaO3HYmD7a2q8rFE2FQX8IMRO2MWaSfr0t+wLAhVPcQuV0Da7IFFHsOs/ID90mp/GGJOmYsRrSQBBsbK0oL/6adYw2DI5izRCH5o7HHYjuCdbT0aJngcKhjszGD9E98oI9dbOIHLQRR38+lKYsg37cr9s5N6Y5t37YMbkP7jo/aiLob/nLzmv/+wGfLKvBK86ytEa5ZMgjI74x7ZhW1SsNfmSuCFhnstQjCDZWvlTBtviUxQ5bZ8h+ipJjjfh/a9cYuux4Sk1KdFQZ8YAI2CmMpFVGSbsibpJKIihsA5UflcDSplHJ72nHNBj3DQnFVXuGBpJ7nMLbno7KO28EGNo4CBMs65+UwIbpaS72zPlibYtGmxYVywEOtJNsmw7VYYBMkcjYBsWFhJMEQnco9Dp/9MHbOG2bfhkNE78THVAzaF6xiLNvjhcDHC1aSqCkH8/ueoiS7CIf55i4Ai52NXpqVDyNwPAVaPQppkPq/FFFFE3/09A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5751.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199015)(2616005)(76116006)(66556008)(66476007)(66946007)(82960400001)(41300700001)(38100700002)(66446008)(91956017)(64756008)(122000001)(107886003)(8676002)(4326008)(4001150100001)(2906002)(8936002)(86362001)(5660300002)(38070700005)(36756003)(83380400001)(6486002)(478600001)(6506007)(110136005)(54906003)(316002)(186003)(6512007)(26005)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UUVFREN5ZGw5QjIyelVYOUV6T0V5K2duL1FDSXljSmFYYU0rTnZPRlZwRFkw?=
- =?utf-8?B?bzV2N0FDRFh6bVdlR0gvQXhCN0pPZlhCdUVXVkYzUXN2ZEJyQWY2QmlwTXJ2?=
- =?utf-8?B?U21sdFlBT2E0SUx1NFlScTVjWHYwbStRcVNFajYya3N5NmFHcllVUEtYNDZS?=
- =?utf-8?B?T2pXcmxHTG1wbWZGOGJJdlZvOWtHTWNjVDl2ek9Rdjd6TzQ1RkVHV3V5Vno0?=
- =?utf-8?B?MDVQNStSbkZlT1BWNnFGNHo4NkVHdTgyQm1mVGRiMURGVWdtNWNPZERnYmJi?=
- =?utf-8?B?a3VDZGZDVXJXV3cxZVQwTDc3M3FRR3lmUjlmbUJlR2V0cXQ0aldjczFKMnda?=
- =?utf-8?B?a1lTRUxENXJOMmVkWHppV1IzVkFuT0x5T0huemovMGNxVS9QZVFQZDdyckVE?=
- =?utf-8?B?d1BYWTU4S012cy9ncFRVOTFBZnd0dVdtWndSTkJHUDlnNHNHcFJiekNTNWV0?=
- =?utf-8?B?T2pUQ1ZMV0xvQTdLeUpVbEFoeWNkM3lGTWt3TlNaQkZuTk5FeWxCTitzSjVE?=
- =?utf-8?B?N0J4ZjhLVUlKTUJqMi83OXZvY1lYdkpUenptbnhrbitUL3R0SEh4aFFzMXZz?=
- =?utf-8?B?ZG1LclkxZW9mNlYvL1NyTEdaZUNPUlhkSklMbjVOQWVZTGI4VHRtM0RCbjRO?=
- =?utf-8?B?N3piaXpzVmU3K2xkcFRiOFNzZEZOakdXV0FKQnpUK1lUUXFsZks0U3J4UTJw?=
- =?utf-8?B?M3RueGZGN1FtNzZRNXNPSnh3dEhMNm1VSS9YbGpaYnVVbUZwSkd6WXQzNnJP?=
- =?utf-8?B?QndVNVAwNGViM0tGQmZGWWtqWEUwdENqOElaVWRsZTdSdUE1N1RPcHo5dUxx?=
- =?utf-8?B?U1Rpc0pFa0szcjJpbFozWS9kWWlCdkhxcURISW85VVpWcTdrNExHZER6dERP?=
- =?utf-8?B?YlFkb2crY2J0Q0hsZEUvdE1wSFpTbnFKdHAyellVSWt5amFFZElHYXA0aU56?=
- =?utf-8?B?aXFtOUs1WXowbnUvV3RsMHRiTDJKZHFnYldzZ0hSZEdzRnpWUGhXV1J5L1kw?=
- =?utf-8?B?VVFQZGNxNm00Z0djZzl5UVMxbFdiMFg2Q3laZVFBTTR6Skwvd1FocHdESVJE?=
- =?utf-8?B?dTJhK3Y3cW8wcWdpMGlPaXZia0VXWUxXYlJYZW9qeUFxaGhYTUl5cXk0VHVo?=
- =?utf-8?B?LzRGTEJYK1grSUQ3dDdhQUV6SS9QaEt6NkVRTFRHNDlSVXFrUkRzNzZYTytw?=
- =?utf-8?B?cVlWaDMrLzZoUjFYOXhPTlVSVnRNRUJZUFpPalJzUWRvSXVHWUlPTW5XcXlF?=
- =?utf-8?B?ZVlmbisyQkJVV0VhUGdoSGpZUi9venRLTENSejFMOU11TUg5RGxuN0hOL0dz?=
- =?utf-8?B?TVh2UXdTQkpYWFpVWURVYmJBTVRwWDhnaHl0NmRMdlRBYU55TVI0SFpaV2tt?=
- =?utf-8?B?MkRsb0pmNnd0OFhoMkZiNnAzdWp1WTV2eU9lKzZrMnQrS2oyK0Y2TEI2bkxF?=
- =?utf-8?B?R0psTzlBbEtVZWZLS0VRMkJ0OHQ0UnMrZTRlU0dRT2RCTWFtcmFhOExTN2l4?=
- =?utf-8?B?Z1cwMHJpS2pXMmU4U2h0ZEFBLzFncHFyaXZ4VFdFd1FSSzlkblJxOWpQeVVQ?=
- =?utf-8?B?cFhYblVpam82STRuc1M5KzdyUDdNWmcrWmZSd0VXbDFDelBIMjE0QmRVT05t?=
- =?utf-8?B?cEZkeVlQMVlEQkhEejRYbGIwSUVRUU0vMnY3WUNXaDJLOElKRWJYajFmVnFL?=
- =?utf-8?B?RTh5QjVVbmZPYmlGSTc3T2Q2aXF0RXBiQVB1dVFUVHlzUU5KNkNEdzY4c0pK?=
- =?utf-8?B?bHNVeTcyRDFRSzBvV2lmT1Jlb29NM25kemZLWGduczd2a2FoVmMzWTZKMVdz?=
- =?utf-8?B?Nk5jV1RhVkd5dlQrMUZXT1NLemJPSUFmR1U1aWkzMnBOK3p4cWZvSjdsVFk2?=
- =?utf-8?B?RENqOUVQcktJeW9ERTVPeVZyTVFBZGJLdmVGcUxiTXNiV2lmSFZxaW9qcXJE?=
- =?utf-8?B?Y21Ha1MwRmZTUmwwSDRiY1NhMyticEhmaDdabFgrdkd2WVY1Vko0d25oZSsv?=
- =?utf-8?B?ckgwMFBrT1U0SGFCNlF2bWYxaHRQT29DWDVLV1NXUmNTcWhyWFYzMkg1Ulpw?=
- =?utf-8?B?bHBlS1ZzbTdJb2dDRysvUUM0Q3FiUThsWWpsZXVFS01WUi9QSWVFSzg0aDBM?=
- =?utf-8?B?OU5vU2NETkFpcDZQYWlKSkZDQXZ5b2k4bm9PaC9ZcGtiQVhybW55cmFUbHlI?=
- =?utf-8?Q?9J7fnYB8khmc/0zntkx/nYE=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7C563FF2EDFE42469D9CE87B1E5A1F9B@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 27 Dec 2022 12:56:36 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99191AD
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 09:56:33 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id k26-20020a05600c1c9a00b003d972646a7dso6550742wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 09:56:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EwM/fBfrUUVz1mduvq+vEFx/4zKbQs6z+L9h8AqPjss=;
+        b=PvJ9V5qD0ps1iC5jYEKfr1CnBFhI5u8GCyYZ6RMyLQgXtCNxGGEzE8bMtj3FkLrvFz
+         A2SeCi+cNfrcyMZ54oYtXHtucY05FFGXUrEToYUrc/sdLCOrO6h9eqrIFbo8ETKY1vJj
+         cErJ4uTZ7Qxg/9kZ9KpI2p/97m7XTWsexON2mvdO0JOv4EAh0kXEF7o6uKQc21QSAgPB
+         lzLOotUzA0Al2zm5jN1bt/LZu7sNeNfwxa8V5+qJ9z50pR//zOhdf7MRxDmi4zemfHUy
+         n46wu/IP/QeWVIpUOmbYjCUzWkxQvYFw0VYNa4RH9QyRBC8amQgvbhwnuuGLw+KBYDj8
+         TY+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EwM/fBfrUUVz1mduvq+vEFx/4zKbQs6z+L9h8AqPjss=;
+        b=DJSRpNBAd2h3Ucvt6XkysLkrDU4gbzzClbe0XUof1wsYIowwK8SjBZb7BiCmM4aWks
+         rvtIdVuSYPqgNh4NTuAE/ATTam4TT501vegF9hu+JTD4yJy9VksYmtA6MqrPReNM69bK
+         JcKi2Zt/cIuWucgprZtyMJkCNgllholRbf+QxHD2nsmwBeoFrKRy65v9SO9cuPgxG/Zi
+         eUNKFFcIT/lN5L38xoAOmdvKZKCcRK5p6Y3lHHWG952Q8PufMeeADYNI5JtQpyQuGHw8
+         0gNcS8Q5HC4uh74UY1aI5MqKtoyuqHIHiGeWYwyZpsqdb4UxXN4Zqn/2HiyIcMXnmHJ6
+         7AYg==
+X-Gm-Message-State: AFqh2komyK9UBlQZP524JLsqWVUERjcYOkoUcjvHMQPB/y7aOkGjiiTm
+        dgurBkA6q0CNeeLgDPgqgTE=
+X-Google-Smtp-Source: AMrXdXt1eWy+mK/C9i2KYXdq0iHfulaobi/jCqO9yAxprpQfVaO+v6BgCuSHTbPwmMK4KouYLRv7Pg==
+X-Received: by 2002:a05:600c:3493:b0:3d2:370b:97f4 with SMTP id a19-20020a05600c349300b003d2370b97f4mr19251819wmq.16.1672163792312;
+        Tue, 27 Dec 2022 09:56:32 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m8-20020a05600c4f4800b003cfaae07f68sm24123899wmq.17.2022.12.27.09.56.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Dec 2022 09:56:31 -0800 (PST)
+Date:   Tue, 27 Dec 2022 20:56:27 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        Francisco Munoz <francisco.munoz.ruiz@linux.intel.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>
+Subject: drivers/pci/controller/vmd.c:876 vmd_enable_domain() error:
+ uninitialized symbol 'ret'.
+Message-ID: <202212262019.g63LQtiD-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5751.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f747ea14-a906-46ab-26d8-08dae8338387
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Dec 2022 17:55:17.3370
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AkDC2NzEEw29918DmkVWYaq+SE17CKfUyX9/1qp3z3o8xAuOPdCGyPT0iEHlUxG0EhCre2yOyEfUTLIzM6TvfA/eTOgoOlxVOA5KRgEDYMiM7puhR0+4qWEslA69stF/
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7199
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SXMgdGhlcmUgYSBiZXR0ZXIgcGxhY2UgZm9yIHRoaXMgY2hlY2sgaGlnaGVyIHVwIHRoZSBpbnRl
-bCBzcGVjaWZpYyBhdG9taWMtY2hlY2s/IChzbyB0aGUgY2hlY2sgd29uJ3QgYmUgc2tsIHNwZWNp
-ZmljIC0gaSBub3RpY2UgdGhhdCBpbnRlbF9hZGp1c3RlZF9yYXRlIGlzIGFsc28gY2FsbGVkIGJ5
-DQppbGtfZm9vIGFzIHdlbGwgYW5kIG5vbi1iYWNrZW5kLXNwZWNpZmljIGZ1bmN0aW9ucykuIEVs
-c2UsIHBlcmhhcHMgaW50ZWxfYWRqdXN0ZWRfcmF0ZSBzaG91bGQgYWRkIGEgY2hlY2sgKyBXQVJO
-PyAoaWYgd2UgYXJlIHRyeWluZyB0byBwcm9wYWdhdGUgdGhpcyBzbG93bHkgYWNyb3NzIEhXKS4N
-Cg0KDQouLi5hbGFuIA0KDQpPbiBNb24sIDIwMjItMTItMjYgYXQgMjI6NTMgLTA3MDAsIERyZXcg
-RGF2ZW5wb3J0IHdyb3RlOg0KPiBUaGUgZXJyb3IgbWVzc2FnZSBzdWdnZXN0cyB0aGF0IHRoZSBo
-ZWlnaHQgb2YgdGhlIHNyYyByZWN0IG11c3QgYmUgYXQNCj4gbGVhc3QgMS4gUmVqZWN0IHNvdXJj
-ZSB3aXRoIGhlaWdodCBvZiAwLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogRHJldyBEYXZlbnBvcnQg
-PGRkYXZlbnBvcnRAY2hyb21pdW0ub3JnPg0KPiANCj4gLS0tDQo+IEkgd2FzIGludmVzdGlnYXRp
-bmcgc29tZSBkaXZpZGUtYnktemVybyBjcmFzaCByZXBvcnRzIG9uIENocm9tZU9TIHdoaWNoDQo+
-IHBvaW50ZWQgdG8gdGhlIGludGVsX2FkanVzdGVkX3JhdGUgZnVuY3Rpb24uIEZ1cnRoZXIgcHJv
-ZGRpbmcgc2hvd2VkDQo+IHRoYXQgSSBjb3VsZCByZXByb2R1Y2UgdGhpcyBpbiBhIHNpbXBsZSB0
-ZXN0IHByb2dyYW0gaWYgSSBtYWRlIHNyY19oDQo+IHNvbWUgdmFsdWUgbGVzcyB0aGFuIDEgYnV0
-IGdyZWF0ZXIgdGhhbiAwLg0KPiANCj4gVGhpcyBzZWVtZWQgdG8gYmUgYSBzZW5zaWJsZSBwbGFj
-ZSB0byBjaGVjayB0aGF0IHRoZSBzb3VyY2UgaGVpZ2h0IGlzIGF0DQo+IGxlYXN0IDEuIEkgdHJp
-ZWQgdG8gcmVwcm8gdGhpcyBpc3N1ZSBvbiBhbiBhbWQgZGV2aWNlIEkgaGFkIG9uIGhhbmQsIGFu
-ZA0KPiB0aGUgY29uZmlndXJhdGlvbiB3YXMgcmVqZWN0ZWQuDQo+IA0KPiBXb3VsZCBpdCBtYWtl
-IHNlbnNlIHRvIGFkZCBhIGNoZWNrIHRoYXQgc291cmNlIGRpbWVuc2lvbnMgYXJlIGF0IGxlYXN0
-IDENCj4gc29tZXdoZXJlIGluIGNvcmUsIGxpa2UgaW4gZHJtX2F0b21pY19wbGFuZV9jaGVjaz8g
-T3IgaXMgdGhhdCBhIHZhbGlkDQo+IHVzZSBjYXNlIG9uIHNvbWUgZGV2aWNlcywgYW5kIHRodXMg
-YW55IHN1Y2ggY2hlY2sgc2hvdWxkIGJlIGRvbmUgb24gYQ0KPiBwZXItZHJpdmVyIGJhc2lzPw0K
-PiANCj4gVGhhbmtzLg0KPiANCj4gIGRyaXZlcnMvZ3B1L2RybS9pOTE1L2Rpc3BsYXkvc2tsX3Vu
-aXZlcnNhbF9wbGFuZS5jIHwgMiArLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-LCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2k5MTUv
-ZGlzcGxheS9za2xfdW5pdmVyc2FsX3BsYW5lLmMgYi9kcml2ZXJzL2dwdS9kcm0vaTkxNS9kaXNw
-bGF5L3NrbF91bml2ZXJzYWxfcGxhbmUuYw0KPiBpbmRleCA0Yjc5YzJkMmQ2MTc3Li45YjE3MmEx
-ZTkwZGViIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vaTkxNS9kaXNwbGF5L3NrbF91
-bml2ZXJzYWxfcGxhbmUuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vaTkxNS9kaXNwbGF5L3Nr
-bF91bml2ZXJzYWxfcGxhbmUuYw0KPiBAQCAtMTYyNyw3ICsxNjI3LDcgQEAgc3RhdGljIGludCBz
-a2xfY2hlY2tfbWFpbl9zdXJmYWNlKHN0cnVjdCBpbnRlbF9wbGFuZV9zdGF0ZSAqcGxhbmVfc3Rh
-dGUpDQo+ICAJdTMyIG9mZnNldDsNCj4gIAlpbnQgcmV0Ow0KPiAgDQo+IC0JaWYgKHcgPiBtYXhf
-d2lkdGggfHwgdyA8IG1pbl93aWR0aCB8fCBoID4gbWF4X2hlaWdodCkgew0KPiArCWlmICh3ID4g
-bWF4X3dpZHRoIHx8IHcgPCBtaW5fd2lkdGggfHwgaCA+IG1heF9oZWlnaHQgfHwgaCA8IDEpIHsN
-Cj4gIAkJZHJtX2RiZ19rbXMoJmRldl9wcml2LT5kcm0sDQo+ICAJCQkgICAgInJlcXVlc3RlZCBZ
-L1JHQiBzb3VyY2Ugc2l6ZSAlZHglZCBvdXRzaWRlIGxpbWl0cyAobWluOiAlZHgxIG1heDogJWR4
-JWQpXG4iLA0KPiAgCQkJICAgIHcsIGgsIG1pbl93aWR0aCwgbWF4X3dpZHRoLCBtYXhfaGVpZ2h0
-KTsNCj4gLS0gDQo+IDIuMzkuMC4zMTQuZzg0YjlhNzEzYzQxLWdvb2cNCj4gDQoNCg==
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1b929c02afd37871d5afb9d498426f83432e71c2
+commit: 0a584655ef89541dae4d48d2c523b1480ae80284 PCI: vmd: Fix secondary bus reset for Intel bridges
+config: x86_64-randconfig-m001-20221226
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+
+smatch warnings:
+drivers/pci/controller/vmd.c:876 vmd_enable_domain() error: uninitialized symbol 'ret'.
+
+vim +/ret +876 drivers/pci/controller/vmd.c
+
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  712  static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  713  {
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  714  	struct pci_sysdata *sd = &vmd->sysdata;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  715  	struct resource *res;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  716  	u32 upper_bits;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  717  	unsigned long flags;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  718  	LIST_HEAD(resources);
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  719  	resource_size_t offset[2] = {0};
+e3dffa4f6c3612 drivers/pci/controller/vmd.c Jon Derrick       2019-09-16  720  	resource_size_t membar2_offset = 0x2000;
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  721  	struct pci_bus *child;
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  722  	struct pci_dev *dev;
+030109c0376c8f drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  723  	int ret;
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  724  
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  725  	/*
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  726  	 * Shadow registers may exist in certain VMD device ids which allow
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  727  	 * guests to correctly assign host physical addresses to the root ports
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  728  	 * and child devices. These registers will either return the host value
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  729  	 * or 0, depending on an enable bit in the VMD device.
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  730  	 */
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  731  	if (features & VMD_FEAT_HAS_MEMBAR_SHADOW) {
+a1a30170138c9c drivers/pci/controller/vmd.c Jon Derrick       2019-09-16  732  		membar2_offset = MB2_SHADOW_OFFSET + MB2_SHADOW_SIZE;
+030109c0376c8f drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  733  		ret = vmd_get_phys_offsets(vmd, true, &offset[0], &offset[1]);
+030109c0376c8f drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  734  		if (ret)
+030109c0376c8f drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  735  			return ret;
+030109c0376c8f drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  736  	} else if (features & VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP) {
+030109c0376c8f drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  737  		ret = vmd_get_phys_offsets(vmd, false, &offset[0], &offset[1]);
+030109c0376c8f drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  738  		if (ret)
+030109c0376c8f drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  739  			return ret;
+51f939b11cb1c4 drivers/pci/controller/vmd.c Jon Derrick       2020-05-27  740  	}
+51f939b11cb1c4 drivers/pci/controller/vmd.c Jon Derrick       2020-05-27  741  
+2a5a9c9a20f919 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  742  	/*
+2a5a9c9a20f919 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  743  	 * Certain VMD devices may have a root port configuration option which
+08bcdd22ecdb01 drivers/pci/controller/vmd.c Jon Derrick       2019-11-12  744  	 * limits the bus range to between 0-127, 128-255, or 224-255
+2a5a9c9a20f919 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  745  	 */
+2a5a9c9a20f919 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  746  	if (features & VMD_FEAT_HAS_BUS_RESTRICTIONS) {
+2e1224183b1bec drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  747  		ret = vmd_get_bus_number_start(vmd);
+2e1224183b1bec drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  748  		if (ret)
+2e1224183b1bec drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  749  			return ret;
+2a5a9c9a20f919 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  750  	}
+2a5a9c9a20f919 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  751  
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  752  	res = &vmd->dev->resource[VMD_CFGBAR];
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  753  	vmd->resources[0] = (struct resource) {
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  754  		.name  = "VMD CFGBAR",
+e3dffa4f6c3612 drivers/pci/controller/vmd.c Jon Derrick       2019-09-16  755  		.start = vmd->busn_start,
+e3dffa4f6c3612 drivers/pci/controller/vmd.c Jon Derrick       2019-09-16  756  		.end   = vmd->busn_start + (resource_size(res) >> 20) - 1,
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  757  		.flags = IORESOURCE_BUS | IORESOURCE_PCI_FIXED,
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  758  	};
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  759  
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  760  	/*
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  761  	 * If the window is below 4GB, clear IORESOURCE_MEM_64 so we can
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  762  	 * put 32-bit resources in the window.
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  763  	 *
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  764  	 * There's no hardware reason why a 64-bit window *couldn't*
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  765  	 * contain a 32-bit resource, but pbus_size_mem() computes the
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  766  	 * bridge window size assuming a 64-bit window will contain no
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  767  	 * 32-bit resources.  __pci_assign_resource() enforces that
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  768  	 * artificial restriction to make sure everything will fit.
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  769  	 *
+f6b6aefee70aa5 drivers/pci/controller/vmd.c Bjorn Helgaas     2019-05-30  770  	 * The only way we could use a 64-bit non-prefetchable MEMBAR is
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  771  	 * if its address is <4GB so that we can convert it to a 32-bit
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  772  	 * resource.  To be visible to the host OS, all VMD endpoints must
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  773  	 * be initially configured by platform BIOS, which includes setting
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  774  	 * up these resources.  We can assume the device is configured
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  775  	 * according to the platform needs.
+83cc54a608b66d arch/x86/pci/vmd.c           Keith Busch       2016-03-02  776  	 */
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  777  	res = &vmd->dev->resource[VMD_MEMBAR1];
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  778  	upper_bits = upper_32_bits(res->end);
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  779  	flags = res->flags & ~IORESOURCE_SIZEALIGN;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  780  	if (!upper_bits)
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  781  		flags &= ~IORESOURCE_MEM_64;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  782  	vmd->resources[1] = (struct resource) {
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  783  		.name  = "VMD MEMBAR1",
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  784  		.start = res->start,
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  785  		.end   = res->end,
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  786  		.flags = flags,
+2c2c5c5cd213ae arch/x86/pci/vmd.c           Jon Derrick       2016-02-24  787  		.parent = res,
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  788  	};
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  789  
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  790  	res = &vmd->dev->resource[VMD_MEMBAR2];
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  791  	upper_bits = upper_32_bits(res->end);
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  792  	flags = res->flags & ~IORESOURCE_SIZEALIGN;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  793  	if (!upper_bits)
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  794  		flags &= ~IORESOURCE_MEM_64;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  795  	vmd->resources[2] = (struct resource) {
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  796  		.name  = "VMD MEMBAR2",
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  797  		.start = res->start + membar2_offset,
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  798  		.end   = res->end,
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  799  		.flags = flags,
+2c2c5c5cd213ae arch/x86/pci/vmd.c           Jon Derrick       2016-02-24  800  		.parent = res,
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  801  	};
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  802  
+34067c56fa177d drivers/pci/controller/vmd.c Jon Derrick       2020-01-21  803  	sd->vmd_dev = vmd->dev;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  804  	sd->domain = vmd_find_free_domain();
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  805  	if (sd->domain < 0)
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  806  		return sd->domain;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  807  
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  808  	sd->node = pcibus_to_node(vmd->dev->bus);
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  809  
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  810  	/*
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  811  	 * Currently MSI remapping must be enabled in guest passthrough mode
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  812  	 * due to some missing interrupt remapping plumbing. This is probably
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  813  	 * acceptable because the guest is usually CPU-limited and MSI
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  814  	 * remapping doesn't become a performance bottleneck.
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  815  	 */
+c94f732e8001a8 drivers/pci/controller/vmd.c Nirmal Patel      2022-05-11  816  	if (!(features & VMD_FEAT_CAN_BYPASS_MSI_REMAP) ||
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  817  	    offset[0] || offset[1]) {
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  818  		ret = vmd_alloc_irqs(vmd);
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  819  		if (ret)
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  820  			return ret;
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  821  
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  822  		vmd_set_msi_remapping(vmd, true);
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  823  
+1552b11ba15e93 drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  824  		ret = vmd_create_irq_domain(vmd);
+1552b11ba15e93 drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  825  		if (ret)
+1552b11ba15e93 drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  826  			return ret;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  827  
+d7f954e54079b4 drivers/pci/controller/vmd.c Thomas Gleixner   2020-08-26  828  		/*
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  829  		 * Override the IRQ domain bus token so the domain can be
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  830  		 * distinguished from a regular PCI/MSI domain.
+d7f954e54079b4 drivers/pci/controller/vmd.c Thomas Gleixner   2020-08-26  831  		 */
+d7f954e54079b4 drivers/pci/controller/vmd.c Thomas Gleixner   2020-08-26  832  		irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  833  	} else {
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  834  		vmd_set_msi_remapping(vmd, false);
+ee81ee84f8739e drivers/pci/controller/vmd.c Jon Derrick       2021-02-10  835  	}
+d7f954e54079b4 drivers/pci/controller/vmd.c Thomas Gleixner   2020-08-26  836  
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  837  	pci_add_resource(&resources, &vmd->resources[0]);
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  838  	pci_add_resource_offset(&resources, &vmd->resources[1], offset[0]);
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  839  	pci_add_resource_offset(&resources, &vmd->resources[2], offset[1]);
+6788958e4f3ca1 drivers/pci/host/vmd.c       Jon Derrick       2018-05-18  840  
+e3dffa4f6c3612 drivers/pci/controller/vmd.c Jon Derrick       2019-09-16  841  	vmd->bus = pci_create_root_bus(&vmd->dev->dev, vmd->busn_start,
+e3dffa4f6c3612 drivers/pci/controller/vmd.c Jon Derrick       2019-09-16  842  				       &vmd_ops, sd, &resources);
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  843  	if (!vmd->bus) {
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  844  		pci_free_resource_list(&resources);
+1552b11ba15e93 drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  845  		vmd_remove_irq_domain(vmd);
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  846  		return -ENODEV;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  847  	}
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  848  
+04b12ef163d10e drivers/pci/controller/vmd.c Kai-Heng Feng     2021-12-03  849  	vmd_copy_host_bridge_flags(pci_find_host_bridge(vmd->dev->bus),
+04b12ef163d10e drivers/pci/controller/vmd.c Kai-Heng Feng     2021-12-03  850  				   to_pci_host_bridge(vmd->bus->bridge));
+04b12ef163d10e drivers/pci/controller/vmd.c Kai-Heng Feng     2021-12-03  851  
+2c2c5c5cd213ae arch/x86/pci/vmd.c           Jon Derrick       2016-02-24  852  	vmd_attach_resources(vmd);
+1552b11ba15e93 drivers/pci/controller/vmd.c Jon Derrick       2020-07-28  853  	if (vmd->irq_domain)
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  854  		dev_set_msi_domain(&vmd->bus->dev, vmd->irq_domain);
+886e67100b904c drivers/pci/controller/vmd.c Nirmal Patel      2022-05-11  855  	else
+886e67100b904c drivers/pci/controller/vmd.c Nirmal Patel      2022-05-11  856  		dev_set_msi_domain(&vmd->bus->dev,
+886e67100b904c drivers/pci/controller/vmd.c Nirmal Patel      2022-05-11  857  				   dev_get_msi_domain(&vmd->dev->dev));
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  858  
+59dc33252ee777 drivers/pci/controller/vmd.c Rafael J. Wysocki 2021-08-24  859  	vmd_acpi_begin();
+59dc33252ee777 drivers/pci/controller/vmd.c Rafael J. Wysocki 2021-08-24  860  
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  861  	pci_scan_child_bus(vmd->bus);
+6aab5622296b99 drivers/pci/controller/vmd.c Nirmal Patel      2021-11-16  862  	vmd_domain_reset(vmd);
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  863  
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  864  	/* When Intel VMD is enabled, the OS does not discover the Root Ports
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  865  	 * owned by Intel VMD within the MMCFG space. pci_reset_bus() applies
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  866  	 * a reset to the parent of the PCI device supplied as argument. This
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  867  	 * is why we pass a child device, so the reset can be triggered at
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  868  	 * the Intel bridge level and propagated to all the children in the
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  869  	 * hierarchy.
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  870  	 */
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  871  	list_for_each_entry(child, &vmd->bus->children, node) {
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  872  		if (!list_empty(&child->devices)) {
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  873  			dev = list_first_entry(&child->devices,
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  874  					       struct pci_dev, bus_list);
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  875  			if (pci_reset_bus(dev))
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05 @876  				pci_warn(dev, "can't reset device: %d\n", ret);
+
+"ret" not initialized/useful at this point.
+
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  877  
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  878  			break;
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  879  		}
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  880  	}
+0a584655ef8954 drivers/pci/controller/vmd.c Francisco Munoz   2022-12-05  881  
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  882  	pci_assign_unassigned_bus_resources(vmd->bus);
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  883  
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  884  	/*
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  885  	 * VMD root buses are virtual and don't return true on pci_is_pcie()
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  886  	 * and will fail pcie_bus_configure_settings() early. It can instead be
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  887  	 * run on each of the real root ports.
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  888  	 */
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  889  	list_for_each_entry(child, &vmd->bus->children, node)
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  890  		pcie_bus_configure_settings(child);
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  891  
+0294951030eb8e drivers/pci/controller/vmd.c Jon Derrick       2018-12-13  892  	pci_bus_add_devices(vmd->bus);
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  893  
+59dc33252ee777 drivers/pci/controller/vmd.c Rafael J. Wysocki 2021-08-24  894  	vmd_acpi_end();
+59dc33252ee777 drivers/pci/controller/vmd.c Rafael J. Wysocki 2021-08-24  895  
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  896  	WARN(sysfs_create_link(&vmd->dev->dev.kobj, &vmd->bus->dev.kobj,
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  897  			       "domain"), "Can't create symlink to domain\n");
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  898  	return 0;
+185a383ada2e77 arch/x86/pci/vmd.c           Keith Busch       2016-01-12  899  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
