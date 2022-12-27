@@ -2,65 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E51E656E25
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEB7656E28
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiL0TKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
+        id S230293AbiL0TK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiL0TKE (ORCPT
+        with ESMTP id S231221AbiL0TKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:10:04 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB566CE12
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:10:02 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id vm8so26941427ejc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:10:02 -0800 (PST)
+        Tue, 27 Dec 2022 14:10:50 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C8AD116
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:10:49 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id z12so11135039qtv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:10:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E2gUvzefuGQfzRw3IXsN/yQhJ7wb3oyMnqOzM2W06bQ=;
-        b=LCRBRzVCt4dH/C/m9t2Z09K8t9q1oIWgw9rUBHmQu0CyHyqqoPASd2FEHEVwLQT4Jb
-         kO2svJ5hRkoimvsLdjZ+uRge/YW1H6iplS5QmxcmVo7erSyjftmnzryjVR/E0PTIsiTJ
-         Ua9BwgRYnEsuvdy8bUsFGkRbqpcMqxTAl924S5vGFov7JmgznRINm6m2rFbbN9eXihhA
-         MaP6j0iRHLPk40TJi/KNvgA7iKl2RmcBUCwjnEuw8jJt8Ku7satSQoABBYKkEpokd3IR
-         oUijaerUXs37GFFYHbxYwimqmvCV9/8iYfheCoXYHA1iahdTSV0lC6bFohpuHgD74Xkl
-         1CJA==
+        bh=ala6gezAzOfA3A3+kxaw4LGN1hrXw5q3ThDReQX0bOs=;
+        b=Aq+2ymtxux+AtiI6SM1Qao0amZsbwS0ltaNHroJ1yK+FXjtMBIs4FZ/ap33ecVvtop
+         zLMLr3qZTfkf+X7A2HhvWFboTHPoyDfdayA+DKXHj8wMG8eeFJ0JpgFReEC98ZD8BAYu
+         yyBev6KA6UgXGxdqumz7UzO+CDDcI10az/6YM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=E2gUvzefuGQfzRw3IXsN/yQhJ7wb3oyMnqOzM2W06bQ=;
-        b=SwnH9QyLSfkN95F/e7cNZcHeGR/6bo5/HmPRJNseluSd/NaT1/ifBFHhCCaQizFqHZ
-         JUfSCr/Lo+9upO9BnP0qKCptrTHGVpTFYqI7UhdQjn4kbwI/707lo4+Qo1Dsl/fg7LWd
-         Z23TTtIBVysM+x1rv2azG69ig4eTKv+uZypV78DkkgYea5idERK5kh6yGDpwzBDlOT+y
-         AkWNAbP8RqWMyxx0CyqyKXpsW4PiOmMYaLVAyc6B5TbPoZhZYhMvxqQ1qaFP3fcfJAAK
-         tzpN3jpccZePkUDSdztniff48B36Z/ytyoHBxiBU7IrihP+ZKuuSGgsPIy8qAEak6MuV
-         WwvA==
-X-Gm-Message-State: AFqh2kqHdmIQfoLsWWL5M9203ad5R+tPvyjYTRVehXL6ysbLMsql0SQn
-        AgtVPN8WEk//5+iOcr3GDzKrT9SYjyvIUPvD0331FQ==
-X-Google-Smtp-Source: AMrXdXumgrYu5l/0QrSYzJykoczNg3RNSCJjw6IzvdTuTnstYPS+Jx9Z9R47X9MbnzQuY3onvwu1FoE70pdYEP6Y/0Q=
-X-Received: by 2002:a17:906:6955:b0:7de:e268:2069 with SMTP id
- c21-20020a170906695500b007dee2682069mr2218428ejs.341.1672168201311; Tue, 27
- Dec 2022 11:10:01 -0800 (PST)
+        bh=ala6gezAzOfA3A3+kxaw4LGN1hrXw5q3ThDReQX0bOs=;
+        b=ALuIcenPtRr5bA/lmX6yMvZW3i+0VZT7xUDWHvEXq4eS9svUbo1ZSBWge2xk/cZbtw
+         PbwAB5oZWQLoyJHdyavA6oPKcjBCIhLh+HY78BKLNnrTYc8M6ZWQG7uB3Z2HESe/5u6b
+         zlLWA82X4H4HiNPTnm2T9Vtmk8WtFg5eB877tW+PbPtXP4+rJXcYyFv3tAfZchFHq2So
+         fBPeWmYNbhzKKYTo7Imr+xKpWHnegqqYelCtguBy9fhI0C1lOCodeAKtuxAQ+uaAaKCi
+         48HCc7bDqud/EznU2RdCypmRBZfiGU4K4iDKSSxQX5qAO96YuWfifKf8ro6XZva5mEw+
+         jRMw==
+X-Gm-Message-State: AFqh2kpUzu7zNcBn3ErvtPh0Vch4yoWlx+k/ULnIenQZz3Gdspq+bStR
+        AI3GkbPqpC2otHf3LJhqXa3Q5VosnyKD638R
+X-Google-Smtp-Source: AMrXdXvt4wEJmrT0ockLXrnESnfio2J0BEA3fff+AardSIoW98CX77gsymk2P0gjAis+5x53Swto2Q==
+X-Received: by 2002:a05:622a:4205:b0:3a5:3cb5:2485 with SMTP id cp5-20020a05622a420500b003a53cb52485mr29164636qtb.0.1672168248099;
+        Tue, 27 Dec 2022 11:10:48 -0800 (PST)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com. [209.85.219.43])
+        by smtp.gmail.com with ESMTPSA id l14-20020ac848ce000000b003a820f9fb70sm8723717qtr.36.2022.12.27.11.10.47
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Dec 2022 11:10:48 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id p17so8028829qvn.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:10:47 -0800 (PST)
+X-Received: by 2002:a05:6214:1185:b0:4c6:608c:6b2c with SMTP id
+ t5-20020a056214118500b004c6608c6b2cmr1025269qvv.130.1672168247410; Tue, 27
+ Dec 2022 11:10:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-7-vipinsh@google.com>
-In-Reply-To: <20221222023457.1764-7-vipinsh@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 27 Dec 2022 11:09:49 -0800
-Message-ID: <CANgfPd_=WwrgVVQnooZLCSXpSnEjRVOdt6qZtrvhO_wmxc5Tzg@mail.gmail.com>
-Subject: Re: [Patch v3 6/9] KVM: Provide NUMA node support to kvm_mmu_memory_cache{}
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221227030829.12508-1-kirill.shutemov@linux.intel.com> <20221227030829.12508-6-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20221227030829.12508-6-kirill.shutemov@linux.intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 27 Dec 2022 11:10:31 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgKTcOx1hhWAGJ-g9_9o7xiGJ9v9n2RskBSCkaUMBxDkw@mail.gmail.com>
+Message-ID: <CAHk-=wgKTcOx1hhWAGJ-g9_9o7xiGJ9v9n2RskBSCkaUMBxDkw@mail.gmail.com>
+Subject: Re: [PATCHv13 05/16] x86/uaccess: Provide untagged_addr() and remove
+ tags before address check
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,180 +89,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 6:35 PM Vipin Sharma <vipinsh@google.com> wrote:
+On Mon, Dec 26, 2022 at 7:08 PM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
 >
-> Add 'node' variable in kvm_mmu_memory_cache{} to denote which NUMA node
-> this cache should allocate memory from. Default initialize to
-> NUMA_NO_NODE in all architectures.
+> --- a/arch/x86/include/asm/uaccess.h
+> +++ b/arch/x86/include/asm/uaccess.h
+> @@ -21,6 +22,37 @@ static inline bool pagefault_disabled(void);
+>  # define WARN_ON_IN_IRQ()
+>  #endif
 >
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  arch/arm64/kvm/arm.c      |  2 +-
->  arch/arm64/kvm/mmu.c      |  4 +++-
->  arch/mips/kvm/mips.c      |  2 ++
->  arch/riscv/kvm/mmu.c      |  2 +-
->  arch/riscv/kvm/vcpu.c     |  2 +-
->  arch/x86/kvm/mmu/mmu.c    | 22 ++++++++++++----------
->  include/linux/kvm_host.h  |  6 ++++++
->  include/linux/kvm_types.h |  2 ++
->  8 files changed, 28 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 9c5573bc4614..52a41f4532e2 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -340,7 +340,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->         vcpu->arch.target = -1;
->         bitmap_zero(vcpu->arch.features, KVM_VCPU_MAX_FEATURES);
->
-> -       vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
-> +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache, NULL, NUMA_NO_NODE);
->
->         /*
->          * Default value for the FP state, will be overloaded at load
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index 31d7fa4c7c14..bd07155e17fa 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -894,12 +894,14 @@ int kvm_phys_addr_ioremap(struct kvm *kvm, phys_addr_t guest_ipa,
->  {
->         phys_addr_t addr;
->         int ret = 0;
-> -       struct kvm_mmu_memory_cache cache = { .gfp_zero = __GFP_ZERO };
-> +       struct kvm_mmu_memory_cache cache;
->         struct kvm_pgtable *pgt = kvm->arch.mmu.pgt;
->         enum kvm_pgtable_prot prot = KVM_PGTABLE_PROT_DEVICE |
->                                      KVM_PGTABLE_PROT_R |
->                                      (writable ? KVM_PGTABLE_PROT_W : 0);
->
-> +       INIT_KVM_MMU_MEMORY_CACHE(&cache, NULL, NUMA_NO_NODE);
-> +
->         if (is_protected_kvm_enabled())
->                 return -EPERM;
->
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index a25e0b73ee70..b017c29a9340 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -304,6 +304,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->                      HRTIMER_MODE_REL);
->         vcpu->arch.comparecount_timer.function = kvm_mips_comparecount_wakeup;
->
-> +       vcpu->arch.mmu_page_cache.node = NUMA_NO_NODE;
-> +
+> +#ifdef CONFIG_X86_64
 
-It looks weird to have MIPS not using the initialization MACRO. Should
-it just have a GFP_ZERO parameter?
+I think this should be CONFIG_ADDRESS_MASKING or something like that.
 
->         /*
->          * Allocate space for host mode exception handlers that handle
->          * guest mode exits
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 34b57e0be2ef..119de4520cc6 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -353,9 +353,9 @@ int kvm_riscv_gstage_ioremap(struct kvm *kvm, gpa_t gpa,
->         phys_addr_t addr, end;
->         struct kvm_mmu_memory_cache pcache = {
->                 .gfp_custom = (in_atomic) ? GFP_ATOMIC | __GFP_ACCOUNT : 0,
-> -               .gfp_zero = __GFP_ZERO,
->         };
->
-> +       INIT_KVM_MMU_MEMORY_CACHE(&pcache, NULL, NUMA_NO_NODE);
->         end = (gpa + size + PAGE_SIZE - 1) & PAGE_MASK;
->         pfn = __phys_to_pfn(hpa);
->
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 7c08567097f0..189b14feb365 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -161,7 +161,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->
->         /* Mark this VCPU never ran */
->         vcpu->arch.ran_atleast_once = false;
-> -       vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
-> +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_cache, NULL, NUMA_NO_NODE);
->         bitmap_zero(vcpu->arch.isa, RISCV_ISA_EXT_MAX);
->
->         /* Setup ISA features available to VCPU */
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 6f6a10d7a871..23a3b82b2384 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5954,13 +5954,14 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
->  {
->         int ret;
->
-> -       vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
-> -       vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
-> +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_pte_list_desc_cache,
-> +                                 pte_list_desc_cache, NUMA_NO_NODE);
->
-> -       vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
-> -       vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
-> +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache,
-> +                                 mmu_page_header_cache, NUMA_NO_NODE);
->
-> -       vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> +       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache,
-> +                                 NULL, NUMA_NO_NODE);
->         spin_lock_init(&vcpu->arch.mmu_shadow_page_cache_lock);
->
->         vcpu->arch.mmu = &vcpu->arch.root_mmu;
-> @@ -6124,14 +6125,15 @@ int kvm_mmu_init_vm(struct kvm *kvm)
->         node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;
->         kvm_page_track_register_notifier(kvm, node);
->
-> -       kvm->arch.split_page_header_cache.kmem_cache = mmu_page_header_cache;
-> -       kvm->arch.split_page_header_cache.gfp_zero = __GFP_ZERO;
-> +       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache,
-> +                                 mmu_page_header_cache, NUMA_NO_NODE);
->
-> -       kvm->arch.split_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> +       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache,
-> +                                 NULL, NUMA_NO_NODE);
->         spin_lock_init(&kvm->arch.split_shadow_page_cache_lock);
->
-> -       kvm->arch.split_desc_cache.kmem_cache = pte_list_desc_cache;
-> -       kvm->arch.split_desc_cache.gfp_zero = __GFP_ZERO;
-> +       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_desc_cache,
-> +                                 pte_list_desc_cache, NUMA_NO_NODE);
->
->         return 0;
->  }
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index a262e15ebd19..719687a37ef7 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -2302,4 +2302,10 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
->  /* Max number of entries allowed for each kvm dirty ring */
->  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
->
-> +#define INIT_KVM_MMU_MEMORY_CACHE(_cache, _kmem_cache, _node) ({       \
-> +       (_cache)->kmem_cache = _kmem_cache;                             \
-> +       (_cache)->gfp_zero = __GFP_ZERO;                                \
-> +       (_cache)->node = _node;                                         \
+This is not a "64 vs 32-bit feature". This is something else.
+
+Even if you then were to select it unconditionally for 64-bit kernels
+(but why would you?) it reads better if the #ifdef's make sense.
+
+> +#define __untagged_addr(mm, addr)      ({                              \
+> +       u64 __addr = (__force u64)(addr);                               \
+> +       s64 sign = (s64)__addr >> 63;                                   \
+> +       __addr &= READ_ONCE((mm)->context.untag_mask) | sign;           \
+
+Now the READ_ONCE() doesn't make much sense. There shouldn't be any
+data races on that thing.
+
+Plus:
+
+> +#define untagged_addr(addr) __untagged_addr(current->mm, addr)
+
+I think this should at least allow caching it in 'current' without the
+mm indirection.
+
+In fact, it might be even better off as a per-cpu variable.
+
+Because it is now in somewhat crititcal code sections:
+
+> -#define get_user(x,ptr) ({ might_fault(); do_get_user_call(get_user,x,ptr); })
+> +#define get_user(x,ptr)                                                        \
+> +({                                                                     \
+> +       might_fault();                                                  \
+> +       do_get_user_call(get_user,x,untagged_ptr(ptr)); \
 > +})
-> +
 
-Given that this initialization is probably not happening in a super
-hot path, is there any downside to just using a function for the
-initialization?
+This is disgusting and wrong.
 
->  #endif
-> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-> index 76de36e56cdf..9c70ce95e51f 100644
-> --- a/include/linux/kvm_types.h
-> +++ b/include/linux/kvm_types.h
-> @@ -97,6 +97,8 @@ struct kvm_mmu_memory_cache {
->         struct kmem_cache *kmem_cache;
->         int capacity;
->         void **objects;
-> +       /* Node on which memory should be allocated by default */
-> +       int node;
->  };
->  #endif
->
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+The whole reason we do do_get_user_call() as a function call is
+because we *don't* want to do this kind of stuff at the call sites. We
+used to inline it all, but with all the clac/stac and access_ok
+checks, it all just ended up ballooning so much that it was much
+better to make it a special function call with particular calling
+conventions.
+
+That untagged_ptr() should be done in that asm function, not in every call site.
+
+Now, the sad part is that we got *rid* of all this kind of crap not
+that long ago when Christoph cleaned up the old legacy set_fs() mess,
+and we were able to make the task limit be a constant (ok, be _two_
+constants, depending on LA57). So we'd have to re-introduce that nasty
+"look up task size dynamically". See commit 47058bb54b57 ("x86: remove
+address space overrides using set_fs()") for the removal that would
+have to be re-instated.
+
+But see above about "maybe it should be a per-cpu variable" - and
+making that ALTERNATIVE th8ing even nastier.
+
+Another alternative mght be to *only* test the sign bit in the
+get_user/put_user functions, and just take the fault instead. Right
+now we warn about non-canonical addresses because it implies somebody
+might have missed an access_ok(), but we'd just mark those
+get_user/put_user accesses special.
+
+That would get this all entirely off the critical path. Most other
+address masking is for relatively rare things (ie mmap/munmap), but
+the user accesses are hot.
+
+Hmm?
+
+             Linus
