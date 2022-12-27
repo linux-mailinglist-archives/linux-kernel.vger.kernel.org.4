@@ -2,68 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EB765695C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 11:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82591656978
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 11:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbiL0KWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 05:22:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S229801AbiL0Kae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 05:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiL0KWt (ORCPT
+        with ESMTP id S229445AbiL0Kaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 05:22:49 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD5425E2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 02:22:48 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id h4so1032520vkn.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 02:22:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C5/0JksOM2lGuEYSzF1Qu3MnIOgzw58Ul9AktACBNVI=;
-        b=NoTyXYNTcm9i+GC7/+I09XJcPjGPm2toisrvYx3dF44c57grwNAzYz5vVRbhRnJA9S
-         B34KZz4oVKrZN6wpBQ+QnVG35XqSCtcpouGuyB3/fUIXDDIpvt2o1dete8IQ4jhB2VK4
-         pTiaILZwM41NBdToO6kueGNZ1CXaHt5GRY3XI59BNUIdJR6mN615Mf+88Gmm6QxHb95p
-         U2SNRsXu3eqo5n5Smjbcca054NvBvgIuwPw6R1Xds9lzkojAc2OLtCvD9hN5aBTgkIPV
-         WpOHVwYJ4HgifzdLK3a+ewkHHdUb5DUt4wNyHa5aVn0xUqXEJ4EnpoZHjRQsUqZ3yip/
-         TFJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C5/0JksOM2lGuEYSzF1Qu3MnIOgzw58Ul9AktACBNVI=;
-        b=Il6eqtAlMxzqg8sy5yhYV41ohLJYYCHQ18bR0eAALSviJGF6VtTPRGiOEeuOG6I3Wk
-         YAWuRWgw2gDuB4EvbetZFCZ9MJFqvNgmLTNKH/ljEe9gabd29qdkQp09KGwZzqO9d4Vk
-         WxXIZ0cwxPSkrvbQQjM+YJrt3qFsSrl5SIPy8WOA1qBqa0ocvod6+zX9Jsj9ZGZ5pMaX
-         0lEnS3ARaKpsnnktLWudIjfn495SwXZaghkd8ijvKlYuVr+Xb9afTEh9sOO8fC7Pzqqw
-         pytkHCRRqivzUeVgfyhKhsObEn1AHCnT8Ja6SXvULnj1EjiyrN4Ds4ZIcR1f/Qr0bD0K
-         kwyw==
-X-Gm-Message-State: AFqh2krBNi0oFrfv3rfEs0HK7+MwHpQqSet3IAnKOPaAscTFmOjmhexQ
-        Xbj02lOD3sN0sS8anWTAgGXtVtwON9YZ4HgHEsFeyg==
-X-Google-Smtp-Source: AMrXdXuBs2JliWerOZZXmJNVHzg/xf71Hb0VEHnA0XGAF1ihq/iN1gmrkZTToN9EzxIyzAeEgwTxu37dmgcPKXEXKFI=
-X-Received: by 2002:a1f:2016:0:b0:3d5:53d8:aa10 with SMTP id
- g22-20020a1f2016000000b003d553d8aa10mr872944vkg.21.1672136567160; Tue, 27 Dec
- 2022 02:22:47 -0800 (PST)
+        Tue, 27 Dec 2022 05:30:30 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71D512B;
+        Tue, 27 Dec 2022 02:30:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1672136978;
+        bh=6rUL/0fqLXUc3EXcoTbmuRQCiIi6QAilAchLciXsdAw=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=r+YiZvZlnUxMyhBIQFkg9VK1CsEsBPCu6gPQmPLEQAbDGpbAgmHGBNxB9+1Wb6M8d
+         bup5FzjJkrbh1fMYLiyeFtuDwJa6ZkHx0E+STBoBmQLLSf4a7EBZmaXYTnyqq15MK6
+         bih6f6Upn/2wdI00+suCEySy+JEh086fjGTuOr71z2z7vLwlI0gNKqv9/QQRrajwr2
+         cXjHb/p4UJPo/MrkCPMTfwfNWb0jtaiEVQfgMStgHTrt/o4A+ZUNKX6xZMRIGbLwWI
+         w5r8HysTrW/d6YI606cN0756PxNSy1S7CL4J9npulX21/9iXbrjfPpZEFkmcmPijUz
+         xVlGB6lU/wpfA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.153.252] ([217.61.153.252]) by web-mail.gmx.net
+ (3c-app-gmx-bap27.server.lan [172.19.172.97]) (via HTTP); Tue, 27 Dec 2022
+ 11:29:38 +0100
 MIME-Version: 1.0
-References: <20221227022528.609839-1-mie@igel.co.jp> <20221227022528.609839-5-mie@igel.co.jp>
- <20221227020007-mutt-send-email-mst@kernel.org> <CANXvt5pRy-i7=_ikNkZPp2HcRmWZYNJYpjO_ieBJJVc90nds+A@mail.gmail.com>
-In-Reply-To: <CANXvt5pRy-i7=_ikNkZPp2HcRmWZYNJYpjO_ieBJJVc90nds+A@mail.gmail.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 27 Dec 2022 19:22:36 +0900
-Message-ID: <CANXvt5qUUOqB1CVgAk5KyL9sV+NsnJSKhatvdV12jH5=kBjjJw@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/9] vringh: unify the APIs for all accessors
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <trinity-6777c8ee-36ac-4564-8542-f74d3a942a91-1672136978587@3c-app-gmx-bap27>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        devicetree@vger.kernel.org
+Subject: Aw: Re: [next v7 8/8] arm64: dts: mt7986: add Bananapi R3
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 27 Dec 2022 11:29:38 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <trinity-256904b6-bbb5-4424-9686-50ec7fa14f26-1672134220733@3c-app-gmx-bap27>
+References: <20221127114142.156573-1-linux@fw-web.de>
+ <20221127114142.156573-9-linux@fw-web.de> <Y6dMWFy7gChG88j0@makrotopia.org>
+ <trinity-256904b6-bbb5-4424-9686-50ec7fa14f26-1672134220733@3c-app-gmx-bap27>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:uoMc7nMOIJIrLTMKyLHi5Zf+w/mb4Fzoluw4dxHqiG7Oh3NCdu3bQPysJDKjXeSdF3pWn
+ jaWkxXdLvNm01Hn/aewnT06IsBqEfmbeCdLtU+ilvh7Nvs5l2AOup2GSF8gppkuGSLyU1iSxGiv+
+ ptXmk1z2u14AHo0epOf9V04OMa20adKrX+D38DcBs6YA/e2rffYiPf6hNVrblfNU6Q8qlHy1svFl
+ FcSO5I8fpT3Bm/fGPcLdiGgk4WFUT8NQRt3q3Fb+zatO03cpqNqj3lWpRWG9hHwQNVG2DrXuL1YE
+ Tw=
+UI-OutboundReport: notjunk:1;M01:P0:zRngNs/wW1c=;wpD4ghfb7HZxstpqtJ4IJmHdX7N
+ Nh97dEZkWW/RqQx7esRtmZ/sUkd5Z7pn7kzVkfTKFrprUoZ8RYp8I8kjw9SfGMq17fGTL6teZ
+ xNEE5R5GD9wo9ZYbcwsY8iCr/nkj6AV8L5j2Zt8xwJDFoezR7BDmknG4R3j4milCUSgJOdyi/
+ cIzq+a9DCoQLMcR1Z0wjpmY/ZiMQy5JVt1e8J3340hf5RTTs2gujA5Kf4T0/wLTYEOeWc/1Lh
+ GnxQZuRatOn35fBKz7I10efG2DJUqmCah6Ab/ohbSEZqlNM7ZmbxVj4lulKoMrTIG0UuwjUmu
+ QJZ6tbNcIXDKsJCrqNX9PW1CvD3tySRFkXbS4V5ifIsoL0fAHXy1USexOWPXRDva1TAi8OIWi
+ a8KkRFoU+3N5QXEghfPevzMmkf+f7WeSLEG+ySQYFC3fyJ6iFp1t9oxEv9cZXxYUGZeCURbUe
+ L42ylPAQg3xqLQgR82+aXdFWKEYTVfGPBqgekqye/ZhedDaIu+hkMivudxlY6pOB+Y/vy0h94
+ x1fS3kz+qVRejgFh6fKMxDq+NTUgRMBpNxaKqBAHXQyDf/8Fdvzq/ug8EGuKyDR6PAPQ8gDhr
+ EvaTpEPQPX6pt4qBGEWYO8SxLgjDQL5zr2VqYDoCkXKGufX6YxVPG4nG0xm2iw15fHHb1FeSf
+ FSi4gbxb5+5ZQ19xfx2v4QEpeeOtNHBWrmy1asxToSqD3FcI+HUX8MXJEJxhUkd+1nnvcugAD
+ K8G749+8bBgWSqokMRKk4onu7yBdK09ngsSuA2d/e0d1Zk3F+bOrgWAQXBJIEeWOdAVxtHCwy
+ 4jJA7C8+M/YaDnXtB/4ZYFug==
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,141 +91,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=E5=B9=B412=E6=9C=8827=E6=97=A5(=E7=81=AB) 16:49 Shunsuke Mie <mie@igel=
-.co.jp>:
+looks like i've found it:
+
+when reverting these 2 (latter alone was not enough and seems not fixing t=
+he timeout as shown in my trace)
+
+Revert "spi: mediatek: Enable irq when pdata is ready"  (HEAD -> 6.2-rc)
+Revert "spi: spi-mtk-nor: Add recovery mechanism for dma read timeout"
+
+so this breaks spi on mt7986:
+
+c6f7874687f7 2022-11-28 spi: mediatek: Enable irq when pdata is ready
+
+have sent bug-report to mailinglist and author/reviewer/maintainer...
+
+regards Frank
+
+
+> Gesendet: Dienstag, 27. Dezember 2022 um 10:43 Uhr
+> Von: "Frank Wunderlich" <frank-w@public-files.de>
 >
-> 2022=E5=B9=B412=E6=9C=8827=E6=97=A5(=E7=81=AB) 16:04 Michael S. Tsirkin <=
-mst@redhat.com>:
-> >
-> > On Tue, Dec 27, 2022 at 11:25:26AM +0900, Shunsuke Mie wrote:
-> > > Each vringh memory accessors that are for user, kern and iotlb has ow=
-n
-> > > interfaces that calls common code. But some codes are duplicated and =
-that
-> > > becomes loss extendability.
-> > >
-> > > Introduce a struct vringh_ops and provide a common APIs for all acces=
-sors.
-> > > It can bee easily extended vringh code for new memory accessor and
-> > > simplified a caller code.
-> > >
-> > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > ---
-> > >  drivers/vhost/vringh.c | 667 +++++++++++----------------------------=
---
-> > >  include/linux/vringh.h | 100 +++---
-> > >  2 files changed, 225 insertions(+), 542 deletions(-)
-> > >
-> > > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> > > index aa3cd27d2384..ebfd3644a1a3 100644
-> > > --- a/drivers/vhost/vringh.c
-> > > +++ b/drivers/vhost/vringh.c
-> > > @@ -35,15 +35,12 @@ static __printf(1,2) __cold void vringh_bad(const=
- char *fmt, ...)
-> > >  }
-> > >
-> > >  /* Returns vring->num if empty, -ve on error. */
-> > > -static inline int __vringh_get_head(const struct vringh *vrh,
-> > > -                                 int (*getu16)(const struct vringh *=
-vrh,
-> > > -                                               u16 *val, const __vir=
-tio16 *p),
-> > > -                                 u16 *last_avail_idx)
-> > > +static inline int __vringh_get_head(const struct vringh *vrh, u16 *l=
-ast_avail_idx)
-> > >  {
-> > >       u16 avail_idx, i, head;
-> > >       int err;
-> > >
-> > > -     err =3D getu16(vrh, &avail_idx, &vrh->vring.avail->idx);
-> > > +     err =3D vrh->ops.getu16(vrh, &avail_idx, &vrh->vring.avail->idx=
-);
-> > >       if (err) {
-> > >               vringh_bad("Failed to access avail idx at %p",
-> > >                          &vrh->vring.avail->idx);
-> >
-> > I like that this patch removes more lines of code than it adds.
-> >
-> > However one of the design points of vringh abstractions is that they we=
-re
-> > carefully written to be very low overhead.
-> > This is why we are passing function pointers to inline functions -
-> > compiler can optimize that out.
-> >
-> > I think that introducing ops indirect functions calls here is going to =
-break
-> > these assumptions and hurt performance.
-> > Unless compiler can somehow figure it out and optimize?
-> > I don't see how it's possible with ops pointer in memory
-> > but maybe I'm wrong.
-> I think your concern is correct. I have to understand the compiler
-> optimization and redesign this approach If it is needed.
-> > Was any effort taken to test effect of these patches on performance?
-> I just tested vringh_test and already faced little performance reduction.
-> I have to investigate that, as you said.
-I attempted to test with perf. I found that the performance of patched code
-is almost the same as the upstream one. However, I have to investigate way
-this patch leads to this result, also the profiling should be run on
-more powerful
-machines too.
+> at first look it seems it is needed...as i get this trace with 6.2:
+>
+> [    2.145931] pc : mtk_spi_can_dma+0x0/0x34
+> [    2.155212] lr : mtk_spi_interrupt+0x74/0x360
+>
+> [    2.091801] mtk-spi 1100a000.spi: spi-mem transfer timeout
+> [    2.097310] spi-nor: probe of spi0.0 failed with error -110
+> [    2.102930] Unable to handle kernel read from unreadable memory at vi=
+rtual address 0000000000000010
+>
+> but i get the same trace when reverting the cs-gpios change....seems som=
+ething is broken in 6.2-rc1
+>
+> 6.1 works without the bogus cs-gpios (and the mt7531 interrupt-change)..=
+.
+>
+> have tried reverting this commit, but it does not fix the issue:
+>
+> 8330e9e8269b 2022-12-07 spi: spi-mtk-nor: Add recovery mechanism for dma=
+ read timeout
 
-environment:
-$ grep 'model name' /proc/cpuinfo
-model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-
-results:
-* for patched code
- Performance counter stats for 'nice -n -20 ./vringh_test_patched
---parallel --eventidx --fast-vringh --indirect --virtio-1' (20 runs):
-
-          3,028.05 msec task-clock                #    0.995 CPUs
-utilized            ( +-  0.12% )
-            78,150      context-switches          #   25.691 K/sec
-               ( +-  0.00% )
-                 5      cpu-migrations            #    1.644 /sec
-               ( +-  3.33% )
-               190      page-faults               #   62.461 /sec
-               ( +-  0.41% )
-     6,919,025,222      cycles                    #    2.275 GHz
-               ( +-  0.13% )
-     8,990,220,160      instructions              #    1.29  insn per
-cycle           ( +-  0.04% )
-     1,788,326,786      branches                  #  587.899 M/sec
-               ( +-  0.05% )
-         4,557,398      branch-misses             #    0.25% of all
-branches          ( +-  0.43% )
-
-           3.04359 +- 0.00378 seconds time elapsed  ( +-  0.12% )
-
-* for upstream code
- Performance counter stats for 'nice -n -20 ./vringh_test_base
---parallel --eventidx --fast-vringh --indirect --virtio-1' (10 runs):
-
-          3,058.41 msec task-clock                #    0.999 CPUs
-utilized            ( +-  0.14% )
-            78,149      context-switches          #   25.545 K/sec
-               ( +-  0.00% )
-                 5      cpu-migrations            #    1.634 /sec
-               ( +-  2.67% )
-               194      page-faults               #   63.414 /sec
-               ( +-  0.43% )
-     6,988,713,963      cycles                    #    2.284 GHz
-               ( +-  0.14% )
-     8,512,533,269      instructions              #    1.22  insn per
-cycle           ( +-  0.04% )
-     1,638,375,371      branches                  #  535.549 M/sec
-               ( +-  0.05% )
-         4,428,866      branch-misses             #    0.27% of all
-branches          ( +- 22.57% )
-
-           3.06085 +- 0.00420 seconds time elapsed  ( +-  0.14% )
-
-> Thank you for your comments.
-> > Thanks!
-> >
-> >
-> Best,
-> Shunsuke.
