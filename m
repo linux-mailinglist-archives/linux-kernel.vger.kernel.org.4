@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8B66568F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9862D6568F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiL0Jiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
+        id S231161AbiL0JjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiL0Jil (ORCPT
+        with ESMTP id S231154AbiL0JjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 04:38:41 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B633095AE;
-        Tue, 27 Dec 2022 01:38:38 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BR9cTJK129802;
-        Tue, 27 Dec 2022 03:38:29 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1672133909;
-        bh=sBFcxIfmVFWwHDXc/9DJHMlWRkChsqo7NpNib9YU6Gc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=u6tJmSvTadIK9mmTL8LeKqS5+wRL5N4avWLv/FaHU16eGvfThFxnOr4VYnKcLDdg+
-         QWrCssyHVrf2BnahCb0k3OAXNOWwLalQJfr95+98o636bhpvsjnDY6yPOnT1/itfUu
-         Natw49NKRRNtHvCExBrOybXhOgjbP3yZAWSmCGN8=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BR9cTfd026954
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 27 Dec 2022 03:38:29 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 27
- Dec 2022 03:38:28 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 27 Dec 2022 03:38:28 -0600
-Received: from [172.24.145.199] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BR9cOqu080668;
-        Tue, 27 Dec 2022 03:38:25 -0600
-Message-ID: <01a0ee96-051d-9f0b-88e6-8b6feaffacb8@ti.com>
-Date:   Tue, 27 Dec 2022 15:08:23 +0530
+        Tue, 27 Dec 2022 04:39:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EE02637
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:38:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672133912;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J3BLtHqoydlVUf+z9Cs67tPhoqV/CQzv2c7yUWqYhoE=;
+        b=FGXHCX7/J1P9lPs3V0pXOwU6ADXhRDfzVKrgxBwG4hveR07PHhDR2n8DN7kxtUr1ke64HC
+        qZOI+aIAz5ABo0I3n2MANhvg81l3LHXSeBZLjNHTRGjIoIjedJK7v4pSQAlyKsAQrbT4/n
+        vEXJVRbQ7SroHB8Gefiv7lKINgVVUW8=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-66-_9_JRL3vMLeCaLAq19NQbw-1; Tue, 27 Dec 2022 04:38:30 -0500
+X-MC-Unique: _9_JRL3vMLeCaLAq19NQbw-1
+Received: by mail-ed1-f70.google.com with SMTP id c12-20020a05640227cc00b004853521ef55so2770022ede.8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:38:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J3BLtHqoydlVUf+z9Cs67tPhoqV/CQzv2c7yUWqYhoE=;
+        b=l2A+IIHuKAzFMI25GpkF1wrjiz1XZEbVPwMa331AnzAOQdrbmGGcvMVVUNNFfp7NtO
+         HgHjNGumWXUBNBckX7BnWeczm66sbuOTqiMAYXDSusdJ30mhD/n25Lqm7hqEco3VCFPZ
+         mgTLsn0z81FxytFxsJgDQbWQiVpc87UW5qX46Zdr9PZOM8EaFd69uhSi7VABV9aLA/xb
+         TKCbMy3sHZ2L2UQnNRxdl0TyMHjtF8PkQoQKScREsvx4No1wTNmVVQgMUBVcy5P/wg91
+         tAYDXIB3rfdmTfTId6ZhQYnOen+MRGOEKzfwd0jaMRe6LBgdq+4manM7ngFl6Qp+o5dJ
+         5M4A==
+X-Gm-Message-State: AFqh2kq6LuF5zi7KXSAfGpx4STkcsfpX1g6kUOx9ZCNeSagPjMzwzZ+d
+        /Ggh+dT/8outZge3ZbZBdj0X+JT9cWtfT5/8lvK9sm5JQnwz2LJLOLd2N/o9CELOapKjNdCg3aj
+        bSRAI0JYMeI4uYUtL9NDBi0Ww
+X-Received: by 2002:a17:907:7f04:b0:7c1:36:9002 with SMTP id qf4-20020a1709077f0400b007c100369002mr21415454ejc.67.1672133909656;
+        Tue, 27 Dec 2022 01:38:29 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu1izE+/u+Tuwf8tjP2vCdjI4kLYsk008OtSrOIXpnLKNcCpaysWJW9Xx5P3ns02pTzhv/LQg==
+X-Received: by 2002:a17:907:7f04:b0:7c1:36:9002 with SMTP id qf4-20020a1709077f0400b007c100369002mr21415444ejc.67.1672133909480;
+        Tue, 27 Dec 2022 01:38:29 -0800 (PST)
+Received: from redhat.com ([2.52.151.85])
+        by smtp.gmail.com with ESMTPSA id 9-20020a170906218900b007c4fbb79535sm5873901eju.82.2022.12.27.01.38.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Dec 2022 01:38:28 -0800 (PST)
+Date:   Tue, 27 Dec 2022 04:38:25 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
+        eperezma@redhat.com
+Subject: Re: [PATCH 3/4] virtio_ring: introduce a per virtqueue waitqueue
+Message-ID: <20221227043148-mutt-send-email-mst@kernel.org>
+References: <20221226074908.8154-1-jasowang@redhat.com>
+ <20221226074908.8154-4-jasowang@redhat.com>
+ <20221226183705-mutt-send-email-mst@kernel.org>
+ <CACGkMEuNZLJRnWw+XNxJ-to1y8L2GrTrJkk0y0Gwb5H2YhDczQ@mail.gmail.com>
+ <20221227022255-mutt-send-email-mst@kernel.org>
+ <d77bc1ce-b73f-1ba8-f04f-b3bffeb731c3@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/2] dt-bindings: remoteproc: ti: Add new compatible
- for AM62 SoC family
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <andersson@kernel.org>, <devicetree@vger.kernel.org>,
-        <mathieu.poirier@linaro.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <s-anna@ti.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
-        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>
-References: <20221223115638.20192-1-devarsht@ti.com>
- <20221223115638.20192-2-devarsht@ti.com>
- <374d0b5c-55f4-ee30-c804-4488a3fedb48@linaro.org>
-From:   Devarsh Thakkar <devarsht@ti.com>
-In-Reply-To: <374d0b5c-55f4-ee30-c804-4488a3fedb48@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d77bc1ce-b73f-1ba8-f04f-b3bffeb731c3@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,162 +87,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26/12/22 17:48, Krzysztof Kozlowski wrote:
-> On 23/12/2022 12:56, Devarsh Thakkar wrote:
->> AM62 family of devices don't have a R5F cluster, instead
->> they have single core DM R5F.
->> Add new compatible string ti,am62-r5fss to support this scenario.
->>
->> When this new compatible is used don't allow cluster-mode
->> property usage in device-tree as this implies that there
->> is no R5F cluster available and only single R5F core
->> is present.
->>
->> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
->> ---
->> V2: Avoid acronyms, use "Device Manager" instead of "DM"
->> V3:
->> - Use separate if block for each compatible for ti,cluster-mode property
->> - Rearrange compatibles as per alphabatical order
->> ---
->>  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml  | 68 +++++++++++++------
->>  1 file changed, 47 insertions(+), 21 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
->> index fb9605f0655b..e8a861179bd9 100644
->> --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
->> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
->> @@ -21,6 +21,9 @@ description: |
->>    called "Single-CPU" mode, where only Core0 is used, but with ability to use
->>    Core1's TCMs as well.
->>  
->> +  AM62 SoC family support a single R5F core only which runs Device Manager
->> +  firmware and can also be used as a remote processor with IPC communication.
->> +
->>    Each Dual-Core R5F sub-system is represented as a single DTS node
->>    representing the cluster, with a pair of child DT nodes representing
->>    the individual R5F cores. Each node has a number of required or optional
->> @@ -28,16 +31,20 @@ description: |
->>    the device management of the remote processor and to communicate with the
->>    remote processor.
->>  
->> +  Since AM62 SoC family only support a single core, there is no cluster-mode
->> +  property setting required for it.
->> +
->>  properties:
->>    $nodename:
->>      pattern: "^r5fss(@.*)?"
->>  
->>    compatible:
->>      enum:
->> +      - ti,am62-r5fss
->> +      - ti,am64-r5fss
->>        - ti,am654-r5fss
->> -      - ti,j721e-r5fss
->>        - ti,j7200-r5fss
->> -      - ti,am64-r5fss
->> +      - ti,j721e-r5fss
->>        - ti,j721s2-r5fss
->>  
->>    power-domains:
->> @@ -80,7 +87,9 @@ patternProperties:
->>        node representing a TI instantiation of the Arm Cortex R5F core. There
->>        are some specific integration differences for the IP like the usage of
->>        a Region Address Translator (RAT) for translating the larger SoC bus
->> -      addresses into a 32-bit address space for the processor.
->> +      addresses into a 32-bit address space for the processor. For AM62x,
->> +      the R5F Sub-System device node should only define one R5F child node
->> +      as it has only one core available.
->>  
->>        Each R5F core has an associated 64 KB of Tightly-Coupled Memory (TCM)
->>        internal memories split between two banks - TCMA and TCMB (further
->> @@ -100,11 +109,12 @@ patternProperties:
->>      properties:
->>        compatible:
->>          enum:
->> -          - ti,am654-r5f
->> -          - ti,j721e-r5f
->> -          - ti,j7200-r5f
->> -          - ti,am64-r5f
->> -          - ti,j721s2-r5f
->> +          - ti,am62-r5fss
->> +          - ti,am64-r5fss
->> +          - ti,am654-r5fss
->> +          - ti,j7200-r5fss
->> +          - ti,j721e-r5fss
->> +          - ti,j721s2-r5fss
->>  
-There is a problem here, the compatibles still need to be "-r5f" I will
-correct it in V4.
->>        reg:
->>          items:
->> @@ -208,19 +218,35 @@ patternProperties:
->>  
->>      unevaluatedProperties: false
->>  
->> -if:
->> -  properties:
->> -    compatible:
->> -      enum:
->> -        - ti,am64-r5fss
->> -then:
->> -  properties:
->> -    ti,cluster-mode:
->> -      enum: [0, 2]
->> -else:
->> -  properties:
->> -    ti,cluster-mode:
->> -      enum: [0, 1]
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - ti,am64-r5fss
->> +    then:
->> +      properties:
->> +        ti,cluster-mode:
->> +          enum: [0, 2]
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum: ["ti,am654-r5fss", "ti,j7200-r5fss", "ti,j721e-r5fss",  "ti,j721s2-r5fss"]
+On Tue, Dec 27, 2022 at 05:12:58PM +0800, Jason Wang wrote:
 > 
-> That's not how enums are spelled for such cases. Git grep for examples -
-> this should be a enum with each item in new entry, no quotes.
-Yeah, that was my initial thought but then I looked at section 4.9.3 of
-https://json-schema.org/understanding-json-schema/UnderstandingJSONSchema.pdf
-which had below example and based on that did this change thus avoiding
-separate entries for each enum.
+> 在 2022/12/27 15:33, Michael S. Tsirkin 写道:
+> > On Tue, Dec 27, 2022 at 12:30:35PM +0800, Jason Wang wrote:
+> > > > But device is still going and will later use the buffers.
+> > > > 
+> > > > Same for timeout really.
+> > > Avoiding infinite wait/poll is one of the goals, another is to sleep.
+> > > If we think the timeout is hard, we can start from the wait.
+> > > 
+> > > Thanks
+> > If the goal is to avoid disrupting traffic while CVQ is in use,
+> > that sounds more reasonable. E.g. someone is turning on promisc,
+> > a spike in CPU usage might be unwelcome.
+> 
+> 
+> Yes, this would be more obvious is UP is used.
+> 
+> 
+> > 
+> > things we should be careful to address then:
+> > 1- debugging. Currently it's easy to see a warning if CPU is stuck
+> >     in a loop for a while, and we also get a backtrace.
+> >     E.g. with this - how do we know who has the RTNL?
+> >     We need to integrate with kernel/watchdog.c for good results
+> >     and to make sure policy is consistent.
+> 
+> 
+> That's fine, will consider this.
+> 
+> 
+> > 2- overhead. In a very common scenario when device is in hypervisor,
+> >     programming timers etc has a very high overhead, at bootup
+> >     lots of CVQ commands are run and slowing boot down is not nice.
+> >     let's poll for a bit before waiting?
+> 
+> 
+> Then we go back to the question of choosing a good timeout for poll. And
+> poll seems problematic in the case of UP, scheduler might not have the
+> chance to run.
 
-Example:
-{
-"enum": ["red", "amber", "green", null, 42]
-}
-
-To confirm whether the change works fine, I deliberately modified cluster-mode
-values for each of the SoC's beyond acceptable ranges as seen in
-https://gist.github.com/devarsht/1956063c8e39f1bdbad3574ea96b95a3
-and then ran "make dtbs_check" and it was able to catch the inappropriate
-values of cluster-mode as seen in below logs :
-
-https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L392
-https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L500
-https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L712
-https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L741
-https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L750
-https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L766
-https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L773
-
-Kindly let me know if you see some issues with this approach.
-
-Best Regards,
-Devarsh
+Poll just a bit :) Seriously I don't know, but at least check once
+after kick.
 
 > 
-> Best regards,
-> Krzysztof
+> > 3- suprise removal. need to wake up thread in some way. what about
+> >     other cases of device breakage - is there a chance this
+> >     introduces new bugs around that? at least enumerate them please.
 > 
+> 
+> The current code did:
+> 
+> 1) check for vq->broken
+> 2) wakeup during BAD_RING()
+> 
+> So we won't end up with a never woke up process which should be fine.
+> 
+> Thanks
+
+
+BTW BAD_RING on removal will trigger dev_err. Not sure that is a good
+idea - can cause crashes if kernel panics on error.
+
+> 
+> > 
+> > 
+
