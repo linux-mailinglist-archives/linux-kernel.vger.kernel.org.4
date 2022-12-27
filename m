@@ -2,132 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE3665686F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE19656874
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiL0I3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 03:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
+        id S229880AbiL0Idc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 03:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiL0I3s (ORCPT
+        with ESMTP id S229578AbiL0Id3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 03:29:48 -0500
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D4A26C1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:29:45 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:312a:feb:527f:f392])
-        by laurent.telenet-ops.be with bizsmtp
-        id 1LVi2900a3T8eJe01LViHk; Tue, 27 Dec 2022 09:29:42 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pA5LB-001Isa-AZ
-        for linux-kernel@vger.kernel.org; Tue, 27 Dec 2022 09:29:41 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pA5L2-003LhW-O9
-        for linux-kernel@vger.kernel.org; Tue, 27 Dec 2022 09:29:32 +0100
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-kernel@vger.kernel.org
-Subject: Build regressions/improvements in v6.2-rc1
-Date:   Tue, 27 Dec 2022 09:29:32 +0100
-Message-Id: <20221227082932.798359-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
+        Tue, 27 Dec 2022 03:33:29 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425CD646F
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:33:27 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id gt4so12632066pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:33:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cJHx4NOHvRf/XIDu7SdTGqUE9RfpKHxNuq88IOpL9o8=;
+        b=IdLGQ3GzzdJk4fE1sZJKE4/QPqdoSDGQ1+hAdNsamwouqh7fVA59ni08NkUDEZlq3K
+         fWqeFXBQDh9lHLfXNvWuJs04thU9MR96xQJALtJzNuNMPz+VkqKKExJhl6xY2ZQML76z
+         XU7MzOLDeekm9aIZ7QNU397kw6T+4cN55vbxw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cJHx4NOHvRf/XIDu7SdTGqUE9RfpKHxNuq88IOpL9o8=;
+        b=4AdLhV1v1Bj0Y/YSHQEBFmsj2NoSb+gtyAnCftoMMda68yTe6t1HxdsycrivHNl7iC
+         6JKw4fL5mCWCf20ymtSOACwKNv5eFdtKzpziPTRvtloM0WhSxbEOQIDP3hpxJLfeveTS
+         gh8wZ/x5HNLM23ijSHpq3+BFagYXNKDDelo4bfBrLPkWxaRRVTr2fi8k4DIjujyUqI/c
+         jFW2KM1+3usyxGFIvnjdTO/BOuGK9Sdy2MyaM2P0FwDlzBoHsdI8fcBEMWdHedWmWYs2
+         ulKri2eeZuQREnXZqSG/RsBtCfznx9LYs2IbKJNesOSyks5gWbtb+zb+pmbTGMo6FpEl
+         KEOg==
+X-Gm-Message-State: AFqh2kptlg2cncYqQi7RhvMU8zuVgLLUFbWOdRasYxbIvlns8zntSAIT
+        qITM+Mqmomqnfkbcj/OaKWanpg==
+X-Google-Smtp-Source: AMrXdXs92rQ4Z5gPuVFRgc9X51B9sxIz8j3YWugvgnJ0VTzF7HfdnSt89k/fR9jLBMy36kCY8Nfdog==
+X-Received: by 2002:a17:903:134c:b0:189:e909:32e3 with SMTP id jl12-20020a170903134c00b00189e90932e3mr24805166plb.40.1672130006606;
+        Tue, 27 Dec 2022 00:33:26 -0800 (PST)
+Received: from 82a1e6c4c19b (lma3293270.lnk.telstra.net. [60.231.90.117])
+        by smtp.gmail.com with ESMTPSA id u7-20020a17090341c700b00189988a1a9esm8493363ple.135.2022.12.27.00.33.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Dec 2022 00:33:25 -0800 (PST)
+Date:   Tue, 27 Dec 2022 08:33:17 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Pedro Tammela <pctammela@mojatatu.com>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, kuniyu@amazon.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v6 0/4] net/sched: retpoline wrappers for tc
+Message-ID: <20221227083317.GA1025927@82a1e6c4c19b>
+References: <20221206135513.1904815-1-pctammela@mojatatu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206135513.1904815-1-pctammela@mojatatu.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the list of build error/warning regressions/improvements in
-v6.2-rc1[1] compared to v6.1[2].
+Hi Pedro,
 
-Summarized:
-  - build errors: +11/-13
-  - build warnings: +13/-10
+Compiling kernel 6.2-rc1 fails on x86_64 when CONFIG_NET_CLS or
+CONFIG_NET_CLS_ACT is not set, when CONFIG_RETPOLINE=y is set.
 
-Happy fixing! ;-)
+Does tc_wrapper RETPOLINE need a dependency on NET_CLS/NET_CLS_ACT
+to be added? Or a default?
 
-Thanks to the linux-next team for providing the build service.
+net/sched/sch_api.c: In function 'pktsched_init':
+net/sched/sch_api.c:2306:9: error: implicit declaration of function
+'tc_wrapper_init' [-Werror=implicit-function-declaration]
+ 2306 |         tc_wrapper_init();
+      |         ^~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:252: net/sched/sch_api.o] Error 1
+make[2]: *** [scripts/Makefile.build:504: net/sched] Error 2
+make[1]: *** [scripts/Makefile.build:504: net] Error 2
 
-[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/1b929c02afd37871d5afb9d498426f83432e71c2/ (all 152 configs)
-[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
+below is the relevent lines from the .config file.
 
+$ grep -e RETPOLINE -e NET_CLS projects/Generic/linux/linux.x86_64.conf 
+CONFIG_RETPOLINE=y
+# CONFIG_NET_CLS_BASIC is not set
+# CONFIG_NET_CLS_TCINDEX is not set
+# CONFIG_NET_CLS_ROUTE4 is not set
+# CONFIG_NET_CLS_FW is not set
+# CONFIG_NET_CLS_U32 is not set
+# CONFIG_NET_CLS_RSVP is not set
+# CONFIG_NET_CLS_RSVP6 is not set
+# CONFIG_NET_CLS_FLOW is not set
+# CONFIG_NET_CLS_CGROUP is not set
+# CONFIG_NET_CLS_BPF is not set
+# CONFIG_NET_CLS_FLOWER is not set
+# CONFIG_NET_CLS_MATCHALL is not set
+# CONFIG_NET_CLS_ACT is not set
 
-*** ERRORS ***
+On Tue, Dec 06, 2022 at 10:55:09AM -0300, Pedro Tammela wrote:
+> In tc all qdics, classifiers and actions can be compiled as modules.
+> This results today in indirect calls in all transitions in the tc hierarchy.
+> Due to CONFIG_RETPOLINE, CPUs with mitigations=on might pay an extra cost on
+> indirect calls. For newer Intel cpus with IBRS the extra cost is
+> nonexistent, but AMD Zen cpus and older x86 cpus still go through the
+> retpoline thunk.
+> 
+> Known built-in symbols can be optimized into direct calls, thus
+> avoiding the retpoline thunk. So far, tc has not been leveraging this
+> build information and leaving out a performance optimization for some
+> CPUs. In this series we wire up 'tcf_classify()' and 'tcf_action_exec()'
+> with direct calls when known modules are compiled as built-in as an
+> opt-in optimization.
+> 
+> We measured these changes in one AMD Zen 4 cpu (Retpoline), one AMD Zen 3 cpu (Retpoline),
+> one Intel 10th Gen CPU (IBRS), one Intel 3rd Gen cpu (Retpoline) and one
+> Intel Xeon CPU (IBRS) using pktgen with 64b udp packets. Our test setup is a
+> dummy device with clsact and matchall in a kernel compiled with every
+> tc module as built-in.  We observed a 3-8% speed up on the retpoline CPUs,
+> when going through 1 tc filter, and a 60-100% speed up when going through 100 filters.
+> For the IBRS cpus we observed a 1-2% degradation in both scenarios, we believe
+> the extra branches check introduced a small overhead therefore we added
+> a static key that bypasses the wrapper on kernels not using the retpoline mitigation,
+> but compiled with CONFIG_RETPOLINE.
 
-11 error regressions:
-  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7082:1
-  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7127:1
-  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
-  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
-  + /kisskb/src/include/linux/bitfield.h: error: call to '__field_overflow' declared with attribute error: value doesn't fit into mask:  => 151:3
-  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_262' declared with attribute error: Unsupported access size for {READ,WRITE}_ONCE().:  => 358:45
-  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_263' declared with attribute error: Unsupported access size for {READ,WRITE}_ONCE().:  => 358:45
-  + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memcpy' offset [0, 127] is out of the bounds [0, 0] [-Werror=array-bounds]:  => 57:33
-  + /kisskb/src/include/linux/fortify-string.h: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]:  => 59:33
-  + /kisskb/src/kernel/kcsan/kcsan_test.c: error: the frame size of 1680 bytes is larger than 1536 bytes [-Werror=frame-larger-than=]:  => 257:1
-  + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  => 1718
-
-13 error improvements:
-  - /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 239:34 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
-  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
-  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
-  - /kisskb/src/drivers/net/ethernet/marvell/prestera/prestera_flower.c: error: 'rule' is used uninitialized [-Werror=uninitialized]: 480:34 => 
-  - {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field: 2286 => 
-  - {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field : 2302 => 
-  - {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field : 2213 => 
-  - {standard input}: Error: pcrel too far: 2231, 2204, 2209, 2293, 2262, 2249, 2261, 2229, 2206, 2247, 2232, 2221, 2274, 2217, 2215, 2259, 2248, 2216 => 
-  - {standard input}: Error: unknown pseudo-op: `.l': 2305 => 
-
-
-*** WARNINGS ***
-
-13 warning regressions:
-  + modpost: WARNING: modpost: "__ndelay" [drivers/gpio/gpio-latch.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max11410.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/tegra-kbc.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/mfd/axp20x.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunplus-mmc.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/rswitch_drv.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852b.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/phy/renesas/r8a779f0-ether-serdes.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_idt82p33.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [drivers/usb/fotg210/fotg210.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "__udelay" [fs/xfs/xfs.ko] has no CRC!:  => N/A
-  + modpost: WARNING: modpost: "empty_zero_page" [net/rxrpc/rxperf.ko] has no CRC!:  => N/A
-
-10 warning improvements:
-  - modpost: WARNING: modpost: "__ashldi3" [lib/zstd/zstd_compress.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/pch_can.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fealnx.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc911x.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/net/pcs/pcs-altera-tse.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/fotg210-hcd.ko] has no CRC!: N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_ext_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata): N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qed/qed.o: section mismatch in reference: qed_mfw_legacy_maps (section: .data) -> qed_mfw_legacy_bb_100g (section: .init.rodata): N/A => 
-  - modpost: WARNING: modpost: drivers/net/ethernet/qlogic/qede/qede.o: section mismatch in reference: qede_forced_speed_maps (section: .data) -> qede_forced_speed_100000 (section: .init.rodata): N/A => 
-  - modpost: WARNING: modpost: vmlinux.o: section mismatch in reference: __trace_event_discard_commit (section: .text.unlikely) -> initcall_level_names (section: .init.data): N/A => 
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+...
