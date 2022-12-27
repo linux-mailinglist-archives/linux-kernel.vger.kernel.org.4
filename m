@@ -2,152 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B4A656D44
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF60656D4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiL0RIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 12:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
+        id S229801AbiL0RJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 12:09:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbiL0RHk (ORCPT
+        with ESMTP id S232001AbiL0RJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 12:07:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5CCBF6A;
-        Tue, 27 Dec 2022 09:07:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E202611D1;
-        Tue, 27 Dec 2022 17:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E40C433AF;
-        Tue, 27 Dec 2022 17:07:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672160852;
-        bh=uxaBKlEBdgL2vH6RIInA6fuLSoTpmrLUhjWBaHzLQMY=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=B0vvlwYeBFVsH5dzWcS9zGctixO+BcVewUGdlEbOSaTLz6q4UGTMnJfw5wtWPC8Ki
-         Z//pmIfDhIzmK9aBnkuh2SLvCJnSrzzjX+h/JxoW+h6XHL0aOecAWUC+te1OVgBEmU
-         KkAlT0XTbuomePlmuHknbIuoG7N6GWr5hClA9oXnDOuzJQrXP7D+21w6h57Vea2BMM
-         x4c9/BMJ0LyOWy6X+nvuR2HaonZKqwJPUKhlQ4b9aeU2vPJR4VokQ/5+kzLQEdEcgV
-         /yRcqvwCYLrJFYPJseOWvfSqhtWTIZOQgfyLeybXhOo9khAAeF+1SDbFcQdmbwKt2X
-         omC8FY3PycjcQ==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 27 Dec 2022 17:06:52 +0000
-Subject: [PATCH v4 7/7] kselftest/alsa: pcm - Add more coverage by default
+        Tue, 27 Dec 2022 12:09:46 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF83B491
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 09:09:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qSISMw7MDq754PJkgLb1MOK6jarnJMSK1VgU5WOFP+s=; b=aZhzR+9cjBxFNS69QT2d7G0qBT
+        QPDpe4o2G6nrD347jQTx/8/UpPpzcP2Zqe2mpq8VKVnj1pHA6tT05eAFH8fb5fm+ixMohmYSYWbwK
+        IsbDba1SQq/8CL9BJZQ0ZvsGtGAwyoqtaHgDw7gi0vRCGn9QGAegGsx5bTTDxDsb2PPlAqYEVyCzQ
+        hNGuu4M7m0zyMQbuQab7rSWQZ8qmZ/4CGKqh2siN4rBretnzHELU7Ye01rJe00G4hx1tPMTYmjNey
+        pt/RiG94u+NT/g9vCn7uG/DSXRExbijqMXg5Fo83Haa3juN5OA5rMInZ/y1qyib1fI/q/y1vHZTKX
+        gojRiz2Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pADSQ-00EmvA-6V; Tue, 27 Dec 2022 17:09:42 +0000
+Date:   Tue, 27 Dec 2022 09:09:42 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
+        suzuki.poulose@arm.com, acme@kernel.org, james.clark@arm.com
+Subject: Re: [PATCH v5 3/6] coresight: configfs: Add in binary attributes to
+ load files
+Message-ID: <Y6sm1gXTER/XaggE@infradead.org>
+References: <20221219234638.3661-1-mike.leach@linaro.org>
+ <20221219234638.3661-4-mike.leach@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221208-alsa-pcm-test-hacks-v4-7-5a152e65b1e1@kernel.org>
-References: <20221208-alsa-pcm-test-hacks-v4-0-5a152e65b1e1@kernel.org>
-In-Reply-To: <20221208-alsa-pcm-test-hacks-v4-0-5a152e65b1e1@kernel.org>
-To:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12-dev-7ab1d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2160; i=broonie@kernel.org;
- h=from:subject:message-id; bh=uxaBKlEBdgL2vH6RIInA6fuLSoTpmrLUhjWBaHzLQMY=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqyZF4AynULWOON7IsKhfOyuMp8d1cKEzp28jmiLn
- bAKabXmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6smRQAKCRAk1otyXVSH0L4CB/
- 9Y/IcV/hbQxayzYQsUYnwl4bcP73J3w9Q8D4DLLlcycEy9+CT7NbYvB17FUeibbOMc4XoojPKLTSpV
- qcaYQ9DSDtHboeRb70V7brVMWPnWDKiDXL2U84cDKqt2TFa7PJu8LnutT2N5ko/3UAu3UtAgA8/akI
- wiOevp+bm+amAgoHMuqFVwh2XVDuVWRZr60Ib2HsLDYgImHhSgudVrxvzF4sgpyg5u2xKHqFPUcWc+
- Y5Oi2RMVA0FwgMYR78oZeUYPqOwdHWzIuqCueNshnmMhCy+k11lLh8Y9rsuQq4eoW/lNRzohzQUIzE
- Co6Kr1lvBNNjZEbIhPZEOM8aaV1Elv
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219234638.3661-4-mike.leach@linaro.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add more coverage to our standard test cases:
+On Mon, Dec 19, 2022 at 11:46:35PM +0000, Mike Leach wrote:
+> Add in functionality and binary attribute to load and unload
+> configurations as binary data.
+> 
+> Files are loaded via the 'load' binary attribute. System reads the incoming
+> file, which must be formatted correctly as defined in the file reader code.
+> This will create configuration(s) and/or feature(s) and load them
+> into the system.
 
- - 8kHz mono and stereo to verify that the most common mono format is
-   clocked correctly.
- - 44.1kHz stereo to verify that this different clock base is generated
-   accurately.
- - 48kHz 6 channel to verify that 6 channel is clocked correctly.
- - 96kHz stereo since that is a common audiophile rate.
-
-Reviewed-by: Jaroslav Kysela <perex@perex.cz>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/alsa/pcm-test.conf | 47 +++++++++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/alsa/pcm-test.conf b/tools/testing/selftests/alsa/pcm-test.conf
-index 1662a8c7073e..71bd3f78a6f2 100644
---- a/tools/testing/selftests/alsa/pcm-test.conf
-+++ b/tools/testing/selftests/alsa/pcm-test.conf
-@@ -1,4 +1,31 @@
- pcm.test.time1 {
-+	description "8kHz mono large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 8000
-+	channels 1
-+	period_size 8000
-+	buffer_size 32000
-+}
-+pcm.test.time2 {
-+	description "8kHz stereo large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 8000
-+	channels 2
-+	period_size 8000
-+	buffer_size 32000
-+}
-+pcm.test.time3 {
-+	description "44.1kHz stereo large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 44100
-+	channels 2
-+	period_size 22500
-+	buffer_size 192000
-+}
-+pcm.test.time4 {
- 	description "48kHz stereo small periods"
- 	format S16_LE
- 	alt_formats [ S32_LE ]
-@@ -7,7 +34,7 @@ pcm.test.time1 {
- 	period_size 512
- 	buffer_size 4096
- }
--pcm.test.time2 {
-+pcm.test.time5 {
- 	description "48kHz stereo large periods"
- 	format S16_LE
- 	alt_formats [ S32_LE ]
-@@ -16,3 +43,21 @@ pcm.test.time2 {
- 	period_size 24000
- 	buffer_size 192000
- }
-+pcm.test.time6 {
-+	description "48kHz 6 channel large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 48000
-+	channels 2
-+	period_size 48000
-+	buffer_size 576000
-+}
-+pcm.test.time7 {
-+	description "96kHz stereo large periods"
-+	format S16_LE
-+	alt_formats [ S32_LE ]
-+	rate 96000
-+	channels 2
-+	period_size 48000
-+	buffer_size 192000
-+}
-
--- 
-2.30.2
+Binary attributes are intended to pass things such as firmware
+through.  Defining your own structured file format seems like a
+major abuse of the configfs design.  What's the advantage of this
+over simply using an ioctl?
