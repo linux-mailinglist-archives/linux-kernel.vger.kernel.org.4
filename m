@@ -2,264 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C87B656650
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 02:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 051F265664D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 02:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbiL0A74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Dec 2022 19:59:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
+        id S232491AbiL0A7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Dec 2022 19:59:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbiL0A7t (ORCPT
+        with ESMTP id S229578AbiL0A7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 26 Dec 2022 19:59:49 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FB525E9;
-        Mon, 26 Dec 2022 16:59:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672102788; x=1703638788;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=d7/cJiEhtpQEBKmtxYwMJgN7vN+Wh9BBd4VpPUvynLU=;
-  b=OQRe5N2GZxljQIvbixDUhejXQUEOdtmvHUZmI/Kzf4CqKMouCk+P0W1n
-   Mmgtl1YTl1TmsQizP4HtEMOgKov7NgU/fVXiOnmgMlu8e7C4HopkgNqHo
-   L8NHVkVCmdOsEgeND2TnAu8qY5i/VTgWAOXvGMACJWnY0dbrFciDYkwEp
-   Jj9qDQZuo1SE6xFglDr85IWYJCO/n09Q07mvORVvyjdFPKFROvV9uiJmE
-   F5A/tofSHytl/M4fEtEFygEedr1ZZpHKIhWOLbQrvEhADk/fi131Wh/Yf
-   dammawgd1ANONw0j8zyB9nFZpTQ3Al9sLJuObAi3s112zkanX6Y0fNRX6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="300315261"
-X-IronPort-AV: E=Sophos;i="5.96,277,1665471600"; 
-   d="scan'208";a="300315261"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2022 16:59:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10572"; a="685282425"
-X-IronPort-AV: E=Sophos;i="5.96,277,1665471600"; 
-   d="scan'208";a="685282425"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga001.jf.intel.com with ESMTP; 26 Dec 2022 16:59:47 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 26 Dec 2022 16:59:46 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 26 Dec 2022 16:59:46 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 26 Dec 2022 16:59:46 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 26 Dec 2022 16:59:43 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UMRRkjcx808jfuZcJx+NELf7Vg24BuNzQbiDJ7BhuMOOmo71sPs8oKqnHaya5ygHVY5wZzFs0wlm/NQ7zvHxVTlEoB20vVsM9wtFAvFXmuV5yMyHoLLS3gDq6NbxytsOscZlQDNmQt6tXQvdsOAoavRA6lmLFsJX4kjmUCj8C1qq49cQyHcFJIkc8gzXSkAyxeJOB0nuumyQwcOTPAmkRVGwhBGgQYeZHj8Y2ca3c/6kS9EyJqyA0jUCm7vW294Oipsvy0dhqLoOwGdTKKwpMmy8NV6Q9U0D7KBYWgnoh9FuBRqG/Skbq2+PdkudHd05qBYDIiyxoqsz+YIb/wPqcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=64RKgfpGabj7ZKUkY4f27dyHXMBVKVypzDoIfu7fgjs=;
- b=WfNvWc79VmrnOV8vcMbJB/FhXnqMozgAVpRhOTqtcyonUke9tXNuwOzxId9iIefbOZapB6Z9H/UDBNpt7/bHed7X2bEDkd6DAmB4egIXPLAKtMqEHXt0Sroe6+qhFxVZslyycarTE+YTSUeWCoa5KoRU+7+qvJrkz2wMJ+5oncG6Sedig2p4NUgrZmypq85QWz9j1j49uJ4kPaurTHbsDjgMxX0e6kRX3GNa5S8RLtyXP8L46Be67ljbpsF79AVpFTfXO9P5ioyicw8oBJ1GfBF3c9dk9gDRqZhob1e3+7OybKd4QnNEQoIjMeuzajkeWVrT3tPNTgp0qiTFsrK+8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
- by CY5PR11MB6259.namprd11.prod.outlook.com (2603:10b6:930:24::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.13; Tue, 27 Dec
- 2022 00:59:24 +0000
-Received: from PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::ae1a:fa3e:e36e:c2fe]) by PH0PR11MB4965.namprd11.prod.outlook.com
- ([fe80::ae1a:fa3e:e36e:c2fe%3]) with mapi id 15.20.5944.016; Tue, 27 Dec 2022
- 00:59:24 +0000
-Message-ID: <752cacbf-5268-6ea0-8c5d-36fb297789ee@intel.com>
-Date:   Tue, 27 Dec 2022 08:59:13 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] KVM: x86: Omit PMU MSRs from KVM_GET_MSR_INDEX_LIST
- if !enable_pmu
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-CC:     "Christopherson,, Sean" <seanjc@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>
-References: <20221226111710.51831-1-likexu@tencent.com>
- <20221226111710.51831-2-likexu@tencent.com>
-Content-Language: en-US
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <20221226111710.51831-2-likexu@tencent.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR02CA0029.apcprd02.prod.outlook.com
- (2603:1096:4:195::6) To PH0PR11MB4965.namprd11.prod.outlook.com
- (2603:10b6:510:34::7)
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BD210D0
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 16:59:47 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id k6-20020a92c246000000b003035797fa8cso7779350ilo.8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 16:59:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=46X/1ebZ09bWORLFjyXEMURdLbgiW/4n8efT0Ulsrdw=;
+        b=5dtLBBiz/U27mQXs7/o08NdBZnlEPGrBH64nJAflpB9h4Zgvoy6jY13VqLdBKhS/qX
+         MeesibNNmx/LBAQWPl+upfJ2cIkHIA4jcqFlqa6BaAqRTN6ODfBUfjaJ1In8xa5EZm73
+         wPaixpLzDNRZ14FClU0GzTqut3GZkGmEVmNXJORBgUIWLzxYEHJLwLWP317pkPi7UwOD
+         m34nEL2JLuXoX38OWhlHBZ7bfoAnjCiR+XcXx23AqsQ7V/jw1wBaFVmYgpFmAM1jSeYi
+         qcdbgvKyi5OCEkxWtIC3Cmdw+etxYtcNm+avW4baT3UBftCoE4F5QcJOG0HZuJlfuW0h
+         lLUQ==
+X-Gm-Message-State: AFqh2kpWCp1tje6ioAupHpypCeE8ZdoE6ltsg0YBP0yBgZDV3/Si9+rC
+        TOiZOOqv+BNL5fjcjjCoHbOQWa0XYKScEJcmAZY4kfmHJUNi
+X-Google-Smtp-Source: AMrXdXtlb+kQZADtnNW+zvhlZ/SPh+L9NqMiqjcM7ct7d004hnxBpJ552on4ZJbQLwT9KqqnMte32zyfOBWLjovIkhBeYgZ8Eoi7
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4965:EE_|CY5PR11MB6259:EE_
-X-MS-Office365-Filtering-Correlation-Id: a59c4c38-6d31-4428-8932-08dae7a59852
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WFH65rvTp5uW2cEtGxkF1dAVz8S8S7s5hFVtCJsfqPr7sugPs1Mn4pTFt1RN8XLPhUcLW5T+5rT87oAz2N2ZuHwuibsjp6kKYxfCeS1oAmgaJ4GrL3K9yoXyk46gkgwU3m2gA4DsUm+DvGi2r6tnEU7tgUNITX+Y0c5MbOABPKpMFKkLCxFE1sKxzpveidFMKNQdHQmBWROBmPoUpE+jtlcz5XCTEmWCewY20xMA+GKchsHRz8sX50gBC/6SJLylssD6NOvDqfdUjn7cHhIyZSQIkZyWgNeVTKQy24XOtPFN1Uq02xnPqHE6W3wD/rC9cPMxjcB1Vz+6ygzl81ExSazNw5uAPkLfn+qx3fiK0ZHgdOLCPGNpK6um7JaHKwE8JIPHImMDwVll4sL21tu7VDVvzu3LcL1NBxMItXhzmjqnWT4vV9clsFRqsiyzq4R4DSm+xG9MokH3Kaddp+ELzPpZCMeuFiudz7zry+VqTSUsTdWJPLHUMHHxRvIYVB/8kUYc9sfDUMiHbQUArCqK17BB4gsAO8uzWSOdHe6IId3NwIsxRMvV1w3P3uPbKfZ27gSmM9CK23i6EVhej5C0HfYDMYuuWPq3v6cqoYte+uUvSd6G0y0snGRV7vZkZvptXMtmC9pdwxPB/B9PpR8zRde473H2NTLbeRwiic9IB/2ofpKGjJ0ai9DlvsV3b47U02tik7Sy4Dp2WhPFzbnkRw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(39860400002)(376002)(396003)(366004)(451199015)(2906002)(110136005)(316002)(478600001)(6486002)(83380400001)(36756003)(54906003)(53546011)(6506007)(86362001)(31696002)(6666004)(2616005)(186003)(6512007)(26005)(82960400001)(38100700002)(8936002)(31686004)(41300700001)(66476007)(5660300002)(66946007)(66556008)(8676002)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXhkblBpcWlCQnlteWFLQlY3S1R0VHZYM2R0V0Y3KzNqVWFTb1RCZHRaU1lQ?=
- =?utf-8?B?U1prbDVRMjk4SWZ4QzQzNWJVZ3l1VTg5cUN4OThJRVNkenB3K240TlZhUU5L?=
- =?utf-8?B?bmZDQ3ZpZzc0aFhPcU9NOHhJRHFqNWpZTFJLVXlOZDlWRVNPcXVOSkpTZk1B?=
- =?utf-8?B?b0JXb2RSK2ZEbmJCZEh2QklZT1RVZVA5eTAyTEtZL21UTDR0ZUw2YytPRys1?=
- =?utf-8?B?T3NxWWNSWXRYK0YwVlhqQ1hyWVhGYWUzeFNHSmRDOFJySU9lYzQzU3lnOVBr?=
- =?utf-8?B?QTAxZXYrdUlzUGZCSVBxUEtVZ3YycEs3eWhOejdvL0ZJaytjU0srSTlSQ3Fk?=
- =?utf-8?B?bzJBa09DQnBkNGpLR1ZlSVZ0WE5xYk44cEdUQy9zeUZEcFljR1BmaHVQeC9x?=
- =?utf-8?B?cUJSb1FzcEU1T2pBaDBybUxsa1Bhb0JwRzdlSW1zRnlaM25ncmxGdmpwK1Rp?=
- =?utf-8?B?SENwcjhKeWRYcHF6SndJcHdpZ1E4R1E3UDhnTzdnUGlSYjk2YW1yanIxcENU?=
- =?utf-8?B?L1FVYWR3aDgxZkk2bGJmM25xMWtlVWg5Uk5aYmMrSEo5a2FxTzNpcVBYeWlD?=
- =?utf-8?B?eHdTRzloT1NKbUZHbHp1OGdEcHdHbEl6aSs3M3VjUUlwOHpZS08yMDQwV1JG?=
- =?utf-8?B?ZXBuRkJFVnJITDY5UC82QU9LNVJQbWxKakdIdkVaOWpEbEdMYXN6ZHdMODhQ?=
- =?utf-8?B?RFlEV1ZlTURUREZBeDNXYlpsT0N4NWR6MHZQbm5vZFJnL292cXg4NENJMXpp?=
- =?utf-8?B?KzFBZnJMOCtiNUNLbXJHTncrZFJCazJZbjh1OWZlTm9IL00ySHdOYW9qQzNZ?=
- =?utf-8?B?V3kzSzF0Ri9pblVXcGxKZ2NQN2hkbDR3bmJHYms5dGJYQW4ydm9BbFFDSk9w?=
- =?utf-8?B?ZHg3NXVsbXRZUG9ub2lrOU13N3R1Q3BveXRQTCs5YlpFNTI3Rlh2VGRucGFp?=
- =?utf-8?B?MCtyRFFINlIwUU9hU0MyMXBLT1ViZGNLL3FnUWtpWTR1WW5mdjNZaVNSdHVh?=
- =?utf-8?B?RVNwem1uWUQ3clU5dTlIMW45aXBsak05b1MrTW9JUEhKOTQ4Y0w3ZmFBS2hm?=
- =?utf-8?B?eDlOZXp3bjZVaWVPbitXbjB1aHc5NElNcWY0S0dYY0xBZ3dlbmNBVFVCbEsx?=
- =?utf-8?B?WG80RkhYYXA3eWxqcFJkS0szc0o1bWJINnNod09KdXg0YTQ2MlFSa1V5NjF5?=
- =?utf-8?B?RmxjSUZ6YVAyYitaaFRzZno4eG13M2pPYlYyaFNmWkF4NDRFYTJPY09JNEZR?=
- =?utf-8?B?UDU4cVJOamF2QU1FalJaQXZoY3dBQmkxVFZnWS9LeEZ5RjZ6VCtLTWhqelh6?=
- =?utf-8?B?YWkxQXpCMzZSTzAxbDhabWJWUDdjRFpsTlQ0RlJ6OHRVZ2dXVTlwQ253cUFz?=
- =?utf-8?B?aGxxN2dJM0doWlFucGpiRGtPSDdQbngzUlBJaU9JUzZtQUY5dG5TN0NHUGdJ?=
- =?utf-8?B?ejkxRXd0L29EZzdkUkloVnBKTHdYL1NqbnFmcGt4bU1UVDBzUjB4V2dFeTl4?=
- =?utf-8?B?NTd2aW4wZmRXd3RPUFd5OGNMNFc1N3A4MDk3dHFSU3gwNkFEY2F5SUVRYU52?=
- =?utf-8?B?ZDNueTlmTUFPd2NXRTVMMFBUZ200R3dJOGh3TDF0Yi9jSUJtbnhnVThjOGlN?=
- =?utf-8?B?YUMyREtpd0FoK1drYjltdXk1THBkbTlmZDE3dkE0L21IeWNCdDUzK29lUVRU?=
- =?utf-8?B?OFBNaWY3SkJZUlZrUjUwS3hITFRDK01BbE5PQW8zQjIwZnBoWCtGbG5IWVhi?=
- =?utf-8?B?TDdEWXRDalBvOVY1Ly9Vb2ZsVmd0bkYzYkxTWUZabEpQdzcyYmh0ZEVHaEVn?=
- =?utf-8?B?WHJZbHVDb2VNcWVOQ2pnOWhaOTJwSm9MeHcyRDlIdTFhZkJHZ3Zmb3pjaXQ2?=
- =?utf-8?B?aVA4UTdXb2s1V1J3MVliR2ZQcXBIc29Fd1pSZWlYbkg0MWNSU2c2dDVXTmZ0?=
- =?utf-8?B?ZnlXY2xnbTJXZkI1bGtKN1NUTEYxS3BmQ2tNQ0VCU3RRRm02ZXFIY0h5eEtn?=
- =?utf-8?B?d0VpOTZoQk1SVGlqK1NKRjU1Y0dHRXRVQzREcXBON1pOcUJaUXpUMXJOVXNv?=
- =?utf-8?B?ckRzV0pDNVJxMEErYUoxVnJya3ovK3ZKNWhSMWJjdmZLN2I1cGQxYmxENWd5?=
- =?utf-8?B?TGVGVTlYWTZmK0JLOWhaUWVONFhxNmJUVm9kcmdSdzRKcmYyWTRtTUZNOTc5?=
- =?utf-8?B?NEE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a59c4c38-6d31-4428-8932-08dae7a59852
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4965.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Dec 2022 00:59:24.0012
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 736aa5aLFLTxc9olhKkh5weq+9SG3ifajEq22oY7liFCSBdwD3LwaTL62Ek2XxDLoTPRSvtXTkwy/a1vmvk7yg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6259
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c047:0:b0:30c:6e9:253b with SMTP id
+ o7-20020a92c047000000b0030c06e9253bmr348834ilf.97.1672102787153; Mon, 26 Dec
+ 2022 16:59:47 -0800 (PST)
+Date:   Mon, 26 Dec 2022 16:59:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a806c405f0c4c45b@google.com>
+Subject: [syzbot] [hfs?] possible deadlock in hfs_find_init (2)
+From:   syzbot <syzbot+e390d66dda462b51fde1@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 12/26/2022 7:17 PM, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
->
-> When the PMU is disabled, don't bother sharing the PMU MSRs with
-> userspace through KVM_GET_MSR_INDEX_LIST.  Instead, filter them out
-> so userspace doesn't have to keep track of them.
->
-> Note that 'enable_pmu' is read-only, so userspace has no control over
-> whether the PMU MSRs are included in the list or not.
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Co-developed-by: Aaron Lewis <aaronlewis@google.com>
-> Signed-off-by: Aaron Lewis <aaronlewis@google.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->   arch/x86/include/asm/kvm_host.h |  1 +
->   arch/x86/kvm/x86.c              | 22 ++++++++++++++++++++--
->   2 files changed, 21 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index f35f1ff4427b..2ed710b393eb 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -514,6 +514,7 @@ struct kvm_pmc {
->   #define MSR_ARCH_PERFMON_PERFCTR_MAX	(MSR_ARCH_PERFMON_PERFCTR0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
->   #define MSR_ARCH_PERFMON_EVENTSEL_MAX	(MSR_ARCH_PERFMON_EVENTSEL0 + KVM_INTEL_PMC_MAX_GENERIC - 1)
->   #define KVM_PMC_MAX_FIXED	3
-> +#define MSR_ARCH_PERFMON_FIXED_CTR_MAX	(MSR_ARCH_PERFMON_FIXED_CTR0 + KVM_PMC_MAX_FIXED - 1)
->   #define KVM_AMD_PMC_MAX_GENERIC	6
->   struct kvm_pmu {
->   	unsigned nr_arch_gp_counters;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 5c3ce39cdccb..f570367463c8 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -7054,15 +7054,32 @@ static void kvm_init_msr_list(void)
->   				continue;
->   			break;
->   		case MSR_ARCH_PERFMON_PERFCTR0 ... MSR_ARCH_PERFMON_PERFCTR_MAX:
-> -			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
-> +			if (!enable_pmu || msrs_to_save_all[i] - MSR_ARCH_PERFMON_PERFCTR0 >=
->   			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
->   				continue;
->   			break;
->   		case MSR_ARCH_PERFMON_EVENTSEL0 ... MSR_ARCH_PERFMON_EVENTSEL_MAX:
-> -			if (msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
-> +			if (!enable_pmu || msrs_to_save_all[i] - MSR_ARCH_PERFMON_EVENTSEL0 >=
->   			    min(KVM_INTEL_PMC_MAX_GENERIC, kvm_pmu_cap.num_counters_gp))
->   				continue;
->   			break;
-> +		case MSR_ARCH_PERFMON_FIXED_CTR0 ... MSR_ARCH_PERFMON_FIXED_CTR_MAX:
-> +			if (!enable_pmu || msrs_to_save_all[i] - MSR_ARCH_PERFMON_FIXED_CTR0 >=
-> +			    min(KVM_PMC_MAX_FIXED, kvm_pmu_cap.num_counters_fixed))
-> +				continue;
-> +			break;
-> +		case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
-> +		case MSR_K7_EVNTSEL0 ... MSR_K7_PERFCTR3:
-> +		case MSR_CORE_PERF_FIXED_CTR_CTRL:
-> +		case MSR_CORE_PERF_GLOBAL_STATUS:
-> +		case MSR_CORE_PERF_GLOBAL_CTRL:
-> +		case MSR_CORE_PERF_GLOBAL_OVF_CTRL:
-> +		case MSR_IA32_DS_AREA:
-> +		case MSR_IA32_PEBS_ENABLE:
-> +		case MSR_PEBS_DATA_CFG:
-> +			if (!enable_pmu)
-> +				continue;
-> +			break;
+syzbot found the following issue on:
+
+HEAD commit:    51094a24b85e Merge tag 'hardening-v6.2-rc1-fixes' of git:/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15e0dc54480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4e2d7bfa2d6d5a76
+dashboard link: https://syzkaller.appspot.com/bug?extid=e390d66dda462b51fde1
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a26f3769fdfb/disk-51094a24.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5decc3ae71d7/vmlinux-51094a24.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/dd2ac18a5b04/bzImage-51094a24.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e390d66dda462b51fde1@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-syzkaller-14587-g51094a24b85e #0 Not tainted
+------------------------------------------------------
+syz-executor.5/14715 is trying to acquire lock:
+ffff8880470440b0
+ (&tree->tree_lock
+/1){+.+.}-{3:3}
+, at: hfs_find_init+0x167/0x1e0
+
+but task is already holding lock:
+ffff88804170c1f8
+ (&HFS_I(tree->inode)->extents_lock
+){+.+.}-{3:3}
+, at: hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
+
+which lock already depends on the new lock.
 
 
-I prefer use a helper to wrap the hunk of PMU msr checks and move the 
-helper to
+the existing dependency chain (in reverse order) is:
 
-the "default" branch of switch, it makes the code looks nicer:
+-> #1
+ (&HFS_I(tree->inode)->extents_lock
+){+.+.}-{3:3}
+:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
+       hfs_bmap_reserve+0xfa/0x410 fs/hfs/btree.c:234
+       __hfs_ext_write_extent+0x1ea/0x460 fs/hfs/extent.c:121
+       __hfs_ext_cache_extent+0x67/0x980 fs/hfs/extent.c:174
+       hfs_ext_read_extent fs/hfs/extent.c:202 [inline]
+       hfs_extend_file+0x323/0x1420 fs/hfs/extent.c:401
+       hfs_get_block+0x3fc/0xbb0 fs/hfs/extent.c:353
+       __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
+       __block_write_begin fs/buffer.c:2041 [inline]
+       block_write_begin+0x93/0x1e0 fs/buffer.c:2102
+       cont_write_begin+0x606/0x860 fs/buffer.c:2456
+       hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
+       cont_expand_zero fs/buffer.c:2383 [inline]
+       cont_write_begin+0x2cf/0x860 fs/buffer.c:2446
+       hfs_write_begin+0x86/0xd0 fs/hfs/inode.c:58
+       generic_perform_write+0x2e4/0x5e0 mm/filemap.c:3772
+       __generic_file_write_iter+0x176/0x400 mm/filemap.c:3900
+       generic_file_write_iter+0xab/0x310 mm/filemap.c:3932
+       do_iter_write+0x6c2/0xc20 fs/read_write.c:861
+       vfs_writev fs/read_write.c:934 [inline]
+       do_pwritev+0x200/0x350 fs/read_write.c:1031
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-default:
+-> #0 (
+&tree->tree_lock
+/1){+.+.}-{3:3}
+:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       hfs_find_init+0x167/0x1e0
+       hfs_ext_read_extent fs/hfs/extent.c:200 [inline]
+       hfs_extend_file+0x2f8/0x1420 fs/hfs/extent.c:401
+       hfs_bmap_reserve+0xfa/0x410 fs/hfs/btree.c:234
+       hfs_cat_create+0x1b5/0x8a0 fs/hfs/catalog.c:104
+       hfs_create+0x62/0xd0 fs/hfs/dir.c:202
+       lookup_open fs/namei.c:3413 [inline]
+       open_last_lookups fs/namei.c:3481 [inline]
+       path_openat+0x12ac/0x2dd0 fs/namei.c:3711
+       do_filp_open+0x264/0x4f0 fs/namei.c:3741
+       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_open fs/open.c:1334 [inline]
+       __se_sys_open fs/open.c:1330 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1330
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-if(!enable_pmu && !kvm_pmu_valid_msrlist(msr))
+other info that might help us debug this:
 
-         continue;
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&HFS_I(tree->inode)->extents_lock);
+                               lock(&tree->tree_lock/1);
+                               lock(&HFS_I(tree->inode)->extents_lock);
+  lock(&tree->tree_lock/1);
+
+ *** DEADLOCK ***
+
+4 locks held by syz-executor.5/14715:
+ #0: ffff88802c73a460 (sb_writers#19){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:508
+ #1: ffff88804170bd28 (&type->i_mutex_dir_key#11){++++}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff88804170bd28 (&type->i_mutex_dir_key#11){++++}-{3:3}, at: open_last_lookups fs/namei.c:3478 [inline]
+ #1: ffff88804170bd28 (&type->i_mutex_dir_key#11){++++}-{3:3}, at: path_openat+0x7b9/0x2dd0 fs/namei.c:3711
+ #2: ffff88802a7440b0 (&tree->tree_lock){+.+.}-{3:3}, at: hfs_find_init+0x167/0x1e0
+ #3: ffff88804170c1f8 (&HFS_I(tree->inode)->extents_lock){+.+.}-{3:3}, at: hfs_extend_file+0xde/0x1420 fs/hfs/extent.c:397
+
+stack backtrace:
+CPU: 0 PID: 14715 Comm: syz-executor.5 Not tainted 6.1.0-syzkaller-14587-g51094a24b85e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ hfs_find_init+0x167/0x1e0
+ hfs_ext_read_extent fs/hfs/extent.c:200 [inline]
+ hfs_extend_file+0x2f8/0x1420 fs/hfs/extent.c:401
+ hfs_bmap_reserve+0xfa/0x410 fs/hfs/btree.c:234
+ hfs_cat_create+0x1b5/0x8a0 fs/hfs/catalog.c:104
+ hfs_create+0x62/0xd0 fs/hfs/dir.c:202
+ lookup_open fs/namei.c:3413 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x12ac/0x2dd0 fs/namei.c:3711
+ do_filp_open+0x264/0x4f0 fs/namei.c:3741
+ do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_open fs/open.c:1334 [inline]
+ __se_sys_open fs/open.c:1330 [inline]
+ __x64_sys_open+0x221/0x270 fs/open.c:1330
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc71f08c0a9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc71fe9b168 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007fc71f1ac050 RCX: 00007fc71f08c0a9
+RDX: 0000000000000000 RSI: 000000000014d27e RDI: 0000000020000180
+RBP: 00007fc71f0e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd5d3e729f R14: 00007fc71fe9b300 R15: 0000000000022000
+ </TASK>
 
 
->   		case MSR_IA32_XFD:
->   		case MSR_IA32_XFD_ERR:
->   			if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
-> @@ -13468,3 +13485,4 @@ static void __exit kvm_x86_exit(void)
->   	 */
->   }
->   module_exit(kvm_x86_exit);
-> +
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-Extra newline.
-
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
