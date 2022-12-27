@@ -2,191 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D2C656E1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B915656E23
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiL0TCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        id S230281AbiL0TJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:09:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiL0TCt (ORCPT
+        with ESMTP id S229488AbiL0TJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:02:49 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97C2D114
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:02:48 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id u28so15309992edd.10
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:02:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O0p+ppNOGRKb/NOMxrUDYaSzLYMOpLEPChffMwzyD4s=;
-        b=G+As5w1O9GJAgcoSWrA1V1BBzCp4+BkPOjQB9qG4fRx7dwEQAqXK8xYYxvvOgFcZIt
-         4hMjo/Ckrx//oepVJWG+oBx9wRpONu/UKVWzE8Iwi4VauxCXxC8lCy6OI0Q/jjhX+BWf
-         ZaLhfnQcfZWQ/DEFbzeCFUYcT2X+aIEsad4VbI5Pmg+ATzQkoe5xMe8Cmf229TBWVoAV
-         wAIHOKQq7zUg3Hj/40JbeWk+DT09nO2Sg6jlT/fp08Gw8gAJ6g2xIKZHcWjzaIeIprgn
-         7dXxfdxKgZ5pGaPhrLMuW+7FinDO9XBlyfJMzZHReg9OFaAlYfViqIVKOSlg9Iirj5bC
-         KT6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O0p+ppNOGRKb/NOMxrUDYaSzLYMOpLEPChffMwzyD4s=;
-        b=svWoRFL5es4I09qUl6Fps+lTPb/4EQjmFjsdkMwOf80bd5IlA2MYKEu+p+4AWO+NZc
-         ZFAylsSzK/Wq2vD5mYCpxz/PbEeIOi/MgXO7UhUgH6xWIeryGM/zGbsSbaLF6aGu+3BJ
-         7hdcyIvSSr/oelzSHDW15IyfFa3ZA6EH7nlOX7d/h84WZ9XZBWEmtL+dYl8aFkHG+ocY
-         fZpcg9VEgABVTggBMEtUMUEec5EAGojWeV92l0fidNXQEt1nVE/S7r2C3ylJW/fkTP+c
-         TBI9hYpmflO37Pk+LsDm0Cjwe1olFsIk3yhGgCRhATaRs4MconUcPgcZ7e6xL3/Y/yqI
-         v3gA==
-X-Gm-Message-State: AFqh2kri5Hr6bESyyzkanKCgL5rtTxffZqo5oWrmSRxjeRfWCYY32YC1
-        Cyh3yTyGrvQbv0KC5pW4FdAj1w3ITBFEJ2e7TdIydg==
-X-Google-Smtp-Source: AMrXdXvi6hRJf+bFZ47VpANM/2xs3vP25zTe6ZAc9vU4JEzmbdcfZ4YfBsh1C7oaOLY/tye78AWCvC9kVBtXX+D2emU=
-X-Received: by 2002:a05:6402:204d:b0:471:c322:ce41 with SMTP id
- bc13-20020a056402204d00b00471c322ce41mr1566013edb.4.1672167767277; Tue, 27
- Dec 2022 11:02:47 -0800 (PST)
+        Tue, 27 Dec 2022 14:09:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDF6B0A;
+        Tue, 27 Dec 2022 11:09:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CC926120C;
+        Tue, 27 Dec 2022 19:09:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65DBAC433F2;
+        Tue, 27 Dec 2022 19:09:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672168145;
+        bh=g3AyVzPiNK7FxMi/7WTq97Bc0fAXmoQbAX8mHjVaQxI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Yym3KAPbn9qNC2OBGMjYtPvT6kmkA4f39Rpge2jGHEt/aiN06KQ4uFAokbNObVfRn
+         z7tOPMD0DdV5mgpqPeRatxbc0Uxcx4COj3ju27HabhkmY5IO33lmt0T73jBz9a2H4B
+         p5ZspCX3XwZ0Hlg901SyXBijbohBVkD6Pv+nWz3xb8EMGq4nEA+UaqvR4NVsYDLh+j
+         13Y19RCxUW6M3qEDJPcpbs/qM4nqyUMeP2sd42VqwqC4msSiYNffilWp2YinfZkUx1
+         yGOPM6k8BC9QL/sv5Las3SfCYVToR7lI8yhGtL0+FR8PE26uQR8peEv6vQb/KzcPpO
+         4IB8buq1y0pVQ==
+Received: by mail-lf1-f50.google.com with SMTP id p36so20765392lfa.12;
+        Tue, 27 Dec 2022 11:09:05 -0800 (PST)
+X-Gm-Message-State: AFqh2kqUFVZLi7XUqFNTAmI3BvoXh22Ob/wD9lUdvL+M65JDV3vnyPPA
+        48MIkYcJBl1b/nKIOYwPFUb9BidUwY+xYc9BqgA=
+X-Google-Smtp-Source: AMrXdXvcF3XoVDzIwaHd3nCZ+sdH8SqawTNuZbXSdUpEEloMj4+gOul+o/MJ1P2kmhyb/Nb4II/ZIxSU2n6rn2aDsMc=
+X-Received: by 2002:a05:6512:1395:b0:4b5:b46b:17c7 with SMTP id
+ p21-20020a056512139500b004b5b46b17c7mr2364489lfa.215.1672168143388; Tue, 27
+ Dec 2022 11:09:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-6-vipinsh@google.com>
-In-Reply-To: <20221222023457.1764-6-vipinsh@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 27 Dec 2022 11:02:35 -0800
-Message-ID: <CANgfPd-x+w8DnyfnLeMCWApbNyAbxOdS8e-nhoSq7txSu2mHXA@mail.gmail.com>
-Subject: Re: [Patch v3 5/9] KVM: x86/mmu: Allocate TDP page table's page on
- correct NUMA node on split
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221224133146.780578-1-nashuiliang@gmail.com> <Y6ofUzLHZKraIDre@krava>
+In-Reply-To: <Y6ofUzLHZKraIDre@krava>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 27 Dec 2022 11:08:50 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7A7NFNeOrQn4AnvgqXvapCK7=XsZcirtYW4p+wNvJfjA@mail.gmail.com>
+Message-ID: <CAPhsuW7A7NFNeOrQn4AnvgqXvapCK7=XsZcirtYW4p+wNvJfjA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Fix panic due to wrong pageattr of im->image
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Chuang Wang <nashuiliang@gmail.com>, stable@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 6:35 PM Vipin Sharma <vipinsh@google.com> wrote:
+On Mon, Dec 26, 2022 at 2:25 PM Jiri Olsa <olsajiri@gmail.com> wrote:
 >
-> When dirty log is enabled, huge pages are split. Page table's pages
+> On Sat, Dec 24, 2022 at 09:31:46PM +0800, Chuang Wang wrote:
+> > In the scenario where livepatch and kretfunc coexist, the pageattr of
+> > im->image is rox after arch_prepare_bpf_trampoline in
+> > bpf_trampoline_update, and then modify_fentry or register_fentry returns
+> > -EAGAIN from bpf_tramp_ftrace_ops_func, the BPF_TRAMP_F_ORIG_STACK flag
+> > will be configured, and arch_prepare_bpf_trampoline will be re-executed.
+> >
+> > At this time, because the pageattr of im->image is rox,
+> > arch_prepare_bpf_trampoline will read and write im->image, which causes
+> > a fault. as follows:
+> >
+> >   insmod livepatch-sample.ko    # samples/livepatch/livepatch-sample.c
+> >   bpftrace -e 'kretfunc:cmdline_proc_show {}'
+> >
+> > BUG: unable to handle page fault for address: ffffffffa0206000
+> > PGD 322d067 P4D 322d067 PUD 322e063 PMD 1297e067 PTE d428061
+> > Oops: 0003 [#1] PREEMPT SMP PTI
+> > CPU: 2 PID: 270 Comm: bpftrace Tainted: G            E K    6.1.0 #5
+> > RIP: 0010:arch_prepare_bpf_trampoline+0xed/0x8c0
+> > RSP: 0018:ffffc90001083ad8 EFLAGS: 00010202
+> > RAX: ffffffffa0206000 RBX: 0000000000000020 RCX: 0000000000000000
+> > RDX: ffffffffa0206001 RSI: ffffffffa0206000 RDI: 0000000000000030
+> > RBP: ffffc90001083b70 R08: 0000000000000066 R09: ffff88800f51b400
+> > R10: 000000002e72c6e5 R11: 00000000d0a15080 R12: ffff8880110a68c8
+> > R13: 0000000000000000 R14: ffff88800f51b400 R15: ffffffff814fec10
+> > FS:  00007f87bc0dc780(0000) GS:ffff88803e600000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: ffffffffa0206000 CR3: 0000000010b70000 CR4: 00000000000006e0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> > <TASK>
+> >  bpf_trampoline_update+0x25a/0x6b0
+> >  __bpf_trampoline_link_prog+0x101/0x240
+> >  bpf_trampoline_link_prog+0x2d/0x50
+> >  bpf_tracing_prog_attach+0x24c/0x530
+> >  bpf_raw_tp_link_attach+0x73/0x1d0
+> >  __sys_bpf+0x100e/0x2570
+> >  __x64_sys_bpf+0x1c/0x30
+> >  do_syscall_64+0x5b/0x80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > With this patch, when modify_fentry or register_fentry returns -EAGAIN
+> > from bpf_tramp_ftrace_ops_func, the pageattr of im->image will be reset
+> > to nx+rw.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 00963a2e75a8 ("bpf: Support bpf_trampoline on functions with IPMODIFY (e.g. livepatch)")
 
-Nit: Suggest "When huge pages are split for dirty log" since this can
-happen at various points during dirty logging.
-Same below.
+Good catch! Thanks for the fix!
 
-> during the split are allocated based on the current thread NUMA node or
-> mempolicy. This causes inefficient page table accesses if underlying
-> page is on a different NUMA node
+> > Signed-off-by: Chuang Wang <nashuiliang@gmail.com>
 >
-> Allocate page table's pages on the same NUMA node as the underlying huge
-> page when dirty log is enabled and huge pages are split.
->
-> The performance gain during the pre-copy phase of live migrations of a
-> 416 vCPUs and 11 TiB memory VM  on a 8 node host was seen in the range
-> of 130% to 150%.
->
-> Suggested-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++----
->  include/linux/kvm_host.h   | 18 ++++++++++++++++++
->  2 files changed, 26 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 4974fa96deff..376b8dceb3f9 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1403,7 +1403,7 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
->         return spte_set;
->  }
->
-> -static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
-> +static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
->  {
->         struct kvm_mmu_page *sp;
->
-> @@ -1413,7 +1413,8 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
->         if (!sp)
->                 return NULL;
->
-> -       sp->spt = (void *)__get_free_page(gfp);
-> +       sp->spt = kvm_mmu_get_free_page(nid, gfp);
-> +
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-Just so that kvm_mmu_get_free_page isn't dead code in the previous
-commit, I'd do this refactor there and just pass NUMA_NO_NODE here.
+Acked-by: Song Liu <song@kernel.org>
 
->         if (!sp->spt) {
->                 kmem_cache_free(mmu_page_header_cache, sp);
->                 return NULL;
-> @@ -1427,6 +1428,9 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->                                                        bool shared)
->  {
->         struct kvm_mmu_page *sp;
-> +       int nid;
-> +
-> +       nid = kvm_pfn_to_page_table_nid(spte_to_pfn(iter->old_spte));
 >
->         /*
->          * Since we are allocating while under the MMU lock we have to be
-> @@ -1437,7 +1441,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->          * If this allocation fails we drop the lock and retry with reclaim
->          * allowed.
->          */
-> -       sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
-> +       sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_NOWAIT | __GFP_ACCOUNT);
->         if (sp)
->                 return sp;
+> jirka
 >
-> @@ -1449,7 +1453,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
->                 write_unlock(&kvm->mmu_lock);
->
->         iter->yielded = true;
-> -       sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
-> +       sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_KERNEL_ACCOUNT);
->
->         if (shared)
->                 read_lock(&kvm->mmu_lock);
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index d48064503b88..a262e15ebd19 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1583,6 +1583,24 @@ void kvm_arch_sync_events(struct kvm *kvm);
->  int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
->
->  struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn);
-> +
-> +/*
-> + * Tells the appropriate NUMA node location of the page table's page based on
-> + * pfn it will point to.
-> + *
-> + * Return the nid of the page if pfn is valid and backed by a refcounted page,
-> + * otherwise, return the nearest memory node for the current CPU.
-
-Nit: Should this be "current thread"?
-
-> + */
-> +static inline int kvm_pfn_to_page_table_nid(kvm_pfn_t pfn)
-
-This could just be kvm_pfn_nid (or even better kvm_pfn_node_id) since
-this really has nothing to do with page tables. We just want to know
-which NUMA node backs the given PFN.
-
-> +{
-> +       struct page *page = kvm_pfn_to_refcounted_page(pfn);
-> +
-> +       if (page)
-> +               return page_to_nid(page);
-> +       else
-> +               return numa_mem_id();
-> +}
-> +
->  bool kvm_is_zone_device_page(struct page *page);
->
->  struct kvm_irq_ack_notifier {
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+> > ---
+> >  kernel/bpf/trampoline.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > index 11f5ec0b8016..d0ed7d6f5eec 100644
+> > --- a/kernel/bpf/trampoline.c
+> > +++ b/kernel/bpf/trampoline.c
+> > @@ -488,6 +488,10 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
+> >               /* reset fops->func and fops->trampoline for re-register */
+> >               tr->fops->func = NULL;
+> >               tr->fops->trampoline = 0;
+> > +
+> > +             /* reset im->image memory attr for arch_prepare_bpf_trampoline */
+> > +             set_memory_nx((long)im->image, 1);
+> > +             set_memory_rw((long)im->image, 1);
+> >               goto again;
+> >       }
+> >  #endif
+> > --
+> > 2.37.2
+> >
