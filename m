@@ -2,110 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74957656818
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB1C65682B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiL0IBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 03:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
+        id S230342AbiL0IHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 03:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiL0IBT (ORCPT
+        with ESMTP id S230201AbiL0IHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 03:01:19 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44628114F
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:01:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1672128061; bh=L7owGmbT1ZxgBvi6fbS8mXVWDglqw6W6df4BA5PYtMM=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=QxVY8yjoKzb0OTh6OmIxWa+uJk9lbvdtIva6tG/qKJiCZplp9WSDt6le7+JUI+CnL
-         FFs4xPIeVx42lFD3oov338vMc6A6DtGnSXp5zpDA6+RSIJwgiz4vs1aQTtwSZRT700
-         3PUVumlKzgM2VxuTq1ewiY3ZdkGCGj7dzhY+i73k=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue, 27 Dec 2022 09:01:01 +0100 (CET)
-X-EA-Auth: 055MqznYGGdxPOOuTU1LvLH5vLFB+IXYkeGlM26BeEaHaWLHphe/AO32mkbpjHKL2tQxrFN4WIgzNiFSMaanFHsHZ6uFhWf9
-Date:   Tue, 27 Dec 2022 13:30:53 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] drm/i915/fbc: Avoid full proxy f_ops for FBC debug attributes
-Message-ID: <Y6qmNW6cOHjGwn03@qemulion>
+        Tue, 27 Dec 2022 03:07:04 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C06633C
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:07:01 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id g13so18633404lfv.7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:07:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OJ/7FKaYQPbSQfr8IKqXAW5Ibx9zEMr06Yb1xIgzRps=;
+        b=JXlN4p1JR20ckkY81K15D3vNl6qOqL5zutcruCZy/SHUKJcdfVQRNhDvv10crJZRR8
+         XGquJa2AFr4KLIdLCfjeBsib8JLQRtt/LakZITiEDuKKtZFHiw+f2cAY3MVMTCM2h7/j
+         DzL27PwrkjGANH3vRRg4yh/OraSPbD2SGc8MT3JOpDtbb9jWxoA5K3CQN2iVSPI5qOXd
+         ISo4sB6EnTdF6qPtxtUj+aA4lrWhrBD/oJRElE1ErtRPezc3WtysT6ridQpdSdHPA2Xw
+         M/NG0LiQRbTzqkfGmaC6NV4h/GpL6nl7F15PsEGVx+9XWAcsPN8kZUnTrFy2eMQiXikD
+         /H0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJ/7FKaYQPbSQfr8IKqXAW5Ibx9zEMr06Yb1xIgzRps=;
+        b=hQddRSZYxwxI7gNE4hoooOWEPUyaIk5IJyH5P9zo6bvVo6fwsd94RvkviiGaOdXBka
+         CtFw54Ndx1yQT87SZflJnJ/9mW3RCQ+EF33YeSnPfnkbqfoWHxYdyK3moJerMRi9K1IJ
+         yfuVCWpSPGWhLmRi+YDWFFG/CgCJRjRo95A5o8hDzLfMMbDuUdex7KVrNYELokT425Qw
+         Y6c4lxNDcX9oegp8tQrCoetf9kzxGBSQB+ep96AMvExMLv+ZU5+fcsLpmfK6jhd9lMg4
+         QmRmzuRvwB8hsC2VGXFZCLCx4PRh2zh2VhzIZ7rUUi0ZbtcRCH8vWdvKw/Xn75aqFsW8
+         9t4w==
+X-Gm-Message-State: AFqh2koMpPf6gEHJZRTsmOQvDM36NcpjkJibEwRcGToQAU7ssUHnOLS0
+        pdOmltZBE/1LFKAC5LiNLGDevA==
+X-Google-Smtp-Source: AMrXdXuOPt5JMrtcl95yqiO17abJPoW67fI3p5WipJORLY/dTnnw7KGxlUmcQDy458TGWtVsrYHb1g==
+X-Received: by 2002:a05:6512:3c82:b0:4b5:adae:b6be with SMTP id h2-20020a0565123c8200b004b5adaeb6bemr10160824lfv.42.1672128420011;
+        Tue, 27 Dec 2022 00:07:00 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b11-20020a056512024b00b004b57277474esm2147571lfo.106.2022.12.27.00.06.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Dec 2022 00:06:59 -0800 (PST)
+Message-ID: <9a2ae843-1cc8-b3c7-1d63-da56547f81c8@linaro.org>
+Date:   Tue, 27 Dec 2022 09:06:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [net PATCH 1/2] dt-bindings: net: marvell,orion-mdio: Fix error
+Content-Language: en-US
+To:     =?UTF-8?Q?Micha=c5=82_Grzelak?= <mig@semihalf.com>,
+        devicetree@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
+        chris.packham@alliedtelesis.co.nz, netdev@vger.kernel.org,
+        upstream@semihalf.com, linux-kernel@vger.kernel.org
+References: <20221227010523.59328-1-mig@semihalf.com>
+ <20221227010523.59328-2-mig@semihalf.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221227010523.59328-2-mig@semihalf.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using DEFINE_SIMPLE_ATTRIBUTE macro with the debugfs_create_file()
-function adds the overhead of introducing a proxy file operation
-functions to wrap the original read/write inside file removal protection
-functions. This adds significant overhead in terms of introducing and
-managing the proxy factory file operations structure and function
-wrapping at runtime.
-As a replacement, a combination of DEFINE_DEBUGFS_ATTRIBUTE macro paired
-with debugfs_create_file_unsafe() is suggested to be used instead.  The
-DEFINE_DEBUGFS_ATTRIBUTE utilises debugfs_file_get() and
-debugfs_file_put() wrappers to protect the original read and write
-function calls for the debug attributes. There is no need for any
-runtime proxy file operations to be managed by the debugfs core.
+On 27/12/2022 02:05, Michał Grzelak wrote:
+> Fix 'unevaluated properties error' during 'make dtbs_check' appearing on
+> arm device trees by defining generic 'ethernet-phy' subnode in
+> marvell,orion-mdio.yaml.
 
-This Change is reported by the debugfs_simple_attr.cocci Coccinelle
-semantic patch.
+Instead of long test just paste a bit of warning message. Much easier to
+read.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/gpu/drm/i915/display/intel_fbc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> Fixes: 0781434af811f ("dt-bindings: net: orion-mdio: Convert to JSON
+> schema")
 
-diff --git a/drivers/gpu/drm/i915/display/intel_fbc.c b/drivers/gpu/drm/i915/display/intel_fbc.c
-index b5ee5ea0d010..4b481e2f908b 100644
---- a/drivers/gpu/drm/i915/display/intel_fbc.c
-+++ b/drivers/gpu/drm/i915/display/intel_fbc.c
-@@ -1809,10 +1809,10 @@ static int intel_fbc_debugfs_false_color_set(void *data, u64 val)
- 	return 0;
- }
+Don't wrap tags.
 
--DEFINE_SIMPLE_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
--			intel_fbc_debugfs_false_color_get,
--			intel_fbc_debugfs_false_color_set,
--			"%llu\n");
-+DEFINE_DEBUGFS_ATTRIBUTE(intel_fbc_debugfs_false_color_fops,
-+			 intel_fbc_debugfs_false_color_get,
-+			 intel_fbc_debugfs_false_color_set,
-+			 "%llu\n");
+> Signed-off-by: Michał Grzelak <mig@semihalf.com>
+> ---
+>  Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
+> index d2906b4a0f59..2b2b3f8709fc 100644
+> --- a/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
+> +++ b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
+> @@ -35,6 +35,10 @@ properties:
+>      minItems: 1
+>      maxItems: 4
+>  
+> +patternProperties:
+> +  '^ethernet-phy':
 
- static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
- 				  struct dentry *parent)
-@@ -1821,8 +1821,8 @@ static void intel_fbc_debugfs_add(struct intel_fbc *fbc,
- 			    fbc, &intel_fbc_debugfs_status_fops);
-
- 	if (fbc->funcs->set_false_color)
--		debugfs_create_file("i915_fbc_false_color", 0644, parent,
--				    fbc, &intel_fbc_debugfs_false_color_fops);
-+		debugfs_create_file_unsafe("i915_fbc_false_color", 0644, parent,
-+					   fbc, &intel_fbc_debugfs_false_color_fops);
- }
-
- void intel_fbc_crtc_debugfs_add(struct intel_crtc *crtc)
---
-2.34.1
+ethernet-phy@ is already accepted via mdio, so this looks wrong. You
+need to rather fix the DTS.
 
 
+Best regards,
+Krzysztof
 
