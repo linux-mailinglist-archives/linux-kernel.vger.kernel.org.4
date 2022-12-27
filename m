@@ -2,95 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829B9656CC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 17:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178B1656CC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 17:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiL0QOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 11:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S231220AbiL0QP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 11:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiL0QOX (ORCPT
+        with ESMTP id S229588AbiL0QPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 11:14:23 -0500
-Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 16F1DCDC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 08:14:21 -0800 (PST)
-Received: from mail.didiglobal.com (unknown [10.79.65.12])
-        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id A20A511002B812;
-        Wed, 28 Dec 2022 00:14:17 +0800 (CST)
-Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 28 Dec 2022 00:14:17 +0800
-Date:   Wed, 28 Dec 2022 00:14:00 +0800
-X-MD-Sfrom: tiozhang@didiglobal.com
-X-MD-SrcIP: 10.79.65.12
-From:   Tio Zhang <tiozhang@didiglobal.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <pmladek@suse.com>,
-        <zyhtheonly@gmail.com>, <zyhtheonly@yeah.net>, <zwp10758@gmail.com>
-Subject: [PATCH] sched: print parent comm in sched_show_task()
-Message-ID: <20221227161400.GA7646@didi-ThinkCentre-M930t-N000>
-Mail-Followup-To: mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        zyhtheonly@gmail.com, zyhtheonly@yeah.net, zwp10758@gmail.com
+        Tue, 27 Dec 2022 11:15:24 -0500
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D962ECFD;
+        Tue, 27 Dec 2022 08:15:23 -0800 (PST)
+Received: by mail-qt1-f176.google.com with SMTP id z12so10737459qtv.5;
+        Tue, 27 Dec 2022 08:15:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o4/jvC6LoaYDJ2i8XVmPXWzut9eNTEwxTOlFn2Vt940=;
+        b=Cw7jkicRBv7smswkKIoL/N4qsUYHYTKAMB9IgmPEdAPWnSSb/V6b2hFLdWdycvdNo0
+         ulmOnYtqO2TsU/eLA369GW1LoU/BR8D+ajIYyUp6QfBYMdVtPwlZcpN8LM3YJuypHawj
+         QKpHS34GUmbf0ZWM45A2GQPyLJWbNgdQuxAGXWhXPDlTHULFI28mYDosZ0u+yk7bbSuZ
+         dRpHXryZfJdMsbAp56QOeS4C5/rD/6oxDORRG4Yr41MGExC049qcamMV2do7C4wlgCc/
+         oXsj9IB2nWM9ASRa9wzORZKRClN6PC25kCEIZbkpmW/iHgJ3rUNJczu6dsVS9OtB+uGV
+         qpag==
+X-Gm-Message-State: AFqh2kpEu846pMFTtjN2QPIJ7nTrwbJ2hLlHtKZPbZJBremNrwqpx0kL
+        dKDcqkQ/CQyC9yoMfIjh08eB9nqwNcSU8j3Itlk=
+X-Google-Smtp-Source: AMrXdXvRDw3yOr3HtrbwIr8ZhcWwC4vGUgYDiilUUSb0o6WeawkXxFnn+dmx0hrzDSK9PI1LIshF9D1SRNyjac9PaMc=
+X-Received: by 2002:ac8:749a:0:b0:3a6:8dd0:4712 with SMTP id
+ v26-20020ac8749a000000b003a68dd04712mr933793qtq.411.1672157723029; Tue, 27
+ Dec 2022 08:15:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.79.64.101]
-X-ClientProxiedBy: ZJY03-PUBMBX-01.didichuxing.com (10.79.71.12) To
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221221155203.11347-1-ptyadav@amazon.de>
+In-Reply-To: <20221221155203.11347-1-ptyadav@amazon.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 27 Dec 2022 17:15:04 +0100
+Message-ID: <CAJZ5v0jNB1UnwW8mW6Cu9qi4vdvH9twMRkGcSOcndv_SEDeoOA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] intel_pstate: fix turbo not being used after a
+ processor is rebooted
+To:     Pratyush Yadav <ptyadav@amazon.de>
+Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@acpica.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Knowing who the parent is might be useful for debugging.
-For example, we can sometimes resolve kernel hung tasks by stopping
-the person who begins those hung tasks.
-With the parent's name printed in sched_show_task(),
-it might be helpful to let people know which "service" should be operated.
+On Wed, Dec 21, 2022 at 4:52 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
+>
+> When a processor is brought offline and online again, it is unable to
+> use Turbo mode because the _PSS table does not contain the whole turbo
+> frequency range, but only +1 MHz above the max non-turbo frequency.
 
-Signed-off-by: Tio Zhang <tiozhang@didiglobal.com>
----
- kernel/sched/core.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+That's because of the way P-state limits in the turbo range are
+handled by the given processor.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index cb2aa2b54c7a..6f4aef0fed58 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8854,6 +8854,7 @@ void sched_show_task(struct task_struct *p)
- {
- 	unsigned long free = 0;
- 	int ppid;
-+	char pcomm[TASK_COMM_LEN];
- 
- 	if (!try_get_task_stack(p))
- 		return;
-@@ -8867,11 +8868,13 @@ void sched_show_task(struct task_struct *p)
- #endif
- 	ppid = 0;
- 	rcu_read_lock();
--	if (pid_alive(p))
-+	if (pid_alive(p)) {
- 		ppid = task_pid_nr(rcu_dereference(p->real_parent));
-+		get_task_comm(pcomm, rcu_dereference(p->real_parent));
-+	}
- 	rcu_read_unlock();
--	pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d flags:0x%08lx\n",
--		free, task_pid_nr(p), ppid,
-+	pr_cont(" stack:%-5lu pid:%-5d ppid:%-6d parent:%-15.15s flags:0x%08lx\n",
-+		free, task_pid_nr(p), ppid, pcomm,
- 		read_task_thread_flags(p));
- 
- 	print_worker_info(KERN_INFO, p);
--- 
-2.17.1
+Some of them restrict the P-state even if the limit is located within
+the turbo range and some of them don't (that is, requesting any
+P-state in the turbo range gives the processor a license to use the
+whole of it).
 
+> This causes problems when ACPI processor driver tries to set frequency
+> constraints.
+
+The problem is that acpi_processor_get_platform_limit() sets the limit
+to the frequency for all of the _PSS states including the last special
+one and it should update the QoS to "no limit" in that case.
