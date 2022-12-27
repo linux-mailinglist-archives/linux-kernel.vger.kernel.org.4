@@ -2,53 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48C2656A47
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D089C656A42
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbiL0L7o convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Dec 2022 06:59:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S231834AbiL0L7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 06:59:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiL0L7N (ORCPT
+        with ESMTP id S231972AbiL0L64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 06:59:13 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711E4B845;
-        Tue, 27 Dec 2022 03:59:09 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 5944824DDB2;
-        Tue, 27 Dec 2022 19:59:07 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Dec
- 2022 19:59:06 +0800
-Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
- by EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Tue, 27 Dec 2022 19:59:05 +0800
-From:   William Qiu <william.qiu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@linux.starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/3] dt-bindings: mmc: Add bindings for StarFive
-Date:   Tue, 27 Dec 2022 19:58:54 +0800
-Message-ID: <20221227115856.460790-2-william.qiu@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221227115856.460790-1-william.qiu@starfivetech.com>
-References: <20221227115856.460790-1-william.qiu@starfivetech.com>
+        Tue, 27 Dec 2022 06:58:56 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5769B7E6;
+        Tue, 27 Dec 2022 03:58:55 -0800 (PST)
+Date:   Tue, 27 Dec 2022 11:58:54 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672142334;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9TZqt83Scy1dn6mE5MEfELkLQ3zO2SAdanIc2JfFnxw=;
+        b=qhk9vEUlzTUL6qHkKrQO9QFUF2NXJE3xVPJEdAdFY08IU5JnYQHZd55sFJ419dC6EPijC1
+        mjVpDTKrjMx9HAYgstMpmhHifMTBNcFmp5WW80H4FwOLhQnWZdJO0dSMWcRTgNsUSNo8sH
+        dn02wnJwqiAqEOhomq8QE1VM6MHDhI6cIj9myyADld1sbGZn6+kyLYnBuKkPUFFzO/5EJ3
+        LHV2BMBYFctRSZzZf6RqGl11KEYVc5ygwbixuasfMZ8IqDWuOZtUTFbTWlyS/2HOLs+U4s
+        YHoxymZh3ej3bUrti4bZi7gtcVgb0q8oNK/XytllpB/3zpQ0xqg7HDaJEFyxdA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672142334;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9TZqt83Scy1dn6mE5MEfELkLQ3zO2SAdanIc2JfFnxw=;
+        b=D2nnJJTYpmrpxMq+3A5RuX2SAAzcvNVd5Efl1e3xTOx5CaAApzcyYPK+S0rl7Zrzj0RLHr
+        twk7hgKJIkfLMwDQ==
+From:   "tip-bot2 for Like Xu" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf/x86/lbr: Simplify the exposure check for the
+ LBR_INFO registers
+Cc:     Like Xu <like.xu@linux.intel.com>,
+        Yang Weijiang <weijiang.yang@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221125040604.5051-2-weijiang.yang@intel.com>
+References: <20221125040604.5051-2-weijiang.yang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Message-ID: <167214233418.4906.13269799714918773894.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,93 +68,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation to describe StarFive
-designware mobile storage host controller driver.
+The following commit has been merged into the perf/core branch of tip:
 
-Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+Commit-ID:     03c4c7f88709fac0e20b6a48357c73d6fc50e544
+Gitweb:        https://git.kernel.org/tip/03c4c7f88709fac0e20b6a48357c73d6fc50e544
+Author:        Like Xu <like.xu@linux.intel.com>
+AuthorDate:    Thu, 24 Nov 2022 23:05:50 -05:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 27 Dec 2022 12:52:07 +01:00
+
+perf/x86/lbr: Simplify the exposure check for the LBR_INFO registers
+
+The x86_pmu.lbr_info is 0 unless explicitly initialized, so there's
+no point checking x86_pmu.intel_cap.lbr_format.
+
+Signed-off-by: Like Xu <like.xu@linux.intel.com>
+Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Link: https://lkml.kernel.org/r/20221125040604.5051-2-weijiang.yang@intel.com
 ---
- .../bindings/mmc/starfive,jh7110-mmc.yaml     | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
+ arch/x86/events/intel/lbr.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml b/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
-new file mode 100644
-index 000000000000..430dd5f24933
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
-@@ -0,0 +1,72 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mmc/starfive,jh7110-mmc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: StarFive Designware Mobile Storage Host Controller
-+
-+description:
-+  StarFive uses the Synopsys designware mobile storage host controller
-+  to interface a SoC with storage medium such as eMMC or SD/MMC cards.
-+
-+allOf:
-+  - $ref: synopsys-dw-mshc-common.yaml#
-+
-+maintainers:
-+  - William Qiu <william.qiu@starfivetech.com>
-+
-+properties:
-+  compatible:
-+    const: starfive,jh7110-mmc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: biu clock
-+      - description: ciu clock
-+
-+  clock-names:
-+    items:
-+      - const: biu
-+      - const: ciu
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  starfive,syscon:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description:
-+      arg0:arg0 is syscon.
-+      arg1:arg1 is syscon register offset, used to enable MMC function.
-+      arg2:arg2 is used to enable the register shift of the MMC function.
-+      arg3:arg3 is used to enable the register mask of the MMC function.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+  - starfive,syscon
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    mmc@16010000 {
-+        compatible = "starfive,jh7110-mmc";
-+        reg = <0x16010000 0x10000>;
-+        clocks = <&syscrg 91>,
-+                 <&syscrg 93>;
-+        clock-names = "biu","ciu";
-+        resets = <&syscrg 64>;
-+        reset-names = "reset";
-+        interrupts = <74>;
-+        fifo-depth = <32>;
-+        fifo-watermark-aligned;
-+        data-addr = <0>;
-+        starfive,syscon = <&syscon 0x14 0x1a 0x7c000000>;
-+    };
--- 
-2.34.1
-
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index 1f21f57..c3b0d15 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -1606,12 +1606,10 @@ clear_arch_lbr:
+  */
+ void x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
+ {
+-	int lbr_fmt = x86_pmu.intel_cap.lbr_format;
+-
+ 	lbr->nr = x86_pmu.lbr_nr;
+ 	lbr->from = x86_pmu.lbr_from;
+ 	lbr->to = x86_pmu.lbr_to;
+-	lbr->info = (lbr_fmt == LBR_FORMAT_INFO) ? x86_pmu.lbr_info : 0;
++	lbr->info = x86_pmu.lbr_info;
+ }
+ EXPORT_SYMBOL_GPL(x86_perf_get_lbr);
+ 
