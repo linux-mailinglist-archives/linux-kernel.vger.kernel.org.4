@@ -2,54 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D61656B27
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 14:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13212656B2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 14:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiL0NES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 08:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
+        id S231593AbiL0NEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 08:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiL0NEP (ORCPT
+        with ESMTP id S231624AbiL0NEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:04:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A326546;
-        Tue, 27 Dec 2022 05:04:15 -0800 (PST)
+        Tue, 27 Dec 2022 08:04:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4386546
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 05:04:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA878B81018;
-        Tue, 27 Dec 2022 13:04:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 595F4C433EF;
-        Tue, 27 Dec 2022 13:04:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D558561158
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 13:04:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371D2C433EF;
+        Tue, 27 Dec 2022 13:04:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672146252;
-        bh=h42tCSHbnqvK8vlzC0z3qtjM8IKb2Ml+g4s3G+u8YAw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dihhn9rmIYrL0+fz9PYVoqH8FhEtLjiGKNFcDZjl+CAIeheBvYw+HgbJjyfe2ah2u
-         QJt0oV8gCrU5R6VxFoCHz8UAMkPCUzK6VkPd9Wr75mSiCGoQChaUgtnpxTwVtzL5wT
-         FhccscTdZe9bQQ6nvM5S9X+PvSzbSeRGd6MHYXGhJvNMKYvHJK/IwAypXDn20DjfvZ
-         2eE5dkSS4lUMIFg7WEt9tHUCtrhDXkJrygvW9g+Gvv4H4rmmpZugyHVAQvcfrhNC38
-         9G3VSPfe8BUv1a5LngOWcsjejZKupXdb/U1p3F4gOAyiAWUDLh2ezv5hZBFbZpiI7/
-         xMlehFZAbyohw==
-Date:   Tue, 27 Dec 2022 08:04:11 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     stable-commits@vger.kernel.org, johan+linaro@kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: Patch "phy: qcom-qmp-combo: fix runtime suspend" has been added
- to the 5.15-stable tree
-Message-ID: <Y6rtS7AaQ+EmfD8o@sashalap>
-References: <20221225150913.691403-1-sashal@kernel.org>
- <Y6q3k21nJFWKye76@hovoldconsulting.com>
+        s=k20201202; t=1672146283;
+        bh=pTrChFbqVqwC6gDN/DoqmaY2bboCZ02nPBSBZf5fRx0=;
+        h=From:Date:Subject:To:Cc:From;
+        b=PsMAZrE+f7OWqqbE/SVgkzdw+kXKaWAXXBHouWbn7aYc5iVTUbvRyEqfMS5bLp2Lv
+         /YKFY3zw/K7whmeo5DevJ4l5CY/oMH7nqkuGjNiw29zoFzI0NjMlLffgEg8SWdAl6q
+         SN4+O80JFR+vcNCFW3HEBrMmuyC6gliiVUkY2jMKgMVjUhyqPATeIAiIes/f+gdkQP
+         fMpO2Toe9K2+iYHvONW2OaiaaB8K0jczs52974TgsgBrOHAWzDgk53HmWeqbE78Tvu
+         6pFkmuvCz5DjJMo8HKbGNmIT6nY2vsTrChoSL8b1yNaqvg4GNjvGMTxWMwqh4ojoWO
+         YuyeOeQioZqhg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Tue, 27 Dec 2022 13:04:35 +0000
+Subject: [PATCH] arm64/sme: Don't use streaming mode to probe the maximum SME VL
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y6q3k21nJFWKye76@hovoldconsulting.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221223-arm64-sme-probe-max-v1-1-cbde68f67ad0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGPtqmMC/x2NQQrCQAwAv1JyNtBNi1W/Ih6yNdogu1sSqIXSv
+ 7v1OAPDbOBiKg63ZgOTRV1LrhBODYwT57egPisDtUSBqEO2dO7Rk+BsJQomXnHg0A2Xtg9XIqhl
+ ZBeMxnmcjvZb7HPo2eSl6392f+z7D1WQSEd8AAAA
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12-dev-7ab1d
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1276; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=pTrChFbqVqwC6gDN/DoqmaY2bboCZ02nPBSBZf5fRx0=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqu1pmVDmTeVu62lKGILUFR/hYnubH4Gbu1lX+mFh
+ YspZj3GJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6rtaQAKCRAk1otyXVSH0OvMB/
+ oDUKXOzQNQdSZyCVj1xyyp0b3UV8Qv8Gm3WSjFJlIRR1rFNK1DpZeLlhlZs21lyxY3A6ipknGPai53
+ Q/3GwpTCM1IidvobHTbDDvMmRsDsu37HM2uh6MpVfVfBJI0n31YsXYO/Eykioo7UfvFk4xPOjwlZPx
+ fCtZT2Kj/IJBljfKVmiWfzcDJOKIx7oq9wt0V03F9AmD6CFlCrUm7mNImv4f2l9somW65W+VohyGiw
+ wk5fKLUK0whEwuwRAX6j/cQmUtQvUBZkPO/2gZlQg6R8qDobvRStCyHa8+wb5zc/PNCThnrKBX8w3t
+ /AxLqyRujO4PAAVB5hicRJeeoLxlbU
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,62 +67,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 10:14:59AM +0100, Johan Hovold wrote:
->On Sun, Dec 25, 2022 at 10:09:13AM -0500, Sasha Levin wrote:
->> This is a note to let you know that I've just added the patch titled
->>
->>     phy: qcom-qmp-combo: fix runtime suspend
->>
->> to the 5.15-stable tree which can be found at:
->>     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
->>
->> The filename of the patch is:
->>      phy-qcom-qmp-combo-fix-runtime-suspend.patch
->> and it can be found in the queue-5.15 subdirectory.
->>
->> If you, or anyone else, feels it should not be added to the stable tree,
->> please let <stable@vger.kernel.org> know about it.
->>
->>
->>
->> commit d17b3a7b0119f7d92788acbe0f3d3b31bd8f892b
->> Author: Johan Hovold <johan+linaro@kernel.org>
->> Date:   Mon Nov 14 09:13:45 2022 +0100
->>
->>     phy: qcom-qmp-combo: fix runtime suspend
->>
->>     [ Upstream commit c7b98de745cffdceefc077ad5cf9cda032ef8959 ]
->>
->>     Drop the confused runtime-suspend type check which effectively broke
->>     runtime PM if the DP child node happens to be parsed before the USB
->>     child node during probe (e.g. due to order of child nodes in the
->>     devicetree).
->>
->>     Instead use the new driver data USB PHY pointer to access the USB
->>     configuration and resources.
->>
->>     Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
->>     Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>     Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>     Link: https://lore.kernel.org/r/20221114081346.5116-6-johan+linaro@kernel.org
->>     Signed-off-by: Vinod Koul <vkoul@kernel.org>
->>     Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->This one was not marked for stable and can not be backported without
->further dependencies. This driver did not even exist in 5.15, and no,
->you should no try to backport the split of the original driver either.
+During development the architecture added the RDSVL instruction which means
+we do not need to enter streaming mode to enumerate the SME VLs, use it
+when we probe the maximum supported VL. Other users were already updated.
 
-I'll drop this patch.
+No functional change.
 
->Sasha, please stop this madness.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/kernel/fpsimd.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-So help me understand this... The fixes tag says:
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index dcc81e7200d4..62c67664cdaa 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -1322,7 +1322,6 @@ u64 read_smcr_features(void)
+ 	unsigned int vq_max;
+ 
+ 	sme_kernel_enable(NULL);
+-	sme_smstart_sm();
+ 
+ 	/*
+ 	 * Set the maximum possible VL.
+@@ -1332,11 +1331,9 @@ u64 read_smcr_features(void)
+ 
+ 	smcr = read_sysreg_s(SYS_SMCR_EL1);
+ 	smcr &= ~(u64)SMCR_ELx_LEN_MASK; /* Only the LEN field */
+-	vq_max = sve_vq_from_vl(sve_get_vl());
++	vq_max = sve_vq_from_vl(sme_get_vl());
+ 	smcr |= vq_max - 1; /* set LEN field to maximum effective value */
+ 
+-	sme_smstop_sm();
+-
+ 	return smcr;
+ }
+ 
 
-	Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20221223-arm64-sme-probe-max-7a1378041922
 
-52e013d0bffa was merged in v5.10. Does the tag point to the wrong
-commit?
-
+Best regards,
 -- 
-Thanks,
-Sasha
+Mark Brown <broonie@kernel.org>
