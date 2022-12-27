@@ -2,118 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9076568AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F10A66568B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiL0JET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
+        id S230147AbiL0JHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiL0JEQ (ORCPT
+        with ESMTP id S230094AbiL0JHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 04:04:16 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10F0964EF;
-        Tue, 27 Dec 2022 01:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
-        Content-Type; bh=EuoPMJzmyay0f+IIM34l3uXr5LmOon9KnbZ7ePTRmwU=;
-        b=NYOr+WTFpJ57SpJgd6q7PmHtN/kPCA2KLyzox/AyyOpjgmIwk5Jv2Vl4Owu0Di
-        dP6ZoqxQNROPmaX8fQkwAjcpNdzrruFS4rWICwG8UGrLIlmryF5dvQrvXVD1KU8M
-        jK5TUMRGBsXazPP34GEINOONtykwZnQ9Cnau1F0K/24OY=
-Received: from ubuntu.localdomain (unknown [220.180.239.55])
-        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wDn7zestKpjp5xPAA--.22528S2;
-        Tue, 27 Dec 2022 17:02:38 +0800 (CST)
-From:   =?UTF-8?q?Duke=20Xin=28=E8=BE=9B=E5=AE=89=E6=96=87=29?= 
-        <duke_xinanwen@163.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jerry.meng@quectel.com, duke.xin@quectel.com,
-        =?UTF-8?q?Duke=20Xin=28=E8=BE=9B=E5=AE=89=E6=96=87=29?= 
-        <duke_xinanwen@163.com>
-Subject: [PATCH] USB: serial: option: add Quectel EM05CN modem
-Date:   Tue, 27 Dec 2022 01:01:08 -0800
-Message-Id: <20221227090109.115731-1-duke_xinanwen@163.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Dec 2022 04:07:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C7E1E0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:06:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672131979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nz1SnC0gAVnfhR/QDRjT/YSO9ZI+vbqwUHzyKwphYUc=;
+        b=daeMOgAQ0VWoX6nB4kcpGAq4OYMxFmR+pzacQhU8Jqm4ForPsBUYoo8ct5aUFcxH8SddC2
+        zEmN1kOWf46UoOY8gSPi6mXn0+sTCQKQSIp/rMvsjAvSZuR++0MHJzhO54v5WXn5jNFMzT
+        2FPtU8Oq5q3vRhnQXyiP4A+172FeWlo=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-169-RbFP6dQsPQ-R2Y9Tqb3fJg-1; Tue, 27 Dec 2022 04:06:17 -0500
+X-MC-Unique: RbFP6dQsPQ-R2Y9Tqb3fJg-1
+Received: by mail-pf1-f198.google.com with SMTP id n22-20020a62e516000000b005817b3a197aso216573pff.14
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:06:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nz1SnC0gAVnfhR/QDRjT/YSO9ZI+vbqwUHzyKwphYUc=;
+        b=tHGxN/S3aBBe/lURv+n1QpNTDyvxErCduFwf6N+UVC9C4wUOIiL7D8UkriohJs1Qhc
+         yyoWMfBn0yM13uz2czPdzAknhUTeQVlS7EHexalBxCy4BCGvhOF6jS+C+pSCbsH4WZFv
+         och89TgJoZVPbhQZtMUX9F56nxAVRUK1+PdotWvWzHGkR24yVFEJykGj7BGxon1TaGpy
+         Fui4yViP4Qd2tnVQiNR+asTI9IsbpfnLjCqF6hH+uApx/lH/BPMD86sOcSiWqAHBcov9
+         pRpskUOsGLaAWgWzFb5StJnInS2VR3l0fp+00SV7uasm8w+6WDZIQBB4PfuhHQcEypCk
+         YgJw==
+X-Gm-Message-State: AFqh2kqVRyFliXJVtd0qbkOO2gDKYzRM8LR/swGasKl2LdnwrafEy6Nb
+        SDZbUiEZxkp41+IeV9+jO7FHKbEGKUEs6nvWNd/I8OSTru2usaAOdTD0XB7fsMiCpsh+n05mt6c
+        0EJEgY79k7BCQj5Uyc6JRDsn9
+X-Received: by 2002:a17:90a:4744:b0:21a:fd7:210d with SMTP id y4-20020a17090a474400b0021a0fd7210dmr23290667pjg.2.1672131976914;
+        Tue, 27 Dec 2022 01:06:16 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXu93UpcjkbltIaP0U0Rt09nzSfJefeq48CvQOBnDYBKMyh1vT3OdwcM5vSFTtb3thaw2XTprg==
+X-Received: by 2002:a17:90a:4744:b0:21a:fd7:210d with SMTP id y4-20020a17090a474400b0021a0fd7210dmr23290648pjg.2.1672131976643;
+        Tue, 27 Dec 2022 01:06:16 -0800 (PST)
+Received: from [10.72.13.143] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id o61-20020a17090a0a4300b00225ffb9c43dsm2168531pjo.5.2022.12.27.01.06.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Dec 2022 01:06:16 -0800 (PST)
+Message-ID: <6026e801-6fda-fee9-a69b-d06a80368621@redhat.com>
+Date:   Tue, 27 Dec 2022 17:06:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH 1/4] virtio-net: convert rx mode setting to use workqueue
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
+        eperezma@redhat.com
+References: <20221226074908.8154-1-jasowang@redhat.com>
+ <20221226074908.8154-2-jasowang@redhat.com>
+ <20221227023447-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20221227023447-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDn7zestKpjp5xPAA--.22528S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCF13ur1kur17ZF15GFyUZFb_yoW5AF4UpF
-        1UAFWavFy8XF47W3ZIkrs5uFW5Kan7Kr47CanrZw4fWFyxArs3tr1jyrZ5tr129F4Fyr4S
-        vws8Gw47Ga4kJ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRZYFPUUUUU=
-X-Originating-IP: [220.180.239.55]
-X-CM-SenderInfo: 5gxnvsp0lqt0xzhqqiywtou0bp/1tbiPRfke2I0UxwcTgAAs+
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the following Quectel EM05CN composition:
 
-0x0310: AT + MBIM + DIAG + NMEA + MODEM
+在 2022/12/27 15:39, Michael S. Tsirkin 写道:
+> On Mon, Dec 26, 2022 at 03:49:05PM +0800, Jason Wang wrote:
+>> @@ -2227,9 +2267,21 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>>   				  VIRTIO_NET_CTRL_MAC_TABLE_SET, sg))
+>>   		dev_warn(&dev->dev, "Failed to set MAC filter table.\n");
+>>   
+>> +	rtnl_unlock();
+>> +
+>>   	kfree(buf);
+>>   }
+>>   
+>> +static void virtnet_set_rx_mode(struct net_device *dev)
+>> +{
+>> +	struct virtnet_info *vi = netdev_priv(dev);
+>> +
+>> +	spin_lock(&vi->rx_mode_lock);
+>> +	if (vi->rx_mode_work_enabled)
+>> +		schedule_work(&vi->rx_mode_work);
+>> +	spin_unlock(&vi->rx_mode_lock);
+>> +}
+>> +
+>>   static int virtnet_vlan_rx_add_vid(struct net_device *dev,
+>>   				   __be16 proto, u16 vid)
+>>   {
+> Hmm so user tells us to e.g enable promisc. We report completion
+> but card is still dropping packets. I think this
+> has a chance to break some setups.
 
-usb-devices output:
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0310 Rev= 3.18
-S:  Manufacturer=Quectel
-S:  Product=Quectel EM05-CN
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#= 1 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 2 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#= 2 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Signed-off-by: Duke Xin(辛安文) <duke_xinanwen@163.com>
----
- drivers/usb/serial/option.c | 3 +++
- 1 file changed, 3 insertions(+)
+I think all those filters are best efforts, am I wrong?
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index dee79c7d82d5..0f5c479fa678 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
- #define QUECTEL_PRODUCT_EM05G			0x030a
- #define QUECTEL_PRODUCT_EM060K			0x030b
- #define QUECTEL_PRODUCT_EM05G_SG		0x0311
-+#define QUECTEL_PRODUCT_EM05CN_SG		0x0310
- #define QUECTEL_PRODUCT_EM12			0x0512
- #define QUECTEL_PRODUCT_RM500Q			0x0800
- #define QUECTEL_PRODUCT_RM520N			0x0801
-@@ -1163,6 +1164,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(6) | ZLP },
- 	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_SG, 0xff),
- 	  .driver_info = RSVD(6) | ZLP },
-+	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05CN_SG, 0xff),
-+	  .driver_info = RSVD(6) | ZLP },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0x00, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM060K, 0xff, 0xff, 0x40) },
--- 
-2.25.1
+Thanks
+
+
+>
 
