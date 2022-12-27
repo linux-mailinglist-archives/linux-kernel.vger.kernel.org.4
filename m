@@ -2,197 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97BA656E9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC24656E9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiL0UYW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Dec 2022 15:24:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
+        id S229911AbiL0U04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 15:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiL0UYV (ORCPT
+        with ESMTP id S229884AbiL0U0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 15:24:21 -0500
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7F3F15;
-        Tue, 27 Dec 2022 12:24:20 -0800 (PST)
-Received: by mail-il1-f179.google.com with SMTP id j28so7239125ila.9;
-        Tue, 27 Dec 2022 12:24:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZYIWCf/X/Ha6fzlOLJLrAZYz4Dy2m9LBU9hsQfnPLuM=;
-        b=TIskR3Jjj8/kBB0knoI1q5fq9KAbhwDP1tnbdfq+QomShd4+FEip6YP0R4rCEpSRh7
-         KwqPn4M8/wOL9XfPgLt+GVQOwBahuBWmTx93EW9jxI9Z0ZOYFiUmRsM+DxlNsMOblCn5
-         X2pIJ6BHxZ9l51OwYh23jam45fUKGmd+jQ1xv9gL33toIQW4JkuvybSXT5uodvrvHNRw
-         Ep8hTAWylgQsTYfvzE5EnsLeBrrm/H2z7cgeI7Vl6OmrLlPPMHrxx5c/Lzm2eE/XekxP
-         fltya2cISo+hcxbigFua7eVBV1udbTr/4O76ce9u8W2Z4oxmlcN8izBJrpfZRloQn2kA
-         6xeQ==
-X-Gm-Message-State: AFqh2krm+vzAdLhHErFj1XqhjBbfiarZZxB32kp04s+AlwP3V75K/wyq
-        w4rf1/XxYLaAa7CL5qhLXnE72eXEHyVKqur5DX8=
-X-Google-Smtp-Source: AMrXdXu5ah4PmdOmI0U7aT/d7+iZsd0E6schiX4tuXFhPmzimqU3nPQeedgtbyQPTCyYmiBMReoJQX4xE3P1KeQkcJo=
-X-Received: by 2002:a92:d811:0:b0:303:7c99:eb78 with SMTP id
- y17-20020a92d811000000b003037c99eb78mr1832673ilm.88.1672172659361; Tue, 27
- Dec 2022 12:24:19 -0800 (PST)
+        Tue, 27 Dec 2022 15:26:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7700263FE;
+        Tue, 27 Dec 2022 12:26:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1116A61237;
+        Tue, 27 Dec 2022 20:26:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33449C433F0;
+        Tue, 27 Dec 2022 20:26:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672172809;
+        bh=71+MufZX0fY/PDS4aJFJS0cBLxjDpoM2IXrKM3835+Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tSgUtU8MSaqTL56VP8lE5vzON0ZYprHIwyD3golx3i2ccUfIVuJzLQg4kRaUXg/iq
+         8S+E8w92iOBbXVHeonTlzu1ubvgJmHuhjPxV4SPjlfB1mQjSGEEVwSR1z5ErPMHi/D
+         h826f8KbhvguQelshXP9yfr57KivIR3cfaRiVbweZm0ufwVTMwqgYAhD4io7agnrD1
+         6Sus9aBAYYuhxHIR7bYgfkFBTk3j5ZKaktu7HqruPkBcMVT/ImuHJowR1kehDssxRN
+         ha4pMgMPHt/qnfsZRc91klWZbH+Bc25VdqvOSBTOWm6EJ81JeHGlwLbVeOJ+dkhOLp
+         Zo+DFk5u5BcTg==
+Date:   Tue, 27 Dec 2022 15:26:47 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     stable-commits@vger.kernel.org, johan+linaro@kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: Patch "phy: qcom-qmp-combo: fix runtime suspend" has been added
+ to the 5.15-stable tree
+Message-ID: <Y6tVB5+c6vZ4z3GX@sashalap>
+References: <20221225150913.691403-1-sashal@kernel.org>
+ <Y6q3k21nJFWKye76@hovoldconsulting.com>
+ <Y6rtS7AaQ+EmfD8o@sashalap>
+ <Y6ryF2J2nzYbJV05@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20221226193517.qynxfceqgzvr4qwu@tarta.nabijaczleweli.xyz>
-In-Reply-To: <20221226193517.qynxfceqgzvr4qwu@tarta.nabijaczleweli.xyz>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 27 Dec 2022 12:24:07 -0800
-Message-ID: <CAM9d7ciuh1H2Mfx5ToYGT1fOm8E3jrQhkzg304JKDd7BhT=h5g@mail.gmail.com>
-Subject: Re: [PATCH] perf tui: don't ignore job control
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        yaowenbin <yaowenbin1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Y6ryF2J2nzYbJV05@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Dec 27, 2022 at 02:24:39PM +0100, Johan Hovold wrote:
+>On Tue, Dec 27, 2022 at 08:04:11AM -0500, Sasha Levin wrote:
+>> On Tue, Dec 27, 2022 at 10:14:59AM +0100, Johan Hovold wrote:
+>> >On Sun, Dec 25, 2022 at 10:09:13AM -0500, Sasha Levin wrote:
+>> >> This is a note to let you know that I've just added the patch titled
+>> >>
+>> >>     phy: qcom-qmp-combo: fix runtime suspend
+>> >>
+>> >> to the 5.15-stable tree which can be found at:
+>> >>     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+>> >>
+>> >> The filename of the patch is:
+>> >>      phy-qcom-qmp-combo-fix-runtime-suspend.patch
+>> >> and it can be found in the queue-5.15 subdirectory.
+>> >>
+>> >> If you, or anyone else, feels it should not be added to the stable tree,
+>> >> please let <stable@vger.kernel.org> know about it.
+>> >>
+>> >>
+>> >>
+>> >> commit d17b3a7b0119f7d92788acbe0f3d3b31bd8f892b
+>> >> Author: Johan Hovold <johan+linaro@kernel.org>
+>> >> Date:   Mon Nov 14 09:13:45 2022 +0100
+>> >>
+>> >>     phy: qcom-qmp-combo: fix runtime suspend
+>> >>
+>> >>     [ Upstream commit c7b98de745cffdceefc077ad5cf9cda032ef8959 ]
+>> >>
+>> >>     Drop the confused runtime-suspend type check which effectively broke
+>> >>     runtime PM if the DP child node happens to be parsed before the USB
+>> >>     child node during probe (e.g. due to order of child nodes in the
+>> >>     devicetree).
+>> >>
+>> >>     Instead use the new driver data USB PHY pointer to access the USB
+>> >>     configuration and resources.
+>> >>
+>> >>     Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
+>> >>     Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> >>     Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>> >>     Link: https://lore.kernel.org/r/20221114081346.5116-6-johan+linaro@kernel.org
+>> >>     Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>> >>     Signed-off-by: Sasha Levin <sashal@kernel.org>
+>> >
+>> >This one was not marked for stable and can not be backported without
+>> >further dependencies. This driver did not even exist in 5.15, and no,
+>> >you should no try to backport the split of the original driver either.
+>>
+>> I'll drop this patch.
+>>
+>> >Sasha, please stop this madness.
+>>
+>> So help me understand this... The fixes tag says:
+>>
+>> 	Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
+>>
+>> 52e013d0bffa was merged in v5.10. Does the tag point to the wrong
+>> commit?
+>
+>The fixes tag is correct, but the qmp driver has since been split into
+>multiple drivers.
+>
+>But first, the commit in question will not even compile without
+>7a7d86d14d07 ("phy: qcom-qmp-combo: fix broken power on") which from
+>what I can tell has not yet been backported (even though it has a stable
+>tag).
+>
+>Did you make sure that you compile-tested this patch after applying it
+>to 5.15?
 
-On Mon, Dec 26, 2022 at 11:35 AM Ahelenia Ziemiańska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
->
-> In its infinite wisdom, by default, SLang sets susp undef,
-> and this can only be un-done by calling SLtty_set_suspend_state(true).
-> After every SLang_init_tty().
->
-> Additionally, no provisions are made for maintaining the teletype
-> attributes across suspend/continue (outside of curses emulation mode(?!),
-> which provides full support, naturally), so we need to save and restore
-> the flags ourselves. We need to also re-draw the screen, and raising
-> SIGWINCH, shockingly, Just Works.
->
-> The correct solution would be to Not Use SLang, but as a stop-gap,
-> this makes TUI perf report usable.
->
-> Signed-off-by: Ahelenia Ziemiańska <nabijaczleweli@nabijaczleweli.xyz>
+https://linux.kernelci.org/build/stable-rc/branch/queue%2F5.15/kernel/v5.15.85-687-g210b69cd4594/
 
-Cool, this makes Ctrl-Z and then 'fg' work.  But it comes with the
-color for a selected line depending on the timing.  Maybe we can
-reset the color before going to the background?
+>Second, this commit fixes the combo driver which did not exist before
+>94a407cc17a4 (phy: qcom-qmp: create copies of QMP PHY driver) which
+>split the older driver into multiple drivers. This onef and all the
+>follow-on cleanups should not be backported.
+>
+>If we find anything that really needs to be fixed in stable kernels
+>prior to the driver split, those fixes need to be backported properly
+>to the older version of the driver. This should not be automated.
 
+Ack, I'll blacklist this driver, thank you.
+
+-- 
 Thanks,
-Namhyung
-
-
-> ---
->  tools/perf/ui/browsers/annotate.c |  1 +
->  tools/perf/ui/browsers/hists.c    |  2 ++
->  tools/perf/ui/browsers/scripts.c  |  1 +
->  tools/perf/ui/tui/setup.c         | 19 +++++++++++++++++++
->  4 files changed, 23 insertions(+)
->
-> diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
-> index c03fa76c02ff..6a4ffbf66c7f 100644
-> --- a/tools/perf/ui/browsers/annotate.c
-> +++ b/tools/perf/ui/browsers/annotate.c
-> @@ -942,6 +942,7 @@ int hist_entry__tui_annotate(struct hist_entry *he, struct evsel *evsel,
->         /* reset abort key so that it can get Ctrl-C as a key */
->         SLang_reset_tty();
->         SLang_init_tty(0, 0, 0);
-> +       SLtty_set_suspend_state(true);
->
->         return map_symbol__tui_annotate(&he->ms, evsel, hbt, opts);
->  }
-> diff --git a/tools/perf/ui/browsers/hists.c b/tools/perf/ui/browsers/hists.c
-> index b72ee6822222..2479e6d42e7c 100644
-> --- a/tools/perf/ui/browsers/hists.c
-> +++ b/tools/perf/ui/browsers/hists.c
-> @@ -3010,6 +3010,7 @@ static int evsel__hists_browse(struct evsel *evsel, int nr_events, const char *h
->         /* reset abort key so that it can get Ctrl-C as a key */
->         SLang_reset_tty();
->         SLang_init_tty(0, 0, 0);
-> +       SLtty_set_suspend_state(true);
->
->         if (min_pcnt)
->                 browser->min_pcnt = min_pcnt;
-> @@ -3682,6 +3683,7 @@ int block_hists_tui_browse(struct block_hist *bh, struct evsel *evsel,
->         /* reset abort key so that it can get Ctrl-C as a key */
->         SLang_reset_tty();
->         SLang_init_tty(0, 0, 0);
-> +       SLtty_set_suspend_state(true);
->
->         memset(&action, 0, sizeof(action));
->
-> diff --git a/tools/perf/ui/browsers/scripts.c b/tools/perf/ui/browsers/scripts.c
-> index 47d2c7a8cbe1..50d45054ed6c 100644
-> --- a/tools/perf/ui/browsers/scripts.c
-> +++ b/tools/perf/ui/browsers/scripts.c
-> @@ -166,6 +166,7 @@ void run_script(char *cmd)
->         printf("\033[c\033[H\033[J");
->         fflush(stdout);
->         SLang_init_tty(0, 0, 0);
-> +       SLtty_set_suspend_state(true);
->         SLsmg_refresh();
->  }
->
-> diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
-> index a3b8c397c24d..4211a161458a 100644
-> --- a/tools/perf/ui/tui/setup.c
-> +++ b/tools/perf/ui/tui/setup.c
-> @@ -2,6 +2,7 @@
->  #include <signal.h>
->  #include <stdbool.h>
->  #include <stdlib.h>
-> +#include <termios.h>
->  #include <unistd.h>
->  #include <linux/kernel.h>
->  #ifdef HAVE_BACKTRACE_SUPPORT
-> @@ -122,6 +123,21 @@ static void ui__signal(int sig)
->         exit(0);
->  }
->
-> +static void ui__sigcont(int sig)
-> +{
-> +       static struct termios tty;
-> +
-> +       if (sig == SIGTSTP) {
-> +               while (tcgetattr(SLang_TT_Read_FD, &tty) == -1 && errno == EINTR)
-> +                       ;
-> +               raise(SIGSTOP);
-> +       } else {
-> +               while (tcsetattr(SLang_TT_Read_FD, TCSADRAIN, &tty) == -1 && errno == EINTR)
-> +                       ;
-> +               raise(SIGWINCH);
-> +       }
-> +}
-> +
->  int ui__init(void)
->  {
->         int err;
-> @@ -136,6 +152,7 @@ int ui__init(void)
->         err = SLang_init_tty(-1, 0, 0);
->         if (err < 0)
->                 goto out;
-> +       SLtty_set_suspend_state(true);
->
->         err = SLkp_init();
->         if (err < 0) {
-> @@ -150,6 +167,8 @@ int ui__init(void)
->         signal(SIGINT, ui__signal);
->         signal(SIGQUIT, ui__signal);
->         signal(SIGTERM, ui__signal);
-> +       signal(SIGTSTP, ui__sigcont);
-> +       signal(SIGCONT, ui__sigcont);
->
->         perf_error__register(&perf_tui_eops);
->
-> --
-> 2.30.2
+Sasha
