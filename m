@@ -2,121 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEF1656769
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 06:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604AC656772
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 07:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiL0Fxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 00:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
+        id S229586AbiL0GFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 01:05:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiL0Fxf (ORCPT
+        with ESMTP id S229539AbiL0GFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 00:53:35 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C20F21A3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 21:53:35 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id q190so6512362iod.10
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 21:53:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9wARd1L8KoeksEpzilviu4ulCrJM4nCfjKCQtrReh+8=;
-        b=KtWR1NWXObtv0A+S1nWRpm41eZaY26/OpoTg1WUZ0w96TGoaGxTskVlBy9RmAUg26I
-         R50W5tkC5ZcQFkjLlDpE3K+Eebi3Ek2LtjejuCN1dyyzmdDotjvb03OKSHhHed9q3n1F
-         scwRYzxgCR93T0aHENr/aJvGK684YPRaGbyzI=
+        Tue, 27 Dec 2022 01:05:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5803883
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 22:04:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672121057;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JtwK0TmUyPB3eYskZMtg0oNP152qeukFtzmu8szThS4=;
+        b=DqQ5gJ6sIs5GYY/AZHOdgEBHaWkP39q7GptckzO1WSf/WxUV/D4qSaA4x0ljizwVE2xJbz
+        aFR+WCXSC90XE6CSwhHG64F/1V47+51EPNtI0M0+dW0xLxVAfLdqS0gJ3UwCnY3SvIDP2K
+        EULs09MemSx8UPK6diBI7YiMYpWCeY0=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-287-8WTXr9lvMYaRwUeX7qvDaA-1; Tue, 27 Dec 2022 01:04:15 -0500
+X-MC-Unique: 8WTXr9lvMYaRwUeX7qvDaA-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-144ea535efbso5944543fac.16
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 22:04:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9wARd1L8KoeksEpzilviu4ulCrJM4nCfjKCQtrReh+8=;
-        b=2NKxtNS/vIqpmyVVParmHy0uUOfWMb/VDu2RxDgtnmkPNKOY6U4NzNAsf73Tp4uHNf
-         qCHMSKdOMalg4ZQroAo5N+vYk8j/0kI7aeLFbyqZ9h5muQKMM4Y/C63aQzmBAUuytFX3
-         YL7CC+c4Fg5V84z0q0g5wn4uJpRCAf2sxlQpXekByyExqQBwlOCp/Iz/8vItxGKF+QVz
-         jpMzCNdf0mNzXAAAoxIi9f4AJlFHEhCmCBBGr4sBFtwcsbLC9FXo3tAIlisBesgmIUqY
-         xe9Yd/XtKdeBuDoCim+8MTbzfSTsYJJP8A6rOrT4RrySSh4i8Pzw8gpjbg7AWiN4M1A8
-         rauA==
-X-Gm-Message-State: AFqh2kpxy2Q0kORn3FSrjNby3YhlVNq+VRZKbl9nrDMpXngsub/3/+Ce
-        gJadORIk0ThGpNdb0WW7xJ+1bA==
-X-Google-Smtp-Source: AMrXdXte67TRl8MJY98BS/POkZrzxYuSwpJzPmANvIyiIz41oROqn94AbLwguwkLz3ZdO3qL9GeTXA==
-X-Received: by 2002:a6b:da19:0:b0:6e4:e62c:38e3 with SMTP id x25-20020a6bda19000000b006e4e62c38e3mr15013786iob.5.1672120414631;
-        Mon, 26 Dec 2022 21:53:34 -0800 (PST)
-Received: from midworld.bld.corp.google.com ([2620:15c:183:200:2d44:773f:eb35:d838])
-        by smtp.gmail.com with ESMTPSA id z11-20020a05660217cb00b006df2b3f17c3sm4678335iox.30.2022.12.26.21.53.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 21:53:34 -0800 (PST)
-From:   Drew Davenport <ddavenport@chromium.org>
-To:     intel-gfx@lists.freedesktop.org
-Cc:     Drew Davenport <ddavenport@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        =?UTF-8?q?Juha-Pekka=20Heikkil=C3=A4?= 
-        <juha-pekka.heikkila@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/i915/display: Check source height is > 0
-Date:   Mon, 26 Dec 2022 22:53:24 -0700
-Message-Id: <20221226225246.1.I15dff7bb5a0e485c862eae61a69096caf12ef29f@changeid>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+        bh=JtwK0TmUyPB3eYskZMtg0oNP152qeukFtzmu8szThS4=;
+        b=ztPfMB6CJPuuu4I08exEslPe87HW35Q6o74EuS8oYsQFo/w5QzKY3MOKo0k+R547RC
+         XbE8YqGf6f1zHjwIS5e31tSbWW7KQmDf3/X//K8KCUL2pWUf/ap0/R3fCtFZrdTaKuEO
+         nP7dAff7Gvv2ZXpKrhOde6KNpZegtlUqmaptDwv4O7E0ADADauJAff2EoYK7ZG5Q4xbx
+         Sx74E43JGS+Uy7RaX++ff8jCSJmx+hHkR8P/t8W0eYGfDf9JQSqZ377nIuNRlQzAVqsX
+         vpTWLQ1te+9JeWveJKPi0mQ1hk33aAoaekJgPp0mPQ3zGrcgFBAaFClaF/+cm1yZ2kDG
+         MEzA==
+X-Gm-Message-State: AFqh2kqO9gWhRcvHCfBSXKItQTbp9a4IrNQro79RGMoFT20tHR01Cvyy
+        Pob9EL/B5Fu9RJ2K/C5so+w5pXFgaudsj6LVZW5ijS5J2W3shE7I6NNwBRSzeQOAdv9nGGhnMlI
+        b8j8M4xgoJKzRoUwuFgy0JQzueir0MmsCVHUvyEhQ
+X-Received: by 2002:aca:1111:0:b0:35e:7a42:7ab5 with SMTP id 17-20020aca1111000000b0035e7a427ab5mr1074629oir.280.1672121054827;
+        Mon, 26 Dec 2022 22:04:14 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtdg06zg3ogBEVD5FhVYBrkQ3mVFEJUcvWP+Qa87KA4giCLeV4ft04uckoxPDm96o/QYr3l3GA1xlty9lfuvl8=
+X-Received: by 2002:aca:1111:0:b0:35e:7a42:7ab5 with SMTP id
+ 17-20020aca1111000000b0035e7a427ab5mr1074622oir.280.1672121054572; Mon, 26
+ Dec 2022 22:04:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221227022528.609839-1-mie@igel.co.jp> <20221227022528.609839-3-mie@igel.co.jp>
+In-Reply-To: <20221227022528.609839-3-mie@igel.co.jp>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 27 Dec 2022 14:04:03 +0800
+Message-ID: <CACGkMEtAaYpuZtS0gx_m931nFzcvqSNK9BhvUZH_tZXTzjgQCg@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/9] vringh: remove vringh_iov and unite to vringh_kiov
+To:     Shunsuke Mie <mie@igel.co.jp>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error message suggests that the height of the src rect must be at
-least 1. Reject source with height of 0.
+On Tue, Dec 27, 2022 at 10:25 AM Shunsuke Mie <mie@igel.co.jp> wrote:
+>
+> struct vringh_iov is defined to hold userland addresses. However, to use
+> common function, __vring_iov, finally the vringh_iov converts to the
+> vringh_kiov with simple cast. It includes compile time check code to make
+> sure it can be cast correctly.
+>
+> To simplify the code, this patch removes the struct vringh_iov and unifies
+> APIs to struct vringh_kiov.
+>
+> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
 
-Signed-off-by: Drew Davenport <ddavenport@chromium.org>
+While at this, I wonder if we need to go further, that is, switch to
+using an iov iterator instead of a vringh customized one.
 
----
-I was investigating some divide-by-zero crash reports on ChromeOS which
-pointed to the intel_adjusted_rate function. Further prodding showed
-that I could reproduce this in a simple test program if I made src_h
-some value less than 1 but greater than 0.
+Thanks
 
-This seemed to be a sensible place to check that the source height is at
-least 1. I tried to repro this issue on an amd device I had on hand, and
-the configuration was rejected.
-
-Would it make sense to add a check that source dimensions are at least 1
-somewhere in core, like in drm_atomic_plane_check? Or is that a valid
-use case on some devices, and thus any such check should be done on a
-per-driver basis?
-
-Thanks.
-
- drivers/gpu/drm/i915/display/skl_universal_plane.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/i915/display/skl_universal_plane.c b/drivers/gpu/drm/i915/display/skl_universal_plane.c
-index 4b79c2d2d6177..9b172a1e90deb 100644
---- a/drivers/gpu/drm/i915/display/skl_universal_plane.c
-+++ b/drivers/gpu/drm/i915/display/skl_universal_plane.c
-@@ -1627,7 +1627,7 @@ static int skl_check_main_surface(struct intel_plane_state *plane_state)
- 	u32 offset;
- 	int ret;
- 
--	if (w > max_width || w < min_width || h > max_height) {
-+	if (w > max_width || w < min_width || h > max_height || h < 1) {
- 		drm_dbg_kms(&dev_priv->drm,
- 			    "requested Y/RGB source size %dx%d outside limits (min: %dx1 max: %dx%d)\n",
- 			    w, h, min_width, max_width, max_height);
--- 
-2.39.0.314.g84b9a713c41-goog
+> ---
+>  drivers/vhost/vringh.c | 32 ++++++------------------------
+>  include/linux/vringh.h | 45 ++++--------------------------------------
+>  2 files changed, 10 insertions(+), 67 deletions(-)
+>
+> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> index 828c29306565..aa3cd27d2384 100644
+> --- a/drivers/vhost/vringh.c
+> +++ b/drivers/vhost/vringh.c
+> @@ -691,8 +691,8 @@ EXPORT_SYMBOL(vringh_init_user);
+>   * calling vringh_iov_cleanup() to release the memory, even on error!
+>   */
+>  int vringh_getdesc_user(struct vringh *vrh,
+> -                       struct vringh_iov *riov,
+> -                       struct vringh_iov *wiov,
+> +                       struct vringh_kiov *riov,
+> +                       struct vringh_kiov *wiov,
+>                         bool (*getrange)(struct vringh *vrh,
+>                                          u64 addr, struct vringh_range *r),
+>                         u16 *head)
+> @@ -708,26 +708,6 @@ int vringh_getdesc_user(struct vringh *vrh,
+>         if (err == vrh->vring.num)
+>                 return 0;
+>
+> -       /* We need the layouts to be the identical for this to work */
+> -       BUILD_BUG_ON(sizeof(struct vringh_kiov) != sizeof(struct vringh_iov));
+> -       BUILD_BUG_ON(offsetof(struct vringh_kiov, iov) !=
+> -                    offsetof(struct vringh_iov, iov));
+> -       BUILD_BUG_ON(offsetof(struct vringh_kiov, i) !=
+> -                    offsetof(struct vringh_iov, i));
+> -       BUILD_BUG_ON(offsetof(struct vringh_kiov, used) !=
+> -                    offsetof(struct vringh_iov, used));
+> -       BUILD_BUG_ON(offsetof(struct vringh_kiov, max_num) !=
+> -                    offsetof(struct vringh_iov, max_num));
+> -       BUILD_BUG_ON(sizeof(struct iovec) != sizeof(struct kvec));
+> -       BUILD_BUG_ON(offsetof(struct iovec, iov_base) !=
+> -                    offsetof(struct kvec, iov_base));
+> -       BUILD_BUG_ON(offsetof(struct iovec, iov_len) !=
+> -                    offsetof(struct kvec, iov_len));
+> -       BUILD_BUG_ON(sizeof(((struct iovec *)NULL)->iov_base)
+> -                    != sizeof(((struct kvec *)NULL)->iov_base));
+> -       BUILD_BUG_ON(sizeof(((struct iovec *)NULL)->iov_len)
+> -                    != sizeof(((struct kvec *)NULL)->iov_len));
+> -
+>         *head = err;
+>         err = __vringh_iov(vrh, *head, (struct vringh_kiov *)riov,
+>                            (struct vringh_kiov *)wiov,
+> @@ -740,14 +720,14 @@ int vringh_getdesc_user(struct vringh *vrh,
+>  EXPORT_SYMBOL(vringh_getdesc_user);
+>
+>  /**
+> - * vringh_iov_pull_user - copy bytes from vring_iov.
+> + * vringh_iov_pull_user - copy bytes from vring_kiov.
+>   * @riov: the riov as passed to vringh_getdesc_user() (updated as we consume)
+>   * @dst: the place to copy.
+>   * @len: the maximum length to copy.
+>   *
+>   * Returns the bytes copied <= len or a negative errno.
+>   */
+> -ssize_t vringh_iov_pull_user(struct vringh_iov *riov, void *dst, size_t len)
+> +ssize_t vringh_iov_pull_user(struct vringh_kiov *riov, void *dst, size_t len)
+>  {
+>         return vringh_iov_xfer(NULL, (struct vringh_kiov *)riov,
+>                                dst, len, xfer_from_user);
+> @@ -755,14 +735,14 @@ ssize_t vringh_iov_pull_user(struct vringh_iov *riov, void *dst, size_t len)
+>  EXPORT_SYMBOL(vringh_iov_pull_user);
+>
+>  /**
+> - * vringh_iov_push_user - copy bytes into vring_iov.
+> + * vringh_iov_push_user - copy bytes into vring_kiov.
+>   * @wiov: the wiov as passed to vringh_getdesc_user() (updated as we consume)
+>   * @src: the place to copy from.
+>   * @len: the maximum length to copy.
+>   *
+>   * Returns the bytes copied <= len or a negative errno.
+>   */
+> -ssize_t vringh_iov_push_user(struct vringh_iov *wiov,
+> +ssize_t vringh_iov_push_user(struct vringh_kiov *wiov,
+>                              const void *src, size_t len)
+>  {
+>         return vringh_iov_xfer(NULL, (struct vringh_kiov *)wiov,
+> diff --git a/include/linux/vringh.h b/include/linux/vringh.h
+> index 1991a02c6431..733d948e8123 100644
+> --- a/include/linux/vringh.h
+> +++ b/include/linux/vringh.h
+> @@ -79,18 +79,6 @@ struct vringh_range {
+>         u64 offset;
+>  };
+>
+> -/**
+> - * struct vringh_iov - iovec mangler.
+> - *
+> - * Mangles iovec in place, and restores it.
+> - * Remaining data is iov + i, of used - i elements.
+> - */
+> -struct vringh_iov {
+> -       struct iovec *iov;
+> -       size_t consumed; /* Within iov[i] */
+> -       unsigned i, used, max_num;
+> -};
+> -
+>  /**
+>   * struct vringh_kiov - kvec mangler.
+>   *
+> @@ -113,44 +101,19 @@ int vringh_init_user(struct vringh *vrh, u64 features,
+>                      vring_avail_t __user *avail,
+>                      vring_used_t __user *used);
+>
+> -static inline void vringh_iov_init(struct vringh_iov *iov,
+> -                                  struct iovec *iovec, unsigned num)
+> -{
+> -       iov->used = iov->i = 0;
+> -       iov->consumed = 0;
+> -       iov->max_num = num;
+> -       iov->iov = iovec;
+> -}
+> -
+> -static inline void vringh_iov_reset(struct vringh_iov *iov)
+> -{
+> -       iov->iov[iov->i].iov_len += iov->consumed;
+> -       iov->iov[iov->i].iov_base -= iov->consumed;
+> -       iov->consumed = 0;
+> -       iov->i = 0;
+> -}
+> -
+> -static inline void vringh_iov_cleanup(struct vringh_iov *iov)
+> -{
+> -       if (iov->max_num & VRINGH_IOV_ALLOCATED)
+> -               kfree(iov->iov);
+> -       iov->max_num = iov->used = iov->i = iov->consumed = 0;
+> -       iov->iov = NULL;
+> -}
+> -
+>  /* Convert a descriptor into iovecs. */
+>  int vringh_getdesc_user(struct vringh *vrh,
+> -                       struct vringh_iov *riov,
+> -                       struct vringh_iov *wiov,
+> +                       struct vringh_kiov *riov,
+> +                       struct vringh_kiov *wiov,
+>                         bool (*getrange)(struct vringh *vrh,
+>                                          u64 addr, struct vringh_range *r),
+>                         u16 *head);
+>
+>  /* Copy bytes from readable vsg, consuming it (and incrementing wiov->i). */
+> -ssize_t vringh_iov_pull_user(struct vringh_iov *riov, void *dst, size_t len);
+> +ssize_t vringh_iov_pull_user(struct vringh_kiov *riov, void *dst, size_t len);
+>
+>  /* Copy bytes into writable vsg, consuming it (and incrementing wiov->i). */
+> -ssize_t vringh_iov_push_user(struct vringh_iov *wiov,
+> +ssize_t vringh_iov_push_user(struct vringh_kiov *wiov,
+>                              const void *src, size_t len);
+>
+>  /* Mark a descriptor as used. */
+> --
+> 2.25.1
+>
 
