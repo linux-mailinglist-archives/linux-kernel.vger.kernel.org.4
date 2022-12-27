@@ -2,68 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1C16567BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA176567BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiL0HOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 02:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S229543AbiL0HQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 02:16:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiL0HOD (ORCPT
+        with ESMTP id S229521AbiL0HQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 02:14:03 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C596D2AE6
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:14:00 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id d185so11982927vsd.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:14:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+KQfd0qQa24pmN4jbSpJWNWeqDqVNRsi5GfHHVHb10I=;
-        b=JnDgLgH3KEZYTTFz2OogWOc6UzxCg8sWVfEVHFghkWlpxlqZqelxy06X6jxl+1Qu4U
-         5XbZ9CYTNySXfjx+Auz3LO7ziUDzSgOCEbwfyVWxcBj6aHAVy30eyInCPVqdjrDhDv5D
-         azzjNfXtFa5kF8SmRD+zMOl+khoViUXeCmhNAe9I72Wjdi9Ui5C8X9geF1uK+l4iH7Yk
-         3fd4ZsS+OZBcYdUAkNiCfqhm0ZUf8J05J/Y34snl9SUh4i+9ws7mgvc5B0ot+dCwyb9z
-         atFV+c2Hn+RKPH8wgEI+ZMKfo6h7s7HJ5APo3ZeAwVy6CrblZf3x2fXCkVo+ZEQH/TBJ
-         Ytuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+KQfd0qQa24pmN4jbSpJWNWeqDqVNRsi5GfHHVHb10I=;
-        b=0W4Vabdz4n4P/au8dTHjRhMwIu5ynuKUc5H6BXxXdTyjqY+1OS9iQEzlUr9LKNRH/w
-         mloAFSdwiIhuq0pJdtdvHBMkz8ucLb3yWjd4taUr3BPWGo6HiZ8WOSmxYCvU1WXwC9Pq
-         l0PUqVLshbrs3Dktg2667ZndNbib9c06D0ULsaKJEzPMGk9PaOKONrMLPIF+nielMSoy
-         tfjotSvj4scTEtXRaf5pxWBOZSR8Jtfm7q7+OSJCEWzbKDFNXCVdwasdqBO0/XASf54z
-         but5jmoCWvd8Pp5pdWSZhzMkZtVHS1ydoWDMbUrieGSR65w9L1fxxcTg88FOJMeKM7w3
-         lMgQ==
-X-Gm-Message-State: AFqh2kp2l+ic0AMSsD6UIscTG3Gl8z5U2jzdujtLD84kerQmQRmRbaTl
-        JhUaBhCRcP0gZPBy5t+o1DE+NnMb+oTaXT9JHR5f8A==
-X-Google-Smtp-Source: AMrXdXveVEzfaCgCX7ll10/TckFbSv+JK5mIYKf8aCht+1Noe74CJXwAERw1BZvxxJVNWvLE//EQJd/v6X6NLOza8Yc=
-X-Received: by 2002:a05:6102:14a7:b0:3b5:1126:2b62 with SMTP id
- d39-20020a05610214a700b003b511262b62mr2182450vsv.51.1672125239853; Mon, 26
- Dec 2022 23:13:59 -0800 (PST)
+        Tue, 27 Dec 2022 02:16:49 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D602363E2;
+        Mon, 26 Dec 2022 23:16:47 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Nh5XJ3K3Sz16LrJ;
+        Tue, 27 Dec 2022 15:15:28 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 27 Dec 2022 15:16:43 +0800
+Subject: Re: [PATCH] kallsyms: Fix sleeping function called from invalid
+ context when CONFIG_KALLSYMS_SELFTEST=y
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+References: <20221220063923.1937-1-thunder.leizhen@huawei.com>
+ <df75bb4e-6cf8-7f41-b053-9619c13d1c72@csgroup.eu> <Y6GWInExu2m48K/C@alley>
+ <c5a04eaa-2b8d-647a-7c70-9262e6147394@huawei.com> <Y6HYChz6pa9Aw0Sa@alley>
+ <1f7c8542-ff47-106b-f651-71c1d555b027@huawei.com>
+Message-ID: <07f7beec-2837-6bc1-eb24-db84462e035f@huawei.com>
+Date:   Tue, 27 Dec 2022 15:16:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20221227022528.609839-1-mie@igel.co.jp> <20221227022528.609839-3-mie@igel.co.jp>
- <CACGkMEtAaYpuZtS0gx_m931nFzcvqSNK9BhvUZH_tZXTzjgQCg@mail.gmail.com> <20221227020425-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221227020425-mutt-send-email-mst@kernel.org>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 27 Dec 2022 16:13:49 +0900
-Message-ID: <CANXvt5pXkS=TTOU0+Lkx6CjcV7xvDHRS6FbFikJ4Ww8832sg8g@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/9] vringh: remove vringh_iov and unite to vringh_kiov
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <1f7c8542-ff47-106b-f651-71c1d555b027@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,40 +57,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=E5=B9=B412=E6=9C=8827=E6=97=A5(=E7=81=AB) 16:05 Michael S. Tsirkin <ms=
-t@redhat.com>:
->
-> On Tue, Dec 27, 2022 at 02:04:03PM +0800, Jason Wang wrote:
-> > On Tue, Dec 27, 2022 at 10:25 AM Shunsuke Mie <mie@igel.co.jp> wrote:
-> > >
-> > > struct vringh_iov is defined to hold userland addresses. However, to =
-use
-> > > common function, __vring_iov, finally the vringh_iov converts to the
-> > > vringh_kiov with simple cast. It includes compile time check code to =
-make
-> > > sure it can be cast correctly.
-> > >
-> > > To simplify the code, this patch removes the struct vringh_iov and un=
-ifies
-> > > APIs to struct vringh_kiov.
-> > >
-> > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> >
-> > While at this, I wonder if we need to go further, that is, switch to
-> > using an iov iterator instead of a vringh customized one.
-> >
-> > Thanks
->
-> Possibly, but when doing changes like this one needs to be careful
-> to avoid breaking all the inlining tricks vringh relies on for
-> performance.
-Definitely, I'm evaluating the performance using vringh_test. I'll add a
-result of the evaluation. But, If there are other evaluation methods, could=
- you
-please tell me?
-> --
-> MST
->
 
-Best,
-Shunsuke
+
+On 2022/12/21 20:37, Leizhen (ThunderTown) wrote:
+>>>> I am not familiar with it. But task_cputime() in
+>>>> kernel/sched/cputime.c looks promising. And there must be
+>>>> the interface how the user space get this information.
+>>>> Some is available via /proc/<PID>/... I am not sure
+>>>> if there is a syscall.
+>> Please, try to investigate the above hints.
+> Yes, I will. Thanks.
+
+Function task_cputime() works well when CONFIG_VIRT_CPU_ACCOUNTING_GEN=y,
+but not when CONFIG_TICK_CPU_ACCOUNTING=y. The latter seems to be based on
+tick interrupt sampling, rather than recording timestamps during task switches.
+
+> 
+
+-- 
+Regards,
+  Zhen Lei
