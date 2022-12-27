@@ -2,127 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9365D65702E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 23:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D70657032
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 23:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbiL0WRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 17:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        id S229953AbiL0WZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 17:25:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbiL0WRA (ORCPT
+        with ESMTP id S229502AbiL0WZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 17:17:00 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136BDB7EB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 14:16:59 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id d10so9513114pgm.13
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 14:16:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nz+0xpf/FwZYsXl34br/szBrwNJc+k2jQRK/lfXtjA=;
-        b=DGJa8SlxJIzUxSfemShBGXpsL8Wtha+pI2wuXtLL7AR7v+4qQd674pnUjr1j9rT5YQ
-         9RBVW0r7ExG9qO7tsSokHH20t1t/ANRvfv7fjA131WDL+3iy6OfGL64zCunszN2D0zia
-         stbXzFNdb32jdP2PF48udsdQ8diDRq5maFn7fc634Lq31D2wycikbpQK/x9K4cUROHHH
-         yLe+gtESc5XkCzV4idqKAsTr4pUI92YTCA/54oRKoHR5Sj1sQ16ZsOxKESKub69V2lyj
-         9Q462b7tBeueWmkti8A+1lsu/4qP9Z91tbfiwMs32MQMjDBUU901KFrGor8Qoz32Kk6S
-         ookw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2nz+0xpf/FwZYsXl34br/szBrwNJc+k2jQRK/lfXtjA=;
-        b=GhfcOiXEGyXYKVVcuz3QPzDXRwxCzKiE06WPh+/2hlvWYLjyuqJ1tSmUTcW3ZH9CFL
-         6ho6jDHST/LHwTwyIUqZdT9RdhX9GeMmdFrMURmH6QEaZeBSBsLbjXwn/2Ujod4Q/n1b
-         Xnw7xAGNyPJlx4bLwi9ZuHPYPCfTLpf7r40BrzEB0KPxeGzdkVh7tmNeSlX9bOrQFYJ4
-         E4jNE1vX6xw0iK6AsNEO9iJQlOMWUJ2TqKXukf9muhJuLG95DzrQz4k407o/SAv5zFLq
-         IWc6JiHS0wxcm4JuzGec5XtjLLBPmWX7EGrlyXouCtnqUaKHC9FZ3Iv4MrSzhZ2bW+HZ
-         I+3g==
-X-Gm-Message-State: AFqh2kqYn/frQZvH+56jvSSVILnrzSglj1hbCD9DHMrNW4PhwOYewr3s
-        4YcFC84zAF/3wj+jcYIIzjmePnEeAtadUvPgZFXiHA==
-X-Google-Smtp-Source: AMrXdXtezi5rDNeB0Nbw47Kco1JdQdNlIn5BXcEJuJPLNDYS047a83X3tjrfItS0VtvqbaZrvwHSUqxzmDB29aes3lY=
-X-Received: by 2002:a63:1e66:0:b0:47c:c502:3713 with SMTP id
- p38-20020a631e66000000b0047cc5023713mr1287923pgm.28.1672179418571; Tue, 27
- Dec 2022 14:16:58 -0800 (PST)
+        Tue, 27 Dec 2022 17:25:20 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BF6CCD8;
+        Tue, 27 Dec 2022 14:25:19 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 113C42F4;
+        Tue, 27 Dec 2022 14:26:00 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CC9FA3F663;
+        Tue, 27 Dec 2022 14:25:16 -0800 (PST)
+Date:   Tue, 27 Dec 2022 22:23:30 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, kishon@kernel.org,
+        wens@csie.org, jernej.skrabec@gmail.com,
+        wsa+renesas@sang-engineering.com, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.10 1/7] phy: sun4i-usb: Add support for the
+ H616 USB PHY
+Message-ID: <20221227222330.5ebdf780@slackpad.lan>
+In-Reply-To: <530561e9-9ef8-7c8c-8e73-838c86a92266@sholland.org>
+References: <20221227203512.1214527-1-sashal@kernel.org>
+        <530561e9-9ef8-7c8c-8e73-838c86a92266@sholland.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-References: <20221227110335.2923359-1-javierm@redhat.com> <20221227110335.2923359-2-javierm@redhat.com>
- <CAMty3ZAaHKJ21D8mE=HU3D3KOGAiZ7vfmW_Hgc-E5JO5S+tMNA@mail.gmail.com>
- <CABxcv=kwtk21UbOwaV4tq=BpPsrYmnTrzuhybjbknipqk5R-fA@mail.gmail.com> <CAMty3ZDESyJoWMO_BgHzUJN=hLV0dH6y=3B9ogOsSUvaTMqarQ@mail.gmail.com>
-In-Reply-To: <CAMty3ZDESyJoWMO_BgHzUJN=hLV0dH6y=3B9ogOsSUvaTMqarQ@mail.gmail.com>
-From:   Javier Martinez Canillas <javier@dowhile0.org>
-Date:   Tue, 27 Dec 2022 23:16:46 +0100
-Message-ID: <CABxcv=mFzuUq0-PQ8H3N0Sxmzg+z1v_uwhUe0jcH2++NDQRR0w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] dt-bindings: display: Add Himax HX8394 panel controller
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        devicetree@vger.kernel.org, Robert Mader <robert.mader@posteo.de>,
-        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
-        Neal Gompa <ngompa13@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
-        Martijn Braam <martijn@brixit.nl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Ondrej Jirman <megi@xff.cz>,
-        Peter Robinson <pbrobinson@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Kamil_Trzci=C5=84ski?= <ayufan@ayufan.eu>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 8:37 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
->
-> On Wed, Dec 28, 2022 at 12:58 AM Javier Martinez Canillas
-> <javier@dowhile0.org> wrote:
-> >
-> > Hello Jagan,
-> >
-> > On Tue, Dec 27, 2022 at 7:16 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
-> >
-> > [...]
-> >
-> > > > +allOf:
-> > > > +  - $ref: panel-common.yaml#
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    enum:
-> > > > +      # HannStar HSD060BHW4 5.99" 720x1440 TFT LCD panel
-> > > > +      - hannstar,hsd060bhw4
-> > >
-> > > Parent controller can have a compatible where the associated panels
-> > > will be enum list.
-> > >
-> >
-> > I'm not sure to follow what you meant. Could you please elaborate?
->
-> compatible:
->     items:
->       - enum:
->           - hannstar,hsd060bhw4
->       - const: himax,hx8394
->
-> himax,hx8394 is the actual controller and is denoted as fallback compatible.
->
+On Tue, 27 Dec 2022 15:58:16 -0600
+Samuel Holland <samuel@sholland.org> wrote:
 
-I see. Do you have an example of a panel controller that does this? I
-don't see that much value in doing this since you want the DTS to
-describe the actual HW and so want the panel I believe.
+> Hi Sasha,
+> 
+> On 12/27/22 14:35, Sasha Levin wrote:
+> > From: Andre Przywara <andre.przywara@arm.com>
+> > 
+> > [ Upstream commit 0f607406525d25019dd9c498bcc0b42734fc59d5 ]
+> > 
+> > The USB PHY used in the Allwinner H616 SoC inherits some traits from its
+> > various predecessors: it has four full PHYs like the H3, needs some
+> > extra bits to be set like the H6, and puts SIDDQ on a different bit like
+> > the A100. Plus it needs this weird PHY2 quirk.
+> > 
+> > Name all those properties in a new config struct and assign a new
+> > compatible name to it.
+> > 
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > Reviewed-by: Samuel Holland <samuel@sholland.org>
+> > Link: https://lore.kernel.org/r/20221031111358.3387297-5-andre.przywara@arm.com
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > ---
+> >  drivers/phy/allwinner/phy-sun4i-usb.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> > 
+> > diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
+> > index 651d5e2a25ce..230987e55ece 100644
+> > --- a/drivers/phy/allwinner/phy-sun4i-usb.c
+> > +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+> > @@ -974,6 +974,17 @@ static const struct sun4i_usb_phy_cfg sun50i_h6_cfg = {
+> >  	.missing_phys = BIT(1) | BIT(2),
+> >  };
+> >  
+> > +static const struct sun4i_usb_phy_cfg sun50i_h616_cfg = {
+> > +	.num_phys = 4,
+> > +	.type = sun50i_h6_phy,
+> > +	.disc_thresh = 3,
+> > +	.phyctl_offset = REG_PHYCTL_A33,
+> > +	.dedicated_clocks = true,
+> > +	.phy0_dual_route = true,
+> > +	.hci_phy_ctl_clear = PHY_CTL_SIDDQ,
+> > +	.needs_phy2_siddq = true,  
+> 
+> This will fail to compile without b45c6d80325b ("phy: sun4i-usb:
+> Introduce port2 SIDDQ quirk"). However, like Andre mentioned in
+> reference to the devicetree updates[1], we were not expecting any of
+> these patches to be backported. Since you already dropped the DT
+> portion, there is no need to bother with these two patches either.
 
-But also there isn't an of_device_id entry for this fallback
-controller compatible string. Feel free to propose that as a follow-up
-if you think it is worth doing so.
+Well, definitely not for 5.4 and 5.10, since the essential pinctrl and
+clock patches for the H616 were only added in 5.12, so there is no
+point in having USB support.
 
-Best regards,
-Javier
+I don't know how useful it is for 6.0, but having both patches in 6.1
+would make some sense, since it's an LTS kernel. The H616 SoC became
+usable in 6.0, with the USB patches being delayed back then. And it's
+only those two that are missing from enabling USB support, IIRC.
+The DT part is not really relevant, since you can always use U-Boot's
+DT (recommended) or the DT from any newer kernel.
+
+So from an user's perspective, it would be very helpful to just have:
+- [PATCH AUTOSEL 6.1 12/28]
+- [PATCH AUTOSEL 6.1 13/28]
+Personally I would support this, since it makes all H616 based devices
+much more usable with next year's distribution kernels.
+
+I don't know if this fulfils the stable kernel rules, though, since
+strictly speaking they don't fix anything, but add (USB) support to a
+new SoC. Then again they are little risk, since most of the code is
+guarded by H616 filters, so wouldn't be used by other SoCs.
+
+Cheers,
+Andre
+
+> 
+> Regards,
+> Samuel
+> 
+> [1]: https://lore.kernel.org/lkml/20221220000115.19c152fe@slackpad.lan/
+> 
+> > +};
+> > +
+> >  static const struct of_device_id sun4i_usb_phy_of_match[] = {
+> >  	{ .compatible = "allwinner,sun4i-a10-usb-phy", .data = &sun4i_a10_cfg },
+> >  	{ .compatible = "allwinner,sun5i-a13-usb-phy", .data = &sun5i_a13_cfg },
+> > @@ -988,6 +999,7 @@ static const struct of_device_id sun4i_usb_phy_of_match[] = {
+> >  	{ .compatible = "allwinner,sun50i-a64-usb-phy",
+> >  	  .data = &sun50i_a64_cfg},
+> >  	{ .compatible = "allwinner,sun50i-h6-usb-phy", .data = &sun50i_h6_cfg },
+> > +	{ .compatible = "allwinner,sun50i-h616-usb-phy", .data = &sun50i_h616_cfg },
+> >  	{ },
+> >  };
+> >  MODULE_DEVICE_TABLE(of, sun4i_usb_phy_of_match);  
+> 
+
