@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C1B65693E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF701656942
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiL0Jzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
+        id S230495AbiL0J45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbiL0JzQ (ORCPT
+        with ESMTP id S230201AbiL0J41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 04:55:16 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C9BB84E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:54:07 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id s25so13291792lji.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:54:07 -0800 (PST)
+        Tue, 27 Dec 2022 04:56:27 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298A7B498
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:55:18 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id z26so18955066lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:55:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OaoIC/ryKnNhlBlNMTIYhMbHFPcEdt6jMuKU7tfaLLE=;
-        b=XUyNmJsyyocqQxGCRroMHP34XB7Q6gX9hkseknbtDh7XdP20R4FY0EjHw0rOddhE//
-         Xt+t1NUfHNpUUZzAc2iTI54u29TDcQ13Qqtsu/LYeeOKF90aj82cyRNXMx9RbEy7U8V4
-         j+lWIYC2sKaSvJyRZ4B8qlJOCe8gx5AX/11joT/koX9Q6pcZzMotP5ArBUuGEvxEFx11
-         dG6YbFQyVh4TsoBusAzkyVYRaB+TOfBVWGfxwCH4R0FAZkc58KiOI3MYKkOXfhxca++y
-         NIbcRRYONTRmzF94M7Z96JP1HewgEvR0TVqzCCRDCZA9CTAh6vDRZESguzG3abptiN+1
-         d3cg==
+        bh=IPELBybm3OZnPzS1qLb2eKjz0NHNGczcyBgATwq2AJ8=;
+        b=a3UtnFcbLnbcl0VpqfiGS+3wdLVd8cVaF6vWs6Z73JN9u8GKOcwuHvZ7PeFo2Fz8Gb
+         Dg33aK8GsX9rXOk5JHLN+UFwwLtUGge2vDJcLxDgKQBj0UlrAwxvRdTyIlqjOBxb6uL2
+         3r8wy+ifXw9wMu+5ohSWs57+ivuQsve9TeeIsGrOCr3I2UKbfLcVTzYjnN3o5GN79Z8V
+         4aixJ758qbUSfUaK04lAaM+3z/IdBQ94CY7xifFwzdw5ESD37q6+CFXOjjzRg1KEvOb9
+         bx3izGa6470MaOEzPMLBZD6oRxIvl+pgygrs7v2swp3COdc38cNfCwdd7rXSjYmxbKqi
+         A25Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OaoIC/ryKnNhlBlNMTIYhMbHFPcEdt6jMuKU7tfaLLE=;
-        b=7w6IcI7ivHhi0WkvSPa9L0pjrSbh48hdaVLJsFM9bfwSdFgXZTxwnYvTo+Ycdu3GDD
-         o3OaFAxb1omPvnS176mqgwRsEMuYkIRJJGC4ZGuSXJr7y0Epo7PyYXPdtae6EJh92bIA
-         lK106sy2KQqaFbtjRjCrk+R4MCKPBe/iJAMSSssXaUlrHJ0Z2vWFepJnwCJDC/gGJnvl
-         5sHmBlNUXx3MqasPrK/zf/e+pp9dYgxTwmiIQz9lcQR8FJ7A8JccEcn9VnUS4mmc1Zhw
-         S0KouifN6RNSX4ReviZh//fq3SC+EZwA9XCDxo+FuipYegeGqIsQQ+w08+kAzyaOOUDF
-         zVmA==
-X-Gm-Message-State: AFqh2kpyVQ63zAIKdt3XdzcJw/DBggASPZa119uc84fr6qVPWY+2l1s8
-        XtkffanIfSw8hCFLdDQWm1h2Og==
-X-Google-Smtp-Source: AMrXdXuUfwqspTZAKh4PXKGG3Ov5cC5AM7Of3uPBeAtf36WvsuT5WnASOwV+t6VY/6GUpmE/Q7w33A==
-X-Received: by 2002:a2e:6e0b:0:b0:27f:bcdf:526d with SMTP id j11-20020a2e6e0b000000b0027fbcdf526dmr2110087ljc.31.1672134845785;
-        Tue, 27 Dec 2022 01:54:05 -0800 (PST)
+        bh=IPELBybm3OZnPzS1qLb2eKjz0NHNGczcyBgATwq2AJ8=;
+        b=XBqXegOwmvvXMLTKlP6lwlSFMN7qLmw+OFTfCiXaHm8IkseM3igFy1CMLGd0NUPH2+
+         AaEpMzqxnUE9QqZXQawotPWzbxa+4y9cN3xsxGbMWPeTja26LBEZdI3gIp67fS9ND3+w
+         Kz0IC5ZBmbMMVRKRtw0pIDxU6evEIRWMmKzCrrfRWtZgo0WpY55QtDhwXS1BF8gxkDZI
+         3/SlBQjr7lUrWJbdP42cwYaIDT4Usx/KkhTuP4NSUEtcfh/Bx6I5ehZYUHvHSDnRCUfz
+         iu7tFn92msFF8VtCsKqwLCs6FC4xW8Mefue2tFbdlJHFc6RWFJj78BO966JndYZ0X3qU
+         zusg==
+X-Gm-Message-State: AFqh2kpLLqksPZPYl/DS2WYxCtgVJXAdrGSPzYrElEnz8pBHP+/M1zot
+        3Evtn33hf3VdlQFANl6A5JBg3yiYYv6641BR
+X-Google-Smtp-Source: AMrXdXtltf4vB2TNQasjCgOUGdVW5TjMPZt530L9JnGeaOu3jfGKIVxewdonxiUQ0BeVA82qYm+DzA==
+X-Received: by 2002:a19:f514:0:b0:4b5:61e8:8934 with SMTP id j20-20020a19f514000000b004b561e88934mr5295350lfb.64.1672134916572;
+        Tue, 27 Dec 2022 01:55:16 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 20-20020a05651c00d400b0027a1ee0b8d4sm1565944ljr.130.2022.12.27.01.54.04
+        by smtp.gmail.com with ESMTPSA id o17-20020a05651205d100b00498f77cfa63sm2211382lfo.280.2022.12.27.01.55.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 01:54:05 -0800 (PST)
-Message-ID: <0a3ece05-c94f-3d7e-2f90-b72b777617e5@linaro.org>
-Date:   Tue, 27 Dec 2022 10:54:03 +0100
+        Tue, 27 Dec 2022 01:55:16 -0800 (PST)
+Message-ID: <1cc66b84-fcf3-2801-57ad-94430fa38055@linaro.org>
+Date:   Tue, 27 Dec 2022 10:55:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v10 2/7] media: dt-binding: nuvoton: Add NPCM VCD and ECE
- engine
+Subject: Re: [PATCH v10 3/7] dt-bindings: arm: nuvoton: Add bindings for NPCM
+ GFXI
 Content-Language: en-US
 To:     Marvin Lin <milkfafa@gmail.com>, mchehab@kernel.org,
         hverkuil-cisco@xs4all.nl, avifishman70@gmail.com,
@@ -67,15 +67,14 @@ Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         kwliu@nuvoton.com, kflin@nuvoton.com
 References: <20221227095123.2447948-1-milkfafa@gmail.com>
- <20221227095123.2447948-3-milkfafa@gmail.com>
+ <20221227095123.2447948-4-milkfafa@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221227095123.2447948-3-milkfafa@gmail.com>
+In-Reply-To: <20221227095123.2447948-4-milkfafa@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,17 +82,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 27/12/2022 10:51, Marvin Lin wrote:
-> Add dt-binding document for Video Capture/Differentiation Engine (VCD)
-> and Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
+> Add dt-bindings document for Graphics Core Information (GFXI) node. It
+> is used by NPCM video driver to retrieve Graphics core information.
 > 
 > Signed-off-by: Marvin Lin <milkfafa@gmail.com>
 > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Subject - it is "dt-bindings", not "dt-bindings".
-
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
+The comment about subject from v8 applies here as well. Once you receive
+a comment apply it everywhere, fix all the issues, not only one.
 
 
 Best regards,
