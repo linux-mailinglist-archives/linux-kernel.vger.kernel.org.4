@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8A1656E51
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8B6656E53
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiL0T1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
+        id S231521AbiL0T20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:28:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbiL0T0q (ORCPT
+        with ESMTP id S229770AbiL0T2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:26:46 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C468DEB3;
-        Tue, 27 Dec 2022 11:26:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672169201; x=1703705201;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bdnmzdLPhGnylPibn6OyUTv4aH136Snh4DgyixVJCbw=;
-  b=mkAcUxaBnA9rbpH0Tndy4kjiS5IvPnzGF6i7e+sfEsMAQJcTmD1tU5cA
-   Nvi8UWbSrBtIgj47YA/9ABu7LDbVqpWBdkUbJ+tPq5dpZ5i6u4gUOeWUy
-   kzdacGyy/tFq+gw7pYqcLTV7gGYtYo3AM/orakiWc57LipFDvBHa5QsOz
-   Nh1AZPG6udYcykjYaY0kOsq7e8vryablG5m2oXvapfHN/qsye9g7Y8QUl
-   s1jg5TO3VNZvy8LQX1Eb/0EsK/zIocrIA77qz4QEFREiZiE7C5RwXvjC4
-   mlUeOqhlbacPo/v5n2HCa1bP8jbRfa1Z/Ulnrk+UTSVSa5MLw8gENvbET
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="385170802"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="385170802"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 11:26:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="827196199"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="827196199"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 27 Dec 2022 11:26:22 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pAFae-000CF1-2Z;
-        Tue, 27 Dec 2022 21:26:20 +0200
-Date:   Tue, 27 Dec 2022 21:26:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 1/1] pinctrl: intel: Define maximum pad number in the
- group
-Message-ID: <Y6tG3KJZeacSVa23@smile.fi.intel.com>
-References: <20221219123240.5601-1-andriy.shevchenko@linux.intel.com>
- <Y6B2nIy4hXQLjgvU@black.fi.intel.com>
+        Tue, 27 Dec 2022 14:28:22 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E3A2A0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:28:21 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id t2so14068854ply.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:28:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F3yGec1v/pAZdlsdz4KptKUFtToX+P4HKect6tvS0bM=;
+        b=eZBHoAftWthVp/W6i1eY7oWJRD71Y9IPWPP49BSMuDdLH48aPJpqXUHhnHjcQ3vxWA
+         ZElU5SN+QVdH4rtn71R3XmF1NZb/hHZiRp4vSIr57NzmfzKvfF2CpsWiOmID82+AKp6Y
+         WoFCh9ct+g0Kcltcu1FrAU32Xw5daqNdSiPPaPVWMqdfsM5TWGAuWgvIEOl4KvauhwWS
+         VBWOYYOLzHxRJd+P24Npz/HegJMC3wwrVJR3mkGFj1Zc1ovw21WVJ5h5BEBd0orRN8S5
+         JZdt7pjgX64uGwkPxT0pUtDPeh4DIwUJB+37rVEhy4erYpHB99SzJTCDyNADiLzEMlX6
+         kzrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F3yGec1v/pAZdlsdz4KptKUFtToX+P4HKect6tvS0bM=;
+        b=EvmAnODUtmoy4grWVQ7/qmRdyv8CILEdd2MHWkCoL+46F+CGUaiqwHvaD8zeezuGEL
+         Xa5jgu+TD9wZ2ajC/0YPcSTNVZODDwjeWj2TA59zpBH3zMP1ycM75Nim4EAN7Mj1E+nn
+         1p0/BF7udP5ZW5J2CUMnZErlPcQfs2l/krcI9YdHvTMNZ/NCcvBeiPqcu7yDH02pepI+
+         ARTqyuuH7azyFNqvdLpq8ON8ZFMdHS1h34hLPbVfshX99SNovrM2Kb2t8yAzscMUN3O9
+         QbB2aYBfnGNyRcetz0VcvUDrxTv/eHxlNDrXEpsNLiwhgvihxlZjDx7yB053lLVKB+oC
+         skUg==
+X-Gm-Message-State: AFqh2koN+OC50muU0weJJpeYDdRGT4V2NWAmCOb1WOIzXOSupDDcILU1
+        e0oEt2bc3dxkgotMPXDXcdulB7yYEOyRN0qEhlPZaQ==
+X-Google-Smtp-Source: AMrXdXsOvBld3xBN5qjRM49UlgQSR/vTb5qkj6SsVg9Om1xjMhqlnlFj5FBPS6mSldhVyUhf3qbUFTbJ4PIqwLf2jHQ=
+X-Received: by 2002:a17:902:7089:b0:189:9cfd:be76 with SMTP id
+ z9-20020a170902708900b001899cfdbe76mr1390560plk.21.1672169301016; Tue, 27 Dec
+ 2022 11:28:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6B2nIy4hXQLjgvU@black.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221227110335.2923359-1-javierm@redhat.com> <20221227110335.2923359-2-javierm@redhat.com>
+ <CAMty3ZAaHKJ21D8mE=HU3D3KOGAiZ7vfmW_Hgc-E5JO5S+tMNA@mail.gmail.com>
+In-Reply-To: <CAMty3ZAaHKJ21D8mE=HU3D3KOGAiZ7vfmW_Hgc-E5JO5S+tMNA@mail.gmail.com>
+From:   Javier Martinez Canillas <javier@dowhile0.org>
+Date:   Tue, 27 Dec 2022 20:28:09 +0100
+Message-ID: <CABxcv=kwtk21UbOwaV4tq=BpPsrYmnTrzuhybjbknipqk5R-fA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: display: Add Himax HX8394 panel controller
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        devicetree@vger.kernel.org, Robert Mader <robert.mader@posteo.de>,
+        Onuralp Sezer <thunderbirdtr@fedoraproject.org>,
+        Neal Gompa <ngompa13@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Martijn Braam <martijn@brixit.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Ondrej Jirman <megi@xff.cz>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Kamil_Trzci=C5=84ski?= <ayufan@ayufan.eu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 04:35:08PM +0200, Mika Westerberg wrote:
-> On Mon, Dec 19, 2022 at 02:32:40PM +0200, Andy Shevchenko wrote:
-> > Instead of using hard coded magic number here and there,
-> > define maximum pad number in the group in newly added
-> > INTEL_PINCTRL_MAX_GPP_SIZE.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Hello Jagan,
 
-Pushed to my review and testing queue, thanks!
+On Tue, Dec 27, 2022 at 7:16 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
 
--- 
-With Best Regards,
-Andy Shevchenko
+[...]
 
+> > +allOf:
+> > +  - $ref: panel-common.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      # HannStar HSD060BHW4 5.99" 720x1440 TFT LCD panel
+> > +      - hannstar,hsd060bhw4
+>
+> Parent controller can have a compatible where the associated panels
+> will be enum list.
+>
 
+I'm not sure to follow what you meant. Could you please elaborate?
+
+Best regards,
+Javier
