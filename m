@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611A2656B22
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 14:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7A1656B2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 14:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiL0NC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 08:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S231615AbiL0NEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 08:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiL0NCZ (ORCPT
+        with ESMTP id S231586AbiL0NEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 08:02:25 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE96A283;
-        Tue, 27 Dec 2022 05:02:24 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id g7so10374551qts.1;
-        Tue, 27 Dec 2022 05:02:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=As9R9cHjsoEUKawysSraV8MPqyGDXYZgkaD+AH1/+1g=;
-        b=l49dLBge3idM2ouN9VPuHDojZ7mnjTaCIaSq5vzSyPgFa+FWvz+ifCzlHX1zugpEmW
-         RUohrHwOnZ1pJApJvnnw7/wKklzw0Jw+AfxsrfJ1fr2Y2ZraLZbX/exPVFRvsxD2l671
-         2GvvmKUIcgiHtqjO5YjZ53x0E/iASjgg/LO9M7SBdF6Oh/SqAdmRnjsc03U0bxAGciIq
-         5Co9nzT/xNYCd99sZ65AAc+xT7GH1JQ1kgCp9gH+XMy2IVvM2L7a4v/cQJOxnWPxCkZp
-         8PpntSL/ePcmSs8Hn3VzXVXM3RvoYUdVqROVYQ4emZTh/eh/p6cYaN5AdGqXlaQ9jWWH
-         K/kA==
-X-Gm-Message-State: AFqh2kp8gaVBjLkzRNLNsnzeuWdJT7BTiNZHFEOtKrsz/0bQY8whRQiI
-        +G+iYHqV8GHCoK++a21/17d5rfg/z/TAMw==
-X-Google-Smtp-Source: AMrXdXubLtB1i6Xwjh9JlRo9jTjPcM8Eo4ecC5/xq1c03/ls2er3wIl54ipWrkrww9qua7FG71jGqw==
-X-Received: by 2002:ac8:7285:0:b0:3a7:f599:d7f2 with SMTP id v5-20020ac87285000000b003a7f599d7f2mr28808053qto.51.1672146143578;
-        Tue, 27 Dec 2022 05:02:23 -0800 (PST)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id bn9-20020a05622a1dc900b003a7e38055c9sm8185956qtb.63.2022.12.27.05.02.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 05:02:23 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-43ea87d0797so183207617b3.5;
-        Tue, 27 Dec 2022 05:02:22 -0800 (PST)
-X-Received: by 2002:a05:690c:c02:b0:370:202b:f085 with SMTP id
- cl2-20020a05690c0c0200b00370202bf085mr1630998ywb.502.1672146142353; Tue, 27
- Dec 2022 05:02:22 -0800 (PST)
+        Tue, 27 Dec 2022 08:04:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5C964FD
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 05:03:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672146228;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=itmwXqUo01mTV85no/9ZNLho2BNM+XUgesQju+SpFwM=;
+        b=U0NKNUYjrprKVxH+jgcI5SsKEVIDMayWUq9lv3TLt0CbLtXDdPIP+64/QSW7eUBJZBpHiQ
+        mmrsWXgU+Lga5CMD3cjU52H0oDy2RWaFw9TC3a2qB+X/F9n6F97BQyWfAs6x7BHYc2kkgu
+        t1N3QmFBRDRUYYps9Aa0MWZYukRwME4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-359-al1j6ULROiyc5y_rGIER3A-1; Tue, 27 Dec 2022 08:03:41 -0500
+X-MC-Unique: al1j6ULROiyc5y_rGIER3A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C26A0101A521;
+        Tue, 27 Dec 2022 13:03:38 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C14DC15BA0;
+        Tue, 27 Dec 2022 13:03:37 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Durrant <paul@xen.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuan Yao <yuan.yao@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2 00/50] KVM: Rework kvm_init() and hardware enabling
+Date:   Tue, 27 Dec 2022 08:02:50 -0500
+Message-Id: <20221227130249.1650197-1-pbonzini@redhat.com>
+In-Reply-To: <20221130230934.1014142-1-seanjc@google.com>
+References: 
 MIME-Version: 1.0
-References: <20221221000242.340202-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221221000242.340202-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221221000242.340202-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Dec 2022 14:02:05 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV1UAF0Pgk6omcLz6-kHLD6xnMFDN-UJ2ge_bhoD7rAcw@mail.gmail.com>
-Message-ID: <CAMuHMdV1UAF0Pgk6omcLz6-kHLD6xnMFDN-UJ2ge_bhoD7rAcw@mail.gmail.com>
-Subject: Re: [PATCH v2 9/9] arm64: dts: renesas: rzg2ul-smarc-som: Add PHY
- interrupt support for ETH{0/1}
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Queued, thanks.  I will leave this in kvm/queue after testing everything
+else and moving it to kvm/next; this way, we can wait for test results
+on other architectures.
 
-On Wed, Dec 21, 2022 at 1:04 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> The PHY interrupt (INT_N) pin is connected to IRQ2 and IRQ7 for ETH0 and
-> ETH1 respectively.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Paolo
 
-Thanks for your patch!
 
-> --- a/arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
-> @@ -6,6 +6,7 @@
->   */
->
->  #include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/irqc-rzg2l.h>
->  #include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
->
->  / {
-> @@ -77,6 +78,8 @@ phy0: ethernet-phy@7 {
->                 compatible = "ethernet-phy-id0022.1640",
->                              "ethernet-phy-ieee802.3-c22";
->                 reg = <7>;
-> +               interrupt-parent = <&irqc>;
-
-Note that arch/riscv/boot/dts/renesas/r9a07g043f.dtsi does not have
-the irqc node yet, so I cannot take this as-is.
-
-> +               interrupts = <RZG2L_IRQ2 IRQ_TYPE_LEVEL_LOW>;
->                 rxc-skew-psec = <2400>;
->                 txc-skew-psec = <2400>;
->                 rxdv-skew-psec = <0>;
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
