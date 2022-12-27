@@ -2,219 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D088656BFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 15:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86EE656BFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 15:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbiL0Oi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 09:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S231897AbiL0Ohf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 09:37:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbiL0OiQ (ORCPT
+        with ESMTP id S231771AbiL0Ohe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 09:38:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF6E2A3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 06:37:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672151846;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xgCz+tLYAfF9d3fkcqmVpnYWdED3weMm6ilwwtC+TyE=;
-        b=fzPa3yTR0JMwQ2SRs2eYsCz1kzN+CqeiQ+fPLwe/jhSqbLDmFEFaa7BqFkGttHPamBvl+X
-        uuyhCCXvSaHzRf79ttaQzO3nV+PYSj3eH+V3vuWktrdpwh0MC3+GdUZf+fA9J0dCe8cvRs
-        bEGRzpsuNXBqAgDZ0r55h+CnYJPGWZ4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-487-_C6ffTvZMaKy7deaj9gXfA-1; Tue, 27 Dec 2022 09:37:25 -0500
-X-MC-Unique: _C6ffTvZMaKy7deaj9gXfA-1
-Received: by mail-wm1-f69.google.com with SMTP id i7-20020a05600c354700b003d62131fe46so9590690wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 06:37:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xgCz+tLYAfF9d3fkcqmVpnYWdED3weMm6ilwwtC+TyE=;
-        b=JypL8SSj7fRs8p6S27PkprTrNRpCvavekADSF5Q6oxwJLWC8bAe5fQpyZRJQ8otk/s
-         GhlJVxbsuGzTXsMtVXmT7AHhgAZArf7cjcjPFp/s+upEGEkuTuaBBLPphuPzaODdjFBT
-         RKg8ng2foq/wSQWW7Y3F/M7yrarveWJEMDx1h36Tssf2140zu9w2+SwxnnbvXTPDfWMU
-         koEautFZOiGlmn+M07WsIE+zFRyzWef9yasxJ5E8pdue4slB9QVeJrkGdtn5AWpNSVIk
-         /8PaCL4tuewjeE7b/x1RG9/PoQGowjaBjr5H0nT25nqsHQbGfRYmG6O4eAM5wJsWRa1C
-         oUiw==
-X-Gm-Message-State: AFqh2kqYUx67yuoGPkCfFwVXUC+NBklIxO8T1a8ikijG4Ss8WMM7KATw
-        Z8fSDQcMPJyftG7OKWpwUGmcyysRd+Jw8bfcqzuBqhsk2nFL5YcKeuYIcUb9LODizqDy+yy7zeI
-        BAjpvUMVNnmqAKKnYLbApbG9U
-X-Received: by 2002:adf:e810:0:b0:276:4089:81c2 with SMTP id o16-20020adfe810000000b00276408981c2mr7127722wrm.41.1672151843991;
-        Tue, 27 Dec 2022 06:37:23 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuEQROGF+oitUSmj1Q8NX620ccWWcAn/1+eRYCelPItDeRg6waNVMMHTHrgmKbV/c3RtVQv9g==
-X-Received: by 2002:adf:e810:0:b0:276:4089:81c2 with SMTP id o16-20020adfe810000000b00276408981c2mr7127707wrm.41.1672151843730;
-        Tue, 27 Dec 2022 06:37:23 -0800 (PST)
-Received: from redhat.com ([2.52.151.85])
-        by smtp.gmail.com with ESMTPSA id v18-20020a5d6792000000b0027e5501f7f5sm5002656wru.53.2022.12.27.06.37.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 06:37:23 -0800 (PST)
-Date:   Tue, 27 Dec 2022 09:37:20 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Shunsuke Mie <mie@igel.co.jp>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Tue, 27 Dec 2022 09:37:34 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41309114F;
+        Tue, 27 Dec 2022 06:37:33 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8FE65514;
+        Tue, 27 Dec 2022 15:37:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672151851;
+        bh=uIFy53dh+MOyb7n6C3/FdgAjbfgf004pHkGiHJYvU/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R/hLKQD9nCHkTAa326H7uhQJKPGYwiPArCSGdjkvWTPM/phl982cT2IYpHd1QtSz1
+         j8ngAMrX8qxsbfsySvHaop1SNxHPy2wrMliTrB2FxAzZgj/nQbwtxM5/0+BRVEkD46
+         ekgJZ4VyqPKKv0nHzvFxHbpf8jvr4d6/l3Tx8Y8w=
+Date:   Tue, 27 Dec 2022 16:37:28 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Staudt <mstaudt@google.com>, linux-media@vger.kernel.org,
+        stable@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 4/9] vringh: unify the APIs for all accessors
-Message-ID: <20221227075332-mutt-send-email-mst@kernel.org>
-References: <20221227022528.609839-1-mie@igel.co.jp>
- <20221227022528.609839-5-mie@igel.co.jp>
- <20221227020007-mutt-send-email-mst@kernel.org>
- <CANXvt5pRy-i7=_ikNkZPp2HcRmWZYNJYpjO_ieBJJVc90nds+A@mail.gmail.com>
- <CANXvt5qUUOqB1CVgAk5KyL9sV+NsnJSKhatvdV12jH5=kBjjJw@mail.gmail.com>
+Subject: Re: [PATCH v4] media: uvcvideo: Fix race condition with usb_kill_urb
+Message-ID: <Y6sDKPD8L47ce35u@pendragon.ideasonboard.com>
+References: <20221212-uvc-race-v4-0-38d7075b03f5@chromium.org>
+ <Y6sAO7URJpSIulye@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANXvt5qUUOqB1CVgAk5KyL9sV+NsnJSKhatvdV12jH5=kBjjJw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y6sAO7URJpSIulye@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 07:22:36PM +0900, Shunsuke Mie wrote:
-> 2022年12月27日(火) 16:49 Shunsuke Mie <mie@igel.co.jp>:
-> >
-> > 2022年12月27日(火) 16:04 Michael S. Tsirkin <mst@redhat.com>:
-> > >
-> > > On Tue, Dec 27, 2022 at 11:25:26AM +0900, Shunsuke Mie wrote:
-> > > > Each vringh memory accessors that are for user, kern and iotlb has own
-> > > > interfaces that calls common code. But some codes are duplicated and that
-> > > > becomes loss extendability.
-> > > >
-> > > > Introduce a struct vringh_ops and provide a common APIs for all accessors.
-> > > > It can bee easily extended vringh code for new memory accessor and
-> > > > simplified a caller code.
-> > > >
-> > > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > > ---
-> > > >  drivers/vhost/vringh.c | 667 +++++++++++------------------------------
-> > > >  include/linux/vringh.h | 100 +++---
-> > > >  2 files changed, 225 insertions(+), 542 deletions(-)
-> > > >
-> > > > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> > > > index aa3cd27d2384..ebfd3644a1a3 100644
-> > > > --- a/drivers/vhost/vringh.c
-> > > > +++ b/drivers/vhost/vringh.c
-> > > > @@ -35,15 +35,12 @@ static __printf(1,2) __cold void vringh_bad(const char *fmt, ...)
-> > > >  }
-> > > >
-> > > >  /* Returns vring->num if empty, -ve on error. */
-> > > > -static inline int __vringh_get_head(const struct vringh *vrh,
-> > > > -                                 int (*getu16)(const struct vringh *vrh,
-> > > > -                                               u16 *val, const __virtio16 *p),
-> > > > -                                 u16 *last_avail_idx)
-> > > > +static inline int __vringh_get_head(const struct vringh *vrh, u16 *last_avail_idx)
-> > > >  {
-> > > >       u16 avail_idx, i, head;
-> > > >       int err;
-> > > >
-> > > > -     err = getu16(vrh, &avail_idx, &vrh->vring.avail->idx);
-> > > > +     err = vrh->ops.getu16(vrh, &avail_idx, &vrh->vring.avail->idx);
-> > > >       if (err) {
-> > > >               vringh_bad("Failed to access avail idx at %p",
-> > > >                          &vrh->vring.avail->idx);
-> > >
-> > > I like that this patch removes more lines of code than it adds.
-> > >
-> > > However one of the design points of vringh abstractions is that they were
-> > > carefully written to be very low overhead.
-> > > This is why we are passing function pointers to inline functions -
-> > > compiler can optimize that out.
-> > >
-> > > I think that introducing ops indirect functions calls here is going to break
-> > > these assumptions and hurt performance.
-> > > Unless compiler can somehow figure it out and optimize?
-> > > I don't see how it's possible with ops pointer in memory
-> > > but maybe I'm wrong.
-> > I think your concern is correct. I have to understand the compiler
-> > optimization and redesign this approach If it is needed.
-> > > Was any effort taken to test effect of these patches on performance?
-> > I just tested vringh_test and already faced little performance reduction.
-> > I have to investigate that, as you said.
-> I attempted to test with perf. I found that the performance of patched code
-> is almost the same as the upstream one. However, I have to investigate way
-> this patch leads to this result, also the profiling should be run on
-> more powerful
-> machines too.
+On Tue, Dec 27, 2022 at 04:25:01PM +0200, Laurent Pinchart wrote:
+> Hi Ricardo,
 > 
-> environment:
-> $ grep 'model name' /proc/cpuinfo
-> model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-> model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-> model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-> model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
+> Thank you for the patch.
 > 
-> results:
-> * for patched code
->  Performance counter stats for 'nice -n -20 ./vringh_test_patched
-> --parallel --eventidx --fast-vringh --indirect --virtio-1' (20 runs):
+> On Wed, Dec 14, 2022 at 05:31:55PM +0100, Ricardo Ribalda wrote:
+> > usb_kill_urb warranties that all the handlers are finished when it
+> > returns, but does not protect against threads that might be handling
+> > asynchronously the urb.
+> > 
+> > For UVC, the function uvc_ctrl_status_event_async() takes care of
+> > control changes asynchronously.
+> > 
+> >  If the code is executed in the following order:
+> > 
+> > CPU 0					CPU 1
+> > ===== 					=====
+> > uvc_status_complete()
+> > 					uvc_status_stop()
+> > uvc_ctrl_status_event_work()
+> > 					uvc_status_start() -> FAIL
+> > 
+> > Then uvc_status_start will keep failing and this error will be shown:
+> > 
+> > <4>[    5.540139] URB 0000000000000000 submitted while active
+> > drivers/usb/core/urb.c:378 usb_submit_urb+0x4c3/0x528
+> > 
+> > Let's improve the current situation, by not re-submiting the urb if
+> > we are stopping the status event. Also process the queued work
+> > (if any) during stop.
+> > 
+> > CPU 0					CPU 1
+> > ===== 					=====
+> > uvc_status_complete()
+> > 					uvc_status_stop()
+> > 					uvc_status_start()
+> > uvc_ctrl_status_event_work() -> FAIL
+> > 
+> > Hopefully, with the usb layer protection this should be enough to cover
+> > all the cases.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: e5225c820c05 ("media: uvcvideo: Send a control event when a Control Change interrupt arrives")
+> > Reviewed-by: Yunke Cao <yunkec@chromium.org>
+> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > ---
+> > uvc: Fix race condition on uvc
+> > 
+> > Make sure that all the async work is finished when we stop the status urb.
+> > 
+> > To: Yunke Cao <yunkec@chromium.org>
+> > To: Sergey Senozhatsky <senozhatsky@chromium.org>
+> > To: Max Staudt <mstaudt@google.com>
+> > To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > To: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Cc: linux-media@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > ---
+> > Changes in v4:
+> > - Replace bool with atomic_t to avoid compiler reordering
+> > - First complete the async work and then kill the urb to avoid race (Thanks Laurent!)
+> > - Link to v3: https://lore.kernel.org/r/20221212-uvc-race-v3-0-954efc752c9a@chromium.org
+> > 
+> > Changes in v3:
+> > - Remove the patch for dev->status, makes more sense in another series, and makes
+> >   the zero day less nervous.
+> > - Update reviewed-by (thanks Yunke!).
+> > - Link to v2: https://lore.kernel.org/r/20221212-uvc-race-v2-0-54496cc3b8ab@chromium.org
+> > 
+> > Changes in v2:
+> > - Add a patch for not kalloc dev->status
+> > - Redo the logic mechanism, so it also works with suspend (Thanks Yunke!)
+> > - Link to v1: https://lore.kernel.org/r/20221212-uvc-race-v1-0-c52e1783c31d@chromium.org
+> > ---
+> >  drivers/media/usb/uvc/uvc_ctrl.c   | 3 +++
+> >  drivers/media/usb/uvc/uvc_status.c | 6 ++++++
+> >  drivers/media/usb/uvc/uvcvideo.h   | 1 +
+> >  3 files changed, 10 insertions(+)
+> > 
+> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > index c95a2229f4fa..1be6897a7d6d 100644
+> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > @@ -1442,6 +1442,9 @@ static void uvc_ctrl_status_event_work(struct work_struct *work)
+> >  
+> >  	uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+> >  
+> > +	if (atomic_read(&dev->flush_status))
+> > +		return;
+> > +
+> >  	/* Resubmit the URB. */
+> >  	w->urb->interval = dev->int_ep->desc.bInterval;
+> >  	ret = usb_submit_urb(w->urb, GFP_KERNEL);
+> > diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+> > index 7518ffce22ed..4a95850cdc1b 100644
+> > --- a/drivers/media/usb/uvc/uvc_status.c
+> > +++ b/drivers/media/usb/uvc/uvc_status.c
+> > @@ -304,10 +304,16 @@ int uvc_status_start(struct uvc_device *dev, gfp_t flags)
+> >  	if (dev->int_urb == NULL)
+> >  		return 0;
+> >  
+> > +	atomic_set(&dev->flush_status, 0);
+> >  	return usb_submit_urb(dev->int_urb, flags);
+> >  }
+> >  
+> >  void uvc_status_stop(struct uvc_device *dev)
+> >  {
+> > +	struct uvc_ctrl_work *w = &dev->async_ctrl;
+> > +
+> > +	atomic_set(&dev->flush_status, 1);
 > 
->           3,028.05 msec task-clock                #    0.995 CPUs
-> utilized            ( +-  0.12% )
->             78,150      context-switches          #   25.691 K/sec
->                ( +-  0.00% )
->                  5      cpu-migrations            #    1.644 /sec
->                ( +-  3.33% )
->                190      page-faults               #   62.461 /sec
->                ( +-  0.41% )
->      6,919,025,222      cycles                    #    2.275 GHz
->                ( +-  0.13% )
->      8,990,220,160      instructions              #    1.29  insn per
-> cycle           ( +-  0.04% )
->      1,788,326,786      branches                  #  587.899 M/sec
->                ( +-  0.05% )
->          4,557,398      branch-misses             #    0.25% of all
-> branches          ( +-  0.43% )
+> Note that atomic_read() and atomic_set() do no imply any memory barrier
+> on most architectures, as far as I can tell. They essentially become
+> READ_ONCE() and WRITE_ONCE() calls, which guarantee that the compiler
+> will not merge or split loads or stores, or reorder them with respect to
+> load and stores to the *same* memory location, but nothing else. I think
+> you need to add proper barriers, and you can then probably also drop
+> usage of atomic_t.
 > 
->            3.04359 +- 0.00378 seconds time elapsed  ( +-  0.12% )
+> > +	if (cancel_work_sync(&w->work))
+> > +		uvc_ctrl_status_event(w->chain, w->ctrl, w->data);
+> >  	usb_kill_urb(dev->int_urb);
 > 
-> * for upstream code
->  Performance counter stats for 'nice -n -20 ./vringh_test_base
-> --parallel --eventidx --fast-vringh --indirect --virtio-1' (10 runs):
+> This should get rid of the main race (possibly save the barrier issue),
+> but it's not the most efficient option, and can still be problematic.
+> Consider the following case:
 > 
->           3,058.41 msec task-clock                #    0.999 CPUs
-> utilized            ( +-  0.14% )
->             78,149      context-switches          #   25.545 K/sec
->                ( +-  0.00% )
->                  5      cpu-migrations            #    1.634 /sec
->                ( +-  2.67% )
->                194      page-faults               #   63.414 /sec
->                ( +-  0.43% )
->      6,988,713,963      cycles                    #    2.284 GHz
->                ( +-  0.14% )
->      8,512,533,269      instructions              #    1.22  insn per
-> cycle           ( +-  0.04% )
->      1,638,375,371      branches                  #  535.549 M/sec
->                ( +-  0.05% )
->          4,428,866      branch-misses             #    0.27% of all
-> branches          ( +- 22.57% )
+> CPU0							CPU1
+> ----							----
 > 
->            3.06085 +- 0.00420 seconds time elapsed  ( +-  0.14% )
+> void uvc_status_stop(struct uvc_device *dev)		uvc_ctrl_status_event_async()
+> {							{
+> 	...
+> 	atomic_set(&dev->flush_status, 1);			...
+> 	if (cancel_work_sync())
+> 		...
+> 								schedule_work();
+> 	usb_kill_urb();					}
+> }
+> 
+> The usb_kill_urb() call ensures that uvc_ctrl_status_event_async()
+> completes before uvc_status_stop() returns, but there will still be work
+> scheduled in that case. uvc_ctrl_status_event_work() will be run later,
+> and as flush_status is set to 1, the function will not resubmit the URB.
+> That fixes the main race, but leaves the asynchronous control status
+> event handling for after uvc_status_stop() returns, which isn't great.
+> 
+> Now, if we consider that uvc_status_start() could be called shortly
+> after uvc_status_stop(), we may get in a situation where
+> uvc_status_start() will reset flush_status to 0 before
+> uvc_ctrl_status_event_async() runs. Both uvc_ctrl_status_event_async()
+> and uvc_status_start() will thus submit the same URB.
+> 
+> You can't fix this by first killing the URB and then cancelling the
+> work, as there would then be a risk that uvc_ctrl_status_event_work()
+> would be running in parallel, going past the flush_status check before
+> flush_status gets set to 1 in uvc_status_stop(), and submitting the URB
+> after usb_kill_urb() is called.
+> 
+> I think a good fix would be to check flush_status in
+> uvc_ctrl_status_event_async() and avoid the schedule_work() call in that
+> case. You could then also move the atomic_set(..., 0) call from
+> uvc_status_start() to the end of uvc_status_stop() (again with proper
+> barriers).
 
+Also, as all of this is tricky, comments in appropriate places in the
+code would be very helpful to avoid breaking things later.
 
-How you compiled it also matters. ATM we don't enable retpolines
-and it did not matter since we didn't have indirect calls,
-but we should. Didn't yet investigate how to do that for virtio tools.
+> Could you please check the memory barriers and test the above proposal
+> (after double-checking it of course, I may have missed something) ?
+> 
+> >  }
+> > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+> > index df93db259312..1274691f157f 100644
+> > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > @@ -560,6 +560,7 @@ struct uvc_device {
+> >  	struct usb_host_endpoint *int_ep;
+> >  	struct urb *int_urb;
+> >  	u8 *status;
+> > +	atomic_t flush_status;
+> >  	struct input_dev *input;
+> >  	char input_phys[64];
+> >  
 
+-- 
+Regards,
 
-> > Thank you for your comments.
-> > > Thanks!
-> > >
-> > >
-> > Best,
-> > Shunsuke.
-
+Laurent Pinchart
