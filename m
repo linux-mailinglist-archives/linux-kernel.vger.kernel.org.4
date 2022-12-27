@@ -2,140 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF386570C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 00:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FC16570D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 00:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiL0XGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 18:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
+        id S232419AbiL0XIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 18:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232483AbiL0XFi (ORCPT
+        with ESMTP id S232120AbiL0XHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 18:05:38 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B72E007
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 15:04:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=iPb26V/bD72ho/Dr9ncU5KScQpzpdoyZqKrW5hhPbcY=; b=BIWvTn0mkU8hUUd1cMaHruRwBK
-        Umc9/fOcuq2sOWcU/DReH1pIqgbwm08cSgnQDbQcspkZSOCnLqmn/LZfk41Ob0LD3Qg/515USX6AL
-        N8ES/vInTcky4pBLtdEH9NLPRu7d650e5LorLJVrTMn3uWaFgwUo2gdxrCKit/SgSFloBI2R7RDOL
-        /7SAldyqhGxbXxvBsMCGm9Kti+GEZX6G6RzuHpE9DJHV9Bd3VvbFmTtLzYxVKcCRGV0LPV4RSquRY
-        L5oM8Euh4TEnnkyO850g4qbLRVWrnuAPewkRwGvTdKEy3emrNjCbOQJ5NXf9OJ3Wb5qKhyJaBdRgR
-        WtgnfPAQ==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pAIzu-00H50F-L2; Tue, 27 Dec 2022 23:04:38 +0000
-Message-ID: <dbbe0115-23a6-c28f-b892-72841f12fca1@infradead.org>
-Date:   Tue, 27 Dec 2022 15:04:37 -0800
+        Tue, 27 Dec 2022 18:07:43 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AE8EAE;
+        Tue, 27 Dec 2022 15:07:27 -0800 (PST)
+Received: from mwalle01.sab.local (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 7D1BB4E;
+        Wed, 28 Dec 2022 00:07:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1672182444;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TRJcRR333rwL5PCfo8eZYRyTNn3aczY+GklZvIg5sSY=;
+        b=vJobZ7uDgnBqcNJVTD+NPckdxu2oXipLrsPAfDHIbxJVB7iXrJ+CCWCM2NW4C8aSNqcrze
+        F8wDuIHwX3neVjiVJNlstpEHQKiE8URJHm/R55y7XiUwSEWFAgqRFGbXiwF9Pc88e5spVy
+        Dq4tXerL6Ow30zNemsGELDLpeCwlrzTyRFzmBHz/RJA6erZC8YsOXeoXslP65xPEcKgxSQ
+        PqwetYkhuKiDfzBhImFPYs4hkccDs2X3vxrv4NiUyh/vtFp69bvyn72JJ2ib9HH9oAIqMh
+        LNR+6019sVyujch6Kn+bs3fEJKJJhp+aPSQNj++BQOBQbEtXiq+WsgKW7TqS8g==
+From:   Michael Walle <michael@walle.cc>
+Subject: [PATCH RFC net-next v2 00/12] net: mdio: Start separating C22 and C45
+Date:   Wed, 28 Dec 2022 00:07:17 +0100
+Message-Id: <20221227-v6-2-rc1-c45-seperation-v2-0-ddb37710e5a7@walle.cc>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: kismet: WARNING: unmet direct dependencies detected for
- IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>
-References: <202212221206.Lt61kYrt-lkp@intel.com>
- <e1680223-2819-172e-20ea-daea3282e9eb@infradead.org> <Y6tAgP7UoP3aYBjq@spud>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <Y6tAgP7UoP3aYBjq@spud>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAKV6q2MC/x2NQQrCMBBFr1Jm7UAzpi24FTyAW3ExjVObhbHMh
+ FIovbuJy/c+j7+DiUYxuDQ7qKzR4jcVoFMDYeb0FoyvwkAtkSMacO2RUIPD4Ds0WUQ5lwa78zT0
+ 5H3L7KDUI5vgqJzCXPsPWxatw6Iyxe1/+YD77VpdkoxJtgzP4/gBxbsN8ZMAAAA=
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Wei Fang <wei.fang@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Andrew Lunn <andrew@lunn.ch>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Walle <michael@walle.cc>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+I've picked this older series from Andrew up and rebased it onto
+v6.2-rc1.
 
-On 12/27/22 10:59, Conor Dooley wrote:
-> Hey Randy,
-> 
-> On Thu, Dec 22, 2022 at 05:00:06PM -0800, Randy Dunlap wrote:
->> On 12/21/22 20:49, kernel test robot wrote:
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>> head:   9d2f6060fe4c3b49d0cdc1dce1c99296f33379c8
->>> commit: 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1 riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
->>> date:   6 weeks ago
->>> config: riscv-kismet-CONFIG_IOMMU_IO_PGTABLE_LPAE-CONFIG_IPMMU_VMSA-0-0
->>> reproduce:
->>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
->>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>         git fetch --no-tags linus master
->>>         git checkout 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
->>>         # 1. reproduce by kismet
->>>            # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
->>>            kismet --linux-ksrc=linux --selectees CONFIG_IOMMU_IO_PGTABLE_LPAE --selectors CONFIG_IPMMU_VMSA -a=riscv
->>>         # 2. reproduce by make
->>>            # save the config file to linux source tree
->>>            cd linux
->>>            make ARCH=riscv olddefconfig
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>>
->>> kismet warnings: (new ones prefixed by >>)
->>>>> kismet: WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
->>>    .config:4814:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' invalid for ARCH_MMAP_RND_BITS
->>>    
->>>    WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
->>>      Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
->>>      Selected by [y]:
->>>      - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
->>>
->>
->> Maybe this:
->>
->> ---
->>  drivers/iommu/Kconfig |    3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
->> --- a/drivers/iommu/Kconfig
->> +++ b/drivers/iommu/Kconfig
->> @@ -32,7 +32,8 @@ config IOMMU_IO_PGTABLE
->>  config IOMMU_IO_PGTABLE_LPAE
->>  	bool "ARMv7/v8 Long Descriptor Format"
->>  	select IOMMU_IO_PGTABLE
->> -	depends on ARM || ARM64 || (COMPILE_TEST && !GENERIC_ATOMIC64)
->> +	depends on ARM || ARM64 || ARCH_RENESAS || \
->> +		(COMPILE_TEST && !GENERIC_ATOMIC64)
->>  	help
->>  	  Enable support for the ARM long descriptor pagetable format.
->>  	  This allocator supports 4K/2M/1G, 16K/32M and 64K/512M page
->>
->>
->> or is way off?
-> 
-> Apologies for the radio silence here..
-> 
-> Palmer initially sent a workaround and there was some discussion there:
-> https://lore.kernel.org/all/20221214180409.7354-1-palmer@rivosinc.com/
+This patch set starts the separation of C22 and C45 MDIO bus
+transactions at the API level to the MDIO Bus drivers. C45 read and
+write ops are added to the MDIO bus driver structure, and the MDIO
+core will try to use these ops if requested to perform a C45
+transfer. If not available a fallback to the older API is made, to
+allow backwards compatibility until all drivers are converted.
 
-> Guo sent a patch too:
-> https://lore.kernel.org/linux-riscv/20221215073212.1966823-1-guoren@kernel.org/
+A few drivers are then converted to this new API.
 
-I prefer Guo's patch. :) 
+Link to v1: https://lore.kernel.org/netdev/20220508153049.427227-1-andrew@lunn.ch/
 
-> I suppose Christmas is doing Christmas things :)
+To: Heiner Kallweit <hkallweit1@gmail.com>
+To: Russell King <linux@armlinux.org.uk>
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Jose Abreu <Jose.Abreu@synopsys.com>
+To: Sergey Shtylyov <s.shtylyov@omp.ru>
+To: Wei Fang <wei.fang@nxp.com>
+To: Shenwei Wang <shenwei.wang@nxp.com>
+To: Clark Wang <xiaoning.wang@nxp.com>
+To: NXP Linux Team <linux-imx@nxp.com>
+To: Sean Wang <sean.wang@mediatek.com>
+To: Landen Chao <Landen.Chao@mediatek.com>
+To: DENG Qingfang <dqfext@gmail.com>
+To: Florian Fainelli <f.fainelli@gmail.com>
+To: Vladimir Oltean <olteanv@gmail.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Sure, no problem.
+---
+Andrew Lunn (12):
+      net: mdio: Add dedicated C45 API to MDIO bus drivers
+      net: pcs: pcs-xpcs: Use C45 MDIO API
+      net: mdio: mdiobus_register: update validation test
+      net: mdio: C22 is now optional, EOPNOTSUPP if not provided
+      net: mdio: Move mdiobus_c45_addr() next to users
+      net: mdio: mdio-bitbang: Separate C22 and C45 transactions
+      net: mdio: mvmdio: Convert XSMI bus to new API
+      net: ethernet: freescale: xgmac: Separate C22 and C45 transactions for xgmac
+      net: ethernet: freescale: fec: Separate C22 and C45 transactions for xgmac
+      net: mdio: add mdiobus_c45_read/write_nested helpers
+      net: dsa: Separate C22 and C45 MDIO bus transaction methods
+      net: dsa: mv88e6xxx: Separate C22 and C45 transactions
 
-Thanks.
+ drivers/net/dsa/mt7530.c                    |  87 ++++-----
+ drivers/net/dsa/mt7530.h                    |  15 +-
+ drivers/net/dsa/mv88e6xxx/chip.c            | 175 +++++++++++++-----
+ drivers/net/dsa/mv88e6xxx/chip.h            |   7 +
+ drivers/net/dsa/mv88e6xxx/global2.c         |  66 ++++---
+ drivers/net/dsa/mv88e6xxx/global2.h         |  18 +-
+ drivers/net/dsa/mv88e6xxx/phy.c             |  32 ++++
+ drivers/net/dsa/mv88e6xxx/phy.h             |   4 +
+ drivers/net/dsa/mv88e6xxx/serdes.c          |   8 +-
+ drivers/net/ethernet/freescale/fec_main.c   | 153 +++++++++++-----
+ drivers/net/ethernet/freescale/xgmac_mdio.c | 150 +++++++++++----
+ drivers/net/ethernet/marvell/mvmdio.c       |  24 +--
+ drivers/net/ethernet/renesas/sh_eth.c       |  37 +++-
+ drivers/net/mdio/mdio-bitbang.c             |  77 +++++---
+ drivers/net/pcs/pcs-xpcs.c                  |   4 +-
+ drivers/net/phy/mdio_bus.c                  | 273 +++++++++++++++++++++++++++-
+ include/linux/mdio-bitbang.h                |   6 +-
+ include/linux/mdio.h                        |  48 ++---
+ include/linux/phy.h                         |   5 +
+ include/net/dsa.h                           |   2 +-
+ 20 files changed, 891 insertions(+), 300 deletions(-)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20221227-v6-2-rc1-c45-seperation-53f762440aa1
 
+Best regards,
 -- 
-~Randy
+Michael Walle <michael@walle.cc>
