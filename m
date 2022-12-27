@@ -2,163 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376A0656E1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 19:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D2C656E1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiL0S7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 13:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S229488AbiL0TCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiL0S7T (ORCPT
+        with ESMTP id S229533AbiL0TCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 13:59:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD3FD108
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 10:59:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BB4A6120C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 18:59:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CF91C433EF;
-        Tue, 27 Dec 2022 18:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672167557;
-        bh=Qn+m0nFAT9ZNwVVdZj2KPeTzIUkk4H9rkLVFQDo9wrc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pHUBhqoZYHEP5/tYlk7K5eDB4TgiY0PHncPVGLEDNjMG+xKpq/Z7A7IAplTw0Ryed
-         N2clVCImpG0Up+jfqUP+XxkmZKw1vkKyNWi+0GJ/6ezc6GBZkZ+hk3mwzQ4XULYxPr
-         JJxCuzTrB8jUzEZ+naBFk8ALQNjmW+D8rWbdEwDNCRZ2Kn8FKf9FJkTa8dGxlOV4t1
-         HyxP2WRNk+dMZ71ekwN0ad5t4qY/1BgVUW0ZAnexa4kE4d8Xb2Zq5DWQvV2/ZNxhSF
-         Xw4wYdLc4PKpwumRJzca3uluZ6lfGhum+pjNrYIS8g4HVVT21zB1HBX9oz6ydJwcm2
-         NhsugiE8qf0xA==
-Date:   Tue, 27 Dec 2022 18:59:12 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>
-Subject: Re: kismet: WARNING: unmet direct dependencies detected for
- IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
-Message-ID: <Y6tAgP7UoP3aYBjq@spud>
-References: <202212221206.Lt61kYrt-lkp@intel.com>
- <e1680223-2819-172e-20ea-daea3282e9eb@infradead.org>
+        Tue, 27 Dec 2022 14:02:49 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97C2D114
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:02:48 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id u28so15309992edd.10
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:02:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O0p+ppNOGRKb/NOMxrUDYaSzLYMOpLEPChffMwzyD4s=;
+        b=G+As5w1O9GJAgcoSWrA1V1BBzCp4+BkPOjQB9qG4fRx7dwEQAqXK8xYYxvvOgFcZIt
+         4hMjo/Ckrx//oepVJWG+oBx9wRpONu/UKVWzE8Iwi4VauxCXxC8lCy6OI0Q/jjhX+BWf
+         ZaLhfnQcfZWQ/DEFbzeCFUYcT2X+aIEsad4VbI5Pmg+ATzQkoe5xMe8Cmf229TBWVoAV
+         wAIHOKQq7zUg3Hj/40JbeWk+DT09nO2Sg6jlT/fp08Gw8gAJ6g2xIKZHcWjzaIeIprgn
+         7dXxfdxKgZ5pGaPhrLMuW+7FinDO9XBlyfJMzZHReg9OFaAlYfViqIVKOSlg9Iirj5bC
+         KT6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O0p+ppNOGRKb/NOMxrUDYaSzLYMOpLEPChffMwzyD4s=;
+        b=svWoRFL5es4I09qUl6Fps+lTPb/4EQjmFjsdkMwOf80bd5IlA2MYKEu+p+4AWO+NZc
+         ZFAylsSzK/Wq2vD5mYCpxz/PbEeIOi/MgXO7UhUgH6xWIeryGM/zGbsSbaLF6aGu+3BJ
+         7hdcyIvSSr/oelzSHDW15IyfFa3ZA6EH7nlOX7d/h84WZ9XZBWEmtL+dYl8aFkHG+ocY
+         fZpcg9VEgABVTggBMEtUMUEec5EAGojWeV92l0fidNXQEt1nVE/S7r2C3ylJW/fkTP+c
+         TBI9hYpmflO37Pk+LsDm0Cjwe1olFsIk3yhGgCRhATaRs4MconUcPgcZ7e6xL3/Y/yqI
+         v3gA==
+X-Gm-Message-State: AFqh2kri5Hr6bESyyzkanKCgL5rtTxffZqo5oWrmSRxjeRfWCYY32YC1
+        Cyh3yTyGrvQbv0KC5pW4FdAj1w3ITBFEJ2e7TdIydg==
+X-Google-Smtp-Source: AMrXdXvi6hRJf+bFZ47VpANM/2xs3vP25zTe6ZAc9vU4JEzmbdcfZ4YfBsh1C7oaOLY/tye78AWCvC9kVBtXX+D2emU=
+X-Received: by 2002:a05:6402:204d:b0:471:c322:ce41 with SMTP id
+ bc13-20020a056402204d00b00471c322ce41mr1566013edb.4.1672167767277; Tue, 27
+ Dec 2022 11:02:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MtaQOvggsNiMCdq7"
-Content-Disposition: inline
-In-Reply-To: <e1680223-2819-172e-20ea-daea3282e9eb@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-6-vipinsh@google.com>
+In-Reply-To: <20221222023457.1764-6-vipinsh@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Tue, 27 Dec 2022 11:02:35 -0800
+Message-ID: <CANgfPd-x+w8DnyfnLeMCWApbNyAbxOdS8e-nhoSq7txSu2mHXA@mail.gmail.com>
+Subject: Re: [Patch v3 5/9] KVM: x86/mmu: Allocate TDP page table's page on
+ correct NUMA node on split
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 21, 2022 at 6:35 PM Vipin Sharma <vipinsh@google.com> wrote:
+>
+> When dirty log is enabled, huge pages are split. Page table's pages
 
---MtaQOvggsNiMCdq7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Nit: Suggest "When huge pages are split for dirty log" since this can
+happen at various points during dirty logging.
+Same below.
 
-Hey Randy,
-
-On Thu, Dec 22, 2022 at 05:00:06PM -0800, Randy Dunlap wrote:
-> On 12/21/22 20:49, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git master
-> > head:   9d2f6060fe4c3b49d0cdc1dce1c99296f33379c8
-> > commit: 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1 riscv: Kconfig.socs: A=
-dd ARCH_RENESAS kconfig option
-> > date:   6 weeks ago
-> > config: riscv-kismet-CONFIG_IOMMU_IO_PGTABLE_LPAE-CONFIG_IPMMU_VMSA-0-0
-> > reproduce:
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
-x.git/commit/?id=3D8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kerne=
-l/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
-> >         # 1. reproduce by kismet
-> >            # install kmax per https://github.com/paulgazz/kmax/blob/mas=
-ter/README.md
-> >            kismet --linux-ksrc=3Dlinux --selectees CONFIG_IOMMU_IO_PGTA=
-BLE_LPAE --selectors CONFIG_IPMMU_VMSA -a=3Driscv
-> >         # 2. reproduce by make
-> >            # save the config file to linux source tree
-> >            cd linux
-> >            make ARCH=3Driscv olddefconfig
-> >=20
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> >=20
-> > kismet warnings: (new ones prefixed by >>)
-> >>> kismet: WARNING: unmet direct dependencies detected for IOMMU_IO_PGTA=
-BLE_LPAE when selected by IPMMU_VMSA
-> >    .config:4814:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' inv=
-alid for ARCH_MMAP_RND_BITS
-> >   =20
-> >    WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
-> >      Depends on [n]: IOMMU_SUPPORT [=3Dy] && (ARM || ARM64 || COMPILE_T=
-EST [=3Dy] && !GENERIC_ATOMIC64 [=3Dy])
-> >      Selected by [y]:
-> >      - IPMMU_VMSA [=3Dy] && IOMMU_SUPPORT [=3Dy] && (ARCH_RENESAS [=3Dy=
-] || COMPILE_TEST [=3Dy] && !GENERIC_ATOMIC64 [=3Dy])
-> >=20
->=20
-> Maybe this:
->=20
+> during the split are allocated based on the current thread NUMA node or
+> mempolicy. This causes inefficient page table accesses if underlying
+> page is on a different NUMA node
+>
+> Allocate page table's pages on the same NUMA node as the underlying huge
+> page when dirty log is enabled and huge pages are split.
+>
+> The performance gain during the pre-copy phase of live migrations of a
+> 416 vCPUs and 11 TiB memory VM  on a 8 node host was seen in the range
+> of 130% to 150%.
+>
+> Suggested-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
 > ---
->  drivers/iommu/Kconfig |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-> --- a/drivers/iommu/Kconfig
-> +++ b/drivers/iommu/Kconfig
-> @@ -32,7 +32,8 @@ config IOMMU_IO_PGTABLE
->  config IOMMU_IO_PGTABLE_LPAE
->  	bool "ARMv7/v8 Long Descriptor Format"
->  	select IOMMU_IO_PGTABLE
-> -	depends on ARM || ARM64 || (COMPILE_TEST && !GENERIC_ATOMIC64)
-> +	depends on ARM || ARM64 || ARCH_RENESAS || \
-> +		(COMPILE_TEST && !GENERIC_ATOMIC64)
->  	help
->  	  Enable support for the ARM long descriptor pagetable format.
->  	  This allocator supports 4K/2M/1G, 16K/32M and 64K/512M page
->=20
->=20
-> or is way off?
+>  arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++----
+>  include/linux/kvm_host.h   | 18 ++++++++++++++++++
+>  2 files changed, 26 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 4974fa96deff..376b8dceb3f9 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -1403,7 +1403,7 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm *kvm,
+>         return spte_set;
+>  }
+>
+> -static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+> +static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
+>  {
+>         struct kvm_mmu_page *sp;
+>
+> @@ -1413,7 +1413,8 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(gfp_t gfp)
+>         if (!sp)
+>                 return NULL;
+>
+> -       sp->spt = (void *)__get_free_page(gfp);
+> +       sp->spt = kvm_mmu_get_free_page(nid, gfp);
+> +
 
-Apologies for the radio silence here..
+Just so that kvm_mmu_get_free_page isn't dead code in the previous
+commit, I'd do this refactor there and just pass NUMA_NO_NODE here.
 
-Palmer initially sent a workaround and there was some discussion there:
-https://lore.kernel.org/all/20221214180409.7354-1-palmer@rivosinc.com/
-Guo sent a patch too:
-https://lore.kernel.org/linux-riscv/20221215073212.1966823-1-guoren@kernel.=
-org/
+>         if (!sp->spt) {
+>                 kmem_cache_free(mmu_page_header_cache, sp);
+>                 return NULL;
+> @@ -1427,6 +1428,9 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+>                                                        bool shared)
+>  {
+>         struct kvm_mmu_page *sp;
+> +       int nid;
+> +
+> +       nid = kvm_pfn_to_page_table_nid(spte_to_pfn(iter->old_spte));
+>
+>         /*
+>          * Since we are allocating while under the MMU lock we have to be
+> @@ -1437,7 +1441,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+>          * If this allocation fails we drop the lock and retry with reclaim
+>          * allowed.
+>          */
+> -       sp = __tdp_mmu_alloc_sp_for_split(GFP_NOWAIT | __GFP_ACCOUNT);
+> +       sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_NOWAIT | __GFP_ACCOUNT);
+>         if (sp)
+>                 return sp;
+>
+> @@ -1449,7 +1453,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp_for_split(struct kvm *kvm,
+>                 write_unlock(&kvm->mmu_lock);
+>
+>         iter->yielded = true;
+> -       sp = __tdp_mmu_alloc_sp_for_split(GFP_KERNEL_ACCOUNT);
+> +       sp = __tdp_mmu_alloc_sp_for_split(nid, GFP_KERNEL_ACCOUNT);
+>
+>         if (shared)
+>                 read_lock(&kvm->mmu_lock);
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index d48064503b88..a262e15ebd19 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1583,6 +1583,24 @@ void kvm_arch_sync_events(struct kvm *kvm);
+>  int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu);
+>
+>  struct page *kvm_pfn_to_refcounted_page(kvm_pfn_t pfn);
+> +
+> +/*
+> + * Tells the appropriate NUMA node location of the page table's page based on
+> + * pfn it will point to.
+> + *
+> + * Return the nid of the page if pfn is valid and backed by a refcounted page,
+> + * otherwise, return the nearest memory node for the current CPU.
 
-I suppose Christmas is doing Christmas things :)
+Nit: Should this be "current thread"?
 
-Thanks,
-Conor.
+> + */
+> +static inline int kvm_pfn_to_page_table_nid(kvm_pfn_t pfn)
 
+This could just be kvm_pfn_nid (or even better kvm_pfn_node_id) since
+this really has nothing to do with page tables. We just want to know
+which NUMA node backs the given PFN.
 
---MtaQOvggsNiMCdq7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6tAgAAKCRB4tDGHoIJi
-0iNeAP9Qrq4IWyn5TklutoCL8xcd+CsP3xMipIRMbYkPO6qtUgD/THGKBpG4PMl6
-7773RRj2qse2AGe9KxdQlg8x3ZxwngA=
-=OA0L
------END PGP SIGNATURE-----
-
---MtaQOvggsNiMCdq7--
+> +{
+> +       struct page *page = kvm_pfn_to_refcounted_page(pfn);
+> +
+> +       if (page)
+> +               return page_to_nid(page);
+> +       else
+> +               return numa_mem_id();
+> +}
+> +
+>  bool kvm_is_zone_device_page(struct page *page);
+>
+>  struct kvm_irq_ack_notifier {
+> --
+> 2.39.0.314.g84b9a713c41-goog
+>
