@@ -2,95 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539A26568F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8B66568F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 10:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiL0Jic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 04:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S229711AbiL0Jiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 04:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiL0Ji3 (ORCPT
+        with ESMTP id S230375AbiL0Jil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 04:38:29 -0500
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA2725F9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:38:28 -0800 (PST)
-Received: by mail-qt1-f174.google.com with SMTP id j16so10069720qtv.4
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:38:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=siFqAc8jSxdLv2WV3aOXYztZ7rcB86DU4foFECsxEtc=;
-        b=oZa93YKisJiLHL/AqFEhxYxkFtxUaKJkqPrVIXy+Zyo1BeC+jctGzM2bpGYLcvozer
-         9wpnVbMjtrKhPk+okXsxSJTQbUtU/lXuO84dF1ewjFGzpiGgT/k3lMIrbnanvOg1D3qm
-         5pkIsrdJQgxGkd3FYIO4MT30t+xQ1D3nA11ul/IYhSTd8wgzCDa8fLgmviAaKtbyC3MK
-         HRtsMySiD6PGcddz46+s/Gn3SZ0x8bSGEd2KbzDHLzHMQBEf5ZusCATrHlyRyQ9cFRU3
-         3zxYU2Q0nRzWdyeMN+9gVbHjtVVPRrfZNm03/aXi5f/4Ela5Q7J/uVGpKFslsGnTpDfL
-         zewA==
-X-Gm-Message-State: AFqh2kpy6wT5iahk72ZEY+1OpLeyYbejKkVTiqLQJ2VKGrLDPANKgvTN
-        7isViVZ36gaTJMCjIw90hS1sE9VrxkCTQw==
-X-Google-Smtp-Source: AMrXdXuj1MQ9HfAuHyn5jmvorcmsiNLL09ncXikEEqjf1P+oHh6P3KkpcEaNleNow07sAm69xMP4zg==
-X-Received: by 2002:ac8:5f0f:0:b0:3a6:2170:b089 with SMTP id x15-20020ac85f0f000000b003a62170b089mr37653456qta.12.1672133907483;
-        Tue, 27 Dec 2022 01:38:27 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id fc16-20020a05622a489000b003a6a7a20575sm8122780qtb.73.2022.12.27.01.38.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 01:38:26 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-46198b81e5eso177508567b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 01:38:26 -0800 (PST)
-X-Received: by 2002:a81:356:0:b0:478:831e:454e with SMTP id
- 83-20020a810356000000b00478831e454emr596721ywd.384.1672133906056; Tue, 27 Dec
- 2022 01:38:26 -0800 (PST)
+        Tue, 27 Dec 2022 04:38:41 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B633095AE;
+        Tue, 27 Dec 2022 01:38:38 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BR9cTJK129802;
+        Tue, 27 Dec 2022 03:38:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672133909;
+        bh=sBFcxIfmVFWwHDXc/9DJHMlWRkChsqo7NpNib9YU6Gc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=u6tJmSvTadIK9mmTL8LeKqS5+wRL5N4avWLv/FaHU16eGvfThFxnOr4VYnKcLDdg+
+         QWrCssyHVrf2BnahCb0k3OAXNOWwLalQJfr95+98o636bhpvsjnDY6yPOnT1/itfUu
+         Natw49NKRRNtHvCExBrOybXhOgjbP3yZAWSmCGN8=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BR9cTfd026954
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 27 Dec 2022 03:38:29 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 27
+ Dec 2022 03:38:28 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 27 Dec 2022 03:38:28 -0600
+Received: from [172.24.145.199] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BR9cOqu080668;
+        Tue, 27 Dec 2022 03:38:25 -0600
+Message-ID: <01a0ee96-051d-9f0b-88e6-8b6feaffacb8@ti.com>
+Date:   Tue, 27 Dec 2022 15:08:23 +0530
 MIME-Version: 1.0
-References: <cover.1672043615.git.lstoakes@gmail.com> <4b59f47ff4cd89ff76a5b6edbef6e8e0b37046f1.1672043615.git.lstoakes@gmail.com>
-In-Reply-To: <4b59f47ff4cd89ff76a5b6edbef6e8e0b37046f1.1672043615.git.lstoakes@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Dec 2022 10:38:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUeLjcXPr0QgOWs6zo9KPu0p9E0tjndcWG0K9Vr_gBDkg@mail.gmail.com>
-Message-ID: <CAMuHMdUeLjcXPr0QgOWs6zo9KPu0p9E0tjndcWG0K9Vr_gBDkg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] m68k/mm/motorola: specify pmd_page() type
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Rapoport <rppt@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 1/2] dt-bindings: remoteproc: ti: Add new compatible
+ for AM62 SoC family
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andersson@kernel.org>, <devicetree@vger.kernel.org>,
+        <mathieu.poirier@linaro.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <s-anna@ti.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
+        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>
+References: <20221223115638.20192-1-devarsht@ti.com>
+ <20221223115638.20192-2-devarsht@ti.com>
+ <374d0b5c-55f4-ee30-c804-4488a3fedb48@linaro.org>
+From:   Devarsh Thakkar <devarsht@ti.com>
+In-Reply-To: <374d0b5c-55f4-ee30-c804-4488a3fedb48@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 26, 2022 at 9:45 AM Lorenzo Stoakes <lstoakes@gmail.com> wrote:
-> Failing to specify a specific type here breaks anything that relies on the type
-> being explicitly known, such as page_folio().
->
-> Make explicit the type of null pointer returned here.
->
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Gr{oetje,eeting}s,
+On 26/12/22 17:48, Krzysztof Kozlowski wrote:
+> On 23/12/2022 12:56, Devarsh Thakkar wrote:
+>> AM62 family of devices don't have a R5F cluster, instead
+>> they have single core DM R5F.
+>> Add new compatible string ti,am62-r5fss to support this scenario.
+>>
+>> When this new compatible is used don't allow cluster-mode
+>> property usage in device-tree as this implies that there
+>> is no R5F cluster available and only single R5F core
+>> is present.
+>>
+>> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+>> ---
+>> V2: Avoid acronyms, use "Device Manager" instead of "DM"
+>> V3:
+>> - Use separate if block for each compatible for ti,cluster-mode property
+>> - Rearrange compatibles as per alphabatical order
+>> ---
+>>  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml  | 68 +++++++++++++------
+>>  1 file changed, 47 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
+>> index fb9605f0655b..e8a861179bd9 100644
+>> --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
+>> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
+>> @@ -21,6 +21,9 @@ description: |
+>>    called "Single-CPU" mode, where only Core0 is used, but with ability to use
+>>    Core1's TCMs as well.
+>>  
+>> +  AM62 SoC family support a single R5F core only which runs Device Manager
+>> +  firmware and can also be used as a remote processor with IPC communication.
+>> +
+>>    Each Dual-Core R5F sub-system is represented as a single DTS node
+>>    representing the cluster, with a pair of child DT nodes representing
+>>    the individual R5F cores. Each node has a number of required or optional
+>> @@ -28,16 +31,20 @@ description: |
+>>    the device management of the remote processor and to communicate with the
+>>    remote processor.
+>>  
+>> +  Since AM62 SoC family only support a single core, there is no cluster-mode
+>> +  property setting required for it.
+>> +
+>>  properties:
+>>    $nodename:
+>>      pattern: "^r5fss(@.*)?"
+>>  
+>>    compatible:
+>>      enum:
+>> +      - ti,am62-r5fss
+>> +      - ti,am64-r5fss
+>>        - ti,am654-r5fss
+>> -      - ti,j721e-r5fss
+>>        - ti,j7200-r5fss
+>> -      - ti,am64-r5fss
+>> +      - ti,j721e-r5fss
+>>        - ti,j721s2-r5fss
+>>  
+>>    power-domains:
+>> @@ -80,7 +87,9 @@ patternProperties:
+>>        node representing a TI instantiation of the Arm Cortex R5F core. There
+>>        are some specific integration differences for the IP like the usage of
+>>        a Region Address Translator (RAT) for translating the larger SoC bus
+>> -      addresses into a 32-bit address space for the processor.
+>> +      addresses into a 32-bit address space for the processor. For AM62x,
+>> +      the R5F Sub-System device node should only define one R5F child node
+>> +      as it has only one core available.
+>>  
+>>        Each R5F core has an associated 64 KB of Tightly-Coupled Memory (TCM)
+>>        internal memories split between two banks - TCMA and TCMB (further
+>> @@ -100,11 +109,12 @@ patternProperties:
+>>      properties:
+>>        compatible:
+>>          enum:
+>> -          - ti,am654-r5f
+>> -          - ti,j721e-r5f
+>> -          - ti,j7200-r5f
+>> -          - ti,am64-r5f
+>> -          - ti,j721s2-r5f
+>> +          - ti,am62-r5fss
+>> +          - ti,am64-r5fss
+>> +          - ti,am654-r5fss
+>> +          - ti,j7200-r5fss
+>> +          - ti,j721e-r5fss
+>> +          - ti,j721s2-r5fss
+>>  
+There is a problem here, the compatibles still need to be "-r5f" I will
+correct it in V4.
+>>        reg:
+>>          items:
+>> @@ -208,19 +218,35 @@ patternProperties:
+>>  
+>>      unevaluatedProperties: false
+>>  
+>> -if:
+>> -  properties:
+>> -    compatible:
+>> -      enum:
+>> -        - ti,am64-r5fss
+>> -then:
+>> -  properties:
+>> -    ti,cluster-mode:
+>> -      enum: [0, 2]
+>> -else:
+>> -  properties:
+>> -    ti,cluster-mode:
+>> -      enum: [0, 1]
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          enum:
+>> +            - ti,am64-r5fss
+>> +    then:
+>> +      properties:
+>> +        ti,cluster-mode:
+>> +          enum: [0, 2]
+>> +
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          enum: ["ti,am654-r5fss", "ti,j7200-r5fss", "ti,j721e-r5fss",  "ti,j721s2-r5fss"]
+> 
+> That's not how enums are spelled for such cases. Git grep for examples -
+> this should be a enum with each item in new entry, no quotes.
+Yeah, that was my initial thought but then I looked at section 4.9.3 of
+https://json-schema.org/understanding-json-schema/UnderstandingJSONSchema.pdf
+which had below example and based on that did this change thus avoiding
+separate entries for each enum.
 
-                        Geert
+Example:
+{
+"enum": ["red", "amber", "green", null, 42]
+}
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+To confirm whether the change works fine, I deliberately modified cluster-mode
+values for each of the SoC's beyond acceptable ranges as seen in
+https://gist.github.com/devarsht/1956063c8e39f1bdbad3574ea96b95a3
+and then ran "make dtbs_check" and it was able to catch the inappropriate
+values of cluster-mode as seen in below logs :
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L392
+https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L500
+https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L712
+https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L741
+https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L750
+https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L766
+https://gist.github.com/devarsht/bc8cfb82c55b75d85649585d3fd536a0#file-gistfile1-txt-L773
+
+Kindly let me know if you see some issues with this approach.
+
+Best Regards,
+Devarsh
+
+> 
+> Best regards,
+> Krzysztof
+> 
