@@ -2,127 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2F6656768
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 06:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEF1656769
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 06:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiL0FwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 00:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
+        id S229664AbiL0Fxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 00:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiL0FwQ (ORCPT
+        with ESMTP id S229478AbiL0Fxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 00:52:16 -0500
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96E62196
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 21:52:15 -0800 (PST)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-14455716674so14572534fac.7
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 21:52:15 -0800 (PST)
+        Tue, 27 Dec 2022 00:53:35 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C20F21A3
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 21:53:35 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id q190so6512362iod.10
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 21:53:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=txM5BMbA9p01PtClB7g3vamTSBTC8eTbXIe7VyrdVpw=;
-        b=CY/w3MBrrIdFb7k03q/Y3m7qIfK5oqx+HPUauNsVeE5cwBMg+SCd2yNHLn7wgY+7Bn
-         saniL/QZKSpnz74IjLZJ+INHbJlB/ZCdo78GD+95GrIPohVZYv8Qy4xpO6wCdTFIg7Hw
-         eVmQDERgql1zx2v6Pq7Kz3J2ubdV4jiS28dGPFK/gB/sdj1xDQCAb8hzmUTm9QtvSoLR
-         5GlZgIpU13y28BO4n7wP9XYABQqYU7q1vHvQFD+7CnTjSaHRtU7201URJlic/65J8GlA
-         ubf2fwMUq/Hw3NEl+Wydb80N2rgXhkfiCpr+hu6D5P3FNcJasirzFvA6oL+w79CyQl6T
-         JZYg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9wARd1L8KoeksEpzilviu4ulCrJM4nCfjKCQtrReh+8=;
+        b=KtWR1NWXObtv0A+S1nWRpm41eZaY26/OpoTg1WUZ0w96TGoaGxTskVlBy9RmAUg26I
+         R50W5tkC5ZcQFkjLlDpE3K+Eebi3Ek2LtjejuCN1dyyzmdDotjvb03OKSHhHed9q3n1F
+         scwRYzxgCR93T0aHENr/aJvGK684YPRaGbyzI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=txM5BMbA9p01PtClB7g3vamTSBTC8eTbXIe7VyrdVpw=;
-        b=oM4W7aHMAwfkDrvpRul/jhdld+PvsW/5D1ejqF4ua3gjpLdPtuZdtX5rTg6A9Go3tl
-         ONMOgB9sbFM5HZ4Ns7QpxLrvsijF7jdjUBIikiJGk7jtku8q2a4PQ1NSAw9Z4cH/fm9Q
-         ov2Lw/KAqXYkNM44K5ln0zHTH7zeccyQ3ECDF7jIeX/WCy6y+rN4HMXtnfLpLUynZwxB
-         OIm1EE2UB6gKCx+L0MF8cP3adsmIUqcVBOxSH7+tgp18Fh9Dm4IGtozrLJ3dyUsLNI6u
-         Fu6KnqaywT1dcFHVxl7X24D/HeF9xVnk0CV5Ll8E74ITDZ2PH3HMq1xozf57U6O+cwl+
-         5gpg==
-X-Gm-Message-State: AFqh2kqqxqKkmwdMkzFTsP7//2u4YY3Dmjnf/sId4nB+cA66vViyJE/m
-        250l8uDPOM1MvUEvpXYRjds=
-X-Google-Smtp-Source: AMrXdXv1KWT94mSs93O8jsSOWuQ8T10Mte15MmLthaTm6C85zICIfrphGH1GAH3ykNMnVhn4iYAh5Q==
-X-Received: by 2002:a05:6871:4595:b0:13b:2b44:e453 with SMTP id nl21-20020a056871459500b0013b2b44e453mr9710358oab.49.1672120335120;
-        Mon, 26 Dec 2022 21:52:15 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z36-20020a056870462400b00144e6ffe9e5sm5707908oao.47.2022.12.26.21.52.13
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9wARd1L8KoeksEpzilviu4ulCrJM4nCfjKCQtrReh+8=;
+        b=2NKxtNS/vIqpmyVVParmHy0uUOfWMb/VDu2RxDgtnmkPNKOY6U4NzNAsf73Tp4uHNf
+         qCHMSKdOMalg4ZQroAo5N+vYk8j/0kI7aeLFbyqZ9h5muQKMM4Y/C63aQzmBAUuytFX3
+         YL7CC+c4Fg5V84z0q0g5wn4uJpRCAf2sxlQpXekByyExqQBwlOCp/Iz/8vItxGKF+QVz
+         jpMzCNdf0mNzXAAAoxIi9f4AJlFHEhCmCBBGr4sBFtwcsbLC9FXo3tAIlisBesgmIUqY
+         xe9Yd/XtKdeBuDoCim+8MTbzfSTsYJJP8A6rOrT4RrySSh4i8Pzw8gpjbg7AWiN4M1A8
+         rauA==
+X-Gm-Message-State: AFqh2kpxy2Q0kORn3FSrjNby3YhlVNq+VRZKbl9nrDMpXngsub/3/+Ce
+        gJadORIk0ThGpNdb0WW7xJ+1bA==
+X-Google-Smtp-Source: AMrXdXte67TRl8MJY98BS/POkZrzxYuSwpJzPmANvIyiIz41oROqn94AbLwguwkLz3ZdO3qL9GeTXA==
+X-Received: by 2002:a6b:da19:0:b0:6e4:e62c:38e3 with SMTP id x25-20020a6bda19000000b006e4e62c38e3mr15013786iob.5.1672120414631;
+        Mon, 26 Dec 2022 21:53:34 -0800 (PST)
+Received: from midworld.bld.corp.google.com ([2620:15c:183:200:2d44:773f:eb35:d838])
+        by smtp.gmail.com with ESMTPSA id z11-20020a05660217cb00b006df2b3f17c3sm4678335iox.30.2022.12.26.21.53.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 21:52:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 26 Dec 2022 21:52:12 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kees Cook <kees@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: Linux 6.2-rc1
-Message-ID: <20221227055212.GA2711289@roeck-us.net>
-References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com>
- <20221226195206.GA2626419@roeck-us.net>
- <CAHk-=whD1zMyt4c7g6-+tWvVweyb-6oHMT_+ZVHqe1EXwtFpCQ@mail.gmail.com>
- <DA632860-284E-4923-8863-9D2745DD289E@kernel.org>
- <20221227002941.GA2691687@roeck-us.net>
- <D8BDBF66-E44C-45D4-9758-BAAA4F0C1998@kernel.org>
+        Mon, 26 Dec 2022 21:53:34 -0800 (PST)
+From:   Drew Davenport <ddavenport@chromium.org>
+To:     intel-gfx@lists.freedesktop.org
+Cc:     Drew Davenport <ddavenport@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        =?UTF-8?q?Juha-Pekka=20Heikkil=C3=A4?= 
+        <juha-pekka.heikkila@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/i915/display: Check source height is > 0
+Date:   Mon, 26 Dec 2022 22:53:24 -0700
+Message-Id: <20221226225246.1.I15dff7bb5a0e485c862eae61a69096caf12ef29f@changeid>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D8BDBF66-E44C-45D4-9758-BAAA4F0C1998@kernel.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 26, 2022 at 05:32:28PM -0800, Kees Cook wrote:
-> On December 26, 2022 4:29:41 PM PST, Guenter Roeck <linux@roeck-us.net> wrote:
-> >On Mon, Dec 26, 2022 at 01:03:59PM -0800, Kees Cook wrote:
-> >> On December 26, 2022 12:56:29 PM PST, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> >> >On Mon, Dec 26, 2022 at 11:52 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >> >>
-> >> >> fs/f2fs/inline.c: In function 'f2fs_move_inline_dirents':
-> >> >> include/linux/fortify-string.h:59:33: error: '__builtin_memset' pointer overflow between offset [28, 898293814] and size [-898293787, -1] [-Werror=array-bounds]
-> >> >> fs/f2fs/inline.c:430:9: note: in expansion of macro 'memset'
-> >> >>   430 |         memset(dst.bitmap + src.nr_bitmap, 0, dst.nr_bitmap - src.nr_bitmap);
-> >> >>       |         ^~~~~~
-> >> >
-> >> >Well, that's unfortunate.
-> >> 
-> >> I'll look into this.
-> >> 
-> >
-> >I did some more testing. The problem is seen with gcc 11.3.0, but not with
-> >gcc 12.2.0 nor with gcc 10.3.0.
-> 
-> That's what I'd expect: 10 didn't have variable range tracking wired up to -Warray-bounds, 11 does, and we disable -Warray-bounds on 12 because of 3 separate 12-only GCC bugs.
-> 
-> > gcc bug ? Should I switch to gcc 12.2.0 for
-> >powerpc when build testing the latest kernel ?
-> 
-> Sure? But that'll just hide it. I suspect GCC has found a way for dst.nr_bitmap to be compile-time 27, so the size is always negative.
-> 
-dst.nr_bitmap is initialized with SIZE_OF_DENTRY_BITMAP,
-which is defined as:
+The error message suggests that the height of the src rect must be at
+least 1. Reject source with height of 0.
 
-#define NR_DENTRY_IN_BLOCK      214     /* the number of dentry in a block */
-#define SIZE_OF_DIR_ENTRY       11      /* by byte */
-#define SIZE_OF_DENTRY_BITMAP   ((NR_DENTRY_IN_BLOCK + BITS_PER_BYTE - 1) / \
-                                        BITS_PER_BYTE)
+Signed-off-by: Drew Davenport <ddavenport@chromium.org>
 
-((214 + 8 - 1) / 8 = 27, so dst.nr_bitmap is indeed compile-time 27.
+---
+I was investigating some divide-by-zero crash reports on ChromeOS which
+pointed to the intel_adjusted_rate function. Further prodding showed
+that I could reproduce this in a simple test program if I made src_h
+some value less than 1 but greater than 0.
 
-Not sure how would know that src.nr_bitmap can be > 27, though.
-Am I missing something ?
+This seemed to be a sensible place to check that the source height is at
+least 1. I tried to repro this issue on an amd device I had on hand, and
+the configuration was rejected.
 
-Thanks,
-Guenter
+Would it make sense to add a check that source dimensions are at least 1
+somewhere in core, like in drm_atomic_plane_check? Or is that a valid
+use case on some devices, and thus any such check should be done on a
+per-driver basis?
+
+Thanks.
+
+ drivers/gpu/drm/i915/display/skl_universal_plane.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/display/skl_universal_plane.c b/drivers/gpu/drm/i915/display/skl_universal_plane.c
+index 4b79c2d2d6177..9b172a1e90deb 100644
+--- a/drivers/gpu/drm/i915/display/skl_universal_plane.c
++++ b/drivers/gpu/drm/i915/display/skl_universal_plane.c
+@@ -1627,7 +1627,7 @@ static int skl_check_main_surface(struct intel_plane_state *plane_state)
+ 	u32 offset;
+ 	int ret;
+ 
+-	if (w > max_width || w < min_width || h > max_height) {
++	if (w > max_width || w < min_width || h > max_height || h < 1) {
+ 		drm_dbg_kms(&dev_priv->drm,
+ 			    "requested Y/RGB source size %dx%d outside limits (min: %dx1 max: %dx%d)\n",
+ 			    w, h, min_width, max_width, max_height);
+-- 
+2.39.0.314.g84b9a713c41-goog
+
