@@ -2,131 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0110B65694D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 11:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F04656949
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 11:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiL0KHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 05:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S229836AbiL0KFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 05:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiL0KHa (ORCPT
+        with ESMTP id S229445AbiL0KFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 05:07:30 -0500
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755D964C3;
-        Tue, 27 Dec 2022 02:07:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=PYDm95PWaADa9YxjFLIe4Cqpn1ITTd0IS1l03smDoZI=;
-        b=NRKaVERjP8DPCHUa1B+i6P3ve/o20Ki43luqRob99yEHHPV3BdvQx8tteWZBssTlc19fpTU5j+6YM
-         +HdiekDTphI0msuVJKGfQvw88BKqaoOXVWfN5jBn87HMA/T0BtmWEd9LZhylJhyY+fSbdmchmvc9kS
-         VhelAq6A6RAWzFzd4hFUlgZVrX9Esw+s8kLBIPBb+4B+1hnQGY5OOtnDEcde+UO0IgLQ3IYgFuB7yv
-         z9xowIiEbnf+5K2WCAsSjxJ8EKC+SQyLLcTnFwYk8YTeeQlUXTM73efdd38kxASJ4+wt+TyjtkBZKK
-         b9/jxjbE3RK26+4+8pFhVqHDGWPccHw==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.5.1460, Stamp: 3], Multi: [Enabled, t: (0.000009,0.012572)], BW: [Enabled, t: (0.000022,0.000001)], RTDA: [Enabled, t: (0.089347), Hit: No, Details: v2.42.0; Id: 15.52ka2i.1gl9gprcr.3ma; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([78.37.162.181])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Tue, 27 Dec 2022 13:07:11 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru
-Subject: [PATCH v3 3/3] fpga: microchip-spi: separate data frame write routine
-Date:   Tue, 27 Dec 2022 13:04:50 +0300
-Message-Id: <20221227100450.2257-4-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.38.2
-In-Reply-To: <20221227100450.2257-1-i.bornyakov@metrotek.ru>
-References: <20221227100450.2257-1-i.bornyakov@metrotek.ru>
+        Tue, 27 Dec 2022 05:05:22 -0500
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D981D2D4
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 02:05:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1672135500; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=e8ufoqB33em2gOtEPUVDFC+CvsJopt1iZg5J4H7B2lvi0CgPiaNFI4hYSMa2R9S2uciBiVqQmbij6M21kEIDA7OhjlCEr7ZCExLohfb7XDxPMl0p43rUsX4zOQ5A7qIKAH2opZJpSeaPgzYYnjtRfk+uapE1VnQWYFBTWZnSLNo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1672135500; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=DAXSpzQd+Jsc9stx//zixRGHRdcARwpGOuARJ44D1lA=; 
+        b=K0dm38x8JqK9fzvYaIyt9nEmZLO1vbbZeEnLsN7DdoWIUJkhFnI1kxih3/MuhKQNvt1Nf2AJ074HT6ALyLyE0hqL1PNwgw1E58KAdu3P8QUeFqNssui3l+UDZ9MLjM4gWbYTzYEKJ/rfioXhuNhg7uvFvxH42Ul+GU5G9KmopWY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1672135500;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=DAXSpzQd+Jsc9stx//zixRGHRdcARwpGOuARJ44D1lA=;
+        b=SchVgPQzuZMNjC5ranCx7xU+SWQMmjXMGJAWsstEx/IEv4cj+4J9fK7pdaAzx1O/
+        7KVg9Qcw1I1b9990+ZbS7qFz+lQA3y+B0iQvTe9cOu2UMtobjV+410xTxsHgo9P6rTW
+        W0zdlFzqrzAoH3j0+b8saui/RsiZm0w+3vKBVCEc=
+Received: from edelgard.fodlan.icenowy.me (120.85.99.39 [120.85.99.39]) by mx.zohomail.com
+        with SMTPS id 167213549979179.98103443094215; Tue, 27 Dec 2022 02:04:59 -0800 (PST)
+Message-ID: <2c3bf520dec7e368f5b98d7c17811f027921dfa8.camel@icenowy.me>
+Subject: Re: [PATCH 1/2] riscv: errata: fix T-Head dcache.cva encoding
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Tue, 27 Dec 2022 18:04:55 +0800
+In-Reply-To: <CAJF2gTSGvEnTqEqR9f+zU8T3VS8FoCtsgSk=9hz6cWxAL630zQ@mail.gmail.com>
+References: <20221227020258.303900-1-uwu@icenowy.me>
+         <CAJF2gTSGvEnTqEqR9f+zU8T3VS8FoCtsgSk=9hz6cWxAL630zQ@mail.gmail.com>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mpf_ops_write() function writes bitstream data to the FPGA by a smaller
-frames. Introduce mpf_spi_frame_write() function which is for writing a
-single data frame and use it in mpf_ops_write().
-
-No functional changes intended.
-
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
----
- drivers/fpga/microchip-spi.c | 36 +++++++++++++++++++++++-------------
- 1 file changed, 23 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-index 8d1d9476d0cc..ea92e5d106fa 100644
---- a/drivers/fpga/microchip-spi.c
-+++ b/drivers/fpga/microchip-spi.c
-@@ -274,9 +274,30 @@ static int mpf_ops_write_init(struct fpga_manager *mgr,
- 	return 0;
- }
- 
-+static int mpf_spi_frame_write(struct mpf_priv *priv, const char *buf)
-+{
-+	struct spi_transfer xfers[2] = {
-+		{
-+			.tx_buf = &priv->tx,
-+			.len = 1,
-+		}, {
-+			.tx_buf = buf,
-+			.len = MPF_SPI_FRAME_SIZE,
-+		},
-+	};
-+	int ret;
-+
-+	ret = mpf_poll_status(priv, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	priv->tx = MPF_SPI_FRAME;
-+
-+	return spi_sync_transfer(priv->spi, xfers, ARRAY_SIZE(xfers));
-+}
-+
- static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
- {
--	struct spi_transfer xfers[2] = { 0 };
- 	struct mpf_priv *priv = mgr->priv;
- 	struct device *dev = &mgr->dev;
- 	int ret, i;
-@@ -287,19 +308,8 @@ static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count
- 		return -EINVAL;
- 	}
- 
--	xfers[0].tx_buf = &priv->tx;
--	xfers[0].len = 1;
--
- 	for (i = 0; i < count / MPF_SPI_FRAME_SIZE; i++) {
--		xfers[1].tx_buf = buf + i * MPF_SPI_FRAME_SIZE;
--		xfers[1].len = MPF_SPI_FRAME_SIZE;
--
--		ret = mpf_poll_status(priv, 0);
--		if (ret >= 0) {
--			priv->tx = MPF_SPI_FRAME;
--			ret = spi_sync_transfer(priv->spi, xfers, ARRAY_SIZE(xfers));
--		}
--
-+		ret = mpf_spi_frame_write(priv, buf + i * MPF_SPI_FRAME_SIZE);
- 		if (ret) {
- 			dev_err(dev, "Failed to write bitstream frame %d/%zu\n",
- 				i, count / MPF_SPI_FRAME_SIZE);
--- 
-2.38.2
-
+5ZyoIDIwMjItMTItMjfmmJ/mnJ/kuoznmoQgMTA6NDcgKzA4MDDvvIxHdW8gUmVu5YaZ6YGT77ya
+Cj4gR29vZCBjYXRjaC4gQnV0IEkgaG9wZSBjOTA2LzkxMCBjYW4gZGlyZWN0bHkgdXNlIHBhZGRy
+IGhlcmUuIEl0J3MKPiB1bm5lY2Vzc2FyeSB0byBjYXVzZSBzb2Z0d2FyZSB0cmFuc2xhdGlvbiAm
+IG1tdSB0cmFuc2xhdGlvbiBoZXJlLgoKVGhpcyBjb3VsZCBiZSBhbiBlbmhhbmNlbWVudCBpbmRl
+cGVuZGVudCBvZiB0aGlzIHBhdGNoc2V0LgoKSW4gYWRkaXRpb24sIEkgdGhpbmsgdGhpcyBpcyBz
+b21lIHJlbWFpbmluZyBvZiB0aGUgZGVzaWduIG9mIHRoZQpvcmlnaW5hbCBwYXRjaHNldCwgaW4g
+d2hpY2ggYWRkcyBaaWNib20gc3VwcG9ydCBhbmQgdGhlbiBYdGhlYWRjbW8Kc3VwcG9ydCBhcyBz
+b21lIGVycmF0YS4KCj4gCj4gZGlmZiAtLWdpdCBhL2FyY2gvcmlzY3YvbW0vZG1hLW5vbmNvaGVy
+ZW50LmMgYi9hcmNoL3Jpc2N2L21tL2RtYS0KPiBub25jb2hlcmVudC5jCj4gaW5kZXggYjBhZGQ5
+ODM1MzBhLi4zMDY1MGEwYzQ0ODEgMTAwNjQ0Cj4gLS0tIGEvYXJjaC9yaXNjdi9tbS9kbWEtbm9u
+Y29oZXJlbnQuYwo+ICsrKyBiL2FyY2gvcmlzY3YvbW0vZG1hLW5vbmNvaGVyZW50LmMKPiBAQCAt
+MjQsMTMgKzI0LDEzIEBAIHZvaWQgYXJjaF9zeW5jX2RtYV9mb3JfZGV2aWNlKHBoeXNfYWRkcl90
+IHBhZGRyLAo+IHNpemVfdCBzaXplLAo+IAo+IMKgwqDCoMKgwqDCoMKgIHN3aXRjaCAoZGlyKSB7
+Cj4gwqDCoMKgwqDCoMKgwqAgY2FzZSBETUFfVE9fREVWSUNFOgo+IC3CoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIEFMVF9DTU9fT1AoY2xlYW4sIHZhZGRyLCBzaXplLAo+IHJpc2N2X2Nib21f
+YmxvY2tfc2l6ZSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19PUChj
+bGVhbiwgdmFkZHIsIHBhZGRyLCBzaXplLAo+IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7CgpNYXli
+ZSB0aGUgbWFjcm8gc2hvdWxkIGJlIHJlbmFtZWQgYXMgQUxUX0NNT19PUF9WUEEgb3Igc2ltaWxh
+ciB0aGluZywKdGhhdCBtZWFucyBib3RoIFZBIGFuZCBQQSBhcmUgcHJvdmlkZWQgYW5kIHRoZSBt
+b3N0IGVmZmljaWVudCBvbmUgd2lsbApiZSBjaG9zZW4sIGJlY2F1c2UgQ01PIG9wZXJhdGlvbnMg
+d2l0aCBQQSBpcyBzdGlsbCBzb21lIFQtSGVhZC1vbmx5CnRoaW5nIChaaWNib20gb25seSBzdXBw
+b3J0cyBWQSkuCgo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiDCoMKg
+wqDCoMKgwqDCoCBjYXNlIERNQV9GUk9NX0RFVklDRToKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBBTFRfQ01PX09QKGNsZWFuLCB2YWRkciwgc2l6ZSwKPiByaXNjdl9jYm9tX2Jsb2Nr
+X3NpemUpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEFMVF9DTU9fT1AoY2xlYW4s
+IHZhZGRyLCBwYWRkciwgc2l6ZSwKPiByaXNjdl9jYm9tX2Jsb2NrX3NpemUpOwo+IMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiDCoMKgwqDCoMKgwqDCoCBjYXNlIERNQV9C
+SURJUkVDVElPTkFMOgo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEFMVF9DTU9fT1Ao
+Zmx1c2gsIHZhZGRyLCBzaXplLAo+IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7Cj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgQUxUX0NNT19PUChmbHVzaCwgdmFkZHIsIHBhZGRyLCBzaXpl
+LAo+IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIGJyZWFrOwo+IMKgwqDCoMKgwqDCoMKgIGRlZmF1bHQ6Cj4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIGJyZWFrOwo+IEBAIC00Nyw3ICs0Nyw3IEBAIHZvaWQgYXJjaF9zeW5jX2Rt
+YV9mb3JfY3B1KHBoeXNfYWRkcl90IHBhZGRyLAo+IHNpemVfdCBzaXplLAo+IMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiDCoMKgwqDCoMKgwqDCoCBjYXNlIERNQV9GUk9N
+X0RFVklDRToKPiDCoMKgwqDCoMKgwqDCoCBjYXNlIERNQV9CSURJUkVDVElPTkFMOgo+IC3CoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIEFMVF9DTU9fT1AoZmx1c2gsIHZhZGRyLCBzaXplLAo+
+IHJpc2N2X2Nib21fYmxvY2tfc2l6ZSk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+QUxUX0NNT19PUChmbHVzaCwgdmFkZHIsIHBhZGRyLCBzaXplLAo+IHJpc2N2X2Nib21fYmxvY2tf
+c2l6ZSk7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+IMKgwqDCoMKg
+wqDCoMKgIGRlZmF1bHQ6Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+
+IEBAIC01Nyw4ICs1Nyw5IEBAIHZvaWQgYXJjaF9zeW5jX2RtYV9mb3JfY3B1KHBoeXNfYWRkcl90
+IHBhZGRyLAo+IHNpemVfdCBzaXplLAo+IMKgdm9pZCBhcmNoX2RtYV9wcmVwX2NvaGVyZW50KHN0
+cnVjdCBwYWdlICpwYWdlLCBzaXplX3Qgc2l6ZSkKPiDCoHsKPiDCoMKgwqDCoMKgwqDCoCB2b2lk
+ICpmbHVzaF9hZGRyID0gcGFnZV9hZGRyZXNzKHBhZ2UpOwo+ICvCoMKgwqDCoMKgwqAgcGh5c19h
+ZGRyX3QgcGFkZHIgPSBQRk5fUEhZUyhwYWdlX3RvX3Bmbih4KSk7Cj4gCj4gLcKgwqDCoMKgwqDC
+oCBBTFRfQ01PX09QKGZsdXNoLCBmbHVzaF9hZGRyLCBzaXplLCByaXNjdl9jYm9tX2Jsb2NrX3Np
+emUpOwo+ICvCoMKgwqDCoMKgwqAgQUxUX0NNT19PUChmbHVzaCwgZmx1c2hfYWRkciwgcGFkZHIs
+IHNpemUsCj4gcmlzY3ZfY2JvbV9ibG9ja19zaXplKTsKPiDCoH0KPiAKPiBPbiBUdWUsIERlYyAy
+NywgMjAyMiBhdCAxMDowMyBBTSBJY2Vub3d5IFpoZW5nIDx1d3VAaWNlbm93eS5tZT4KPiB3cm90
+ZToKPiA+IAo+ID4gVGhlIGRjYWNoZS5jdmEgZW5jb2Rpbmcgc2hvd24gaW4gdGhlIGNvbW1lbnRz
+IGFyZSB3cm9uZywgaXQncyBmb3IKPiA+IGRjYWNoZS5jdmFsMSAod2hpY2ggaXMgcmVzdHJpY3Rl
+ZCB0byBMMSkgaW5zdGVhZC4KPiA+IAo+ID4gRml4IHRoaXMgaW4gdGhlIGNvbW1lbnQgYW5kIGlu
+IHRoZSBoYXJkY29kZWQgaW5zdHJ1Y3Rpb24uCj4gPiAKPiA+IFNpZ25lZC1vZmYtYnk6IEljZW5v
+d3kgWmhlbmcgPHV3dUBpY2Vub3d5Lm1lPgo+ID4gLS0tCj4gPiBUaGUgY29kZSBpcyB0ZXN0ZWQg
+b24gYSBMaXRlWCBTb0Mgd2l0aCBPcGVuQzkwNiBjb3JlLCBhbmQgaXQKPiA+IHN1Y2Nlc3NmdWxs
+eSBib290cyB0byBTeXN0ZW1kIG9uIGEgU0QgY2FyZCBjb25uZWN0ZWQgdG8gTGl0ZVNEQ2FyZC4K
+PiA+IAo+ID4gVGhpcyBjaGFuZ2Ugc2hvdWxkIGJlIG5vdCBub3RpY2FibGUgb24gQzkwNiwgYnV0
+IG9uIG11bHRpLWNvcmUgQzkxMAo+ID4gY2x1c3RlciBpdCBzaG91bGQgZml4ZXMgc29tZXRoaW5n
+LiBVbmZvcnR1bmF0ZWx5IFRIMTUyMCBzZWVtcyB0byBiZQo+ID4gbm90Cj4gPiBzbyByZWFkeSB0
+byB0ZXN0IG1haW5saW5lIHBhdGNoZXMgb24uCj4gPiAKPiA+IMKgYXJjaC9yaXNjdi9pbmNsdWRl
+L2FzbS9lcnJhdGFfbGlzdC5oIHwgNCArKy0tCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
+dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9hcmNoL3Jpc2N2
+L2luY2x1ZGUvYXNtL2VycmF0YV9saXN0LmgKPiA+IGIvYXJjaC9yaXNjdi9pbmNsdWRlL2FzbS9l
+cnJhdGFfbGlzdC5oCj4gPiBpbmRleCA0MTgwMzEyZDJhNzAuLjYwNTgwMGJkMzkwZSAxMDA2NDQK
+PiA+IC0tLSBhL2FyY2gvcmlzY3YvaW5jbHVkZS9hc20vZXJyYXRhX2xpc3QuaAo+ID4gKysrIGIv
+YXJjaC9yaXNjdi9pbmNsdWRlL2FzbS9lcnJhdGFfbGlzdC5oCj4gPiBAQCAtMTAyLDcgKzEwMiw3
+IEBAIGFzbQo+ID4gdm9sYXRpbGUoQUxURVJOQVRJVkUowqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIFwKPiA+IMKgICogfCAzMSAtIDI1IHwgMjQgLSAyMCB8IDE5IC0gMTUgfCAxNCAtIDEyIHwg
+MTEgLSA3IHwgNiAtIDAgfAo+ID4gwqAgKsKgwqAgMDAwMDAwMcKgwqDCoCAwMTAwMcKgwqDCoMKg
+wqAgcnMxwqDCoMKgwqDCoMKgIDAwMMKgwqDCoMKgwqAgMDAwMDDCoCAwMDAxMDExCj4gPiDCoCAq
+IGRjYWNoZS5jdmEgcnMxIChjbGVhbiwgdmlydHVhbCBhZGRyZXNzKQo+ID4gLSAqwqDCoCAwMDAw
+MDAxwqDCoMKgIDAwMTAwwqDCoMKgwqDCoCByczHCoMKgwqDCoMKgwqAgMDAwwqDCoMKgwqDCoCAw
+MDAwMMKgIDAwMDEwMTEKPiA+ICsgKsKgwqAgMDAwMDAwMcKgwqDCoCAwMDEwMcKgwqDCoMKgwqAg
+cnMxwqDCoMKgwqDCoMKgIDAwMMKgwqDCoMKgwqAgMDAwMDDCoCAwMDAxMDExCj4gPiDCoCAqCj4g
+PiDCoCAqIGRjYWNoZS5jaXBhIHJzMSAoY2xlYW4gdGhlbiBpbnZhbGlkYXRlLCBwaHlzaWNhbCBh
+ZGRyZXNzKQo+ID4gwqAgKiB8IDMxIC0gMjUgfCAyNCAtIDIwIHwgMTkgLSAxNSB8IDE0IC0gMTIg
+fCAxMSAtIDcgfCA2IC0gMCB8Cj4gPiBAQCAtMTE1LDcgKzExNSw3IEBAIGFzbQo+ID4gdm9sYXRp
+bGUoQUxURVJOQVRJVkUowqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFwKPiA+IMKgICrCoMKg
+IDAwMDAwMDDCoMKgwqAgMTEwMDHCoMKgwqDCoCAwMDAwMMKgwqDCoMKgwqAgMDAwwqDCoMKgwqDC
+oCAwMDAwMMKgIDAwMDEwMTEKPiA+IMKgICovCj4gPiDCoCNkZWZpbmUgVEhFQURfaW52YWxfQTAg
+Ii5sb25nIDB4MDI2NTAwMGIiCj4gPiAtI2RlZmluZSBUSEVBRF9jbGVhbl9BMCAiLmxvbmcgMHgw
+MjQ1MDAwYiIKPiA+ICsjZGVmaW5lIFRIRUFEX2NsZWFuX0EwICIubG9uZyAweDAyNTUwMDBiIgo+
+ID4gwqAjZGVmaW5lIFRIRUFEX2ZsdXNoX0EwICIubG9uZyAweDAyNzUwMDBiIgo+ID4gwqAjZGVm
+aW5lIFRIRUFEX1NZTkNfU8KgwqAgIi5sb25nIDB4MDE5MDAwMGIiCj4gPiAKPiA+IC0tCj4gPiAy
+LjM4LjEKPiA+IAo+IAo+IAoK
 
