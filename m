@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CD4656BF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 15:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6E8656BF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 15:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiL0OgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 09:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
+        id S231835AbiL0Ogg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 09:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbiL0OfZ (ORCPT
+        with ESMTP id S232063AbiL0Oga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 09:35:25 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF811BF64
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 06:35:14 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id bf43so19848381lfb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 06:35:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtcsotDn15TPTkFly8n95bUSK+EHyjdF6zxrKEvkF+A=;
-        b=cJ6ktIhanhnQQuskUX/4b3r+ZzyyazoGhkGvCIWOpRGFRQh+SM5o/rp+mpmU49Wy7+
-         6u8KGyNEsTG/p1By7QGTIpmLjWNx5zky/8nTDMhLt2+iy5aKJ//3QhQKknBzM/aZqMyC
-         39QrU2TFro3S6lBE2G2DlzVtqdeVFEhDmMTsnLEsa9Bu4XdOSNvQaTt9gjAcM6P2KZmf
-         uXFJCagktoBGohIFqndsaqMcFydLOh+4PFm9P3ZFoKPrcZaYl8AZoJ0Y8hepxFzH+7Hv
-         21E+JhnDLpXc4l6ly7f2aCdB+4Zkb3/qoOmN08mdItoxIKkcjAR3arAWpdPi0aqxMh3Y
-         icKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dtcsotDn15TPTkFly8n95bUSK+EHyjdF6zxrKEvkF+A=;
-        b=qWQZMLpgPyZ24Nh/QiJCYxo571gUyWCpRT8H7djD5Wgayvybw6bfufhVUYeNOyCzNa
-         OUYhedGJeNrfY0kEyihKgzJUmwCnKn6LYvDrgEngnejK8LyWehIU0aQ+t90TybXSb9ka
-         s48Unlv+yrsu0mM1ayBLSI21AOYGAIa9zSPmcHNxYK/J5nrQWEmeWa07mfJiuFMp8JpP
-         rZTRauNzqfXoWbgX5Qh/5bMbIu+1+Sto9OKVCIVIBZntXwKX7wrNPx79sN3pE69qBacB
-         ahniQiaUdIqIUNZ+eM9ymExoLF0rZ81HaG4DV3+7byKWKICLb1Cf5YmbfBKbVEBb43qt
-         gnqg==
-X-Gm-Message-State: AFqh2krmlck8PFOyMFeOg1BKfGshOLo5mi9mfHQuitqjXMUTkZfAe82n
-        HPndGsPZs5HVFPH5wfZkrs3ASA==
-X-Google-Smtp-Source: AMrXdXuvld5/xbXQGLb+wU76UBWoZji/R/V7d0PC62MJJiUSsWttGYN1Xw7w41Rp5vRAAFSeE9LofA==
-X-Received: by 2002:a05:6512:b27:b0:4b6:eaed:f18f with SMTP id w39-20020a0565120b2700b004b6eaedf18fmr6727397lfu.38.1672151713200;
-        Tue, 27 Dec 2022 06:35:13 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m2-20020ac24242000000b0048b0696d0b1sm2276372lfl.90.2022.12.27.06.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 06:35:12 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] media: venus: drop unused opp_table field documentation
-Date:   Tue, 27 Dec 2022 15:35:09 +0100
-Message-Id: <20221227143509.77812-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 27 Dec 2022 09:36:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100C82A3;
+        Tue, 27 Dec 2022 06:36:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E71360F92;
+        Tue, 27 Dec 2022 14:36:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C23DC433D2;
+        Tue, 27 Dec 2022 14:36:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672151788;
+        bh=/EDm6xhhHpeJLbxbvhfcWbFizxBuWlsdVT/F3n9zhI8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CLqf7O8kcixh9nFMoanB7/3AjIQ/vkR6JwoLk/VkZpj/dZIOCVMr9XHmbajyDVUkq
+         DMynJ4rVrF1rYXU5ED00w18DFAHLR+lj3isG3KzHwRnKfb+7ni3KrBNcn9IxDrteU/
+         gQu3GI7S14K+jwCyCR/BjVfJMh5+E0aQXEY3OyyYHW2f8S83HNMNjoYZzXhJh15dlC
+         COFEKUOJdwwzauI7le8XIP39UiH+8Pkl+66lQf145BESc9gHJdmFU18qxf3w0anHaO
+         mqCBRpcJwFSMHEHsB88PZNbZ6WsPFSIQY2OObZcZ983HjO2Boqe5fGwrW0cSFI1fD/
+         HKWrefRYy432g==
+Date:   Tue, 27 Dec 2022 14:36:21 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_jackp@quicinc.com, quic_plai@quicinc.com
+Subject: Re: [RFC PATCH 00/14] Introduce QC USB SND audio offloading support
+Message-ID: <Y6sC5e9Zrd2JWTHU@sirena.org.uk>
+References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
+ <Y6agEsfXKMMXPpmz@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1+ZKSFcDOruBirf+"
+Content-Disposition: inline
+In-Reply-To: <Y6agEsfXKMMXPpmz@kroah.com>
+X-Cookie: If it heals good, say it.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct venus_format does not have a "opp_table" field.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/media/platform/qcom/venus/core.h | 1 -
- 1 file changed, 1 deletion(-)
+--1+ZKSFcDOruBirf+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 32551c2602a9..6c4d483d98d2 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -107,7 +107,6 @@ struct venus_format {
-  * @vcodec1_clks: an array of vcodec1 struct clk pointers
-  * @video_path: an interconnect handle to video to/from memory path
-  * @cpucfg_path: an interconnect handle to cpu configuration path
-- * @opp_table: an device OPP table handle
-  * @has_opp_table: does OPP table exist
-  * @pmdomains:	an array of pmdomains struct device pointers
-  * @opp_dl_venus: an device-link for device OPP
--- 
-2.34.1
+On Sat, Dec 24, 2022 at 07:45:38AM +0100, Greg KH wrote:
+> On Fri, Dec 23, 2022 at 03:31:46PM -0800, Wesley Cheng wrote:
 
+> > soc-usb: Intention is to treat a USB port similar to a headphone jack.
+> > The port is always present on the device, but cable/pin status can be
+> > enabled/disabled.  Expose mechanisms for USB backend ASoC drivers to
+> > communicate with USB SND.
+
+> > Create a USB backend for Q6DSP:
+> > q6usb: Basic backend driver that will be responsible for maintaining the
+> > resources needed to initiate a playback stream using the Q6DSP.  Will
+
+> This looks to duplicate a bunch of the same things that a number of
+> different google developers have posted recently.  Please work with them
+> to come up with a unified set of patches that you all can agree with,
+> AND get them to sign off on the changes before resubmitting them.
+
+> This uncoordinated drip of patches from different people doing the same
+> thing is almost impossible to review from our side, as I'm sure you can
+> imagine.
+
+I have to say this is the first I've heard of any such patches other
+than from the Qualcomm people and I can't immediately see anything that
+was on the list either, though I might be missing something since I
+don't have the subject or anything.  If other people send things again
+it's probably good to suggest they copy in audio people and lists.
+
+--1+ZKSFcDOruBirf+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOrAuQACgkQJNaLcl1U
+h9AjZwgAhsVgucuD8v8EbY26CtQPykN5gxWGJ+7ciqU2SrnCmlf+PFa++50wRWOa
+pDrX7dQ+fLhgUGMXCKWlY7dRqGjtYicvaKElyZXfKt8vdXifdNur+KBhJW979lbF
+X2c3CK0pl7plOpv43L4vYExx5Qlr7B4Jz+sYbdw6ND1CqpW7a5lghIAOL2d0kTxB
+yPdeMrE4vmzXcN24/XFrTb0zgfTkh13j6et4DocgNe9UhHjgMzgEfHKmM7W/QBZf
+RNE8voHGyXvSb0w92ZyX1AGLIZF0sU2gOSR0tAQwH/5w5emoHj3b+LvGz1ArQVmj
+ms5nPnW0UpzZU8QkG6f+w8tJiSQCcw==
+=XxVJ
+-----END PGP SIGNATURE-----
+
+--1+ZKSFcDOruBirf+--
