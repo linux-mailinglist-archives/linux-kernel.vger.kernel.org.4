@@ -2,99 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EED86567D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F73D6567D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiL0H0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 02:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S229929AbiL0H1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 02:27:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiL0H0m (ORCPT
+        with ESMTP id S229936AbiL0H1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 02:26:42 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A46C4D;
-        Mon, 26 Dec 2022 23:26:40 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Nh5n627T1z4f3p0x;
-        Tue, 27 Dec 2022 15:26:34 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP3 (Coremail) with SMTP id _Ch0CgDnkyErnqpjTmUvAg--.29535S2;
-        Tue, 27 Dec 2022 15:26:37 +0800 (CST)
-Subject: Re: [PATCH v2 00/10] A few bugfix and cleancode patch for bfq
-To:     jack@suse.cz, paolo.valente@linaro.org, tj@kernel.org,
-        josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221216111230.3638832-1-shikemeng@huaweicloud.com>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <9bd43295-95f1-f3e0-8703-3cf4d0e46dbd@huaweicloud.com>
-Date:   Tue, 27 Dec 2022 15:26:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Tue, 27 Dec 2022 02:27:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08AAE66;
+        Mon, 26 Dec 2022 23:27:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8069A60F90;
+        Tue, 27 Dec 2022 07:27:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FFD9C433D2;
+        Tue, 27 Dec 2022 07:27:14 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
+        stable@vger.kernel.org, Yinyu Cai <caiyinyu@loongson.cn>
+Subject: [PATCH] LoongArch: Add HWCAP_LOONGARCH_CPUCFG to elf_hwcap
+Date:   Tue, 27 Dec 2022 15:27:24 +0800
+Message-Id: <20221227072724.47564-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20221216111230.3638832-1-shikemeng@huaweicloud.com>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: _Ch0CgDnkyErnqpjTmUvAg--.29535S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr4rCrW8AFy8tFyDuF1rZwb_yoWkAFX_WF
-        WrGFyfGrWUWa45AFyjk3W5Ja90qrWDtF15KF9Yqr45XrnxtFn3ZwnrKr4kZF4DZan7Zay5
-        Zrs0v348JrWDujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping...
+HWCAP_LOONGARCH_CPUCFG is missing in elf_hwcap, so add it for glibc's
+later use.
 
-on 12/16/2022 7:12 PM, Kemeng Shi wrote:
-> Hi, this series contain two patches to fix bug in request injection
-> mechanism and some random cleancode patches.
-> Thanks!
-> 
-> ---
-> v2:
->  -improve git log.
-> ---
-> 
-> Kemeng Shi (10):
->   block, bfq: correctly raise inject limit in
->     bfq_choose_bfqq_for_injection
->   block, bfq: remove unsed parameter reason in bfq_bfqq_is_slow
->   block, bfq: initialize bfqq->decrease_time_jif correctly
->   block, bfq: use helper macro RQ_BFQQ to get bfqq of request
->   block, bfq: remove unnecessary dereference to get async_bfqq
->   block, bfq: remove redundant bfqd->rq_in_driver > 0 check in
->     bfq_add_request
->   block, bfq: remove redundant check in bfq_put_cooperator
->   block, bfq: remove unnecessary goto tag in bfq_dispatch_rq_from_bfqq
->   block, bfq: remove unused bfq_wr_max_time in struct bfq_data
->   block, bfq: remove check of bfq_wr_max_softrt_rate which is always
->     greater than 0
-> 
->  block/bfq-iosched.c | 49 +++++++++++++++++----------------------------
->  block/bfq-iosched.h |  2 --
->  2 files changed, 18 insertions(+), 33 deletions(-)
-> 
+Cc: stable@vger.kernel.org
+Reported-by: Yinyu Cai <caiyinyu@loongson.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/kernel/cpu-probe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+index 255a09876ef2..3a3fce2d7846 100644
+--- a/arch/loongarch/kernel/cpu-probe.c
++++ b/arch/loongarch/kernel/cpu-probe.c
+@@ -94,7 +94,7 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
+ 	c->options = LOONGARCH_CPU_CPUCFG | LOONGARCH_CPU_CSR |
+ 		     LOONGARCH_CPU_TLB | LOONGARCH_CPU_VINT | LOONGARCH_CPU_WATCH;
+ 
+-	elf_hwcap |= HWCAP_LOONGARCH_CRC32;
++	elf_hwcap = HWCAP_LOONGARCH_CPUCFG | HWCAP_LOONGARCH_CRC32;
+ 
+ 	config = read_cpucfg(LOONGARCH_CPUCFG1);
+ 	if (config & CPUCFG1_UAL) {
 -- 
-Best wishes
-Kemeng Shi
+2.31.1
 
