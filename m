@@ -2,204 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED5A656F9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D6D656EA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbiL0Uvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 15:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S230333AbiL0Uc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 15:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233044AbiL0UvG (ORCPT
+        with ESMTP id S229502AbiL0Ucy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 15:51:06 -0500
-X-Greylist: delayed 477 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Dec 2022 12:39:27 PST
-Received: from mr85p00im-zteg06021901.me.com (mr85p00im-zteg06021901.me.com [17.58.23.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FA013DFC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 12:39:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1672173090; bh=bn8cbZ1+5gpfp47ylD0XGaLQcJuV5XgPGMnDvf0oOfc=;
-        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
-        b=HMQytf0C+PD8zA4CoYTgDmf1Mf0ZzOLE8VHOzCS80TmAJ2zA7D9gcTBvlGLLQpPix
-         wZVz4pA8/EWoMFWutcn6xmbmpffQPyU3APfozAUxxkIo0aSARH+GO+bsJ5NfdyTk6g
-         l1bB1yPHgTU/sbnNNi7/yD2IuF7qYCz13wz4Ux6vTmJi7t8TLxhQV+W9F6euHi59Es
-         v2tRTrRV6DjBy6qlWOW1wKsSf6pA2LeF1OL4gmdGr232sZ1FNqnByWlXqVP87YjgDe
-         SRCWicxsvwDmCKiGs0iLCKdVpUZdPwB4zViyi3vVVyW77UTj+zoHBNG6Dl5w2mM3gW
-         FBUhY2P0vYBOA==
-Received: from smtpclient.apple (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-zteg06021901.me.com (Postfix) with ESMTPSA id 59F2F74062F;
-        Tue, 27 Dec 2022 20:31:29 +0000 (UTC)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.23\))
-Subject: Re: [bp:tip-x86-alternatives 1/1] error[E0588]: packed type cannot
- transitively contain a `#[repr(align)]` type
-From:   Alexander Altman <alexanderaltman@me.com>
-In-Reply-To: <Y6r+UbfkXruwHU2v@zn.tnic>
-Date:   Tue, 27 Dec 2022 12:31:17 -0800
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <76353487-736A-4470-AD31-77F47F8C08F6@me.com>
-References: <202212272003.rgQDX8DQ-lkp@intel.com> <Y6r4mXz5NS0+HVXo@zn.tnic>
- <Y6r+UbfkXruwHU2v@zn.tnic>
-To:     Borislav Petkov <bp@alien8.de>
-X-Mailer: Apple Mail (2.3731.400.23)
-X-Proofpoint-GUID: AR0abnXbYKiN-FukuifFkXTTBuwPFtj0
-X-Proofpoint-ORIG-GUID: AR0abnXbYKiN-FukuifFkXTTBuwPFtj0
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0 clxscore=1011
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2212270170
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 27 Dec 2022 15:32:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583D265CA;
+        Tue, 27 Dec 2022 12:32:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E35FB61035;
+        Tue, 27 Dec 2022 20:32:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923DCC433F0;
+        Tue, 27 Dec 2022 20:32:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672173172;
+        bh=WOpWFmLLWI+lA2gvQHVwy13qZ8bNfgo+s9kU+89teFo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QlYRW4Cou4mx4WDHaagvJAWdHHr1h+lLl/QRR5cOYNI3mf+V/MNcaWvo/dMlsn5xK
+         IMrtD0W+Yvk8v5Pb5D8adLvz7a1pbS7ywVc7Hg/KQNCWmV2A9xgeBvq4o9DcKvMM9+
+         SRf9q5XP66PWt7TNhdAVDdevKrchPToQ+3ievis67I5nY6WC1eb2sKioTd/T3nygp6
+         tpHaycdfOkT4SjaqCpYeSlpiiFRgOZomiUB3u4/4rK6mwQ9FjQulbeCSqzfCeOsvGw
+         Xe/1rBhGKybxlS/BtG0aN1Uy3+ZPoHKk5TQ3be/7nPeXXMRie12KILFwtT+tZZ/8Db
+         W7MKaWmPKBzUw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     edward lo <edward.lo@ambergroup.io>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Sasha Levin <sashal@kernel.org>, ntfs3@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.1 01/28] fs/ntfs3: Validate BOOT record_size
+Date:   Tue, 27 Dec 2022 15:32:22 -0500
+Message-Id: <20221227203249.1213526-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Dec 27, 2022, at 6:16 AM, Borislav Petkov <bp@alien8.de> wrote:
->=20
-> Resending because rust ML doesn't like big messages:
->=20
-> From: rust-for-linux-owner@vger.kernel.org
-> To: rust-for-linux-approval@vger.kernel.org, bp@alien8.de
-> Subject: BOUNCE rust-for-linux@vger.kernel.org:     Message too long =
-(>100000 chars)
->=20
-> Rust folks, you can check out the whole thing here:
->=20
-> https://lore.kernel.org/all/202212272003.rgQDX8DQ-lkp@intel.com/
->=20
-> (and maybe raise the limit on that ML of yours :))
->=20
-> Thx.
->=20
-> On Tue, Dec 27, 2022 at 02:52:25PM +0100, Borislav Petkov wrote:
->> On Tue, Dec 27, 2022 at 08:36:11PM +0800, kernel test robot wrote:
->>> Hi Borislav,
->>>=20
->>> FYI, the error/warning was bisected to this commit, please ignore it =
-if it's irrelevant.
->>>=20
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git =
-tip-x86-alternatives
->>> head:   82db736201e76889825efe8899ad55976111691a
->>> commit: 82db736201e76889825efe8899ad55976111691a [1/1] =
-x86/alternatives: Add alt_instr.flags
->>> config: x86_64-rhel-8.3-rust
->>> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project =
-f28c006a5895fc0e329fe15fead81e37457cb1d1)
->>> reproduce (this is a W=3D1 build):
->>>        wget =
-https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross =
--O ~/bin/make.cross
->>>        chmod +x ~/bin/make.cross
->>>        # =
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git/commit/?id=3D82d=
-b736201e76889825efe8899ad55976111691a
->>>        git remote add bp =
-https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git
->>>        git fetch --no-tags bp tip-x86-alternatives
->>>        git checkout 82db736201e76889825efe8899ad55976111691a
->>>        # save the config file
->>>        mkdir build_dir && cp config build_dir/.config
->>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
-make.cross W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 olddefconfig
->>>        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang =
-make.cross W=3D1 O=3Dbuild_dir ARCH=3Dx86_64 prepare
->>=20
->> These reproduction instructions look insufficient to me. The env =
-needs a
->> rust compiler installed. Which I don't have:
->>=20
->> ./scripts/rust_is_available.sh -v
->> ***
->> *** Rust compiler '' could not be found.
->> ***
->>=20
->> Or does some of that make.cross magic install one? I don't see a =
-"rustc"
->> mentioned there at all but I see
->>=20
->> CONFIG_RUSTC_VERSION_TEXT=3D"rustc 1.62.0 (a8314ef7d 2022-06-27)"
->>=20
->> in the .config so apparently that rustc thing has come from =
-somewhere...
->>=20
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>>=20
->>> All errors (new ones prefixed by >>):
->>>=20
->>>>> error[E0588]: packed type cannot transitively contain a =
-`#[repr(align)]` type
+From: edward lo <edward.lo@ambergroup.io>
 
+[ Upstream commit 0b66046266690454dc04e6307bcff4a5605b42a1 ]
 
-This is indeed directly because of your change, although fixing it =
-beyond my
-skill.  Explanation:
+When the NTFS BOOT record_size field < 0, it represents a
+shift value. However, there is no sanity check on the shift result
+and the sbi->record_bits calculation through blksize_bits() assumes
+the size always > 256, which could lead to NPD while mounting a
+malformed NTFS image.
 
-You made the following change:
-> - u16 cpuid; /* cpuid bit set for replacement */
-> +
-> + union {
-> + struct {
-> + u32 cpuid: 16; /* CPUID bit set for replacement */
-> + u32 flags: 16; /* patching control flags */
-> + };
-> + u32 ft_flgs;
-> + };
+[  318.675159] BUG: kernel NULL pointer dereference, address: 0000000000000158
+[  318.675682] #PF: supervisor read access in kernel mode
+[  318.675869] #PF: error_code(0x0000) - not-present page
+[  318.676246] PGD 0 P4D 0
+[  318.676502] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[  318.676934] CPU: 0 PID: 259 Comm: mount Not tainted 5.19.0 #5
+[  318.677289] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+[  318.678136] RIP: 0010:ni_find_attr+0x2d/0x1c0
+[  318.678656] Code: 89 ca 4d 89 c7 41 56 41 55 41 54 41 89 cc 55 48 89 fd 53 48 89 d3 48 83 ec 20 65 48 8b 04 25 28 00 00 00 48 89 44 24 180
+[  318.679848] RSP: 0018:ffffa6c8c0297bd8 EFLAGS: 00000246
+[  318.680104] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000080
+[  318.680790] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+[  318.681679] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[  318.682577] R10: 0000000000000000 R11: 0000000000000005 R12: 0000000000000080
+[  318.683015] R13: ffff8d5582e68400 R14: 0000000000000100 R15: 0000000000000000
+[  318.683618] FS:  00007fd9e1c81e40(0000) GS:ffff8d55fdc00000(0000) knlGS:0000000000000000
+[  318.684280] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  318.684651] CR2: 0000000000000158 CR3: 0000000002e1a000 CR4: 00000000000006f0
+[  318.685623] Call Trace:
+[  318.686607]  <TASK>
+[  318.686872]  ? ntfs_alloc_inode+0x1a/0x60
+[  318.687235]  attr_load_runs_vcn+0x2b/0xa0
+[  318.687468]  mi_read+0xbb/0x250
+[  318.687576]  ntfs_iget5+0x114/0xd90
+[  318.687750]  ntfs_fill_super+0x588/0x11b0
+[  318.687953]  ? put_ntfs+0x130/0x130
+[  318.688065]  ? snprintf+0x49/0x70
+[  318.688164]  ? put_ntfs+0x130/0x130
+[  318.688256]  get_tree_bdev+0x16a/0x260
+[  318.688407]  vfs_get_tree+0x20/0xb0
+[  318.688519]  path_mount+0x2dc/0x9b0
+[  318.688877]  do_mount+0x74/0x90
+[  318.689142]  __x64_sys_mount+0x89/0xd0
+[  318.689636]  do_syscall_64+0x3b/0x90
+[  318.689998]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[  318.690318] RIP: 0033:0x7fd9e133c48a
+[  318.690687] Code: 48 8b 0d 11 fa 2a 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 008
+[  318.691357] RSP: 002b:00007ffd374406c8 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+[  318.691632] RAX: ffffffffffffffda RBX: 0000564d0b051080 RCX: 00007fd9e133c48a
+[  318.691920] RDX: 0000564d0b051280 RSI: 0000564d0b051300 RDI: 0000564d0b0596a0
+[  318.692123] RBP: 0000000000000000 R08: 0000564d0b0512a0 R09: 0000000000000020
+[  318.692349] R10: 00000000c0ed0000 R11: 0000000000000202 R12: 0000564d0b0596a0
+[  318.692673] R13: 0000564d0b051280 R14: 0000000000000000 R15: 00000000ffffffff
+[  318.693007]  </TASK>
+[  318.693271] Modules linked in:
+[  318.693614] CR2: 0000000000000158
+[  318.694446] ---[ end trace 0000000000000000 ]---
+[  318.694779] RIP: 0010:ni_find_attr+0x2d/0x1c0
+[  318.694952] Code: 89 ca 4d 89 c7 41 56 41 55 41 54 41 89 cc 55 48 89 fd 53 48 89 d3 48 83 ec 20 65 48 8b 04 25 28 00 00 00 48 89 44 24 180
+[  318.696042] RSP: 0018:ffffa6c8c0297bd8 EFLAGS: 00000246
+[  318.696531] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000080
+[  318.698114] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+[  318.699286] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[  318.699795] R10: 0000000000000000 R11: 0000000000000005 R12: 0000000000000080
+[  318.700236] R13: ffff8d5582e68400 R14: 0000000000000100 R15: 0000000000000000
+[  318.700973] FS:  00007fd9e1c81e40(0000) GS:ffff8d55fdc00000(0000) knlGS:0000000000000000
+[  318.701688] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  318.702190] CR2: 0000000000000158 CR3: 0000000002e1a000 CR4: 00000000000006f0
+[  318.726510] mount (259) used greatest stack depth: 13320 bytes left
 
-That caused Rust=E2=80=99s bindgen (bindings generator) to generate a =
-type for the
-altered field that indirectly included a representation of the
-bitfields...which have a greater-than-natural alignment because of their
-encoding (they=E2=80=99re represented as an array of 4 8-bit unsigned =
-integers, but
-aligned as if they=E2=80=99re a single 16-bit unsigned integer).  This =
-interacts
-badly with the top-level command to make the alt_instr struct packed, =
-which
-bindgen faithfully translates from C __packed to Rust #[repr(packed)].
+This patch adds a sanity check.
 
-One way to resolve this temporarily would be to add the following line =
-above
-the offending struct:
-/// <div rustbindgen hide></div>
-This will cause bindgen to ignore the struct entirely and not translate =
-it.  If it=E2=80=99s
-actually needed for Rust code, now or later, then we can=E2=80=99t do =
-that and need
-to actually replace it with something translatable, or else leave it =
-hidden and
-manually create its translation on the Rust side.  For the latter, just =
-using a
-u32 for the entire bitfield-containing union would be sufficient.
+Signed-off-by: edward lo <edward.lo@ambergroup.io>
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/ntfs3/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->>=20
->> -ENOPARSE this error.
->>=20
->> Lemme add rust and toolchain MLs to Cc and leave the rest for them =
-with
->> the hope that they can translate this linenoise for me.
->=20
-> Well, not leaving it because rust ML can't take such big emails.
->=20
-> --=20
-> Regards/Gruss,
->    Boris.
->=20
-> https://people.kernel.org/tglx/notes-about-netiquette
->=20
+diff --git a/fs/ntfs3/super.c b/fs/ntfs3/super.c
+index 47012c9bf505..d998cb083d95 100644
+--- a/fs/ntfs3/super.c
++++ b/fs/ntfs3/super.c
+@@ -789,7 +789,7 @@ static int ntfs_init_from_boot(struct super_block *sb, u32 sector_size,
+ 						 : (u32)boot->record_size
+ 							   << sbi->cluster_bits;
+ 
+-	if (record_size > MAXIMUM_BYTES_PER_MFT)
++	if (record_size > MAXIMUM_BYTES_PER_MFT || record_size < SECTOR_SIZE)
+ 		goto out;
+ 
+ 	sbi->record_bits = blksize_bits(record_size);
+-- 
+2.35.1
 
-
-Thanks,
-     Laine Taffin Altman=20=
