@@ -2,192 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E2E656797
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 07:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10FB565679E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 07:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiL0Gnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 01:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S229564AbiL0G7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 01:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiL0Gnp (ORCPT
+        with ESMTP id S229488AbiL0G7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 01:43:45 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 802AF62FF
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 22:43:38 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxjusYlKpjA8wIAA--.19816S3;
-        Tue, 27 Dec 2022 14:43:36 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxIL8XlKpjScANAA--.44756S3;
-        Tue, 27 Dec 2022 14:43:36 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Fix irq enable in exception handlers
-To:     Jinyang He <hejinyang@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-References: <20221221074238.6699-1-hejinyang@loongson.cn>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <c6477e2e-2950-ac27-97c9-38fb0c089c80@loongson.cn>
-Date:   Tue, 27 Dec 2022 14:43:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 27 Dec 2022 01:59:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A3DFC8
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 22:58:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672124308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mEQnE9PVAxMt3NN5busw/86CF7CMlanPyO97TM74NVQ=;
+        b=Zk1M4/+Ot37IzYXK6uaZk7K1ZYQ6Wp9/IN4Tw/6FoqSQpSdAWjl1/dZh7IjNzNvL3C6Maq
+        gbH9PV5pbVMvqfp3o8X1gW2kX5g63UE+vgEfx1zzm13s1SBCBIukkaBZJGIVVxZLzWKJOJ
+        M6fGO5cYsPgb5BaIX/WNZsrpKslODLg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-650-H81-AmHuOaux7U3GGJzsHQ-1; Tue, 27 Dec 2022 01:58:27 -0500
+X-MC-Unique: H81-AmHuOaux7U3GGJzsHQ-1
+Received: by mail-wm1-f71.google.com with SMTP id k42-20020a05600c1caa00b003d971135cd5so5663536wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 22:58:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mEQnE9PVAxMt3NN5busw/86CF7CMlanPyO97TM74NVQ=;
+        b=A9Cxw5YtrEj0HUYrLZj4qlP6ujVbq/pJmK6KmbxdnRs7YnS1qM7WA1F6BzhMFS/AM6
+         oQFRxXv9u0oYdoLQ+Z1lt4RIboIqfmXTfr2TP6XadDR4qMGFI8tRl/N2MVgblGrZkmbL
+         uAguNs+zNV7Lbq1QvzA5oEot8gm3o84bQZL2ZWtum6FLmC6lylAjW/ITWO+e55cnPXTU
+         WA0Oi/sUepULHf27lBwmSyIh1UQsFeCgIPtukeiJrYRzJk69FqfYOSNPjCNMynfaXi78
+         i2ER53oEaPtOqnQwQCIy0eNXjFxbrYN1yMPpdj8rksT9GpqbnGrpry3civv2ywo70nWI
+         0K0g==
+X-Gm-Message-State: AFqh2kozH4yqhFg3n4H8S7bBIWoqHGQnVFH2Eq7uXTpQSYVj4S1bSK3e
+        dAdr5CIFyqK+YCPtSTsnVIGpLBlfBM+ZQrN//tIvIuZDDH9++OFChXw7Ft17TSKWujACX81tHxd
+        HbEYOs21XYUaZjnKqC7/e/CPi
+X-Received: by 2002:a05:6000:408b:b0:242:8404:6b66 with SMTP id da11-20020a056000408b00b0024284046b66mr16317870wrb.1.1672124306088;
+        Mon, 26 Dec 2022 22:58:26 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsQCt0+AaMD4RxNYOoeOnSYvfwzUkVJfqDViHWgn3ChjJ9wRZbivi34ts/r3cP93RBNHKXVag==
+X-Received: by 2002:a05:6000:408b:b0:242:8404:6b66 with SMTP id da11-20020a056000408b00b0024284046b66mr16317856wrb.1.1672124305675;
+        Mon, 26 Dec 2022 22:58:25 -0800 (PST)
+Received: from redhat.com ([2.52.151.85])
+        by smtp.gmail.com with ESMTPSA id p18-20020a056000019200b00279d23574c4sm6850233wrx.13.2022.12.26.22.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 22:58:25 -0800 (PST)
+Date:   Tue, 27 Dec 2022 01:58:22 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, eperezma@redhat.com,
+        edumazet@google.com, maxime.coquelin@redhat.com, kuba@kernel.org,
+        pabeni@redhat.com, davem@davemloft.net
+Subject: Re: [PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq
+ command
+Message-ID: <20221227014641-mutt-send-email-mst@kernel.org>
+References: <20221226074908.8154-1-jasowang@redhat.com>
+ <20221226074908.8154-5-jasowang@redhat.com>
+ <1672107557.0142956-1-xuanzhuo@linux.alibaba.com>
+ <CACGkMEvzhAFj5HCmP--9DKfCAq_4wPNwsmmg4h0Sbv6ra0+DrQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20221221074238.6699-1-hejinyang@loongson.cn>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxIL8XlKpjScANAA--.44756S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGFy7GF4xJr1DKFW3GFy3Arb_yoWrZw15pF
-        W7CFs5KFW8ZFn7Xa9rJ340vFy5X392qa1xC3yvka93Wan0yr95Wr1vqFW7XFyjv34Dur40
-        vry0y3Z2q3WUJFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU70PfDUUUU
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEvzhAFj5HCmP--9DKfCAq_4wPNwsmmg4h0Sbv6ra0+DrQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 27, 2022 at 12:33:53PM +0800, Jason Wang wrote:
+> On Tue, Dec 27, 2022 at 10:25 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> >
+> > On Mon, 26 Dec 2022 15:49:08 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> > > We used to busy waiting on the cvq command this tends to be
+> > > problematic since:
+> > >
+> > > 1) CPU could wait for ever on a buggy/malicous device
+> > > 2) There's no wait to terminate the process that triggers the cvq
+> > >    command
+> > >
+> > > So this patch switch to use virtqueue_wait_for_used() to sleep with a
+> > > timeout (1s) instead of busy polling for the cvq command forever. This
+> >
+> > I don't think that a fixed 1S is a good choice.
+> 
+> Well, it could be tweaked to be a little bit longer.
+> 
+> One way, as discussed, is to let the device advertise a timeout then
+> the driver can validate if it's valid and use that timeout. But it
+> needs extension to the spec.
+
+Controlling timeout from device is a good idea, e.g. hardware devices
+would benefit from a shorter timeout, hypervisor devices from a longer
+timeout or no timeout.
+
+> 
+> > Some of the DPUs are very
+> > lazy for cvq handle.
+> 
+> Such design needs to be revisited, cvq (control path) should have a
+> better priority or QOS than datapath.
+
+Spec says nothing about this, so driver can't assume this either.
+
+> > In particular, we will also directly break the device.
+> 
+> It's kind of hardening for malicious devices.
+
+ATM no amount of hardening can prevent a malicious hypervisor from
+blocking the guest. Recovering when a hardware device is broken would be
+nice but I think if we do bother then we should try harder to recover,
+such as by driving device reset.
 
 
-On 12/21/2022 03:42 PM, Jinyang He wrote:
-> The interrupt state can be got by regs->csr_prmd. Once previous
-> interrupt state is disable, we shouldn't enable interrupt if we
-> triggered exception which can be triggered in kernel mode. So
-> conditionally enable interrupt. For those do_\exception which
-> can not triggered in kernel mode but need enable interrupt, call
-> die_if_kernel() firstly. And for do_lsx, do_lasx and do_lbt cannot
-> triggered in kernel mode, too.
->
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> ---
->  arch/loongarch/kernel/traps.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
->
-> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-> index 1ea14f6c18d3..3ac7b32d1e15 100644
-> --- a/arch/loongarch/kernel/traps.c
-> +++ b/arch/loongarch/kernel/traps.c
-> @@ -340,9 +340,9 @@ asmlinkage void noinstr do_fpe(struct pt_regs *regs, unsigned long fcsr)
->
->  	/* Clear FCSR.Cause before enabling interrupts */
->  	write_fcsr(LOONGARCH_FCSR0, fcsr & ~mask_fcsr_x(fcsr));
-> -	local_irq_enable();
->
->  	die_if_kernel("FP exception in kernel code", regs);
-> +	local_irq_enable();
->
->  	sig = SIGFPE;
->  	fault_addr = (void __user *) regs->csr_era;
-> @@ -432,7 +432,8 @@ asmlinkage void noinstr do_bp(struct pt_regs *regs)
->  	unsigned long era = exception_era(regs);
->  	irqentry_state_t state = irqentry_enter(regs);
->
-> -	local_irq_enable();
-> +	if (regs->csr_prmd & CSR_PRMD_PIE)
-> +		local_irq_enable();
->  	current->thread.trap_nr = read_csr_excode();
->  	if (__get_inst(&opcode, (u32 *)era, user))
->  		goto out_sigsegv;
-> @@ -514,7 +515,8 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
->  	unsigned int __user *era = (unsigned int __user *)exception_era(regs);
->  	irqentry_state_t state = irqentry_enter(regs);
->
-> -	local_irq_enable();
-> +	if (regs->csr_prmd & CSR_PRMD_PIE)
-> +		local_irq_enable();
->  	current->thread.trap_nr = read_csr_excode();
->
->  	if (notify_die(DIE_RI, "RI Fault", regs, 0, current->thread.trap_nr,
-> @@ -606,8 +608,8 @@ asmlinkage void noinstr do_fpu(struct pt_regs *regs)
->  {
->  	irqentry_state_t state = irqentry_enter(regs);
->
-> -	local_irq_enable();
->  	die_if_kernel("do_fpu invoked from kernel context!", regs);
-> +	local_irq_enable();
->  	BUG_ON(is_lsx_enabled());
->  	BUG_ON(is_lasx_enabled());
->
-> @@ -623,13 +625,13 @@ asmlinkage void noinstr do_lsx(struct pt_regs *regs)
->  {
->  	irqentry_state_t state = irqentry_enter(regs);
->
-> +	die_if_kernel("do_lsx invoked from kernel context!", regs);
->  	local_irq_enable();
->  	if (!cpu_has_lsx) {
->  		force_sig(SIGILL);
->  		goto out;
->  	}
->
-> -	die_if_kernel("do_lsx invoked from kernel context!", regs);
->  	BUG_ON(is_lasx_enabled());
->
->  	preempt_disable();
-> @@ -645,14 +647,13 @@ asmlinkage void noinstr do_lasx(struct pt_regs *regs)
->  {
->  	irqentry_state_t state = irqentry_enter(regs);
->
-> +	die_if_kernel("do_lasx invoked from kernel context!", regs);
->  	local_irq_enable();
->  	if (!cpu_has_lasx) {
->  		force_sig(SIGILL);
->  		goto out;
->  	}
->
-> -	die_if_kernel("do_lasx invoked from kernel context!", regs);
-> -
->  	preempt_disable();
->  	init_restore_lasx();
->  	preempt_enable();
-> @@ -666,6 +667,7 @@ asmlinkage void noinstr do_lbt(struct pt_regs *regs)
->  {
->  	irqentry_state_t state = irqentry_enter(regs);
->
-> +	die_if_kernel("do_lbt invoked from kernel context!", regs);
->  	local_irq_enable();
->  	force_sig(SIGILL);
->  	local_irq_disable();
-> @@ -677,7 +679,6 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
->  {
->  	irqentry_state_t state = irqentry_enter(regs);
->
-> -	local_irq_enable();
->  	/*
->  	 * Game over - no way to handle this if it ever occurs.	Most probably
->  	 * caused by a fatal error after another hardware/software error.
-> @@ -685,8 +686,8 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
->  	pr_err("Caught reserved exception %u on pid:%d [%s] - should not happen\n",
->  		read_csr_excode(), current->pid, current->comm);
->  	die_if_kernel("do_reserved exception", regs);
-> +	local_irq_enable();
->  	force_sig(SIGUNUSED);
-> -
->  	local_irq_disable();
->
->  	irqentry_exit(regs, state);
->
+Also, does your patch break surprise removal? There's no callback
+in this case ATM.
 
-With this patch, the kprobe hang problem can be fixed, it is better
-to merge this patch before the kprobe patches, or I can put it as
-the first patch when submit the new kprobe series.
-
-Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-
-Thanks,
-Tiezhu
+> >
+> > I think it is necessary to add a Virtio-Net parameter to allow users to define
+> > this timeout by themselves. Although I don't think this is a good way.
+> 
+> Very hard and unfriendly to the end users.
+> 
+> Thanks
+> 
+> >
+> > Thanks.
+> >
+> >
+> > > gives the scheduler a breath and can let the process can respond to
+> > > asignal. If the device doesn't respond in the timeout, break the
+> > > device.
+> > >
+> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > ---
+> > > Changes since V1:
+> > > - break the device when timeout
+> > > - get buffer manually since the virtio core check more_used() instead
+> > > ---
+> > >  drivers/net/virtio_net.c | 24 ++++++++++++++++--------
+> > >  1 file changed, 16 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > index efd9dd55828b..6a2ea64cfcb5 100644
+> > > --- a/drivers/net/virtio_net.c
+> > > +++ b/drivers/net/virtio_net.c
+> > > @@ -405,6 +405,7 @@ static void disable_rx_mode_work(struct virtnet_info *vi)
+> > >       vi->rx_mode_work_enabled = false;
+> > >       spin_unlock_bh(&vi->rx_mode_lock);
+> > >
+> > > +     virtqueue_wake_up(vi->cvq);
+> > >       flush_work(&vi->rx_mode_work);
+> > >  }
+> > >
+> > > @@ -1497,6 +1498,11 @@ static bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq,
+> > >       return !oom;
+> > >  }
+> > >
+> > > +static void virtnet_cvq_done(struct virtqueue *cvq)
+> > > +{
+> > > +     virtqueue_wake_up(cvq);
+> > > +}
+> > > +
+> > >  static void skb_recv_done(struct virtqueue *rvq)
+> > >  {
+> > >       struct virtnet_info *vi = rvq->vdev->priv;
+> > > @@ -1984,6 +1990,8 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
+> > >       return err;
+> > >  }
+> > >
+> > > +static int virtnet_close(struct net_device *dev);
+> > > +
+> > >  /*
+> > >   * Send command via the control virtqueue and check status.  Commands
+> > >   * supported by the hypervisor, as indicated by feature bits, should
+> > > @@ -2026,14 +2034,14 @@ static bool virtnet_send_command(struct virtnet_info *vi, u8 class, u8 cmd,
+> > >       if (unlikely(!virtqueue_kick(vi->cvq)))
+> > >               return vi->ctrl->status == VIRTIO_NET_OK;
+> > >
+> > > -     /* Spin for a response, the kick causes an ioport write, trapping
+> > > -      * into the hypervisor, so the request should be handled immediately.
+> > > -      */
+> > > -     while (!virtqueue_get_buf(vi->cvq, &tmp) &&
+> > > -            !virtqueue_is_broken(vi->cvq))
+> > > -             cpu_relax();
+> > > +     if (virtqueue_wait_for_used(vi->cvq)) {
+> > > +             virtqueue_get_buf(vi->cvq, &tmp);
+> > > +             return vi->ctrl->status == VIRTIO_NET_OK;
+> > > +     }
+> > >
+> > > -     return vi->ctrl->status == VIRTIO_NET_OK;
+> > > +     netdev_err(vi->dev, "CVQ command timeout, break the virtio device.");
+> > > +     virtio_break_device(vi->vdev);
+> > > +     return VIRTIO_NET_ERR;
+> > >  }
+> > >
+> > >  static int virtnet_set_mac_address(struct net_device *dev, void *p)
+> > > @@ -3526,7 +3534,7 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
+> > >
+> > >       /* Parameters for control virtqueue, if any */
+> > >       if (vi->has_cvq) {
+> > > -             callbacks[total_vqs - 1] = NULL;
+> > > +             callbacks[total_vqs - 1] = virtnet_cvq_done;
+> > >               names[total_vqs - 1] = "control";
+> > >       }
+> > >
+> > > --
+> > > 2.25.1
+> > >
+> > > _______________________________________________
+> > > Virtualization mailing list
+> > > Virtualization@lists.linux-foundation.org
+> > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+> >
 
