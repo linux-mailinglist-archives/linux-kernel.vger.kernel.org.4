@@ -2,147 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC24656E9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8A1656EA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiL0U04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 15:26:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S230162AbiL0UaG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Dec 2022 15:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiL0U0v (ORCPT
+        with ESMTP id S229502AbiL0UaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 15:26:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7700263FE;
-        Tue, 27 Dec 2022 12:26:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1116A61237;
-        Tue, 27 Dec 2022 20:26:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33449C433F0;
-        Tue, 27 Dec 2022 20:26:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672172809;
-        bh=71+MufZX0fY/PDS4aJFJS0cBLxjDpoM2IXrKM3835+Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tSgUtU8MSaqTL56VP8lE5vzON0ZYprHIwyD3golx3i2ccUfIVuJzLQg4kRaUXg/iq
-         8S+E8w92iOBbXVHeonTlzu1ubvgJmHuhjPxV4SPjlfB1mQjSGEEVwSR1z5ErPMHi/D
-         h826f8KbhvguQelshXP9yfr57KivIR3cfaRiVbweZm0ufwVTMwqgYAhD4io7agnrD1
-         6Sus9aBAYYuhxHIR7bYgfkFBTk3j5ZKaktu7HqruPkBcMVT/ImuHJowR1kehDssxRN
-         ha4pMgMPHt/qnfsZRc91klWZbH+Bc25VdqvOSBTOWm6EJ81JeHGlwLbVeOJ+dkhOLp
-         Zo+DFk5u5BcTg==
-Date:   Tue, 27 Dec 2022 15:26:47 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     stable-commits@vger.kernel.org, johan+linaro@kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: Patch "phy: qcom-qmp-combo: fix runtime suspend" has been added
- to the 5.15-stable tree
-Message-ID: <Y6tVB5+c6vZ4z3GX@sashalap>
-References: <20221225150913.691403-1-sashal@kernel.org>
- <Y6q3k21nJFWKye76@hovoldconsulting.com>
- <Y6rtS7AaQ+EmfD8o@sashalap>
- <Y6ryF2J2nzYbJV05@hovoldconsulting.com>
+        Tue, 27 Dec 2022 15:30:04 -0500
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EBD63FE;
+        Tue, 27 Dec 2022 12:30:03 -0800 (PST)
+Received: by mail-il1-f173.google.com with SMTP id y2so7253290ily.5;
+        Tue, 27 Dec 2022 12:30:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qmLwJ+PWqbcorDCwxmocOdJgeZdtJDX23RvZXns5ir0=;
+        b=yib27nWOshfewB/9gcylNZJw/CTBxvoQrqoQDeFFsNQJHD27Zuko60Pawy7Su05/bM
+         czvh2wpmNsZpqO4aNIPWjDXdZnLR5l0atN3IE+tj4uH/6vhfipWyNXZZugW4wOVhY26U
+         chlQe3LJyf49V4iLKq5PVs1rf6dcgAEN8NCAHBJRoWDC4LKNroHwpJwTubRd7hapLVqX
+         t0qmxV+5Tm3PqCds2hTXSe/SSKeFIDNAxnJTwZjG613q24LlJskARxuSn8lx9YTduEtl
+         KHfrut6yNPfRPY21hS28sgjm+U1Ofs4h4cU60GvL1NPC63tdw8KOXfdwnZ3FlOQL9iKX
+         d4Ng==
+X-Gm-Message-State: AFqh2kqtLIDY2mpGKEKgbPZiuDBV9t55BRvwcQBowoJ/S5nL/62Dk3uZ
+        hbu3advhM7+6M65I9oUhvZcKU1aCGXJ3Sr0RMyw=
+X-Google-Smtp-Source: AMrXdXsB3MLS/ng1XsIcpRzLrbjLFZqQgfrh6A4j+8oJXGChl1QcIpglgU/EebkQKql8MqlNf5aeD7JKett5RkenJh8=
+X-Received: by 2002:a92:da4f:0:b0:30b:e5e7:9854 with SMTP id
+ p15-20020a92da4f000000b0030be5e79854mr1406536ilq.180.1672173002819; Tue, 27
+ Dec 2022 12:30:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y6ryF2J2nzYbJV05@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221226193517.qynxfceqgzvr4qwu@tarta.nabijaczleweli.xyz> <20221226195015.venelpockrns7uk4@tarta.nabijaczleweli.xyz>
+In-Reply-To: <20221226195015.venelpockrns7uk4@tarta.nabijaczleweli.xyz>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 27 Dec 2022 12:29:51 -0800
+Message-ID: <CAM9d7cgJr4-LvH_xFJfmMu_7Zj+BB_n0jyE_=CDY+gR+EhGxtg@mail.gmail.com>
+Subject: Re: [PATCH 2/1] perf tools: don't include signature in version strings
+To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 02:24:39PM +0100, Johan Hovold wrote:
->On Tue, Dec 27, 2022 at 08:04:11AM -0500, Sasha Levin wrote:
->> On Tue, Dec 27, 2022 at 10:14:59AM +0100, Johan Hovold wrote:
->> >On Sun, Dec 25, 2022 at 10:09:13AM -0500, Sasha Levin wrote:
->> >> This is a note to let you know that I've just added the patch titled
->> >>
->> >>     phy: qcom-qmp-combo: fix runtime suspend
->> >>
->> >> to the 5.15-stable tree which can be found at:
->> >>     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
->> >>
->> >> The filename of the patch is:
->> >>      phy-qcom-qmp-combo-fix-runtime-suspend.patch
->> >> and it can be found in the queue-5.15 subdirectory.
->> >>
->> >> If you, or anyone else, feels it should not be added to the stable tree,
->> >> please let <stable@vger.kernel.org> know about it.
->> >>
->> >>
->> >>
->> >> commit d17b3a7b0119f7d92788acbe0f3d3b31bd8f892b
->> >> Author: Johan Hovold <johan+linaro@kernel.org>
->> >> Date:   Mon Nov 14 09:13:45 2022 +0100
->> >>
->> >>     phy: qcom-qmp-combo: fix runtime suspend
->> >>
->> >>     [ Upstream commit c7b98de745cffdceefc077ad5cf9cda032ef8959 ]
->> >>
->> >>     Drop the confused runtime-suspend type check which effectively broke
->> >>     runtime PM if the DP child node happens to be parsed before the USB
->> >>     child node during probe (e.g. due to order of child nodes in the
->> >>     devicetree).
->> >>
->> >>     Instead use the new driver data USB PHY pointer to access the USB
->> >>     configuration and resources.
->> >>
->> >>     Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
->> >>     Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> >>     Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->> >>     Link: https://lore.kernel.org/r/20221114081346.5116-6-johan+linaro@kernel.org
->> >>     Signed-off-by: Vinod Koul <vkoul@kernel.org>
->> >>     Signed-off-by: Sasha Levin <sashal@kernel.org>
->> >
->> >This one was not marked for stable and can not be backported without
->> >further dependencies. This driver did not even exist in 5.15, and no,
->> >you should no try to backport the split of the original driver either.
->>
->> I'll drop this patch.
->>
->> >Sasha, please stop this madness.
->>
->> So help me understand this... The fixes tag says:
->>
->> 	Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
->>
->> 52e013d0bffa was merged in v5.10. Does the tag point to the wrong
->> commit?
+On Mon, Dec 26, 2022 at 11:50 AM Ahelenia Ziemiańska
+<nabijaczleweli@nabijaczleweli.xyz> wrote:
 >
->The fixes tag is correct, but the qmp driver has since been split into
->multiple drivers.
+> This explodes the build if HEAD is signed, since the generated version
+> is gpg: Signature made Mon 26 Dec 2022 20:34:48 CET, then a few more
+> lines, then the SHA.
 >
->But first, the commit in question will not even compile without
->7a7d86d14d07 ("phy: qcom-qmp-combo: fix broken power on") which from
->what I can tell has not yet been backported (even though it has a stable
->tag).
->
->Did you make sure that you compile-tested this patch after applying it
->to 5.15?
+> Signed-off-by: Ahelenia Ziemiańska <nabijaczleweli@nabijaczleweli.xyz>
 
-https://linux.kernelci.org/build/stable-rc/branch/queue%2F5.15/kernel/v5.15.85-687-g210b69cd4594/
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
->Second, this commit fixes the combo driver which did not exist before
->94a407cc17a4 (phy: qcom-qmp: create copies of QMP PHY driver) which
->split the older driver into multiple drivers. This onef and all the
->follow-on cleanups should not be backported.
->
->If we find anything that really needs to be fixed in stable kernels
->prior to the driver split, those fixes need to be backported properly
->to the older version of the driver. This should not be automated.
-
-Ack, I'll blacklist this driver, thank you.
-
--- 
 Thanks,
-Sasha
+Namhyung
+
+
+> ---
+>  tools/perf/Documentation/Makefile | 2 +-
+>  tools/perf/util/PERF-VERSION-GEN  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/Documentation/Makefile b/tools/perf/Documentation/Makefile
+> index 6e7b88917ca0..ba5d942e4c6a 100644
+> --- a/tools/perf/Documentation/Makefile
+> +++ b/tools/perf/Documentation/Makefile
+> @@ -267,7 +267,7 @@ $(OUTPUT)%.xml : %.txt
+>         $(ASCIIDOC) -b docbook -d manpage \
+>                 $(ASCIIDOC_EXTRA) -aperf_version=$(PERF_VERSION) \
+>                 -aperf_date=$(shell git log -1 --pretty="format:%cd" \
+> -                               --date=short $<) \
+> +                               --date=short --no-show-signature $<) \
+>                 -o $@+ $< && \
+>         mv $@+ $@
+>
+> diff --git a/tools/perf/util/PERF-VERSION-GEN b/tools/perf/util/PERF-VERSION-GEN
+> index 3cc42821d9b3..d7dc7c28508c 100755
+> --- a/tools/perf/util/PERF-VERSION-GEN
+> +++ b/tools/perf/util/PERF-VERSION-GEN
+> @@ -19,7 +19,7 @@ TAG=
+>  if test -d ../../.git -o -f ../../.git
+>  then
+>         TAG=$(MAKEFLAGS= make -sC ../.. kernelversion)
+> -       CID=$(git log -1 --abbrev=12 --pretty=format:"%h" 2>/dev/null) && CID="-g$CID"
+> +       CID=$(git log -1 --abbrev=12 --pretty=format:"%h" --no-show-signature 2>/dev/null) && CID="-g$CID"
+>  elif test -f ../../PERF-VERSION-FILE
+>  then
+>         TAG=$(cut -d' ' -f3 ../../PERF-VERSION-FILE | sed -e 's/\"//g')
+> --
+> 2.30.2
