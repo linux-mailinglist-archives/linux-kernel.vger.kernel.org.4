@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DD9656AF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F38B2656B0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiL0MZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 07:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        id S231220AbiL0MiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 07:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232230AbiL0MZC (ORCPT
+        with ESMTP id S231586AbiL0Mhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 07:25:02 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6137662
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 04:24:27 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so8092437otk.8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 04:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dV8isNUppacynWpg45DwTWA/VWjEAGzXX+K9/4Lkct8=;
-        b=f/t4KgC7HXwvjrgBON1ICJtbFLbtYnJ2nherC2JR9NUcExu5ff+BgHVgj4o3OXLQsY
-         Mn6f8wfgXRGyF+04P283Mg7rUnYeLvXKjeVQHQ4lr5p69FWd893lW8b0ij1+Zsi734A5
-         JcnU1ith+6I6Y8q9iuTjrjrqYssm+ol/Nj5XdUsPtaYMfD2xN7sa2TGezWYBr9AzYMaj
-         98se/PLLZwNinK5LxUUmlAXkP/WlUgOGPYxhxE62+LkuXg6DF4yxsyR6gwgfDzcoO0om
-         mmY7VzoEr/CzpxjWdbO61mmpuAcGalOMO2rgn9RSxcTZmBMaHh5l7lcL0EAbcfpTiXGq
-         4Xdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dV8isNUppacynWpg45DwTWA/VWjEAGzXX+K9/4Lkct8=;
-        b=56EqslPzHLiZzze8fa6mZFqjotJN96sDS1Fh9I95fu9srpvDCYTLYiMaRE4E7FTDWy
-         Nfxf1PNHpm4puIUOCUXErlqq7t7yvR/gAkkmWg6p9S3rTJ0ncXB3WNnCTKDNjpdmMvae
-         GkVltg4U/TsvLtF5yv0HVRQ5NhMr/uEI8BLVEvChDf1rL8JBuYgCu78VMk5d/a3Kr/ae
-         IJxDTlF86ql1jZGBGqDNJvxiQFC2FrlnvGCaFH43Fw6CjQPWHjgPyvA9s51Hh44aL7c7
-         B6xJBwL8fxRWtzGhTTmPnJ04IquMU53f0BzaoaWSdpvAJ3fUjxmsE5yFT6DFH5FBfT/u
-         tbpw==
-X-Gm-Message-State: AFqh2krEIoctVbkCpxmpPiuhnMHi6vsOuLwm0ccBkgcYm3MS56tbGQvU
-        uvvR3D6eaauJ7+Xm80sdueQhtg9Q/7H+4IqK
-X-Google-Smtp-Source: AMrXdXvnTqQsEGOxkGO4mFjcmw+KnpvIu+qJjoICn+Nl3zlT9BcRo1dMNL/QyQWHQH7BEV9i5calcg==
-X-Received: by 2002:a05:6830:1251:b0:670:7865:133c with SMTP id s17-20020a056830125100b006707865133cmr10578090otp.13.1672143866971;
-        Tue, 27 Dec 2022 04:24:26 -0800 (PST)
-Received: from ?IPV6:2804:14d:5c5e:4698:e4b6:5a8e:5e17:7db3? ([2804:14d:5c5e:4698:e4b6:5a8e:5e17:7db3])
-        by smtp.gmail.com with ESMTPSA id s6-20020a9d7586000000b0066ca61230casm6471717otk.8.2022.12.27.04.24.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 04:24:26 -0800 (PST)
-Message-ID: <e527f418-1cfc-df4d-614f-873128bb1368@mojatatu.com>
-Date:   Tue, 27 Dec 2022 09:24:22 -0300
+        Tue, 27 Dec 2022 07:37:46 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8226C2A3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 04:37:45 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 74D8A15D5;
+        Tue, 27 Dec 2022 13:37:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1672144663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CAAvJN77bvgX7oGEekHJcV4mBzu/DWg2fOxNjin+9Hc=;
+        b=CSdxd9zIl65XUlXt2RIzmcidEvaoXvNPRocz5E8L4+rLCOEXYxE1mO4PqLEKpfydZ5uXlu
+        ehVFfLL7hyuDxxKKpOsA/n7uv8JHG/Qa5qZcfNPMItpNKfgUuD0KzGrwPUI7ceO7b+Nuz1
+        h6f3cMNZ0UcojcdDJfQTtS6LdiwUSbkS5Dq+rCLMdNTM04XbulwHLLIYOsgSGb6YFekJGI
+        5axoPSly5aZe83WMuOlrPgNK3iZVDzhIQ4XUzY7vX2Yewmit7tQaFnRLSnqDRmFkxyHQ+I
+        JvxuFN6mQGJCjuRboX+EQRlEH5Z+7q2Q8plMGrnK2feSX+SsMfvrwJCYv568Lw==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next v6 0/4] net/sched: retpoline wrappers for tc
-Content-Language: en-US
-To:     Rudi Heitbaum <rudi@heitbaum.com>, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, kuniyu@amazon.com, linux-kernel@vger.kernel.org
-References: <20221206135513.1904815-1-pctammela@mojatatu.com>
- <20221227083317.GA1025927@82a1e6c4c19b>
-From:   Pedro Tammela <pctammela@mojatatu.com>
-In-Reply-To: <20221227083317.GA1025927@82a1e6c4c19b>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+Date:   Tue, 27 Dec 2022 13:37:43 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>,
+        greg.malysa@timesys.com,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "open list:SPI NOR SUBSYSTEM" <linux-mtd@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 3/3] mtd: spi-nor: Add support for IS25LX256 operating
+ in 1S-8S-8S octal read mode
+In-Reply-To: <eafebda5-7342-dfa9-7745-543d5f7d6f3d@linaro.org>
+References: <20221202135539.271936-1-nathan.morrison@timesys.com>
+ <20221202135539.271936-4-nathan.morrison@timesys.com>
+ <9927a8c3-40cf-2c69-46c6-f660ff2422b1@linaro.org>
+ <eafebda5-7342-dfa9-7745-543d5f7d6f3d@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <14b5fc24d0e9391807768c595a4277ee@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,71 +68,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/12/2022 05:33, Rudi Heitbaum wrote:
-> Hi Pedro,
+Am 2022-12-26 09:17, schrieb Tudor Ambarus:
+> On 26.12.2022 10:04, Tudor Ambarus wrote:
+>> Hi, Nathan,
+>> 
+>> The series is starting to look good, but I'll need another version,
+>> please.
+>> 
+>> On 02.12.2022 15:55, Nathan Barrett-Morrison wrote:
+>>> This adds the IS25LX256 chip into the ISSI flash_info parts table
+>> 
+>> Describe your changes in imperative mood, e.g. "Add support for
+>> S25LX256" instead of "This adds ..."
+>> 
+>> It may worth to re-read
+>> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+>> once in a while.
+>> 
+>>> 
+>>> Signed-off-by: Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+>>> ---
+>>>   drivers/mtd/spi-nor/issi.c | 32 ++++++++++++++++++++++++++++++++
+>>>   1 file changed, 32 insertions(+)
+>>> 
+>>> diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
+>>> index 89a66a19d754..362bc3603d8f 100644
+>>> --- a/drivers/mtd/spi-nor/issi.c
+>>> +++ b/drivers/mtd/spi-nor/issi.c
+>>> @@ -29,6 +29,35 @@ static const struct spi_nor_fixups 
+>>> is25lp256_fixups = {
+>>>       .post_bfpt = is25lp256_post_bfpt_fixups,
+>>>   };
+>>> +static int
+>>> +is25lx256_post_bfpt_fixups(struct spi_nor *nor,
+>>> +               const struct sfdp_parameter_header *bfpt_header,
+>>> +               const struct sfdp_bfpt *bfpt)
+>>> +{
+>>> +    /*
+>>> +     * IS25LX256 supports both 1S-1S-8S and 1S-8S-8S.
+>>> +     * However, the BFPT does not contain any information denoting 
+>>> this
+>>> +     * functionality, so the proper fast read opcodes are never 
+>>> setup.
+>>> +     * We're correcting this issue via the fixup below.  Page 
+>>> program
+>>> +     * commands are detected and setup properly via the 4BAIT 
+>>> lookup.
+>>> +     */
 > 
-> Compiling kernel 6.2-rc1 fails on x86_64 when CONFIG_NET_CLS or
-> CONFIG_NET_CLS_ACT is not set, when CONFIG_RETPOLINE=y is set.
-> 
-> Does tc_wrapper RETPOLINE need a dependency on NET_CLS/NET_CLS_ACT
-> to be added? Or a default?
-> 
-> net/sched/sch_api.c: In function 'pktsched_init':
-> net/sched/sch_api.c:2306:9: error: implicit declaration of function
-> 'tc_wrapper_init' [-Werror=implicit-function-declaration]
->   2306 |         tc_wrapper_init();
->        |         ^~~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
-> make[3]: *** [scripts/Makefile.build:252: net/sched/sch_api.o] Error 1
-> make[2]: *** [scripts/Makefile.build:504: net/sched] Error 2
-> make[1]: *** [scripts/Makefile.build:504: net] Error 2
-> 
-> below is the relevent lines from the .config file.
-> 
-> $ grep -e RETPOLINE -e NET_CLS projects/Generic/linux/linux.x86_64.conf
-> CONFIG_RETPOLINE=y
-> # CONFIG_NET_CLS_BASIC is not set
-> # CONFIG_NET_CLS_TCINDEX is not set
-> # CONFIG_NET_CLS_ROUTE4 is not set
-> # CONFIG_NET_CLS_FW is not set
-> # CONFIG_NET_CLS_U32 is not set
-> # CONFIG_NET_CLS_RSVP is not set
-> # CONFIG_NET_CLS_RSVP6 is not set
-> # CONFIG_NET_CLS_FLOW is not set
-> # CONFIG_NET_CLS_CGROUP is not set
-> # CONFIG_NET_CLS_BPF is not set
-> # CONFIG_NET_CLS_FLOWER is not set
-> # CONFIG_NET_CLS_MATCHALL is not set
-> # CONFIG_NET_CLS_ACT is not set
-> 
+> Why don't you set the READ support when parsing the 4bait table?
 
-Hi Rudi,
+That would deviate from the read handling of all the other modes.
 
-Thanks for the report.
-Could you try the following patch?
+> We need to see the SFDP dump to determine how we treat this. I'm not
+> sure a post_bfpt hook is the right thing to do for this flash.
 
-diff --git a/include/net/tc_wrapper.h b/include/net/tc_wrapper.h
-index ceed2fc089ff..d323fffb839a 100644
---- a/include/net/tc_wrapper.h
-+++ b/include/net/tc_wrapper.h
-@@ -216,6 +216,8 @@ static inline int tc_classify(struct sk_buff *skb, 
-const struct tcf_proto *tp,
-         return tp->classify(skb, tp, res);
-  }
+See:
+https://lore.kernel.org/linux-mtd/e07105d41ec62a6ee47ca0295ca347dc@walle.cc/
 
-+#endif /* CONFIG_NET_CLS */
-+
-  static inline void tc_wrapper_init(void)
-  {
-  #ifdef CONFIG_X86
-@@ -224,8 +226,6 @@ static inline void tc_wrapper_init(void)
-  #endif
-  }
+But yes, I missed that you should include the sfdp dump and some other
+commands in the comment section of the patch which adds support for that
+flash (see Tudors reply).
 
--#endif /* CONFIG_NET_CLS */
--
-  #else
+Tudor, what is the status of your documentation patch? I'd really like
+to refer to the kernel docs instead of having write the same over and
+over again ;)
 
-  #define TC_INDIRECT_SCOPE static
-
-
+-michael
