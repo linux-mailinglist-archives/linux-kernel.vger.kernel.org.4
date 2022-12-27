@@ -2,327 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE11A656D32
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDE7656D38
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 18:07:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiL0REt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 12:04:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        id S231268AbiL0RH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 12:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiL0REi (ORCPT
+        with ESMTP id S229801AbiL0RHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 12:04:38 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAE0A462;
-        Tue, 27 Dec 2022 09:04:37 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id o66so12877870oia.6;
-        Tue, 27 Dec 2022 09:04:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cgoC62GHvEIMBNJM+s+sVmcwJZA/l2ktr3Y+mPUSGLk=;
-        b=D/s9eZ1u28y/MYzi4qIDcYTkxw6XE5Cij5znEItdRjUkgHMCR+FFrQrYnD493vMnoH
-         Z7+0Q3wOSZUOWaFE7Vu9lPh+mYQpZTp5Hfwl74cISQmJGqEbFT7MwVJWMQJFQwDAjM0u
-         WrDtEP17iQpnGxv4gdJc5rZp777yWMYt44O/BBuaqqe6VdWDIJRbowmMqm1BOwmWYDE/
-         nYKtzDrGuj5JvcBBnzUxB085kzjTtrrkzTayd1Zygo6Xe/rTg4szUNaCoEcQ+JTmxdNg
-         ikvllEehcvVXbG56DRzoJZSYI89lFzs73XJYT70dsEoS2Q1FIYnZbsRmdRetRFdebdM9
-         i47A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cgoC62GHvEIMBNJM+s+sVmcwJZA/l2ktr3Y+mPUSGLk=;
-        b=dG2MGScwfA4MEMp3f237tMsIoQwcRgPvGg9IjuSUbPl79K9bTUQmUjk2n3uE2TK6kd
-         MDfR/Cm3PbhB8D+tzzhNh5C4U7udjCuaN+olZ1YnM8B3vFLn5Aq1lfDLgGSBUl9KvjxG
-         +7poCu2yocTjSMK5GR+brnOpzC/m8riHOnAKxqgoONZ02rrQFucIEer4GEFohKbP8xHf
-         Aez6DlBSS1I9naoZtmLlzj4AvN5wvUXVI0Vac3IcZsb+2AJ7K17PXLvqZpcPRKjLUbmQ
-         e26h0HN4xoRXhLT7HGbd5AVaqqCyRfn+vkhEIqiKVqNmNzjUVae3PaeTFerq+ecvTZmQ
-         66JA==
-X-Gm-Message-State: AFqh2krq8dr3o/R1Ig+YIuAjMOAtSbv96d1mjRLZ3i4mOboG2IvmvGHs
-        E4y27uEPdc85NS3U68Q/O12axvo85iXSbqV02HU=
-X-Google-Smtp-Source: AMrXdXsgonfvlbVyG3VFA0NgVj6GOiuGvjvIhcjGxeZxa28G/D3+MuTjZgu69O1aImPtHvf3kWOlguAQbOv2To24Ljc=
-X-Received: by 2002:a05:6808:2001:b0:35b:d93f:cbc4 with SMTP id
- q1-20020a056808200100b0035bd93fcbc4mr1413974oiw.96.1672160676913; Tue, 27 Dec
- 2022 09:04:36 -0800 (PST)
+        Tue, 27 Dec 2022 12:07:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD68BD0;
+        Tue, 27 Dec 2022 09:07:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B9A8611B3;
+        Tue, 27 Dec 2022 17:07:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E8D5C433F2;
+        Tue, 27 Dec 2022 17:07:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672160841;
+        bh=GT0ib72WyJtF+L2c/Gx69hmpwfVEAu1SUy6Sba1vebw=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=armwAVD8T9mnAHhKri3M65L6kE3DC7P4+9S9GX2v5Uad6JYCmDmaDcfQqt/lHDlMo
+         0U7u8r7JydEhiBVKgQE6MiXgfLD1NmTkBEq3pRNlJ1v4j1e42cn/RE/uzihYlDNDYW
+         fX5QgJqAf1WG6iPPpJFCQAz2G/DnkgWiorsbtmAOB6H0akio09KSpUY9F4uzCC/Lt+
+         Ar+z43jE31St23utVgVv8bUowLjhjWxXJcU/flt6IbGdefoayoWASJMDnvdLKKqzkR
+         3hpIvKNaQLQ7zki+4Sy3wa7O8lxkhNjROWefL5F9cNN9Q6M/qJSFcT6ch18tm82gTS
+         DEoruS8nSxScQ==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Tue, 27 Dec 2022 17:06:46 +0000
+Subject: [PATCH v4 1/7] kselftest/alsa: pcm - Drop recent coverage improvement changes
 MIME-Version: 1.0
-References: <20221222183012.1046-1-mario.limonciello@amd.com>
- <2761b1e1-508d-2c2c-f2d8-6f1be536723e@suse.de> <f9b40837-ee2b-76fb-0ec1-d7dfda4ffb7e@amd.com>
- <CADnq5_M42GQhVquw5BM+P-6NKmdZ6yj8czq=s5iXVAmVOexAkw@mail.gmail.com>
-In-Reply-To: <CADnq5_M42GQhVquw5BM+P-6NKmdZ6yj8czq=s5iXVAmVOexAkw@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 27 Dec 2022 12:04:25 -0500
-Message-ID: <CADnq5_OLf3VhFZm7=riDm9ezVT9j9nQ5Fwei3budnqPt5C4t9Q@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Recover from failure to probe GPU
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-efi@vger.kernel.org,
-        Carlos Soriano Sanchez <csoriano@redhat.com>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221208-alsa-pcm-test-hacks-v4-1-5a152e65b1e1@kernel.org>
+References: <20221208-alsa-pcm-test-hacks-v4-0-5a152e65b1e1@kernel.org>
+In-Reply-To: <20221208-alsa-pcm-test-hacks-v4-0-5a152e65b1e1@kernel.org>
+To:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.12-dev-7ab1d
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9518; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=GT0ib72WyJtF+L2c/Gx69hmpwfVEAu1SUy6Sba1vebw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBjqyZAbqPyo20g/crzqVyXwv4m9w1ElysCONNEpBgI
+ bgiBg2CJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY6smQAAKCRAk1otyXVSH0C7rB/
+ 43TCyZavNZeBUCukQZ0aKXxemyrt9wIDijRAIMMLKWAPw+PmZCLnKwER/fYBIjqRoO/L27Xj2ynJQb
+ 5Qh1u2jkqIDgj6597uylgyy0O9NRncJYUBCWm2C6Fvia7E9ZsPeIPvMsvgZsvmyESA30ccsAmp7Aio
+ t6XC95XqZhUBzFL0DmQ4XF4MnNy8J08g+GlJ04P9YJVrU7pC+MfAqLliwXZ5tYZzgrc5pEgQAK6+Qw
+ YLNyhN+/XwEjtnahY9w+3ohRMQl0dZX1sEGEYZlJcBr0szzUWcyfX74qkzfphzStoRcHp7vdJCmmin
+ N/xb5kdCTsDRercTKaCBtauObfEh6w
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 10:40 AM Alex Deucher <alexdeucher@gmail.com> wrote=
-:
->
-> On Sun, Dec 25, 2022 at 10:31 AM Christian K=C3=B6nig
-> <christian.koenig@amd.com> wrote:
-> >
-> > Am 24.12.22 um 10:34 schrieb Thomas Zimmermann:
-> > > Hi
-> > >
-> > > Am 22.12.22 um 19:30 schrieb Mario Limonciello:
-> > >> One of the first thing that KMS drivers do during initialization is
-> > >> destroy the system firmware framebuffer by means of
-> > >> `drm_aperture_remove_conflicting_pci_framebuffers`
-> > >>
-> > >> This means that if for any reason the GPU failed to probe the user
-> > >> will be stuck with at best a screen frozen at the last thing that
-> > >> was shown before the KMS driver continued it's probe.
-> > >>
-> > >> The problem is most pronounced when new GPU support is introduced
-> > >> because users will need to have a recent linux-firmware snapshot
-> > >> on their system when they boot a kernel with matching support.
-> > >>
-> > >> However the problem is further exaggerated in the case of amdgpu bec=
-ause
-> > >> it has migrated to "IP discovery" where amdgpu will attempt to load
-> > >> on "ALL" AMD GPUs even if the driver is missing support for IP block=
-s
-> > >> contained in that GPU.
-> > >>
-> > >> IP discovery requires some probing and isn't run until after the
-> > >> framebuffer has been destroyed.
-> > >>
-> > >> This means a situation can occur where a user purchases a new GPU no=
-t
-> > >> yet supported by a distribution and when booting the installer it wi=
-ll
-> > >> "freeze" even if the distribution doesn't have the matching kernel
-> > >> support
-> > >> for those IP blocks.
-> > >>
-> > >> The perfect example of this is Ubuntu 21.10 and the new dGPUs just
-> > >> launched by AMD.  The installation media ships with kernel 5.19 (whi=
-ch
-> > >> has IP discovery) but the amdgpu support for those IP blocks landed =
-in
-> > >> kernel 6.0. The matching linux-firmware was released after 21.10's
-> > >> launch.
-> > >> The screen will freeze without nomodeset. Even if a user manages to
-> > >> install
-> > >> and then upgrades to kernel 6.0 after install they'll still have the
-> > >> problem of missing firmware, and the same experience.
-> > >>
-> > >> This is quite jarring for users, particularly if they don't know
-> > >> that they have to use "nomodeset" to install.
-> > >>
-> > >> To help the situation, allow drivers to re-run the init process for =
-the
-> > >> firmware framebuffer during a failed probe. As this problem is most
-> > >> pronounced with amdgpu, this is the only driver changed.
-> > >>
-> > >> But if this makes sense more generally for other KMS drivers, the ca=
-ll
-> > >> can be added to the cleanup routine for those too.
-> > >
-> > > Just a quick drive-by comment: as Javier noted, at some point while
-> > > probing, your driver has changed the device' state and the system FB
-> > > will be gone. you cannot reestablish the sysfb after that.
-> >
-> > I was about to note exactly that as well. This effort here is
-> > unfortunately pretty pointless.
-> >
-> > >
-> > > You are, however free to read device state at any time, as long as it
-> > > has no side effects.
-> > >
-> > > So why not just move the call to
-> > > drm_aperture_remove_conflicting_pci_framebuffers() to a later point
-> > > when you know that your driver supports the hardware? That's the
-> > > solution we always proposed to this kind of problem. It's safe and
-> > > won't require any changes to the aperture helpers.
-> >
-> > if I'm not completely mistaken that's a little bit tricky. Currently
-> > it's not possible to read the discovery table before disabling the VGA
-> > and/or current framebuffer.
-> >
-> > We might be able to do this, but it's probably not easy.
->
->
-> It should be possible.  It's populated by the PSP/VBIOS at power up,
-> so all you need to do is read the right offset in vram.  For
-> firmwares, we currently read them from the filesystem from the
-> relevant IP code, but we could also just read it in amdgpu_discovery.c
-> when we walk the IP discovery table.
+In preparation to adopting a better, more comprehensive approach to
+adding the coverage that was just added using some changes from Jaroslav
+which were sent at the same time the recently added improvements were
+being applied drop what was applied.  This reverts:
 
-I think something like this would do the trick:
+  7d721baea138 "kselftest/alsa: Add more coverage of sample rates and channel counts"
+  ee12040dd53a "kselftest/alsa: Provide more meaningful names for tests"
+  ae95efd9754c "kselftest/alsa: Don't any configuration in the sample config"
+  8370d9b00c92 Revert "kselftest/alsa: Report failures to set the requested channels as skips"
+  f944f8b539ea "kselftest/alsa: Report failures to set the requested sample rate as skips"
+  22eeb8f531c1 "kselftest/alsa: Refactor pcm-test to list the tests to run in a struct"
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index 2017b3466612..45aee27ab6b1 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -2141,6 +2141,11 @@ static int amdgpu_device_ip_early_init(struct
-amdgpu_device *adev)
-                break;
-        }
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ .../alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf       | 35 ++++-----
+ tools/testing/selftests/alsa/pcm-test.c            | 88 +++++++------------
+---
+ .../alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf       | 35 ++++-----
+ tools/testing/selftests/alsa/pcm-test.c            | 88 +++++++---------------
+ 2 files changed, 42 insertions(+), 81 deletions(-)
 
-+       /* Get rid of things like offb */
-+       r =3D drm_aperture_remove_conflicting_pci_framebuffers(pdev,
-&amdgpu_kms_driver);
-+       if (r)
-+               return r;
-+
-        if (amdgpu_has_atpx() &&
-            (amdgpu_is_atpx_hybrid() ||
-             amdgpu_has_atpx_dgpu_power_cntl()) &&
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index b8cfa48fb296..4e74d7abc3c2 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -2123,11 +2123,6 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
-        }
- #endif
-
--       /* Get rid of things like offb */
--       ret =3D drm_aperture_remove_conflicting_pci_framebuffers(pdev,
-&amdgpu_kms_driver);
--       if (ret)
--               return ret;
+diff --git a/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf b/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
+index 9eca985e0c08..0a83f35d43eb 100644
+--- a/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
++++ b/tools/testing/selftests/alsa/conf.d/Lenovo_ThinkPad_P1_Gen2.conf
+@@ -39,25 +39,22 @@ card.hda {
+ 	#
+ 	pcm.0.0 {
+ 		PLAYBACK {
+-			#
+-			# Uncomment to override values for specific tests
+-			#
+-			#test_name1 {
+-			#	access RW_INTERLEAVED
+-			#	format S16_LE
+-			#	rate 48000
+-			#	channels 2
+-			#	period_size 512
+-			#	buffer_size 4096
+-			#}
+-			#test_name2 {
+-			#	access RW_INTERLEAVED
+-			#	format S16_LE
+-			#	rate 48000
+-			#	channels 2
+-			#	period_size 24000
+-			#	buffer_size 192000
+-			#}
++			test.time1 {
++				access RW_INTERLEAVED	# can be omitted - default
++				format S16_LE		# can be omitted - default
++				rate 48000		# can be omitted - default
++				channels 2		# can be omitted - default
++				period_size 512
++				buffer_size 4096
++			}
++			test.time2 {
++				access RW_INTERLEAVED
++				format S16_LE
++				rate 48000
++				channels 2
++				period_size 24000
++				buffer_size 192000
++			}
+ 		}
+ 		CAPTURE {
+ 			# use default tests, check for the presence
+diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
+index f293c7d81009..6e7dfc395b98 100644
+--- a/tools/testing/selftests/alsa/pcm-test.c
++++ b/tools/testing/selftests/alsa/pcm-test.c
+@@ -37,15 +37,6 @@ struct pcm_data *pcm_list = NULL;
+ int num_missing = 0;
+ struct pcm_data *pcm_missing = NULL;
+ 
+-struct time_test_def {
+-	const char *cfg_prefix;
+-	const char *format;
+-	long rate;
+-	long channels;
+-	long period_size;
+-	long buffer_size;
+-};
 -
-        adev =3D devm_drm_dev_alloc(&pdev->dev, &amdgpu_kms_driver,
-typeof(*adev), ddev);
-        if (IS_ERR(adev))
-                return PTR_ERR(adev);
+ void timestamp_now(timestamp_t *tstamp)
+ {
+ 	if (clock_gettime(CLOCK_MONOTONIC_RAW, tstamp))
+@@ -229,7 +220,9 @@ static void find_pcms(void)
+ }
+ 
+ static void test_pcm_time1(struct pcm_data *data,
+-			   const struct time_test_def *test)
++			   const char *cfg_prefix, const char *sformat,
++			   long srate, long schannels,
++			   long speriod_size, long sbuffer_size)
+ {
+ 	char name[64], key[128], msg[256];
+ 	const char *cs;
+@@ -241,32 +234,30 @@ static void test_pcm_time1(struct pcm_data *data,
+ 	snd_pcm_sframes_t frames;
+ 	long long ms;
+ 	long rate, channels, period_size, buffer_size;
+-	unsigned int rchannels;
+ 	unsigned int rrate;
+ 	snd_pcm_uframes_t rperiod_size, rbuffer_size, start_threshold;
+ 	timestamp_t tstamp;
+ 	bool pass = false, automatic = true;
+ 	snd_pcm_hw_params_t *hw_params;
+ 	snd_pcm_sw_params_t *sw_params;
+-	bool skip = false;
+ 
+ 	snd_pcm_hw_params_alloca(&hw_params);
+ 	snd_pcm_sw_params_alloca(&sw_params);
+ 
+-	cs = conf_get_string(data->pcm_config, test->cfg_prefix, "format", test->format);
++	cs = conf_get_string(data->pcm_config, cfg_prefix, "format", sformat);
+ 	format = snd_pcm_format_value(cs);
+ 	if (format == SND_PCM_FORMAT_UNKNOWN)
+ 		ksft_exit_fail_msg("Wrong format '%s'\n", cs);
+-	rate = conf_get_long(data->pcm_config, test->cfg_prefix, "rate", test->rate);
+-	channels = conf_get_long(data->pcm_config, test->cfg_prefix, "channels", test->channels);
+-	period_size = conf_get_long(data->pcm_config, test->cfg_prefix, "period_size", test->period_size);
+-	buffer_size = conf_get_long(data->pcm_config, test->cfg_prefix, "buffer_size", test->buffer_size);
++	rate = conf_get_long(data->pcm_config, cfg_prefix, "rate", srate);
++	channels = conf_get_long(data->pcm_config, cfg_prefix, "channels", schannels);
++	period_size = conf_get_long(data->pcm_config, cfg_prefix, "period_size", speriod_size);
++	buffer_size = conf_get_long(data->pcm_config, cfg_prefix, "buffer_size", sbuffer_size);
+ 
+-	automatic = strcmp(test->format, snd_pcm_format_name(format)) == 0 &&
+-			test->rate == rate &&
+-			test->channels == channels &&
+-			test->period_size == period_size &&
+-			test->buffer_size == buffer_size;
++	automatic = strcmp(sformat, snd_pcm_format_name(format)) == 0 &&
++			srate == rate &&
++			schannels == channels &&
++			speriod_size == period_size &&
++			sbuffer_size == buffer_size;
+ 
+ 	samples = malloc((rate * channels * snd_pcm_format_physical_width(format)) / 8);
+ 	if (!samples)
+@@ -302,7 +293,7 @@ static void test_pcm_time1(struct pcm_data *data,
+ 		if (automatic && format == SND_PCM_FORMAT_S16_LE) {
+ 			format = SND_PCM_FORMAT_S32_LE;
+ 			ksft_print_msg("%s.%d.%d.%d.%s.%s format S16_LE -> S32_LE\n",
+-					 test->cfg_prefix,
++					 cfg_prefix,
+ 					 data->card, data->device, data->subdevice,
+ 					 snd_pcm_stream_name(data->stream),
+ 					 snd_pcm_access_name(access));
+@@ -311,17 +302,11 @@ static void test_pcm_time1(struct pcm_data *data,
+ 					   snd_pcm_format_name(format), snd_strerror(err));
+ 		goto __close;
+ 	}
+-	rchannels = channels;
+-	err = snd_pcm_hw_params_set_channels_near(handle, hw_params, &rchannels);
++	err = snd_pcm_hw_params_set_channels(handle, hw_params, channels);
+ 	if (err < 0) {
+ 		snprintf(msg, sizeof(msg), "snd_pcm_hw_params_set_channels %ld: %s", channels, snd_strerror(err));
+ 		goto __close;
+ 	}
+-	if (rchannels != channels) {
+-		snprintf(msg, sizeof(msg), "channels unsupported %ld != %ld", channels, rchannels);
+-		skip = true;
+-		goto __close;
+-	}
+ 	rrate = rate;
+ 	err = snd_pcm_hw_params_set_rate_near(handle, hw_params, &rrate, 0);
+ 	if (err < 0) {
+@@ -329,8 +314,7 @@ static void test_pcm_time1(struct pcm_data *data,
+ 		goto __close;
+ 	}
+ 	if (rrate != rate) {
+-		snprintf(msg, sizeof(msg), "rate unsupported %ld != %ld", rate, rrate);
+-		skip = true;
++		snprintf(msg, sizeof(msg), "rate mismatch %ld != %ld", rate, rrate);
+ 		goto __close;
+ 	}
+ 	rperiod_size = period_size;
+@@ -378,7 +362,7 @@ static void test_pcm_time1(struct pcm_data *data,
+ 	}
+ 
+ 	ksft_print_msg("%s.%d.%d.%d.%s hw_params.%s.%s.%ld.%ld.%ld.%ld sw_params.%ld\n",
+-			 test->cfg_prefix,
++			 cfg_prefix,
+ 			 data->card, data->device, data->subdevice,
+ 			 snd_pcm_stream_name(data->stream),
+ 			 snd_pcm_access_name(access),
+@@ -426,40 +410,21 @@ static void test_pcm_time1(struct pcm_data *data,
+ 	msg[0] = '\0';
+ 	pass = true;
+ __close:
+-	if (!skip) {
+-		ksft_test_result(pass, "%s.%d.%d.%d.%s%s%s\n",
+-				 test->cfg_prefix,
+-				 data->card, data->device, data->subdevice,
+-				 snd_pcm_stream_name(data->stream),
+-				 msg[0] ? " " : "", msg);
+-	} else {
+-		ksft_test_result_skip("%s.%d.%d.%d.%s%s%s\n",
+-				      test->cfg_prefix,
+-				      data->card, data->device,
+-				      data->subdevice,
+-				      snd_pcm_stream_name(data->stream),
+-				      msg[0] ? " " : "", msg);
+-	}
++	ksft_test_result(pass, "%s.%d.%d.%d.%s%s%s\n",
++			 cfg_prefix,
++			 data->card, data->device, data->subdevice,
++			 snd_pcm_stream_name(data->stream),
++			 msg[0] ? " " : "", msg);
+ 	free(samples);
+ 	if (handle)
+ 		snd_pcm_close(handle);
+ }
+ 
+-static const struct time_test_def time_tests[] = {
+-	/* name          format     rate   chan  period  buffer */
+-	{ "8k.1.big",    "S16_LE",   8000, 2,     8000,   32000 },
+-	{ "8k.2.big",    "S16_LE",   8000, 2,     8000,   32000 },
+-	{ "44k1.2.big",  "S16_LE",  44100, 2,    22050,  192000 },
+-	{ "48k.2.small", "S16_LE",  48000, 2,      512,    4096 },
+-	{ "48k.2.big",   "S16_LE",  48000, 2,    24000,  192000 },
+-	{ "48k.6.big",   "S16_LE",  48000, 6,    48000,  576000 },
+-	{ "96k.2.big",   "S16_LE",  96000, 2,    48000,  192000 },
+-};
++#define TESTS_PER_PCM 2
+ 
+ int main(void)
+ {
+ 	struct pcm_data *pcm;
+-	int i;
+ 
+ 	ksft_print_header();
+ 
+@@ -467,7 +432,7 @@ int main(void)
+ 
+ 	find_pcms();
+ 
+-	ksft_set_plan(num_missing + num_pcms * ARRAY_SIZE(time_tests));
++	ksft_set_plan(num_missing + num_pcms * TESTS_PER_PCM);
+ 
+ 	for (pcm = pcm_missing; pcm != NULL; pcm = pcm->next) {
+ 		ksft_test_result(false, "test.missing.%d.%d.%d.%s\n",
+@@ -476,9 +441,8 @@ int main(void)
+ 	}
+ 
+ 	for (pcm = pcm_list; pcm != NULL; pcm = pcm->next) {
+-		for (i = 0; i < ARRAY_SIZE(time_tests); i++) {
+-			test_pcm_time1(pcm, &time_tests[i]);
+-		}
++		test_pcm_time1(pcm, "test.time1", "S16_LE", 48000, 2, 512, 4096);
++		test_pcm_time1(pcm, "test.time2", "S16_LE", 48000, 2, 24000, 192000);
+ 	}
+ 
+ 	conf_free();
 
-
->
-> Alex
->
->
-> >
-> > Regards,
-> > Christian.
-> >
-> >
-> > >
-> > > Best regards
-> > > Thomas
-> > >
-> > >>
-> > >> Here is a sample of what happens with missing GPU firmware and this
-> > >> series:
-> > >>
-> > >> [    5.950056] amdgpu 0000:63:00.0: vgaarb: deactivate vga console
-> > >> [    5.950114] amdgpu 0000:63:00.0: enabling device (0006 -> 0007)
-> > >> [    5.950883] [drm] initializing kernel modesetting (YELLOW_CARP
-> > >> 0x1002:0x1681 0x17AA:0x22F1 0xD2).
-> > >> [    5.952954] [drm] register mmio base: 0xB0A00000
-> > >> [    5.952958] [drm] register mmio size: 524288
-> > >> [    5.954633] [drm] add ip block number 0 <nv_common>
-> > >> [    5.954636] [drm] add ip block number 1 <gmc_v10_0>
-> > >> [    5.954637] [drm] add ip block number 2 <navi10_ih>
-> > >> [    5.954638] [drm] add ip block number 3 <psp>
-> > >> [    5.954639] [drm] add ip block number 4 <smu>
-> > >> [    5.954641] [drm] add ip block number 5 <dm>
-> > >> [    5.954642] [drm] add ip block number 6 <gfx_v10_0>
-> > >> [    5.954643] [drm] add ip block number 7 <sdma_v5_2>
-> > >> [    5.954644] [drm] add ip block number 8 <vcn_v3_0>
-> > >> [    5.954645] [drm] add ip block number 9 <jpeg_v3_0>
-> > >> [    5.954663] amdgpu 0000:63:00.0: amdgpu: Fetched VBIOS from VFCT
-> > >> [    5.954666] amdgpu: ATOM BIOS: 113-REMBRANDT-X37
-> > >> [    5.954677] [drm] VCN(0) decode is enabled in VM mode
-> > >> [    5.954678] [drm] VCN(0) encode is enabled in VM mode
-> > >> [    5.954680] [drm] JPEG decode is enabled in VM mode
-> > >> [    5.954681] amdgpu 0000:63:00.0: amdgpu: Trusted Memory Zone (TMZ=
-)
-> > >> feature disabled as experimental (default)
-> > >> [    5.954683] amdgpu 0000:63:00.0: amdgpu: PCIE atomic ops is not
-> > >> supported
-> > >> [    5.954724] [drm] vm size is 262144 GB, 4 levels, block size is
-> > >> 9-bit, fragment size is 9-bit
-> > >> [    5.954732] amdgpu 0000:63:00.0: amdgpu: VRAM: 512M
-> > >> 0x000000F400000000 - 0x000000F41FFFFFFF (512M used)
-> > >> [    5.954735] amdgpu 0000:63:00.0: amdgpu: GART: 1024M
-> > >> 0x0000000000000000 - 0x000000003FFFFFFF
-> > >> [    5.954738] amdgpu 0000:63:00.0: amdgpu: AGP: 267419648M
-> > >> 0x000000F800000000 - 0x0000FFFFFFFFFFFF
-> > >> [    5.954747] [drm] Detected VRAM RAM=3D512M, BAR=3D512M
-> > >> [    5.954750] [drm] RAM width 256bits LPDDR5
-> > >> [    5.954834] [drm] amdgpu: 512M of VRAM memory ready
-> > >> [    5.954838] [drm] amdgpu: 15680M of GTT memory ready.
-> > >> [    5.954873] [drm] GART: num cpu pages 262144, num gpu pages 26214=
-4
-> > >> [    5.955333] [drm] PCIE GART of 1024M enabled (table at
-> > >> 0x000000F41FC00000).
-> > >> [    5.955502] amdgpu 0000:63:00.0: Direct firmware load for
-> > >> amdgpu/yellow_carp_toc.bin failed with error -2
-> > >> [    5.955505] amdgpu 0000:63:00.0: amdgpu: fail to request/validate
-> > >> toc microcode
-> > >> [    5.955510] [drm:psp_sw_init [amdgpu]] *ERROR* Failed to load psp
-> > >> firmware!
-> > >> [    5.955725] [drm:amdgpu_device_init.cold [amdgpu]] *ERROR* sw_ini=
-t
-> > >> of IP block <psp> failed -2
-> > >> [    5.955952] amdgpu 0000:63:00.0: amdgpu: amdgpu_device_ip_init fa=
-iled
-> > >> [    5.955954] amdgpu 0000:63:00.0: amdgpu: Fatal error during GPU i=
-nit
-> > >> [    5.955957] amdgpu 0000:63:00.0: amdgpu: amdgpu: finishing device=
-.
-> > >> [    5.971162] efifb: probing for efifb
-> > >> [    5.971281] efifb: showing boot graphics
-> > >> [    5.974803] efifb: framebuffer at 0x910000000, using 20252k, tota=
-l
-> > >> 20250k
-> > >> [    5.974805] efifb: mode is 2880x1800x32, linelength=3D11520, page=
-s=3D1
-> > >> [    5.974807] efifb: scrolling: redraw
-> > >> [    5.974807] efifb: Truecolor: size=3D8:8:8:8, shift=3D24:16:8:0
-> > >> [    5.974974] Console: switching to colour frame buffer device 180x=
-56
-> > >> [    5.978181] fb0: EFI VGA frame buffer device
-> > >> [    5.978199] amdgpu: probe of 0000:63:00.0 failed with error -2
-> > >> [    5.978285] [drm] amdgpu: ttm finalized
-> > >>
-> > >> Now if the user loads the firmware into the system they can re-load =
-the
-> > >> driver or re-attach using sysfs and it gracefully recovers.
-> > >>
-> > >> [  665.080480] [drm] Initialized amdgpu 3.49.0 20150101 for
-> > >> 0000:63:00.0 on minor 0
-> > >> [  665.090075] fbcon: amdgpudrmfb (fb0) is primary device
-> > >> [  665.090248] [drm] DSC precompute is not needed.
-> > >>
-> > >> Mario Limonciello (2):
-> > >>    firmware: sysfb: Allow re-creating system framebuffer after init
-> > >>    drm/amd: Re-create firmware framebuffer on failure to probe
-> > >>
-> > >>   drivers/firmware/efi/sysfb_efi.c        |  6 +++---
-> > >>   drivers/firmware/sysfb.c                | 15 ++++++++++++++-
-> > >>   drivers/firmware/sysfb_simplefb.c       |  4 ++--
-> > >>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  2 ++
-> > >>   include/linux/sysfb.h                   |  5 +++++
-> > >>   5 files changed, 26 insertions(+), 6 deletions(-)
-> > >>
-> > >>
-> > >> base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
-> > >
-> >
+-- 
+2.30.2
