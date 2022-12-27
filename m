@@ -2,124 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DEB656810
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F33656812
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiL0H5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 02:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
+        id S230403AbiL0H6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 02:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiL0H5a (ORCPT
+        with ESMTP id S231175AbiL0H6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 02:57:30 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E253B04
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:57:24 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id x24so2784693uaf.4
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:57:24 -0800 (PST)
+        Tue, 27 Dec 2022 02:58:08 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B66E659D
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:58:05 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id f20so13034135lja.4
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:58:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7v/WSJyZmtBjH1RduwJIBnIVDn9u078UD/StpnslVx0=;
-        b=mDjhdOb+37hZkSU5zz/DbB2FXU0Pc/729sq2tkWFJiYAVkgTfJKuUpOSXeo0P8EzEI
-         bhvix75DeyyFatTBY3VZFtz+3N0uYxzvYQyIRe3J2bhYKTyltbqH3tHftOLiqj30uybe
-         u4Ctr0Gk9w3V2DMnaAWShGbvxy33VSLGYTfcJXxyi0g6ADHstijwy8Mb6Ux2lh5SlkIF
-         ylW1Upb/0Njy0ENduTaULY90gM/vB/jM/88JULcTRxcNXIchHnvyUw6EzkLggnuEyXNi
-         nNZ9AVJDThH5Gy1xpZyGD5iPmx+Ez0gJ4ZgmpLUj6TOx1lWdtd2mxwaRoFaJNuny/6aF
-         3XNw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2+G/BwEPrVr7kfmXq62oK9q5XBGcDyHuv32x7f8Pzz0=;
+        b=TdMOqT/WbdxTC0C3myt7u6Vzj07cRGNtTV5MhtkEDtv8Vv28iOoZrFpR4Ih9GGlxnb
+         UNtlb9kRgKh27VqVsnrtzE+9BofIPAZfE9wX4dLbrgFQkixGsBfFt2pPG6H/uLEJLzMI
+         b1uJXEMX9fpQL5jtX+jI7UnCgoNElREap3EecJroFBpa9gAK3s2Q1Yf7WxJAot/AmiKy
+         JdOj73K5I8n5aohgk1UHH6qsWdxQ1VU933YJyq4jbH8PNhXAwze35Nmm/M/QMB6iKOSv
+         mVWqKelmPaac2E1mQd2FzTK0JPlfllKUN1jGBZLW03l1l0hUr3LpkdtnIea4hSJihCpm
+         /t+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7v/WSJyZmtBjH1RduwJIBnIVDn9u078UD/StpnslVx0=;
-        b=kzg4ffwPBQYL1WXKTeQm8CIRpI2nu90kCtV9gUnYhLJyhJMG/xXJQhVDMzwpLtF/M9
-         kVn93z21v0lDTWuZvDK/q37OIVG7O41bcd00O4/SlOM2jzRqO+ku+ytNf7jSBi1DL0Xg
-         GEp2DBVljIBWpdfJTF0WUrhe5uHLjmbzN7EOFncx8aRf1clCQBAZkFB6N9alHJz5byFh
-         JxpOCjSBCWGOBKECxcFjJ96/3BPBit4um0S21Wk7JEc7wnRb9PhRUbO1PwkEyArEH4Ln
-         kZWjdbuDd2Wn2f4iPNc/+6OjP1l2On+wZGkbB0XXu6D0OAiZOS7xgLfnqjVIfcCsqqZa
-         nC+w==
-X-Gm-Message-State: AFqh2kpwH/kWPjZns0NmgmzbrWENIRWO6P6BgUkFPZddd0Bqzmm5VLB0
-        DH07gbGjJnSlIK4yqji2mrB3uqZ7mtBc7uGb8nDQrw==
-X-Google-Smtp-Source: AMrXdXsR/ThovcjSI43AaK4Fos8vXu6n0K3qiqUEOlotWF5yGcagJgxiHP0FtJUsV9OnUNvEQSj+hEYwL6OSgTbFwqU=
-X-Received: by 2002:ab0:2398:0:b0:3fe:c0cb:aa43 with SMTP id
- b24-20020ab02398000000b003fec0cbaa43mr1886262uan.72.1672127843661; Mon, 26
- Dec 2022 23:57:23 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2+G/BwEPrVr7kfmXq62oK9q5XBGcDyHuv32x7f8Pzz0=;
+        b=qtrij4RIN/q+nH/woMOOiJ2nPyAzfSal+aHEc1mCgZz28B2z3qPEbdB55QEXqkAGlw
+         dL+EQVUQjbt7NJkcjtXNABVGPySDk8SjBj4r8FZ5RSPwpxU2H0iUwCYPYM9zlqCo5UEs
+         Hm2HPE1bxdiwdhZJgvOYqodQZmMkAdewPoR5Ln70OGmKetxUPcfr4C6/niaMqGULz6Cf
+         grRlERATxSWwT4ZwZB76IwQKt8zcBBiXijQ9Xchb6dUoSy/Nm6aYHfAQAnQrPbbAyJDv
+         Ns0NfozhBkO+9oz2at8iAuWX6Xq6VERLnsFQMnB7Kczhv7XqfooHF91XTUxI+5VBZds4
+         H8Ig==
+X-Gm-Message-State: AFqh2kq0D9nH5HJA4dXyJteI5eNOyJdHKcH4/S1jOp09afb8AkQ+CmaS
+        hn/+JVtcqIVSB4W0grnfOTcMsg==
+X-Google-Smtp-Source: AMrXdXuHCaNuAEieKb4FdTEY/qPfC0zFtnG1so9DeugSmsD70B2SP0LyMVbYvK/Oo5RCW08JI0AhKA==
+X-Received: by 2002:a05:651c:510:b0:27f:bc6c:c4f4 with SMTP id o16-20020a05651c051000b0027fbc6cc4f4mr2144837ljp.9.1672127883564;
+        Mon, 26 Dec 2022 23:58:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id r26-20020a2e80da000000b0027fbc128189sm677945ljg.131.2022.12.26.23.58.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Dec 2022 23:58:03 -0800 (PST)
+Message-ID: <7cc1078e-744a-c68f-98d2-6c68d2784df2@linaro.org>
+Date:   Tue, 27 Dec 2022 08:58:01 +0100
 MIME-Version: 1.0
-References: <20221227022528.609839-1-mie@igel.co.jp> <20221227022528.609839-3-mie@igel.co.jp>
- <CACGkMEtAaYpuZtS0gx_m931nFzcvqSNK9BhvUZH_tZXTzjgQCg@mail.gmail.com>
- <20221227020425-mutt-send-email-mst@kernel.org> <CANXvt5pXkS=TTOU0+Lkx6CjcV7xvDHRS6FbFikJ4Ww8832sg8g@mail.gmail.com>
- <20221227025534-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221227025534-mutt-send-email-mst@kernel.org>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 27 Dec 2022 16:57:12 +0900
-Message-ID: <CANXvt5qh885mi7shJ9jiZbCBeSVR7=bDhx29GnpL1ZHymb_Rxw@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/9] vringh: remove vringh_iov and unite to vringh_kiov
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 0/7] Basic device tree support for StarFive JH7110
+ RISC-V SoC
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>,
+        Hal Feng <hal.feng@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221220011247.35560-1-hal.feng@starfivetech.com>
+ <Y6on34WC2u3PSBHl@spud>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y6on34WC2u3PSBHl@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=E5=B9=B412=E6=9C=8827=E6=97=A5(=E7=81=AB) 16:56 Michael S. Tsirkin <ms=
-t@redhat.com>:
->
-> On Tue, Dec 27, 2022 at 04:13:49PM +0900, Shunsuke Mie wrote:
-> > 2022=E5=B9=B412=E6=9C=8827=E6=97=A5(=E7=81=AB) 16:05 Michael S. Tsirkin=
- <mst@redhat.com>:
-> > >
-> > > On Tue, Dec 27, 2022 at 02:04:03PM +0800, Jason Wang wrote:
-> > > > On Tue, Dec 27, 2022 at 10:25 AM Shunsuke Mie <mie@igel.co.jp> wrot=
-e:
-> > > > >
-> > > > > struct vringh_iov is defined to hold userland addresses. However,=
- to use
-> > > > > common function, __vring_iov, finally the vringh_iov converts to =
-the
-> > > > > vringh_kiov with simple cast. It includes compile time check code=
- to make
-> > > > > sure it can be cast correctly.
-> > > > >
-> > > > > To simplify the code, this patch removes the struct vringh_iov an=
-d unifies
-> > > > > APIs to struct vringh_kiov.
-> > > > >
-> > > > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > >
-> > > > While at this, I wonder if we need to go further, that is, switch t=
-o
-> > > > using an iov iterator instead of a vringh customized one.
-> > > >
-> > > > Thanks
-> > >
-> > > Possibly, but when doing changes like this one needs to be careful
-> > > to avoid breaking all the inlining tricks vringh relies on for
-> > > performance.
-> > Definitely, I'm evaluating the performance using vringh_test. I'll add =
-a
-> > result of the evaluation. But, If there are other evaluation methods, c=
-ould you
-> > please tell me?
->
-> high level tests over virtio blk and net are possible, but let's
-> start with vringh_test.
-Ok, I'll do it.
-> > > --
-> > > MST
-> > >
-> >
-> > Best,
-> > Shunsuke
->
+On 27/12/2022 00:01, Conor Dooley wrote:
+> On Tue, Dec 20, 2022 at 09:12:40AM +0800, Hal Feng wrote:
+> The DT is waiting for the clock/reset & pinctrl binding headers anyway,
+
+Which were sent with build warnings/errors...
+
+Best regards,
+Krzysztof
+
