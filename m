@@ -2,278 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9E065696A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 11:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF2A656952
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 11:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiL0KYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 05:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41224 "EHLO
+        id S229687AbiL0KLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 05:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiL0KYC (ORCPT
+        with ESMTP id S229445AbiL0KLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 05:24:02 -0500
-Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39BD9FE2;
-        Tue, 27 Dec 2022 02:23:59 -0800 (PST)
-Received: from pro2.mail.ovh.net (unknown [10.109.146.229])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 8F372147C1C0A;
-        Tue, 27 Dec 2022 11:07:08 +0100 (CET)
-Received: from localhost.localdomain (88.161.25.233) by DAG1EX1.emp2.local
- (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 27 Dec
- 2022 11:07:07 +0100
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-To:     <lee@kernel.org>, <pavel@ucw.cz>, <robh+dt@kernel.org>,
-        <sven.schwermer@disruptive-technologies.com>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <johan+linaro@kernel.org>, <marijn.suijten@somainline.org>,
-        <bjorn.andersson@linaro.org>, <andy.shevchenko@gmail.com>,
-        <jacek.anaszewski@gmail.com>, <linux-leds@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Subject: [RESEND PATCH v6 6/6] leds: Add a multicolor LED driver to group monochromatic LEDs
-Date:   Tue, 27 Dec 2022 11:06:59 +0100
-Message-ID: <20221227100659.157071-7-jjhiblot@traphandler.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221227100659.157071-1-jjhiblot@traphandler.com>
-References: <20221227100659.157071-1-jjhiblot@traphandler.com>
+        Tue, 27 Dec 2022 05:11:06 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17A1826E8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 02:11:00 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8AxxvCyxKpjpdIIAA--.19166S3;
+        Tue, 27 Dec 2022 18:10:59 +0800 (CST)
+Received: from [10.136.12.26] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbL6wxKpjXOENAA--.16519S3;
+        Tue, 27 Dec 2022 18:10:58 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: Fix irq enable in exception handlers
+To:     Huacai Chen <chenhuacai@kernel.org>, Qi Hu <huqi@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221221074238.6699-1-hejinyang@loongson.cn>
+ <CAAhV-H6VX=d1oymY0rh-mwOPMuBsYd7C9RzQat8BmmnrJ7apng@mail.gmail.com>
+ <8eaea09e-67b0-5e51-4632-2c31a4c56a3e@loongson.cn>
+ <CAAhV-H7maW1YWhfvCzYVix=aCMMFbx0KkGodaBjka4ThunBO5Q@mail.gmail.com>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <1c578efd-ae8a-2d80-e505-a09b1a2f7eaa@loongson.cn>
+Date:   Tue, 27 Dec 2022 18:10:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: DAG3EX1.emp2.local (172.16.2.21) To DAG1EX1.emp2.local
- (172.16.2.1)
-X-Ovh-Tracer-Id: 14108651734926113243
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedriedtgdduudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvvefufffkofgjfhgggfgtihesthekredtredttdenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepudetveelveevgffgvdeuffffjefhheehueeitdegtdejgefhheeuuddugeeffeeunecukfhppeduvdejrddtrddtrddupdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgepkeenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlvggvsehkvghrnhgvlhdrohhrghdpphgrvhgvlhesuhgtfidrtgiipdhrohgshhdoughtsehkvghrnhgvlhdrohhrghdpshhvvghnrdhstghhfigvrhhmvghrseguihhsrhhuphhtihhvvgdqthgvtghhnhholhhoghhivghsrdgtohhmpdhkrhiihihsiihtohhfrdhkohiilhhofihskhhiodgutheslhhinhgrrhhordhorhhgpdhjohhhrghnodhlihhnrghroheskhgvrhhnvghlrdhorhhgpdhmrghrihhjnhdrshhuihhjthgvnhesshhomhgrihhnlhhinhgvrd
- horhhgpdgsjhhorhhnrdgrnhguvghrshhsohhnsehlihhnrghrohdrohhrghdprghnugihrdhshhgvvhgthhgvnhhkohesghhmrghilhdrtghomhdpjhgrtggvkhdrrghnrghsiigvfihskhhisehgmhgrihhlrdgtohhmpdhlihhnuhigqdhlvggushesvhhgvghrrdhkvghrnhgvlhdrohhrghdpuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhohedvkedpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhV-H7maW1YWhfvCzYVix=aCMMFbx0KkGodaBjka4ThunBO5Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8DxbL6wxKpjXOENAA--.16519S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxtF4fZF15ArWrGrW8XryDGFg_yoW7tFyDpF
+        ZrCF48GFW8XF1xXanFqw1FvF9Iq3yvqF48ur4vya4fWan0vF98Xr1kXF4UWFyjvryDGr40
+        qryjya1S9a45JFUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8fsqJUUUUU==
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By allowing to group multiple monochrome LED into multicolor LEDs,
-all involved LEDs can be controlled in-sync. This enables using effects
-using triggers, etc.
+On 2022-12-27 17:52, Huacai Chen wrote:
 
-Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
----
- drivers/leds/rgb/Kconfig                 |  10 ++
- drivers/leds/rgb/Makefile                |   1 +
- drivers/leds/rgb/leds-group-multicolor.c | 168 +++++++++++++++++++++++
- 3 files changed, 179 insertions(+)
- create mode 100644 drivers/leds/rgb/leds-group-multicolor.c
+> On Tue, Dec 27, 2022 at 5:30 PM Jinyang He <hejinyang@loongson.cn> wrote:
+>>
+>> On 2022-12-27 15:37, Huacai Chen wrote:
+>>> Hi, Jinyang,
+>>>
+>>> Move die_if_kernel to irq disabled context to solve what?
+>> For more strict logical. If the code flow go to die in die_if_kernel(),
+>> its interrupt state is enable, that means it may cause schedule.
+>> So I think it is better to call die_if_kernel() firstly.
+> die_if_kernel is called with irq enabled in old kernels for several
+> years, and has no problems.
 
-diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
-index 204cf470beae..1a87f53faa8a 100644
---- a/drivers/leds/rgb/Kconfig
-+++ b/drivers/leds/rgb/Kconfig
-@@ -2,6 +2,16 @@
- 
- if LEDS_CLASS_MULTICOLOR
- 
-+config LEDS_GRP_MULTICOLOR
-+	tristate "Multi-color LED grouping support"
-+	depends on COMPILE_TEST || OF
-+	help
-+	  This option enables support for monochrome LEDs that are
-+	  grouped into multicolor LEDs.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called leds-grp-multicolor.
-+
- config LEDS_PWM_MULTICOLOR
- 	tristate "PWM driven multi-color LED Support"
- 	depends on PWM
-diff --git a/drivers/leds/rgb/Makefile b/drivers/leds/rgb/Makefile
-index 0675bc0f6e18..4de087ad79bc 100644
---- a/drivers/leds/rgb/Makefile
-+++ b/drivers/leds/rgb/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+obj-$(CONFIG_LEDS_GRP_MULTICOLOR)	+= leds-group-multicolor.o
- obj-$(CONFIG_LEDS_PWM_MULTICOLOR)	+= leds-pwm-multicolor.o
- obj-$(CONFIG_LEDS_QCOM_LPG)		+= leds-qcom-lpg.o
-diff --git a/drivers/leds/rgb/leds-group-multicolor.c b/drivers/leds/rgb/leds-group-multicolor.c
-new file mode 100644
-index 000000000000..1766642c7604
---- /dev/null
-+++ b/drivers/leds/rgb/leds-group-multicolor.c
-@@ -0,0 +1,168 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * multi-color LED built with monochromatic LED devices
-+ *
-+ * Copyright 2022 Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/leds.h>
-+#include <linux/led-class-multicolor.h>
-+#include <linux/math.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+
-+struct led_mcg_priv {
-+	struct led_classdev_mc mc_cdev;
-+	struct led_classdev **monochromatics;
-+};
-+
-+static int led_mcg_set(struct led_classdev *cdev,
-+			  enum led_brightness brightness)
-+{
-+	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
-+	struct led_mcg_priv *priv = container_of(mc_cdev, struct led_mcg_priv, mc_cdev);
-+	const unsigned int mc_max_brightness = mc_cdev->led_cdev.max_brightness;
-+	int i;
-+
-+	for (i = 0; i < mc_cdev->num_colors; i++) {
-+		struct led_classdev *mono = priv->monochromatics[i];
-+		const unsigned int mono_max = mono->max_brightness;
-+		unsigned int rel_intensity = mc_cdev->subled_info[i].intensity;
-+		int b;
-+
-+		/*
-+		 * Scale the brightness according to relative intensity of the
-+		 * color AND the max brightness of the monochromatic LED.
-+		 */
-+		b = DIV_ROUND_CLOSEST(brightness * rel_intensity * mono_max,
-+			mc_max_brightness * mc_max_brightness);
-+
-+		led_set_brightness(mono, b);
-+	}
-+
-+	return 0;
-+}
-+
-+static void restore_sysfs_access(void *data)
-+{
-+	struct led_classdev *led_cdev = data;
-+
-+	mutex_lock(&led_cdev->led_access);
-+	led_sysfs_enable(led_cdev);
-+	mutex_unlock(&led_cdev->led_access);
-+}
-+
-+static int led_mcg_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct led_init_data init_data = {};
-+	struct led_classdev *cdev;
-+	struct mc_subled *subled;
-+	struct led_mcg_priv *priv;
-+	unsigned int max_brightness;
-+	int i, count, ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	count = 0;
-+	max_brightness = 0;
-+	for (;;) {
-+		struct led_classdev *led_cdev;
-+
-+		led_cdev = devm_of_led_get_optional(dev, count);
-+
-+		if (IS_ERR(led_cdev))
-+			return dev_err_probe(dev, PTR_ERR(led_cdev),
-+					     "Unable to get led #%d", count);
-+
-+		/* Reached the end of the list ?*/
-+		if (!led_cdev)
-+			break;
-+
-+		count++;
-+
-+		priv->monochromatics = devm_krealloc_array(dev, priv->monochromatics,
-+					count, sizeof(*priv->monochromatics),
-+					GFP_KERNEL);
-+		if (!priv->monochromatics)
-+			return -ENOMEM;
-+
-+		priv->monochromatics[count - 1] = led_cdev;
-+
-+		max_brightness = max(max_brightness, led_cdev->max_brightness);
-+	}
-+
-+	subled = devm_kcalloc(dev, count, sizeof(*subled), GFP_KERNEL);
-+	if (!subled)
-+		return -ENOMEM;
-+	priv->mc_cdev.subled_info = subled;
-+
-+	for (i = 0; i < count; i++) {
-+		struct led_classdev *led_cdev = priv->monochromatics[i];
-+
-+		subled[i].color_index = led_cdev->color;
-+		/* configure the LED intensity to its maximum */
-+		subled[i].intensity = max_brightness;
-+	}
-+
-+	/* init the multicolor's LED class device */
-+	cdev = &priv->mc_cdev.led_cdev;
-+	cdev->flags = LED_CORE_SUSPENDRESUME;
-+	cdev->brightness_set_blocking = led_mcg_set;
-+	cdev->max_brightness = max_brightness;
-+	cdev->color = LED_COLOR_ID_MULTI;
-+	priv->mc_cdev.num_colors = count;
-+
-+	init_data.fwnode = dev_fwnode(dev);
-+	ret = devm_led_classdev_multicolor_register_ext(dev, &priv->mc_cdev,
-+							&init_data);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+			"failed to register multicolor led for %s.\n",
-+			cdev->name);
-+
-+	ret = led_mcg_set(cdev, cdev->brightness);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "failed to set led value for %s.",
-+				     cdev->name);
-+
-+	for (i = 0; i < count; i++) {
-+		struct led_classdev *led_cdev = priv->monochromatics[i];
-+
-+		/* Make the sysfs of the monochromatic LED read-only */
-+		mutex_lock(&led_cdev->led_access);
-+		led_sysfs_disable(led_cdev);
-+		mutex_unlock(&led_cdev->led_access);
-+
-+		/* Restore sysfs access when the multicolor LED is released */
-+		devm_add_action_or_reset(dev, restore_sysfs_access, led_cdev);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id of_led_mcg_match[] = {
-+	{ .compatible = "leds-group-multicolor" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, of_led_mcg_match);
-+
-+static struct platform_driver led_mcg_driver = {
-+	.probe		= led_mcg_probe,
-+	.driver		= {
-+		.name	= "leds_group_multicolor",
-+		.of_match_table = of_led_mcg_match,
-+	}
-+};
-+module_platform_driver(led_mcg_driver);
-+
-+MODULE_AUTHOR("Jean-Jacques Hiblot <jjhiblot@traphandler.com>");
-+MODULE_DESCRIPTION("multi-color LED group driver");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:leds-group-multicolor");
--- 
-2.25.1
+
+I think because it never call die() in die_if_kernel(). What I do
+emphasize is that there needs to be more strict logic here than
+it worked well in the past. I bet if die_if_kernel() was removed,
+it will still work well in the future.
+
+
+>
+>>
+>>>    And LBT is
+>>> surely allowed to be triggered in kernel context.
+>> I'm not familar with lbt, I just not see any lbt codes in kernel. Plz,
+>> how lbt exception triggered, and how kernel trigger lbt exception?
+> You can ask Huqi for more details, and this was discussed publicly last week.
+
+To: Qi Hu
+
+
+Hi,
+
+
+We really need some help. Can you give us some ideas?
+
+
+Thanks,
+
+Jinyang
+
+
+> Huacai
+>>
+>> Thanks,
+>>
+>> Jinyang
+>>
+>>
+>>> Huacai
+>>>
+>>> On Wed, Dec 21, 2022 at 3:43 PM Jinyang He <hejinyang@loongson.cn> wrote:
+>>>> The interrupt state can be got by regs->csr_prmd. Once previous
+>>>> interrupt state is disable, we shouldn't enable interrupt if we
+>>>> triggered exception which can be triggered in kernel mode. So
+>>>> conditionally enable interrupt. For those do_\exception which
+>>>> can not triggered in kernel mode but need enable interrupt, call
+>>>> die_if_kernel() firstly. And for do_lsx, do_lasx and do_lbt cannot
+>>>> triggered in kernel mode, too.
+>>>>
+>>>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>>>> ---
+>>>>    arch/loongarch/kernel/traps.c | 19 ++++++++++---------
+>>>>    1 file changed, 10 insertions(+), 9 deletions(-)
+>>>>
+>>>> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+>>>> index 1ea14f6c18d3..3ac7b32d1e15 100644
+>>>> --- a/arch/loongarch/kernel/traps.c
+>>>> +++ b/arch/loongarch/kernel/traps.c
+>>>> @@ -340,9 +340,9 @@ asmlinkage void noinstr do_fpe(struct pt_regs *regs, unsigned long fcsr)
+>>>>
+>>>>           /* Clear FCSR.Cause before enabling interrupts */
+>>>>           write_fcsr(LOONGARCH_FCSR0, fcsr & ~mask_fcsr_x(fcsr));
+>>>> -       local_irq_enable();
+>>>>
+>>>>           die_if_kernel("FP exception in kernel code", regs);
+>>>> +       local_irq_enable();
+>>>>
+>>>>           sig = SIGFPE;
+>>>>           fault_addr = (void __user *) regs->csr_era;
+>>>> @@ -432,7 +432,8 @@ asmlinkage void noinstr do_bp(struct pt_regs *regs)
+>>>>           unsigned long era = exception_era(regs);
+>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>
+>>>> -       local_irq_enable();
+>>>> +       if (regs->csr_prmd & CSR_PRMD_PIE)
+>>>> +               local_irq_enable();
+>>>>           current->thread.trap_nr = read_csr_excode();
+>>>>           if (__get_inst(&opcode, (u32 *)era, user))
+>>>>                   goto out_sigsegv;
+>>>> @@ -514,7 +515,8 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
+>>>>           unsigned int __user *era = (unsigned int __user *)exception_era(regs);
+>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>
+>>>> -       local_irq_enable();
+>>>> +       if (regs->csr_prmd & CSR_PRMD_PIE)
+>>>> +               local_irq_enable();
+>>>>           current->thread.trap_nr = read_csr_excode();
+>>>>
+>>>>           if (notify_die(DIE_RI, "RI Fault", regs, 0, current->thread.trap_nr,
+>>>> @@ -606,8 +608,8 @@ asmlinkage void noinstr do_fpu(struct pt_regs *regs)
+>>>>    {
+>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>
+>>>> -       local_irq_enable();
+>>>>           die_if_kernel("do_fpu invoked from kernel context!", regs);
+>>>> +       local_irq_enable();
+>>>>           BUG_ON(is_lsx_enabled());
+>>>>           BUG_ON(is_lasx_enabled());
+>>>>
+>>>> @@ -623,13 +625,13 @@ asmlinkage void noinstr do_lsx(struct pt_regs *regs)
+>>>>    {
+>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>
+>>>> +       die_if_kernel("do_lsx invoked from kernel context!", regs);
+>>>>           local_irq_enable();
+>>>>           if (!cpu_has_lsx) {
+>>>>                   force_sig(SIGILL);
+>>>>                   goto out;
+>>>>           }
+>>>>
+>>>> -       die_if_kernel("do_lsx invoked from kernel context!", regs);
+>>>>           BUG_ON(is_lasx_enabled());
+>>>>
+>>>>           preempt_disable();
+>>>> @@ -645,14 +647,13 @@ asmlinkage void noinstr do_lasx(struct pt_regs *regs)
+>>>>    {
+>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>
+>>>> +       die_if_kernel("do_lasx invoked from kernel context!", regs);
+>>>>           local_irq_enable();
+>>>>           if (!cpu_has_lasx) {
+>>>>                   force_sig(SIGILL);
+>>>>                   goto out;
+>>>>           }
+>>>>
+>>>> -       die_if_kernel("do_lasx invoked from kernel context!", regs);
+>>>> -
+>>>>           preempt_disable();
+>>>>           init_restore_lasx();
+>>>>           preempt_enable();
+>>>> @@ -666,6 +667,7 @@ asmlinkage void noinstr do_lbt(struct pt_regs *regs)
+>>>>    {
+>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>
+>>>> +       die_if_kernel("do_lbt invoked from kernel context!", regs);
+>>>>           local_irq_enable();
+>>>>           force_sig(SIGILL);
+>>>>           local_irq_disable();
+>>>> @@ -677,7 +679,6 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
+>>>>    {
+>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>
+>>>> -       local_irq_enable();
+>>>>           /*
+>>>>            * Game over - no way to handle this if it ever occurs. Most probably
+>>>>            * caused by a fatal error after another hardware/software error.
+>>>> @@ -685,8 +686,8 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
+>>>>           pr_err("Caught reserved exception %u on pid:%d [%s] - should not happen\n",
+>>>>                   read_csr_excode(), current->pid, current->comm);
+>>>>           die_if_kernel("do_reserved exception", regs);
+>>>> +       local_irq_enable();
+>>>>           force_sig(SIGUNUSED);
+>>>> -
+>>>>           local_irq_disable();
+>>>>
+>>>>           irqentry_exit(regs, state);
+>>>> --
+>>>> 2.34.3
+>>>>
+>>
 
