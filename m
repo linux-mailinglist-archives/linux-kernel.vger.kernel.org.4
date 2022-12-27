@@ -2,112 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2B3656E3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD2B656E48
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiL0TXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:23:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
+        id S232101AbiL0TYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiL0TXA (ORCPT
+        with ESMTP id S231723AbiL0TYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:23:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AB2D4C;
-        Tue, 27 Dec 2022 11:22:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 968D9B80E8C;
-        Tue, 27 Dec 2022 19:22:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08BFFC433EF;
-        Tue, 27 Dec 2022 19:22:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672168976;
-        bh=JZVucA8oHxLNl9U1Lb781S9ah8U4/JhduG51boVtfvw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uRBmMG5yRCzun79mh5c6fhtVgNPwQO7Vm3IBaHwZT5Kk49+ecVp4FMvGcHWFQOGTl
-         caYQd12doLUszoP0i14aqrgjbsm4oB9lZbVVXKI2V0gHItCEQXTarFBB18u9PXkDNT
-         ChmJNuWHnGIAATLRtuCsWVKRO0AYGZ65e5o9pXF78kFEefJZvzzmBZFJCDZsdWdunQ
-         RsTpBikc9CcuyPrVCQ1VzgIu4+4PcpTtP8UXqMUn1mLCMTWeCcb2ND46PqOH+zL+/S
-         CJudYAfqPXSeoWxfXue9W7mRYUmtaNLvRxl8gcu51WgG0fQoFwMhEAWjy66fg+/ybx
-         GeGfRX42jFhzQ==
-Date:   Tue, 27 Dec 2022 19:22:38 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Vitaly Chikunov <vt@altlinux.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto: certs: fix FIPS selftest depenency
-Message-ID: <Y6tF52G6/bnG+VfJ@kernel.org>
-References: <20221215170259.2553400-1-arnd@kernel.org>
+        Tue, 27 Dec 2022 14:24:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CDB65A3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:23:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672169018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y7dbgHTngiyfazSG5sXwLfx+o+WyMctqSvzgKNLu/LU=;
+        b=WJq1VkATQMtmUffPjF7oJkvOz/G22et3IVad+jZ0wFBjIVXmyOycEDqNqt5ICwkljD6qbA
+        UAtBho+Df7kMei2+wNVt4Jk8AHV7IuDwrnQKeQ0oIyarPOCqaoGdxnQzWfthWy1GflI7Al
+        ylF0wFjHaNNIDHV25VXm6A5mo2OOPXQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-311-L0-BS_1ZMkG4kxHR33TfyA-1; Tue, 27 Dec 2022 14:23:35 -0500
+X-MC-Unique: L0-BS_1ZMkG4kxHR33TfyA-1
+Received: by mail-wr1-f71.google.com with SMTP id d6-20020adf9b86000000b0028304dfbab5so323532wrc.15
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:23:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7dbgHTngiyfazSG5sXwLfx+o+WyMctqSvzgKNLu/LU=;
+        b=YItehx2eoO0nvUeWyl1L5GbEESGmJNoTpKZMrd5cDMsyse2AODyxvOgUdxtTk5BaHW
+         v69vV34baKNoL0+NQuAy1QlyT4Ir8RjTqka5kF6cPKf59OCe6Fxv8Q8BYXBOQ7mf5l43
+         aM7cX0fAhWi43sijfV+j+nlU3rj1PS2SjYJYBhQ7img+duAp9HMskIspVo4jmtvISP+z
+         ClOX8ox64HKngX4oEgx7rsMlkKFSlWyCD4pwSSQKA6ixTdxTZGRBbDShSzH5w3Vd92yj
+         sTxHCUR1nAQsEAsi88ZHVpEN65mnvGCmYLbIkcu8TqigMZ6LhYJ7TMkCO0nlmRZO4NoU
+         q08A==
+X-Gm-Message-State: AFqh2kp3DSRxdkwGo62D9pz4Q+psbA77dRp67tPxzUaf5DyzfE/Nsldu
+        JDFgKJNFQcpN3dZlcUT79oBrH6HJ3xe7++sZVXNuFCGL9m15bdFtxY/32fwq533i+wW0rCnCncE
+        b+3WrLE+MX2Fo/ChshUa5IBHP
+X-Received: by 2002:a05:600c:3b90:b0:3d1:f0f1:ceb4 with SMTP id n16-20020a05600c3b9000b003d1f0f1ceb4mr16025411wms.19.1672169014395;
+        Tue, 27 Dec 2022 11:23:34 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXva0B2UHKhAop8zDawG+uzkPkYfVViqdOdvS3DOeaUVR1+zQGk160j5uLhQYZ6Be0X+v85V8g==
+X-Received: by 2002:a05:600c:3b90:b0:3d1:f0f1:ceb4 with SMTP id n16-20020a05600c3b9000b003d1f0f1ceb4mr16025401wms.19.1672169014169;
+        Tue, 27 Dec 2022 11:23:34 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id q20-20020a1ce914000000b003b4935f04a4sm21286147wmc.5.2022.12.27.11.23.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Dec 2022 11:23:33 -0800 (PST)
+Message-ID: <9911d249-ccc0-7724-b0bc-17bcf2a524e8@redhat.com>
+Date:   Tue, 27 Dec 2022 20:23:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221215170259.2553400-1-arnd@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 0/2] Recover from failure to probe GPU
+Content-Language: en-US
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        linux-efi@vger.kernel.org,
+        Carlos Soriano Sanchez <csoriano@redhat.com>,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20221222183012.1046-1-mario.limonciello@amd.com>
+ <2761b1e1-508d-2c2c-f2d8-6f1be536723e@suse.de>
+ <f9b40837-ee2b-76fb-0ec1-d7dfda4ffb7e@amd.com>
+ <CADnq5_M42GQhVquw5BM+P-6NKmdZ6yj8czq=s5iXVAmVOexAkw@mail.gmail.com>
+ <CADnq5_OLf3VhFZm7=riDm9ezVT9j9nQ5Fwei3budnqPt5C4t9Q@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CADnq5_OLf3VhFZm7=riDm9ezVT9j9nQ5Fwei3budnqPt5C4t9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 06:02:52PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The selftest code is built into the x509_key_parser module, and depends
-> on the pkcs7_message_parser module, which in turn has a dependency on
-> the key parser, creating a dependency loop and a resulting link
-> failure when the pkcs7 code is a loadable module:
-> 
-> ld: crypto/asymmetric_keys/selftest.o: in function `fips_signature_selftest':
-> crypto/asymmetric_keys/selftest.c:205: undefined reference to `pkcs7_parse_message'
-> ld: crypto/asymmetric_keys/selftest.c:209: undefined reference to `pkcs7_supply_detached_data'
-> ld: crypto/asymmetric_keys/selftest.c:211: undefined reference to `pkcs7_verify'
-> ld: crypto/asymmetric_keys/selftest.c:215: undefined reference to `pkcs7_validate_trust'
-> ld: crypto/asymmetric_keys/selftest.c:219: undefined reference to `pkcs7_free_message'
-> 
-> Avoid this by only allowing the selftest to be enabled when either
-> both parts are loadable modules, or both are built-in.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  crypto/asymmetric_keys/Kconfig        | 2 +-
->  crypto/asymmetric_keys/pkcs7_verify.c | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
-> index 3df3fe4ed95f..1ef3b46d6f6e 100644
-> --- a/crypto/asymmetric_keys/Kconfig
-> +++ b/crypto/asymmetric_keys/Kconfig
-> @@ -83,6 +83,6 @@ config FIPS_SIGNATURE_SELFTEST
->  	  for FIPS.
->  	depends on KEYS
->  	depends on ASYMMETRIC_KEY_TYPE
-> -	depends on PKCS7_MESSAGE_PARSER
-> +	depends on PKCS7_MESSAGE_PARSER=X509_CERTIFICATE_PARSER
->  
->  endif # ASYMMETRIC_KEY_TYPE
-> diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_keys/pkcs7_verify.c
-> index f6321c785714..4fa769c4bcdb 100644
-> --- a/crypto/asymmetric_keys/pkcs7_verify.c
-> +++ b/crypto/asymmetric_keys/pkcs7_verify.c
-> @@ -485,3 +485,4 @@ int pkcs7_supply_detached_data(struct pkcs7_message *pkcs7,
->  	pkcs7->data_len = datalen;
->  	return 0;
->  }
-> +EXPORT_SYMBOL_GPL(pkcs7_supply_detached_data);
-> -- 
-> 2.35.1
-> 
+Hello Alex,
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+On 12/27/22 18:04, Alex Deucher wrote:
 
-BR, Jarkko
+[...]
+
+> 
+> I think something like this would do the trick:
+> 
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> index 2017b3466612..45aee27ab6b1 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -2141,6 +2141,11 @@ static int amdgpu_device_ip_early_init(struct
+> amdgpu_device *adev)
+>                 break;
+>         }
+> 
+> +       /* Get rid of things like offb */
+> +       r = drm_aperture_remove_conflicting_pci_framebuffers(pdev,
+> &amdgpu_kms_driver);
+> +       if (r)
+> +               return r;
+> +
+>         if (amdgpu_has_atpx() &&
+>             (amdgpu_is_atpx_hybrid() ||
+>              amdgpu_has_atpx_dgpu_power_cntl()) &&
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> index b8cfa48fb296..4e74d7abc3c2 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> @@ -2123,11 +2123,6 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
+>         }
+>  #endif
+> 
+> -       /* Get rid of things like offb */
+> -       ret = drm_aperture_remove_conflicting_pci_framebuffers(pdev,
+> &amdgpu_kms_driver);
+> -       if (ret)
+> -               return ret;
+> -
+
+I'm not familiar with the amdgpu driver but yes, something like that
+is what I had in mind.
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
