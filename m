@@ -2,144 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530266567F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5A56567F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiL0Hti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 02:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S230142AbiL0HuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 02:50:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiL0Hte (ORCPT
+        with ESMTP id S230099AbiL0HuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 02:49:34 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC48BE1A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:49:33 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id f25so2778805uaa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:49:33 -0800 (PST)
+        Tue, 27 Dec 2022 02:50:18 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C3EE26
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:50:17 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bf43so18611300lfb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:50:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W5to3Z4Sn21mWEIZEJGvSoWUEuZOvMtlIkM4pTNXTa4=;
-        b=athKvejDkz6WSCUOqN63r4RkPc7PljBcdn1pqKggjZSE8/UMue7d69Hl0+z0dS1T14
-         TMhEMq/PWya4AXj39g9+GOrmLL/6PF0RM4WrxXttFOwovqpHxNQYtyH4IboGtbgLeNqV
-         SXdXhdL07fADUCEVkrw4TPoqd61my8VqkLH8JoelYHKVxjoTN/wxYvv/ArhTnhs9dRHG
-         k5aaZcuYrmlAQmcwMjLycR0ZuNHCCCf3taivtDVAZ5oAdkOHU0A1//IUelvkKEKIWYYa
-         jNK5gRLbWE3DV++L1ZnaRG6YpOx9jMjvsaOPkoQD+v6pnSzOtW7vFH5SC2hG7hXGo4AN
-         ec2Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hzXsYCwMTv/IXyBUyGK/jvkgx7DUqvPKPo9aKzdn+YQ=;
+        b=M7q4WYjuG/Nc8kH8QWTCRMCJaioC6DMORZxU3UxY+flf61tk1lqDfCQhZ/paTlGQ9t
+         nvHfhgoXjuSB2NctVns7gqs/dlG8eWLfdHnvOTkbOluSm+80iFIDRdtc8GABSzIk6sVo
+         aEPF4gkkLX/JVqHb3KsOugo3W14hFwfpJMtcuMnJSelHdlUPOw4Ai6Ik8QK57febc01R
+         +A5hmw7/9BGAnLOSwK4uOTux858Ttnkngu887yuAa8LkCFgGegY3eSYfC7lD3Bxdriko
+         924M7HZkTgdNMjpXjW2PQLPTHx4RGmDPPclYuwCk6p3Ehffc71AZdlLkEyKXpQGs1KmH
+         e/KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W5to3Z4Sn21mWEIZEJGvSoWUEuZOvMtlIkM4pTNXTa4=;
-        b=7icCIjNs8qKjNjIdHHDMo0M8gZEfbChZrswgcftUf3PWDsC0LHeHmWtNySIBZX3yQt
-         OyAAQLTyxJstcsvaEngaBHQXsvSwkIzwNZB9Epcnmzg1A4Ebqq3aSixdrQf51uGn2OJK
-         QqeY5hoT6VxS9rKAKdQKWSrP1sDM4u15b58z6rQjNlHaMUjHU3VGs2/xSM6JngMVz4Rw
-         fVSqMbU0VLlctveBFG6FO3Nj4OnGzraAtK+oyA7soQZIEYW9PyQzYzM8gjDvWGu7e+te
-         2CYBreSbhyovlpTjrbuTIow4dhu8QBj9D25w7VlyYdww/EnxYvGFEY+KdW3rtvvWatg2
-         nyHQ==
-X-Gm-Message-State: AFqh2kp0+Z9jwhs3i2r33Z1/sbLxHxPrIqTxsd9jRYEwNz8wkiDS3bc+
-        dzSUMB4cHWLKtAGQeZS66eiBnIObXeAZ79CxjTlsug==
-X-Google-Smtp-Source: AMrXdXusNUsGQL0Ne/cKnzjlrEkV3MuC9iimVicFSzsdURbLbmAJZHBO2efWxuvY91KyNogPqzmtu2qQDpJ5tYpw3H8=
-X-Received: by 2002:ab0:2eb7:0:b0:43a:243f:35b7 with SMTP id
- y23-20020ab02eb7000000b0043a243f35b7mr2032126uay.101.1672127372773; Mon, 26
- Dec 2022 23:49:32 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hzXsYCwMTv/IXyBUyGK/jvkgx7DUqvPKPo9aKzdn+YQ=;
+        b=UkFyHKi+NjxcwaaA+VaK7rE+X2eBZfEvhDLx3RZ/Ptj/W0xmj7wxzgFvJzDoQGymYW
+         DxS7O90OZ9nBbSOEcvaajapUyv77xoORC+3UGS1QB4fjdk9qUs0tnLbmxgkMrUrgVNAC
+         mFN/O6yW+rmDBC+vG1PimcmjqhLkPoXoJdvyQzQcshXrukivsmYcbPyDhgQHUnHGsICu
+         TrH2+1ZMuSsG9qwT2ykqJkSyTHAUD5A1vgFpe99xAFnNXh8Fp2ndI9wc2cJUUaRijrmb
+         29Sf9kQ79Up61PKfG1lKAIwYPvU8+Up6vBEpfyS32D9ZuJ0RChdSMKz5AhuSQ8Jyw0b9
+         r2kA==
+X-Gm-Message-State: AFqh2krt6PJ0qxa/ZuuVPC9zEA4EtXNEZ6sH00oCLo1OLLS4X7ZShQ8b
+        c/1xFHEJod7vDYoQKyLIBiECCg==
+X-Google-Smtp-Source: AMrXdXu2X8V66vkMys4iSbPakcSEtq7XPjdJ8Z+Sz5gZDOgytIkYQE590cD1S4YJH4SRplT/hjWBUw==
+X-Received: by 2002:a05:6512:2255:b0:4a4:68b8:c2ad with SMTP id i21-20020a056512225500b004a468b8c2admr6511068lfu.4.1672127415594;
+        Mon, 26 Dec 2022 23:50:15 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s20-20020a195e14000000b004b0b2212315sm2160253lfb.121.2022.12.26.23.50.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Dec 2022 23:50:14 -0800 (PST)
+Message-ID: <5801b0ed-282e-331f-00cf-fdce1adcda31@linaro.org>
+Date:   Tue, 27 Dec 2022 08:50:13 +0100
 MIME-Version: 1.0
-References: <20221227022528.609839-1-mie@igel.co.jp> <20221227022528.609839-5-mie@igel.co.jp>
- <20221227020007-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20221227020007-mutt-send-email-mst@kernel.org>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 27 Dec 2022 16:49:21 +0900
-Message-ID: <CANXvt5pRy-i7=_ikNkZPp2HcRmWZYNJYpjO_ieBJJVc90nds+A@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/9] vringh: unify the APIs for all accessors
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 0/5] Add MAX77541/MAX77540 PMIC Support
+Content-Language: en-US
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221226225123.105907-1-okan.sahin@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221226225123.105907-1-okan.sahin@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022=E5=B9=B412=E6=9C=8827=E6=97=A5(=E7=81=AB) 16:04 Michael S. Tsirkin <ms=
-t@redhat.com>:
->
-> On Tue, Dec 27, 2022 at 11:25:26AM +0900, Shunsuke Mie wrote:
-> > Each vringh memory accessors that are for user, kern and iotlb has own
-> > interfaces that calls common code. But some codes are duplicated and th=
-at
-> > becomes loss extendability.
-> >
-> > Introduce a struct vringh_ops and provide a common APIs for all accesso=
-rs.
-> > It can bee easily extended vringh code for new memory accessor and
-> > simplified a caller code.
-> >
-> > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > ---
-> >  drivers/vhost/vringh.c | 667 +++++++++++------------------------------
-> >  include/linux/vringh.h | 100 +++---
-> >  2 files changed, 225 insertions(+), 542 deletions(-)
-> >
-> > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> > index aa3cd27d2384..ebfd3644a1a3 100644
-> > --- a/drivers/vhost/vringh.c
-> > +++ b/drivers/vhost/vringh.c
-> > @@ -35,15 +35,12 @@ static __printf(1,2) __cold void vringh_bad(const c=
-har *fmt, ...)
-> >  }
-> >
-> >  /* Returns vring->num if empty, -ve on error. */
-> > -static inline int __vringh_get_head(const struct vringh *vrh,
-> > -                                 int (*getu16)(const struct vringh *vr=
-h,
-> > -                                               u16 *val, const __virti=
-o16 *p),
-> > -                                 u16 *last_avail_idx)
-> > +static inline int __vringh_get_head(const struct vringh *vrh, u16 *las=
-t_avail_idx)
-> >  {
-> >       u16 avail_idx, i, head;
-> >       int err;
-> >
-> > -     err =3D getu16(vrh, &avail_idx, &vrh->vring.avail->idx);
-> > +     err =3D vrh->ops.getu16(vrh, &avail_idx, &vrh->vring.avail->idx);
-> >       if (err) {
-> >               vringh_bad("Failed to access avail idx at %p",
-> >                          &vrh->vring.avail->idx);
->
-> I like that this patch removes more lines of code than it adds.
->
-> However one of the design points of vringh abstractions is that they were
-> carefully written to be very low overhead.
-> This is why we are passing function pointers to inline functions -
-> compiler can optimize that out.
->
-> I think that introducing ops indirect functions calls here is going to br=
-eak
-> these assumptions and hurt performance.
-> Unless compiler can somehow figure it out and optimize?
-> I don't see how it's possible with ops pointer in memory
-> but maybe I'm wrong.
-I think your concern is correct. I have to understand the compiler
-optimization and redesign this approach If it is needed.
-> Was any effort taken to test effect of these patches on performance?
-I just tested vringh_test and already faced little performance reduction.
-I have to investigate that, as you said.
+On 26/12/2022 23:51, Okan Sahin wrote:
+> MFD, regulator and ADC driver and related bindings for MAX77540/MAX77541.
+> The patches are requeired to be applied in sequence.
+> 
 
-Thank you for your comments.
-> Thanks!
->
->
-Best,
-Shunsuke.
+I got two cover letters, with nothing attached, sent to different people
+yet still both of them sent to incomplete list.
+
+Make a RESEND or send a v3 to all necessary people, not some subset.
+Properly thread your patchset so it comes as one thread, not just one
+cover letter.
+
+Best regards,
+Krzysztof
+
