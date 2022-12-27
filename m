@@ -2,411 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64775656E61
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B292A656E64
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiL0TeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:34:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
+        id S230360AbiL0TfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:35:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiL0TeQ (ORCPT
+        with ESMTP id S231917AbiL0Te7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:34:16 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACACB1D0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:34:14 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id u9so34071567ejo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:34:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vh+7qUBaycnnXdIPeYQksFLpunUrXlERk02OTzqZZ6g=;
-        b=XQ37szYyCSDZJgX+EpiNM9SVVlAwoO3TCEeWr1bYs/HvNIVArOd09IyrSKaO/n/cH8
-         B4PKi57LPuKpebYRk6OTavSV2yG9tELx4vfsWnXNhmp2yL0RFeDHkwTpuQirXinC9p00
-         czRgwzDfGTksQVh0mP8rMtBHk7y9LJmBkGYJ5xzTevqRr+flc0FK42l4CH9Mr3fHUC31
-         l4r7Lfz/QH8+Ky1SgwZfzY4TbUgkH9RpqC3vNswQvWTIfDVN8a4pOob+T7gjsyj2+yu4
-         fLGvV0BH6khWpQHfGwwcyekAODh5zNX2s9Anh8HcNWULqllMQlUuT1i7SkrUnQA6q0tW
-         /kEg==
+        Tue, 27 Dec 2022 14:34:59 -0500
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2CEB1F3;
+        Tue, 27 Dec 2022 11:34:58 -0800 (PST)
+Received: by mail-il1-f180.google.com with SMTP id y2so7186885ily.5;
+        Tue, 27 Dec 2022 11:34:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vh+7qUBaycnnXdIPeYQksFLpunUrXlERk02OTzqZZ6g=;
-        b=MlTQxmF922wBKZvsY0RRq1R9Nl8iLO2nZZee3iFL/0kM4+DDq/PFneK29Qte1UPCtw
-         grCi7KmW910sjW6FkhZzVS5lf2gehAFMtkNP+2U/58FAXzHbTU8GcDg9oKqIM5W0QR0X
-         HjIvXuxIyHKcgMCvcRQB6QyHxH/uQZVOB1chXBqWmi7QjDo+JqBKWjauXjDK7be9Nx/p
-         TA2HiQRo4ke+wn2IeuCVPThJvF6Sl6pwH9HAyCyADfIoANrz8YxNmSvOTEKjsNlP7htW
-         EEpUDFPTpMS46ASK/iaDiLGCYgZrUexP9wH13ixfYQEq9qxG/EQlh1cXQPB7ukNB7uLZ
-         BtCg==
-X-Gm-Message-State: AFqh2krAzjP+0bTzMbPx2P7DExmpOfzh8wOUj6RdBRz86+sFaYZ7rFXm
-        BhIpp8f2AAPg6PMixwH3NcaoeIO5+UxWI/+YqQ8/KA==
-X-Google-Smtp-Source: AMrXdXsYqhPrvbXjYqDZYbDxk7d/L/xyHpJ7ZpO9tQzm2UV7BZc0ROpL1KbXw5kK4lUTH6hoiL6RVwOTrbHbPV0+ktY=
-X-Received: by 2002:a17:906:5f94:b0:7c1:d49:d06d with SMTP id
- a20-20020a1709065f9400b007c10d49d06dmr2194583eju.440.1672169652952; Tue, 27
- Dec 2022 11:34:12 -0800 (PST)
+        bh=/q0Crof8q8V+8RgYswk3311L1UJGwtVfuTGMKthNFUs=;
+        b=KJAeQ6skYR75Ke+GBlomXpMNaNZWm6fulYY6cxlx38ym03Mus+2MtMSvMojMYWU+Jh
+         V4pcRE6MjYVxmR3SBedIFR+uKMNFTY9Xqkls+CoQ4bTaGV97ZxUIG3K3xDhOiv2Frv15
+         zBwXsyCAcN1TRcR8VNpoNbFA9Rrcfn8krHcuvJaT6yUN8rXrFh53Xokum771igSX8vIY
+         /9aF+cqcTRxQ5/C58sbnYo3lbiZnjEODh0frcGU52zDpg+VWMKEpOUDrOSxuLfngcWti
+         GcvKSkuJBkdEVeq+h3jJfB97fOybY1BarqsGqJDSiw7N4nLYxw91Anz84mLGfveHrn/w
+         Qtyg==
+X-Gm-Message-State: AFqh2kpI3liDNlaitHIrn9xBCVjaAJm79Y8Pfcp2idjuUnUN6gef7VgW
+        GSFuX/uViVviKWfbJRi76o+iQNHAaA2t66GxNdE=
+X-Google-Smtp-Source: AMrXdXtNnVeSYo/va+NN4uk0nfPAAZe6QzH+3hbmSvbLNNQv34wXMdFTh9dK7dNU3pg17ptjyoYj2WshgZGT+JrjXJw=
+X-Received: by 2002:a92:ceca:0:b0:30b:8e9:1047 with SMTP id
+ z10-20020a92ceca000000b0030b08e91047mr2350445ilq.271.1672169697504; Tue, 27
+ Dec 2022 11:34:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-8-vipinsh@google.com>
-In-Reply-To: <20221222023457.1764-8-vipinsh@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 27 Dec 2022 11:34:00 -0800
-Message-ID: <CANgfPd_iktQYfRc0=zp4wsrADPQhPQNKo_MBZ0djzeeYi+w6aw@mail.gmail.com>
-Subject: Re: [Patch v3 7/9] KVM: x86/mmu: Allocate page table's pages on NUMA
- node of the underlying pages
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221226085703.95081-1-yangjihong1@huawei.com>
+In-Reply-To: <20221226085703.95081-1-yangjihong1@huawei.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 27 Dec 2022 11:34:46 -0800
+Message-ID: <CAM9d7cjoFCqEBVwA+_D5ZNOnVcUo1Y6fysZmG0-uvqm9kUBJGA@mail.gmail.com>
+Subject: Re: [PATCH] perf help: Use HAVE_LIBTRACEEVENT to filter out
+ unsupported commands
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 6:35 PM Vipin Sharma <vipinsh@google.com> wrote:
->
-> Page table pages of a VM are currently allocated based on the current
-> task's NUMA node or its mempolicy. This can cause suboptimal remote
-> accesses by the vCPU if it is accessing physical pages local to its NUMA
-> node but the page table pages mapping those physcal pages were created
-> by some other vCPU which was on different NUMA node or had different
-> policy.
->
-> Allocate page table pages on the same NUMA node where underlying
-> physical page exists. Page table at level 5, 4, and 3 might not end up
-> on the same NUMA node as they can span multiple NUMA nodes.
+Hello,
 
-A page table at any level could map memory spanning multiple NUMA
-nodes, it just becomes more likely at higher levels.
-We're only guaranteed that a page table maps memory all on the same
-node if it's a split hugepage.
-This change can only guarantee that the page table pages are allocated
-on the same node as at least some of the memory they map.
-Of course in practice, the above is absolutely correct since we'd
-expect to have multi-GB continuous ranges of GFNs allocated on the
-same node via huge pages.
-
-And since the root pages are allocated based only on where the thread
-allocating them is running, they're not actually guaranteed to be on
-the same node as any of the memory they map. (Though they probably
-will be.)
-
+On Mon, Dec 26, 2022 at 1:00 AM Yang Jihong <yangjihong1@huawei.com> wrote:
 >
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> Commands such as kmem, kwork, lock, sched, trace and timechart depend on
+> libtraceevent, these commands need to be isolated using HAVE_LIBTRACEEVENT
+> macro when cmdlist generation.
+>
+> The output of the generate-cmdlist.sh script is as follows:
+>
+>   # ./util/generate-cmdlist.sh
+>   /* Automatically generated by ./util/generate-cmdlist.sh */
+>   struct cmdname_help
+>   {
+>       char name[16];
+>       char help[80];
+>   };
+>
+>   static struct cmdname_help common_cmds[] = {
+>     {"annotate", "Read perf.data (created by perf record) and display annotated code"},
+>     {"archive", "Create archive with object files with build-ids found in perf.data file"},
+>     {"bench", "General framework for benchmark suites"},
+>     {"buildid-cache", "Manage build-id cache."},
+>     {"buildid-list", "List the buildids in a perf.data file"},
+>     {"c2c", "Shared Data C2C/HITM Analyzer."},
+>     {"config", "Get and set variables in a configuration file."},
+>     {"daemon", "Run record sessions on background"},
+>     {"data", "Data file related processing"},
+>     {"diff", "Read perf.data files and display the differential profile"},
+>     {"evlist", "List the event names in a perf.data file"},
+>     {"ftrace", "simple wrapper for kernel's ftrace functionality"},
+>     {"inject", "Filter to augment the events stream with additional information"},
+>     {"iostat", "Show I/O performance metrics"},
+>     {"kallsyms", "Searches running kernel for symbols"},
+>     {"kvm", "Tool to trace/measure kvm guest os"},
+>     {"list", "List all symbolic event types"},
+>     {"mem", "Profile memory accesses"},
+>     {"record", "Run a command and record its profile into perf.data"},
+>     {"report", "Read perf.data (created by perf record) and display the profile"},
+>     {"script", "Read perf.data (created by perf record) and display trace output"},
+>     {"stat", "Run a command and gather performance counter statistics"},
+>     {"test", "Runs sanity tests."},
+>     {"top", "System profiling tool."},
+>     {"version", "display the version of perf binary"},
+>   #ifdef HAVE_LIBELF_SUPPORT
+>     {"probe", "Define new dynamic tracepoints"},
+>   #endif /* HAVE_LIBELF_SUPPORT */
+>   #if defined(HAVE_LIBTRACEEVENT) && (defined(HAVE_LIBAUDIT_SUPPORT) || defined(HAVE_SYSCALL_TABLE_SUPPORT))
+>     {"trace", "strace inspired tool"},
+>   #endif /* HAVE_LIBTRACEEVENT && (HAVE_LIBAUDIT_SUPPORT || HAVE_SYSCALL_TABLE_SUPPORT) */
+>   #ifdef HAVE_LIBTRACEEVENT
+>     {"kmem", "Tool to trace/measure kernel memory properties"},
+>     {"kwork", "Tool to trace/measure kernel work properties (latencies)"},
+>     {"lock", "Analyze lock events"},
+>     {"sched", "Tool to trace/measure scheduler properties (latencies)"},
+>     {"timechart", "Tool to visualize total system behavior during a workload"},
+>   #endif /* HAVE_LIBTRACEEVENT */
+>   };
+>
+> Fixes: 378ef0f5d9d7 ("perf build: Use libtraceevent from the system")
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
+
+
 > ---
->  arch/x86/include/asm/kvm_host.h |  2 +-
->  arch/x86/kvm/mmu/mmu.c          | 63 ++++++++++++++++++++++-----------
->  arch/x86/kvm/mmu/paging_tmpl.h  |  4 +--
->  arch/x86/kvm/mmu/tdp_mmu.c      | 11 +++---
->  virt/kvm/kvm_main.c             |  2 +-
->  5 files changed, 53 insertions(+), 29 deletions(-)
+>  tools/perf/command-list.txt         | 10 +++++-----
+>  tools/perf/util/generate-cmdlist.sh | 19 +++++++++++++++++--
+>  2 files changed, 22 insertions(+), 7 deletions(-)
 >
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 293994fabae3..b1f319ad6f89 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -782,7 +782,7 @@ struct kvm_vcpu_arch {
->         struct kvm_mmu *walk_mmu;
+> diff --git a/tools/perf/command-list.txt b/tools/perf/command-list.txt
+> index 8fcab5ad00c5..e8d2762adade 100644
+> --- a/tools/perf/command-list.txt
+> +++ b/tools/perf/command-list.txt
+> @@ -16,20 +16,20 @@ perf-ftrace                 mainporcelain common
+>  perf-inject                    mainporcelain common
+>  perf-iostat                    mainporcelain common
+>  perf-kallsyms                  mainporcelain common
+> -perf-kmem                      mainporcelain common
+> +perf-kmem                      mainporcelain traceevent
+>  perf-kvm                       mainporcelain common
+> -perf-kwork                     mainporcelain common
+> +perf-kwork                     mainporcelain traceevent
+>  perf-list                      mainporcelain common
+> -perf-lock                      mainporcelain common
+> +perf-lock                      mainporcelain traceevent
+>  perf-mem                       mainporcelain common
+>  perf-probe                     mainporcelain full
+>  perf-record                    mainporcelain common
+>  perf-report                    mainporcelain common
+> -perf-sched                     mainporcelain common
+> +perf-sched                     mainporcelain traceevent
+>  perf-script                    mainporcelain common
+>  perf-stat                      mainporcelain common
+>  perf-test                      mainporcelain common
+> -perf-timechart                 mainporcelain common
+> +perf-timechart                 mainporcelain traceevent
+>  perf-top                       mainporcelain common
+>  perf-trace                     mainporcelain audit
+>  perf-version                   mainporcelain common
+> diff --git a/tools/perf/util/generate-cmdlist.sh b/tools/perf/util/generate-cmdlist.sh
+> index c3cef36d4176..1b5140e5ce99 100755
+> --- a/tools/perf/util/generate-cmdlist.sh
+> +++ b/tools/perf/util/generate-cmdlist.sh
+> @@ -38,7 +38,7 @@ do
+>  done
+>  echo "#endif /* HAVE_LIBELF_SUPPORT */"
 >
->         struct kvm_mmu_memory_cache mmu_pte_list_desc_cache;
-> -       struct kvm_mmu_memory_cache mmu_shadow_page_cache;
-> +       struct kvm_mmu_memory_cache mmu_shadow_page_cache[MAX_NUMNODES];
->         struct kvm_mmu_memory_cache mmu_shadowed_info_cache;
->         struct kvm_mmu_memory_cache mmu_page_header_cache;
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 23a3b82b2384..511c6ef265ee 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -677,24 +677,29 @@ static int mmu_topup_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
->
->  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
->  {
-> -       int r;
-> +       int r, nid;
->
->         /* 1 rmap, 1 parent PTE per level, and the prefetched rmaps. */
->         r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
->                                        1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
->         if (r)
->                 return r;
-> -       r = mmu_topup_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
-> -                                     &vcpu->arch.mmu_shadow_page_cache_lock,
-> -                                     PT64_ROOT_MAX_LEVEL);
-> -       if (r)
-> -               return r;
+> -echo "#if defined(HAVE_LIBAUDIT_SUPPORT) || defined(HAVE_SYSCALL_TABLE_SUPPORT)"
+> +echo "#if defined(HAVE_LIBTRACEEVENT) && (defined(HAVE_LIBAUDIT_SUPPORT) || defined(HAVE_SYSCALL_TABLE_SUPPORT))"
+>  sed -n -e 's/^perf-\([^        ]*\)[   ].* audit*/\1/p' command-list.txt |
+>  sort |
+>  while read cmd
+> @@ -51,5 +51,20 @@ do
+>             p
+>       }' "Documentation/perf-$cmd.txt"
+>  done
+> -echo "#endif /* HAVE_LIBELF_SUPPORT */"
+> +echo "#endif /* HAVE_LIBTRACEEVENT && (HAVE_LIBAUDIT_SUPPORT || HAVE_SYSCALL_TABLE_SUPPORT) */"
 > +
-> +       for_each_online_node(nid) {
-> +               r = mmu_topup_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache[nid],
-> +                                             &vcpu->arch.mmu_shadow_page_cache_lock,
-> +                                             PT64_ROOT_MAX_LEVEL);
-> +               if (r)
-> +                       return r;
-> +       }
-> +
->         if (maybe_indirect) {
->                 r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadowed_info_cache,
->                                                PT64_ROOT_MAX_LEVEL);
->                 if (r)
->                         return r;
->         }
-> +
->         return kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_page_header_cache,
->                                           PT64_ROOT_MAX_LEVEL);
->  }
-> @@ -715,9 +720,14 @@ static void mmu_free_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
->
->  static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
->  {
-> +       int nid;
-> +
->         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
-> -       mmu_free_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
-> -                                &vcpu->arch.mmu_shadow_page_cache_lock);
-> +
-> +       for_each_node(nid)
-> +               mmu_free_sp_memory_cache(&vcpu->arch.mmu_shadow_page_cache[nid],
-> +                                        &vcpu->arch.mmu_shadow_page_cache_lock);
-> +
-
-Was just trying to think if there could be any issue with memory
-leakage if the online nodes changed, though IDK if any hardware does
-that.
-Still, it might be more robust to use ARRAY_SIZE and cover the whole array.
-
->         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadowed_info_cache);
->         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
->  }
-> @@ -2256,11 +2266,12 @@ static struct kvm_mmu_page *__kvm_mmu_get_shadow_page(struct kvm *kvm,
->
->  static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
->                                                     gfn_t gfn,
-> -                                                   union kvm_mmu_page_role role)
-> +                                                   union kvm_mmu_page_role role,
-> +                                                   int nid)
->  {
->         struct shadow_page_caches caches = {
->                 .page_header_cache = &vcpu->arch.mmu_page_header_cache,
-> -               .shadow_page_cache = &vcpu->arch.mmu_shadow_page_cache,
-> +               .shadow_page_cache = &vcpu->arch.mmu_shadow_page_cache[nid],
->                 .shadowed_info_cache = &vcpu->arch.mmu_shadowed_info_cache,
->                 .shadow_page_cache_lock = &vcpu->arch.mmu_shadow_page_cache_lock
->         };
-> @@ -2316,15 +2327,19 @@ static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct,
->
->  static struct kvm_mmu_page *kvm_mmu_get_child_sp(struct kvm_vcpu *vcpu,
->                                                  u64 *sptep, gfn_t gfn,
-> -                                                bool direct, unsigned int access)
-> +                                                bool direct, unsigned int access,
-> +                                                kvm_pfn_t pfn)
->  {
->         union kvm_mmu_page_role role;
-> +       int nid;
->
->         if (is_shadow_present_pte(*sptep) && !is_large_pte(*sptep))
->                 return ERR_PTR(-EEXIST);
->
->         role = kvm_mmu_child_role(sptep, direct, access);
-> -       return kvm_mmu_get_shadow_page(vcpu, gfn, role);
-> +       nid = kvm_pfn_to_page_table_nid(pfn);
-> +
-> +       return kvm_mmu_get_shadow_page(vcpu, gfn, role, nid);
->  }
->
->  static void shadow_walk_init_using_root(struct kvm_shadow_walk_iterator *iterator,
-> @@ -3208,7 +3223,8 @@ static int direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->                 if (it.level == fault->goal_level)
->                         break;
->
-> -               sp = kvm_mmu_get_child_sp(vcpu, it.sptep, base_gfn, true, ACC_ALL);
-> +               sp = kvm_mmu_get_child_sp(vcpu, it.sptep, base_gfn, true,
-> +                                         ACC_ALL, fault->pfn);
->                 if (sp == ERR_PTR(-EEXIST))
->                         continue;
->
-> @@ -3636,7 +3652,7 @@ static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
->         WARN_ON_ONCE(quadrant && !role.has_4_byte_gpte);
->         WARN_ON_ONCE(role.direct && role.has_4_byte_gpte);
->
-> -       sp = kvm_mmu_get_shadow_page(vcpu, gfn, role);
-> +       sp = kvm_mmu_get_shadow_page(vcpu, gfn, role, numa_mem_id());
->         ++sp->root_count;
->
->         return __pa(sp->spt);
-> @@ -5952,7 +5968,7 @@ static int __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
->
->  int kvm_mmu_create(struct kvm_vcpu *vcpu)
->  {
-> -       int ret;
-> +       int ret, nid;
->
->         INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_pte_list_desc_cache,
->                                   pte_list_desc_cache, NUMA_NO_NODE);
-> @@ -5960,8 +5976,9 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
->         INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_page_header_cache,
->                                   mmu_page_header_cache, NUMA_NO_NODE);
->
-> -       INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache,
-> -                                 NULL, NUMA_NO_NODE);
-> +       for_each_node(nid)
-> +               INIT_KVM_MMU_MEMORY_CACHE(&vcpu->arch.mmu_shadow_page_cache[nid],
-> +                                         NULL, nid);
->         spin_lock_init(&vcpu->arch.mmu_shadow_page_cache_lock);
->
->         vcpu->arch.mmu = &vcpu->arch.root_mmu;
-> @@ -6692,13 +6709,17 @@ void kvm_mmu_invalidate_mmio_sptes(struct kvm *kvm, u64 gen)
->  }
->
->  static unsigned long mmu_shrink_cache(struct kvm_mmu_memory_cache *cache,
-> +                                     int cache_count,
->                                       spinlock_t *cache_lock)
->  {
->         unsigned long freed = 0;
-> +       int nid;
->
->         spin_lock(cache_lock);
-> -       if (cache->nobjs)
-> -               freed = kvm_mmu_empty_memory_cache(cache);
-> +       for (nid = 0; nid < cache_count; nid++) {
-> +               if (node_online(nid) && cache[nid].nobjs)
-
-Is there any reason to keep the cache if !node_online(nid)?
-Actually, I'd also just drop the cache_count argument and always
-iterate over the entire array, only checking nobjs. There's no
-guarantee I'm aware of that the set of nodes has a sequential series
-of IDs starting at 0 and you'd get a bug if that wasn't the case since
-it only iterates to  nid < cache_count here but some of the earlier
-nids might not have been online.
-
-> +                       freed += kvm_mmu_empty_memory_cache(&cache[nid]);
-> +       }
->         spin_unlock(cache_lock);
->         return freed;
->  }
-> @@ -6721,13 +6742,15 @@ mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
->                 list_move_tail(&kvm->vm_list, &vm_list);
->
->                 freed += mmu_shrink_cache(&kvm->arch.split_shadow_page_cache,
-> +                                         1,
-
-So lonely.
-One.
-All by itself,
-with only a coma for company.
-
-NIT: This could be merged to the previous or subsequent lines.
-
->                                           &kvm->arch.split_shadow_page_cache_lock);
->
->                 if (freed >= sc->nr_to_scan)
->                         break;
->
->                 kvm_for_each_vcpu(i, vcpu, kvm) {
-> -                       freed += mmu_shrink_cache(&vcpu->arch.mmu_shadow_page_cache,
-> +                       freed += mmu_shrink_cache(vcpu->arch.mmu_shadow_page_cache,
-> +                                                 MAX_NUMNODES,
->                                                   &vcpu->arch.mmu_shadow_page_cache_lock);
->                 }
->
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index e5662dbd519c..1ceca62ec4cf 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -652,7 +652,7 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->                 table_gfn = gw->table_gfn[it.level - 2];
->                 access = gw->pt_access[it.level - 2];
->                 sp = kvm_mmu_get_child_sp(vcpu, it.sptep, table_gfn,
-> -                                         false, access);
-> +                                         false, access, fault->pfn);
->
->                 if (sp != ERR_PTR(-EEXIST)) {
->                         /*
-> @@ -708,7 +708,7 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->                 validate_direct_spte(vcpu, it.sptep, direct_access);
->
->                 sp = kvm_mmu_get_child_sp(vcpu, it.sptep, base_gfn,
-> -                                         true, direct_access);
-> +                                         true, direct_access, fault->pfn);
->                 if (sp == ERR_PTR(-EEXIST))
->                         continue;
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 376b8dceb3f9..b5abae2366dd 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -259,12 +259,12 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
->                     kvm_mmu_page_as_id(_root) != _as_id) {              \
->                 } else
->
-> -static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
-> +static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu, int nid)
->  {
->         struct kvm_mmu_page *sp;
->
->         sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
-> -       sp->spt = kvm_mmu_sp_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache,
-> +       sp->spt = kvm_mmu_sp_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache[nid],
->                                                 &vcpu->arch.mmu_shadow_page_cache_lock);
->
->         return sp;
-> @@ -317,7 +317,7 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu)
->                         goto out;
->         }
->
-> -       root = tdp_mmu_alloc_sp(vcpu);
-> +       root = tdp_mmu_alloc_sp(vcpu, numa_mem_id());
-
-Might be worth calling out somewhere that the root page is just
-allocated based on where the thread allocating it runs.
-
->         tdp_mmu_init_sp(root, NULL, 0, role);
->
->         refcount_set(&root->tdp_mmu_root_count, 1);
-> @@ -1149,7 +1149,7 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->         struct kvm *kvm = vcpu->kvm;
->         struct tdp_iter iter;
->         struct kvm_mmu_page *sp;
-> -       int ret = RET_PF_RETRY;
-> +       int ret = RET_PF_RETRY, nid;
->
->         kvm_mmu_hugepage_adjust(vcpu, fault);
->
-> @@ -1178,11 +1178,12 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->                     !is_large_pte(iter.old_spte))
->                         continue;
->
-> +               nid = kvm_pfn_to_page_table_nid(fault->pfn);
->                 /*
->                  * The SPTE is either non-present or points to a huge page that
->                  * needs to be split.
->                  */
-> -               sp = tdp_mmu_alloc_sp(vcpu);
-> +               sp = tdp_mmu_alloc_sp(vcpu, nid);
->                 tdp_mmu_init_child_sp(sp, &iter);
->
->                 sp->nx_huge_page_disallowed = fault->huge_page_disallowed;
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index d96c8146e9ba..4f3db7ffeba8 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -415,7 +415,7 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
->         if (mc->kmem_cache)
->                 return kmem_cache_alloc(mc->kmem_cache, gfp_flags);
->         else
-> -               return (void *)__get_free_page(gfp_flags);
-> +               return kvm_mmu_get_free_page(mc->node, gfp_flags);
-
-You could do part of this change in the commit that introduced
-kvm_mmu_get_free_page too.
->  }
->
->  int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+> +echo "#ifdef HAVE_LIBTRACEEVENT"
+> +sed -n -e 's/^perf-\([^        ]*\)[   ].* traceevent.*/\1/p' command-list.txt |
+> +sort |
+> +while read cmd
+> +do
+> +     sed -n '
+> +     /^NAME/,/perf-'"$cmd"'/H
+> +     ${
+> +            x
+> +            s/.*perf-'"$cmd"' - \(.*\)/  {"'"$cmd"'", "\1"},/
+> +            p
+> +     }' "Documentation/perf-$cmd.txt"
+> +done
+> +echo "#endif /* HAVE_LIBTRACEEVENT */"
+>  echo "};"
 > --
-> 2.39.0.314.g84b9a713c41-goog
+> 2.17.1
 >
