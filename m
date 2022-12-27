@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E7F656AAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D407656AA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiL0MPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 07:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
+        id S231775AbiL0MPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 07:15:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbiL0MOi (ORCPT
+        with ESMTP id S232099AbiL0MOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 07:14:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0EBC0E;
+        Tue, 27 Dec 2022 07:14:37 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195A4BCE;
         Tue, 27 Dec 2022 04:13:50 -0800 (PST)
 Date:   Tue, 27 Dec 2022 12:13:48 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1672143229;
+        s=2020; t=1672143228;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lOddLRVxfeU+1QhsA0x4c7NKPt/49V8pu9vYzKx84IY=;
-        b=Rs3ydQasKXu+Lg90oMYMt1YtqW//jLFXIBQMoT93NQAWgtkSTepo9O7GEvgj3soDe+9k03
-        YPSgN2ewiC4JpcRJjBiRnnUN3DQaGTOcku+bYT0l/YYMISnUiuEAZEuqMIMzR5PgmILl2n
-        NM/Q5EV5NYm0RS5Aa2dFlGMtEslthhXybFNLlRFsxziUpw/TNHnb4aOKstMn3PGsC/YYQV
-        lyTy0fwOH2qTiz7A75fQP043Zq26+zKKIFP2RyeH4XX8LJkdsb0FBC5N6C+/u4odaCMPbk
-        dxgvcqpWmxmhs2YnM0CJWpf15aMAp2cOepZwmPpaD/c4UuJzEm5BZsuo0l3y0w==
+        bh=Oge8BJUdIiR8BP1GUdyWN8bXPtoIk/0R250b97qS1F4=;
+        b=NhtCsqJEvC22vJr6hO6dsxKp1d6McUdSfCRCUhacaErQrGfN3Ak8JHF5QGYcBEeM3NnwFJ
+        ApK6SJhhwcCDeRRYdmGQkG9Q6z/Z6DfIMBU7eBRKRLNtD+jVNEDzfALsHCC//8LMt35s/k
+        0mDbuMKI3H366ONDkEBzdemeOsHTbLuA3rKdmYQ7E1pe6onw/wA+BXdJkW+4pYNvp1hf90
+        KAcP+JHDCHgIo0oi5ZeGJJ2IvGAgXr49v8hUmTmxueLd6nxTEvCabxI0cqboJS8c3Qf6Lz
+        HgmtrbOQAbf7sZWgU4Qxp6EtrrgF+MfL/sAu/VaHsqnPvoVZDeDcL7HWpgGkOA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1672143229;
+        s=2020e; t=1672143228;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lOddLRVxfeU+1QhsA0x4c7NKPt/49V8pu9vYzKx84IY=;
-        b=7EjQzzLKyQ2TRap8jKpuV/JgbCPl83oxuyEhzWJITLJjKWz3yzOqM1fp6m03nh6d7eqoyY
-        4jJe7FY9yG3u3UAA==
-From:   "tip-bot2 for Hao Jia" <tip-bot2@linutronix.de>
+        bh=Oge8BJUdIiR8BP1GUdyWN8bXPtoIk/0R250b97qS1F4=;
+        b=9g4gbHJfFxeydysTiPp9iXcU/GvO35iQdSKqTeArghjAoNfU8HKg+UTDMK28FGDhNjC1Ut
+        hiVgYqFEbXC1VyAA==
+From:   "tip-bot2 for Nicholas Piggin" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/numa: Stop an exhastive search if an idle
- core is found
-Cc:     Hao Jia <jiahao.os@bytedance.com>,
+Subject: [tip: sched/core] cputime: remove cputime_to_nsecs fallback
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>, x86@kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221216062406.7812-2-jiahao.os@bytedance.com>
-References: <20221216062406.7812-2-jiahao.os@bytedance.com>
+In-Reply-To: <20221220070705.2958959-1-npiggin@gmail.com>
+References: <20221220070705.2958959-1-npiggin@gmail.com>
 MIME-Version: 1.0
-Message-ID: <167214322868.4906.12856544569923049158.tip-bot2@tip-bot2>
+Message-ID: <167214322823.4906.12017382437888947820.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,40 +67,98 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     feaed76376fd612b9450ad1251aec20a63ccfe92
-Gitweb:        https://git.kernel.org/tip/feaed76376fd612b9450ad1251aec20a63ccfe92
-Author:        Hao Jia <jiahao.os@bytedance.com>
-AuthorDate:    Fri, 16 Dec 2022 14:24:05 +08:00
+Commit-ID:     c89970202a1153b2fc230e89f90c180bd5bcbcef
+Gitweb:        https://git.kernel.org/tip/c89970202a1153b2fc230e89f90c180bd5bcbcef
+Author:        Nicholas Piggin <npiggin@gmail.com>
+AuthorDate:    Tue, 20 Dec 2022 17:07:05 +10:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 27 Dec 2022 12:52:16 +01:00
+CommitterDate: Tue, 27 Dec 2022 12:52:17 +01:00
 
-sched/numa: Stop an exhastive search if an idle core is found
+cputime: remove cputime_to_nsecs fallback
 
-In update_numa_stats() we try to find an idle cpu on the NUMA node,
-preferably an idle core. we can stop looking for the next idle core
-or idle cpu after finding an idle core. But we can't stop the
-whole loop of scanning the CPU, because we need to calculate
-approximate NUMA stats at a point in time. For example,
-the src and dst nr_running is needed by task_numa_find_cpu().
+The archs that use cputime_to_nsecs() internally provide their own
+definition and don't need the fallback. cputime_to_usecs() unused except
+in this fallback, and is not defined anywhere.
 
-Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+This removes the final remnant of the cputime_t code from the kernel.
+
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Link: https://lore.kernel.org/r/20221216062406.7812-2-jiahao.os@bytedance.com
+Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Link: https://lore.kernel.org/r/20221220070705.2958959-1-npiggin@gmail.com
 ---
- kernel/sched/fair.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/s390/kernel/idle.c       |  2 +-
+ arch/s390/kernel/vtime.c      |  2 +-
+ include/linux/sched/cputime.h |  9 ---------
+ kernel/sched/cputime.c        |  4 ++++
+ 4 files changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d0e2a48..aaff209 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1804,7 +1804,7 @@ static void update_numa_stats(struct task_numa_env *env,
- 		ns->nr_running += rq->cfs.h_nr_running;
- 		ns->compute_capacity += capacity_of(cpu);
+diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
+index 4bf1ee2..a6bbcea 100644
+--- a/arch/s390/kernel/idle.c
++++ b/arch/s390/kernel/idle.c
+@@ -12,9 +12,9 @@
+ #include <linux/notifier.h>
+ #include <linux/init.h>
+ #include <linux/cpu.h>
+-#include <linux/sched/cputime.h>
+ #include <trace/events/power.h>
+ #include <asm/cpu_mf.h>
++#include <asm/cputime.h>
+ #include <asm/nmi.h>
+ #include <asm/smp.h>
+ #include "entry.h"
+diff --git a/arch/s390/kernel/vtime.c b/arch/s390/kernel/vtime.c
+index 9436f30..e0a88dc 100644
+--- a/arch/s390/kernel/vtime.c
++++ b/arch/s390/kernel/vtime.c
+@@ -7,13 +7,13 @@
+  */
  
--		if (find_idle && !rq->nr_running && idle_cpu(cpu)) {
-+		if (find_idle && idle_core < 0 && !rq->nr_running && idle_cpu(cpu)) {
- 			if (READ_ONCE(rq->numa_migrate_on) ||
- 			    !cpumask_test_cpu(cpu, env->p->cpus_ptr))
- 				continue;
+ #include <linux/kernel_stat.h>
+-#include <linux/sched/cputime.h>
+ #include <linux/export.h>
+ #include <linux/kernel.h>
+ #include <linux/timex.h>
+ #include <linux/types.h>
+ #include <linux/time.h>
+ #include <asm/alternative.h>
++#include <asm/cputime.h>
+ #include <asm/vtimer.h>
+ #include <asm/vtime.h>
+ #include <asm/cpu_mf.h>
+diff --git a/include/linux/sched/cputime.h b/include/linux/sched/cputime.h
+index ce3c582..5f8fd5b 100644
+--- a/include/linux/sched/cputime.h
++++ b/include/linux/sched/cputime.h
+@@ -8,15 +8,6 @@
+  * cputime accounting APIs:
+  */
+ 
+-#ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
+-#include <asm/cputime.h>
+-
+-#ifndef cputime_to_nsecs
+-# define cputime_to_nsecs(__ct)	\
+-	(cputime_to_usecs(__ct) * NSEC_PER_USEC)
+-#endif
+-#endif /* CONFIG_VIRT_CPU_ACCOUNTING_NATIVE */
+-
+ #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
+ extern bool task_cputime(struct task_struct *t,
+ 			 u64 *utime, u64 *stime);
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 95fc778..af7952f 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -3,6 +3,10 @@
+  * Simple CPU accounting cgroup controller
+  */
+ 
++#ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
++ #include <asm/cputime.h>
++#endif
++
+ #ifdef CONFIG_IRQ_TIME_ACCOUNTING
+ 
+ /*
