@@ -2,288 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BCE656E6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C0E656E78
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 20:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiL0TnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 14:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
+        id S231221AbiL0TzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 14:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiL0TnM (ORCPT
+        with ESMTP id S229566AbiL0Tyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 14:43:12 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AD0DBC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:43:10 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id c17so20234644edj.13
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j5kXQRlrqHu8eJ+PnymlZSWD3DUZ2ZpMSlrZH3zs570=;
-        b=Gf+XaEL+PcrsY+ycGu0/8WmBgeQR2hujrqh8NeaumFKcgmuqpd9L5V2UTcw5P2B/yk
-         ayN3sGwxDgRd/2AGVRnfM3b55NJNPvKxjsu2BHkDZuq1rYkLa22uUTxHubUXwSX5ydrD
-         reGjD57/fAv7wrQ0L1SgwmLw2nSB41/HanHYwWLuA6HxzQMFHGVyoylBM93poY+pa7po
-         CF6nDSKonJWCgYHUGYGfDbEWQdPufWSOuVvHRlgq7BVoCFuQ+NO/8RIa1kb8HXhUhyav
-         ZzJFFYY/VgWuOyvnXgYNqcS2IV2jnHdsRDLliFPT+2+1ICBhy+Ob0//nr9S/zVS4nxne
-         Frgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j5kXQRlrqHu8eJ+PnymlZSWD3DUZ2ZpMSlrZH3zs570=;
-        b=VwxaBO5sEO+onAgw34oAMVOyuQqhI9QRrT6lZ3ZoJK/dDUO+CKc+tHUkeYTeqYi6X+
-         Jr3UpV40w+/v8CroaRfpjiFZHI5qgMT7tQ3rvIxA/tNlIxMP47j2E/b9aGbpkiPkg6og
-         5tEfKnQZRXk127j4fgahYFeQ1CQf3oQ6O6fCVOHMMDMUtf6pQ0s8A5Sa8b3SCjUtoRm7
-         y/c8N/0Bm5rJ2/w0RX95rWp0ierw1oFau/x7PkSEfz7bAVJICs2Vk5P1FYVCXU6D0rSU
-         IGLd1a18dmqDdNKimSj76QdGXZQVur35hooE/qEUbd5FsgL8gjH01a5+cLVXFh42ZEnI
-         3INw==
-X-Gm-Message-State: AFqh2kqsvV5rLwH8lJ5CxVz3ygEq3bstmj76ROeJFcgz0ZDmZh4E7hkT
-        +OjadULWfXgredS8MCjRHVXvFiDUJXPLhsuO72n9pw==
-X-Google-Smtp-Source: AMrXdXvihDS7OmnauKfYptIedfxY4i0n5+dUGRqkwI7dvqGL3lhPd+0XmBtZuy2Ry2Cj/RiImEjJ49nN2X9OIwWA1Rc=
-X-Received: by 2002:aa7:d60c:0:b0:47d:5b93:61c2 with SMTP id
- c12-20020aa7d60c000000b0047d5b9361c2mr1789243edr.294.1672170188954; Tue, 27
- Dec 2022 11:43:08 -0800 (PST)
+        Tue, 27 Dec 2022 14:54:52 -0500
+X-Greylist: delayed 493 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Dec 2022 11:54:51 PST
+Received: from mail.holmansrus.com (unknown [143.59.183.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5A3101E;
+        Tue, 27 Dec 2022 11:54:51 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.holmansrus.com (Postfix) with ESMTP id 2820BE1D46;
+        Tue, 27 Dec 2022 13:46:37 -0600 (CST)
+Received: from mail.holmansrus.com ([127.0.0.1])
+        by localhost (mail.holmansrus.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id VlecP-Fp4TuH; Tue, 27 Dec 2022 13:46:34 -0600 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.holmansrus.com (Postfix) with ESMTP id B1591E1D4A;
+        Tue, 27 Dec 2022 13:46:34 -0600 (CST)
+X-Virus-Scanned: amavisd-new at holmansrus.com
+Received: from mail.holmansrus.com ([127.0.0.1])
+        by localhost (mail.holmansrus.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 8GvPUnVo9Se7; Tue, 27 Dec 2022 13:46:34 -0600 (CST)
+Received: from mail.holmansrus.com (mail.holmansrus.com [10.90.0.246])
+        by mail.holmansrus.com (Postfix) with ESMTP id 7559CE1778;
+        Tue, 27 Dec 2022 13:46:34 -0600 (CST)
+Date:   Tue, 27 Dec 2022 13:46:34 -0600 (CST)
+From:   Walt Holman <walt@holmansrus.com>
+To:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-input@vger.kernel.org
+Message-ID: <743753078.40.1672170394290.JavaMail.zimbra@holmansrus.com>
+Subject: PATCH: Add devce IDs for Logitech G923 Xbox Steering Wheel
 MIME-Version: 1.0
-References: <20221222023457.1764-1-vipinsh@google.com> <20221222023457.1764-9-vipinsh@google.com>
-In-Reply-To: <20221222023457.1764-9-vipinsh@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 27 Dec 2022 11:42:56 -0800
-Message-ID: <CANgfPd-sByYUeFxrRpuTYn=mVdDTmrOMeDW8Ath+PzWe06V8-g@mail.gmail.com>
-Subject: Re: [Patch v3 8/9] KVM: x86/mmu: Make split_shadow_page_cache NUMA aware
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_38_1228832334.1672170394288"
+X-Originating-IP: [10.90.0.246]
+X-Mailer: Zimbra 8.8.15_GA_4484 (ZimbraWebClient - GC108 (Linux)/8.8.15_GA_4481)
+Thread-Index: OOK75kChqCuOz9n0sHuUxbaMgbTqAQ==
+Thread-Topic: PATCH: Add devce IDs for Logitech G923 Xbox Steering Wheel
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 6:35 PM Vipin Sharma <vipinsh@google.com> wrote:
->
-> Make split_shadow_page_cache NUMA aware and allocate page table's pages
-> during the split based on the underlying physical page's NUMA node.
->
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  2 +-
->  arch/x86/kvm/mmu/mmu.c          | 50 ++++++++++++++++++---------------
->  2 files changed, 29 insertions(+), 23 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index b1f319ad6f89..7b3f36ae37a4 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1410,7 +1410,7 @@ struct kvm_arch {
->          *
->          * Protected by kvm->slots_lock.
->          */
-> -       struct kvm_mmu_memory_cache split_shadow_page_cache;
-> +       struct kvm_mmu_memory_cache split_shadow_page_cache[MAX_NUMNODES];
->         struct kvm_mmu_memory_cache split_page_header_cache;
->
->         /*
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 511c6ef265ee..7454bfc49a51 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -6126,7 +6126,7 @@ static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
->  int kvm_mmu_init_vm(struct kvm *kvm)
->  {
->         struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
-> -       int r;
-> +       int r, nid;
->
->         INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
->         INIT_LIST_HEAD(&kvm->arch.possible_nx_huge_pages);
-> @@ -6145,8 +6145,9 @@ int kvm_mmu_init_vm(struct kvm *kvm)
->         INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_page_header_cache,
->                                   mmu_page_header_cache, NUMA_NO_NODE);
->
-> -       INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache,
-> -                                 NULL, NUMA_NO_NODE);
-> +       for_each_node(nid)
+------=_Part_38_1228832334.1672170394288
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Again, assuming no one sets CONFIG_NODE_SHIFT to a ridiculous value,
-it would probably be fine to initialize the entire array here since
-that doesn't take any extra memory and we're not in a super hot path.
+Hello,
 
-> +               INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_shadow_page_cache[nid],
-> +                                         NULL, NUMA_NO_NODE);
->         spin_lock_init(&kvm->arch.split_shadow_page_cache_lock);
->
->         INIT_KVM_MMU_MEMORY_CACHE(&kvm->arch.split_desc_cache,
-> @@ -6157,10 +6158,13 @@ int kvm_mmu_init_vm(struct kvm *kvm)
->
->  static void mmu_free_vm_memory_caches(struct kvm *kvm)
->  {
-> +       int nid;
-> +
->         kvm_mmu_free_memory_cache(&kvm->arch.split_desc_cache);
->         kvm_mmu_free_memory_cache(&kvm->arch.split_page_header_cache);
-> -       mmu_free_sp_memory_cache(&kvm->arch.split_shadow_page_cache,
-> -                                &kvm->arch.split_shadow_page_cache_lock);
-> +       for_each_node(nid)
+This patch adds support for the Logitech G923 Xbox edition steering wheel. This uses the hid-logitech-hidpp kernel module and from my testing, force feedback and all buttons work. This requires the usb_modeswitch application to setup the device in PC mode with a magic string that is the same as the Logitech 920 wheel. Originally I had massaged a patch I found for this wheel, however, much of it was unnecessary and I culled it back to just adding the ID's. Let me know if you need anything else or have any questions. Thanks,
 
-Again, could just iterate over the whole array here.
+Signed-off-by: Walt Holman walt@holmansrus.com
 
-> +               mmu_free_sp_memory_cache(&kvm->arch.split_shadow_page_cache[nid],
-> +                                        &kvm->arch.split_shadow_page_cache_lock);
->  }
->
->  void kvm_mmu_uninit_vm(struct kvm *kvm)
-> @@ -6269,7 +6273,7 @@ static inline bool need_topup(struct kvm_mmu_memory_cache *cache, int min)
->         return kvm_mmu_memory_cache_nr_free_objects(cache) < min;
->  }
->
-> -static bool need_topup_split_caches_or_resched(struct kvm *kvm)
-> +static bool need_topup_split_caches_or_resched(struct kvm *kvm, int nid)
->  {
->         if (need_resched() || rwlock_needbreak(&kvm->mmu_lock))
->                 return true;
-> @@ -6281,10 +6285,10 @@ static bool need_topup_split_caches_or_resched(struct kvm *kvm)
->          */
->         return need_topup(&kvm->arch.split_desc_cache, SPLIT_DESC_CACHE_MIN_NR_OBJECTS) ||
->                need_topup(&kvm->arch.split_page_header_cache, 1) ||
-> -              need_topup(&kvm->arch.split_shadow_page_cache, 1);
-> +              need_topup(&kvm->arch.split_shadow_page_cache[nid], 1);
->  }
->
-> -static int topup_split_caches(struct kvm *kvm)
-> +static int topup_split_caches(struct kvm *kvm, int nid)
->  {
->         /*
->          * Allocating rmap list entries when splitting huge pages for nested
-> @@ -6314,18 +6318,21 @@ static int topup_split_caches(struct kvm *kvm)
->         if (r)
->                 return r;
->
-> -       return mmu_topup_sp_memory_cache(&kvm->arch.split_shadow_page_cache,
-> +       return mmu_topup_sp_memory_cache(&kvm->arch.split_shadow_page_cache[nid],
->                                          &kvm->arch.split_shadow_page_cache_lock,
->                                          1);
->  }
->
-> -static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *huge_sptep)
-> +static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm,
-> +                                                       u64 *huge_sptep,
-> +                                                       u64 huge_spte)
+------=_Part_38_1228832334.1672170394288
+Content-Type: text/x-patch; name=logitech-g923-hidpp-clean.patch
+Content-Disposition: attachment; filename=logitech-g923-hidpp-clean.patch
+Content-Transfer-Encoding: base64
 
-These can go on the same line.
-
->  {
->         struct kvm_mmu_page *huge_sp = sptep_to_sp(huge_sptep);
->         struct shadow_page_caches caches = {};
->         union kvm_mmu_page_role role;
->         unsigned int access;
->         gfn_t gfn;
-> +       int nid;
->
->         gfn = kvm_mmu_page_get_gfn(huge_sp, spte_index(huge_sptep));
->         access = kvm_mmu_page_get_access(huge_sp, spte_index(huge_sptep));
-> @@ -6338,9 +6345,11 @@ static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *hu
->          */
->         role = kvm_mmu_child_role(huge_sptep, /*direct=*/true, access);
->
-> +       nid = kvm_pfn_to_page_table_nid(spte_to_pfn(huge_spte));
-> +
->         /* Direct SPs do not require a shadowed_info_cache. */
->         caches.page_header_cache = &kvm->arch.split_page_header_cache;
-> -       caches.shadow_page_cache = &kvm->arch.split_shadow_page_cache;
-> +       caches.shadow_page_cache = &kvm->arch.split_shadow_page_cache[nid];
->         caches.shadow_page_cache_lock = &kvm->arch.split_shadow_page_cache_lock;
->
->         /* Safe to pass NULL for vCPU since requesting a direct SP. */
-> @@ -6360,7 +6369,7 @@ static void shadow_mmu_split_huge_page(struct kvm *kvm,
->         gfn_t gfn;
->         int index;
->
-> -       sp = shadow_mmu_get_sp_for_split(kvm, huge_sptep);
-> +       sp = shadow_mmu_get_sp_for_split(kvm, huge_sptep, huge_spte);
->
->         for (index = 0; index < SPTE_ENT_PER_PAGE; index++) {
->                 sptep = &sp->spt[index];
-> @@ -6398,7 +6407,7 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
->                                           u64 *huge_sptep)
->  {
->         struct kvm_mmu_page *huge_sp = sptep_to_sp(huge_sptep);
-> -       int level, r = 0;
-> +       int level, r = 0, nid;
->         gfn_t gfn;
->         u64 spte;
->
-> @@ -6406,13 +6415,14 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
->         gfn = kvm_mmu_page_get_gfn(huge_sp, spte_index(huge_sptep));
->         level = huge_sp->role.level;
->         spte = *huge_sptep;
-> +       nid = kvm_pfn_to_page_table_nid(spte_to_pfn(spte));
->
->         if (kvm_mmu_available_pages(kvm) <= KVM_MIN_FREE_MMU_PAGES) {
->                 r = -ENOSPC;
->                 goto out;
->         }
->
-> -       if (need_topup_split_caches_or_resched(kvm)) {
-> +       if (need_topup_split_caches_or_resched(kvm, nid)) {
->                 write_unlock(&kvm->mmu_lock);
->                 cond_resched();
->                 /*
-> @@ -6420,7 +6430,7 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
->                  * rmap iterator should be restarted because the MMU lock was
->                  * dropped.
->                  */
-> -               r = topup_split_caches(kvm) ?: -EAGAIN;
-> +               r = topup_split_caches(kvm, nid) ?: -EAGAIN;
->                 write_lock(&kvm->mmu_lock);
->                 goto out;
->         }
-> @@ -6709,17 +6719,15 @@ void kvm_mmu_invalidate_mmio_sptes(struct kvm *kvm, u64 gen)
->  }
->
->  static unsigned long mmu_shrink_cache(struct kvm_mmu_memory_cache *cache,
-> -                                     int cache_count,
->                                       spinlock_t *cache_lock)
->  {
->         unsigned long freed = 0;
->         int nid;
->
->         spin_lock(cache_lock);
-> -       for (nid = 0; nid < cache_count; nid++) {
-> -               if (node_online(nid) && cache[nid].nobjs)
-> +       for_each_online_node(nid)
-> +               if (cache[nid].nobjs)
->                         freed += kvm_mmu_empty_memory_cache(&cache[nid]);
-> -       }
->         spin_unlock(cache_lock);
->         return freed;
->  }
-> @@ -6741,8 +6749,7 @@ mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
->                         first_kvm = kvm;
->                 list_move_tail(&kvm->vm_list, &vm_list);
->
-> -               freed += mmu_shrink_cache(&kvm->arch.split_shadow_page_cache,
-> -                                         1,
-> +               freed += mmu_shrink_cache(kvm->arch.split_shadow_page_cache,
->                                           &kvm->arch.split_shadow_page_cache_lock);
->
->                 if (freed >= sc->nr_to_scan)
-> @@ -6750,7 +6757,6 @@ mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
->
->                 kvm_for_each_vcpu(i, vcpu, kvm) {
->                         freed += mmu_shrink_cache(vcpu->arch.mmu_shadow_page_cache,
-> -                                                 MAX_NUMNODES,
->                                                   &vcpu->arch.mmu_shadow_page_cache_lock);
->                 }
->
-> --
-> 2.39.0.314.g84b9a713c41-goog
->
+ZGlmZiAtdTIgLXIgbGludXgtc291cmNlL2RyaXZlcnMvaGlkL2hpZC1pZHMuaCBsaW51eC10YXJn
+ZXQvZHJpdmVycy9oaWQvaGlkLWlkcy5oCi0tLSBsaW51eC1zb3VyY2UvZHJpdmVycy9oaWQvaGlk
+LWlkcy5oCTIwMjItMTItMjEgMTA6NDg6MTIuMDAwMDAwMDAwIC0wNjAwCisrKyBsaW51eC10YXJn
+ZXQvZHJpdmVycy9oaWQvaGlkLWlkcy5oCTIwMjItMTItMjIgMTI6NTA6MTYuNDAzODgwMTM3IC0w
+NjAwCkBAIC04MjAsNCArODIwLDUgQEAKICNkZWZpbmUgVVNCX0RFVklDRV9JRF9MT0dJVEVDSF9H
+MjlfV0hFRUwJMHhjMjRmCiAjZGVmaW5lIFVTQl9ERVZJQ0VfSURfTE9HSVRFQ0hfRzkyMF9XSEVF
+TAkweGMyNjIKKyNkZWZpbmUgVVNCX0RFVklDRV9JRF9MT0dJVEVDSF9HOTIzX1hCT1hfV0hFRUwJ
+MHhjMjZlCiAjZGVmaW5lIFVTQl9ERVZJQ0VfSURfTE9HSVRFQ0hfV0lOR01BTl9GM0QJMHhjMjgz
+CiAjZGVmaW5lIFVTQl9ERVZJQ0VfSURfTE9HSVRFQ0hfRk9SQ0UzRF9QUk8JMHhjMjg2CmRpZmYg
+LXUyIC1yIGxpbnV4LXNvdXJjZS9kcml2ZXJzL2hpZC9oaWQtbG9naXRlY2gtaGlkcHAuYyBsaW51
+eC10YXJnZXQvZHJpdmVycy9oaWQvaGlkLWxvZ2l0ZWNoLWhpZHBwLmMKLS0tIGxpbnV4LXNvdXJj
+ZS9kcml2ZXJzL2hpZC9oaWQtbG9naXRlY2gtaGlkcHAuYwkyMDIyLTEyLTIxIDEwOjQ4OjEyLjAw
+MDAwMDAwMCAtMDYwMAorKysgbGludXgtdGFyZ2V0L2RyaXZlcnMvaGlkL2hpZC1sb2dpdGVjaC1o
+aWRwcC5jCTIwMjItMTItMjIgMTI6NTM6MzYuMzM1NzU1MTk5IC0wNjAwCkBAIC00MzQxLDQgKzQz
+NDEsNyBAQAogCSAgSElEX1VTQl9ERVZJQ0UoVVNCX1ZFTkRPUl9JRF9MT0dJVEVDSCwgVVNCX0RF
+VklDRV9JRF9MT0dJVEVDSF9HOTIwX1dIRUVMKSwKIAkJLmRyaXZlcl9kYXRhID0gSElEUFBfUVVJ
+UktfQ0xBU1NfRzkyMCB8IEhJRFBQX1FVSVJLX0ZPUkNFX09VVFBVVF9SRVBPUlRTfSwKKwl7IC8q
+IExvZ2l0ZWNoIEc5MjMgV2hlZWwgKFhib3ggdmVyc2lvbikgb3ZlciBVU0IgKi8KKwkgIEhJRF9V
+U0JfREVWSUNFKFVTQl9WRU5ET1JfSURfTE9HSVRFQ0gsIFVTQl9ERVZJQ0VfSURfTE9HSVRFQ0hf
+RzkyM19YQk9YX1dIRUVMKSwKKwkJLmRyaXZlcl9kYXRhID0gSElEUFBfUVVJUktfQ0xBU1NfRzky
+MCB8IEhJRFBQX1FVSVJLX0ZPUkNFX09VVFBVVF9SRVBPUlRTIH0sCiAJeyAvKiBMb2dpdGVjaCBH
+IFBybyBHYW1pbmcgTW91c2Ugb3ZlciBVU0IgKi8KIAkgIEhJRF9VU0JfREVWSUNFKFVTQl9WRU5E
+T1JfSURfTE9HSVRFQ0gsIDB4QzA4OCkgfSwKCg==
+------=_Part_38_1228832334.1672170394288--
