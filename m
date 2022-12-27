@@ -2,190 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C7C6567E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E6B6567E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiL0HhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 02:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
+        id S229990AbiL0HkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 02:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiL0HhN (ORCPT
+        with ESMTP id S229506AbiL0HkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 02:37:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B540D2616
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:37:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47BA460F37
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 07:37:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96AB8C433F2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 07:37:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672126631;
-        bh=yW8sx49Bqj1F3p6Fj5aD8adoFCB5BVioG2FGMnGJrV8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jyv1p1vBfd96xG4OUC/RY8B2KgTSgEpoaFeN6tw+dM03mK/wN+/8bidRXdSRA6wdS
-         wx0kN+DcBAVA9/6UBaZ4h4cdNBF6YSLqnY6h3ONYB5pbXJ3GJKTQeJXrqAMPSXPDgO
-         iIkuQRPSosVf3DgJriCGEqYkRy5J/oUAWHYW/JLLGpKvahkam0ZFYsKBWTQ8z0C5ln
-         rvBJyiVJwW6Oyptr7FJQ2ljU5kfXjGQrhDnXzSa05rsfSiL6pi+sVNViznk0k2yujl
-         63tFom1JXRQxeWOIx4UXV0bx6/Y4/IIOMcnGYPmX4+Sa58uvfnM14gvAChqi6MGRm5
-         eYTqdh9CfLJrQ==
-Received: by mail-ed1-f52.google.com with SMTP id i15so18032357edf.2
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:37:11 -0800 (PST)
-X-Gm-Message-State: AFqh2kqIOQ4Ia3Cimt0NeGjOu0TefYxd0P6uNdifWosPSkwGc0eAVGgC
-        SUiC0WxXg1wvSDso5eGHL3R4Boj4jSSXRK4hGrQ=
-X-Google-Smtp-Source: AMrXdXvmq/FhZkjr3S4+YTytjaL9PDB1Uw5yUcQf97+8tz46lVqGs/oVq6hBB+L0g+ao8PIowtXoGfl2ly/Pt7vvYGQ=
-X-Received: by 2002:aa7:cdc5:0:b0:470:327d:c46c with SMTP id
- h5-20020aa7cdc5000000b00470327dc46cmr1814812edw.298.1672126629656; Mon, 26
- Dec 2022 23:37:09 -0800 (PST)
+        Tue, 27 Dec 2022 02:40:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FAC2659
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:39:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672126768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ijp4/KDE7JPbV8flU95Sfl+xTfRImiWtlUkFnWEg/0E=;
+        b=Tly+4QEYezBzxCbP3BVXS6aCeZiKpOKvFizhTDgYnqe5mB60RAYI4A7CqMbxoj/VwWphxN
+        X6+2DV7pTYi/Y5LafFqKEm1AnFH9n0+T2EbV6Ba0lHt7uDWdpQ8DUvk5B1Sk6qC6Ppvzk3
+        JKh1hay+9owFGvFS0qeLS9YxvWS+8+s=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-116-eRwcFhIaOxWtvTp3oMRQag-1; Tue, 27 Dec 2022 02:39:26 -0500
+X-MC-Unique: eRwcFhIaOxWtvTp3oMRQag-1
+Received: by mail-ed1-f71.google.com with SMTP id x13-20020a05640226cd00b0047ac11c9774so8767448edd.17
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:39:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ijp4/KDE7JPbV8flU95Sfl+xTfRImiWtlUkFnWEg/0E=;
+        b=CYMiBnil33FDHOrdZ4YBNr17DIAqiphN9SWmd7f9K/PC3KE/bN56DeFkSANL1/HEU1
+         ycT/+y6qOUS/NFoNWU77hSASngnTs4pdy64meNl3dAeKqHIXgH4YvbL3plibCmig3FbQ
+         b5e9HKaXIcIMtQ/XVJDkzcqhNALEqP4cZskzCSgptuCgn9S4UnzXbE3McmA0edAapRA1
+         4UQvzWRRt0T1Gzm5f0ZguwhDqZlkAQVmKpO+0BgM9TN28+lkRrPw8qW3e/vVLKgsCy7a
+         XFhs99HyVfSEB0RWzQnBbLxWkY8rmiiMca3NDKhdikmuPOfScV6ucWzC7LKXnNCo0d2e
+         gL7A==
+X-Gm-Message-State: AFqh2kpRWteTAVqzmJnfJXdGGnFyLtGDxpVP4crmma4MXjf0wwCz77PY
+        uTL8s4b2QI7e75G8GfsHs6mOlYANTI6Ld0dzqxQvhIcpBfxlKxhWKjw7cXfmbABDYWNVjnk/irb
+        yxxBFpjI2XJNnABKS1c+FSqPt
+X-Received: by 2002:a17:906:5012:b0:7c1:2e19:ba3f with SMTP id s18-20020a170906501200b007c12e19ba3fmr20934653ejj.57.1672126765788;
+        Mon, 26 Dec 2022 23:39:25 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXvEK74H/0mvVg5+sIWI5S05sZ4NLeTRvhDcGPRtrHczfjDKJoNMKT3etQeIE3+qjfimvG37zg==
+X-Received: by 2002:a17:906:5012:b0:7c1:2e19:ba3f with SMTP id s18-20020a170906501200b007c12e19ba3fmr20934639ejj.57.1672126765571;
+        Mon, 26 Dec 2022 23:39:25 -0800 (PST)
+Received: from redhat.com ([2.52.151.85])
+        by smtp.gmail.com with ESMTPSA id ta13-20020a1709078c0d00b0077a201f6d1esm5705579ejc.87.2022.12.26.23.39.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Dec 2022 23:39:25 -0800 (PST)
+Date:   Tue, 27 Dec 2022 02:39:21 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
+        eperezma@redhat.com
+Subject: Re: [PATCH 1/4] virtio-net: convert rx mode setting to use workqueue
+Message-ID: <20221227023447-mutt-send-email-mst@kernel.org>
+References: <20221226074908.8154-1-jasowang@redhat.com>
+ <20221226074908.8154-2-jasowang@redhat.com>
 MIME-Version: 1.0
-References: <20221221074238.6699-1-hejinyang@loongson.cn>
-In-Reply-To: <20221221074238.6699-1-hejinyang@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 27 Dec 2022 15:37:02 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6VX=d1oymY0rh-mwOPMuBsYd7C9RzQat8BmmnrJ7apng@mail.gmail.com>
-Message-ID: <CAAhV-H6VX=d1oymY0rh-mwOPMuBsYd7C9RzQat8BmmnrJ7apng@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Fix irq enable in exception handlers
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221226074908.8154-2-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jinyang,
+On Mon, Dec 26, 2022 at 03:49:05PM +0800, Jason Wang wrote:
+> @@ -2227,9 +2267,21 @@ static void virtnet_set_rx_mode(struct net_device *dev)
+>  				  VIRTIO_NET_CTRL_MAC_TABLE_SET, sg))
+>  		dev_warn(&dev->dev, "Failed to set MAC filter table.\n");
+>  
+> +	rtnl_unlock();
+> +
+>  	kfree(buf);
+>  }
+>  
+> +static void virtnet_set_rx_mode(struct net_device *dev)
+> +{
+> +	struct virtnet_info *vi = netdev_priv(dev);
+> +
+> +	spin_lock(&vi->rx_mode_lock);
+> +	if (vi->rx_mode_work_enabled)
+> +		schedule_work(&vi->rx_mode_work);
+> +	spin_unlock(&vi->rx_mode_lock);
+> +}
+> +
+>  static int virtnet_vlan_rx_add_vid(struct net_device *dev,
+>  				   __be16 proto, u16 vid)
+>  {
 
-Move die_if_kernel to irq disabled context to solve what? And LBT is
-surely allowed to be triggered in kernel context.
+Hmm so user tells us to e.g enable promisc. We report completion
+but card is still dropping packets. I think this
+has a chance to break some setups.
 
-Huacai
+-- 
+MST
 
-On Wed, Dec 21, 2022 at 3:43 PM Jinyang He <hejinyang@loongson.cn> wrote:
->
-> The interrupt state can be got by regs->csr_prmd. Once previous
-> interrupt state is disable, we shouldn't enable interrupt if we
-> triggered exception which can be triggered in kernel mode. So
-> conditionally enable interrupt. For those do_\exception which
-> can not triggered in kernel mode but need enable interrupt, call
-> die_if_kernel() firstly. And for do_lsx, do_lasx and do_lbt cannot
-> triggered in kernel mode, too.
->
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> ---
->  arch/loongarch/kernel/traps.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
->
-> diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-> index 1ea14f6c18d3..3ac7b32d1e15 100644
-> --- a/arch/loongarch/kernel/traps.c
-> +++ b/arch/loongarch/kernel/traps.c
-> @@ -340,9 +340,9 @@ asmlinkage void noinstr do_fpe(struct pt_regs *regs, unsigned long fcsr)
->
->         /* Clear FCSR.Cause before enabling interrupts */
->         write_fcsr(LOONGARCH_FCSR0, fcsr & ~mask_fcsr_x(fcsr));
-> -       local_irq_enable();
->
->         die_if_kernel("FP exception in kernel code", regs);
-> +       local_irq_enable();
->
->         sig = SIGFPE;
->         fault_addr = (void __user *) regs->csr_era;
-> @@ -432,7 +432,8 @@ asmlinkage void noinstr do_bp(struct pt_regs *regs)
->         unsigned long era = exception_era(regs);
->         irqentry_state_t state = irqentry_enter(regs);
->
-> -       local_irq_enable();
-> +       if (regs->csr_prmd & CSR_PRMD_PIE)
-> +               local_irq_enable();
->         current->thread.trap_nr = read_csr_excode();
->         if (__get_inst(&opcode, (u32 *)era, user))
->                 goto out_sigsegv;
-> @@ -514,7 +515,8 @@ asmlinkage void noinstr do_ri(struct pt_regs *regs)
->         unsigned int __user *era = (unsigned int __user *)exception_era(regs);
->         irqentry_state_t state = irqentry_enter(regs);
->
-> -       local_irq_enable();
-> +       if (regs->csr_prmd & CSR_PRMD_PIE)
-> +               local_irq_enable();
->         current->thread.trap_nr = read_csr_excode();
->
->         if (notify_die(DIE_RI, "RI Fault", regs, 0, current->thread.trap_nr,
-> @@ -606,8 +608,8 @@ asmlinkage void noinstr do_fpu(struct pt_regs *regs)
->  {
->         irqentry_state_t state = irqentry_enter(regs);
->
-> -       local_irq_enable();
->         die_if_kernel("do_fpu invoked from kernel context!", regs);
-> +       local_irq_enable();
->         BUG_ON(is_lsx_enabled());
->         BUG_ON(is_lasx_enabled());
->
-> @@ -623,13 +625,13 @@ asmlinkage void noinstr do_lsx(struct pt_regs *regs)
->  {
->         irqentry_state_t state = irqentry_enter(regs);
->
-> +       die_if_kernel("do_lsx invoked from kernel context!", regs);
->         local_irq_enable();
->         if (!cpu_has_lsx) {
->                 force_sig(SIGILL);
->                 goto out;
->         }
->
-> -       die_if_kernel("do_lsx invoked from kernel context!", regs);
->         BUG_ON(is_lasx_enabled());
->
->         preempt_disable();
-> @@ -645,14 +647,13 @@ asmlinkage void noinstr do_lasx(struct pt_regs *regs)
->  {
->         irqentry_state_t state = irqentry_enter(regs);
->
-> +       die_if_kernel("do_lasx invoked from kernel context!", regs);
->         local_irq_enable();
->         if (!cpu_has_lasx) {
->                 force_sig(SIGILL);
->                 goto out;
->         }
->
-> -       die_if_kernel("do_lasx invoked from kernel context!", regs);
-> -
->         preempt_disable();
->         init_restore_lasx();
->         preempt_enable();
-> @@ -666,6 +667,7 @@ asmlinkage void noinstr do_lbt(struct pt_regs *regs)
->  {
->         irqentry_state_t state = irqentry_enter(regs);
->
-> +       die_if_kernel("do_lbt invoked from kernel context!", regs);
->         local_irq_enable();
->         force_sig(SIGILL);
->         local_irq_disable();
-> @@ -677,7 +679,6 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
->  {
->         irqentry_state_t state = irqentry_enter(regs);
->
-> -       local_irq_enable();
->         /*
->          * Game over - no way to handle this if it ever occurs. Most probably
->          * caused by a fatal error after another hardware/software error.
-> @@ -685,8 +686,8 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
->         pr_err("Caught reserved exception %u on pid:%d [%s] - should not happen\n",
->                 read_csr_excode(), current->pid, current->comm);
->         die_if_kernel("do_reserved exception", regs);
-> +       local_irq_enable();
->         force_sig(SIGUNUSED);
-> -
->         local_irq_disable();
->
->         irqentry_exit(regs, state);
-> --
-> 2.34.3
->
