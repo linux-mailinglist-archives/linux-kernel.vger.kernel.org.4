@@ -2,113 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E6B6567E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5DC6567EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 08:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiL0HkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 02:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S230048AbiL0Hoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 02:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiL0HkQ (ORCPT
+        with ESMTP id S229990AbiL0Hoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 02:40:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FAC2659
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:39:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672126768;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ijp4/KDE7JPbV8flU95Sfl+xTfRImiWtlUkFnWEg/0E=;
-        b=Tly+4QEYezBzxCbP3BVXS6aCeZiKpOKvFizhTDgYnqe5mB60RAYI4A7CqMbxoj/VwWphxN
-        X6+2DV7pTYi/Y5LafFqKEm1AnFH9n0+T2EbV6Ba0lHt7uDWdpQ8DUvk5B1Sk6qC6Ppvzk3
-        JKh1hay+9owFGvFS0qeLS9YxvWS+8+s=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-116-eRwcFhIaOxWtvTp3oMRQag-1; Tue, 27 Dec 2022 02:39:26 -0500
-X-MC-Unique: eRwcFhIaOxWtvTp3oMRQag-1
-Received: by mail-ed1-f71.google.com with SMTP id x13-20020a05640226cd00b0047ac11c9774so8767448edd.17
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:39:26 -0800 (PST)
+        Tue, 27 Dec 2022 02:44:32 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6E563FF
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:44:30 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id cf42so18609455lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Dec 2022 23:44:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aOVYkZxxKsbhw75iIPorGD6czBegT76jGDD2E1ugnSw=;
+        b=EkUsdF1Xsu/m2xxqaQd6vkNWPP72fGbMXmWvG3FRb05pNjBEbhl22BY8CbCkowAnPT
+         0TM6ijjMC8IycOqIgIpFi3PQiEnyjbHjIGZj533TQxJQZQ8ZLPBOPYZ7E8VW6TNHLlE3
+         JzDDdNXMToh/0OEzwcsmIsK+lvDCtVRphNnDmMOTv6xLIBB6BQ8nXat+dESmbf3P0J3/
+         +vkJNqqUDojmMskeGTK3d1FX/2KZ7NcPE8FqOt/8gJMGE/BAPyvB1ZtUEDThTEcO3ZiM
+         3yyhg0lknpwJJ8xALJ0j5ZRD8iXAaTIm/O+L3uYpkRvyA0XzMLShMH3KARcyaszRVr+d
+         NkNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ijp4/KDE7JPbV8flU95Sfl+xTfRImiWtlUkFnWEg/0E=;
-        b=CYMiBnil33FDHOrdZ4YBNr17DIAqiphN9SWmd7f9K/PC3KE/bN56DeFkSANL1/HEU1
-         ycT/+y6qOUS/NFoNWU77hSASngnTs4pdy64meNl3dAeKqHIXgH4YvbL3plibCmig3FbQ
-         b5e9HKaXIcIMtQ/XVJDkzcqhNALEqP4cZskzCSgptuCgn9S4UnzXbE3McmA0edAapRA1
-         4UQvzWRRt0T1Gzm5f0ZguwhDqZlkAQVmKpO+0BgM9TN28+lkRrPw8qW3e/vVLKgsCy7a
-         XFhs99HyVfSEB0RWzQnBbLxWkY8rmiiMca3NDKhdikmuPOfScV6ucWzC7LKXnNCo0d2e
-         gL7A==
-X-Gm-Message-State: AFqh2kpRWteTAVqzmJnfJXdGGnFyLtGDxpVP4crmma4MXjf0wwCz77PY
-        uTL8s4b2QI7e75G8GfsHs6mOlYANTI6Ld0dzqxQvhIcpBfxlKxhWKjw7cXfmbABDYWNVjnk/irb
-        yxxBFpjI2XJNnABKS1c+FSqPt
-X-Received: by 2002:a17:906:5012:b0:7c1:2e19:ba3f with SMTP id s18-20020a170906501200b007c12e19ba3fmr20934653ejj.57.1672126765788;
-        Mon, 26 Dec 2022 23:39:25 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXvEK74H/0mvVg5+sIWI5S05sZ4NLeTRvhDcGPRtrHczfjDKJoNMKT3etQeIE3+qjfimvG37zg==
-X-Received: by 2002:a17:906:5012:b0:7c1:2e19:ba3f with SMTP id s18-20020a170906501200b007c12e19ba3fmr20934639ejj.57.1672126765571;
-        Mon, 26 Dec 2022 23:39:25 -0800 (PST)
-Received: from redhat.com ([2.52.151.85])
-        by smtp.gmail.com with ESMTPSA id ta13-20020a1709078c0d00b0077a201f6d1esm5705579ejc.87.2022.12.26.23.39.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 23:39:25 -0800 (PST)
-Date:   Tue, 27 Dec 2022 02:39:21 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
-        eperezma@redhat.com
-Subject: Re: [PATCH 1/4] virtio-net: convert rx mode setting to use workqueue
-Message-ID: <20221227023447-mutt-send-email-mst@kernel.org>
-References: <20221226074908.8154-1-jasowang@redhat.com>
- <20221226074908.8154-2-jasowang@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aOVYkZxxKsbhw75iIPorGD6czBegT76jGDD2E1ugnSw=;
+        b=IQPr5asD/3G1pMpT2JuW8nDANlnNwyoUIFVsTtAvlZkYobBFf2n+1GrwzRPJgdzsvz
+         Ox72otwvjOo0sEeLYnk5wwqGwcNvGletBHqqIEJ5vJzClgGKmcTtygBjzKJzwfQjbezv
+         Xm7Xd571pzrJk7YM8x7kcQxS75a2OrZLVQcpd2HPR7BNfQK+S9TefdwtueMnb8j1vHa3
+         n9zlTLYgK2Hg2uAE179VZ4lFtK3WwkNIWsqsoDQGkAfFxIQQ9mB3Sv8Th70WbiTWX0iF
+         UBZ4F9DQBzbFOe02iPgcBfq6BlTmMU2/L8/zHXzzVgxCHLQJZLbzlgCp8pqiJk7r7LEN
+         61Yw==
+X-Gm-Message-State: AFqh2koXXwWuJWjhwlABlyfT4O4cmf44u3aAQFYbJiCLFXWhf9hgHJPk
+        WpsTvYDgBoAhSF9PO3WNr83axw==
+X-Google-Smtp-Source: AMrXdXsFrxQWaAaSLuxH3iop/N0+P56sRuckOjOr9ApBjTDbXw5HqvDHjO+M3IQbjGPyO2dFQnqbHw==
+X-Received: by 2002:a05:6512:39ce:b0:4b4:e559:8b10 with SMTP id k14-20020a05651239ce00b004b4e5598b10mr6697970lfu.24.1672127068773;
+        Mon, 26 Dec 2022 23:44:28 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a14-20020a056512390e00b004b5872a7003sm2153971lfu.98.2022.12.26.23.44.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Dec 2022 23:44:28 -0800 (PST)
+Message-ID: <f47cab97-2c8c-a3d5-b362-774f970dffd3@linaro.org>
+Date:   Tue, 27 Dec 2022 08:44:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221226074908.8154-2-jasowang@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 2/4] dt-bindings: display: Add Himax HX8394 panel
+ controller
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Ondrej Jirman <megi@xff.cz>, Robert Mader <robert.mader@posteo.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        =?UTF-8?Q?Kamil_Trzci=c5=84ski?= <ayufan@ayufan.eu>,
+        Martijn Braam <martijn@brixit.nl>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20221226134909.2822179-1-javierm@redhat.com>
+ <20221226134909.2822179-3-javierm@redhat.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221226134909.2822179-3-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 26, 2022 at 03:49:05PM +0800, Jason Wang wrote:
-> @@ -2227,9 +2267,21 @@ static void virtnet_set_rx_mode(struct net_device *dev)
->  				  VIRTIO_NET_CTRL_MAC_TABLE_SET, sg))
->  		dev_warn(&dev->dev, "Failed to set MAC filter table.\n");
->  
-> +	rtnl_unlock();
+On 26/12/2022 14:49, Javier Martinez Canillas wrote:
+> Add device tree bindings for panels based on the Himax HX8394 controller,
+> such as the HannStar HSD060BHW4 720x1440 TFT LCD panel that is connected
+> through a MIPI-DSI video interface.
+> 
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> 
+> Changes in v2:
+> - Drop redundant "bindings" in subject (Krzysztof Kozlowski).
+> - Drop "device tree bindings" in title (Krzysztof Kozlowski).
+> - Put port next to other "true" properties (Krzysztof Kozlowski).
+> - Add Krzysztof Kozlowski's Reviewed-by tag.
+> 
+>  .../bindings/display/panel/himax,hx8394.yaml  | 65 +++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+> new file mode 100644
+> index 000000000000..bead3f0b05c5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/panel/himax,hx8394.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/panel/himax,hx8394.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  	kfree(buf);
->  }
->  
-> +static void virtnet_set_rx_mode(struct net_device *dev)
-> +{
-> +	struct virtnet_info *vi = netdev_priv(dev);
+> +title: Himax HX8394 MIPI-DSI LCD panel controller
 > +
-> +	spin_lock(&vi->rx_mode_lock);
-> +	if (vi->rx_mode_work_enabled)
-> +		schedule_work(&vi->rx_mode_work);
-> +	spin_unlock(&vi->rx_mode_lock);
-> +}
+> +maintainers:
+> +  - Javier Martinez Canillas <javierm@redhat.com>
 > +
->  static int virtnet_vlan_rx_add_vid(struct net_device *dev,
->  				   __be16 proto, u16 vid)
->  {
+> +description:
+> +  Device tree bindings for panels based on the Himax HX8394 controller,
+> +  such as the HannStar HSD060BHW4 720x1440 TFT LCD panel connected with
+> +  a MIPI-DSI video interface.
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      # HannStar HSD060BHW4 5.99" 720x1440 TFT LCD panel
+> +      - hannstar,hsd060bhw4
+> +
+> +  vcc-supply:
+> +    description: Panel power supply
+> +
+> +  iovcc-supply:
+> +    description: I/O voltage supply
+> +
+> +  port: true
+> +
+> +  reset-gpios: true
+> +
+> +  backlight: true
+> +
+> +required:
+> +  - compatible
+> +  - vcc-supply
+> +  - iovcc-supply
+> +  - port
 
-Hmm so user tells us to e.g enable promisc. We report completion
-but card is still dropping packets. I think this
-has a chance to break some setups.
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
--- 
-MST
+Best regards,
+Krzysztof
 
