@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C605E656A36
+	by mail.lfdr.de (Postfix) with ESMTP id 22178656A34
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbiL0L60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 06:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S229777AbiL0L6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 06:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbiL0L5w (ORCPT
+        with ESMTP id S232036AbiL0L5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 06:57:52 -0500
+        Tue, 27 Dec 2022 06:57:55 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B161A198;
-        Tue, 27 Dec 2022 03:57:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447329FE2;
+        Tue, 27 Dec 2022 03:57:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD53BB80F93;
-        Tue, 27 Dec 2022 11:57:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A93C433F0;
-        Tue, 27 Dec 2022 11:57:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01BE5B80ED9;
+        Tue, 27 Dec 2022 11:57:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFFC3C433D2;
+        Tue, 27 Dec 2022 11:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672142269;
-        bh=MlbYDyHB2xL8RHMNdHwdmuRIR6U4juvja/JqAIqJOG8=;
+        s=k20201202; t=1672142271;
+        bh=bZfJB2u0JwifyT37HdrvtWpabXNKxyHB+8ikOAbuUfc=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Y47OOsgvF+sPnz4oT6xAxGZUQ9UQSvJnD8oEYBZq2LUAuINDtu6bZTEOhv7JyNiEu
-         LvXG0I8YRz7RBNzUlBBwAXhgPMr+10UP1MgP1VfU67By5WW/R+8vxX6JmGy+gCY0rW
-         Yc27nYK35ki/WuF0Ar5Zh55M+i9Lyk0QCauEXTDUCx/jy06RRYMMxO+eJsE4h5atEV
-         +LR+C0UHKyjXyVgHUAQz1E1HEC/y26vOAx+mUKRPS17g9fvF2OmhTYHEyE2MwuXhZV
-         wbMTDdWLSigE8ls6+EtqLiV8P4G5K9/JV1YWGeVlP/5RolcMhNAOFff9CdOfWrl8Vc
-         HChFeGWZdLEwQ==
+        b=Oe8l7CqGmdtTHu5NKFrc5orRriJxmtJnJyfRPuzG4Jux8CIxuF4voUB9UD8eFgs/Q
+         FfXgOsvbKddzGRjvJN7F8iUrUaxlkKy0B7rUu9hQZtyn1CN5BbtDkUgH11NgmDgDqS
+         51IKuXsa9SF34JBEisoPeLF7PCcMxKA2KW3M+olaY8FOqx7Mlmy8hLUsB+qQbG3WcG
+         rVegO4/Cl6RRQ/lDtvCmXQECh0p0LlSEKmTqnIHbIwBIoOkCF0pP808KMn5Jlknqdt
+         AwYANQqeqZu0+Mh3Cmad2O+xads++G9JYfzpfhgWu17c++rVJfVvuyJJYixoND9KRJ
+         0Z3BMtuZ1Hozw==
 From:   Mark Brown <broonie@kernel.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org, quic_vtanuku@quicinc.com, vkoul@kernel.org,
-        quic_arandive@quicinc.com, quic_ramkri@quicinc.com
-In-Reply-To: <1670509544-15977-1-git-send-email-quic_vnivarth@quicinc.com>
-References: <1670509544-15977-1-git-send-email-quic_vnivarth@quicinc.com>
-Subject: Re: [V4] spi: spi-geni-qcom: Add support for SE DMA mode
-Message-Id: <167214226629.88639.764160014719387166.b4-ty@kernel.org>
-Date:   Tue, 27 Dec 2022 11:57:46 +0000
+To:     Witold Sadowski <wsadowski@marvell.com>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jpawar@cadence.com,
+        pthombar@cadence.com, konrad@cadence.com, wbartczak@marvell.com,
+        wzmuda@marvell.com
+In-Reply-To: <20221219144254.20883-1-wsadowski@marvell.com>
+References: <20221219144254.20883-1-wsadowski@marvell.com>
+Subject: Re: (subset) [PATCH 0/7] Support for Marvell modifications for Cadence XSPI
+Message-Id: <167214226970.88639.17320415439798476005.b4-ty@kernel.org>
+Date:   Tue, 27 Dec 2022 11:57:49 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -58,11 +56,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 08 Dec 2022 19:55:44 +0530, Vijaya Krishna Nivarthi wrote:
-> SE DMA mode can be used for larger transfers and FIFO mode
-> for smaller transfers.
+On Mon, 19 Dec 2022 06:42:47 -0800, Witold Sadowski wrote:
+> This patch series is fixing bugs, and adding support for
+> Marvell changes for Cadence XSPI IP.
+> It includes:
+> - Polling mode support
+> - Changes for modebyte handling
+> - Busycycles calculations
+> - Marvell specific IP changes
 > 
-> 
+> [...]
 
 Applied to
 
@@ -70,8 +73,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-geni-qcom: Add support for SE DMA mode
-      commit: e5f0dfa78ac77374a3f0817bf427a22f61494246
+[1/7] spi: cadence: Fix busy cycles calculation
+      commit: e8bb8f19e73a1e855e54788f8673b9b49e46b5cd
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
