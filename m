@@ -2,51 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5131B656A48
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FA0656A41
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbiL0L7q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Dec 2022 06:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
+        id S231792AbiL0L7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 06:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbiL0L7N (ORCPT
+        with ESMTP id S231967AbiL0L64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 06:59:13 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C918B7F8;
-        Tue, 27 Dec 2022 03:59:08 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id A5D3024DD82;
-        Tue, 27 Dec 2022 19:59:04 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 27 Dec
- 2022 19:58:58 +0800
-Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
- by EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Tue, 27 Dec 2022 19:58:57 +0800
-From:   William Qiu <william.qiu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@linux.starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 0/3] StarFive's SDIO/eMMC driver support
-Date:   Tue, 27 Dec 2022 19:58:53 +0800
-Message-ID: <20221227115856.460790-1-william.qiu@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 27 Dec 2022 06:58:56 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB22DAE5A;
+        Tue, 27 Dec 2022 03:58:55 -0800 (PST)
+Date:   Tue, 27 Dec 2022 11:58:53 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1672142334;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G9KGHKGvEmHY8m6mMHbHyYBd5mnPoViFa4gD7Us+W8E=;
+        b=ZjzsFz30JcHNNKitODN5AzpHyFp1DhFvc08uWV/qUacYyMhxX0fknUB3nKSdZbUMQ9tHnX
+        iPI0f7nhlXbXmDQ82laEvgvPX/v8wqvCza6nP4gdJ5HjA066oVzJ9Zl055rvz08CLN9WvV
+        QkgzDlduiT//fmEcC/mpQKwAX+HIQiJxt2Gdf6CrvcF08kHt07EMSwWHe/C71xZEK1VOPn
+        qOCKGc9j3YA4jRyqfo+H829XHJq8mTFxhofdJR1bcUgcHYJ2fInIbS7c+fIi5A5jXoUkKC
+        rhrq7NbwvBS2qIztydIHMf6QSMVkX2nnSOAx5WGZMo08Iw5/wQV99yLDLV4b2A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1672142334;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G9KGHKGvEmHY8m6mMHbHyYBd5mnPoViFa4gD7Us+W8E=;
+        b=bmtwC+3Li5Q08No3N7rc54fF5SO6AJli3YYN8Aeuym7b+dHnrVq5FL71xaqjUKzT1ejJKP
+        +mdaDqZiH1KiW6Dw==
+From:   "tip-bot2 for Mathieu Desnoyers" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: locking/urgent] futex: Fix futex_waitv() hrtimer debug object
+ leak on kcalloc error
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>, stable@vger.kernel.org,
+        stable@vger.kernel.org, #@tip-bot2.tec.linutronix.de,
+        v5.16+@tip-bot2.tec.linutronix.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221214222008.200393-1-mathieu.desnoyers@efficios.com>
+References: <20221214222008.200393-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Message-ID: <167214233380.4906.7703534432069912531.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,43 +68,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following commit has been merged into the locking/urgent branch of tip:
 
-This patchset adds initial rudimentary support for the StarFive
-designware mobile storage host controller driver. And this driver will
-be used in StarFive's VisionFive 2 board. The main purpose of adding
-this driver is to accommodate the ultra-high speed mode of eMMC.
+Commit-ID:     94cd8fa09f5f1ebdd4e90964b08b7f2cc4b36c43
+Gitweb:        https://git.kernel.org/tip/94cd8fa09f5f1ebdd4e90964b08b7f2cc4b36c43
+Author:        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+AuthorDate:    Wed, 14 Dec 2022 17:20:08 -05:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 27 Dec 2022 12:52:02 +01:00
 
-The last patch should be applied after the patchset [1]:
-[1] https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
+futex: Fix futex_waitv() hrtimer debug object leak on kcalloc error
 
-Changes since v1:
-- Renamed the dt-binding 'starfive,jh7110-sdio.yaml' to 'starfive,jh7110-mmc.yaml'.
-- Changed the type of 'starfive,syscon' and modify its description.
-- Deleted unused head files like '#include <linux/gpio.h>'.
-- Added comment for the 'rise_point' and 'fall_point'.
-- Changed the API 'num_caps' to 'common_caps'.
-- Changed the node name 'sys_syscon' to 'syscon'.
-- Changed the node name 'sdio' to 'mmc'.
+In a scenario where kcalloc() fails to allocate memory, the futex_waitv
+system call immediately returns -ENOMEM without invoking
+destroy_hrtimer_on_stack(). When CONFIG_DEBUG_OBJECTS_TIMERS=y, this
+results in leaking a timer debug object.
 
-The patch series is based on v6.1-rc5.
+Fixes: bf69bad38cf6 ("futex: Implement sys_futex_waitv()")
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Cc: stable@vger.kernel.org
+Cc: stable@vger.kernel.org # v5.16+
+Link: https://lore.kernel.org/r/20221214222008.200393-1-mathieu.desnoyers@efficios.com
+---
+ kernel/futex/syscalls.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-William Qiu (3):
-  dt-bindings: mmc: Add bindings for StarFive
-  mmc: starfive: Add sdio/emmc driver support
-  riscv: dts: starfive: Add mmc node
-
- .../bindings/mmc/starfive,jh7110-mmc.yaml     |  72 +++++++
- MAINTAINERS                                   |   6 +
- .../jh7110-starfive-visionfive-v2.dts         |  25 +++
- arch/riscv/boot/dts/starfive/jh7110.dtsi      |  38 ++++
- drivers/mmc/host/Kconfig                      |  10 +
- drivers/mmc/host/Makefile                     |   1 +
- drivers/mmc/host/dw_mmc-starfive.c            | 185 ++++++++++++++++++
- 7 files changed, 337 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-mmc.yaml
- create mode 100644 drivers/mmc/host/dw_mmc-starfive.c
-
---
-2.34.1
-
+diff --git a/kernel/futex/syscalls.c b/kernel/futex/syscalls.c
+index 086a22d..a807407 100644
+--- a/kernel/futex/syscalls.c
++++ b/kernel/futex/syscalls.c
+@@ -286,19 +286,22 @@ SYSCALL_DEFINE5(futex_waitv, struct futex_waitv __user *, waiters,
+ 	}
+ 
+ 	futexv = kcalloc(nr_futexes, sizeof(*futexv), GFP_KERNEL);
+-	if (!futexv)
+-		return -ENOMEM;
++	if (!futexv) {
++		ret = -ENOMEM;
++		goto destroy_timer;
++	}
+ 
+ 	ret = futex_parse_waitv(futexv, waiters, nr_futexes);
+ 	if (!ret)
+ 		ret = futex_wait_multiple(futexv, nr_futexes, timeout ? &to : NULL);
+ 
++	kfree(futexv);
++
++destroy_timer:
+ 	if (timeout) {
+ 		hrtimer_cancel(&to.timer);
+ 		destroy_hrtimer_on_stack(&to.timer);
+ 	}
+-
+-	kfree(futexv);
+ 	return ret;
+ }
+ 
