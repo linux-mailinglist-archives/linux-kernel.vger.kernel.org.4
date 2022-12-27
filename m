@@ -2,99 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2ED656E99
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B97BA656E9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 21:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbiL0UVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 15:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
+        id S229884AbiL0UYW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Dec 2022 15:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiL0UVi (ORCPT
+        with ESMTP id S229602AbiL0UYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 15:21:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9BDC7F
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 12:21:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0DC9B8109A
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 20:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC0CC433D2;
-        Tue, 27 Dec 2022 20:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672172495;
-        bh=+6SHzFYpleoqvJNUY3JPRsP/mA1tz9L+T/ymsSLaI2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bPZ6lNF8ptkFi2U99dBpZSEU7g4kFpmvGsmLyQjob5pGFhV4HWsnFWRzb9f57SP3Q
-         EbcyPhR2M0B+ot83g3NsUJ/SdicbClIVr5jF4+wS2Cjq2cUwSCk7MjYavFguN3avMX
-         Rx0/irB+tis7chl140KdkWANCB4hPcyXz+oOmA2ZZP5IWetY45a46ufosYlRBb9Bap
-         B1ZnxJDy9lHfTMbT88gJbHANzz3ovqKSeBbbrt2Tp9F+2s4UP/VkJgODJDhKg5vmk4
-         WuMSDmmICljb32mvizzZcyLHfb2IpABfVK+y9REFN+m5d7iDxrEXaH8/9SubdO5kQj
-         8cBmLDeU2SEFw==
-Date:   Tue, 27 Dec 2022 13:21:32 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Keith Busch <kbusch@meta.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Kernel Team <kernel-team@meta.com>
-Subject: Re: [PATCHv2 09/11] dmapool: simplify freeing
-Message-ID: <Y6tTzGs3lFWlMcPt@kbusch-mbp>
-References: <20221216201625.2362737-1-kbusch@meta.com>
- <20221216201625.2362737-10-kbusch@meta.com>
- <Y6XZnz0EDXYlfqhX@infradead.org>
+        Tue, 27 Dec 2022 15:24:21 -0500
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7F3F15;
+        Tue, 27 Dec 2022 12:24:20 -0800 (PST)
+Received: by mail-il1-f179.google.com with SMTP id j28so7239125ila.9;
+        Tue, 27 Dec 2022 12:24:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZYIWCf/X/Ha6fzlOLJLrAZYz4Dy2m9LBU9hsQfnPLuM=;
+        b=TIskR3Jjj8/kBB0knoI1q5fq9KAbhwDP1tnbdfq+QomShd4+FEip6YP0R4rCEpSRh7
+         KwqPn4M8/wOL9XfPgLt+GVQOwBahuBWmTx93EW9jxI9Z0ZOYFiUmRsM+DxlNsMOblCn5
+         X2pIJ6BHxZ9l51OwYh23jam45fUKGmd+jQ1xv9gL33toIQW4JkuvybSXT5uodvrvHNRw
+         Ep8hTAWylgQsTYfvzE5EnsLeBrrm/H2z7cgeI7Vl6OmrLlPPMHrxx5c/Lzm2eE/XekxP
+         fltya2cISo+hcxbigFua7eVBV1udbTr/4O76ce9u8W2Z4oxmlcN8izBJrpfZRloQn2kA
+         6xeQ==
+X-Gm-Message-State: AFqh2krm+vzAdLhHErFj1XqhjBbfiarZZxB32kp04s+AlwP3V75K/wyq
+        w4rf1/XxYLaAa7CL5qhLXnE72eXEHyVKqur5DX8=
+X-Google-Smtp-Source: AMrXdXu5ah4PmdOmI0U7aT/d7+iZsd0E6schiX4tuXFhPmzimqU3nPQeedgtbyQPTCyYmiBMReoJQX4xE3P1KeQkcJo=
+X-Received: by 2002:a92:d811:0:b0:303:7c99:eb78 with SMTP id
+ y17-20020a92d811000000b003037c99eb78mr1832673ilm.88.1672172659361; Tue, 27
+ Dec 2022 12:24:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6XZnz0EDXYlfqhX@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221226193517.qynxfceqgzvr4qwu@tarta.nabijaczleweli.xyz>
+In-Reply-To: <20221226193517.qynxfceqgzvr4qwu@tarta.nabijaczleweli.xyz>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 27 Dec 2022 12:24:07 -0800
+Message-ID: <CAM9d7ciuh1H2Mfx5ToYGT1fOm8E3jrQhkzg304JKDd7BhT=h5g@mail.gmail.com>
+Subject: Re: [PATCH] perf tui: don't ignore job control
+To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        yaowenbin <yaowenbin1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 08:38:55AM -0800, Christoph Hellwig wrote:
-> > @@ -280,14 +268,14 @@ void dma_pool_destroy(struct dma_pool *pool)
-> >  	mutex_unlock(&pools_reg_lock);
-> >  
-> >  	list_for_each_entry_safe(page, tmp, &pool->page_list, page_list) {
-> > +		if (!is_page_busy(page))
-> > +			dma_free_coherent(pool->dev, pool->allocation,
-> > +					  page->vaddr, page->dma);
-> > +		else
-> >  			dev_err(pool->dev, "%s %s, %p busy\n", __func__,
-> >  				pool->name, page->vaddr);
-> > +		list_del(&page->page_list);
-> > +		kfree(page);
-> 
-> Hmm.  The is_page_busy case is really a should not happen case.
-> What is the benefit of skipping the dma_free_coherent and leaking
-> memory here, vs letting KASAN and friends see the free and possibly
-> help with debugging?  In other words, why is this not:
-> 
-> 		WARN_ON_ONCE(is_page_busy(page));
-> 		dma_free_coherent(pool->dev, pool->allocation, page->vaddr,
-> 				  page->dma);
-> 		...
+Hello,
 
-The memory is presumed to still be owned by the device in this case, so
-the kernel shouldn't free it. I don't think KASAN will be very helpful
-if the device corrupts memory.
- 
-> >  	page->in_use--;
-> >  	*(int *)vaddr = page->offset;
-> >  	page->offset = offset;
-> > -	/*
-> > -	 * Resist a temptation to do
-> > -	 *    if (!is_page_busy(page)) pool_free_page(pool, page);
-> > -	 * Better have a few empty pages hang around.
-> > -	 */
-> 
-> This doesn't look related to the rest, or am I missing something?
+On Mon, Dec 26, 2022 at 11:35 AM Ahelenia Ziemiańska
+<nabijaczleweli@nabijaczleweli.xyz> wrote:
+>
+> In its infinite wisdom, by default, SLang sets susp undef,
+> and this can only be un-done by calling SLtty_set_suspend_state(true).
+> After every SLang_init_tty().
+>
+> Additionally, no provisions are made for maintaining the teletype
+> attributes across suspend/continue (outside of curses emulation mode(?!),
+> which provides full support, naturally), so we need to save and restore
+> the flags ourselves. We need to also re-draw the screen, and raising
+> SIGWINCH, shockingly, Just Works.
+>
+> The correct solution would be to Not Use SLang, but as a stop-gap,
+> this makes TUI perf report usable.
+>
+> Signed-off-by: Ahelenia Ziemiańska <nabijaczleweli@nabijaczleweli.xyz>
 
-Oops, this was supposed to go with a later patch in this series that
-removed "is_page_busy()".
+Cool, this makes Ctrl-Z and then 'fg' work.  But it comes with the
+color for a selected line depending on the timing.  Maybe we can
+reset the color before going to the background?
+
+Thanks,
+Namhyung
+
+
+> ---
+>  tools/perf/ui/browsers/annotate.c |  1 +
+>  tools/perf/ui/browsers/hists.c    |  2 ++
+>  tools/perf/ui/browsers/scripts.c  |  1 +
+>  tools/perf/ui/tui/setup.c         | 19 +++++++++++++++++++
+>  4 files changed, 23 insertions(+)
+>
+> diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+> index c03fa76c02ff..6a4ffbf66c7f 100644
+> --- a/tools/perf/ui/browsers/annotate.c
+> +++ b/tools/perf/ui/browsers/annotate.c
+> @@ -942,6 +942,7 @@ int hist_entry__tui_annotate(struct hist_entry *he, struct evsel *evsel,
+>         /* reset abort key so that it can get Ctrl-C as a key */
+>         SLang_reset_tty();
+>         SLang_init_tty(0, 0, 0);
+> +       SLtty_set_suspend_state(true);
+>
+>         return map_symbol__tui_annotate(&he->ms, evsel, hbt, opts);
+>  }
+> diff --git a/tools/perf/ui/browsers/hists.c b/tools/perf/ui/browsers/hists.c
+> index b72ee6822222..2479e6d42e7c 100644
+> --- a/tools/perf/ui/browsers/hists.c
+> +++ b/tools/perf/ui/browsers/hists.c
+> @@ -3010,6 +3010,7 @@ static int evsel__hists_browse(struct evsel *evsel, int nr_events, const char *h
+>         /* reset abort key so that it can get Ctrl-C as a key */
+>         SLang_reset_tty();
+>         SLang_init_tty(0, 0, 0);
+> +       SLtty_set_suspend_state(true);
+>
+>         if (min_pcnt)
+>                 browser->min_pcnt = min_pcnt;
+> @@ -3682,6 +3683,7 @@ int block_hists_tui_browse(struct block_hist *bh, struct evsel *evsel,
+>         /* reset abort key so that it can get Ctrl-C as a key */
+>         SLang_reset_tty();
+>         SLang_init_tty(0, 0, 0);
+> +       SLtty_set_suspend_state(true);
+>
+>         memset(&action, 0, sizeof(action));
+>
+> diff --git a/tools/perf/ui/browsers/scripts.c b/tools/perf/ui/browsers/scripts.c
+> index 47d2c7a8cbe1..50d45054ed6c 100644
+> --- a/tools/perf/ui/browsers/scripts.c
+> +++ b/tools/perf/ui/browsers/scripts.c
+> @@ -166,6 +166,7 @@ void run_script(char *cmd)
+>         printf("\033[c\033[H\033[J");
+>         fflush(stdout);
+>         SLang_init_tty(0, 0, 0);
+> +       SLtty_set_suspend_state(true);
+>         SLsmg_refresh();
+>  }
+>
+> diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
+> index a3b8c397c24d..4211a161458a 100644
+> --- a/tools/perf/ui/tui/setup.c
+> +++ b/tools/perf/ui/tui/setup.c
+> @@ -2,6 +2,7 @@
+>  #include <signal.h>
+>  #include <stdbool.h>
+>  #include <stdlib.h>
+> +#include <termios.h>
+>  #include <unistd.h>
+>  #include <linux/kernel.h>
+>  #ifdef HAVE_BACKTRACE_SUPPORT
+> @@ -122,6 +123,21 @@ static void ui__signal(int sig)
+>         exit(0);
+>  }
+>
+> +static void ui__sigcont(int sig)
+> +{
+> +       static struct termios tty;
+> +
+> +       if (sig == SIGTSTP) {
+> +               while (tcgetattr(SLang_TT_Read_FD, &tty) == -1 && errno == EINTR)
+> +                       ;
+> +               raise(SIGSTOP);
+> +       } else {
+> +               while (tcsetattr(SLang_TT_Read_FD, TCSADRAIN, &tty) == -1 && errno == EINTR)
+> +                       ;
+> +               raise(SIGWINCH);
+> +       }
+> +}
+> +
+>  int ui__init(void)
+>  {
+>         int err;
+> @@ -136,6 +152,7 @@ int ui__init(void)
+>         err = SLang_init_tty(-1, 0, 0);
+>         if (err < 0)
+>                 goto out;
+> +       SLtty_set_suspend_state(true);
+>
+>         err = SLkp_init();
+>         if (err < 0) {
+> @@ -150,6 +167,8 @@ int ui__init(void)
+>         signal(SIGINT, ui__signal);
+>         signal(SIGQUIT, ui__signal);
+>         signal(SIGTERM, ui__signal);
+> +       signal(SIGTSTP, ui__sigcont);
+> +       signal(SIGCONT, ui__sigcont);
+>
+>         perf_error__register(&perf_tui_eops);
+>
+> --
+> 2.30.2
