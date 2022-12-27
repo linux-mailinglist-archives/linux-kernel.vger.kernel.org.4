@@ -2,48 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CEE656A20
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9BE656A27
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 12:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiL0L5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 06:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S232007AbiL0L5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 06:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiL0L4z (ORCPT
+        with ESMTP id S231752AbiL0L5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 06:56:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFAADE65;
-        Tue, 27 Dec 2022 03:56:54 -0800 (PST)
+        Tue, 27 Dec 2022 06:57:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D8F2191
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 03:57:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A2DE61013;
-        Tue, 27 Dec 2022 11:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49C0EC433EF;
-        Tue, 27 Dec 2022 11:56:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86DC56105D
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 11:57:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7BADC433D2;
+        Tue, 27 Dec 2022 11:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672142213;
-        bh=2iTsTT2A+ekcurGrt4ecw7Jd6VDWhmDM/YnuYNKbzyI=;
+        s=k20201202; t=1672142226;
+        bh=MzTBZPhvIlkVLSghjEdmDKumVOn249Gk5zXs/ZFSXvI=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=aP7nRyB9rxZDBxNHhD9Q8gguRPqnI03i1g9iieY6INIZa3wpDC5KvoDRk5iwvu9rY
-         3tu7DvZ3S8DAK7GeERGDm401+nuGJz3/33hENDiaejN53LatQI/KLF8Zdxp/+fmXHO
-         U1mKagWjExC13THy+jYE8KcDIkmbejkqtxYUlzcDgtxiMNcSleh2039VbhJ+XkrCrn
-         yLryUNwhUyJ952mj6X+mg/cJ8vUeYGXTNhVw6QizT8g7GACLxKaldo1MXvj6cbujGM
-         q8G5cJyNeKowv4kYywQ04CG9DXIraiP0fl7XfhdZm8cC16YL7mdpMQypmFt5uN0n8m
-         34fZUv3bTDIPg==
+        b=FgrIU/q2N0hYGtnLrjbAb9BJ5teGWt2wSML4rR+qtRl3yb//ATNp2Ormexkl4HSTi
+         8XNFdu72Z6B3LiUwbSHDCX4c/jfO/W2+BU7rZ2gSykyJt4HpmOhtLhHBLu0JXyuHXU
+         ebjzzfCOhpEB824FdmLeFkm27LKfHL4ZYDOAYW5fK0P5XyiC3qbPky1geDEokqtNnR
+         cgD+15bB01/zGLvb3lKkkQArK9/jqjDZBoF1m6LAIEmGFs5JIHPSmjVqWk7hrQFnpi
+         C7iAaclpqzc7hULCr9iuhTUFKphnWXkaWrJrWLscN7q0ZDNfVTULdybSvJvKdRK7Qs
+         BFVWAO2hQlMqQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221209175947.335319-1-krzysztof.kozlowski@linaro.org>
-References: <20221209175947.335319-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] ASoC: dt-bindings: adi,adau7002: Convert to DT schema
-Message-Id: <167214221201.82924.956548399223155626.b4-ty@kernel.org>
-Date:   Tue, 27 Dec 2022 11:56:52 +0000
+To:     alsa-devel@alsa-project.org,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+Cc:     Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, venkataprasad.potturu@amd.com,
+        ssabakar@amd.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+In-Reply-To: <20221213071640.3038853-1-Vsujithkumar.Reddy@amd.com>
+References: <20221213071640.3038853-1-Vsujithkumar.Reddy@amd.com>
+Subject: Re: [PATCH] ASoC: SOF: amd: Enable cache for AMD Rembrandt platform
+Message-Id: <167214222145.82924.15119219694173833192.b4-ty@kernel.org>
+Date:   Tue, 27 Dec 2022 11:57:01 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -57,15 +69,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Dec 2022 18:59:46 +0100, Krzysztof Kozlowski wrote:
-> Convert the Analog Devices ADAU7002 Stereo PDM-to-I2S/TDM Converter
-> bindings to DT schema.  During the conversion, add properties already
-> used by DTS (sc7180-trogdor-coachz.dts) and Linux driver:
-> 1. wakeup-delay-ms,
-> 2. sound-dai-cells (via referencing dai-common.yaml).
+On Tue, 13 Dec 2022 12:46:37 +0530, V sujith kumar Reddy wrote:
+> Enable DSP cache for ACP memory
 > 
 > 
-> [...]
 
 Applied to
 
@@ -73,8 +80,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: dt-bindings: adi,adau7002: Convert to DT schema
-      commit: 3bc351aa97e5c4b346c7223749d057ce0c372195
+[1/1] ASoC: SOF: amd: Enable cache for AMD Rembrandt platform
+      commit: b5ba646142195d63dd1aae69bc15457fca5aeb78
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
