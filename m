@@ -2,201 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CC3656856
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D31765685C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 09:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbiL0IS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 03:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S230047AbiL0ITs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 03:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbiL0IS3 (ORCPT
+        with ESMTP id S231349AbiL0ITj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 03:18:29 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6C165EC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:18:27 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id p36so18647923lfa.12
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 00:18:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ln/8Ql524XEPoI9ew3MSboAB3m1N4yBN0rK6DAhoSQc=;
-        b=Gn8jP14aqJUl2sYT/CC74nEl6iK3r3GlM8+8U3U2+YDVio9yhnwmgt8kiSBHdIbqcZ
-         ddDMnFUk4+QFTQuGirYV8QtkNE66naw29OBxcx0z8sYGypp/mQy3TidxPa/umQ3qgxGz
-         P1fF5EZWv1mavEyymtzMJLNrgXuv8eaYS9qZNKXSxRAs8scvzL8HOiGSFuoA29gIrDU4
-         CgwZGcGgIiqXJ+CU6dt7sBv3UVEMDJ1Kz6CfdlAqz5RUv7scScTe1mDYrPxpGJ+8ihmW
-         jwh+XoTRXbJmB1BtsNOBREKB4Ka/6luOkNqYop1dp7ZxBs3D1q/P1SGWcAGjkFq1cs7w
-         U2qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ln/8Ql524XEPoI9ew3MSboAB3m1N4yBN0rK6DAhoSQc=;
-        b=3gb0gusqR9+EJMoMOkBd6R2G6fcMHEZpfKYq78/XOyixCs8pgHP/nVr9SwhF4QNAbH
-         OBKpzxXv15OlAQOqA4Hv9i4NiwTI4EgRK2pm9B0PkSkth9A0PJSfiP7TtiKkxkRVbi3V
-         BrpVXiT2cPuvDn1OcgPuVOUjQu/fnJ4x+ofZSaixXXxjS14S0XqZ8yKJp04/WFpqxhp/
-         oeFnidOI1dd1c7cLas3TIh2k+LINBPe3iLlHljhVGCAlm+vL6vw/MsGcIhkcuoIauKCC
-         x0zwDYU6scJzhOfuRBif3Rn1nUJW6mfZgJsE56852uAVuDcNVtDHA3zboBVHOXsjrCXy
-         kxtw==
-X-Gm-Message-State: AFqh2ko9ju6ClBTLUfgaNjnB3t1cF/MHMtPnfE3wkw5oyZ8uEvCKyz9/
-        tBMI3SzTGKtCiK1RJVghVcUV3A==
-X-Google-Smtp-Source: AMrXdXtinLKfEQpXrboACp/LM0hIqO/J5ZwM/NFnK4xJuv9eNoY6MPwpJBHtI2U0eFo6wqOde5ngRg==
-X-Received: by 2002:a05:6512:3ba1:b0:4b5:8fbf:7dd6 with SMTP id g33-20020a0565123ba100b004b58fbf7dd6mr10587170lfv.61.1672129106302;
-        Tue, 27 Dec 2022 00:18:26 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m1-20020a197101000000b004b094730074sm2142854lfc.267.2022.12.27.00.18.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Dec 2022 00:18:25 -0800 (PST)
-Message-ID: <526ab8a0-f77c-64f8-7209-c33bec8cb3e6@linaro.org>
-Date:   Tue, 27 Dec 2022 09:18:24 +0100
+        Tue, 27 Dec 2022 03:19:39 -0500
+Received: from out30-8.freemail.mail.aliyun.com (out30-8.freemail.mail.aliyun.com [115.124.30.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9930E8FD4;
+        Tue, 27 Dec 2022 00:19:32 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VYCwgaT_1672129163;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VYCwgaT_1672129163)
+          by smtp.aliyun-inc.com;
+          Tue, 27 Dec 2022 16:19:29 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] mfd: qcom-pm8xxx: Remove set but unused variable 'rev'
+Date:   Tue, 27 Dec 2022 16:19:21 +0800
+Message-Id: <20221227081921.56448-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/9] dt-bindings: net: snps,dwmac: Update the maxitems
- number of resets and reset-names
-Content-Language: en-US
-To:     yanhong wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20221216070632.11444-1-yanhong.wang@starfivetech.com>
- <20221216070632.11444-3-yanhong.wang@starfivetech.com>
- <040b56b1-c65c-34c3-e4a1-5cae4428d1d2@linaro.org>
- <7f4339df-6616-120f-f16a-cd38a2b6ea1d@starfivetech.com>
- <1a696768-45ef-0144-07f3-d356af9659e5@linaro.org>
- <25fce6e7-604e-6c07-3ff1-b65a5115a491@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <25fce6e7-604e-6c07-3ff1-b65a5115a491@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/12/2022 08:48, yanhong wang wrote:
-> 
-> 
-> On 2022/12/20 17:21, Krzysztof Kozlowski wrote:
->> On 20/12/2022 07:48, yanhong wang wrote:
->>
->>>>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>>> index e26c3e76ebb7..7870228b4cd3 100644
->>>>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>>> @@ -133,12 +133,19 @@ properties:
->>>>>          - ptp_ref
->>>>>  
->>>>>    resets:
->>>>> -    maxItems: 1
->>>>> -    description:
->>>>> -      MAC Reset signal.
->>>>> +    minItems: 1
->>>>> +    maxItems: 3
->>>>> +    additionalItems: true
->>>>> +    items:
->>>>> +      - description: MAC Reset signal
->>>>>  
->>>>>    reset-names:
->>>>> -    const: stmmaceth
->>>>> +    minItems: 1
->>>>> +    maxItems: 3
->>>>> +    additionalItems: true
->>>>> +    contains:
->>>>> +      enum:
->>>>> +        - stmmaceth
->>>>
->>>> No, this is highly unspecific and you know affect all the schemas using
->>>> snps,dwmac.yaml. Both lists must be specific - for your device and for
->>>> others.
->>>>
->>>
->>> I have tried to define the resets in "starfive,jh71x0-dwmac.yaml", but it can not over-write the maxItems limit in "snps,dwmac.yaml",therefore, it will report error "reset-names: ['stmmaceth', 'ahb'] is too long"  running "make dt_binding_check". Do you have any suggestions to deal with this situation?
->>
->> The solution is not to affect all schemas with allowing anything as reset.
->>
->> If you need more items for your case, you can change snps,dwmac.yaml and
->> add constraints in allOf:if:then: allowing it only for your compatible.
->> There are plenty of examples how this is done, e.g.:
->>
->> https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
->>
-> 
-> Thanks. Refer to the definition in the example and update the definition as follows:
-> 
-> snps,dwmac.yaml[Partial Content]:
-> 
-> properties:
->   resets:
->     maxItems: 1
->     description:
->       MAC Reset signal.
-> 
->   reset-names:
->     const: stmmaceth
-> 
-> allOf:
->   - if:
->       properties:
->         compatible:
->           contains:
->             const: starfive,jh7110-dwmac
-> 
->     then:
->       properties:
->         resets:
->           minItems: 2
->           maxItems: 2
->         reset-names:
->           items:
->             - const: stmmaceth
->             - const: ahb
->       required:
->         - resets
->         - reset-names
-> 
-> 
-> starfive,jh7110-dwmac.yaml[Partial Content]:
-> 
-> properties:
->   resets:
->     items:
->       - description: MAC Reset signal.
->       - description: AHB Reset signal.
-> 
->   reset-names:
->     items:
->       - const: stmmaceth
->       - const: ahb
-> 
-> allOf:
->   - $ref: snps,dwmac.yaml#
-> 
-> It will also report error "reset-names: ['stmmaceth', 'ahb'] is too long"  running "make dt_binding_check" with 'starfive,jh7110-dwmac.yaml'. Do you have any better suggestions to solve this problem?
+Variable rev is not effectively used in the function, so delete it.
 
-Because it is not correct. The top-level properties must have the widest
-constraints which in allOf:if:then:else you are further narrowing for
-all of variants. ALL.
+drivers/mfd/qcom-pm8xxx.c:513:6: warning: variable 'rev' set but not used.
 
-https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3558
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/mfd/qcom-pm8xxx.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/mfd/qcom-pm8xxx.c b/drivers/mfd/qcom-pm8xxx.c
+index 601106580e2e..9a948df8c28d 100644
+--- a/drivers/mfd/qcom-pm8xxx.c
++++ b/drivers/mfd/qcom-pm8xxx.c
+@@ -510,7 +510,6 @@ static int pm8xxx_probe(struct platform_device *pdev)
+ 	struct regmap *regmap;
+ 	int irq, rc;
+ 	unsigned int val;
+-	u32 rev;
+ 	struct pm_irq_chip *chip;
+ 
+ 	data = of_device_get_match_data(&pdev->dev);
+@@ -535,7 +534,6 @@ static int pm8xxx_probe(struct platform_device *pdev)
+ 		return rc;
+ 	}
+ 	pr_info("PMIC revision 1: %02X\n", val);
+-	rev = val;
+ 
+ 	/* Read PMIC chip revision 2 */
+ 	rc = regmap_read(regmap, REG_HWREV_2, &val);
+@@ -545,7 +543,6 @@ static int pm8xxx_probe(struct platform_device *pdev)
+ 		return rc;
+ 	}
+ 	pr_info("PMIC revision 2: %02X\n", val);
+-	rev |= val << BITS_PER_BYTE;
+ 
+ 	chip = devm_kzalloc(&pdev->dev,
+ 			    struct_size(chip, config, data->num_irqs),
+-- 
+2.20.1.7.g153144c
 
