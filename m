@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13315656BE8
+	by mail.lfdr.de (Postfix) with ESMTP id 68EF6656BE9
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 15:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiL0Oda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 09:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S231995AbiL0Odd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 09:33:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbiL0Oc6 (ORCPT
+        with ESMTP id S231781AbiL0Oc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Dec 2022 09:32:58 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E25BCA7
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D827CBCBA
         for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 06:32:49 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id r11so12517036oie.13
+Received: by mail-oi1-x230.google.com with SMTP id s186so12547219oia.5
         for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 06:32:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1uRuu1UfJFMdmi1/wTADm7WY/0yQto4LnL2JRG710R4=;
-        b=cifHAwixb58gkXHwFfWuc1fTdCr0qVcsv+K99JJmM7DaaYITTVIrJXa2KzjZT5yV93
-         lK4f/qbIpbNMOp3iDQHs5YHko2I4ztYesatH6MALukxDUnvweX5NGYrnMJGDtbxPqlrx
-         ErdKDLLt0shuVSLXc8TeVbnZJis3GfRA7tGAu3/mXwzJ+YvKLbqZNtbjEsTJq5LzRvgb
-         vlF7wsgl+Y1JYDW+cIwUzBox/rCbVeO5xHlZnVo9ZY8raSbdUtlbe8lvuu/sHDpW8Ixh
-         V0xsUI1ifN++4I48DstIr1vZrlOJyaHerMxuoiavzSVncLcL1ovckK1NjMrCL2OgVQfH
-         r/Ow==
+        bh=hhPywnIu0oHq46vQgQ1v3uZDHE34LJl/8jn0V5hUOLk=;
+        b=vmoMp0OzfWaG073gvBNXZoHaUT8xZAjxs0EW257xMxsE/BuyMVsMNd8tExuSv5T25m
+         q5lhqgGwoi/wNKDF2fQUDZv3JQcLICo1WtvO5Xa8RUFqkG+0jG2kds5IQv+muvXmejAf
+         fUtl5yzdnneUi/JI09CelbExNuxOY2qdWXhkoVXow+iVhzXjyWzFcZ+YTqroDc19JDvN
+         oSD1SE73gRmqur/tYa4uUOd5UsEMALjAmoC1XhypH/gx+vZClrH7P6lXXDUs93ahn48l
+         C5ly7CpGdwMOvGwswFBbytp5wGiBVFYAvIHF7WgsRA+JlkBqP63UneL82DodKweZhEf8
+         zEHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1uRuu1UfJFMdmi1/wTADm7WY/0yQto4LnL2JRG710R4=;
-        b=0Me2qQZ5KUGFeUkPBB/Pe1obkGuEMLW/Nxjb3SigXNxxelK0rb0SRW8dqa4W9rJmz9
-         H3m7uzaqo1cxTZlvhZEkN4jyLqeP+lpG/oQGGSn82xlYlzdRD+dDfNJDagb7YT4yf58l
-         1GG3NB77eSQzuRemxStBR8CM63J6qx4AxDUvrqEF0EccU1AxoZewB2PJWGUyLjrPRJVB
-         o0ZjekUB+lr+b8ZGKy7nHoyBA50H1Vo6AMOOMYMpSDXCqMcNz3rAE+3QmBNhIlDFaUY0
-         KMfl3WAwGKXMxd83CVGnpNV+gmGkyp2Orwn5pqVnlbwKiHKdfqQ6b0dioWxhd5FhLEaG
-         qDxw==
-X-Gm-Message-State: AFqh2krIOdAI349sonlIeshPkNHLvbgpiUKMg9HNdTeWTohrvlNaFpDa
-        7148zTOA4rcDUP99R9D+0ECNbQ==
-X-Google-Smtp-Source: AMrXdXscoPinLee4A+PsS9cfO9HtMkGd5TmIFMAxtu37W9tXUC1R0GLA9MZ3FjkLFxlNQTIVV4kpFg==
-X-Received: by 2002:aca:d841:0:b0:35c:29d0:fda5 with SMTP id p62-20020acad841000000b0035c29d0fda5mr9711902oig.59.1672151568438;
-        Tue, 27 Dec 2022 06:32:48 -0800 (PST)
+        bh=hhPywnIu0oHq46vQgQ1v3uZDHE34LJl/8jn0V5hUOLk=;
+        b=2nlBs5ijwi/eqJDZ0wFtPYnLOpbsbRYlP5Us3q/ydsKu3X+nW/zlmZPd59HsS9AE7S
+         gjWkz140QorDVM6oit/4PlkbsTFOpNIqmyOZJum571tG5g8eQgI0E7NQvIfT0umsji7i
+         2SShaL4QKAw6/UGr0mUxH7owIhatALcGQxgmoNjupllkGuUn5+syW36gI2NQb7lzfrcV
+         rsYzJAnop4dBDLHVfo90H6D+8cQDBP3R5M3f6VErnqXP1AO83BjvPSKjy+BKUQjH+Rf4
+         jqblL52qUuIQaY0ZdIDncAF5tjfaTIK2DtaQv2Ux9jH+oKy+pNTCBUTBz79S6L2aSUjy
+         zyfA==
+X-Gm-Message-State: AFqh2kpfKxkbPN+9fpOXjGtZkIWKEqCz0Jj6SDfLCQQcouLq6WhwoS7e
+        6zBrHNwcBvAQcLYSqB48gelEFw==
+X-Google-Smtp-Source: AMrXdXsvMx5pfrKgqtmJ7r34ccZpqKyL2UyRjyZ1bxuKYIfq58PznfRePNaE4GKCfqW0bgKX8OQo9w==
+X-Received: by 2002:a05:6808:2908:b0:35a:6f80:63c5 with SMTP id ev8-20020a056808290800b0035a6f8063c5mr9388884oib.2.1672151569422;
+        Tue, 27 Dec 2022 06:32:49 -0800 (PST)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id q205-20020acac0d6000000b0035bce2a39c7sm5864969oif.21.2022.12.27.06.32.47
+        by smtp.gmail.com with ESMTPSA id q205-20020acac0d6000000b0035bce2a39c7sm5864969oif.21.2022.12.27.06.32.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 06:32:48 -0800 (PST)
+        Tue, 27 Dec 2022 06:32:49 -0800 (PST)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     linus.walleij@linaro.org, brgl@bgdev.pl
 Cc:     andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, michael@walle.cc,
         William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v5 5/8] gpio: i8255: Migrate to gpio-regmap API
-Date:   Tue, 27 Dec 2022 09:09:43 -0500
-Message-Id: <85d221804aad710ee0eae96ef442c7a33865274f.1672149007.git.william.gray@linaro.org>
+Subject: [PATCH v5 6/8] gpio: 104-dio-48e: Migrate to regmap API
+Date:   Tue, 27 Dec 2022 09:09:44 -0500
+Message-Id: <3749203f86a048ae6c0915ec793fafc9b3b3f739.1672149007.git.william.gray@linaro.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1672149007.git.william.gray@linaro.org>
 References: <cover.1672149007.git.william.gray@linaro.org>
@@ -74,271 +74,203 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The regmap API supports IO port accessors so we can take advantage of
 regmap abstractions rather than handling access to the device registers
-directly in the driver.
-
-By leveraging the gpio-regmap API, the i8255 library is reduced to
-simply a devm_i8255_regmap_register() function, a configuration
-structure struct i8255_regmap_config, and a helper macro
-i8255_volatile_regmap_range() provided to simplify volatile PPI register
-hinting for the regmap.
-
-Legacy functions and code will be removed once all consumers have
-migrated to the new i8255 library interface.
+directly in the driver. The 104-dio-48e module is migrated to the new
+i8255 library interface leveraging the gpio-regmap API.
 
 Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
- drivers/gpio/Kconfig      |   1 +
- drivers/gpio/gpio-i8255.c | 119 ++++++++++++++++++++++++++++++++++----
- drivers/gpio/gpio-i8255.h |  28 +++++++++
- 3 files changed, 136 insertions(+), 12 deletions(-)
+ drivers/gpio/gpio-104-dio-48e.c | 137 ++------------------------------
+ 1 file changed, 7 insertions(+), 130 deletions(-)
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 84316924574f..63acb9cb4c58 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -831,6 +831,7 @@ menu "Port-mapped I/O GPIO drivers"
- 
- config GPIO_I8255
- 	tristate
-+	select GPIO_REGMAP
- 	help
- 	  Enables support for the i8255 interface library functions. The i8255
- 	  interface library provides functions to facilitate communication with
-diff --git a/drivers/gpio/gpio-i8255.c b/drivers/gpio/gpio-i8255.c
-index 9b97db418df1..9ecb2e9b97f9 100644
---- a/drivers/gpio/gpio-i8255.c
-+++ b/drivers/gpio/gpio-i8255.c
-@@ -4,23 +4,31 @@
-  * Copyright (C) 2022 William Breathitt Gray
-  */
- #include <linux/bitmap.h>
-+#include <linux/device.h>
+diff --git a/drivers/gpio/gpio-104-dio-48e.c b/drivers/gpio/gpio-104-dio-48e.c
+index e053a4e46b27..a3846faf3780 100644
+--- a/drivers/gpio/gpio-104-dio-48e.c
++++ b/drivers/gpio/gpio-104-dio-48e.c
+@@ -9,7 +9,6 @@
+ #include <linux/bits.h>
+ #include <linux/device.h>
  #include <linux/err.h>
- #include <linux/export.h>
-+#include <linux/gpio/regmap.h>
- #include <linux/io.h>
- #include <linux/module.h>
-+#include <linux/regmap.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
+-#include <linux/gpio/driver.h>
+ #include <linux/ioport.h>
+ #include <linux/irq.h>
+ #include <linux/isa.h>
+@@ -42,90 +41,6 @@ MODULE_PARM_DESC(irq, "ACCES 104-DIO-48E interrupt line numbers");
  
- #include "gpio-i8255.h"
+ #define DIO48E_NUM_PPI 2
  
-+#define I8255_NGPIO 24
-+#define I8255_NGPIO_PER_REG 8
- #define I8255_CONTROL_PORTC_LOWER_DIRECTION BIT(0)
- #define I8255_CONTROL_PORTB_DIRECTION BIT(1)
- #define I8255_CONTROL_PORTC_UPPER_DIRECTION BIT(3)
- #define I8255_CONTROL_PORTA_DIRECTION BIT(4)
- #define I8255_CONTROL_MODE_SET BIT(7)
--#define I8255_PORTA 0
--#define I8255_PORTB 1
--#define I8255_PORTC 2
-+#define I8255_PORTA 0x0
-+#define I8255_PORTB 0x1
-+#define I8255_PORTC 0x2
-+#define I8255_CONTROL 0x3
-+#define I8255_REG_DAT_BASE I8255_PORTA
-+#define I8255_REG_DIR_IN_BASE I8255_CONTROL
- 
- static int i8255_get_port(struct i8255 __iomem *const ppi,
- 			  const unsigned long io_port, const unsigned long mask)
-@@ -31,20 +39,19 @@ static int i8255_get_port(struct i8255 __iomem *const ppi,
- 	return ioread8(&ppi[bank].port[ppi_port]) & mask;
+-/**
+- * struct dio48e_reg - device register structure
+- * @ppi:		Programmable Peripheral Interface groups
+- */
+-struct dio48e_reg {
+-	struct i8255 ppi[DIO48E_NUM_PPI];
+-};
+-
+-/**
+- * struct dio48e_gpio - GPIO device private data structure
+- * @chip:		instance of the gpio_chip
+- * @ppi_state:		PPI device states
+- * @reg:		I/O address offset for the device registers
+- */
+-struct dio48e_gpio {
+-	struct gpio_chip chip;
+-	struct i8255_state ppi_state[DIO48E_NUM_PPI];
+-	struct dio48e_reg __iomem *reg;
+-};
+-
+-static int dio48e_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
+-{
+-	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
+-
+-	if (i8255_get_direction(dio48egpio->ppi_state, offset))
+-		return GPIO_LINE_DIRECTION_IN;
+-
+-	return GPIO_LINE_DIRECTION_OUT;
+-}
+-
+-static int dio48e_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
+-{
+-	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
+-
+-	i8255_direction_input(dio48egpio->reg->ppi, dio48egpio->ppi_state,
+-			      offset);
+-
+-	return 0;
+-}
+-
+-static int dio48e_gpio_direction_output(struct gpio_chip *chip, unsigned int offset,
+-					int value)
+-{
+-	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
+-
+-	i8255_direction_output(dio48egpio->reg->ppi, dio48egpio->ppi_state,
+-			       offset, value);
+-
+-	return 0;
+-}
+-
+-static int dio48e_gpio_get(struct gpio_chip *chip, unsigned int offset)
+-{
+-	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
+-
+-	return i8255_get(dio48egpio->reg->ppi, offset);
+-}
+-
+-static int dio48e_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
+-	unsigned long *bits)
+-{
+-	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
+-
+-	i8255_get_multiple(dio48egpio->reg->ppi, mask, bits, chip->ngpio);
+-
+-	return 0;
+-}
+-
+-static void dio48e_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
+-{
+-	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
+-
+-	i8255_set(dio48egpio->reg->ppi, dio48egpio->ppi_state, offset, value);
+-}
+-
+-static void dio48e_gpio_set_multiple(struct gpio_chip *chip,
+-	unsigned long *mask, unsigned long *bits)
+-{
+-	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
+-
+-	i8255_set_multiple(dio48egpio->reg->ppi, dio48egpio->ppi_state, mask,
+-			   bits, chip->ngpio);
+-}
+-
+ static const struct regmap_range dio48e_wr_ranges[] = {
+ 	regmap_reg_range(0x0, 0x9), regmap_reg_range(0xB, 0xB),
+ 	regmap_reg_range(0xD, 0xD), regmap_reg_range(0xF, 0xF),
+@@ -245,25 +160,10 @@ static int dio48e_irq_init_hw(struct regmap *const map)
+ 	return regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
  }
  
--static u8 i8255_direction_mask(const unsigned long offset)
-+static int i8255_direction_mask(const unsigned int offset)
+-static void dio48e_init_ppi(struct i8255 __iomem *const ppi,
+-			    struct i8255_state *const ppi_state)
+-{
+-	const unsigned long ngpio = 24;
+-	const unsigned long mask = GENMASK(ngpio - 1, 0);
+-	const unsigned long bits = 0;
+-	unsigned long i;
+-
+-	/* Initialize all GPIO to output 0 */
+-	for (i = 0; i < DIO48E_NUM_PPI; i++) {
+-		i8255_mode0_output(&ppi[i]);
+-		i8255_set_multiple(&ppi[i], &ppi_state[i], &mask, &bits, ngpio);
+-	}
+-}
+-
+ static int dio48e_probe(struct device *dev, unsigned int id)
  {
--	const unsigned long port_offset = offset % 8;
--	const unsigned long io_port = offset / 8;
--	const unsigned long ppi_port = io_port % 3;
-+	const unsigned int stride = offset / I8255_NGPIO_PER_REG;
-+	const unsigned int line = offset % I8255_NGPIO_PER_REG;
+-	struct dio48e_gpio *dio48egpio;
+ 	const char *const name = dev_name(dev);
++	struct i8255_regmap_config config = {};
+ 	void __iomem *regs;
+ 	struct regmap *map;
+ 	int err;
+@@ -271,10 +171,6 @@ static int dio48e_probe(struct device *dev, unsigned int id)
+ 	unsigned int irq_mask;
+ 	struct regmap_irq_chip_data *chip_data;
  
--	switch (ppi_port) {
-+	switch (stride) {
- 	case I8255_PORTA:
- 		return I8255_CONTROL_PORTA_DIRECTION;
- 	case I8255_PORTB:
- 		return I8255_CONTROL_PORTB_DIRECTION;
- 	case I8255_PORTC:
- 		/* Port C can be configured by nibble */
--		if (port_offset >= 4)
-+		if (line >= 4)
- 			return I8255_CONTROL_PORTC_UPPER_DIRECTION;
- 		return I8255_CONTROL_PORTC_LOWER_DIRECTION;
- 	default:
-@@ -53,6 +60,49 @@ static u8 i8255_direction_mask(const unsigned long offset)
- 	}
+-	dio48egpio = devm_kzalloc(dev, sizeof(*dio48egpio), GFP_KERNEL);
+-	if (!dio48egpio)
+-		return -ENOMEM;
+-
+ 	if (!devm_request_region(dev, base[id], DIO48E_EXTENT, name)) {
+ 		dev_err(dev, "Unable to lock port addresses (0x%X-0x%X)\n",
+ 			base[id], base[id] + DIO48E_EXTENT);
+@@ -284,7 +180,6 @@ static int dio48e_probe(struct device *dev, unsigned int id)
+ 	regs = devm_ioport_map(dev, base[id], DIO48E_EXTENT);
+ 	if (!regs)
+ 		return -ENOMEM;
+-	dio48egpio->reg = regs;
+ 
+ 	map = devm_regmap_init_mmio(dev, regs, &dio48e_regmap_config);
+ 	if (IS_ERR(map))
+@@ -321,31 +216,13 @@ static int dio48e_probe(struct device *dev, unsigned int id)
+ 	if (err)
+ 		return dev_err_probe(dev, err, "IRQ registration failed\n");
+ 
+-	dio48egpio->chip.label = name;
+-	dio48egpio->chip.parent = dev;
+-	dio48egpio->chip.owner = THIS_MODULE;
+-	dio48egpio->chip.base = -1;
+-	dio48egpio->chip.ngpio = DIO48E_NGPIO;
+-	dio48egpio->chip.names = dio48e_names;
+-	dio48egpio->chip.get_direction = dio48e_gpio_get_direction;
+-	dio48egpio->chip.direction_input = dio48e_gpio_direction_input;
+-	dio48egpio->chip.direction_output = dio48e_gpio_direction_output;
+-	dio48egpio->chip.get = dio48e_gpio_get;
+-	dio48egpio->chip.get_multiple = dio48e_gpio_get_multiple;
+-	dio48egpio->chip.set = dio48e_gpio_set;
+-	dio48egpio->chip.set_multiple = dio48e_gpio_set_multiple;
+-
+-	i8255_state_init(dio48egpio->ppi_state, DIO48E_NUM_PPI);
+-	dio48e_init_ppi(dio48egpio->reg->ppi, dio48egpio->ppi_state);
+-
+-	err = devm_gpiochip_add_data(dev, &dio48egpio->chip, dio48egpio);
+-	if (err) {
+-		dev_err(dev, "GPIO registering failed (%d)\n", err);
+-		return err;
+-	}
++	config.parent = dev;
++	config.map = map;
++	config.num_ppi = DIO48E_NUM_PPI;
++	config.names = dio48e_names;
++	config.domain = regmap_irq_get_domain(chip_data);
+ 
+-	return gpiochip_irqchip_add_domain(&dio48egpio->chip,
+-					   regmap_irq_get_domain(chip_data));
++	return devm_i8255_regmap_register(dev, &config);
  }
  
-+static int i8255_ppi_init(struct regmap *const map, const unsigned int base)
-+{
-+	int err;
-+
-+	/* Configure all ports to MODE 0 output mode */
-+	err = regmap_write(map, base + I8255_CONTROL, I8255_CONTROL_MODE_SET);
-+	if (err)
-+		return err;
-+
-+	/* Initialize all GPIO to output 0 */
-+	err = regmap_write(map, base + I8255_PORTA, 0x00);
-+	if (err)
-+		return err;
-+	err = regmap_write(map, base + I8255_PORTB, 0x00);
-+	if (err)
-+		return err;
-+	return regmap_write(map, base + I8255_PORTC, 0x00);
-+}
-+
-+static int i8255_reg_mask_xlate(struct gpio_regmap *gpio, unsigned int base,
-+				unsigned int offset, unsigned int *reg,
-+				unsigned int *mask)
-+{
-+	const unsigned int ppi = offset / I8255_NGPIO;
-+	const unsigned int ppi_offset = offset % I8255_NGPIO;
-+	const unsigned int stride = ppi_offset / I8255_NGPIO_PER_REG;
-+	const unsigned int line = ppi_offset % I8255_NGPIO_PER_REG;
-+
-+	switch (base) {
-+	case I8255_REG_DAT_BASE:
-+		*reg = base + stride + ppi * 4;
-+		*mask = BIT(line);
-+		return 0;
-+	case I8255_REG_DIR_IN_BASE:
-+		*reg = base + ppi * 4;
-+		*mask = i8255_direction_mask(ppi_offset);
-+		return 0;
-+	default:
-+		/* Should never reach this path */
-+		return -EINVAL;
-+	}
-+}
-+
- static void i8255_set_port(struct i8255 __iomem *const ppi,
- 			   struct i8255_state *const state,
- 			   const unsigned long io_port,
-@@ -93,7 +143,7 @@ void i8255_direction_input(struct i8255 __iomem *const ppi,
- 	spin_lock_irqsave(&state[bank].lock, flags);
- 
- 	state[bank].control_state |= I8255_CONTROL_MODE_SET;
--	state[bank].control_state |= i8255_direction_mask(offset);
-+	state[bank].control_state |= i8255_direction_mask(offset % 24);
- 
- 	iowrite8(state[bank].control_state, &ppi[bank].control);
- 
-@@ -125,7 +175,7 @@ void i8255_direction_output(struct i8255 __iomem *const ppi,
- 	spin_lock_irqsave(&state[bank].lock, flags);
- 
- 	state[bank].control_state |= I8255_CONTROL_MODE_SET;
--	state[bank].control_state &= ~i8255_direction_mask(offset);
-+	state[bank].control_state &= ~i8255_direction_mask(offset % 24);
- 
- 	iowrite8(state[bank].control_state, &ppi[bank].control);
- 
-@@ -165,7 +215,7 @@ int i8255_get_direction(const struct i8255_state *const state,
- 	const unsigned long io_port = offset / 8;
- 	const unsigned long bank = io_port / 3;
- 
--	return !!(state[bank].control_state & i8255_direction_mask(offset));
-+	return !!(state[bank].control_state & i8255_direction_mask(offset % 24));
- }
- EXPORT_SYMBOL_NS_GPL(i8255_get_direction, I8255);
- 
-@@ -282,6 +332,51 @@ void i8255_state_init(struct i8255_state *const state,
- }
- EXPORT_SYMBOL_NS_GPL(i8255_state_init, I8255);
- 
-+/**
-+ * devm_i8255_regmap_register - Register an i8255 GPIO controller
-+ * @dev:	device that is registering this i8255 GPIO device
-+ * @config:	configuration for i8255_regmap_config
-+ *
-+ * Registers an Intel 8255 Programmable Peripheral Interface GPIO controller.
-+ * Returns 0 on success and negative error number on failure.
-+ */
-+int devm_i8255_regmap_register(struct device *const dev,
-+			       const struct i8255_regmap_config *const config)
-+{
-+	struct gpio_regmap_config gpio_config = {0};
-+	unsigned long i;
-+	int err;
-+
-+	if (!config->parent)
-+		return -EINVAL;
-+
-+	if (!config->map)
-+		return -EINVAL;
-+
-+	if (!config->num_ppi)
-+		return -EINVAL;
-+
-+	for (i = 0; i < config->num_ppi; i++) {
-+		err = i8255_ppi_init(config->map, i * 4);
-+		if (err)
-+			return err;
-+	}
-+
-+	gpio_config.parent = config->parent;
-+	gpio_config.regmap = config->map;
-+	gpio_config.ngpio = I8255_NGPIO * config->num_ppi;
-+	gpio_config.names = config->names;
-+	gpio_config.reg_dat_base = GPIO_REGMAP_ADDR(I8255_REG_DAT_BASE);
-+	gpio_config.reg_set_base = GPIO_REGMAP_ADDR(I8255_REG_DAT_BASE);
-+	gpio_config.reg_dir_in_base = GPIO_REGMAP_ADDR(I8255_REG_DIR_IN_BASE);
-+	gpio_config.ngpio_per_reg = I8255_NGPIO_PER_REG;
-+	gpio_config.irq_domain = config->domain;
-+	gpio_config.reg_mask_xlate = i8255_reg_mask_xlate;
-+
-+	return PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &gpio_config));
-+}
-+EXPORT_SYMBOL_NS_GPL(devm_i8255_regmap_register, I8255);
-+
- MODULE_AUTHOR("William Breathitt Gray");
- MODULE_DESCRIPTION("Intel 8255 Programmable Peripheral Interface");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/gpio/gpio-i8255.h b/drivers/gpio/gpio-i8255.h
-index d9084aae9446..3daa0b145890 100644
---- a/drivers/gpio/gpio-i8255.h
-+++ b/drivers/gpio/gpio-i8255.h
-@@ -26,6 +26,34 @@ struct i8255_state {
- 	u8 control_state;
- };
- 
-+struct device;
-+struct irq_domain;
-+struct regmap;
-+
-+#define i8255_volatile_regmap_range(_base) regmap_reg_range(_base, _base + 0x2)
-+
-+/**
-+ * struct i8255_regmap_config - Configuration for the register map of an i8255
-+ * @parent:	parent device
-+ * @map:	regmap for the i8255
-+ * @num_ppi:	number of i8255 Programmable Peripheral Interface
-+ * @names:	(optional) array of names for gpios
-+ * @domain:	(optional) IRQ domain if the controller is interrupt-capable
-+ *
-+ * Note: The regmap is expected to have cache enabled and i8255 control
-+ * registers not marked as volatile.
-+ */
-+struct i8255_regmap_config {
-+	struct device *parent;
-+	struct regmap *map;
-+	int num_ppi;
-+	const char *const *names;
-+	struct irq_domain *domain;
-+};
-+
-+int devm_i8255_regmap_register(struct device *dev,
-+			       const struct i8255_regmap_config *config);
-+
- void i8255_direction_input(struct i8255 __iomem *ppi, struct i8255_state *state,
- 			   unsigned long offset);
- void i8255_direction_output(struct i8255 __iomem *ppi,
+ static struct isa_driver dio48e_driver = {
 -- 
 2.38.1
 
