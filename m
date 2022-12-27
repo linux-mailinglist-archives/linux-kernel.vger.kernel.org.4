@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16857656AD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70131656AD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Dec 2022 13:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbiL0MQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 07:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
+        id S232118AbiL0MQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 07:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiL0MOm (ORCPT
+        with ESMTP id S231180AbiL0MOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 07:14:42 -0500
+        Tue, 27 Dec 2022 07:14:41 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F253F41;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF80F2F;
         Tue, 27 Dec 2022 04:13:56 -0800 (PST)
 Date:   Tue, 27 Dec 2022 12:13:52 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Tcy8KIO8gQc9Kc01ifmjA4/hjm9ajuh+8clk09xwYCU=;
-        b=P35BcO47ib9k3WiOWGbnVxNGO1OLZt/t3+QbTsylmwEp8FQPPUVjJ3Yi6JD5LM8rSKyCkJ
-        79ffDf2g6SKYie+LWtSTo+GMLaNMohVtwPl9jc3FbRrQj5oyJ0A78iQWqidmohJW3XbMk6
-        lzK/RKBhqflnRBrWdJ9Stn0JbCGiKrsQ9atQKkkdrzaVEr+yQU1izdbN/B1ASe0LcQjLwI
-        LzC6ZHPg8A1FpR/pddGw1eJB4jDgc1EgBjMfD8HOLSFFc+J68n/28HQ2DnxRd7h5Z6s+Lf
-        miQ3sSANWw0IG8ygL/YfMlPhPpdnfa0jYxyYULyRCX3pj/OxeT41IwTliN8XxQ==
+        bh=mAOa34tc7kBV+mchywOyvV8HysVruET6BguhI5CRWGU=;
+        b=OJr4P1Shj3ZlAiZ9xlChqHUsSzwayvujzQ1psrD4ZL3g9PH7NL3i3STU6QwsznOTtjVFL9
+        l0TcLI+APhEmMrIV52hlTuqFc6Im5SRo6Ti1EbmG+O86rkKQcTMFKy3Ol/0pF9R13xPeTA
+        A5LUmm3lMv4DIPrwvubfPUzrUXI1X/TsUlGAJmtUnbBNPdME8s0qDOscObRuM1WeQYT349
+        gCbjIyua94Pce3ffhS+Rn6p2HHq8kIN3PNrOR/QHASvJjWkU/ua0KXh3HQ0finiT3xLEiP
+        T6VYV6hPNlzYdXPzpuvHOKH2lMy7FXCtf8yXQK2zWM8Mu9xBjdttrm99taODgA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1672143232;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Tcy8KIO8gQc9Kc01ifmjA4/hjm9ajuh+8clk09xwYCU=;
-        b=SyBSHE3N8Sg70B+IPJewN06/9kwkfL/6Rh/9xTLWt48qcOozT6eicnakrZ93YrKQrZCzu0
-        pEZ/bEXQxY7tNBBg==
+        bh=mAOa34tc7kBV+mchywOyvV8HysVruET6BguhI5CRWGU=;
+        b=aGi57LfKsdmBq5J8i+JzjvrUi9Xo1But+Z4+O0onWAHuluBh6lEB5W+NPAOkKBXRIK9tzQ
+        Q3O7fRzsDHcsE2AQ==
 From:   "tip-bot2 for Mathieu Desnoyers" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] rseq: Extend struct rseq with numa node id
+Subject: [tip: sched/core] selftests/rseq: Use ELF auxiliary vector for
+ extensible rseq
 Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221122203932.231377-5-mathieu.desnoyers@efficios.com>
-References: <20221122203932.231377-5-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221122203932.231377-6-mathieu.desnoyers@efficios.com>
+References: <20221122203932.231377-6-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Message-ID: <167214323227.4906.16721070982383036641.tip-bot2@tip-bot2>
+Message-ID: <167214323207.4906.10658635695375494462.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,140 +67,212 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     cbae6bac29a8c5cf2f1cb5c6bce35af00cec164b
-Gitweb:        https://git.kernel.org/tip/cbae6bac29a8c5cf2f1cb5c6bce35af00cec164b
+Commit-ID:     03f5c0272d1b59343144e199becc911dae52c37e
+Gitweb:        https://git.kernel.org/tip/03f5c0272d1b59343144e199becc911dae52c37e
 Author:        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-AuthorDate:    Tue, 22 Nov 2022 15:39:06 -05:00
+AuthorDate:    Tue, 22 Nov 2022 15:39:07 -05:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 27 Dec 2022 12:52:10 +01:00
+CommitterDate: Tue, 27 Dec 2022 12:52:11 +01:00
 
-rseq: Extend struct rseq with numa node id
+selftests/rseq: Use ELF auxiliary vector for extensible rseq
 
-Adding the NUMA node id to struct rseq is a straightforward thing to do,
-and a good way to figure out if anything in the user-space ecosystem
-prevents extending struct rseq.
-
-This NUMA node id field allows memory allocators such as tcmalloc to
-take advantage of fast access to the current NUMA node id to perform
-NUMA-aware memory allocation.
-
-It can also be useful for implementing fast-paths for NUMA-aware
-user-space mutexes.
-
-It also allows implementing getcpu(2) purely in user-space.
+Use the ELF auxiliary vector AT_RSEQ_FEATURE_SIZE to detect the RSEQ
+features supported by the kernel.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20221122203932.231377-5-mathieu.desnoyers@efficios.com
+Link: https://lore.kernel.org/r/20221122203932.231377-6-mathieu.desnoyers@efficios.com
 ---
- include/trace/events/rseq.h |  4 +++-
- include/uapi/linux/rseq.h   |  8 ++++++++
- kernel/rseq.c               | 19 +++++++++++++------
- 3 files changed, 24 insertions(+), 7 deletions(-)
+ tools/testing/selftests/rseq/rseq-abi.h |  5 ++-
+ tools/testing/selftests/rseq/rseq.c     | 67 +++++++++++++++++++++---
+ tools/testing/selftests/rseq/rseq.h     | 18 ++++--
+ 3 files changed, 78 insertions(+), 12 deletions(-)
 
-diff --git a/include/trace/events/rseq.h b/include/trace/events/rseq.h
-index a04a64b..dde7a35 100644
---- a/include/trace/events/rseq.h
-+++ b/include/trace/events/rseq.h
-@@ -16,13 +16,15 @@ TRACE_EVENT(rseq_update,
- 
- 	TP_STRUCT__entry(
- 		__field(s32, cpu_id)
-+		__field(s32, node_id)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->cpu_id = raw_smp_processor_id();
-+		__entry->node_id = cpu_to_node(__entry->cpu_id);
- 	),
- 
--	TP_printk("cpu_id=%d", __entry->cpu_id)
-+	TP_printk("cpu_id=%d node_id=%d", __entry->cpu_id, __entry->node_id)
- );
- 
- TRACE_EVENT(rseq_ip_fixup,
-diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-index 05d3c4c..1cb90a4 100644
---- a/include/uapi/linux/rseq.h
-+++ b/include/uapi/linux/rseq.h
-@@ -132,6 +132,14 @@ struct rseq {
+diff --git a/tools/testing/selftests/rseq/rseq-abi.h b/tools/testing/selftests/rseq/rseq-abi.h
+index a8c44d9..00ac846 100644
+--- a/tools/testing/selftests/rseq/rseq-abi.h
++++ b/tools/testing/selftests/rseq/rseq-abi.h
+@@ -146,6 +146,11 @@ struct rseq_abi {
+ 	 *     this thread.
+ 	 */
  	__u32 flags;
- 
- 	/*
-+	 * Restartable sequences node_id field. Updated by the kernel. Read by
-+	 * user-space with single-copy atomicity semantics. This field should
-+	 * only be read by the thread which registered this data structure.
-+	 * Aligned on 32-bit. Contains the current NUMA node ID.
-+	 */
-+	__u32 node_id;
 +
 +	/*
- 	 * Flexible array member at end of structure, after last feature field.
- 	 */
- 	char end[];
-diff --git a/kernel/rseq.c b/kernel/rseq.c
-index 7962738..193cfcc 100644
---- a/kernel/rseq.c
-+++ b/kernel/rseq.c
-@@ -85,15 +85,17 @@
-  *   F1. <failure>
-  */
++	 * Flexible array member at end of structure, after last feature field.
++	 */
++	char end[];
+ } __attribute__((aligned(4 * sizeof(__u64))));
  
--static int rseq_update_cpu_id(struct task_struct *t)
-+static int rseq_update_cpu_node_id(struct task_struct *t)
- {
--	u32 cpu_id = raw_smp_processor_id();
- 	struct rseq __user *rseq = t->rseq;
-+	u32 cpu_id = raw_smp_processor_id();
-+	u32 node_id = cpu_to_node(cpu_id);
+ #endif /* _RSEQ_ABI_H */
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+index 376a73f..1e8e326 100644
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -28,6 +28,8 @@
+ #include <limits.h>
+ #include <dlfcn.h>
+ #include <stddef.h>
++#include <sys/auxv.h>
++#include <linux/auxvec.h>
  
- 	if (!user_write_access_begin(rseq, t->rseq_len))
- 		goto efault;
- 	unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
- 	unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
-+	unsafe_put_user(node_id, &rseq->node_id, efault_end);
- 	/*
- 	 * Additional feature fields added after ORIG_RSEQ_SIZE
- 	 * need to be conditionally updated only if
-@@ -109,9 +111,9 @@ efault:
- 	return -EFAULT;
+ #include "../kselftest.h"
+ #include "rseq.h"
+@@ -36,20 +38,38 @@ static const ptrdiff_t *libc_rseq_offset_p;
+ static const unsigned int *libc_rseq_size_p;
+ static const unsigned int *libc_rseq_flags_p;
+ 
+-/* Offset from the thread pointer to the rseq area.  */
++/* Offset from the thread pointer to the rseq area. */
+ ptrdiff_t rseq_offset;
+ 
+-/* Size of the registered rseq area.  0 if the registration was
+-   unsuccessful.  */
++/*
++ * Size of the registered rseq area. 0 if the registration was
++ * unsuccessful.
++ */
+ unsigned int rseq_size = -1U;
+ 
+ /* Flags used during rseq registration.  */
+ unsigned int rseq_flags;
+ 
++/*
++ * rseq feature size supported by the kernel. 0 if the registration was
++ * unsuccessful.
++ */
++unsigned int rseq_feature_size = -1U;
++
+ static int rseq_ownership;
++static int rseq_reg_success;	/* At least one rseq registration has succeded. */
++
++/* Allocate a large area for the TLS. */
++#define RSEQ_THREAD_AREA_ALLOC_SIZE	1024
++
++/* Original struct rseq feature size is 20 bytes. */
++#define ORIG_RSEQ_FEATURE_SIZE		20
++
++/* Original struct rseq allocation size is 32 bytes. */
++#define ORIG_RSEQ_ALLOC_SIZE		32
+ 
+ static
+-__thread struct rseq_abi __rseq_abi __attribute__((tls_model("initial-exec"))) = {
++__thread struct rseq_abi __rseq_abi __attribute__((tls_model("initial-exec"), aligned(RSEQ_THREAD_AREA_ALLOC_SIZE))) = {
+ 	.cpu_id = RSEQ_ABI_CPU_ID_UNINITIALIZED,
+ };
+ 
+@@ -84,10 +104,16 @@ int rseq_register_current_thread(void)
+ 		/* Treat libc's ownership as a successful registration. */
+ 		return 0;
+ 	}
+-	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq_abi), 0, RSEQ_SIG);
+-	if (rc)
++	rc = sys_rseq(&__rseq_abi, rseq_size, 0, RSEQ_SIG);
++	if (rc) {
++		if (RSEQ_READ_ONCE(rseq_reg_success)) {
++			/* Incoherent success/failure within process. */
++			abort();
++		}
+ 		return -1;
++	}
+ 	assert(rseq_current_cpu_raw() >= 0);
++	RSEQ_WRITE_ONCE(rseq_reg_success, 1);
+ 	return 0;
  }
  
--static int rseq_reset_rseq_cpu_id(struct task_struct *t)
-+static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
- {
--	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED;
-+	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0;
- 
- 	/*
- 	 * Reset cpu_id_start to its initial state (0).
-@@ -126,6 +128,11 @@ static int rseq_reset_rseq_cpu_id(struct task_struct *t)
- 	if (put_user(cpu_id, &t->rseq->cpu_id))
- 		return -EFAULT;
- 	/*
-+	 * Reset node_id to its initial state (0).
-+	 */
-+	if (put_user(node_id, &t->rseq->node_id))
-+		return -EFAULT;
-+	/*
- 	 * Additional feature fields added after ORIG_RSEQ_SIZE
- 	 * need to be conditionally reset only if
- 	 * t->rseq_len != ORIG_RSEQ_SIZE.
-@@ -314,7 +321,7 @@ void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
- 		if (unlikely(ret < 0))
- 			goto error;
+@@ -99,12 +125,28 @@ int rseq_unregister_current_thread(void)
+ 		/* Treat libc's ownership as a successful unregistration. */
+ 		return 0;
  	}
--	if (unlikely(rseq_update_cpu_id(t)))
-+	if (unlikely(rseq_update_cpu_node_id(t)))
- 		goto error;
- 	return;
+-	rc = sys_rseq(&__rseq_abi, sizeof(struct rseq_abi), RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
++	rc = sys_rseq(&__rseq_abi, rseq_size, RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
+ 	if (rc)
+ 		return -1;
+ 	return 0;
+ }
  
-@@ -361,7 +368,7 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
- 			return -EINVAL;
- 		if (current->rseq_sig != sig)
- 			return -EPERM;
--		ret = rseq_reset_rseq_cpu_id(current);
-+		ret = rseq_reset_rseq_cpu_node_id(current);
- 		if (ret)
- 			return ret;
- 		current->rseq = NULL;
++static
++unsigned int get_rseq_feature_size(void)
++{
++	unsigned long auxv_rseq_feature_size, auxv_rseq_align;
++
++	auxv_rseq_align = getauxval(AT_RSEQ_ALIGN);
++	assert(!auxv_rseq_align || auxv_rseq_align <= RSEQ_THREAD_AREA_ALLOC_SIZE);
++
++	auxv_rseq_feature_size = getauxval(AT_RSEQ_FEATURE_SIZE);
++	assert(!auxv_rseq_feature_size || auxv_rseq_feature_size <= RSEQ_THREAD_AREA_ALLOC_SIZE);
++	if (auxv_rseq_feature_size)
++		return auxv_rseq_feature_size;
++	else
++		return ORIG_RSEQ_FEATURE_SIZE;
++}
++
+ static __attribute__((constructor))
+ void rseq_init(void)
+ {
+@@ -117,16 +159,24 @@ void rseq_init(void)
+ 		rseq_offset = *libc_rseq_offset_p;
+ 		rseq_size = *libc_rseq_size_p;
+ 		rseq_flags = *libc_rseq_flags_p;
++		rseq_feature_size = get_rseq_feature_size();
++		if (rseq_feature_size > rseq_size)
++			rseq_feature_size = rseq_size;
+ 		return;
+ 	}
+ 	rseq_ownership = 1;
+ 	if (!rseq_available()) {
+ 		rseq_size = 0;
++		rseq_feature_size = 0;
+ 		return;
+ 	}
+ 	rseq_offset = (void *)&__rseq_abi - rseq_thread_pointer();
+-	rseq_size = sizeof(struct rseq_abi);
+ 	rseq_flags = 0;
++	rseq_feature_size = get_rseq_feature_size();
++	if (rseq_feature_size == ORIG_RSEQ_FEATURE_SIZE)
++		rseq_size = ORIG_RSEQ_ALLOC_SIZE;
++	else
++		rseq_size = RSEQ_THREAD_AREA_ALLOC_SIZE;
+ }
+ 
+ static __attribute__((destructor))
+@@ -136,6 +186,7 @@ void rseq_exit(void)
+ 		return;
+ 	rseq_offset = 0;
+ 	rseq_size = -1U;
++	rseq_feature_size = -1U;
+ 	rseq_ownership = 0;
+ }
+ 
+diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
+index 6f75133..95adc1e 100644
+--- a/tools/testing/selftests/rseq/rseq.h
++++ b/tools/testing/selftests/rseq/rseq.h
+@@ -47,14 +47,24 @@
+ 
+ #include "rseq-thread-pointer.h"
+ 
+-/* Offset from the thread pointer to the rseq area.  */
++/* Offset from the thread pointer to the rseq area. */
+ extern ptrdiff_t rseq_offset;
+-/* Size of the registered rseq area.  0 if the registration was
+-   unsuccessful.  */
++
++/*
++ * Size of the registered rseq area. 0 if the registration was
++ * unsuccessful.
++ */
+ extern unsigned int rseq_size;
+-/* Flags used during rseq registration.  */
++
++/* Flags used during rseq registration. */
+ extern unsigned int rseq_flags;
+ 
++/*
++ * rseq feature size supported by the kernel. 0 if the registration was
++ * unsuccessful.
++ */
++extern unsigned int rseq_feature_size;
++
+ static inline struct rseq_abi *rseq_get_abi(void)
+ {
+ 	return (struct rseq_abi *) ((uintptr_t) rseq_thread_pointer() + rseq_offset);
