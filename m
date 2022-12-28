@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C79658740
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 23:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F6B658743
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 23:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbiL1WNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 17:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
+        id S231796AbiL1WRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 17:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiL1WNi (ORCPT
+        with ESMTP id S232799AbiL1WRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 17:13:38 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673A6D9B
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 14:13:37 -0800 (PST)
-Received: from letrec.thunk.org (capios.firout.com [104.224.87.177] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BSMDDj7012798
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Dec 2022 17:13:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1672265599; bh=ul/NZsCm1LN681rwuJVRjc6Rre5uxmh36nv6gaDD6Zk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=bQ0sELAf0MkyDpX2YfhSPyZu7PNw0tyhKvYxrPslvfzsXpjtfbX+toZKJBF/k7E/Q
-         0q+oMGtUtbvHyugU9FhY7p7SRFCf3Vy6HAn9MnSQFM/SHnMCIcTmm4h331Hb4ge+kq
-         bT2B3J6rSoAt0+kyeXca4w/NmbDn3PkgsvtYApIJ0lFlw3seQNcY9Ho12tTRQS+pIt
-         UaW9ITffzg3CAtRn1OKZhdWYtMB6+siNCskG9+wAiSTpUlW8yTumfYzNwxVs+BVqyG
-         2KFH2FQ4XaDPM86p6mWMAR5qAFxiPUaBP6Im0tj+4hw8zB7v8Ki9kaI3j84eHTfiwp
-         AWYK/fgfJL1Vg==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id 9EA5B8C08FD; Wed, 28 Dec 2022 17:14:42 -0500 (EST)
-Date:   Wed, 28 Dec 2022 17:14:42 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     oss-security@lists.openwall.com,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
-Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat
- correctly
-Message-ID: <Y6y/0uzFlTpkw/VT@mit.edu>
-References: <Y6SJDbKBk471KE4k@p183>
- <Y6TUJcr/IHrsTE0W@codewreck.org>
- <1a1963aa1036ba07@orthanc.ca>
- <20221228152458.6xyksrxunukjrtzx@mutt-hbsd>
- <Y6xzIR9P+a6uaaEx@itl-email>
- <20221228172517.l7h3m7wjfpxr3dzw@mutt-hbsd>
- <Y6yEv+6iYQQNaqi9@itl-email>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y6yEv+6iYQQNaqi9@itl-email>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,MAY_BE_FORGED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Dec 2022 17:17:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E3013D16
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 14:17:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CCD061640
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:17:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB142C433EF;
+        Wed, 28 Dec 2022 22:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1672265823;
+        bh=TIUBssIqTL0wXOJJ79ujlgOXLd564sfw9ogVxe9yqhE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uJHEgKDZT6Vvn8sswHYsfVvULQSaTlrCcGRC7Wd+0Ov3vn7PIGC5+LjgUuJTZu1m+
+         UhtG0l6Q/qSYwueLsAtvIZdUPEEYNfZWed51W9Rqp+b5Vtb9kuG6sB8jPkBCAsDQo6
+         Q7NrsMvuR3FfT1yoQecwdmN5j8PBrSW1NJRctXaM=
+Date:   Wed, 28 Dec 2022 14:17:01 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Wupeng Ma <mawupeng1@huawei.com>
+Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <kuleshovmail@gmail.com>, <aneesh.kumar@linux.ibm.com>,
+        <clameter@sgi.com>
+Subject: Re: [PATCH 1/4] mm/mlock: return EINVAL for illegal user memory
+ range in mlock
+Message-Id: <20221228141701.c64add46c4b09aa17f605baf@linux-foundation.org>
+In-Reply-To: <20221205034108.3365182-2-mawupeng1@huawei.com>
+References: <20221205034108.3365182-1-mawupeng1@huawei.com>
+        <20221205034108.3365182-2-mawupeng1@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 01:02:35PM -0500, Demi Marie Obenour wrote:
-> > I think the argument I'm trying to make is to be flexible in
-> > implementation, allowing for future needs and wants--that is "future
-> > proofing".
+On Mon, 5 Dec 2022 11:41:05 +0800 Wupeng Ma <mawupeng1@huawei.com> wrote:
+
+> While testing mlock, we have a problem if the len of mlock is ULONG_MAX.
+> The return value of mlock is zero. But nothing will be locked since the
+> len in do_mlock overflows to zero due to the following code in mlock:
 > 
-> Linux should not have an XML, JSON, or YAML serializer.  Linux already
-> does way too much; let’s not add one more thing to the list.
+>   len = PAGE_ALIGN(len + (offset_in_page(start)));
+> 
+> The same problem happens in munlock.
+> 
+> Since TASK_SIZE is the maximum user space address. The start or len of
+> mlock shouldn't be bigger than this. Function access_ok can be used to
+> check this issue, so return -EINVAL if bigger.
 
-There's always Protobufs[1]!  :-)  And all of these are better than
-ASN.1, for which Google already has a limited parser (for x.509
-certificates).   :-)   :-)   :-)
+What happens if userspace uses a value somewhat smaller than ULONG_MAX?
 
-						- Ted
+	mlock(addr, ULONG_MAX - 1000000);
+
+?
+
+Because if the above works successfully and if it no longer works
+successfully with this patchset then that could be a
+backward-compatibility problem.
+
