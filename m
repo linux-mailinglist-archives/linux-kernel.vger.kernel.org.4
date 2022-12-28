@@ -2,102 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47171658708
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F0765870A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiL1V1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 16:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
+        id S231796AbiL1V10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 16:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiL1V1U (ORCPT
+        with ESMTP id S229716AbiL1V1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Dec 2022 16:27:20 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273A8140B5;
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B543C140B4;
         Wed, 28 Dec 2022 13:27:18 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 5f72451d9ceeb59f; Wed, 28 Dec 2022 22:27:16 +0100
-Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 0C8E9780AF8;
-        Wed, 28 Dec 2022 22:27:16 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Pratyush Yadav <ptyadav@amazon.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2 3/3] cpufreq: intel_pstate: Drop ACPI _PSS states table patching
-Date:   Wed, 28 Dec 2022 22:26:04 +0100
-Message-ID: <2269998.ElGaqSPkdT@kreacher>
-In-Reply-To: <12138067.O9o76ZdvQC@kreacher>
-References: <12138067.O9o76ZdvQC@kreacher>
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 00D65109;
+        Wed, 28 Dec 2022 22:27:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1672262836;
+        bh=sp2ZBB6P279b00k8+UwmXpA6Hm9xy8NUgh+Jr/+0/uc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dQ2+f64EH8lFWaBxwtHVGK154e2FTIKrvuMvgSb5Z2okoo5DPwieKwZFzSs70IXiO
+         /sShwWs/jk2Md1WsZCkIa5X9bHoZMMpa/kRMazfVX5MQEgA1klbMK/U6TvatttHkdl
+         dgHp2q+KRh/Bpd86b0GUdNwMTks+jxqaeageqkyY=
+Date:   Wed, 28 Dec 2022 23:27:11 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tanmay Bhushan <007047221b@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: staging: media: omap4iss: Fix null dereference
+ for iss
+Message-ID: <Y6y0r9fPnfWvwlua@pendragon.ideasonboard.com>
+References: <7f4fe87ef8a9995bc2c64bf2e5a03ef6948b8692.camel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 89.77.51.84
-X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedriedvgdduhedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeekledrjeejrdehuddrkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdejjedrhedurdekgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehpthihrggurghvsegrmhgriihonhdruggvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghs
- rdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7f4fe87ef8a9995bc2c64bf2e5a03ef6948b8692.camel@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Tanmay,
 
-After making acpi_processor_get_platform_limit() use the "no limit"
-value for its frequency QoS request when _PPC returns 0, it is not
-necessary to replace the frequency corresponding to the first _PSS
-return package entry with the maximum turbo frequency of the given
-CPU in intel_pstate_init_acpi_perf_limits() any more, so drop the
-code doing that along with the comment explaining it.
+Thank you for the patch.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+On Wed, Dec 28, 2022 at 09:58:31PM +0100, Tanmay Bhushan wrote:
+> From 7aa39c0d02bddf9cfa14762f115303b79bfa0ae3 Mon Sep 17 00:00:00 2001
+> From: Tanmay Bhushan <007047221b@gmail.com>
+> Date: Wed, 28 Dec 2022 21:01:16 +0100
+> Subject: [PATCH] media: staging: media: omap4iss: Fix null dereference
+> for iss
+> 
+> media_pad_remote_pad_first returns NULL in some cases but while using
+> the return value was used without NULL check which will lead to panic
+> in case of NULL return. iss_pipeline_is_last returns value check so
+> have returned 0 in case of NULL and csi2_configure is not documented
+> for such cases so returned EINVAL for it. Code is not tested
+> as it is only for NULL dereference verification.
+> 
+> Signed-off-by: Tanmay Bhushan <007047221b@gmail.com>
+> ---
+>  drivers/staging/media/omap4iss/iss.c      | 6 +++++-
+>  drivers/staging/media/omap4iss/iss_csi2.c | 4 ++++
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/media/omap4iss/iss.c
+> b/drivers/staging/media/omap4iss/iss.c
+> index fa2a36d829d3..3f01eeff40e7 100644
+> --- a/drivers/staging/media/omap4iss/iss.c
+> +++ b/drivers/staging/media/omap4iss/iss.c
+> @@ -552,7 +552,11 @@ static int iss_pipeline_is_last(struct
+> media_entity *me)
 
-v1 -> v2:
-   * Same as the previous [2/2], no changes.
+Your mail client wrapped lines, which prevents the patch from being
+applied with git-am. I recommend using git-send-email to send patches.
+https://git-send-email.io/ provides clear and detailed instructions on
+how to set it up (especially when using gmail).
 
----
- drivers/cpufreq/intel_pstate.c |   14 --------------
- 1 file changed, 14 deletions(-)
+>  	if (!pipe || pipe->stream_state ==
+> ISS_PIPELINE_STREAM_STOPPED)
+>  		return 0;
+>  	pad = media_pad_remote_pad_first(&pipe->output->pad);
+> -	return pad->entity == me;
 
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -452,20 +452,6 @@ static void intel_pstate_init_acpi_perf_
- 			 (u32) cpu->acpi_perf_data.states[i].control);
- 	}
- 
--	/*
--	 * The _PSS table doesn't contain whole turbo frequency range.
--	 * This just contains +1 MHZ above the max non turbo frequency,
--	 * with control value corresponding to max turbo ratio. But
--	 * when cpufreq set policy is called, it will call with this
--	 * max frequency, which will cause a reduced performance as
--	 * this driver uses real max turbo frequency as the max
--	 * frequency. So correct this frequency in _PSS table to
--	 * correct max turbo frequency based on the turbo state.
--	 * Also need to convert to MHz as _PSS freq is in MHz.
--	 */
--	if (!global.turbo_disabled)
--		cpu->acpi_perf_data.states[0].core_frequency =
--					policy->cpuinfo.max_freq / 1000;
- 	cpu->valid_pss_table = true;
- 	pr_debug("_PPC limits will be enforced\n");
- 
+Have you seen this actually crashing, or are you only speculating ? The
+video node at the output of the pipeline should always be connected, so
+I don't think media_pad_remote_pad_first() can ever return NULL here.
 
+> +
+> +	if (pad)
+> +		return pad->entity == me;
+> +
+> +	return 0;
+>  }
+>  
+>  static int iss_reset(struct iss_device *iss)
+> diff --git a/drivers/staging/media/omap4iss/iss_csi2.c
+> b/drivers/staging/media/omap4iss/iss_csi2.c
+> index 04ce0e7eb557..ab2c2ad64464 100644
+> --- a/drivers/staging/media/omap4iss/iss_csi2.c
+> +++ b/drivers/staging/media/omap4iss/iss_csi2.c
+> @@ -539,6 +539,10 @@ static int csi2_configure(struct iss_csi2_device
+> *csi2)
+>  		return -EBUSY;
+>  
+>  	pad = media_pad_remote_pad_first(&csi2->pads[CSI2_PAD_SINK]);
+> +
+> +	if (!pad)
+> +		return -EINVAL;
 
+Same here, what makes you think this is possible ?
 
+> +
+>  	sensor = media_entity_to_v4l2_subdev(pad->entity);
+>  	pdata = sensor->host_priv;
+>  
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
