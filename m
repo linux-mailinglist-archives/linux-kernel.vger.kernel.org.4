@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728A365750D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D5E657511
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiL1KEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 05:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S232182AbiL1KF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 05:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232714AbiL1KDg (ORCPT
+        with ESMTP id S232756AbiL1KFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 05:03:36 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ACEDB5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 02:03:34 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id ge16so12109964pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 02:03:34 -0800 (PST)
+        Wed, 28 Dec 2022 05:05:08 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D17C1007B;
+        Wed, 28 Dec 2022 02:05:08 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id d7so15626659pll.9;
+        Wed, 28 Dec 2022 02:05:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jZR5Lk2p6F6iFuRFOmyJe5Nk54JFtY0MngXtWbJ9xVs=;
-        b=Isp/wP80yS1tT/rqZ+sZ2C7KiMwvaP0ZdU7RxLpMcTiV+uHZGI9BpPfIyTkpqmhvzr
-         35ac/i+folEILmnpTAoSxhbbi7buXvAP1c+PjerD4pUMULClg+DhxoA3qXduuffh/chj
-         ezrtGLtvtwv861WQlDk/le+GiKaaYqHYo9iJNcjbRbZrxQt3xCCVAe0wX0kbI0pTkHQR
-         Unxf1hnmPhBH71NWHultxupDT/plwfhzy7FtCI9X+loo+42B2y18GVnZFoZFXose4pJr
-         RB27dXg1dQ0q1m9FALN01bH9dA1Zo2tMPjAGTqvk68Q8cE9LTTQ7EIACAdmgVYJl2yz0
-         JJzA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2u7Uk1luvmnMjmFHjGbs37xOdHZWhJfRtivVYvqsKyM=;
+        b=BlOZxQ5+5ju6hXADgDx2hPBqe9r38X9X8SmUUkifVf4KIr45ylB/tSiqMtWEsEbn7Y
+         EhQ1f3ozW+hw3PdFi+cM9TRtoRR/hS7auXKnoNSvzVMGKj/sTmd0GydvJ2XPgdpHwk8T
+         vpSzFMx9qo8J6p+g4uwaMeU0Oqf0Uc82mJEXehu/zEvQLRFmi7v3O+sEbcLpt60y601y
+         r+fHvKFhmSIQ4snrIJRCQ5bRPdlaiNDhA/Q+HdHRbZAlBvflUZndIsQ043Sxxx8UpblI
+         c6XFyqDqC/jaRk4F87Zbj+fCA9iSlDitrUMVhyZZ/NLD2qg5LFgP2IqQEAGEyUoS9W1t
+         LFwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jZR5Lk2p6F6iFuRFOmyJe5Nk54JFtY0MngXtWbJ9xVs=;
-        b=3Ds8DsBvp9f+IpHrXfYJMr02ZqxVXoDF6qECkDQyCSFdSgCNT8RKyIV1n6gS2jsyDl
-         miT0Xo637SvsXu1Blb0Osq657zL2eLVGSd4IHQJRDpBqnxlxWXRaml55+lOhCHutf+oe
-         BA+0qvvo1dWSBws6IWCPtr6xmJTpQWHU2uzw7bg8Klo1eRq1UsO9EWXhlvGvc26TCMkn
-         ddrXeEOF/QeRqhRGPl1RnPXh+q1khRiDS8uzItGArH7eklOH36oR/mZkpNGWwt4hsShN
-         G03l2EZsatNtrzhFYNqr6qIAR5ibiero+xo33xSCKSJETDrUdPQxZyeAVD1jwG/vXlx9
-         mR5A==
-X-Gm-Message-State: AFqh2kpOdP6KI6LIBQbq4lQ77J9CmthnNZywaky3a/gdkfGpTbS2jZ8C
-        tbEbBHrvBNqGwv+K/UyOWbQ=
-X-Google-Smtp-Source: AMrXdXsTEaaGu8tGtQwafMiMyRCoS0Th7VtpwdcuzJflpeohl1DzYIEA5Ed3SgyepoqYZSM6A7UhaQ==
-X-Received: by 2002:a17:902:e054:b0:189:fba2:3756 with SMTP id x20-20020a170902e05400b00189fba23756mr23059519plx.66.1672221813886;
-        Wed, 28 Dec 2022 02:03:33 -0800 (PST)
-Received: from localhost.localdomain ([185.216.119.110])
-        by smtp.googlemail.com with ESMTPSA id l2-20020a170902d34200b001893efd3e03sm10691385plk.119.2022.12.28.02.03.31
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2u7Uk1luvmnMjmFHjGbs37xOdHZWhJfRtivVYvqsKyM=;
+        b=b6bZRH3/vNGJ+Ap+L5jO202W8k8glKf/r0rYt9EFLzuYENBOILnSorFWJRaXLCHyu7
+         z3Zy/CHDwbk3mpZdfAAq3WI4vwaKZ0Kyyg9zIWRxc9vTRlcU+dm9PaOpvz0K08aHv4Qh
+         4QVdvZAjjjAByHOPMlUt/mebZIThl1/kK8BXgDYm/hKgiEInH9xr0cj47mWiFvuX2Kto
+         0MXtOeiW+2flnw4P9jLufLqggirzxznCCL1om194hYo8BAvSyfIZt5MVKb2mDKsbR0Zu
+         40xBF3JQHtnH6SNNGOulbQGe4mMQIVWKI4JfDcoN+QBTyWnEw4uE/SQRHvEqMCj/pi6P
+         LHqg==
+X-Gm-Message-State: AFqh2koK8Id/obqE4gy2m+1hIyg7KHOAQq9DwL3NA6ki0y55MdV/TBw5
+        FgdrTZXwfU7TAj4ToW2ls3E=
+X-Google-Smtp-Source: AMrXdXtgp+C1gXCKHzBhlMTiGizZFzt1wSInB/oFAAIr0BnRXXMSGIzeiG4uF2FYYgUW6TOU4+wuGA==
+X-Received: by 2002:a17:902:b114:b0:192:64a9:62f3 with SMTP id q20-20020a170902b11400b0019264a962f3mr17041434plr.48.1672221907772;
+        Wed, 28 Dec 2022 02:05:07 -0800 (PST)
+Received: from localhost.localdomain ([45.112.3.26])
+        by smtp.gmail.com with ESMTPSA id t6-20020a1709027fc600b0019277df45a6sm5794915plb.53.2022.12.28.02.05.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 02:03:33 -0800 (PST)
-From:   Wang Yong <yongw.kernel@gmail.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, corbet@lwn.net,
-        changbin.du@gmail.com, linux-kernel@vger.kernel.org
-Cc:     Wang Yong <yongw.kernel@gmail.com>
-Subject: [PATCH] Documentation: x86: fix typo in x86_64/mm.rst
-Date:   Wed, 28 Dec 2022 10:01:41 +0000
-Message-Id: <20221228100141.382325-1-yongw.kernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 28 Dec 2022 02:05:07 -0800 (PST)
+From:   Anand Moon <linux.amoon@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <uwu@icenowy.me>
+Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 01/11] dt-bindings: usb: Add device id for Genesys Logic hub controller
+Date:   Wed, 28 Dec 2022 10:03:10 +0000
+Message-Id: <20221228100321.15949-2-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221228100321.15949-1-linux.amoon@gmail.com>
+References: <20221228100321.15949-1-linux.amoon@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,26 +75,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-change "64Gb" to "64GB".
+Add usb hub device id for Genesys Logic, Inc. GL852G-OHG Hub USB 2.0
+root hub and Genesys Logic, Inc. GL3523-QFN76 USB 3.1 root hub.
 
-Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 ---
- Documentation/x86/x86_64/mm.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/x86/x86_64/mm.rst b/Documentation/x86/x86_64/mm.rst
-index 9798676bb0bf..35e5e18c83d0 100644
---- a/Documentation/x86/x86_64/mm.rst
-+++ b/Documentation/x86/x86_64/mm.rst
-@@ -140,7 +140,7 @@ The direct mapping covers all memory in the system up to the highest
- memory address (this means in some cases it can also include PCI memory
- holes).
+diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+index a9f831448cca..db009f3ef438 100644
+--- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
++++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+@@ -16,6 +16,8 @@ properties:
+   compatible:
+     enum:
+       - usb5e3,608
++      - genesys,usb5e3,610
++      - genesys,usb5e3,620
  
--We map EFI runtime services in the 'efi_pgd' PGD in a 64Gb large virtual
-+We map EFI runtime services in the 'efi_pgd' PGD in a 64GB large virtual
- memory window (this size is arbitrary, it can be raised later if needed).
- The mappings are not part of any other kernel PGD and are only available
- during EFI runtime calls.
+   reg: true
+ 
 -- 
-2.25.1
+2.38.1
 
