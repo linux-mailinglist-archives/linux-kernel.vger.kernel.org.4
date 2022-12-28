@@ -2,174 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B74657485
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD91B657493
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbiL1JPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 04:15:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33500 "EHLO
+        id S232758AbiL1JUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 04:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbiL1JPq (ORCPT
+        with ESMTP id S232691AbiL1JUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 04:15:46 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF1813F
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 01:15:42 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id z26so22837836lfu.8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 01:15:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zHfGy9Laz7eCuwSYN292QO9okKvZGpgecX/zbeSHhK0=;
-        b=YUmZMBTkEjZmJYJe7NsLeaKDHqpUyJWPHoelRZsaowbOOIMm9QTjoF2VhTb9ub2hss
-         JIbxiNc34Q2MdqjLxsoHf9T+1ixwg0+dOQQCeOysINni1OGL29+taOwaaYi7VtQ5ZRgh
-         FXgggDcPJJL7JfuKMrMVmyGFU8AsjNWHPqNq/boCB18NwE+3XsoXs5cVaPCd3XdKT+I5
-         VLsSX52YwgWh4JBFaAnWElSijRsWxtN3dlgd0VpNB1FKAZ5k+zsNV3aTvQV5vGje+AMD
-         EWS46Zs4ini68nHvEVVPbu1w66gh73M5CoXzyVvvxwuzmmB595RzqU/WW4z29SBR7WTx
-         0YEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zHfGy9Laz7eCuwSYN292QO9okKvZGpgecX/zbeSHhK0=;
-        b=GEfj+ui4V7AI71dOEC77QMmGfjlQLFcgr7ZQJ1j/rGHAzg3rKwG+Samoaau7fYVh10
-         UemN/MwcunvRQ4m6dn1qe9MUJEo5CQBYLp4/T/Vz9orA1nQ841g3AWaflIwLL4KiO+Ri
-         tYIVB4UX7hIJuvQ6Aw0C9KHZ1STr8feb+rJg4W0Vd6Gw1nt2R3LQ2h2IMap+l7KjkFoQ
-         Wi+msowGS7gsugLV5pRAsKtq1i4lNrlv6+4p5XjvFTsYCa1L9fkA9KMgZosMmIbPAUx9
-         LkIO8fFKd/3azaq9NlcC5OfRFLuoNXfnGrvmyr851wi5vSXJyoNEgFNj2KEB+ffL52Mn
-         ciyQ==
-X-Gm-Message-State: AFqh2kqWwSOeuMNRUQlWjlTz3R251mUbUTKES/sI5olSKZz/oM4AyIGi
-        4mwNXJzYb5w4M0ixfpAEwtarjA==
-X-Google-Smtp-Source: AMrXdXuSBPe3YclVGcr+1kAh/FcxwSdU2wFJT56/FdPUnYvTp9rDQnmdWkSNxnp/7u0kvt1xW4nbuQ==
-X-Received: by 2002:a19:7b18:0:b0:4b5:9cce:73a0 with SMTP id w24-20020a197b18000000b004b59cce73a0mr7415088lfc.39.1672218941331;
-        Wed, 28 Dec 2022 01:15:41 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q13-20020a056512210d00b004b5732080d1sm2577189lfr.150.2022.12.28.01.15.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 01:15:40 -0800 (PST)
-Message-ID: <73599d25-cd2c-e89a-20b4-d34471583a6b@linaro.org>
-Date:   Wed, 28 Dec 2022 10:15:39 +0100
+        Wed, 28 Dec 2022 04:20:37 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E523F7F;
+        Wed, 28 Dec 2022 01:20:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672219237; x=1703755237;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bum+WdvrzI3wejg9qWLst8ugJ79dtlVwig+FFitYkUY=;
+  b=LI+6qLAm6gE7vKqtru1QOkh+wrtYWaHh04Qb3+6theBUufBLQFkBuaf3
+   mqlKcvhUQK8KdlJr2sM4TVJAB6Qdg4tvTDSO7p3HJ3rj8JPNEOpe2QJoQ
+   ssE1L3aHVTSVPnuFV4Z3C1xWSbY5XZ/ZRPvxGeqqFpPwVHo3G3EZCG0Nz
+   QkPxzo6YWByz7w0MJBY66Gn9cDfx+/54hm2JLM6wQXxLvCZ0Wn8ZHHTvS
+   3hLXDIBHCTyvZCHva7rFgVdZT1ubu0KHrt7Y1ufx3AOpr4l8VHJwAtU0i
+   MeSrKlyISad04GKPdLp0ZXhuIrwG9atZYkw7nzsm7qUYa2BZCbc3D3NHt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="348041417"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="348041417"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 01:20:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="721737242"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="721737242"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Dec 2022 01:20:21 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 02102159; Wed, 28 Dec 2022 11:20:52 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [rft, PATCH v4 0/3] gpiolib: eventual of_node retirement
+Date:   Wed, 28 Dec 2022 11:20:42 +0200
+Message-Id: <20221228092045.80425-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] ARM: dts: n900: switch accelerometer to iio driver
-Content-Language: en-US
-To:     "Sicelo A. Mhlongo" <absicsz@gmail.com>, linux-omap@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tony@atomide.com,
-        devicetree@vger.kernel.org
-References: <20221227223841.2990847-1-absicsz@gmail.com>
- <20221227223841.2990847-2-absicsz@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221227223841.2990847-2-absicsz@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/12/2022 23:38, Sicelo A. Mhlongo wrote:
-> Since 8a7449d68670a8f9033d57b9e7997af77a900d53, lis302dl is supported by an iio
+Now that all GPIO library users are converted to use fwnode,
+Drop redundant field from struct gpio_chip and accompanying
+code.
 
-Use commit SHA ("title") format, as suggested by checkpatch.
+Bart, I prefer this series to go as soon as possible if you
+have no objection. Or even as v6.2 material.
 
-> driver. Make the switch, to accommodate modern userspace, even though the iio
-> interface lacks some of the extended features of the older driver
-> 
-> Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
-> ---
->  arch/arm/boot/dts/omap3-n900.dts | 53 +++++---------------------------
->  1 file changed, 8 insertions(+), 45 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/omap3-n900.dts b/arch/arm/boot/dts/omap3-n900.dts
-> index 6ba2e8f81973..94fa1d492fb4 100644
-> --- a/arch/arm/boot/dts/omap3-n900.dts
-> +++ b/arch/arm/boot/dts/omap3-n900.dts
-> @@ -767,56 +767,19 @@ &i2c3 {
->  
->  	clock-frequency = <400000>;
->  
-> -	lis302dl: lis3lv02d@1d {
-> -		compatible = "st,lis3lv02d";
-> +	lis302dl: lis302dl@1d {
+Thierry, can you please test it once again, so we will be sure
+there is no breakage for OF platforms?
 
-That's not really explained in commit msg and does not look related to
-your goal. If changing - in separate patch - make the node name generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+Cc: Thierry Reding <treding@nvidia.com>
 
-> +		compatible = "st,lis302dl";
->  		reg = <0x1d>;
->  
-> -		Vdd-supply = <&vaux1>;
-> -		Vdd_IO-supply = <&vio>;
-> +		vdd-supply = <&vaux1>;
-> +		vddio-supply = <&vio>;
+v4: added couple of additional patches to the bundle that missed
+    the merge window by one or another reason
 
-Does not look related/explained in commit msg.
+v3: rebased against latest Linux Next: expected not to fail now
+    (Also keeping in mind Thierry's report, so reworked a bit)
 
->  
->  		interrupt-parent = <&gpio6>;
-> -		interrupts = <21 20>; /* 181 and 180 */
-> -
-> -		/* click flags */
-> -		st,click-single-x;
-> -		st,click-single-y;
-> -		st,click-single-z;
-> -
-> -		/* Limits are 0.5g * value */
-> -		st,click-threshold-x = <8>;
-> -		st,click-threshold-y = <8>;
-> -		st,click-threshold-z = <10>;
-> -
-> -		/* Click must be longer than time limit */
-> -		st,click-time-limit = <9>;
-> -
-> -		/* Kind of debounce filter */
-> -		st,click-latency = <50>;
-> -
-> -		/* Interrupt line 2 for click detection */
-> -		st,irq2-click;
-> -
-> -		st,wakeup-x-hi;
-> -		st,wakeup-y-hi;
-> -		st,wakeup-threshold = <(800/18)>; /* millig-value / 18 to get HW values */
-> -
-> -		st,wakeup2-z-hi;
-> -		st,wakeup2-threshold = <(900/18)>; /* millig-value / 18 to get HW values */
-> -
-> -		st,hipass1-disable;
-> -		st,hipass2-disable;
-> -
-> -		st,axis-x = <1>;    /* LIS3_DEV_X */
-> -		st,axis-y = <(-2)>; /* LIS3_INV_DEV_Y */
-> -		st,axis-z = <(-3)>; /* LIS3_INV_DEV_Z */
-> -
-> -		st,min-limit-x = <(-32)>;
-> -		st,min-limit-y = <3>;
-> -		st,min-limit-z = <3>;
-> +		interrupts = <21 IRQ_TYPE_EDGE_RISING>, <20 IRQ_TYPE_EDGE_RISING>; /* 181 and 180 */
+v2: resent against latest Linux Next: expected not to fail now
+    (Linux Next has no more users of of_node member of gpio_chip)
 
-Does not fit in 80-wrap length.
+v1: to test for now (using CIs and build bots) what is left unconverted
+    (Expected to fail in some configurations!)
 
->  
-> -		st,max-limit-x = <(-3)>;
-> -		st,max-limit-y = <32>;
-> -		st,max-limit-z = <32>;
-> +		mount-matrix =	 "-1",  "0",  "0",
-> +				  "0",  "1",  "0",
-> +				  "0",  "0",  "1";
->  	};
->  
->  	cam1: camera@3e {
+Andy Shevchenko (3):
+  gpiolib: Introduce gpio_device_get() and gpio_device_put()
+  gpiolib: Get rid of not used of_node member
+  gpiolib: sort header inclusion alphabetically
 
-Best regards,
-Krzysztof
+ drivers/gpio/gpiolib-acpi.c | 10 -------
+ drivers/gpio/gpiolib-acpi.h |  4 ---
+ drivers/gpio/gpiolib-cdev.c | 21 ++++++-------
+ drivers/gpio/gpiolib-of.c   | 25 ++++------------
+ drivers/gpio/gpiolib-of.h   |  5 ----
+ drivers/gpio/gpiolib.c      | 60 +++++++++++++++++--------------------
+ drivers/gpio/gpiolib.h      | 10 +++++++
+ include/linux/gpio/driver.h |  7 -----
+ 8 files changed, 51 insertions(+), 91 deletions(-)
+
+
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+-- 
+2.35.1
 
