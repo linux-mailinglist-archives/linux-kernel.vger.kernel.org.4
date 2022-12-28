@@ -2,249 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066E96580EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAC865810C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234654AbiL1QXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 11:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
+        id S234479AbiL1QYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 11:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbiL1QV2 (ORCPT
+        with ESMTP id S234747AbiL1QX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 11:21:28 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E3B1A05B
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:19:24 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8055B5C016A;
-        Wed, 28 Dec 2022 11:19:23 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 28 Dec 2022 11:19:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672244363; x=1672330763; bh=tN
-        PPicb71bW2Kkv83J5nMmqaOBqEDoEyAGBVtrD7K44=; b=TbueCSE7mAQv23DvP8
-        mOfeGFH9G7YmfvOdXAlRalPfIY3bGsWjSkDSsuf45D5MfOy3vQclW1fA8Sdzq8W9
-        TWhrkcdUMxTtIMVs77QBREbkEWed3JWmiL+FyTmC3z7NqXbw08QKffLoxctuOFW5
-        QYZLFmCTTz/PSaPKgf03sq3zZV1ur5hGT0Oju/O8hFPLG1uUxbkT1s/MonzJFtPy
-        bwnC8Mdvko3nMCWThcew6/JnivB8rzr/WLm36HlfIeGpHHLDgMflUbL2kH68hpeH
-        DycAfD06Nu5RPde6eUjq7AEn3xhNXdnEDrQufRl4saGzKrEic5eP+hWJe2eJGHgJ
-        tAwA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672244363; x=1672330763; bh=tNPPicb71bW2K
-        kv83J5nMmqaOBqEDoEyAGBVtrD7K44=; b=MfOiLrflpldJKncXeb5+CfhFO4VoZ
-        XZE7QF/FtBEaP8SCQkECtHij1BsQMDoZBoP2YkK758J4lCdub9ZLU6eOr/leODO2
-        MihTCIVx7n7M+k3X/Z9gGMkiTsZiA7YTdBL5fG+8Vd0q3u2bYgBwOELAltvHYY6T
-        wE6nEQ8Ug7IhHqrmGnY6PfeOLbsGzqYwQ+SXIKDdmPngQwWkMMciFGr4VdFl3uX1
-        nhijrEgL4O6OlaRIIUsYfjzbN57Oc55WZBBR7An1vZrOj3LZbT/Wt9zCCF+u3BK9
-        eWwVd0fqry43TLsyR84rD6YW2d17gRF8EktbulbeHbSxaFbqPyGvFDCkA==
-X-ME-Sender: <xms:i2ysY9W23dUf7cMF4P6aV6V7WvJzBTCSqltMhkri9__YiOYCYtgKcQ>
-    <xme:i2ysY9lS_MuiEHfQVf68AdN1Ea89FjdKER7K_wzugksm_3clWo2Yu1IDyoJh4vNh_
-    28w0FrNAz9-bTcCMQ>
-X-ME-Received: <xmr:i2ysY5aUShLndy4drpbv5AUMZo9YDTPXxvxhSCB3T936JkqN3M62mDqqFtb9W1npAufyr4cf9up-NRxBc5GsKk_B9tJ6_Rkg7fq7qXf4BiMGN8KNvsmKJO5VbCx_cbNcx-ZU1g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedriedvgdekkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:i2ysYwV0ax7Dex3m1QDOVRaZjlC7EA4jErsTsh0bBiyJqngWusXE8w>
-    <xmx:i2ysY3mo3AS8Kak18np_NhohFAnOyNB0Ds3_sUWQvX5-9dQaxCgJqw>
-    <xmx:i2ysY9cNww-Qu1J-TQtE71-YFASoUTWXjLOxKVZFZQSZhT6qmRrTng>
-    <xmx:i2ysY50uij-XpUgY_CfNPMbpefROjXLDH-D7Pm-ABYCQGkisJu9ZUA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 28 Dec 2022 11:19:22 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Petr Mladek <pmladek@suse.com>,
-        YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH 3/3] riscv: sbi: Switch to the sys-off handler API
-Date:   Wed, 28 Dec 2022 10:19:15 -0600
-Message-Id: <20221228161915.13194-4-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221228161915.13194-1-samuel@sholland.org>
-References: <20221228161915.13194-1-samuel@sholland.org>
+        Wed, 28 Dec 2022 11:23:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A56D2189;
+        Wed, 28 Dec 2022 08:20:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83945B816F4;
+        Wed, 28 Dec 2022 16:20:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51644C433F0;
+        Wed, 28 Dec 2022 16:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672244443;
+        bh=n+AL8sJppicQ0AnwFa/E3rCM32uk82yPOrot2Ng0Yc0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T2vmrUTGqESNwoNT9N51PkG4DvFWQx4y3mrZ20VufCuy4/jQQ8q2di13kbhd2G77J
+         e0zTCPJEYuIRw1SMRqmL8kyQrmSHgzx40IrtrMlmEjLMedyNWFm1LDZ06eV5Cyw8bP
+         QYJUcSGjGTZlE7g99qM117n4iTIlFC7hq7scH42WtpQvaZ4xUkwsMhCxN08AjGN3tR
+         +O1YkzpRP1d5EjigucUS6u0rK4KWHBfFbBLIoeFvrOsaoJhpQTYTHRP9Q1N9ctuSO1
+         Z8pqpWHJYulompAbH3zQtRZShfMFVpGzo6tu5TA8Jxm08Si/xj0QAiy5AN00Lw1Boz
+         i/Dh8S7OOFNIA==
+Date:   Wed, 28 Dec 2022 10:20:40 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Subject: Re: [PATCH v1 1/3] remoteproc: qcom: q6v5: Send subdevice
+ notifications before panic
+Message-ID: <20221228162040.m3ucsyau3s55rkfn@builder.lan>
+References: <cover.1662995608.git.quic_gokukris@quicinc.com>
+ <842a6b6307d26874959d29f2065aad544ff0b86c.1662995608.git.quic_gokukris@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <842a6b6307d26874959d29f2065aad544ff0b86c.1662995608.git.quic_gokukris@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Any other poweroff handlers registered at the default priority will
-run before the legacy pm_power_off() function. Register the SBI
-poweroff handler with the correct priority to ensure it runs first.
+On Mon, Sep 19, 2022 at 09:00:38AM -0700, Gokul krishna Krishnakumar wrote:
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+Looking back, I don't think I gave you proper feedback on this feature.
+Sorry about that Gokul.
 
- arch/riscv/include/asm/sbi.h |  1 -
- arch/riscv/kernel/sbi.c      | 52 +++++++++++++++++++++---------------
- 2 files changed, 30 insertions(+), 23 deletions(-)
+> Subdevice notifications after a remoteproc has crashed are useful to any
+> clients that might want to preserve data pertaining to the driver after the
+> remoteproc crashed. Sending subdevice notifications before triggering a
+> kernel panic gives these drivers the time to do collect this information.
 
-diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-index 4ca7fbacff42..2915a3ddf7c6 100644
---- a/arch/riscv/include/asm/sbi.h
-+++ b/arch/riscv/include/asm/sbi.h
-@@ -267,7 +267,6 @@ long sbi_get_mvendorid(void);
- long sbi_get_marchid(void);
- long sbi_get_mimpid(void);
- void sbi_set_timer(uint64_t stime_value);
--void sbi_shutdown(void);
- void sbi_clear_ipi(void);
- int sbi_send_ipi(const struct cpumask *cpu_mask);
- int sbi_remote_fence_i(const struct cpumask *cpu_mask);
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index 1196c12299f6..9574851eae6e 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -7,7 +7,6 @@
- 
- #include <linux/bits.h>
- #include <linux/init.h>
--#include <linux/pm.h>
- #include <linux/reboot.h>
- #include <asm/sbi.h>
- #include <asm/smp.h>
-@@ -120,15 +119,16 @@ int sbi_console_getchar(void)
- EXPORT_SYMBOL(sbi_console_getchar);
- 
- /**
-- * sbi_shutdown() - Remove all the harts from executing supervisor code.
-+ * __sbi_shutdown_v01() - Remove all the harts from executing supervisor code.
-  *
-- * Return: None
-+ * Return: NOTIFY_DONE
-  */
--void sbi_shutdown(void)
-+static int __sbi_shutdown_v01(struct sys_off_data *data)
- {
- 	sbi_ecall(SBI_EXT_0_1_SHUTDOWN, 0, 0, 0, 0, 0, 0, 0);
-+
-+	return NOTIFY_DONE;
- }
--EXPORT_SYMBOL(sbi_shutdown);
- 
- /**
-  * sbi_clear_ipi() - Clear any pending IPIs for the calling hart.
-@@ -204,11 +204,6 @@ static int __sbi_rfence_v01(int fid, const struct cpumask *cpu_mask,
- 
- 	return result;
- }
--
--static void sbi_set_power_off(void)
--{
--	pm_power_off = sbi_shutdown;
--}
- #else
- static void __sbi_warn_unsupported(const char *extension)
- {
-@@ -216,6 +211,13 @@ static void __sbi_warn_unsupported(const char *extension)
- 		extension, sbi_major_version(), sbi_minor_version());
- }
- 
-+static int __sbi_shutdown_v01(struct sys_off_data *data)
-+{
-+	__sbi_warn_unsupported("Shutdown");
-+
-+	return NOTIFY_DONE;
-+}
-+
- static void __sbi_set_timer_v01(uint64_t stime_value)
- {
- 	__sbi_warn_unsupported("Timer");
-@@ -236,8 +238,6 @@ static int __sbi_rfence_v01(int fid, const struct cpumask *cpu_mask,
- 
- 	return 0;
- }
--
--static void sbi_set_power_off(void) {}
- #endif /* CONFIG_RISCV_SBI_V01 */
- 
- static void __sbi_set_timer_v02(uint64_t stime_value)
-@@ -574,10 +574,12 @@ static int sbi_srst_reboot(struct notifier_block *this,
- 
- static struct notifier_block sbi_srst_reboot_nb;
- 
--static void sbi_srst_power_off(void)
-+static int sbi_srst_power_off(struct sys_off_data *data)
- {
- 	sbi_srst_reset(SBI_SRST_RESET_TYPE_SHUTDOWN,
- 		       SBI_SRST_RESET_REASON_NONE);
-+
-+	return NOTIFY_DONE;
- }
- 
- /**
-@@ -657,7 +659,6 @@ void __init sbi_init(void)
- {
- 	int ret;
- 
--	sbi_set_power_off();
- 	ret = sbi_get_spec_version();
- 	if (ret > 0)
- 		sbi_spec_version = ret;
-@@ -686,19 +687,26 @@ void __init sbi_init(void)
- 		} else {
- 			__sbi_rfence	= __sbi_rfence_v01;
- 		}
--		if ((sbi_spec_version >= sbi_mk_version(0, 3)) &&
--		    (sbi_probe_extension(SBI_EXT_SRST) > 0)) {
--			pr_info("SBI SRST extension detected\n");
--			pm_power_off = sbi_srst_power_off;
--			sbi_srst_reboot_nb.notifier_call = sbi_srst_reboot;
--			sbi_srst_reboot_nb.priority = 192;
--			register_restart_handler(&sbi_srst_reboot_nb);
--		}
- 	} else {
- 		__sbi_set_timer = __sbi_set_timer_v01;
- 		__sbi_send_ipi	= __sbi_send_ipi_v01;
- 		__sbi_rfence	= __sbi_rfence_v01;
- 	}
- 
-+	if ((sbi_spec_version >= sbi_mk_version(0, 3)) &&
-+	    (sbi_probe_extension(SBI_EXT_SRST) > 0)) {
-+		pr_info("SBI SRST extension detected\n");
-+		sbi_srst_reboot_nb.notifier_call = sbi_srst_reboot;
-+		sbi_srst_reboot_nb.priority = 192;
-+		register_restart_handler(&sbi_srst_reboot_nb);
-+		register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-+					 SYS_OFF_PRIO_FIRMWARE,
-+					 sbi_srst_power_off, NULL);
-+	} else {
-+		register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-+					 SYS_OFF_PRIO_FIRMWARE,
-+					 __sbi_shutdown_v01, NULL);
-+	}
-+
- 	riscv_set_ipi_ops(&sbi_ipi_ops);
- }
--- 
-2.37.4
+The elephant in the room here is the call to panic(), this deserves more
+attention in the commit messages.
 
+> 
+> Change-Id: Id6e55fb038b70f54ff5854d2adff72b74b6a9570
+
+Please remember to remove your Gerrit Change-Id when posting to the
+list.
+
+> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> ---
+>  drivers/remoteproc/qcom_q6v5.c | 31 +++++++++++++++++++++++++++++++
+>  drivers/remoteproc/qcom_q6v5.h |  2 ++
+>  2 files changed, 33 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+> index 497acfb..89f5384 100644
+> --- a/drivers/remoteproc/qcom_q6v5.c
+> +++ b/drivers/remoteproc/qcom_q6v5.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/soc/qcom/smem.h>
+>  #include <linux/soc/qcom/smem_state.h>
+>  #include <linux/remoteproc.h>
+> +#include <linux/delay.h>
+>  #include "qcom_common.h"
+>  #include "qcom_q6v5.h"
+>  
+> @@ -94,6 +95,29 @@ int qcom_q6v5_unprepare(struct qcom_q6v5 *q6v5)
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_q6v5_unprepare);
+>  
+> +static void qcom_q6v5_crash_handler_work(struct work_struct *work)
+> +{
+> +	struct qcom_q6v5 *q6v5 = container_of(work, struct qcom_q6v5, crash_handler);
+> +	struct rproc *rproc = q6v5->rproc;
+> +	struct rproc_subdev *subdev;
+> +
+> +	mutex_lock(&rproc->lock);
+> +
+> +	list_for_each_entry_reverse(subdev, &rproc->subdevs, node) {
+> +		if (subdev->stop)
+> +			subdev->stop(subdev, true);
+> +	}
+> +
+> +	mutex_unlock(&rproc->lock);
+> +
+> +	/*
+> +	 * Temporary workaround until ramdump userspace application calls
+> +	 * sync() and fclose() on attempting the dump.
+> +	 */
+
+I'm not able to see how this would happen, you only schedule_work() if
+rproc->recovery_disabled and the coredump generation will only happen if
+!rproc->recovery_disabled.
+
+Also, the reason I can see for invoking panic() here would be to gather
+a full system coredump to do post mortem analysis of all systems
+involved. So why would you capture a coredump as well? (This needs to be
+documented clearly...)
+
+> +	msleep(100);
+> +	panic("Panicking, remoteproc %s crashed\n", q6v5->rproc->name);
+
+As you might know, calling panic() is frowned upon. But I can see the
+benefit of being able to do full system post mortem analysis.
+
+I do however think that your patch indicates a shortcoming (to you) in
+the remoteproc_core's recovery logic. So please fix that shortcoming,
+rather than circumventing it in your driver.
+
+I.e. make it possible to get rproc_crash_handler_work() behave like you
+want it to, with a good motivation to why you want that.
+
+Regards,
+Bjorn
+
+> +}
+> +
+>  static irqreturn_t q6v5_wdog_interrupt(int irq, void *data)
+>  {
+>  	struct qcom_q6v5 *q6v5 = data;
+> @@ -113,6 +137,9 @@ static irqreturn_t q6v5_wdog_interrupt(int irq, void *data)
+>  		dev_err(q6v5->dev, "watchdog without message\n");
+>  
+>  	q6v5->running = false;
+> +	if (q6v5->rproc->recovery_disabled)
+> +		schedule_work(&q6v5->crash_handler);
+> +
+>  	rproc_report_crash(q6v5->rproc, RPROC_WATCHDOG);
+>  
+>  	return IRQ_HANDLED;
+> @@ -134,6 +161,9 @@ static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+>  		dev_err(q6v5->dev, "fatal error without message\n");
+>  
+>  	q6v5->running = false;
+> +	if (q6v5->rproc->recovery_disabled)
+> +		schedule_work(&q6v5->crash_handler);
+> +
+>  	rproc_report_crash(q6v5->rproc, RPROC_FATAL_ERROR);
+>  
+>  	return IRQ_HANDLED;
+> @@ -354,6 +384,7 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+>  	if (IS_ERR(q6v5->path))
+>  		return dev_err_probe(&pdev->dev, PTR_ERR(q6v5->path),
+>  				     "failed to acquire interconnect path\n");
+> +	INIT_WORK(&q6v5->crash_handler, qcom_q6v5_crash_handler_work);
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/remoteproc/qcom_q6v5.h b/drivers/remoteproc/qcom_q6v5.h
+> index 5a859c4..b1654be 100644
+> --- a/drivers/remoteproc/qcom_q6v5.h
+> +++ b/drivers/remoteproc/qcom_q6v5.h
+> @@ -29,6 +29,8 @@ struct qcom_q6v5 {
+>  	int handover_irq;
+>  	int stop_irq;
+>  
+> +	struct work_struct crash_handler;
+> +
+>  	bool handover_issued;
+>  
+>  	struct completion start_done;
+> -- 
+> 2.7.4
+> 
