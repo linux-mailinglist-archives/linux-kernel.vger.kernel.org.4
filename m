@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DAC657458
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4F465745C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiL1IxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 03:53:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S230127AbiL1I4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 03:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiL1IxF (ORCPT
+        with ESMTP id S229587AbiL1I4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 03:53:05 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BF418B;
-        Wed, 28 Dec 2022 00:53:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672217584; x=1703753584;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8fUF24/ihBlgYQOdGQDE6pDDEjiexMimLn7EKulDOvg=;
-  b=Qj9KPZlg09O6+3mAyW+yo0skvxYIpV71rxgkh7mt+GdU9qwTWII7LCv1
-   WBfsEen6U3Zdk7uVhewZ4Tt6kGjpcMXhxW+Ik6Zf0eF+8VWlLIx98buPu
-   re1tygmoFLPZtvPrWOi8kUp2uCOhCN4nx6+bWEsgZ9tU8a1SSfCEmsmg8
-   NsVlsJnrEup0eYoX0NB2oVgnW8fOnafnl6Fcey8eZ8YBfiukzcdbiUGZu
-   oO/9Y/BFCKoWAbo8HjpKK9DXcLXcS7cMkBwRKslVeAQSWo7bDWw2U5/QG
-   LMi3XvwutGPavH/5fIN5clBVs/kLYHNscIhATQIyycT6Wm55cwxPfaDjT
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="322815948"
-X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
-   d="scan'208";a="322815948"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 00:53:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="646672225"
-X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
-   d="scan'208";a="646672225"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 28 Dec 2022 00:53:01 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pASBH-000V45-2R;
-        Wed, 28 Dec 2022 10:52:59 +0200
-Date:   Wed, 28 Dec 2022 10:52:59 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pinctrl: nomadik: include linux/seq_file.h
-Message-ID: <Y6wD67Rj4ZCcHQ2X@smile.fi.intel.com>
-References: <20221215170103.2349282-1-arnd@kernel.org>
- <Y5tWhi9s5fGDMfxW@smile.fi.intel.com>
+        Wed, 28 Dec 2022 03:56:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A954025FB;
+        Wed, 28 Dec 2022 00:56:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AF61B8109E;
+        Wed, 28 Dec 2022 08:56:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE75C433EF;
+        Wed, 28 Dec 2022 08:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672217788;
+        bh=8kKUNMcrrr0Y1Xedt+qZwO8rQtcXcgKODbZvvAQe4s4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aoXKtyVbdTegZBUNjqHSM7SCk+/d0e4FILbzyhIIyO7lLNdPSFWTDUWOB9kfmv7jx
+         Iv8mzbwlViYooCyKok8B06eQCMt3UdUcJfHfwpCtqsy/XwoB6U48ONP01yj9Cq06h2
+         pORUpHfTzwjgWv3l5v6ndnSg1SV9WvPLmASN22KFwtKvQLOfrZYFBdXgJ0ISYmGzks
+         fZP18ADire1ZG+VJuR4CyZXV5bWSbn42brQAi0OzgFALwBJ8dhQTf2axoxUHtYQa6q
+         W5jfPiGOEo5zux8uNnZPEYc0Y3FqvA0CWWmFoq7Xx+/YPwqvbjemeuGM9pFiQxVq51
+         0dzLZ6yySmsqA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pASEg-0003vQ-G3; Wed, 28 Dec 2022 09:56:31 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sc8280xp-x13s: move 'regulator-vph-pwr' node
+Date:   Wed, 28 Dec 2022 09:56:14 +0100
+Message-Id: <20221228085614.15080-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5tWhi9s5fGDMfxW@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 07:16:54PM +0200, Andy Shevchenko wrote:
-> On Thu, Dec 15, 2022 at 06:00:57PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > In some randconfig builds, the missing #include causes a
-> > build failure:
-> > 
-> > drivers/pinctrl/nomadik/pinctrl-nomadik.c: In function 'nmk_gpio_irq_print_chip':
-> > drivers/pinctrl/nomadik/pinctrl-nomadik.c:1084:9: error: implicit declaration of function 'seq_printf'; did you mean 'bstr_printf'? [-Werror=implicit-function-declaration]
-> >  1084 |         seq_printf(p, "nmk%u-%u-%u", nmk_chip->bank,
-> >       |         ^~~~~~~~~~
-> >       |         bstr_printf
-> 
-> Hmm... Strange that I have not noticed this from CIs.
-> Nevertheless, I have a patch that adds more missing
-> headers to this driver. I have planned to send it
-> after v6.2-rc1.
-> 
-> I'm fine if this goes first. Up to Linus.
+Move the new 'regulator-vph-pwr' node before the wlan regulator node to
+restore the root-node sort order (alphabetically by node name).
 
-FYI: I have just sent my version
-https://lore.kernel.org/r/20221228084310.85210-1-andriy.shevchenko@linux.intel.com
+While at it, add a couple of newlines to separate the properties for
+consistency with the other regulator nodes.
 
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index aeb9e1800f71..0201c6776746 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -95,6 +95,16 @@ vreg_nvme: regulator-nvme {
+ 		regulator-boot-on;
+ 	};
+ 
++	vreg_vph_pwr: regulator-vph-pwr {
++		compatible = "regulator-fixed";
++
++		regulator-name = "VPH_VCC3R9";
++		regulator-min-microvolt = <3900000>;
++		regulator-max-microvolt = <3900000>;
++
++		regulator-always-on;
++	};
++
+ 	vreg_wlan: regulator-wlan {
+ 		compatible = "regulator-fixed";
+ 
+@@ -127,14 +137,6 @@ vreg_wwan: regulator-wwan {
+ 		regulator-boot-on;
+ 	};
+ 
+-	vreg_vph_pwr: regulator-vph-pwr {
+-		compatible = "regulator-fixed";
+-		regulator-name = "VPH_VCC3R9";
+-		regulator-min-microvolt = <3900000>;
+-		regulator-max-microvolt = <3900000>;
+-		regulator-always-on;
+-	};
+-
+ 	thermal-zones {
+ 		skin-temp-thermal {
+ 			polling-delay-passive = <250>;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.4
 
