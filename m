@@ -2,230 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA61657534
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BA2657539
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbiL1KQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 05:16:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        id S232850AbiL1KQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 05:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiL1KQT (ORCPT
+        with ESMTP id S232824AbiL1KQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 05:16:19 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6DE120;
-        Wed, 28 Dec 2022 02:16:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1672222569; bh=KE0lBfKTFaOiQJ09ag9/+CSPiwxMIgnNmASY7Qrk4F4=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=iPsbC20881d4itO252qjVjpMQWdUQrjWkz6ew4/WU5+pMTcpeASyqNFLNCeyQvKet
-         KpeB093ZLxcZwcxAqAtFAEdyY656nPSYwGN6PFtH7Pr5Bhddbhij197aI/0AgruyKk
-         LkOYwadEwLQZoXSDbohs4ei3JcuaL0R3PaIt4m5c=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Wed, 28 Dec 2022 11:16:09 +0100 (CET)
-X-EA-Auth: EUYTIluwwGcxYCcnMCEx5HMuTzuulED8BsHgOtBH4xIEJJ79HyPbrh049Hxn/9dtntSlTSv9lWzIvXBMQSUYgRBjVYYykkn6
-Date:   Wed, 28 Dec 2022 15:45:59 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH] scsi: qla4xxx: Use sysfs_emit in show function callsbacks
-Message-ID: <Y6wXX9X7TkpnoXZC@qemulion>
-References: <Y5RF+PGBuiXu7UrX@qemulion>
- <Y6DPMipC0V00uUu0@qemulion>
+        Wed, 28 Dec 2022 05:16:33 -0500
+Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF1D120
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 02:16:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1672222588; x=1674814588;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oVJnYDbF2ktfkp8XSbH6Wj64VWVTuGh5A3DbFRH21Xg=;
+        b=kBfry2KtVaplH9pn2UX9jrd6GM5n5b7LKjPeOksZ5cUdjOrtW1k8lWcgIBfNcl7C
+        gAL7WFuk2RpXZq2uTBSFYKR7suZEx8jtJKfjofq1QDUrQSyG9f8Jufjg6xY0T4yN
+        +RK8CFBoEWcl92jAJC4ZSVDvrCcYMljge+dzwlekntA=;
+X-AuditID: ac14000a-917fe70000007ecb-bf-63ac177cd8dc
+Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 87.C4.32459.C771CA36; Wed, 28 Dec 2022 11:16:28 +0100 (CET)
+Received: from Berlix.phytec.de (172.25.0.12) by Berlix.phytec.de
+ (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 28 Dec
+ 2022 11:16:27 +0100
+Received: from Berlix.phytec.de ([fe80::61cc:ebf0:7375:8768]) by
+ berlix.phytec.de ([fe80::197e:d26b:2ca:c7b4%4]) with mapi id 15.01.2375.018;
+ Wed, 28 Dec 2022 11:16:27 +0100
+From:   Wadim Egorov <W.Egorov@phytec.de>
+To:     Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     jerome Neanne <jneanne@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "kristo@kernel.org" <kristo@kernel.org>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "tony@atomide.com" <tony@atomide.com>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "marcel.ziswiler@toradex.com" <marcel.ziswiler@toradex.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jeff@labundy.com" <jeff@labundy.com>, "afd@ti.com" <afd@ti.com>,
+        "khilman@baylibre.com" <khilman@baylibre.com>,
+        "narmstrong@baylibre.com" <narmstrong@baylibre.com>,
+        "msp@baylibre.com" <msp@baylibre.com>,
+        "j-keerthy@ti.com" <j-keerthy@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
+Subject: Re: [PATCH v7 1/6] DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC
+ support for AM642 SK board.
+Thread-Topic: [PATCH v7 1/6] DONOTMERGE: arm64: dts: ti: Add TI TPS65219 PMIC
+ support for AM642 SK board.
+Thread-Index: AQHY8GHP4sH8k9jEvEicIzv1bzoxDa5vPM8AgAAL5wCAAAUUAIAAHSeAgAAH4YCAADe5gIABDDwAgBKiloA=
+Date:   Wed, 28 Dec 2022 10:16:27 +0000
+Message-ID: <c2a0f9fb-3b54-0a3f-2bfa-9575a9ae937f@phytec.de>
+References: <20221104152311.1098603-1-jneanne@baylibre.com>
+ <20221104152311.1098603-2-jneanne@baylibre.com>
+ <d0d7e315-ce86-0420-8ef5-fe2e4aefd5b4@phytec.de>
+ <e2bc53fe-3a0c-cf24-8b29-ca377aba3721@baylibre.com>
+ <Y5tGzjgcAWPqdFNE@sirena.org.uk> <20221215175411.znxy3d6ussq2iq5h@grieving>
+ <Y5tl3+2pJispcXy6@sirena.org.uk> <20221215214149.whcjdphxxvvedrih@affront>
+ <Y5x1oAzezZGqyZSx@sirena.org.uk>
+In-Reply-To: <Y5x1oAzezZGqyZSx@sirena.org.uk>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.25.0.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C5CFE471CAD70F4EABAD6E65C4662516@phytec.de>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6DPMipC0V00uUu0@qemulion>
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUzMcRzH+/4e7ve7I/t24r7VMG2mTHkY22fWPP31G/8UY4ZNp35zp6Rd
+        MVkbUtGVuJPMXUW0os5DP1kPDnVSuenBJCEqNaJyPaxS5OE6pv9e3/fn/dr3892+PK1sZr15
+        bVSsqItSR/rKFIzFy21mQLzKErY8p0YODruBg0ljDQc5ZaMUXOjsloEjPw3B5eoGFgyN4zJ4
+        fLUHQbbZiMBemkDBs7e5FGR2fEQwfqqEgoJhMwfpPZ00lCXnMjDafJoCqauFhddDoyy8qMiS
+        gTnvLAMnugopSDR+kIEtfRf0faunIOlBNQc9JSp41LwJftUPcFDeVkdDYtvq9QsES44FCd8n
+        jEgYHTEygqM1iRNu9Jg5wVAfIJSb3nGCVJgiEwqqMimhrcUqE+7mHRNqW0spQfoiCMPS/OBZ
+        OxVB4WKk9rCoW7Y2VKGpSXGg6A6PI4a6J+xxlOehR3Ke4FVkUn+e0yMFr8TXKNLXYWRdhw5E
+        bvZLfyfFiAwMtSGnIsOLiWGy7k+L5z3xOpKQsNXZobE0g+TarJSzMxvvJwnFRVPsiSPIj8Ei
+        2sV7yaeqJNbJDF5E7MWvp3J3HEReFORP5UqcQZMzt5Y7WY4DiKOpkXEywvPInTuNU30aq4j0
+        cYx1PQGTPKsrJ3gO+dz182++gNS9yaSce9LYn9yuWOZSgaT1JiMXLyQZqZ2cawUP8vRSN3MO
+        qUzTbjD9t03TbNM02zTNvoLYQqQ8oA2LEHXaiMBoTVysGBYYLkrI+fM83RRlKD1LsCGKRzZE
+        eNrX092vvihM6R6ujjsq6g7u0R2KFGNsyIdnfFXu7WmUWon3qWPFCFGMFnX/phQv9z6Obl+P
+        yu9Xh+zZt/LLIXvL9onu3qw1GyuH9Dfv+41sKasMDt14Sb/Ei7d/XfN88YaZ2UE+yR+kDEtT
+        ZshJ78HU4Nr8vTtfLpXvvhcCrRuYdrV//JFN3Y+8aGvQq/crcpB/qH9D6Y648hOM/OGiZw+t
+        Upxmzti2lxd/kRSzZm7J+OZsrS8To1GvWELrYtS/AfgfHpFnAwAA
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 02:23:06AM +0530, Deepak R Varma wrote:
-> On Sat, Dec 10, 2022 at 02:10:24PM +0530, Deepak R Varma wrote:
-> > According to Documentation/filesystems/sysfs.rst, the show() callback
-> > function of kobject attributes should strictly use sysfs_emit instead
-> > of sprintf family functions.
-> > Issue identified using the coccinelle device_attr_show.cocci script.
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
->
-> Hello,
-> May I please request a review and feedback on this patch?
-
-Hello,
-Requesting a review and feedback on this patch proposal please.
-
-Thank you,
-./drv
-
->
-> Thank you,
-> ./drv
->
-> > ---
-> >  drivers/scsi/qla4xxx/ql4_attr.c | 32 ++++++++++++++++----------------
-> >  1 file changed, 16 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/drivers/scsi/qla4xxx/ql4_attr.c b/drivers/scsi/qla4xxx/ql4_attr.c
-> > index abfa6ef60480..773b8dbe1121 100644
-> > --- a/drivers/scsi/qla4xxx/ql4_attr.c
-> > +++ b/drivers/scsi/qla4xxx/ql4_attr.c
-> > @@ -156,11 +156,11 @@ qla4xxx_fw_version_show(struct device *dev,
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> >
-> >  	if (is_qla80XX(ha))
-> > -		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d (%x)\n",
-> > +		return sysfs_emit(buf, "%d.%02d.%02d (%x)\n",
-> >  				ha->fw_info.fw_major, ha->fw_info.fw_minor,
-> >  				ha->fw_info.fw_patch, ha->fw_info.fw_build);
-> >  	else
-> > -		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
-> > +		return sysfs_emit(buf, "%d.%02d.%02d.%02d\n",
-> >  				ha->fw_info.fw_major, ha->fw_info.fw_minor,
-> >  				ha->fw_info.fw_patch, ha->fw_info.fw_build);
-> >  }
-> > @@ -170,7 +170,7 @@ qla4xxx_serial_num_show(struct device *dev, struct device_attribute *attr,
-> >  			char *buf)
-> >  {
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> > -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->serial_number);
-> > +	return sysfs_emit(buf, "%s\n", ha->serial_number);
-> >  }
-> >
-> >  static ssize_t
-> > @@ -178,7 +178,7 @@ qla4xxx_iscsi_version_show(struct device *dev, struct device_attribute *attr,
-> >  			   char *buf)
-> >  {
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> > -	return snprintf(buf, PAGE_SIZE, "%d.%02d\n", ha->fw_info.iscsi_major,
-> > +	return sysfs_emit(buf, "%d.%02d\n", ha->fw_info.iscsi_major,
-> >  			ha->fw_info.iscsi_minor);
-> >  }
-> >
-> > @@ -187,7 +187,7 @@ qla4xxx_optrom_version_show(struct device *dev, struct device_attribute *attr,
-> >  			    char *buf)
-> >  {
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> > -	return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
-> > +	return sysfs_emit(buf, "%d.%02d.%02d.%02d\n",
-> >  			ha->fw_info.bootload_major, ha->fw_info.bootload_minor,
-> >  			ha->fw_info.bootload_patch, ha->fw_info.bootload_build);
-> >  }
-> > @@ -197,7 +197,7 @@ qla4xxx_board_id_show(struct device *dev, struct device_attribute *attr,
-> >  		      char *buf)
-> >  {
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> > -	return snprintf(buf, PAGE_SIZE, "0x%08X\n", ha->board_id);
-> > +	return sysfs_emit(buf, "0x%08X\n", ha->board_id);
-> >  }
-> >
-> >  static ssize_t
-> > @@ -207,7 +207,7 @@ qla4xxx_fw_state_show(struct device *dev, struct device_attribute *attr,
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> >
-> >  	qla4xxx_get_firmware_state(ha);
-> > -	return snprintf(buf, PAGE_SIZE, "0x%08X%8X\n", ha->firmware_state,
-> > +	return sysfs_emit(buf, "0x%08X%8X\n", ha->firmware_state,
-> >  			ha->addl_fw_state);
-> >  }
-> >
-> > @@ -220,7 +220,7 @@ qla4xxx_phy_port_cnt_show(struct device *dev, struct device_attribute *attr,
-> >  	if (is_qla40XX(ha))
-> >  		return -ENOSYS;
-> >
-> > -	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_cnt);
-> > +	return sysfs_emit(buf, "0x%04X\n", ha->phy_port_cnt);
-> >  }
-> >
-> >  static ssize_t
-> > @@ -232,7 +232,7 @@ qla4xxx_phy_port_num_show(struct device *dev, struct device_attribute *attr,
-> >  	if (is_qla40XX(ha))
-> >  		return -ENOSYS;
-> >
-> > -	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_num);
-> > +	return sysfs_emit(buf, "0x%04X\n", ha->phy_port_num);
-> >  }
-> >
-> >  static ssize_t
-> > @@ -244,7 +244,7 @@ qla4xxx_iscsi_func_cnt_show(struct device *dev, struct device_attribute *attr,
-> >  	if (is_qla40XX(ha))
-> >  		return -ENOSYS;
-> >
-> > -	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->iscsi_pci_func_cnt);
-> > +	return sysfs_emit(buf, "0x%04X\n", ha->iscsi_pci_func_cnt);
-> >  }
-> >
-> >  static ssize_t
-> > @@ -253,7 +253,7 @@ qla4xxx_hba_model_show(struct device *dev, struct device_attribute *attr,
-> >  {
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> >
-> > -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->model_name);
-> > +	return sysfs_emit(buf, "%s\n", ha->model_name);
-> >  }
-> >
-> >  static ssize_t
-> > @@ -261,7 +261,7 @@ qla4xxx_fw_timestamp_show(struct device *dev, struct device_attribute *attr,
-> >  			  char *buf)
-> >  {
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> > -	return snprintf(buf, PAGE_SIZE, "%s %s\n", ha->fw_info.fw_build_date,
-> > +	return sysfs_emit(buf, "%s %s\n", ha->fw_info.fw_build_date,
-> >  			ha->fw_info.fw_build_time);
-> >  }
-> >
-> > @@ -270,7 +270,7 @@ qla4xxx_fw_build_user_show(struct device *dev, struct device_attribute *attr,
-> >  			   char *buf)
-> >  {
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> > -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->fw_info.fw_build_user);
-> > +	return sysfs_emit(buf, "%s\n", ha->fw_info.fw_build_user);
-> >  }
-> >
-> >  static ssize_t
-> > @@ -278,7 +278,7 @@ qla4xxx_fw_ext_timestamp_show(struct device *dev, struct device_attribute *attr,
-> >  			      char *buf)
-> >  {
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> > -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->fw_info.extended_timestamp);
-> > +	return sysfs_emit(buf, "%s\n", ha->fw_info.extended_timestamp);
-> >  }
-> >
-> >  static ssize_t
-> > @@ -300,7 +300,7 @@ qla4xxx_fw_load_src_show(struct device *dev, struct device_attribute *attr,
-> >  		break;
-> >  	}
-> >
-> > -	return snprintf(buf, PAGE_SIZE, "%s\n", load_src);
-> > +	return sysfs_emit(buf, "%s\n", load_src);
-> >  }
-> >
-> >  static ssize_t
-> > @@ -309,7 +309,7 @@ qla4xxx_fw_uptime_show(struct device *dev, struct device_attribute *attr,
-> >  {
-> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
-> >  	qla4xxx_about_firmware(ha);
-> > -	return snprintf(buf, PAGE_SIZE, "%u.%u secs\n", ha->fw_uptime_secs,
-> > +	return sysfs_emit(buf, "%u.%u secs\n", ha->fw_uptime_secs,
-> >  			ha->fw_uptime_msecs);
-> >  }
-> >
-> > --
-> > 2.34.1
-> >
-
-
+QW0gMTYuMTIuMjIgdW0gMTQ6NDEgc2NocmllYiBNYXJrIEJyb3duOg0KPiBPbiBUaHUsIERlYyAx
+NSwgMjAyMiBhdCAwMzo0MTo0OVBNIC0wNjAwLCBOaXNoYW50aCBNZW5vbiB3cm90ZToNCj4NCj4+
+IFllYWggLSB0aGlzIGhhcHBlbnMgdG8gYmUgU0RjYXJkIHN1cHBseSAoYXQgbGVhc3QgaW4gbXkg
+Y2FzZSkuLiBJJ2QNCj4+IHJhdGhlciBub3QgY2hhbmdlIHRoZSBtbWMgaG9zdCBvciBjb3JlIGxh
+eWVyIHRvIGhhbmRsZSBhIGNhc2Ugd2hlcmUNCj4+IExETyBoYXBwZW5lZCB0byBiZSBpbiBieXBh
+c3MuIGl0IGlzIGEgcmVndWxhdG9yIGRyaXZlcidzIHByb2JsZW0sIElNSE8NCj4+IGhvdyB0byBw
+cm92aWRlIHRoZSBzdGF0ZWQgdm9sdGFnZSBPUiBmYWlsIHRvIHRyYW5zaXRpb24gdGhlIHZvbHRh
+Z2UuDQo+IFdlbGwsIGlmIHRoZSByZWd1bGF0b3IgaXMgaW4gYnlwYXNzIG1vZGUgdGhlbiBpdCBp
+cyBieSBkZWZpbml0aW9uIG5vdA0KPiByZWd1bGF0aW5nIGFuZCBzbyBpdCdzIGxpa2UgcHJvZ3Jh
+bW1pbmcgdGhlIHZvbHRhZ2Ugd2hpbGUgc3dpdGNoZWQgb2ZmLA0KPiBzZXR0aW5nIHRoZSB0YXJn
+ZXQgZm9yIHdoZW4gaXQgc3RhcnRzIHJlZ3VsYXRpbmcgYWdhaW4uICBJdCdzIGEgd2VpcmRlcg0K
+PiB1c2UgY2FzZSBidXQgaXQgZG9lcyBmZWVsIGxpa2UgdGhlIGNvbnNpc3RlbnQgdGhpbmcgdG8g
+ZG8gYXQgbGVhc3QuDQo+IFRoZSBkcml2ZXIgc2hvdWxkbid0IGVudGVyL2xlYXZlIGJ5cGFzcyB3
+aXRob3V0IGJlaW5nIGV4cGxpY2l0bHkgdG9sZCB0bw0KPiBzbyBzaW5jZSB0aGVyZSdsbCBiZSBh
+IHBlcmZvcm1hbmNlIGltcGFjdC4NCj4NCj4+IGIpIElmIEkgd2FudGVkIHRoZSBMRE8gdG8gcG93
+ZXJvZmYgdGhlIGJ5cGFzcyBiaXQgYXQgc3RhcnQgKGRlZmluZSB0aGUNCj4+ICAgICBzdGFydHVw
+IGhhcmR3YXJlIGNvbmRpdGlvbiksIEkgZG9udCBzZWVtIHRvIGhhdmUgYSBkZXNjcmlwdGlvbiBm
+b3INCj4+ICAgICB0aGF0IGVpdGhlci4NCj4gVGhhdCdzIHNvbWV0aGluZyB3ZSBjb3VsZCBhZGQg
+aW4gY29uc3RyYWludHMsIHRob3VnaCB0aGUgYWN0dWFsIHByb2Nlc3MNCj4gb2YgaW1wbGVtZW50
+aW5nIGl0IG1pZ2h0IGdldCBtZXNzeSBpZiB0aGVyZSdzIHJlc3RyaWN0aW9ucyBsaWtlIGhhdmlu
+Zw0KPiB0byBwb3dlciBvZmYgKHRob3VnaCBmcm9tIGZ1cnRoZXIgZG93biB0aGUgdGhyZWFkIEkg
+c2VlIHRoYXQgbWlnaHQgbm90DQo+IGFwcGx5IHRvIHRoaXMgZGV2aWNlKS4NCg0KSnVzdCBmb3Ig
+dGhlIHJlY29yZDoNCg0KTXkgcmVwb3J0ZWQgcHJvYmxlbSB3YXMgYWN0dWFsbHkgbm90IHRoZSBM
+RE8xL2J5cGFzcyBzaXR1YXRpb24sIGJ1dCBhbiBpc3N1ZSBpbiANCnRoZSBwcm9jZXNzIG9mIHJl
+c29sdmluZyB0aGUgcmVndWxhdG9yIHN1cHBsaWVzLg0KDQpJdCB3YXMgcmVzb2x2ZWQgYnkNCiDC
+oCBjb21taXQgMGRlYmVkNWIxMTdkICgicmVndWxhdG9yOiBjb3JlOiBGaXggcmVzb2x2ZSBzdXBw
+bHkgbG9va3VwIGlzc3VlIikNCg0KTm93IGV2ZXJ5dGhpbmcgc2VlbXMgdG8gd29yayB3aXRoIG15
+IHNldHVwIHdpdGggTERPMSBzdXBwbGllZCBieSBhIGZpeGVkIA0KcmVndWxhdG9yIGFuZCBMRE8x
+IGFjdGluZyBpbiBieXBhc3MgbW9kZSBvbiBvdXIgaGFyZHdhcmUuDQoNClJlZ2FyZHMsDQpXYWRp
+bQ0KDQo=
