@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9044C6573C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7D56573C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiL1H6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 02:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S232589AbiL1H7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 02:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiL1H6b (ORCPT
+        with ESMTP id S230451AbiL1H7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 02:58:31 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B75BEA0;
-        Tue, 27 Dec 2022 23:58:29 -0800 (PST)
+        Wed, 28 Dec 2022 02:59:03 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F50CEA0;
+        Tue, 27 Dec 2022 23:59:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672214290; bh=cXJ87oJBwBaxFCFIb6cYyvIrq6iLUXOa4/DOQ+Am96A=;
+        t=1672214307; bh=ut0QnBH+n52wyKHqQwBmihflDips2qqky7SOU6xr2yk=;
         h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=HAID7YT/vNUrVzsXDM4XmHQ6JmeC9tdByp0B27sHicNFTVdMkh8zu75WMZSQldfR5
-         dB2TFhqzCf79QB3dd0mLJAMej+QTcKhd74lxDQtpPmHcVue58cB7O2lxmyWKOVgdA2
-         OAEl1i2h08BMpGGovfROJYmnBC6E3JmBOERp2u5512tv+ife6GkjYAbJ370KgYbF1f
-         /SFrBW4OCe35V6D3AW+ib4LdC3sEpSLvA+b7Q3ZHNNZJf7CKVv1+8YWj9d04T9dkWJ
-         2p5ZZQ7At665pHPl0UMQ3ho9i8MC1/EfkJzVbBENdcSROaBp9+jC3s5nIZKi2TPY4y
-         RSaaDDBb75YXQ==
+        b=eN4Ex5QIPgdWjYcTYy02q5aoymbvKY1bYLviQ/rRbu0eSYMZYvDKomIFZwyNpSL6X
+         dDOlDBXZU4g0zLRxV0OxLqMb9jix3i5YNyaXWlN0Ka+e3fgKL15J32gphECk6EMM7y
+         cfjWG4Tz9e36ntSPS253HeVp+vP17JdNUBl2E5by+N7Y6jh/jAqRCy67LhtnlOLm6o
+         G+LZqLeLqTG9nX2vnX+UGBjeNOETP1nvbjzFH3/v7kPl83v9rvCMZ7VbBybaPGfRE4
+         2+nWnwa24JVg8yE75z9IdoUKneFPViOCAR6FBG9Z6bMeE9NMA+MIr0supORmd6XdQF
+         Wvm1t9CQH48RQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.20.60] ([92.116.184.137]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2Dx8-1oi9c41F78-013b6v; Wed, 28
- Dec 2022 08:58:10 +0100
-Message-ID: <ffcf3922-1ff9-ed2b-619b-d411a8eb70fc@gmx.de>
-Date:   Wed, 28 Dec 2022 08:58:08 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmDEm-1oSGsF2jrc-00iCsh; Wed, 28
+ Dec 2022 08:58:27 +0100
+Message-ID: <10b15ff6-0671-a523-a708-76f1dfa0383e@gmx.de>
+Date:   Wed, 28 Dec 2022 08:58:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH linux-next] fbdev: use strscpy() to instead of strncpy()
+Subject: Re: [PATCH linux-next] fbdev: omap: use strscpy() to instead of
+ strncpy()
 Content-Language: en-US
 To:     yang.yang29@zte.com.cn
-Cc:     javierm@redhat.com, tzimmermann@suse.de,
-        christophe.leroy@csgroup.eu, wsa+renesas@sang-engineering.com,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+Cc:     tony@atomide.com, b.zolnierkie@samsung.com, arnd@arndb.de,
+        yuzhe@nfschina.com, jiapeng.chong@linux.alibaba.com,
+        guozhengkui@vivo.com, linux-fbdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, xu.panda@zte.com.cn
-References: <202212280944112670081@zte.com.cn>
+References: <202212280940017919910@zte.com.cn>
 From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <202212280944112670081@zte.com.cn>
+In-Reply-To: <202212280940017919910@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:AAhu+1ssDZWoHC1JNYuG/2KCh1p3zsD72YAqTRmf05EsUPmyzrO
- QHsOOUBkSPhImYBWLCA4t1tg3wqvfaSlkTA/8WblTxjmF1CvOGiNqHRiEm8ChyQY/S9m7lv
- 6njdih102P3MBEJaajcYb4iArArBV2eZ7XDl9cxSu02R8aoC0Pwxxn1xFB72dnrGrVzAIIt
- gzTblnWClmCUunfgBq7lA==
-UI-OutboundReport: notjunk:1;M01:P0:/lN6jKlBR/I=;M3jUZ8kAf5uIo42ps8BktURfzoO
- FfV8zcPRYC4H3d82KSGL4FD5CA5b0ew5WWbJvwf8TrV9R+M0FS8mpXsNSmw3k9fTupky5SpN7
- sML67Fpa90FZgmXkBxKcZHt9wVTiSC54fhAY0zaehxcde9uiY/B7nUfxawn9cQTv+f4nE9DFO
- Bkf36cILJt8xAm1fREb2nzBtd4LAWiruBFs/SMwIwzTP6PdE0b7702vEG1vXbBK5TcTuKDfFB
- 6b98tGnR/RHSgvxeQPkSFJjVJhdSciJwVvZ4muJr9ux3vTzbRAQkhCyKUgR1r2+ovo5fWc8Xr
- +tQJaxOCuCz3dH/hLAhDtQchRl2G2C9XTUr3+RDBtP+e5zG5sq9TfP1M913Yp2IBIrX2beKF8
- A1JoqEgwfUTaB0wdPnZAJ9AqNnYO2t7lxifQ1u6AwCUy2eZ70Wex3Z2RaA4coH/XMRTKH458B
- 2woMGtbMESSS3Uf9f3KxjiWBL7RP9RVjrIEmNCyzPC8pSk3ejkN33iW1zE8BMzC0MuBDnVi4H
- 3tnPo8D/YZgcmympvP2ou225SEvVkLn/XyCcO/a/5xanNdQSSu/DR5V5seHWfzy0pcKhNTTy0
- 9VzeUrRqFlE6y1LF/8KwTW94hU1QQkIKHdtdVU2Uh2WoLF7YB9NcbicfNGp7mgpCT8Q0GxQfv
- oe6XMITK2f2qLP4KqjmubSUkGbtUwrFpyOofFRwdLPAvFIOW7zyejZKa5u12BwMJo1IQqAu2D
- EscPnX5RDGolSTmal4UELaHjECDs4swcYcRMc1GkOukg6pIHnEYUGzdUJoYO+T4y5ZecWQJdr
- zovaUo1r8Ta8SAm67BT83Q1VFKePKYB9cgv8g6wIJpLyV0ppFz4UEmSTdaWuyAqdX9hBqIL9V
- 6GVaThopKQkwi38AaEFCimKc3v20Ln0/ahu3XkZ4365ma4c3uoc4f2LEyPjpnxQ2WPmpVryLg
- NxLfhHirTVxZnqbzwD3Pf4j8RWI=
+X-Provags-ID: V03:K1:6xYT7XBtpcRWzDX6SMR5Z8MDNCitrlJnvbo6qFAtHCUpmmFKG34
+ DRPCkQvPUUNTq4SCURlK0nW2KbSdPE5Grhs+SCPnjG/D6UE8SdJcq6trxfGRFDV4ZuurelR
+ zYw9zApIoPh+QWH9UbFNIYmcfnm6xI2/COONct/6CTwTjyCUFD+izjSkiIBF2L0gY2tMMdL
+ OatStnnePHFTsFj5928yQ==
+UI-OutboundReport: notjunk:1;M01:P0:dneBwogOC4o=;S5DKRe/GJouDkmz713c8D7GJqKU
+ smMzawgYoxAlQfzoJG7OXVgQcpjkt0IqYNibKYZVNkL2RQRa7gXQ1lrTQsyKPGWl9CrX+7x/S
+ HYNu+j2+k7b+uybzfaetqpRO7G9vBLo9113eU2gXJ8Jft0dGNt7+ig8rJAHnIGB11Q/aU9mc1
+ jamMY/chikb/PyJis3Gj/tNPtorYqoHvDMV9xa8W4LKoR6aFAFkMYf8qWmI87dZNJ4gCGiJCS
+ kTx2vXFySUiydsVkvPxrciN05hMZOqt05nw1LFJjxIcAuyFEQ7zvAkBFMfSc8W5rgyPiddNyT
+ 9c7td3QC0z/0hmVWWvZoAe9xbd25xFcpvYcI4tpeRc7JHj1RVwlpsSDmN1+qtsETI3RM1YYA0
+ sVE4F5QcqsS2wuwb8J/gKg3m5a1AYnUMvryyvnLD1lFetZcJCSXY/AjHZb876N1aopDWNiVOQ
+ 5F/UsAU+tUSRuJAPhmN3PYJgiUGRFDKQkalmiGHrto4JoXyHDggqvBsJsffnqbm0NT8my9hUZ
+ 8wdEeN2AB7PJ8CZWJH/Pb/owXT6XnCTZCifnZL76LBYF/pHWyzqGwG/azsCGeV/9jpvUzKVO4
+ 02KtXNoDD+PfphySAkjnEDzt2czFaRFLB1yvxfSgz0jU+HmgSXwpAiFfCw5JluOESFCJNzjVr
+ loYNzfH+SMkrk57A8cGmw49z+l3TbhJnw63OqbcbWEIQxYAOIgVpG+/ur5WFZn3z8GY6FSvXk
+ ZANUX3x6tzYeqO7715fn0cQ9L5BZlzx5JqqYVDotaWxSs8q+ukKz6vbJGqNulenCnT95wcDOu
+ fb/6RmYWzTAPLVpv44PMsfQe10S52P9t9Nv1OjW8/pfvIMObhWLzM6MbMLgmbhk63pRe9mXUb
+ 897s79htsTTweXHFSzhBxzxBuTgwHY8r7eVu38W/Xu0sP9xytOj7tj7Duz075b6TRm2LS/l3Q
+ ftQ5+g==
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -74,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/22 02:44, yang.yang29@zte.com.cn wrote:
+On 12/28/22 02:40, yang.yang29@zte.com.cn wrote:
 > From: Xu Panda <xu.panda@zte.com.cn>
 >
 > The implementation of strscpy() is more robust and safer.
@@ -83,29 +85,38 @@ On 12/28/22 02:44, yang.yang29@zte.com.cn wrote:
 > Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
 > Signed-off-by: Yang Yang <yang.yang29@zte.com>
 > ---
->   drivers/video/fbdev/aty/atyfb_base.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+>   drivers/video/fbdev/omap/omapfb_main.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
 
 applied.
 Thanks!
 Helge
 
-
 >
-> diff --git a/drivers/video/fbdev/aty/atyfb_base.c b/drivers/video/fbdev/=
-aty/atyfb_base.c
-> index 0ccf5d401ecb..851c1236fddb 100644
-> --- a/drivers/video/fbdev/aty/atyfb_base.c
-> +++ b/drivers/video/fbdev/aty/atyfb_base.c
-> @@ -3192,8 +3192,7 @@ static void aty_init_lcd(struct atyfb_par *par, u3=
-2 bios_base)
->   		 * which we print to the screen.
->   		 */
->   		id =3D *(u8 *)par->lcd_table;
-> -		strncpy(model, (char *)par->lcd_table+1, 24);
-> -		model[23] =3D 0;
-> +		strscpy(model, (char *)par->lcd_table+1, 24);
+> diff --git a/drivers/video/fbdev/omap/omapfb_main.c b/drivers/video/fbde=
+v/omap/omapfb_main.c
+> index 17cda5765683..1f3df2055ff0 100644
+> --- a/drivers/video/fbdev/omap/omapfb_main.c
+> +++ b/drivers/video/fbdev/omap/omapfb_main.c
+> @@ -1447,7 +1447,7 @@ static int fbinfo_init(struct omapfb_device *fbdev=
+, struct fb_info *info)
+>   	info->fbops =3D &omapfb_ops;
+>   	info->flags =3D FBINFO_FLAG_DEFAULT;
 >
->   		width =3D par->lcd_width =3D *(u16 *)(par->lcd_table+25);
->   		height =3D par->lcd_height =3D *(u16 *)(par->lcd_table+27);
+> -	strncpy(fix->id, MODULE_NAME, sizeof(fix->id));
+> +	strscpy(fix->id, MODULE_NAME, sizeof(fix->id));
+>
+>   	info->pseudo_palette =3D fbdev->pseudo_palette;
+>
+> @@ -1573,8 +1573,7 @@ static int omapfb_find_ctrl(struct omapfb_device *=
+fbdev)
+>
+>   	fbdev->ctrl =3D NULL;
+>
+> -	strncpy(name, conf->lcd.ctrl_name, sizeof(name) - 1);
+> -	name[sizeof(name) - 1] =3D '\0';
+> +	strscpy(name, conf->lcd.ctrl_name, sizeof(name));
+>
+>   	if (strcmp(name, "internal") =3D=3D 0) {
+>   		fbdev->ctrl =3D fbdev->int_ctrl;
 
