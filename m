@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D73658547
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 18:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7560F658551
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 18:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbiL1R2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 12:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
+        id S232620AbiL1RjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 12:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiL1R2b (ORCPT
+        with ESMTP id S230443AbiL1RjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 12:28:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00A61658C;
-        Wed, 28 Dec 2022 09:28:29 -0800 (PST)
+        Wed, 28 Dec 2022 12:39:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FF8261F;
+        Wed, 28 Dec 2022 09:38:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D2C36158D;
-        Wed, 28 Dec 2022 17:28:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67ADCC433D2;
-        Wed, 28 Dec 2022 17:28:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3313961542;
+        Wed, 28 Dec 2022 17:38:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB01C433D2;
+        Wed, 28 Dec 2022 17:38:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672248508;
-        bh=Dibxouqu84SBg/J/yTbFauKUYfl32fPLgSeV3dyv87M=;
+        s=k20201202; t=1672249135;
+        bh=TIOkX6Fl7QU257FKnfyNVkA3crmw2BZs5EqZXWs6sP4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vKUt7VZwbGsaph7PITSfybymzqitYVro09zdOLMCKweCHJswdPLN8+DWtM5OaADkI
-         Y5l4AjmP5JAsT5O+Un3k0kQTEabwFunEg87S3l/whHsadqK/3BLQRavztcIKMBpoT2
-         ASdFFeIKZlOEV6+gEoAmRpHQYaL6NmaJOTFzbL/kDdO1raB4+l92tz1MWcMcp/sbmv
-         hlXLsuGHg5KS2oOhXgKbdzW7XTPh+TtnHGuJHKq9UNXWHveZRkVicVKEv5VyhiL91o
-         KOQCXczg5VyfRxJ7YP2k4/36749ogmfcs8U4EGhVDUJs3fv5s4RHcKDdNJrfbF3Z+Q
-         7VMYnCXL7W2zA==
-Date:   Wed, 28 Dec 2022 11:28:25 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>, vkoul@kernel.org
-Subject: Re: [PATCH V21 2/7] soc: qcom: dcc: Add driver support for Data
- Capture and Compare unit(DCC)
-Message-ID: <20221228172825.r32vpphbdulaldvv@builder.lan>
-References: <cover.1672148732.git.quic_schowdhu@quicinc.com>
- <644b4f66a358492a8a6738454035c3b120092fe7.1672148732.git.quic_schowdhu@quicinc.com>
+        b=OA2ixycvEkuFpFNZ1whzdRvYcTuPF81g9zeJ/UCq1HR7Zrf7ePE+z2BVFIVmDPoht
+         gcM3ePVWaWv+8j6N77kbUA/00PHc0bVajntqLDYXIVD+/szRwMIfHUUniIxlILTrGR
+         xC84hQHVbmnoY42jVt1HJYN7/sq8c6MqN2tKzFIhB9//XcSg95aumBtUvfGAWvV2Hz
+         GaSR5GrI0GUiqOGzg8KEYcsbJAUUnkVkTTaPV7abB9LuVc14X+WU6sMEzWgAEJIPYn
+         Og/5VmIeHqp7baWZ1H+quvdGhBKO1ZUv7owL8v77zboJLH0OeFWixiu+UeszFPbaMh
+         TRfAEBZ7LK9Dw==
+Date:   Wed, 28 Dec 2022 12:38:54 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
+Message-ID: <Y6x/LkDEzeP3m4x4@sashalap>
+References: <20221228144330.180012208@linuxfoundation.org>
+ <20221228151059.GA2565317@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <644b4f66a358492a8a6738454035c3b120092fe7.1672148732.git.quic_schowdhu@quicinc.com>
+In-Reply-To: <20221228151059.GA2565317@roeck-us.net>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,53 +59,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 08:52:46PM +0530, Souradeep Chowdhury wrote:
-> The DCC is a DMA Engine designed to capture and store data
-> during system crash or software triggers. The DCC operates
-> based on user inputs via the debugfs interface. The user gives
-> addresses as inputs and these addresses are stored in the
-> dcc sram. In case of a system crash or a manual software
-> trigger by the user through the debugfs interface,
-> the dcc captures and stores the values at these addresses.
-> This patch contains the driver which has all the methods
-> pertaining to the debugfs interface, auxiliary functions to
-> support all the four fundamental operations of dcc namely
-> read, write, read/modify/write and loop. The probe method
-> here instantiates all the resources necessary for dcc to
-> operate mainly the dedicated dcc sram where it stores the
-> values. The DCC driver can be used for debugging purposes
-> without going for a reboot since it can perform software
-> triggers as well based on user inputs.
-> 
-> Also add the documentation for debugfs entries which explains
-> the functionalities of each debugfs file that has been created
-> for dcc.
-> 
-> The following is the justification of using debugfs interface
-> over the other alternatives like sysfs/ioctls
-> 
-> i) As can be seen from the debugfs attribute descriptions,
-> some of the debugfs attribute files here contains multiple
-> arguments which needs to be accepted from the user. This goes
-> against the design style of sysfs.
-> 
-> ii) The user input patterns have been made simple and convenient
-> in this case with the use of debugfs interface as user doesn't
-> need to shuffle between different files to execute one instruction
-> as was the case on using other alternatives.
-> 
+On Wed, Dec 28, 2022 at 07:10:59AM -0800, Guenter Roeck wrote:
+>On Wed, Dec 28, 2022 at 03:25:39PM +0100, Greg Kroah-Hartman wrote:
+>> This is the start of the stable review cycle for the 6.1.2 release.
+>> There are 1146 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+>>
+>> Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
+>> Anything received after that time might be too late.
+>>
+>
+>Building arm:allmodconfig ... failed
+>Building arm64:allmodconfig ... failed
+>--------------
+>Error log:
+>drivers/mfd/qcom_rpm.c: In function 'qcom_rpm_remove':
+>drivers/mfd/qcom_rpm.c:680:26: error: unused variable 'rpm' [-Werror=unused-variable]
+>  680 |         struct qcom_rpm *rpm = dev_get_drvdata(&pdev->dev);
+>
+>36579aca877a ("mfd: qcom_rpm: Fix an error handling path in qcom_rpm_probe()")
+>was applied without e48dee960462 ("mfd: qcom_rpm: Use
+>devm_of_platform_populate() to simplify code") which fixes the problem
+>without saying that it does.
+>
+>The problem affects v5.15.y and v6.0.y as well.
 
-I would have preferred to get some more input from users of the debugfs
-interface, but it's after all not ABI. So let's get this merged and
-if people has concerns/objections/suggestions we'll improve it as
-necessary.
+I've queued up 36579aca877a, thanks for looking into it!
 
-Thanks for pushing this Souradeep!
-
-> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-> Reviewed-by: Alex Elder <elder@linaro.org>
-
-Thanks Alex.
-
-Regards,
-Bjorn
+-- 
+Thanks,
+Sasha
