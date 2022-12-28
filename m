@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19E9657306
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 07:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B08B657307
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 07:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiL1GEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 01:04:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
+        id S230042AbiL1GEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 01:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiL1GEj (ORCPT
+        with ESMTP id S229549AbiL1GEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Dec 2022 01:04:39 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A262BDF5E;
-        Tue, 27 Dec 2022 22:04:37 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id n3so13326857wrc.5;
-        Tue, 27 Dec 2022 22:04:37 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82481DF7A;
+        Tue, 27 Dec 2022 22:04:38 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id o5so14090668wrm.1;
+        Tue, 27 Dec 2022 22:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=goq/CMrFBd6u+qE+xn52atb3sI7HR978kaW9wQkRdwc=;
-        b=QCeu10zRclmKJOgwNkQvDbuxs0Cl1FaNUtIhoFH+m++i0zY2pFvcmyZ/f/5JZxDidH
-         Ft52J1m0QnOKBe9gos0xQ9atSJeYrEUe2+qh2Fp08EpdDJnCDERtSlcxk3llQKSXvDVK
-         lG+kW5pfP9UYzhX1ahke286G9Q+OwKDasAeZSK0Kv+ZILmLWOeJkABcUnSqLhNL1x7kD
-         VSbjOkXS6EbpHpzoen1Fg7w3fEaWmtsrKljPhhg5ZVlxbh83TNaZeNBAxwzn+0swy4DN
-         RBWazzkIpzmEqwNK7Eat/8hgHRZwUbmINiXla7hS3ITLAAmfBPf4LVE9ScKqAA8xd0tm
-         vD7g==
+        bh=gOo9rRH83QUmkvXUKyYf97kVoLlh2nALRLlTOM81350=;
+        b=Fqd2ghAkIt63+p69JvueLL8sBn3T/lmXJ/spCefQKbXeohzqEKqM4253s03gDtQ3k2
+         XDsudlLpPNshviV9YRRttUNpKxSYDumasa2fl7IoDbJ2SkTLyN/3MkRLBC2FlCIjYUWA
+         fr7qu8YNKIRH0Bu6TDFU2T48Bo8rgUBWpQDvSAUhBAQMx9zIiMrC7liYap8mc3RuohUa
+         PabVwkdWPozo3WKJKECyLOt6iAGQ1+MzBe2b5g3JQ3KRLdijDni1YNSAOPJ+Xp2otxUn
+         ld8NfD5yUVKHAalq7VLI603sL+mNE2epnhLgeILZFBh8eAfj5mAJWcKCjfmiX/I7G3cL
+         GtUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=goq/CMrFBd6u+qE+xn52atb3sI7HR978kaW9wQkRdwc=;
-        b=PtP1a1512jT2ro3nrw4pYr4LSuyXsx/6XEyx7s7SjTvBhC3MdxhiaKXpjw5nN57Ejn
-         XPACBhM79gdGdRg3QxDeZyFjYEfsmprORwbkqOH0Oi+1CpbKUOH89LWYIMkWSJU3oPna
-         XiiF1RKR5GcO4aY56PHkT+VDpnNea9Dm0hbG0YA8cGI8ssua95kDRERqGELQnUTToq08
-         bU7QgD7OCLQYEDarAHYNu9iXKdEnKAnMgDHHBy2ptK2HZJsCVLcS2fIU3H0PIxiwQJED
-         wmAf9DPTzFdkZN4JvVRlcZUdMIvfKbq51tZdBg9XkOOMVpl2p2F4FmfeIc9iHEiJ3zaV
-         I6gg==
-X-Gm-Message-State: AFqh2kqPt2ul+faPTFCHc40MdwOmKomNJWkRPenHvXkC+J46HNyIf+Wb
-        dINkgx9humhBAAReSn+OmUBwfvM/HkbtmA==
-X-Google-Smtp-Source: AMrXdXs/K9CWPr0+1C6ehYAefcszcm8XY/rFPYKGkyvgBCwH0gV8wBTpX+8nKUs0kffghkTEl1qEog==
-X-Received: by 2002:a5d:430e:0:b0:279:53e1:5178 with SMTP id h14-20020a5d430e000000b0027953e15178mr7260690wrq.45.1672207476141;
+        bh=gOo9rRH83QUmkvXUKyYf97kVoLlh2nALRLlTOM81350=;
+        b=H2DWKpokXOYGVXMvBfLBUlLvDDp0laCsNZ/R1VySsaf9sIuFRRvcNu2865DydeHMoy
+         6m94hEvtyMGd0PG+BB9hE60fpwcDZmX6hUn8sZTk9iUkJhHhIQphH3TOYrtA7kG0yckZ
+         1ok7kZvpAczGZzs4/WtI0eCdekrbAZIk5nX3kKCaZjFjxtQMEWeXQly4k3Ff2lXKeMbE
+         M++Fg+wbGsxYhcaQ20bL1DkKa0fZdYIPkjbJ7pb/EnBVH9svYVLLACIjlK3KMic+pMUb
+         G/voF7cfQvw9sJo1eaRin//EAyIJ2/AUxs9S/JZJPt5il1DMd4Y2KR2QUB9O60QIzw+h
+         aBFw==
+X-Gm-Message-State: AFqh2kokmtKl0ZuyqXjTT6SQouYpMHhPI+XDlJytTmSj1qySdN9TlmEp
+        h2nI92ZWaJwhsLlkGuAOEr5nrdJK3oLxFg==
+X-Google-Smtp-Source: AMrXdXv9Zi4SzSRgb8FoyJFms+0ZYGa3oyP1izjArnrERCHhkmAZAUy+IWuBPX34uEXDq8Zy5gjN/Q==
+X-Received: by 2002:adf:e383:0:b0:255:300d:79c7 with SMTP id e3-20020adfe383000000b00255300d79c7mr15597738wrm.18.1672207476964;
         Tue, 27 Dec 2022 22:04:36 -0800 (PST)
 Received: from wedsonaf-dev.. ([81.2.152.129])
-        by smtp.googlemail.com with ESMTPSA id x16-20020a5d6510000000b002755e301eeasm12128867wru.100.2022.12.27.22.04.35
+        by smtp.googlemail.com with ESMTPSA id x16-20020a5d6510000000b002755e301eeasm12128867wru.100.2022.12.27.22.04.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 22:04:35 -0800 (PST)
+        Tue, 27 Dec 2022 22:04:36 -0800 (PST)
 From:   Wedson Almeida Filho <wedsonaf@gmail.com>
 To:     rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -58,9 +58,9 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org,
         Wedson Almeida Filho <wedsonaf@gmail.com>
-Subject: [PATCH 2/7] rust: sync: allow type of `self` to be `Arc<T>` or variants
-Date:   Wed, 28 Dec 2022 06:03:41 +0000
-Message-Id: <20221228060346.352362-2-wedsonaf@gmail.com>
+Subject: [PATCH 3/7] rust: sync: allow coercion from `Arc<T>` to `Arc<U>`
+Date:   Wed, 28 Dec 2022 06:03:42 +0000
+Message-Id: <20221228060346.352362-3-wedsonaf@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221228060346.352362-1-wedsonaf@gmail.com>
 References: <20221228060346.352362-1-wedsonaf@gmail.com>
@@ -76,70 +76,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows associated functions whose `self` argument has `Arc<T>` or
-variants as their type. This, in turn, allows callers to use the dot
-syntax to make calls.
+The coercion is only allowed if `U` is a compatible dynamically-sized
+type (DST). For example, if we have some type `X` that implements trait
+`Y`, then this allows `Arc<X>` to be coerced into `Arc<dyn Y>`.
 
+Suggested-by: Gary Guo <gary@garyguo.net>
 Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
 ---
- rust/kernel/lib.rs      |  1 +
- rust/kernel/sync/arc.rs | 28 ++++++++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
+ rust/kernel/lib.rs      |  2 ++
+ rust/kernel/sync/arc.rs | 27 ++++++++++++++++++++++++++-
+ 2 files changed, 28 insertions(+), 1 deletion(-)
 
 diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index ace064a3702a..1a10f7c0ddd9 100644
+index 1a10f7c0ddd9..4bde65e7b06b 100644
 --- a/rust/kernel/lib.rs
 +++ b/rust/kernel/lib.rs
-@@ -14,6 +14,7 @@
+@@ -13,8 +13,10 @@
+ 
  #![no_std]
  #![feature(allocator_api)]
++#![feature(coerce_unsized)]
  #![feature(core_ffi_c)]
-+#![feature(receiver_trait)]
+ #![feature(receiver_trait)]
++#![feature(unsize)]
  
  // Ensure conditional compilation based on the kernel configuration works;
  // otherwise we may silently break things like initcall handling.
 diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index 22290eb5ab9b..e2eb0e67d483 100644
+index e2eb0e67d483..dbc7596cc3ce 100644
 --- a/rust/kernel/sync/arc.rs
 +++ b/rust/kernel/sync/arc.rs
-@@ -57,6 +57,31 @@ use core::{marker::PhantomData, ops::Deref, ptr::NonNull};
+@@ -17,7 +17,11 @@
+ 
+ use crate::{bindings, error::Result, types::Opaque};
+ use alloc::boxed::Box;
+-use core::{marker::PhantomData, ops::Deref, ptr::NonNull};
++use core::{
++    marker::{PhantomData, Unsize},
++    ops::Deref,
++    ptr::NonNull,
++};
+ 
+ /// A reference-counted pointer to an instance of `T`.
  ///
- /// // The refcount drops to zero when `cloned` goes out of scope, and the memory is freed.
+@@ -82,6 +86,23 @@ use core::{marker::PhantomData, ops::Deref, ptr::NonNull};
+ /// obj.use_reference();
+ /// obj.take_over();
  /// ```
 +///
-+/// Using `Arc<T>` as the type of `self`:
++/// Coercion from `Arc<Example>` to `Arc<dyn MyTrait>`:
 +///
 +/// ```
 +/// use kernel::sync::Arc;
 +///
-+/// struct Example {
-+///     a: u32,
-+///     b: u32,
-+/// }
++/// trait MyTrait {}
 +///
-+/// impl Example {
-+///     fn take_over(self: Arc<Self>) {
-+///         // ...
-+///     }
++/// struct Example;
++/// impl MyTrait for Example {}
 +///
-+///     fn use_reference(self: &Arc<Self>) {
-+///         // ...
-+///     }
-+/// }
++/// // `obj` has type `Arc<Example>`.
++/// let obj: Arc<Example> = Arc::try_new(Example)?;
 +///
-+/// let obj = Arc::try_new(Example { a: 10, b: 20 })?;
-+/// obj.use_reference();
-+/// obj.take_over();
++/// // `coerced` has type `Arc<dyn MyTrait>`.
++/// let coerced: Arc<dyn MyTrait> = obj;
 +/// ```
  pub struct Arc<T: ?Sized> {
      ptr: NonNull<ArcInner<T>>,
      _p: PhantomData<ArcInner<T>>,
-@@ -68,6 +93,9 @@ struct ArcInner<T: ?Sized> {
-     data: T,
- }
+@@ -96,6 +117,10 @@ struct ArcInner<T: ?Sized> {
+ // This is to allow [`Arc`] (and variants) to be used as the type of `self`.
+ impl<T: ?Sized> core::ops::Receiver for Arc<T> {}
  
-+// This is to allow [`Arc`] (and variants) to be used as the type of `self`.
-+impl<T: ?Sized> core::ops::Receiver for Arc<T> {}
++// This is to allow coercion from `Arc<T>` to `Arc<U>` if `T` can be converted to the
++// dynamically-sized type (DST) `U`.
++impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::CoerceUnsized<Arc<U>> for Arc<T> {}
 +
  // SAFETY: It is safe to send `Arc<T>` to another thread when the underlying `T` is `Sync` because
  // it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally, it needs
