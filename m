@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78086585BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 19:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A21596585C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 19:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbiL1STI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 13:19:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        id S235373AbiL1STW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 13:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbiL1SSo (ORCPT
+        with ESMTP id S233819AbiL1SSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 13:18:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50098175B4;
-        Wed, 28 Dec 2022 10:18:44 -0800 (PST)
+        Wed, 28 Dec 2022 13:18:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AA5175B4;
+        Wed, 28 Dec 2022 10:18:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1A466159C;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66E6FB818B9;
+        Wed, 28 Dec 2022 18:18:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CA56C43396;
         Wed, 28 Dec 2022 18:18:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB54CC43392;
-        Wed, 28 Dec 2022 18:18:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672251523;
-        bh=wQu6V4JXnEqzKaCGFiH6e/Jze+gbQn7pV1zFXUHplkk=;
+        s=k20201202; t=1672251524;
+        bh=mTgGNOz3lU8l1LaN8BP5RhWmlCmyOy9J4H3DcGvheHY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LT5oq6Zm8kCP0xN2Fh7fvIzJHNmLVvSzL6kGqG6ZgShSvLC5CcNgSA/YuGZyhrPr8
-         8r9SxpU1oWKtqXs6/df6abcWGq3WTDYqrJFXt8uiznax9z8qWhvlFGJAkcqo5KeTMT
-         GNq6fTEePDHP0VaTovWYW11VlGj3Fs+9zIIb0VZebM+2RRP8eu4jGidENUdrG0+52z
-         2lfTq4ucNJcU88UMxHcVO1GVksAZsYW+O96HsrG8A9nbeCsKF+7qien3rA08KLY/ES
-         04sCBsb+ou4FQ0GYGJU9Nz0ApfXb1EnycmpQXlVlHf5ijynfKqS5V5L86j0iFcAjxX
-         ou7Iv+DVOcSxw==
+        b=lkgP/vVAEXVq+ZqAyXnoi2l27whpd54Vh6wscvvT0C4wZGrYoEy1thvScbzqzKi2e
+         gdE61hcV1T2y71h9uMCQ6IyrOBtAh4fIYVzh/GJvTymBrCIwBHL/kSbOEnXwbRw4ni
+         NR4KHdl5BcGEXepW1qE/Wc+qd/UVrjMxXepm0GDe6Gp2GlS3QgpjknmWXgxiUOYLVe
+         CeKLP4WqH67wc1UHpMZFErTYPb4AvC0mO2R1OJ2tuNI/fcHZ+Jqq4/NBombGbpYbms
+         2iKb6j8MMIS8Qkoka+/kXIcRcqn+HMCYLtlSa4mZ8GzbINU7mB1U1ie98lb0vDj7hD
+         DGfr+B5E6CeHg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     sireeshkodali1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     dmitry.baryshkov@linaro.org, krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v4 0/2] remoteproc: qcom: Add support for MSM8953 ADSP
-Date:   Wed, 28 Dec 2022 12:18:32 -0600
-Message-Id: <167225151234.950465.1055044011318869402.b4-ty@kernel.org>
+To:     linux-kernel@vger.kernel.org, wsa+renesas@sang-engineering.com
+Cc:     mathieu.poirier@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, konrad.dybcio@somainline.org,
+        agross@kernel.org
+Subject: Re: [PATCH] remoteproc: move from strlcpy with unused retval to strscpy
+Date:   Wed, 28 Dec 2022 12:18:33 -0600
+Message-Id: <167225151224.950465.17763103861662931886.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221013042749.104668-1-sireeshkodali1@gmail.com>
-References: <20221013042749.104668-1-sireeshkodali1@gmail.com>
+In-Reply-To: <20220818210059.7253-1-wsa+renesas@sang-engineering.com>
+References: <20220818210059.7253-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,23 +55,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 09:57:47 +0530, Sireesh Kodali wrote:
-> This patch series adds support for the ADSP PIL as found on the MSM8953
-> platform. It is a subset of a previous patch series.
+On Thu, 18 Aug 2022 23:00:59 +0200, Wolfram Sang wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
 > 
-> Changes since v3:
->  * Made ordering of compatible strings lexical in driver patch
 > 
-> Link to v3: https://lkml.org/lkml/2022/10/8/204
-> 
-> [...]
 
 Applied, thanks!
 
-[1/2] remoteproc: qcom: pas: Add MSM8953 ADSP PIL support
-      commit: 1cfaa13b82c73977e8ddaca63c791203addc39c1
-[2/2] dt-bindings: remoteproc: qcom: adsp: Add ADSP on MSM8953
-      commit: 4a0510a46c4447ad3e807a1e4d6cf195fd604c1d
+[1/1] remoteproc: move from strlcpy with unused retval to strscpy
+      commit: 1b0f00d3b1fc25525e1fcd8c5845e362f5688849
 
 Best regards,
 -- 
