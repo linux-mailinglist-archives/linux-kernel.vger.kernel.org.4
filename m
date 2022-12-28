@@ -2,96 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2362A657596
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C733465759A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbiL1LEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
+        id S232942AbiL1LFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232847AbiL1LDp (ORCPT
+        with ESMTP id S230083AbiL1LFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:03:45 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6153A137;
-        Wed, 28 Dec 2022 03:03:42 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pAUDc-00BYvN-Ek; Wed, 28 Dec 2022 19:03:33 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 28 Dec 2022 19:03:32 +0800
-Date:   Wed, 28 Dec 2022 19:03:32 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Gaurav Jain <gaurav.jain@nxp.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
-        "David S. Miller" <davem@davemloft.net>,
-        kernel test robot <lkp@intel.com>
-Subject: [v2 PATCH] crypto: caam - Avoid GCC memset bug warning
-Message-ID: <Y6wihNIoOT4pYB5+@gondor.apana.org.au>
-References: <20221222162513.4021928-1-u.kleine-koenig@pengutronix.de>
- <Y6VK4IJkHiawAbJz@gondor.apana.org.au>
- <20221223174719.4n6pmwio4zycj2qm@pengutronix.de>
- <Y6wCbyttJ+WVzmZX@gondor.apana.org.au>
- <20221228093917.zhkjpzc2ok5dc4ga@pengutronix.de>
+        Wed, 28 Dec 2022 06:05:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D5B6456
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:04:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672225456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1pjwclVxU00ME1HQWci/rX5qpnSJvDd+pioG/KTQXLw=;
+        b=I0SLZ6gmqLQT1krNGbJzmyoEE3NKLHOObCTPbIrnIXCDUNHEZJdiOnpdh7jhVz4fI87vjo
+        OcO/sNuLWkHAhU5nYMJ0FFtrGydFPOEFomhlD33Bp3HzFPCPBOAK3Taf2VoJPN6emWtcpU
+        9h0L6Ng+BV372ZPrp4woITK/96i6Ij8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-282-n5pRSaJPNyWZ_I0WqJTFOQ-1; Wed, 28 Dec 2022 06:04:11 -0500
+X-MC-Unique: n5pRSaJPNyWZ_I0WqJTFOQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FDCB3814946;
+        Wed, 28 Dec 2022 11:04:11 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 26F5840AE1E9;
+        Wed, 28 Dec 2022 11:04:11 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     seanjc@google.com, Michal Luczaj <mhal@rbox.co>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: [PATCH] KVM: x86: fix deadlock for KVM_XEN_EVTCHN_RESET
+Date:   Wed, 28 Dec 2022 06:04:09 -0500
+Message-Id: <20221228110410.1682852-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221228093917.zhkjpzc2ok5dc4ga@pengutronix.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 10:39:17AM +0100, Uwe Kleine-König wrote:
->
-> Huh, broken encoding in the mail. I'd appreciate someone to doublecheck
-> it's fine in the final commit.
-> 
-> Tested-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+While KVM_XEN_EVTCHN_RESET is usually called with no vCPUs running,
+if that happened it could cause a deadlock.  This is due to
+kvm_xen_eventfd_reset() doing a synchronize_srcu() inside
+a kvm->lock critical section.
 
-Sorry.  Let me try again:
+To avoid this, first collect all the evtchnfd objects in an
+array and free all of them once the kvm->lock critical section
+is over and th SRCU grace period has expired.
 
----8<---
-Certain versions of gcc don't like the memcpy with a NULL dst
-(which only happens with a zero length).  This only happens
-when debugging is enabled so add an if clause to work around
-these warnings.
+Reported-by: Michal Luczaj <mhal@rbox.co>
+Cc: David Woodhouse <dwmw@amazon.co.uk>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ arch/x86/kvm/xen.c                            | 30 +++++++++++++++++--
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    |  6 ++++
+ 2 files changed, 33 insertions(+), 3 deletions(-)
 
-A similar warning used to be generated by sparse but that was
-fixed years ago.
-
-Link: https://lore.kernel.org/lkml/202210290446.qBayTfzl-lkp@intel.com
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Kees Cook <keescook@chromium.org>
-Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Tested-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/drivers/crypto/caam/desc_constr.h b/drivers/crypto/caam/desc_constr.h
-index 62ce6421bb3f..824c94d44f94 100644
---- a/drivers/crypto/caam/desc_constr.h
-+++ b/drivers/crypto/caam/desc_constr.h
-@@ -163,7 +163,8 @@ static inline void append_data(u32 * const desc, const void *data, int len)
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index b178f40bd863..2e29bdc2949c 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -1942,18 +1942,42 @@ static int kvm_xen_eventfd_deassign(struct kvm *kvm, u32 port)
+ 
+ static int kvm_xen_eventfd_reset(struct kvm *kvm)
  {
- 	u32 *offset = desc_end(desc);
+-	struct evtchnfd *evtchnfd;
++	struct evtchnfd *evtchnfd, **all_evtchnfds;
+ 	int i;
++	int n = 0;
  
--	if (len) /* avoid sparse warning: memcpy with byte count of 0 */
-+	/* Avoid gcc warning: memcpy with data == NULL */
-+	if (!IS_ENABLED(CONFIG_CRYPTO_DEV_FSL_CAAM_DEBUG) || data)
- 		memcpy(offset, data, len);
+ 	mutex_lock(&kvm->lock);
++
++	/*
++	 * Because synchronize_srcu() cannot be called inside the
++	 * critical section, first collect all the evtchnfd objects
++	 * in an array as they are removed from evtchn_ports.
++	 */
++	idr_for_each_entry(&kvm->arch.xen.evtchn_ports, evtchnfd, i)
++		n++;
++
++	all_evtchnfds = kmalloc_array(n, sizeof(struct evtchnfd *), GFP_KERNEL);
++	if (!all_evtchnfds) {
++		mutex_unlock(&kvm->lock);
++		return -ENOMEM;
++	}
++
++	n = 0;
+ 	idr_for_each_entry(&kvm->arch.xen.evtchn_ports, evtchnfd, i) {
++		all_evtchnfds[n++] = evtchnfd;
+ 		idr_remove(&kvm->arch.xen.evtchn_ports, evtchnfd->send_port);
+-		synchronize_srcu(&kvm->srcu);
++	}
++	mutex_unlock(&kvm->lock);
++
++	synchronize_srcu(&kvm->srcu);
++
++	while (n--) {
++		evtchnfd = all_evtchnfds[n];
+ 		if (!evtchnfd->deliver.port.port)
+ 			eventfd_ctx_put(evtchnfd->deliver.eventfd.ctx);
+ 		kfree(evtchnfd);
+ 	}
+-	mutex_unlock(&kvm->lock);
++	kfree(all_evtchnfds);
  
- 	(*desc) = cpu_to_caam32(caam32_to_cpu(*desc) +
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+index 721f6a693799..dae510c263b4 100644
+--- a/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
++++ b/tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c
+@@ -962,6 +962,12 @@ int main(int argc, char *argv[])
+ 	}
+ 
+  done:
++	struct kvm_xen_hvm_attr evt_reset = {
++		.type = KVM_XEN_ATTR_TYPE_EVTCHN,
++		.u.evtchn.flags = KVM_XEN_EVTCHN_RESET,
++	};
++	vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &evt_reset);
++
+ 	alarm(0);
+ 	clock_gettime(CLOCK_REALTIME, &max_ts);
+ 
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.31.1
+
