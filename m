@@ -2,54 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBD865722F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 03:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E3D65723D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 04:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbiL1CmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 21:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
+        id S229829AbiL1DF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 22:05:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbiL1Clp (ORCPT
+        with ESMTP id S229722AbiL1DFy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 21:41:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366B8D2C3;
-        Tue, 27 Dec 2022 18:41:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4E21612B7;
-        Wed, 28 Dec 2022 02:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3BBC4339C;
-        Wed, 28 Dec 2022 02:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672195303;
-        bh=QnklbxEBG3COVRxv2QVCvdpAZpImQ2YsUCTp8vPcCbo=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=DMU43Zs4PPqKU0/VYQXRJ7AcV3Z89R6H7NK72HAwb1eZwS3LmBMqOIDWrLxXldigr
-         dRvMcZ26hri9kL2QN1FAvrT+BM5nb0EhPoYYCG8heyawsCdat1MzzxJ53ynt7D9HAm
-         y43VEFRvEzowgVSHfyyC060E6FNeyuNo44Cq/c01my+/c5DflL8DfzLi/D/43ZwXiW
-         ntxbXSPWfM4zIghmEBgyaxtH+WylqrqZzNvP96CQKEyQS++vcr2J3V+GFS1di7t/FY
-         yb6a/7C+VVQEGwNnSpffyQILr+kU0uJGetdtClgdorVTkp66aJuLZ0zYcctURe9zz9
-         hi7fRGLac+LCA==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-kernel@vger.kernel.org, robimarko@gmail.com,
-        pabeni@redhat.com, davem@davemloft.net, agross@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        netdev@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, kuba@kernel.org,
-        linux-arm-msm@vger.kernel.org, edumazet@google.com
-Subject: Re: (subset) [PATCH v2 1/5] dt-bindings: net: ipq4019-mdio: document IPQ6018 compatible
-Date:   Tue, 27 Dec 2022 20:41:36 -0600
-Message-Id: <167219529289.794508.54060153961953073.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221114194734.3287854-1-robimarko@gmail.com>
-References: <20221114194734.3287854-1-robimarko@gmail.com>
+        Tue, 27 Dec 2022 22:05:54 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC41A102A;
+        Tue, 27 Dec 2022 19:05:51 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Nhbw10XnQzRqLt;
+        Wed, 28 Dec 2022 11:04:17 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 28 Dec 2022 11:05:38 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] evm: Use __vfs_setxattr() to update security.evm
+Date:   Wed, 28 Dec 2022 11:02:48 +0800
+Message-ID: <20221228030248.94285-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,21 +46,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 20:47:30 +0100, Robert Marko wrote:
-> Document IPQ6018 compatible that is already being used in the DTS along
-> with the fallback IPQ4019 compatible as driver itself only gets probed
-> on IPQ4019 and IPQ5018 compatibles.
-> 
-> This is also required in order to specify which platform require clock to
-> be defined and validate it in schema.
-> 
-> [...]
+Currently it uses __vfs_setxattr_noperm() to update "security.evm",
+however there are two lsm hooks(inode_post_setxattr and inode_setsecurity)
+being called inside this function, which don't make any sense for xattr
+"security.evm", because the handlers of these two hooks, such as selinux
+and smack, only care about their own xattr.
 
-Applied, thanks!
+On the other hand, there is a literally rather than actually cyclical
+callchain as follows:
+security_inode_post_setxattr
+  ->evm_inode_post_setxattr
+    ->evm_update_evmxattr
+      ->__vfs_setxattr_noperm
+        ->security_inode_post_setxattr
 
-[5/5] arm64: dts: qcom: ipq8074: add SoC specific compatible to MDIO
-      commit: 36e830a5656d6c22110c5dcffb611fc69a57a269
+So use __vfs_setxattr() to update "security.evm".
 
-Best regards,
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ security/integrity/evm/evm_crypto.c   | 7 +++----
+ security/integrity/ima/ima_appraise.c | 8 ++++----
+ 2 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
+index fa5ff13fa8c9..d8275dfa49ef 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -376,10 +376,9 @@ int evm_update_evmxattr(struct dentry *dentry, const char *xattr_name,
+ 			   xattr_value_len, &data);
+ 	if (rc == 0) {
+ 		data.hdr.xattr.sha1.type = EVM_XATTR_HMAC;
+-		rc = __vfs_setxattr_noperm(&init_user_ns, dentry,
+-					   XATTR_NAME_EVM,
+-					   &data.hdr.xattr.data[1],
+-					   SHA1_DIGEST_SIZE + 1, 0);
++		rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
++				    XATTR_NAME_EVM, &data.hdr.xattr.data[1],
++				    SHA1_DIGEST_SIZE + 1, 0);
+ 	} else if (rc == -ENODATA && (inode->i_opflags & IOP_XATTR)) {
+ 		rc = __vfs_removexattr(&init_user_ns, dentry, XATTR_NAME_EVM);
+ 	}
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index ee6f7e237f2e..d2de9dc6c345 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -98,10 +98,10 @@ static int ima_fix_xattr(struct dentry *dentry,
+ 		iint->ima_hash->xattr.ng.type = IMA_XATTR_DIGEST_NG;
+ 		iint->ima_hash->xattr.ng.algo = algo;
+ 	}
+-	rc = __vfs_setxattr_noperm(&init_user_ns, dentry, XATTR_NAME_IMA,
+-				   &iint->ima_hash->xattr.data[offset],
+-				   (sizeof(iint->ima_hash->xattr) - offset) +
+-				   iint->ima_hash->length, 0);
++	rc = __vfs_setxattr(&init_user_ns, dentry, d_inode(dentry),
++			    XATTR_NAME_IMA, &iint->ima_hash->xattr.data[offset],
++			    (sizeof(iint->ima_hash->xattr) - offset) +
++			    iint->ima_hash->length, 0);
+ 	return rc;
+ }
+ 
 -- 
-Bjorn Andersson <andersson@kernel.org>
+2.17.1
+
