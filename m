@@ -2,119 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F52658663
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 20:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC31658660
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 20:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbiL1TZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 14:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
+        id S232179AbiL1TYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 14:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233285AbiL1TY6 (ORCPT
+        with ESMTP id S230406AbiL1TYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 14:24:58 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B05D1838A
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 11:24:52 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id e6-20020aa78c46000000b005772151d489so8656618pfd.15
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 11:24:52 -0800 (PST)
+        Wed, 28 Dec 2022 14:24:42 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F35213EB6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 11:24:38 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id x65so2861313vsb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 11:24:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eezWDwyqk949sEAV6VBZXvmE65PTPfqNCFhhSoX++44=;
-        b=VQLWwAsnp8xEr114AAmlLuYwOEaQZ3kuhyeF6c365GeAlZ4EMzS8MiWB11jz/EMUgm
-         khDN6r175XUEyW7m/oNk3OZkdkPyvwGwmsgCd4NMjRYpSLjTAYPrx72KQCfsNXcbQRLr
-         0EkXan3XgXT5CLnAlpsw0Vmj/h7JMY+8peywoXVo1O9CJLLG6GhpKfyUTh1zNLRd6zLY
-         FEq1Y+kNPCkX43rdGocrQGj5MgGl4RnJaqHBexdt3XuZeOQtdNgiFzgO99+DYRM3JFBZ
-         20n74dHtErcViR3PW+5hpXz5jvnhsU/bhHiP4KqIRiiRfueHHRoeui8yVMj5sxFSEL5j
-         47jA==
+        d=hardenedbsd.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQoSPV/1oOCa8cF4Ca8Amt2eQFnSyvUDA4BmxDEFR+w=;
+        b=kIAmp8g/mEVi078s384yPgoXQvrA3mRa1XYHXxSOJDxEkuRxmjWy6JnVDv+rSkC5Cy
+         0DUwDdB1bSP5DbelGgaMTIpaMKagza7eCPCU9Fa80nmpaCXBihPM9u+txr/UwhrVZBT1
+         1I/E+PJ3yvAzx5ZSFRqbRzEON7RweLfIqlQiTAq6buKurVxF9AzBpGxOJsscmpwIuarM
+         fDUk6ZomH64X4SrwgIW0kSHfY33Qwbj74mckd4TKZSBVZJ/nFuN0X+lJCWcxzYfqr/kF
+         RdSAWLkcKSk7QeplI2BpJ9cVewKW4q2voiiIntzUD4hgT64wvHc7bDC009VjTzIg2Oss
+         Pytw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eezWDwyqk949sEAV6VBZXvmE65PTPfqNCFhhSoX++44=;
-        b=2SMcvlyi+qWifjT+KmkYnsPj3gj52RaZygWetdu0H/hKtQA/AC4OjajPD7HdrxZq6N
-         sEzuvqS9OwuPqLUxmRoZ/meF3G+7xjUOHrho8E6VPDfPXOLqIXad8a357AJDyHRjxXPm
-         9jrR2Qr0MecDfYo8V/rp1FrbdExIpRuypPWt8ccsMzlqfmiTGOAvaLPhuM4p0LzBpGno
-         ztl1Ku6TBYNxL8pi1OpLa6DML9/6u294KBskGq84+XIjyI3zvNM+ePP0esKhfZIZppA5
-         Z4WlIjwQZf+K9TcJ4evJ3Pk0nkYFbgk7d3w/JhzqoCSNEogeDOv8+5h5gW2V5sWpVrqq
-         RjAQ==
-X-Gm-Message-State: AFqh2koD2iqPVrElVCO46SYusSG/EM/3G8H6j2tV/OqebuSi746gxe3z
-        10HRT4krdaW/jOBCQv3mBSyW3o7WAmDJ7eiH
-X-Google-Smtp-Source: AMrXdXuFouVTMxaq7VekFjs4wz2DtSH9W9iNxpumCXLOPTj16YNvmf/eBWS8w7lu3B8BzCIKLgDjy4XmaacOkKAz
-X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:90a:5c86:b0:219:c1fb:5da8 with SMTP
- id r6-20020a17090a5c8600b00219c1fb5da8mr2330892pji.221.1672255492112; Wed, 28
- Dec 2022 11:24:52 -0800 (PST)
-Date:   Wed, 28 Dec 2022 19:24:36 +0000
-In-Reply-To: <20221228192438.2835203-1-vannapurve@google.com>
-Mime-Version: 1.0
-References: <20221228192438.2835203-1-vannapurve@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221228192438.2835203-3-vannapurve@google.com>
-Subject: [V4 PATCH 2/4] KVM: selftests: x86: Add variables to store cpu type
-From:   Vishal Annapurve <vannapurve@google.com>
-To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     pbonzini@redhat.com, shuah@kernel.org, bgardon@google.com,
-        seanjc@google.com, oupton@google.com, peterx@redhat.com,
-        vkuznets@redhat.com, dmatlack@google.com,
-        Vishal Annapurve <vannapurve@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UQoSPV/1oOCa8cF4Ca8Amt2eQFnSyvUDA4BmxDEFR+w=;
+        b=wWke1hw391quaQlzt5xD54HUNJD+LTDPCkYYNxBYLSQCNUjTab++zeZvGNgXc9y2PH
+         Ssr6aEhISRLMMK6bvesqcJms+fbfBuR8Sfm1gJ0HZbQ3bB0iDIkkTWWZBmim+z0Q6Xlj
+         NY9bwD2q3aXPDijnPL2kxIhfHSn/2u/LBOvDPWiWlNoCBkkY1XBPtCZmC7eW7/VPWYPP
+         dgcBDGdAf5L+cqivWt0ze7vYi5bOJNNm9vDvJuy8ez+V85WoGF70lBBd3lv+lh0HtVIh
+         gXN/VPkVQHFmKcY6NACji9+IvTeAftj7a8BsOE28L4cMrrVFRt25WqWcX8Geb9b26O+l
+         GQMA==
+X-Gm-Message-State: AFqh2krt2Uc4lm0Cnm3YDialh6jN0iLjcfs+1TCwLJyWvgpTblGLbU9W
+        UcSNKMFrylZy1ZlHltMpVhOVshsEYDBaUPQN
+X-Google-Smtp-Source: AMrXdXum8fPc3sjwaK/zW/xv//enj22K0WAIsRX0JtKDbvNzJgE95zxm9bniqRvhIYwLpgGtgczLcA==
+X-Received: by 2002:a05:6102:52c:b0:3cb:bb2:7d37 with SMTP id m12-20020a056102052c00b003cb0bb27d37mr1614387vsa.33.1672255477254;
+        Wed, 28 Dec 2022 11:24:37 -0800 (PST)
+Received: from mutt-hbsd (pool-100-16-219-215.bltmmd.fios.verizon.net. [100.16.219.215])
+        by smtp.gmail.com with ESMTPSA id bj4-20020a05620a190400b006fa2cc1b0fbsm9227728qkb.11.2022.12.28.11.24.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 11:24:36 -0800 (PST)
+Date:   Wed, 28 Dec 2022 14:24:36 -0500
+From:   Shawn Webb <shawn.webb@hardenedbsd.org>
+To:     oss-security@lists.openwall.com
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
+Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat
+ correctly
+Message-ID: <20221228192436.viuoyil2ntr4lxjo@mutt-hbsd>
+X-Operating-System: FreeBSD mutt-hbsd 14.0-CURRENT-HBSD FreeBSD
+ 14.0-CURRENT-HBSD 
+X-PGP-Key: https://git.hardenedbsd.org/hardenedbsd/pubkeys/-/blob/master/Shawn_Webb/03A4CBEBB82EA5A67D9F3853FF2E67A277F8E1FA.pub.asc
+References: <Y6SJDbKBk471KE4k@p183>
+ <Y6TUJcr/IHrsTE0W@codewreck.org>
+ <1a1963aa1036ba07@orthanc.ca>
+ <20221228152458.6xyksrxunukjrtzx@mutt-hbsd>
+ <Y6xzIR9P+a6uaaEx@itl-email>
+ <20221228172517.l7h3m7wjfpxr3dzw@mutt-hbsd>
+ <Y6yEv+6iYQQNaqi9@itl-email>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="cqcy4xsopj5osl73"
+Content-Disposition: inline
+In-Reply-To: <Y6yEv+6iYQQNaqi9@itl-email>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add variables to hold the cpu vendor type that are initialized early
-during the selftest setup and later synced to guest vm post VM creation.
 
-These variables will be used in later patches to avoid querying CPU
-type multiple times.
+--cqcy4xsopj5osl73
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Vishal Annapurve <vannapurve@google.com>
----
- tools/testing/selftests/kvm/lib/x86_64/processor.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+On Wed, Dec 28, 2022 at 01:02:35PM -0500, Demi Marie Obenour wrote:
+> On Wed, Dec 28, 2022 at 12:25:17PM -0500, Shawn Webb wrote:
+> > On Wed, Dec 28, 2022 at 11:47:25AM -0500, Demi Marie Obenour wrote:
+> > > On Wed, Dec 28, 2022 at 10:24:58AM -0500, Shawn Webb wrote:
+> > > > On Tue, Dec 27, 2022 at 04:44:49PM -0800, Lyndon Nerenberg (VE7TFX/=
+VE6BBM) wrote:
+> > > > > Dominique Martinet writes:
+> > > > >=20
+> > > > > > But, really, I just don't see how this can practically be said =
+to be parsable...
+> > > > >=20
+> > > > > In its current form it never will be.  The solution is to place
+> > > > > this variable-length field last.  Then you can "cut -d ' ' -f 51-"
+> > > > > to get the command+args part (assuming I counted all those fields
+> > > > > correctly ...)
+> > > > >=20
+> > > > > Of course, this breaks backwards compatability.
+> > > >=20
+> > > > It would also break forwards compatibility in the case new fields
+> > > > needed to be added.
+> > > >=20
+> > > > The only solution would be a libxo-style feature wherein a
+> > > > machine-parseable format is exposed by virtue of a file extension.
+> > > >=20
+> > > > Examples:
+> > > >=20
+> > > > 1. /proc/pid/stats.json
+> > > > 2. /proc/pid/stats.xml
+> > > > 3. /proc/pid/stats.yaml_shouldnt_be_a_thing
+> > >=20
+> > > A binary format would be even better.  No risk of ambiguity.
+> >=20
+> > I think the argument I'm trying to make is to be flexible in
+> > implementation, allowing for future needs and wants--that is "future
+> > proofing".
+>=20
+> Linux should not have an XML, JSON, or YAML serializer.  Linux already
+> does way too much; let=E2=80=99s not add one more thing to the list.
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index a799af572f3f..b3d2a9ab5ced 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -19,6 +19,8 @@
- #define MAX_NR_CPUID_ENTRIES 100
- 
- vm_vaddr_t exception_handlers;
-+static bool host_cpu_is_amd;
-+static bool host_cpu_is_intel;
- 
- static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
- {
-@@ -555,6 +557,8 @@ static void vcpu_setup(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
- void kvm_arch_vm_post_create(struct kvm_vm *vm)
- {
- 	vm_create_irqchip(vm);
-+	sync_global_to_guest(vm, host_cpu_is_intel);
-+	sync_global_to_guest(vm, host_cpu_is_amd);
- }
- 
- struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
-@@ -1264,3 +1268,9 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
- 
- 	return get_kvm_intel_param_bool("unrestricted_guest");
- }
-+
-+void kvm_selftest_arch_init(void)
-+{
-+	host_cpu_is_intel = this_cpu_is_intel();
-+	host_cpu_is_amd = this_cpu_is_amd();
-+}
--- 
-2.39.0.314.g84b9a713c41-goog
+Somewhat agreed. I think formats like JSON provide a good balance
+between machine parseable and human readable.
 
+As I described earlier, though, when it comes to concepts like procfs
+and sysfs, I have a bias towards abandoning them in favor of sysctl.
+If sysctl nodes were to be used, no new serialization formats would
+need to be implemented--and developers would also use a safter method
+of system and process inspection and manipulation.
+
+--=20
+Shawn Webb
+Cofounder / Security Engineer
+HardenedBSD
+
+https://git.hardenedbsd.org/hardenedbsd/pubkeys/-/raw/master/Shawn_Webb/03A=
+4CBEBB82EA5A67D9F3853FF2E67A277F8E1FA.pub.asc
+
+--cqcy4xsopj5osl73
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEA6TL67gupaZ9nzhT/y5nonf44foFAmOsl/MACgkQ/y5nonf4
+4fruEA//dlGqPyMLJmcW57PIEZ2w6Y/ctFuHGK1vfHncR7lDgTCgjQICFSqnVLt3
+PyESWAmZus4ZqneCmReoxzy6y/io4jyRWcEZEywcRk/n+asD5+5eEcL8yKdCXszF
+FLL9VGA1U4jUnQuUQgArkpjo7pNNScp34FjKRKD0RJKbpKDNGPcTz2ASMpM4vt7n
+9klfnjP7e7+XD9cuZaNQVK0nz2/BNObKGdikJR9cMv3SONkGTOlRZxOj+y2Rc86P
+QpSmfMC+PJxULFSfIW4bucmnzC2qQenTELgoEUEhG4IZNT3VYv1mDRKU9xlVeSvQ
+Pcm6JcFQxd759On8QW1aY4N9KGs6U7hH0elQkNxBctM3Nh9YowNxZGXuZGF9Kwu1
+Vyw9tDADZiMh0GqXgO9tSwc95kcVdeUgIzwBhF31YhSNv95CpDwdtQhvmt2qTXea
+Zec8Ys0hNcvd5xn8FLIk73m+yvNkTBEkyejo/cyQZFHW/gQmf5znozMht0qeYt/j
+9Na9M094IX1zLLy3dMlNZe1j7pzBsRJgbWBwWcmixkao2pJ7vLuocQjDJmrpet2Q
+wkkSKSRDw33S7fRZxKJClXeP1agiTxgpnC3Hi1mmmWVff900O6xTrMl6tds6c8CY
+EP6VZqmBqlNBAP2yGTGPFXLVm91UV5DvHZ1VdAfSZukqq6rCIU0=
+=jiq0
+-----END PGP SIGNATURE-----
+
+--cqcy4xsopj5osl73--
