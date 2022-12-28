@@ -2,104 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E392765756F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA216657571
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiL1Kq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 05:46:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
+        id S232745AbiL1Kqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 05:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiL1KqZ (ORCPT
+        with ESMTP id S232700AbiL1Kqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 05:46:25 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15518DA3;
-        Wed, 28 Dec 2022 02:46:23 -0800 (PST)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 256A0100008;
-        Wed, 28 Dec 2022 10:46:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1672224381;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tPhB9YD5mKOaUrJH3XDFS7rFqV5FxdGCchYtk5MvfdE=;
-        b=gk9JkWgOOMenYieQG9suTpj/sWfHBXPuyGHmqeqY66hups8+Neu2LVN43A1VAhCQHUFofk
-        uG9AqJCE4tB2g/X4CTP2BakPuvtGnG90jIICszUiepR1pcbSK2l582jTUYM61zasFqULXV
-        zYOo9SX57Dc1RL5jh5uhU2CaimRU3J5nmXG0c14i58oQ3mNKoROPWc21ACoS/+Uz/0jbte
-        xJUe/GIimcX6tRPn1V7yHIjb65w1zpMpOHfAjXVft0iQS17PaWZ2bfCbUUB7sGSGECoyG9
-        ms+XQ4sf8ntTeSWqBkLByj+VMb31nU0U/CbaVhvrR6Mq5NHcKId4Vituw1OFeQ==
-Date:   Wed, 28 Dec 2022 11:46:17 +0100
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: Re: [PATCH v2 21/21] staging: media: tegra-video: add tegra20
- variant
-Message-ID: <20221228114617.397cba35@booty>
-In-Reply-To: <44d2d972-1cdf-fdb2-5dc0-cc493f79b3da@gmail.com>
-References: <20221128152336.133953-1-luca.ceresoli@bootlin.com>
-        <20221128152336.133953-22-luca.ceresoli@bootlin.com>
-        <44d2d972-1cdf-fdb2-5dc0-cc493f79b3da@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 28 Dec 2022 05:46:33 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4675E2706;
+        Wed, 28 Dec 2022 02:46:32 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id B50BC24E133;
+        Wed, 28 Dec 2022 18:46:26 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 28 Dec
+ 2022 18:46:27 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 28 Dec
+ 2022 18:46:25 +0800
+Message-ID: <b828357c-81b3-870b-a658-02bf8cfad47c@starfivetech.com>
+Date:   Wed, 28 Dec 2022 18:46:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 0/3] StarFive's SDIO/eMMC driver support
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@linux.starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221227115856.460790-1-william.qiu@starfivetech.com>
+ <02e8c75f-658f-320c-7c90-64ccf2beccbe@linaro.org>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <02e8c75f-658f-320c-7c90-64ccf2beccbe@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Dec 2022 15:35:58 +0300
-Dmitry Osipenko <digetx@gmail.com> wrote:
 
-> 28.11.2022 18:23, Luca Ceresoli =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
 
-...
+On 2022/12/27 21:07, Krzysztof Kozlowski wrote:
+> On 27/12/2022 12:58, William Qiu wrote:
+>> Hi,
+>> 
+>> This patchset adds initial rudimentary support for the StarFive
+>> designware mobile storage host controller driver. And this driver will
+>> be used in StarFive's VisionFive 2 board. The main purpose of adding
+>> this driver is to accommodate the ultra-high speed mode of eMMC.
+>> 
+>> The last patch should be applied after the patchset [1]:
+>> [1] https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
+> 
+> It's a duplicate? Why do I have two of them in mailbox? Isn't this v3 then?
+> 
 
-> > +static const struct tegra_vip_ops tegra20_vip_ops =3D {
-> > +	.vip_start_streaming =3D tegra20_vip_start_streaming,
-> > +};
-> > +
-> > +const struct tegra_vip_soc tegra20_vip_soc =3D {
-> > +	.ops =3D &tegra20_vip_ops,
-> > +}; =20
->=20
-> Shouldn't this be placed in vip.c?
+Hi Krzysztof,
 
-Indeed. Which means tegra210_csi_soc can be moved as well, so I'm adding
-a small patch to the series to do that.
+Sorry about that. I usually use a script to send emails. The first email was 
+sent to the wrong person, so I corrected it and sent the second one.
 
-> Also looks like patch #20 won't link
-> because tegra20_vip_soc is defined in patch #21.
+Best regards,
+William Qiu
 
-You're right, we have a chicken-egg problem here. One solution would be
-leaving tegra_vip_of_id_table empty in patch 20 and fill it only in
-patch 21, but that would not be bisectable as patch 20 would introduce
-code that nobody uses until patch 21. So I think it's better to squash
-together patches 20+21.
-
---=20
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Best regards,
+> Krzysztof
+> 
