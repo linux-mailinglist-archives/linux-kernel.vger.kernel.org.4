@@ -2,84 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34946574D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969B36574D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbiL1JmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 04:42:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
+        id S229668AbiL1Jm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 04:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbiL1JmJ (ORCPT
+        with ESMTP id S232795AbiL1Jm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 04:42:09 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FAE6456;
-        Wed, 28 Dec 2022 01:42:06 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id b81so7207897vkf.1;
-        Wed, 28 Dec 2022 01:42:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fwLk0wjxGIvhAq7dgs3jTc6JAPT5yAloCtLTEegt4xo=;
-        b=Rj3269mP+Zl4qhDW7MsDPLmDP6tF+49SIZwkN+VgicWg0Lh+MM6wfzfed8Yevd11Ca
-         IXyS/nw13+lolANzO+oXGSYaN0xQEv2Mx1ioSVy5ptMu1e1Pbc+2VAThBj0lsbhse7Su
-         fqfFjpkPCyS0FRZ3NorPCwDa1AVLENVVNGVkae8Dp32EJNnQKP5SZI+bVNX4IChMwlqX
-         AzDABDnLY7gtuzKSCBNcJkBFSiTVnq/Yz3F0XqyXhoKzHzcQ9uOLLJeMh6pfHw5Hlpp0
-         n2nSwjObsMi9NuCQDWCA/zsGxwsBswa1D2NdCFScnjJJurb3Si0pz9n+TNrrZFva3FoP
-         tJqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fwLk0wjxGIvhAq7dgs3jTc6JAPT5yAloCtLTEegt4xo=;
-        b=1JDZ+NH0OgenhagGrtqq1G+7JfI/6saeSKnjC6YTP7Ye0z98mLoxsnmhfhFO7/z9/N
-         6/pewt3hZ9oVti1+4Tk/KtMnpVpmWomKZFMYX3iviYJqz6wAReoFcRpekAGUJfb97wZM
-         tUt+sFuStSqOJgA6tWvhafQQFGQF/th+H5PHGMcnyvdX+gU0qyjq6lbenPogEjYcp/MA
-         EB8oB5WbTohs4y9gUVjatb+Ga/6tmjzKn9IHlK5h9uBJvtMAQpYpUi49RDEdcqBStEfs
-         p7nxp1/xBl/Byw2OWFABIKwkrRcCRRhnpyW1Dru7yHpyD8OdGj+36xtmKSf5jPNy1+FR
-         ctnA==
-X-Gm-Message-State: AFqh2kpFfE5HppD5uQQ8YH6Tdz2tNtFeUcft2lcDvznZy7xuBJlmX+3Y
-        SlL/iNNo+c8yj/47ZZH0T8HKrx096nCAlTE9wv8=
-X-Google-Smtp-Source: AMrXdXuiO15bKKKO/sD+d/YsDkXXMmVgtIh2UUu6LekwHNnzWeW8s6XUBfaregIYgxtO4eVYcere42BjzWOrSO+I02A=
-X-Received: by 2002:ac5:c382:0:b0:3bd:e0b8:e350 with SMTP id
- s2-20020ac5c382000000b003bde0b8e350mr2671281vkk.25.1672220525745; Wed, 28 Dec
- 2022 01:42:05 -0800 (PST)
+        Wed, 28 Dec 2022 04:42:28 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746636264;
+        Wed, 28 Dec 2022 01:42:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672220547; x=1703756547;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5G01XmqXrUM+91mhB3Vz/c4W/zaLMjFyi5lKjPbwk0Y=;
+  b=jTJFXm5Feg4SudhYO2OQDMYawdmmtmWb4qJjhBeO2oSVLAPtteaaefRy
+   yAeDGcEoSJkmash8AA7yWtT9Cwm2aAX0PoaqCKGXPIPA5ymDOpTyuU52a
+   Azeuz681gt+T1Wj0PSOmcD7LB3ANCynXZcxTGhuGpyGsrlaVkGqoQzdKy
+   5aZHzmsz1/yT/FUFgslW351k+43ugwauyz/XqeaSFxOvNkQ8vivBpfP/g
+   dL2oDz4xW2AiHWCB9oSRgEI1b6MW3Bb/BJpVJPJOm0t2JSHR7iUhs0ymB
+   EIzcYdX7s7Zw3y4bKCvhJR/33Y4SheXXHpt0mkqaEvDUosMoRIF7b6tyA
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="385265823"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="385265823"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 01:42:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="603289869"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="603289869"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 28 Dec 2022 01:42:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pASx5-000W7H-0C;
+        Wed, 28 Dec 2022 11:42:23 +0200
+Date:   Wed, 28 Dec 2022 11:42:22 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1 1/5] rtc: isl12022: Get rid of unneeded private struct
+ isl12022
+Message-ID: <Y6wPfnRC3YeFxs3S@smile.fi.intel.com>
+References: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
+ <a004a051-2f63-b5a4-bf7b-925850f1f718@rasmusvillemoes.dk>
 MIME-Version: 1.0
-References: <20221227095123.2447948-1-milkfafa@gmail.com> <20221227095123.2447948-3-milkfafa@gmail.com>
- <0a3ece05-c94f-3d7e-2f90-b72b777617e5@linaro.org>
-In-Reply-To: <0a3ece05-c94f-3d7e-2f90-b72b777617e5@linaro.org>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Wed, 28 Dec 2022 17:41:54 +0800
-Message-ID: <CADnNmFp-RD6-6PUOJzF4GNW4zBoD+Zk6v0dGnmofLBxMWMEaow@mail.gmail.com>
-Subject: Re: [PATCH v10 2/7] media: dt-binding: nuvoton: Add NPCM VCD and ECE engine
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        andrzej.p@collabora.com, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, kwliu@nuvoton.com, kflin@nuvoton.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a004a051-2f63-b5a4-bf7b-925850f1f718@rasmusvillemoes.dk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject - it is "dt-bindings", not "dt-bindings".
->
-> Use subject prefixes matching the subsystem (which you can get for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching).
+On Tue, Nov 29, 2022 at 03:10:00PM +0100, Rasmus Villemoes wrote:
+> On 26/11/2022 15.18, Andy Shevchenko wrote:
+> > First of all, the struct rtc_device pointer is kept in the managed
+> > resources, no need to keep it outside (no users in the driver).
+> > 
+> > Second, replace private struct isl12022 with a regmap.
+> 
+> Nice simplification.
+> 
+> Acked-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-I'll correct it in the next patch. Thanks for the remind.
+Thank you!
 
-Regards,
-Marvin
+Alexandre, do you have any comments on this series?
+If no, can it be applied now?
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
