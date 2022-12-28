@@ -2,81 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034B365731B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 07:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56743657320
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 07:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiL1GU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 01:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S230347AbiL1GVx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Dec 2022 01:21:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiL1GU4 (ORCPT
+        with ESMTP id S229526AbiL1GVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 01:20:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09FAAE6B;
-        Tue, 27 Dec 2022 22:20:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3E6FB81211;
-        Wed, 28 Dec 2022 06:20:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA9AC433EF;
-        Wed, 28 Dec 2022 06:20:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672208453;
-        bh=JCjNKHa2L/LD6O1qZ2+Vv4QD9BCcPkQfGN1EKNkqtCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LTo6kqLzqSYEaviGJawhdGSxa5wSYZpih/7wBfXFYohgAd7uQ2Qmy/D3UrH8fn/YJ
-         wtsQImjvN4cXg8dA1VyXfKbcbx9RkzQTTE94Y9xCncEhrk/QmKgPgYD1QS5u4lZl5i
-         LJjg+5YqvvUX6cM1ckyvvi4clfGy0kYj7Kbr9/f4ZrRbPwLEdGpnNfPMFRHV+DKkCd
-         SqIajj8zXlcnton5ypUqQWG0dVCAjc65gJSlczPOFia1aTfSasRtbzs/66jBHHudB8
-         2Fz5o0kj8/Qxr4ThCWlAD13R62zuns9cgDYh8hh1CXi9WhtlTdAikzfNbf3dooSpjz
-         b5vJ/6pVsv8Dw==
-Date:   Wed, 28 Dec 2022 11:50:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Lux Aliaga <they@mint.lgbt>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Richard Acayan <mailingradian@gmail.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: dma: gpi: Document SM6125 compatible
-Message-ID: <Y6vgQZLyGV0wPPDs@matsya>
-References: <20221222194600.139854-1-marijn.suijten@somainline.org>
- <20221222194600.139854-2-marijn.suijten@somainline.org>
+        Wed, 28 Dec 2022 01:21:51 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82162AE6B;
+        Tue, 27 Dec 2022 22:21:48 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BS6KYogC001141, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BS6KYogC001141
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Wed, 28 Dec 2022 14:20:34 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.9; Wed, 28 Dec 2022 14:21:28 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 28 Dec 2022 14:21:28 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Wed, 28 Dec 2022 14:21:27 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Chris Morgan <macroalpha82@gmail.com>,
+        "Nitin Gupta" <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: RE: [RFC PATCH v1 06/19] rtw88: rtw8821c: Add support for parsing the RTL8821CS (SDIO) efuse
+Thread-Topic: [RFC PATCH v1 06/19] rtw88: rtw8821c: Add support for parsing
+ the RTL8821CS (SDIO) efuse
+Thread-Index: AQHZGks+HXgF0Jfl1UCsDAdyYOhe0q6C099A
+Date:   Wed, 28 Dec 2022 06:21:27 +0000
+Message-ID: <695c976e02ed44a2b2345a3ceb226fc4@realtek.com>
+References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
+ <20221227233020.284266-7-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20221227233020.284266-7-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/28_=3F=3F_01:41:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221222194600.139854-2-marijn.suijten@somainline.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-12-22, 20:45, Marijn Suijten wrote:
-> From: Martin Botka <martin.botka@somainline.org>
+
+
+> -----Original Message-----
+> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Sent: Wednesday, December 28, 2022 7:30 AM
+> To: linux-wireless@vger.kernel.org
+> Cc: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; Ulf Hansson
+> <ulf.hansson@linaro.org>; linux-kernel@vger.kernel.org; netdev@vger.kernel.org;
+> linux-mmc@vger.kernel.org; Chris Morgan <macroalpha82@gmail.com>; Nitin Gupta <nitin.gupta981@gmail.com>;
+> Neo Jou <neojou@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
+> Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Subject: [RFC PATCH v1 06/19] rtw88: rtw8821c: Add support for parsing the RTL8821CS (SDIO) efuse
 > 
-> Document compatibility for this GPI DMA controller on SM6125.
+> The efuse of the SDIO RTL8821CS chip has only one known member: the mac
+> address is at offset 0x11a. Add a struct rtw8821cs_efuse describing this
+> and use it for copying the mac address when the SDIO bus is used.
+> 
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>  drivers/net/wireless/realtek/rtw88/rtw8821c.c | 9 +++++++++
+>  drivers/net/wireless/realtek/rtw88/rtw8821c.h | 6 ++++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+> b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+> index 17f800f6efbd..dd01b22f9770 100644
+> --- a/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+> +++ b/drivers/net/wireless/realtek/rtw88/rtw8821c.c
+> @@ -26,6 +26,12 @@ static void rtw8821ce_efuse_parsing(struct rtw_efuse *efuse,
+>  	ether_addr_copy(efuse->addr, map->e.mac_addr);
+>  }
+> 
+> +static void rtw8821cs_efuse_parsing(struct rtw_efuse *efuse,
+> +				    struct rtw8821c_efuse *map)
+> +{
+> +	ether_addr_copy(efuse->addr, map->s.mac_addr);
+> +}
+> +
+>  static void rtw8821cu_efuse_parsing(struct rtw_efuse *efuse,
+>  				    struct rtw8821c_efuse *map)
+>  {
+> @@ -74,6 +80,9 @@ static int rtw8821c_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
+>  	case RTW_HCI_TYPE_PCIE:
+>  		rtw8821ce_efuse_parsing(efuse, map);
+>  		break;
+> +	case RTW_HCI_TYPE_SDIO:
+> +		rtw8821cs_efuse_parsing(efuse, map);
+> +		break;
+>  	case RTW_HCI_TYPE_USB:
+>  		rtw8821cu_efuse_parsing(efuse, map);
+>  		break;
+> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821c.h
+> b/drivers/net/wireless/realtek/rtw88/rtw8821c.h
+> index 1c81260f3a54..1deea54575b5 100644
+> --- a/drivers/net/wireless/realtek/rtw88/rtw8821c.h
+> +++ b/drivers/net/wireless/realtek/rtw88/rtw8821c.h
+> @@ -65,6 +65,11 @@ struct rtw8821ce_efuse {
+>  	u8 res7;
+>  };
+> 
+> +struct rtw8821cs_efuse {
+> +	u8 res4[0x4a];			/* 0xd0 */
+> +	u8 mac_addr[ETH_ALEN];		/* 0x11a */
+> +};
+> +
 
-Applied, thanks
+This struct should be __packed, as well as rtw8821c_efuse.
 
--- 
-~Vinod
+Would you mind to create additional patch to add __packed to these struct of
+efuse layout?
+
+>  struct rtw8821c_efuse {
+>  	__le16 rtl_id;
+>  	u8 res0[0x0e];
+> @@ -93,6 +98,7 @@ struct rtw8821c_efuse {
+>  	u8 res[3];
+>  	union {
+>  		struct rtw8821ce_efuse e;
+> +		struct rtw8821cs_efuse s;
+>  		struct rtw8821cu_efuse u;
+>  	};
+>  };
+> --
+> 2.39.0
+
