@@ -2,117 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A71657643
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8A0657650
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbiL1MDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
+        id S232023AbiL1MKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbiL1MC3 (ORCPT
+        with ESMTP id S229668AbiL1MKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:02:29 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A492A2AEE;
-        Wed, 28 Dec 2022 04:01:42 -0800 (PST)
-Received: from [10.7.7.5] (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id E0E6A7E258;
-        Wed, 28 Dec 2022 12:01:38 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1672228902;
-        bh=Yw3TuLngTSu3YPEHEdu5NGY2ZRCtBOIME+CW2blUEs8=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=MjNkG8lxgq2o1fPcIbFjRNB7VWK9krBeq3aNDYaLcqFQKPdejJx74tVrBb5T5s4au
-         eTO2mkcJrwlA2NKG760KjK0uzSTTSCCXHnlSgHxFQtSGRD/s8tPnFTOchu/ZtFIGRK
-         R1xXc3B7k09S33iZD5WoZjdWgCAdDy4zsH8h/5OYuMH21VXqgDtBQeXgREv0yG5dwL
-         PO1PV0PUqkoTzNikbTKrlLOKFC47nkWAaYh1Rf5j3QsHru4h4e78sA8tm6ZfvkgVdT
-         7/+n+TudLNq68SljvWnDkPkVDulQz+wsCyEGJRPrV5fEHWkzpTmy1oL637AXb5w5Xb
-         5Mu8vAkMPnxCQ==
-Message-ID: <23e84c59-4f2c-01b4-5b8a-80af39a1d761@gnuweeb.org>
-Date:   Wed, 28 Dec 2022 19:01:36 +0700
+        Wed, 28 Dec 2022 07:10:04 -0500
+X-Greylist: delayed 484 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Dec 2022 04:10:02 PST
+Received: from honk.sigxcpu.org (honk.sigxcpu.org [24.134.29.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FC4DA3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:10:02 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id F27D1FB03;
+        Wed, 28 Dec 2022 13:01:54 +0100 (CET)
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cJ_u4MwGn99Z; Wed, 28 Dec 2022 13:01:51 +0100 (CET)
+Date:   Wed, 28 Dec 2022 13:01:49 +0100
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Ondrej Jirman <megous@megous.com>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 03/14] drm/panel-sitronix-st7703: Drop custom DSI write
+ macros
+Message-ID: <Y6wwLdvhjUeTYSlQ@qwark.sigxcpu.org>
+References: <20221228014757.3170486-1-javierm@redhat.com>
+ <20221228014757.3170486-4-javierm@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        VNLX Kernel Department <kernel@vnlx.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>,
-        Muhammad Rizki <kiizuha@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>
-References: <20221222035134.3467659-1-ammar.faizi@intel.com>
- <20221222043452.GB29086@1wt.eu>
- <20221222134615.3535422-1-ammar.faizi@intel.com>
- <20221227062640.GA5337@1wt.eu>
- <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
- <20221227184902.GA6287@1wt.eu>
-Content-Language: en-US
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
-In-Reply-To: <20221227184902.GA6287@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221228014757.3170486-4-javierm@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
+        SPF_HELO_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/22 1:49 AM, Willy Tarreau wrote:
-> I'll try to do it but do not want to make you wait too long in case it
-> gets delayed. In the worst case we should only postpone the getauxval()
-> patch and not the other ones.
+Hi Javier,
+Could you please also cc maintainers on the actual macro addition since
+it's hard to review without seeing what the code gets changed to
+(especially when there's multiple revisions). I assume
 
-I will split it into 2 patchset then.
+   https://lore.kernel.org/dri-devel/20221228014757.3170486-2-javierm@redhat.com/
 
-> BTW, do you think your arch-specific changes for sigaction() will be
-> easily portable to other architectures ? I feel a bit wary of starting
-> to have different features per architecture given the purpose of the
-> lib, so the more uniform the coverage the better.
+is the right one?
+Cheers,
+ -- Guido
 
-The 'rt_sigaction()' itself doesn't seem to be an arch specific, but
-the way it resumes the execution needs to call 'rt_sigreturn()' which
-is arch specific. I took a look at the kernel source code, most
-architectures read 'struct rt_sigframe' from the stack pointer.
-
-https://github.com/torvalds/linux/blob/631aa744423173bf921191ba695bbc7c1aabd9e0/arch/x86/kernel/signal_32.c#L145
-https://github.com/torvalds/linux/blob/631aa744423173bf921191ba695bbc7c1aabd9e0/arch/x86/kernel/signal_64.c#L243-L271
-https://github.com/torvalds/linux/blob/a6b450573b912316ad36262bfc70e7c3870c56d1/arch/arm64/kernel/signal.c#L668-L699
-https://github.com/torvalds/linux/blob/a6b450573b912316ad36262bfc70e7c3870c56d1/arch/arm64/kernel/signal32.c#L259
-https://github.com/torvalds/linux/blob/eb67d239f3aa1711afb0a42eab50459d9f3d672e/arch/riscv/kernel/signal.c#L101
-
-On the x86-64 arch, the implementation is just like this:
-
-    __arch_restore_rt:
-        #
-        # ((%rsp - sizeof(long)) must point to 'struct rt_sigframe')
-        #
-        # 'struct rt_sigframe' is automatically constructed by
-        # the kernel when a signal is caught.
-        #
-        movl       $0xf, %eax // __NR_rt_sigreturn == 0xf
-        syscall
-
-I believe aarch64 and RISCV don't behave differently, but different
-registers.
-
-Not sure what PowerPC does here, it seems a bit different:
-https://github.com/torvalds/linux/blob/1612c382ffbdf1f673caec76502b1c00e6d35363/arch/powerpc/kernel/signal_64.c#L744
-
-I haven't taken a look at other archs.
-
-What do you think? Is it affordable for nolibc to implement all of
-these?
-
--- 
-Ammar Faizi
-
+On Wed, Dec 28, 2022 at 02:47:46AM +0100, Javier Martinez Canillas wrote:
+> There are macros for these already in the <drm/drm_mipi_dsi.h> header, use
+> that instead and delete the custom DSI write macros defined in the driver.
+> 
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
+> 
+>  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 83 ++++++++-----------
+>  1 file changed, 33 insertions(+), 50 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+> index 86a472b01360..3e6655c2727e 100644
+> --- a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
+> @@ -73,14 +73,6 @@ static inline struct st7703 *panel_to_st7703(struct drm_panel *panel)
+>  	return container_of(panel, struct st7703, panel);
+>  }
+>  
+> -#define dsi_generic_write_seq(dsi, seq...) do {				\
+> -		static const u8 d[] = { seq };				\
+> -		int ret;						\
+> -		ret = mipi_dsi_generic_write(dsi, d, ARRAY_SIZE(d));	\
+> -		if (ret < 0)						\
+> -			return ret;					\
+> -	} while (0)
+> -
+>  static int jh057n_init_sequence(struct st7703 *ctx)
+>  {
+>  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
+> @@ -90,27 +82,27 @@ static int jh057n_init_sequence(struct st7703 *ctx)
+>  	 * resemble the ST7703 but the number of parameters often don't match
+>  	 * so it's likely a clone.
+>  	 */
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETEXTC,
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETEXTC,
+>  			      0xF1, 0x12, 0x83);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETRGBIF,
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETRGBIF,
+>  			      0x10, 0x10, 0x05, 0x05, 0x03, 0xFF, 0x00, 0x00,
+>  			      0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETSCR,
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETSCR,
+>  			      0x73, 0x73, 0x50, 0x50, 0x00, 0x00, 0x08, 0x70,
+>  			      0x00);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETVDC, 0x4E);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETPANEL, 0x0B);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETCYC, 0x80);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETDISP, 0xF0, 0x12, 0x30);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETEQ,
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETVDC, 0x4E);
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETPANEL, 0x0B);
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETCYC, 0x80);
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETDISP, 0xF0, 0x12, 0x30);
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETEQ,
+>  			      0x07, 0x07, 0x0B, 0x0B, 0x03, 0x0B, 0x00, 0x00,
+>  			      0x00, 0x00, 0xFF, 0x00, 0xC0, 0x10);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETBGP, 0x08, 0x08);
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETBGP, 0x08, 0x08);
+>  	msleep(20);
+>  
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETVCOM, 0x3F, 0x3F);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_UNKNOWN_BF, 0x02, 0x11, 0x00);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETGIP1,
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETVCOM, 0x3F, 0x3F);
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_UNKNOWN_BF, 0x02, 0x11, 0x00);
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETGIP1,
+>  			      0x82, 0x10, 0x06, 0x05, 0x9E, 0x0A, 0xA5, 0x12,
+>  			      0x31, 0x23, 0x37, 0x83, 0x04, 0xBC, 0x27, 0x38,
+>  			      0x0C, 0x00, 0x03, 0x00, 0x00, 0x00, 0x0C, 0x00,
+> @@ -119,7 +111,7 @@ static int jh057n_init_sequence(struct st7703 *ctx)
+>  			      0x64, 0x20, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88,
+>  			      0x02, 0x88, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+>  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETGIP2,
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETGIP2,
+>  			      0x02, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+>  			      0x00, 0x00, 0x00, 0x00, 0x02, 0x46, 0x02, 0x88,
+>  			      0x88, 0x88, 0x88, 0x88, 0x88, 0x64, 0x88, 0x13,
+> @@ -128,7 +120,7 @@ static int jh057n_init_sequence(struct st7703 *ctx)
+>  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+>  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x0A,
+>  			      0xA5, 0x00, 0x00, 0x00, 0x00);
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETGAMMA,
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETGAMMA,
+>  			      0x00, 0x09, 0x0E, 0x29, 0x2D, 0x3C, 0x41, 0x37,
+>  			      0x07, 0x0B, 0x0D, 0x10, 0x11, 0x0F, 0x10, 0x11,
+>  			      0x18, 0x00, 0x09, 0x0E, 0x29, 0x2D, 0x3C, 0x41,
+> @@ -162,15 +154,6 @@ static const struct st7703_panel_desc jh057n00900_panel_desc = {
+>  	.init_sequence = jh057n_init_sequence,
+>  };
+>  
+> -#define dsi_dcs_write_seq(dsi, cmd, seq...) do {			\
+> -		static const u8 d[] = { seq };				\
+> -		int ret;						\
+> -		ret = mipi_dsi_dcs_write(dsi, cmd, d, ARRAY_SIZE(d));	\
+> -		if (ret < 0)						\
+> -			return ret;					\
+> -	} while (0)
+> -
+> -
+>  static int xbd599_init_sequence(struct st7703 *ctx)
+>  {
+>  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
+> @@ -180,9 +163,9 @@ static int xbd599_init_sequence(struct st7703 *ctx)
+>  	 */
+>  
+>  	/* Magic sequence to unlock user commands below. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETEXTC, 0xF1, 0x12, 0x83);
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETEXTC, 0xF1, 0x12, 0x83);
+>  
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETMIPI,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETMIPI,
+>  			  0x33, /* VC_main = 0, Lane_Number = 3 (4 lanes) */
+>  			  0x81, /* DSI_LDO_SEL = 1.7V, RTERM = 90 Ohm */
+>  			  0x05, /* IHSRX = x6 (Low High Speed driving ability) */
+> @@ -194,14 +177,14 @@ static int xbd599_init_sequence(struct st7703 *ctx)
+>  			  0x44, 0x25, 0x00, 0x91, 0x0a, 0x00, 0x00, 0x02,
+>  			  0x4F, 0x11, 0x00, 0x00, 0x37);
+>  
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETPOWER_EXT,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETPOWER_EXT,
+>  			  0x25, /* PCCS = 2, ECP_DC_DIV = 1/4 HSYNC */
+>  			  0x22, /* DT = 15ms XDK_ECP = x2 */
+>  			  0x20, /* PFM_DC_DIV = /1 */
+>  			  0x03  /* ECP_SYNC_EN = 1, VGX_SYNC_EN = 1 */);
+>  
+>  	/* RGB I/F porch timing */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETRGBIF,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETRGBIF,
+>  			  0x10, /* VBP_RGB_GEN */
+>  			  0x10, /* VFP_RGB_GEN */
+>  			  0x05, /* DE_BP_RGB_GEN */
+> @@ -212,7 +195,7 @@ static int xbd599_init_sequence(struct st7703 *ctx)
+>  			  0x00, 0x00);
+>  
+>  	/* Source driving settings. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETSCR,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETSCR,
+>  			  0x73, /* N_POPON */
+>  			  0x73, /* N_NOPON */
+>  			  0x50, /* I_POPON */
+> @@ -224,19 +207,19 @@ static int xbd599_init_sequence(struct st7703 *ctx)
+>  			  0x00  /* Undocumented */);
+>  
+>  	/* NVDDD_SEL = -1.8V, VDDD_SEL = out of range (possibly 1.9V?) */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETVDC, 0x4E);
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETVDC, 0x4E);
+>  
+>  	/*
+>  	 * SS_PANEL = 1 (reverse scan), GS_PANEL = 0 (normal scan)
+>  	 * REV_PANEL = 1 (normally black panel), BGR_PANEL = 1 (BGR)
+>  	 */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETPANEL, 0x0B);
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETPANEL, 0x0B);
+>  
+>  	/* Zig-Zag Type C column inversion. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETCYC, 0x80);
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETCYC, 0x80);
+>  
+>  	/* Set display resolution. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETDISP,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETDISP,
+>  			  0xF0, /* NL = 240 */
+>  			  0x12, /* RES_V_LSB = 0, BLK_CON = VSSD,
+>  				 * RESO_SEL = 720RGB
+> @@ -246,7 +229,7 @@ static int xbd599_init_sequence(struct st7703 *ctx)
+>  				 * ISC = 0 frames
+>  				 */);
+>  
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETEQ,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETEQ,
+>  			  0x00, /* PNOEQ */
+>  			  0x00, /* NNOEQ */
+>  			  0x0B, /* PEQGND */
+> @@ -267,9 +250,9 @@ static int xbd599_init_sequence(struct st7703 *ctx)
+>  				 */);
+>  
+>  	/* Undocumented command. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_UNKNOWN_C6, 0x01, 0x00, 0xFF, 0xFF, 0x00);
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_UNKNOWN_C6, 0x01, 0x00, 0xFF, 0xFF, 0x00);
+>  
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETPOWER,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETPOWER,
+>  			  0x74, /* VBTHS, VBTLS: VGH = 17V, VBL = -11V */
+>  			  0x00, /* FBOFF_VGH = 0, FBOFF_VGL = 0 */
+>  			  0x32, /* VRP  */
+> @@ -287,20 +270,20 @@ static int xbd599_init_sequence(struct st7703 *ctx)
+>  			  0x77  /* VGH3_R_DIV, VGL3_R_DIV (4.5MHz) */);
+>  
+>  	/* Reference voltage. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETBGP,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETBGP,
+>  			  0x07, /* VREF_SEL = 4.2V */
+>  			  0x07  /* NVREF_SEL = 4.2V */);
+>  	msleep(20);
+>  
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETVCOM,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETVCOM,
+>  			  0x2C, /* VCOMDC_F = -0.67V */
+>  			  0x2C  /* VCOMDC_B = -0.67V */);
+>  
+>  	/* Undocumented command. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_UNKNOWN_BF, 0x02, 0x11, 0x00);
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_UNKNOWN_BF, 0x02, 0x11, 0x00);
+>  
+>  	/* This command is to set forward GIP timing. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETGIP1,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETGIP1,
+>  			  0x82, 0x10, 0x06, 0x05, 0xA2, 0x0A, 0xA5, 0x12,
+>  			  0x31, 0x23, 0x37, 0x83, 0x04, 0xBC, 0x27, 0x38,
+>  			  0x0C, 0x00, 0x03, 0x00, 0x00, 0x00, 0x0C, 0x00,
+> @@ -311,7 +294,7 @@ static int xbd599_init_sequence(struct st7703 *ctx)
+>  			  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
+>  
+>  	/* This command is to set backward GIP timing. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETGIP2,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETGIP2,
+>  			  0x02, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+>  			  0x00, 0x00, 0x00, 0x00, 0x02, 0x46, 0x02, 0x88,
+>  			  0x88, 0x88, 0x88, 0x88, 0x88, 0x64, 0x88, 0x13,
+> @@ -322,7 +305,7 @@ static int xbd599_init_sequence(struct st7703 *ctx)
+>  			  0xA5, 0x00, 0x00, 0x00, 0x00);
+>  
+>  	/* Adjust the gamma characteristics of the panel. */
+> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETGAMMA,
+> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETGAMMA,
+>  			  0x00, 0x09, 0x0D, 0x23, 0x27, 0x3C, 0x41, 0x35,
+>  			  0x07, 0x0D, 0x0E, 0x12, 0x13, 0x10, 0x12, 0x12,
+>  			  0x18, 0x00, 0x09, 0x0D, 0x23, 0x27, 0x3C, 0x41,
+> @@ -499,7 +482,7 @@ static int allpixelson_set(void *data, u64 val)
+>  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
+>  
+>  	dev_dbg(ctx->dev, "Setting all pixels on\n");
+> -	dsi_generic_write_seq(dsi, ST7703_CMD_ALL_PIXEL_ON);
+> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_ALL_PIXEL_ON);
+>  	msleep(val * 1000);
+>  	/* Reset the panel to get video back */
+>  	drm_panel_disable(&ctx->panel);
+> -- 
+> 2.38.1
+> 
