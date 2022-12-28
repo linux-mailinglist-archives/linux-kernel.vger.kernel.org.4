@@ -2,114 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C19657575
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4D7657577
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiL1KtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 05:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        id S232542AbiL1Kub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 05:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiL1KtQ (ORCPT
+        with ESMTP id S229603AbiL1Ku3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 05:49:16 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCBA1135
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 02:49:15 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id f25so3471926uaa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 02:49:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qc4GMdi1dtN/U5J4nf2BxViaxJc5bdEY/94/Fx0h1oo=;
-        b=GDpb95sQOqwhtno042AWhfoDl0nhCVpuvOZfzg0N9VK7B+ObUvY1HJXg5UDnuFEZyT
-         XcvanvurpsD0m/qKhH5+eVkxhOYTAzHgGiu0ERW6rP3mojiBawuT1oESSOXJkT/xnmPS
-         yIJJ0QuDcA893uMQBzoI2PhczPk68eeucdyUZJq6yO4usDmoAg094Sd0Sdz+dzY/kZ6d
-         BPKRNavyeaP7nqCE4k31L/VZAEwr4EiiXH+LnE7JjBOWGoHMF7SrvSTKljdg8q9uxZCT
-         PPFwzSTbq3931s1pRbWicWA7ByGGcMeRDatgcaPq7W2WNTKdCggg/hTxpTNFl+yiNvrL
-         0wcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qc4GMdi1dtN/U5J4nf2BxViaxJc5bdEY/94/Fx0h1oo=;
-        b=h+txU70iU9tlxYjUSYSC4sRbMAMoASsN/ROkANKSrIJNflszlY6+45TWynwWSbEAn1
-         iM5sCPoQMCzCbamhQ/Vbpv8xZzBg0x84zI8fma3FhBmBbhzRFSuWEr/sUFqmDGcTCYTO
-         Mt2AtoktsQ9lk2oVy7xdmC+Ywi1o3lFUYE/sjS6DkdG3EzFpYcZLXhk5oo+XPatlcjH5
-         ZW6In/X4RJnPNLXXtyBo0R9OvSSD3JMr7lD8H7rm1VAvouBIkA/qp6qO9wRVQxLlOcRR
-         pgGLQdN5JFkxGizcOUzo7cWk8wQaD4fvoWXzJyZ6ta0ozjhA3sOU156eeeuDeLz0SefQ
-         05ww==
-X-Gm-Message-State: AFqh2kp0nJLcJ/kWWKmXPYZhT+jo8Y5IIdsWUuGsjpLzNC+0Xc5f/si1
-        6U1AXdhbKbkaoYU6Dt3SSZeOI5/Os/gfrEj8y+n/8A==
-X-Google-Smtp-Source: AMrXdXtFsHIeSouKwNPlsTpcJOWSMlR0NPg9XgKy51UaKg6Cvktw0EIVnnGJFn0Fu8vAMp+iebSa/M1UJx/vBFw5lT4=
-X-Received: by 2002:ab0:152b:0:b0:418:620e:6794 with SMTP id
- o40-20020ab0152b000000b00418620e6794mr2222573uae.59.1672224554156; Wed, 28
- Dec 2022 02:49:14 -0800 (PST)
+        Wed, 28 Dec 2022 05:50:29 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41389DA3;
+        Wed, 28 Dec 2022 02:50:28 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BSAFcib029539;
+        Wed, 28 Dec 2022 04:50:20 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=rIeu7WF6DtqWolIDAOYqvMx29bKhbAUlb2U/kZoTnH0=;
+ b=V94GarekpKmiZWByPz+K7dj+KFEmHN7rSXJF3Zo1z+gNNjHKi/bChMUEhAk4PAwdd8+V
+ vfFeA8g4ekN0tnm/F1a7KAIbluozEgAYTQ7xqasX/IMKDw56M1f+qn5Lm6zXQbdfbMcc
+ /9Y9nOI7XCant0ZRWAbondQip5nLnWEeP3pWgts3313JMD9ObtUOapmAmTs4Hs0OH1y2
+ 293G4H9nv8eYwfb3yW4Ed37q2qlL17V2sNAYJIWpzXMftC77bBWJAo+SizR9Y/NZeaCt
+ iTSdaPKYHzFJThrw9o5RiVvnwJz+RqpnAoOoQfVx1aKgCiT0AmjWlpUyt6gIG483xwNK Jg== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3mnyq7aygf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 04:50:20 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 28 Dec
+ 2022 04:50:18 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.20 via Frontend Transport; Wed, 28 Dec 2022 04:50:18 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 726BC11CB;
+        Wed, 28 Dec 2022 10:50:18 +0000 (UTC)
+Date:   Wed, 28 Dec 2022 10:50:18 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: cirrus,cs35l41: add interrupts
+Message-ID: <20221228105018.GH36097@ediswmail.ad.cirrus.com>
+References: <20221224154210.43356-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20221213191813.4054267-1-giulio.benetti@benettiengineering.com>
-In-Reply-To: <20221213191813.4054267-1-giulio.benetti@benettiengineering.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 28 Dec 2022 16:19:02 +0530
-Message-ID: <CA+G9fYvHyx+R2Dbw+qijK5aG=k2w+YN_o3-KwWVYK1U-3L-ddg@mail.gmail.com>
-Subject: Re: [PATCH] ARM: mm: fix warning on phys_addr_t to void pointer assignment
-To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221224154210.43356-1-krzysztof.kozlowski@linaro.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: GLp5ipBMYVET8tLWK6OHEKBU3-iUWl04
+X-Proofpoint-ORIG-GUID: GLp5ipBMYVET8tLWK6OHEKBU3-iUWl04
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 14 Dec 2022 at 00:48, Giulio Benetti
-<giulio.benetti@benettiengineering.com> wrote:
->
-> zero_page is a void* pointer but memblock_alloc() returns phys_addr_t type
-> so this generates a warning while using clang and with -Wint-error enabled
-> that becomes and error. So let's cast the return of memblock_alloc() to
-> (void *).
->
-> Cc: <stable@vger.kernel.org> # 4.14.x +
-> Fixes: 340a982825f7 ("ARM: 9266/1: mm: fix no-MMU ZERO_PAGE() implementation")
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
+On Sat, Dec 24, 2022 at 04:42:09PM +0100, Krzysztof Kozlowski wrote:
+> Both DTS (SM8250 and SM8350 based Sony Xperia boards) and Linux driver
+> mention interrupt, so allow it to fix:
+> 
+>   sm8350-sony-xperia-sagami-pdx215.dtb: cs35l41@41: Unevaluated properties are not allowed ('interrupt-parent', 'interrupts' were unexpected)
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  arch/arm/mm/nommu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
-> index c1494a4dee25..53f2d8774fdb 100644
-> --- a/arch/arm/mm/nommu.c
-> +++ b/arch/arm/mm/nommu.c
-> @@ -161,7 +161,7 @@ void __init paging_init(const struct machine_desc *mdesc)
->         mpu_setup();
->
->         /* allocate the zero page. */
-> -       zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-> +       zero_page = (void *)memblock_alloc(PAGE_SIZE, PAGE_SIZE);
->         if (!zero_page)
->                 panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
->                       __func__, PAGE_SIZE, PAGE_SIZE);
-> --
-> 2.34.1
 
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Thanks,
+Charles
