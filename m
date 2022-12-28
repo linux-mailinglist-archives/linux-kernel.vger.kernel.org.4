@@ -2,108 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74AC657167
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 01:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED98365716B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 01:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiL1A1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 19:27:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S229674AbiL1Af5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 19:35:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiL1A1p (ORCPT
+        with ESMTP id S229475AbiL1Af4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 19:27:45 -0500
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF4210E4;
-        Tue, 27 Dec 2022 16:27:44 -0800 (PST)
-Received: by mail-il1-f175.google.com with SMTP id i25so7569865ila.8;
-        Tue, 27 Dec 2022 16:27:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lzEg4VO5GMi09m7RLPNF4beRTGaDDincjcOLdN8zZdk=;
-        b=MYVPFXSiAJF3rKVPNgcOuKV7X2v1OdQE9f6coPHd3r2GRSL4+dFVjeHoFv0aokx2UZ
-         QOuF0YEYT8T8c87kE5fsRJTfgTZQZfbOhL36g6l4ImaR9Z8utEN+0vZvs5eoA9lJ4KFq
-         /PW9PtBB91QLycXbmnQvsK1FfLIownZ28Wo0uJGvXsZLXaIL1p0CzHfoxwYjvVkJYUx4
-         f9pa1+7LRngJBOt5B10nEYzD/z/oec1q4G4I0jK6ej0or5BeowWjdowMKrACHC3CnG7i
-         EgAilLapp7KDJjKgMQj9jzE68DnuFaCys5UxjomSP/HeOGc4eX6aI5JZBV/9aFynGCQ9
-         Fz0g==
-X-Gm-Message-State: AFqh2kpnXXbjxPJ7ILKOlT8Kuz2oVDpAMIPXaTDkLXaIA3d0XkHwCQ09
-        lZDQSHN/gbMGiVLVhjHM9A==
-X-Google-Smtp-Source: AMrXdXtSbeY5HcnJUrgcgnQWGZZB8V4nCKmekBJ+lCyjQy174hnKaPbClWYr0MaWlXwbR6bSTkuH0Q==
-X-Received: by 2002:a92:d2cf:0:b0:30b:e45c:3d1a with SMTP id w15-20020a92d2cf000000b0030be45c3d1amr12815714ilg.23.1672187263562;
-        Tue, 27 Dec 2022 16:27:43 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id w9-20020a92c889000000b0030c00897497sm2423967ilo.19.2022.12.27.16.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 16:27:42 -0800 (PST)
-Received: (nullmailer pid 42254 invoked by uid 1000);
-        Wed, 28 Dec 2022 00:27:41 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+        Tue, 27 Dec 2022 19:35:56 -0500
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AC8BC2A;
+        Tue, 27 Dec 2022 16:35:53 -0800 (PST)
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id B34C6DB4;
+        Wed, 28 Dec 2022 01:35:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202211; t=1672187750;
+        bh=+yuFqRfY2HLZJC2FTM5sps1/rCx07mHiCqapWOI0R/c=;
+        h=Date:From:Cc:Subject:From;
+        b=hsmtYgBQLo1Z4Qzh85AN9gMUxXyHYaoD5iz+hIUBCovvxPn6km+W6Z1C6v1MscyZh
+         Lha37KFpdbgElHnNfALmj/AhX2VXwFxgZ2vUGoLmBRzZJaEeVUVPe6tRrEgzcPEyW6
+         equ9UmhUp9IeYY8D0PfCeYpxvVomhg42/LJPGJ6PTDaMKuvjmB7KjTfzq6THmx9Itd
+         B3e5634EoqAHoDAXNs9JLN9S8ZUPw4quAzlRqd+eYHvYAEs0jsOI15Sr1IjxZ2W1kp
+         7N+AZ6KCyos8845Hofx20UxisuGi+6QxUpes/opTdX+SEfHwcXarHyZCpdKoxjA/Fz
+         NH0pbvjRY+mNQ==
+Date:   Wed, 28 Dec 2022 01:35:49 +0100
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH 1/2] perf python: fix clang feature detection littering
+Message-ID: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Okan Sahin <okan.sahin@analog.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:MAXIM MAX77541 PMIC MFD DRIVER" 
-        <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20221226223839.103460-3-okan.sahin@analog.com>
-References: <20221226223839.103460-1-okan.sahin@analog.com>
- <20221226223839.103460-3-okan.sahin@analog.com>
-Message-Id: <167218706106.33727.591355104841763067.robh@kernel.org>
-Subject: Re: [PATCH v2 2/5] dt-bindings: mfd: adi,max77541.yaml Add MAX77541 bindings
-Date:   Tue, 27 Dec 2022 18:27:41 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t3pulo24eodgyv74"
+Content-Disposition: inline
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,MISSING_HEADERS,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 27 Dec 2022 01:38:36 +0300, Okan Sahin wrote:
-> The bindings for MAX77541 MFD driver. It also
-> includes MAX77540 driver whose regmap is covered by MAX77541.
-> 
-> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
-> ---
->  .../devicetree/bindings/mfd/adi,max77541.yaml | 102 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 103 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77541.yaml
-> 
+--t3pulo24eodgyv74
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This left behind tools/perf/a.out,
+not .gitignored and not removed by make clean.
 
-yamllint warnings/errors:
+Fixes: commit 5508672d7f4949f15c316ffd947228f130498534 ("perf python:
+ Remove -mcet and -fcf-protection when building with clang")
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+---
+ tools/perf/util/setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/mfd/adi,max77541.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/regulator/adi,max77541-regulator.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77541.example.dtb: pmic@69: regulators: False schema does not allow {'BUCK1': {'regulator-min-microvolt': [[500000]], 'regulator-max-microvolt': [[5200000]], 'regulator-boot-on': True, 'regulator-always-on': True}, 'BUCK2': {'regulator-min-microvolt': [[500000]], 'regulator-max-microvolt': [[5200000]], 'regulator-boot-on': True, 'regulator-always-on': True}}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77541.yaml
+diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+index c294db713677..58239e1cdb2a 100644
+--- a/tools/perf/util/setup.py
++++ b/tools/perf/util/setup.py
+@@ -16,7 +16,7 @@ cc_is_clang =3D b"clang version" in Popen([cc, "-v"], std=
+err=3DPIPE).stderr.readline
+ src_feature_tests  =3D getenv('srctree') + '/tools/build/feature'
+=20
+ def clang_has_option(option):
+-    cc_output =3D Popen([cc, cc_options + option, path.join(src_feature_te=
+sts, "test-hello.c") ], stderr=3DPIPE).stderr.readlines()
++    cc_output =3D Popen([cc, cc_options + option + "-o /dev/null", path.jo=
+in(src_feature_tests, "test-hello.c") ], stderr=3DPIPE).stderr.readlines()
+     return [o for o in cc_output if ((b"unknown argument" in o) or (b"is n=
+ot supported" in o))] =3D=3D [ ]
+=20
+ if cc_is_clang:
+--=20
+2.30.2
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221226223839.103460-3-okan.sahin@analog.com
+--t3pulo24eodgyv74
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+-----BEGIN PGP SIGNATURE-----
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmOrj2UACgkQvP0LAY0m
+WPHYow//fy0XFEF+QnvjTzfb45o4BtmQnZjdY1QcstapWBzocqgQ+vuygxVpc7kJ
+q5WzQVBwEPgBgqnqlLH9cDsQ1W7YRzbL9/7hn3/yq84CqYAr5aGPoF1oE/yPEUO8
+9ngrEXMCfLi9U1rPfkd51y3X27J6+dnogMskoyl4vFsRdyDcsgU9APA7L2jmHyVc
+VRm5JQDLDEgJE2kajCks6r8Qpz9M1xEiFB2yIXw+9Ithl7T1LJez62CHLUiM3Tnj
+yld3e1y/VkIqPykc/gTR0Wiza4WUHyMY8ZpFB1cv8rwnr2z4hBuQQRoZ5XhUPmrI
+WXkQgkoB2yesb7fu9+f30UmHIxShr5etoeDhhzxo/y37qHm4n1DQ5Qrt4WctE7FE
+e0E7FtDRUNvrPBaRdxhVI0PGpc6XKsHHzY/LSsjhtgcO3m1o2r3GLdrFguckBdEt
+RyWHxMV4lzsBpmFAH2/QfLWQcmIa1dFSe9hP8xzoc2BOLsouo/0kadzzEIYwatSP
+00HgN8zhf/9YGX10cP1X35lpDNvx8ow02a5t/YnpSpkIToAimIlo+Xu4Bt9xvcXk
+XEcZfE1gPIiJNBwSeM6NRmDtWGCwqFirh9S4fDiEGlZElNUfyYYpV3tHtlraMSG4
+EBW22aYuAIzoAvRb5tOXVL1O4cHyFb1DSg4vlmkKPkFXIXrM+1s=
+=KmYn
+-----END PGP SIGNATURE-----
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--t3pulo24eodgyv74--
