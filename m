@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB4A657178
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 01:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC28657179
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 01:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiL1Aov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 19:44:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S230141AbiL1Aoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 19:44:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiL1Aot (ORCPT
+        with ESMTP id S229674AbiL1Aot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Dec 2022 19:44:49 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B103DFDF;
-        Tue, 27 Dec 2022 16:44:49 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id pj1so6947056qkn.3;
-        Tue, 27 Dec 2022 16:44:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AVmMB7LWgzdDIBRBEs9sPvtNNzf69pakGxYpB1OitTQ=;
-        b=EmI/12RhYqoyRBOJGISVnnAJyd8SrqHywjQceEQHxUb4IWGfUxyMYH6Oj3vA2gemwl
-         AanGkRJ/RL+HzJ161PC6ENC/uJJCwX2XqA22LpYHrrPko3aDo/QeFNPaUNFD0s92d/CB
-         qqkU3L3cj92IJ6TUQjxR9oPutRRx9N1/CYePYuCCP5lN/wwtW1nzxu48xCXuPodMSsrn
-         Us1gz2P/zfmPvH9fzhzU8hlHQWepG0ZLmXeq0yH8su++ManAM6QJos8zGvNrdAdaRptk
-         wSXjVQSIJiBqbuMr3oJZ/fGSviUKaUe8EW1f8hE9yto9l8gqPedSSH94Vvsh03Q6OZMo
-         kW1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AVmMB7LWgzdDIBRBEs9sPvtNNzf69pakGxYpB1OitTQ=;
-        b=iTEBb7leJd162y6P7lNeI0W9D8hiioiMrMS0JfrAHUobDZdoVfk4Rs4JDMZfE01V1r
-         0jep++59uDOjp9SKyWfbeb9BQWPB632MRYWlBV0WgpswaFJkkDC8biq7SDRI3tXLCHAT
-         cGRyQXbjftxntKO39QCpOxGIf4Z3j/MsRntvXQr7zfpGw7caYDDRKGNMKoyxO25/6u0K
-         JtJSAJw8f17lN4I8W2npv1tR5fBJSxHiOxS3F941awG2h5Eo1MlDvWPsFOj0bfCu4niF
-         EexunRmx9587UO442B5RChCaNE2SIajk7un9yj/t+1ROCm47adjXHwnLfSlX8nv6Rli8
-         S/AA==
-X-Gm-Message-State: AFqh2krBCA3AwMmxKhYfP4VMqJYGjPMWygd+G3Uf5OZJzQezpaGpJq6j
-        RkfUjbw+fLbOiS6OAbQaC3dwubfM216h8L9KfAI=
-X-Google-Smtp-Source: AMrXdXvR7x7YM6+Gq7ish224E78nPWdIqhJd3dcvNp6WaxeLjEbrEYNp+Z7vKscJjkyqHGwxbQLF4bHEsp3LditEKCE=
-X-Received: by 2002:a05:620a:489:b0:6ff:c2e:c71c with SMTP id
- 9-20020a05620a048900b006ff0c2ec71cmr1057568qkr.734.1672188287751; Tue, 27 Dec
- 2022 16:44:47 -0800 (PST)
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C5ADFB8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:44:49 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D7B5B5C00CC;
+        Tue, 27 Dec 2022 19:44:46 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 27 Dec 2022 19:44:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1672188286; x=1672274686; bh=lJKh5hLUSVyNtGb27sEl8iKUo
+        pQtksa0I8JjuVzm/jY=; b=zsXQvkbc4qvvStb1M0jQ5bPd3f+tBhq0STct4u3nu
+        QFwp83KoW0i4X//TVOFdjcNsGpo1Oc38whYYa4fcxGZZ2eckTsIBQzascSQqMPP8
+        6OVXIpr4QS8lrMMTycvQ91m6h4MABLc40u0OqDZrJBcGVSwkIfn+8Ccw333WRn/o
+        OKeY58lnAe0WBBFmQeUQFR4qZzeXq7m4JcZlPBMBwtsb30OK9N8DOfDdvrlofZtM
+        PaYpS2orM7rveegfgrhS8t5AIsR+VvHlMG/64g7Eu8EEkiqSvkapcpYnVuxzuOtO
+        wltFE3GW16yFFeXEIMF+HykbGcx2QWkWNG51VzbZTeSdw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1672188286; x=1672274686; bh=lJKh5hLUSVyNtGb27sEl8iKUopQtksa0I8J
+        juVzm/jY=; b=jpUgIno+86qYFaeGQn5+s30NUnkg/CCRVzjVp9GW/E0dR7mLEL6
+        0DZXdgLmi4IMPbDCHBE6s3l6QB+KlxDqkQernCkEGU2ihv+i16/qN+hh+qornvRW
+        iFBeM82wFAPlLX4qBIGjFMdw3ttGCWogLIZoXxqtEM2fEHC/r5Fg5EzdEBMf8lLV
+        0DRy/AoepLZX1Gdu93AduwHcuDl1i957/hv5Es+1pO6bFDj34JJty1Af5u5HfPdF
+        qbkN18LEkOeCeLS54EDRbc9ELnnqA8p7qMbMtdxFAKtYA+m/eQlKTsStnCSvhrOL
+        aT/WId0KvRn/4djCWMHJxr8BoTi89658xVg==
+X-ME-Sender: <xms:fpGrYwPR4xuCgO4e8y3P4kgryvMjk42PLPqwkWkoMEUIv3yhqZ5w0Q>
+    <xme:fpGrY2_Mgh6SUqXB3ZIOmu2p2OjixDgn19CWxyBsVtHs3SKDvCDgW-jpLL_dugSev
+    Pd_XqC8j6VxseP_hg>
+X-ME-Received: <xmr:fpGrY3QdETEsIgjk2Ux7Dl81HunUTSYYv6VmsQTyWSeYgQ58vR-14Tv6BeEuJHSIP7YX_dYVHSb0qiLGdqbCW_3sULwLMM941T22UNW1VjW0fAFXaWEVWGinr7qTtQOzWC2YNA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedriedugddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeehhffh
+    keekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:fpGrY4suk0hdHM_fE1N5dEqeRltOyr9UMHDbkEc3qJa3vTaFnMv_wA>
+    <xmx:fpGrY4d349C_7MaAlYDu9H52k22l5DFzr0D5ndAdsyDjxF0N6r2nLQ>
+    <xmx:fpGrY83KlxEYWxV4AhgP7btqrSfpWVu29JBVjUs1vfimRgLwes5UBg>
+    <xmx:fpGrY2tQhPmgQHCdvI7buI3rSUz3bXzdEKsHeUnnZLA2DefNNoaDMQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 27 Dec 2022 19:44:45 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH] clocksource/drivers/riscv: Increase the clock source rating
+Date:   Tue, 27 Dec 2022 18:44:44 -0600
+Message-Id: <20221228004444.61568-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-References: <20221227100659.157071-1-jjhiblot@traphandler.com>
- <20221227100659.157071-7-jjhiblot@traphandler.com> <CAHp75VceSOCiu=17jrmHVOaqAoaqw4He9DKgH8Vjw_oYZdi7Eg@mail.gmail.com>
-In-Reply-To: <CAHp75VceSOCiu=17jrmHVOaqAoaqw4He9DKgH8Vjw_oYZdi7Eg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 28 Dec 2022 02:44:11 +0200
-Message-ID: <CAHp75VfkcZCN+6i9bUAXQbj62GxBAJMwn-5xeU76yTKC7ek7wg@mail.gmail.com>
-Subject: Re: [RESEND PATCH v6 6/6] leds: Add a multicolor LED driver to group
- monochromatic LEDs
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     lee@kernel.org, pavel@ucw.cz, robh+dt@kernel.org,
-        sven.schwermer@disruptive-technologies.com,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
-        marijn.suijten@somainline.org, jacek.anaszewski@gmail.com,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,62 +86,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 2:41 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Tue, Dec 27, 2022 at 12:07 PM Jean-Jacques Hiblot
-> <jjhiblot@traphandler.com> wrote:
-> >
-> > By allowing to group multiple monochrome LED into multicolor LEDs,
-> > all involved LEDs can be controlled in-sync. This enables using effects
-> > using triggers, etc.
->
-> ...
->
-> > +       count = 0;
-> > +       max_brightness = 0;
-> > +       for (;;) {
-> > +               struct led_classdev *led_cdev;
-> > +
-> > +               led_cdev = devm_of_led_get_optional(dev, count);
->
-> > +
->
-> Redundant blank line.
->
-> > +               if (IS_ERR(led_cdev))
-> > +                       return dev_err_probe(dev, PTR_ERR(led_cdev),
-> > +                                            "Unable to get led #%d", count);
-> > +
-> > +               /* Reached the end of the list ?*/
-> > +               if (!led_cdev)
-> > +                       break;
->
-> > +               count++;
->
-> If I understand the flow correctly, this can be moved...
->
-> > +               priv->monochromatics = devm_krealloc_array(dev, priv->monochromatics,
-> > +                                       count, sizeof(*priv->monochromatics),
+RISC-V provides an architectural clock source via the time CSR. This
+clock source exposes a 64-bit counter synchronized across all CPUs.
+Because it is accessed using a CSR, it is much more efficient to read
+than MMIO clock sources. For example, on the Allwinner D1, reading the
+sun4i timer in a loop takes 131 cycles/iteration, while reading the
+RISC-V time CSR takes only 5 cycles/iteration.
 
-Yes, here the + 1 will be needed instead. But I think it would be
-better from the reader perspective, as we try to allocate memory for
-existing amount + 1 as it would be clearly written.
+Adjust the RISC-V clock source rating so it is preferred over the
+various platform-specific MMIO clock sources.
 
-> > +                                       GFP_KERNEL);
-> > +               if (!priv->monochromatics)
-> > +                       return -ENOMEM;
->
-> > +               priv->monochromatics[count - 1] = led_cdev;
->
-> ...here either as a separate line or a part of the above assignment,
-> in either case the -1 wouldn't be needed.
->
->
-> > +               max_brightness = max(max_brightness, led_cdev->max_brightness);
-> > +       }
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-P.S. Bjorn's address is wrong.
+ drivers/clocksource/timer-riscv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+index a0d66fabf073..55dad7965f43 100644
+--- a/drivers/clocksource/timer-riscv.c
++++ b/drivers/clocksource/timer-riscv.c
+@@ -73,7 +73,7 @@ static u64 notrace riscv_sched_clock(void)
+ 
+ static struct clocksource riscv_clocksource = {
+ 	.name		= "riscv_clocksource",
+-	.rating		= 300,
++	.rating		= 400,
+ 	.mask		= CLOCKSOURCE_MASK(64),
+ 	.flags		= CLOCK_SOURCE_IS_CONTINUOUS,
+ 	.read		= riscv_clocksource_rdtime,
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.4
+
