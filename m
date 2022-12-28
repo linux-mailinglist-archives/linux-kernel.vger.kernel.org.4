@@ -2,107 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5581C65869A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 21:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B997C6586A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 21:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiL1UEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 15:04:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
+        id S231635AbiL1UQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 15:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbiL1UEB (ORCPT
+        with ESMTP id S231415AbiL1UQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 15:04:01 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B9713F3F;
-        Wed, 28 Dec 2022 12:04:00 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso20939111pjp.4;
-        Wed, 28 Dec 2022 12:04:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D9hw1tyF2xNwFWyPmio8njtMOWA8uIyfYQ81GU7PQ4g=;
-        b=l5hSqSw7DhDVM2wKiPZ9RYMs20w2cvUUZhLOO00+ql252Nm0olrX0Rv9xmU7vqHR9O
-         LIRe6eWgrqlHrYUPH6OiRi4Q7e9fQ9fO0elhONz3PQ1X7oq0PuaMjwSnXeMV1nkJ5NCg
-         1PGR683ce+XaMymj5D6i1neHgegICCGOO0Oh8W84QDxYUMX7SQqNCCMvv1OE529fve2s
-         4deFw1HB8r23vK/YoMdKhIaOTVy566MgadmYlZpO0e5obxEmwuxIQnZ7cniERQBnRJhk
-         GA2+0O68FtQz8I/lonnmxobdxon3TsFtre6KLTdcgGgZhlqv5mYIA7fdnlj+s609WLs2
-         sD1w==
+        Wed, 28 Dec 2022 15:16:44 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6D514D39
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 12:16:41 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id a14-20020a6b660e000000b006bd37975cdfso5432571ioc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 12:16:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9hw1tyF2xNwFWyPmio8njtMOWA8uIyfYQ81GU7PQ4g=;
-        b=EusXyHkKgzoDy0pQ8cEk9eLbPTywwRAvLvV4J0zS0VDx74OpEOgw61LmDFN7xpycq4
-         eGOML4qNvJioND7uZxhrkdbdZcLARJgojiyoH0+xh4AMuC35jDP8yRdNWvjjl1ZzZk6P
-         03K94gB67dQYFa2SNXUeqgPS/UJE4HfOXZf41BEsfY81nrCHMhEJfKqYuJnq2CJRoW4c
-         56LJpnCZ52kH1OziH1AwEa/hhAai1lCi8ri2P47kwQ/KSS28CC5QoDDuX85x3LVN62cy
-         0Rb3qQOInoHIyRksT2cJ//PXRPIT51whququ6QPB8Tf7Ipgld7v7yJrPJl5369Qu+p+j
-         MZGg==
-X-Gm-Message-State: AFqh2kqXyGZTWbGXHP9f8j8vtYP1PVrnpqK8o+4FhrKo91vvUiswGJzn
-        qKRF1XcqSexCMJnUJ7TQQdc=
-X-Google-Smtp-Source: AMrXdXvaLyIZDB2S9vQZlF3OIaI/XmryotvyVvLG8GaQ4k7gCNGscNcXAEniNr9iPcBPOU3EdJJIzA==
-X-Received: by 2002:a17:90a:780d:b0:219:ccbc:ed8e with SMTP id w13-20020a17090a780d00b00219ccbced8emr30058109pjk.20.1672257839728;
-        Wed, 28 Dec 2022 12:03:59 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id q60-20020a17090a4fc200b00225d963fbc2sm7056781pjh.34.2022.12.28.12.03.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 12:03:59 -0800 (PST)
-Message-ID: <6e00e703-f0ff-a739-75b5-bbca484ab74a@gmail.com>
-Date:   Wed, 28 Dec 2022 12:03:57 -0800
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GSXYMt9F0DljBBJAoeS8ed0co8SNZwaD/wJIXGf4jtI=;
+        b=eg/3vJ7igukzjKbENOPlN9z3BYVHm4K/1S9c0WaO49RsaXW7BT4PPVPj3n+2sFDGLE
+         2qZSO3Dtz7Y1XgCTGQciLgDQQlxdcBfrqCPzIINROkHR9gr2thyy2zTZ0q0YFLSiCQ62
+         BMfpmzTVmBlQCBeS2dSn8A5ogv+bFCs5vs8nGto0m0ANl4f1zpjyXNcyNneQFYajxka7
+         TrJftaND7Ex3ktpAFJ13b6vD3MTiriOM5vVerc+bPlLRCsMK+TIohB3J6pUpUhnRxf9t
+         ff+WoBCQL2dfCtsIHf1E1dtdW3Y+mCmcpdU8OJ3/AhPjWa060DnOmporYim9MtaWpKzK
+         snig==
+X-Gm-Message-State: AFqh2kqvbbO04x+PRKPmec0enJgGb8GN5V+2qquiX/7Kw8jF3Mhh0yMS
+        8YQxB8uJSUoiyr+ymAoOBCsvI/TW9b2xsg08SaltE3xQJBo+
+X-Google-Smtp-Source: AMrXdXv6jKhQuYftlLetBmbX477fP15MKMfQi0gyJr5HNxY0Zra+9mTDy3BudcHp2z7DhMtMcaFYssjmO6EunwXuNYv6x3bKBDX6
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221228144330.180012208@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221228144330.180012208@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1a2e:b0:303:4b02:47eb with SMTP id
+ g14-20020a056e021a2e00b003034b0247ebmr2346852ile.251.1672258601271; Wed, 28
+ Dec 2022 12:16:41 -0800 (PST)
+Date:   Wed, 28 Dec 2022 12:16:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e6c7b005f0e90bf1@google.com>
+Subject: [syzbot] [ext4?] kernel panic: EXT4-fs (device loop0): panic forced
+ after error (2)
+From:   syzbot <syzbot+3c45794f522ad93b0eb6@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    72a85e2b0a1e Merge tag 'spi-fix-v6.2-rc1' of git://git.ker..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13527f8c480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4e2d7bfa2d6d5a76
+dashboard link: https://syzkaller.appspot.com/bug?extid=3c45794f522ad93b0eb6
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12d7f2e4480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10c8d2ac480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/510d16df06c8/disk-72a85e2b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/50ef5477a1d4/vmlinux-72a85e2b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f2acd6f1189a/bzImage-72a85e2b.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/6f0bbc430a64/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3c45794f522ad93b0eb6@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 512
+EXT4-fs error (device loop0): ext4_map_blocks:607: inode #2: block 2: comm syz-executor170: lblock 0 mapped to illegal pblock 2 (length 1)
+Kernel panic - not syncing: EXT4-fs (device loop0): panic forced after error
+CPU: 1 PID: 5069 Comm: syz-executor170 Not tainted 6.1.0-syzkaller-14594-g72a85e2b0a1e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ panic+0x2d6/0x710 kernel/panic.c:318
+ ext4_handle_error+0x848/0x8a0 fs/ext4/super.c:685
+ __ext4_error_inode+0x2e1/0x4c0 fs/ext4/super.c:808
+ ext4_map_blocks+0xadf/0x1cc0
+ ext4_getblk+0x1b9/0x770 fs/ext4/inode.c:864
+ ext4_bread+0x2a/0x170 fs/ext4/inode.c:920
+ __ext4_read_dirblock+0xc9/0x890 fs/ext4/namei.c:144
+ dx_probe+0xb7/0x1590 fs/ext4/namei.c:818
+ ext4_dx_find_entry fs/ext4/namei.c:1771 [inline]
+ __ext4_find_entry+0x599/0x1ba0 fs/ext4/namei.c:1616
+ ext4_lookup_entry fs/ext4/namei.c:1752 [inline]
+ ext4_lookup+0x11c/0x690 fs/ext4/namei.c:1820
+ __lookup_slow+0x266/0x3a0 fs/namei.c:1685
+ lookup_slow fs/namei.c:1702 [inline]
+ lookup_one_unlocked+0x3f8/0x670 fs/namei.c:2772
+ lookup_one_positive_unlocked fs/namei.c:2801 [inline]
+ lookup_positive_unlocked+0x27/0xb0 fs/namei.c:2841
+ dquot_quota_on_mount+0x56/0xe0 fs/quota/dquot.c:2514
+ ext4_quota_on_mount fs/ext4/orphan.c:316 [inline]
+ ext4_orphan_cleanup+0x687/0x1340 fs/ext4/orphan.c:444
+ __ext4_fill_super fs/ext4/super.c:5516 [inline]
+ ext4_fill_super+0x81cd/0x8700 fs/ext4/super.c:5644
+ get_tree_bdev+0x400/0x620 fs/super.c:1282
+ vfs_get_tree+0x88/0x270 fs/super.c:1489
+ do_new_mount+0x289/0xad0 fs/namespace.c:3145
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd5f592fbca
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcfa196b78 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fd5f592fbca
+RDX: 0000000020000440 RSI: 0000000020000480 RDI: 00007ffcfa196b90
+RBP: 00007ffcfa196b90 R08: 00007ffcfa196bd0 R09: 0000000000000474
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000004
+R13: 00005555565362c0 R14: 0000000000000000 R15: 00007ffcfa196bd0
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
 
-On 12/28/2022 6:25 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.2 release.
-> There are 1146 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
