@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14D2657FB6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:08:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFB4657FC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234442AbiL1QIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 11:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
+        id S233067AbiL1QII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 11:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234449AbiL1QHj (ORCPT
+        with ESMTP id S234382AbiL1QHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Dec 2022 11:07:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6958193D4
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B618192BC
         for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:07:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45430B81730
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E022161579
         for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 16:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06939C433F0;
-        Wed, 28 Dec 2022 16:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70942C43392
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 16:07:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672243654;
-        bh=Y4X7RMwk9+vTUyMZ9CXeP4qzat5tfskxOFNjJ7+LrII=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iLYKyDvWN6RokSrIFp/UMAwc+wcsKNyI0JmOucG3oh7awnE9pQT1m37NRN3wN03+l
-         P+4lf1QyrmnMH7DnhbgNZzIJ0ALoMeFQqJQrpt6VMbyKXnFi8vZbHU8FwsrsffaWZn
-         GRq8d+i4KjYC+7PxJLUJH3xMgMVc9Te2CJGDZAP/vzBpzxwM8VtuM0HpY/vEPDEcoK
-         +Ei2ZJ1pBouUOdw3JjN9rslYlafae5mOx8Nxx9r2Yb7o6H25lBoL5SLfcdUgmXlxuH
-         /Vb5a6gKte9AyYbG2dnwQmOJbr3C95L7z6NP6PTHlwnfUn90GpikQ9JX4rjj6bxwnH
-         kIUehOTlWfP4Q==
+        s=k20201202; t=1672243656;
+        bh=SQGbSPHfdkj6XZAEZ2uYak02sBPvuUvgoQ1xJYRzt2o=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=TQxpsh8nUR3AgVZrBCyQWJqRHSA2k67BIaDMTtlrZNS9nR1LrffMw15tUjkg0MJPr
+         WXqdM4aQk4X7eBbNEJwGQVgSTVegIEElqUmnBKw7mT8Vqetv+6af8CxQKiyF/tLc6L
+         6BZW0Ww/BZRgma9RhQ0naLOWx/DE1EojGCrotA9q5EPioG8/VxiGYHImjKAjvpLUSm
+         f25X5LS9+b3qKsvKHzILKKhliRqdzpFYUQ7P9UBojzNOxeahHAVT7WsIc5wn43kXgQ
+         zlnq3SU1yRh8pMe/iGwjn/eYU7OjL45QyAdNfEETLi8LesjYHfzVgdclp1yerHe7JS
+         x41ttOVKXE37A==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Tomer Tayar <ttayar@habana.ai>
-Subject: [PATCH 2/9] habanalabs: verify that kernel CB is destroyed only once
-Date:   Wed, 28 Dec 2022 18:07:16 +0200
-Message-Id: <20221228160723.387-2-ogabbay@kernel.org>
+Subject: [PATCH 3/9] habanalabs/gaudi2: update asic register files
+Date:   Wed, 28 Dec 2022 18:07:17 +0200
+Message-Id: <20221228160723.387-3-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221228160723.387-1-ogabbay@kernel.org>
 References: <20221228160723.387-1-ogabbay@kernel.org>
@@ -45,162 +44,509 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomer Tayar <ttayar@habana.ai>
+Update some register files with the latest h/w auto-generated files.
+There is no functional change.
 
-Remove the distinction between user CB and kernel CB, and verify for
-both that they are not destroyed more than once.
-
-As kernel CB might be taken from the pre-allocated CB pool, so we need
-to clear the handle destroyed indication when returning a CB to the
-pool.
-
-Signed-off-by: Tomer Tayar <ttayar@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- .../accel/habanalabs/common/command_buffer.c  | 32 ++++++++-----------
- drivers/accel/habanalabs/common/device.c      |  2 +-
- drivers/accel/habanalabs/common/habanalabs.h  |  4 +--
- .../accel/habanalabs/common/habanalabs_drv.c  |  2 +-
- drivers/accel/habanalabs/common/memory_mgr.c  |  4 +--
- 5 files changed, 18 insertions(+), 26 deletions(-)
+ .../gaudi2/arc/gaudi2_arc_common_packets.h    | 156 +++++++++---------
+ .../gaudi2/asic_reg/dcore0_hmmu0_mmu_masks.h  |  15 +-
+ .../gaudi2/asic_reg/dcore0_hmmu0_stlb_masks.h |  41 ++---
+ ...re0_mme_ctrl_lo_arch_non_tensor_end_regs.h |   6 +-
+ .../asic_reg/dcore0_mme_ctrl_lo_masks.h       |   9 +-
+ .../asic_reg/dcore0_vdec0_brdg_ctrl_masks.h   |   6 +-
+ .../include/gaudi2/asic_reg/pcie_dbi_regs.h   |   3 +-
+ .../asic_reg/pcie_vdec0_brdg_ctrl_masks.h     |   3 +-
+ .../gaudi2/asic_reg/pmmu_hbw_stlb_masks.h     |   3 +-
+ .../gaudi2/asic_reg/psoc_global_conf_masks.h  |  27 +--
+ 10 files changed, 114 insertions(+), 155 deletions(-)
 
-diff --git a/drivers/accel/habanalabs/common/command_buffer.c b/drivers/accel/habanalabs/common/command_buffer.c
-index 6263d01cb9c1..390011b02239 100644
---- a/drivers/accel/habanalabs/common/command_buffer.c
-+++ b/drivers/accel/habanalabs/common/command_buffer.c
-@@ -88,6 +88,7 @@ static void cb_fini(struct hl_device *hdev, struct hl_cb *cb)
- static void cb_do_release(struct hl_device *hdev, struct hl_cb *cb)
- {
- 	if (cb->is_pool) {
-+		atomic_set(&cb->is_handle_destroyed, 0);
- 		spin_lock(&hdev->cb_pool_lock);
- 		list_add(&cb->pool_list, &hdev->cb_pool);
- 		spin_unlock(&hdev->cb_pool_lock);
-@@ -301,28 +302,23 @@ int hl_cb_destroy(struct hl_mem_mgr *mmg, u64 cb_handle)
- 	struct hl_cb *cb;
- 	int rc;
+diff --git a/drivers/accel/habanalabs/include/gaudi2/arc/gaudi2_arc_common_packets.h b/drivers/accel/habanalabs/include/gaudi2/arc/gaudi2_arc_common_packets.h
+index 2cf30c206ac6..22a6ab9a7f47 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/arc/gaudi2_arc_common_packets.h
++++ b/drivers/accel/habanalabs/include/gaudi2/arc/gaudi2_arc_common_packets.h
+@@ -7,93 +7,91 @@
+ #ifndef __GAUDI2_ARC_COMMON_PACKETS_H__
+ #define __GAUDI2_ARC_COMMON_PACKETS_H__
  
--	/* Make sure that a CB handle isn't destroyed by user more than once */
--	if (!mmg->is_kernel_mem_mgr) {
--		cb = hl_cb_get(mmg, cb_handle);
--		if (!cb) {
--			dev_dbg(mmg->dev, "CB destroy failed, no CB was found for handle %#llx\n",
--				cb_handle);
--			rc = -EINVAL;
--			goto out;
--		}
-+	cb = hl_cb_get(mmg, cb_handle);
-+	if (!cb) {
-+		dev_dbg(mmg->dev, "CB destroy failed, no CB was found for handle %#llx\n",
-+			cb_handle);
-+		return -EINVAL;
-+	}
+-/*
+- * CPU IDs for each ARC CPUs
+- */
+-
+-#define CPU_ID_SCHED_ARC0		0	/* FARM_ARC0 */
+-#define CPU_ID_SCHED_ARC1		1	/* FARM_ARC1 */
+-#define CPU_ID_SCHED_ARC2		2	/* FARM_ARC2 */
+-#define CPU_ID_SCHED_ARC3		3	/* FARM_ARC3 */
+-/* Dcore1 MME Engine ARC instance used as scheduler */
+-#define CPU_ID_SCHED_ARC4		4	/* DCORE1_MME0 */
+-/* Dcore3 MME Engine ARC instance used as scheduler */
+-#define CPU_ID_SCHED_ARC5		5	/* DCORE3_MME0 */
++enum {
++	CPU_ID_SCHED_ARC0 = 0, /* FARM_ARC0 */
++	CPU_ID_SCHED_ARC1 = 1, /* FARM_ARC1 */
++	CPU_ID_SCHED_ARC2 = 2, /* FARM_ARC2 */
++	CPU_ID_SCHED_ARC3 = 3, /* FARM_ARC3 */
++	/* Dcore1 MME Engine ARC instance used as scheduler */
++	CPU_ID_SCHED_ARC4 = 4, /* DCORE1_MME0 */
++	/* Dcore3 MME Engine ARC instance used as scheduler */
++	CPU_ID_SCHED_ARC5 = 5, /* DCORE3_MME0 */
  
--		rc = atomic_cmpxchg(&cb->is_handle_destroyed, 0, 1);
--		hl_cb_put(cb);
--		if (rc) {
--			dev_dbg(mmg->dev, "CB destroy failed, handle %#llx was already destroyed\n",
--				cb_handle);
--			rc = -EINVAL;
--			goto out;
--		}
-+	/* Make sure that CB handle isn't destroyed more than once */
-+	rc = atomic_cmpxchg(&cb->is_handle_destroyed, 0, 1);
-+	hl_cb_put(cb);
-+	if (rc) {
-+		dev_dbg(mmg->dev, "CB destroy failed, handle %#llx was already destroyed\n",
-+			cb_handle);
-+		return -EINVAL;
- 	}
+-#define CPU_ID_TPC_QMAN_ARC0		6	/* DCORE0_TPC0 */
+-#define CPU_ID_TPC_QMAN_ARC1		7	/* DCORE0_TPC1 */
+-#define CPU_ID_TPC_QMAN_ARC2		8	/* DCORE0_TPC2 */
+-#define CPU_ID_TPC_QMAN_ARC3		9	/* DCORE0_TPC3 */
+-#define CPU_ID_TPC_QMAN_ARC4		10	/* DCORE0_TPC4 */
+-#define CPU_ID_TPC_QMAN_ARC5		11	/* DCORE0_TPC5 */
+-#define CPU_ID_TPC_QMAN_ARC6		12	/* DCORE1_TPC0 */
+-#define CPU_ID_TPC_QMAN_ARC7		13	/* DCORE1_TPC1 */
+-#define CPU_ID_TPC_QMAN_ARC8		14	/* DCORE1_TPC2 */
+-#define CPU_ID_TPC_QMAN_ARC9		15	/* DCORE1_TPC3 */
+-#define CPU_ID_TPC_QMAN_ARC10		16	/* DCORE1_TPC4 */
+-#define CPU_ID_TPC_QMAN_ARC11		17	/* DCORE1_TPC5 */
+-#define CPU_ID_TPC_QMAN_ARC12		18	/* DCORE2_TPC0 */
+-#define CPU_ID_TPC_QMAN_ARC13		19	/* DCORE2_TPC1 */
+-#define CPU_ID_TPC_QMAN_ARC14		20	/* DCORE2_TPC2 */
+-#define CPU_ID_TPC_QMAN_ARC15		21	/* DCORE2_TPC3 */
+-#define CPU_ID_TPC_QMAN_ARC16		22	/* DCORE2_TPC4 */
+-#define CPU_ID_TPC_QMAN_ARC17		23	/* DCORE2_TPC5 */
+-#define CPU_ID_TPC_QMAN_ARC18		24	/* DCORE3_TPC0 */
+-#define CPU_ID_TPC_QMAN_ARC19		25	/* DCORE3_TPC1 */
+-#define CPU_ID_TPC_QMAN_ARC20		26	/* DCORE3_TPC2 */
+-#define CPU_ID_TPC_QMAN_ARC21		27	/* DCORE3_TPC3 */
+-#define CPU_ID_TPC_QMAN_ARC22		28	/* DCORE3_TPC4 */
+-#define CPU_ID_TPC_QMAN_ARC23		29	/* DCORE3_TPC5 */
+-#define CPU_ID_TPC_QMAN_ARC24		30	/* DCORE0_TPC6 - Never present */
++	CPU_ID_TPC_QMAN_ARC0 = 6,   /* DCORE0_TPC0 */
++	CPU_ID_TPC_QMAN_ARC1 = 7,   /* DCORE0_TPC1 */
++	CPU_ID_TPC_QMAN_ARC2 = 8,   /* DCORE0_TPC2 */
++	CPU_ID_TPC_QMAN_ARC3 = 9,   /* DCORE0_TPC3 */
++	CPU_ID_TPC_QMAN_ARC4 = 10,  /* DCORE0_TPC4 */
++	CPU_ID_TPC_QMAN_ARC5 = 11,  /* DCORE0_TPC5 */
++	CPU_ID_TPC_QMAN_ARC6 = 12,  /* DCORE1_TPC0 */
++	CPU_ID_TPC_QMAN_ARC7 = 13,  /* DCORE1_TPC1 */
++	CPU_ID_TPC_QMAN_ARC8 = 14,  /* DCORE1_TPC2 */
++	CPU_ID_TPC_QMAN_ARC9 = 15,  /* DCORE1_TPC3 */
++	CPU_ID_TPC_QMAN_ARC10 = 16, /* DCORE1_TPC4 */
++	CPU_ID_TPC_QMAN_ARC11 = 17, /* DCORE1_TPC5 */
++	CPU_ID_TPC_QMAN_ARC12 = 18, /* DCORE2_TPC0 */
++	CPU_ID_TPC_QMAN_ARC13 = 19, /* DCORE2_TPC1 */
++	CPU_ID_TPC_QMAN_ARC14 = 20, /* DCORE2_TPC2 */
++	CPU_ID_TPC_QMAN_ARC15 = 21, /* DCORE2_TPC3 */
++	CPU_ID_TPC_QMAN_ARC16 = 22, /* DCORE2_TPC4 */
++	CPU_ID_TPC_QMAN_ARC17 = 23, /* DCORE2_TPC5 */
++	CPU_ID_TPC_QMAN_ARC18 = 24, /* DCORE3_TPC0 */
++	CPU_ID_TPC_QMAN_ARC19 = 25, /* DCORE3_TPC1 */
++	CPU_ID_TPC_QMAN_ARC20 = 26, /* DCORE3_TPC2 */
++	CPU_ID_TPC_QMAN_ARC21 = 27, /* DCORE3_TPC3 */
++	CPU_ID_TPC_QMAN_ARC22 = 28, /* DCORE3_TPC4 */
++	CPU_ID_TPC_QMAN_ARC23 = 29, /* DCORE3_TPC5 */
++	CPU_ID_TPC_QMAN_ARC24 = 30, /* DCORE0_TPC6 - Never present */
  
- 	rc = hl_mmap_mem_buf_put_handle(mmg, cb_handle);
--out:
- 	if (rc < 0)
- 		return rc; /* Invalid handle */
+-#define CPU_ID_MME_QMAN_ARC0		31	/* DCORE0_MME0 */
+-#define CPU_ID_MME_QMAN_ARC1		32	/* DCORE2_MME0 */
++	CPU_ID_MME_QMAN_ARC0 = 31, /* DCORE0_MME0 */
++	CPU_ID_MME_QMAN_ARC1 = 32, /* DCORE2_MME0 */
  
-diff --git a/drivers/accel/habanalabs/common/device.c b/drivers/accel/habanalabs/common/device.c
-index 6620580e9ba8..fe3540ed60d7 100644
---- a/drivers/accel/habanalabs/common/device.c
-+++ b/drivers/accel/habanalabs/common/device.c
-@@ -855,7 +855,7 @@ static int device_early_init(struct hl_device *hdev)
- 	if (rc)
- 		goto free_chip_info;
+-#define CPU_ID_EDMA_QMAN_ARC0		33	/* DCORE0_EDMA0 */
+-#define CPU_ID_EDMA_QMAN_ARC1		34	/* DCORE0_EDMA1 */
+-#define CPU_ID_EDMA_QMAN_ARC2		35	/* DCORE1_EDMA0 */
+-#define CPU_ID_EDMA_QMAN_ARC3		36	/* DCORE1_EDMA1 */
+-#define CPU_ID_EDMA_QMAN_ARC4		37	/* DCORE2_EDMA0 */
+-#define CPU_ID_EDMA_QMAN_ARC5		38	/* DCORE2_EDMA1 */
+-#define CPU_ID_EDMA_QMAN_ARC6		39	/* DCORE3_EDMA0 */
+-#define CPU_ID_EDMA_QMAN_ARC7		40	/* DCORE3_EDMA1 */
++	CPU_ID_EDMA_QMAN_ARC0 = 33, /* DCORE0_EDMA0 */
++	CPU_ID_EDMA_QMAN_ARC1 = 34, /* DCORE0_EDMA1 */
++	CPU_ID_EDMA_QMAN_ARC2 = 35, /* DCORE1_EDMA0 */
++	CPU_ID_EDMA_QMAN_ARC3 = 36, /* DCORE1_EDMA1 */
++	CPU_ID_EDMA_QMAN_ARC4 = 37, /* DCORE2_EDMA0 */
++	CPU_ID_EDMA_QMAN_ARC5 = 38, /* DCORE2_EDMA1 */
++	CPU_ID_EDMA_QMAN_ARC6 = 39, /* DCORE3_EDMA0 */
++	CPU_ID_EDMA_QMAN_ARC7 = 40, /* DCORE3_EDMA1 */
  
--	hl_mem_mgr_init(hdev->dev, &hdev->kernel_mem_mgr, 1);
-+	hl_mem_mgr_init(hdev->dev, &hdev->kernel_mem_mgr);
+-#define CPU_ID_PDMA_QMAN_ARC0		41	/* DCORE0_PDMA0 */
+-#define CPU_ID_PDMA_QMAN_ARC1		42	/* DCORE0_PDMA1 */
++	CPU_ID_PDMA_QMAN_ARC0 = 41, /* DCORE0_PDMA0 */
++	CPU_ID_PDMA_QMAN_ARC1 = 42, /* DCORE0_PDMA1 */
  
- 	hdev->reset_wq = create_singlethread_workqueue("hl_device_reset");
- 	if (!hdev->reset_wq) {
-diff --git a/drivers/accel/habanalabs/common/habanalabs.h b/drivers/accel/habanalabs/common/habanalabs.h
-index 95bbc00c6262..9bcefbef5ad7 100644
---- a/drivers/accel/habanalabs/common/habanalabs.h
-+++ b/drivers/accel/habanalabs/common/habanalabs.h
-@@ -876,13 +876,11 @@ struct hl_mmap_mem_buf;
-  * @dev: back pointer to the owning device
-  * @lock: protects handles
-  * @handles: an idr holding all active handles to the memory buffers in the system.
-- * @is_kernel_mem_mgr: indicate whether the memory manager is the per-device kernel memory manager
+-#define CPU_ID_ROT_QMAN_ARC0		43	/* ROT0 */
+-#define CPU_ID_ROT_QMAN_ARC1		44	/* ROT1 */
++	CPU_ID_ROT_QMAN_ARC0 = 43, /* ROT0 */
++	CPU_ID_ROT_QMAN_ARC1 = 44, /* ROT1 */
+ 
+-#define CPU_ID_NIC_QMAN_ARC0		45	/* NIC0_0 */
+-#define CPU_ID_NIC_QMAN_ARC1		46	/* NIC0_1 */
+-#define CPU_ID_NIC_QMAN_ARC2		47	/* NIC1_0 */
+-#define CPU_ID_NIC_QMAN_ARC3		48	/* NIC1_1 */
+-#define CPU_ID_NIC_QMAN_ARC4		49	/* NIC2_0 */
+-#define CPU_ID_NIC_QMAN_ARC5		50	/* NIC2_1 */
+-#define CPU_ID_NIC_QMAN_ARC6		51	/* NIC3_0 */
+-#define CPU_ID_NIC_QMAN_ARC7		52	/* NIC3_1 */
+-#define CPU_ID_NIC_QMAN_ARC8		53	/* NIC4_0 */
+-#define CPU_ID_NIC_QMAN_ARC9		54	/* NIC4_1 */
+-#define CPU_ID_NIC_QMAN_ARC10		55	/* NIC5_0 */
+-#define CPU_ID_NIC_QMAN_ARC11		56	/* NIC5_1 */
+-#define CPU_ID_NIC_QMAN_ARC12		57	/* NIC6_0 */
+-#define CPU_ID_NIC_QMAN_ARC13		58	/* NIC6_1 */
+-#define CPU_ID_NIC_QMAN_ARC14		59	/* NIC7_0 */
+-#define CPU_ID_NIC_QMAN_ARC15		60	/* NIC7_1 */
+-#define CPU_ID_NIC_QMAN_ARC16		61	/* NIC8_0 */
+-#define CPU_ID_NIC_QMAN_ARC17		62	/* NIC8_1 */
+-#define CPU_ID_NIC_QMAN_ARC18		63	/* NIC9_0 */
+-#define CPU_ID_NIC_QMAN_ARC19		64	/* NIC9_1 */
+-#define CPU_ID_NIC_QMAN_ARC20		65	/* NIC10_0 */
+-#define CPU_ID_NIC_QMAN_ARC21		66	/* NIC10_1 */
+-#define CPU_ID_NIC_QMAN_ARC22		67	/* NIC11_0 */
+-#define CPU_ID_NIC_QMAN_ARC23		68	/* NIC11_1 */
++	CPU_ID_NIC_QMAN_ARC0 = 45,  /* NIC0_0 */
++	CPU_ID_NIC_QMAN_ARC1 = 46,  /* NIC0_1 */
++	CPU_ID_NIC_QMAN_ARC2 = 47,  /* NIC1_0 */
++	CPU_ID_NIC_QMAN_ARC3 = 48,  /* NIC1_1 */
++	CPU_ID_NIC_QMAN_ARC4 = 49,  /* NIC2_0 */
++	CPU_ID_NIC_QMAN_ARC5 = 50,  /* NIC2_1 */
++	CPU_ID_NIC_QMAN_ARC6 = 51,  /* NIC3_0 */
++	CPU_ID_NIC_QMAN_ARC7 = 52,  /* NIC3_1 */
++	CPU_ID_NIC_QMAN_ARC8 = 53,  /* NIC4_0 */
++	CPU_ID_NIC_QMAN_ARC9 = 54,  /* NIC4_1 */
++	CPU_ID_NIC_QMAN_ARC10 = 55, /* NIC5_0 */
++	CPU_ID_NIC_QMAN_ARC11 = 56, /* NIC5_1 */
++	CPU_ID_NIC_QMAN_ARC12 = 57, /* NIC6_0 */
++	CPU_ID_NIC_QMAN_ARC13 = 58, /* NIC6_1 */
++	CPU_ID_NIC_QMAN_ARC14 = 59, /* NIC7_0 */
++	CPU_ID_NIC_QMAN_ARC15 = 60, /* NIC7_1 */
++	CPU_ID_NIC_QMAN_ARC16 = 61, /* NIC8_0 */
++	CPU_ID_NIC_QMAN_ARC17 = 62, /* NIC8_1 */
++	CPU_ID_NIC_QMAN_ARC18 = 63, /* NIC9_0 */
++	CPU_ID_NIC_QMAN_ARC19 = 64, /* NIC9_1 */
++	CPU_ID_NIC_QMAN_ARC20 = 65, /* NIC10_0 */
++	CPU_ID_NIC_QMAN_ARC21 = 66, /* NIC10_1 */
++	CPU_ID_NIC_QMAN_ARC22 = 67, /* NIC11_0 */
++	CPU_ID_NIC_QMAN_ARC23 = 68, /* NIC11_1 */
+ 
+-#define CPU_ID_MAX			69
+-#define CPU_ID_SCHED_MAX		6
++	CPU_ID_MAX = 69,
++	CPU_ID_SCHED_MAX = 6,
+ 
+-#define CPU_ID_ALL			0xFE
+-#define CPU_ID_INVALID			0xFF
++	CPU_ID_ALL = 0xFE,
++	CPU_ID_INVALID = 0xFF,
++};
+ 
+ enum arc_regions_t {
+ 	ARC_REGION0_UNSED  = 0,
+diff --git a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_mmu_masks.h b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_mmu_masks.h
+index df51eac10dd7..2965b6a3b423 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_mmu_masks.h
++++ b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_mmu_masks.h
+@@ -150,8 +150,7 @@
+ #define DCORE0_HMMU0_MMU_STATIC_MULTI_PAGE_SIZE_HOP1_PAGE_SIZE_SHIFT 16
+ #define DCORE0_HMMU0_MMU_STATIC_MULTI_PAGE_SIZE_HOP1_PAGE_SIZE_MASK 0xF0000
+ #define DCORE0_HMMU0_MMU_STATIC_MULTI_PAGE_SIZE_CFG_8_BITS_HOP_MODE_EN_SHIFT 20
+-#define DCORE0_HMMU0_MMU_STATIC_MULTI_PAGE_SIZE_CFG_8_BITS_HOP_MODE_EN_MASK \
+-0x100000
++#define DCORE0_HMMU0_MMU_STATIC_MULTI_PAGE_SIZE_CFG_8_BITS_HOP_MODE_EN_MASK 0x100000
+ 
+ /* DCORE0_HMMU0_MMU_CORE_SEP_CACHE_RNG */
+ #define DCORE0_HMMU0_MMU_CORE_SEP_CACHE_RNG_CORE_SET_MASK_SHIFT 0
+@@ -235,23 +234,19 @@
+ 
+ /* DCORE0_HMMU0_MMU_ILLEGAL_ADDR_WRITE_63_32 */
+ #define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_WRITE_63_32_ILLEGAL_ADDR_63_32_SHIFT 0
+-#define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_WRITE_63_32_ILLEGAL_ADDR_63_32_MASK \
+-0xFFFFFFFF
++#define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_WRITE_63_32_ILLEGAL_ADDR_63_32_MASK 0xFFFFFFFF
+ 
+ /* DCORE0_HMMU0_MMU_ILLEGAL_ADDR_WRITE_31_0 */
+ #define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_WRITE_31_0_ILLEGAL_ADDR_31_0_SHIFT 0
+-#define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_WRITE_31_0_ILLEGAL_ADDR_31_0_MASK \
+-0xFFFFFFFF
++#define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_WRITE_31_0_ILLEGAL_ADDR_31_0_MASK 0xFFFFFFFF
+ 
+ /* DCORE0_HMMU0_MMU_ILLEGAL_ADDR_READ_63_32 */
+ #define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_READ_63_32_ILLEGAL_ADDR_63_32_SHIFT 0
+-#define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_READ_63_32_ILLEGAL_ADDR_63_32_MASK \
+-0xFFFFFFFF
++#define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_READ_63_32_ILLEGAL_ADDR_63_32_MASK 0xFFFFFFFF
+ 
+ /* DCORE0_HMMU0_MMU_ILLEGAL_ADDR_READ_31_0 */
+ #define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_READ_31_0_ILLEGAL_ADDR_31_0_SHIFT 0
+-#define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_READ_31_0_ILLEGAL_ADDR_31_0_MASK \
+-0xFFFFFFFF
++#define DCORE0_HMMU0_MMU_ILLEGAL_ADDR_READ_31_0_ILLEGAL_ADDR_31_0_MASK 0xFFFFFFFF
+ 
+ /* DCORE0_HMMU0_MMU_RAZWI_WRITE_VLD */
+ #define DCORE0_HMMU0_MMU_RAZWI_WRITE_VLD_R_SHIFT 0
+diff --git a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_stlb_masks.h b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_stlb_masks.h
+index 192eba5f07bb..a311778b21e7 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_stlb_masks.h
++++ b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_hmmu0_stlb_masks.h
+@@ -92,8 +92,7 @@
+ #define DCORE0_HMMU0_STLB_HOP_CONFIGURATION_ONLY_LARGE_PAGE_SHIFT 20
+ #define DCORE0_HMMU0_STLB_HOP_CONFIGURATION_ONLY_LARGE_PAGE_MASK 0x100000
+ #define DCORE0_HMMU0_STLB_HOP_CONFIGURATION_LARGE_PAGE_INDICATION_BIT_SHIFT 21
+-#define DCORE0_HMMU0_STLB_HOP_CONFIGURATION_LARGE_PAGE_INDICATION_BIT_MASK \
+-0x7E00000
++#define DCORE0_HMMU0_STLB_HOP_CONFIGURATION_LARGE_PAGE_INDICATION_BIT_MASK 0x7E00000
+ 
+ /* DCORE0_HMMU0_STLB_LINK_LIST_LOOKUP_MASK_63_32 */
+ #define DCORE0_HMMU0_STLB_LINK_LIST_LOOKUP_MASK_63_32_R_SHIFT 0
+@@ -228,12 +227,8 @@
+ #define DCORE0_HMMU0_STLB_MEM_READ_ARPROT_R_MASK 0x7
+ 
+ /* DCORE0_HMMU0_STLB_RANGE_CACHE_INVALIDATION */
+-#define \
+-DCORE0_HMMU0_STLB_RANGE_CACHE_INVALIDATION_RANGE_INVALIDATION_ENABLE_SHIFT \
+-0
+-#define \
+-DCORE0_HMMU0_STLB_RANGE_CACHE_INVALIDATION_RANGE_INVALIDATION_ENABLE_MASK \
+-0x1
++#define DCORE0_HMMU0_STLB_RANGE_CACHE_INVALIDATION_RANGE_INVALIDATION_ENABLE_SHIFT 0
++#define DCORE0_HMMU0_STLB_RANGE_CACHE_INVALIDATION_RANGE_INVALIDATION_ENABLE_MASK 0x1
+ #define DCORE0_HMMU0_STLB_RANGE_CACHE_INVALIDATION_INVALIDATION_ASID_EN_SHIFT 1
+ #define DCORE0_HMMU0_STLB_RANGE_CACHE_INVALIDATION_INVALIDATION_ASID_EN_MASK 0x2
+ #define DCORE0_HMMU0_STLB_RANGE_CACHE_INVALIDATION_INVALIDATION_ASID_SHIFT 2
+@@ -261,53 +256,43 @@ DCORE0_HMMU0_STLB_RANGE_CACHE_INVALIDATION_RANGE_INVALIDATION_ENABLE_MASK \
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_0 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_0_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_0_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_0_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_1 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_1_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_1_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_1_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_2 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_2_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_2_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_2_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_3 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_3_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_3_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_3_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_4 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_4_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_4_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_4_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_5 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_5_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_5_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_5_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_6 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_6_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_6_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_6_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_7 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_7_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_7_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_7_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_8 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_8_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_8_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_8_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_9 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_9_ASID_POLY_MATRIX_H3_SHIFT 0
+-#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_9_ASID_POLY_MATRIX_H3_MASK \
+-0x1FF
++#define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MATRIX_H3_9_ASID_POLY_MATRIX_H3_MASK 0x1FF
+ 
+ /* DCORE0_HMMU0_STLB_ASID_SCR_POLY_MAT_H3_10 */
+ #define DCORE0_HMMU0_STLB_ASID_SCR_POLY_MAT_H3_10_ASID_POLY_MATRIX_H3_SHIFT 0
+diff --git a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_non_tensor_end_regs.h b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_non_tensor_end_regs.h
+index 7c22b9383f3c..fb53feb0a1a6 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_non_tensor_end_regs.h
++++ b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_arch_non_tensor_end_regs.h
+@@ -20,8 +20,7 @@
+  *****************************************
   */
- struct hl_mem_mgr {
- 	struct device *dev;
- 	spinlock_t lock;
- 	struct idr handles;
--	u8 is_kernel_mem_mgr;
- };
  
- /**
-@@ -3824,7 +3822,7 @@ __printf(4, 5) int hl_snprintf_resize(char **buf, size_t *size, size_t *offset,
- char *hl_format_as_binary(char *buf, size_t buf_len, u32 n);
- const char *hl_sync_engine_to_string(enum hl_sync_engine_type engine_type);
+-#define mmDCORE0_MME_CTRL_LO_ARCH_NON_TENSOR_END_CONV_KERNEL_SIZE_MINUS_1 \
+-0x40CB280
++#define mmDCORE0_MME_CTRL_LO_ARCH_NON_TENSOR_END_CONV_KERNEL_SIZE_MINUS_1 0x40CB280
  
--void hl_mem_mgr_init(struct device *dev, struct hl_mem_mgr *mmg, u8 is_kernel_mem_mgr);
-+void hl_mem_mgr_init(struct device *dev, struct hl_mem_mgr *mmg);
- void hl_mem_mgr_fini(struct hl_mem_mgr *mmg);
- int hl_mem_mgr_mmap(struct hl_mem_mgr *mmg, struct vm_area_struct *vma,
- 		    void *args);
-diff --git a/drivers/accel/habanalabs/common/habanalabs_drv.c b/drivers/accel/habanalabs/common/habanalabs_drv.c
-index a2983913d7c0..7815c60df54e 100644
---- a/drivers/accel/habanalabs/common/habanalabs_drv.c
-+++ b/drivers/accel/habanalabs/common/habanalabs_drv.c
-@@ -164,7 +164,7 @@ int hl_device_open(struct inode *inode, struct file *filp)
- 	nonseekable_open(inode, filp);
+ #define mmDCORE0_MME_CTRL_LO_ARCH_NON_TENSOR_END_CONV_LOW 0x40CB284
  
- 	hl_ctx_mgr_init(&hpriv->ctx_mgr);
--	hl_mem_mgr_init(hpriv->hdev->dev, &hpriv->mem_mgr, 0);
-+	hl_mem_mgr_init(hpriv->hdev->dev, &hpriv->mem_mgr);
+@@ -29,8 +28,7 @@
  
- 	hpriv->taskpid = get_task_pid(current, PIDTYPE_PID);
+ #define mmDCORE0_MME_CTRL_LO_ARCH_NON_TENSOR_END_OUTER_LOOP 0x40CB28C
  
-diff --git a/drivers/accel/habanalabs/common/memory_mgr.c b/drivers/accel/habanalabs/common/memory_mgr.c
-index 92d20ed465b4..0f2759e26547 100644
---- a/drivers/accel/habanalabs/common/memory_mgr.c
-+++ b/drivers/accel/habanalabs/common/memory_mgr.c
-@@ -308,16 +308,14 @@ int hl_mem_mgr_mmap(struct hl_mem_mgr *mmg, struct vm_area_struct *vma,
-  *
-  * @dev: owner device pointer
-  * @mmg: structure to initialize
-- * @is_kernel_mem_mgr: indicate whether the memory manager is the per-device kernel memory manager
-  *
-  * Initialize an instance of unified memory manager
-  */
--void hl_mem_mgr_init(struct device *dev, struct hl_mem_mgr *mmg, u8 is_kernel_mem_mgr)
-+void hl_mem_mgr_init(struct device *dev, struct hl_mem_mgr *mmg)
- {
- 	mmg->dev = dev;
- 	spin_lock_init(&mmg->lock);
- 	idr_init(&mmg->handles);
--	mmg->is_kernel_mem_mgr = is_kernel_mem_mgr;
- }
+-#define mmDCORE0_MME_CTRL_LO_ARCH_NON_TENSOR_END_NUM_ITERATIONS_MINUS_1 \
+-0x40CB290
++#define mmDCORE0_MME_CTRL_LO_ARCH_NON_TENSOR_END_NUM_ITERATIONS_MINUS_1 0x40CB290
  
- /**
+ #define mmDCORE0_MME_CTRL_LO_ARCH_NON_TENSOR_END_SB_REPEAT 0x40CB294
+ 
+diff --git a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_masks.h b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_masks.h
+index f699661d76aa..da0c94075e64 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_masks.h
++++ b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_mme_ctrl_lo_masks.h
+@@ -78,8 +78,7 @@
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_MASTER_WAIT_SLAVE_FENCE_SHIFT 15
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_MASTER_WAIT_SLAVE_FENCE_MASK 0x8000
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE_SEND_FENCE2MASTER_SHIFT 16
+-#define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE_SEND_FENCE2MASTER_MASK \
+-0x10000
++#define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE_SEND_FENCE2MASTER_MASK 0x10000
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE_SIGNAL_EN_SHIFT 17
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE_SIGNAL_EN_MASK 0x20000
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE0_USE_SLV_ADR_SHIFT 18
+@@ -87,11 +86,9 @@
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE1_USE_SLV_ADR_SHIFT 19
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE1_USE_SLV_ADR_MASK 0x80000
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE0_USE_MSTR_ADR_PLUS4_SHIFT 20
+-#define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE0_USE_MSTR_ADR_PLUS4_MASK \
+-0x100000
++#define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE0_USE_MSTR_ADR_PLUS4_MASK 0x100000
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE1_USE_MSTR_ADR_PLUS4_SHIFT 21
+-#define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE1_USE_MSTR_ADR_PLUS4_MASK \
+-0x200000
++#define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_DW0_SLAVE1_USE_MSTR_ADR_PLUS4_MASK 0x200000
+ 
+ /* DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_ADDR0 */
+ #define DCORE0_MME_CTRL_LO_ARCH_SYNC_OBJ_ADDR0_V_SHIFT 0
+diff --git a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_masks.h b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_masks.h
+index 68dd98459c86..1c02f3dfdb6e 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_masks.h
++++ b/drivers/accel/habanalabs/include/gaudi2/asic_reg/dcore0_vdec0_brdg_ctrl_masks.h
+@@ -106,8 +106,7 @@
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_AWBURST_VIOL_SHIFT 2
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_AWBURST_VIOL_MASK 0x4
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_AWADDR_SIZE_ALIGN_VIOL_SHIFT 3
+-#define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_AWADDR_SIZE_ALIGN_VIOL_MASK \
+-0x8
++#define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_AWADDR_SIZE_ALIGN_VIOL_MASK 0x8
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_AWSIZE_VIOL_SHIFT 4
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_AWSIZE_VIOL_MASK 0x10
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARLEN_GT_31_SHIFT 5
+@@ -117,8 +116,7 @@
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARBURST_VIOL_SHIFT 7
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARBURST_VIOL_MASK 0x80
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARADDR_SIZE_ALIGN_VIOL_SHIFT 8
+-#define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARADDR_SIZE_ALIGN_VIOL_MASK \
+-0x100
++#define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARADDR_SIZE_ALIGN_VIOL_MASK 0x100
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARSIZE_VIOL_SHIFT 9
+ #define DCORE0_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARSIZE_VIOL_MASK 0x200
+ 
+diff --git a/drivers/accel/habanalabs/include/gaudi2/asic_reg/pcie_dbi_regs.h b/drivers/accel/habanalabs/include/gaudi2/asic_reg/pcie_dbi_regs.h
+index cc5842ec6ceb..2ee79d8e62d0 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/asic_reg/pcie_dbi_regs.h
++++ b/drivers/accel/habanalabs/include/gaudi2/asic_reg/pcie_dbi_regs.h
+@@ -48,8 +48,7 @@
+ 
+ #define mmPCIE_DBI_PCI_CAP_PTR_REG 0x4C02034
+ 
+-#define mmPCIE_DBI_MAX_LATENCY_MIN_GRANT_INTERRUPT_PIN_INTERRUPT_LINE_REG \
+-0x4C0203C
++#define mmPCIE_DBI_MAX_LATENCY_MIN_GRANT_INTERRUPT_PIN_INTERRUPT_LINE_REG 0x4C0203C
+ 
+ #define mmPCIE_DBI_CAP_ID_NXT_PTR_REG 0x4C02040
+ 
+diff --git a/drivers/accel/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_masks.h b/drivers/accel/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_masks.h
+index d29837883216..7a96aebf08b3 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_masks.h
++++ b/drivers/accel/habanalabs/include/gaudi2/asic_reg/pcie_vdec0_brdg_ctrl_masks.h
+@@ -116,8 +116,7 @@
+ #define PCIE_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARBURST_VIOL_SHIFT 7
+ #define PCIE_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARBURST_VIOL_MASK 0x80
+ #define PCIE_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARADDR_SIZE_ALIGN_VIOL_SHIFT 8
+-#define PCIE_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARADDR_SIZE_ALIGN_VIOL_MASK \
+-0x100
++#define PCIE_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARADDR_SIZE_ALIGN_VIOL_MASK 0x100
+ #define PCIE_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARSIZE_VIOL_SHIFT 9
+ #define PCIE_VDEC0_BRDG_CTRL_HBW_AXI_VIOL_CAUSE_ARSIZE_VIOL_MASK 0x200
+ 
+diff --git a/drivers/accel/habanalabs/include/gaudi2/asic_reg/pmmu_hbw_stlb_masks.h b/drivers/accel/habanalabs/include/gaudi2/asic_reg/pmmu_hbw_stlb_masks.h
+index 0276506ea523..b4f32632cd36 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/asic_reg/pmmu_hbw_stlb_masks.h
++++ b/drivers/accel/habanalabs/include/gaudi2/asic_reg/pmmu_hbw_stlb_masks.h
+@@ -228,8 +228,7 @@
+ 
+ /* PMMU_HBW_STLB_RANGE_CACHE_INVALIDATION */
+ #define PMMU_HBW_STLB_RANGE_CACHE_INVALIDATION_RANGE_INVALIDATION_ENABLE_SHIFT 0
+-#define PMMU_HBW_STLB_RANGE_CACHE_INVALIDATION_RANGE_INVALIDATION_ENABLE_MASK \
+-0x1
++#define PMMU_HBW_STLB_RANGE_CACHE_INVALIDATION_RANGE_INVALIDATION_ENABLE_MASK 0x1
+ #define PMMU_HBW_STLB_RANGE_CACHE_INVALIDATION_INVALIDATION_ASID_EN_SHIFT 1
+ #define PMMU_HBW_STLB_RANGE_CACHE_INVALIDATION_INVALIDATION_ASID_EN_MASK 0x2
+ #define PMMU_HBW_STLB_RANGE_CACHE_INVALIDATION_INVALIDATION_ASID_SHIFT 2
+diff --git a/drivers/accel/habanalabs/include/gaudi2/asic_reg/psoc_global_conf_masks.h b/drivers/accel/habanalabs/include/gaudi2/asic_reg/psoc_global_conf_masks.h
+index 9be3d656da3a..85a81e2cb546 100644
+--- a/drivers/accel/habanalabs/include/gaudi2/asic_reg/psoc_global_conf_masks.h
++++ b/drivers/accel/habanalabs/include/gaudi2/asic_reg/psoc_global_conf_masks.h
+@@ -1306,11 +1306,9 @@
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL0_ADDR_EXTMEM_PC_LOC2_SHIFT 12
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL0_ADDR_EXTMEM_PC_LOC2_MASK 0x3F000
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL0_ADDR_EXTMEM_PC_LOC3_SHIFT 18
+-#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL0_ADDR_EXTMEM_PC_LOC3_MASK \
+-0xFC0000
++#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL0_ADDR_EXTMEM_PC_LOC3_MASK 0xFC0000
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL0_ADDR_EXTMEM_HBM_LOC0_SHIFT 24
+-#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL0_ADDR_EXTMEM_HBM_LOC0_MASK \
+-0x3F000000
++#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL0_ADDR_EXTMEM_HBM_LOC0_MASK 0x3F000000
+ 
+ /* PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1 */
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_ADDR_EXTMEM_HBM_LOC1_SHIFT 0
+@@ -1322,24 +1320,17 @@
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_NON_LIN_HBM_CNT_EN_SHIFT 13
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_NON_LIN_HBM_CNT_EN_MASK 0x2000
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_NON_LIN_HBM_ALL_ADDR_EN_SHIFT 14
+-#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_NON_LIN_HBM_ALL_ADDR_EN_MASK \
+-0x4000
+-#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_NON_LIN_HBM_ALL_ADDR_MASK_SHIFT \
+-16
+-#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_NON_LIN_HBM_ALL_ADDR_MASK_MASK \
+-0xFF0000
++#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_NON_LIN_HBM_ALL_ADDR_EN_MASK 0x4000
++#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_NON_LIN_HBM_ALL_ADDR_MASK_SHIFT 16
++#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_NON_LIN_HBM_ALL_ADDR_MASK_MASK 0xFF0000
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_HBM_NUM_SHIFT 24
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL1_HBM_NUM_MASK 0x7000000
+ 
+ /* PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL2 */
+-#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL2_SCRAM_NONLIN_HBM_CNT_MASK_SHIFT \
+-0
+-#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL2_SCRAM_NONLIN_HBM_CNT_MASK_MASK \
+-0xFFFF
+-#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL2_SCRAM_NONLIN_EXTM_PC_MASK_SHIFT \
+-16
+-#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL2_SCRAM_NONLIN_EXTM_PC_MASK_MASK \
+-0xFFFF0000
++#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL2_SCRAM_NONLIN_HBM_CNT_MASK_SHIFT 0
++#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL2_SCRAM_NONLIN_HBM_CNT_MASK_MASK 0xFFFF
++#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL2_SCRAM_NONLIN_EXTM_PC_MASK_SHIFT 16
++#define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL2_SCRAM_NONLIN_EXTM_PC_MASK_MASK 0xFFFF0000
+ 
+ /* PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL3 */
+ #define PSOC_GLOBAL_CONF_AXI_DRAIN_NL_SRC_CTRL3_HBM_MAP0_SHIFT 0
 -- 
 2.34.1
 
