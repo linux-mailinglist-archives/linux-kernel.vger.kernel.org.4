@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4E76580E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBA26580FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiL1QWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 11:22:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S234595AbiL1QXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 11:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbiL1QVY (ORCPT
+        with ESMTP id S234479AbiL1QVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 11:21:24 -0500
+        Wed, 28 Dec 2022 11:21:25 -0500
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F631B792
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510701B794
         for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:19:22 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 228DE5C0185;
-        Wed, 28 Dec 2022 11:19:19 -0500 (EST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 85F6D5C018E;
+        Wed, 28 Dec 2022 11:19:20 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 28 Dec 2022 11:19:19 -0500
+  by compute2.internal (MEProxy); Wed, 28 Dec 2022 11:19:20 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1672244359; x=1672330759; bh=+MzbJuL0sz6xYgyGW+zwedxik
-        v2ybOeYdYhDY6xmhzg=; b=EgjRXLVlzDO3JjcYyL+wRRhrOb013Iu2nzK8NjvUB
-        voaTsi/8c8J/dPerwe9GRP0c6h2r7/1P8I7k5Dz3zjoLOLnzpRU8SUk2qbWKg9eR
-        1MLzORr7BDUczDuHhNXZGhy2Ls45lPa2bO+liasLEz0WVrrvLuOCMkwMOzwqgpkk
-        xDjtrwkaMw6kJU1+CEvyLflxq6Bl/fIOIpWbCzlTWp6sMCrcXqEt0NzY9HNfkcdI
-        BC+oa0TYHK567p9JMYeWEO5tsv1ArfMmEid7eDcDNbkz3xlZ3OooQATV9Z/6pLom
-        F4+X1oRNzJU9vXuKwWnRu0rYvf4M9OcwSBts1UTpbMNpA==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1672244360; x=1672330760; bh=+U
+        8N0UmTlYd9YC+LHaZbBbMVD4CfYomec3Duaw8K1K0=; b=zr7fbQXW2nEGBaEc4T
+        INBtGnH6KEP1UgaieU+aZQgiU7aex0jvJZ0hgkFNPQgPnGSGz+BS0aRbXoHxRiT4
+        6H4yZd4xNTWGevCjZAZI6VU1kZpJdCpqYl2w4409kmFiqPGz8BM/SxKDmUQTqcaJ
+        yVoXJyocG2vIcB8uwuobV8E/tHIkFFDkFQSW+IPlb90zDVUquNiGSUUFeDesMf9B
+        2YzihJ/Q6yBVKk6oJD+U/89eg4X/mQLNYxsUPf5sZAhBIYcCcojHxGxJuQD6JJPU
+        qLuT6uOM6fSzkL+B021ISwz3y/ey4FRgx/EKS2uiaC009Pqo6zgH0JgQUpyogB4U
+        3Q8A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1672244359; x=1672330759; bh=+MzbJuL0sz6xYgyGW+zwedxikv2ybOeYdYh
-        DY6xmhzg=; b=W7dQrHduKsuWY3JvJyYCqpaeZ5NviTqpcnpThpvNwbig6qO4O+g
-        KSBtnpFupqSICqAVQ20+L2ya+/bB6kz0u2GCncnSukFUylW/6UZj7XNTvS79U6sm
-        d6kbPvCMjIl+GndbnrU8dcctRC/WOF0oEPayQYUshOOGo7V6i3hVwVQ5M1oMFDP5
-        g54UQjmMIcn994h6gbuJ1/lR14IxCLc4ZI9D0uDsWUaB3JcA2e7h+eFlKgco571U
-        MPnEyq3zc0N/LBBbCHMgJVOy9pY5Wi8ZSD2YuPci1yORd68mrBlWDYONnuW7oj1C
-        IPSlMlwJLsoWNTc3Ue7PpW/54De1kWPFOCw==
-X-ME-Sender: <xms:hWysY_MIvyNk6Fl7igOS5ykwpW4bxcB89DCO3ihVnRYHh3-7L6yHmw>
-    <xme:hWysY589Wxxp36pc5UhBaipoIkE80BSPT4j6zDXPzc_tINkYUzmqEzXCBv4ysu_-V
-    9L-wUHbWopfsbcWxA>
-X-ME-Received: <xmr:hWysY-RuKrR36tmIXILMS2__02PNQEw9NQKEpicgWMtt-1UUOY3hUzpJNu9MBIQv34FX_-kw-mZKGeRvF_KMQ3s0gkb6XY-zDHneg36afg7hIaox3OrWxfwa7SwW6NeEXZdqKw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedriedvgdekkecutefuodetggdotefrodftvf
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1672244360; x=1672330760; bh=+U8N0UmTlYd9Y
+        C+LHaZbBbMVD4CfYomec3Duaw8K1K0=; b=LHKENN4HaAl9eTzGJzlvlQQpxNiLw
+        iL6iM4q8xbb93azfif+ouJbTwpUljNqJKRjm4A/vC8brr0ZuAxt8ShwIWx82v+zq
+        IyZ7s9L+YoBix7xe3GSigT0lOs/kN+nSuN4Xl9ElTA4MQco4MtwjwbrzRHlfxaIk
+        PH5BgqZP8fWpQ0AhynLvv6xEV5bm7A7ON7moOTSnAMFF9bSX721CQdBwMS55TmU4
+        Ya04Rq8J3mCLr3I4znNAahnK+TXBMqKIQprlphidStUGpfop7F8fkulJUY9fKEoQ
+        NBNlM1qDxAr4Q6tv1/mU3No71LrlJHkF3AKsZceWe9ptexc5zc5n98NDw==
+X-ME-Sender: <xms:iGysY0guii7cQfF3e2W_lRxmUExyUnzANv7WpecgE_V6PXRhEBE3-w>
+    <xme:iGysY9CAwFhrx-LblKgItSvPDJurlJRPedCt32q6Na7mhNkVC2QbK3taWaYTrc_N1
+    XmbSE1yi3VFO5naFw>
+X-ME-Received: <xmr:iGysY8EQ0tSzJ9YzTNkvQsT_jg3CD6GkFW6sYtmGocEeiuxv3VqITuOBOvHH1Jqmbr2A7Dx2WM6dWpW0VQzzFV0eJckM6IZZmgXr2B9CI-io4-g9oYxMiw81poqa9eKjmmRzig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedriedvgdeklecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
-    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
-    htthgvrhhnpeekheffteehtdetfffgfeetteejvdefleeuvedufffguedtjedvheelvddv
-    fffhveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdr
-    ohhrgh
-X-ME-Proxy: <xmx:hWysYzt7xQyw9T6XNt25TH7IQjKZOIfbKJeQAUP-Rt_kmi4eK3_wJw>
-    <xmx:hWysY3c-dN0q47s7C4QR5Ukc8MPYVkiRLA4m5vMaOdI-eJVp6s3_dg>
-    <xmx:hWysY_0eOANcwUIgRg9k078yiHZhIUVygSKTUt9PjsTdiGhxnb-UgQ>
-    <xmx:h2ysYytkq0BX7Gc454wV-4bRuk35MyCM4_MOQl5VOg_xsJkRaTVbjA>
+    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
+    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:iGysY1T0TW22FduipxSaawhlvwDpX67u9VymKmdZR035lCkXHzO86w>
+    <xmx:iGysYxxEaOW5xKb8sJ6kkMOvKqkT_aNQffn5_4kt561AGRg0ykB2DA>
+    <xmx:iGysYz7ETO1Ke2PXq2Uy55OipoQXUr4zYO-uD5-5G_Qr5ACmte34-g>
+    <xmx:iGysY-id7cP476eOi3xrJGeEeUTYklhs93sfPvleQUlhLpvHpp5SuQ>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 28 Dec 2022 11:19:16 -0500 (EST)
+ 28 Dec 2022 11:19:19 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>,
@@ -79,10 +79,12 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Petr Mladek <pmladek@suse.com>,
         YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH 0/3] riscv: sbi: Switch to the sys-off handler API
-Date:   Wed, 28 Dec 2022 10:19:12 -0600
-Message-Id: <20221228161915.13194-1-samuel@sholland.org>
+Subject: [PATCH 1/3] kernel/reboot: Use the static sys-off handler for any priority
+Date:   Wed, 28 Dec 2022 10:19:13 -0600
+Message-Id: <20221228161915.13194-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221228161915.13194-1-samuel@sholland.org>
+References: <20221228161915.13194-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,34 +97,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I want to convert the axp20x PMIC poweroff handler to use the sys-off
-API, so it can be used as a fallback for if the SBI poweroff handler
-is unavailable. But the SBI poweroff handler still uses pm_power_off, so
-done alone, this would cause the axp20x callback to be called first,
-before the SBI poweroff handler has a chance to run.
+commit 587b9bfe0668 ("kernel/reboot: Use static handler for
+register_platform_power_off()") addded a statically-allocated handler
+so register_sys_off_handler() could be called before the slab allocator
+is available.
 
-In order to prevent this change in behavior, the SBI poweroff handler
-needs to be converted to the sys-off API first, at a higher priority.
+That behavior was limited to the SYS_OFF_PRIO_PLATFORM priority.
+However, it is also required for handlers such as PSCI on ARM and SBI on
+RISC-V, which should be registered at SYS_OFF_PRIO_FIRMWARE. Currently,
+this call stack crashes:
 
-This series performs the conversion, after accounting for the fact that
-the SBI poweroff handler is registered quite early during boot.
+  start_kernel()
+    setup_arch()
+      psci_dt_init()
+        psci_0_2_init()
+          register_sys_off_handler()
+            kmem_cache_alloc()
 
-The first patch is a dependency for both this series and the PSCI
-series[1], so I would like to get at least patch 1 merged soon.
+Generalize the code to use the statically-allocated handler for the
+first registration, regardless of priority. Check .sys_off_cb for
+conflicts instead of .cb_data; some callbacks (e.g. firmware drivers)
+do not need any per-instance data, so .cb_data could be NULL.
 
-[1]: https://lore.kernel.org/lkml/20221105214841.7828-1-samuel@sholland.org/
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
+ kernel/reboot.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Samuel Holland (3):
-  kernel/reboot: Use the static sys-off handler for any priority
-  riscv: sbi: Share the code for unsupported extension warnings
-  riscv: sbi: Switch to the sys-off handler API
-
- arch/riscv/include/asm/sbi.h |  1 -
- arch/riscv/kernel/sbi.c      | 63 +++++++++++++++++++++---------------
- kernel/reboot.c              | 10 +++---
- 3 files changed, 41 insertions(+), 33 deletions(-)
-
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index 3bba88c7ffc6..38c18d4f0a36 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -327,7 +327,7 @@ static int sys_off_notify(struct notifier_block *nb,
+ 	return handler->sys_off_cb(&data);
+ }
+ 
+-static struct sys_off_handler platform_sys_off_handler;
++static struct sys_off_handler early_sys_off_handler;
+ 
+ static struct sys_off_handler *alloc_sys_off_handler(int priority)
+ {
+@@ -338,10 +338,8 @@ static struct sys_off_handler *alloc_sys_off_handler(int priority)
+ 	 * Platforms like m68k can't allocate sys_off handler dynamically
+ 	 * at the early boot time because memory allocator isn't available yet.
+ 	 */
+-	if (priority == SYS_OFF_PRIO_PLATFORM) {
+-		handler = &platform_sys_off_handler;
+-		if (handler->cb_data)
+-			return ERR_PTR(-EBUSY);
++	if (!early_sys_off_handler.sys_off_cb) {
++		handler = &early_sys_off_handler;
+ 	} else {
+ 		if (system_state > SYSTEM_RUNNING)
+ 			flags = GFP_ATOMIC;
+@@ -358,7 +356,7 @@ static struct sys_off_handler *alloc_sys_off_handler(int priority)
+ 
+ static void free_sys_off_handler(struct sys_off_handler *handler)
+ {
+-	if (handler == &platform_sys_off_handler)
++	if (handler == &early_sys_off_handler)
+ 		memset(handler, 0, sizeof(*handler));
+ 	else
+ 		kfree(handler);
 -- 
 2.37.4
 
