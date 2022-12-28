@@ -2,77 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21AE658543
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 18:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D73658547
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 18:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbiL1RZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 12:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S233270AbiL1R2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 12:28:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiL1RZY (ORCPT
+        with ESMTP id S230443AbiL1R2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 12:25:24 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8042C1573F
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 09:25:19 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id 128so16059464vsz.12
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 09:25:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hardenedbsd.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AEVM5AUDilZJYaQsZd9oVNR1x46s1U+Ak2sstBJ5jV8=;
-        b=j8S08/QHYpGAcDHI/4qQdIScYpGuBRltLRMeaq4DGRSTXK38MdlCFAmttEa3pQ2AAR
-         NtXln8auiAZjKs5RKITvwiuO1ZOSR0W++0JciEQIn8C56feM5e5AFKcDHtkheALQVVPp
-         r7zMAp6ORF1QFUMJpVD7nasWQGh0kL0KtpkZ4C9/ZXMqHbz5BlpuW8H8UFd1MiDW8OKH
-         kyiXRFlSRG5m8C3h/8RAgYplVIyX07AKNInN72kjvOFxhk6+rNlOtc5iUW4hXlqJbQBh
-         JpCuRo1YLtBeJlbNRlsujRzhTF8G4fVxxPfdmWgN2GVySWxiR8no5Ah1jufjcdqUB1EA
-         OrmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AEVM5AUDilZJYaQsZd9oVNR1x46s1U+Ak2sstBJ5jV8=;
-        b=zNZmXzzjq+K8/jKuG/yDpOhOK7OHO571OtJp2yfmV7A5ki0oYF+/a0gblLP9GpLc43
-         AirIiPGBZGGMo2DELL25gej9LsTb/qCnkXGVHnuJ8qg7KOaciuFMkbKspG8CFtliIpNz
-         4OFy5RPjz1qPl6eKNaaEXTlx0qFotqHLMMZ8TKhlAqFIotTp8esNNe663ayK5pOdiQxo
-         nWnLvSCFIa4Hq2faGzIGNJJmF64XwJNtGRw0vnAVj0wm6m0BQOUO1Q2dOiuDzmj+tftF
-         hQqVccn2xcukN4h+jhMzaBuMWqgDaCbAT3Yoc056W+nm7owLW01ogPFdccFn0MeOdT2K
-         wwIQ==
-X-Gm-Message-State: AFqh2kpPkDiSPoU6KMV1z3NdnPvHx836OM4Dw+FdjF3yx0bwY38tQOkH
-        cK+Eo7sIoXJ/LZ9Xc7nOTvkFhA==
-X-Google-Smtp-Source: AMrXdXubLSWgdRat/lLGOFgWgMfxK3e5HrzYBf27Lx4PdebB/GXsDoRKstMhux3jJ8bNBBTapYhWlA==
-X-Received: by 2002:a05:6102:508a:b0:3b1:3a70:ae18 with SMTP id bl10-20020a056102508a00b003b13a70ae18mr13788387vsb.17.1672248318317;
-        Wed, 28 Dec 2022 09:25:18 -0800 (PST)
-Received: from mutt-hbsd (pool-100-16-219-215.bltmmd.fios.verizon.net. [100.16.219.215])
-        by smtp.gmail.com with ESMTPSA id q12-20020a05620a2a4c00b006fef61300fesm11801298qkp.16.2022.12.28.09.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 09:25:17 -0800 (PST)
-Date:   Wed, 28 Dec 2022 12:25:17 -0500
-From:   Shawn Webb <shawn.webb@hardenedbsd.org>
-To:     oss-security@lists.openwall.com
-Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
-Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat
- correctly
-Message-ID: <20221228172517.l7h3m7wjfpxr3dzw@mutt-hbsd>
-X-Operating-System: FreeBSD mutt-hbsd 14.0-CURRENT-HBSD FreeBSD
- 14.0-CURRENT-HBSD 
-X-PGP-Key: https://git.hardenedbsd.org/hardenedbsd/pubkeys/-/blob/master/Shawn_Webb/03A4CBEBB82EA5A67D9F3853FF2E67A277F8E1FA.pub.asc
-References: <Y6SJDbKBk471KE4k@p183>
- <Y6TUJcr/IHrsTE0W@codewreck.org>
- <1a1963aa1036ba07@orthanc.ca>
- <20221228152458.6xyksrxunukjrtzx@mutt-hbsd>
- <Y6xzIR9P+a6uaaEx@itl-email>
+        Wed, 28 Dec 2022 12:28:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00A61658C;
+        Wed, 28 Dec 2022 09:28:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D2C36158D;
+        Wed, 28 Dec 2022 17:28:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67ADCC433D2;
+        Wed, 28 Dec 2022 17:28:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672248508;
+        bh=Dibxouqu84SBg/J/yTbFauKUYfl32fPLgSeV3dyv87M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vKUt7VZwbGsaph7PITSfybymzqitYVro09zdOLMCKweCHJswdPLN8+DWtM5OaADkI
+         Y5l4AjmP5JAsT5O+Un3k0kQTEabwFunEg87S3l/whHsadqK/3BLQRavztcIKMBpoT2
+         ASdFFeIKZlOEV6+gEoAmRpHQYaL6NmaJOTFzbL/kDdO1raB4+l92tz1MWcMcp/sbmv
+         hlXLsuGHg5KS2oOhXgKbdzW7XTPh+TtnHGuJHKq9UNXWHveZRkVicVKEv5VyhiL91o
+         KOQCXczg5VyfRxJ7YP2k4/36749ogmfcs8U4EGhVDUJs3fv5s4RHcKDdNJrfbF3Z+Q
+         7VMYnCXL7W2zA==
+Date:   Wed, 28 Dec 2022 11:28:25 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>, vkoul@kernel.org
+Subject: Re: [PATCH V21 2/7] soc: qcom: dcc: Add driver support for Data
+ Capture and Compare unit(DCC)
+Message-ID: <20221228172825.r32vpphbdulaldvv@builder.lan>
+References: <cover.1672148732.git.quic_schowdhu@quicinc.com>
+ <644b4f66a358492a8a6738454035c3b120092fe7.1672148732.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="53fjlxfw5lfxitvk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6xzIR9P+a6uaaEx@itl-email>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <644b4f66a358492a8a6738454035c3b120092fe7.1672148732.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,72 +62,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 27, 2022 at 08:52:46PM +0530, Souradeep Chowdhury wrote:
+> The DCC is a DMA Engine designed to capture and store data
+> during system crash or software triggers. The DCC operates
+> based on user inputs via the debugfs interface. The user gives
+> addresses as inputs and these addresses are stored in the
+> dcc sram. In case of a system crash or a manual software
+> trigger by the user through the debugfs interface,
+> the dcc captures and stores the values at these addresses.
+> This patch contains the driver which has all the methods
+> pertaining to the debugfs interface, auxiliary functions to
+> support all the four fundamental operations of dcc namely
+> read, write, read/modify/write and loop. The probe method
+> here instantiates all the resources necessary for dcc to
+> operate mainly the dedicated dcc sram where it stores the
+> values. The DCC driver can be used for debugging purposes
+> without going for a reboot since it can perform software
+> triggers as well based on user inputs.
+> 
+> Also add the documentation for debugfs entries which explains
+> the functionalities of each debugfs file that has been created
+> for dcc.
+> 
+> The following is the justification of using debugfs interface
+> over the other alternatives like sysfs/ioctls
+> 
+> i) As can be seen from the debugfs attribute descriptions,
+> some of the debugfs attribute files here contains multiple
+> arguments which needs to be accepted from the user. This goes
+> against the design style of sysfs.
+> 
+> ii) The user input patterns have been made simple and convenient
+> in this case with the use of debugfs interface as user doesn't
+> need to shuffle between different files to execute one instruction
+> as was the case on using other alternatives.
+> 
 
---53fjlxfw5lfxitvk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I would have preferred to get some more input from users of the debugfs
+interface, but it's after all not ABI. So let's get this merged and
+if people has concerns/objections/suggestions we'll improve it as
+necessary.
 
-On Wed, Dec 28, 2022 at 11:47:25AM -0500, Demi Marie Obenour wrote:
-> On Wed, Dec 28, 2022 at 10:24:58AM -0500, Shawn Webb wrote:
-> > On Tue, Dec 27, 2022 at 04:44:49PM -0800, Lyndon Nerenberg (VE7TFX/VE6B=
-BM) wrote:
-> > > Dominique Martinet writes:
-> > >=20
-> > > > But, really, I just don't see how this can practically be said to b=
-e parsable...
-> > >=20
-> > > In its current form it never will be.  The solution is to place
-> > > this variable-length field last.  Then you can "cut -d ' ' -f 51-"
-> > > to get the command+args part (assuming I counted all those fields
-> > > correctly ...)
-> > >=20
-> > > Of course, this breaks backwards compatability.
-> >=20
-> > It would also break forwards compatibility in the case new fields
-> > needed to be added.
-> >=20
-> > The only solution would be a libxo-style feature wherein a
-> > machine-parseable format is exposed by virtue of a file extension.
-> >=20
-> > Examples:
-> >=20
-> > 1. /proc/pid/stats.json
-> > 2. /proc/pid/stats.xml
-> > 3. /proc/pid/stats.yaml_shouldnt_be_a_thing
->=20
-> A binary format would be even better.  No risk of ambiguity.
+Thanks for pushing this Souradeep!
 
-I think the argument I'm trying to make is to be flexible in
-implementation, allowing for future needs and wants--that is "future
-proofing".
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> Reviewed-by: Alex Elder <elder@linaro.org>
 
---=20
-Shawn Webb
-Cofounder / Security Engineer
-HardenedBSD
+Thanks Alex.
 
-https://git.hardenedbsd.org/hardenedbsd/pubkeys/-/raw/master/Shawn_Webb/03A=
-4CBEBB82EA5A67D9F3853FF2E67A277F8E1FA.pub.asc
-
---53fjlxfw5lfxitvk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEA6TL67gupaZ9nzhT/y5nonf44foFAmOse+YACgkQ/y5nonf4
-4fqYGw//ei+Kr3PwFtaEm+2Q1h8l2hrnM14W8ORZQWkqtv75yAPUCq6mb4XmSDze
-3Z9kMrY4xvdYTMUZa4S1VvXF+tDe7nIqjf4kq6qCOhfyeoozvUm13yXEARvpMsLO
-joSrhua4pTi8fCs3ZGebfgM8mNEMl4ZgdZIIpjcRWhVe0XAs7FvwZJyknr6joe8G
-HBXB6FzCzbR4AUpp8+MjpwZIoPKw5KVODDGBG2rOvDoCFZceL/d9djmBW0dsI1Y1
-EM4dQkx2zUJWBF77sQni1pAK+JJ52Xlwh61PbgHJLzUpUvUl7ZWMZoVn996MEdfF
-tD0/V6de9kF6xkyQ+tBI+hRHuAUAAkSuYFR9/1BdLkcgVzaaXbUdTUAJQ/6sD9nt
-CRIIhN6sQcYUe2VZbbS+KU+DhFGl6M9P3WPfbMJeaDootxRbkshThvUiXcdlMHIg
-q8ce1idlwBxYonLgYdhF2FtOi3kjy0bykabUM3lzHpieadyxfSwP01x8PiOPjRs3
-+M48jCecix8LaW8yIzvY42ZhawwsO/7fqr4U373hM6BhkW6HnkzTr0Glkq6pQxVR
-8tBkVfaY9+JEqNOb0qU+fO3MVcpbkUnAtbnnGOfEmEaT5aWcaI7m1IvJsN6L+wWP
-HNBNpi9Gizl9BbzbIkFxepiN8WsxNK2aEjuSt6YfiUICuguqeeM=
-=ZLcQ
------END PGP SIGNATURE-----
-
---53fjlxfw5lfxitvk--
+Regards,
+Bjorn
