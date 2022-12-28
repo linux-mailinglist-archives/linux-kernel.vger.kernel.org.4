@@ -2,153 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ACC6571E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 02:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A006571E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 02:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232461AbiL1B4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 20:56:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S232525AbiL1B5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 20:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbiL1B4l (ORCPT
+        with ESMTP id S229939AbiL1B5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 20:56:41 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1A810E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 17:56:39 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id cf42so21825377lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 17:56:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ya4OkwTxkQIsQisM/Dm9mdZB4FBQpxpLG/pVmuZn5L4=;
-        b=Jmkig8CX48nfiBERsCtde7QIRT0twnS96s3BpTt0B0ITmbwVmk/jZs0M5M+b0Z8M83
-         aLA6MekTcPxaFRbkxVsmD/rLYAguq9i9pNrAafQaFsotkoCz23OCWAsioM50+5YZB7g6
-         UrzhhlLStPOCi+86IReulMj3AiM2aTy6FT5BUHXEqfzBu6nNEFdBlfrzQSPO4/Ob0lGQ
-         fcn7fg5+czVUC4vqcZcf1beJwirxZP7iXgmjEV9v5VNOLybuPofxjfaxXqxcJllN/jI3
-         5qREHDaBfdTx/apFiu2HEZTGcRybUPp/YXxEMdMHMwc59TuIDfeZOVnffh1tj6llK+CN
-         r45w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ya4OkwTxkQIsQisM/Dm9mdZB4FBQpxpLG/pVmuZn5L4=;
-        b=eAwOOiJwGLiiXz6KTDMe9dawslMa2YSzYTLv+IGMAziEXLpXMtSXeYidAMSr+DdTpb
-         QhmUWUzHIAFdDdWL6Q7zXG8e4XL7z/hDm0H4RX92Z2kkDMWxrCQotI1bawZK90iOAEYr
-         eBtb2gTZQw+tbigfgu4Xf/xSomyeiF5kbu76JsrFE97LDity6VkgaejZsN99c6S0JG3L
-         Q/MCnGvysdRLCCTGdx29kW+Qr2yJaim+A56xOOgXEgx5XfoTMlp/q+bBpBXbwY1Mjjdk
-         RLu64NkroZkKa4BGlcU6qVFLGzJ5XmbLu909LrZYU3QnanEXZqfDVMfe3mRHbe54Gq2s
-         8OZA==
-X-Gm-Message-State: AFqh2kqSAnuS/+UCGMwX6xq/6nKJGE6azUjMDQoIq0lIRIGHPAWvAdi0
-        PxbfiBzDC/aBhSKkuh8dpZu2qw==
-X-Google-Smtp-Source: AMrXdXswpTVzhGP9x29LisdW+YxBu8bpDSgNf2VvWKUP22usyT4Oykd1ed9f4Aw/ebsj32589xEcDQ==
-X-Received: by 2002:a05:6512:2527:b0:4b5:8504:7072 with SMTP id be39-20020a056512252700b004b585047072mr6558508lfb.14.1672192597725;
-        Tue, 27 Dec 2022 17:56:37 -0800 (PST)
-Received: from michal-H370M-DS3H.office.semihalf.net ([83.142.187.84])
-        by smtp.googlemail.com with ESMTPSA id h10-20020a2ea48a000000b002776eb5b1ccsm1842623lji.4.2022.12.27.17.56.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 17:56:37 -0800 (PST)
-From:   =?UTF-8?q?Micha=C5=82=20Grzelak?= <mig@semihalf.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     andrew@lunn.ch, chris.packham@alliedtelesis.co.nz,
-        davem@davemloft.net, devicetree@vger.kernel.org,
-        edumazet@google.com, krzysztof.kozlowski+dt@linaro.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org, mig@semihalf.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        upstream@semihalf.com
-Subject: [PATCH v2] dt-bindings: net: marvell,orion-mdio: Fix examples
-Date:   Wed, 28 Dec 2022 02:54:33 +0100
-Message-Id: <20221228015433.73919-1-mig@semihalf.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <7f6a2072-f26b-e2f0-9c07-d2ea43c8c4bc@linaro.org>
-References: <7f6a2072-f26b-e2f0-9c07-d2ea43c8c4bc@linaro.org>
+        Tue, 27 Dec 2022 20:57:47 -0500
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ECB7BE2;
+        Tue, 27 Dec 2022 17:57:41 -0800 (PST)
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 68ED4456;
+        Wed, 28 Dec 2022 02:57:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202211; t=1672192659;
+        bh=m02CFbCfLjgB/D/F8c3/1CJMeEw8Hb7kGUUt5zHmh94=;
+        h=Date:From:Cc:Subject:References:In-Reply-To:From;
+        b=IojomR1xBGcBofTo9LZmbGRmJ61IoSkBUvhP4FOcjSrLb0gsjuhDNGDzSEwRmlEL/
+         pq85VA6FAoDBaZzAN0Egm0v0omd0KQ/Kc46F4rSiJKbRJ4cnZp3xi42jUvJi2X0+WY
+         TXzdGZomYZNIjDiHA6G7w/7QJxWDVaDk8YE4g0D1wXG4jw2O5CCog0wQ0EX/6GJMC3
+         QvGjEAu8VNyROqwGdin7xlGz4kAn4USxWC6Brb9Hw7FqO8Xl15BpW838e9RlKFl2vp
+         k95XKgZPq6Bgb8T6P+mU9RvnHFiVwAkoz3q/eyIffU7wieD6Zk5AU0HkS6+U2Ai2bE
+         jUd5YSbYKZr7g==
+Date:   Wed, 28 Dec 2022 02:57:38 +0100
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH v2 1/4] perf python: make clang feature detection work
+Message-ID: <ea47c9d024e10a0cf50ae7f049320d89b307b5c7.1672192591.git.nabijaczleweli@nabijaczleweli.xyz>
+References: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tip2335yapfu46iq"
+Content-Disposition: inline
+In-Reply-To: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        MISSING_HEADERS,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated in marvell-orion-mdio.txt deleted in commit 0781434af811f
-("dt-bindings: net: orion-mdio: Convert to JSON schema") if
-'interrupts' property is present, width of 'reg' should be 0x84.
-Otherwise, width of 'reg' should be 0x4. Fix 'examples:' and add
-constraints checking whether 'interrupts' property is present
-and validate it against fixed values in reg.
 
-Signed-off-by: Michał Grzelak <mig@semihalf.com>
+--tip2335yapfu46iq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+As it stands, it's /entirely/ broken: cc_options is pasted together
+with the tested option /as a single argument/.
+
+For example, for CC=3D'cc -O3', this will run (the equivalent of)
+  cc "-O3 -mcet" ../build/feature/test-heello.c
+  cc "-O3 -fcf-protection" ../build/feature/test-heello.c
+  ..
+which, obviously, doesn't work, and has /never/ worked. The commit
+referenced in Fixes: is just the first one that uses this approach.
+
+Instead of emulating shell tokenisation and turning tokens into words
+badly (well, we barely do it, which is even more alarming. the only way
+I can foresee this having ever worked for anyone is if it, very literally,
+returned False for /every/ clang_has_option() invocation with
+non-single-token $CC, which, I mean, sure, but it means that every clang
+build like this has all hardening off), just... run these through the
+shell, like they will be at point-of-use anyway.
+
+As a demo, with CC=3D'/tmp/cc -O3' and /tmp/cc consisting of
+  #!/bin/sh
+  echo "$*" | grep -qFe '-mcet' && printf 'CC:"%s"\n' "$@" "" > /dev/tty
+  exec cc "$@"
+before:
+    AR      /mnt/filling/store/nabijaczleweli/code/linux/tools/perf/libsubc=
+md/libsubcmd.a
+  CC:"-O3 -mcet"
+  CC:"/mnt/filling/store/nabijaczleweli/code/linux/tools/build/feature/test=
+-hello.c"
+  CC:""
+  CC:"-O3 -mcet"
+  CC:"/mnt/filling/store/nabijaczleweli/code/linux/tools/build/feature/test=
+-hello.c"
+  CC:""
+    LD      /mnt/filling/store/nabijaczleweli/code/linux/tools/perf/libbpf/=
+staticobjs/libbpf-in.o
+after:
+    GEN     python/perf.cpython-39-x86_64-linux-gnu.so
+  CC:"-O3"
+  CC:"-mcet"
+  CC:"/mnt/filling/store/nabijaczleweli/code/linux/tools/build/feature/test=
+-hello.c"
+  CC:""
+  CC:"-O3"
+  CC:"-mcet"
+  CC:"/mnt/filling/store/nabijaczleweli/code/linux/tools/build/feature/test=
+-hello.c"
+  CC:""
+    LD      /mnt/filling/store/nabijaczleweli/code/linux/tools/perf/libbpf/=
+staticobjs/libbpf-in.o
+
+Fixes: commit 3cad53a6f9cdb ("perf python: Account for multiple words in
+ CC")
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
-Changelog:
-v1->v2:
-- remove second example
-- add 'if:' constraint to 'allOf:'
-- move 'allOf:' before 'examples:'
+ tools/perf/util/setup.py | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
 
- .../bindings/net/marvell,orion-mdio.yaml      | 31 ++++++++++++++++---
- 1 file changed, 27 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
-index d2906b4a0f59..381cd8edebed 100644
---- a/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
-+++ b/Documentation/devicetree/bindings/net/marvell,orion-mdio.yaml
-@@ -16,9 +16,6 @@ description: |
-   8k has a second unit which provides an interface with the xMDIO bus. This
-   driver handles these interfaces.
- 
--allOf:
--  - $ref: "mdio.yaml#"
+diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+index c294db713677..1cee26c63613 100644
+--- a/tools/perf/util/setup.py
++++ b/tools/perf/util/setup.py
+@@ -2,21 +2,11 @@ from os import getenv, path
+ from subprocess import Popen, PIPE
+ from re import sub
+=20
+-cc =3D getenv("CC")
 -
- properties:
-   compatible:
-     enum:
-@@ -39,13 +36,39 @@ required:
-   - compatible
-   - reg
- 
-+allOf:
-+
-+  - $ref: "mdio.yaml#"
-+
-+  - if:
-+      required:
-+        - interrupts
-+
-+    then:
-+      properties:
-+        reg:
-+          items:
-+            - items:
-+                - $ref: /schemas/types.yaml#/definitions/cell
-+                - const: 0x84
-+
-+    else:
-+      properties:
-+        reg:
-+          items:
-+            - items:
-+                - $ref: /schemas/types.yaml#/definitions/cell
-+                - enum:
-+                    - 0x4
-+                    - 0x10
-+
- unevaluatedProperties: false
- 
- examples:
-   - |
-     mdio@d0072004 {
-       compatible = "marvell,orion-mdio";
--      reg = <0xd0072004 0x4>;
-+      reg = <0xd0072004 0x84>;
-       #address-cells = <1>;
-       #size-cells = <0>;
-       interrupts = <30>;
--- 
-2.34.1
+-# Check if CC has options, as is the case in yocto, where it uses CC=3D"cc=
+ --sysroot..."
+-cc_tokens =3D cc.split()
+-if len(cc_tokens) > 1:
+-    cc =3D cc_tokens[0]
+-    cc_options =3D " ".join([str(e) for e in cc_tokens[1:]]) + " "
+-else:
+-    cc_options =3D ""
+-
+-cc_is_clang =3D b"clang version" in Popen([cc, "-v"], stderr=3DPIPE).stder=
+r.readline()
++cc_is_clang =3D b"clang version" in Popen(["/bin/sh", "-c", "$CC -v"], std=
+err=3DPIPE).stderr.readline()
+ src_feature_tests  =3D getenv('srctree') + '/tools/build/feature'
+=20
+ def clang_has_option(option):
+-    cc_output =3D Popen([cc, cc_options + option, path.join(src_feature_te=
+sts, "test-hello.c") ], stderr=3DPIPE).stderr.readlines()
++    cc_output =3D Popen(["/bin/sh", "-c", '$CC "$@"', "", option, path.joi=
+n(src_feature_tests, "test-hello.c")], stderr=3DPIPE).stderr.readlines()
+     return [o for o in cc_output if ((b"unknown argument" in o) or (b"is n=
+ot supported" in o))] =3D=3D [ ]
+=20
+ if cc_is_clang:
+--=20
+2.30.2
 
+
+--tip2335yapfu46iq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmOropEACgkQvP0LAY0m
+WPGsVg/+PJMmdskKa6YK5DdrzqRRZeuhbZL/ZdF4Nnw+Ockjao22fsAPCLELOs51
+382U/64gfXDl/Zo9ndgpzLF4z0yoh91SUssdF4zsHCXFg2WCeXb5DLRAOd821jAi
+Um6B+PywCC9BhuYVh+I6Kng4xAEegW/NX5L46Xo0Qvv+C1sxDkuy+CtaaY8bKjxu
+vCITb8JqyTMsvj+QM+OyyVhHOWGBwUS96EO5hv8a2GvidRPmDDjhYbC+px+XoBPA
+NEkA50Ru3BOK0qZqJDa3CcwmTehX5Axc1sfY756abREEVtMGL0s3PL42fSH8EumE
+cyYjgQOJP7pKqRiHtk2aF8OatTQPvC5Up0o9UQabS0OfaN6NP5zj+VlDFycH/N7p
+2TtTx4gvSlnf4uwvE6DEKKn2wnszRACTn/S9CeSkQl0dzvKJRAZmb3pa8GVelgyE
+LktIlYQN+ueUA7cZhLgUf1x5+KdWi5Syn1BKUQyu3oWVhRaMtJ3kwG6Wmx19tz9z
+R2uouLeqWb8T7aSxbMR80huRZno5HxUzlq0rl2OCzYxEJNkOhBi8/YFyDKaQKUC5
+Osad15aBLEV+ISzn1d8Zzcix40IvdtAVk/7nAQwvtJDHE7HeIlIWOWiuLc5UdIvw
+5cmTeOqZq3tePl4ovM3iuLx4T3nqsxnqL70aL2vEPzKUaIEsXmE=
+=9Kw2
+-----END PGP SIGNATURE-----
+
+--tip2335yapfu46iq--
