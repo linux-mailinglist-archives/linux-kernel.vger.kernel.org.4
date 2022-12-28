@@ -2,171 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FACB657614
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF044657613
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbiL1LyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:54:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S232602AbiL1Lxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbiL1LyK (ORCPT
+        with ESMTP id S232250AbiL1Lxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:54:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA32A10FCB
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:53:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672228401;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3hQKS1NwOrIIXUtr0/6kNG7P651iOA+L6EemF1Qhqo8=;
-        b=a3/ip11NJgo5ciZu+r1h09W/A1329peynAL+bUgFJfbFzb6V0h/xZieJGGi9Bh2HO+sGCm
-        295/1DMdVZTTyyDgO/AN1KZdIeiO5y0U33hQQOEy6pdFuNNtB8uCOCVIviF5d/sLAUd3Ia
-        AeOp2ZZMih0j0m4upN1I7N8WE9TFbbs=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-541-56w2p8oKN_-d6auElWJdVg-1; Wed, 28 Dec 2022 06:53:20 -0500
-X-MC-Unique: 56w2p8oKN_-d6auElWJdVg-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-1437fb9949bso7501715fac.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:53:20 -0800 (PST)
+        Wed, 28 Dec 2022 06:53:34 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29ED1055D
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:53:30 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so8769486wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jIc8aJi8QrQvoJC03xAlMGnXDQaBLi9+Xeuw2xbs1CY=;
+        b=IqTlpr+kOSYALPPG9hyn3C9MlIclYXZ7rmvtGH7avBSeuw0UUodYrtkyEnyOdeAAo8
+         i0fBxxV8jK97PO6KBukzq5ruUVd4+WlrDQubGUOmyxTAXnlc5mpPzO1a773G8VfRjrpt
+         5nwas47xCB6lLvtRpTpV01nuBknkPnkZ6yTrHfALUdCkJpVfeTqWcY7qB8CzRU/3AYX3
+         z7sUolaxeNYwAhmsjgplLToOE4xYZmtxU6fLSiXulUS/87GBU6Iok8fSHwwUXLp6u38j
+         D0xKba8YxPKtTDorV053vnH+vcRZ89rq1wnFuWMpMLDSDtADRQkxmUhRrUmDiM16Sw38
+         qQ4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3hQKS1NwOrIIXUtr0/6kNG7P651iOA+L6EemF1Qhqo8=;
-        b=n00s+fy6yQfkM8mYzsZ0B2VBE5iQ4yIP6cP1n24wy30Ok6lHvB3wfKNENrHZ8pG7oD
-         v5KeQmmML1N7OllP6/p5FuiSV+YUnwXHoRRQagH9+bs8KL3gn4pBAFUV1+8lm98bZzpm
-         PpKXxC+sMWmpUEUkq3B2acJgEE1vP4SKdyxoOyWPFOj6aMX4Grz3QrVdGexoJEhap5AL
-         DV/p6UFrP+oNTBqFbtXuTj0RdbFWhBNSUdVnfHmVUMM/w6hKqS/mILANsVRPo5QsU5wQ
-         Zh9G18+N85vOmn0PzMfsNzNhGmC4pgVuw55JNXBvptK/fhmSWLwaUu6LRxRnAoiwh10R
-         8oHg==
-X-Gm-Message-State: AFqh2kpgz4J2Z7mR2S5y86N9p89ba9wdsV5XbgaVKr5hIfT83zoHc0oa
-        ZH3uzcQrfvuT9IUEmpKfcmmWqgML5qesuDTNlBVcLHiwmzqS73NTGnoY6TDSLf2SR6pxAZUEOC6
-        fU7kTFP1oE5mpNiteLj8P72dRgGAadKLRYm9gCUFc
-X-Received: by 2002:a9d:7843:0:b0:678:1eb4:3406 with SMTP id c3-20020a9d7843000000b006781eb43406mr1573916otm.237.1672228399892;
-        Wed, 28 Dec 2022 03:53:19 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuiaCrxXL5+xhMG7tUHPCIJ4eF/3FYo5UTrnp+O2D9BcfxMWXCf0aeUTDXkBGQmvAAjX9SfrHhS9db4WpzKM1c=
-X-Received: by 2002:a9d:7843:0:b0:678:1eb4:3406 with SMTP id
- c3-20020a9d7843000000b006781eb43406mr1573914otm.237.1672228399502; Wed, 28
- Dec 2022 03:53:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20221226074908.8154-1-jasowang@redhat.com> <20221226074908.8154-4-jasowang@redhat.com>
- <20221226183705-mutt-send-email-mst@kernel.org> <CACGkMEuNZLJRnWw+XNxJ-to1y8L2GrTrJkk0y0Gwb5H2YhDczQ@mail.gmail.com>
- <20221227022255-mutt-send-email-mst@kernel.org> <d77bc1ce-b73f-1ba8-f04f-b3bffeb731c3@redhat.com>
- <20221227043148-mutt-send-email-mst@kernel.org> <0d9f1b89-9374-747b-3fb0-b4b28ad0ace1@redhat.com>
-In-Reply-To: <0d9f1b89-9374-747b-3fb0-b4b28ad0ace1@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 28 Dec 2022 19:53:08 +0800
-Message-ID: <CACGkMEv=+D+Es4sfde_X7F0zspVdy4Rs1Wi9qfCudsznsUrOTQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] virtio_ring: introduce a per virtqueue waitqueue
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
-        eperezma@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jIc8aJi8QrQvoJC03xAlMGnXDQaBLi9+Xeuw2xbs1CY=;
+        b=TOowWq4E6N6zuaWGGHPTGp2QTSOcgDTxdfiNHByYJ2ac4B8oKD1vzCT/kR65Tt+9qZ
+         LP76gApAq/+pZoQoK0uqsNoO0FqRTIuUFNljQg/pxWWuvP+Y2avNUmXuVLwZn/cp0miC
+         dYf8Vt2VR9PpQ3qhpcrn/uV+jXE/qbC6aIn9GBkFDEc0quSrDBGG+Hx9Jtn6aY+TlLRo
+         K4mpoalwYX1Xsl6eN8O06reF7yAbotewD8U7AaDDFFA8keIhaxqQiUUtQ1u6zZun/Yxc
+         yh8ZXI+/0JR2nKhZF6d2275DbszPqb65FAawp+ty0M2rGOvxmAgarGVeF0GtoFrLhwUt
+         JMOw==
+X-Gm-Message-State: AFqh2ko3t0H2J4PnuMa4ObQ/14/OkWJIXlFy6RrOso+pxGAxC5jHvYi8
+        yZCrS3Qg/KbqrOblTMfRRuo/Gw==
+X-Google-Smtp-Source: AMrXdXsHsKXYzrbgvBev4TqUTsvmYSdXTIKLuvACYlZVNAx/xPx9eOVDrIVvKi9OWOpGnsegvvTAow==
+X-Received: by 2002:a05:600c:34ce:b0:3cf:614e:b587 with SMTP id d14-20020a05600c34ce00b003cf614eb587mr18312059wmq.26.1672228409224;
+        Wed, 28 Dec 2022 03:53:29 -0800 (PST)
+Received: from localhost (2a02-8388-6582-fe80-0000-0000-0000-0006.cable.dynamic.v6.surfer.at. [2a02:8388:6582:fe80::6])
+        by smtp.gmail.com with ESMTPSA id n25-20020a7bc5d9000000b003d969a595fbsm20730799wmk.10.2022.12.28.03.53.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 03:53:28 -0800 (PST)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 28 Dec 2022 12:53:27 +0100
+Message-Id: <CPDFHXBPSP76.5CWNQK4N1KGI@otso>
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Avri Altman" <avri.altman@wdc.com>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+Cc:     <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: ufs: qcom: Add reg-names property for ICE
+X-Mailer: aerc 0.13.0
+References: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
+ <c4109766-22f1-7227-47bb-9273a027bb0c@linaro.org>
+In-Reply-To: <c4109766-22f1-7227-47bb-9273a027bb0c@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 2:34 PM Jason Wang <jasowang@redhat.com> wrote:
->
->
-> =E5=9C=A8 2022/12/27 17:38, Michael S. Tsirkin =E5=86=99=E9=81=93:
-> > On Tue, Dec 27, 2022 at 05:12:58PM +0800, Jason Wang wrote:
-> >> =E5=9C=A8 2022/12/27 15:33, Michael S. Tsirkin =E5=86=99=E9=81=93:
-> >>> On Tue, Dec 27, 2022 at 12:30:35PM +0800, Jason Wang wrote:
-> >>>>> But device is still going and will later use the buffers.
-> >>>>>
-> >>>>> Same for timeout really.
-> >>>> Avoiding infinite wait/poll is one of the goals, another is to sleep=
-.
-> >>>> If we think the timeout is hard, we can start from the wait.
-> >>>>
-> >>>> Thanks
-> >>> If the goal is to avoid disrupting traffic while CVQ is in use,
-> >>> that sounds more reasonable. E.g. someone is turning on promisc,
-> >>> a spike in CPU usage might be unwelcome.
-> >>
-> >> Yes, this would be more obvious is UP is used.
-> >>
-> >>
-> >>> things we should be careful to address then:
-> >>> 1- debugging. Currently it's easy to see a warning if CPU is stuck
-> >>>      in a loop for a while, and we also get a backtrace.
-> >>>      E.g. with this - how do we know who has the RTNL?
-> >>>      We need to integrate with kernel/watchdog.c for good results
-> >>>      and to make sure policy is consistent.
-> >>
-> >> That's fine, will consider this.
+Hi Krzysztof,
 
-So after some investigation, it seems the watchdog.c doesn't help. The
-only export helper is touch_softlockup_watchdog() which tries to avoid
-triggering the lockups warning for the known slow path.
+On Wed Dec 28, 2022 at 12:50 PM CET, Krzysztof Kozlowski wrote:
+> On 09/12/2022 15:29, Luca Weiss wrote:
+> > The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add thi=
+s
+> > in the bindings so the existing dts can validate successfully.
+> >=20
+> > Also sm8450 is using ICE since commit 276ee34a40c1 ("arm64: dts: qcom:
+> > sm8450: add Inline Crypto Engine registers and clock") so move the
+> > compatible to the correct if.
+> >=20
+> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > ---
+> > (no cover subject)
+> >=20
+> > The only remaining validation issues I see is the following on sc8280xp=
+-crd.dtb
+> > and sa8540p-ride.dtb:
+> >=20
+>
+> Any plans on fixing the patch (after testing it) and resending?
 
-And before the patch, we end up with a real infinite loop which could
-be caught by RCU stall detector which is not the case of the sleep.
-What we can do is probably do a periodic netdev_err().
+I wasn't quite sure how to fix the comments, but re-reading them this
+comment from you is how you expect it to be in v2?
 
-Thanks
+> Just add it to top-level with minItems: 1 and per variant customize:
+> 1. maxItems: 1
+> 2. minItems: 2 + required
 
-> >>
-> >>
-> >>> 2- overhead. In a very common scenario when device is in hypervisor,
-> >>>      programming timers etc has a very high overhead, at bootup
-> >>>      lots of CVQ commands are run and slowing boot down is not nice.
-> >>>      let's poll for a bit before waiting?
-> >>
-> >> Then we go back to the question of choosing a good timeout for poll. A=
-nd
-> >> poll seems problematic in the case of UP, scheduler might not have the
-> >> chance to run.
-> > Poll just a bit :) Seriously I don't know, but at least check once
-> > after kick.
+If so I can spin v2 maybe today still.
+
+Regards
+Luca
+
 >
->
-> I think it is what the current code did where the condition will be
-> check before trying to sleep in the wait_event().
->
->
-> >
-> >>> 3- suprise removal. need to wake up thread in some way. what about
-> >>>      other cases of device breakage - is there a chance this
-> >>>      introduces new bugs around that? at least enumerate them please.
-> >>
-> >> The current code did:
-> >>
-> >> 1) check for vq->broken
-> >> 2) wakeup during BAD_RING()
-> >>
-> >> So we won't end up with a never woke up process which should be fine.
-> >>
-> >> Thanks
-> >
-> > BTW BAD_RING on removal will trigger dev_err. Not sure that is a good
-> > idea - can cause crashes if kernel panics on error.
->
->
-> Yes, it's better to use __virtqueue_break() instead.
->
-> But consider we will start from a wait first, I will limit the changes
-> in virtio-net without bothering virtio core.
->
-> Thanks
->
->
-> >
-> >>>
+> Best regards,
+> Krzysztof
 
