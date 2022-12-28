@@ -2,133 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0C16575A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 774B56575AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbiL1LKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:10:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S229864AbiL1LMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiL1LKc (ORCPT
+        with ESMTP id S232883AbiL1LLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:10:32 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404C821F;
-        Wed, 28 Dec 2022 03:10:29 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id fy4so15955586pjb.0;
-        Wed, 28 Dec 2022 03:10:29 -0800 (PST)
+        Wed, 28 Dec 2022 06:11:25 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6C1299
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:11:24 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id y25so23180302lfa.9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:11:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9naIqkNaMLLvBoGYLzFhWmmFiWmpVPHULOvj3Di9g6k=;
-        b=eGH05jcojq8zeolUJcWkGi13CoWSOuiL6roVFk71k5HBNaFEMs0LV2JrvAy/InsyIw
-         Dqe7pp5Pnv319wrjp/4mjTmxT6RsHaD//5XzUuSjnpbXky3m424p2xrkTuxfJ7OmVRP+
-         2SM9uqz18R6sC4azPQJAIHacJxxzjJa967YYXhDHgY4swyLsvzi1/YuTtPIgzw++wyA1
-         KH/PWLGM3T9Q4naPyj6v+jydtZCCDAjmUdCJWWbbxVnXM4YuemoqfKgc5PL5BJ/eaXDl
-         MjcJ5OWzNjMhzeJMzg0RjYC+W8cfOM32RfZ1VRIqfrOgPs4ZJXgedd5nQ5yKTAl+db3e
-         gOKQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z2f4SZyg4wonPVTx4RxeA6rIxFyapG0eRgUtOAydlWA=;
+        b=VgWuOg0Q/BEsBygLFpJMjYgIuVod22bWs5l+/X3fOaaWVx2IsUkTSEmYS51+wK57k2
+         AUfCWQAqR4hCi3nLS80syhaX/nsfMis8faHJzh7uTMpzmuASDUVAU3goBDGehMe972uK
+         q/xvXtEZB2MqYQfqyPin8nBk5kR7sPo4cddfVm/DUFP/BfjpkZXJaksirvR0lTu5Pa6T
+         RCVe0Nqk48/Iu2DfDLhx6HhpiG7FG8YN8LRYrx0iBGicqs0qOJPUmtiHLwf0xcF5PdZr
+         UtTEUuBT9t1fTENfGm0Yq6hYTuRqpqLdp1kGG0tZGG1vwmXibTxBmSevUKASgYB1u3UK
+         zp6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9naIqkNaMLLvBoGYLzFhWmmFiWmpVPHULOvj3Di9g6k=;
-        b=2U7vwRQ8O6yLb00IWXtfXDmdk7+WcYz8Untmi63eqBJX4R6jnWjW696+D3701Psst8
-         iZMkWq92roeoWPqCD9CXHmkaQVSDGeEboRjkLuhQHlommNQjwJTQF89mo3giLOiK9N7i
-         TupZrmJkVCZGWCHrATFK64NJP8utWLu+Nte33BofCXyhP/ebBbz3XB6+q6qjwrKDutWK
-         An0LeSadaT96Nh7Mj39oukUIlympC+xIieWHOdpMyO/CXHVTYTtFkP2ITcKnwfoFB2WN
-         fauZsqpcuwZjTu3o5CFudoZzAiymxnkRO4ODEcEfzTo5R3SVjADerZdl3EMPdP2iO4tk
-         zy8g==
-X-Gm-Message-State: AFqh2kq8fXrzRcvBEhNJOSQS6lK+jdrWL0mq/pnA2D6xMNaNlHVMEnBR
-        v8mkUKOX/ZseNYDA5nc5Met5LSGSNQ2W9bpX6jg=
-X-Google-Smtp-Source: AMrXdXsR2yBJjTWXi9Mcq9RAHhoH5ym7DSPJZ4GBvFZ7UCjdbK9Z7RqQU3pfsUC8aO/1M1t4cyIPFu1YXwSA9Hpx6RM=
-X-Received: by 2002:a17:903:2301:b0:192:55ab:890c with SMTP id
- d1-20020a170903230100b0019255ab890cmr1494771plh.57.1672225828681; Wed, 28 Dec
- 2022 03:10:28 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z2f4SZyg4wonPVTx4RxeA6rIxFyapG0eRgUtOAydlWA=;
+        b=wpkCEtzsaLJmu/4Q+hJAlu/7vjJCYKFwDs6icqNUcywJCXeJA8i9pJdXvvgwIGcoFV
+         I4KJkL6ZyB3lLAAwW9kAs8NQgTYr8fbZwDcGRtWCl0p+1SIpwlefgqiVSRpMzok48/H/
+         WlfN9FFBCCR9k3gqfggibXm4lARy85lr8kjqboYnxa1hLBV4nqgFTAcoke5QxvBRwkIz
+         XrhOvNqmi1VVUnczGVcGVRmK94EmQ9xw6Jc/btE7ImrPYqBrYPOczEYR9ZM5xbLIulsz
+         w1bPk5qCZbKNeU2GwhlAH5HP3TW08V9m7luS/pr92okQ7lVKWXsjfcaScf/ybtgLAk+0
+         2O3g==
+X-Gm-Message-State: AFqh2kpmpjxC27WEdWXbn/+pxs4EeGj3G8n+rYaQomq7H8Jg6U8gfunL
+        /77XPXP0OcCgqgJSjUDXSYkRbw==
+X-Google-Smtp-Source: AMrXdXvOtmvIG7R1J4c06BP7mYgTgqlZzX8dEVFQxPiuCwnLOhkokMDzf7g7ahmf2F74vURqMQtXZw==
+X-Received: by 2002:ac2:51b6:0:b0:4b6:ed8b:4f16 with SMTP id f22-20020ac251b6000000b004b6ed8b4f16mr6620915lfk.52.1672225882451;
+        Wed, 28 Dec 2022 03:11:22 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s5-20020a056512314500b004b59871f457sm2628788lfi.247.2022.12.28.03.11.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 03:11:22 -0800 (PST)
+Message-ID: <2653e293-92a1-817f-6a84-c8e21f34d304@linaro.org>
+Date:   Wed, 28 Dec 2022 12:11:21 +0100
 MIME-Version: 1.0
-References: <20221116214841.1116735-1-robimarko@gmail.com> <20221116214841.1116735-2-robimarko@gmail.com>
- <20221205215253.itobukkyiecn7xi7@builder.lan> <CAOX2RU5C6uYKS4Hc7NBwnzRju1=gzewrEHudMksUAL1XdKcfCQ@mail.gmail.com>
- <20221227192049.zk5gqhpnq2m7baqa@builder.lan>
-In-Reply-To: <20221227192049.zk5gqhpnq2m7baqa@builder.lan>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Wed, 28 Dec 2022 12:10:17 +0100
-Message-ID: <CAOX2RU4SGmmZT6e0V5YCsCYU82wAJH736PhEz4Tx+Q0XTFU_9A@mail.gmail.com>
-Subject: Re: [PATCH 2/9] arm64: dts: qcom: ipq8074: fix Gen3 PCIe QMP PHY
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mani@kernel.org, lpieralisi@kernel.org, kw@linux.com,
-        svarbanov@mm-sol.com, shawn.guo@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3] regulator: dt-bindings: qcom,rpmh: Indicate
+ regulator-allow-set-load dependencies
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Andrew Halaney <ahalaney@redhat.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dianders@chromium.org, Johan Hovold <johan+kernel@kernel.org>
+References: <20220907204924.173030-1-ahalaney@redhat.com>
+ <14b0237d-6511-4a1f-3bda-e0e72b442a56@linaro.org>
+ <Y6whZ50Lz07xG/R1@hovoldconsulting.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y6whZ50Lz07xG/R1@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Dec 2022 at 20:20, Bjorn Andersson <andersson@kernel.org> wrote:
->
-> On Tue, Dec 06, 2022 at 10:51:40AM +0100, Robert Marko wrote:
-> > On Mon, 5 Dec 2022 at 22:52, Bjorn Andersson <andersson@kernel.org> wrote:
-> > >
-> > > On Wed, Nov 16, 2022 at 10:48:34PM +0100, Robert Marko wrote:
-> > > > IPQ8074 comes in 2 silicon versions:
-> > > > * v1 with 2x Gen2 PCIe ports and QMP PHY-s
-> > > > * v2 with 1x Gen3 and 1x Gen2 PCIe ports and QMP PHY-s
-> > > >
-> > > > v2 is the final and production version that is actually supported by the
-> > > > kernel, however it looks like PCIe related nodes were added for the v1 SoC.
-> > > >
-> > > > Now that we have Gen3 QMP PHY support, we can start fixing the PCIe support
-> > > > by fixing the Gen3 QMP PHY node first.
-> > > >
-> > > > Change the compatible to the Gen3 QMP PHY, correct the register space start
-> > > > and size, add the missing misc PCS register space.
-> > > >
-> > >
-> > > Does this imply that the current node doesn't actually work?
-> >
-> > Hi Bjorn,
-> > Yes, the node is for a completely different PHY generation, basically
-> > PCIe on IPQ8074
-> > is completely broken, hence this patch series.
-> >
-> > >
-> > > If that's the case, could we perhaps adopt Johan Hovolds' new binding
-> > > and drop the subnode in favor of just a flat reg covering the whole
-> > > QMP region?
-> >
-> > I have not seen that so far, any examples?
-> >
->
-> See
-> Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml in
-> v6.2-rc1.
->
-> The idea is to, at least, use this for all new platforms introduced.
->
-> And if the current definition doesn't actually work I suggest that we
-> replace it with the new one.
+On 28/12/2022 11:58, Johan Hovold wrote:
+> On Wed, Dec 28, 2022 at 11:37:06AM +0100, Krzysztof Kozlowski wrote:
+>> On 07/09/2022 22:49, Andrew Halaney wrote:
+>>> For RPMH regulators it doesn't make sense to indicate
+>>> regulator-allow-set-load without saying what modes you can switch to,
+>>> so be sure to indicate a dependency on regulator-allowed-modes.
+>>>
+>>> In general this is true for any regulators that are setting modes
+>>> instead of setting a load directly, for example RPMH regulators. A
+>>> counter example would be RPM based regulators, which set a load
+>>> change directly instead of a mode change. In the RPM case
+>>> regulator-allow-set-load alone is sufficient to describe the regulator
+>>> (the regulator can change its output current, here's the new load),
+>>> but in the RPMH case what valid operating modes exist must also be
+>>> stated to properly describe the regulator (the new load is this, what
+>>> is the optimum mode for this regulator with that load, let's change to
+>>> that mode now).
+>>>
+>>> With this in place devicetree validation can catch issues like this:
+>>>
+>>>     /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
+>>>             From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+>>
+>> Andrew,
+>>
+>> This patch was merged therefore we started seeing such warnings. Any
+>> plans to actually fix them?
+> 
+> Didn't Doug already do that?
+> 
+> 	https://lore.kernel.org/all/20220829164952.2672848-1-dianders@chromium.org/
 
-I understand the intention, but these bindings dont match the QMP generation
-found in IPQ8074 at all, and Gen3 has already been documented in bindings.
+You're right, thanks. I keep seeing the error on
+sm8350-sony-xperia-sagami-pdx214 and I thought it is on every board. My
+bad. I'll fix the Xperia same way as HDK was fixed.
 
-This would require updating the driver to carry the offsets and rework
-of bindings to
-not require power domains, etc for IPQ8074 as I have not found any
-code downstream
-to indicate it has GSDC-s for PCIe though I dont have any docs at all
-for the SoC.
 
-Regards,
-Robert
->
-> Regards,
-> Bjorn
+Best regards,
+Krzysztof
+
