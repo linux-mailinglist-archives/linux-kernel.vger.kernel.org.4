@@ -2,116 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DF76572F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 06:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CEB6572FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 06:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiL1F2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 00:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        id S229813AbiL1FkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 00:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiL1F2i (ORCPT
+        with ESMTP id S229468AbiL1FkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 00:28:38 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A748DCC
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 21:28:37 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso15859466pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 21:28:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9cAM4RhmUF/0okz7iGJZyGhb8wvgosg7Pe52G62TzuE=;
-        b=JGTuVx/19KQlpCvCoeEmPy73oDMhAn7fVSSmJgfHEX+2S7PV4Hksc4YduZq9w/truH
-         uJuU7bxjIiESuewVZq8SHZ9CNJylx1p6sYC7LeJqINs+8+geWB6fGwuNQ5FWmvmjFkmo
-         cjJ2NKoqj1SfJhKB+YlzR6M+/EyPs6lR0kUzg6JR1YYEZD/NYVTABQWVr3MRhrcKQeEY
-         RarBkVkfPt4crvf+YmnXF42s+cJ64RA5roSOrtnJKa/vyXnsvt/VEm8iOPkn/4fEyb8m
-         8N8C/+xYegf7pnFB7dh0Ys4ZwhGVnlkvPDvBsmN2Q91KZnOPuhBtjg/DL3KruKZDtF7i
-         BeSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9cAM4RhmUF/0okz7iGJZyGhb8wvgosg7Pe52G62TzuE=;
-        b=DoQtsC50YEG8J82gSpHW8e7hfMPgwOiJ6cAez8689PkHvhxW5A05tcFAF0e086nEcI
-         utji3lZ7GaV7MuYSxCO4QVVkHjSfderDJfhvzS1eVUV8cFN8uok3vu7rq/lhAt2NAcNO
-         8LBjDMxzZT1AbgNLFpav4G7tw53VkG4uJUkg9R5JoCDninc/bJaEDFAqT7u6UnLlLk4J
-         srZqLdFIIPpP8iBkcxgicF9O8iHAxi6KdLcTvebHE2R/dRubdvl85nOU3h/z9ovAsPs6
-         B65nMUiViQBMebp/O1QEP6l1+RYnpNViA7n+K6l2Ly1HX7K6yzbXHT4EFBa0+zCNNZT9
-         cYuw==
-X-Gm-Message-State: AFqh2kr27TASPp23ZZPPb+DKTK37STKwjK/Mvrl3GM+aHHtybXCrdysX
-        gf6ozluFRO/vhFEdAzFhuztn+a4aRec91iRf5Bbnpg==
-X-Google-Smtp-Source: AMrXdXucD2UuV6eCz/qiNghJ5GxgT3TnOtddAezIMiy5Cbg7XzHb/zmA7oU/ii3ws+/T5IFcS9BIisTXbPI+gj6CLxI=
-X-Received: by 2002:a17:90b:1281:b0:225:be82:ba21 with SMTP id
- fw1-20020a17090b128100b00225be82ba21mr1650901pjb.209.1672205316516; Tue, 27
- Dec 2022 21:28:36 -0800 (PST)
+        Wed, 28 Dec 2022 00:40:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E6C10AE
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 21:40:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E39CA61337
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 05:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E497C433EF;
+        Wed, 28 Dec 2022 05:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672206016;
+        bh=M1Y98MLSEPnhjCHspW3YqG4scBFNBKNAXqYJfKEG9Pk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GXzadqtZ2AAi/o0jXp6HfCBxnCFaMfTlK2vkenknivfFydKAoIX2+QD9nnkOwPSDU
+         IjTorWYt0zHFe1rjpRl2M/XkAvEoxiVB4Q/TAqzcVHARX/rOl970gUfV4GXNl2q9tb
+         eXd67hw3i3Ffybe3AqCfm97YgvGc/f/oXL2BDpDfT5eP5n2WloNBdo7lBUwVBc6StK
+         R9Lqx1z9JoUMEqKbMJYROgumumHtzUeo8WxJH4QE9+Dp4nKOY6DQevKdb3FBH+9TS+
+         k1nfg0OuFLjUfgwprAMnlYydUpyxIFzUfffIIHuOWztgZ2onC8BbKGS9pvQwLB4usD
+         lz9jKaUfXP6sA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 20630C395DF;
+        Wed, 28 Dec 2022 05:40:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221227104837.27208-1-anand@edgeble.ai> <20221227104837.27208-3-anand@edgeble.ai>
- <732352f3-fda0-039e-4fef-ceb6f5348086@gmail.com>
-In-Reply-To: <732352f3-fda0-039e-4fef-ceb6f5348086@gmail.com>
-From:   Anand Moon <anand@edgeble.ai>
-Date:   Wed, 28 Dec 2022 10:58:25 +0530
-Message-ID: <CACF1qnfEjGCQ2e5DQqszc6Ak0XR5+NB-PSBFJtnC1P5O9hNGqA@mail.gmail.com>
-Subject: Re: [PATCHv3 linux-next 3/4] ARM: dts: rockchip: rv1126: Add GMAC node
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jagan Teki <jagan@edgeble.ai>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v13 1/3] platform/chrome: cros_ec_uart: Add transport layer
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <167220601612.11271.6344750587766687879.git-patchwork-notify@kernel.org>
+Date:   Wed, 28 Dec 2022 05:40:16 +0000
+References: <20221227123212.v13.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+In-Reply-To: <20221227123212.v13.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+To:     Mark Hasemeyer <markhas@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, rrangel@chromium.org,
+        bhanumaiya@chromium.org, pmalani@chromium.org, bleung@chromium.org,
+        groeck@chromium.org, tzungbi@kernel.org,
+        chrome-platform@lists.linux.dev
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan
+Hello:
 
-On Tue, 27 Dec 2022 at 17:25, Johan Jonker <jbx6244@gmail.com> wrote:
->
->
->
-> On 12/27/22 11:48, Anand Moon wrote:
-> > Rockchip RV1126 has GMAC 10/100/1000M ethernet controller
-> > add GMAC node for RV1126 SoC.
-> >
-> > Signed-off-by: Anand Moon <anand@edgeble.ai>
-> > Signed-off-by: Jagan Teki <jagan@edgeble.ai>
-> > ---
-> > v3: drop the gmac_clkin_m0 & gmac_clkin_m1 fix clock node which are not
-> > used, Add SoB of Jagan Teki.
-> > V2: drop SoB of Jagan Teki.
-> > ---
-> >  arch/arm/boot/dts/rv1126.dtsi | 49 +++++++++++++++++++++++++++++++++++
-> >  1 file changed, 49 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/rv1126.dtsi b/arch/arm/boot/dts/rv1126.dtsi
-> > index 1cb43147e90b..e20fdd0d333c 100644
-> > --- a/arch/arm/boot/dts/rv1126.dtsi
-> > +++ b/arch/arm/boot/dts/rv1126.dtsi
-> > @@ -90,6 +90,55 @@ xin24m: oscillator {
-> >               #clock-cells = <0>;
-> >       };
-> >
->
-> > +     gmac: ethernet@ffc40000 {
->
-> Nodes with a reg property are sort on reg address.
-> Heiko can fix that.. ;)
->
->         timer0: timer@ff660000 {
->         gmac: ethernet@ffc40000 {
->         emmc: mmc@ffc50000 {
->
+This series was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-will sort these on reg address. In the future. or the next version.
+On Tue, 27 Dec 2022 12:32:22 -0700 you wrote:
+> From: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
+> 
+> This patch does following:
+> 1. Adds a new cros-ec-uart driver. This driver can send EC requests on
+>    UART and process response packets received on UART transport.
+> 2. Once probed, this driver will initialize the serdev device based on
+>    the underlying information in the ACPI resource. After serdev device
+>    properties are set, this driver will register itself cros-ec.
+> 3. High level driver can use this implementation to talk to ChromeOS
+>    Embedded Controller device in case it supports UART as transport.
+> 4. When cros-ec driver initiates a request packet, outgoing message is
+>    processed in buffer and sent via serdev. Once bytes are sent, driver
+>    enables a wait_queue.
+> 5. Since ChromeOS EC device sends response asynchronously, AP's TTY
+>    driver accumulates response bytes and calls the registered callback.
+>    TTY driver can send multiple callback for bytes ranging from 1 to MAX
+>    bytes supported by EC device.
+> 6. Driver waits for EC_MSG_DEADLINE_MS to collect and process received
+>    bytes. It wakes wait_queue if expected bytes are received or else
+>    wait_queue timeout. Based on the error condition, driver returns
+>    data_len or error to cros_ec.
+> 
+> [...]
 
-Thanks.
--Anand
+Here is the summary with links:
+  - [v13,1/3] platform/chrome: cros_ec_uart: Add transport layer
+    https://git.kernel.org/chrome-platform/c/04a8bdd135cc
+  - [v13,2/3] dt-bindings: mfd: cros-ec: Add UART compatible string
+    https://git.kernel.org/chrome-platform/c/5be8cd61dcdd
+  - [v13,3/3] platform/chrome: cros_ec_uart: Add DT enumeration support
+    https://git.kernel.org/chrome-platform/c/c34fea225806
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
