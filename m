@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FC2657481
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B74657485
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbiL1JPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 04:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S232644AbiL1JPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 04:15:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiL1JPI (ORCPT
+        with ESMTP id S232543AbiL1JPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 04:15:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDAE6DEF5;
-        Wed, 28 Dec 2022 01:15:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 476BD61356;
-        Wed, 28 Dec 2022 09:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBD92C433EF;
-        Wed, 28 Dec 2022 09:15:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672218905;
-        bh=xYhr5uhlKdptK0DYghqZVkuxC4UV7CC/gyvUEUOnE2M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nu2xgrCop9EMDeNqUC5PECTIAKfcuC1AF/UlHyrc0n0xJ0EWVvFei003SPk5aZr44
-         Z1lRpEvP3Ap7D6lzRwlgQIbXNVEI91DuCs4jGj/nzXkhVjkk6egSdMkoQizpGqKbTD
-         BUJX5nPkpfSWFmxVKB5pTqRIE3z5u/ukpG/kVtxB8WtmDZjoxoSYJUjVQTbtqF5lWd
-         WzBhpY/eM37lGGicYo/Ecy1gFT8MOmxmEpqYtLEBovphRmwaqkVRcX3oGkqYlryUrE
-         MTHAwHD5Xea5fmxqtf+1blK5JFYQYoy83TJLWUPx/KWxD2j4yXkKXPNX557elYoAyo
-         2AtTt8IL0qecw==
-Date:   Wed, 28 Dec 2022 11:15:01 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Lixue Liang <lianglixuehao@126.com>,
-        anthony.l.nguyen@intel.com, linux-kernel@vger.kernel.org,
-        jesse.brandeburg@intel.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        lianglixue@greatwall.com.cn
-Subject: Re: [PATCH v7] igb: Assign random MAC address instead of fail in
- case of invalid one
-Message-ID: <Y6wJFYMZVQ7V+ogG@unreal>
-References: <20221213074726.51756-1-lianglixuehao@126.com>
- <Y5l5pUKBW9DvHJAW@unreal>
- <20221214085106.42a88df1@kernel.org>
- <Y5obql8TVeYEsRw8@unreal>
- <20221214125016.5a23c32a@kernel.org>
- <Y57SPPmui6cwD5Ma@unreal>
- <CAKgT0UfZk3=b0q3AQiexaJ=gCz6vW_hnHRnFiYLFSCESYdenOw@mail.gmail.com>
+        Wed, 28 Dec 2022 04:15:46 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF1813F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 01:15:42 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id z26so22837836lfu.8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 01:15:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zHfGy9Laz7eCuwSYN292QO9okKvZGpgecX/zbeSHhK0=;
+        b=YUmZMBTkEjZmJYJe7NsLeaKDHqpUyJWPHoelRZsaowbOOIMm9QTjoF2VhTb9ub2hss
+         JIbxiNc34Q2MdqjLxsoHf9T+1ixwg0+dOQQCeOysINni1OGL29+taOwaaYi7VtQ5ZRgh
+         FXgggDcPJJL7JfuKMrMVmyGFU8AsjNWHPqNq/boCB18NwE+3XsoXs5cVaPCd3XdKT+I5
+         VLsSX52YwgWh4JBFaAnWElSijRsWxtN3dlgd0VpNB1FKAZ5k+zsNV3aTvQV5vGje+AMD
+         EWS46Zs4ini68nHvEVVPbu1w66gh73M5CoXzyVvvxwuzmmB595RzqU/WW4z29SBR7WTx
+         0YEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zHfGy9Laz7eCuwSYN292QO9okKvZGpgecX/zbeSHhK0=;
+        b=GEfj+ui4V7AI71dOEC77QMmGfjlQLFcgr7ZQJ1j/rGHAzg3rKwG+Samoaau7fYVh10
+         UemN/MwcunvRQ4m6dn1qe9MUJEo5CQBYLp4/T/Vz9orA1nQ841g3AWaflIwLL4KiO+Ri
+         tYIVB4UX7hIJuvQ6Aw0C9KHZ1STr8feb+rJg4W0Vd6Gw1nt2R3LQ2h2IMap+l7KjkFoQ
+         Wi+msowGS7gsugLV5pRAsKtq1i4lNrlv6+4p5XjvFTsYCa1L9fkA9KMgZosMmIbPAUx9
+         LkIO8fFKd/3azaq9NlcC5OfRFLuoNXfnGrvmyr851wi5vSXJyoNEgFNj2KEB+ffL52Mn
+         ciyQ==
+X-Gm-Message-State: AFqh2kqWwSOeuMNRUQlWjlTz3R251mUbUTKES/sI5olSKZz/oM4AyIGi
+        4mwNXJzYb5w4M0ixfpAEwtarjA==
+X-Google-Smtp-Source: AMrXdXuSBPe3YclVGcr+1kAh/FcxwSdU2wFJT56/FdPUnYvTp9rDQnmdWkSNxnp/7u0kvt1xW4nbuQ==
+X-Received: by 2002:a19:7b18:0:b0:4b5:9cce:73a0 with SMTP id w24-20020a197b18000000b004b59cce73a0mr7415088lfc.39.1672218941331;
+        Wed, 28 Dec 2022 01:15:41 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q13-20020a056512210d00b004b5732080d1sm2577189lfr.150.2022.12.28.01.15.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 01:15:40 -0800 (PST)
+Message-ID: <73599d25-cd2c-e89a-20b4-d34471583a6b@linaro.org>
+Date:   Wed, 28 Dec 2022 10:15:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKgT0UfZk3=b0q3AQiexaJ=gCz6vW_hnHRnFiYLFSCESYdenOw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] ARM: dts: n900: switch accelerometer to iio driver
+Content-Language: en-US
+To:     "Sicelo A. Mhlongo" <absicsz@gmail.com>, linux-omap@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tony@atomide.com,
+        devicetree@vger.kernel.org
+References: <20221227223841.2990847-1-absicsz@gmail.com>
+ <20221227223841.2990847-2-absicsz@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221227223841.2990847-2-absicsz@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,45 +76,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 07:30:45AM -0800, Alexander Duyck wrote:
-> On Sun, Dec 18, 2022 at 12:41 AM Leon Romanovsky <leon@kernel.org> wrote:
-> >
-> > On Wed, Dec 14, 2022 at 12:50:16PM -0800, Jakub Kicinski wrote:
-> > > On Wed, 14 Dec 2022 20:53:30 +0200 Leon Romanovsky wrote:
-> > > > On Wed, Dec 14, 2022 at 08:51:06AM -0800, Jakub Kicinski wrote:
-> > > > > On Wed, 14 Dec 2022 09:22:13 +0200 Leon Romanovsky wrote:
-> > > > > > NAK to any module driver parameter. If it is applicable to all drivers,
-> > > > > > please find a way to configure it to more user-friendly. If it is not,
-> > > > > > try to do the same as other drivers do.
-> > > > >
-> > > > > I think this one may be fine. Configuration which has to be set before
-> > > > > device probing can't really be per-device.
-> > > >
-> > > > This configuration can be different between multiple devices
-> > > > which use same igb module. Module parameters doesn't allow such
-> > > > separation.
-> > >
-> > > Configuration of the device, sure, but this module param is more of
-> > > a system policy.
-> >
-> > And system policy should be controlled by userspace and applicable to as
-> > much as possible NICs, without custom module parameters.
-> >
-> > I would imagine global (at the beginning, till someone comes forward and
-> > requests this parameter be per-device) to whole stack parameter with policies:
-> >  * Be strict - fail if mac is not valid
-> >  * Fallback to random
-> >  * Random only ???
-> >
-> > Thanks
+On 27/12/2022 23:38, Sicelo A. Mhlongo wrote:
+> Since 8a7449d68670a8f9033d57b9e7997af77a900d53, lis302dl is supported by an iio
+
+Use commit SHA ("title") format, as suggested by checkpatch.
+
+> driver. Make the switch, to accommodate modern userspace, even though the iio
+> interface lacks some of the extended features of the older driver
 > 
-> So are you suggesting you would rather see something like this as a
-> sysctl then? Maybe something like net.core.netdev_mac_behavior where
-> we have some enum with a predetermined set of behaviors available? I
-> would be fine with us making this a global policy if that is the route
-> we want to go. It would just be a matter of adding the sysctl and an
-> accessor so that drivers can determine if it is set or not.
+> Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
+> ---
+>  arch/arm/boot/dts/omap3-n900.dts | 53 +++++---------------------------
+>  1 file changed, 8 insertions(+), 45 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/omap3-n900.dts b/arch/arm/boot/dts/omap3-n900.dts
+> index 6ba2e8f81973..94fa1d492fb4 100644
+> --- a/arch/arm/boot/dts/omap3-n900.dts
+> +++ b/arch/arm/boot/dts/omap3-n900.dts
+> @@ -767,56 +767,19 @@ &i2c3 {
+>  
+>  	clock-frequency = <400000>;
+>  
+> -	lis302dl: lis3lv02d@1d {
+> -		compatible = "st,lis3lv02d";
+> +	lis302dl: lis302dl@1d {
 
-Something like that and maybe convert drivers and/or to honor this policy.
+That's not really explained in commit msg and does not look related to
+your goal. If changing - in separate patch - make the node name generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-Thanks
+> +		compatible = "st,lis302dl";
+>  		reg = <0x1d>;
+>  
+> -		Vdd-supply = <&vaux1>;
+> -		Vdd_IO-supply = <&vio>;
+> +		vdd-supply = <&vaux1>;
+> +		vddio-supply = <&vio>;
+
+Does not look related/explained in commit msg.
+
+>  
+>  		interrupt-parent = <&gpio6>;
+> -		interrupts = <21 20>; /* 181 and 180 */
+> -
+> -		/* click flags */
+> -		st,click-single-x;
+> -		st,click-single-y;
+> -		st,click-single-z;
+> -
+> -		/* Limits are 0.5g * value */
+> -		st,click-threshold-x = <8>;
+> -		st,click-threshold-y = <8>;
+> -		st,click-threshold-z = <10>;
+> -
+> -		/* Click must be longer than time limit */
+> -		st,click-time-limit = <9>;
+> -
+> -		/* Kind of debounce filter */
+> -		st,click-latency = <50>;
+> -
+> -		/* Interrupt line 2 for click detection */
+> -		st,irq2-click;
+> -
+> -		st,wakeup-x-hi;
+> -		st,wakeup-y-hi;
+> -		st,wakeup-threshold = <(800/18)>; /* millig-value / 18 to get HW values */
+> -
+> -		st,wakeup2-z-hi;
+> -		st,wakeup2-threshold = <(900/18)>; /* millig-value / 18 to get HW values */
+> -
+> -		st,hipass1-disable;
+> -		st,hipass2-disable;
+> -
+> -		st,axis-x = <1>;    /* LIS3_DEV_X */
+> -		st,axis-y = <(-2)>; /* LIS3_INV_DEV_Y */
+> -		st,axis-z = <(-3)>; /* LIS3_INV_DEV_Z */
+> -
+> -		st,min-limit-x = <(-32)>;
+> -		st,min-limit-y = <3>;
+> -		st,min-limit-z = <3>;
+> +		interrupts = <21 IRQ_TYPE_EDGE_RISING>, <20 IRQ_TYPE_EDGE_RISING>; /* 181 and 180 */
+
+Does not fit in 80-wrap length.
+
+>  
+> -		st,max-limit-x = <(-3)>;
+> -		st,max-limit-y = <32>;
+> -		st,max-limit-z = <32>;
+> +		mount-matrix =	 "-1",  "0",  "0",
+> +				  "0",  "1",  "0",
+> +				  "0",  "0",  "1";
+>  	};
+>  
+>  	cam1: camera@3e {
+
+Best regards,
+Krzysztof
+
