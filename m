@@ -2,57 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA216657571
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C19657575
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbiL1Kqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 05:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
+        id S230199AbiL1KtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 05:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbiL1Kqd (ORCPT
+        with ESMTP id S229603AbiL1KtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 05:46:33 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4675E2706;
-        Wed, 28 Dec 2022 02:46:32 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id B50BC24E133;
-        Wed, 28 Dec 2022 18:46:26 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 28 Dec
- 2022 18:46:27 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 28 Dec
- 2022 18:46:25 +0800
-Message-ID: <b828357c-81b3-870b-a658-02bf8cfad47c@starfivetech.com>
-Date:   Wed, 28 Dec 2022 18:46:25 +0800
+        Wed, 28 Dec 2022 05:49:16 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCBA1135
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 02:49:15 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id f25so3471926uaa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 02:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qc4GMdi1dtN/U5J4nf2BxViaxJc5bdEY/94/Fx0h1oo=;
+        b=GDpb95sQOqwhtno042AWhfoDl0nhCVpuvOZfzg0N9VK7B+ObUvY1HJXg5UDnuFEZyT
+         XcvanvurpsD0m/qKhH5+eVkxhOYTAzHgGiu0ERW6rP3mojiBawuT1oESSOXJkT/xnmPS
+         yIJJ0QuDcA893uMQBzoI2PhczPk68eeucdyUZJq6yO4usDmoAg094Sd0Sdz+dzY/kZ6d
+         BPKRNavyeaP7nqCE4k31L/VZAEwr4EiiXH+LnE7JjBOWGoHMF7SrvSTKljdg8q9uxZCT
+         PPFwzSTbq3931s1pRbWicWA7ByGGcMeRDatgcaPq7W2WNTKdCggg/hTxpTNFl+yiNvrL
+         0wcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qc4GMdi1dtN/U5J4nf2BxViaxJc5bdEY/94/Fx0h1oo=;
+        b=h+txU70iU9tlxYjUSYSC4sRbMAMoASsN/ROkANKSrIJNflszlY6+45TWynwWSbEAn1
+         iM5sCPoQMCzCbamhQ/Vbpv8xZzBg0x84zI8fma3FhBmBbhzRFSuWEr/sUFqmDGcTCYTO
+         Mt2AtoktsQ9lk2oVy7xdmC+Ywi1o3lFUYE/sjS6DkdG3EzFpYcZLXhk5oo+XPatlcjH5
+         ZW6In/X4RJnPNLXXtyBo0R9OvSSD3JMr7lD8H7rm1VAvouBIkA/qp6qO9wRVQxLlOcRR
+         pgGLQdN5JFkxGizcOUzo7cWk8wQaD4fvoWXzJyZ6ta0ozjhA3sOU156eeeuDeLz0SefQ
+         05ww==
+X-Gm-Message-State: AFqh2kp0nJLcJ/kWWKmXPYZhT+jo8Y5IIdsWUuGsjpLzNC+0Xc5f/si1
+        6U1AXdhbKbkaoYU6Dt3SSZeOI5/Os/gfrEj8y+n/8A==
+X-Google-Smtp-Source: AMrXdXtFsHIeSouKwNPlsTpcJOWSMlR0NPg9XgKy51UaKg6Cvktw0EIVnnGJFn0Fu8vAMp+iebSa/M1UJx/vBFw5lT4=
+X-Received: by 2002:ab0:152b:0:b0:418:620e:6794 with SMTP id
+ o40-20020ab0152b000000b00418620e6794mr2222573uae.59.1672224554156; Wed, 28
+ Dec 2022 02:49:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 0/3] StarFive's SDIO/eMMC driver support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@linux.starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221227115856.460790-1-william.qiu@starfivetech.com>
- <02e8c75f-658f-320c-7c90-64ccf2beccbe@linaro.org>
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <02e8c75f-658f-320c-7c90-64ccf2beccbe@linaro.org>
+References: <20221213191813.4054267-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20221213191813.4054267-1-giulio.benetti@benettiengineering.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 28 Dec 2022 16:19:02 +0530
+Message-ID: <CA+G9fYvHyx+R2Dbw+qijK5aG=k2w+YN_o3-KwWVYK1U-3L-ddg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: mm: fix warning on phys_addr_t to void pointer assignment
+To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,31 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 14 Dec 2022 at 00:48, Giulio Benetti
+<giulio.benetti@benettiengineering.com> wrote:
+>
+> zero_page is a void* pointer but memblock_alloc() returns phys_addr_t type
+> so this generates a warning while using clang and with -Wint-error enabled
+> that becomes and error. So let's cast the return of memblock_alloc() to
+> (void *).
+>
+> Cc: <stable@vger.kernel.org> # 4.14.x +
+> Fixes: 340a982825f7 ("ARM: 9266/1: mm: fix no-MMU ZERO_PAGE() implementation")
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
 
-On 2022/12/27 21:07, Krzysztof Kozlowski wrote:
-> On 27/12/2022 12:58, William Qiu wrote:
->> Hi,
->> 
->> This patchset adds initial rudimentary support for the StarFive
->> designware mobile storage host controller driver. And this driver will
->> be used in StarFive's VisionFive 2 board. The main purpose of adding
->> this driver is to accommodate the ultra-high speed mode of eMMC.
->> 
->> The last patch should be applied after the patchset [1]:
->> [1] https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
-> 
-> It's a duplicate? Why do I have two of them in mailbox? Isn't this v3 then?
-> 
+> ---
+>  arch/arm/mm/nommu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
+> index c1494a4dee25..53f2d8774fdb 100644
+> --- a/arch/arm/mm/nommu.c
+> +++ b/arch/arm/mm/nommu.c
+> @@ -161,7 +161,7 @@ void __init paging_init(const struct machine_desc *mdesc)
+>         mpu_setup();
+>
+>         /* allocate the zero page. */
+> -       zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+> +       zero_page = (void *)memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+>         if (!zero_page)
+>                 panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
+>                       __func__, PAGE_SIZE, PAGE_SIZE);
+> --
+> 2.34.1
 
-Hi Krzysztof,
 
-Sorry about that. I usually use a script to send emails. The first email was 
-sent to the wrong person, so I corrected it and sent the second one.
-
-Best regards,
-William Qiu
-
-> Best regards,
-> Krzysztof
-> 
+--
+Linaro LKFT
+https://lkft.linaro.org
