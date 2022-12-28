@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83BE65754B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA085657558
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 11:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbiL1K3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 05:29:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S232723AbiL1KdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 05:33:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiL1K3f (ORCPT
+        with ESMTP id S229868AbiL1KdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 05:29:35 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2B9DDC;
-        Wed, 28 Dec 2022 02:29:34 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id d185so15172825vsd.0;
-        Wed, 28 Dec 2022 02:29:34 -0800 (PST)
+        Wed, 28 Dec 2022 05:33:16 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12B8FCE9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 02:33:14 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id x37so9279626ljq.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 02:33:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ojYNDiVvW5O96P8SY9WJxKmUEE42niI4l4BjCEll5Tc=;
-        b=W8m7pH4Jzws/6d+Q2fA5u2Ife3Iz7M2qhrNmwh7UvjmwNNKq+NFtOuoNicXUK2TSxe
-         o2s0uXpQFxooNZsUHZIwyAOZtx+Zogc0sfOz4q/NFPIMuceBOFXV5exCjprJTI+JUePv
-         Umbk+CPxEm92GNcNJlkmgREeAfwmEmpXhi/RjwBRfbjhNpGI1t9V5JhC6ra/ug+GxoM+
-         yrYsYGG6MxQhRs1l9x/x0Q2tD9SjAUWFoQPPyNOqTW9NyQ/sabyod5Tja+Uq5HprspsG
-         UyrnR91tAzJyB1Smg0jbDzEDZKiWe9H66znA+nS6LYlzTUsi2XcATM5SvUWC82WxURH0
-         sT6g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OEp9IYyED8X7OHNpRld99usILEl7zmdiLWyW6VCAt3I=;
+        b=ODEssGuGzUu2tk/wxbHi7TxffhnKCPYfPWJ3mabLByvOf8Tcih8kc/cn/9SDvv/lmr
+         eB+4z7yOBh+vO6BWBk4wcbF/QNYPc5F2136iRDmk6gdj1E+HaYJUD1JGhY5V7hy2FU7K
+         q/J+t//VVttb1T1KVyW/qz7fwtjulFEfIPkVa27Fwe/Pw8TIlk41PM0pPuarmzAv3R2n
+         7QENWp2h3kGRe6/Sbe1xqfd2v27E6ejkBy6o7jJATZRRoTzk7oM0fDQNWpa+6QhrDvvN
+         CIIchKYn47eAODcOKAATngruhSfYPMMjP/jNnxxlOp0qMCMWA/bTpCJJWYZnSzjOTC4L
+         J/WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ojYNDiVvW5O96P8SY9WJxKmUEE42niI4l4BjCEll5Tc=;
-        b=EgyHom2ERsM3DE6NXkYOaIDWs1eZQCO+f7iWuv1Y8r4TWvmZ8bmzDsP4NHzOP+DRI8
-         jxU2+da/aC9FYY5tg0oDSdaucZKv6OuSIv8LvO7aRQ39HlLTZUGDF+cIh+M6hERgzXen
-         R5vv7mFBAX0VLaC1S76B1ceRwiLD5hYgUJ13+URXxHJBG9vDmTbXFdnycpf8EpijYlcT
-         I2dlxJniJBn/qv+x707l4wSepjriURsyHcuguIDBao/L/ULx3iyU4rJ0ZGW/TRCzffyq
-         12Bmr/ch3/nZGj34SzJsaEYNA8UWdE5qd9cggRQoF+JMj3x5ZB12jVIRdK5PHb37KZye
-         a2LQ==
-X-Gm-Message-State: AFqh2krAaxlxYFC8rVk1vnmwc28+DD2LkrJErY1LqhRoIjBKmyCCCGGa
-        r7kHfSvaW5DocdkFbsWXYOjHT1XW9ICFBavwSKA=
-X-Google-Smtp-Source: AMrXdXsNQGqcHh16rEam6d68yAikJ0QyFEiLfbX/FBIlndF+snOBA1R/3+TrtxdXmnLlItVjMv2rduXkI0Ce+X8DA5Q=
-X-Received: by 2002:a05:6102:388:b0:3c6:6870:1435 with SMTP id
- m8-20020a056102038800b003c668701435mr1617707vsq.76.1672223373665; Wed, 28 Dec
- 2022 02:29:33 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OEp9IYyED8X7OHNpRld99usILEl7zmdiLWyW6VCAt3I=;
+        b=1Ud8yspBI3e3Tr5YXDogAb24Gl6A2NF5HuDRQNawfylTie5HnYrP8s7uRweNNj3m0b
+         v0dKC4g/u8XbICzo2Gm5uqXWKBQfg9gRnm8bx5zY3dsiAc0NdNx/ws50+y55hKsDnEaJ
+         zVi2XxESR7+Ee4MBWq/wsAG1CLJGJkoRURy4SuENrmrxQajrye220J8s0lw/OsXGu910
+         hZkjEHo8x6G1R/FTO8syTfgK/SV95/7vySCQd3mW2VAHZcr3ASiQ9Nfn1alPGktVz83K
+         Z/2fYZCZyTN+zgfkTXlJTSbOlAQKUykx6p5UgmAXX/3tgmKwS750CtcK9d4LZ4mFy+Jv
+         nDxg==
+X-Gm-Message-State: AFqh2kqOijfNuNqBZkzs1HCPKx8TXu27TKbM1rmOOPt4FUotxzwolo05
+        OjhzPQSebQhJq/PQXFxG5XZgUw==
+X-Google-Smtp-Source: AMrXdXuQCDuEPsW6x3RcMopuQYPmt30y+od2VlW/CIl6y/KTfTnBNt28UrsHU9ln8ZXUut8+xGwPyw==
+X-Received: by 2002:a05:651c:505:b0:279:bddb:6c8e with SMTP id o5-20020a05651c050500b00279bddb6c8emr8977955ljp.25.1672223593192;
+        Wed, 28 Dec 2022 02:33:13 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a18-20020a05651c031200b0026bf0d71b1esm1887465ljp.93.2022.12.28.02.33.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 02:33:12 -0800 (PST)
+Message-ID: <958b6c4e-02f8-1289-42f7-212edbcd80ee@linaro.org>
+Date:   Wed, 28 Dec 2022 11:33:11 +0100
 MIME-Version: 1.0
-References: <20221228100321.15949-1-linux.amoon@gmail.com> <20221228100321.15949-2-linux.amoon@gmail.com>
- <ef20a7dfa027f1a5a24a515e347af10c06a4da85.camel@icenowy.me>
-In-Reply-To: <ef20a7dfa027f1a5a24a515e347af10c06a4da85.camel@icenowy.me>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 28 Dec 2022 15:59:17 +0530
-Message-ID: <CANAwSgSJ1SQXUovgM6FHUozr46C_CogLaAD4gf4ANNHXoav6ag@mail.gmail.com>
-Subject: Re: [PATCH v1 01/11] dt-bindings: usb: Add device id for Genesys
- Logic hub controller
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] ARM: dts: n900: switch accelerometer to iio driver
+Content-Language: en-US
+To:     Sicelo <absicsz@gmail.com>
+Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tony@atomide.com, devicetree@vger.kernel.org
+References: <20221227223841.2990847-1-absicsz@gmail.com>
+ <20221227223841.2990847-2-absicsz@gmail.com>
+ <73599d25-cd2c-e89a-20b4-d34471583a6b@linaro.org>
+ <Y6waVkobLCGqRHm7@tp440p.steeds.sam>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y6waVkobLCGqRHm7@tp440p.steeds.sam>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Icenowy,
+On 28/12/2022 11:28, Sicelo wrote:
+> Thank you for the review.
+> 
+>>> +	lis302dl: lis302dl@1d {
+>>
+>> That's not really explained in commit msg and does not look related to
+>> your goal. If changing - in separate patch - make the node name generic.
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>  
+> Now I understand that it should just be `accelerometer@1d`. To be clear,
+> are you saying this change should have a separate patch, i.e. not part
+> of the switch to iio driver?
 
-Thanks for the review comments
+Yes, such cleanup is not related to changing compatible.
 
-On Wed, 28 Dec 2022 at 15:38, Icenowy Zheng <uwu@icenowy.me> wrote:
->
-> =E5=9C=A8 2022-12-28=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 10:03 +0000=EF=
-=BC=8CAnand Moon=E5=86=99=E9=81=93=EF=BC=9A
-> > Add usb hub device id for Genesys Logic, Inc. GL852G-OHG Hub USB 2.0
-> > root hub and Genesys Logic, Inc. GL3523-QFN76 USB 3.1 root hub.
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git
-> > a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > index a9f831448cca..db009f3ef438 100644
-> > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > @@ -16,6 +16,8 @@ properties:
-> >    compatible:
-> >      enum:
-> >        - usb5e3,608
-> > +      - genesys,usb5e3,610
-> > +      - genesys,usb5e3,620
->
-> I don't think genesys, is needed here because usb5e3 means USB VID
-> 0x05e3, which is already linked to Genesys Logic.
->
+> 
+>>> -		Vdd-supply = <&vaux1>;
+>>> -		Vdd_IO-supply = <&vio>;
+>>> +		vdd-supply = <&vaux1>;
+>>> +		vddio-supply = <&vio>;
+>>
+>> Does not look related/explained in commit msg.
+> 
+> This is from Documentation/devicetree/bindings/iio/st,st-sensors.yaml,
+> i.e. lowercase. I will look for a way to explain it in v2.
 
-Ok, I added this as genesys, is it part of the manufacturer or vendor name
-which is most commonly used for adding vendor-specific compatible strings.
+Ah, ok, then maybe mention in commit msg that you are changing
+properties to match bindings of new compatible.
 
-> In addition, the control logic of these two hubs are needed to be
-> verified.
+Best regards,
+Krzysztof
 
-We were using gpio-hog to reset the USB hub, so now switch to USB onboard h=
-ub
-
->
-> And what's the status of the companion hub of the USB3 hub? Is it
-> really a USB3-only hub, or is its USB2 part just equal to another USB3
-> hub?
->
-usb5e3,610 is USB 2.0 port hub present on Odroid C1 and Odroid C2 board
-
-usb5e3,620 is USB 3.1 port hub present on Odroid N2.
-
-> >
-> >    reg: true
-> >
->
-
-Thanks
--Anand
