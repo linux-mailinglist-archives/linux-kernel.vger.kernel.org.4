@@ -2,117 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD62657748
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 14:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4C265773A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 14:36:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbiL1NhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 08:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S232845AbiL1NgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 08:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbiL1Ngp (ORCPT
+        with ESMTP id S232023AbiL1NgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 08:36:45 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157CF1A5;
-        Wed, 28 Dec 2022 05:36:44 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id u9so38550432ejo.0;
-        Wed, 28 Dec 2022 05:36:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7cV9Fdo1DL6GcPAsaixy13a9upftzi/bKQrV6XnSaJE=;
-        b=USJJdxr3Yz8nPXAAgyGOZVykqPmSUXeK/1ry0KFjCY4hRH9aQWpkx9ZKCwUvS584LV
-         3HhqWFaVguLKjkYq8mRugAQ9zk9YkAxiUc9efCumVsgRzEfzQ6EN1065HgROUie4jPPG
-         vAj84V1WGloWB6MzSoW1mJxCuhYjFrup/jdHI+DJ6Us+WV6Qq9i0GBRY+1UtrBvBTCAl
-         +mqO8WOHkzeQz1df6+SckyhA397MA5O99MwtWmyBkXFl7FJQ+1ZuS5s9/C9+WRKagckQ
-         tyIgytef+lt5OPs15rEhdyo7K4egpTm5rnoY6NeVyQVm1XqIF7DVDSOq94jrVjFNMCiz
-         9Xng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7cV9Fdo1DL6GcPAsaixy13a9upftzi/bKQrV6XnSaJE=;
-        b=GaKXG8tpKAsQ8igP5/xpKrq/kAuTTSSmVAg4Chh52TQXqjeI71Z65Z3k2iPzw9Lig4
-         rR4xMgY23WeOt8QVQY7G509sO+W7TuV81N6sc3UCzdZ3yFq79R2oCjGvVUMtZ6OiSnRi
-         WyzNYOxSl4uB4wB7DleuB+u06Acr46IM1v9iBvlrUTTvA0tWVIwFBanS1lCWCGY4159A
-         bncOMSICqiOObL1teCd73v/PE6kGYc/EpiAuJknOF+afnQcFVO3zlDqaqSg3teFqDEHP
-         4zkv+xti5laCJS1gzrHKcSjw+y+5UGRtlIvf9mogmFiMkFMKKEdpULswzf1FO8GR/AEq
-         aaCA==
-X-Gm-Message-State: AFqh2kpuYMMwOAGI0Z4/oB1zsfly6RjWpoEoWgNhLUq27ieHBkmnJuVU
-        3Q/wWI205KfqbCSv5zGSg3hGFUnPJiY=
-X-Google-Smtp-Source: AMrXdXsjhQ2pro9S2msXgEkEhAegxknZw8ooT5nRpSojikoYXWDpEfjoMoGN6JfJAJAae6odJFUHLw==
-X-Received: by 2002:a17:906:6d2:b0:7e7:4dd7:bb88 with SMTP id v18-20020a17090606d200b007e74dd7bb88mr18612063ejb.57.1672234602426;
-        Wed, 28 Dec 2022 05:36:42 -0800 (PST)
-Received: from localhost.localdomain (dynamic-2a01-0c23-b830-5100-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:b830:5100:f22f:74ff:fe21:725])
-        by smtp.googlemail.com with ESMTPSA id g3-20020a170906538300b0082535e2da13sm7450475ejo.6.2022.12.28.05.36.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 05:36:42 -0800 (PST)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-wireless@vger.kernel.org
-Cc:     tony0620emma@gmail.com, kvalo@kernel.org, pkshih@realtek.com,
-        tehuang@realtek.com, s.hauer@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH 4/4] rtw88: Use non-atomic rtw_iterate_stas() in rtw_ra_mask_info_update()
-Date:   Wed, 28 Dec 2022 14:35:47 +0100
-Message-Id: <20221228133547.633797-5-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
-References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
+        Wed, 28 Dec 2022 08:36:02 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F66C1A5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 05:36:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672234561; x=1703770561;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zW6Em7VKW6QJK6Y9hrXmcyrM2HrENfs3xicGHX5cUI0=;
+  b=cyD5iVHrj9nOdycl8Syv9eZK4necPariJ5ZNjB/3NXcMrv50QhI6FRtB
+   9BRU0GvK6pzWrllpSy9eP4Ua8DuIsSgSMpb28RV6NJHxbEl1qcZCUofcs
+   f7VkeSwK04VMLZlSEI7IsP1zAbfREL2ksxLjnsb2wj/MBj9fj/O4rN8GB
+   RrQZ06fdJKLZQXzuk4Y7EB7cCUuQpSqvenIztwl+5Vflaj3oCxCWG6dRo
+   oiI6InWlADClhl26ehnHuZyoUHcf3qKwHgtyuI1uekJ4e0WbH8ixgI2Zw
+   mCtshbXyom3i7arNAv8D2A2w1hgaYALIvkOpIIcq/LJ+cl7M+n81MAA7M
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="304367432"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="304367432"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 05:35:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="982095935"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="982095935"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Dec 2022 05:35:54 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1CDF4159; Wed, 28 Dec 2022 15:36:26 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v1 1/1] uuid: Decouple guid_t and uuid_le types and respective macros
+Date:   Wed, 28 Dec 2022 15:36:16 +0200
+Message-Id: <20221228133616.69278-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USB and (upcoming) SDIO support may sleep in the read/write handlers.
-Use non-atomic rtw_iterate_stas() in rtw_ra_mask_info_update() because
-the iterator function rtw_ra_mask_info_update_iter() needs to read and
-write registers from within rtw_update_sta_info(). Using the non-atomic
-iterator ensures that we can sleep during USB and SDIO register reads
-and writes. This fixes "scheduling while atomic" or "Voluntary context
-switch within RCU read-side critical section!" warnings as seen by SDIO
-card users (but it also affects USB cards).
+The guid_t type and respective macros are being used internally only.
+The uuid_le has its user outside the kernel. Decouple these types and
+macros, and make guid_t completely internal type to the kernel.
 
-Fixes: 78d5bf925f30 ("wifi: rtw88: iterate over vif/sta list non-atomically")
-Suggested-by: Ping-Ke Shih <pkshih@realtek.com>
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/net/wireless/realtek/rtw88/mac80211.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/linux/uuid.h      | 20 ++++++++++++++++----
+ include/uapi/linux/uuid.h | 12 ++++--------
+ 2 files changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtw88/mac80211.c b/drivers/net/wireless/realtek/rtw88/mac80211.c
-index 776a9a9884b5..3b92ac611d3f 100644
---- a/drivers/net/wireless/realtek/rtw88/mac80211.c
-+++ b/drivers/net/wireless/realtek/rtw88/mac80211.c
-@@ -737,7 +737,7 @@ static void rtw_ra_mask_info_update(struct rtw_dev *rtwdev,
- 	br_data.rtwdev = rtwdev;
- 	br_data.vif = vif;
- 	br_data.mask = mask;
--	rtw_iterate_stas_atomic(rtwdev, rtw_ra_mask_info_update_iter, &br_data);
-+	rtw_iterate_stas(rtwdev, rtw_ra_mask_info_update_iter, &br_data);
- }
+diff --git a/include/linux/uuid.h b/include/linux/uuid.h
+index 8cdc0d3567cd..5be158a49e11 100644
+--- a/include/linux/uuid.h
++++ b/include/linux/uuid.h
+@@ -8,15 +8,25 @@
+ #ifndef _LINUX_UUID_H_
+ #define _LINUX_UUID_H_
  
- static int rtw_ops_set_bitrate_mask(struct ieee80211_hw *hw,
-@@ -746,7 +746,9 @@ static int rtw_ops_set_bitrate_mask(struct ieee80211_hw *hw,
+-#include <uapi/linux/uuid.h>
+ #include <linux/string.h>
+ 
+ #define UUID_SIZE 16
+ 
++typedef struct {
++	__u8 b[UUID_SIZE];
++} guid_t;
++
+ typedef struct {
+ 	__u8 b[UUID_SIZE];
+ } uuid_t;
+ 
++#define GUID_INIT(a, b, c, d0, d1, d2, d3, d4, d5, d6, d7)			\
++((guid_t)								\
++{{ (a) & 0xff, ((a) >> 8) & 0xff, ((a) >> 16) & 0xff, ((a) >> 24) & 0xff, \
++   (b) & 0xff, ((b) >> 8) & 0xff,					\
++   (c) & 0xff, ((c) >> 8) & 0xff,					\
++   (d0), (d1), (d2), (d3), (d4), (d5), (d6), (d7) }})
++
+ #define UUID_INIT(a, b, c, d0, d1, d2, d3, d4, d5, d6, d7)			\
+ ((uuid_t)								\
+ {{ ((a) >> 24) & 0xff, ((a) >> 16) & 0xff, ((a) >> 8) & 0xff, (a) & 0xff, \
+@@ -97,10 +107,12 @@ extern const u8 uuid_index[16];
+ int guid_parse(const char *uuid, guid_t *u);
+ int uuid_parse(const char *uuid, uuid_t *u);
+ 
+-/* backwards compatibility, don't use in new code */
+-static inline int uuid_le_cmp(const guid_t u1, const guid_t u2)
++/* MEI UUID type, don't use anywhere else */
++#include <uapi/linux/uuid.h>
++
++static inline int uuid_le_cmp(const uuid_le u1, const uuid_le u2)
  {
- 	struct rtw_dev *rtwdev = hw->priv;
- 
-+	mutex_lock(&rtwdev->mutex);
- 	rtw_ra_mask_info_update(rtwdev, vif, mask);
-+	mutex_unlock(&rtwdev->mutex);
- 
- 	return 0;
+-	return memcmp(&u1, &u2, sizeof(guid_t));
++	return memcmp(&u1, &u2, sizeof(uuid_le));
  }
+ 
+ #endif
+diff --git a/include/uapi/linux/uuid.h b/include/uapi/linux/uuid.h
+index c0f4bd9b040e..96ac684a4b2f 100644
+--- a/include/uapi/linux/uuid.h
++++ b/include/uapi/linux/uuid.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+ /* DO NOT USE in new code! This is solely for MEI due to legacy reasons */
+ /*
+- * UUID/GUID definition
++ * MEI UUID definition
+  *
+  * Copyright (C) 2010, Intel Corp.
+  *	Huang Ying <ying.huang@intel.com>
+@@ -14,19 +14,15 @@
+ 
+ typedef struct {
+ 	__u8 b[16];
+-} guid_t;
++} uuid_le;
+ 
+-#define GUID_INIT(a, b, c, d0, d1, d2, d3, d4, d5, d6, d7)			\
+-((guid_t)								\
++#define UUID_LE(a, b, c, d0, d1, d2, d3, d4, d5, d6, d7)		\
++((uuid_le)								\
+ {{ (a) & 0xff, ((a) >> 8) & 0xff, ((a) >> 16) & 0xff, ((a) >> 24) & 0xff, \
+    (b) & 0xff, ((b) >> 8) & 0xff,					\
+    (c) & 0xff, ((c) >> 8) & 0xff,					\
+    (d0), (d1), (d2), (d3), (d4), (d5), (d6), (d7) }})
+ 
+-/* backwards compatibility, don't use in new code */
+-typedef guid_t uuid_le;
+-#define UUID_LE(a, b, c, d0, d1, d2, d3, d4, d5, d6, d7)		\
+-	GUID_INIT(a, b, c, d0, d1, d2, d3, d4, d5, d6, d7)
+ #define NULL_UUID_LE							\
+ 	UUID_LE(0x00000000, 0x0000, 0x0000, 0x00, 0x00, 0x00, 0x00,	\
+ 	     0x00, 0x00, 0x00, 0x00)
 -- 
-2.39.0
+2.35.1
 
