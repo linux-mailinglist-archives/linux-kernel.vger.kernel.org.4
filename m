@@ -2,230 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61D5657633
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F7E657639
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbiL1MAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S233077AbiL1MAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233087AbiL1L7l (ORCPT
+        with ESMTP id S233130AbiL1L74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:59:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A23611814;
-        Wed, 28 Dec 2022 03:59:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3DBB614A5;
-        Wed, 28 Dec 2022 11:59:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0766C433D2;
-        Wed, 28 Dec 2022 11:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672228755;
-        bh=uAssjzpnLfCwXvz1npPumuo6zQSx5QwSiVe04OHm4oM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EwiQ5i5gF8oEFgTKXuqWSLDD0dZrJ01l9eUUQXAUu9+KMJwXXeLH/nAJQhaUc4r8+
-         W8BCm4ojCd19gQ7nfBOFQT0EpZzNRR017nQfJF1WYy/488dOKe2GaaIrckHjdaw5Bq
-         GdqokXCQTdFtMbNBpUb8SQU+ZAsd3m67QuHcK7QfN9yf2yXOC/EOvabpUGuXgWROiN
-         nMhWWmF/nppC2gzvOi+KIlcRv8B2S3xrULEC+5qNS7MuLNABvZOpgaAsxUJQ1N2b3c
-         zq9nbl6kqYQG+qKORTkAAblvYAMp1Wbkb4vA+nQLJeDwUc/bhn+dKAgk2giIrAD/eo
-         BcEijVNPOX4Mg==
-Date:   Wed, 28 Dec 2022 11:59:09 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <apatel@ventanamicro.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Rob Herring <robh@kernel.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v5 3/3] clocksource: timer-riscv: Set
- CLOCK_EVT_FEAT_C3STOP based on DT
-Message-ID: <Y6wvjaB4GE8s1W/g@spud>
-References: <20221201123954.1111603-1-apatel@ventanamicro.com>
- <20221201123954.1111603-4-apatel@ventanamicro.com>
- <20221202000603.GA1720201-robh@kernel.org>
- <CAK9=C2VbM+CP0Y9Xx-SM9O4TFrQmOKvVWy-u5mxdPxrhacK4JQ@mail.gmail.com>
- <Y40ueQiTZK6hi7RS@spud>
- <0515dc20-2e82-bd16-301a-6ffff010af13@sholland.org>
- <Y42s8d+RSPMkrR6j@wendy>
+        Wed, 28 Dec 2022 06:59:56 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0441057E;
+        Wed, 28 Dec 2022 03:59:55 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id c34so15967790edf.0;
+        Wed, 28 Dec 2022 03:59:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y3dCBduSZep7OtTaS9LhWzGoxt4oPR9hKAZLosj+w9Y=;
+        b=O1B4AaBRlbaNtr6ENlhGMOwiBXypMphOmNmFl+u1EV1ALRUIuRz89SY14mNhOiryww
+         NLJaCfn9E+XWOFUfDXpftsyH4Ot4I6tq1NCQVCng1NN8NFCEFRES4HMc5w0zeWtZAIiD
+         /Ydzi/ZIcCC/0gkLvGOdcKMcCWB8vVRgfGEY3u6hG8R/954epU8p/egwIePu3/p4eDoa
+         vPw/jYJdO/cPXcYkHm1HemTRLyhJwoKiPW2XVk3b0jeq3OQV+/BAHbqeyoAcE2HIFdna
+         33/7ghCqjhGxY26lNdwFSviFqxDTPyE7y3fS4WEjv/uL/8pKgF2Ofnn9VE9du3fTZHvq
+         43cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y3dCBduSZep7OtTaS9LhWzGoxt4oPR9hKAZLosj+w9Y=;
+        b=wiwMVLTxXIhRTNnn9S3Bic/aDYntOEyhRYdc9NSSoLQnOd4fbfDnMedZrxIHMwlnTP
+         rE3ba5bmdVkNATiGoDTObgAqSueYK0eUCboVsdcFuj0GeduTu7LUTjGllCHYHaJHTax4
+         Ofw7mdhuni6+16Fkg+ZC6rfXZMMHIWXt+KMpYGHBpFRz+zbWtLChH0Y4v5kI4uKPWRHT
+         v5OsdPcr1lbJNEHOI1E74JSxfPrYhjsGWYGtMqtN9u71WT+GmSaPYGm+oSP/dTZhXuXe
+         EnDTna8O82PuYPpdcDNNVQkbLb0B/VIDYJMcEZ9R+e33B1MU1a4J+FzZwZpZUyYxUkCd
+         Hpbg==
+X-Gm-Message-State: AFqh2krAo38OKHD50yevr8QXKQhTSd9V/QshfWpbkqYIvZSa0jsaSTLY
+        90qaZlsEdIAgieRiDrsOzRFMpjEIQ+yPxR/13Zg=
+X-Google-Smtp-Source: AMrXdXunyLRnGi+5FJ5SwEShJ34TGNrDu6XFzxjG/T4X0i6iCX9AeAnSDYpw2vSBQ9EGT/1RBYyphnyr2L7UB5ORgQ0=
+X-Received: by 2002:aa7:c0cd:0:b0:461:b033:90ac with SMTP id
+ j13-20020aa7c0cd000000b00461b03390acmr2868918edp.257.1672228793315; Wed, 28
+ Dec 2022 03:59:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="250qyPOy9rEbmPOI"
-Content-Disposition: inline
-In-Reply-To: <Y42s8d+RSPMkrR6j@wendy>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
+ <20221227233020.284266-13-martin.blumenstingl@googlemail.com> <2a9e671ef17444238fee3e7e6f14484b@realtek.com>
+In-Reply-To: <2a9e671ef17444238fee3e7e6f14484b@realtek.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 28 Dec 2022 12:59:42 +0100
+Message-ID: <CAFBinCDVq6o0c6OLSD0PhQKFPrXohjhdJeXk=5wuDEWMKwufrA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 12/19] rtw88: sdio: Add HCI implementation for SDIO
+ based chipsets
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Chris Morgan <macroalpha82@gmail.com>,
+        Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ping-Ke,
 
---250qyPOy9rEbmPOI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+as always: thank you so much for taking time to go through this!
 
-Hey Anup (& Daniel++),
+On Wed, Dec 28, 2022 at 10:39 AM Ping-Ke Shih <pkshih@realtek.com> wrote:
+[...]
+>
+> > +
+> > +static void rtw_sdio_writel(struct rtw_sdio *rtwsdio, u32 val,
+> > +                         u32 addr, int *ret)
+> > +{
+> > +     u8 buf[4];
+> > +     int i;
+> > +
+> > +     if (!(addr & 3) && rtwsdio->is_powered_on) {
+> > +             sdio_writel(rtwsdio->sdio_func, val, addr, ret);
+> > +             return;
+> > +     }
+> > +
+> > +     *(__le32 *)buf = cpu_to_le32(val);
+> > +
+> > +     for (i = 0; i < 4; i++) {
+> > +             sdio_writeb(rtwsdio->sdio_func, buf[i], addr + i, ret);
+> > +             if (*ret)
+>
+> Do you need some messages to know something wrong?
+It's not obvious but we're already logging that something went wrong.
+The messages are logged in rtw_sdio_{read,write}{8,16,32}.
+We do this because there's multiple ways to access data (direct,
+indirect, ...) and some of them require multiple register operations.
+So we print one message in the end.
 
-On Mon, Dec 05, 2022 at 08:33:53AM +0000, Conor Dooley wrote:
-> On Mon, Dec 05, 2022 at 02:17:40AM -0600, Samuel Holland wrote:
-> > On 12/4/22 17:34, Conor Dooley wrote:
-> > > Hey Rob, Anup, Prabhakar,
-> > >=20
-> > > On Fri, Dec 02, 2022 at 12:03:05PM +0530, Anup Patel wrote:
-> > >> On Fri, Dec 2, 2022 at 5:36 AM Rob Herring <robh@kernel.org> wrote:
-> > >>>
-> > >>> On Thu, Dec 01, 2022 at 06:09:54PM +0530, Anup Patel wrote:
-> > >>>> We should set CLOCK_EVT_FEAT_C3STOP for a clock_event_device only
-> > >>>> when riscv,timer-cannot-wake-cpu DT property is present in the RIS=
-C-V
-> > >>>> timer DT node.
-> > >>>>
-> > >>>> This way CLOCK_EVT_FEAT_C3STOP feature is set for clock_event_devi=
-ce
-> > >>>> based on RISC-V platform capabilities rather than having it set for
-> > >>>> all RISC-V platforms.
-> > >>>>
-> > >>>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > >>>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > >>>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > >>>> ---
-> > >>>>  drivers/clocksource/timer-riscv.c | 12 +++++++++++-
-> > >>>>  1 file changed, 11 insertions(+), 1 deletion(-)
-> > >>>>
-> > >>>> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksour=
-ce/timer-riscv.c
-> > >>>> index 969a552da8d2..1b4b36df5484 100644
-> > >>>> --- a/drivers/clocksource/timer-riscv.c
-> > >>>> +++ b/drivers/clocksource/timer-riscv.c
-> > >>>> @@ -28,6 +28,7 @@
-> > >>>>  #include <asm/timex.h>
-> > >>>>
-> > >>>>  static DEFINE_STATIC_KEY_FALSE(riscv_sstc_available);
-> > >>>> +static bool riscv_timer_cannot_wake_cpu;
-> > >>>>
-> > >>>>  static int riscv_clock_next_event(unsigned long delta,
-> > >>>>               struct clock_event_device *ce)
-> > >>>> @@ -51,7 +52,7 @@ static int riscv_clock_next_event(unsigned long =
-delta,
-> > >>>>  static unsigned int riscv_clock_event_irq;
-> > >>>>  static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_even=
-t) =3D {
-> > >>>>       .name                   =3D "riscv_timer_clockevent",
-> > >>>> -     .features               =3D CLOCK_EVT_FEAT_ONESHOT | CLOCK_E=
-VT_FEAT_C3STOP,
-> > >>>> +     .features               =3D CLOCK_EVT_FEAT_ONESHOT,
-> > >>>
-> > >>> A platform that depended on CLOCK_EVT_FEAT_C3STOP being set will br=
-eak
-> > >>> with this change because its existing DT will not have the new prop=
-erty.
-> > >>>
-> > >>> It needs to be the other way around which would effectively be the
-> > >>> existing 'always-on' property.
-> > >>
-> > >> There are no RISC-V platforms using C3STOP. The patch which
-> > >> added C3STOP has been reverted.
-> > >> (Refer, https://lore.kernel.org/lkml/a218ebf8-0fba-168d-6598-c970bbf=
-f5faf@sholland.org/T/)
-> > >>
-> > >> I just need to rebase this patch upon the C3STOP revert patch.
-> > >=20
-> > > I guess you could say that the C3STOP addition was done spec-ulativel=
-y*,
-> > > as the platform that actually exhibits that behaviour does not use the
-> > > riscv-timer & its maintainer acked the revert (allwinner d1 family).
-> >=20
-> > For clarity: that doesn't mean the platform will _never_ use the SBI
-> > timer facility, just that Linux happens to not use it right now.
->=20
-> Yeah sorry - should have been a bit clearer there. There's a few other
-> SoCs about that are using the thead cores, so I'd be "worried" that they
-> share the timer behaviour but do not have an alternative like you do on
-> the D1. That's part of what's kinda given me cold feet on the current
-> approach.
->=20
-> > > *The spec does not make any guarantees about whether events arrive
-> > > during suspend, only the behaviour *if* they arrive.
-> > >=20
-> > > Switching the property to "always-on" would require retrofitting that
-> > > property to every other existing platform (and therefore regressing s=
-ome
-> > > behaviour there, no?).
-> > >=20
-> > > Most of the existing platforms are "toys" or demo platforms though, so
-> > > it would not, I guess, be the end of the world to do so. Doubly so si=
-nce
-> > > none of them actually implement any sleep states that making it an
-> > > "always-on" property.
-> >=20
-> > Specifically, only sleep states with a "local-timer-stop" property would
-> > be inhibited by the C3STOP flag, so there is only possibility of a
-> > regression if some DT declaring such a sleep state exists anywhere.
+[...]
+> > +static u8 rtw_sdio_read_indirect8(struct rtw_dev *rtwdev, u32 addr, int *ret)
+> > +{
+> > +     struct rtw_sdio *rtwsdio = (struct rtw_sdio *)rtwdev->priv;
+> > +     u32 reg_cfg, reg_data;
+> > +     int retry;
+> > +     u8 tmp;
+> > +
+> > +     reg_cfg = rtw_sdio_to_bus_offset(rtwdev, REG_SDIO_INDIRECT_REG_CFG);
+> > +     reg_data = rtw_sdio_to_bus_offset(rtwdev, REG_SDIO_INDIRECT_REG_DATA);
+> > +
+> > +     rtw_sdio_writel(rtwsdio, BIT(19) | addr, reg_cfg, ret);
+> > +     if (*ret)
+> > +             return 0;
+> > +
+> > +     for (retry = 0; retry < RTW_SDIO_INDIRECT_RW_RETRIES; retry++) {
+> > +             tmp = sdio_readb(rtwsdio->sdio_func, reg_cfg + 2, ret);
+> > +             if (!ret && tmp & BIT(4))
+>
+> 'ret' is pointer, do you need '*' ?
+Well spotted - thank you!
 
-What is the plan for this series? IIRC, a rebase was required on top of
-the revert?
-I'm not overly pushed either way at this point, I'd like to get this
-C3STOP issue sorted out before more thead powered SoCs start showing up
-with the same implementation issues.
+[...]
+> As I look into sdio_readb(), it use 'int *err_ret' as arugment.
+> Would you like to change ' int *ret' to 'int *err_ret'?
+> It could help to misunderstand.
+Sure, I'll do that
 
-I know it is the Christmas period so not expecting anything to actually
-happen right away.
+[...]
+> > +             rtw_write16(rtwdev, REG_RXDMA_AGG_PG_TH, size |
+> > +                         (timeout << BIT_SHIFT_DMA_AGG_TO_V1));
+>
+> BIT_RXDMA_AGG_PG_TH GENMASK(7, 0)       // for size
+> BIT_DMA_AGG_TO_V1 GENMASK(15, 8)        // for timeout
+Thanks, I'll use these
 
-Thanks,
-Conor.
+[...]
+> > +static void rtw_sdio_rx_isr(struct rtw_dev *rtwdev)
+> > +{
+> > +     u32 rx_len;
+> > +
+> > +     while (true) {
+>
+> add a limit to prevent infinite loop.
+Do you have any recommendations on how many packets to pull in one go?
+My thinking is: pulling to little data at once can hurt performance
 
-> > > I've said since the start that defaulting to C3STOP is the "safer" th=
-ing
-> > > to do, and although we disagreed on this last time Anup, I think the
-> > > better outcome of someone missing a DT property is inaccessible sleep
-> > > states rather than going into sleep states they cannot get out of.
-> > >=20
-> > > For PolarFire SoC, which I guess is one of the few "commerical"
-> > > platforms, I'd be willing to accept retrofitting, since we have not y=
-et
-> > > implemented such sleep states yet.
-> > >=20
-> > > Maybe Prabhakar knows whether the RZ/Five has either a) implemented
-> > > sleep states and b) which side of the "timer events arrive in suspend"
-> > > divide their platform lies on.
-> > > I'm particular interested here since that is not a SiFive core comple=
-x.
-> > >=20
-> > > I would like to get DT maintainer approval of an approach here soon-i=
-sh
-> > > so that we can something sorted for the jh7110 stuff and for the
-> > > bouffalolabs SoC - the latter of which may very well be in the "no
-> > > events in suspend" camp as it also uses thead stuff.
-> > >=20
-> > > Sorry for kinda rowing back on my previous acceptance of the approach,
-> > > but I am really between two minds on this.
+[...]
+>
+> > +
+> > +static void rtw_sdio_process_tx_queue(struct rtw_dev *rtwdev,
+> > +                                   enum rtw_tx_queue_type queue)
+> > +{
+> > +     struct rtw_sdio *rtwsdio = (struct rtw_sdio *)rtwdev->priv;
+> > +     struct sk_buff *skb;
+> > +     int ret;
+> > +
+> > +     while (true) {
+>
+> Can we have a limit?
+Similar to the question above: do you have any recommendations on how
+many packets (per queue) to send in one go?
 
 
---250qyPOy9rEbmPOI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6wviQAKCRB4tDGHoIJi
-0m+XAP4iwz4yySGdb9pxurqrq+4vSoL8sb+IqzQUC6K13l+bCwEAqjwhLRQBidpk
-JAJDC5mNSIouBHR53vXVlobx+xL55w8=
-=E0sn
------END PGP SIGNATURE-----
-
---250qyPOy9rEbmPOI--
+Best regards,
+Martin
