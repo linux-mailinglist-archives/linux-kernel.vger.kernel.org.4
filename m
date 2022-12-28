@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7796585B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 19:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4126585BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 19:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbiL1SS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 13:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S234904AbiL1STF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 13:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233363AbiL1SSi (ORCPT
+        with ESMTP id S233470AbiL1SSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 13:18:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B21C175B4;
-        Wed, 28 Dec 2022 10:18:38 -0800 (PST)
+        Wed, 28 Dec 2022 13:18:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAA4175B4;
+        Wed, 28 Dec 2022 10:18:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDF4261582;
-        Wed, 28 Dec 2022 18:18:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FA2C433EF;
-        Wed, 28 Dec 2022 18:18:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CB70B818BC;
+        Wed, 28 Dec 2022 18:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1A6C43392;
+        Wed, 28 Dec 2022 18:18:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672251517;
-        bh=uUVGWuZiaQOKU09yyOgoE6OKa2WCSHqNWbzCAny96FU=;
+        s=k20201202; t=1672251519;
+        bh=lrZY2fsTFYfQj4eVl3mncxZwaKUp972COk8fahv6UvM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p86R2ZSD8gJHyYiWUkR96BFMTCWeYAL7LgstvOr1L8f40CZx+RrFt5buA9gtUs+NH
-         +iXsFYz+pJ2EOR73lj3wUX+y5FVal7ILJpYcboLDc+tdfIoVWT4A3u2a7dKH48WP4O
-         FQlxFi2noCMZQsotrOi6BNQUGFevhaGDxgiqWreHMbeLJ6m7K9U2i8dnuePfl+7uP9
-         WM2ybNEdVIvFxgTxXLfRzuj9CRGV0/oPk76LThe0SFwkmpJOD4gi2Kel89oIgAlibj
-         mn3d3RKulM4AXIW4wT8KhXkzQV5R37NG1RZ+ZgXe97mXjnfTwOWKrlRjYsyLOO78SE
-         aEtnlfgJe6Xug==
+        b=pHDraBv1GIIuM9H6jtWMKo3NO/fuwbqZ1VXb4oMj18v2h1d481zgdmbLAc1k2plI/
+         vBXuTnD+hxnn/MOkN+TBZO9mMT7dOdZYzqAHgjKOT+41t+AiTYbIZjuYwax/+nZM/k
+         7IGWh3ThC8GGAwWm45vgqnRQRU/aPwqr2NClUcZUswLluIz8X5kPOBDHV2PwJNLwBd
+         D5TIveEjdZACuZD4o/rcVCglplMmxwNVMlRqVAOfF2R+urCcedLj5jAFLXG47dOOOP
+         hQOaCphqIamwEzcaQWLIDH7o5LF4XUh61TCGWzexhEzmtQ4iaA1JkPqm34Var9oq1d
+         wFy+aMTMgXkAg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     mathieu.poirier@linaro.org, abel.vesa@linaro.org,
+To:     mathieu.poirier@linaro.org, swboyd@chromium.org,
+        quic_deesin@quicinc.com, quic_clew@quicinc.com,
         Bjorn Andersson <andersson@kernel.org>,
-        konrad.dybcio@somainline.org, agross@kernel.org
+        arnaud.pouliquen@foss.st.com
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH v2] remoteproc: qcom: q6v5: Use _clk_get_optional for aggre2_clk
-Date:   Wed, 28 Dec 2022 12:18:26 -0600
-Message-Id: <167225151223.950465.14429804095591076576.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH V4 0/2] rpmsg_char/ctrl driver fixes
+Date:   Wed, 28 Dec 2022 12:18:28 -0600
+Message-Id: <167225151225.950465.10463243136528744031.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220718121514.2451590-1-abel.vesa@linaro.org>
-References: <20220718121514.2451590-1-abel.vesa@linaro.org>
+In-Reply-To: <1663584840-15762-1-git-send-email-quic_deesin@quicinc.com>
+References: <1663584840-15762-1-git-send-email-quic_deesin@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,22 +57,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Jul 2022 15:15:14 +0300, Abel Vesa wrote:
-> Only msm8996 and msm8998 SLPIs need the RPM_SMD_AGGR2_NOC_CLK
-> (as aggre2 clock). None of the other platforms do. Back when the support
-> for the mentioned platforms was added to the q6v5 pass driver, the
-> devm_clk_get_optional was not available, so the has_aggre2_clk was
-> necessary in order to differentiate between plaforms that need this
-> clock and those which do not. Now that devm_clk_get_optional is available,
-> we can drop the has_aggre2_clk. This makes the adsp_data more cleaner
-> and removes the check within adsp_init_clocks.
+On Mon, 19 Sep 2022 16:23:58 +0530, Deepak Kumar Singh wrote:
+> Change from v4:
+> Corrcted mistaked in commit message for patch2.
+> 
+> Deepak Kumar Singh (2):
+>   rpmsg: glink: Add lock to avoid race when rpmsg device is released
+>   rpmsg: glink: Add lock to rpmsg_ctrldev_remove
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] remoteproc: qcom: q6v5: Use _clk_get_optional for aggre2_clk
-      commit: 6d967a5a49e8d08d8e4430aadba8d3c903b794a5
+[1/2] rpmsg: char: Add lock to avoid race when rpmsg device is released
+      commit: 17b88a2050e9d1f89a53562f2adb709a8959e763
+[2/2] rpmsg: ctrl: Add lock to rpmsg_ctrldev_remove
+      commit: c23965b7f7d99bbb2604f1f02aa26fb6d1d5864d
 
 Best regards,
 -- 
