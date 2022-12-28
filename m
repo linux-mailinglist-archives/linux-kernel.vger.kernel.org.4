@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79CA657A62
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 16:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BCF657A84
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 16:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbiL1PLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 10:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
+        id S232989AbiL1PMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 10:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbiL1PLD (ORCPT
+        with ESMTP id S233053AbiL1PMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 10:11:03 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8718713E08;
-        Wed, 28 Dec 2022 07:11:02 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so9990783otk.8;
-        Wed, 28 Dec 2022 07:11:02 -0800 (PST)
+        Wed, 28 Dec 2022 10:12:06 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5220E13F1D
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 07:11:50 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id f20so16781860lja.4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 07:11:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BEi2X8IqqjxNARHjcUaUwyHSrSwQ2u3CkgJ6q6RIUNQ=;
-        b=EoezPrGxjN3BbswTSuUUGvmgpJSYbca9QQWKmY41lEUb8vU0J8a5JhBbLmJcLsYxTM
-         MDKHc/wC7yxtlfWcZMv5NYT6pZmGfSWSlv3zMpJiC6d1CUM//lrN+wK5xNveFjb6rOgI
-         h78F+NeWLFoH4wDzgnCS9RlrKoYgHUBiTRWMGcIWqRGMiQdghy96F6z4wKmonsKBryrC
-         MvlKESd7HhQspVoQcDS7oaRTKUBcdxHlYRK+qW81hflJtQhqTVV8luu9yOCXJBzYI/6l
-         02gga2dLLM4boYP0+LAxZUd9LUaFr0bU1I/lBTJlaYukEq2DKWgpLcvsNJuPdBRjdlKz
-         J3kg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ubYwZeaZS68YtABRDEYXGkCnGRePf9F31/jYHcMocpw=;
+        b=L4DA9N9QVywBhf5U3AMOC+UzziT2R6n3W9DLQ8MzZPa7EEEG4W4ir3fgTeVvOLmfN6
+         85/nu/j4zvTff3gFFKCYOaRDBmEN64lg4Z74ngBhxMMy7jKP8ZVRIZlJw0hRLPhvjO0G
+         VwLuZZs0SkODzHTzRRjeWW2BBDXYlnXWzoNC2tL8gjrkMRbytiQdk0A+QKXwj2FQEDFS
+         qrW6x5NhOYfl/OCRccROhrzV67paQqzS9xl7AUTQcYiVf2gsREkxogZE+oetRig8suGr
+         Eq3ZOemLNjjDXVkXtZ9kBmI+XDCVoA7p9oo2BVafT81FJten/eEo11S7fhL0dMGJwGwL
+         vfOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BEi2X8IqqjxNARHjcUaUwyHSrSwQ2u3CkgJ6q6RIUNQ=;
-        b=DLdqknmDARWEq+DaoKgBGCbRd/EUE3WKqLsBlw2JYhf7E1/PxTE5CpnOS5eVIuAKQ0
-         YjraBBKDotTMOpvvqyGsYydkbRqltwPyaM6LRX7TS+egJ6lUKE0V8cUBK9Y0By2nGdAn
-         fCB9eDqzPrU6kZdhbim+VKIL0NFZYtClQrJwPKHoepu2fTWfs4EnTFZlUtc4SvSQyRhD
-         nSDUqQ0TdSRmri+N30VdCJdtHVi1l3Tn2jsd1NJGiqEi28yckaFSTXMdstc7Uc28LGsi
-         fNqtHDMX5+hJ8iHKXBBCmiVn6BGF+OyEBfOKXYY4SU3UmS9VsMi4HncBobBD90GzqJ07
-         TlMw==
-X-Gm-Message-State: AFqh2koPcN99i/XfaiNIycDN/hFngQtnFkJYe//IO6BE55G6CRPreEHC
-        1BoAX8V4ckzsKacLDbrxv90=
-X-Google-Smtp-Source: AMrXdXvFx2Y6Snk+TpNsxxKH5WFlAffqZKHDWNvb2TMTuqkduNKnzjfIvlKAMzDqrXI4ZjIbpz8E+g==
-X-Received: by 2002:a9d:694b:0:b0:66c:5797:5c22 with SMTP id p11-20020a9d694b000000b0066c57975c22mr12439741oto.14.1672240261839;
-        Wed, 28 Dec 2022 07:11:01 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id db6-20020a0568306b0600b00683e4084740sm4066034otb.10.2022.12.28.07.11.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 07:11:01 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 28 Dec 2022 07:10:59 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
-Message-ID: <20221228151059.GA2565317@roeck-us.net>
-References: <20221228144330.180012208@linuxfoundation.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ubYwZeaZS68YtABRDEYXGkCnGRePf9F31/jYHcMocpw=;
+        b=OlSk6gY6V5L5MNr9nvqzmM5zpu8SksQdymH0TVrUWzQcr3Z7h6BkKYPHUKQOrHEXWu
+         9rR99c5YnJbGqfMnR++daAiD4tf6QgOxAkIu+U54NVWSm/iDTK3m7LJMMAQBtgKSlFu1
+         znCV6hTwM2fDRpThxpqaiJz9VL6dcLOZF87GPak+19f0IEryvl4sAHxQlILamjJbhw4b
+         CvQQK7ozxwhtuPDMkipV+eOEOQEnqqJk7/SAa87+N52Mcn6bBfNQ7GQDa9mo9Co5IXL7
+         3qdc0+ayzDLQLtfEb7DJGFW3stwxWd3pZUuBgflFRhoENb7UG09qcjDUSv8cFou2mTw8
+         HMLg==
+X-Gm-Message-State: AFqh2koRIZPlu1BPB9tdebAcwqolcX/jNSr778KgBZ8+CnLdDqr4pz71
+        xk0uAfbjFceQv/iowOzJhxb/dq8bEOeRYRi3
+X-Google-Smtp-Source: AMrXdXvIcY/heKHIPnpMU96K2aJammSqLAViET3DK30IyVf7ZggpP+EjutDQlr2EUBzwxhyhYVPm4g==
+X-Received: by 2002:a2e:99cd:0:b0:27f:ac85:2b6a with SMTP id l13-20020a2e99cd000000b0027fac852b6amr5512348ljj.1.1672240308530;
+        Wed, 28 Dec 2022 07:11:48 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id i14-20020a2ea36e000000b0026fc822c264sm1973119ljn.87.2022.12.28.07.11.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 07:11:47 -0800 (PST)
+Message-ID: <f42a5b1e-922b-22d2-2f95-cac0be47d6b2@linaro.org>
+Date:   Wed, 28 Dec 2022 16:11:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221228144330.180012208@linuxfoundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 07/11] vendor-prefixes: Add VIA Labs, Inc.
+Content-Language: en-US
+To:     Anand Moon <linux.amoon@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-amlogic@lists.infradead.org, Rob Herring <robh@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221228100321.15949-1-linux.amoon@gmail.com>
+ <20221228100321.15949-8-linux.amoon@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221228100321.15949-8-linux.amoon@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 03:25:39PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.2 release.
-> There are 1146 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
-> Anything received after that time might be too late.
-> 
+On 28/12/2022 11:03, Anand Moon wrote:
+> Add the vendor prefix for VIA Labs, Inc. (VLI) is a leading supplier
 
-Building arm:allmodconfig ... failed
-Building arm64:allmodconfig ... failed
---------------
-Error log:
-drivers/mfd/qcom_rpm.c: In function 'qcom_rpm_remove':
-drivers/mfd/qcom_rpm.c:680:26: error: unused variable 'rpm' [-Werror=unused-variable]
-  680 |         struct qcom_rpm *rpm = dev_get_drvdata(&pdev->dev);
+Drop marketing, so without "leading".
 
-36579aca877a ("mfd: qcom_rpm: Fix an error handling path in qcom_rpm_probe()")
-was applied without e48dee960462 ("mfd: qcom_rpm: Use
-devm_of_platform_populate() to simplify code") which fixes the problem
-without saying that it does.
 
-The problem affects v5.15.y and v6.0.y as well.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Guenter
+
+Best regards,
+Krzysztof
+
