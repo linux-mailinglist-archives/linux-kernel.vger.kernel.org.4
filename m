@@ -2,131 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F0765870A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DE665870F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbiL1V10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 16:27:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S231157AbiL1Va4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 16:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiL1V1U (ORCPT
+        with ESMTP id S230050AbiL1Vaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 16:27:20 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B543C140B4;
-        Wed, 28 Dec 2022 13:27:18 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 00D65109;
-        Wed, 28 Dec 2022 22:27:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672262836;
-        bh=sp2ZBB6P279b00k8+UwmXpA6Hm9xy8NUgh+Jr/+0/uc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dQ2+f64EH8lFWaBxwtHVGK154e2FTIKrvuMvgSb5Z2okoo5DPwieKwZFzSs70IXiO
-         /sShwWs/jk2Md1WsZCkIa5X9bHoZMMpa/kRMazfVX5MQEgA1klbMK/U6TvatttHkdl
-         dgHp2q+KRh/Bpd86b0GUdNwMTks+jxqaeageqkyY=
-Date:   Wed, 28 Dec 2022 23:27:11 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tanmay Bhushan <007047221b@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: staging: media: omap4iss: Fix null dereference
- for iss
-Message-ID: <Y6y0r9fPnfWvwlua@pendragon.ideasonboard.com>
-References: <7f4fe87ef8a9995bc2c64bf2e5a03ef6948b8692.camel@gmail.com>
+        Wed, 28 Dec 2022 16:30:52 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB93C140BC;
+        Wed, 28 Dec 2022 13:30:50 -0800 (PST)
+Received: from g550jk.localnet (2a02-8388-6582-fe80-0000-0000-0000-0005.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::5])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 8ACF1CB42D;
+        Wed, 28 Dec 2022 21:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1672263049; bh=R5soxCa2nbRONnnIoOyx6lQyz71J9M+o4tRpsv7zD70=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=kDJwpTiEItwDlltv01z04XOJQnmOabmI9wvG/eEMAN0HjL3svfwbEBXbgJWEhFCKx
+         wbCU0NO8S3i8xoDJX9Ysf6WQ3E0hVvHs1Jr1E4XCC5TaAGgvkDYxQML0n/avhcQ/U+
+         UADXhM+hVuGOMiBiFYZCDPJWC71khov49SiLfN4I=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        afd@ti.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] regulator: dt-bindings: qcom,usb-vbus-regulator: change
+ node name
+Date:   Wed, 28 Dec 2022 22:30:47 +0100
+Message-ID: <12119366.O9o76ZdvQC@g550jk>
+In-Reply-To: <20221031173933.936147-2-luca@z3ntu.xyz>
+References: <20221031173933.936147-1-luca@z3ntu.xyz>
+ <20221031173933.936147-2-luca@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7f4fe87ef8a9995bc2c64bf2e5a03ef6948b8692.camel@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FROM_SUSPICIOUS_NTLD,SPF_HELO_NONE,SPF_PASS,
+        T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tanmay,
-
-Thank you for the patch.
-
-On Wed, Dec 28, 2022 at 09:58:31PM +0100, Tanmay Bhushan wrote:
-> From 7aa39c0d02bddf9cfa14762f115303b79bfa0ae3 Mon Sep 17 00:00:00 2001
-> From: Tanmay Bhushan <007047221b@gmail.com>
-> Date: Wed, 28 Dec 2022 21:01:16 +0100
-> Subject: [PATCH] media: staging: media: omap4iss: Fix null dereference
-> for iss
+On Montag, 31. Oktober 2022 18:39:32 CET Luca Weiss wrote:
+> usb-vbus-regulator is a better generic node name than dcdc to change the
+> example to match.
 > 
-> media_pad_remote_pad_first returns NULL in some cases but while using
-> the return value was used without NULL check which will lead to panic
-> in case of NULL return. iss_pipeline_is_last returns value check so
-> have returned 0 in case of NULL and csi2_configure is not documented
-> for such cases so returned EINVAL for it. Code is not tested
-> as it is only for NULL dereference verification.
-> 
-> Signed-off-by: Tanmay Bhushan <007047221b@gmail.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+
+Bump? Can this patch be picked up please?
+
 > ---
->  drivers/staging/media/omap4iss/iss.c      | 6 +++++-
->  drivers/staging/media/omap4iss/iss_csi2.c | 4 ++++
->  2 files changed, 9 insertions(+), 1 deletion(-)
+> Changes in v2:
+> * New patch
 > 
-> diff --git a/drivers/staging/media/omap4iss/iss.c
-> b/drivers/staging/media/omap4iss/iss.c
-> index fa2a36d829d3..3f01eeff40e7 100644
-> --- a/drivers/staging/media/omap4iss/iss.c
-> +++ b/drivers/staging/media/omap4iss/iss.c
-> @@ -552,7 +552,11 @@ static int iss_pipeline_is_last(struct
-> media_entity *me)
-
-Your mail client wrapped lines, which prevents the patch from being
-applied with git-am. I recommend using git-send-email to send patches.
-https://git-send-email.io/ provides clear and detailed instructions on
-how to set it up (especially when using gmail).
-
->  	if (!pipe || pipe->stream_state ==
-> ISS_PIPELINE_STREAM_STOPPED)
->  		return 0;
->  	pad = media_pad_remote_pad_first(&pipe->output->pad);
-> -	return pad->entity == me;
-
-Have you seen this actually crashing, or are you only speculating ? The
-video node at the output of the pipeline should always be connected, so
-I don't think media_pad_remote_pad_first() can ever return NULL here.
-
-> +
-> +	if (pad)
-> +		return pad->entity == me;
-> +
-> +	return 0;
->  }
->  
->  static int iss_reset(struct iss_device *iss)
-> diff --git a/drivers/staging/media/omap4iss/iss_csi2.c
-> b/drivers/staging/media/omap4iss/iss_csi2.c
-> index 04ce0e7eb557..ab2c2ad64464 100644
-> --- a/drivers/staging/media/omap4iss/iss_csi2.c
-> +++ b/drivers/staging/media/omap4iss/iss_csi2.c
-> @@ -539,6 +539,10 @@ static int csi2_configure(struct iss_csi2_device
-> *csi2)
->  		return -EBUSY;
->  
->  	pad = media_pad_remote_pad_first(&csi2->pads[CSI2_PAD_SINK]);
-> +
-> +	if (!pad)
-> +		return -EINVAL;
-
-Same here, what makes you think this is possible ?
-
-> +
->  	sensor = media_entity_to_v4l2_subdev(pad->entity);
->  	pdata = sensor->host_priv;
->  
+>  .../devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml  | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git
+> a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> index dbe78cd4adba..b1cff3adb21b 100644
+> ---
+> a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> +++
+> b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> @@ -33,7 +33,7 @@ examples:
+>       pm8150b {
+>          #address-cells = <1>;
+>          #size-cells = <0>;
+> -        pm8150b_vbus: dcdc@1100 {
+> +        pm8150b_vbus: usb-vbus-regulator@1100 {
+>              compatible = "qcom,pm8150b-vbus-reg";
+>              reg = <0x1100>;
+>          };
 
--- 
-Regards,
 
-Laurent Pinchart
+
+
