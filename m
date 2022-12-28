@@ -2,101 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BDE6586B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 21:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF846586CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 21:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiL1UYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 15:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S232179AbiL1Ulr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 15:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiL1UYs (ORCPT
+        with ESMTP id S231139AbiL1Ulk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 15:24:48 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6548B1573E;
-        Wed, 28 Dec 2022 12:24:47 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BBA5C21A21;
-        Wed, 28 Dec 2022 20:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1672259084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PNZQeMoVy7KGBZd3TY/hjBMsT8Wahi2q2P3jL0HXUCM=;
-        b=tM2qJZhfi+SXzV27m5JEZd9GV5wClY52zAhFoccQlN8dpIzzvNouvfILmLE8cQzFBjYvVM
-        Up8RcjucQd8KQncfBVF95Rg7GDne7MDMkFzQrY7GZqjh3YsvAq3svw8ba8J0AJSonHr6nO
-        /18RRjOBU7cGfGUGEH/FzUPKCKsWyxI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1672259084;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PNZQeMoVy7KGBZd3TY/hjBMsT8Wahi2q2P3jL0HXUCM=;
-        b=FXKd3ScYdOkNc6F3uKQe/h4ql4UCQ6G+bOr0MMaKzWX4QuYZRE2kDI+6DyTGkmuOehsMUE
-        pbMZ/jPF58AUBODw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6F496134F5;
-        Wed, 28 Dec 2022 20:24:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6y7VGQymrGNrRQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 28 Dec 2022 20:24:44 +0000
-Message-ID: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
-Date:   Wed, 28 Dec 2022 21:22:56 +0100
+        Wed, 28 Dec 2022 15:41:40 -0500
+X-Greylist: delayed 917 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Dec 2022 12:41:39 PST
+Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567CA10EE
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 12:41:38 -0800 (PST)
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1pAd03-001oCV-Sc; Wed, 28 Dec 2022 20:26:08 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH] ARM: dts: imx8mm-venice-gw7901: fix USB2 controller OC polarity
+Date:   Wed, 28 Dec 2022 12:26:06 -0800
+Message-Id: <20221228202606.2572716-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-To:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>
-Cc:     regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ugh, while the problem [1] was fixed in 6.1, it's now happening again on
-the T460 with 6.2-rc1. Except I didn't see any oops message or
-"tpm_try_transmit" error this time. The first indication of a problem is
-this during a resume from suspend to ram:
+The GW7901 has USB2 routed to a USB VBUS supply with over-current
+protection via an active-low pin. Define the OC pin polarity properly.
 
-tpm tpm0: A TPM error (28) occurred continue selftest
+Fixes: 2b1649a83afc ("arm64: dts: imx: Add i.mx8mm Gateworks gw7901 dts support")
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-and then periodically 
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
+index d3ee6fc4baab..72311b55f06d 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
+@@ -759,6 +759,7 @@ &usbotg1 {
+ &usbotg2 {
+ 	dr_mode = "host";
+ 	vbus-supply = <&reg_usb2_vbus>;
++	over-current-active-low;
+ 	status = "okay";
+ };
+ 
+-- 
+2.25.1
 
-tpm tpm0: A TPM error (28) occurred attempting get random
-
-and further suspend to ram attempts fail:
-
-tpm tpm0: Error (28) sending savestate before suspend
-tpm_tis 00:08: PM: __pnp_bus_suspend(): tpm_pm_suspend+0x0/0x80 returns 28
-tpm_tis 00:08: PM: dpm_run_callback(): pnp_bus_suspend+0x0/0x10 returns 28
-tpm_tis 00:08: PM: failed to suspend: error 28
-PM: Some devices failed to suspend, or early wake event detected
-
-Unfortunately I doubt I would be able to bisect it as any "good" kernel might
-be a false negative.
-
-[1] https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
-
-#regzbot introduced: v6.1..v6.2-rc1
