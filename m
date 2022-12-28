@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83531657268
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 04:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A624657267
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 04:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiL1Du0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 22:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
+        id S229829AbiL1DuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 22:50:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiL1DuT (ORCPT
+        with ESMTP id S229475AbiL1DuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 22:50:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE45A65AF
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 19:50:18 -0800 (PST)
+        Tue, 27 Dec 2022 22:50:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1155F65AF
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 19:50:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75D45B81253
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0458AC433F1;
-        Wed, 28 Dec 2022 03:50:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94560612E1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E4335C433D2;
+        Wed, 28 Dec 2022 03:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1672199416;
-        bh=5H7IAXzQjHU/QAgykblCbKWPC+mCBynG7IgcSd4TwgM=;
+        bh=iVSbpG5q72cpxth8FTXCpTOZjGJPR4Wcqvruu7fBW0s=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pVGO/N/lVLa62CMfM5z3PTaBP/g2+Kq2h0SrRzcQ38jZKZJAYplM0MRv1lf8p9ieM
-         KX432+K7SHuuAIhyRIdfCmLmfIHUDz6rORNlXBZ9DE9mXrFP0LcK10FJAcvczIpfPn
-         Z0JFHcH7yYP77Z/LUFMt6eNLQU88JrmdUmtd3bwliRdFz8KhWyyx2ZmSDMDRxBqlFY
-         dthzGi7Cm1559LaskgWee5milpMo6B4udy+iqIKf1rfLIXA2Gl3wxniaK6WzKW8j51
-         9YGGSh1tqTyuN07NbTzMjFLuXMwdd+nM7TpXohJ9ptRe91iKoBCVpiVhPisLuqdWuB
-         lZXMdcMFRweHA==
+        b=mr/QYDTprNgtLfO/gEpob0rXmNgA7J+1kTJ3jFZBudtNoweC/dB1XQd+5MTZ99Bbd
+         nHL9RT0KH7rFAMVfmMgcKZpLPGny+0ge8BEnpry973q1oenH9MG87258d2NBNWvz7O
+         FKUkotyJXVU7QYaD8a+njiR6T/FU29XS+CH9Og4NToVbd9VJnVWw3R0sAo9KmThFm6
+         i4mCsuAQNY73JkCU3qkOPTb32bgMKUmeQt+Z8GA1kro25JlRGBqjfevIZB61mE7Dlx
+         zwDAuWb7lYnrXR9aAbJuYB7puutAQtYIhiSMMnNyYPR3jz0uCBvOhfw2LBcEgpqgn1
+         AQLSWvIrRn/EA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3347C395E0;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CB3E1E4D029;
         Wed, 28 Dec 2022 03:50:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v12 1/3] platform/chrome: cros_ec_uart: Add cros-ec-uart
- transport layer
+Subject: Re: [PATCH v13 1/3] platform/chrome: cros_ec_uart: Add transport layer
 From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <167219941586.31925.4046196257831132463.git-patchwork-notify@kernel.org>
+Message-Id: <167219941582.31925.13873263945811927474.git-patchwork-notify@kernel.org>
 Date:   Wed, 28 Dec 2022 03:50:15 +0000
-References: <20221209092619.v12.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
-In-Reply-To: <20221209092619.v12.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+References: <20221227123212.v13.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+In-Reply-To: <20221227123212.v13.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
 To:     Mark Hasemeyer <markhas@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, rrangel@chromium.org,
-        bhanumaiya@chromium.org, lkp@intel.com, pmalani@chromium.org,
-        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
+        bhanumaiya@chromium.org, pmalani@chromium.org, bleung@chromium.org,
+        groeck@chromium.org, tzungbi@kernel.org,
         chrome-platform@lists.linux.dev
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -64,7 +63,7 @@ Hello:
 This series was applied to chrome-platform/linux.git (for-kernelci)
 by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-On Fri,  9 Dec 2022 09:26:22 -0700 you wrote:
+On Tue, 27 Dec 2022 12:32:22 -0700 you wrote:
 > From: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
 > 
 > This patch does following:
@@ -90,11 +89,11 @@ On Fri,  9 Dec 2022 09:26:22 -0700 you wrote:
 > [...]
 
 Here is the summary with links:
-  - [v12,1/3] platform/chrome: cros_ec_uart: Add cros-ec-uart transport layer
-    (no matching commit)
-  - [v12,2/3] dt-bindings: mfd: cros-ec: Add UART compatible string
+  - [v13,1/3] platform/chrome: cros_ec_uart: Add transport layer
+    https://git.kernel.org/chrome-platform/c/04a8bdd135cc
+  - [v13,2/3] dt-bindings: mfd: cros-ec: Add UART compatible string
     https://git.kernel.org/chrome-platform/c/5be8cd61dcdd
-  - [v12,3/3] platform/chrome: cros_ec_uart: Add DT enumeration support
+  - [v13,3/3] platform/chrome: cros_ec_uart: Add DT enumeration support
     https://git.kernel.org/chrome-platform/c/c34fea225806
 
 You are awesome, thank you!
