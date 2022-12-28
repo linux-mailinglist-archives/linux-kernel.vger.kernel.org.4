@@ -2,121 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7D56573C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0BA6573C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbiL1H7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 02:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
+        id S232535AbiL1H6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 02:58:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiL1H7D (ORCPT
+        with ESMTP id S229691AbiL1H6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 02:59:03 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F50CEA0;
-        Tue, 27 Dec 2022 23:59:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1672214307; bh=ut0QnBH+n52wyKHqQwBmihflDips2qqky7SOU6xr2yk=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=eN4Ex5QIPgdWjYcTYy02q5aoymbvKY1bYLviQ/rRbu0eSYMZYvDKomIFZwyNpSL6X
-         dDOlDBXZU4g0zLRxV0OxLqMb9jix3i5YNyaXWlN0Ka+e3fgKL15J32gphECk6EMM7y
-         cfjWG4Tz9e36ntSPS253HeVp+vP17JdNUBl2E5by+N7Y6jh/jAqRCy67LhtnlOLm6o
-         G+LZqLeLqTG9nX2vnX+UGBjeNOETP1nvbjzFH3/v7kPl83v9rvCMZ7VbBybaPGfRE4
-         2+nWnwa24JVg8yE75z9IdoUKneFPViOCAR6FBG9Z6bMeE9NMA+MIr0supORmd6XdQF
-         Wvm1t9CQH48RQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.184.137]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmDEm-1oSGsF2jrc-00iCsh; Wed, 28
- Dec 2022 08:58:27 +0100
-Message-ID: <10b15ff6-0671-a523-a708-76f1dfa0383e@gmx.de>
-Date:   Wed, 28 Dec 2022 08:58:25 +0100
+        Wed, 28 Dec 2022 02:58:34 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF0DEA0;
+        Tue, 27 Dec 2022 23:58:32 -0800 (PST)
+X-UUID: 9b9b589c182b406c9c1539004688c4e9-20221228
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=hTIBEWfUEwvi8Ni7b5PaoSl4qonL92kVD6YGJarC3dk=;
+        b=miy4yJYTcHPN9rXRQALUVx1LE6cdWOyTXpC3PeeBsFzCBLKYyYwM0Ewxvfz727bu/XH8mMqFYusfBt9acAZAv98GxHlqypoKl1/3jV6N8DEchSGl9Qkoh/YGl2IZvIFLXJAFMENkgl+vkH3vUiKlH9WAy/l2HSbavh6keN2SMxM=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:d1fc1aef-6746-4eee-9445-166fc38244c4,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:aa139e8a-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 9b9b589c182b406c9c1539004688c4e9-20221228
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1944221149; Wed, 28 Dec 2022 15:58:27 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 28 Dec 2022 15:58:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 28 Dec 2022 15:58:26 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <angelogioacchino.delregno@collabora.com>
+CC:     <chun-jie.chen@mediatek.com>, <daniel@makrotopia.org>,
+        <devicetree@vger.kernel.org>, <fparent@baylibre.com>,
+        <ikjn@chromium.org>, <johnson.wang@mediatek.com>,
+        <jose.exposito89@gmail.com>, <kernel@collabora.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <msp@baylibre.com>,
+        <mturquette@baylibre.com>, <nfraprado@collabora.com>,
+        <pablo.sun@mediatek.com>, <rex-bc.chen@mediatek.com>,
+        <robh+dt@kernel.org>, <ryder.lee@kernel.org>,
+        <sam.shih@mediatek.com>, <sboyd@kernel.org>,
+        <weiyi.lu@mediatek.com>, <wenst@chromium.org>,
+        <y.oudjana@protonmail.com>, <yangyingliang@huawei.com>
+Subject: Re: [PATCH v2 14/23] clk: mediatek: clk-mt8192: Move CLK_TOP_CSW_F26M_D2 in top_divs
+Date:   Wed, 28 Dec 2022 15:58:26 +0800
+Message-ID: <20221228075826.27396-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20221223094259.87373-15-angelogioacchino.delregno@collabora.com>
+References: <20221223094259.87373-15-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH linux-next] fbdev: omap: use strscpy() to instead of
- strncpy()
-Content-Language: en-US
-To:     yang.yang29@zte.com.cn
-Cc:     tony@atomide.com, b.zolnierkie@samsung.com, arnd@arndb.de,
-        yuzhe@nfschina.com, jiapeng.chong@linux.alibaba.com,
-        guozhengkui@vivo.com, linux-fbdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, xu.panda@zte.com.cn
-References: <202212280940017919910@zte.com.cn>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <202212280940017919910@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6xYT7XBtpcRWzDX6SMR5Z8MDNCitrlJnvbo6qFAtHCUpmmFKG34
- DRPCkQvPUUNTq4SCURlK0nW2KbSdPE5Grhs+SCPnjG/D6UE8SdJcq6trxfGRFDV4ZuurelR
- zYw9zApIoPh+QWH9UbFNIYmcfnm6xI2/COONct/6CTwTjyCUFD+izjSkiIBF2L0gY2tMMdL
- OatStnnePHFTsFj5928yQ==
-UI-OutboundReport: notjunk:1;M01:P0:dneBwogOC4o=;S5DKRe/GJouDkmz713c8D7GJqKU
- smMzawgYoxAlQfzoJG7OXVgQcpjkt0IqYNibKYZVNkL2RQRa7gXQ1lrTQsyKPGWl9CrX+7x/S
- HYNu+j2+k7b+uybzfaetqpRO7G9vBLo9113eU2gXJ8Jft0dGNt7+ig8rJAHnIGB11Q/aU9mc1
- jamMY/chikb/PyJis3Gj/tNPtorYqoHvDMV9xa8W4LKoR6aFAFkMYf8qWmI87dZNJ4gCGiJCS
- kTx2vXFySUiydsVkvPxrciN05hMZOqt05nw1LFJjxIcAuyFEQ7zvAkBFMfSc8W5rgyPiddNyT
- 9c7td3QC0z/0hmVWWvZoAe9xbd25xFcpvYcI4tpeRc7JHj1RVwlpsSDmN1+qtsETI3RM1YYA0
- sVE4F5QcqsS2wuwb8J/gKg3m5a1AYnUMvryyvnLD1lFetZcJCSXY/AjHZb876N1aopDWNiVOQ
- 5F/UsAU+tUSRuJAPhmN3PYJgiUGRFDKQkalmiGHrto4JoXyHDggqvBsJsffnqbm0NT8my9hUZ
- 8wdEeN2AB7PJ8CZWJH/Pb/owXT6XnCTZCifnZL76LBYF/pHWyzqGwG/azsCGeV/9jpvUzKVO4
- 02KtXNoDD+PfphySAkjnEDzt2czFaRFLB1yvxfSgz0jU+HmgSXwpAiFfCw5JluOESFCJNzjVr
- loYNzfH+SMkrk57A8cGmw49z+l3TbhJnw63OqbcbWEIQxYAOIgVpG+/ur5WFZn3z8GY6FSvXk
- ZANUX3x6tzYeqO7715fn0cQ9L5BZlzx5JqqYVDotaWxSs8q+ukKz6vbJGqNulenCnT95wcDOu
- fb/6RmYWzTAPLVpv44PMsfQe10S52P9t9Nv1OjW8/pfvIMObhWLzM6MbMLgmbhk63pRe9mXUb
- 897s79htsTTweXHFSzhBxzxBuTgwHY8r7eVu38W/Xu0sP9xytOj7tj7Duz075b6TRm2LS/l3Q
- ftQ5+g==
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/22 02:40, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
+> This driver is registered early in clk_mt8192_top_init_early() and
+> then again in clk_mt8192_top_probe(): the difference between the
+> two is that the early one is probed with CLK_OF_DECLARE_DRIVER and
+> the latter is regularly probed as a platform_driver.
+> 
+> Knowing that it is not necessary for this platform to register the
+> TOP_CSW_F26M_D2 clock that early, move it to top_divs and register
+> it with the others during platform_driver probe for topckgen;
+> 
+> While at it, since the only reason why the early probe existed was
+> to register that clock, remove that entirely - leaving this driver
+> to use only platform_driver.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 >
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL-terminated strings.
->
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
-> ---
->   drivers/video/fbdev/omap/omapfb_main.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
 
-applied.
-Thanks!
-Helge
+Thanks and this patch makes it easier to convert clk-mt8192 driver to a kernel module.
 
->
-> diff --git a/drivers/video/fbdev/omap/omapfb_main.c b/drivers/video/fbde=
-v/omap/omapfb_main.c
-> index 17cda5765683..1f3df2055ff0 100644
-> --- a/drivers/video/fbdev/omap/omapfb_main.c
-> +++ b/drivers/video/fbdev/omap/omapfb_main.c
-> @@ -1447,7 +1447,7 @@ static int fbinfo_init(struct omapfb_device *fbdev=
-, struct fb_info *info)
->   	info->fbops =3D &omapfb_ops;
->   	info->flags =3D FBINFO_FLAG_DEFAULT;
->
-> -	strncpy(fix->id, MODULE_NAME, sizeof(fix->id));
-> +	strscpy(fix->id, MODULE_NAME, sizeof(fix->id));
->
->   	info->pseudo_palette =3D fbdev->pseudo_palette;
->
-> @@ -1573,8 +1573,7 @@ static int omapfb_find_ctrl(struct omapfb_device *=
-fbdev)
->
->   	fbdev->ctrl =3D NULL;
->
-> -	strncpy(name, conf->lcd.ctrl_name, sizeof(name) - 1);
-> -	name[sizeof(name) - 1] =3D '\0';
-> +	strscpy(name, conf->lcd.ctrl_name, sizeof(name));
->
->   	if (strcmp(name, "internal") =3D=3D 0) {
->   		fbdev->ctrl =3D fbdev->int_ctrl;
-
+Reviewed-by: Miles Chen <miles.chen@mediatek.com> 
