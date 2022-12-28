@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02343657591
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2F5657593
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232770AbiL1LCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S232883AbiL1LDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbiL1LCr (ORCPT
+        with ESMTP id S232830AbiL1LDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:02:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D6C27A;
-        Wed, 28 Dec 2022 03:02:46 -0800 (PST)
+        Wed, 28 Dec 2022 06:03:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8AEFCC9;
+        Wed, 28 Dec 2022 03:03:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 140DC6146E;
-        Wed, 28 Dec 2022 11:02:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72317C433EF;
-        Wed, 28 Dec 2022 11:02:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9ADAFB8120C;
+        Wed, 28 Dec 2022 11:02:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B98D5C433EF;
+        Wed, 28 Dec 2022 11:02:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672225365;
-        bh=B+kIgsbyyYwzcCIKPiZMpmbnCMNl6xqsXDtyJEIVNw4=;
+        s=k20201202; t=1672225378;
+        bh=Jbc8fHFUzvmzYj/mYnldsorEIWVL9g9+hlCte94smN4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YdnLrNXKFoCGABlpow37gP9VNIeEfLMxRhvSRa3SD8MCWf/xz1UXmo5U4Lh0z+Ot3
-         AqPVjGQYZouqxEh9Bwr+bRMbxcOOJ6GDZ0Jz+GVF7+/go7Yb60Cyg3ovWv+6rDbqyl
-         cpGvF8tcMPk104aSnmxm+CrZECzxEKD7vingzbdk8thDYMYKPI3Xpze3jwYy43nwRp
-         NTxSpgmBdpKkv7c+PRnT2t5KZ7b5t8zC4X+C5EZQo0dVlNwmGAD/5jInOTPx+NOETF
-         mAyaO5Fnj84pAU48yEtYfPXHc1b1wl1Vn9O8IccsqnCfu2Ty+/J/bQY+bkqC+EieeR
-         i89deR5FZpuUQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pAUCu-00067t-1E; Wed, 28 Dec 2022 12:02:48 +0100
-Date:   Wed, 28 Dec 2022 12:02:48 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab
- VL817Q7 hub controller
-Message-ID: <Y6wiWIH5S3jJnkai@hovoldconsulting.com>
-References: <20221228100321.15949-1-linux.amoon@gmail.com>
- <20221228100321.15949-9-linux.amoon@gmail.com>
+        b=A0IS6MWadTuC2MA6rSteotPG1AULwI6VcUsBisG+qQTyV6/rIYIX02b9alcQnXZLW
+         Je1qhgxeWinPGk3b558tpXDZr8BjSGDFSfHEFnvfH2/q3PmgW8Z+s72woJ3X8m3zTa
+         14Mb6vII8Sp67bCOoNBxFx0v5lzCcKqKGxfuawkx6T832KC3R8SiS+Nu/RJYSAaGtp
+         Z+cZR/OI25ecfp27cLAu3FfwazbECMBI2TZN/S0GzRNXDw9VQVZf1MAHr36ssWJGNR
+         RMCIKVT0drtc5Zg579GLT7ct6W26nRmUz3rm0oRUnWrp7cZ6PKyJyQ5y/UY4W54tLJ
+         yHmKvGI+jlYzg==
+Date:   Wed, 28 Dec 2022 16:32:54 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@gmail.com>
+Cc:     Jayesh Choudhary <j-choudhary@ti.com>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: ti: k3-udma: drop loglevel for non-fatal
+ probe deferral log
+Message-ID: <Y6wiXlZh1MUL2WrF@matsya>
+References: <20221128101334.512816-1-j-choudhary@ti.com>
+ <f954e71b-043c-43bc-a692-530497de2d0b@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221228100321.15949-9-linux.amoon@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f954e71b-043c-43bc-a692-530497de2d0b@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,50 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 10:03:17AM +0000, Anand Moon wrote:
-> The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
-> features 4 downstream ports, an internal 5V regulator and has
-> external reset pin.
+On 29-11-22, 18:28, Péter Ujfalusi wrote:
 > 
-> Add a device tree binding for its USB protocol part.
-> The internal LDO is not covered by this and can just be modelled
-> as a fixed regulator.
 > 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
->  .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> On 28/11/2022 12:13, Jayesh Choudhary wrote:
+> > Change the log level from dev_err() to dev_dbg() for non-fatal probe
+> > deferral log for getting MSI domain.
+> > This makes the kernel log clean and we do not get recurring logs
+> > stating: "Failed to get MSI domain".
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
-> new file mode 100644
-> index 000000000000..4ae995160fd5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Via labs VL817Q7 USB 3.1 hub controller
-> +
-> +maintainers:
-> +  - Anand Moon <linux.amoon@gmail.com>
-> +
-> +allOf:
-> +  - $ref: usb-device.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - vialab,usb2109
+> Or not print at all?
 
-This isn't a valid compatible string for USB devices (should be
-"usb<vid>,<pid>").
+that would be better one :-)
 
-Same for the other binding.
+> 
+> Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+> 
+> > 
+> > Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> > ---
+> >   drivers/dma/ti/k3-udma.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+> > index ce8b80bb34d7..e540166cf4c7 100644
+> > --- a/drivers/dma/ti/k3-udma.c
+> > +++ b/drivers/dma/ti/k3-udma.c
+> > @@ -5344,7 +5344,7 @@ static int udma_probe(struct platform_device *pdev)
+> >   	dev->msi.domain = of_msi_get_domain(dev, dev->of_node,
+> >   					    DOMAIN_BUS_TI_SCI_INTA_MSI);
+> >   	if (!dev->msi.domain) {
+> > -		dev_err(dev, "Failed to get MSI domain\n");
+> > +		dev_dbg(dev, "Failed to get MSI domain\n");
+> >   		return -EPROBE_DEFER;
+> >   	}
+> 
+> -- 
+> Péter
 
-Also the bindings should go before the driver changes in the series.
-
-Johan
+-- 
+~Vinod
