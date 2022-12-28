@@ -2,235 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C553965739A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3586465739F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbiL1HVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 02:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S231533AbiL1HYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 02:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiL1HVI (ORCPT
+        with ESMTP id S229583AbiL1HY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 02:21:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F4FF5A0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 23:20:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672212026;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7p/vayyP8zWaxjPZEqa7TOM9QZB/OUBM2psrPg6s4TY=;
-        b=XNhzPtEHGrGzkqzELeuXmYgTu2JRi+C8g9HqLpyXecp7RtyY7oHUmH/yWYkz/XP6kJs9hk
-        mL3JSeVnehz+ZFYDfGP/1VvSdUIwUidgmtCteZkNH8Wu/Id0UgehphXe2hp3OOw383nqHx
-        P821EI9IWtA+z7Y2HYJVHm5tjLvQJBc=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-75-b8MCS2aTNA2JNmdIZVctwQ-1; Wed, 28 Dec 2022 02:20:24 -0500
-X-MC-Unique: b8MCS2aTNA2JNmdIZVctwQ-1
-Received: by mail-wm1-f71.google.com with SMTP id j1-20020a05600c1c0100b003d99070f529so1469691wms.9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 23:20:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7p/vayyP8zWaxjPZEqa7TOM9QZB/OUBM2psrPg6s4TY=;
-        b=n5bDzpuuKJFf8DwgX4t5vU2UCPrRwAMnCKkrw4LTffmE8J2/9nEA0DuA3R3qpDWlYc
-         EZtKu5jgDFlicGarlfwhZwBl+zuIXHWezSMknYtD+nqNItx0VA533DSagn++4UB5/hzt
-         UR8zfM+pLfw/1HgwbsMOgRFPd9jZ87MKfl50p+SWdBv7ZtfgFQqzhPq/CBna+WEIDjWi
-         IFkUpjwBclIT/rQXOgsrca19OOS6G/crva8FzgsZl+fR6Fmk7x1e0grj3hcPL/eDrEeq
-         Ze09PFiPfdmJ6AdXXpCPCT1Nh40Yt1ZE78T/ehPAg6NWyb5jqrDDr8gvKVgZAyq8Mb8R
-         awRQ==
-X-Gm-Message-State: AFqh2krp/Pn0bt+r701+GqvKodOkdrsNPKVwfAOwMwlgkCQ6qnclS2Jv
-        3obp3L10wYgb28VSCPwEPX8TVESw4s+yICts9sD6KmiRUb3mOKFurWJAEdHs0J5AJHyEvfJOH7p
-        nQXYEzAG2hdXIJtDs0vDXNIUb
-X-Received: by 2002:a7b:cbd4:0:b0:3d3:3d51:7d44 with SMTP id n20-20020a7bcbd4000000b003d33d517d44mr17093104wmi.33.1672212023559;
-        Tue, 27 Dec 2022 23:20:23 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtANV2jcLiF8FOUgRwAbdZCJlTx1cmFHZF/EGV/YNCYif1iFoN8Etw6/Ex+BxcMNQN/2wrnfg==
-X-Received: by 2002:a7b:cbd4:0:b0:3d3:3d51:7d44 with SMTP id n20-20020a7bcbd4000000b003d33d517d44mr17093090wmi.33.1672212023191;
-        Tue, 27 Dec 2022 23:20:23 -0800 (PST)
-Received: from redhat.com ([2.52.151.85])
-        by smtp.gmail.com with ESMTPSA id k31-20020a05600c1c9f00b003d22528decesm26573211wms.43.2022.12.27.23.20.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 23:20:22 -0800 (PST)
-Date:   Wed, 28 Dec 2022 02:20:19 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Shunsuke Mie <mie@igel.co.jp>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 4/9] vringh: unify the APIs for all accessors
-Message-ID: <20221228021354-mutt-send-email-mst@kernel.org>
-References: <20221227022528.609839-1-mie@igel.co.jp>
- <20221227022528.609839-5-mie@igel.co.jp>
- <20221227020007-mutt-send-email-mst@kernel.org>
- <CANXvt5pRy-i7=_ikNkZPp2HcRmWZYNJYpjO_ieBJJVc90nds+A@mail.gmail.com>
- <CANXvt5qUUOqB1CVgAk5KyL9sV+NsnJSKhatvdV12jH5=kBjjJw@mail.gmail.com>
- <20221227075332-mutt-send-email-mst@kernel.org>
- <CANXvt5qTbGi7p5Y7eVSjyHJ7MLjiMgGKyAM-LEkJZXvhtSh7vw@mail.gmail.com>
+        Wed, 28 Dec 2022 02:24:27 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42683F03E;
+        Tue, 27 Dec 2022 23:24:22 -0800 (PST)
+X-UUID: d1a55c853375401c99250af0c921bfa3-20221228
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=8TGwloJUAR+sWvzTu+xAmrTJk0LoQNxpn5wak0pwHT4=;
+        b=LaxXbvQy8galBgQuPMrHSrwBJ/J5gKF9BqV7tc3eR4K6X57Cyzqy4Ww4nghH5daf/ilmsXg2QcBPLsUIfQOgHIYLA5t2yc5bsn+JrLYfyZfhwtBMVhDwOyvDIT49An3e7GkqoT8/gPMsqOAdTv5nvjkC0xnLzoyGL5dFZLS1yAU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:2115ecdf-936b-47f0-8317-d70b3ff57ced,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:71220253-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: d1a55c853375401c99250af0c921bfa3-20221228
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 523258031; Wed, 28 Dec 2022 15:24:15 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 28 Dec 2022 15:24:14 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 28 Dec 2022 15:24:14 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <angelogioacchino.delregno@collabora.com>
+CC:     <chun-jie.chen@mediatek.com>, <daniel@makrotopia.org>,
+        <devicetree@vger.kernel.org>, <fparent@baylibre.com>,
+        <ikjn@chromium.org>, <johnson.wang@mediatek.com>,
+        <jose.exposito89@gmail.com>, <kernel@collabora.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <msp@baylibre.com>,
+        <mturquette@baylibre.com>, <nfraprado@collabora.com>,
+        <pablo.sun@mediatek.com>, <rex-bc.chen@mediatek.com>,
+        <robh+dt@kernel.org>, <ryder.lee@kernel.org>,
+        <sam.shih@mediatek.com>, <sboyd@kernel.org>,
+        <weiyi.lu@mediatek.com>, <wenst@chromium.org>,
+        <y.oudjana@protonmail.com>, <yangyingliang@huawei.com>
+Subject: Re: [PATCH v2 07/23] clk: mediatek: clk-mtk: Add dummy clock ops
+Date:   Wed, 28 Dec 2022 15:24:14 +0800
+Message-ID: <20221228072414.26391-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20221223094259.87373-8-angelogioacchino.delregno@collabora.com>
+References: <20221223094259.87373-8-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANXvt5qTbGi7p5Y7eVSjyHJ7MLjiMgGKyAM-LEkJZXvhtSh7vw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 11:24:10AM +0900, Shunsuke Mie wrote:
-> 2022年12月27日(火) 23:37 Michael S. Tsirkin <mst@redhat.com>:
-> >
-> > On Tue, Dec 27, 2022 at 07:22:36PM +0900, Shunsuke Mie wrote:
-> > > 2022年12月27日(火) 16:49 Shunsuke Mie <mie@igel.co.jp>:
-> > > >
-> > > > 2022年12月27日(火) 16:04 Michael S. Tsirkin <mst@redhat.com>:
-> > > > >
-> > > > > On Tue, Dec 27, 2022 at 11:25:26AM +0900, Shunsuke Mie wrote:
-> > > > > > Each vringh memory accessors that are for user, kern and iotlb has own
-> > > > > > interfaces that calls common code. But some codes are duplicated and that
-> > > > > > becomes loss extendability.
-> > > > > >
-> > > > > > Introduce a struct vringh_ops and provide a common APIs for all accessors.
-> > > > > > It can bee easily extended vringh code for new memory accessor and
-> > > > > > simplified a caller code.
-> > > > > >
-> > > > > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > > > > ---
-> > > > > >  drivers/vhost/vringh.c | 667 +++++++++++------------------------------
-> > > > > >  include/linux/vringh.h | 100 +++---
-> > > > > >  2 files changed, 225 insertions(+), 542 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> > > > > > index aa3cd27d2384..ebfd3644a1a3 100644
-> > > > > > --- a/drivers/vhost/vringh.c
-> > > > > > +++ b/drivers/vhost/vringh.c
-> > > > > > @@ -35,15 +35,12 @@ static __printf(1,2) __cold void vringh_bad(const char *fmt, ...)
-> > > > > >  }
-> > > > > >
-> > > > > >  /* Returns vring->num if empty, -ve on error. */
-> > > > > > -static inline int __vringh_get_head(const struct vringh *vrh,
-> > > > > > -                                 int (*getu16)(const struct vringh *vrh,
-> > > > > > -                                               u16 *val, const __virtio16 *p),
-> > > > > > -                                 u16 *last_avail_idx)
-> > > > > > +static inline int __vringh_get_head(const struct vringh *vrh, u16 *last_avail_idx)
-> > > > > >  {
-> > > > > >       u16 avail_idx, i, head;
-> > > > > >       int err;
-> > > > > >
-> > > > > > -     err = getu16(vrh, &avail_idx, &vrh->vring.avail->idx);
-> > > > > > +     err = vrh->ops.getu16(vrh, &avail_idx, &vrh->vring.avail->idx);
-> > > > > >       if (err) {
-> > > > > >               vringh_bad("Failed to access avail idx at %p",
-> > > > > >                          &vrh->vring.avail->idx);
-> > > > >
-> > > > > I like that this patch removes more lines of code than it adds.
-> > > > >
-> > > > > However one of the design points of vringh abstractions is that they were
-> > > > > carefully written to be very low overhead.
-> > > > > This is why we are passing function pointers to inline functions -
-> > > > > compiler can optimize that out.
-> > > > >
-> > > > > I think that introducing ops indirect functions calls here is going to break
-> > > > > these assumptions and hurt performance.
-> > > > > Unless compiler can somehow figure it out and optimize?
-> > > > > I don't see how it's possible with ops pointer in memory
-> > > > > but maybe I'm wrong.
-> > > > I think your concern is correct. I have to understand the compiler
-> > > > optimization and redesign this approach If it is needed.
-> > > > > Was any effort taken to test effect of these patches on performance?
-> > > > I just tested vringh_test and already faced little performance reduction.
-> > > > I have to investigate that, as you said.
-> > > I attempted to test with perf. I found that the performance of patched code
-> > > is almost the same as the upstream one. However, I have to investigate way
-> > > this patch leads to this result, also the profiling should be run on
-> > > more powerful
-> > > machines too.
-> > >
-> > > environment:
-> > > $ grep 'model name' /proc/cpuinfo
-> > > model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-> > > model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-> > > model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-> > > model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
-> > >
-> > > results:
-> > > * for patched code
-> > >  Performance counter stats for 'nice -n -20 ./vringh_test_patched
-> > > --parallel --eventidx --fast-vringh --indirect --virtio-1' (20 runs):
-> > >
-> > >           3,028.05 msec task-clock                #    0.995 CPUs
-> > > utilized            ( +-  0.12% )
-> > >             78,150      context-switches          #   25.691 K/sec
-> > >                ( +-  0.00% )
-> > >                  5      cpu-migrations            #    1.644 /sec
-> > >                ( +-  3.33% )
-> > >                190      page-faults               #   62.461 /sec
-> > >                ( +-  0.41% )
-> > >      6,919,025,222      cycles                    #    2.275 GHz
-> > >                ( +-  0.13% )
-> > >      8,990,220,160      instructions              #    1.29  insn per
-> > > cycle           ( +-  0.04% )
-> > >      1,788,326,786      branches                  #  587.899 M/sec
-> > >                ( +-  0.05% )
-> > >          4,557,398      branch-misses             #    0.25% of all
-> > > branches          ( +-  0.43% )
-> > >
-> > >            3.04359 +- 0.00378 seconds time elapsed  ( +-  0.12% )
-> > >
-> > > * for upstream code
-> > >  Performance counter stats for 'nice -n -20 ./vringh_test_base
-> > > --parallel --eventidx --fast-vringh --indirect --virtio-1' (10 runs):
-> > >
-> > >           3,058.41 msec task-clock                #    0.999 CPUs
-> > > utilized            ( +-  0.14% )
-> > >             78,149      context-switches          #   25.545 K/sec
-> > >                ( +-  0.00% )
-> > >                  5      cpu-migrations            #    1.634 /sec
-> > >                ( +-  2.67% )
-> > >                194      page-faults               #   63.414 /sec
-> > >                ( +-  0.43% )
-> > >      6,988,713,963      cycles                    #    2.284 GHz
-> > >                ( +-  0.14% )
-> > >      8,512,533,269      instructions              #    1.22  insn per
-> > > cycle           ( +-  0.04% )
-> > >      1,638,375,371      branches                  #  535.549 M/sec
-> > >                ( +-  0.05% )
-> > >          4,428,866      branch-misses             #    0.27% of all
-> > > branches          ( +- 22.57% )
-> > >
-> > >            3.06085 +- 0.00420 seconds time elapsed  ( +-  0.14% )
-> >
-> >
-> > How you compiled it also matters. ATM we don't enable retpolines
-> > and it did not matter since we didn't have indirect calls,
-> > but we should. Didn't yet investigate how to do that for virtio tools.
-> I think the retpolines certainly affect performance. Thank you for pointing
-> it out. I'd like to start the investigation that how to apply the
-> retpolines to the
-> virtio tools.
-> > > > Thank you for your comments.
-> > > > > Thanks!
-> > > > >
-> > > > >
-> > > > Best,
-> > > > Shunsuke.
+Hi Angelo,
 
-This isn't all that trivial if we want this at runtime.
-But compile time is kind of easy.
-See Documentation/admin-guide/hw-vuln/spectre.rst
+> In order to migrate some (few) old clock drivers to the common
+> mtk_clk_simple_probe() function, add dummy clock ops to be able
+> to insert a dummy clock with ID 0 at the beginning of the list.
+>
 
+...snip...
+ 
+> +/*
+> + * We need the clock IDs to start from zero but to maintain devicetree
+> + * backwards compatibility we can't change bindings to start from zero.
+> + * Only a few platforms are affected, so we solve issues given by the
+> + * commonized MTK clocks probe function(s) by adding a dummy clock at
+> + * the beginning where needed.
+> + */
+> +#define CLK_DUMMY		0
+>
+
+Reviewed-by: Miles Chen <miles.chen@mediatek.com> 
 
 
 -- 
-MST
+2.39.0
+
 
