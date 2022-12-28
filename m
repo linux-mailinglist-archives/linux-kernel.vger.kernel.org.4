@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69030658586
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 19:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C766658589
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 19:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbiL1SN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 13:13:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
+        id S233821AbiL1SOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 13:14:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiL1SNw (ORCPT
+        with ESMTP id S232778AbiL1SNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 13:13:52 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D8417065;
+        Wed, 28 Dec 2022 13:13:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EF417078;
         Wed, 28 Dec 2022 10:13:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 73694CE1375;
-        Wed, 28 Dec 2022 18:13:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7494C433D2;
-        Wed, 28 Dec 2022 18:13:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DF9DB818B9;
+        Wed, 28 Dec 2022 18:13:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E081FC43392;
+        Wed, 28 Dec 2022 18:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672251228;
-        bh=lVwSaqSZ7IuhavkV9bL4BSr/f9Da8jSkCwPr1LBYck0=;
+        s=k20201202; t=1672251229;
+        bh=XSlxKgFnM+rkJnSuzByNSUGQriIVV3inYNbPunGEF3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=moKj8pZL8Wrj9P/eXsJ1Lgk3vAhAqLZvJdm41aT7jjWHVzU+cDx7eQ76dLuPOcaQg
-         ZFQkAacEzfxqeB2ML0zbu+de2Ew3hki+kAeU9m2yDg8qqJRq568PMKoFCzGhtCaDl3
-         2wIeFSyEspJIkTNow/2PQiG/DjwIvtO2QC7nXfCxy42pC8pigC5/iCBbEpsb5ltGCG
-         3VL6MNymaTUkZexJN/Z5pT7CwV9BfDFK1p1+9b/6NdXd3qzhslDrUrE7b2KOUUmnXX
-         2Hks/s3yPGQManGLBSs/FixP3Db+jcRMPlsaiMu8nfibsV4Tr5TTi0u7V1/fWp519x
-         jdYZEkcXCu7TA==
+        b=eSm5sHNr/1NhZBHmTwggnnuuR7pd1aTogYO+yoNjiZ5nErc700+E5fHgJeiPT1Ky2
+         wLDQWGcUEckWLDsZ4L7I7+D4HR0rHODgofpZl6puN8ldih4BWlB9uR6nuL4UP9TheY
+         r9GNJ039/nqpSlTdIYS1CuF7c1hk2n4fGgcknaJ9Fn6YmZru5/8YipRwc18DmlJR8O
+         hU0XjORPdaVzRvOMazf3aJZ+GKguGjsKaQFjYxw2aBRZGWRMJpFLJMeYRieL5N/u7T
+         K25lmS1Re/PTOdcVRRySo5ET4VmPgxL9Ui5wV+sfTzycdxRikdxURjSPEShDbeByVI
+         W1hV7AuDs+kKA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     robin.murphy@arm.com, joro@8bytes.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        will@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        marijn.suijten@somainline.org, iommu@lists.linux.dev
-Subject: Re: (subset) [PATCH 1/2] dt-bindings: arm-smmu: Add sm8150-smmu-500 to the list of Adreno smmus
-Date:   Wed, 28 Dec 2022 12:13:42 -0600
-Message-Id: <167225121530.949655.3229083574762071501.b4-ty@kernel.org>
+To:     krzysztof.kozlowski@linaro.org, konrad.dybcio@linaro.org,
+        bhupesh.sharma@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        agross@kernel.org
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: qcom: apq8084-ifc6540: fix overriding SDHCI
+Date:   Wed, 28 Dec 2022 12:13:43 -0600
+Message-Id: <167225121526.949655.13443428227538668523.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221213002626.260267-1-konrad.dybcio@linaro.org>
-References: <20221213002626.260267-1-konrad.dybcio@linaro.org>
+In-Reply-To: <20221204084614.12193-1-krzysztof.kozlowski@linaro.org>
+References: <20221204084614.12193-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,20 +57,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Dec 2022 01:26:25 +0100, Konrad Dybcio wrote:
-> From: Marijn Suijten <marijn.suijten@somainline.org>
-> 
-> sm8150 has an smmu-500 specifically for Adreno, where the GPU is allowed
-> to switch pagetables.  Document the allowed 3-compatibles for this,
-> similar to sc7280 and sm8250.
+On Sun, 4 Dec 2022 09:46:14 +0100, Krzysztof Kozlowski wrote:
+> While changing node names of APQ8084 SDHCI, the ones in IFC6540 board
+> were not updated leading to disabled and misconfigured SDHCI.
 > 
 > 
-> [...]
 
 Applied, thanks!
 
-[2/2] arm64: dts: qcom: sm8150: Enable split pagetables for Adreno SMMU
-      commit: c34bef62a0096d1db309db8ffd165a1a6f01f227
+[1/1] ARM: dts: qcom: apq8084-ifc6540: fix overriding SDHCI
+      commit: 0154252a3b87f77db1e44516d1ed2e82e2d29c30
 
 Best regards,
 -- 
