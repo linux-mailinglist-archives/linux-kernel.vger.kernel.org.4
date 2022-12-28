@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74B26574B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB906574B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbiL1Jf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 04:35:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        id S232525AbiL1JgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 04:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiL1Jfw (ORCPT
+        with ESMTP id S232494AbiL1Jfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 04:35:52 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16701E1;
-        Wed, 28 Dec 2022 01:35:49 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id 6so7217450vkz.0;
-        Wed, 28 Dec 2022 01:35:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3sibGBIP0qfr15zCs+LR1FWj+O5p4xMBAwTb8KT3ZFo=;
-        b=ElMpyQfw4EjT7pVErCiIjYzpl5WTibySHAZpxETa4BVArl7fsr9mjYahaMf6ueUx2c
-         fEUyFA/phIDj0kaDm1T7kVDXym+9sfa+9uSKDBEqj5DZ9pql1gHqg0vlmt/JBBtGCYIu
-         tznZtG8UmydP1EyOcSVE7mSEQgCf+gQTkUQFApLOspcKpw3NX0s0AmHkVGPTG2gUOEoX
-         3LKwW5YdaA1BFznohGea70qC55P2RpSE7TCV2ZdAV54U5ivgkl8S0qcjl3lbWcSwOg7h
-         8BNGsxMW8nQvtRBZO8WM+xUKQXXmUCjiUz/pAYHrogYIzMuDIFo5TduYS/h1w3+Eo5Wk
-         9wwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3sibGBIP0qfr15zCs+LR1FWj+O5p4xMBAwTb8KT3ZFo=;
-        b=nhCzcq/kN41EavFOGKtnZ3eppx8eX3Md94Qle8/970f6CqgyvfT5+U80ljJSTUQWlv
-         62LxJ/Z6N2Xy/ETCQe2pexAoSgVpfdasUBYd0iX+PYxnQIcggExTaD0klIkDcWPJbJEC
-         BVvrgeMtPeFirtJPQjlBpgCG+sRZkyk5FlUTxJWZ4/HdX2WdPPSfvesk8vmuDNWXQvZ1
-         MUoRyuuLrG96sK8fmcZbOlaeAgdDzJunnvyjdYmbsqFDkiH5QidR17IVCdKdObE+uh4+
-         k/eZeT6GjlLTNLEMthl3YUou6+J1eMdEaubUk/e4U4c/4uw1gh8byutbub788Uc3Ze9J
-         faKA==
-X-Gm-Message-State: AFqh2krCiOrzo4Pd4OnFyx0UJrDNi6iK0mBJrl4BvWizaXwOBycXeEgG
-        eLM3hrsg6jA91287qVOCZDvxghIqtkzXvyH6dE8=
-X-Google-Smtp-Source: AMrXdXu2vG/opw86gJxJic7D2pXoI0xu8KoLJ3tKlVtyUwLrpZVECwWc7O02O0XkPUZCRxdlL3IsKI++4Td+5L4funY=
-X-Received: by 2002:a1f:a954:0:b0:3b8:ba98:bd43 with SMTP id
- s81-20020a1fa954000000b003b8ba98bd43mr2717589vke.34.1672220148952; Wed, 28
- Dec 2022 01:35:48 -0800 (PST)
+        Wed, 28 Dec 2022 04:35:55 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D931D2D2;
+        Wed, 28 Dec 2022 01:35:54 -0800 (PST)
+Received: from dggpemm500017.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NhmWM3whyz9t29;
+        Wed, 28 Dec 2022 17:31:59 +0800 (CST)
+Received: from [10.174.178.220] (10.174.178.220) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 28 Dec 2022 17:35:51 +0800
+Message-ID: <25b89f97-0cac-7611-c20f-3140565219c4@huawei.com>
+Date:   Wed, 28 Dec 2022 17:35:51 +0800
 MIME-Version: 1.0
-References: <20221223032859.3055638-1-milkfafa@gmail.com> <20221223032859.3055638-3-milkfafa@gmail.com>
- <2a88ee33-91ab-431f-b9ce-472dc64f7430@linaro.org>
-In-Reply-To: <2a88ee33-91ab-431f-b9ce-472dc64f7430@linaro.org>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Wed, 28 Dec 2022 17:35:37 +0800
-Message-ID: <CADnNmFrchhZqv_KzXq1RGQXhFF5A8G_CkXzgT+7Rj+--7cfdtw@mail.gmail.com>
-Subject: Re: [PATCH v17 2/3] dt-bindings: edac: nuvoton: Add document for NPCM
- memory controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        benjaminfair@google.com, yuenn@google.com, venture@google.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, ctcchien@nuvoton.com,
-        kflin@nuvoton.com, Rob Herring <robh@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 0/2] scsi:donot skip lun if inquiry returns PQ=1 for all
+ hosts
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuzhiqiang (I)" <liuzhiqiang26@huawei.com>,
+        linfeilong <linfeilong@huawei.com>,
+        Andrey Melnikov <temnota.am@gmail.com>
+References: <20221214070846.1808300-1-haowenchao@huawei.com>
+ <Y5rHX95Vvl1aLhbp@infradead.org>
+ <57c12317-c229-8cbe-b3d2-d799ea5f554c@huawei.com>
+ <Y5waet8RoXKQHDR7@infradead.org>
+ <5129c84b-38e5-8be4-6411-fcc003776d70@huawei.com>
+ <Y6XPRfgLSUShN+mY@infradead.org>
+From:   Wenchao Hao <haowenchao@huawei.com>
+In-Reply-To: <Y6XPRfgLSUShN+mY@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggpeml500003.china.huawei.com (7.185.36.200) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,11 +64,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Add dt-bindings document for Nuvoton NPCM memory controller.
->
-> Subject: use "memory-controllers" prefix, not edac.
+On 2022/12/23 23:54, Christoph Hellwig wrote:
+> On Fri, Dec 16, 2022 at 07:41:26PM +0800, Wenchao Hao wrote:
+>> For nothing, I want the iscsi_tcp transport do not skip PQ=1 default
+>> as what it did before commit 948e922fc4461 ("scsi: core: map PQ=1,
+>> PDT=other values to SCSI_SCAN_TARGET_PRESENT").
+> 
+> Well, that commit was very much intentional and is now three an a half
+> years old, so we've not just going to partially revert it on a
+> per-transport basis when it is in no way transport related.
+> 
+> If you can come up with a good enough rationale we could do the
+> sysfs override, but so far the reason mostly seems to be "I want"
+> and not anctual explanation of why it is useful.
+> .
 
-Thanks for the review. I'll correct it in the next patch.
 
-Regards,
-Marvin
+Sorry, I did not describe in detail.
+
+Here is the reason of my patches.
+
+1. The SPC did not tell PQ=1 means the addressed lun is invalid explicitly.
+2. scsi_bus_match() would prevent luns with PQ=1 be handled by any scsi
+   drivers, so the only influence if we do not skip luns with PQ=1 is we
+   would add an scsi_device and an sg device.
+
+The reason I force a specific behavior for iSCSI:
+
+1. This issue is occurred with iSCSI, it means there are scenarios where
+   targets would return PQ=1 for an valid LUN which should not be skipped.
+2. The changes for iSCSI could be tested
+
+I did not change other transports' behavior is because I do not know if PQ=1
+would be returned, and I do not have the related environment. If other
+transports like adaptec raid also needs these changes, they can override
+the default value by other patches.
+
+Thanks.
+
