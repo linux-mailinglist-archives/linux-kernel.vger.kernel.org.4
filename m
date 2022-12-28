@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B8C657201
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 03:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DE1657209
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 03:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232637AbiL1CJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 21:09:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
+        id S232523AbiL1CQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 21:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbiL1CJY (ORCPT
+        with ESMTP id S229840AbiL1CQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 21:09:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381A9DFC2;
-        Tue, 27 Dec 2022 18:09:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B83F4611F2;
-        Wed, 28 Dec 2022 02:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F904C433D2;
-        Wed, 28 Dec 2022 02:09:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672193361;
-        bh=0+9mbLzHdVINwOD8vgA/LPr1HjdwcqowwuSzxvl7dXI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aeWc+l1u/GpeRN6IHZfdLNkL8f8QnVLmPhoDo3v7jJ5UYL/GYcKP7FF3ARl0YfVRp
-         w3873WEAGUoq7z/E5YbwvCHXk75rJ+c44eesw3h6fylZTk1UEBb3Py3e2raHxojxQm
-         bkNqVLJ6n7lKQMRuXR77bf7Xm/gJr5hyYA0KViggYysry68z67sUte+xPFApUAeX5w
-         aOPcDHXvCq3Rdgklwu88jKx988Gn5cUdQdNxoc7mwt/4ndbeslOR+5bY8C52qt7JFT
-         C9pUKBfrC1T8ncUFsUj2F3dDXgYAiSQOMlD5ghOxS2ooCetb4GWnZsLoHLsXEmR20j
-         UUHQYNhlt+MjA==
-From:   SeongJae Park <sj@kernel.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     SeongJae Park <sj@kernel.org>, akpm@linux-foundation.org,
-        alexander.h.duyck@linux.intel.com, paulmck@kernel.org,
-        linux-mm@kvack.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm/page_reporting: replace rcu_access_pointer() with rcu_dereference_protected()
-Date:   Wed, 28 Dec 2022 02:09:18 +0000
-Message-Id: <20221228020919.1511138-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <4bc4ab74-3ccd-f892-b387-d48451463d3c@huawei.com>
-References: 
+        Tue, 27 Dec 2022 21:16:40 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3E01B7;
+        Tue, 27 Dec 2022 18:16:39 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BS1e1RF007633;
+        Wed, 28 Dec 2022 02:16:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=asIZrBR6xvoEHqV5/o1Frexo0Xgux3N4ZgpDKGq0nec=;
+ b=UbgD9g1DJxgbwpPkYcJmF83gdYMwVZG2WD/dAsbwIekFXFDWQdSukmD1e6EEqph6pFSg
+ v9/pQhwiXxmi5Gul74b7x6sGjLSwFN5og9RornllusEAcHBr2fZeDT3qv4uMLxNR6ELQ
+ 7ps51TTIwpQUVs5gurgMksiZ3yg8RpZ2Wut/yJzRV92odXEluy6PY6FOThbGSLBQKnG2
+ Crvt+IoViRV+1uadlHy+hKhnwKLyCOjNCthyWzKwBvKPbWHY91Ou5CMRH+B1+Xa/rClS
+ 3qZ20UUKTtprV08M2WIAEAiW2NMYopnA8S1PDsX9d2Hqkr2HIIcHH74qBfaLw3v7QJLK pg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mntqf5ts6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 02:16:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BS2GXLR023805
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 02:16:33 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 27 Dec 2022 18:16:32 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6 0/2] do not complete dp_aux_cmd_fifo_tx() if irq is not for aux transfer
+Date:   Tue, 27 Dec 2022 18:16:23 -0800
+Message-ID: <1672193785-11003-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: FYK6c7lTJE-D1dW2y-yedrIu3XKBbw9d
+X-Proofpoint-ORIG-GUID: FYK6c7lTJE-D1dW2y-yedrIu3XKBbw9d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-27_18,2022-12-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 adultscore=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=821 clxscore=1015 mlxscore=0
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212280015
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Dec 2022 09:45:00 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+ignore spuriors isr at dp_aux_isr() to fixed eDP edid read failed
 
-> On 2022/12/28 9:29, SeongJae Park wrote:
-> > Page reporting fetches pr_dev_info using rcu_access_pointer(), which is
-> > for safely fetching a pointer that will not be dereferenced but could
-> > concurrently updated.  The code indeed does not dereference pr_dev_info
-> > after fetcing it using rcu_access_pointer(), but it fetches the pointer
-> 
-> Thanks for your work. Might something to improve.
-> 
-> s/fetcing/fetching/
-> 
-> > while concurrent updtes to the pointer is avoided by holding the update
-> 
-> s/updtes/updates/
+Kuogee Hsieh (2):
+  drm/msm/dp: do not complete dp_aux_cmd_fifo_tx() if irq is not for aux
+    transfer
+  drm/msm/dp: enhance dp controller isr
 
-Thank you!  I shall add these to scripts/spelling.txt.
+ drivers/gpu/drm/msm/dp/dp_aux.c     | 97 ++++++++++++++++++++++++++-----------
+ drivers/gpu/drm/msm/dp/dp_aux.h     |  2 +-
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 12 ++++-
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
+ drivers/gpu/drm/msm/dp/dp_display.c | 16 ++++--
+ 5 files changed, 92 insertions(+), 37 deletions(-)
 
-> 
-> > side lock, page_reporting_mutex.
-> > 
-> > In the case, rcu_dereference_protected() is recommended because it
-> > provides better readability and performance on some cases, as
-> > rcu_dereference_protected() avoids use of READ_ONCE().  Replace the
-> > rcu_access_pointer() calls with rcu_dereference_protected().
-> > 
-> > Signed-off-by: SeongJae Park <sj@kernel.org>
-> > ---
-> > Changes from v1
-> > (https://lore.kernel.org/linux-mm/20221227192158.2553-1-sj@kernel.org/)
-> > - Explicitly set the protection condition (Matthew Wilcox)
-> > 
-> >  mm/page_reporting.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/mm/page_reporting.c b/mm/page_reporting.c
-> > index 79a8554f024c..5c557a3e1423 100644
-> > --- a/mm/page_reporting.c
-> > +++ b/mm/page_reporting.c
-> > @@ -356,7 +356,8 @@ int page_reporting_register(struct page_reporting_dev_info *prdev)
-> >  	mutex_lock(&page_reporting_mutex);
-> >  
-> >  	/* nothing to do if already in use */
-> > -	if (rcu_access_pointer(pr_dev_info)) {
-> > +	if (rcu_dereference_protected(pr_dev_info,
-> > +				lockdep_is_held(&page_reporting_order))) {
-> 
-> I think it should be lockdep_is_held(&page_reporting_mutex) instead of
-> lockdep_is_held(&page_reporting_order) here?
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-You're right, thank you for finding this.
-
-I will fix these in the next version.
-
-
-Thanks,
-SJ
-
-> 
-> Thanks,
-> Miaohe Lin
