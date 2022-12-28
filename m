@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2D7657A45
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 16:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79CA657A62
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 16:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbiL1PJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 10:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S232861AbiL1PLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 10:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbiL1PJb (ORCPT
+        with ESMTP id S233734AbiL1PLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 10:09:31 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0EF13E3D;
-        Wed, 28 Dec 2022 07:09:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672240160; x=1703776160;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fdP0nh1OD1wvErCaU7T6b8HwCVcBr17oElrYcEN5+No=;
-  b=chOzYeWml2pigiNoXhR7iH18hvNjoPDmysXlUMSONwzkwBhveK8pZCJu
-   beMMk+a8U1tLMv9XmvbrauN2mfiJVrl1v8jNZ0l3j1mejJcvB+uRKZr2c
-   44Xpmpl3F8p0eJswfu2kw4Rx8XfvtBCTRraz4as3CzD+3A3ZQ/DuDW+mb
-   GBP0FAMjOu3uLOlgKU9YMElbqoqJS2dv3zo4ymRUZ/97j/MMYKl8AqseF
-   0uKZcOMmRWr6im/lUn9hburCDF7d1fwK6UpCUJNKgdkM/qq2O8SL4jlrw
-   MTwpn7QZ4/V5IzL9k5QomUt0luJ7b74dz0qBG+A3ZBA6UP/weriUTOany
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="385309686"
-X-IronPort-AV: E=Sophos;i="5.96,281,1665471600"; 
-   d="scan'208";a="385309686"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 07:09:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="603359287"
-X-IronPort-AV: E=Sophos;i="5.96,281,1665471600"; 
-   d="scan'208";a="603359287"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 28 Dec 2022 07:09:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pAY3O-000gDi-0l;
-        Wed, 28 Dec 2022 17:09:14 +0200
-Date:   Wed, 28 Dec 2022 17:09:13 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hanna Hawa <hhhawa@amazon.com>
-Cc:     wsa@kernel.org, linus.walleij@linaro.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
-        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, farbere@amazon.com, itamark@amazon.com
-Subject: Re: [PATCH v4 2/2] i2c: Set i2c pinctrl recovery info from it's
- device pinctrl
-Message-ID: <Y6xcGWK7ghrQIjL/@smile.fi.intel.com>
-References: <20221221205116.73941-1-hhhawa@amazon.com>
- <20221221205116.73941-3-hhhawa@amazon.com>
+        Wed, 28 Dec 2022 10:11:03 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8718713E08;
+        Wed, 28 Dec 2022 07:11:02 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so9990783otk.8;
+        Wed, 28 Dec 2022 07:11:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BEi2X8IqqjxNARHjcUaUwyHSrSwQ2u3CkgJ6q6RIUNQ=;
+        b=EoezPrGxjN3BbswTSuUUGvmgpJSYbca9QQWKmY41lEUb8vU0J8a5JhBbLmJcLsYxTM
+         MDKHc/wC7yxtlfWcZMv5NYT6pZmGfSWSlv3zMpJiC6d1CUM//lrN+wK5xNveFjb6rOgI
+         h78F+NeWLFoH4wDzgnCS9RlrKoYgHUBiTRWMGcIWqRGMiQdghy96F6z4wKmonsKBryrC
+         MvlKESd7HhQspVoQcDS7oaRTKUBcdxHlYRK+qW81hflJtQhqTVV8luu9yOCXJBzYI/6l
+         02gga2dLLM4boYP0+LAxZUd9LUaFr0bU1I/lBTJlaYukEq2DKWgpLcvsNJuPdBRjdlKz
+         J3kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BEi2X8IqqjxNARHjcUaUwyHSrSwQ2u3CkgJ6q6RIUNQ=;
+        b=DLdqknmDARWEq+DaoKgBGCbRd/EUE3WKqLsBlw2JYhf7E1/PxTE5CpnOS5eVIuAKQ0
+         YjraBBKDotTMOpvvqyGsYydkbRqltwPyaM6LRX7TS+egJ6lUKE0V8cUBK9Y0By2nGdAn
+         fCB9eDqzPrU6kZdhbim+VKIL0NFZYtClQrJwPKHoepu2fTWfs4EnTFZlUtc4SvSQyRhD
+         nSDUqQ0TdSRmri+N30VdCJdtHVi1l3Tn2jsd1NJGiqEi28yckaFSTXMdstc7Uc28LGsi
+         fNqtHDMX5+hJ8iHKXBBCmiVn6BGF+OyEBfOKXYY4SU3UmS9VsMi4HncBobBD90GzqJ07
+         TlMw==
+X-Gm-Message-State: AFqh2koPcN99i/XfaiNIycDN/hFngQtnFkJYe//IO6BE55G6CRPreEHC
+        1BoAX8V4ckzsKacLDbrxv90=
+X-Google-Smtp-Source: AMrXdXvFx2Y6Snk+TpNsxxKH5WFlAffqZKHDWNvb2TMTuqkduNKnzjfIvlKAMzDqrXI4ZjIbpz8E+g==
+X-Received: by 2002:a9d:694b:0:b0:66c:5797:5c22 with SMTP id p11-20020a9d694b000000b0066c57975c22mr12439741oto.14.1672240261839;
+        Wed, 28 Dec 2022 07:11:01 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id db6-20020a0568306b0600b00683e4084740sm4066034otb.10.2022.12.28.07.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 07:11:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 28 Dec 2022 07:10:59 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
+Message-ID: <20221228151059.GA2565317@roeck-us.net>
+References: <20221228144330.180012208@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221221205116.73941-3-hhhawa@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221228144330.180012208@linuxfoundation.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 08:51:16PM +0000, Hanna Hawa wrote:
-> Currently the i2c subsystem rely on the controller device tree to
-> initialize the pinctrl recovery information, part of the drivers does
-> not set this field (rinfo->pinctrl), for example i2c designware driver.
-
-DesignWare
-
-> The pins information is saved part of the device structure before probe
-> and it's done on pinctrl_bind_pins().
+On Wed, Dec 28, 2022 at 03:25:39PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.2 release.
+> There are 1146 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Make the i2c init recovery to get the device pins if it's not
-> initialized by the driver from the device pins.
+> Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
+> Anything received after that time might be too late.
+> 
 
-...
+Building arm:allmodconfig ... failed
+Building arm64:allmodconfig ... failed
+--------------
+Error log:
+drivers/mfd/qcom_rpm.c: In function 'qcom_rpm_remove':
+drivers/mfd/qcom_rpm.c:680:26: error: unused variable 'rpm' [-Werror=unused-variable]
+  680 |         struct qcom_rpm *rpm = dev_get_drvdata(&pdev->dev);
 
-> -	struct pinctrl *p = bri->pinctrl;
-> +	struct pinctrl *p;
-> +
-> +	bri->pinctrl = bri->pinctrl ?: dev_pinctrl(dev->parent);
-> +	p = bri->pinctrl;
+36579aca877a ("mfd: qcom_rpm: Fix an error handling path in qcom_rpm_probe()")
+was applied without e48dee960462 ("mfd: qcom_rpm: Use
+devm_of_platform_populate() to simplify code") which fixes the problem
+without saying that it does.
 
-What about
+The problem affects v5.15.y and v6.0.y as well.
 
-	struct pinctrl *p = bri->pinctrl ?: dev_pinctrl(dev->parent);
-
-	bri->pinctrl = p;
-
-?
-
-Seems like one line of code less.
-
-Either way,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Guenter
