@@ -2,103 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A599B65767B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652BF657685
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiL1Mey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:34:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
+        id S232847AbiL1MhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbiL1Mev (ORCPT
+        with ESMTP id S232929AbiL1MhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:34:51 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F25710040;
-        Wed, 28 Dec 2022 04:34:51 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id e21so1063831pfl.1;
-        Wed, 28 Dec 2022 04:34:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Frx76nYEfOImaf2Qpg6M0j5kIFUXt3fVGDIGwcWIJWU=;
-        b=IA3i3fizu8ALp34ROwZ9WX/+jBZBtGBaQO5fyEOdNT9zSLHY93lCP9CKm2HYX3ndID
-         JeUmi/sccAQAZUNqrLgQG46eIgp5B/EQL4DtATOXl9bMITfhSYrp6KIZCUemJHGOUTrW
-         WzLvSZuxVsdKoWKVa/3c5kea+lwdO0VNHENzItLexxYEAln9CbDkttN7bbyxIijIw9N7
-         JmkxeY4N+CN9Wk1y3tsGdS0CdK0WNhQXHv133lTPPrGXDgdiAVrn1FUUvwKXca/l3fV8
-         A5shyFZ3xPfraqqWCxFYboVKDaf8sU5au/wlApa3HNjZh9v3ZywfbagIPYVL0mF2fDvp
-         qjpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Frx76nYEfOImaf2Qpg6M0j5kIFUXt3fVGDIGwcWIJWU=;
-        b=FThEbVb+ISXvEG3W8w5W2q80LgSzS1wf5AnN5LifdY9UfQVHpbDbXHbGhKTcebYTNI
-         v3EOoaXkK0jhhioxRhV79w42FKd5fIAoDrkoAz/J4j+qz1udSOy/9LMjJoPmb3YCzbbW
-         v34Wm5K5MQ9WPX0SpuMna1Ms8paLU/MNN87pIDcNQujBbDuYne01WnxniRGmFl3KG6Fl
-         ZEERQgXtUrA/2jZDcCwbkekFlTPrxKgCAeUFCoH+beqW9tOz5GiFxNb0O70zDP1XNsf6
-         spETUELopS51/KRgLZhY6iRyFNr4hnHoANjPsJrmCb025NqDKZv+8/ozRCh6faAV7vW7
-         FPUw==
-X-Gm-Message-State: AFqh2kp+0lhCPXfX+HpOEw1Hb60FIhGTTJpISs9fYPszuiqTOprVZJmR
-        WkanXMMj9lAMoDtWPFdhVVI=
-X-Google-Smtp-Source: AMrXdXuCA1sVh9R+K43kQWAzkRUlycUPMWUwLCzkFFdGSyeXG/PJ2jtylsFq7g8tsp08ks0YsGrMIA==
-X-Received: by 2002:aa7:96aa:0:b0:581:3b0e:803c with SMTP id g10-20020aa796aa000000b005813b0e803cmr9683672pfk.7.1672230890621;
-        Wed, 28 Dec 2022 04:34:50 -0800 (PST)
-Received: from [192.168.43.80] (subs03-180-214-233-21.three.co.id. [180.214.233.21])
-        by smtp.gmail.com with ESMTPSA id w66-20020a623045000000b0057fec210d33sm10171449pfw.152.2022.12.28.04.33.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 04:34:50 -0800 (PST)
-Message-ID: <32a201f7-fb1a-0651-6b82-b2593e56e759@gmail.com>
-Date:   Wed, 28 Dec 2022 19:33:53 +0700
+        Wed, 28 Dec 2022 07:37:08 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8881057D;
+        Wed, 28 Dec 2022 04:37:07 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BSCatOp126422;
+        Wed, 28 Dec 2022 06:36:55 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672231015;
+        bh=O2Hz9Uvtnd+mG34FJzY1H/GA1klNaJL0QZfQb3d9kfY=;
+        h=From:To:CC:Subject:Date;
+        b=TI1bvCpWE/6Ij7fMFfjrHZck0cNcwJYaRqLDNA4kxmvY+C2qQmPePk5OzEZ4tgOCN
+         g+Y/rWANr8f/RbmW6lO0XljFPnkJoxGvrroSx+HjAi+s+2u5SDbsDuvqAgPhduKmzX
+         T6MiPH0a2jupG9V92SkPj4djhGIE5L6EpYQ9nros=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BSCatlQ055671
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 28 Dec 2022 06:36:55 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 28
+ Dec 2022 06:36:55 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 28 Dec 2022 06:36:55 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BSCatiw064113;
+        Wed, 28 Dec 2022 06:36:55 -0600
+From:   Hari Nagalla <hnagalla@ti.com>
+To:     <andersson@kernel.org>, <devicetree@vger.kernel.org>,
+        <mathieu.poirier@linaro.org>, <p.zabel@pengutronix.de>,
+        <linux-remoteproc@vger.kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>
+CC:     <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
+        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>,
+        <devarsht@ti.com>
+Subject: [PATCH 0/2] Add C7xv DSP for AM62A
+Date:   Wed, 28 Dec 2022 06:36:53 -0600
+Message-ID: <20221228123655.15384-1-hnagalla@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1] Documentation: process: Document suitability of Proton
- Mail for kernel development
-To:     Conor Dooley <conor@kernel.org>, corbet@lwn.net
-Cc:     Conor Dooley <conor.dooley@microchip.com>, broonie@kernel.org,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221228000330.3971104-1-conor@kernel.org>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221228000330.3971104-1-conor@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/22 07:03, Conor Dooley wrote:
-> +
-> +Proton Mail
-> +***********
-> +
-> +Proton Mail has a "feature" where it looks up keys using Web Key Directory
-> +(WKD) and encrypts mail to any email recipients for which it finds a key.
-> +Kernel.org publishes the WKD for all developers who have kernel.org accounts.
-> +As a result, emails sent using Proton Mail to kernel.org addresses will be
-> +encrypted.
-> +Unfortunately, Proton Mail does not provide a mechanism to disable the
-> +automatic encryption, viewing it as a privacy feature.
-> +This affects mail sent from their web GUI, from other mail clients using their
-> +mail "bridge", as well as patches sent using ``git send-email``.
-> +Unless a way to disable this "feature" is introduced, Proton Mail is unsuited
-> +to kernel development.
+AM62A SoC family has a C7xv DSP subsystem with Analytics engine. This
+susbystem is intended for deep learning purposes. C7xv is similar to C71
+DSPs on K3 J7 SoCs with additional harware accelerators and IP updates
+for deep learining.
 
-All mails sent via Proton Mail SMTP relay? Also, why is sending encrypted emails
-to public mailing lists (like LKML) not a good idea?
+Hari Nagalla (2):
+  dt-bindings: remoteproc: k3-dsp: update bindings for AM62A SoCs
+  remoteproc: k3-c7x: Add support for C7xv DSP on AM62A SoC
 
-Thanks.
+ .../bindings/remoteproc/ti,k3-dsp-rproc.yaml         |  3 +++
+ drivers/remoteproc/ti_k3_dsp_remoteproc.c            | 12 ++++++++++++
+ 2 files changed, 15 insertions(+)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.17.1
 
