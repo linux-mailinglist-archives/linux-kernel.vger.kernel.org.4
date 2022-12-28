@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C846571D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 02:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5606571D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 02:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiL1BuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 20:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
+        id S232589AbiL1BuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 20:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbiL1Btf (ORCPT
+        with ESMTP id S232494AbiL1Btf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Dec 2022 20:49:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9355F21
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8271005
         for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 17:48:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672192100;
+        s=mimecast20190719; t=1672192101;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UzhOyd87pzqH2lLPP8bW2hUWTvEpAwSTndaCbjcNTpo=;
-        b=FYR4XCck0qoo4lrIJwA2nmwuwYMRP62xBQjQQ31JKt75zJwKd2/JCTB4jJlaH1x+Vcym1F
-        pZ4xw4M8bZ5REmdmJgrwmXr/U87alrkuiMiYAKWJsW2gHeYXxrFBxiZDm3B/VQwN5cpH2U
-        1lcRNkH1RDcHbWZzNOMrX0G0zYN+JD4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=lU6VOUG1vSrY2tpqFwz0Ej2kvheVmIlXVmdfOeOCkyw=;
+        b=GQzqP9FQJjJVYKhkVYY4B6l8FOhbm8pWnudUSY9Ujf1wjC1czr/IiGKBo8Lw7VZRaTi8Tz
+        KxF8PBI1ahM78keleONEGB45v4DoVi0gr3IxnVvqbAFjMjZ2Wnng1MoIZ4EBSLxK/LTRGP
+        MurRtYc/AUwbeGKH5IWpKQETZxTiyRI=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-75-B8WGzFoqPuC-5jCDdzrxAg-1; Tue, 27 Dec 2022 20:48:18 -0500
-X-MC-Unique: B8WGzFoqPuC-5jCDdzrxAg-1
-Received: by mail-wm1-f72.google.com with SMTP id fm25-20020a05600c0c1900b003d9702a11e5so5976339wmb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 17:48:18 -0800 (PST)
+ us-mta-356-vTvclH96PWm6Ke5CkmhAaA-1; Tue, 27 Dec 2022 20:48:19 -0500
+X-MC-Unique: vTvclH96PWm6Ke5CkmhAaA-1
+Received: by mail-wm1-f70.google.com with SMTP id bg10-20020a05600c3c8a00b003d9717d882eso6800885wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 17:48:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UzhOyd87pzqH2lLPP8bW2hUWTvEpAwSTndaCbjcNTpo=;
-        b=QgBexI3Ab3HY7ATaJ3jD/ye5PIeDPyx9r9NhnkNDL0gBZnNGucN3poDldTN61NIrdu
-         c9E5E6YL1DR3/jQVEHOt5SxlywUplmC/TlaVQ+8zBvpRfTUaK8M9QNMvEJspAQGCNTQp
-         W0G0zTDwhOCqHDtk3YKLbG04o6a0KWbP2/q/pEnqX8yHyd5hZST87RONNH6F6Dvm1/W5
-         2wvUTcEDyutvh+uXb0JqBt9pz5HBHxDo+BCWfZB6gKSnuP2McyzDNDlZIIY3g4+AYntk
-         pjIRN3YZCMFfmTL7sUz1ZzVYm0j7uNwSzOYZAeZud1yHn80BPqF9wZyrUcf4k2+72Z3f
-         vJcQ==
-X-Gm-Message-State: AFqh2kp8zppSWP6ECStI1kLNfIpeiDLpBnfZhqBqFa9F/vOlesAQy4qJ
-        UvtcCHHuFkwo8tr3cdhRMA7yuApxvfYRTFSQHfqKtc7zvUNSlD93tkb010Yd0YIaI4QwsAiMS9s
-        C/piPAHXNRW4tmuHpOrMvseRNVG1PsQPRI/+UQxkahKe8x8TCgVr4wn90/barj3p1AVBXS/uekq
-        w=
-X-Received: by 2002:a5d:6244:0:b0:242:eb5:254f with SMTP id m4-20020a5d6244000000b002420eb5254fmr13630617wrv.48.1672192096954;
-        Tue, 27 Dec 2022 17:48:16 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs8CwqFT9w2GCJT0hpiJ5lnmv6UiA/bcKXFdt9OP764WinkWZC0pn6kDbgah1SaCPsH72jgNA==
-X-Received: by 2002:a5d:6244:0:b0:242:eb5:254f with SMTP id m4-20020a5d6244000000b002420eb5254fmr13630603wrv.48.1672192096692;
-        Tue, 27 Dec 2022 17:48:16 -0800 (PST)
+        bh=lU6VOUG1vSrY2tpqFwz0Ej2kvheVmIlXVmdfOeOCkyw=;
+        b=SIWQ71bVYM9xjV4xzwqjZ6iZ0QJs4LFcM7RwomB4wFenPQJRfpr2LUiVpFno1DAepr
+         aGkiPYdhBpDp9FPa0GY1Ex2eUvfdgAX46+1iLOqfO+BG4fGh1+YmVWMcy2I8bA/RohI0
+         x3skDOw9pHY2qZMghttwBCJossND9HruOSWyQ+XGSlGXuMSzTLKcqwFe0OSjz8Vld9Ys
+         GjCs6T604gsJ2EIM2I8wo3yJDgJVD8U9i+i3YM0jsJdPrJhqRv0D/gIuXLi4yiZ0dG3I
+         muLEniNP3+2JG2FRs/CpeJflko8mNdP/2O7vAMVCAdAYeFL8DfaeI6snKG5TZcO8mU1i
+         wQ9w==
+X-Gm-Message-State: AFqh2kpgE5dTEaHK71SY36uJj2whQKmfHvSWTjE6wvihs/GQ7ip65XL0
+        bcivanlkaIOAbjFd2c9QOQ7ZzBM9Ud5Oz0c/hraIqltdReAnXvcFdSz+aiM5czQ/molv9kltvo3
+        RybLcqtyn8orbi5F3kI4UwKLjx121DCi3FaiA5HgP2/0r9pTKYqfnr3AQYLgk6rVVBq0kBdXygw
+        g=
+X-Received: by 2002:adf:9b99:0:b0:241:fa2d:dea0 with SMTP id d25-20020adf9b99000000b00241fa2ddea0mr14018196wrc.3.1672192098242;
+        Tue, 27 Dec 2022 17:48:18 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtFinSDNvZD1/lFP5JuaVSl0nj8OZdwp1w6kixV9ufXdaQQ+vqUKiQuRf6PKWrFwFLIszkKlw==
+X-Received: by 2002:adf:9b99:0:b0:241:fa2d:dea0 with SMTP id d25-20020adf9b99000000b00241fa2ddea0mr14018183wrc.3.1672192097961;
+        Tue, 27 Dec 2022 17:48:17 -0800 (PST)
 Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id k16-20020a056000005000b002258235bda3sm14158873wrx.61.2022.12.27.17.48.15
+        by smtp.gmail.com with ESMTPSA id k16-20020a056000005000b002258235bda3sm14158873wrx.61.2022.12.27.17.48.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 17:48:16 -0800 (PST)
+        Tue, 27 Dec 2022 17:48:17 -0800 (PST)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Javier Martinez Canillas <javierm@redhat.com>,
@@ -65,9 +65,9 @@ Cc:     Javier Martinez Canillas <javierm@redhat.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH 09/14] drm/panel-samsung-s6e88a0-ams452ef01: Drop custom DSI write macro
-Date:   Wed, 28 Dec 2022 02:47:52 +0100
-Message-Id: <20221228014757.3170486-10-javierm@redhat.com>
+Subject: [PATCH 10/14] drm/panel-samsung-sofef00: Drop custom DSI write macro
+Date:   Wed, 28 Dec 2022 02:47:53 +0100
+Message-Id: <20221228014757.3170486-11-javierm@redhat.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221228014757.3170486-1-javierm@redhat.com>
 References: <20221228014757.3170486-1-javierm@redhat.com>
@@ -89,15 +89,15 @@ that instead and delete the custom DSI write macro defined in the driver.
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
 
- .../panel/panel-samsung-s6e88a0-ams452ef01.c  | 24 +++++++------------
+ drivers/gpu/drm/panel/panel-samsung-sofef00.c | 24 +++++++------------
  1 file changed, 8 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams452ef01.c b/drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams452ef01.c
-index 97ff7a18545c..e94d88fed4f3 100644
---- a/drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams452ef01.c
-+++ b/drivers/gpu/drm/panel/panel-samsung-s6e88a0-ams452ef01.c
-@@ -28,14 +28,6 @@ s6e88a0_ams452ef01 *to_s6e88a0_ams452ef01(struct drm_panel *panel)
- 	return container_of(panel, struct s6e88a0_ams452ef01, panel);
+diff --git a/drivers/gpu/drm/panel/panel-samsung-sofef00.c b/drivers/gpu/drm/panel/panel-samsung-sofef00.c
+index 1a0d24595faa..9db49a028930 100644
+--- a/drivers/gpu/drm/panel/panel-samsung-sofef00.c
++++ b/drivers/gpu/drm/panel/panel-samsung-sofef00.c
+@@ -34,14 +34,6 @@ struct sofef00_panel *to_sofef00_panel(struct drm_panel *panel)
+ 	return container_of(panel, struct sofef00_panel, panel);
  }
  
 -#define dsi_dcs_write_seq(dsi, seq...) do {				\
@@ -108,43 +108,36 @@ index 97ff7a18545c..e94d88fed4f3 100644
 -			return ret;					\
 -	} while (0)
 -
- static void s6e88a0_ams452ef01_reset(struct s6e88a0_ams452ef01 *ctx)
+ static void sofef00_panel_reset(struct sofef00_panel *ctx)
  {
- 	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-@@ -54,8 +46,8 @@ static int s6e88a0_ams452ef01_on(struct s6e88a0_ams452ef01 *ctx)
+ 	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
+@@ -67,7 +59,7 @@ static int sofef00_panel_on(struct sofef00_panel *ctx)
+ 	}
+ 	usleep_range(10000, 11000);
  
- 	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+-	dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
++	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
  
--	dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a); // enable LEVEL2 commands
--	dsi_dcs_write_seq(dsi, 0xcc, 0x4c); // set Pixel Clock Divider polarity
-+	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a); // enable LEVEL2 commands
-+	mipi_dsi_dcs_write_seq(dsi, 0xcc, 0x4c); // set Pixel Clock Divider polarity
- 
- 	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+ 	ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
  	if (ret < 0) {
-@@ -65,7 +57,7 @@ static int s6e88a0_ams452ef01_on(struct s6e88a0_ams452ef01 *ctx)
- 	msleep(120);
+@@ -75,13 +67,13 @@ static int sofef00_panel_on(struct sofef00_panel *ctx)
+ 		return ret;
+ 	}
  
- 	// set default brightness/gama
--	dsi_dcs_write_seq(dsi, 0xca,
-+	mipi_dsi_dcs_write_seq(dsi, 0xca,
- 			  0x01, 0x00, 0x01, 0x00, 0x01, 0x00,	// V255 RR,GG,BB
- 			  0x80, 0x80, 0x80,			// V203 R,G,B
- 			  0x80, 0x80, 0x80,			// V151 R,G,B
-@@ -77,11 +69,11 @@ static int s6e88a0_ams452ef01_on(struct s6e88a0_ams452ef01 *ctx)
- 			  0x6b, 0x68, 0x71,			// V3   R,G,B
- 			  0x00, 0x00, 0x00);			// V1   R,G,B
- 	// set default Amoled Off Ratio
--	dsi_dcs_write_seq(dsi, 0xb2, 0x40, 0x0a, 0x17, 0x00, 0x0a);
--	dsi_dcs_write_seq(dsi, 0xb6, 0x2c, 0x0b); // set default elvss voltage
+-	dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+-	dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+-	dsi_dcs_write_seq(dsi, 0xb0, 0x07);
+-	dsi_dcs_write_seq(dsi, 0xb6, 0x12);
+-	dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+-	dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, 0x20);
 -	dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_POWER_SAVE, 0x00);
--	dsi_dcs_write_seq(dsi, 0xf7, 0x03); // gamma/aor update
--	dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5); // disable LEVEL2 commands
-+	mipi_dsi_dcs_write_seq(dsi, 0xb2, 0x40, 0x0a, 0x17, 0x00, 0x0a);
-+	mipi_dsi_dcs_write_seq(dsi, 0xb6, 0x2c, 0x0b); // set default elvss voltage
++	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
++	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
++	mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x07);
++	mipi_dsi_dcs_write_seq(dsi, 0xb6, 0x12);
++	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
++	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, 0x20);
 +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_POWER_SAVE, 0x00);
-+	mipi_dsi_dcs_write_seq(dsi, 0xf7, 0x03); // gamma/aor update
-+	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5); // disable LEVEL2 commands
  
  	ret = mipi_dsi_dcs_set_display_on(dsi);
  	if (ret < 0) {
