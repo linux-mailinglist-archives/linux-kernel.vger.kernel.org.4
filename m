@@ -2,76 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A9D658637
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 20:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DC265863D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 20:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232770AbiL1TEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 14:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
+        id S232071AbiL1TIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 14:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbiL1TEg (ORCPT
+        with ESMTP id S230224AbiL1TIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 14:04:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C4B140A3;
-        Wed, 28 Dec 2022 11:04:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C497615E6;
-        Wed, 28 Dec 2022 19:04:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD1DC43398;
-        Wed, 28 Dec 2022 19:04:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672254274;
-        bh=270cMYLczO9t+ZiiX9URnltykYM4Da7zTeMVapdFzoc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZPkKiokNAOitzsEzke6/2Xw9VDZYjcyjosa4NQcIp4G2Ik66UkY9JOSOBiNn17PV8
-         YWdQJcCRXMUpVldzriM6nvinjgDelDf+05gP5nHpY2/tfzSDnVgkKl+54MSmjV5XY4
-         wjhFd7hTYZVw3rEN0oiIupWPHTMOcvN3q6Dpiey/nwirXGXxP4R9OLuy4OdJiauyG4
-         jkVAVCkXvqLSBW/58gijH7DRF/i6A7w8capbYDpU39uD+vxbCH13pNOJtTVIqAsV3C
-         LHIYkAr+RwMZa/dqUfOfy96LF2RJGoZiqQTJrSSrfx4fpAJ1l94W9Pw0JiEwPEy/Ju
-         CGxNEwI5hvNRA==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, konrad.dybcio@linaro.org,
-        konrad.dybcio@somainline.org, ulf.hansson@linaro.org
-Cc:     quic_mkshah@quicinc.com, dmitry.baryshkov@linaro.org,
-        linux-arm-kernel@lists.infradead.org, amit.pundir@linaro.org,
-        linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
-        linux-arm-msm@vger.kernel.org, quic_rjendra@quicinc.com
-Subject: Re: [PATCH] Revert "arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state"
-Date:   Wed, 28 Dec 2022 13:04:29 -0600
-Message-Id: <167225426553.971585.4004554962729710791.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221122123713.65631-1-ulf.hansson@linaro.org>
-References: <20221122123713.65631-1-ulf.hansson@linaro.org>
+        Wed, 28 Dec 2022 14:08:39 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DDB14D2B;
+        Wed, 28 Dec 2022 11:08:38 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id k137so6487972pfd.8;
+        Wed, 28 Dec 2022 11:08:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LG1TKXfO3Ap1YVLnv1vLNUNgLF1B4SFHf63ToBDBDCg=;
+        b=FNNpqbSgPvg8Ci3s8pZ/cj5NIEYbaKeAAwgKGJqFKYZyOm7nviLlkiR27j7/kHiv9/
+         MuHJB+cBnFGTq7w139IlWJnRhv8C2KUlnGjFT+vzh/7HKB+W1J+kv544ucAy6VfbLFpu
+         W6QtZAcnN0IKj1z01vbj27jp/80bOBXixHgJBJ6pT1WHjrVicdj7AS6l4AIFwdNxFx73
+         oH3j6aMBeqic8o4P0PKi4LnxXJfbp198PDGGlSWomBxm6cxK6IBG5ugd47Fq7dv44h01
+         ZQ75f7yL6ViuO7uK0KUT7guq5DKDPYI7W8Z/SkMd28MppgKVHYRyS51vPJmKT4IhmdUA
+         Wxmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LG1TKXfO3Ap1YVLnv1vLNUNgLF1B4SFHf63ToBDBDCg=;
+        b=jR2ZBc6u2OSI69wrXetqDpoiRr5J5gT6STOwVyUsRSsocd50TgKLehgG4/bjWZfz+L
+         fx1BzhVgG5UcjK+rixhXuO/J0g/Lg155pibgrn6ukZGjDsXEaxvMrKewi1EDF5EjUYcf
+         qG8RQSlhfxs+xldyyeiD78h+4MCe39I1hWTTzz440K+4P9qjoKTN6JjAghEPNbLK9p5X
+         W4tEZWqCl8iLcRKVFSORQAMy+YP4BZTn3ed7NLmOXTBp0U7yDjYAbNl99UDXGhpDpJKc
+         PrnCHDXXxGx3vws70FWcfN6xbV11tX3kaCdDQje7Na7XBWPSdgEzU/b0LgL5UxD6Yl+V
+         DXiA==
+X-Gm-Message-State: AFqh2koRLJohPS4/GT82iWGiMq0WrQaAnQnat+rCGMyAN3KquZKI2M0D
+        cUhfjdeJavZdllt0FEwocCA=
+X-Google-Smtp-Source: AMrXdXs3v3zXwsJDPj1hQvHoDsNZ8SJR/+bixjEBkFAtCi2TvZFCePhcLD/CddXDaxSe9zF7eKZ0HQ==
+X-Received: by 2002:a05:6a00:1255:b0:576:b8e1:862b with SMTP id u21-20020a056a00125500b00576b8e1862bmr33307714pfi.14.1672254517424;
+        Wed, 28 Dec 2022 11:08:37 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id j123-20020a625581000000b00574e84ed847sm10715726pfb.24.2022.12.28.11.08.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 11:08:36 -0800 (PST)
+Message-ID: <e0b14de8-db62-b403-bd23-ee36f99073ae@gmail.com>
+Date:   Wed, 28 Dec 2022 11:08:35 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221228144256.536395940@linuxfoundation.org>
+Content-Language: en-US
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221228144256.536395940@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 13:37:13 +0100, Ulf Hansson wrote:
-> Due to recent improvements of the cluster idle state support for Qcom based
-> platforms, we are now able to support the deepest cluster idle state. Let's
-> therefore revert the earlier workaround.
+
+
+On 12/28/2022 6:31 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.86 release.
+> There are 731 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This reverts commit cadaa773bcf1 ("arm64: dts: qcom: sm8250: Disable the
-> not yet supported cluster idle state"), which is available from v6.1-rc6.
+> Responses should be made by Fri, 30 Dec 2022 14:41:39 +0000.
+> Anything received after that time might be too late.
 > 
-> [...]
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.86-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Applied, thanks!
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-[1/1] Revert "arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state"
-      commit: 6c82b94d583a116faf99858379ee34844df963a1
-
-Best regards,
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Florian
