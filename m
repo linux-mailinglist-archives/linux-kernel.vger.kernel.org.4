@@ -2,62 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3005B657396
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C553965739A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiL1HUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 02:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54952 "EHLO
+        id S231484AbiL1HVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 02:21:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiL1HUG (ORCPT
+        with ESMTP id S229705AbiL1HVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 02:20:06 -0500
-Received: from mr85p00im-ztdg06011801.me.com (mr85p00im-ztdg06011801.me.com [17.58.23.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21705F038
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 23:20:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1672212004; bh=h6QXMJKjXRhLN3M3TBsEF+a1iGTF5nwOodBXfKcg/rw=;
-        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
-        b=YrOY5R0FnmGXU+X8MGGIqdqQMt4FEQTzvV6G/qJ4b6N1QP+2xlMWp5mZh0fTGaFm4
-         zxtOLSGrq2+5pEgr3qHbgdoiMYIKmDGLAokeMePHYCmlsHFzCNRpS/mWpJT3yCMxva
-         ZaGYBysml2A8e0MQUCA/ykBruMxnnrM4Cwo9JByQi4uUEJAo0R//47c/WUydrcsNcn
-         KBr9086S4SVLrtV6wkzNfHuSJ2TFi84+dhSVJN/c9TCKfULN8kDXOsvJwcnzVzyBUy
-         oNDPPLAn7Ed9+dc6dnrea4p6hEDwrILL/pV6lLzdCOJWwptU+AYvKeqtgYj8MqlkWF
-         w8ybMFzjlbpqQ==
-Received: from smtpclient.apple (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-ztdg06011801.me.com (Postfix) with ESMTPSA id B89129C1CB7;
-        Wed, 28 Dec 2022 07:20:03 +0000 (UTC)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.23\))
-Subject: Re: [PATCH 6/7] rust: sync: introduce `UniqueArc`
-From:   Laine Taffin Altman <alexanderaltman@me.com>
-In-Reply-To: <20221228060346.352362-6-wedsonaf@gmail.com>
-Date:   Tue, 27 Dec 2022 23:19:52 -0800
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Wed, 28 Dec 2022 02:21:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F4FF5A0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 23:20:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672212026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7p/vayyP8zWaxjPZEqa7TOM9QZB/OUBM2psrPg6s4TY=;
+        b=XNhzPtEHGrGzkqzELeuXmYgTu2JRi+C8g9HqLpyXecp7RtyY7oHUmH/yWYkz/XP6kJs9hk
+        mL3JSeVnehz+ZFYDfGP/1VvSdUIwUidgmtCteZkNH8Wu/Id0UgehphXe2hp3OOw383nqHx
+        P821EI9IWtA+z7Y2HYJVHm5tjLvQJBc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-75-b8MCS2aTNA2JNmdIZVctwQ-1; Wed, 28 Dec 2022 02:20:24 -0500
+X-MC-Unique: b8MCS2aTNA2JNmdIZVctwQ-1
+Received: by mail-wm1-f71.google.com with SMTP id j1-20020a05600c1c0100b003d99070f529so1469691wms.9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 23:20:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7p/vayyP8zWaxjPZEqa7TOM9QZB/OUBM2psrPg6s4TY=;
+        b=n5bDzpuuKJFf8DwgX4t5vU2UCPrRwAMnCKkrw4LTffmE8J2/9nEA0DuA3R3qpDWlYc
+         EZtKu5jgDFlicGarlfwhZwBl+zuIXHWezSMknYtD+nqNItx0VA533DSagn++4UB5/hzt
+         UR8zfM+pLfw/1HgwbsMOgRFPd9jZ87MKfl50p+SWdBv7ZtfgFQqzhPq/CBna+WEIDjWi
+         IFkUpjwBclIT/rQXOgsrca19OOS6G/crva8FzgsZl+fR6Fmk7x1e0grj3hcPL/eDrEeq
+         Ze09PFiPfdmJ6AdXXpCPCT1Nh40Yt1ZE78T/ehPAg6NWyb5jqrDDr8gvKVgZAyq8Mb8R
+         awRQ==
+X-Gm-Message-State: AFqh2krp/Pn0bt+r701+GqvKodOkdrsNPKVwfAOwMwlgkCQ6qnclS2Jv
+        3obp3L10wYgb28VSCPwEPX8TVESw4s+yICts9sD6KmiRUb3mOKFurWJAEdHs0J5AJHyEvfJOH7p
+        nQXYEzAG2hdXIJtDs0vDXNIUb
+X-Received: by 2002:a7b:cbd4:0:b0:3d3:3d51:7d44 with SMTP id n20-20020a7bcbd4000000b003d33d517d44mr17093104wmi.33.1672212023559;
+        Tue, 27 Dec 2022 23:20:23 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtANV2jcLiF8FOUgRwAbdZCJlTx1cmFHZF/EGV/YNCYif1iFoN8Etw6/Ex+BxcMNQN/2wrnfg==
+X-Received: by 2002:a7b:cbd4:0:b0:3d3:3d51:7d44 with SMTP id n20-20020a7bcbd4000000b003d33d517d44mr17093090wmi.33.1672212023191;
+        Tue, 27 Dec 2022 23:20:23 -0800 (PST)
+Received: from redhat.com ([2.52.151.85])
+        by smtp.gmail.com with ESMTPSA id k31-20020a05600c1c9f00b003d22528decesm26573211wms.43.2022.12.27.23.20.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Dec 2022 23:20:22 -0800 (PST)
+Date:   Wed, 28 Dec 2022 02:20:19 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Shunsuke Mie <mie@igel.co.jp>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <792D12DA-73F0-4218-B0E1-7A0D8C235C21@me.com>
-References: <20221228060346.352362-1-wedsonaf@gmail.com>
- <20221228060346.352362-6-wedsonaf@gmail.com>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-X-Mailer: Apple Mail (2.3731.400.23)
-X-Proofpoint-GUID: DBm9ilUyzi5etzvJXVSIrCyBbuFE_PWX
-X-Proofpoint-ORIG-GUID: DBm9ilUyzi5etzvJXVSIrCyBbuFE_PWX
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2022-01-14=5F01:2022-01-14=5F01,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
- suspectscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 bulkscore=0
- adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2212280058
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Subject: Re: [RFC PATCH 4/9] vringh: unify the APIs for all accessors
+Message-ID: <20221228021354-mutt-send-email-mst@kernel.org>
+References: <20221227022528.609839-1-mie@igel.co.jp>
+ <20221227022528.609839-5-mie@igel.co.jp>
+ <20221227020007-mutt-send-email-mst@kernel.org>
+ <CANXvt5pRy-i7=_ikNkZPp2HcRmWZYNJYpjO_ieBJJVc90nds+A@mail.gmail.com>
+ <CANXvt5qUUOqB1CVgAk5KyL9sV+NsnJSKhatvdV12jH5=kBjjJw@mail.gmail.com>
+ <20221227075332-mutt-send-email-mst@kernel.org>
+ <CANXvt5qTbGi7p5Y7eVSjyHJ7MLjiMgGKyAM-LEkJZXvhtSh7vw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANXvt5qTbGi7p5Y7eVSjyHJ7MLjiMgGKyAM-LEkJZXvhtSh7vw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,245 +87,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 28, 2022 at 11:24:10AM +0900, Shunsuke Mie wrote:
+> 2022年12月27日(火) 23:37 Michael S. Tsirkin <mst@redhat.com>:
+> >
+> > On Tue, Dec 27, 2022 at 07:22:36PM +0900, Shunsuke Mie wrote:
+> > > 2022年12月27日(火) 16:49 Shunsuke Mie <mie@igel.co.jp>:
+> > > >
+> > > > 2022年12月27日(火) 16:04 Michael S. Tsirkin <mst@redhat.com>:
+> > > > >
+> > > > > On Tue, Dec 27, 2022 at 11:25:26AM +0900, Shunsuke Mie wrote:
+> > > > > > Each vringh memory accessors that are for user, kern and iotlb has own
+> > > > > > interfaces that calls common code. But some codes are duplicated and that
+> > > > > > becomes loss extendability.
+> > > > > >
+> > > > > > Introduce a struct vringh_ops and provide a common APIs for all accessors.
+> > > > > > It can bee easily extended vringh code for new memory accessor and
+> > > > > > simplified a caller code.
+> > > > > >
+> > > > > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+> > > > > > ---
+> > > > > >  drivers/vhost/vringh.c | 667 +++++++++++------------------------------
+> > > > > >  include/linux/vringh.h | 100 +++---
+> > > > > >  2 files changed, 225 insertions(+), 542 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> > > > > > index aa3cd27d2384..ebfd3644a1a3 100644
+> > > > > > --- a/drivers/vhost/vringh.c
+> > > > > > +++ b/drivers/vhost/vringh.c
+> > > > > > @@ -35,15 +35,12 @@ static __printf(1,2) __cold void vringh_bad(const char *fmt, ...)
+> > > > > >  }
+> > > > > >
+> > > > > >  /* Returns vring->num if empty, -ve on error. */
+> > > > > > -static inline int __vringh_get_head(const struct vringh *vrh,
+> > > > > > -                                 int (*getu16)(const struct vringh *vrh,
+> > > > > > -                                               u16 *val, const __virtio16 *p),
+> > > > > > -                                 u16 *last_avail_idx)
+> > > > > > +static inline int __vringh_get_head(const struct vringh *vrh, u16 *last_avail_idx)
+> > > > > >  {
+> > > > > >       u16 avail_idx, i, head;
+> > > > > >       int err;
+> > > > > >
+> > > > > > -     err = getu16(vrh, &avail_idx, &vrh->vring.avail->idx);
+> > > > > > +     err = vrh->ops.getu16(vrh, &avail_idx, &vrh->vring.avail->idx);
+> > > > > >       if (err) {
+> > > > > >               vringh_bad("Failed to access avail idx at %p",
+> > > > > >                          &vrh->vring.avail->idx);
+> > > > >
+> > > > > I like that this patch removes more lines of code than it adds.
+> > > > >
+> > > > > However one of the design points of vringh abstractions is that they were
+> > > > > carefully written to be very low overhead.
+> > > > > This is why we are passing function pointers to inline functions -
+> > > > > compiler can optimize that out.
+> > > > >
+> > > > > I think that introducing ops indirect functions calls here is going to break
+> > > > > these assumptions and hurt performance.
+> > > > > Unless compiler can somehow figure it out and optimize?
+> > > > > I don't see how it's possible with ops pointer in memory
+> > > > > but maybe I'm wrong.
+> > > > I think your concern is correct. I have to understand the compiler
+> > > > optimization and redesign this approach If it is needed.
+> > > > > Was any effort taken to test effect of these patches on performance?
+> > > > I just tested vringh_test and already faced little performance reduction.
+> > > > I have to investigate that, as you said.
+> > > I attempted to test with perf. I found that the performance of patched code
+> > > is almost the same as the upstream one. However, I have to investigate way
+> > > this patch leads to this result, also the profiling should be run on
+> > > more powerful
+> > > machines too.
+> > >
+> > > environment:
+> > > $ grep 'model name' /proc/cpuinfo
+> > > model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
+> > > model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
+> > > model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
+> > > model name      : Intel(R) Core(TM) i3-7020U CPU @ 2.30GHz
+> > >
+> > > results:
+> > > * for patched code
+> > >  Performance counter stats for 'nice -n -20 ./vringh_test_patched
+> > > --parallel --eventidx --fast-vringh --indirect --virtio-1' (20 runs):
+> > >
+> > >           3,028.05 msec task-clock                #    0.995 CPUs
+> > > utilized            ( +-  0.12% )
+> > >             78,150      context-switches          #   25.691 K/sec
+> > >                ( +-  0.00% )
+> > >                  5      cpu-migrations            #    1.644 /sec
+> > >                ( +-  3.33% )
+> > >                190      page-faults               #   62.461 /sec
+> > >                ( +-  0.41% )
+> > >      6,919,025,222      cycles                    #    2.275 GHz
+> > >                ( +-  0.13% )
+> > >      8,990,220,160      instructions              #    1.29  insn per
+> > > cycle           ( +-  0.04% )
+> > >      1,788,326,786      branches                  #  587.899 M/sec
+> > >                ( +-  0.05% )
+> > >          4,557,398      branch-misses             #    0.25% of all
+> > > branches          ( +-  0.43% )
+> > >
+> > >            3.04359 +- 0.00378 seconds time elapsed  ( +-  0.12% )
+> > >
+> > > * for upstream code
+> > >  Performance counter stats for 'nice -n -20 ./vringh_test_base
+> > > --parallel --eventidx --fast-vringh --indirect --virtio-1' (10 runs):
+> > >
+> > >           3,058.41 msec task-clock                #    0.999 CPUs
+> > > utilized            ( +-  0.14% )
+> > >             78,149      context-switches          #   25.545 K/sec
+> > >                ( +-  0.00% )
+> > >                  5      cpu-migrations            #    1.634 /sec
+> > >                ( +-  2.67% )
+> > >                194      page-faults               #   63.414 /sec
+> > >                ( +-  0.43% )
+> > >      6,988,713,963      cycles                    #    2.284 GHz
+> > >                ( +-  0.14% )
+> > >      8,512,533,269      instructions              #    1.22  insn per
+> > > cycle           ( +-  0.04% )
+> > >      1,638,375,371      branches                  #  535.549 M/sec
+> > >                ( +-  0.05% )
+> > >          4,428,866      branch-misses             #    0.27% of all
+> > > branches          ( +- 22.57% )
+> > >
+> > >            3.06085 +- 0.00420 seconds time elapsed  ( +-  0.14% )
+> >
+> >
+> > How you compiled it also matters. ATM we don't enable retpolines
+> > and it did not matter since we didn't have indirect calls,
+> > but we should. Didn't yet investigate how to do that for virtio tools.
+> I think the retpolines certainly affect performance. Thank you for pointing
+> it out. I'd like to start the investigation that how to apply the
+> retpolines to the
+> virtio tools.
+> > > > Thank you for your comments.
+> > > > > Thanks!
+> > > > >
+> > > > >
+> > > > Best,
+> > > > Shunsuke.
+
+This isn't all that trivial if we want this at runtime.
+But compile time is kind of easy.
+See Documentation/admin-guide/hw-vuln/spectre.rst
 
 
-> On Dec 27, 2022, at 10:03 PM, Wedson Almeida Filho =
-<wedsonaf@gmail.com> wrote:
->=20
-> Since `Arc<T>` does not allow mutating `T` directly (i.e., without =
-inner
-> mutability), it is currently not possible to do some initialisation of
-> `T` post construction but before being shared.
->=20
-> `UniqueArc<T>` addresses this problem essentially being an `Arc<T>` =
-that
-> has a refcount of 1 and is therefore writable. Once initialisation is
-> completed, it can be transitioned (without failure paths) into an
-> `Arc<T>`.
->=20
-> Suggested-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> ---
-> rust/kernel/sync.rs     |   2 +-
-> rust/kernel/sync/arc.rs | 152 +++++++++++++++++++++++++++++++++++++++-
-> 2 files changed, 151 insertions(+), 3 deletions(-)
->=20
-> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-> index 5de03ea83ea1..33da23e3076d 100644
-> --- a/rust/kernel/sync.rs
-> +++ b/rust/kernel/sync.rs
-> @@ -7,4 +7,4 @@
->=20
-> mod arc;
->=20
-> -pub use arc::{Arc, ArcBorrow};
-> +pub use arc::{Arc, ArcBorrow, UniqueArc};
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index 84f31c85a513..832bafc74a90 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -19,8 +19,9 @@ use crate::{bindings, error::Result, types::Opaque};
-> use alloc::boxed::Box;
-> use core::{
->     marker::{PhantomData, Unsize},
-> -    mem::ManuallyDrop,
-> -    ops::Deref,
-> +    mem::{ManuallyDrop, MaybeUninit},
-> +    ops::{Deref, DerefMut},
-> +    pin::Pin,
->     ptr::NonNull,
-> };
->=20
-> @@ -222,6 +223,19 @@ impl<T: ?Sized> Drop for Arc<T> {
->     }
-> }
->=20
-> +impl<T: ?Sized> From<UniqueArc<T>> for Arc<T> {
-> +    fn from(item: UniqueArc<T>) -> Self {
-> +        item.inner
-> +    }
-> +}
-> +
-> +impl<T: ?Sized> From<Pin<UniqueArc<T>>> for Arc<T> {
-> +    fn from(item: Pin<UniqueArc<T>>) -> Self {
-> +        // SAFETY: The type invariants of `Arc` guarantee that the =
-data is pinned.
-> +        unsafe { Pin::into_inner_unchecked(item).inner }
-> +    }
-> +}
-> +
-> /// A borrowed reference to an [`Arc`] instance.
-> ///
-> /// For cases when one doesn't ever need to increment the refcount on =
-the allocation, it is simpler
-> @@ -328,3 +342,137 @@ impl<T: ?Sized> Deref for ArcBorrow<'_, T> {
->         unsafe { &self.inner.as_ref().data }
->     }
-> }
-> +
-> +/// A refcounted object that is known to have a refcount of 1.
-> +///
-> +/// It is mutable and can be converted to an [`Arc`] so that it can =
-be shared.
-> +///
-> +/// # Invariants
-> +///
-> +/// `inner` always has a reference count of 1.
-> +///
-> +/// # Examples
-> +///
-> +/// In the following example, we make changes to the inner object =
-before turning it into an
-> +/// `Arc<Test>` object (after which point, it cannot be mutated =
-directly). Note that `x.into()`
-> +/// cannot fail.
-> +///
-> +/// ```
-> +/// use kernel::sync::{Arc, UniqueArc};
-> +///
-> +/// struct Example {
-> +///     a: u32,
-> +///     b: u32,
-> +/// }
-> +///
-> +/// fn test() -> Result<Arc<Example>> {
-> +///     let mut x =3D UniqueArc::try_new(Example { a: 10, b: 20 })?;
-> +///     x.a +=3D 1;
-> +///     x.b +=3D 1;
-> +///     Ok(x.into())
-> +/// }
-> +///
-> +/// # test().unwrap();
-> +/// ```
-> +///
-> +/// In the following example we first allocate memory for a =
-ref-counted `Example` but we don't
-> +/// initialise it on allocation. We do initialise it later with a =
-call to [`UniqueArc::write`],
-> +/// followed by a conversion to `Arc<Example>`. This is particularly =
-useful when allocation happens
-> +/// in one context (e.g., sleepable) and initialisation in another =
-(e.g., atomic):
-> +///
-> +/// ```
-> +/// use kernel::sync::{Arc, UniqueArc};
-> +///
-> +/// struct Example {
-> +///     a: u32,
-> +///     b: u32,
-> +/// }
-> +///
-> +/// fn test() -> Result<Arc<Example>> {
-> +///     let x =3D UniqueArc::try_new_uninit()?;
-> +///     Ok(x.write(Example { a: 10, b: 20 }).into())
-> +/// }
-> +///
-> +/// # test().unwrap();
-> +/// ```
-> +///
-> +/// In the last example below, the caller gets a pinned instance of =
-`Example` while converting to
-> +/// `Arc<Example>`; this is useful in scenarios where one needs a =
-pinned reference during
-> +/// initialisation, for example, when initialising fields that are =
-wrapped in locks.
-> +///
-> +/// ```
-> +/// use kernel::sync::{Arc, UniqueArc};
-> +///
-> +/// struct Example {
-> +///     a: u32,
-> +///     b: u32,
-> +/// }
-> +///
-> +/// fn test() -> Result<Arc<Example>> {
-> +///     let mut pinned =3D Pin::from(UniqueArc::try_new(Example { a: =
-10, b: 20 })?);
-> +///     // We can modify `pinned` because it is `Unpin`.
-> +///     pinned.as_mut().a +=3D 1;
-> +///     Ok(pinned.into())
-> +/// }
-> +///
-> +/// # test().unwrap();
-> +/// ```
-> +pub struct UniqueArc<T: ?Sized> {
-> +    inner: Arc<T>,
-> +}
-> +
-> +impl<T> UniqueArc<T> {
-> +    /// Tries to allocate a new [`UniqueArc`] instance.
-> +    pub fn try_new(value: T) -> Result<Self> {
-> +        Ok(Self {
-> +            // INVARIANT: The newly-created object has a ref-count of =
-1.
-> +            inner: Arc::try_new(value)?,
-> +        })
-> +    }
-> +
-> +    /// Tries to allocate a new [`UniqueArc`] instance whose contents =
-are not initialised yet.
-> +    pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>> {
-> +        Ok(UniqueArc::<MaybeUninit<T>> {
-> +            // INVARIANT: The newly-created object has a ref-count of =
-1.
-> +            inner: Arc::try_new(MaybeUninit::uninit())?,
-> +        })
-> +    }
-> +}
-> +
-> +impl<T> UniqueArc<MaybeUninit<T>> {
-> +    /// Converts a `UniqueArc<MaybeUninit<T>>` into a `UniqueArc<T>` =
-by writing a value into it.
-> +    pub fn write(mut self, value: T) -> UniqueArc<T> {
-> +        self.deref_mut().write(value);
-> +        let inner =3D ManuallyDrop::new(self).inner.ptr;
-> +        UniqueArc {
-> +            // SAFETY: The new `Arc` is taking over `ptr` from =
-`self.inner` (which won't be
-> +            // dropped). The types are compatible because =
-`MaybeUninit<T>` is compatible with `T`.
-> +            inner: unsafe { Arc::from_inner(inner.cast()) },
-> +        }
-> +    }
-> +}
-> +
-> +impl<T: ?Sized> From<UniqueArc<T>> for Pin<UniqueArc<T>> {
-> +    fn from(obj: UniqueArc<T>) -> Self {
-> +        // SAFETY: It is not possible to move/replace `T` inside a =
-`Pin<UniqueArc<T>>` (unless `T`
 
-Minor nit:  `Pin<UniqueArc<T>>` in this comment should just be =
-`UniqueArc<T>`.
-
-> +        // is `Unpin`), so it is ok to convert it to =
-`Pin<UniqueArc<T>>`.
-> +        unsafe { Pin::new_unchecked(obj) }
-> +    }
-> +}
-> +
-> +impl<T: ?Sized> Deref for UniqueArc<T> {
-> +    type Target =3D T;
-> +
-> +    fn deref(&self) -> &Self::Target {
-> +        self.inner.deref()
-> +    }
-> +}
-> +
-> +impl<T: ?Sized> DerefMut for UniqueArc<T> {
-> +    fn deref_mut(&mut self) -> &mut Self::Target {
-> +        // SAFETY: By the `Arc` type invariant, there is necessarily =
-a reference to the object, so
-> +        // it is safe to dereference it. Additionally, we know there =
-is only one reference when
-> +        // it's inside a `UniqueArc`, so it is safe to get a mutable =
-reference.
-> +        unsafe { &mut self.inner.ptr.as_mut().data }
-> +    }
-> +}
-> --=20
-> 2.34.1
->=20
->=20
-
-=E2=80=94 Laine Taffin Altman
+-- 
+MST
 
