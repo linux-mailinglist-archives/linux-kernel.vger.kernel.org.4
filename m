@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1623C6576A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2444B6576A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbiL1MtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:49:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S232697AbiL1Muh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiL1MtM (ORCPT
+        with ESMTP id S232630AbiL1Mue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:49:12 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEFAEAF
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:49:06 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id g16so6303919plq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:49:06 -0800 (PST)
+        Wed, 28 Dec 2022 07:50:34 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D8910AD
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:50:32 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id bn6so6565482ljb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:50:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:message-id:subject:date:mime-version:from
-         :content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P6gDrXdowsD5wNp3NTDHh4ckr3ghwrPSRVQHTuuyLts=;
-        b=gSftiTPD/6azNoRXbxwxc2CgGQXghSFW1g3BBzKfH165w6rhBTUqUpdC2BjaiiQT5N
-         NLvdRe5UtfFMkoerf4jnB5Z4yo5CQG5TPFGSzdyJQj2ZnPiIdBSvPAtO880PBnBkGL1C
-         KE9efK8gsLU7hGrJNhLqZWJPCzN2kbxiQ0E7kIaWN1g//fOwGH0hRoIpvBUIfjuZCmLz
-         gKs/ShQK3sl8cVVA8qzBmr5PFZV83Z5wHrbomMpzHq81+xNnqZ8NiPne/uMZeD/DS9Q0
-         huxzC6ypJ4fM10jksU3KLr44pxB4EeJWjwXBtzW6TD3UQKOWEJXeabgbGx8s6Bo/kflf
-         CLkA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F8/YpCQ3OCyoXapLzBfKYsO+glpD+PxcQRfK5fsu1GI=;
+        b=BbGSIBDlIWjIPzIpI3IS8aDjGCShQ4Bu4EaZZLSteCB334CyeQ2zI99HK430n63BZv
+         VvW5PwkZvppnArmmmr9MBtM4JKjjbwArgtn31D7q92AGhpioi1jW7sRwXta/hJhtaVCw
+         CDYK2FY2DwxH3UPzeL70VcgpwA4G/7mvUdulhiLMR4ECKQrf/RJOLdb6MLpm/dSoxH04
+         Y0GS3HXH1F3F/p2Vr9vApS9jAOmJN3u+qsBaAprFlbOl454Sr4G4lhXkU08SAVBza48g
+         dpBL6ht8pBHgI1OvLfJur13p1X50NjzD2Bl6KqgHRLnFWgriKUTYZhKUo2GBhebKNYaU
+         q/wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:message-id:subject:date:mime-version:from
-         :content-transfer-encoding:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=P6gDrXdowsD5wNp3NTDHh4ckr3ghwrPSRVQHTuuyLts=;
-        b=sJF175vQ6UeIfSjM+BQp4W3F5Wd2V++/ax6ZugTMwM5P1teaZmZk+tufenV9jaUfvY
-         KokB8jlq0iH4L/z3bhl0KuHGYmncKIVL80jdyjmitLpxT18L6rKvuZHZsWeBOFOroNyc
-         CXHDycpLYW+omJPWT0U+NkWvsl8ndr7OC+TuyKbuuRBPOqo78d0EFKdhRvPqfiluBdzf
-         4J5dSw3AgjYZ0XjPvi/HuBRiBxvcswHoIF4aPEWUrcrcctdNBitrEDZnae9vJQ6Hazr6
-         4wDzrG9q/4OdEJeWtLvqPktZJwsIWzgSbCNFQBfW138jvwQqr83FFJMmrW677MpLIJ+A
-         yiIA==
-X-Gm-Message-State: AFqh2kp7Z7UHExDCKqruyqZPf4nNjUbdrPSp0v7Ds48FZELdz8dJaL1b
-        9cHkuM4KGmlMisEG5jFXiG23lnfqez4aig==
-X-Google-Smtp-Source: AMrXdXvM9jjVjHMsfATruyxrLdD9AD5DCPMwwg9rYDKq2s+GvIpBHRcNtfEqUmsvCKteAs4csaRjZw==
-X-Received: by 2002:a17:90a:3c86:b0:225:dac9:f070 with SMTP id g6-20020a17090a3c8600b00225dac9f070mr14781123pjc.32.1672231745154;
-        Wed, 28 Dec 2022 04:49:05 -0800 (PST)
-Received: from smtpclient.apple ([2001:2d8:621a:351f:d5bd:4555:ce5f:72f0])
-        by smtp.gmail.com with ESMTPSA id j14-20020a17090a2a8e00b002187a4dd830sm5538651pjd.46.2022.12.28.04.49.04
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F8/YpCQ3OCyoXapLzBfKYsO+glpD+PxcQRfK5fsu1GI=;
+        b=zTcW2rFJbLle4ZAomvgBZnIHZAG/xrekiYDNwA0NfRdG6RtfY7Kkx4VMBe3pGlbZfy
+         lYaF2099BpCWlxuWgLVQ2n0zMJO3M3p/VoVbStOfBRuQxNmGVexHgSGXoshXDTA0HrjA
+         GIAS8RZHan33e+QChV3It7OnZ6lK4b73y3NT4Yhf4rFJ6nCczsUkyizh57bRrjezi5jV
+         G+XeT9Hrg7FNtiltsS/LV75HGA9dFsrRKG6uoy4nNNQphqzteIuYx3O5N4v1b+IQgl3B
+         QmstRzOvvExkCA8vdxU+S8C3P4diHAurZ1vWDRnY9OMiqFjoZgCprxTP6Rw8QC+7ITRy
+         ZcSw==
+X-Gm-Message-State: AFqh2kq4keI9XeOFFdwhl8kDG30QZhqJLda+6UJPK69lLBSYSl3McXjk
+        aQKQF57vV2cwwZnzezshDuaRLg==
+X-Google-Smtp-Source: AMrXdXvRNE45JeWBAUysh9AkxSKTXg9GFLWAFCY6ZvmLFOEstMdgfpxXKelwMIq271rDCe9QBrN5cA==
+X-Received: by 2002:a05:651c:8f:b0:27f:b083:e328 with SMTP id 15-20020a05651c008f00b0027fb083e328mr4823175ljq.8.1672231831200;
+        Wed, 28 Dec 2022 04:50:31 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id s4-20020a05651c048400b0027fbc576464sm1061755ljc.137.2022.12.28.04.50.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 04:49:04 -0800 (PST)
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Mime-Version: 1.0 (1.0)
-Date:   Wed, 28 Dec 2022 21:48:51 +0900
-Subject: [QUESTION] about the maple tree and current status of mmap_lock scalability
-Message-Id: <EC51CFA7-2BC8-4F72-A7D4-3B1A778EDB37@gmail.com>
-To:     linux-mm@kvack.org, liam.howlett@oracle.com, willy@infradead.org,
-        surenb@google.com, ldufour@linux.ibm.com, michel@lespinasse.org,
-        vbabka@suse.cz, linux-kernel@vger.kernel.org
-X-Mailer: iPad Mail (20B82)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,MIME_QP_LONG_LINE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Wed, 28 Dec 2022 04:50:30 -0800 (PST)
+Message-ID: <97a27c10-411e-8823-507c-ebb3f71a48ed@linaro.org>
+Date:   Wed, 28 Dec 2022 14:50:29 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sm8350: add missing
+ core_bi_pll_test_se GCC clock
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221228112456.31348-1-krzysztof.kozlowski@linaro.org>
+ <d2e303d9-3ac4-f574-680f-4f5ccbf5ed13@linaro.org>
+ <5001001a-203f-e832-f916-ce483b2d8ea1@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <5001001a-203f-e832-f916-ce483b2d8ea1@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello mm folks,
+On 28/12/2022 13:55, Krzysztof Kozlowski wrote:
+> On 28/12/2022 12:37, Konrad Dybcio wrote:
+>>
+>>
+>> On 28.12.2022 12:24, Krzysztof Kozlowski wrote:
+>>> The GCC bindings expect core_bi_pll_test_se clock input, even if it is
+>>> optional:
+>>>
+>>>    sm8350-mtp.dtb: clock-controller@100000: clock-names:2: 'core_bi_pll_test_se' was expected
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>> Is it even going to be used by anybody, or should we just drop
+>> it on the driver side as per usual?
+> 
+> It's mentioned as possible parent, so there might be users somewhere...
+> Or you want to say that other binding and DTS users cannot use that clock?
 
-I have a few questions about the current status of mmap_lock scalability.
+Yes. In the past few months we have been removing the core_bi_pll_test 
+from the old clock drivers (and new clock drivers mostly lack them). 
+Let's remove it from the rest of clock drivers.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-What is currently causing the kernel to use mmap_lock to protect the maple t=
-ree?
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> 
+> Best regards,
+> Krzysztof
+> 
 
-I understand that the long-term goal is to remove the need for mmap_lock in r=
-eaders
-while traversing the maple tree, using techniques such as RCU or SPF.
-What is the biggest obstacle preventing this from being achieved at this tim=
-e?
+-- 
+With best wishes
+Dmitry
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-How does the maple tree provide RCU-safe manipulation of VMAs?
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-Is it similar to the approach suggested in the RCUVM paper (replacing the or=
-iginal
-root node with a new root node that shares most of its nodes and deferring
-the freeing of stale nodes using RCU)?
-
-I'm having difficulty understanding the design of the maple tree in this reg=
-ard.
-
-[RCUVM paper] https://pdos.csail.mit.edu/papers/rcuvm:asplos12.pdf
-
-Thank you for your time.
-
----
-Hyeonggon=
