@@ -2,184 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C595657F85
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B03657F6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234378AbiL1QFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 11:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S234282AbiL1QEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 11:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiL1QFk (ORCPT
+        with ESMTP id S234295AbiL1QEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 11:05:40 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D7D192A8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:05:38 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso5023725wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:05:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ixsystems.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PU9635POemxwDKmm5VBJNB22BtO90u5rPxeWqV5JJQM=;
-        b=WFUoe+tyv2U/PyZBuUklrh1xgR9Rjo5FJBU6KjkrFuofVZgDqrPMdmmGaDsuCFQdbo
-         fsSyXIsPFJ4ZNK7Dd365O8QbMWmRkYBmKxP9HxJnGK/GIdWjEqKDKaM7Safkp28mmDc5
-         bfPgGa4dvMMQgUZEzWGX1gJH29ds9KfJK0CBPDt5q+j0VsKOdPWsd9pbMX2r7hmznDtN
-         Wn1dzlZXz3bQNQUyfzT9dQOw6n/8eQgrh2ATVMBLK5EX/Afd+5DZ0rdjgCd0tUXlcXck
-         GRGIkz+GTpL1ZN9EYaS/vlvDimosr9GRWsMaGY7IczC5G3hwxVnjntJ9j8p8+rwJvcKx
-         Y9Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PU9635POemxwDKmm5VBJNB22BtO90u5rPxeWqV5JJQM=;
-        b=25yla2bsxm2DRLIfTnRmw5zaY8wlbQuoEZ3PJ9Z3xD8RuFcqvLKOBd8UD047uGijWt
-         s8dHPI2Or/TKSWK0shlRgFRSgB3/2bqTANCbVCGPvhkoKMIuUPHWWI4kxLjmKR6PVFRP
-         JX49oiBhebDZR+cBventVGakyFhscSMRM9gxtOYZT0ZVytc80qhUljenjtf/K/dbcXMq
-         zyE3xvDpZ0UHLCVl9xvB90al6hhsGllvuTNq9fPOP24hf/eVYzd82qZzwMcFq9Hwxx0B
-         Z2sf+zmMM6XEIGR2BiAbVKFFLIzQVLM3xSz9/vgTdEfig6eY3IwFrWSTdChbyloLKLKz
-         SV1w==
-X-Gm-Message-State: AFqh2kqe5DMexnoI4Q4Kmnju7uCi/MPyebaWdVhZuZX3DRJNq3Lv9I6b
-        LmQ8WiM7LZF/R8Pp43UVfPOzQw==
-X-Google-Smtp-Source: AMrXdXsiCpYBueXRJXFRX5Npqbo8GYiSXFBdZ7NEkiKJe6SGRWdI1eLl7vTMaNi/wuqjd3b8KHIOOw==
-X-Received: by 2002:a1c:4b04:0:b0:3c6:f0b8:74e6 with SMTP id y4-20020a1c4b04000000b003c6f0b874e6mr18597235wma.4.1672243537543;
-        Wed, 28 Dec 2022 08:05:37 -0800 (PST)
-Received: from localhost.localdomain ([2400:adc1:158:c700:5f84:8415:6e5a:7fea])
-        by smtp.googlemail.com with ESMTPSA id l42-20020a05600c1d2a00b003cfbbd54178sm40491463wms.2.2022.12.28.08.05.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 08:05:36 -0800 (PST)
-From:   Ameer Hamza <ahamza@ixsystems.com>
-To:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
-        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
-        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, ahamza@ixsystems.com,
-        awalker@ixsystems.com
-Subject: [PATCH] Add new open(2) flag - O_EMPTY_PATH
-Date:   Wed, 28 Dec 2022 21:02:49 +0500
-Message-Id: <20221228160249.428399-1-ahamza@ixsystems.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 28 Dec 2022 11:04:34 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A54719026
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:04:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672243474; x=1703779474;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dEmMhtbExLjpySrpjFytGXz3rC5stTWIszgcrj9yf9c=;
+  b=NLF52opCl6nK5cEOaVy6icpPatLs0bCgZcucsbpT2nMQnsR2hnRKWS1F
+   EgaUqjnIc6B7Jw0VMa7MpTiSSx+lWMtByWAQEUHHeV74ZqBznP61tyRN4
+   cQyoVewqInpIFWQR5XYV6cqOE8AoSGXn1jDyIIyUNZiAHHGKQMKinHXrl
+   mKaLKvE5mukWPNB6lsuLTiOLiGL/jB/m+F7pHALhXvXstIn64HB1IhCY1
+   72JO7APTnf4bbzVtIB1ogOMcoylY1z8GfujCmQYAJ6NmvPh1z45jj7Ci+
+   LS+5o55zkPg1Jlrm50agp3lOfRDGbT4FVUped/qrALB0K6kqO87u6e3M2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="318572339"
+X-IronPort-AV: E=Sophos;i="5.96,281,1665471600"; 
+   d="scan'208";a="318572339"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 08:04:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="827427099"
+X-IronPort-AV: E=Sophos;i="5.96,281,1665471600"; 
+   d="scan'208";a="827427099"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 28 Dec 2022 08:04:31 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 78F97F8; Wed, 28 Dec 2022 18:05:02 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ramalingam C <ramalingam.c@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [PATCH v1 1/1] misc/mei/hdcp: Use correct macros to initialize uuid_le
+Date:   Wed, 28 Dec 2022 18:05:00 +0200
+Message-Id: <20221228160500.21220-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a new flag O_EMPTY_PATH that allows openat and open
-system calls to open a file referenced by fd if the path is empty,
-and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
-beneficial in some cases since it would avoid having to grant /proc
-access to things like samba containers for reopening files to change
-flags in a race-free way.
+GUID_INIT() is for internal guid_t type and shouldn't be used
+for the uuid_le. I.o.w. relying on the implementation details
+is layering violation. Use correct macros to initialize uuid_le.
 
-Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
+Fixes: 64e9bbdd9588 ("misc/mei/hdcp: Client driver for HDCP application")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- fs/fcntl.c                             | 2 +-
- fs/namei.c                             | 4 ++--
- fs/open.c                              | 2 +-
- include/linux/fcntl.h                  | 2 +-
- include/uapi/asm-generic/fcntl.h       | 4 ++++
- tools/include/uapi/asm-generic/fcntl.h | 4 ++++
- 6 files changed, 13 insertions(+), 5 deletions(-)
+ drivers/misc/mei/hdcp/mei_hdcp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/fcntl.c b/fs/fcntl.c
-index 146c9ab0cd4b..7aac650e16e2 100644
---- a/fs/fcntl.c
-+++ b/fs/fcntl.c
-@@ -1027,7 +1027,7 @@ static int __init fcntl_init(void)
- 	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
- 	 * is defined as O_NONBLOCK on some platforms and not on others.
- 	 */
--	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
-+	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
- 		HWEIGHT32(
- 			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
- 			__FMODE_EXEC | __FMODE_NONOTIFY));
-diff --git a/fs/namei.c b/fs/namei.c
-index 309ae6fc8c99..2b2735af6d03 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -192,7 +192,7 @@ getname_flags(const char __user *filename, int flags, int *empty)
- 	if (unlikely(!len)) {
- 		if (empty)
- 			*empty = 1;
--		if (!(flags & LOOKUP_EMPTY)) {
-+		if (!(flags & (LOOKUP_EMPTY | O_EMPTY_PATH))) {
- 			putname(result);
- 			return ERR_PTR(-ENOENT);
- 		}
-@@ -2347,7 +2347,7 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
- 	if ((flags & (LOOKUP_RCU | LOOKUP_CACHED)) == LOOKUP_CACHED)
- 		return ERR_PTR(-EAGAIN);
+diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
+index 5a1c93a2d2f1..cc7f1169206c 100644
+--- a/drivers/misc/mei/hdcp/mei_hdcp.c
++++ b/drivers/misc/mei/hdcp/mei_hdcp.c
+@@ -858,8 +858,8 @@ static void mei_hdcp_remove(struct mei_cl_device *cldev)
+ 		dev_warn(&cldev->dev, "mei_cldev_disable() failed\n");
+ }
  
--	if (!*s)
-+	if (!*s && unlikely(!(flags & O_EMPTY_PATH)))
- 		flags &= ~LOOKUP_RCU;
- 	if (flags & LOOKUP_RCU)
- 		rcu_read_lock();
-diff --git a/fs/open.c b/fs/open.c
-index 82c1a28b3308..b4ec054a418f 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -1301,7 +1301,7 @@ static long do_sys_openat2(int dfd, const char __user *filename,
- 	if (fd)
- 		return fd;
+-#define MEI_UUID_HDCP GUID_INIT(0xB638AB7E, 0x94E2, 0x4EA2, 0xA5, \
+-				0x52, 0xD1, 0xC5, 0x4B, 0x62, 0x7F, 0x04)
++#define MEI_UUID_HDCP UUID_LE(0xB638AB7E, 0x94E2, 0x4EA2, 0xA5, \
++			      0x52, 0xD1, 0xC5, 0x4B, 0x62, 0x7F, 0x04)
  
--	tmp = getname(filename);
-+	tmp = getname_flags(filename, how->flags & O_EMPTY_PATH, NULL);
- 	if (IS_ERR(tmp))
- 		return PTR_ERR(tmp);
- 
-diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
-index a332e79b3207..bf8467bb0bd2 100644
---- a/include/linux/fcntl.h
-+++ b/include/linux/fcntl.h
-@@ -10,7 +10,7 @@
- 	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | \
- 	 O_APPEND | O_NDELAY | O_NONBLOCK | __O_SYNC | O_DSYNC | \
- 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
--	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
-+	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_EMPTY_PATH)
- 
- /* List of all valid flags for the how->resolve argument: */
- #define VALID_RESOLVE_FLAGS \
-diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
-index 1ecdb911add8..a03f4275517b 100644
---- a/include/uapi/asm-generic/fcntl.h
-+++ b/include/uapi/asm-generic/fcntl.h
-@@ -89,6 +89,10 @@
- #define __O_TMPFILE	020000000
- #endif
- 
-+#ifndef O_EMPTY_PATH
-+#define O_EMPTY_PATH	040000000
-+#endif
-+
- /* a horrid kludge trying to make sure that this will fail on old kernels */
- #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
- #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
-diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
-index b02c8e0f4057..f32a81604296 100644
---- a/tools/include/uapi/asm-generic/fcntl.h
-+++ b/tools/include/uapi/asm-generic/fcntl.h
-@@ -89,6 +89,10 @@
- #define __O_TMPFILE	020000000
- #endif
- 
-+#ifndef O_EMPTY_PATH
-+#define O_EMPTY_PATH	040000000
-+#endif
-+
- /* a horrid kludge trying to make sure that this will fail on old kernels */
- #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
- #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+ static const struct mei_cl_device_id mei_hdcp_tbl[] = {
+ 	{ .uuid = MEI_UUID_HDCP, .version = MEI_CL_VERSION_ANY },
 -- 
-2.25.1
+2.35.1
 
