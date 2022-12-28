@@ -2,171 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CACC6573CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B456573D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiL1IBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 03:01:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S230183AbiL1IMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 03:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiL1IBv (ORCPT
+        with ESMTP id S229526AbiL1IMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 03:01:51 -0500
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBD8FE4;
-        Wed, 28 Dec 2022 00:01:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=M54YK/lBrrcKNhiCQEZFv8PIdYNMDYnBHr5xVOUNbFE=; b=BLgMakDscmJWzJ71VufH+VbiUh
-        8KH18vQRX3o9wKxcdCMIieQyr8qMz6KPFLcJoFQzL/Y0GnqYoGYuSRLuwm07H/eKJzd8JwSHDPmcC
-        LcAHXU0rm1I3cwpGxwCOLi8NM0EFdxvPGziDNTXJhmJLQUUQtuAPDwKYllk93agnAO7zp2OIoXYM1
-        2gHFyneIt5ZUne6/s35tUrA/foWjqxmwmQFsRUkv1qDy+lQOm/mSfL1r2XA0ozZ9q7A8H+m/JpgPB
-        TxVTAxYRjcIxxvXFn0//ruw86nj4GhmwAh/cvcQm0GxaM0Blq058KsWLcIDamHdzLrSYGC6Z4ho+G
-        WChAZ7Hw==;
-Received: from [89.212.21.243] (port=40670 helo=[192.168.69.116])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <primoz.fiser@norik.com>)
-        id 1pARNZ-004kGl-Eh;
-        Wed, 28 Dec 2022 09:01:44 +0100
-Message-ID: <41991ce2-3e88-5afc-6def-6e718d624768@norik.com>
-Date:   Wed, 28 Dec 2022 09:01:46 +0100
+        Wed, 28 Dec 2022 03:12:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EE5F4D
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 00:12:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6262361284
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B09FC433EF;
+        Wed, 28 Dec 2022 08:12:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1672215166;
+        bh=s7dzLkCAywG95n7cM0EsVwrHVQoeK5pAxCrnXODh4A4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gp3V2lGo+aJ17QdjmbDX3Bnc2qGL5a0XGCh09VEjrnCCRa8buj3JRmmauDC2swBHn
+         JVVQgBO39DDKZZdTU+EZOK2MVl3LqSM3e1qGasxDdm2bNpTtqy7dHuvErE4t6DyMh7
+         VDOnaurx0cTTWN9M5yHuuWSg36UGjH3zZ+8t5rbQ=
+Date:   Wed, 28 Dec 2022 09:12:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Russell Currey <ruscur@russell.cc>
+Cc:     linuxppc-dev@lists.ozlabs.org, gcwilson@linux.ibm.com,
+        linux-kernel@vger.kernel.org, nayna@linux.ibm.com,
+        ajd@linux.ibm.com, zohar@linux.ibm.com, mpe@ellerman.id.au
+Subject: Re: [PATCH 6/6] powerpc/pseries: Implement secvars for dynamic
+ secure boot
+Message-ID: <Y6v6ezv11U3/VI/j@kroah.com>
+References: <20221228072943.429266-1-ruscur@russell.cc>
+ <20221228072943.429266-7-ruscur@russell.cc>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] i2c: imx: increase retries on arbitration loss
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        upstream@lists.phytec.de, Marco Felsch <m.felsch@pengutronix.de>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        francesco.dolcini@toradex.com
-References: <20221216084511.2576786-1-primoz.fiser@norik.com>
- <20221216094518.bevkg5buzu7iybfh@pengutronix.de>
- <bb4882a9-8be6-5255-6256-aa1253362e59@norik.com>
- <20221216110227.GA12327@pengutronix.de>
- <20221216111308.wckibotr5d3q6ree@pengutronix.de>
- <5c2e0531-e7c3-1b37-35ed-c8e9795a0d18@norik.com>
- <Y5xpt6J01Boec6Xr@francesco-nb.int.toradex.com>
-From:   Primoz Fiser <primoz.fiser@norik.com>
-In-Reply-To: <Y5xpt6J01Boec6Xr@francesco-nb.int.toradex.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: primoz.fiser@norik.com
-X-Authenticated-Sender: cpanel.siel.si: primoz.fiser@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221228072943.429266-7-ruscur@russell.cc>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
-
-On 16. 12. 22 13:51, Francesco Dolcini wrote:
-> On Fri, Dec 16, 2022 at 01:23:29PM +0100, Primoz Fiser wrote:
->> Hi all,
->>
->> On 16. 12. 22 12:13, Uwe Kleine-König wrote:
->>> On Fri, Dec 16, 2022 at 12:02:27PM +0100, Oleksij Rempel wrote:
->>>> On Fri, Dec 16, 2022 at 11:41:08AM +0100, Primoz Fiser wrote:
->>>>> Hi Marco,
->>>>>
->>>>> On 16. 12. 22 10:45, Marco Felsch wrote:
->>>>>> Hi Primoz,
->>>>>>
->>>>>> On 22-12-16, Primoz Fiser wrote:
->>>>>>> By default, retries value is set to 0 (no retries). Set retries to more
->>>>>>> sensible value of 3 to allow i2c core to re-attempt transfer in case of
->>>>>>> i2c arbitration loss (i2c-imx returns -EAGAIN errno is such case).
->>>>>>
->>>>>> apart the fact that the number of retries vary a lot and so the client
->>>>>> driver behaviour can vary a lot which is not good IMHO, why do you think
->>>>>> that 3 is a sufficient number?
->>>>>
->>>>> IMHO it is better than leaving it at 0 (no retries)?
->>>>>
->>>>> Setting it to sensible value like 3 will at least attempt to make transfer
->>>>> in case arbitration-loss occurs.
->>>>>
->>>>>>
->>>>>> If an arbitration loss happen, why do you think that retrying it 3 times
->>>>>> changes that?
->>>>>
->>>>> I our case, setting retries to non-zero value solves issues with PMIC
->>>>> shutdown on phyboard-mira which in some rare cases fails with "Failed to
->>>>> shutdown (err =  -11)" (-EAGAIN).
->>>>>
->>>>> To me it makes common sense retries is set to non-zero value especially for
->>>>> such rare conditions/situations.
->>>>
->>>> https://lore.kernel.org/all/Ys1bw9zuIwWS+bqw@shikoro/
->>
->> Ohh I see.
->>
->> Reading through the thread I guess we aren't getting this mainlined at all
->> :)
->>
->> The only solid point in the thread seems to be that in that case we are not
->> covering up the potential i2c hardware issues?
+On Wed, Dec 28, 2022 at 06:29:43PM +1100, Russell Currey wrote:
+> The pseries platform can support dynamic secure boot (i.e. secure boot
+> using user-defined keys) using variables contained with the PowerVM LPAR
+> Platform KeyStore (PLPKS).  Using the powerpc secvar API, expose the
+> relevant variables for pseries dynamic secure boot through the existing
+> secvar filesystem layout.
 > 
-> I believe that in this case we should just have a warning in the kernel.
-> The retry potentially work-around a transient issue and we do not hide any hardware
-> issue at the same time. It seems an easy win-win solution.
-
-I would agree about throwing a warning message in retry case.
-
-Not sure how would it affect other i2c bus drivers using retries > 0. 
-Retries might be pretty rare with i2c-imx but some other drivers set 
-this to 5 for example. At least using _ratelimited printk is a must 
-using this approach.
-
+> The relevant variables for dynamic secure boot are signed in the
+> keystore, and can only be modified using the H_PKS_SIGNED_UPDATE hcall.
+> Object labels in the keystore are encoded using ucs2 format.  With our
+> fixed variable names we don't have to care about encoding outside of the
+> necessary byte padding.
 > 
->> Yeah fair point but on the other hand, goal of this patch would be to
->> improve robustness in case of otherwise good performing hardware. From user
->> perspective I just want it to work despite it retrying under the hood from
->> time to time. I think Francesco had the same idea.
+> When a user writes to a variable, the first 8 bytes of data must contain
+> the signed update flags as defined by the hypervisor.
 > 
-> Unfortunately I was missing the exact background that made us do this
-> change, we just had it sitting in our fork for too long :-/
-> This is one of the reason I gave up on it.
+> When a user reads a variable, the first 4 bytes of data contain the
+> policies defined for the object.
 > 
-> Quoting Uwe [1]
->> sometimes there is no practical way around such work arounds. I happens
->> from time to time that the reason for problem is known, but fixing the
->> hardware is no option, then you need such workrounds. (This applies to
->> both, retrying the transfers and resetting the bus.)
+> Limitations exist due to the underlying implementation of sysfs binary
+> attributes, as is the case for the OPAL secvar implementation -
+> partial writes are unsupported and writes cannot be larger than PAGE_SIZE.
+> 
+> Co-developed-by: Nayna Jain <nayna@linux.ibm.com>
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> ---
+>  Documentation/ABI/testing/sysfs-secvar        |   8 +
+>  arch/powerpc/platforms/pseries/Kconfig        |  13 +
+>  arch/powerpc/platforms/pseries/Makefile       |   4 +-
+>  arch/powerpc/platforms/pseries/plpks-secvar.c | 250 ++++++++++++++++++
+>  4 files changed, 273 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/powerpc/platforms/pseries/plpks-secvar.c
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-secvar b/Documentation/ABI/testing/sysfs-secvar
+> index feebb8c57294..e6fef664c9c8 100644
+> --- a/Documentation/ABI/testing/sysfs-secvar
+> +++ b/Documentation/ABI/testing/sysfs-secvar
+> @@ -44,3 +44,11 @@ Contact:	Nayna Jain <nayna@linux.ibm.com>
+>  Description:	A write-only file that is used to submit the new value for the
+>  		variable. The size of the file represents the maximum size of
+>  		the variable data that can be written.
+> +
+> +What:		/sys/firmware/secvar/config
+> +Date:		December 2022
+> +Contact:	Nayna Jain <nayna@linux.ibm.com>
+> +Description:	This optional directory contains read-only config attributes as
+> +		defined by the secure variable implementation.  All data is in
+> +		ASCII format. The directory is only created if the backing
+> +		implementation provides variables to populate it.
 
-I wouldn't say this is exactly a workaround if "retries mechanism" is 
-standard part of the i2c core. Other drivers use it as well. it is just 
-a setting to improve bus robustness.
+That is _WAY_ too vague, sorry.  You have to define the files that are
+in here and what the contents of them are.
 
-But OK, I guess we can live with this one-liner in the downstream kernel.
+If you do not, you will get warnings from the tools that we have that
+you can run on a system that wants to verify all sysfs files are
+properly documented.
 
-> 
-> Francesco
-> 
-> [1] https://lore.kernel.org/all/20220715083400.q226rrwxsgt4eomp@pengutronix.de/
-> 
+> diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platforms/pseries/Kconfig
+> index a3b4d99567cb..94e08c405d50 100644
+> --- a/arch/powerpc/platforms/pseries/Kconfig
+> +++ b/arch/powerpc/platforms/pseries/Kconfig
+> @@ -162,6 +162,19 @@ config PSERIES_PLPKS
+>  
+>  	  If unsure, select N.
+>  
+> +config PSERIES_PLPKS_SECVAR
+> +	depends on PSERIES_PLPKS
+> +	depends on PPC_SECURE_BOOT
+> +	bool "Support for the PLPKS secvar interface"
+> +	help
+> +	  PowerVM can support dynamic secure boot with user-defined keys
+> +	  through the PLPKS. Keystore objects used in dynamic secure boot
+> +	  can be exposed to the kernel and userspace through the powerpc
+> +	  secvar infrastructure. Select this to enable the PLPKS backend
+> +	  for secvars for use in pseries dynamic secure boot.
+> +
+> +	  If unsure, select N.
+> +
+>  config PAPR_SCM
+>  	depends on PPC_PSERIES && MEMORY_HOTPLUG && LIBNVDIMM
+>  	tristate "Support for the PAPR Storage Class Memory interface"
+> diff --git a/arch/powerpc/platforms/pseries/Makefile b/arch/powerpc/platforms/pseries/Makefile
+> index 92310202bdd7..807756991f9d 100644
+> --- a/arch/powerpc/platforms/pseries/Makefile
+> +++ b/arch/powerpc/platforms/pseries/Makefile
+> @@ -27,8 +27,8 @@ obj-$(CONFIG_PAPR_SCM)		+= papr_scm.o
+>  obj-$(CONFIG_PPC_SPLPAR)	+= vphn.o
+>  obj-$(CONFIG_PPC_SVM)		+= svm.o
+>  obj-$(CONFIG_FA_DUMP)		+= rtas-fadump.o
+> -obj-$(CONFIG_PSERIES_PLPKS) += plpks.o
+> -
+> +obj-$(CONFIG_PSERIES_PLPKS)	+= plpks.o
+> +obj-$(CONFIG_PSERIES_PLPKS_SECVAR)	+= plpks-secvar.o
+>  obj-$(CONFIG_SUSPEND)		+= suspend.o
+>  obj-$(CONFIG_PPC_VAS)		+= vas.o vas-sysfs.o
+>  
+> diff --git a/arch/powerpc/platforms/pseries/plpks-secvar.c b/arch/powerpc/platforms/pseries/plpks-secvar.c
+> new file mode 100644
+> index 000000000000..3f9ff16c03c8
+> --- /dev/null
+> +++ b/arch/powerpc/platforms/pseries/plpks-secvar.c
+> @@ -0,0 +1,250 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Secure variable implementation using the PowerVM LPAR Platform KeyStore (PLPKS)
+> + *
+> + * Copyright 2022, IBM Corporation
+> + * Authors: Russell Currey
+> + *          Andrew Donnellan
+> + *          Nayna Jain
+> + */
+> +
+> +#define pr_fmt(fmt) "secvar: "fmt
+> +
+> +#include <linux/printk.h>
+> +#include <linux/init.h>
+> +#include <linux/types.h>
+> +#include <linux/slab.h>
+> +#include <linux/string.h>
+> +#include <linux/kobject.h>
+> +#include <asm/secvar.h>
+> +#include "plpks.h"
+> +
+> +// Config attributes for sysfs
+> +#define PLPKS_CONFIG_ATTR(name, fmt, func)			\
+> +	static ssize_t name##_show(struct kobject *kobj,	\
+> +				   struct kobj_attribute *attr,	\
+> +				   char *buf)			\
+> +	{							\
+> +		return sprintf(buf, fmt, func());		\
 
+sysfs_emit() please.
+
+> +	}							\
+> +	static struct kobj_attribute attr_##name = __ATTR_RO(name)
+> +
+> +PLPKS_CONFIG_ATTR(version, "%u\n", plpks_get_version);
+> +PLPKS_CONFIG_ATTR(object_overhead, "%u\n", plpks_get_objoverhead);
+> +PLPKS_CONFIG_ATTR(max_password_size, "%u\n", plpks_get_maxpwsize);
+> +PLPKS_CONFIG_ATTR(max_object_size, "%u\n", plpks_get_maxobjectsize);
+> +PLPKS_CONFIG_ATTR(max_object_label_size, "%u\n", plpks_get_maxobjectlabelsize);
+> +PLPKS_CONFIG_ATTR(total_size, "%u\n", plpks_get_totalsize);
+> +PLPKS_CONFIG_ATTR(used_space, "%u\n", plpks_get_usedspace);
+> +PLPKS_CONFIG_ATTR(supported_policies, "%08x\n", plpks_get_supportedpolicies);
+> +PLPKS_CONFIG_ATTR(max_large_object_size, "%u\n", plpks_get_maxlargeobjectsize);
+> +PLPKS_CONFIG_ATTR(signed_update_algorithms, "%016llx\n", plpks_get_signedupdatealgorithms);
+
+Looks like you know what these files and values are going to be, so
+again, please document them properly.
+
+thanks,
+
+greg k-h
