@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54139657657
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6783A657659
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232731AbiL1MU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
+        id S232081AbiL1MV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiL1MUV (ORCPT
+        with ESMTP id S233072AbiL1MVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:20:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4D5654E;
-        Wed, 28 Dec 2022 04:20:19 -0800 (PST)
+        Wed, 28 Dec 2022 07:21:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C0F398;
+        Wed, 28 Dec 2022 04:20:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E01C2CE12CF;
-        Wed, 28 Dec 2022 12:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6E57C433F1;
-        Wed, 28 Dec 2022 12:20:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A313E61314;
+        Wed, 28 Dec 2022 12:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B6D4C433EF;
+        Wed, 28 Dec 2022 12:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672230015;
-        bh=BF8pGi2+TlK5BZ4zCkFeHhTghrWTuL6n7RHTNforA+s=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=J0PicxVU03gLawjfOSUaldlJ2VGBNQkt8XnFjEBv7a6Pl5qCAZ36A26wtOCgW75Nm
-         UFpqmCrt6BovwvaNcvMhuZEy/ZScrlLtle4RSqWgxOmZxgLMg9z4LLVs4oBg4fQodB
-         oE85uA+xuLKZQuvvhkC7+1qq/5dAftE/BZjeS0N3MJDP7olkbGjot3NHVB9XcLy/9c
-         yBv2rVjlG2s2CvtUxnqNzk4lJERYwU1C8NKzgNDeEBSED0jVCk+6gGxULkCww7RdNJ
-         UpcSOc/CXXiVqeI3GQJfAkGz7NcgNNfuLuvk289AGL9mso75yjoLzhq9RK0K0W0Wzr
-         BYJCim2x4pyZw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD6E9E50D70;
-        Wed, 28 Dec 2022 12:20:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1672230057;
+        bh=C7T4NVQ1zeuRB/WdHZAnJLTd1TxXdCWI5njfycxmT7A=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=TGL9rU32ZfsEbz4HQbyF34AC+5SUyfnoWadKg1SThfxBmQvBnQiiMV6EUzMqDxyk/
+         JcLnnRhQ2UxKWdRLX4tWGfkoAyoisOreEjGGG80cybzGYT5bugjDJHrwhIKBpECkVr
+         algkesya59d1CUUtWj8QSfxvQWpCJchdSllyUCqNb6q4G4wtycIG/aTP/FzyWnXHID
+         R8M794CFrFyIab542aEAU2QNTJsvnyUw6ibSgUk/2OjpPgCVEEUIBhCnNPGLKlAheB
+         /4Teig5DSLWi4u0HOEPeu0eO6v23pzbdjbN88YjRb/pjg07zpJA0hf4e4mn2eDCH4a
+         u1aosxqMhLo/w==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Wenpeng Liang <liangwenpeng@huawei.com>,
+        Yixing Liu <liuyixing1@huawei.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Haoyue Xu <xuhaoyue1@hisilicon.com>
+In-Reply-To: <20221223072900.802728-1-linmq006@gmail.com>
+References: <20221223072900.802728-1-linmq006@gmail.com>
+Subject: Re: [PATCH v2] RDMA/hns: Fix refcount leak in hns_roce_mmap
+Message-Id: <167223005274.61198.7536575567109139092.b4-ty@kernel.org>
+Date:   Wed, 28 Dec 2022 14:20:52 +0200
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] s390/qeth: convert sysfs snprintf to sysfs_emit
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167223001583.30539.3371420401703338150.git-patchwork-notify@kernel.org>
-Date:   Wed, 28 Dec 2022 12:20:15 +0000
-References: <20221227110352.1436120-1-zhangxuezhi3@gmail.com>
-In-Reply-To: <20221227110352.1436120-1-zhangxuezhi3@gmail.com>
-To:     Xuezhi Zhang <zhangxuezhi3@gmail.com>
-Cc:     zhangxuezhi1@coolpad.com, wintera@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-87e0e
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,29 +57,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue, 27 Dec 2022 19:03:52 +0800 you wrote:
-> From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+On Fri, 23 Dec 2022 11:29:00 +0400, Miaoqian Lin wrote:
+> rdma_user_mmap_entry_get_pgoff() takes the reference.
+> Add missing rdma_user_mmap_entry_put() to release the reference.
 > 
-> Follow the advice of the Documentation/filesystems/sysfs.rst
-> and show() should only use sysfs_emit() or sysfs_emit_at()
-> when formatting the value to be returned to user space.
 > 
-> Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> 
-> [...]
 
-Here is the summary with links:
-  - s390/qeth: convert sysfs snprintf to sysfs_emit
-    https://git.kernel.org/netdev/net/c/c2052189f19b
+Applied, thanks!
 
-You are awesome, thank you!
+[1/1] RDMA/hns: Fix refcount leak in hns_roce_mmap
+      https://git.kernel.org/rdma/rdma/c/cf6a05c8494a8a
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Leon Romanovsky <leon@kernel.org>
