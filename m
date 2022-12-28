@@ -2,82 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F9F65725E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 04:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D0D657264
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 04:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbiL1DeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 22:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S229891AbiL1Dkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 22:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiL1DeD (ORCPT
+        with ESMTP id S229475AbiL1Dkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 22:34:03 -0500
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC8FBDF18;
-        Tue, 27 Dec 2022 19:34:00 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowAC3vvIhuatjyjmmCQ--.37213S2;
-        Wed, 28 Dec 2022 11:33:53 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     njavali@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] scsi: qla2xxx: Add missing check for dma_map_single
-Date:   Wed, 28 Dec 2022 11:33:52 +0800
-Message-Id: <20221228033352.48237-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Dec 2022 22:40:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5466E53
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 19:40:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 598F5612E4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:40:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98716C433D2;
+        Wed, 28 Dec 2022 03:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672198830;
+        bh=ha35eFq9jwy11rw0xahqaZm/PgmnOe7c6uOAQU9WB38=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=n4Wd48Eg2+48RDcgI04y8/tNSQ12+0Hp+7D+d5qHOQqirvdCs4KE8qvP5PZTRvSCB
+         zAFdUWZtTSoejc/5ZICjJnBqj30JeO4KX/bNOSoiRJHwW18ixLpUs7xU06eMiti5bt
+         v84GCfKx8UyD0XBeF6bjBrNkioEgEmebgFijv7S/xRS68Ea9pMKTPlh3EJ7jRtNa+4
+         o9+/9yzZLKGKqE566BauV2w3g+NhmI4I1yKFvhtgiCHGFjwtyprjpJnyDq/hBFp6EL
+         8q1fuVjBENpTBvZGPR5lup+GUtMkTUlAkBH6AImyoFBho1T4wFO1VyFtcAEZp9k/DX
+         QMe7iI6cHZdhA==
+Date:   Tue, 27 Dec 2022 19:40:30 -0800
+From:   Kees Cook <kees@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: Linux 6.2-rc1
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20221227055212.GA2711289@roeck-us.net>
+References: <CAHk-=wgf929uGOVpiWALPyC7pv_9KbwB2EAvQ3C4woshZZ5zqQ@mail.gmail.com> <20221226195206.GA2626419@roeck-us.net> <CAHk-=whD1zMyt4c7g6-+tWvVweyb-6oHMT_+ZVHqe1EXwtFpCQ@mail.gmail.com> <DA632860-284E-4923-8863-9D2745DD289E@kernel.org> <20221227002941.GA2691687@roeck-us.net> <D8BDBF66-E44C-45D4-9758-BAAA4F0C1998@kernel.org> <20221227055212.GA2711289@roeck-us.net>
+Message-ID: <DE30CDA1-CFF4-49FE-B653-F4CA831EAA12@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAC3vvIhuatjyjmmCQ--.37213S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gr18uFW7JrW5tr4fWrWDtwb_yoWDZFcE9r
-        s0v347ZFykCrs3Zr4Igr1rZrySyrWDXF1I9r1Fq34rCw45X39xWryjv345uw1xZ3y7tF45
-        Cw4UurW5tF10gjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUb2g4DUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for dma_map_single and return error if it fails in order
-to avoid invalid dma being used by dma_sync_single_for_device.
+On December 26, 2022 9:52:12 PM PST, Guenter Roeck <linux@roeck-us=2Enet> w=
+rote:
+>On Mon, Dec 26, 2022 at 05:32:28PM -0800, Kees Cook wrote:
+>> On December 26, 2022 4:29:41 PM PST, Guenter Roeck <linux@roeck-us=2Ene=
+t> wrote:
+>> >On Mon, Dec 26, 2022 at 01:03:59PM -0800, Kees Cook wrote:
+>> >> On December 26, 2022 12:56:29 PM PST, Linus Torvalds <torvalds@linux=
+-foundation=2Eorg> wrote:
+>> >> >On Mon, Dec 26, 2022 at 11:52 AM Guenter Roeck <linux@roeck-us=2Ene=
+t> wrote:
+>> >> >>
+>> >> >> fs/f2fs/inline=2Ec: In function 'f2fs_move_inline_dirents':
+>> >> >> include/linux/fortify-string=2Eh:59:33: error: '__builtin_memset'=
+ pointer overflow between offset [28, 898293814] and size [-898293787, -1] =
+[-Werror=3Darray-bounds]
+>> >> >> fs/f2fs/inline=2Ec:430:9: note: in expansion of macro 'memset'
+>> >> >>   430 |         memset(dst=2Ebitmap + src=2Enr_bitmap, 0, dst=2En=
+r_bitmap - src=2Enr_bitmap);
+>> >> >>       |         ^~~~~~
+>> >> >
+>> >> >Well, that's unfortunate=2E
+>> >>=20
+>> >> I'll look into this=2E
+>> >>=20
+>> >
+>> >I did some more testing=2E The problem is seen with gcc 11=2E3=2E0, bu=
+t not with
+>> >gcc 12=2E2=2E0 nor with gcc 10=2E3=2E0=2E
+>>=20
+>> That's what I'd expect: 10 didn't have variable range tracking wired up=
+ to -Warray-bounds, 11 does, and we disable -Warray-bounds on 12 because of=
+ 3 separate 12-only GCC bugs=2E
+>>=20
+>> > gcc bug ? Should I switch to gcc 12=2E2=2E0 for
+>> >powerpc when build testing the latest kernel ?
+>>=20
+>> Sure? But that'll just hide it=2E I suspect GCC has found a way for dst=
+=2Enr_bitmap to be compile-time 27, so the size is always negative=2E
+>>=20
+>dst=2Enr_bitmap is initialized with SIZE_OF_DENTRY_BITMAP,
+>which is defined as:
+>
+>#define NR_DENTRY_IN_BLOCK      214     /* the number of dentry in a bloc=
+k */
+>#define SIZE_OF_DIR_ENTRY       11      /* by byte */
+>#define SIZE_OF_DENTRY_BITMAP   ((NR_DENTRY_IN_BLOCK + BITS_PER_BYTE - 1)=
+ / \
+>                                        BITS_PER_BYTE)
+>
+>((214 + 8 - 1) / 8 =3D 27, so dst=2Enr_bitmap is indeed compile-time 27=
+=2E
+>
+>Not sure how would know that src=2Enr_bitmap can be > 27, though=2E
+>Am I missing something ?
 
-Fixes: e84067d74301 ("scsi: qla2xxx: Add FC-NVMe F/W initialization and transport registration")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/scsi/qla2xxx/qla_nvme.c | 3 +++
- 1 file changed, 3 insertions(+)
+I think it's saying it can't rule out it being larger? I=2Ee=2E there is n=
+o obvious bounds checking for it=2E Perhaps:
 
-diff --git a/drivers/scsi/qla2xxx/qla_nvme.c b/drivers/scsi/qla2xxx/qla_nvme.c
-index 02fdeb0d31ec..28e75bfd8a3a 100644
---- a/drivers/scsi/qla2xxx/qla_nvme.c
-+++ b/drivers/scsi/qla2xxx/qla_nvme.c
-@@ -367,6 +367,9 @@ static int qla_nvme_ls_req(struct nvme_fc_local_port *lport,
- 	nvme->u.nvme.timeout_sec = fd->timeout;
- 	nvme->u.nvme.cmd_dma = dma_map_single(&ha->pdev->dev, fd->rqstaddr,
- 	    fd->rqstlen, DMA_TO_DEVICE);
-+	if (dma_mapping_error(&ha->pdev->dev, nvme->u.nvme.cmd_dma))
-+		return rval;
-+
- 	dma_sync_single_for_device(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
- 	    fd->rqstlen, DMA_TO_DEVICE);
- 
--- 
-2.25.1
+if (src=2Enr_bitmap > dst=2Enr_bitmap) {
+    err =3D -EFSCORRUPTED;
+		goto out;
+}
 
+
+-Kees
+
+
+--=20
+Kees Cook
