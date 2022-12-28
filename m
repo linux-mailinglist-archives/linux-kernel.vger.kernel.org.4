@@ -2,416 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171B76571F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 03:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7221A6571FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 03:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiL1CAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 21:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
+        id S229754AbiL1CHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 21:07:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbiL1CAc (ORCPT
+        with ESMTP id S230025AbiL1CG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 21:00:32 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879B9BE2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 18:00:30 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id b12so9764864pgj.6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 18:00:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xb8jJPqAsZD3bkiqHrdaFakWJ3w1ushhBL+PrBwDuro=;
-        b=Et9I8+HEhgQhnhgHIHWqEipxttx+lPZtqZ1ZZHCONiAst/ULmA73XUWQb+FJtNm6J3
-         msTO8MI0Nzdrn6u3KRZ7XP6H+Mq24NyI3tdsQgpnWrq8i30M1O8HJooIQKSQAFV/w/AD
-         GGY+dcM0CJvcQrFfFVBZLXaCBR4bWXq+Ox+vMBN/Feqolp4eKIsDDdlYJl94rc1oGaY5
-         NkNtcJRdNzSabZHV4pf1GRhOS28+QDHVnXXEtZand5VmtUQsM3SETMhpY9euFTADHDxU
-         QU2BYrLOgQM1QVGTp782y4ny7YAExdePylBIJYKBK8mkaUSt0izGnvMGCGQ3+k1yYUeI
-         AxiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xb8jJPqAsZD3bkiqHrdaFakWJ3w1ushhBL+PrBwDuro=;
-        b=ggQmhjBXTUiroX5GU9ngl0eIM2Ebw0NJ+BCfyqEAe+FRKhp5+uaCj7Helb910ColkI
-         a71siiLI9MseqpZdYNgNuI5mJIfY1/91ix5J9D32gN5fAzUwn4THcEzzwCsYaMlAYHZv
-         R56T4WtluFRbL6SR9ycMpzrO0X28TooJEeuF5Y68PhRpIHpVRCQmDDwllilzmR+WM5RB
-         bL1VEy9Pwny6basAZ3k2U9YxuQkgifCrz5O+5zR0ho7JjjByyYhUaKYFK+h36MT9EJvx
-         7GcWtmlKY3t3ZGIGLVYsdt/kgbvavTqpO6vLsbn3eQwUrLbB5GxphTbrlx5pabLzqJ9O
-         FzrQ==
-X-Gm-Message-State: AFqh2krxfu4wjPXsnNpyJBiGshOEiVj93Qmgq6IWgOOrr91FvR+J7UNy
-        02iaf3HfJz4JJNO3y4G7rqq/vF7sOvAD5yATbXE4w4xyZl4u8g==
-X-Google-Smtp-Source: AMrXdXsE51z3NvYJCtXjWgC8fIzxdAX8wWhz/lVKCERVTd6SU6/Jyhvn9zWXNd6LMS4K7H+jOB3KeRRqvX2I6lGCrxE=
-X-Received: by 2002:a62:1c4d:0:b0:581:1898:93ae with SMTP id
- c74-20020a621c4d000000b00581189893aemr611997pfc.51.1672192829589; Tue, 27 Dec
- 2022 18:00:29 -0800 (PST)
+        Tue, 27 Dec 2022 21:06:56 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A73E15
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 18:06:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672193209; x=1703729209;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vJVQ4j9uyvBuRxdZxCxhGx927WPgoZzDqK0YGUAc5e4=;
+  b=C4sTeCy+CpGVKAFMsW2k7XGGbhC8mRXRL516aUs/ZjgHXaWyCeJSV8Vx
+   tjZqBYQy3ZVny6ygNFfTP00c39Sf1PYXDY9IYEQQvPHpdJXUcELaINRmr
+   18F0QKjm8ONieb89EjO8zppUt4bL3oiItiSkcBTFwyvKOE2p3dgevtVVj
+   WjHCl1S2L0psISLwM+gnmi+JZWmQZoxERtMGDuCQUp/d34h/zU8SNJUN6
+   77WpknKwBvqzwAHo5LN9qMxCpFqQiMkyXF7EulH/6vD3Ll2a9MTHUKmRp
+   D7BmZXVjSF1L+JX5KXtm/9BXB0ZwBE99RFaLqKfJ1YVFidGukDuJtQ08R
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="301152773"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="301152773"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 18:06:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="646594930"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="646594930"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 27 Dec 2022 18:06:46 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pALqA-000FKP-08;
+        Wed, 28 Dec 2022 02:06:46 +0000
+Date:   Wed, 28 Dec 2022 10:06:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 1379eb6a2a60194c655c745385fffbb7d903fb1e
+Message-ID: <63aba49e.fIwEZQA2GQq8VKAu%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20221220031023.197178-1-rmoar@google.com>
-In-Reply-To: <20221220031023.197178-1-rmoar@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 27 Dec 2022 18:00:18 -0800
-Message-ID: <CAGS_qxrp_oT7b_NNP4PfES06QAp-V4B4BAETFd3Wv9x-F8Zhrg@mail.gmail.com>
-Subject: Re: [PATCH v1] lib/hashtable_test.c: add test for the hashtable structure
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 7:16 PM Rae Moar <rmoar@google.com> wrote:
->
-> Add a KUnit test for the kernel hashtable implementation in
-> include/linux/hashtable.h.
->
-> Note that this version does not yet test each of the rcu
-> alternative versions of functions.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 1379eb6a2a60194c655c745385fffbb7d903fb1e  Merge branch into tip/master: 'sched/core'
 
-Looks pretty good from a cursory glance.
-Had some mostly stylistic nits/suggestions below.
+elapsed time: 724m
 
-> ---
->
-> Note: The check patch script is outputting open brace errors on lines
-> 154, 186, 231 of lib/hashtable_test.c but I believe the format of the
-> braces on those lines is consistent with the Linux Kernel style guide.
-> Will continue to look at these errors.
->
->  lib/Kconfig.debug    |  13 ++
->  lib/Makefile         |   1 +
->  lib/hashtable_test.c | 299 +++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 313 insertions(+)
->  create mode 100644 lib/hashtable_test.c
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 3fc7abffc7aa..3cf3b6f8cff4 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2458,6 +2458,19 @@ config LIST_KUNIT_TEST
->
->           If unsure, say N.
->
-> +config HASHTABLE_KUNIT_TEST
-> +       tristate "KUnit Test for Kernel Hashtable structures" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This builds the hashtable KUnit test suite.
-> +         It tests the API and basic functionality of the functions
-> +         and associated macros defined in include/linux/hashtable.h.
+configs tested: 91
+configs skipped: 2
 
-nit: the "functions and associated macros" == "the API", so perhaps we
-can shorten this a bit.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> +         For more information on KUnit and unit tests in general please refer
-> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +         If unsure, say N.
-> +
->  config LINEAR_RANGES_TEST
->         tristate "KUnit test for linear_ranges"
->         depends on KUNIT
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 161d6a724ff7..9036d3aeee0a 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -370,6 +370,7 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
->  CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
->  obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
->  obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-> +obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
->  obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
->  obj-$(CONFIG_BITS_TEST) += test_bits.o
->  obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-> diff --git a/lib/hashtable_test.c b/lib/hashtable_test.c
-> new file mode 100644
-> index 000000000000..7907df66a8e7
-> --- /dev/null
-> +++ b/lib/hashtable_test.c
-> @@ -0,0 +1,299 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test for the Kernel Hashtable structures.
-> + *
-> + * Copyright (C) 2022, Google LLC.
-> + * Author: Rae Moar <rmoar@google.com>
-> + */
-> +#include <kunit/test.h>
-> +
-> +#include <linux/hashtable.h>
-> +
-> +struct hashtable_test_entry {
-> +       int key;
-> +       int data;
-> +       struct hlist_node node;
-> +       int visited;
-> +};
-> +
-> +static void hashtable_test_hash_init(struct kunit *test)
-> +{
-> +       /* Test the different ways of initialising a hashtable. */
-> +       DEFINE_HASHTABLE(hash1, 3);
-> +       DECLARE_HASHTABLE(hash2, 3);
-> +
-> +       hash_init(hash1);
-> +       hash_init(hash2);
-> +
-> +       KUNIT_EXPECT_TRUE(test, hash_empty(hash1));
-> +       KUNIT_EXPECT_TRUE(test, hash_empty(hash2));
-> +}
-> +
-> +static void hashtable_test_hash_empty(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry a;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       hash_init(hash);
-> +       KUNIT_EXPECT_TRUE(test, hash_empty(hash));
-> +
-> +       a.key = 1;
-> +       a.data = 13;
-> +       hash_add(hash, &a.node, a.key);
-> +
-> +       /* Hashtable should no longer be empty. */
-> +       KUNIT_EXPECT_FALSE(test, hash_empty(hash));
-> +}
-> +
-> +static void hashtable_test_hash_hashed(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry a, b;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       hash_init(hash);
-> +       a.key = 1;
-> +       a.data = 13;
-> +       b.key = 1;
-> +       b.data = 2;
-> +
-> +       hash_add(hash, &a.node, a.key);
-> +       hash_add(hash, &b.node, b.key);
-> +
-> +       KUNIT_EXPECT_TRUE(test, hash_hashed(&a.node));
-> +       KUNIT_EXPECT_TRUE(test, hash_hashed(&b.node));
-> +}
-> +
-> +static void hashtable_test_hash_add(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry a, b, *x;
-> +       int bkt;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       hash_init(hash);
-> +       a.key = 1;
-> +       a.data = 13;
-> +       a.visited = 0;
-> +       b.key = 2;
-> +       b.data = 10;
-> +       b.visited = 0;
-> +
-> +       hash_add(hash, &a.node, a.key);
-> +       hash_add(hash, &b.node, b.key);
-> +
-> +       hash_for_each(hash, bkt, x, node) {
-> +               if (x->key == a.key && x->data == a.data)
-> +                       a.visited += 1;
-> +               if (x->key == b.key && x->data == b.data)
-> +                       b.visited += 1;
-> +       }
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+powerpc                           allnoconfig
+arc                              allyesconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+sh                               allmodconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+x86_64                           rhel-8.3-bpf
+s390                             allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                              defconfig
+x86_64                    rhel-8.3-kselftests
+i386                                defconfig
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+arm                                 defconfig
+i386                          randconfig-a014
+x86_64                           allyesconfig
+i386                          randconfig-a012
+ia64                             allmodconfig
+i386                          randconfig-a016
+x86_64               randconfig-a012-20221226
+x86_64               randconfig-a014-20221226
+x86_64               randconfig-a013-20221226
+x86_64               randconfig-a011-20221226
+arm64                            allyesconfig
+x86_64               randconfig-a015-20221226
+x86_64               randconfig-a016-20221226
+arm                              allyesconfig
+i386                             allyesconfig
+arm                  randconfig-r046-20221225
+arc                  randconfig-r043-20221225
+arc                  randconfig-r043-20221227
+arm                  randconfig-r046-20221227
+arc                  randconfig-r043-20221226
+riscv                randconfig-r042-20221226
+s390                 randconfig-r044-20221226
+x86_64                            allnoconfig
+i386                          randconfig-c001
+powerpc              randconfig-c003-20221225
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20221225
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
 
-  x->visited += 1;
-or
-  x->visited++;
-also do the same thing.
+clang tested configs:
+x86_64               randconfig-a002-20221226
+x86_64               randconfig-a003-20221226
+x86_64                          rhel-8.3-rust
+x86_64               randconfig-a006-20221226
+x86_64               randconfig-a001-20221226
+x86_64               randconfig-a004-20221226
+x86_64               randconfig-a005-20221226
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+i386                 randconfig-a004-20221226
+i386                 randconfig-a001-20221226
+i386                 randconfig-a003-20221226
+i386                 randconfig-a002-20221226
+i386                 randconfig-a005-20221226
+i386                 randconfig-a006-20221226
+hexagon              randconfig-r045-20221225
+riscv                randconfig-r042-20221227
+hexagon              randconfig-r041-20221225
+hexagon              randconfig-r041-20221227
+hexagon              randconfig-r041-20221226
+arm                  randconfig-r046-20221226
+s390                 randconfig-r044-20221225
+hexagon              randconfig-r045-20221226
+riscv                randconfig-r042-20221225
+hexagon              randconfig-r045-20221227
+s390                 randconfig-r044-20221227
+x86_64                        randconfig-k001
 
-Note: given x is supposed to point to a or b, I don't know if checking
-against a.data does us much good.
-If we're trying to check that hash_add() doesn't mutate the keys and
-data, this code won't catch it.
-We'd have to instead do something like
-  if(x->key != 1 && x->key != 2) KUNIT_FAIL(test, ...);
-
-> +
-> +       /* Both entries should have been visited exactly once. */
-> +       KUNIT_EXPECT_EQ(test, a.visited, 1);
-> +       KUNIT_EXPECT_EQ(test, b.visited, 1);
-> +}
-> +
-> +static void hashtable_test_hash_del(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry a, b, *x;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       hash_init(hash);
-> +       a.key = 1;
-> +       a.data = 13;
-> +       b.key = 2;
-> +       b.data = 10;
-> +       b.visited = 0;
-> +
-> +       hash_add(hash, &a.node, a.key);
-> +       hash_add(hash, &b.node, b.key);
-> +
-> +       hash_del(&b.node);
-> +       hash_for_each_possible(hash, x, node, b.key) {
-> +               if (x->key == b.key && x->data == b.data)
-> +                       b.visited += 1;
-
-Similarly to above, x->visited += 1 (or ++) is probably better.
-
-> +       }
-> +
-> +       /* The deleted entry should not have been visited. */
-> +       KUNIT_EXPECT_EQ(test, b.visited, 0);
-> +
-> +       hash_del(&a.node);
-> +
-> +       /* The hashtable should be empty. */
-> +       KUNIT_EXPECT_TRUE(test, hash_empty(hash));
-> +}
-> +
-> +static void hashtable_test_hash_for_each(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry entries[3];
-> +       struct hashtable_test_entry *x;
-> +       int bkt, i, j, count;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       /* Initialize a hashtable with three entries. */
-> +       hash_init(hash);
-> +       for (i = 0; i < 3; i++) {
-> +               entries[i].key = i;
-> +               entries[i].data = i + 10;
-> +               entries[i].visited = 0;
-> +               hash_add(hash, &entries[i].node, entries[i].key);
-> +       }
-> +
-> +       count = 0;
-> +       hash_for_each(hash, bkt, x, node) {
-> +               if (x->key >= 0 && x->key < 3)
-> +                       entries[x->key].visited += 1;
-
-Would this be better using an assert to fail the test if we see unexpected keys?
-E.g. like
-  if (x->key < 0 || x->key > 3) KUNIT_ASSERT_FAILURE(test, ...);
-  x->visited++;
-  count++;
-or
-  KUNIT_ASSERT_GE(test, x->key, 0);
-  KUNIT_ASSERT_LT(test, x->key, 3);
-
-> +               count++;
-> +       }
-> +
-> +       /* Should have visited each entry exactly once. */
-> +       KUNIT_EXPECT_EQ(test, count, 3);
-> +       for (j = 0; j < 3; j++)
-> +               KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-> +}
-> +
-> +static void hashtable_test_hash_for_each_safe(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry entries[3];
-> +       struct hashtable_test_entry *x;
-> +       struct hlist_node *tmp;
-> +       int bkt, i, j, count;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       /* Initialize a hashtable with three entries. */
-> +       hash_init(hash);
-> +       for (i = 0; i < 3; i++) {
-> +               entries[i].key = i;
-> +               entries[i].data = i + 10;
-> +               entries[i].visited = 0;
-> +               hash_add(hash, &entries[i].node, entries[i].key);
-> +       }
-> +
-> +       count = 0;
-> +       hash_for_each_safe(hash, bkt, tmp, x, node) {
-> +               if (x->key >= 0 && x->key < 3) {
-> +                       entries[x->key].visited += 1;
-> +                       hash_del(&entries[x->key].node);
-> +               }
-> +               count++;
-> +       }
-> +
-> +       /* Should have visited each entry exactly once. */
-> +       KUNIT_EXPECT_EQ(test, count, 3);
-> +       for (j = 0; j < 3; j++)
-> +               KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-> +}
-> +
-> +static void hashtable_test_hash_for_each_possible(struct kunit *test)
-> +{
-> +       struct hashtable_test_entry entries[4];
-> +       struct hashtable_test_entry *x;
-> +       int i, j, count;
-> +       DEFINE_HASHTABLE(hash, 3);
-> +
-> +       /* Initialize a hashtable with three entries with key = 1. */
-> +       hash_init(hash);
-> +       for (i = 0; i < 3; i++) {
-> +               entries[i].key = 1;
-> +               entries[i].data = i;
-> +               entries[i].visited = 0;
-> +               hash_add(hash, &entries[i].node, entries[i].key);
-> +       }
-> +
-> +       /* Add an entry with key = 2. */
-> +       entries[3].key = 2;
-> +       entries[3].data = 3;
-> +       entries[3].visited = 0;
-> +       hash_add(hash, &entries[3].node, entries[3].key);
-> +
-> +       count = 0;
-> +       hash_for_each_possible(hash, x, node, 1) {
-> +               if (x->data >= 0 && x->data < 4)
-> +                       entries[x->data].visited += 1;
-> +               count++;
-> +       }
-> +
-> +       /* Should have visited each entry with key = 1 exactly once. */
-> +       for (j = 0; j < 3; j++)
-> +               KUNIT_EXPECT_EQ(test, entries[j].visited, 1);
-> +
-> +       /* If entry with key = 2 is in the same bucket as the entries with
-> +        * key = 1, check it was visited. Otherwise ensure that only three
-> +        * entries were visited.
-> +        */
-> +       if (hash_min(1, HASH_BITS(hash)) == hash_min(2, HASH_BITS(hash))) {
-
-nit: this feels like we might be a bit too tied to the impl (not sure
-if it'll change anytime soon, but still).
-
-Could we check the bucket using hash_for_each?
-E.g.
-
-// assume we change the keys from {1,2} to {0,1}
-int buckets[2];
-hash_for_each(hash, bkt, x, node) {
-  buckets[x->key] = bkt;
-}
-
-if (buckets[0] == buckets[1]) { // all in the same bucket
-  ...
-} else { ... }
-
-> +               KUNIT_EXPECT_EQ(test, count, 4);
-> +               KUNIT_EXPECT_EQ(test, entries[3].visited, 1);
-> +       } else {
-> +               KUNIT_EXPECT_EQ(test, count, 3);
-
-should we also check that entries[3].visited == 0?
-
-Daniel
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
