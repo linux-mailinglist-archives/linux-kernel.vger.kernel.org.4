@@ -2,131 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E917657191
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 02:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2C265717D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 01:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbiL1BNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 20:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        id S231716AbiL1AuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 19:50:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiL1BNB (ORCPT
+        with ESMTP id S229801AbiL1Atp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 20:13:01 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2706B4B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 17:12:57 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id d10so9698743pgm.13
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 17:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=19FACrxzZLvGXvd0qASwod3BuDfjZjR6MyHlKQ4qp7g=;
-        b=iEVqWLpKFWneA1CaDK1kR7cs5OO3qwDqFvdU2t4jNQZOYZuUah0u5S9U6d6kBS9K5P
-         4GynIc5CjpScZRoFcv7w4txy1LtJyF1SiMm8Mapgj32y6w1cX9VXL6lcpELZYg4G3ohN
-         YRRTb4EG9LMCE47SXDsUxXt8KElbfN1f9MgKQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=19FACrxzZLvGXvd0qASwod3BuDfjZjR6MyHlKQ4qp7g=;
-        b=znZTzoMVJf+N7o2aWM8cYcw0G/jHf5hXX4+PG7k4DRDP1eUhgkdmJoxfWof2G1E2se
-         uVZILR4TW0bADhN8F/o4MGqeWzWJ2eGx/Oz9IkFjqgjzB5CpVrFeRP671A0P8sQW3mji
-         R1AJf0JtFXe9nxSshDHppyL4QnDD1Tl1bTBatrZOwnTI4ByPKt9jIVOnw95lolEOmqzq
-         7a7KlY6WhrAawfH9xUBBdkxcSy3ef4eZvFtBC01wjat+PFVkwtyIvAhDeaFrhKGnX75K
-         Ji7sMMymyTxb1kS39dI1kBumvCTobRV2sLQsNZ/0jvq4g7CqjNe5rCYuY+z2nsH08eqR
-         mlrQ==
-X-Gm-Message-State: AFqh2kq/OJSiJbwAilMsPhV48axXssJkkfwpi7z/1l7DIhB7DFiXJ6Mp
-        FyJ3okCGJU5+1PscusC94TbTlh3jhpRFUQg5
-X-Google-Smtp-Source: AMrXdXtE+Iu61LxC8/oG9wiX3A5IaH1P+cVPyJUa2fQ6FKLIm8WQohl8bsbs8zl8o9Nxf1TwkKt2rA==
-X-Received: by 2002:a05:6a00:1f06:b0:581:366b:ca63 with SMTP id be6-20020a056a001f0600b00581366bca63mr7058629pfb.34.1672189977038;
-        Tue, 27 Dec 2022 17:12:57 -0800 (PST)
-Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id 68-20020a621947000000b00580e679dcf2sm6045566pfz.157.2022.12.27.17.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 17:12:56 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Cc:     heikki.krogerus@linux.intel.com,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Evan Green <evgreen@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>, Lee Jones <lee@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH 10/10] platform/chrome: cros_typec_vdm: Add VDM send support
-Date:   Wed, 28 Dec 2022 00:45:13 +0000
-Message-Id: <20221228004648.793339-11-pmalani@chromium.org>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-In-Reply-To: <20221228004648.793339-1-pmalani@chromium.org>
-References: <20221228004648.793339-1-pmalani@chromium.org>
+        Tue, 27 Dec 2022 19:49:45 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0836EE003
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:49:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672188584; x=1703724584;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XvQDeXuRsAjQbXnf2tfggKMpZ76Dk0ReMOjPyChUJes=;
+  b=gIZqjUJJ/JGX1/HUTzg6e0nhcXBa23RNyEzoABbTcM6b1LGLujAXcMtk
+   7XJjkH9R2oFcgxdchaXfqknGWK0bQDbXFf8+gPd6riOx9mRXIcmLv7/IR
+   dLY9O/3AzqENRhIjrDLxDGhAED2gCEN0GAibTmviay8NvLVUhjO331m+e
+   LiaJh/DpFqRSPMIERV3jCv5hHKEUwhVq85UUOsZEdnPy+XHK1Gts4387R
+   IMWdbLjU3iKHPKpUMq8s4DTag67nz+5Ozml0uWIEyHeLkB7ZlJkdB4lxS
+   LaFWu9a1pARyHfwulcjo85I2GmInqp2aRj2rIQkpOux32RPwRau05ApNN
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="407046285"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="407046285"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 16:49:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="741876714"
+X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
+   d="scan'208";a="741876714"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Dec 2022 16:49:42 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pAKdZ-000FID-3B;
+        Wed, 28 Dec 2022 00:49:41 +0000
+Date:   Wed, 28 Dec 2022 08:49:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/urgent] BUILD SUCCESS
+ 94cd8fa09f5f1ebdd4e90964b08b7f2cc4b36c43
+Message-ID: <63ab927e.JaRmZHkf7MV6KtVB%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to send generic VDM messages from the alt mode driver to the
-partner (via the ChromeOS EC). The function introduced here is intended
-to be called by the alt mode driver (via the Type-C bus logic).
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/urgent
+branch HEAD: 94cd8fa09f5f1ebdd4e90964b08b7f2cc4b36c43  futex: Fix futex_waitv() hrtimer debug object leak on kcalloc error
 
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
- drivers/platform/chrome/cros_typec_vdm.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+elapsed time: 730m
 
-diff --git a/drivers/platform/chrome/cros_typec_vdm.c b/drivers/platform/chrome/cros_typec_vdm.c
-index fc7b602ceb37..aca9d337118e 100644
---- a/drivers/platform/chrome/cros_typec_vdm.c
-+++ b/drivers/platform/chrome/cros_typec_vdm.c
-@@ -77,6 +77,30 @@ static int cros_typec_port_amode_enter(struct typec_altmode *amode, u32 *vdo)
- 			   sizeof(req), NULL, 0);
- }
- 
-+static int cros_typec_port_amode_vdm(struct typec_altmode *amode, const u32 hdr,
-+				     const u32 *vdo, int cnt)
-+{
-+	struct cros_typec_port *port = typec_altmode_get_drvdata(amode);
-+	struct ec_params_typec_control req = {
-+		.port = port->port_num,
-+		.command = TYPEC_CONTROL_COMMAND_SEND_VDM_REQ,
-+	};
-+	struct typec_vdm_req vdm_req = {};
-+
-+	vdm_req.vdm_data[0] = hdr;
-+	vdm_req.vdm_data_objects = cnt;
-+	memcpy(&vdm_req.vdm_data[1], vdo, cnt - 1);
-+	vdm_req.partner_type = TYPEC_PARTNER_SOP;
-+	req.vdm_req_params = vdm_req;
-+
-+	dev_dbg(port->typec_data->dev, "Sending VDM, hdr: %x, num_objects: %d, port: %d\n",
-+		hdr, cnt, port->port_num);
-+
-+	return cros_ec_cmd(port->typec_data->ec, 0, EC_CMD_TYPEC_CONTROL, &req,
-+			   sizeof(req), NULL, 0);
-+}
-+
- struct typec_altmode_ops port_amode_ops = {
- 	.enter = cros_typec_port_amode_enter,
-+	.vdm = cros_typec_port_amode_vdm,
- };
+configs tested: 83
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+s390                                defconfig
+s390                             allmodconfig
+ia64                             allmodconfig
+s390                             allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+arm                                 defconfig
+x86_64                           rhel-8.3-bpf
+i386                 randconfig-a012-20221226
+x86_64                           rhel-8.3-syz
+i386                 randconfig-a011-20221226
+x86_64                              defconfig
+x86_64                         rhel-8.3-kunit
+i386                 randconfig-a013-20221226
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a014-20221226
+arm64                            allyesconfig
+x86_64                               rhel-8.3
+i386                 randconfig-a016-20221226
+i386                                defconfig
+arm                              allyesconfig
+i386                 randconfig-a015-20221226
+x86_64                           allyesconfig
+x86_64               randconfig-a014-20221226
+i386                             allyesconfig
+x86_64               randconfig-a013-20221226
+x86_64               randconfig-a011-20221226
+x86_64               randconfig-a012-20221226
+x86_64               randconfig-a015-20221226
+x86_64               randconfig-a016-20221226
+arc                  randconfig-r043-20221227
+arm                  randconfig-r046-20221227
+arc                  randconfig-r043-20221226
+riscv                randconfig-r042-20221226
+s390                 randconfig-r044-20221226
+arm                  randconfig-r046-20221225
+arc                  randconfig-r043-20221225
+x86_64                            allnoconfig
+sh                               allmodconfig
+i386                          randconfig-c001
+powerpc              randconfig-c003-20221225
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+
+clang tested configs:
+x86_64                          rhel-8.3-rust
+x86_64               randconfig-a002-20221226
+x86_64               randconfig-a003-20221226
+x86_64               randconfig-a006-20221226
+x86_64               randconfig-a001-20221226
+x86_64               randconfig-a004-20221226
+i386                 randconfig-a004-20221226
+x86_64               randconfig-a005-20221226
+i386                 randconfig-a001-20221226
+i386                 randconfig-a003-20221226
+i386                 randconfig-a002-20221226
+i386                 randconfig-a006-20221226
+i386                 randconfig-a005-20221226
+hexagon              randconfig-r041-20221227
+hexagon              randconfig-r041-20221226
+arm                  randconfig-r046-20221226
+hexagon              randconfig-r045-20221226
+hexagon              randconfig-r045-20221227
+riscv                randconfig-r042-20221227
+s390                 randconfig-r044-20221227
+hexagon              randconfig-r045-20221225
+hexagon              randconfig-r041-20221225
+s390                 randconfig-r044-20221225
+riscv                randconfig-r042-20221225
+x86_64                        randconfig-k001
+
 -- 
-2.39.0.314.g84b9a713c41-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
