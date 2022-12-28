@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C29657688
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5CF65768B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbiL1Mhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
+        id S232614AbiL1Miu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232938AbiL1MhS (ORCPT
+        with ESMTP id S233087AbiL1MiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:37:18 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F1710FF7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:37:16 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id 1so23443690lfz.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:37:16 -0800 (PST)
+        Wed, 28 Dec 2022 07:38:15 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D961211447
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:38:09 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id s22so16419424ljp.5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:38:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=szUYv0uneyN7YHYxEv+1bpNF1FTM8iygqyO0FKMlC7o=;
-        b=WOVDjahbgzvlWA+I1nfhLWRgkZ9OLauPupQIX9iHFBEbdG8UN1RK9cBk1C1lyT3fTt
-         M8sP2kN+ZfEc0G/6RdgTqJ8VY/1ISqEaKr6aGlvBLyAp1z+6nm656TsD+NlwlHqAqUup
-         6K1j9LRupJG4y9A3X8omkxFf7AoNQ2HTj5Jq/V8I9J0C+nIOWRdneTA+I4UZ/UiAHjAi
-         ahjoVbi51mljf696KPwr8etfQCOeRJYRFbfXjkDtECh+NQiS182weSxvczkUsV01bKTf
-         9FbvEHLrlGbTsDPaiqZBZsi68TiUfCAbJejheVLEvaTvdgfLnLO/DxzpGHofAqiqCkej
-         I4og==
+        bh=ulQdzi20zd2U46RZKsWGGdfViyIJCsOcS9mGLZlm5yU=;
+        b=ROZy35wsYl1/tNFkRh0mrMmTpcQIU+41TeXZI6z23pccDhF71JS3vFW0I6QBK5tqCG
+         +yx3MG8YeeqfNyuyH7Kpxj6/ehUia8GTAq20UcCyksilXnkN3b8iIR4FvbHUTj6HoRlc
+         UX9USikFDumDonaVnDgl137WIqjLQbBc/fPog42FT0vQ7d309epTunt9B50/0C05XE9I
+         uGlEyErjaGvgamWLdzaMz9sooxtCug8QlctG6G9wRYUc1ppb1wJe7FcszmlUPfo18oTy
+         yl6MWffhxj5pH9E4EuI4w+m0DRGYnOHcZwrAo34GHU9EjqrJ7I/out4nSyeUwEsT7wvg
+         FUWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=szUYv0uneyN7YHYxEv+1bpNF1FTM8iygqyO0FKMlC7o=;
-        b=fGgfcUaiuIEDjNaLsHV4jqZKWTyxINylYRjjgfzh393qUmPKuI3JpoJBK/I3pzHgOj
-         5PInQeNWhziuk0ThDFbFfmGDjv/O5DmIZpnpyPmf28eOQNWR2kaB0Y0KZj4x3biRUgRL
-         7E/FzsNkxSnMJZ8M710m7wf3FczWJ3V5vYb5D9xf+6wKMvj6MZFNPYbm9EXu1Db6uWKX
-         3ZQfB7DzGArt5S8UpxvJxqZK/v1+oXr5dq/my/1LD+LdffSqqC0o5d1ejBvsDI+XakoQ
-         2yCtuIZfgGdJP+KvcikUGB0yKaslm+VxMFFSZGCFFDnvBgqzkmQzHiIh+jOSGW5BYWTw
-         sg7w==
-X-Gm-Message-State: AFqh2kojCgT1HQRJKDc0qv2ptbj2oTJvQUIs/Ahx3w0vEtUDY3MszD6n
-        J1vsP6Kf4Ra0hEGqhp7ixhoHlQ==
-X-Google-Smtp-Source: AMrXdXvZp7CP84l0lYhtw+B8zuMLZIv9fPypPu/nFTNLtiVo6H2Eh797Bsi99jc32fqou298yyIzXg==
-X-Received: by 2002:a05:6512:228a:b0:4b5:7f79:f8bd with SMTP id f10-20020a056512228a00b004b57f79f8bdmr9812553lfu.22.1672231034559;
-        Wed, 28 Dec 2022 04:37:14 -0800 (PST)
+        bh=ulQdzi20zd2U46RZKsWGGdfViyIJCsOcS9mGLZlm5yU=;
+        b=CDWHWLCZ1xc0asLoJcyfB4hITy37mU0lKlbBOn/Z5L7RdxePVIHkWSiNSG7WCtqVAH
+         BLt4R2aSRWRcaA15eW6IDSI1WTUVIMWa+V+5sBpb5F/adQ5ZNoStcdK2w5sIloZs7XGM
+         j9ivvozWL1SxN5KpTyQ4CQzv93a1BzdIAcBc4N4adsOZdUJXGaeRQ5QMiffgnATCwfoK
+         aN06nUyuK0SHuXcAAePh3oFTa4Tc69x0s1Vq5+DRoFrsylAUn7LSCsJyOo2njGmAHdgx
+         Td8yufInv9REbMhFOufGVIDa6wjZEwsKhRcg2hUQ7riIiwm1sJ3Ug1tNssNZ7KDw4+0D
+         k3ZA==
+X-Gm-Message-State: AFqh2kpjRFV6tnb318XakZrkADuBZ4uy4AXRaNQ8CPKWcOT2wYVDoD4L
+        euzzwl2Hr21X9ePk40oXwbzKBA==
+X-Google-Smtp-Source: AMrXdXsoIJZhKKDkqEp/ZqcNn9QOtQzkUwBxJWwRPesEC5Q4Kb3HlmbuhYhJDQ+aKdj8EeXGi7O2/w==
+X-Received: by 2002:a05:651c:90:b0:27f:b833:c50a with SMTP id 16-20020a05651c009000b0027fb833c50amr3893384ljq.14.1672231087829;
+        Wed, 28 Dec 2022 04:38:07 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q21-20020a19a415000000b004a46f92a15bsm2661813lfc.41.2022.12.28.04.37.12
+        by smtp.gmail.com with ESMTPSA id f1-20020a05651c03c100b0027d75b38fd6sm1940734ljp.43.2022.12.28.04.38.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 04:37:13 -0800 (PST)
-Message-ID: <cae5273e-aac5-0c4c-6686-fb2cbc5379e3@linaro.org>
-Date:   Wed, 28 Dec 2022 13:37:12 +0100
+        Wed, 28 Dec 2022 04:38:06 -0800 (PST)
+Message-ID: <76a34e02-ec76-10c8-5cea-681a7477a026@linaro.org>
+Date:   Wed, 28 Dec 2022 13:38:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] ASoC: mediatek: mt8186: support rt5682s_max98360
+Subject: Re: [PATCH 2/2] ASoC: dt-bindings: mt8186-mt6366: add new compatible
+ for max98360a
 Content-Language: en-US
 To:     tongjian <tongjian@huaqin.corp-partner.google.com>,
         lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
@@ -68,9 +69,9 @@ Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20221228122230.3818533-1-tongjian@huaqin.corp-partner.google.com>
- <20221228122230.3818533-2-tongjian@huaqin.corp-partner.google.com>
+ <20221228122230.3818533-3-tongjian@huaqin.corp-partner.google.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221228122230.3818533-2-tongjian@huaqin.corp-partner.google.com>
+In-Reply-To: <20221228122230.3818533-3-tongjian@huaqin.corp-partner.google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,14 +85,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 28/12/2022 13:22, tongjian wrote:
-> Add support for using the rt5682s codec together with max98360a on
-> MT8186-MT6366-RT1019-RT5682S machines.
+> Adds new compatible string "mt8186-mt6366-rt5682s-max98360-sound" for machines
+> with max98360a and rt5682s.
 > 
 > Signed-off-by: tongjian <tongjian@huaqin.corp-partner.google.com>
+> ---
 
-The author and SoB should be full name. Is this correct (full)
-transliteration of your name?
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
