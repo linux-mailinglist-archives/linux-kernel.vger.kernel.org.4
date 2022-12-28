@@ -2,123 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B91D6586F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BA665870C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbiL1VPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 16:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S232129AbiL1V1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 16:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiL1VPF (ORCPT
+        with ESMTP id S231338AbiL1V1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 16:15:05 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E847113EA8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 13:15:03 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id o66so15751475oia.6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 13:15:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u61catlXVW5wFymBQzKgemYTpBvwIjho7UirvKaMj6s=;
-        b=GJn/+f/zSq4Sj1Jy5I7R7pzdtBAYQj/fHvpunvZvo6+d4ZIVzK1RydQT4AkNxsAUqH
-         62BtU1qKw8UmOR1rCLQkwd1luBZeeG+xEmJH1un6vgWHAsSOnGOIOIeNr7/LcpKCzNsy
-         4vH5KtfRC+FkayOrE7CDm9ViKw81nIwEUl1E/MapYHw31K5enZlwC0hczo54VhHIl+80
-         KuHi2ZZl9cSwo2FmsewEBVbCBhmrLeLCdSc2H46hQtIJKj7EtonhPQYY7iWFRLB+o25g
-         VFdc5oVOGjmS9qPZm0KY0zKtJ567MiNrJ6KzdCaYEUJuhU8Hai4YjynfnttUUFELW5q1
-         Y+HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u61catlXVW5wFymBQzKgemYTpBvwIjho7UirvKaMj6s=;
-        b=3HtyJ4NM2XeEDXZYMnV5mngFfSw6YXhuGY+mUfgsmmnON3IIB14MqVFicw7i9PoZIM
-         R1TidJlTI5a++750wpMYIYLpVULQr55jY3SxqPdDJOFcZWMNr4k1FJsgCUZW+yK4ALps
-         ol3k31eGrJAJ5bPU0n5xlCOlZcce2P8Guq3E9OENBrSE2Z9dy+h1629fNNRHGQv+hhGJ
-         evtCOwDYmUBhCNS7oi12D5OA1BzLu5ckcnL6ZdnK15FDuk6e908FDD1cu1TGgRaxI8l1
-         +R5uLb4KBLXTHc05XktSu9cL8Ezon8zIny8CH6X5/riH86QA+zz7yGsI8MDhu/A+W/uq
-         +zqg==
-X-Gm-Message-State: AFqh2kpzfN2jgsUIpgJPyLwtPlp5mYSFwmP8e0NEOYRQgOW3C3BPSs62
-        YrzHub1QuJlPq/2k3biMuPdKAg==
-X-Google-Smtp-Source: AMrXdXvjsN/jTj/sK+n2xZm0y1XctLSMEEFFh1I46UezAZgLU8ZmXZK9DIWXil/6O6GaUT28xYetxQ==
-X-Received: by 2002:aca:4009:0:b0:360:ceb6:1f6f with SMTP id n9-20020aca4009000000b00360ceb61f6fmr9928171oia.54.1672262103112;
-        Wed, 28 Dec 2022 13:15:03 -0800 (PST)
-Received: from [192.168.17.16] ([189.219.72.83])
-        by smtp.gmail.com with ESMTPSA id c17-20020a056808139100b003546fada8f6sm7400869oiw.12.2022.12.28.13.15.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 13:15:02 -0800 (PST)
-Message-ID: <9560136e-d6e9-995a-141a-61dd05a62b8a@linaro.org>
-Date:   Wed, 28 Dec 2022 15:15:01 -0600
+        Wed, 28 Dec 2022 16:27:22 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544C4140AF;
+        Wed, 28 Dec 2022 13:27:21 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 36817dc0ed6b8a83; Wed, 28 Dec 2022 22:27:19 +0100
+Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 12A5D780AF8;
+        Wed, 28 Dec 2022 22:27:19 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Pratyush Yadav <ptyadav@amazon.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2 1/3] ACPI: processor: perflib: Use the "no limit" frequency QoS
+Date:   Wed, 28 Dec 2022 22:21:49 +0100
+Message-ID: <12124970.O9o76ZdvQC@kreacher>
+In-Reply-To: <12138067.O9o76ZdvQC@kreacher>
+References: <12138067.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221228144330.180012208@linuxfoundation.org>
-Content-Language: en-US
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20221228144330.180012208@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.77.51.84
+X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedriedvgdduhedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeekledrjeejrdehuddrkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdejjedrhedurdekgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehpthihrggurghvsegrmhgriihonhdruggvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghs
+ rdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+When _PPC returns 0, it means that the CPU frequency is not limited by
+the platform firmware, so make acpi_processor_get_platform_limit()
+update the frequency QoS request used by it to "no limit" in that case.
+
+This addresses a problem with limiting CPU frequency artificially on
+some systems after CPU offline/online to the frequency that corresponds
+to the first entry in the _PSS return package.
+
+Reported-by: Pratyush Yadav <ptyadav@amazon.de>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2:
+   * Move some changes into a separate patch
+   * Update the changelog accordingly
+
+---
+ drivers/acpi/processor_perflib.c |   20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
+
+Index: linux-pm/drivers/acpi/processor_perflib.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_perflib.c
++++ linux-pm/drivers/acpi/processor_perflib.c
+@@ -53,6 +53,8 @@ static int acpi_processor_get_platform_l
+ {
+ 	acpi_status status = 0;
+ 	unsigned long long ppc = 0;
++	s32 qos_value;
++	int index;
+ 	int ret;
+ 
+ 	if (!pr)
+@@ -72,17 +74,27 @@ static int acpi_processor_get_platform_l
+ 		}
+ 	}
+ 
++	index = ppc;
++
+ 	pr_debug("CPU %d: _PPC is %d - frequency %s limited\n", pr->id,
+-		       (int)ppc, ppc ? "" : "not");
++		 index, index ? "is" : "is not");
+ 
+-	pr->performance_platform_limit = (int)ppc;
++	pr->performance_platform_limit = index;
+ 
+ 	if (ppc >= pr->performance->state_count ||
+ 	    unlikely(!freq_qos_request_active(&pr->perflib_req)))
+ 		return 0;
+ 
+-	ret = freq_qos_update_request(&pr->perflib_req,
+-			pr->performance->states[ppc].core_frequency * 1000);
++	/*
++	 * If _PPC returns 0, it means that all of the available states can be
++	 * used ("no limit").
++	 */
++	if (index == 0)
++		qos_value = FREQ_QOS_MAX_DEFAULT_VALUE;
++	else
++		qos_value = pr->performance->states[index].core_frequency * 1000;
++
++	ret = freq_qos_update_request(&pr->perflib_req, qos_value);
+ 	if (ret < 0) {
+ 		pr_warn("Failed to update perflib freq constraint: CPU%d (%d)\n",
+ 			pr->id, ret);
 
 
-On 28/12/22 08:25, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.2 release.
-> There are 1146 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-We're seeing the already reported problem with the unused variable 'rpm', but also seeing this on Arm, i386, MIPS, PA-RISC:
-
-| /builds/linux/drivers/pwm/pwm-tegra.c: In function 'tegra_pwm_config':
-| /builds/linux/drivers/pwm/pwm-tegra.c:148:53: error: result of '1000000000 << 8' requires 39 bits to represent, but 'long int' only has 32 bits [-Werror=shift-overflow=]
-|    required_clk_rate = DIV_ROUND_UP_ULL(NSEC_PER_SEC << PWM_DUTY_WIDTH,
-|                                                      ^~
-| /builds/linux/include/linux/math.h:40:32: note: in definition of macro 'DIV_ROUND_DOWN_ULL'
-|   ({ unsigned long long _tmp = (ll); do_div(_tmp, d); _tmp; })
-|                                 ^~
-| /builds/linux/drivers/pwm/pwm-tegra.c:148:23: note: in expansion of macro 'DIV_ROUND_UP_ULL'
-|    required_clk_rate = DIV_ROUND_UP_ULL(NSEC_PER_SEC << PWM_DUTY_WIDTH,
-|                        ^~~~~~~~~~~~~~~~
-| cc1: all warnings being treated as errors
-
-Those are with GCC-8 and allmodconfig.
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org
 
