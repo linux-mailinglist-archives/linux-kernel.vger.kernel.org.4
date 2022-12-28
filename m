@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B941065758E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02343657591
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbiL1LBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
+        id S232770AbiL1LCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:02:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbiL1LAy (ORCPT
+        with ESMTP id S232653AbiL1LCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:00:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF48EB1;
-        Wed, 28 Dec 2022 03:00:51 -0800 (PST)
+        Wed, 28 Dec 2022 06:02:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D6C27A;
+        Wed, 28 Dec 2022 03:02:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B8AAB8120C;
-        Wed, 28 Dec 2022 11:00:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67951C433D2;
-        Wed, 28 Dec 2022 11:00:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 140DC6146E;
+        Wed, 28 Dec 2022 11:02:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72317C433EF;
+        Wed, 28 Dec 2022 11:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672225249;
-        bh=Q/zd1RS/MKwAIMZo6szCGlvWyEUH6//dSmNHq1F4y1Y=;
+        s=k20201202; t=1672225365;
+        bh=B+kIgsbyyYwzcCIKPiZMpmbnCMNl6xqsXDtyJEIVNw4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OzXgvu56dgzH08op7IJjLyMG99KZYy5mqF0nDDfU8IFfOmxoQ2NeYRENe1TqihUA1
-         gM7GxYQCxOIiy0s85AYu5nbafBPw7wmGePXMK0pD8tmp4Esmt3TNFqptAip+ZvAj7i
-         0I3BgZp/CY9tLNoF2Cf1XhTZKUTZco+IzXt6tP8CfrzB+xAijtx8KoANCSThMvOIOc
-         Fgje4TFEerbRj3WgD3ylD4IB/+MHmxj0uRs/PT+sb/lb025oM7MYgCEfJ6x0wmgQGz
-         TuhHWw3pddF+pU3tfULJuZSOiAuiXGgsB8u5jMvwqvyNw5NPiIylCBtRDrNkRdfZYc
-         ayTBf8RRZhhXg==
-Date:   Wed, 28 Dec 2022 16:30:45 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lars@metafoo.de, adrianml@alumnos.upm.es,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        michal.simek@amd.com, radhey.shyam.pandey@amd.com,
-        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
-Subject: Re: [PATCH V2 6/6] dmaengine: xilinx_dma: Program interrupt delay
- timeout
-Message-ID: <Y6wh3W0S/pzTI4vL@matsya>
-References: <20221124102745.2620370-1-sarath.babu.naidu.gaddam@amd.com>
- <20221124102745.2620370-7-sarath.babu.naidu.gaddam@amd.com>
+        b=YdnLrNXKFoCGABlpow37gP9VNIeEfLMxRhvSRa3SD8MCWf/xz1UXmo5U4Lh0z+Ot3
+         AqPVjGQYZouqxEh9Bwr+bRMbxcOOJ6GDZ0Jz+GVF7+/go7Yb60Cyg3ovWv+6rDbqyl
+         cpGvF8tcMPk104aSnmxm+CrZECzxEKD7vingzbdk8thDYMYKPI3Xpze3jwYy43nwRp
+         NTxSpgmBdpKkv7c+PRnT2t5KZ7b5t8zC4X+C5EZQo0dVlNwmGAD/5jInOTPx+NOETF
+         mAyaO5Fnj84pAU48yEtYfPXHc1b1wl1Vn9O8IccsqnCfu2Ty+/J/bQY+bkqC+EieeR
+         i89deR5FZpuUQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pAUCu-00067t-1E; Wed, 28 Dec 2022 12:02:48 +0100
+Date:   Wed, 28 Dec 2022 12:02:48 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 08/11] dt-bindings: usb: Add binding for Via lab
+ VL817Q7 hub controller
+Message-ID: <Y6wiWIH5S3jJnkai@hovoldconsulting.com>
+References: <20221228100321.15949-1-linux.amoon@gmail.com>
+ <20221228100321.15949-9-linux.amoon@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221124102745.2620370-7-sarath.babu.naidu.gaddam@amd.com>
+In-Reply-To: <20221228100321.15949-9-linux.amoon@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,96 +61,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24-11-22, 15:57, Sarath Babu Naidu Gaddam wrote:
-> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+On Wed, Dec 28, 2022 at 10:03:17AM +0000, Anand Moon wrote:
+> The VIA Lab VL817-Q7 is a USB 3.1 Gen 1 4-Port hub controller that
+> features 4 downstream ports, an internal 5V regulator and has
+> external reset pin.
 > 
-> Program IRQDelay for AXI DMA. The interrupt timeout mechanism causes
-> the DMA engine to generate an interrupt after the delay time period
-> has expired. It enables dmaengine to respond in real-time even though
-> interrupt coalescing is configured. It also remove the placeholder
-> for delay interrupt and merge it with frame completion interrupt.
-> Since by default interrupt delay timeout is disabled this feature
-> addition has no functional impact on VDMA and CDMA IP's.
+> Add a device tree binding for its USB protocol part.
+> The internal LDO is not covered by this and can just be modelled
+> as a fixed regulator.
 > 
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 > ---
->  drivers/dma/xilinx/xilinx_dma.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
+>  .../bindings/usb/vialab,vl817q7.yaml          | 47 +++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
 > 
-> diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
-> index ce0c151d8f61..333d68ee3559 100644
-> --- a/drivers/dma/xilinx/xilinx_dma.c
-> +++ b/drivers/dma/xilinx/xilinx_dma.c
-> @@ -173,8 +173,10 @@
->  #define XILINX_DMA_MAX_TRANS_LEN_MAX	23
->  #define XILINX_DMA_V2_MAX_TRANS_LEN_MAX	26
->  #define XILINX_DMA_CR_COALESCE_MAX	GENMASK(23, 16)
-> +#define XILINX_DMA_CR_DELAY_MAX		GENMASK(31, 24)
->  #define XILINX_DMA_CR_CYCLIC_BD_EN_MASK	BIT(4)
->  #define XILINX_DMA_CR_COALESCE_SHIFT	16
-> +#define XILINX_DMA_CR_DELAY_SHIFT	24
->  #define XILINX_DMA_BD_SOP		BIT(27)
->  #define XILINX_DMA_BD_EOP		BIT(26)
->  #define XILINX_DMA_COALESCE_MAX		255
-> @@ -410,6 +412,7 @@ struct xilinx_dma_tx_descriptor {
->   * @stop_transfer: Differentiate b/w DMA IP's quiesce
->   * @tdest: TDEST value for mcdma
->   * @has_vflip: S2MM vertical flip
-> + * @irq_delay: Interrupt delay timeout
->   */
->  struct xilinx_dma_chan {
->  	struct xilinx_dma_device *xdev;
-> @@ -448,6 +451,7 @@ struct xilinx_dma_chan {
->  	int (*stop_transfer)(struct xilinx_dma_chan *chan);
->  	u16 tdest;
->  	bool has_vflip;
-> +	u8 irq_delay;
->  };
->  
->  /**
-> @@ -1560,6 +1564,9 @@ static void xilinx_dma_start_transfer(struct xilinx_dma_chan *chan)
->  	if (chan->has_sg)
->  		xilinx_write(chan, XILINX_DMA_REG_CURDESC,
->  			     head_desc->async_tx.phys);
-> +	reg  &= ~XILINX_DMA_CR_DELAY_MAX;
-> +	reg  |= chan->irq_delay << XILINX_DMA_CR_DELAY_SHIFT;
-> +	dma_ctrl_write(chan, XILINX_DMA_REG_DMACR, reg);
->  
->  	xilinx_dma_start(chan);
->  
-> @@ -1887,15 +1894,8 @@ static irqreturn_t xilinx_dma_irq_handler(int irq, void *data)
->  		}
->  	}
->  
-> -	if (status & XILINX_DMA_DMASR_DLY_CNT_IRQ) {
-> -		/*
-> -		 * Device takes too long to do the transfer when user requires
-> -		 * responsiveness.
-> -		 */
-> -		dev_dbg(chan->dev, "Inter-packet latency too long\n");
-> -	}
-> -
-> -	if (status & XILINX_DMA_DMASR_FRM_CNT_IRQ) {
-> +	if (status & (XILINX_DMA_DMASR_FRM_CNT_IRQ |
-> +		      XILINX_DMA_DMASR_DLY_CNT_IRQ)) {
->  		spin_lock(&chan->lock);
->  		xilinx_dma_complete_descriptor(chan);
->  		chan->idle = true;
-> @@ -2822,6 +2822,8 @@ static int xilinx_dma_chan_probe(struct xilinx_dma_device *xdev,
->  	/* Retrieve the channel properties from the device tree */
->  	has_dre = of_property_read_bool(node, "xlnx,include-dre");
->  
-> +	of_property_read_u8(node, "xlnx,irq-delay", &chan->irq_delay);
-
-Same question here too
-
+> diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> new file mode 100644
+> index 000000000000..4ae995160fd5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/vialab,vl817q7.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  	chan->genlock = of_property_read_bool(node, "xlnx,genlock-mode");
->  
->  	err = of_property_read_u32(node, "xlnx,datawidth", &value);
-> -- 
-> 2.25.1
+> +title: Via labs VL817Q7 USB 3.1 hub controller
+> +
+> +maintainers:
+> +  - Anand Moon <linux.amoon@gmail.com>
+> +
+> +allOf:
+> +  - $ref: usb-device.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - vialab,usb2109
 
--- 
-~Vinod
+This isn't a valid compatible string for USB devices (should be
+"usb<vid>,<pid>").
+
+Same for the other binding.
+
+Also the bindings should go before the driver changes in the series.
+
+Johan
