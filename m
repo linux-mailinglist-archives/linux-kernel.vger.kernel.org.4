@@ -2,81 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8942765745F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 386A26574BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbiL1I4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 03:56:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
+        id S232306AbiL1JhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 04:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiL1I4s (ORCPT
+        with ESMTP id S229632AbiL1JhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 03:56:48 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3DDBCB8;
-        Wed, 28 Dec 2022 00:56:47 -0800 (PST)
-Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NhljF1P8vzmWr7;
-        Wed, 28 Dec 2022 16:55:29 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by dggpeml500019.china.huawei.com
- (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 28 Dec
- 2022 16:56:46 +0800
-From:   Wu Bo <wubo40@huawei.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <qiuchangqi.qiu@huawei.com>, <wubo40@huawei.com>
-Subject: [RFC PATCH] ata: libata-eh: Retry the cmnd when normal complete occurrd after scsi timeout
-Date:   Wed, 28 Dec 2022 17:36:56 +0800
-Message-ID: <1672220216-46938-1-git-send-email-wubo40@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Wed, 28 Dec 2022 04:37:23 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49895BDB;
+        Wed, 28 Dec 2022 01:37:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672220242; x=1703756242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XkK3LKwAOFdbmHz35XkZ5MZla29j/ici6NeL6N0Ob0c=;
+  b=HjDQocAWuPcW09rRA7mLozraa/JTIoMMRwigvLQyG+VMNcIDMbHDd84o
+   L9fBCKG19Z9PhPDF67zrlcYntgaDZezFfToLYh7jjogubJ2dfxoDgmrQU
+   v1fDs31EXQFHjVTgOfvr0V55uufADiSkOAXqlDSuqUkkLiBYDlHk1EaSH
+   Aci/yj3YjI4Qn7fkdmm0ogjKN0WPK6Pj0c8zRLFdueSeGlBZfR7r/795v
+   elJNedYVyzpy8d5ToQpjNwL/ZDgX194sYX+1ejVi8+djdV9vkHjpoU+d5
+   SEEp6+XuTDlvIAts8iRtF10OCt9MXhGr1hq5hdwnH2GUQkWQZ+v+L54WF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="385265074"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="385265074"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 01:37:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="655264001"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="655264001"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Dec 2022 01:37:17 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pASs7-000W0b-2Z;
+        Wed, 28 Dec 2022 11:37:15 +0200
+Date:   Wed, 28 Dec 2022 11:37:15 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djrscally@gmail.com, heikki.krogerus@linux.intel.com,
+        sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Subject: Re: [PATCH v3] device property: fix of node refcount leak in
+ fwnode_graph_get_next_endpoint()
+Message-ID: <Y6wOS8NFAZc5+piJ@smile.fi.intel.com>
+References: <20221123022542.2999510-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500019.china.huawei.com (7.185.36.137)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123022542.2999510-1-yangyingliang@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: wubo <wubo40@huawei.com>
+On Wed, Nov 23, 2022 at 10:25:42AM +0800, Yang Yingliang wrote:
+> The 'parent' returned by fwnode_graph_get_port_parent()
+> with refcount incremented when 'prev' is not NULL, it
+> needs be put when finish using it.
+> 
+> Because the parent is const, introduce a new variable to
+> store the returned fwnode, then put it before returning
+> from fwnode_graph_get_next_endpoint().
 
-Hi,
+Rafael, Greg, is this went through the cracks?
 
-Now SCSI middle layer EH and normal IO handler can only choose one of them,
-after the SCSI command is completed normally after scsi timeout period,
-Should this scenario be given a chance to retry?
-
-Signed-off-by: wubo <wubo40@huawei.com>
----
- drivers/ata/libata-eh.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-index 34303ce..8d1856f 100644
---- a/drivers/ata/libata-eh.c
-+++ b/drivers/ata/libata-eh.c
-@@ -617,14 +617,8 @@ void ata_scsi_cmd_error_handler(struct Scsi_Host *host, struct ata_port *ap,
- 					qc->flags |= ATA_QCFLAG_FAILED;
- 					nr_timedout++;
- 				}
--			} else {
--				/* Normal completion occurred after
--				 * SCSI timeout but before this point.
--				 * Successfully complete it.
--				 */
--				scmd->retries = scmd->allowed;
-+			} else
- 				scsi_eh_finish_cmd(scmd, &ap->eh_done_q);
--			}
- 		}
- 
- 		/* If we have timed out qcs.  They belong to EH from
 -- 
-1.8.3.1
+With Best Regards,
+Andy Shevchenko
+
 
