@@ -2,122 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774B56575AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7921A6575AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiL1LMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
+        id S232931AbiL1LME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbiL1LLZ (ORCPT
+        with ESMTP id S232989AbiL1LL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:11:25 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6C1299
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:11:24 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id y25so23180302lfa.9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:11:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z2f4SZyg4wonPVTx4RxeA6rIxFyapG0eRgUtOAydlWA=;
-        b=VgWuOg0Q/BEsBygLFpJMjYgIuVod22bWs5l+/X3fOaaWVx2IsUkTSEmYS51+wK57k2
-         AUfCWQAqR4hCi3nLS80syhaX/nsfMis8faHJzh7uTMpzmuASDUVAU3goBDGehMe972uK
-         q/xvXtEZB2MqYQfqyPin8nBk5kR7sPo4cddfVm/DUFP/BfjpkZXJaksirvR0lTu5Pa6T
-         RCVe0Nqk48/Iu2DfDLhx6HhpiG7FG8YN8LRYrx0iBGicqs0qOJPUmtiHLwf0xcF5PdZr
-         UtTEUuBT9t1fTENfGm0Yq6hYTuRqpqLdp1kGG0tZGG1vwmXibTxBmSevUKASgYB1u3UK
-         zp6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z2f4SZyg4wonPVTx4RxeA6rIxFyapG0eRgUtOAydlWA=;
-        b=wpkCEtzsaLJmu/4Q+hJAlu/7vjJCYKFwDs6icqNUcywJCXeJA8i9pJdXvvgwIGcoFV
-         I4KJkL6ZyB3lLAAwW9kAs8NQgTYr8fbZwDcGRtWCl0p+1SIpwlefgqiVSRpMzok48/H/
-         WlfN9FFBCCR9k3gqfggibXm4lARy85lr8kjqboYnxa1hLBV4nqgFTAcoke5QxvBRwkIz
-         XrhOvNqmi1VVUnczGVcGVRmK94EmQ9xw6Jc/btE7ImrPYqBrYPOczEYR9ZM5xbLIulsz
-         w1bPk5qCZbKNeU2GwhlAH5HP3TW08V9m7luS/pr92okQ7lVKWXsjfcaScf/ybtgLAk+0
-         2O3g==
-X-Gm-Message-State: AFqh2kpmpjxC27WEdWXbn/+pxs4EeGj3G8n+rYaQomq7H8Jg6U8gfunL
-        /77XPXP0OcCgqgJSjUDXSYkRbw==
-X-Google-Smtp-Source: AMrXdXvOtmvIG7R1J4c06BP7mYgTgqlZzX8dEVFQxPiuCwnLOhkokMDzf7g7ahmf2F74vURqMQtXZw==
-X-Received: by 2002:ac2:51b6:0:b0:4b6:ed8b:4f16 with SMTP id f22-20020ac251b6000000b004b6ed8b4f16mr6620915lfk.52.1672225882451;
-        Wed, 28 Dec 2022 03:11:22 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s5-20020a056512314500b004b59871f457sm2628788lfi.247.2022.12.28.03.11.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 03:11:22 -0800 (PST)
-Message-ID: <2653e293-92a1-817f-6a84-c8e21f34d304@linaro.org>
-Date:   Wed, 28 Dec 2022 12:11:21 +0100
+        Wed, 28 Dec 2022 06:11:57 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7419387;
+        Wed, 28 Dec 2022 03:11:55 -0800 (PST)
+Received: (Authenticated sender: didi.debian@cknow.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3101460002;
+        Wed, 28 Dec 2022 11:11:52 +0000 (UTC)
+From:   Diederik de Haas <didi.debian@cknow.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        LABBE Corentin <clabbe@baylibre.com>
+Subject: Re: crypto-rockchip patches queued for 6.1
+Date:   Wed, 28 Dec 2022 12:11:40 +0100
+Message-ID: <2589096.039tgBz4BG@prancing-pony>
+Organization: Connecting Knowledge
+In-Reply-To: <Y6wdZHlnUIzzreTA@kroah.com>
+References: <2236134.UumAgOJHRH@prancing-pony> <Y6wdZHlnUIzzreTA@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3] regulator: dt-bindings: qcom,rpmh: Indicate
- regulator-allow-set-load dependencies
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dianders@chromium.org, Johan Hovold <johan+kernel@kernel.org>
-References: <20220907204924.173030-1-ahalaney@redhat.com>
- <14b0237d-6511-4a1f-3bda-e0e72b442a56@linaro.org>
- <Y6whZ50Lz07xG/R1@hovoldconsulting.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y6whZ50Lz07xG/R1@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart2694219.z1yeqPhZyi"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/12/2022 11:58, Johan Hovold wrote:
-> On Wed, Dec 28, 2022 at 11:37:06AM +0100, Krzysztof Kozlowski wrote:
->> On 07/09/2022 22:49, Andrew Halaney wrote:
->>> For RPMH regulators it doesn't make sense to indicate
->>> regulator-allow-set-load without saying what modes you can switch to,
->>> so be sure to indicate a dependency on regulator-allowed-modes.
->>>
->>> In general this is true for any regulators that are setting modes
->>> instead of setting a load directly, for example RPMH regulators. A
->>> counter example would be RPM based regulators, which set a load
->>> change directly instead of a mode change. In the RPM case
->>> regulator-allow-set-load alone is sufficient to describe the regulator
->>> (the regulator can change its output current, here's the new load),
->>> but in the RPMH case what valid operating modes exist must also be
->>> stated to properly describe the regulator (the new load is this, what
->>> is the optimum mode for this regulator with that load, let's change to
->>> that mode now).
->>>
->>> With this in place devicetree validation can catch issues like this:
->>>
->>>     /mnt/extrassd/git/linux-next/arch/arm64/boot/dts/qcom/sm8350-hdk.dtb: pm8350-rpmh-regulators: ldo5: 'regulator-allowed-modes' is a dependency of 'regulator-allow-set-load'
->>>             From schema: /mnt/extrassd/git/linux-next/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
->>
->> Andrew,
->>
->> This patch was merged therefore we started seeing such warnings. Any
->> plans to actually fix them?
+--nextPart2694219.z1yeqPhZyi
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Diederik de Haas <didi.debian@cknow.org>
+To: Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: crypto-rockchip patches queued for 6.1
+Date: Wed, 28 Dec 2022 12:11:40 +0100
+Message-ID: <2589096.039tgBz4BG@prancing-pony>
+Organization: Connecting Knowledge
+In-Reply-To: <Y6wdZHlnUIzzreTA@kroah.com>
+MIME-Version: 1.0
+
+On Wednesday, 28 December 2022 11:41:40 CET Greg KH wrote:
+> > All those patches have been merged into Linus' tree for 6.2 and there's a
+> > hotfix planned to be submitted for 6.2 here:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git/
+> > commit/?h=v6.2-armsoc/dtsfixes&id=53e8e1e6e9c1653095211a8edf17912f2374bb03
+> > 
+> > Wouldn't it make more sense to queue the whole patch set for 6.1?
+> > Or (at least) the whole crypto rockchip part as mentioned here:
+> > https://lore.kernel.org/all/Y5mGGrBJaDL6mnQJ@gondor.apana.org.au/
+> > under the "Corentin Labbe (32):" label?
 > 
-> Didn't Doug already do that?
+> Please provide us a list of the specific git commits and in the order in
+> which you wish to see them applied and we will be glad to review them.
 > 
-> 	https://lore.kernel.org/all/20220829164952.2672848-1-dianders@chromium.org/
+> Looking at random links (that are wrapped and not able to be easily
+> used) is not going to work well.
 
-You're right, thanks. I keep seeing the error on
-sm8350-sony-xperia-sagami-pdx214 and I thought it is on every board. My
-bad. I'll fix the Xperia same way as HDK was fixed.
+These are the commits from Linus' tree (in the correct order):
+
+https://git.kernel.org/linus/299c481fa5c121f892420d97f1123a853b7f1079
+https://git.kernel.org/linus/8ccd9c8cd1d1618f5e073c86ffcfe15f292eefe6
+https://git.kernel.org/linus/c50ef1411c8cbad0c7db100c477126076b6e3348
+https://git.kernel.org/linus/6d11c9387865723fd779be00ae37a4588e60133d
+https://git.kernel.org/linus/87e356c4966444866186f68f05832fdcc0f351a3
+https://git.kernel.org/linus/68ef8af09a1a912a5ed2cfaa4cca7606f52cef90
+https://git.kernel.org/linus/816600485cb597b3ff7d6806a95a78512839f775
+https://git.kernel.org/linus/d6b23ccef82816050c2fd458c9dabfa0e0af09b9
+https://git.kernel.org/linus/bb3c7b73363c9a149b12b74c44ae94b73a8fddf8
+https://git.kernel.org/linus/57d67c6e8219b2a034c16d6149e30fb40fd39935
+https://git.kernel.org/linus/6d55c4a206d29006c733b5083ba5da8391abbdbd
+https://git.kernel.org/linus/48d904d428b68080abd9161148ca2ab1331124a4
+https://git.kernel.org/linus/a216be3964c15661579005012b1f0d7d20a1f265
+https://git.kernel.org/linus/6f61192549d0214f8d9d1e1d3152e450658ed1e9
+https://git.kernel.org/linus/3a6fd464f48ad35d8cf15d81fd92094132dc862a
+https://git.kernel.org/linus/e803188400d32d28ecfbef0878c289e3c7026723
+https://git.kernel.org/linus/37bc22159c456ad43fb852fc6ed60f4081df25df
+https://git.kernel.org/linus/456698746b40008eb0924eb7e9ec908330948b2d
+https://git.kernel.org/linus/e65e90101329de0fe304e2df057f68c5f0fa4748
+https://git.kernel.org/linus/a7fa0644dd0b91fab97398de7ea4672a6526261f
+https://git.kernel.org/linus/2e3b149578c30275db9c3501c1d9dec36d16622a
+https://git.kernel.org/linus/c018c7a9dd198ce965ca4d10c7b083849bc533be
+https://git.kernel.org/linus/ea389be9857721252367fd2cf81bc8068e060693
+https://git.kernel.org/linus/81aaf680e85207d6521b250b2a80ba7c91cc9cbe
+https://git.kernel.org/linus/d1b5749687618d969c0be6428174a18a7e94ebd2
+https://git.kernel.org/linus/b136468a0024ea90c1259767c732eed12ce6edba
+https://git.kernel.org/linus/d1152bc533c941f7e267bf53d344cee510ea2808
+https://git.kernel.org/linus/8c701fa6e38c43dba75282e4d919298a5cfc5b05
+https://git.kernel.org/linus/2d3c756adcd7a7ee15b6a55cf01b363e3f134e79
+https://git.kernel.org/linus/e220e6719438f7a99fe0a73e6e126481380202fa
+https://git.kernel.org/linus/0d31b14c9e4178a129a1aa5e491e4da1489c07de
+https://git.kernel.org/linus/c5a1e104c35e5134b6048f1e03960a6ac9c42935
+https://git.kernel.org/linus/9dcd71c863a6f6476378d076d3e9189c854d49fd
+
+These commands will show them too:
+git log --oneline -25 d1b5749687618d969c0be6428174a18a7e94ebd2 --reverse
+git log --oneline -1 b136468a0024ea90c1259767c732eed12ce6edba
+git log --oneline -2 8c701fa6e38c43dba75282e4d919298a5cfc5b05 --reverse
+git log --oneline -5 9dcd71c863a6f6476378d076d3e9189c854d49fd --reverse
+
+And this is the hotfix, planned for 6.2 (unwrapped):
+https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git/commit?id=53e8e1e6e9c1653095211a8edf17912f2374bb03
+
+Regards,
+  Diederik
+--nextPart2694219.z1yeqPhZyi
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCY6wkbAAKCRDXblvOeH7b
+bq9RAPwJrkq5/raRkGrN+Qdih68Rn4M3xmqQq9pW1gjV2HwKoAEA3nbehpmpu0eA
+zGZd10gkx4NuMmWEUXTsOUI5APrDjwI=
+=yGm3
+-----END PGP SIGNATURE-----
+
+--nextPart2694219.z1yeqPhZyi--
 
 
-Best regards,
-Krzysztof
 
