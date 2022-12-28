@@ -2,108 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64B865744A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48AD6573D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiL1Ise (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 03:48:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
+        id S230145AbiL1IRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 03:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbiL1IsJ (ORCPT
+        with ESMTP id S229526AbiL1IRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 03:48:09 -0500
-X-Greylist: delayed 1808 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Dec 2022 00:45:22 PST
-Received: from mail1.wrs.com (mail1.windriver.com [147.11.146.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9DB396;
-        Wed, 28 Dec 2022 00:45:22 -0800 (PST)
-Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 2BS8Ep4n001781
-        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Wed, 28 Dec 2022 00:14:51 -0800
-Received: from pek-lpd-ccm4.wrs.com (pek-lpd-ccm4.wrs.com [128.224.153.194])
-        by mail.windriver.com (8.15.2/8.15.2) with ESMTP id 2BS8ElXl025145;
-        Wed, 28 Dec 2022 00:14:48 -0800 (PST)
-From:   jiguang.xiao@windriver.com
-To:     thomas.lendacky@amd.com, Shyam-sundar.S-k@amd.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Prashant.Chikhalkar@windriver.com,
-        zhaolong.zhang@windriver.com, Rick.Ilowite@windriver.com,
-        Jiguang.Xiao@windriver.com
-Subject: [PATCH] net: amd-xgbe: add missed tasklet_kill
-Date:   Wed, 28 Dec 2022 16:14:47 +0800
-Message-Id: <20221228081447.3400369-1-jiguang.xiao@windriver.com>
-X-Mailer: git-send-email 2.37.3
+        Wed, 28 Dec 2022 03:17:38 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203E3F43
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 00:17:36 -0800 (PST)
+Received: from dggpemm500017.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nhkqz6sm9zmWMm;
+        Wed, 28 Dec 2022 16:16:15 +0800 (CST)
+Received: from [10.174.178.220] (10.174.178.220) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 28 Dec 2022 16:17:32 +0800
+Message-ID: <5cb83ada-a1a4-b52f-3254-0e6536ab4315@huawei.com>
+Date:   Wed, 28 Dec 2022 16:17:32 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] cma:tracing: Print alloc result in trace_cma_alloc_finish
+Content-Language: en-US
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+CC:     Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <liuzhiqiang26@huawei.com>, <linfeilong@huawei.com>
+References: <20221208142130.1501195-1-haowenchao@huawei.com>
+ <20221218102030.94b44e62608f20fd9decf9a0@kernel.org>
+From:   Wenchao Hao <haowenchao@huawei.com>
+In-Reply-To: <20221218102030.94b44e62608f20fd9decf9a0@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggpeml100018.china.huawei.com (7.185.36.133) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiguang Xiao <jiguang.xiao@windriver.com>
+On 2022/12/18 9:20, Masami Hiramatsu (Google) wrote:
+> On Thu, 8 Dec 2022 22:21:30 +0800
+> Wenchao Hao <haowenchao@huawei.com> wrote:
+> 
+>> The result of allocation is not printed in trace_cma_alloc_finish
+>> now, while it's important to do it so we can set filters to catch
+>> specific error on allocation or trigger some operations on specific
+>> error.
+>>
+>> Although we have printed the result in log, but the log is
+>> conditional and could not be filtered by tracing event.
+>>
+>> What's more, it introduce little overhead to print this result.
+>> The result of allocation is named as errorno in trace.
+> 
+> This looks good to me. BTW, with this change, cma_alloc_class has only
+> one event - cma_alloc_busy_retry. If so, can we remove the cma_alloc_class?
+> 
+> Thank you,
+> 
 
-The driver does not call tasklet_kill in several places.
-Add the calls to fix it.
+Sorry, I got COVID-19 and just recovered, so did not response your email in time.
 
-Fixes: 85b85c853401 (amd-xgbe: Re-issue interrupt if interrupt status
-not cleared)
-Signed-off-by: Jiguang Xiao <jiguang.xiao@windriver.com>
----
- drivers/net/ethernet/amd/xgbe/xgbe-drv.c  | 3 +++
- drivers/net/ethernet/amd/xgbe/xgbe-i2c.c  | 4 +++-
- drivers/net/ethernet/amd/xgbe/xgbe-mdio.c | 4 +++-
- 3 files changed, 9 insertions(+), 2 deletions(-)
+The cma_alloc_class should be removed. Since Andrew has applied this patch,
+I would send another one to remove it.
 
-diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-index 7b666106feee..614c0278419b 100644
---- a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
-@@ -1064,6 +1064,9 @@ static void xgbe_free_irqs(struct xgbe_prv_data *pdata)
- 
- 	devm_free_irq(pdata->dev, pdata->dev_irq, pdata);
- 
-+	tasklet_kill(&pdata->tasklet_dev);
-+	tasklet_kill(&pdata->tasklet_ecc);
-+
- 	if (pdata->vdata->ecc_support && (pdata->dev_irq != pdata->ecc_irq))
- 		devm_free_irq(pdata->dev, pdata->ecc_irq, pdata);
- 
-diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-i2c.c b/drivers/net/ethernet/amd/xgbe/xgbe-i2c.c
-index 22d4fc547a0a..a9ccc4258ee5 100644
---- a/drivers/net/ethernet/amd/xgbe/xgbe-i2c.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-i2c.c
-@@ -447,8 +447,10 @@ static void xgbe_i2c_stop(struct xgbe_prv_data *pdata)
- 	xgbe_i2c_disable(pdata);
- 	xgbe_i2c_clear_all_interrupts(pdata);
- 
--	if (pdata->dev_irq != pdata->i2c_irq)
-+	if (pdata->dev_irq != pdata->i2c_irq) {
- 		devm_free_irq(pdata->dev, pdata->i2c_irq, pdata);
-+		tasklet_kill(&pdata->tasklet_i2c);
-+	}
- }
- 
- static int xgbe_i2c_start(struct xgbe_prv_data *pdata)
-diff --git a/drivers/net/ethernet/amd/xgbe/xgbe-mdio.c b/drivers/net/ethernet/amd/xgbe/xgbe-mdio.c
-index 4e97b4869522..0c5c1b155683 100644
---- a/drivers/net/ethernet/amd/xgbe/xgbe-mdio.c
-+++ b/drivers/net/ethernet/amd/xgbe/xgbe-mdio.c
-@@ -1390,8 +1390,10 @@ static void xgbe_phy_stop(struct xgbe_prv_data *pdata)
- 	/* Disable auto-negotiation */
- 	xgbe_an_disable_all(pdata);
- 
--	if (pdata->dev_irq != pdata->an_irq)
-+	if (pdata->dev_irq != pdata->an_irq) {
- 		devm_free_irq(pdata->dev, pdata->an_irq, pdata);
-+		tasklet_kill(&pdata->tasklet_an);
-+	}
- 
- 	pdata->phy_if.phy_impl.stop(pdata);
- 
--- 
-2.37.3
+>>
+>> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+>> ---
+>>  include/trace/events/cma.h | 32 +++++++++++++++++++++++++++++---
+>>  mm/cma.c                   |  2 +-
+>>  2 files changed, 30 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/include/trace/events/cma.h b/include/trace/events/cma.h
+>> index 3d708dae1542..ef75ea606ab2 100644
+>> --- a/include/trace/events/cma.h
+>> +++ b/include/trace/events/cma.h
+>> @@ -91,12 +91,38 @@ TRACE_EVENT(cma_alloc_start,
+>>  		  __entry->align)
+>>  );
+>>  
+>> -DEFINE_EVENT(cma_alloc_class, cma_alloc_finish,
+>> +TRACE_EVENT(cma_alloc_finish,
+>>  
+>>  	TP_PROTO(const char *name, unsigned long pfn, const struct page *page,
+>> -		 unsigned long count, unsigned int align),
+>> +		 unsigned long count, unsigned int align, int errorno),
+>>  
+>> -	TP_ARGS(name, pfn, page, count, align)
+>> +	TP_ARGS(name, pfn, page, count, align, errorno),
+>> +
+>> +	TP_STRUCT__entry(
+>> +		__string(name, name)
+>> +		__field(unsigned long, pfn)
+>> +		__field(const struct page *, page)
+>> +		__field(unsigned long, count)
+>> +		__field(unsigned int, align)
+>> +		__field(int, errorno)
+>> +	),
+>> +
+>> +	TP_fast_assign(
+>> +		__assign_str(name, name);
+>> +		__entry->pfn = pfn;
+>> +		__entry->page = page;
+>> +		__entry->count = count;
+>> +		__entry->align = align;
+>> +		__entry->errorno = errorno;
+>> +	),
+>> +
+>> +	TP_printk("name=%s pfn=0x%lx page=%p count=%lu align=%u errorno=%d",
+>> +		  __get_str(name),
+>> +		  __entry->pfn,
+>> +		  __entry->page,
+>> +		  __entry->count,
+>> +		  __entry->align,
+>> +		  __entry->errorno)
+>>  );
+>>  
+>>  DEFINE_EVENT(cma_alloc_class, cma_alloc_busy_retry,
+>> diff --git a/mm/cma.c b/mm/cma.c
+>> index 4a978e09547a..a75b17b03b66 100644
+>> --- a/mm/cma.c
+>> +++ b/mm/cma.c
+>> @@ -491,7 +491,7 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+>>  		start = bitmap_no + mask + 1;
+>>  	}
+>>  
+>> -	trace_cma_alloc_finish(cma->name, pfn, page, count, align);
+>> +	trace_cma_alloc_finish(cma->name, pfn, page, count, align, ret);
+>>  
+>>  	/*
+>>  	 * CMA can allocate multiple page blocks, which results in different
+>> -- 
+>> 2.32.0
+>>
+> 
+> 
 
