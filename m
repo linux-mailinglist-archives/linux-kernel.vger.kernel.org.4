@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B4C65766A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F4B65766D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbiL1M3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S232862AbiL1MaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:30:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiL1M31 (ORCPT
+        with ESMTP id S232873AbiL1M37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:29:27 -0500
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AF2BE4;
-        Wed, 28 Dec 2022 04:29:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=S5A82/vTyB3E2qT0vPwrQFPcNR5JLZTUdXm1+CZZGm4=; b=tNoMND1zfSVEkRkapAe2SLkvk7
-        fd5mxSYnQi6ax/CA3Mjd3eZLODVxSQokSsyTWPohYXRhea7L8rNqQNo+yq3070vKuqreS5YXZgnga
-        701DTc5Xu0hmurfmugUFF71WnfJfctEkSuhffIku+n9q61MBigcnJxbkrNGfdm6Mjbh1TmzZVPthK
-        V7BOhzMIgGVlAGtT4CmQm6FF2OE1PzPUgzcsVj3xulqcjQbhScMGC//YXY1W30icwCEd1JlB+3eDQ
-        Z7gKCr7G5GdEaFWzIdBiEcb8/VsBlY0vGezsi3gYRkRy8Qb36JPkmy08qsiYqVKWjui4U8gsNBSsO
-        3XyXF9jg==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1pAVYY-008VYL-HA; Wed, 28 Dec 2022 14:29:14 +0200
-Message-ID: <864f2fdd-4289-a178-bbf1-c2a6a579c58c@kapsi.fi>
-Date:   Wed, 28 Dec 2022 14:28:54 +0200
+        Wed, 28 Dec 2022 07:29:59 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE60EA3;
+        Wed, 28 Dec 2022 04:29:58 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id j8-20020a17090a3e0800b00225fdd5007fso6324524pjc.2;
+        Wed, 28 Dec 2022 04:29:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xva4+JODa1CXmxrrNEoeJGKgbbb6AVhHbz9b3pDdu3Y=;
+        b=LSTQpTjJPDYXXfQgBFygaBnBXhiDHGw8nySZOPSt8FTS+JN/iPOuTa+aHzokSyIjeA
+         yETYvBEjlaQbziFflOlzDKih6/eoiSRb7U97HPJvLGKWiOV8mLGHZ7xRopYi+jf1uuXy
+         NnyL2BYLrVt14Z4lkVj8vslSwKGDRrvc0Q5uBHMLMvyHBoexl0OdlMeWKPOGitxeSweO
+         SbwtmkMSLFy1tLTNj69xQegSyxxU+jLXOWzoA/u5Ku3nxguClAR6rtWleX1FH7awXDTn
+         +kj22wptp8k2w390UzXBmcErwlOyyF2xn2Aa0spFG6WKv8+WJ3y9HD/VdwBP3r2UD3vI
+         V4VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xva4+JODa1CXmxrrNEoeJGKgbbb6AVhHbz9b3pDdu3Y=;
+        b=AEf9N5/XC7kjU/BEL/Z5UoNuI+94PMl+FYn4t4NgGR0dIKLzr5gd3QUeIQXg4dDbG8
+         tIntDuzy0N0UIyVN3xZqm5kmTGIyCEh+CKxGBovadKCIP9yFHbQS+old8h0Edu1hxg1i
+         xJOBdr6vCH35RilOSKE1zeFAtxyu3En//GkmLkhkyfm03VbocON8KINT0BHPiN0U8HQJ
+         rzJfjecO6I36V9XtHX0ogjXcy4U2X5TGuea1Yb5a1yPMjk7qwMWIiGR2AKNfV6u2R3WY
+         jkH2nW+xnmFCA5omra4rP1X2ctNNE5hlNt5Db+vOG5depnRDbHhJkV9P16oy1qGJgQXH
+         iOAw==
+X-Gm-Message-State: AFqh2krpwL1Nsk5Zc21mfNzEaDZoba/GiQO/mjGtncPa25anQiKE+7zc
+        hIN9UegJBEOWYP4/7b6YStWxVnderK8=
+X-Google-Smtp-Source: AMrXdXtsBi80DY9iwPR5JpBM2gQ0nTOt8eV/7FcOW3HG2JFpwq9o0rV1ylg2c4EWuyxfXExCDG7uBg==
+X-Received: by 2002:a17:902:b402:b0:188:d434:9c67 with SMTP id x2-20020a170902b40200b00188d4349c67mr24625787plr.32.1672230598294;
+        Wed, 28 Dec 2022 04:29:58 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-21.three.co.id. [180.214.233.21])
+        by smtp.gmail.com with ESMTPSA id o9-20020a170903210900b001782398648dsm10932255ple.8.2022.12.28.04.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 04:29:57 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 6EBF8100504; Wed, 28 Dec 2022 19:29:52 +0700 (WIB)
+Date:   Wed, 28 Dec 2022 19:29:52 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Irui Wang <irui.wang@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        angelogioacchino.delregno@collabora.com,
+        nicolas.dufresne@collabora.com, kyrie wu <kyrie.wu@mediatek.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
+        maoguang.meng@mediatek.com
+Subject: Re: [V2] media: jpeg: Fix multi-hw judgement
+Message-ID: <Y6w2wG2MlIiHlkr/@debian.me>
+References: <20221216035247.18816-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] drm/tegra: submit: No need for Null pointer check before
- kfree
-To:     Deepak R Varma <drv@mailo.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-References: <Y6sn7XptKyk5cbrA@qemulion>
-Content-Language: en-US
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <Y6sn7XptKyk5cbrA@qemulion>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KTfqalsCkhxWe9vh"
+Content-Disposition: inline
+In-Reply-To: <20221216035247.18816-1-irui.wang@mediatek.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/27/22 19:14, Deepak R Varma wrote:
-> kfree() & vfree() internally perform NULL check on the pointer handed
-> to it and take no action if it indeed is NULL. Hence there is no need
-> for a pre-check of the memory pointer before handing it to
-> kfree()/vfree().
-> 
-> Issue reported by ifnullfree.cocci Coccinelle semantic patch script.
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
->   drivers/gpu/drm/tegra/submit.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/tegra/submit.c b/drivers/gpu/drm/tegra/submit.c
-> index 066f88564169..06f836db99d0 100644
-> --- a/drivers/gpu/drm/tegra/submit.c
-> +++ b/drivers/gpu/drm/tegra/submit.c
-> @@ -680,8 +680,8 @@ int tegra_drm_ioctl_channel_submit(struct drm_device *drm, void *data,
->   		kfree(job_data->used_mappings);
->   	}
-> 
-> -	if (job_data)
-> -		kfree(job_data);
-> +	kfree(job_data);
-> +
->   put_bo:
->   	gather_bo_put(&bo->base);
->   unlock:
-> --
-> 2.34.1
-> 
-> 
-> 
 
-It continues to be the case that I think this transform is bad. Same 
-applies to the host1x patch.
+--KTfqalsCkhxWe9vh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Mikko
+On Fri, Dec 16, 2022 at 11:52:47AM +0800, Irui Wang wrote:
+> From: kyrie wu <kyrie.wu@mediatek.com>
+>=20
+> some chips have multi-hw, but others have only one,
+> modify the condition of multi-hw judgement
+
+nit: s/judgement/conditional block/ ...
+
+> -	if (list_empty(&pdev->dev.devres_head)) {
+> +	if (!jpeg->variant->hw_arch) {
+
+=2E.. like here (if block).
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--KTfqalsCkhxWe9vh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY6w2ugAKCRD2uYlJVVFO
+oxnoAQDF4eixtonmpeiSzrrnq0P464jpGvONKLB03PJ+hcYvmgEAkL0nfkqyljuU
+uDlPj3WP1suLVtrYWPvRsjvpYhBOvws=
+=vr87
+-----END PGP SIGNATURE-----
+
+--KTfqalsCkhxWe9vh--
