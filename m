@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D79657695
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1623C6576A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiL1Mnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S230508AbiL1MtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:49:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiL1Mnk (ORCPT
+        with ESMTP id S230012AbiL1MtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:43:40 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C10F3C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:43:39 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id b3so23489908lfv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:43:39 -0800 (PST)
+        Wed, 28 Dec 2022 07:49:12 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEFAEAF
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:49:06 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id g16so6303919plq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:49:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wyLEEKIyqkAjb9IQ0Oi9TdXRS+RdmpHpVD+IMGR2Kbs=;
-        b=Y2dv+v5dkIAzONv9TPRC7w/+PzHLta6hYhIHZA/4acoueQatOfsspyB144denkYekh
-         DuJ+mf9M+cyqWx//dBNZLvQTnyDQF06A5/ilUVpYmS5LgDZMWRDVwORd9kDBj+1CxTLY
-         qOXWKtrgCb0n6HOCoYN3in5OJHIzAoBVOW6OtIv3/yeLi+0TJ1b+oM2Ib9nJ28ThxNwf
-         y55psogOh1MG0bszg1YtBGJ0F4+fqqnxsNCm/nIkIoSSRIQ27vxyX391u3EtdCUyV6F6
-         zqNKnm1ObLwQMYxYNLaareaMMPDTUIA6la9CXa5VTuPVyYN0dzSRgyyKWwz3knS0tl+r
-         9KYg==
+        d=gmail.com; s=20210112;
+        h=to:message-id:subject:date:mime-version:from
+         :content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P6gDrXdowsD5wNp3NTDHh4ckr3ghwrPSRVQHTuuyLts=;
+        b=gSftiTPD/6azNoRXbxwxc2CgGQXghSFW1g3BBzKfH165w6rhBTUqUpdC2BjaiiQT5N
+         NLvdRe5UtfFMkoerf4jnB5Z4yo5CQG5TPFGSzdyJQj2ZnPiIdBSvPAtO880PBnBkGL1C
+         KE9efK8gsLU7hGrJNhLqZWJPCzN2kbxiQ0E7kIaWN1g//fOwGH0hRoIpvBUIfjuZCmLz
+         gKs/ShQK3sl8cVVA8qzBmr5PFZV83Z5wHrbomMpzHq81+xNnqZ8NiPne/uMZeD/DS9Q0
+         huxzC6ypJ4fM10jksU3KLr44pxB4EeJWjwXBtzW6TD3UQKOWEJXeabgbGx8s6Bo/kflf
+         CLkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wyLEEKIyqkAjb9IQ0Oi9TdXRS+RdmpHpVD+IMGR2Kbs=;
-        b=g4+8AIVgyvAKgzOnsfOVSR2+zG/yu4I0TOp8yJMVrqNY/xPdt+vpcjoibpZ3v4j047
-         Ht3ULygVwu8xhFnfx4/zIZAHfRQCZOxMGqZsl/2xPRvTmX9Hni0F+lCG0iRHgX0Xp5GZ
-         /WebfUT6bvDDigHeu/6l1NckuuYwAvIC3CnixFSwasY16WM26yb3cYZxHlbyppYJ5Yg1
-         3Rkfbxa/JaPDT99/KehOCpuFRjv/2hwRUe/fMmMWwfEiFwumguC4pB6Kl4fLe/vZWvZB
-         dmz424w9pf9VOoDZKyiJtdgApOZliZa5U2Xq0d0f5SmPyHI42U0nwfDOOsqZmBrufbIM
-         PDhg==
-X-Gm-Message-State: AFqh2krzwR559I6IcxwtP67jW35QbaHJG/EMqmGGlPjJGdExJUBP/s+3
-        DuNvponv3MwJGDV2aBf1uFqEng==
-X-Google-Smtp-Source: AMrXdXtJknrPqpsSn+QPvuHwcVlU6sMMhCqPKVdgnUPn88kT7MU7FTU5h/obHREzhpHJTWFCmh6zMA==
-X-Received: by 2002:a05:6512:398c:b0:4ac:ec52:e063 with SMTP id j12-20020a056512398c00b004acec52e063mr7993973lfu.29.1672231417668;
-        Wed, 28 Dec 2022 04:43:37 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c1-20020ac25f61000000b0049f54c5f2a4sm2647356lfc.229.2022.12.28.04.43.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 04:43:37 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: ufs: qcom,ufs: document required-opps
-Date:   Wed, 28 Dec 2022 13:43:31 +0100
-Message-Id: <20221228124331.258416-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=to:message-id:subject:date:mime-version:from
+         :content-transfer-encoding:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=P6gDrXdowsD5wNp3NTDHh4ckr3ghwrPSRVQHTuuyLts=;
+        b=sJF175vQ6UeIfSjM+BQp4W3F5Wd2V++/ax6ZugTMwM5P1teaZmZk+tufenV9jaUfvY
+         KokB8jlq0iH4L/z3bhl0KuHGYmncKIVL80jdyjmitLpxT18L6rKvuZHZsWeBOFOroNyc
+         CXHDycpLYW+omJPWT0U+NkWvsl8ndr7OC+TuyKbuuRBPOqo78d0EFKdhRvPqfiluBdzf
+         4J5dSw3AgjYZ0XjPvi/HuBRiBxvcswHoIF4aPEWUrcrcctdNBitrEDZnae9vJQ6Hazr6
+         4wDzrG9q/4OdEJeWtLvqPktZJwsIWzgSbCNFQBfW138jvwQqr83FFJMmrW677MpLIJ+A
+         yiIA==
+X-Gm-Message-State: AFqh2kp7Z7UHExDCKqruyqZPf4nNjUbdrPSp0v7Ds48FZELdz8dJaL1b
+        9cHkuM4KGmlMisEG5jFXiG23lnfqez4aig==
+X-Google-Smtp-Source: AMrXdXvM9jjVjHMsfATruyxrLdD9AD5DCPMwwg9rYDKq2s+GvIpBHRcNtfEqUmsvCKteAs4csaRjZw==
+X-Received: by 2002:a17:90a:3c86:b0:225:dac9:f070 with SMTP id g6-20020a17090a3c8600b00225dac9f070mr14781123pjc.32.1672231745154;
+        Wed, 28 Dec 2022 04:49:05 -0800 (PST)
+Received: from smtpclient.apple ([2001:2d8:621a:351f:d5bd:4555:ce5f:72f0])
+        by smtp.gmail.com with ESMTPSA id j14-20020a17090a2a8e00b002187a4dd830sm5538651pjd.46.2022.12.28.04.49.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 04:49:04 -0800 (PST)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Mime-Version: 1.0 (1.0)
+Date:   Wed, 28 Dec 2022 21:48:51 +0900
+Subject: [QUESTION] about the maple tree and current status of mmap_lock scalability
+Message-Id: <EC51CFA7-2BC8-4F72-A7D4-3B1A778EDB37@gmail.com>
+To:     linux-mm@kvack.org, liam.howlett@oracle.com, willy@infradead.org,
+        surenb@google.com, ldufour@linux.ibm.com, michel@lespinasse.org,
+        vbabka@suse.cz, linux-kernel@vger.kernel.org
+X-Mailer: iPad Mail (20B82)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,MIME_QP_LONG_LINE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UFS device node on SC8280XP uses required-opps:
+Hello mm folks,
 
-  sc8280xp-crd.dtb: ufs@1d84000: Unevaluated properties are not allowed ('required-opps' was unexpected)
+I have a few questions about the current status of mmap_lock scalability.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+What is currently causing the kernel to use mmap_lock to protect the maple t=
+ree?
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+I understand that the long-term goal is to remove the need for mmap_lock in r=
+eaders
+while traversing the maple tree, using techniques such as RCU or SPF.
+What is the biggest obstacle preventing this from being achieved at this tim=
+e?
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+How does the maple tree provide RCU-safe manipulation of VMAs?
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Is it similar to the approach suggested in the RCUVM paper (replacing the or=
+iginal
+root node with a new root node that shares most of its nodes and deferring
+the freeing of stale nodes using RCU)?
+
+I'm having difficulty understanding the design of the maple tree in this reg=
+ard.
+
+[RCUVM paper] https://pdos.csail.mit.edu/papers/rcuvm:asplos12.pdf
+
+Thank you for your time.
+
 ---
- Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-index e53c6e203ac8..41ac2fe861f3 100644
---- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-@@ -75,6 +75,9 @@ properties:
-     minItems: 1
-     maxItems: 2
- 
-+  required-opps:
-+    maxItems: 1
-+
-   resets:
-     maxItems: 1
- 
--- 
-2.34.1
-
+Hyeonggon=
