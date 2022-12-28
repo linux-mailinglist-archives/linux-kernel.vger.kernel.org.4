@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4AF6580AD
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9B76580AC
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiL1QT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 11:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S234651AbiL1QTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 11:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234445AbiL1QSr (ORCPT
+        with ESMTP id S234638AbiL1QSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 11:18:47 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA17519C3A
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:17:31 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id fy4so16670204pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:17:31 -0800 (PST)
+        Wed, 28 Dec 2022 11:18:50 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C081A055
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:17:35 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id 20so3008277plo.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:17:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SbuT81cTqrWb06I08YNk/QYGpUnIYQwfiUqfqhuTPAs=;
-        b=JwkluDZyi7Hbk8sR9WvMw++RLfzCX9DprsV3tjkhS2dzv1yi7hfwIIdDLn2zDn+WMU
-         zXSx2D7xPxtwGEPFtzUYkN7s+Z2rUHQGfnEckae/t0WEY9i9Cens7510/Q4frn+bq0Y4
-         R4qgF86gnbPdO0DZQD0FODtGrIwqZzwXERjL3YpRvaLQEMHDtYBGMWkEigYpLp3Pqf7M
-         Ffap7EyGYsRbUb08/5RNkuPLE8UKKZN/qnC66e00Hrtx+ElVMdBQaWfukcJqMczec70i
-         S45NoYIx8YZCIx6JUzPTBO9Sa1PjT5kB9FOnLI2LTd8HSUkWv5wQAgmy3yxVZZDN28z6
-         3+yw==
+        bh=k+iHQs4uPoFa0chr8duXApXo2zq9mEU5tnmcTMS1VXc=;
+        b=RZ9ntAEHz2cR92CulW8lqRm6cxZJBAiKx+fRYPDJVU6e2bgPGYAIzC1QzJqFRS8YW3
+         FBA0rLpwRw/eUM3a6OJPyRUCmXpcdIWMPxR0wvrHy6EdQdtPZ6UUqHcSSDnG4LV3Rjzo
+         gXCZ2oHxfUau2UB6QYgeMhS2RUny2GUcEj0/JNeRbqu/6UMEmoG24BSh64+fQ4T2Ra5E
+         bs4k+WEFf2vUdGalc9kF/ZxE0bv7B234oYBb6BJKM+fOBoa77eAgWdIujcuDIzq9tu2S
+         LI0Rt5j5EdRQ8BxOSUWXvBmDvuSdDUDfw/xi/OZV/y31G6FDeB3WhF3Wj049evchny7y
+         XwKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SbuT81cTqrWb06I08YNk/QYGpUnIYQwfiUqfqhuTPAs=;
-        b=vTfXkS1Gt2mdoIg2EmrwxCuBsBCPJwY+kZazcTAbyoM1euAbWXUZ000ZRgbkYBbvY2
-         uvEFYDJfS8IjSQLc6g+Epvu47qzHpxVwZUblpD+ppQGftlONKIMNvodW/010Om+yMX7A
-         ttBtfHEADeK9/UGSxWUWrOd7/uVpuP+wJXUEbpLtG5sr+2TwSUMf8VWyl4fOj6/Untu2
-         v/I/VMPqnfCflU/kW+o+egf46Pwdzskbea/POijm1Q5hgzoXh/4hmgELh+oz9xnGJlW5
-         FJqiUioxrVQOqqGUlyOEVaj+9HYkx0fqmEvRE2WITqykmq7aORUEaHUL04udUgDZxdcg
-         +QgA==
-X-Gm-Message-State: AFqh2kolr6GQIg0YB0wN0l8j8mLG6RjXics/GnLBvSZvLA2O8gds/VDr
-        R8F+oso26kHWPRoQJ0jLr7Jh
-X-Google-Smtp-Source: AMrXdXtGHOufEjAivRbcDgryAR6ZPswcvzR2crozMrc0bWmqfHtGbGBTW/roNQvygYIcdxVZ6G728g==
-X-Received: by 2002:a17:902:be16:b0:188:f0eb:ce10 with SMTP id r22-20020a170902be1600b00188f0ebce10mr30387826pls.65.1672244251263;
-        Wed, 28 Dec 2022 08:17:31 -0800 (PST)
+        bh=k+iHQs4uPoFa0chr8duXApXo2zq9mEU5tnmcTMS1VXc=;
+        b=QxxRP+q3rc5wfVOODESZslhVkziwMFR/lH0ui8IRUHjExNK3vKqjCoZ77h7PiQPqEw
+         obH6fcjnLOE+yCis7MitmOYbVEqzsvWHQkS+M5+Y4X3kU4TeG+n71rh3cXMZysrjWwZi
+         EzLMWqumR8tbYE1pPcMlLxaF6e4UWux89V6RhpJNd0Ya+0o1MCBzR60406n6D4yX1J5H
+         c0fmgtqZ8bN6vbkIUVH1TrqWDg7ngrdF3GfenYExd495u4WxeS1i0SuKtX1xiYNougt1
+         ERgmtu8y2ZMFCUK99H9NftGrOE8uG7GZkPzLl5fcTctGNLPjd1Kixf4Uyc3HRfsCKx1g
+         eAtQ==
+X-Gm-Message-State: AFqh2kqLcwr9FefwJJFcdgQz5SPxvGPdc7wuQXqBPX0jtNLI9e0qXFzp
+        NjyUynCkrcHc8+o7ROGrEcXC
+X-Google-Smtp-Source: AMrXdXvMD9P/xlFzXn30LDNXalC1ybtN/BG+KRBU6C6L+w65aD8UdblWVHgdDVnQt/Sr6+JRm4kDxQ==
+X-Received: by 2002:a17:903:2781:b0:189:c3ef:c759 with SMTP id jw1-20020a170903278100b00189c3efc759mr29247326plb.68.1672244255068;
+        Wed, 28 Dec 2022 08:17:35 -0800 (PST)
 Received: from localhost.localdomain ([117.217.178.100])
-        by smtp.gmail.com with ESMTPSA id s3-20020a170902c64300b00186abb95bfdsm11256798pls.25.2022.12.28.08.17.27
+        by smtp.gmail.com with ESMTPSA id s3-20020a170902c64300b00186abb95bfdsm11256798pls.25.2022.12.28.08.17.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 08:17:29 -0800 (PST)
+        Wed, 28 Dec 2022 08:17:34 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     mhi@lists.linux.dev
 Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 4/6] bus: mhi: ep: Fix the debug message for MHI_PKT_TYPE_RESET_CHAN_CMD cmd
-Date:   Wed, 28 Dec 2022 21:47:02 +0530
-Message-Id: <20221228161704.255268-5-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH 5/6] bus: mhi: ep: Move chan->lock to the start of processing queued ch ring
+Date:   Wed, 28 Dec 2022 21:47:03 +0530
+Message-Id: <20221228161704.255268-6-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221228161704.255268-1-manivannan.sadhasivam@linaro.org>
 References: <20221228161704.255268-1-manivannan.sadhasivam@linaro.org>
@@ -71,27 +72,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The debug log incorrectly mentions that STOP command is received instead of
-RESET command. Fix that.
+There is a good chance that while the channel ring gets processed, the STOP
+or RESET command for the channel might be received from the MHI host. In
+those cases, the entire channel ring processing needs to be protected by
+chan->lock to prevent the race where the corresponding channel ring might
+be reset.
 
+While at it, let's also add a sanity check to make sure that the ring is
+started before processing it. Because, if the STOP/RESET command gets
+processed while mhi_ep_ch_ring_worker() waited for chan->lock, the ring
+would've been reset.
+
+Cc: <stable@vger.kernel.org> # 5.19
+Fixes: 03c0bb8ec983 ("bus: mhi: ep: Add support for processing channel rings")
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/bus/mhi/ep/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bus/mhi/ep/main.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-index 7d68b00bdbcf..0bce6610ebf1 100644
+index 0bce6610ebf1..2362fcc8b32c 100644
 --- a/drivers/bus/mhi/ep/main.c
 +++ b/drivers/bus/mhi/ep/main.c
-@@ -226,7 +226,7 @@ static int mhi_ep_process_cmd_ring(struct mhi_ep_ring *ring, struct mhi_ring_ele
- 		mutex_unlock(&mhi_chan->lock);
- 		break;
- 	case MHI_PKT_TYPE_RESET_CHAN_CMD:
--		dev_dbg(dev, "Received STOP command for channel (%u)\n", ch_id);
-+		dev_dbg(dev, "Received RESET command for channel (%u)\n", ch_id);
- 		if (!ch_ring->started) {
- 			dev_err(dev, "Channel (%u) not opened\n", ch_id);
- 			return -ENODEV;
+@@ -730,24 +730,37 @@ static void mhi_ep_ch_ring_worker(struct work_struct *work)
+ 		list_del(&itr->node);
+ 		ring = itr->ring;
+ 
++		chan = &mhi_cntrl->mhi_chan[ring->ch_id];
++		mutex_lock(&chan->lock);
++
++		/*
++		 * The ring could've stopped while we waited to grab the (chan->lock), so do
++		 * a sanity check before going further.
++		 */
++		if (!ring->started) {
++			mutex_unlock(&chan->lock);
++			kfree(itr);
++			continue;
++		}
++
+ 		/* Update the write offset for the ring */
+ 		ret = mhi_ep_update_wr_offset(ring);
+ 		if (ret) {
+ 			dev_err(dev, "Error updating write offset for ring\n");
++			mutex_unlock(&chan->lock);
+ 			kfree(itr);
+ 			continue;
+ 		}
+ 
+ 		/* Sanity check to make sure there are elements in the ring */
+ 		if (ring->rd_offset == ring->wr_offset) {
++			mutex_unlock(&chan->lock);
+ 			kfree(itr);
+ 			continue;
+ 		}
+ 
+ 		el = &ring->ring_cache[ring->rd_offset];
+-		chan = &mhi_cntrl->mhi_chan[ring->ch_id];
+ 
+-		mutex_lock(&chan->lock);
+ 		dev_dbg(dev, "Processing the ring for channel (%u)\n", ring->ch_id);
+ 		ret = mhi_ep_process_ch_ring(ring, el);
+ 		if (ret) {
 -- 
 2.25.1
 
