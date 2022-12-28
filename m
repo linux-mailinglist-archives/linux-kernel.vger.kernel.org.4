@@ -2,112 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7541D658618
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 19:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35F3658623
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 19:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiL1Sxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 13:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
+        id S232024AbiL1S5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 13:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbiL1Sxe (ORCPT
+        with ESMTP id S230224AbiL1S5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 13:53:34 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E8515FED;
-        Wed, 28 Dec 2022 10:53:31 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Wed, 28 Dec 2022 13:57:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3FD17074;
+        Wed, 28 Dec 2022 10:57:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7B0D31EC04C1;
-        Wed, 28 Dec 2022 19:53:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672253610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=HaNhDAnQUnW3eGCf7lfZiCI/y+B7ggEGtDMUKhr9xVQ=;
-        b=T05EVPbnaNkNsTblWXujvigaCb+4Gge3E72SFkNqyKL/gglICltLYh5LOA2lYgaCyyI8aQ
-        6BlrmV7l3QMGzgRxFhYkft6SaZsgXHXm3TC5Y60MkSIGTxaWCC9tPpjmwd23hhENglxLUX
-        m/1d/fxBQv5hUMkXu3hoFHghcocvPxc=
-Date:   Wed, 28 Dec 2022 19:53:25 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>, tony.luck@intel.com
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v6 2/4] x86/mce: Remove __mcheck_cpu_init_early()
-Message-ID: <Y6yQpWtlnFmL04h6@zn.tnic>
-References: <20221206173607.1185907-1-yazen.ghannam@amd.com>
- <20221206173607.1185907-3-yazen.ghannam@amd.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18357615A0;
+        Wed, 28 Dec 2022 18:57:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A5FC433EF;
+        Wed, 28 Dec 2022 18:57:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672253823;
+        bh=DREtdnJeXc6R6wIE9paEufR2i5KPgK7BYcKbJMgBpjY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a37xw12AJT4hBNwCimK7qCcBD2OWoHaTYP20D64esILnl3s8fJc1j91Z7WAjlEcC3
+         sLFOhBkbqhWoRlKw7uYnQm3L3E9it26gr8K+PTsqIeGEYKPxq77rkEeqi0vuAYrfVJ
+         fwHp2PTSfOSIxN9daAOWwIZ8uv0FDy43Q5tvA2L6u97QckqAfETGYbHg0bm2Tbvam8
+         AtMJhthvLa/6Kf2t3Mfz0uWepaACvRI77BfsrWPlT7Zgn+FLdz9F6CbiBQwNWATl5f
+         8OgCUybWq2k1cxZG4RD6R2DwCTPZDB7mbaq14WoMRB58lMl3zi6EwJMItrUS+tr+jb
+         xFo7DhXfC3/PQ==
+Date:   Wed, 28 Dec 2022 12:57:00 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Georgi Djakov <djakov@kernel.org>, Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: interconnect: Add Qualcomm SM8550
+Message-ID: <20221228185700.4tyziwqiiopafstl@builder.lan>
+References: <20221202232054.2666830-1-abel.vesa@linaro.org>
+ <20221202232054.2666830-2-abel.vesa@linaro.org>
+ <20221205221425.c6eiserur27clirp@builder.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206173607.1185907-3-yazen.ghannam@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221205221425.c6eiserur27clirp@builder.lan>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 11:36:05AM -0600, Yazen Ghannam wrote:
-> +	mce_flags.overflow_recov = !!cpu_has(c, X86_FEATURE_OVERFLOW_RECOV);
-> +	mce_flags.succor	 = !!cpu_has(c, X86_FEATURE_SUCCOR);
-> +	mce_flags.smca		 = !!cpu_has(c, X86_FEATURE_SMCA);
-> +	mce_flags.amd_threshold	 = 1;
->  
->  	for (bank = 0; bank < this_cpu_read(mce_num_banks); ++bank) {
->  		if (mce_flags.smca)
-> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-> index 5f406d135d32..9efd6d010e2d 100644
-> --- a/arch/x86/kernel/cpu/mce/core.c
-> +++ b/arch/x86/kernel/cpu/mce/core.c
-> @@ -1906,19 +1906,6 @@ static int __mcheck_cpu_ancient_init(struct cpuinfo_x86 *c)
->  	return 0;
->  }
->  
-> -/*
-> - * Init basic CPU features needed for early decoding of MCEs.
-> - */
-> -static void __mcheck_cpu_init_early(struct cpuinfo_x86 *c)
-> -{
-> -	if (c->x86_vendor == X86_VENDOR_AMD || c->x86_vendor == X86_VENDOR_HYGON) {
-> -		mce_flags.overflow_recov = !!cpu_has(c, X86_FEATURE_OVERFLOW_RECOV);
-> -		mce_flags.succor	 = !!cpu_has(c, X86_FEATURE_SUCCOR);
-> -		mce_flags.smca		 = !!cpu_has(c, X86_FEATURE_SMCA);
-> -		mce_flags.amd_threshold	 = 1;
-> -	}
+On Mon, Dec 05, 2022 at 04:14:25PM -0600, Bjorn Andersson wrote:
+> On Sat, Dec 03, 2022 at 01:20:53AM +0200, Abel Vesa wrote:
+> > The Qualcomm SM8550 SoC has several bus fabrics that could be
+> > controlled and tuned dynamically according to the bandwidth demand.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> @Georgi, would you mind picking this patch on its own, create a git tag
+> and share that tag with me (and then merge the tag into your tree...),
+> so that I can merge the dts patches ontop?
+> 
 
-Yeah, looking at this, before and after the change, what we are and were
-doing here is silly. Those flags are global for the whole system but we
-do set them on each CPU - unnecessarily, ofc ;-\ - because we don't have
-a BSP MCE init call.
+dt-bindings/clock/qcom,sm8550-gcc.h has now made it into v6.2-rc1, so
+you should be able to merge this now,Georgi.
 
-That above happens on the mcheck_cpu_init() path which is per-CPU.
+In order for me to pick the dts patches I still would need a immutable
+branch/tag.
 
-However, if we had to be precise and correct, this flags setup should
-happen in a function called
-
-	mcheck_bsp_init()
-
-or so which gets called at the end of identify_boot_cpu() and which does
-all the *once* actions there like allocate the gen pool, run the quirks
-which need to run only once on the BSP and so on.
-
-So that we don't have to do unnecessary work on every CPU.
-
-Tony, thoughts?
-
-I think we should start working towards this - doesn't have to be done
-immediately but I think a proper separation of what runs where - once
-on the BSP or on every CPU - is needed here. Unless I'm missing an
-important angle, which is entirely possible.
-
-Hmmm.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Bjorn
