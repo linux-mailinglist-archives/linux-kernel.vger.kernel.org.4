@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFF465722D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 03:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBD865722F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 03:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbiL1Clz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 21:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S232680AbiL1CmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 21:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiL1Clo (ORCPT
+        with ESMTP id S231263AbiL1Clp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 21:41:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EAECE3C;
-        Tue, 27 Dec 2022 18:41:43 -0800 (PST)
+        Tue, 27 Dec 2022 21:41:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366B8D2C3;
+        Tue, 27 Dec 2022 18:41:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53F91B8109E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4E21612B7;
+        Wed, 28 Dec 2022 02:41:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3BBC4339C;
         Wed, 28 Dec 2022 02:41:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C39DC43392;
-        Wed, 28 Dec 2022 02:41:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672195302;
-        bh=eHnI02DoWX+AoKFVoK0OF4tS3e1cSQZZ2mRmcF8y0FM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QSR9IPhW2nZFUJBf3h8o5krEvE7cEPb8Jf3/8ozlhkvaJvOgXHO6YKazZgltseALc
-         UIOcCYfhftTgmZRXlIDp/4DDkeKCw66XQI0X22TwYt6vAxGPluXyBPDnfi49yd7/yi
-         wNNDqYL1TkPQ7uCElP/u2vVjmo6LlZBuOeAK4Xol/JzC9quE2urkqDQvBPguyWTHbx
-         uCkuEm+ZOVD0yEE7D0fsxtj3vBJD37ZDtnFrugFbxZ36nxSaPNViBpNvPZWUVakSiZ
-         KO2sHf8EOOOOOBel3Scou8ftgSUE/pmD12ij35ORlkEMg+qYLze7jlS4WnnGJswkof
-         dn7iiiZl9uwTg==
+        s=k20201202; t=1672195303;
+        bh=QnklbxEBG3COVRxv2QVCvdpAZpImQ2YsUCTp8vPcCbo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=DMU43Zs4PPqKU0/VYQXRJ7AcV3Z89R6H7NK72HAwb1eZwS3LmBMqOIDWrLxXldigr
+         dRvMcZ26hri9kL2QN1FAvrT+BM5nb0EhPoYYCG8heyawsCdat1MzzxJ53ynt7D9HAm
+         y43VEFRvEzowgVSHfyyC060E6FNeyuNo44Cq/c01my+/c5DflL8DfzLi/D/43ZwXiW
+         ntxbXSPWfM4zIghmEBgyaxtH+WylqrqZzNvP96CQKEyQS++vcr2J3V+GFS1di7t/FY
+         yb6a/7C+VVQEGwNnSpffyQILr+kU0uJGetdtClgdorVTkp66aJuLZ0zYcctURe9zz9
+         hi7fRGLac+LCA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        lee@kernel.org, neil.armstrong@linaro.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        lgirdwood@gmail.com, broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, robh@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH v5 0/2] arm: qcom: mdm9615: second round of bindings and DT fixes
-Date:   Tue, 27 Dec 2022 20:41:35 -0600
-Message-Id: <167219529293.794508.2040766827907383347.b4-ty@kernel.org>
+To:     linux-kernel@vger.kernel.org, robimarko@gmail.com,
+        pabeni@redhat.com, davem@davemloft.net, agross@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
+        netdev@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, kuba@kernel.org,
+        linux-arm-msm@vger.kernel.org, edumazet@google.com
+Subject: Re: (subset) [PATCH v2 1/5] dt-bindings: net: ipq4019-mdio: document IPQ6018 compatible
+Date:   Tue, 27 Dec 2022 20:41:36 -0600
+Message-Id: <167219529289.794508.54060153961953073.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v5-0-910019fb8b9b@linaro.org>
-References: <20221005-mdm9615-pinctrl-yaml-v5-0-910019fb8b9b@linaro.org>
+In-Reply-To: <20221114194734.3287854-1-robimarko@gmail.com>
+References: <20221114194734.3287854-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,21 +57,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 18:04:57 +0100, Neil Armstrong wrote:
-> This is a second round of bindings & DT fixes for the MDM9615 platform.
+On Mon, 14 Nov 2022 20:47:30 +0100, Robert Marko wrote:
+> Document IPQ6018 compatible that is already being used in the DTS along
+> with the fallback IPQ4019 compatible as driver itself only gets probed
+> on IPQ4019 and IPQ5018 compatibles.
 > 
-> This second round focuses on less trivial changes like pinctrl & regulators bindings,
-> the remaining work will mainly be fixing the qcom,kpss-timer/qcom,msm-timer situation and
-> add bindings for qcom,lcc-mdm9615, qcom,kpss-gcc & swir,mangoh-iotport-spi.
-> 
-> Dependencies: None
+> This is also required in order to specify which platform require clock to
+> be defined and validate it in schema.
 > 
 > [...]
 
 Applied, thanks!
 
-[2/2] dt-bindings: soc: qcom: convert non-smd RPM bindings to dt-schema
-      commit: 6b42133d2189d9b3770153e84111ede1e1948e0f
+[5/5] arm64: dts: qcom: ipq8074: add SoC specific compatible to MDIO
+      commit: 36e830a5656d6c22110c5dcffb611fc69a57a269
 
 Best regards,
 -- 
