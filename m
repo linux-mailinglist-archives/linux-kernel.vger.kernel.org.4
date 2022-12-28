@@ -2,605 +2,398 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AB1657377
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D45FD65737E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbiL1HBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 02:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
+        id S230127AbiL1HKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 02:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbiL1HA7 (ORCPT
+        with ESMTP id S229668AbiL1HKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 02:00:59 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F26B62B0;
-        Tue, 27 Dec 2022 23:00:56 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.31:60298.401377448
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.42 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 2517B10029D;
-        Wed, 28 Dec 2022 15:00:55 +0800 (CST)
-Received: from  ([123.150.8.42])
-        by gateway-153622-dep-79f476db8-srhz2 with ESMTP id 9b7ed7b5b3124d83b36a3212303ad65b for rostedt@goodmis.org;
-        Wed, 28 Dec 2022 15:00:56 CST
-X-Transaction-ID: 9b7ed7b5b3124d83b36a3212303ad65b
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.42
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From:   Song Chen <chensong_2000@189.cn>
-To:     rostedt@goodmis.org, mhiramat@kernel.org, arnd@arndb.de
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Song Chen <chensong_2000@189.cn>
-Subject: [PATCH v4 2/2] kernel/trace: Provide default impelentations defined in trace_probe_tmpl.h
-Date:   Wed, 28 Dec 2022 15:08:25 +0800
-Message-Id: <1672211305-31482-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 28 Dec 2022 02:10:13 -0500
+Received: from mr85p00im-ztdg06021701.me.com (mr85p00im-ztdg06021701.me.com [17.58.23.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D610A458
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 23:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1672211409; bh=bcNtYuQZlJwpGTNKEC4GZVBkqp1+IA7MdYYDJXwfYTM=;
+        h=Content-Type:Mime-Version:Subject:From:Date:Message-Id:To;
+        b=wf1JPcIcVx12uduPIeinC03H38EFjXk1Wx4c/+TPSDdiWaBw+wm9TEY8J3dDXIKVF
+         8z711/30cCABo0Msb/WPeZ4g+y5fNeaNyW8iUvnzohTB3S7e9DyWN+Vk/HgCRsoWZH
+         GBYdvDzc2g0Hi5YqafrTwhmj1u5OxCaeTjeePMYK3Vymgj2DEDvXu18ulnKCR8Wh7m
+         ZT5QfpH2+7MD+O/CAojx6QQG00pKJOaRHWJMyLeun/w22LaP6R4oPmPI+11gWOsvL7
+         WAVmBM6iRq9UZ5GbYClaAFaEyXlFlCuwx1L8xvMKHmyzn/vkI0MD3vs/KbfoQ85NGs
+         qM0WEQ+YO6ang==
+Received: from smtpclient.apple (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+        by mr85p00im-ztdg06021701.me.com (Postfix) with ESMTPSA id 97A3E26340DD;
+        Wed, 28 Dec 2022 07:10:08 +0000 (UTC)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.23\))
+Subject: Re: [PATCH 1/7] rust: sync: add `Arc` for ref-counted allocations
+From:   Laine Taffin Altman <alexanderaltman@me.com>
+In-Reply-To: <20221228060346.352362-1-wedsonaf@gmail.com>
+Date:   Tue, 27 Dec 2022 23:09:57 -0800
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <B3B7C271-4C96-455E-A990-2AC7C52F703E@me.com>
+References: <20221228060346.352362-1-wedsonaf@gmail.com>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+X-Mailer: Apple Mail (2.3731.400.23)
+X-Proofpoint-GUID: UoIZ98A_cIOTpmpXc_HiHJxG83PX_Do3
+X-Proofpoint-ORIG-GUID: UoIZ98A_cIOTpmpXc_HiHJxG83PX_Do3
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 clxscore=1011
+ spamscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2212280057
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are 7 function definitions in trace_probe_tmpl.h, they are:
+On Dec 27, 2022, at 10:03 PM, Wedson Almeida Filho <wedsonaf@gmail.com> =
+wrote:
+>=20
+> This is a basic implementation of `Arc` backed by C's `refcount_t`. It
+> allows Rust code to idiomatically allocate memory that is ref-counted.
+>=20
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> ---
+> rust/bindings/bindings_helper.h |   1 +
+> rust/bindings/lib.rs            |   1 +
+> rust/helpers.c                  |  19 ++++
+> rust/kernel/lib.rs              |   1 +
+> rust/kernel/sync.rs             |  10 ++
+> rust/kernel/sync/arc.rs         | 157 ++++++++++++++++++++++++++++++++
+> 6 files changed, 189 insertions(+)
+> create mode 100644 rust/kernel/sync.rs
+> create mode 100644 rust/kernel/sync/arc.rs
+>=20
+> diff --git a/rust/bindings/bindings_helper.h =
+b/rust/bindings/bindings_helper.h
+> index c48bc284214a..75d85bd6c592 100644
+> --- a/rust/bindings/bindings_helper.h
+> +++ b/rust/bindings/bindings_helper.h
+> @@ -7,6 +7,7 @@
+>  */
+>=20
+> #include <linux/slab.h>
+> +#include <linux/refcount.h>
+>=20
+> /* `bindgen` gets confused at certain things. */
+> const gfp_t BINDINGS_GFP_KERNEL =3D GFP_KERNEL;
+> diff --git a/rust/bindings/lib.rs b/rust/bindings/lib.rs
+> index 6c50ee62c56b..7b246454e009 100644
+> --- a/rust/bindings/lib.rs
+> +++ b/rust/bindings/lib.rs
+> @@ -41,6 +41,7 @@ mod bindings_raw {
+> #[allow(dead_code)]
+> mod bindings_helper {
+>     // Import the generated bindings for types.
+> +    use super::bindings_raw::*;
+>     include!(concat!(
+>         env!("OBJTREE"),
+>         "/rust/bindings/bindings_helpers_generated.rs"
+> diff --git a/rust/helpers.c b/rust/helpers.c
+> index b4f15eee2ffd..09a4d93f9d62 100644
+> --- a/rust/helpers.c
+> +++ b/rust/helpers.c
+> @@ -20,6 +20,7 @@
+>=20
+> #include <linux/bug.h>
+> #include <linux/build_bug.h>
+> +#include <linux/refcount.h>
+>=20
+> __noreturn void rust_helper_BUG(void)
+> {
+> @@ -27,6 +28,24 @@ __noreturn void rust_helper_BUG(void)
+> }
+> EXPORT_SYMBOL_GPL(rust_helper_BUG);
+>=20
+> +refcount_t rust_helper_REFCOUNT_INIT(int n)
+> +{
+> + return (refcount_t)REFCOUNT_INIT(n);
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_REFCOUNT_INIT);
+> +
+> +void rust_helper_refcount_inc(refcount_t *r)
+> +{
+> + refcount_inc(r);
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_refcount_inc);
+> +
+> +bool rust_helper_refcount_dec_and_test(refcount_t *r)
+> +{
+> + return refcount_dec_and_test(r);
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
+> +
+> /*
+>  * We use `bindgen`'s `--size_t-is-usize` option to bind the C =
+`size_t` type
+>  * as the Rust `usize` type, so we can use it in contexts where Rust
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 53040fa9e897..ace064a3702a 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -31,6 +31,7 @@ mod static_assert;
+> #[doc(hidden)]
+> pub mod std_vendor;
+> pub mod str;
+> +pub mod sync;
+> pub mod types;
+>=20
+> #[doc(hidden)]
+> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+> new file mode 100644
+> index 000000000000..39b379dd548f
+> --- /dev/null
+> +++ b/rust/kernel/sync.rs
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Synchronisation primitives.
+> +//!
+> +//! This module contains the kernel APIs related to synchronisation =
+that have been ported or
+> +//! wrapped for usage by Rust code in the kernel.
+> +
+> +mod arc;
+> +
+> +pub use arc::Arc;
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> new file mode 100644
+> index 000000000000..22290eb5ab9b
+> --- /dev/null
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -0,0 +1,157 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! A reference-counted pointer.
+> +//!
+> +//! This module implements a way for users to create =
+reference-counted objects and pointers to
+> +//! them. Such a pointer automatically increments and decrements the =
+count, and drops the
+> +//! underlying object when it reaches zero. It is also safe to use =
+concurrently from multiple
+> +//! threads.
+> +//!
+> +//! It is different from the standard library's [`Arc`] in a few =
+ways:
+> +//! 1. It is backed by the kernel's `refcount_t` type.
+> +//! 2. It does not support weak references, which allows it to be =
+half the size.
+> +//! 3. It saturates the reference count instead of aborting when it =
+goes over a threshold.
 
-1, process_fetch_insn
-2, fetch_store_strlen
-3, fetch_store_string
-4, fetch_store_strlen_user
-5, fetch_store_string_user
-6, probe_mem_read
-7, probe_mem_read_user
+This makes me worry, and the rest of the code confirms it.  This is not =
+a safe abstraction:  what happens if the count saturates and then =
+everything is dropped again?  The count =E2=80=9Cgoes negative=E2=80=9D =
+(which is to say, use-after-free).
 
-Every C file which includes trace_probe_tmpl.h has to implement them,
-otherwise it gets warnings and errors. However, some of them are identical,
-like kprobe and eprobe, as a result, there is a lot redundant code in those
-2 files.
+> +//! 4. It does not provide a `get_mut` method, so the ref counted =
+object is pinned.
+> +//!
+> +//! [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
+> +
+> +use crate::{bindings, error::Result, types::Opaque};
+> +use alloc::boxed::Box;
+> +use core::{marker::PhantomData, ops::Deref, ptr::NonNull};
+> +
+> +/// A reference-counted pointer to an instance of `T`.
+> +///
+> +/// The reference count is incremented when new instances of [`Arc`] =
+are created, and decremented
+> +/// when they are dropped. When the count reaches zero, the =
+underlying `T` is also dropped.
+> +///
+> +/// # Invariants
+> +///
+> +/// The reference count on an instance of [`Arc`] is always non-zero.
+> +/// The object pointed to by [`Arc`] is always pinned.
+> +///
+> +/// # Examples
+> +///
+> +/// ```
+> +/// use kernel::sync::Arc;
+> +///
+> +/// struct Example {
+> +///     a: u32,
+> +///     b: u32,
+> +/// }
+> +///
+> +/// // Create a ref-counted instance of `Example`.
+> +/// let obj =3D Arc::try_new(Example { a: 10, b: 20 })?;
+> +///
+> +/// // Get a new pointer to `obj` and increment the refcount.
+> +/// let cloned =3D obj.clone();
+> +///
+> +/// // Assert that both `obj` and `cloned` point to the same =
+underlying object.
+> +/// assert!(core::ptr::eq(&*obj, &*cloned));
+> +///
+> +/// // Destroy `obj` and decrement its refcount.
+> +/// drop(obj);
+> +///
+> +/// // Check that the values are still accessible through `cloned`.
+> +/// assert_eq!(cloned.a, 10);
+> +/// assert_eq!(cloned.b, 20);
+> +///
+> +/// // The refcount drops to zero when `cloned` goes out of scope, =
+and the memory is freed.
+> +/// ```
+> +pub struct Arc<T: ?Sized> {
+> +    ptr: NonNull<ArcInner<T>>,
+> +    _p: PhantomData<ArcInner<T>>,
+> +}
+> +
+> +#[repr(C)]
+> +struct ArcInner<T: ?Sized> {
+> +    refcount: Opaque<bindings::refcount_t>,
+> +    data: T,
+> +}
+> +
+> +// SAFETY: It is safe to send `Arc<T>` to another thread when the =
+underlying `T` is `Sync` because
+> +// it effectively means sharing `&T` (which is safe because `T` is =
+`Sync`); additionally, it needs
+> +// `T` to be `Send` because any thread that has an `Arc<T>` may =
+ultimately access `T` directly, for
+> +// example, when the reference count reaches zero and `T` is dropped.
+> +unsafe impl<T: ?Sized + Sync + Send> Send for Arc<T> {}
+> +
+> +// SAFETY: It is safe to send `&Arc<T>` to another thread when the =
+underlying `T` is `Sync` for the
+> +// same reason as above. `T` needs to be `Send` as well because a =
+thread can clone an `&Arc<T>`
+> +// into an `Arc<T>`, which may lead to `T` being accessed by the same =
+reasoning as above.
+> +unsafe impl<T: ?Sized + Sync + Send> Sync for Arc<T> {}
+> +
+> +impl<T> Arc<T> {
+> +    /// Constructs a new reference counted instance of `T`.
+> +    pub fn try_new(contents: T) -> Result<Self> {
+> +        // INVARIANT: The refcount is initialised to a non-zero =
+value.
+> +        let value =3D ArcInner {
+> +            // SAFETY: There are no safety requirements for this FFI =
+call.
+> +            refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) =
+}),
+> +            data: contents,
+> +        };
+> +
+> +        let inner =3D Box::try_new(value)?;
+> +
+> +        // SAFETY: We just created `inner` with a reference count of =
+1, which is owned by the new
+> +        // `Arc` object.
+> +        Ok(unsafe { Self::from_inner(Box::leak(inner).into()) })
+> +    }
+> +}
+> +
+> +impl<T: ?Sized> Arc<T> {
+> +    /// Constructs a new [`Arc`] from an existing [`ArcInner`].
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// The caller must ensure that `inner` points to a valid =
+location and has a non-zero reference
+> +    /// count, one of which will be owned by the new [`Arc`] =
+instance.
+> +    unsafe fn from_inner(inner: NonNull<ArcInner<T>>) -> Self {
+> +        // INVARIANT: By the safety requirements, the invariants =
+hold.
+> +        Arc {
+> +            ptr: inner,
+> +            _p: PhantomData,
+> +        }
+> +    }
+> +}
+> +
+> +impl<T: ?Sized> Deref for Arc<T> {
+> +    type Target =3D T;
+> +
+> +    fn deref(&self) -> &Self::Target {
+> +        // SAFETY: By the type invariant, there is necessarily a =
+reference to the object, so it is
+> +        // safe to dereference it.
+> +        unsafe { &self.ptr.as_ref().data }
+> +    }
+> +}
+> +
+> +impl<T: ?Sized> Clone for Arc<T> {
+> +    fn clone(&self) -> Self {
+> +        // INVARIANT: C `refcount_inc` saturates the refcount, so it =
+cannot overflow to zero.
+> +        // SAFETY: By the type invariant, there is necessarily a =
+reference to the object, so it is
+> +        // safe to increment the refcount.
+> +        unsafe { =
+bindings::refcount_inc(self.ptr.as_ref().refcount.get()) };
 
-This patch would like to provide default behaviors for those functions
-which kprobe and eprobe can share by just including trace_probe_kernel.h
-with trace_probe_tmpl.h together.
+This needs to be a fallible process; maybe provide a try_clone inherent =
+method instead of the trait impl.  It=E2=80=99s not worth the =
+=E2=80=9Cconvenience=E2=80=9D to have something that can break safety =
+(see above).  There is a reason for the original one panicking here!
 
-It removes redundant code, increases readability, and more importantly,
-makes it easier to introduce a new feature based on trace probe
-(it's possible).
-
-Signed-off-by: Song Chen <chensong_2000@189.cn>
-Reported-by: kernel test robot <lkp@intel.com>
-
----
-v2:
-1, reorganize patchset
-
-v3:
-1, mark nokprobe_inline for get_event_field
-2, remove warnings reported from kernel test robot
-3, fix errors reported from kernel test robot
-
-v4:
-1, reset changes in v3(2) and v3(3), they are not reasonable fix.
-2, I intended to introduce a new header file to exclude
-trace_events_synth.c out of the patch. However, after looking
-further, i found the errors in [1] are introduced by this patch,
-but the warning in [1] are not. The errors can be fixed by adding
-"#ifdef CONFIG_HAVE_REGS_AND_STACK_ACCESS_API".
-
-[1]:https://lore.kernel.org/lkml/202211301946.pkLE4PDp-lkp@intel.com/
----
- kernel/trace/trace_eprobe.c       | 144 ------------------------------
- kernel/trace/trace_events_synth.c |   7 +-
- kernel/trace/trace_kprobe.c       | 102 ---------------------
- kernel/trace/trace_probe_kernel.h | 143 +++++++++++++++++++++++++++--
- 4 files changed, 141 insertions(+), 255 deletions(-)
-
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index bdb26eee7a0c..60ced4a7a25d 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -319,64 +319,6 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
- 	return trace_handle_return(s);
- }
- 
--static unsigned long get_event_field(struct fetch_insn *code, void *rec)
--{
--	struct ftrace_event_field *field = code->data;
--	unsigned long val;
--	void *addr;
--
--	addr = rec + field->offset;
--
--	if (is_string_field(field)) {
--		switch (field->filter_type) {
--		case FILTER_DYN_STRING:
--			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
--			break;
--		case FILTER_RDYN_STRING:
--			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
--			break;
--		case FILTER_STATIC_STRING:
--			val = (unsigned long)addr;
--			break;
--		case FILTER_PTR_STRING:
--			val = (unsigned long)(*(char *)addr);
--			break;
--		default:
--			WARN_ON_ONCE(1);
--			return 0;
--		}
--		return val;
--	}
--
--	switch (field->size) {
--	case 1:
--		if (field->is_signed)
--			val = *(char *)addr;
--		else
--			val = *(unsigned char *)addr;
--		break;
--	case 2:
--		if (field->is_signed)
--			val = *(short *)addr;
--		else
--			val = *(unsigned short *)addr;
--		break;
--	case 4:
--		if (field->is_signed)
--			val = *(int *)addr;
--		else
--			val = *(unsigned int *)addr;
--		break;
--	default:
--		if (field->is_signed)
--			val = *(long *)addr;
--		else
--			val = *(unsigned long *)addr;
--		break;
--	}
--	return val;
--}
--
- static int get_eprobe_size(struct trace_probe *tp, void *rec)
- {
- 	struct fetch_insn *code;
-@@ -419,92 +361,6 @@ static int get_eprobe_size(struct trace_probe *tp, void *rec)
- 	return ret;
- }
- 
--/* Kprobe specific fetch functions */
--
--/* Note that we don't verify it, since the code does not come from user space */
--static int
--process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
--		   void *base)
--{
--	unsigned long val;
--
-- retry:
--	switch (code->op) {
--	case FETCH_OP_TP_ARG:
--		val = get_event_field(code, rec);
--		break;
--	case FETCH_OP_IMM:
--		val = code->immediate;
--		break;
--	case FETCH_OP_COMM:
--		val = (unsigned long)current->comm;
--		break;
--	case FETCH_OP_DATA:
--		val = (unsigned long)code->data;
--		break;
--	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
--		code++;
--		goto retry;
--	default:
--		return -EILSEQ;
--	}
--	code++;
--	return process_fetch_insn_bottom(code, val, dest, base);
--}
--NOKPROBE_SYMBOL(process_fetch_insn)
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen_user(unsigned long addr)
--{
--	return kern_fetch_store_strlen_user(addr);
--}
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen(unsigned long addr)
--{
--	return kern_fetch_store_strlen(addr);
--}
--
--/*
-- * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
-- * with max length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string_user(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string_user(addr, dest, base);
--}
--
--/*
-- * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
-- * length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string(addr, dest, base);
--}
--
--static nokprobe_inline int
--probe_mem_read_user(void *dest, void *src, size_t size)
--{
--	const void __user *uaddr =  (__force const void __user *)src;
--
--	return copy_from_user_nofault(dest, uaddr, size);
--}
--
--static nokprobe_inline int
--probe_mem_read(void *dest, void *src, size_t size)
--{
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if ((unsigned long)src < TASK_SIZE)
--		return probe_mem_read_user(dest, src, size);
--#endif
--	return copy_from_kernel_nofault(dest, src, size);
--}
--
- /* eprobe handler */
- static inline void
- __eprobe_trace_func(struct eprobe_data *edata, void *rec)
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index e310052dc83c..7460f18ba973 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -18,6 +18,7 @@
- #include <linux/trace_events.h>
- #include <trace/events/mmflags.h>
- #include "trace_probe.h"
-+#include "trace_probe_tmpl.h"
- #include "trace_probe_kernel.h"
- 
- #include "trace_synth.h"
-@@ -420,12 +421,12 @@ static unsigned int trace_string(struct synth_trace_event *entry,
- 		data_offset += event->n_u64 * sizeof(u64);
- 		data_offset += data_size;
- 
--		len = kern_fetch_store_strlen((unsigned long)str_val);
-+		len = fetch_store_strlen((unsigned long)str_val);
- 
- 		data_offset |= len << 16;
- 		*(u32 *)&entry->fields[*n_u64] = data_offset;
- 
--		ret = kern_fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
-+		ret = fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
- 
- 		(*n_u64)++;
- 	} else {
-@@ -473,7 +474,7 @@ static notrace void trace_event_raw_event_synth(void *__data,
- 		val_idx = var_ref_idx[field_pos];
- 		str_val = (char *)(long)var_ref_vals[val_idx];
- 
--		len = kern_fetch_store_strlen((unsigned long)str_val);
-+		len = fetch_store_strlen((unsigned long)str_val);
- 
- 		fields_size += len;
- 	}
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index a4ffa864dbb7..c2e0b741ae82 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -1218,108 +1218,6 @@ static const struct file_operations kprobe_profile_ops = {
- 	.release        = seq_release,
- };
- 
--/* Kprobe specific fetch functions */
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen_user(unsigned long addr)
--{
--	return kern_fetch_store_strlen_user(addr);
--}
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen(unsigned long addr)
--{
--	return kern_fetch_store_strlen(addr);
--}
--
--/*
-- * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
-- * with max length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string_user(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string_user(addr, dest, base);
--}
--
--/*
-- * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
-- * length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string(addr, dest, base);
--}
--
--static nokprobe_inline int
--probe_mem_read_user(void *dest, void *src, size_t size)
--{
--	const void __user *uaddr =  (__force const void __user *)src;
--
--	return copy_from_user_nofault(dest, uaddr, size);
--}
--
--static nokprobe_inline int
--probe_mem_read(void *dest, void *src, size_t size)
--{
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if ((unsigned long)src < TASK_SIZE)
--		return probe_mem_read_user(dest, src, size);
--#endif
--	return copy_from_kernel_nofault(dest, src, size);
--}
--
--/* Note that we don't verify it, since the code does not come from user space */
--static int
--process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
--		   void *base)
--{
--	struct pt_regs *regs = rec;
--	unsigned long val;
--
--retry:
--	/* 1st stage: get value from context */
--	switch (code->op) {
--	case FETCH_OP_REG:
--		val = regs_get_register(regs, code->param);
--		break;
--	case FETCH_OP_STACK:
--		val = regs_get_kernel_stack_nth(regs, code->param);
--		break;
--	case FETCH_OP_STACKP:
--		val = kernel_stack_pointer(regs);
--		break;
--	case FETCH_OP_RETVAL:
--		val = regs_return_value(regs);
--		break;
--	case FETCH_OP_IMM:
--		val = code->immediate;
--		break;
--	case FETCH_OP_COMM:
--		val = (unsigned long)current->comm;
--		break;
--	case FETCH_OP_DATA:
--		val = (unsigned long)code->data;
--		break;
--#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
--	case FETCH_OP_ARG:
--		val = regs_get_kernel_argument(regs, code->param);
--		break;
--#endif
--	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
--		code++;
--		goto retry;
--	default:
--		return -EILSEQ;
--	}
--	code++;
--
--	return process_fetch_insn_bottom(code, val, dest, base);
--}
--NOKPROBE_SYMBOL(process_fetch_insn)
- 
- /* Kprobe handler */
- static nokprobe_inline void
-diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
-index 77dbd9ff9782..39f44513ec4e 100644
---- a/kernel/trace/trace_probe_kernel.h
-+++ b/kernel/trace/trace_probe_kernel.h
-@@ -12,7 +12,7 @@
-  */
- /* Return the length of string -- including null terminal byte */
- static nokprobe_inline int
--kern_fetch_store_strlen_user(unsigned long addr)
-+fetch_store_strlen_user(unsigned long addr)
- {
- 	const void __user *uaddr =  (__force const void __user *)addr;
- 	int ret;
-@@ -29,14 +29,14 @@ kern_fetch_store_strlen_user(unsigned long addr)
- 
- /* Return the length of string -- including null terminal byte */
- static nokprobe_inline int
--kern_fetch_store_strlen(unsigned long addr)
-+fetch_store_strlen(unsigned long addr)
- {
- 	int ret, len = 0;
- 	u8 c;
- 
- #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
- 	if (addr < TASK_SIZE)
--		return kern_fetch_store_strlen_user(addr);
-+		return fetch_store_strlen_user(addr);
- #endif
- 
- 	do {
-@@ -63,7 +63,7 @@ static nokprobe_inline void set_data_loc(int ret, void *dest, void *__dest, void
-  * with max length and relative data location.
-  */
- static nokprobe_inline int
--kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
-+fetch_store_string_user(unsigned long addr, void *dest, void *base)
- {
- 	const void __user *uaddr =  (__force const void __user *)addr;
- 	int maxlen = get_loc_len(*(u32 *)dest);
-@@ -86,7 +86,7 @@ kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
-  * length and relative data location.
-  */
- static nokprobe_inline int
--kern_fetch_store_string(unsigned long addr, void *dest, void *base)
-+fetch_store_string(unsigned long addr, void *dest, void *base)
- {
- 	int maxlen = get_loc_len(*(u32 *)dest);
- 	void *__dest;
-@@ -94,7 +94,7 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
- 
- #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
- 	if ((unsigned long)addr < TASK_SIZE)
--		return kern_fetch_store_string_user(addr, dest, base);
-+		return fetch_store_string_user(addr, dest, base);
- #endif
- 
- 	if (unlikely(!maxlen))
-@@ -112,4 +112,135 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
- 	return ret;
- }
- 
-+static nokprobe_inline int
-+probe_mem_read_user(void *dest, void *src, size_t size)
-+{
-+	const void __user *uaddr =  (__force const void __user *)src;
-+
-+	return copy_from_user_nofault(dest, uaddr, size);
-+}
-+
-+static nokprobe_inline int
-+probe_mem_read(void *dest, void *src, size_t size)
-+{
-+#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+	if ((unsigned long)src < TASK_SIZE)
-+		return probe_mem_read_user(dest, src, size);
-+#endif
-+	return copy_from_kernel_nofault(dest, src, size);
-+}
-+
-+static nokprobe_inline unsigned long
-+get_event_field(struct fetch_insn *code, void *rec)
-+{
-+	struct ftrace_event_field *field = code->data;
-+	unsigned long val;
-+	void *addr;
-+
-+	addr = rec + field->offset;
-+
-+	if (is_string_field(field)) {
-+		switch (field->filter_type) {
-+		case FILTER_DYN_STRING:
-+			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
-+			break;
-+		case FILTER_RDYN_STRING:
-+			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
-+			break;
-+		case FILTER_STATIC_STRING:
-+			val = (unsigned long)addr;
-+			break;
-+		case FILTER_PTR_STRING:
-+			val = (unsigned long)(*(char *)addr);
-+			break;
-+		default:
-+			WARN_ON_ONCE(1);
-+			return 0;
-+		}
-+		return val;
-+	}
-+
-+	switch (field->size) {
-+	case 1:
-+		if (field->is_signed)
-+			val = *(char *)addr;
-+		else
-+			val = *(unsigned char *)addr;
-+		break;
-+	case 2:
-+		if (field->is_signed)
-+			val = *(short *)addr;
-+		else
-+			val = *(unsigned short *)addr;
-+		break;
-+	case 4:
-+		if (field->is_signed)
-+			val = *(int *)addr;
-+		else
-+			val = *(unsigned int *)addr;
-+		break;
-+	default:
-+		if (field->is_signed)
-+			val = *(long *)addr;
-+		else
-+			val = *(unsigned long *)addr;
-+		break;
-+	}
-+	return val;
-+}
-+
-+/* Note that we don't verify it, since the code does not come from user space */
-+static int
-+process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-+		   void *base)
-+{
-+	struct pt_regs *regs = rec;
-+	unsigned long val;
-+
-+retry:
-+	/* 1st stage: get value from context */
-+	switch (code->op) {
-+#ifdef CONFIG_HAVE_REGS_AND_STACK_ACCESS_API
-+	case FETCH_OP_REG:
-+		val = regs_get_register(regs, code->param);
-+		break;
-+	case FETCH_OP_STACK:
-+		val = regs_get_kernel_stack_nth(regs, code->param);
-+		break;
-+	case FETCH_OP_STACKP:
-+		val = kernel_stack_pointer(regs);
-+		break;
-+	case FETCH_OP_RETVAL:
-+		val = regs_return_value(regs);
-+		break;
-+#endif
-+	case FETCH_OP_IMM:
-+		val = code->immediate;
-+		break;
-+	case FETCH_OP_COMM:
-+		val = (unsigned long)current->comm;
-+		break;
-+	case FETCH_OP_DATA:
-+		val = (unsigned long)code->data;
-+		break;
-+#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-+	case FETCH_OP_ARG:
-+		val = regs_get_kernel_argument(regs, code->param);
-+		break;
-+#endif
-+	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-+		code++;
-+		goto retry;
-+	case FETCH_OP_TP_ARG:
-+		val = get_event_field(code, rec);
-+		break;
-+	default:
-+		return -EILSEQ;
-+	}
-+	code++;
-+
-+	return process_fetch_insn_bottom(code, val, dest, base);
-+}
-+NOKPROBE_SYMBOL(process_fetch_insn)
-+
- #endif /* __TRACE_PROBE_KERNEL_H_ */
--- 
-2.25.1
+> +
+> +        // SAFETY: We just incremented the refcount. This increment =
+is now owned by the new `Arc`.
+> +        unsafe { Self::from_inner(self.ptr) }
+> +    }
+> +}
+> +
+> +impl<T: ?Sized> Drop for Arc<T> {
+> +    fn drop(&mut self) {
+> +        // SAFETY: By the type invariant, there is necessarily a =
+reference to the object. We cannot
+> +        // touch `refcount` after it's decremented to a non-zero =
+value because another thread/CPU
+> +        // may concurrently decrement it to zero and free it. It is =
+ok to have a raw pointer to
+> +        // freed/invalid memory as long as it is never dereferenced.
+> +        let refcount =3D unsafe { self.ptr.as_ref() }.refcount.get();
+> +
+> +        // INVARIANT: If the refcount reaches zero, there are no =
+other instances of `Arc`, and
+> +        // this instance is being dropped, so the broken invariant is =
+not observable.
+> +        // SAFETY: Also by the type invariant, we are allowed to =
+decrement the refcount.
+> +        let is_zero =3D unsafe { =
+bindings::refcount_dec_and_test(refcount) };
+> +        if is_zero {
+> +            // The count reached zero, we must free the memory.
+> +            //
+> +            // SAFETY: The pointer was initialised from the result of =
+`Box::leak`.
+> +            unsafe { Box::from_raw(self.ptr.as_ptr()) };
+> +        }
+> +    }
+> +}
+> --=20
+> 2.34.1
+>=20
+>=20
 
