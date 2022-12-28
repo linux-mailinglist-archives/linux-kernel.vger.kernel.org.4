@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE33657686
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C29657688
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiL1MhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55112 "EHLO
+        id S232507AbiL1Mhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbiL1MhI (ORCPT
+        with ESMTP id S232938AbiL1MhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:37:08 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B066218D;
-        Wed, 28 Dec 2022 04:37:07 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BSCauGZ044994;
-        Wed, 28 Dec 2022 06:36:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1672231016;
-        bh=mZsWxaiRIo0auzUVscKpPpJQJBOzj2LbFL3IGK6uq1s=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=AZygj01+ZbYhW84KAxO9ICrPF8Zzw++LVCDDQVUYsTSRoOYXg+NzMwTxkzyriTJ0X
-         vh43O2UtSQ0VXSrF+VEyG0yc8GWXjFM8A60ez56eIGgUxHYiuTJl6EIIKs0b2d+VqD
-         ++G9l0+9vd+ttEmqftXSdqc1DTlhG+qQR+M8qPz4=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BSCat7h023513
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 28 Dec 2022 06:36:55 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 28
- Dec 2022 06:36:55 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 28 Dec 2022 06:36:55 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BSCatR9031789;
-        Wed, 28 Dec 2022 06:36:55 -0600
-From:   Hari Nagalla <hnagalla@ti.com>
-To:     <andersson@kernel.org>, <devicetree@vger.kernel.org>,
-        <mathieu.poirier@linaro.org>, <p.zabel@pengutronix.de>,
-        <linux-remoteproc@vger.kernel.org>, <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>
-CC:     <hnagalla@ti.com>, <praneeth@ti.com>, <nm@ti.com>,
-        <vigneshr@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>,
-        <devarsht@ti.com>
-Subject: [PATCH 2/2] remoteproc: k3-c7x: Add support for C7xv DSP on AM62A SoC
-Date:   Wed, 28 Dec 2022 06:36:55 -0600
-Message-ID: <20221228123655.15384-3-hnagalla@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221228123655.15384-1-hnagalla@ti.com>
-References: <20221228123655.15384-1-hnagalla@ti.com>
+        Wed, 28 Dec 2022 07:37:18 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F1710FF7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:37:16 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id 1so23443690lfz.4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:37:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=szUYv0uneyN7YHYxEv+1bpNF1FTM8iygqyO0FKMlC7o=;
+        b=WOVDjahbgzvlWA+I1nfhLWRgkZ9OLauPupQIX9iHFBEbdG8UN1RK9cBk1C1lyT3fTt
+         M8sP2kN+ZfEc0G/6RdgTqJ8VY/1ISqEaKr6aGlvBLyAp1z+6nm656TsD+NlwlHqAqUup
+         6K1j9LRupJG4y9A3X8omkxFf7AoNQ2HTj5Jq/V8I9J0C+nIOWRdneTA+I4UZ/UiAHjAi
+         ahjoVbi51mljf696KPwr8etfQCOeRJYRFbfXjkDtECh+NQiS182weSxvczkUsV01bKTf
+         9FbvEHLrlGbTsDPaiqZBZsi68TiUfCAbJejheVLEvaTvdgfLnLO/DxzpGHofAqiqCkej
+         I4og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=szUYv0uneyN7YHYxEv+1bpNF1FTM8iygqyO0FKMlC7o=;
+        b=fGgfcUaiuIEDjNaLsHV4jqZKWTyxINylYRjjgfzh393qUmPKuI3JpoJBK/I3pzHgOj
+         5PInQeNWhziuk0ThDFbFfmGDjv/O5DmIZpnpyPmf28eOQNWR2kaB0Y0KZj4x3biRUgRL
+         7E/FzsNkxSnMJZ8M710m7wf3FczWJ3V5vYb5D9xf+6wKMvj6MZFNPYbm9EXu1Db6uWKX
+         3ZQfB7DzGArt5S8UpxvJxqZK/v1+oXr5dq/my/1LD+LdffSqqC0o5d1ejBvsDI+XakoQ
+         2yCtuIZfgGdJP+KvcikUGB0yKaslm+VxMFFSZGCFFDnvBgqzkmQzHiIh+jOSGW5BYWTw
+         sg7w==
+X-Gm-Message-State: AFqh2kojCgT1HQRJKDc0qv2ptbj2oTJvQUIs/Ahx3w0vEtUDY3MszD6n
+        J1vsP6Kf4Ra0hEGqhp7ixhoHlQ==
+X-Google-Smtp-Source: AMrXdXvZp7CP84l0lYhtw+B8zuMLZIv9fPypPu/nFTNLtiVo6H2Eh797Bsi99jc32fqou298yyIzXg==
+X-Received: by 2002:a05:6512:228a:b0:4b5:7f79:f8bd with SMTP id f10-20020a056512228a00b004b57f79f8bdmr9812553lfu.22.1672231034559;
+        Wed, 28 Dec 2022 04:37:14 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q21-20020a19a415000000b004a46f92a15bsm2661813lfc.41.2022.12.28.04.37.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 04:37:13 -0800 (PST)
+Message-ID: <cae5273e-aac5-0c4c-6686-fb2cbc5379e3@linaro.org>
+Date:   Wed, 28 Dec 2022 13:37:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/2] ASoC: mediatek: mt8186: support rt5682s_max98360
+Content-Language: en-US
+To:     tongjian <tongjian@huaqin.corp-partner.google.com>,
+        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        perex@perex.cz, tiwai@suse.com,
+        angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
+        jiaxin.yu@mediatek.com, chunxu.li@mediatek.com,
+        ajye_huang@compal.corp-partner.google.com
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221228122230.3818533-1-tongjian@huaqin.corp-partner.google.com>
+ <20221228122230.3818533-2-tongjian@huaqin.corp-partner.google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221228122230.3818533-2-tongjian@huaqin.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to the K3 DSP remoteproc driver to configure the C7xv
-subsystem core on AM62A SoCs. The C7xv susbsytem is based on C71 DSP
-with anlytics engine for deep leraning purposes. The remoteproc
-handling for device management is similar to the C66/C71 DSPs on K3
-J7 family SoCs, even though there are additional hardware accelerators
-and IP updates to C7xv subsystem.
+On 28/12/2022 13:22, tongjian wrote:
+> Add support for using the rt5682s codec together with max98360a on
+> MT8186-MT6366-RT1019-RT5682S machines.
+> 
+> Signed-off-by: tongjian <tongjian@huaqin.corp-partner.google.com>
 
-Signed-off-by: Hari Nagalla <hnagalla@ti.com>
-Signed-off-by: Jai Luthra <j-luthra@ti.com>
----
- drivers/remoteproc/ti_k3_dsp_remoteproc.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+The author and SoB should be full name. Is this correct (full)
+transliteration of your name?
 
-diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-index eb9c64f7b9b4..ec626a37fef6 100644
---- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-@@ -870,6 +870,10 @@ static const struct k3_dsp_mem_data c71_mems[] = {
- 	{ .name = "l1dram", .dev_addr = 0xe00000 },
- };
- 
-+static const struct k3_dsp_mem_data c7xv_mems[] = {
-+	{ .name = "l2sram", .dev_addr = 0x800000 },
-+};
-+
- static const struct k3_dsp_dev_data c66_data = {
- 	.mems = c66_mems,
- 	.num_mems = ARRAY_SIZE(c66_mems),
-@@ -884,10 +888,18 @@ static const struct k3_dsp_dev_data c71_data = {
- 	.uses_lreset = false,
- };
- 
-+static const struct k3_dsp_dev_data c7xv_data = {
-+	.mems = c7xv_mems,
-+	.num_mems = ARRAY_SIZE(c7xv_mems),
-+	.boot_align_addr = SZ_2M,
-+	.uses_lreset = false,
-+};
-+
- static const struct of_device_id k3_dsp_of_match[] = {
- 	{ .compatible = "ti,j721e-c66-dsp", .data = &c66_data, },
- 	{ .compatible = "ti,j721e-c71-dsp", .data = &c71_data, },
- 	{ .compatible = "ti,j721s2-c71-dsp", .data = &c71_data, },
-+	{ .compatible = "ti,am62a-c7xv-dsp", .data = &c7xv_data, },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, k3_dsp_of_match);
--- 
-2.17.1
+
+Best regards,
+Krzysztof
 
