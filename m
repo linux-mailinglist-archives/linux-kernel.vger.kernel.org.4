@@ -2,59 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F8D658237
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC25658244
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234883AbiL1Qdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 11:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S234797AbiL1QeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 11:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234814AbiL1QdT (ORCPT
+        with ESMTP id S234737AbiL1Qdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 11:33:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE8DDCE
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:30:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3AC8B81888
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 16:30:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4937CC433F2;
-        Wed, 28 Dec 2022 16:30:41 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Bnt+skTk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1672245039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u0Zn+bBTFed2/1RZkgN1sK7uWyOuyZ80v3AHCcAcyw8=;
-        b=Bnt+skTkWREmE/Cr76o+HWIhI9nJ6payiMUeKeObAMOh1ZRX2/znTspB6WwTUaq+tepEYL
-        Jefc0BfgA0avgwY856Zpqs0QsEg4Fy0/idH+UfAKYi0p7NOFFDwGXcYi3a5QywwNIyk9FZ
-        ymzQ5K06EtW5nhDZrYIN/yZq7u0aOks=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 67ab20fe (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 28 Dec 2022 16:30:38 +0000 (UTC)
-Date:   Wed, 28 Dec 2022 17:30:30 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Cc:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        ardb@kernel.org, kraxel@redhat.com, hpa@zytor.com, bp@alien8.de
-Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
- setup_data
-Message-ID: <Y6xvJheSYC83voCZ@zx2c4.com>
-References: <20221228143831.396245-1-Jason@zx2c4.com>
- <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org>
+        Wed, 28 Dec 2022 11:33:54 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2053.outbound.protection.outlook.com [40.107.94.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5FE1C433
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:31:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bxjDnbTMap5aA8TIuKZlMMlJmKo6nI65gk0BP6IvhsnopTsN8SMOsabUg9qxWBK1/aec+YJIcE5jXLhtaqursB4IHL4u86qIPJc2FrSkmP0kqqYocvEEeAuS6Cd5NEJYmfLOSmJAEQY2jQRj0pYDk6AjjSrflhfepiNg83yMZDFMvuO4VwK2RyHdRpu22ngMwLsj0Cjdtxwxcfgh4SjTfJDI30lhhLaYC4tn9UpJOVpWsLof4gF/GhiObD4dISA94WbCYO6RtpCeOF+3V2npjp3CsPCpK6ltp/z7zRNd/4vMRGKNKUQkybJWNZan5fXoFWwn43bVQsfK5rwtLBL/Ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w0YS+81BdYxXITmvX9vPnTZjDwH1JVA4Tpy72EtpMGo=;
+ b=YjLXjUqK2b7hxfq4UaboeO8UBArNSkWJ2c4tHmNMHFXKzis8PdExz+W7xZd/XW//F/JoxP1eZ73gv0RkUQgZYaA6TSXF0qwFLN/RT6ZZK3bgQdgqChfIf9IddVF5u+2Fctl1WzWwNCC6G6W3Ujecpt1aNrMxOWY+5lLvky/J0UjgHfWBD6FoRaK0ASEmfLk3vFYfrlgUve+WT3Huo1VhPa0Hy5LTEUfFVEOz2WxHJpU1gAG8TwsGoI7TLJtPbh6Hll4TXBMDiGdwJcAlPi9MtieEjKXcbKUqq3Hm1Z7pD9aLge/Qv6xoqCxLw87CysYvBtsdJIkK0VwTLa7jTOgk/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w0YS+81BdYxXITmvX9vPnTZjDwH1JVA4Tpy72EtpMGo=;
+ b=wRNXJ1qE7xUV7IHjJLSwplB1sbVioY2YL5pn84KCDhbMfdMMIABMrrjoj1daZqWTWgLPA683Tky8i3RqBGqiSDFf31MKyBDXE6odoUPUeQynsVWOc0gbcPv5e/Tzp6rElU4d6fT/G2TbpGcnuUGcf8LeU8+T/8P0EN9nGzFv4ek=
+Received: from MW4PR03CA0088.namprd03.prod.outlook.com (2603:10b6:303:b6::33)
+ by DS7PR12MB6070.namprd12.prod.outlook.com (2603:10b6:8:9e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.13; Wed, 28 Dec
+ 2022 16:31:15 +0000
+Received: from CO1NAM11FT089.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b6:cafe::33) by MW4PR03CA0088.outlook.office365.com
+ (2603:10b6:303:b6::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16 via Frontend
+ Transport; Wed, 28 Dec 2022 16:31:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT089.mail.protection.outlook.com (10.13.175.179) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5966.18 via Frontend Transport; Wed, 28 Dec 2022 16:31:14 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 28 Dec
+ 2022 10:31:13 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+CC:     Carlos Soriano Sanchez <csoriano@redhat.com>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        "David Airlie" <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, <christian.koenig@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 00/11] Recover from failure to probe GPU
+Date:   Wed, 28 Dec 2022 10:30:47 -0600
+Message-ID: <20221228163102.468-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT089:EE_|DS7PR12MB6070:EE_
+X-MS-Office365-Filtering-Correlation-Id: 98f06102-51c7-4916-5374-08dae8f0f058
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AAl2GqjMTguQlUPVmLfhW7IzQ+sVK7wZl6Mdm4RjEzjw4aGkIScjFHtGp1a+VeEf4tKhWVInq8LRo33BPhaAVdutqmuUIfhO7QQhf09vcQ/NMTJYmzhgmHVHQnmuqbmuimTBIhovXEW9k1UN1ds7PLoD8snB4kOzQhVDobnS28KiAr1+xQeZClcRH9XhUvb7fYEcnk1Fjlcz1724lPn3o8a0EEkTF2by6UoyPdYYmrB4BeucUedQYzq2PX4splKIVSlXRye13rsSlf5k5sgCGir9rLO3EINL7bqKwVCXVdFn7T8fVN+lBJ4O36qefJ7klJZF/8YaluJ25hN4uBoQhCuZj92zW/jQZZgtQ3JFFYozIgzkTcYQKy0NRnj0Bm0FAjvb5pfOmlebrTyuSqOqAI7KOzBgEX3WylK8oiIfQylFmJTXOLIzRdZNOsLg+EsOQoS5jOT4apnvjCrLf3lCVUQI5HRrcyKkALcnkLXO357XRv7e25J0tJkGF4zR6bJy8cBJ56NkhGeY18ip4OisapCmT8coeqhzQIZA9zfmzZfELVki308Sq7K1o8mgd/rtBiCYoK0UUqx82+DEnvPq5eywz0zitTsiyyTAHDshWiqEyc72k4WlziooAJ5n+SWfqm3MN4q4SJSOlXKzdXLdSZD7YCzRdBRnDxgn6YfBNrpU9TZILec3B0hLJ9IuR8e1bAjhviwVmKRdQ4xW7EfjLBHfUKj7zJ41FExWoz3SE5o=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(136003)(376002)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(16526019)(26005)(186003)(82310400005)(36756003)(110136005)(6666004)(81166007)(356005)(82740400003)(7696005)(86362001)(40480700001)(40460700003)(54906003)(2616005)(83380400001)(1076003)(336012)(47076005)(36860700001)(44832011)(426003)(5660300002)(8936002)(2906002)(70206006)(4326008)(478600001)(70586007)(6636002)(316002)(8676002)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2022 16:31:14.6743
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98f06102-51c7-4916-5374-08dae8f0f058
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT089.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6070
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,57 +102,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 05:02:22PM +0100, Philippe Mathieu-Daudé wrote:
-> Hi Jason,
-> 
-> On 28/12/22 15:38, Jason A. Donenfeld wrote:
-> > The setup_data links are appended to the compressed kernel image. Since
-> > the kernel image is typically loaded at 0x100000, setup_data lives at
-> > `0x100000 + compressed_size`, which does not get relocated during the
-> > kernel's boot process.
-> > 
-> > The kernel typically decompresses the image starting at address
-> > 0x1000000 (note: there's one more zero there than the decompressed image
-*compressed image
+One of the first thing that KMS drivers do during initialization is
+destroy the system firmware framebuffer by means of
+`drm_aperture_remove_conflicting_pci_framebuffers`
 
-> > +        uint32_t target_address = ldl_p(setup + 0x258);
-> 
-> Nitpicking, can the Linux kernel add these magic values in
-> arch/x86/include/uapi/asm/bootparam.h? Or can we use
-> offsetof(setup_header) to get them?
+This means that if for any reason the GPU failed to probe the user
+will be stuck with at best a screen frozen at the last thing that
+was shown before the KMS driver continued it's probe.
 
-I suspect the reason that x86.c has always had those hardcoded offsets
-is because this is how it's documented in Documentation/x86/boot.rst?
+The problem is most pronounced when new GPU support is introduced
+because users will need to have a recent linux-firmware snapshot
+on their system when they boot a kernel with matching support.
 
-> > +        if ((start_setup_data >= start_target && start_setup_data < end_target) ||
-> > +            (end_setup_data >= start_target && end_setup_data < end_target)) {
-> > +            uint32_t padded_size = target_address + decompressed_length - prot_addr;
-> > +
-> > +            /* The early stage can't address past around 64 MB from the original
-> > +             * mapping, so just give up in that case. */
-> > +            if (padded_size < 62 * 1024 * 1024)
-> 
-> You mention 64 but check for 62, is that expected? You can use the MiB
-> definitions to ease code review: 64 * MiB.
+However the problem is further exaggerated in the case of amdgpu because
+it has migrated to "IP discovery" where amdgpu will attempt to load
+on "ALL" AMD GPUs even if the driver is missing support for IP blocks
+contained in that GPU.
 
-62 is intentional. But I'm still not really sure what's up. 63 doesn't
-work. I haven't totally worked out why this is, or why the 64 MiB limit
-exists in the first place. Maybe because this is a very early mapping
-set up by real mode? Or because another mapping is placed over it that's
-executable? There's that 2MiB*4096 gdt entry, but that'd cover all 4
-gigs. So I really don't know yet. I'll continue to poke at it, but on
-the off chance somebody here understands what's up, that'd save me a
-bunch of head scratching.
+IP discovery requires some probing and isn't run until after the
+framebuffer has been destroyed.
 
-> Fix looks good, glad you figured out the problem.
+This means a situation can occur where a user purchases a new GPU not
+yet supported by a distribution and when booting the installer it will
+"freeze" even if the distribution doesn't have the matching kernel support
+for those IP blocks.
 
-I mean, kind of. The solution here sucks, especially given that in the
-worst case, setup_data just gets dropped. I'm half inclined to consider
-this a kernel bug instead, and add some code to relocate setup_data
-prior to decompression, and then fix up all the links. It seems like
-this would be a lot more robust.
+The perfect example of this is Ubuntu 22.10 and the new dGPUs just
+launched by AMD.  The installation media ships with kernel 5.19 (which
+has IP discovery) but the amdgpu support for those IP blocks landed in
+kernel 6.0. The matching linux-firmware was released after 22.10's launch.
+The screen will freeze without nomodeset. Even if a user manages to install
+and then upgrades to kernel 6.0 after install they'll still have the
+problem of missing firmware, and the same experience.
 
-I just wish the people who wrote this stuff would chime in. I've had
-x86@kernel.org CC'd but so far, no input from them.
+This is quite jarring for users, particularly if they don't know
+that they have to use "nomodeset" to install.
 
-Jason
+To help the situation make changes to GPU discovery:
+1) Delay releasing the firmware framebuffer until after IP discovery has
+completed.  This will help the situation of an older kernel that doesn't
+yet support the IP blocks probing a new GPU.
+2) Request loading all PSP, VCN, SDMA, MES and GC microcode into memory
+during IP discovery. This will help the situation of new enough kernel for
+the IP discovery phase to otherwise pass but missing microcode from
+linux-firmware.git.
+
+Not all requested firmware will be loaded during IP discovery as some of it
+will require larger driver architecture changes. For example SMU firmware
+isn't loaded on certain products, but that's not known until later on when
+the early_init phase of the SMU load occurs.
+
+v1->v2:
+ * Take the suggestion from v1 thread to delay the framebuffer release until
+   ip discovery is done. This patch is CC to stable to that older stable
+   kernels with IP discovery won't try to probe unknown IP.
+ * Drop changes to drm aperature.
+ * Fetch SDMA, VCN, MES, GC and PSP microcode during IP discovery.
+
+Mario Limonciello (11):
+  drm/amd: Delay removal of the firmware framebuffer
+  drm/amd: Add a legacy mapping to "amdgpu_ucode_ip_version_decode"
+  drm/amd: Convert SMUv11 microcode init to use
+    `amdgpu_ucode_ip_version_decode`
+  drm/amd: Convert SMU v13 to use `amdgpu_ucode_ip_version_decode`
+  drm/amd: Request SDMA microcode during IP discovery
+  drm/amd: Request VCN microcode during IP discovery
+  drm/amd: Request MES microcode during IP discovery
+  drm/amd: Request GFX9 microcode during IP discovery
+  drm/amd: Request GFX10 microcode during IP discovery
+  drm/amd: Request GFX11 microcode during IP discovery
+  drm/amd: Request PSP microcode during IP discovery
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |   8 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 590 +++++++++++++++++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |   6 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c       |   2 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c      |   9 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h      |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c     | 208 ++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c       |  85 +--
+ drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c        | 180 +-----
+ drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c        |  64 +-
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c         | 143 +----
+ drivers/gpu/drm/amd/amdgpu/mes_v10_1.c        |  28 -
+ drivers/gpu/drm/amd/amdgpu/mes_v11_0.c        |  25 +-
+ drivers/gpu/drm/amd/amdgpu/psp_v10_0.c        | 106 +---
+ drivers/gpu/drm/amd/amdgpu/psp_v11_0.c        | 165 +----
+ drivers/gpu/drm/amd/amdgpu/psp_v12_0.c        | 102 +--
+ drivers/gpu/drm/amd/amdgpu/psp_v13_0.c        |  82 ---
+ drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c      |  36 --
+ drivers/gpu/drm/amd/amdgpu/psp_v3_1.c         |  36 --
+ drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c        |  61 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c        |  42 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c        |  65 +-
+ drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c        |  30 +-
+ .../gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c    |  35 +-
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c    |  12 +-
+ 25 files changed, 919 insertions(+), 1203 deletions(-)
+
+
+base-commit: de9a71e391a92841582ca3008e7b127a0b8ccf41
+-- 
+2.34.1
+
