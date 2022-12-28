@@ -2,198 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8C86574F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CBE6574F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbiL1Ju4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 04:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
+        id S230177AbiL1Jva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 04:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232938AbiL1JuZ (ORCPT
+        with ESMTP id S229691AbiL1Juh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 04:50:25 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B72110043
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 01:50:14 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id o22-20020a6b5a16000000b006e2d564944aso4978907iob.7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 01:50:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uwSWzJqyMBbn/1Ywtyk9+BWui3OB4pahkbTwiBdNnsk=;
-        b=Sg+cIFKIMiBNf9TwMU2AsY/Ko/+oJnoe7wnGmhAnkK+O8hiCq5e+lQsvGD48oAGKu3
-         d5O0BZRgD/wdb62YhM8iaFIT1C6yeRYmI+3fxC0yTQyEnV0C3/tnjGyqgQA+6dfxWws0
-         l7EqEoiU0lPPd3BjxpPyvuxnttFNhtMROkbBAWcwJsl/60/vJo9YibYVMk1cUd2caKVC
-         amOj50NGOYiE/s4dexpIGhcX9/7bCNJ8lLgkCWJiSDWXmeSC5HfM2Q9br/NlxS8eVkan
-         KHOoPjPg7L+35bK/3BPzIjI+lyDIzWIjPJ7z79sKw/g051S3wczTwMiRoTFN/lUaK+6D
-         V5og==
-X-Gm-Message-State: AFqh2ko0d3K2PUgQlkwb9Cod6VkN/lBh0oGnIpZk2TnrVofvxzpmWqwV
-        c7fx/+kqCCWodRNkkq3TPCjlWKroQTQn57J1v8QUPfWomjjW
-X-Google-Smtp-Source: AMrXdXvM2b5zve5NjNs2vaEyiME3mcpco4DpEcoc/+8kbtna/jlGzJ20PCc4/dmhqKD9zUjcm+VIsp/zLOjxJMgnyX4KSbESwaMR
+        Wed, 28 Dec 2022 04:50:37 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AF510075;
+        Wed, 28 Dec 2022 01:50:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672221036; x=1703757036;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jcHRyTOIWLvjQ22vBtCT8JpVqWGWk/i6Ux7FH4hlVT8=;
+  b=I4VJWIhIz73moz63vBg/B00NjrFi9aGo/jdNvDflnIJKLz0BbDXzLXvt
+   VElGmlT35eabB9JxqSFrcqKt+SoV/xMjJ8g/9KNEvnEmSaglJS/TZ/dfm
+   trH9qogjZ478HnbAh4NHOx2Ouh53urfN+iQeewYY4gFwDqyBqdEosbVQc
+   sw4cMKnjoCtD+2Kmh6NczW9PVKThW48pywynWjvvIApsTlvApZKekNksK
+   n2bZsYaZgzUySNxdppOGJk0CeAJ4eCMSNziTOvpjGK0PgciRi4edJCB4A
+   yf/LL+dpGjElTJvGvY0zmIR0GR8P/LPssYKY9fJ8zV/XkjdW5k4xjYZlO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="385266942"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="385266942"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 01:50:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="655265447"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="655265447"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Dec 2022 01:50:33 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pAT4y-000WIj-00;
+        Wed, 28 Dec 2022 11:50:32 +0200
+Date:   Wed, 28 Dec 2022 11:50:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djrscally@gmail.com, heikki.krogerus@linux.intel.com,
+        sakari.ailus@linux.intel.com, rafael@kernel.org
+Subject: Re: [PATCH v3] device property: fix of node refcount leak in
+ fwnode_graph_get_next_endpoint()
+Message-ID: <Y6wRZyvqY2AhTLbp@smile.fi.intel.com>
+References: <20221123022542.2999510-1-yangyingliang@huawei.com>
+ <Y6wOS8NFAZc5+piJ@smile.fi.intel.com>
+ <Y6wQZOn+fObx0Mua@kroah.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:9a0a:0:b0:397:cb64:9696 with SMTP id
- b10-20020a029a0a000000b00397cb649696mr2017820jal.102.1672221014008; Wed, 28
- Dec 2022 01:50:14 -0800 (PST)
-Date:   Wed, 28 Dec 2022 01:50:13 -0800
-In-Reply-To: <20221228093841.2684-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000086aa6e05f0e04b3a@google.com>
-Subject: Re: [syzbot] [ext4?] possible deadlock in ext4_find_inline_entry
-From:   syzbot <syzbot+d3bb749184481f92deb5@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6wQZOn+fObx0Mua@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Dec 28, 2022 at 10:46:12AM +0100, Greg KH wrote:
+> On Wed, Dec 28, 2022 at 11:37:15AM +0200, Andy Shevchenko wrote:
+> > On Wed, Nov 23, 2022 at 10:25:42AM +0800, Yang Yingliang wrote:
+> > > The 'parent' returned by fwnode_graph_get_port_parent()
+> > > with refcount incremented when 'prev' is not NULL, it
+> > > needs be put when finish using it.
+> > > 
+> > > Because the parent is const, introduce a new variable to
+> > > store the returned fwnode, then put it before returning
+> > > from fwnode_graph_get_next_endpoint().
+> > 
+> > Rafael, Greg, is this went through the cracks?
+> 
+> Yes, but still in my queue.  I'll look at it when I get back from break.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-possible deadlock in ext4_find_inline_entry
+Have a nice one!
 
-EXT4-fs: Warning: mounting with an experimental mount option 'dioread_nolock' for blocksize < PAGE_SIZE
-EXT4-fs (loop0): mounted filesystem without journal. Quota mode: none.
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc8-syzkaller-00172-ga5541c0811a0-dirty #0 Not tainted
-------------------------------------------------------
-syz-executor.0/3637 is trying to acquire lock:
-ffff0000d11c93e8 (&ei->xattr_sem){++++}-{3:3}, at: ext4_find_inline_entry+0x80/0x224 fs/ext4/inline.c:1690
+-- 
+With Best Regards,
+Andy Shevchenko
 
-but task is already holding lock:
-ffff0000d11ca0b0 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
-ffff0000d11ca0b0 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: vfs_unlink+0x78/0x300 fs/namei.c:4241
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}:
-       down_write+0x5c/0x88 kernel/locking/rwsem.c:1562
-       inode_lock include/linux/fs.h:756 [inline]
-       ext4_xattr_inode_write+0x2f0/0x460 fs/ext4/xattr.c:1400
-       ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1538 [inline]
-       ext4_xattr_set_entry+0xd38/0xe08 fs/ext4/xattr.c:1662
-       ext4_xattr_ibody_set+0x94/0x184 fs/ext4/xattr.c:2222
-       ext4_xattr_set_handle+0x648/0x9a0 fs/ext4/xattr.c:2379
-       ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2493
-       ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
-       __vfs_setxattr+0x250/0x260 fs/xattr.c:182
-       __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
-       __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
-       vfs_setxattr+0xf4/0x1f4 fs/xattr.c:309
-       do_setxattr fs/xattr.c:594 [inline]
-       setxattr fs/xattr.c:617 [inline]
-       path_setxattr+0x354/0x414 fs/xattr.c:636
-       __do_sys_lsetxattr fs/xattr.c:659 [inline]
-       __se_sys_lsetxattr fs/xattr.c:655 [inline]
-       __arm64_sys_lsetxattr+0x2c/0x40 fs/xattr.c:655
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #0 (&ei->xattr_sem){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain kernel/locking/lockdep.c:3831 [inline]
-       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
-       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
-       ext4_find_inline_entry+0x80/0x224 fs/ext4/inline.c:1690
-       __ext4_find_entry+0xe8/0xb4c fs/ext4/namei.c:1596
-       ext4_find_entry fs/ext4/namei.c:1731 [inline]
-       __ext4_unlink+0xa8/0x3e4 fs/ext4/namei.c:3215
-       ext4_unlink+0x150/0x200 fs/ext4/namei.c:3291
-       vfs_unlink+0x1dc/0x300 fs/namei.c:4252
-       do_unlinkat+0x200/0x3dc fs/namei.c:4320
-       __do_sys_unlinkat fs/namei.c:4363 [inline]
-       __se_sys_unlinkat fs/namei.c:4356 [inline]
-       __arm64_sys_unlinkat+0x7c/0xa8 fs/namei.c:4356
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&ea_inode->i_rwsem#8/1);
-                               lock(&ei->xattr_sem);
-                               lock(&ea_inode->i_rwsem#8/1);
-  lock(&ei->xattr_sem);
-
- *** DEADLOCK ***
-
-3 locks held by syz-executor.0/3637:
- #0: ffff0000cabc0460 (sb_writers#3){.+.+}-{0:0}, at: mnt_want_write+0x20/0x64 fs/namespace.c:393
- #1: ffff0000d11c9720 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:791 [inline]
- #1: ffff0000d11c9720 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: do_unlinkat+0xf0/0x3dc fs/namei.c:4303
- #2: ffff0000d11ca0b0 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #2: ffff0000d11ca0b0 (&ea_inode->i_rwsem#8/1){+.+.}-{3:3}, at: vfs_unlink+0x78/0x300 fs/namei.c:4241
-
-stack backtrace:
-CPU: 0 PID: 3637 Comm: syz-executor.0 Not tainted 6.1.0-rc8-syzkaller-00172-ga5541c0811a0-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
- ext4_find_inline_entry+0x80/0x224 fs/ext4/inline.c:1690
- __ext4_find_entry+0xe8/0xb4c fs/ext4/namei.c:1596
- ext4_find_entry fs/ext4/namei.c:1731 [inline]
- __ext4_unlink+0xa8/0x3e4 fs/ext4/namei.c:3215
- ext4_unlink+0x150/0x200 fs/ext4/namei.c:3291
- vfs_unlink+0x1dc/0x300 fs/namei.c:4252
- do_unlinkat+0x200/0x3dc fs/namei.c:4320
- __do_sys_unlinkat fs/namei.c:4363 [inline]
- __se_sys_unlinkat fs/namei.c:4356 [inline]
- __arm64_sys_unlinkat+0x7c/0xa8 fs/namei.c:4356
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
-
-Tested on:
-
-commit:         a5541c08 Merge branch 'for-next/core' into for-kernelci
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=10d9aec4480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=d3bb749184481f92deb5
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15213e32480000
 
