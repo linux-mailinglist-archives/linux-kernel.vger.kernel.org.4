@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BEF657604
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C781E657609
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbiL1LtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
+        id S232965AbiL1LvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiL1LtI (ORCPT
+        with ESMTP id S232680AbiL1LvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:49:08 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC542FCE2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:49:07 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id b3so23312870lfv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:49:07 -0800 (PST)
+        Wed, 28 Dec 2022 06:51:01 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAB2108A
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:51:00 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id f20so16323434lja.4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:51:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KIdAswb95AYARrc2vrOKujVdFE1u4lmRC2qYIaY3apw=;
-        b=f55bwhGc94q1irBQ3Jl6361/Nv4prGoRA3QeucqleLYxW4zOVIkFwwfYTo+jyslT1p
-         nPYi8sWM21YkX4TXWGzLe70PGKdPSUQ0nqmVPzFgLmiU9EYcBJGfrNvdHvTklo/EvyTn
-         qcRGKzKNydOPCrBqLr9z2aBblFZ/9uFbEqtumpj9npZMFHCDoQ9XqNaTvbwyODXELYy/
-         TS2X97+Keb/iGE8O/PH9/40IKjVz1cl5ezrLPqim4ZRlp3/anTaQ34bjm80hfVZ3iHdZ
-         M9zoHO+ZX5pnWrw6ulcdmYcNFzHmRBqs1QDsG5ZbZjDAWuMKCK9KAOpc3VNpzh/v/y/I
-         LxqA==
+        bh=/5K3KP5mDdgN0eqJUL/TJpR4Fs9Rq1rDI3FFgGZRBmQ=;
+        b=lAKNm5s4YW3N+clC20lLrn3ibALFmxk9YFvnz7UmR83v4emrhYOwJf3b2bBTsKl5vL
+         dd4iHZCnHY3A3d4nRd9C0Z8JE1rPKO9lp4+2x4fTfCJBEoYeLqHczAQpcd+QFdeexKSm
+         2eH+QNchNuhXPoY7jZNNhemYFbsiRRVfiquLGkKCGUfUofgAAIe3NWcDNLLSbVUi+tAR
+         FUZUN0xxh7Jc7rh7Pp+QmT1ihMx+B7XYqjB5mT57M6twNZczmAIKGHgYLzxmSoGZ7gkq
+         32HIySCfKWUUPblRky9mqXI/a2oHafakkcalCBIlEPzN1jsX52rDmwY7cD778N7Sz8F9
+         fIhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KIdAswb95AYARrc2vrOKujVdFE1u4lmRC2qYIaY3apw=;
-        b=GbqKqY+498/f1Fr6Dk/rfgp33LNo+2cIEYqGBbVRcPpwUbbNicGguEHFHFkTWG+RV2
-         NGjxmAGUCQK5zaouc6Q9/MohxM+iJTsTaJLTXQURb6jSx/KwCutql6GushDptSZyWfpu
-         h3d+ZXGALERogJ9s0e301tCoKcbDH+x1YMzQQTpfi4zbFL9K3Nd8Oqx2Ss9RwhQi18C+
-         Mpg4iosu1miaWgCLAyMv10ft/l06NVN65cENK9X1KK568EOLy/mCWrg/Yby5Y4kX7u/m
-         FeONZRxady07b7hZTT2MCIzgNMdOKnjiH0dOXW7QgCLUVavgEEJGALgdvZ4yIP+7DTTO
-         88+A==
-X-Gm-Message-State: AFqh2kqd20yyb1dxhdSIXZyOJPHpGI3s6mtl2fAT9m5f0ROBvWXHNno3
-        ajGYan90t9/IToug+dQRff7v3A==
-X-Google-Smtp-Source: AMrXdXt+bGsJN6Y8DrxVVOVGXUlrshZ+hPi3h72qrABuvQKXyrpESQ0BdCJfotsDD64oOI8h/QYbgA==
-X-Received: by 2002:a05:6512:3750:b0:4a4:68b9:66cc with SMTP id a16-20020a056512375000b004a468b966ccmr6645261lfs.23.1672228146214;
-        Wed, 28 Dec 2022 03:49:06 -0800 (PST)
-Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
-        by smtp.gmail.com with ESMTPSA id 11-20020ac25f0b000000b004b5789ecdd7sm2576972lfq.274.2022.12.28.03.49.05
+        bh=/5K3KP5mDdgN0eqJUL/TJpR4Fs9Rq1rDI3FFgGZRBmQ=;
+        b=nNkUSQojl+ej7G5hmWoEuHqkOesL1pL4l6XpRhHe/tEoVpctFXXqwTVF7K2MdDMxze
+         nFVvvJtt6wl7Xhr2SWhVcFvnIB+QvE5+YlskKyGmq8FxsZrEjhJcqPh15qNBhRDI+LZP
+         4OunFNlDojAFHQy6cMCOpzKhoSrtbV0MLseytZtxwgNhWZWiBqgeAiqXkVpg+hIHUHwG
+         FfjqcBNMtVT5MqmjCwl7MZD6WZPqOCRkfhncFlfZEkDN2I1s5+5tYXbJc2P/0HmGYi9V
+         XbnpB8TlcC018/WdOYUqhWldUN+vd8dFZb0ZTj5wHLH2E+iFtq11ndH/IkNDJZf4rZLQ
+         IHug==
+X-Gm-Message-State: AFqh2kpnVzYoFnHw6OLHZGLRzSNFkG0EQ4qBoEm7NqGigJD+9pQvca/p
+        ZHeJ2vJDIKTNEBMSnLZEtpQMyw==
+X-Google-Smtp-Source: AMrXdXu8/FWArHMsH2HpxRSK9zV6JdGrL7GdeNUK42xFXGhh8eXlwNs9E+UXd4dwGhBZUAQhrNR7Bg==
+X-Received: by 2002:a2e:bf26:0:b0:27f:ada4:ce01 with SMTP id c38-20020a2ebf26000000b0027fada4ce01mr6445753ljr.6.1672228258918;
+        Wed, 28 Dec 2022 03:50:58 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 20-20020a05651c00d400b0027a1ee0b8d4sm1918271ljr.130.2022.12.28.03.50.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 03:49:05 -0800 (PST)
-Message-ID: <3434b152-20f0-83d0-7fbc-04247ce609cd@linaro.org>
-Date:   Wed, 28 Dec 2022 12:49:04 +0100
+        Wed, 28 Dec 2022 03:50:58 -0800 (PST)
+Message-ID: <c4109766-22f1-7227-47bb-9273a027bb0c@linaro.org>
+Date:   Wed, 28 Dec 2022 12:50:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp-x13s: move 'regulator-vph-pwr'
- node
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] dt-bindings: ufs: qcom: Add reg-names property for ICE
 Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221228085614.15080-1-johan+linaro@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221228085614.15080-1-johan+linaro@kernel.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,56 +84,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 28.12.2022 09:56, Johan Hovold wrote:
-> Move the new 'regulator-vph-pwr' node before the wlan regulator node to
-> restore the root-node sort order (alphabetically by node name).
+On 09/12/2022 15:29, Luca Weiss wrote:
+> The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add this
+> in the bindings so the existing dts can validate successfully.
 > 
-> While at it, add a couple of newlines to separate the properties for
-> consistency with the other regulator nodes.
+> Also sm8450 is using ICE since commit 276ee34a40c1 ("arm64: dts: qcom:
+> sm8450: add Inline Crypto Engine registers and clock") so move the
+> compatible to the correct if.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
+> (no cover subject)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index aeb9e1800f71..0201c6776746 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -95,6 +95,16 @@ vreg_nvme: regulator-nvme {
->  		regulator-boot-on;
->  	};
->  
-> +	vreg_vph_pwr: regulator-vph-pwr {
-> +		compatible = "regulator-fixed";
-> +
-> +		regulator-name = "VPH_VCC3R9";
-> +		regulator-min-microvolt = <3900000>;
-> +		regulator-max-microvolt = <3900000>;
-> +
-> +		regulator-always-on;
-> +	};
-> +
->  	vreg_wlan: regulator-wlan {
->  		compatible = "regulator-fixed";
->  
-> @@ -127,14 +137,6 @@ vreg_wwan: regulator-wwan {
->  		regulator-boot-on;
->  	};
->  
-> -	vreg_vph_pwr: regulator-vph-pwr {
-> -		compatible = "regulator-fixed";
-> -		regulator-name = "VPH_VCC3R9";
-> -		regulator-min-microvolt = <3900000>;
-> -		regulator-max-microvolt = <3900000>;
-> -		regulator-always-on;
-> -	};
-> -
->  	thermal-zones {
->  		skin-temp-thermal {
->  			polling-delay-passive = <250>;
+> The only remaining validation issues I see is the following on sc8280xp-crd.dtb
+> and sa8540p-ride.dtb:
+> 
+
+Any plans on fixing the patch (after testing it) and resending?
+
+Best regards,
+Krzysztof
+
