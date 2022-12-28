@@ -2,49 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81D26575AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9FE6575B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbiL1LMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
+        id S232887AbiL1LOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232994AbiL1LL7 (ORCPT
+        with ESMTP id S229708AbiL1LOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:11:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5562FB66;
-        Wed, 28 Dec 2022 03:11:58 -0800 (PST)
+        Wed, 28 Dec 2022 06:14:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AC710FDA;
+        Wed, 28 Dec 2022 03:14:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E69E0B81633;
-        Wed, 28 Dec 2022 11:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB4BC433D2;
-        Wed, 28 Dec 2022 11:11:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8BA1B81639;
+        Wed, 28 Dec 2022 11:14:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867D4C433EF;
+        Wed, 28 Dec 2022 11:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672225915;
-        bh=2NN9aOnhE0g5CPXUvtIdD6kBa8yBbezuVcM869SJkok=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PSjg8W1HNmTIpEIFfujXpWBj6i5pumTE1y+o6U1FUf+zHekrPia7cAUrd4u4CYfp2
-         CZka3Kndf2zwdi3BGwJOoTW2eyG7xVc+ryolNZYs4FL6FBMLnboOXPHpGiX6dDzj4q
-         av/XLQmmMM10hwtW6yt42PoJnHbQpnczjx0HTvaksBBQkrg5TaV7tqNMULIdwhP15L
-         4WsHvlgkxQ6L8ICIMgfQILorwIkSyxNaqD7Y6vl3cWJxuBBVEaGYyiNtgs4KLlXddB
-         r2AGxsNRT1ReHiWrkvRIa/94bsvKdDLyo51AhksOCFjUytiV6tT2XY2ob/tf/doOPg
-         axE+kX/trQ5Uw==
-Date:   Wed, 28 Dec 2022 16:41:51 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Zhou Wang <wangzhou1@hisilicon.com>,
-        Zhenfa Qiu <qiuzhenfa@hisilicon.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: HISI_DMA should depend on ARCH_HISI
-Message-ID: <Y6wkd93CvGW/iOQR@matsya>
-References: <363a1816d36cd3cf604d88ec90f97c75f604de64.1669044190.git.geert+renesas@glider.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <363a1816d36cd3cf604d88ec90f97c75f604de64.1669044190.git.geert+renesas@glider.be>
+        s=k20201202; t=1672226053;
+        bh=xMjgukjtHzE0+lVwng5j2D0+boNEBOyC78JjAszKCE4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PKlHAant/Ojc+U94Px/F4pmlzcZKOOejI3Z4u1rOyLUglMo+T3SGxC6pfoiS+cNb3
+         o19ZWMA0nEx9XSAvZykv0FgpXFJUDsx+yJxEoUHYmvIbwQb9coeLdov5RfhSjbXPCa
+         RfgqyTEwFGDiIR2eTd+701hfRriLPh9zsUYKOiZ58o3UXPbjuOZKxn4vfcMSaJycjk
+         H/msAen1LqLfwW2jSXv9isCQUknemX5jhsDD6WePXc54pBm9VlkigxtsZn4na16NzU
+         Y6l6pZwpPOuHAzdHGRwzORO/MUx57cILwWblh4jOy0fogxddjXrxbCQAopINrf25I7
+         Qmq4R5NauN1hw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pAUNv-00FXOu-87;
+        Wed, 28 Dec 2022 11:14:11 +0000
+Date:   Wed, 28 Dec 2022 11:14:11 +0000
+Message-ID: <86bknnbx18.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Yogesh Lal <quic_ylal@quicinc.com>, <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH] irqchip: gic-v3: Handle failure case of CPU enters low power state
+In-Reply-To: <20221227103638.GA3974604@hu-pkondeti-hyd.qualcomm.com>
+References: <1671734140-15935-1-git-send-email-quic_ylal@quicinc.com>
+        <20221227103638.GA3974604@hu-pkondeti-hyd.qualcomm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_pkondeti@quicinc.com, quic_ylal@quicinc.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,41 +66,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-11-22, 16:23, Geert Uytterhoeven wrote:
-> The HiSilicon DMA Engine is only present on HiSilicon SoCs.  Hence add a
-> dependency on ARCH_HISI, to prevent asking the user about this driver
-> when configuring a kernel without HiSilicon SoC support.
+On Tue, 27 Dec 2022 10:36:38 +0000,
+Pavan Kondeti <quic_pkondeti@quicinc.com> wrote:
 > 
-> Fixes: e9f08b65250d73ab ("dmaengine: hisilicon: Add Kunpeng DMA engine support")
-
-My script warns of bad tag, so I looked up.. this one uses 16 chars of
-SHA1... checkpatch also complains: Please use correct Fixes: style
-'Fixes: <12 chars of sha1>...
-
-I guess lots of parts assume that it shall be _exactly_ 12!
-
-I have applied it ..
-
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/dma/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi Yogesh,
 > 
-> diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-> index b9d54f20812f794b..67323afe9fcad137 100644
-> --- a/drivers/dma/Kconfig
-> +++ b/drivers/dma/Kconfig
-> @@ -245,7 +245,7 @@ config FSL_RAID
->  
->  config HISI_DMA
->  	tristate "HiSilicon DMA Engine support"
-> -	depends on ARM64 || COMPILE_TEST
-> +	depends on ARCH_HISI || COMPILE_TEST
->  	depends on PCI_MSI
->  	select DMA_ENGINE
->  	select DMA_VIRTUAL_CHANNELS
-> -- 
-> 2.25.1
+> On Fri, Dec 23, 2022 at 12:05:40AM +0530, Yogesh Lal wrote:
+> > When CPU enter in low power mode it disable the redistributor and
+> > Group1 interrupts. And re-initialise the system registers on wakeup.
+> > 
+> > But in case of failure to enter low power mode need to enable
+> > the redistributor and Group1 interrupts.
+> > 
+> > Signed-off-by: Yogesh Lal <quic_ylal@quicinc.com>
+> > ---
+> >  drivers/irqchip/irq-gic-v3.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > index 997104d..4904f00 100644
+> > --- a/drivers/irqchip/irq-gic-v3.c
+> > +++ b/drivers/irqchip/irq-gic-v3.c
+> > @@ -1376,7 +1376,7 @@ static int gic_retrigger(struct irq_data *data)
+> >  static int gic_cpu_pm_notifier(struct notifier_block *self,
+> >  			       unsigned long cmd, void *v)
+> >  {
+> > -	if (cmd == CPU_PM_EXIT) {
+> > +	if (cmd == CPU_PM_EXIT || cmd == CPU_PM_ENTER_FAILED) {
+> >  		if (gic_dist_security_disabled())
+> >  			gic_enable_redist(true);
+> >  		gic_cpu_sys_reg_init();
+> 
+> static int gic_cpu_pm_notifier(struct notifier_block *self,
+> 			       unsigned long cmd, void *v)
+> {
+> 	if (cmd == CPU_PM_EXIT) {
+> 		if (gic_dist_security_disabled())
+> 			gic_enable_redist(true);
+> 		gic_cpu_sys_reg_init();
+> 	} else if (cmd == CPU_PM_ENTER && gic_dist_security_disabled()) {
+> 		gic_write_grpen1(0);
+> 		gic_enable_redist(false);
+> 	}
+> 	return NOTIFY_OK;
+> }
+> 
+> During CPU_PM_ENTER notification, we are not doing anything for the
+> !gic_dist_security_disabled() case. Since CPU_PM_ENTER_FAILED notification
+> arrive when CPU fails to power down, do we need to reinitialize the
+> system registers? IOW, should we do different handling for CPU_PM_ENTER_FAILED
+> based on gic_dist_security_disabled()?
+
+What does it gain you apart from the extra complexity?
+
+gic_cpu_sys_reg_init() does very little, and makes sure we're always
+back into a sane state.
+
+	M.
 
 -- 
-~Vinod
+Without deviation from the norm, progress is not possible.
