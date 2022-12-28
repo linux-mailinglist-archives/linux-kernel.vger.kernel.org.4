@@ -2,153 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35254657464
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F71065746A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 10:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbiL1I7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 03:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S232625AbiL1JEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 04:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiL1I7K (ORCPT
+        with ESMTP id S229868AbiL1JEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 03:59:10 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2085.outbound.protection.outlook.com [40.107.13.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C217025FB;
-        Wed, 28 Dec 2022 00:59:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SOYjrXEf9RtRlngfcpWfDSzFyfTpSSzhGhrQJ1A73mBWK3z1ZpS8tboeS3XlW3XhR+cSlc0/TY6wzJb2WK1jSR+t9CCBe23HHZV09lhjc/w5ph9WuW9PfhAtJD8fiNvdsBJkTup66323IuaZN/KQJQ0Vopovhuc4Bhwyjrc7oIdbj5B6lU6fd5gXURmxYrEuivpd89uY8RxHqufED01poBde0KKh8zn/fOoCEP14Q/OsSp9zsuB4nYRw6ZwFToLsVZOwveSWDIP6bS4+EPf41Lik4mWK3bAT3/DSoCcAoSFmYMYTEKwLNGujj8u6BXgiBdT8NP3uoUAqOSNxmMrWjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B2XwEXv/CYCGjCHZLMDZZ5mJaIHnmTEDin/uIFEcxxs=;
- b=ieNaBuxOV1LQ+hdJY8bPGmkmC2BskzR5qWs2m+cF6TmoKmpz58jpRRz57Qbp7gWUZgl/ElnAN3YKNYYWwVXk9ZthqK37Wdw6ESlFLkSVkuCo8pys1UM5PGlfjtnA0789o4llL75oXBUCph53JZ9LbfNWXDlDsIv9r6xHtzhiPhcrLiU0L6mnluvdQnjVKLeuwfNS7/zculsjjwcpOta417viMIx2cTSrAR2efvgoxcazZ+8wU5pgzgk8vLycOSKxfECaUv7/Z+1a22I5BRbN0p1eyCn7jdUnKY3KZxjv37FnGwFctVIXW0VBlLUyp5aK0+UeNoF6M1FZS7Kyukm/Lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B2XwEXv/CYCGjCHZLMDZZ5mJaIHnmTEDin/uIFEcxxs=;
- b=p99JQK2mCU65YnUnM+IhAuxu72QMEfFE4LDG/6I3UoWmnPlfG8FIB7lhmoRvegAuPqWyaeeicmtoh1Of0nfowixXRZ5XULjSeTzpJIWMfc7Wb3I83cHXNzrPOVNIdGyl7CuDrpQtbDqlpSuIOJCg+dCneuxZmG+aH4jixa4NMVtCkmBYNAjSw9Rt1jNkbBAaTFA7EnxkqjNPCQ2oxZjADs1uxBo3yjuA7HcCw+RuzStBCu3MnAlToqGQEPp+M5TntVMpXstnOQOAF7/V0Ct876tHnPDjSCdBXzv5Ju6vTIhDxZ2ehSH+16L2KMi1P0/jO1BnaKHdwMw9BkVlnASyKA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by DBBPR04MB7754.eurprd04.prod.outlook.com (2603:10a6:10:1ee::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Wed, 28 Dec
- 2022 08:59:06 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::8d51:14ac:adfd:2d9b]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::8d51:14ac:adfd:2d9b%5]) with mapi id 15.20.5944.016; Wed, 28 Dec 2022
- 08:59:06 +0000
-Message-ID: <bf1011a8-c746-c465-f161-f0293409d922@suse.com>
-Date:   Wed, 28 Dec 2022 09:59:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC PATCH 06/14] usb: core: hcd: Introduce USB HCD APIs for
- interrupter management
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_jackp@quicinc.com, quic_plai@quicinc.com
-References: <20221223233200.26089-1-quic_wcheng@quicinc.com>
- <20221223233200.26089-7-quic_wcheng@quicinc.com>
- <Y6ca8IKLK9g497Qv@rowland.harvard.edu>
- <e1203849-01b4-b196-36f3-76d58dd7c724@quicinc.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <e1203849-01b4-b196-36f3-76d58dd7c724@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0209.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a5::8) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        Wed, 28 Dec 2022 04:04:45 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7A4C74A
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 01:04:43 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id jl4so9245713plb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 01:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=W/FTEJ8XCt6QzrbvqyxI8eyBUAXbA8Tx6jTMYIdd6hg=;
+        b=mgScZBtHjxG944kgEKqqjyrMOB5bEzMmCzaKYFz9oowAHB40eja7ubIkgrx54v3Y9f
+         5VR6VRyR+oCdQhw3PO3cdqfLoG13gT8WKobCs1gKeV4qmcaK5TSl4vMwPtLyzhKkcK04
+         cPbY0zjqCnRQVpTVuqwp98ntaNCOqqd2/jBQprD4HKUt6AtmEqUrPVxqRRaniv92vfWU
+         yb6yAUABrH4ioOg5x9DnWzGgNCpYZ8g+NBgcGOB9jTmJYtgno4I3hpkH12Ly9cNbb6jq
+         ziulXLkupFCBm7C/JyhKy4O3JoS30p65ZS8J+YPtwWCYhXM/xoOJNm8bbJWO6neslOqg
+         Ia2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W/FTEJ8XCt6QzrbvqyxI8eyBUAXbA8Tx6jTMYIdd6hg=;
+        b=JL+1EiPRAxk5PGnqCJj2LNuSIFq4xF/uA+5G8e8X2mLP+MS+9avxslc7YDe8ZIE2a5
+         4b6tTQyfI//DhWL2yBjA8xjsaDtwNI3hzRgAblo+7Gus2Z3q0CZnJUAyK1EVSM6O81eM
+         eietjNP1345ayp8BOJODgMPHleBN6ocM7oJxHsBGAenHtsPX/ZfpfhVyybfISNBm/Tf3
+         0thDbW1BR8PiOwQIdKc80luq0wanIb7Eqleb6CpJS3Tsi0U8pgOhsC3SHaTlZvVQhXdb
+         WiAy1qFbqEsoBnYNngQZ4OF6Vbr+0StAnayp4B6iIsqUxA11iWpu778iIvaQZqC49Xbw
+         T8ow==
+X-Gm-Message-State: AFqh2kq1wW8uPwGt+1ATjH9bBG5RNNhM+bckmnfkg5dGW494/7aW0xtr
+        k69fQ/1cPFZjlpPBjFCZDp/V
+X-Google-Smtp-Source: AMrXdXvUqXiREoyvpHVXLT3s8wVEI3QvBcRUreLN9CynaeWqp2Hs6Pjf58YpmTmSqmtz6sBUhtJ3mQ==
+X-Received: by 2002:a17:90b:2688:b0:225:f8ce:5cd8 with SMTP id pl8-20020a17090b268800b00225f8ce5cd8mr8829683pjb.4.1672218282862;
+        Wed, 28 Dec 2022 01:04:42 -0800 (PST)
+Received: from thinkpad ([117.217.178.73])
+        by smtp.gmail.com with ESMTPSA id j8-20020a17090a94c800b00219bf165b5fsm9406890pjw.21.2022.12.28.01.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 01:04:41 -0800 (PST)
+Date:   Wed, 28 Dec 2022 14:34:33 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bhelgaas@google.com,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sm8450: Use GIC-ITS for PCIe0
+ and PCIe1
+Message-ID: <20221228090433.GC30143@thinkpad>
+References: <20221222133123.50676-1-manivannan.sadhasivam@linaro.org>
+ <20221222133123.50676-4-manivannan.sadhasivam@linaro.org>
+ <e756516a-a5e2-a6ac-fd7f-71726766fa81@linaro.org>
+ <20221223174555.GE4587@thinkpad>
+ <9c7cb68c-6516-6087-92ad-e707d8b122ed@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|DBBPR04MB7754:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6024c3a4-2fdd-440f-cf5d-08dae8b1c5f9
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yZ23L6r3HybdPVHODqtVu7JUUh7ZlYXYYljAGiQioK9Oq9lcC9gxCQvwf4mVLwr47hk2YG2h55UagkqSiN442cOKM8Ar6yQ+WZGJeecR+IQom1Vb0xiTnThWM7tTNu1LqOniM2O1gmhxhpeIXWzKqU8io8LlwfmcVLhTIzpb7oE2TtYVoHvpozfCxjiMa9UF7zdQFKsWMX1gfM1rDkM/qhYusX2i2LQJNd8PvThLDjU5CgXeuEhI7WUWK6hiNHa7V4zGE9Y+InoNKnXwN32BqHTIKw/LHXeav8c1MNfBNBUELW9byAbbpjzFpLXUejh+WZEkfBuLtCyUZeUOh+BjuWP4vc8O5yoKtcmT/hiiVIFfEZhA7vnN7e/K3g40HcVFytO8K1KlufbW66zQ6I8U3NIHU9oj/dGVtLtfSnd2KpSANhHXeorl8BD5prrgXcp0Q/N+bp5nXx/7Wm9evXyNodgrQDm6jRuyPAWMcbBx1mzdY1O5zSA8vgV5nzkrkb4ZKBelFYC3UZtPD3EyuhS/iVkXMpKTg/AaxbA+B7AKaGx9TAR8wO0uur/MCbmYDlFQdJE+YmoLSjxVeTUxNHXe0OYsty4BIBTfK+hx1Aww57mMA45x0bcT5Dw4LHBJWDP4TySop1b8H5F5dVQiuOl3KKrdBF+vzPs8LOWqeS2dWbyKpipUn75F67QmqRIR32EXk+qlgZvrY1n3HV2FcHSMBpX24Ao3mU/2SRi9PaFL6jQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(39860400002)(366004)(396003)(376002)(451199015)(6486002)(478600001)(316002)(186003)(110136005)(2906002)(36756003)(6506007)(38100700002)(6666004)(31696002)(53546011)(86362001)(2616005)(6512007)(4744005)(31686004)(7416002)(5660300002)(8676002)(66946007)(8936002)(4326008)(66556008)(66476007)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K3JKSUxHRGRhWGdEZ0praFFybHRYTnowbyt1SzZQUldxNkhTTVl2Q3haYTVo?=
- =?utf-8?B?NDdEZXFjUjV5ek16NUFzZW93YjBTT21sdHE2d09QZTcxYkxtNit5WXFkd2NS?=
- =?utf-8?B?Q1VlVHZBUzkwZ2dYV0tlWktpZjdCaXFuOGZHYVFHSmxBQkR6dGV6VUl6Vzl0?=
- =?utf-8?B?R2REalpsL2pQMVBVbG16aGFrMUc5OE9lRGFacEloekVCQ3lzend6ZnUzV3lj?=
- =?utf-8?B?MXRaenF6OHQxaHA3KzJySlVWRVNVbXp0aHlIeC8wM2NTSnFob2g1bWdsRDdB?=
- =?utf-8?B?RWhIME1jLzg1djdFbzBGb0JESHNDejV4NDNicmw1K096dnVyWU5tTU1UK3Yw?=
- =?utf-8?B?ZCt5VzZ1M3VhVHJtd3FRbXBSdGo3Zk9kZVV1R3JZelNSbUs3VE9YV3lhU0J1?=
- =?utf-8?B?NEZZelJzODBhV1VkNFVHNVp6c0tLUVhoa3RQaDVwTDhTTFIrd3V5ZzZIcytH?=
- =?utf-8?B?a29BcUV6bS9RNm5CWGJLMTNKM1FyTEplQ2dwTnlRL0JJeEZDSHFWOHNQb2xL?=
- =?utf-8?B?Q3g0YVB6TmRDZ1h2eHVlcU1NTFJqSXlhQ1lJVHQxZkhmQ3pITG92Q1pkMXp6?=
- =?utf-8?B?dGR4UExzcU1aNTVkVlNTK3ZwckM2YlpvT1poaEZSOHdQemNVdVhPMGp6Wk4z?=
- =?utf-8?B?RCtIWXlXVTNJTUlpdXBpcFRLNS9ncUR3RW1GVUJHa2gvaG40MjAzQTBJN2Vx?=
- =?utf-8?B?dTMxcEFBMis3b0xad3BhWG5UYVdYclBTMnN2a2xOZ0ZndS9Ca09scW1XdEtD?=
- =?utf-8?B?NnltUFZySGJvbzEzRTFqcm1WZjZKZG0xQnZ6cUFvWStETHIwRFlJU3JaKysy?=
- =?utf-8?B?WnVrN3AxQ1RsUTA5RVEvREdQNDREcWJoL1VqQWdhbHdoZG9Kb2YyVG4rMXgx?=
- =?utf-8?B?NzVrYnVTRHI1c3FxS2hkOW5JbjFkNElaR2h3ZWo0VUdvcnNoUW1uV3N3Yk5U?=
- =?utf-8?B?NXIxMWR3U3ZRUnV3UEZvbTRlRXl5cW84ZURLR21TS3lsK1pXa0hRRzNUclJZ?=
- =?utf-8?B?cmNSMndMNzdwdmxWaXhZb3krdmZad2g2U29ETythY2hQUVBhSUl0VFg4c0dr?=
- =?utf-8?B?S2xVNm1sdS9ZMjJJYVVpN2pMRnV4amRuWm9mR29TRUtvSUJpbWZDVi9rTDBH?=
- =?utf-8?B?by9vQUVjSC9jeUdzd0lWL3AxSEo4aFNOVVFUT2xxWEZsWjU5ZSswV0NwQWJ6?=
- =?utf-8?B?U2ZwS2lBWldBT04weHFha2prVE0rQ0xtRVRKc1owdHI3QnQ0RGRDUWdvWmZr?=
- =?utf-8?B?Ri9RYzdacHdrRlc5Y05RRHNQdkRWaUpRZnFES0Y3WVVKd3dvQ04rTU16UUk0?=
- =?utf-8?B?VS82WWM2SWUyUkhzdlMrQXRyVmNsTjJlT28wdmhZY05tUEwxNUdLMDVlMVEy?=
- =?utf-8?B?cVgrNzBhUzVlVUZYTXJFVDI1ejJBODRENlJZTGhYZWxJdExvS3ljQUQxVWU4?=
- =?utf-8?B?SkJZQjhoR3BUWGpndyttK25xVEZVaTVtVlNkSUNCaXBNcGFsckNaMVFGUUth?=
- =?utf-8?B?K251UkNRYVNOZXRJM28wQUNpcVRBZGNIZzNXNjEwZnVwWWRXUDBOQkw2UGxq?=
- =?utf-8?B?dVM0Qk5XVno1eDVFamFoRUh2UGNaL0FLOHVvKzdqRS9mOTRiY1g1VWh4REFt?=
- =?utf-8?B?cDhwaWFPdUpxOVBpd2pMMlZ1Y2NvTGFBZVlrN282dk1YMUtjMnVjS3l4dDN4?=
- =?utf-8?B?V0w0YS9sb09tcDlZL2pldTNSY2lMWW1RK0cwSVA0dEx4eTg5Yzg4SVMzVVQ2?=
- =?utf-8?B?c3lWMm4wTWpySUJGMU9qTHhRWStRQlh6cVdsNXJmelZmQjVEMXBnbmdNcDBJ?=
- =?utf-8?B?RWxTTTZXOHJMVmdLaDhWQ0p4TmZEWEtMMnZtcGdyV2RHbldDdG9EdklBZ0la?=
- =?utf-8?B?ZU9HQ2dwMEoyQ0Z4NmxOZnkwNXFzcnFJNGh4RVhDeUlqVkc1SHVGRUZLVGVt?=
- =?utf-8?B?dmRJdklVRmFwMGhFdkdWMTgyeFRFUkF4ZWN1b1RzQ2NkWXFCd0JKR0tPdVdn?=
- =?utf-8?B?WVNMSVFXY29NTXRaOFpxdXQ4ODJ0YXpaSUZmeWdBbnYyMkt1c1NUcXFYeEMz?=
- =?utf-8?B?cFRSSVBJUlg4dCtrazdSK1pQbWsyRkFJbFRienVBOEJWSktrL0o5cVBONmtk?=
- =?utf-8?B?M2RML2pEZjl6VEwwU1pTNUx2NjNQR09NU2drRStoR3BENnRWeWk0MVRvdWNM?=
- =?utf-8?Q?jDNBANYoj/HV6S5tgXDSsFw7vtPbZh85mpb3CytNt1YW?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6024c3a4-2fdd-440f-cf5d-08dae8b1c5f9
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2022 08:59:05.7809
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7THR7gdtjisBk17hIH9T4VtfN8AbN62zAb9R7+4e5faDDjtwZZ+HNNx+Gw6G+Rc4C4ccX5irKr4guheA3p9zjw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7754
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9c7cb68c-6516-6087-92ad-e707d8b122ed@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 27.12.22 22:07, Wesley Cheng wrote:
-
+On Fri, Dec 23, 2022 at 08:15:32PM +0200, Dmitry Baryshkov wrote:
+> On 23/12/2022 19:45, Manivannan Sadhasivam wrote:
+> > On Fri, Dec 23, 2022 at 07:18:32PM +0200, Dmitry Baryshkov wrote:
+> > > On 22/12/2022 15:31, Manivannan Sadhasivam wrote:
+> > > > Both PCIe0 and PCIe1 controllers are capable of receiving MSIs from
+> > > > endpoint devices using GIC-ITS MSI controller. Add support for it.
+> > > > 
+> > > > Currently, BDF (0:0.0) and BDF (1:0.0) are enabled and with the
+> > > > msi-map-mask of 0xff00, all the 32 devices under these two busses can
+> > > > share the same Device ID.
+> > > > 
+> > > > The GIC-ITS MSI implementation provides an advantage over internal MSI
+> > > > implementation using Locality-specific Peripheral Interrupts (LPI) that
+> > > > would allow MSIs to be targeted for each CPU core.
+> > > > 
+> > > > It should be noted that the MSIs for BDF (1:0.0) only works with Device
+> > > > ID of 0x5980 and 0x5a00. Hence, the IDs are swapped.
+> > > > 
+> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > > ---
+> > > >    arch/arm64/boot/dts/qcom/sm8450.dtsi | 20 ++++++++++++++------
+> > > >    1 file changed, 14 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> > > > index 570475040d95..c4dd5838fac6 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> > > > +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> > > > @@ -1733,9 +1733,13 @@ pcie0: pci@1c00000 {
+> > > >    			ranges = <0x01000000 0x0 0x60200000 0 0x60200000 0x0 0x100000>,
+> > > >    				 <0x02000000 0x0 0x60300000 0 0x60300000 0x0 0x3d00000>;
+> > > > -			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
+> > > > -			interrupt-names = "msi";
+> > > > -			#interrupt-cells = <1>;
+> > > > +			/*
+> > > > +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5980.
+> > > > +			 * Hence, the IDs are swapped.
+> > > > +			 */
+> > > > +			msi-map = <0x0 &gic_its 0x5981 0x1>,
+> > > > +				  <0x100 &gic_its 0x5980 0x1>;
+> > > 
+> > > This definitely doesn't match what has been used in the downstream.
+> > > 
+> > 
+> > Yes, I do not know why the downstream Device ID doesn't work. I tried finding
+> > the answer within Qcom but didn't get any answer so far :/ So I just went with
+> > the value that works on multiple boards.
 > 
-> Hmmm...maybe I should change the name of the API then to avoid the confusion.  Yes, usb_hcd_flush_endpoint() does ensure that URBs submitted to the EP are stopped.  However, with this offloading concept, we aren't actually submitting URBs from the main processor, so the ep->urb_list will be empty.
+> Ugh :-(
 > 
-> This means the usb_hcd_flush_endpoint() API won't actually do anything.  What we need is to ensure that we send a XHCI stop ep command to the controller.
+> > 
+> > > Also if I understand correctly this change would prevent us from using
+> > > multiple MSI interrupts for the connected device, as the last value of the
+> > > 0x100 mapping is 0x1, while the vendor kernel uses <0x100 &its 0x5981 0x20>.
+> > > 
+> > 
+> > Not true. The controller can still support multiple MSIs for the endpoint
+> > devices but the only difference is, it would use the same Device ID for all.
+> 
+> I see, please excuse me then. But don't we have to define multiple MSI
+> vectors here too?
+> 
 
-That is a concept specific to XHCI, yet you are adding a generic
-API. The namin should reflect that. usb_quiesce_endpoint() ?
+No, it is not required. GIC-ITS driver will handle the MSI mapping internally
+and devicetree only needs to specify the Device ID for each PCIe device.
 
-	Regards
-		Oliver
+Thanks,
+Mani
+
+> > 
+> > The Qcom GIC-ITS implementation could only support 32 Device IDs. By specifying
+> > the size of 0x20, a separate Device ID would be used for each devices of bus 1.
+> > But if a PCIe switch is connected and the bus count becomes > 1, then the MSI
+> > allocation would fail because Device IDs are exhausted.
+> > 
+> > The downstream implementation just assumes that there will be only bus 1 and I
+> > do not want to follow that assumption.
+> > 
+> > That's why I used "msi-map-mask" property of value "0xff00" here, as that will
+> > allow all the devices under the bus 1 to share the same Device ID. For now I
+> > only mapped bus 1, but extending that in the future for other busses is simple.
+> > 
+> > Thanks,
+> > Mani
+> > 
+> > > Do you know by chance, why do we differ from the vendor dtsi?
+> > > 
+> > > > +			msi-map-mask = <0xff00>;
+> > > >    			interrupt-map-mask = <0 0 0 0x7>;
+> > > >    			interrupt-map = <0 0 0 1 &intc 0 0 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> > > >    					<0 0 0 2 &intc 0 0 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> > > > @@ -1842,9 +1846,13 @@ pcie1: pci@1c08000 {
+> > > >    			ranges = <0x01000000 0x0 0x40200000 0 0x40200000 0x0 0x100000>,
+> > > >    				 <0x02000000 0x0 0x40300000 0 0x40300000 0x0 0x1fd00000>;
+> > > > -			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
+> > > > -			interrupt-names = "msi";
+> > > > -			#interrupt-cells = <1>;
+> > > > +			/*
+> > > > +			 * MSIs for BDF (1:0.0) only works with Device ID 0x5a00.
+> > > > +			 * Hence, the IDs are swapped.
+> > > > +			 */
+> > > > +			msi-map = <0x0 &gic_its 0x5a01 0x1>,
+> > > > +				  <0x100 &gic_its 0x5a00 0x1>;
+> > > > +			msi-map-mask = <0xff00>;
+> > > >    			interrupt-map-mask = <0 0 0 0x7>;
+> > > >    			interrupt-map = <0 0 0 1 &intc 0 0 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+> > > >    					<0 0 0 2 &intc 0 0 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+> > > 
+> > > -- 
+> > > With best wishes
+> > > Dmitry
+> > > 
+> > 
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
