@@ -2,128 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EDB6571EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 02:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61E86571EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 02:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbiL1B6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 20:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
+        id S232697AbiL1B7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 20:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiL1B5t (ORCPT
+        with ESMTP id S232738AbiL1B6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 20:57:49 -0500
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C3F9292;
-        Tue, 27 Dec 2022 17:57:49 -0800 (PST)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 67C94120C;
-        Wed, 28 Dec 2022 02:57:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202211; t=1672192668;
-        bh=Xb7nUn6EDqGGST4kb/TTOlSVXa+n18Xx10sbI7pkaC4=;
-        h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=WJ8W7cOkD3Lw2VBRVTJz9C7TXysy97mFkEQj8xQEkMWm/X/k6T2VOYZ+qILeedJT0
-         HoAnOmyrwPpQLRXtCkU9ZqfdDBokmuVUzyo4FEoi3Fj5zqoNBuBsMnQKnE8xxTXcLU
-         tnmHCeC3VWhFPkfu/zA+0JBd8OU7lnjAwSoy9fnoDqmeWE3fTm9tcg9kzihmc2m+bp
-         /E8yxp2+08AuudJc84X4xan5COazxmYRzRhyax6dQnu12gjOHRGR+EYL7eU7D03sje
-         3WtxhyNwnnvspISDmbEd/amakF6T5dG/wZblaaJYW+OdLWdqIydQwODUxS8zUtW9pa
-         eE7aMnBJ8yFqQ==
-Date:   Wed, 28 Dec 2022 02:57:47 +0100
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v2 3/4] perf python: don't run the linker for clang feature
- tests
-Message-ID: <6dd7e9dd522c7c6014f8273affa7a558918b048b.1672192591.git.nabijaczleweli@nabijaczleweli.xyz>
-References: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
+        Tue, 27 Dec 2022 20:58:39 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2A2DE9C;
+        Tue, 27 Dec 2022 17:58:38 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BS1s9vL019100;
+        Wed, 28 Dec 2022 01:58:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0bN/yWL2tBdPrF0v4drFLgURz1fV6tzmavuK+AhfMaU=;
+ b=PVGDk3tw1ys59r1q2HbJ3S7cAbhAODbU+cUOUnrPekNJOL88Vibvg8Wb4TVOp3sn5USN
+ mkiieVI/Byh2BxYfS6mU5Wcv3oTETy9MU7eZ0dyQI/WBne0tpCUSv7sgVh2Q4OGCF8Uq
+ 28CVMb/4nw8v6Cs5XMSAAe/kkF3TFUFcW5WB6AClL8ayfpemTI2zgINxYsoL54Z2UaI+
+ itudWfLfHZx1er6HMBlyMhAJ+7r5eQ25WqGSPCE7b4W7RyKVaAPLnpB4BqxVbekTVuQv
+ beXTnz/H77uaGhpcITjwBrKIRqSAzcDztvSs7Jw94kJJV04DsmR7vO+Cve+NbvmIH8Ip 3A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mr1r1h5af-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 01:58:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BS1wXqT014462
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 01:58:33 GMT
+Received: from [10.110.12.185] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 27 Dec
+ 2022 17:58:32 -0800
+Message-ID: <7517fbb0-5ce8-6df0-0c6d-bc904253e334@quicinc.com>
+Date:   Tue, 27 Dec 2022 17:58:31 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gemavj4ktrh3cvwf"
-Content-Disposition: inline
-In-Reply-To: <44bb9a29bd7a0385c25ebfd69abd0a41ac2d753b.1672187710.git.nabijaczleweli@nabijaczleweli.xyz>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        MISSING_HEADERS,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_PASS,
-        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2] drm/msm/dpu: Fix memory leak in
+ msm_mdss_parse_data_bus_icc_path
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221207065922.2086368-1-linmq006@gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20221207065922.2086368-1-linmq006@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lxbN2vyffXXParmMA4h0_BATU03ywTUS
+X-Proofpoint-ORIG-GUID: lxbN2vyffXXParmMA4h0_BATU03ywTUS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-27_18,2022-12-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=999 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 spamscore=0 impostorscore=0 adultscore=0 malwarescore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212280012
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---gemavj4ktrh3cvwf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-This, for me, slightly-more-than-halves the time it takes to run
-  for a in "-mcet" "-fcf-protection" "-fstack-clash-protection" \
-           "-fstack-protector-strong" "-fno-semantic-interposition" \
-           "-ffat-lto-objects"; do
-    sh -c '$CC "$@"' '' "$a" -o /dev/null ../build/feature/test-hello.c; do=
-ne
-=66rom just over 600ms.
-
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
- tools/perf/util/setup.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
-index ba0b1e078855..0a557f2bf357 100644
---- a/tools/perf/util/setup.py
-+++ b/tools/perf/util/setup.py
-@@ -6,7 +6,7 @@ cc_is_clang =3D b"clang version" in Popen(["/bin/sh", "-c",=
- "$CC -v"], stderr=3DPIPE
- src_feature_tests  =3D getenv('srctree') + '/tools/build/feature'
-=20
- def clang_has_option(option):
--    cc_output =3D Popen(["/bin/sh", "-c", '$CC "$@"', "", option, "-o", "/=
-dev/null", path.join(src_feature_tests, "test-hello.c")], stderr=3DPIPE).st=
-derr.readlines()
-+    cc_output =3D Popen(["/bin/sh", "-c", '$CC "$@"', "", option, "-c", "-=
-o", "/dev/null", path.join(src_feature_tests, "test-hello.c")], stderr=3DPI=
-PE).stderr.readlines()
-     return [o for o in cc_output if ((b"unknown argument" in o) or (b"is n=
-ot supported" in o))] =3D=3D [ ]
-=20
- if cc_is_clang:
---=20
-2.30.2
-
-
---gemavj4ktrh3cvwf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmOropoACgkQvP0LAY0m
-WPF2jw/6AkulK2kjFfwEHV9b87kJ7O45cSTHu4+l9vrgvVu3ZJr6ZQDbjwGZppE8
-f+jcqMQAIQG7oHdOkGvReLU8M6nsrDYgCIpKtusuJ4GBfiRnSWAvLfpt6dNK+mjx
-r9wAtF0Y4o1INYpUhIF2BCQ4T0Wtuo/C2Az8I2C1OxHLibxe4DYc86lxR+MUauv6
-G8BCLBovebU6Sfn8DKNgEqXCac+aLsw1j9Rqb5rHY3/43Ea9PHvB5LPJk0+falm/
-3qoq7BKb7MXg1am23d+EOtIuncTrkjiuknPmuiK3Wv4WaBDp6s7l0Hay2ORFFs1B
-nAGe7gNYZ4Y2TjB6CJ18IX8zXED+THhk75Yc0IEMT2uzS6QZr8cLGBy8gKcnlTWq
-A7TZB4vuLSq12LoGGF6PNhs2STMDDF3TqqVphKDeFldElzWiK4krlI253/dMaHS5
-JzbM3HZ1SaBt1k6MZteMYu61SitmQ9EYc0/vg4ad/Q5LWLDf49/AngpIRrEBfeis
-js8E+Doqf7M2DbXt41sEOyemsYYapfqj2cqN8FafsyL+9Gnj50hxuw0aNI4PNg9/
-Eg5v0tG0uC2AquDKxeUIta0WQ0OMaVagiRVzOCIKagZv1/SEB8mQ6jErVxRpWBLc
-OlihSeVYZ1CtAiedqvxx7+NBggBr6sz1uwJgAvMM6/5bcRMn3CI=
-=bqp7
------END PGP SIGNATURE-----
-
---gemavj4ktrh3cvwf--
+On 12/6/2022 10:59 PM, Miaoqian Lin wrote:
+> of_icc_get() alloc resources for path1, we should release it when not
+> need anymore. Early return when IS_ERR_OR_NULL(path0) may leak path1.
+> Defer getting path1 to fix this.
+> 
+> Fixes: b9364eed9232 ("drm/msm/dpu: Move min BW request and full BW disable back to mdss")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
+> changes in v2:
+> - move getting path1 after error check for path0.
+> ---
+>   drivers/gpu/drm/msm/msm_mdss.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
+> index e13c5c12b775..3b8d6991b04e 100644
+> --- a/drivers/gpu/drm/msm/msm_mdss.c
+> +++ b/drivers/gpu/drm/msm/msm_mdss.c
+> @@ -46,15 +46,17 @@ struct msm_mdss {
+>   static int msm_mdss_parse_data_bus_icc_path(struct device *dev,
+>   					    struct msm_mdss *msm_mdss)
+>   {
+> -	struct icc_path *path0 = of_icc_get(dev, "mdp0-mem");
+> -	struct icc_path *path1 = of_icc_get(dev, "mdp1-mem");
+> +	struct icc_path *path0;
+> +	struct icc_path *path1;
+>   
+> +	path0 = of_icc_get(dev, "mdp0-mem");
+>   	if (IS_ERR_OR_NULL(path0))
+>   		return PTR_ERR_OR_ZERO(path0);
+>   
+>   	msm_mdss->path[0] = path0;
+>   	msm_mdss->num_paths = 1;
+>   
+> +	path1 = of_icc_get(dev, "mdp1-mem");
+>   	if (!IS_ERR_OR_NULL(path1)) {
+>   		msm_mdss->path[1] = path1;
+>   		msm_mdss->num_paths++;
