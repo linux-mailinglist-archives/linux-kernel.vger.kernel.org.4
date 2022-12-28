@@ -2,115 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B7D6583E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 245D66583E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235101AbiL1Qx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 11:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S235021AbiL1QxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 11:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbiL1Qwo (ORCPT
+        with ESMTP id S235210AbiL1Qwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 11:52:44 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1771DDF1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:47:24 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id t2so16530548ply.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:47:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=20heIbwArwzJZx617fL3Bywm94hV8d0YJO2Vs/U/I44=;
-        b=FZsMOHQJQn/nyu2ewUl+t3Z16WbE4SFe8elYLjjLQUYE3T3MO+x6Y34R1OpxRptkOW
-         23GPjz3fyivGHaZjAkNThOZcrpYnKCZtxow802YIyreKKne+/YzzQEdoNEXaOPvNfC53
-         3WbnHBE3UO+WpeXILK1gyhIM4ONIw5yVksc1ANfya95Bw6Hisuugcv5T/sX7YU0yYzBG
-         JK65qajqiW1yXt5g85RwfQx8qSBzXfXmmwM7wobyb+lvUEpTZkXVnQ2F3CuGxRGyMf5e
-         LUHMvP5nWZfT37zPRGChdfSq5pyvY1MdNhCJwU8SY+2PRYwS0TxJLL7aNGKfjL6bkWsf
-         uEsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=20heIbwArwzJZx617fL3Bywm94hV8d0YJO2Vs/U/I44=;
-        b=bAMhXjQo10qrYyFsppIwppQeDvtnR50YI4jZQCiWqc2Jp9Z4fz9GwfsWHunwzh+egs
-         Q6OdV8ONiEuyJlHhLalq6aIBJyLyWXU+Az36ZvXvJGzkAt205K3hq400hcozIxhfsy00
-         9KyztGHmplMa2XqvkS5ZQduEED/PiaRwg4BUwzJ1sEXpWuVPCNl7hZHw39966CTxtUNa
-         Pht4SXkkm4kSu9dKOkf8zDfpiGw7bj0mon5+OLCRzw6VFGAzROUXbfss/TjZFFGnukyr
-         Lh+MMytYGmrgjCidyp/R7bRndL0D3fg7rkZTkPug6VbpbZkY1Z2/aSF3WK5I5X/ipBvI
-         PzAQ==
-X-Gm-Message-State: AFqh2kr8qTvJrSMz7ucWDUCF0dTC1GEBB4RvIRF2rOu3ABeD09htma0b
-        p8vyBLBjYhNXd4/DJk+SpXbl
-X-Google-Smtp-Source: AMrXdXtFKZAfe8GZaSjUc16vjEtsrMue4bvQYgI7FCpW2FFQe2IDhQPxlL7lS/FSgLrjpptRy+vvSg==
-X-Received: by 2002:a17:902:ed0b:b0:192:7b0b:9c06 with SMTP id b11-20020a170902ed0b00b001927b0b9c06mr9754198pld.8.1672246044274;
-        Wed, 28 Dec 2022 08:47:24 -0800 (PST)
-Received: from thinkpad ([117.217.178.100])
-        by smtp.gmail.com with ESMTPSA id s6-20020a170902ea0600b001913c5fc051sm11283591plg.274.2022.12.28.08.47.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 08:47:23 -0800 (PST)
-Date:   Wed, 28 Dec 2022 22:17:11 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tony.luck@intel.com,
-        quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
-        luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org
-Subject: Re: [PATCH v5 00/17] Qcom: LLCC/EDAC: Fix base address used for LLCC
- banks
-Message-ID: <20221228164711.GB256211@thinkpad>
-References: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
- <Y6wcFjqpBUoxAkdk@zn.tnic>
+        Wed, 28 Dec 2022 11:52:45 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A26C1D0E4;
+        Wed, 28 Dec 2022 08:47:32 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id CA0A25C0197;
+        Wed, 28 Dec 2022 11:47:31 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 28 Dec 2022 11:47:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1672246051; x=
+        1672332451; bh=kNEXh77+6wY23ZdF9C0dJh8nBDvRVsFvdpp9oNCrBQA=; b=T
+        QXrNMCJuy72Qyz8a+hAKaJwHniwj+t/33+MUy98/s1jDMTK9TnCzM9PVH7veOxl2
+        abNE3E53WEtzhRFn7rTT9+Nbgu/M2xZoSF3rdWbmlOHBI4tX4vCYEAqZliAn1dQX
+        b3DLhKblswviltyAS+uGGNBV7eutuEOO6RfrmKlnPPEILM9rzuEK3isQaqGlz73u
+        Pg1NwXRVhOaZS10FIPHtlhisbPSzMrQoYsVUwCFqBXHlNzoAhuJk2PnirM4UggJv
+        faeCH6SJmNKSn5mNjjccthJNR0gUvd2zRE8elqKu8aN0dhaAxITW4VJrIbN7FMmf
+        BlbulI98MbufWDvXO994Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672246051; x=1672332451; bh=kNEXh77+6wY23ZdF9C0dJh8nBDvR
+        VsFvdpp9oNCrBQA=; b=Cm3M6SLAGROnguwnqsMb5REVOQ5WnIndpxqFT1cV0p3B
+        mKlBHKOQzSbGx75r3ZjcNXq9csWpffkW/wAsaXGvTA5IBcHl+4/zzIqVob25kGvn
+        1QekDtW1wM6jF8QwtEBYieJQV0LHIFcCBpabqKU5ntSWNc37jVZVmJi52ZCuyKqk
+        RDh70r7a82gAAMQa1nLUT509oaZ5sb5DsvRznmAtfHlAfBZRlv0hE9LMUBlKLIf3
+        WihKESlR30cejoaJNZB9wsrDERj1rc9z60hqSwoYc3g9BhBZI6NFOA2oSUGtY+p8
+        EVeKXDQJtcKuT9IUdLSPkn4o0vasjacDpW3//t8DJg==
+X-ME-Sender: <xms:I3OsYz5hRhYMEas7y71Sww6BGMce91_3xjYLIrPO8JIKTUVbD3s2IA>
+    <xme:I3OsY443c2iCaPqRY9fawRe_q5ZjpN_leV-Cy4AinN3hXK7aiBoJ5MHBYCgF0Xtq6
+    SWKf3lPGzGxvZ4>
+X-ME-Received: <xmr:I3OsY6eTQE_gPzdh-k8l9cAqw5Fv7jp7seJhFsOBr3OfdYEJOc2VrZfqVEje>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedriedvgdelgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesghdtre
+    ertddtvdenucfhrhhomhepffgvmhhiucforghrihgvucfqsggvnhhouhhruceouggvmhhi
+    sehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnh
+    epudeileefueetvdelheeuteffjeegjeegffekleevueelueekjeejudffteejkeetnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepuggvmhhise
+    hinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
+X-ME-Proxy: <xmx:I3OsY0JU_veQtjYBiC3HniNOTkiOfWiL_4ain8QTEd81lO5O2OtKuQ>
+    <xmx:I3OsY3LwGDztGLd08k5G3RwjsHDxi4uo8e1kg4GIeTEX-9IOEUP7DA>
+    <xmx:I3OsY9xoowRss3v04ct5kDbOZPK7Q94VeH40CloN5IpBecwfYjkLtw>
+    <xmx:I3OsY-XZ0ofbrNrxu-1W5UA3u95zki_rCPi9s1ugav9Q8YW02geH3w>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 28 Dec 2022 11:47:30 -0500 (EST)
+Date:   Wed, 28 Dec 2022 11:47:25 -0500
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     oss-security@lists.openwall.com
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
+Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat
+ correctly
+Message-ID: <Y6xzIR9P+a6uaaEx@itl-email>
+References: <Y6SJDbKBk471KE4k@p183>
+ <Y6TUJcr/IHrsTE0W@codewreck.org>
+ <1a1963aa1036ba07@orthanc.ca>
+ <20221228152458.6xyksrxunukjrtzx@mutt-hbsd>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r4azVG4BR9kBokFk"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y6wcFjqpBUoxAkdk@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221228152458.6xyksrxunukjrtzx@mutt-hbsd>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 11:36:06AM +0100, Borislav Petkov wrote:
-> On Wed, Dec 28, 2022 at 02:10:11PM +0530, Manivannan Sadhasivam wrote:
-> > Patches 1/17, 2/17 and 3/17 can be merged independently to EDAC tree. Rest of
-> > the patches should be merged to qcom tree due to LLCC dependency.
-> 
-> Why make it more complicated than it has to be?
-> 
-> How about I review the EDAC bits and once they look ok, whoever takes
-> care of the qcom tree can pick them up too and route the whole pile
-> through there?
-> 
 
-Well, some maintainers prefer to pick the independent patches through their
-tree. That's why I moved those patches to the start of the series.
+--r4azVG4BR9kBokFk
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 Dec 2022 11:47:25 -0500
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: oss-security@lists.openwall.com
+Cc: Alejandro Colomar <alx.manpages@gmail.com>,
+	Michael Kerrisk <mtk.manpages@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
+Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat
+ correctly
 
-> This way there's no needless dependency between trees...
-> 
+On Wed, Dec 28, 2022 at 10:24:58AM -0500, Shawn Webb wrote:
+> On Tue, Dec 27, 2022 at 04:44:49PM -0800, Lyndon Nerenberg (VE7TFX/VE6BBM=
+) wrote:
+> > Dominique Martinet writes:
+> >=20
+> > > But, really, I just don't see how this can practically be said to be =
+parsable...
+> >=20
+> > In its current form it never will be.  The solution is to place
+> > this variable-length field last.  Then you can "cut -d ' ' -f 51-"
+> > to get the command+args part (assuming I counted all those fields
+> > correctly ...)
+> >=20
+> > Of course, this breaks backwards compatability.
+>=20
+> It would also break forwards compatibility in the case new fields
+> needed to be added.
+>=20
+> The only solution would be a libxo-style feature wherein a
+> machine-parseable format is exposed by virtue of a file extension.
+>=20
+> Examples:
+>=20
+> 1. /proc/pid/stats.json
+> 2. /proc/pid/stats.xml
+> 3. /proc/pid/stats.yaml_shouldnt_be_a_thing
 
-If you are fine with all patches going through qcom tree, I do not have any
-issue :)
+A binary format would be even better.  No risk of ambiguity.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
 
-Thanks,
-Mani
+--r4azVG4BR9kBokFk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Hmm.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+-----BEGIN PGP SIGNATURE-----
 
--- 
-மணிவண்ணன் சதாசிவம்
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmOscyIACgkQsoi1X/+c
+IsHnOA//fT6cVIE4FIMywkI+AqPhk9XiChwWd7FjC1AvRuFHtzRVeZKbsQm5+TvP
+zsyVq80XH79nYyCvOdjUsU6ItgvLFssJhLrgLHsLZLgOBF6aCjcKTGQ/Gt6yksqG
+SYEf2mU5CDAvHiqqimYruOHU7I+4KLozQpk1zhOkb2YyVcl9Jwc6ia4k7p6Fffdi
+K/W851sXSQ4MHRGwu3Acwu014W0OgwCji/0UeFIhktSMMyi/sOQrs9F/hfsCty+q
+F1pCWeclNXERprw5653z5ujLGEUgD4eUX+DLoqxJ1oYQz0MvMITWISSZ8Q1lnPM+
+xpaZZTF2cJG6IF0hBuMWqqudaOvfqKYlyXU2c92FyBKsVruaj1e7WDco60p4iFvX
+rxaPlMsRUYeMYjWdO9Uvhz1GcygbI4eBdQk6+XCNX+jvCHAG2TtKtda5fPa5r2mt
+wpfni8qiaGDJQybqsDqjAjjRlN+AgXQJYYK+GFDXCd7B6qdxpOGSJaTUmjw3Mf+6
+vykA7kPEX2MrF2WCben6ve6pvUKQYI3NjjWUd+R1IDnnFrFMJiC7MdKgaRF2jN/1
+x7w+U7oj6VngCGRWcwlbx01/BTkhJT1AvKF4wjCxffaG7OS9JYlOLfERAZTiXjMh
+PlHFUvAsRpTaqXdVVT3/f4WvXlFMGB7jydW9E/PX1Qd3YZHaOUo=
+=ujCS
+-----END PGP SIGNATURE-----
+
+--r4azVG4BR9kBokFk--
