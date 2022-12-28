@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716E2657181
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 01:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BF4657183
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 01:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiL1A4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 19:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S230156AbiL1A6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 19:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiL1A4m (ORCPT
+        with ESMTP id S229475AbiL1A6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 19:56:42 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940FCDFFD
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:56:41 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so6749049pjk.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:56:41 -0800 (PST)
+        Tue, 27 Dec 2022 19:58:18 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405FEE013
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:58:17 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d15so14681449pls.6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:58:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6pBNYJdKXzam2nXK0e/4rLZrKFDWqDasg6cE5ctCeLs=;
-        b=RKvg/T3PMBvEQZilUPnU4QNnnFWl3WaUHN9Rf/hXYh6bzT9+tVGKtuqYOuFUFKL/xt
-         tCiKyp2lUBydu+rR22CjAkhiw0oiIpA4oD8BVbALOVLcusx2KyR1ob1G8hQ/CiiitCzn
-         bomGAoN0aZ4RLZl3gzDrce6rFlcaf3O69q7/o=
+        bh=UlkVfUBe/NCfBa71O2rd9oCNbNRfdZ1yxlTWgpEWcJM=;
+        b=DtPex/an83yfigVpvCXORqv940vc0AIQEz08QWsNwTfI1b4uzmqNDUsRKW9L7TdIe/
+         HjadvImKK/AW8yt34ZtnpaeGrp4qI8AOK+lcfHnyKHZYidt7wiIfZU8ttDEiPqqWANi9
+         VlE0AYjiRo5r4nS8KS+BsLPxLh+osXkwsoVCc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6pBNYJdKXzam2nXK0e/4rLZrKFDWqDasg6cE5ctCeLs=;
-        b=JoKtnna/0seKf6sMZE/Im/FHXyS8u6aZGAg5o2kCxvIFJXIKeXqk0ad9f19l7fr8Ug
-         IYfoOG7RW/TcuLgpLuM7F05GigTJ45hceEAGpgzVcl8JvFkBwgCq4Lpi+8eYD/giwjC0
-         caaXnYFXXAc/tmiBMwhAQQyrarUQ00U2wP44qTmqey4bNMaWnSrT+2Arzsv+fxPCXLca
-         WWJ8KSa4Ip9jhfK/dteVlExTx1xwQyPFi96c+quk11yAlfz+N5ZZACP2LxbmqRoz1BYr
-         LvlCioAkOqACuwYZZCMq56OZwkGEqod8vK2TGvDmnz2tqc6IUBjmPgFPE3dS/tVoe/fQ
-         5ASA==
-X-Gm-Message-State: AFqh2kptKugesJdDrPh90ncrHsd1LqmLt2gYhbUDhEx3nyWmya6YFlOk
-        4SBdlww05XKiOqM9zyQMmnREj/43uF83q8uf
-X-Google-Smtp-Source: AMrXdXtlGD1iF9qDlfibxWqFvtJyFneuKzXuyKtopGLMCo88wsQSvk2xYDuqTAiHjx1yO48ULlMsFw==
-X-Received: by 2002:a05:6a20:1bd9:b0:ad:efda:5e5d with SMTP id cv25-20020a056a201bd900b000adefda5e5dmr24969506pzb.61.1672189000941;
-        Tue, 27 Dec 2022 16:56:40 -0800 (PST)
+        bh=UlkVfUBe/NCfBa71O2rd9oCNbNRfdZ1yxlTWgpEWcJM=;
+        b=5pvNumffqQvSdlIcYAr+ztstpfBsBuurF3FXXBxwyadt2zxQANbC5tgjPmCqh4hvw9
+         ZxZOEfTUXbXiG6+bHoF3pN90UQE4FRvY+shFi4erdNPlAKoeVq04q6hdbKp0liAeB1Kb
+         YSK7NQfIrOJa0HmCr9BrISkQDx1nAsljztTZQxcDwqEYxKYv2WfB0trlEzM5C5/6FWHl
+         28gFG03w8Etp4IJ3AeLR/5rIImXZ/B9+BGpcFd0CnvxVSpMxaLT1cY8rRpswgJmhYxrR
+         LhPZd6kmRgoP2XH5KNKuAYcDllf/d14XjOJ5RRtZ/GtEARXZG43PQ9jZ4dggFj3xCOuu
+         DZAQ==
+X-Gm-Message-State: AFqh2kqerPBaYVbZPlX+l/6SZrNztwZKAKEgSCDxVXm5/jZNDwRRo16r
+        SwV+5Y7Axr2GXzf8NEN7cl4xkxPAc6Iw6rGA
+X-Google-Smtp-Source: AMrXdXufenNnXoC4kkU0SDNn5FlEczA8R3d5sE9/rZBWavVP5SpMEqK/pwUXdtNUGoE3mN/yZFMdaQ==
+X-Received: by 2002:a05:6a20:7da8:b0:a2:c45f:f0fc with SMTP id v40-20020a056a207da800b000a2c45ff0fcmr36080228pzj.27.1672189096619;
+        Tue, 27 Dec 2022 16:58:16 -0800 (PST)
 Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id 68-20020a621947000000b00580e679dcf2sm6045566pfz.157.2022.12.27.16.56.40
+        by smtp.gmail.com with ESMTPSA id 68-20020a621947000000b00580e679dcf2sm6045566pfz.157.2022.12.27.16.58.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 16:56:40 -0800 (PST)
+        Tue, 27 Dec 2022 16:58:16 -0800 (PST)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
 Cc:     heikki.krogerus@linux.intel.com,
@@ -60,14 +60,13 @@ Cc:     heikki.krogerus@linux.intel.com,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Lee Jones <lee.jones@linaro.org>, Lee Jones <lee@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Stephen Boyd <swboyd@chromium.org>,
         Tinghan Shen <tinghan.shen@mediatek.com>,
         Tzung-Bi Shih <tzungbi@kernel.org>,
         Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH 01/10] Revert "mfd: cros_ec: Add SCP Core-1 as a new CrOS EC MCU"
-Date:   Wed, 28 Dec 2022 00:45:04 +0000
-Message-Id: <20221228004648.793339-2-pmalani@chromium.org>
+Subject: [PATCH 02/10] platform_chrome: cros_ec: Add Type-C VDM defines
+Date:   Wed, 28 Dec 2022 00:45:05 +0000
+Message-Id: <20221228004648.793339-3-pmalani@chromium.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 In-Reply-To: <20221228004648.793339-1-pmalani@chromium.org>
 References: <20221228004648.793339-1-pmalani@chromium.org>
@@ -82,70 +81,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 66ee379d743c69c726b61d078119a34d5be96a35.
+Add the EC header changes need to support USB Type-C VDM (Vendor Defined
+Messages) communication between the system and USB PD-enabled
+peripherals.
 
-The feature flag introduced by Commit 66ee379d743c ("mfd: cros_ec: Add
-SCP Core-1 as a new CrOS EC MCU") was not first added in the source EC
-code base[1]. This can lead to the possible misinterpration of an EC's
-supported feature set, as well as causes issues with all future feature
-flag updates.
+The headers are already present in the EC code base, from which they've
+been ported [1].
 
 [1] https://source.chromium.org/chromium/chromiumos/platform/ec/+/main:include/ec_commands.h
 
 Signed-off-by: Prashant Malani <pmalani@chromium.org>
 ---
+ .../linux/platform_data/cros_ec_commands.h    | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-While this patch modifies drivers/mfd, it would be preferable to submit
-it through the chrome-platform tree, since that eliminates cross-tree
-dependencies for the series of which this patch is a part.
-
-
- drivers/mfd/cros_ec_dev.c                      | 5 -----
- include/linux/platform_data/cros_ec_commands.h | 2 --
- include/linux/platform_data/cros_ec_proto.h    | 1 -
- 3 files changed, 8 deletions(-)
-
-diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
-index 344ad03bdc42..02d4271dfe06 100644
---- a/drivers/mfd/cros_ec_dev.c
-+++ b/drivers/mfd/cros_ec_dev.c
-@@ -64,11 +64,6 @@ static const struct cros_feature_to_name cros_mcu_devices[] = {
- 		.name	= CROS_EC_DEV_SCP_NAME,
- 		.desc	= "System Control Processor",
- 	},
--	{
--		.id	= EC_FEATURE_SCP_C1,
--		.name	= CROS_EC_DEV_SCP_C1_NAME,
--		.desc	= "System Control Processor 2nd Core",
--	},
- 	{
- 		.id	= EC_FEATURE_TOUCHPAD,
- 		.name	= CROS_EC_DEV_TP_NAME,
 diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-index 5744a2d746aa..7c94bf5c8f05 100644
+index 7c94bf5c8f05..6665e7da6ee2 100644
 --- a/include/linux/platform_data/cros_ec_commands.h
 +++ b/include/linux/platform_data/cros_ec_commands.h
-@@ -1300,8 +1300,6 @@ enum ec_feature_code {
+@@ -1300,6 +1300,18 @@ enum ec_feature_code {
  	 * mux.
  	 */
  	EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK = 43,
--	/* The MCU is a System Companion Processor (SCP) 2nd Core. */
--	EC_FEATURE_SCP_C1 = 45,
++	/*
++	 * The EC supports entering and residing in S4.
++	 */
++	EC_FEATURE_S4_RESIDENCY = 44,
++	/*
++	 * The EC supports the AP directing mux sets for the board.
++	 */
++	EC_FEATURE_TYPEC_AP_MUX_SET = 45,
++	/*
++	 * The EC supports the AP composing VDMs for us to send.
++	 */
++	EC_FEATURE_TYPEC_AP_VDM_SEND = 46,
  };
  
  #define EC_FEATURE_MASK_0(event_code) BIT(event_code % 32)
-diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-index e43107e0bee1..a1f5b6d6db3a 100644
---- a/include/linux/platform_data/cros_ec_proto.h
-+++ b/include/linux/platform_data/cros_ec_proto.h
-@@ -19,7 +19,6 @@
- #define CROS_EC_DEV_ISH_NAME	"cros_ish"
- #define CROS_EC_DEV_PD_NAME	"cros_pd"
- #define CROS_EC_DEV_SCP_NAME	"cros_scp"
--#define CROS_EC_DEV_SCP_C1_NAME	"cros_scp_c1"
- #define CROS_EC_DEV_TP_NAME	"cros_tp"
+@@ -5724,6 +5736,8 @@ enum typec_control_command {
+ 	TYPEC_CONTROL_COMMAND_ENTER_MODE,
+ 	TYPEC_CONTROL_COMMAND_TBT_UFP_REPLY,
+ 	TYPEC_CONTROL_COMMAND_USB_MUX_SET,
++	TYPEC_CONTROL_COMMAND_BIST_SHARE_MODE,
++	TYPEC_CONTROL_COMMAND_SEND_VDM_REQ,
+ };
  
- #define CROS_EC_DEV_EC_INDEX 0
+ /* Replies the AP may specify to the TBT EnterMode command as a UFP */
+@@ -5737,6 +5751,17 @@ struct typec_usb_mux_set {
+ 	uint8_t mux_flags;	/* USB_PD_MUX_*-encoded USB mux state to set */
+ } __ec_align1;
+ 
++#define VDO_MAX_SIZE 7
++
++struct typec_vdm_req {
++	/* VDM data, including VDM header */
++	uint32_t vdm_data[VDO_MAX_SIZE];
++	/* Number of 32-bit fields filled in */
++	uint8_t vdm_data_objects;
++	/* Partner to address - see enum typec_partner_type */
++	uint8_t partner_type;
++} __ec_align1;
++
+ struct ec_params_typec_control {
+ 	uint8_t port;
+ 	uint8_t command;	/* enum typec_control_command */
+@@ -5752,6 +5777,8 @@ struct ec_params_typec_control {
+ 		uint8_t mode_to_enter;      /* enum typec_mode */
+ 		uint8_t tbt_ufp_reply;      /* enum typec_tbt_ufp_reply */
+ 		struct typec_usb_mux_set mux_params;
++		/* Used for VMD_REQ */
++		struct typec_vdm_req vdm_req_params;
+ 		uint8_t placeholder[128];
+ 	};
+ } __ec_align1;
+@@ -5833,6 +5860,8 @@ enum tcpc_cc_polarity {
+ #define PD_STATUS_EVENT_DISCONNECTED		BIT(3)
+ #define PD_STATUS_EVENT_MUX_0_SET_DONE		BIT(4)
+ #define PD_STATUS_EVENT_MUX_1_SET_DONE		BIT(5)
++#define PD_STATUS_EVENT_VDM_REQ_REPLY		BIT(6)
++#define PD_STATUS_EVENT_VDM_REQ_FAILED		BIT(7)
+ 
+ struct ec_params_typec_status {
+ 	uint8_t port;
+@@ -5876,6 +5905,28 @@ struct ec_response_typec_status {
+ 	uint32_t sink_cap_pdos[7];	/* Max 7 PDOs can be present */
+ } __ec_align1;
+ 
++/*
++ * Gather the response to the most recent VDM REQ from the AP
++ */
++#define EC_CMD_TYPEC_VDM_RESPONSE 0x013C
++
++struct ec_params_typec_vdm_response {
++	uint8_t port;
++} __ec_align1;
++
++struct ec_response_typec_vdm_response {
++	/* Number of 32-bit fields filled in */
++	uint8_t vdm_data_objects;
++	/* Partner to address - see enum typec_partner_type */
++	uint8_t partner_type;
++	/* Reserved */
++	uint16_t reserved;
++	/* VDM data, including VDM header */
++	uint32_t vdm_response[VDO_MAX_SIZE];
++} __ec_align1;
++
++#undef VDO_MAX_SIZE
++
+ /*****************************************************************************/
+ /* The command range 0x200-0x2FF is reserved for Rotor. */
+ 
 -- 
 2.39.0.314.g84b9a713c41-goog
 
