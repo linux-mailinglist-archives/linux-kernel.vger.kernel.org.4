@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E58D6580B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B266580B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234661AbiL1QTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 11:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
+        id S234662AbiL1QTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 11:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234439AbiL1QSn (ORCPT
+        with ESMTP id S234438AbiL1QSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 11:18:43 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE2619C0C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:17:23 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so20455600pjj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:17:23 -0800 (PST)
+        Wed, 28 Dec 2022 11:18:44 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DBF19C16
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:17:27 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id c8-20020a17090a4d0800b00225c3614161so13303097pjg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:17:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cTBEJ8Yt1F+qFY4dSzBFOLsJDCyD/sILn8NSazfFNCk=;
-        b=dj/Ub+3kYN0/agt2gS0Famnp0N3dkHl3+FQoEtgK8tVZZmkz0cvmZhpxMoXa1eohso
-         W/q7ffJ3CL2rdK75bB9J1pelQS2Gl7fVyTt/u6b0c2MzkYmsDpSLTJ+n5S/PkQMVpxpg
-         W3tx3uGeOsiW3kipxMk+3R6nTT0sfKA0ROiAjB2bdYkF6U4xG1RWl8CKDDbnBLmgQu/n
-         ACSEHvnEFfsHMdlRyJjvYR5Q2ywytVYCohuJfc9xu46q4Lyb2vvy+gNZ4T48sjPzEgg/
-         ayNGNThqpMWVae/tFgumbIJFspGofWHAyjI7Q3rCIajcGJPV2nFAxsQnkr1zhMyVlz8H
-         8Gyw==
+        bh=nCFU0KCqTh7FlQ8evG955AiRt86XIvSnki+8nWo+njQ=;
+        b=GC4TcWpBQl00n4Y1fqaF8bTVq2/KnhyWyJ3s4AMB8/9MIP9ntBMY0TWweRIge8i1EQ
+         lk4F1KiY+FtYLf2e7QqDESspd2fPqQoqPNNvhGinnvehLQ2M9LZ5gT14gT+7XcyvXzT1
+         rx1YJowuaJrw3OYziAYFJwAWOdKSo27bKmzAg4SM8exV+5Jp7tTRJTK2YN9Db2TJjIO6
+         KKXS2G8qz4MkJT+3Ky6SZklbrn/zo9a7xZbs5o49mRBSE7+5f6yy0+XiHzlBrlJNX9yW
+         3DgOnA3pjb+V1nngG6/WLfY/BaSWyelZpfesVsTNQPHd/iJFXocVBjkq7J//BxUxSsDv
+         jMQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cTBEJ8Yt1F+qFY4dSzBFOLsJDCyD/sILn8NSazfFNCk=;
-        b=BQY+RNsVhWZ1XTW/ynN+Yl1/upJi1NKbJyo3Zsb877a2FoddJW9ZKOWPTQwcRTI6b0
-         xl7DiiR3AewZ17j86VSbWnaHOpfpUMv1c/2G1STvSfF7GKd8VNr/vKbwlcjd/9ZkoBum
-         6K+IDFYxnpYvAZ3vAeT6sRwKBPnYuF2gm+fT8NXspif5XG3I+Ds7svkPztp8cfPMztpH
-         KFVYbFEdMqlgQgxigG3UGEFVNaOz0yOKfiLDH5siKfgkx9S22LRflRPl93j5E79nOb8g
-         y63u/+QWp+Yl+whXfMz1GFJGQJspjRCrkPPy1ctF4nEEChes+nyiDAXoIriPwokHFECu
-         Nd6g==
-X-Gm-Message-State: AFqh2kqb0mk7ty63r4CbjHstYhqxkQEqNWDsmoMDbbrLMnJFKDBjwcrc
-        PHIdC1gYRIbiiclmB5Wp0ZeW
-X-Google-Smtp-Source: AMrXdXur43RoXjvFIHa8mRXlYHujGDsIAt+jiccMI+o4799ciQu1Uvcdm1daRBtNgm7mnMYbOUdXaw==
-X-Received: by 2002:a17:902:cecf:b0:191:191f:e7a7 with SMTP id d15-20020a170902cecf00b00191191fe7a7mr36963609plg.69.1672244242997;
-        Wed, 28 Dec 2022 08:17:22 -0800 (PST)
+        bh=nCFU0KCqTh7FlQ8evG955AiRt86XIvSnki+8nWo+njQ=;
+        b=laV8NmdiXGPp9wNbzeRMSJOH6jDVQRR+7ur6ENMx28nU9ktPhQlxFQkNnYlhn6OTKW
+         p2IBTxYcm9b6kLoxyeuWks5G21jwcAPjn3FxgylhHsuSenLuBB/a5VHXkmx9TdaGteYY
+         ugtjvzHRQGF6aLLjWx8YSoDgrVvhfWPQxpyvIHAnpuoIE851fZo5BgcuLkspRtYrVWFq
+         p5R4PN04alCVIWHNPUfVuxiC9gDjm/YD6uXOpnXt21/MzIlBOw8y3wlf7HEoMsWRyGFt
+         UASgUGA6q87b0WlFt7HUMDaL8G5FZH+rixOSi3MFxk/9cp1A27qcWw4PbRJ49nPi7G9u
+         9HIg==
+X-Gm-Message-State: AFqh2kp9xRWH29yzr/SUJ071bSB+Rui8A0hQ+xKnP6+IdTi1gGSutq6q
+        6JHcWUO6sclzD8ZcLxVfoR/a
+X-Google-Smtp-Source: AMrXdXslfCaH8dI1dD3KxXGW8+I2yw8KJ/SiFwQ5aFGEWO/GU5SuXXkjlkDm87wvjtrevGu/DF2Whg==
+X-Received: by 2002:a17:902:b401:b0:189:aa51:e27f with SMTP id x1-20020a170902b40100b00189aa51e27fmr32379244plr.44.1672244246949;
+        Wed, 28 Dec 2022 08:17:26 -0800 (PST)
 Received: from localhost.localdomain ([117.217.178.100])
-        by smtp.gmail.com with ESMTPSA id s3-20020a170902c64300b00186abb95bfdsm11256798pls.25.2022.12.28.08.17.19
+        by smtp.gmail.com with ESMTPSA id s3-20020a170902c64300b00186abb95bfdsm11256798pls.25.2022.12.28.08.17.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 08:17:21 -0800 (PST)
+        Wed, 28 Dec 2022 08:17:26 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     mhi@lists.linux.dev
 Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 2/6] bus: mhi: ep: Check if the channel is supported by the controller
-Date:   Wed, 28 Dec 2022 21:47:00 +0530
-Message-Id: <20221228161704.255268-3-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH 3/6] bus: mhi: ep: Only send -ENOTCONN status if client driver is available
+Date:   Wed, 28 Dec 2022 21:47:01 +0530
+Message-Id: <20221228161704.255268-4-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221228161704.255268-1-manivannan.sadhasivam@linaro.org>
 References: <20221228161704.255268-1-manivannan.sadhasivam@linaro.org>
@@ -71,32 +72,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before processing the command ring for the channel, check if the channel is
-supported by the controller or not.
+For the STOP and RESET commands, only send the channel disconnect status
+-ENOTCONN if client driver is available. Otherwise, it will result in
+null pointer dereference.
 
+Cc: <stable@vger.kernel.org> # 5.19
+Fixes: e827569062a8 ("bus: mhi: ep: Add support for processing command rings")
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/bus/mhi/ep/main.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/bus/mhi/ep/main.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-index 55209d42a995..8b065a3cc848 100644
+index 8b065a3cc848..7d68b00bdbcf 100644
 --- a/drivers/bus/mhi/ep/main.c
 +++ b/drivers/bus/mhi/ep/main.c
-@@ -123,6 +123,13 @@ static int mhi_ep_process_cmd_ring(struct mhi_ep_ring *ring, struct mhi_ring_ele
- 	int ret;
+@@ -203,9 +203,11 @@ static int mhi_ep_process_cmd_ring(struct mhi_ep_ring *ring, struct mhi_ring_ele
+ 		mhi_ep_mmio_disable_chdb(mhi_cntrl, ch_id);
  
- 	ch_id = MHI_TRE_GET_CMD_CHID(el);
-+
-+	/* Check if the channel is supported by the controller */
-+	if ((ch_id > mhi_cntrl->max_chan) || !mhi_cntrl->mhi_chan[ch_id].name) {
-+		dev_err(dev, "Channel (%u) not supported!\n", ch_id);
-+		return -ENODEV;
-+	}
-+
- 	mhi_chan = &mhi_cntrl->mhi_chan[ch_id];
- 	ch_ring = &mhi_cntrl->mhi_chan[ch_id].ring;
+ 		/* Send channel disconnect status to client drivers */
+-		result.transaction_status = -ENOTCONN;
+-		result.bytes_xferd = 0;
+-		mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
++		if (mhi_chan->xfer_cb) {
++			result.transaction_status = -ENOTCONN;
++			result.bytes_xferd = 0;
++			mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
++		}
  
+ 		/* Set channel state to STOP */
+ 		mhi_chan->state = MHI_CH_STATE_STOP;
+@@ -235,9 +237,11 @@ static int mhi_ep_process_cmd_ring(struct mhi_ep_ring *ring, struct mhi_ring_ele
+ 		mhi_ep_ring_reset(mhi_cntrl, ch_ring);
+ 
+ 		/* Send channel disconnect status to client driver */
+-		result.transaction_status = -ENOTCONN;
+-		result.bytes_xferd = 0;
+-		mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
++		if (mhi_chan->xfer_cb) {
++			result.transaction_status = -ENOTCONN;
++			result.bytes_xferd = 0;
++			mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
++		}
+ 
+ 		/* Set channel state to DISABLED */
+ 		mhi_chan->state = MHI_CH_STATE_DISABLED;
 -- 
 2.25.1
 
