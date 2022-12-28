@@ -2,106 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C781E657609
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B858065760E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbiL1LvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S232989AbiL1Lwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232680AbiL1LvB (ORCPT
+        with ESMTP id S232250AbiL1Lwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:51:01 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAB2108A
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:51:00 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id f20so16323434lja.4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:51:00 -0800 (PST)
+        Wed, 28 Dec 2022 06:52:51 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C814101C9;
+        Wed, 28 Dec 2022 03:52:49 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id u19so37833151ejm.8;
+        Wed, 28 Dec 2022 03:52:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/5K3KP5mDdgN0eqJUL/TJpR4Fs9Rq1rDI3FFgGZRBmQ=;
-        b=lAKNm5s4YW3N+clC20lLrn3ibALFmxk9YFvnz7UmR83v4emrhYOwJf3b2bBTsKl5vL
-         dd4iHZCnHY3A3d4nRd9C0Z8JE1rPKO9lp4+2x4fTfCJBEoYeLqHczAQpcd+QFdeexKSm
-         2eH+QNchNuhXPoY7jZNNhemYFbsiRRVfiquLGkKCGUfUofgAAIe3NWcDNLLSbVUi+tAR
-         FUZUN0xxh7Jc7rh7Pp+QmT1ihMx+B7XYqjB5mT57M6twNZczmAIKGHgYLzxmSoGZ7gkq
-         32HIySCfKWUUPblRky9mqXI/a2oHafakkcalCBIlEPzN1jsX52rDmwY7cD778N7Sz8F9
-         fIhQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8lv+2gfd1swZJvfXBV25TOjELjyrVqoIgTLkjJVFeok=;
+        b=DNW2K1iFqBTf0U1xLmUuFlXeaQQEl2UEqISP1Lim8nVz0J11FMS9hN24joYP5QVLT9
+         wbkdNOIvQ6ysf5f/1lOOujFdJXVf5h8jvybdI6mJW2i/gKV11RqkZ8lg63fJBw16PPdT
+         0x8X7XAO5sFXXbhBB0J3b9ve/hZlzBqPRXJ+lEMOe+vkhktIa8OYyBGSDI64PEOMfm8n
+         iPzBL9R1uZbThqQjwL5TwLpx+ry3P+GB1XjJNvZN/9ECFTHTvZ0N7beuDqsnc8UwnJe1
+         OdjYE5t3/eNHG87PEeg968SKO7IVt0jz0fQfPo0FYneEGK4DgP+yPAczbvoRn1AOjMpB
+         0fVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/5K3KP5mDdgN0eqJUL/TJpR4Fs9Rq1rDI3FFgGZRBmQ=;
-        b=nNkUSQojl+ej7G5hmWoEuHqkOesL1pL4l6XpRhHe/tEoVpctFXXqwTVF7K2MdDMxze
-         nFVvvJtt6wl7Xhr2SWhVcFvnIB+QvE5+YlskKyGmq8FxsZrEjhJcqPh15qNBhRDI+LZP
-         4OunFNlDojAFHQy6cMCOpzKhoSrtbV0MLseytZtxwgNhWZWiBqgeAiqXkVpg+hIHUHwG
-         FfjqcBNMtVT5MqmjCwl7MZD6WZPqOCRkfhncFlfZEkDN2I1s5+5tYXbJc2P/0HmGYi9V
-         XbnpB8TlcC018/WdOYUqhWldUN+vd8dFZb0ZTj5wHLH2E+iFtq11ndH/IkNDJZf4rZLQ
-         IHug==
-X-Gm-Message-State: AFqh2kpnVzYoFnHw6OLHZGLRzSNFkG0EQ4qBoEm7NqGigJD+9pQvca/p
-        ZHeJ2vJDIKTNEBMSnLZEtpQMyw==
-X-Google-Smtp-Source: AMrXdXu8/FWArHMsH2HpxRSK9zV6JdGrL7GdeNUK42xFXGhh8eXlwNs9E+UXd4dwGhBZUAQhrNR7Bg==
-X-Received: by 2002:a2e:bf26:0:b0:27f:ada4:ce01 with SMTP id c38-20020a2ebf26000000b0027fada4ce01mr6445753ljr.6.1672228258918;
-        Wed, 28 Dec 2022 03:50:58 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 20-20020a05651c00d400b0027a1ee0b8d4sm1918271ljr.130.2022.12.28.03.50.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 03:50:58 -0800 (PST)
-Message-ID: <c4109766-22f1-7227-47bb-9273a027bb0c@linaro.org>
-Date:   Wed, 28 Dec 2022 12:50:57 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] dt-bindings: ufs: qcom: Add reg-names property for ICE
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8lv+2gfd1swZJvfXBV25TOjELjyrVqoIgTLkjJVFeok=;
+        b=2ylPrEhprUWLVaXDuUt+2KD8DWbbdtUYL0YeY23xFzbFcHVaxUEx+mikfm0oREX6rV
+         9uECwH8GL4HR6siwansXKRi+KQPCl/vP4vtejvtsichSxRd0QETyMHnwwmltmV4OZSv1
+         kFfatLJho2RK8a7kolR2i6p/nKUQ7FBIhsbHz0pOVEMgML66X5JufAyNxc16ybt0P5Nb
+         hjA5jRIOv4sPCGX/E8tbkIJQGJ8cQt5jKGY9aap3WBUDjzsVTum7IrYS1JPsaDcxCL6/
+         ou2znVw2p+ZK8F4gcs2BsKxeTeWnuIM5avC9zHN59ZmWcj59dSvwiaGNIbizRCNSUZf0
+         aBsg==
+X-Gm-Message-State: AFqh2krZE9DN3LaRrNhTBEANsgg1zLgUA9iU3qnQ/tiqOtHcC32EoPWD
+        wZ/Cr3tqnw5nePFAytyb98Ab5rDKl4Y=
+X-Google-Smtp-Source: AMrXdXv55eOV/6Zaz0YJaQGgx35FTElVq6rR/m8ceGSaLLbqjTYyNbhRktYia9tAdoB64tho8M3h6g==
+X-Received: by 2002:a17:906:3f97:b0:83f:41a2:a68b with SMTP id b23-20020a1709063f9700b0083f41a2a68bmr20473464ejj.30.1672228367668;
+        Wed, 28 Dec 2022 03:52:47 -0800 (PST)
+Received: from localhost.localdomain ([46.216.42.4])
+        by smtp.googlemail.com with ESMTPSA id s1-20020a1709067b8100b007c07b23a79bsm7317467ejo.213.2022.12.28.03.52.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 03:52:47 -0800 (PST)
+From:   Dzmitry Sankouski <dsankouski@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dzmitry Sankouski <dsankouski@gmail.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        Marijn Suijten <marijn.suijten@somainline.org>
+Subject: [PATCH v2] arm64: dts: qcom: Re-enable resin on MSM8998 and SDM845 boards
+Date:   Wed, 28 Dec 2022 14:52:43 +0300
+Message-Id: <20221228115243.201038-1-dsankouski@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/12/2022 15:29, Luca Weiss wrote:
-> The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add this
-> in the bindings so the existing dts can validate successfully.
-> 
-> Also sm8450 is using ICE since commit 276ee34a40c1 ("arm64: dts: qcom:
-> sm8450: add Inline Crypto Engine registers and clock") so move the
-> compatible to the correct if.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-> (no cover subject)
-> 
-> The only remaining validation issues I see is the following on sc8280xp-crd.dtb
-> and sa8540p-ride.dtb:
-> 
+resin node declaration was moved to pm8998.dtsi file (in disabled state).
+MSM8998 and SDM845 boards defining resin node did not previously have
+status="okay" and ended up disabled.
+Re-enable it by using resin node link from pm8998.dtsi with status="okay".
 
-Any plans on fixing the patch (after testing it) and resending?
+Fixes: f86ae6f23a9e ("arm64: dts: qcom: sagit: add initial device tree for sagit")
+Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reported-by: Marijn Suijten <marijn.suijten@somainline.org>
+Link: https://lore.kernel.org/linux-arm-msm/20221222115922.jlachctn4lxopp7a@SoMainline.org/
+---
+Changes v2:
+- change description and subject
 
-Best regards,
-Krzysztof
+ arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts       | 11 +++--------
+ .../boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi    | 11 +++--------
+ arch/arm64/boot/dts/qcom/sdm845-db845c.dts            | 11 +++--------
+ arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi        | 11 +++--------
+ arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts     | 11 +++--------
+ .../boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi | 11 +++--------
+ arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts    | 11 +++--------
+ 7 files changed, 21 insertions(+), 56 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+index 310f7a2df1e8..510d12c8c512 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
++++ b/arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+@@ -364,14 +364,9 @@ cam_snapshot_pin_a: cam-snapshot-btn-active-state {
+ 	};
+ };
+ 
+-&pm8998_pon {
+-	resin {
+-		compatible = "qcom,pm8941-resin";
+-		interrupts = <GIC_SPI 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+-		bias-pull-up;
+-		debounce = <15625>;
+-		linux,code = <KEY_VOLUMEDOWN>;
+-	};
++&pm8998_resin {
++	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &qusb2phy {
+diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
+index 5da87baa2b23..3bbd5df196bf 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
+@@ -357,14 +357,9 @@ vib_default: vib-en-state {
+ 	};
+ };
+ 
+-&pm8998_pon {
+-	resin {
+-		compatible = "qcom,pm8941-resin";
+-		interrupts = <GIC_SPI 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+-		debounce = <15625>;
+-		bias-pull-up;
+-		linux,code = <KEY_VOLUMEUP>;
+-	};
++&pm8998_resin {
++	linux,code = <KEY_VOLUMEUP>;
++	status = "okay";
+ };
+ 
+ &qusb2phy {
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+index f41c6d600ea8..878801f540c5 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
+@@ -615,14 +615,9 @@ vol_up_pin_a: vol-up-active-state {
+ 	};
+ };
+ 
+-&pm8998_pon {
+-	resin {
+-		compatible = "qcom,pm8941-resin";
+-		interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+-		debounce = <15625>;
+-		bias-pull-up;
+-		linux,code = <KEY_VOLUMEDOWN>;
+-	};
++&pm8998_resin {
++	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pmi8998_lpg {
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
+index 1eb423e4be24..943287804e1a 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845-lg-common.dtsi
+@@ -482,14 +482,9 @@ &mss_pil {
+ 	status = "okay";
+ };
+ 
+-&pm8998_pon {
+-	resin {
+-		compatible = "qcom,pm8941-resin";
+-		interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+-		debounce = <15625>;
+-		bias-pull-up;
+-		linux,code = <KEY_VOLUMEDOWN>;
+-	};
++&pm8998_resin {
++	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &sdhc_2 {
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+index bb77ccfdc68c..e6191602c70a 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+@@ -522,14 +522,9 @@ pinconf {
+ 	};
+ };
+ 
+-&pm8998_pon {
+-	volume_down_resin: resin {
+-		compatible = "qcom,pm8941-resin";
+-		interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+-		debounce = <15625>;
+-		bias-pull-up;
+-		linux,code = <KEY_VOLUMEDOWN>;
+-	};
++&pm8998_resin {
++	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pmi8998_lpg {
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+index eb6b2b676eca..1b12b1a4dcbc 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
+@@ -325,14 +325,9 @@ &pmi8998_wled {
+ 	qcom,cabc;
+ };
+ 
+-&pm8998_pon {
+-	resin {
+-		compatible = "qcom,pm8941-resin";
+-		interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+-		debounce = <15625>;
+-		bias-pull-up;
+-		linux,code = <KEY_VOLUMEDOWN>;
+-	};
++&pm8998_resin {
++	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &pmi8998_rradc {
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+index 38ba809a95cd..fba229d0bd10 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+@@ -530,14 +530,9 @@ pinconf {
+ 	};
+ };
+ 
+-&pm8998_pon {
+-	resin {
+-		interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+-		compatible = "qcom,pm8941-resin";
+-		linux,code = <KEY_VOLUMEDOWN>;
+-		debounce = <15625>;
+-		bias-pull-up;
+-	};
++&pm8998_resin {
++	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
+ };
+ 
+ &q6afedai {
+-- 
+2.30.2
 
