@@ -2,162 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44342657F3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C595657F85
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 17:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbiL1QDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 11:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S234378AbiL1QFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 11:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234325AbiL1QCk (ORCPT
+        with ESMTP id S234243AbiL1QFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 11:02:40 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D29719285
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:02:26 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bs20so13193089wrb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:02:26 -0800 (PST)
+        Wed, 28 Dec 2022 11:05:40 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D7D192A8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:05:38 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso5023725wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 08:05:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jj57U2uI9msDNKTzmjpPKS0AnQ76SAjTHpihoUn6P3Y=;
-        b=KDZp30dSv+s3qN4vPW6zvrh6DM4NtJiH35WJO/kWBKb++abBFrqGeuySYQdYBH3Vp6
-         AnnPNW3GoUzAJg8aWWTBjYGxx/uHKBXsVuc8ZkgLAvRnLvWY47hmJq5pXeTOKZ3APoP1
-         5l9yXZIjp2RFd+hamwWiwrRzIhC32FNr54SylOPdra1iOpOdE2P4YZZXwUPYnLOcCoIp
-         5jEYOyhMiekv9oh3J3HUKi2KP6ZkbHruNOU17rIM3VXx9LN1AUkKdFqy6tQ+MkpwU5Tz
-         nnrNPMfeQZEefpJvGB7bom02oxPaub9WHP4tNkFr/XPeNMajJnOf5Y3DBZImqged1Jcr
-         ak7w==
+        d=ixsystems.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PU9635POemxwDKmm5VBJNB22BtO90u5rPxeWqV5JJQM=;
+        b=WFUoe+tyv2U/PyZBuUklrh1xgR9Rjo5FJBU6KjkrFuofVZgDqrPMdmmGaDsuCFQdbo
+         fsSyXIsPFJ4ZNK7Dd365O8QbMWmRkYBmKxP9HxJnGK/GIdWjEqKDKaM7Safkp28mmDc5
+         bfPgGa4dvMMQgUZEzWGX1gJH29ds9KfJK0CBPDt5q+j0VsKOdPWsd9pbMX2r7hmznDtN
+         Wn1dzlZXz3bQNQUyfzT9dQOw6n/8eQgrh2ATVMBLK5EX/Afd+5DZ0rdjgCd0tUXlcXck
+         GRGIkz+GTpL1ZN9EYaS/vlvDimosr9GRWsMaGY7IczC5G3hwxVnjntJ9j8p8+rwJvcKx
+         Y9Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jj57U2uI9msDNKTzmjpPKS0AnQ76SAjTHpihoUn6P3Y=;
-        b=DSfp7UhCTRntIUiMD6uJyn5zC/jE9LcU3po03RFXBlKFKNLgLaCN025CAady5NVe3N
-         NeiZtiwmVw3zlFF3F6EZOz2jhPztE49v4czmSgGSgWhxgdoJ6DCD16QTnbqbaasLMDo3
-         lgJAW+oXb92prHXWSVbIbRzcAOYXlKXaTQv7FsMoXQTfF9tno6W4IB3l1DtIeIZB3C+w
-         OJ672UlkVOTpnTmg831vJj0I7yhGi/Tz5AYAxG9G0LUeBMis6QamIRXTJSWZkV0UfPY4
-         t6kXRvpEMkqaNdnw4QhNlWOTocfY98L6dK/tnjz/2S5c62CMK6Lm21tB0CB1CywXv7pL
-         Z8lg==
-X-Gm-Message-State: AFqh2kpiyo5Y6YELmvkGX2XPytKSNRHp3prkec2GdCcStBxQi569DpiO
-        dMkYFZVRfwaEUXhcM3Fh9GT3WA==
-X-Google-Smtp-Source: AMrXdXtf3ayrmWdF60L/lWpzJOj9QHgs8JOUuL+LYBksy1ySN1/nW5SQWt9by/aROEYptjng4I4vWg==
-X-Received: by 2002:adf:f781:0:b0:242:1ba0:208b with SMTP id q1-20020adff781000000b002421ba0208bmr20609543wrp.64.1672243344740;
-        Wed, 28 Dec 2022 08:02:24 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id h6-20020adffa86000000b0024246991121sm16166006wrr.116.2022.12.28.08.02.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 08:02:24 -0800 (PST)
-Message-ID: <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org>
-Date:   Wed, 28 Dec 2022 17:02:22 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PU9635POemxwDKmm5VBJNB22BtO90u5rPxeWqV5JJQM=;
+        b=25yla2bsxm2DRLIfTnRmw5zaY8wlbQuoEZ3PJ9Z3xD8RuFcqvLKOBd8UD047uGijWt
+         s8dHPI2Or/TKSWK0shlRgFRSgB3/2bqTANCbVCGPvhkoKMIuUPHWWI4kxLjmKR6PVFRP
+         JX49oiBhebDZR+cBventVGakyFhscSMRM9gxtOYZT0ZVytc80qhUljenjtf/K/dbcXMq
+         zyE3xvDpZ0UHLCVl9xvB90al6hhsGllvuTNq9fPOP24hf/eVYzd82qZzwMcFq9Hwxx0B
+         Z2sf+zmMM6XEIGR2BiAbVKFFLIzQVLM3xSz9/vgTdEfig6eY3IwFrWSTdChbyloLKLKz
+         SV1w==
+X-Gm-Message-State: AFqh2kqe5DMexnoI4Q4Kmnju7uCi/MPyebaWdVhZuZX3DRJNq3Lv9I6b
+        LmQ8WiM7LZF/R8Pp43UVfPOzQw==
+X-Google-Smtp-Source: AMrXdXsiCpYBueXRJXFRX5Npqbo8GYiSXFBdZ7NEkiKJe6SGRWdI1eLl7vTMaNi/wuqjd3b8KHIOOw==
+X-Received: by 2002:a1c:4b04:0:b0:3c6:f0b8:74e6 with SMTP id y4-20020a1c4b04000000b003c6f0b874e6mr18597235wma.4.1672243537543;
+        Wed, 28 Dec 2022 08:05:37 -0800 (PST)
+Received: from localhost.localdomain ([2400:adc1:158:c700:5f84:8415:6e5a:7fea])
+        by smtp.googlemail.com with ESMTPSA id l42-20020a05600c1d2a00b003cfbbd54178sm40491463wms.2.2022.12.28.08.05.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 08:05:36 -0800 (PST)
+From:   Ameer Hamza <ahamza@ixsystems.com>
+To:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
+        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
+        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, ahamza@ixsystems.com,
+        awalker@ixsystems.com
+Subject: [PATCH] Add new open(2) flag - O_EMPTY_PATH
+Date:   Wed, 28 Dec 2022 21:02:49 +0500
+Message-Id: <20221228160249.428399-1-ahamza@ixsystems.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
- setup_data
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, pbonzini@redhat.com,
-        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
-        hpa@zytor.com, bp@alien8.de
-References: <20221228143831.396245-1-Jason@zx2c4.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221228143831.396245-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+This patch adds a new flag O_EMPTY_PATH that allows openat and open
+system calls to open a file referenced by fd if the path is empty,
+and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
+beneficial in some cases since it would avoid having to grant /proc
+access to things like samba containers for reopening files to change
+flags in a race-free way.
 
-On 28/12/22 15:38, Jason A. Donenfeld wrote:
-> The setup_data links are appended to the compressed kernel image. Since
-> the kernel image is typically loaded at 0x100000, setup_data lives at
-> `0x100000 + compressed_size`, which does not get relocated during the
-> kernel's boot process.
-> 
-> The kernel typically decompresses the image starting at address
-> 0x1000000 (note: there's one more zero there than the decompressed image
-> above). This usually is fine for most kernels.
-> 
-> However, if the compressed image is actually quite large, then
-> setup_data will live at a `0x100000 + compressed_size` that extends into
-> the decompressed zone at 0x1000000. In other words, if compressed_size
-> is larger than `0x1000000 - 0x100000`, then the decompression step will
-> clobber setup_data, resulting in crashes.
-> 
-> Fix this by detecting that possibility, and if it occurs, put setup_data
-> *after* the end of the decompressed kernel, so that it doesn't get
-> clobbered.
-> 
-> One caveat is that this only works for images less than around 64
-> megabytes, so just bail out in that case. This is unfortunate, but I
-> don't currently have a way of fixing it.
-> 
-> Cc: x86@kernel.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->   hw/i386/x86.c | 30 ++++++++++++++++++++++++++++++
->   1 file changed, 30 insertions(+)
-> 
-> diff --git a/hw/i386/x86.c b/hw/i386/x86.c
-> index 78cc131926..628fd2b2e9 100644
-> --- a/hw/i386/x86.c
-> +++ b/hw/i386/x86.c
-> @@ -1077,6 +1077,36 @@ void x86_load_linux(X86MachineState *x86ms,
->       }
->       fclose(f);
->   
-> +    /* If a setup_data is going to be used, make sure that the bootloader won't
-> +     * decompress into it and clobber those bytes. */
-> +    if (dtb_filename || !legacy_no_rng_seed) {
-> +        uint32_t payload_offset = ldl_p(setup + 0x248);
-> +        uint32_t payload_length = ldl_p(setup + 0x24c);
-> +        uint32_t target_address = ldl_p(setup + 0x258);
+Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
+---
+ fs/fcntl.c                             | 2 +-
+ fs/namei.c                             | 4 ++--
+ fs/open.c                              | 2 +-
+ include/linux/fcntl.h                  | 2 +-
+ include/uapi/asm-generic/fcntl.h       | 4 ++++
+ tools/include/uapi/asm-generic/fcntl.h | 4 ++++
+ 6 files changed, 13 insertions(+), 5 deletions(-)
 
-Nitpicking, can the Linux kernel add these magic values in
-arch/x86/include/uapi/asm/bootparam.h? Or can we use
-offsetof(setup_header) to get them?
+diff --git a/fs/fcntl.c b/fs/fcntl.c
+index 146c9ab0cd4b..7aac650e16e2 100644
+--- a/fs/fcntl.c
++++ b/fs/fcntl.c
+@@ -1027,7 +1027,7 @@ static int __init fcntl_init(void)
+ 	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+ 	 * is defined as O_NONBLOCK on some platforms and not on others.
+ 	 */
+-	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
++	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
+ 		HWEIGHT32(
+ 			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+ 			__FMODE_EXEC | __FMODE_NONOTIFY));
+diff --git a/fs/namei.c b/fs/namei.c
+index 309ae6fc8c99..2b2735af6d03 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -192,7 +192,7 @@ getname_flags(const char __user *filename, int flags, int *empty)
+ 	if (unlikely(!len)) {
+ 		if (empty)
+ 			*empty = 1;
+-		if (!(flags & LOOKUP_EMPTY)) {
++		if (!(flags & (LOOKUP_EMPTY | O_EMPTY_PATH))) {
+ 			putname(result);
+ 			return ERR_PTR(-ENOENT);
+ 		}
+@@ -2347,7 +2347,7 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
+ 	if ((flags & (LOOKUP_RCU | LOOKUP_CACHED)) == LOOKUP_CACHED)
+ 		return ERR_PTR(-EAGAIN);
+ 
+-	if (!*s)
++	if (!*s && unlikely(!(flags & O_EMPTY_PATH)))
+ 		flags &= ~LOOKUP_RCU;
+ 	if (flags & LOOKUP_RCU)
+ 		rcu_read_lock();
+diff --git a/fs/open.c b/fs/open.c
+index 82c1a28b3308..b4ec054a418f 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1301,7 +1301,7 @@ static long do_sys_openat2(int dfd, const char __user *filename,
+ 	if (fd)
+ 		return fd;
+ 
+-	tmp = getname(filename);
++	tmp = getname_flags(filename, how->flags & O_EMPTY_PATH, NULL);
+ 	if (IS_ERR(tmp))
+ 		return PTR_ERR(tmp);
+ 
+diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+index a332e79b3207..bf8467bb0bd2 100644
+--- a/include/linux/fcntl.h
++++ b/include/linux/fcntl.h
+@@ -10,7 +10,7 @@
+ 	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | \
+ 	 O_APPEND | O_NDELAY | O_NONBLOCK | __O_SYNC | O_DSYNC | \
+ 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+-	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
++	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_EMPTY_PATH)
+ 
+ /* List of all valid flags for the how->resolve argument: */
+ #define VALID_RESOLVE_FLAGS \
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index 1ecdb911add8..a03f4275517b 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+index b02c8e0f4057..f32a81604296 100644
+--- a/tools/include/uapi/asm-generic/fcntl.h
++++ b/tools/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+-- 
+2.25.1
 
-> +        uint32_t decompressed_length = ldl_p(kernel + payload_offset + payload_length - 4);
-> +
-> +        uint32_t estimated_setup_data_length = 4096 * 16;
-> +        uint32_t start_setup_data = prot_addr + kernel_size;
-> +        uint32_t end_setup_data = start_setup_data + estimated_setup_data_length;
-> +        uint32_t start_target = target_address;
-> +        uint32_t end_target = target_address + decompressed_length;
-
-Maybe we can simply use 'unsigned' type.
-
-> +        if ((start_setup_data >= start_target && start_setup_data < end_target) ||
-> +            (end_setup_data >= start_target && end_setup_data < end_target)) {
-> +            uint32_t padded_size = target_address + decompressed_length - prot_addr;
-> +
-> +            /* The early stage can't address past around 64 MB from the original
-> +             * mapping, so just give up in that case. */
-> +            if (padded_size < 62 * 1024 * 1024)
-
-You mention 64 but check for 62, is that expected? You can use the MiB
-definitions to ease code review: 64 * MiB.
-
-> +                kernel_size = padded_size;
-> +            else {
-> +                fprintf(stderr, "qemu: Kernel image too large to hold setup_data\n");
-> +                dtb_filename = NULL;
-> +                legacy_no_rng_seed = true;
-> +            }
-> +        }
-> +    }
-Fix looks good, glad you figured out the problem.
-
-Regards,
-
-Phil.
