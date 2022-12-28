@@ -2,131 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503D1657266
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 04:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83531657268
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 04:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiL1DrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 22:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        id S229912AbiL1Du0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 22:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiL1DrC (ORCPT
+        with ESMTP id S229744AbiL1DuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 22:47:02 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37B565AF
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 19:47:00 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id i127so13988270oif.8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 19:47:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n0Zi/8oFccnAJnJwzjE2MMvMFl1USl7X1V+QLXXfx74=;
-        b=c7i/gTVaQnojibtdF4t3mojGVNE09BhSrpBNVPHWkeJAvegoTQd4EMiQHtYMLmnIru
-         DWHdODQSO4wud0LBrOvIa7tkUh0VhYHDrI/W+e8CNYewQ1KbBO5iA+wr/FV1vqe4oORF
-         XXiUT1E77jYOmWULBMiuY6+v0qMYSijIpLdu6sPDlR0xfJQXZ3MAYjQxXg/o79OBCo7h
-         jBP0qpyGPIWu1tWWRHEj9oiN9EMFjNZfdaur2fR4jhztvFTArB7aw1/RFcH7p/sXr7uE
-         RPSxQvNrHbI2Q9mLcs3P/7NC24DWio0hsv5mfljJsmDcjoyWCu13kI0GHb82a8CUKnoz
-         BhfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n0Zi/8oFccnAJnJwzjE2MMvMFl1USl7X1V+QLXXfx74=;
-        b=NT2kzPVADmBfQUu52OQ0RUu9sW9R4s32YqoK+HjmhIDW0WUPhfUAFhRNOQxTjsDCyT
-         OpYLy1EX8X2Minm7qm/nnB9cprwVUNjCOAOARvT/rM/KJCCi7ZFpCjkbRi7I6ph+snEz
-         Hck4UcAlOta8RRGmI63UU+tJQhY2T9p79JhzU1UgnpkhSLdStcIift/9prK8Abo+Yuu8
-         XvSWAp+J+sTwZoTDB+2vCmPyDeBMbsOj/x1ZOZtLhHliyw3mtCcQhvVhnLB9qw9CK1Cd
-         5dqFXUCxrUzZ1JPdb9QHpDGZbuUgr8etFbhJICjvwWhZe0BNoY3jHBXwOgDISfhUW8GJ
-         BQoQ==
-X-Gm-Message-State: AFqh2kphxssCrxr9rWRe8oj0odXo1yDHeiNBQojdX7YF6H4uwptAZBrS
-        7UdR91poZbM+F+mJ15U/8Ufdl8JbbME=
-X-Google-Smtp-Source: AMrXdXur7C38OYX0NVQuL0C+p0Mvq+iAcLtf6wfIooLQ+ooi5G/roIy9xDdNWpfqiW3AHgGo7fBRHQ==
-X-Received: by 2002:aca:1717:0:b0:35e:2d60:32d9 with SMTP id j23-20020aca1717000000b0035e2d6032d9mr10419647oii.27.1672199220291;
-        Tue, 27 Dec 2022 19:47:00 -0800 (PST)
-Received: from protoss.cs.ucr.edu (protoss.cs.ucr.edu. [169.235.26.60])
-        by smtp.gmail.com with ESMTPSA id j6-20020aca1706000000b0035a64076e0bsm6516663oii.37.2022.12.27.19.46.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Dec 2022 19:46:59 -0800 (PST)
-From:   Hang Zhang <zh.nvgt@gmail.com>
-Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-kernel@vger.kernel.org, Hang Zhang <zh.nvgt@gmail.com>
-Subject: [PATCH] mailbox: mailbox-test: fix potential use-after-free issues
-Date:   Tue, 27 Dec 2022 19:46:17 -0800
-Message-Id: <20221228034617.58386-1-zh.nvgt@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        Tue, 27 Dec 2022 22:50:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE45A65AF
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 19:50:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75D45B81253
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 03:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0458AC433F1;
+        Wed, 28 Dec 2022 03:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672199416;
+        bh=5H7IAXzQjHU/QAgykblCbKWPC+mCBynG7IgcSd4TwgM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pVGO/N/lVLa62CMfM5z3PTaBP/g2+Kq2h0SrRzcQ38jZKZJAYplM0MRv1lf8p9ieM
+         KX432+K7SHuuAIhyRIdfCmLmfIHUDz6rORNlXBZ9DE9mXrFP0LcK10FJAcvczIpfPn
+         Z0JFHcH7yYP77Z/LUFMt6eNLQU88JrmdUmtd3bwliRdFz8KhWyyx2ZmSDMDRxBqlFY
+         dthzGi7Cm1559LaskgWee5milpMo6B4udy+iqIKf1rfLIXA2Gl3wxniaK6WzKW8j51
+         9YGGSh1tqTyuN07NbTzMjFLuXMwdd+nM7TpXohJ9ptRe91iKoBCVpiVhPisLuqdWuB
+         lZXMdcMFRweHA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D3347C395E0;
+        Wed, 28 Dec 2022 03:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v12 1/3] platform/chrome: cros_ec_uart: Add cros-ec-uart
+ transport layer
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <167219941586.31925.4046196257831132463.git-patchwork-notify@kernel.org>
+Date:   Wed, 28 Dec 2022 03:50:15 +0000
+References: <20221209092619.v12.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+In-Reply-To: <20221209092619.v12.1.If7926fcbad397bc6990dd725690229bed403948c@changeid>
+To:     Mark Hasemeyer <markhas@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, rrangel@chromium.org,
+        bhanumaiya@chromium.org, lkp@intel.com, pmalani@chromium.org,
+        bleung@chromium.org, groeck@chromium.org, tzungbi@kernel.org,
+        chrome-platform@lists.linux.dev
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mbox_test_message_write() is the .write handler of the message
-debugfs interface, it operates on global pointers "tdev->signal"
-and "tdev->message" (e.g., allocation, dereference, free and
-nullification). However, these operations are not protected by any
-locks, making use-after-free possible in the concurrent setting.
-E.g., one invocation of the handler may have freed "tdev->signal"
-but being preempted before nullifying the pointer, then another
-invocation of the handler may dereference the now dangling pointer,
-causing use-after-free. Similarly, "tdev->message", as a shared
-pointer, may be manipulated by multiple invocations concurrently,
-resulting in unexpected issues such as use-after-free.
+Hello:
 
-Fix these potential issues by protecting the above operations with
-the spinlock "tdev->lock", which has already been deployed in other
-handlers of the debugfs interface (e.g., .read). This patch introduces
-the same lock to the .write handler.
+This series was applied to chrome-platform/linux.git (for-kernelci)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
----
- drivers/mailbox/mailbox-test.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+On Fri,  9 Dec 2022 09:26:22 -0700 you wrote:
+> From: Bhanu Prakash Maiya <bhanumaiya@chromium.org>
+> 
+> This patch does following:
+> 1. Adds a new cros-ec-uart driver. This driver can send EC requests on
+>    UART and process response packets received on UART transport.
+> 2. Once probed, this driver will initialize the serdev device based on
+>    the underlying information in the ACPI resource. After serdev device
+>    properties are set, this driver will register itself cros-ec.
+> 3. High level driver can use this implementation to talk to ChromeOS
+>    Embedded Controller device in case it supports UART as transport.
+> 4. When cros-ec driver initiates a request packet, outgoing message is
+>    processed in buffer and sent via serdev. Once bytes are sent, driver
+>    enables a wait_queue.
+> 5. Since ChromeOS EC device sends response asynchronously, AP's TTY
+>    driver accumulates response bytes and calls the registered callback.
+>    TTY driver can send multiple callback for bytes ranging from 1 to MAX
+>    bytes supported by EC device.
+> 6. Driver waits for EC_MSG_DEADLINE_MS to collect and process received
+>    bytes. It wakes wait_queue if expected bytes are received or else
+>    wait_queue timeout. Based on the error condition, driver returns
+>    data_len or error to cros_ec.
+> 
+> [...]
 
-diff --git a/drivers/mailbox/mailbox-test.c b/drivers/mailbox/mailbox-test.c
-index 4555d678fadd..b2315261644a 100644
---- a/drivers/mailbox/mailbox-test.c
-+++ b/drivers/mailbox/mailbox-test.c
-@@ -97,6 +97,7 @@ static ssize_t mbox_test_message_write(struct file *filp,
- 	struct mbox_test_device *tdev = filp->private_data;
- 	void *data;
- 	int ret;
-+	unsigned long flags;
- 
- 	if (!tdev->tx_channel) {
- 		dev_err(tdev->dev, "Channel cannot do Tx\n");
-@@ -110,9 +111,12 @@ static ssize_t mbox_test_message_write(struct file *filp,
- 		return -EINVAL;
- 	}
- 
-+	spin_lock_irqsave(&tdev->lock, flags);
- 	tdev->message = kzalloc(MBOX_MAX_MSG_LEN, GFP_KERNEL);
--	if (!tdev->message)
--		return -ENOMEM;
-+	if (!tdev->message) {
-+		ret = -ENOMEM;
-+		goto out_1;
-+	}
- 
- 	ret = copy_from_user(tdev->message, userbuf, count);
- 	if (ret) {
-@@ -143,6 +147,8 @@ static ssize_t mbox_test_message_write(struct file *filp,
- 	kfree(tdev->signal);
- 	kfree(tdev->message);
- 	tdev->signal = NULL;
-+out_1:
-+	spin_unlock_irqrestore(&tdev->lock, flags);
- 
- 	return ret < 0 ? ret : count;
- }
+Here is the summary with links:
+  - [v12,1/3] platform/chrome: cros_ec_uart: Add cros-ec-uart transport layer
+    (no matching commit)
+  - [v12,2/3] dt-bindings: mfd: cros-ec: Add UART compatible string
+    https://git.kernel.org/chrome-platform/c/5be8cd61dcdd
+  - [v12,3/3] platform/chrome: cros_ec_uart: Add DT enumeration support
+    https://git.kernel.org/chrome-platform/c/c34fea225806
+
+You are awesome, thank you!
 -- 
-2.39.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
