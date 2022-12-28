@@ -2,113 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18346586EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B91D6586F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbiL1VMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 16:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        id S231327AbiL1VPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 16:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiL1VMl (ORCPT
+        with ESMTP id S229716AbiL1VPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 16:12:41 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4354613E9C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 13:12:39 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-43ea87d0797so236934167b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 13:12:39 -0800 (PST)
+        Wed, 28 Dec 2022 16:15:05 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E847113EA8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 13:15:03 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id o66so15751475oia.6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 13:15:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+7ooGxz+slyS/E6q6mPR6pfactn5WEBlXeWzI+mnkNI=;
-        b=ih97jiTj5/uvAHQi1SWZaUjBeXFNFLtW/L9Hr9vhA+WQfOHxMAnExk4bbjcsVNabCW
-         HeKqmkdzPhmyWoS62nY4lwgh34goModIcMoZkgAZiGkLRDyhzt7SraAkeIQw+9Uhz9DP
-         EYyMcKiIJK6/1LXp6AjX7BYgPhR1JpZKb2VHVhZsFFZyRg7Nwo4nbGAmGaGwMzYQgXed
-         sjni7INdx2icrIAEAXbjjHBkN0iNa6FlazuUYl5LHmRvzbiRo0Hwz9lWy07HYNYn0iSz
-         JkaJIeebofKuXyxQfxtDyuXOfPFUotcXWOKX9YkMv4n3U0JmuhwbQQT86uC4hMjbTXo8
-         8DZQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u61catlXVW5wFymBQzKgemYTpBvwIjho7UirvKaMj6s=;
+        b=GJn/+f/zSq4Sj1Jy5I7R7pzdtBAYQj/fHvpunvZvo6+d4ZIVzK1RydQT4AkNxsAUqH
+         62BtU1qKw8UmOR1rCLQkwd1luBZeeG+xEmJH1un6vgWHAsSOnGOIOIeNr7/LcpKCzNsy
+         4vH5KtfRC+FkayOrE7CDm9ViKw81nIwEUl1E/MapYHw31K5enZlwC0hczo54VhHIl+80
+         KuHi2ZZl9cSwo2FmsewEBVbCBhmrLeLCdSc2H46hQtIJKj7EtonhPQYY7iWFRLB+o25g
+         VFdc5oVOGjmS9qPZm0KY0zKtJ567MiNrJ6KzdCaYEUJuhU8Hai4YjynfnttUUFELW5q1
+         Y+HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+7ooGxz+slyS/E6q6mPR6pfactn5WEBlXeWzI+mnkNI=;
-        b=sHcX26Ij3izBJ1GrXoON8vLuAxGTAnRvVnK8qTudZUVbQyop/dYnQhS2SyFWRfPhyg
-         j3qGemZWVpc1UTKuWXGIXXiX7GiQbuh+Nm0TrfqNJcMY1zMNV4g2LVGp02cDa8TsY0/b
-         sOdbypZiEgtgY8OJUG/QhEVgClCZaL6y/5Izijexqt3sIgx5PBwLKXmjWaOQc7+gHIkz
-         Lgmxrbys6Duex1b6yQiFHgsYxUSoLcB57h804uIzyMcmPmrIecNMZZc8YzsQbWkYb7gk
-         oo27LeBuzBU9Ss7qgD0h9onyLyWR/HNNpsgRwYRlw0lqkhHsKBPttbZ6Hsk4TmzWUJ5V
-         1tFg==
-X-Gm-Message-State: AFqh2kofomo8uLBdNiChiZ7bSVaS5ri4AMETLiQs9NysNXeAUIHhIuAe
-        ujuBgp6CwI5Uib6mKtjguET2WQ4CHRXA+VXWhRd9Yh90XX11LKpt
-X-Google-Smtp-Source: AMrXdXsJbuyjVhn8JGXsjh7X1fYP2OqQbbsy1d4w6OwpnN9wrEjQnavmbjW6sV+0agNTau2XV3MZkafhwdaidHprrcI=
-X-Received: by 2002:a0d:d5cf:0:b0:3dd:b7d7:ae7e with SMTP id
- x198-20020a0dd5cf000000b003ddb7d7ae7emr2597695ywd.11.1672261958348; Wed, 28
- Dec 2022 13:12:38 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u61catlXVW5wFymBQzKgemYTpBvwIjho7UirvKaMj6s=;
+        b=3HtyJ4NM2XeEDXZYMnV5mngFfSw6YXhuGY+mUfgsmmnON3IIB14MqVFicw7i9PoZIM
+         R1TidJlTI5a++750wpMYIYLpVULQr55jY3SxqPdDJOFcZWMNr4k1FJsgCUZW+yK4ALps
+         ol3k31eGrJAJ5bPU0n5xlCOlZcce2P8Guq3E9OENBrSE2Z9dy+h1629fNNRHGQv+hhGJ
+         evtCOwDYmUBhCNS7oi12D5OA1BzLu5ckcnL6ZdnK15FDuk6e908FDD1cu1TGgRaxI8l1
+         +R5uLb4KBLXTHc05XktSu9cL8Ezon8zIny8CH6X5/riH86QA+zz7yGsI8MDhu/A+W/uq
+         +zqg==
+X-Gm-Message-State: AFqh2kpzfN2jgsUIpgJPyLwtPlp5mYSFwmP8e0NEOYRQgOW3C3BPSs62
+        YrzHub1QuJlPq/2k3biMuPdKAg==
+X-Google-Smtp-Source: AMrXdXvjsN/jTj/sK+n2xZm0y1XctLSMEEFFh1I46UezAZgLU8ZmXZK9DIWXil/6O6GaUT28xYetxQ==
+X-Received: by 2002:aca:4009:0:b0:360:ceb6:1f6f with SMTP id n9-20020aca4009000000b00360ceb61f6fmr9928171oia.54.1672262103112;
+        Wed, 28 Dec 2022 13:15:03 -0800 (PST)
+Received: from [192.168.17.16] ([189.219.72.83])
+        by smtp.gmail.com with ESMTPSA id c17-20020a056808139100b003546fada8f6sm7400869oiw.12.2022.12.28.13.15.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 13:15:02 -0800 (PST)
+Message-ID: <9560136e-d6e9-995a-141a-61dd05a62b8a@linaro.org>
+Date:   Wed, 28 Dec 2022 15:15:01 -0600
 MIME-Version: 1.0
-References: <20221223074238.4092772-1-jcmvbkbc@gmail.com>
-In-Reply-To: <20221223074238.4092772-1-jcmvbkbc@gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 28 Dec 2022 22:12:01 +0100
-Message-ID: <CANpmjNOs6vyX+y0XuNaz5J=8p1yKxfsWcNGL=vA1Dzjua=fsYg@mail.gmail.com>
-Subject: Re: [PATCH] kcsan: test: don't put the expect array on the stack
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221228144330.180012208@linuxfoundation.org>
+Content-Language: en-US
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20221228144330.180012208@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Dec 2022 at 08:42, Max Filippov <jcmvbkbc@gmail.com> wrote:
->
-> Size of the 'expect' array in the __report_matches is 1536 bytes, which
-> is exactly the default frame size warning limit of the xtensa
-> architecture.
-> As a result allmodconfig xtensa kernel builds with the gcc that does not
-> support the compiler plugins (which otherwise would push the said
-> warning limit to 2K) fail with the following message:
->
->   kernel/kcsan/kcsan_test.c:257:1: error: the frame size of 1680 bytes
->     is larger than 1536 bytes
->
-> Fix it by dynamically alocating the 'expect' array.
->
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  kernel/kcsan/kcsan_test.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/kcsan/kcsan_test.c b/kernel/kcsan/kcsan_test.c
-> index dcec1b743c69..af62ec51bd5f 100644
-> --- a/kernel/kcsan/kcsan_test.c
-> +++ b/kernel/kcsan/kcsan_test.c
-> @@ -159,7 +159,7 @@ static bool __report_matches(const struct expect_report *r)
->         const bool is_assert = (r->access[0].type | r->access[1].type) & KCSAN_ACCESS_ASSERT;
->         bool ret = false;
->         unsigned long flags;
-> -       typeof(observed.lines) expect;
-> +       typeof(*observed.lines) *expect;
->         const char *end;
->         char *cur;
->         int i;
-> @@ -168,6 +168,10 @@ static bool __report_matches(const struct expect_report *r)
->         if (!report_available())
->                 return false;
->
-> +       expect = kmalloc(sizeof(observed.lines), GFP_KERNEL);
-> +       if (!expect)
+Hello!
 
-WARN_ON(), because this may either spuriously fail or pass a test
-case, and we'd want to know about that.
 
-Thanks,
--- Marco
+On 28/12/22 08:25, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.2 release.
+> There are 1146 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+
+We're seeing the already reported problem with the unused variable 'rpm', but also seeing this on Arm, i386, MIPS, PA-RISC:
+
+| /builds/linux/drivers/pwm/pwm-tegra.c: In function 'tegra_pwm_config':
+| /builds/linux/drivers/pwm/pwm-tegra.c:148:53: error: result of '1000000000 << 8' requires 39 bits to represent, but 'long int' only has 32 bits [-Werror=shift-overflow=]
+|    required_clk_rate = DIV_ROUND_UP_ULL(NSEC_PER_SEC << PWM_DUTY_WIDTH,
+|                                                      ^~
+| /builds/linux/include/linux/math.h:40:32: note: in definition of macro 'DIV_ROUND_DOWN_ULL'
+|   ({ unsigned long long _tmp = (ll); do_div(_tmp, d); _tmp; })
+|                                 ^~
+| /builds/linux/drivers/pwm/pwm-tegra.c:148:23: note: in expansion of macro 'DIV_ROUND_UP_ULL'
+|    required_clk_rate = DIV_ROUND_UP_ULL(NSEC_PER_SEC << PWM_DUTY_WIDTH,
+|                        ^~~~~~~~~~~~~~~~
+| cc1: all warnings being treated as errors
+
+Those are with GCC-8 and allmodconfig.
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org
+
