@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E9F657676
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B037A657666
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbiL1MdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S230006AbiL1M04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbiL1MZL (ORCPT
+        with ESMTP id S229864AbiL1M00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:25:11 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CD72BA;
-        Wed, 28 Dec 2022 04:25:10 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1672230309;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BTPJCC4TTwP84BBs21zNnyfu2sa/UTInRsPtE+n30Ws=;
-        b=V1S7bplS+y8D9cCLAQGLJABikiXryBsHamNvolWehSPkVGmzskHzmK0d9V/KdWty0+tj/N
-        XS6PWb4TbHD/7k8mFgTf5Yk0sY29fIP8dheLnyntQ8dUSYTF7H4VMwwU5ehVQfGQRwS8Z8
-        6SMai/It+C3fIamoNts88ANxY8FYot8=
-From:   Cixi Geng <cixi.geng@linux.dev>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cixi.geng1@unisoc.com
-Subject: [PATCH V3 3/3] gpio: gpio-sprd: Make the irqchip immutable
-Date:   Wed, 28 Dec 2022 20:24:42 +0800
-Message-Id: <20221228122442.392504-4-cixi.geng@linux.dev>
-In-Reply-To: <20221228122442.392504-1-cixi.geng@linux.dev>
-References: <20221228122442.392504-1-cixi.geng@linux.dev>
+        Wed, 28 Dec 2022 07:26:26 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBD5EA3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:26:25 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id v23so6266027ljj.9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:26:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ub4ATzUfOQ3XmwVarg+cJkngzbh6iXKnfcPqJ9I4RlY=;
+        b=JQTsGEnoyxqTgLMb3BsXtAxnqxGelXXtAenB1eBJeZbzHYymRlyju3DIpRW+PcTFZp
+         kljrBbN9AXs3aTwyTPG0ALjls2UfO9yPRMM6sGkW3jX7UaRpvUntGTRTHUpN1GpOoaAV
+         cjgbg7+oFkAnQVA1vJD/YeBq+fhk55c4bknUjgSBMSoJQt7OqZplK6gdoOpgTnwi2q0w
+         P0egTcxMqtR+45w3aUzERJfPz86cfwATnvcBqXav3x5ee4OD3gortep1QKoZUL3uFVit
+         WxM3yLB8DThZszAM/fY1p/xMbS19hyTdRMBbYx7q5cU8JcRZhjBcSzfkZKrkC0V/vjDf
+         8YNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ub4ATzUfOQ3XmwVarg+cJkngzbh6iXKnfcPqJ9I4RlY=;
+        b=qBku2K1kIRyvCzIIlM3tHqsmaJt5e984MWDi4xxv+AKrl4IwHDdJfxPUJMpksUbPml
+         WD8fkAOa3LEiSGCL+63ai6AG7Nt74a1TaPsNKsrD2UeddpcuVGLTQ18MQ6pgDwNP8pGj
+         2fq28ppyN9w9LwxdHo/8d/y426FIVwwdaStt4KHi+XO5NeFvDsVzvOkGR1RzUFIKXEEt
+         vKJqaQy+oKb+aMlUYp185/uLGdeOmS9KTDdqmCRg5l57JFyRo6/u6osB+BwBSby2dykl
+         g/yr+F0h89AH9XOSqcJzXMwlr5JyN5GhZ9vkDVaIrF3GmFCKzxsWMI2DtIo0uA31zRXd
+         HChw==
+X-Gm-Message-State: AFqh2kp/W3etcv+j9MpMAFPrNmqQrzgteoMaIFrBfR8iWehC35Iy3LhX
+        kPzWZEAkDYseZand8RwqtlyqAA==
+X-Google-Smtp-Source: AMrXdXuFOgavTsz6/VjUbcdE+BABkvmBsLjBmuASv+YLKGodRKLJ5a+n9HlkS7L6YG3pZVFop41hhQ==
+X-Received: by 2002:a2e:998e:0:b0:278:e50e:9b38 with SMTP id w14-20020a2e998e000000b00278e50e9b38mr6272779lji.5.1672230384061;
+        Wed, 28 Dec 2022 04:26:24 -0800 (PST)
+Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
+        by smtp.gmail.com with ESMTPSA id o10-20020a2e730a000000b00279ebd80387sm1916232ljc.133.2022.12.28.04.26.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 04:26:23 -0800 (PST)
+Message-ID: <508441b7-5af1-ee58-4787-9e3996fb16da@linaro.org>
+Date:   Wed, 28 Dec 2022 13:26:22 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sm8350: add missing
+ core_bi_pll_test_se GCC clock
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221228112456.31348-1-krzysztof.kozlowski@linaro.org>
+ <d2e303d9-3ac4-f574-680f-4f5ccbf5ed13@linaro.org>
+ <5001001a-203f-e832-f916-ce483b2d8ea1@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <5001001a-203f-e832-f916-ce483b2d8ea1@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cixi Geng <cixi.geng1@unisoc.com>
 
-Make the struct irq_chip const, flag it as IRQCHIP_IMMUTABLE, add the
-new helper functions, and call the appropriate gpiolib functions.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Julia Lawall <julia.lawall@lip6.fr>
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
----
- drivers/gpio/gpio-sprd.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+On 28.12.2022 12:55, Krzysztof Kozlowski wrote:
+> On 28/12/2022 12:37, Konrad Dybcio wrote:
+>>
+>>
+>> On 28.12.2022 12:24, Krzysztof Kozlowski wrote:
+>>> The GCC bindings expect core_bi_pll_test_se clock input, even if it is
+>>> optional:
+>>>
+>>>   sm8350-mtp.dtb: clock-controller@100000: clock-names:2: 'core_bi_pll_test_se' was expected
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>> Is it even going to be used by anybody, or should we just drop
+>> it on the driver side as per usual?
+> 
+> It's mentioned as possible parent, so there might be users somewhere...
+> Or you want to say that other binding and DTS users cannot use that clock?
+There's no driver (even downstream) for a supplier of this clock and it's
+(probably) only used for early validation by qcom folks. What we're
+interested in, as far as debugging clocks goes, is handled by debugcc [1].
 
-diff --git a/drivers/gpio/gpio-sprd.c b/drivers/gpio/gpio-sprd.c
-index 9bff63990eee..072b4e653216 100644
---- a/drivers/gpio/gpio-sprd.c
-+++ b/drivers/gpio/gpio-sprd.c
-@@ -120,6 +120,7 @@ static void sprd_gpio_irq_mask(struct irq_data *data)
- 	u32 offset = irqd_to_hwirq(data);
- 
- 	sprd_gpio_update(chip, offset, SPRD_GPIO_IE, 0);
-+	gpiochip_disable_irq(chip, offset);
- }
- 
- static void sprd_gpio_irq_ack(struct irq_data *data)
-@@ -136,6 +137,7 @@ static void sprd_gpio_irq_unmask(struct irq_data *data)
- 	u32 offset = irqd_to_hwirq(data);
- 
- 	sprd_gpio_update(chip, offset, SPRD_GPIO_IE, 1);
-+	gpiochip_enable_irq(chip, offset);
- }
- 
- static int sprd_gpio_irq_set_type(struct irq_data *data,
-@@ -205,13 +207,14 @@ static void sprd_gpio_irq_handler(struct irq_desc *desc)
- 	chained_irq_exit(ic, desc);
- }
- 
--static struct irq_chip sprd_gpio_irqchip = {
-+static const struct irq_chip sprd_gpio_irqchip = {
- 	.name = "sprd-gpio",
- 	.irq_ack = sprd_gpio_irq_ack,
- 	.irq_mask = sprd_gpio_irq_mask,
- 	.irq_unmask = sprd_gpio_irq_unmask,
- 	.irq_set_type = sprd_gpio_irq_set_type,
--	.flags = IRQCHIP_SKIP_SET_WAKE,
-+	.flags = IRQCHIP_SKIP_SET_WAKE | IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
- 
- static int sprd_gpio_probe(struct platform_device *pdev)
-@@ -245,7 +248,7 @@ static int sprd_gpio_probe(struct platform_device *pdev)
- 	sprd_gpio->chip.direction_output = sprd_gpio_direction_output;
- 
- 	irq = &sprd_gpio->chip.irq;
--	irq->chip = &sprd_gpio_irqchip;
-+	gpio_irq_chip_set_chip(irq, &sprd_gpio_irqchip);
- 	irq->handler = handle_bad_irq;
- 	irq->default_type = IRQ_TYPE_NONE;
- 	irq->parent_handler = sprd_gpio_irq_handler;
--- 
-2.34.1
+Konrad
 
+[1] https://github.com/andersson/debugcc/
+> 
+> Best regards,
+> Krzysztof
+> 
