@@ -2,141 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B8E657738
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 14:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 889C4657741
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 14:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiL1Nfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 08:35:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S232913AbiL1NhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 08:37:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbiL1Nfi (ORCPT
+        with ESMTP id S232788AbiL1Ngm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 08:35:38 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1EB6F5B9;
-        Wed, 28 Dec 2022 05:35:33 -0800 (PST)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 2BSDZEBE007517;
-        Wed, 28 Dec 2022 14:35:14 +0100
-Date:   Wed, 28 Dec 2022 14:35:14 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        VNLX Kernel Department <kernel@vnlx.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>,
-        Muhammad Rizki <kiizuha@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
-Message-ID: <20221228133513.GA7457@1wt.eu>
-References: <20221222035134.3467659-1-ammar.faizi@intel.com>
- <20221222043452.GB29086@1wt.eu>
- <20221222134615.3535422-1-ammar.faizi@intel.com>
- <20221227062640.GA5337@1wt.eu>
- <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
- <20221227184902.GA6287@1wt.eu>
- <23e84c59-4f2c-01b4-5b8a-80af39a1d761@gnuweeb.org>
+        Wed, 28 Dec 2022 08:36:42 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8810AFCCB;
+        Wed, 28 Dec 2022 05:36:40 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id t17so38406056eju.1;
+        Wed, 28 Dec 2022 05:36:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d807py09DD3Qe4/u5U+I0QX5zsRCtWMK/ARKc6ylwQ8=;
+        b=IIXsBoXeUkr+5VqJl+tmA3q8ykF7/iePNO1YUjQkz1bk78gN7+sUTIdid2y2esG/WG
+         NCn2UiehP8nX2hbxuJurO4Z3g0VlXTrgUUVnIqbsz98Vgb5NPb44pyHiLs6xDMTP9kSH
+         X+2oRJHyPqf3o6Ct9OlcBMQgmrdLw5gK5+qgdzRzRf29OGFsajzyYARKs5Gzu2ktqqxu
+         h6TW2G7BNg6qMexOyFxZ2DGpxr8x8op1lhbE6BzSSthRMtz0FY05j2ngY81/bxNddt8n
+         9ChlGQ3U9c2iMcmGbgR49u2lgJ8FoFknn6mBnV85aaL5MWEknLP7q1cJPB+HyljBi3Gr
+         ERcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d807py09DD3Qe4/u5U+I0QX5zsRCtWMK/ARKc6ylwQ8=;
+        b=xyYuDdmHtT+dw5jgcMgeeianmkWYY3KRW4/RqfRGZZ3HzulAbRBGQmd+hjc2XIXaby
+         rdIxRYZoFxNQ+66hJJhTtA6Pz0yDQqbmEhuHxDPhtaPf5rM54aXQej2Ndx/22fHgN2Sp
+         ap75OYBA4wryemHj1eVbMA3NHFN9ZKs1TAIEUunC76h7i7LnzO0MultP66HLH0P6kyzl
+         X4h0/ktOez3SYhLZ4Ws4VUclsTZoPJqNkx2u6eBeovK6PtT2g0WkauQ8WWpqaM51vLRT
+         0Iv3QZOjDbGGzBYHv3oxakhZErQa9XDikrp/RJP39wHNls9lJXfk8RiMYw+uQdZ7m7Eq
+         C9nw==
+X-Gm-Message-State: AFqh2kpan2s4a3q03BHhiGbrkNKz2+Ynv8Ut2O4Ic1/v6Vg1IbL+s3mM
+        j3V/y0FPa8EsN+oMNgWOttnI06J57p8=
+X-Google-Smtp-Source: AMrXdXuRWTaubbJK9yWRBILGJVgtdeYL5uiE1CLzyfTiDB/dlno4xBj06jBWIAnl777t2+IZeyIFNw==
+X-Received: by 2002:a17:907:c712:b0:7bd:6372:fdb4 with SMTP id ty18-20020a170907c71200b007bd6372fdb4mr30778950ejc.41.1672234598895;
+        Wed, 28 Dec 2022 05:36:38 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c23-b830-5100-f22f-74ff-fe21-0725.c23.pool.telefonica.de. [2a01:c23:b830:5100:f22f:74ff:fe21:725])
+        by smtp.googlemail.com with ESMTPSA id g3-20020a170906538300b0082535e2da13sm7450475ejo.6.2022.12.28.05.36.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 05:36:38 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-wireless@vger.kernel.org
+Cc:     tony0620emma@gmail.com, kvalo@kernel.org, pkshih@realtek.com,
+        tehuang@realtek.com, s.hauer@pengutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH 0/4] rtw88: Four fixes found while working on SDIO support
+Date:   Wed, 28 Dec 2022 14:35:43 +0100
+Message-Id: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23e84c59-4f2c-01b4-5b8a-80af39a1d761@gnuweeb.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 07:01:36PM +0700, Ammar Faizi wrote:
-> On 12/28/22 1:49 AM, Willy Tarreau wrote:
-> > I'll try to do it but do not want to make you wait too long in case it
-> > gets delayed. In the worst case we should only postpone the getauxval()
-> > patch and not the other ones.
-> 
-> I will split it into 2 patchset then.
+This series consists of three patches which are fixing existing
+behavior (meaning: it either affects PCIe or USB or both) in the rtw88
+driver.
 
-OK thanks!
+The first change adds the packed attribute to the eFuse structs. This
+was spotted by Ping-Ke while reviewing the SDIO support patches from
+[0].
 
-I've pushed for you an update which starts to do what I proposed. Errno
-and environ are now marked weak for all archs, and _auxv is set for i386,
-x86_64, arm64 and arm for now:
+The remaining three changes relate to locking (barrier hold) problems.
+We previously had discussed patches for this for SDIO support, but the
+problem never ocurred while testing USB cards. It turns out that these
+are still needed and I think that they also fix the same problems for
+USB users (it's not clear how often it happens there though).
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20221227-nolibc-weak-2
+The issue fixed by the second and third patches have been spotted by a
+user who tested rtw88 SDIO support. Everything is working fine for him
+but there are warnings [1] and [2] in the kernel log stating "Voluntary
+context switch within RCU read-side critical section!".
 
-You can already use it to implement getauxval(), it will normally work
-for these archs.
+The solution in the third and fourth patch was actually suggested by
+Ping-Ke in [3]. Thanks again!
 
-> > BTW, do you think your arch-specific changes for sigaction() will be
-> > easily portable to other architectures ? I feel a bit wary of starting
-> > to have different features per architecture given the purpose of the
-> > lib, so the more uniform the coverage the better.
-> 
-> The 'rt_sigaction()' itself doesn't seem to be an arch specific, but
-> the way it resumes the execution needs to call 'rt_sigreturn()' which
-> is arch specific. I took a look at the kernel source code, most
-> architectures read 'struct rt_sigframe' from the stack pointer.
-> 
-> https://github.com/torvalds/linux/blob/631aa744423173bf921191ba695bbc7c1aabd9e0/arch/x86/kernel/signal_32.c#L145
-> https://github.com/torvalds/linux/blob/631aa744423173bf921191ba695bbc7c1aabd9e0/arch/x86/kernel/signal_64.c#L243-L271
-> https://github.com/torvalds/linux/blob/a6b450573b912316ad36262bfc70e7c3870c56d1/arch/arm64/kernel/signal.c#L668-L699
-> https://github.com/torvalds/linux/blob/a6b450573b912316ad36262bfc70e7c3870c56d1/arch/arm64/kernel/signal32.c#L259
-> https://github.com/torvalds/linux/blob/eb67d239f3aa1711afb0a42eab50459d9f3d672e/arch/riscv/kernel/signal.c#L101
-> 
-> On the x86-64 arch, the implementation is just like this:
-> 
->    __arch_restore_rt:
->        #
->        # ((%rsp - sizeof(long)) must point to 'struct rt_sigframe')
->        #
->        # 'struct rt_sigframe' is automatically constructed by
->        # the kernel when a signal is caught.
->        #
->        movl       $0xf, %eax // __NR_rt_sigreturn == 0xf
->        syscall
 
-I think we could avoid the asm specific stuff is we get rid of the frame
-pointer. Please look below:
+[0] https://lore.kernel.org/linux-wireless/695c976e02ed44a2b2345a3ceb226fc4@realtek.com/
+[1] https://github.com/LibreELEC/LibreELEC.tv/pull/7301#issuecomment-1366421445
+[2] https://github.com/LibreELEC/LibreELEC.tv/pull/7301#issuecomment-1366610249
+[3] https://lore.kernel.org/lkml/e0aa1ba4336ab130712e1fcb425e6fd0adca4145.camel@realtek.com/
 
-  __attribute__((weak,unused,noreturn,optimize("omit-frame-pointer"),section(".text.nolibc_rt_sigreturn")))
-  void sys_rt_sigreturn()
-  {
-        my_syscall0(__NR_rt_sigreturn);
-        __builtin_unreachable();
-  }
 
-It gives me the correct code for x86_64 and i586. I don't know if other
-architectures will want to add a prologue. I tried with "naked" but it's
-ignored by the compiler since the function is not purely asm. Not very
-important but given that we already have everything to perform our calls
-it would make sense to stay on this. By the way, for the sake of
-consistency with other syscalls, I do think the function (or label if
-we can't do otherwise) should be called "sys_rt_sigreturn" as it just
-performs a syscall.
+Martin Blumenstingl (4):
+  rtw88: Add packed attribute to the eFuse structs
+  rtw88: Configure the registers from rtw_bf_assoc() outside the RCU
+    lock
+  rtw88: Use rtw_iterate_vifs() for rtw_vif_watch_dog_iter()
+  rtw88: Use non-atomic rtw_iterate_stas() in rtw_ra_mask_info_update()
 
-> I believe aarch64 and RISCV don't behave differently, but different
-> registers.
-> 
-> Not sure what PowerPC does here, it seems a bit different:
-> https://github.com/torvalds/linux/blob/1612c382ffbdf1f673caec76502b1c00e6d35363/arch/powerpc/kernel/signal_64.c#L744
+ drivers/net/wireless/realtek/rtw88/bf.c       | 13 ++++++------
+ drivers/net/wireless/realtek/rtw88/mac80211.c |  4 +++-
+ drivers/net/wireless/realtek/rtw88/main.c     |  6 ++++--
+ drivers/net/wireless/realtek/rtw88/main.h     |  6 +++---
+ drivers/net/wireless/realtek/rtw88/rtw8723d.h |  6 +++---
+ drivers/net/wireless/realtek/rtw88/rtw8821c.h | 20 +++++++++----------
+ drivers/net/wireless/realtek/rtw88/rtw8822b.h | 20 +++++++++----------
+ drivers/net/wireless/realtek/rtw88/rtw8822c.h | 20 +++++++++----------
+ 8 files changed, 50 insertions(+), 45 deletions(-)
 
-It looks similar to me, it's just that the kernel side differs but I
-think it's the same.
+-- 
+2.39.0
 
-> I haven't taken a look at other archs.
-> 
-> What do you think? Is it affordable for nolibc to implement all of
-> these?
-
-Yes I think so. I suspect that we might need to have a few arch-specific
-implementations, but we've already had this case a few times and we could
-easily use a pair of #define/#ifdef to skip the generic version.
-
-Best regards,
-Willy
