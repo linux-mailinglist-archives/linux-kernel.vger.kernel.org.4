@@ -2,353 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9926577F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 15:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8F46577F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 15:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbiL1Om2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 09:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        id S232846AbiL1Ont (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 09:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiL1OmZ (ORCPT
+        with ESMTP id S232023AbiL1Onq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 09:42:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B07F001;
-        Wed, 28 Dec 2022 06:42:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A740B81711;
-        Wed, 28 Dec 2022 14:42:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2098C433D2;
-        Wed, 28 Dec 2022 14:42:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672238541;
-        bh=xbPBhB2yqYTTsAvDEFw3ghE/1/l/diLVG1mJwQAEiCc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mrizdCUQ9/0d3EZ1Xok5ItRvHlgXzqHkKiaUn3J0PcB0bsVwnm/jMkTAUMK2cLXhx
-         XHak2yhgMsZppLPq0BZxjLO3SAU9FeUakTYUN21sjQsylOZYG7ZpH3eaBwLyDFcpPJ
-         cXLgwmLPnM0Kw5I6DT0tncz/xKZdSc9Ig6whKbPoeX6y22jVU09six5MofgFn/Zi1W
-         4KqqZpesQHoSvXPy6011j+eSt5rSb1Ekjx0o1sMS8UwAldoFuHSxtgaeaiSH82pL4d
-         AfWovOOnWDUrBDTJNfwwM19QVQFwS/D5bQBkpFHZMoF/6N5wA1hnM5wT9RB8xYBCsN
-         PwUnl/18QX/fw==
-Date:   Wed, 28 Dec 2022 14:42:16 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        system@metrotek.ru
-Subject: Re: [PATCH v3 1/3] fpga: microchip-spi: move SPI I/O buffers out of
- stack
-Message-ID: <Y6xVyCt5tXwnKhfw@spud>
-References: <20221227100450.2257-1-i.bornyakov@metrotek.ru>
- <20221227100450.2257-2-i.bornyakov@metrotek.ru>
+        Wed, 28 Dec 2022 09:43:46 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CAC6F001
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 06:43:45 -0800 (PST)
+Received: from [192.168.1.139] (unknown [171.76.80.102])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 676CE20F26B6;
+        Wed, 28 Dec 2022 06:43:42 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 676CE20F26B6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1672238625;
+        bh=eISDS/91oiq1DS7pKCpl1TnGMMOr/ZfUtjW/6tYTuBo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JA/DFLkJg+lq0r974VDtsSIzXPguPqbLgZMMrdHHFydbLbq6uiflSW7pRUYc7jZ4V
+         JCJbMMLq6SQXaSF44FNDtApMoSBCxsMeTzl/KU2oCe71ev6/CiHYxYpBdettrtcK9H
+         iKndRKC3FCLd8gA6bCKjQE49B/+rLttmkRNOpAnY=
+Message-ID: <adabe9ea-1e25-5d4f-88d6-cd232af04693@linux.microsoft.com>
+Date:   Wed, 28 Dec 2022 20:13:39 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9mcttTVEGBOS8687"
-Content-Disposition: inline
-In-Reply-To: <20221227100450.2257-2-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/2] drm/i915: convert i915_active.count from atomic_t
+ to refcount_t
+Content-Language: en-US
+To:     Deepak R Varma <drv@mailo.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>
+References: <cover.1671952191.git.drv@mailo.com>
+ <fe31efd659622839c7f7bc2890d9e3411bbfa7cd.1671952191.git.drv@mailo.com>
+From:   Praveen Kumar <kumarpraveen@linux.microsoft.com>
+In-Reply-To: <fe31efd659622839c7f7bc2890d9e3411bbfa7cd.1671952191.git.drv@mailo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-20.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---9mcttTVEGBOS8687
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey Ivan,
-
-Given the time of year, I don't have my proper setup to actually go an
-test this (or the other patches).
-
-On Tue, Dec 27, 2022 at 01:04:48PM +0300, Ivan Bornyakov wrote:
-> As spi-summary doc says:
->  > I/O buffers use the usual Linux rules, and must be DMA-safe.
->  > You'd normally allocate them from the heap or free page pool.
->  > Don't use the stack, or anything that's declared "static".
->=20
-> Replace spi_write() with spi_write_then_read(), which is dma-safe for
-> on-stack buffers. Use allocated buffers for transfers used in
-> spi_sync_transfer().
->=20
-> Although everything works OK with stack-located I/O buffers, better
-> follow the doc to be safe.
->=20
-> Fixes: 5f8d4a900830 ("fpga: microchip-spi: add Microchip MPF FPGA manager=
-")
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-
-The changes look fine though...
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
+On 25-12-2022 13:17, Deepak R Varma wrote:
+> The refcount_* APIs are designed to address known issues with the
+> atomic_t APIs for reference counting. They provide following distinct
+> advantages:
+>    - protect the reference counters from overflow/underflow
+>    - avoid use-after-free errors
+>    - provide improved memory ordering guarantee schemes
+>    - neater and safer.
+> Hence, convert the atomic_t count member variable and associated
+> atomic_*() API calls to equivalent refcount_t type and refcount_*() API
+> calls.
+> 
+> This patch proposal address the following warnings generated by
+> the atomic_as_refcounter.cocci coccinelle script
+> 	atomic_add_unless
+> 
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
 > ---
->  drivers/fpga/microchip-spi.c | 93 ++++++++++++++++++------------------
->  1 file changed, 47 insertions(+), 46 deletions(-)
->=20
-> diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-> index 7436976ea904..e72fedd93a27 100644
-> --- a/drivers/fpga/microchip-spi.c
-> +++ b/drivers/fpga/microchip-spi.c
-> @@ -42,46 +42,55 @@
->  struct mpf_priv {
->  	struct spi_device *spi;
->  	bool program_mode;
-> +	u8 tx __aligned(ARCH_KMALLOC_MINALIGN);
-> +	u8 rx __aligned(ARCH_KMALLOC_MINALIGN);
->  };
-> =20
-> -static int mpf_read_status(struct spi_device *spi)
-> +static int mpf_read_status(struct mpf_priv *priv)
+> Please note:
+>    1. Proposed changes are compile tested only.
+>    2. This patch 1/2 is required to be applied before patch 2/2 due to
+>       interdependency.
+> 
+> Changes in v2:
+>    1. Patch added to the patch series.
+>    2. Handle build issues Reported-by: kernel test robot <lkp@intel.com>
+>       Earlier a standalone patch was sent for the i915 base driver only. The
+>       Kernel Test Robot reported build failure for additional atomic_*() calls
+>       specific to i915 debugging support when enabled. This version now includes
+>       those changes as well.
+> 
+> 
+>  drivers/gpu/drm/i915/i915_active.c       | 28 +++++++++++++-----------
+>  drivers/gpu/drm/i915/i915_active.h       |  6 ++---
+>  drivers/gpu/drm/i915/i915_active_types.h |  4 ++--
+>  3 files changed, 20 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/i915_active.c b/drivers/gpu/drm/i915/i915_active.c
+> index 7412abf166a8..5e58d8b1e947 100644
+> --- a/drivers/gpu/drm/i915/i915_active.c
+> +++ b/drivers/gpu/drm/i915/i915_active.c
+> @@ -92,14 +92,14 @@ static void debug_active_init(struct i915_active *ref)
+>  static void debug_active_activate(struct i915_active *ref)
 >  {
-> -	u8 status =3D 0, status_command =3D MPF_SPI_READ_STATUS;
-> -	struct spi_transfer xfers[2] =3D { 0 };
-> -	int ret;
-> -
->  	/*
->  	 * HW status is returned on MISO in the first byte after CS went
->  	 * active. However, first reading can be inadequate, so we submit
->  	 * two identical SPI transfers and use result of the later one.
->  	 */
-> -	xfers[0].tx_buf =3D &status_command;
-> -	xfers[1].tx_buf =3D &status_command;
-> -	xfers[0].rx_buf =3D &status;
-> -	xfers[1].rx_buf =3D &status;
-> -	xfers[0].len =3D 1;
-> -	xfers[1].len =3D 1;
-> -	xfers[0].cs_change =3D 1;
-> +	struct spi_transfer xfers[2] =3D {
-> +		{
-> +			.tx_buf =3D &priv->tx,
-> +			.rx_buf =3D &priv->rx,
-> +			.len =3D 1,
-> +			.cs_change =3D 1,
-> +		}, {
-> +			.tx_buf =3D &priv->tx,
-> +			.rx_buf =3D &priv->rx,
-> +			.len =3D 1,
-> +		},
-> +	};
-> +	u8 status;
-> +	int ret;
-> +
-> +	priv->tx =3D MPF_SPI_READ_STATUS;
-> +
-> +	ret =3D spi_sync_transfer(priv->spi, xfers, 2);
-> +	if (ret)
-> +		return ret;
-> =20
-> -	ret =3D spi_sync_transfer(spi, xfers, 2);
-> +	status =3D priv->rx;
-> =20
->  	if ((status & MPF_STATUS_SPI_VIOLATION) ||
->  	    (status & MPF_STATUS_SPI_ERROR))
-> -		ret =3D -EIO;
-> +		return -EIO;
-> =20
-> -	return ret ? : status;
-> +	return status;
+>  	lockdep_assert_held(&ref->tree_lock);
+> -	if (!atomic_read(&ref->count)) /* before the first inc */
+> +	if (!refcount_read(&ref->count)) /* before the first inc */
+>  		debug_object_activate(ref, &active_debug_desc);
 >  }
-> =20
->  static enum fpga_mgr_states mpf_ops_state(struct fpga_manager *mgr)
+> 
+>  static void debug_active_deactivate(struct i915_active *ref)
 >  {
->  	struct mpf_priv *priv =3D mgr->priv;
-> -	struct spi_device *spi;
->  	bool program_mode;
->  	int status;
-> =20
-> -	spi =3D priv->spi;
->  	program_mode =3D priv->program_mode;
-> -	status =3D mpf_read_status(spi);
-> +	status =3D mpf_read_status(priv);
-> =20
->  	if (!program_mode && !status)
->  		return FPGA_MGR_STATE_OPERATING;
-> @@ -186,12 +195,12 @@ static int mpf_ops_parse_header(struct fpga_manager=
- *mgr,
+>  	lockdep_assert_held(&ref->tree_lock);
+> -	if (!atomic_read(&ref->count)) /* after the last dec */
+> +	if (!refcount_read(&ref->count)) /* after the last dec */
+>  		debug_object_deactivate(ref, &active_debug_desc);
 >  }
-> =20
->  /* Poll HW status until busy bit is cleared and mask bits are set. */
-> -static int mpf_poll_status(struct spi_device *spi, u8 mask)
-> +static int mpf_poll_status(struct mpf_priv *priv, u8 mask)
+> 
+> @@ -133,7 +133,7 @@ __active_retire(struct i915_active *ref)
+>  	GEM_BUG_ON(i915_active_is_idle(ref));
+> 
+>  	/* return the unused nodes to our slabcache -- flushing the allocator */
+> -	if (!atomic_dec_and_lock_irqsave(&ref->count, &ref->tree_lock, flags))
+> +	if (!refcount_dec_and_lock_irqsave(&ref->count, &ref->tree_lock, &flags))
+>  		return;
+> 
+>  	GEM_BUG_ON(rcu_access_pointer(ref->excl.fence));
+> @@ -179,8 +179,8 @@ active_work(struct work_struct *wrk)
 >  {
->  	int status, retries =3D MPF_STATUS_POLL_RETRIES;
-> =20
->  	while (retries--) {
-> -		status =3D mpf_read_status(spi);
-> +		status =3D mpf_read_status(priv);
->  		if (status < 0)
->  			return status;
-> =20
-> @@ -205,32 +214,32 @@ static int mpf_poll_status(struct spi_device *spi, =
-u8 mask)
->  	return -EBUSY;
->  }
-> =20
-> -static int mpf_spi_write(struct spi_device *spi, const void *buf, size_t=
- buf_size)
-> +static int mpf_spi_write(struct mpf_priv *priv, const void *buf, size_t =
-buf_size)
+>  	struct i915_active *ref = container_of(wrk, typeof(*ref), work);
+> 
+> -	GEM_BUG_ON(!atomic_read(&ref->count));
+> -	if (atomic_add_unless(&ref->count, -1, 1))
+> +	GEM_BUG_ON(!refcount_read(&ref->count));
+> +	if (refcount_dec_not_one(&ref->count))
+
+I'm not sure if this is correct here, I assume we should be adding instead here its decrementing ?
+
+>  		return;
+> 
+>  	__active_retire(ref);
+> @@ -189,8 +189,8 @@ active_work(struct work_struct *wrk)
+>  static void
+>  active_retire(struct i915_active *ref)
 >  {
-> -	int status =3D mpf_poll_status(spi, 0);
-> +	int status =3D mpf_poll_status(priv, 0);
-> =20
->  	if (status < 0)
->  		return status;
-> =20
-> -	return spi_write(spi, buf, buf_size);
-> +	return spi_write_then_read(priv->spi, buf, buf_size, NULL, 0);
->  }
-> =20
-> -static int mpf_spi_write_then_read(struct spi_device *spi,
-> +static int mpf_spi_write_then_read(struct mpf_priv *priv,
->  				   const void *txbuf, size_t txbuf_size,
->  				   void *rxbuf, size_t rxbuf_size)
->  {
->  	const u8 read_command[] =3D { MPF_SPI_READ_DATA };
->  	int ret;
-> =20
-> -	ret =3D mpf_spi_write(spi, txbuf, txbuf_size);
-> +	ret =3D mpf_spi_write(priv, txbuf, txbuf_size);
->  	if (ret)
->  		return ret;
-> =20
-> -	ret =3D mpf_poll_status(spi, MPF_STATUS_READY);
-> +	ret =3D mpf_poll_status(priv, MPF_STATUS_READY);
->  	if (ret < 0)
->  		return ret;
-> =20
-> -	return spi_write_then_read(spi, read_command, sizeof(read_command),
-> +	return spi_write_then_read(priv->spi, read_command, sizeof(read_command=
-),
->  				   rxbuf, rxbuf_size);
->  }
-> =20
-> @@ -242,7 +251,6 @@ static int mpf_ops_write_init(struct fpga_manager *mg=
-r,
->  	const u8 isc_en_command[] =3D { MPF_SPI_ISC_ENABLE };
->  	struct mpf_priv *priv =3D mgr->priv;
->  	struct device *dev =3D &mgr->dev;
-> -	struct spi_device *spi;
->  	u32 isc_ret =3D 0;
->  	int ret;
-> =20
-> @@ -251,9 +259,7 @@ static int mpf_ops_write_init(struct fpga_manager *mg=
-r,
->  		return -EOPNOTSUPP;
+> -	GEM_BUG_ON(!atomic_read(&ref->count));
+> -	if (atomic_add_unless(&ref->count, -1, 1))
+> +	GEM_BUG_ON(!refcount_read(&ref->count));
+> +	if (refcount_dec_not_one(&ref->count))
+>  		return;
+> 
+>  	if (ref->flags & I915_ACTIVE_RETIRE_SLEEPS) {
+> @@ -354,7 +354,7 @@ void __i915_active_init(struct i915_active *ref,
+>  	ref->cache = NULL;
+> 
+>  	init_llist_head(&ref->preallocated_barriers);
+> -	atomic_set(&ref->count, 0);
+> +	refcount_set(&ref->count, 0);
+>  	__mutex_init(&ref->mutex, "i915_active", mkey);
+>  	__i915_active_fence_init(&ref->excl, NULL, excl_retire);
+>  	INIT_WORK(&ref->work, active_work);
+> @@ -445,7 +445,7 @@ int i915_active_add_request(struct i915_active *ref, struct i915_request *rq)
+> 
+>  	if (replace_barrier(ref, active)) {
+>  		RCU_INIT_POINTER(active->fence, NULL);
+> -		atomic_dec(&ref->count);
+> +		refcount_dec(&ref->count);
 >  	}
-> =20
-> -	spi =3D priv->spi;
-> -
-> -	ret =3D mpf_spi_write_then_read(spi, isc_en_command, sizeof(isc_en_comm=
-and),
-> +	ret =3D mpf_spi_write_then_read(priv, isc_en_command, sizeof(isc_en_com=
-mand),
->  				      &isc_ret, sizeof(isc_ret));
->  	if (ret || isc_ret) {
->  		dev_err(dev, "Failed to enable ISC: spi_ret %d, isc_ret %u\n",
-> @@ -261,7 +267,7 @@ static int mpf_ops_write_init(struct fpga_manager *mg=
-r,
->  		return -EFAULT;
->  	}
-> =20
-> -	ret =3D mpf_spi_write(spi, program_mode, sizeof(program_mode));
-> +	ret =3D mpf_spi_write(priv, program_mode, sizeof(program_mode));
->  	if (ret) {
->  		dev_err(dev, "Failed to enter program mode: %d\n", ret);
->  		return ret;
-> @@ -274,11 +280,9 @@ static int mpf_ops_write_init(struct fpga_manager *m=
-gr,
-> =20
->  static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size=
-_t count)
+>  	if (!__i915_active_fence_set(active, fence))
+>  		__i915_active_acquire(ref);
+> @@ -488,14 +488,16 @@ i915_active_set_exclusive(struct i915_active *ref, struct dma_fence *f)
+>  bool i915_active_acquire_if_busy(struct i915_active *ref)
 >  {
-> -	u8 spi_frame_command[] =3D { MPF_SPI_FRAME };
->  	struct spi_transfer xfers[2] =3D { 0 };
->  	struct mpf_priv *priv =3D mgr->priv;
->  	struct device *dev =3D &mgr->dev;
-> -	struct spi_device *spi;
->  	int ret, i;
-> =20
->  	if (count % MPF_SPI_FRAME_SIZE) {
-> @@ -287,18 +291,18 @@ static int mpf_ops_write(struct fpga_manager *mgr, =
-const char *buf, size_t count
->  		return -EINVAL;
->  	}
-> =20
-> -	spi =3D priv->spi;
-> -
-> -	xfers[0].tx_buf =3D spi_frame_command;
-> -	xfers[0].len =3D sizeof(spi_frame_command);
-> +	xfers[0].tx_buf =3D &priv->tx;
-> +	xfers[0].len =3D 1;
-> =20
->  	for (i =3D 0; i < count / MPF_SPI_FRAME_SIZE; i++) {
->  		xfers[1].tx_buf =3D buf + i * MPF_SPI_FRAME_SIZE;
->  		xfers[1].len =3D MPF_SPI_FRAME_SIZE;
-> =20
-> -		ret =3D mpf_poll_status(spi, 0);
-> -		if (ret >=3D 0)
-> -			ret =3D spi_sync_transfer(spi, xfers, ARRAY_SIZE(xfers));
-> +		ret =3D mpf_poll_status(priv, 0);
-> +		if (ret >=3D 0) {
-> +			priv->tx =3D MPF_SPI_FRAME;
-> +			ret =3D spi_sync_transfer(priv->spi, xfers, ARRAY_SIZE(xfers));
-> +		}
-> =20
->  		if (ret) {
->  			dev_err(dev, "Failed to write bitstream frame %d/%zu\n",
-> @@ -317,12 +321,9 @@ static int mpf_ops_write_complete(struct fpga_manage=
-r *mgr,
->  	const u8 release_command[] =3D { MPF_SPI_RELEASE };
->  	struct mpf_priv *priv =3D mgr->priv;
->  	struct device *dev =3D &mgr->dev;
-> -	struct spi_device *spi;
->  	int ret;
-> =20
-> -	spi =3D priv->spi;
-> -
-> -	ret =3D mpf_spi_write(spi, isc_dis_command, sizeof(isc_dis_command));
-> +	ret =3D mpf_spi_write(priv, isc_dis_command, sizeof(isc_dis_command));
->  	if (ret) {
->  		dev_err(dev, "Failed to disable ISC: %d\n", ret);
->  		return ret;
-> @@ -330,7 +331,7 @@ static int mpf_ops_write_complete(struct fpga_manager=
- *mgr,
-> =20
->  	usleep_range(1000, 2000);
-> =20
-> -	ret =3D mpf_spi_write(spi, release_command, sizeof(release_command));
-> +	ret =3D mpf_spi_write(priv, release_command, sizeof(release_command));
->  	if (ret) {
->  		dev_err(dev, "Failed to exit program mode: %d\n", ret);
->  		return ret;
-> --=20
-> 2.38.2
->=20
->=20
+>  	debug_active_assert(ref);
+> -	return atomic_add_unless(&ref->count, 1, 0);
+> +	return refcount_add_not_zero(1, &ref->count);
+>  }
+> 
+>  static void __i915_active_activate(struct i915_active *ref)
+>  {
+>  	spin_lock_irq(&ref->tree_lock); /* __active_retire() */
+> -	if (!atomic_fetch_inc(&ref->count))
+> +	if (!refcount_inc_not_zero(&ref->count)) {
+> +		refcount_inc(&ref->count);
+>  		debug_active_activate(ref);
+> +	}
+>  	spin_unlock_irq(&ref->tree_lock);
+>  }
+> 
+> @@ -757,7 +759,7 @@ int i915_sw_fence_await_active(struct i915_sw_fence *fence,
+>  void i915_active_fini(struct i915_active *ref)
+>  {
+>  	debug_active_fini(ref);
+> -	GEM_BUG_ON(atomic_read(&ref->count));
+> +	GEM_BUG_ON(refcount_read(&ref->count));
+>  	GEM_BUG_ON(work_pending(&ref->work));
+>  	mutex_destroy(&ref->mutex);
+> 
+> @@ -927,7 +929,7 @@ int i915_active_acquire_preallocate_barrier(struct i915_active *ref,
+> 
+>  		first = first->next;
+> 
+> -		atomic_dec(&ref->count);
+> +		refcount_dec(&ref->count);
+>  		intel_engine_pm_put(barrier_to_engine(node));
+> 
+>  		kmem_cache_free(slab_cache, node);
+> diff --git a/drivers/gpu/drm/i915/i915_active.h b/drivers/gpu/drm/i915/i915_active.h
+> index 7eb44132183a..116c7c28466a 100644
+> --- a/drivers/gpu/drm/i915/i915_active.h
+> +++ b/drivers/gpu/drm/i915/i915_active.h
+> @@ -193,14 +193,14 @@ void i915_active_release(struct i915_active *ref);
+> 
+>  static inline void __i915_active_acquire(struct i915_active *ref)
+>  {
+> -	GEM_BUG_ON(!atomic_read(&ref->count));
+> -	atomic_inc(&ref->count);
+> +	GEM_BUG_ON(!refcount_read(&ref->count));
+> +	refcount_inc(&ref->count);
+>  }
+> 
+>  static inline bool
+>  i915_active_is_idle(const struct i915_active *ref)
+>  {
+> -	return !atomic_read(&ref->count);
+> +	return !refcount_read(&ref->count);
+>  }
+> 
+>  void i915_active_fini(struct i915_active *ref);
+> diff --git a/drivers/gpu/drm/i915/i915_active_types.h b/drivers/gpu/drm/i915/i915_active_types.h
+> index b02a78ac87db..152a3a25d9f7 100644
+> --- a/drivers/gpu/drm/i915/i915_active_types.h
+> +++ b/drivers/gpu/drm/i915/i915_active_types.h
+> @@ -7,7 +7,7 @@
+>  #ifndef _I915_ACTIVE_TYPES_H_
+>  #define _I915_ACTIVE_TYPES_H_
+> 
+> -#include <linux/atomic.h>
+> +#include <linux/refcount.h>
+>  #include <linux/dma-fence.h>
+>  #include <linux/llist.h>
+>  #include <linux/mutex.h>
+> @@ -23,7 +23,7 @@ struct i915_active_fence {
+>  struct active_node;
+> 
+>  struct i915_active {
+> -	atomic_t count;
+> +	refcount_t count;
+>  	struct mutex mutex;
+> 
+>  	spinlock_t tree_lock;
+> --
+> 2.34.1
+> 
+> 
 
---9mcttTVEGBOS8687
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY6xVyAAKCRB4tDGHoIJi
-0pvjAQDtilP3wgIaMeXEjpYCl/sJwcplBAj3FE0l9IDfMxyyAQD/QDLPvzwTXNo1
-RD/jIAf22Jfq5ttLAdhH694u0O+d0Aw=
-=5rWK
------END PGP SIGNATURE-----
-
---9mcttTVEGBOS8687--
+~Praveen.
