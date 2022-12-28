@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59E9657402
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4FA657406
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 09:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiL1IlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 03:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
+        id S232225AbiL1IlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 03:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbiL1Ikz (ORCPT
+        with ESMTP id S232659AbiL1IlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 03:40:55 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A361C6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 00:40:42 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id e21so733533pfl.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 00:40:42 -0800 (PST)
+        Wed, 28 Dec 2022 03:41:00 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DF8268
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 00:40:50 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 7so10203577pga.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 00:40:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=upvEDusjxGXHtrTFd/h6/9Atzs+zFMDkhyOWz4mxZUs=;
-        b=o/avvO6tpKj3lCeujTVVFi9HofNLe6IPJYloXe22hk7xEspCZZOvD7JnI9j7iVreB3
-         gskaHrfVZMrA+7RqU3wMFXT6eWLGhDGNJftq3TgYXDwJ7tgxoCgMJXfmfQ3aPk6P0R/f
-         XC9KFNNbobE5vsQkFJAmb/StNTCgmqqJhG6vmHPoca6nYMpYpMmQKJN8T+d6Z0e5PQ6y
-         WbkSjo2ECT/MDIxsR0cWfTxTHq4ZdQouFykwlprQnRzAsfQi55Qrm7W3shciI2jjZIMl
-         tWUnbmcweASYjXdMx9crst7vplr3AHawmPCsLpXdRMv/wYCetbFwAOBgv7Dwzx7vtTaC
-         pjsQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=neDlpAxOqPxKQsX09z7HIhUpqVcLiuVepxClOJ3AnCk=;
+        b=TO9dKYGst245T1FMDa9SJ7Cxs4BbwS8yCPhWehj2oL1iNJWyO2XcJefzEiXWM6sR+z
+         1Fa3k6LqqS9mh5h5Iisk7cYKSGWAQsUAlL6CtNJou0B5lAhT9FP30D2aMfRfXixnha18
+         u3gSjZtQtaZWdpEzyasM0yOETDO8dugLpvvf9fLCZKeLO/kZnCTg8qvsuI1f/Ym7QKRj
+         HV5VrmX/gP8FkhRCkIsLu3QZTwJoVBOpTzA5nBDPrt8tT2THbC2MVh15GpVEICGLEtWN
+         enEq6qEW39ZV1z0Y3QUdwp02JupQ22ZktOsyg+AfteXCuQP0QaNBDjHeDBz0w5ZD9cT0
+         EIvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=upvEDusjxGXHtrTFd/h6/9Atzs+zFMDkhyOWz4mxZUs=;
-        b=mpxoLhSmua+1bN47dII45I2u5QM9eVGada7MVBHFlzMaI5Di7jVGwOma0RlTlWNqLV
-         Y5OunO5P3MCu09eOVyS2+pM0Q3O6kU4xGdvkLUxHtX/GcSM0li8Xi9NCOnCmsHpjR1r2
-         pFVHU7F6yNtCwr1CIYTdqrtPrqI0Z+Dr9fd7ldT1BSR3cRk1bmiK6zFgOOWlgIdH7FWC
-         EtFv53uftSzuVEPLlIeMmxy/+/+/i3cT51u22Yqj4WCa3QPDzhzeH3PhJ4MlWOdF7dt2
-         1Ro1h71X3wnwzqUPbfmeiZ/3WfUc6N/DA0TwBSORUNCcd1H2GPoqNtchJepeyEorzW+V
-         T8Qw==
-X-Gm-Message-State: AFqh2kqkDPOhwNww5GlZ851tN/+wXx4U6+RNmPlCDmXWaLWY889Unarl
-        +TNunBzSh/asYCIOmMa/QG9G
-X-Google-Smtp-Source: AMrXdXsjo87+COX2AueXW+gEKyg8L16tQg46b7p6iFL187j5glnZ1DmSDNFhl3CXgcCDz+oyuXU4FA==
-X-Received: by 2002:a62:5241:0:b0:56a:d3ff:f4b2 with SMTP id g62-20020a625241000000b0056ad3fff4b2mr25495156pfb.10.1672216842113;
-        Wed, 28 Dec 2022 00:40:42 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=neDlpAxOqPxKQsX09z7HIhUpqVcLiuVepxClOJ3AnCk=;
+        b=Fq3i6lATOurOKK9Emq1X5ks5KOXAR9Nm481O83C8Sd2+opcn4ah43zhXB5W1aC1Fa2
+         VRYfY+1fLD2S4ia8kVOe1HFFZ9i5HjJ5+1gYSJa6oV2bovy1IoLl3mJ2hgbiSIOQuVWG
+         9e8TP0qABss3QCLQAjna1yaLtKPrMX+VXlkUtAo3JTVI3P5c0SboksIXC7U+HPE8USvO
+         2jK4qOXCOveYjWYCieObI8/3GIpCAfq6tIILJa7Y8gvRTGPscaKWaGG5Dy9zbQy01bvt
+         f0QvXU60STgBZTe2PgqGIx/KJceKGQL7XjmDF3Z+I14F4TNJIXUINEs1aByV7E9V0Obj
+         /UeQ==
+X-Gm-Message-State: AFqh2kpNv6pIuBsMkW4l038jGIQq0NIPYxtn/hgvrUuUovo9pN5d9EwQ
+        u7f8wUyL2zC7/DLSPrXtBS1B
+X-Google-Smtp-Source: AMrXdXuvED813YpAwBQ4YACRPHJyw43PMQJzcUevAevLVbG0LtLKRvEHNJeKmpG42psm7SVaqnFw1g==
+X-Received: by 2002:a05:6a00:1da2:b0:57d:8b30:db0a with SMTP id z34-20020a056a001da200b0057d8b30db0amr27459818pfw.9.1672216850324;
+        Wed, 28 Dec 2022 00:40:50 -0800 (PST)
 Received: from localhost.localdomain ([117.217.178.73])
-        by smtp.gmail.com with ESMTPSA id d188-20020a6236c5000000b0057a9b146592sm9786286pfa.186.2022.12.28.00.40.35
+        by smtp.gmail.com with ESMTPSA id d188-20020a6236c5000000b0057a9b146592sm9786286pfa.186.2022.12.28.00.40.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 00:40:41 -0800 (PST)
+        Wed, 28 Dec 2022 00:40:49 -0800 (PST)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
@@ -58,117 +59,52 @@ Cc:     quic_saipraka@quicinc.com, konrad.dybcio@linaro.org,
         james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
         linux-edac@vger.kernel.org, quic_ppareek@quicinc.com,
         luca.weiss@fairphone.com, ahalaney@redhat.com, steev@kali.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v5 00/17] Qcom: LLCC/EDAC: Fix base address used for LLCC banks
-Date:   Wed, 28 Dec 2022 14:10:11 +0530
-Message-Id: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v5 01/17] EDAC/device: Make use of poll_msec value in edac_device_ctl_info struct
+Date:   Wed, 28 Dec 2022 14:10:12 +0530
+Message-Id: <20221228084028.46528-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
+References: <20221228084028.46528-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
-accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
-This offset only works for some SoCs like SDM845 for which driver support
-was initially added.
-    
-But the later SoCs use different register stride that vary between the
-banks with holes in-between. So it is not possible to use a single register
-stride for accessing the CSRs of each bank. By doing so could result in a
-crash with the current drivers. So far this crash is not reported since
-EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
-driver extensively by triggering the EDAC IRQ (that's where each bank
-CSRs are accessed).
+The EDAC drivers may optionally pass the poll_msec value. Use that value if
+available, else fall back to 1000ms.
 
-For fixing this issue, let's obtain the base address of each LLCC bank from
-devicetree and get rid of the fixed stride.
+Cc: <stable@vger.kernel.org> # 4.9
+Fixes: e27e3dac6517 ("drivers/edac: add edac_device class")
+Tested-by: Steev Klimaszewski <steev@kali.org> # Thinkpad X13s
+Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
+Reported-by: Luca Weiss <luca.weiss@fairphone.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/edac/edac_device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This series has been tested on SM8250, SM8450, SM6350, SC8280XP, SA8540P,
-and SDM845.
-
-Merging strategy
-----------------
-
-Patches 1/17, 2/17 and 3/17 can be merged independently to EDAC tree. Rest of
-the patches should be merged to qcom tree due to LLCC dependency.
-
-Thanks,
-Mani
-
-Changes in v5:
-
-* Reduced the size of llcc0 to 0x45000 on SDM845 due to overlapping with BWMON
-* Added a patch to disable creation of EDAC platform device on SDM845
-* Rebase on top of v6.2-rc1
-* Moved the EDAC specific patches to the start so that they can be applied
-  independently of LLCC patches
-
-Changes in v4:
-
-* Added a patch that fixes the use-after-free bug in qcom_edac driver
-
-Changes in v3:
-
-* Brought back reg-names property for compatibility (Krzysztof)
-* Removed Fixes tag and stable list as backporting the drivers/binding/dts
-  patches alone would break (Krzysztof)
-* Fixed the uninitialized variable issue (Kbot)
-* Added a patch to make use of driver supplied polling interval (Luca)
-* Added a patch for module autoloading (Andrew)
-* Didn't collect Review tags from Sai as the dts patches were changed.
-
-Changes in v2:
-
-* Removed reg-names property and used index of reg property to parse LLCC
-  bank base address (Bjorn)
-* Collected Ack from Sai for binding
-* Added a new patch for polling mode (Luca)
-* Renamed subject of patches targeting SC7180 and SM6350
-
-Manivannan Sadhasivam (17):
-  EDAC/device: Make use of poll_msec value in edac_device_ctl_info
-    struct
-  EDAC/qcom: Add platform_device_id table for module autoloading
-  EDAC/qcom: Do not pass llcc_driv_data as edac_device_ctl_info's
-    pvt_info
-  dt-bindings: arm: msm: Update the maintainers for LLCC
-  dt-bindings: arm: msm: Fix register regions used for LLCC banks
-  arm64: dts: qcom: sdm845: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sc7180: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sc7280: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sc8280xp: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm8150: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm8250: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm8350: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm8450: Fix the base addresses of LLCC banks
-  arm64: dts: qcom: sm6350: Fix the base addresses of LLCC banks
-  qcom: llcc/edac: Fix the base address used for accessing LLCC banks
-  qcom: llcc/edac: Support polling mode for ECC handling
-  soc: qcom: llcc: Do not create EDAC platform device on SDM845
-
- .../bindings/arm/msm/qcom,llcc.yaml           | 128 ++++++++++++++++--
- arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
- arch/arm64/boot/dts/qcom/sc7280.dtsi          |   5 +-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  10 +-
- arch/arm64/boot/dts/qcom/sdm845.dtsi          |   7 +-
- arch/arm64/boot/dts/qcom/sm6350.dtsi          |   2 +-
- arch/arm64/boot/dts/qcom/sm8150.dtsi          |   7 +-
- arch/arm64/boot/dts/qcom/sm8250.dtsi          |   7 +-
- arch/arm64/boot/dts/qcom/sm8350.dtsi          |   7 +-
- arch/arm64/boot/dts/qcom/sm8450.dtsi          |   7 +-
- drivers/edac/edac_device.c                    |   2 +-
- drivers/edac/qcom_edac.c                      |  63 +++++----
- drivers/soc/qcom/llcc-qcom.c                  |  80 ++++++-----
- include/linux/soc/qcom/llcc-qcom.h            |   6 +-
- 14 files changed, 244 insertions(+), 89 deletions(-)
-
+diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+index 19522c568aa5..19c3ab2a434e 100644
+--- a/drivers/edac/edac_device.c
++++ b/drivers/edac/edac_device.c
+@@ -447,7 +447,7 @@ int edac_device_add_device(struct edac_device_ctl_info *edac_dev)
+ 		 * enable workq processing on this instance,
+ 		 * default = 1000 msec
+ 		 */
+-		edac_device_workq_setup(edac_dev, 1000);
++		edac_device_workq_setup(edac_dev, edac_dev->poll_msec ? edac_dev->poll_msec : 1000);
+ 	} else {
+ 		edac_dev->op_state = OP_RUNNING_INTERRUPT;
+ 	}
 -- 
 2.25.1
 
