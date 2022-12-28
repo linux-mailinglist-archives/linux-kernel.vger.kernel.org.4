@@ -2,137 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE5C657775
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 15:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D6A65777F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 15:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbiL1OEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 09:04:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
+        id S232081AbiL1OHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 09:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiL1OEL (ORCPT
+        with ESMTP id S230398AbiL1OHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 09:04:11 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2E11099;
-        Wed, 28 Dec 2022 06:04:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672236249; x=1703772249;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Lg126dF0ZRB51ZzT/H9t/6uTcxQgkla19QDrEd0Bge0=;
-  b=c2iP/ZA0uWkDdxNpHAOp0YCPyjxlv8h7aQGjKTZMRR6SF9YaM3bfiYBo
-   znnuls8vYhO1gaLI8oWuZ0LS1uu7CDIFWchzA0Bm52jf8k1gXX5ukVRGS
-   yQjFCK/Uyg1WSsPnfwkU1I6ZkA2N0fP+v7wT7LJci5FMbxPvNgbNBQ3Sb
-   trJLLyHX6b08mMxFr3/IEyVreRUFb8JhUOZscI71WMkXsnHO3DCKYLE6h
-   MhiDvWFxat86ZuPres05zdP8WimKmqBfpkojgFFT29JBeuJ4L8HEUyf0f
-   RzMhpsKGuVkrBKvQjXmNvZlxeTh770iy7IgB4+Iowwg9wednRPRO6uk59
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="308631762"
-X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
-   d="scan'208";a="308631762"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 06:03:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="655320885"
-X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
-   d="scan'208";a="655320885"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Dec 2022 06:03:13 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pAX1S-000cPm-1R;
-        Wed, 28 Dec 2022 16:03:10 +0200
-Date:   Wed, 28 Dec 2022 16:03:10 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Jami Kettunen <jami.kettunen@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Helge Deller <deller@gmx.de>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Kim Phillips <kim.phillips@amd.com>, linux-doc@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 0/3] Add generic framebuffer support to EFI earlycon
- driver
-Message-ID: <Y6xMnuMqpThmFn1q@smile.fi.intel.com>
-References: <20221221105402.6598-1-markuss.broks@gmail.com>
- <CAMj1kXGUC7dsSwVEUsAMeAoqDYtbqrM7SDOJTXbPfi-LrcSk9g@mail.gmail.com>
+        Wed, 28 Dec 2022 09:07:24 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567FF10B56
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 06:07:22 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id B5CF132002FB;
+        Wed, 28 Dec 2022 09:07:18 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 28 Dec 2022 09:07:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        tom-fitzhenry.me.uk; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1672236438; x=1672322838; bh=id
+        LicMBZIzQfY5/e+pSbLh+Z27RObyqK85/CknT0pzE=; b=C0yaNOSba6OryyAA4O
+        5/URcS2zNDNLvB4uAIJPUvRTMl20JretnWi1iPwQEGLYscDHfNE6L4mhG83+lSDv
+        HdfCA5gqJc62QrUp8yyxg+FM62I5fSLei0lfGQ+tbEISAmzGbpC54PclUQExI1YT
+        SooOM/4CcVHnMEKoQxl4sS+S0xOAnJ6YVfLljBqlXExhsciiFL6ZkLbR1e6hwULJ
+        MYE9t5Vhdb3KAcrMi0SrugaN9duFvmuEoCNsv+6tiG28E7LKy8VWOmDdgkrN0dgY
+        /Q/2Qi6ghgPSzzOHU9AqnhJkF1lCyL2bn+RGzjclgO7Gg8GxiZIMxQ44APTAG043
+        m/Pw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1672236438; x=1672322838; bh=idLicMBZIzQfY5/e+pSbLh+Z27RObyqK85/
+        CknT0pzE=; b=CUppFfXDzG9V4lwanTMi+MVJ4HpWMc4+5Ir+5hfT2MtdPNCAzFM
+        byaWOGWubnIqOzX3kNWpgpFkOPUisXrCp8mg9y4yl0xWnukvF9NtZrxgNo2y/Ze6
+        i0//XIT+FTiouZAjHXkw4UjuiJ5yCnVt/FaEtwfDfIZaYn6bZRi0KFbqWSrlvsWv
+        Pz8cYj1B9A82VlGC13LvjGQP6BI8bpy5OUHZQJR2g5gvjji+dsQvAxc97jlj77RO
+        /njTjqLqKNhinOdSY6UPNc14T+o3I64WcPe+kRvoTZTeupp9Tpgzuc4sPn8FM3Pg
+        ade8ErCrxni2WDdjb3DeSYDJdEEVo9lcIgw==
+X-ME-Sender: <xms:lU2sY-NT93-YZ0z5aIQUAfPuB3-25OQVYLH1DpDmyPIXGV1ACZ25cA>
+    <xme:lU2sY8_F5iiMU77r_IryU9Ck-ZKQTf7Ue9DJ5_NI6eqfiN3a_75vu__9g6oFOVv-6
+    3gMEBOfY5-pB2TJtA>
+X-ME-Received: <xmr:lU2sY1SLLpT-B3wdaR8_DB5K1zukC0dPY3-fUMFRd-FoZpQ4dU2dzEvx3ZaN17Omrg3Mh1mursiGg5iLd3PiIbEoTf0Sf6UCwg0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedriedvgdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvohhmucfhihht
+    iihhvghnrhihuceothhomhesthhomhdqfhhithiihhgvnhhrhidrmhgvrdhukheqnecugg
+    ftrfgrthhtvghrnhepfeeivdegffeftefhkeeugfdvudetfedtieejuddugfejueektddv
+    vdefueetgeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepthhomhesthhomhdqfhhithiihhgvnhhrhidrmhgvrdhukh
+X-ME-Proxy: <xmx:lU2sY-s2UndtnrJseT2rVHgqRJqSi7D6UCZBo9PPy5x0n5fuPCv97w>
+    <xmx:lU2sY2dIQFI90H18YLRbNCQ0_EbJ5Qp6BQ-bIjFGHux-6UUA9MN02Q>
+    <xmx:lU2sYy36RVhA2n-_RcLR5PLydeuCQtWqHYNjeQKLld0b75T7QTHQQA>
+    <xmx:lk2sY3XC9WGfaSycXF17PY2cwIDsjYfp9e_ymz6spa1nd92QEAXcmg>
+Feedback-ID: iefc945ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 28 Dec 2022 09:07:14 -0500 (EST)
+From:   Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+To:     Lee Jones <lee@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Ondrej Jirman <megi@xff.cz>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Martijn Braam <martijn@brixit.nl>,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Subject: [PATCH] mfd: rk808: re-add rk808-clkout to RK818
+Date:   Thu, 29 Dec 2022 01:07:08 +1100
+Message-Id: <20221228140708.26431-1-tom@tom-fitzhenry.me.uk>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGUC7dsSwVEUsAMeAoqDYtbqrM7SDOJTXbPfi-LrcSk9g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 03:42:33PM +0100, Ard Biesheuvel wrote:
-> (cc Andy)
+Fixes RK818 (e.g. on Pinephone Pro) to register its clock, without which
+dependent devices (e.g. wifi/BT, via sdio-wifi-pwrseq) fail to probe.
 
-I believe there are two reasons I'm Cc'ed now:
-- the Cc was forgotten. because I remember reviewing some parts
-  of this contribution
-- this conflicts (to some extent) with my patch that speeds up
-  the scrolling
+This line was removed in commit 3633daacea2e
+("mfd: rk808: Permit having multiple PMIC instances"), but only from RK818.
 
-For the first it's obvious what to do, I think Markuss can include me
-in his v4.
+Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+---
+ drivers/mfd/rk808.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-For the second I don't see the functional clash. The scrolling in this
-series is not anyhow optimized. I think my patch should go first as
-- it is less intrusive
-- it has been tested, or can be tested easily
+diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk808.c
+index f44fc3f080a8..0f22ef61e817 100644
+--- a/drivers/mfd/rk808.c
++++ b/drivers/mfd/rk808.c
+@@ -189,6 +189,7 @@ static const struct mfd_cell rk817s[] = {
+ };
+ 
+ static const struct mfd_cell rk818s[] = {
++	{ .name = "rk808-clkout", .id = PLATFORM_DEVID_NONE, },
+ 	{ .name = "rk808-regulator", .id = PLATFORM_DEVID_NONE, },
+ 	{
+ 		.name = "rk808-rtc",
 
-Tell me if I'm missing something here.
-
-> On Wed, 21 Dec 2022 at 11:54, Markuss Broks <markuss.broks@gmail.com> wrote:
-> >
-> > Make the EFI earlycon driver be suitable for any linear framebuffers.
-> > This should be helpful for early porting of boards with no other means of
-> > output, like smartphones/tablets. There seems to be an issue with early_ioremap
-> > function on ARM32, but I am unable to find the exact cause. It appears the mappings
-> > returned by it are somehow incorrect, thus the driver is disabled on ARM.
-> 
-> The reason that this driver is disabled on ARM is because the struct
-> screen_info is not populated early enough, as it is retrieved from a
-> UEFI configuration table.
-> 
-> early_ioremap() works fine on ARM as long as they mapping is torn down
-> before paging_init()
-> 
-> > EFI early
-> > console was disabled on IA64 previously because of missing early_memremap_prot,
-> > and this is inherited to this driver.
-> >
-> > This patch also changes
-> 
-> "This patch also changes ..." is usually a strong hint to self that
-> the patches need to be split up.
-> 
-> > behavior on EFI systems, by selecting the mapping type
-> > based on if the framebuffer region intersects with system RAM. If it does, it's
-> > common sense that it should be in RAM as a whole, and so the system RAM mapping is
-> > used. It was tested to be working on my PC (Intel Z490 platform), as well as several
-> > ARM64 boards (Samsung Galaxy S9 (Exynos), iPad Air 2, Xiaomi Mi Pad 4, ...).
-
+base-commit: c76083fac3bae1a87ae3d005b5cb1cbc761e31d5
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.38.1
 
