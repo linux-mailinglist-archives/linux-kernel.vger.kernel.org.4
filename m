@@ -2,97 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2F5657593
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2362A657596
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 12:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232883AbiL1LDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 06:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
+        id S232653AbiL1LEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 06:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbiL1LDC (ORCPT
+        with ESMTP id S232847AbiL1LDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 06:03:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8AEFCC9;
-        Wed, 28 Dec 2022 03:03:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9ADAFB8120C;
-        Wed, 28 Dec 2022 11:02:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B98D5C433EF;
-        Wed, 28 Dec 2022 11:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672225378;
-        bh=Jbc8fHFUzvmzYj/mYnldsorEIWVL9g9+hlCte94smN4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A0IS6MWadTuC2MA6rSteotPG1AULwI6VcUsBisG+qQTyV6/rIYIX02b9alcQnXZLW
-         Je1qhgxeWinPGk3b558tpXDZr8BjSGDFSfHEFnvfH2/q3PmgW8Z+s72woJ3X8m3zTa
-         14Mb6vII8Sp67bCOoNBxFx0v5lzCcKqKGxfuawkx6T832KC3R8SiS+Nu/RJYSAaGtp
-         Z+cZR/OI25ecfp27cLAu3FfwazbECMBI2TZN/S0GzRNXDw9VQVZf1MAHr36ssWJGNR
-         RMCIKVT0drtc5Zg579GLT7ct6W26nRmUz3rm0oRUnWrp7cZ6PKyJyQ5y/UY4W54tLJ
-         yHmKvGI+jlYzg==
-Date:   Wed, 28 Dec 2022 16:32:54 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     =?iso-8859-1?Q?P=E9ter?= Ujfalusi <peter.ujfalusi@gmail.com>
-Cc:     Jayesh Choudhary <j-choudhary@ti.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: ti: k3-udma: drop loglevel for non-fatal
- probe deferral log
-Message-ID: <Y6wiXlZh1MUL2WrF@matsya>
-References: <20221128101334.512816-1-j-choudhary@ti.com>
- <f954e71b-043c-43bc-a692-530497de2d0b@gmail.com>
+        Wed, 28 Dec 2022 06:03:45 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6153A137;
+        Wed, 28 Dec 2022 03:03:42 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pAUDc-00BYvN-Ek; Wed, 28 Dec 2022 19:03:33 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 28 Dec 2022 19:03:32 +0800
+Date:   Wed, 28 Dec 2022 19:03:32 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
+        "David S. Miller" <davem@davemloft.net>,
+        kernel test robot <lkp@intel.com>
+Subject: [v2 PATCH] crypto: caam - Avoid GCC memset bug warning
+Message-ID: <Y6wihNIoOT4pYB5+@gondor.apana.org.au>
+References: <20221222162513.4021928-1-u.kleine-koenig@pengutronix.de>
+ <Y6VK4IJkHiawAbJz@gondor.apana.org.au>
+ <20221223174719.4n6pmwio4zycj2qm@pengutronix.de>
+ <Y6wCbyttJ+WVzmZX@gondor.apana.org.au>
+ <20221228093917.zhkjpzc2ok5dc4ga@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f954e71b-043c-43bc-a692-530497de2d0b@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221228093917.zhkjpzc2ok5dc4ga@pengutronix.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-11-22, 18:28, Péter Ujfalusi wrote:
+On Wed, Dec 28, 2022 at 10:39:17AM +0100, Uwe Kleine-König wrote:
+>
+> Huh, broken encoding in the mail. I'd appreciate someone to doublecheck
+> it's fine in the final commit.
 > 
-> 
-> On 28/11/2022 12:13, Jayesh Choudhary wrote:
-> > Change the log level from dev_err() to dev_dbg() for non-fatal probe
-> > deferral log for getting MSI domain.
-> > This makes the kernel log clean and we do not get recurring logs
-> > stating: "Failed to get MSI domain".
-> 
-> Or not print at all?
+> Tested-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-that would be better one :-)
+Sorry.  Let me try again:
 
-> 
-> Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-> 
-> > 
-> > Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> > ---
-> >   drivers/dma/ti/k3-udma.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> > index ce8b80bb34d7..e540166cf4c7 100644
-> > --- a/drivers/dma/ti/k3-udma.c
-> > +++ b/drivers/dma/ti/k3-udma.c
-> > @@ -5344,7 +5344,7 @@ static int udma_probe(struct platform_device *pdev)
-> >   	dev->msi.domain = of_msi_get_domain(dev, dev->of_node,
-> >   					    DOMAIN_BUS_TI_SCI_INTA_MSI);
-> >   	if (!dev->msi.domain) {
-> > -		dev_err(dev, "Failed to get MSI domain\n");
-> > +		dev_dbg(dev, "Failed to get MSI domain\n");
-> >   		return -EPROBE_DEFER;
-> >   	}
-> 
-> -- 
-> Péter
+---8<---
+Certain versions of gcc don't like the memcpy with a NULL dst
+(which only happens with a zero length).  This only happens
+when debugging is enabled so add an if clause to work around
+these warnings.
 
+A similar warning used to be generated by sparse but that was
+fixed years ago.
+
+Link: https://lore.kernel.org/lkml/202210290446.qBayTfzl-lkp@intel.com
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Kees Cook <keescook@chromium.org>
+Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Tested-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/drivers/crypto/caam/desc_constr.h b/drivers/crypto/caam/desc_constr.h
+index 62ce6421bb3f..824c94d44f94 100644
+--- a/drivers/crypto/caam/desc_constr.h
++++ b/drivers/crypto/caam/desc_constr.h
+@@ -163,7 +163,8 @@ static inline void append_data(u32 * const desc, const void *data, int len)
+ {
+ 	u32 *offset = desc_end(desc);
+ 
+-	if (len) /* avoid sparse warning: memcpy with byte count of 0 */
++	/* Avoid gcc warning: memcpy with data == NULL */
++	if (!IS_ENABLED(CONFIG_CRYPTO_DEV_FSL_CAAM_DEBUG) || data)
+ 		memcpy(offset, data, len);
+ 
+ 	(*desc) = cpu_to_caam32(caam32_to_cpu(*desc) +
 -- 
-~Vinod
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
