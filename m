@@ -2,128 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E511658716
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD041658719
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 22:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiL1VdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 16:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
+        id S231577AbiL1Vek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 16:34:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiL1VdG (ORCPT
+        with ESMTP id S229835AbiL1Vei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 16:33:06 -0500
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C49140E4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 13:33:02 -0800 (PST)
-Received: by mail-qv1-xf49.google.com with SMTP id qf9-20020a0562144b8900b004c71efc3528so9121397qvb.22
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 13:33:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IL2YbOoN7yPmIShOQbEFF8vOUsSkAn/M3lJ9txKjS40=;
-        b=DQd928Kdr25J4ElaX6WZIg0y5aPMxnpaZIJg7IPsyFdp7Z3sU095SY0P4pr93F+joX
-         xUOk7tHxITprNKxjOzKUe37tbXK/nCU27n9rSpuQq1RpZsLqxdkYR8J3rkdvDie+cd+y
-         ICbF0Bb4zALDvouCsj8CQka5kHUqA+uGamn/b8vdYyT2UPKCSqXq3xcLHVYsCFJ49nfE
-         DEiCH87vUImae/stFU5wBLHDK0H2wgLqT9wzF1M2QF/ObcdX/Z82QE3LEsX8T45STvmL
-         D1V14FdeAMzvVu4ud311bpNBF3CP3ub9xaQlueCFvMG89KPT/0ILIL398AEZfuEQs4Zg
-         I1rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IL2YbOoN7yPmIShOQbEFF8vOUsSkAn/M3lJ9txKjS40=;
-        b=0Hoq/GbikiqbwWVPVsQeGUu2PBHpSPhJRumghzGoukGQDfr4srcHLybqDxX+Znt5fN
-         55+4RmDs1RimgjunkJm5kMXF5cc0eutV9gSAhXaJZiqKHWOL+nBG9qAgmYTWujrb6nGA
-         z6bc5826E/4ob8SQ7rNNTxtJZx3xJJsoNhogWDLT15eFWMfNuF3hAh5Vqfajm4M5h9ao
-         jb4ZA/pCfeCvEm4H/gvoOm2QyTeUwxwRY8KkSrYZ3abwrliBWj9aoRHxrs7R/sKLS0nd
-         6XPxOqhuV5fbLcv1DZrm18lIRqVfSuTjMOB8sz+03jXoh6oB9U0DA99io+z1CFiLXBtv
-         8smA==
-X-Gm-Message-State: AFqh2kqvkKCmfRHv0JPooUTzcJbwLIkgSE8kW4dN8zIMTjwdC1CWFGB0
-        0LhMfVlrtodeP8Rhf6wCsDjFIeMBKENJEw==
-X-Google-Smtp-Source: AMrXdXuT3YZ7pyxLMjotm+dwHDwO4EFMSgwCmbIC0SCzzCpxPS24vC4Udc+/ecWzG0atJluAdQBMxnC4sffFuA==
-X-Received: from shacharr-cloud.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:4338])
- (user=shacharr job=sendgmr) by 2002:a0c:e991:0:b0:530:eae2:9240 with SMTP id
- z17-20020a0ce991000000b00530eae29240mr750777qvn.106.1672263181304; Wed, 28
- Dec 2022 13:33:01 -0800 (PST)
-Date:   Wed, 28 Dec 2022 21:32:12 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20221228213212.628636-1-shacharr@google.com>
-Subject: [PATCH] Convert backwards goto into a while loop
-From:   Shachar Raindel <shacharr@google.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shachar Raindel <shacharr@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 28 Dec 2022 16:34:38 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A07F140C8;
+        Wed, 28 Dec 2022 13:34:37 -0800 (PST)
+Received: from g550jk.localnet (2a02-8388-6582-fe80-0000-0000-0000-0005.cable.dynamic.v6.surfer.at [IPv6:2a02:8388:6582:fe80::5])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 964ABCB428;
+        Wed, 28 Dec 2022 21:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1672263276; bh=P7Zg/b7zNWRtK1YhRoeKSV0ZncuTX3zqOfvkP8ZocvM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=jlfuRHrKhhHdomTKJzvJoOzwZIG6RMbL6HUGhCGxDsDDdlR5wRQrfYCFM9Z+YskjO
+         ByxnoQytPVdCSl/1CrWpsMa7sy4qNwBJgmTImQ4bKW4PTttgH9IWkFCIRgsBSoQMpx
+         SiPr/BsvcbwvfgVxYsflVk2rZ8WRCdtkJFzuSsNo=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Will Deacon <will@kernel.org>
+Cc:     iommu@lists.linux.dev, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] dt-bindings: iommu: qcom: Add Qualcomm MSM8953 compatible
+Date:   Wed, 28 Dec 2022 22:34:35 +0100
+Message-ID: <4793103.31r3eYUQgx@g550jk>
+In-Reply-To: <20221114134458.GD30263@willie-the-truck>
+References: <20221105142016.93406-1-luca@z3ntu.xyz>
+ <20221114134458.GD30263@willie-the-truck>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FROM_SUSPICIOUS_NTLD,SPF_HELO_NONE,SPF_PASS,
+        T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function vaddr_get_pfns used a goto retry structure to implement
-retrying.  This is discouraged by the coding style guide (which is
-only recommending goto for handling function exits). Convert the code
-to a while loop, making it explicit that the follow block only runs
-when the pin attempt failed.
+On Montag, 14. November 2022 14:44:59 CET Will Deacon wrote:
+> On Sat, Nov 05, 2022 at 03:20:17PM +0100, Luca Weiss wrote:
+> > Document the compatible used for IOMMU on the msm8953 SoC.
+> > 
+> > Acked-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > ---
+> > Changes in v5:
+> > * Change subject so it hopefully gets noticed by iommu maintainers
+> > 
+> >   (thanks Krzysztof, maybe this helps..)
+> >  
+> >  Documentation/devicetree/bindings/iommu/qcom,iommu.txt | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
+> > b/Documentation/devicetree/bindings/iommu/qcom,iommu.txt index
+> > 059139abce35..e6cecfd360eb 100644
+> > --- a/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
+> > +++ b/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
+> > @@ -10,6 +10,7 @@ to non-secure vs secure interrupt line.
+> > 
+> >  - compatible       : Should be one of:
+> >                          "qcom,msm8916-iommu"
+> > 
+> > +                        "qcom,msm8953-iommu"
+> > 
+> >                       Followed by "qcom,msm-iommu-v1".
+> 
+> I'd expect the MSM maintainers (i.e Andy and Bjorn) to pick this up.
 
-Signed-off-by: Shachar Raindel <shacharr@google.com>
----
- drivers/vfio/vfio_iommu_type1.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+Bjorn, could you pick this up for v6.3 please?
 
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index 23c24fe98c00..7f38d7fc3f62 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -570,27 +570,28 @@ static int vaddr_get_pfns(struct mm_struct *mm, unsigned long vaddr,
- 		}
- 
- 		*pfn = page_to_pfn(pages[0]);
--		goto done;
--	}
-+	} else
-+		do {
-+
-+			/* This is not a normal page, lookup PFN for P2P DMA */
-+			vaddr = untagged_addr(vaddr);
- 
--	vaddr = untagged_addr(vaddr);
-+			vma = vma_lookup(mm, vaddr);
- 
--retry:
--	vma = vma_lookup(mm, vaddr);
-+			if (!vma || !(vma->vm_flags & VM_PFNMAP))
-+				break;
- 
--	if (vma && vma->vm_flags & VM_PFNMAP) {
--		ret = follow_fault_pfn(vma, mm, vaddr, pfn, prot & IOMMU_WRITE);
--		if (ret == -EAGAIN)
--			goto retry;
-+			ret = follow_fault_pfn(vma, mm, vaddr, pfn,
-+					       prot & IOMMU_WRITE);
-+			if (ret)
-+				continue; /* Retry for EAGAIN, otherwise bail */
- 
--		if (!ret) {
- 			if (is_invalid_reserved_pfn(*pfn))
- 				ret = 1;
- 			else
- 				ret = -EFAULT;
--		}
--	}
--done:
-+		} while (ret == -EAGAIN);
-+
- 	mmap_read_unlock(mm);
- 	return ret;
- }
--- 
-2.39.0.314.g84b9a713c41-goog
+> 
+> Will
+
+
+
 
