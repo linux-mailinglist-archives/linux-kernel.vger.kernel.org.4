@@ -2,343 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13619657364
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 07:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F70E657394
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiL1GyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 01:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
+        id S229745AbiL1HT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 02:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiL1GyE (ORCPT
+        with ESMTP id S229526AbiL1HTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 01:54:04 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1092DC59
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 22:54:03 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id d3so15256238plr.10
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 22:54:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TeajCQ9nJ3xMY0Pj1f9Z3uIcTFs/noQ1iKw1tVK+dCM=;
-        b=WBAYuB6D5AISA5eBQh64FNoAw0n9C45YO2CClq7whDF922r3dwKQViTvM92sn7OCOG
-         vEFcvXmrTl8flM5amvMciNkBSIuKqG88/rGPIbOUYENNhG5GpDtjVkN9IoKYeUsmrz6y
-         RDHarozlcknospaVekRVgUPZwMLf02DMeK/je8FFe6oit8ULHf8WX1+mEd52dLWZ3oad
-         k8j8b+Apm13m21HcpFjfAbd06JC0iBtJ6pJd+Gy3OXwyW7ClDXyEQscz6KOlfQABoiD7
-         kQnFcCLKwtANIwFxO7lyXCDINdwwbjSXgBqQs4D1T3l4/JJ2wNxl5Urvq4r60mMpU8nZ
-         hAwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TeajCQ9nJ3xMY0Pj1f9Z3uIcTFs/noQ1iKw1tVK+dCM=;
-        b=7PLGD6UAkfeN17jfSySGIbP4hqeBBpIpF29gn0lfwPhO+lSRWQ/873ShKqPl9MwzA4
-         FdDmOhSSrVscmk2GDwbaRpARxFQNiWY3o3P7z4ib999zMo2+7WeNuEdAWZLLESrGEjD4
-         IRbjgRg3pdVTv7rDwBZj29P7kylmqM5w72JbKrQvzTdAUhbJb9EjBwpRvfSKX4lsGw3h
-         b49WKPLSrzaCsXG8pLH/RzjlKD773BQZManacs6+pVyglyNhd+cw6ZCfWBn06lEG4kwu
-         WkU5lV0Rri1AKrpnPAD0aSThJif8M4JUCPQPbuCu8OlHOmCfznIEl7fS2mRgpcV11Lmf
-         c7Mw==
-X-Gm-Message-State: AFqh2koH2LvLjlWqsrTzt0EyBLG88MLEYxZsJ2G3OWe09bY7b7RowXDU
-        U71/VU8BDJkqbsXR19szJ2vT
-X-Google-Smtp-Source: AMrXdXvHOuXCbhhwZ7dvFcvsADK9ThJTNs9idihgJk0m9Y4HIJDJuvsXS5dd933vHWIv0XDoZkkKKA==
-X-Received: by 2002:a17:903:2787:b0:189:7f09:3fbd with SMTP id jw7-20020a170903278700b001897f093fbdmr24561385plb.51.1672210442492;
-        Tue, 27 Dec 2022 22:54:02 -0800 (PST)
-Received: from thinkpad ([117.217.178.73])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902710900b00186748fe6ccsm10134115pll.214.2022.12.27.22.53.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 22:54:01 -0800 (PST)
-Date:   Wed, 28 Dec 2022 12:23:53 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        ahalaney@redhat.com, steev@kali.org
-Subject: Re: [PATCH v4 15/16] qcom: llcc/edac: Fix the base address used for
- accessing LLCC banks
-Message-ID: <20221228065353.GB30143@thinkpad>
-References: <20221222131656.49584-1-manivannan.sadhasivam@linaro.org>
- <20221222131656.49584-16-manivannan.sadhasivam@linaro.org>
- <20221228042944.g4g6vvaapiln6ces@builder.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 28 Dec 2022 02:19:25 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC176F016;
+        Tue, 27 Dec 2022 23:19:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672211963; x=1703747963;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=2c4gRftQHo51Rky8Mikq7f6PdmIy+Qqw6QaVOD2GJAE=;
+  b=DD8YOXrXJ06NxuJbIRuNLIAhugnlALeqdZWQaUBXcxAI/NQuw/R5BcFU
+   ntXZyqrcojAtc09CQ7V1kQUyM9sS9oIOycQm9DUo6chp4FlB13usmTP1B
+   6DQDBHYytkK2vupugG5gzUMJGMzf0xkGmNMZZoDySEbQJr7kolF+bmUo2
+   +SdpeahxqnFvm7UcSwuYIh4X0iTveKtEddqsPs15FnxFBR7+YaeXb7nz9
+   I2cSrcpOTo2ZqLP6Jou9Js234J1xCQ0JGi3/ukPgCaH1BECWUlbRVbIF/
+   ltbQsten+/xMAXm7mTdgsanKE+rHmBN4GxRPt0LYNLxc4SSKqRppLvQWw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="407087789"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="407087789"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 23:19:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="683841238"
+X-IronPort-AV: E=Sophos;i="5.96,280,1665471600"; 
+   d="scan'208";a="683841238"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga008.jf.intel.com with ESMTP; 27 Dec 2022 23:19:22 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 27 Dec 2022 23:19:22 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 27 Dec 2022 23:19:22 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 27 Dec 2022 23:19:22 -0800
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.49) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 27 Dec 2022 23:19:21 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kC97HbzOGtpE/s1wWrclTKB5UtfLTrt/Zx2DrDO/PB00OA+oCd8kjHT+qai3dUBUw8R+Qswcw2imzgW2h+6d3FzvenDgNvoKIpo3owVaqysapatzHTFDNzpf2pAl1ZtfxBO/tTpZ/x2oUYwrHb3bLa8ridLxBAoLoyctyaws5MBLeKvqtl+izK9dc1S1K6pr6/U/D6/UKrpCau+alpkTmevPt1x7doP+8U3TGqBRxkd0IJjLjjFWCxuL6mSqc0fY0HNAx/pFrU2nzf64vPyZThkHDzKttnjf8exUr/xFVAIBp+r9MCVQ1ZT9sO4sKcTJ9T/r5uHdoW2IgE/SBNplRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YrzHRTUZCiARhALzFykatyoi2yRN/rxC5JhbfgTsAyA=;
+ b=eT9I8uEfS8gvuE9/t5SsYGDPUH5+kbeHaUdSesYLSqSXLWD+OJ0j0VSGUW3WJvrX9l6+L+nTw8ogkfHXs3PNgjHwh0xUiLkyjcHyAiyFhygxj7Hn7xamckvMH92OOCFCIchyIo5Og2UKCp5Ri5e1PaCfgWuSTUKWjxkKTU9Ley0OXG8vMVbhax/ji8yei/j+Hb0WCp2ZimkERjPPIbzVI97WOTqixEqCn3I5rcVlNI201S3Ss/mUFSurpIS+VkvfU5XYOoWIMI4pg/hcum4zzTOBy0oxdNVOpojwfWCpDGe1cJVciGFy8SvDujz/K8Eg7HrCkU5xbstm3w6m3Yj7Hg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ CH0PR11MB5396.namprd11.prod.outlook.com (2603:10b6:610:bb::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.16; Wed, 28 Dec 2022 07:19:19 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::bd50:2cf7:f362:3734]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::bd50:2cf7:f362:3734%9]) with mapi id 15.20.5944.016; Wed, 28 Dec 2022
+ 07:19:18 +0000
+Date:   Wed, 28 Dec 2022 14:56:00 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>, <kvm@vger.kernel.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 19/27] KVM: x86/mmu: Use page-track notifiers iff there
+ are external users
+Message-ID: <Y6vogAvkktOPLwK9@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20221223005739.1295925-1-seanjc@google.com>
+ <20221223005739.1295925-20-seanjc@google.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221228042944.g4g6vvaapiln6ces@builder.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221223005739.1295925-20-seanjc@google.com>
+X-ClientProxiedBy: SG2PR02CA0102.apcprd02.prod.outlook.com
+ (2603:1096:4:92::18) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|CH0PR11MB5396:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0f4ff804-c746-4c99-1a5b-08dae8a3d58c
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: diuyOuWOkOKt4U9c2uEpwhmO9nTuc258rtp0SB5xHm/lJrIYpYqdM7JiHgfMFnoSDBe3teHVVxAjaz9LIP9FNnEjaB1cx/vXxwVp8eK6HZbOC3LlNq0SU7E63SNtCMVyE2eNe/RTA8O7NhFtD75/7Ll2RoOoQNiMOyeeUj8J5LDvW4iHPUEgQyCNw6xcjg4kiGjfveH3EJy84lvrqg3d6vos8G0j+rqOicGEXjD2tBhjEaNjn7AcbALHzFcBtAcPa4s84DLicp39ObY8AL+G0b0BBgf/aLY5otfSWtTd8V6Jbq/Ur4NxIUapqQb8BsEEBO2b0LH1PpB//J8HiaZyOJqmMY0JTbZim6yBsHyz2JPSoQYE3gzHkOii5W8do4sT3Nwht8D7qw0MbTJ2PPYp8FnMUW2oASbheX3d1ppKrDoY6tec0fY4KRSPRb6ulX5vOmqk1V4mfXvjE6DuguiwxAvFSyrQxoNrqVUGDJysQiJ/BaNL2U3x1GD2rNUMq7I1R8lPf3XirNGO21+xe9Y2n6NhzZnNtpcqsRoa+iK6tjDdEDt+Q/YPJ7MUMsDg7z3cipX0AJPCac5i9VPDoxWM/q0Evec4K/oN4I2gVkzmthgDMw9U/tLOby3iDy+rji1c7Dn8nNTso70X0CAn9XAW5KVLfJiZ1zSvUekxleUUH3y4LAPN0xd3oIOCObGf9wBz4FBozRSXxnapA02rXIO1e7JZnjc26douPx9NLURym4bAxkpVL8n2lUnCNFTkrSIS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(366004)(136003)(376002)(346002)(451199015)(86362001)(26005)(6486002)(186003)(478600001)(6512007)(41300700001)(6666004)(6506007)(66556008)(66476007)(66946007)(8676002)(5660300002)(4326008)(6916009)(3450700001)(2906002)(8936002)(316002)(54906003)(38100700002)(82960400001)(83380400001)(26730200005)(19860200003)(309714004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P8tORmEbRvzf2u/rnyuqXViwI5idKCQyGICMcY/t5U67KyILBu7Zls1JNqG/?=
+ =?us-ascii?Q?tByfg0vSMWpwINK4SQJ2IFVrtPoqLB22G9HMh9lzxPXO6LJuJ9tx2U3tbDIe?=
+ =?us-ascii?Q?8wimUKGjmBvgqtzUEluu7j1VhyaNts/uCc8JZRF/a0PF7rHHRXRwQqbKaTrv?=
+ =?us-ascii?Q?QSNkkIM+55t15ViheFnT7ZNkENhjBVueN++gEXHbvzONMS8CLSpVckvVY6bn?=
+ =?us-ascii?Q?M1TeHBz4r+h4/W0tEyQb/CsfwKmFuSuAL7vnMb4Wk+hwyyAFlIYTASlNSuWV?=
+ =?us-ascii?Q?d28rLY0KdtTCvZ0NhFVMqm8V6JDCS9nCAneeByzrIFhB2hASYmtKYdBlaNvZ?=
+ =?us-ascii?Q?h8ge8z5w7JmwysFW7t5bE46pbs2HqREcw+6GsZgBkOUwcnDBkqNjpaee8B/9?=
+ =?us-ascii?Q?QmpBR0Epciulh3YMvg/JVOH0qa+Zu92a68x9bBZ9sIsEq1u/XfhE+5wUG8Kf?=
+ =?us-ascii?Q?y5jTEbIlHyOtHBXZc2HMheAzi26ID3q8Ybymq4eHGfcmjSdH6xNYPpTGs07D?=
+ =?us-ascii?Q?4wnn1xIeAbg4/jgbrsiitFzsCel9Zz+ENbXH9an3Q4NDtz/oTSnC6BbKbxKn?=
+ =?us-ascii?Q?aKy/0pamXogE6/QuRuYFUlBfUfv9QpyEL5ibtnYCF9WxISIkI6cmwq4yKy2Q?=
+ =?us-ascii?Q?wxBxFgo+K/ScFWIKX/CjTAbRTgLh2Fuzke/TdTVs/BA8QrZIk57FALVgbXXu?=
+ =?us-ascii?Q?GKqnorSlfX7KmT0GQitkZ0gfuJ81zUdZrUX0syBAyOZYWmdGn036UAyri5xi?=
+ =?us-ascii?Q?Ft0OmLCLF/KCPcc/zr/6GjcmsE/D+QSR33vTZrjzIlV3xLS9YshhZS/npfaJ?=
+ =?us-ascii?Q?7sX4mZG6PGcvDEEaCVk5yRs50nM9hwVleCYQdENAXJ89moUZ05IKB9xWk9Zo?=
+ =?us-ascii?Q?1/YXmQlOr/VDeKHJxnvq+jYeEuPMiJ9NVO8xxA6ornZ+NeRDCkOVsW11rCFe?=
+ =?us-ascii?Q?FD1Xl4Ap+6f9wtLzlk4z+lJhnWbo8jVyr/IjWpfQQ0uVcgjFkqEwiZAdB72q?=
+ =?us-ascii?Q?PL9+sNfv5dTk3fOEb3D880jnVs7vt5RTjjlyclhi/mAo4HUOtKI/iqk6tN0N?=
+ =?us-ascii?Q?xD9obWoHrol31eOHEeuw3z5RIowqtRI6UetmUE6WS/EYqcGGItYZ7QpuTFzJ?=
+ =?us-ascii?Q?cvBO6emspE/7++msAG/OVKTK+iP8xcb/X18TZK20RdJTYRRfsYQQ21oWJo0M?=
+ =?us-ascii?Q?wLU0k7H7dPOH0BPpxG0K+/Cn2MqsRn79WH6L7UPMvF4Pug0peMvCguBr0oE5?=
+ =?us-ascii?Q?kxG/QB9kjeofhRm1o8XLv7FmySAL8LYdvVQsu8FayvD6GZhbzU7WOSmTPRJH?=
+ =?us-ascii?Q?3qm7EbOKWx7FF3PPigNkz7bfwOrXvo6GAhF9RQEHCzwPVHZK7gtlQTYbbREx?=
+ =?us-ascii?Q?8HvrFgPDx8oEiuhGHKErqArAUSmG9ZsrwC06qBW5/WA2kHk6EJGH1nj7ToM/?=
+ =?us-ascii?Q?9kfvgz6coswNE2/F1rlJVZfemz25bZjs4K4MbPt8lICt6fxEoHTnxaVx3LkN?=
+ =?us-ascii?Q?OmhvLd5jFX6mlUFduP2oSiX7R9OIusYTO3bCdIt5TgEGUg7b+RnW74UhPxDM?=
+ =?us-ascii?Q?1rONQZnzz3pa54T10QhchAPUWuf1afP55YIqSe3Q?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f4ff804-c746-4c99-1a5b-08dae8a3d58c
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2022 07:19:18.7950
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d0kavYM/8BvSvb+I4R6HXXjnB+x0v4FtnMqcgccnj0vRONfXMznr4sgC+3n59WRlMV1GirFaWEoX896e7U6WkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5396
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 10:29:44PM -0600, Bjorn Andersson wrote:
-> On Thu, Dec 22, 2022 at 06:46:55PM +0530, Manivannan Sadhasivam wrote:
-> > First index is LLCC bank 0 and last index is LLCC broadcast. If the SoC
-> > supports more than one bank, then those needs to be defined in devicetree
-> > for index from 1..N-1.
-> > 
+On Fri, Dec 23, 2022 at 12:57:31AM +0000, Sean Christopherson wrote:
+> Disable the page-track notifier code at compile time if there are no
+> external users, i.e. if CONFIG_KVM_EXTERNAL_WRITE_TRACKING=n.  KVM itself
+> now hooks emulated writes directly instead of relying on the page-track
+> mechanism.
 > 
-> What happened to my request for dropping the reliance on reg-names and
-> pick reg entries per the logic you describe here?
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h       |  2 ++
+>  arch/x86/include/asm/kvm_page_track.h |  2 ++
+>  arch/x86/kvm/mmu/page_track.c         |  9 ++++----
+>  arch/x86/kvm/mmu/page_track.h         | 30 +++++++++++++++++++++++----
+>  4 files changed, 35 insertions(+), 8 deletions(-)
 > 
-> Was it request just lost or was there a reason why you stuck with the
-> reg-names?
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index eec424fac0ba..e8f8e1bd96c7 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1223,7 +1223,9 @@ struct kvm_arch {
+>  	 * create an NX huge page (without hanging the guest).
+>  	 */
+>  	struct list_head possible_nx_huge_pages;
+> +#ifdef CONFIG_KVM_EXTERNAL_WRITE_TRACKING
+>  	struct kvm_page_track_notifier_head track_notifier_head;
+> +#endif
+>  	/*
+>  	 * Protects marking pages unsync during page faults, as TDP MMU page
+>  	 * faults only take mmu_lock for read.  For simplicity, the unsync
+> diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm/kvm_page_track.h
+> index deece45936a5..53c2adb25a07 100644
+> --- a/arch/x86/include/asm/kvm_page_track.h
+> +++ b/arch/x86/include/asm/kvm_page_track.h
+> @@ -55,6 +55,7 @@ void kvm_slot_page_track_remove_page(struct kvm *kvm,
+>  				     struct kvm_memory_slot *slot, gfn_t gfn,
+>  				     enum kvm_page_track_mode mode);
+>  
+> +#ifdef CONFIG_KVM_EXTERNAL_WRITE_TRACKING
+>  enum pg_level kvm_page_track_max_mapping_level(struct kvm *kvm, gfn_t gfn,
+>  					       enum pg_level max_level);
+>  
+> @@ -64,5 +65,6 @@ kvm_page_track_register_notifier(struct kvm *kvm,
+>  void
+>  kvm_page_track_unregister_notifier(struct kvm *kvm,
+>  				   struct kvm_page_track_notifier_node *n);
+> +#endif /* CONFIG_KVM_EXTERNAL_WRITE_TRACKING */
+>  
+>  #endif
+> diff --git a/arch/x86/kvm/mmu/page_track.c b/arch/x86/kvm/mmu/page_track.c
+> index 2b302fd2c5dd..f932909aa9b5 100644
+> --- a/arch/x86/kvm/mmu/page_track.c
+> +++ b/arch/x86/kvm/mmu/page_track.c
+> @@ -193,6 +193,7 @@ bool kvm_slot_page_track_is_active(struct kvm *kvm,
+>  	return !!READ_ONCE(slot->arch.gfn_track[mode][index]);
+>  }
+>  
+> +#ifdef CONFIG_KVM_EXTERNAL_WRITE_TRACKING
+>  void kvm_page_track_cleanup(struct kvm *kvm)
+>  {
+>  	struct kvm_page_track_notifier_head *head;
+> @@ -208,6 +209,7 @@ int kvm_page_track_init(struct kvm *kvm)
+>  	head = &kvm->arch.track_notifier_head;
+>  	INIT_HLIST_HEAD(&head->track_notifier_list);
+>  	return init_srcu_struct(&head->track_srcu);
+> +	return 0;
+Double "return"s.
+
+
+>  }
+>  
+>  /*
+> @@ -254,8 +256,8 @@ EXPORT_SYMBOL_GPL(kvm_page_track_unregister_notifier);
+>   * The node should figure out if the written page is the one that node is
+>   * interested in by itself.
+>   */
+> -void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+> -			  int bytes)
+> +void __kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+> +			    int bytes)
+>  {
+>  	struct kvm_page_track_notifier_head *head;
+>  	struct kvm_page_track_notifier_node *n;
+> @@ -272,8 +274,6 @@ void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+>  		if (n->track_write)
+>  			n->track_write(gpa, new, bytes, n);
+>  	srcu_read_unlock(&head->track_srcu, idx);
+> -
+> -	kvm_mmu_track_write(vcpu, gpa, new, bytes);
+>  }
+>  
+>  /*
+> @@ -316,3 +316,4 @@ enum pg_level kvm_page_track_max_mapping_level(struct kvm *kvm, gfn_t gfn,
+>  	return max_level;
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_page_track_max_mapping_level);
+> +#endif
+> diff --git a/arch/x86/kvm/mmu/page_track.h b/arch/x86/kvm/mmu/page_track.h
+> index 89712f123ad3..1b363784aa4a 100644
+> --- a/arch/x86/kvm/mmu/page_track.h
+> +++ b/arch/x86/kvm/mmu/page_track.h
+> @@ -6,8 +6,6 @@
+>  
+>  #include <asm/kvm_page_track.h>
+>  
+> -int kvm_page_track_init(struct kvm *kvm);
+> -void kvm_page_track_cleanup(struct kvm *kvm);
+>  
+>  bool kvm_page_track_write_tracking_enabled(struct kvm *kvm);
+>  int kvm_page_track_write_tracking_alloc(struct kvm_memory_slot *slot);
+> @@ -21,13 +19,37 @@ bool kvm_slot_page_track_is_active(struct kvm *kvm,
+>  				   const struct kvm_memory_slot *slot,
+>  				   gfn_t gfn, enum kvm_page_track_mode mode);
+>  
+> -void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+> -			  int bytes);
+> +#ifdef CONFIG_KVM_EXTERNAL_WRITE_TRACKING
+> +int kvm_page_track_init(struct kvm *kvm);
+> +void kvm_page_track_cleanup(struct kvm *kvm);
+> +
+> +void __kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+> +			    int bytes);
+>  void kvm_page_track_delete_slot(struct kvm *kvm, struct kvm_memory_slot *slot);
+>  
+>  static inline bool kvm_page_track_has_external_user(struct kvm *kvm)
+>  {
+>  	return hlist_empty(&kvm->arch.track_notifier_head.track_notifier_list);
+>  }
+> +#else
+> +static inline int kvm_page_track_init(struct kvm *kvm) { return 0; }
+> +static inline void kvm_page_track_cleanup(struct kvm *kvm) { }
+> +
+> +static inline void __kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa,
+> +					  const u8 *new, int bytes) { }
+> +static inline void kvm_page_track_delete_slot(struct kvm *kvm,
+> +					      struct kvm_memory_slot *slot) { }
+> +
+> +static inline bool kvm_page_track_has_external_user(struct kvm *kvm) { return false; }
+> +
+> +#endif /* CONFIG_KVM_EXTERNAL_WRITE_TRACKING */
+> +
+> +static inline void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa,
+> +					const u8 *new, int bytes)
+> +{
+> +	__kvm_page_track_write(vcpu, gpa, new, bytes);
+> +
+Why not convert "vcpu" to "kvm" in __kvm_page_track_write() ?
+i.e.
+void __kvm_page_track_write(struct kvm *kvm, gpa_t gpa, const u8 *new, int bytes);
+
+
+Thanks
+Yan
+
+> +	kvm_mmu_track_write(vcpu, gpa, new, bytes);
+> +}
+>  
+>  #endif /* __KVM_X86_PAGE_TRACK_H */
+> -- 
+> 2.39.0.314.g84b9a713c41-goog
 > 
-
-The driver uses index to map the resources from DT and not using reg-names.
-See qcom_llcc_init_mmio().
-
-But the reg-names property is kept in the devicetree as per Krzysztof's
-request. I've recorded these in the changelog.
-
-Thanks,
-Mani
-
-> Regards,
-> Bjorn
-> 
-> > Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> > Tested-by: Luca Weiss <luca.weiss@fairphone.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/edac/qcom_edac.c           | 14 +++---
-> >  drivers/soc/qcom/llcc-qcom.c       | 72 +++++++++++++++++-------------
-> >  include/linux/soc/qcom/llcc-qcom.h |  6 +--
-> >  3 files changed, 48 insertions(+), 44 deletions(-)
-> > 
-> > diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-> > index 3256254c3722..1d3cc1930a74 100644
-> > --- a/drivers/edac/qcom_edac.c
-> > +++ b/drivers/edac/qcom_edac.c
-> > @@ -213,7 +213,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
-> >  
-> >  	for (i = 0; i < reg_data.reg_cnt; i++) {
-> >  		synd_reg = reg_data.synd_reg + (i * 4);
-> > -		ret = regmap_read(drv->regmap, drv->offsets[bank] + synd_reg,
-> > +		ret = regmap_read(drv->regmaps[bank], synd_reg,
-> >  				  &synd_val);
-> >  		if (ret)
-> >  			goto clear;
-> > @@ -222,8 +222,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
-> >  			    reg_data.name, i, synd_val);
-> >  	}
-> >  
-> > -	ret = regmap_read(drv->regmap,
-> > -			  drv->offsets[bank] + reg_data.count_status_reg,
-> > +	ret = regmap_read(drv->regmaps[bank], reg_data.count_status_reg,
-> >  			  &err_cnt);
-> >  	if (ret)
-> >  		goto clear;
-> > @@ -233,8 +232,7 @@ dump_syn_reg_values(struct llcc_drv_data *drv, u32 bank, int err_type)
-> >  	edac_printk(KERN_CRIT, EDAC_LLCC, "%s: Error count: 0x%4x\n",
-> >  		    reg_data.name, err_cnt);
-> >  
-> > -	ret = regmap_read(drv->regmap,
-> > -			  drv->offsets[bank] + reg_data.ways_status_reg,
-> > +	ret = regmap_read(drv->regmaps[bank], reg_data.ways_status_reg,
-> >  			  &err_ways);
-> >  	if (ret)
-> >  		goto clear;
-> > @@ -296,8 +294,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
-> >  
-> >  	/* Iterate over the banks and look for Tag RAM or Data RAM errors */
-> >  	for (i = 0; i < drv->num_banks; i++) {
-> > -		ret = regmap_read(drv->regmap,
-> > -				  drv->offsets[i] + DRP_INTERRUPT_STATUS,
-> > +		ret = regmap_read(drv->regmaps[i], DRP_INTERRUPT_STATUS,
-> >  				  &drp_error);
-> >  
-> >  		if (!ret && (drp_error & SB_ECC_ERROR)) {
-> > @@ -312,8 +309,7 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
-> >  		if (!ret)
-> >  			irq_rc = IRQ_HANDLED;
-> >  
-> > -		ret = regmap_read(drv->regmap,
-> > -				  drv->offsets[i] + TRP_INTERRUPT_0_STATUS,
-> > +		ret = regmap_read(drv->regmaps[i], TRP_INTERRUPT_0_STATUS,
-> >  				  &trp_error);
-> >  
-> >  		if (!ret && (trp_error & SB_ECC_ERROR)) {
-> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> > index 23ce2f78c4ed..72f3f2a9aaa0 100644
-> > --- a/drivers/soc/qcom/llcc-qcom.c
-> > +++ b/drivers/soc/qcom/llcc-qcom.c
-> > @@ -62,8 +62,6 @@
-> >  #define LLCC_TRP_WRSC_CACHEABLE_EN    0x21f2c
-> >  #define LLCC_TRP_ALGO_CFG8	      0x21f30
-> >  
-> > -#define BANK_OFFSET_STRIDE	      0x80000
-> > -
-> >  #define LLCC_VERSION_2_0_0_0          0x02000000
-> >  #define LLCC_VERSION_2_1_0_0          0x02010000
-> >  #define LLCC_VERSION_4_1_0_0          0x04010000
-> > @@ -898,8 +896,8 @@ static int qcom_llcc_remove(struct platform_device *pdev)
-> >  	return 0;
-> >  }
-> >  
-> > -static struct regmap *qcom_llcc_init_mmio(struct platform_device *pdev,
-> > -		const char *name)
-> > +static struct regmap *qcom_llcc_init_mmio(struct platform_device *pdev, u8 index,
-> > +					  const char *name)
-> >  {
-> >  	void __iomem *base;
-> >  	struct regmap_config llcc_regmap_config = {
-> > @@ -909,7 +907,7 @@ static struct regmap *qcom_llcc_init_mmio(struct platform_device *pdev,
-> >  		.fast_io = true,
-> >  	};
-> >  
-> > -	base = devm_platform_ioremap_resource_byname(pdev, name);
-> > +	base = devm_platform_ioremap_resource(pdev, index);
-> >  	if (IS_ERR(base))
-> >  		return ERR_CAST(base);
-> >  
-> > @@ -927,6 +925,7 @@ static int qcom_llcc_probe(struct platform_device *pdev)
-> >  	const struct llcc_slice_config *llcc_cfg;
-> >  	u32 sz;
-> >  	u32 version;
-> > +	struct regmap *regmap;
-> >  
-> >  	drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
-> >  	if (!drv_data) {
-> > @@ -934,21 +933,51 @@ static int qcom_llcc_probe(struct platform_device *pdev)
-> >  		goto err;
-> >  	}
-> >  
-> > -	drv_data->regmap = qcom_llcc_init_mmio(pdev, "llcc_base");
-> > -	if (IS_ERR(drv_data->regmap)) {
-> > -		ret = PTR_ERR(drv_data->regmap);
-> > +	/* Initialize the first LLCC bank regmap */
-> > +	regmap = qcom_llcc_init_mmio(pdev, 0, "llcc0_base");
-> > +	if (IS_ERR(regmap)) {
-> > +		ret = PTR_ERR(regmap);
-> >  		goto err;
-> >  	}
-> >  
-> > -	drv_data->bcast_regmap =
-> > -		qcom_llcc_init_mmio(pdev, "llcc_broadcast_base");
-> > +	cfg = of_device_get_match_data(&pdev->dev);
-> > +
-> > +	ret = regmap_read(regmap, cfg->reg_offset[LLCC_COMMON_STATUS0], &num_banks);
-> > +	if (ret)
-> > +		goto err;
-> > +
-> > +	num_banks &= LLCC_LB_CNT_MASK;
-> > +	num_banks >>= LLCC_LB_CNT_SHIFT;
-> > +	drv_data->num_banks = num_banks;
-> > +
-> > +	drv_data->regmaps = devm_kcalloc(dev, num_banks, sizeof(*drv_data->regmaps), GFP_KERNEL);
-> > +	if (!drv_data->regmaps) {
-> > +		ret = -ENOMEM;
-> > +		goto err;
-> > +	}
-> > +
-> > +	drv_data->regmaps[0] = regmap;
-> > +
-> > +	/* Initialize rest of LLCC bank regmaps */
-> > +	for (i = 1; i < num_banks; i++) {
-> > +		char *base = kasprintf(GFP_KERNEL, "llcc%d_base", i);
-> > +
-> > +		drv_data->regmaps[i] = qcom_llcc_init_mmio(pdev, i, base);
-> > +		if (IS_ERR(drv_data->regmaps[i])) {
-> > +			ret = PTR_ERR(drv_data->regmaps[i]);
-> > +			kfree(base);
-> > +			goto err;
-> > +		}
-> > +
-> > +		kfree(base);
-> > +	}
-> > +
-> > +	drv_data->bcast_regmap = qcom_llcc_init_mmio(pdev, i, "llcc_broadcast_base");
-> >  	if (IS_ERR(drv_data->bcast_regmap)) {
-> >  		ret = PTR_ERR(drv_data->bcast_regmap);
-> >  		goto err;
-> >  	}
-> >  
-> > -	cfg = of_device_get_match_data(&pdev->dev);
-> > -
-> >  	/* Extract version of the IP */
-> >  	ret = regmap_read(drv_data->bcast_regmap, cfg->reg_offset[LLCC_COMMON_HW_INFO],
-> >  			  &version);
-> > @@ -957,15 +986,6 @@ static int qcom_llcc_probe(struct platform_device *pdev)
-> >  
-> >  	drv_data->version = version;
-> >  
-> > -	ret = regmap_read(drv_data->regmap, cfg->reg_offset[LLCC_COMMON_STATUS0],
-> > -			  &num_banks);
-> > -	if (ret)
-> > -		goto err;
-> > -
-> > -	num_banks &= LLCC_LB_CNT_MASK;
-> > -	num_banks >>= LLCC_LB_CNT_SHIFT;
-> > -	drv_data->num_banks = num_banks;
-> > -
-> >  	llcc_cfg = cfg->sct_data;
-> >  	sz = cfg->size;
-> >  
-> > @@ -973,16 +993,6 @@ static int qcom_llcc_probe(struct platform_device *pdev)
-> >  		if (llcc_cfg[i].slice_id > drv_data->max_slices)
-> >  			drv_data->max_slices = llcc_cfg[i].slice_id;
-> >  
-> > -	drv_data->offsets = devm_kcalloc(dev, num_banks, sizeof(u32),
-> > -							GFP_KERNEL);
-> > -	if (!drv_data->offsets) {
-> > -		ret = -ENOMEM;
-> > -		goto err;
-> > -	}
-> > -
-> > -	for (i = 0; i < num_banks; i++)
-> > -		drv_data->offsets[i] = i * BANK_OFFSET_STRIDE;
-> > -
-> >  	drv_data->bitmap = devm_bitmap_zalloc(dev, drv_data->max_slices,
-> >  					      GFP_KERNEL);
-> >  	if (!drv_data->bitmap) {
-> > diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
-> > index ad1fd718169d..423220e66026 100644
-> > --- a/include/linux/soc/qcom/llcc-qcom.h
-> > +++ b/include/linux/soc/qcom/llcc-qcom.h
-> > @@ -120,7 +120,7 @@ struct llcc_edac_reg_offset {
-> >  
-> >  /**
-> >   * struct llcc_drv_data - Data associated with the llcc driver
-> > - * @regmap: regmap associated with the llcc device
-> > + * @regmaps: regmaps associated with the llcc device
-> >   * @bcast_regmap: regmap associated with llcc broadcast offset
-> >   * @cfg: pointer to the data structure for slice configuration
-> >   * @edac_reg_offset: Offset of the LLCC EDAC registers
-> > @@ -129,12 +129,11 @@ struct llcc_edac_reg_offset {
-> >   * @max_slices: max slices as read from device tree
-> >   * @num_banks: Number of llcc banks
-> >   * @bitmap: Bit map to track the active slice ids
-> > - * @offsets: Pointer to the bank offsets array
-> >   * @ecc_irq: interrupt for llcc cache error detection and reporting
-> >   * @version: Indicates the LLCC version
-> >   */
-> >  struct llcc_drv_data {
-> > -	struct regmap *regmap;
-> > +	struct regmap **regmaps;
-> >  	struct regmap *bcast_regmap;
-> >  	const struct llcc_slice_config *cfg;
-> >  	const struct llcc_edac_reg_offset *edac_reg_offset;
-> > @@ -143,7 +142,6 @@ struct llcc_drv_data {
-> >  	u32 max_slices;
-> >  	u32 num_banks;
-> >  	unsigned long *bitmap;
-> > -	u32 *offsets;
-> >  	int ecc_irq;
-> >  	u32 version;
-> >  };
-> > -- 
-> > 2.25.1
-> > 
-
--- 
-மணிவண்ணன் சதாசிவம்
