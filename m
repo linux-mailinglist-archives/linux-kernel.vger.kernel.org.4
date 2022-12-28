@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B9865765F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D3F657663
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbiL1MXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
+        id S229627AbiL1MYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbiL1MXF (ORCPT
+        with ESMTP id S233114AbiL1MYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:23:05 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AA5BCA
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:23:03 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id d10so10452481pgm.13
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:23:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F0LQcrjzcqyHGx/EG+ZxulY1MidQR+dP6F+oRvG3vQs=;
-        b=x/ZSlQ8pHG3xkV8dK6KyzVm22eyZhu3j80eOGMvGPMwCebW/JYa9bvXGKtSFn8vbV5
-         5aC30qO+FGeVDqa6hM3f99d42d8Y+EUt0EWm8TFlq/4TkyPTXHubCPe6BK6txdD2JPJ/
-         cYErJ2c2Ye/cFe9UA9HJlFki7EhknDZ7YBu+183MID3AA4U4OWc421E+CU5jvpKL53Wq
-         SkMh7FCqoS9IAMN7cCNgH84NXgJcgvj083upOmOktH6ErMszWA+rp4ftCOeuQOWRWfUg
-         VRaZLGm0Ka0jC0o/RtTXruMlZ0UTjdD0si5vTQceCk80DTEva2K3MqCzm6l5oU4u0gWG
-         SGmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F0LQcrjzcqyHGx/EG+ZxulY1MidQR+dP6F+oRvG3vQs=;
-        b=5r4YiJFDIFb1ATnL/G5Xz4S5bXiDlFxDD5yUPWD+z8I9m1wh+z3xHsGI2Xatdd9dcI
-         1zwE8s6s+TOBT7WvCu80qVcwENj99Ovri1+F6m9qV48HARuOnxSfGIkx4FkOVBwynpFL
-         qC+BASsV3I8fO9+I/9IemCTdF6Isa8bejZIOym6u0An6WVZaMUVs/Lkm6ZWYEL4Upbhi
-         akNO+LSYEIlTb74qnaNpqJuaavnyCFURcv6opMSSWMjpfJG5Csjvx7fm9qDIMB13bDol
-         eSOxA1vNcz4MaEr83L69i+qlT06umy1GN2O4crc2L+TElt6wQTbXsDkpOF2xCGkn8rHi
-         xp5g==
-X-Gm-Message-State: AFqh2kqx58WymkWMCs38b1UGj2yNavSjpWL9EUmUGW+sGEuef3kGMITA
-        tlh7pez5oElW6HTgNBzoub9nxQ==
-X-Google-Smtp-Source: AMrXdXudRa1wP9H6e6vGFfQm6qY0zfkdkBMEcZaDW22e10mqSIjt3bIqPJ0YRH0r2IRG0HPaz0kP6g==
-X-Received: by 2002:a62:16d5:0:b0:580:f58f:efb3 with SMTP id 204-20020a6216d5000000b00580f58fefb3mr14897592pfw.15.1672230182928;
-        Wed, 28 Dec 2022 04:23:02 -0800 (PST)
-Received: from localhost.localdomain (202.60.225.077.static.cyberec.com. [202.60.225.77])
-        by smtp.gmail.com with ESMTPSA id h1-20020a056a00000100b0058124f92399sm5236074pfk.219.2022.12.28.04.22.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 04:23:02 -0800 (PST)
-From:   tongjian <tongjian@huaqin.corp-partner.google.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        perex@perex.cz, tiwai@suse.com,
-        angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
-        jiaxin.yu@mediatek.com, chunxu.li@mediatek.com,
-        ajye_huang@compal.corp-partner.google.com,
-        tongjian@huaqin.corp-partner.google.com
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ASoC: dt-bindings: mt8186-mt6366: add new compatible for max98360a
-Date:   Wed, 28 Dec 2022 20:22:30 +0800
-Message-Id: <20221228122230.3818533-3-tongjian@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221228122230.3818533-1-tongjian@huaqin.corp-partner.google.com>
-References: <20221228122230.3818533-1-tongjian@huaqin.corp-partner.google.com>
+        Wed, 28 Dec 2022 07:24:04 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A6011454;
+        Wed, 28 Dec 2022 04:24:03 -0800 (PST)
+Received: from [10.7.7.5] (unknown [182.253.183.184])
+        by gnuweeb.org (Postfix) with ESMTPSA id 106F57E258;
+        Wed, 28 Dec 2022 12:23:59 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1672230243;
+        bh=t7QUZ1L7JK6Nhqu6pFle36FU4w6y2nAlvhYffQoZJe0=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=ajJfaRL68lkrQUuZpaOP6fcHZVpymqPqEUPpnSPp8YbsTki5LRPVjvg6fksvJlPkY
+         GeeDsU9Wq8tQVflPH3OgN3T9zf+HloXV8mKM3b/f75KDn4c7AB2+QUy6iB/tsC0aMh
+         8UTx2137OOXiQaB7AUkIc9Xnn9kULGGaZzpSbiduhFLsoO0mxFIygRRBOHzfYdDK/N
+         uaM8npHvS0n3v4YXxTQLO+mLifnKRWbWOc/H6tbWKIevLrb2zq0OV4rk0vq/j1t9jr
+         zjXTaSS8YbsNulYtVgB4zEtXlcIdIlnf0N1uUBFUhbWsBCrsMx8rdvZNkr84SK1woP
+         HmuRSnMXUTRnQ==
+Message-ID: <80abe382-b2e5-a323-1c6a-deb3c3b1e22c@gnuweeb.org>
+Date:   Wed, 28 Dec 2022 19:23:57 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Gilang Fachrezy <gilang4321@gmail.com>,
+        VNLX Kernel Department <kernel@vnlx.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List 
+        <linux-kselftest@vger.kernel.org>
+References: <20221222035134.3467659-1-ammar.faizi@intel.com>
+ <20221222043452.GB29086@1wt.eu>
+ <20221222134615.3535422-1-ammar.faizi@intel.com>
+ <20221227062640.GA5337@1wt.eu>
+ <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
+ <d206f87d-2107-7cdb-ee2a-7fe718f06f3d@gnuweeb.org>
+ <20221227185836.GB6287@1wt.eu>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
+In-Reply-To: <20221227185836.GB6287@1wt.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds new compatible string "mt8186-mt6366-rt5682s-max98360-sound" for machines
-with max98360a and rt5682s.
+On 12/28/22 1:58 AM, Willy Tarreau wrote:
+> The nice thing about assembly is that once you know one, others are
+> easy to learn to permit you to write code that you can test. You can
+> have a look at MIPS for delayed slots, SPARC for register banks, ARM
+> for instructions that do multiple operations at once and you'll have
+> seen most of the basics that you'll ever need. Also all of these are
+> RISC based and cannot load a full-length register in a single instruction,
+> that's possibly the most confusing thing when you come from x86. And
+> it's also very interesting to see differences in constraints ;-)
 
-Signed-off-by: tongjian <tongjian@huaqin.corp-partner.google.com>
----
- .../devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml  | 1 +
- 1 file changed, 1 insertion(+)
+Sounds fun. I'll try to get involved with other arch(s). But before
+that, I have to prepare the environment. At least virtualization
+that emulates those arch(s).
 
-diff --git a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-index 9d3139990237..aa23b0024c46 100644
---- a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
-@@ -16,6 +16,7 @@ properties:
-   compatible:
-     enum:
-       - mediatek,mt8186-mt6366-rt1019-rt5682s-sound
-+      - mediatek,mt8186-mt6366-rt5682s-max98360-sound
- 
-   mediatek,platform:
-     $ref: "/schemas/types.yaml#/definitions/phandle"
 -- 
-2.25.1
+Ammar Faizi
 
