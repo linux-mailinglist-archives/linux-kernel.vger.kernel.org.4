@@ -2,100 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140CD6586DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 21:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284B86586DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 21:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbiL1U5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 15:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
+        id S231666AbiL1U6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 15:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiL1U5b (ORCPT
+        with ESMTP id S230006AbiL1U6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 15:57:31 -0500
-Received: from hera.aquilenet.fr (hera.aquilenet.fr [185.233.100.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E468167C2;
-        Wed, 28 Dec 2022 12:57:29 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by hera.aquilenet.fr (Postfix) with ESMTP id 867F0640;
-        Wed, 28 Dec 2022 21:57:27 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at hera.aquilenet.fr
-Received: from hera.aquilenet.fr ([127.0.0.1])
-        by localhost (hera.aquilenet.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HCs0dfKZ8YnL; Wed, 28 Dec 2022 21:57:27 +0100 (CET)
-Received: from begin.home (2a01cb008c016e00de41a9fffe47ec49.ipv6.abo.wanadoo.fr [IPv6:2a01:cb00:8c01:6e00:de41:a9ff:fe47:ec49])
-        by hera.aquilenet.fr (Postfix) with ESMTPSA id 0A2653E7;
-        Wed, 28 Dec 2022 21:57:27 +0100 (CET)
-Received: from samy by begin.home with local (Exim 4.96)
-        (envelope-from <samuel.thibault@aquilenet.fr>)
-        id 1pAdUM-005Zph-1D;
-        Wed, 28 Dec 2022 21:57:26 +0100
-Date:   Wed, 28 Dec 2022 21:57:26 +0100
-From:   Samuel Thibault <samuel.thibault@aquilenet.fr>
-To:     Kees Cook <kees@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+        Wed, 28 Dec 2022 15:58:35 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1359A167C8;
+        Wed, 28 Dec 2022 12:58:35 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id vm8so33956338ejc.2;
+        Wed, 28 Dec 2022 12:58:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:date:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=+EjcY7YoO0rpM2U9BDoOIi8R/714b5mQZSttojJNkYo=;
+        b=DBioYxUifXdL6edfAm4WJ17nVN/Q6xruvAGqXhFvl5K9Lgc/9MQ6WGk7Xb66ySMlgb
+         iF8MPk0+RW1zfQjEwReWTkjBls9MLh19asHK9Vbi8kygyrXoeyTRDfawGVeuTLfTykeF
+         Z/RuTUpqHNXpZCQnPqE/T3kBmpKrrhdCEirqF4h+OmC9a3VIfqbiJayRZwNOMtYtN+Lr
+         Yey5O7pasS0GTDM3DfE5UgI53plGdjDZhvvYaJEZg+/TXk2tMn3NdP9GvsD4sDlR4bhp
+         ODWCU8VGZ9xgc9Obyg8r+iAiULyk7S4AAZFOmth4mwpvtSHCSNLXpTyNyHPVkKAlXklM
+         AQzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:date:to:from
+         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+EjcY7YoO0rpM2U9BDoOIi8R/714b5mQZSttojJNkYo=;
+        b=egwu/VQSXKcNzEoB8wpo3+H07Tnljyu1j+XYkryXfsAbcneIgfLw488nXH3Fe7S202
+         pFjXjt+inndwXaox5MBRJFVmECNLJOPsjfmXGEtZk+8r32VKNw/9RZ+0tin8cssAt/ZR
+         0vi1gFKSgZ6rCGCTGCbbE5cVLDJlex+rP2b90rArcaBnquRc+E8PyPKegPG+LZCi3UWD
+         l+n1OgyHL84zdLBGEX8ktT09HSafjRE20MWxzBE5nh6i1WM0PtKxekOndp28lzEh5rWz
+         9ZGvwVj0UoO/6GC0WJLxpWpJh8QpIHrcO1VXxK6vg+6orVXutKTud3vlCLEXn32xgI6b
+         MUgQ==
+X-Gm-Message-State: AFqh2kqQIELH9UsbvCgeIzobch5BQMoFI8k9sTO8bbEHAelUpaN/FyQZ
+        rkuJKwuqsGkA83sDL/ZIrHs=
+X-Google-Smtp-Source: AMrXdXsXzEOMDbuHar3p6QjnuZUk9Ygrar/HHfNGbLiAV4rYXlzVhza6nZQ6SaRhXqk9E/roNTMQXA==
+X-Received: by 2002:a17:907:8b93:b0:7c1:1dc7:8837 with SMTP id tb19-20020a1709078b9300b007c11dc78837mr23364441ejc.66.1672261113492;
+        Wed, 28 Dec 2022 12:58:33 -0800 (PST)
+Received: from [192.168.0.239] (ip5f5ad5e2.dynamic.kabel-deutschland.de. [95.90.213.226])
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090676ce00b007ad94422cf6sm7759916ejn.198.2022.12.28.12.58.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 12:58:32 -0800 (PST)
+Message-ID: <7f4fe87ef8a9995bc2c64bf2e5a03ef6948b8692.camel@gmail.com>
+Subject: [PATCH] media: staging: media: omap4iss: Fix null dereference for
+ iss
+From:   Tanmay Bhushan <007047221b@gmail.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Simon Brand <simon.brand@postadigitale.de>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] tty: Allow TIOCSTI to be disabled
-Message-ID: <20221228205726.rfevry7ud6gmttg5@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@aquilenet.fr>,
-        Kees Cook <kees@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Simon Brand <simon.brand@postadigitale.de>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20221022182828.give.717-kees@kernel.org>
- <20221022182949.2684794-2-keescook@chromium.org>
- <20221227234000.jgosvixx7eahqb3z@begin>
- <C95AF535-7A95-48BA-8921-1932C15A1931@kernel.org>
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 28 Dec 2022 21:58:31 +0100
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <C95AF535-7A95-48BA-8921-1932C15A1931@kernel.org>
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From 7aa39c0d02bddf9cfa14762f115303b79bfa0ae3 Mon Sep 17 00:00:00 2001
+From: Tanmay Bhushan <007047221b@gmail.com>
+Date: Wed, 28 Dec 2022 21:01:16 +0100
+Subject: [PATCH] media: staging: media: omap4iss: Fix null dereference
+for iss
 
-Kees Cook, le mar. 27 déc. 2022 19:32:55 -0800, a ecrit:
-> On December 27, 2022 3:40:00 PM PST, Samuel Thibault <samuel.thibault@aquilenet.fr> wrote:
-> >Kees Cook, le sam. 22 oct. 2022 11:29:49 -0700, a ecrit:
-> >> TIOCSTI continues its long history of being used in privilege escalation
-> >> attacks[1]. Prior attempts to provide a mechanism to disable this have
-> >> devolved into discussions around creating full-blown LSMs to provide
-> >> arbitrary ioctl filtering, which is hugely over-engineered -- only
-> >> TIOCSTI is being used this way. 3 years ago OpenBSD entirely removed
-> >> TIOCSTI[2], Android has had it filtered for longer[3], and the tools that
-> >> had historically used TIOCSTI either do not need it, are not commonly
-> >> built with it, or have had its use removed.
-> >
-> >No. The Brltty screen reader entirely relies on TIOCSTI to be able to
-> >support input from various Braille devices. Please make sure to keep
-> >TIOCSTI enabled by default, otherwise some people would just completely
-> >lose their usual way of simply typing on Linux.
-> 
-> Yup, it remains default enabled:
+media_pad_remote_pad_first returns NULL in some cases but while using
+the return value was used without NULL check which will lead to panic
+in case of NULL return. iss_pipeline_is_last returns value check so
+have returned 0 in case of NULL and csi2_configure is not documented
+for such cases so returned EINVAL for it. Code is not tested
+as it is only for NULL dereference verification.
 
-Yes, but thining of it, very soon people in various security-sensitive
-distributions will disable it, as they should indeed. And people who
-need to use their Braille device on such distributions will get stuck.
+Signed-off-by: Tanmay Bhushan <007047221b@gmail.com>
+---
+ drivers/staging/media/omap4iss/iss.c      | 6 +++++-
+ drivers/staging/media/omap4iss/iss_csi2.c | 4 ++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-Can we perhaps just introduce a CAP_TIOCSTI that the brltty daemon would
-be able to use? We could even make it only allow TIOCSTI on the linux
-console (tty->ops == con_ops).
+diff --git a/drivers/staging/media/omap4iss/iss.c
+b/drivers/staging/media/omap4iss/iss.c
+index fa2a36d829d3..3f01eeff40e7 100644
+--- a/drivers/staging/media/omap4iss/iss.c
++++ b/drivers/staging/media/omap4iss/iss.c
+@@ -552,7 +552,11 @@ static int iss_pipeline_is_last(struct
+media_entity *me)
+ 	if (!pipe || pipe->stream_state =3D=3D
+ISS_PIPELINE_STREAM_STOPPED)
+ 		return 0;
+ 	pad =3D media_pad_remote_pad_first(&pipe->output->pad);
+-	return pad->entity =3D=3D me;
++
++	if (pad)
++		return pad->entity =3D=3D me;
++
++	return 0;
+ }
+=20
+ static int iss_reset(struct iss_device *iss)
+diff --git a/drivers/staging/media/omap4iss/iss_csi2.c
+b/drivers/staging/media/omap4iss/iss_csi2.c
+index 04ce0e7eb557..ab2c2ad64464 100644
+--- a/drivers/staging/media/omap4iss/iss_csi2.c
++++ b/drivers/staging/media/omap4iss/iss_csi2.c
+@@ -539,6 +539,10 @@ static int csi2_configure(struct iss_csi2_device
+*csi2)
+ 		return -EBUSY;
+=20
+ 	pad =3D media_pad_remote_pad_first(&csi2->pads[CSI2_PAD_SINK]);
++
++	if (!pad)
++		return -EINVAL;
++
+ 	sensor =3D media_entity_to_v4l2_subdev(pad->entity);
+ 	pdata =3D sensor->host_priv;
+=20
+--=20
+2.34.1
 
-> Also, what does FreeBSD use for screen readers?
 
-FreeBSD provides poor support for that, people have to use a patched
-screen tool to somehow access the console (but only after login).
-
-Samuel
