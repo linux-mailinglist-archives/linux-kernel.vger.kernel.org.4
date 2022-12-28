@@ -2,142 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D711C657BC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 16:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD03657BCB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 16:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiL1PZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 10:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
+        id S233793AbiL1PZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 10:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233718AbiL1PZB (ORCPT
+        with ESMTP id S233745AbiL1PZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 10:25:01 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1D214081
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 07:25:00 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-381662c78a9so225746677b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 07:25:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hardenedbsd.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/B1rOCH9HmW+vhDEypyd7tOOp9ZpzuMp1iRK/8e6VVE=;
-        b=dZRaLcJt0LA5Sb4x8OsTw5hsUcfVPzPLAtoCa/4ntHT8PwvuRAlD76g80CtcyygsYa
-         dCo0hik7AA0m6xY+AeiUqVhR23n9WtVTg7Kw51xF8uWZWA6QGFqCzD8wsH/7eiGIIHQm
-         wud3Ghtd73qp89MrwYRwTRtMkJx24SZwmnQO/hWC5rhlkH0FS/O6L8KrTOjsTLZBT9Qd
-         dMdnGSbm5PRoj5NlqmEJXr8WgYn4WqdcsySTmyES12faWKFpV7V5bO6FdmF/RAa8aQ6r
-         yeeFn/QBhmT+PtTxeOQbRqGexlNjisovgvqBc3Q9xi3fiOhSKcBkFzRQAA4bI5JuDjUl
-         35dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/B1rOCH9HmW+vhDEypyd7tOOp9ZpzuMp1iRK/8e6VVE=;
-        b=MiYRQXDy0WLEXOCZAwmBfet7x3vPj5Z01K9izjSds9yjDv0nbQwxGD43NB3oT2gZRb
-         TJR+Z7I40AOpSLeIpeXHzVSgLpSJD0t4x9Lr821aibkbOneC6lUh7lxpl2L+iBXKR7HX
-         yV2+c2Eqp0ejO2OfKsB5W3VhlenOJaocTYJs0P2HUu3482QLlyGR9TKvQ94Itb+qZGrK
-         ZYQzy1xDfjnC6tKs3HpzA/RrJ7rq+O1moWESd0sXRHB/J+K56hzf0Sqf6EWZC9wbB5sV
-         8JOghrmF9woq/QBgP7M40Y4PNw8HZA55IiTAlMhSzvcMgf+ctJcNDVmmvrDEmtIqjreZ
-         ioEg==
-X-Gm-Message-State: AFqh2kpyLjv36mbMhCmbYVYP+cK47KLnVTyoNtll5ZXs+ulzn+z+WSF2
-        HQjG3O4pPZqchkp6Ii6b5jCVyw==
-X-Google-Smtp-Source: AMrXdXv4sMiSL7vKKuaChkyg9/yi5j3uuoC3NO91mZj+xIm23uyWN3whKb8odSyXTWfADQZtfdST6Q==
-X-Received: by 2002:a0d:d452:0:b0:364:1ba1:4bd2 with SMTP id w79-20020a0dd452000000b003641ba14bd2mr26414420ywd.43.1672241099492;
-        Wed, 28 Dec 2022 07:24:59 -0800 (PST)
-Received: from mutt-hbsd (pool-100-16-219-215.bltmmd.fios.verizon.net. [100.16.219.215])
-        by smtp.gmail.com with ESMTPSA id do55-20020a05620a2b3700b00704d8ad2e11sm9378808qkb.42.2022.12.28.07.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 07:24:58 -0800 (PST)
-Date:   Wed, 28 Dec 2022 10:24:58 -0500
-From:   Shawn Webb <shawn.webb@hardenedbsd.org>
-To:     oss-security@lists.openwall.com
-Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
-Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat
- correctly
-Message-ID: <20221228152458.6xyksrxunukjrtzx@mutt-hbsd>
-X-Operating-System: FreeBSD mutt-hbsd 14.0-CURRENT-HBSD FreeBSD
- 14.0-CURRENT-HBSD 
-X-PGP-Key: https://git.hardenedbsd.org/hardenedbsd/pubkeys/-/blob/master/Shawn_Webb/03A4CBEBB82EA5A67D9F3853FF2E67A277F8E1FA.pub.asc
-References: <Y6SJDbKBk471KE4k@p183>
- <Y6TUJcr/IHrsTE0W@codewreck.org>
- <1a1963aa1036ba07@orthanc.ca>
+        Wed, 28 Dec 2022 10:25:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9853F1402A;
+        Wed, 28 Dec 2022 07:25:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20DCA61564;
+        Wed, 28 Dec 2022 15:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9ACC433EF;
+        Wed, 28 Dec 2022 15:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672241112;
+        bh=W6bfM3a4PKbIE7EIvoN/B544EGN62Ti2jZ8ZRlS6agI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dWhrDKZZ054H/PNCvybtl+4JwCrIDKL2nK0cnD+3byQWU1WSy5X7Ko8QVDlWBNLZU
+         xWHAgia6r363o5dBy74BERghKah0T21uvYptg9jK3lu9WvPLez4ln/hWne1mwg056w
+         9Pm261wOGT7/ywSWiuz0ED2Dn1k5LtIqAMJO2/dW5JX7oKCCHYawZVZorIOUwnYXGJ
+         o0BZhEkhRBnRX1oyCmN7hIvPxLDwuo1wd+gGsVxvumhRoeCS/KZz9JoM3X19sF46RG
+         72xKX1TlBMaPcROwQ/9AQFVPjp4wSUBF9Mx/j1R6PRlPgOtG807UOumHXJoX8I236y
+         utr/qU+bMqmYg==
+Message-ID: <f47e877c-c95f-e3e6-b96f-89b0ca582878@kernel.org>
+Date:   Wed, 28 Dec 2022 16:25:08 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tq67mwsdswvrgjh4"
-Content-Disposition: inline
-In-Reply-To: <1a1963aa1036ba07@orthanc.ca>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: rtla osnoise hist: average duration is always zero
+To:     Andreas Ziegler <br015@umbiko.net>
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+References: <d7bb31547e9bbf6684801a7bbd857810@umbiko.net>
+Content-Language: en-US
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <d7bb31547e9bbf6684801a7bbd857810@umbiko.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andreas,
 
---tq67mwsdswvrgjh4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 12/24/22 13:39, Andreas Ziegler wrote:
+> -- Observed in, but not limited to, Linux 6.1.1
 
-On Tue, Dec 27, 2022 at 04:44:49PM -0800, Lyndon Nerenberg (VE7TFX/VE6BBM) =
-wrote:
-> Dominique Martinet writes:
->=20
-> > But, really, I just don't see how this can practically be said to be pa=
-rsable...
->=20
-> In its current form it never will be.  The solution is to place
-> this variable-length field last.  Then you can "cut -d ' ' -f 51-"
-> to get the command+args part (assuming I counted all those fields
-> correctly ...)
->=20
-> Of course, this breaks backwards compatability.
+Since original commit... The best way to report this is adding
+a Fixes: tag. For example:
 
-It would also break forwards compatibility in the case new fields
-needed to be added.
+Fixes: 829a6c0b5698 ("rtla/osnoise: Add the hist mode")
 
-The only solution would be a libxo-style feature wherein a
-machine-parseable format is exposed by virtue of a file extension.
+> rtla osnoise hist always outputs '0' as average duration value. Example:
+> 
+> # rtla osnoise hist -P F:1 -c 0-1 -r 900000 -d 1M -b 1 -E 5000 -T 1
+> # RTLA osnoise histogram
+> # Time unit is microseconds (us)
+> # Duration:   0 00:01:00
+>   ...
+> count:     5629      1364
+> min:          1         1
+> avg:          0         0
+> max:       2955        56
+> 
+> This is due to sum_sample in osnoise_hist_update_multiple() being calculated as the sum (duration), not as sum (duration * count).
 
-Examples:
+Yeah, that is correct. It works on timerlat hist because timerlat hist collects
+each trace event. osnoise hist uses in-kernel histograms, so we need to multiply
+the value with the count. This is a leftover from the development phase, as I started
+using tracing and then moved to histograms (which is better).
 
-1. /proc/pid/stats.json
-2. /proc/pid/stats.xml
-3. /proc/pid/stats.yaml_shouldnt_be_a_thing
+> Rounding, instead of truncating, of the average value would be cool.
 
-Thanks,
+I thought: the values were already rounded up, so it might be rounding too much.
 
---=20
-Shawn Webb
-Cofounder / Security Engineer
-HardenedBSD
+But we are in user space. It is just easier to add a two digits precision
+to the value, no?
 
-https://git.hardenedbsd.org/hardenedbsd/pubkeys/-/raw/master/Shawn_Webb/03A=
-4CBEBB82EA5A67D9F3853FF2E67A277F8E1FA.pub.asc
+> The following patch would solve the issue described above:
+> 
+> 
+> Sampled duration must be weighted by observed quantity, to arrive at a
+> correct average duration value.
+> 
+> Fix calculation of total duration by summing (duration * count).
+> Introduce rounding for calculation of final value.
+> 
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> 
+> --- a/tools/tracing/rtla/src/osnoise_hist.c
+> +++ b/tools/tracing/rtla/src/osnoise_hist.c
+> @@ -121,6 +121,7 @@
+>  {
+>      struct osnoise_hist_params *params = tool->params;
+>      struct osnoise_hist_data *data = tool->data;
+> +    unsigned long long total_duration;
+>      int entries = data->entries;
+>      int bucket;
+>      int *hist;
+> @@ -131,10 +132,12 @@
+>      if (data->bucket_size)
+>          bucket = duration / data->bucket_size;
+> 
+> +    total_duration = duration * count;
+> +
+>      hist = data->hist[cpu].samples;
+>      data->hist[cpu].count += count;
+>      update_min(&data->hist[cpu].min_sample, &duration);
+> -    update_sum(&data->hist[cpu].sum_sample, &duration);
+> +    update_sum(&data->hist[cpu].sum_sample, &total_duration);
 
---tq67mwsdswvrgjh4
-Content-Type: application/pgp-signature; name="signature.asc"
+How about re-seding a patch with the code above, adding the:
 
------BEGIN PGP SIGNATURE-----
+Fixes: 829a6c0b5698 ("rtla/osnoise: Add the hist mode")
 
-iQIzBAABCAAdFiEEA6TL67gupaZ9nzhT/y5nonf44foFAmOsX7sACgkQ/y5nonf4
-4frR+g/9FSG8mCUh/OYcCWgfRUJRi+2bBxoklcCfEcswS60dOe+dAOZ3kfpnmPig
-SLm/eY5Bgl1hkHF8+Mz6pFJu9Nlg3+ZmJ4LlWV6L6SZsry0V5NTlwAmUqyqysqYO
-e3R6UXGnv5JBYK2fyzk7r2eebzfUtGwCo+vBeq1tJNSPKkqA49fvSVZeGQYPYmAW
-FZJHQhKdJ0OBpxNa8JPW+HAsmJInXVBRlZos9yYkaAsvTFH+ymtp8Dn+2h99HL0H
-hClUswUv+DD9M/XeBeovg7f07BWUj8kwWjKDfgZCAJKvupFu7hLZemh7+ZDXgXcZ
-Wiog9NqztTFJHfZO9YmcEdoBlT1IM9aIwNjOtCjsWNzNINOe//VFuNdc1obx4l32
-nnu3FjxLx6kv7rkWfMPB1gloIcKDZmiSVWm8m0UYoVEwIpX0avaGNGg0URVq/Vf1
-FukDumq8CSsyb673Z5m4iDJBbKBo2KnMOQcDEdHqkbvXb4Ug/8tGpfq/NRVRjqkB
-KV4tDnYZ70paHbJOX6Bb6MEPA4ywyT9Hy4MZv+3SBZkWvLNkpVs+GBWpmzcTQWuO
-clxGl1Kz+aHZon4RAnxwU31NBjmvvRvbkGHTjzFFrUxNCrIdu/VSDPFZX4/uWFX2
-Qj1SV0/8/pL0CAzLtxiYD9hEWqMEyS0yMZ5zcv2XUMSICItK3/A=
-=YDgV
------END PGP SIGNATURE-----
+and...
 
---tq67mwsdswvrgjh4--
+>      update_max(&data->hist[cpu].max_sample, &duration);
+> 
+>      if (bucket < entries)
+> @@ -333,7 +336,7 @@
+> 
+>          if (data->hist[cpu].count)
+>              trace_seq_printf(trace->seq, "%9llu ",
+> -                    data->hist[cpu].sum_sample / data->hist[cpu].count);
+> +                (data->hist[cpu].sum_sample + data->hist[cpu].count / 2) / data->hist[cpu].count);
+
+another patch with this part, adding two digits precision?
+
+>          else
+>              trace_seq_printf(trace->seq, "        - ");
+>      }
+> 
+Thanks!
+-- Daniel
+
+> Kind regards,
+> Andreas
+
