@@ -2,86 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB26657272
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 05:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57402657274
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 05:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiL1ED3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 23:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S230018AbiL1EFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 23:05:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiL1EDX (ORCPT
+        with ESMTP id S229475AbiL1EFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 23:03:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79D1D13B;
-        Tue, 27 Dec 2022 20:03:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81FB2B81205;
-        Wed, 28 Dec 2022 04:03:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A45C7C433EF;
-        Wed, 28 Dec 2022 04:03:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672200200;
-        bh=8ZRP2tXKd0dMQ760LBzjUQzvT6qVBWagB9uvUEDeto0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oSUkn4On7DpXQPoXnWoWfTf+wNL9Go/NRBcSN3uyl54OzRYXkrG/X9GYKHSU/NeL4
-         /qJmERzXg8XW3ZRlMD+I42RqQqIFc20GurrlJyaEp4CNQN8ghtBvF9/yeVbXpKm9RG
-         yIrUTLf1defvgVukP4DT03diQMDydIdR5Xu95wBrv20Fs/XOvHgcVzxeHyI2J0o+M3
-         VAL9iJjpB7smmgU8U7672BMaOYhZ5/L6d+EY/DjbFvSY2SHGCMHnuE8VNLOA0rN/l9
-         RefqUrU4JAi22MVhxDR0tsNnjnTJYKzqKhwtw8kEi+oZTPBI+nTmJGN80V4VcFnw6e
-         DAk2rEzrRn82Q==
-Date:   Tue, 27 Dec 2022 22:03:17 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845: drop 0x from unit address
-Message-ID: <20221228040317.wmfjq2il5q4uzdtx@builder.lan>
-References: <20221210113340.63833-1-krzysztof.kozlowski@linaro.org>
- <5d21408f-cc99-35f3-c4ce-b13f02c1c1f3@linaro.org>
- <f260fd4e-a25b-6ae5-0952-63f68b5330fc@linaro.org>
+        Tue, 27 Dec 2022 23:05:10 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D025D13B;
+        Tue, 27 Dec 2022 20:05:09 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id e21so416863pfl.1;
+        Tue, 27 Dec 2022 20:05:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jK0tDIcLfnflzS1LznZP6x/fI+ZY0ZL4k2RInKThgIY=;
+        b=RctnmHHOeHRoTlYvNNisGCE2Wz4+3xO7Cp0I8yrPtcJpRXIIXvXKBrdYLm2dJKp8Qf
+         uGpm2988jUYQtm00sIinDLQpJsANsha7m5c0Xi/8/HobfS/XP29Zy3BG00R9kBVWv7mZ
+         OLximqa884rNy2qlxdbjbWE9CtxSMJBW/08tYB7S/gAeOLzISPQgVaol2+2x7oGA/xCD
+         ta/wtXLyoIVfM78JLiraScZkmlbinyBDzUlAypNArEIwCWS9+INxNIL2LjekRXzsF0FI
+         FLc8QYJEhskOC74nxf20jf4IZO09uqrBy6vjmqvdxGs/gNJlTMS8OPQKa6PC5Oeg5Sk4
+         PLrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jK0tDIcLfnflzS1LznZP6x/fI+ZY0ZL4k2RInKThgIY=;
+        b=Rd3kK37bSFU3RUL3p3QdVmDqpZUPUspz1YuUJGG4j6jqcrqRemxvCxLpPQGTFVsB0a
+         lzHEVKcPQG97Fp/UynKlH/47OuY0CQk+sVZgCWryEvjb6yXgMprBASi+WWmOJwnHE7QM
+         AnmsbDw2kRRDrQe6YFztC+SgMexQahdUAB/CkIkCUgkSXj4ol5vtFfueAJafy9wrwMem
+         PdovsgpD44Mq8dCOufRwtMqAyvZtpE8g3nRKjWf5Z5xte79WB/UsDmj2EO1+AY2VNfYW
+         MQDMIzrVllPNkM3328a0DwAiipXYl606lijrtRpl8w+6OsuPg5SynVS6somKPw9YC1hq
+         LWtA==
+X-Gm-Message-State: AFqh2krL4X6InherPJuV/ImQgdpaw5Pwyi0PFsvGbPet/lOyrDlT7BCo
+        0ilYgwwh5bDthHLg4eo0T0k=
+X-Google-Smtp-Source: AMrXdXuuYs30wiC2IfBDU1nWCD8vYDJrC6lTUDmnvBNKqUoGI7wjo5+rB4R4jlB8qODkT2RzSb6mEw==
+X-Received: by 2002:a05:6a00:bcb:b0:581:824a:c45d with SMTP id x11-20020a056a000bcb00b00581824ac45dmr2381900pfu.7.1672200309029;
+        Tue, 27 Dec 2022 20:05:09 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id g11-20020aa79dcb000000b00575caf8478dsm9284815pfq.41.2022.12.27.20.05.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Dec 2022 20:05:08 -0800 (PST)
+From:   zys.zljxml@gmail.com
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yushan Zhou <katrinzhou@tencent.com>
+Subject: [PATCH] brtfs: use PAGE_ALIGNED macro
+Date:   Wed, 28 Dec 2022 12:04:47 +0800
+Message-Id: <20221228040447.3566246-1-zys.zljxml@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f260fd4e-a25b-6ae5-0952-63f68b5330fc@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 11, 2022 at 09:15:36PM +0100, Krzysztof Kozlowski wrote:
-> On 10/12/2022 13:26, Konrad Dybcio wrote:
-> > 
-> > 
-> > On 10.12.2022 12:33, Krzysztof Kozlowski wrote:
-> >> By coding style, unit address should not start with 0x.
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> ---
-> > We somehow keep running into solving the same style issues :P
-> > 
-> > https://lore.kernel.org/lkml/20220930191049.123256-8-konrad.dybcio@somainline.org/
-> > 
-> 
-> Eh, this should have been just applied long time ago...
-> 
+From: Yushan Zhou <katrinzhou@tencent.com>
 
-That's patch 7 in a series, which I would be expecting to see respun
-per your request for changes.
+The header file linux/mm.h provides the PAGE_ALIGNED macro to
+test whether an address is aligned to PAGE_SIZE. Use it instead
+of IS_ALIGNED.
 
+Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
+---
+ fs/btrfs/lzo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-@Konrad, please put fixes like that first in your series - or just send
-them separate from the series.
+diff --git a/fs/btrfs/lzo.c b/fs/btrfs/lzo.c
+index d5e78cbc8fbc..71f6d8302d50 100644
+--- a/fs/btrfs/lzo.c
++++ b/fs/btrfs/lzo.c
+@@ -280,7 +280,7 @@ int lzo_compress_pages(struct list_head *ws, struct address_space *mapping,
+ 		}
+ 
+ 		/* Check if we have reached page boundary */
+-		if (IS_ALIGNED(cur_in, PAGE_SIZE)) {
++		if (PAGE_ALIGNED(cur_in)) {
+ 			put_page(page_in);
+ 			page_in = NULL;
+ 		}
+-- 
+2.27.0
 
-Regards,
-Bjorn
