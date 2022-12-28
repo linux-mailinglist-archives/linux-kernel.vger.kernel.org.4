@@ -2,155 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B1B657BB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 16:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D711C657BC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 16:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233713AbiL1PYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 10:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S233785AbiL1PZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 10:25:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbiL1PYh (ORCPT
+        with ESMTP id S233718AbiL1PZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 10:24:37 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B75514021
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 07:24:35 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l26so9857645wme.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 07:24:35 -0800 (PST)
+        Wed, 28 Dec 2022 10:25:01 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1D214081
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 07:25:00 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-381662c78a9so225746677b3.7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 07:25:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8nXKCVyOIX4nL784wtZ3ILMzCso/8DNyZaBxq04sqn0=;
-        b=HsmTzuhMZWa6Oxk/vOaMQqv2DO5KR6hoG7P4Waf31F+8oxMU2lCAMeICEaWOvObyIM
-         mVtuQeDpHICUTJwZRM8Rj+Se1bo5qnuUMJlauo1VtOkHNlhpnesn9L3SYGugl/EkHWMd
-         NU/WwKpsTxKFT8eTSsZeYaTJilYE+4iP5IPbGVzx8LMgKBgpJSTXdNbvfJbFr99CLuIc
-         Q2MGijvcB1SX37e5Yrc/BZKPCd7zKm/W8ulUFXoPpZwHamrUIFTRm8X/XNGtPjA1ehJB
-         hcTmOx1+ZOUoeDDmdAkgAKSnL7PAcBHzgfw0lv1yca0TMzp5UhtEmJQry9d21P/WeZey
-         w1Pw==
+        d=hardenedbsd.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/B1rOCH9HmW+vhDEypyd7tOOp9ZpzuMp1iRK/8e6VVE=;
+        b=dZRaLcJt0LA5Sb4x8OsTw5hsUcfVPzPLAtoCa/4ntHT8PwvuRAlD76g80CtcyygsYa
+         dCo0hik7AA0m6xY+AeiUqVhR23n9WtVTg7Kw51xF8uWZWA6QGFqCzD8wsH/7eiGIIHQm
+         wud3Ghtd73qp89MrwYRwTRtMkJx24SZwmnQO/hWC5rhlkH0FS/O6L8KrTOjsTLZBT9Qd
+         dMdnGSbm5PRoj5NlqmEJXr8WgYn4WqdcsySTmyES12faWKFpV7V5bO6FdmF/RAa8aQ6r
+         yeeFn/QBhmT+PtTxeOQbRqGexlNjisovgvqBc3Q9xi3fiOhSKcBkFzRQAA4bI5JuDjUl
+         35dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8nXKCVyOIX4nL784wtZ3ILMzCso/8DNyZaBxq04sqn0=;
-        b=TUryGaiRD8KGAA90z7eaOqFTLsHKIClN/Pzq3OWak91fKnXkpkKAafPB4U2sc9aIMT
-         wZVOxu/rSrofEqUGzjMDEbmcFCbEa+CvfwQ7sH8uzC7f2ayyA4TkcgfH5EQ/IKfQKYCT
-         GygDHbhCCf83MrIkUHRJUfIV9uxkcuawDSd2IOccDdJldejySU/SFhwM8b60VBVZ9FI7
-         +GRVC2XHEDFIXD+GCrjyjtskbsRUNNBCGIA9qpZecgGSyGfUPM6qZ7+gQaMUSBlDZ80g
-         TwXniM79M/D+4af0440b2+19n19L3w+AiVHvpqfclXCjppGjzm4Pbi8DqQJ518uID3r3
-         5Cwg==
-X-Gm-Message-State: AFqh2kqRBw1IQGdqcNkOgkM8fiyw5Jsb+S4OtLq4lEZEOOmahJx5Pwzg
-        iEQxrp/mAwNcKSOxuTAm5fP/QA==
-X-Google-Smtp-Source: AMrXdXtCg+Zy0Gj3Bdwd1XS/UTyFga3yDiwuZtjI5i4ejJyCw9JYw95SPFwBVkaqRN9O3lknqx5kEg==
-X-Received: by 2002:a05:600c:4191:b0:3d7:9ae7:e4f2 with SMTP id p17-20020a05600c419100b003d79ae7e4f2mr18470609wmh.35.1672241074108;
-        Wed, 28 Dec 2022 07:24:34 -0800 (PST)
-Received: from localhost (2a02-8388-6582-fe80-0000-0000-0000-0006.cable.dynamic.v6.surfer.at. [2a02:8388:6582:fe80::6])
-        by smtp.gmail.com with ESMTPSA id h15-20020adfaa8f000000b002421888a011sm15870418wrc.69.2022.12.28.07.24.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 07:24:33 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 28 Dec 2022 16:24:32 +0100
-Message-Id: <CPDJZJHDL1XJ.2UY1U1E19CTUH@otso>
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Alim Akhtar" <alim.akhtar@samsung.com>,
-        "Avri Altman" <avri.altman@wdc.com>,
-        "Bart Van Assche" <bvanassche@acm.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-Cc:     <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: ufs: qcom: Add reg-names property for ICE
-X-Mailer: aerc 0.13.0
-References: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
- <c4109766-22f1-7227-47bb-9273a027bb0c@linaro.org>
- <CPDFHXBPSP76.5CWNQK4N1KGI@otso>
- <5391e6e5-3773-a012-c396-b59b1f54ea51@linaro.org>
-In-Reply-To: <5391e6e5-3773-a012-c396-b59b1f54ea51@linaro.org>
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/B1rOCH9HmW+vhDEypyd7tOOp9ZpzuMp1iRK/8e6VVE=;
+        b=MiYRQXDy0WLEXOCZAwmBfet7x3vPj5Z01K9izjSds9yjDv0nbQwxGD43NB3oT2gZRb
+         TJR+Z7I40AOpSLeIpeXHzVSgLpSJD0t4x9Lr821aibkbOneC6lUh7lxpl2L+iBXKR7HX
+         yV2+c2Eqp0ejO2OfKsB5W3VhlenOJaocTYJs0P2HUu3482QLlyGR9TKvQ94Itb+qZGrK
+         ZYQzy1xDfjnC6tKs3HpzA/RrJ7rq+O1moWESd0sXRHB/J+K56hzf0Sqf6EWZC9wbB5sV
+         8JOghrmF9woq/QBgP7M40Y4PNw8HZA55IiTAlMhSzvcMgf+ctJcNDVmmvrDEmtIqjreZ
+         ioEg==
+X-Gm-Message-State: AFqh2kpyLjv36mbMhCmbYVYP+cK47KLnVTyoNtll5ZXs+ulzn+z+WSF2
+        HQjG3O4pPZqchkp6Ii6b5jCVyw==
+X-Google-Smtp-Source: AMrXdXv4sMiSL7vKKuaChkyg9/yi5j3uuoC3NO91mZj+xIm23uyWN3whKb8odSyXTWfADQZtfdST6Q==
+X-Received: by 2002:a0d:d452:0:b0:364:1ba1:4bd2 with SMTP id w79-20020a0dd452000000b003641ba14bd2mr26414420ywd.43.1672241099492;
+        Wed, 28 Dec 2022 07:24:59 -0800 (PST)
+Received: from mutt-hbsd (pool-100-16-219-215.bltmmd.fios.verizon.net. [100.16.219.215])
+        by smtp.gmail.com with ESMTPSA id do55-20020a05620a2b3700b00704d8ad2e11sm9378808qkb.42.2022.12.28.07.24.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 07:24:58 -0800 (PST)
+Date:   Wed, 28 Dec 2022 10:24:58 -0500
+From:   Shawn Webb <shawn.webb@hardenedbsd.org>
+To:     oss-security@lists.openwall.com
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
+Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat
+ correctly
+Message-ID: <20221228152458.6xyksrxunukjrtzx@mutt-hbsd>
+X-Operating-System: FreeBSD mutt-hbsd 14.0-CURRENT-HBSD FreeBSD
+ 14.0-CURRENT-HBSD 
+X-PGP-Key: https://git.hardenedbsd.org/hardenedbsd/pubkeys/-/blob/master/Shawn_Webb/03A4CBEBB82EA5A67D9F3853FF2E67A277F8E1FA.pub.asc
+References: <Y6SJDbKBk471KE4k@p183>
+ <Y6TUJcr/IHrsTE0W@codewreck.org>
+ <1a1963aa1036ba07@orthanc.ca>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tq67mwsdswvrgjh4"
+Content-Disposition: inline
+In-Reply-To: <1a1963aa1036ba07@orthanc.ca>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Dec 28, 2022 at 12:58 PM CET, Krzysztof Kozlowski wrote:
-> On 28/12/2022 12:53, Luca Weiss wrote:
-> > Hi Krzysztof,
-> >=20
-> > On Wed Dec 28, 2022 at 12:50 PM CET, Krzysztof Kozlowski wrote:
-> >> On 09/12/2022 15:29, Luca Weiss wrote:
-> >>> The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add t=
-his
-> >>> in the bindings so the existing dts can validate successfully.
-> >>>
-> >>> Also sm8450 is using ICE since commit 276ee34a40c1 ("arm64: dts: qcom=
-:
-> >>> sm8450: add Inline Crypto Engine registers and clock") so move the
-> >>> compatible to the correct if.
-> >>>
-> >>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> >>> ---
-> >>> (no cover subject)
-> >>>
-> >>> The only remaining validation issues I see is the following on sc8280=
-xp-crd.dtb
-> >>> and sa8540p-ride.dtb:
-> >>>
-> >>
-> >> Any plans on fixing the patch (after testing it) and resending?
-> >=20
-> > I wasn't quite sure how to fix the comments, but re-reading them this
-> > comment from you is how you expect it to be in v2?
->
-> The patch fails testing, so I meant this.
->
-> >=20
-> >> Just add it to top-level with minItems: 1 and per variant customize:
-> >> 1. maxItems: 1
-> >> 2. minItems: 2 + required
-> >=20
 
-I tried a bit now but couldn't get it to work when using 'items' so that
-we have the "std" and "ice" names in there.
+--tq67mwsdswvrgjh4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Documentation/devicetree/bindings/ufs/qcom,ufs.yaml: allOf:2:then:propertie=
-s:reg-names: 'oneOf' conditional failed, one must be fixed:
-        [{'const': 'std'}, {'const': 'ice'}] is too long
-        [{'const': 'std'}, {'const': 'ice'}] is too short
-        False schema does not allow 2
-        1 was expected
-        hint: "minItems" is only needed if less than the "items" list lengt=
-h
-        from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+On Tue, Dec 27, 2022 at 04:44:49PM -0800, Lyndon Nerenberg (VE7TFX/VE6BBM) =
+wrote:
+> Dominique Martinet writes:
+>=20
+> > But, really, I just don't see how this can practically be said to be pa=
+rsable...
+>=20
+> In its current form it never will be.  The solution is to place
+> this variable-length field last.  Then you can "cut -d ' ' -f 51-"
+> to get the command+args part (assuming I counted all those fields
+> correctly ...)
+>=20
+> Of course, this breaks backwards compatability.
 
-Since I have 'minItems: 1' in top-level I seemingly cannot use 'items'
-in the 'if' neither alone nor with 'minItems' and/or 'maxItems', getting
-different errors when doing that.
+It would also break forwards compatibility in the case new fields
+needed to be added.
 
-Can I just put 'reg-names: true' top-level and then specify either items
-for the ones that use ICE or for the others use the 'maxItems: 1'?
+The only solution would be a libxo-style feature wherein a
+machine-parseable format is exposed by virtue of a file extension.
 
-Or am I supposed to ignore 'items' completely but driver expects 'ice'
-name so I'd rather include it.
+Examples:
 
-Regards
-Luca
+1. /proc/pid/stats.json
+2. /proc/pid/stats.xml
+3. /proc/pid/stats.yaml_shouldnt_be_a_thing
 
->
-> Yes.
->
-> Best regards,
-> Krzysztof
+Thanks,
 
+--=20
+Shawn Webb
+Cofounder / Security Engineer
+HardenedBSD
+
+https://git.hardenedbsd.org/hardenedbsd/pubkeys/-/raw/master/Shawn_Webb/03A=
+4CBEBB82EA5A67D9F3853FF2E67A277F8E1FA.pub.asc
+
+--tq67mwsdswvrgjh4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEA6TL67gupaZ9nzhT/y5nonf44foFAmOsX7sACgkQ/y5nonf4
+4frR+g/9FSG8mCUh/OYcCWgfRUJRi+2bBxoklcCfEcswS60dOe+dAOZ3kfpnmPig
+SLm/eY5Bgl1hkHF8+Mz6pFJu9Nlg3+ZmJ4LlWV6L6SZsry0V5NTlwAmUqyqysqYO
+e3R6UXGnv5JBYK2fyzk7r2eebzfUtGwCo+vBeq1tJNSPKkqA49fvSVZeGQYPYmAW
+FZJHQhKdJ0OBpxNa8JPW+HAsmJInXVBRlZos9yYkaAsvTFH+ymtp8Dn+2h99HL0H
+hClUswUv+DD9M/XeBeovg7f07BWUj8kwWjKDfgZCAJKvupFu7hLZemh7+ZDXgXcZ
+Wiog9NqztTFJHfZO9YmcEdoBlT1IM9aIwNjOtCjsWNzNINOe//VFuNdc1obx4l32
+nnu3FjxLx6kv7rkWfMPB1gloIcKDZmiSVWm8m0UYoVEwIpX0avaGNGg0URVq/Vf1
+FukDumq8CSsyb673Z5m4iDJBbKBo2KnMOQcDEdHqkbvXb4Ug/8tGpfq/NRVRjqkB
+KV4tDnYZ70paHbJOX6Bb6MEPA4ywyT9Hy4MZv+3SBZkWvLNkpVs+GBWpmzcTQWuO
+clxGl1Kz+aHZon4RAnxwU31NBjmvvRvbkGHTjzFFrUxNCrIdu/VSDPFZX4/uWFX2
+Qj1SV0/8/pL0CAzLtxiYD9hEWqMEyS0yMZ5zcv2XUMSICItK3/A=
+=YDgV
+-----END PGP SIGNATURE-----
+
+--tq67mwsdswvrgjh4--
