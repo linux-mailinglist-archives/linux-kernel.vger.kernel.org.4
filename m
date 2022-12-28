@@ -2,302 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8A0657650
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7955657646
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbiL1MKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
+        id S230486AbiL1MDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:03:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiL1MKE (ORCPT
+        with ESMTP id S230145AbiL1MCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:10:04 -0500
-X-Greylist: delayed 484 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Dec 2022 04:10:02 PST
-Received: from honk.sigxcpu.org (honk.sigxcpu.org [24.134.29.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FC4DA3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 04:10:02 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id F27D1FB03;
-        Wed, 28 Dec 2022 13:01:54 +0100 (CET)
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cJ_u4MwGn99Z; Wed, 28 Dec 2022 13:01:51 +0100 (CET)
-Date:   Wed, 28 Dec 2022 13:01:49 +0100
-From:   Guido =?iso-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Ondrej Jirman <megous@megous.com>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 03/14] drm/panel-sitronix-st7703: Drop custom DSI write
- macros
-Message-ID: <Y6wwLdvhjUeTYSlQ@qwark.sigxcpu.org>
-References: <20221228014757.3170486-1-javierm@redhat.com>
- <20221228014757.3170486-4-javierm@redhat.com>
+        Wed, 28 Dec 2022 07:02:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB0D1173;
+        Wed, 28 Dec 2022 04:01:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD9316136E;
+        Wed, 28 Dec 2022 12:01:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D00DC433EF;
+        Wed, 28 Dec 2022 12:01:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672228912;
+        bh=mSKLstnN8UErpGX3SpV286l5MB64KVuBWn9aENVo6uU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uP6BKCG4B92YvGOjiIMg5muVDxbIR1nd7iCwR6y3ZECXLYn+jcOv8+WyvpBhqZNnc
+         sTSfBsb28qm0npZCoSC+Ow42cHqn1uriOaWiOG36j28ZmFr9UCd0lmuJ7l5Cu3AMEA
+         4ps62l4Z4L9rOAXMbMFQGQyX02Kl8JMfKORoAO2HDAyWP2Wf524O8rrCwZYzEHDDv2
+         Vz0or3eSbDVwbGKPxDP5roUMd2giRm10t0Q4BjyxS80sNTRoxc/GukOJM3tO3mOGq2
+         d10+o4uPHaRw5V0PGiZheyYtxcEMFum6DQC74tuSoZd0Gw/0thdZAmwoEEdNmCcGtL
+         GaP3Odh+clihg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pAV86-0004WX-St; Wed, 28 Dec 2022 13:01:54 +0100
+Date:   Wed, 28 Dec 2022 13:01:54 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     agross@kernel.org, srinivas.kandagatla@linaro.org,
+        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] arm64: dts: qcom: sc8280xp: add audio support
+Message-ID: <Y6wwMo8KLulNAoiU@hovoldconsulting.com>
+References: <20221123104342.26140-1-srinivas.kandagatla@linaro.org>
+ <167220221217.833009.5730063788271218487.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221228014757.3170486-4-javierm@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_FAIL,
-        SPF_HELO_NONE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <167220221217.833009.5730063788271218487.b4-ty@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
-Could you please also cc maintainers on the actual macro addition since
-it's hard to review without seeing what the code gets changed to
-(especially when there's multiple revisions). I assume
+On Tue, Dec 27, 2022 at 10:36:56PM -0600, Bjorn Andersson wrote:
+> On Wed, 23 Nov 2022 10:43:39 +0000, Srinivas Kandagatla wrote:
+> > This patchset adds audio support for sc8280xp Lenovo x13s.
+> > Support for Headset Playback/Capture, Speaker Playback and DMIC is
+> > tested.
+> > 
+> > A prebuit ASoC topology file available at
+> > https://git.linaro.org/people/srinivas.kandagatla/audioreach-topology.git/tree/prebuilt/SC8280XP-LENOVO-X13S-tplg.bin
+> > 
+> > [...]
+> 
+> Applied, thanks!
+> 
+> [1/3] arm64: dts: qcom: sc8280xp: add gpr node
+>       commit: e73defb2deee74f3f4988196bf0c21782dffa415
+> [2/3] arm64: dts: qcom: sc8280xp: add SoundWire and LPASS
+>       commit: c18773d162a63f65024e80ae355e3fbc923e7255
+> [3/3] arm64: dts: qcom: sc8280xp-x13s: Add soundcard support
+>       commit: f29077d8665221ba2802a29ee7bd9fcef66cde81
 
-   https://lore.kernel.org/dri-devel/20221228014757.3170486-2-javierm@redhat.com/
+Perhaps merging this was a bit premature. I just gave it a spin, but
+this is apparently not even expected to work without various changes
+that are still work in progress. For example, the codecs fails to probe
+with:
 
-is the right one?
-Cheers,
- -- Guido
+[   11.077727] qcom-prm gprsvc:service:2:2: DSP returned error[100100f] 1
+[   11.077926] rx_macro: probe of 3200000.rxmacro failed with error -22
 
-On Wed, Dec 28, 2022 at 02:47:46AM +0100, Javier Martinez Canillas wrote:
-> There are macros for these already in the <drm/drm_mipi_dsi.h> header, use
-> that instead and delete the custom DSI write macros defined in the driver.
-> 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
-> 
->  drivers/gpu/drm/panel/panel-sitronix-st7703.c | 83 ++++++++-----------
->  1 file changed, 33 insertions(+), 50 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-sitronix-st7703.c b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-> index 86a472b01360..3e6655c2727e 100644
-> --- a/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-> +++ b/drivers/gpu/drm/panel/panel-sitronix-st7703.c
-> @@ -73,14 +73,6 @@ static inline struct st7703 *panel_to_st7703(struct drm_panel *panel)
->  	return container_of(panel, struct st7703, panel);
->  }
->  
-> -#define dsi_generic_write_seq(dsi, seq...) do {				\
-> -		static const u8 d[] = { seq };				\
-> -		int ret;						\
-> -		ret = mipi_dsi_generic_write(dsi, d, ARRAY_SIZE(d));	\
-> -		if (ret < 0)						\
-> -			return ret;					\
-> -	} while (0)
-> -
->  static int jh057n_init_sequence(struct st7703 *ctx)
->  {
->  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
-> @@ -90,27 +82,27 @@ static int jh057n_init_sequence(struct st7703 *ctx)
->  	 * resemble the ST7703 but the number of parameters often don't match
->  	 * so it's likely a clone.
->  	 */
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETEXTC,
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETEXTC,
->  			      0xF1, 0x12, 0x83);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETRGBIF,
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETRGBIF,
->  			      0x10, 0x10, 0x05, 0x05, 0x03, 0xFF, 0x00, 0x00,
->  			      0x00, 0x00);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETSCR,
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETSCR,
->  			      0x73, 0x73, 0x50, 0x50, 0x00, 0x00, 0x08, 0x70,
->  			      0x00);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETVDC, 0x4E);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETPANEL, 0x0B);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETCYC, 0x80);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETDISP, 0xF0, 0x12, 0x30);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETEQ,
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETVDC, 0x4E);
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETPANEL, 0x0B);
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETCYC, 0x80);
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETDISP, 0xF0, 0x12, 0x30);
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETEQ,
->  			      0x07, 0x07, 0x0B, 0x0B, 0x03, 0x0B, 0x00, 0x00,
->  			      0x00, 0x00, 0xFF, 0x00, 0xC0, 0x10);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETBGP, 0x08, 0x08);
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETBGP, 0x08, 0x08);
->  	msleep(20);
->  
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETVCOM, 0x3F, 0x3F);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_UNKNOWN_BF, 0x02, 0x11, 0x00);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETGIP1,
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETVCOM, 0x3F, 0x3F);
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_UNKNOWN_BF, 0x02, 0x11, 0x00);
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETGIP1,
->  			      0x82, 0x10, 0x06, 0x05, 0x9E, 0x0A, 0xA5, 0x12,
->  			      0x31, 0x23, 0x37, 0x83, 0x04, 0xBC, 0x27, 0x38,
->  			      0x0C, 0x00, 0x03, 0x00, 0x00, 0x00, 0x0C, 0x00,
-> @@ -119,7 +111,7 @@ static int jh057n_init_sequence(struct st7703 *ctx)
->  			      0x64, 0x20, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88,
->  			      0x02, 0x88, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
->  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETGIP2,
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETGIP2,
->  			      0x02, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
->  			      0x00, 0x00, 0x00, 0x00, 0x02, 0x46, 0x02, 0x88,
->  			      0x88, 0x88, 0x88, 0x88, 0x88, 0x64, 0x88, 0x13,
-> @@ -128,7 +120,7 @@ static int jh057n_init_sequence(struct st7703 *ctx)
->  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
->  			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x0A,
->  			      0xA5, 0x00, 0x00, 0x00, 0x00);
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_SETGAMMA,
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_SETGAMMA,
->  			      0x00, 0x09, 0x0E, 0x29, 0x2D, 0x3C, 0x41, 0x37,
->  			      0x07, 0x0B, 0x0D, 0x10, 0x11, 0x0F, 0x10, 0x11,
->  			      0x18, 0x00, 0x09, 0x0E, 0x29, 0x2D, 0x3C, 0x41,
-> @@ -162,15 +154,6 @@ static const struct st7703_panel_desc jh057n00900_panel_desc = {
->  	.init_sequence = jh057n_init_sequence,
->  };
->  
-> -#define dsi_dcs_write_seq(dsi, cmd, seq...) do {			\
-> -		static const u8 d[] = { seq };				\
-> -		int ret;						\
-> -		ret = mipi_dsi_dcs_write(dsi, cmd, d, ARRAY_SIZE(d));	\
-> -		if (ret < 0)						\
-> -			return ret;					\
-> -	} while (0)
-> -
-> -
->  static int xbd599_init_sequence(struct st7703 *ctx)
->  {
->  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
-> @@ -180,9 +163,9 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->  	 */
->  
->  	/* Magic sequence to unlock user commands below. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETEXTC, 0xF1, 0x12, 0x83);
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETEXTC, 0xF1, 0x12, 0x83);
->  
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETMIPI,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETMIPI,
->  			  0x33, /* VC_main = 0, Lane_Number = 3 (4 lanes) */
->  			  0x81, /* DSI_LDO_SEL = 1.7V, RTERM = 90 Ohm */
->  			  0x05, /* IHSRX = x6 (Low High Speed driving ability) */
-> @@ -194,14 +177,14 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->  			  0x44, 0x25, 0x00, 0x91, 0x0a, 0x00, 0x00, 0x02,
->  			  0x4F, 0x11, 0x00, 0x00, 0x37);
->  
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETPOWER_EXT,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETPOWER_EXT,
->  			  0x25, /* PCCS = 2, ECP_DC_DIV = 1/4 HSYNC */
->  			  0x22, /* DT = 15ms XDK_ECP = x2 */
->  			  0x20, /* PFM_DC_DIV = /1 */
->  			  0x03  /* ECP_SYNC_EN = 1, VGX_SYNC_EN = 1 */);
->  
->  	/* RGB I/F porch timing */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETRGBIF,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETRGBIF,
->  			  0x10, /* VBP_RGB_GEN */
->  			  0x10, /* VFP_RGB_GEN */
->  			  0x05, /* DE_BP_RGB_GEN */
-> @@ -212,7 +195,7 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->  			  0x00, 0x00);
->  
->  	/* Source driving settings. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETSCR,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETSCR,
->  			  0x73, /* N_POPON */
->  			  0x73, /* N_NOPON */
->  			  0x50, /* I_POPON */
-> @@ -224,19 +207,19 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->  			  0x00  /* Undocumented */);
->  
->  	/* NVDDD_SEL = -1.8V, VDDD_SEL = out of range (possibly 1.9V?) */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETVDC, 0x4E);
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETVDC, 0x4E);
->  
->  	/*
->  	 * SS_PANEL = 1 (reverse scan), GS_PANEL = 0 (normal scan)
->  	 * REV_PANEL = 1 (normally black panel), BGR_PANEL = 1 (BGR)
->  	 */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETPANEL, 0x0B);
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETPANEL, 0x0B);
->  
->  	/* Zig-Zag Type C column inversion. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETCYC, 0x80);
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETCYC, 0x80);
->  
->  	/* Set display resolution. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETDISP,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETDISP,
->  			  0xF0, /* NL = 240 */
->  			  0x12, /* RES_V_LSB = 0, BLK_CON = VSSD,
->  				 * RESO_SEL = 720RGB
-> @@ -246,7 +229,7 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->  				 * ISC = 0 frames
->  				 */);
->  
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETEQ,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETEQ,
->  			  0x00, /* PNOEQ */
->  			  0x00, /* NNOEQ */
->  			  0x0B, /* PEQGND */
-> @@ -267,9 +250,9 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->  				 */);
->  
->  	/* Undocumented command. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_UNKNOWN_C6, 0x01, 0x00, 0xFF, 0xFF, 0x00);
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_UNKNOWN_C6, 0x01, 0x00, 0xFF, 0xFF, 0x00);
->  
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETPOWER,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETPOWER,
->  			  0x74, /* VBTHS, VBTLS: VGH = 17V, VBL = -11V */
->  			  0x00, /* FBOFF_VGH = 0, FBOFF_VGL = 0 */
->  			  0x32, /* VRP  */
-> @@ -287,20 +270,20 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->  			  0x77  /* VGH3_R_DIV, VGL3_R_DIV (4.5MHz) */);
->  
->  	/* Reference voltage. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETBGP,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETBGP,
->  			  0x07, /* VREF_SEL = 4.2V */
->  			  0x07  /* NVREF_SEL = 4.2V */);
->  	msleep(20);
->  
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETVCOM,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETVCOM,
->  			  0x2C, /* VCOMDC_F = -0.67V */
->  			  0x2C  /* VCOMDC_B = -0.67V */);
->  
->  	/* Undocumented command. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_UNKNOWN_BF, 0x02, 0x11, 0x00);
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_UNKNOWN_BF, 0x02, 0x11, 0x00);
->  
->  	/* This command is to set forward GIP timing. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETGIP1,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETGIP1,
->  			  0x82, 0x10, 0x06, 0x05, 0xA2, 0x0A, 0xA5, 0x12,
->  			  0x31, 0x23, 0x37, 0x83, 0x04, 0xBC, 0x27, 0x38,
->  			  0x0C, 0x00, 0x03, 0x00, 0x00, 0x00, 0x0C, 0x00,
-> @@ -311,7 +294,7 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->  			  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
->  
->  	/* This command is to set backward GIP timing. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETGIP2,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETGIP2,
->  			  0x02, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
->  			  0x00, 0x00, 0x00, 0x00, 0x02, 0x46, 0x02, 0x88,
->  			  0x88, 0x88, 0x88, 0x88, 0x88, 0x64, 0x88, 0x13,
-> @@ -322,7 +305,7 @@ static int xbd599_init_sequence(struct st7703 *ctx)
->  			  0xA5, 0x00, 0x00, 0x00, 0x00);
->  
->  	/* Adjust the gamma characteristics of the panel. */
-> -	dsi_dcs_write_seq(dsi, ST7703_CMD_SETGAMMA,
-> +	mipi_dsi_dcs_write_seq(dsi, ST7703_CMD_SETGAMMA,
->  			  0x00, 0x09, 0x0D, 0x23, 0x27, 0x3C, 0x41, 0x35,
->  			  0x07, 0x0D, 0x0E, 0x12, 0x13, 0x10, 0x12, 0x12,
->  			  0x18, 0x00, 0x09, 0x0D, 0x23, 0x27, 0x3C, 0x41,
-> @@ -499,7 +482,7 @@ static int allpixelson_set(void *data, u64 val)
->  	struct mipi_dsi_device *dsi = to_mipi_dsi_device(ctx->dev);
->  
->  	dev_dbg(ctx->dev, "Setting all pixels on\n");
-> -	dsi_generic_write_seq(dsi, ST7703_CMD_ALL_PIXEL_ON);
-> +	mipi_dsi_generic_write_seq(dsi, ST7703_CMD_ALL_PIXEL_ON);
->  	msleep(val * 1000);
->  	/* Reset the panel to get video back */
->  	drm_panel_disable(&ctx->panel);
-> -- 
-> 2.38.1
-> 
+and you need an out-of-tree hack to get around that:
+
+	https://git.linaro.org/people/srinivas.kandagatla/linux.git/commit/?h=lenovo-x13s-6.1.0-rc7-audio&id=0bffb619bf7929c56b7458af3a583fa9ce87fc26
+
+I learned that the hard way after a debugging session.
+
+Even with those hacks in place, I see:
+
+[   14.466733] qcom-soundwire 3330000.soundwire-controller: qcom_swrm_irq_handler: SWR bus clsh detected
+[   14.522324] qcom-soundwire 3330000.soundwire-controller: swrm_wait_for_frame_gen_enabled: link status not disconnected
+[   14.522372] qcom-soundwire 3330000.soundwire-controller: link failed to connect
+
+so this does not look like it was ready to be merged. I'm still not sure
+what else is needed, but there are a bunch of other work-in-progress
+changes in the above branch.
+
+Srini, next time can you please document such dependencies in the cover
+letter to avoid having people debug things that are not even supposed to
+work yet and so that we can hold-off on merging the dts changes until
+driver support in place.
+
+Johan
