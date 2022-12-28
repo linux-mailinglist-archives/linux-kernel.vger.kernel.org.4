@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DC265863D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 20:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 597D065863F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 20:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbiL1TIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 14:08:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S232390AbiL1TKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 14:10:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiL1TIj (ORCPT
+        with ESMTP id S230224AbiL1TKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 14:08:39 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DDB14D2B;
-        Wed, 28 Dec 2022 11:08:38 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id k137so6487972pfd.8;
-        Wed, 28 Dec 2022 11:08:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LG1TKXfO3Ap1YVLnv1vLNUNgLF1B4SFHf63ToBDBDCg=;
-        b=FNNpqbSgPvg8Ci3s8pZ/cj5NIEYbaKeAAwgKGJqFKYZyOm7nviLlkiR27j7/kHiv9/
-         MuHJB+cBnFGTq7w139IlWJnRhv8C2KUlnGjFT+vzh/7HKB+W1J+kv544ucAy6VfbLFpu
-         W6QtZAcnN0IKj1z01vbj27jp/80bOBXixHgJBJ6pT1WHjrVicdj7AS6l4AIFwdNxFx73
-         oH3j6aMBeqic8o4P0PKi4LnxXJfbp198PDGGlSWomBxm6cxK6IBG5ugd47Fq7dv44h01
-         ZQ75f7yL6ViuO7uK0KUT7guq5DKDPYI7W8Z/SkMd28MppgKVHYRyS51vPJmKT4IhmdUA
-         Wxmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LG1TKXfO3Ap1YVLnv1vLNUNgLF1B4SFHf63ToBDBDCg=;
-        b=jR2ZBc6u2OSI69wrXetqDpoiRr5J5gT6STOwVyUsRSsocd50TgKLehgG4/bjWZfz+L
-         fx1BzhVgG5UcjK+rixhXuO/J0g/Lg155pibgrn6ukZGjDsXEaxvMrKewi1EDF5EjUYcf
-         qG8RQSlhfxs+xldyyeiD78h+4MCe39I1hWTTzz440K+4P9qjoKTN6JjAghEPNbLK9p5X
-         W4tEZWqCl8iLcRKVFSORQAMy+YP4BZTn3ed7NLmOXTBp0U7yDjYAbNl99UDXGhpDpJKc
-         PrnCHDXXxGx3vws70FWcfN6xbV11tX3kaCdDQje7Na7XBWPSdgEzU/b0LgL5UxD6Yl+V
-         DXiA==
-X-Gm-Message-State: AFqh2koRLJohPS4/GT82iWGiMq0WrQaAnQnat+rCGMyAN3KquZKI2M0D
-        cUhfjdeJavZdllt0FEwocCA=
-X-Google-Smtp-Source: AMrXdXs3v3zXwsJDPj1hQvHoDsNZ8SJR/+bixjEBkFAtCi2TvZFCePhcLD/CddXDaxSe9zF7eKZ0HQ==
-X-Received: by 2002:a05:6a00:1255:b0:576:b8e1:862b with SMTP id u21-20020a056a00125500b00576b8e1862bmr33307714pfi.14.1672254517424;
-        Wed, 28 Dec 2022 11:08:37 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id j123-20020a625581000000b00574e84ed847sm10715726pfb.24.2022.12.28.11.08.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Dec 2022 11:08:36 -0800 (PST)
-Message-ID: <e0b14de8-db62-b403-bd23-ee36f99073ae@gmail.com>
-Date:   Wed, 28 Dec 2022 11:08:35 -0800
+        Wed, 28 Dec 2022 14:10:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C2314D2B;
+        Wed, 28 Dec 2022 11:10:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92CF2615ED;
+        Wed, 28 Dec 2022 19:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2C6C433D2;
+        Wed, 28 Dec 2022 19:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672254629;
+        bh=NDaJHiYbI1eAcF8Qz6/6BoaxzjqK+j8AikgdtIirofo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YptHzzDmaVigBO+yhhTMg1gtUXHQ4eAYcGZp82FEDH4+2HHKwU5ot0I9TppGl+4lq
+         UiKbytKGJL/J2WfCuECQdN6b7KbjwTG8AfuWXO08lsMY0ktQe/TgCmh1uBoHJXyReZ
+         FmQysuNFOYEuUDh5Sm7Vfyx65ydxoU/BuHXDr1jNaf5xmtqX+fUQ12mRrRJz0VfRAx
+         2UWS09DgMXBoC+855b7vhkq26FPlU8m2Zcv+iKk9ExdI2uMwPD3eAAqkFC8fk12w12
+         271yV8gE/Hm4JtBwAlViPNv3g5uSCA0JJxbfcDgnL7LGgLRQ1VxRkqmxJdm8Y0XDqW
+         /rchBx/pbsocw==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Jonathan Toppins <jtoppins@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>
+Subject: [PATCH] kbuild: rpm-pkg: add libelf-devel as alternative for BuildRequires
+Date:   Thu, 29 Dec 2022 04:10:14 +0900
+Message-Id: <20221228191014.659746-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221228144256.536395940@linuxfoundation.org>
-Content-Language: en-US
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221228144256.536395940@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Guoqing Jiang reports that openSUSE cannot compile the kernel rpm due
+to "BuildRequires: elfutils-libelf-devel" added by commit 8818039f959b
+("kbuild: add ability to make source rpm buildable using koji").
+The relevant package name in openSUSE is libelf-devel.
 
+Add it an alternative package.
 
-On 12/28/2022 6:31 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.86 release.
-> There are 731 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 30 Dec 2022 14:41:39 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.86-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+BTW, if it is impossible to solve the build requirement, the final
+resort would be:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+    $ make RPMOPTS=--nodeps rpm-pkg
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+This passes --nodeps to the rpmbuild command so it will not verify
+build dependencies. This is useful to test rpm builds on non-rpm
+system. On Debian/Ubuntu, for example, you can install rpmbuild by
+'apt-get install rpm'.
+
+NOTE1:
+  Likewise, it is possible to bypass the build dependency check for
+  debian package builds:
+
+    $ make DPKG_FLAGS=-d deb-pkg
+
+NOTE2:
+  The 'or' operator is supported since RPM 4.13. So, old distros such
+  as CentOS 7 will break. I suggest installing newer rpmbuild in such
+  cases.
+
+Link: https://lore.kernel.org/linux-kbuild/ee227d24-9c94-bfa3-166a-4ee6b5dfea09@linux.dev/T/#u
+Fixes: 8818039f959b ("kbuild: add ability to make source rpm buildable using koji")
+Reported-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ scripts/package/mkspec | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index dda00a948a01..adab28fa7f89 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -51,7 +51,8 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
+ 	URL: https://www.kernel.org
+ $S	Source: kernel-$__KERNELRELEASE.tar.gz
+ 	Provides: $PROVIDES
+-$S	BuildRequires: bc binutils bison dwarves elfutils-libelf-devel flex
++$S	BuildRequires: bc binutils bison dwarves
++$S	BuildRequires: (elfutils-libelf-devel or libelf-devel) flex
+ $S	BuildRequires: gcc make openssl openssl-devel perl python3 rsync
+ 
+ 	# $UTS_MACHINE as a fallback of _arch in case
 -- 
-Florian
+2.34.1
+
