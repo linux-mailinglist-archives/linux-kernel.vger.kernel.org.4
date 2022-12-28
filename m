@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27477657678
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A599B65767B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 13:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbiL1MeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 07:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S230115AbiL1Mey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 07:34:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbiL1Mdi (ORCPT
+        with ESMTP id S232809AbiL1Mev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 07:33:38 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A7910553;
-        Wed, 28 Dec 2022 04:33:33 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NhrSM4T6qz9t2Y;
-        Wed, 28 Dec 2022 20:29:39 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 28 Dec 2022 20:33:32 +0800
-Subject: Re: [PATCH] mce: fix missing stack-dumping in mce_panic()
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <bp@alien8.de>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <dave.hansen@linux.intel.com>, "hpa@zytor.com" <hpa@zytor.com>
-CC:     <x86@kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Tony Luck <tony.luck@intel.com>
-References: <20221202163728.392509-1-linmiaohe@huawei.com>
- <470ffd37-3f65-7ad1-71cb-a1d4547d8afa@huawei.com>
-Message-ID: <8e91609c-2130-8acd-37c9-88277ea9ae39@huawei.com>
-Date:   Wed, 28 Dec 2022 20:33:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 28 Dec 2022 07:34:51 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F25710040;
+        Wed, 28 Dec 2022 04:34:51 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id e21so1063831pfl.1;
+        Wed, 28 Dec 2022 04:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Frx76nYEfOImaf2Qpg6M0j5kIFUXt3fVGDIGwcWIJWU=;
+        b=IA3i3fizu8ALp34ROwZ9WX/+jBZBtGBaQO5fyEOdNT9zSLHY93lCP9CKm2HYX3ndID
+         JeUmi/sccAQAZUNqrLgQG46eIgp5B/EQL4DtATOXl9bMITfhSYrp6KIZCUemJHGOUTrW
+         WzLvSZuxVsdKoWKVa/3c5kea+lwdO0VNHENzItLexxYEAln9CbDkttN7bbyxIijIw9N7
+         JmkxeY4N+CN9Wk1y3tsGdS0CdK0WNhQXHv133lTPPrGXDgdiAVrn1FUUvwKXca/l3fV8
+         A5shyFZ3xPfraqqWCxFYboVKDaf8sU5au/wlApa3HNjZh9v3ZywfbagIPYVL0mF2fDvp
+         qjpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Frx76nYEfOImaf2Qpg6M0j5kIFUXt3fVGDIGwcWIJWU=;
+        b=FThEbVb+ISXvEG3W8w5W2q80LgSzS1wf5AnN5LifdY9UfQVHpbDbXHbGhKTcebYTNI
+         v3EOoaXkK0jhhioxRhV79w42FKd5fIAoDrkoAz/J4j+qz1udSOy/9LMjJoPmb3YCzbbW
+         v34Wm5K5MQ9WPX0SpuMna1Ms8paLU/MNN87pIDcNQujBbDuYne01WnxniRGmFl3KG6Fl
+         ZEERQgXtUrA/2jZDcCwbkekFlTPrxKgCAeUFCoH+beqW9tOz5GiFxNb0O70zDP1XNsf6
+         spETUELopS51/KRgLZhY6iRyFNr4hnHoANjPsJrmCb025NqDKZv+8/ozRCh6faAV7vW7
+         FPUw==
+X-Gm-Message-State: AFqh2kp+0lhCPXfX+HpOEw1Hb60FIhGTTJpISs9fYPszuiqTOprVZJmR
+        WkanXMMj9lAMoDtWPFdhVVI=
+X-Google-Smtp-Source: AMrXdXuCA1sVh9R+K43kQWAzkRUlycUPMWUwLCzkFFdGSyeXG/PJ2jtylsFq7g8tsp08ks0YsGrMIA==
+X-Received: by 2002:aa7:96aa:0:b0:581:3b0e:803c with SMTP id g10-20020aa796aa000000b005813b0e803cmr9683672pfk.7.1672230890621;
+        Wed, 28 Dec 2022 04:34:50 -0800 (PST)
+Received: from [192.168.43.80] (subs03-180-214-233-21.three.co.id. [180.214.233.21])
+        by smtp.gmail.com with ESMTPSA id w66-20020a623045000000b0057fec210d33sm10171449pfw.152.2022.12.28.04.33.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Dec 2022 04:34:50 -0800 (PST)
+Message-ID: <32a201f7-fb1a-0651-6b82-b2593e56e759@gmail.com>
+Date:   Wed, 28 Dec 2022 19:33:53 +0700
 MIME-Version: 1.0
-In-Reply-To: <470ffd37-3f65-7ad1-71cb-a1d4547d8afa@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1] Documentation: process: Document suitability of Proton
+ Mail for kernel development
+To:     Conor Dooley <conor@kernel.org>, corbet@lwn.net
+Cc:     Conor Dooley <conor.dooley@microchip.com>, broonie@kernel.org,
+        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221228000330.3971104-1-conor@kernel.org>
 Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221228000330.3971104-1-conor@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/10 10:28, Miaohe Lin wrote:
-> On 2022/12/3 0:37, Miaohe Lin wrote:
->> When machine check exception occurs, there is no stack-dumping now in
->> mce_panic(). It's because bust_spinlocks(1) is called prematurely so
->> oops_in_progress will be >= 2 when trying to call dump_stack() in
->> panic(). Thus dump_stack() won't be called as this is considered as
->> nested stack-dumping.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> 
-> Friendly ping. ;)
+On 12/28/22 07:03, Conor Dooley wrote:
+> +
+> +Proton Mail
+> +***********
+> +
+> +Proton Mail has a "feature" where it looks up keys using Web Key Directory
+> +(WKD) and encrypts mail to any email recipients for which it finds a key.
+> +Kernel.org publishes the WKD for all developers who have kernel.org accounts.
+> +As a result, emails sent using Proton Mail to kernel.org addresses will be
+> +encrypted.
+> +Unfortunately, Proton Mail does not provide a mechanism to disable the
+> +automatic encryption, viewing it as a privacy feature.
+> +This affects mail sent from their web GUI, from other mail clients using their
+> +mail "bridge", as well as patches sent using ``git send-email``.
+> +Unless a way to disable this "feature" is introduced, Proton Mail is unsuited
+> +to kernel development.
 
-Friendly ping after busy merge window. :)
+All mails sent via Proton Mail SMTP relay? Also, why is sending encrypted emails
+to public mailing lists (like LKML) not a good idea?
 
-> 
->> ---
->>  arch/x86/kernel/cpu/mce/core.c | 1 -
->>  1 file changed, 1 deletion(-)
->>
->> diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
->> index 2c8ec5c71712..c40dad1a6749 100644
->> --- a/arch/x86/kernel/cpu/mce/core.c
->> +++ b/arch/x86/kernel/cpu/mce/core.c
->> @@ -254,7 +254,6 @@ static noinstr void mce_panic(const char *msg, struct mce *final, char *exp)
->>  			wait_for_panic();
->>  		barrier();
->>  
->> -		bust_spinlocks(1);
->>  		console_verbose();
->>  	} else {
->>  		/* Don't log too much for fake panic */
->>
-> 
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
 
