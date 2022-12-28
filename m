@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7E7657180
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 01:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716E2657181
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 01:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiL1AzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Dec 2022 19:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
+        id S230168AbiL1A4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Dec 2022 19:56:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiL1AzE (ORCPT
+        with ESMTP id S229475AbiL1A4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Dec 2022 19:55:04 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE0CDFC0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:55:02 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id d15so14676349pls.6
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:55:02 -0800 (PST)
+        Tue, 27 Dec 2022 19:56:42 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940FCDFFD
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:56:41 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id m7-20020a17090a730700b00225ebb9cd01so6749049pjk.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Dec 2022 16:56:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yTqVNH++fZMirwbn+n2exEBd8ZG8kfwS08YzOkZ9oH4=;
-        b=C94FKUqUcTIXM00dOO50LmScr0c+pLRL5UBLLbs0SVg9FuNwHGd+jVLE1y3gca/htk
-         Vi4JvG9gUkpk8DXxuM7m3D/oUZSdIEugOzulbSPCyJ1L4Z3BjqJcMWGFne42sV0JKXc0
-         3YLZXjrRIpi6G2GblEy+06rCeHGgXtT0XgbkE=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6pBNYJdKXzam2nXK0e/4rLZrKFDWqDasg6cE5ctCeLs=;
+        b=RKvg/T3PMBvEQZilUPnU4QNnnFWl3WaUHN9Rf/hXYh6bzT9+tVGKtuqYOuFUFKL/xt
+         tCiKyp2lUBydu+rR22CjAkhiw0oiIpA4oD8BVbALOVLcusx2KyR1ob1G8hQ/CiiitCzn
+         bomGAoN0aZ4RLZl3gzDrce6rFlcaf3O69q7/o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yTqVNH++fZMirwbn+n2exEBd8ZG8kfwS08YzOkZ9oH4=;
-        b=w1KuDOw25q/W87imZ2dyI/EJgtn1Tt8eECi6cFWqtAP5c3sy27jEm7p5WHNSa2/iuG
-         n69/Hy4oAAsQqqUErzFnzTC703LGVF+iwPQOvASgU8a4nAaIAMe0he4runmYfZcEtmTg
-         c61RpyQ+bj78bzAeB8Z2VyCIfWCPMojiogvg8b7L2ytzh2zc6uItyNYdVEho093i/+48
-         AqOUrFhFTUIiDxBpJNN5Dx7XFnzZiJhctEbbaWMhYtDh9S7EfNqaahxBovQNnEVkFXR9
-         JRL8Zc4zX3GzgFEkSzQq/m3Ny1jevcjf1kZJUFk4Q58qPbXPpP9zk7pOW3zuFNNjxzJp
-         uBzg==
-X-Gm-Message-State: AFqh2kpHDzZiIdSSbJ01S4E7BcT68iiPSh04I4FpGm1LaUQRlUHE7y0s
-        n6CbnTLQrMeodF/YJJGw8VXE9gddZ2YZT4uY
-X-Google-Smtp-Source: AMrXdXsZB9QQ6d2egb2hhk0rfrTPOiTet+8+Sff1neN2SPJQZptUfqgubjgNoZmWQCRxRfJDpqdrPA==
-X-Received: by 2002:a05:6a21:c08d:b0:af:f1d1:6f7f with SMTP id bn13-20020a056a21c08d00b000aff1d16f7fmr33010478pzc.31.1672188901932;
-        Tue, 27 Dec 2022 16:55:01 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6pBNYJdKXzam2nXK0e/4rLZrKFDWqDasg6cE5ctCeLs=;
+        b=JoKtnna/0seKf6sMZE/Im/FHXyS8u6aZGAg5o2kCxvIFJXIKeXqk0ad9f19l7fr8Ug
+         IYfoOG7RW/TcuLgpLuM7F05GigTJ45hceEAGpgzVcl8JvFkBwgCq4Lpi+8eYD/giwjC0
+         caaXnYFXXAc/tmiBMwhAQQyrarUQ00U2wP44qTmqey4bNMaWnSrT+2Arzsv+fxPCXLca
+         WWJ8KSa4Ip9jhfK/dteVlExTx1xwQyPFi96c+quk11yAlfz+N5ZZACP2LxbmqRoz1BYr
+         LvlCioAkOqACuwYZZCMq56OZwkGEqod8vK2TGvDmnz2tqc6IUBjmPgFPE3dS/tVoe/fQ
+         5ASA==
+X-Gm-Message-State: AFqh2kptKugesJdDrPh90ncrHsd1LqmLt2gYhbUDhEx3nyWmya6YFlOk
+        4SBdlww05XKiOqM9zyQMmnREj/43uF83q8uf
+X-Google-Smtp-Source: AMrXdXtlGD1iF9qDlfibxWqFvtJyFneuKzXuyKtopGLMCo88wsQSvk2xYDuqTAiHjx1yO48ULlMsFw==
+X-Received: by 2002:a05:6a20:1bd9:b0:ad:efda:5e5d with SMTP id cv25-20020a056a201bd900b000adefda5e5dmr24969506pzb.61.1672189000941;
+        Tue, 27 Dec 2022 16:56:40 -0800 (PST)
 Received: from pmalani.c.googlers.com.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id 68-20020a621947000000b00580e679dcf2sm6045566pfz.157.2022.12.27.16.55.00
+        by smtp.gmail.com with ESMTPSA id 68-20020a621947000000b00580e679dcf2sm6045566pfz.157.2022.12.27.16.56.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Dec 2022 16:55:01 -0800 (PST)
+        Tue, 27 Dec 2022 16:56:40 -0800 (PST)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
 Cc:     heikki.krogerus@linux.intel.com,
@@ -64,10 +65,12 @@ Cc:     heikki.krogerus@linux.intel.com,
         Tinghan Shen <tinghan.shen@mediatek.com>,
         Tzung-Bi Shih <tzungbi@kernel.org>,
         Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH 00/10] platform/chrome: cros_ec_typec: VDM support
-Date:   Wed, 28 Dec 2022 00:45:03 +0000
-Message-Id: <20221228004648.793339-1-pmalani@chromium.org>
+Subject: [PATCH 01/10] Revert "mfd: cros_ec: Add SCP Core-1 as a new CrOS EC MCU"
+Date:   Wed, 28 Dec 2022 00:45:04 +0000
+Message-Id: <20221228004648.793339-2-pmalani@chromium.org>
 X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
+In-Reply-To: <20221228004648.793339-1-pmalani@chromium.org>
+References: <20221228004648.793339-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -79,53 +82,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for sending and receiving USB PD Vendor
-Defined Messages (VDMs) between the Application Processor's Type-C
-ports and connected peripherals.
+This reverts commit 66ee379d743c69c726b61d078119a34d5be96a35.
 
-Thir enables the Application processor to enter alternate modes and
-process VDMs directly, instead of relying on state machines that exist
-inside of co-processors like the ChromeOS Embedded Controller (EC).
+The feature flag introduced by Commit 66ee379d743c ("mfd: cros_ec: Add
+SCP Core-1 as a new CrOS EC MCU") was not first added in the source EC
+code base[1]. This can lead to the possible misinterpration of an EC's
+supported feature set, as well as causes issues with all future feature
+flag updates.
 
-Patch 1/10 reverts an incorrect EC header modification.
-Patch 2/10 to 5/10 update headers and existing Type-C structs to
-accommodate the VDM code.
-Patch 6/10 and 7/10 prepare the Type-C driver to have more than 1 file.
-Patch 8/10 to 10/10 introduce the VDM functionality.
+[1] https://source.chromium.org/chromium/chromiumos/platform/ec/+/main:include/ec_commands.h
 
-Patch submissions suggestion (if approved):
-- Even though Patch 1 touches drivers/mfd, it would be better to take
-  the entire series through the cbrome-platform branch, to avoid
-  cross-dependencies across maintainer trees.
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
+
+While this patch modifies drivers/mfd, it would be preferable to submit
+it through the chrome-platform tree, since that eliminates cross-tree
+dependencies for the series of which this patch is a part.
 
 
-Prashant Malani (10):
-  Revert "mfd: cros_ec: Add SCP Core-1 as a new CrOS EC MCU"
-  platform_chrome: cros_ec: Add Type-C VDM defines
-  platform/chrome: cros_ec_typec: Stash port driver info
-  platform/chrome: cros_ec_typec: Set port alt mode drvdata
-  platform/chrome: cros_ec_typec: Update port DP VDO
-  platform/chrome: cros_ec_typec: Move structs to header
-  platform/chrome: cros_ec_typec: Alter module name with hyphens
-  platform/chrome: cros_ec_typec: Add initial VDM support
-  platform/chrome: cros_typec_vdm: Add VDM reply support
-  platform/chrome: cros_typec_vdm: Add VDM send support
+ drivers/mfd/cros_ec_dev.c                      | 5 -----
+ include/linux/platform_data/cros_ec_commands.h | 2 --
+ include/linux/platform_data/cros_ec_proto.h    | 1 -
+ 3 files changed, 8 deletions(-)
 
- MAINTAINERS                                   |   3 +-
- drivers/mfd/cros_ec_dev.c                     |   5 -
- drivers/platform/chrome/Kconfig               |   2 +-
- drivers/platform/chrome/Makefile              |   3 +-
- drivers/platform/chrome/cros_ec_typec.c       |  91 +++------------
- drivers/platform/chrome/cros_ec_typec.h       |  85 ++++++++++++++
- drivers/platform/chrome/cros_typec_vdm.c      | 106 ++++++++++++++++++
- drivers/platform/chrome/cros_typec_vdm.h      |  12 ++
- .../linux/platform_data/cros_ec_commands.h    |  53 ++++++++-
- include/linux/platform_data/cros_ec_proto.h   |   1 -
- 10 files changed, 276 insertions(+), 85 deletions(-)
- create mode 100644 drivers/platform/chrome/cros_ec_typec.h
- create mode 100644 drivers/platform/chrome/cros_typec_vdm.c
- create mode 100644 drivers/platform/chrome/cros_typec_vdm.h
-
+diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+index 344ad03bdc42..02d4271dfe06 100644
+--- a/drivers/mfd/cros_ec_dev.c
++++ b/drivers/mfd/cros_ec_dev.c
+@@ -64,11 +64,6 @@ static const struct cros_feature_to_name cros_mcu_devices[] = {
+ 		.name	= CROS_EC_DEV_SCP_NAME,
+ 		.desc	= "System Control Processor",
+ 	},
+-	{
+-		.id	= EC_FEATURE_SCP_C1,
+-		.name	= CROS_EC_DEV_SCP_C1_NAME,
+-		.desc	= "System Control Processor 2nd Core",
+-	},
+ 	{
+ 		.id	= EC_FEATURE_TOUCHPAD,
+ 		.name	= CROS_EC_DEV_TP_NAME,
+diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+index 5744a2d746aa..7c94bf5c8f05 100644
+--- a/include/linux/platform_data/cros_ec_commands.h
++++ b/include/linux/platform_data/cros_ec_commands.h
+@@ -1300,8 +1300,6 @@ enum ec_feature_code {
+ 	 * mux.
+ 	 */
+ 	EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK = 43,
+-	/* The MCU is a System Companion Processor (SCP) 2nd Core. */
+-	EC_FEATURE_SCP_C1 = 45,
+ };
+ 
+ #define EC_FEATURE_MASK_0(event_code) BIT(event_code % 32)
+diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+index e43107e0bee1..a1f5b6d6db3a 100644
+--- a/include/linux/platform_data/cros_ec_proto.h
++++ b/include/linux/platform_data/cros_ec_proto.h
+@@ -19,7 +19,6 @@
+ #define CROS_EC_DEV_ISH_NAME	"cros_ish"
+ #define CROS_EC_DEV_PD_NAME	"cros_pd"
+ #define CROS_EC_DEV_SCP_NAME	"cros_scp"
+-#define CROS_EC_DEV_SCP_C1_NAME	"cros_scp_c1"
+ #define CROS_EC_DEV_TP_NAME	"cros_tp"
+ 
+ #define CROS_EC_DEV_EC_INDEX 0
 -- 
 2.39.0.314.g84b9a713c41-goog
 
