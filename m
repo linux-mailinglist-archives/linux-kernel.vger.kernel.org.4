@@ -2,88 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F7865873E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 23:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C79658740
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 23:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbiL1WLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 17:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        id S232463AbiL1WNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 17:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233041AbiL1WKc (ORCPT
+        with ESMTP id S229745AbiL1WNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 17:10:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5071740D;
-        Wed, 28 Dec 2022 14:10:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F7A7B818C8;
-        Wed, 28 Dec 2022 22:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D069C433F2;
-        Wed, 28 Dec 2022 22:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672265415;
-        bh=MeR9j/cmIt9uaY3svYNjr58bocyoGbZmb2YMoE//58s=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ROi45159QDNZO1hDflueUiB9tf4rcCUGUT9ysje19VpGabAnEV+5U4/SrxbWwHR/z
-         mFzlrCQ1OezK9FIrv/KsDzir96wTtvEVOOUa4I0rkTIGQwzbukE6QXxV+zBJ/2YOM3
-         wO9Z+atqRvRIPTALcGHZmr79zgN/G8TT41ywsf+IulaVWjE5b2qU3rm1fY1rN7rGja
-         oyXrYzstMZDiwdWEHPlhZydJRP0okGDYE5YnjIJokfDFJMX2FTh5eetzIfLGt6KKAI
-         mvfLZRtvCUBVHGUAZ1NxG85buVel7mtXF2bRTW2YFSzpz6AW9in5dzFkdtu09PzCi6
-         WTd9SsC0rwj2Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30269C395DF;
-        Wed, 28 Dec 2022 22:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 28 Dec 2022 17:13:38 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673A6D9B
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 14:13:37 -0800 (PST)
+Received: from letrec.thunk.org (capios.firout.com [104.224.87.177] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2BSMDDj7012798
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 17:13:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1672265599; bh=ul/NZsCm1LN681rwuJVRjc6Rre5uxmh36nv6gaDD6Zk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=bQ0sELAf0MkyDpX2YfhSPyZu7PNw0tyhKvYxrPslvfzsXpjtfbX+toZKJBF/k7E/Q
+         0q+oMGtUtbvHyugU9FhY7p7SRFCf3Vy6HAn9MnSQFM/SHnMCIcTmm4h331Hb4ge+kq
+         bT2B3J6rSoAt0+kyeXca4w/NmbDn3PkgsvtYApIJ0lFlw3seQNcY9Ho12tTRQS+pIt
+         UaW9ITffzg3CAtRn1OKZhdWYtMB6+siNCskG9+wAiSTpUlW8yTumfYzNwxVs+BVqyG
+         2KFH2FQ4XaDPM86p6mWMAR5qAFxiPUaBP6Im0tj+4hw8zB7v8Ki9kaI3j84eHTfiwp
+         AWYK/fgfJL1Vg==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id 9EA5B8C08FD; Wed, 28 Dec 2022 17:14:42 -0500 (EST)
+Date:   Wed, 28 Dec 2022 17:14:42 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     oss-security@lists.openwall.com,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-man@vger.kernel.org
+Subject: Re: [oss-security] [patch] proc.5: tell how to parse /proc/*/stat
+ correctly
+Message-ID: <Y6y/0uzFlTpkw/VT@mit.edu>
+References: <Y6SJDbKBk471KE4k@p183>
+ <Y6TUJcr/IHrsTE0W@codewreck.org>
+ <1a1963aa1036ba07@orthanc.ca>
+ <20221228152458.6xyksrxunukjrtzx@mutt-hbsd>
+ <Y6xzIR9P+a6uaaEx@itl-email>
+ <20221228172517.l7h3m7wjfpxr3dzw@mutt-hbsd>
+ <Y6yEv+6iYQQNaqi9@itl-email>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: Fix panic due to wrong pageattr of im->image
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167226541519.8452.10536194221890799528.git-patchwork-notify@kernel.org>
-Date:   Wed, 28 Dec 2022 22:10:15 +0000
-References: <20221224133146.780578-1-nashuiliang@gmail.com>
-In-Reply-To: <20221224133146.780578-1-nashuiliang@gmail.com>
-To:     Chuang Wang <nashuiliang@gmail.com>
-Cc:     stable@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y6yEv+6iYQQNaqi9@itl-email>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MAY_BE_FORGED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Sat, 24 Dec 2022 21:31:46 +0800 you wrote:
-> In the scenario where livepatch and kretfunc coexist, the pageattr of
-> im->image is rox after arch_prepare_bpf_trampoline in
-> bpf_trampoline_update, and then modify_fentry or register_fentry returns
-> -EAGAIN from bpf_tramp_ftrace_ops_func, the BPF_TRAMP_F_ORIG_STACK flag
-> will be configured, and arch_prepare_bpf_trampoline will be re-executed.
+On Wed, Dec 28, 2022 at 01:02:35PM -0500, Demi Marie Obenour wrote:
+> > I think the argument I'm trying to make is to be flexible in
+> > implementation, allowing for future needs and wants--that is "future
+> > proofing".
 > 
-> At this time, because the pageattr of im->image is rox,
-> arch_prepare_bpf_trampoline will read and write im->image, which causes
-> a fault. as follows:
-> 
-> [...]
+> Linux should not have an XML, JSON, or YAML serializer.  Linux already
+> does way too much; let’s not add one more thing to the list.
 
-Here is the summary with links:
-  - bpf: Fix panic due to wrong pageattr of im->image
-    https://git.kernel.org/bpf/bpf/c/9ed1d9aeef58
+There's always Protobufs[1]!  :-)  And all of these are better than
+ASN.1, for which Google already has a limited parser (for x.509
+certificates).   :-)   :-)   :-)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+						- Ted
