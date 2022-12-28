@@ -2,52 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB1D657373
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED99765737B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Dec 2022 08:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiL1HAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 02:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
+        id S229864AbiL1HC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 02:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbiL1HAY (ORCPT
+        with ESMTP id S230006AbiL1HCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 02:00:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F32EB9B;
-        Tue, 27 Dec 2022 23:00:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFD2F612F5;
-        Wed, 28 Dec 2022 07:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9442BC433EF;
-        Wed, 28 Dec 2022 07:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672210822;
-        bh=UTg1APtDgewyvsjCQ8Y8Vtlggt5/wTplwHDPwJWVb3c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HlxYyAtuOhViZbuRX+1zpaLmHfe8JNduRlYiLvnb1cMwgaG37Lcj3BYrsLdbxYWVV
-         /JNEZOCnU954+YL+i6LAUVh6+PL2u6HcBh2b4rjXuC5T+IteHOKkwcY810q3Q+iZwR
-         xP1KICzcob1dw2giy28iRzBhm17flyXw8Nh/OcnIS64dYC0dsMtZzIC2o80fJp44ST
-         XJN/pNRY2FfpD/hJ7jhReQPaYIutPV3NOlDBpLAlUdYSbRwA/ke9UuPoIpWZC8msMU
-         vKz/W+wat0kTudkB2HyE+4f4MPXn+FntIdTy4eq7aeSbB6UsqgK20zpY4PBK/AVq7M
-         8U2oF/yhTQTtw==
-Date:   Wed, 28 Dec 2022 12:30:18 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     Dave Jiang <dave.jiang@intel.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dmaengine@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: idxd: Set traffic class values in GRPCFG on
- DSA 2.0
-Message-ID: <Y6vpgh4cGFBG0PB9@matsya>
-References: <20221209172141.562648-1-fenghua.yu@intel.com>
+        Wed, 28 Dec 2022 02:02:32 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6635EE10;
+        Tue, 27 Dec 2022 23:02:21 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BS6KQPg018044;
+        Wed, 28 Dec 2022 07:02:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=IuLDrSDp8o65nZmLn1U/Z5goxhL8nt5SyunEDK44oyk=;
+ b=XChODGUTp/w97j+FtOYKV/+y8qkrUVXzYQTa3cBAVxMKH7Jq6jREy/JhAGqhxmiLfg3K
+ iSi+F4tAJLa2v2IvSNQCSEp5h+b6LpMgK2yoNc17+Kf/7JddgeORfMntDFZ7wRnUyJ/2
+ VIX3273IxmCUjTHNqYwCaPAwSZxRtA0FCrifO9RoLGuC1CsGByXOECiOlPM2p+9sFN81
+ wCwBqdvOcjb6eSmY/K0RRGmh9UmLMKPdI9qDyNBuWtSSf+SlP78gyZPZqtkbOGYuiMuo
+ jFa4HbQgU5G+84H69TIixzlHMdik/lVGccYNhhoVTYJd2P89DRLeKrJQWAmUr9eTcb5q AQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mnrd1ea55-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 07:02:13 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BS72CPg015052
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Dec 2022 07:02:12 GMT
+Received: from [10.206.64.67] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 27 Dec
+ 2022 23:02:09 -0800
+Message-ID: <50adff46-be9e-7f4f-74dd-7e71b84bd3ac@quicinc.com>
+Date:   Wed, 28 Dec 2022 12:32:05 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209172141.562648-1-fenghua.yu@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Add wifi alias for
+ SC7280-idp
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <quic_mpubbise@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221223073353.20612-1-quic_youghand@quicinc.com>
+ <8f9ddaeb-5481-85e2-314e-8c2a99bd48c0@linaro.org>
+From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
+In-Reply-To: <8f9ddaeb-5481-85e2-314e-8c2a99bd48c0@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: NCQ1rBkLwi5LYRwAa5RISFaszlFHkZXf
+X-Proofpoint-GUID: NCQ1rBkLwi5LYRwAa5RISFaszlFHkZXf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-28_04,2022-12-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ spamscore=0 malwarescore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
+ impostorscore=0 phishscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=726
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212280056
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,76 +83,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09-12-22, 09:21, Fenghua Yu wrote:
-> On DSA/IAX 1.0, TC-A and TC-B in GRPCFG are set as 1 to have best
-> performance and cannot be changed through sysfs knobs unless override
-> option is given.
-> 
-> The same values should be set on DSA 2.0 as well.
 
-Applied, thanks
+On 12/23/2022 1:29 PM, Krzysztof Kozlowski wrote:
+> On 23/12/2022 08:33, Youghandhar Chintala wrote:
+>> Currently, the boot loader code used in the SC7280 SoC accesses
+>> the WiFi node using node names (wifi@<addr>). Since the bootloader
+>> is a common code that is used in SoCs having different WiFi chipsets,
+>> it is better if the bootloader code accesses the WiFi node using
+>> a WiFi alias. The advantage of this method is that the boot loader
+>> code need not be changed for every new WiFi chip.
+>> Therefore, add wifi alias entry for SC7280-idp device tree
+> Sounds good but which bootloader.
+>
+> Best regards,
+> Krzysztof
 
-> 
-> Fixes: ea7c8f598c32 ("dmaengine: idxd: restore traffic class defaults after wq reset")
-> Fixes: ade8a86b512c ("dmaengine: idxd: Set defaults for GRPCFG traffic class")
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> ---
->  drivers/dma/idxd/device.c | 2 +-
->  drivers/dma/idxd/init.c   | 2 +-
->  drivers/dma/idxd/sysfs.c  | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-> index b55405efd4ab..901257081524 100644
-> --- a/drivers/dma/idxd/device.c
-> +++ b/drivers/dma/idxd/device.c
-> @@ -834,7 +834,7 @@ static void idxd_groups_clear_state(struct idxd_device *idxd)
->  		group->use_rdbuf_limit = false;
->  		group->rdbufs_allowed = 0;
->  		group->rdbufs_reserved = 0;
-> -		if (idxd->hw.version < DEVICE_VERSION_2 && !tc_override) {
-> +		if (idxd->hw.version <= DEVICE_VERSION_2 && !tc_override) {
->  			group->tc_a = 1;
->  			group->tc_b = 1;
->  		} else {
-> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-> index 1053e2bb4e9f..4ecd34200998 100644
-> --- a/drivers/dma/idxd/init.c
-> +++ b/drivers/dma/idxd/init.c
-> @@ -314,7 +314,7 @@ static int idxd_setup_groups(struct idxd_device *idxd)
->  		}
->  
->  		idxd->groups[i] = group;
-> -		if (idxd->hw.version < DEVICE_VERSION_2 && !tc_override) {
-> +		if (idxd->hw.version <= DEVICE_VERSION_2 && !tc_override) {
->  			group->tc_a = 1;
->  			group->tc_b = 1;
->  		} else {
-> diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
-> index 632166538458..9db35011037f 100644
-> --- a/drivers/dma/idxd/sysfs.c
-> +++ b/drivers/dma/idxd/sysfs.c
-> @@ -388,7 +388,7 @@ static ssize_t group_traffic_class_a_store(struct device *dev,
->  	if (idxd->state == IDXD_DEV_ENABLED)
->  		return -EPERM;
->  
-> -	if (idxd->hw.version < DEVICE_VERSION_2 && !tc_override)
-> +	if (idxd->hw.version <= DEVICE_VERSION_2 && !tc_override)
->  		return -EPERM;
->  
->  	if (val < 0 || val > 7)
-> @@ -430,7 +430,7 @@ static ssize_t group_traffic_class_b_store(struct device *dev,
->  	if (idxd->state == IDXD_DEV_ENABLED)
->  		return -EPERM;
->  
-> -	if (idxd->hw.version < DEVICE_VERSION_2 && !tc_override)
-> +	if (idxd->hw.version <= DEVICE_VERSION_2 && !tc_override)
->  		return -EPERM;
->  
->  	if (val < 0 || val > 7)
-> -- 
-> 2.32.0
+Depth-charge Chrome OS bootloader.
 
--- 
-~Vinod
+Regards,
+
+Youghandhar
+
