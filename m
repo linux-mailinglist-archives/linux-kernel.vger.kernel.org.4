@@ -2,181 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F242B658A70
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B342658A7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233168AbiL2IWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 03:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
+        id S233173AbiL2IXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 03:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiL2IWp (ORCPT
+        with ESMTP id S230193AbiL2IX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 03:22:45 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7C46470
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:22:44 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id b88so18529979edf.6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:22:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cdbk6YKET6QEGq9IebYDQMQPZF6j/6rc109njHhKlvI=;
-        b=e0zqBtvvlQD2HeN7X7P1SHKwtY1WmNXBewHhrqgYf+Cjes2XV0RT3hygT/cZ9mLgAg
-         mK9seVibJbFJISY9ylAm9410ISVQog0mR5lB7brL/TzMXjDdvh0jGSUofBvfksQXdS0N
-         Bc48MzAHtkmpJ07DAwIqs27Z+Q8lD/rkRbbfs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cdbk6YKET6QEGq9IebYDQMQPZF6j/6rc109njHhKlvI=;
-        b=DKrMbBpZytXBLjAUh8xoImhAWArjcGGzEToncn0QuodLe4tyou6XgH6H5wuxw76SZk
-         Z4eHOgvTOC3aAkAeLMz2MSdsC36GChSbtVsKVQpQNumv5eypPGwBdTj4FEIGf33tqJt1
-         9ZPSqW33DNfn4irKmzedEQTPThM7U/Ye6c/M6pN4UvdchoHeqcoCJCErxo6wou8LZvGZ
-         0jtTqLth3GP3559tcm9AglzLCcYoKHJB+wSD9DGbi3EkN9SegKu+MaLA85mxaskfwkw4
-         q1nwe1xDJTDyYgziU2VKC0F+uIJ3DE68seL3ELzcEJYciDcPwrIYoctjsSfMZV0RnraD
-         Xkww==
-X-Gm-Message-State: AFqh2kqULIxvDWQzNOAN8RDkJIWMEf3VFPuv/GHD133pZWoUMnj9pYAq
-        j5PrLBac6FXHo4XVCqsAAD9CqSwKgI3cBKG1OKwGxA==
-X-Google-Smtp-Source: AMrXdXsQ7w+8O+47UlcrH/eyB1AcY+iw3zi67xHAp19yIp7KZoxSU3hceHOEF+dEFVjlYfKxx8GN7IxiiG1wtM0JlDA=
-X-Received: by 2002:a05:6402:1654:b0:47f:e663:1d78 with SMTP id
- s20-20020a056402165400b0047fe6631d78mr1566473edx.237.1672302162986; Thu, 29
- Dec 2022 00:22:42 -0800 (PST)
+        Thu, 29 Dec 2022 03:23:29 -0500
+Received: from mail1.bemta32.messagelabs.com (mail1.bemta32.messagelabs.com [195.245.230.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD7610A9;
+        Thu, 29 Dec 2022 00:23:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1672302206; i=@fujitsu.com;
+        bh=SUSAOyphF+B29lskscxDvTF3FQCewU2rscBGHhh6gm4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=FjqWGmTuFguN7i+NUk81QEUGiW8CeKad7QUINXYTukOPyE5khuoATs0HniXwcpbn2
+         lIkN8gSvbMAdrQ/XeLdJtQImFVu9vLIR2G/ZwnVNqrdfDnh+c2/L3yRMGlJr4r7JD0
+         7wfU33sUye7vLx3sikmain6l+oR6dbBr3v0NMxuEDwKuUSvNbCysTYRQvipuN74MAQ
+         nllZfIGy02JtktXivHkXnHSv9lOA6NPcs2yVK/kJCAO16fQKMCjZOoTnZSmqTcKD4i
+         cjMmDbylN42AiqOHv1NgslfvuO3WOINBLNFhdiRivLOnRTLmD5jJ8s5iSwuhX9DYc4
+         3dJ6bAH6hRHdA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCKsWRWlGSWpSXmKPExsViZ8ORpFvjtzb
+  Z4PkyfYs569ewWUyfeoHRYsuxe4wWl5/wWezZe5LF4vKuOWwWu/7sYLdY+eMPqwOHx6lFEh6L
+  97xk8ti0qpPN48SM3yweLzbPZPT4vEkugC2KNTMvKb8igTXj0KuJjAWXJCru/rzC1MC4SLiLk
+  YtDSGAjo0THw4ksEM5iJonLZ68yQzg7GCVeX/rG1MXIycErYCex9OgZMJtFQFXi8cMv7BBxQY
+  mTM5+wgNiiAskSL45+YwSxhQWsJaaufczaxcjBISJQKnHqYxZImFmgWmLi3/NQ85sYJVafmsg
+  MkmAT0JG4sOAvK4jNKeAp8WHlX2aIBguJxW8OskPY8hLNW2eDxSUElCR6G96zQtgVErNmtTFB
+  2GoSV89tYp7AKDQLyXmzkIyahWTUAkbmVYxmxalFZalFuoYmeklFmekZJbmJmTl6iVW6iXqpp
+  brlqcUluoZ6ieXFeqnFxXrFlbnJOSl6eaklmxiBEZZSzLZqB+OvZX/0DjFKcjApifJm2K1NFu
+  JLyk+pzEgszogvKs1JLT7EKMPBoSTBG+YNlBMsSk1PrUjLzAFGO0xagoNHSYR3Hkiat7ggMbc
+  4Mx0idYpRl2Ntw4G9zEIsefl5qVLivI6+QEUCIEUZpXlwI2CJ5xKjrJQwLyMDA4MQT0FqUW5m
+  Car8K0ZxDkYlYd54H6ApPJl5JXCbXgEdwQR0xIdDK0GOKElESEk1MEm8KLrSwRd5fEkt370To
+  hWHo/5HPZxkqnrqiLOTl0fbgbl7rnCtSVQR7bp39vjlDen8NrWLNe7v6phVsX4/5467lpYurr
+  fvTxeW2TpRkNG961pboNDhKXe/uHH6GLIqiDi/27oiTdhj88Se2PDDBhNZU3adE2K/bfdO/g7
+  jmsTQydwsZ24krJzLzZ6y9N/52SU7mBx00/PL1ylJzStme+PpeMnq5rzAlAnmWZXBnrPmri9T
+  yhZmUp7zZ4IHg9Dhm1l1b25q/Kk2+smw5CK34NMnU+WqqiQvNDpH+kQ6rrlmJia1IO36FYv8r
+  t7+68Y1l2NdV6nGme6eYhuhuHud2hkBuQkfryyceaGt3WLjOiWW4oxEQy3mouJEAD4S2ja3Aw
+  AA
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-9.tower-587.messagelabs.com!1672302204!842!1
+X-Originating-IP: [62.60.8.98]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.101.2; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 12139 invoked from network); 29 Dec 2022 08:23:24 -0000
+Received: from unknown (HELO n03ukasimr03.n03.fujitsu.local) (62.60.8.98)
+  by server-9.tower-587.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 29 Dec 2022 08:23:24 -0000
+Received: from n03ukasimr03.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTP id 517BD1B1;
+        Thu, 29 Dec 2022 08:23:24 +0000 (GMT)
+Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTPS id 4604B7B;
+        Thu, 29 Dec 2022 08:23:24 +0000 (GMT)
+Received: from [10.167.201.145] (10.167.201.145) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.42; Thu, 29 Dec 2022 08:23:20 +0000
+Message-ID: <5bbe8d22-0cdb-9c6f-d568-c183c4bd7dbe@fujitsu.com>
+Date:   Thu, 29 Dec 2022 16:23:13 +0800
 MIME-Version: 1.0
-References: <20220915164826.1396245-1-sarthakkukreti@google.com>
- <20220915164826.1396245-3-sarthakkukreti@google.com> <Yy3BXc9wf4PH6Rby@redhat.com>
-In-Reply-To: <Yy3BXc9wf4PH6Rby@redhat.com>
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-Date:   Thu, 29 Dec 2022 00:22:32 -0800
-Message-ID: <CAG9=OMMgtscWZyZYHsY0pp-9we+yxs=88sr_yMb6pfz7e75nyA@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/8] dm: Add support for block provisioning
-To:     Mike Snitzer <snitzer@redhat.com>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        Daniil Lunev <dlunev@google.com>,
-        Evan Green <evgreen@google.com>,
-        Gwendal Grignou <gwendal@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 0/8] fsdax,xfs: fix warning messages
+To:     Dan Williams <dan.j.williams@intel.com>, <djwong@kernel.org>,
+        <david@fromorbit.com>, <akpm@linux-foundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>
+References: <1669908538-55-1-git-send-email-ruansy.fnst@fujitsu.com>
+ <638aa4a298879_3cbe0294ba@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+In-Reply-To: <638aa4a298879_3cbe0294ba@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.167.201.145]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 23, 2022 at 7:23 AM Mike Snitzer <snitzer@redhat.com> wrote:
->
-> On Thu, Sep 15 2022 at 12:48P -0400,
-> Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
->
-> > From: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> >
-> > Add support to dm devices for REQ_OP_PROVISION. The default mode
-> > is to pass through the request and dm-thin will utilize it to provision
-> > blocks.
-> >
-> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > ---
-> >  drivers/md/dm-crypt.c         |  4 +-
-> >  drivers/md/dm-linear.c        |  1 +
-> >  drivers/md/dm-table.c         | 17 +++++++
-> >  drivers/md/dm-thin.c          | 86 +++++++++++++++++++++++++++++++++--
-> >  drivers/md/dm.c               |  4 ++
-> >  include/linux/device-mapper.h |  6 +++
-> >  6 files changed, 113 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-> > index 159c6806c19b..357f0899cfb6 100644
-> > --- a/drivers/md/dm-crypt.c
-> > +++ b/drivers/md/dm-crypt.c
-> > @@ -3081,6 +3081,8 @@ static int crypt_ctr_optional(struct dm_target *ti, unsigned int argc, char **ar
-> >       if (ret)
-> >               return ret;
-> >
-> > +     ti->num_provision_bios = 1;
-> > +
-> >       while (opt_params--) {
-> >               opt_string = dm_shift_arg(&as);
-> >               if (!opt_string) {
-> > @@ -3384,7 +3386,7 @@ static int crypt_map(struct dm_target *ti, struct bio *bio)
-> >        * - for REQ_OP_DISCARD caller must use flush if IO ordering matters
-> >        */
-> >       if (unlikely(bio->bi_opf & REQ_PREFLUSH ||
-> > -         bio_op(bio) == REQ_OP_DISCARD)) {
-> > +         bio_op(bio) == REQ_OP_DISCARD || bio_op(bio) == REQ_OP_PROVISION)) {
-> >               bio_set_dev(bio, cc->dev->bdev);
-> >               if (bio_sectors(bio))
-> >                       bio->bi_iter.bi_sector = cc->start +
-> > diff --git a/drivers/md/dm-linear.c b/drivers/md/dm-linear.c
-> > index 3212ef6aa81b..1aa782149428 100644
-> > --- a/drivers/md/dm-linear.c
-> > +++ b/drivers/md/dm-linear.c
-> > @@ -61,6 +61,7 @@ static int linear_ctr(struct dm_target *ti, unsigned int argc, char **argv)
-> >       ti->num_discard_bios = 1;
-> >       ti->num_secure_erase_bios = 1;
-> >       ti->num_write_zeroes_bios = 1;
-> > +     ti->num_provision_bios = 1;
-> >       ti->private = lc;
-> >       return 0;
-> >
-> > diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
-> > index 332f96b58252..b7f9cb66b7ba 100644
-> > --- a/drivers/md/dm-table.c
-> > +++ b/drivers/md/dm-table.c
-> > @@ -1853,6 +1853,18 @@ static bool dm_table_supports_write_zeroes(struct dm_table *t)
-> >       return true;
-> >  }
-> >
-> > +static bool dm_table_supports_provision(struct dm_table *t)
-> > +{
-> > +     for (unsigned int i = 0; i < t->num_targets; i++) {
-> > +             struct dm_target *ti = dm_table_get_target(t, i);
-> > +
-> > +             if (ti->num_provision_bios)
-> > +                     return true;
-> > +     }
-> > +
-> > +     return false;
-> > +}
-> > +
->
-> This needs to go a step further and verify a device in the stack
-> actually services REQ_OP_PROVISION.
->
-> Please see dm_table_supports_discards(): it iterates all devices in
-> the table and checks that support is advertised.
->
-> For discard, DM requires that _all_ devices in a table advertise
-> support (that is pretty strict and likely could be relaxed to _any_).
->
-> You'll need ti->provision_supported (like ->discards_supported) to
-> advertise actual support is provided by dm-thinp (even if underlying
-> devices don't support it).
->
-> And yeah, dm-thinp passdown support for REQ_OP_PROVISION can follow
-> later as needed (if there actual HW that would benefit from
-> REQ_OP_PROVISION).
->
-Done, thanks (the provision support, not the passdown)! I think the
-one case where passdown might help is to build images with dm-thinp
-already set up on one of the partitions (I have something in the works
-for ChromiumOS images to do VM tests with preset state :)). That would
-allow us to preallocate space for thin logical volumes inside the
-image file.
 
-> Mike
->
+
+在 2022/12/3 9:21, Dan Williams 写道:
+> Shiyang Ruan wrote:
+>> Changes since v1:
+>>   1. Added a snippet of the warning message and some of the failed cases
+>>   2. Separated the patch for easily review
+>>   3. Added page->share and its helper functions
+>>   4. Included the patch[1] that removes the restrictions of fsdax and reflink
+>> [1] https://lore.kernel.org/linux-xfs/1663234002-17-1-git-send-email-ruansy.fnst@fujitsu.com/
+>>
+...
+>>
+>> This also effects dax+noreflink mode if we run the test after a
+>> dax+reflink test.  So, the most urgent thing is solving the warning
+>> messages.
+>>
+>> With these fixes, most warning messages in dax_associate_entry() are
+>> gone.  But honestly, generic/388 will randomly failed with the warning.
+>> The case shutdown the xfs when fsstress is running, and do it for many
+>> times.  I think the reason is that dax pages in use are not able to be
+>> invalidated in time when fs is shutdown.  The next time dax page to be
+>> associated, it still remains the mapping value set last time.  I'll keep
+>> on solving it.
+> 
+> This one also sounds like it is going to be relevant for CXL PMEM, and
+> the improvements to the reference counting. CXL has a facility where the
+> driver asserts that no more writes are in-flight to the device so that
+> the device can assert a clean shutdown. Part of that will be making sure
+> that page access ends at fs shutdown.
+
+I was trying to locate the root cause of the fail on generic/388.  But 
+since it's a fsstress test, I can't relpay the operation sequence to 
+help me locate the operations.  So, I tried to replace fsstress with 
+fsx, which can do replay after the case fails, but it can't reproduce 
+the fail.  I think another important factor is that fsstress tests with 
+multiple threads.  So, for now, it's hard for me to locate the cause by 
+running the test.
+
+Then I updated the kernel to the latest v6.2-rc1 and run generic/388 for 
+many times.  The warning dmesg doesn't show any more.
+
+How is your test on this case?  Does it still fail on the latest kernel? 
+  If so, I think I have to keep on locating the cause, and need your advice.
+
+
+--
+Thanks,
+Ruan.
+
+> 
+>> The warning message in dax_writeback_one() can also be fixed because of
+>> the dax unshare.
+>>
+>>
+>> Shiyang Ruan (8):
+>>    fsdax: introduce page->share for fsdax in reflink mode
+>>    fsdax: invalidate pages when CoW
+>>    fsdax: zero the edges if source is HOLE or UNWRITTEN
+>>    fsdax,xfs: set the shared flag when file extent is shared
+>>    fsdax: dedupe: iter two files at the same time
+>>    xfs: use dax ops for zero and truncate in fsdax mode
+>>    fsdax,xfs: port unshare to fsdax
+>>    xfs: remove restrictions for fsdax and reflink
+>>
+>>   fs/dax.c                   | 220 +++++++++++++++++++++++++------------
+>>   fs/xfs/xfs_ioctl.c         |   4 -
+>>   fs/xfs/xfs_iomap.c         |   6 +-
+>>   fs/xfs/xfs_iops.c          |   4 -
+>>   fs/xfs/xfs_reflink.c       |   8 +-
+>>   include/linux/dax.h        |   2 +
+>>   include/linux/mm_types.h   |   5 +-
+>>   include/linux/page-flags.h |   2 +-
+>>   8 files changed, 166 insertions(+), 85 deletions(-)
+>>
+>> -- 
+>> 2.38.1
+>>
+>>
+> 
+> 
