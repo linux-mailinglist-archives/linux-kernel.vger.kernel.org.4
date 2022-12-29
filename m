@@ -2,117 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A2A658CA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF69658C8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233240AbiL2MSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:18:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
+        id S231128AbiL2MJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:09:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiL2MSA (ORCPT
+        with ESMTP id S229685AbiL2MJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:18:00 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F9710B5B;
-        Thu, 29 Dec 2022 04:18:00 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 891F11EC034B;
-        Thu, 29 Dec 2022 13:17:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672316278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=wSRpswI9u60JfI6sWY2yfCWEP9K0fmolgwn8Wp8wVro=;
-        b=nUijUjCO3f0F3lKDnwUjShJLuzg8Te08KQWeSK1O8CYkaoOv4H1WdTTd60grAJwdH3ybYk
-        7d1+JxrHlDav78/VwKPK5g7hOs5SwfviZ7tTlbVb67rQZCREhd2nfhpmXX/gQBidKGyasA
-        T0pJccZK9EcweKSTC+UPU6YntjU/RDQ=
-Date:   Thu, 29 Dec 2022 13:17:48 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
-        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: Re: [Patch v4 04/13] x86/mm: Handle decryption/re-encryption of
- bss_decrypted consistently
-Message-ID: <Y62FbJ1rZ6TVUgml@zn.tnic>
-References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
- <1669951831-4180-5-git-send-email-mikelley@microsoft.com>
+        Thu, 29 Dec 2022 07:09:38 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F885FFA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:09:37 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NjRxC1SFtz16LvT;
+        Thu, 29 Dec 2022 20:08:15 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 29 Dec 2022 20:09:32 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
+CC:     <linux-kernel@vger.kernel.org>, <willy@infradead.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH] mm: huge_memory: convert split_huge_pages_all() to use a folio
+Date:   Thu, 29 Dec 2022 20:25:03 +0800
+Message-ID: <20221229122503.149083-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1669951831-4180-5-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 07:30:22PM -0800, Michael Kelley wrote:
-> Current code in sme_postprocess_startup() decrypts the bss_decrypted
-> section when sme_me_mask is non-zero.  But code in
-> mem_encrypt_free_decrypted_mem() re-encrypts the unused portion based
-> on CC_ATTR_MEM_ENCRYPT.  In a Hyper-V guest VM using vTOM, these
-> conditions are not equivalent as sme_me_mask is always zero when
-> using vTOM.  Consequently, mem_encrypt_free_decrypted_mem() attempts
-> to re-encrypt memory that was never decrypted.
-> 
-> Fix this in mem_encrypt_free_decrypted_mem() by conditioning the
-> re-encryption on the same test for non-zero sme_me_mask.  Hyper-V
-> guests using vTOM don't need the bss_decrypted section to be
-> decrypted, so skipping the decryption/re-encryption doesn't cause
-> a problem.
+Straightforwardly convert split_huge_pages_all() to use a folio.
 
-Lemme simplify the formulations a bit:
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ mm/huge_memory.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
-"sme_postprocess_startup() decrypts the bss_decrypted ection when me_mask
-sme_is non-zero.
-
-mem_encrypt_free_decrypted_mem() re-encrypts the unused portion based on
-CC_ATTR_MEM_ENCRYPT.
-
-In a Hyper-V guest VM using vTOM, these conditions are not equivalent
-as sme_me_mask is always zero when using vTOM. Consequently,
-mem_encrypt_free_decrypted_mem() attempts to re-encrypt memory that was
-never decrypted.
-
-So check sme_me_mask in mem_encrypt_free_decrypted_mem() too.
-
-Hyper-V guests using vTOM don't need the bss_decrypted section to be
-decrypted, so skipping the decryption/re-encryption doesn't cause a
-problem."
-
-> Fixes: e9d1d2bb75b2 ("treewide: Replace the use of mem_encrypt_active() with cc_platform_has()")
-
-So when you say Fixes - this is an issue only for vTOM-using VMs and
-before yours, there were none. And yours needs more enablement than just
-this patch.
-
-So does this one really need to be backported to stable@?
-
-I'm asking because there's AI which will pick it up based on this Fixes
-tag up but that AI is still not that smart to replace us all. :-)
-
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 266c4b557946..c8cbe7f62eaa 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2932,6 +2932,7 @@ static void split_huge_pages_all(void)
+ {
+ 	struct zone *zone;
+ 	struct page *page;
++	struct folio *folio;
+ 	unsigned long pfn, max_zone_pfn;
+ 	unsigned long total = 0, split = 0;
+ 
+@@ -2944,24 +2945,32 @@ static void split_huge_pages_all(void)
+ 			int nr_pages;
+ 
+ 			page = pfn_to_online_page(pfn);
+-			if (!page || !get_page_unless_zero(page))
++			if (!page || PageTail(page))
++				continue;
++			folio = page_folio(page);
++			if (!folio_try_get(folio))
+ 				continue;
+ 
+-			if (zone != page_zone(page))
++			if (unlikely(page_folio(page) != folio))
++				goto next;
++
++			if (zone != folio_zone(folio))
+ 				goto next;
+ 
+-			if (!PageHead(page) || PageHuge(page) || !PageLRU(page))
++			if (!folio_test_large(folio)
++				|| folio_test_hugetlb(folio)
++				|| !folio_test_lru(folio))
+ 				goto next;
+ 
+ 			total++;
+-			lock_page(page);
+-			nr_pages = thp_nr_pages(page);
+-			if (!split_huge_page(page))
++			folio_lock(folio);
++			nr_pages = folio_nr_pages(folio);
++			if (!split_folio(folio))
+ 				split++;
+ 			pfn += nr_pages - 1;
+-			unlock_page(page);
++			folio_unlock(folio);
+ next:
+-			put_page(page);
++			folio_put(folio);
+ 			cond_resched();
+ 		}
+ 	}
 -- 
-Regards/Gruss,
-    Boris.
+2.35.3
 
-https://people.kernel.org/tglx/notes-about-netiquette
