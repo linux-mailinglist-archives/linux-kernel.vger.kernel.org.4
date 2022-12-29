@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D56658A09
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 08:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E151658A0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 08:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbiL2Hlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 02:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S232924AbiL2Hn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 02:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiL2Hle (ORCPT
+        with ESMTP id S230078AbiL2Hn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 02:41:34 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D952EF
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 23:41:33 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id n15-20020a056e021baf00b0030387c2e1d3so11356787ili.5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 23:41:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7TQjimL8KUZMscO4m3fC34iqwHwmpZuK4STzqhRFKQI=;
-        b=0jAYEJ0wTZHuWLr8nDBmXS9bzE1yzirpee7nZV2E9mzQrzMkG9PJ3RXs+ZDEukhopS
-         +v6UFZNAecfNbWVQb92Q8Afp0fDUqOlvxMLwJLSti3QXWmDZfxe2hYWIIMiAHXsPJ0Yi
-         Txm9pBtTaFyYOm4u8m5L1ciD2PS2vIWtlgKv+kONjwpLeMSLF17/owt34I4NWRP+uVLT
-         P/QeHn+lEYOLLRDmHquhwfApyPsyaMNF/lhIFMqypIEc79QmEYNrBuzZSsEt4ydgxmpX
-         nLyzGK/zjIbo+xvLt8cPo5pH2XNMXrYOiMysH6Q1Iklj777VkS4mBm2nETN1j6Bt0GhW
-         OfbQ==
-X-Gm-Message-State: AFqh2kqp2kX9GDaA2JFRgNaVwnNglFaMTUmI7VfA9PVT0WgeS5e098oE
-        YPOiggNjv6Wsdpkaxc5PKJtflhJsJbpJgcDy0LDxPXsDZ9Cs
-X-Google-Smtp-Source: AMrXdXuYLY6fqexLmgudj5C+fa2G61v4XrTcbiSl1xvdnHFrzt5G6uuSPBCL5pfEUBrWBTeNyMSoN5rgpur89PA6kEU6VrHQRqSJ
+        Thu, 29 Dec 2022 02:43:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6A1B486;
+        Wed, 28 Dec 2022 23:43:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 483B161724;
+        Thu, 29 Dec 2022 07:43:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DDAEC433EF;
+        Thu, 29 Dec 2022 07:43:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672299805;
+        bh=ha9gPkeEMdP/2N37rSOoAud9ZwoPXuJqw+mMc7OloXw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eY45LjFSbjq9lFd3TuaYsVftNInFTpCnJSUPIc9G3xcl3YXH1kcMdNAtysho+QDM/
+         H/fpb4/tN4jSQgqtT2H3h0HkALhoj1kT/ZV11iYMJRzmaGQHWLNCuP4Ly4bmD7iMyN
+         xLgz1XJKJKdlIM29yJxHAvHn/uUYZziAegkLUP5fSZOuLWRGVp3EZCOYp4yauWVFzO
+         CEbZQ3z2UJ+2KI/wPwyLGc+Xd41xDd7NNvBZEs1o1c6DDlnCY5E2/EFaq9tXoFuLJ4
+         AOYGZtzCjoZJ/hoVoM8U6+Rai/QFWl4eLe0aBB3o8Ly+SNbt+IknbepTOkPd0wJRoL
+         nBwY4ZOamaLfg==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>, Andrew Davis <afd@ti.com>,
+        Kees Cook <keescook@chromium.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: [PATCH v3 1/2] .gitignore: update the command to check tracked files being ignored
+Date:   Thu, 29 Dec 2022 16:43:09 +0900
+Message-Id: <20221229074310.906556-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:dd8e:0:b0:30c:217:ddfa with SMTP id
- g14-20020a92dd8e000000b0030c0217ddfamr945881iln.148.1672299693017; Wed, 28
- Dec 2022 23:41:33 -0800 (PST)
-Date:   Wed, 28 Dec 2022 23:41:32 -0800
-In-Reply-To: <000000000000f2b07b05d5dc87cc@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000029119905f0f29dd3@google.com>
-Subject: Re: [syzbot] general protection fault in fscache_free_cookie
-From:   syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
-To:     dhowells@redhat.com, dvyukov@google.com,
-        linux-cachefs-bounces@redhat.com, linux-cachefs-owner@redhat.com,
-        linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
-        mudongliangabcd@gmail.com, nogikh@google.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-fscache: fix GPF in fscache_free_cookie
+Recent git versions do not accept the noted command.
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+  $ git ls-files -i --exclude-standard
+  fatal: ls-files -i must be used with either -o or -c
 
-#syz fix: exact-commit-title
+The -c was implied before, but we need to make it explicit since
+git commit b338e9f66873 ("ls-files: error out on -i unless -o or -c
+are specified").
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+Also, replace --exclude-standard with --exclude-per-directory=.gitignore
+so that everyone will get consistent results.
 
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=5b129e8586277719bab3
+git-ls-files(1) says:
 
+  --exclude-standard
+      Add the standard Git exclusions: .git/info/exclude, .gitignore in
+      each directory, and the user's global exclusion file.
+
+We cannot predict what is locally added to .git/info/exclude or the
+user's global exclusion file.
+
+We can only manage .gitignore files committed to the repository.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
 ---
-[1] I expect the commit to be present in:
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+Changes in v3:
+  - Fix a typo. Update commit description per Miguel
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+ .gitignore | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+diff --git a/.gitignore b/.gitignore
+index 3ec73ead6757..2e2e3d1eeaee 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -4,7 +4,7 @@
+ # subdirectories here. Add them in the ".gitignore" file
+ # in that subdirectory instead.
+ #
+-# NOTE! Please use 'git ls-files -i --exclude-standard'
++# NOTE! Please use 'git ls-files -i -c --exclude-per-directory=.gitignore'
+ # command after changing this file, to see if there are
+ # any tracked files which get ignored after the change.
+ #
+-- 
+2.34.1
 
-4. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
