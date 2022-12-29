@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243B2658AFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 10:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFFC658B03
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 10:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbiL2J3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 04:29:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S232749AbiL2Jaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 04:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiL2J3b (ORCPT
+        with ESMTP id S229483AbiL2Jaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 04:29:31 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF00F13D70;
-        Thu, 29 Dec 2022 01:29:29 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id t15so8069330wro.9;
-        Thu, 29 Dec 2022 01:29:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQjUzt0TYzPClWLYVG06i7EaST8h2wDOVIpEzBnJCKM=;
-        b=IqTbHq4xT4HYduozrFDpiDA7xJ9I+5OnwguxGsOfY3/321zoGjQt8+6WV4s/5EG1Ao
-         VVPVp6PPpUyzgnG1R5QXST2wikq1yDOK/Qx3/CUd2u5+f6abRfL+Vygdxi3h2OIsR1ZF
-         cWGPdbDZJ5lrSLGF+tgXTMYY9hteZOYzcwx0qoIN/EYJtAet2+xmjRw4pazNK0aXL4Hs
-         JKRFPHCkir35PSkPzwjWdurWmqdhKfLW8nZPy2nlXVs5wdjw0SeLirjyMjagC2cf9iUU
-         m6wrUlN7hEwtsNR12bZ8n4qSV5y4N4QSnmdtnqnq55t952J0IK+Bflia6v1E0uCQgM61
-         7cWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dQjUzt0TYzPClWLYVG06i7EaST8h2wDOVIpEzBnJCKM=;
-        b=ZOkkU2p0dbuxf/k0PLa9slimdu5dpV+rhM3ecZp0x5T00FXr1z28fWtVHxpWqCMMrk
-         5XU0ZGoHg6QDCE6wADNlHp1zkRnZAMEiKBJCwsQTDo0oIdDd/CpPBpAgSmWXASARTOQV
-         b5ZgFKn6AhAGshprGktxr9O3aaQJ0OzPpJG32U2RgRjwvN0lqqH+6ftusdCB9OfQ6aBJ
-         0zwSpf0mU6eXR2K2j3WzlqWQWC/PqPZUbCNcqpya1PHcOmlvMeh4pM9WrU+4B0s17v4H
-         W7q+RuxNgqwM0UkjnibsVee4X4xOdH7PkVYR0HGs2m4w7Hsw6CbB8YFr2/6DXIFheGB4
-         BMxw==
-X-Gm-Message-State: AFqh2kpEmH+9Sg/yn+RGec2cosLAWtm0WklYu2tdkLXs+6IDXZYVV2/p
-        s7/SPohnYzJ1VCu4oJPKA1U=
-X-Google-Smtp-Source: AMrXdXvpWbDjkYnrUfS5uRT4UDoc3xE2G3Tlimu2DTpvAxWp+BIGeZObuZyRRKFe3+Mwk7ax6JNEHA==
-X-Received: by 2002:a05:6000:10e:b0:272:4d0b:366b with SMTP id o14-20020a056000010e00b002724d0b366bmr14027014wrx.38.1672306168168;
-        Thu, 29 Dec 2022 01:29:28 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id c10-20020a5d414a000000b0024242111a27sm17819412wrq.75.2022.12.29.01.29.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 01:29:27 -0800 (PST)
-Date:   Thu, 29 Dec 2022 12:29:24 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Joshua Goins <josh@redstrate.com>,
-        linux-input@vger.kernel.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, kurikaesu@users.noreply.github.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: uclogic: Add support for XP-PEN Artist 22R Pro
-Message-ID: <202212261746.hBtGGDW4-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2068502.VLH7GnMWUR@adrastea>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 29 Dec 2022 04:30:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B94D13D36;
+        Thu, 29 Dec 2022 01:30:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D3261743;
+        Thu, 29 Dec 2022 09:30:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73F44C433F1;
+        Thu, 29 Dec 2022 09:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672306232;
+        bh=eVuEeWshgWIQcuB7tYB1fhEKCp5j5oKin5EYhZhaQGA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Zt+8S1CWiTjE2/bKWLdiEkURVjz2KQzan9F2E7DVHmFP4q9kPKFCZ2oFMXeebwp85
+         mOZiB50DBI4SlTJ8iNcX6ylvTqPh67SpRYX5/FST5edvCfouKrqyXv4R1T2PjbHzve
+         cqOkmE1/LIQM+2wkA2tanSWsqrhpMAfOhI9M2VGn0UfWdGlmG9UCFMfm+vAjPpzfPX
+         zaJlosf4Z0HCIntWOQJK2UDOPCZdV3AcTTkTAjkpPygw47OhoncFMPPOMIvs/flU1J
+         Xdkj+kebaiCD2M/aiWLvxN9/cj/XmrshpHSLwb7bJryomtZ2mlAsdK79GGoX3cTEu9
+         BYAPMO254InwA==
+Date:   Thu, 29 Dec 2022 18:30:27 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Song Chen <chensong_2000@189.cn>
+Cc:     rostedt@goodmis.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] kernel/trace: Provide default impelentations
+ defined in trace_probe_tmpl.h
+Message-Id: <20221229183027.6f2c75ba0b2924a2bfd0499d@kernel.org>
+In-Reply-To: <1672211305-31482-1-git-send-email-chensong_2000@189.cn>
+References: <1672211305-31482-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,121 +56,640 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joshua,
+On Wed, 28 Dec 2022 15:08:25 +0800
+Song Chen <chensong_2000@189.cn> wrote:
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> There are 7 function definitions in trace_probe_tmpl.h, they are:
+> 
+> 1, process_fetch_insn
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joshua-Goins/HID-uclogic-Add-support-for-XP-PEN-Artist-22R-Pro/20221226-112302
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/2068502.VLH7GnMWUR%40adrastea
-patch subject: [PATCH] HID: uclogic: Add support for XP-PEN Artist 22R Pro
-config: i386-randconfig-m021-20221226
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+Other functions except for this are OK for me.
+But I think this function should have different instance for kprobe
+and eprobe, because the passed 'void *rec' is completely different.
+For the kprobe's process_fetch_insn() will take a 'pt_regs *', on the
+other hand, the eprobe's process_fetch_insn() will take a
+'ftrace_event_field *'.
+I also, don't want to expose get_event_field() function because
+it is only for the eprobes.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+What about making a new common function and call it in default case
+from both process_fetch_insn()? Your goal is reducing the redundant
+code, then it is enough to share only the common code. :)
 
-New smatch warnings:
-drivers/hid/hid-uclogic-params.c:1453 uclogic_params_init_ugee_xppen_pro() warn: variable dereferenced before check 'hdev' (see line 1447)
-drivers/hid/hid-uclogic-params.c:1454 uclogic_params_init_ugee_xppen_pro() warn: possible memory leak of 'buf'
-drivers/hid/hid-uclogic-params.c:1492 uclogic_params_init_ugee_xppen_pro() error: double free of 'buf'
+For example, in trace_probe_kernel.h,
 
-Old smatch warnings:
-drivers/hid/hid-uclogic-params.c:1502 uclogic_params_init_ugee_xppen_pro() error: double free of 'buf'
+process_common_fetch_insn(struct fetch_insn *code, void *dest, void *base, unsigned long *val)
+{
+	switch (code->op) {
+	case FETCH_OP_IMM:
+		*val = code->immediate;
+		break;
+	case FETCH_OP_COMM:
+		*val = (unsigned long)current->comm;
+		break;
+	case FETCH_OP_DATA:
+		*val = (unsigned long)code->data;
+		break;
+	default:
+		return -EILSEQ;
+	}
+	return 0;
+}
 
-vim +/hdev +1453 drivers/hid/hid-uclogic-params.c
+For kprobe events:
 
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1436  static int uclogic_params_init_ugee_xppen_pro(struct hid_device *hdev,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1437  					      struct uclogic_params *p,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1438  					      const u8 probe_endpoint,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1439  					      const u8 rdesc_init_packet[],
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1440  					      const size_t rdesc_init_size,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1441  					      const u8 rdesc_tablet_arr[],
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1442  					      const size_t rdesc_tablet_size,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1443  					      const u8 rdesc_frame_arr[],
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1444  					      const size_t rdesc_frame_size)
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1445  {
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1446  	const size_t str_desc_len = 12;
-51d8c9b14fc55dc Aren Villanueva 2022-12-25 @1447  	struct usb_device *udev = hid_to_usb_dev(hdev);
-                                                                                                 ^^^^
-Dereference.
+process_fetch_insn(struct fetch_insn *code, void *rec, void *dest, void *base)
+{
+	while (code->op == FETCH_NOP_SYMBOL)
+		code++;
+	switch (code->op) {
+	case FETCH_OP_REG:
+		val = regs_get_register(regs, code->param);
+		...
+	default:
+		ret = process_common_fetch_insn(code, dest, base, &val);
+		if (ret < 0)
+			return ret;
+	}
+	...
+}
 
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1448  	u8 *buf = kmemdup(rdesc_init_packet, rdesc_init_size, GFP_KERNEL);
+For eprobe events:
 
-Never put functions which can fail in the declaration block.  This
-allocation has no check for NULL (common problem when done in
-declaration block).
+process_fetch_insn(struct fetch_insn *code, void *rec, void *dest, void *base)
+{
+	while (code->op == FETCH_NOP_SYMBOL)
+		code++;
+	if (code->op == FETCH_OP_TP_ARG) {
+		val = get_event_field(code, rec);
+	} else {
+		ret = process_common_fetch_insn(code, dest, base, &val);
+		if (ret < 0)
+			return ret;
+	}
+	...
+}
 
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1449  	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1450  	int actual_len, rc;
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1451  	u16 resolution;
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1452  
-51d8c9b14fc55dc Aren Villanueva 2022-12-25 @1453  	if (hdev == NULL || p == NULL)
-                                                            ^^^^^^^^^^^^
-Checked to late.
+You also don't see the error related to CONFIG_HAVE_REGS_AND_STACK_ACCESS_API. :)
 
-51d8c9b14fc55dc Aren Villanueva 2022-12-25 @1454  		return -EINVAL;
+Thank you,
 
-Needs a kfree(buf);
+> 2, fetch_store_strlen
+> 3, fetch_store_string
+> 4, fetch_store_strlen_user
+> 5, fetch_store_string_user
+> 6, probe_mem_read
+> 7, probe_mem_read_user
+> 
+> Every C file which includes trace_probe_tmpl.h has to implement them,
+> otherwise it gets warnings and errors. However, some of them are identical,
+> like kprobe and eprobe, as a result, there is a lot redundant code in those
+> 2 files.
+> 
+> This patch would like to provide default behaviors for those functions
+> which kprobe and eprobe can share by just including trace_probe_kernel.h
+> with trace_probe_tmpl.h together.
+> 
+> It removes redundant code, increases readability, and more importantly,
+> makes it easier to introduce a new feature based on trace probe
+> (it's possible).
+> 
+> Signed-off-by: Song Chen <chensong_2000@189.cn>
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> ---
+> v2:
+> 1, reorganize patchset
+> 
+> v3:
+> 1, mark nokprobe_inline for get_event_field
+> 2, remove warnings reported from kernel test robot
+> 3, fix errors reported from kernel test robot
+> 
+> v4:
+> 1, reset changes in v3(2) and v3(3), they are not reasonable fix.
+> 2, I intended to introduce a new header file to exclude
+> trace_events_synth.c out of the patch. However, after looking
+> further, i found the errors in [1] are introduced by this patch,
+> but the warning in [1] are not. The errors can be fixed by adding
+> "#ifdef CONFIG_HAVE_REGS_AND_STACK_ACCESS_API".
+> 
+> [1]:https://lore.kernel.org/lkml/202211301946.pkLE4PDp-lkp@intel.com/
+> ---
+>  kernel/trace/trace_eprobe.c       | 144 ------------------------------
+>  kernel/trace/trace_events_synth.c |   7 +-
+>  kernel/trace/trace_kprobe.c       | 102 ---------------------
+>  kernel/trace/trace_probe_kernel.h | 143 +++++++++++++++++++++++++++--
+>  4 files changed, 141 insertions(+), 255 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> index bdb26eee7a0c..60ced4a7a25d 100644
+> --- a/kernel/trace/trace_eprobe.c
+> +++ b/kernel/trace/trace_eprobe.c
+> @@ -319,64 +319,6 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
+>  	return trace_handle_return(s);
+>  }
+>  
+> -static unsigned long get_event_field(struct fetch_insn *code, void *rec)
+> -{
+> -	struct ftrace_event_field *field = code->data;
+> -	unsigned long val;
+> -	void *addr;
+> -
+> -	addr = rec + field->offset;
+> -
+> -	if (is_string_field(field)) {
+> -		switch (field->filter_type) {
+> -		case FILTER_DYN_STRING:
+> -			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
+> -			break;
+> -		case FILTER_RDYN_STRING:
+> -			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
+> -			break;
+> -		case FILTER_STATIC_STRING:
+> -			val = (unsigned long)addr;
+> -			break;
+> -		case FILTER_PTR_STRING:
+> -			val = (unsigned long)(*(char *)addr);
+> -			break;
+> -		default:
+> -			WARN_ON_ONCE(1);
+> -			return 0;
+> -		}
+> -		return val;
+> -	}
+> -
+> -	switch (field->size) {
+> -	case 1:
+> -		if (field->is_signed)
+> -			val = *(char *)addr;
+> -		else
+> -			val = *(unsigned char *)addr;
+> -		break;
+> -	case 2:
+> -		if (field->is_signed)
+> -			val = *(short *)addr;
+> -		else
+> -			val = *(unsigned short *)addr;
+> -		break;
+> -	case 4:
+> -		if (field->is_signed)
+> -			val = *(int *)addr;
+> -		else
+> -			val = *(unsigned int *)addr;
+> -		break;
+> -	default:
+> -		if (field->is_signed)
+> -			val = *(long *)addr;
+> -		else
+> -			val = *(unsigned long *)addr;
+> -		break;
+> -	}
+> -	return val;
+> -}
+> -
+>  static int get_eprobe_size(struct trace_probe *tp, void *rec)
+>  {
+>  	struct fetch_insn *code;
+> @@ -419,92 +361,6 @@ static int get_eprobe_size(struct trace_probe *tp, void *rec)
+>  	return ret;
+>  }
+>  
+> -/* Kprobe specific fetch functions */
+> -
+> -/* Note that we don't verify it, since the code does not come from user space */
+> -static int
+> -process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+> -		   void *base)
+> -{
+> -	unsigned long val;
+> -
+> - retry:
+> -	switch (code->op) {
+> -	case FETCH_OP_TP_ARG:
+> -		val = get_event_field(code, rec);
+> -		break;
+> -	case FETCH_OP_IMM:
+> -		val = code->immediate;
+> -		break;
+> -	case FETCH_OP_COMM:
+> -		val = (unsigned long)current->comm;
+> -		break;
+> -	case FETCH_OP_DATA:
+> -		val = (unsigned long)code->data;
+> -		break;
+> -	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+> -		code++;
+> -		goto retry;
+> -	default:
+> -		return -EILSEQ;
+> -	}
+> -	code++;
+> -	return process_fetch_insn_bottom(code, val, dest, base);
+> -}
+> -NOKPROBE_SYMBOL(process_fetch_insn)
+> -
+> -/* Return the length of string -- including null terminal byte */
+> -static nokprobe_inline int
+> -fetch_store_strlen_user(unsigned long addr)
+> -{
+> -	return kern_fetch_store_strlen_user(addr);
+> -}
+> -
+> -/* Return the length of string -- including null terminal byte */
+> -static nokprobe_inline int
+> -fetch_store_strlen(unsigned long addr)
+> -{
+> -	return kern_fetch_store_strlen(addr);
+> -}
+> -
+> -/*
+> - * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
+> - * with max length and relative data location.
+> - */
+> -static nokprobe_inline int
+> -fetch_store_string_user(unsigned long addr, void *dest, void *base)
+> -{
+> -	return kern_fetch_store_string_user(addr, dest, base);
+> -}
+> -
+> -/*
+> - * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
+> - * length and relative data location.
+> - */
+> -static nokprobe_inline int
+> -fetch_store_string(unsigned long addr, void *dest, void *base)
+> -{
+> -	return kern_fetch_store_string(addr, dest, base);
+> -}
+> -
+> -static nokprobe_inline int
+> -probe_mem_read_user(void *dest, void *src, size_t size)
+> -{
+> -	const void __user *uaddr =  (__force const void __user *)src;
+> -
+> -	return copy_from_user_nofault(dest, uaddr, size);
+> -}
+> -
+> -static nokprobe_inline int
+> -probe_mem_read(void *dest, void *src, size_t size)
+> -{
+> -#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+> -	if ((unsigned long)src < TASK_SIZE)
+> -		return probe_mem_read_user(dest, src, size);
+> -#endif
+> -	return copy_from_kernel_nofault(dest, src, size);
+> -}
+> -
+>  /* eprobe handler */
+>  static inline void
+>  __eprobe_trace_func(struct eprobe_data *edata, void *rec)
+> diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+> index e310052dc83c..7460f18ba973 100644
+> --- a/kernel/trace/trace_events_synth.c
+> +++ b/kernel/trace/trace_events_synth.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/trace_events.h>
+>  #include <trace/events/mmflags.h>
+>  #include "trace_probe.h"
+> +#include "trace_probe_tmpl.h"
+>  #include "trace_probe_kernel.h"
+>  
+>  #include "trace_synth.h"
+> @@ -420,12 +421,12 @@ static unsigned int trace_string(struct synth_trace_event *entry,
+>  		data_offset += event->n_u64 * sizeof(u64);
+>  		data_offset += data_size;
+>  
+> -		len = kern_fetch_store_strlen((unsigned long)str_val);
+> +		len = fetch_store_strlen((unsigned long)str_val);
+>  
+>  		data_offset |= len << 16;
+>  		*(u32 *)&entry->fields[*n_u64] = data_offset;
+>  
+> -		ret = kern_fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
+> +		ret = fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
+>  
+>  		(*n_u64)++;
+>  	} else {
+> @@ -473,7 +474,7 @@ static notrace void trace_event_raw_event_synth(void *__data,
+>  		val_idx = var_ref_idx[field_pos];
+>  		str_val = (char *)(long)var_ref_vals[val_idx];
+>  
+> -		len = kern_fetch_store_strlen((unsigned long)str_val);
+> +		len = fetch_store_strlen((unsigned long)str_val);
+>  
+>  		fields_size += len;
+>  	}
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index a4ffa864dbb7..c2e0b741ae82 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -1218,108 +1218,6 @@ static const struct file_operations kprobe_profile_ops = {
+>  	.release        = seq_release,
+>  };
+>  
+> -/* Kprobe specific fetch functions */
+> -
+> -/* Return the length of string -- including null terminal byte */
+> -static nokprobe_inline int
+> -fetch_store_strlen_user(unsigned long addr)
+> -{
+> -	return kern_fetch_store_strlen_user(addr);
+> -}
+> -
+> -/* Return the length of string -- including null terminal byte */
+> -static nokprobe_inline int
+> -fetch_store_strlen(unsigned long addr)
+> -{
+> -	return kern_fetch_store_strlen(addr);
+> -}
+> -
+> -/*
+> - * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
+> - * with max length and relative data location.
+> - */
+> -static nokprobe_inline int
+> -fetch_store_string_user(unsigned long addr, void *dest, void *base)
+> -{
+> -	return kern_fetch_store_string_user(addr, dest, base);
+> -}
+> -
+> -/*
+> - * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
+> - * length and relative data location.
+> - */
+> -static nokprobe_inline int
+> -fetch_store_string(unsigned long addr, void *dest, void *base)
+> -{
+> -	return kern_fetch_store_string(addr, dest, base);
+> -}
+> -
+> -static nokprobe_inline int
+> -probe_mem_read_user(void *dest, void *src, size_t size)
+> -{
+> -	const void __user *uaddr =  (__force const void __user *)src;
+> -
+> -	return copy_from_user_nofault(dest, uaddr, size);
+> -}
+> -
+> -static nokprobe_inline int
+> -probe_mem_read(void *dest, void *src, size_t size)
+> -{
+> -#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+> -	if ((unsigned long)src < TASK_SIZE)
+> -		return probe_mem_read_user(dest, src, size);
+> -#endif
+> -	return copy_from_kernel_nofault(dest, src, size);
+> -}
+> -
+> -/* Note that we don't verify it, since the code does not come from user space */
+> -static int
+> -process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+> -		   void *base)
+> -{
+> -	struct pt_regs *regs = rec;
+> -	unsigned long val;
+> -
+> -retry:
+> -	/* 1st stage: get value from context */
+> -	switch (code->op) {
+> -	case FETCH_OP_REG:
+> -		val = regs_get_register(regs, code->param);
+> -		break;
+> -	case FETCH_OP_STACK:
+> -		val = regs_get_kernel_stack_nth(regs, code->param);
+> -		break;
+> -	case FETCH_OP_STACKP:
+> -		val = kernel_stack_pointer(regs);
+> -		break;
+> -	case FETCH_OP_RETVAL:
+> -		val = regs_return_value(regs);
+> -		break;
+> -	case FETCH_OP_IMM:
+> -		val = code->immediate;
+> -		break;
+> -	case FETCH_OP_COMM:
+> -		val = (unsigned long)current->comm;
+> -		break;
+> -	case FETCH_OP_DATA:
+> -		val = (unsigned long)code->data;
+> -		break;
+> -#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
+> -	case FETCH_OP_ARG:
+> -		val = regs_get_kernel_argument(regs, code->param);
+> -		break;
+> -#endif
+> -	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+> -		code++;
+> -		goto retry;
+> -	default:
+> -		return -EILSEQ;
+> -	}
+> -	code++;
+> -
+> -	return process_fetch_insn_bottom(code, val, dest, base);
+> -}
+> -NOKPROBE_SYMBOL(process_fetch_insn)
+>  
+>  /* Kprobe handler */
+>  static nokprobe_inline void
+> diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
+> index 77dbd9ff9782..39f44513ec4e 100644
+> --- a/kernel/trace/trace_probe_kernel.h
+> +++ b/kernel/trace/trace_probe_kernel.h
+> @@ -12,7 +12,7 @@
+>   */
+>  /* Return the length of string -- including null terminal byte */
+>  static nokprobe_inline int
+> -kern_fetch_store_strlen_user(unsigned long addr)
+> +fetch_store_strlen_user(unsigned long addr)
+>  {
+>  	const void __user *uaddr =  (__force const void __user *)addr;
+>  	int ret;
+> @@ -29,14 +29,14 @@ kern_fetch_store_strlen_user(unsigned long addr)
+>  
+>  /* Return the length of string -- including null terminal byte */
+>  static nokprobe_inline int
+> -kern_fetch_store_strlen(unsigned long addr)
+> +fetch_store_strlen(unsigned long addr)
+>  {
+>  	int ret, len = 0;
+>  	u8 c;
+>  
+>  #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>  	if (addr < TASK_SIZE)
+> -		return kern_fetch_store_strlen_user(addr);
+> +		return fetch_store_strlen_user(addr);
+>  #endif
+>  
+>  	do {
+> @@ -63,7 +63,7 @@ static nokprobe_inline void set_data_loc(int ret, void *dest, void *__dest, void
+>   * with max length and relative data location.
+>   */
+>  static nokprobe_inline int
+> -kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
+> +fetch_store_string_user(unsigned long addr, void *dest, void *base)
+>  {
+>  	const void __user *uaddr =  (__force const void __user *)addr;
+>  	int maxlen = get_loc_len(*(u32 *)dest);
+> @@ -86,7 +86,7 @@ kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
+>   * length and relative data location.
+>   */
+>  static nokprobe_inline int
+> -kern_fetch_store_string(unsigned long addr, void *dest, void *base)
+> +fetch_store_string(unsigned long addr, void *dest, void *base)
+>  {
+>  	int maxlen = get_loc_len(*(u32 *)dest);
+>  	void *__dest;
+> @@ -94,7 +94,7 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
+>  
+>  #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>  	if ((unsigned long)addr < TASK_SIZE)
+> -		return kern_fetch_store_string_user(addr, dest, base);
+> +		return fetch_store_string_user(addr, dest, base);
+>  #endif
+>  
+>  	if (unlikely(!maxlen))
+> @@ -112,4 +112,135 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
+>  	return ret;
+>  }
+>  
+> +static nokprobe_inline int
+> +probe_mem_read_user(void *dest, void *src, size_t size)
+> +{
+> +	const void __user *uaddr =  (__force const void __user *)src;
+> +
+> +	return copy_from_user_nofault(dest, uaddr, size);
+> +}
+> +
+> +static nokprobe_inline int
+> +probe_mem_read(void *dest, void *src, size_t size)
+> +{
+> +#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+> +	if ((unsigned long)src < TASK_SIZE)
+> +		return probe_mem_read_user(dest, src, size);
+> +#endif
+> +	return copy_from_kernel_nofault(dest, src, size);
+> +}
+> +
+> +static nokprobe_inline unsigned long
+> +get_event_field(struct fetch_insn *code, void *rec)
+> +{
+> +	struct ftrace_event_field *field = code->data;
+> +	unsigned long val;
+> +	void *addr;
+> +
+> +	addr = rec + field->offset;
+> +
+> +	if (is_string_field(field)) {
+> +		switch (field->filter_type) {
+> +		case FILTER_DYN_STRING:
+> +			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
+> +			break;
+> +		case FILTER_RDYN_STRING:
+> +			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
+> +			break;
+> +		case FILTER_STATIC_STRING:
+> +			val = (unsigned long)addr;
+> +			break;
+> +		case FILTER_PTR_STRING:
+> +			val = (unsigned long)(*(char *)addr);
+> +			break;
+> +		default:
+> +			WARN_ON_ONCE(1);
+> +			return 0;
+> +		}
+> +		return val;
+> +	}
+> +
+> +	switch (field->size) {
+> +	case 1:
+> +		if (field->is_signed)
+> +			val = *(char *)addr;
+> +		else
+> +			val = *(unsigned char *)addr;
+> +		break;
+> +	case 2:
+> +		if (field->is_signed)
+> +			val = *(short *)addr;
+> +		else
+> +			val = *(unsigned short *)addr;
+> +		break;
+> +	case 4:
+> +		if (field->is_signed)
+> +			val = *(int *)addr;
+> +		else
+> +			val = *(unsigned int *)addr;
+> +		break;
+> +	default:
+> +		if (field->is_signed)
+> +			val = *(long *)addr;
+> +		else
+> +			val = *(unsigned long *)addr;
+> +		break;
+> +	}
+> +	return val;
+> +}
+> +
+> +/* Note that we don't verify it, since the code does not come from user space */
+> +static int
+> +process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+> +		   void *base)
+> +{
+> +	struct pt_regs *regs = rec;
+> +	unsigned long val;
+> +
+> +retry:
+> +	/* 1st stage: get value from context */
+> +	switch (code->op) {
+> +#ifdef CONFIG_HAVE_REGS_AND_STACK_ACCESS_API
+> +	case FETCH_OP_REG:
+> +		val = regs_get_register(regs, code->param);
+> +		break;
+> +	case FETCH_OP_STACK:
+> +		val = regs_get_kernel_stack_nth(regs, code->param);
+> +		break;
+> +	case FETCH_OP_STACKP:
+> +		val = kernel_stack_pointer(regs);
+> +		break;
+> +	case FETCH_OP_RETVAL:
+> +		val = regs_return_value(regs);
+> +		break;
+> +#endif
+> +	case FETCH_OP_IMM:
+> +		val = code->immediate;
+> +		break;
+> +	case FETCH_OP_COMM:
+> +		val = (unsigned long)current->comm;
+> +		break;
+> +	case FETCH_OP_DATA:
+> +		val = (unsigned long)code->data;
+> +		break;
+> +#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
+> +	case FETCH_OP_ARG:
+> +		val = regs_get_kernel_argument(regs, code->param);
+> +		break;
+> +#endif
+> +	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+> +		code++;
+> +		goto retry;
+> +	case FETCH_OP_TP_ARG:
+> +		val = get_event_field(code, rec);
+> +		break;
+> +	default:
+> +		return -EILSEQ;
+> +	}
+> +	code++;
+> +
+> +	return process_fetch_insn_bottom(code, val, dest, base);
+> +}
+> +NOKPROBE_SYMBOL(process_fetch_insn)
+> +
+>  #endif /* __TRACE_PROBE_KERNEL_H_ */
+> -- 
+> 2.25.1
+> 
 
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1455  
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1456  	rc = usb_interrupt_msg(
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1457  		udev,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1458  		usb_sndintpipe(udev, probe_endpoint),
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1459  		buf,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1460  		rdesc_init_size,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1461  		&actual_len,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1462  		USB_CTRL_SET_TIMEOUT);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1463  	kfree(buf);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1464  	if (rc == -EPIPE) {
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1465  		hid_err(hdev, "broken pipe sending init packet\n");
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1466  		return rc;
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1467  	} else if (rc < 0) {
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1468  		hid_err(hdev, "failed sending init packet: %d\n", rc);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1469  		return rc;
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1470  	} else if (actual_len != rdesc_init_size) {
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1471  		hid_err(hdev,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1472  			"failed to transfer complete init packet, only %d bytes sent\n",
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1473  			actual_len);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1474  		return -1;
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1475  	}
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1476  
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1477  	rc = uclogic_params_get_str_desc(&buf, hdev, 100, str_desc_len);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1478  	if (rc != str_desc_len) {
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1479  		if (rc == -EPIPE) {
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1480  			hid_err(hdev,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1481  				"string descriptor with pen parameters not found\n");
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1482  		} else if (rc < 0) {
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1483  			hid_err(hdev,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1484  				"failed retrieving pen parameters: %d\n", rc);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1485  		} else {
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1486  			hid_err(hdev,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1487  				"string descriptor with pen parameters has invalid length (got %d, expected %lu)\n",
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1488  				rc,
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1489  				str_desc_len);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1490  			rc = -1;
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1491  		}
-51d8c9b14fc55dc Aren Villanueva 2022-12-25 @1492  		kfree(buf);
-
-If uclogic_params_get_str_desc() fails then this is a double free.
-
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1493  		return rc;
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1494  	}
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1495  
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1496  	desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_LM] = get_unaligned_le16(buf + 2);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1497  	desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] = get_unaligned_le16(buf + 4);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1498  	/* buf + 6 is the number of pad buttons? Its 0x0008 */
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1499  	desc_params[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM] =
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1500  		get_unaligned_le16(buf + 8);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1501  	resolution = get_unaligned_le16(buf + 10);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1502  	kfree(buf);
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1503  	if (resolution == 0) {
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1504  		hid_err(hdev, "resolution of 0 in descriptor string\n");
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1505  		return -1;
-51d8c9b14fc55dc Aren Villanueva 2022-12-25  1506  	}
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
