@@ -2,135 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A465658CD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEEA658CD7
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbiL2MsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
+        id S233151AbiL2MsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:48:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbiL2Mru (ORCPT
+        with ESMTP id S233404AbiL2Mrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:47:50 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BF713D5E
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:47:48 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id m6so16979221lfj.11
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:47:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2HXheRu1dQbpoYyygoUpbH2Rv+D8A+p3lB+rWKexBOo=;
-        b=PxKTeQb+UavEDvyMVmHJf2HQSpqc2uu+sfVBpVpoZHd4sfN/POkyPykRSCVD1jkR6o
-         fRdMtGHcXyH3D0/Uaa4WtTGArly1jYD3+hYd67Y8hR50EZ0NQ1J2ZgvWhDzupq0KWYTG
-         fYAjTBFdrbA0wqQrzmTx6W3JhgkxY6y7R2rQHHYKjXPgZf6vwP0JV+yg6gVFpbTXXXjc
-         ZcRIhKWO9oSR2KGhTt4eEp5R6glBZXydQrCWcOYdxWywLHAEqXUzHiqpbXzJSQU1JiAG
-         ykmclOSpxQnMfovCswvcuMoYR8AZF3NjHPhsmUbyvKQxbtvG6ouupb4VFyNzMMlOmrv+
-         oEPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2HXheRu1dQbpoYyygoUpbH2Rv+D8A+p3lB+rWKexBOo=;
-        b=WZDhDlG/+fWJ86EAFwsOTQ/SEi95ROzk53TvqOnED9Ez9Hm0iJuSj2KpcToPOkkJSz
-         vXvk8IpX7NEppozuxZIowtJP0fG3xm/dQTs7nGrb4W4+oel8J1YoNxpHeLij6Ihzo0CE
-         ZYRakmZRqTldbI9cPgnHBkwoqegYe4qFY4kBTzDS1KsuXbZoukW6YhENxlQlZnn4UH2e
-         y45y4Mw6kplyUd3zA5K8GcK6uxHsUG7M0Wg33/hHmUt2dL4j9DqmcO+Z9cwl/UvEQY3M
-         tkQ6ygknAPkvhDwT/hmdfvdnAvpvCcS+zwbh8KBu9gnvRf5xcnqJH8gVq4LiwUHG+Qec
-         RsuQ==
-X-Gm-Message-State: AFqh2kpYS5auW9ONLY1bk5nJXnBsPGdPBpxIPWlMTeYfVdDXHQ3xMTpb
-        80273HuJePcuJE/ZKnuA4kk=
-X-Google-Smtp-Source: AMrXdXuIHJFWKzgwr5b7gyRTuZ7rfNwzf68SClV98VMvfHdknq9/nDZk0tV629b5vNuGr518o4+Q9A==
-X-Received: by 2002:ac2:5e2f:0:b0:4b5:5a15:8050 with SMTP id o15-20020ac25e2f000000b004b55a158050mr7808148lfg.32.1672318066963;
-        Thu, 29 Dec 2022 04:47:46 -0800 (PST)
-Received: from pc636 (host-90-233-208-74.mobileonline.telia.com. [90.233.208.74])
-        by smtp.gmail.com with ESMTPSA id q13-20020a056512210d00b004b5732080d1sm3040948lfr.150.2022.12.29.04.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 04:47:46 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 29 Dec 2022 13:47:43 +0100
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v3 2/3] mm: vmalloc: Switch to find_unlink_vmap_area() in
- vm_unmap_ram()
-Message-ID: <Y62Mb8NtZQkTmlfV@pc636>
-References: <20221222190022.134380-1-urezki@gmail.com>
- <20221222190022.134380-2-urezki@gmail.com>
- <Y6VlA8Mbbv7Ug6tW@infradead.org>
- <Y6XaTM+xSlGNjo0e@pc636>
- <20221228154707.432e8900855122712f98037c@linux-foundation.org>
+        Thu, 29 Dec 2022 07:47:55 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDF363E9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:47:54 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2396E1EC01CE;
+        Thu, 29 Dec 2022 13:47:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672318073;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=1KcR7E77mv9elx5G9X9IlsW0Rh4iCO+tG818qQo64N4=;
+        b=CXjIIeugIvcObmtb7Y1VmnUNOHDXpJU3ucwjMO1ozxW9lHCawJh7MurU1zO23IZx13C8rl
+        t28rQjH2rqLXjinYGlHeFAyAlnl32bEKMf8id/Vv/FcMml3qru7Xkv397ijHGtsGftOLd0
+        oHU55jRihKJJFoKwMmQ7wQOvWd2qkqA=
+Date:   Thu, 29 Dec 2022 13:47:49 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, pbonzini@redhat.com,
+        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
+        philmd@linaro.org
+Subject: Re: [PATCH qemu] x86: don't let decompressed kernel image clobber
+ setup_data
+Message-ID: <Y62MdawGaasXmoVL@zn.tnic>
+References: <20221228143831.396245-1-Jason@zx2c4.com>
+ <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org>
+ <Y6xvJheSYC83voCZ@zx2c4.com>
+ <Y6x1knb8udpSyMSp@zx2c4.com>
+ <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com>
+ <Y6z765zHrQ6Rl/0o@zx2c4.com>
+ <AF921575-0968-434A-8B46-095B78C209C1@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221228154707.432e8900855122712f98037c@linux-foundation.org>
+In-Reply-To: <AF921575-0968-434A-8B46-095B78C209C1@zytor.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 03:47:07PM -0800, Andrew Morton wrote:
-> On Fri, 23 Dec 2022 17:41:48 +0100 Uladzislau Rezki <urezki@gmail.com> wrote:
+On Wed, Dec 28, 2022 at 11:31:34PM -0800, H. Peter Anvin wrote:
+> As far as a crash... that sounds like a big and a pretty serious one at that.
 > 
-> > > Don't we also need to remove the manual unlink that was done
-> > > here previously?   Actually it seems like that manual unlink is missing
-> > > after patch 1, creating a bisection hazard.  So either add it there,
-> > > or just fold this patch into the previous one.
-> > >
-> > Right. In terms of bisection it is not so good. I think folding is the
-> > best.
-> > 
-> > Andrew, could you please fold this patch into the:
-> 
-> which patch ;)
-> 
-Currently the next-20221226 contains three patches:
+> Could you let me know what kernel you are using and how *exactly* you are booting it?
 
-<snip>
-[1]
-commit c83b70c3cc1ecf99897ca0ea6e44aa2125a61ccb
-Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
-Date:   Wed Dec 21 18:44:54 2022 +0100
+Right, with CONFIG_X86_VERBOSE_BOOTUP=y in a guest here, it says:
 
-    mm: vmalloc: replace BUG_ON() by WARN_ON_ONCE()
+early console in extract_kernel
+input_data: 0x000000000be073a8
+input_len: 0x00000000008cfc43
+output: 0x0000000001000000
+output_len: 0x000000000b600a98
+kernel_total_size: 0x000000000ac26000
+needed_size: 0x000000000b800000
+trampoline_32bit: 0x000000000009d000
 
-[2]
-commit 8a85ea97b35924ee39d51e00ecb3f6d07f748a36
-Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
-Date:   Wed Dec 21 18:44:53 2022 +0100
+so that's a ~9M kernel which gets decompressed at 0x1000000 and the
+output len is, what, ~180M which looks like plenty to me...
 
-    mm: vmalloc: switch to find_unlink_vmap_area() in vm_unmap_ram()
+-- 
+Regards/Gruss,
+    Boris.
 
-[3]
-commit a7c84c673c71cdfad20fe25e5d2051ed229859f7
-Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
-Date:   Wed Dec 21 18:44:52 2022 +0100
-
-    mm: vmalloc: avoid calling __find_vmap_area() twise in __vunmap()
-<snip>
-
-It would be good if you could fold [2] into [3] making it as one
-patch. The problem is that, if we leave it as it is, the bisection
-mechanism would consider [3] as a buggy patch, because it is not
-fully accomplished and depends on [2].
-
-Is that OK for you, i mean to squash on your own? Or i just should
-resend one more time?
-
-Thank you in advance!
-
---
-Uladzislau Rezki
+https://people.kernel.org/tglx/notes-about-netiquette
