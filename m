@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47568658DB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872AC658DBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbiL2OCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 09:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S233498AbiL2OCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 09:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiL2OCB (ORCPT
+        with ESMTP id S233494AbiL2OCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 09:02:01 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3C6FED;
-        Thu, 29 Dec 2022 06:01:57 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id y194-20020a4a45cb000000b004a08494e4b6so3156138ooa.7;
-        Thu, 29 Dec 2022 06:01:57 -0800 (PST)
+        Thu, 29 Dec 2022 09:02:14 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A4E1014;
+        Thu, 29 Dec 2022 06:02:13 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id e17-20020a9d7311000000b00678202573f1so11500904otk.8;
+        Thu, 29 Dec 2022 06:02:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yioAVI6+zgw454eICpzYlCELxSt3pmYSYWdJrFTwAWk=;
-        b=LtPIIBkU9J9lpUOxembRvMJQe9VC6DgVnokGY1mT7P/Jpi6JC4PEgw460skkezm1lv
-         mUhfEPlh0EfeU8orpp3jHKacjLqdeGxkgx5fSUia/LtbdBpBu+OnU3zpFpN31eDPKsvA
-         nTid/+6AkaxnjaAbl9ttCkrZgTFEB503QObtquyOpP/SD/Z0x08P3MXS+N6htRSeZcGh
-         oJgrbz9hO1Kz1mBny1hMl6F7e1YOqJ11oF3vynztkZq3RoZnRpQvo+VI+4A9SkBWpnHZ
-         hTbal481rXmC+hS1bDaxuizUXR1dzldU1bnP4RHVIb402emVf5l1NxKMU/5+EAXS8Ofn
-         jHfA==
+        bh=JXArgKaUTK7bUwW6m7GDFoDzl4YNyLjGSKQdPTwGKDc=;
+        b=YbmDz38jMg2x1DyCeETQir8cvipSZBLgO+Qf4O8Jjj69FIVqhQFv5gEogQhiiNQFIl
+         BLAc6nMInVsHHyzmN7ITL8TBArcA73g02Lm5njnD27L3btjH9NHoUG1XU3LmAJqjFukb
+         jTbJHjEekRJ0jjCmRAHRdXKoN/xSogSQ2bVoV8DpDmZCuVNZ3WPnA/JVPEpYFYgKIZcl
+         4y7crh9J1KloYZux3BGudvihEmjFmSzv32ux2eYxl+iqv3OcVKfQvFFW0ClsPp1tOUaY
+         87naRsZN7fHbJ3rtSLGndML7E2La7W+8XtdEV5F2E1vSl2MgG0ZRUVM4NLzDxC+IT43H
+         RZFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yioAVI6+zgw454eICpzYlCELxSt3pmYSYWdJrFTwAWk=;
-        b=TVDkhfeciEf4IJGWB+IWcbOIC+kxwvPTVh2u/yAtMzr7EHkyjwXdLt1bnaYpu1kvgD
-         SEnNqXGXwlNaLvPsAgtvyWIOfGZXrMNQXlpdFlWEuiSp18ijKH4cFuTZDmQko2RHZFCI
-         3TOxZZSQbbWpB5aUbTY1DftBSMyBpNUL5oO56T151ea4Z58IK46/K43VUdDM3k/ZGvhM
-         WzOZM7ld0lkcHd4gwYYgoBnaZopYc7WyPLJrsLYjC2qIu3gxMxrCWKCl6NHzPfQzrmBx
-         +qKpDLXZkObJnTOQSD9aKmMNWlKFIhxjZ//q+lF1DdXkFT5eQhGE8utOMlXVRTD39IU8
-         VHCQ==
-X-Gm-Message-State: AFqh2krFcQVP/baKVlUQ0i5Z46Wjatm6xVMj9WJntekYoJSx9BfwdSMn
-        sIN8bDf2igchP27F1jP1VUHAAYte79Y=
-X-Google-Smtp-Source: AMrXdXtsV42J5ZWjWQtY7AbZeJs0oQTfJeqpDfewj+Yv49roV9UXlZ/1F/uOmK3xpKTWzGcEhGDDFQ==
-X-Received: by 2002:a05:6820:16d:b0:4b9:1b69:579f with SMTP id k13-20020a056820016d00b004b91b69579fmr13629507ood.4.1672322517062;
-        Thu, 29 Dec 2022 06:01:57 -0800 (PST)
+        bh=JXArgKaUTK7bUwW6m7GDFoDzl4YNyLjGSKQdPTwGKDc=;
+        b=Vv+LPt75PLyAnNXaYl2oBQioSHoewqlkFbEUA3RbMVp7d48t85EaaXVdwnlO7m4fwQ
+         gW5w+L/CSZ0EAH1XB/7lDyAaYRFlHdGgGX0N8qPJUvtcDDg5uhTyeWZWTFYe+G0nanka
+         0Vq0IGX5HvfTx0+Ht3UVfdn59hnn5i2Jf8tgeuBs8GrwawJ8JwJuiPRa22jjE8WNeMaH
+         3nF1MN9egSFlfT7r3iXUlo1WABPtz6NY5qZe76qRgBhkj20LaTkWUu8JAFeIkVqhLWOL
+         x1RBg/TJcPGZIo74Fr2FsQATrEbTiUKaN69IFMUscbAXvgkNSEhlCB0435wFOpW2biyj
+         AqVw==
+X-Gm-Message-State: AFqh2koQZWyyDu00dECjUOAboi38cYv8PspzVEq1Hcfbd2FkIfpi41vE
+        T+DK6+1tkEiXk48tuAo5Ue/0ZBNCOUU=
+X-Google-Smtp-Source: AMrXdXsUXRUtYQ88aZCCv9lGBIB5KT/VKtNTqv7oxkvC2NYthzkFdSreqy32Dti8ybeAoUEon1xKIw==
+X-Received: by 2002:a05:6830:d6:b0:670:5fd6:4c2e with SMTP id x22-20020a05683000d600b006705fd64c2emr15937144oto.31.1672322533283;
+        Thu, 29 Dec 2022 06:02:13 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j6-20020a4ac546000000b0049fcedf1899sm7477676ooq.3.2022.12.29.06.01.56
+        by smtp.gmail.com with ESMTPSA id e20-20020a0568301f3400b0066e820696edsm8983251oth.13.2022.12.29.06.02.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 06:01:56 -0800 (PST)
+        Thu, 29 Dec 2022 06:02:12 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 29 Dec 2022 06:01:55 -0800
+Date:   Thu, 29 Dec 2022 06:02:11 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Saravanan Sekar <saravanan@linumiz.com>
 Cc:     jdelvare@suse.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, marten.lindahl@axis.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] hwmon: (pmbus/mpq7932) Add a support for mpq7932
- Power Management IC
-Message-ID: <20221229140155.GA17849@roeck-us.net>
+Subject: Re: [PATCH v3 1/4] hwmon: pm_bus: core: Add min_uV in pmbus
+ regulator helper macro
+Message-ID: <20221229140211.GA17976@roeck-us.net>
 References: <20221207173716.123223-1-saravanan@linumiz.com>
- <20221207173716.123223-4-saravanan@linumiz.com>
+ <20221207173716.123223-2-saravanan@linumiz.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221207173716.123223-4-saravanan@linumiz.com>
+In-Reply-To: <20221207173716.123223-2-saravanan@linumiz.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -78,226 +78,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 06:37:15PM +0100, Saravanan Sekar wrote:
-> The MPQ7932 is a power management IC designed to operate from 5V buses to
-> power a variety of Advanced driver-assistance system SOCs. Six integrated
-> buck converters with hardware monitoring capability powers a variety of
-> target rails configurable over PMBus interface.
+On Wed, Dec 07, 2022 at 06:37:13PM +0100, Saravanan Sekar wrote:
+> Some regulator operates in a range of voltage which should not allow
+> below the lower threshold.
 > 
 > Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
 
-Applied to hwmon-next, after changing multi-line comments.
-
-Guenter
+Applied to hwmon-next.
 
 > ---
->  drivers/hwmon/pmbus/Kconfig   |  16 ++++
->  drivers/hwmon/pmbus/Makefile  |   1 +
->  drivers/hwmon/pmbus/mpq7932.c | 153 ++++++++++++++++++++++++++++++++++
->  3 files changed, 170 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/mpq7932.c
+>  drivers/hwmon/pmbus/ltc2978.c | 16 ++++++++--------
+>  drivers/hwmon/pmbus/pmbus.h   |  5 +++--
+>  2 files changed, 11 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 89668af67206..30448e049486 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -317,6 +317,22 @@ config SENSORS_MP5023
->  	  This driver can also be built as a module. If so, the module will
->  	  be called mp5023.
+> diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
+> index 6d2592731ba3..406a36885ef3 100644
+> --- a/drivers/hwmon/pmbus/ltc2978.c
+> +++ b/drivers/hwmon/pmbus/ltc2978.c
+> @@ -569,14 +569,14 @@ MODULE_DEVICE_TABLE(i2c, ltc2978_id);
+>  #define LTC2978_N_VOLTAGES	((LTC2978_MAX_UV / LTC2978_UV_STEP) + 1)
 >  
-> +config SENSORS_MPQ7932_REGULATOR
-> +	bool "Regulator support for MPQ7932"
-> +	depends on SENSORS_MPQ7932 && REGULATOR
-> +	help
-> +	  If you say yes here you get six integrated buck converter regulator
-> +	  support for power management IC MPS MPQ7932.
-> +
-> +config SENSORS_MPQ7932
-> +	tristate "MPS MPQ7932"
-> +	help
-> +	  If you say yes here you get hardware monitoring functionality support
-> +	  for power management IC MPS MPQ7932.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called mpq7932.
-> +
->  config SENSORS_PIM4328
->  	tristate "Flex PIM4328 and compatibles"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 0002dbe22d52..d9d2fa4bd6f7 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
->  obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
->  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->  obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
-> +obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
->  obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
->  obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
->  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
-> diff --git a/drivers/hwmon/pmbus/mpq7932.c b/drivers/hwmon/pmbus/mpq7932.c
-> new file mode 100644
-> index 000000000000..1dc1ab71957b
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mpq7932.c
-> @@ -0,0 +1,153 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * mpq7932.c - hwmon with optional regulator driver for mps mpq7932
-> + * Copyright 2022 Monolithic Power Systems, Inc
-> + *
-> + * Author: Saravanan Sekar <saravanan@linumiz.com>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +#define MPQ7932_BUCK_UV_MIN		206250
-> +#define MPQ7932_UV_STEP			6250
-> +#define MPQ7932_N_VOLTAGES		256
-> +#define MPQ7932_VOUT_MAX		0xFF
-> +#define MPQ7932_NUM_PAGES		6
-> +
-> +#define MPQ7932_TON_DELAY		0x60
-> +#define MPQ7932_VOUT_STARTUP_SLEW	0xA3
-> +#define MPQ7932_VOUT_SHUTDOWN_SLEW	0xA5
-> +#define MPQ7932_VOUT_SLEW_MASK		GENMASK(1, 0)
-> +#define MPQ7932_TON_DELAY_MASK		GENMASK(4, 0)
-> +
-> +struct mpq7932_data {
-> +	struct pmbus_driver_info info;
-> +	struct pmbus_platform_data pdata;
-> +};
-> +
-> +#if IS_ENABLED(CONFIG_SENSORS_MPQ7932_REGULATOR)
-> +static struct regulator_desc mpq7932_regulators_desc[] = {
-> +	PMBUS_REGULATOR_STEP("buck", 0, MPQ7932_N_VOLTAGES,
-> +			     MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 1, MPQ7932_N_VOLTAGES,
-> +			     MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 2, MPQ7932_N_VOLTAGES,
-> +			     MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 3, MPQ7932_N_VOLTAGES,
-> +			     MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 4, MPQ7932_N_VOLTAGES,
-> +			     MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +	PMBUS_REGULATOR_STEP("buck", 5, MPQ7932_N_VOLTAGES,
-> +			     MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
-> +};
-> +#endif
-> +
-> +static int mpq7932_write_word_data(struct i2c_client *client, int page, int reg,
-> +				   u16 word)
-> +{
-> +	switch (reg) {
-> +	/* chip support only byte access for VOUT_COMMAND otherwise
-> +	 * results -EREMOTEIO
-> +	 */
-
-/*
- * We do not use or accept networking-style multi-line comments in the hwmon
- * subsystem.
- */
-
-> +	case PMBUS_VOUT_COMMAND:
-> +		return pmbus_write_byte_data(client, page, reg, word & 0xFF);
-> +
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +}
-> +
-> +static int mpq7932_read_word_data(struct i2c_client *client, int page,
-> +				  int phase, int reg)
-> +{
-> +	switch (reg) {
-> +	/* chip support neither (PMBUS_VOUT_MARGIN_HIGH, PMBUS_VOUT_MARGIN_LOW)
-> +	 * nor (PMBUS_MFR_VOUT_MIN, PMBUS_MFR_VOUT_MAX). As a result set voltage
-> +	 * fails due to error in pmbus_regulator_get_low_margin, so faked.
-> +	 */
-> +	case PMBUS_MFR_VOUT_MIN:
-> +		return 0;
-> +
-> +	case PMBUS_MFR_VOUT_MAX:
-> +		return MPQ7932_VOUT_MAX;
-> +
-> +	/* chip support only byte access for VOUT_COMMAND otherwise
-> +	 * results -EREMOTEIO
-> +	 */
-> +	case PMBUS_READ_VOUT:
-> +		return pmbus_read_byte_data(client, page, PMBUS_VOUT_COMMAND);
-> +
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +}
-> +
-> +static int mpq7932_probe(struct i2c_client *client)
-> +{
-> +	struct mpq7932_data *data;
-> +	struct pmbus_driver_info *info;
-> +	struct device *dev = &client->dev;
-> +	int i;
-> +
-> +	data = devm_kzalloc(dev, sizeof(struct mpq7932_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	info = &data->info;
-> +	info->pages = MPQ7932_NUM_PAGES;
-> +	info->format[PSC_VOLTAGE_OUT] = direct;
-> +	info->m[PSC_VOLTAGE_OUT] = 160;
-> +	info->b[PSC_VOLTAGE_OUT] = -33;
-> +	for (i = 0; i < info->pages; i++) {
-> +		info->func[i] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-> +				| PMBUS_HAVE_STATUS_TEMP;
-> +	}
-> +
-> +#if IS_ENABLED(CONFIG_SENSORS_MPQ7932_REGULATOR)
-> +	info->num_regulators = ARRAY_SIZE(mpq7932_regulators_desc);
-> +	info->reg_desc = mpq7932_regulators_desc;
-> +#endif
-> +
-> +	info->read_word_data = mpq7932_read_word_data;
-> +	info->write_word_data = mpq7932_write_word_data;
-> +
-> +	data->pdata.flags = PMBUS_NO_CAPABILITY;
-> +	dev->platform_data = &data->pdata;
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct of_device_id mpq7932_of_match[] = {
-> +	{ .compatible = "mps,mpq7932"},
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, mpq7932_of_match);
-> +
-> +static const struct i2c_device_id mpq7932_id[] = {
-> +	{ "mpq7932", },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(i2c, mpq7932_id);
-> +
-> +static struct i2c_driver mpq7932_regulator_driver = {
-> +	.driver = {
-> +		.name = "mpq7932",
-> +		.of_match_table = mpq7932_of_match,
-> +	},
-> +	.probe_new = mpq7932_probe,
-> +	.id_table = mpq7932_id,
-> +};
-> +module_i2c_driver(mpq7932_regulator_driver);
-> +
-> +MODULE_AUTHOR("Saravanan Sekar <saravanan@linumiz.com>");
-> +MODULE_DESCRIPTION("MPQ7932 PMIC regulator driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
+>  static const struct regulator_desc ltc2978_reg_desc[] = {
+> -	PMBUS_REGULATOR_STEP("vout", 0, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
+> -	PMBUS_REGULATOR_STEP("vout", 1, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
+> -	PMBUS_REGULATOR_STEP("vout", 2, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
+> -	PMBUS_REGULATOR_STEP("vout", 3, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
+> -	PMBUS_REGULATOR_STEP("vout", 4, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
+> -	PMBUS_REGULATOR_STEP("vout", 5, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
+> -	PMBUS_REGULATOR_STEP("vout", 6, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
+> -	PMBUS_REGULATOR_STEP("vout", 7, LTC2978_N_VOLTAGES, LTC2978_UV_STEP),
+> +	PMBUS_REGULATOR_STEP("vout", 0, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
+> +	PMBUS_REGULATOR_STEP("vout", 1, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
+> +	PMBUS_REGULATOR_STEP("vout", 2, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
+> +	PMBUS_REGULATOR_STEP("vout", 3, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
+> +	PMBUS_REGULATOR_STEP("vout", 4, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
+> +	PMBUS_REGULATOR_STEP("vout", 5, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
+> +	PMBUS_REGULATOR_STEP("vout", 6, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
+> +	PMBUS_REGULATOR_STEP("vout", 7, LTC2978_N_VOLTAGES, LTC2978_UV_STEP, 0),
+>  };
+>  
+>  static const struct regulator_desc ltc2978_reg_desc_default[] = {
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index 10fb17879f8e..713ea7915425 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -464,7 +464,7 @@ struct pmbus_driver_info {
+>  extern const struct regulator_ops pmbus_regulator_ops;
+>  
+>  /* Macros for filling in array of struct regulator_desc */
+> -#define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step)  \
+> +#define PMBUS_REGULATOR_STEP(_name, _id, _voltages, _step, _min_uV)  \
+>  	[_id] = {						\
+>  		.name = (_name # _id),				\
+>  		.id = (_id),					\
+> @@ -475,9 +475,10 @@ extern const struct regulator_ops pmbus_regulator_ops;
+>  		.owner = THIS_MODULE,				\
+>  		.n_voltages = _voltages,			\
+>  		.uV_step = _step,				\
+> +		.min_uV = _min_uV,				\
+>  	}
+>  
+> -#define PMBUS_REGULATOR(_name, _id)	PMBUS_REGULATOR_STEP(_name, _id, 0, 0)
+> +#define PMBUS_REGULATOR(_name, _id)   PMBUS_REGULATOR_STEP(_name, _id, 0, 0, 0)
+>  
+>  /* Function declarations */
+>  
