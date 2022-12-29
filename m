@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3136C6590C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 20:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A54EC6590BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 20:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbiL2TJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 14:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S233915AbiL2TJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 14:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbiL2TJM (ORCPT
+        with ESMTP id S233614AbiL2TJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 14:09:12 -0500
+        Thu, 29 Dec 2022 14:09:14 -0500
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B37C14D3F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 11:09:11 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 91F0D3200786;
-        Thu, 29 Dec 2022 14:09:10 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB4D14D3C
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 11:09:13 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 6DCB432005B5;
+        Thu, 29 Dec 2022 14:09:12 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 29 Dec 2022 14:09:11 -0500
+  by compute5.internal (MEProxy); Thu, 29 Dec 2022 14:09:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1672340950; x=1672427350; bh=26
-        OVl7pfPjUCuTagaZGOenKInbPyTJjQTgFy1rxtBYQ=; b=1rOqAIpmu7OJxRRrWD
-        Zg9QX/bWx2jqDmeTQg3mXE+S3f2iXjFA5VRSEYIAKhz3TqC1z26C4Ww69up8ZmPI
-        sAFbYpTbj4XjE82+7HRPJmkrWsDAY7t9pWPGOi+hY7LPXwPadAX+hkjjl6U5g/YP
-        C0B7LCvVGZYkNsGOdZN8ckXgmT2mBpC7wFKCTKE0ww04ERxhn/xhZNKQnzUFggkq
-        3hJ2CCCKCykSl+qCPV/zrRMrtO90oE5qdv/16rVX8NZCe2ZWNyi9DWVlT+3AF51b
-        1q283Y3XLHuT1p3igWKEJP6aR7oJJ12kkjFLJ1ca0ZOZIGYEwEnWlXKENOm0IRrx
-        sXYQ==
+        :subject:subject:to:to; s=fm3; t=1672340952; x=1672427352; bh=g5
+        qIXCdzDVSxDpcNOdyuqgoqHDHz1BqdbXW1iSCF4RQ=; b=kId0KHA/Yh/Tao9yLi
+        sVxAs6/QCg5Hh8jzHO0IxjRVrXCnNkAybj4+8mPbwCGiQq5f/HfGPkhgnVei3/MZ
+        nyN3cWblK5XqrHIZ5ryOpVBecaHw+8V7WboS3jjnv0L6UQvTeLi9oM3MJxFf2iIS
+        bQDTeBHO4YDoKsgINIHWAoVMoD9Lbj9omyLHV+NO+9Op8MWsMay1RJozwMerrJ/J
+        HCxJT7L1bhg9wBM3jIkkm4ZOmwblOcX/esNnLj2JBeYszamhfbocSYQypldGfBSl
+        XEmFpzGx/AMZ16f1jkvgem3N4c3JfEkknWYykkgzFX4QY4Xk8Xgm6hHBibQJktdS
+        rGnQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1672340950; x=1672427350; bh=26OVl7pfPjUCu
-        TagaZGOenKInbPyTJjQTgFy1rxtBYQ=; b=oein5zp1XyEl9w8dNi+CcdsUJs+9s
-        4zovpuXNQAL3KwV+y3rdjurP34r7N2Ir6vaJxZ3FgxYIKhH3Rg99wFYM6dGwWLXl
-        ZQytwE5bqCqUSVh9F6coLVSmSs5eJKnnL05mNDhfFcT/jmuIxcnQaDeBwHpWEzcl
-        n+X1cjJL6WG4optJpEitcTzqSV/1y+USov9vX20L9p5TzXeJzyAU1D8+2DwQxluY
-        uMUmwiR4gtrN+Y0/gfo0JJnJ45OCccYZnlUitU+A9H84ss2EqbfwzX779phnNvFQ
-        8zWQj6YHDTdcw+Tu6U4xY+FCAlY3olP78XbvJ0GkCf2nc9G4eBHhBCKVw==
-X-ME-Sender: <xms:1uWtY49K47hOBg76TsHofq8eOXNvYloJTFSejCTK6oMG6xnaV7Ha4Q>
-    <xme:1uWtYwtVjfOSSYgNd85fTQOugYthDFcHi-QDU6sNf_Er9Xi9vw67DsCH1s9P_IZnH
-    oO33jTaCAxK0rn5nA>
-X-ME-Received: <xmr:1uWtY-BvGZVbLcmhpf4Uk8B4yadL_C0BC6FC6Get9bV2EsGi3KdiddYq1jfwCrfIzlFgkBF2DZEJcwgxLT8pnEg_6wIxZMBoPtLN869dxN4JzXWWumkldVk_pKg0hnQIth0EGQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdduvdduucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm2; t=1672340952; x=1672427352; bh=g5qIXCdzDVSxD
+        pcNOdyuqgoqHDHz1BqdbXW1iSCF4RQ=; b=GscAcTS8q4m6HwlCdc3FoLVACmKZy
+        4Xg8WgSFCMxf4DBfQoqQvpEufdjsVyBdbbZ6wKBiQLT2em7FTezVIvWiuZqvXRD/
+        QrKlPM4faGsEEVipnhmWaqSNeWxcGHxbmnV36rGgNRQAw0wDSyDwspAb0m3SKaSl
+        azSw+oKts8o3R/NvDNbvXAk6wBeQuJI0SPG0sxj4n6Sg6E6naVJcl/hHV2qviPLv
+        o7gTlSGreKJwnIwfFxIPvDU36gs28yeZkIUnEyhqgOqrbisQRiPIRb9wx7VBMiFO
+        bTV4igaPTGGzmb1uZ0SRzLsYVj+lzR3pTCnfSm+LGBB2zgxM1ioxQG1CA==
+X-ME-Sender: <xms:1-WtY5gjWUB2OMkut-e7Cuz3mHwtzDreYAzL1MO_QZ_il-zRZpp5IA>
+    <xme:1-WtY-DTBGQ42A4RFNqhneMdqPgjb3tEB1eMM-DbdM72zQP5SQdast7GbI7XmgQk3
+    d5E1Q5utB47buxMFw>
+X-ME-Received: <xmr:1-WtY5HOSXYzO9HeE6CUa96-bbdB4S-wiNe9Rp4UinXVrF1mV5qxy-aUz5DQziUuhsyWRm743rRCbBPM-AUw3ic02WnsVxHD7t9OXpGVRgH6X8ld7-ZxIL18O5I5ie_GJXLHEQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdduvddvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
@@ -55,22 +55,22 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdduvdduucetufdoteggod
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
     udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:1uWtY4dOu_1Ly8xvK86jaB1BhT_cbkNaBn3SNi49Hd_xhG2SrypJsQ>
-    <xmx:1uWtY9N9BQRB5abLsfiv3Kst0QPlXRY_nAyFxiXwiggCVCVUH-0pPQ>
-    <xmx:1uWtYynBzB7xyjUvdR47EhenlAlFgGN6t1fLRk78aup1xZnYX3hCWw>
-    <xmx:1uWtYyrZxoVvF0anYcK_dai54NaJmseOTa5bnOJt_vVB-H11K9wfsA>
+X-ME-Proxy: <xmx:1-WtY-Slkh2zIQRf-4_zq4yic2ZsX9DdG0ovTpqyUhTFnAGf7KUY1Q>
+    <xmx:1-WtY2w-7zp5EQBsBSrEe9FWunGTKjJBoygRbs5L55oO_kiGs6HDEQ>
+    <xmx:1-WtY044ab489IVsbvbqX1KLhO-Cdk3U5UmmB1JFdyosPJTG_FiR8g>
+    <xmx:2OWtYwvJsFttLxTjB6e_WfMMv1kg7Y2WauiStFU8j4ScC0RdxrV9Ng>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Dec 2022 14:09:09 -0500 (EST)
+ 29 Dec 2022 14:09:11 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>
 Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 1/3] mtd: rawnand: hynix: Add support for H27UCG8T2FTR-BC MLC NAND
-Date:   Thu, 29 Dec 2022 13:09:03 -0600
-Message-Id: <20221229190906.6467-2-samuel@sholland.org>
+Subject: [RFC PATCH 2/3] mtd: rawnand: Support non-power-of-two chip sizes
+Date:   Thu, 29 Dec 2022 13:09:04 -0600
+Message-Id: <20221229190906.6467-3-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221229190906.6467-1-samuel@sholland.org>
 References: <20221229190906.6467-1-samuel@sholland.org>
@@ -86,46 +86,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-H27UCG8T2FTR-BC is similar to the already-supported H27UCG8T2ETR-BC, but
-reports a different ID.
+Some NAND chips have a number of pages that is not exactly a power of
+two. Support this by calculating the shifts and masks for the next
+larger power of two.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- drivers/mtd/nand/raw/nand_hynix.c | 4 ++++
- drivers/mtd/nand/raw/nand_ids.c   | 4 ++++
- 2 files changed, 8 insertions(+)
+ drivers/mtd/nand/raw/nand_base.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/nand_hynix.c b/drivers/mtd/nand/raw/nand_hynix.c
-index 0d4d4bbfdece..836f152612ab 100644
---- a/drivers/mtd/nand/raw/nand_hynix.c
-+++ b/drivers/mtd/nand/raw/nand_hynix.c
-@@ -721,6 +721,10 @@ static int hynix_nand_init(struct nand_chip *chip)
- 		     sizeof("H27UCG8T2ETR-BC") - 1))
- 		h27ucg8t2etrbc_init(chip);
+diff --git a/drivers/mtd/nand/raw/nand_base.c b/drivers/mtd/nand/raw/nand_base.c
+index c3cc66039925..f46bad7796ed 100644
+--- a/drivers/mtd/nand/raw/nand_base.c
++++ b/drivers/mtd/nand/raw/nand_base.c
+@@ -5003,6 +5003,7 @@ static int nand_detect(struct nand_chip *chip, struct nand_flash_dev *type)
+ 	u8 *id_data = chip->id.data;
+ 	u8 maf_id, dev_id;
+ 	u64 targetsize;
++	u32 chip_page_shift;
  
-+	if (!strncmp("H27UCG8T2FTR-BC", chip->parameters.model,
-+		     sizeof("H27UCG8T2FTR-BC") - 1))
-+		h27ucg8t2etrbc_init(chip);
-+
- 	ret = hynix_nand_rr_init(chip);
- 	if (ret)
- 		hynix_nand_cleanup(chip);
-diff --git a/drivers/mtd/nand/raw/nand_ids.c b/drivers/mtd/nand/raw/nand_ids.c
-index dacc5529b3df..167183ccb9e9 100644
---- a/drivers/mtd/nand/raw/nand_ids.c
-+++ b/drivers/mtd/nand/raw/nand_ids.c
-@@ -55,6 +55,10 @@ struct nand_flash_dev nand_flash_ids[] = {
- 		{ .id = {0xad, 0xde, 0x14, 0xa7, 0x42, 0x4a} },
- 		  SZ_16K, SZ_8K, SZ_4M, NAND_NEED_SCRAMBLING, 6, 1664,
- 		  NAND_ECC_INFO(40, SZ_1K) },
-+	{"H27UCG8T2FTR-BC 64G 3.3V 8-bit",
-+		{ .id = {0xad, 0xde, 0x14, 0xab, 0x42, 0x4a} },
-+		  SZ_16K, SZ_8K, SZ_4M, NAND_NEED_SCRAMBLING, 6, 1664,
-+		  NAND_ECC_INFO(40, SZ_1K) },
- 	{"TH58NVG2S3HBAI4 4G 3.3V 8-bit",
- 		{ .id = {0x98, 0xdc, 0x91, 0x15, 0x76} },
- 		  SZ_2K, SZ_512, SZ_128K, 0, 5, 128, NAND_ECC_INFO(8, SZ_512) },
+ 	/*
+ 	 * Let's start by initializing memorg fields that might be left
+@@ -5148,18 +5149,13 @@ static int nand_detect(struct nand_chip *chip, struct nand_flash_dev *type)
+ 	chip->page_shift = ffs(mtd->writesize) - 1;
+ 	/* Convert chipsize to number of pages per chip -1 */
+ 	targetsize = nanddev_target_size(&chip->base);
+-	chip->pagemask = (targetsize >> chip->page_shift) - 1;
++	chip_page_shift = order_base_2(targetsize >> chip->page_shift);
++	chip->pagemask = BIT(chip_page_shift) - 1;
+ 
+ 	chip->bbt_erase_shift = chip->phys_erase_shift =
+ 		ffs(mtd->erasesize) - 1;
+-	if (targetsize & 0xffffffff)
+-		chip->chip_shift = ffs((unsigned)targetsize) - 1;
+-	else {
+-		chip->chip_shift = ffs((unsigned)(targetsize >> 32));
+-		chip->chip_shift += 32 - 1;
+-	}
+-
+-	if (chip->chip_shift - chip->page_shift > 16)
++	chip->chip_shift = chip_page_shift + chip->page_shift;
++	if (chip_page_shift > 16)
+ 		chip->options |= NAND_ROW_ADDR_3;
+ 
+ 	chip->badblockbits = 8;
 -- 
 2.37.4
 
