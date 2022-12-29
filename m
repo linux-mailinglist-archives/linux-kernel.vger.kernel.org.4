@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E7D65904A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598F065904D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbiL2SX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 13:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S233833AbiL2SYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 13:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiL2SXx (ORCPT
+        with ESMTP id S233509AbiL2SXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 13:23:53 -0500
+        Thu, 29 Dec 2022 13:23:55 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 021D613EB0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:23:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41F0B13EB0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 10:23:54 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 368B3AD7;
-        Thu, 29 Dec 2022 10:24:33 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 685901042;
+        Thu, 29 Dec 2022 10:24:35 -0800 (PST)
 Received: from e120937-lin.. (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C38A03F71A;
-        Thu, 29 Dec 2022 10:23:49 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 037723F71A;
+        Thu, 29 Dec 2022 10:23:51 -0800 (PST)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
@@ -30,9 +30,9 @@ Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
         peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
         tarek.el-sherbiny@arm.com, quic_kshivnan@quicinc.com,
         cristian.marussi@arm.com
-Subject: [PATCH v6 01/17] firmware: arm_scmi: Refactor xfer in-flight registration routines
-Date:   Thu, 29 Dec 2022 18:22:37 +0000
-Message-Id: <20221229182253.948175-2-cristian.marussi@arm.com>
+Subject: [PATCH v6 02/17] firmware: arm_scmi: Refactor polling helpers
+Date:   Thu, 29 Dec 2022 18:22:38 +0000
+Message-Id: <20221229182253.948175-3-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221229182253.948175-1-cristian.marussi@arm.com>
 References: <20221229182253.948175-1-cristian.marussi@arm.com>
@@ -46,180 +46,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the whole xfer in-flight registration process out of scmi_xfer_get
-and while at that, split the sequence number selection steps from the
-in-flight registration procedure itself.
+Refactor polling helpers to receive scmi_desc directly as a parameter and
+move all of them to common.h.
 
 No functional change.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- drivers/firmware/arm_scmi/driver.c | 102 +++++++++++++++++++----------
- 1 file changed, 68 insertions(+), 34 deletions(-)
+ drivers/firmware/arm_scmi/common.h | 18 ++++++++++++++++
+ drivers/firmware/arm_scmi/driver.c | 34 ++++++++----------------------
+ 2 files changed, 27 insertions(+), 25 deletions(-)
 
+diff --git a/drivers/firmware/arm_scmi/common.h b/drivers/firmware/arm_scmi/common.h
+index 80f63fc8ca14..f785f0ff2090 100644
+--- a/drivers/firmware/arm_scmi/common.h
++++ b/drivers/firmware/arm_scmi/common.h
+@@ -211,6 +211,24 @@ struct scmi_desc {
+ 	const bool atomic_enabled;
+ };
+ 
++static inline bool is_polling_required(struct scmi_chan_info *cinfo,
++				       const struct scmi_desc *desc)
++{
++	return cinfo->no_completion_irq || desc->force_polling;
++}
++
++static inline bool is_transport_polling_capable(const struct scmi_desc *desc)
++{
++	return desc->ops->poll_done || desc->sync_cmds_completed_on_ret;
++}
++
++static inline bool is_polling_enabled(struct scmi_chan_info *cinfo,
++				      const struct scmi_desc *desc)
++{
++	return is_polling_required(cinfo, desc) &&
++		is_transport_polling_capable(desc);
++}
++
+ #ifdef CONFIG_ARM_SCMI_TRANSPORT_MAILBOX
+ extern const struct scmi_desc scmi_mailbox_desc;
+ #endif
 diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
-index 50267eef10fa..3400bd124a38 100644
+index 3400bd124a38..d7f21e81bd11 100644
 --- a/drivers/firmware/arm_scmi/driver.c
 +++ b/drivers/firmware/arm_scmi/driver.c
-@@ -411,8 +411,6 @@ static int scmi_xfer_token_set(struct scmi_xfers_info *minfo,
- 	if (xfer_id != next_token)
- 		atomic_add((int)(xfer_id - next_token), &transfer_last_id);
- 
--	/* Set in-flight */
--	set_bit(xfer_id, minfo->xfer_alloc_table);
- 	xfer->hdr.seq = (u16)xfer_id;
- 
- 	return 0;
-@@ -430,33 +428,77 @@ static inline void scmi_xfer_token_clear(struct scmi_xfers_info *minfo,
- 	clear_bit(xfer->hdr.seq, minfo->xfer_alloc_table);
+@@ -748,25 +748,6 @@ static inline void scmi_clear_channel(struct scmi_info *info,
+ 		info->desc->ops->clear_channel(cinfo);
  }
  
-+/**
-+ * scmi_xfer_inflight_register_unlocked  - Register the xfer as in-flight
-+ *
-+ * @xfer: The xfer to register
-+ * @minfo: Pointer to Tx/Rx Message management info based on channel type
-+ *
-+ * Note that this helper assumes that the xfer to be registered as in-flight
-+ * had been built using an xfer sequence number which still corresponds to a
-+ * free slot in the xfer_alloc_table.
-+ *
-+ * Context: Assumes to be called with @xfer_lock already acquired.
-+ */
-+static inline void
-+scmi_xfer_inflight_register_unlocked(struct scmi_xfer *xfer,
-+				     struct scmi_xfers_info *minfo)
-+{
-+	/* Set in-flight */
-+	set_bit(xfer->hdr.seq, minfo->xfer_alloc_table);
-+	hash_add(minfo->pending_xfers, &xfer->node, xfer->hdr.seq);
-+	xfer->pending = true;
-+}
-+
-+/**
-+ * scmi_xfer_pending_set  - Pick a proper sequence number and mark the xfer
-+ * as pending in-flight
-+ *
-+ * @xfer: The xfer to act upon
-+ * @minfo: Pointer to Tx/Rx Message management info based on channel type
-+ *
-+ * Return: 0 on Success or error otherwise
-+ */
-+static inline int scmi_xfer_pending_set(struct scmi_xfer *xfer,
-+					struct scmi_xfers_info *minfo)
-+{
-+	int ret;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&minfo->xfer_lock, flags);
-+	/* Set a new monotonic token as the xfer sequence number */
-+	ret = scmi_xfer_token_set(minfo, xfer);
-+	if (!ret)
-+		scmi_xfer_inflight_register_unlocked(xfer, minfo);
-+	spin_unlock_irqrestore(&minfo->xfer_lock, flags);
-+
-+	return ret;
-+}
-+
- /**
-  * scmi_xfer_get() - Allocate one message
-  *
-  * @handle: Pointer to SCMI entity handle
-  * @minfo: Pointer to Tx/Rx Message management info based on channel type
-- * @set_pending: If true a monotonic token is picked and the xfer is added to
-- *		 the pending hash table.
-  *
-  * Helper function which is used by various message functions that are
-  * exposed to clients of this driver for allocating a message traffic event.
-  *
-- * Picks an xfer from the free list @free_xfers (if any available) and, if
-- * required, sets a monotonically increasing token and stores the inflight xfer
-- * into the @pending_xfers hashtable for later retrieval.
-+ * Picks an xfer from the free list @free_xfers (if any available) and perform
-+ * a basic initialization.
-+ *
-+ * Note that, at this point, still no sequence number is assigned to the
-+ * allocated xfer, nor it is registered as a pending transaction.
-  *
-  * The successfully initialized xfer is refcounted.
-  *
-- * Context: Holds @xfer_lock while manipulating @xfer_alloc_table and
-- *	    @free_xfers.
-+ * Context: Holds @xfer_lock while manipulating @free_xfers.
-  *
-- * Return: 0 if all went fine, else corresponding error.
-+ * Return: An initialized xfer if all went fine, else pointer error.
-  */
- static struct scmi_xfer *scmi_xfer_get(const struct scmi_handle *handle,
--				       struct scmi_xfers_info *minfo,
--				       bool set_pending)
-+				       struct scmi_xfers_info *minfo)
- {
--	int ret;
- 	unsigned long flags;
- 	struct scmi_xfer *xfer;
- 
-@@ -476,25 +518,8 @@ static struct scmi_xfer *scmi_xfer_get(const struct scmi_handle *handle,
- 	 */
- 	xfer->transfer_id = atomic_inc_return(&transfer_last_id);
- 
--	if (set_pending) {
--		/* Pick and set monotonic token */
--		ret = scmi_xfer_token_set(minfo, xfer);
--		if (!ret) {
--			hash_add(minfo->pending_xfers, &xfer->node,
--				 xfer->hdr.seq);
--			xfer->pending = true;
--		} else {
--			dev_err(handle->dev,
--				"Failed to get monotonic token %d\n", ret);
--			hlist_add_head(&xfer->node, &minfo->free_xfers);
--			xfer = ERR_PTR(ret);
--		}
--	}
+-static inline bool is_polling_required(struct scmi_chan_info *cinfo,
+-				       struct scmi_info *info)
+-{
+-	return cinfo->no_completion_irq || info->desc->force_polling;
+-}
 -
--	if (!IS_ERR(xfer)) {
--		refcount_set(&xfer->users, 1);
--		atomic_set(&xfer->busy, SCMI_XFER_FREE);
--	}
-+	refcount_set(&xfer->users, 1);
-+	atomic_set(&xfer->busy, SCMI_XFER_FREE);
- 	spin_unlock_irqrestore(&minfo->xfer_lock, flags);
+-static inline bool is_transport_polling_capable(struct scmi_info *info)
+-{
+-	return info->desc->ops->poll_done ||
+-		info->desc->sync_cmds_completed_on_ret;
+-}
+-
+-static inline bool is_polling_enabled(struct scmi_chan_info *cinfo,
+-				      struct scmi_info *info)
+-{
+-	return is_polling_required(cinfo, info) &&
+-		is_transport_polling_capable(info);
+-}
+-
+ static void scmi_handle_notification(struct scmi_chan_info *cinfo,
+ 				     u32 msg_hdr, void *priv)
+ {
+@@ -1009,7 +990,8 @@ static int do_xfer(const struct scmi_protocol_handle *ph,
+ 	struct scmi_chan_info *cinfo;
  
- 	return xfer;
-@@ -752,7 +777,7 @@ static void scmi_handle_notification(struct scmi_chan_info *cinfo,
- 	ktime_t ts;
+ 	/* Check for polling request on custom command xfers at first */
+-	if (xfer->hdr.poll_completion && !is_transport_polling_capable(info)) {
++	if (xfer->hdr.poll_completion &&
++	    !is_transport_polling_capable(info->desc)) {
+ 		dev_warn_once(dev,
+ 			      "Polling mode is not supported by transport.\n");
+ 		return -EINVAL;
+@@ -1020,7 +1002,7 @@ static int do_xfer(const struct scmi_protocol_handle *ph,
+ 		return -EINVAL;
  
- 	ts = ktime_get_boottime();
--	xfer = scmi_xfer_get(cinfo->handle, minfo, false);
-+	xfer = scmi_xfer_get(cinfo->handle, minfo);
- 	if (IS_ERR(xfer)) {
- 		dev_err(dev, "failed to get free message slot (%ld)\n",
- 			PTR_ERR(xfer));
-@@ -1143,13 +1168,22 @@ static int xfer_get_init(const struct scmi_protocol_handle *ph,
- 	    tx_size > info->desc->max_msg_size)
- 		return -ERANGE;
+ 	/* True ONLY if also supported by transport. */
+-	if (is_polling_enabled(cinfo, info))
++	if (is_polling_enabled(cinfo, info->desc))
+ 		xfer->hdr.poll_completion = true;
  
--	xfer = scmi_xfer_get(pi->handle, minfo, true);
-+	xfer = scmi_xfer_get(pi->handle, minfo);
- 	if (IS_ERR(xfer)) {
- 		ret = PTR_ERR(xfer);
- 		dev_err(dev, "failed to get free message slot(%d)\n", ret);
+ 	/*
+@@ -1956,7 +1938,8 @@ static bool scmi_is_transport_atomic(const struct scmi_handle *handle,
+ 	bool ret;
+ 	struct scmi_info *info = handle_to_scmi_info(handle);
+ 
+-	ret = info->desc->atomic_enabled && is_transport_polling_capable(info);
++	ret = info->desc->atomic_enabled &&
++		is_transport_polling_capable(info->desc);
+ 	if (ret && atomic_threshold)
+ 		*atomic_threshold = info->atomic_threshold;
+ 
+@@ -2180,8 +2163,8 @@ static int scmi_chan_setup(struct scmi_info *info, struct device_node *of_node,
  		return ret;
  	}
  
-+	/* Pick a sequence number and register this xfer as in-flight */
-+	ret = scmi_xfer_pending_set(xfer, minfo);
-+	if (ret) {
-+		dev_err(pi->handle->dev,
-+			"Failed to get monotonic token %d\n", ret);
-+		__scmi_xfer_put(minfo, xfer);
-+		return ret;
-+	}
-+
- 	xfer->tx.len = tx_size;
- 	xfer->rx.len = rx_size ? : info->desc->max_msg_size;
- 	xfer->hdr.type = MSG_TYPE_COMMAND;
+-	if (tx && is_polling_required(cinfo, info)) {
+-		if (is_transport_polling_capable(info))
++	if (tx && is_polling_required(cinfo, info->desc)) {
++		if (is_transport_polling_capable(info->desc))
+ 			dev_info(&tdev->dev,
+ 				 "Enabled polling mode TX channel - prot_id:%d\n",
+ 				 prot_id);
+@@ -2443,7 +2426,8 @@ static int scmi_probe(struct platform_device *pdev)
+ 	if (scmi_notification_init(handle))
+ 		dev_err(dev, "SCMI Notifications NOT available.\n");
+ 
+-	if (info->desc->atomic_enabled && !is_transport_polling_capable(info))
++	if (info->desc->atomic_enabled &&
++	    !is_transport_polling_capable(info->desc))
+ 		dev_err(dev,
+ 			"Transport is not polling capable. Atomic mode not supported.\n");
+ 
 -- 
 2.34.1
 
