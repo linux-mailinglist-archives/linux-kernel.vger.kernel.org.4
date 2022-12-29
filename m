@@ -2,190 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0933659184
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DEE659185
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 21:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbiL2U0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 15:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S234011AbiL2U23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 15:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiL2U0o (ORCPT
+        with ESMTP id S234001AbiL2U22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 15:26:44 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABBB14005
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:26:42 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id l3-20020a056e021aa300b00304be32e9e5so12374048ilv.12
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:26:42 -0800 (PST)
+        Thu, 29 Dec 2022 15:28:28 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD2313F12
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:28:26 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id 186so21687238ybe.8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 12:28:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=39vmEvDUiA/aRZqSAoUZ+FtQACt8A9KX/csWheBbyBc=;
+        b=OsGK9KiusQpyermVRhKNv9nv8wGA/Bn+ihJCscdf+iVUIYHv70QLFwEUZhzA+ptvpn
+         CM3fv5B9LQpwP8m01ST1tMKf6zwooqtzcxwqhhCwtfWuY411Xpb+IRj2kZvGrgH/8MO8
+         VDuqyRaYk07nc5pQaRs7DBIxFYzfvhVl+xE4eOI5+CJJ7dT5kfltt5g6LHmO8JFbf4hB
+         MTLtlHFAANeJfJ3KzDNx62T9f+xSKOIzRGwoafpDCOLfeDFHDsOMoIjFLQu/Z7VL1dIm
+         IiSXVGcvkmLozqCR5QbunuzAnHabdv9BlJVkd9V6cGUOVyjE4hiDQ3SRXIf8FzNi5kL4
+         qcIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BrdfuQKC3IEHrqVlF9HvlqBuZgfNcN5SbSHn+PTkhas=;
-        b=JKAsqfO+JgTfacgMyVWDWBX7abHeAnL4YAOL2zUj2u7MKk7PCq5pbHSP8vTyYeoSYy
-         yhY9o9okLqP+3pKAafAUy/dNskX9d6FNaGtmIdqmub0U42ddw0v4FbhX6HMwQi0Sg6dR
-         kiT4ZNju5p1sHWXeid/OmTuLIh0CFPclKxeXciplvsUhwWAFvgFN0WIFclBK3Zu6PiN4
-         urD9xyvcRND9ZXKMDlh8R99EgAS04GETsZd5X9Nm9kIMTsrankTGclXfXLKwKzg7DEmK
-         9eWRwZYPkQE2De45bwrBY9rhM51+tMWY1Q0wQe0PPkHw6v7dWVQBBa1JlrcyZbvqU152
-         /S/Q==
-X-Gm-Message-State: AFqh2kqmccvH0dOnMsxGqRZJ8iTJVWXcwEfjXD5r/cJrhrjL6q8u4gzo
-        YKF3lCbXO4vyUw1NiEpSI9TJJCIwmZ2s8HtCmRz+tX+bGpyw
-X-Google-Smtp-Source: AMrXdXuQO6X+Z50fbOWHu6NIUUPGmDFkhuNX4WO0ifd2egH3JgKISMaidNA8CUU216NjH5oyargepXbQ/YXCDaVhxP8xngUJrPpe
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=39vmEvDUiA/aRZqSAoUZ+FtQACt8A9KX/csWheBbyBc=;
+        b=5NMAeKWglmgiFrVSMDuWU6q/iRSep/ADpk0G2Js5eOzQ/r/KtfQBMy5plCIR1ItOGK
+         PRxibHNc7EKUA/zHH3RVdqI3z3UuTG1Y1uHuJO/lZW+WCgrFCxnCWudotMb/PDxnpRcv
+         iv8wRQbd6qKV6zFBPGQ4wiZP3bv3Ntwof3TFun1d3yTKsE9LLODuj4Yus0n0FDJ93eRk
+         fUz5IODUKOvaDKnN7dkSp/xXPSYGPpr22E6fHgr1G8jmYU4QXUT2mr8YXeQoyIHaFOc7
+         9licoo2/kJad7x7TgzfBYd9KkZuPjlxxByKF/Gl4nD+f9TJDsZxiEumRvTcHu/v5eQ9X
+         Xceg==
+X-Gm-Message-State: AFqh2kqYVtJFHAE5C7iIk6L6s9RJaUIsnE1yWiwwklSS14QKLSf8cFNf
+        BElSfd4tOc4eZgTedetV4pbMPSkL2m6uG/Q2qNFq9g==
+X-Google-Smtp-Source: AMrXdXveUjb1MNXk9v+25y93ROJ6jz5/vfQMf9nh0DdQcpgBt6HkDbMhz7vHqtSN6kWdfLuUa7VhiyxE5J+4HXwTd6M=
+X-Received: by 2002:a25:aa8a:0:b0:74d:e2b6:d5fa with SMTP id
+ t10-20020a25aa8a000000b0074de2b6d5famr2850343ybi.226.1672345705413; Thu, 29
+ Dec 2022 12:28:25 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:c6d3:0:b0:38a:3dbb:1f90 with SMTP id
- r19-20020a02c6d3000000b0038a3dbb1f90mr2778727jan.94.1672345601914; Thu, 29
- Dec 2022 12:26:41 -0800 (PST)
-Date:   Thu, 29 Dec 2022 12:26:41 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008b3c4305f0fd4dbe@google.com>
-Subject: [syzbot] [xfs?] WARNING in call_rcu (2)
-From:   syzbot <syzbot+49cacf14fd027a089740@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <03ae2704-8c30-f9f0-215b-7cdf4ad35a9a@molgen.mpg.de> <CAODwPW8=1R53Dir+CFHu-NADygCZVqDjsg0q+xT-KheZHghxtw@mail.gmail.com>
+In-Reply-To: <CAODwPW8=1R53Dir+CFHu-NADygCZVqDjsg0q+xT-KheZHghxtw@mail.gmail.com>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Thu, 29 Dec 2022 12:28:14 -0800
+Message-ID: <CABXOdTcvBe5PzO6RrUDC-NcYpWYuabZkN1qXA=gSqbhPHLxqsw@mail.gmail.com>
+Subject: Re: memcpy: detected field-spanning write (size 168) of single field
+ "&device->entry" at drivers/firmware/google/coreboot_table.c:103 (size 8)
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Jack Rosenthal <jrosenth@chromium.org>, coreboot@coreboot.org,
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Dec 29, 2022 at 6:43 AM Julius Werner <jwerner@chromium.org> wrote:
+>
+> I can confirm that this warning is a false positive, at least. We're
+> intentionally copying bytes from beyond the end of the header
+> structure in this case.
+>
+> I don't know what kind of kernel system detects this stuff at runtime
+> and how to silence it. Probably need to add a void pointer cast or
+> something?
+>
 
-syzbot found the following issue on:
+This is part of kernel hardening code. Kees Cook might know what to do about it.
 
-HEAD commit:    a5541c0811a0 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=135634a8480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=49cacf14fd027a089740
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=145749a8480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10bb4118480000
+Guenter
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4b7702208fb9/disk-a5541c08.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9ec0153ec051/vmlinux-a5541c08.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6f8725ad290a/Image-a5541c08.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/ffd09d8cecad/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+49cacf14fd027a089740@syzkaller.appspotmail.com
-
-XFS (loop0): Please unmount the filesystem and rectify the problem(s).
-------------[ cut here ]------------
-ODEBUG: activate active (active state 1) object type: rcu_head hint: 0x0
-WARNING: CPU: 0 PID: 50 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
-WARNING: CPU: 0 PID: 50 at lib/debugobjects.c:505 debug_object_activate+0x2c0/0x300 lib/debugobjects.c:674
-Modules linked in:
-CPU: 0 PID: 50 Comm: kworker/0:1H Not tainted 6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: xfs-log/loop0 xlog_ioend_work
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : debug_print_object lib/debugobjects.c:502 [inline]
-pc : debug_object_activate+0x2c0/0x300 lib/debugobjects.c:674
-lr : debug_print_object lib/debugobjects.c:502 [inline]
-lr : debug_object_activate+0x2c0/0x300 lib/debugobjects.c:674
-sp : ffff80000f723880
-x29: ffff80000f723880 x28: 0000000000000001 x27: 0000000000000000
-x26: 0000000000000000 x25: 0000000000000000 x24: ffff0000c6ad9a50
-x23: ffff80000c0cec40 x22: ffff0000c79fcc30 x21: ffff80000f143000
-x20: ffff80000c0cec40 x19: ffff0000cab5a638 x18: 00000000000000c0
-x17: 6820646165685f75 x16: ffff80000dbe6158 x15: ffff0000c106cec0
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c106cec0
-x11: ff808000081c4d64 x10: 0000000000000000 x9 : 41d50f7522bc1100
-x8 : 41d50f7522bc1100 x7 : ffff80000c091ebc x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000048
-Call trace:
- debug_print_object lib/debugobjects.c:502 [inline]
- debug_object_activate+0x2c0/0x300 lib/debugobjects.c:674
- debug_rcu_head_queue kernel/rcu/rcu.h:189 [inline]
- call_rcu+0x40/0x494 kernel/rcu/tree.c:2783
- xfs_buf_rele+0x654/0x780
- xfs_buf_relse fs/xfs/xfs_buf.h:286 [inline]
- xfs_buf_ioend+0x214/0x228 fs/xfs/xfs_buf.c:1339
- xfs_buf_ioend_fail+0x58/0x68 fs/xfs/xfs_buf.c:1397
- xfs_buf_item_unpin+0x18c/0x280 fs/xfs/xfs_buf_item.c:549
- xfs_trans_committed_bulk+0x190/0x460 fs/xfs/xfs_trans.c:806
- xlog_cil_committed+0xcc/0x340 fs/xfs/xfs_log_cil.c:795
- xlog_cil_process_committed+0x6c/0xa8 fs/xfs/xfs_log_cil.c:823
- xlog_state_shutdown_callbacks+0xac/0x140 fs/xfs/xfs_log.c:538
- xlog_force_shutdown+0x1ac/0x230 fs/xfs/xfs_log.c:3821
- xlog_ioend_work+0x68/0xa0 fs/xfs/xfs_log.c:1402
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 558
-hardirqs last  enabled at (557): [<ffff8000081c3048>] __up_console_sem+0xb0/0xfc kernel/printk/printk.c:261
-hardirqs last disabled at (558): [<ffff80000c084084>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (528): [<ffff800008e528b8>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (526): [<ffff800008e52884>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-ODEBUG: active_state active (active state 1) object type: rcu_head hint: 0x0
-WARNING: CPU: 0 PID: 50 at lib/debugobjects.c:505 debug_print_object lib/debugobjects.c:502 [inline]
-WARNING: CPU: 0 PID: 50 at lib/debugobjects.c:505 debug_object_active_state+0x1b0/0x1dc lib/debugobjects.c:950
-Modules linked in:
-CPU: 0 PID: 50 Comm: kworker/0:1H Tainted: G        W          6.1.0-rc8-syzkaller-33330-ga5541c0811a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: xfs-log/loop0 xlog_ioend_work
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : debug_print_object lib/debugobjects.c:502 [inline]
-pc : debug_object_active_state+0x1b0/0x1dc lib/debugobjects.c:950
-lr : debug_print_object lib/debugobjects.c:502 [inline]
-lr : debug_object_active_state+0x1b0/0x1dc lib/debugobjects.c:950
-sp : ffff80000f723880
-x29: ffff80000f723880 x28: 0000000000000001 x27: 0000000000000000
-x26: 0000000000000000 x25: 0000000000000000 x24: ffff0000c79fcc30
-x23: 0000000000000000 x22: 0000000000000001 x21: ffff80000f10e018
-x20: ffff80000c0cec40 x19: ffff80000f143000 x18: 00000000000000c0
-x17: 65685f756372203a x16: ffff80000dbe6158 x15: ffff0000c106cec0
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c106cec0
-x11: ff808000081c4d64 x10: 0000000000000000 x9 : 41d50f7522bc1100
-x8 : 41d50f7522bc1100 x7 : ffff80000c091ebc x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000000 x0 : 000000000000004c
-Call trace:
- debug_print_object lib/debugobjects.c:502 [inline]
- debug_object_active_state+0x1b0/0x1dc lib/debugobjects.c:950
- debug_rcu_head_queue kernel/rcu/rcu.h:190 [inline]
- call_rcu+0x58/0x494 kernel/rcu/tree.c:2783
- xfs_buf_rele+0x654/0x780
- xfs_buf_relse fs/xfs/xfs_buf.h:286 [inline]
- xfs_buf_ioend+0x214/0x228 fs/xfs/xfs_buf.c:1339
- xfs_buf_ioend_fail+0x58/0x68 fs/xfs/xfs_buf.c:1397
- xfs_buf_item_unpin+0x18c/0x280 fs/xfs/xfs_buf_item.c:549
- xfs_trans_committed_bulk+0x190/0x460 fs/xfs/xfs_trans.c:806
- xlog_cil_committed+0xcc/0x340 fs/xfs/xfs_log_cil.c:795
- xlog_cil_process_committed+0x6c/0xa8 fs/xfs/xfs_log_cil.c:823
- xlog_state_shutdown_callbacks+0xac/0x140 fs/xfs/xfs_log.c:538
- xlog_force_shutdown+0x1ac/0x230 fs/xfs/xfs_log.c:3821
- xlog_ioend_work+0x68/0xa0 fs/xfs/xfs_log.c:1402
- process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
- worker_thread+0x340/0x610 kernel/workqueue.c:2436
- kthread+0x12c/0x158 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-irq event stamp: 686
-hardirqs last  enabled at (685): [<ffff8000081c3048>] __up_console_sem+0xb0/0xfc kernel/printk/printk.c:261
-hardirqs last disabled at (686): [<ffff80000c084084>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (658): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (561): [<ffff800008017c88>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
----[ end trace 0000000000000000 ]---
-rcu: call_rcu(): Double-freed CB 00000000d44ae33c->0x0()!!!   slab xfs_buf start ffff0000cab5a3c0 pointer offset 632
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> On Thu, Dec 29, 2022 at 11:46 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+> >
+> > Dear Linux folks,
+> >
+> >
+> > Running Linux v6.2-rc1+ on a motherboard using coreboot as firmware, the
+> > warning below is shown.
+> >
+> > ```
+> > [    1.630244] ------------[ cut here ]------------
+> > [    1.630249] memcpy: detected field-spanning write (size 168) of
+> > single field "&device->entry" at
+> > drivers/firmware/google/coreboot_table.c:103 (size 8)
+> > [    1.630299] WARNING: CPU: 1 PID: 150 at
+> > drivers/firmware/google/coreboot_table.c:103
+> > coreboot_table_probe+0x1ea/0x210 [coreboot_table]
+> > [    1.630307] Modules linked in: coreboot_table(+) sg binfmt_misc fuse
+> > ipv6 autofs4
+> > [    1.630316] CPU: 1 PID: 150 Comm: systemd-udevd Not tainted
+> > 6.2.0-rc1-00097-gaebfba447cae #407
+> > [    1.630318] Hardware name: ASUS F2A85-M_PRO/F2A85-M_PRO, BIOS
+> > 4.18-4-gb3dd5af9c5 12/28/2022
+> > [    1.630320] RIP: 0010:coreboot_table_probe+0x1ea/0x210 [coreboot_table]
+> > [    1.630326] Code: 08 00 00 00 4c 89 c6 4c 89 04 24 48 c7 c2 50 81 60
+> > c0 48 c7 c7 98 81 60 c0 4c 89 4c 24 08 c6 05 ab 1e 00 00 01 e8 e1 ca 47
+> > d3 <0f> 0b 4c 8b 4c 24 08 4c 8b 04 24 e9 35 ff ff ff 41 be ea ff ff ff
+> > [    1.630329] RSP: 0018:ffffb409c046fc30 EFLAGS: 00010286
+> > [    1.630332] RAX: 0000000000000000 RBX: ffffb409c0175018 RCX:
+> > 0000000000000000
+> > [    1.630334] RDX: 0000000000000001 RSI: ffffffff94222bcd RDI:
+> > 00000000ffffffff
+> > [    1.630336] RBP: ffff937a44a06c00 R08: 0000000000000000 R09:
+> > 00000000ffffdfff
+> > [    1.630338] R10: ffffb409c046fad8 R11: ffffffff9452a948 R12:
+> > 0000000000000000
+> > [    1.630339] R13: ffffb409c0175000 R14: 0000000000000000 R15:
+> > ffff937a40beb410
+> > [    1.630341] FS:  0000000000000000(0000) GS:ffff937abb500000(0063)
+> > knlGS:00000000f7f43800
+> > [    1.630343] CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+> > [    1.630345] CR2: 00000000f7e3c2cf CR3: 00000001046de000 CR4:
+> > 00000000000406e0
+> > [    1.630347] Call Trace:
+> > [    1.630348]  <TASK>
+> > [    1.630351]  platform_probe+0x3f/0xa0
+> > [    1.630357]  really_probe+0xe1/0x390
+> > [    1.630361]  ? pm_runtime_barrier+0x50/0x90
+> > [    1.630365]  __driver_probe_device+0x78/0x180
+> > [    1.630369]  driver_probe_device+0x1e/0x90
+> > [    1.630372]  __driver_attach+0xd2/0x1c0
+> > [    1.630375]  ? __pfx___driver_attach+0x10/0x10
+> > [    1.630378]  bus_for_each_dev+0x78/0xc0
+> > [    1.630382]  bus_add_driver+0x1a9/0x200
+> > [    1.630385]  driver_register+0x8f/0xf0
+> > [    1.630387]  ? __pfx_init_module+0x10/0x10 [coreboot_table]
+> > [    1.630392]  coreboot_table_driver_init+0x2d/0xff0 [coreboot_table]
+> > [    1.630397]  do_one_initcall+0x44/0x220
+> > [    1.630401]  ? kmalloc_trace+0x25/0x90
+> > [    1.630405]  do_init_module+0x4c/0x1f0
+> > [    1.630409]  __do_sys_finit_module+0xb4/0x130
+> > [    1.630413]  __do_fast_syscall_32+0x6f/0xf0
+> > [    1.630418]  do_fast_syscall_32+0x2f/0x70
+> > [    1.630421]  entry_SYSCALL_compat_after_hwframe+0x71/0x79
+> > [    1.630425] RIP: 0023:0xf7f49549
+> > [    1.630428] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10
+> > 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 cd 0f 05 cd
+> > 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+> > [    1.630430] RSP: 002b:00000000ffa7bbbc EFLAGS: 00200292 ORIG_RAX:
+> > 000000000000015e
+> > [    1.630433] RAX: ffffffffffffffda RBX: 0000000000000010 RCX:
+> > 00000000f7f28e09
+> > [    1.630434] RDX: 0000000000000000 RSI: 00000000568cb4c0 RDI:
+> > 000000005689fc50
+> > [    1.630436] RBP: 0000000000000000 R08: 00000000ffa7bbbc R09:
+> > 0000000000000000
+> > [    1.630437] R10: 0000000000000000 R11: 0000000000200292 R12:
+> > 0000000000000000
+> > [    1.630439] R13: 0000000000000000 R14: 0000000000000000 R15:
+> > 0000000000000000
+> > [    1.630442]  </TASK>
+> > [    1.630443] ---[ end trace 0000000000000000 ]---
+> > ```
+> >
+> > Another user reported this with Linux 6.1.1 in the Arch Linux forum [1].
+> >
+> >
+> > Kind regards,
+> >
+> > Paul
+> >
+> >
+> > [1]: https://bbs.archlinux.org/viewtopic.php?id=282245
+> >       "6.1.1-arch1-1 - dmesg"
