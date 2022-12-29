@@ -2,156 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A3365894B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EC6658947
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiL2D5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 22:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S230419AbiL2Dv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 22:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiL2D51 (ORCPT
+        with ESMTP id S230078AbiL2Dv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 22:57:27 -0500
-Received: from out20-85.mail.aliyun.com (out20-85.mail.aliyun.com [115.124.20.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CDF12A98;
-        Wed, 28 Dec 2022 19:57:24 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.04443898|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00661763-0.000755731-0.992627;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047208;MF=wangyugui@e16-tech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.Qg8Xn.3_1672286227;
-Received: from 192.168.2.112(mailfrom:wangyugui@e16-tech.com fp:SMTPD_---.Qg8Xn.3_1672286227)
-          by smtp.aliyun-inc.com;
-          Thu, 29 Dec 2022 11:57:08 +0800
-Date:   Thu, 29 Dec 2022 11:57:09 +0800
-From:   Wang Yugui <wangyugui@e16-tech.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        yukuai3@huawei.com, hch@lst.de
-Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-In-Reply-To: <20221228144330.180012208@linuxfoundation.org>
-References: <20221228144330.180012208@linuxfoundation.org>
-Message-Id: <20221229115707.098A.409509F4@e16-tech.com>
+        Wed, 28 Dec 2022 22:51:26 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE18E95
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 19:51:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672285885; x=1703821885;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=59i36TC3qVB7r4xcr2ZX3sAZi9oelqMTs+Bwmm1RP7M=;
+  b=QJwtQBS3fMC1Zo0ZQHoh6ZFDGIOeOdN9MoRpIdVCk0kHZx0gRq21sx1p
+   2YqrvDO/iLKc1sbwgghsAjzSZkNFVwzQj7g3RNJ9Bi7rSZP24YoJLQOXK
+   tx8CUHwhplmZpahbgsJ7JRKhZUmHT0mgf32Tt4dAnm2klduE9aoexcm2/
+   RF0Bx2WyOQY3TY+xeUuoIdBmC5hLrCUH4e3HqmB5hpDktIl0cwqwrEzmu
+   ul5eSMIMZcqyitPutU5oiAHfhKvcTW7PNOlbKZYDgn73BN6fPd5wXNmz+
+   P6hGMUAkrzEXWg3zX3C5kaSYbIJjNYWHkduA0kj9u5eTpL/Yj/IZlD88L
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="383274425"
+X-IronPort-AV: E=Sophos;i="5.96,282,1665471600"; 
+   d="scan'208";a="383274425"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2022 19:51:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="716803442"
+X-IronPort-AV: E=Sophos;i="5.96,282,1665471600"; 
+   d="scan'208";a="716803442"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Dec 2022 19:51:24 -0800
+Date:   Wed, 28 Dec 2022 20:00:03 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 1/7] sched/fair: Generalize asym_packing logic for SMT
+ local sched group
+Message-ID: <20221229040003.GA11497@ranerica-svr.sc.intel.com>
+References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
+ <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
+ <xhsmhv8m3e5sx.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Becky! ver. 2.81.04 [en]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xhsmhv8m3e5sx.mognet@vschneid.remote.csb>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-> This is the start of the stable review cycle for the 6.1.2 release.
-> There are 1146 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Dec 22, 2022 at 04:55:58PM +0000, Valentin Schneider wrote:
+> On 22/11/22 12:35, Ricardo Neri wrote:
+> > @@ -8926,25 +8924,16 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
+> >               return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
+> >       }
+> >
+> > -	/* @dst_cpu has SMT siblings. */
+> > -
+> > -	if (sg_is_smt) {
+> > -		int local_busy_cpus = sds->local->group_weight -
+> > -				      sds->local_stat.idle_cpus;
+> > -		int busy_cpus_delta = sg_busy_cpus - local_busy_cpus;
+> > -
+> > -		if (busy_cpus_delta == 1)
+> > -			return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
+> > -
+> > -		return false;
+> > -	}
+> > -
+> >       /*
+> > -	 * @sg does not have SMT siblings. Ensure that @sds::local does not end
+> > -	 * up with more than one busy SMT sibling and only pull tasks if there
+> > -	 * are not busy CPUs (i.e., no CPU has running tasks).
+> > +	 * @dst_cpu has SMT siblings. Do asym_packing load balancing only if
+> > +	 * all its siblings are idle (moving tasks between physical cores in
+> > +	 * which some SMT siblings are busy results in the same throughput).
+> > +	 *
+> > +	 * If the difference in the number of busy CPUs is two or more, let
+> > +	 * find_busiest_group() take care of it. We only care if @sg has
+> > +	 * exactly one busy CPU. This covers SMT and non-SMT sched groups.
+> >        */
+> > -	if (!sds->local_stat.sum_nr_running)
+> > +	if (sg_busy_cpus == 1 && !sds->local_stat.sum_nr_running)
+> >               return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
+> >
 > 
-> Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
-> Anything received after that time might be too late.
+> Some of this is new to me - I had missed the original series introducing
+> this. However ISTM that this is conflating two concepts: SMT occupancy
+> balancing, and asym packing.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> Take the !local_is_smt :: sg_busy_cpus >= 2 :: return true; path. It does
+> not involve asym packing priorities at all. This can end up in an
+> ASYM_PACKING load balance,
 
-fstests(btrfs/056) hit a panic with the patch-6.1.2-rc1.
+Yes, this the desired result: an idle low-priority CPU should help a high-
+priority core with more than one busy SMT sibling. But yes, it does not
+relate to priorities and can be implemented differently.
 
-[  926.026568] run fstests btrfs/056 at 2022-12-29 08:35:25
-[  926.254689] BTRFS info (device sdb1): using crc32c (crc32c-intel) checksum algorithm
-[  926.263606] BTRFS info (device sdb1): using free space tree
-[  926.273951] BTRFS info (device sdb1): enabling ssd optimizations
-[  926.842618] BTRFS: device fsid 4c66cb1b-1661-4b5e-9446-1c610b079eb4 devid 1 transid 6 /dev/sdb2 scanned by systemd-udevd (342727)
-[  926.924311] BTRFS info (device dm-0): using crc32c (crc32c-intel) checksum algorithm
-[  926.933217] BTRFS info (device dm-0): using free space tree
-[  926.941727] BTRFS info (device dm-0): enabling ssd optimizations
-[  926.949066] BTRFS info (device dm-0): checking UUID tree
-[  927.025958] BTRFS info: devid 1 device path /dev/mapper/flakey-test changed to /dev/dm-0 scanned by systemd-udevd (342802)
-[  927.038851] BTRFS info: devid 1 device path /dev/dm-0 changed to /dev/mapper/flakey-test scanned by systemd-udevd (342802)
-[  927.130611] BTRFS info (device dm-0): using crc32c (crc32c-intel) checksum algorithm
-[  927.139316] BTRFS info (device dm-0): using free space tree
-[  927.148273] BTRFS info (device dm-0): enabling ssd optimizations
-[  927.155220] BTRFS info (device dm-0): start tree-log replay
-[  927.177434] BTRFS info (device dm-0): checking UUID tree
-[  927.239312] BUG: kernel NULL pointer dereference, address: 0000000000000058
-[  927.246268] #PF: supervisor read access in kernel mode
-[  927.253259] #PF: error_code(0x0000) - not-present page
-[  927.259256] PGD 0 P4D 0
-[  927.262261] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[  927.267251] CPU: 29 PID: 342867 Comm: dmsetup Not tainted 6.1.2-0.3.el7.x86_64 #1
-[  927.275253] Hardware name: Dell Inc. Precision T7610/0NK70N, BIOS A18 09/11/2019
-[  927.283253] RIP: 0010:blk_mq_wait_quiesce_done+0xc/0x30
-[  927.290262] Code: 00 00 00 e8 c6 48 ff ff 4c 89 e6 5b 48 89 ef 5d 41 5c e9 f7 c5 66 00 0f 1f 80 00 00 00 00 0f 1f 44 00 00 48 8b 87 18 03 00 00 <f6> 40 58 20 74 0c 48 8b b8 a8 00 00 00 e9 f2 74 c4 ff e9 dd ef c4
-[  927.311254] RSP: 0018:ffffbc5a8e41bc60 EFLAGS: 00010286
-[  927.317255] RAX: 0000000000000000 RBX: ffffa0cf2a2fb000 RCX: 0000000000000000
-[  927.325274] RDX: 0000000000000000 RSI: 0000000000000246 RDI: ffffa0cfa08e2260
-[  927.333257] RBP: ffffa0cfa08e2260 R08: ffffa0b048488000 R09: ffffa0ceca2e5000
-[  927.341253] R10: 0000000000000001 R11: ffffa0cf2a2fa800 R12: 0000000000000000
-[  927.350258] R13: ffffa0cf9e4d0c80 R14: ffffa0d0130ab200 R15: ffffffffc19dc560
-[  927.358261] FS:  00007f16c58cc580(0000) GS:ffffa0ce2fcc0000(0000) knlGS:0000000000000000
-[  927.367251] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  927.373265] CR2: 0000000000000058 CR3: 00000001a0b8c005 CR4: 00000000001706e0
-[  927.382265] Call Trace:
-[  927.385256]  <TASK>
-[  927.388264]  del_gendisk+0x1ec/0x2c0
-[  927.393254]  cleanup_mapped_device+0x130/0x140 [dm_mod]
-[  927.399253]  __dm_destroy+0x13d/0x1e0 [dm_mod]
-[  927.403254]  ? remove_all+0x30/0x30 [dm_mod]
-[  927.410259]  dev_remove+0x117/0x190 [dm_mod]
-[  927.415253]  ctl_ioctl+0x1ee/0x520 [dm_mod]
-[  927.419258]  ? ipc_addid+0x37c/0x460
-[  927.423252]  dm_ctl_ioctl+0xa/0x20 [dm_mod]
-[  927.430291]  __x64_sys_ioctl+0x89/0xc0
-[  927.434263]  do_syscall_64+0x58/0x80
-[  927.439268]  ? syscall_exit_to_user_mode+0x12/0x30
-[  927.445257]  ? do_syscall_64+0x67/0x80
-[  927.449255]  ? exc_page_fault+0x64/0x140
-[  927.454262]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[  927.459253] RIP: 0033:0x7f16c3a397cb
-[  927.465253] Code: 73 01 c3 48 8b 0d bd 66 38 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 8d 66 38 00 f7 d8 64 89 01 48
-[  927.485254] RSP: 002b:00007fffd5f91a98 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
-[  927.494267] RAX: ffffffffffffffda RBX: 00007f16c520e1f0 RCX: 00007f16c3a397cb
-[  927.502268] RDX: 000055bace7bbb40 RSI: 00000000c138fd04 RDI: 0000000000000003
-[  927.510263] RBP: 00007f16c524a143 R08: 00007f16c524ad38 R09: 00007fffd5f918f0
-[  927.518262] R10: 0000000000000006 R11: 0000000000000206 R12: 000055bace7bbb40
-[  927.526266] R13: 000055bace7bbbf0 R14: 000055bace7bb940 R15: 0000000000000001
-[  927.535253]  </TASK>
-[  927.538260] Modules linked in: dm_flakey ext4 mbcache jbd2 loop rpcsec_gss_krb5 nfsv4 dns_resolver nfs fscache netfs rpcrdma rdma_cm iw_cm ib_cm rfkill ib_core dm_multipath dm_mod intel_rapl_msr intel_rapl_common snd_hda_codec_realtek snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi snd_hda_intel sb_edac snd_intel_dspcfg x86_pkg_temp_thermal intel_powerclamp snd_intel_sdw_acpi coretemp snd_hda_codec kvm_intel snd_hda_core mei_wdt snd_hwdep dcdbas iTCO_wdt btrfs iTCO_vendor_support kvm dell_smm_hwmon snd_seq irqbypass snd_seq_device crct10dif_pclmul crc32_pclmul blake2b_generic xor ghash_clmulni_intel snd_pcm raid6_pq snd_timer rapl zstd_compress intel_cstate snd mei_me i2c_i801 intel_uncore pcspkr lpc_ich i2c_smbus mei soundcore nfsd auth_rpcgss nfs_acl lockd grace sunrpc xfs sd_mod t10_pi amdgpu iommu_v2 gpu_sched drm_buddy sr_mod cdrom sg radeon video ahci drm_ttm_helper ttm libahci bnx2x mpt3sas libata drm_display_helper e1000e crc32c_intel mdio raid_class cec
-[  927.538260]  scsi_transport_sas wmi i2c_dev
-[  927.637256] CR2: 0000000000000058
-[  927.642269] ---[ end trace 0000000000000000 ]---
-[  927.822578] RIP: 0010:blk_mq_wait_quiesce_done+0xc/0x30
-[  927.828966] Code: 00 00 00 e8 c6 48 ff ff 4c 89 e6 5b 48 89 ef 5d 41 5c e9 f7 c5 66 00 0f 1f 80 00 00 00 00 0f 1f 44 00 00 48 8b 87 18 03 00 00 <f6> 40 58 20 74 0c 48 8b b8 a8 00 00 00 e9 f2 74 c4 ff e9 dd ef c4
-[  927.850187] RSP: 0018:ffffbc5a8e41bc60 EFLAGS: 00010286
-[  927.856631] RAX: 0000000000000000 RBX: ffffa0cf2a2fb000 RCX: 0000000000000000
-[  927.864996] RDX: 0000000000000000 RSI: 0000000000000246 RDI: ffffa0cfa08e2260
-[  927.873366] RBP: ffffa0cfa08e2260 R08: ffffa0b048488000 R09: ffffa0ceca2e5000
-[  927.881735] R10: 0000000000000001 R11: ffffa0cf2a2fa800 R12: 0000000000000000
-[  927.890105] R13: ffffa0cf9e4d0c80 R14: ffffa0d0130ab200 R15: ffffffffc19dc560
-[  927.898477] FS:  00007f16c58cc580(0000) GS:ffffa0ce2fcc0000(0000) knlGS:0000000000000000
-[  927.907809] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  927.914794] CR2: 0000000000000058 CR3: 00000001a0b8c005 CR4: 00000000001706e0
-[  927.923182] Kernel panic - not syncing: Fatal exception
-[  927.928253] Kernel Offset: 0x15800000 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-[  927.928253] Rebooting in 15 seconds..
+> which per calculate_imbalance() tries to move
+> *all* tasks to the higher priority CPU - in the case of SMT balancing,
+> we don't want to totally empty the core, just its siblings.
 
-the reason is yet not clear.
+But it will not empty the core, only one of its SMT siblings. A single
+sibling will be selected in find_busiest_queue(). The other siblings will
+be unaffected.
 
-It still happen without these 4 patches.
-dm-cleanup-open_table_device.patch
-dm-cleanup-close_table_device.patch
-dm-make-sure-create-and-remove-dm-device-won-t-race-.patch
-dm-track-per-add_disk-holder-relations-in-dm.patch
+> 
+> Is there an ITMT/big.LITTLE (or however x86 calls it) case that invalidates
+> the above?
 
-Best Regards
-Wang Yugui (wangyugui@e16-tech.com)
-2022/12/29
+Please see below.
 
+> 
+> Say, what's not sufficient with the below? AFAICT the only thing that isn't
+> covered is the sg_busy_cpus >= 2 thing, but IMO that's SMT balancing, not
+> asym packing - if the current calculate_imbalance() doesn't do it, it
+> should be fixed to do it.
 
+Agreed.
+
+>Looking at the
+> 
+>   local->group_type == group_has_spare
+> 
+> case, it looks like it should DTRT.
+
+I had tried (and failed) to have find_busiest_group() handle the
+!local_is_smt :: sg_busy_cpus >= 2 case. Now I think I made it work.
+
+When the busiest group is not overloaded, find_busiest_group() and
+local->group = group_has_spare during an idle load balance events the
+number of *idle* CPUs. However, this does not work if the local and busiest
+groups have different weights. In SMT2, for instance, if busiest has 2 busy
+CPUs (i.e., 0 idle CPUs) and the destination CPU is idle, the difference in
+the number of idle CPUs is 1. find_busiest_group() will incorrectly goto
+out_balanced.
+
+This issue very visible in Intel hybrid processors because the big cores
+have SMT but the small cores do not. It can, however, be reproduced in non-
+hybrid processors by offlining the SMT siblings of some cores.
+
+The problem can be fixed by instead balancing the number of *busy* CPUs,
+which is what in general we want, IMO. (When two groups have the same
+weight, it is equivalent to balancing the number of idle CPUs).
+
+This patch worked for me:
+
+@@ -9787,14 +9787,18 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+ 			lsub_positive(&nr_diff, local->sum_nr_running);
+ 			env->imbalance = nr_diff;
+ 		} else {
++			unsigned int busiest_busy_cpus, local_busy_cpus;
++
++			busiest_busy_cpus = busiest->group_weight - busiest->idle_cpus;
++			local_busy_cpus = local->group_weight - local->idle_cpus;
+ 
+ 			/*
+ 			 * If there is no overload, we just want to even the number of
+-			 * idle cpus.
++			 * busy cpus.
+ 			 */
+ 			env->migration_type = migrate_task;
+-			env->imbalance = max_t(long, 0,
+-					       (local->idle_cpus - busiest->idle_cpus));
++			env->imbalance = max_t(long, 0 ,
++					       (busiest_busy_cpus -  local_busy_cpus));
+ 		}
+ 
+ #ifdef CONFIG_NUMA
+@@ -9981,18 +9985,24 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+ 			 */
+ 			goto out_balanced;
+ 
+-		if (busiest->group_weight > 1 &&
+-		    local->idle_cpus <= (busiest->idle_cpus + 1))
+-			/*
+-			 * If the busiest group is not overloaded
+-			 * and there is no imbalance between this and busiest
+-			 * group wrt idle CPUs, it is balanced. The imbalance
+-			 * becomes significant if the diff is greater than 1
+-			 * otherwise we might end up to just move the imbalance
+-			 * on another group. Of course this applies only if
+-			 * there is more than 1 CPU per group.
+-			 */
+-			goto out_balanced;
++		if (busiest->group_weight > 1) {
++			unsigned int local_busy_cpus, busiest_busy_cpus;
++
++			local_busy_cpus = local->group_weight - local->idle_cpus;
++			busiest_busy_cpus = busiest->group_weight - busiest->idle_cpus;
++
++			if (busiest_busy_cpus <= local_busy_cpus + 1)
++				/*
++				 * If the busiest group is not overloaded
++				 * and there is no imbalance between this and busiest
++				 * group wrt busy CPUs, it is balanced. The imbalance
++				 * becomes significant if the diff is greater than 1
++				 * otherwise we might end up to just move the imbalance
++				 * on another group. Of course this applies only if
++				 * there is more than 1 CPU per group.
++				 */
++				goto out_balanced;
++		}
+ 
+ 		if (busiest->sum_h_nr_running == 1)
+ 			/*
+
+With this I can remove the sg_busy_cpus >=2 thing from asym_smt_can_pull_tasks().
+
+> 
+> ---
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 224107278471f..15eb2d3cff186 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9176,12 +9176,15 @@ static inline bool
+>  sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs,
+>  	   struct sched_group *group)
+>  {
+> -	/* Only do SMT checks if either local or candidate have SMT siblings */
+> -	if ((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
+> -	    (group->flags & SD_SHARE_CPUCAPACITY))
+> -		return asym_smt_can_pull_tasks(env->dst_cpu, sds, sgs, group);
+> +	/*
+> +	 * For SMT, env->idle != CPU_NOT_IDLE isn't sufficient, we need to make
+> +	 * sure the whole core is idle.
+> +	 */
+> +	if (((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
+> +	     (group->flags & SD_SHARE_CPUCAPACITY)) &&
+> +	    !test_idle_cores(env->dst_cpu))
+
+But test_idle_cores() tests for *any* idle core in the highest domain with the
+SD_SHARE_PKG_RESOURCES flag. Here we are only interested in the SMT siblings
+of env->dst_cpu. If is_core_idle(env->dst_cpu) is used, then I agree with the
+change.
+
+Thanks and BR,
+Ricardo
