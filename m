@@ -2,84 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F7E658C9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A2A658CA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbiL2MQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S233240AbiL2MSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbiL2MQv (ORCPT
+        with ESMTP id S229658AbiL2MSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:16:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5006510B5B;
-        Thu, 29 Dec 2022 04:16:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 29 Dec 2022 07:18:00 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F9710B5B;
+        Thu, 29 Dec 2022 04:18:00 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0314CB8191A;
-        Thu, 29 Dec 2022 12:16:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472AAC433EF;
-        Thu, 29 Dec 2022 12:16:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672316207;
-        bh=TX8G1KV/y28/WouPtDwI6OooJOomGW1Xb8CNPc+bzpM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iGN6g+7kEwTx8vhPyEGpKEvL2e8q5Ha+ll/QBunugvztvY9YLjzu4N2klzN6ioRic
-         VW03/91CDts6rvEZ9r5JyZihVGPRBg0LwQfGDqvKFxD+8HVFhIYdJeJdG+bRsYLLAk
-         2F6in4dh8QSsfNbJnIIfj4iMCNndyfMNGD+71DnVYFuSzm7HugNtUHeSrXAyJDesWL
-         0xCmwIRDFaLc3HPeL7AdLqUALFfAfao0FWtagcFzhhr7IAWP8KrIAwKdcNSYq5c8Ih
-         mQfejy+dNlfKjaJ/K+pHWMqH4loB/dYHKeHWLrbJM1W4BY4zzqGGjKeTegsGlgONEb
-         7R0yVjJVmBheg==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH v2] kbuild: sort single-targets alphabetically again
-Date:   Thu, 29 Dec 2022 21:16:42 +0900
-Message-Id: <20221229121642.1046890-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 891F11EC034B;
+        Thu, 29 Dec 2022 13:17:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672316278;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=wSRpswI9u60JfI6sWY2yfCWEP9K0fmolgwn8Wp8wVro=;
+        b=nUijUjCO3f0F3lKDnwUjShJLuzg8Te08KQWeSK1O8CYkaoOv4H1WdTTd60grAJwdH3ybYk
+        7d1+JxrHlDav78/VwKPK5g7hOs5SwfviZ7tTlbVb67rQZCREhd2nfhpmXX/gQBidKGyasA
+        T0pJccZK9EcweKSTC+UPU6YntjU/RDQ=
+Date:   Thu, 29 Dec 2022 13:17:48 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [Patch v4 04/13] x86/mm: Handle decryption/re-encryption of
+ bss_decrypted consistently
+Message-ID: <Y62FbJ1rZ6TVUgml@zn.tnic>
+References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
+ <1669951831-4180-5-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1669951831-4180-5-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This was previously alphabetically sorted. Sort it again.
+On Thu, Dec 01, 2022 at 07:30:22PM -0800, Michael Kelley wrote:
+> Current code in sme_postprocess_startup() decrypts the bss_decrypted
+> section when sme_me_mask is non-zero.  But code in
+> mem_encrypt_free_decrypted_mem() re-encrypts the unused portion based
+> on CC_ATTR_MEM_ENCRYPT.  In a Hyper-V guest VM using vTOM, these
+> conditions are not equivalent as sme_me_mask is always zero when
+> using vTOM.  Consequently, mem_encrypt_free_decrypted_mem() attempts
+> to re-encrypt memory that was never decrypted.
+> 
+> Fix this in mem_encrypt_free_decrypted_mem() by conditioning the
+> re-encryption on the same test for non-zero sme_me_mask.  Hyper-V
+> guests using vTOM don't need the bss_decrypted section to be
+> decrypted, so skipping the decryption/re-encryption doesn't cause
+> a problem.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
----
+Lemme simplify the formulations a bit:
 
-Changes in v2:
-  - Move %.rsi after %.o to make it really sorted
+"sme_postprocess_startup() decrypts the bss_decrypted ection when me_mask
+sme_is non-zero.
 
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+mem_encrypt_free_decrypted_mem() re-encrypts the unused portion based on
+CC_ATTR_MEM_ENCRYPT.
 
-diff --git a/Makefile b/Makefile
-index c0d7c75d8f14..8daf1be6a2e4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -289,7 +289,7 @@ no-compiler-targets := $(no-dot-config-targets) install dtbs_install \
- 			headers_install modules_install kernelrelease image_name
- no-sync-config-targets := $(no-dot-config-targets) %install kernelrelease \
- 			  image_name
--single-targets := %.a %.i %.rsi %.ko %.lds %.ll %.lst %.mod %.o %.s %.symtypes %/
-+single-targets := %.a %.i %.ko %.lds %.ll %.lst %.mod %.o %.rsi %.s %.symtypes %/
- 
- config-build	:=
- mixed-build	:=
+In a Hyper-V guest VM using vTOM, these conditions are not equivalent
+as sme_me_mask is always zero when using vTOM. Consequently,
+mem_encrypt_free_decrypted_mem() attempts to re-encrypt memory that was
+never decrypted.
+
+So check sme_me_mask in mem_encrypt_free_decrypted_mem() too.
+
+Hyper-V guests using vTOM don't need the bss_decrypted section to be
+decrypted, so skipping the decryption/re-encryption doesn't cause a
+problem."
+
+> Fixes: e9d1d2bb75b2 ("treewide: Replace the use of mem_encrypt_active() with cc_platform_has()")
+
+So when you say Fixes - this is an issue only for vTOM-using VMs and
+before yours, there were none. And yours needs more enablement than just
+this patch.
+
+So does this one really need to be backported to stable@?
+
+I'm asking because there's AI which will pick it up based on this Fixes
+tag up but that AI is still not that smart to replace us all. :-)
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
