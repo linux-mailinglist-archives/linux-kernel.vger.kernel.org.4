@@ -2,218 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F29658853
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D87658855
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 02:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbiL2BX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 20:23:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S231635AbiL2BYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 20:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiL2BXY (ORCPT
+        with ESMTP id S229716AbiL2BYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 20:23:24 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FD713F80
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:23:23 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so10973719ilt.9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 17:23:23 -0800 (PST)
+        Wed, 28 Dec 2022 20:24:12 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5934B13F80;
+        Wed, 28 Dec 2022 17:24:11 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id l29so17878076edj.7;
+        Wed, 28 Dec 2022 17:24:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XAqpI1hfHxgQ6Uy3XAywrclvfUKIQehLo4WcSKTbul8=;
+        b=kclW9Pa5PEDvFNC9F8q4hAAiScRiMYD0ncSIMWhtV5bucjEv3mwX2L8FQJgYQyORES
+         dvYRSIX2lgFqolNIg970DbZ90iu3I1DqAIjFF3SicL93uXDRLoQyzbMvlTC183Ozwgqj
+         fgStaW1TKccoIOip19PXa/RUEIl45Y5HAYOfobHloXz6NtHDEdAgF0fiaEhjQvY5E9TW
+         LjT8zPKPVqPedgmgraLYT9clylLsLzNFMzorEPW1qJaSRwMetqeFEBPlmaHWURqVU1pV
+         XDzVXZ7h4U+Ln+2yMSDQ2+6xv0SSZ6jUCBEc7EbBTrBxqXb33sxgYhByD2IpWFZL/gLk
+         PfXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eeJLsnPHPnTdoII+fk4/DB6TZ+ww6Hs/SN0JpWJO4S8=;
-        b=HolCuuqJ6PGHDYIKHPTNswLfMlvlsSoahZnEhC8THnjCQ3YdLE/Qo7U7TX+F19NBr3
-         U8r4n+8BOl8ulgeoEyamuAppQljGo95GX9zcr/pkjcHi96Hx1O2ohiGohROb8/qr+UkT
-         SA/fIqAB0sOwjGT7c2ky9hM+Kg1HpZP0BBcZ498hjArXk3rLTT/jRHH4js0AaBNTHczq
-         +FcHJP/7C7YlJ30slBkWoNGyoFV17XmHjK5/026OF9X4tlCK2u9IH8I9krgwoFjXZ5Ax
-         1jYfB7HCwAAd18seCdXqpzTUMErshaGHCLyCtudhAj/BxDktKVqKD1xb/mFTqEWscLKG
-         A5Cw==
-X-Gm-Message-State: AFqh2krl+Gq0DQki2GcG3PLnm9sGpAEYxnT3aPxFwKkAk9WcBQoAHVtx
-        d5GX3fHE/mFqK5Er+NZOQ2Y0eQ4+l6ZYcadPYSdMe34+kZ3U
-X-Google-Smtp-Source: AMrXdXsohTMDZ+IMtekOV3KljYZi/ZPObBKromXUuAQVIARbMjkM0pmO3zxqW7NnZRfx4FrWwnhn4MUOrF3KWRoCG4Y+wfemZjCC
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XAqpI1hfHxgQ6Uy3XAywrclvfUKIQehLo4WcSKTbul8=;
+        b=BaqzSqkGKQuUjDeaIph8wkJQ2AXx5ll0cHsEXixjO8tg2Jad3wbNsyJC07AuhYOmnb
+         3O/XFnBqaGBlPIgjM9yumTNhD6RlDyUakp6mzyU/Ii4S6HQiWCNj9Xq2+psk/IvJE/4G
+         /lgXm3uz0f+lDya+yEcLW7+Wpk6NKaK/x7u4YC0VfJHXP2pNSqn7C1+gjcRYbWeG2hNT
+         NwK+A+MDNG9Tw27U057QsCVyAPBSTyNQRojOLDO7cJ09syaNScb3Nt5mETscS2/KDUBF
+         7cuZGIhOR9xjMijmUmy8dF2O2H3DsK1MB+F8N13J9+CzNAq5N5fjJ9Kw0SOVUX1/NBuQ
+         UjDg==
+X-Gm-Message-State: AFqh2kowqPFHGloQjpbFQ4B0fMPAxfJn65aYRNSz8Mus2Sfp05GmU2qs
+        uAfQt5JymbNgIJou8+KlsXMYAZTAzv6EBdpXdCs=
+X-Google-Smtp-Source: AMrXdXtXsQeNOZ8wh9KBzQif+Z75dAHlhkZoTHgPNqCsC4W3DlvH2EXibZxhbIlBGUgSK6ZgC7iaMkBHgoOGPDDv7AE=
+X-Received: by 2002:a05:6402:298b:b0:47f:7465:6e76 with SMTP id
+ eq11-20020a056402298b00b0047f74656e76mr2189552edb.181.1672277049757; Wed, 28
+ Dec 2022 17:24:09 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:c64a:0:b0:38a:c06e:daa5 with SMTP id
- k10-20020a02c64a000000b0038ac06edaa5mr2339690jan.238.1672277002674; Wed, 28
- Dec 2022 17:23:22 -0800 (PST)
-Date:   Wed, 28 Dec 2022 17:23:22 -0800
-In-Reply-To: <20221229005540.2777-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b5e7b405f0ed54fb@google.com>
-Subject: Re: [syzbot] [ext4?] possible deadlock in ext4_find_inline_entry
-From:   syzbot <syzbot+d3bb749184481f92deb5@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <cover.1671772917.git.matsuda-daisuke@fujitsu.com>
+ <d2f6b3aca61fe1858a97cda94691eece6b0e60bd.1671772917.git.matsuda-daisuke@fujitsu.com>
+ <53a2fca7-d98a-acef-8b18-d36a5a16d176@gmail.com>
+In-Reply-To: <53a2fca7-d98a-acef-8b18-d36a5a16d176@gmail.com>
+From:   Zhu Yanjun <zyjzyj2000@gmail.com>
+Date:   Thu, 29 Dec 2022 09:23:56 +0800
+Message-ID: <CAD=hENc1WWOQX_L9bB2rGztBBdyhHjE+1Qs+nC4xx0K9xa0N2w@mail.gmail.com>
+Subject: Re: [PATCH for-next v3 1/7] RDMA/rxe: Convert triple tasklets to use workqueue
+To:     Bob Pearson <rpearsonhpe@gmail.com>
+Cc:     Daisuke Matsuda <matsuda-daisuke@fujitsu.com>,
+        linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
+        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        yangx.jy@fujitsu.com, lizhijian@fujitsu.com, y-goto@fujitsu.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Dec 29, 2022 at 12:56 AM Bob Pearson <rpearsonhpe@gmail.com> wrote:
+>
+> On 12/23/22 00:51, Daisuke Matsuda wrote:
+> > In order to implement On-Demand Paging on the rxe driver, triple tasklets
+> > (requester, responder, and completer) must be allowed to sleep so that they
+> > can trigger page fault when pages being accessed are not present.
+> >
+> > This patch replaces the tasklets with a workqueue, but still allows direct-
+> > call of works from softirq context if it is obvious that MRs are not going
+> > to be accessed and there is no work being processed in the workqueue.
+>
+> There are already at least two patch sets that do this waiting to get upstream.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-possible deadlock in ext4_xattr_set_entry
+RXE accepted several patch sets just now. So it needs time to make
+tests and check bugs.
 
-EXT4-fs: Warning: mounting with an experimental mount option 'dioread_nolock' for blocksize < PAGE_SIZE
-EXT4-fs (loop0): mounted filesystem without journal. Quota mode: none.
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc8-syzkaller-00172-ga5541c0811a0-dirty #0 Not tainted
-------------------------------------------------------
-syz-executor.0/3668 is trying to acquire lock:
-ffff0000cf16bd60 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
-ffff0000cf16bd60 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_xattr_inode_create fs/ext4/xattr.c:1453 [inline]
-ffff0000cf16bd60 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1536 [inline]
-ffff0000cf16bd60 (&sb->s_type->i_mutex_key#8){++++}-{3:3}, at: ext4_xattr_set_entry+0xdbc/0xe00 fs/ext4/xattr.c:1664
+Zhu Yanjun
 
-but task is already holding lock:
-ffff0000cf16b098 (&ei->xattr_sem){++++}-{3:3}, at: ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
-ffff0000cf16b098 (&ei->xattr_sem){++++}-{3:3}, at: ext4_xattr_set_handle+0xd0/0x9a0 fs/ext4/xattr.c:2308
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&ei->xattr_sem){++++}-{3:3}:
-       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
-       ext4_xattr_get+0x90/0x418 fs/ext4/xattr.c:665
-       ext4_xattr_security_get+0x40/0x54 fs/ext4/xattr_security.c:20
-       __vfs_getxattr+0x1fc/0x20c fs/xattr.c:407
-       cap_inode_need_killpriv+0x34/0x5c security/commoncap.c:301
-       security_inode_need_killpriv+0x34/0x88 security/security.c:1422
-       dentry_needs_remove_privs fs/inode.c:1995 [inline]
-       __file_remove_privs+0xe0/0x308 fs/inode.c:2026
-       file_modified_flags+0x60/0x330 fs/inode.c:2148
-       file_modified+0x24/0x34 fs/inode.c:2177
-       ext4_write_checks fs/ext4/file.c:264 [inline]
-       ext4_buffered_write_iter+0x12c/0x294 fs/ext4/file.c:280
-       ext4_file_write_iter+0x84/0x408 fs/ext4/file.c:700
-       call_write_iter include/linux/fs.h:2199 [inline]
-       new_sync_write fs/read_write.c:491 [inline]
-       vfs_write+0x2dc/0x46c fs/read_write.c:584
-       ksys_write+0xb4/0x160 fs/read_write.c:637
-       __do_sys_write fs/read_write.c:649 [inline]
-       __se_sys_write fs/read_write.c:646 [inline]
-       __arm64_sys_write+0x24/0x34 fs/read_write.c:646
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #0 (&sb->s_type->i_mutex_key#8){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain kernel/locking/lockdep.c:3831 [inline]
-       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
-       down_write+0x5c/0x88 kernel/locking/rwsem.c:1562
-       inode_lock include/linux/fs.h:756 [inline]
-       ext4_xattr_inode_create fs/ext4/xattr.c:1453 [inline]
-       ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1536 [inline]
-       ext4_xattr_set_entry+0xdbc/0xe00 fs/ext4/xattr.c:1664
-       ext4_xattr_ibody_set+0x94/0x184 fs/ext4/xattr.c:2224
-       ext4_xattr_set_handle+0x648/0x9a0 fs/ext4/xattr.c:2381
-       ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2495
-       ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
-       __vfs_setxattr+0x250/0x260 fs/xattr.c:182
-       __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
-       __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
-       vfs_setxattr+0xf4/0x1f4 fs/xattr.c:309
-       do_setxattr fs/xattr.c:594 [inline]
-       setxattr fs/xattr.c:617 [inline]
-       path_setxattr+0x354/0x414 fs/xattr.c:636
-       __do_sys_lsetxattr fs/xattr.c:659 [inline]
-       __se_sys_lsetxattr fs/xattr.c:655 [inline]
-       __arm64_sys_lsetxattr+0x2c/0x40 fs/xattr.c:655
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&ei->xattr_sem);
-                               lock(&sb->s_type->i_mutex_key#8);
-                               lock(&ei->xattr_sem);
-  lock(&sb->s_type->i_mutex_key#8);
-
- *** DEADLOCK ***
-
-3 locks held by syz-executor.0/3668:
- #0: ffff0000c9dee460 (sb_writers#3){.+.+}-{0:0}, at: mnt_want_write+0x20/0x64 fs/namespace.c:393
- #1: ffff0000cf16b3d0 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #1: ffff0000cf16b3d0 (&type->i_mutex_dir_key#3){++++}-{3:3}, at: vfs_setxattr+0xd4/0x1f4 fs/xattr.c:308
- #2: ffff0000cf16b098 (&ei->xattr_sem){++++}-{3:3}, at: ext4_write_lock_xattr fs/ext4/xattr.h:155 [inline]
- #2: ffff0000cf16b098 (&ei->xattr_sem){++++}-{3:3}, at: ext4_xattr_set_handle+0xd0/0x9a0 fs/ext4/xattr.c:2308
-
-stack backtrace:
-CPU: 1 PID: 3668 Comm: syz-executor.0 Not tainted 6.1.0-rc8-syzkaller-00172-ga5541c0811a0-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- down_write+0x5c/0x88 kernel/locking/rwsem.c:1562
- inode_lock include/linux/fs.h:756 [inline]
- ext4_xattr_inode_create fs/ext4/xattr.c:1453 [inline]
- ext4_xattr_inode_lookup_create fs/ext4/xattr.c:1536 [inline]
- ext4_xattr_set_entry+0xdbc/0xe00 fs/ext4/xattr.c:1664
- ext4_xattr_ibody_set+0x94/0x184 fs/ext4/xattr.c:2224
- ext4_xattr_set_handle+0x648/0x9a0 fs/ext4/xattr.c:2381
- ext4_xattr_set+0x100/0x1d0 fs/ext4/xattr.c:2495
- ext4_xattr_trusted_set+0x4c/0x64 fs/ext4/xattr_trusted.c:38
- __vfs_setxattr+0x250/0x260 fs/xattr.c:182
- __vfs_setxattr_noperm+0xcc/0x320 fs/xattr.c:216
- __vfs_setxattr_locked+0x16c/0x194 fs/xattr.c:277
- vfs_setxattr+0xf4/0x1f4 fs/xattr.c:309
- do_setxattr fs/xattr.c:594 [inline]
- setxattr fs/xattr.c:617 [inline]
- path_setxattr+0x354/0x414 fs/xattr.c:636
- __do_sys_lsetxattr fs/xattr.c:659 [inline]
- __se_sys_lsetxattr fs/xattr.c:655 [inline]
- __arm64_sys_lsetxattr+0x2c/0x40 fs/xattr.c:655
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
-
-Tested on:
-
-commit:         a5541c08 Merge branch 'for-next/core' into for-kernelci
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=16f5d4bc480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cbd4e584773e9397
-dashboard link: https://syzkaller.appspot.com/bug?extid=d3bb749184481f92deb5
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15be6de4480000
-
+> Bob
+>
+> >
+> > As counterparts to tasklet_disable() and tasklet_enable() are missing for
+> > workqueues, an atomic value is introduced to prevent work items from being
+> > scheduled while qp reset is in progress.
+> >
+> > The way to initialize/destroy workqueue is picked up from the
+> > implementation of Ian Ziemba and Bob Pearson at HPE.
+> >
+> > Link: https://lore.kernel.org/all/20221018043345.4033-1-rpearsonhpe@gmail.com/
+> > Signed-off-by: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+> > ---
+> >  drivers/infiniband/sw/rxe/rxe.c       |  9 ++++-
+> >  drivers/infiniband/sw/rxe/rxe_comp.c  |  2 +-
+> >  drivers/infiniband/sw/rxe/rxe_param.h |  2 +-
+> >  drivers/infiniband/sw/rxe/rxe_qp.c    |  2 +-
+> >  drivers/infiniband/sw/rxe/rxe_req.c   |  2 +-
+> >  drivers/infiniband/sw/rxe/rxe_resp.c  |  2 +-
+> >  drivers/infiniband/sw/rxe/rxe_task.c  | 52 ++++++++++++++++++++-------
+> >  drivers/infiniband/sw/rxe/rxe_task.h  | 15 ++++++--
+> >  8 files changed, 65 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/drivers/infiniband/sw/rxe/rxe.c b/drivers/infiniband/sw/rxe/rxe.c
+> > index 136c2efe3466..3c7e42e5b0c7 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe.c
+> > +++ b/drivers/infiniband/sw/rxe/rxe.c
+> > @@ -210,10 +210,16 @@ static int __init rxe_module_init(void)
+> >  {
+> >       int err;
+> >
+> > -     err = rxe_net_init();
+> > +     err = rxe_alloc_wq();
+> >       if (err)
+> >               return err;
+> >
+> > +     err = rxe_net_init();
+> > +     if (err) {
+> > +             rxe_destroy_wq();
+> > +             return err;
+> > +     }
+> > +
+> >       rdma_link_register(&rxe_link_ops);
+> >       pr_info("loaded\n");
+> >       return 0;
+> > @@ -224,6 +230,7 @@ static void __exit rxe_module_exit(void)
+> >       rdma_link_unregister(&rxe_link_ops);
+> >       ib_unregister_driver(RDMA_DRIVER_RXE);
+> >       rxe_net_exit();
+> > +     rxe_destroy_wq();
+> >
+> >       pr_info("unloaded\n");
+> >  }
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_comp.c b/drivers/infiniband/sw/rxe/rxe_comp.c
+> > index 20737fec392b..046bbacce37c 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_comp.c
+> > +++ b/drivers/infiniband/sw/rxe/rxe_comp.c
+> > @@ -773,7 +773,7 @@ int rxe_completer(void *arg)
+> >       }
+> >
+> >       /* A non-zero return value will cause rxe_do_task to
+> > -      * exit its loop and end the tasklet. A zero return
+> > +      * exit its loop and end the work item. A zero return
+> >        * will continue looping and return to rxe_completer
+> >        */
+> >  done:
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_param.h b/drivers/infiniband/sw/rxe/rxe_param.h
+> > index a754fc902e3d..bd8050e99d6b 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_param.h
+> > +++ b/drivers/infiniband/sw/rxe/rxe_param.h
+> > @@ -112,7 +112,7 @@ enum rxe_device_param {
+> >       RXE_INFLIGHT_SKBS_PER_QP_HIGH   = 64,
+> >       RXE_INFLIGHT_SKBS_PER_QP_LOW    = 16,
+> >
+> > -     /* Max number of interations of each tasklet
+> > +     /* Max number of interations of each work item
+> >        * before yielding the cpu to let other
+> >        * work make progress
+> >        */
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_qp.c b/drivers/infiniband/sw/rxe/rxe_qp.c
+> > index ab72db68b58f..e033b2449dfe 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_qp.c
+> > +++ b/drivers/infiniband/sw/rxe/rxe_qp.c
+> > @@ -471,7 +471,7 @@ int rxe_qp_chk_attr(struct rxe_dev *rxe, struct rxe_qp *qp,
+> >  /* move the qp to the reset state */
+> >  static void rxe_qp_reset(struct rxe_qp *qp)
+> >  {
+> > -     /* stop tasks from running */
+> > +     /* flush workqueue and stop tasks from running */
+> >       rxe_disable_task(&qp->resp.task);
+> >
+> >       /* stop request/comp */
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_req.c b/drivers/infiniband/sw/rxe/rxe_req.c
+> > index 899c8779f800..2bcd287a2c3b 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_req.c
+> > +++ b/drivers/infiniband/sw/rxe/rxe_req.c
+> > @@ -830,7 +830,7 @@ int rxe_requester(void *arg)
+> >       update_state(qp, &pkt);
+> >
+> >       /* A non-zero return value will cause rxe_do_task to
+> > -      * exit its loop and end the tasklet. A zero return
+> > +      * exit its loop and end the work item. A zero return
+> >        * will continue looping and return to rxe_requester
+> >        */
+> >  done:
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
+> > index c74972244f08..d9134a00a529 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_resp.c
+> > +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+> > @@ -1691,7 +1691,7 @@ int rxe_responder(void *arg)
+> >       }
+> >
+> >       /* A non-zero return value will cause rxe_do_task to
+> > -      * exit its loop and end the tasklet. A zero return
+> > +      * exit its loop and end the work item. A zero return
+> >        * will continue looping and return to rxe_responder
+> >        */
+> >  done:
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_task.c b/drivers/infiniband/sw/rxe/rxe_task.c
+> > index 60b90e33a884..b96f72aa9005 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_task.c
+> > +++ b/drivers/infiniband/sw/rxe/rxe_task.c
+> > @@ -6,6 +6,22 @@
+> >
+> >  #include "rxe.h"
+> >
+> > +static struct workqueue_struct *rxe_wq;
+> > +
+> > +int rxe_alloc_wq(void)
+> > +{
+> > +     rxe_wq = alloc_workqueue("rxe_wq", WQ_CPU_INTENSIVE, WQ_MAX_ACTIVE);
+> > +     if (!rxe_wq)
+> > +             return -ENOMEM;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +void rxe_destroy_wq(void)
+> > +{
+> > +     destroy_workqueue(rxe_wq);
+> > +}
+> > +
+> >  int __rxe_do_task(struct rxe_task *task)
+> >
+> >  {
+> > @@ -24,11 +40,11 @@ int __rxe_do_task(struct rxe_task *task)
+> >   * a second caller finds the task already running
+> >   * but looks just after the last call to func
+> >   */
+> > -static void do_task(struct tasklet_struct *t)
+> > +static void do_task(struct work_struct *w)
+> >  {
+> >       int cont;
+> >       int ret;
+> > -     struct rxe_task *task = from_tasklet(task, t, tasklet);
+> > +     struct rxe_task *task = container_of(w, typeof(*task), work);
+> >       struct rxe_qp *qp = (struct rxe_qp *)task->arg;
+> >       unsigned int iterations = RXE_MAX_ITERATIONS;
+> >
+> > @@ -64,10 +80,10 @@ static void do_task(struct tasklet_struct *t)
+> >                       } else if (iterations--) {
+> >                               cont = 1;
+> >                       } else {
+> > -                             /* reschedule the tasklet and exit
+> > +                             /* reschedule the work item and exit
+> >                                * the loop to give up the cpu
+> >                                */
+> > -                             tasklet_schedule(&task->tasklet);
+> > +                             queue_work(task->workq, &task->work);
+> >                               task->state = TASK_STATE_START;
+> >                       }
+> >                       break;
+> > @@ -97,7 +113,8 @@ int rxe_init_task(struct rxe_task *task, void *arg, int (*func)(void *))
+> >       task->func      = func;
+> >       task->destroyed = false;
+> >
+> > -     tasklet_setup(&task->tasklet, do_task);
+> > +     INIT_WORK(&task->work, do_task);
+> > +     task->workq = rxe_wq;
+> >
+> >       task->state = TASK_STATE_START;
+> >       spin_lock_init(&task->lock);
+> > @@ -111,17 +128,16 @@ void rxe_cleanup_task(struct rxe_task *task)
+> >
+> >       /*
+> >        * Mark the task, then wait for it to finish. It might be
+> > -      * running in a non-tasklet (direct call) context.
+> > +      * running in a non-workqueue (direct call) context.
+> >        */
+> >       task->destroyed = true;
+> > +     flush_workqueue(task->workq);
+> >
+> >       do {
+> >               spin_lock_bh(&task->lock);
+> >               idle = (task->state == TASK_STATE_START);
+> >               spin_unlock_bh(&task->lock);
+> >       } while (!idle);
+> > -
+> > -     tasklet_kill(&task->tasklet);
+> >  }
+> >
+> >  void rxe_run_task(struct rxe_task *task)
+> > @@ -129,7 +145,7 @@ void rxe_run_task(struct rxe_task *task)
+> >       if (task->destroyed)
+> >               return;
+> >
+> > -     do_task(&task->tasklet);
+> > +     do_task(&task->work);
+> >  }
+> >
+> >  void rxe_sched_task(struct rxe_task *task)
+> > @@ -137,15 +153,27 @@ void rxe_sched_task(struct rxe_task *task)
+> >       if (task->destroyed)
+> >               return;
+> >
+> > -     tasklet_schedule(&task->tasklet);
+> > +     /*
+> > +      * busy-loop while qp reset is in progress.
+> > +      * This may be called from softirq context and thus cannot sleep.
+> > +      */
+> > +     while (atomic_read(&task->suspended))
+> > +             cpu_relax();
+> > +
+> > +     queue_work(task->workq, &task->work);
+> >  }
+> >
+> >  void rxe_disable_task(struct rxe_task *task)
+> >  {
+> > -     tasklet_disable(&task->tasklet);
+> > +     /* Alternative to tasklet_disable() */
+> > +     atomic_inc(&task->suspended);
+> > +     smp_mb__after_atomic();
+> > +     flush_workqueue(task->workq);
+> >  }
+> >
+> >  void rxe_enable_task(struct rxe_task *task)
+> >  {
+> > -     tasklet_enable(&task->tasklet);
+> > +     /* Alternative to tasklet_enable() */
+> > +     smp_mb__before_atomic();
+> > +     atomic_dec(&task->suspended);
+> >  }
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_task.h b/drivers/infiniband/sw/rxe/rxe_task.h
+> > index 7b88129702ac..9aa3f236e886 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_task.h
+> > +++ b/drivers/infiniband/sw/rxe/rxe_task.h
+> > @@ -19,15 +19,22 @@ enum {
+> >   * called again.
+> >   */
+> >  struct rxe_task {
+> > -     struct tasklet_struct   tasklet;
+> > +     struct workqueue_struct *workq;
+> > +     struct work_struct      work;
+> >       int                     state;
+> >       spinlock_t              lock;
+> >       void                    *arg;
+> >       int                     (*func)(void *arg);
+> >       int                     ret;
+> >       bool                    destroyed;
+> > +     /* used to {dis, en}able per-qp work items */
+> > +     atomic_t                suspended;
+> >  };
+> >
+> > +int rxe_alloc_wq(void);
+> > +
+> > +void rxe_destroy_wq(void);
+> > +
+> >  /*
+> >   * init rxe_task structure
+> >   *   arg  => parameter to pass to fcn
+> > @@ -40,18 +47,20 @@ void rxe_cleanup_task(struct rxe_task *task);
+> >
+> >  /*
+> >   * raw call to func in loop without any checking
+> > - * can call when tasklets are disabled
+> > + * can call when tasks are suspended
+> >   */
+> >  int __rxe_do_task(struct rxe_task *task);
+> >
+> > +/* run a task without scheduling */
+> >  void rxe_run_task(struct rxe_task *task);
+> >
+> > +/* schedule a task into workqueue */
+> >  void rxe_sched_task(struct rxe_task *task);
+> >
+> >  /* keep a task from scheduling */
+> >  void rxe_disable_task(struct rxe_task *task);
+> >
+> > -/* allow task to run */
+> > +/* allow a task to run again */
+> >  void rxe_enable_task(struct rxe_task *task);
+> >
+> >  #endif /* RXE_TASK_H */
+>
