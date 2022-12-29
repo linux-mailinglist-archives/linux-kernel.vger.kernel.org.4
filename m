@@ -2,222 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404C46588BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215216588BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiL2Cuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 21:50:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S232967AbiL2CwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 21:52:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiL2Cui (ORCPT
+        with ESMTP id S230078AbiL2CwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 21:50:38 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B068810B76;
-        Wed, 28 Dec 2022 18:50:36 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 83673109;
-        Thu, 29 Dec 2022 03:50:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672282233;
-        bh=kr/KMqyJ37X4fK4i6QdUKRzoLvLGk3YoMdym7liQ8TU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WBKmgoziPI4NSXzuvEhQolG2fD6ZSjHG1AXZ2ZPdtmt3+Y0RWHEJsnwo4FiTZT9kD
-         HfwpKHCHln3OSSdmxOq8dZ8WePfbn92Etr8oyHSP61F+HfE0GR3xzkT8cPxT1EXIO0
-         LcPh/H+zjFxASLQWYjOSq0DNVw1cxFNGZu2ewBZI=
-Date:   Thu, 29 Dec 2022 04:50:29 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hans.verkuil@cisco.com>
-Subject: Re: [PATCH RESEND v2 6/7] media: uvcvideo: Implement mask for
- V4L2_CTRL_TYPE_MENU
-Message-ID: <Y60AdY7eACCXVQS+@pendragon.ideasonboard.com>
-References: <20220920-resend-v4l2-compliance-v2-0-b0ceb15353ac@chromium.org>
- <20220920-resend-v4l2-compliance-v2-6-b0ceb15353ac@chromium.org>
+        Wed, 28 Dec 2022 21:52:19 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B20BB9;
+        Wed, 28 Dec 2022 18:52:17 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VYJZ.O-_1672282334;
+Received: from 30.236.46.126(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VYJZ.O-_1672282334)
+          by smtp.aliyun-inc.com;
+          Thu, 29 Dec 2022 10:52:15 +0800
+Message-ID: <c8c5472f-68ca-0b53-e8ba-56f296fb2624@linux.alibaba.com>
+Date:   Thu, 29 Dec 2022 10:52:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220920-resend-v4l2-compliance-v2-6-b0ceb15353ac@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V3 1/3] gpio: eic-sprd: Make the irqchip immutable
+To:     Cixi Geng <cixi.geng@linux.dev>, linus.walleij@linaro.org,
+        brgl@bgdev.pl, orsonzhai@gmail.com, zhang.lyra@gmail.com
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cixi.geng1@unisoc.com
+References: <20221228122442.392504-1-cixi.geng@linux.dev>
+ <20221228122442.392504-2-cixi.geng@linux.dev>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20221228122442.392504-2-cixi.geng@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
 
-Thank you for the patch.
 
-On Fri, Dec 02, 2022 at 06:21:40PM +0100, Ricardo Ribalda wrote:
-> Replace the count with a mask field that lets us choose not only the max
-> value, but also the minimum value and what values are valid in between.
+On 12/28/2022 8:24 PM, Cixi Geng wrote:
+> From: Cixi Geng <cixi.geng1@unisoc.com>
 > 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Remove the irq_chip from pmic_eic structure,
+> use the various calls by defining the statically
+> irq_chip structure.
+> 
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
 > ---
->  drivers/media/usb/uvc/uvc_ctrl.c   | 30 ++++++++++++++++++++----------
->  drivers/media/usb/uvc/uvc_driver.c |  2 +-
->  drivers/media/usb/uvc/uvc_v4l2.c   |  2 +-
->  drivers/media/usb/uvc/uvcvideo.h   |  2 +-
->  4 files changed, 23 insertions(+), 13 deletions(-)
+>   drivers/gpio/gpio-eic-sprd.c | 23 ++++++++++++++---------
+>   1 file changed, 14 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index 526572044e82..df273b829961 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -6,6 +6,7 @@
->   *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
->   */
->  
-> +#include <linux/bitops.h>
->  #include <linux/kernel.h>
->  #include <linux/list.h>
->  #include <linux/module.h>
-> @@ -524,7 +525,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings[] = {
->  		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
->  		.data_type	= UVC_CTRL_DATA_TYPE_BITMASK,
->  		.menu_info	= exposure_auto_controls,
-> -		.menu_count	= ARRAY_SIZE(exposure_auto_controls),
-> +		.menu_mask	= BIT_MASK(ARRAY_SIZE(exposure_auto_controls)),
->  		.slave_ids	= { V4L2_CID_EXPOSURE_ABSOLUTE, },
->  	},
->  	{
-> @@ -730,7 +731,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings_uvc11[] = {
->  		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
->  		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
->  		.menu_info	= power_line_frequency_controls,
-> -		.menu_count	= ARRAY_SIZE(power_line_frequency_controls) - 1,
-> +		.menu_mask	= BIT_MASK(ARRAY_SIZE(power_line_frequency_controls) - 1),
->  	},
->  };
->  
-> @@ -744,7 +745,7 @@ static const struct uvc_control_mapping uvc_ctrl_mappings_uvc15[] = {
->  		.v4l2_type	= V4L2_CTRL_TYPE_MENU,
->  		.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
->  		.menu_info	= power_line_frequency_controls,
-> -		.menu_count	= ARRAY_SIZE(power_line_frequency_controls),
-> +		.menu_mask	= BIT_MASK(ARRAY_SIZE(power_line_frequency_controls)),
->  	},
->  };
->  
-> @@ -974,7 +975,9 @@ static s32 __uvc_ctrl_get_value(struct uvc_control_mapping *mapping,
->  		const struct uvc_menu_info *menu = mapping->menu_info;
->  		unsigned int i;
->  
-> -		for (i = 0; i < mapping->menu_count; ++i, ++menu) {
-> +		for (i = 0; BIT(i) <= mapping->menu_mask; ++i, ++menu) {
-> +			if (!test_bit(i, &mapping->menu_mask))
-> +				continue;
->  			if (menu->value == value) {
->  				value = i;
->  				break;
-> @@ -1212,12 +1215,14 @@ static int __uvc_query_v4l2_ctrl(struct uvc_video_chain *chain,
->  
->  	switch (mapping->v4l2_type) {
->  	case V4L2_CTRL_TYPE_MENU:
-> -		v4l2_ctrl->minimum = 0;
-> -		v4l2_ctrl->maximum = mapping->menu_count - 1;
-> +		v4l2_ctrl->minimum = ffs(mapping->menu_mask) - 1;
-> +		v4l2_ctrl->maximum = fls(mapping->menu_mask) - 1;
->  		v4l2_ctrl->step = 1;
->  
->  		menu = mapping->menu_info;
-> -		for (i = 0; i < mapping->menu_count; ++i, ++menu) {
-> +		for (i = 0; BIT(i) <= mapping->menu_mask; ++i, ++menu) {
-> +			if (!test_bit(i, &mapping->menu_mask))
-> +				continue;
->  			if (menu->value == v4l2_ctrl->default_value) {
->  				v4l2_ctrl->default_value = i;
->  				break;
-> @@ -1338,7 +1343,7 @@ int uvc_query_v4l2_menu(struct uvc_video_chain *chain,
->  		goto done;
->  	}
->  
-> -	if (query_menu->index >= mapping->menu_count) {
-> +	if (!test_bit(query_menu->index, &mapping->menu_mask)) {
->  		ret = -EINVAL;
->  		goto done;
->  	}
-> @@ -1853,8 +1858,13 @@ int uvc_ctrl_set(struct uvc_fh *handle,
->  		break;
->  
->  	case V4L2_CTRL_TYPE_MENU:
-> -		if (xctrl->value < 0 || xctrl->value >= mapping->menu_count)
-> +		if (xctrl->value < (ffs(mapping->menu_mask) - 1) ||
-> +		    xctrl->value > (fls(mapping->menu_mask) - 1))
->  			return -ERANGE;
+> diff --git a/drivers/gpio/gpio-eic-sprd.c b/drivers/gpio/gpio-eic-sprd.c
+> index 8d722e026e9c..86563c0604e8 100644
+> --- a/drivers/gpio/gpio-eic-sprd.c
+> +++ b/drivers/gpio/gpio-eic-sprd.c
+> @@ -91,7 +91,6 @@ enum sprd_eic_type {
+>   
+>   struct sprd_eic {
+>   	struct gpio_chip chip;
+> -	struct irq_chip intc;
+>   	void __iomem *base[SPRD_EIC_MAX_BANK];
+>   	enum sprd_eic_type type;
+>   	spinlock_t lock;
+> @@ -255,6 +254,8 @@ static void sprd_eic_irq_mask(struct irq_data *data)
+>   	default:
+>   		dev_err(chip->parent, "Unsupported EIC type.\n");
+>   	}
 > +
-> +		if (!test_bit(xctrl->value, &mapping->menu_mask))
-> +			return -EINVAL;
+> +	gpiochip_disable_irq(chip, offset);
+>   }
+>   
+>   static void sprd_eic_irq_unmask(struct irq_data *data)
+> @@ -263,6 +264,8 @@ static void sprd_eic_irq_unmask(struct irq_data *data)
+>   	struct sprd_eic *sprd_eic = gpiochip_get_data(chip);
+>   	u32 offset = irqd_to_hwirq(data);
+>   
+> +	gpiochip_enable_irq(chip, offset);
 > +
->  		value = mapping->menu_info[xctrl->value].value;
->  
->  		/*
-> @@ -2301,7 +2311,7 @@ static int __uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
->  
->  	INIT_LIST_HEAD(&map->ev_subs);
->  
-> -	size = sizeof(*mapping->menu_info) * mapping->menu_count;
-> +	size = sizeof(*mapping->menu_info) * fls(mapping->menu_mask);
->  	map->menu_info = kmemdup(mapping->menu_info, size, GFP_KERNEL);
->  	if (map->menu_info == NULL) {
->  		kfree(map->name);
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index 9c05776f11d1..abdb9ca7eed6 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -2675,7 +2675,7 @@ static const struct uvc_control_mapping uvc_ctrl_power_line_mapping_limited = {
->  	.v4l2_type	= V4L2_CTRL_TYPE_MENU,
->  	.data_type	= UVC_CTRL_DATA_TYPE_ENUM,
->  	.menu_info	= power_line_frequency_controls_limited,
-> -	.menu_count	= ARRAY_SIZE(power_line_frequency_controls_limited),
-> +	.menu_mask	= BIT_MASK(ARRAY_SIZE(power_line_frequency_controls_limited)),
+>   	switch (sprd_eic->type) {
+>   	case SPRD_EIC_DEBOUNCE:
+>   		sprd_eic_update(chip, offset, SPRD_EIC_DBNC_IE, 1);
+> @@ -564,6 +567,15 @@ static void sprd_eic_irq_handler(struct irq_desc *desc)
+>   	chained_irq_exit(ic, desc);
+>   }
+>   
+> +static const struct irq_chip sprd_eic_irq = {
+> +	.name		= "sprd-eic-gpio",
 
-Let's include linux/bits.h. Same in the next file. I'll fix this when
-applying the patch if there's no other need to submit a new version of
-the series.
+Should be "sprd-eic". Otherwise looks good to me.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  };
->  
->  static const struct uvc_device_info uvc_ctrl_power_line_limited = {
-> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-> index d95168cdc2d1..e6792fd46bf5 100644
-> --- a/drivers/media/usb/uvc/uvc_v4l2.c
-> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
-> @@ -80,7 +80,7 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
->  			goto free_map;
->  		}
->  
-> -		map->menu_count = xmap->menu_count;
-> +		map->menu_mask = BIT_MASK(xmap->menu_count);
->  		break;
->  
->  	default:
-> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
-> index 644d5fcf2eef..7e2339fc256e 100644
-> --- a/drivers/media/usb/uvc/uvcvideo.h
-> +++ b/drivers/media/usb/uvc/uvcvideo.h
-> @@ -255,7 +255,7 @@ struct uvc_control_mapping {
->  	u32 data_type;
->  
->  	const struct uvc_menu_info *menu_info;
-> -	u32 menu_count;
-> +	unsigned long menu_mask;
->  
->  	u32 master_id;
->  	s32 master_manual;
-> 
-
--- 
-Regards,
-
-Laurent Pinchart
+> +	.irq_ack	= sprd_eic_irq_ack,
+> +	.irq_mask	= sprd_eic_irq_mask,
+> +	.irq_unmask	= sprd_eic_irq_unmask,
+> +	.irq_set_type	= sprd_eic_irq_set_type,
+> +	.flags		= IRQCHIP_SKIP_SET_WAKE | IRQCHIP_IMMUTABLE,
+> +	GPIOCHIP_IRQ_RESOURCE_HELPERS,
+> +};
+>   static int sprd_eic_probe(struct platform_device *pdev)
+>   {
+>   	const struct sprd_eic_variant_data *pdata;
+> @@ -626,15 +638,8 @@ static int sprd_eic_probe(struct platform_device *pdev)
+>   		break;
+>   	}
+>   
+> -	sprd_eic->intc.name = dev_name(&pdev->dev);
+> -	sprd_eic->intc.irq_ack = sprd_eic_irq_ack;
+> -	sprd_eic->intc.irq_mask = sprd_eic_irq_mask;
+> -	sprd_eic->intc.irq_unmask = sprd_eic_irq_unmask;
+> -	sprd_eic->intc.irq_set_type = sprd_eic_irq_set_type;
+> -	sprd_eic->intc.flags = IRQCHIP_SKIP_SET_WAKE;
+> -
+>   	irq = &sprd_eic->chip.irq;
+> -	irq->chip = &sprd_eic->intc;
+> +	gpio_irq_chip_set_chip(irq, &sprd_eic_irq);
+>   	irq->handler = handle_bad_irq;
+>   	irq->default_type = IRQ_TYPE_NONE;
+>   	irq->parent_handler = sprd_eic_irq_handler;
