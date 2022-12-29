@@ -2,152 +2,503 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBFE659048
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA6D65905D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 19:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbiL2SX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 13:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S234030AbiL2SZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 13:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbiL2SXX (ORCPT
+        with ESMTP id S234022AbiL2SYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 13:23:23 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6047613FAF;
-        Thu, 29 Dec 2022 10:23:19 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso3546641wmq.1;
-        Thu, 29 Dec 2022 10:23:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/MTMhs2bRE0tnfF4cPhkn8pKgJ/TVN539Wzurs/nPN4=;
-        b=kMKQXk6elGJ/w8abYvDklu3L3ZbUyVez6w9S3r23QALsFhY7YewVKy2hU73hSTAyPg
-         nBSI0Kil9UDQeZH0uBw4imxDBMnf6SmJLb3G/iG0eqoIwNkOc6i9CA9KYoDfocJ3CCHt
-         mMeS4m6KCY+K80jq810lthGtoVojAdmHfMyppVvE8JKuwN+nJd16pLAbQPnvpMRRb4m+
-         PynzmH4gIQ7h6v81xU5Jy9rYdBTEyG1FRH7riYLQKa2GntkzJBCVWlqqMkfF6iH+/tlu
-         tsjHDhFdJu1sa4vLHIzTB1NcG16ost13lx3hoVEvHfyVli4jivPQN9SQmPkZaP8dU2rR
-         zeYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/MTMhs2bRE0tnfF4cPhkn8pKgJ/TVN539Wzurs/nPN4=;
-        b=YhfGnl+uvMm5gUZABGdoLQaiZktLy478pmj/ALDCiSKAOcbctq97EM9cRc9Y+supex
-         qDvkIZQiywbQEto/lWkJYTfJ2OlG0eZC3mC2aU6IOa71RadUoWhz3ZUdEB4abyv0ZgeC
-         IDxUE7p/7vwd1O8wKyVM/HIV03l0JsiLQG8cpCz1iMldM1ENo3mHonhny4Yg2IGomgLE
-         dPqM9RqJqhVp+rOZ7usHwqeHIeMRCB88JTSmPmVBuVARTm73nQj+09W4/Jjzevc9B+FV
-         IBhF4bHItxJ1JjlkwfhkMHfkRzqc3LZtjb3ZJENloAItqjM7TMn51XK4ywRHST5kGkA7
-         y1Hg==
-X-Gm-Message-State: AFqh2kpsRJZWciAKNXZ1Qy9wb/jIQKDx0aNgNR3UzknsKzZVQkapPDb1
-        borwRBxBWaFwkvRnb4eCdyVr27Hv9z0=
-X-Google-Smtp-Source: AMrXdXtl1SqJ3LnxKAN/sV2iFfa1Rj2w5UqgI4vLFh+ROL9mNpn5r1tEtPqpPTgeMUvY9GknHMrj+Q==
-X-Received: by 2002:a05:600c:2207:b0:3d2:24d2:d02b with SMTP id z7-20020a05600c220700b003d224d2d02bmr21127467wml.29.1672338197784;
-        Thu, 29 Dec 2022 10:23:17 -0800 (PST)
-Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id l42-20020a05600c1d2a00b003d23928b654sm33523421wms.11.2022.12.29.10.23.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 10:23:17 -0800 (PST)
-Message-ID: <8c4826ea5698e4e1b2910f5b01e66a41970a8053.camel@gmail.com>
-Subject: Re: [PATCH v2 3/5] iio: pressure: bmp280: Add support for new
- sensor BMP580
-From:   Angel Iglesias <ang.iglesiasg@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     ak@it-klinger.de, andriy.shevchenko@linux.intel.com,
-        devicetree@vger.kernel.org, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lars@metafoo.de,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nikita.yoush@cogentembedded.com, paul@crapouillou.net,
-        rafael.j.wysocki@intel.com, robh+dt@kernel.org,
-        ulf.hansson@linaro.org
-Date:   Thu, 29 Dec 2022 19:23:16 +0100
-In-Reply-To: <d0e98b2d-1c00-b7cc-d0b3-4477e27cf822@wanadoo.fr>
-References: <cover.1672062380.git.ang.iglesiasg@gmail.com>
-         <c053976f56c3810915ca2ead6c358b5997b782e5.1672062380.git.ang.iglesiasg@gmail.com>
-         <d0e98b2d-1c00-b7cc-d0b3-4477e27cf822@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (by Flathub.org) 
+        Thu, 29 Dec 2022 13:24:43 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1039D13F91;
+        Thu, 29 Dec 2022 10:24:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672338276; x=1703874276;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=j6AdErddOqC871Dsa7UuMSnZAJkrT4w35N5022AWvYU=;
+  b=QmJ+oCm0F+u2XYmkHDWWpAspxgZSDYRcndhLD1U0L8/NnIqG5KmivaU3
+   kgJps3i45qFF2Md/23y7+Iqln/oRF3xU7Ui5Vx0pGW59zpJjGItp1TGYQ
+   bokiJFNVzCQPWPi8FzHBLKmS20h6XH/XrjUB1N8ovmHScLi06AODQSzbF
+   9MmRd48CYmPQimD5+giGuqCP/3PzkwbzPhFmyp1wQdg6DLXxCNKokO3Vg
+   QBhsQIA4U88qReReP/1+5jgXAwZS8viRmAg+HFlP7JDSvaBPYXEt9zDVX
+   0U94Ea67zTdR0WJYwrJKLmKxQEIwfEKGQ+Xd/wnCj3h/lxj7Cf3c4H+GW
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="308849845"
+X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
+   d="scan'208";a="308849845"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 10:24:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="899053757"
+X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
+   d="scan'208";a="899053757"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 10:24:36 -0800
+Date:   Thu, 29 Dec 2022 10:25:01 -0800 (PST)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Tom Rix <trix@redhat.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tianfei.zhang@intel.com,
+        corbet@lwn.net, gregkh@linuxfoundation.org,
+        linux-serial@vger.kernel.org, jirislaby@kernel.org,
+        geert+renesas@glider.be, andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com, bagasdotme@gmail.com
+Subject: Re: [PATCH v8 3/4] fpga: dfl: add basic support for DFHv1
+In-Reply-To: <628c125a-5a84-e1bd-7724-2637315cc35e@redhat.com>
+Message-ID: <alpine.DEB.2.22.394.2212290940590.1857691@rhweight-WRK1>
+References: <20221228181624.1793433-1-matthew.gerlach@linux.intel.com> <20221228181624.1793433-4-matthew.gerlach@linux.intel.com> <628c125a-5a84-e1bd-7724-2637315cc35e@redhat.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323328-611982471-1672338303=:1857691"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-29 at 18:35 +0100, Christophe JAILLET wrote:
-> Le 26/12/2022 =C3=A0 15:29, Angel Iglesias a =C3=A9crit=C2=A0:
-> > Adds compatibility with the new sensor generation, the BMP580.
-> >=20
-> > The measurement and initialization codepaths are adapted from
-> > the device datasheet and the repository from manufacturer at
-> > https://github.com/boschsensortec/BMP5-Sensor-API.
-> >=20
-> > Signed-off-by: Angel Iglesias
-> > <ang.iglesiasg-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> >=20
->=20
-> [...]
->=20
-> > diff --git a/drivers/iio/pressure/bmp280.h b/drivers/iio/pressure/bmp28=
-0.h
-> > index efc31bc84708..27d2abc17d01 100644
-> > --- a/drivers/iio/pressure/bmp280.h
-> > +++ b/drivers/iio/pressure/bmp280.h
->=20
-> [...]
->=20
-> > +#define BMP580_CHIP_ID=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A00x50
-> > =C2=A0 #define BMP380_CHIP_ID=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A00x50
->=20
-> Hi,
->=20
-> this is maybe correct (I've not been able to find the datasheet to check=
-=20
-> myself), but it looks odd to have the same ID for 2 different chips.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Yes, I also couldn't find a datasheet for the BMP580 or a devkit anywhere. =
-I'm
-developing this using the BMP581, which seems to be a variant almost identi=
-cal.
-Something similar happened with the BMP38x; you could find the BMP384 and t=
-he
-BMP388, but the BMP380 was unavailable everywhere, datasheet included. My g=
-uess
-is this is a similar situation. In any case, the datasheet of the BMP581 is
-available here:
-https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/b=
-st-bmp581-ds004.pdf
+--8323328-611982471-1672338303=:1857691
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-Regarding the chip id being the same between generations is weird, but at l=
-east
-the datasheet and the sensor I have uses 0x50 as the chip id. After you
-mentioned this, I checked back on the reference API repository from Bosch a=
-nd it
-has both 0x50 and 0x51 as valid IDs:
-* https://github.com/boschsensortec/BMP5-Sensor-API/blob/master/bmp5_defs.h=
-#L198
-* https://github.com/boschsensortec/BMP5-Sensor-API/blob/master/bmp5.c#L144=
-4
 
-Angel
 
-> CJ
->=20
-> > =C2=A0 #define BMP180_CHIP_ID=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A00x55
-> > =C2=A0 #define BMP280_CHIP_ID=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A00x58
->=20
+On Thu, 29 Dec 2022, Tom Rix wrote:
 
+> On 12/28/22 10:16 AM, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> 
+>> +
+>> +	while (params < end) {
+>> +		v = *params;
+>> +		if (param_id == FIELD_GET(DFHv1_PARAM_HDR_ID, v))
+>> +			return params;
+>> +
+>> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+>> +		params += next;
+>> +		if (FIELD_GET(DFHv1_PARAM_HDR_NEXT_EOP, v))
+>> +			break;
+> Move before next =, and save some work calculating unsed next
+
+Thanks for the suggestion.  Yes, the change will save some work, and the 
+code will look better.
+
+>> +	}
+>> +
+>> +	return NULL;
+>> +}
+>> +
+>> +/**
+>> + * dfh_find_param() - find parameter block for the given parameter id
+>> + * @dfl_dev: dfl device
+>> + * @param: id of dfl parameter
+>> + *
+>> + * Return: pointer to start of parameter block, NULL otherwise.
+>> + */
+>> +u64 *dfh_find_param(struct dfl_device *dfl_dev, int param_id)
+>> +{
+>> +	return find_param(dfl_dev->params, dfl_dev->param_size, param_id);
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfh_find_param);
+>
+> This and similar should be noop's for dfh v0
+>
+> Generally there should be better checking if code is running a v1 vs  v0 
+> header.
+
+With v0, dfl_dev->params will be NULL and dfl_dev->param_size will be 
+zero. Earlier feedback suggested to use the internal NULL/size checking 
+instead of adding redundant checks.
+
+>
+>> +
+>> +/**
+>> + * dfh_get_u64_param_vals() - get array of u64 param values for given 
+>> parameter id
+>> + * @dfl_dev: dfl device
+>> + * @param: id of dfl parameter
+>> + * @pval: location of parameter data destination
+>> + * @nvals: number of u64 elements of parameter data
+>> + *
+>> + * Return: pointer to start of parameter block, PTR_ERR otherwise
+>> + */
+>> +u64 *dfh_get_u64_param_vals(struct dfl_device *dfl_dev, int param_id, u64 
+>> *pval, int nvals)
+> nvals should be unsigned
+>> +{
+>> +	u64 *param = find_param(dfl_dev->params, dfl_dev->param_size, 
+>> param_id);
+>> +	u64 next;
+>> +	int i;
+>> +
+>> +	if (!param)
+>> +		return ERR_PTR(-ENOENT);
+>> +
+>> +	next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, *param);
+>> +
+>> +	if (nvals >= next)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	for (i = 0; i < nvals; i++)
+>> +		*pval++ = param[i + 1];
+> memcpy ?
+
+Yes, memcpy would be better.
+
+>> +
+>> +	return param;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dfh_get_u64_param_vals);
+>> +
+>>   static int parse_feature_irqs(struct build_feature_devs_info *binfo,
+>> -			      resource_size_t ofst, u16 fid,
+>> -			      unsigned int *irq_base, unsigned int *nr_irqs)
+>> +			      resource_size_t ofst, struct dfl_feature_info 
+>> *finfo)
+>>   {
+>>   	void __iomem *base = binfo->ioaddr + ofst;
+>>   	unsigned int i, ibase, inr = 0;
+>> +	void *params = finfo->params;
+>>   	enum dfl_id_type type;
+>> +	u16 fid = finfo->fid;
+>>   	int virq;
+>> +	u64 *p;
+>>   	u64 v;
+>>   -	type = feature_dev_id_type(binfo->feature_dev);
+>> +	switch (finfo->dfh_version) {
+>> +	case 0:
+>
+> A switch makes this code complicated to read.
+
+Previous feedback suggested a switch statement better than if/else.
+
+>
+> Have you thought about a function pointer table to separate out similar v1 vs 
+> v0 code blocks?
+
+I haven't though of a function pointer table, and I'm not sure how much 
+clearer it would be, but I'll consider it.
+
+>
+>> +		/*
+>> +		 * DFHv0 only provides MMIO resource information for each 
+>> feature
+>> +		 * in the DFL header.  There is no generic interrupt 
+>> information.
+>> +		 * Instead, features with interrupt functionality provide
+>> +		 * the information in feature specific registers.
+>> +		 */
+>> +		type = feature_dev_id_type(binfo->feature_dev);
+>> +		if (type == PORT_ID) {
+>> +			switch (fid) {
+>> +			case PORT_FEATURE_ID_UINT:
+>> +				v = readq(base + PORT_UINT_CAP);
+>> +				ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
+>> +				inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
+>> +				break;
+>> +			case PORT_FEATURE_ID_ERROR:
+>> +				v = readq(base + PORT_ERROR_CAP);
+>> +				ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, 
+>> v);
+>> +				inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
+>> +				break;
+>> +			}
+>> +		} else if (type == FME_ID) {
+>> +			switch (fid) {
+>> +			case FME_FEATURE_ID_GLOBAL_ERR:
+>> +				v = readq(base + FME_ERROR_CAP);
+>> +				ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
+>> +				inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
+>> +				break;
+>> +			}
+>> +		}
+>> +		break;
+>>   -	/*
+>> -	 * Ideally DFL framework should only read info from DFL header, but
+>> -	 * current version DFL only provides mmio resources information for
+>> -	 * each feature in DFL Header, no field for interrupt resources.
+>> -	 * Interrupt resource information is provided by specific mmio
+>> -	 * registers of each private feature which supports interrupt. So in
+>> -	 * order to parse and assign irq resources, DFL framework has to look
+>> -	 * into specific capability registers of these private features.
+>> -	 *
+>> -	 * Once future DFL version supports generic interrupt resource
+>> -	 * information in common DFL headers, the generic interrupt parsing
+>> -	 * code will be added. But in order to be compatible to old version
+>> -	 * DFL, the driver may still fall back to these quirks.
+>> -	 */
+>> -	if (type == PORT_ID) {
+>> -		switch (fid) {
+>> -		case PORT_FEATURE_ID_UINT:
+>> -			v = readq(base + PORT_UINT_CAP);
+>> -			ibase = FIELD_GET(PORT_UINT_CAP_FST_VECT, v);
+>> -			inr = FIELD_GET(PORT_UINT_CAP_INT_NUM, v);
+>> -			break;
+>> -		case PORT_FEATURE_ID_ERROR:
+>> -			v = readq(base + PORT_ERROR_CAP);
+>> -			ibase = FIELD_GET(PORT_ERROR_CAP_INT_VECT, v);
+>> -			inr = FIELD_GET(PORT_ERROR_CAP_SUPP_INT, v);
+>> +	case 1:
+>> +		/*
+>> +		 * DFHv1 provides interrupt resource information in DFHv1
+>> +		 * parameter blocks.
+>> +		 */
+>> +		p = find_param(params, finfo->param_size, 
+>> DFHv1_PARAM_ID_MSI_X);
+>> +		if (!p)
+>>   			break;
+>> -		}
+>> -	} else if (type == FME_ID) {
+>> -		if (fid == FME_FEATURE_ID_GLOBAL_ERR) {
+>> -			v = readq(base + FME_ERROR_CAP);
+>> -			ibase = FIELD_GET(FME_ERROR_CAP_INT_VECT, v);
+>> -			inr = FIELD_GET(FME_ERROR_CAP_SUPP_INT, v);
+>> -		}
+>> +
+>> +		p++;
+>> +		ibase = FIELD_GET(DFHv1_PARAM_MSI_X_STARTV, *p);
+>> +		inr = FIELD_GET(DFHv1_PARAM_MSI_X_NUMV, *p);
+>> +		break;
+>> +
+>> +	default:
+>> +		dev_warn(binfo->dev, "unexpected DFH version %d\n", 
+>> finfo->dfh_version);
+>> +		break;
+>>   	}
+>>     	if (!inr) {
+>> -		*irq_base = 0;
+>> -		*nr_irqs = 0;
+>> +		finfo->irq_base = 0;
+>> +		finfo->nr_irqs = 0;
+>>   		return 0;
+>>   	}
+>>   @@ -1006,12 +1114,37 @@ static int parse_feature_irqs(struct 
+>> build_feature_devs_info *binfo,
+>>   		}
+>>   	}
+>>   -	*irq_base = ibase;
+>> -	*nr_irqs = inr;
+>> +	finfo->irq_base = ibase;
+>> +	finfo->nr_irqs = inr;
+>>     	return 0;
+>>   }
+>>   +static int dfh_get_psize(void __iomem *dfh_base, resource_size_t max)
+> for clarity, psize should be expanded to param_size
+
+s/psize/param_size would be clearer and more consistent.
+
+>> +{
+>> +	int size = 0;
+>> +	u64 v, next;
+>> +
+>> +	if (!FIELD_GET(DFHv1_CSR_SIZE_GRP_HAS_PARAMS,
+>> +		       readq(dfh_base + DFHv1_CSR_SIZE_GRP)))
+>> +		return 0;
+>> +
+>> +	while (size + DFHv1_PARAM_HDR < max) {
+>> +		v = readq(dfh_base + DFHv1_PARAM_HDR + size);
+>> +
+>> +		next = FIELD_GET(DFHv1_PARAM_HDR_NEXT_OFFSET, v);
+>> +		if (!next)
+>> +			return -EINVAL;
+>> +
+>> +		size += next * sizeof(u64);
+>> +
+>> +		if (FIELD_GET(DFHv1_PARAM_HDR_NEXT_EOP, v))
+>> +			return size;
+>> +	}
+>> +
+>> +	return -ENOENT;
+>> +}
+>> +
+>>   /*
+>>    * when create sub feature instances, for private features, it doesn't 
+>> need
+>>    * to provide resource size and feature id as they could be read from DFH
+>> @@ -1023,39 +1156,69 @@ static int
+>>   create_feature_instance(struct build_feature_devs_info *binfo,
+>>   			resource_size_t ofst, resource_size_t size, u16 fid)
+>>   {
+>> -	unsigned int irq_base, nr_irqs;
+>>   	struct dfl_feature_info *finfo;
+>> +	resource_size_t start, end;
+>> +	int dfh_psize = 0;
+>>   	u8 revision = 0;
+>> +	u64 v, addr_off;
+>> +	u8 dfh_ver = 0;
+>>   	int ret;
+>> -	u64 v;
+>>     	if (fid != FEATURE_ID_AFU) {
+>>   		v = readq(binfo->ioaddr + ofst);
+>>   		revision = FIELD_GET(DFH_REVISION, v);
+>> -
+>> +		dfh_ver = FIELD_GET(DFH_VERSION, v);
+>>   		/* read feature size and id if inputs are invalid */
+>>   		size = size ? size : feature_size(v);
+>>   		fid = fid ? fid : feature_id(v);
+>> +		if (dfh_ver == 1) {
+>> +			dfh_psize = dfh_get_psize(binfo->ioaddr + ofst, 
+>> size);
+>> +			if (dfh_psize < 0) {
+>> +				dev_err(binfo->dev,
+>> +					"failed to read size of DFHv1 
+>> parameters %d\n",
+>> +					dfh_psize);
+>> +				return dfh_psize;
+>> +			}
+>> +			dev_dbg(binfo->dev, "dfhv1_psize %d\n", dfh_psize);
+>> +		}
+>>   	}
+>>     	if (binfo->len - ofst < size)
+>>   		return -EINVAL;
+>>   -	ret = parse_feature_irqs(binfo, ofst, fid, &irq_base, &nr_irqs);
+>> -	if (ret)
+>> -		return ret;
+>> -
+>> -	finfo = kzalloc(sizeof(*finfo), GFP_KERNEL);
+>> +	finfo = kzalloc(struct_size(finfo, params, dfh_psize/sizeof(u64)), 
+>> GFP_KERNEL);
+>>   	if (!finfo)
+>>   		return -ENOMEM;
+>>   +	memcpy_fromio(finfo->params, binfo->ioaddr + ofst + DFHv1_PARAM_HDR, 
+>> dfh_psize);
+>> +	finfo->param_size = dfh_psize;
+>> +
+>>   	finfo->fid = fid;
+>>   	finfo->revision = revision;
+>> -	finfo->mmio_res.start = binfo->start + ofst;
+>> -	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>> +	finfo->dfh_version = dfh_ver;
+>> +	if (dfh_ver == 1) {
+>> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_ADDR);
+>> +		addr_off = FIELD_GET(DFHv1_CSR_ADDR_MASK, v);
+>> +		if (FIELD_GET(DFHv1_CSR_ADDR_REL, v))
+>> +			start = addr_off << 1;
+>> +		else
+>> +			start = binfo->start + ofst + addr_off;
+>> +
+>> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_SIZE_GRP);
+>> +		end = start + FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v) - 1;
+>> +	} else {
+>> +		start = binfo->start + ofst;
+>> +		end = start + size - 1;
+>> +	}
+>>   	finfo->mmio_res.flags = IORESOURCE_MEM;
+>> -	finfo->irq_base = irq_base;
+>> -	finfo->nr_irqs = nr_irqs;
+>> +	finfo->mmio_res.start = start;
+>> +	finfo->mmio_res.end = end;
+>> +
+>> +	ret = parse_feature_irqs(binfo, ofst, finfo);
+>> +	if (ret) {
+>> +		kfree(finfo);
+>> +		return ret;
+>> +	}
+>>     	list_add_tail(&finfo->node, &binfo->sub_features);
+>>   	binfo->feature_num++;
+>> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
+>> index fc59f33367ee..a21065cec04e 100644
+>> --- a/drivers/fpga/dfl.h
+>> +++ b/drivers/fpga/dfl.h
+>> @@ -111,6 +111,10 @@
+>>   #define DFHv1_PARAM_HDR_NEXT_EOP	BIT_ULL(32)
+>>   #define DFHv1_PARAM_DATA		0x08  /* Offset of Param data from 
+>> Param header */
+>>   +#define DFHv1_PARAM_ID_MSI_X		0x1
+>> +#define DFHv1_PARAM_MSI_X_NUMV		GENMASK_ULL(63, 32)
+>> +#define DFHv1_PARAM_MSI_X_STARTV	GENMASK_ULL(31, 0)
+>> +
+>>   /* Next AFU Register Bitfield */
+>>   #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to 
+>> next AFU */
+>>   @@ -272,11 +276,14 @@ struct dfl_feature_irq_ctx {
+>>    * @ops: ops of this sub feature.
+>>    * @ddev: ptr to the dfl device of this sub feature.
+>>    * @priv: priv data of this feature.
+>> + * @param_size: size of dfh parameters
+>> + * @params: point to memory copy of dfh parameters
+>>    */
+>>   struct dfl_feature {
+>>   	struct platform_device *dev;
+>>   	u16 id;
+>>   	u8 revision;
+>> +	u8 dfh_version;
+>
+> Needs a description in the comments above.
+
+Thanks for catching that.
+
+>
+> I am concerned generally about backward compatibility and oot drivers that 
+> are dfh v0.
+
+I agree it would be much safter to add the new fields to the end of the 
+structure for compatibility reasons. I will do this for struct dfl_device 
+as well.
+
+Thanks for the review,
+Matthew Gerlach
+
+
+>
+> Adding an element in the middle will break things.
+>
+> These structures could be more explicit about what is common, and what is v0 
+> and v1 specific.
+>
+> Tom
+>
+>>   	int resource_index;
+>>   	void __iomem *ioaddr;
+>>   	struct dfl_feature_irq_ctx *irq_ctx;
+>> @@ -284,6 +291,8 @@ struct dfl_feature {
+>>   	const struct dfl_feature_ops *ops;
+>>   	struct dfl_device *ddev;
+>>   	void *priv;
+>> +	unsigned int param_size;
+>> +	void *params;
+>>   };
+>>     #define FEATURE_DEV_ID_UNUSED	(-1)
+>> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
+>> index 431636a0dc78..3138ea42d02e 100644
+>> --- a/include/linux/dfl.h
+>> +++ b/include/linux/dfl.h
+>> @@ -39,9 +39,12 @@ struct dfl_device {
+>>   	u16 type;
+>>   	u16 feature_id;
+>>   	u8 revision;
+>> +	u8 dfh_version;
+>>   	struct resource mmio_res;
+>>   	int *irqs;
+>>   	unsigned int num_irqs;
+>> +	unsigned int param_size;
+>> +	void *params;
+>>   	struct dfl_fpga_cdev *cdev;
+>>   	const struct dfl_device_id *id_entry;
+>>   };
+>> @@ -84,4 +87,7 @@ void dfl_driver_unregister(struct dfl_driver *dfl_drv);
+>>   	module_driver(__dfl_driver, dfl_driver_register, \
+>>   		      dfl_driver_unregister)
+>>   +u64 *dfh_find_param(struct dfl_device *dfl_dev, int param);
+>> +
+>> +u64 *dfh_get_u64_param_vals(struct dfl_device *dfl_dev, int param_id, u64 
+>> *pval, int nvals);
+>>   #endif /* __LINUX_DFL_H */
+>
+>
+--8323328-611982471-1672338303=:1857691--
