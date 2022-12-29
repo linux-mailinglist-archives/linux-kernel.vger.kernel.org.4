@@ -2,181 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E703658FE3
+	by mail.lfdr.de (Postfix) with ESMTP id 00EA8658FE2
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233942AbiL2Rbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 12:31:48 -0500
+        id S234112AbiL2RcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:32:15 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbiL2RbS (ORCPT
+        with ESMTP id S233912AbiL2Rb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 12:31:18 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032E314D19
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 09:31:16 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id i127so17646769oif.8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 09:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NJCXUXY/M8fTwQQAdzuC6CJTX/+lXiGdvSWxvK5G6oA=;
-        b=WKZIfZNz9UKJkJ+ocpI1xexXH07sw2P3f7WU9Ir50CBc32zAlHh+SkNDRzlF9SSgWo
-         RlN0i7HCiy+GdOL58Zxc1c5OuyPStHLJYsJFFJkPqkLkISnxpuoHhydccPpMCpkeVL2J
-         pXK48VH6n5Sug61DnBSQ71+CkC0/IxZxXaNuBuNkb0hSTwIkBqKolyI307YYSGOe2hhb
-         yluu9wuElKnfK7LrBejgiPIo9J7BT5bFB/FHkAGOKeDmfeoqUacKeUNV3Tc//2R02IGv
-         6StasNqLXd2xih4D/ujoXAAJw7F1DH23xr81arzoDispPWa9w2PFZODJETqFZnWt5xU9
-         sK6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NJCXUXY/M8fTwQQAdzuC6CJTX/+lXiGdvSWxvK5G6oA=;
-        b=EUgr/348tGHlmhVeAJcg7WmQPrCHw6Q76w0z8f66BP6qQ7ge22Utxer8gk4b5NXRF3
-         TNoBOJBN9uXE/R6yBnkjS00gSJ1S+dsOjrwYmDBmCH4TRHMtvJt++gLPIZF0jhH8rGFH
-         Gq22a8Y1jcYZIwQaHliGWivagj19m092GaHAnklQhcZPv7/HejMtTMjRzvstOX4r6Vk4
-         puiK05NOCyj5WCNd9cF17cv03J4UBI7MpnM1Hq7Vi0o1Q6hZXRiGVxJ+BeA9YjlKjZJj
-         60EBCb3sGGzwuTo9f/hP4euqobnJI20APv1h28C0m2iR9obetff3+Yk2CK5JUjIWvzBn
-         soyg==
-X-Gm-Message-State: AFqh2ko+x4LXObrvItXh1hwdl0DmhU+/l9iG783YruPtnnJojGEL9zw8
-        zB/nxf1aT5w0jf+Qu3qIEdRzSpRjxWYIcXQhaOk=
-X-Google-Smtp-Source: AMrXdXvp283pf5WoH/3pj/+GlGfkAIOh/nwYkfc/HL9Vkid6wsHr7LAhQ9viUtuYtqwqumkJIaO5Tdp8p1Rq2NVDPGY=
-X-Received: by 2002:a05:6808:2994:b0:35b:f5f7:3ed0 with SMTP id
- ex20-20020a056808299400b0035bf5f73ed0mr1888175oib.46.1672335075214; Thu, 29
- Dec 2022 09:31:15 -0800 (PST)
+        Thu, 29 Dec 2022 12:31:26 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FC815813
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 09:31:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=O6Ikrs1CIxHfi8Ue6kwk76aDhiVwW97NYJ5AhQiikWY=; b=fZJ91ZHH4wjOdmJFKpknmM2JjI
+        ls0n0/1hxa4PVs+RaxBEjxjrk4pI42FWPiAnjtNaKauJuvjhv3Xa7M+buiGTIYLkoF9QItIdP+N3R
+        +Qqb3MWEu6NwN5QK8kLvrU0VRZd+T4/Yzu5S1NaHPEYCmplvs7+Vc4wuiLTGrtmTJy5SXLINYPOBt
+        muE8v74cPqxViZwA0t/J9AL3MJk11Kqp06oNSbfHirv8WqJKupT2QEZ6SSx7hFJuEm825pwiZKVtF
+        rnzyceNMthtUK9ir1LVYqnvCak6NLRNGKOLk5tRutpVoWpmWsvprSRQoFafG66UwygxMa/CBlq8Ny
+        h/Wo9xSw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pAwkN-00A11E-Ng; Thu, 29 Dec 2022 17:31:15 +0000
+Date:   Thu, 29 Dec 2022 17:31:15 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        liam.howlett@oracle.com, surenb@google.com, ldufour@linux.ibm.com,
+        michel@lespinasse.org, vbabka@suse.cz, linux-kernel@vger.kernel.org
+Subject: Re: [QUESTION] about the maple tree and current status of mmap_lock
+ scalability
+Message-ID: <Y63O4zYhhi3/zkF0@casper.infradead.org>
+References: <EC51CFA7-2BC8-4F72-A7D4-3B1A778EDB37@gmail.com>
+ <Y6ysHNPvKayTfeq8@casper.infradead.org>
+ <Y62ipKlWGEbJZKXv@hyeyoo>
+ <Y63FmaNoLAcdsLaU@casper.infradead.org>
+ <Y63KBNzdOkf3qmBX@murray>
 MIME-Version: 1.0
-References: <20221228163102.468-1-mario.limonciello@amd.com>
-In-Reply-To: <20221228163102.468-1-mario.limonciello@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 29 Dec 2022 12:31:03 -0500
-Message-ID: <CADnq5_NpLB5Nr_C5UN5UkJEo7E9=MBExmbhcTJHdjEuRSU8ccw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/11] Recover from failure to probe GPU
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org,
-        Carlos Soriano Sanchez <csoriano@redhat.com>,
-        christian.koenig@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y63KBNzdOkf3qmBX@murray>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patches 1-10 are:
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+On Thu, Dec 29, 2022 at 05:10:28PM +0000, Lorenzo Stoakes wrote:
+> On Thu, Dec 29, 2022 at 04:51:37PM +0000, Matthew Wilcox wrote:
+> > The mmap_lock is taken for many, many things.  [snip]
+> 
+> I am currently describing the use of this lock (for 6.0) in the book and it is
+> striking just how broadly it's used. I'm diagramming it out for 'core' users,
+> i.e. non-driver and non-some other things, but even constraining that leaves a
+> HUGE number of users.
 
-On Wed, Dec 28, 2022 at 11:31 AM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> One of the first thing that KMS drivers do during initialization is
-> destroy the system firmware framebuffer by means of
-> `drm_aperture_remove_conflicting_pci_framebuffers`
->
-> This means that if for any reason the GPU failed to probe the user
-> will be stuck with at best a screen frozen at the last thing that
-> was shown before the KMS driver continued it's probe.
->
-> The problem is most pronounced when new GPU support is introduced
-> because users will need to have a recent linux-firmware snapshot
-> on their system when they boot a kernel with matching support.
->
-> However the problem is further exaggerated in the case of amdgpu because
-> it has migrated to "IP discovery" where amdgpu will attempt to load
-> on "ALL" AMD GPUs even if the driver is missing support for IP blocks
-> contained in that GPU.
->
-> IP discovery requires some probing and isn't run until after the
-> framebuffer has been destroyed.
->
-> This means a situation can occur where a user purchases a new GPU not
-> yet supported by a distribution and when booting the installer it will
-> "freeze" even if the distribution doesn't have the matching kernel support
-> for those IP blocks.
->
-> The perfect example of this is Ubuntu 22.10 and the new dGPUs just
-> launched by AMD.  The installation media ships with kernel 5.19 (which
-> has IP discovery) but the amdgpu support for those IP blocks landed in
-> kernel 6.0. The matching linux-firmware was released after 22.10's launch.
-> The screen will freeze without nomodeset. Even if a user manages to install
-> and then upgrades to kernel 6.0 after install they'll still have the
-> problem of missing firmware, and the same experience.
->
-> This is quite jarring for users, particularly if they don't know
-> that they have to use "nomodeset" to install.
->
-> To help the situation make changes to GPU discovery:
-> 1) Delay releasing the firmware framebuffer until after IP discovery has
-> completed.  This will help the situation of an older kernel that doesn't
-> yet support the IP blocks probing a new GPU.
-> 2) Request loading all PSP, VCN, SDMA, MES and GC microcode into memory
-> during IP discovery. This will help the situation of new enough kernel for
-> the IP discovery phase to otherwise pass but missing microcode from
-> linux-firmware.git.
->
-> Not all requested firmware will be loaded during IP discovery as some of it
-> will require larger driver architecture changes. For example SMU firmware
-> isn't loaded on certain products, but that's not known until later on when
-> the early_init phase of the SMU load occurs.
->
-> v1->v2:
->  * Take the suggestion from v1 thread to delay the framebuffer release until
->    ip discovery is done. This patch is CC to stable to that older stable
->    kernels with IP discovery won't try to probe unknown IP.
->  * Drop changes to drm aperature.
->  * Fetch SDMA, VCN, MES, GC and PSP microcode during IP discovery.
->
-> Mario Limonciello (11):
->   drm/amd: Delay removal of the firmware framebuffer
->   drm/amd: Add a legacy mapping to "amdgpu_ucode_ip_version_decode"
->   drm/amd: Convert SMUv11 microcode init to use
->     `amdgpu_ucode_ip_version_decode`
->   drm/amd: Convert SMU v13 to use `amdgpu_ucode_ip_version_decode`
->   drm/amd: Request SDMA microcode during IP discovery
->   drm/amd: Request VCN microcode during IP discovery
->   drm/amd: Request MES microcode during IP discovery
->   drm/amd: Request GFX9 microcode during IP discovery
->   drm/amd: Request GFX10 microcode during IP discovery
->   drm/amd: Request GFX11 microcode during IP discovery
->   drm/amd: Request PSP microcode during IP discovery
->
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c    |   8 +
->  drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 590 +++++++++++++++++-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |   6 -
->  drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c       |   2 -
->  drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.c      |   9 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_sdma.h      |   2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ucode.c     | 208 ++++++
->  drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.c       |  85 +--
->  drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c        | 180 +-----
->  drivers/gpu/drm/amd/amdgpu/gfx_v11_0.c        |  64 +-
->  drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c         | 143 +----
->  drivers/gpu/drm/amd/amdgpu/mes_v10_1.c        |  28 -
->  drivers/gpu/drm/amd/amdgpu/mes_v11_0.c        |  25 +-
->  drivers/gpu/drm/amd/amdgpu/psp_v10_0.c        | 106 +---
->  drivers/gpu/drm/amd/amdgpu/psp_v11_0.c        | 165 +----
->  drivers/gpu/drm/amd/amdgpu/psp_v12_0.c        | 102 +--
->  drivers/gpu/drm/amd/amdgpu/psp_v13_0.c        |  82 ---
->  drivers/gpu/drm/amd/amdgpu/psp_v13_0_4.c      |  36 --
->  drivers/gpu/drm/amd/amdgpu/psp_v3_1.c         |  36 --
->  drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c        |  61 +-
->  drivers/gpu/drm/amd/amdgpu/sdma_v5_0.c        |  42 +-
->  drivers/gpu/drm/amd/amdgpu/sdma_v5_2.c        |  65 +-
->  drivers/gpu/drm/amd/amdgpu/sdma_v6_0.c        |  30 +-
->  .../gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c    |  35 +-
->  .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c    |  12 +-
->  25 files changed, 919 insertions(+), 1203 deletions(-)
->
->
-> base-commit: de9a71e391a92841582ca3008e7b127a0b8ccf41
-> --
-> 2.34.1
->
+I fear this would be overwhelming.  I don't think anybody would disagree
+that the mmap_lock needs to be split up like the BKL was, but we didn't
+do that by diagramming it out.  Instead, we introduced new smaller locks
+that protected much better-defined things until eventually we were able
+to kill the BKL entirely.
+
+That's what I'm trying to do here -- there is one well-defined thing
+that the maple tree lock will protect, and that's the structure of the
+maple tree.  It doesn't protect the data pointed to by the pointers
+stored in the tree, just the maple tree itself.
+
+> I've also documented the 'unexpected' uses of the
+> page_table_lock, which seems to have been significantly improved over time but
+> still a few cases remain!
+
+Now, I think this is useful.  There's probably few enough abuses of the
+PTL that my brain can wrap itself around which ones are legitimate and
+then deal with the inappropriate ones.
+
+> Am happy to give you (+ anybody else on MAINTAINERS list) an early copy of the
+> relevant bit (once I've finished the diagrams anyway) if that'd be helpful!
+
+I'm definitely interested in the PTL.  Thank you for the offer!
+
+> Now if you guys could stop obsoleting my work that'd be great ;)
+
+Never!  How else will you get interest in the Second Edition Covering
+Linux 7.0?  ;-)
