@@ -2,61 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD4B658880
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5030658883
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 03:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232883AbiL2CA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 21:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
+        id S232892AbiL2CGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 21:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiL2CAY (ORCPT
+        with ESMTP id S230083AbiL2CGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 21:00:24 -0500
-X-Greylist: delayed 467 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Dec 2022 18:00:11 PST
-Received: from mail4.tencent.com (mail12.tencent.com [61.241.47.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8051FBC9B;
-        Wed, 28 Dec 2022 18:00:11 -0800 (PST)
-Received: from EX-SZ018.tencent.com (unknown [10.28.6.39])
-        by mail4.tencent.com (Postfix) with ESMTP id 3B180BA31F;
-        Thu, 29 Dec 2022 09:52:22 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tencent.com;
-        s=s202002; t=1672278742;
-        bh=IT5RZfT5T334qVeq2A/RSbr1MuPROR0hLfXMCIZCR+o=;
-        h=From:To:CC:Subject:Date;
-        b=VAITQT+B4wjIJ24YQuIEAMVlpM2ZD9YsCynLp56lUHDiCXkrKEtN2ETo2u1xpogf8
-         SiHLYM11/MJ/JkDtGKkIkchBfhRb8s8DLML6LmyQo/NNUxswL6jtcuwwvWzy2lnnIo
-         V3MCzDygWV4cmSrGms2vRyYNFvWY034cjautQQ3c=
-Received: from EX-SZ052.tencent.com (10.28.6.108) by EX-SZ018.tencent.com
- (10.28.6.39) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Thu, 29 Dec
- 2022 09:52:22 +0800
-Received: from EX-SZ049.tencent.com (10.28.6.102) by EX-SZ052.tencent.com
- (10.28.6.108) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Thu, 29 Dec
- 2022 09:52:21 +0800
-Received: from EX-SZ049.tencent.com ([fe80::a50b:1c86:c1f2:8cf4]) by
- EX-SZ049.tencent.com ([fe80::a50b:1c86:c1f2:8cf4%8]) with mapi id
- 15.01.2242.008; Thu, 29 Dec 2022 09:52:21 +0800
-From:   =?utf-8?B?Zmx5aW5ncGVuZyjlva3mtakp?= <flyingpeng@tencent.com>
-To:     "pbonzini@redhat.com" <pbonzini@redhat.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [RESEND PATCH v2] KVM: use unified srcu interface function
-Thread-Topic: [RESEND PATCH v2] KVM: use unified srcu interface function
-Thread-Index: AQHZGygwmEDfKOhCQ02bKVr49C7THQ==
-Date:   Thu, 29 Dec 2022 01:52:21 +0000
-Message-ID: <C1483DFC-94D2-4515-95E5-FCEEC0B2A250@tencent.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.99.213.112]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D873D5F5A08BEB42B5C1EA4350589402@tencent.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SPF_HELO_TEMPERROR
+        Wed, 28 Dec 2022 21:06:16 -0500
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43393194;
+        Wed, 28 Dec 2022 18:06:14 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VYJPPK2_1672279570;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VYJPPK2_1672279570)
+          by smtp.aliyun-inc.com;
+          Thu, 29 Dec 2022 10:06:11 +0800
+Message-ID: <1672279315.3435805-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq command
+Date:   Thu, 29 Dec 2022 10:01:55 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, eperezma@redhat.com,
+        edumazet@google.com, maxime.coquelin@redhat.com, kuba@kernel.org,
+        pabeni@redhat.com, davem@davemloft.net, mst@redhat.com
+References: <20221226074908.8154-1-jasowang@redhat.com>
+ <20221226074908.8154-5-jasowang@redhat.com>
+ <1672107557.0142956-1-xuanzhuo@linux.alibaba.com>
+ <CACGkMEvzhAFj5HCmP--9DKfCAq_4wPNwsmmg4h0Sbv6ra0+DrQ@mail.gmail.com>
+ <1672216748.7057884-1-xuanzhuo@linux.alibaba.com>
+ <CACGkMEtr7r25s6Tgsj=fcw3MD3ShLmuuVHvx0WVNiQHyV_G=zw@mail.gmail.com>
+In-Reply-To: <CACGkMEtr7r25s6Tgsj=fcw3MD3ShLmuuVHvx0WVNiQHyV_G=zw@mail.gmail.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,31 +45,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-a3ZtLT5pcnFfcm91dGluZyBpcyBwcm90ZWN0ZWQgYnkga3ZtLT5pcnFfc3JjdS4NCg0KU2lnbmVk
-LW9mZi1ieTogUGVuZyBIYW8gPGZseWluZ3BlbmdAdGVuY2VudC5jb20+DQotLS0NCiB2aXJ0L2t2
-bS9pcnFjaGlwLmMgfCA5ICsrKysrKy0tLQ0KIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMo
-KyksIDMgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS92aXJ0L2t2bS9pcnFjaGlwLmMgYi92
-aXJ0L2t2bS9pcnFjaGlwLmMNCmluZGV4IDFlNTY3ZDFmNmQzZC4uZDNjY2ZlOTIyODgwIDEwMDY0
-NA0KLS0tIGEvdmlydC9rdm0vaXJxY2hpcC5jDQorKysgYi92aXJ0L2t2bS9pcnFjaGlwLmMNCkBA
-IC0xOCw2ICsxOCwxMCBAQA0KICNpbmNsdWRlIDxsaW51eC9leHBvcnQuaD4NCiAjaW5jbHVkZSA8
-dHJhY2UvZXZlbnRzL2t2bS5oPg0KDQorI2RlZmluZSBrdm1fZ2V0X2lycV9yb3V0aW5nKGt2bSkg
-XA0KKyAgICAgICBzcmN1X2RlcmVmZXJlbmNlX2NoZWNrKChrdm0pLT5pcnFfcm91dGluZywgJihr
-dm0pLT5pcnFfc3JjdSwgICAgXA0KKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBsb2Nr
-ZGVwX2lzX2hlbGQoJihrdm0pLT5pcnFfbG9jaykpDQorDQogaW50IGt2bV9pcnFfbWFwX2dzaShz
-dHJ1Y3Qga3ZtICprdm0sDQogICAgICAgICAgICAgICAgICAgIHN0cnVjdCBrdm1fa2VybmVsX2ly
-cV9yb3V0aW5nX2VudHJ5ICplbnRyaWVzLCBpbnQgZ3NpKQ0KIHsNCkBAIC0yNSw4ICsyOSw3IEBA
-IGludCBrdm1faXJxX21hcF9nc2koc3RydWN0IGt2bSAqa3ZtLA0KICAgICAgICBzdHJ1Y3Qga3Zt
-X2tlcm5lbF9pcnFfcm91dGluZ19lbnRyeSAqZTsNCiAgICAgICAgaW50IG4gPSAwOw0KDQotICAg
-ICAgIGlycV9ydCA9IHNyY3VfZGVyZWZlcmVuY2VfY2hlY2soa3ZtLT5pcnFfcm91dGluZywgJmt2
-bS0+aXJxX3NyY3UsDQotICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbG9j
-a2RlcF9pc19oZWxkKCZrdm0tPmlycV9sb2NrKSk7DQorICAgICAgIGlycV9ydCA9IGt2bV9nZXRf
-aXJxX3JvdXRpbmcoa3ZtKTsNCiAgICAgICAgaWYgKGlycV9ydCAmJiBnc2kgPCBpcnFfcnQtPm5y
-X3J0X2VudHJpZXMpIHsNCiAgICAgICAgICAgICAgICBobGlzdF9mb3JfZWFjaF9lbnRyeShlLCAm
-aXJxX3J0LT5tYXBbZ3NpXSwgbGluaykgew0KICAgICAgICAgICAgICAgICAgICAgICAgZW50cmll
-c1tuXSA9ICplOw0KQEAgLTIxNiw3ICsyMTksNyBAQCBpbnQga3ZtX3NldF9pcnFfcm91dGluZyhz
-dHJ1Y3Qga3ZtICprdm0sDQogICAgICAgIH0NCg0KICAgICAgICBtdXRleF9sb2NrKCZrdm0tPmly
-cV9sb2NrKTsNCi0gICAgICAgb2xkID0gcmN1X2RlcmVmZXJlbmNlX3Byb3RlY3RlZChrdm0tPmly
-cV9yb3V0aW5nLCAxKTsNCisgICAgICAgb2xkID0ga3ZtX2dldF9pcnFfcm91dGluZyhrdm0pOw0K
-ICAgICAgICByY3VfYXNzaWduX3BvaW50ZXIoa3ZtLT5pcnFfcm91dGluZywgbmV3KTsNCiAgICAg
-ICAga3ZtX2lycV9yb3V0aW5nX3VwZGF0ZShrdm0pOw0KICAgICAgICBrdm1fYXJjaF9pcnFfcm91
-dGluZ191cGRhdGUoa3ZtKTsNCi0tDQoyLjI3LjANCg0K
+On Wed, 28 Dec 2022 19:43:56 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> On Wed, Dec 28, 2022 at 4:40 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> >
+> > On Tue, 27 Dec 2022 12:33:53 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> > > On Tue, Dec 27, 2022 at 10:25 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> > > >
+> > > > On Mon, 26 Dec 2022 15:49:08 +0800, Jason Wang <jasowang@redhat.com> wrote:
+> > > > > We used to busy waiting on the cvq command this tends to be
+> > > > > problematic since:
+> > > > >
+> > > > > 1) CPU could wait for ever on a buggy/malicous device
+> > > > > 2) There's no wait to terminate the process that triggers the cvq
+> > > > >    command
+> > > > >
+> > > > > So this patch switch to use virtqueue_wait_for_used() to sleep with a
+> > > > > timeout (1s) instead of busy polling for the cvq command forever. This
+> > > >
+> > > > I don't think that a fixed 1S is a good choice.
+> > >
+> > > Well, it could be tweaked to be a little bit longer.
+> > >
+> > > One way, as discussed, is to let the device advertise a timeout then
+> > > the driver can validate if it's valid and use that timeout. But it
+> > > needs extension to the spec.
+> > >
+> > > > Some of the DPUs are very
+> > > > lazy for cvq handle.
+> > >
+> > > Such design needs to be revisited, cvq (control path) should have a
+> > > better priority or QOS than datapath.
+> > >
+> > > > In particular, we will also directly break the device.
+> > >
+> > > It's kind of hardening for malicious devices.
+> >
+> > Just based on timeout, it is judged that it is a malicious device. I think it is
+> > too arbitrary.
+>
+> Drivers have very little information to make the decision. So it's
+> really a balance.
+>
+> We can start with a very long timeout like 10 minutes. Otherwise a
+> buggy/malicious device will block a lot of important things (reboot,
+> modprobe) even if the scheduler is still functional.
+
+Relatively speaking, starting from a 1min+ timeout, I think it is safe.
+
+Thanks.
+
+
+
+>
+> Thanks
+>
+> >
+> > Thanks.
+> >
+> >
+> > >
+> > > >
+> > > > I think it is necessary to add a Virtio-Net parameter to allow users to define
+> > > > this timeout by themselves. Although I don't think this is a good way.
+> > >
+> > > Very hard and unfriendly to the end users.
+> > >
+> > > Thanks
+> > >
+> > > >
+> > > > Thanks.
+> > > >
+> > > >
+> > > > > gives the scheduler a breath and can let the process can respond to
+> > > > > asignal. If the device doesn't respond in the timeout, break the
+> > > > > device.
+> > > > >
+> > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > > ---
+> > > > > Changes since V1:
+> > > > > - break the device when timeout
+> > > > > - get buffer manually since the virtio core check more_used() instead
+> > > > > ---
+> > > > >  drivers/net/virtio_net.c | 24 ++++++++++++++++--------
+> > > > >  1 file changed, 16 insertions(+), 8 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > > > index efd9dd55828b..6a2ea64cfcb5 100644
+> > > > > --- a/drivers/net/virtio_net.c
+> > > > > +++ b/drivers/net/virtio_net.c
+> > > > > @@ -405,6 +405,7 @@ static void disable_rx_mode_work(struct virtnet_info *vi)
+> > > > >       vi->rx_mode_work_enabled = false;
+> > > > >       spin_unlock_bh(&vi->rx_mode_lock);
+> > > > >
+> > > > > +     virtqueue_wake_up(vi->cvq);
+> > > > >       flush_work(&vi->rx_mode_work);
+> > > > >  }
+> > > > >
+> > > > > @@ -1497,6 +1498,11 @@ static bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq,
+> > > > >       return !oom;
+> > > > >  }
+> > > > >
+> > > > > +static void virtnet_cvq_done(struct virtqueue *cvq)
+> > > > > +{
+> > > > > +     virtqueue_wake_up(cvq);
+> > > > > +}
+> > > > > +
+> > > > >  static void skb_recv_done(struct virtqueue *rvq)
+> > > > >  {
+> > > > >       struct virtnet_info *vi = rvq->vdev->priv;
+> > > > > @@ -1984,6 +1990,8 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
+> > > > >       return err;
+> > > > >  }
+> > > > >
+> > > > > +static int virtnet_close(struct net_device *dev);
+> > > > > +
+> > > > >  /*
+> > > > >   * Send command via the control virtqueue and check status.  Commands
+> > > > >   * supported by the hypervisor, as indicated by feature bits, should
+> > > > > @@ -2026,14 +2034,14 @@ static bool virtnet_send_command(struct virtnet_info *vi, u8 class, u8 cmd,
+> > > > >       if (unlikely(!virtqueue_kick(vi->cvq)))
+> > > > >               return vi->ctrl->status == VIRTIO_NET_OK;
+> > > > >
+> > > > > -     /* Spin for a response, the kick causes an ioport write, trapping
+> > > > > -      * into the hypervisor, so the request should be handled immediately.
+> > > > > -      */
+> > > > > -     while (!virtqueue_get_buf(vi->cvq, &tmp) &&
+> > > > > -            !virtqueue_is_broken(vi->cvq))
+> > > > > -             cpu_relax();
+> > > > > +     if (virtqueue_wait_for_used(vi->cvq)) {
+> > > > > +             virtqueue_get_buf(vi->cvq, &tmp);
+> > > > > +             return vi->ctrl->status == VIRTIO_NET_OK;
+> > > > > +     }
+> > > > >
+> > > > > -     return vi->ctrl->status == VIRTIO_NET_OK;
+> > > > > +     netdev_err(vi->dev, "CVQ command timeout, break the virtio device.");
+> > > > > +     virtio_break_device(vi->vdev);
+> > > > > +     return VIRTIO_NET_ERR;
+> > > > >  }
+> > > > >
+> > > > >  static int virtnet_set_mac_address(struct net_device *dev, void *p)
+> > > > > @@ -3526,7 +3534,7 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
+> > > > >
+> > > > >       /* Parameters for control virtqueue, if any */
+> > > > >       if (vi->has_cvq) {
+> > > > > -             callbacks[total_vqs - 1] = NULL;
+> > > > > +             callbacks[total_vqs - 1] = virtnet_cvq_done;
+> > > > >               names[total_vqs - 1] = "control";
+> > > > >       }
+> > > > >
+> > > > > --
+> > > > > 2.25.1
+> > > > >
+> > > > > _______________________________________________
+> > > > > Virtualization mailing list
+> > > > > Virtualization@lists.linux-foundation.org
+> > > > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+> > > >
+> > >
+> >
+>
