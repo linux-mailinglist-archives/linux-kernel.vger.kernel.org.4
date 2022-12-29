@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A70B2659285
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 23:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CCF659288
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 23:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234154AbiL2WjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 17:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S230160AbiL2WkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 17:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiL2WjJ (ORCPT
+        with ESMTP id S229794AbiL2WkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 17:39:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7289B14024;
-        Thu, 29 Dec 2022 14:39:08 -0800 (PST)
+        Thu, 29 Dec 2022 17:40:19 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1228214024;
+        Thu, 29 Dec 2022 14:40:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12944B819CD;
-        Thu, 29 Dec 2022 22:39:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AF5C433EF;
-        Thu, 29 Dec 2022 22:39:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 555BACE16CA;
+        Thu, 29 Dec 2022 22:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93C77C433F0;
+        Thu, 29 Dec 2022 22:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672353545;
-        bh=Vl16ZrQ6FIVlc0MsbXC4FP4xe8sX0FhBJ0Zr7gy0p3k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RDiEvnsJ7m+xWx1JB3ZXOqwxK6gfQ7FhGem0LZdefcr//JxgTkvMhIyjggykSOjPg
-         G43lW/GXie2JOFvIxuNZlN+IYJJnFvjb3nI5NOuCMwUo/ED57wAR+Aa6lwrshtNexq
-         Kye9wmMjHimuhiRfKWJsta2EFquKEHR7lCLLZBPFY0vYzXVFyD/ZBN182WMYZA/6BX
-         51utRGlceQI7eHvg0dJV0lb03uVjcgOnI/9+udBgzRmAOfZOyzzmrnCWiCfJb6TwFM
-         m7jp72RYb6mVoOV4hM5DaWmX8O2ljVwfmbA8uuYoi7KSa3CLFlbzpyVsx0I1Wrz1wN
-         IFMjGZyxi8r1Q==
-Date:   Thu, 29 Dec 2022 14:39:03 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v5 2/2] KEYS: asymmetric: Copy sig and digest in
- public_key_verify_signature()
-Message-ID: <Y64XB0yi24yjeBDw@sol.localdomain>
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
- <20221227142740.2807136-3-roberto.sassu@huaweicloud.com>
+        s=k20201202; t=1672353615;
+        bh=YTeAya3sAyksUTVeAFd2g0dgm0CJ8kwV1GO3dUbPplk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Ny3DUGBA4s30f60TxXPwnszhkld9uYfhdFwc0NDzXt5z5hTyY9ozd9PztLLvNSZST
+         oVnV9SPBccKKm6AAk4U3PIA9UAMdtE1a6V3ZxeGrzjP6qrt8+4EQoBtl2DRhHqEzQo
+         xDXxatjiJ+2rToHKB93j+l0rsr1icwxXRRrVwMb9pEcuHR239VB8/BqVNu4GVKh2ag
+         huEjZ/m0hc34/Nmf1TFsqHDHK3bmP4611gJAohWM37xMii8QrZvJbJw6+/kOIucIl7
+         DHNo4BI1j6PmT7d/1Qq8RXLkHDuLJU2HJdXBDL8La8sEDdQDN5SA8LuVikuOsivu5r
+         sKrO7NP8C079g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C24BE50D71;
+        Thu, 29 Dec 2022 22:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221227142740.2807136-3-roberto.sassu@huaweicloud.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] libbpf: Added the description of some API functions
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167235361550.16779.392269015773043979.git-patchwork-notify@kernel.org>
+Date:   Thu, 29 Dec 2022 22:40:15 +0000
+References: <20221224112058.12038-1-liuxin350@huawei.com>
+In-Reply-To: <20221224112058.12038-1-liuxin350@huawei.com>
+To:     Xin Liu <liuxin350@huawei.com>
+Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yanan@huawei.com,
+        wuchangye@huawei.com, xiesongyang@huawei.com,
+        kongweibin2@huawei.com, zhangmingyi5@huawei.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,32 +61,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 03:27:40PM +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> mapping") checks that both the signature and the digest reside in the
-> linear mapping area.
-> 
-> However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> stack support") made it possible to move the stack in the vmalloc area,
-> which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> adjacent pages.
-> 
-> Always make a copy of the signature and digest in the same buffer used to
-> store the key and its parameters, and pass them to sg_init_one(). Prefer it
-> to conditionally doing the copy if necessary, to keep the code simple. The
-> buffer allocated with kmalloc() is in the linear mapping area.
-> 
-> Cc: stable@vger.kernel.org # 4.9.x
-> Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-> Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  crypto/asymmetric_keys/public_key.c | 38 ++++++++++++++++-------------
->  1 file changed, 21 insertions(+), 17 deletions(-)
+Hello:
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-- Eric
+On Sat, 24 Dec 2022 19:20:58 +0800 you wrote:
+> Currently, many API functions are not described in the document.
+> I have tried to add the API description of the following four API
+> functions:
+>  libbpf_set_print
+>  bpf_object__open
+>  bpf_object__load
+>  bpf_object__close
+> 
+> [...]
+
+Here is the summary with links:
+  - libbpf: Added the description of some API functions
+    https://git.kernel.org/bpf/bpf-next/c/678a1c036199
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
