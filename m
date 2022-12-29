@@ -2,110 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C609658BE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A97A658BF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233143AbiL2Krj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 05:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
+        id S233273AbiL2Ku6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 05:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiL2Krg (ORCPT
+        with ESMTP id S233345AbiL2Ku1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 05:47:36 -0500
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4938B12753
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:47:34 -0800 (PST)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D92023F114;
-        Thu, 29 Dec 2022 11:47:31 +0100 (CET)
-Date:   Thu, 29 Dec 2022 11:47:30 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Emma Anholt <emma@anholt.net>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/msm/adreno: Make adreno quirks not overwrite each
- other
-Message-ID: <20221229104730.guopbgyleb6hif4h@SoMainline.org>
-References: <20221229101846.981223-1-konrad.dybcio@linaro.org>
+        Thu, 29 Dec 2022 05:50:27 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1C213DE9;
+        Thu, 29 Dec 2022 02:50:08 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id u9so44279604ejo.0;
+        Thu, 29 Dec 2022 02:50:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xFMsXCfWSHnd7DW7AtBbmF0mbUVmP/dA5yo0gz+yknc=;
+        b=ZALxZ8yvP8e0FGeniJtEPHJyRQrP28k4KcZz2NVsNmw1Hc7gK2Tuxn+wv59OkqYdih
+         gtmz1nMNthCW9OGAnkSywu6s7QSPbs7NQltZGd6qcD1LPuCJ/igMF3kR/t0wjylr8zop
+         jXaOBYOx4h2/tIqdmUbnOkfDOP8ISY7PDtNtcxSiHgzEJIxxFiEwweOV/RnfCZq3Uc4s
+         9bjKLgAoU8lEGgrBuMcFog7w0FGHFFCMSi/xWvXzE+qlTniGCNutVrCnyfuJKnaLYXqt
+         r+LQIEElorWCtkreTu40z97grjfePXugyo3G5osJ2CTekVSoGgkH7dJOAvoAifiLnjKM
+         JkHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xFMsXCfWSHnd7DW7AtBbmF0mbUVmP/dA5yo0gz+yknc=;
+        b=r5l/FKk3X9nY8MrVSkJYCvCVAfNh4wzMieWh6OyTVSZT7td/pHx4JLac3amztKUp9P
+         isqdlYwdePEcJj8aoalQ1Fr5ag4F6eoKMEN4mRKX8BGO4ORLdZvmc5+PaG9zVxptJJm6
+         RBhhHxi2fJWG53ZI7rRb2ojZlgjczvCfq90YT0O22AdfuAcu1ddLWCqfcR9n8nUO+qu2
+         utPhh9pq31VxCzdfAbKh41qMXjWzqkUQV2lSTuQndpGzpg4rXWC7eDl7J2bsf+PcckLd
+         RaVEvI9q+eVae9cPc6QbeH48rOkM6nIzycYKVMTEi6G0eiyjbeFubuh3mfhVRCXwMnxS
+         m1pA==
+X-Gm-Message-State: AFqh2ko7QwkVXdyBe7PCHP9tHQnsjSuwsp7efa2mSMoxQJMkkmlkZxFZ
+        06UNGJ4WrIBuN+t+ttSN/4Gecrp9bOkK6nAvd6Y=
+X-Google-Smtp-Source: AMrXdXvw5WKMnFWDjCEYC95jCJQ5AsoOniEwsFJo04jNqkFv7owm3aekbXzzjg0HRBL68POW19mB4nqvXhwUJHBXbsQ=
+X-Received: by 2002:a17:906:e4f:b0:7c0:ae1c:3eb7 with SMTP id
+ q15-20020a1709060e4f00b007c0ae1c3eb7mr1773070eji.510.1672311006635; Thu, 29
+ Dec 2022 02:50:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221229101846.981223-1-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221227233020.284266-1-martin.blumenstingl@googlemail.com>
+ <20221227233020.284266-14-martin.blumenstingl@googlemail.com> <b30273c693fd4868873d9bf4a1b5c0ca@realtek.com>
+In-Reply-To: <b30273c693fd4868873d9bf4a1b5c0ca@realtek.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 29 Dec 2022 11:49:55 +0100
+Message-ID: <CAFBinCAzmgwRAzAbXM17nmPw0bo9Mzx6gQQQrR3tPDb+n2jDHA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 13/19] rtw88: mac: Add support for SDIO specifics
+ in the power on sequence
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Chris Morgan <macroalpha82@gmail.com>,
+        Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-29 11:18:45, Konrad Dybcio wrote:
-> So far the adreno quirks have all been assigned with an OR operator,
-> which is problematic, because they were assigned consecutive integer
-> values, which makes checking them with an AND operator kind of no bueno..
-> 
-> Switch to using BIT(n) so that only the quirks that the programmer chose
-> are taken into account when evaluating info->quirks & ADRENO_QUIRK_...
-> 
-> Fixes: b5f103ab98c7 ("drm/msm: gpu: Add A5XX target support")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Hi Ping-Ke,
 
-Nice catch!
+On Thu, Dec 29, 2022 at 2:15 AM Ping-Ke Shih <pkshih@realtek.com> wrote:
+[...]
+> > +             if (rtw_sdio_is_sdio30_supported(rtwdev))
+> > +                     rtw_write8_set(rtwdev, REG_HCI_OPT_CTRL + 2, BIT(2));
+>
+> BIT_USB_LPM_ACT_EN BIT(10)   // reg_addr +2, so bit >> 8
+The ones above are clear to me, thank you.
+But for this one I have a question: don't we need BIT(18) for this one
+and then bit >> 16?
+reg_addr + 0: bits 0..7
+reg_addr + 1: bits 8..15
+reg_addr + 2: bits 16..23
 
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-Not sure if it's the right Fixes commit though, as it would have worked
-when ADRENO_QUIRK_LMLOADKILL_DISABLE was added with constant 4 instead
-of 3 in 370063ee427a ("drm/msm/adreno: Add A540 support"), but then
-using bitflags in an enum value type is invalid anyway, AFAIK.
-
-- Marijn
-
-> ---
->  drivers/gpu/drm/msm/adreno/adreno_gpu.h | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> index c85857c0a228..5eb254c9832a 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> @@ -29,11 +29,9 @@ enum {
->  	ADRENO_FW_MAX,
->  };
->  
-> -enum adreno_quirks {
-> -	ADRENO_QUIRK_TWO_PASS_USE_WFI = 1,
-> -	ADRENO_QUIRK_FAULT_DETECT_MASK = 2,
-> -	ADRENO_QUIRK_LMLOADKILL_DISABLE = 3,
-> -};
-> +#define ADRENO_QUIRK_TWO_PASS_USE_WFI		BIT(0)
-> +#define ADRENO_QUIRK_FAULT_DETECT_MASK		BIT(1)
-> +#define ADRENO_QUIRK_LMLOADKILL_DISABLE		BIT(2)
->  
->  struct adreno_rev {
->  	uint8_t  core;
-> @@ -65,7 +63,7 @@ struct adreno_info {
->  	const char *name;
->  	const char *fw[ADRENO_FW_MAX];
->  	uint32_t gmem;
-> -	enum adreno_quirks quirks;
-> +	u64 quirks;
->  	struct msm_gpu *(*init)(struct drm_device *dev);
->  	const char *zapfw;
->  	u32 inactive_period;
-> -- 
-> 2.39.0
-> 
+Best regards,
+Martin
