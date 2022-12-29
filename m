@@ -2,144 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB0D6589F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 08:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8963B6589FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 08:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiL2Hbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 02:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
+        id S233044AbiL2HgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 02:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiL2Hbx (ORCPT
+        with ESMTP id S229992AbiL2HgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 02:31:53 -0500
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627A7C9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 23:31:52 -0800 (PST)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2BT7VXCx843333
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Wed, 28 Dec 2022 23:31:34 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2BT7VXCx843333
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022120601; t=1672299094;
-        bh=P9B3uTyi8J6q0aKf9lvY9XtgOYfhraMemSVXlke1pIA=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=WfW98zlmWRjat8XXY4YvCjtF2d0PV7rT+SdB96ndtnnoBKwdX/tOa6eLa2EkWSCRK
-         CCoyD+laiIIWUgeKHqKq0hci7eRSLMbWMIvFPu/ORqu2BN2rzjDC/UrC4Vl27UnFF2
-         TfrHoxxZ9RlyCJj294k97ulX28VeCqKDS3ixu0/enFvWSugbhiLsn42XFGuruY/avT
-         iZrDcFkjXqWp6YyulCn2HLcEHcM2yz588rfzBo1CcoqIcfs94nTckFPzMha5gzOAI5
-         s1MlB6P/10I00c2tN1uf+XIpAGM7w8dJufC2sQUTKSqgV8MYvAaB44ddsY3vJm6qIa
-         wJCmDBVAceroA==
-Date:   Wed, 28 Dec 2022 23:31:34 -0800
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        ardb@kernel.org, kraxel@redhat.com, bp@alien8.de, philmd@linaro.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_qemu=5D_x86=3A_don=27t_let_decomp?= =?US-ASCII?Q?ressed_kernel_image_clobber_setup=5Fdata?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y6z765zHrQ6Rl/0o@zx2c4.com>
-References: <20221228143831.396245-1-Jason@zx2c4.com> <6cab26b5-06ae-468d-ac79-ecdecb86ef07@linaro.org> <Y6xvJheSYC83voCZ@zx2c4.com> <Y6x1knb8udpSyMSp@zx2c4.com> <9188EEE9-2759-4389-B39E-0FEBBA3FA57D@zytor.com> <Y6z765zHrQ6Rl/0o@zx2c4.com>
-Message-ID: <AF921575-0968-434A-8B46-095B78C209C1@zytor.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        Thu, 29 Dec 2022 02:36:21 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2081.outbound.protection.outlook.com [40.107.101.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B5EA46C;
+        Wed, 28 Dec 2022 23:36:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NRbKImvxw4kKmLqoG494Zzn0sEemKLsGZPsp/yN03neSXKk/P/iT1uyeleZ4NiK1pffLyZoZ52tpjCNqdq5pDATuuD8HXw8Qv4H7VKrdzU7t7hyWgH60jBqARj6Hp9XRz4YfWH6NeeqBe+DXe7PwKTtxwNPGbfH5QVOKZu9UpqEQ4Te9VD6LeS1CjQ2USjNVEcxDZzPABjTjjulcDwMwp5Ila0flcYYr0Qoccz9uGLXiDdBZ4WIV7jN9PBj86EcR1TDqPfdbxDz04R85uIwnBmOlfi3NeeNpY2Z+XV7iZNbl3R9kKxPSwWqUfwx6wMq6wNHIFsMjfZaB8TLtwD7WUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HShoMvEBtnfqSL+jtkU7x0f8yJWWxyO3v5XYzh7Mr+U=;
+ b=hqblRLzrx3B0dAHMNE9XzldYIjBfaVf0antigHs9dsxTL+pT+p4TrC6kg1iEevJFkM/kCUz/JIv0xmcb4qR4AOmPkVmiI9IhiT7Ugvq3F6qwVwwS2+Fp9xQjilYEmOIASVnBm8+UqqtJhFYSnKL/e9ygFsvh0RPOfRhe1wPrfwajsJVWnMQ0k/RGdA6vlXFao8j5rtVsUmu7KdUhs3AO0ShSUaIpVTz4kdKlUfBJn2xk9X6gpY576OC4soBcJ+HuvzQP0g4VjluaQRWw1Xw3Dtoe0wbppEIgMGMWloOGdx8u5zIuAHv4G/2vr3pdgie94vMMULBTxQwuZwalgz4txw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HShoMvEBtnfqSL+jtkU7x0f8yJWWxyO3v5XYzh7Mr+U=;
+ b=LFy0ff9QaPsrtPTBJi0Gh348NJl3xjwUwg7JYFtmDK0tcehx6YaBLRfI+qMaZ7vdYmPGHTl8WuNg/Dz984grJ7UyE14FKPU9k9RwOHEVJhm2zA5HyYzCj/zr6aTEPCD47Qb1I+PPs6sJq3SSc7B+EJK2H9EN9aMetFvnGX6wpzLuZQ+RFgJpvoYX4qX9/aYENkVZIpf1RR7eVOhHlS2f5Z38j/xh5O1IqsDcgXkr2L7JQWb97IaFcf+E0NIrnwUHOB0viq4Qvc6AsvwV5iSRSwpL79nVM0jlAYMgT6Ajh3D5y8Y1EXCLuwwdHJEn4RXsG3LU8k0AI++x7dPCCBxv9A==
+Received: from MW4P220CA0013.NAMP220.PROD.OUTLOOK.COM (2603:10b6:303:115::18)
+ by BL1PR12MB5174.namprd12.prod.outlook.com (2603:10b6:208:31c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Thu, 29 Dec
+ 2022 07:36:16 +0000
+Received: from CO1NAM11FT104.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:115:cafe::4d) by MW4P220CA0013.outlook.office365.com
+ (2603:10b6:303:115::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.17 via Frontend
+ Transport; Thu, 29 Dec 2022 07:36:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ CO1NAM11FT104.mail.protection.outlook.com (10.13.174.220) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.17 via Frontend Transport; Thu, 29 Dec 2022 07:36:15 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 28 Dec
+ 2022 23:36:04 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 28 Dec 2022 23:36:04 -0800
+Received: from orome.fritz.box (10.127.8.9) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Wed, 28 Dec 2022 23:36:00 -0800
+From:   Thierry Reding <treding@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 6.1 00/25] 6.1.1-rc1 review
+In-Reply-To: <20221219182943.395169070@linuxfoundation.org>
+References: <20221219182943.395169070@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Message-ID: <7906b589-d73d-4b0a-935e-7a15a1bcbe9a@drhqmail201.nvidia.com>
+Date:   Wed, 28 Dec 2022 23:36:00 -0800
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT104:EE_|BL1PR12MB5174:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3d49088-edca-4069-28c6-08dae96f5e2e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p7RfBrNg1qX/d5bUWc+kLAKRzRE3c6GtfCKQ46lBpTgraJqoOIM0mrXg1jm4GVaA3+JUgtCE78h+37C76wriccxncPyOEFXAJKJx0ZoxC4UULiKv8oskAmnsjXmVP+zGyVvtgIJMLczUCUx/3o2la0OWfGdcbXwHtfb3d6QLrSDFaOUL2gsB8NYdsHT+LgIjsRGrirgKgVjlPLRmRv3+zXO+Ivyczri0U034KxjjVfoCRlmpW2lZVCMEvVAF06bddDMCw8aDgqjfqclGWa4ETww2Y7CoVGM3DWdoNRrdUBTzTJbzcHYpQPM2H09K6Kf4rvnugbESdN5p9JI5HNEkufXBbvIaoIce8XIKxtwlvI+P6KCijjkwFKGUGAeme8AukATpf+2ruSY+2VdDX2mJgUNjVDsxy/6sCmTnhA59RxpBANv/KhriGM7UOi+QJUjjcAVGj2WGcX7OAKMT8CgkqElCZN/45my3ihVnJB0NXLIdjUs1JV+GMewLNJpw0w05Wpa5YQPMgokKXcm1tskWpGv/AuZq9dVz9iEATi5ntweCajYkixzJfgnh6yIgcZZ1FKUgtQxB4ZyxsdbFFdp17aVdH/jahNJ8GW/IlYvPG7ZQzs3MW6BKYuzr4vZtFvc3On04j0aXvdxJoF6ON3MEClr1uOkwKMYMNv3Ep6VHXu/YCZXerGvTLb79ZKce/taQ5ndl3LEBRgfws8VzhvSicp+M0vSrWhelpV4owaGAxcFkkYSXZ96lZJRzY5N4J0p6/BH1loAcZLt+swXFj0oq+toyxt0OO+BYuejAVUB0DI0=
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(396003)(346002)(451199015)(40470700004)(46966006)(36840700001)(6916009)(40460700003)(54906003)(7416002)(316002)(2906002)(82740400003)(478600001)(356005)(186003)(26005)(82310400005)(47076005)(966005)(336012)(7636003)(426003)(40480700001)(4326008)(8676002)(70586007)(70206006)(31696002)(41300700001)(86362001)(31686004)(8936002)(5660300002)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2022 07:36:15.6134
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3d49088-edca-4069-28c6-08dae96f5e2e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT104.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5174
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On December 28, 2022 6:31:07 PM PST, "Jason A=2E Donenfeld" <Jason@zx2c4=2E=
-com> wrote:
->Hi,
->
->Read this message in a fixed width text editor with a lot of columns=2E
->
->On Wed, Dec 28, 2022 at 03:58:12PM -0800, H=2E Peter Anvin wrote:
->> Glad you asked=2E
->>=20
->> So the kernel load addresses are parameterized in the kernel image
->> setup header=2E One of the things that are so parameterized are the siz=
-e
->> and possible realignment of the kernel image in memory=2E
->>=20
->> I'm very confused where you are getting the 64 MB number from=2E There
->> should not be any such limitation=2E
->
->Currently, QEMU appends it to the kernel image, not to the initramfs as
->you suggest below=2E So, that winds up looking, currently, like:
->
->          kernel image            setup_data
->   |--------------------------||----------------|
->0x100000                  0x100000+l1     0x100000+l1+l2
->
->The problem is that this decompresses to 0x1000000 (one more zero)=2E So
->if l1 is > (0x1000000-0x100000), then this winds up looking like:
->
->          kernel image            setup_data
->   |--------------------------||----------------|
->0x100000                  0x100000+l1     0x100000+l1+l2
->
->                                 d e c o m p r e s s e d   k e r n e l
->		     |-------------------------------------------------------------|
->                0x1000000                                                =
-     0x1000000+l3=20
->
->The decompressed kernel seemingly overwriting the compressed kernel
->image isn't a problem, because that gets relocated to a higher address
->early on in the boot process=2E setup_data, however, stays in the same
->place, since those links are self referential and nothing fixes them up=
-=2E
->So the decompressed kernel clobbers it=2E
->
->The solution in this commit adds a bunch of padding between the kernel
->image and setup_data to avoid this=2E That looks like this:
->
->          kernel image                            padding                =
-               setup_data
->   |--------------------------||-----------------------------------------=
-----------||----------------|
->0x100000                  0x100000+l1                                    =
-     0x1000000+l3      0x1000000+l3+l2
->
->                                 d e c o m p r e s s e d   k e r n e l
->		     |-------------------------------------------------------------|
->                0x1000000                                                =
-     0x1000000+l3=20
->
->This way, the decompressed kernel doesn't clobber setup_data=2E
->
->The problem is that if 0x1000000+l3-0x100000 is around 62 megabytes,
->then the bootloader crashes when trying to dereference setup_data's
->->len param at the end of initialize_identity_maps() in ident_map_64=2Ec=
-=2E
->I don't know why it does this=2E If I could remove the 62 megabyte
->restriction, then I could keep with this technique and all would be
->well=2E
->
->> In general, setup_data should be able to go anywhere the initrd can
->> go, and so is subject to the same address cap (896 MB for old kernels,
->> 4 GB on newer ones; this address too is enumerated in the header=2E)
->
->It would be theoretically possible to attach it to the initrd image
->instead of to the kernel image=2E As a last resort, I guess I can look
->into doing that=2E However, that's going to require some serious rework
->and plumbing of a lot of different components=2E So if I can make it work
->as is, that'd be ideal=2E However, I need to figure out this weird 62 meg
->limitation=2E
->
->Any ideas on that?
->
->Jason
+On Mon, 19 Dec 2022 20:22:39 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.1 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Wed, 21 Dec 2022 18:29:31 +0000.
+> Anything received after that time might be too late.
+>=20
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.1-rc1=
+.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git l=
+inux-6.1.y
+> and the diffstat can be found below.
+>=20
+> thanks,
+>=20
+> greg k-h
 
-As far as a crash=2E=2E=2E that sounds like a big and a pretty serious one=
- at that=2E
+All tests passing for Tegra ...
 
-Could you let me know what kernel you are using and how *exactly* you are =
-booting it?
+Test results for stable-v6.1:
+    11 builds:	11 pass, 0 fail
+    28 boots:	28 pass, 0 fail
+    130 tests:	130 pass, 0 fail
+
+Linux version:	6.1.1-rc1-g4478ff938eb5
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                tegra20-ventana, tegra210-p2371-2180,
+                tegra210-p3450-0000, tegra30-cardhu-a04
+
+Tested-by: Thierry Reding <treding@nvidia.com>
+
