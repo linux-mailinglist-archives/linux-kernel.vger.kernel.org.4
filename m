@@ -2,138 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49960658C48
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD60658C4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbiL2Lim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 06:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S233139AbiL2LjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 06:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232967AbiL2Lih (ORCPT
+        with ESMTP id S230173AbiL2LjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 06:38:37 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D3CBF65
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:38:36 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3e45d25de97so256832707b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 03:38:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzVijDpOmDlJ/TO0wgjRtfeBQOxC0cctQS/eEfP3SpY=;
-        b=WhascANlVjl5U5gZFZPJX1JCvzaY0eFSP57cDDpyQWbsemmdB+gKOGNgG9ea0ke1Wo
-         INWSY6J4eO1atBRfG7CHK0mNffIF3QX3IiegBrcTUIoNlJhGvCJpzQD8Hd9E/59NaKyR
-         E6z/EKVKXOU+DwZsRme7VUyXydyN/i2j+jRHB3cIxlk6iYeIsU934d2wN9H10OBM27bq
-         IwFyHbWsFtyoz7IXv+sK0MzmD9O6BQEk+zi5AoTstfJSVX5hHt8lKQkGKdwKB80MhFJM
-         N84++q/77POvO4qIxhkcTodWOnIxPNRZ6EQI6I0r88YkSCDMtzVkk7gT4nv8CjQJriC4
-         C8rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QzVijDpOmDlJ/TO0wgjRtfeBQOxC0cctQS/eEfP3SpY=;
-        b=Jj3gZzvgvTAE0jRo4p+abXi3eNWxA4zeZ5+9XjmsQ0VFdpUmC4GOnTy1HiyVVzNm1A
-         l74lmdsKNwmSNqN11uWsk6tqvrfYPOz12Nxj/Xp6bWaafQvnQ5/ZzgpJs5+B7OJWbUAj
-         G86u3J0OltjqfbF9A4kJeIzoPfDSxoCzvGvlv67Eppv+Tcw+T34GI1GTaE86QiNjiuFM
-         n+0KTvqAqKmKzOv+OFpjVyA3lH8udVxL1Qx74kiiXmFyh9gzXit+7+2bxNRvuC9GtL/I
-         GYaRGVY0w42Unu312iotJzH9KWRPx5cRn6ap10IIsuucK/rJBuXcpsauL8vQBXPjtdAl
-         18RA==
-X-Gm-Message-State: AFqh2kpif3U1qtt2yU/8ZylZAQw8uroCKBoviItlPBkBE24dbwH8v2HE
-        sX+6J/oTr3O1vLr1eT+L92fLQTD0VxLdtp8muD/jcw==
-X-Google-Smtp-Source: AMrXdXv9e+eV4tISPHDx2U7r7Ck2jrKmPt6GILLj/sOAVw2uAMBZi0tErVUE4qTF18qsGZPTIq0H1EH0sOHq3nJLvRY=
-X-Received: by 2002:a0d:dc86:0:b0:3d5:ecbb:2923 with SMTP id
- f128-20020a0ddc86000000b003d5ecbb2923mr3630692ywe.485.1672313915726; Thu, 29
- Dec 2022 03:38:35 -0800 (PST)
+        Thu, 29 Dec 2022 06:39:15 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873A013E24;
+        Thu, 29 Dec 2022 03:39:11 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D43761EC064D;
+        Thu, 29 Dec 2022 12:39:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1672313949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ul44K3f4ZupNPx/eCMwjHBaV6XqkOzJhw1crDNySdnk=;
+        b=bxNiEBBLAaBnIPVoCbb+hCeekBNbVKTQcB3i2k6jDvY//NgNcPOphifK0E8Zy75BUtZmBE
+        dt186MvMyBnoFlR8z5b6TFHAhdWikrfAqAunyUzuWfmpmJ7xW0AXAHtjeEfb7rl/9lsD3Z
+        FWBWKkS8+hFeKC0KzPo1PEwvMPoQ5e0=
+Date:   Thu, 29 Dec 2022 12:39:05 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [Patch v4 01/13] x86/ioapic: Gate decrypted mapping on
+ cc_platform_has() attribute
+Message-ID: <Y618Wf6tAVpXo/qm@zn.tnic>
+References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
+ <1669951831-4180-2-git-send-email-mikelley@microsoft.com>
+ <Y4+WjB/asSvxXW/t@zn.tnic>
+ <BYAPR21MB16882C3F39AB321A53BA4129D71B9@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20221229100511.979972-1-konrad.dybcio@linaro.org> <20221229100511.979972-2-konrad.dybcio@linaro.org>
-In-Reply-To: <20221229100511.979972-2-konrad.dybcio@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 29 Dec 2022 13:38:24 +0200
-Message-ID: <CAA8EJpr2AzT9W44mR4=5QBcmQzsznvO7XROObFGiSv+T3kJznA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sm8150: Add DISPCC node
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Rob Herring <robh@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB16882C3F39AB321A53BA4129D71B9@BYAPR21MB1688.namprd21.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Dec 2022 at 12:05, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> Years after the SoC support has been added, it's high time for it to
-> get dispcc going. Add the node to ensure that.
->
-> Tested-by: Marijn Suijten <marijn.suijten@somainline.org> # Xperia 5
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Tue, Dec 06, 2022 at 07:54:02PM +0000, Michael Kelley (LINUX) wrote:
+> Exactly correct.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Ok, thanks.
 
+Let's put that in the commit message and get rid of the "subsequent
+patch" wording as patch order in git is ambiguous.
 
-> ---
-> v1 -> v2:
-> - Pick up tags
-> - Remove required-opps
-> - Move power-domains up
->  arch/arm64/boot/dts/qcom/sm8150.dtsi | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index a0c57fb798d3..c7935f7a2926 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -3579,6 +3579,29 @@ camnoc_virt: interconnect@ac00000 {
->                         qcom,bcm-voters = <&apps_bcm_voter>;
->                 };
->
-> +               dispcc: clock-controller@af00000 {
-> +                       compatible = "qcom,sm8150-dispcc";
-> +                       reg = <0 0x0af00000 0 0x10000>;
-> +                       clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +                                <0>,
-> +                                <0>,
-> +                                <0>,
-> +                                <0>,
-> +                                <0>,
-> +                                <0>;
-> +                       clock-names = "bi_tcxo",
-> +                                     "dsi0_phy_pll_out_byteclk",
-> +                                     "dsi0_phy_pll_out_dsiclk",
-> +                                     "dsi1_phy_pll_out_byteclk",
-> +                                     "dsi1_phy_pll_out_dsiclk",
-> +                                     "dp_phy_pll_link_clk",
-> +                                     "dp_phy_pll_vco_div_clk";
-> +                       power-domains = <&rpmhpd SM8150_MMCX>;
-> +                       #clock-cells = <1>;
-> +                       #reset-cells = <1>;
-> +                       #power-domain-cells = <1>;
-> +               };
-> +
->                 pdc: interrupt-controller@b220000 {
->                         compatible = "qcom,sm8150-pdc", "qcom,pdc";
->                         reg = <0 0x0b220000 0 0x400>;
-> --
-> 2.39.0
->
+IOW, something like this:
 
+    Current code always maps the IO-APIC as shared (decrypted) in a
+    confidential VM. But Hyper-V guest VMs on AMD SEV-SNP with vTOM enabled
+    use a paravisor running in VMPL0 to emulate the IO-APIC.
+
+    In such a case, the IO-APIC must be accessed as private (encrypted)
+    because the paravisor emulates the IO-APIC in the lower half of the vTOM
+    where all accesses must be encrypted.
+
+    Add a new CC attribute which determines how the IO-APIC MMIO mapping
+    should be established depending on the platform the kernel is running on
+    as a guest.
+
+Thx.
 
 -- 
-With best wishes
-Dmitry
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
