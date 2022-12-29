@@ -2,94 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244C5658927
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0494658928
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiL2D2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 22:28:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S232463AbiL2D3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 22:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiL2D2i (ORCPT
+        with ESMTP id S230078AbiL2D3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 22:28:38 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53A113D59;
-        Wed, 28 Dec 2022 19:28:37 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1AF0B109;
-        Thu, 29 Dec 2022 04:28:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1672284516;
-        bh=IdUNGMBGY8cIigGTuFXoxeut6tWYUHexeWDammMcYhc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fC0EiT6hRTDtsbUvO9eiN9Eg2f0+rzvE+Vnra9L85atHg51pqnnoownETLqeCQW6w
-         9VRHXUXLVR/st5bybsLo0OHQzNnvkItIwjMRrSvWtLJ7QZ1IhAUA3BFpBWsxVqjbxR
-         kFcvTfRLSGixLsN7TQTY647bMZ/1wannkN2nbvCY=
-Date:   Thu, 29 Dec 2022 05:28:32 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans Verkuil <hans.verkuil@cisco.com>
-Subject: Re: [PATCH RESEND v2 4/7] media: uvcvideo: Do not return positive
- errors in uvc_query_ctrl()
-Message-ID: <Y60JYIErl74yX6xO@pendragon.ideasonboard.com>
-References: <20220920-resend-v4l2-compliance-v2-0-b0ceb15353ac@chromium.org>
- <20220920-resend-v4l2-compliance-v2-4-b0ceb15353ac@chromium.org>
+        Wed, 28 Dec 2022 22:29:17 -0500
+Received: from out203-205-251-59.mail.qq.com (out203-205-251-59.mail.qq.com [203.205.251.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAA213D5B
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 19:29:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1672284551;
+        bh=UU93fVlYjXrZmVWksMFApIIJgL0Los+nXQrfTOSsnqM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=USTRqQJIvBWag56dfvGXd7+yZo9IT/Sqr+QxWzGiwnJDaBN9Aa1zIxAceiyBqC4hw
+         hB604hQjCGQHT2MjCQuY/YtFjeYoEatmVBWcOV4r78j+3bMKIK5TDRmzhAkemPfOrD
+         u0nAcXD2hjKy9x57eJ0m8ZXNaR/QpTMjIyq+7r+k=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+        id 748B90E2; Thu, 29 Dec 2022 11:29:08 +0800
+X-QQ-mid: xmsmtpt1672284548txjyko01l
+Message-ID: <tencent_61428759F197532A46AF38A338882C06D108@qq.com>
+X-QQ-XMAILINFO: N7h1OCCDntujsNeHzHJsGOWF7i+VEDPfUmy0rnDT/lSrDpdRbZLQJkKyekst2Z
+         JHPOYze6dwXkVG9RSVbaGW7iZ9BuXqYlCttAa8Nmno0D6YZaw6oeD699SnkBrkAKR0hwf1cvz3FT
+         4HYh5mDaj8deh7Y+8bfI8kkiMQFVsn/lsrY35lZJ3C4gfrExMLrSFxYUrAjjKKW72VqxGdV/T+Q6
+         5adfp3dwXXlTk38Gguu3oFcDMVF+/MLpvz4tpH5qt1lZysncnsFYsC6OCeJ4CK1GxkDe95Zo15qY
+         6lYRdSJ27doLUTFH1cChLgyVjeld1r0SrtRHzJ18ea42WbcVzqLNnTUqldYOYPC90GwWNO281etZ
+         oUxMbWVhRRQEl9fwiwNNNbF1tkD0NVzgmZfh15ScDD6hMNyw7QsKzqeCPqySjqSmEHG8Hx7HI9IJ
+         gtNQ+simxzB04JVZiUuEQ9yUKbq2KuHI77Zg3Gc/DF1+whEnhGwXt2q78ruTHlPqg/rxWk+Ct+lv
+         tSxRDhb5vzTBU4Gy4Z7az/l69zD6L75eIAHrFzqmIqgql2SxtnSehCz6feVDggh3Dne/3zrBqIZv
+         jl0t7EjyAq2Ngta1pvZXMOwljDizpciJFd32ruD7lmnyzpfUX9FTliLbZc6GWKh8zI5C+lg+gQ2C
+         d6hl+wkSr64a49X5UtCYW/tBQ4BEVnwHX0aRDQelVCofTYz0wt+Zum6/cMNKqn6fsYCFjgvyZ4bl
+         1NKEKHZfVlX3D2Ptz4n9o2nGEcNliXHo8kSPHS0aoHcTWS4u/iwnrla45v33PRwPFbzu9EH804g/
+         TjFz0s7mGTodr4I2GLPOZc2Q+HD0ubq5owCxcvtXWXPhLr8psc8h5sd/4jF5Zb/4BePe+GoJ3dTR
+         afinZn+4dE5jzpB1l0qx5QqOO2lcBa0J14gLL3iIuUTNBLZXxlq2lzmAEypXvfw9CbBbov3tSlg8
+         mXfspH2Q9FPHogNBpUWTPxz9DdLVAlqtAGbUydtjVbVDIaF50QE3u2cllupbPY792i1Nv8VM0=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     thomas@t-8ch.de
+Cc:     jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
+        linux@weissschuh.net, peterz@infradead.org, rtoax@foxmail.com,
+        Rong Tao <rongtao@cestc.cn>
+Subject: Re: [PATCH v2 5/8] objtool: reduce memory usage of struct reloc
+Date:   Thu, 29 Dec 2022 11:29:07 +0800
+X-OQ-MSGID: <20221229032907.8435-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221229022622.khboqwfe23e7u2en@snowball.t-8ch.de>
+References: <20221229022622.khboqwfe23e7u2en@snowball.t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220920-resend-v4l2-compliance-v2-4-b0ceb15353ac@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+Hi, Thomas:
 
-Thank you for the patch.
+In /usr/include/elf.h has:
 
-On Fri, Dec 02, 2022 at 06:21:38PM +0100, Ricardo Ribalda wrote:
-> If the returned size of the query does not match the expected size or it
-> is zero, return -EPIPE instead of 0 or a positive value.
+#define ELF32_R_TYPE(val)		((val) & 0xff)
+#define ELF64_R_TYPE(i)			((i) & 0xffffffff)
+                                       ^^^^^^^^^^
 
-The commit message should explain why: this will avoid confusing the
-caller (and ultimately userspace) that doesn't expect a positive or zero
-value.
+So, I still feel that keeping 'unsigned int' is a good option. Can we just
+use __attribute__((packed)) for wasted padding bytes?
 
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Reviewed-by: Rong Tao <rongtao@cestc.cn>
 
-I'll update the commit message locally.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/media/usb/uvc/uvc_video.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-> index 497073a50194..902f2817a743 100644
-> --- a/drivers/media/usb/uvc/uvc_video.c
-> +++ b/drivers/media/usb/uvc/uvc_video.c
-> @@ -83,7 +83,7 @@ int uvc_query_ctrl(struct uvc_device *dev, u8 query, u8 unit,
->  		dev_err(&dev->udev->dev,
->  			"Failed to query (%s) UVC control %u on unit %u: %d (exp. %u).\n",
->  			uvc_query_name(query), cs, unit, ret, size);
-> -		return ret;
-> +		return ret < 0 ? ret : -EPIPE;
->  	}
->  
->  	/* reuse data[0] to request the error code. */
-> 
-
--- 
-Regards,
-
-Laurent Pinchart
