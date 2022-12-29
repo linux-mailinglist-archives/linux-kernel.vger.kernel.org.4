@@ -2,91 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C230E658BD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEF9658BDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbiL2KlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 05:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
+        id S233162AbiL2Kmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 05:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiL2Kkv (ORCPT
+        with ESMTP id S233146AbiL2KmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 05:40:51 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A08DCF;
-        Thu, 29 Dec 2022 02:40:50 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id m18so44045531eji.5;
-        Thu, 29 Dec 2022 02:40:50 -0800 (PST)
+        Thu, 29 Dec 2022 05:42:15 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611DB764E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:42:14 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id y25so27003806lfa.9
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:42:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NzZOv1CRraywjb+t+xrlHJC1I3n/ntQos2kcP4ZYPFE=;
-        b=qbjkceik0jikKwPqQ5YUpus+366wQdlW8/3vTKPMjIuyca6c8AaXJowv1TqYVP0OJc
-         k6QZgc0JMs+FIZ4YaHuhIM9WM8wLywrOM1ipt9d7tTDhlorSHbmEx/kgt0g0CS6WxZXt
-         QvPPFQiBpkednku2IBMaU9AkhLySELYC41Vz+QusNumArOsQa+2pfMuoVhp4jhbGwpju
-         qp3/vLOearVHAZkfXOo+GDH9l1vL4CL97wODxSg1Fw7eUNFnOKazM5t8l4yG38zhyP0M
-         VmMtgwKrH4LnTginj5RAD/kSjbRx6Nnk3uFMZUHNfayM7JbPlRADljFzpvF1JhtDHLvt
-         aClA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TUO2ZxZxILG32KT15nV7qQTkYrHi8pO+dQ/hT0mLj34=;
+        b=VyE/LhPG1XUl12g3cFtagDNEhD/mZuXjff05r8gsZcfCE49gKYMkLL27hCKWj6miZ6
+         D5/xH5bdsTHNNcaqMdXfFiAGf0eD4OHQGUfXVQOmKXwWN0Hb0ouQoRHPccnDALVEs7e3
+         SjhuAsj+XW/kWx6VC8gtrVqAOe7v1rGPlv5ptgLAJwRD2dQOmHZ0HWikcJVpDzNprgp1
+         joYyYmGqnLr/1HmJk1Icf+j4hwV9gZDV0bhUR089/0vjjENczViwYQUwY67CzagmpB+R
+         kBEnDgqw/9GrR1SpXgunrbB2aCMdIYuzns+sr+1oV5JFpAOc2z4DssAWcKWxXAEsXG2f
+         RymA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NzZOv1CRraywjb+t+xrlHJC1I3n/ntQos2kcP4ZYPFE=;
-        b=DVpWW98H423UVAtUti8BfFyw/qiW4VqrIKAY6jbNqfDdwrEHB69u2CK+U8RAxOmBX9
-         POEh9WQ8rmNoYrph/jxty8iglqKfxuRwr2wbPqzSf/AJ+azlc7BJ7qF4KZsUONG/1F0t
-         di1Dbw25DYrU9hdEJ3dlNZ2fkNdnjnl4zsz1+SaDdSbLrEPP9fnI0PhUTwtthULOmEf6
-         klVS0NKtmB8UhSqVjG4iAFwKJ0UpsZKHBO7mn6VVA+EqGZwRWohy9WJJUr21Hj/kpMbX
-         68yzv1rhoJWsYJE312Enmr486UWoNpQmxAbj5CsxSzVBRR7niyW8E7u4DtXiZQi69D9B
-         AglA==
-X-Gm-Message-State: AFqh2kpO/CxEzsjAanhu8pgVqq0gYWrwp2ttZol46htq8iOr38AFDl5U
-        gGs82RgIIqrA2J6sAzwrnM7/+D/MXI7eo8YkYva0R3mQYU8=
-X-Google-Smtp-Source: AMrXdXuyP1yNLlQySKApsJpcisyAUsFg8+A5y+WxBvR6yikiFExXtVKouGOP6s8yz7xdFhmFP9uz9RsixLbOSPRNsaw=
-X-Received: by 2002:a17:906:e4f:b0:7c0:ae1c:3eb7 with SMTP id
- q15-20020a1709060e4f00b007c0ae1c3eb7mr1771649eji.510.1672310449173; Thu, 29
- Dec 2022 02:40:49 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TUO2ZxZxILG32KT15nV7qQTkYrHi8pO+dQ/hT0mLj34=;
+        b=tX6gNH9Y6d4j+iHh0bM+urCCO99Tzbr3H0/RN7ZWbP2MlclVOWOTGO1IdaF1Yh+xGV
+         BT2r3GQwF7IaCoOJQGWK87FkZLu9FvAONbqVV0HQqNaFUC0ZUyyKNsjN41TJwY1FaI51
+         EPkPvmwJGcXxm4drXMhSoGPTQ1zCirTk5R/YsRwGwTT0ZWynmDbjQxUhMqd1rKQIcpRb
+         esh772ftV69GQ7UpBOg5YVpEmhWgPbEX4bgDXD0cCTAunNQm8zgZKO71L92/QnU+t3Xf
+         bFNXadzjRPel8pUTe6iyc/Ns49SIDYIAkzwMAb2znH+FHBBSKu/ctrL+kcbFlGM+8/Qe
+         OVNg==
+X-Gm-Message-State: AFqh2kqWLxqQtPTLjV33PCYpnc1uuJU/j0EN63SKolYiJnKAtXViXDzH
+        OLnYhtC4ZTbJ6rrbnTMmnwwK1w==
+X-Google-Smtp-Source: AMrXdXs3sjVVdg2iNUlQiU1svF2uVYY93ybv2BrHLp59HJclAt/0wi4EjM0Pt1650H+l7wGMRfRIwQ==
+X-Received: by 2002:a05:6512:3f1e:b0:4c0:91d0:e7ab with SMTP id y30-20020a0565123f1e00b004c091d0e7abmr8517693lfa.28.1672310532762;
+        Thu, 29 Dec 2022 02:42:12 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id z5-20020a056512370500b004bea5274fbfsm3030569lfr.160.2022.12.29.02.42.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Dec 2022 02:42:12 -0800 (PST)
+Message-ID: <7b32e414-96a9-7265-efee-f872badb32b2@linaro.org>
+Date:   Thu, 29 Dec 2022 11:42:10 +0100
 MIME-Version: 1.0
-References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com> <84e2f2289e964834b1eaf60d4f9f5255@realtek.com>
-In-Reply-To: <84e2f2289e964834b1eaf60d4f9f5255@realtek.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 29 Dec 2022 11:40:38 +0100
-Message-ID: <CAFBinCAvSYgnamMCEBGg5+vt6Uvz+AKapJ+dSfSPBbmtERYsBw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] rtw88: Four fixes found while working on SDIO support
-To:     Ping-Ke Shih <pkshih@realtek.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tehuang@realtek.com" <tehuang@realtek.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/7] arm64: dts: qcom: sm8450: add spmi node
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221229103212.984324-1-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221229103212.984324-1-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ping-Ke,
+On 29/12/2022 11:32, Konrad Dybcio wrote:
+> From: Vinod Koul <vkoul@kernel.org>
+> 
+> Add the spmi bus as found in the SM8450 SoC
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> [Konrad: 0x0 -> 0, move #cells down, make reg-names a vertical list]
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> v1 -> v2:
+> No changes
+> 
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 570475040d95..b9b59c5223eb 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -2715,6 +2715,28 @@ aoss_qmp: power-controller@c300000 {
+>  			#clock-cells = <0>;
+>  		};
+>  
+> +		spmi_bus: spmi@c42d000 {
 
-On Thu, Dec 29, 2022 at 10:26 AM Ping-Ke Shih <pkshih@realtek.com> wrote:
-[...]
-> > Martin Blumenstingl (4):
-> >   rtw88: Add packed attribute to the eFuse structs
->
-> I think this patch depends on another patchset or oppositely.
-> Please point that out for reviewers.
-There are no dependencies for this smaller individual series other
-than Linux 6.2-rc1 (as this has USB support). I made sure to not
-include any of the SDIO changes in this series.
-The idea is that it can be applied individually and make it either
-into 6.2-rc2 (or newer) or -next (6.3).
+Hmm looks different than reg.
 
+> +			compatible = "qcom,spmi-pmic-arb";
+> +			reg = <0 0x0c400000 0 0x00003000>,
+> +			      <0 0x0c500000 0 0x00400000>,
+> +			      <0 0x0c440000 0 0x00080000>,
+> +			      <0 0x0c4c0000 0 0x00010000>,
+> +			      <0 0x0c42d000 0 0x00010000>;
+x
 
 Best regards,
-Martin
+Krzysztof
+
