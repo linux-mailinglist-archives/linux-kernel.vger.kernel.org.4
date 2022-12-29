@@ -2,110 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F6B658A82
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62878658A85
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233181AbiL2I0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 03:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
+        id S233187AbiL2I15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 03:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233046AbiL2I0E (ORCPT
+        with ESMTP id S233182AbiL2I14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 03:26:04 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D548DC7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:26:03 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id s25so18774577lji.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:26:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2jD6n3VI4U3d7CzDLMYOr4tAgBELkqFchc0PWmapwU8=;
-        b=qhEE4crGFgsdwFNKY2hdx6b7U+9CNNrQU/L8EM7pLIpvdLqLPQ/X0IBU6xWI/+Tjsb
-         9FjNHb7ac8oTGST4Pbt4LqMouaI7o6ptRX4gxrDV+DY0BsNtQ6dSwvr001n+5/bQS1TW
-         dOYdrUbb3v+dkIbYWz8iLCg7x3t4MMPZ2yEMkhH+Z1WWRJ5+yQu/egLPHHwdl+1Fnl0r
-         PuT+vKRtc4y/RnrOZISux3vGOnMZ5wVwplKkBDryIN5kA1LWgtUpYvt5rXpBwKcDY8L/
-         6qQO0TjZcXtrHmmg4U1cLbF5ONgdzmJSCfn+i6u1lzyWWaYS2DnxoS5MODp9cAuXOAFC
-         PUxA==
+        Thu, 29 Dec 2022 03:27:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B6ADC7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:27:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1672302433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3gwn9uw8GpeaAYNSjcfDG9cgBntGteGPOXdgf7cDThI=;
+        b=f+n+jcDxrJej5p33uVFnAZ7zsKK8JRj/vvAl3ACECEfHrVK+VLZpFQ0dlk2GMtHizEO8GL
+        KV7FT4huP3j9gJlRqaTxrNWc+6cU8bqtRmbwOUe+9D/JzwRhhA2U4NKPaKUI/cKRYawBF9
+        r8+uxVmnCgS5hN3x56X9Yk3wt9DJdEc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-249-9cxv75FDN7GZYUN1y-C08A-1; Thu, 29 Dec 2022 03:27:12 -0500
+X-MC-Unique: 9cxv75FDN7GZYUN1y-C08A-1
+Received: by mail-wm1-f70.google.com with SMTP id fl12-20020a05600c0b8c00b003d96f0a7f36so7980727wmb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:27:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2jD6n3VI4U3d7CzDLMYOr4tAgBELkqFchc0PWmapwU8=;
-        b=buJ0nN4NkVu1DdTyynYn6AS+rlShay/Ddd1Z2DHcXEXFnv+FeJJDZ/4K0xguE+K0bQ
-         S9OdhyATexaXdxQE1NmmaUIXQ49c7L+KikXk39SU+hEKRSb6osyRHgZip8qfQA1aHhck
-         ETgSsMWamxwLc7Pl1cziTnpB2YqgcDMRuGbqMWYn3RkpgCnFZkJ8JE1heLz/Rrprfc0n
-         pKlS+h8ME9AVZs1B1efnN8RyDtjDt/Nr8Dtiid2tABduSM+QP5JsoPEdqSQ+69hwFSR0
-         49I8Wjm9dT4p56VdX5X1Kp3Tit/KC9YkM3FYaA+dKqfSCEg/OyFZkpozBwN70mMpNFVy
-         JLYA==
-X-Gm-Message-State: AFqh2koP61oF3QwUBIHl77I23faD1RpQFmONqoOXOYCI16gIU8MkSGYa
-        ipUm9Ay4DQyLXFklpp6b5e5jXQ==
-X-Google-Smtp-Source: AMrXdXtydbHGlVS8vt7G1ajfd6J2r0uGDhywhmHhWEcVTDCakT7GghbtMJ0/ytEappMkCSN9KHVobg==
-X-Received: by 2002:a05:651c:1a2c:b0:27f:cccc:1df3 with SMTP id by44-20020a05651c1a2c00b0027fcccc1df3mr2208846ljb.41.1672302361996;
-        Thu, 29 Dec 2022 00:26:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p5-20020a2eb105000000b0027f77c96339sm2257519ljl.0.2022.12.29.00.26.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 00:26:01 -0800 (PST)
-Message-ID: <06a46227-1a0c-aa5b-0b06-f202a5eff05b@linaro.org>
-Date:   Thu, 29 Dec 2022 09:26:00 +0100
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3gwn9uw8GpeaAYNSjcfDG9cgBntGteGPOXdgf7cDThI=;
+        b=DSwmFwuKGZaHUfMTeZGIjuWFrMf7yKG9oL5UfHOE0gcGQ6vZgD84sNPougzeaUIghx
+         5QcTQ2szopgvyWkV/7bWwm7/RnqZ5S/m70vdmg7iaqqKJwVRgTXboQVFjeSieGazwCMg
+         rgjoSy+lGM1yFd3urQrWQH22t9+2lofQbhXniRgrR7tQ3bOoapZWSOS+Q1pcdZTGfFa+
+         wZelrBns+/f3ILjh75XtmuLZUqqCbj6m4tJ/8vLF3iFqW2NWZyxUz/c0aXeMpH1P4Iax
+         kv6M+8jIL9RXtpLXzntNx2bDTsNwSfa2FLvNCKjOb9xO3K2M0TVPsRMLvKer4YCyly3s
+         Z9bg==
+X-Gm-Message-State: AFqh2kr43ieImc0u2StSG0XhtqJsITriYSxI883tVzSqPeQCFSGIxIkA
+        QvDM4uYIhPE6bxBohOEGyqTRKppmLXolMPQCzTsGdUH47hhIGEyC0mcPRmqrdU+cuAy+MhuGukY
+        +VSyIDY4wPtQsiSvBsyYuKWRj
+X-Received: by 2002:a05:600c:6020:b0:3d1:f0b4:8827 with SMTP id az32-20020a05600c602000b003d1f0b48827mr19496190wmb.25.1672302430934;
+        Thu, 29 Dec 2022 00:27:10 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsQs9zU/+72QHHkqHDKfXVW3103mpuPJJ/aAonpa2iu+6ge/EIA41O0YEwthIKCtPSmtrVmsQ==
+X-Received: by 2002:a05:600c:6020:b0:3d1:f0b4:8827 with SMTP id az32-20020a05600c602000b003d1f0b48827mr19496182wmb.25.1672302430729;
+        Thu, 29 Dec 2022 00:27:10 -0800 (PST)
+Received: from starship ([89.237.103.62])
+        by smtp.gmail.com with ESMTPSA id f18-20020a05600c4e9200b003d35c845cbbsm32258609wmq.21.2022.12.29.00.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 00:27:10 -0800 (PST)
+Message-ID: <b002fd18c2abdfe5f4395be38858f461b3c76ac3.camel@redhat.com>
+Subject: Re: [PATCH v4 28/32] KVM: SVM: Require logical ID to be power-of-2
+ for AVIC entry
+From:   mlevitsk@redhat.com
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Thu, 29 Dec 2022 10:27:08 +0200
+In-Reply-To: <f1f1a33134c739f09f5820b5a4973535f121c0da.camel@redhat.com>
+References: <20221001005915.2041642-1-seanjc@google.com>
+         <20221001005915.2041642-29-seanjc@google.com>
+         <f1f1a33134c739f09f5820b5a4973535f121c0da.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/1] dt-bindings: msm: dsi-phy-28nm: Add missing
- qcom,dsi-phy-regulator-ldo-mode
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        sean@poorly.run, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     quic_mkrishn@quicinc.com, andersson@kernel.org,
-        swboyd@chromium.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221228131110.213116-1-bryan.odonoghue@linaro.org>
- <20221228131110.213116-2-bryan.odonoghue@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221228131110.213116-2-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/12/2022 14:11, Bryan O'Donoghue wrote:
-> Add in missing qcom,dsi-phy-regulator-ldo-mode to the 28nm DSI PHY.
-> When converting from .txt to .yaml we missed this one.
+On Fri, 2022-12-09 at 00:00 +0200, Maxim Levitsky wrote:
+> On Sat, 2022-10-01 at 00:59 +0000, Sean Christopherson wrote:
+> > Do not modify AVIC's logical ID table if the logical ID portion of the
+> > LDR is not a power-of-2, i.e. if the LDR has multiple bits set.  Taking
+> > only the first bit means that KVM will fail to match MDAs that intersect
+> > with "higher" bits in the "ID"
+> > 
+> > The "ID" acts as a bitmap, but is referred to as an ID because theres an
+> > implicit, unenforced "requirement" that software only set one bit.  This
+> > edge case is arguably out-of-spec behavior, but KVM cleanly handles it
+> > in all other cases, e.g. the optimized logical map (and AVIC!) is also
+> > disabled in this scenario.
+> > 
+> > Refactor the code to consolidate the checks, and so that the code looks
+> > more like avic_kick_target_vcpus_fast().
+> > 
+> > Fixes: 18f40c53e10f ("svm: Add VMEXIT handlers for AVIC")
+> > Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> > Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/svm/avic.c | 30 +++++++++++++++---------------
+> >  1 file changed, 15 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> > index 4b6fc9d64f4d..a9e4e09f83fc 100644
+> > --- a/arch/x86/kvm/svm/avic.c
+> > +++ b/arch/x86/kvm/svm/avic.c
+> > @@ -513,26 +513,26 @@ unsigned long avic_vcpu_get_apicv_inhibit_reasons(struct kvm_vcpu *vcpu)
+> >  static u32 *avic_get_logical_id_entry(struct kvm_vcpu *vcpu, u32 ldr, bool flat)
+> >  {
+> >  	struct kvm_svm *kvm_svm = to_kvm_svm(vcpu->kvm);
+> > -	int index;
+> >  	u32 *logical_apic_id_table;
+> > -	int dlid = GET_APIC_LOGICAL_ID(ldr);
+> > +	u32 cluster, index;
+> >  
+> > -	if (!dlid)
+> > -		return NULL;
+> > +	ldr = GET_APIC_LOGICAL_ID(ldr);
+> >  
+> > -	if (flat) { /* flat */
+> > -		index = ffs(dlid) - 1;
+> > -		if (index > 7)
+> > +	if (flat) {
+> > +		cluster = 0;
+> > +	} else {
+> > +		cluster = (ldr >> 4) << 2;
+> > +		if (cluster >= 0xf)
+> >  			return NULL;
+> > -	} else { /* cluster */
+> > -		int cluster = (dlid & 0xf0) >> 4;
+> > -		int apic = ffs(dlid & 0x0f) - 1;
+> > -
+> > -		if ((apic < 0) || (apic > 7) ||
+> > -		    (cluster >= 0xf))
+> > -			return NULL;
+> > -		index = (cluster << 2) + apic;
+> > +		ldr &= 0xf;
+> >  	}
+> > +	if (!ldr || !is_power_of_2(ldr))
+> > +		return NULL;
+> > +
+> > +	index = __ffs(ldr);
+> > +	if (WARN_ON_ONCE(index > 7))
+> > +		return NULL;
+> > +	index += (cluster << 2);
+> >  
+> >  	logical_apic_id_table = (u32 *) page_address(kvm_svm->avic_logical_id_table_page);
+> >  
 > 
-> Fixes: 4dbe55c97741 ("dt-bindings: msm: dsi: add yaml schemas for DSI bindings")
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  .../devicetree/bindings/display/msm/dsi-phy-28nm.yaml         | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml
-> index 3d8540a06fe22..95076c90ea171 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-28nm.yaml
-> @@ -25,6 +25,10 @@ properties:
->        - description: dsi phy register set
->        - description: dsi phy regulator register set
->  
-> +  qcom,dsi-phy-regulator-ldo-mode:
-> +    type: boolean
-> +    description: Indicates if the LDO mode PHY regulator is wanted.
-> +
-Do not add it between reg/reg-names (or any other grouped properties).
-Should go after reg-names.
+> Looks good.
 
-Krzysztof
+I hate to say it but this patch has a bug:
+
+We have both 'cluster = (ldr >> 4) << 2' and then 'index += (cluster << 2)'
+
+One of the shifts has to go.
+
+Best regards,
+	Maxim Levitsky
+
+
+> 
+> For future refactoring, I also suggest to rename this function to 'avic_get_logical_id_table_entry'
+> to stress the fact that it gets a pointer to the AVIC's data structure.
+> 
+> Same for 'avic_get_physical_id_entry'
+> 
+> And also while at it : the 'svm->avic_physical_id_cache', is a very misleading name,
+> 
+> It should be svm->avic_physical_id_table_entry_ptr with a comment explaining that
+> is is the pointer to physid table entry.
+> 
+> 
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> 
+> 
+> 
+> Best regards,
+> 	Maxim Levitsky
+
 
