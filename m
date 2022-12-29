@@ -2,202 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2728658A38
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A879658A3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiL2ILl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 03:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S232875AbiL2INI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 03:13:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiL2ILh (ORCPT
+        with ESMTP id S230251AbiL2INE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 03:11:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD74FB48F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:10:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672301446;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gI6AlEc7KfZ1avo1jwJKrSQequUz5Q+UUl+tM82CWOM=;
-        b=AV9zpFHRCl1/eZolQsiw8myZfyda+u6h+arE3PQfj+6tYKyuR45RnctNO4tHZfMNsKtyoD
-        4NB++hTajBIfGANUkw/ie9x/tM9dpu+A0LIvZTuGL5HlGOodubr6pI2uJSp/jkNiiZa+Vt
-        oBg5sFrfG4A7+yNZSaQzJXC/0oaGuH8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-450-QGuZlwxoPcSfIULsVsuHRw-1; Thu, 29 Dec 2022 03:10:44 -0500
-X-MC-Unique: QGuZlwxoPcSfIULsVsuHRw-1
-Received: by mail-wm1-f70.google.com with SMTP id k20-20020a05600c1c9400b003d9717c8b11so7424135wms.7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:10:43 -0800 (PST)
+        Thu, 29 Dec 2022 03:13:04 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFDAFCC8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:12:59 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id ge16so14860826pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:12:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=THv6prYzDq2eXsCiqs3MdATdHNqWI4kkKeIbH/Zad64=;
+        b=kcc6RJTVV+2TkQyJSCeFHxHCvqGkX61fU5api+mTm4FoeljrR37YPZMYhuY7PSi34I
+         dVzq3WHy0oVAErA1ntoAfenJREFeiWAPXvpomnDmICPC7Lsjk2Iqk1e5hs4pz3lteU9e
+         gJktCqLkel+nkfKGeyyzLk2ONLcRio7yg64ig=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gI6AlEc7KfZ1avo1jwJKrSQequUz5Q+UUl+tM82CWOM=;
-        b=3I9724fSAZZNZcUOJaSBoe6d4vra9PQ6jA3da24NkZ3IBDYqR8F/ELAOfkzy/Z5ccp
-         Wey+L2xWqB27fG2lqrG2+y2+netNhoVeZawvZ7dw4ExL/W/qniLbZGiaR8Fn83f1VTMb
-         flxCtAMC18yfure67kZmcGk5yPivViLzmD/4hG5u+OdPoFzX7/YvwDVNR7vevV5nSTwx
-         uEh+dhsdB8zP4rV4vmV0GpvqMuWBKimkbXbZEIUUKlwhnL3jFvDVX6aNTL92IjmUwytH
-         xVRb9YBzvdOA6je5FiWpMKaoEIVruRrB1FwnV6x9fjmwwtpog8RrRKxWlliox45QGyW5
-         fbYA==
-X-Gm-Message-State: AFqh2ko1XEbdiYjReYyGqtt1PrkV+NI1SVjfrUUrbC0ShAQBdEbZE9dU
-        ll/KHHd+3KIcFr+xANtHWf9NL6VnygvrlMF7DsnLjj00VYf3jNCL986QrBpgGzrTAs6j2BzUV4N
-        aqYWwMSpcN/EYhxST+x/45yMt
-X-Received: by 2002:adf:ce0a:0:b0:246:e6df:86e7 with SMTP id p10-20020adfce0a000000b00246e6df86e7mr17498204wrn.5.1672301442825;
-        Thu, 29 Dec 2022 00:10:42 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtCwrO0CDFtRs3sThb9MNmLR5zMGV1PR7/QCvy+zp7ENhYRIgm6RfCU8IAhgG7fUSbme3pHsQ==
-X-Received: by 2002:adf:ce0a:0:b0:246:e6df:86e7 with SMTP id p10-20020adfce0a000000b00246e6df86e7mr17498181wrn.5.1672301442504;
-        Thu, 29 Dec 2022 00:10:42 -0800 (PST)
-Received: from redhat.com ([2.52.151.85])
-        by smtp.gmail.com with ESMTPSA id a6-20020adff7c6000000b002421db5f279sm17347928wrq.78.2022.12.29.00.10.40
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=THv6prYzDq2eXsCiqs3MdATdHNqWI4kkKeIbH/Zad64=;
+        b=6tIwZPi5vn81umgHvcxVcv7PikwcV4opGyNAwyNaDH1BQM7M0h6SYWM70v3/uttDcT
+         U6OLazIMI59TnHVnoX1NXeo1WiaY59Gxk9LzL710IjN6d1GNirSW0t7cuchbMCRsuXQb
+         FZBzDYhe3C4bIWDMKUppCWBH2C0fVMIRzLDFeA0ys1DYNIQzU8VzDq4EqF1x5Fh16qeH
+         ly6mccGAH/+qf6zKsR+/DDRxqCijVT2xq80hao+qH1VUw09I8JpfeMkIon7SaEcGfAgA
+         BeJOV+ASTHdGg+y0E6AoljHs6Ud7QUxWiKpwuMcBlLIG/P/YK/29GDfsEGAPGMPd9c/D
+         WTJA==
+X-Gm-Message-State: AFqh2kpJg62Y+OOIQ/J0mItQkZZKiy1Od5IBrgw2f2KTy1tSno2mBm5F
+        4DzyoqpmWZ3dyf6HCL4b8OQ22w==
+X-Google-Smtp-Source: AMrXdXu9lcGIP5E+xv/lfVaOI7oGNaTa8ZYVW9/FVtdg5eoc6mZA7pS4ycv7ew5XN0iSQz9w8aYiWA==
+X-Received: by 2002:a05:6a21:3a46:b0:9f:3197:bfa1 with SMTP id zu6-20020a056a213a4600b0009f3197bfa1mr40455755pzb.7.1672301579046;
+        Thu, 29 Dec 2022 00:12:59 -0800 (PST)
+Received: from sarthakkukreti-glaptop.hsd1.ca.comcast.net ([2601:647:4200:b5b0:75ff:1277:3d7b:d67a])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902e9cc00b00192820d00d0sm6496325plk.120.2022.12.29.00.12.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 00:10:41 -0800 (PST)
-Date:   Thu, 29 Dec 2022 03:10:38 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
-        eperezma@redhat.com
-Subject: Re: [PATCH 3/4] virtio_ring: introduce a per virtqueue waitqueue
-Message-ID: <20221229030633-mutt-send-email-mst@kernel.org>
-References: <20221226074908.8154-4-jasowang@redhat.com>
- <20221226183705-mutt-send-email-mst@kernel.org>
- <CACGkMEuNZLJRnWw+XNxJ-to1y8L2GrTrJkk0y0Gwb5H2YhDczQ@mail.gmail.com>
- <20221227022255-mutt-send-email-mst@kernel.org>
- <d77bc1ce-b73f-1ba8-f04f-b3bffeb731c3@redhat.com>
- <20221227043148-mutt-send-email-mst@kernel.org>
- <0d9f1b89-9374-747b-3fb0-b4b28ad0ace1@redhat.com>
- <CACGkMEv=+D+Es4sfde_X7F0zspVdy4Rs1Wi9qfCudsznsUrOTQ@mail.gmail.com>
- <20221229020553-mutt-send-email-mst@kernel.org>
- <CACGkMEs5s3Muo+4OfjaLK_P76rTdPhjQdTwykRNGOecAWnt+8g@mail.gmail.com>
+        Thu, 29 Dec 2022 00:12:58 -0800 (PST)
+From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
+To:     sarthakkukreti@google.com, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        Daniil Lunev <dlunev@google.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: [PATCH v2 0/8] Introduce provisioning primitives for thinly provisioned storage
+Date:   Thu, 29 Dec 2022 00:12:45 -0800
+Message-Id: <20221229081252.452240-1-sarthakkukreti@chromium.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEs5s3Muo+4OfjaLK_P76rTdPhjQdTwykRNGOecAWnt+8g@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 04:04:13PM +0800, Jason Wang wrote:
-> On Thu, Dec 29, 2022 at 3:07 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Wed, Dec 28, 2022 at 07:53:08PM +0800, Jason Wang wrote:
-> > > On Wed, Dec 28, 2022 at 2:34 PM Jason Wang <jasowang@redhat.com> wrote:
-> > > >
-> > > >
-> > > > 在 2022/12/27 17:38, Michael S. Tsirkin 写道:
-> > > > > On Tue, Dec 27, 2022 at 05:12:58PM +0800, Jason Wang wrote:
-> > > > >> 在 2022/12/27 15:33, Michael S. Tsirkin 写道:
-> > > > >>> On Tue, Dec 27, 2022 at 12:30:35PM +0800, Jason Wang wrote:
-> > > > >>>>> But device is still going and will later use the buffers.
-> > > > >>>>>
-> > > > >>>>> Same for timeout really.
-> > > > >>>> Avoiding infinite wait/poll is one of the goals, another is to sleep.
-> > > > >>>> If we think the timeout is hard, we can start from the wait.
-> > > > >>>>
-> > > > >>>> Thanks
-> > > > >>> If the goal is to avoid disrupting traffic while CVQ is in use,
-> > > > >>> that sounds more reasonable. E.g. someone is turning on promisc,
-> > > > >>> a spike in CPU usage might be unwelcome.
-> > > > >>
-> > > > >> Yes, this would be more obvious is UP is used.
-> > > > >>
-> > > > >>
-> > > > >>> things we should be careful to address then:
-> > > > >>> 1- debugging. Currently it's easy to see a warning if CPU is stuck
-> > > > >>>      in a loop for a while, and we also get a backtrace.
-> > > > >>>      E.g. with this - how do we know who has the RTNL?
-> > > > >>>      We need to integrate with kernel/watchdog.c for good results
-> > > > >>>      and to make sure policy is consistent.
-> > > > >>
-> > > > >> That's fine, will consider this.
-> > >
-> > > So after some investigation, it seems the watchdog.c doesn't help. The
-> > > only export helper is touch_softlockup_watchdog() which tries to avoid
-> > > triggering the lockups warning for the known slow path.
-> >
-> > I never said you can just use existing exporting APIs. You'll have to
-> > write new ones :)
-> 
-> Ok, I thought you wanted to trigger similar warnings as a watchdog.
-> 
-> Btw, I wonder what kind of logic you want here. If we switch to using
-> sleep, there won't be soft lockup anymore. A simple wait + timeout +
-> warning seems sufficient?
-> 
-> Thanks
+Hi,
 
-I'd like to avoid need to teach users new APIs. So watchdog setup to apply
-to this driver. The warning can be different.
+This patch series adds a mechanism to pass through provision requests on
+stacked thinly provisioned storage devices/filesystems.
 
+The linux kernel provides several mechanisms to set up thinly provisioned
+block storage abstractions (eg. dm-thin, loop devices over sparse files),
+either directly as block devices or backing storage for filesystems. Currently,
+short of writing data to either the device or filesystem, there is no way for
+users to pre-allocate space for use in such storage setups. Consider the
+following use-cases:
 
-> >
-> > > And before the patch, we end up with a real infinite loop which could
-> > > be caught by RCU stall detector which is not the case of the sleep.
-> > > What we can do is probably do a periodic netdev_err().
-> > >
-> > > Thanks
-> >
-> > Only with a bad device.
-> >
-> > > > >>
-> > > > >>
-> > > > >>> 2- overhead. In a very common scenario when device is in hypervisor,
-> > > > >>>      programming timers etc has a very high overhead, at bootup
-> > > > >>>      lots of CVQ commands are run and slowing boot down is not nice.
-> > > > >>>      let's poll for a bit before waiting?
-> > > > >>
-> > > > >> Then we go back to the question of choosing a good timeout for poll. And
-> > > > >> poll seems problematic in the case of UP, scheduler might not have the
-> > > > >> chance to run.
-> > > > > Poll just a bit :) Seriously I don't know, but at least check once
-> > > > > after kick.
-> > > >
-> > > >
-> > > > I think it is what the current code did where the condition will be
-> > > > check before trying to sleep in the wait_event().
-> > > >
-> > > >
-> > > > >
-> > > > >>> 3- suprise removal. need to wake up thread in some way. what about
-> > > > >>>      other cases of device breakage - is there a chance this
-> > > > >>>      introduces new bugs around that? at least enumerate them please.
-> > > > >>
-> > > > >> The current code did:
-> > > > >>
-> > > > >> 1) check for vq->broken
-> > > > >> 2) wakeup during BAD_RING()
-> > > > >>
-> > > > >> So we won't end up with a never woke up process which should be fine.
-> > > > >>
-> > > > >> Thanks
-> > > > >
-> > > > > BTW BAD_RING on removal will trigger dev_err. Not sure that is a good
-> > > > > idea - can cause crashes if kernel panics on error.
-> > > >
-> > > >
-> > > > Yes, it's better to use __virtqueue_break() instead.
-> > > >
-> > > > But consider we will start from a wait first, I will limit the changes
-> > > > in virtio-net without bothering virtio core.
-> > > >
-> > > > Thanks
-> > > >
-> > > >
-> > > > >
-> > > > >>>
-> >
+1) Suspend-to-disk and resume from a dm-thin device: In order to ensure that
+   the underlying thinpool metadata is not modified during the suspend
+   mechanism, the dm-thin device needs to be fully provisioned.
+2) If a filesystem uses a loop device over a sparse file, fallocate() on the
+   filesystem will allocate blocks for files but the underlying sparse file
+   will remain intact.
+3) Another example is virtual machine using a sparse file/dm-thin as a storage
+   device; by default, allocations within the VM boundaries will not affect
+   the host.
+4) Several storage standards support mechanisms for thin provisioning on
+   real hardware devices. For example:
+   a. The NVMe spec 1.0b section 2.1.1 loosely talks about thin provisioning:
+      "When the THINP bit in the NSFEAT field of the Identify Namespace data
+       structure is set to ‘1’, the controller ... shall track the number of
+       allocated blocks in the Namespace Utilization field"
+   b. The SCSi Block Commands reference - 4 section references "Thin
+      provisioned logical units",
+   c. UFS 3.0 spec section 13.3.3 references "Thin provisioning".
 
+In all the above situations, currently, the only way for pre-allocating space
+is to issue writes (or use WRITE_ZEROES/WRITE_SAME). However, that does not
+scale well with larger pre-allocation sizes.
+
+This patchset introduces primitives to support block-level provisioning (note:
+the term 'provisioning' is used to prevent overloading the term
+'allocations/pre-allocations') requests across filesystems and block devices.
+This allows fallocate() and file creation requests to reserve space across
+stacked layers of block devices and filesystems. Currently, the patchset covers
+a prototype on the device-mapper targets, loop device and ext4, but the same
+mechanism can be extended to other filesystems/block devices as well as extended
+for use with devices in 4 a-c.
+
+Patch 1 introduces REQ_OP_PROVISION as a new request type.
+The provision request acts like the inverse of a discard request; instead
+of notifying lower layers that the block range will no longer be used, provision
+acts as a request to lower layers to provision disk space for the given block
+range. Real hardware storage devices will currently disable the provisioing
+capability but for the standards listed in 4a.-c., REQ_OP_PROVISION can be
+overloaded for use as the provisioing primitive for future devices.
+
+Patch 2 implements REQ_OP_PROVISION handling for some of the device-mapper
+targets. This additionally adds support for pre-allocating space for thinly
+provisioned logical volumes via fallocate()
+
+Patch 3 introduces an fallocate() mode (FALLOC_FL_PROVISION) that sends a
+provision request to the underlying block device (and beyond). This acts as the
+primary mechanism for file provisioning as well as disambiguates the notion of
+virtual and true disk space allocations for thinly provisioned storage devices/
+filesystems. With patch 3, the 'default' fallocate() mode is preserved to
+perform preallocation at the current allocation layer and 'provision' mode
+adds the capability to punch through the allocations to the underlying thinly
+provisioned storage layers. For regular filesystems, both allocation modes
+are equivalent.
+
+Patch 4 wires up the loop device handling of REQ_OP_PROVISION.
+
+Patches 5-7 cover a prototype implementation for ext4, which includes wiring up
+the fallocate() implementation, introducing a filesystem level option (called
+'provision') to control the default allocation behaviour and, finally, a
+file-level override to retain current handling, even on filesystems mounted with
+'provision'. These options allow users of stacked filesystems to flexibly take
+advantage of provisioning.
+
+Testing:
+--------
+- Tested on a VM running a 6.2 kernel.
+- The following perfomrmance measurements were collected with fallocate(2)
+patched to add support for FALLOC_FL_PROVISION via a command line option 
+`-p/--provision`.
+
+- Preallocation of dm-thin devices:
+As expected, avoiding the need to zero out thinly-provisioned block devices to
+preallocate space speeds up the provisioning operation significantly:
+
+The following was tested on a dm-thin device set up on top of a dm-thinp with
+skip_block_zeroing=true.
+A) Zeroout was measured using `fallocate -z ...`
+B) Provision was measured using `fallocate -p ...`.
+
+Size    Time     A	B
+512M    real     1.093  0.034
+        user     0      0
+        sys      0.022  0.01
+1G      real     2.182  0.048
+        user     0      0.01
+        sys      0.022  0
+2G      real     4.344  0.082
+        user     0      0.01
+        sys      0.036  0
+4G      real     8.679  0.153
+        user     0      0.01
+        sys      0.073  0
+8G      real    17.777  0.318
+        user     0      0.01
+        sys      0.144  0
+
+- Preallocation of files on filesystems
+Since fallocate() with FALLOC_FL_PROVISION can now pass down through
+filesystems/block devices, this results in an expected slowdown in fallocate()
+calls if the provision request is sent to the underlying layers.
+
+The measurements were taken using fallocate() on ext4 filesystems set up with
+the following opts/block devices:
+A) ext4 filesystem mounted with 'noprovision'
+B) ext4 filesystem mounted with 'provision' on a dm-thin device.
+C) ext4 filesystem mounted with 'provision' on a loop device with a sparse
+   backing file on the filesystem in (B).
+
+Size	Time	A	B	C
+512M	real	0.011	0.036	0.041
+	user	0.02	0.03	0.002
+	sys	0	0	0
+1G	real	0.011	0.055	0.064
+	user	0	0	0.03
+	sys	0.003	0.004	0
+2G	real	0.011	0.109	0.117
+	user	0	0	0.004
+	sys	0.003	0.006	0
+4G	real	0.011	0.224	0.231
+	user	0	0	0.006
+	sys	0.004	0.012	0
+8G	real	0.017	0.426	0.527
+	user	0	0	0.013
+	sys	0.009	0.024	0
+
+As expected, the additional provision requests will slow down fallocate() calls
+and the degree of slowdown depends on the number of layers that the provision
+request is passed through to as well as the complexity of allocation on those
+layers.
+
+TODOs:
+------
+- Xfstests for validating provisioning results in allocation.
+
+Changelog:
+
+V2:
+- Fix stacked limit handling.
+- Enable provision request handling in dm-snapshot
+- Don't call truncate_bdev_range if blkdev_fallocate() is called with
+  FALLOC_FL_PROVISION.
+- Clarify semantics of FALLOC_FL_PROVISION and why it needs to be a separate flag
+  (as opposed to overloading mode == 0).
