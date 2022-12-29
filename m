@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A344658DE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E85658DE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbiL2O0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 09:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S233330AbiL2O35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 09:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiL2O0K (ORCPT
+        with ESMTP id S229871AbiL2O3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 09:26:10 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3976E0A8;
-        Thu, 29 Dec 2022 06:26:07 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id j130so11619243oif.4;
-        Thu, 29 Dec 2022 06:26:07 -0800 (PST)
+        Thu, 29 Dec 2022 09:29:55 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC5BE0A8;
+        Thu, 29 Dec 2022 06:29:54 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id r2-20020a9d7cc2000000b006718a7f7fbaso11548770otn.2;
+        Thu, 29 Dec 2022 06:29:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pu2i+yqAuTpsosJSjE8BjQ/j8yCFJ6AF+GvsZ04xxRY=;
-        b=WZ/aiULlHgKhCNIC2gvA+k7OyG1HotluR0o3Ig1QNlRPvj74h7umpuZPUhvcZCs9cp
-         jrBpgHKYcwGgdNLUi30Sq0BcTN6O4sltMtRrqJVyXY/DHiCnlhov+WdTpHm6kq+922fM
-         zPWcUUjsluax0vcbNREv68sbMrGD74zwPVrNM5YIJblQqA0z9BG0PvV3kvTUoirMrFck
-         f9Obx4fn4wKSDqi08eiqEtyOGV47h0773mjcTyFDldRZoD2n+hzmwYMrxhdSsXI3cxI2
-         pDDESHTalyUTYosGGIES+O36PgeYzhWb0OkMsgKlUvVf9UQml5xcBQVHIfQYCMJPoXdQ
-         1d+g==
+        bh=PL55QmUDSJz2PWahGHhR8h5Ae0gnbaDbaf5jPT4pcyU=;
+        b=azEE1JRCCHq8IORGhrfEEC/1Xq1x83HOkuRGSo9SBlIATiEYLiwcDEs3z+pp7WzqSQ
+         H5vP7YXI60i8KK3L7R7B/z+kUPMwyC6D/ED8CP/bJHEkxBebT9na9gNvd7UeUZ2M4E6T
+         eeVgWA3FeQVV1+7o4at8+KeoQPvgewkLL+GHz21InKxcBPZobNHDR8mUAsgrTZM3PKrW
+         C5xXy73fTuxUt05FDRljLszZvk64XdeihvQyC2q8EFos1UK6lv2Tqo7FuK2OqfxX3LpQ
+         ThgFnrleHhdHc7lJ3wjwXascytaxRzt35hf/lCpEk7Oz46n2AbD+L2U/3K6MufBZZ9ee
+         DBvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pu2i+yqAuTpsosJSjE8BjQ/j8yCFJ6AF+GvsZ04xxRY=;
-        b=lG0PZyg7FsDrXJz6nCVKnx9Tb+kKxiC9kQkSxobYrwZ3svZzm6LLXisv5rqNBT8SL6
-         9NstkhzMOvMZTYl+w8oyUFE3NWDZZhEqa/pbAYysI2q6PtqsEv/lmZ8T/0nYbF9NqXga
-         uX3ug8nY+MVS8aCeSfdt8vWxGyiNmDAvDobaX6/DbiNsSzkArdXy1zwMVCA7nLpFjC37
-         HzEVn12a1+oiqsDwShu+00BMIUOMZcXvpnj68NAU5KsKxl69G79/bYDkdksy9aTzjBdn
-         wyCwh01gS5+Ql5jyYh/bhz971Yu/GeUHjorp1ixdmVzFSJ2E4AzyZXbOanVtphBAXwmq
-         gIfA==
-X-Gm-Message-State: AFqh2krpi+hBPl610dKNWwxyKaDIGD+kRoDgdY0kIl2jBdZ13CCNGAPv
-        GAiLR79PcJufclHEYfuEUjI5dryUKtM=
-X-Google-Smtp-Source: AMrXdXul0FfiL51kGC1BF3UBOu+y2T89lKbLnMENTSBBRzlZ2FXOTvjmcCVTs6rs+znhrUrOdca5cw==
-X-Received: by 2002:a05:6808:3af:b0:360:ea74:b6b9 with SMTP id n15-20020a05680803af00b00360ea74b6b9mr12937155oie.37.1672323967066;
-        Thu, 29 Dec 2022 06:26:07 -0800 (PST)
+        bh=PL55QmUDSJz2PWahGHhR8h5Ae0gnbaDbaf5jPT4pcyU=;
+        b=qdc6q7Cmr4FU6TRy95E2TONvXGX9indRyU6Z+VlOjokQxNdJ+I3YY8L/O79BRBNSOh
+         3ZdvTVkBwqB9XSvl2ZA0cyI7gubWsX6/H4b3WVTtMj5AHlSVn3mKs6fcy5IIZZc5sXVK
+         5FSDsWnsvhksWP+O3OaesGJJXuScLlAqmgkEhyVt/QQgBETvmvFWYB8j/lJ64pezK37Q
+         xQ/kjyqQuAjKTNPwTQZlfoPQKA6frsDZSi4jwcwVJl2f8YDFQRWRr1ba2AGeM0ggxT3C
+         kv7XX37O3o/VhEgbCQtI7XCwjW9dkwGdM1bK4nm371jVaxIhuQLGfntUxUCPIrVlVP0z
+         tWUw==
+X-Gm-Message-State: AFqh2koaq9SW6dPp2IUfojGLPWaEO3SCOV8vziX0hs+BAMjFJY7uGLbJ
+        oEnqUMxzqVE6JRWMu2n3HQpWt9Grdiw=
+X-Google-Smtp-Source: AMrXdXsk9DBDdnhj/78enjT18rDcLlNndy7I405c01Hs5lTzgcwPATuew7PY4J+aQtpxgVBuH6bKoA==
+X-Received: by 2002:a9d:7cca:0:b0:677:3d79:e60a with SMTP id r10-20020a9d7cca000000b006773d79e60amr13315713otn.31.1672324193920;
+        Thu, 29 Dec 2022 06:29:53 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id be15-20020a056808218f00b0035e7c48d08esm8148585oib.15.2022.12.29.06.26.06
+        by smtp.gmail.com with ESMTPSA id c1-20020a056830000100b006708d2cd8bcsm9077840otp.65.2022.12.29.06.29.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 06:26:06 -0800 (PST)
+        Thu, 29 Dec 2022 06:29:53 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 29 Dec 2022 06:26:05 -0800
+Date:   Thu, 29 Dec 2022 06:29:52 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Armin Wolf <W_Armin@gmx.de>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] hwmon: (ftsteutates) Fix scaling of measurements
-Message-ID: <20221229142605.GA20427@roeck-us.net>
+Subject: Re: [PATCH 3/3] hwmon: (ftsteutates) Use
+ devm_watchdog_register_device()
+Message-ID: <20221229142952.GA21098@roeck-us.net>
 References: <20221224041855.83981-1-W_Armin@gmx.de>
- <20221224041855.83981-2-W_Armin@gmx.de>
+ <20221224041855.83981-4-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221224041855.83981-2-W_Armin@gmx.de>
+In-Reply-To: <20221224041855.83981-4-W_Armin@gmx.de>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -75,122 +76,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 24, 2022 at 05:18:53AM +0100, Armin Wolf wrote:
-> A user complained that the ftsteutates driver was displaying
-> bogus values since its introduction. This happens because the
-> sensor measurements need to be scaled in order to produce
-> meaningful results:
-> - the fan speed needs to be multiplied by 60 since its in RPS
-> - the temperature is in degrees celsius and needs an offset of 64
-> - the voltage is in 1/256 of 3.3V
-> 
-> The offical datasheet says the voltage needs to be divided by 256,
-> but this is likely an off-by-one-error, since even the BIOS
-> devides by 255 (otherwise 3.3V could not be measured).
-> 
-> The voltage channels additionally need a board-specific multiplier,
-> however this can be done by the driver since its board-specific.
-> 
-> The reason the missing scaling of measurements is the way Fujitsu
-> used this driver when it was still out-of-tree. Back then, all
-> scaling was done in userspace by libsensors, even the generic one.
+On Sat, Dec 24, 2022 at 05:18:55AM +0100, Armin Wolf wrote:
+> Use devm_watchdog_register_device() to let devres take care
+> of unregistering the watchdog at device removal. Remove the
+> now pointless fts_remove() function.
 > 
 > Tested on a Fujitsu DS3401-B1.
 > 
-> Fixes: 08426eda58e0 ("hwmon: Add driver for FTS BMC chip "Teutates"")
 > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
-Applied.
+Applied to hwmon-next.
 
 Thanks,
 Guenter
 
 > ---
->  Documentation/hwmon/ftsteutates.rst |  4 ++++
->  drivers/hwmon/ftsteutates.c         | 19 +++++++++++++------
->  2 files changed, 17 insertions(+), 6 deletions(-)
+>  drivers/hwmon/ftsteutates.c | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
 > 
 > --
 > 2.30.2
 > 
-> diff --git a/Documentation/hwmon/ftsteutates.rst b/Documentation/hwmon/ftsteutates.rst
-> index 58a2483d8d0d..198fa8e2819d 100644
-> --- a/Documentation/hwmon/ftsteutates.rst
-> +++ b/Documentation/hwmon/ftsteutates.rst
-> @@ -22,6 +22,10 @@ enhancements. It can monitor up to 4 voltages, 16 temperatures and
->  8 fans. It also contains an integrated watchdog which is currently
->  implemented in this driver.
-> 
-> +The 4 voltages require a board-specific multiplier, since the BMC can
-> +only measure voltages up to 3.3V and thus relies on voltage dividers.
-> +Consult your motherboard manual for details.
-> +
->  To clear a temperature or fan alarm, execute the following command with the
->  correct path to the alarm file::
-> 
 > diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
-> index f5b8e724a8ca..ffa0bb364877 100644
+> index 66ff8d69a0de..d8878b8d16bc 100644
 > --- a/drivers/hwmon/ftsteutates.c
 > +++ b/drivers/hwmon/ftsteutates.c
-> @@ -12,6 +12,7 @@
->  #include <linux/i2c.h>
->  #include <linux/init.h>
->  #include <linux/jiffies.h>
-> +#include <linux/math.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/slab.h>
-> @@ -347,13 +348,15 @@ static ssize_t in_value_show(struct device *dev,
->  {
->  	struct fts_data *data = dev_get_drvdata(dev);
->  	int index = to_sensor_dev_attr(devattr)->index;
-> -	int err;
-> +	int value, err;
+> @@ -333,7 +333,7 @@ static int fts_watchdog_init(struct fts_data *data)
+>  	/* max timeout 255 minutes. */
+>  	data->wdd.max_hw_heartbeat_ms = 0xFF * 60 * MSEC_PER_SEC;
 > 
->  	err = fts_update_device(data);
->  	if (err < 0)
->  		return err;
-> 
-> -	return sprintf(buf, "%u\n", data->volt[index]);
-> +	value = DIV_ROUND_CLOSEST(data->volt[index] * 3300, 255);
-> +
-> +	return sprintf(buf, "%d\n", value);
+> -	return watchdog_register_device(&data->wdd);
+> +	return devm_watchdog_register_device(&data->client->dev, &data->wdd);
 >  }
 > 
->  static ssize_t temp_value_show(struct device *dev,
-> @@ -361,13 +364,15 @@ static ssize_t temp_value_show(struct device *dev,
->  {
->  	struct fts_data *data = dev_get_drvdata(dev);
->  	int index = to_sensor_dev_attr(devattr)->index;
-> -	int err;
-> +	int value, err;
-> 
->  	err = fts_update_device(data);
->  	if (err < 0)
->  		return err;
-> 
-> -	return sprintf(buf, "%u\n", data->temp_input[index]);
-> +	value = (data->temp_input[index] - 64) * 1000;
-> +
-> +	return sprintf(buf, "%d\n", value);
+>  static umode_t fts_is_visible(const void *devdata, enum hwmon_sensor_types type, u32 attr,
+> @@ -611,13 +611,6 @@ static int fts_detect(struct i2c_client *client,
+>  	return 0;
 >  }
 > 
->  static ssize_t temp_fault_show(struct device *dev,
-> @@ -436,13 +441,15 @@ static ssize_t fan_value_show(struct device *dev,
+> -static void fts_remove(struct i2c_client *client)
+> -{
+> -	struct fts_data *data = dev_get_drvdata(&client->dev);
+> -
+> -	watchdog_unregister_device(&data->wdd);
+> -}
+> -
+>  static int fts_probe(struct i2c_client *client)
 >  {
->  	struct fts_data *data = dev_get_drvdata(dev);
->  	int index = to_sensor_dev_attr(devattr)->index;
-> -	int err;
-> +	int value, err;
-> 
->  	err = fts_update_device(data);
->  	if (err < 0)
->  		return err;
-> 
-> -	return sprintf(buf, "%u\n", data->fan_input[index]);
-> +	value = data->fan_input[index] * 60;
-> +
-> +	return sprintf(buf, "%d\n", value);
->  }
-> 
->  static ssize_t fan_source_show(struct device *dev,
+>  	u8 revision;
+> @@ -684,7 +677,6 @@ static struct i2c_driver fts_driver = {
+>  	},
+>  	.id_table = fts_id,
+>  	.probe_new = fts_probe,
+> -	.remove = fts_remove,
+>  	.detect = fts_detect,
+>  	.address_list = normal_i2c,
+>  };
