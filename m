@@ -2,82 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576B8658990
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 06:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483D7658992
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 06:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiL2Flj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 00:41:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
+        id S231415AbiL2Fsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 00:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiL2Flh (ORCPT
+        with ESMTP id S229538AbiL2Fsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 00:41:37 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7D310B72;
-        Wed, 28 Dec 2022 21:41:36 -0800 (PST)
-Received: from localhost.localdomain (1.general.phlin.uk.vpn [10.172.194.38])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id BFC2043519;
-        Thu, 29 Dec 2022 05:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1672292494;
-        bh=K8ugYDZRkBzYLfNsSqHX8RJMnPEEi0o0mHYPYxH+SLI=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=XqOBpPvoVd0ncnFiqoSkWtdU86ck2Ge69FXp082fJRaJKMDTXKxobVdLMN/wYwMu5
-         MrAGtz6/Kj/kuGz7flskJMeeqcaF7rI5B+18E9d/VfBi7cAUfAwWcbo9yU4355snis
-         DQtQM1qnAeyeUDsa+hxhan+S8lk81wA0dzbZTj3jQv2TPT9SxroeeLWzWnt5FFLO6D
-         F/42SMmS+dP+3GI9/o+nSGUjKsdsbthETzAafrN5xmaFz2Ys4NGUgenwzCJqydWNfm
-         /cvnGgZpe9ZMZOexPv1egNvFpr7Pnm5IHDNx2VfDOZ91bH2YLn7IAfo7sSBVZFykzO
-         WJ+rTZHFbYGFw==
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, naresh.kamboju@linaro.org,
-        po-hsu.lin@canonical.com
-Subject: [PATCH] selftests: net: fix cmsg_so_mark.sh test hang
-Date:   Thu, 29 Dec 2022 13:41:06 +0800
-Message-Id: <20221229054106.96682-1-po-hsu.lin@canonical.com>
+        Thu, 29 Dec 2022 00:48:37 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6151275A;
+        Wed, 28 Dec 2022 21:48:35 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so18014833pjj.4;
+        Wed, 28 Dec 2022 21:48:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4W0s6Vcwe3tgxRphK3rNr3wMCLErEs9BbnZK8mgAHes=;
+        b=jo5SgIpWKjfwxooVy7t329MfTXrDhgKnkSHOOLgLeY2b9CFSJ81opr6jvlDvDFtPao
+         cPWb3MNDVeyz5o2Dt01tyLD1AKzmaZxG75eSXWbOV/VrdM3ldyQpTm3Xwq7uLjLkja9P
+         nSt2nt7zhAT5fOZ7xrWP0uhwgkAny6zzh+PUXhGgbieovFgAATQ/M4xE8X+aBNdfGk0D
+         oL1nXLYW0MGSaugA7JtdJS3A8RgEI/VFFrnTYxieFq62+pc4zlgirC/gRDQoS2Sll69h
+         sGyv7+0sM8/8nh2w28G01+E0Bk+IDII/Xobz1jYpU4MxGOkN45n/a3lTg+hiQf1+Se6j
+         WDtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4W0s6Vcwe3tgxRphK3rNr3wMCLErEs9BbnZK8mgAHes=;
+        b=KXU84YiARrEH33FOIQHsQ0tEFhqEFwnOBaDUtIHi6pcgnSwlm7rrk0pdWTT18w4MY1
+         OuXjOgnOVH0MTla9rSOTCp6hi21cx9J5Hio+TrXrhE+GZuinQr441yPGB/S+OusrLrO6
+         ez7MxG9jqb22XO8U7EGn2AyKOP1t6Koq7DhshRWGw/fUnBFCQrVAbQ+wqki2jIug51zI
+         pEfJEZ0abS9JnJOWmKUV2pjpNCwL+JIvR3cnoAH2cjq/rcOHXaevPQTTXwyhQrpOY/LU
+         oVVo4uykWWd9bCDTISE/0fMTdOxgXhbw8eYiEtm6ylvKJ9Em0proodKWwdT1olJezyaE
+         JvpA==
+X-Gm-Message-State: AFqh2kohPD9o2yXLJHhAUES15wIPo+ImjG5zT2L/teMwZAf9PsdsysLo
+        ZdeV3DCxOrqjZLWPpOwjmcI=
+X-Google-Smtp-Source: AMrXdXuI4gReujWBOjsXlS/Y8uekhUDShEClQW43vE4X0/gfunRcrnapmR1UA5Q306CRVSk9m708kA==
+X-Received: by 2002:a17:902:ab4d:b0:189:d0e1:4fcd with SMTP id ij13-20020a170902ab4d00b00189d0e14fcdmr33476734plb.55.1672292914910;
+        Wed, 28 Dec 2022 21:48:34 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id l2-20020a170902f68200b00177faf558b5sm11888274plg.250.2022.12.28.21.48.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 21:48:34 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Rob Herring <rob.herring@calxeda.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] EDAC: highbank: Fix memory leak in highbank_mc_probe
+Date:   Thu, 29 Dec 2022 09:48:24 +0400
+Message-Id: <20221229054825.1361993-1-linmq006@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This cmsg_so_mark.sh test will hang on non-amd64 systems because of the
-infinity loop for argument parsing in cmsg_sender.
+edac_mc_alloc() allocates memory. The memory are not released
+when devres_open_group() fails, which causes memory leak.
+Call edac_mc_free() in the error handling to fix this.
 
-Variable "o" in cs_parse_args() for taking getopt() should be an int,
-otherwise it will be 255 when getopt() returns -1 on non-amd64 system
-and thus causing infinity loop.
-
-Link: https://lore.kernel.org/lkml/CA+G9fYsM2k7mrF7W4V_TrZ-qDauWM394=8yEJ=-t1oUg8_40YA@mail.gmail.com/t/
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+Fixes: a1b01edb2745 ("edac: add support for Calxeda highbank memory controller")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- tools/testing/selftests/net/cmsg_sender.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+altr_sdram_probe() performs similar operations,
+I take it as reference.
+---
+ drivers/edac/highbank_mc_edac.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/cmsg_sender.c b/tools/testing/selftests/net/cmsg_sender.c
-index 75dd83e..24b21b1 100644
---- a/tools/testing/selftests/net/cmsg_sender.c
-+++ b/tools/testing/selftests/net/cmsg_sender.c
-@@ -110,7 +110,7 @@ static void __attribute__((noreturn)) cs_usage(const char *bin)
+diff --git a/drivers/edac/highbank_mc_edac.c b/drivers/edac/highbank_mc_edac.c
+index 61b76ec226af..19fba258ae10 100644
+--- a/drivers/edac/highbank_mc_edac.c
++++ b/drivers/edac/highbank_mc_edac.c
+@@ -174,8 +174,10 @@ static int highbank_mc_probe(struct platform_device *pdev)
+ 	drvdata = mci->pvt_info;
+ 	platform_set_drvdata(pdev, mci);
  
- static void cs_parse_args(int argc, char *argv[])
- {
--	char o;
-+	int o;
+-	if (!devres_open_group(&pdev->dev, NULL, GFP_KERNEL))
+-		return -ENOMEM;
++	if (!devres_open_group(&pdev->dev, NULL, GFP_KERNEL)) {
++		res = -ENOMEM;
++		goto free;
++	}
  
- 	while ((o = getopt(argc, argv, "46sS:p:m:M:d:tf:F:c:C:l:L:H:")) != -1) {
- 		switch (o) {
+ 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!r) {
+@@ -243,6 +245,7 @@ static int highbank_mc_probe(struct platform_device *pdev)
+ 	edac_mc_del_mc(&pdev->dev);
+ err:
+ 	devres_release_group(&pdev->dev, NULL);
++free:
+ 	edac_mc_free(mci);
+ 	return res;
+ }
 -- 
-2.7.4
+2.25.1
 
