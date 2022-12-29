@@ -2,140 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7244F658AF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 10:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 243B2658AFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 10:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233128AbiL2J1I convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Dec 2022 04:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
+        id S231203AbiL2J3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 04:29:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiL2J1G (ORCPT
+        with ESMTP id S230331AbiL2J3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 04:27:06 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 479AE2EE;
-        Thu, 29 Dec 2022 01:27:05 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BT9Pt6iA029915, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BT9Pt6iA029915
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 29 Dec 2022 17:25:55 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 29 Dec 2022 17:26:49 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 29 Dec 2022 17:26:49 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
- RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
- 15.01.2375.007; Thu, 29 Dec 2022 17:26:49 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tehuang@realtek.com" <tehuang@realtek.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 0/4] rtw88: Four fixes found while working on SDIO support
-Thread-Topic: [PATCH 0/4] rtw88: Four fixes found while working on SDIO
- support
-Thread-Index: AQHZGsFtyqvVdb8Ir06VvN9lkSQirK6EmVQw
-Date:   Thu, 29 Dec 2022 09:26:49 +0000
-Message-ID: <84e2f2289e964834b1eaf60d4f9f5255@realtek.com>
-References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/29_=3F=3F_07:25:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 29 Dec 2022 04:29:31 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF00F13D70;
+        Thu, 29 Dec 2022 01:29:29 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id t15so8069330wro.9;
+        Thu, 29 Dec 2022 01:29:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dQjUzt0TYzPClWLYVG06i7EaST8h2wDOVIpEzBnJCKM=;
+        b=IqTbHq4xT4HYduozrFDpiDA7xJ9I+5OnwguxGsOfY3/321zoGjQt8+6WV4s/5EG1Ao
+         VVPVp6PPpUyzgnG1R5QXST2wikq1yDOK/Qx3/CUd2u5+f6abRfL+Vygdxi3h2OIsR1ZF
+         cWGPdbDZJ5lrSLGF+tgXTMYY9hteZOYzcwx0qoIN/EYJtAet2+xmjRw4pazNK0aXL4Hs
+         JKRFPHCkir35PSkPzwjWdurWmqdhKfLW8nZPy2nlXVs5wdjw0SeLirjyMjagC2cf9iUU
+         m6wrUlN7hEwtsNR12bZ8n4qSV5y4N4QSnmdtnqnq55t952J0IK+Bflia6v1E0uCQgM61
+         7cWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dQjUzt0TYzPClWLYVG06i7EaST8h2wDOVIpEzBnJCKM=;
+        b=ZOkkU2p0dbuxf/k0PLa9slimdu5dpV+rhM3ecZp0x5T00FXr1z28fWtVHxpWqCMMrk
+         5XU0ZGoHg6QDCE6wADNlHp1zkRnZAMEiKBJCwsQTDo0oIdDd/CpPBpAgSmWXASARTOQV
+         b5ZgFKn6AhAGshprGktxr9O3aaQJ0OzPpJG32U2RgRjwvN0lqqH+6ftusdCB9OfQ6aBJ
+         0zwSpf0mU6eXR2K2j3WzlqWQWC/PqPZUbCNcqpya1PHcOmlvMeh4pM9WrU+4B0s17v4H
+         W7q+RuxNgqwM0UkjnibsVee4X4xOdH7PkVYR0HGs2m4w7Hsw6CbB8YFr2/6DXIFheGB4
+         BMxw==
+X-Gm-Message-State: AFqh2kpEmH+9Sg/yn+RGec2cosLAWtm0WklYu2tdkLXs+6IDXZYVV2/p
+        s7/SPohnYzJ1VCu4oJPKA1U=
+X-Google-Smtp-Source: AMrXdXvpWbDjkYnrUfS5uRT4UDoc3xE2G3Tlimu2DTpvAxWp+BIGeZObuZyRRKFe3+Mwk7ax6JNEHA==
+X-Received: by 2002:a05:6000:10e:b0:272:4d0b:366b with SMTP id o14-20020a056000010e00b002724d0b366bmr14027014wrx.38.1672306168168;
+        Thu, 29 Dec 2022 01:29:28 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id c10-20020a5d414a000000b0024242111a27sm17819412wrq.75.2022.12.29.01.29.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 01:29:27 -0800 (PST)
+Date:   Thu, 29 Dec 2022 12:29:24 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Joshua Goins <josh@redstrate.com>,
+        linux-input@vger.kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, kurikaesu@users.noreply.github.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: uclogic: Add support for XP-PEN Artist 22R Pro
+Message-ID: <202212261746.hBtGGDW4-lkp@intel.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2068502.VLH7GnMWUR@adrastea>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Joshua,
 
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Wednesday, December 28, 2022 9:36 PM
-> To: linux-wireless@vger.kernel.org
-> Cc: tony0620emma@gmail.com; kvalo@kernel.org; Ping-Ke Shih <pkshih@realtek.com>; tehuang@realtek.com;
-> s.hauer@pengutronix.de; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Martin Blumenstingl
-> <martin.blumenstingl@googlemail.com>
-> Subject: [PATCH 0/4] rtw88: Four fixes found while working on SDIO support
-> 
-> This series consists of three patches which are fixing existing
-> behavior (meaning: it either affects PCIe or USB or both) in the rtw88
-> driver.
-> 
-> The first change adds the packed attribute to the eFuse structs. This
-> was spotted by Ping-Ke while reviewing the SDIO support patches from
-> [0].
-> 
-> The remaining three changes relate to locking (barrier hold) problems.
-> We previously had discussed patches for this for SDIO support, but the
-> problem never ocurred while testing USB cards. It turns out that these
-> are still needed and I think that they also fix the same problems for
-> USB users (it's not clear how often it happens there though).
-> 
-> The issue fixed by the second and third patches have been spotted by a
-> user who tested rtw88 SDIO support. Everything is working fine for him
-> but there are warnings [1] and [2] in the kernel log stating "Voluntary
-> context switch within RCU read-side critical section!".
-> 
-> The solution in the third and fourth patch was actually suggested by
-> Ping-Ke in [3]. Thanks again!
-> 
-> 
-> [0] https://lore.kernel.org/linux-wireless/695c976e02ed44a2b2345a3ceb226fc4@realtek.com/
-> [1] https://github.com/LibreELEC/LibreELEC.tv/pull/7301#issuecomment-1366421445
-> [2] https://github.com/LibreELEC/LibreELEC.tv/pull/7301#issuecomment-1366610249
-> [3] https://lore.kernel.org/lkml/e0aa1ba4336ab130712e1fcb425e6fd0adca4145.camel@realtek.com/
-> 
-> 
-> Martin Blumenstingl (4):
->   rtw88: Add packed attribute to the eFuse structs
+url:    https://github.com/intel-lab-lkp/linux/commits/Joshua-Goins/HID-uclogic-Add-support-for-XP-PEN-Artist-22R-Pro/20221226-112302
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/2068502.VLH7GnMWUR%40adrastea
+patch subject: [PATCH] HID: uclogic: Add support for XP-PEN Artist 22R Pro
+config: i386-randconfig-m021-20221226
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 
-I think this patch depends on another patchset or oppositely.
-Please point that out for reviewers.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
->   rtw88: Configure the registers from rtw_bf_assoc() outside the RCU
->     lock
->   rtw88: Use rtw_iterate_vifs() for rtw_vif_watch_dog_iter()
->   rtw88: Use non-atomic rtw_iterate_stas() in rtw_ra_mask_info_update()
-> 
->  drivers/net/wireless/realtek/rtw88/bf.c       | 13 ++++++------
->  drivers/net/wireless/realtek/rtw88/mac80211.c |  4 +++-
->  drivers/net/wireless/realtek/rtw88/main.c     |  6 ++++--
->  drivers/net/wireless/realtek/rtw88/main.h     |  6 +++---
->  drivers/net/wireless/realtek/rtw88/rtw8723d.h |  6 +++---
->  drivers/net/wireless/realtek/rtw88/rtw8821c.h | 20 +++++++++----------
->  drivers/net/wireless/realtek/rtw88/rtw8822b.h | 20 +++++++++----------
->  drivers/net/wireless/realtek/rtw88/rtw8822c.h | 20 +++++++++----------
->  8 files changed, 50 insertions(+), 45 deletions(-)
-> 
-> --
-> 2.39.0
+New smatch warnings:
+drivers/hid/hid-uclogic-params.c:1453 uclogic_params_init_ugee_xppen_pro() warn: variable dereferenced before check 'hdev' (see line 1447)
+drivers/hid/hid-uclogic-params.c:1454 uclogic_params_init_ugee_xppen_pro() warn: possible memory leak of 'buf'
+drivers/hid/hid-uclogic-params.c:1492 uclogic_params_init_ugee_xppen_pro() error: double free of 'buf'
+
+Old smatch warnings:
+drivers/hid/hid-uclogic-params.c:1502 uclogic_params_init_ugee_xppen_pro() error: double free of 'buf'
+
+vim +/hdev +1453 drivers/hid/hid-uclogic-params.c
+
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1436  static int uclogic_params_init_ugee_xppen_pro(struct hid_device *hdev,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1437  					      struct uclogic_params *p,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1438  					      const u8 probe_endpoint,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1439  					      const u8 rdesc_init_packet[],
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1440  					      const size_t rdesc_init_size,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1441  					      const u8 rdesc_tablet_arr[],
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1442  					      const size_t rdesc_tablet_size,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1443  					      const u8 rdesc_frame_arr[],
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1444  					      const size_t rdesc_frame_size)
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1445  {
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1446  	const size_t str_desc_len = 12;
+51d8c9b14fc55dc Aren Villanueva 2022-12-25 @1447  	struct usb_device *udev = hid_to_usb_dev(hdev);
+                                                                                                 ^^^^
+Dereference.
+
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1448  	u8 *buf = kmemdup(rdesc_init_packet, rdesc_init_size, GFP_KERNEL);
+
+Never put functions which can fail in the declaration block.  This
+allocation has no check for NULL (common problem when done in
+declaration block).
+
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1449  	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1450  	int actual_len, rc;
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1451  	u16 resolution;
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1452  
+51d8c9b14fc55dc Aren Villanueva 2022-12-25 @1453  	if (hdev == NULL || p == NULL)
+                                                            ^^^^^^^^^^^^
+Checked to late.
+
+51d8c9b14fc55dc Aren Villanueva 2022-12-25 @1454  		return -EINVAL;
+
+Needs a kfree(buf);
+
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1455  
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1456  	rc = usb_interrupt_msg(
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1457  		udev,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1458  		usb_sndintpipe(udev, probe_endpoint),
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1459  		buf,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1460  		rdesc_init_size,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1461  		&actual_len,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1462  		USB_CTRL_SET_TIMEOUT);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1463  	kfree(buf);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1464  	if (rc == -EPIPE) {
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1465  		hid_err(hdev, "broken pipe sending init packet\n");
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1466  		return rc;
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1467  	} else if (rc < 0) {
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1468  		hid_err(hdev, "failed sending init packet: %d\n", rc);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1469  		return rc;
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1470  	} else if (actual_len != rdesc_init_size) {
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1471  		hid_err(hdev,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1472  			"failed to transfer complete init packet, only %d bytes sent\n",
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1473  			actual_len);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1474  		return -1;
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1475  	}
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1476  
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1477  	rc = uclogic_params_get_str_desc(&buf, hdev, 100, str_desc_len);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1478  	if (rc != str_desc_len) {
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1479  		if (rc == -EPIPE) {
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1480  			hid_err(hdev,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1481  				"string descriptor with pen parameters not found\n");
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1482  		} else if (rc < 0) {
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1483  			hid_err(hdev,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1484  				"failed retrieving pen parameters: %d\n", rc);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1485  		} else {
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1486  			hid_err(hdev,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1487  				"string descriptor with pen parameters has invalid length (got %d, expected %lu)\n",
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1488  				rc,
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1489  				str_desc_len);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1490  			rc = -1;
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1491  		}
+51d8c9b14fc55dc Aren Villanueva 2022-12-25 @1492  		kfree(buf);
+
+If uclogic_params_get_str_desc() fails then this is a double free.
+
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1493  		return rc;
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1494  	}
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1495  
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1496  	desc_params[UCLOGIC_RDESC_PEN_PH_ID_X_LM] = get_unaligned_le16(buf + 2);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1497  	desc_params[UCLOGIC_RDESC_PEN_PH_ID_Y_LM] = get_unaligned_le16(buf + 4);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1498  	/* buf + 6 is the number of pad buttons? Its 0x0008 */
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1499  	desc_params[UCLOGIC_RDESC_PEN_PH_ID_PRESSURE_LM] =
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1500  		get_unaligned_le16(buf + 8);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1501  	resolution = get_unaligned_le16(buf + 10);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1502  	kfree(buf);
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1503  	if (resolution == 0) {
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1504  		hid_err(hdev, "resolution of 0 in descriptor string\n");
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1505  		return -1;
+51d8c9b14fc55dc Aren Villanueva 2022-12-25  1506  	}
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 
