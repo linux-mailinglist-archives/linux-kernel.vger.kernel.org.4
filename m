@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5975658CCB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965BF658CC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbiL2Mp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S233303AbiL2Mo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbiL2MpV (ORCPT
+        with ESMTP id S229535AbiL2Mox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:45:21 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482EF13D6C;
-        Thu, 29 Dec 2022 04:45:18 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NjSkK5T7kzJqkX;
-        Thu, 29 Dec 2022 20:43:53 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 29 Dec 2022 20:44:31 +0800
-Subject: Re: [PATCH] perf record: Fix coredump with --overwrite and --max-size
-To:     Namhyung Kim <namhyung@kernel.org>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <jiwei.sun@windriver.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221227130701.124278-1-yangjihong1@huawei.com>
- <CAM9d7chDPQ9_J5=XLWbhp2AztiyVwTaRjTf20reCdriseTvX_A@mail.gmail.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <730b1733-8778-8b82-3751-a14905cef114@huawei.com>
-Date:   Thu, 29 Dec 2022 20:44:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Thu, 29 Dec 2022 07:44:53 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA6A120B3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:44:51 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id m18so44649782eji.5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 04:44:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0TFFrUt4LQqfMqFPZcUCojOx9RB3FN3rW7wfQoSwSrA=;
+        b=TeL5UAmg/6zgmU3Ix28zmrwTqBsHNJFuE74+7sO8tbSEZvyyync000drkXXuU7p7Qu
+         uWs8ItZm1xA60PyUHCQ4vjfgR1btDJlWhhOXEICIjjAByseTXkqiBDiLXuzM0xSHEAPG
+         PscC83Wj4yyfgO8RPMXih7sZs+cuK3LU30TzeHlUxLr8PcFcr89x4uzUpAtNHidk4j/4
+         X3x7y8dy69BrnH2ecBlszIw+3IZjK6mHfeppnulHSfG9PnIdZjrWDvS6aNAvRNOJXV++
+         3yFKJs46Mj3QS6GIEamPrFslAvLRuROgSJs+z7geztMtCTPcDD5mcWCA/PbzaiHl6c3O
+         r9pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0TFFrUt4LQqfMqFPZcUCojOx9RB3FN3rW7wfQoSwSrA=;
+        b=VynfNJ+Nhznm+sxwNuyznCh/r+MAKNgnpvOv2hz8z7aWxIHG9/RYMHM7rtUCQzCqiz
+         1sfcCcaQYmT144BEPTOqeC8eREOzK3Pd3qvOPAdzpiny6CGI9TQTnCGxRB1y236ZnqTJ
+         iVwuIk46WcfEA4Yc1mPNzaKh22jvdEfvAUiEJ1rzU6Duwr7K9XgnKkI7ddnUsWKtV7t3
+         gkK7tB1OqgsbJa8A0KakGuLn+01cqaIyXKfo/2J6OKX6WsNgGYtx+YvS+6dLLsHxfYYf
+         4eSEfp84a9dM4bOtIxSOVm3NHGIU5aaOHe0UxMhYJuR/Kqc1Hp8cBbf8ZmDq8smzQD1X
+         jRlw==
+X-Gm-Message-State: AFqh2koygazZi1B5jJ7S9fCLjfq0F6W1A72sYh0B3zzYqqT9BWMl3ji5
+        5mX7246tjpuTfpd17cWGkUQNvg==
+X-Google-Smtp-Source: AMrXdXssBXJ2oUDdvTt+u35WNx5VyF+QRRodDl/adWaxq1LEm/yYsY4FbIIzuvo6lICBCR3ElLA3BA==
+X-Received: by 2002:a17:906:18e2:b0:7c1:4bb:b157 with SMTP id e2-20020a17090618e200b007c104bbb157mr30451069ejf.4.1672317889933;
+        Thu, 29 Dec 2022 04:44:49 -0800 (PST)
+Received: from planet9.chello.ie (2001-1c06-2302-5600-12a8-8cf4-e3f6-f90f.cable.dynamic.v6.ziggo.nl. [2001:1c06:2302:5600:12a8:8cf4:e3f6:f90f])
+        by smtp.gmail.com with ESMTPSA id 15-20020a170906318f00b0078db5bddd9csm8483461ejy.22.2022.12.29.04.44.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 04:44:49 -0800 (PST)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     quic_mkrishn@quicinc.com, andersson@kernel.org,
+        swboyd@chromium.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bryan.odonoghue@linaro.org
+Subject: [PATCH v3 0/1] Fixup documentation for dsi-phy-28nm
+Date:   Thu, 29 Dec 2022 12:44:37 +0000
+Message-Id: <20221229124438.504770-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <CAM9d7chDPQ9_J5=XLWbhp2AztiyVwTaRjTf20reCdriseTvX_A@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+V3:
+Moves change to last item in list so as not to break-up grouping of reg/reg-names
 
-On 2022/12/28 5:05, Namhyung Kim wrote:
-> On Tue, Dec 27, 2022 at 5:10 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->>
->> When --overwrite and --max-size options of perf record are used together,
->> a segmentation fault occurs. The following is an example:
->>
->>   # perf record -e sched:sched* --overwrite --max-size 1M -a -- sleep 1
->>    [ perf record: Woken up 1 times to write data ]
->>    perf: Segmentation fault
->>    Obtained 1 stack frames.
->>    [0xc4c67f]
->>    Segmentation fault (core dumped)
->>
->> backtrace of the core file is as follows:
->>
->>    #0  0x0000000000417990 in process_locked_synthesized_event (tool=0x0, event=0x15, sample=0x1de0, machine=0xf8) at builtin-record.c:630
->>    #1  0x000000000057ee53 in perf_event__synthesize_threads (nr_threads_synthesize=21, mmap_data=<optimized out>, needs_mmap=<optimized out>, machine=0x17ad9b0, process=<optimized out>, tool=0x0) at util/synthetic-events.c:1950
->>    #2  __machine__synthesize_threads (nr_threads_synthesize=0, data_mmap=<optimized out>, needs_mmap=<optimized out>, process=<optimized out>, threads=0x8, target=0x8, tool=0x0, machine=0x17ad9b0) at util/synthetic-events.c:1936
->>    #3  machine__synthesize_threads (machine=0x17ad9b0, target=0x8, threads=0x8, needs_mmap=<optimized out>, data_mmap=<optimized out>, nr_threads_synthesize=0) at util/synthetic-events.c:1947
->>    #4  0x000000000040165d in record__synthesize (tail=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2010
->>    #5  0x0000000000403989 in __cmd_record (argc=<optimized out>, argv=<optimized out>, rec=0xbe2520 <record>) at builtin-record.c:2810
->>    #6  0x00000000004196ba in record__init_thread_user_masks (rec=0xbe2520 <record>, cpus=0x17a65f0) at builtin-record.c:3837
->>    #7  record__init_thread_masks (rec=0xbe2520 <record>) at builtin-record.c:3938
->>    #8  cmd_record (argc=1, argv=0x7ffdd692dc60) at builtin-record.c:4241
->>    #9  0x00000000004b701d in pager_command_config (var=0x0, value=0x15 <error: Cannot access memory at address 0x15>, data=0x1de0) at perf.c:117
->>    #10 0x00000000004b732b in get_leaf_frame_caller_aarch64 (sample=0xfffffffb, thread=0x0, usr_idx=<optimized out>) at util/arm64-frame-pointer-unwind-support.c:56
->>    #11 0x0000000000406331 in execv_dashed_external (argv=0x7ffdd692d9e8) at perf.c:410
->>    #12 run_argv (argcp=<synthetic pointer>, argv=<synthetic pointer>) at perf.c:431
->>    #13 main (argc=<optimized out>, argv=0x7ffdd692d9e8) at perf.c:562
-> 
-> I'm not sure this callstack is correct.
-This is the backtrace printed by using the gdb to debug the core file, 
-which should be normal.
+V2:
+This is the one remaining patch I had from a previous series for
+mdss-dsi-ctrl and the dsi-phy. The mdss-dsi-ctrl set became a bigger so I
+split out the 28nm phy fixes.
 
-The preceding example should trigger this problem as long as the perf 
-file reaches max_size.
-> 
->>
->> The reason is that record__bytes_written accesses the freed memory rec->thread_data,
->> The process is as follows:
->>    __cmd_record
->>      -> record__free_thread_data
->>        -> zfree(&rec->thread_data)         // free rec->thread_data
->>      -> record__synthesize
->>        -> perf_event__synthesize_id_index
->>          -> process_synthesized_event
->>            -> record__write
->>              -> record__bytes_written     // access rec->thread_data
->>
->> In the overwrite scenario, to synthesize non-sample events,
->> we do not need to check perf size limit.
-> 
-> Hmm.. I think we should prevent this kind of access after
-> record__free_thread_data().  We may set nr_threads to 0
-> and save the bytes_written for threads separately.
-Ok, will change in next version.
-> 
-the value of done is 1 here, Therefore, we only need to check the value 
-of done first.
+I'm resubmitting with Dmitry's RB as a standalone.
 
-Thanks,
-Yang.
+Old: https://lore.kernel.org/all/20220630120845.3356144-1-bryan.odonoghue@linaro.org/
 
-> Thanks,
-> Namhyung
-> 
-> 
->>
->> Fixes: 6d57581659f7 ("perf record: Add support for limit perf output file size")
->> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->> ---
->>   tools/perf/builtin-record.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
->> index 29dcd454b8e2..c5f169150d63 100644
->> --- a/tools/perf/builtin-record.c
->> +++ b/tools/perf/builtin-record.c
->> @@ -260,7 +260,7 @@ static int record__write(struct record *rec, struct mmap *map __maybe_unused,
->>          else
->>                  rec->bytes_written += size;
->>
->> -       if (record__output_max_size_exceeded(rec) && !done) {
->> +       if (!rec->opts.tail_synthesize && record__output_max_size_exceeded(rec) && !done) {
->>                  fprintf(stderr, "[ perf record: perf size limit reached (%" PRIu64 " KB),"
->>                                  " stopping session ]\n",
->>                                  record__bytes_written(rec) >> 10);
->> --
->> 2.17.1
->>
-> .
-> 
+Bryan O'Donoghue (1):
+  dt-bindings: msm: dsi-phy-28nm: Add missing
+    qcom,dsi-phy-regulator-ldo-mode
+
+ .../devicetree/bindings/display/msm/dsi-phy-28nm.yaml         | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+-- 
+2.34.1
+
