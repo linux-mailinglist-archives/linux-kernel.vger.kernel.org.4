@@ -2,149 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F2A658A1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 08:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5489D658A21
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbiL2HzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 02:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S233075AbiL2IC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 03:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiL2HzB (ORCPT
+        with ESMTP id S229520AbiL2ICx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 02:55:01 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2074.outbound.protection.outlook.com [40.107.100.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAA6F5AC;
-        Wed, 28 Dec 2022 23:55:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RKNivkU2XqHwkJ8O5Q4s6iNBxV+Z3m+vn9m9EjI6btQEIGIz9TxQ6o28fRsR2f7JpMSdnxh09tHZPOC9oGMwOzM2+bmL7YxwriRz4vq/NAfY6w/v2y46xO6raAtIgQAlCXZaDHnqhoJoYjK2vDyj/4IPplzMqlZvzSOmCIm6g+YA3PIWzO3B4VflX4e9xGj8DDNHnB2oY9jfWvVonhfM8TB+8hEE3cAlkQ/9Wx8GExz94/qb5CbYnimczBGS/2P1BDvh4+meflSWjLG89EbDj+e1aV/9/a533xxeuB2Av+v/+eUz2bgUJq5hs8k0apO6sRg84TqkxOfrqOBFA8o7vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e3CbsPL87SyxkevnyZw0QBoY2ny9iwqqDFXcnDc8SGw=;
- b=bqEd+nTPgHv8X+G9XgZzHcXcqMTGxnAjf5lSAPATm57zsX2lWonzF8ngx+zoBd3uYeSMZ8WuecOoWzGLoaSPepbnt8rDVolrxKsru0ZdoOCV1qUPzd0GO3zVYx9V7KBwYa1bnG+CqeGbDgqCC+W/mXBHlCE88wA5AUt516ajkl7QAExK9LEmzhrdvbdm9fKRduhQgWvRTX8i76Pp7tUGucWoYL6g3zeyHvpw9eOEiMaV33JWMS5poBOq8kDZHTWTHUO0GdUhixbGzUlDULXJcPrgP8P088XfVFv/Qy5gzNEHwsRp6YPbIv4m6qGYdNyR6n5JvdFeY6D/+QcAZuKNAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e3CbsPL87SyxkevnyZw0QBoY2ny9iwqqDFXcnDc8SGw=;
- b=g3dZUteYmUg7n1eDbbJexE6xekPggAbxcSl3+BJZ67pi+q/hBkdRqSAYLV2nakM+lrRYwoz7Z+9PBadYmZUITC/I+4pyvlE8eOkpNgN0swcXWtGmKfPCUnqt7Kg7B6kTsQOGamXL3fGiSBy6atUp0ZY6/yY4LYHperkiMiBer0GxlBX9Rc+fHtZrB8OpTeDQmD7moN5S/VT43YCBxAfee52jcTluPK0uJ2gITZJCvohi29Qe/hA7aFNRtD60aqpVS1G9NshYPHewWbTsqYxAWWI/X0kggbUpR6WtR7rgL2q2zqhlQqsJowoMkjKZYFrapH3F3MuWyq1vcHFsLehWwA==
-Received: from BN9PR03CA0729.namprd03.prod.outlook.com (2603:10b6:408:110::14)
- by SA0PR12MB4480.namprd12.prod.outlook.com (2603:10b6:806:99::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Thu, 29 Dec
- 2022 07:54:58 +0000
-Received: from BN8NAM11FT101.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:110:cafe::bb) by BN9PR03CA0729.outlook.office365.com
- (2603:10b6:408:110::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.17 via Frontend
- Transport; Thu, 29 Dec 2022 07:54:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT101.mail.protection.outlook.com (10.13.177.126) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5966.17 via Frontend Transport; Thu, 29 Dec 2022 07:54:57 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 28 Dec
- 2022 23:54:39 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 28 Dec
- 2022 23:54:38 -0800
-Received: from orome.fritz.box (10.127.8.9) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Wed, 28 Dec 2022 23:54:35 -0800
-From:   Thierry Reding <treding@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <stable@vger.kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
-In-Reply-To: <20221228144256.536395940@linuxfoundation.org>
-References: <20221228144256.536395940@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 29 Dec 2022 03:02:53 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA17FD2DA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:02:23 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id b145so8095394pfb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:02:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YYn77ci8+oadBW76lYzJfKZ6fFNIjqBEwRX0Ww9TJ7s=;
+        b=Dn6En9W1e8cvEiQoDDVWTZzEhI8jZ1ErnKGxbi6HBk4DW/AKMU1+gcswtxwjrru8kf
+         8B/8zwi25Cr+1OxPpx/7zMQjEiw5ewfmX8xAhAo9u4gxjj/NLtDGgk+YprKWbhlCmeWW
+         AAxgE6cdm36llA/q9WPCKI60l9jGJEWmmbk3TpkHmvrWSyMB6OkkE8MvTG+6RNIu+oU0
+         R/gm9aBaQOxiJmdN70/jpopv7gVx6htBToGrpLSOyTfQIac1gBCYsYazgZ9Zw+uTsAMP
+         MIF4VqjN4rr/1GTHPuC1lvhf5OdDFDjVM7chHc5oVlqaM8tc8pbn3lMGIIK3DC72THig
+         T4rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YYn77ci8+oadBW76lYzJfKZ6fFNIjqBEwRX0Ww9TJ7s=;
+        b=6fPyw9PUR0Xf5TV81oNBVW1uXDjPEs9uwdtA7+KPxl+kzy+t9R4tXrzfVEvDaDHID9
+         OmxMuiYqCikTNk/x8WfU+ZAW3vH6Icp0ghxRQIc7SfC9fHD71RaNH4ibBWeoPsjvD6iM
+         CQsi+Z/fDDTfsgEFPsKmjZk8abcmvIoB1TYDHJZz+cQF6K614tDuN1HjpxhreGoMg9hj
+         fScw36CEA0eldeoHrIMA4vl1RL+k3BSHfzm6qr2PMnF4JwrNPENyftxUK1tZjWv+k6p/
+         ape/EPH/5PN3S/Bn+HkBB8CHjXDLFv/RAdzRptAF9bQui4lpCPM5cYbzc7jXhqjzRyUw
+         ieZA==
+X-Gm-Message-State: AFqh2kp6spA+9tOedSmM4pdkL9q0M6+XpgJktkmiBJ7FXrwIR6fb09Ab
+        0awbQx+DqGO1Bp5ASAVm/funlw==
+X-Google-Smtp-Source: AMrXdXvczbVUCzIVrbJxWzaGVw3CX97HUqqvyMnn4zkn6ZEH4k4Vjnicexgjj2tSI+5JDyoPrIq4YQ==
+X-Received: by 2002:a62:648b:0:b0:57a:a199:93e7 with SMTP id y133-20020a62648b000000b0057aa19993e7mr28677722pfb.28.1672300943082;
+        Thu, 29 Dec 2022 00:02:23 -0800 (PST)
+Received: from PF2E59YH-BKX.inc.bytedance.com ([139.177.225.249])
+        by smtp.gmail.com with ESMTPSA id k17-20020aa79d11000000b005764c8f8f15sm11485781pfp.73.2022.12.29.00.02.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 00:02:22 -0800 (PST)
+From:   Yunhui Cui <cuiyunhui@bytedance.com>
+To:     edumazet@google.com, rostedt@goodmis.org, mhiramat@kernel.org,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, duanxiongchun@bytedance.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, cuiyunhui@bytedance.com
+Subject: [PATCH] tcp/udp: add tracepoint for send recv length
+Date:   Thu, 29 Dec 2022 16:02:07 +0800
+Message-Id: <20221229080207.1029-1-cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Message-ID: <100e6bf5-22c7-4cb8-b7f6-2b0221613ee9@rnnvmail202.nvidia.com>
-Date:   Wed, 28 Dec 2022 23:54:35 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT101:EE_|SA0PR12MB4480:EE_
-X-MS-Office365-Filtering-Correlation-Id: 711b2a18-49c4-4e1b-71e5-08dae971fb3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RZ6WEkVchMGjocYDs+x6K2wbwArVCafGNeXTffzDhUUb+YfccULOedXX/C1n8rrDnca/5ibHpXZjEtmN5aNy1ias7yBn8y0chR+6dmSRbFqf2oRKQ9btB9rbddOQahxRUQQNesFTz/TDGYLBxtN0zQ8HzNISAYV9L0xhk+ChpRVN4fkyPt9JjN0O6Cseuh55JuJcq6K+Vy2n4OADyRpVTef88l8VGOGZHIRxMIC2Q3CebHd+fzI6Bi0mxhXfQky+FAHm7XYk9ybSeDP7H1LMgjMKxIVaoLq/myHE3AtwUbfvOJnCGHAXP2bF5vQTKMMw2MFIyuW7af1JJEywUeO+HjkOAxLo6As2d8dY80Z4rRMwIPwOFo2+zJFtPiC9ffGTojXsoUfImJnCdrREs88aG/XbQn0pxD/CwNNtMZ6Tz+rAXhHJnB29inuA32K/7NsEUa2RvamEmeH0opHu0frQPR19kMYIg71k+oUcyu8p8TCST5Yo4/Xezu2A2bJG7jfA61dOJNTSjXrNg2qYQOkDnMQAW2yrqJAbdP9SGEJS0dzLqc3cYGHHNcOH6wwayfDBFJVNf6R9SfNH6JpH/s+8UrsYKvAtb7aAKlwWmMk/LgL2kgcSkBPw/34dSmgBq2NMjrxP/Ey6nl/F1QGIRfPBAfxigYKsx2whulgr7iXzbx4SYN2KgfYyq5gwh9cy+FbA3xCerFXblOtAJvZKzkan6CgvpCwMRT5x+UJl+HLzmYHTPclcl4McnB9ZgslQRfawCNWQvc1Jt0s4fMLAtOHOr5aEqJKZgO086I0DNGe9zI4nnVeFtw1vDAntMgWNRuQaXw2U6pjRrMM4SZ2i7Os+ng==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(31686004)(82310400005)(41300700001)(8936002)(5660300002)(70586007)(40480700001)(7416002)(8676002)(4326008)(31696002)(86362001)(70206006)(2906002)(54906003)(36860700001)(7636003)(316002)(110136005)(356005)(966005)(82740400003)(336012)(47076005)(478600001)(26005)(426003)(40460700003)(186003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2022 07:54:57.9712
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 711b2a18-49c4-4e1b-71e5-08dae971fb3b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT101.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4480
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Dec 2022 15:31:47 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.86 release.
-> There are 731 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Fri, 30 Dec 2022 14:41:39 +0000.
-> Anything received after that time might be too late.
->=20
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.86-r=
-c1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git l=
-inux-5.15.y
-> and the diffstat can be found below.
->=20
-> thanks,
->=20
-> greg k-h
+From: Xiongchun Duan <duanxiongchun@bytedance.com>
 
-All tests passing for Tegra ...
+Add a tracepoint for capturing TCP segments with
+a send or receive length. This makes it easy to obtain
+the packet sending and receiving information of each process
+in the user mode, such as the netatop tool.
 
-Test results for stable-v5.15:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    114 tests:	114 pass, 0 fail
+Signed-off-by: Xiongchun Duan <duanxiongchun@bytedance.com>
+---
+ include/trace/events/tcp.h | 41 ++++++++++++++++++++++++++++++++++++++
+ include/trace/events/udp.h | 34 +++++++++++++++++++++++++++++++
+ net/ipv4/tcp.c             |  7 +++++++
+ net/ipv4/udp.c             | 11 ++++++++--
+ 4 files changed, 91 insertions(+), 2 deletions(-)
 
-Linux version:	5.15.86-rc1-g87d5d5cae7d9
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
-
-Tested-by: Thierry Reding <treding@nvidia.com>
+diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
+index 901b440238d5..d9973c8508d1 100644
+--- a/include/trace/events/tcp.h
++++ b/include/trace/events/tcp.h
+@@ -187,6 +187,47 @@ DEFINE_EVENT(tcp_event_sk, tcp_rcv_space_adjust,
+ 	TP_ARGS(sk)
+ );
+ 
++/*
++ * tcp send/recv stream length
++ *
++ * Note: this class requires positive integer
++ */
++DECLARE_EVENT_CLASS(tcp_stream_length,
++
++	TP_PROTO(struct sock *sk, int length, int error, int flags),
++
++	TP_ARGS(sk, length, error, flags),
++
++	TP_STRUCT__entry(
++		__field(void *, sk)
++		__field(int, length)
++		__field(int, error)
++		__field(int, flags)
++	),
++
++	TP_fast_assign(
++		__entry->sk = sk;
++		__entry->length = length;
++		__entry->error = error;
++		__entry->flags = flags;
++	),
++
++	TP_printk("sk address = %p, length = %d, error = %d flags = %u ",
++		__entry->sk, __entry->length, __entry->error, __entry->flags)
++);
++
++DEFINE_EVENT(tcp_stream_length, tcp_send_length,
++	TP_PROTO(struct sock *sk, int length, int error, int flags),
++
++	TP_ARGS(sk, length, error, flags)
++);
++
++DEFINE_EVENT(tcp_stream_length, tcp_recv_length,
++	TP_PROTO(struct sock *sk, int length, int error, int flags),
++
++	TP_ARGS(sk, length, error, flags)
++);
++
+ TRACE_EVENT(tcp_retransmit_synack,
+ 
+ 	TP_PROTO(const struct sock *sk, const struct request_sock *req),
+diff --git a/include/trace/events/udp.h b/include/trace/events/udp.h
+index 336fe272889f..22181c91c8e2 100644
+--- a/include/trace/events/udp.h
++++ b/include/trace/events/udp.h
+@@ -27,6 +27,40 @@ TRACE_EVENT(udp_fail_queue_rcv_skb,
+ 	TP_printk("rc=%d port=%hu", __entry->rc, __entry->lport)
+ );
+ 
++DECLARE_EVENT_CLASS(udp_stream_length,
++
++	TP_PROTO(struct sock *sk, int length, int error, int flags),
++
++	TP_ARGS(sk, length, error, flags),
++
++	TP_STRUCT__entry(
++		__field(void *, sk)
++		__field(int, length)
++		__field(int, error)
++		__field(int, flags)
++	),
++
++	TP_fast_assign(
++		__entry->sk = sk;
++		__entry->length = length;
++		__entry->error = error;
++		__entry->flags = flags;
++	),
++
++	TP_printk("sk address = %p, length = %d, error=%d, flags = %u ",
++	__entry->sk, __entry->length, __entry->error, __entry->flags)
++);
++
++DEFINE_EVENT(udp_stream_length, udp_send_length,
++	TP_PROTO(struct sock *sk, int length, int error, int flags),
++	TP_ARGS(sk, length, error, flags)
++);
++
++DEFINE_EVENT(udp_stream_length, udp_recv_length,
++	TP_PROTO(struct sock *sk, int length, int error, int flags),
++	TP_ARGS(sk, length, error, flags)
++);
++
+ #endif /* _TRACE_UDP_H */
+ 
+ /* This part must be outside protection */
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index c567d5e8053e..5deb69e2d3e7 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -267,6 +267,7 @@
+ #include <linux/errqueue.h>
+ #include <linux/static_key.h>
+ #include <linux/btf.h>
++#include <trace/events/tcp.h>
+ 
+ #include <net/icmp.h>
+ #include <net/inet_common.h>
+@@ -1150,6 +1151,7 @@ int tcp_sendpage(struct sock *sk, struct page *page, int offset,
+ 	lock_sock(sk);
+ 	ret = tcp_sendpage_locked(sk, page, offset, size, flags);
+ 	release_sock(sk);
++	trace_tcp_send_length(sk, ret > 0 ? ret : 0, ret > 0 ? 0 : ret, 0);
+ 
+ 	return ret;
+ }
+@@ -1482,6 +1484,7 @@ int tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 	lock_sock(sk);
+ 	ret = tcp_sendmsg_locked(sk, msg, size);
+ 	release_sock(sk);
++	trace_tcp_send_length(sk, ret > 0 ? ret : 0, ret > 0 ? 0 : ret, 0);
+ 
+ 	return ret;
+ }
+@@ -2647,6 +2650,10 @@ static int tcp_recvmsg_locked(struct sock *sk, struct msghdr *msg, size_t len,
+ 
+ 	/* Clean up data we have read: This will do ACK frames. */
+ 	tcp_cleanup_rbuf(sk, copied);
++	trace_tcp_recv_length(sk, (copied > 0 && !(flags & MSG_PEEK)) ?
++				   copied : 0,
++			      (copied > 0 &&
++			       !(flags & MSG_PEEK)) ? 0 : copied, flags);
+ 	return copied;
+ 
+ out:
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 9592fe3e444a..1b336af4df6d 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -1300,6 +1300,7 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 	release_sock(sk);
+ 
+ out:
++	trace_udp_send_length(sk, err == 0 ? len : 0, err, 0);
+ 	ip_rt_put(rt);
+ out_free:
+ 	if (free)
+@@ -1364,8 +1365,10 @@ int udp_sendpage(struct sock *sk, struct page *page, int offset,
+ 			     page, offset, size, flags);
+ 	if (ret == -EOPNOTSUPP) {
+ 		release_sock(sk);
+-		return sock_no_sendpage(sk->sk_socket, page, offset,
+-					size, flags);
++		ret = sock_no_sendpage(sk->sk_socket, page, offset,
++				       size, flags);
++		trace_udp_send_length(sk, ret > 0 ? ret : 0, ret > 0 ? 0 : ret, 0);
++		return ret;
+ 	}
+ 	if (ret < 0) {
+ 		udp_flush_pending_frames(sk);
+@@ -1377,6 +1380,7 @@ int udp_sendpage(struct sock *sk, struct page *page, int offset,
+ 		ret = udp_push_pending_frames(sk);
+ 	if (!ret)
+ 		ret = size;
++	trace_udp_send_length(sk, ret > 0 ? ret : 0, ret > 0 ? 0 : ret, 0);
+ out:
+ 	release_sock(sk);
+ 	return ret;
+@@ -1935,6 +1939,9 @@ int udp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int flags,
+ 	if (flags & MSG_TRUNC)
+ 		err = ulen;
+ 
++	trace_udp_recv_length(sk, (err > 0 && !peeking) ? err : 0,
++			      (err > 0 && !peeking) ? 0 : err, flags);
++
+ 	skb_consume_udp(sk, skb, peeking ? -err : err);
+ 	return err;
+ 
+-- 
+2.20.1
 
