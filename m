@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26B4658931
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4292765893A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 04:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbiL2DmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Dec 2022 22:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
+        id S232818AbiL2Dpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Dec 2022 22:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiL2DmJ (ORCPT
+        with ESMTP id S230488AbiL2Dpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Dec 2022 22:42:09 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416A713D10;
-        Wed, 28 Dec 2022 19:42:07 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so17796971pjj.4;
-        Wed, 28 Dec 2022 19:42:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dc0DuU1O9eY3YHChsMW27jwVrWlDkDg7wgtC9pCKkng=;
-        b=CTW90m8ookmgVbN8JMlAeqhaXEU435OhE/1KEl/BoV4uGNO5P8bjeviexwlm5cVk/X
-         OsW9kElZhbSXAvb8vyOJerVRWDXC89AYna8oigszgeyPVJxLS9PXoa6FXqz0MtbAFi6f
-         c8FpQlNfCIgMz+Lr/8XOUwyWlEjvzr51j2WVeL1MXNkAk15bRUT5J3c3xW4AwKExYAbm
-         ls+LsMHF4J50qm1w0QXJ4qIJg7OJoMj0m6yrekLLrMGnmdRLKpOlp6Xw5gjgA7cLZB/6
-         /9WJM980pPoChLsbZj4tCte5jsGEug4hwG+d/2Gqg1GynSCktPO6ubAnmFtrQUFJQz+k
-         XyTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dc0DuU1O9eY3YHChsMW27jwVrWlDkDg7wgtC9pCKkng=;
-        b=eaormJpM2Q7e6Di9W6dgVpDe2YH8AdsrvrmOiNTXpw2o49iQiFJffrpTAeIOX70e3/
-         4rwxW73nLO+odLkBL+kmobHKKxxgS/Iab1JRHWkIEGG4eduIENPd+osHbvhPEj/XHCts
-         2ALOyNsgXkBLs9pw09T4yPxOWBrmFiHYsgiFr1A7C9L+xH7Jhn9BoscAxvRKJjaaDWzP
-         1sy/ynRvpR3NVKVvk8eNgUTpx1NoGkE4FX2rj0I0690VRDeTOsau+JiFVqvruoSuE7ph
-         xRWePbMxV0VPi0Ar0RVFwh6eLaUNDbORCm5HuW6Mnz9QPJzzrlZ9pkwh7aWz0oTcDFGf
-         g4ZA==
-X-Gm-Message-State: AFqh2koVO/Xv1J7SB4UMAwv5GTbuT1fM9rRvoiFuyk5qdxMZ56jusHua
-        jy7+1lc/Fmbo26aC8ajslYc=
-X-Google-Smtp-Source: AMrXdXtiyWJ5Cr7Un3Vovkoxmt4cIPtCGX4RjLXIDFR46yC2jvX6/fFlcEK66r4aCOkui+YEQisq/Q==
-X-Received: by 2002:a05:6a20:7b28:b0:ac:184:d297 with SMTP id s40-20020a056a207b2800b000ac0184d297mr29035719pzh.38.1672285326711;
-        Wed, 28 Dec 2022 19:42:06 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-94.three.co.id. [180.214.232.94])
-        by smtp.gmail.com with ESMTPSA id a11-20020a63e40b000000b00478ca052819sm10074960pgi.47.2022.12.28.19.42.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 19:42:06 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 61442103AA8; Thu, 29 Dec 2022 10:42:02 +0700 (WIB)
-Date:   Thu, 29 Dec 2022 10:42:01 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/731] 5.15.86-rc1 review
-Message-ID: <Y60MiWGDnPIH8Xrf@debian.me>
-References: <20221228144256.536395940@linuxfoundation.org>
+        Wed, 28 Dec 2022 22:45:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C72B3F;
+        Wed, 28 Dec 2022 19:45:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68D16B816E4;
+        Thu, 29 Dec 2022 03:45:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7066CC433EF;
+        Thu, 29 Dec 2022 03:45:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672285542;
+        bh=alCJu5XAjMvKb+w02CBSziyyOEltpCAw/XCcSnAbcuk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AWVpuj5foLvPtcXPEKqfw0DoLzqyOXgKpm8loWrcWzFCx9x1HAGhq1+H2xh6FDgft
+         tiOxrDVp42TPAczZTjiaTkNCyYelRu20N7woz+978EI9U2qo6D4sM6IdbrTLjJm9b9
+         BDYjBz4hkRwGBlqFp35eyon5jyCkJscIJVhqb2A732TGBiK3d29+nVmZHyuxDyeI7a
+         AkUqXhS7acN3Gu4GTg61iI2ijgBZNZbhdo5nO7F+8XWJZZV+1gshYlBR8Z02nRLJGU
+         ZYtCzy1PNtJFO39EmgrTvIDu3rH3HRI+ouTvdVNVVBCdeY9BV/5LQdLrBmn1CWUDZW
+         u5JbdpRlv3fcA==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     keescook@chromium.org, Tony Luck <tony.luck@intel.com>,
+        luca@z3ntu.xyz, gpiccoli@igalia.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        agross@kernel.org, konrad.dybcio@linaro.org
+Cc:     linux-kernel@vger.kernel.org, a39.skl@gmail.com,
+        krzysztof.kozlowski@linaro.org, devicetree@vger.kernel.org,
+        ultracoolguy@disroot.org, vladimir.lypak@gmail.com,
+        morf3089@gmail.com, atafalla@dnyon.com,
+        linux-arm-msm@vger.kernel.org, jenneron@protonmail.com,
+        ~postmarketos/upstreaming@lists.sr.ht, julianbraha@gmail.com,
+        fekz115@gmail.com, JIaxyga@protonmail.com,
+        sireeshkodali1@gmail.com, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 0/9] Add a bunch of msm8953 dts files
+Date:   Wed, 28 Dec 2022 21:45:38 -0600
+Message-Id: <167228553507.1017132.4894386227853517055.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20221207-msm8953-6-1-next-dtbs-v3-v3-0-a64b3b0af0eb@z3ntu.xyz>
+References: <20221207-msm8953-6-1-next-dtbs-v3-v3-0-a64b3b0af0eb@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3ddO/rcqvwCyeG/o"
-Content-Disposition: inline
-In-Reply-To: <20221228144256.536395940@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 07 Dec 2022 19:30:37 +0100, Luca Weiss wrote:
+> The following patches add a bunch of msm8953-based devices that have
+> been created in the msm8953-mainline[0] repository, which includes
+> Snapdragon 450 (SDM450), Snapdragon 625 (msm8953) and Snapdragon 632
+> (SDM632) devices.
+> The dts files are trimmed down to what is currently supported upstream,
+> as a way to also minimizing diff for further patches.
+> 
+> [...]
 
---3ddO/rcqvwCyeG/o
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On Wed, Dec 28, 2022 at 03:31:47PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.86 release.
-> There are 731 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+[2/9] arm64: dts: qcom: msm8953: Adjust reserved-memory nodes
+      commit: eca9ee35e895686d179964dc6f94e6c473d2a171
+[3/9] arm64: dts: qcom: sdm450: Add device tree for Motorola Moto G6
+      commit: eee5a89b4fe5615ba57fd8048102504aaa052065
+[4/9] arm64: dts: qcom: msm8953: Add device tree for Motorola G5 Plus
+      commit: 4ccd0dd6a3d2a98b11664992012af04cb0ce8f6c
+[5/9] arm64: dts: qcom: msm8953: Add device tree for Xiaomi Mi A2 Lite
+      commit: 38d779c26395df5f7f66bb5da7af6241180283e1
+[6/9] arm64: dts: qcom: msm8953: Add device tree for Xiaomi Redmi Note 4X
+      commit: c144005129b09141b292820d35f0094e54b12d6d
+[7/9] arm64: dts: qcom: msm8953: Add device tree for Xiaomi Mi A1
+      commit: cf152c05eb35afc9db3c9480ce17b27a703b2893
+[8/9] arm64: dts: qcom: msm8953: Add device tree for Xiaomi Redmi 5 Plus
+      commit: aa17e707e04a0446de5e40f74aac979582185559
+[9/9] arm64: dts: qcom: sdm632: Add device tree for Motorola G7 Power
+      commit: 3176c4d6b9beba4a554bebba6b19b56942705a28
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
-
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---3ddO/rcqvwCyeG/o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY60MgQAKCRD2uYlJVVFO
-o2vHAQCIFNWPgIZdRpUl9FNBuKw24/tlOtehnd/RDdmGNs6COgEA/DHKoy2Wd5oI
-hn+mogOECjYoSBQcTBZhfMIhMYRU2wM=
-=scV8
------END PGP SIGNATURE-----
-
---3ddO/rcqvwCyeG/o--
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
