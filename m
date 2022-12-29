@@ -2,53 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A5B658FD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFF4658FDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbiL2Raz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 12:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S233619AbiL2RbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234060AbiL2RaK (ORCPT
+        with ESMTP id S234075AbiL2RaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 12:30:10 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A40314024
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 09:28:59 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pAwhx-0005QI-Re; Thu, 29 Dec 2022 18:28:45 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pAwhr-002Xc3-9T; Thu, 29 Dec 2022 18:28:39 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pAwhq-008no3-LN; Thu, 29 Dec 2022 18:28:38 +0100
-Date:   Thu, 29 Dec 2022 18:28:35 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Anatolij Gustschin <agust@denx.de>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] powerpc/mpc52xx_lpbfifo: Drop unused functions
-Message-ID: <20221229172835.ldbpjwl4aelx7p3h@pengutronix.de>
-References: <20221228145129.31700-1-u.kleine-koenig@pengutronix.de>
+        Thu, 29 Dec 2022 12:30:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DCA1573E;
+        Thu, 29 Dec 2022 09:29:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D0376CE16B8;
+        Thu, 29 Dec 2022 17:29:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C57C433D2;
+        Thu, 29 Dec 2022 17:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672334987;
+        bh=G+SWBiYi4yJIL5V5j7GqWjgDRQL0QUPCjoveiHSWEys=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CwTopccyU0qtmz7hrUHjKgdNsQrcMOeRCMSs3du5zRXM/bVQDZMF937F/K9PDK2bC
+         4bfWT8xNGQWeOQGGmaJD+VjgOK79IrJftXw3YkZybR7Tgz0qJsM8wuWPGaG1v9bQA2
+         ZzdkyN9sF1aIkFK8uGUlXRuABUNG2JdKwXU15WbDUg2XlZZWblFqbDwpcX/bfNcS0r
+         rAWoAo2m4fkWP6cl8RQJPeAPG70QWmA5LFSexq8EjBjFz+avfaLJRC7OVAHd0AUdXG
+         wYN/VF8NIj9EURov3AQkOpZg/U4yYL2FpDwVM6f02C3C1+oyWNwXwUXi4XGr8D23N2
+         pbGMZnwr7JjEA==
+Date:   Thu, 29 Dec 2022 11:29:44 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mani@kernel.org, lpieralisi@kernel.org, kw@linux.com,
+        svarbanov@mm-sol.com, shawn.guo@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/9] arm64: dts: qcom: ipq8074: fix Gen3 PCIe QMP PHY
+Message-ID: <20221229172944.6lg6mb53uqj2hps6@builder.lan>
+References: <20221116214841.1116735-1-robimarko@gmail.com>
+ <20221116214841.1116735-2-robimarko@gmail.com>
+ <20221205215253.itobukkyiecn7xi7@builder.lan>
+ <CAOX2RU5C6uYKS4Hc7NBwnzRju1=gzewrEHudMksUAL1XdKcfCQ@mail.gmail.com>
+ <20221227192049.zk5gqhpnq2m7baqa@builder.lan>
+ <CAOX2RU4SGmmZT6e0V5YCsCYU82wAJH736PhEz4Tx+Q0XTFU_9A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rti4uiobizeudh3c"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221228145129.31700-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <CAOX2RU4SGmmZT6e0V5YCsCYU82wAJH736PhEz4Tx+Q0XTFU_9A@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,46 +62,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 28, 2022 at 12:10:17PM +0100, Robert Marko wrote:
+> On Tue, 27 Dec 2022 at 20:20, Bjorn Andersson <andersson@kernel.org> wrote:
+> >
+> > On Tue, Dec 06, 2022 at 10:51:40AM +0100, Robert Marko wrote:
+> > > On Mon, 5 Dec 2022 at 22:52, Bjorn Andersson <andersson@kernel.org> wrote:
+> > > >
+> > > > On Wed, Nov 16, 2022 at 10:48:34PM +0100, Robert Marko wrote:
+> > > > > IPQ8074 comes in 2 silicon versions:
+> > > > > * v1 with 2x Gen2 PCIe ports and QMP PHY-s
+> > > > > * v2 with 1x Gen3 and 1x Gen2 PCIe ports and QMP PHY-s
+> > > > >
+> > > > > v2 is the final and production version that is actually supported by the
+> > > > > kernel, however it looks like PCIe related nodes were added for the v1 SoC.
+> > > > >
+> > > > > Now that we have Gen3 QMP PHY support, we can start fixing the PCIe support
+> > > > > by fixing the Gen3 QMP PHY node first.
+> > > > >
+> > > > > Change the compatible to the Gen3 QMP PHY, correct the register space start
+> > > > > and size, add the missing misc PCS register space.
+> > > > >
+> > > >
+> > > > Does this imply that the current node doesn't actually work?
+> > >
+> > > Hi Bjorn,
+> > > Yes, the node is for a completely different PHY generation, basically
+> > > PCIe on IPQ8074
+> > > is completely broken, hence this patch series.
+> > >
+> > > >
+> > > > If that's the case, could we perhaps adopt Johan Hovolds' new binding
+> > > > and drop the subnode in favor of just a flat reg covering the whole
+> > > > QMP region?
+> > >
+> > > I have not seen that so far, any examples?
+> > >
+> >
+> > See
+> > Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml in
+> > v6.2-rc1.
+> >
+> > The idea is to, at least, use this for all new platforms introduced.
+> >
+> > And if the current definition doesn't actually work I suggest that we
+> > replace it with the new one.
+> 
+> I understand the intention, but these bindings dont match the QMP generation
+> found in IPQ8074 at all, and Gen3 has already been documented in bindings.
+> 
+> This would require updating the driver to carry the offsets and rework
+> of bindings to
+> not require power domains, etc for IPQ8074 as I have not found any
+> code downstream
+> to indicate it has GSDC-s for PCIe though I dont have any docs at all
+> for the SoC.
+> 
 
---rti4uiobizeudh3c
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I was only thinking of the structural difference, not the power-domains
+etc. But yes you're right that it means updating the driver and the
+binding.
 
-On Wed, Dec 28, 2022 at 03:51:29PM +0100, Uwe Kleine-K=F6nig wrote:
-> The four exported functions mpc52xx_lpbfifo_submit(),
-> mpc52xx_lpbfifo_abort(), mpc52xx_lpbfifo_poll(), and
-> mpc52xx_lpbfifo_start_xfer() are not used. So they can be dropped and the
-> definitions needed to call them can be moved into the driver file.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
+The end result would be much nicer though...
 
-I forgot to note here that maybe without these four exported functions
-the driver is useless and can be removed completely.
-
-I didn't look in detail, but maybe one of the recipents might know.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---rti4uiobizeudh3c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOtzj0ACgkQwfwUeK3K
-7Alzngf/Xx+HJYH/vMXNuHjNRyrafXDMgBhet+5A1v5j/4Nm97YyRa41lN30vS86
-HRKzP3fevg5wxaJ6pTwVjHJxSk2iSuxsuqZ0VGp9angN3YrY0C6/hE+gNz626CJs
-jdRRbU0B5MJOf4yd3xADCfxKOxsHCOVIJj2NnyvHpQ0kgk+KKCxvM8yYRZaRdg8x
-Zbuffu2ss9qc3mS09yOLv/pdqvMn/YD+vYAOAt1mZaRF0E6j0clpPO7+OkZ6wXWz
-TB1KDjM/ZCYAN4g56r79vXYm0Shuo2Ljtty28g4tjHI3FDvdUjQ9hdLJsV8CR7eK
-Gm528AR6uba9S5iQJHeGlQlB1CzMLA==
-=VL+9
------END PGP SIGNATURE-----
-
---rti4uiobizeudh3c--
+Regards,
+Bjorn
