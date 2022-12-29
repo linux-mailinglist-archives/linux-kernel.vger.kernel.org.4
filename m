@@ -2,51 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F796658C19
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F19E658C18
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:13:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiL2LNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 06:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        id S230287AbiL2LNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 06:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiL2LNu (ORCPT
+        with ESMTP id S229535AbiL2LNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 29 Dec 2022 06:13:50 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FD312A9B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F4B12A99;
         Thu, 29 Dec 2022 03:13:48 -0800 (PST)
 Date:   Thu, 29 Dec 2022 11:13:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1672312426;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=VnpK1nkYAe3Br6uKqNc2H7ZpVwGG1Y3w1UxSUJcI+oQ=;
-        b=BZiot/nV3Jg3RSrJs2J8wQ93DclDbl7A2lwCPfQaptVe8H+ZP9q3mTeuzAZW74L2EQkCTg
-        NTUwHipCCELbY3CLzeYhAOdK+U5lCivNO2hTN/O2IRpGo7iP+vu4o0Rh+nTIZEczpNoIBu
-        Bc2nTTIWitoQ3U4IXe4hbGt8LrZ/YrL2N6NdlL4qEumPFRY09bZ7bVlC4Tmh8btI+1y7la
-        94x/BuWgY3PuZR5jTvzwdlLRyxCwTN//s1fHy348hMuCL2mfZ3FAtrmNdKlDxLxZ1sPE+n
-        SpnJng5YaTjwCzjGCDp8LZISvNVkAs6so2AeKAhG00+biymqTBuOqPgnyKHy0w==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ggG9V250zF7THnyKowlPbOF/35JWH505/2cKT69U4AM=;
+        b=HmxhqKQaBBbJjWGVhoyVp6WeA7GwFjnVSBljmy1EMuvoEWGm18wnV136IxnfX6IaOnT9oh
+        62LmBDYmxPgfuObgRYBWxuC8SpeobIkyp7SuKKepuzGIMkwq0qL6eP5nUVUC354fKE5mYN
+        pGaxImr7pdSanfNgQbMojLBoDqyKdaMafTEt9Ide5+j56NHMn1RhCACUPE0Fntr3r4UvuD
+        zCOvjn4DpBgQSr5DTRHQ/ZSby3AZoR3xBA00OzOYUhMAphk1w2LUZjMPE1wGDsKkFeUU6o
+        BBcFL3D8nR5pKD/7kabvd5R/Gw+b4OUdjYm+oYyiapEM1f1Kzx5dChFACO+FcQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1672312426;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=VnpK1nkYAe3Br6uKqNc2H7ZpVwGG1Y3w1UxSUJcI+oQ=;
-        b=qyu8zCZIWCUvrY3YxgL5mTpfIMVlvkfqSzOQXNowd8+29kdJxIClICGkORpgrp9uVH4KJA
-        jkYkohQTqoLbCCDQ==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ggG9V250zF7THnyKowlPbOF/35JWH505/2cKT69U4AM=;
+        b=KxQw747jdHnzwFkZnXMUJw/iF2CWRUhhoG8S4F7wNXI5oFt3FI+kXN9cIIde8UtV2ifHaV
+        qgi+vMyocyQn9JCg==
 From:   "tip-bot2 for Smita Koralahalli" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/mce: Define a function to extract ErrorAddr from MCA_ADDR
+Subject: [tip: ras/core] x86/mce: Add support for Extended Physical Address
+ MCA changes
 Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Yazen Ghannam <yazen.ghannam@amd.com>, x86@kernel.org,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20221206173607.1185907-5-yazen.ghannam@amd.com>
+References: <20221206173607.1185907-5-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-Message-ID: <167231242579.4906.1017232750066168905.tip-bot2@tip-bot2>
+Message-ID: <167231242539.4906.2144083463011188100.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,99 +68,134 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the ras/core branch of tip:
 
-Commit-ID:     2117654e806c08c343e3d0567bbedf33eab040c8
-Gitweb:        https://git.kernel.org/tip/2117654e806c08c343e3d0567bbedf33eab040c8
+Commit-ID:     fcd343a285cb41894a7bd02dbd675042d394758d
+Gitweb:        https://git.kernel.org/tip/fcd343a285cb41894a7bd02dbd675042d394758d
 Author:        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-AuthorDate:    Tue, 06 Dec 2022 11:36:06 -06:00
+AuthorDate:    Tue, 06 Dec 2022 11:36:07 -06:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Wed, 28 Dec 2022 22:11:48 +01:00
+CommitterDate: Wed, 28 Dec 2022 22:37:37 +01:00
 
-x86/mce: Define a function to extract ErrorAddr from MCA_ADDR
+x86/mce: Add support for Extended Physical Address MCA changes
 
-Move MCA_ADDR[ErrorAddr] extraction into a separate helper function. This
-will be further refactored to support extended ErrorAddr bits in MCA_ADDR
-in newer AMD CPUs.
+Newer AMD CPUs support more physical address bits.
 
-  [ bp: Massage. ]
+That is, the MCA_ADDR registers on Scalable MCA systems contain the
+ErrorAddr in bits [56:0] instead of [55:0]. Hence, the existing LSB field
+from bits [61:56] in MCA_ADDR must be moved around to accommodate the
+larger ErrorAddr size.
+
+MCA_CONFIG[McaLsbInStatusSupported] indicates this change. If set, the
+LSB field will be found in MCA_STATUS rather than MCA_ADDR.
+
+Each logical CPU has unique MCA bank in hardware and is not shared with
+other logical CPUs. Additionally, on SMCA systems, each feature bit may
+be different for each bank within same logical CPU.
+
+Check for MCA_CONFIG[McaLsbInStatusSupported] for each MCA bank and for
+each CPU.
+
+Additionally, all MCA banks do not support maximum ErrorAddr bits in
+MCA_ADDR. Some banks might support fewer bits but the remaining bits are
+marked as reserved.
+
+  [ Yazen: Rebased and fixed up formatting.
+    bp: Massage comments. ]
 
 Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Link: https://lore.kernel.org/all/20220225193342.215780-3-Smita.KoralahalliChannabasappa@amd.com/
+Link: https://lore.kernel.org/r/20221206173607.1185907-5-yazen.ghannam@amd.com
 ---
- arch/x86/kernel/cpu/mce/amd.c      | 10 +---------
- arch/x86/kernel/cpu/mce/core.c     | 10 +---------
- arch/x86/kernel/cpu/mce/internal.h | 15 +++++++++++++++
- 3 files changed, 17 insertions(+), 18 deletions(-)
+ arch/x86/kernel/cpu/mce/amd.c      |  2 ++-
+ arch/x86/kernel/cpu/mce/core.c     |  8 +-------
+ arch/x86/kernel/cpu/mce/internal.h | 31 ++++++++++++++++++++++++++++-
+ 3 files changed, 33 insertions(+), 8 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 10fb5b5..c6b1fd5 100644
+index c6b1fd5..23c5072 100644
 --- a/arch/x86/kernel/cpu/mce/amd.c
 +++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -736,15 +736,7 @@ static void __log_error(unsigned int bank, u64 status, u64 addr, u64 misc)
- 	if (m.status & MCI_STATUS_ADDRV) {
- 		m.addr = addr;
+@@ -306,6 +306,8 @@ static void smca_configure(unsigned int bank, unsigned int cpu)
+ 		if ((low & BIT(5)) && !((high >> 5) & 0x3))
+ 			high |= BIT(5);
  
--		/*
--		 * Extract [55:<lsb>] where lsb is the least significant
--		 * *valid* bit of the address bits.
--		 */
--		if (mce_flags.smca) {
--			u8 lsb = (m.addr >> 56) & 0x3f;
--
--			m.addr &= GENMASK_ULL(55, lsb);
--		}
-+		smca_extract_err_addr(&m);
++		this_cpu_ptr(mce_banks_array)[bank].lsb_in_status = !!(low & BIT(8));
++
+ 		wrmsr(smca_config, low, high);
  	}
  
- 	if (mce_flags.smca) {
 diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 2c8ec5c..d0ade77 100644
+index d0ade77..626a1c6 100644
 --- a/arch/x86/kernel/cpu/mce/core.c
 +++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -633,15 +633,7 @@ static noinstr void mce_read_aux(struct mce *m, int i)
- 			m->addr <<= shift;
- 		}
+@@ -67,13 +67,7 @@ DEFINE_PER_CPU(unsigned, mce_exception_count);
  
--		/*
--		 * Extract [55:<lsb>] where lsb is the least significant
--		 * *valid* bit of the address bits.
--		 */
--		if (mce_flags.smca) {
--			u8 lsb = (m->addr >> 56) & 0x3f;
+ DEFINE_PER_CPU_READ_MOSTLY(unsigned int, mce_num_banks);
+ 
+-struct mce_bank {
+-	u64			ctl;			/* subevents to enable */
 -
--			m->addr &= GENMASK_ULL(55, lsb);
--		}
-+		smca_extract_err_addr(m);
- 	}
+-	__u64 init			: 1,		/* initialise bank? */
+-	      __reserved_1		: 63;
+-};
+-static DEFINE_PER_CPU_READ_MOSTLY(struct mce_bank[MAX_NR_BANKS], mce_banks_array);
++DEFINE_PER_CPU_READ_MOSTLY(struct mce_bank[MAX_NR_BANKS], mce_banks_array);
  
- 	if (mce_flags.smca) {
+ #define ATTR_LEN               16
+ /* One object for each MCE bank, shared by all CPUs */
 diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 7e03f5b..6dcb94f 100644
+index 6dcb94f..91a4155 100644
 --- a/arch/x86/kernel/cpu/mce/internal.h
 +++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -189,8 +189,23 @@ extern bool filter_mce(struct mce *m);
+@@ -177,6 +177,24 @@ struct mce_vendor_flags {
  
+ extern struct mce_vendor_flags mce_flags;
+ 
++struct mce_bank {
++	/* subevents to enable */
++	u64			ctl;
++
++	/* initialise bank? */
++	__u64 init		: 1,
++
++	/*
++	 * (AMD) MCA_CONFIG[McaLsbInStatusSupported]: When set, this bit indicates
++	 * the LSB field is found in MCA_STATUS and not in MCA_ADDR.
++	 */
++	lsb_in_status		: 1,
++
++	__reserved_1		: 62;
++};
++
++DECLARE_PER_CPU_READ_MOSTLY(struct mce_bank[MAX_NR_BANKS], mce_banks_array);
++
+ enum mca_msr {
+ 	MCA_CTL,
+ 	MCA_STATUS,
+@@ -190,7 +208,10 @@ extern bool filter_mce(struct mce *m);
  #ifdef CONFIG_X86_MCE_AMD
  extern bool amd_filter_mce(struct mce *m);
-+
-+/* Extract [55:<lsb>] where lsb is the LS-*valid* bit of the address bits. */
-+static __always_inline void smca_extract_err_addr(struct mce *m)
-+{
-+	u8 lsb;
-+
-+	if (!mce_flags.smca)
-+		return;
-+
-+	lsb = (m->addr >> 56) & 0x3f;
-+
-+	m->addr &= GENMASK_ULL(55, lsb);
-+}
-+
- #else
- static inline bool amd_filter_mce(struct mce *m) { return false; }
-+static inline void smca_extract_err_addr(struct mce *m) { }
- #endif
  
- #ifdef CONFIG_X86_ANCIENT_MCE
+-/* Extract [55:<lsb>] where lsb is the LS-*valid* bit of the address bits. */
++/*
++ * If MCA_CONFIG[McaLsbInStatusSupported] is set, extract ErrAddr in bits
++ * [56:0] of MCA_STATUS, else in bits [55:0] of MCA_ADDR.
++ */
+ static __always_inline void smca_extract_err_addr(struct mce *m)
+ {
+ 	u8 lsb;
+@@ -198,6 +219,14 @@ static __always_inline void smca_extract_err_addr(struct mce *m)
+ 	if (!mce_flags.smca)
+ 		return;
+ 
++	if (this_cpu_ptr(mce_banks_array)[m->bank].lsb_in_status) {
++		lsb = (m->status >> 24) & 0x3f;
++
++		m->addr &= GENMASK_ULL(56, lsb);
++
++		return;
++	}
++
+ 	lsb = (m->addr >> 56) & 0x3f;
+ 
+ 	m->addr &= GENMASK_ULL(55, lsb);
