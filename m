@@ -2,56 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCF8658E16
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAF2658E1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbiL2Ow5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 09:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
+        id S233442AbiL2OyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 09:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233602AbiL2Owa (ORCPT
+        with ESMTP id S233601AbiL2Oxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 09:52:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F635FB1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 06:52:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 86B83B8188B
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 14:52:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 803C9C433EF;
-        Thu, 29 Dec 2022 14:52:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672325547;
-        bh=PMjNANa9dMUyZ7Y/RbFcEx2O4VFez054Vgv8tQMtH+A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uxKIm2HrR5AOej74jYrdW1cE3mZ9U1Sr6ZOt30Yoo+0vBgLDhuKwyWogc+FaVyTc+
-         6TARY78QQz8GEMyplIVVOZPPAUTP6wpIAtA3r1MbI63AEkph5t98lUvwQ/c/hbqkP8
-         /gqOSr3EhKSIP1zBzak+wcdehV/mJPNMxllCc2sIkrmSh7rEeqkibTGdvZLq63nz+w
-         83HwMSOBSLml47IDARnuVNZEgZQTeZAukB+V+vOHowpG/3s0D5DMOTtToUzpGMjCgl
-         dwCXGOZH+PpGoLKDDL20MdVA6YpWDYaX4bo1+rjgLBIEuCmqMksqZ5lsrxZ7A7UCP4
-         ffs6uVMt9x2zQ==
-Date:   Thu, 29 Dec 2022 23:52:20 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     wuqiang <wuqiang.matt@bytedance.com>
-Cc:     davem@davemloft.net, anil.s.keshavamurthy@intel.com,
-        naveen.n.rao@linux.ibm.com, rostedt@goodmis.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        sander@svanheule.net, ebiggers@google.com,
-        dan.j.williams@intel.com, jpoimboe@kernel.org,
-        linux-kernel@vger.kernel.org, lkp@intel.com, mattwu@163.com
-Subject: Re: [PATCH v8 0/5] lib,kprobes: kretprobe scalability improvement
-Message-Id: <20221229235220.4044edccae7c9d39798af8e9@kernel.org>
-In-Reply-To: <20221218050310.1338630-1-wuqiang.matt@bytedance.com>
-References: <20221218050310.1338630-1-wuqiang.matt@bytedance.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 29 Dec 2022 09:53:40 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2731FF2;
+        Thu, 29 Dec 2022 06:53:39 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id z16so1123213wrw.1;
+        Thu, 29 Dec 2022 06:53:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ccq95IZNXm9rVZDfCeTqu5lSGJXR28E+vmtTwPcaamg=;
+        b=ekFyAFgaaNki7S+7E4Gz20eL+7Whui6g7qwdwTgMop9nsxhN0LhAVMbNvGXm+V90LH
+         X6EBoo9DJdXIZ5hCe3QHyKQcUY9ieLl9xceDK8J2YJWORfnh7BRz6tAL10bgRKPnhqjp
+         aW1G2LhOJoY7/dgYDYrzxbGzLqJF/mHc+mC0GY+5IRn/KmvYRMWlYoLgCtmv5wLlO7du
+         68qrkoStvgQ3oW8xTfJba759GEd7/U+YaIWMI/Gww9pq3sDj58cFmtANff8pivZ4dNIf
+         A3iI1wu9qZ6N+iYhYWNZgFEgdLCs4cGXtH+veim7SuiPZwy8pIaefyFWDwgPtXFfIV0z
+         XaLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ccq95IZNXm9rVZDfCeTqu5lSGJXR28E+vmtTwPcaamg=;
+        b=N7e87b0y9PyEZyG37KfgACAdQcX0GwBubGC5pQxaJVCQxQTzFEIOBsl16NwgZeL6ED
+         okfHvKXwiI06HNQvRoHB8gVIzhvpbHx23HjLUdpdIdjQMdQntBL6Mnh12YLXfGrF+dFY
+         Jr+hK8Y3N+YEMhULhDBjW5sp63hF91P+laSMH4UH8Hl6necP41sXI+yjtXJaCnmaJVfh
+         aVj2L65sEnNpiKRQQK+GOXQ4p/KGtEwHpo5/rp2IzHw9NGbcIimOWJ+GnQNseZAhNo5x
+         GxuaKc4uoVfm+EgOkqatYxJeqRjEtSCSH8T238Wu8FLeMI1aqe1RUb9RvngJAtQg72B5
+         kHeA==
+X-Gm-Message-State: AFqh2kqA9ZMBfSXzJ/eYqwMK5Yc/cl0TU0P0FasKZj9lbAp00YQkPZbV
+        BcRlc4+wLK34zWytbBta7QWKma3YVmmIEj5c
+X-Google-Smtp-Source: AMrXdXvp3Q4zQlK6xWLHi9MPyCpoexg5UaRopR2zLTJ9XTYu/rRnCtIela47vdbKjiUqO6z87VrEDw==
+X-Received: by 2002:a5d:5965:0:b0:27f:1c70:58c3 with SMTP id e37-20020a5d5965000000b0027f1c7058c3mr8172632wri.24.1672325617544;
+        Thu, 29 Dec 2022 06:53:37 -0800 (PST)
+Received: from tpt440p.steeds.sam ([69.63.64.50])
+        by smtp.gmail.com with ESMTPSA id v7-20020adfe287000000b00241bd177f89sm18151089wri.14.2022.12.29.06.53.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 06:53:36 -0800 (PST)
+From:   "Sicelo A. Mhlongo" <absicsz@gmail.com>
+To:     linux-omap@vger.kernel.org
+Cc:     "Sicelo A. Mhlongo" <absicsz@gmail.com>,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tony@atomide.com,
+        devicetree@vger.kernel.org, maemo-leste@lists.dyne.org
+Subject: [PATCH v2 0/2] ARM: dts: n900: use iio driver for accelerometer
+Date:   Thu, 29 Dec 2022 16:52:48 +0200
+Message-Id: <20221229145251.3535402-1-absicsz@gmail.com>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221227223841.2990847-1-absicsz@gmail.com>
+References: <20221227223841.2990847-1-absicsz@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,63 +74,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matt,
+The accelerometer in the N900 is now supported by the iio framework. This patch
+series makes the switch to the new compatible.
 
-Sorry, I missed to commented v7 patch. Anyway, please read
-my comments on previous version.
+The iio framework does not support some of the extended properties in the
+previous driver, but the change is useful for modern userspace, which expects
+accelerometers to be exposed via iio
 
-On Sun, 18 Dec 2022 13:03:05 +0800
-wuqiang <wuqiang.matt@bytedance.com> wrote:
+Sicelo A. Mhlongo (2):
+  ARM: dts: n900: rename accelerometer node
+  ARM: dts: n900: use iio driver for accelerometer
 
-> This patch series introduces a scalable and lockless ring-array based
-> object pool and replaces the original freelist (a LIFO queue based on
-> singly linked list) to improve scalability of kretprobed routines.
-> 
-> v8:
->   1) objpool: refcount added for objpool lifecycle management
-
-At least this update part looks good to me.
-(But I think this may be useful only for kretprobe/rethook
-use cases...)
-
-Thank you,
-
-> 
-> v7:
->   1) objpool: implementation simplified as Masami advised
->   2) rethook_alloc: error codes returning supported (ERR_PTR)
->   3) MAINTAINERS: support added for objpool files
->   4) synced to latest 6.1 with x86_64/x86/aarch64 verified
-> 
-> wuqiang (5):
->   lib: objpool added: ring-array based lockless MPMC queue
->   lib: objpool test module added
->   kprobes: kretprobe scalability improvement with objpool
->   kprobes: freelist.h removed
->   MAINTAINERS: objpool added
-> 
->  MAINTAINERS              |   7 +
->  include/linux/freelist.h | 129 --------
->  include/linux/kprobes.h  |  11 +-
->  include/linux/objpool.h  | 116 +++++++
->  include/linux/rethook.h  |  16 +-
->  kernel/kprobes.c         |  93 +++---
->  kernel/trace/fprobe.c    |  37 +--
->  kernel/trace/rethook.c   |  91 +++---
->  lib/Kconfig.debug        |  11 +
->  lib/Makefile             |   4 +-
->  lib/objpool.c            | 372 +++++++++++++++++++++
->  lib/test_objpool.c       | 682 +++++++++++++++++++++++++++++++++++++++
->  12 files changed, 1292 insertions(+), 277 deletions(-)
->  delete mode 100644 include/linux/freelist.h
->  create mode 100644 include/linux/objpool.h
->  create mode 100644 lib/objpool.c
->  create mode 100644 lib/test_objpool.c
-> 
-> -- 
-> 2.34.1
-> 
-
+ arch/arm/boot/dts/omap3-n900.dts | 54 ++++++--------------------------
+ 1 file changed, 9 insertions(+), 45 deletions(-)
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.39.0
+
