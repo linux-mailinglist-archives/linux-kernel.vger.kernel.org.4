@@ -2,282 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7456589A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 07:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B017F6589AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 07:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232973AbiL2GQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 01:16:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
+        id S231303AbiL2G0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 01:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbiL2GPy (ORCPT
+        with ESMTP id S229747AbiL2G0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 01:15:54 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22B535FAE
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:15:52 -0800 (PST)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8CxI_CWMK1jTTMJAA--.20716S3;
-        Thu, 29 Dec 2022 14:15:50 +0800 (CST)
-Received: from localhost.localdomain (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxrb6OMK1jIiYPAA--.24618S7;
-        Thu, 29 Dec 2022 14:15:49 +0800 (CST)
-From:   Jinyang He <hejinyang@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Qing Zhang <zhangqing@loongson.cn>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH v2 5/6] LoongArch: Add generic ex-handler unwind in prologue unwinder
-Date:   Thu, 29 Dec 2022 14:15:16 +0800
-Message-Id: <20221229061516.31671-6-hejinyang@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221229061516.31671-1-hejinyang@loongson.cn>
-References: <20221229061516.31671-1-hejinyang@loongson.cn>
+        Thu, 29 Dec 2022 01:26:39 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790C78FE5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:26:37 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id n15-20020a056e021baf00b0030387c2e1d3so11272538ili.5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:26:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BhbflDOV2k1KLyHwZs0cA13pq6md2aueXIcWzsW7/xQ=;
+        b=B0uPjHYWEUA6ONQUL/p3zjpvvFRQOVTrw+MT5NCB8rPzwo2kP3R8bHcq5HWgmyKYkO
+         5cjeKPREpJ87lanf+3K/QEgt05VwzOC5iynCcvVwOwpU3ZL5cZ0i/E3bW4RVnkpxgHdo
+         OtdHc1J8tkhz15rO8sxy/13NyLDW6NOIRTe14ARBUM1tPsVYBPOKwG1OJz8GTXyibcWk
+         rx+cHMgamFSibCLdmJKfx+wJw3HK1D4MTs0KMHcZpZp0+dar0YEqhTNquh7pyUidxhkq
+         ak3EuLJYjvVbKbHTcd+4ymtRnuIPdVzpGC4fM3ziyTBKfk8nSIPVVwrYN80OcKXG0F02
+         WJ4Q==
+X-Gm-Message-State: AFqh2krqoKwKJSmgVdHFroOXdbB5OqZobUvcBs0+yOHnIZjRirzA61ku
+        5Dmey4cAHanQ8yMob+QvTtC/i0E5ny2+KWmFOMPXaaSQK0vP
+X-Google-Smtp-Source: AMrXdXtEXNg77rqsguWCrJD35UlA6mDxsEdnkiJQx9de80ndRMBTEEGwG/IbtoSUP4YA+jNL5E5JiryM/qq7CbLOIJW1ese8qpQL
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dxrb6OMK1jIiYPAA--.24618S7
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3XF15XF48Wr4DWF48ZrW8WFg_yoWxAF4fpF
-        9akrn5Gr4rKr9FqrW7Jryq9r98Aw4kCw12gF9rKas5CF1Iqry3WrnYy34qvF1DJ3y8WFyI
-        qFsxXrya9a1UJa7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWrXVW3AwAv7VC2
-        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I
-        0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCI
-        bckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
-        I_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
-        6ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj4
-        0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
-        JrUvcSsGvfC2KfnxnUUI43ZEXa7IUneRRtUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:803:b0:304:c661:f53 with SMTP id
+ u3-20020a056e02080300b00304c6610f53mr2292911ilm.155.1672295196843; Wed, 28
+ Dec 2022 22:26:36 -0800 (PST)
+Date:   Wed, 28 Dec 2022 22:26:36 -0800
+In-Reply-To: <00000000000033a0120588fac894@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002ae67f05f0f191aa@google.com>
+Subject: Re: [syzbot] WARNING: locking bug in inet_autobind
+From:   syzbot <syzbot+94cc2a66fc228b23f360@syzkaller.appspotmail.com>
+To:     Alexander.Deucher@amd.com, Christian.Koenig@amd.com,
+        David1.Zhou@amd.com, Evan.Quan@amd.com, Felix.Kuehling@amd.com,
+        Harry.Wentland@amd.com, Oak.Zeng@amd.com, Ray.Huang@amd.com,
+        Yong.Zhao@amd.com, airlied@linux.ie, alexander.deucher@amd.com,
+        amd-gfx@lists.freedesktop.org, ast@kernel.org,
+        boqun.feng@gmail.com, bpf@vger.kernel.org,
+        christian.koenig@amd.com, daniel@ffwll.ch, daniel@iogearbox.net,
+        davem@davemloft.net, david1.zhou@amd.com,
+        dri-devel@lists.freedesktop.org, dsahern@kernel.org,
+        edumazet@google.com, evan.quan@amd.com, felix.kuehling@amd.com,
+        gautammenghani201@gmail.com, harry.wentland@amd.com,
+        jakub@cloudflare.com, kafai@fb.com, kuba@kernel.org,
+        kuznet@ms2.inr.ac.ru, linux-kernel@vger.kernel.org,
+        longman@redhat.com, mingo@redhat.com, netdev@vger.kernel.org,
+        ozeng@amd.com, pabeni@redhat.com,
+        penguin-kernel@I-love.SAKURA.ne.jp,
+        penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
+        ray.huang@amd.com, rex.zhu@amd.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, will@kernel.org, yhs@fb.com,
+        yong.zhao@amd.com, yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When exception is triggered, code flow go handle_\exception in some
-cases. One of stackframe in this case as follows,
+syzbot has found a reproducer for the following issue on:
 
-high -> +-------+
-        | REGS  |  <- a pt_regs
-        |       |
-        |       |  <- ex trigger
-        | REGS  |  <- ex pt_regs   <-+
-        |       |                    |
-        |       |                    |
-low  -> +-------+           ->unwind-+
+HEAD commit:    1b929c02afd3 Linux 6.2-rc1
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=145c6a68480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2651619a26b4d687
+dashboard link: https://syzkaller.appspot.com/bug?extid=94cc2a66fc228b23f360
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e13e32480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13790f08480000
 
-When unwinder unwind to handler_\exception it cannot go on prologue
-analysis. It is asynchronous code flow, we should get the next frame
-PC from regs->csr_era but not from regs->regs[1]. And we copy the
-handler codes to eentry in the early time and copy the handler codes
-to NUMA-relative memory named pcpu_handlers if NUMA is enabled. Thus,
-unwinder cannot unwind normally. Therefore, try to give some hint in
-handler_\exception and fixup it in unwind_next_frame.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d1849f1ca322/disk-1b929c02.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/924cb8aa4ada/vmlinux-1b929c02.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8c7330dae0a0/bzImage-1b929c02.xz
 
-Reported-by: Qing Zhang <zhangqing@loongson.cn>
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
----
- arch/loongarch/include/asm/unwind.h     |   2 +-
- arch/loongarch/kernel/genex.S           |   3 +
- arch/loongarch/kernel/unwind_prologue.c | 100 +++++++++++++++++++++---
- arch/loongarch/mm/tlb.c                 |   2 +-
- 4 files changed, 92 insertions(+), 15 deletions(-)
+The issue was bisected to:
 
-diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
-index 4a55fd7b77ad..1eb6d7f771a8 100644
---- a/arch/loongarch/include/asm/unwind.h
-+++ b/arch/loongarch/include/asm/unwind.h
-@@ -18,7 +18,7 @@ struct unwinder_ops;
- struct unwind_state {
- 	struct stack_info stack_info;
- 	struct task_struct *task;
--	bool first, error, is_ftrace;
-+	bool first, error, reset;
- 	int graph_idx;
- 	unsigned long sp, pc, ra;
- 	const struct unwinder_ops *ops;
-diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-index 75e5be807a0d..7e5c293ed89f 100644
---- a/arch/loongarch/kernel/genex.S
-+++ b/arch/loongarch/kernel/genex.S
-@@ -67,14 +67,17 @@ SYM_FUNC_END(except_vec_cex)
- 	.macro	BUILD_HANDLER exception handler prep
- 	.align	5
- 	SYM_FUNC_START(handle_\exception)
-+	666:
- 	BACKUP_T0T1
- 	SAVE_ALL
- 	build_prep_\prep
- 	move	a0, sp
- 	la.abs	t0, do_\handler
- 	jirl	ra, t0, 0
-+	668:
- 	RESTORE_ALL_AND_RET
- 	SYM_FUNC_END(handle_\exception)
-+	SYM_DATA(unwind_hint_\exception, .word 668b - 666b)
- 	.endm
- 
- 	BUILD_HANDLER ade ade badv
-diff --git a/arch/loongarch/kernel/unwind_prologue.c b/arch/loongarch/kernel/unwind_prologue.c
-index beb57ea24da2..edce9eba6b52 100644
---- a/arch/loongarch/kernel/unwind_prologue.c
-+++ b/arch/loongarch/kernel/unwind_prologue.c
-@@ -2,21 +2,100 @@
- /*
-  * Copyright (C) 2022 Loongson Technology Corporation Limited
-  */
-+#include <linux/cpumask.h>
- #include <linux/ftrace.h>
- #include <linux/kallsyms.h>
- 
- #include <asm/inst.h>
-+#include <asm/loongson.h>
- #include <asm/ptrace.h>
-+#include <asm/setup.h>
- #include <asm/unwind.h>
- 
--static inline void unwind_state_fixup(struct unwind_state *state)
-+extern const int unwind_hint_ade;
-+extern const int unwind_hint_ale;
-+extern const int unwind_hint_bp;
-+extern const int unwind_hint_fpe;
-+extern const int unwind_hint_fpu;
-+extern const int unwind_hint_lsx;
-+extern const int unwind_hint_lasx;
-+extern const int unwind_hint_lbt;
-+extern const int unwind_hint_ri;
-+extern const int unwind_hint_watch;
-+extern unsigned long eentry;
-+#ifdef CONFIG_NUMA
-+extern unsigned long pcpu_handlers[NR_CPUS];
-+#endif
-+
-+static inline bool scan_handler(unsigned long entry_offset)
- {
--#ifdef CONFIG_DYNAMIC_FTRACE
--	static unsigned long ftrace = (unsigned long)ftrace_call + 4;
-+	int idx, offset;
- 
--	if (state->pc == ftrace)
--		state->is_ftrace = true;
-+	if (entry_offset >= EXCCODE_INT_START * VECSIZE)
-+		return false;
-+
-+	idx = entry_offset / VECSIZE;
-+	offset = entry_offset % VECSIZE;
-+	switch (idx) {
-+	case EXCCODE_ADE:
-+		return offset == unwind_hint_ade;
-+	case EXCCODE_ALE:
-+		return offset == unwind_hint_ale;
-+	case EXCCODE_BP:
-+		return offset == unwind_hint_bp;
-+	case EXCCODE_FPE:
-+		return offset == unwind_hint_fpe;
-+	case EXCCODE_FPDIS:
-+		return offset == unwind_hint_fpu;
-+	case EXCCODE_LSXDIS:
-+		return offset == unwind_hint_lsx;
-+	case EXCCODE_LASXDIS:
-+		return offset == unwind_hint_lasx;
-+	case EXCCODE_BTDIS:
-+		return offset == unwind_hint_lbt;
-+	case EXCCODE_INE:
-+		return offset == unwind_hint_ri;
-+	case EXCCODE_WATCH:
-+		return offset == unwind_hint_watch;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static inline bool fix_exceptions(unsigned long pc)
-+{
-+#ifdef CONFIG_NUMA
-+	int cpu;
-+
-+	for_each_possible_cpu(cpu) {
-+		if (!pcpu_handlers[cpu])
-+			continue;
-+		if (scan_handler(pc - pcpu_handlers[cpu]))
-+			return true;
-+	}
- #endif
-+	return scan_handler(pc - eentry);
-+}
-+
-+/*
-+ * As we meet ftrace_regs_entry, reset first flag like first doing
-+ * tracing. Prologue analysis will stop soon because PC is at entry.
-+ */
-+static inline bool fix_ftrace(unsigned long pc)
-+{
-+#ifdef CONFIG_DYNAMIC_FTRACE
-+	return pc == (unsigned long)ftrace_call + LOONGARCH_INSN_SIZE;
-+#else
-+	return false;
-+#endif
-+}
-+
-+static inline bool unwind_state_fixup(struct unwind_state *state)
-+{
-+	if (!fix_exceptions(state->pc) && !fix_ftrace(state->pc))
-+		return false;
-+	state->reset = true;
-+	return true;
- }
- 
- static unsigned long get_return_address(struct unwind_state *state)
-@@ -44,14 +123,10 @@ static bool unwind_by_prologue(struct unwind_state *state)
- 	if (state->sp >= info->end || state->sp < info->begin)
- 		return false;
- 
--	if (state->is_ftrace) {
--		/*
--		 * As we meet ftrace_regs_entry, reset first flag like first doing
--		 * tracing. Prologue analysis will stop soon because PC is at entry.
--		 */
-+	if (state->reset) {
- 		regs = (struct pt_regs *)state->sp;
- 		state->first = true;
--		state->is_ftrace = false;
-+		state->reset = false;
- 		state->pc = regs->csr_era;
- 		state->ra = regs->regs[1];
- 		state->sp = regs->regs[3];
-@@ -116,8 +191,7 @@ static bool unwind_by_prologue(struct unwind_state *state)
- 
- out:
- 	state->first = false;
--	unwind_state_fixup(state);
--	return !!__kernel_text_address(state->pc);
-+	return unwind_state_fixup(state) || __kernel_text_address(state->pc);
- }
- 
- static void start(struct unwind_state *state, struct task_struct *task,
-diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-index da3681f131c8..8bad6b0cff59 100644
---- a/arch/loongarch/mm/tlb.c
-+++ b/arch/loongarch/mm/tlb.c
-@@ -251,7 +251,7 @@ static void output_pgtable_bits_defines(void)
- }
- 
- #ifdef CONFIG_NUMA
--static unsigned long pcpu_handlers[NR_CPUS];
-+unsigned long pcpu_handlers[NR_CPUS];
- #endif
- extern long exception_handlers[VECSIZE * 128 / sizeof(long)];
- 
--- 
-2.34.3
+commit c0d9271ecbd891cdeb0fad1edcdd99ee717a655f
+Author: Yong Zhao <Yong.Zhao@amd.com>
+Date:   Fri Feb 1 23:36:21 2019 +0000
+
+    drm/amdgpu: Delete user queue doorbell variables
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1433ece4a00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1633ece4a00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1233ece4a00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+94cc2a66fc228b23f360@syzkaller.appspotmail.com
+Fixes: c0d9271ecbd8 ("drm/amdgpu: Delete user queue doorbell variables")
+
+------------[ cut here ]------------
+Looking for class "l2tp_sock" with key l2tp_socket_class, but found a different class "slock-AF_INET6" with the same key
+WARNING: CPU: 0 PID: 7280 at kernel/locking/lockdep.c:937 look_up_lock_class+0x97/0x110 kernel/locking/lockdep.c:937
+Modules linked in:
+CPU: 0 PID: 7280 Comm: syz-executor835 Not tainted 6.2.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:look_up_lock_class+0x97/0x110 kernel/locking/lockdep.c:937
+Code: 17 48 81 fa e0 e5 f6 8f 74 59 80 3d 5d bc 57 04 00 75 50 48 c7 c7 00 4d 4c 8a 48 89 04 24 c6 05 49 bc 57 04 01 e8 a9 42 b9 ff <0f> 0b 48 8b 04 24 eb 31 9c 5a 80 e6 02 74 95 e8 45 38 02 fa 85 c0
+RSP: 0018:ffffc9000b5378b8 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: ffffffff91c06a00 RCX: 0000000000000000
+RDX: ffff8880292d0000 RSI: ffffffff8166721c RDI: fffff520016a6f09
+RBP: 0000000000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000201 R11: 20676e696b6f6f4c R12: 0000000000000000
+R13: ffff88802a5820b0 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007f1fd7a97700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000100 CR3: 0000000078ab4000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ register_lock_class+0xbe/0x1120 kernel/locking/lockdep.c:1289
+ __lock_acquire+0x109/0x56d0 kernel/locking/lockdep.c:4934
+ lock_acquire kernel/locking/lockdep.c:5668 [inline]
+ lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x33/0x40 kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:355 [inline]
+ lock_sock_nested+0x5f/0xf0 net/core/sock.c:3473
+ lock_sock include/net/sock.h:1725 [inline]
+ inet_autobind+0x1a/0x190 net/ipv4/af_inet.c:177
+ inet_send_prepare net/ipv4/af_inet.c:813 [inline]
+ inet_send_prepare+0x325/0x4e0 net/ipv4/af_inet.c:807
+ inet6_sendmsg+0x43/0xe0 net/ipv6/af_inet6.c:655
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xd3/0x120 net/socket.c:734
+ __sys_sendto+0x23a/0x340 net/socket.c:2117
+ __do_sys_sendto net/socket.c:2129 [inline]
+ __se_sys_sendto net/socket.c:2125 [inline]
+ __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2125
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1fd78538b9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f1fd7a971f8 EFLAGS: 00000212 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007f1fd78f0038 RCX: 00007f1fd78538b9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
+RBP: 00007f1fd78f0030 R08: 0000000020000100 R09: 000000000000001c
+R10: 0000000004008000 R11: 0000000000000212 R12: 00007f1fd78f003c
+R13: 00007f1fd79ffc8f R14: 00007f1fd7a97300 R15: 0000000000022000
+ </TASK>
 
