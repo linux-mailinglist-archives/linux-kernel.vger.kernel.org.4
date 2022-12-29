@@ -2,193 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707A4658EA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A39A658EA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbiL2Pyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 10:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S233655AbiL2P5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 10:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbiL2Py2 (ORCPT
+        with ESMTP id S233723AbiL2P4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 10:54:28 -0500
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6DA167F9;
-        Thu, 29 Dec 2022 07:52:42 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1447c7aa004so22057728fac.11;
-        Thu, 29 Dec 2022 07:52:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vW8MXh4Mn1681f84anrjuU04/GdxNepGDloajKgzfZk=;
-        b=iST9t6g3S6A5oY0zCVrxOMlz1aufM0trr1bdCOJ3tv6CL8Ac/BYf/QVAhevqfgKaWx
-         wWYDZnSYlIUO1dSYmJO15PoPYnUMggsKu1EFhEuQlQ0mqFg4wRdt93i4CzM/IvlCMuER
-         WedrLTWJh6w7qlgwsY95gO/eFy42t6dLkEWDIkwShgt4fUsQrc3ICQanThqJcxufG7zD
-         xEvHsFTMGBuQ863fq7L6pjyK9s6fnT0wp/KPYl/tX4lmq5NSfP5FS+DcY5i59tJGT4g5
-         xrDOWxAa/Cy4Zq8bm/Wbv6YmvSkwy1MJDKG8o0r3UkDnTQqIqh2dkwNfn1z88U8ckTLa
-         Wfjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vW8MXh4Mn1681f84anrjuU04/GdxNepGDloajKgzfZk=;
-        b=X1XHlptZDiiH6UOAcbY4uLHDBf6c+BqSvZIUF18SWrdjx6kjfJexYPVpE6TNAq4WgZ
-         FmoFIC4L1+C4fIoIk8Ou6X9UnHYrKDJr2OPMpDq5WYURx7GEmChw7c1LSuglMeW7jtVB
-         uok79CP7sd5JVxRmdAzVyQMqyvvI/sjF+C8osZbwedrjNm/4dBG6K0RCJY4wpSVFXybP
-         ofR0hL7PjSXfRNRNGRWKuAlDWAiDjGNvnIL5TutOJVLblOncdYi5I+rOscg7OMsNgk91
-         ZumIMx91sA5MeDO0xC/Fn0in5PEoFWR3Pvui/FUV1HiaCRe95WvnyDYxh9MTrMCDyMnX
-         J3/Q==
-X-Gm-Message-State: AFqh2kosL7THvV7cobNgH29OA5UPL7vXvfwG3CevNKACPfvNU8ZU7hjC
-        WC1rcts2ap76iRiniuq/Gs0=
-X-Google-Smtp-Source: AMrXdXuT0vomwfXAvwp7Bx6QpIpSSp1oqi9iVQAiP34/b5hkljMMUBTku4/UQgxyiOkRDxtkuyGUWg==
-X-Received: by 2002:a05:6870:4711:b0:144:49b8:6800 with SMTP id b17-20020a056870471100b0014449b86800mr16565499oaq.58.1672329149252;
-        Thu, 29 Dec 2022 07:52:29 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056871008300b0010d7242b623sm8774842oaa.21.2022.12.29.07.52.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 07:52:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 29 Dec 2022 07:52:27 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sinan Divarci <Sinan.Divarci@analog.com>, jdelvare@suse.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: hwmon: Add bindings for max31732
-Message-ID: <20221229155227.GA22937@roeck-us.net>
-References: <20221214142206.13288-1-Sinan.Divarci@analog.com>
- <20221214142206.13288-4-Sinan.Divarci@analog.com>
- <386e3717-a063-a2ea-6028-19d11b5838b0@linaro.org>
+        Thu, 29 Dec 2022 10:56:36 -0500
+Received: from mail.holmansrus.com (unknown [143.59.183.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FDF2BF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:54:43 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.holmansrus.com (Postfix) with ESMTP id 9831EE1D8B;
+        Thu, 29 Dec 2022 09:54:42 -0600 (CST)
+Received: from mail.holmansrus.com ([127.0.0.1])
+        by localhost (mail.holmansrus.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id SFOQwsu4wpPp; Thu, 29 Dec 2022 09:54:41 -0600 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.holmansrus.com (Postfix) with ESMTP id BBC9FE1D81;
+        Thu, 29 Dec 2022 09:54:41 -0600 (CST)
+X-Virus-Scanned: amavisd-new at holmansrus.com
+Received: from mail.holmansrus.com ([127.0.0.1])
+        by localhost (mail.holmansrus.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id qCojwFhzkrdt; Thu, 29 Dec 2022 09:54:41 -0600 (CST)
+Received: from mail.holmansrus.com (mail.holmansrus.com [10.90.0.246])
+        by mail.holmansrus.com (Postfix) with ESMTP id 8E3BBE1D82;
+        Thu, 29 Dec 2022 09:54:41 -0600 (CST)
+Date:   Thu, 29 Dec 2022 09:54:41 -0600 (CST)
+From:   Walt Holman <walt@holmansrus.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <308147064.5.1672329281388.JavaMail.zimbra@holmansrus.com>
+In-Reply-To: <Y60+ClXkkBAfKhUf@kroah.com>
+References: <933489772.83.1672266579857.JavaMail.zimbra@holmansrus.com> <Y60+ClXkkBAfKhUf@kroah.com>
+Subject: Re: [PATCH 6.1 0000/1146] 6.1.2-rc1 review
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <386e3717-a063-a2ea-6028-19d11b5838b0@linaro.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.90.0.246]
+X-Mailer: Zimbra 8.8.15_GA_4484 (ZimbraWebClient - GC108 (Linux)/8.8.15_GA_4481)
+Thread-Topic: 6.1.2-rc1 review
+Thread-Index: FQOn6q/XNZPwbOB/ytDSaiKZEiPvAQ==
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 06:00:03PM +0100, Krzysztof Kozlowski wrote:
-> On 14/12/2022 15:22, Sinan Divarci wrote:
-> > Adding bindings for max31732 quad remote temperature sensor
-> 
-> Full stop.
-> 
-> Subject: drop second, redundant "bindings for".
-> 
-> > 
-> > Signed-off-by: Sinan Divarci <Sinan.Divarci@analog.com>
-> > ---
-> >  .../bindings/hwmon/adi,max31732.yaml          | 83 +++++++++++++++++++
-> >  1 file changed, 83 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
-> > new file mode 100644
-> > index 000000000..c701cda95
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/adi,max31732.yaml
-> > @@ -0,0 +1,83 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright 2022 Analog Devices Inc.
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/hwmon/adi,max31732.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Analog Devices MAX31732 Temperature Sensor Device Driver
-> 
-> Drop "Device Driver"
-> 
-> > +
-> > +maintainers:
-> > +  - Sinan Divarci <Sinan.Divarci@analog.com>
-> > +
-> > +description: Bindings for the Analog Devices MAX31732 Temperature Sensor Device.
-> 
-> Drop "Bindings for". Actually, either drop entire description or write
-> something else than title.
-> 
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - adi,max31732
-> > +
-> > +  reg:
-> > +    description: I2C address of the Temperature Sensor Device.
-> 
-> Drop description.
-> 
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +
-> > +  interrupt-names:
-> > +    description: Name of the interrupt pin of max31732 used for IRQ.
-> 
-> Drop description.
-> 
-> > +    minItems: 1
-> > +    items:
-> > +      - enum: [ALARM1, ALARM2]
-> > +      - enum: [ALARM1, ALARM2]
-> 
-> This should be fixed, not flexible. Why it's flexible?
-> 
-> lowercase letters only
-> 
-> > +
-> > +  adi,alarm1-interrupt-mode:
-> > +    description: |
-> > +      Enables the ALARM1 output to function in interrupt mode.
-> > +      Default ALARM1 output function is comparator mode.
-> 
-> Why this is a property of DT/hardware? Don't encode policy in DT.
-> 
+----- On Dec 29, 2022, at 1:13 AM, Greg KH gregkh@linuxfoundation.org wrote:
 
-I would not call this "policy". Normally it is an implementation
-question or decision, since interrupts behave differently depending
-on the mode. Impact is difficult to see, though, since the chip
-documentation is not available to the public.
-
-> > +    type: boolean
-> > +
-> > +  adi,alarm2-interrupt-mode:
-> > +    description: |
-> > +      Enables the ALARM2 output to function in interrupt mode.
-> > +      Default ALARM2 output function is comparator mode.
+> On Wed, Dec 28, 2022 at 04:29:39PM -0600, Walt Holman wrote:
+>> > This is the start of the stable review cycle for the 6.1.2 release.
+>> > There are 1146 patches in this series, all will be posted as a response
+>> > to this one.  If anyone has any issues with these being applied, please
+>> > let me know.
+>> > 
+>> > Responses should be made by Fri, 30 Dec 2022 14:41:29 +0000.
+>> > Anything received after that time might be too late.
+>> > 
+>> > The whole patch series can be found in one patch at:
+>> > [ https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
+>> > | https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.2-rc1.gz
+>> > ] > or in the git tree and branch at:
+>> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+>> > 	linux-6.1.y
+>> > and the diffstat can be found below.
+>> > 
+>> > thanks,
+>> > 
+>> > greg k-h
+>> > 
+>> > -------------
+>> 
+>> Hello,
+>> 
+>> I'm getting a NULL Pointer Dereference when shutting down or rebooting. It
+>> happens just as it tries to shut down the swap device ( /dev/dm-3 ). This
+>> happens late in the shutdown process and nothing gets saved in the logs.
+>> However, I've attached a photo of my screen showing the Oops and stack trace.
+>> Let me know if there's anything you'd like me to try.
 > 
-> Same question.
+> Does this happen with 6.1.1 also?
 > 
-> > +    type: boolean
-> > +
-> > +  adi,alarm1-fault-queue:
-> > +    description: The number of consecutive faults required to assert ALARM1.
+> Can you use 'git bisect' to track down the offending change?
 > 
-> Same question - why this number differs with hardware?
+> thanks,
 > 
+> greg k-h
 
-Noisier hardware will require more samples to avoid spurious faults.
-Trade-off is speed of reporting a fault. Normally the board designer
-would determine a value which is low enough to avoid spurious faults.
+Bisecting the kernel results in the following:
 
-Note that the chip (according to patch 2/3) supports resistance
-cancellation as well as beta compensation, which are also board specific.
-I don't have access to the datasheet, so I don't know for sure if those
-are configurable (typically they are). If they are configurable, I would
-expect to see respective properties.
+273d29fa4beb3954c970b6377a2aa6ee442b1430 is the first bad commit
+commit 273d29fa4beb3954c970b6377a2aa6ee442b1430
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Tue Nov 1 16:00:47 2022 +0100
 
-Guenter
+    blk-mq: move the srcu_struct used for quiescing to the tagset
+    
+    [ Upstream commit 80bd4a7aab4c9ce59bf5e35fdf52aa23d8a3c9f5 ]
+    
+    All I/O submissions have fairly similar latencies, and a tagset-wide
+    quiesce is a fairly common operation.
+    
+    Signed-off-by: Christoph Hellwig <hch@lst.de>
+    Reviewed-by: Keith Busch <kbusch@kernel.org>
+    Reviewed-by: Ming Lei <ming.lei@redhat.com>
+    Reviewed-by: Chao Leng <lengchao@huawei.com>
+    Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+    Reviewed-by: Hannes Reinecke <hare@suse.de>
+    Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+    Link: https://lore.kernel.org/r/20221101150050.3510-12-hch@lst.de
+    [axboe: fix whitespace]
+    Signed-off-by: Jens Axboe <axboe@kernel.dk>
+    Stable-dep-of: d36a9ea5e776 ("block: fix use-after-free of q->q_usage_counter")
+    Signed-off-by: Sasha Levin <sashal@kernel.org>
+
+ block/blk-core.c       | 27 +++++----------------------
+ block/blk-mq.c         | 33 +++++++++++++++++++++++++--------
+ block/blk-mq.h         | 14 +++++++-------
+ block/blk-sysfs.c      |  9 ++-------
+ block/blk.h            |  9 +--------
+ block/genhd.c          |  2 +-
+ include/linux/blk-mq.h |  4 ++++
+ include/linux/blkdev.h |  9 ---------
+ 8 files changed, 45 insertions(+), 62 deletions(-)
+
+-Walt
