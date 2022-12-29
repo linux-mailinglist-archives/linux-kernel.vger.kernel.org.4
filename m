@@ -2,103 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5D4658AA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:46:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C591C658AAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 09:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbiL2Iqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 03:46:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S233234AbiL2IrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 03:47:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiL2Iqj (ORCPT
+        with ESMTP id S233252AbiL2IrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 03:46:39 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FCC1147F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:46:35 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id bt23so10014645lfb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 00:46:35 -0800 (PST)
+        Thu, 29 Dec 2022 03:47:09 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93100120AE;
+        Thu, 29 Dec 2022 00:47:07 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so15928001wma.1;
+        Thu, 29 Dec 2022 00:47:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=00JBJmBBiBVV/0bx3FG8bOjOr7Fe2FO016Rg6RwMTyA=;
-        b=OHDKnWDlr4rdofCxcy9mYZ1WJwSzWBQgYbEyFkdnLkXivVwKpIvsEJZayqCTMEq7sT
-         k2X5KQyuZ7yCPvcLd6KoI7XDFrKQZXcb4npzm6ryg4QOPKKXoECuj/72FPEOXc26T2UX
-         U3gqO3DdFxJjTNTHK9Ac+h7wYQQ5oni1NDeROmDHT4+E39GJP+M9OYna4aD82cT1R977
-         q3y/UsvsAzhvV0KH+zpoaco1S4d64fKe1MPtWQJhb6l/Sf9d55fXeWZH/Ue5IE1Us/K6
-         JNBIrc9ix/SpgDowBRGPp6Q20iTqmqfhrexOeIPF6cKfiS0DCB+wOg2VnU8+toylFMJT
-         oSdg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jRWUhYIq+SLDOvQiqrOVOP6g3Plcd0QA8Y2GhVoNHpY=;
+        b=PMmPvJZJK2r6qP2rG7yBPRIYRvx2BDiE43Zlzgw1gDG+sj56JGlhCmiz59Ads3rrFw
+         Rp1PFqxtnf+Dh/uSXrbNLt1WwQq/YFqM71Ew5SfdqyQSr2CvYMfrZeHYAa2lMorNalck
+         e/89+1riqt1mZnOVftBxiIjfKXy643kUZe4qj6DoGNzoF54gTTqAXX9VG57Up8jcNHwd
+         /LvbhlSfhGjSbHzO7Mm+z1bCdP01fyBE9Wr23jPWJG62klUveXG5eRAdjIPZrWAUYudh
+         kCLHtW8ZlIznRK3PiS5AkRDVB5TOfUo+n6bmdgR9AtpS+tyGOI4m+n2ryhjewrVq6B3o
+         8+cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=00JBJmBBiBVV/0bx3FG8bOjOr7Fe2FO016Rg6RwMTyA=;
-        b=JX9RDa3EMo12Y0/dofQKAx388MHvkU4lG+AmjBn3+/nsi4ZSV6VV15etmGpL3zx97I
-         B5ks1PXeVg1Yg83Lw4cWnp5ENDMuJ2FgNsQPf6vaYigHAi8x9JiFbxkcUq9dxqbhSk2T
-         A6lQbN4VVKnNsklyQ6tdP0P2gpoXXMQwyh+VwNxDA+eprwPmNdeAE6VObe7LH7E1tku4
-         cCQeVrDIgCxiMy4niS4aeNWdSSieKTvb2rGJaW5yGm7XIfXunSvCQInZfpAlrJMm3NBE
-         3nfAlyuc8wQDDi8EWxGSU1q/yOjSiLKugtKbNHdqRXsojaOTIjm2AYzcvw2LmtozCqzg
-         euyg==
-X-Gm-Message-State: AFqh2kohTzLEnwjcMuMO0PWkysab5OCKAhQvk+/Bcb+kAUju2veVyyRo
-        +RVcy39Ll/IvY15TENcJ5aOcVA==
-X-Google-Smtp-Source: AMrXdXuDtZLYWJ1O1/6oOKr2ktf6+/ZBpd7g4CJ6Z4Rsk8pzJAsC89j6hBEXcq05OZLzKeZlxTTZrg==
-X-Received: by 2002:a05:6512:220a:b0:4b4:b667:4b1d with SMTP id h10-20020a056512220a00b004b4b6674b1dmr9041214lfu.27.1672303593720;
-        Thu, 29 Dec 2022 00:46:33 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p16-20020ac24ed0000000b004b4f3c0d9f8sm2980668lfr.283.2022.12.29.00.46.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 00:46:33 -0800 (PST)
-Message-ID: <170665b6-161a-6dd0-6ceb-199277c0ce2f@linaro.org>
-Date:   Thu, 29 Dec 2022 09:46:32 +0100
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jRWUhYIq+SLDOvQiqrOVOP6g3Plcd0QA8Y2GhVoNHpY=;
+        b=xC88OGtp9x1e+crwn+/DL/xj6PJiXmYC8sYjW1f6Czc0NfZbjDT0vUHVwlfZwBJMH/
+         w50hIjQNGRsg0rrF0A2sp2JuW6KJWJvU4qrbiKLQ7sXSPyCD5Q2mdpFRVhX4QNIs2eql
+         cwrPV8KfwlcMBwVmqN4gc2kg/947Rgf5JnbpSNEIwQSwxpyVtmH611peUaJZrebfYaIF
+         XIQRUaTdYtedLtYnGg5xBjvMXsxnOcjaXCFB/JvGF7vMUIn0eNYnA0qJrRXpftHjyiyd
+         fqmB0kH0lSiXaQCrpIkjDmLmm/xuT7vSrag78Xew2r2E5pYDUyeVY+x8EPzIcLJT2xQt
+         Na1w==
+X-Gm-Message-State: AFqh2krFd6zm03K211UpITF9sfHOzuZAcDeZDVw7HxzO32C66cRaGaG0
+        6hlNCKLztZoWYMA4isc3Ahw=
+X-Google-Smtp-Source: AMrXdXs15dm23+E5UFcIdXUAKnnmmfv0pPZ4hEra6qNEnJIQ5Mnj58LgrCWanrudgmPOTIz4vAuhng==
+X-Received: by 2002:a05:600c:54ef:b0:3d0:5254:8a43 with SMTP id jb15-20020a05600c54ef00b003d052548a43mr25267480wmb.38.1672303625992;
+        Thu, 29 Dec 2022 00:47:05 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n36-20020a05600c3ba400b003b49bd61b19sm29848934wms.15.2022.12.29.00.47.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 00:47:05 -0800 (PST)
+Date:   Thu, 29 Dec 2022 11:46:56 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Haotien Hsu <haotienh@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        Wayne Chang <waynec@nvidia.com>,
+        Sing-Han Chen <singhanc@nvidia.com>,
+        Sanket Goswami <Sanket.Goswami@amd.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Haotien Hsu <haotienh@nvidia.com>
+Subject: Re: [PATCH] ucsi_ccg: Refine the UCSI Interrupt handling
+Message-ID: <202212271237.LWXg8oOw-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/9] dt-bindings: interrupt-controller: irqc-rzg2l:
- Drop RZG2L_NMI macro
-Content-Language: en-US
-To:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20221221000242.340202-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221221000242.340202-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221221000242.340202-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221221083812.3363045-1-haotienh@nvidia.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/12/2022 01:02, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> NMI interrupt is not an external interrupt as compared to IRQ0-7 and
-> TINT0-31 on RZ/G2L SoC, so there is no need for RZG2L_NMI macro.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v1 -> v2
+Hi Haotien,
 
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Haotien-Hsu/ucsi_ccg-Refine-the-UCSI-Interrupt-handling/20221221-163923
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20221221083812.3363045-1-haotienh%40nvidia.com
+patch subject: [PATCH] ucsi_ccg: Refine the UCSI Interrupt handling
+config: x86_64-randconfig-m001-20221226
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
 
-Best regards,
-Krzysztof
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+
+smatch warnings:
+drivers/usb/typec/ucsi/ucsi_ccg.c:708 ccg_irq_handler() error: uninitialized symbol 'cci'.
+
+vim +/cci +708 drivers/usb/typec/ucsi/ucsi_ccg.c
+
+247c554a14aa16 Ajay Gupta      2018-10-26  675  static irqreturn_t ccg_irq_handler(int irq, void *data)
+247c554a14aa16 Ajay Gupta      2018-10-26  676  {
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  677  	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_CCI);
+247c554a14aa16 Ajay Gupta      2018-10-26  678  	struct ucsi_ccg *uc = data;
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  679  	u8 intr_reg;
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  680  	u32 cci;
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  681  	int ret;
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  682  
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  683  	ret = ccg_read(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  684  	if (ret)
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  685  		return ret;
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  686  
+e65232d7f1fccd Sing-Han Chen   2022-12-21  687  	if (!intr_reg)
+e65232d7f1fccd Sing-Han Chen   2022-12-21  688  		return IRQ_HANDLED;
+e65232d7f1fccd Sing-Han Chen   2022-12-21  689  	else if (!(intr_reg & UCSI_READ_INT))
+e65232d7f1fccd Sing-Han Chen   2022-12-21  690  		goto err_clear_irq;
+
+cci is uninitialized on this goto.
+
+e65232d7f1fccd Sing-Han Chen   2022-12-21  691  
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  692  	ret = ccg_read(uc, reg, (void *)&cci, sizeof(cci));
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  693  	if (ret)
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  694  		goto err_clear_irq;
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  695  
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  696  	if (UCSI_CCI_CONNECTOR(cci))
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  697  		ucsi_connector_change(uc->ucsi, UCSI_CCI_CONNECTOR(cci));
+247c554a14aa16 Ajay Gupta      2018-10-26  698  
+e65232d7f1fccd Sing-Han Chen   2022-12-21  699  	/* As per CCGx UCSI interface guide, copy CCI and MESSAGE_IN
+e65232d7f1fccd Sing-Han Chen   2022-12-21  700  	 * to the OpRegion before clear the UCSI interrupt
+e65232d7f1fccd Sing-Han Chen   2022-12-21  701  	 */
+e65232d7f1fccd Sing-Han Chen   2022-12-21  702  	ccg_op_region_update(uc, cci);
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  703  
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  704  err_clear_irq:
+e32fd989ac1c45 Heikki Krogerus 2019-11-04  705  	ccg_write(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+247c554a14aa16 Ajay Gupta      2018-10-26  706  
+e65232d7f1fccd Sing-Han Chen   2022-12-21  707  	if (!ret && test_bit(DEV_CMD_PENDING, &uc->flags) &&
+e65232d7f1fccd Sing-Han Chen   2022-12-21 @708  	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
+e65232d7f1fccd Sing-Han Chen   2022-12-21  709  		complete(&uc->complete);
+e65232d7f1fccd Sing-Han Chen   2022-12-21  710  
+247c554a14aa16 Ajay Gupta      2018-10-26  711  	return IRQ_HANDLED;
+247c554a14aa16 Ajay Gupta      2018-10-26  712  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 
