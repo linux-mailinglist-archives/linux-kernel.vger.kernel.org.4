@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED94658CFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40326658CFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbiL2M7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S233396AbiL2M7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:59:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbiL2M7f (ORCPT
+        with ESMTP id S233376AbiL2M7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:59:35 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E03D13E3A;
+        Thu, 29 Dec 2022 07:59:34 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F4313E34;
         Thu, 29 Dec 2022 04:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1672318774; x=1703854774;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=3WsSO9O51lFPB1otUWTEinjSTgtzgo4BI9Nj5m+iCzE=;
-  b=fmEWMVTj3hxgA9jr76ZHXVZoK4s0GJLg04t4ROqaoGSHreJTOLuIAh4q
-   OYteP2AkvPFOAX4+8Gp9Q5qdwogKekVCPocPFRmew8i1+6ELnQ5Y6fZnS
-   stb22KFPIm4H2dh20fhVY0T9pvYKua1l/hjS/2SxU/FQWVu/+qvvQyjHG
-   5jNdI/ID2bth3UfLPD7OvgRvsPufRIL3fdML9ZLCAnf8oKvCXQTWtFyGB
-   7yTkDWzzH/a7tSjTpnTX9pzCq5efS4WWaXj36gMeUS9cd2dHLHCsGRozR
-   kiKor624GzaH/bePF3NlZsGAcnaTl4kgDhOix/NOFew//3MRcNzj9aMn0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="348247468"
+  bh=cEYKSoq9ion/Msb52XFy1pALM0Lv1Yrd952UiRZkdb8=;
+  b=UWWB2UmAg2uuSNqTDNEplkOTKevWDjfN+1lUl8W4RWjmKe2NYuDkUnrb
+   jmte8hkQ+YojfLLpo9DMkiCuNoBZysUEZh/iZqG6Ve6eVltLIwcObXFw3
+   deY9HuLAo62XGe8DSa8hyHrHkotIFtkfAac3xP2gtg9Pa9RQOF4Frts7X
+   I0qYNeEZTFUdpr5RoEU0yiSa/j6+J3IXyR6QoRrBp2Qx5FETYBzPUnLO2
+   lzoMVT5NHWCP48fO/PswtEfDP65ecte7UM1ET+pNp0LptrJmlI547gjBo
+   aCEAiJ2qMoxuio4IpQdcm5bbiRznixSL3AQ8F32EQWAH5bXpOl60FE6Lb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="318722547"
 X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
-   d="scan'208";a="348247468"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 04:59:33 -0800
+   d="scan'208";a="318722547"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 04:59:33 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="777691263"
+X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="684203053"
 X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
-   d="scan'208";a="777691263"
+   d="scan'208";a="684203053"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2022 04:59:30 -0800
+  by orsmga008.jf.intel.com with ESMTP; 29 Dec 2022 04:59:30 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5CBF719E; Thu, 29 Dec 2022 15:00:01 +0200 (EET)
+        id 660871CA; Thu, 29 Dec 2022 15:00:01 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -52,18 +52,17 @@ Cc:     Andy Shevchenko <andy@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH v1 2/3] pinctrl: intel: Switch to use DEFINE_NOIRQ_DEV_PM_OPS() helper
-Date:   Thu, 29 Dec 2022 14:59:56 +0200
-Message-Id: <20221229125957.45923-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 3/3] pinctrl: cherryview: Switch to use DEFINE_NOIRQ_DEV_PM_OPS() helper
+Date:   Thu, 29 Dec 2022 14:59:57 +0200
+Message-Id: <20221229125957.45923-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221229125957.45923-1-andriy.shevchenko@linux.intel.com>
 References: <20221229125957.45923-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,25 +74,24 @@ switch the driver to use it instead of open coded variant.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/pinctrl/intel/pinctrl-intel.h | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/pinctrl/intel/pinctrl-cherryview.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.h b/drivers/pinctrl/intel/pinctrl-intel.h
-index 350328988571..207ef71f4a7d 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.h
-+++ b/drivers/pinctrl/intel/pinctrl-intel.h
-@@ -261,9 +261,7 @@ int intel_pinctrl_probe_by_uid(struct platform_device *pdev);
- int intel_pinctrl_suspend_noirq(struct device *dev);
- int intel_pinctrl_resume_noirq(struct device *dev);
+diff --git a/drivers/pinctrl/intel/pinctrl-cherryview.c b/drivers/pinctrl/intel/pinctrl-cherryview.c
+index 917563cef965..ddb83a40cce5 100644
+--- a/drivers/pinctrl/intel/pinctrl-cherryview.c
++++ b/drivers/pinctrl/intel/pinctrl-cherryview.c
+@@ -1875,9 +1875,7 @@ static int chv_pinctrl_resume_noirq(struct device *dev)
+ 	return 0;
+ }
  
--#define INTEL_PINCTRL_PM_OPS(_name)								\
--const struct dev_pm_ops _name = {								\
--	NOIRQ_SYSTEM_SLEEP_PM_OPS(intel_pinctrl_suspend_noirq, intel_pinctrl_resume_noirq)	\
--}
-+#define INTEL_PINCTRL_PM_OPS(name)								\
-+	DEFINE_NOIRQ_DEV_PM_OPS((name), intel_pinctrl_suspend_noirq, intel_pinctrl_resume_noirq)
+-static const struct dev_pm_ops chv_pinctrl_pm_ops = {
+-	NOIRQ_SYSTEM_SLEEP_PM_OPS(chv_pinctrl_suspend_noirq, chv_pinctrl_resume_noirq)
+-};
++static DEFINE_NOIRQ_DEV_PM_OPS(chv_pinctrl_pm_ops, chv_pinctrl_suspend_noirq, chv_pinctrl_resume_noirq);
  
- #endif /* PINCTRL_INTEL_H */
+ static const struct acpi_device_id chv_pinctrl_acpi_match[] = {
+ 	{ "INT33FF", (kernel_ulong_t)chv_soc_data },
 -- 
 2.35.1
 
