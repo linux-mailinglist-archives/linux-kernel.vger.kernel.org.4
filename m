@@ -2,52 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F837658F8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB462658F95
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233820AbiL2RXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 12:23:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S233849AbiL2RXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbiL2RXp (ORCPT
+        with ESMTP id S233819AbiL2RXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 12:23:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DDB14007;
-        Thu, 29 Dec 2022 09:23:44 -0800 (PST)
+        Thu, 29 Dec 2022 12:23:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF4914007;
+        Thu, 29 Dec 2022 09:23:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF9126185D;
-        Thu, 29 Dec 2022 17:23:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09391C433D2;
-        Thu, 29 Dec 2022 17:23:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF9F36185D;
+        Thu, 29 Dec 2022 17:23:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88FC2C433F2;
+        Thu, 29 Dec 2022 17:23:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672334623;
-        bh=5fT/RTDsMIRCI7vqqQas00P1ECkoWfUHN3WO6EWD7qo=;
+        s=k20201202; t=1672334625;
+        bh=gOUOkR2zo8y+S8Joa+T9Olru8LKRhBzMfjUbTckw5Fk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YeA1yV48zylkU+UoL14P7pvGkQ+qMuG0tUSbp2zY7Dq8WKyGvHhi2rbDc1Bf+FXJj
-         Z69YGzkcyjYttgVYY2aYdC+q2sU6kK58UkVS0/Q5Nsp9mSXn0A6ZC/vCEgKex+EnOV
-         ftjpmjms3nLXZW7v+HEmGV/X0835bGSFH65GuuxZVnWLdj5PIc2HrL3bVdwt26DEM9
-         0bdapkaJlSEX3yUJtUM1UQvhl1oedeC2tYaMeiQK909uu/72tzJz98vz28cU6iCAI7
-         wAVID/hf2NLU8zvoSIOjnhGmzkyUAZodfIcKxXBJIjTuRQZkdxqa4gaVKjtVTsmcbA
-         J9Pvl19VZfVGg==
+        b=dsEwq5bk0cqVsqxGZ0jBh9y1F9fO7ILZrxtYac5VvWc1c4P8592YQ3//LjCsh/IYG
+         qaTx196RprgKc1w2HeHRPkYduZeWsGhNxEJ2uPP1zLrZyD7qga5HYq9pFThC1nwDpg
+         d0BQY/66ShnRK9f/2WWll5GTfRGsWhO1YWPaYrV/yVtiCK1k0yp2cGXTjfUa2TDwhq
+         Hn8uml52oRulXoz6cgjo8Q/x9ZLa25Ec1wMg+20U9+BpPIOoKkKCpt4z/Ma/jEsWLp
+         R6mgiHQiGfxiwsYDgqcbuNNV08Oh3fI6jhFiueYQdIB3646dJ010ssNVHXxDk8O7KW
+         VyMLi8QoKkFkA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     freedreno@lists.freedesktop.org, bryan.odonoghue@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     swboyd@chromium.org, agross@kernel.org,
-        konrad.dybcio@somainline.org, quic_abhinavk@quicinc.com,
-        airlied@gmail.com, robdclark@gmail.com,
-        dmitry.baryshkov@linaro.org, robh+dt@kernel.org, daniel@ffwll.ch,
-        dianders@chromium.org, sean@poorly.run,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        david@ixit.cz, dri-devel@lists.freedesktop.org
-Subject: Re: (subset) [PATCH v6 00/18] mdss-dsi-ctrl binding and dts fixes
-Date:   Thu, 29 Dec 2022 11:23:22 -0600
-Message-Id: <167233461766.1099840.17628700245792986354.b4-ty@kernel.org>
+To:     agross@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, elder@linaro.org,
+        konrad.dybcio@linaro.org
+Cc:     mka@chromium.org, quic_sibis@quicinc.com, elder@kernel.org,
+        linux-arm-msm@vger.kernel.org, dianders@chromium.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3] arm64: dts: qcom: sc7280: only enable IPA for boards with a modem
+Date:   Thu, 29 Dec 2022 11:23:24 -0600
+Message-Id: <167233461763.1099840.13987684672071387995.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221223021025.1646636-1-bryan.odonoghue@linaro.org>
-References: <20221223021025.1646636-1-bryan.odonoghue@linaro.org>
+In-Reply-To: <20221224002126.1518552-1-elder@linaro.org>
+References: <20221224002126.1518552-1-elder@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,46 +57,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 23 Dec 2022 02:10:07 +0000, Bryan O'Donoghue wrote:
-> V6:
-> - Squashes a number of patches per Krzysztof's comments on bisectability
-> - Adds in Acked-by Rob and Krzysztof
+On Fri, 23 Dec 2022 18:21:26 -0600, Alex Elder wrote:
+> IPA is only needed on a platform if it includes a modem, and not all
+> SC7280 SoC variants do.  The file "sc7280-herobrine-lte-sku.dtsi" is
+> used to encapsulate definitions related to Chrome OS SC7280 devices
+> where a modem is present, and that's the proper place for the IPA
+> node to be enabled.
 > 
-> V5:
-> - Adds compat strings to bindings/display/msm/qcom,SoC-mdss.yaml - Dmitry
-> - Re-orders simple fixes to the start of the series to allow backports - Dmitry
-> - VDDA and drop of node-names - Krzysztof
-> - Deprecates qcom,dsi-ctrl-6g-qcm2290 - Krzysztof, Dmitry
-> - Expands set of updated files to include new msm8953 - bod
-> - Converts to agreed compat string qcom,SoC-dsi-ctrl hence
->   -              - qcom,mdss-dsi-ctrl-msm8996
->   +              - qcom,msm8996-dsi-ctrl
-> - Adds RB where indicated for the compat strings.
-> V4:
-> - Moves the update of the example from patch #5 to patch #4
+> Currently IPA is enabled in "sc7280-idp.dtsi", which is included by
+> DTS files for Qualcomm reference platforms (all of which include the
+> modem).  That also includes "sc7280-herobrine-lte-sku.dtsi", so
+> enabling IPA there would make it unnecessary for "sc7280-idp.dtsi"
+> to enable it.
 > 
 > [...]
 
 Applied, thanks!
 
-[10/18] arm64: dts: qcom: msm8916: Add compat qcom,msm8916-dsi-ctrl
-        commit: cd8cecc723671016a28f88ab13ee31642cb9e391
-[11/18] arm64: dts: qcom: msm8953: Add compat qcom,msm8953-dsi-ctrl
-        commit: 634ecbc6b17ac2beea4d64f84df629520306e8cc
-[12/18] arm64: dts: qcom: msm8996: Add compat qcom,msm8996-dsi-ctrl
-        commit: 5ebe4191286add92e8560915aaeb803578407f12
-[13/18] arm64: dts: qcom: sc7180: Add compat qcom,sc7180-dsi-ctrl
-        commit: a45d0641d110e81826710aa92711e1c2eedecb43
-[14/18] arm64: dts: qcom: sc7280: Add compat qcom,sc7280-dsi-ctrl
-        commit: 5b5e4ac378e5d2b1f881c8a6ea0ae827201ee07d
-[15/18] arm64: dts: qcom: sdm630: Add compat qcom,sdm660-dsi-ctrl
-        commit: 197d28d46315353cfc91d8519b8b561ab08a02cc
-[16/18] arm64: dts: qcom: sdm660: Add compat qcom,sdm660-dsi-ctrl
-        commit: 3381020a778c559c95e31af6d868ad059fbd65e8
-[17/18] arm64: dts: qcom: sdm845: Add compat qcom,sdm845-dsi-ctrl
-        commit: a1a685c312f5bcc6fbf35b647d3bc5cfc6f70c7d
-[18/18] arm64: dts: qcom: sm8250: Add compat qcom,sm8250-dsi-ctrl
-        commit: ff114e399e746e07df56bad1b4aaf540f37d579d
+[1/1] arm64: dts: qcom: sc7280: only enable IPA for boards with a modem
+      commit: 9472edb3e7ea08ada9d19a9cfc1bee7de6edee75
 
 Best regards,
 -- 
