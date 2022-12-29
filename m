@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580D2658CBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB46A658CBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 13:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbiL2MeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 07:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S233297AbiL2MeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 07:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbiL2MeF (ORCPT
+        with ESMTP id S230214AbiL2MeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 07:34:05 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E23313DD4;
-        Thu, 29 Dec 2022 04:33:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672317226; x=1703853226;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zHreUtqmKvOEGxfPmwFyAvdSxxzgj/SeSN1QmXbCurY=;
-  b=kZLTBsk2Qi0hYJvbUKDC9pkUDY+5f+V2IeQbuPDFRp2bS4tKvjSqAFa8
-   /6BsSgkW//kneHdQebAJ6gY0oGtHrby+nTATDl1AhJ96uXfrM/tNRlxBL
-   0LNi0RYV8Q/BHD8gq1b7hLRLrPKA2sCAAtzZJtdxtMB9Q8EM5rnli/aIp
-   oF34sRZfNghBnric+yZHTv70/IuJecUnV4g17RQVBv7WnCc5CPedo4Mrb
-   /VgkTeiD7YXsPy0Eyp8JVH1OF3mdoxywdudtfpT+IOJrC8Gokdfg6B8E0
-   hvGapkDG1p0KEN6tc+raKxpkpXswbWfRCIKKG6ctOxvP5BYMPuUludij4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="300720474"
-X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
-   d="scan'208";a="300720474"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 04:33:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10574"; a="684195741"
-X-IronPort-AV: E=Sophos;i="5.96,284,1665471600"; 
-   d="scan'208";a="684195741"
-Received: from tdx-lm.sh.intel.com ([10.239.53.27])
-  by orsmga008.jf.intel.com with ESMTP; 29 Dec 2022 04:33:43 -0800
-From:   Wei Wang <wei.w.wang@intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Wang <wei.w.wang@intel.com>
-Subject: [PATCH v2] KVM: move KVM_CAP_DEVICE_CTRL to the generic check
-Date:   Thu, 29 Dec 2022 20:33:38 +0800
-Message-Id: <20221229123338.4142-1-wei.w.wang@intel.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 29 Dec 2022 07:34:08 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7B21054C;
+        Thu, 29 Dec 2022 04:33:58 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NjSTY2XcQzJqRk;
+        Thu, 29 Dec 2022 20:32:49 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 29 Dec 2022 20:33:55 +0800
+Subject: Re: [PATCH] mce: fix missing stack-dumping in mce_panic()
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+References: <20221202163728.392509-1-linmiaohe@huawei.com>
+ <SJ1PR11MB60830CE8C3F79C9531C8567AFC179@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <5cf492bf-9807-a091-6ac2-a953fce276da@huawei.com> <Y61/+V47qH/8OVxp@zn.tnic>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <1e97c11d-99b6-c06f-b67f-c56ba6653d27@huawei.com>
+Date:   Thu, 29 Dec 2022 20:33:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y61/+V47qH/8OVxp@zn.tnic>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM_CAP_DEVICE_CTRL allows userspace to check if the kvm_device
-framework (e.g. KVM_CREATE_DEVICE) is supported by KVM. Move
-KVM_CAP_DEVICE_CTRL to the generic check for the two reasons:
-1) it already supports arch agnostic usages (i.e. KVM_DEV_TYPE_VFIO).
-For example, userspace VFIO implementation may needs to create
-KVM_DEV_TYPE_VFIO on x86, riscv, or arm etc. It is simpler to have it
-checked at the generic code than at each arch's code.
-2) KVM_CREATE_DEVICE has been added to the generic code.
+On 2022/12/29 19:54, Borislav Petkov wrote:
+> On Sat, Dec 03, 2022 at 10:19:32AM +0800, Miaohe Lin wrote:
+>> So I think it's better to have at least one stack dumps. Also what the commit
+>> 6e6f0a1f0fa6 ("panic: don't print redundant backtraces on oops") and commit
+>> 026ee1f66aaa ("panic: fix stack dump print on direct call to panic()") want
+>> to do is avoiding nested stack-dumping to have the original oops data being
+>> scrolled away on a 80x50 screen but to have *at least one backtraces*. So
+>> this patch acts more like a BUGFIX to ensure having at least one backtraces
+>> in mce_panic().
+> 
 
-Signed-off-by: Wei Wang <wei.w.wang@intel.com>
----
- arch/arm64/kvm/arm.c       | 1 -
- arch/powerpc/kvm/powerpc.c | 1 -
- arch/riscv/kvm/vm.c        | 1 -
- arch/s390/kvm/kvm-s390.c   | 1 -
- virt/kvm/kvm_main.c        | 1 +
- 5 files changed, 1 insertion(+), 4 deletions(-)
+Many thanks for your reply. :)
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 9c5573bc4614..190e9c3b10a7 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -212,7 +212,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 		r = vgic_present;
- 		break;
- 	case KVM_CAP_IOEVENTFD:
--	case KVM_CAP_DEVICE_CTRL:
- 	case KVM_CAP_USER_MEMORY:
- 	case KVM_CAP_SYNC_MMU:
- 	case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index 04494a4fb37a..21f9fbe96f6a 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -541,7 +541,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_ENABLE_CAP:
- 	case KVM_CAP_ONE_REG:
- 	case KVM_CAP_IOEVENTFD:
--	case KVM_CAP_DEVICE_CTRL:
- 	case KVM_CAP_IMMEDIATE_EXIT:
- 	case KVM_CAP_SET_GUEST_DEBUG:
- 		r = 1;
-diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-index 65a964d7e70d..6efe93b282e1 100644
---- a/arch/riscv/kvm/vm.c
-+++ b/arch/riscv/kvm/vm.c
-@@ -57,7 +57,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 
- 	switch (ext) {
- 	case KVM_CAP_IOEVENTFD:
--	case KVM_CAP_DEVICE_CTRL:
- 	case KVM_CAP_USER_MEMORY:
- 	case KVM_CAP_SYNC_MMU:
- 	case KVM_CAP_DESTROY_MEMORY_REGION_WORKS:
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index e4890e04b210..191d220b6a30 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -567,7 +567,6 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_ENABLE_CAP:
- 	case KVM_CAP_S390_CSS_SUPPORT:
- 	case KVM_CAP_IOEVENTFD:
--	case KVM_CAP_DEVICE_CTRL:
- 	case KVM_CAP_S390_IRQCHIP:
- 	case KVM_CAP_VM_ATTRIBUTES:
- 	case KVM_CAP_MP_STATE:
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 582757ebdce6..84073464aea0 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -4524,6 +4524,7 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
- #endif
- 	case KVM_CAP_BINARY_STATS_FD:
- 	case KVM_CAP_SYSTEM_EVENT_DATA:
-+	case KVM_CAP_DEVICE_CTRL:
- 		return 1;
- 	default:
- 		break;
--- 
-2.27.0
+> So which commit broke this?
+> 
+
+I think it should be Fixes: 6e6f0a1f0fa6 ("panic: don't print redundant backtraces on oops")
+as there's missing stack-dumping in mce_panic() since then. Should I resend the patch with
+above Fixes tag attached?
+
+> One of the two above or
+> 
+> 004429956b48 ("handle recursive calls to bust_spinlocks()")
+> 
+> or
+> 
+> d896a940ef4f ("x86, mce: remove oops_begin() use in 64bit machine check")
+> 
+> or...?
+> 
+> By looking at their dates, they're pretty much too old so that this can
+> go to *all* stable kernels.
+
+Yes, it should be a really old problem. And it seems it's unnoticed yet because mce should be a
+really rare event and corresponding dump-stacking might not be that attractive at that time.
+
+Thanks!
+Miaohe Lin
 
