@@ -2,91 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2331A658F6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8882658F70
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 18:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233585AbiL2RM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 12:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S233730AbiL2RNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 12:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233720AbiL2RMU (ORCPT
+        with ESMTP id S233704AbiL2RNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 12:12:20 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDFCDFF1;
-        Thu, 29 Dec 2022 09:12:19 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Thu, 29 Dec 2022 12:13:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9270013FBB;
+        Thu, 29 Dec 2022 09:13:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EA61F1EC01CE;
-        Thu, 29 Dec 2022 18:12:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672333938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=sqeooaleqBTMPBtHWAeLVMtTZ1xfk6rO2FzUqBNbtKw=;
-        b=QObNy42hmAtuswnJb8OglmyKvFnt1YAyP0phH4fNMyCB+uOSiROVBU9rTNybRKMg2S/OeP
-        JPC3cXk44PBGhiQPG6PRlGGJpi7nj21yYAIhgZNHgpszrJKFqxoS/Z9pQk0OGZjqHuG9SP
-        FiF4iIDhSNFB61FuWL9Zr6ZwEnAwzio=
-Date:   Thu, 29 Dec 2022 18:12:17 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, luto@kernel.org, peterz@infradead.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: Re: [Patch v4 04/13] x86/mm: Handle decryption/re-encryption of
- bss_decrypted consistently
-Message-ID: <Y63Kcaqo2U6G+JmY@zn.tnic>
-References: <Y62FbJ1rZ6TVUgml@zn.tnic>
- <20221229165431.GA611286@bhelgaas>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2ABF61337;
+        Thu, 29 Dec 2022 17:13:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3809BC433EF;
+        Thu, 29 Dec 2022 17:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672333984;
+        bh=QDYaBGUiKiWlnfyJfkUdPRWV+eylE86a9UGNgjXpeOk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zkkc6JBdtvNTzozF2B1x7GI7iJvu60LDG5RE0A0aTF0xPIelMQbETyqNwjC/kV3NS
+         LMLmPVn5lMEz8WLWzAn5tMCw/GRTYiBSD03Eh+4DYh6XOSaXajHZ2LOlJBLP3Vq07w
+         zJ1vvR3MFm6PyeEXnbrIp7Hass8NK8OHbhRA7K06BknCxlhcHeigqT2C0cbc3o7Gkg
+         /Pg7qhtAUxgb5xHfbOpPqJjTVaATfxcx6ixbIYHY7S03msgwxaWzg0vZ0KnW48S+Xl
+         JxQBT1LAzDiocPC5HP2gK2LKsBytAGUyU9dBwUeRyg0BvmiYgmZ/bZRv5NqkkhBBI8
+         EsOXSeOTcLc4A==
+Date:   Thu, 29 Dec 2022 11:13:01 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Lux Aliaga <they@mint.lgbt>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] arm64: dts: qcom: sm6125: QUPs, SPI and Seine I2C
+ buses
+Message-ID: <20221229171301.7sjbyvqpn3qjwexu@builder.lan>
+References: <20221216233408.1283581-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221229165431.GA611286@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221216233408.1283581-1-marijn.suijten@somainline.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 10:54:31AM -0600, Bjorn Helgaas wrote:
-> > "sme_postprocess_startup() decrypts the bss_decrypted ection when me_mask
-> > sme_is non-zero.
+On Sat, Dec 17, 2022 at 12:34:05AM +0100, Marijn Suijten wrote:
+> Introduce Qualcomm Universal Peripheral support on SM6125 and define all
+> known SPI and I2C Serial Engines.  On Sony Seine PDX201 all I2C buses
+> with known-connected hardware are enabled for future hardware mapping,
+> together with the respective GPI DMA 0 and QUP 0.
 > 
-> s/ection/section/
+> Changes since v1:
+> - Un-downstream pinctrl mapping:
+>   - Remove nested mux {} / config {};
+>   - Remove useless comments;
+>   - Remove unreferenced pinctrl states;
+> - Use qup14 pinctrl function name instead of unknown qup_14;
+> - Reword commit message;
+> - Add iommus to QUP nodes now that this series depends on apps_smmu to
+>   be available;
+> - Reorder all properties to match other SoCs;
+> - Reorder/intersperse QUP nodes with GPI DMA nodes to maintain sorting
+>   by address;
+> - Reorder SPI nodes to fit in with I2C nodes, restoring sorting by
+>   address too;
+> - Use QCOM_GPI_* constants;
+> - Adhere to 3 instead of 5 dma cells for gpi_dma.
 > 
-> (In case you copy/paste this text without noticing the typo)
+> v1: https://lore.kernel.org/all/20221001185628.494884-1-martin.botka@somainline.org/T/#u
+> 
+> Depends on:
+> - SM6125 APPS SMMU: https://lore.kernel.org/linux-arm-msm/20221216215819.1164973-1-marijn.suijten@somainline.org/T/#u
+> - SM6125 GPI DMA: https://lore.kernel.org/linux-arm-msm/20221216231528.1268447-1-marijn.suijten@somainline.org/T/#u
 
-Thanks.
+Please, in the future, when you have dependencies between your dts
+patches, send them together so I don't need to go on a treasure hunt in
+my mailbox to figure out which order to apply things...
 
-My par-agraph reformating helper does mangle words like that sometimes.
-The correct sentence should be:
+Regards,
+Bjorn
 
-"sme_postprocess_startup() decrypts the bss_decrypted section when
-sme_me_mask is non-zero."
-
-/me makes a mental note to switch to the vim builtin instead.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+> Marijn Suijten (2):
+>   arm64: dts: qcom: sm6125: Add QUPs with SPI and I2C Serial Engines
+>   arm64: dts: qcom: sm6125-seine: Enable GPI DMA 0, QUP 0 and I2C SEs
+> 
+> Martin Botka (1):
+>   arm64: dts: qcom: sm6125: Add pin configs for QUP SPI/I2C Serial
+>     Engines
+> 
+>  .../qcom/sm6125-sony-xperia-seine-pdx201.dts  |  29 +
+>  arch/arm64/boot/dts/qcom/sm6125.dtsi          | 522 ++++++++++++++++++
+>  2 files changed, 551 insertions(+)
+> 
+> --
+> 2.39.0
+> 
