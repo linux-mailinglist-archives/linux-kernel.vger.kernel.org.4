@@ -2,172 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E41B658DF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC70E658DF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233519AbiL2Onf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 09:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S233538AbiL2Oob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 09:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiL2Ond (ORCPT
+        with ESMTP id S233461AbiL2Oo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 09:43:33 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D2BBE17
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 06:43:32 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id bi26-20020a05600c3d9a00b003d3404a89faso11448673wmb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 06:43:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=be+qVMIVv1STigUldLLSO+VEimO4FkEtiUuMmMMI/5g=;
-        b=kSXA3QpIhcCotJqDx/s0W9EvKZ5nNPVhzbOQCqFnSsLF3GrRjGsFxgeCuEKFc9+SpA
-         lVZO29W49yDkzGRIjUv8taAG5wesM0a9zliltpD+NU4UU2paq4uBnsL9psuBiUyGA3Av
-         5cWMfL/FYt4aC/EuvKuDy++fuN3B46+t7RBSk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=be+qVMIVv1STigUldLLSO+VEimO4FkEtiUuMmMMI/5g=;
-        b=X+diMzsOTnv4kk4Wu+PJPRyagjYsfmzdXa8o/yaTEqjTBiKnyEZ6k+K4Ugvv+kIqxE
-         GdF5YLuKstlZrmazBlulo/0GuJtUxSmcL24nv1R3K9xEW7GWCULd7wzpTqjOq/tAsL/2
-         vkoM6E1/gvCA0tdvcozpCRdS1remc5jXTolp1luAndKoMgAjHlUCMptzTVzSU64IgOMU
-         zzh93OYkqHzOa0snnObLdu6rjXBuifPhcS6hJ/rrSU48qVXVPSoyqYMsMn/u1Qrsp00z
-         jDIzR3Y8gMY6WmJw+5FAgYzkZkRfTy3WFm2+QORpSowydbMKOtjgSkaO3sP+i0aPOgvY
-         7PfQ==
-X-Gm-Message-State: AFqh2kq2rk8LIN6fbrr8k/R1MMaBtqAeY7Krmb5zJZrvkDBL47QvMCW3
-        6hCrgrr0MysXTQWgPxYqAuPIAZ8GWKKHMX67FUbz7g==
-X-Google-Smtp-Source: AMrXdXsFdk450IIEC0x/VeSCqfmgXCVqlRlyOddNRWvIBJFGjuk6khq4CySIJSumLBM5RPwdMfj/3od7M9MCSiX7chk=
-X-Received: by 2002:a05:600c:1c86:b0:3cf:71e4:75b with SMTP id
- k6-20020a05600c1c8600b003cf71e4075bmr2138709wms.114.1672325010719; Thu, 29
- Dec 2022 06:43:30 -0800 (PST)
-MIME-Version: 1.0
-References: <03ae2704-8c30-f9f0-215b-7cdf4ad35a9a@molgen.mpg.de>
-In-Reply-To: <03ae2704-8c30-f9f0-215b-7cdf4ad35a9a@molgen.mpg.de>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Thu, 29 Dec 2022 15:43:18 +0100
-Message-ID: <CAODwPW8=1R53Dir+CFHu-NADygCZVqDjsg0q+xT-KheZHghxtw@mail.gmail.com>
-Subject: Re: memcpy: detected field-spanning write (size 168) of single field
- "&device->entry" at drivers/firmware/google/coreboot_table.c:103 (size 8)
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Jack Rosenthal <jrosenth@chromium.org>, coreboot@coreboot.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 29 Dec 2022 09:44:28 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50C712AEA;
+        Thu, 29 Dec 2022 06:44:27 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 81A23320051E;
+        Thu, 29 Dec 2022 09:44:24 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 29 Dec 2022 09:44:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1672325064; x=1672411464; bh=JTZgLSlIIO
+        qenxEyLqfYo+J6+xlLVEFKuOuTUw7iSWE=; b=DZTPZthcZYu1YEUlH1zU3pVIG3
+        RzyI9Zm0zpIAOe8fvCgTm13UsUnNFGXVWZXfN9XFrY9emstyy746EfdppTH+rs1K
+        nESO87lyUky4GtWjyfgb6xdqrRGJNJml423z04OqR1uzFVIeDeyBhKUmjPRrg2Lm
+        X1GCZd3LrJmjG7qmnq9Qcd+pcs/dqMT6VO7QDWV3R5oElO2eZPLQe95HEEFil1Yo
+        PBV2Ymm1IsZh2yE44klgHvNdQcteYWGMOKgqP/WCtXoy9tlO/bz4UFxFny50ZsEg
+        5GE1mvcf+qA6tezCydHEGd4T8lGlTyTw/uf+6JH9JvZin2zKKNYXp0HoV8BA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672325064; x=1672411464; bh=JTZgLSlIIOqenxEyLqfYo+J6+xlL
+        VEFKuOuTUw7iSWE=; b=bLSbDrHhS8mDxk5E+B4reyFQ2TvYVxi2YOEZKLDx/AZ5
+        7a/E+YLSbCqWeK4lJZ8xVdlbhpdry5H/Cmn2ek0DtLS9cZ6N+NmRjHW8P57u5nHz
+        9JhKqmqL3tJ8IZ3C3luaDV+YvLeup/A+xeiTQj0nKdyrBzz3lh2kUmPMJVt+q+xu
+        bfcYL3CIOI13yE1U30yVcocSYlRWEaxreEJiDC48eVPYqPbn/eCFQg5Igv9GpEX5
+        KiF08DMezFHcecNODfsIjyy/nm+o2UGYiS0Ncvc5asuTfgZtM7LbBnIsYG16kJRT
+        DPZtEjhxLndbXccqH1yAEmnymf9P+MXl78JciTR2kQ==
+X-ME-Sender: <xms:x6etY4Ct9AFWXGC9nEQtP26zZAncySJfT1MfpLpaTzqymEPMB4kP-Q>
+    <xme:x6etY6j7BOMcFbWpYIZT8C_Bw8tHiTXcKLYpocF-aAP8yAFhfXIh4cnunxYeTuXcp
+    UjRuviFusDfeSgGpZU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdeilecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:x6etY7lueMmwiP7xJPHL13jyILA21u7gCw-emD34a2rA1lMjCj7I-w>
+    <xmx:x6etY-zGMMELoPCgcBp6AdiznVmP8rEO_tKyuHS3YaRscHN6LPC_3g>
+    <xmx:x6etY9R-UFq5lpUObbZt8oZ4sWF6dqh3-vO2Mh-9QVu86z4GX_0mwQ>
+    <xmx:yKetY9Z4C58471U1lsksfQ1qQwEmOVEjo1TuVIG0tv7aRa24A2zkzw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 60BDFB60086; Thu, 29 Dec 2022 09:44:23 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <4c779562-37d2-4bd3-bb02-41b943d7ef9d@app.fastmail.com>
+In-Reply-To: <1672307866-25839-2-git-send-email-dh10.jung@samsung.com>
+References: <1672307866-25839-1-git-send-email-dh10.jung@samsung.com>
+ <CGME20221229100413epcas2p34c702faf8c96d207cf1659b1173f8858@epcas2p3.samsung.com>
+ <1672307866-25839-2-git-send-email-dh10.jung@samsung.com>
+Date:   Thu, 29 Dec 2022 15:44:02 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Daehwan Jung" <dh10.jung@samsung.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>,
+        "Mathias Nyman" <mathias.nyman@intel.com>,
+        "Felipe Balbi" <balbi@kernel.org>
+Cc:     "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>, sc.suh@samsung.com,
+        taehyun.cho@samsung.com, jh0801.jung@samsung.com,
+        eomji.oh@samsung.com
+Subject: Re: [RFC PATCH v2 1/3] usb: support Samsung Exynos xHCI Controller
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I can confirm that this warning is a false positive, at least. We're
-intentionally copying bytes from beyond the end of the header
-structure in this case.
+On Thu, Dec 29, 2022, at 10:57, Daehwan Jung wrote:
+> Currently, dwc3 invokes just xhci platform driver without any data.
+> We add xhci node as child of dwc3 node in order to get data from
+> device tree. It populates "xhci" child by name during initialization
+> of host. This patch only effects if dwc3 node has a child named "xhci"
+> not to disturb original path.
 
-I don't know what kind of kernel system detects this stuff at runtime
-and how to silence it. Probably need to add a void pointer cast or
-something?
+Using child nodes is not the normal way of abstracting a soc specific
+variant of a device, though there are some USB host drivers that
+do this. Just use the node itself and add whatever samsung specific
+properties are needed based on the compatible string.
 
-On Thu, Dec 29, 2022 at 11:46 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Dear Linux folks,
->
->
-> Running Linux v6.2-rc1+ on a motherboard using coreboot as firmware, the
-> warning below is shown.
->
-> ```
-> [    1.630244] ------------[ cut here ]------------
-> [    1.630249] memcpy: detected field-spanning write (size 168) of
-> single field "&device->entry" at
-> drivers/firmware/google/coreboot_table.c:103 (size 8)
-> [    1.630299] WARNING: CPU: 1 PID: 150 at
-> drivers/firmware/google/coreboot_table.c:103
-> coreboot_table_probe+0x1ea/0x210 [coreboot_table]
-> [    1.630307] Modules linked in: coreboot_table(+) sg binfmt_misc fuse
-> ipv6 autofs4
-> [    1.630316] CPU: 1 PID: 150 Comm: systemd-udevd Not tainted
-> 6.2.0-rc1-00097-gaebfba447cae #407
-> [    1.630318] Hardware name: ASUS F2A85-M_PRO/F2A85-M_PRO, BIOS
-> 4.18-4-gb3dd5af9c5 12/28/2022
-> [    1.630320] RIP: 0010:coreboot_table_probe+0x1ea/0x210 [coreboot_table]
-> [    1.630326] Code: 08 00 00 00 4c 89 c6 4c 89 04 24 48 c7 c2 50 81 60
-> c0 48 c7 c7 98 81 60 c0 4c 89 4c 24 08 c6 05 ab 1e 00 00 01 e8 e1 ca 47
-> d3 <0f> 0b 4c 8b 4c 24 08 4c 8b 04 24 e9 35 ff ff ff 41 be ea ff ff ff
-> [    1.630329] RSP: 0018:ffffb409c046fc30 EFLAGS: 00010286
-> [    1.630332] RAX: 0000000000000000 RBX: ffffb409c0175018 RCX:
-> 0000000000000000
-> [    1.630334] RDX: 0000000000000001 RSI: ffffffff94222bcd RDI:
-> 00000000ffffffff
-> [    1.630336] RBP: ffff937a44a06c00 R08: 0000000000000000 R09:
-> 00000000ffffdfff
-> [    1.630338] R10: ffffb409c046fad8 R11: ffffffff9452a948 R12:
-> 0000000000000000
-> [    1.630339] R13: ffffb409c0175000 R14: 0000000000000000 R15:
-> ffff937a40beb410
-> [    1.630341] FS:  0000000000000000(0000) GS:ffff937abb500000(0063)
-> knlGS:00000000f7f43800
-> [    1.630343] CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
-> [    1.630345] CR2: 00000000f7e3c2cf CR3: 00000001046de000 CR4:
-> 00000000000406e0
-> [    1.630347] Call Trace:
-> [    1.630348]  <TASK>
-> [    1.630351]  platform_probe+0x3f/0xa0
-> [    1.630357]  really_probe+0xe1/0x390
-> [    1.630361]  ? pm_runtime_barrier+0x50/0x90
-> [    1.630365]  __driver_probe_device+0x78/0x180
-> [    1.630369]  driver_probe_device+0x1e/0x90
-> [    1.630372]  __driver_attach+0xd2/0x1c0
-> [    1.630375]  ? __pfx___driver_attach+0x10/0x10
-> [    1.630378]  bus_for_each_dev+0x78/0xc0
-> [    1.630382]  bus_add_driver+0x1a9/0x200
-> [    1.630385]  driver_register+0x8f/0xf0
-> [    1.630387]  ? __pfx_init_module+0x10/0x10 [coreboot_table]
-> [    1.630392]  coreboot_table_driver_init+0x2d/0xff0 [coreboot_table]
-> [    1.630397]  do_one_initcall+0x44/0x220
-> [    1.630401]  ? kmalloc_trace+0x25/0x90
-> [    1.630405]  do_init_module+0x4c/0x1f0
-> [    1.630409]  __do_sys_finit_module+0xb4/0x130
-> [    1.630413]  __do_fast_syscall_32+0x6f/0xf0
-> [    1.630418]  do_fast_syscall_32+0x2f/0x70
-> [    1.630421]  entry_SYSCALL_compat_after_hwframe+0x71/0x79
-> [    1.630425] RIP: 0023:0xf7f49549
-> [    1.630428] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01 10
-> 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 cd 0f 05 cd
-> 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
-> [    1.630430] RSP: 002b:00000000ffa7bbbc EFLAGS: 00200292 ORIG_RAX:
-> 000000000000015e
-> [    1.630433] RAX: ffffffffffffffda RBX: 0000000000000010 RCX:
-> 00000000f7f28e09
-> [    1.630434] RDX: 0000000000000000 RSI: 00000000568cb4c0 RDI:
-> 000000005689fc50
-> [    1.630436] RBP: 0000000000000000 R08: 00000000ffa7bbbc R09:
-> 0000000000000000
-> [    1.630437] R10: 0000000000000000 R11: 0000000000200292 R12:
-> 0000000000000000
-> [    1.630439] R13: 0000000000000000 R14: 0000000000000000 R15:
-> 0000000000000000
-> [    1.630442]  </TASK>
-> [    1.630443] ---[ end trace 0000000000000000 ]---
-> ```
->
-> Another user reported this with Linux 6.1.1 in the Arch Linux forum [1].
->
->
-> Kind regards,
->
-> Paul
->
->
-> [1]: https://bbs.archlinux.org/viewtopic.php?id=282245
->       "6.1.1-arch1-1 - dmesg"
+> @@ -86,6 +90,33 @@ static void xhci_plat_quirks(struct device *dev, 
+> struct xhci_hcd *xhci)
+>  	xhci->quirks |= XHCI_PLAT | priv->quirks;
+>  }
+> 
+> +static int xhci_plat_bus_suspend(struct usb_hcd *hcd)
+> +{
+> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+> +
+> +	if (xhci->quirks & XHCI_ROOTHUB_WAKEUP) {
+> +		if (hcd == xhci->main_hcd)
+> +			__pm_relax(xhci->main_wakelock);
+> +		else
+> +			__pm_relax(xhci->shared_wakelock);
+> +	}
+> +
+> +	return xhci_bus_suspend(hcd);
+> +}
+> +
+> +static int xhci_plat_bus_resume(struct usb_hcd *hcd)
+> +{
+> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+> +
+> +	if (xhci->quirks & XHCI_ROOTHUB_WAKEUP) {
+> +		if (hcd == xhci->main_hcd)
+> +			__pm_stay_awake(xhci->main_wakelock);
+> +		else
+> +			__pm_stay_awake(xhci->shared_wakelock);
+> +	}
+> +	return xhci_bus_resume(hcd);
+> +}
+
+It looks like these are no longer tied to the Samsung
+device type, which would be a step in the right direction,
+but I think adding this should be a separate patch since
+it is not a hardware specific change but a new feature.
+
+    Arnd
