@@ -2,170 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1556658E6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4520A658E74
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiL2PtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 10:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S233532AbiL2Puk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 10:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiL2PtT (ORCPT
+        with ESMTP id S233187AbiL2Puh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 10:49:19 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5269D13DD2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:49:17 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id g25-20020a7bc4d9000000b003d97c8d4941so7940531wmk.4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:49:17 -0800 (PST)
+        Thu, 29 Dec 2022 10:50:37 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B48713F49
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:50:35 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso13473678wmb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OcHD+68JKivFTNKn8cO/CBcZZAARu6aqYEBF3jaYXXY=;
-        b=wov4t/Dp6UbuGwqLvgc4vMkRfInBScyFz5VfMRxkFh9qxszC85YMpmSHny1gXPrVsS
-         g32f4reKOVtWQMJ8tXOoxbkRbjZCZ1m5SUTFsEeNVyo3qe4fzbUv7mzyONTfBVWN/ygF
-         VCv0lEJwgaS8OQpQtH1AmoCHEbO8WSsmtXkJwQMKbTVyQhOUnzPNh5aURydy23AIStHq
-         7IW6dSqOnW/cLTthbtNHuMUuvGcSnsN4MUGA1Z6MgEXnnWMIIXtkOr33tpHLHB4icRu/
-         EKo8oFJTgXBFfNfzRgvO95/Kqn05D0Qao4eQAzZ4kyo7nkuPJ1BIRmhp7+wC87dbet08
-         SVKw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mxBRWEKdxDoxUmsf4m1Rf+wCWTOWa4yctJPkk6Ti6eA=;
+        b=mAWTeny0sqvADkOky+spceEmg9syZ8nm2BawGZXoEyTRWH6pr2xqeTmQP6z3nF7ga4
+         vJTk2fXB0ynr/dpSkhgIGH/AYtGa7mMVG+z0M/JjcThAmVF0p0wUVjpVmPj3lOfhTAU/
+         1Dh/x3SgVJpZYdoD2JxwQb4be7nzV0WLkdsPScKFuwHreV9O5FsSUmYEHeonc8ncGQBL
+         if+w7MFVFw/znWnPebEOCHBeErX1HH/SZZa+fqeAEu+TrfHwwvximtCfQSB0ZKsycRTx
+         OjveQ4o2aMYzc0HaY5yF5E0kXS30j6QPurPra3G9a3fVSClCvTlbDvp8i1f+mElmsU84
+         v3cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OcHD+68JKivFTNKn8cO/CBcZZAARu6aqYEBF3jaYXXY=;
-        b=V+5fJa0ltiqbq20VDBnyYlH7zU5ytN9AvK/QKG4AHzykwIbBkEN7mtq7+dKcNlEmyJ
-         h4RkmTTqqo8/QaPpRwCXHFInF7XfRJgG8u5GvZEKA5T21zCx0vwFV0lO8/KYHq9ioRuu
-         cXb565NOoRYUsrX2CCdZEdksQNeYUNPq5GzRa3mqnA7HUiDhrCM/hR3UIju+W2mPi8FS
-         L/B2AfiLPMi3oTW3vHPp/E8d/TqjxCVWWnXX9EaCtBnK02g1y9ECotQe+dRBorzVe+Qh
-         b+89O74sJFHLWlBhtseS9t6u30RzCoXDECSSEgpDIuMNEl7pVljLCT+uhxvCPlywISMa
-         qsCA==
-X-Gm-Message-State: AFqh2kraoPJjeQLKtj1kKN49QZnzzemH7WgWamC353zhcOv9D54PaXE8
-        wcgjo+szyHj9F5IT63omdzuPMg==
-X-Google-Smtp-Source: AMrXdXtGRRh5vsIthQvg5P5kw1KkeD+SE+4wsU583Cr1cJtcHYeGo9tuCyPGsdjApkph9RNzbdVSaQ==
-X-Received: by 2002:a05:600c:3b02:b0:3c7:18:b339 with SMTP id m2-20020a05600c3b0200b003c70018b339mr25804533wms.37.1672328955770;
-        Thu, 29 Dec 2022 07:49:15 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id d10-20020a05600c3aca00b003d34faca949sm24381530wms.39.2022.12.29.07.49.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 07:49:15 -0800 (PST)
-Message-ID: <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
-Date:   Thu, 29 Dec 2022 16:49:13 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mxBRWEKdxDoxUmsf4m1Rf+wCWTOWa4yctJPkk6Ti6eA=;
+        b=WKT2rHsiPvRc5Solg8Sh4YL7cGoYezwbS6Vyj2XwGBRrViyt+OoH5KrlMcNgwoNX6P
+         PvZVlx0I/nLqXUPx5vvNdXwVPzJGufvxx4p5ifQKulpJZRx5asb9ye3HeBBJojv0QlR+
+         hJx6Mzzyax3ZydzwMUAuPnLJbJhxnHvRNZBTqRT6TYJ0Zg2rLn1w4yDoSBIW/flO6u7E
+         49t3vp/hqxqY01h93TAL2xHV4DrijACMEUqBJ9cJIvF70gik9b9yRO5+qU4HEmRHRTVD
+         fVFqPYHwb6+CEVkmJLr+3EuHr2I/oTzBTvle+vRvWUb5CYWS+rFatgfIIHLTCREAqaTj
+         URfA==
+X-Gm-Message-State: AFqh2kom4sEUHB0BUgXzSeb1vLkcUbb+21OuTAJVyrTd006H0+QRSXxv
+        li3HHNs6/xA1fqPnXBsj3lXrrg==
+X-Google-Smtp-Source: AMrXdXt180PN5Ceh/nenWRord0+ZdJloEExn/Z1fAmgzdQZ3Flv/bOvzy0bNwEZKtBazgUjhZSX2hg==
+X-Received: by 2002:a05:600c:1603:b0:3d1:c895:930c with SMTP id m3-20020a05600c160300b003d1c895930cmr20392802wmn.35.1672329033991;
+        Thu, 29 Dec 2022 07:50:33 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:8f7a:98d8:9d8d:ced8])
+        by smtp.gmail.com with ESMTPSA id bh12-20020a05600c3d0c00b003cfa81e2eb4sm25251647wmb.38.2022.12.29.07.50.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 07:50:33 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v6 00/14] serial: qcom-geni-serial: implement support for SE DMA
+Date:   Thu, 29 Dec 2022 16:50:16 +0100
+Message-Id: <20221229155030.418800-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
- <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
- <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
- <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
- <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12/2022 10:18, Amjad Ouled-Ameur wrote:
-> Hi Daniel,
-> On Mon Dec 5, 2022 at 8:39 PM CET, Daniel Lezcano wrote:
->>
->> Hi Amjad,
->>
->>
->> On 05/12/2022 11:41, Amjad Ouled-Ameur wrote:
->>
->> [ ... ]
->>
->>>>> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>>>>     
->>>>>     	platform_set_drvdata(pdev, mt);
->>>>>     
->>>>> -	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->>>>> -					      &mtk_thermal_ops);
->>>>> -	if (IS_ERR(tzdev)) {
->>>>> -		ret = PTR_ERR(tzdev);
->>>>> -		goto err_disable_clk_peri_therm;
->>>>> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->>>>> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->>>>> +		if (!tz)
->>>>> +			return -ENOMEM;
->>>>> +
->>>>> +		tz->mt = mt;
->>>>> +		tz->id = i;
->>>>> +
->>>>> +		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
->>>>> +							     &mtk_thermal_ops :
->>>>> +							     &mtk_thermal_sensor_ops);
->>>>
->>>> Here you use again the aggregation
->>> I addressed this concern in V6, could you please take a look and let me
->>> know what you think [0].
->>>
->>> [0]: https://lore.kernel.org/all/5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com/
->>
->> May I misunderstanding but AFAICS, this patch is setting the
->> mtk_thermal_ops if the sensor id is zero. The get_temp is computing the
->> max temperature in this ops which is what we don't want to do.
-> 
-> Correct, but I think that is out of scope of this patchset, as the current
-> driver already uses mtk_thermal_ops for sensor 0. The focus of this patchset
-> is to add support for the other sensors.
-> 
-> Besides, what do you suggest as a clean implementation if the current one
-> no longer meets thermal core requirements ?
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-IIUC, there is a sensor per couple of cores. 1 x 2Bigs, 1 x 2Bigs, 1 x 4 
-Little, right ?
+The goal of this series is to update the qcom-geni-serial driver to use
+the DMA mode of the QUPv3 serial engine. This is accomplished by the last
+patch in the series. The previous ones contain either various tweaks,
+reworks and refactoring or prepare the driver for adding DMA support.
 
-If it is the case, then a thermal zone per sensor with the trip points 
-and a cooling device for each of them.
+More work will follow on the serial engine in order to reduce code
+redundancy among its users and add support for SE DMA to the qcom GENI
+SPI driver.
 
-The two thermal zones for the big will share the same cooling device. 
-The little thermal zone will have its own cooling device.
+v5 -> v6:
+- move patch 12/14 to the front of the series and mark it as a fix
+- rebase on top of v6.2-rc1 (there were some updates to the driver)
 
-If there is the GPU, then its own cooling device also with devfreq.
+v4 -> v5:
+- split patch 8/13 into two: one for splitting out the chunk sending code
+  and one for refactoring it (for easier review)
+- when stopping uart: disable the irq first before stopping transfers in
+  progress, otherwise we rist rescheduling additional transfers after
+  interrupt
+- make types even nore consistent in qcom_geni_serial_send_chunk_fifo()
 
+v3 -> v4:
+- don't assign NULL (even cast) to variables of type dma_addr_t
+- refactor checking the SE_GENI_STATUS into two inline functions
+- drop min_t() in favor of regular min() after adding some consistency to types
+- check if the abort command was successful and emit a message if not when
+  stopping TX in DMA mode
 
->> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
-> 
+v2 -> v3:
+- drop devres patches from the series
+
+v1 -> v2:
+- turn to_dev_uport() macro into a static inline function
+- use CIRC_CNT_TO_END() and uart_xmit_advance() where applicable and don't
+  handle xmit->tail directly
+- drop sizeof() where BYTES_PER_FIFO_WORD can be used
+- further refactor qcom_geni_serial_handle_tx_fifo()
+- collect review tags
+
+Bartosz Golaszewski (14):
+  tty: serial: qcom-geni-serial: stop operations in progress at shutdown
+  tty: serial: qcom-geni-serial: drop unneeded forward definitions
+  tty: serial: qcom-geni-serial: remove unused symbols
+  tty: serial: qcom-geni-serial: align #define values
+  tty: serial: qcom-geni-serial: improve the to_dev_port() macro
+  tty: serial: qcom-geni-serial: remove stray newlines
+  tty: serial: qcom-geni-serial: refactor qcom_geni_serial_isr()
+  tty: serial: qcom-geni-serial: remove unneeded tabs
+  tty: serial: qcom-geni-serial: split out the FIFO tx code
+  tty: serial: qcom-geni-serial: refactor
+    qcom_geni_serial_send_chunk_fifo()
+  tty: serial: qcom-geni-serial: drop the return value from handle_rx
+  tty: serial: qcom-geni-serial: use of_device_id data
+  soc: qcom-geni-se: add more symbol definitions
+  tty: serial: qcom-geni-serial: add support for serial engine DMA
+
+ drivers/tty/serial/qcom_geni_serial.c | 626 +++++++++++++++++---------
+ include/linux/qcom-geni-se.h          |   3 +
+ 2 files changed, 413 insertions(+), 216 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.37.2
 
