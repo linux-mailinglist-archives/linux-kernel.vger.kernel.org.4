@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261A4658A19
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 08:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA94658A1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 08:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbiL2Hsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 02:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
+        id S233049AbiL2Hxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 02:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbiL2HsR (ORCPT
+        with ESMTP id S230237AbiL2Hxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 02:48:17 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3768FB844
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 23:48:14 -0800 (PST)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NjL3v5GhHzkX1g;
-        Thu, 29 Dec 2022 15:43:39 +0800 (CST)
-Received: from [10.174.178.120] (10.174.178.120) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 29 Dec 2022 15:48:12 +0800
-Message-ID: <ffd9e2ef-8240-35db-f6ec-e1bfcd8e011d@huawei.com>
-Date:   Thu, 29 Dec 2022 15:48:12 +0800
+        Thu, 29 Dec 2022 02:53:34 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B95EF585
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 23:53:33 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id k19so4464896pfg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 23:53:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wDeSYbJRD5UIxf0kkPf6Les3H3nIVnzcLc/ji7ALnCE=;
+        b=qtpzgTHlnAUEX2ly37pMS8tGaRlIXK0hm2KhLHj9n1OgGC9mPJ4R3s1wEEjDXcr7v8
+         LH/xO2CKUW7TThMnCXMQEU9Fk5xFelRz6bQcuIWar7ylBvHdnqsKlrLT9D6avGwhi1k3
+         LmoOfoEoWvjBIA2cf40UqTdy6hKv1svsnmqN10EGTR7WwHtxWgAwe08tA8Sp5BiuBktj
+         2ju9o7VcUAj4/KeelGsnMQNp3IcuNtJuvIASxr7+eJX/yilF8MgvPSYnudnfAm3/5xvt
+         i0tWic8Sgt7ZkiBubZUj1ckNt5qyowqTIWpqOgNKZPebk0yxzwrGsJBHf+fMUC3tgzj5
+         Y/2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wDeSYbJRD5UIxf0kkPf6Les3H3nIVnzcLc/ji7ALnCE=;
+        b=zhURCT4uDETmXKC9umyxVE8I65Elkdzwr4Eu0Lznt0fVPIiHwQ89a/uAoai5CxP2l3
+         yZYT/PM0t1bOnGThzrwPR3Blgzw3BIebU6AmXwP2BRDXTn6bU0yFJa/9hdYnexKz3nHp
+         nS1jZmqkzF6U0OFfn9PsTrAB8dc7eVMcoAXivCWzwDLbyl4NCmwWd2RgVR9tU4foCb/9
+         Klj6WxsbdNT/6S9XmNoofDL7Al56D5gz8TLA0H1NoLz14DE/xw5wUVZMKNHQcmSCfVUO
+         d3uDDc3g6j2/WHEufyL6MSNqkajaf5mqTipkj23FaavLanVr3K7SDHHv1f55CyOpWGtx
+         ZVpQ==
+X-Gm-Message-State: AFqh2kpZmVKzDkTl5yhcUy2ZYB4Q7hgy3J5Tq05eu6Aqu9J86wi5xx07
+        U7DQ/iAu8K+lB3iWLXj2qA0=
+X-Google-Smtp-Source: AMrXdXv9sdoL0oUYN50GZYSQ/Q+vg/lYZGOj0iBbbAfLxbLORZ9wpsaC7se50iwwDrJg9KKX5LDS8w==
+X-Received: by 2002:a05:6a00:410b:b0:57a:9482:843b with SMTP id bu11-20020a056a00410b00b0057a9482843bmr31812196pfb.5.1672300412939;
+        Wed, 28 Dec 2022 23:53:32 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id x24-20020aa78f18000000b0058134d2df41sm6126235pfr.146.2022.12.28.23.53.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 23:53:32 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] um: vector: Fix memory leak in vector_config
+Date:   Thu, 29 Dec 2022 11:53:21 +0400
+Message-Id: <20221229075323.1394010-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   mawupeng <mawupeng1@huawei.com>
-Subject: Re: [PATCH 1/4] mm/mlock: return EINVAL for illegal user memory range
- in mlock
-To:     <akpm@linux-foundation.org>
-CC:     <mawupeng1@huawei.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <kuleshovmail@gmail.com>,
-        <aneesh.kumar@linux.ibm.com>, <clameter@sgi.com>
-References: <20221205034108.3365182-1-mawupeng1@huawei.com>
- <20221205034108.3365182-2-mawupeng1@huawei.com>
- <20221228141701.c64add46c4b09aa17f605baf@linux-foundation.org>
-Content-Language: en-US
-In-Reply-To: <20221228141701.c64add46c4b09aa17f605baf@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.120]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,69 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+kstrdup() return newly allocated copy of the string.
+Call kfree() to release the memory when after use.
 
+Fixes: 49da7e64f33e ("High Performance UML Vector Network Driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ arch/um/drivers/vector_kern.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 2022/12/29 6:17, Andrew Morton wrote:
-> On Mon, 5 Dec 2022 11:41:05 +0800 Wupeng Ma <mawupeng1@huawei.com> wrote:
-> 
->> While testing mlock, we have a problem if the len of mlock is ULONG_MAX.
->> The return value of mlock is zero. But nothing will be locked since the
->> len in do_mlock overflows to zero due to the following code in mlock:
->>
->>   len = PAGE_ALIGN(len + (offset_in_page(start)));
->>
->> The same problem happens in munlock.
->>
->> Since TASK_SIZE is the maximum user space address. The start or len of
->> mlock shouldn't be bigger than this. Function access_ok can be used to
->> check this issue, so return -EINVAL if bigger.
-> 
-> What happens if userspace uses a value somewhat smaller than ULONG_MAX?
-> 
-> 	mlock(addr, ULONG_MAX - 1000000);
-> 
-> ?
-> 
-> Because if the above works successfully and if it no longer works
-> successfully with this patchset then that could be a
-> backward-compatibility problem.
-
-For mlock:
-
- mlock(addr, ULONG_MAX - 1000000) will ret -1 and the errno is EINVAL(22) due to
-the following call trace.
-
-do_mlock
-  apply_vma_lock_flags
-    end = start + len;
-    if (end < start)
-      return -EINVAL;
-
-Just like you said, we need to keep backward-compatibility. Maybe we can only catch and fix
-the overflowing scenarios since they are absolutely wrong. here is the diff:
-
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 7032f6dd0ce1..fd5e857ab245 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -569,6 +569,7 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
-        unsigned long locked;
-        unsigned long lock_limit;
-        int error = -ENOMEM;
-+       size_t old_len = len;
+diff --git a/arch/um/drivers/vector_kern.c b/arch/um/drivers/vector_kern.c
+index ded7c47d2fbe..78f32005dd90 100644
+--- a/arch/um/drivers/vector_kern.c
++++ b/arch/um/drivers/vector_kern.c
+@@ -765,6 +765,7 @@ static int vector_config(char *str, char **error_out)
  
-        start = untagged_addr(start);
+ 	parsed = uml_parse_vector_ifspec(params);
  
-@@ -578,6 +579,9 @@ static __must_check int do_mlock(unsigned long start, size_t len, vm_flags_t fla
-        len = PAGE_ALIGN(len + (offset_in_page(start)));
-        start &= PAGE_MASK;
- 
-+       if (old_len != 0 && len == 0)
-+               return -EINVAL;
-+
-        lock_limit = rlimit(RLIMIT_MEMLOCK);
-        lock_limit >>= PAGE_SHIFT;
-        locked = len >> PAGE_SHIFT;
++	kfree(params);
+ 	if (parsed == NULL) {
+ 		*error_out = "vector_config failed to parse parameters";
+ 		return -EINVAL;
+-- 
+2.25.1
 
-
-> 
