@@ -2,117 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D102B65924C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 22:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CC3659250
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 22:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbiL2VtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 16:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S233651AbiL2Vx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 16:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiL2VtS (ORCPT
+        with ESMTP id S230160AbiL2VxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 16:49:18 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F27910FD4;
-        Thu, 29 Dec 2022 13:49:17 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id fc4so47666758ejc.12;
-        Thu, 29 Dec 2022 13:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7NMRV5ypnDMUJPfywMYOiu80EiYecrYjVKdYS5AMU/0=;
-        b=hzvEZw96TKFXIf2ulPVp8Z1vJD4aDY9Kd7OTIxM+iCgxr2Wft17+UyrU6zijMltNfq
-         SHxvea3tnqG7zI7GeDDG4V/3cLAE11S0lsgL5n0hehuD9syLwbWWqseCM4wjq4+CQCin
-         wAnQflmh/VBDUWct73Mpq7RB/z82ivJC++sugddeQ3fWmBpQCRi5TCaJy9oQkKLSZwAR
-         auiNAimhYGTAlodHJUKi7rMNL9x/mhFd3jFwP2PJdESpoM2ysdA/yFLmLsnAxc3/36gR
-         ot5HW6GYMSPjy72seZJkI5KAy1h9CVZkw/vXtfymYRzt9nUJxYXS8bO3r3dRvNaaq5gq
-         j1ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7NMRV5ypnDMUJPfywMYOiu80EiYecrYjVKdYS5AMU/0=;
-        b=n6H6F4ags0bBKMcuhXFYsJ/dfRPAXlVQNToSg3Pknf7xGar0XRBhTZwTWywiFqelOl
-         53KQsEDmhBVeo83UKjSmKkgkxtImeDITVT3TQAu0MLTmT50iQS+BOP/dyurF9lm6yhKd
-         NnMb672rRSLSPZF/tQA7YapvLriNmJxi7TXsQ4J0JOhz+8DtlGpvWbUC4U7z7SM8QgFZ
-         h4xObbxRZUDD55eF39FrSmwmQDwxb5jO0M+aQDshWCCm7EakGiPYqhf1qF717XwiXKwK
-         t/7PzuRuhjOr922IZzhUDs7U84+T8M/a9PsoirpKZaA8LxQByzc1EPM5utoueNPB7KYA
-         y5ug==
-X-Gm-Message-State: AFqh2ko1M1VE7whVKn48mJbVPJLjsrQNnM6hgXzvGCBqng5gFaP5LCu9
-        kzipvgjF7Vo0m5ePNwMycBepGBUXXl7oGpd7qvA=
-X-Google-Smtp-Source: AMrXdXuGSHPJdC4E8PK48hQYqla/lioEbgmENnzp7DqtrP+6xiQyqhJK3VxnNgy6M65k5wlVw3Z2VKF6E88PqLRLWsE=
-X-Received: by 2002:a17:906:30c9:b0:7c1:bb5:f29c with SMTP id
- b9-20020a17090630c900b007c10bb5f29cmr1782370ejb.58.1672350555420; Thu, 29 Dec
- 2022 13:49:15 -0800 (PST)
+        Thu, 29 Dec 2022 16:53:25 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBAE1572B;
+        Thu, 29 Dec 2022 13:53:25 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 26EAE32005B5;
+        Thu, 29 Dec 2022 16:53:22 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 29 Dec 2022 16:53:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1672350801; x=1672437201; bh=GmZbFK5G8r3n4tr/8fciPGSNC
+        kBT0fjFOydO/VsJtnM=; b=1IFGGQlnjZZHd4CGC3hCJ/2dUcS0HJG0PDg1NIZG3
+        UpZNmfRv32+SeQ+hbVeZmNPh1fc0dITzfjsVIQlE6ScS8vdThM+s75geDG2dJvGe
+        LDRAlVfFfGOAZCp5i89RqF0XP4nXTkzklJ1h/IgEWnUZe5ZFomK5hTu799nWHpph
+        2gzlepUSfOORM439h5lCWz8Mc2SipRF0le86uxx2elSSuGCoNkx+MjU0MOXYmnbL
+        tK1qMMXu2Cjt/tUPAMj0eC/lJJvIF9oUEYrc1ucfK4ylBJULuv3fOTVdDIkEEZ4S
+        dP2C+pBI0T3HTg3TOmS66i7h5OS8c8W6G90ep8nMG04LQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1672350801; x=1672437201; bh=GmZbFK5G8r3n4tr/8fciPGSNCkBT0fjFOyd
+        O/VsJtnM=; b=R4wlBjyS0eWG+v3T4OhIn4vIlyaoUbEWwqlbOG33EBFN+Q4+YQv
+        +BDS6KbSPelxjKCdteUT8WQD8a6fhWY4BeZB2zbH8YZkZMwJoTz61jMC3wfNbGC6
+        WFxDotjrZTYPZCf0bJ/aAA0/RjlDjWKLZsDSpq5LQoYiW6l8yoAf67lfTZjkRuA/
+        9GkQc9JhIV8CndXrP6HFynx+nfum6VLyPhZ60RUwjRzphAlMqo0BcpfoAmvY6Bxr
+        7Cb47dInTzKci0Z1JvWTqtHXWYdFDJ0YpIG7/Ik9t4JI3lQt2mpPNeTCUG9tgX5o
+        8zfe0F4fm+LvjvJtOVdcwpJDCFnjFxSbAJw==
+X-ME-Sender: <xms:UAyuYwkSDzvjMoZmemhcUzxxEdW4nYvOtjGHz_GBURF3JYLeKaWBMA>
+    <xme:UAyuY_3f4GULYIw1le2TsFp8uXavGn2Dt8D6m9S6DkwHEHAnS7T2jhZQHIqyIq5mE
+    2HLLyeGACJa7wOF6A>
+X-ME-Received: <xmr:UAyuY-oEmUR3p4MNEZTd7lajrXQZH2zi3byGKZNEbjZEXLdLu8WO8ykWNKaATTMHNlWjDlfheVk4MdDHzfqJPkerO08nwGZBTVD3-XNj6iKgStGFVIK37eLduXnpFKZ5HF44eg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdduheehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeehffethedtteffgfefteetjedvfeelueevudffgfeutdejvdehledv
+    vdffhfevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgu
+    rdhorhhg
+X-ME-Proxy: <xmx:UAyuY8m_LGg3ws12hCkqHzVTtf-bgQySISiOAUNoflsOMmkZ8Aij_A>
+    <xmx:UAyuY-0C7OZ8kVxhFYd_lHPBZ7IiE12h1lK7SLmhfc8Eqoq1DKwR8w>
+    <xmx:UAyuYzvJgBaC7pVUVwSRiprpPcGfev2cGF8pL8orO_AAlYsEfHhuEg>
+    <xmx:UQyuY3lj5vDw6tTSDkhmGwJUMVELCLAe_a9tMdI5op1QXVAbQ3LA3Q>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 29 Dec 2022 16:53:20 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] rtc: sun6i: Always export the internal oscillator
+Date:   Thu, 29 Dec 2022 15:53:19 -0600
+Message-Id: <20221229215319.14145-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-References: <20221223133618.10323-1-liuxin350@huawei.com> <CAEf4BzYYvs0TgA5aE41z7_ZQ8qa0=ird3P4hCFn3Xxj7km49-w@mail.gmail.com>
-In-Reply-To: <CAEf4BzYYvs0TgA5aE41z7_ZQ8qa0=ird3P4hCFn3Xxj7km49-w@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 29 Dec 2022 13:49:03 -0800
-Message-ID: <CAADnVQ+FbGD9yMpRYtCbzC-snOG1tGLfvEXQvkJYcMRjbYjTyw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: fix errno is overwritten after being closed.
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Xin Liu <liuxin350@huawei.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        yanan@huawei.com, wuchangye@huawei.com, xiesongyang@huawei.com,
-        kongweibin2@huawei.com, zhangmingyi5@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 29, 2022 at 1:44 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Dec 23, 2022 at 5:36 AM Xin Liu <liuxin350@huawei.com> wrote:
-> >
-> > In the ensure_good_fd function, if the fcntl function succeeds but
-> > the close function fails, ensure_good_fd returns a normal fd and
-> > sets errno, which may cause users to misunderstand. The close
-> > failure is not a serious problem, and the correct FD has been
-> > handed over to the upper-layer application. Let's restore errno here.
-> >
-> > Signed-off-by: Xin Liu <liuxin350@huawei.com>
-> > ---
-> >  tools/lib/bpf/libbpf_internal.h | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-> > index 377642ff51fc..98333a6c38e9 100644
-> > --- a/tools/lib/bpf/libbpf_internal.h
-> > +++ b/tools/lib/bpf/libbpf_internal.h
-> > @@ -543,10 +543,9 @@ static inline int ensure_good_fd(int fd)
-> >                 fd = fcntl(fd, F_DUPFD_CLOEXEC, 3);
-> >                 saved_errno = errno;
-> >                 close(old_fd);
-> > -               if (fd < 0) {
-> > +               errno = saved_errno;
-> > +               if (fd < 0)
-> >                         pr_warn("failed to dup FD %d to FD > 2: %d\n", old_fd, -saved_errno);
-> > -                       errno = saved_errno;
->
-> pr_warn calls into user-provided callback, which can clobber errno, so
-> `errno = saved_errno` should happen after pr_warn. With your change
-> there is even higher chance of errno clobbering.
->
-> Please send a follow up fix to unconditionally restore errno *after*
-> pr_warn, thanks.
+On all variants of the hardware, the internal oscillator is one possible
+parent for the AR100 clock. It needs to be exported so we can model that
+relationship correctly in the devicetree.
 
-Good point. I can follow up with one line fix too.
+Fixes: c56afc1844d6 ("rtc: sun6i: Expose internal oscillator through device tree")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
+This patch should be applied before [1] so this patch can be backported.
+[1]: https://lore.kernel.org/linux-rtc/20221229184011.62925-2-samuel@sholland.org/
+
+ drivers/rtc/rtc-sun6i.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index ed5516089e9a..7038f47d77ff 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -136,7 +136,6 @@ struct sun6i_rtc_clk_data {
+ 	unsigned int fixed_prescaler : 16;
+ 	unsigned int has_prescaler : 1;
+ 	unsigned int has_out_clk : 1;
+-	unsigned int export_iosc : 1;
+ 	unsigned int has_losc_en : 1;
+ 	unsigned int has_auto_swt : 1;
+ };
+@@ -271,10 +270,8 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 	/* Yes, I know, this is ugly. */
+ 	sun6i_rtc = rtc;
+ 
+-	/* Only read IOSC name from device tree if it is exported */
+-	if (rtc->data->export_iosc)
+-		of_property_read_string_index(node, "clock-output-names", 2,
+-					      &iosc_name);
++	of_property_read_string_index(node, "clock-output-names", 2,
++				      &iosc_name);
+ 
+ 	rtc->int_osc = clk_hw_register_fixed_rate_with_accuracy(NULL,
+ 								iosc_name,
+@@ -315,13 +312,10 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 		goto err_register;
+ 	}
+ 
+-	clk_data->num = 2;
++	clk_data->num = 3;
+ 	clk_data->hws[0] = &rtc->hw;
+ 	clk_data->hws[1] = __clk_get_hw(rtc->ext_losc);
+-	if (rtc->data->export_iosc) {
+-		clk_data->hws[2] = rtc->int_osc;
+-		clk_data->num = 3;
+-	}
++	clk_data->hws[2] = rtc->int_osc;
+ 	of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+ 	return;
+ 
+@@ -361,7 +355,6 @@ static const struct sun6i_rtc_clk_data sun8i_h3_rtc_data = {
+ 	.fixed_prescaler = 32,
+ 	.has_prescaler = 1,
+ 	.has_out_clk = 1,
+-	.export_iosc = 1,
+ };
+ 
+ static void __init sun8i_h3_rtc_clk_init(struct device_node *node)
+@@ -379,7 +372,6 @@ static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
+ 	.fixed_prescaler = 32,
+ 	.has_prescaler = 1,
+ 	.has_out_clk = 1,
+-	.export_iosc = 1,
+ 	.has_losc_en = 1,
+ 	.has_auto_swt = 1,
+ };
+-- 
+2.37.4
+
