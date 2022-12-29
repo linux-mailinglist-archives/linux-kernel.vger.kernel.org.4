@@ -2,403 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7A7658D16
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4A2658D14
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbiL2N1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 08:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S233208AbiL2N1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 08:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiL2N1f (ORCPT
+        with ESMTP id S233125AbiL2N1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 08:27:35 -0500
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2162.outbound.protection.outlook.com [40.92.63.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA885FACF
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:27:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PNS4jp+cf19e2H8x2LatwC8Hp7hlACQbdCJJe3giFx3TB1ApJL9vrcK+miOKZXHkc9X8YlQiH/hgRaQ4XJQvwOcoNSOAsJ6Uf23FTDByYocl/rRkdfs4koKdQsn0MIUK0m8zJALghOCAUXW+Yjxb7eeduIyDZbKLUYxtz0xgc22cyieeQhoUQhehXZ6d2fo4EzpKWW8fGQ+LNXK8R4f+tUKZWqewTCx9PJChCBeGHKec7gxVx+U4tkCf1NFGnOoUO9Oy1WP3+FxNirXJaD3gJoIiduGTqpfGpb3g3ges1X8oQN0eg/rRDyIOr5p30a1wn1dbovtmqgfdUaIx6STt9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+4sEKuRdSV1eGMTKI/BrW8wP3LoxL8J190/W6HAe9O4=;
- b=jAeu7FFOxIvFuO/tn7k/5TYsEX0j9AjFhfVAW7K19KXNwvJ1pSUr70MUHyS3IFyMNRGywwsSYcVFCqSqkujC1PjAv7RgTg4+uzxaJN+a1DlrllBnYoHeSfaMa0ztPUOMaFhcyQNWM9MXyq/7LqfHAI/Ktp6NJDNxS6OFFyVMTBqZIIpVUUY4HycBqjZVE2IKaP1KFikkXqMH/3Xjrk/ciGuAn4bKOLIIoFPWnBcVUYIzaUbMP8uLCqvDTKEkfAIDk8DcaQ5dLXM8Jc42b/zMJl0DomtCI/J4rKczoLP3GtIUNW6fCMav5bvFwvRWqYtWM1CfK0gv2bp+z2chh/Bi/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+4sEKuRdSV1eGMTKI/BrW8wP3LoxL8J190/W6HAe9O4=;
- b=OlH4RHOAQaySYMjodbdSMa2c6d+oQw6Z04p1afixzVJOSbRUCwJ6HttdIZzOyw75As1z+SCmyJSsyRfSdx6+hWC4RSvnc9qlbKp5UWXfkStq6Jk5hk7EQ2vxguPsW+D7srYuWjD3lGeDo9iaWtteupuJIMGRtTTUefKWXqwuGLzJn9j5MYAAgrEhliLrL8wqxB4yjA6t+Wq8GdlxBYlW+Ky2viZzTz3xje9WkxjDJvCsWssN5icuvmQUoL4Mgjbx8nICsfli8TRs0EfVHkCyqjQTHeZRzShLAm+geyMoqcCppx8LvYmEkVV/D0y+e/oq2OSUBU9wAT2PQJDqFoW37A==
-Received: from SYZP282MB3252.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:169::6) by
- ME3P282MB2626.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:115::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.16; Thu, 29 Dec 2022 13:27:27 +0000
-Received: from SYZP282MB3252.AUSP282.PROD.OUTLOOK.COM
- ([fe80::3021:4e2f:269f:86a2]) by SYZP282MB3252.AUSP282.PROD.OUTLOOK.COM
- ([fe80::3021:4e2f:269f:86a2%6]) with mapi id 15.20.5944.016; Thu, 29 Dec 2022
- 13:27:27 +0000
-From:   qi zhou <atmgnd@outlook.com>
-To:     "matthew.auld@intel.com" <matthew.auld@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "zhi.a.wang@intel.com" <zhi.a.wang@intel.com>,
-        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
-        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
-        "rodrigo.vivi@intel.com" <rodrigo.vivi@intel.com>,
-        "tvrtko.ursulin@linux.intel.com" <tvrtko.ursulin@linux.intel.com>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
-CC:     "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        qi zhou <ATMGND@OUTLOOK.COM>
-Subject: Re: [PATCH] fix gvtg cursor position if it is negative
-Thread-Topic: [PATCH] fix gvtg cursor position if it is negative
-Thread-Index: AQHZG4eUlO6VebNR50mtjCIRm5fqp66E2jBu
-Date:   Thu, 29 Dec 2022 13:27:27 +0000
-Message-ID: <SYZP282MB3252C832275ACAD8C8C2A091C9F39@SYZP282MB3252.AUSP282.PROD.OUTLOOK.COM>
-References: <SYZP282MB3252074E5A0A1C467337132AC9F39@SYZP282MB3252.AUSP282.PROD.OUTLOOK.COM>
-In-Reply-To: <SYZP282MB3252074E5A0A1C467337132AC9F39@SYZP282MB3252.AUSP282.PROD.OUTLOOK.COM>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [LVo5SZwuP6AiZP0E16U1TMNxwPpiVhMt]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SYZP282MB3252:EE_|ME3P282MB2626:EE_
-x-ms-office365-filtering-correlation-id: 73c4fa68-f318-4605-1db9-08dae9a06e1f
-x-ms-exchange-slblob-mailprops: EgT5Wr3QDKz918u76bcdvRMWUZXhBQCAJL9uKGdeHbeboL+FBVsfOZCqHvoGt/iho6kUuNsqOyXCCPrIY7KNnUSGis/MZ+4415HLWFkq6lgkfyGIw5w/h9sDaleJaRkRM3PcH+4j/0BxRD7CwPfwSYOBRpS6KJYEssDwG6qrrH9WKDzEUkPJJduG+dRdOGqoL8XoAvcz/WbxdZnLI5fR13aNWUlFXFUY0zAjPexxujHD8o3iQTdtoX4vJYJp65994TRrYf+jsoyoLVI8YEJn9785Tr3YMLKkb0B1O8Tfdz/zkztSQWpQulrejfm8yga9y5AWryYISW0zqdDBPG4sl3Te7XpKDAwZisNFizQ/Uy1/nH/C9ngmKvkTFxYRCCQIRHcfwzA69umLP929zuieBCQADwGOr+WWHNTKWUwRVXWnpsgPNrian4rRbM+NMtn2kwSe5CBuInw56Ivw36Tvekfgc0JmVI1WGvJEJOT1vklebXjST48Mv9LEIL00f841xiTYAAevximyKzpjSXR008e9ZpkYqSNNMwRmgnrldPW8nvt7guXdyLLBDoGYUtE2ZOuR6J11g/tUugvT5hySZtsTdnkuzgvVJ/FPLyR9n+MQT6cdMHxhaZCO07mMZ4szTXoV5+SkQQB709sVpnyh/ZdrFOFlisz8wcJy0j1VhhAl1gCB9J+3il4YxUtGFPGGi0onYdFHKjzxex97B4JRMNUXAijcRYonzjdyN2CGM0o=
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6L6XZ1fOzrE4jIgm4JmnsXUrrV3NX+P/vD9IfGJu4cSmZGRihbFw4btBZQHjJDRWuR+MeG9wgatsA2i1Y+Z8QypWG7YS5vjZe/ew7LeOhD9HsMo1xOXs3p9vshzjcu+9Ouu+CEAO9dFk/kpA8He4Ae1OM16nMccnu046OiLKqfwjo8UC0GMc6a8wmAufvFSkfW8r1dkHcE45pLpSPqVOumXneo3PO/SWfhKGE6fvlKIVcndpGgxirRouEOSKg3PDZ+3Y/gS+tX946F7lyEipwlypLhl3GTgflDEZ/V7Jr7qRE/0uoIJC8V4LORnI96kbvyVN1JIY1gXUbQoLYVcGZljXayFuuQol2UWz/LgZ8TuiMA6OPScvdtuGWXyQIg7bcvsCoKznqohznIaQCMss6A+PYkU8sXHw7yDkvsNHtkzMHldXZntJf+5zLgMEe2Oiv/b0lWkW2hay4hGPiIWvlHkEo/8Zox4mtXYKUkNwU20MnYQQbz9r7p2/n/nbdW6IktavKsLh0uKyBbafW6muEuVozEWtJV0sS5/F13gyVKWAtYZ15JyMHn0wt0RHu342QzN0cJj3HaX5TZPWCd9eAvt9v/6qN/VZRinLPf+4w48kCo5RGZ8mZcjwuAGs7qBiz6Cqr/yJvCXj0nTCGn57q/PV47+SXFk3ddtRHhSzsdE=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?CSw2kqIV0/DvsqFJ/FoaYZb/nwDM8BFcsZbNhluzjSQTQiaTzSflnyn5Ge?=
- =?iso-8859-1?Q?dMe734+ZT1/l/h+EQbvl7qPhxx3PQmAs5hRj0Gma8QbvjR8P16OuG1HXop?=
- =?iso-8859-1?Q?NQwLGPZs/j2cCEcuel0NhP9J1EFuzN/A0de9ljeNEI9QR+1UhK8Nhu/yWB?=
- =?iso-8859-1?Q?LYfi8jyW68S4xB8mA9W57Bu5KRunXahkzZkFeJkcJbT+WT56zOF4v0f5b1?=
- =?iso-8859-1?Q?Mu06LjXTyur7ZGsxP3DEkJ51tjhUFt39hYq+RWR9MjnSBLJXEvrko+fZbB?=
- =?iso-8859-1?Q?a45cqIhcyb6fL4qdIZbRK4HDCHDKJ+7lZ1zCW7n2J0fma37QaTnwc3flY3?=
- =?iso-8859-1?Q?9BDSCaIwENwQKUNRNGO/3UhdobpZAh43OEk2Wm4rraUqSZpTY+m4b6PycI?=
- =?iso-8859-1?Q?K3/Q2P32UHp1pAAzipmQAGvipvuC88qR5KXs6/L/kukBG4GAh06Df/Bq0y?=
- =?iso-8859-1?Q?9ROoO6SbPXX/vFe5m+Vw9+EkPGWw3OJg1IeC/bmueJ5MWbh40XtWWPodTl?=
- =?iso-8859-1?Q?y8lOwnBBmKNmrzX2RONWYj9fEvQkp3KXEKXKoA4e3VV0EV7emhaZraw/8I?=
- =?iso-8859-1?Q?5sFrdfvj2X+np6QyWVjogalkKQp1oxQKjBJ392jydJsull6hFo56CxtfQJ?=
- =?iso-8859-1?Q?rf+ZTI9lbWozy/+U2ipvPPsT7e/hRIB0yLj3P6r1m9X4Dy3id66yo0sytC?=
- =?iso-8859-1?Q?9uKo8cKLrTyGDLSNrPjb/s7Y2yji9WWLp93FJrzYZRreb6/ongmXu54GXF?=
- =?iso-8859-1?Q?o0IvfJQ8AEKqjZinp3ZcWSmGF1UTfW+V8Rx7b2hSH9ijHc++5b+XG7Aw67?=
- =?iso-8859-1?Q?A9w5iSSuZaO4l99oUvN1aAyRYd+Zu8VYe/hKc6Bak+JshsrxBQefVJbedm?=
- =?iso-8859-1?Q?sEbiKjL3RN2fSK1jvDvpS5cR0VovPJC2zkONPJ7+Ym+zBHwaWYOrJbEUl9?=
- =?iso-8859-1?Q?2Pe33sVeObPQc4VC1zZuu4fYUOG9ZiGWKYaeZqzfwQELBZF21X5t3lT3Jy?=
- =?iso-8859-1?Q?P94HmOqGQLf1KiDBv/zCGT0Hy7I8QRKTLTt3l8DUHfOXTLD8G/8lZeMIt3?=
- =?iso-8859-1?Q?SIHysT6CAgHz5MbTyinUiRRdoTTKJQmaRldaD+t2O9vkLquuYFps7+FxiM?=
- =?iso-8859-1?Q?oRy5s7aV0+YQmxipFAQwD0KlrhDbPAa2AZALT7ZAG+KuwIYCFrZ/5Y5UGr?=
- =?iso-8859-1?Q?VrB0ELsETu2ih3Cuwekcbj1WVuOmTWRqvZ10wjzlhDMzKu6IS+fdkjDdP/?=
- =?iso-8859-1?Q?oEqtpM+Su0SZqfN8l0FjHzjuct/El68J5ggq5bRzdYV+oyw+KxG5NBEzfH?=
- =?iso-8859-1?Q?JGg9?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 29 Dec 2022 08:27:39 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3133CFAEA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:27:37 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id z26so27495945lfu.8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:27:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gZSCpbFYEqU4kXdvZagC2f9wuaUgm6zGDC72Dg77aBg=;
+        b=EwfxI6MHyfLh+RSomgQ/cBEJaIlk0FfQzfv/1WmxeBnIqFl+gB6RBwDJjb6x2mq5xV
+         i74mE6DVGWFPrVoCO9sqzlYASEzyvDfz6oS2BwoyAVRfmmwuIgg3+VwrJ6DZ0XWwB3nk
+         KKL2qZYJ4M0emp+ggc19qQhLyiohmz2/MYqxv+B0g/V/5naXND6T1B7YL3SADG9+6RaV
+         I94ex3DIgPZL9BHtpCFYGTOgUn/3rNJP/OaueAMsBr/6XKAvlO9l7e+8nTwNYzJNDm4d
+         sbsyZa3JprKLvqb/Om/QIawYIMq2EtLzVqF8KCWv5HbvZBFrFanYXbhwsIGdFr+KddNp
+         jAIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gZSCpbFYEqU4kXdvZagC2f9wuaUgm6zGDC72Dg77aBg=;
+        b=Q284nTzrU4yHalW/j6QKsFMbW45mF0Kquga0PYB9rvRkuvtTCCBNfczy58Oq8DfMQF
+         M//oBKtPIEP7AjPQ8BL3aNi70FB4hcE7zUWmmFlH+KMEUHHEe47KyuNGCFKXNXFCOk6V
+         ZEhhqwjvUUQ4pqFjefcIbHV4oMz6FW10PTo2zy5nGcxLzktPcVtemlKpmQwsAtAOdH2/
+         P2OZseA3+B1p+o4D83QRlOfrHkfjBBaXQ+JxFovdd4Vn14dGCtzE+ozKya2UjILJuOQ/
+         D/SDmkO26iTr7ocHTGCqj5j1r+XDym45giLTG2I4Qi4Nuk4u6QCP0xojDc+FWrX216Fl
+         5LcQ==
+X-Gm-Message-State: AFqh2kr+lSx60NmL49VQedh1yiVOV44l9+Q7oPlUpVeWzWxYcJJiVypf
+        EPyhAoOogh2DkEpPSS7AbT07zw==
+X-Google-Smtp-Source: AMrXdXsZF5PMbIvZk9Qtlm7oBw6pmmt5L+LuelrSLsR94OcdSMuTwoN6ZdPt/P+Mn+1tEN8QXaqxhg==
+X-Received: by 2002:ac2:5327:0:b0:4b6:e64c:aec1 with SMTP id f7-20020ac25327000000b004b6e64caec1mr7226461lfh.53.1672320455538;
+        Thu, 29 Dec 2022 05:27:35 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 3-20020ac25f43000000b004996fbfd75esm3040595lfz.71.2022.12.29.05.27.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 05:27:35 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: sm8250: add cache size
+Date:   Thu, 29 Dec 2022 14:27:31 +0100
+Message-Id: <20221229132731.1193713-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SYZP282MB3252.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73c4fa68-f318-4605-1db9-08dae9a06e1f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Dec 2022 13:27:27.7293
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME3P282MB2626
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To test, you need patch qemu too, I paste it here for convenience, and I it=
- have been sent to qemu dev mailling list=0A=
-=0A=
-From 4f14d6216d3f05f01ffe419ff0baeebe416a3e58 Mon Sep 17 00:00:00 2001=0A=
-From: Qi Zhou <atmgnd@outlook.com>=0A=
-Date: Thu, 29 Dec 2022 20:25:06 +0800=0A=
-Subject: [PATCH] fix gvtg cursor position if it is negative=0A=
-=0A=
-It is valid if position of cursor is negative(not hotspot coordinates). for=
-=0A=
-example: precision section, resize, move, north east arrow...=0A=
-=0A=
-Signed-off-by: Qi Zhou <atmgnd@outlook.com>=0A=
----=0A=
- include/hw/vfio/vfio-common.h | 6 ++++--=0A=
- include/ui/console.h          | 4 ++--=0A=
- include/ui/gtk.h              | 2 +-=0A=
- linux-headers/linux/vfio.h    | 4 ++--=0A=
- ui/console.c                  | 2 +-=0A=
- ui/dbus-listener.c            | 2 +-=0A=
- ui/egl-headless.c             | 2 +-=0A=
- ui/gtk-egl.c                  | 2 +-=0A=
- ui/spice-display.c            | 2 +-=0A=
- 9 files changed, 14 insertions(+), 12 deletions(-)=0A=
-=0A=
-diff --git a/include/hw/vfio/vfio-common.h b/include/hw/vfio/vfio-common.h=
-=0A=
-index e573f5a9f1..8048816176 100644=0A=
---- a/include/hw/vfio/vfio-common.h=0A=
-+++ b/include/hw/vfio/vfio-common.h=0A=
-@@ -166,8 +166,10 @@ typedef struct VFIOGroup {=0A=
- =0A=
- typedef struct VFIODMABuf {=0A=
-     QemuDmaBuf buf;=0A=
--    uint32_t pos_x, pos_y, pos_updates;=0A=
--    uint32_t hot_x, hot_y, hot_updates;=0A=
-+    int32_t pos_x, pos_y;=0A=
-+    uint32_t pos_updates;=0A=
-+    uint32_t hot_x, hot_y;=0A=
-+    uint32_t hot_updates;=0A=
-     int dmabuf_id;=0A=
-     QTAILQ_ENTRY(VFIODMABuf) next;=0A=
- } VFIODMABuf;=0A=
-diff --git a/include/ui/console.h b/include/ui/console.h=0A=
-index e400ee9fa7..589d0fd621 100644=0A=
---- a/include/ui/console.h=0A=
-+++ b/include/ui/console.h=0A=
-@@ -264,7 +264,7 @@ typedef struct DisplayChangeListenerOps {=0A=
-                                  uint32_t hot_x, uint32_t hot_y);=0A=
-     /* optional */=0A=
-     void (*dpy_gl_cursor_position)(DisplayChangeListener *dcl,=0A=
--                                   uint32_t pos_x, uint32_t pos_y);=0A=
-+                                   int32_t pos_x, int32_t pos_y);=0A=
-     /* optional */=0A=
-     void (*dpy_gl_release_dmabuf)(DisplayChangeListener *dcl,=0A=
-                                   QemuDmaBuf *dmabuf);=0A=
-@@ -362,7 +362,7 @@ void dpy_gl_scanout_dmabuf(QemuConsole *con,=0A=
- void dpy_gl_cursor_dmabuf(QemuConsole *con, QemuDmaBuf *dmabuf,=0A=
-                           bool have_hot, uint32_t hot_x, uint32_t hot_y);=
-=0A=
- void dpy_gl_cursor_position(QemuConsole *con,=0A=
--                            uint32_t pos_x, uint32_t pos_y);=0A=
-+                            int32_t pos_x, int32_t pos_y);=0A=
- void dpy_gl_release_dmabuf(QemuConsole *con,=0A=
-                            QemuDmaBuf *dmabuf);=0A=
- void dpy_gl_update(QemuConsole *con,=0A=
-diff --git a/include/ui/gtk.h b/include/ui/gtk.h=0A=
-index ae0f53740d..bb28360185 100644=0A=
---- a/include/ui/gtk.h=0A=
-+++ b/include/ui/gtk.h=0A=
-@@ -182,7 +182,7 @@ void gd_egl_cursor_dmabuf(DisplayChangeListener *dcl,=
-=0A=
-                           QemuDmaBuf *dmabuf, bool have_hot,=0A=
-                           uint32_t hot_x, uint32_t hot_y);=0A=
- void gd_egl_cursor_position(DisplayChangeListener *dcl,=0A=
--                            uint32_t pos_x, uint32_t pos_y);=0A=
-+                            int32_t pos_x, int32_t pos_y);=0A=
- void gd_egl_flush(DisplayChangeListener *dcl,=0A=
-                   uint32_t x, uint32_t y, uint32_t w, uint32_t h);=0A=
- void gd_egl_scanout_flush(DisplayChangeListener *dcl,=0A=
-diff --git a/linux-headers/linux/vfio.h b/linux-headers/linux/vfio.h=0A=
-index ede44b5572..646db069b8 100644=0A=
---- a/linux-headers/linux/vfio.h=0A=
-+++ b/linux-headers/linux/vfio.h=0A=
-@@ -720,8 +720,8 @@ struct vfio_device_gfx_plane_info {=0A=
- 	__u32 height;	/* height of plane */=0A=
- 	__u32 stride;	/* stride of plane */=0A=
- 	__u32 size;	/* size of plane in bytes, align on page*/=0A=
--	__u32 x_pos;	/* horizontal position of cursor plane */=0A=
--	__u32 y_pos;	/* vertical position of cursor plane*/=0A=
-+	__s32 x_pos;	/* horizontal position of cursor plane */=0A=
-+	__s32 y_pos;	/* vertical position of cursor plane*/=0A=
- 	__u32 x_hot;    /* horizontal position of cursor hotspot */=0A=
- 	__u32 y_hot;    /* vertical position of cursor hotspot */=0A=
- 	union {=0A=
-diff --git a/ui/console.c b/ui/console.c=0A=
-index 9ff9217f9b..8dffacf07d 100644=0A=
---- a/ui/console.c=0A=
-+++ b/ui/console.c=0A=
-@@ -2049,7 +2049,7 @@ void dpy_gl_cursor_dmabuf(QemuConsole *con, QemuDmaBu=
-f *dmabuf,=0A=
- }=0A=
- =0A=
- void dpy_gl_cursor_position(QemuConsole *con,=0A=
--                            uint32_t pos_x, uint32_t pos_y)=0A=
-+                            int32_t pos_x, int32_t pos_y)=0A=
- {=0A=
-     DisplayState *s =3D con->ds;=0A=
-     DisplayChangeListener *dcl;=0A=
-diff --git a/ui/dbus-listener.c b/ui/dbus-listener.c=0A=
-index f9fc8eda51..43c00b7a75 100644=0A=
---- a/ui/dbus-listener.c=0A=
-+++ b/ui/dbus-listener.c=0A=
-@@ -188,7 +188,7 @@ static void dbus_cursor_dmabuf(DisplayChangeListener *d=
-cl,=0A=
- }=0A=
- =0A=
- static void dbus_cursor_position(DisplayChangeListener *dcl,=0A=
--                                 uint32_t pos_x, uint32_t pos_y)=0A=
-+                                 int32_t pos_x, int32_t pos_y)=0A=
- {=0A=
-     DBusDisplayListener *ddl =3D container_of(dcl, DBusDisplayListener, dc=
-l);=0A=
- =0A=
-diff --git a/ui/egl-headless.c b/ui/egl-headless.c=0A=
-index 7a30fd9777..7a03b08d46 100644=0A=
---- a/ui/egl-headless.c=0A=
-+++ b/ui/egl-headless.c=0A=
-@@ -110,7 +110,7 @@ static void egl_cursor_dmabuf(DisplayChangeListener *dc=
-l,=0A=
- }=0A=
- =0A=
- static void egl_cursor_position(DisplayChangeListener *dcl,=0A=
--                                uint32_t pos_x, uint32_t pos_y)=0A=
-+                                int32_t pos_x, int32_t pos_y)=0A=
- {=0A=
-     egl_dpy *edpy =3D container_of(dcl, egl_dpy, dcl);=0A=
- =0A=
-diff --git a/ui/gtk-egl.c b/ui/gtk-egl.c=0A=
-index e84431790c..a454402212 100644=0A=
---- a/ui/gtk-egl.c=0A=
-+++ b/ui/gtk-egl.c=0A=
-@@ -286,7 +286,7 @@ void gd_egl_cursor_dmabuf(DisplayChangeListener *dcl,=
-=0A=
- }=0A=
- =0A=
- void gd_egl_cursor_position(DisplayChangeListener *dcl,=0A=
--                            uint32_t pos_x, uint32_t pos_y)=0A=
-+                            int32_t pos_x, int32_t pos_y)=0A=
- {=0A=
-     VirtualConsole *vc =3D container_of(dcl, VirtualConsole, gfx.dcl);=0A=
- =0A=
-diff --git a/ui/spice-display.c b/ui/spice-display.c=0A=
-index 494168e7fe..347c3917bf 100644=0A=
---- a/ui/spice-display.c=0A=
-+++ b/ui/spice-display.c=0A=
-@@ -1002,7 +1002,7 @@ static void qemu_spice_gl_cursor_dmabuf(DisplayChange=
-Listener *dcl,=0A=
- }=0A=
- =0A=
- static void qemu_spice_gl_cursor_position(DisplayChangeListener *dcl,=0A=
--                                          uint32_t pos_x, uint32_t pos_y)=
-=0A=
-+                                          int32_t pos_x, int32_t pos_y)=0A=
- {=0A=
-     SimpleSpiceDisplay *ssd =3D container_of(dcl, SimpleSpiceDisplay, dcl)=
-;=0A=
- =0A=
--- =0A=
-2.25.1=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-From: qi zhou <atmgnd@outlook.com>=0A=
-Sent: Thursday, December 29, 2022 21:17=0A=
-To: matthew.auld@intel.com <matthew.auld@intel.com>; open list <linux-kerne=
-l@vger.kernel.org>; zhi.a.wang@intel.com <zhi.a.wang@intel.com>; jani.nikul=
-a@linux.intel.com <jani.nikula@linux.intel.com>; joonas.lahtinen@linux.inte=
-l.com <joonas.lahtinen@linux.intel.com>; rodrigo.vivi@intel.com <rodrigo.vi=
-vi@intel.com>; tvrtko.ursulin@linux.intel.com <tvrtko.ursulin@linux.intel.c=
-om>; airlied@gmail.com <airlied@gmail.com>; daniel@ffwll.ch <daniel@ffwll.c=
-h>; alex.williamson@redhat.com <alex.williamson@redhat.com>; cohuck@redhat.=
-com <cohuck@redhat.com>; intel-gvt-dev@lists.freedesktop.org <intel-gvt-dev=
-@lists.freedesktop.org>; intel-gfx@lists.freedesktop.org <intel-gfx@lists.f=
-reedesktop.org>; dri-devel@lists.freedesktop.org <dri-devel@lists.freedeskt=
-op.org>=0A=
-Subject: [PATCH] fix gvtg cursor position if it is negative =0A=
-=A0=0A=
-From 8d2a0c2c265119cb481deab825ea59c9605f3bd8 Mon Sep 17 00:00:00 2001=0A=
-From: Qi Zhou <atmgnd@outlook.com>=0A=
-Date: Thu, 29 Dec 2022 20:15:51 +0800=0A=
-Subject: [PATCH] fix gvtg cursor position if it is negative=0A=
-=0A=
-It is valid if position of cursor is negative(not hotspot coordinates). for=
-=0A=
-example: precision section, resize, move, north east arrow...=0A=
-=0A=
-Signed-off-by: Qi Zhou <atmgnd@outlook.com>=0A=
----=0A=
-=A0drivers/gpu/drm/i915/gvt/dmabuf.c | 5 ++---=0A=
-=A0drivers/gpu/drm/i915/gvt/dmabuf.h | 4 ++--=0A=
-=A0include/uapi/linux/vfio.h=A0=A0=A0=A0=A0=A0=A0=A0 | 4 ++--=0A=
-=A03 files changed, 6 insertions(+), 7 deletions(-)=0A=
-=0A=
-diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.c b/drivers/gpu/drm/i915/gvt/d=
-mabuf.c=0A=
-index 355f1c0e8664..b91122b33222 100644=0A=
---- a/drivers/gpu/drm/i915/gvt/dmabuf.c=0A=
-+++ b/drivers/gpu/drm/i915/gvt/dmabuf.c=0A=
-@@ -299,9 +299,8 @@ static int vgpu_get_plane_info(struct drm_device *dev,=
-=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 info->stride =3D c.width *=
- (c.bpp / 8);=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 info->drm_format =3D c.drm=
-_format;=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 info->drm_format_mod =3D 0=
-;=0A=
--=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 info->x_pos =3D c.x_pos;=0A=
--=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 info->y_pos =3D c.y_pos;=0A=
--=0A=
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 info->x_pos =3D c.x_sign ? -c.x=
-_pos : c.x_pos;=0A=
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 info->y_pos =3D c.y_sign ? -c.y=
-_pos : c.y_pos;=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if (validate_hotspot(&c)) =
-{=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 in=
-fo->x_hot =3D c.x_hot;=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 in=
-fo->y_hot =3D c.y_hot;=0A=
-diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.h b/drivers/gpu/drm/i915/gvt/d=
-mabuf.h=0A=
-index 3dcdb6570eda..4103106d7cc2 100644=0A=
---- a/drivers/gpu/drm/i915/gvt/dmabuf.h=0A=
-+++ b/drivers/gpu/drm/i915/gvt/dmabuf.h=0A=
-@@ -41,8 +41,8 @@ struct intel_vgpu_fb_info {=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 height;=A0=A0 /* height of plane */=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 stride;=A0=A0 /* stride of plane */=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 size;=A0=A0=A0=A0 /* size of plane in bytes,=
- align on page */=0A=
--=A0=A0=A0=A0=A0=A0 __u32 x_pos;=A0=A0=A0 /* horizontal position of cursor =
-plane */=0A=
--=A0=A0=A0=A0=A0=A0 __u32 y_pos;=A0=A0=A0 /* vertical position of cursor pl=
-ane */=0A=
-+=A0=A0=A0=A0=A0=A0 __s32 x_pos;=A0=A0=A0 /* horizontal position of cursor =
-plane */=0A=
-+=A0=A0=A0=A0=A0=A0 __s32 y_pos;=A0=A0=A0 /* vertical position of cursor pl=
-ane */=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 x_hot;=A0=A0=A0 /* horizontal position of cu=
-rsor hotspot */=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 y_hot;=A0=A0=A0 /* vertical position of curs=
-or hotspot */=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 struct intel_vgpu_dmabuf_obj *obj;=0A=
-diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h=0A=
-index 23105eb036fa..a9b93251ac7f 100644=0A=
---- a/include/uapi/linux/vfio.h=0A=
-+++ b/include/uapi/linux/vfio.h=0A=
-@@ -720,8 +720,8 @@ struct vfio_device_gfx_plane_info {=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 height;=A0=A0 /* height of plane */=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 stride;=A0=A0 /* stride of plane */=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 size;=A0=A0=A0=A0 /* size of plane in bytes,=
- align on page*/=0A=
--=A0=A0=A0=A0=A0=A0 __u32 x_pos;=A0=A0=A0 /* horizontal position of cursor =
-plane */=0A=
--=A0=A0=A0=A0=A0=A0 __u32 y_pos;=A0=A0=A0 /* vertical position of cursor pl=
-ane*/=0A=
-+=A0=A0=A0=A0=A0=A0 __s32 x_pos;=A0=A0=A0 /* horizontal position of cursor =
-plane */=0A=
-+=A0=A0=A0=A0=A0=A0 __s32 y_pos;=A0=A0=A0 /* vertical position of cursor pl=
-ane*/=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 x_hot;=A0=A0=A0 /* horizontal position of cu=
-rsor hotspot */=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 __u32 y_hot;=A0=A0=A0 /* vertical position of curs=
-or hotspot */=0A=
-=A0=A0=A0=A0=A0=A0=A0=A0 union {=0A=
--- =0A=
-2.25.1=
+Add full cache description to DTS to avoid:
+1. "Early cacheinfo failed" warnings,
+2. Cache topology detection which leads to early memory allocations and
+   "BUG: sleeping function called from invalid context" on PREEMPT_RT
+   kernel:
+
+  smp: Bringing up secondary CPUs ...
+  Detected VIPT I-cache on CPU1
+  BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+  in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 0, name: swapper/1
+  preempt_count: 1, expected: 0
+  RCU nest depth: 1, expected: 1
+  3 locks held by swapper/1/0:
+   #0: ffff5e337eee5f18 (&pcp->lock){+.+.}-{3:3}, at: get_page_from_freelist+0x20c/0xffc
+   #1: ffffa9e24a900b18 (rcu_read_lock){....}-{1:3}, at: rt_spin_trylock+0x40/0xe4
+   #2: ffff5e337efc8918 (&zone->lock){+.+.}-{3:3}, at: rmqueue_bulk+0x54/0x720
+  irq event stamp: 0
+  Call trace:
+   __might_resched+0x17c/0x214
+   rt_spin_lock+0x5c/0x100
+   rmqueue_bulk+0x54/0x720
+   get_page_from_freelist+0xcfc/0xffc
+   __alloc_pages+0xec/0x1150
+   alloc_page_interleave+0x1c/0xd0
+   alloc_pages+0xec/0x160
+   new_slab+0x330/0x454
+   ___slab_alloc+0x5b8/0xba0
+   __kmem_cache_alloc_node+0xf4/0x20c
+   __kmalloc+0x60/0x100
+   detect_cache_attributes+0x2a8/0x5a0
+   update_siblings_masks+0x28/0x300
+   store_cpu_topology+0x58/0x70
+   secondary_start_kernel+0xc8/0x154
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+The patch extends and depends in context on:
+https://lore.kernel.org/r/20221107155825.1644604-17-pierre.gondois@arm.com
+
+Cache sizes from publicly available data:
+https://en.wikichip.org/wiki/qualcomm/snapdragon_800/865
+---
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 4478bf0e7b22..4555345ee42e 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -111,10 +111,14 @@ CPU0: cpu@0 {
+ 			L2_0: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
++				cache-size = <0x20000>;
++				cache-unified;
+ 				next-level-cache = <&L3_0>;
+ 				L3_0: l3-cache {
+ 					compatible = "cache";
+ 					cache-level = <3>;
++					cache-size = <0x400000>;
++					cache-unified;
+ 				};
+ 			};
+ 		};
+@@ -137,6 +141,8 @@ CPU1: cpu@100 {
+ 			L2_100: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
++				cache-size = <0x20000>;
++				cache-unified;
+ 				next-level-cache = <&L3_0>;
+ 			};
+ 		};
+@@ -159,6 +165,8 @@ CPU2: cpu@200 {
+ 			L2_200: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
++				cache-size = <0x20000>;
++				cache-unified;
+ 				next-level-cache = <&L3_0>;
+ 			};
+ 		};
+@@ -181,6 +189,8 @@ CPU3: cpu@300 {
+ 			L2_300: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
++				cache-size = <0x20000>;
++				cache-unified;
+ 				next-level-cache = <&L3_0>;
+ 			};
+ 		};
+@@ -203,6 +213,8 @@ CPU4: cpu@400 {
+ 			L2_400: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
++				cache-size = <0x40000>;
++				cache-unified;
+ 				next-level-cache = <&L3_0>;
+ 			};
+ 		};
+@@ -225,6 +237,8 @@ CPU5: cpu@500 {
+ 			L2_500: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
++				cache-size = <0x40000>;
++				cache-unified;
+ 				next-level-cache = <&L3_0>;
+ 			};
+ 
+@@ -248,6 +262,8 @@ CPU6: cpu@600 {
+ 			L2_600: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
++				cache-size = <0x40000>;
++				cache-unified;
+ 				next-level-cache = <&L3_0>;
+ 			};
+ 		};
+@@ -270,6 +286,8 @@ CPU7: cpu@700 {
+ 			L2_700: l2-cache {
+ 				compatible = "cache";
+ 				cache-level = <2>;
++				cache-size = <0x80000>;
++				cache-unified;
+ 				next-level-cache = <&L3_0>;
+ 			};
+ 		};
+-- 
+2.34.1
+
