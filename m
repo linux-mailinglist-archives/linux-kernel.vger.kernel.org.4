@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47A9658E0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2743658E0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 15:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbiL2Oux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 09:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
+        id S233231AbiL2Out (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 09:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233472AbiL2Ouf (ORCPT
+        with ESMTP id S233525AbiL2Oug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 09:50:35 -0500
-Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6F613DCB;
+        Thu, 29 Dec 2022 09:50:36 -0500
+Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BC813DD3;
         Thu, 29 Dec 2022 06:50:34 -0800 (PST)
 Received: from mxbulk.masterlogin.de (unknown [192.168.10.85])
-        by mxout1.routing.net (Postfix) with ESMTP id E021D40122;
-        Thu, 29 Dec 2022 14:50:32 +0000 (UTC)
+        by mxout3.routing.net (Postfix) with ESMTP id 3255F60510;
+        Thu, 29 Dec 2022 14:50:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
         s=20200217; t=1672325433;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NdrLgZ7kHEHZCcXHBTGh4SDP3w9h0DuG6QN4UIa1As8=;
-        b=O1trYHL+ocAAPXPyAq8oLw4wu1KDtEgMhref6YrJPHBwQW/xXSBmT4eqeoo6jo6LHKQ/n5
-        6SgwMTRYx01gegLg3CFuPKIEnhx3DteVN3Jb09fazf3nIVkfwe0qLe8TKn+zIZejU3dJ8z
-        AHKDvOgW1lPt087kzOr0SrCc8gTOPM0=
+        bh=xI7XT67CqYlVW3+/XRkZxk2brg5+ceAOUtpu7n5qfPw=;
+        b=jt+ZH0Km/I3eda2F3q+kXXIzOPty6DMH9W53DVdoSsxySZp8Wu9HUqYFb8ccMW2OQEVLBV
+        0p9EDViI3/msY5vOAQJQHPpku14TB/KbFUqYSiCZuZytTCy8l6SWXx0AEowNk2G2yX0LZl
+        /hHc8LcsRuF8HXhWXAOTlVw8LFiu1dI=
 Received: from frank-G5.. (fttx-pool-80.245.77.213.bambit.de [80.245.77.213])
-        by mxbulk.masterlogin.de (Postfix) with ESMTPSA id A96631226AC;
+        by mxbulk.masterlogin.de (Postfix) with ESMTPSA id E3D53122725;
         Thu, 29 Dec 2022 14:50:32 +0000 (UTC)
 From:   Frank Wunderlich <linux@fw-web.de>
 To:     linux-mediatek@lists.infradead.org
@@ -43,9 +43,9 @@ Cc:     Frank Wunderlich <frank-w@public-files.de>,
         linux-arm-kernel@lists.infradead.org,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Sam Shih <sam.shih@mediatek.com>
-Subject: [PATCH v8 2/5] arm64: dts: mt7986: add usb related device nodes
-Date:   Thu, 29 Dec 2022 15:50:20 +0100
-Message-Id: <20221229145023.55713-3-linux@fw-web.de>
+Subject: [PATCH v8 3/5] arm64: dts: mt7986: add mmc related device nodes
+Date:   Thu, 29 Dec 2022 15:50:21 +0100
+Message-Id: <20221229145023.55713-4-linux@fw-web.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221229145023.55713-1-linux@fw-web.de>
 References: <20221229145023.55713-1-linux@fw-web.de>
@@ -62,143 +62,173 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sam Shih <sam.shih@mediatek.com>
 
-This patch adds USB support for MT7986.
+This patch adds mmc support for MT7986.
 
 Signed-off-by: Sam Shih <sam.shih@mediatek.com>
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Reviewed-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
-changes compared to sams original version:
-- reorder xhci-clocks based on yaml binding
+v2:
+- update mmc-node because clocks changed
 
-v5:
- - update ranges/reg of usb-phy
- - not added RB from AngeloGioacchino for v4 because of these changes
+v3:
+- fix pullups/pulldowns for mt7986a-rfb to have generic bias-pull-*
 
 v6:
-- remove unused usb regulators
-- remove 3v3 regulator (will be added with emmc-patch)
+- add 3v3 regulator in mt7986a-rfb (was in usb patch before)
+- dropped AngeloGioacchino RB because of this change
 ---
- arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts |  8 +++
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 55 ++++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts |  8 +++
- 3 files changed, 71 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 96 ++++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 15 +++
+ 2 files changed, 111 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-index 9b83925893b7..58089fcf4d16 100644
+index 58089fcf4d16..c7a2ac764a30 100644
 --- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-@@ -140,6 +140,10 @@ &spi1 {
- 	status = "okay";
+@@ -5,6 +5,8 @@
+  */
+ 
+ /dts-v1/;
++#include <dt-bindings/pinctrl/mt65xx.h>
++
+ #include "mt7986a.dtsi"
+ 
+ / {
+@@ -23,6 +25,24 @@ memory@40000000 {
+ 		device_type = "memory";
+ 		reg = <0 0x40000000 0 0x40000000>;
+ 	};
++
++	reg_1p8v: regulator-1p8v {
++		compatible = "regulator-fixed";
++		regulator-name = "fixed-1.8V";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-boot-on;
++		regulator-always-on;
++	};
++
++	reg_3p3v: regulator-3p3v {
++		compatible = "regulator-fixed";
++		regulator-name = "fixed-3.3V";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-boot-on;
++		regulator-always-on;
++	};
  };
  
-+&ssusb {
+ &crypto {
+@@ -58,7 +78,83 @@ switch: switch@0 {
+ 	};
+ };
+ 
++&mmc0 {
++	pinctrl-names = "default", "state_uhs";
++	pinctrl-0 = <&mmc0_pins_default>;
++	pinctrl-1 = <&mmc0_pins_uhs>;
++	bus-width = <8>;
++	max-frequency = <200000000>;
++	cap-mmc-highspeed;
++	mmc-hs200-1_8v;
++	mmc-hs400-1_8v;
++	hs400-ds-delay = <0x14014>;
++	vmmc-supply = <&reg_3p3v>;
++	vqmmc-supply = <&reg_1p8v>;
++	non-removable;
++	no-sd;
++	no-sdio;
 +	status = "okay";
 +};
 +
- &switch {
- 	ports {
- 		#address-cells = <1>;
-@@ -201,6 +205,10 @@ &uart2 {
- 	status = "okay";
- };
- 
-+&usb_phy {
-+	status = "okay";
-+};
+ &pio {
++	mmc0_pins_default: mmc0-pins {
++		mux {
++			function = "emmc";
++			groups = "emmc_51";
++		};
++		conf-cmd-dat {
++			pins = "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
++			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
++			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
++			input-enable;
++			drive-strength = <4>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>; /* pull-up 10K */
++		};
++		conf-clk {
++			pins = "EMMC_CK";
++			drive-strength = <6>;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>; /* pull-down 50K */
++		};
++		conf-ds {
++			pins = "EMMC_DSL";
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>; /* pull-down 50K */
++		};
++		conf-rst {
++			pins = "EMMC_RSTB";
++			drive-strength = <4>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>; /* pull-up 10K */
++		};
++	};
 +
- &wifi {
- 	status = "okay";
- 	pinctrl-names = "default", "dbdc";
++	mmc0_pins_uhs: mmc0-uhs-pins {
++		mux {
++			function = "emmc";
++			groups = "emmc_51";
++		};
++		conf-cmd-dat {
++			pins = "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
++			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
++			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
++			input-enable;
++			drive-strength = <4>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>; /* pull-up 10K */
++		};
++		conf-clk {
++			pins = "EMMC_CK";
++			drive-strength = <6>;
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>; /* pull-down 50K */
++		};
++		conf-ds {
++			pins = "EMMC_DSL";
++			bias-pull-down = <MTK_PUPD_SET_R1R0_10>; /* pull-down 50K */
++		};
++		conf-rst {
++			pins = "EMMC_RSTB";
++			drive-strength = <4>;
++			bias-pull-up = <MTK_PUPD_SET_R1R0_01>; /* pull-up 10K */
++		};
++	};
++
+ 	spi_flash_pins: spi-flash-pins {
+ 		mux {
+ 			function = "spi";
 diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-index 0e9406fc63e2..9ff2968152ae 100644
+index 9ff2968152ae..9c552442c02d 100644
 --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -323,6 +323,61 @@ spi1: spi@1100b000 {
+@@ -346,6 +346,21 @@ ssusb: usb@11200000 {
  			status = "disabled";
  		};
  
-+		ssusb: usb@11200000 {
-+			compatible = "mediatek,mt7986-xhci",
-+				     "mediatek,mtk-xhci";
-+			reg = <0 0x11200000 0 0x2e00>,
-+			      <0 0x11203e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&infracfg CLK_INFRA_IUSB_SYS_CK>,
-+				 <&infracfg CLK_INFRA_IUSB_CK>,
-+				 <&infracfg CLK_INFRA_IUSB_133_CK>,
-+				 <&infracfg CLK_INFRA_IUSB_66M_CK>,
-+				 <&topckgen CLK_TOP_U2U3_XHCI_SEL>;
-+			clock-names = "sys_ck",
-+				      "ref_ck",
-+				      "mcu_ck",
-+				      "dma_ck",
-+				      "xhci_ck";
-+			phys = <&u2port0 PHY_TYPE_USB2>,
-+			       <&u3port0 PHY_TYPE_USB3>,
-+			       <&u2port1 PHY_TYPE_USB2>;
++		mmc0: mmc@11230000 {
++			compatible = "mediatek,mt7986-mmc";
++			reg = <0 0x11230000 0 0x1000>,
++			      <0 0x11c20000 0 0x1000>;
++			interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&topckgen CLK_TOP_EMMC_416M_SEL>,
++				 <&infracfg CLK_INFRA_MSDC_HCK_CK>,
++				 <&infracfg CLK_INFRA_MSDC_CK>,
++				 <&infracfg CLK_INFRA_MSDC_133M_CK>,
++				 <&infracfg CLK_INFRA_MSDC_66M_CK>;
++			clock-names = "source", "hclk", "source_cg", "bus_clk",
++				      "sys_cg";
 +			status = "disabled";
 +		};
 +
-+		usb_phy: t-phy@11e10000 {
-+			compatible = "mediatek,mt7986-tphy",
-+				     "mediatek,generic-tphy-v2";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x11e10000 0x1700>;
-+			status = "disabled";
-+
-+			u2port0: usb-phy@0 {
-+				reg = <0x0 0x700>;
-+				clocks = <&topckgen CLK_TOP_DA_U2_REFSEL>,
-+					 <&topckgen CLK_TOP_DA_U2_CK_1P_SEL>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+			};
-+
-+			u3port0: usb-phy@700 {
-+				reg = <0x700 0x900>;
-+				clocks = <&topckgen CLK_TOP_USB3_PHY_SEL>;
-+				clock-names = "ref";
-+				#phy-cells = <1>;
-+			};
-+
-+			u2port1: usb-phy@1000 {
-+				reg = <0x1000 0x700>;
-+				clocks = <&topckgen CLK_TOP_DA_U2_REFSEL>,
-+					 <&topckgen CLK_TOP_DA_U2_CK_1P_SEL>;
-+				clock-names = "ref", "da_ref";
-+				#phy-cells = <1>;
-+			};
-+		};
-+
- 		ethsys: syscon@15000000 {
- 			 #address-cells = <1>;
- 			 #size-cells = <1>;
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-index 243760cd3011..188ce82ae56c 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-@@ -167,10 +167,18 @@ &spi1 {
- 	status = "okay";
- };
- 
-+&ssusb {
-+	status = "okay";
-+};
-+
- &uart0 {
- 	status = "okay";
- };
- 
-+&usb_phy {
-+	status = "okay";
-+};
-+
- &wifi {
- 	status = "okay";
- 	pinctrl-names = "default", "dbdc";
+ 		usb_phy: t-phy@11e10000 {
+ 			compatible = "mediatek,mt7986-tphy",
+ 				     "mediatek,generic-tphy-v2";
 -- 
 2.34.1
 
