@@ -2,143 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0C865932D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 00:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5802D65932E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 00:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234238AbiL2Xbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 18:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
+        id S234239AbiL2Xcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 18:32:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiL2Xbq (ORCPT
+        with ESMTP id S229650AbiL2Xcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 18:31:46 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E8915F00
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:31:42 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id 192so22064424ybt.6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:31:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8NwlNvW8os5X59hb+wdm0uo0iYsXBEq+kQRMcnpWHiE=;
-        b=0j4VQxs4nuQQ9EjiJwPgd/BWlKvqX8/RfMJ7cBnb1Q3LJKUSLHooHGvRB1cIOnqkig
-         S/QQa1CbQ3LapqEQO1J/jAZP/XsLf9vqw4NPLPE8I2TCyGTqGxB520sGCoVYHzU3dxoY
-         WBcxDegm3jeJk0yZSOB0l7j6PNzK0EX+ixnj5P3hO+URsg6FtBSz3aHITR/rFKENIey3
-         WixOaNwb8qBnA1/w+gFXyIToQsyoyLQgtIDOommrlxN6s+tZp86wgfrwg0gYxkXP3CcG
-         vBgM9+4LTtlz6v6qJNAARMWk3nyorQA5/6Z0xTOvLml2VbFMxrG/luCVxMC3GUA6Tau4
-         m6DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8NwlNvW8os5X59hb+wdm0uo0iYsXBEq+kQRMcnpWHiE=;
-        b=8CnLMpWQ8Prczrayr13MIjt8MTY/nJr04GEA48E0NZ5oYcA8DKDSDGZElxsx7C2N20
-         POWOzkIEcyHXgUE7j7TmmE3cGkafKMf+liS3fG7AWi1vNcZAqjPcZpRRdYYbZuJ7GOOD
-         GkYT1XmPhT7sbxZcKlxUlbVlfWSq13INqmut0iex7wxxYknyzsMe7VJBll4W9PLdXk3r
-         Khtupk45JMBJjTMwWPpzzQUittlWQJLpykYN9mxzktcD6LYyMBKM+/S60lHyof65WRxX
-         jITbC6EfYdvdeXHpbDam3KOsP428I36mWk8i1Km4umdyQSw2gkvpjcT/DtY7h5S4xT3a
-         g5Qw==
-X-Gm-Message-State: AFqh2krAHtW1NvuhHmFzUNdMkw975ybzeMSEXua++tYIPturO9MVRIum
-        CK2kY6zlCUuVYy0baJ/ck/mccEY51aE2v3MqPY1gEr7eUIC6zoqx
-X-Google-Smtp-Source: AMrXdXvFwo//4ugbN3LtFvW0Sxm9BywwvyVJV+up6QWzpw24GP8LTdM0mEKDLcMwEI3XthBq05XMVSeokYNuCVarIoE=
-X-Received: by 2002:a25:6fd5:0:b0:6f6:648:510b with SMTP id
- k204-20020a256fd5000000b006f60648510bmr3476079ybc.637.1672356702151; Thu, 29
- Dec 2022 15:31:42 -0800 (PST)
+        Thu, 29 Dec 2022 18:32:45 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C53B15F00
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:32:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672356764; x=1703892764;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/3hUUs3GoyJwjLhjjISNnLrxK2OEYxprekjNBKpDmSo=;
+  b=LUPFJjKuEM5e2H6OvP8/fqKgHEeLwZ1OmvMytT5zC2gDoH6L12E3XtC8
+   Up+0WY+DHYeXpl71X8BDqty/Awk9BMtaNDPwWJ+FhqxGQNOjvY89uB3f0
+   Xe+sme6C+ySjIuTn/TfhoEwwRxX5uXLy4yml/ezCenmc0oCFalMvqb+Hl
+   kHdYaORfxKttsSZfBIHDcUAuygRmVNX6h5MgymlGRqJ6/FeFWlnRW11un
+   7KGvo8kM8Rlw0cHpAbqnFk03UuzlzV+mib0sq036liQ5ZYo8y7nrkUppw
+   bZ84u/7SJQ1nP3jja5Una/84TbkSnwov0kIZ4vAc82fGnXzqxxsqhMIkd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="322364518"
+X-IronPort-AV: E=Sophos;i="5.96,285,1665471600"; 
+   d="scan'208";a="322364518"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2022 15:32:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10575"; a="777813055"
+X-IronPort-AV: E=Sophos;i="5.96,285,1665471600"; 
+   d="scan'208";a="777813055"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Dec 2022 15:32:41 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pB2O8-000HC2-1C;
+        Thu, 29 Dec 2022 23:32:40 +0000
+Date:   Fri, 30 Dec 2022 07:32:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ e57afd2216b3825940e4a63bcfafb1e9d090ba24
+Message-ID: <63ae238e.93QzSen1UXY/x8bC%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20221117184406.292416-1-nfrayer@baylibre.com> <Y6wlhfdDdm+XAsuH@matsya>
- <52a11d11-20a0-bf08-ce64-401b5d0ad133@gmail.com>
-In-Reply-To: <52a11d11-20a0-bf08-ce64-401b5d0ad133@gmail.com>
-From:   Nicolas Frayer <nfrayer@baylibre.com>
-Date:   Fri, 30 Dec 2022 00:31:31 +0100
-Message-ID: <CANyCTtTwAoT9O=8kUeJvsX=+KvCANHdtku8T=Brnmpy3AKysLQ@mail.gmail.com>
-Subject: Re: [PATCH v3] dmaengine: ti: k3-udma: Deferring probe when
- soc_device_match() returns NULL
-To:     =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Cc:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        glaroque@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeu. 29 d=C3=A9c. 2022 =C3=A0 17:27, P=C3=A9ter Ujfalusi
-<peter.ujfalusi@gmail.com> a =C3=A9crit :
->
->
->
-> On 28/12/2022 13:16, Vinod Koul wrote:
-> > On 17-11-22, 19:44, Nicolas Frayer wrote:
-> >> When the k3 socinfo driver is built as a module, there is a possibilit=
-y
-> >> that it will probe after the k3 udma driver and the later returns -ENO=
-DEV.
-> >> By deferring the k3 udma probe we allow the k3 socinfo to probe and
-> >> register the soc_device_attribute structure needed by the k3 udma driv=
-er.
-> >> Removed the dev_err() message as well as it's deferring and not failin=
-g.
-> >
-> > lgtm, but need rebase as I already picked commit 3f58e10615f3 dmaengine=
-: ti:
-> > k3-udma: Add support for BCDMA CSI RX
->
-> Is this path needed at all? afaik the k3 socinfo is not going to be
-> module built.
->
-> >
-> >>
-> >> Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
-> >> ---
-> >> v1->v2:
-> >> Extracted this patch from the following series:
-> >> https://lore.kernel.org/all/20221108181144.433087-1-nfrayer@baylibre.c=
-om/
-> >>
-> >> v2->v3:
-> >> Removed the dev_err() message
-> >>
-> >>   drivers/dma/ti/k3-udma.c | 8 ++++----
-> >>   1 file changed, 4 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> >> index ce8b80bb34d7..ca1512eb9910 100644
-> >> --- a/drivers/dma/ti/k3-udma.c
-> >> +++ b/drivers/dma/ti/k3-udma.c
-> >> @@ -5271,10 +5271,10 @@ static int udma_probe(struct platform_device *=
-pdev)
-> >>      ud->match_data =3D match->data;
-> >>
-> >>      soc =3D soc_device_match(k3_soc_devices);
-> >> -    if (!soc) {
-> >> -            dev_err(dev, "No compatible SoC found\n");
-> >> -            return -ENODEV;
-> >> -    }
-> >> +
-> >> +    if (!soc)
-> >> +            return -EPROBE_DEFER;
-> >> +
-> >>      ud->soc_data =3D soc->data;
-> >>
-> >>      ret =3D udma_get_mmrs(pdev, ud);
-> >> --
-> >> 2.25.1
-> >
->
-> --
-> P=C3=A9ter
-Hi Vinod, P=C3=A9ter,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: e57afd2216b3825940e4a63bcfafb1e9d090ba24  Merge ras/core into tip/master
 
-This patch needs to be dropped as the k3 socinfo patch has been dropped.
+elapsed time: 726m
 
-Thanks,
-Nicolas
+configs tested: 47
+configs skipped: 75
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+i386                                defconfig
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+i386                 randconfig-a016-20221226
+x86_64                              defconfig
+x86_64                    rhel-8.3-kselftests
+i386                 randconfig-a012-20221226
+x86_64                          rhel-8.3-func
+x86_64               randconfig-a016-20221226
+i386                 randconfig-a011-20221226
+x86_64                           rhel-8.3-bpf
+i386                 randconfig-a013-20221226
+x86_64                           rhel-8.3-syz
+i386                 randconfig-a014-20221226
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+x86_64               randconfig-a014-20221226
+x86_64                           rhel-8.3-kvm
+x86_64               randconfig-a013-20221226
+i386                 randconfig-a015-20221226
+x86_64               randconfig-a011-20221226
+x86_64               randconfig-a012-20221226
+x86_64                           allyesconfig
+x86_64               randconfig-a015-20221226
+i386                             allyesconfig
+x86_64                            allnoconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20221225
+i386                          randconfig-c001
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+
+clang tested configs:
+x86_64               randconfig-a002-20221226
+x86_64               randconfig-a003-20221226
+x86_64               randconfig-a006-20221226
+i386                          randconfig-a002
+x86_64               randconfig-a001-20221226
+i386                          randconfig-a004
+x86_64               randconfig-a004-20221226
+x86_64               randconfig-a005-20221226
+i386                          randconfig-a006
+x86_64                          rhel-8.3-rust
+x86_64                        randconfig-k001
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
