@@ -2,112 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692D3658BD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F22658BD2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 11:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbiL2Khy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 05:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S233129AbiL2KiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 05:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233045AbiL2Kha (ORCPT
+        with ESMTP id S233104AbiL2Khz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 05:37:30 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F01911832;
-        Thu, 29 Dec 2022 02:37:26 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id t17so44066379eju.1;
-        Thu, 29 Dec 2022 02:37:26 -0800 (PST)
+        Thu, 29 Dec 2022 05:37:55 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B927510B58
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:37:53 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id d185so18102695vsd.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 02:37:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8yN2UOeep6Dr0AKjJEFzftya+Rk2XU0VFFUWitWBRu8=;
-        b=KLxed4jWUMjHhYAAv2olw9q+/vOBhFUwvDZFKN+4MHCYBzqjeUhNCj8s1EuqQxK1GP
-         iXuUPh82qNH9a2PUUlF89hyd9Uair4QwwniGNXjaDQlO+1kBBPFxMXRFDcRbqosIQ3Er
-         2LcnwzxMA3/MQ2XMSh7tl4IjrkvAphdljwcXQ45Wvim2ilKAl5wMlmxLXIZAjtQu8wT3
-         FUY9hZMcTZdbAbfwRLZG/flQgKjQHC/BzioAEPoJ7suXdqC+cbMruK3ZLiNZ2NJTidUd
-         +AnBkxDjfMejwLoDAKfEBl9rwa2ZesS/QhU/9P35AWParBCKeCFfT/HDb6ikvnsMAd2x
-         1hkA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b8Y42xIXgL1eMkrgLpvrHsYvzuZh55E8nXO8bqFw93M=;
+        b=n+1rGnKC54+rbc4cgQix6MlqAvLsOt+mxxCIvHqRujHtqOBdnTa21rRtnbRJeRS9C8
+         ET7G5Cv5S0SiyXRAkPQ6x4aHcSt/MR2F0W2INwqkgkHIJ1ODE1omptcwDMPkxBQp3qFo
+         FeI9BsYoYgtYllUyGD5PdfmRjS/iBH+1AJPb0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8yN2UOeep6Dr0AKjJEFzftya+Rk2XU0VFFUWitWBRu8=;
-        b=1wtCQQQHWQKmYuZGyB4DFF7AYhFu5eogHLHb+hBSuQVbDLQzKxvyaHZB8et+1kviJg
-         lMzQZxRIzJ26OY7UnVvK/3oYMOlrQBUkcfi1SrnWzLPr64cMffydBRP9WGTly2334v+C
-         BExAZUKn7m/AkGZvseXyG2Xf3AoYeI586pr7bPGjUIkgcJNzMfvX00vZ4oFxr2B32ShB
-         aQ477tAPXaVw53ruFOpiXTdrt8crSReIU9B0I9xLuHvH3WBL1Bv5jjfsymOtiv8fKzje
-         McwK0C2GiR3qxxkUyjxjapP4h0mwXWKoAz5+/ZjBIdtAamXptJ/8e+O++mEL6rvwGzP/
-         q/Fw==
-X-Gm-Message-State: AFqh2kqzO4aP6ooCF2I54eCBno1g8P24jxbZUMgFkyLK/cHQkgiI9Krn
-        J86/ArMvplKDybICLWjbNRf1TeTFNcM9ZezVo2A=
-X-Google-Smtp-Source: AMrXdXumH0x9Lc4+ttBAXwDIaxE+/hVpA2oQOIazaE3IX4tIJJZeZX9N2LLEEU9+nwxLZmdQh7lxPdYrVahjjbuwdr0=
-X-Received: by 2002:a17:906:3989:b0:7c1:1f28:afed with SMTP id
- h9-20020a170906398900b007c11f28afedmr2308471eje.678.1672310244665; Thu, 29
- Dec 2022 02:37:24 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b8Y42xIXgL1eMkrgLpvrHsYvzuZh55E8nXO8bqFw93M=;
+        b=mFDP1g9Ak03JxH0Qz6epG5zUd4B0vrPfVLbVvet+hDTEpzY7VqkpS56YIh88mtmm1M
+         pPqzIsu3TZTDnTwAtOwnuleQmCkvl5rmw7MGhL1DQ3dBc3d0k/jZZ7japaydgEgwXohI
+         +kj/l9NtZCwwlCpgtyY6/pzbEBRdEGOSC07/PlbGFKealKYeJKci1Rup52E2lXTgpoCx
+         8NGmATrr5fCXL94GMedhSCj7v4UsaJz/IWpO7C+1CgwqYfC9sMkFFfNvgNLwpLLpKWNR
+         PWSmpQi1Fy0iajpgd9I9YCg0UJQyoy7wUf/nNvydm1YueLYFSWRlUFneaG+UrgsQ3a5H
+         GVLg==
+X-Gm-Message-State: AFqh2kqrrZY6N9GI10IwPIIm/zB/bB6ukr5TuLfMIvQ+0W9fT7ANN98h
+        2nTuGIgJcVvbSm41QdKtppdvVJKsPicxuN/7TY5R2A==
+X-Google-Smtp-Source: AMrXdXuGd+euo/Y/QzF70Wh9yJgo9zt/cVIVFVgu/E4UIEn36ysnrttGlo14HEh6kgdeVcojyAcKK885ahyhQcOCVdg=
+X-Received: by 2002:a05:6102:74b:b0:3ad:3d65:22b with SMTP id
+ v11-20020a056102074b00b003ad3d65022bmr3992771vsg.65.1672310272757; Thu, 29
+ Dec 2022 02:37:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
- <20221228133547.633797-2-martin.blumenstingl@googlemail.com> <92eb7dfa8b7d447e966a2751e174b642@realtek.com>
-In-Reply-To: <92eb7dfa8b7d447e966a2751e174b642@realtek.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 29 Dec 2022 11:37:13 +0100
-Message-ID: <CAFBinCBKuTsK21CxEhth5js4Quyy0iUg6ctZwEQwwarePgghaQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] rtw88: Add packed attribute to the eFuse structs
-To:     Ping-Ke Shih <pkshih@realtek.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tehuang@realtek.com" <tehuang@realtek.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221108033209.22751-1-allen-kh.cheng@mediatek.com>
+In-Reply-To: <20221108033209.22751-1-allen-kh.cheng@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 29 Dec 2022 18:37:41 +0800
+Message-ID: <CAGXv+5EkPWF77ATVRhxygVOyYmxXgdTNPmOefP7jGeOMeZw_MA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/7] MediaTek watchdog: Convert mtk-wdt.txt to dt-schema
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     nfraprado@collabora.com, angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ping-Ke,
-
-On Thu, Dec 29, 2022 at 10:25 AM Ping-Ke Shih <pkshih@realtek.com> wrote:
-[...]
+On Tue, Nov 8, 2022 at 12:03 PM Allen-KH Cheng
+<allen-kh.cheng@mediatek.com> wrote:
 >
-> > @@ -43,13 +43,13 @@ struct rtw8821ce_efuse {
-> >       u8 link_cap[4];
-> >       u8 link_control[2];
-> >       u8 serial_number[8];
-> > -     u8 res0:2;                      /* 0xf4 */
-> > -     u8 ltr_en:1;
-> > -     u8 res1:2;
-> > -     u8 obff:2;
-> > -     u8 res2:3;
-> > -     u8 obff_cap:2;
-> > -     u8 res3:4;
-> > +     u16 res0:2;                     /* 0xf4 */
-> > +     u16 ltr_en:1;
-> > +     u16 res1:2;
-> > +     u16 obff:2;
-> > +     u16 res2:3;
-> > +     u16 obff_cap:2;
-> > +     u16 res3:4;
+> Based on git/groeck/linux-staging.git, watchdog-next.
+> We use [1] and [2] as references to send a new series.
 >
-> These should be __le16. Though bit fields are suitable to efuse layout,
-> we don't access these fields for now. It would be well.
-My understanding is that it should look like this (replacing all of res0..res3):
-    __le16 some_field_name;                     /* 0xf4 */
-How to call that single __le16 field then?
+> This series converts mtk-wdt.txt to dt-schema and contains
+> - Fix watchdog compatibles for MT7986, MT8186, MT8188 and MT8195,
+> - Fix the watchdog name of mt8516
+> - Add mt6795 and MT8173 watchdog compatible
+>
+> Changes since v4:
+>  - Drop label for watchdog node in mt8516
+>
+> Changes since v3:
+>  - Drop label for watchdog example in yaml
+>
+> Changes since v2:
+>  - Drop merged patch from series
+>  - Rebase to watchdog-next (for mt8188)
+>
+> Changes since v1:
+>  - Drop "items" for a single enum=C2=B7
+>
+> Changes since [1]:
+>   - Update the commit message with some details
+>  - Drop "timeout-sec: true" and use unevaluatedProperties
+> [1] https://lore.kernel.org/all/20221005113517.70628-1-angelogioacchino.d=
+elregno@collabora.com/
+> [2] https://lore.kernel.org/all/20220422121017.23920-3-allen-kh.cheng@med=
+iatek.com/
+>
+> Allen-KH Cheng (3):
+>   arm64: dts: mediatek: mt7986: Fix watchdog compatible
+>   arm64: dts: mediatek: mt8516: Fix the watchdog node name
+>   dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT8173
+>
+> AngeloGioacchino Del Regno (4):
+>   arm64: dts: mediatek: mt8186: Fix watchdog compatible
+>   arm64: dts: mediatek: mt8195: Fix watchdog compatible
 
-I also tried using bit-fields for an __le16 (so basically the same as
-my patch but using __le16 instead of u16) but that makes sparse
-complain:
-  error: invalid bitfield specifier for type restricted __le16
+Looks like the dt-bindings have been merged, but the dts fixes haven't.
+
+Matthias, could you queue them up?
 
 
-Best regards,
-Martin
+Thanks
+ChenYu
+
+>   dt-bindings: watchdog: mediatek: Convert mtk-wdt to json-schema
+>   dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT6795
+>
+>  .../bindings/watchdog/mediatek,mtk-wdt.yaml   | 80 +++++++++++++++++++
+>  .../devicetree/bindings/watchdog/mtk-wdt.txt  | 43 ----------
+>  arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  3 +-
+>  arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  3 +-
+>  arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  3 +-
+>  arch/arm64/boot/dts/mediatek/mt8516.dtsi      |  2 +-
+>  6 files changed, 84 insertions(+), 50 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,m=
+tk-wdt.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.tx=
+t
+>
+> --
+> 2.18.0
+>
+>
