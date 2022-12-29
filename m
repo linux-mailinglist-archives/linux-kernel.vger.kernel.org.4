@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F695658C54
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63D6658C57
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 12:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbiL2LmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 06:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S233161AbiL2Lmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 06:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiL2LmI (ORCPT
+        with ESMTP id S229871AbiL2Lm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 06:42:08 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA691EE2B;
-        Thu, 29 Dec 2022 03:42:07 -0800 (PST)
-Received: from [192.168.88.87] (unknown [125.160.97.236])
-        by gnuweeb.org (Postfix) with ESMTPSA id CD84D7E259;
-        Thu, 29 Dec 2022 11:42:03 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1672314126;
-        bh=Wm/M0KFPV/UrXA6Ml+ZYeaSNEGdUKJquP84+pixMr+Q=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=ioEorrDULg3Vw9Qd+4LGx9rD7cCo67YGL8iFu7LH+j5isM323rjg3vzUW+u5yueMZ
-         RVzN1O83fZL6I+9sCJ7M6InEbiYLXC3t1CWc9M6nJKPn2DsxlgqhnEpY00wcw86iBV
-         1qhspCaMEOt5GtvxTaXjmyaDW9FnO3JGxB8VTUH1+XQEBp0mFA2OnEB9brCE6GchKr
-         Fgf3BUk68UNoWamXXKM0Ubw9yMwdaimTBt4SrAZLx0fh2bv2pPap1tkLGOnxWiHsQg
-         UZBD4GivfptXWNdiVmxFbjZ32PcASp6lWmb04kxQJnthS2wRMZ0UkBTt9M38uYqqSY
-         OS5u22AWSGmxA==
-Message-ID: <39d68044-2641-75da-929a-f5e852f0a3d0@gnuweeb.org>
-Date:   Thu, 29 Dec 2022 18:41:59 +0700
+        Thu, 29 Dec 2022 06:42:29 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6433A13E81;
+        Thu, 29 Dec 2022 03:42:25 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2BTBfErX5002841, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2BTBfErX5002841
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 29 Dec 2022 19:41:15 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.9; Thu, 29 Dec 2022 19:42:09 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 29 Dec 2022 19:42:06 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Thu, 29 Dec 2022 19:42:06 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tehuang@realtek.com" <tehuang@realtek.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/4] rtw88: Four fixes found while working on SDIO support
+Thread-Topic: [PATCH 0/4] rtw88: Four fixes found while working on SDIO
+ support
+Thread-Index: AQHZGsFtyqvVdb8Ir06VvN9lkSQirK6EmVQw//+PBwCAABEeAA==
+Date:   Thu, 29 Dec 2022 11:42:06 +0000
+Message-ID: <c29eb85527c6834482ecdbb0946ff9b794fe7cb6.camel@realtek.com>
+References: <20221228133547.633797-1-martin.blumenstingl@googlemail.com>
+         <84e2f2289e964834b1eaf60d4f9f5255@realtek.com>
+         <CAFBinCAvSYgnamMCEBGg5+vt6Uvz+AKapJ+dSfSPBbmtERYsBw@mail.gmail.com>
+In-Reply-To: <CAFBinCAvSYgnamMCEBGg5+vt6Uvz+AKapJ+dSfSPBbmtERYsBw@mail.gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.1-2 
+x-originating-ip: [172.16.22.50]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEyLzI5IOS4iuWNiCAwNzoyNTowMA==?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B7AE489C41B8D24BBD47138620B88D83@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        VNLX Kernel Department <kernel@vnlx.org>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>,
-        Muhammad Rizki <kiizuha@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kselftest Mailing List 
-        <linux-kselftest@vger.kernel.org>
-References: <20221222035134.3467659-1-ammar.faizi@intel.com>
- <20221222043452.GB29086@1wt.eu>
- <20221222134615.3535422-1-ammar.faizi@intel.com>
- <20221227062640.GA5337@1wt.eu>
- <00eee75f-59fa-83b2-c7e1-f0da347b2dde@gnuweeb.org>
- <20221227184902.GA6287@1wt.eu>
- <23e84c59-4f2c-01b4-5b8a-80af39a1d761@gnuweeb.org>
- <20221228133513.GA7457@1wt.eu>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: Re: [RFC PATCH v1 0/8] nolibc signal handling support
-In-Reply-To: <20221228133513.GA7457@1wt.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,49 +76,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/28/22 8:35 PM, Willy Tarreau wrote:
-> OK thanks!
-> 
-> I've pushed for you an update which starts to do what I proposed. Errno
-> and environ are now marked weak for all archs, and _auxv is set for i386,
-> x86_64, arm64 and arm for now:
-> 
->     https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git/log/?h=20221227-nolibc-weak-2
-> 
-> You can already use it to implement getauxval(), it will normally work
-> for these archs.
-
-Will do and be back with two patch series.
-
-> I think we could avoid the asm specific stuff is we get rid of the frame
-> pointer. Please look below:
-> 
->    __attribute__((weak,unused,noreturn,optimize("omit-frame-pointer"),section(".text.nolibc_rt_sigreturn")))
->    void sys_rt_sigreturn()
->    {
->          my_syscall0(__NR_rt_sigreturn);
->          __builtin_unreachable();
->    }
-
-Wow! You just taught me that we can force optimize a function with
-optimize("omit-frame-pointer") attribute. Nice to know this one!
-
-I compile-tested it and it indeed gives the correct code on x86-64.
-Hopefully this approach works for all archs.
-
-> It gives me the correct code for x86_64 and i586. I don't know if other
-> architectures will want to add a prologue. I tried with "naked" but it's
-> ignored by the compiler since the function is not purely asm. Not very
-> important but given that we already have everything to perform our calls
-> it would make sense to stay on this. By the way, for the sake of
-> consistency with other syscalls, I do think the function (or label if
-> we can't do otherwise) should be called "sys_rt_sigreturn" as it just
-> performs a syscall.
-
-Will call that 'sys_rt_sigreturn' in the next series.
-
-Thanks!
-
--- 
-Ammar Faizi
-
+T24gVGh1LCAyMDIyLTEyLTI5IGF0IDExOjQwICswMTAwLCBNYXJ0aW4gQmx1bWVuc3RpbmdsIHdy
+b3RlOg0KPiBIaSBQaW5nLUtlLA0KPiANCj4gT24gVGh1LCBEZWMgMjksIDIwMjIgYXQgMTA6MjYg
+QU0gUGluZy1LZSBTaGloIDxwa3NoaWhAcmVhbHRlay5jb20+IHdyb3RlOg0KPiBbLi4uXQ0KPiA+
+ID4gTWFydGluIEJsdW1lbnN0aW5nbCAoNCk6DQo+ID4gPiAgIHJ0dzg4OiBBZGQgcGFja2VkIGF0
+dHJpYnV0ZSB0byB0aGUgZUZ1c2Ugc3RydWN0cw0KPiA+IA0KPiA+IEkgdGhpbmsgdGhpcyBwYXRj
+aCBkZXBlbmRzIG9uIGFub3RoZXIgcGF0Y2hzZXQgb3Igb3Bwb3NpdGVseS4NCj4gPiBQbGVhc2Ug
+cG9pbnQgdGhhdCBvdXQgZm9yIHJldmlld2Vycy4NCj4gVGhlcmUgYXJlIG5vIGRlcGVuZGVuY2ll
+cyBmb3IgdGhpcyBzbWFsbGVyIGluZGl2aWR1YWwgc2VyaWVzIG90aGVyDQo+IHRoYW4gTGludXgg
+Ni4yLXJjMSAoYXMgdGhpcyBoYXMgVVNCIHN1cHBvcnQpLiBJIG1hZGUgc3VyZSB0byBub3QNCj4g
+aW5jbHVkZSBhbnkgb2YgdGhlIFNESU8gY2hhbmdlcyBpbiB0aGlzIHNlcmllcy4NCj4gVGhlIGlk
+ZWEgaXMgdGhhdCBpdCBjYW4gYmUgYXBwbGllZCBpbmRpdmlkdWFsbHkgYW5kIG1ha2UgaXQgZWl0
+aGVyDQo+IGludG8gNi4yLXJjMiAob3IgbmV3ZXIpIG9yIC1uZXh0ICg2LjMpLg0KPiANCg0KSSB0
+aG91Z2h0IHRoaXMgY291bGQgZGVwZW5kIG9uIFNESU8gcGF0Y2hzZXQsIGJlY2F1c2UgeW91IGFk
+ZA0Kc3RydWN0IGZvciBlZnVzZSBsYXlvdXQgbmVhcmJ5LCBzbyB0aGVyZSBtYXkgYmUgbWVyZ2Ug
+Y29uZmxpY3RzLg0KUGxlYXNlIGlnbm9yZSB0aGlzIGNvbW1lbnQsIHRoZW4uDQoNClBpbmctS2UN
+Cg0K
