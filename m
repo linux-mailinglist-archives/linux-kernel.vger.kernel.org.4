@@ -2,171 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F8F658E68
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11466658E6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 16:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233336AbiL2PkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 10:40:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S230176AbiL2Pn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 10:43:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbiL2Pj7 (ORCPT
+        with ESMTP id S229615AbiL2Pn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 10:39:59 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3311F5FEF;
-        Thu, 29 Dec 2022 07:39:59 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id c133so17438100oif.1;
-        Thu, 29 Dec 2022 07:39:59 -0800 (PST)
+        Thu, 29 Dec 2022 10:43:56 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD7213DF2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:43:55 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id k4so14722869vsc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 07:43:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L+yasPu/FMSW02rgKC1nt4DHDdecaVj9VV//R/xPi0M=;
-        b=lCU+oajxseYQ6RacSzu4ZZL9tu41SmMXfFx5kkJLFjlO+t36/dhs6fr7fMIHKYDJTr
-         lMN7CqOoKj3OI2XmBg8Wlb6K8pKZ+Eu3H5vKym+K7/CzNTddIxhX99cc/WeGhS73pXe4
-         kxzpNczOqxy0sFFJXadNT/L3Zp41qt/7rJZ1lqgM8BnQKEFwUCnnyYOZceW79bgY03b6
-         rq81uPuhafMZ0/A6RS9QPcUxxN/NLnhN0IXtANZEUpWSAdB7q5u8i5Vi6oX70HkWS4zn
-         KlPjoKECafDSlN2Uj1Nkh6gSq7alXvprBP6aait0r0j0IASv7P9eNJjYm/wGhP0vU9YN
-         8ryw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nmYmfqjtvbfBZK8/2ZwhaSTeo2hBhd+oyVOwXnos3I0=;
+        b=LKfCWv8QFNtfVhCvZxXROYgAus787paACdWe41EGKYMBn56ZTWlpXOwd46m+Pyw+8d
+         UJ1zBXSxYYJd6XYZ18BqrQjw16ct2qilMGQWcabRyQ8JAhQkhmmEQqKN+vGYq0+/qsDE
+         rM8zG2cODseTt9KPGhP5XkeP+V4oRrtchUUQR/kJrI5MUX+SEyfVKXbADPPymcy2MPj9
+         wwE4Iu7fVV4K/hHeKfEt0LUZO7mvW1Mg82tHs17cu0GrIkWFIxPZJjVw6RLF426jEm/P
+         GsjMRY6YLH8L7IE1eM9JNa1t8YTcBltmoLdJxzmkAXUqz2ZPwf/iLX2pzeKTV2qUBD25
+         +vyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L+yasPu/FMSW02rgKC1nt4DHDdecaVj9VV//R/xPi0M=;
-        b=NiglsUKRDcoDECT58SwiVu29jCv+kIcoLC4SOJGG1PM9YJI7cNzP9H//bH4cp/tm83
-         YxfRI7pEj/nZVGhVrHhXTSWvsV+hbWfteLPs0CMfbh6E4KFz6vDavr6bdI4AJnWCeteK
-         uBAi+YNLdy4Tt0bXkPi4cHi/dsuE87kfttmfVgVlpTuHkSsOZss8sUBRdBZE7wFvszZ6
-         jlucHt8/KYdM8R5X9D1hOrY2iHD+Plwn3sDddCcY6NbT9Uic5/ZNYXcuIPYzaoYUHRiA
-         D7higAhvz/uYo9RHQL9xV8vcyGlVEjvd2hcHyk9hnGCd+V7YtkKqTbeeonDnrNHoto1T
-         b3Ag==
-X-Gm-Message-State: AFqh2kqUgPoytamsKiezJWYYXpix9YBAll42JyXrA+5uDk9GHr2GzeQk
-        nC0n7++V5Gx5ve9n88xP6vQ=
-X-Google-Smtp-Source: AMrXdXuAum7nXd32CkpwA759U0kJ9EauJJo4YB7XhSF1q8/kPLQ+dbGKanZNf9Wd/28zaoOWeLXwsA==
-X-Received: by 2002:a05:6808:297:b0:361:e72:db5e with SMTP id z23-20020a056808029700b003610e72db5emr13122617oic.29.1672328398512;
-        Thu, 29 Dec 2022 07:39:58 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i127-20020acaea85000000b0035a9003b8edsm8203035oih.40.2022.12.29.07.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 07:39:58 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 29 Dec 2022 07:39:57 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sinan Divarci <Sinan.Divarci@analog.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] docs: hwmon: add max31732 documentation
-Message-ID: <20221229153957.GA24429@roeck-us.net>
-References: <20221214142206.13288-1-Sinan.Divarci@analog.com>
- <20221214142206.13288-3-Sinan.Divarci@analog.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nmYmfqjtvbfBZK8/2ZwhaSTeo2hBhd+oyVOwXnos3I0=;
+        b=3YMx6Yu/lXCR8LWmaeG8BHYaa02O8Em4ibM38Kp8QLSXoJepnmGEDrPzsiVEDkcp87
+         6Yw2pBkNhuZxKZTc/zEHVsvKgrMtCX0B7pCHYzdRmJF+JSN5wsApTwR8qwPXl05ZgmJw
+         enDqrYYN+ntS6jlmoZn352ngPfjQ9DvlM+ZS2xTW0vwK60wHRu5XaJYk8VV4+IVThmeT
+         LJhJ0Hx6LSWrr9WAQN+DxYCrXACn8B2yNMZU4TLrSUvK0nddMRgsJdvQL/SYDmu4zaGf
+         2lIrmiDZY048ts8aBfLjOYxWcgWd1jKYdxpI42M5Xdh+9qcnLtDhyTdlop4lHodNI6Yi
+         sxng==
+X-Gm-Message-State: AFqh2koZessGO+TXBt8S7lCFB6QeMwpaEezhKgioZz6s9AyqqK8Neib6
+        2tP4z0y1lUwvSxPey680C0QPwuIrPaQZfP+QnFhlvg==
+X-Google-Smtp-Source: AMrXdXstz5XMGPX5idIZD6wR33EZQEtbkH71xvI1/DfJZjRzGPNffUb02qm52fHjfqL/+yXTZCgMhuQHDs0NdFmc8g0=
+X-Received: by 2002:a05:6102:c4e:b0:3c8:c513:197 with SMTP id
+ y14-20020a0561020c4e00b003c8c5130197mr1368830vss.9.1672328634050; Thu, 29 Dec
+ 2022 07:43:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221214142206.13288-3-Sinan.Divarci@analog.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221228144328.162723588@linuxfoundation.org>
+In-Reply-To: <20221228144328.162723588@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 29 Dec 2022 21:13:42 +0530
+Message-ID: <CA+G9fYtf=vBE4e91Xwd2FbkCsbKCZXe_G0E7AfhC9+RBboXHfQ@mail.gmail.com>
+Subject: Re: [PATCH 6.0 0000/1073] 6.0.16-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 05:22:05PM +0300, Sinan Divarci wrote:
-> Adding documentation for max31732 quad remote temperature sensor
-> 
-> Signed-off-by: Sinan Divarci <Sinan.Divarci@analog.com>
-> ---
->  Documentation/hwmon/index.rst    |  1 +
->  Documentation/hwmon/max31732.rst | 62 ++++++++++++++++++++++++++++++++
->  2 files changed, 63 insertions(+)
->  create mode 100644 Documentation/hwmon/max31732.rst
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index fe2cc6b73..e521bf555 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -133,6 +133,7 @@ Hardware Monitoring Kernel Drivers
->     max20751
->     max31722
->     max31730
-> +   max31732
->     max31760
->     max31785
->     max31790
-> diff --git a/Documentation/hwmon/max31732.rst b/Documentation/hwmon/max31732.rst
-> new file mode 100644
-> index 000000000..67bfcf393
-> --- /dev/null
-> +++ b/Documentation/hwmon/max31732.rst
-> @@ -0,0 +1,62 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver max31732
-> +======================
-> +
-> +Supported chips:
-> +
-> +  * Analog Devices MAX31732
-> +
-> +    Prefix: 'max31732'
-> +
-> +    Addresses scanned: none
-> +
-> +Author: Sinan Divarci <Sinan.Divarci@analog.com>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Maxim MAX31732.
-> +
-> +The MAX31732 is a multi-channel temperature sensor that monitors its
-> +own temperature and the temperatures of up to four external diodeconnected
-> +transistors. The device operates with 3.0V to 3.6V supply range
-> +and consume TBDμA of current in standby mode of operation. Resistance
+On Wed, 28 Dec 2022 at 20:14, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.0.16 release.
+> There are 1073 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 30 Dec 2022 14:41:34 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.0.16-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-TBDμA ?
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> +cancellation feature compensates for high series resistance between
-> +circuit-board traces and the external thermal diode, while beta
-> +compensation corrects for temperature-measurement errors due to lowbeta
-> +sensing transistors.
-> +
-> +The MAX31732 offers two open-drain, active-low alarm outputs,
-> +ALARM1 and ALARM2. When the measured temperature of a channel
-> +crosses the respective primary over/under temperature threshold levels
-> +ALARM1 asserts low and a status bit is set in the corresponding thermal
-> +status registers. When the measured temperature of a channel crosses the
-> +secondary over/under temperature threshold levels, ALARM2 asserts low
-> +and a status bit is set in the corresponding thermal status registers.
-> +
-> +Temperature measurement range: from -64°C to 150°C
-> +
-> +Temperature Resolution: 12 Bits, ±0.0625°C
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +===================== == =======================================================
-> +temp[1-5]_enable      RW Temperature enable/disable
-> +                         Set to 1 to enable channel, 0 to disable
-> +temp[1-5]_input       RO Temperature input
-> +temp[2-5]_fault       RO Fault indicator for remote channels
-> +temp[1-5]_max         RW Temperature max value. Asserts "ALARM1" pin when exceeded
-> +temp[1-5]_max_alarm   RO Temperature max alarm status
-> +temp[1-5]_crit        RW Temperature critical value. Asserts "ALARM2" pin when exceeded
-> +temp[1-5]_crit_alarm  RO Temperature critical alarm status
-> +temp[1-5]_min         RW Temperature min value. Common for all channels.
-> +                         Only temp1_min is writeable. Asserts "ALARM1" pin when exceeded
-> +temp[1-5]_min_alarm   RO Temperature min alarm status
-> +temp[1-5]_lcrit       RW Temperature critical low value. Common for all channels.
-> +                         Only temp1_min is writeable. Asserts "ALARM2" pin when exceeded
-> +temp[1-5]_lcrit_alarm RO Temperature critical low alarm status
-> +temp[2-5]_offset      RW Temperature offset for remote channels
-> +===================== == =======================================================
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+NOTE:
+Daniel D=C3=ADaz reported allmodconfig failures [1].
+https://lore.kernel.org/stable/c3c2ef47-b46d-b446-5475-366867954528@linaro.=
+org/
+
+## Build
+* kernel: 6.0.16-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.0.y
+* git commit: 4c258f770fed290e92e6c284822fc4b4544b9ba0
+* git describe: v6.0.15-1074-g4c258f770fed
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.1=
+5-1074-g4c258f770fed
+
+## Test Regressions (compared to v6.0.14-29-g65f3ab07fb24)
+
+## Metric Regressions (compared to v6.0.14-29-g65f3ab07fb24)
+
+## Test Fixes (compared to v6.0.14-29-g65f3ab07fb24)
+
+## Metric Fixes (compared to v6.0.14-29-g65f3ab07fb24)
+
+## Test result summary
+total: 144840, pass: 128905, fail: 2636, skip: 13000, xfail: 299
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 144 passed, 7 failed
+* arm64: 49 total, 45 passed, 4 failed
+* i386: 39 total, 35 passed, 4 failed
+* mips: 30 total, 27 passed, 3 failed
+* parisc: 8 total, 7 passed, 1 failed
+* powerpc: 38 total, 32 passed, 6 failed
+* riscv: 16 total, 14 passed, 2 failed
+* s390: 16 total, 13 passed, 3 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 39 passed, 3 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
