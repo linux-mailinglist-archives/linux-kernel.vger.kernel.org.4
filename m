@@ -2,120 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B71659309
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 00:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DF365930C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Dec 2022 00:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiL2XDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 18:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
+        id S234117AbiL2XH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 18:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiL2XDm (ORCPT
+        with ESMTP id S229585AbiL2XHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 18:03:42 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A25C13F83;
-        Thu, 29 Dec 2022 15:03:41 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id y8so18470066wrl.13;
-        Thu, 29 Dec 2022 15:03:41 -0800 (PST)
+        Thu, 29 Dec 2022 18:07:25 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4ED16485
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:07:24 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id o13so10486287ilc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 15:07:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e1AZ5G8QdvwsjRXOP4YGY0iwqvUTHtMnrEchm0crWkw=;
-        b=OrNOIe5F6kwD3gvBb13uLI1jiPKI7ZhRmfv2ONO+sPyfEHiG3dBVd8BchL0itwUYUk
-         6wnI+GOa5NeqF9eAT7M5IIW5J4fztW06SmyP+5oDard61Ns62R0MP2mSJoz2c57MrE/S
-         Tq7vrEduhs3Kk6rPtHtQ+4+lFk+7vnnljUHjsu5+AWrtYvj+L5hJSwqO8tcvpRsHK6GV
-         Ur08RUkqMM7TflssQZWU9ScAKOTUzmqUlJbsMwj2oHV3d1RFCCbtY8AZ8Wjx8zaQqbXt
-         1idm+2bIA4IwVz+hxEnvNdiBHvUWh96VxI8Jt/pC754z6YUEe3VbwaFhBBdjqwNVp0+W
-         F7KQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=o7uei9zrAWrOOZeeNT79yAqnNOL1YbIB/w/YKJPnjdA=;
+        b=iZpCxqVbZUIzuHPBmJ/9MdkYPOqbyQAqyEST2lYuwe5QRxSe25tdwf2MFki0Icl1o4
+         1+3eanZv8CvCx/yZ7maSBfhwPlMVVSO5FDRDLwLdg87KZH06dPPwQo8rLomXZOKpOfiI
+         2SN8GFtVMDhumg+wIjGl9ZOBB6a1TgKnx3DX0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=e1AZ5G8QdvwsjRXOP4YGY0iwqvUTHtMnrEchm0crWkw=;
-        b=hAraNuekXT4pfSTkCUygiFIqNCHwJTCrlTtCT0NVkeqicJnwTZLWm2tVIq1kOmgDdh
-         gTeXEGHexNF0WPo88dTgt7K6e7WxsNjWwPzwBt25q7Ycel5ag1v6uOBbe5IiW8Am6F+k
-         9vwNGmT1NhJNqOphAKMnMITmXnPxNkGyAPPndAYW0x651V5qNYR/pkQmFp5UkkgC0XZY
-         F+PKHyrbU+gOyZpogcvqw0stDSaAC3Qcqf3MB8xc+d4Qt3aGoQ1/bGrV/l05ZgfLtZsh
-         lXXj8U+QrPKzPfYdWF7i2z9fo8CI9HSMnYzRoevDeoq725/E07m92oN7LAej2d5noRzm
-         wAKQ==
-X-Gm-Message-State: AFqh2ko7WDZfPLhDFx9PVq0iIq8wMSd7yp03/M8zimtmp2cmXoa1vpRQ
-        uoXKAMTnSvjgd8l+bah2n5Y=
-X-Google-Smtp-Source: AMrXdXtFEYvWXlgWHpUtQQSJ9uFe1qiaXPSmpUChY+HKun8x4LG88d8sQabX63FNkBzy4tffYEvyjQ==
-X-Received: by 2002:a5d:484d:0:b0:27b:45ba:3b53 with SMTP id n13-20020a5d484d000000b0027b45ba3b53mr9467197wrs.12.1672355019974;
-        Thu, 29 Dec 2022 15:03:39 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:88e9:3a08:4328:85c4])
-        by smtp.gmail.com with ESMTPSA id b9-20020adff909000000b00267bcb1bbe5sm18995683wrr.56.2022.12.29.15.03.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 15:03:39 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] riscv: dts: renesas: rzfive-smarc-som: Enable OSTM nodes
-Date:   Thu, 29 Dec 2022 23:03:00 +0000
-Message-Id: <20221229230300.104524-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        bh=o7uei9zrAWrOOZeeNT79yAqnNOL1YbIB/w/YKJPnjdA=;
+        b=AkqdCqDk/AKaFC0+fbuT3Me0l9DfKRD47jR58ySLhJRbNhul2uaue88n9/H5r7F0d5
+         RL8E0IuayiucXkzyyar9dKdvBhJ2bNmoywASEg+io75AB5EjdG2L0nDOq40D/5EIOIei
+         E7BJpUPPCsxtKXEnH+Pz3amfJx1rJ43C5bI8dtPLQdUMF97zDNKhhGg/rhRDUPh8VARf
+         EAmlEnNRjE+ySgPU+bUpfEQOjVmjQKVErhZkWFBXMuDRZV8/VKZ86j+gKQyzPGcbDMpe
+         xPy+6Incald37M44S0Hx8gdWMrb/pa2ovS7RqA5Rig1bWaA2rGywve5zjV6LGw+dvVUI
+         zM+g==
+X-Gm-Message-State: AFqh2kooV0QzoQoaEYzCpjtPjU8oJtW1Am/8GROSvMh2Zs+lYME55jqu
+        0fkWiYB1xN7Vun98siqSQrtUbA==
+X-Google-Smtp-Source: AMrXdXsgkS/UOfQRcOyPX4s3Ojqm+h0bJ1IAG4FBmO9jBY0wiE+b3tOwYft3t6MQDwa6csoUWZDYIA==
+X-Received: by 2002:a92:c9cb:0:b0:304:c683:3c8a with SMTP id k11-20020a92c9cb000000b00304c6833c8amr4063217ilq.3.1672355243696;
+        Thu, 29 Dec 2022 15:07:23 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id o3-20020a92d383000000b0030341bffab8sm5980440ilo.31.2022.12.29.15.07.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Dec 2022 15:07:22 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------Wui0JXF5eqvFybFanSvyLAih"
+Message-ID: <226f1d09-aed1-e1c7-1607-e71393cd3a51@linuxfoundation.org>
+Date:   Thu, 29 Dec 2022 16:07:21 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] KUnit fixes update for Linux 6.2-rc2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+This is a multi-part message in MIME format.
+--------------Wui0JXF5eqvFybFanSvyLAih
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Enable OSTM{1,2} nodes on RZ/Five SMARC SoM.
+Hi Linus,
 
-Note, OSTM{1,2} nodes are enabled in the RZ/G2UL SMARC SoM DTSI [0] hence
-deleting the disabled nodes from RZ/Five SMARC SoM DTSI enables it here
-too as we include [0] in RZ/Five SMARC SoM DTSI.
+Please pull the following KUnit fixes update for Linux 6.2-rc2.
 
-[0] arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
+This KUnit update for Linux 6.2-rc2 consists of:
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-Note, without patch [0] clocksource-switch tests fail on RZ/Five SoC.
+- alloc_string_stream_fragment() error path fix to free before
+   returning a failure.
 
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/patch/20221229224601.103851-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
----
- arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi | 8 --------
- 1 file changed, 8 deletions(-)
+diff is attached.
 
-diff --git a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-index 318a584be341..43a74c8a4321 100644
---- a/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-+++ b/arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
-@@ -28,11 +28,3 @@ phy1: ethernet-phy@7 {
- 		/delete-property/ interrupts;
- 	};
- };
--
--&ostm1 {
--	status = "disabled";
--};
--
--&ostm2 {
--	status = "disabled";
--};
--- 
-2.25.1
+thanks,
+-- Shuah
 
+----------------------------------------------------------------
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+
+   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.2-rc2
+
+for you to fetch changes up to 93ef83050e597634d2c7dc838a28caf5137b9404:
+
+   kunit: alloc_string_stream_fragment error handling bug fix (2022-12-26 16:01:36 -0700)
+
+----------------------------------------------------------------
+linux-kselftest-kunit-fixes-6.2-rc2
+
+This KUnit update for Linux 6.2-rc2 consists of:
+
+- alloc_string_stream_fragment() error path fix to free before
+   returning a failure.
+
+----------------------------------------------------------------
+YoungJun.park (1):
+       kunit: alloc_string_stream_fragment error handling bug fix
+
+  lib/kunit/string-stream.c | 4 +++-
+  1 file changed, 3 insertions(+), 1 deletion(-)
+----------------------------------------------------------------
+--------------Wui0JXF5eqvFybFanSvyLAih
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-kunit-fixes-6.2-rc2.diff"
+Content-Disposition: attachment;
+ filename="linux-kselftest-kunit-fixes-6.2-rc2.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC9zdHJpbmctc3RyZWFtLmMgYi9saWIva3VuaXQvc3Ry
+aW5nLXN0cmVhbS5jCmluZGV4IGY1ZjUxMTY2ZDhjMi4uY2MzMjc0M2MxMTcxIDEwMDY0NAot
+LS0gYS9saWIva3VuaXQvc3RyaW5nLXN0cmVhbS5jCisrKyBiL2xpYi9rdW5pdC9zdHJpbmct
+c3RyZWFtLmMKQEAgLTIzLDggKzIzLDEwIEBAIHN0YXRpYyBzdHJ1Y3Qgc3RyaW5nX3N0cmVh
+bV9mcmFnbWVudCAqYWxsb2Nfc3RyaW5nX3N0cmVhbV9mcmFnbWVudCgKIAkJcmV0dXJuIEVS
+Ul9QVFIoLUVOT01FTSk7CiAKIAlmcmFnLT5mcmFnbWVudCA9IGt1bml0X2ttYWxsb2ModGVz
+dCwgbGVuLCBnZnApOwotCWlmICghZnJhZy0+ZnJhZ21lbnQpCisJaWYgKCFmcmFnLT5mcmFn
+bWVudCkgeworCQlrdW5pdF9rZnJlZSh0ZXN0LCBmcmFnKTsKIAkJcmV0dXJuIEVSUl9QVFIo
+LUVOT01FTSk7CisJfQogCiAJcmV0dXJuIGZyYWc7CiB9Cg==
+
+--------------Wui0JXF5eqvFybFanSvyLAih--
