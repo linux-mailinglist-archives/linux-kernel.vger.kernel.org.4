@@ -2,99 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29E4658D07
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82C0658D0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiL2NMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 08:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S230303AbiL2NRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 08:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiL2NMa (ORCPT
+        with ESMTP id S229637AbiL2NRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 08:12:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A211B1C9;
-        Thu, 29 Dec 2022 05:12:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C33FC6173E;
-        Thu, 29 Dec 2022 13:12:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B072AC433EF;
-        Thu, 29 Dec 2022 13:12:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672319548;
-        bh=SOp23ONE2ZS2Rwu9m1lYp6HK4zU0C88MNMwFM+Hhi14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O4Y/ldkVSy4v8cK97cQWNnrWFPne4n6oRjzjryZAR1e07QBAbtgW/bc1tDIwBwCyj
-         bYKa9urmBNddHNzuXcL5jIkqsLKvtU8Tgl2KFM5hT0nbPtnT5vtgwId/1jjlbYxV37
-         nhHtMdU7uw9k7ud+xoeGgmZJWLak2rQRlR1spA5UOjucjtRnLQNvW2Bi/m29A2Cve2
-         pKpxUBL5itg0jPn0LW/4INV3ViQfEiAJU6bsp5hbJ6ar3HySbEduxyuthrQZyf9JCR
-         UiJHN5F3MQ0vtQEwUSrbvB+p9hu9XWQWt3K0Yk3NnPISy0jLc3oryZK2YfmXl9xdkH
-         i0cOzkaQ9fDBQ==
-Date:   Thu, 29 Dec 2022 13:13:04 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     corbet@lwn.net, Conor Dooley <conor.dooley@microchip.com>,
-        konstantin@linuxfoundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] Documentation: process: Document suitability of
- Proton Mail for kernel development
-Message-ID: <Y62SYKyhE+hPX5b9@sirena.org.uk>
-References: <20221228000330.3971104-1-conor@kernel.org>
+        Thu, 29 Dec 2022 08:17:34 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37697BF6E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:17:31 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id 20so5470250plo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:17:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XB/5UP/6Hlg6zTc+Ud2YT+DViPlugAJ2lyEfvvnjKZo=;
+        b=WSaNH1wYnCQ2F4DfK3LHH0f36myjyXNNCEIsNZkta/yfavxOHNCpUlSzOrQwL/vrLV
+         X/5TG/lQ4yV2U/NZDmutVlMglPI8WZDfS4Gi1mZ/M9LK6hv0RbU4+626/qrrOChAdT9N
+         VTL6GoSUVR31hVmRJKTNkusi5IjqZWAMWiwQSD0alNUCNgjboCsFVkjx6BT2yJnG2s9R
+         39j2EoSFIdbU51W7KWOABz5jar/dogLdycBNuuynrzpdxyPsxIz6BXGOMrg7bdAvXDyy
+         h3o2tvth78JuiWpzmmXGvBVoi2Yteq3/8rKMG9sOJyJf6jOKB7wHnFBGIMsOYaQNiXAd
+         qaCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XB/5UP/6Hlg6zTc+Ud2YT+DViPlugAJ2lyEfvvnjKZo=;
+        b=gARCgGUP46QZkdF9xtAwe9fbg2IupVkKsy2W+sDK243bnDJ0mkox1dGj5QTKfVqx3k
+         O5ABttF7XmAZ+6U1Eto4Roux7EXjYBmAGLIirwKsx2gORAPWLeOBbEzS2+/xkRbWKHRG
+         U4gezZZKH44UMX62MNcQ1TN1nVBW2gq17VS64A51ygytYrjsnWtr41qoiac0dO/jECFc
+         50NhmigcR01KxW+2wCO7AfItCSbfLQ7ISpErBTqoayb2oZdMYtAcV3/yXC9Hxyeq3m7K
+         QVxkkDSE/zI+DPleLDkfB74Kl/rNBPWMC6geW9hq5XT9J6USqhRpCsUa7f+yxaKcFoHL
+         aEMw==
+X-Gm-Message-State: AFqh2kq8QF+zZX/aiOHDY3+697RdW10GrlB/vdeGTpDcwmlwIDXk9Th6
+        8Mk/cVNBoCq6MxHoolAe0nU=
+X-Google-Smtp-Source: AMrXdXtIST9doYDjZbreinPfq6LLl8u+EjrKg8kUSPl4LiBW+zcgu1u3TK6StxalYI7xvOmgrq9nUw==
+X-Received: by 2002:a17:902:7601:b0:192:8e8b:bcf with SMTP id k1-20020a170902760100b001928e8b0bcfmr8590295pll.56.1672319850632;
+        Thu, 29 Dec 2022 05:17:30 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id n6-20020a170902d2c600b0018962933a3esm12945038plc.181.2022.12.29.05.17.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Dec 2022 05:17:29 -0800 (PST)
+Date:   Thu, 29 Dec 2022 22:17:23 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+j44CA55u05LmfKQ==?= 
+        <naoya.horiguchi@nec.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joe Perches <joe@perches.com>, Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Matthew WilCox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC v3 1/4] mm/hwpoison: remove MF_MSG_SLAB from
+ action_page_types
+Message-ID: <Y62TYzkpiDxJ7yVZ@hyeyoo>
+References: <20221218101901.373450-1-42.hyeyoo@gmail.com>
+ <20221218101901.373450-2-42.hyeyoo@gmail.com>
+ <20221220235246.GA2334024@hori.linux.bs1.fc.nec.co.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mVQiF8DEATNhfjPe"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221228000330.3971104-1-conor@kernel.org>
-X-Cookie: Ego sum ens omnipotens.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221220235246.GA2334024@hori.linux.bs1.fc.nec.co.jp>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 20, 2022 at 11:53:11PM +0000, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Sun, Dec 18, 2022 at 07:18:58PM +0900, Hyeonggon Yoo wrote:
+> > As suggested by Naoya [1], identify_page_state() is never
+> > called when handling memory error on a slab page.
+> > 
+> > Clean this up before moving PG_slab flag to page_type in later patch.
+> > 
+> > [1] https://lore.kernel.org/linux-mm/Y2s+dnBsHAJu19ob@hyeyoo/#r
+> > 
+> > Suggested-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> 
+> Thank you for the patch,
+> I think there're a few other places to remove under include/.
+> 
+>   $ grep -inr MF_MSG_SLA include
+>   include/ras/ras_event.h:359:    EM ( MF_MSG_SLAB, "kernel slab page" )                          \
+>   include/linux/mm.h:3502:        MF_MSG_SLAB,
 
---mVQiF8DEATNhfjPe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> 
+> , so could you update them together?
 
-On Wed, Dec 28, 2022 at 12:03:31AM +0000, Conor Dooley wrote:
+Oh, missed this. Will do in next version.
 
-> +Proton Mail has a "feature" where it looks up keys using Web Key Directory
-> +(WKD) and encrypts mail to any email recipients for which it finds a key.
-> +Kernel.org publishes the WKD for all developers who have kernel.org accounts.
-> +As a result, emails sent using Proton Mail to kernel.org addresses will be
-> +encrypted.
-> +Unfortunately, Proton Mail does not provide a mechanism to disable the
-> +automatic encryption, viewing it as a privacy feature.
-
-I'd perhaps add a note here that the reason the encryption is a
-problem is that developers may not have their mail client set up
-for easy and fluid operation with encrypted mail, making the
-process of reading the mail needlessly difficult, or it may cause
-some mail clients to encrypt replies to everyone including the
-list which obviously won't work well.  But that's not essential,
-either way
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---mVQiF8DEATNhfjPe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOtkl0ACgkQJNaLcl1U
-h9C/Mgf9HWBv9oSmF0btC9VmOlYBKv0fDFxP2g1iH1GI0AK0Is7zsACbQM79cDzM
-FwqELSmo76/2LmKILPKEQ9YDNZk3ooacH5Lrt8aVyv1SbNc/2q0QK+MZl19+onLq
-YX265KhTyDRh2bkJrsETubT2OKWqCUI3AlDn4QzL/raerOVvY1QXCabeVL3TyhaL
-HRP4I01mp3fG+kj5NzA2CUuP424wBENdvvtYmJaDK8s5CwQXfXQZA8aNKB8lVq3q
-3vQWWKbh/7Yg1RRVibcAjVGFERaHU1AaUUYjHq+083I6qn8Xkc2lWr3LZE5QOpgg
-SbU2VCzdWuAgoARcVIAIGTtM5cY4zA==
-=/UTQ
------END PGP SIGNATURE-----
-
---mVQiF8DEATNhfjPe--
+-- 
+Thanks,
+Hyeonggon
