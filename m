@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1546658DA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E865658DAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 14:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbiL2Nv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 08:51:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
+        id S233462AbiL2Nxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 08:53:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiL2Nv5 (ORCPT
+        with ESMTP id S229487AbiL2Nxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 08:51:57 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02562BB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:51:55 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id y16so17443701wrm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Dec 2022 05:51:55 -0800 (PST)
+        Thu, 29 Dec 2022 08:53:43 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFDAFE4;
+        Thu, 29 Dec 2022 05:53:42 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id i17-20020a05600c355100b003d99434b1cfso2995756wmq.1;
+        Thu, 29 Dec 2022 05:53:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zm1bDobgQ6pSygeM5xND4kJhHGlT6DofkyFQfGt783I=;
-        b=ebyv8dR6NjEqXCxT6IOlhcLHXUp8IXlMN5UxhjqQjoo2WdZPXKdncfCJXZ7/nJilSf
-         iknxXehJ0bmCibu4XomXgfzlgaGShlrLSGtTP8l7R0+SbNjuXVp7YX1AfpZPsX5hR2RH
-         GBc6ER0dziccAo57D9bmapVWmX6WWbYH03tv5Rs41ZBFFYzBhCXV4Ft04SlHiy7bTMxX
-         CfGHfbeUNTsAPApgDkFcMS1M2PAOt9q2eDvl8aJ/zE1FSzZ/Rt+h95X2xOEZInUd/noh
-         HqPdwalRJ9U3QQURPgH8mnMsn02Pf30ith2s1CSeT51aTvHcDvWnpSjh3SXxt26470YC
-         tXnA==
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LJwf80EtLvb2UBH2ZbyBI17EFsPIf4lOqD8gl4LKhZ4=;
+        b=FAQoOzlDpeLo72ZAMKMhu/gWJ/TOowgO42psGVEXAECWu0thXQ8zW7/ro67wufADaB
+         CMRz6D2798qdSuF2hfYStRrOfzlGaQSgK6UHhbqmE4EwnUXmPmhQMYxfSubtZcKC8qWH
+         0xm3j8dd9+pxu7pU74T+sl4FQjMRzt8GsQVYtlHXDfXAqaTYpaKhetj+DPgOomD1Qjl3
+         idm/Eg7GCJlV7D4AQ+rexbkfxZ542bh+yHMS4gx355iUNPHnPxfJsnT7IdOUCI6FQEtE
+         PFXxzndFsFHNXGr5Tj3ytXeBzR8vE1hr2wd0Q0S4KRo4uUCV1rliHAehvQB56ZnHFEKt
+         FJOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zm1bDobgQ6pSygeM5xND4kJhHGlT6DofkyFQfGt783I=;
-        b=E5MWk3oz+xsbuBPuNnL5RYuJRwRWtcCuilhhhbjjJrX7kYPCAJxy2DgXVlRa/Xx3S3
-         QbvVxOmCERlO6mxqRm1VSpEaopgq4FcmK789XAAXsDXCc52sQmlW/FKKTe6Mzxq/+6Za
-         9OC0THNfsLOBH/zs1IHfdWmpFxIwoLVDOZHQRRjJ1Eet6RgKRD2MweC/BEmvizAPyh66
-         SWGdad+FVICXnHSav3ENhvjAuOeZcF9r0q51KuQQ/E990Uduet9wePuIthuhfJu8xVf4
-         bu2hYHET8cGjoqV2OxKbC6uI1Ck58jAecWS5LVfczJSu9fivPhgGrJ79AAMU2F6h707v
-         aRrw==
-X-Gm-Message-State: AFqh2ko3ikoqQc2vMB+iBRLwl/bU2QHPe1b81XlloO+XiFTI4y4ZpRoC
-        AzDqVNhzwwCNelSN8sMdcQU=
-X-Google-Smtp-Source: AMrXdXtLRvlEt+jd72HMXlQo7iX6ufjl37B1CT3ePpVUkFgVOQvjeCTsYYPmCCcIkJbhUp0GzkFGgw==
-X-Received: by 2002:adf:e94a:0:b0:242:154e:5f14 with SMTP id m10-20020adfe94a000000b00242154e5f14mr17800498wrn.17.1672321914423;
-        Thu, 29 Dec 2022 05:51:54 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LJwf80EtLvb2UBH2ZbyBI17EFsPIf4lOqD8gl4LKhZ4=;
+        b=49b4cXTb98GKLKuUlm7M4NYPP6JodNKT02D/fMExSXGsU2KXYKAKBrH3BJB4pChpnP
+         yFovGn0uEy+EidJqJsq/ttN9IjwYXhEI0talY7xQn85fRJY5i+zjJ+zVol+7hljLr61c
+         KYMqaQbA2zLSV8Em6YVvU7/khTglogVdXkndMHYyd3CsrcX1Wc3tdy9X4nexOFuX/1hN
+         j3kP5tZUwPIunhb2P0BytsCXqW6NsdTioRLyPGF1wvtZMiiVzMn2+/SO0VeG8ULzv0x9
+         zIx6f70nWr/OjPCTDx6iXSvQC2krfcYHd1BFuSd0Py/24pT/jRpeIy7cnGiu0y+qCuYZ
+         Zn1A==
+X-Gm-Message-State: AFqh2kqgeC7XAkuNPF8mzpP4I8u4tW8m7MNKdGRV8hBRvnkNU9em8CFA
+        8eJyRG0SWv0x4MgnsnCD23w=
+X-Google-Smtp-Source: AMrXdXvXXSL9Llf5GsFViQn7QP2VpfEFeUnppQNVMgE75yUbgFtJK6ImFMvp4JGI/YnX7lduojdcVw==
+X-Received: by 2002:a05:600c:2112:b0:3d3:396e:5e36 with SMTP id u18-20020a05600c211200b003d3396e5e36mr19927055wml.0.1672322020730;
+        Thu, 29 Dec 2022 05:53:40 -0800 (PST)
 Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id t13-20020adfe44d000000b002365b759b65sm17934596wrm.86.2022.12.29.05.51.53
+        by smtp.gmail.com with ESMTPSA id m185-20020a1c26c2000000b003c6f1732f65sm28855687wmm.38.2022.12.29.05.53.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 05:51:54 -0800 (PST)
-Date:   Thu, 29 Dec 2022 16:51:50 +0300
+        Thu, 29 Dec 2022 05:53:40 -0800 (PST)
+Date:   Thu, 29 Dec 2022 16:53:37 +0300
 From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Xiaojian Du <Xiaojian.Du@amd.com>
+To:     oe-kbuild@lists.linux.dev,
+        Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        "David S. Miller" <davem@davemloft.net>
 Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Huang Rui <ray.huang@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c:928 gmc_v6_0_hw_init() warn:
- missing error code? 'r'
-Message-ID: <202212291937.KPkOnXbQ-lkp@intel.com>
+        netdev@vger.kernel.org,
+        Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Varun Prakash <varun@chelsio.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>, Wu Bo <wubo40@huawei.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org
+Subject: Re: [RESEND PATCH v2] cxgbi: move cxgbi_ddp_set_one_ppod to cxgb_ppm
+ and remove its duplicate
+Message-ID: <202212291705.id5qvdk7-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20221226090609.1917788-1-d-tatianin@yandex-team.ru>
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,48 +86,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1b929c02afd37871d5afb9d498426f83432e71c2
-commit: 479e3b02b73a2de2b19df2950863149c59d57bfe drm/amdgpu: add vram check function for GMC
-config: ia64-randconfig-m041-20221229
-compiler: ia64-linux-gcc (GCC) 12.1.0
+Hi Daniil,
+
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniil-Tatianin/cxgbi-move-cxgbi_ddp_set_one_ppod-to-cxgb_ppm-and-remove-its-duplicate/20221226-171028
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20221226090609.1917788-1-d-tatianin%40yandex-team.ru
+patch subject: [RESEND PATCH v2] cxgbi: move cxgbi_ddp_set_one_ppod to cxgb_ppm and remove its duplicate
+config: powerpc-randconfig-m031-20221226
+compiler: powerpc-linux-gcc (GCC) 12.1.0
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 | Reported-by: Dan Carpenter <error27@gmail.com>
 
 smatch warnings:
-drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c:928 gmc_v6_0_hw_init() warn: missing error code? 'r'
+drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.c:571 cxgbi_ppm_set_one_ppod() error: we previously assumed 'sg_off' could be null (see line 536)
 
-vim +/r +928 drivers/gpu/drm/amd/amdgpu/gmc_v6_0.c
+vim +/sg_off +571 drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.c
 
-df70502eef80be Ken Wang     2016-01-19  906  static int gmc_v6_0_hw_init(void *handle)
-df70502eef80be Ken Wang     2016-01-19  907  {
-df70502eef80be Ken Wang     2016-01-19  908  	int r;
-df70502eef80be Ken Wang     2016-01-19  909  	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
-df70502eef80be Ken Wang     2016-01-19  910  
-df70502eef80be Ken Wang     2016-01-19  911  	gmc_v6_0_mc_program(adev);
-df70502eef80be Ken Wang     2016-01-19  912  
-df70502eef80be Ken Wang     2016-01-19  913  	if (!(adev->flags & AMD_IS_APU)) {
-df70502eef80be Ken Wang     2016-01-19  914  		r = gmc_v6_0_mc_load_microcode(adev);
-df70502eef80be Ken Wang     2016-01-19  915  		if (r) {
-075719c3cb79f3 Tom St Denis 2016-09-06  916  			dev_err(adev->dev, "Failed to load MC firmware!\n");
-df70502eef80be Ken Wang     2016-01-19  917  			return r;
-df70502eef80be Ken Wang     2016-01-19  918  		}
-df70502eef80be Ken Wang     2016-01-19  919  	}
-df70502eef80be Ken Wang     2016-01-19  920  
-df70502eef80be Ken Wang     2016-01-19  921  	r = gmc_v6_0_gart_enable(adev);
-df70502eef80be Ken Wang     2016-01-19  922  	if (r)
-df70502eef80be Ken Wang     2016-01-19  923  		return r;
-df70502eef80be Ken Wang     2016-01-19  924  
-479e3b02b73a2d Xiaojian Du  2022-01-17  925  	if (amdgpu_emu_mode == 1)
-479e3b02b73a2d Xiaojian Du  2022-01-17  926  		return amdgpu_gmc_vram_checking(adev);
-479e3b02b73a2d Xiaojian Du  2022-01-17  927  	else
-df70502eef80be Ken Wang     2016-01-19 @928  		return r;
+e775e542c914b4 Daniil Tatianin 2022-12-26  530  void
+e775e542c914b4 Daniil Tatianin 2022-12-26  531  cxgbi_ppm_set_one_ppod(struct cxgbi_pagepod *ppod,
+e775e542c914b4 Daniil Tatianin 2022-12-26  532  		       struct cxgbi_task_tag_info *ttinfo,
+e775e542c914b4 Daniil Tatianin 2022-12-26  533  		       struct scatterlist **sg_pp, unsigned int *sg_off)
+e775e542c914b4 Daniil Tatianin 2022-12-26  534  {
+e775e542c914b4 Daniil Tatianin 2022-12-26  535  	struct scatterlist *sg = sg_pp ? *sg_pp : NULL;
+e775e542c914b4 Daniil Tatianin 2022-12-26 @536  	unsigned int offset = sg_off ? *sg_off : 0;
+                                                                              ^^^^^^
+Check for NULL
 
-"r" is zero.  Just return a literal "return 0;" or "return EINVAL;"
+e775e542c914b4 Daniil Tatianin 2022-12-26  537  	dma_addr_t addr = 0UL;
+e775e542c914b4 Daniil Tatianin 2022-12-26  538  	unsigned int len = 0;
+e775e542c914b4 Daniil Tatianin 2022-12-26  539  	int i;
+e775e542c914b4 Daniil Tatianin 2022-12-26  540  
+e775e542c914b4 Daniil Tatianin 2022-12-26  541  	memcpy(ppod, &ttinfo->hdr, sizeof(struct cxgbi_pagepod_hdr));
+e775e542c914b4 Daniil Tatianin 2022-12-26  542  
+e775e542c914b4 Daniil Tatianin 2022-12-26  543  	if (sg) {
+e775e542c914b4 Daniil Tatianin 2022-12-26  544  		addr = sg_dma_address(sg);
+e775e542c914b4 Daniil Tatianin 2022-12-26  545  		len = sg_dma_len(sg);
+e775e542c914b4 Daniil Tatianin 2022-12-26  546  	}
+e775e542c914b4 Daniil Tatianin 2022-12-26  547  
+e775e542c914b4 Daniil Tatianin 2022-12-26  548  	for (i = 0; i < PPOD_PAGES_MAX; i++) {
+e775e542c914b4 Daniil Tatianin 2022-12-26  549  		if (sg) {
+e775e542c914b4 Daniil Tatianin 2022-12-26  550  			ppod->addr[i] = cpu_to_be64(addr + offset);
+e775e542c914b4 Daniil Tatianin 2022-12-26  551  			offset += PAGE_SIZE;
+e775e542c914b4 Daniil Tatianin 2022-12-26  552  			if (offset == (len + sg->offset)) {
+e775e542c914b4 Daniil Tatianin 2022-12-26  553  				offset = 0;
+e775e542c914b4 Daniil Tatianin 2022-12-26  554  				sg = sg_next(sg);
+e775e542c914b4 Daniil Tatianin 2022-12-26  555  				if (sg) {
+e775e542c914b4 Daniil Tatianin 2022-12-26  556  					addr = sg_dma_address(sg);
+e775e542c914b4 Daniil Tatianin 2022-12-26  557  					len = sg_dma_len(sg);
+e775e542c914b4 Daniil Tatianin 2022-12-26  558  				}
+e775e542c914b4 Daniil Tatianin 2022-12-26  559  			}
+e775e542c914b4 Daniil Tatianin 2022-12-26  560  		} else {
+e775e542c914b4 Daniil Tatianin 2022-12-26  561  			ppod->addr[i] = 0ULL;
+e775e542c914b4 Daniil Tatianin 2022-12-26  562  		}
+e775e542c914b4 Daniil Tatianin 2022-12-26  563  	}
+e775e542c914b4 Daniil Tatianin 2022-12-26  564  
+e775e542c914b4 Daniil Tatianin 2022-12-26  565  	/*
+e775e542c914b4 Daniil Tatianin 2022-12-26  566  	 * the fifth address needs to be repeated in the next ppod, so do
+e775e542c914b4 Daniil Tatianin 2022-12-26  567  	 * not move sg
+e775e542c914b4 Daniil Tatianin 2022-12-26  568  	 */
+e775e542c914b4 Daniil Tatianin 2022-12-26  569  	if (sg_pp) {
+e775e542c914b4 Daniil Tatianin 2022-12-26  570  		*sg_pp = sg;
+e775e542c914b4 Daniil Tatianin 2022-12-26 @571  		*sg_off = offset;
+                                                                ^^^^^^^
+Unchecked dereference.
 
-df70502eef80be Ken Wang     2016-01-19  929  }
+e775e542c914b4 Daniil Tatianin 2022-12-26  572  	}
+e775e542c914b4 Daniil Tatianin 2022-12-26  573  
+e775e542c914b4 Daniil Tatianin 2022-12-26  574  	if (offset == len) {
+e775e542c914b4 Daniil Tatianin 2022-12-26  575  		offset = 0;
+e775e542c914b4 Daniil Tatianin 2022-12-26  576  		if (sg) {
+e775e542c914b4 Daniil Tatianin 2022-12-26  577  			sg = sg_next(sg);
+e775e542c914b4 Daniil Tatianin 2022-12-26  578  			if (sg)
+e775e542c914b4 Daniil Tatianin 2022-12-26  579  				addr = sg_dma_address(sg);
+e775e542c914b4 Daniil Tatianin 2022-12-26  580  		}
+e775e542c914b4 Daniil Tatianin 2022-12-26  581  	}
+e775e542c914b4 Daniil Tatianin 2022-12-26  582  	ppod->addr[i] = sg ? cpu_to_be64(addr + offset) : 0ULL;
+e775e542c914b4 Daniil Tatianin 2022-12-26  583  }
 
 -- 
 0-DAY CI Kernel Test Service
