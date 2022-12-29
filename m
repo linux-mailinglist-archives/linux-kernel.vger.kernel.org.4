@@ -2,272 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899266589A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 07:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B9D65899E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Dec 2022 07:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiL2GOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Dec 2022 01:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
+        id S230398AbiL2GOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Dec 2022 01:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiL2GOM (ORCPT
+        with ESMTP id S229538AbiL2GOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Dec 2022 01:14:12 -0500
-Received: from out30-1.freemail.mail.aliyun.com (out30-1.freemail.mail.aliyun.com [115.124.30.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA996154;
-        Wed, 28 Dec 2022 22:14:09 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VYK6Tb2_1672294446;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VYK6Tb2_1672294446)
-          by smtp.aliyun-inc.com;
-          Thu, 29 Dec 2022 14:14:07 +0800
-Message-ID: <1672294402.0733626-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH 4/4] virtio-net: sleep instead of busy waiting for cvq command
-Date:   Thu, 29 Dec 2022 14:13:22 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, eperezma@redhat.com,
-        edumazet@google.com, maxime.coquelin@redhat.com, kuba@kernel.org,
-        pabeni@redhat.com, davem@davemloft.net
-References: <20221226074908.8154-1-jasowang@redhat.com>
- <20221226074908.8154-5-jasowang@redhat.com>
- <1672107557.0142956-1-xuanzhuo@linux.alibaba.com>
- <CACGkMEvzhAFj5HCmP--9DKfCAq_4wPNwsmmg4h0Sbv6ra0+DrQ@mail.gmail.com>
- <20221227014641-mutt-send-email-mst@kernel.org>
- <1672216298.4455094-1-xuanzhuo@linux.alibaba.com>
- <CACGkMEuADspVzge5Q8JdEQssjGg911CaT1u_NQ9s7i-7UMwkhg@mail.gmail.com>
- <1672279792.8628097-2-xuanzhuo@linux.alibaba.com>
- <CACGkMEsET7fKxuKu7NckZX5N8fs+AqZ-adwKFNixJRNNn09GRQ@mail.gmail.com>
- <1672285288.3368185-1-xuanzhuo@linux.alibaba.com>
- <CACGkMEtp7ee_Tv21SZXh+a5Y6TsT31SUABECbOwRk=Hk3xRcWw@mail.gmail.com>
-In-Reply-To: <CACGkMEtp7ee_Tv21SZXh+a5Y6TsT31SUABECbOwRk=Hk3xRcWw@mail.gmail.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 29 Dec 2022 01:14:02 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0490F5FF9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Dec 2022 22:13:57 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8AxhfAjMK1j_TIJAA--.20383S3;
+        Thu, 29 Dec 2022 14:13:56 +0800 (CST)
+Received: from [10.136.12.26] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxb+QfMK1jrCUPAA--.50304S3;
+        Thu, 29 Dec 2022 14:13:53 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: Fix irq enable in exception handlers
+To:     Qi Hu <huqi@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221221074238.6699-1-hejinyang@loongson.cn>
+ <CAAhV-H6VX=d1oymY0rh-mwOPMuBsYd7C9RzQat8BmmnrJ7apng@mail.gmail.com>
+ <8eaea09e-67b0-5e51-4632-2c31a4c56a3e@loongson.cn>
+ <CAAhV-H7maW1YWhfvCzYVix=aCMMFbx0KkGodaBjka4ThunBO5Q@mail.gmail.com>
+ <1c578efd-ae8a-2d80-e505-a09b1a2f7eaa@loongson.cn>
+ <b267cab1-3df4-6263-9c83-0061f20dd4a4@loongson.cn>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <2364400d-bb1e-cbe2-8a65-adbe87186938@loongson.cn>
+Date:   Thu, 29 Dec 2022 14:13:51 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <b267cab1-3df4-6263-9c83-0061f20dd4a4@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Bxb+QfMK1jrCUPAA--.50304S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxKF1xKw4rtr4fAryfJr4DXFb_yoWfuF48pr
+        1kAF1UJry5Ar18Xr17tr1jyryUtr1Ut3WUXr1UJa4rJr4qyrn0qr18Xr1qgr1UAr48Jr1U
+        Xr15tF129F1UJF7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU88Ma5UUUUU==
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Dec 2022 12:08:23 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> On Thu, Dec 29, 2022 at 11:49 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> >
-> > On Thu, 29 Dec 2022 11:22:13 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> > > On Thu, Dec 29, 2022 at 10:10 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> > > >
-> > > > On Wed, 28 Dec 2022 19:41:13 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> > > > > On Wed, Dec 28, 2022 at 4:34 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> > > > > >
-> > > > > > On Tue, 27 Dec 2022 01:58:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > > > > > On Tue, Dec 27, 2022 at 12:33:53PM +0800, Jason Wang wrote:
-> > > > > > > > On Tue, Dec 27, 2022 at 10:25 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Mon, 26 Dec 2022 15:49:08 +0800, Jason Wang <jasowang@redhat.com> wrote:
-> > > > > > > > > > We used to busy waiting on the cvq command this tends to be
-> > > > > > > > > > problematic since:
-> > > > > > > > > >
-> > > > > > > > > > 1) CPU could wait for ever on a buggy/malicous device
-> > > > > > > > > > 2) There's no wait to terminate the process that triggers the cvq
-> > > > > > > > > >    command
-> > > > > > > > > >
-> > > > > > > > > > So this patch switch to use virtqueue_wait_for_used() to sleep with a
-> > > > > > > > > > timeout (1s) instead of busy polling for the cvq command forever. This
-> > > > > > > > >
-> > > > > > > > > I don't think that a fixed 1S is a good choice.
-> > > > > > > >
-> > > > > > > > Well, it could be tweaked to be a little bit longer.
-> > > > > > > >
-> > > > > > > > One way, as discussed, is to let the device advertise a timeout then
-> > > > > > > > the driver can validate if it's valid and use that timeout. But it
-> > > > > > > > needs extension to the spec.
-> > > > > > >
-> > > > > > > Controlling timeout from device is a good idea, e.g. hardware devices
-> > > > > > > would benefit from a shorter timeout, hypervisor devices from a longer
-> > > > > > > timeout or no timeout.
-> > > > > >
-> > > > > > Yes. That is good.
-> > > > > >
-> > > > > > Before introducing this feature, I personally like to use "wait", rather than
-> > > > > > define a timeout.
-> > > > >
-> > > > > Note that the driver still needs to validate what device advertises to
-> > > > > avoid infinite wait.
-> > > >
-> > > > Sorry, I didn't understand what you mean.
-> > >
-> > > I meant the interface needs to carefully designed to
-> > >
-> > > 1) avoid device to advertise a infinite (or very long) timeout
-> > > 2) driver need to have its own max timeout regardless what device advertises
-> >
-> >
-> > I see.
-> >
-> > As far as I know, different operations will take different time.
-> > For example, the queues are initialized one by one when performing
-> > VIRTIO_NET_CTRL_MQ_VQ_PAIRS_SET commands. If the number of queues is large, then
-> > this time will be very long.
->
-> I see. This is the case even for the software backends.
->
-> >
-> > So we should set different timeouts for different commands.
->
-> Probably but it would result in a very complex interface, the device
-> can just choose to advertise the maximum timeout of all the commands
-> in this case. As discussed, I think we can start a very long timeout.
-> Is 1 minutes sufficient in this case?
-
-
-For now, 1 minutes are safe.
-
-Thanks.
+On 2022-12-29 00:51, Qi Hu wrote:
 
 >
-> Thanks
+> On 2022/12/27 18:10, Jinyang He wrote:
+>> On 2022-12-27 17:52, Huacai Chen wrote:
+>>
+>>> On Tue, Dec 27, 2022 at 5:30 PM Jinyang He <hejinyang@loongson.cn> 
+>>> wrote:
+>>>>
+>>>> On 2022-12-27 15:37, Huacai Chen wrote:
+>>>>> Hi, Jinyang,
+>>>>>
+>>>>> Move die_if_kernel to irq disabled context to solve what?
+>>>> For more strict logical. If the code flow go to die in 
+>>>> die_if_kernel(),
+>>>> its interrupt state is enable, that means it may cause schedule.
+>>>> So I think it is better to call die_if_kernel() firstly.
+>>> die_if_kernel is called with irq enabled in old kernels for several
+>>> years, and has no problems.
+>>
+>>
+>> I think because it never call die() in die_if_kernel(). What I do
+>> emphasize is that there needs to be more strict logic here than
+>> it worked well in the past. I bet if die_if_kernel() was removed,
+>> it will still work well in the future.
+>>
+>>
+>>>
+>>>>
+>>>>>    And LBT is
+>>>>> surely allowed to be triggered in kernel context.
+>>>> I'm not familar with lbt, I just not see any lbt codes in kernel. Plz,
+>>>> how lbt exception triggered, and how kernel trigger lbt exception?
+>>> You can ask Huqi for more details, and this was discussed publicly 
+>>> last week.
+>>
+>> To: Qi Hu
+>>
+>>
+>> Hi,
+>>
+>>
+>> We really need some help. Can you give us some ideas?
+>>
+>>
+>> Thanks,
+>>
+>> Jinyang
+>>
+> Huacai is correct. The LBT disable exception (BTD) can be triggered in 
+> kernel context.
 >
-> >
-> > Thanks.
-> >
-> > >
-> > > Thanks
-> > >
-> > > >
-> > > > Thanks.
-> > > >
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > > > >
-> > > > > > Thanks.
-> > > > > >
-> > > > > >
-> > > > > > >
-> > > > > > > >
-> > > > > > > > > Some of the DPUs are very
-> > > > > > > > > lazy for cvq handle.
-> > > > > > > >
-> > > > > > > > Such design needs to be revisited, cvq (control path) should have a
-> > > > > > > > better priority or QOS than datapath.
-> > > > > > >
-> > > > > > > Spec says nothing about this, so driver can't assume this either.
-> > > > > > >
-> > > > > > > > > In particular, we will also directly break the device.
-> > > > > > > >
-> > > > > > > > It's kind of hardening for malicious devices.
-> > > > > > >
-> > > > > > > ATM no amount of hardening can prevent a malicious hypervisor from
-> > > > > > > blocking the guest. Recovering when a hardware device is broken would be
-> > > > > > > nice but I think if we do bother then we should try harder to recover,
-> > > > > > > such as by driving device reset.
-> > > > > > >
-> > > > > > >
-> > > > > > > Also, does your patch break surprise removal? There's no callback
-> > > > > > > in this case ATM.
-> > > > > > >
-> > > > > > > > >
-> > > > > > > > > I think it is necessary to add a Virtio-Net parameter to allow users to define
-> > > > > > > > > this timeout by themselves. Although I don't think this is a good way.
-> > > > > > > >
-> > > > > > > > Very hard and unfriendly to the end users.
-> > > > > > > >
-> > > > > > > > Thanks
-> > > > > > > >
-> > > > > > > > >
-> > > > > > > > > Thanks.
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > > gives the scheduler a breath and can let the process can respond to
-> > > > > > > > > > asignal. If the device doesn't respond in the timeout, break the
-> > > > > > > > > > device.
-> > > > > > > > > >
-> > > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > > > > ---
-> > > > > > > > > > Changes since V1:
-> > > > > > > > > > - break the device when timeout
-> > > > > > > > > > - get buffer manually since the virtio core check more_used() instead
-> > > > > > > > > > ---
-> > > > > > > > > >  drivers/net/virtio_net.c | 24 ++++++++++++++++--------
-> > > > > > > > > >  1 file changed, 16 insertions(+), 8 deletions(-)
-> > > > > > > > > >
-> > > > > > > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > > > > > > index efd9dd55828b..6a2ea64cfcb5 100644
-> > > > > > > > > > --- a/drivers/net/virtio_net.c
-> > > > > > > > > > +++ b/drivers/net/virtio_net.c
-> > > > > > > > > > @@ -405,6 +405,7 @@ static void disable_rx_mode_work(struct virtnet_info *vi)
-> > > > > > > > > >       vi->rx_mode_work_enabled = false;
-> > > > > > > > > >       spin_unlock_bh(&vi->rx_mode_lock);
-> > > > > > > > > >
-> > > > > > > > > > +     virtqueue_wake_up(vi->cvq);
-> > > > > > > > > >       flush_work(&vi->rx_mode_work);
-> > > > > > > > > >  }
-> > > > > > > > > >
-> > > > > > > > > > @@ -1497,6 +1498,11 @@ static bool try_fill_recv(struct virtnet_info *vi, struct receive_queue *rq,
-> > > > > > > > > >       return !oom;
-> > > > > > > > > >  }
-> > > > > > > > > >
-> > > > > > > > > > +static void virtnet_cvq_done(struct virtqueue *cvq)
-> > > > > > > > > > +{
-> > > > > > > > > > +     virtqueue_wake_up(cvq);
-> > > > > > > > > > +}
-> > > > > > > > > > +
-> > > > > > > > > >  static void skb_recv_done(struct virtqueue *rvq)
-> > > > > > > > > >  {
-> > > > > > > > > >       struct virtnet_info *vi = rvq->vdev->priv;
-> > > > > > > > > > @@ -1984,6 +1990,8 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
-> > > > > > > > > >       return err;
-> > > > > > > > > >  }
-> > > > > > > > > >
-> > > > > > > > > > +static int virtnet_close(struct net_device *dev);
-> > > > > > > > > > +
-> > > > > > > > > >  /*
-> > > > > > > > > >   * Send command via the control virtqueue and check status.  Commands
-> > > > > > > > > >   * supported by the hypervisor, as indicated by feature bits, should
-> > > > > > > > > > @@ -2026,14 +2034,14 @@ static bool virtnet_send_command(struct virtnet_info *vi, u8 class, u8 cmd,
-> > > > > > > > > >       if (unlikely(!virtqueue_kick(vi->cvq)))
-> > > > > > > > > >               return vi->ctrl->status == VIRTIO_NET_OK;
-> > > > > > > > > >
-> > > > > > > > > > -     /* Spin for a response, the kick causes an ioport write, trapping
-> > > > > > > > > > -      * into the hypervisor, so the request should be handled immediately.
-> > > > > > > > > > -      */
-> > > > > > > > > > -     while (!virtqueue_get_buf(vi->cvq, &tmp) &&
-> > > > > > > > > > -            !virtqueue_is_broken(vi->cvq))
-> > > > > > > > > > -             cpu_relax();
-> > > > > > > > > > +     if (virtqueue_wait_for_used(vi->cvq)) {
-> > > > > > > > > > +             virtqueue_get_buf(vi->cvq, &tmp);
-> > > > > > > > > > +             return vi->ctrl->status == VIRTIO_NET_OK;
-> > > > > > > > > > +     }
-> > > > > > > > > >
-> > > > > > > > > > -     return vi->ctrl->status == VIRTIO_NET_OK;
-> > > > > > > > > > +     netdev_err(vi->dev, "CVQ command timeout, break the virtio device.");
-> > > > > > > > > > +     virtio_break_device(vi->vdev);
-> > > > > > > > > > +     return VIRTIO_NET_ERR;
-> > > > > > > > > >  }
-> > > > > > > > > >
-> > > > > > > > > >  static int virtnet_set_mac_address(struct net_device *dev, void *p)
-> > > > > > > > > > @@ -3526,7 +3534,7 @@ static int virtnet_find_vqs(struct virtnet_info *vi)
-> > > > > > > > > >
-> > > > > > > > > >       /* Parameters for control virtqueue, if any */
-> > > > > > > > > >       if (vi->has_cvq) {
-> > > > > > > > > > -             callbacks[total_vqs - 1] = NULL;
-> > > > > > > > > > +             callbacks[total_vqs - 1] = virtnet_cvq_done;
-> > > > > > > > > >               names[total_vqs - 1] = "control";
-> > > > > > > > > >       }
-> > > > > > > > > >
-> > > > > > > > > > --
-> > > > > > > > > > 2.25.1
-> > > > > > > > > >
-> > > > > > > > > > _______________________________________________
-> > > > > > > > > > Virtualization mailing list
-> > > > > > > > > > Virtualization@lists.linux-foundation.org
-> > > > > > > > > > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
-> > > > > > > > >
-> > > > > > >
-> > > > > >
-> > > > >
-> > > >
-> > >
-> >
+> If the CSR.ENEU.BTE == 0 [^1], the LBT instructions (these [^2] will 
+> be used in the kernel) will trigger the exception.
 >
+> Unfortunately, when you want to do some fpu_{save, restore}, you need 
+> to use some LBT instructions [^3] [^4]. So if FPD is triggered, LBT 
+> might still not be enabled, and the 'do_lbt' will be called in the 
+> kernel context.
+>
+> Hope the information can help. Thanks.
+>
+>
+> [1] 
+> https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#extended-component-unit-enable
+>
+> [2] 
+> https://github.com/loongson/linux/pull/4/files#diff-381d03cf86e2796d280e2fc82c005409d5e44b4bbbf90dd0dc17f5f0fa5553f1R140-R184
+>
+> [3] 
+> https://github.com/loongson/linux/pull/4/files#diff-381d03cf86e2796d280e2fc82c005409d5e44b4bbbf90dd0dc17f5f0fa5553f1R218-R230
+>
+> [4] 
+> https://github.com/loongson/linux/pull/4/files#diff-381d03cf86e2796d280e2fc82c005409d5e44b4bbbf90dd0dc17f5f0fa5553f1R236-R263
+>
+>
+Hi,
+
+
+That's helpful. Thanks!
+
+
+But I still wonder if SXD or ASXD have the same possibility of being 
+triggered in the kernel mode by sc_save_{lsx, lasx} or other place. Do 
+we need remove these die_if_kernel codes in do_lasx() and do_lsx()?
+
+
+Jinyang
+
+
+> Qi
+>
+>>
+>>> Huacai
+>>>>
+>>>> Thanks,
+>>>>
+>>>> Jinyang
+>>>>
+>>>>
+>>>>> Huacai
+>>>>>
+>>>>> On Wed, Dec 21, 2022 at 3:43 PM Jinyang He <hejinyang@loongson.cn> 
+>>>>> wrote:
+>>>>>> The interrupt state can be got by regs->csr_prmd. Once previous
+>>>>>> interrupt state is disable, we shouldn't enable interrupt if we
+>>>>>> triggered exception which can be triggered in kernel mode. So
+>>>>>> conditionally enable interrupt. For those do_\exception which
+>>>>>> can not triggered in kernel mode but need enable interrupt, call
+>>>>>> die_if_kernel() firstly. And for do_lsx, do_lasx and do_lbt cannot
+>>>>>> triggered in kernel mode, too.
+>>>>>>
+>>>>>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>>>>>> ---
+>>>>>>    arch/loongarch/kernel/traps.c | 19 ++++++++++---------
+>>>>>>    1 file changed, 10 insertions(+), 9 deletions(-)
+>>>>>>
+>>>>>> diff --git a/arch/loongarch/kernel/traps.c 
+>>>>>> b/arch/loongarch/kernel/traps.c
+>>>>>> index 1ea14f6c18d3..3ac7b32d1e15 100644
+>>>>>> --- a/arch/loongarch/kernel/traps.c
+>>>>>> +++ b/arch/loongarch/kernel/traps.c
+>>>>>> @@ -340,9 +340,9 @@ asmlinkage void noinstr do_fpe(struct pt_regs 
+>>>>>> *regs, unsigned long fcsr)
+>>>>>>
+>>>>>>           /* Clear FCSR.Cause before enabling interrupts */
+>>>>>>           write_fcsr(LOONGARCH_FCSR0, fcsr & ~mask_fcsr_x(fcsr));
+>>>>>> -       local_irq_enable();
+>>>>>>
+>>>>>>           die_if_kernel("FP exception in kernel code", regs);
+>>>>>> +       local_irq_enable();
+>>>>>>
+>>>>>>           sig = SIGFPE;
+>>>>>>           fault_addr = (void __user *) regs->csr_era;
+>>>>>> @@ -432,7 +432,8 @@ asmlinkage void noinstr do_bp(struct pt_regs 
+>>>>>> *regs)
+>>>>>>           unsigned long era = exception_era(regs);
+>>>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>>>
+>>>>>> -       local_irq_enable();
+>>>>>> +       if (regs->csr_prmd & CSR_PRMD_PIE)
+>>>>>> +               local_irq_enable();
+>>>>>>           current->thread.trap_nr = read_csr_excode();
+>>>>>>           if (__get_inst(&opcode, (u32 *)era, user))
+>>>>>>                   goto out_sigsegv;
+>>>>>> @@ -514,7 +515,8 @@ asmlinkage void noinstr do_ri(struct pt_regs 
+>>>>>> *regs)
+>>>>>>           unsigned int __user *era = (unsigned int __user 
+>>>>>> *)exception_era(regs);
+>>>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>>>
+>>>>>> -       local_irq_enable();
+>>>>>> +       if (regs->csr_prmd & CSR_PRMD_PIE)
+>>>>>> +               local_irq_enable();
+>>>>>>           current->thread.trap_nr = read_csr_excode();
+>>>>>>
+>>>>>>           if (notify_die(DIE_RI, "RI Fault", regs, 0, 
+>>>>>> current->thread.trap_nr,
+>>>>>> @@ -606,8 +608,8 @@ asmlinkage void noinstr do_fpu(struct pt_regs 
+>>>>>> *regs)
+>>>>>>    {
+>>>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>>>
+>>>>>> -       local_irq_enable();
+>>>>>>           die_if_kernel("do_fpu invoked from kernel context!", 
+>>>>>> regs);
+>>>>>> +       local_irq_enable();
+>>>>>>           BUG_ON(is_lsx_enabled());
+>>>>>>           BUG_ON(is_lasx_enabled());
+>>>>>>
+>>>>>> @@ -623,13 +625,13 @@ asmlinkage void noinstr do_lsx(struct 
+>>>>>> pt_regs *regs)
+>>>>>>    {
+>>>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>>>
+>>>>>> +       die_if_kernel("do_lsx invoked from kernel context!", regs);
+>>>>>>           local_irq_enable();
+>>>>>>           if (!cpu_has_lsx) {
+>>>>>>                   force_sig(SIGILL);
+>>>>>>                   goto out;
+>>>>>>           }
+>>>>>>
+>>>>>> -       die_if_kernel("do_lsx invoked from kernel context!", regs);
+>>>>>>           BUG_ON(is_lasx_enabled());
+>>>>>>
+>>>>>>           preempt_disable();
+>>>>>> @@ -645,14 +647,13 @@ asmlinkage void noinstr do_lasx(struct 
+>>>>>> pt_regs *regs)
+>>>>>>    {
+>>>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>>>
+>>>>>> +       die_if_kernel("do_lasx invoked from kernel context!", regs);
+>>>>>>           local_irq_enable();
+>>>>>>           if (!cpu_has_lasx) {
+>>>>>>                   force_sig(SIGILL);
+>>>>>>                   goto out;
+>>>>>>           }
+>>>>>>
+>>>>>> -       die_if_kernel("do_lasx invoked from kernel context!", regs);
+>>>>>> -
+>>>>>>           preempt_disable();
+>>>>>>           init_restore_lasx();
+>>>>>>           preempt_enable();
+>>>>>> @@ -666,6 +667,7 @@ asmlinkage void noinstr do_lbt(struct pt_regs 
+>>>>>> *regs)
+>>>>>>    {
+>>>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>>>
+>>>>>> +       die_if_kernel("do_lbt invoked from kernel context!", regs);
+>>>>>>           local_irq_enable();
+>>>>>>           force_sig(SIGILL);
+>>>>>>           local_irq_disable();
+>>>>>> @@ -677,7 +679,6 @@ asmlinkage void noinstr do_reserved(struct 
+>>>>>> pt_regs *regs)
+>>>>>>    {
+>>>>>>           irqentry_state_t state = irqentry_enter(regs);
+>>>>>>
+>>>>>> -       local_irq_enable();
+>>>>>>           /*
+>>>>>>            * Game over - no way to handle this if it ever occurs. 
+>>>>>> Most probably
+>>>>>>            * caused by a fatal error after another 
+>>>>>> hardware/software error.
+>>>>>> @@ -685,8 +686,8 @@ asmlinkage void noinstr do_reserved(struct 
+>>>>>> pt_regs *regs)
+>>>>>>           pr_err("Caught reserved exception %u on pid:%d [%s] - 
+>>>>>> should not happen\n",
+>>>>>>                   read_csr_excode(), current->pid, current->comm);
+>>>>>>           die_if_kernel("do_reserved exception", regs);
+>>>>>> +       local_irq_enable();
+>>>>>>           force_sig(SIGUNUSED);
+>>>>>> -
+>>>>>>           local_irq_disable();
+>>>>>>
+>>>>>>           irqentry_exit(regs, state);
+>>>>>> -- 
+>>>>>> 2.34.3
+>>>>>>
+>>>>
+>>
+>
+
